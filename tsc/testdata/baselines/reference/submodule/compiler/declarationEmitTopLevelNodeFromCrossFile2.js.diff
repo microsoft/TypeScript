@@ -8,15 +8,15 @@
 +const boxedBox_1 = require("./boxedBox");
  exports._ = boxedBox_1.boxedBox;
  // At index 83
- /**
-  * wat
-  */
+-/**
+- * wat
+- */
 -
 -
 -//// [a.d.ts]
 -export declare const _: import("./box").Box<{
 -    boxed: import("./box").Box<number>;
 -}>;
--/**
-- * wat
-- */
+ /**
+  * wat
+  */

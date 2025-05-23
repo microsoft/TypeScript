@@ -1,8 +1,7 @@
 --- old.moduleExportAssignment2.errors.txt
 +++ new.moduleExportAssignment2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +npm.js(1,11): error TS2322: Type '(tree: any) => void' is not assignable to type 'typeof import("npm")'.
 +npm.js(5,12): error TS2349: This expression is not callable.
 +  Type 'typeof import("npm")' has no call signatures.

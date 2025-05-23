@@ -2,7 +2,7 @@
 +++ new.modularizeLibrary_UsingES5LibAndES6ArrayLib.symbols
 @@= skipped -8, +8 lines =@@
  >z : Symbol(z, Decl(modularizeLibrary_UsingES5LibAndES6ArrayLib.ts, 1, 32))
- 
+
      return Array.from(arguments);
 ->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 +>Array.from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
@@ -11,4 +11,3 @@
 +>from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >arguments : Symbol(arguments)
  }
- 

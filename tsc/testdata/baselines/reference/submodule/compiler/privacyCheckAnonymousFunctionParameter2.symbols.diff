@@ -7,5 +7,5 @@
 ->x : Symbol(Iterator.x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 23))
 +>x : Symbol(x, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 23))
  >T : Symbol(T, Decl(privacyCheckAnonymousFunctionParameter2.ts, 1, 19))
- 
+
  module Q {

@@ -1,8 +1,8 @@
 --- old.genericObjectCreationWithoutTypeArgs.js
 +++ new.genericObjectCreationWithoutTypeArgs.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [genericObjectCreationWithoutTypeArgs.js]
 -var SS = /** @class */ (function () {
 -    function SS() {

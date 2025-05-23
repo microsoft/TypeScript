@@ -2,7 +2,7 @@
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit6(module=node16).js
 @@= skipped -28, +28 lines =@@
  export default (obj as typeof obj);
- 
+
  //// [uses.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

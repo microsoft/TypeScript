@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.
 +main.ts(1,10): error TS2305: Module '"node_modules/ext/ts3.1/index"' has no exported member 'fa'.
- 
- 
+
+
  ==== tsconfig.json (0 errors) ====
 @@= skipped -5, +5 lines =@@
  ==== main.ts (1 errors) ====

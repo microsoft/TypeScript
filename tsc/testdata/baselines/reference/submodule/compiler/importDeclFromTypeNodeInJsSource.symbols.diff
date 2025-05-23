@@ -18,11 +18,11 @@
  >a : Symbol(a, Decl(events.d.ts, 18, 31))
 ->b : Symbol(d, Decl(events.d.ts, 19, 16))
 +>b : Symbol(b, Decl(events.d.ts, 19, 16))
- 
+
      export = d;
  >d : Symbol(d, Decl(events.d.ts, 21, 5))
 @@= skipped -24, +24 lines =@@
- 
+
  export class Foo2 extends n3.c {
  >Foo2 : Symbol(Foo2, Decl(b.js, 5, 1))
 ->n3.c : Symbol(n3.c, Decl(events.d.ts, 13, 24))
@@ -31,5 +31,5 @@
 ->c : Symbol(n3.c, Decl(events.d.ts, 13, 24))
 +>c : Symbol(c, Decl(events.d.ts, 13, 24))
  }
- 
+
  export class Foo3 extends d {

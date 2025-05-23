@@ -7,7 +7,7 @@
 ->_ : Underscore.Static
 +>_ : Static
  >Underscore : any
- 
+
  var r = _.all([true, 1, null, 'yes'], _.identity);
  >r : string | number | boolean
  >_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean
@@ -25,7 +25,7 @@
 ->_ : Underscore.Static
 +>_ : Static
  >identity : <T>(value: T) => T
- 
+
  var r2 = _.all([true], _.identity);
  >r2 : boolean
  >_.all([true], _.identity) : boolean
@@ -41,7 +41,7 @@
 ->_ : Underscore.Static
 +>_ : Static
  >identity : <T>(value: T) => T
- 
+
  var r3 = _.all([], _.identity);
  >r3 : any
  >_.all([], _.identity) : any
@@ -56,7 +56,7 @@
 ->_ : Underscore.Static
 +>_ : Static
  >identity : <T>(value: T) => T
- 
+
  var r4 = _.all([<any>true], _.identity);
  >r4 : any
  >_.all([<any>true], _.identity) : any
@@ -73,4 +73,3 @@
 ->_ : Underscore.Static
 +>_ : Static
  >identity : <T>(value: T) => T
- 

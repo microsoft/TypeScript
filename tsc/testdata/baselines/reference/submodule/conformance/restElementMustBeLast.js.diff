@@ -1,8 +1,8 @@
 --- old.restElementMustBeLast.js
 +++ new.restElementMustBeLast.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [restElementMustBeLast.js]
 -var _a;
 -var _b = [1, 2, 3], x = _b[1]; // Error, rest must be last element

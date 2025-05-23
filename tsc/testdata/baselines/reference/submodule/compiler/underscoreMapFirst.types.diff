@@ -11,7 +11,7 @@
 +>pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
  >data : IData[]
  >"series" : "series"
- 
+
          return _.map(allSeries, _.first);
  >_.map(allSeries, _.first) : ISeries[]
 ->_.map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
@@ -27,4 +27,3 @@
 +>first : <T>(array: List<T>) => T
      }
  }
- 

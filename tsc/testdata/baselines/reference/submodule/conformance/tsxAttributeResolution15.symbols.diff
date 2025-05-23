@@ -1,7 +1,7 @@
 --- old.tsxAttributeResolution15.symbols
 +++ new.tsxAttributeResolution15.symbols
 @@= skipped -5, +5 lines =@@
- 
+
  class BigGreeter extends React.Component<{ }, {}> {
  >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 0, 32))
 ->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
@@ -9,11 +9,11 @@
  >React : Symbol(React, Decl(file.tsx, 0, 0))
 ->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 +>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
- 
+
      render() {
 ->render : Symbol(BigGreeter.render, Decl(file.tsx, 2, 51))
 +>render : Symbol(render, Decl(file.tsx, 2, 51))
- 
+
          return <div>Default hi</div>;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
@@ -24,7 +24,7 @@
 ->greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 5, 5))
 +>greeting : Symbol(greeting, Decl(file.tsx, 5, 5))
  }
- 
+
  // Error
 @@= skipped -32, +32 lines =@@
  let c = <BigGreeter data-extra="hi" />
@@ -32,4 +32,3 @@
  >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 0, 32))
 ->data-extra : Symbol(data-extra, Decl(file.tsx, 14, 19))
 +>data-extra : Symbol("data-extra", Decl(file.tsx, 14, 19))
- 

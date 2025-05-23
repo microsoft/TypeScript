@@ -1,6 +1,6 @@
 --- old.amdModuleName2.errors.txt
 +++ new.amdModuleName2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -amdModuleName2.ts(2,1): error TS2458: An AMD module cannot have multiple name assignments.
 -
 -
@@ -17,5 +17,4 @@
 -    }
 -    export = Foo;
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
 +index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type '(Missing).JSX.Element' but required in type 'import("renderer2").predom.JSX.Element'.
- 
- 
+
+
  ==== renderer.d.ts (0 errors) ====
 @@= skipped -44, +44 lines =@@
      let elem = prerendered;

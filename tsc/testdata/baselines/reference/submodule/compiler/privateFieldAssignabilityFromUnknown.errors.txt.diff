@@ -5,8 +5,8 @@
 -privateFieldAssignabilityFromUnknown.ts(5,7): error TS2741: Property '#field' is missing in type '{}' but required in type 'Class'.
 +privateFieldAssignabilityFromUnknown.ts(5,7): error TS2322: Type 'unknown' is not assignable to type 'Class'.
 +  Property '#field' is missing in type '{}' but required in type 'Class'.
- 
- 
+
+
  ==== privateFieldAssignabilityFromUnknown.ts (2 errors) ====
 @@= skipped -10, +11 lines =@@
      

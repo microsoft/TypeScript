@@ -1,8 +1,8 @@
 --- old.inferFromBindingPattern.js
 +++ new.inferFromBindingPattern.js
 @@= skipped -45, +45 lines =@@
- 
- 
+
+
  //// [inferFromBindingPattern.js]
 -"use strict";
 -var x1 = f1(); // string

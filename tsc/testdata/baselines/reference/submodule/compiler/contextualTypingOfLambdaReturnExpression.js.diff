@@ -1,7 +1,7 @@
 --- old.contextualTypingOfLambdaReturnExpression.js
 +++ new.contextualTypingOfLambdaReturnExpression.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [contextualTypingOfLambdaReturnExpression.js]
  function callb(a) { }
 -callb(function (a) { return a.length; }); // Ok, we choose the second overload because the first one gave us an error when trying to resolve the lambda return type

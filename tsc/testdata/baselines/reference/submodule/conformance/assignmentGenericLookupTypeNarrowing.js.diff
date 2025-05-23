@@ -1,7 +1,7 @@
 --- old.assignmentGenericLookupTypeNarrowing.js
 +++ new.assignmentGenericLookupTypeNarrowing.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [assignmentGenericLookupTypeNarrowing.js]
  // Repro from #26130
 -var mappedObject = { foo: { x: "hello" } };

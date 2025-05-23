@@ -2,7 +2,7 @@
 +++ new.classAbstractExtends.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [classAbstractExtends.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

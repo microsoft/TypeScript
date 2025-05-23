@@ -6,7 +6,7 @@
  >require : Symbol(require, Decl(types.d.ts, 0, 0))
 ->'./mod' : Symbol(mod, Decl(mod.js, 0, 0))
 +>'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
- 
+
  var a = new mod.A()
  >a : Symbol(a, Decl(use.js, 2, 3))
 ->mod.A : Symbol(mod.A, Decl(mod.js, 6, 1))
@@ -14,7 +14,7 @@
  >mod : Symbol(mod, Decl(use.js, 1, 3))
 ->A : Symbol(mod.A, Decl(mod.js, 6, 1))
 +>A : Symbol(A, Decl(mod.js, 6, 1))
- 
+
  var b = new mod.B()
  >b : Symbol(b, Decl(use.js, 3, 3))
 ->mod.B : Symbol(mod.B, Decl(mod.js, 7, 13))
@@ -22,17 +22,17 @@
  >mod : Symbol(mod, Decl(use.js, 1, 3))
 ->B : Symbol(mod.B, Decl(mod.js, 7, 13))
 +>B : Symbol(B, Decl(mod.js, 7, 13))
- 
+
  a.m('nope')
 ->a.m : Symbol(m, Decl(mod.js, 9, 29))
  >a : Symbol(a, Decl(use.js, 2, 3))
 ->m : Symbol(m, Decl(mod.js, 9, 29))
- 
+
  b.m('not really')
 ->b.m : Symbol(m, Decl(mod.js, 9, 29))
  >b : Symbol(b, Decl(use.js, 3, 3))
 ->m : Symbol(m, Decl(mod.js, 9, 29))
- 
+
  === types.d.ts ===
  declare function require(name: string): any;
 @@= skipped -35, +31 lines =@@
@@ -42,7 +42,7 @@
 ->A : Symbol(A, Decl(mod.js, 1, 3), Decl(mod.js, 8, 13))
 +>A : Symbol(A, Decl(mod.js, 1, 3))
  >A : Symbol(A, Decl(mod.js, 1, 7))
- 
+
      this.a = 1
 ->this.a : Symbol(A.a, Decl(mod.js, 1, 22))
 ->this : Symbol(A, Decl(mod.js, 1, 7))
@@ -52,7 +52,7 @@
 ->B : Symbol(B, Decl(mod.js, 4, 3), Decl(mod.js, 9, 13))
 +>B : Symbol(B, Decl(mod.js, 4, 3))
  >B : Symbol(B, Decl(mod.js, 4, 7))
- 
+
      this.b = 2
 ->this.b : Symbol(B.b, Decl(mod.js, 4, 22))
 ->this : Symbol(B, Decl(mod.js, 4, 7))
@@ -65,7 +65,7 @@
  >A : Symbol(A, Decl(mod.js, 6, 1))
 ->A : Symbol(A, Decl(mod.js, 1, 3), Decl(mod.js, 8, 13))
 +>A : Symbol(A, Decl(mod.js, 1, 3))
- 
+
  exports.B = B
  >exports.B : Symbol(B, Decl(mod.js, 7, 13))
 ->exports : Symbol(B, Decl(mod.js, 7, 13))
@@ -73,7 +73,7 @@
  >B : Symbol(B, Decl(mod.js, 7, 13))
 ->B : Symbol(B, Decl(mod.js, 4, 3), Decl(mod.js, 9, 13))
 +>B : Symbol(B, Decl(mod.js, 4, 3))
- 
+
  A.prototype = B.prototype = {
 ->A.prototype : Symbol(A.prototype, Decl(mod.js, 8, 13))
 ->A : Symbol(A, Decl(mod.js, 1, 3), Decl(mod.js, 8, 13))
@@ -87,6 +87,6 @@
 +>B.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>B : Symbol(B, Decl(mod.js, 4, 3))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 
+
      /** @param {number} n */
      m(n) {

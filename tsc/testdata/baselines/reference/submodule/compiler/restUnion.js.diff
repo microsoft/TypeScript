@@ -1,8 +1,8 @@
 --- old.restUnion.js
 +++ new.restUnion.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [restUnion.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

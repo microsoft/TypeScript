@@ -9,4 +9,3 @@
  >a : Symbol(a, Decl(logicalOrExpressionIsNotContextuallyTyped.ts, 9, 15))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
- 

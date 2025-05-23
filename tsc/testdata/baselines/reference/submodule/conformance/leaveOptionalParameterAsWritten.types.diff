@@ -1,16 +1,16 @@
 --- old.leaveOptionalParameterAsWritten.types
 +++ new.leaveOptionalParameterAsWritten.types
 @@= skipped -5, +5 lines =@@
- 
+
  === b.ts ===
  import * as a from "./a";
 ->a : typeof a
 +>a : typeof import("a")
- 
+
  declare global {
  >global : typeof global
 @@= skipped -13, +13 lines =@@
- 
+
        export import Foo = a.Foo;
  >Foo : any
 ->a : typeof a
@@ -19,14 +19,14 @@
      }
    }
 @@= skipped -8, +8 lines =@@
- 
+
  === c.ts ===
  type Foo = teams.calling.Foo;
 ->Foo : import("a").Foo
 +>Foo : Foo
  >teams : any
  >calling : any
- 
+
  export const bar = (p?: Foo) => {}
 ->bar : (p?: Foo) => void
 ->(p?: Foo) => {} : (p?: Foo) => void
@@ -34,4 +34,3 @@
 +>bar : (p?: Foo | undefined) => void
 +>(p?: Foo) => {} : (p?: Foo | undefined) => void
 +>p : Foo | undefined
- 

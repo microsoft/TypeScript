@@ -2,7 +2,7 @@
 +++ new.importCallExpressionNestedSystem.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [foo.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

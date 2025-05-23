@@ -2,7 +2,7 @@
 +++ new.exponentiationOperatorWithTemplateStringInvalidES6.js
 @@= skipped -16, +16 lines =@@
  kj **= `2${ 3 }4`;
- 
+
  //// [exponentiationOperatorWithTemplateStringInvalidES6.js]
 -var a = Math.pow(1, `${3}`);
 -var b = Math.pow(1, `2${3}`);

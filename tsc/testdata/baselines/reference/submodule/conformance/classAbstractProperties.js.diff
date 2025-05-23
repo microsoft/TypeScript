@@ -2,7 +2,7 @@
 +++ new.classAbstractProperties.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [classAbstractProperties.js]
 -var A = /** @class */ (function () {
 -    function A() {

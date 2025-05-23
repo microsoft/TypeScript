@@ -1,8 +1,8 @@
 --- old.exportDefaultParenthesize.js
 +++ new.exportDefaultParenthesize.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [commalist.js]
 -var _a;
 -export default (_a = {},

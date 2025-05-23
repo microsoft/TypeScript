@@ -1,8 +1,8 @@
 --- old.instanceOfAssignability.js
 +++ new.instanceOfAssignability.js
 @@= skipped -91, +91 lines =@@
- 
- 
+
+
  //// [instanceOfAssignability.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -119,14 +119,16 @@
          // 1.5: y: Array<number>|Array<string>
          // Want: y: Array<number>|Array<string>
 -        var y = x;
-+        let y = x;
-     }
- }
+-    }
+-}
 -var ABC = /** @class */ (function () {
 -    function ABC() {
 -    }
 -    return ABC;
 -}());
++        let y = x;
++    }
++}
 +class ABC {
 +    a;
 +    b;

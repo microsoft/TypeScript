@@ -1,8 +1,8 @@
 --- old.expressionTypeNodeShouldError.js
 +++ new.expressionTypeNodeShouldError.js
 @@= skipped -47, +47 lines =@@
- 
- 
+
+
  //// [string.js]
 -var C = /** @class */ (function () {
 -    function C() {

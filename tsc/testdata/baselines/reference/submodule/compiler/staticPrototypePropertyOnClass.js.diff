@@ -2,25 +2,16 @@
 +++ new.staticPrototypePropertyOnClass.js
 @@= skipped -20, +20 lines =@@
  var d = c4;
- 
+
  //// [staticPrototypePropertyOnClass.js]
 -var c1 = /** @class */ (function () {
 -    function c1() {
-+class c1 {
-+}
-+class c2 {
-+}
-+class c3 {
-+    constructor() {
-     }
+-    }
 -    return c1;
 -}());
 -var c2 = /** @class */ (function () {
 -    function c2() {
-+}
-+class c4 {
-+    constructor(param) {
-     }
+-    }
 -    return c2;
 -}());
 -var c3 = /** @class */ (function () {
@@ -33,6 +24,17 @@
 -    }
 -    return c4;
 -}());
++class c1 {
++}
++class c2 {
++}
++class c3 {
++    constructor() {
++    }
++}
++class c4 {
++    constructor(param) {
++    }
 +}
  var a = c1;
  var b = c2;

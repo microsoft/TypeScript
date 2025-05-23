@@ -1,8 +1,8 @@
 --- old.genericConstraintDeclaration.js
 +++ new.genericConstraintDeclaration.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [genericConstraintDeclaration.js]
 -var List = /** @class */ (function () {
 -    function List() {

@@ -2,23 +2,22 @@
 +++ new.functionConstraintSatisfaction2.types
 @@= skipped -121, +121 lines =@@
  >f2 : F2
- 
+
  function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 ->fff : <T extends { (): void; }, U extends T>(x: T, y: U) => void
 +>fff : <T extends () => void, U extends T>(x: T, y: U) => void
  >x : T
  >y : U
- 
+
      foo2(x);
  >foo2(x) : (x: string) => string
 ->foo2 : <T_1 extends (x: string) => string>(x: T_1) => T_1
 +>foo2 : <T extends (x: string) => string>(x: T) => T
  >x : T
- 
+
      foo2(y);
  >foo2(y) : (x: string) => string
 ->foo2 : <T_1 extends (x: string) => string>(x: T_1) => T_1
 +>foo2 : <T extends (x: string) => string>(x: T) => T
  >y : U
  }
- 

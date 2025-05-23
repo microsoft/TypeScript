@@ -1,9 +1,9 @@
 --- old.sideEffectImports4(nouncheckedsideeffectimports=true).types
 +++ new.sideEffectImports4(nouncheckedsideeffectimports=true).types
 @@= skipped -3, +3 lines =@@
- 
+
  import "server-only";
- 
+
 +=== node_modules/server-only/index.js ===
 +throw new Error();
 +>new Error() : Error

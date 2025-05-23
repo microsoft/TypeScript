@@ -13,8 +13,8 @@
 +bar.ts(3,13): error TS2305: Module '"foo2"' has no exported member 'b'.
 +bar.ts(3,19): error TS2305: Module '"foo2"' has no exported member 'd'.
 +bar.ts(3,22): error TS2305: Module '"foo2"' has no exported member 'toString'.
- 
- 
+
+
  ==== foo.d.ts (0 errors) ====
 @@= skipped -20, +20 lines =@@
  ==== bar.ts (6 errors) ====

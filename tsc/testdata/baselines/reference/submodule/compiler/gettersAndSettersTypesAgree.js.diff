@@ -2,7 +2,7 @@
 +++ new.gettersAndSettersTypesAgree.js
 @@= skipped -12, +12 lines =@@
  var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
- 
+
  //// [gettersAndSettersTypesAgree.js]
 -var C = /** @class */ (function () {
 -    function C() {

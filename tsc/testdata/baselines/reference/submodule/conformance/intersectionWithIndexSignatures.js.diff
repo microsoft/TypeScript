@@ -1,8 +1,8 @@
 --- old.intersectionWithIndexSignatures.js
 +++ new.intersectionWithIndexSignatures.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [intersectionWithIndexSignatures.js]
 -"use strict";
  ta1 = sa1;

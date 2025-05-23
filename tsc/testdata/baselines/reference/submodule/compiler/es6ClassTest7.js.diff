@@ -1,8 +1,8 @@
 --- old.es6ClassTest7.js
 +++ new.es6ClassTest7.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [es6ClassTest7.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

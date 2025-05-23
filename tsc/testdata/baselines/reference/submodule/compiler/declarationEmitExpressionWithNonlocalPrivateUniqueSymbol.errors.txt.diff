@@ -1,6 +1,6 @@
 --- old.declarationEmitExpressionWithNonlocalPrivateUniqueSymbol.errors.txt
 +++ new.declarationEmitExpressionWithNonlocalPrivateUniqueSymbol.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -b.ts(2,14): error TS2527: The inferred type of 'A1' references an inaccessible 'unique symbol' type. A type annotation is necessary.
 -
 -
@@ -12,5 +12,4 @@
 -    export const A1 = A;
 -                 ~~
 -!!! error TS2527: The inferred type of 'A1' references an inaccessible 'unique symbol' type. A type annotation is necessary.
-@@= skipped --1, +1 lines =@@
 +<no content>

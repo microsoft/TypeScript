@@ -1,12 +1,11 @@
 --- old.allowJsCrossMonorepoPackage.types
 +++ new.allowJsCrossMonorepoPackage.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /packages/main/index.ts ===
  import { x } from "shared";
 ->x : "pkg"
-+>x : any
- 
+-
 -=== /node_modules/pkg/index.d.ts ===
 -export declare function pkg(): "pkg";
 ->pkg : () => "pkg"
@@ -23,4 +22,4 @@
 ->x : "pkg"
 ->pkg() : "pkg"
 ->pkg : () => "pkg"
--
++>x : any

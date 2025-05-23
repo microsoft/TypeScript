@@ -1,8 +1,7 @@
 --- old.jsDeclarationsReusesExistingNodesMappingJSDocTypes.errors.txt
 +++ new.jsDeclarationsReusesExistingNodesMappingJSDocTypes.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(16,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +index.js(19,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
 +index.js(22,12): error TS2315: Type 'Object' is not generic.

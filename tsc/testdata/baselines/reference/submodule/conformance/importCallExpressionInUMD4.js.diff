@@ -2,7 +2,7 @@
 +++ new.importCallExpressionInUMD4.js
 @@= skipped -40, +40 lines =@@
  }
- 
+
  //// [0.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {
@@ -56,36 +56,10 @@
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
 -        if (v !== undefined) module.exports = v;
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.D = void 0;
-+class C {
-+    myModule = Promise.resolve().then(() => require("./0"));
-+    method() {
-+        const loadAsync = Promise.resolve().then(() => require("./0"));
-+        this.myModule.then(Zero => {
-+            console.log(Zero.foo());
-+        }, async err => {
-+            console.log(err);
-+            let one = await Promise.resolve().then(() => require("./1"));
-+            console.log(one.backup());
-+        });
-     }
+-    }
 -    else if (typeof define === "function" && define.amd) {
 -        define(["require", "exports"], factory);
-+}
-+class D {
-+    myModule = Promise.resolve().then(() => require("./0"));
-+    method() {
-+        const loadAsync = Promise.resolve().then(() => require("./0"));
-+        this.myModule.then(Zero => {
-+            console.log(Zero.foo());
-+        }, async err => {
-+            console.log(err);
-+            let one = await Promise.resolve().then(() => require("./1"));
-+            console.log(one.backup());
-+        });
-     }
+-    }
 -})(function (require, exports) {
 -    "use strict";
 -    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
@@ -123,5 +97,33 @@
 -    }
 -    exports.D = D;
 -});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.D = void 0;
++class C {
++    myModule = Promise.resolve().then(() => require("./0"));
++    method() {
++        const loadAsync = Promise.resolve().then(() => require("./0"));
++        this.myModule.then(Zero => {
++            console.log(Zero.foo());
++        }, async err => {
++            console.log(err);
++            let one = await Promise.resolve().then(() => require("./1"));
++            console.log(one.backup());
++        });
++    }
++}
++class D {
++    myModule = Promise.resolve().then(() => require("./0"));
++    method() {
++        const loadAsync = Promise.resolve().then(() => require("./0"));
++        this.myModule.then(Zero => {
++            console.log(Zero.foo());
++        }, async err => {
++            console.log(err);
++            let one = await Promise.resolve().then(() => require("./1"));
++            console.log(one.backup());
++        });
++    }
 +}
 +exports.D = D;

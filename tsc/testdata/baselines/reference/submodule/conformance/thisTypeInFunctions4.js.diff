@@ -1,7 +1,7 @@
 --- old.thisTypeInFunctions4.js
 +++ new.thisTypeInFunctions4.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [thisTypeInFunctions4.js]
  function problemFunction() {
 -    var _this = this;

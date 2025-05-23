@@ -1,8 +1,8 @@
 --- old.subSubClassCanAccessProtectedConstructor.js
 +++ new.subSubClassCanAccessProtectedConstructor.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [subSubClassCanAccessProtectedConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

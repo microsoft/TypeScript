@@ -1,8 +1,8 @@
 --- old.controlFlowStringIndex.js
 +++ new.controlFlowStringIndex.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [controlFlowStringIndex.js]
 -"use strict";
  if (value.foo !== null) {

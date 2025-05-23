@@ -2,7 +2,7 @@
 +++ new.indexWithoutParamType2.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [indexWithoutParamType2.js]
 -var C = /** @class */ (function () {
 -    function C() {

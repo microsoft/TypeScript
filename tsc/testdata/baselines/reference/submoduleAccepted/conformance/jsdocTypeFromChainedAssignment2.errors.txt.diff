@@ -5,15 +5,17 @@
 -use.js(3,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 -use.js(4,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 -use.js(5,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+-
+-
+-==== use.js (4 errors) ====
 +mod.js(2,21): error TS2339: Property 'g' does not exist on type 'typeof import("mod")'.
 +mod.js(2,37): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +mod.js(6,35): error TS2339: Property 'i' does not exist on type 'typeof import("mod")'.
 +mod.js(6,51): error TS7006: Parameter 'mom' implicitly has an 'any' type.
 +use.js(3,5): error TS2339: Property 'g' does not exist on type 'typeof import("mod")'.
 +use.js(5,5): error TS2339: Property 'i' does not exist on type 'typeof import("mod")'.
- 
- 
--==== use.js (4 errors) ====
++
++
 +==== use.js (2 errors) ====
      var mod = require('./mod');
      mod.f('no')

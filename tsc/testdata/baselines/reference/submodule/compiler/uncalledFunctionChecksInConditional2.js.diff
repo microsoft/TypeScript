@@ -1,8 +1,8 @@
 --- old.uncalledFunctionChecksInConditional2.js
 +++ new.uncalledFunctionChecksInConditional2.js
 @@= skipped -74, +74 lines =@@
- 
- 
+
+
  //// [uncalledFunctionChecksInConditional2.js]
 -var _a;
  {

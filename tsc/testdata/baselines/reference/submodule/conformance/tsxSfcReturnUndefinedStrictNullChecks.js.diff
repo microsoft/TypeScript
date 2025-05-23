@@ -2,7 +2,7 @@
 +++ new.tsxSfcReturnUndefinedStrictNullChecks.js
 @@= skipped -12, +12 lines =@@
  const G = <Greet />;
- 
+
  //// [file.jsx]
 -define(["require", "exports", "react"], function (require, exports, React) {
 -    "use strict";

@@ -1,8 +1,8 @@
 --- old.genericFunctionsNotContextSensitive.js
 +++ new.genericFunctionsNotContextSensitive.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [genericFunctionsNotContextSensitive.js]
 -"use strict";
  // Repro from #37110

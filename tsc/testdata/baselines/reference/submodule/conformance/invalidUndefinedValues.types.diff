@@ -2,7 +2,7 @@
 +++ new.invalidUndefinedValues.types
 @@= skipped -70, +70 lines =@@
  >M : typeof M
- 
+
  x = { f() { } }
 ->x = { f() { } } : { f(): void; }
 +>x = { f() { } } : { f: () => void; }
@@ -10,5 +10,5 @@
 ->{ f() { } } : { f(): void; }
 +>{ f() { } } : { f: () => void; }
  >f : () => void
- 
+
  function f<T>(a: T) {

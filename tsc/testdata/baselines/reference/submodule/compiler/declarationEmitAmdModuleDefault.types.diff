@@ -1,9 +1,8 @@
 --- old.declarationEmitAmdModuleDefault.types
 +++ new.declarationEmitAmdModuleDefault.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmitAmdModuleDefault.ts ===
  export default class DefaultClass { }
 ->DefaultClass : DefaultClass
 +>DefaultClass : default
- 

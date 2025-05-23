@@ -1,8 +1,8 @@
 --- old.numericClassMembers1.js
 +++ new.numericClassMembers1.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [numericClassMembers1.js]
 -var C234 = /** @class */ (function () {
 -    function C234() {

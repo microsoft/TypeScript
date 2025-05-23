@@ -1,7 +1,7 @@
 --- old.typedefCrossModule2.symbols
 +++ new.typedefCrossModule2.symbols
 @@= skipped -15, +15 lines =@@
- 
+
  var bbb = new mod.Baz();
  >bbb : Symbol(bbb, Decl(use.js, 5, 3))
 ->mod.Baz : Symbol(Baz, Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18), Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18))
@@ -9,22 +9,22 @@
  >mod : Symbol(mod, Decl(use.js, 0, 3))
 ->Baz : Symbol(Baz, Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18), Decl(mod1.js, 8, 4), Decl(mod1.js, 9, 18))
 +>Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
- 
+
  === mod1.js ===
  // error
- 
+
  /** @typedef {number} Foo */
  class Foo { } // should error
 ->Foo : Symbol(Foo, Decl(mod1.js, 0, 0))
 +>Foo : Symbol(Foo, Decl(mod1.js, 2, 4), Decl(mod1.js, 0, 0))
- 
+
  /** @typedef {number} Bar */
  exports.Bar = class { }
 ->exports.Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 ->exports : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 ->Bar : Symbol(Bar, Decl(mod1.js, 3, 13), Decl(mod1.js, 5, 4))
 +>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
- 
+
  /** @typedef {number} Baz */
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
@@ -33,23 +33,23 @@
 +>module.exports : Symbol(export=, Decl(mod1.js, 6, 23))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(mod1.js, 6, 23))
- 
+
      Baz: class { }
  >Baz : Symbol(Baz, Decl(mod1.js, 9, 18))
 @@= skipped -31, +29 lines =@@
- 
+
  /** @typedef {number} Qux */
  var Qux = 2;
 ->Qux : Symbol(Qux, Decl(mod1.js, 16, 3), Decl(mod1.js, 15, 4))
 +>Qux : Symbol(Qux, Decl(mod1.js, 15, 4), Decl(mod1.js, 16, 3))
- 
+
  /** @typedef {number} Quid */
  exports.Quid = 2;
 ->exports.Quid : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
 ->exports : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
 ->Quid : Symbol(Quid, Decl(mod1.js, 16, 12), Decl(mod1.js, 18, 4))
 +>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
- 
+
  /** @typedef {number} Quack */
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
@@ -58,6 +58,6 @@
 +>module.exports : Symbol(export=, Decl(mod1.js, 6, 23))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(mod1.js, 6, 23))
- 
+
      Quack: 2
  >Quack : Symbol(Quack, Decl(mod1.js, 22, 18))

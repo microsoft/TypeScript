@@ -1,8 +1,8 @@
 --- old.mappedTypes6.js
 +++ new.mappedTypes6.js
 @@= skipped -127, +127 lines =@@
- 
- 
+
+
  //// [mappedTypes6.js]
 -"use strict";
  function f1(x, y, z) {

@@ -1,6 +1,6 @@
 --- old.declarationEmitCastReusesTypeNode3(strictnullchecks=false).js
 +++ new.declarationEmitCastReusesTypeNode3(strictnullchecks=false).js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitCastReusesTypeNode3.ts] ////
 -
 -//// [declarationEmitCastReusesTypeNode3.ts]
@@ -55,5 +55,4 @@
 -declare const _default: P;
 -export default _default;
 -export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;
-@@= skipped --1, +1 lines =@@
 +<no content>

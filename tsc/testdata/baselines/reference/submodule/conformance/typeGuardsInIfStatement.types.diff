@@ -7,7 +7,7 @@
 ->foo : (x: number | string) => number
 +>foo : (x: string | number) => number
  >x : string | number
- 
+
      if (typeof x === "string") {
 @@= skipped -21, +21 lines =@@
      }
@@ -16,7 +16,7 @@
 ->foo2 : (x: number | string) => number
 +>foo2 : (x: string | number) => number
  >x : string | number
- 
+
      if (typeof x === "string") {
 @@= skipped -23, +23 lines =@@
      }
@@ -25,7 +25,7 @@
 ->foo3 : (x: number | string) => string | number
 +>foo3 : (x: string | number) => string | number
  >x : string | number
- 
+
      if (typeof x === "string") {
 @@= skipped -23, +23 lines =@@
      }
@@ -34,7 +34,7 @@
 ->foo4 : (x: number | string) => string | number
 +>foo4 : (x: string | number) => string | number
  >x : string | number
- 
+
      if (typeof x === "string") {
 @@= skipped -23, +23 lines =@@
      }
@@ -43,7 +43,7 @@
 ->foo5 : (x: number | string) => string
 +>foo5 : (x: string | number) => string
  >x : string | number
- 
+
      if (typeof x === "string") {
 @@= skipped -23, +23 lines =@@
      }
@@ -52,7 +52,7 @@
 ->foo6 : (x: number | string) => string | number
 +>foo6 : (x: string | number) => string | number
  >x : string | number
- 
+
      if (typeof x === "string") {
 @@= skipped -28, +28 lines =@@
      }
@@ -61,7 +61,7 @@
 ->foo7 : (x: number | string | boolean) => boolean
 +>foo7 : (x: string | number | boolean) => boolean
  >x : string | number | boolean
- 
+
      if (typeof x === "string") {
 @@= skipped -31, +31 lines =@@
      }
@@ -70,7 +70,7 @@
 ->foo8 : (x: number | string | boolean) => boolean
 +>foo8 : (x: string | number | boolean) => boolean
  >x : string | number | boolean
- 
+
      if (typeof x === "string") {
 @@= skipped -37, +37 lines =@@
      }
@@ -79,7 +79,7 @@
 ->foo9 : (x: number | string) => boolean
 +>foo9 : (x: string | number) => boolean
  >x : string | number
- 
+
      var y = 10;
 @@= skipped -34, +34 lines =@@
      }
@@ -88,7 +88,7 @@
 ->foo10 : (x: number | string | boolean) => boolean
 +>foo10 : (x: string | number | boolean) => boolean
  >x : string | number | boolean
- 
+
      // Mixing typeguard narrowing in if statement with conditional expression typeguard
 @@= skipped -40, +40 lines =@@
      }
@@ -97,7 +97,7 @@
 ->foo11 : (x: number | string | boolean) => string
 +>foo11 : (x: string | number | boolean) => string
  >x : string | number | boolean
- 
+
      // Mixing typeguard narrowing in if statement with conditional expression typeguard
 @@= skipped -62, +62 lines =@@
      }
@@ -106,5 +106,5 @@
 ->foo12 : (x: number | string | boolean) => any
 +>foo12 : (x: string | number | boolean) => any
  >x : string | number | boolean
- 
+
      // Mixing typeguard narrowing in if statement with conditional expression typeguard

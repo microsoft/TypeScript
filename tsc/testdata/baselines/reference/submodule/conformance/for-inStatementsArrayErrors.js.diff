@@ -1,8 +1,8 @@
 --- old.for-inStatementsArrayErrors.js
 +++ new.for-inStatementsArrayErrors.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [for-inStatementsArrayErrors.js]
 -var a;
 -for (var x in a) {

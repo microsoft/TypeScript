@@ -2,11 +2,11 @@
 +++ new.exportNamespace12.types
 @@= skipped -4, +4 lines =@@
  >c : 10
- 
+
  import * as types from './types'
 ->types : typeof types
 +>types : typeof import("types")
- 
+
  console.log(c) // Fails as expected, import is still allowed though.
  >console.log(c) : void
 @@= skipped -15, +15 lines =@@
@@ -16,5 +16,5 @@
 ->types : typeof types
 +>types : typeof import("types")
  >c : any
- 
+
  === types.ts ===

@@ -2,7 +2,7 @@
 +++ new.typeParameterWithInvalidConstraintType.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [typeParameterWithInvalidConstraintType.js]
 -var A = /** @class */ (function () {
 -    function A() {

@@ -7,7 +7,7 @@
 ->f1 : <const T>(x: T) => T
 +>f1 : <T>(x: T) => T
  >x : T
- 
+
      return x;
 @@= skipped -9, +9 lines =@@
  const t1 = f1("a");
@@ -16,7 +16,7 @@
 ->f1 : <const T>(x: T) => T
 +>f1 : <T>(x: T) => T
  >"a" : "a"
- 
+
  const t2 = f1(["a", ["b", "c"]]);
  >t2 : readonly ["a", readonly ["b", "c"]]
  >f1(["a", ["b", "c"]]) : readonly ["a", readonly ["b", "c"]]
@@ -41,7 +41,7 @@
 ->f2 : <const T, U>(x: T) => T
 +>f2 : <T, U>(x: T) => T
  >x : T
- 
+
      return x;
 @@= skipped -10, +10 lines =@@
  const t4 = f2('a');
@@ -50,7 +50,7 @@
 ->f2 : <const T, U>(x: T) => T
 +>f2 : <T, U>(x: T) => T
  >'a' : "a"
- 
+
  const t5 = f2(['a', ['b', 'c']]);
  >t5 : readonly ["a", readonly ["b", "c"]]
  >f2(['a', ['b', 'c']]) : readonly ["a", readonly ["b", "c"]]
@@ -75,7 +75,7 @@
 ->f3 : <const T>(x: T) => T[]
 +>f3 : <T>(x: T) => T[]
  >x : T
- 
+
      return [x];
 @@= skipped -10, +10 lines =@@
  const t7 = f3("hello");
@@ -84,14 +84,14 @@
 ->f3 : <const T>(x: T) => T[]
 +>f3 : <T>(x: T) => T[]
  >"hello" : "hello"
- 
+
  const t8 = f3("hello");
  >t8 : "hello"[]
  >f3("hello") : "hello"[]
 ->f3 : <const T>(x: T) => T[]
 +>f3 : <T>(x: T) => T[]
  >"hello" : "hello"
- 
+
  /**
 @@= skipped -15, +15 lines =@@
   * @returns {T}
@@ -100,7 +100,7 @@
 ->f4 : <const T>(x: [T, T]) => T
 +>f4 : <T>(x: [T, T]) => T
  >x : [T, T]
- 
+
      return x[0];
 @@= skipped -11, +11 lines =@@
  const t9 = f4([[1, "x"], [2, "y"]]);
@@ -127,7 +127,7 @@
 ->f5 : <const T>(obj: { x: T; y: T; }) => T
 +>f5 : <T>(obj: { x: T; y: T; }) => T
  >obj : { x: T; y: T; }
- 
+
      return obj.x;
 @@= skipped -11, +11 lines =@@
  const t11 = f5({ x: [1, "x"], y: [2, "y"] });
@@ -154,7 +154,7 @@
 ->foo : <const U>(x: U) => U
 +>foo : <U>(x: U) => U
  >x : U
- 
+
          return x;
 @@= skipped -29, +29 lines =@@
  const t14 = t13.foo(["a", ["b", "c"]]);
@@ -175,7 +175,7 @@
 ->f6 : <const T extends readonly unknown[]>(...args: T) => T
 +>f6 : <T extends readonly unknown[]>(...args: T) => T
  >args : T
- 
+
      return args;
 @@= skipped -9, +9 lines =@@
  const t15 = f6(1, 'b', { a: 1, b: 'x' });

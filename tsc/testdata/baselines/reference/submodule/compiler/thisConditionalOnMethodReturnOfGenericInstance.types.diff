@@ -2,10 +2,10 @@
 +++ new.thisConditionalOnMethodReturnOfGenericInstance.types
 @@= skipped -12, +12 lines =@@
  >A : A<T>
- 
+
      method(): string | (this extends C ? undefined : null) {
 ->method : () => string | (this extends C ? undefined : null)
 +>method : () => string | (this extends C<any> ? undefined : null)
- 
+
          return "";
  >"" : ""

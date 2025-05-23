@@ -1,7 +1,7 @@
 --- old.typeGuardNarrowByUntypedField.js
 +++ new.typeGuardNarrowByUntypedField.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [typeGuardNarrowByUntypedField.js]
  if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 -    var x = arrayLikeOrIterable.length;

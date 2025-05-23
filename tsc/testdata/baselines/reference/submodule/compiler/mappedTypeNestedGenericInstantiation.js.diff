@@ -1,8 +1,8 @@
 --- old.mappedTypeNestedGenericInstantiation.js
 +++ new.mappedTypeNestedGenericInstantiation.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [mappedTypeNestedGenericInstantiation.js]
 -// Repro from #13346
 -var square = function (x) { return x * x; };

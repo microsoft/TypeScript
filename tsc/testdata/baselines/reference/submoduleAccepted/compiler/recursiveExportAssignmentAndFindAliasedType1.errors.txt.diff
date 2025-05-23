@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 +recursiveExportAssignmentAndFindAliasedType1_moduleA.ts(3,25): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType1_moduleB' or its corresponding type declarations.
  recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts(2,5): error TS2303: Circular definition of import alias 'self'.
- 
- 
+
+
 -==== recursiveExportAssignmentAndFindAliasedType1_moduleA.ts (0 errors) ====
 +==== recursiveExportAssignmentAndFindAliasedType1_moduleA.ts (1 errors) ====
      /// <reference path="recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts"/>

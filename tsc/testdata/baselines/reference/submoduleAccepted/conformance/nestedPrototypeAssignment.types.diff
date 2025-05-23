@@ -13,7 +13,7 @@
 +>C : any
 +>prototype : any
  >{} : {}
- 
+
  C.prototype.bar.foo = {};
  >C.prototype.bar.foo = {} : {}
 ->C.prototype.bar.foo : {}
@@ -31,4 +31,3 @@
 +>bar : any
 +>foo : any
  >{} : {}
- 

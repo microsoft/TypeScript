@@ -11,4 +11,3 @@
  >b : Symbol(b, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 5, 1))
 ->c : Symbol(b.c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
 +>c : Symbol(c, Decl(internalAliasInitializedModuleInsideTopLevelModuleWithExport.ts, 1, 21))
- 

@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.js
 @@= skipped -166, +166 lines =@@
  //var r8b7 = b7 !== a7;
- 
+
  //// [comparisonOperatorWithSubtypeObjectOnInstantiatedConstructorSignature.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

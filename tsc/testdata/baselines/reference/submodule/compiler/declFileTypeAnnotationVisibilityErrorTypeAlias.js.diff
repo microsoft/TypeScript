@@ -45,15 +45,22 @@
 -        return public1;
 -    }());
 -    var m3;
--    (function (m3) {
++    class private1 {
++    }
++    class public1 {
++    }
++    let m3;
+     (function (m3) {
 -        var public1 = /** @class */ (function () {
 -            function public1() {
 -            }
 -            return public1;
 -        }());
--        m3.public1 = public1;
--    })(m3 || (m3 = {}));
--})(M2 || (M2 = {}));
++        class public1 {
++        }
+         m3.public1 = public1;
+     })(m3 || (m3 = {}));
+ })(M2 || (M2 = {}));
 -
 -
 -//// [declFileTypeAnnotationVisibilityErrorTypeAlias.d.ts]
@@ -78,21 +85,16 @@
 -    }
 -}
 -declare namespace M2 {
-     class private1 {
-     }
-     class public1 {
-     }
+-    class private1 {
+-    }
+-    class public1 {
+-    }
 -    namespace m3 {
-+    let m3;
-+    (function (m3) {
-         class public1 {
-         }
+-        class public1 {
+-        }
 -    }
 -    export type t2 = private1;
 -    export type t12 = public1;
 -    export type t112 = m3.public1;
 -    export {};
 -}
-+        m3.public1 = public1;
-+    })(m3 || (m3 = {}));
-+})(M2 || (M2 = {}));

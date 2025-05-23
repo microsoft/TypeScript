@@ -9,10 +9,10 @@
 +>legacyOct : 123
 +>0123 : 123
  >n : any
- 
+
  { const scientific = 1e2n; }
 @@= skipped -42, +42 lines =@@
- 
+
  // Using literals as types
  const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
 ->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
@@ -23,7 +23,7 @@
  >x ** 2n : bigint
  >x : 1n | 3n | 2n
 @@= skipped -9, +9 lines =@@
- 
+
  oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
  >oneTwoOrThree(0n) : bigint
 ->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
@@ -41,7 +41,7 @@
 ->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
 +>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
  >3n : 3n
- 
+
  oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
  >oneTwoOrThree(0) : bigint
 ->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
@@ -59,4 +59,3 @@
 ->oneTwoOrThree : (x: 1n | 2n | 3n) => bigint
 +>oneTwoOrThree : (x: 1n | 3n | 2n) => bigint
  >3 : 3
- 

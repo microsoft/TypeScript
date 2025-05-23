@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 +b.js(1,3): error TS2339: Property 'prototype' does not exist on type 'typeof C'.
  b.js(2,1): error TS2322: Type 'number' is not assignable to type '() => void'.
- 
- 
+
+
 @@= skipped -4, +5 lines =@@
      declare namespace C {
          function bar(): void

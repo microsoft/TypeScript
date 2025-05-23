@@ -2,6 +2,6 @@
 +++ new.conditionalTypeAnyUnion.js
 @@= skipped -9, +9 lines =@@
  type R = WithSpec<Spec> // should not error
- 
+
  //// [conditionalTypeAnyUnion.js]
 -// repro from #52568

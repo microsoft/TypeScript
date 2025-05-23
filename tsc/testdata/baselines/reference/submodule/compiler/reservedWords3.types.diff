@@ -6,6 +6,6 @@
  >f1 : () => any
 -> : (Missing)
 +> : 
- 
+
  function f2(class) {}
  >f2 : () => any

@@ -6,6 +6,6 @@
      module c {
 ->c : typeof import("baz")
 +>c : typeof c
- 
+
          export var c: string;
  >c : string

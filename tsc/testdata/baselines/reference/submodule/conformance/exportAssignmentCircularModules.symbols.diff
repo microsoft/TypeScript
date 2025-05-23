@@ -1,7 +1,7 @@
 --- old.exportAssignmentCircularModules.symbols
 +++ new.exportAssignmentCircularModules.symbols
 @@= skipped -8, +8 lines =@@
- 
+
  	export var x = foo0.x;
  >x : Symbol(x, Decl(foo_2.ts, 2, 11))
 ->foo0.x : Symbol(foo0.x, Decl(foo_0.ts, 2, 11))
@@ -13,7 +13,7 @@
  export = Foo;
  >Foo : Symbol(Foo, Decl(foo_2.ts, 0, 33))
 @@= skipped -16, +16 lines =@@
- 
+
  	export var x = foo1.x;
  >x : Symbol(x, Decl(foo_0.ts, 2, 11))
 ->foo1.x : Symbol(foo1.x, Decl(foo_1.ts, 2, 11))
@@ -25,7 +25,7 @@
  export = Foo;
  >Foo : Symbol(Foo, Decl(foo_0.ts, 0, 33))
 @@= skipped -16, +16 lines =@@
- 
+
  	export var x = foo2.x;
  >x : Symbol(x, Decl(foo_1.ts, 2, 11))
 ->foo2.x : Symbol(foo2.x, Decl(foo_2.ts, 2, 11))

@@ -2,7 +2,7 @@
 +++ new.keyofDoesntContainSymbols.js
 @@= skipped -26, +26 lines =@@
  type ValuesOfObj = Values<typeof obj>;
- 
+
  //// [keyofDoesntContainSymbols.js]
 -var _a;
 -var sym = Symbol();

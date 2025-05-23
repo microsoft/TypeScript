@@ -1,7 +1,7 @@
 --- old.thisPrototypeMethodCompoundAssignmentJs.symbols
 +++ new.thisPrototypeMethodCompoundAssignmentJs.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  Element.prototype.remove ??= function () {
 ->Element.prototype.remove : Symbol(ChildNode.remove, Decl(lib.dom.d.ts, --, --))
@@ -11,7 +11,7 @@
  >prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
 ->remove : Symbol(ChildNode.remove, Decl(lib.dom.d.ts, --, --))
 +>remove : Symbol(remove, Decl(lib.dom.d.ts, --, --))
- 
+
    this.parentNode?.removeChild(this);
 ->this.parentNode?.removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
 ->this.parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
@@ -23,7 +23,7 @@
 +>parentNode : Symbol(parentNode, Decl(lib.dom.d.ts, --, --))
 +>removeChild : Symbol(removeChild, Decl(lib.dom.d.ts, --, --))
  >this : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
- 
+
  };
 @@= skipped -20, +20 lines =@@
   * @this Node
@@ -36,7 +36,7 @@
  >prototype : Symbol(prototype, Decl(lib.dom.d.ts, --, --))
 ->remove : Symbol(ChildNode.remove, Decl(lib.dom.d.ts, --, --))
 +>remove : Symbol(remove, Decl(lib.dom.d.ts, --, --))
- 
+
    this.parentNode?.removeChild(this);
 ->this.parentNode?.removeChild : Symbol(Node.removeChild, Decl(lib.dom.d.ts, --, --))
 ->this.parentNode : Symbol(Node.parentNode, Decl(lib.dom.d.ts, --, --))
@@ -50,6 +50,5 @@
 +>parentNode : Symbol(parentNode, Decl(lib.dom.d.ts, --, --))
 +>removeChild : Symbol(removeChild, Decl(lib.dom.d.ts, --, --))
 +>this : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
- 
+
  };
- 

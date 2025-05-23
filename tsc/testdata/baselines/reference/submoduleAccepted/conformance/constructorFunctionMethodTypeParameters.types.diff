@@ -7,7 +7,7 @@
 ->Cls : typeof Cls
 +>Cls : <T extends string>(t: T) => void
  >t : T
- 
+
      this.t = t;
  >this.t = t : T
  >this.t : any
@@ -34,13 +34,13 @@
 +>function (t, v) {    return v} : (t: any, v: any) => any
 +>t : any
 +>v : any
- 
+
      return v
 ->v : V
 +>v : any
- 
+
  };
- 
+
 @@= skipped -19, +19 lines =@@
  >Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
  >Cls.prototype.nestedComment : any
@@ -49,10 +49,10 @@
 +>Cls : <T extends string>(t: T) => void
  >prototype : any
  >nestedComment : any
- 
+
 @@= skipped -21, +21 lines =@@
      };
- 
+
  var c = new Cls('a');
 ->c : Cls<"a">
 ->new Cls('a') : Cls<"a">
@@ -61,7 +61,7 @@
 +>new Cls('a') : any
 +>Cls : <T extends string>(t: T) => void
  >'a' : "a"
- 
+
  const s = c.topLevelComment('a', 'b');
 ->s : "b"
 ->c.topLevelComment('a', 'b') : "b"
@@ -75,7 +75,7 @@
 +>topLevelComment : any
  >'a' : "a"
  >'b' : "b"
- 
+
  const t = c.nestedComment('a', 'b');
 ->t : "a"
 ->c.nestedComment('a', 'b') : "a"
@@ -89,4 +89,3 @@
 +>nestedComment : any
  >'a' : "a"
  >'b' : "b"
- 

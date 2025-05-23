@@ -78,10 +78,12 @@
 +plainJSGrammarErrors.js(204,37): error TS2307: Cannot find module '1' or its corresponding type declarations.
 +plainJSGrammarErrors.js(204,42): error TS2559: Type '"2"' has no properties in common with type 'ImportCallOptions'.
  plainJSGrammarErrors.js(205,36): error TS1325: Argument of dynamic import cannot be spread element.
-+plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be used within a function body.
- 
- 
+-
+-
 -==== plainJSGrammarErrors.js (102 errors) ====
++plainJSGrammarErrors.js(207,1): error TS1108: A 'return' statement can only be used within a function body.
++
++
 +==== plainJSGrammarErrors.js (104 errors) ====
      class C {
          // #private mistakes

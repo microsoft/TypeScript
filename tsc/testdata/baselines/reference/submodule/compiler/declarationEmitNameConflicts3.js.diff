@@ -2,7 +2,7 @@
 +++ new.declarationEmitNameConflicts3.js
 @@= skipped -28, +28 lines =@@
  }
- 
+
  //// [declarationEmitNameConflicts3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

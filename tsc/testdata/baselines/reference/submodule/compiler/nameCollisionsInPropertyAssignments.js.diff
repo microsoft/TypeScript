@@ -1,7 +1,7 @@
 --- old.nameCollisionsInPropertyAssignments.js
 +++ new.nameCollisionsInPropertyAssignments.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [nameCollisionsInPropertyAssignments.js]
  var x = 1;
 -var y = { x: function () { x++; } };

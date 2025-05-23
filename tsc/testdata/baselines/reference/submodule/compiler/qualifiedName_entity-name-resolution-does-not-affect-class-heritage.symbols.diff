@@ -1,7 +1,7 @@
 --- old.qualifiedName_entity-name-resolution-does-not-affect-class-heritage.symbols
 +++ new.qualifiedName_entity-name-resolution-does-not-affect-class-heritage.symbols
 @@= skipped -9, +9 lines =@@
- 
+
  class Beta extends Alpha.x {
  >Beta : Symbol(Beta, Decl(qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts, 2, 1))
 ->Alpha.x : Symbol(Alpha.x, Decl(qualifiedName_entity-name-resolution-does-not-affect-class-heritage.ts, 1, 14))

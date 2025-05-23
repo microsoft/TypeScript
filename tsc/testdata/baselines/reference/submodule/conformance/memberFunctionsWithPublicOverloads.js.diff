@@ -2,7 +2,7 @@
 +++ new.memberFunctionsWithPublicOverloads.js
 @@= skipped -42, +42 lines =@@
  }
- 
+
  //// [memberFunctionsWithPublicOverloads.js]
 -var C = /** @class */ (function () {
 -    function C() {

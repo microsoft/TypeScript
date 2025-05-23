@@ -2,7 +2,7 @@
 +++ new.commentOnClassAccessor2.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [commentOnClassAccessor2.js]
 -var C = /** @class */ (function () {
 -    function C() {

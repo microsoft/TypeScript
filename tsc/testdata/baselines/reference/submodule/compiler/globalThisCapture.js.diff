@@ -1,8 +1,8 @@
 --- old.globalThisCapture.js
 +++ new.globalThisCapture.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [globalThisCapture.js]
 -var _this = this;
  // Add a lambda to ensure global 'this' capture is triggered

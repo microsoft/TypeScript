@@ -1,7 +1,7 @@
 --- old.jsxElementType.js
 +++ new.jsxElementType.js
 @@= skipped -115, +115 lines =@@
- 
+
  //// [jsxElementType.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

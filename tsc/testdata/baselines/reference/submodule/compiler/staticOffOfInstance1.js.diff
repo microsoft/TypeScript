@@ -2,7 +2,7 @@
 +++ new.staticOffOfInstance1.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [staticOffOfInstance1.js]
 -var List = /** @class */ (function () {
 -    function List() {

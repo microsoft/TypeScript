@@ -2,7 +2,7 @@
 +++ new.jsdocTypeReferenceToImportOfClassExpression.types
 @@= skipped -9, +9 lines =@@
  /** @typedef {number} Cictema */
- 
+
  module.exports = class MC {
 ->module.exports = class MC {  watch() {    return new MW(this);  }} : typeof import("MC")
 ->module.exports : typeof import("MC")
@@ -16,7 +16,7 @@
 +>exports : typeof MC
 +>class MC {  watch() {    return new MW(this);  }} : typeof MC
 +>MC : typeof MC
- 
+
    watch() {
  >watch : () => MW
 @@= skipped -27, +27 lines =@@
@@ -25,7 +25,7 @@
    constructor(compiler) {
 ->compiler : import("MC")
 +>compiler : MC
- 
+
      this.compiler = compiler;
 ->this.compiler = compiler : import("MC")
 ->this.compiler : any
@@ -38,7 +38,7 @@
 +>compiler : MC
    }
  }
- 
+
  module.exports = MW;
  >module.exports = MW : typeof MW
  >module.exports : typeof MW
@@ -46,4 +46,3 @@
 +>module : { MW: typeof MW; }
  >exports : typeof MW
  >MW : typeof MW
- 

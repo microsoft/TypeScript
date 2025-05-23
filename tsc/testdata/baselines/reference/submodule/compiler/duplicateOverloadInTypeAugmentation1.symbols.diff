@@ -2,7 +2,7 @@
 +++ new.duplicateOverloadInTypeAugmentation1.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
- 
+
      reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
 ->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 +>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
@@ -11,7 +11,7 @@
  >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
 @@= skipped -17, +17 lines =@@
  >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 16))
- 
+
      reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U,
 ->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
 +>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))
@@ -19,7 +19,7 @@
  >callbackfn : Symbol(callbackfn, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 14))
  >previousValue : Symbol(previousValue, Decl(duplicateOverloadInTypeAugmentation1.ts, 3, 27))
 @@= skipped -23, +23 lines =@@
- 
+
  var r5 = a.reduce((x, y) => x + y);
  >r5 : Symbol(r5, Decl(duplicateOverloadInTypeAugmentation1.ts, 7, 3))
 ->a.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicateOverloadInTypeAugmentation1.ts, 0, 20), Decl(duplicateOverloadInTypeAugmentation1.ts, 2, 29))

@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithIdenticalObjects.js
 @@= skipped -196, +196 lines =@@
  var r8b7 = b6 !== a6;
- 
+
  //// [comparisonOperatorWithIdenticalObjects.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,42 +23,23 @@
 -    function A1() {
 -    }
 -    A1.prototype.fn = function (a) {
-+class A1 {
-+    a;
-+    b;
-+    c;
-+    d;
-+    e;
-+    fn(a) {
-         return null;
+-        return null;
 -    };
 -    return A1;
 -}());
 -var B1 = /** @class */ (function () {
 -    function B1() {
-     }
+-    }
 -    B1.prototype.fn = function (b) {
-+}
-+class B1 {
-+    a;
-+    b;
-+    c;
-+    d;
-+    e;
-+    fn(b) {
-         return null;
+-        return null;
 -    };
 -    return B1;
 -}());
 -var Base = /** @class */ (function () {
 -    function Base() {
-     }
+-    }
 -    Base.prototype.fn = function (b) {
-+}
-+class Base {
-+    a;
-+    fn(b) {
-         return null;
+-        return null;
 -    };
 -    return Base;
 -}());
@@ -66,7 +47,7 @@
 -    __extends(A2, _super);
 -    function A2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    return A2;
 -}(Base));
 -var B2 = /** @class */ (function (_super) {
@@ -76,6 +57,31 @@
 -    }
 -    return B2;
 -}(Base));
++class A1 {
++    a;
++    b;
++    c;
++    d;
++    e;
++    fn(a) {
++        return null;
++    }
++}
++class B1 {
++    a;
++    b;
++    c;
++    d;
++    e;
++    fn(b) {
++        return null;
++    }
++}
++class Base {
++    a;
++    fn(b) {
++        return null;
++    }
 +}
 +class A2 extends Base {
 +}

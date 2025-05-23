@@ -2,7 +2,7 @@
 +++ new.inferredNonidentifierTypesGetQuotes.js
 @@= skipped -5, +5 lines =@@
  var y = [{ ["a-b"]: "string" }, {}];
- 
+
  //// [inferredNonidentifierTypesGetQuotes.js]
 -var _a;
  var x = [{ "a-b": "string" }, {}];

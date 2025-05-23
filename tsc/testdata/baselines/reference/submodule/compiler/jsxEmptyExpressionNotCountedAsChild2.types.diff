@@ -8,4 +8,3 @@
 +>__properties__ : { bar?: number | undefined; } & { __children__: () => number; }
  >bar : number | undefined
  >__children__ : () => number
- 

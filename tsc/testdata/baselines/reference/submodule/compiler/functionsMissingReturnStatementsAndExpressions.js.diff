@@ -24,10 +24,7 @@
  };
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    get m1() {
-+        // Errors; get accessors must return a value.
-     }
+-    }
 -    Object.defineProperty(C.prototype, "m1", {
 -        get: function () {
 -            // Errors; get accessors must return a value.
@@ -71,6 +68,10 @@
 -    });
 -    return C;
 -}());
++class C {
++    get m1() {
++        // Errors; get accessors must return a value.
++    }
 +    get m2() {
 +        // Permissible; returns undefined.
 +        return;

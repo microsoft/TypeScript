@@ -2,10 +2,12 @@
 +++ new.nodeNextPackageSelfNameWithOutDirDeclDirNestedDirs.errors.txt
 @@= skipped -0, +0 lines =@@
 -error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
-+src/thing.ts(8,21): error TS2307: Cannot find module '@this/package' or its corresponding type declarations.
- 
- 
+-
+-
 -!!! error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
++src/thing.ts(8,21): error TS2307: Cannot find module '@this/package' or its corresponding type declarations.
++
++
  ==== tsconfig.json (0 errors) ====
      {
        "compilerOptions": {

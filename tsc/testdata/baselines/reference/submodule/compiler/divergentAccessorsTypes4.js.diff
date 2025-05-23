@@ -1,8 +1,8 @@
 --- old.divergentAccessorsTypes4.js
 +++ new.divergentAccessorsTypes4.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [divergentAccessorsTypes4.js]
 -var One = /** @class */ (function () {
 -    function One() {

@@ -1,6 +1,6 @@
 --- old.declarationEmitGlobalThisPreserved.js
 +++ new.declarationEmitGlobalThisPreserved.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitGlobalThisPreserved.ts] ////
 -
 -//// [declarationEmitGlobalThisPreserved.ts]
@@ -173,5 +173,4 @@
 -    isNaN?: typeof globalThis.isNaN;
 -}
 -export type AsFunctionType = (isNaN: typeof globalThis.isNaN) => typeof globalThis.isNaN;
-@@= skipped --1, +1 lines =@@
 +<no content>

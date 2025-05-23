@@ -1,8 +1,8 @@
 --- old.varAsID.js
 +++ new.varAsID.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [varAsID.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

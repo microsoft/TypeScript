@@ -2,7 +2,7 @@
 +++ new.anonymousDefaultExportsUmd.js
 @@= skipped -6, +6 lines =@@
  export default function() {}
- 
+
  //// [a.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

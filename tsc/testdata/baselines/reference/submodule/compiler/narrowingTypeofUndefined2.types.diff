@@ -1,31 +1,31 @@
 --- old.narrowingTypeofUndefined2.types
 +++ new.narrowingTypeofUndefined2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === narrowingTypeofUndefined2.ts ===
  declare function takeArray(arr: Array<unknown>): void;
 ->takeArray : (arr: Array<unknown>) => void
 +>takeArray : (arr: unknown[]) => void
  >arr : unknown[]
- 
+
  function fn<T extends Array<unknown> | undefined>(arg: T) {
 ->fn : <T extends Array<unknown> | undefined>(arg: T) => void
 +>fn : <T extends unknown[] | undefined>(arg: T) => void
  >arg : T
- 
+
      if (typeof arg !== "undefined") {
 @@= skipped -15, +15 lines =@@
- 
+
          takeArray(arg);
  >takeArray(arg) : void
 ->takeArray : (arr: Array<unknown>) => void
 +>takeArray : (arr: unknown[]) => void
  >arg : unknown[]
- 
+
          const n: Array<unknown> = arg;
 @@= skipped -12, +12 lines =@@
  >arg : T & {}
- 
+
          const m = [...arg];
 ->m : (T & {})[number][]
 ->[...arg] : (T & {})[number][]

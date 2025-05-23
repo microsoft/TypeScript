@@ -2,7 +2,7 @@
 +++ new.stringLiteralTypesWithVariousOperators02.js
 @@= skipped -19, +19 lines =@@
  let l = abc != xyz;
- 
+
  //// [stringLiteralTypesWithVariousOperators02.js]
 -var abc = "ABC";
 -var xyz = "XYZ";

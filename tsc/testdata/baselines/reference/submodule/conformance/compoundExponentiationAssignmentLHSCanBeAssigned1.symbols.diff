@@ -10,6 +10,6 @@
 +>a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCanBeAssigned1.ts, 0, 8))
 +>b : Symbol(b, Decl(compoundExponentiationAssignmentLHSCanBeAssigned1.ts, 0, 11))
 +>c : Symbol(c, Decl(compoundExponentiationAssignmentLHSCanBeAssigned1.ts, 0, 14))
- 
+
  var a: any;
  >a : Symbol(a, Decl(compoundExponentiationAssignmentLHSCanBeAssigned1.ts, 2, 3))

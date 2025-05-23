@@ -2,12 +2,12 @@
 +++ new.checkJsxGenericTagHasCorrectInferences.symbols
 @@= skipped -8, +8 lines =@@
  >T : Symbol(T, Decl(file.tsx, 1, 20))
- 
+
    initialValues: T;
 ->initialValues : Symbol(BaseProps.initialValues, Decl(file.tsx, 1, 24))
 +>initialValues : Symbol(initialValues, Decl(file.tsx, 1, 24))
  >T : Symbol(T, Decl(file.tsx, 1, 20))
- 
+
    nextValues: (cur: T) => T;
 ->nextValues : Symbol(BaseProps.nextValues, Decl(file.tsx, 2, 19))
 +>nextValues : Symbol(nextValues, Decl(file.tsx, 2, 19))
@@ -26,10 +26,9 @@
  >Props : Symbol(Props, Decl(file.tsx, 5, 31))
  >BaseProps : Symbol(BaseProps, Decl(file.tsx, 0, 31))
  >Values : Symbol(Values, Decl(file.tsx, 5, 42))
- 
+
    iv: Values;
 ->iv : Symbol(GenericComponent.iv, Decl(file.tsx, 5, 116))
 +>iv : Symbol(iv, Decl(file.tsx, 5, 116))
  >Values : Symbol(Values, Decl(file.tsx, 5, 42))
  }
- 

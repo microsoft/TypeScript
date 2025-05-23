@@ -2,7 +2,7 @@
 +++ new.functionAssignabilityWithArrayLike01(strict=true).js
 @@= skipped -4, +4 lines =@@
  const array: ArrayLike<any> = func;
- 
+
  //// [functionAssignabilityWithArrayLike01.js]
 -"use strict";
  function func() { }

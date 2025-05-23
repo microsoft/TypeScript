@@ -2,20 +2,20 @@
 +++ new.narrowingOrderIndependent.symbols
 @@= skipped -6, +6 lines =@@
  >A : Symbol(A, Decl(narrowingOrderIndependent.ts, 0, 0))
- 
+
      constructor(public stringOrUndefined: string | undefined) {}
 ->stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
  }
- 
+
  class B {
  >B : Symbol(B, Decl(narrowingOrderIndependent.ts, 4, 1))
- 
+
      constructor(public str: string) {}
 ->str : Symbol(B.str, Decl(narrowingOrderIndependent.ts, 7, 16))
 +>str : Symbol(str, Decl(narrowingOrderIndependent.ts, 7, 16))
  }
- 
+
  const a = new A("123");
 @@= skipped -17, +17 lines =@@
  if (a instanceof A && a.stringOrUndefined) {
@@ -26,7 +26,7 @@
  >a : Symbol(a, Decl(narrowingOrderIndependent.ts, 10, 5))
 ->stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
- 
+
      new B(a.stringOrUndefined)
  >B : Symbol(B, Decl(narrowingOrderIndependent.ts, 4, 1))
 ->a.stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
@@ -35,7 +35,7 @@
 ->stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
  }
- 
+
  if (a.stringOrUndefined && a instanceof A) {
 ->a.stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>a.stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
@@ -44,7 +44,7 @@
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
  >a : Symbol(a, Decl(narrowingOrderIndependent.ts, 10, 5))
  >A : Symbol(A, Decl(narrowingOrderIndependent.ts, 0, 0))
- 
+
      new B(a.stringOrUndefined)
  >B : Symbol(B, Decl(narrowingOrderIndependent.ts, 4, 1))
 ->a.stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
@@ -53,18 +53,18 @@
 ->stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
  }
- 
+
  if (a instanceof A) {
 @@= skipped -30, +30 lines =@@
  >A : Symbol(A, Decl(narrowingOrderIndependent.ts, 0, 0))
- 
+
      if (a.stringOrUndefined) {
 ->a.stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>a.stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
  >a : Symbol(a, Decl(narrowingOrderIndependent.ts, 10, 5))
 ->stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
- 
+
          new B(a.stringOrUndefined)
  >B : Symbol(B, Decl(narrowingOrderIndependent.ts, 4, 1))
 ->a.stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
@@ -74,18 +74,18 @@
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
      }
  }
- 
+
  if (a.stringOrUndefined) {
 ->a.stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>a.stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
  >a : Symbol(a, Decl(narrowingOrderIndependent.ts, 10, 5))
 ->stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
- 
+
      if (a instanceof A) {
  >a : Symbol(a, Decl(narrowingOrderIndependent.ts, 10, 5))
 @@= skipped -23, +23 lines =@@
- 
+
          new B(a.stringOrUndefined)
  >B : Symbol(B, Decl(narrowingOrderIndependent.ts, 4, 1))
 ->a.stringOrUndefined : Symbol(A.stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
@@ -95,4 +95,3 @@
 +>stringOrUndefined : Symbol(stringOrUndefined, Decl(narrowingOrderIndependent.ts, 3, 16))
      }
  }
- 

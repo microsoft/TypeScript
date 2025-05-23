@@ -19,8 +19,8 @@
  client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
 +client.ts(11,45): error TS2307: Cannot find module 'server' or its corresponding type declarations.
  client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
- 
- 
+
+
 @@= skipped -17, +23 lines =@@
      export var m = a;
      export default {};

@@ -1,8 +1,8 @@
 --- old.typeGuardsInWhileStatement.js
 +++ new.typeGuardsInWhileStatement.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [typeGuardsInWhileStatement.js]
 -var cond;
 +let cond;

@@ -1,21 +1,21 @@
 --- old.impliedNodeFormatInterop1.types
 +++ new.impliedNodeFormatInterop1.types
 @@= skipped -17, +17 lines =@@
- 
+
  === /node_modules/highlight.js/lib/core.d.ts ===
  import hljs from "highlight.js";
 ->hljs : import("highlight.js").HighlightAPI
 +>hljs : HighlightAPI
- 
+
  export default hljs;
 ->hljs : import("highlight.js").HighlightAPI
 +>hljs : HighlightAPI
- 
+
  === /index.ts ===
  import hljs from "highlight.js/lib/core";
 ->hljs : import("highlight.js").HighlightAPI
 +>hljs : HighlightAPI
- 
+
  hljs.highlight("code");
  >hljs.highlight("code") : string
  >hljs.highlight : (code: string) => string
@@ -23,4 +23,3 @@
 +>hljs : HighlightAPI
  >highlight : (code: string) => string
  >"code" : "code"
- 

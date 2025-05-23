@@ -9,7 +9,12 @@
 -    }
 -    return MainModule;
 -}());
--module.exports = MainModule;
++class MainModule {
++    // public static SubModule: SubModule;
++    SubModule;
++    constructor() { }
++}
+ module.exports = MainModule;
 -
 -
 -//// [missingImportAfterModuleImport_0.d.ts]
@@ -20,11 +25,7 @@
 -        constructor();
 -    }
 -    export = SubModule;
-+class MainModule {
-+    // public static SubModule: SubModule;
-+    SubModule;
-+    constructor() { }
- }
+-}
 -//// [missingImportAfterModuleImport_1.d.ts]
 -/// <reference path="missingImportAfterModuleImport_0.d.ts" preserve="true" />
 -import SubModule = require('SubModule');
@@ -33,4 +34,3 @@
 -    constructor();
 -}
 -export = MainModule;
-+module.exports = MainModule;

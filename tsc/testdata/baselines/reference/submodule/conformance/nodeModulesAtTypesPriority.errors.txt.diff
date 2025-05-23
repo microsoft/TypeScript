@@ -1,6 +1,6 @@
 --- old.nodeModulesAtTypesPriority.errors.txt
 +++ new.nodeModulesAtTypesPriority.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS6504: File '/packages/a/node_modules/react/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 -  The file is in the program because:
 -    Root file specified for compilation
@@ -35,5 +35,4 @@
 -    import React from "react";
 -    import { createStore } from "redux";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

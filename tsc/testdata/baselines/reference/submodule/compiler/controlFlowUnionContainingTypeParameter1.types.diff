@@ -2,19 +2,19 @@
 +++ new.controlFlowUnionContainingTypeParameter1.types
 @@= skipped -21, +21 lines =@@
  >v : T
- 
+
    func(val: T | number): void {
 ->func : (val: T | number) => void
 +>func : (val: number | T) => void
  >val : number | T
- 
+
      if (this.typeguard(val)) {
 @@= skipped -47, +47 lines =@@
  >v : T
- 
+
    func(val: T | number): void {
 ->func : (val: T | number) => void
 +>func : (val: number | T) => void
  >val : number | T
- 
+
      if (this.typeguard(val)) {

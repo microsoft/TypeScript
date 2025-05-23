@@ -1,8 +1,8 @@
 --- old.controlFlowForIndexSignatures.js
 +++ new.controlFlowForIndexSignatures.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [controlFlowForIndexSignatures.js]
 -var boo = { bar: 'bar' };
 +const boo = { bar: 'bar' };

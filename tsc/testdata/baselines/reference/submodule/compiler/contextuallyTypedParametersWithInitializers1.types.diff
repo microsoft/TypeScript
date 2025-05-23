@@ -2,7 +2,7 @@
 +++ new.contextuallyTypedParametersWithInitializers1.types
 @@= skipped -16, +16 lines =@@
  >input : T
- 
+
  declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 ->id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
 ->x : { foo?: number; }
@@ -10,13 +10,13 @@
 +>x : { foo?: number | undefined; }
  >foo : number | undefined
  >input : T
- 
+
  declare function id5<T extends (x?: number) => any>(input: T): T;
 ->id5 : <T extends (x?: number) => any>(input: T) => T
 +>id5 : <T extends (x?: number | undefined) => any>(input: T) => T
  >x : number | undefined
  >input : T
- 
+
  const f10 = function ({ foo = 42 }) { return foo };
 ->f10 : ({ foo }: { foo?: number | undefined; }) => number
 ->function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
@@ -25,7 +25,7 @@
  >foo : number
  >42 : 42
  >foo : number
- 
+
  const f11 = id1(function ({ foo = 42 }) { return foo });
 ->f11 : ({ foo }: { foo?: number | undefined; }) => number
 ->id1(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
@@ -37,7 +37,7 @@
  >foo : number
  >42 : 42
  >foo : number
- 
+
  const f12 = id2(function ({ foo = 42 }) { return foo });
 ->f12 : ({ foo }: any) => any
 ->id2(function ({ foo = 42 }) { return foo }) : ({ foo }: any) => any
@@ -49,7 +49,7 @@
  >foo : any
  >42 : 42
  >foo : any
- 
+
  const f13 = id3(function ({ foo = 42 }) { return foo });
 ->f13 : ({ foo }: { foo: any; }) => any
 ->id3(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo: any; }) => any
@@ -61,7 +61,7 @@
  >foo : any
  >42 : 42
  >foo : any
- 
+
  const f14 = id4(function ({ foo = 42 }) { return foo });
 ->f14 : ({ foo }: { foo?: number; }) => number
 ->id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number; }) => number
@@ -85,16 +85,16 @@
  >42 : 42
 @@= skipped -156, +156 lines =@@
  >input : T
- 
+
  function getFoo ({ foo = 42 }) {
 ->getFoo : ({ foo }: { foo?: number | undefined; }) => number
 +>getFoo : (__0: { foo?: number | undefined; }) => number
  >foo : number
  >42 : 42
- 
+
 @@= skipped -9, +9 lines =@@
  }
- 
+
  const newGetFoo = id(getFoo);
 ->newGetFoo : ({ foo }: { foo?: number | undefined; }) => number
 ->id(getFoo) : ({ foo }: { foo?: number | undefined; }) => number
@@ -103,7 +103,7 @@
  >id : <T>(input: T) => T
 ->getFoo : ({ foo }: { foo?: number | undefined; }) => number
 +>getFoo : (__0: { foo?: number | undefined; }) => number
- 
+
  const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
 ->newGetFoo2 : ({ foo }: { foo?: number | undefined; }) => number
 ->id(function getFoo ({ foo = 42 }) {  return foo;}) : ({ foo }: { foo?: number | undefined; }) => number
@@ -116,4 +116,3 @@
 +>getFoo : (__0: { foo?: number | undefined; }) => number
  >foo : number
  >42 : 42
- 

@@ -9,6 +9,6 @@
  >XEvent : Symbol(XEvent, Decl(assignToObjectTypeWithPrototypeProperty.ts, 0, 0))
 ->prototype : Symbol(XEvent.prototype)
 +>prototype : Symbol(prototype)
- 
+
  var x: {prototype: XEvent} = XEvent;
  >x : Symbol(x, Decl(assignToObjectTypeWithPrototypeProperty.ts, 2, 3))

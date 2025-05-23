@@ -1,7 +1,7 @@
 --- old.commonJsImportClassExpression.js
 +++ new.commonJsImportClassExpression.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [mod1.js]
  "use strict";
 -module.exports = /** @class */ (function () {

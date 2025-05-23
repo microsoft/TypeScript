@@ -2,7 +2,7 @@
 +++ new.decoratorOnClassMethodParameter3.symbols
 @@= skipped -14, +14 lines =@@
  >Class : Symbol(Class, Decl(decoratorOnClassMethodParameter3.ts, 2, 42))
- 
+
      async method(@dec(await value) arg: number) {}
 ->method : Symbol(Class.method, Decl(decoratorOnClassMethodParameter3.ts, 3, 15))
 +>method : Symbol(method, Decl(decoratorOnClassMethodParameter3.ts, 3, 15))

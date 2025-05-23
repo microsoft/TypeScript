@@ -1,7 +1,7 @@
 --- old.APISample_WatchWithDefaults.js
 +++ new.APISample_WatchWithDefaults.js
 @@= skipped -57, +57 lines =@@
- 
+
  //// [APISample_WatchWithDefaults.js]
  "use strict";
 -/*

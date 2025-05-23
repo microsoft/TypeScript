@@ -1,17 +1,17 @@
 --- old.sourceMapValidationDestructuringParameterNestedObjectBindingPattern.types
 +++ new.sourceMapValidationDestructuringParameterNestedObjectBindingPattern.types
 @@= skipped -1, +1 lines =@@
- 
+
  === sourceMapValidationDestructuringParameterNestedObjectBindingPattern.ts ===
  declare var console: {
 ->console : { log(msg: string): void; }
 +>console : { log: (msg: string) => void; }
- 
+
      log(msg: string): void;
  >log : (msg: string) => void
 @@= skipped -34, +34 lines =@@
  >"none" : "none"
- 
+
  function foo1({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) {
 ->foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
 +>foo1 : (__0: Robot) => void
@@ -46,7 +46,7 @@
 ->foo3 : ({ skills }: Robot) => void
 +>foo3 : (__0: Robot) => void
  >skills : { primary: string; secondary: string; }
- 
+
      console.log(skills.primary);
  >console.log(skills.primary) : void
  >console.log : (msg: string) => void
@@ -56,13 +56,13 @@
  >skills.primary : string
  >skills : { primary: string; secondary: string; }
 @@= skipped -20, +20 lines =@@
- 
+
  foo1(robotA);
  >foo1(robotA) : void
 ->foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
 +>foo1 : (__0: Robot) => void
  >robotA : Robot
- 
+
  foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
  >foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
 ->foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }: Robot) => void
@@ -71,13 +71,13 @@
  >name : string
  >"Edger" : "Edger"
 @@= skipped -18, +18 lines =@@
- 
+
  foo2(robotA);
  >foo2(robotA) : void
 ->foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) => void
 +>foo2 : (__0: Robot) => void
  >robotA : Robot
- 
+
  foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
  >foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
 ->foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }: Robot) => void
@@ -86,13 +86,13 @@
  >name : string
  >"Edger" : "Edger"
 @@= skipped -18, +18 lines =@@
- 
+
  foo3(robotA);
  >foo3(robotA) : void
 ->foo3 : ({ skills }: Robot) => void
 +>foo3 : (__0: Robot) => void
  >robotA : Robot
- 
+
  foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } });
  >foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
 ->foo3 : ({ skills }: Robot) => void

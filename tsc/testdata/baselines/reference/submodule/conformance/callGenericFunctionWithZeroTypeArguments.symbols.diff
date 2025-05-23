@@ -2,7 +2,7 @@
 +++ new.callGenericFunctionWithZeroTypeArguments.symbols
 @@= skipped -39, +39 lines =@@
  >C : Symbol(C, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 15))
- 
+
      f<T>(x: T): T {
 ->f : Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
@@ -18,10 +18,10 @@
  >C : Symbol(C, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 15))
 ->f : Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
- 
+
  interface I {
  >I : Symbol(I, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 24))
- 
+
      f<T>(x: T): T;
 ->f : Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
@@ -29,7 +29,7 @@
  >x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 9))
  >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
 @@= skipped -20, +20 lines =@@
- 
+
  var r5 = i.f(1);
  >r5 : Symbol(r5, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 3))
 ->i.f : Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
@@ -37,11 +37,11 @@
  >i : Symbol(i, Decl(callGenericFunctionWithZeroTypeArguments.ts, 21, 3))
 ->f : Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
- 
+
  class C2<T> {
  >C2 : Symbol(C2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 16))
  >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
- 
+
      f(x: T): T {
 ->f : Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
@@ -57,11 +57,11 @@
  >C2 : Symbol(C2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 22, 16))
 ->f : Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
- 
+
  interface I2<T> {
  >I2 : Symbol(I2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 29, 25))
  >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
- 
+
      f(x: T): T;
 ->f : Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
@@ -69,7 +69,7 @@
  >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
  >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
 @@= skipped -20, +20 lines =@@
- 
+
  var r7 = i2.f(1);
  >r7 : Symbol(r7, Decl(callGenericFunctionWithZeroTypeArguments.ts, 35, 3))
 ->i2.f : Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
@@ -77,4 +77,3 @@
  >i2 : Symbol(i2, Decl(callGenericFunctionWithZeroTypeArguments.ts, 34, 3))
 ->f : Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
 +>f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
- 

@@ -2,19 +2,19 @@
 +++ new.instanceOfAssignability.types
 @@= skipped -43, +43 lines =@@
  >neck : any
- 
+
  function fn1(x: Array<number>|Array<string>|boolean) {
 ->fn1 : (x: Array<number> | Array<string> | boolean) => void
 +>fn1 : (x: boolean | string[] | number[]) => void
  >x : boolean | string[] | number[]
- 
+
  	if(x instanceof Array) {
 @@= skipped -102, +102 lines =@@
  }
- 
+
  function fn7(x: Array<number>|Array<string>) {
 ->fn7 : (x: Array<number> | Array<string>) => void
 +>fn7 : (x: string[] | number[]) => void
  >x : string[] | number[]
- 
+
  	if(x instanceof Array) {

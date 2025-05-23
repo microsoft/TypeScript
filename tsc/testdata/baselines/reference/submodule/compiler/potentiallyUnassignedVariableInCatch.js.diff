@@ -1,8 +1,8 @@
 --- old.potentiallyUnassignedVariableInCatch.js
 +++ new.potentiallyUnassignedVariableInCatch.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [potentiallyUnassignedVariableInCatch.js]
 -"use strict";
 -var foo;

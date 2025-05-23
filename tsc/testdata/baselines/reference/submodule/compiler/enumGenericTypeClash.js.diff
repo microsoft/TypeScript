@@ -1,8 +1,8 @@
 --- old.enumGenericTypeClash.js
 +++ new.enumGenericTypeClash.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [enumGenericTypeClash.js]
 -var X = /** @class */ (function () {
 -    function X() {

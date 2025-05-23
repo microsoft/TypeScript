@@ -2,7 +2,7 @@
 +++ new.castParentheses.js
 @@= skipped -13, +13 lines =@@
  var b = (<any>new a).b 
- 
+
  //// [castParentheses.js]
 -var a = /** @class */ (function () {
 -    function a() {

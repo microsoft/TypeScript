@@ -8,13 +8,13 @@
  >(4) : any
 +>4 : any
  >4 : 4
- 
+
  var W = /** @type {string} */(4); // Error
  >W : string
  >(4) : string
 +>4 : string
  >4 : 4
- 
+
  /** @type {*} */
 @@= skipped -19, +22 lines =@@
  var a = /** @type {*} */("" + 4);
@@ -30,7 +30,7 @@
  >(4) : any
 +>4 : any
  >4 : 4
- 
+
  class SomeBase {
 @@= skipped -8, +9 lines =@@
      constructor() {
@@ -45,7 +45,7 @@
      }
  }
 @@= skipped -17, +17 lines =@@
- 
+
          this.x = 42;
  >this.x = 42 : 42
 ->this.x : any
@@ -68,11 +68,11 @@
  >42 : 42
      }
  }
- 
+
  function SomeFakeClass() {
 ->SomeFakeClass : typeof SomeFakeClass
 +>SomeFakeClass : () => void
- 
+
      /** @type {string|number} */
      this.p = "bar";
 ->this.p = "bar" : "bar"
@@ -86,10 +86,10 @@
 +>"bar" : string | number
  >"bar" : "bar"
  }
- 
+
 @@= skipped -36, +37 lines =@@
  >SomeOther : typeof SomeOther
- 
+
  var someFakeClass = new SomeFakeClass();
 ->someFakeClass : SomeFakeClass
 ->new SomeFakeClass() : SomeFakeClass
@@ -97,89 +97,89 @@
 +>someFakeClass : any
 +>new SomeFakeClass() : any
 +>SomeFakeClass : () => void
- 
+
  someBase = /** @type {SomeBase} */(someDerived);
  >someBase = /** @type {SomeBase} */(someDerived) : SomeBase
  >someBase : SomeBase
  >(someDerived) : SomeBase
 +>someDerived : SomeBase
  >someDerived : SomeDerived
- 
+
  someBase = /** @type {SomeBase} */(someBase);
 @@= skipped -15, +16 lines =@@
  >someBase : SomeBase
  >(someBase) : SomeBase
  >someBase : SomeBase
 +>someBase : SomeBase
- 
+
  someBase = /** @type {SomeBase} */(someOther); // Error
  >someBase = /** @type {SomeBase} */(someOther) : SomeBase
  >someBase : SomeBase
  >(someOther) : SomeBase
 +>someOther : SomeBase
  >someOther : SomeOther
- 
+
  someDerived = /** @type {SomeDerived} */(someDerived);
 @@= skipped -12, +14 lines =@@
  >someDerived : SomeDerived
  >(someDerived) : SomeDerived
  >someDerived : SomeDerived
 +>someDerived : SomeDerived
- 
+
  someDerived = /** @type {SomeDerived} */(someBase);
  >someDerived = /** @type {SomeDerived} */(someBase) : SomeDerived
  >someDerived : SomeDerived
  >(someBase) : SomeDerived
 +>someBase : SomeDerived
  >someBase : SomeBase
- 
+
  someDerived = /** @type {SomeDerived} */(someOther); // Error
  >someDerived = /** @type {SomeDerived} */(someOther) : SomeDerived
  >someDerived : SomeDerived
  >(someOther) : SomeDerived
 +>someOther : SomeDerived
  >someOther : SomeOther
- 
+
  someOther = /** @type {SomeOther} */(someDerived); // Error
  >someOther = /** @type {SomeOther} */(someDerived) : SomeOther
  >someOther : SomeOther
  >(someDerived) : SomeOther
 +>someDerived : SomeOther
  >someDerived : SomeDerived
- 
+
  someOther = /** @type {SomeOther} */(someBase); // Error
  >someOther = /** @type {SomeOther} */(someBase) : SomeOther
  >someOther : SomeOther
  >(someBase) : SomeOther
 +>someBase : SomeOther
  >someBase : SomeBase
- 
+
  someOther = /** @type {SomeOther} */(someOther);
 @@= skipped -30, +35 lines =@@
  >someOther : SomeOther
  >(someOther) : SomeOther
  >someOther : SomeOther
 +>someOther : SomeOther
- 
+
  someFakeClass = someBase;
  >someFakeClass = someBase : SomeBase
 ->someFakeClass : SomeFakeClass
 +>someFakeClass : any
  >someBase : SomeBase
- 
+
  someFakeClass = someDerived;
  >someFakeClass = someDerived : SomeDerived
 ->someFakeClass : SomeFakeClass
 +>someFakeClass : any
  >someDerived : SomeDerived
- 
+
  someBase = someFakeClass; // Error
 ->someBase = someFakeClass : SomeFakeClass
 +>someBase = someFakeClass : any
  >someBase : SomeBase
 ->someFakeClass : SomeFakeClass
 +>someFakeClass : any
- 
+
  someBase = /** @type {SomeBase} */(someFakeClass);
  >someBase = /** @type {SomeBase} */(someFakeClass) : SomeBase
  >someBase : SomeBase
@@ -187,7 +187,7 @@
 ->someFakeClass : SomeFakeClass
 +>someFakeClass : SomeBase
 +>someFakeClass : any
- 
+
  // Type assertion cannot be a type-predicate type
  /** @type {number | string} */
 @@= skipped -34, +36 lines =@@
@@ -197,18 +197,17 @@
 +>numOrStr === undefined : boolean
  >numOrStr : string | number
  >undefined : undefined
- 
+
 @@= skipped -14, +15 lines =@@
  >asConst1 : 1
  >(1) : 1
  >1 : 1
 +>1 : 1
- 
+
  var asConst2 = /** @type {const} */({
  >asConst2 : { readonly x: 1; }
  >({    x: 1}) : { readonly x: 1; }
- >{    x: 1} : { readonly x: 1; }
 +>{    x: 1} : { readonly x: 1; }
- 
+ >{    x: 1} : { readonly x: 1; }
+
      x: 1
- >x : 1

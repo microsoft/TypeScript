@@ -2,7 +2,7 @@
 +++ new.declFileTypeAnnotationTupleType.js
 @@= skipped -19, +19 lines =@@
  var y = x;
- 
+
  //// [declFileTypeAnnotationTupleType.js]
 -var c = /** @class */ (function () {
 -    function c() {

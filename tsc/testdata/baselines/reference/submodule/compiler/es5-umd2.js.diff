@@ -1,24 +1,17 @@
 --- old.es5-umd2.js
 +++ new.es5-umd2.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [es5-umd2.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
 -        if (v !== undefined) module.exports = v;
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.A = void 0;
-+class A {
-+    constructor() {
-     }
+-    }
 -    else if (typeof define === "function" && define.amd) {
 -        define(["require", "exports"], factory);
-+    B() {
-+        return 42;
-     }
+-    }
 -})(function (require, exports) {
 -    "use strict";
 -    Object.defineProperty(exports, "__esModule", { value: true });
@@ -33,5 +26,14 @@
 -    }());
 -    exports.A = A;
 -});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.A = void 0;
++class A {
++    constructor() {
++    }
++    B() {
++        return 42;
++    }
 +}
 +exports.A = A;

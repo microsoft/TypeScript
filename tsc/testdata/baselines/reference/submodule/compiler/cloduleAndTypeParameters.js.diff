@@ -2,7 +2,7 @@
 +++ new.cloduleAndTypeParameters.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [cloduleAndTypeParameters.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

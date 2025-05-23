@@ -9,7 +9,7 @@
 +>a : function
 +>() => 0 : () => number
  >0 : 0
- 
+
  // Error (good)
  /** @type {function(): string} */
  const b = async () => 0
@@ -18,7 +18,7 @@
 +>b : function
 +>async () => 0 : () => Promise<number>
  >0 : 0
- 
+
  // No error (bad)
  /** @type {function(): string} */
  const c = async () => {
@@ -26,7 +26,7 @@
 ->async () => {	return 0} : () => string
 +>c : function
 +>async () => {	return 0} : () => Promise<number>
- 
+
  	return 0
  >0 : 0
 @@= skipped -24, +24 lines =@@
@@ -37,11 +37,11 @@
 ->async () => {	return ""} : () => string
 +>d : function
 +>async () => {	return ""} : () => Promise<string>
- 
+
  	return ""
  >"" : ""
 @@= skipped -9, +9 lines =@@
- 
+
  /** @type {function(function(): string): void} */
  const f = (p) => {}
 ->f : (arg0: () => string) => void
@@ -50,7 +50,7 @@
 +>f : function
 +>(p) => {} : (p: any) => void
 +>p : any
- 
+
  // Error (good)
  f(async () => {
 ->f(async () => {	return 0}) : void
@@ -58,5 +58,5 @@
 +>f(async () => {	return 0}) : any
 +>f : function
  >async () => {	return 0} : () => Promise<number>
- 
+
  	return 0

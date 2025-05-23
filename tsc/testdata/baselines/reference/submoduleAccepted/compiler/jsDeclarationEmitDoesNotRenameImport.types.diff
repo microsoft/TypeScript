@@ -2,14 +2,14 @@
 +++ new.jsDeclarationEmitDoesNotRenameImport.types
 @@= skipped -39, +39 lines =@@
  >super : typeof Test
- 
+
          if (options.test) {
 ->options.test : typeof import("Test").default | undefined
 +>options.test : any
  >options : Options
 ->test : typeof import("Test").default | undefined
 +>test : any
- 
+
              this.test = new options.test();
 ->this.test = new options.test() : import("Test").default
 +>this.test = new options.test() : any

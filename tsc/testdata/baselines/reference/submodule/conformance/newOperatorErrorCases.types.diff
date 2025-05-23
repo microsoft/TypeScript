@@ -2,10 +2,10 @@
 +++ new.newOperatorErrorCases.types
 @@= skipped -13, +13 lines =@@
  }
- 
+
  class T<T> {
 ->T : globalThis.T<T>
 +>T : T<T>
- 
+
      constructor(n?: T) { }
  >n : T

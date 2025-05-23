@@ -6,7 +6,7 @@
  import Bar = require("instanceOfInExternalModules_require");
 ->Bar : typeof Bar
 +>Bar : any
- 
+
  function IsFoo(value: any): boolean {
  >IsFoo : (value: any) => boolean
 @@= skipped -9, +9 lines =@@
@@ -20,5 +20,5 @@
 +>Bar : any
 +>Foo : any
  }
- 
+
  === instanceOfInExternalModules_require.ts ===

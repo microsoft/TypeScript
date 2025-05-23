@@ -2,7 +2,7 @@
 +++ new.invalidMultipleVariableDeclarations.js
 @@= skipped -55, +55 lines =@@
  var m = M.A;
- 
+
  //// [invalidMultipleVariableDeclarations.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

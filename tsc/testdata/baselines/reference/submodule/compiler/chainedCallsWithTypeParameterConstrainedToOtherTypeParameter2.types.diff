@@ -34,7 +34,7 @@
  >ss : S
  >t : T
 @@= skipped -37, +37 lines =@@
- 
+
          (new Chain(s)).then(ss => s).then(ss => s).then(ss => s);
  >(new Chain(s)).then(ss => s).then(ss => s).then(ss => s) : Chain<S>
 ->(new Chain(s)).then(ss => s).then(ss => s).then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
@@ -50,16 +50,22 @@
  >Chain : typeof Chain
  >s : S
 ->then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
-+>then : <S extends S>(cb: (x: S) => S) => Chain<S>
- >ss => s : (ss: S) => S
- >ss : S
- >s : S
+->ss => s : (ss: S) => S
+->ss : S
+->s : S
+->then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
+->ss => s : (ss: S) => S
+->ss : S
+->s : S
 ->then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
 +>then : <S extends S>(cb: (x: S) => S) => Chain<S>
- >ss => s : (ss: S) => S
- >ss : S
- >s : S
-->then : <S extends S_1>(cb: (x: S_1) => S) => Chain<S>
++>ss => s : (ss: S) => S
++>ss : S
++>s : S
++>then : <S extends S>(cb: (x: S) => S) => Chain<S>
++>ss => s : (ss: S) => S
++>ss : S
++>s : S
 +>then : <S extends S>(cb: (x: S) => S) => Chain<S>
  >ss => s : (ss: S) => S
  >ss : S
@@ -84,16 +90,22 @@
  >ii : I
  >s : S
 ->then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
-+>then : <S extends S>(cb: (x: S) => S) => Chain2<S>
- >ss => s : (ss: S) => S
- >ss : S
- >s : S
+->ss => s : (ss: S) => S
+->ss : S
+->s : S
+->then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
+->ss => s : (ss: S) => S
+->ss : S
+->s : S
 ->then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
 +>then : <S extends S>(cb: (x: S) => S) => Chain2<S>
- >ss => s : (ss: S) => S
- >ss : S
- >s : S
-->then : <S extends S_1>(cb: (x: S_1) => S) => Chain2<S>
++>ss => s : (ss: S) => S
++>ss : S
++>s : S
++>then : <S extends S>(cb: (x: S) => S) => Chain2<S>
++>ss => s : (ss: S) => S
++>ss : S
++>s : S
 +>then : <S extends S>(cb: (x: S) => S) => Chain2<S>
  >ss => s : (ss: S) => S
  >ss : S

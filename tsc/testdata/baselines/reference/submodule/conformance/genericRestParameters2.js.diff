@@ -1,8 +1,8 @@
 --- old.genericRestParameters2.js
 +++ new.genericRestParameters2.js
 @@= skipped -81, +81 lines =@@
- 
- 
+
+
  //// [genericRestParameters2.js]
 -"use strict";
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {

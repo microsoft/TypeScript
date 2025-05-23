@@ -1,8 +1,8 @@
 --- old.propertiesAndIndexersForNumericNames.js
 +++ new.propertiesAndIndexersForNumericNames.js
 @@= skipped -44, +44 lines =@@
- 
- 
+
+
  //// [propertiesAndIndexersForNumericNames.js]
 -var C = /** @class */ (function () {
 -    function C() {

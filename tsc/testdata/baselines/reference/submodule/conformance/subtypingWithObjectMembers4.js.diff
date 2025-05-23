@@ -1,7 +1,7 @@
 --- old.subtypingWithObjectMembers4.js
 +++ new.subtypingWithObjectMembers4.js
 @@= skipped -36, +36 lines =@@
- 
+
  //// [subtypingWithObjectMembers4.js]
  // subtyping when property names do not match
 -var __extends = (this && this.__extends) || (function () {

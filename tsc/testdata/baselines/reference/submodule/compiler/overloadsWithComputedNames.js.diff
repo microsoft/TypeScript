@@ -1,7 +1,7 @@
 --- old.overloadsWithComputedNames.js
 +++ new.overloadsWithComputedNames.js
 @@= skipped -64, +64 lines =@@
- 
+
  //// [overloadsWithComputedNames.js]
  // https://github.com/microsoft/TypeScript/issues/52329
 -var Person = /** @class */ (function () {
@@ -33,7 +33,7 @@
 -}());
 -var C1 = /** @class */ (function () {
 -    function C1() {
-     }
+-    }
 -    C1.prototype[uniqueSym] = function () { };
 -    return C1;
 -}());
@@ -55,6 +55,7 @@
 -    C3.prototype[2] = function () { };
 -    return C3;
 -}());
++    }
 +}
 +class C1 {
 +    [uniqueSym]() { }

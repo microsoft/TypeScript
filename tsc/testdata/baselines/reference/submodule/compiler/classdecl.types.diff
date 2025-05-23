@@ -1,7 +1,7 @@
 --- old.classdecl.types
 +++ new.classdecl.types
 @@= skipped -114, +114 lines =@@
- 
+
  class c extends m1.b {
  >c : c
 ->m1.b : m1.b
@@ -10,5 +10,5 @@
 ->b : typeof m1.b
 +>b : typeof b
  }
- 
+
  class ib2 implements m1.ib {

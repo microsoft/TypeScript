@@ -1,6 +1,6 @@
 --- old.for-of15.errors.txt
 +++ new.for-of15.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -for-of15.ts(11,11): error TS2490: The type returned by the 'next()' method of an iterator must have a 'value' property.
 -
 -
@@ -18,5 +18,4 @@
 -    for (v of new MyStringIterator) { } // Should fail
 -              ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2490: The type returned by the 'next()' method of an iterator must have a 'value' property.
-@@= skipped --1, +1 lines =@@
 +<no content>

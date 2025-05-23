@@ -1,8 +1,8 @@
 --- old.contextualTypeObjectSpreadExpression.js
 +++ new.contextualTypeObjectSpreadExpression.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [contextualTypeObjectSpreadExpression.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

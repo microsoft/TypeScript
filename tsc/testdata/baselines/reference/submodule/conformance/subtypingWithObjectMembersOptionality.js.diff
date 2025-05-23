@@ -2,7 +2,7 @@
 +++ new.subtypingWithObjectMembersOptionality.js
 @@= skipped -75, +75 lines =@@
  }
- 
+
  //// [subtypingWithObjectMembersOptionality.js]
 -// Derived member is not optional but base member is, should be ok
  // object literal case

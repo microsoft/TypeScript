@@ -2,7 +2,7 @@
 +++ new.emitArrowFunctionWhenUsingArguments12.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [emitArrowFunctionWhenUsingArguments12.js]
 -var C = /** @class */ (function () {
 -    function C() {

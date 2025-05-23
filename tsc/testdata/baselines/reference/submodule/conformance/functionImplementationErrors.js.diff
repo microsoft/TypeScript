@@ -1,8 +1,8 @@
 --- old.functionImplementationErrors.js
 +++ new.functionImplementationErrors.js
 @@= skipped -75, +75 lines =@@
- 
- 
+
+
  //// [functionImplementationErrors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

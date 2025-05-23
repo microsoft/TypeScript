@@ -1,7 +1,7 @@
 --- old.declarationEmitForDefaultExportClassExtendingExpression01.js
 +++ new.declarationEmitForDefaultExportClassExtendingExpression01.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [declarationEmitForDefaultExportClassExtendingExpression01.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -38,20 +38,21 @@
      }
 -    return default_1;
 -}(getGreeterBase()));
--exports.default = default_1;
++}
++const getGreeterBase = () => A;
++class default_1 extends getGreeterBase() {
++}
+ exports.default = default_1;
 -
 -
 -//// [declarationEmitForDefaultExportClassExtendingExpression01.d.ts]
 -interface Greeter {
 -    getGreeting(): string;
- }
+-}
 -interface GreeterConstructor {
 -    new (): Greeter;
-+const getGreeterBase = () => A;
-+class default_1 extends getGreeterBase() {
- }
+-}
 -declare const default_base: GreeterConstructor;
 -export default class extends default_base {
 -}
 -export {};
-+exports.default = default_1;

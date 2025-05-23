@@ -1,8 +1,8 @@
 --- old.readonlyAssignmentInSubclassOfClassExpression.js
 +++ new.readonlyAssignmentInSubclassOfClassExpression.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [readonlyAssignmentInSubclassOfClassExpression.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -25,16 +25,17 @@
 -        var _this = _super.call(this) || this;
 -        _this.attrib = 2;
 -        return _this;
-+class C extends class {
-+} {
-+    constructor() {
-+        super();
-+        this.attrib = 2;
-     }
+-    }
 -    return C;
 -}(/** @class */ (function () {
 -    function class_1() {
 -    }
 -    return class_1;
 -}())));
++class C extends class {
++} {
++    constructor() {
++        super();
++        this.attrib = 2;
++    }
 +}

@@ -2,7 +2,7 @@
 +++ new.autoAsiForStaticsInClassDeclaration.js
 @@= skipped -6, +6 lines =@@
  } 
- 
+
  //// [autoAsiForStaticsInClassDeclaration.js]
 -var C = /** @class */ (function () {
 -    function C() {

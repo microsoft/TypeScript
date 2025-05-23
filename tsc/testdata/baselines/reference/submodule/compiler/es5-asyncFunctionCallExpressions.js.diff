@@ -1,8 +1,8 @@
 --- old.es5-asyncFunctionCallExpressions.js
 +++ new.es5-asyncFunctionCallExpressions.js
 @@= skipped -88, +88 lines =@@
- 
- 
+
+
  //// [es5-asyncFunctionCallExpressions.js]
 -function callExpression0() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -15,9 +15,7 @@
 -            }
 -        });
 -    });
-+async function callExpression0() {
-+    await x(y, z);
- }
+-}
 -function callExpression1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -29,9 +27,7 @@
 -            }
 -        });
 -    });
-+async function callExpression1() {
-+    (await x)(y, z);
- }
+-}
 -function callExpression2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -46,9 +42,7 @@
 -            }
 -        });
 -    });
-+async function callExpression2() {
-+    x(await y, z);
- }
+-}
 -function callExpression3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b;
@@ -64,9 +58,7 @@
 -            }
 -        });
 -    });
-+async function callExpression3() {
-+    x(y, await z);
- }
+-}
 -function callExpression4() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -78,9 +70,7 @@
 -            }
 -        });
 -    });
-+async function callExpression4() {
-+    await x(...y, z);
- }
+-}
 -function callExpression5() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -92,9 +82,7 @@
 -            }
 -        });
 -    });
-+async function callExpression5() {
-+    (await x)(...y, z);
- }
+-}
 -function callExpression6() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _d;
@@ -111,9 +99,7 @@
 -            }
 -        });
 -    });
-+async function callExpression6() {
-+    x(...(await y), z);
- }
+-}
 -function callExpression7() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _d;
@@ -130,9 +116,7 @@
 -            }
 -        });
 -    });
-+async function callExpression7() {
-+    x(...y, await z);
- }
+-}
 -function callExpression8() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c;
@@ -148,9 +132,7 @@
 -            }
 -        });
 -    });
-+async function callExpression8() {
-+    x(await y, ...z);
- }
+-}
 -function callExpression9() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _d;
@@ -167,9 +149,7 @@
 -            }
 -        });
 -    });
-+async function callExpression9() {
-+    x(y, ...(await z));
- }
+-}
 -function callExpression10() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -181,9 +161,7 @@
 -            }
 -        });
 -    });
-+async function callExpression10() {
-+    await x.a(y, z);
- }
+-}
 -function callExpression11() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -195,9 +173,7 @@
 -            }
 -        });
 -    });
-+async function callExpression11() {
-+    (await x.a)(y, z);
- }
+-}
 -function callExpression12() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -209,9 +185,7 @@
 -            }
 -        });
 -    });
-+async function callExpression12() {
-+    (await x).a(y, z);
- }
+-}
 -function callExpression13() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b;
@@ -226,9 +200,7 @@
 -            }
 -        });
 -    });
-+async function callExpression13() {
-+    x.a(await y, z);
- }
+-}
 -function callExpression14() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c;
@@ -244,9 +216,7 @@
 -            }
 -        });
 -    });
-+async function callExpression14() {
-+    x.a(y, await z);
- }
+-}
 -function callExpression15() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -258,9 +228,7 @@
 -            }
 -        });
 -    });
-+async function callExpression15() {
-+    await x[a](y, z);
- }
+-}
 -function callExpression16() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -272,9 +240,7 @@
 -            }
 -        });
 -    });
-+async function callExpression16() {
-+    (await x[a])(y, z);
- }
+-}
 -function callExpression17() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -286,9 +252,7 @@
 -            }
 -        });
 -    });
-+async function callExpression17() {
-+    (await x)[a](y, z);
- }
+-}
 -function callExpression18() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -303,9 +267,7 @@
 -            }
 -        });
 -    });
-+async function callExpression18() {
-+    x[await a](y, z);
- }
+-}
 -function callExpression19() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b;
@@ -320,9 +282,7 @@
 -            }
 -        });
 -    });
-+async function callExpression19() {
-+    x[a](await y, z);
- }
+-}
 -function callExpression20() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c;
@@ -338,6 +298,66 @@
 -            }
 -        });
 -    });
++async function callExpression0() {
++    await x(y, z);
++}
++async function callExpression1() {
++    (await x)(y, z);
++}
++async function callExpression2() {
++    x(await y, z);
++}
++async function callExpression3() {
++    x(y, await z);
++}
++async function callExpression4() {
++    await x(...y, z);
++}
++async function callExpression5() {
++    (await x)(...y, z);
++}
++async function callExpression6() {
++    x(...(await y), z);
++}
++async function callExpression7() {
++    x(...y, await z);
++}
++async function callExpression8() {
++    x(await y, ...z);
++}
++async function callExpression9() {
++    x(y, ...(await z));
++}
++async function callExpression10() {
++    await x.a(y, z);
++}
++async function callExpression11() {
++    (await x.a)(y, z);
++}
++async function callExpression12() {
++    (await x).a(y, z);
++}
++async function callExpression13() {
++    x.a(await y, z);
++}
++async function callExpression14() {
++    x.a(y, await z);
++}
++async function callExpression15() {
++    await x[a](y, z);
++}
++async function callExpression16() {
++    (await x[a])(y, z);
++}
++async function callExpression17() {
++    (await x)[a](y, z);
++}
++async function callExpression18() {
++    x[await a](y, z);
++}
++async function callExpression19() {
++    x[a](await y, z);
++}
 +async function callExpression20() {
 +    x[a](y, await z);
  }

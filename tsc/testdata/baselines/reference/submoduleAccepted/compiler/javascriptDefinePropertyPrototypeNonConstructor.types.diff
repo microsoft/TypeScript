@@ -1,13 +1,13 @@
 --- old.javascriptDefinePropertyPrototypeNonConstructor.types
 +++ new.javascriptDefinePropertyPrototypeNonConstructor.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /a.js ===
  function Graphic() {
 ->Graphic : typeof Graphic
 +>Graphic : () => void
  }
- 
+
  Object.defineProperty(Graphic.prototype, "instance", {
 @@= skipped -9, +9 lines =@@
  >Object : ObjectConstructor
@@ -19,16 +19,15 @@
  >"instance" : "instance"
 ->{  get: function() {    return this;  }} : { get: () => this; }
 +>{  get: function() {    return this;  }} : { get: () => any; }
- 
+
    get: function() {
 ->get : () => this
 ->function() {    return this;  } : () => this
 +>get : () => any
 +>function() {    return this;  } : () => any
- 
+
      return this;
 ->this : this
 +>this : any
    }
  });
- 

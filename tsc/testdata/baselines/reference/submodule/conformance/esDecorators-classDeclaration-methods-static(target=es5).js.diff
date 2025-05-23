@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-methods-static(target=es5).js
 +++ new.esDecorators-classDeclaration-methods-static(target=es5).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-methods-static.js]
 -var method3 = "method3";
 -var C = function () {

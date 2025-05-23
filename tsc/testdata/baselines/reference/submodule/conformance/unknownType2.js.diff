@@ -1,8 +1,8 @@
 --- old.unknownType2.js
 +++ new.unknownType2.js
 @@= skipped -262, +262 lines =@@
- 
- 
+
+
  //// [unknownType2.js]
 -"use strict";
 -var validate = function (x) { return (x === 'yes' || x === 'no') ? x : 'idk'; }; // No error

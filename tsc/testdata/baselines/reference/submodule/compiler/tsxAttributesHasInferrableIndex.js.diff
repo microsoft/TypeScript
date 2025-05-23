@@ -1,8 +1,8 @@
 --- old.tsxAttributesHasInferrableIndex.js
 +++ new.tsxAttributesHasInferrableIndex.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [tsxAttributesHasInferrableIndex.js]
 -"use strict";
 -function createElement(name, attributes) {

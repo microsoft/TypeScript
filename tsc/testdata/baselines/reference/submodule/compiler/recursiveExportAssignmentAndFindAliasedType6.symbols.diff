@@ -3,7 +3,7 @@
 @@= skipped -10, +10 lines =@@
  >b : Symbol(b, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleA.ts, 2, 10))
  >ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleA.ts, 0, 81))
- 
+
 -=== recursiveExportAssignmentAndFindAliasedType6_moduleC.ts ===
 -import self = require("recursiveExportAssignmentAndFindAliasedType6_moduleD");
 ->self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType6_moduleC.ts, 0, 0))

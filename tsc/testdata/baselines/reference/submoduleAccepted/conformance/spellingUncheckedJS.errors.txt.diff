@@ -1,8 +1,7 @@
 --- old.spellingUncheckedJS.errors.txt
 +++ new.spellingUncheckedJS.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +other.js(3,1): error TS2552: Cannot find name 'Jon'. Did you mean 'John'?
 +spellingUncheckedJS.js(2,1): error TS2552: Cannot find name 'inmodule'. Did you mean 'inModule'?
 +spellingUncheckedJS.js(5,18): error TS2365: Operator '+' cannot be applied to types 'number' and 'boolean'.

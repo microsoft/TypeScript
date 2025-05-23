@@ -1,6 +1,6 @@
 --- old.jsDeclarationsClassesErr.errors.txt
 +++ new.jsDeclarationsClassesErr.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.js(4,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
 -index.js(5,12): error TS8010: Type annotations can only be used in TypeScript files.
 -index.js(8,16): error TS8004: Type parameter declarations can only be used in TypeScript files.
@@ -137,5 +137,4 @@
 -!!! error TS8010: Type annotations can only be used in TypeScript files.
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

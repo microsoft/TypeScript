@@ -2,11 +2,11 @@
 +++ new.genericRecursiveImplicitConstructorErrors2.symbols
 @@= skipped -16, +16 lines =@@
  >PullSymbolVisibility : Symbol(PullSymbolVisibility, Decl(genericRecursiveImplicitConstructorErrors2.ts, 3, 38))
- 
+
      Private,
 ->Private : Symbol(PullSymbolVisibility.Private, Decl(genericRecursiveImplicitConstructorErrors2.ts, 4, 36))
 +>Private : Symbol(Private, Decl(genericRecursiveImplicitConstructorErrors2.ts, 4, 36))
- 
+
      Public
 ->Public : Symbol(PullSymbolVisibility.Public, Decl(genericRecursiveImplicitConstructorErrors2.ts, 5, 12))
 +>Public : Symbol(Public, Decl(genericRecursiveImplicitConstructorErrors2.ts, 5, 12))
@@ -24,7 +24,7 @@
  >C : Symbol(C, Decl(genericRecursiveImplicitConstructorErrors2.ts, 14, 31))
 @@= skipped -12, +12 lines =@@
      }
- 
+
      public getType<A,B,C>(): PullTypeSymbol<A,B,C> {
 ->getType : Symbol(PullSymbol.getType, Decl(genericRecursiveImplicitConstructorErrors2.ts, 16, 5))
 +>getType : Symbol(getType, Decl(genericRecursiveImplicitConstructorErrors2.ts, 16, 5))

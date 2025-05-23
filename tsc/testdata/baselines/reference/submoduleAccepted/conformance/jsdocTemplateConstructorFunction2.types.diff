@@ -7,7 +7,7 @@
 ->Zet : typeof Zet
 +>Zet : <T>(t: T) => void
  >t : T
- 
+
      /** @type {T} */
      this.u
 ->this.u : T
@@ -16,7 +16,7 @@
 +>this.u : any
 +>this : any
 +>u : any
- 
+
      this.t = t
  >this.t = t : T
  >this.t : any
@@ -43,7 +43,7 @@
 +>function(v, o) {    this.u = v || o.nested    return this.u} : (v: any, o: any) => any
 +>v : any
 +>o : any
- 
+
      this.u = v || o.nested
 ->this.u = v || o.nested : T
 ->this.u : T
@@ -63,7 +63,7 @@
 +>o.nested : any
 +>o : any
 +>nested : any
- 
+
      return this.u
 ->this.u : T
 ->this : this
@@ -80,7 +80,7 @@
 +>new Zet(1) : any
 +>Zet : <T>(t: T) => void
  >1 : 1
- 
+
  z.t = 2
  >z.t = 2 : 2
 ->z.t : number
@@ -90,7 +90,7 @@
 +>z : any
 +>t : any
  >2 : 2
- 
+
  z.u = false
  >z.u = false : false
 ->z.u : number
@@ -100,7 +100,7 @@
 +>z : any
 +>u : any
  >false : false
- 
+
  /** @type {number} */
  let answer = z.add(3, { nested: 4 })
  >answer : number

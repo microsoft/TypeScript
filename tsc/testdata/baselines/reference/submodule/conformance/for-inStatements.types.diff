@@ -1,7 +1,7 @@
 --- old.for-inStatements.types
 +++ new.for-inStatements.types
 @@= skipped -238, +238 lines =@@
- 
+
  for (var x in M.X) { }
  >x : string
 ->M.X : typeof M.X
@@ -9,6 +9,6 @@
  >M : typeof M
 ->X : typeof M.X
 +>X : typeof X
- 
+
  enum Color { Red, Blue }
  >Color : Color

@@ -6,6 +6,6 @@
  >f : (x: Ty) => void
 ->x : CantResolveThis
 +>x : Ty
- 
+
  /**
   * @typedef {CantResolveThis} Ty

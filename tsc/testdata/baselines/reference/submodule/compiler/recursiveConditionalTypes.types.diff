@@ -2,12 +2,12 @@
 +++ new.recursiveConditionalTypes.types
 @@= skipped -124, +124 lines =@@
  }
- 
+
  declare function f23<T>(t: TupleOf<T, 3>): T;
 ->f23 : <T>(t: TupleOf<T, 3>) => T
 +>f23 : <T>(t: [T, T, T]) => T
  >t : [T, T, T]
- 
+
  f23(['a', 'b', 'c']);  // string
  >f23(['a', 'b', 'c']) : string
 ->f23 : <T>(t: TupleOf<T, 3>) => T
@@ -17,7 +17,7 @@
  >'b' : "b"
 @@= skipped -54, +54 lines =@@
  >b3 : InfBox<string>
- 
+
  declare let b4: { value: { value: { value: typeof b4 }}};
 ->b4 : { value: { value: { value: typeof b4; }; }; }
 ->value : { value: { value: typeof b4; }; }
@@ -29,19 +29,19 @@
 +>value : { value: { value: { value: ???; }; }; }
 +>value : { value: { value: { value: ???; }; }; }
 +>b4 : { value: { value: { value: ???; }; }; }
- 
+
  unbox(b1);  // string
  >unbox(b1) : string
 @@= skipped -39, +39 lines =@@
  >5 : 5
- 
+
  unbox(b4);  // { value: { value: typeof b4 }}
 ->unbox(b4) : { value: { value: typeof b4; }; }
 +>unbox(b4) : { value: { value: { value: ???; }; }; }
  >unbox : <T>(box: RecBox<T>) => T
 ->b4 : { value: { value: { value: typeof b4; }; }; }
 +>b4 : { value: { value: { value: ???; }; }; }
- 
+
  unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
 ->unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
 +>unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: ???; }; }
@@ -60,6 +60,5 @@
 +>{ get value() { return this; } } : { readonly value: { readonly value: ???; }; }
 +>value : { readonly value: ???; }
 +>this : { readonly value: ???; } | RecBox<{ readonly value: { readonly value: ???; }; }>
- 
+
  // Inference from nested instantiations of same generic types
- 

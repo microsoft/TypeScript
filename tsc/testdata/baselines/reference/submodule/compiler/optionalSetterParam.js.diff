@@ -1,8 +1,8 @@
 --- old.optionalSetterParam.js
 +++ new.optionalSetterParam.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [optionalSetterParam.js]
 -var foo = /** @class */ (function () {
 -    function foo() {

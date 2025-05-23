@@ -2,41 +2,41 @@
 +++ new.templateLiteralTypes3.types
 @@= skipped -389, +389 lines =@@
  >c : number
- 
+
  declare function chain<F extends keyof Schema>(field: F | `${F}.${F}`): void;
 ->chain : <F extends keyof Schema>(field: F | `${F}.${F}`) => void
 +>chain : <F extends "a">(field: F | `${F}.${F}`) => void
  >field : F | `${F}.${F}`
- 
+
  chain("a");
  >chain("a") : void
 ->chain : <F extends keyof Schema>(field: F | `${F}.${F}`) => void
 +>chain : <F extends "a">(field: F | `${F}.${F}`) => void
  >"a" : "a"
- 
+
  // Repro from #46125
 @@= skipped -53, +53 lines =@@
  }
- 
+
  function ff3(x: string, y: `foo-${string}` | 'bar') {
 ->ff3 : (x: string, y: `foo-${string}` | "bar") => void
 +>ff3 : (x: string, y: "bar" | `foo-${string}`) => void
  >x : string
  >y : "bar" | `foo-${string}`
- 
+
 @@= skipped -78, +78 lines =@@
  >DotString : `${string}.${string}.${string}`
- 
+
  declare function noSpread<P extends DotString>(args: P[]): P;
 ->noSpread : <P extends DotString>(args: P[]) => P
 +>noSpread : <P extends `${string}.${string}.${string}`>(args: P[]) => P
  >args : P[]
- 
+
  declare function spread<P extends DotString>(...args: P[]): P;
 ->spread : <P extends DotString>(...args: P[]) => P
 +>spread : <P extends `${string}.${string}.${string}`>(...args: P[]) => P
  >args : P[]
- 
+
  noSpread([`1.${'2'}.3`, `1.${'2'}.4`]);
  >noSpread([`1.${'2'}.3`, `1.${'2'}.4`]) : "1.2.3" | "1.2.4"
 ->noSpread : <P extends DotString>(args: P[]) => P
@@ -45,7 +45,7 @@
  >`1.${'2'}.3` : "1.2.3"
  >'2' : "2"
 @@= skipped -18, +18 lines =@@
- 
+
  noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]);
  >noSpread([`1.${'2' as string}.3`, `1.${'2' as string}.4`]) : `1.${string}.3` | `1.${string}.4`
 ->noSpread : <P extends DotString>(args: P[]) => P
@@ -54,7 +54,7 @@
  >`1.${'2' as string}.3` : `1.${string}.3`
  >'2' as string : string
 @@= skipped -11, +11 lines =@@
- 
+
  spread(`1.${'2'}.3`, `1.${'2'}.4`);
  >spread(`1.${'2'}.3`, `1.${'2'}.4`) : "1.2.3" | "1.2.4"
 ->spread : <P extends DotString>(...args: P[]) => P
@@ -63,7 +63,7 @@
  >'2' : "2"
  >`1.${'2'}.4` : "1.2.4"
 @@= skipped -8, +8 lines =@@
- 
+
  spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`);
  >spread(`1.${'2' as string}.3`, `1.${'2' as string}.4`) : `1.${string}.3` | `1.${string}.4`
 ->spread : <P extends DotString>(...args: P[]) => P
@@ -73,7 +73,7 @@
  >'2' : "2"
 @@= skipped -9, +9 lines =@@
  >'2' : "2"
- 
+
  function ft1<T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) {
 ->ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: Uppercase<`1.${T}.3`>, u2: Uppercase<`1.${T}.4`>) => void
 +>ft1 : <T extends string>(t: T, u: Uppercase<T>, u1: `1.${Uppercase<T>}.3`, u2: `1.${Uppercase<T>}.4`) => void
@@ -81,7 +81,7 @@
  >u : Uppercase<T>
  >u1 : `1.${Uppercase<T>}.3`
 @@= skipped -8, +8 lines =@@
- 
+
      spread(`1.${t}.3`, `1.${t}.4`);
  >spread(`1.${t}.3`, `1.${t}.4`) : `1.${T}.3` | `1.${T}.4`
 ->spread : <P extends DotString>(...args: P[]) => P
@@ -90,7 +90,7 @@
  >t : T
  >`1.${t}.4` : `1.${T}.4`
 @@= skipped -8, +8 lines =@@
- 
+
      spread(`1.${u}.3`, `1.${u}.4`);
  >spread(`1.${u}.3`, `1.${u}.4`) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
 ->spread : <P extends DotString>(...args: P[]) => P
@@ -99,7 +99,7 @@
  >u : Uppercase<T>
  >`1.${u}.4` : `1.${Uppercase<T>}.4`
 @@= skipped -8, +8 lines =@@
- 
+
      spread(u1, u2);
  >spread(u1, u2) : `1.${Uppercase<T>}.3` | `1.${Uppercase<T>}.4`
 ->spread : <P extends DotString>(...args: P[]) => P
@@ -109,21 +109,20 @@
  }
 @@= skipped -17, +17 lines =@@
  >id : string
- 
+
      let x: keyof T & string | `-${keyof T & string}`;
 ->x : (keyof T & string) | `-${keyof T & string}`
 +>x : keyof T & string | `-${keyof T & string}`
- 
+
      x = "id";
  >x = "id" : "id"
 ->x : (keyof T & string) | `-${keyof T & string}`
 +>x : keyof T & string | `-${keyof T & string}`
  >"id" : "id"
- 
+
      x = "-id";
  >x = "-id" : "-id"
 ->x : (keyof T & string) | `-${keyof T & string}`
 +>x : keyof T & string | `-${keyof T & string}`
  >"-id" : "-id"
  }
- 

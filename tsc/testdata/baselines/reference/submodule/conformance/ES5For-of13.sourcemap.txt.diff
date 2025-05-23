@@ -82,6 +82,20 @@
 -15>Emitted(1, 60) Source(1, 30) + SourceIndex(0)
 -16>Emitted(1, 62) Source(1, 32) + SourceIndex(0)
 -17>Emitted(1, 63) Source(1, 33) + SourceIndex(0)
+----
+->>>    var v = _a[_i];
+-1 >^^^^
+-2 >    ^^^^
+-3 >        ^
+-4 >         ^^^^^^^^^
+-1 >
+-2 >    let 
+-3 >        v
+-4 >         
+-1 >Emitted(2, 5) Source(1, 6) + SourceIndex(0)
+-2 >Emitted(2, 9) Source(1, 10) + SourceIndex(0)
+-3 >Emitted(2, 10) Source(1, 11) + SourceIndex(0)
+-4 >Emitted(2, 19) Source(1, 11) + SourceIndex(0)
 +2 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
 +3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
 +4 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
@@ -96,23 +110,8 @@
 +13>Emitted(1, 32) Source(1, 32) + SourceIndex(0)
 +14>Emitted(1, 33) Source(1, 33) + SourceIndex(0)
  ---
-->>>    var v = _a[_i];
--1 >^^^^
--2 >    ^^^^
--3 >        ^
--4 >         ^^^^^^^^^
--1 >
--2 >    let 
--3 >        v
--4 >         
--1 >Emitted(2, 5) Source(1, 6) + SourceIndex(0)
--2 >Emitted(2, 9) Source(1, 10) + SourceIndex(0)
--3 >Emitted(2, 10) Source(1, 11) + SourceIndex(0)
--4 >Emitted(2, 19) Source(1, 11) + SourceIndex(0)
-----
  >>>    var x = v;
  1 >^^^^
- 2 >    ^^^^
 @@= skipped -74, +51 lines =@@
  4 >         ^^^
  5 >            ^

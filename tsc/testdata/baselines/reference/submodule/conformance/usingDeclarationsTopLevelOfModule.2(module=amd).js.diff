@@ -1,8 +1,8 @@
 --- old.usingDeclarationsTopLevelOfModule.2(module=amd).js
 +++ new.usingDeclarationsTopLevelOfModule.2(module=amd).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [usingDeclarationsTopLevelOfModule.2.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

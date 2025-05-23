@@ -2,10 +2,10 @@
 +++ new.mappedTypeErrors.types
 @@= skipped -87, +87 lines =@@
  }
- 
+
  function f4<T extends keyof Named>(x: T) {
 ->f4 : <T extends keyof Named>(x: T) => void
 +>f4 : <T extends "name">(x: T) => void
  >x : T
- 
+
      let y: Pick<Shape, T>;

@@ -2,7 +2,7 @@
 +++ new.emitPinnedCommentsOnTopOfFile.js
 @@= skipped -9, +9 lines =@@
  var x = 10;
- 
+
  //// [emitPinnedCommentsOnTopOfFile.js]
 -/*!
 -

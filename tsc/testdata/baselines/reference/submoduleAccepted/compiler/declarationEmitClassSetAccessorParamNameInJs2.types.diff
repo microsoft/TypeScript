@@ -7,4 +7,3 @@
 ->bar : { prop: string; }
 +>bar : any
  }
- 

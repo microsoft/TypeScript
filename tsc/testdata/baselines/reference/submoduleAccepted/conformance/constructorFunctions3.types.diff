@@ -1,12 +1,12 @@
 --- old.constructorFunctions3.types
 +++ new.constructorFunctions3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  function Instance() {
 ->Instance : typeof Instance
 +>Instance : () => void
- 
+
      this.i = 'simple'
  >this.i = 'simple' : "simple"
  >this.i : any
@@ -22,19 +22,19 @@
 +>i : any
 +>new Instance() : any
 +>Instance : () => void
- 
+
  Instance;
 ->Instance : typeof Instance
 +>Instance : () => void
- 
+
  i;
 ->i : Instance
 +>i : any
- 
+
  function StaticToo() {
 ->StaticToo : typeof StaticToo
 +>StaticToo : { (): void; property: string; }
- 
+
      this.i = 'more complex'
  >this.i = 'more complex' : "more complex"
  >this.i : any
@@ -50,7 +50,7 @@
 +>StaticToo : { (): void; property: string; }
  >property : string
  >'yep' : "yep"
- 
+
  var s = new StaticToo();
 ->s : StaticToo
 ->new StaticToo() : StaticToo
@@ -58,20 +58,20 @@
 +>s : any
 +>new StaticToo() : any
 +>StaticToo : { (): void; property: string; }
- 
+
  s;
 ->s : StaticToo
 +>s : any
- 
+
  StaticToo;
 ->StaticToo : typeof StaticToo
 +>StaticToo : { (): void; property: string; }
- 
+
  // Both!
  function A () {
 ->A : typeof A
 +>A : { (): void; t: (m: any) => any; }
- 
+
      this.x = 1
  >this.x = 1 : 1
  >this.x : any
@@ -79,7 +79,7 @@
 +>this : any
  >x : any
  >1 : 1
- 
+
      /** @type {1} */
      this.second = 1
  >this.second = 1 : 1
@@ -89,8 +89,8 @@
 +>this.second : any
 +>this : any
 +>second : any
- >1 : 1
 +>1 : 1
+ >1 : 1
  }
  /** @param {number} n */
  A.prototype.z = function f(n) {
@@ -108,7 +108,7 @@
 +>function f(n) {    return n + this.x} : (n: any) => any
 +>f : (n: any) => any
 +>n : any
- 
+
      return n + this.x
 ->n + this.x : number
 ->n : number
@@ -137,7 +137,7 @@
 +>function g(m) {    return m + 1} : (m: any) => any
 +>g : (m: any) => any
 +>m : any
- 
+
      return m + 1
 ->m + 1 : number
 ->m : number
@@ -152,7 +152,7 @@
 +>a : any
 +>new A() : any
 +>A : { (): void; t: (m: any) => any; }
- 
+
  a.z(3)
 ->a.z(3) : number
 ->a.z : (n: number) => number
@@ -163,7 +163,7 @@
 +>a : any
 +>z : any
  >3 : 3
- 
+
  A.t(2)
 ->A.t(2) : number
 ->A.t : (m: number) => number
@@ -174,7 +174,7 @@
 +>A : { (): void; t: (m: any) => any; }
 +>t : (m: any) => any
  >2 : 2
- 
+
  a.second = 1
  >a.second = 1 : 1
 ->a.second : 1
@@ -184,4 +184,3 @@
 +>a : any
 +>second : any
  >1 : 1
- 

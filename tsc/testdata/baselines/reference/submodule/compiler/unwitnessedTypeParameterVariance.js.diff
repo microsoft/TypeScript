@@ -1,7 +1,7 @@
 --- old.unwitnessedTypeParameterVariance.js
 +++ new.unwitnessedTypeParameterVariance.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [unwitnessedTypeParameterVariance.js]
  "use strict";
 -// Repros from #33872

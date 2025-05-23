@@ -2,7 +2,7 @@
 +++ new.collisionThisExpressionAndLocalVarInMethod.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [collisionThisExpressionAndLocalVarInMethod.js]
 -var a = /** @class */ (function () {
 -    function a() {

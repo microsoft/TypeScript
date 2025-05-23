@@ -6,7 +6,7 @@
  >ctor : Symbol(ctor, Decl(jsdocDisallowedInTypescript.ts, 6, 13))
 ->new : Symbol(new, Decl(jsdocDisallowedInTypescript.ts, 6, 28))
 +>function : Symbol(function)
- 
+
      return new ctor('hi');
 ->ctor : Symbol(ctor, Decl(jsdocDisallowedInTypescript.ts, 6, 13))
  }
@@ -16,18 +16,18 @@
 +>function : Symbol(function)
  >this : Symbol(this, Decl(jsdocDisallowedInTypescript.ts, 9, 26))
 +>string : Symbol(string, Decl(jsdocDisallowedInTypescript.ts, 9, 39))
- 
+
      return f(12, 'hullo');
 ->f : Symbol(f, Decl(jsdocDisallowedInTypescript.ts, 9, 14))
 +>f : Symbol(f, Decl(jsdocDisallowedInTypescript.ts, 1, 34))
  }
  var whatevs: * = 1001;
  >whatevs : Symbol(whatevs, Decl(jsdocDisallowedInTypescript.ts, 12, 3))
- 
+
  var ques: ? = 'what';
  >ques : Symbol(ques, Decl(jsdocDisallowedInTypescript.ts, 13, 3))
 +> : Symbol(unknown)
- 
+
  var g: function(number, number): number = (n,m) => n + m;
  >g : Symbol(g, Decl(jsdocDisallowedInTypescript.ts, 14, 3))
 +>function : Symbol(function)

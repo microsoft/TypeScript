@@ -1,7 +1,7 @@
 --- old.indexedAccessRelation.js
 +++ new.indexedAccessRelation.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [indexedAccessRelation.js]
  "use strict";
 -// Repro from #14723

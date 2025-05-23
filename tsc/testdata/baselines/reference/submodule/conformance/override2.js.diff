@@ -2,7 +2,7 @@
 +++ new.override2.js
 @@= skipped -28, +28 lines =@@
  }
- 
+
  //// [override2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -64,27 +64,31 @@
 -    abstract foo(v: string): void;
 -    abstract bar(v: string): void;
 -    abstract baz(v: string): void;
-+class AB {
- }
+-}
 -declare abstract class AD1 extends AB {
-+class AD1 extends AB {
- }
+-}
 -declare abstract class AD2 extends AB {
 -    abstract foo(v: ''): void;
-+class AD2 extends AB {
- }
+-}
 -declare abstract class AD3 extends AB {
 -    foo(v: ''): void;
 -    abstract bar(): void;
 -    baz(): void;
-+class AD3 extends AB {
-+    foo(v) { } // need override?
-+    baz() { }
- }
+-}
 -declare class D4 extends AB {
 -    foo(v: ''): void;
 -    bar(v: ''): void;
 -    baz(): void;
++class AB {
++}
++class AD1 extends AB {
++}
++class AD2 extends AB {
++}
++class AD3 extends AB {
++    foo(v) { } // need override?
++    baz() { }
++}
 +class D4 extends AB {
 +    foo(v) { }
 +    bar(v) { }

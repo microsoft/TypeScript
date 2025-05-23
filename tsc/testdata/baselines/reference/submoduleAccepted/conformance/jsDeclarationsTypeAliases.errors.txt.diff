@@ -1,8 +1,7 @@
 --- old.jsDeclarationsTypeAliases.errors.txt
 +++ new.jsDeclarationsTypeAliases.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +mixed.js(14,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +
 +

@@ -1,7 +1,7 @@
 --- old.jsDeclarationsExportDefinePropertyEmit.types
 +++ new.jsDeclarationsExportDefinePropertyEmit.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  Object.defineProperty(module.exports, "a", { value: function a() {} });
 ->Object.defineProperty(module.exports, "a", { value: function a() {} }) : typeof module.exports
@@ -20,7 +20,7 @@
  >value : () => void
 @@= skipped -14, +14 lines =@@
  >a : () => void
- 
+
  Object.defineProperty(module.exports, "b", { value: function b() {} });
 ->Object.defineProperty(module.exports, "b", { value: function b() {} }) : typeof module.exports
 +>Object.defineProperty(module.exports, "b", { value: function b() {} }) : any
@@ -38,7 +38,7 @@
  >value : () => void
 @@= skipped -14, +14 lines =@@
  >b : () => void
- 
+
  Object.defineProperty(module.exports.b, "cat", { value: "cat" });
 ->Object.defineProperty(module.exports.b, "cat", { value: "cat" }) : () => void
 +>Object.defineProperty(module.exports.b, "cat", { value: "cat" }) : any
@@ -63,7 +63,7 @@
  >b : number
  >(null) : any
 +>null : any
- 
+
  Object.defineProperty(module.exports, "d", { value: d });
 ->Object.defineProperty(module.exports, "d", { value: d }) : typeof module.exports
 +>Object.defineProperty(module.exports, "d", { value: d }) : any
@@ -84,7 +84,7 @@
  >b : U
  >(null) : any
 +>null : any
- 
+
  Object.defineProperty(module.exports, "e", { value: e });
 ->Object.defineProperty(module.exports, "e", { value: e }) : typeof module.exports
 +>Object.defineProperty(module.exports, "e", { value: e }) : any
@@ -119,7 +119,7 @@
  >{ value: f } : { value: <T>(a: T) => T; }
  >value : <T>(a: T) => T
  >f : <T>(a: T) => T
- 
+
  Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
 ->Object.defineProperty(module.exports.f, "self", { value: module.exports.f }) : <T>(a: T) => T
 +>Object.defineProperty(module.exports.f, "self", { value: module.exports.f }) : any
@@ -151,7 +151,7 @@
 +>module : any
 +>exports : any
 +>f : any
- 
+
  /**
   * @param {{x: string}} a
   * @param {{y: typeof module.exports.b}} b
@@ -162,7 +162,7 @@
  >a : { x: string; }
 ->b : { y: () => void; }
 +>b : { y: any; }
- 
+
      return a.x && b.y();
 ->a.x && b.y() : void
 +>a.x && b.y() : any
@@ -197,8 +197,8 @@
 +>{ value: g } : { value: (a: { x: string; }, b: { y: any; }) => any; }
 +>value : (a: { x: string; }, b: { y: any; }) => any
 +>g : (a: { x: string; }, b: { y: any; }) => any
- 
- 
+
+
  /**
 @@= skipped -69, +69 lines =@@
   * @param {{y: typeof module.exports.b}} b
@@ -209,7 +209,7 @@
  >a : { x: string; }
 ->b : { y: () => void; }
 +>b : { y: any; }
- 
+
      return a.x && b.y();
 ->a.x && b.y() : void
 +>a.x && b.y() : any
@@ -244,7 +244,7 @@
 +>{ value: hh } : { value: (a: { x: string; }, b: { y: any; }) => any; }
 +>value : (a: { x: string; }, b: { y: any; }) => any
 +>hh : (a: { x: string; }, b: { y: any; }) => any
- 
+
  Object.defineProperty(module.exports, "i", { value: function i(){} });
 ->Object.defineProperty(module.exports, "i", { value: function i(){} }) : typeof module.exports
 +>Object.defineProperty(module.exports, "i", { value: function i(){} }) : any
@@ -262,7 +262,7 @@
  >value : () => void
 @@= skipped -42, +42 lines =@@
  >i : () => void
- 
+
  Object.defineProperty(module.exports, "ii", { value: module.exports.i });
 ->Object.defineProperty(module.exports, "ii", { value: module.exports.i }) : typeof module.exports
 +>Object.defineProperty(module.exports, "ii", { value: module.exports.i }) : any
@@ -290,7 +290,7 @@
 +>module : any
 +>exports : any
 +>i : any
- 
+
  // note that this last one doesn't make much sense in cjs, since exports aren't hoisted bindings
  Object.defineProperty(module.exports, "jj", { value: module.exports.j });
 ->Object.defineProperty(module.exports, "jj", { value: module.exports.j }) : typeof module.exports
@@ -319,7 +319,7 @@
 +>module : any
 +>exports : any
 +>j : any
- 
+
  Object.defineProperty(module.exports, "j", { value: function j() {} });
 ->Object.defineProperty(module.exports, "j", { value: function j() {} }) : typeof module.exports
 +>Object.defineProperty(module.exports, "j", { value: function j() {} }) : any

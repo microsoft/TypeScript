@@ -2,29 +2,29 @@
 +++ new.controlFlowForIndexSignatures.types
 @@= skipped -11, +11 lines =@@
  >'bar' : "bar"
- 
+
  function a(aboo1?: Foo) {
 ->a : (aboo1?: Foo) => void
 +>a : (aboo1?: Foo | undefined) => void
  >aboo1 : Foo | undefined
- 
+
      if (!aboo1) return;
 @@= skipped -53, +53 lines =@@
  >'string' : "string"
- 
+
      type C = { [key: string]: typeof c };
 ->C : { [key: string]: string; }
 +>C : C
  >key : string
  >c : string
- 
+
      const boo1: C = { bar: 'works' };
 ->boo1 : { [key: string]: string; }
 +>boo1 : C
  >{ bar: 'works' } : { bar: string; }
  >bar : string
  >'works' : "works"
- 
+
      const boo2: C = { bar: 1 }; // should error
 ->boo2 : { [key: string]: string; }
 +>boo2 : C

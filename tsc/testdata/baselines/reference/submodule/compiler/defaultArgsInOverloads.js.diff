@@ -2,7 +2,7 @@
 +++ new.defaultArgsInOverloads.js
 @@= skipped -21, +21 lines =@@
  var f: (a = 3) => number;
- 
+
  //// [defaultArgsInOverloads.js]
 -function fun(a) {
 -    if (a === void 0) { a = null; }

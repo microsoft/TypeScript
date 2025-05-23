@@ -2,7 +2,7 @@
 +++ new.conditionalTypeContextualTypeSimplificationsSuceeds.js
 @@= skipped -17, +17 lines =@@
  good2({ when: value => false });
- 
+
  //// [conditionalTypeContextualTypeSimplificationsSuceeds.js]
 -"use strict";
  function bad(attrs) { }

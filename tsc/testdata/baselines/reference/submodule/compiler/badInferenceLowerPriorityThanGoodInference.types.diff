@@ -13,4 +13,3 @@
 +>{ dog() { return a; } } : { dog: () => string; }
  >dog : () => string
  >a : string
- 

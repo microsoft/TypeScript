@@ -2,7 +2,7 @@
 +++ new.nestedInfinitelyExpandedRecursiveTypes.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 12))
- 
+
        t: G<F<() => T>>;
 ->t : Symbol(F.t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 16))
 +>t : Symbol(t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 16))
@@ -11,7 +11,7 @@
  >T : Symbol(T, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 12))
 @@= skipped -10, +10 lines =@@
  >U : Symbol(U, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 12))
- 
+
        t: G<G<() => U>>;
 ->t : Symbol(G.t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 16))
 +>t : Symbol(t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 16))

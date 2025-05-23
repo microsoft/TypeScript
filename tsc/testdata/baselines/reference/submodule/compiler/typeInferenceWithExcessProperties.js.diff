@@ -1,8 +1,8 @@
 --- old.typeInferenceWithExcessProperties.js
 +++ new.typeInferenceWithExcessProperties.js
 @@= skipped -33, +33 lines =@@
- 
- 
+
+
  //// [typeInferenceWithExcessProperties.js]
 -// Repro from #17041
  function parrot(obj) {

@@ -2,7 +2,7 @@
 +++ new.moduleAsBaseType.js
 @@= skipped -6, +6 lines =@@
  class C2 implements M { }
- 
+
  //// [moduleAsBaseType.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

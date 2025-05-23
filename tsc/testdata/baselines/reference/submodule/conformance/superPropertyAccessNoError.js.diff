@@ -44,21 +44,13 @@
 -    function SomeDerivedClass() {
 -        var _this = _super.call(this) || this;
 -        var x = _super.prototype.func.call(_this);
-+    }
-+}
-+class SomeDerivedClass extends SomeBaseClass {
-+    constructor() {
-+        super();
-+        var x = super.func();
-         var x;
+-        var x;
 -        return _this;
-     }
+-    }
 -    SomeDerivedClass.prototype.fn = function () {
 -        var _this = this;
 -        var x = _super.prototype.func.call(this);
-+    fn() {
-+        var x = super.func();
-         var x;
+-        var x;
 -        var y = function () { return _super.prototype.func.call(_this); };
 -    };
 -    Object.defineProperty(SomeDerivedClass.prototype, "a", {
@@ -76,11 +68,7 @@
 -    });
 -    SomeDerivedClass.fn = function () {
 -        var x = _super.func.call(this);
-+        var y = () => super.func();
-+    }
-+    get a() {
-+        var x = super.func();
-         var x;
+-        var x;
 -    };
 -    Object.defineProperty(SomeDerivedClass, "a", {
 -        get: function () {
@@ -101,6 +89,22 @@
 -    return SomeDerivedClass;
 -}(SomeBaseClass));
 -var instance = new SomeDerivedClass();
++    }
++}
++class SomeDerivedClass extends SomeBaseClass {
++    constructor() {
++        super();
++        var x = super.func();
++        var x;
++    }
++    fn() {
++        var x = super.func();
++        var x;
++        var y = () => super.func();
++    }
++    get a() {
++        var x = super.func();
++        var x;
 +        return null;
 +    }
 +    set a(n) {

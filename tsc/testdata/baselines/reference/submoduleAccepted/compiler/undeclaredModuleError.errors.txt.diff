@@ -7,7 +7,7 @@
 +undeclaredModuleError.ts(8,29): error TS2345: Argument of type '() => void' is not assignable to parameter of type '(stat: Stats, name: string) => boolean'.
    Type 'void' is not assignable to type 'boolean'.
  undeclaredModuleError.ts(11,41): error TS2304: Cannot find name 'IDoNotExist'.
- 
+
 @@= skipped -6, +6 lines =@@
  ==== undeclaredModuleError.ts (3 errors) ====
      import fs = require('fs');

@@ -2,7 +2,7 @@
 +++ new.parserNotHexLiteral1.symbols
 @@= skipped -6, +6 lines =@@
  >x0 : Symbol(x0, Decl(parserNotHexLiteral1.ts, 0, 19))
- 
+
  console.info (x.x0);
 ->console.info : Symbol(Console.info, Decl(lib.dom.d.ts, --, --))
 +>console.info : Symbol(info, Decl(lib.dom.d.ts, --, --))

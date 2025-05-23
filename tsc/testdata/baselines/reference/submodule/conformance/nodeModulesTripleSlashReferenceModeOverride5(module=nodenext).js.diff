@@ -2,7 +2,7 @@
 +++ new.nodeModulesTripleSlashReferenceModeOverride5(module=nodenext).js
 @@= skipped -28, +28 lines =@@
  export {};
- 
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

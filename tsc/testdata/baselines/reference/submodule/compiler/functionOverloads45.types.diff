@@ -1,20 +1,20 @@
 --- old.functionOverloads45.types
 +++ new.functionOverloads45.types
 @@= skipped -21, +21 lines =@@
- 
+
  function foo1([x]: { a:number | string }[]): Animal {
  >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
 ->x : { a: number | string; }
 +>x : { a: string | number; }
  >a : string | number
- 
+
      return undefined;
 @@= skipped -19, +19 lines =@@
- 
+
  function foo2([x]: { a:number | string }[]): Cat | Dog {
  >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
 ->x : { a: number | string; }
 +>x : { a: string | number; }
  >a : string | number
- 
+
      return undefined;

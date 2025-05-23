@@ -51,7 +51,12 @@
 -    }
 -    return D;
 -}(b_1.C));
--exports.D = D;
++const a_1 = require("./a");
++const b_1 = require("./b");
++class D extends b_1.C {
++    [a_1.x] = 12;
++}
+ exports.D = D;
 -_a = a_1.x;
 -
 -
@@ -61,15 +66,10 @@
 -import { x } from "./a";
 -export declare class C {
 -    private [x];
-+const a_1 = require("./a");
-+const b_1 = require("./b");
-+class D extends b_1.C {
-+    [a_1.x] = 12;
- }
+-}
 -//// [c.d.ts]
 -import { x } from "./a";
 -import { C } from "./b";
 -export declare class D extends C {
 -    private [x];
 -}
-+exports.D = D;

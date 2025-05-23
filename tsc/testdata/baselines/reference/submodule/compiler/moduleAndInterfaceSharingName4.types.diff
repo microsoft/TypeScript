@@ -2,10 +2,9 @@
 +++ new.moduleAndInterfaceSharingName4.types
 @@= skipped -4, +4 lines =@@
  >D3 : typeof D3
- 
+
      var x: D3.Color.Color;
 ->x : Color.Color
 +>x : Color
  >D3 : any
  >Color : any
- 

@@ -2,7 +2,7 @@
 +++ new.genericPrototypeProperty.js
 @@= skipped -11, +11 lines =@@
  var r3 = r.foo(null);
- 
+
  //// [genericPrototypeProperty.js]
 -var C = /** @class */ (function () {
 -    function C() {

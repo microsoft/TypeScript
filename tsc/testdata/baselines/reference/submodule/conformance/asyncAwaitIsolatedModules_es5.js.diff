@@ -1,7 +1,7 @@
 --- old.asyncAwaitIsolatedModules_es5.js
 +++ new.asyncAwaitIsolatedModules_es5.js
 @@= skipped -42, +42 lines =@@
- 
+
  //// [asyncAwaitIsolatedModules_es5.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -61,24 +61,7 @@
 -    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
 -        return [2 /*return*/];
 -    }); });
-+async function f0() { }
-+async function f1() { }
-+async function f3() { }
-+let f4 = async function () { };
-+let f5 = async function () { };
-+let f6 = async function () { };
-+let f7 = async () => { };
-+let f8 = async () => { };
-+let f9 = async () => { };
-+let f10 = async () => p;
-+let f11 = async () => mp;
-+let f12 = async () => mp;
-+let f13 = async () => p;
-+let o = {
-+    async m1() { },
-+    async m2() { },
-+    async m3() { }
- };
+-};
 -var f5 = function () {
 -    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
 -        return [2 /*return*/];
@@ -162,6 +145,24 @@
 -    };
 -    return C;
 -}());
++async function f0() { }
++async function f1() { }
++async function f3() { }
++let f4 = async function () { };
++let f5 = async function () { };
++let f6 = async function () { };
++let f7 = async () => { };
++let f8 = async () => { };
++let f9 = async () => { };
++let f10 = async () => p;
++let f11 = async () => mp;
++let f12 = async () => mp;
++let f13 = async () => p;
++let o = {
++    async m1() { },
++    async m2() { },
++    async m3() { }
++};
 +class C {
 +    async m1() { }
 +    async m2() { }

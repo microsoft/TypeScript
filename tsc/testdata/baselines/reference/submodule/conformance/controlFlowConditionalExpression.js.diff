@@ -1,8 +1,8 @@
 --- old.controlFlowConditionalExpression.js
 +++ new.controlFlowConditionalExpression.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [controlFlowConditionalExpression.js]
 -var x;
 -var cond;

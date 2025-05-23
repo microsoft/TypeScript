@@ -1,7 +1,7 @@
 --- old.optionalPropertiesTest.types
 +++ new.optionalPropertiesTest.types
 @@= skipped -1, +1 lines =@@
- 
+
  === optionalPropertiesTest.ts ===
  var x: {p1:number; p2?:string; p3?:{():number;};};
 ->x : { p1: number; p2?: string; p3?: { (): number; }; }

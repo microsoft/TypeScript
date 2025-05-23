@@ -1,8 +1,8 @@
 --- old.moduleWithStatementsOfEveryKind.js
 +++ new.moduleWithStatementsOfEveryKind.js
 @@= skipped -60, +60 lines =@@
- 
- 
+
+
  //// [moduleWithStatementsOfEveryKind.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

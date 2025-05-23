@@ -1,8 +1,8 @@
 --- old.strictFunctionTypes1.js
 +++ new.strictFunctionTypes1.js
 @@= skipped -52, +52 lines =@@
- 
- 
+
+
  //// [strictFunctionTypes1.js]
 -"use strict";
 -var x1 = f1(fo, fs); // (x: string) => void

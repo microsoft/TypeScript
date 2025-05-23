@@ -2,7 +2,7 @@
 +++ new.illegalSuperCallsInConstructor.js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [illegalSuperCallsInConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

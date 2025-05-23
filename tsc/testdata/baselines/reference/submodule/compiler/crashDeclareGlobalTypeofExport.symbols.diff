@@ -8,4 +8,3 @@
 +>default : Symbol(default, Decl(foo.d.ts, 0, 16))
  >Root : Symbol(Root, Decl(foo.d.ts, 0, 0))
  }
- 

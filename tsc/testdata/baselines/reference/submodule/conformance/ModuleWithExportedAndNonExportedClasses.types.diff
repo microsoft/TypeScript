@@ -1,26 +1,27 @@
 --- old.ModuleWithExportedAndNonExportedClasses.types
 +++ new.ModuleWithExportedAndNonExportedClasses.types
 @@= skipped -1, +1 lines =@@
- 
+
  === ModuleWithExportedAndNonExportedClasses.ts ===
  module A {
 ->A : typeof globalThis.A
 +>A : typeof A
- 
+
      export class A {
  >A : A
 @@= skipped -51, +51 lines =@@
- 
+
  var a = new A.A();
  >a : { id: number; name: string; }
 ->new A.A() : A.A
 ->A.A : typeof A.A
+->A : typeof A
+->A : typeof A.A
 +>new A.A() : A
 +>A.A : typeof A
- >A : typeof A
-->A : typeof A.A
 +>A : typeof A
- 
++>A : typeof A
+
  var AG = new A.AG<number, string>()
 ->AG : A.AG<number, string>
 ->new A.AG<number, string>() : A.AG<number, string>
@@ -31,6 +32,6 @@
  >A : typeof A
 ->AG : typeof A.AG
 +>AG : typeof AG
- 
+
  // errors expected, these are not exported
  var a2 = new A.A2();

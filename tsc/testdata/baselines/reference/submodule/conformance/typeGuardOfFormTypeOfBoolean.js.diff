@@ -1,8 +1,8 @@
 --- old.typeGuardOfFormTypeOfBoolean.js
 +++ new.typeGuardOfFormTypeOfBoolean.js
 @@= skipped -88, +88 lines =@@
- 
- 
+
+
  //// [typeGuardOfFormTypeOfBoolean.js]
 -var C = /** @class */ (function () {
 -    function C() {

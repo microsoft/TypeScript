@@ -1,8 +1,8 @@
 --- old.privateNameClassExpressionLoop.js
 +++ new.privateNameClassExpressionLoop.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [privateNameClassExpressionLoop.js]
 -var _a;
  const array = [];

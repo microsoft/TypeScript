@@ -1,7 +1,7 @@
 --- old.es6ExportDefaultFunctionDeclaration.js
 +++ new.es6ExportDefaultFunctionDeclaration.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [es6ExportDefaultFunctionDeclaration.js]
  export default function f() { }
 -

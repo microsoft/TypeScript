@@ -1,8 +1,8 @@
 --- old.independentPropertyVariance.js
 +++ new.independentPropertyVariance.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [independentPropertyVariance.js]
 -"use strict";
 -// Verify that properties can vary independently in comparable relationship

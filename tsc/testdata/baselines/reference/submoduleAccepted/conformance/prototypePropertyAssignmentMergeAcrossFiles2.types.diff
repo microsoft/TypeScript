@@ -1,13 +1,13 @@
 --- old.prototypePropertyAssignmentMergeAcrossFiles2.types
 +++ new.prototypePropertyAssignmentMergeAcrossFiles2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === prototypePropertyAssignmentMergeAcrossFiles2.js ===
  var Ns = {}
 ->Ns : typeof Ns
 +>Ns : {}
  >{} : {}
- 
+
  Ns.One = function() {};
 ->Ns.One = function() {} : typeof One
 ->Ns.One : typeof One
@@ -19,7 +19,7 @@
 +>Ns : {}
 +>One : any
 +>function() {} : () => void
- 
+
  Ns.Two = function() {};
 ->Ns.Two = function() {} : typeof Two
 ->Ns.Two : typeof Two
@@ -31,7 +31,7 @@
 +>Ns : {}
 +>Two : any
 +>function() {} : () => void
- 
+
  Ns.One.prototype = {
 ->Ns.One.prototype = {  ok() {},} : { ok(): void; }
 ->Ns.One.prototype : { ok(): void; }
@@ -47,7 +47,7 @@
 +>One : any
 +>prototype : any
 +>{  ok() {},} : { ok: () => void; }
- 
+
    ok() {},
  >ok : () => void
 @@= skipped -32, +32 lines =@@
@@ -66,4 +66,3 @@
 +>prototype : any
  >{} : {}
  }
- 

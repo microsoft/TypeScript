@@ -7,5 +7,5 @@
 ->t : Symbol(C.t, Decl(dummyType.d.ts, 0, 20))
 +>t : Symbol(t, Decl(dummyType.d.ts, 0, 20))
  >T : Symbol(T, Decl(dummyType.d.ts, 0, 16))
- 
+
  === badTypeArguments.js ===

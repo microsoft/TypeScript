@@ -1,7 +1,7 @@
 --- old.declFileFunctions.symbols
 +++ new.declFileFunctions.symbols
 @@= skipped -24, +24 lines =@@
- 
+
      return a + rests.join("");
  >a : Symbol(a, Decl(declFileFunctions_0.ts, 9, 38))
 ->rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
@@ -10,10 +10,10 @@
 ->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 +>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  export function fooWithOverloads(a: string): string;
 @@= skipped -91, +91 lines =@@
- 
+
      return a + rests.join("");
  >a : Symbol(a, Decl(declFileFunctions_0.ts, 46, 42))
 ->rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
@@ -22,10 +22,10 @@
 ->join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
 +>join : Symbol(join, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function nonExportedFooWithOverloads(a: string): string;
 @@= skipped -46, +46 lines =@@
- 
+
      return a + rests.join("");
  >a : Symbol(a, Decl(declFileFunctions_1.ts, 9, 37))
 ->rests.join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))

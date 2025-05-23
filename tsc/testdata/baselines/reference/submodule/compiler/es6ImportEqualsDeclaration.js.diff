@@ -3,7 +3,7 @@
 @@= skipped -6, +6 lines =@@
  //// [client.ts]
  import a = require("server");
- 
+
 -//// [server.js]
 -var a = 10;
 -export {};

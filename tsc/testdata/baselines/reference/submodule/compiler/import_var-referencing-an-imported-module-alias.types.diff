@@ -1,18 +1,18 @@
 --- old.import_var-referencing-an-imported-module-alias.types
 +++ new.import_var-referencing-an-imported-module-alias.types
 @@= skipped -1, +1 lines =@@
- 
+
  === consumer.ts ===
  import host = require("host");
 ->host : typeof host
 +>host : any
- 
+
  var hostVar = host;
 ->hostVar : typeof host
 ->host : typeof host
 +>hostVar : any
 +>host : any
- 
+
  var v = new hostVar.Host();
 ->v : host.Host
 ->new hostVar.Host() : host.Host

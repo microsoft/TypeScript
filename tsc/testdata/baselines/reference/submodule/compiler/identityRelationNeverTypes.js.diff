@@ -1,8 +1,8 @@
 --- old.identityRelationNeverTypes.js
 +++ new.identityRelationNeverTypes.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [identityRelationNeverTypes.js]
 -"use strict";
 -// Repro from #47996

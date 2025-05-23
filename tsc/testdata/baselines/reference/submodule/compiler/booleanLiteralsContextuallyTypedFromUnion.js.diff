@@ -2,7 +2,7 @@
 +++ new.booleanLiteralsContextuallyTypedFromUnion.js
 @@= skipped -26, +26 lines =@@
  let Success = () => <Funk {...attrs2} />
- 
+
  //// [booleanLiteralsContextuallyTypedFromUnion.jsx]
 -"use strict";
 -var isIt = Math.random() > 0.5;

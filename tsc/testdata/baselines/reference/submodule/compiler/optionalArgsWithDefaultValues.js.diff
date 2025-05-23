@@ -2,7 +2,7 @@
 +++ new.optionalArgsWithDefaultValues.js
 @@= skipped -11, +11 lines =@@
  var b = (x, y?:number = 2) => { x; };
- 
+
  //// [optionalArgsWithDefaultValues.js]
 -function foo(x, y, z) {
 -    if (y === void 0) { y = false; }

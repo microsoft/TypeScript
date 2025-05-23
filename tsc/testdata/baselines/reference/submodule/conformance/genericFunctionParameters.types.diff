@@ -2,18 +2,18 @@
 +++ new.genericFunctionParameters.types
 @@= skipped -11, +11 lines =@@
  >x : S
- 
+
  declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
 ->f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
 ->cb : <S extends Array<S>>(x: S) => T
 +>f3 : <T>(cb: <S extends S[]>(x: S) => T) => T
 +>cb : <S extends S[]>(x: S) => T
  >x : S
- 
+
  let x1 = f1(x => x);  // {}
 @@= skipped -21, +21 lines =@@
  >x : S
- 
+
  let x3 = f3(x => x);  // Array<any>
 ->x3 : any[]
 ->f3(x => x) : any[]
@@ -26,7 +26,7 @@
  >x : S
 @@= skipped -10, +10 lines =@@
  // Repro from #19345
- 
+
  declare const s: <R>(go: <S>(ops: { init(): S; }) => R) => R;
 ->s : <R>(go: <S>(ops: { init(): S; }) => R) => R
 ->go : <S>(ops: { init(): S; }) => R
@@ -35,7 +35,7 @@
 +>go : <S>(ops: { init: () => S; }) => R
 +>ops : { init: () => S; }
  >init : () => S
- 
+
  const x = s(a => a.init());  // x is any, should have been {}
  >x : unknown
  >s(a => a.init()) : unknown
@@ -50,4 +50,3 @@
 ->a : { init(): S; }
 +>a : { init: () => S; }
  >init : () => S
- 

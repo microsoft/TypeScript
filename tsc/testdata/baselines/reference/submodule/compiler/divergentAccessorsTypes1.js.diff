@@ -2,7 +2,7 @@
 +++ new.divergentAccessorsTypes1.js
 @@= skipped -65, +65 lines =@@
  }
- 
+
  //// [divergentAccessorsTypes1.js]
 -"use strict";
  class Test1 {

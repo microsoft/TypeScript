@@ -1,8 +1,8 @@
 --- old.arityErrorRelatedSpanBindingPattern.js
 +++ new.arityErrorRelatedSpanBindingPattern.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [arityErrorRelatedSpanBindingPattern.js]
 -function foo(a, b, _a) {
 -    var c = _a.c;

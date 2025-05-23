@@ -1,7 +1,7 @@
 --- old.staticPropertyNameConflicts(usedefineforclassfields=true).js
 +++ new.staticPropertyNameConflicts(usedefineforclassfields=true).js
 @@= skipped -351, +351 lines =@@
- 
+
  //// [staticPropertyNameConflicts.js]
  "use strict";
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
@@ -781,7 +781,11 @@
 -        }
 -        return StaticName;
 -    }());
--})(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
++    class StaticName {
++        static name; // error without useDefineForClassFields
++        name; // ok
++    }
+ })(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
 -var ExportedStaticName = /** @class */ (function () {
 -    function ExportedStaticName() {
 -        Object.defineProperty(this, _2, {
@@ -790,13 +794,9 @@
 -            writable: true,
 -            value: void 0
 -        }); // ok
-+    class StaticName {
-+        static name; // error without useDefineForClassFields
-+        name; // ok
-     }
+-    }
 -    return ExportedStaticName;
 -}());
-+})(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
 +class ExportedStaticName {
 +    static [FunctionPropertyNames.name]; // error without useDefineForClassFields
 +    [FunctionPropertyNames.name]; // ok
@@ -822,13 +822,14 @@
 -        }); // ok
 -        return StaticNameFn;
 -    }());
--})(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
--var ExportedStaticNameFn = /** @class */ (function () {
--    function ExportedStaticNameFn() {
 +    class StaticNameFn {
 +        static name() { } // error without useDefineForClassFields
 +        name() { } // ok
-     }
++    }
+ })(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
+-var ExportedStaticNameFn = /** @class */ (function () {
+-    function ExportedStaticNameFn() {
+-    }
 -    Object.defineProperty(ExportedStaticNameFn, FunctionPropertyNames.name, {
 -        enumerable: false,
 -        configurable: true,
@@ -843,7 +844,6 @@
 -    }); // ok
 -    return ExportedStaticNameFn;
 -}());
-+})(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
 +class ExportedStaticNameFn {
 +    static [FunctionPropertyNames.name]() { } // error without useDefineForClassFields
 +    [FunctionPropertyNames.name]() { } // ok

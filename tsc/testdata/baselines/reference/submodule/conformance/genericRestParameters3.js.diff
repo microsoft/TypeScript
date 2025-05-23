@@ -1,8 +1,8 @@
 --- old.genericRestParameters3.js
 +++ new.genericRestParameters3.js
 @@= skipped -87, +87 lines =@@
- 
- 
+
+
  //// [genericRestParameters3.js]
 -"use strict";
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {

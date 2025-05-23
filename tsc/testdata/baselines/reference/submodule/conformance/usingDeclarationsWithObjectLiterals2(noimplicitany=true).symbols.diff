@@ -11,7 +11,7 @@
 +>dispose : Symbol(dispose, Decl(lib.esnext.disposable.d.ts, --, --))
  >value : Symbol(value, Decl(usingDeclarationsWithObjectLiterals2.ts, 1, 36))
  }
- 
+
 @@= skipped -12, +12 lines =@@
      await using _ = { async [Symbol.asyncDispose]() {}, value: null };
  >_ : Symbol(_, Decl(usingDeclarationsWithObjectLiterals2.ts, 6, 15))

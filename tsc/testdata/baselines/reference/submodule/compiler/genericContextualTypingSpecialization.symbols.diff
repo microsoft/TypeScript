@@ -2,7 +2,7 @@
 +++ new.genericContextualTypingSpecialization.symbols
 @@= skipped -4, +4 lines =@@
  >b : Symbol(b, Decl(genericContextualTypingSpecialization.ts, 0, 3))
- 
+
  b.reduce<number>((c, d) => c + d, 0); // should not error on '+'
 ->b.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>b.reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

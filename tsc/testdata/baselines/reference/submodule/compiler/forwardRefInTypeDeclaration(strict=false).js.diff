@@ -1,8 +1,8 @@
 --- old.forwardRefInTypeDeclaration(strict=false).js
 +++ new.forwardRefInTypeDeclaration(strict=false).js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [forwardRefInTypeDeclaration.js]
 -var s1 = "x";
 -var s2 = "x";

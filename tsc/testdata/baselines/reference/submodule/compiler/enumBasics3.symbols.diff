@@ -2,11 +2,11 @@
 +++ new.enumBasics3.symbols
 @@= skipped -10, +10 lines =@@
  >E1 : Symbol(E1, Decl(enumBasics3.ts, 1, 22))
- 
+
        a = 1,
 ->a : Symbol(E1.a, Decl(enumBasics3.ts, 2, 20))
 +>a : Symbol(a, Decl(enumBasics3.ts, 2, 20))
- 
+
        b = a.a, // should error
 ->b : Symbol(E1.b, Decl(enumBasics3.ts, 3, 12))
 ->a : Symbol(E1.a, Decl(enumBasics3.ts, 2, 20))
@@ -17,7 +17,7 @@
  }
 @@= skipped -19, +19 lines =@@
  >E2 : Symbol(E2, Decl(enumBasics3.ts, 10, 22))
- 
+
        b = M.N.E1.a,
 ->b : Symbol(E2.b, Decl(enumBasics3.ts, 11, 20))
 ->M.N.E1.a : Symbol(E1.a, Decl(enumBasics3.ts, 2, 20))
@@ -30,7 +30,7 @@
  >E1 : Symbol(E1, Decl(enumBasics3.ts, 1, 22))
 ->a : Symbol(E1.a, Decl(enumBasics3.ts, 2, 20))
 +>a : Symbol(a, Decl(enumBasics3.ts, 2, 20))
- 
+
        c = M.N.E1.a.a, // should error
 ->c : Symbol(E2.c, Decl(enumBasics3.ts, 12, 19))
 ->M.N.E1.a : Symbol(E1.a, Decl(enumBasics3.ts, 2, 20))

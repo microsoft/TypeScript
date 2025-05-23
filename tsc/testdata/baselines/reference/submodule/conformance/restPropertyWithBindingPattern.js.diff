@@ -2,7 +2,7 @@
 +++ new.restPropertyWithBindingPattern.js
 @@= skipped -6, +6 lines =@@
  ({...([])} = {});
- 
+
  //// [restPropertyWithBindingPattern.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

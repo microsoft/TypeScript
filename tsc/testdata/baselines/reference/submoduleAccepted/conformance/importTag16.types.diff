@@ -9,4 +9,3 @@
 +>foo : (a: default, b: I) => void
 +>a : default
  >b : I
- 

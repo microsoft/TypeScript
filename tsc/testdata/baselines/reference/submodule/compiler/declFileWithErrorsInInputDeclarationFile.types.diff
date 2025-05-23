@@ -13,6 +13,6 @@
  >M : typeof M
 ->C : typeof M.C
 +>C : typeof C
- 
+
  === declFile.d.ts ===
  declare module M {

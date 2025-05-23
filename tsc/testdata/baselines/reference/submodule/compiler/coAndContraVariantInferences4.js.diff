@@ -1,8 +1,8 @@
 --- old.coAndContraVariantInferences4.js
 +++ new.coAndContraVariantInferences4.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [coAndContraVariantInferences4.js]
 -"use strict";
 +var SyntaxKind;

@@ -6,7 +6,7 @@
  >addAll : (iterable: LazySet) => void
 ->iterable : import("LazySet")
 +>iterable : LazySet
- 
+
      [Symbol.iterator]() {}
  >[Symbol.iterator] : () => void
 @@= skipped -12, +12 lines =@@
@@ -17,4 +17,3 @@
 +>module : { LazySet: typeof LazySet; }
  >exports : typeof LazySet
  >LazySet : typeof LazySet
- 

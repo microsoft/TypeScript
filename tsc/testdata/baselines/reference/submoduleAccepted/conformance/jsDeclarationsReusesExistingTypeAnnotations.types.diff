@@ -1,37 +1,37 @@
 --- old.jsDeclarationsReusesExistingTypeAnnotations.types
 +++ new.jsDeclarationsReusesExistingTypeAnnotations.types
 @@= skipped -27, +27 lines =@@
- 
+
      /** @type {string=} */
      get p1() {
 ->p1 : string | undefined
 +>p1 : undefined
- 
+
          return undefined;
  >undefined : undefined
 @@= skipped -8, +8 lines =@@
- 
+
      /** @type {string | undefined} */
      get p2() {
 ->p2 : string | undefined
 +>p2 : undefined
- 
+
          return undefined;
  >undefined : undefined
 @@= skipped -8, +8 lines =@@
- 
+
      /** @type {?string} */
      get p3() {
 ->p3 : string | null
 +>p3 : null
- 
+
          return null;
      }
- 
+
      /** @type {string | null} */
      get p4() {
 ->p4 : string | null
 +>p4 : null
- 
+
          return null;
      }

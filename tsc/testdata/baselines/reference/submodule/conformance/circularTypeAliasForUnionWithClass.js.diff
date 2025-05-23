@@ -1,7 +1,7 @@
 --- old.circularTypeAliasForUnionWithClass.js
 +++ new.circularTypeAliasForUnionWithClass.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [circularTypeAliasForUnionWithClass.js]
  var v0;
 -var I0 = /** @class */ (function () {

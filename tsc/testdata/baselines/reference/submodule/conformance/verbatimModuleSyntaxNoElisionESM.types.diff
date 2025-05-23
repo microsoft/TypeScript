@@ -1,22 +1,21 @@
 --- old.verbatimModuleSyntaxNoElisionESM.types
 +++ new.verbatimModuleSyntaxNoElisionESM.types
 @@= skipped -55, +55 lines =@@
- 
+
  === /main5.ts ===
  export default class C {} // ok
 ->C : C
 +>C : default
- 
+
  === /main6.ts ===
  interface I {}
 @@= skipped -9, +9 lines =@@
- 
+
  === /main7.ts ===
  import type C from "./main5";
 ->C : C
 +>C : default
- 
+
  export default C; // error
 ->C : C
 +>C : default
- 

@@ -2,7 +2,7 @@
 +++ new.privacyFunctionCannotNameParameterTypeDeclFile.symbols
 @@= skipped -7, +7 lines =@@
  >publicClassWithWithPrivateParmeterTypes : Symbol(publicClassWithWithPrivateParmeterTypes, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 87))
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
 ->myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 1, 54))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 1, 54))
@@ -46,29 +46,32 @@
      constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) { // Error
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 10, 16))
 ->exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
-+>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
 ->param1 : Symbol(publicClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 10, 57))
 ->exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
-+>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 10, 57))
-+>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
 ->param2 : Symbol(publicClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 10, 108))
 ->exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 10, 57))
++>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 10, 108))
 +>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
      }
  }
  export class publicClassWithWithPrivateParmeterTypes1 {
  >publicClassWithWithPrivateParmeterTypes1 : Symbol(publicClassWithWithPrivateParmeterTypes1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 12, 1))
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget3()) { // Error
 ->myPublicStaticMethod : Symbol(publicClassWithWithPrivateParmeterTypes1.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 13, 55))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 13, 55))
@@ -112,30 +115,33 @@
      constructor(param = exporter.createExportedWidget3(), private param1 = exporter.createExportedWidget3(), public param2 = exporter.createExportedWidget3()) { // Error
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 22, 16))
 ->exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
-+>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
 ->param1 : Symbol(publicClassWithWithPrivateParmeterTypes1.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 22, 57))
 ->exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
-+>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 22, 57))
-+>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
 ->param2 : Symbol(publicClassWithWithPrivateParmeterTypes1.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 22, 108))
 ->exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 22, 57))
++>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 22, 108))
 +>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
      }
  }
- 
+
 @@= skipped -93, +93 lines =@@
  >privateClassWithWithPrivateParmeterTypes : Symbol(privateClassWithWithPrivateParmeterTypes, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 24, 1))
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
 ->myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 26, 48))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 26, 48))
@@ -179,29 +185,32 @@
      constructor(param = exporter.createExportedWidget1(), private param1 = exporter.createExportedWidget1(), public param2 = exporter.createExportedWidget1()) {
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 35, 16))
 ->exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
-+>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
 ->param1 : Symbol(privateClassWithWithPrivateParmeterTypes.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 35, 57))
 ->exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
-+>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 35, 57))
-+>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
 ->param2 : Symbol(privateClassWithWithPrivateParmeterTypes.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 35, 108))
 ->exporter.createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 35, 57))
++>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 35, 108))
 +>exporter.createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget1 : Symbol(exporter.createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
      }
  }
  class privateClassWithWithPrivateParmeterTypes2 {
  >privateClassWithWithPrivateParmeterTypes2 : Symbol(privateClassWithWithPrivateParmeterTypes2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 37, 1))
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget3()) {
 ->myPublicStaticMethod : Symbol(privateClassWithWithPrivateParmeterTypes2.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 38, 49))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 38, 49))
@@ -245,27 +254,30 @@
      constructor(param = exporter.createExportedWidget3(), private param1 = exporter.createExportedWidget3(), public param2 = exporter.createExportedWidget3()) {
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 47, 16))
 ->exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
-+>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
 ->param1 : Symbol(privateClassWithWithPrivateParmeterTypes2.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 47, 57))
 ->exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
-+>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 47, 57))
-+>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
 ->param2 : Symbol(privateClassWithWithPrivateParmeterTypes2.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 47, 108))
 ->exporter.createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 47, 57))
++>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 47, 108))
 +>exporter.createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
      }
  }
- 
+
  export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
  >publicFunctionWithPrivateParmeterTypes : Symbol(publicFunctionWithPrivateParmeterTypes, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 49, 1))
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 51, 55))
@@ -302,11 +314,11 @@
 ->createExportedWidget3 : Symbol(exporter.createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
 +>createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
  }
- 
- 
+
+
 @@= skipped -123, +123 lines =@@
  >publicClassWithPrivateModuleParameterTypes : Symbol(publicClassWithPrivateModuleParameterTypes, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 58, 1))
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget2()) { // Error
 ->myPublicStaticMethod : Symbol(publicClassWithPrivateModuleParameterTypes.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 61, 57))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 61, 57))
@@ -330,29 +342,32 @@
      constructor(param= exporter.createExportedWidget2(), private param1= exporter.createExportedWidget2(), public param2= exporter.createExportedWidget2()) { // Error
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 66, 16))
 ->exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
-+>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
 ->param1 : Symbol(publicClassWithPrivateModuleParameterTypes.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 66, 56))
 ->exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
-+>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 66, 56))
-+>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
 ->param2 : Symbol(publicClassWithPrivateModuleParameterTypes.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 66, 106))
 ->exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 66, 56))
++>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 66, 106))
 +>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
      }
  }
  export class publicClassWithPrivateModuleParameterTypes2 {
  >publicClassWithPrivateModuleParameterTypes2 : Symbol(publicClassWithPrivateModuleParameterTypes2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 68, 1))
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget4()) { // Error
 ->myPublicStaticMethod : Symbol(publicClassWithPrivateModuleParameterTypes2.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 69, 58))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 69, 58))
@@ -376,23 +391,26 @@
      constructor(param= exporter.createExportedWidget4(), private param1= exporter.createExportedWidget4(), public param2= exporter.createExportedWidget4()) { // Error
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 74, 16))
 ->exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
-+>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 ->param1 : Symbol(publicClassWithPrivateModuleParameterTypes2.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 74, 56))
 ->exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
-+>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 74, 56))
-+>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 ->param2 : Symbol(publicClassWithPrivateModuleParameterTypes2.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 74, 106))
 ->exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 74, 56))
++>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 74, 106))
 +>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
      }
  }
@@ -414,11 +432,11 @@
 ->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 +>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
  }
- 
- 
+
+
 @@= skipped -80, +80 lines =@@
  >privateClassWithPrivateModuleParameterTypes : Symbol(privateClassWithPrivateModuleParameterTypes, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 80, 1))
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget2()) {
 ->myPublicStaticMethod : Symbol(privateClassWithPrivateModuleParameterTypes.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 83, 51))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 83, 51))
@@ -442,29 +460,32 @@
      constructor(param= exporter.createExportedWidget2(), private param1= exporter.createExportedWidget2(), public param2= exporter.createExportedWidget2()) {
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 88, 16))
 ->exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
-+>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
 ->param1 : Symbol(privateClassWithPrivateModuleParameterTypes.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 88, 56))
 ->exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
-+>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 88, 56))
-+>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
 ->param2 : Symbol(privateClassWithPrivateModuleParameterTypes.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 88, 106))
 ->exporter.createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 88, 56))
++>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 88, 106))
 +>exporter.createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget2 : Symbol(exporter.createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
      }
  }
  class privateClassWithPrivateModuleParameterTypes1 {
  >privateClassWithPrivateModuleParameterTypes1 : Symbol(privateClassWithPrivateModuleParameterTypes1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 90, 1))
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget4()) {
 ->myPublicStaticMethod : Symbol(privateClassWithPrivateModuleParameterTypes1.myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 91, 52))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 91, 52))
@@ -488,23 +509,26 @@
      constructor(param= exporter.createExportedWidget4(), private param1= exporter.createExportedWidget4(), public param2= exporter.createExportedWidget4()) {
  >param : Symbol(param, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 96, 16))
 ->exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
-+>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 ->param1 : Symbol(privateClassWithPrivateModuleParameterTypes1.param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 96, 56))
 ->exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
-+>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
-+>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 96, 56))
-+>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 ->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 ->param2 : Symbol(privateClassWithPrivateModuleParameterTypes1.param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 96, 106))
 ->exporter.createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
+->exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
+->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
++>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>param1 : Symbol(param1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 96, 56))
++>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
 +>param2 : Symbol(param2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 96, 106))
 +>exporter.createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
- >exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
-->createExportedWidget4 : Symbol(exporter.createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
++>exporter : Symbol(exporter, Decl(privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts, 0, 0))
 +>createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
      }
  }
@@ -530,7 +554,7 @@
  declare module "GlobalWidgets" {
 @@= skipped -82, +82 lines =@@
  >Widget3 : Symbol(Widget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 0, 32))
- 
+
          name: string;
 ->name : Symbol(Widget3.name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 1, 26))
 +>name : Symbol(name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 1, 26))
@@ -539,7 +563,7 @@
  >createWidget3 : Symbol(createWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 3, 5))
 @@= skipped -13, +13 lines =@@
  >Widget4 : Symbol(Widget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 6, 43))
- 
+
              name: string;
 ->name : Symbol(Widget4.name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 7, 30))
 +>name : Symbol(name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 7, 30))
@@ -548,7 +572,7 @@
  >createWidget4 : Symbol(createWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 9, 9))
 @@= skipped -13, +13 lines =@@
  >Widget1 : Symbol(Widget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 0, 0))
- 
+
      name = 'one';
 ->name : Symbol(Widget1.name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 0, 22))
 +>name : Symbol(name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 0, 22))
@@ -557,7 +581,7 @@
  >createWidget1 : Symbol(createWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 2, 1))
 @@= skipped -16, +16 lines =@@
  >Widget2 : Symbol(Widget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 7, 33))
- 
+
          name = 'one';
 ->name : Symbol(Widget2.name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 8, 26))
 +>name : Symbol(name, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 8, 26))
@@ -566,7 +590,7 @@
  >createWidget2 : Symbol(createWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 10, 5))
 @@= skipped -22, +22 lines =@@
  >createExportedWidget1 : Symbol(createExportedWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 2, 43))
- 
+
      return Widgets.createWidget1();
 ->Widgets.createWidget1 : Symbol(Widgets.createWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 2, 1))
 +>Widgets.createWidget1 : Symbol(createWidget1, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 2, 1))
@@ -576,7 +600,7 @@
  }
  export function createExportedWidget2() {
  >createExportedWidget2 : Symbol(createExportedWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 5, 1))
- 
+
      return Widgets.SpecializedWidget.createWidget2();
 ->Widgets.SpecializedWidget.createWidget2 : Symbol(Widgets.SpecializedWidget.createWidget2, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 10, 5))
 ->Widgets.SpecializedWidget : Symbol(Widgets.SpecializedWidget, Decl(privacyFunctionCannotNameParameterTypeDeclFile_Widgets.ts, 5, 1))
@@ -590,7 +614,7 @@
  }
  export function createExportedWidget3() {
  >createExportedWidget3 : Symbol(createExportedWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 8, 1))
- 
+
      return Widgets1.createWidget3();
 ->Widgets1.createWidget3 : Symbol(Widgets1.createWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 3, 5))
 +>Widgets1.createWidget3 : Symbol(createWidget3, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 3, 5))
@@ -600,7 +624,7 @@
  }
  export function createExportedWidget4() {
  >createExportedWidget4 : Symbol(createExportedWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_exporter.ts, 11, 1))
- 
+
      return Widgets1.SpecializedGlobalWidget.createWidget4();
 ->Widgets1.SpecializedGlobalWidget.createWidget4 : Symbol(Widgets1.SpecializedGlobalWidget.createWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 9, 9))
 ->Widgets1.SpecializedGlobalWidget : Symbol(Widgets1.SpecializedGlobalWidget, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 4, 45))
@@ -612,4 +636,3 @@
 +>SpecializedGlobalWidget : Symbol(SpecializedGlobalWidget, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 4, 45))
 +>createWidget4 : Symbol(createWidget4, Decl(privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts, 9, 9))
  }
- 

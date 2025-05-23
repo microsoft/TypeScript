@@ -1,7 +1,7 @@
 --- old.contextuallyTypedFunctionExpressionsAndReturnAnnotations.js
 +++ new.contextuallyTypedFunctionExpressionsAndReturnAnnotations.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [contextuallyTypedFunctionExpressionsAndReturnAnnotations.js]
  // Contextually type the parameter even if there is a return annotation
 -foo(function (y) {

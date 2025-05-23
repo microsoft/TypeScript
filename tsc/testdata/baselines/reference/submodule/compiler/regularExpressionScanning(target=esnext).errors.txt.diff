@@ -1,6 +1,6 @@
 --- old.regularExpressionScanning(target=esnext).errors.txt
 +++ new.regularExpressionScanning(target=esnext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -regularExpressionScanning.ts(3,10): error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
 -regularExpressionScanning.ts(3,11): error TS1499: Unknown regular expression flag.
 -regularExpressionScanning.ts(3,12): error TS1499: Unknown regular expression flag.
@@ -632,5 +632,4 @@
 -!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 -    ];
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

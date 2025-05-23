@@ -2,21 +2,21 @@
 +++ new.contextualSignatureConditionalTypeInstantiationUsingDefault.types
 @@= skipped -19, +19 lines =@@
  >event : TEvent
- 
+
  declare function createMachine<
 ->createMachine : <TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
 +>createMachine : <TTypesMeta extends TypegenDisabled | TypegenEnabled>(config: { types?: TTypesMeta | undefined; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
- 
+
    TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled
  >(
    config: {
 ->config : { types?: TTypesMeta; }
 +>config : { types?: TTypesMeta | undefined; }
- 
+
      types?: TTypesMeta;
  >types : TTypesMeta | undefined
 @@= skipped -24, +24 lines =@@
- 
+
  createMachine({}, (ev) => {
  >createMachine({}, (ev) => {  ev.type; // should be `string`}) : void
 ->createMachine : <TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void

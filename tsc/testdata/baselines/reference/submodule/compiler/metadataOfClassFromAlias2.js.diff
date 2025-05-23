@@ -28,8 +28,7 @@
  exports.ClassA = void 0;
  function annotation() {
 -    return function (target) { };
-+    return (target) => { };
- }
+-}
 -var ClassA = /** @class */ (function () {
 -    function ClassA() {
 -    }
@@ -39,6 +38,8 @@
 -    ], ClassA.prototype, "array", void 0);
 -    return ClassA;
 -}());
++    return (target) => { };
++}
 +class ClassA {
 +    @annotation()
 +    array;

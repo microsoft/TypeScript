@@ -11,7 +11,7 @@
 +>p : any
      }
  }
- 
+
 @@= skipped -24, +24 lines =@@
      constructor() {
          /** @type {T} */

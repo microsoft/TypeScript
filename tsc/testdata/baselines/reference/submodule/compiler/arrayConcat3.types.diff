@@ -2,10 +2,9 @@
 +++ new.arrayConcat3.types
 @@= skipped -6, +6 lines =@@
  >subj : U
- 
+
  function doStuff<T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) {
 ->doStuff : <T extends object, T1 extends T>(a: Array<Fn<T>>, b: Array<Fn<T1>>) => void
 +>doStuff : <T extends object, T1 extends T>(a: Fn<T>[], b: Fn<T1>[]) => void
  >a : Fn<T>[]
  >b : Fn<T1>[]
- 

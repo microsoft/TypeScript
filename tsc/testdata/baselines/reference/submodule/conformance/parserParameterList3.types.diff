@@ -2,7 +2,7 @@
 +++ new.parserParameterList3.types
 @@= skipped -4, +4 lines =@@
  >C : C
- 
+
    F(A?, B) { }
 ->F : (A?: any, B: any) => void
 +>F : (A: any, B: any) => void

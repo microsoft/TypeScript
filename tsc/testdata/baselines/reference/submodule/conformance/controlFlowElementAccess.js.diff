@@ -1,8 +1,8 @@
 --- old.controlFlowElementAccess.js
 +++ new.controlFlowElementAccess.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [controlFlowElementAccess.js]
 -var x = { o: false };
 +let x = { o: false };

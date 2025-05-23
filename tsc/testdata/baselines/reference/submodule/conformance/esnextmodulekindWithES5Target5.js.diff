@@ -2,7 +2,7 @@
 +++ new.esnextmodulekindWithES5Target5.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [esnextmodulekindWithES5Target5.js]
 -export var E1;
 +export { E1 };

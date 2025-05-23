@@ -1,8 +1,8 @@
 --- old.thisConditionalOnMethodReturnOfGenericInstance.js
 +++ new.thisConditionalOnMethodReturnOfGenericInstance.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [thisConditionalOnMethodReturnOfGenericInstance.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {

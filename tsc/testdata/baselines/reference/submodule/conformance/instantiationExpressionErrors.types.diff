@@ -1,15 +1,15 @@
 --- old.instantiationExpressionErrors.types
 +++ new.instantiationExpressionErrors.types
 @@= skipped -1, +1 lines =@@
- 
+
  === instantiationExpressionErrors.ts ===
  declare let f: { <T>(): T, g<U>(): U };
 ->f : { <T>(): T; g<U>(): U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >g : <U>() => U
- 
+
  // Type arguments in member expressions
- 
+
  const a1 = f<number>;  // { (): number; g<U>(): U; }
 ->a1 : { (): number; g<U>(): U; }
 ->f<number> : { (): number; g<U>(): U; }
@@ -17,7 +17,7 @@
 +>a1 : { (): number; g: <U>() => U; }
 +>f<number> : { (): number; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
  const a2 = f.g<number>;  // () => number
  >a2 : () => number
  >f.g<number> : () => number
@@ -25,7 +25,7 @@
 ->f : { <T>(): T; g<U>(): U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >g : <U>() => U
- 
+
  const a3 = f<number>.g;  // <U>() => U
  >a3 : <U>() => U
  >f<number>.g : <U>() => U
@@ -34,7 +34,7 @@
 +>f<number> : { (): number; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >g : <U>() => U
- 
+
  const a4 = f<number>.g<number>;  // () => number
  >a4 : () => number
  >f<number>.g<number> : () => number
@@ -44,7 +44,7 @@
 +>f<number> : { (): number; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >g : <U>() => U
- 
+
  const a5 = f['g']<number>;  // () => number
  >a5 : () => number
  >f['g']<number> : () => number
@@ -52,7 +52,7 @@
 ->f : { <T>(): T; g<U>(): U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >'g' : "g"
- 
+
  // `[` is an expression starter and cannot immediately follow a type argument list
 @@= skipped -45, +45 lines =@@
  >a6 : boolean
@@ -74,7 +74,7 @@
 +>f<number> : { (): number; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >'g' : "g"
- 
+
  // An `<` cannot immediately follow a type argument list
 @@= skipped -11, +11 lines =@@
  >a8 : boolean
@@ -85,7 +85,7 @@
  >number : any
  ><number> : number
  > : any
- 
+
  const a9 = (f<number>)<number>;  // Error, no applicable signatures
 ->a9 : { g<U>(): U; }
 ->(f<number>)<number> : { g<U>(): U; }
@@ -97,21 +97,21 @@
 +>(f<number>) : { (): number; g: <U>() => U; }
 +>f<number> : { (): number; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
  // Type arguments with `?.` token
- 
+
  const b1 = f?.<number>;  // Error, `(` expected
  >b1 : number
  >f?.<number> : number
 ->f : { <T>(): T; g<U>(): U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
  const b2 = f?.<number>();
  >b2 : number
  >f?.<number>() : number
 ->f : { <T>(): T; g<U>(): U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
  const b3 = f<number>?.();
  >b3 : number
  >f<number>?.() : number
@@ -119,7 +119,7 @@
 ->f : { <T>(): T; g<U>(): U; }
 +>f<number> : { (): number; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
  const b4 = f<number>?.<number>();  // Error, expected no type arguments
  >b4 : number
  >f<number>?.<number>() : number
@@ -127,9 +127,9 @@
 ->f : { <T>(): T; g<U>(): U; }
 +>f<number> : { (): number; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
  // Instantiation expression and binary operators
- 
+
 @@= skipped -77, +77 lines =@@
  const x1 = f<true>
  >x1 : true
@@ -137,7 +137,7 @@
 ->f : { <T>(): T; g<U>(): U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  (true);
 @@= skipped -12, +12 lines =@@
  >r1 : boolean
@@ -147,7 +147,7 @@
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
  >true : true
- 
+
 @@= skipped -8, +8 lines =@@
  >r2 : boolean
  >f < true > +1 : boolean
@@ -168,7 +168,7 @@
  >1 : 1
 @@= skipped -8, +8 lines =@@
  // All of the following are parsed as instantiation expressions
- 
+
  const x2 = f<true>
 ->x2 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -177,10 +177,10 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  true;
  >true : true
- 
+
  const x3 = f<true>;
 ->x3 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -189,10 +189,10 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  true;
  >true : true
- 
+
  const x4 = f<true>
 ->x4 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -201,10 +201,10 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  if (true) {}
  >true : true
- 
+
  const x5 = f<true>
 ->x5 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -213,11 +213,11 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  let yy = 0;
 @@= skipped -37, +37 lines =@@
  >0 : 0
- 
+
  const x6 = f<true>
 ->x6 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -226,9 +226,9 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  interface I {}
- 
+
  let x10 = f<true>
 ->x10 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -237,11 +237,11 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  this.bar()
 @@= skipped -20, +20 lines =@@
  >bar : () => void
- 
+
  let x11 = f<true>
 ->x11 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -250,10 +250,10 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  function bar() {}
  >bar : () => void
- 
+
  let x12 = f<true>
 ->x12 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -262,10 +262,10 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  class C {}
  >C : C
- 
+
  let x13 = f<true>
 ->x13 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -274,11 +274,11 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  bar()
 @@= skipped -28, +28 lines =@@
  >bar : () => void
- 
+
  let x14 = f<true>
 ->x14 : { (): true; g<U>(): U; }
 ->f<true> : { (): true; g<U>(): U; }
@@ -287,11 +287,11 @@
 +>f<true> : { (): true; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
  >true : true
- 
+
  void bar()
 @@= skipped -14, +14 lines =@@
  >C1 : C1
- 
+
      static specialFoo = f<string>
 ->specialFoo : { (): string; g<U>(): U; }
 ->f<string> : { (): string; g<U>(): U; }
@@ -299,12 +299,12 @@
 +>specialFoo : { (): string; g: <U>() => U; }
 +>f<string> : { (): string; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
      static bar = 123
  >bar : number
 @@= skipped -13, +13 lines =@@
  >C2 : C2
- 
+
      public specialFoo = f<string>
 ->specialFoo : { (): string; g<U>(): U; }
 ->f<string> : { (): string; g<U>(): U; }
@@ -312,12 +312,12 @@
 +>specialFoo : { (): string; g: <U>() => U; }
 +>f<string> : { (): string; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
      public bar = 123
  >bar : number
 @@= skipped -13, +13 lines =@@
  >C3 : C3
- 
+
      private specialFoo = f<string>
 ->specialFoo : { (): string; g<U>(): U; }
 ->f<string> : { (): string; g<U>(): U; }
@@ -325,12 +325,12 @@
 +>specialFoo : { (): string; g: <U>() => U; }
 +>f<string> : { (): string; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
      private bar = 123
  >bar : number
 @@= skipped -13, +13 lines =@@
  >C4 : C4
- 
+
      protected specialFoo = f<string>
 ->specialFoo : { (): string; g<U>(): U; }
 ->f<string> : { (): string; g<U>(): U; }
@@ -338,6 +338,6 @@
 +>specialFoo : { (): string; g: <U>() => U; }
 +>f<string> : { (): string; g: <U>() => U; }
 +>f : { <T>(): T; g: <U>() => U; }
- 
+
      protected bar = 123
  >bar : number

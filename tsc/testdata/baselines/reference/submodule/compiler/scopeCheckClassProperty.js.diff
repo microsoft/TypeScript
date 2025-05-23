@@ -1,8 +1,8 @@
 --- old.scopeCheckClassProperty.js
 +++ new.scopeCheckClassProperty.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [scopeCheckClassProperty.js]
 -var C = /** @class */ (function () {
 -    function C() {

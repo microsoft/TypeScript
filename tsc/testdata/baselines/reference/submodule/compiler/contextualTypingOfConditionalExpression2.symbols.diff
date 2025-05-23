@@ -2,7 +2,7 @@
 +++ new.contextualTypingOfConditionalExpression2.symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
- 
+
      foo: number;
 ->foo : Symbol(A.foo, Decl(contextualTypingOfConditionalExpression2.ts, 0, 9))
 +>foo : Symbol(foo, Decl(contextualTypingOfConditionalExpression2.ts, 0, 9))
@@ -10,7 +10,7 @@
  class B extends A {
  >B : Symbol(B, Decl(contextualTypingOfConditionalExpression2.ts, 2, 1))
  >A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
- 
+
      bar: number;
 ->bar : Symbol(B.bar, Decl(contextualTypingOfConditionalExpression2.ts, 3, 19))
 +>bar : Symbol(bar, Decl(contextualTypingOfConditionalExpression2.ts, 3, 19))
@@ -18,12 +18,12 @@
  class C extends A {
  >C : Symbol(C, Decl(contextualTypingOfConditionalExpression2.ts, 5, 1))
  >A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
- 
+
      baz: number;
 ->baz : Symbol(C.baz, Decl(contextualTypingOfConditionalExpression2.ts, 6, 19))
 +>baz : Symbol(baz, Decl(contextualTypingOfConditionalExpression2.ts, 6, 19))
  }
- 
+
  var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
 @@= skipped -23, +23 lines =@@
  >A : Symbol(A, Decl(contextualTypingOfConditionalExpression2.ts, 0, 0))
@@ -35,4 +35,3 @@
 ->foo : Symbol(A.foo, Decl(contextualTypingOfConditionalExpression2.ts, 0, 9))
 +>foo : Symbol(foo, Decl(contextualTypingOfConditionalExpression2.ts, 0, 9))
  >b : Symbol(b, Decl(contextualTypingOfConditionalExpression2.ts, 10, 51))
- 

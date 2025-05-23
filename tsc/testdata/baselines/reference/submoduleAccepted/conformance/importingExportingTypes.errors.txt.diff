@@ -7,8 +7,8 @@
 -/index.js(6,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
 -/index.js(7,10): error TS18043: Types cannot appear in export declarations in JavaScript files.
 +/index.js(5,10): error TS2484: Export declaration conflicts with exported declaration of 'JSDocType'.
- 
- 
+
+
  ==== /node_modules/@types/node/index.d.ts (0 errors) ====
 @@= skipped -10, +6 lines =@@
        export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;

@@ -1,8 +1,8 @@
 --- old.trailingCommasInGetter.js
 +++ new.trailingCommasInGetter.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [trailingCommasInGetter.js]
 -var X = /** @class */ (function () {
 -    function X() {

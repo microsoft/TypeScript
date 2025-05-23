@@ -4,8 +4,8 @@
 -generics5.ts(10,14): error TS2344: Type 'A' does not satisfy the constraint 'B'.
 -  Property 'b' is missing in type 'A' but required in type 'B'.
 +generics5.ts(10,14): error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
- 
- 
+
+
  ==== generics5.ts (1 errors) ====
 @@= skipped -13, +12 lines =@@
      

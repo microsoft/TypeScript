@@ -1,8 +1,8 @@
 --- old.assignmentCompatability45.js
 +++ new.assignmentCompatability45.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [assignmentCompatability45.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,12 +21,7 @@
 -})();
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+}
-+class B extends A {
-+    constructor(x) {
-+        super();
-     }
+-    }
 -    return A;
 -}());
 -var B = /** @class */ (function (_super) {
@@ -37,5 +32,11 @@
 -    return B;
 -}(A));
 -var b = B;
++class A {
++}
++class B extends A {
++    constructor(x) {
++        super();
++    }
 +}
 +const b = B;

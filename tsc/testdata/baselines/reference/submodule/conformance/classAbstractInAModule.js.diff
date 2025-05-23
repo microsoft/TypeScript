@@ -2,7 +2,7 @@
 +++ new.classAbstractInAModule.js
 @@= skipped -9, +9 lines =@@
  new M.B;
- 
+
  //// [classAbstractInAModule.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

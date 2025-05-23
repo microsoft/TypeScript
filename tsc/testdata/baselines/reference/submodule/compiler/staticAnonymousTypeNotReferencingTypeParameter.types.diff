@@ -2,11 +2,11 @@
 +++ new.staticAnonymousTypeNotReferencingTypeParameter.types
 @@= skipped -8, +8 lines =@@
  >x : T
- 
+
    class Inner {
 ->Inner : Inner
 +>Inner : Inner<T>
- 
+
      static y: T = x;
  >y : T
 @@= skipped -12, +12 lines =@@
@@ -29,7 +29,7 @@
 +>clone : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
  >dit : typeof ListWrapper2
  >array : T[]
- 
+
 @@= skipped -213, +213 lines =@@
      var a = ListWrapper.clone(dit, array);
  >a : T[]
@@ -41,9 +41,9 @@
 +>clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
  >dit : typeof ListWrapper
  >array : T[]
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
      scanner.scanRange(3, 5, () => {  });
  >scanner.scanRange(3, 5, () => {  }) : void
 ->scanner.scanRange : <T_1>(start: number, length: number, callback: () => T_1) => T_1
@@ -67,13 +67,13 @@
  >t => t.toString() : (t: T) => string
  >t : T
 @@= skipped -273, +273 lines =@@
- 
+
      if (isPresent(compareFn)) {
  >isPresent(compareFn) : boolean
 ->isPresent : <T_1>(compareFn?: (a: T_1, b: T_1) => number) => boolean
 +>isPresent : <T>(compareFn?: (a: T, b: T) => number) => boolean
  >compareFn : (a: T, b: T) => number
- 
+
        l.sort(compareFn);
 @@= skipped -34, +34 lines =@@
  >ListWrapper : typeof ListWrapper
@@ -85,5 +85,5 @@
 ->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
 +>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
  >l : T[]
- 
+
    static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {

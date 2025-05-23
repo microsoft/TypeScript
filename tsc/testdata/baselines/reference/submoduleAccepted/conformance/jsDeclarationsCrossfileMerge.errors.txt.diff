@@ -2,11 +2,13 @@
 +++ new.jsDeclarationsCrossfileMerge.errors.txt
 @@= skipped -0, +0 lines =@@
 -index.js(4,1): error TS6232: Declaration augments declaration in another file. This cannot be serialized.
+-
+-
+-==== index.js (1 errors) ====
 +index.js(3,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +index.js(4,16): error TS2339: Property 'memberName' does not exist on type '() => void'.
- 
- 
--==== index.js (1 errors) ====
++
++
 +==== index.js (2 errors) ====
      const m = require("./exporter");
      

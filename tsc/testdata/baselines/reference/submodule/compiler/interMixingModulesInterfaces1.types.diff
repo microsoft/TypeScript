@@ -2,7 +2,7 @@
 +++ new.interMixingModulesInterfaces1.types
 @@= skipped -23, +23 lines =@@
  }
- 
+
  var x: A.B = A.B.createB();
 ->x : A.B
 +>x : B
@@ -18,4 +18,3 @@
 ->createB : () => A.B
 +>B : typeof B
 +>createB : () => B
- 

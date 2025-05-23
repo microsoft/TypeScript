@@ -1,6 +1,6 @@
 --- old.unicodeExtendedEscapesInRegularExpressions19(target=es6).errors.txt
 +++ new.unicodeExtendedEscapesInRegularExpressions19(target=es6).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -unicodeExtendedEscapesInRegularExpressions19.ts(1,13): error TS1125: Hexadecimal digit expected.
 -
 -
@@ -9,5 +9,4 @@
 -                
 -!!! error TS1125: Hexadecimal digit expected.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

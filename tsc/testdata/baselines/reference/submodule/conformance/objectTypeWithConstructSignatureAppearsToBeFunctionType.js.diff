@@ -2,7 +2,7 @@
 +++ new.objectTypeWithConstructSignatureAppearsToBeFunctionType.js
 @@= skipped -20, +20 lines =@@
  var r4c: (x: any, y?: any) => any = b.apply;
- 
+
  //// [objectTypeWithConstructSignatureAppearsToBeFunctionType.js]
 -// no errors expected below 
  var i;

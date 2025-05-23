@@ -1,7 +1,7 @@
 --- old.privacyVarDeclFile.types
 +++ new.privacyVarDeclFile.types
 @@= skipped -118, +118 lines =@@
- 
+
  export interface publicInterfaceWithPrivateModulePropertyTypes {
      myProperty: privateModule.publicClass; // Error
 ->myProperty : privateModule.publicClass
@@ -10,12 +10,12 @@
  }
  export class publicClassWithPrivateModulePropertyTypes {
  >publicClassWithPrivateModulePropertyTypes : publicClassWithPrivateModulePropertyTypes
- 
+
      static myPublicStaticProperty: privateModule.publicClass; // Error
 ->myPublicStaticProperty : privateModule.publicClass
 +>myPublicStaticProperty : publicClass
  >privateModule : any
- 
+
      myPublicProperty: privateModule.publicClass; // Error
 ->myPublicProperty : privateModule.publicClass
 +>myPublicProperty : publicClass
@@ -25,12 +25,12 @@
 ->publicVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>publicVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
  export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 ->publicAmbientVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>publicAmbientVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
  interface privateInterfaceWithPrivateModulePropertyTypes {
      myProperty: privateModule.publicClass;
 ->myProperty : privateModule.publicClass
@@ -39,12 +39,12 @@
  }
  class privateClassWithPrivateModulePropertyTypes {
  >privateClassWithPrivateModulePropertyTypes : privateClassWithPrivateModulePropertyTypes
- 
+
      static myPublicStaticProperty: privateModule.publicClass;
 ->myPublicStaticProperty : privateModule.publicClass
 +>myPublicStaticProperty : publicClass
  >privateModule : any
- 
+
      myPublicProperty: privateModule.publicClass;
 ->myPublicProperty : privateModule.publicClass
 +>myPublicProperty : publicClass
@@ -54,15 +54,15 @@
 ->privateVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>privateVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
  declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 ->privateAmbientVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>privateAmbientVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
  export module publicModule {
 @@= skipped -167, +167 lines =@@
- 
+
      export interface publicInterfaceWithPrivateModulePropertyTypes {
          myProperty: privateModule.publicClass; // Error
 ->myProperty : privateModule.publicClass
@@ -71,12 +71,12 @@
      }
      export class publicClassWithPrivateModulePropertyTypes {
  >publicClassWithPrivateModulePropertyTypes : publicClassWithPrivateModulePropertyTypes
- 
+
          static myPublicStaticProperty: privateModule.publicClass; // Error
 ->myPublicStaticProperty : privateModule.publicClass
 +>myPublicStaticProperty : publicClass
  >privateModule : any
- 
+
          myPublicProperty: privateModule.publicClass; // Error
 ->myPublicProperty : privateModule.publicClass
 +>myPublicProperty : publicClass
@@ -86,12 +86,12 @@
 ->publicVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>publicVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
      export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 ->publicAmbientVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>publicAmbientVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
      interface privateInterfaceWithPrivateModulePropertyTypes {
          myProperty: privateModule.publicClass;
 ->myProperty : privateModule.publicClass
@@ -100,12 +100,12 @@
      }
      class privateClassWithPrivateModulePropertyTypes {
  >privateClassWithPrivateModulePropertyTypes : privateClassWithPrivateModulePropertyTypes
- 
+
          static myPublicStaticProperty: privateModule.publicClass;
 ->myPublicStaticProperty : privateModule.publicClass
 +>myPublicStaticProperty : publicClass
  >privateModule : any
- 
+
          myPublicProperty: privateModule.publicClass;
 ->myPublicProperty : privateModule.publicClass
 +>myPublicProperty : publicClass
@@ -115,15 +115,15 @@
 ->privateVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>privateVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
      declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 ->privateAmbientVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>privateAmbientVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
  }
- 
+
 @@= skipped -533, +533 lines =@@
- 
+
      export interface publicInterfaceWithPrivateModulePropertyTypes {
          myProperty: privateModule.publicClass; // Error
 ->myProperty : privateModule.publicClass
@@ -132,12 +132,12 @@
      }
      export class publicClassWithPrivateModulePropertyTypes {
  >publicClassWithPrivateModulePropertyTypes : publicClassWithPrivateModulePropertyTypes
- 
+
          static myPublicStaticProperty: privateModule.publicClass; // Error
 ->myPublicStaticProperty : privateModule.publicClass
 +>myPublicStaticProperty : publicClass
  >privateModule : any
- 
+
          myPublicProperty: privateModule.publicClass; // Error
 ->myPublicProperty : privateModule.publicClass
 +>myPublicProperty : publicClass
@@ -147,12 +147,12 @@
 ->publicVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>publicVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
      export declare var publicAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass; // Error
 ->publicAmbientVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>publicAmbientVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
      interface privateInterfaceWithPrivateModulePropertyTypes {
          myProperty: privateModule.publicClass;
 ->myProperty : privateModule.publicClass
@@ -161,12 +161,12 @@
      }
      class privateClassWithPrivateModulePropertyTypes {
  >privateClassWithPrivateModulePropertyTypes : privateClassWithPrivateModulePropertyTypes
- 
+
          static myPublicStaticProperty: privateModule.publicClass;
 ->myPublicStaticProperty : privateModule.publicClass
 +>myPublicStaticProperty : publicClass
  >privateModule : any
- 
+
          myPublicProperty: privateModule.publicClass;
 ->myPublicProperty : privateModule.publicClass
 +>myPublicProperty : publicClass
@@ -176,7 +176,7 @@
 ->privateVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>privateVarWithPrivateModulePropertyTypes : publicClass
  >privateModule : any
- 
+
      declare var privateAmbientVarWithPrivateModulePropertyTypes: privateModule.publicClass;
 ->privateAmbientVarWithPrivateModulePropertyTypes : privateModule.publicClass
 +>privateAmbientVarWithPrivateModulePropertyTypes : publicClass

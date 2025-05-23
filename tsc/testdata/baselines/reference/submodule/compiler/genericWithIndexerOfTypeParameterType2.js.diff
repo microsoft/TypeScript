@@ -1,8 +1,8 @@
 --- old.genericWithIndexerOfTypeParameterType2.js
 +++ new.genericWithIndexerOfTypeParameterType2.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [genericWithIndexerOfTypeParameterType2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

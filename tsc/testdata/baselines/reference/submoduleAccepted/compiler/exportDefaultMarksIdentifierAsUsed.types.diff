@@ -1,7 +1,7 @@
 --- old.exportDefaultMarksIdentifierAsUsed.types
 +++ new.exportDefaultMarksIdentifierAsUsed.types
 @@= skipped -13, +13 lines =@@
- 
+
  Obj.fn = function() {};
  >Obj.fn = function() {} : () => void
 ->Obj.fn : error

@@ -6,7 +6,7 @@
  import * as m from 'math2d';
 ->m : typeof m
 +>m : typeof M2D
- 
+
  let v = new m.Vector(3, 2);
 ->v : m.Vector
 ->new m.Vector(3, 2) : m.Vector
@@ -20,7 +20,7 @@
 +>Vector : typeof Vector
  >3 : 3
  >2 : 2
- 
+
  let magnitude = m.getLength(v);
  >magnitude : number
  >m.getLength(v) : number
@@ -32,7 +32,7 @@
 +>m : typeof M2D
 +>getLength : (p: Vector) => number
 +>v : Vector
- 
+
  let p: m.Point = v.translate(5, 5);
 ->p : m.Point
 +>p : Point
@@ -47,7 +47,7 @@
 +>translate : (dx: number, dy: number) => Vector
  >5 : 5
  >5 : 5
- 
+
  p = v.reverse();
 ->p = v.reverse() : m.Point
 ->p : m.Point
@@ -61,41 +61,41 @@
 +>v.reverse : () => Point
 +>v : Vector
 +>reverse : () => Point
- 
+
  var t = p.x;
  >t : number
  >p.x : number
 ->p : m.Point
 +>p : Point
  >x : number
- 
+
  === node_modules/math2d/index.d.ts ===
  export as namespace Math2d;
 ->Math2d : typeof import("node_modules/math2d/index.d.ts")
 +>Math2d : typeof M2D
- 
+
  export = M2D;
 ->M2D : typeof import("node_modules/math2d/index.d.ts")
 +>M2D : typeof M2D
- 
+
  declare namespace M2D {
 ->M2D : typeof import("node_modules/math2d/index.d.ts")
 +>M2D : typeof M2D
- 
+
  	interface Point {
  		x: number;
 @@= skipped -89, +89 lines =@@
- 
+
  === math2d-augment.d.ts ===
  import * as Math2d from 'math2d';
 ->Math2d : typeof Math2d
 +>Math2d : typeof M2D
- 
+
  // Augment the module
  declare module 'math2d' {
 ->'math2d' : typeof Math2d
 +>'math2d' : typeof M2D
- 
+
  	// Add a method to the class
  	interface Vector {
  		reverse(): Math2d.Point;

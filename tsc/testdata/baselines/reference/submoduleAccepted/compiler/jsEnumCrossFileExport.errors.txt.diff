@@ -1,8 +1,7 @@
 --- old.jsEnumCrossFileExport.errors.txt
 +++ new.jsEnumCrossFileExport.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +enumDef.js(2,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
 +enumDef.js(4,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.
 +enumDef.js(16,6): error TS2339: Property 'UserMetrics' does not exist on type '{}'.

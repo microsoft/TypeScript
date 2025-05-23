@@ -1,8 +1,8 @@
 --- old.optionalParamArgsTest.js
 +++ new.optionalParamArgsTest.js
 @@= skipped -125, +125 lines =@@
- 
- 
+
+
  //// [optionalParamArgsTest.js]
 -// Optional parameter and default argument tests
 -var __extends = (this && this.__extends) || (function () {

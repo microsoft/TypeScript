@@ -2,7 +2,7 @@
 +++ new.recursivelySpecializedConstructorDeclaration.js
 @@= skipped -31, +31 lines =@@
  */
- 
+
  //// [recursivelySpecializedConstructorDeclaration.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

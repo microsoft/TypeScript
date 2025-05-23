@@ -1,8 +1,7 @@
 --- old.jsdocTypeTag.errors.txt
 +++ new.jsdocTypeTag.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(19,12): error TS2304: Cannot find name 'Void'.
 +a.js(25,12): error TS2304: Cannot find name 'Undefined'.
 +a.js(31,12): error TS2304: Cannot find name 'Null'.

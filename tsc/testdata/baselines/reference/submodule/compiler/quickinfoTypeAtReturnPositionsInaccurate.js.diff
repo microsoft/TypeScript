@@ -8,29 +8,32 @@
 -    function NumClass() {
 -    }
 -    NumClass.prototype.get = function () {
-+class NumClass {
-+    value;
-+    get() {
-         return this.value;
+-        return this.value;
 -    };
 -    NumClass.prototype.numExclusive = function () { };
 -    return NumClass;
 -}());
 -var StrClass = /** @class */ (function () {
 -    function StrClass() {
-     }
+-    }
 -    StrClass.prototype.get = function () {
-+    numExclusive() { }
-+}
-+class StrClass {
-+    value;
-+    get() {
-         return this.value;
+-        return this.value;
 -    };
 -    StrClass.prototype.strExclusive = function () { };
 -    return StrClass;
 -}());
 -var isNumClass = function (item) {
++class NumClass {
++    value;
++    get() {
++        return this.value;
++    }
++    numExclusive() { }
++}
++class StrClass {
++    value;
++    get() {
++        return this.value;
 +    }
 +    strExclusive() { }
 +}

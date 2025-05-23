@@ -2,7 +2,7 @@
 +++ new.typeofStrictNull.js
 @@= skipped -4, +4 lines =@@
  let b: typeof a;
- 
+
  //// [typeofStrictNull.js]
 -var a;
 -var b;

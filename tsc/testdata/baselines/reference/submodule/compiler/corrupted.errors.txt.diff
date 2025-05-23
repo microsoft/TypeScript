@@ -1,8 +1,8 @@
 --- old.corrupted.errors.txt
 +++ new.corrupted.errors.txt
 @@= skipped -1, +1 lines =@@
- 
- 
+
+
  ==== corrupted.ts (1 errors) ====
 -    ï¿½ï¿½ï¿½
 +    Æ¼Á

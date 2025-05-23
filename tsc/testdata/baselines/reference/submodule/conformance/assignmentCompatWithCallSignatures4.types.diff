@@ -2,22 +2,22 @@
 +++ new.assignmentCompatWithCallSignatures4.types
 @@= skipped -59, +59 lines =@@
  >bar : string
- 
+
          var a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 ->a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 +>a12 : (x: Base[], y: Derived2[]) => Derived[]
  >x : Base[]
  >y : Derived2[]
- 
+
 @@= skipped -149, +149 lines =@@
  >a11 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
- 
+
          var b12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; 
 ->b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
 +>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
  >x : Base[]
  >y : Base[]
- 
+
          a12 = b12;
 ->a12 = b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
 ->a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
@@ -25,7 +25,7 @@
 +>a12 = b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
 +>a12 : (x: Base[], y: Derived2[]) => Derived[]
 +>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
- 
+
          b12 = a12;
 ->b12 = a12 : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 ->b12 : <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T
@@ -33,6 +33,6 @@
 +>b12 = a12 : (x: Base[], y: Derived2[]) => Derived[]
 +>b12 : <T extends Derived2[]>(x: Base[], y: Base[]) => T
 +>a12 : (x: Base[], y: Derived2[]) => Derived[]
- 
+
          var b15: <T>(x: { a: T; b: T }) => T; 
  >b15 : <T>(x: { a: T; b: T; }) => T

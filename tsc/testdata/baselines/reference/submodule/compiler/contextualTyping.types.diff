@@ -2,11 +2,11 @@
 +++ new.contextualTyping.types
 @@= skipped -326, +326 lines =@@
      }
- 
+
  var objc8: {
 ->objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: { (n: number, s: string): number; }; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: { (n: number, s: string): string; }[]; t12: IBar; t13: IFoo; t14: IFoo; }
 +>objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: (n: number, s: string) => number; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: ((n: number, s: string) => string)[]; t12: IBar; t13: IFoo; t14: IFoo; }
- 
+
      t1: (s: string) => string;
  >t1 : (s: string) => string
 @@= skipped -66, +66 lines =@@
@@ -35,7 +35,7 @@
 +>objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: (n: number, s: string) => number; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: ((n: number, s: string) => string)[]; t12: IBar; t13: IFoo; t14: IFoo; }
  >t3 : number[]
  >[] : undefined[]
- 
+
  objc8.t4 = function() { return <IFoo>({}) };
  >objc8.t4 = function() { return <IFoo>({}) } : () => IFoo
  >objc8.t4 : () => IFoo
@@ -115,7 +115,7 @@
 +>objc8 : { t1: (s: string) => string; t2: IFoo; t3: number[]; t4: () => IFoo; t5: (n: number) => IFoo; t6: (n: number, s: string) => IFoo; t7: (n: number, s: string) => number; t8: (n: number, s: string) => number; t9: number[][]; t10: IFoo[]; t11: ((n: number, s: string) => string)[]; t12: IBar; t13: IFoo; t14: IFoo; }
  >t12 : IBar
  >{    foo: <IFoo>({})} : { foo: IFoo; }
- 
+
 @@= skipped -13, +13 lines =@@
  objc8.t13 = <IFoo>({
  >objc8.t13 = <IFoo>({    f: function(i, s) { return s; }}) : IFoo

@@ -1,8 +1,8 @@
 --- old.topLevel.js
 +++ new.topLevel.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [topLevel.js]
 -var Point = /** @class */ (function () {
 -    function Point(x, y) {

@@ -25,8 +25,8 @@
  mod.mts(5,51): error TS2858: Import attribute values must be string literal expressions.
 +mod.mts(6,37): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
  mod.mts(6,65): error TS2858: Import attribute values must be string literal expressions.
- 
- 
+
+
 -==== mod.mts (10 errors) ====
 +==== mod.mts (16 errors) ====
      import * as thing1 from "./mod.mjs" with { field: 0 };

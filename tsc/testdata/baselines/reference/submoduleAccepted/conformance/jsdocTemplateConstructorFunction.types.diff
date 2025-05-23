@@ -7,7 +7,7 @@
 ->Zet : typeof Zet
 +>Zet : <T>(t: T) => void
  >t : T
- 
+
      /** @type {T} */
      this.u
 ->this.u : T
@@ -16,7 +16,7 @@
 +>this.u : any
 +>this : any
 +>u : any
- 
+
      this.t = t
  >this.t = t : T
  >this.t : any
@@ -43,7 +43,7 @@
 +>function(v, id) {    this.u = v || this.t    return id(this.u)} : (v: any, id: any) => any
 +>v : any
 +>id : any
- 
+
      this.u = v || this.t
 ->this.u = v || this.t : T
 ->this.u : T
@@ -63,7 +63,7 @@
 +>this.t : any
 +>this : any
 +>t : any
- 
+
      return id(this.u)
 ->id(this.u) : T
 ->id : Id<T>
@@ -84,7 +84,7 @@
 +>new Zet(1) : any
 +>Zet : <T>(t: T) => void
  >1 : 1
- 
+
  z.t = 2
  >z.t = 2 : 2
 ->z.t : number
@@ -94,7 +94,7 @@
 +>z : any
 +>t : any
  >2 : 2
- 
+
  z.u = false
  >z.u = false : false
 ->z.u : number
@@ -104,4 +104,3 @@
 +>z : any
 +>u : any
  >false : false
- 

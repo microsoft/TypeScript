@@ -2,7 +2,7 @@
 +++ new.superCallInConstructorWithNoBaseType.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [superCallInConstructorWithNoBaseType.js]
 -var C = /** @class */ (function () {
 -    function C() {

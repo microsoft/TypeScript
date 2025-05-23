@@ -1,8 +1,8 @@
 --- old.missingSelf.js
 +++ new.missingSelf.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [missingSelf.js]
 -var CalcButton = /** @class */ (function () {
 -    function CalcButton() {

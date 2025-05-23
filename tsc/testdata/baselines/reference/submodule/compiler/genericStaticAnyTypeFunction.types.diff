@@ -1,7 +1,7 @@
 --- old.genericStaticAnyTypeFunction.types
 +++ new.genericStaticAnyTypeFunction.types
 @@= skipped -22, +22 lines =@@
- 
+
          return this.one<T>(source, 42); // should not error
  >this.one<T>(source, 42) : T
 ->this.one : <T_1>(source: T_1, value: number) => T_1
@@ -11,4 +11,3 @@
 +>one : <T>(source: T, value: number) => T
  >source : T
  >42 : 42
- 

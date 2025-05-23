@@ -1,8 +1,8 @@
 --- old.genericReturnTypeFromGetter1.js
 +++ new.genericReturnTypeFromGetter1.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [genericReturnTypeFromGetter1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

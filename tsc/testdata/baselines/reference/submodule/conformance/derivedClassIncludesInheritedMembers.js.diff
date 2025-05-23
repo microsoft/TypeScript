@@ -1,8 +1,8 @@
 --- old.derivedClassIncludesInheritedMembers.js
 +++ new.derivedClassIncludesInheritedMembers.js
 @@= skipped -42, +42 lines =@@
- 
- 
+
+
  //// [derivedClassIncludesInheritedMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

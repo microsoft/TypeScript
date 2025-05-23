@@ -1,12 +1,12 @@
 --- old.nodeColonModuleResolution2.types
 +++ new.nodeColonModuleResolution2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /a/b/main.ts ===
  import * as ph from 'fake:thing'
 ->ph : typeof ph
 +>ph : typeof import("/a/b/node_modules/fake/thing/index")
- 
+
  console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
  >console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE) : void
 @@= skipped -8, +8 lines =@@
@@ -20,5 +20,5 @@
 +>ph : typeof import("/a/b/node_modules/fake/thing/index")
 +>constants : typeof constants
  >NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
- 
+
  === /a/b/node_modules/fake/thing/index.d.ts ===

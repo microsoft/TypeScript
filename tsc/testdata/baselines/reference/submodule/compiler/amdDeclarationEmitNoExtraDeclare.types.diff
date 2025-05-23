@@ -1,12 +1,12 @@
 --- old.amdDeclarationEmitNoExtraDeclare.types
 +++ new.amdDeclarationEmitNoExtraDeclare.types
 @@= skipped -1, +1 lines =@@
- 
+
  === Class.ts ===
  import { Configurable } from "./Configurable"
 ->Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
 +>Configurable : <T extends Constructor<{}>>(base: T) => T
- 
+
  export class HiddenClass {}
  >HiddenClass : HiddenClass
 @@= skipped -8, +8 lines =@@
@@ -16,14 +16,14 @@
 ->Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
 +>Configurable : <T extends Constructor<{}>>(base: T) => T
  >HiddenClass : typeof HiddenClass
- 
+
  === Configurable.ts ===
 @@= skipped -15, +15 lines =@@
  >base : T
- 
+
      return class extends base {
 ->class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: Configurable<any>.(Anonymous class); } & T
 +>class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
  >base : {}
- 
+
          constructor(...args: any[]) {

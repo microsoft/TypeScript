@@ -10,7 +10,7 @@
 +>bind : Symbol(bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >this : Symbol(MyClass, Decl(lateBoundMethodNameAssigmentJS.js, 0, 31))
      }
- 
+
      async [_symbol]() { }
 ->[_symbol] : Symbol(MyClass[_symbol], Decl(lateBoundMethodNameAssigmentJS.js, 4, 5))
 +>[_symbol] : Symbol([_symbol], Decl(lateBoundMethodNameAssigmentJS.js, 4, 5))

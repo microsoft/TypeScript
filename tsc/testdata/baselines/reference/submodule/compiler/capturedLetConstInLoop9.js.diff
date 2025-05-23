@@ -2,7 +2,7 @@
 +++ new.capturedLetConstInLoop9.js
 @@= skipped -140, +140 lines =@@
  }
- 
+
  //// [capturedLetConstInLoop9.js]
 -var _loop_1 = function (x) {
 -    var x_1;
@@ -94,12 +94,10 @@
 +            var [{ x1, y: z1 }] = [{ x1: 1, y: arguments.length }];
              if (b === 1) {
 -                return "break";
-+                break;
-             }
-             if (b === 2) {
+-            }
+-            if (b === 2) {
 -                return "break-l0";
-+                break l0;
-             }
+-            }
 -            (function () { return b; });
 -            return { value: 100 };
 -        };
@@ -109,13 +107,11 @@
 -            if (typeof state_2 === "object")
 -                return state_2;
 -            if (state_2 === "break")
--                break;
+                 break;
 -            switch (state_2) {
 -                case "break-l0": return state_2;
 -            }
-+            () => b;
-+            return 100;
-         }
+-        }
 -        (function () { return a; });
 -    };
 -    var arguments_1 = arguments, x, z, x1, z1;
@@ -129,6 +125,13 @@
 -        switch (state_1) {
 -            case "break-l0": break l0;
 -        }
++            }
++            if (b === 2) {
++                break l0;
++            }
++            () => b;
++            return 100;
++        }
 +        () => a;
      }
      use(x);

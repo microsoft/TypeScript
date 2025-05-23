@@ -1,7 +1,7 @@
 --- old.genericInferenceDefaultTypeParameterJsxReact.js
 +++ new.genericInferenceDefaultTypeParameterJsxReact.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [genericInferenceDefaultTypeParameterJsxReact.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

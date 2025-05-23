@@ -1,8 +1,7 @@
 --- old.jsdocTypeReferenceToValue.errors.txt
 +++ new.jsdocTypeReferenceToValue.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +foo.js(1,13): error TS2749: 'Image' refers to a value, but is being used as a type here. Did you mean 'typeof Image'?
 +
 +

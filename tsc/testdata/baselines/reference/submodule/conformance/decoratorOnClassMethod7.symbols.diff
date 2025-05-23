@@ -1,7 +1,7 @@
 --- old.decoratorOnClassMethod7.symbols
 +++ new.decoratorOnClassMethod7.symbols
 @@= skipped -16, +16 lines =@@
- 
+
      @dec public ["method"]() {}
  >dec : Symbol(dec, Decl(decoratorOnClassMethod7.ts, 0, 0))
 ->["method"] : Symbol(C["method"], Decl(decoratorOnClassMethod7.ts, 2, 9))

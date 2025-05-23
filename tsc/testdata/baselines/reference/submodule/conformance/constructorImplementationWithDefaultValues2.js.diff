@@ -2,7 +2,7 @@
 +++ new.constructorImplementationWithDefaultValues2.js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [constructorImplementationWithDefaultValues2.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

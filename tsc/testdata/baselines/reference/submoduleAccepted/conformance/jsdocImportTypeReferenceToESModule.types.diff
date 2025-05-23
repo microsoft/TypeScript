@@ -8,7 +8,7 @@
 ->a : typeof import("ex")
 +>demo : (a: any) => void
 +>a : any
- 
+
      a.config
 ->a.config : {}
 ->a : typeof import("ex")
@@ -17,4 +17,3 @@
 +>a : any
 +>config : any
  }
- 

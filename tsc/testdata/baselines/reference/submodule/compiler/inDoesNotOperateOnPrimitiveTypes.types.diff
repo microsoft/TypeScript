@@ -2,30 +2,30 @@
 +++ new.inDoesNotOperateOnPrimitiveTypes.types
 @@= skipped -85, +85 lines =@@
  }
- 
+
  function union3<T>(thing: T | string | number) {
 ->union3 : <T>(thing: T | string | number) => void
 +>union3 : <T>(thing: string | number | T) => void
  >thing : string | number | T
- 
+
    "key" in thing; // Error (because narrowing is possible)
 @@= skipped -27, +27 lines =@@
  }
- 
+
  function union4<T extends object | "hello">(thing: T) {
 ->union4 : <T extends object | "hello">(thing: T) => void
 +>union4 : <T extends "hello" | object>(thing: T) => void
  >thing : T
- 
+
    "key" in thing; // Ok (because narrowing is impossible)
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function union5<T extends object | string, U extends object | number>(p: T | U) {
 ->union5 : <T extends object | string, U extends object | number>(p: T | U) => void
 +>union5 : <T extends string | object, U extends number | object>(p: T | U) => void
  >p : T | U
- 
+
      // For consistency, this should probably not be an error, because useful
 @@= skipped -25, +25 lines =@@
          "key" in p;
@@ -35,4 +35,3 @@
 +>p : T & object | U & object
      }
  }
- 

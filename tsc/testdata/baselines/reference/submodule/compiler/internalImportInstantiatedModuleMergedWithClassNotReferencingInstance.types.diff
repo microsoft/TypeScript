@@ -2,11 +2,10 @@
 +++ new.internalImportInstantiatedModuleMergedWithClassNotReferencingInstance.types
 @@= skipped -25, +25 lines =@@
  >1 : 1
- 
+
      import Y = A;
 ->Y : typeof Y
 ->A : Y
 +>Y : typeof A
 +>A : A
  }
- 

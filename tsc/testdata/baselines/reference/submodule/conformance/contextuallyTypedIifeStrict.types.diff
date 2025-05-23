@@ -12,7 +12,7 @@
  >q : number
  >{ q : 13 } : { q: number; }
 @@= skipped -10, +10 lines =@@
- 
+
  (({ p = 14 }) => p)({ p : 15 });
  >(({ p = 14 }) => p)({ p : 15 }) : number
 ->(({ p = 14 }) => p) : ({ p }: { p: number; }) => number
@@ -23,7 +23,7 @@
  >14 : 14
  >p : number
 @@= skipped -11, +11 lines =@@
- 
+
  (({ r = 17 } = { r: 18 }) => r)({r : 19});
  >(({ r = 17 } = { r: 18 }) => r)({r : 19}) : number
 ->(({ r = 17 } = { r: 18 }) => r) : ({ r }?: { r: number; }) => number
@@ -34,7 +34,7 @@
  >17 : 17
  >{ r: 18 } : { r: number; }
 @@= skipped -14, +14 lines =@@
- 
+
  (({ u = 22 } = { u: 23 }) => u)();
  >(({ u = 22 } = { u: 23 }) => u)() : number
 ->(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: number; }) => number

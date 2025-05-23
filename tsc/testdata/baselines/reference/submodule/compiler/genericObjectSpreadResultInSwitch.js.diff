@@ -2,7 +2,7 @@
 +++ new.genericObjectSpreadResultInSwitch.js
 @@= skipped -35, +35 lines =@@
  }
- 
+
  //// [genericObjectSpreadResultInSwitch.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

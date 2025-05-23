@@ -9,7 +9,7 @@
  >prop : { key: number; todo: string; }
  >key : number
  >todo : string
- 
+
      return <div>{prop.key.toString() + prop.todo}</div>;
 -><div>{prop.key.toString() + prop.todo}</div> : any
 +><div>{prop.key.toString() + prop.todo}</div> : Element
@@ -23,12 +23,12 @@
 ->TodoList : ({ todos }: TodoListProps) => any
 +>TodoList : (__0: TodoListProps) => Element
  >todos : TodoProp[]
- 
+
      return <div>
 -><div>        {...<Todo key={todos[0].id} todo={todos[0].todo} />}    </div> : any
 +><div>        {...<Todo key={todos[0].id} todo={todos[0].todo} />}    </div> : Element
  >div : any
- 
+
          {...<Todo key={todos[0].id} todo={todos[0].todo} />}
 -><Todo key={todos[0].id} todo={todos[0].todo} /> : any
 ->Todo : (prop: { key: number; todo: string; }) => any
@@ -44,13 +44,13 @@
 ->TodoListNoError : ({ todos }: TodoListProps) => any
 +>TodoListNoError : (__0: TodoListProps) => Element
  >todos : TodoProp[]
- 
+
      // any is not checked
      return <div>
 -><div>        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}    </div> : any
 +><div>        {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}    </div> : Element
  >div : any
- 
+
          {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
  >(<Todo key={todos[0].id} todo={todos[0].todo} /> as any) : any
  ><Todo key={todos[0].id} todo={todos[0].todo} /> as any : any
@@ -63,11 +63,10 @@
  >todos[0] : TodoProp
 @@= skipped -33, +33 lines =@@
  >x : TodoListProps
- 
+
      <TodoList {...x}/>
 -><TodoList {...x}/> : any
 ->TodoList : ({ todos }: TodoListProps) => any
 +><TodoList {...x}/> : Element
 +>TodoList : (__0: TodoListProps) => Element
  >x : TodoListProps
- 

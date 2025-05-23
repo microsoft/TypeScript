@@ -35,7 +35,7 @@
 -var C1 = /** @class */ (function () {
 -    function C1() {
 -        this.getValue = null; // this should be an error
-     }
+-    }
 -    Object.defineProperty(C1.prototype, "castedGet", {
 -        get: function () {
 -            return this.getValue; // this should not be an error
@@ -52,6 +52,7 @@
 -    });
 -    return C1;
 -}());
++    }
 +}
 +class C1 {
 +    getValue = null; // this should be an error

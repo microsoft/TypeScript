@@ -1,8 +1,8 @@
 --- old.aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.js
 +++ new.aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [aliasOfGenericFunctionWithRestBehavedSameAsUnaliased.js]
 -"use strict";
 -// the type printback for every `test` below should be "y"

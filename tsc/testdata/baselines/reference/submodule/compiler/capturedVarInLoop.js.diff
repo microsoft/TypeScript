@@ -2,7 +2,7 @@
 +++ new.capturedVarInLoop.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [capturedVarInLoop.js]
 -var _loop_1 = function () {
 -    str = 'x', len = str.length;

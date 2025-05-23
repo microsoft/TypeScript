@@ -1,7 +1,7 @@
 --- old.esDecorators-decoratorExpression.1(experimentaldecorators=true).js
 +++ new.esDecorators-decoratorExpression.1(experimentaldecorators=true).js
 @@= skipped -49, +49 lines =@@
- 
+
  //// [esDecorators-decoratorExpression.1.js]
  {
 -    let C = class C {
@@ -9,206 +9,281 @@
 -    C = __decorate([
 -        x().y
 -    ], C);
-+    @x().y
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        new x
 -    ], C);
-+    @(new x)
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x().y()
 -    ], C);
-+    @x().y()
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x?.y
 -    ], C);
-+    @(x?.y)
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x?.y()
 -    ], C);
-+    @(x?.y())
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x?.["y"]
 -    ], C);
-+    @(x?.["y"])
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x?.()
 -    ], C);
-+    @(x?.())
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x ``
 -    ], C);
-+    @x ``
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x ``()
 -    ], C);
-+    @x ``()
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x.y ``
 -    ], C);
-+    @x.y ``
-+    class C {
-+    }
- }
- {
+-}
+-{
 -    let C = class C {
 -    };
 -    C = __decorate([
 -        x.y ``()
 -    ], C);
-+    @x.y ``()
-+    class C {
-+    }
- }
- {
-     class C {
-+        @x().y
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x().y
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @(new x)
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        new x
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @x().y()
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x().y()
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @(x?.y)
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x?.y
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @(x?.y())
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x?.y()
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @(x?.["y"])
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x?.["y"]
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @(x?.())
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x?.()
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @x ``
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x ``
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @x ``()
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x ``()
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @x.y ``
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x.y ``
 -    ], C.prototype, "m", null);
- }
- {
-     class C {
-+        @x.y ``()
-         m() { }
-     }
+-}
+-{
+-    class C {
+-        m() { }
+-    }
 -    __decorate([
 -        x.y ``()
 -    ], C.prototype, "m", null);
++    @x().y
++    class C {
++    }
++}
++{
++    @(new x)
++    class C {
++    }
++}
++{
++    @x().y()
++    class C {
++    }
++}
++{
++    @(x?.y)
++    class C {
++    }
++}
++{
++    @(x?.y())
++    class C {
++    }
++}
++{
++    @(x?.["y"])
++    class C {
++    }
++}
++{
++    @(x?.())
++    class C {
++    }
++}
++{
++    @x ``
++    class C {
++    }
++}
++{
++    @x ``()
++    class C {
++    }
++}
++{
++    @x.y ``
++    class C {
++    }
++}
++{
++    @x.y ``()
++    class C {
++    }
++}
++{
++    class C {
++        @x().y
++        m() { }
++    }
++}
++{
++    class C {
++        @(new x)
++        m() { }
++    }
++}
++{
++    class C {
++        @x().y()
++        m() { }
++    }
++}
++{
++    class C {
++        @(x?.y)
++        m() { }
++    }
++}
++{
++    class C {
++        @(x?.y())
++        m() { }
++    }
++}
++{
++    class C {
++        @(x?.["y"])
++        m() { }
++    }
++}
++{
++    class C {
++        @(x?.())
++        m() { }
++    }
++}
++{
++    class C {
++        @x ``
++        m() { }
++    }
++}
++{
++    class C {
++        @x ``()
++        m() { }
++    }
++}
++{
++    class C {
++        @x.y ``
++        m() { }
++    }
++}
++{
++    class C {
++        @x.y ``()
++        m() { }
++    }
  }

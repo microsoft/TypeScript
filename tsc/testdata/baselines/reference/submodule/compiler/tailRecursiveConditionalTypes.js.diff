@@ -1,8 +1,8 @@
 --- old.tailRecursiveConditionalTypes.js
 +++ new.tailRecursiveConditionalTypes.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [tailRecursiveConditionalTypes.js]
 -"use strict";
 -

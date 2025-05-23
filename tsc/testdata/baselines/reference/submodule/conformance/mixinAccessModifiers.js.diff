@@ -1,8 +1,8 @@
 --- old.mixinAccessModifiers.js
 +++ new.mixinAccessModifiers.js
 @@= skipped -134, +134 lines =@@
- 
- 
+
+
  //// [mixinAccessModifiers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -160,21 +160,16 @@
 -    __extends(C5, _super);
 -    function C5() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    C5.prototype.f = function (c4, c5, c6) {
-+}
-+class C5 extends Mix(Protected, Public) {
-+    f(c4, c5, c6) {
-         c4.p; // Error, not in class deriving from Protected2
-         c5.p;
-         c6.p;
+-        c4.p; // Error, not in class deriving from Protected2
+-        c5.p;
+-        c6.p;
 -    };
 -    C5.g = function () {
-+    }
-+    static g() {
-         C4.s; // Error, not in class deriving from Protected2
-         C5.s;
-         C6.s;
+-        C4.s; // Error, not in class deriving from Protected2
+-        C5.s;
+-        C6.s;
 -    };
 -    return C5;
 -}(Mix(Protected, Public)));
@@ -182,27 +177,22 @@
 -    __extends(C6, _super);
 -    function C6() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    C6.prototype.f = function (c4, c5, c6) {
-+}
-+class C6 extends Mix(Public, Public2) {
-+    f(c4, c5, c6) {
-         c4.p; // Error, not in class deriving from Protected2
-         c5.p;
-         c6.p;
+-        c4.p; // Error, not in class deriving from Protected2
+-        c5.p;
+-        c6.p;
 -    };
 -    C6.g = function () {
-+    }
-+    static g() {
-         C4.s; // Error, not in class deriving from Protected2
-         C5.s;
-         C6.s;
+-        C4.s; // Error, not in class deriving from Protected2
+-        C5.s;
+-        C6.s;
 -    };
 -    return C6;
 -}(Mix(Public, Public2)));
 -var ProtectedGeneric = /** @class */ (function () {
 -    function ProtectedGeneric() {
-     }
+-    }
 -    ProtectedGeneric.prototype.privateMethod = function () { };
 -    ProtectedGeneric.prototype.protectedMethod = function () { };
 -    return ProtectedGeneric;
@@ -214,6 +204,31 @@
 -    ProtectedGeneric2.prototype.protectedMethod = function () { };
 -    return ProtectedGeneric2;
 -}());
++    }
++}
++class C5 extends Mix(Protected, Public) {
++    f(c4, c5, c6) {
++        c4.p; // Error, not in class deriving from Protected2
++        c5.p;
++        c6.p;
++    }
++    static g() {
++        C4.s; // Error, not in class deriving from Protected2
++        C5.s;
++        C6.s;
++    }
++}
++class C6 extends Mix(Public, Public2) {
++    f(c4, c5, c6) {
++        c4.p; // Error, not in class deriving from Protected2
++        c5.p;
++        c6.p;
++    }
++    static g() {
++        C4.s; // Error, not in class deriving from Protected2
++        C5.s;
++        C6.s;
++    }
 +}
 +class ProtectedGeneric {
 +    privateMethod() { }

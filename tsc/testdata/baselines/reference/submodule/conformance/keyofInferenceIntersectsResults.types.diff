@@ -2,13 +2,13 @@
 +++ new.keyofInferenceIntersectsResults.types
 @@= skipped -9, +9 lines =@@
  }
- 
+
  declare function foo<T = X>(x: keyof T, y: keyof T): T;
 ->foo : <T = X>(x: keyof T, y: keyof T) => T
 +>foo : <T>(x: keyof T, y: keyof T) => T
  >x : keyof T
  >y : keyof T
- 
+
 @@= skipped -12, +12 lines =@@
  const a = foo<X>('a', 'b'); // compiles cleanly
  >a : X
@@ -17,7 +17,7 @@
 +>foo : <T>(x: keyof T, y: keyof T) => T
  >'a' : "a"
  >'b' : "b"
- 
+
  const b = foo('a', 'b');    // also clean
  >b : { a: any; } & { b: any; }
  >foo('a', 'b') : { a: any; } & { b: any; }
@@ -25,4 +25,3 @@
 +>foo : <T>(x: keyof T, y: keyof T) => T
  >'a' : "a"
  >'b' : "b"
- 

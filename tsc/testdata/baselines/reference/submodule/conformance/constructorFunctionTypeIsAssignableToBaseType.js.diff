@@ -2,7 +2,7 @@
 +++ new.constructorFunctionTypeIsAssignableToBaseType.js
 @@= skipped -21, +21 lines =@@
  }
- 
+
  //// [constructorFunctionTypeIsAssignableToBaseType.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

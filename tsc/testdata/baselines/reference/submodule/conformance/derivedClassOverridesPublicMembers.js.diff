@@ -1,8 +1,8 @@
 --- old.derivedClassOverridesPublicMembers.js
 +++ new.derivedClassOverridesPublicMembers.js
 @@= skipped -64, +64 lines =@@
- 
- 
+
+
  //// [derivedClassOverridesPublicMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

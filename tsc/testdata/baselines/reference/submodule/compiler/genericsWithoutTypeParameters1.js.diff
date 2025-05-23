@@ -2,7 +2,7 @@
 +++ new.genericsWithoutTypeParameters1.js
 @@= skipped -35, +35 lines =@@
  }
- 
+
  //// [genericsWithoutTypeParameters1.js]
 -var C = /** @class */ (function () {
 -    function C() {

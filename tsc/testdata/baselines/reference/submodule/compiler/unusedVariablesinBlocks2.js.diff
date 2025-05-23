@@ -1,7 +1,7 @@
 --- old.unusedVariablesinBlocks2.js
 +++ new.unusedVariablesinBlocks2.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [unusedVariablesinBlocks2.js]
  function f1() {
 -    var x = 10;

@@ -1,6 +1,6 @@
 --- old.exportClassNameWithObjectAMD.errors.txt
 +++ new.exportClassNameWithObjectAMD.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -exportClassNameWithObjectAMD.ts(1,14): error TS2725: Class name cannot be 'Object' when targeting ES5 with module AMD.
 -
 -
@@ -9,5 +9,4 @@
 -                 ~~~~~~
 -!!! error TS2725: Class name cannot be 'Object' when targeting ES5 with module AMD.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

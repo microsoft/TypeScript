@@ -2,14 +2,16 @@
 +++ new.templateStringMultiline3.types
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/conformance/es6/templates/templateStringMultiline3.ts] ////
- 
+
  === templateStringMultiline3.ts ===
 +
 +
  // newlines are <CR>
  `
 ->`\` : "\n"
-+>`\` : "\n"
- 
++>`
++\
++` : "\n"
+
  \
  `

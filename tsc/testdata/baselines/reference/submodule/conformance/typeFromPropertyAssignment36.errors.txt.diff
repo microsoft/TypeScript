@@ -1,6 +1,6 @@
 --- old.typeFromPropertyAssignment36.errors.txt
 +++ new.typeFromPropertyAssignment36.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -typeFromPropertyAssignment36.ts(11,7): error TS2565: Property 'q' is used before being assigned.
 -typeFromPropertyAssignment36.ts(42,3): error TS2565: Property 'q' is used before being assigned.
 -typeFromPropertyAssignment36.ts(64,3): error TS2565: Property 'expando' is used before being assigned.
@@ -86,5 +86,4 @@
 -    }
 -    g.both
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

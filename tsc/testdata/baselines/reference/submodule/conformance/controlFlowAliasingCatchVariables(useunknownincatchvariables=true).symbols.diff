@@ -2,7 +2,7 @@
 +++ new.controlFlowAliasingCatchVariables(useunknownincatchvariables=true).symbols
 @@= skipped -12, +12 lines =@@
  >isString : Symbol(isString, Decl(controlFlowAliasingCatchVariables.ts, 2, 9))
- 
+
          e.toUpperCase(); // e string
 ->e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 +>e.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
@@ -10,10 +10,10 @@
 ->toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 +>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
      }
- 
+
      if (typeof e === 'string') {
  >e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 1, 7))
- 
+
          e.toUpperCase(); // e string
 ->e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 +>e.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
@@ -22,10 +22,10 @@
 +>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
      }
  }
- 
+
 @@= skipped -37, +37 lines =@@
  >e : Symbol(e, Decl(controlFlowAliasingCatchVariables.ts, 13, 7))
- 
+
          e.toUpperCase(); // e string
 ->e.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 +>e.toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
@@ -34,4 +34,3 @@
 +>toUpperCase : Symbol(toUpperCase, Decl(lib.es5.d.ts, --, --))
      }
  }
- 

@@ -1,7 +1,7 @@
 --- old.reactDefaultPropsInferenceSuccess.types
 +++ new.reactDefaultPropsInferenceSuccess.types
 @@= skipped -19, +19 lines =@@
- 
+
  class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
  >FieldFeedback : FieldFeedback<P>
 ->React.Component : React.Component<P, {}, any>
@@ -9,16 +9,16 @@
  >React : typeof React
 ->Component : typeof React.Component
 +>Component : typeof Component
- 
+
    static defaultProps = {
  >defaultProps : { when: () => boolean; }
 @@= skipped -16, +16 lines =@@
    };
- 
+
    render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
      return <div>Hello</div>;
 -><div>Hello</div> : JSX.Element
 +><div>Hello</div> : Element
@@ -26,7 +26,7 @@
  >div : any
    }
 @@= skipped -11, +11 lines =@@
- 
+
  // OK
  const Test1 = () => <FieldFeedback when={value => !!value} />;
 ->Test1 : () => JSX.Element
@@ -39,7 +39,7 @@
  >when : (value: string) => boolean
  >value => !!value : (value: string) => boolean
 @@= skipped -13, +13 lines =@@
- 
+
  // Error: Void not assignable to boolean
  const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 ->Test2 : () => JSX.Element
@@ -52,7 +52,7 @@
  >when : (value: string) => void
  >value => console.log(value) : (value: string) => void
 @@= skipped -15, +15 lines =@@
- 
+
  class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
  >FieldFeedbackBeta : FieldFeedbackBeta<P>
 ->React.Component : React.Component<P, {}, any>
@@ -60,16 +60,16 @@
  >React : typeof React
 ->Component : typeof React.Component
 +>Component : typeof Component
- 
+
    static defaultProps: BaseProps = {
  >defaultProps : BaseProps
 @@= skipped -16, +16 lines =@@
    };
- 
+
    render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
      return <div>Hello</div>;
 -><div>Hello</div> : JSX.Element
 +><div>Hello</div> : Element
@@ -77,7 +77,7 @@
  >div : any
    }
 @@= skipped -11, +11 lines =@@
- 
+
  // OK
  const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta>;
 ->Test1a : () => JSX.Element
@@ -90,7 +90,7 @@
  >when : (value: string) => boolean
  >value => !!value : (value: string) => boolean
 @@= skipped -15, +15 lines =@@
- 
+
  // Error: Void not assignable to boolean
  const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
 ->Test2a : () => JSX.Element
@@ -104,11 +104,11 @@
  >value => console.log(value) : (value: string) => void
 @@= skipped -37, +37 lines =@@
    };
- 
+
    render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
      this.props.when("now"); // OK, always defined
  >this.props.when("now") : boolean
  >this.props.when : P["when"]
@@ -119,7 +119,7 @@
 +>props : Readonly<{ children?: ReactNode; }> & Readonly<P>
  >when : P["when"]
  >"now" : "now"
- 
+
      return <div>Hello</div>;
 -><div>Hello</div> : JSX.Element
 +><div>Hello</div> : Element
@@ -127,7 +127,7 @@
  >div : any
    }
 @@= skipped -20, +20 lines =@@
- 
+
  // OK
  const Test3 = () => <FieldFeedback2 when={value => !!value} />;
 ->Test3 : () => JSX.Element
@@ -140,7 +140,7 @@
  >when : (value: string) => boolean
  >value => !!value : (value: string) => boolean
 @@= skipped -13, +13 lines =@@
- 
+
  // Error: Void not assignable to boolean
  const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 ->Test4 : () => JSX.Element
@@ -153,7 +153,7 @@
  >when : (value: string) => void
  >value => console.log(value) : (value: string) => void
 @@= skipped -15, +15 lines =@@
- 
+
  // OK
  const Test5 = () => <FieldFeedback2 />;
 ->Test5 : () => JSX.Element
@@ -163,4 +163,3 @@
 +>() => <FieldFeedback2 /> : () => Element
 +><FieldFeedback2 /> : Element
  >FieldFeedback2 : typeof FieldFeedback2
- 

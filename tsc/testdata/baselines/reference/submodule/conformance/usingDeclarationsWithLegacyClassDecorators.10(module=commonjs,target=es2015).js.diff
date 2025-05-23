@@ -1,7 +1,7 @@
 --- old.usingDeclarationsWithLegacyClassDecorators.10(module=commonjs,target=es2015).js
 +++ new.usingDeclarationsWithLegacyClassDecorators.10(module=commonjs,target=es2015).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [usingDeclarationsWithLegacyClassDecorators.10.js]
  "use strict";
 +var after;

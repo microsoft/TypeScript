@@ -2,7 +2,7 @@
 +++ new.constructorWithCapturedSuper.js
 @@= skipped -54, +54 lines =@@
  }
- 
+
  //// [constructorWithCapturedSuper.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -77,14 +77,22 @@
 -                return { value: _this };
 +                return;
              }
--        };
++        }
++    }
++}
++class D extends A {
++    constructor(x) {
++        super();
++        () => {
++            return;
+         };
 -        for (var i = 0; i < 10; ++i) {
 -            var state_1 = _loop_1(i);
 -            if (typeof state_1 === "object")
 -                return state_1.value;
-         }
+-        }
 -        return _this;
-     }
+-    }
 -    return C;
 -}(A));
 -var D = /** @class */ (function (_super) {
@@ -92,14 +100,8 @@
 -    function D(x) {
 -        var _this = _super.call(this) || this;
 -        (function () {
-+}
-+class D extends A {
-+    constructor(x) {
-+        super();
-+        () => {
-             return;
+-            return;
 -        });
-+        };
          function foo() {
              return;
          }

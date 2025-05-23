@@ -2,7 +2,7 @@
 +++ new.tsxErrorRecovery2.types
 @@= skipped -3, +3 lines =@@
  declare namespace JSX { interface Element { } }
- 
+
  <div></div>
 -><div></div><div></div> : JSX.Element
 -><div></div> : JSX.Element
@@ -10,25 +10,26 @@
 +><div></div> : Element
  >div : any
  >div : any
- 
+
  <div></div>
 -><div></div> : JSX.Element
 +><div></div> : Element
  >div : any
  >div : any
- 
+
  === file2.tsx ===
  var x = <div></div><div></div>
 ->x : JSX.Element
 -><div></div><div></div> : JSX.Element
 -><div></div> : JSX.Element
+->div : any
+->div : any
+-><div></div> : JSX.Element
 +>x : Element
 +><div></div><div></div> : Element
 +><div></div> : Element
- >div : any
- >div : any
--><div></div> : JSX.Element
++>div : any
++>div : any
 +><div></div> : Element
  >div : any
  >div : any
- 

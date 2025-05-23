@@ -1,6 +1,6 @@
 --- old.jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.errors.txt
 +++ new.jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
 -
 -
@@ -10,5 +10,4 @@
 -    
 -    <></>;
 -    <><span>1</span><><span>2.1</span><span>2.2</span></></>;
-@@= skipped --1, +1 lines =@@
 +<no content>

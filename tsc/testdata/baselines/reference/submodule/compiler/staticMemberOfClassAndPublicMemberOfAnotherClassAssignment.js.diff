@@ -1,8 +1,8 @@
 --- old.staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.js
 +++ new.staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.js]
 -var B = /** @class */ (function () {
 -    function B() {

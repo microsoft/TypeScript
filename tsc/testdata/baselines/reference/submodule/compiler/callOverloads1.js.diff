@@ -2,7 +2,7 @@
 +++ new.callOverloads1.js
 @@= skipped -19, +19 lines =@@
  Foo();
- 
+
  //// [callOverloads1.js]
 -var Foo = /** @class */ (function () {
 -    function Foo(x) {

@@ -1,8 +1,8 @@
 --- old.discriminantsAndPrimitives.js
 +++ new.discriminantsAndPrimitives.js
 @@= skipped -82, +82 lines =@@
- 
- 
+
+
  //// [discriminantsAndPrimitives.js]
 -// Repro from #10257 plus other tests
  function f1(x) {

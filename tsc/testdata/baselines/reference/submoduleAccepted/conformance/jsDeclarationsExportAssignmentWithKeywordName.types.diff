@@ -8,4 +8,3 @@
 +>module : { export=: { extends: string; more: { others: string[]; }; x: number; }; }
  >exports : { extends: string; more: { others: string[]; }; x: number; }
  >{    extends: 'base',    more: {        others: ['strs']    },    x} : { extends: string; more: { others: string[]; }; x: number; }
- 

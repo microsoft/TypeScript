@@ -2,7 +2,7 @@
 +++ new.declFileTypeAnnotationArrayType.js
 @@= skipped -52, +52 lines =@@
  }
- 
+
  //// [declFileTypeAnnotationArrayType.js]
 -var c = /** @class */ (function () {
 -    function c() {
@@ -49,8 +49,7 @@
  }
  function foo10() {
 -    return [function () { return new c(); }];
-+    return [() => new c()];
- }
+-}
 -
 -
 -//// [declFileTypeAnnotationArrayType.d.ts]
@@ -74,3 +73,5 @@
 -declare function foo8(): m.g<number>[];
 -declare function foo9(): (() => c)[];
 -declare function foo10(): (() => c)[];
++    return [() => new c()];
++}

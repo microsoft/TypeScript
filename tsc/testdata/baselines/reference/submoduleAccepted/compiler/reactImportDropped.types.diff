@@ -1,7 +1,7 @@
 --- old.reactImportDropped.types
 +++ new.reactImportDropped.types
 @@= skipped -30, +30 lines =@@
- 
+
  === src/components/TabBar.js ===
  export default React.createClass({
 ->React.createClass({  render() {    return (      null    );  }}) : import("react").ClassicComponentClass
@@ -14,19 +14,19 @@
 +>React : typeof React
 +>createClass : (spec: any) => ClassicComponentClass
 +>{  render() {    return (      null    );  }} : { render: () => any; }
- 
+
    render() {
  >render : () => any
 @@= skipped -19, +19 lines =@@
- 
+
  === src/modules/navigation/NavigationView.js ===
  import TabBar from '../../components/TabBar';
 ->TabBar : import("react").ClassicComponentClass
 +>TabBar : ClassicComponentClass
- 
+
  import {layout} from '../../utils/theme'; // <- DO NOT DROP this import
  >layout : any
- 
+
  const x = <TabBar height={layout.footerHeight} />;
 ->x : error
 -><TabBar height={layout.footerHeight} /> : error
@@ -40,4 +40,3 @@
 +>layout.footerHeight : any
  >layout : any
  >footerHeight : any
- 

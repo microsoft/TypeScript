@@ -1,6 +1,6 @@
 --- old.decoratorOnClassConstructor2.errors.txt
 +++ new.decoratorOnClassConstructor2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -2.ts(1,20): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 -2.ts(2,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 -
@@ -21,5 +21,4 @@
 -            super();
 -        }
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

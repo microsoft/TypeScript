@@ -1,7 +1,7 @@
 --- old.symbolProperty16.js
 +++ new.symbolProperty16.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [symbolProperty16.js]
  class C {
 +    [Symbol.iterator];

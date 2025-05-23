@@ -2,12 +2,12 @@
 +++ new.parserharness.types
 @@= skipped -21, +21 lines =@@
  ///<reference path='diff.ts'/>
- 
+
  declare var assert: Harness.Assert;
 ->assert : Harness.Assert
 +>assert : Assert
  >Harness : any
- 
+
  declare var it;
 @@= skipped -258, +258 lines =@@
              var bugs = content.match(/\bbug (\d+)/i);
@@ -19,7 +19,7 @@
 ->match : (regexp: string | RegExp) => RegExpMatchArray | null
 +>match : (regexp: string | RegExp) => RegExpMatchArray
  >/\bbug (\d+)/i : RegExp
- 
+
              if (bugs) {
 @@= skipped -17, +17 lines =@@
  >bug : string
@@ -32,7 +32,7 @@
              }
 @@= skipped -147, +147 lines =@@
          }
- 
+
          export function compilerWarning(result: Compiler.CompilerResult, line: number, column: number, desc: string) {
 ->compilerWarning : (result: Compiler.CompilerResult, line: number, column: number, desc: string) => void
 ->result : Compiler.CompilerResult
@@ -51,7 +51,7 @@
  >line : number
  >column : number
 @@= skipped -12, +12 lines =@@
- 
+
                  result.errors.forEach(err => {
  >result.errors.forEach(err => {                    actual = actual + '\n     ' + err.toString();                }) : void
 ->result.errors.forEach : (callbackfn: (value: Compiler.CompilerError, index: number, array: Compiler.CompilerError[]) => void, thisArg?: any) => void
@@ -68,7 +68,7 @@
 +>forEach : (callbackfn: (value: CompilerError, index: number, array: CompilerError[]) => void, thisArg?: any) => void
 +>err => {                    actual = actual + '\n     ' + err.toString();                } : (err: CompilerError) => void
 +>err : CompilerError
- 
+
                      actual = actual + '\n     ' + err.toString();
  >actual = actual + '\n     ' + err.toString() : string
 @@= skipped -17, +17 lines =@@
@@ -78,7 +78,7 @@
 ->err : Compiler.CompilerError
 +>err : CompilerError
  >toString : () => string
- 
+
                  });
 @@= skipped -1052, +1052 lines =@@
  >false : false
@@ -87,7 +87,7 @@
 ->assert : Harness.Assert
 +>assert : Assert
  >bugIds : any
- 
+
                      // Report all bugs affecting this scenario
 @@= skipped -8, +8 lines =@@
  >assert.bugIds.forEach(desc => emitLog('bug', metadata, desc)) : any
@@ -105,7 +105,7 @@
 ->assert : Harness.Assert
 +>assert : Assert
  >bugIds : any
- 
+
              // Report all bugs affecting this scenario
 @@= skipped -8, +8 lines =@@
  >assert.bugIds.forEach(desc => emitLog('bug', metadata, desc)) : any
@@ -124,26 +124,26 @@
 +>assert : Assert
  >bugIds : any
  >[] : undefined[]
- 
+
 @@= skipped -492, +492 lines =@@
  >[] : undefined[]
- 
+
          var timeFunction: (
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
 +>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
- 
+
              benchmark: Benchmark,
  >benchmark : Benchmark
 @@= skipped -12, +12 lines =@@
  >name : string
- 
+
              f?: (bench?: { (): void; }) => void
 ->f : (bench?: { (): void; }) => void
 +>f : (bench?: () => void) => void
  >bench : () => void
- 
+
          ) => void;
- 
+
          timeFunction = function (
 ->timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
@@ -151,12 +151,12 @@
 +>timeFunction = function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
 +>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
 +>function (            benchmark: Benchmark,            description: string = benchmark.description,            name: string = '',            f = benchmark.bench        ): void {            var t = new Timer();            t.start();            var subBenchmark = function (name, f): void {                timeFunction(benchmark, description, name, f);            }            f.call(benchmark, subBenchmark);            t.end();            benchmark.addTimingFor(name, t.time);        } : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
- 
+
              benchmark: Benchmark,
  >benchmark : Benchmark
 @@= skipped -24, +24 lines =@@
  >'' : ""
- 
+
              f = benchmark.bench
 ->f : (bench?: { (): void; }) => void
 +>f : (bench?: () => void) => void
@@ -164,7 +164,7 @@
  >benchmark : Benchmark
  >bench : (subBench?: () => void) => void
 @@= skipped -26, +26 lines =@@
- 
+
                  timeFunction(benchmark, description, name, f);
  >timeFunction(benchmark, description, name, f) : void
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
@@ -182,24 +182,24 @@
  >benchmark : Benchmark
  >subBenchmark : (name: any, f: any) => void
 @@= skipped -74, +74 lines =@@
- 
+
                      timeFunction(b);
  >timeFunction(b) : void
 ->timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
 +>timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: () => void) => void) => void
  >b : Benchmark
- 
+
                      b.afterEach();
 @@= skipped -460, +460 lines =@@
          }
- 
+
          export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
 ->makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
 ->c : TypeScript.TypeScriptCompiler
 +>makeDefaultCompilerForTest : (c?: TypeScriptCompiler) => any
 +>c : TypeScriptCompiler
  >TypeScript : any
- 
+
              var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
  >compiler : any
  >c || new TypeScript.TypeScriptCompiler(stderr) : any
@@ -210,12 +210,12 @@
  >TypeScript : any
 @@= skipped -114, +114 lines =@@
          }
- 
+
          var compiler: TypeScript.TypeScriptCompiler;
 ->compiler : TypeScript.TypeScriptCompiler
 +>compiler : TypeScriptCompiler
  >TypeScript : any
- 
+
          recreate();
 @@= skipped -26, +26 lines =@@
                      compiler.pullTypeCheck(true);
@@ -225,7 +225,7 @@
 +>compiler : TypeScriptCompiler
  >pullTypeCheck : any
  >true : true
- 
+
 @@= skipped -14, +14 lines =@@
                      compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true);
  >compiler.pullUpdateUnit(new TypeScript.StringSourceText(""), filename, true) : any
@@ -254,7 +254,7 @@
              }
          }
 @@= skipped -51, +51 lines =@@
- 
+
                  compileString(testCode, 'test.ts', function (compilerResult) {
  >compileString(testCode, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
 ->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
@@ -263,7 +263,7 @@
  >'test.ts' : "test.ts"
  >function (compilerResult) {                    errors = compilerResult.errors;                } : (compilerResult: CompilerResult) => void
 @@= skipped -617, +617 lines =@@
- 
+
                  compileString(code, 'test.ts', function (compilerResult) {
  >compileString(code, 'test.ts', function (compilerResult) {                    errors = compilerResult.errors;                }) : void
 ->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
@@ -306,7 +306,7 @@
 +>compiler : TypeScriptCompiler
  >getScopeEntries : any
  >enclosingScopeContext : any
- 
+
 @@= skipped -51, +51 lines =@@
  >compiler.scripts.members.length : any
  >compiler.scripts.members : any
@@ -318,7 +318,7 @@
  >length : any
 @@= skipped -8, +8 lines =@@
  >m : number
- 
+
                          var script2 = <TypeScript.Script>compiler.scripts.members[m];
 ->script2 : TypeScript.Script
 -><TypeScript.Script>compiler.scripts.members[m] : TypeScript.Script
@@ -352,7 +352,7 @@
  >targetPosition : number
 ->script2 : TypeScript.Script
 +>script2 : Script
- 
+
                                  var name = this.getTypeInfoName(tyInfo.ast);
  >name : string
  >this.getTypeInfoName(tyInfo.ast) : string
@@ -374,7 +374,7 @@
  >pos : number
 ->script2 : TypeScript.Script
 +>script2 : Script
- 
+
                                      var name = this.getTypeInfoName(tyInfo.ast);
  >name : string
  >this.getTypeInfoName(tyInfo.ast) : string
@@ -388,23 +388,23 @@
  >ast : any
 @@= skipped -133, +133 lines =@@
              }
- 
+
              private getTypeInfoName(ast : TypeScript.AST) {
 ->getTypeInfoName : (ast: TypeScript.AST) => string
 ->ast : TypeScript.AST
 +>getTypeInfoName : (ast: AST) => string
 +>ast : AST
  >TypeScript : any
- 
+
                  var name = '';
 @@= skipped -10, +10 lines =@@
- 
+
                  switch (ast.nodeType) {
  >ast.nodeType : any
 ->ast : TypeScript.AST
 +>ast : AST
  >nodeType : any
- 
+
                      case TypeScript.NodeType.Name: // Type Name?
 @@= skipped -87, +87 lines =@@
  >(<any>ast).text : any
@@ -413,7 +413,7 @@
 ->ast : TypeScript.AST
 +>ast : AST
  >text : any
- 
+
                          break;
 @@= skipped -15, +15 lines =@@
  >name = (<TypeScript.RegexLiteral>ast).text : any
@@ -427,7 +427,7 @@
 ->ast : TypeScript.AST
 +>ast : AST
  >text : any
- 
+
                          break;
 @@= skipped -20, +20 lines =@@
  >(<any>ast).text : any
@@ -436,7 +436,7 @@
 ->ast : TypeScript.AST
 +>ast : AST
  >text : any
- 
+
                          break;
 @@= skipped -15, +15 lines =@@
  >name = (<TypeScript.NumberLiteral>ast).text : any
@@ -450,7 +450,7 @@
 ->ast : TypeScript.AST
 +>ast : AST
  >text : any
- 
+
                          break;
 @@= skipped -28, +28 lines =@@
  >name : string
@@ -465,7 +465,7 @@
 +>ast : AST
  >name : any
  >actualText : any
- 
+
 @@= skipped -20, +20 lines =@@
  >name : string
  >(<TypeScript.ModuleDeclaration>ast).name.actualText : any
@@ -479,7 +479,7 @@
 +>ast : AST
  >name : any
  >actualText : any
- 
+
 @@= skipped -20, +20 lines =@@
  >name : string
  >(<TypeScript.ClassDeclaration>ast).name.actualText : any
@@ -493,7 +493,7 @@
 +>ast : AST
  >name : any
  >actualText : any
- 
+
 @@= skipped -21, +21 lines =@@
  >!(<TypeScript.FuncDecl>ast).name ? "" : (<TypeScript.FuncDecl>ast).name.actualText : any
  >!(<TypeScript.FuncDecl>ast).name : boolean
@@ -518,14 +518,14 @@
 +>ast : AST
  >name : any
  >actualText : any
- 
+
 @@= skipped -21, +21 lines =@@
                          var a = <any>ast;
  >a : any
  ><any>ast : any
 ->ast : TypeScript.AST
 +>ast : AST
- 
+
                          name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '';
  >name = (a.id) ? (a.id.actualText) : (a.name) ? a.name.actualText : (a.text) ? a.text : '' : any
 @@= skipped -76, +76 lines =@@
@@ -552,7 +552,7 @@
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
  >TypeScript : any
- 
+
              reset();
 @@= skipped -18, +18 lines =@@
  >compiler.settings.generateDeclarationFiles = true : true
@@ -571,7 +571,7 @@
 +>compiler : TypeScriptCompiler
  >settings : any
  >outputOption : any
- 
+
 @@= skipped -8, +8 lines =@@
  >oldEmitterIOHost : any
  >compiler.emitSettings.ioHost : any
@@ -580,10 +580,10 @@
 +>compiler : TypeScriptCompiler
  >emitSettings : any
  >ioHost : any
- 
+
 @@= skipped -20, +20 lines =@@
                  }
- 
+
                  addUnit(code, unitName, false, false, references);
 ->addUnit(code, unitName, false, false, references) : TypeScript.Script
 ->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
@@ -595,14 +595,14 @@
  >false : false
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
- 
+
                  compiler.reTypeCheck();
  >compiler.reTypeCheck() : any
  >compiler.reTypeCheck : any
 ->compiler : TypeScript.TypeScriptCompiler
 +>compiler : TypeScriptCompiler
  >reTypeCheck : any
- 
+
                  var outputs = {};
 @@= skipped -22, +22 lines =@@
  >compiler.settings.outputOption = "" : ""
@@ -629,7 +629,7 @@
 ->compiler : TypeScript.TypeScriptCompiler
 +>compiler : TypeScriptCompiler
  >emitDeclarations : any
- 
+
                  var results: string = null;
 @@= skipped -83, +83 lines =@@
  >compiler.settings.generateDeclarationFiles = false : false
@@ -657,7 +657,7 @@
 +>compiler : TypeScriptCompiler
  >parseEmitOption : any
  >oldEmitterIOHost : any
- 
+
 @@= skipped -51, +51 lines =@@
  >filename : string
  >file : WriterAggregator
@@ -665,7 +665,7 @@
 ->scripts : TypeScript.Script[]
 +>scripts : Script[]
  >TypeScript : any
- 
+
                  var lines = [];
 @@= skipped -89, +89 lines =@@
                          var match = errorLines[i].match(/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/);
@@ -679,10 +679,10 @@
 ->match : (regexp: string | RegExp) => RegExpMatchArray | null
 +>match : (regexp: string | RegExp) => RegExpMatchArray
  >/([^\(]*)\((\d+),(\d+)\):\s+((.*[\s\r\n]*.*)+)\s*$/ : RegExp
- 
+
                          if (match) {
 @@= skipped -161, +161 lines =@@
- 
+
              compiler = makeDefaultCompilerForTest();
  >compiler = makeDefaultCompilerForTest() : any
 ->compiler : TypeScript.TypeScriptCompiler
@@ -690,7 +690,7 @@
  >makeDefaultCompilerForTest() : any
 ->makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
 +>makeDefaultCompilerForTest : (c?: TypeScriptCompiler) => any
- 
+
              if (usePull) {
  >usePull : boolean
 @@= skipped -10, +10 lines =@@
@@ -731,7 +731,7 @@
  >false : false
 @@= skipped -20, +20 lines =@@
          }
- 
+
          export function addUnit(code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) {
 ->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
 +>addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: IFileReference[]) => Script
@@ -742,12 +742,12 @@
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
  >TypeScript : any
- 
+
              var script: TypeScript.Script = null;
 ->script : TypeScript.Script
 +>script : Script
  >TypeScript : any
- 
+
              var uName = unitName || '0' + (isDeclareFile ? '.d.ts' : '.ts');
 @@= skipped -31, +31 lines =@@
  >i : number
@@ -769,7 +769,7 @@
  >filename : any
 @@= skipped -13, +13 lines =@@
  >uName : string
- 
+
                      script = <TypeScript.Script>compiler.scripts.members[i];
 ->script = <TypeScript.Script>compiler.scripts.members[i] : TypeScript.Script
 ->script : TypeScript.Script
@@ -792,7 +792,7 @@
  >!script : boolean
 ->script : TypeScript.Script
 +>script : Script
- 
+
                  // TODO: make this toggleable, shouldn't be necessary once typecheck bugs are cleaned up
                  // but without it subsequent tests are treated as edits, making for somewhat useful stress testing
 @@= skipped -8, +8 lines =@@
@@ -811,17 +811,17 @@
  >isResident : boolean
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
- 
+
                  needsFullTypeCheck = true;
  >needsFullTypeCheck = true : true
 @@= skipped -17, +17 lines =@@
              }
- 
+
              return script;
 ->script : TypeScript.Script
 +>script : Script
          }
- 
+
          export function updateUnit(code: string, unitName: string, setRecovery?: boolean) {
 @@= skipped -17, +17 lines =@@
                  compiler.pullUpdateUnit(new TypeScript.StringSourceText(code), unitName, setRecovery);
@@ -843,7 +843,7 @@
  >unitName : string
 @@= skipped -9, +9 lines =@@
          }
- 
+
          export function compileFile(path: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
 ->compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 +>compileFile : (path: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: CompilationSettings) => void, context?: CompilationContext, references?: IFileReference[]) => void
@@ -859,7 +859,7 @@
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
  >TypeScript : any
- 
+
              path = switchToForwardSlashes(path);
 @@= skipped -22, +22 lines =@@
  >filename : string
@@ -872,9 +872,9 @@
 +>match : (regexp: string | RegExp) => RegExpMatchArray
  >/[^\/]*$/ : RegExp
  >0 : 0
- 
+
 @@= skipped -14, +14 lines =@@
- 
+
              compileUnit(code, filename, callback, settingsCallback, context, references);
  >compileUnit(code, filename, callback, settingsCallback, context, references) : void
 ->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
@@ -888,7 +888,7 @@
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
          }
- 
+
          export function compileUnit(code: string, filename: string, callback: (res: CompilerResult) => void , settingsCallback?: (settings?: TypeScript.CompilationSettings) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
 ->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 +>compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: CompilationSettings) => void, context?: CompilationContext, references?: IFileReference[]) => void
@@ -905,7 +905,7 @@
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
  >TypeScript : any
- 
+
              // not recursive
 @@= skipped -54, +54 lines =@@
  >clone(compiler.settings, oldCompilerSettings) : void
@@ -915,7 +915,7 @@
 +>compiler : TypeScriptCompiler
  >settings : any
  >oldCompilerSettings : any
- 
+
 @@= skipped -11, +11 lines =@@
  >TypeScript : any
  >EmitOptions : any
@@ -923,7 +923,7 @@
 ->compiler : TypeScript.TypeScriptCompiler
 +>compiler : TypeScriptCompiler
  >settings : any
- 
+
              clone(compiler.emitSettings, oldEmitSettings);
  >clone(compiler.emitSettings, oldEmitSettings) : void
  >clone : (source: any, target: any) => void
@@ -932,14 +932,14 @@
 +>compiler : TypeScriptCompiler
  >emitSettings : any
  >oldEmitSettings : any
- 
+
 @@= skipped -18, +18 lines =@@
  >moduleGenTarget : any
- 
+
              if (settingsCallback) {
 ->settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 +>settingsCallback : (settings?: CompilationSettings) => void
- 
+
                  settingsCallback(compiler.settings);
  >settingsCallback(compiler.settings) : void
 ->settingsCallback : (settings?: TypeScript.CompilationSettings) => void
@@ -948,7 +948,7 @@
 ->compiler : TypeScript.TypeScriptCompiler
 +>compiler : TypeScriptCompiler
  >settings : any
- 
+
                  compiler.emitSettings = new TypeScript.EmitOptions(compiler.settings);
  >compiler.emitSettings = new TypeScript.EmitOptions(compiler.settings) : any
  >compiler.emitSettings : any
@@ -975,14 +975,14 @@
  >context : CompilationContext
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
- 
+
              } finally {
                  // If settingsCallback exists, assume that it modified the global compiler instance's settings in some way.
                  // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
                  if (settingsCallback) {
 ->settingsCallback : (settings?: TypeScript.CompilationSettings) => void
 +>settingsCallback : (settings?: CompilationSettings) => void
- 
+
                      compiler.settings = oldCompilerSettings;
  >compiler.settings = oldCompilerSettings : any
  >compiler.settings : any
@@ -990,7 +990,7 @@
 +>compiler : TypeScriptCompiler
  >settings : any
  >oldCompilerSettings : any
- 
+
                      compiler.emitSettings = oldEmitSettings;
  >compiler.emitSettings = oldEmitSettings : any
  >compiler.emitSettings : any
@@ -998,10 +998,10 @@
 +>compiler : TypeScriptCompiler
  >emitSettings : any
  >oldEmitSettings : any
- 
+
 @@= skipped -63, +63 lines =@@
          }
- 
+
          export function compileUnits(units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void , settingsCallback?: () => void ) {
 ->compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: Compiler.CompilerResult) => void, settingsCallback?: () => void) => void
 ->units : TestCaseParser.TestUnitData[]
@@ -1013,7 +1013,7 @@
  >res : CompilerResult
  >Compiler : any
  >settingsCallback : () => void
- 
+
              var lastUnit = units[units.length - 1];
 ->lastUnit : TestCaseParser.TestUnitData
 ->units[units.length - 1] : TestCaseParser.TestUnitData
@@ -1027,7 +1027,7 @@
 +>units : TestUnitData[]
  >length : number
  >1 : 1
- 
+
 @@= skipped -22, +22 lines =@@
  >unitName : string
  >switchToForwardSlashes(lastUnit.name).match(/[^\/]*$/)[0] : string
@@ -1044,7 +1044,7 @@
 +>match : (regexp: string | RegExp) => RegExpMatchArray
  >/[^\/]*$/ : RegExp
  >0 : 0
- 
+
              var dependencies = units.slice(0, units.length - 1);
 ->dependencies : TestCaseParser.TestUnitData[]
 ->units.slice(0, units.length - 1) : TestCaseParser.TestUnitData[]
@@ -1063,7 +1063,7 @@
 +>units : TestUnitData[]
  >length : number
  >1 : 1
- 
+
              var compilationContext = Harness.Compiler.defineCompilationContextForTest(unitName, dependencies);
  >compilationContext : CompilationContext
  >Harness.Compiler.defineCompilationContextForTest(unitName, dependencies) : CompilationContext
@@ -1077,7 +1077,7 @@
  >unitName : string
 ->dependencies : TestCaseParser.TestUnitData[]
 +>dependencies : TestUnitData[]
- 
+
              compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references);
  >compileUnit(lastUnit.content, unitName, callback, settingsCallback, compilationContext, lastUnit.references) : void
 ->compileUnit : (code: string, filename: string, callback: (res: CompilerResult) => void, settingsCallback?: (settings?: TypeScript.CompilationSettings) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
@@ -1098,7 +1098,7 @@
 +>lastUnit : TestUnitData
 +>references : IFileReference[]
          }
- 
+
          export function emitToOutfile(outfile: WriterAggregator) {
 @@= skipped -56, +56 lines =@@
              compiler.emitToOutfile(outfile);
@@ -1109,7 +1109,7 @@
  >emitToOutfile : any
  >outfile : WriterAggregator
          }
- 
+
          export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
 ->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 ->ioHost : TypeScript.EmitterIOHost
@@ -1117,7 +1117,7 @@
 +>ioHost : EmitterIOHost
  >TypeScript : any
  >usePullEmitter : boolean
- 
+
              compiler.emit(ioHost, usePullEmitter);
  >compiler.emit(ioHost, usePullEmitter) : any
  >compiler.emit : any
@@ -1128,7 +1128,7 @@
 +>ioHost : EmitterIOHost
  >usePullEmitter : boolean
          }
- 
+
          export function compileString(code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void , context?: CompilationContext, references?: TypeScript.IFileReference[]) {
 ->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
 +>compileString : (code: string, unitName: string, callback: (res: CompilerResult) => void, context?: CompilationContext, references?: IFileReference[]) => void
@@ -1142,15 +1142,15 @@
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
  >TypeScript : any
- 
+
              var scripts: TypeScript.Script[] = [];
 ->scripts : TypeScript.Script[]
 +>scripts : Script[]
  >TypeScript : any
  >[] : undefined[]
- 
+
 @@= skipped -75, +75 lines =@@
- 
+
              scripts.push(addUnit(code, uName, false, isDeclareFile, references));
  >scripts.push(addUnit(code, uName, false, isDeclareFile, references)) : number
 ->scripts.push : (...items: TypeScript.Script[]) => number
@@ -1169,7 +1169,7 @@
  >isDeclareFile : boolean
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
- 
+
              compile(code, uName);
  >compile(code, uName) : void
 @@= skipped -29, +29 lines =@@
@@ -1180,7 +1180,7 @@
 +>compiler : TypeScriptCompiler
  >pullGetErrorsForFile : any
  >uName : string
- 
+
                  emit(stdout, true);
  >emit(stdout, true) : void
 ->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
@@ -1189,14 +1189,14 @@
  >true : true
              }
 @@= skipped -20, +20 lines =@@
- 
+
                  emit(stdout, false);
  >emit(stdout, false) : void
 ->emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
 +>emit : (ioHost: EmitterIOHost, usePullEmitter?: boolean) => void
  >stdout : EmitterIOHost
  >false : false
- 
+
 @@= skipped -8, +8 lines =@@
                  compiler.emitDeclarations();
  >compiler.emitDeclarations() : any
@@ -1205,9 +1205,9 @@
 +>compiler : TypeScriptCompiler
  >emitDeclarations : any
              }
- 
+
 @@= skipped -16, +16 lines =@@
- 
+
              callback(new CompilerResult(stdout.toArray(), errors, scripts));
  >callback(new CompilerResult(stdout.toArray(), errors, scripts)) : void
 ->callback : (res: Compiler.CompilerResult) => void
@@ -1222,7 +1222,7 @@
 ->scripts : TypeScript.Script[]
 +>scripts : Script[]
          }
- 
+
          /** Returns a set of functions which can be later executed to add and remove given dependencies to the compiler so that
           *  a file can be successfully compiled. These functions will add/remove named units and code to the compiler for each dependency. 
           */
@@ -1233,7 +1233,7 @@
 ->dependencies : TestCaseParser.TestUnitData[]
 +>dependencies : TestUnitData[]
  >TestCaseParser : any
- 
+
              // if the given file has no dependencies, there is no context to return, it can be compiled without additional work
              if (dependencies.length == 0) {
  >dependencies.length == 0 : boolean
@@ -1242,7 +1242,7 @@
 +>dependencies : TestUnitData[]
  >length : number
  >0 : 0
- 
+
 @@= skipped -34, +34 lines =@@
                      // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
                      dependencies.forEach(dep => {
@@ -1257,7 +1257,7 @@
 +>forEach : (callbackfn: (value: TestUnitData, index: number, array: TestUnitData[]) => void, thisArg?: any) => void
 +>dep => {                        addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));                        addedFiles.push(dep.name);                    } : (dep: TestUnitData) => void
 +>dep : TestUnitData
- 
+
                          addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
 ->addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name)) : TypeScript.Script
 ->addUnit : (code: string, unitName?: string, isResident?: boolean, isDeclareFile?: boolean, references?: TypeScript.IFileReference[]) => TypeScript.Script
@@ -1280,7 +1280,7 @@
 ->dep : TestCaseParser.TestUnitData
 +>dep : TestUnitData
  >name : string
- 
+
                          addedFiles.push(dep.name);
 @@= skipped -9, +9 lines =@@
  >addedFiles : any[]
@@ -1289,26 +1289,26 @@
 ->dep : TestCaseParser.TestUnitData
 +>dep : TestUnitData
  >name : string
- 
+
                      });
 @@= skipped -75, +75 lines =@@
  >originalFilePath : string
- 
+
              references: TypeScript.IFileReference[];
 ->references : TypeScript.IFileReference[]
 +>references : IFileReference[]
  >TypeScript : any
          }
- 
+
 @@= skipped -102, +102 lines =@@
  >currentFileName : any
- 
+
              var refs: TypeScript.IFileReference[] = [];
 ->refs : TypeScript.IFileReference[]
 +>refs : IFileReference[]
  >TypeScript : any
  >[] : undefined[]
- 
+
 @@= skipped -44, +44 lines =@@
                      var isRef = line.match(/reference\spath='(\w*_?\w*\.?d?\.ts)'/);
  >isRef : RegExpMatchArray
@@ -1319,10 +1319,10 @@
 ->match : (regexp: string | RegExp) => RegExpMatchArray | null
 +>match : (regexp: string | RegExp) => RegExpMatchArray
  >/reference\spath='(\w*_?\w*\.?d?\.ts)'/ : RegExp
- 
+
                      if (isRef) {
 @@= skipped -42, +42 lines =@@
- 
+
                          refs.push(ref);
  >refs.push(ref) : number
 ->refs.push : (...items: TypeScript.IFileReference[]) => number
@@ -1335,7 +1335,7 @@
                      }
                  } else if (testMetaData) {
 @@= skipped -78, +78 lines =@@
- 
+
                          // Store result file
                          var newTestFile =
 ->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
@@ -1343,18 +1343,18 @@
                              {
 ->{                                content: currentFileContent,                                name: currentFileName,                                fileOptions: currentFileOptions,                                originalFilePath: filename,                                references: refs                            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 +>{                                content: currentFileContent,                                name: currentFileName,                                fileOptions: currentFileOptions,                                originalFilePath: filename,                                references: refs                            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: IFileReference[]; }
- 
+
                                  content: currentFileContent,
  >content : string
 @@= skipped -21, +21 lines =@@
  >filename : string
- 
+
                                  references: refs
 ->references : TypeScript.IFileReference[]
 ->refs : TypeScript.IFileReference[]
 +>references : IFileReference[]
 +>refs : IFileReference[]
- 
+
                              };
                          files.push(newTestFile);
 @@= skipped -9, +9 lines =@@
@@ -1363,38 +1363,38 @@
  >push : (...items: TestUnitData[]) => number
 ->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 +>newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: IFileReference[]; }
- 
+
                          // Reset local data
                          currentFileContent = null;
 @@= skipped -21, +21 lines =@@
- 
+
                          refs = [];
  >refs = [] : undefined[]
 ->refs : TypeScript.IFileReference[]
 +>refs : IFileReference[]
  >[] : undefined[]
- 
+
                      } else {
 @@= skipped -57, +57 lines =@@
- 
+
              // EOF, push whatever remains
              var newTestFile = {
 ->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 ->{                content: currentFileContent || '',                name: currentFileName,                fileOptions: currentFileOptions,                originalFilePath: filename,                references: refs            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 +>newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: IFileReference[]; }
 +>{                content: currentFileContent || '',                name: currentFileName,                fileOptions: currentFileOptions,                originalFilePath: filename,                references: refs            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: IFileReference[]; }
- 
+
                  content: currentFileContent || '',
  >content : string
 @@= skipped -22, +22 lines =@@
  >filename : string
- 
+
                  references: refs
 ->references : TypeScript.IFileReference[]
 ->refs : TypeScript.IFileReference[]
 +>references : IFileReference[]
 +>refs : IFileReference[]
- 
+
              };
              files.push(newTestFile);
 @@= skipped -9, +9 lines =@@
@@ -1403,12 +1403,12 @@
  >push : (...items: TestUnitData[]) => number
 ->newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 +>newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: IFileReference[]; }
- 
+
              return { settings: settings, testUnitData: files };
  >{ settings: settings, testUnitData: files } : { settings: CompilerSetting[]; testUnitData: TestUnitData[]; }
 @@= skipped -18, +18 lines =@@
  >version : number
- 
+
          public editRanges: { length: number; editRange: TypeScript.ScriptEditRange; }[] = [];
 ->editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 +>editRanges : { length: number; editRange: ScriptEditRange; }[]
@@ -1417,9 +1417,9 @@
 +>editRange : ScriptEditRange
  >TypeScript : any
  >[] : undefined[]
- 
+
 @@= skipped -27, +27 lines =@@
- 
+
              this.editRanges = [];
  >this.editRanges = [] : undefined[]
 ->this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
@@ -1428,7 +1428,7 @@
 ->editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 +>editRanges : { length: number; editRange: ScriptEditRange; }[]
  >[] : undefined[]
- 
+
              this.content = content;
 @@= skipped -72, +72 lines =@@
              // Store edit range + new length of script
@@ -1444,7 +1444,7 @@
 +>editRanges : { length: number; editRange: ScriptEditRange; }[]
 +>push : (...items: { length: number; editRange: ScriptEditRange; }[]) => number
  >{                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            } : { length: number; editRange: any; }
- 
+
                  length: this.content.length,
 @@= skipped -37, +37 lines =@@
              if (this.editRanges.length > this.maxScriptVersions) {
@@ -1459,7 +1459,7 @@
  >this.maxScriptVersions : number
  >this : this
  >maxScriptVersions : number
- 
+
                  this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
 ->this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 ->this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
@@ -1485,16 +1485,16 @@
 +>editRanges : { length: number; editRange: ScriptEditRange; }[]
  >length : number
              }
- 
+
 @@= skipped -36, +36 lines =@@
          }
- 
+
          public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
 ->getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 +>getEditRangeSinceVersion : (version: number) => ScriptEditRange
  >version : number
  >TypeScript : any
- 
+
 @@= skipped -19, +19 lines =@@
  >initialEditRangeIndex : number
  >this.editRanges.length - (this.version - version) : number
@@ -1517,11 +1517,11 @@
 ->editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 +>editRanges : { length: number; editRange: ScriptEditRange; }[]
  >length : number
- 
+
                  // Too far away from what we know
 @@= skipped -16, +16 lines =@@
              }
- 
+
              var entries = this.editRanges.slice(initialEditRangeIndex);
 ->entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 ->this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
@@ -1537,7 +1537,7 @@
 +>editRanges : { length: number; editRange: ScriptEditRange; }[]
 +>slice : (start?: number, end?: number) => { length: number; editRange: ScriptEditRange; }[]
  >initialEditRangeIndex : number
- 
+
              var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
 @@= skipped -14, +14 lines =@@
  >entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current)) : any
@@ -1629,16 +1629,16 @@
  >minDistFromEnd : number
 @@= skipped -14, +14 lines =@@
  >Services : any
- 
+
          private ls: Services.ILanguageServiceShim = null;
 ->ls : Services.ILanguageServiceShim
 +>ls : ILanguageServiceShim
  >Services : any
- 
+
          public scripts: ScriptInfo[] = [];
 @@= skipped -345, +345 lines =@@
  >scriptVersion : number
- 
+
              var range = this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion);
 ->range : TypeScript.ScriptEditRange
 ->this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion) : TypeScript.ScriptEditRange
@@ -1654,7 +1654,7 @@
 ->getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
 +>getEditRangeSinceVersion : (version: number) => ScriptEditRange
  >scriptVersion : number
- 
+
              var result = (range.minChar + "," + range.limChar + "," + range.delta);
 @@= skipped -19, +19 lines =@@
  >range.minChar + "," + range.limChar : string
@@ -1673,7 +1673,7 @@
 ->range : TypeScript.ScriptEditRange
 +>range : ScriptEditRange
  >delta : any
- 
+
              return result;
 @@= skipped -19, +19 lines =@@
           *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
@@ -1682,10 +1682,10 @@
 ->getLanguageService : () => Services.ILanguageServiceShim
 +>getLanguageService : () => ILanguageServiceShim
  >Services : any
- 
+
              var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
 @@= skipped -23, +23 lines =@@
- 
+
              this.ls = ls;
  >this.ls = ls : any
 ->this.ls : Services.ILanguageServiceShim
@@ -1694,10 +1694,10 @@
 ->ls : Services.ILanguageServiceShim
 +>ls : ILanguageServiceShim
  >ls : any
- 
+
              return ls;
 @@= skipped -11, +11 lines =@@
- 
+
          /** Parse file given its source text */
          public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
 ->parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
@@ -1707,7 +1707,7 @@
 +>sourceText : ISourceText
  >TypeScript : any
  >TypeScript : any
- 
+
 @@= skipped -36, +36 lines =@@
  >parser.parse : any
  >parser : any
@@ -1716,19 +1716,19 @@
 +>sourceText : ISourceText
  >fileName : string
  >0 : 0
- 
+
 @@= skipped -10, +10 lines =@@
- 
+
          /** Parse a file on disk given its filename */
          public parseFile(fileName: string) {
 ->parseFile : (fileName: string) => TypeScript.Script
 +>parseFile : (fileName: string) => Script
  >fileName : string
- 
+
              var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName))
 @@= skipped -16, +16 lines =@@
  >fileName : string
- 
+
              return this.parseSourceText(fileName, sourceText);
 ->this.parseSourceText(fileName, sourceText) : TypeScript.Script
 ->this.parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
@@ -1760,7 +1760,7 @@
 +>assert : Assert
  >notNull : any
  >script : any
- 
+
              assert.is(line >= 1);
  >assert.is(line >= 1) : any
  >assert.is : any
@@ -1816,7 +1816,7 @@
 +>assert : Assert
  >notNull : any
  >script : any
- 
+
 @@= skipped -16, +16 lines =@@
              assert.is(result.line >= 0);
  >assert.is(result.line >= 0) : any
@@ -1836,7 +1836,7 @@
  >result.col >= 0 : boolean
  >result.col : any
 @@= skipped -14, +14 lines =@@
- 
+
          /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
          public checkEdits(sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) {
 ->checkEdits : (sourceFileName: string, baselineFileName: string, edits: Services.TextEdit[]) => void
@@ -1846,7 +1846,7 @@
 ->edits : Services.TextEdit[]
 +>edits : TextEdit[]
  >Services : any
- 
+
              var script = readFile(sourceFileName);
 @@= skipped -15, +15 lines =@@
              var formattedScript = this.applyEdits(script, edits);
@@ -1860,7 +1860,7 @@
  >script : any
 ->edits : Services.TextEdit[]
 +>edits : TextEdit[]
- 
+
              var baseline = readFile(baselineFileName);
  >baseline : any
 @@= skipped -15, +15 lines =@@
@@ -1882,7 +1882,7 @@
  >formattedScript : string
  >baseline : any
 @@= skipped -9, +9 lines =@@
- 
+
          /** Apply an array of text edits to a string, and return the resulting string. */
          public applyEdits(content: string, edits: Services.TextEdit[]): string {
 ->applyEdits : (content: string, edits: Services.TextEdit[]) => string
@@ -1891,11 +1891,11 @@
 ->edits : Services.TextEdit[]
 +>edits : TextEdit[]
  >Services : any
- 
+
              var result = content;
 @@= skipped -10, +10 lines =@@
  >content : string
- 
+
              edits = this.normalizeEdits(edits);
 ->edits = this.normalizeEdits(edits) : Services.TextEdit[]
 ->edits : Services.TextEdit[]
@@ -1910,7 +1910,7 @@
 ->edits : Services.TextEdit[]
 +>normalizeEdits : (edits: TextEdit[]) => TextEdit[]
 +>edits : TextEdit[]
- 
+
              for (var i = edits.length - 1; i >= 0; i--) {
  >i : number
  >edits.length - 1 : number
@@ -1922,7 +1922,7 @@
  >i >= 0 : boolean
 @@= skipped -22, +22 lines =@@
  >i : number
- 
+
                  var edit = edits[i];
 ->edit : Services.TextEdit
 ->edits[i] : Services.TextEdit
@@ -1931,7 +1931,7 @@
 +>edits[i] : TextEdit
 +>edits : TextEdit[]
  >i : number
- 
+
                  var prefix = result.substring(0, edit.minChar);
 @@= skipped -13, +13 lines =@@
  >substring : (start: number, end?: number) => string
@@ -1940,14 +1940,14 @@
 ->edit : Services.TextEdit
 +>edit : TextEdit
  >minChar : any
- 
+
                  var middle = edit.text;
  >middle : any
  >edit.text : any
 ->edit : Services.TextEdit
 +>edit : TextEdit
  >text : any
- 
+
                  var suffix = result.substring(edit.limChar);
 @@= skipped -16, +16 lines =@@
  >result : string
@@ -1956,10 +1956,10 @@
 ->edit : Services.TextEdit
 +>edit : TextEdit
  >limChar : any
- 
+
                  result = prefix + middle + suffix;
 @@= skipped -18, +18 lines =@@
- 
+
          /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
          private normalizeEdits(edits: Services.TextEdit[]): Services.TextEdit[] {
 ->normalizeEdits : (edits: Services.TextEdit[]) => Services.TextEdit[]
@@ -1968,13 +1968,13 @@
 +>edits : TextEdit[]
  >Services : any
  >Services : any
- 
+
              var result: Services.TextEdit[] = [];
 ->result : Services.TextEdit[]
 +>result : TextEdit[]
  >Services : any
  >[] : undefined[]
- 
+
              function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
 ->mapEdits : (edits: Services.TextEdit[]) => { edit: Services.TextEdit; index: number; }[]
 ->edits : Services.TextEdit[]
@@ -1985,7 +1985,7 @@
 +>edit : TextEdit
  >Services : any
  >index : number
- 
+
 @@= skipped -28, +28 lines =@@
  >i < edits.length : boolean
  >i : number
@@ -2012,7 +2012,7 @@
  >i : number
 @@= skipped -13, +13 lines =@@
              }
- 
+
              var temp = mapEdits(edits).sort(function (a, b) {
 ->temp : { edit: Services.TextEdit; index: number; }[]
 ->mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: Services.TextEdit; index: number; }[]
@@ -2034,7 +2034,7 @@
 +>function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: TextEdit; index: number; }, b: { edit: TextEdit; index: number; }) => number
 +>a : { edit: TextEdit; index: number; }
 +>b : { edit: TextEdit; index: number; }
- 
+
                  var result = a.edit.minChar - b.edit.minChar;
  >result : number
  >a.edit.minChar - b.edit.minChar : number
@@ -2054,7 +2054,7 @@
 +>b : { edit: TextEdit; index: number; }
 +>edit : TextEdit
  >minChar : any
- 
+
                  if (result == 0)
 @@= skipped -35, +35 lines =@@
  >result : number
@@ -2067,7 +2067,7 @@
 ->b : { edit: Services.TextEdit; index: number; }
 +>b : { edit: TextEdit; index: number; }
  >index : number
- 
+
                  return result;
 @@= skipped -23, +23 lines =@@
  >current < temp.length : boolean
@@ -2076,7 +2076,7 @@
 ->temp : { edit: Services.TextEdit; index: number; }[]
 +>temp : { edit: TextEdit; index: number; }[]
  >length : number
- 
+
                  var currentEdit = temp[current].edit;
 ->currentEdit : Services.TextEdit
 ->temp[current].edit : Services.TextEdit
@@ -2089,7 +2089,7 @@
  >current : number
 ->edit : Services.TextEdit
 +>edit : TextEdit
- 
+
                  // Last edit
                  if (next >= temp.length) {
  >next >= temp.length : boolean
@@ -2098,7 +2098,7 @@
 ->temp : { edit: Services.TextEdit; index: number; }[]
 +>temp : { edit: TextEdit; index: number; }[]
  >length : number
- 
+
                      result.push(currentEdit);
  >result.push(currentEdit) : number
 ->result.push : (...items: Services.TextEdit[]) => number
@@ -2109,7 +2109,7 @@
 +>result : TextEdit[]
 +>push : (...items: TextEdit[]) => number
 +>currentEdit : TextEdit
- 
+
                      current++;
  >current++ : number
 @@= skipped -33, +33 lines =@@
@@ -2127,7 +2127,7 @@
  >next : number
 ->edit : Services.TextEdit
 +>edit : TextEdit
- 
+
                  var gap = nextEdit.minChar - currentEdit.limChar;
  >gap : number
  >nextEdit.minChar - currentEdit.limChar : number
@@ -2139,10 +2139,10 @@
 ->currentEdit : Services.TextEdit
 +>currentEdit : TextEdit
  >limChar : any
- 
+
                  // non-overlapping edits
 @@= skipped -25, +25 lines =@@
- 
+
                      result.push(currentEdit);
  >result.push(currentEdit) : number
 ->result.push : (...items: Services.TextEdit[]) => number
@@ -2153,7 +2153,7 @@
 +>result : TextEdit[]
 +>push : (...items: TextEdit[]) => number
 +>currentEdit : TextEdit
- 
+
                      current = next;
  >current = next : number
 @@= skipped -22, +22 lines =@@
@@ -2167,19 +2167,19 @@
 ->nextEdit : Services.TextEdit
 +>nextEdit : TextEdit
  >limChar : any
- 
+
                      next++;
 @@= skipped -21, +21 lines =@@
              }
- 
+
              return result;
 ->result : Services.TextEdit[]
 +>result : TextEdit[]
          }
- 
+
          public getHostSettings(): string {
 @@= skipped -8, +8 lines =@@
- 
+
              return JSON.stringify({ usePullLanguageService: usePull });
  >JSON.stringify({ usePullLanguageService: usePull }) : string
 ->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
@@ -2203,7 +2203,7 @@
  >0 : 0
  >callback : (error: Error, result: any) => void
 @@= skipped -114, +114 lines =@@
- 
+
              Compiler.compileString(code, unitName, function (res) {
  >Compiler.compileString(code, unitName, function (res) {                runJSString(res.code, callback);            }) : void
 ->Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
@@ -2217,7 +2217,7 @@
 ->res : Compiler.CompilerResult
 +>function (res) {                runJSString(res.code, callback);            } : (res: CompilerResult) => void
 +>res : CompilerResult
- 
+
                  runJSString(res.code, callback);
  >runJSString(res.code, callback) : void
  >runJSString : (code: string, callback: (error: Error, result: any) => void) => void
@@ -2226,4 +2226,3 @@
 +>res : CompilerResult
  >code : string
  >callback : (error: Error, result: any) => void
- 

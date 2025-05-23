@@ -8,8 +8,8 @@
 -main.ts(10,19): error TS2307: Cannot find module './file.d.cts' or its corresponding type declarations.
 -main.ts(11,19): error TS2307: Cannot find module './file.d.mts' or its corresponding type declarations.
  main.ts(12,19): error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.
- 
- 
+
+
  ==== package.json (0 errors) ====
      {"type": "module"}
 -==== main.ts (12 errors) ====

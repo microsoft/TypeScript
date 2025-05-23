@@ -5,10 +5,10 @@
  >apply : Symbol(apply, Decl(test.js, 0, 7))
  >require : Symbol(require)
 ->'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
- 
+
  apply()
  >apply : Symbol(apply, Decl(test.js, 0, 7))
- 
+-
 -=== moduleExportAliasDuplicateAlias.js ===
 -exports.apply = undefined;
 ->exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
@@ -34,4 +34,3 @@
 ->exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
 ->exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 ->apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
--

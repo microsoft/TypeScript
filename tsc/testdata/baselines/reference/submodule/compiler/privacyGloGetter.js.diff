@@ -17,18 +17,12 @@
      m1.C1_public = C1_public;
 -    var C2_private = /** @class */ (function () {
 -        function C2_private() {
-+    class C2_private {
-+    }
-+    class C3_public {
-+        get p1_private() {
-+            return new C1_public();
-         }
+-        }
 -        return C2_private;
 -    }());
 -    var C3_public = /** @class */ (function () {
 -        function C3_public() {
-+        set p1_private(m1_c3_p1_arg) {
-         }
+-        }
 -        Object.defineProperty(C3_public.prototype, "p1_private", {
 -            get: function () {
 -                return new C1_public();
@@ -67,6 +61,14 @@
 -        });
 -        return C3_public;
 -    }());
++    class C2_private {
++    }
++    class C3_public {
++        get p1_private() {
++            return new C1_public();
++        }
++        set p1_private(m1_c3_p1_arg) {
++        }
 +        get p2_private() {
 +            return new C1_public();
 +        }
@@ -86,10 +88,7 @@
      m1.C3_public = C3_public;
 -    var C4_private = /** @class */ (function () {
 -        function C4_private() {
-+    class C4_private {
-+        get p1_private() {
-+            return new C1_public();
-         }
+-        }
 -        Object.defineProperty(C4_private.prototype, "p1_private", {
 -            get: function () {
 -                return new C1_public();
@@ -128,6 +127,10 @@
 -        });
 -        return C4_private;
 -    }());
++    class C4_private {
++        get p1_private() {
++            return new C1_public();
++        }
 +        set p1_private(m1_c3_p1_arg) {
 +        }
 +        get p2_private() {
@@ -149,18 +152,12 @@
  })(m1 || (m1 = {}));
 -var C6_public = /** @class */ (function () {
 -    function C6_public() {
-+class C6_public {
-+}
-+class C7_public {
-+    get p1_private() {
-+        return new C6_public();
-     }
+-    }
 -    return C6_public;
 -}());
 -var C7_public = /** @class */ (function () {
 -    function C7_public() {
-+    set p1_private(m1_c3_p1_arg) {
-     }
+-    }
 -    Object.defineProperty(C7_public.prototype, "p1_private", {
 -        get: function () {
 -            return new C6_public();
@@ -181,6 +178,14 @@
 -    });
 -    return C7_public;
 -}());
++class C6_public {
++}
++class C7_public {
++    get p1_private() {
++        return new C6_public();
++    }
++    set p1_private(m1_c3_p1_arg) {
++    }
 +    get p2_private() {
 +        return new C6_public();
 +    }

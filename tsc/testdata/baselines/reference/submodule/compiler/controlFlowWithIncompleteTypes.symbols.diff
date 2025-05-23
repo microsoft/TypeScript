@@ -1,7 +1,7 @@
 --- old.controlFlowWithIncompleteTypes.symbols
 +++ new.controlFlowWithIncompleteTypes.symbols
 @@= skipped -19, +19 lines =@@
- 
+
              x = x.slice();
  >x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 5, 7))
 ->x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))

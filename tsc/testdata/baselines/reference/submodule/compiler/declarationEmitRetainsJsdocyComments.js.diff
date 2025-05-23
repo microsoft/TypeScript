@@ -6,11 +6,11 @@
  Object.defineProperty(exports, "__esModule", { value: true });
 -exports.someMethod = exports.Foo = exports.foo = void 0;
 +exports.
- /**
++/**
 +* comment5
 +*/
 +someMethod = exports.Foo = exports.foo = void 0;
-+/**
+ /**
   * comment1
   * @param p
   */
@@ -44,7 +44,10 @@
 -    };
 -    return Foo;
 -}());
--exports.Foo = Foo;
++    bar(s) {
++    }
++}
+ exports.Foo = Foo;
 -/**
 -* comment5
 -*/
@@ -86,10 +89,8 @@
 -        * comment6
 -        */
 -        someMethod(collection: any[]): boolean;
-+    bar(s) {
-     }
- }
-+exports.Foo = Foo;
+-    }
+-}
 +({ 
 +    /**
 +    * comment5

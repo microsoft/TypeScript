@@ -44,15 +44,18 @@
 +    var b = () => ;
  })(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
 -var c = function (x) { return ; };
-+var c = (x) => ;
- ;
+-;
 -var d = function (x, y) { return ; };
-+var d = (x, y) => ;
- ;
+-;
 -var e = function (x, y) { return ; };
-+var e = (x, y) => ;
- ;
+-;
 -var f = function () { return ; };
++var c = (x) => ;
++;
++var d = (x, y) => ;
++;
++var e = (x, y) => ;
++;
 +var f = () => ;
  var ce_nEst_pas_une_arrow_function;
  (function (ce_nEst_pas_une_arrow_function) {

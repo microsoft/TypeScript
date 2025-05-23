@@ -1,7 +1,7 @@
 --- old.contextualTupleTypeParameterReadonly.types
 +++ new.contextualTupleTypeParameterReadonly.types
 @@= skipped -1, +1 lines =@@
- 
+
  === contextualTupleTypeParameterReadonly.ts ===
  declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;
 ->each : <T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>) => (fn: (...args: T) => any) => void
@@ -16,5 +16,5 @@
 ->each : <T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>) => (fn: (...args: T) => any) => void
 +>each : <T extends readonly any[]>(cases: readonly T[]) => (fn: (...args: T) => any) => void
  >cases : readonly [readonly [1, "1"], readonly [2, "2"]]
- 
+
  eacher((a, b) => {

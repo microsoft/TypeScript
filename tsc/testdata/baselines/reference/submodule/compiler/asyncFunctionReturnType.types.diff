@@ -2,55 +2,55 @@
 +++ new.asyncFunctionReturnType.types
 @@= skipped -30, +30 lines =@@
  }
- 
+
  async function fIndexedTypeForStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 ->fIndexedTypeForStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
 +>fIndexedTypeForStringProp : (obj: Obj) => Promise<string>
  >obj : Obj
- 
+
      return obj.stringProp;
 @@= skipped -10, +10 lines =@@
  }
- 
+
  async function fIndexedTypeForPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 ->fIndexedTypeForPromiseOfStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
 +>fIndexedTypeForPromiseOfStringProp : (obj: Obj) => Promise<string>
  >obj : Obj
- 
+
      return Promise.resolve(obj.stringProp);
 @@= skipped -14, +14 lines =@@
  }
- 
+
  async function fIndexedTypeForExplicitPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 ->fIndexedTypeForExplicitPromiseOfStringProp : (obj: Obj) => Promise<Obj["stringProp"]>
 +>fIndexedTypeForExplicitPromiseOfStringProp : (obj: Obj) => Promise<string>
  >obj : Obj
- 
+
      return Promise.resolve<Obj["stringProp"]>(obj.stringProp);
 @@= skipped -14, +14 lines =@@
  }
- 
+
  async function fIndexedTypeForAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 ->fIndexedTypeForAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
 +>fIndexedTypeForAnyProp : (obj: Obj) => Promise<any>
  >obj : Obj
- 
+
      return obj.anyProp;
 @@= skipped -10, +10 lines =@@
  }
- 
+
  async function fIndexedTypeForPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 ->fIndexedTypeForPromiseOfAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
 +>fIndexedTypeForPromiseOfAnyProp : (obj: Obj) => Promise<any>
  >obj : Obj
- 
+
      return Promise.resolve(obj.anyProp);
 @@= skipped -14, +14 lines =@@
  }
- 
+
  async function fIndexedTypeForExplicitPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 ->fIndexedTypeForExplicitPromiseOfAnyProp : (obj: Obj) => Promise<Obj["anyProp"]>
 +>fIndexedTypeForExplicitPromiseOfAnyProp : (obj: Obj) => Promise<any>
  >obj : Obj
- 
+
      return Promise.resolve<Obj["anyProp"]>(obj.anyProp);

@@ -7,10 +7,12 @@
 +/user.js(8,21): error TS2307: Cannot find module './js.js' or its corresponding type declarations.
  /user.js(9,7): error TS2339: Property 'b' does not exist on type '{ a: number; }'.
 -/user.js(12,7): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
-+/user.js(12,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
- 
- 
+-
+-
 -==== /user.js (4 errors) ====
++/user.js(12,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
++
++
 +==== /user.js (5 errors) ====
      const json0 = require("./json.json");
      json0.b; // Error (good)

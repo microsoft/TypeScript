@@ -1,8 +1,8 @@
 --- old.objectTypeWithStringNamedPropertyOfIllegalCharacters.js
 +++ new.objectTypeWithStringNamedPropertyOfIllegalCharacters.js
 @@= skipped -55, +55 lines =@@
- 
- 
+
+
  //// [objectTypeWithStringNamedPropertyOfIllegalCharacters.js]
 -var C = /** @class */ (function () {
 -    function C() {

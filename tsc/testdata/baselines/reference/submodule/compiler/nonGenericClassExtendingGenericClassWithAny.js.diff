@@ -2,7 +2,7 @@
 +++ new.nonGenericClassExtendingGenericClassWithAny.js
 @@= skipped -7, +7 lines =@@
  class Bar extends Foo<any> { } // Valid
- 
+
  //// [nonGenericClassExtendingGenericClassWithAny.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

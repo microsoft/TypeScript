@@ -7,12 +7,12 @@
 +>(a, b) => {        return a + b;    } : (a: number, b: number) => number
  >a : number
  >b : number
- 
-@@= skipped -16, +17 lines =@@
+
+@@= skipped -15, +16 lines =@@
+
      /** @type {(a: number, b: number) => number} */
      return function (a, b){
- >function (a, b){        return a + b;    } : (a: number, b: number) => number
 +>function (a, b){        return a + b;    } : (a: number, b: number) => number
+ >function (a, b){        return a + b;    } : (a: number, b: number) => number
  >a : number
  >b : number
- 

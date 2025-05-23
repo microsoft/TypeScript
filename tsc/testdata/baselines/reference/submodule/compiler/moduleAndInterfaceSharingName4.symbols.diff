@@ -6,12 +6,12 @@
  >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 1, 26))
 ->Color : Symbol(Color.Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
 +>Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
- 
+
      module Color {
  >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 1, 26))
 @@= skipped -9, +9 lines =@@
  >Color : Symbol(Color, Decl(moduleAndInterfaceSharingName4.ts, 3, 18))
- 
+
              darker: Color;
 ->darker : Symbol(Color.darker, Decl(moduleAndInterfaceSharingName4.ts, 4, 32))
 +>darker : Symbol(darker, Decl(moduleAndInterfaceSharingName4.ts, 4, 32))

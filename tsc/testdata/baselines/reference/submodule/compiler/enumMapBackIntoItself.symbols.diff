@@ -2,15 +2,15 @@
 +++ new.enumMapBackIntoItself.symbols
 @@= skipped -4, +4 lines =@@
  >TShirtSize : Symbol(TShirtSize, Decl(enumMapBackIntoItself.ts, 0, 0))
- 
+
     Small,
 ->Small : Symbol(TShirtSize.Small, Decl(enumMapBackIntoItself.ts, 0, 17))
 +>Small : Symbol(Small, Decl(enumMapBackIntoItself.ts, 0, 17))
- 
+
     Medium,
 ->Medium : Symbol(TShirtSize.Medium, Decl(enumMapBackIntoItself.ts, 1, 9))
 +>Medium : Symbol(Medium, Decl(enumMapBackIntoItself.ts, 1, 9))
- 
+
     Large
 ->Large : Symbol(TShirtSize.Large, Decl(enumMapBackIntoItself.ts, 2, 10))
 +>Large : Symbol(Large, Decl(enumMapBackIntoItself.ts, 2, 10))
@@ -22,6 +22,6 @@
  >TShirtSize : Symbol(TShirtSize, Decl(enumMapBackIntoItself.ts, 0, 0))
 ->Large : Symbol(TShirtSize.Large, Decl(enumMapBackIntoItself.ts, 2, 10))
 +>Large : Symbol(Large, Decl(enumMapBackIntoItself.ts, 2, 10))
- 
+
  var test = TShirtSize[mySize];
  >test : Symbol(test, Decl(enumMapBackIntoItself.ts, 6, 3))

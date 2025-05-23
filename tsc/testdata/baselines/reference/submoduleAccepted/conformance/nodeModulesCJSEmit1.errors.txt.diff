@@ -4,8 +4,8 @@
 -/3.cjs(2,1): error TS2304: Cannot find name 'exports'.
 +/5.cjs(1,8): error TS1192: Module '"/2"' has no default export.
  /5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
- 
- 
+
+
 @@= skipped -7, +7 lines =@@
  ==== /2.cjs (0 errors) ====
      exports.foo = 0;

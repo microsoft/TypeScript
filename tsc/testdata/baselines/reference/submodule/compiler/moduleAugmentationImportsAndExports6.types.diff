@@ -6,28 +6,28 @@
  >N : any
 ->Ifc : I
 +>Ifc : Ifc
- 
+
  import C = N.Cls;
  >C : any
  >N : any
 ->Cls : C
 +>Cls : Cls
- 
+
  declare module "./f1" {
  >"./f1" : typeof import("f1")
 @@= skipped -15, +15 lines =@@
  >foo : () => B
- 
+
          bar(): I;
 ->bar : () => I
 +>bar : () => Ifc
- 
+
          baz(): C;
 ->baz : () => C
 +>baz : () => Cls
      }
  }
- 
+
 @@= skipped -19, +19 lines =@@
  let b = a.foo().n;
  >b : number
@@ -40,7 +40,7 @@
 ->foo : () => import("f2").B
 +>foo : () => B
  >n : number
- 
+
  let c = a.bar().a;
  >c : number
  >a.bar().a : number
@@ -52,7 +52,7 @@
 ->bar : () => import("f3").N.Ifc
 +>bar : () => Ifc
  >a : number
- 
+
  let d = a.baz().b;
  >d : number
  >a.baz().b : number
@@ -64,4 +64,3 @@
 ->baz : () => import("f3").N.Cls
 +>baz : () => Cls
  >b : number
- 

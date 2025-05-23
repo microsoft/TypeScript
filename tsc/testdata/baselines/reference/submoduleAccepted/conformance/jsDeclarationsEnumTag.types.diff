@@ -25,23 +25,23 @@
 +>t : Target
 +>s : Second
  >f : Fs
- 
+
      /** @type {string} */
      var str = t
  >str : string
 ->t : string
 +>t : Target
- 
+
      /** @type {number} */
      var num = s
  >num : number
 ->s : number
 +>s : Second
- 
+
      /** @type {(n: number) => number} */
      var fun = f
 @@= skipped -21, +21 lines =@@
- 
+
      /** @type {Target} */
      var v = Target.START
 ->v : string
@@ -49,7 +49,7 @@
  >Target.START : string
  >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
  >START : string
- 
+
      v = 'something else' // allowed, like Typescript's classic enums and unlike its string enums
  >v = 'something else' : "something else"
 ->v : string
@@ -65,7 +65,7 @@
 +>Target[s] : any
  >Target : { START: string; MIDDLE: string; END: string; OK_I_GUESS: number; }
  >s : string
- 
+
 @@= skipped -8, +8 lines =@@
      }
      else {

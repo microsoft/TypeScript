@@ -2,109 +2,109 @@
 +++ new.typeGuardTypeOfUndefined.types
 @@= skipped -110, +110 lines =@@
  }
- 
+
  function test5(a: boolean | void) {
 ->test5 : (a: boolean | void) => void
 +>test5 : (a: void | boolean) => void
  >a : void | boolean
- 
+
      if (typeof a !== "undefined") {
 @@= skipped -30, +30 lines =@@
  }
- 
+
  function test6(a: boolean | void) {
 ->test6 : (a: boolean | void) => void
 +>test6 : (a: void | boolean) => void
  >a : void | boolean
- 
+
      if (typeof a === "undefined") {
 @@= skipped -30, +30 lines =@@
  }
- 
+
  function test7(a: boolean | void) {
 ->test7 : (a: boolean | void) => void
 +>test7 : (a: void | boolean) => void
  >a : void | boolean
- 
+
      if (typeof a === "undefined" || typeof a === "boolean") {
 @@= skipped -24, +24 lines =@@
  }
- 
+
  function test8(a: boolean | void) {
 ->test8 : (a: boolean | void) => void
 +>test8 : (a: void | boolean) => void
  >a : void | boolean
- 
+
      if (typeof a !== "undefined" && typeof a === "boolean") {
 @@= skipped -24, +24 lines =@@
  }
- 
+
  function test9(a: boolean | number) {
 ->test9 : (a: boolean | number) => void
 +>test9 : (a: number | boolean) => void
  >a : number | boolean
- 
+
      if (typeof a !== "undefined") {
 @@= skipped -30, +30 lines =@@
  }
- 
+
  function test10(a: boolean | number) {
 ->test10 : (a: boolean | number) => void
 +>test10 : (a: number | boolean) => void
  >a : number | boolean
- 
+
      if (typeof a === "undefined") {
 @@= skipped -30, +30 lines =@@
  }
- 
+
  function test11(a: boolean | number) {
 ->test11 : (a: boolean | number) => void
 +>test11 : (a: number | boolean) => void
  >a : number | boolean
- 
+
      if (typeof a === "undefined" || typeof a === "boolean") {
 @@= skipped -24, +24 lines =@@
  }
- 
+
  function test12(a: boolean | number) {
 ->test12 : (a: boolean | number) => void
 +>test12 : (a: number | boolean) => void
  >a : number | boolean
- 
+
      if (typeof a !== "undefined" && typeof a === "boolean") {
 @@= skipped -24, +24 lines =@@
  }
- 
+
  function test13(a: boolean | number | void) {
 ->test13 : (a: boolean | number | void) => void
 +>test13 : (a: void | number | boolean) => void
  >a : void | number | boolean
- 
+
      if (typeof a !== "undefined") {
 @@= skipped -30, +30 lines =@@
  }
- 
+
  function test14(a: boolean | number | void) {
 ->test14 : (a: boolean | number | void) => void
 +>test14 : (a: void | number | boolean) => void
  >a : void | number | boolean
- 
+
      if (typeof a === "undefined") {
 @@= skipped -30, +30 lines =@@
  }
- 
+
  function test15(a: boolean | number | void) {
 ->test15 : (a: boolean | number | void) => void
 +>test15 : (a: void | number | boolean) => void
  >a : void | number | boolean
- 
+
      if (typeof a === "undefined" || typeof a === "boolean") {
 @@= skipped -24, +24 lines =@@
  }
- 
+
  function test16(a: boolean | number | void) {
 ->test16 : (a: boolean | number | void) => void
 +>test16 : (a: void | number | boolean) => void
  >a : void | number | boolean
- 
+
      if (typeof a !== "undefined" && typeof a === "boolean") {

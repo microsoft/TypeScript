@@ -2,7 +2,7 @@
 +++ new.computedPropertyNames48_ES5.js
 @@= skipped -19, +19 lines =@@
  }); // Should return any (widened form of undefined)
- 
+
  //// [computedPropertyNames48_ES5.js]
 -var _a, _b, _c;
  var E;

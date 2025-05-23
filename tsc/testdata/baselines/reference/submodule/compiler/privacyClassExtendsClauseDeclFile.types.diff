@@ -1,7 +1,7 @@
 --- old.privacyClassExtendsClauseDeclFile.types
 +++ new.privacyClassExtendsClauseDeclFile.types
 @@= skipped -34, +34 lines =@@
- 
+
      class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
  >privateClassExtendingFromPrivateModuleClass : privateClassExtendingFromPrivateModuleClass
 ->privateModule.publicClassInPrivateModule : privateModule.publicClassInPrivateModule
@@ -19,9 +19,9 @@
 +>publicClassInPrivateModule : typeof publicClassInPrivateModule
      }
  }
- 
+
 @@= skipped -89, +89 lines =@@
- 
+
  class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
  >privateClassExtendingFromPrivateModuleClass : privateClassExtendingFromPrivateModuleClass
 ->privateModule.publicClassInPrivateModule : privateModule.publicClassInPrivateModule
@@ -38,5 +38,5 @@
 ->publicClassInPrivateModule : typeof privateModule.publicClassInPrivateModule
 +>publicClassInPrivateModule : typeof publicClassInPrivateModule
  }
- 
+
  === privacyClassExtendsClauseDeclFile_GlobalFile.ts ===

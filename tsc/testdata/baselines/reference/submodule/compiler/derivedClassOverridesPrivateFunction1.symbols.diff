@@ -1,7 +1,7 @@
 --- old.derivedClassOverridesPrivateFunction1.symbols
 +++ new.derivedClassOverridesPrivateFunction1.symbols
 @@= skipped -5, +5 lines =@@
- 
+
      constructor() {
          this._init();
 ->this._init : Symbol(BaseClass._init, Decl(derivedClassOverridesPrivateFunction1.ts, 3, 5))

@@ -2,7 +2,7 @@
 +++ new.aliasBug.types
 @@= skipped -18, +18 lines =@@
  >foo : typeof foo
- 
+
  import booz = foo.bar.baz;
 ->booz : typeof booz
 +>booz : typeof baz
@@ -11,7 +11,7 @@
 ->baz : typeof booz
 +>bar : typeof bar
 +>baz : typeof baz
- 
+
  var p = new provide.Provide();
 ->p : provide.Provide
 ->new provide.Provide() : provide.Provide
@@ -22,25 +22,25 @@
  >provide : typeof foo
 ->Provide : typeof provide.Provide
 +>Provide : typeof Provide
- 
+
  function use() {
  >use : () => void
- 
+
    var p1: provide.Provide; // error here, but should be okay
 ->p1 : provide.Provide
 +>p1 : Provide
  >provide : any
- 
+
    var p2: foo.Provide;
 ->p2 : provide.Provide
 +>p2 : Provide
  >foo : any
- 
+
    var p3:booz.bar;
 ->p3 : booz.bar
 +>p3 : bar
  >booz : any
- 
+
    var p22 = new provide.Provide();
 ->p22 : provide.Provide
 ->new provide.Provide() : provide.Provide
@@ -52,4 +52,3 @@
 ->Provide : typeof provide.Provide
 +>Provide : typeof Provide
  }
- 

@@ -6,4 +6,3 @@
  >base : Symbol(base, Decl(extendBaseClassBeforeItsDeclared.ts, 0, 30))
 ->n : Symbol(base.n, Decl(extendBaseClassBeforeItsDeclared.ts, 2, 26))
 +>n : Symbol(n, Decl(extendBaseClassBeforeItsDeclared.ts, 2, 26))
- 

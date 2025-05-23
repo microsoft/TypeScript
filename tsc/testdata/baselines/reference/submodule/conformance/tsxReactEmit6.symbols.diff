@@ -1,7 +1,7 @@
 --- old.tsxReactEmit6.symbols
 +++ new.tsxReactEmit6.symbols
 @@= skipped -32, +32 lines =@@
- 
+
  	var spread1 = <div x='' {...foo} y='' />;
  >spread1 : Symbol(spread1, Decl(react-consumer.tsx, 8, 4))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))
@@ -18,5 +18,4 @@
 +>div : Symbol((Missing), Decl(file.tsx, 2, 30))
 +>div : Symbol((Missing), Decl(file.tsx, 2, 30))
  }
- 
- 
+

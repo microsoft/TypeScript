@@ -2,15 +2,14 @@
 +++ new.arrayTypeOfTypeOf.types
 @@= skipped -15, +15 lines =@@
  >Array : ArrayConstructor
- 
+
  var xs3: typeof Array<number>;
 ->xs3 : typeof Array<number>
 +>xs3 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
  >Array : ArrayConstructor
- 
+
  var xs4: typeof Array<typeof x>;
 ->xs4 : typeof Array<typeof x>
 +>xs4 : { (arrayLength: number): number[]; (...items: number[]): number[]; new (arrayLength: number): number[]; new (...items: number[]): number[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
  >Array : ArrayConstructor
  >x : number
- 

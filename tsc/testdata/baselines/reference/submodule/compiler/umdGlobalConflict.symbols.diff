@@ -9,4 +9,3 @@
  >Alpha : Symbol(Alpha, Decl(index.d.ts, 0, 0))
 ->x : Symbol(Alpha.x, Decl(index.d.ts, 1, 10))
 +>x : Symbol(x, Decl(index.d.ts, 1, 10))
- 

@@ -2,21 +2,17 @@
 +++ new.collisionRestParameterClassMethod.js
 @@= skipped -40, +40 lines =@@
  }
- 
+
  //// [collisionRestParameterClassMethod.js]
 -var c1 = /** @class */ (function () {
 -    function c1() {
-+class c1 {
-+    foo(_i, ...restParameters) {
-+        var _i = 10; // no error
-     }
+-    }
 -    c1.prototype.foo = function (_i) {
 -        var restParameters = [];
 -        for (var _a = 1; _a < arguments.length; _a++) {
 -            restParameters[_a - 1] = arguments[_a];
 -        }
-+    fooNoError(_i) {
-         var _i = 10; // no error
+-        var _i = 10; // no error
 -    };
 -    c1.prototype.fooNoError = function (_i) {
 -        var _i = 10; // no error
@@ -26,36 +22,47 @@
 -        for (var _a = 1; _a < arguments.length; _a++) {
 -            rest[_a - 1] = arguments[_a];
 -        }
-+    }
-+    f4(_i, ...rest) {
-         var _i; // no error
+-        var _i; // no error
 -    };
 -    c1.prototype.f4NoError = function (_i) {
-+    }
-+    f4NoError(_i) {
-         var _i; // no error
+-        var _i; // no error
 -    };
 -    return c1;
 -}());
 -var c3 = /** @class */ (function () {
 -    function c3() {
-     }
+-    }
 -    c3.prototype.foo = function () {
 -        var restParameters = [];
 -        for (var _a = 0; _a < arguments.length; _a++) {
 -            restParameters[_a] = arguments[_a];
 -        }
-+}
-+class c3 {
-+    foo(...restParameters) {
-         var _i = 10; // no error
+-        var _i = 10; // no error
 -    };
 -    c3.prototype.fooNoError = function () {
-+    }
-+    fooNoError() {
-         var _i = 10; // no error
+-        var _i = 10; // no error
 -    };
 -    return c3;
 -}());
++class c1 {
++    foo(_i, ...restParameters) {
++        var _i = 10; // no error
++    }
++    fooNoError(_i) {
++        var _i = 10; // no error
++    }
++    f4(_i, ...rest) {
++        var _i; // no error
++    }
++    f4NoError(_i) {
++        var _i; // no error
++    }
++}
++class c3 {
++    foo(...restParameters) {
++        var _i = 10; // no error
++    }
++    fooNoError() {
++        var _i = 10; // no error
 +    }
 +}

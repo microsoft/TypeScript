@@ -1,8 +1,8 @@
 --- old.topLevelAwait.1(module=system,target=es2015).js
 +++ new.topLevelAwait.1(module=system,target=es2015).js
 @@= skipped -80, +80 lines =@@
- 
- 
+
+
  //// [other.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";
@@ -102,6 +102,7 @@
 -            await 1;
 -        }
 -    };
+-});
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.x = void 0;
@@ -130,7 +131,7 @@
 +}
 +({
 +    await() { }
- });
++});
 +({
 +    get await() { return 1; },
 +    set await(value) { }

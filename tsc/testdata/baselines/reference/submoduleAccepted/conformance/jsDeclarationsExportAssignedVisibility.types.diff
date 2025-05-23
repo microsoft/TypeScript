@@ -20,7 +20,7 @@
 +>module : { Container: typeof Container; }
  >exports : typeof Container
  >Container : typeof Container
- 
+
  === obj.js ===
  module.exports = class Obj {
 ->module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("obj")
@@ -35,7 +35,7 @@
 +>exports : typeof Obj
 +>class Obj {    constructor() {        this.x = 12;    }} : typeof Obj
 +>Obj : typeof Obj
- 
+
      constructor() {
          this.x = 12;
  >this.x = 12 : 12

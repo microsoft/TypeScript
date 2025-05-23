@@ -1,7 +1,7 @@
 --- old.classWithStaticFieldInParameterBindingPattern(target=es5).js
 +++ new.classWithStaticFieldInParameterBindingPattern(target=es5).js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [classWithStaticFieldInParameterBindingPattern.js]
  // https://github.com/microsoft/TypeScript/issues/36295
 -(function (_a) {

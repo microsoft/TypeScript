@@ -1,8 +1,7 @@
 --- old.jsFileCompilationExternalPackageError.errors.txt
 +++ new.jsFileCompilationExternalPackageError.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +moduleA/a.js(1,17): error TS2306: File 'node_modules/b.ts' is not a module.
 +moduleA/a.js(2,1): error TS2632: Cannot assign to 'a' because it is an import.
 +moduleA/a.js(3,9): error TS2305: Module '"node_modules/c"' has no exported member 'c'.

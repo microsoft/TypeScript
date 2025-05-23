@@ -10,8 +10,8 @@
 ->beta.b : Symbol(b, Decl(index.d.ts, 1, 19))
 ->beta : Symbol(beta, Decl(index.d.ts, 1, 11))
 ->b : Symbol(b, Decl(index.d.ts, 1, 19))
- 
- 
+-
+-
 -=== /test/types/alpha/index.d.ts ===
 -/// <reference types="beta" />
 -declare var alpha: { a: string };
@@ -23,4 +23,4 @@
 -declare var beta: { b: string };
 ->beta : Symbol(beta, Decl(index.d.ts, 1, 11))
 ->b : Symbol(b, Decl(index.d.ts, 1, 19))
--
++

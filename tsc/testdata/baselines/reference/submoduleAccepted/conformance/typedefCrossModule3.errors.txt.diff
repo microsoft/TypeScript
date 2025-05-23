@@ -5,8 +5,8 @@
 -mod2.js(3,4): error TS2300: Duplicate identifier 'Foo'.
 +mod2.js(3,4): error TS2339: Property 'Foo' does not exist on type '{}'.
 +mod2.js(4,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
- 
- 
+
+
  ==== mod2.js (2 errors) ====
      /** @typedef {number} Foo */
 -                          ~~~

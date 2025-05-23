@@ -2,7 +2,7 @@
 +++ new.declarationsAndAssignments.types
 @@= skipped -416, +416 lines =@@
  }
- 
+
  function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 ->f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
 +>f14 : (__0: [number, [string, { x: any; y?: boolean; }]]) => void
@@ -19,7 +19,7 @@
  >2 : 2
  >["abc", { x: 0, y: true }] : [string, { x: number; y: true; }]
 @@= skipped -13, +13 lines =@@
- 
+
  f14([2, ["abc", { x: 0 }]]);
  >f14([2, ["abc", { x: 0 }]]) : void
 ->f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
@@ -28,7 +28,7 @@
  >2 : 2
  >["abc", { x: 0 }] : [string, { x: number; }]
 @@= skipped -11, +11 lines =@@
- 
+
  f14([2, ["abc", { y: false }]]);  // Error, no x
  >f14([2, ["abc", { y: false }]]) : void
 ->f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
@@ -38,7 +38,7 @@
  >["abc", { y: false }] : [string, { y: false; }]
 @@= skipped -54, +54 lines =@@
  }
- 
+
  function f17({ a = "", b = 0, c = false }) {
 ->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 +>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
@@ -46,13 +46,13 @@
  >"" : ""
  >b : number
 @@= skipped -11, +11 lines =@@
- 
+
  f17({});
  >f17({}) : void
 ->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 +>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
  >{} : {}
- 
+
  f17({ a: "hello" });
  >f17({ a: "hello" }) : void
 ->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
@@ -60,7 +60,7 @@
  >{ a: "hello" } : { a: string; }
  >a : string
  >"hello" : "hello"
- 
+
  f17({ c: true });
  >f17({ c: true }) : void
 ->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
@@ -68,11 +68,10 @@
  >{ c: true } : { c: true; }
  >c : true
  >true : true
- 
+
  f17(f15());
  >f17(f15()) : void
 ->f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 +>f17 : (__0: { a?: string; b?: number; c?: boolean; }) => void
  >f15() : { a: string; b: number; c: boolean; }
  >f15 : () => { a: string; b: number; c: boolean; }
- 

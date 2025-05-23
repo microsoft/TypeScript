@@ -1,7 +1,7 @@
 --- old.expandoFunctionExpressionsWithDynamicNames.js
 +++ new.expandoFunctionExpressionsWithDynamicNames.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [expandoFunctionExpressionsWithDynamicNames.js]
  "use strict";
 -// https://github.com/microsoft/TypeScript/issues/54809

@@ -1,8 +1,8 @@
 --- old.thisTypeInTuples.js
 +++ new.thisTypeInTuples.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [thisTypeInTuples.js]
 -var t = [42, "hello"];
 -var a = t.slice();

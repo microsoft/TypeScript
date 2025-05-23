@@ -1,8 +1,8 @@
 --- old.mixedTypeEnumComparison.js
 +++ new.mixedTypeEnumComparison.js
 @@= skipped -41, +41 lines =@@
- 
- 
+
+
  //// [mixedTypeEnumComparison.js]
 -"use strict";
 -if (someNumber > 25 /* E.N2 */) {

@@ -1,7 +1,7 @@
 --- old.declarationEmitInferredUndefinedPropFromFunctionInArray.js
 +++ new.declarationEmitInferredUndefinedPropFromFunctionInArray.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [declarationEmitInferredUndefinedPropFromFunctionInArray.js]
  "use strict";
 -// repro from https://github.com/microsoft/TypeScript/issues/53914

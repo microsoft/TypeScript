@@ -10,7 +10,7 @@
 ->foo : Symbol(A.foo, Decl(a.js, 7, 20))
 +>foo : Symbol(foo, Decl(a.js, 7, 20))
  >foo : Symbol(foo, Decl(a.js, 6, 13))
- 
+
  		/**
 @@= skipped -10, +10 lines =@@
  		 */
@@ -21,7 +21,7 @@
  >this : Symbol(A, Decl(a.js, 0, 0))
 ->arguments : Symbol(A.arguments, Decl(a.js, 33, 2))
 +>arguments : Symbol(arguments, Decl(a.js, 33, 2))
- 
+
  		/**
  		 * @type object
  		 */
@@ -32,7 +32,7 @@
 ->bar : Symbol(A.bar, Decl(a.js, 17, 35))
 +>bar : Symbol(bar, Decl(a.js, 17, 35))
  >arguments : Symbol(arguments, Decl(a.js, 17, 7))
- 
+
  		/**
  		 * @type object
  		 */
@@ -44,7 +44,7 @@
 +>baz : Symbol(baz, Decl(a.js, 22, 27))
  >arguments : Symbol(arguments, Decl(a.js, 17, 7))
  >key : Symbol(key, Decl(a.js, 7, 7))
- 
+
 @@= skipped -27, +27 lines =@@
  		 * @type object
  		 */
@@ -56,10 +56,10 @@
 +>options : Symbol(options, Decl(a.js, 27, 28))
  >arguments : Symbol(arguments, Decl(a.js, 17, 7))
  	}
- 
+
  	get arguments() {
 ->arguments : Symbol(A.arguments, Decl(a.js, 33, 2))
 +>arguments : Symbol(arguments, Decl(a.js, 33, 2))
- 
+
  		return { bar: {} };
  >bar : Symbol(bar, Decl(a.js, 36, 10))

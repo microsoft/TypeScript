@@ -1,8 +1,8 @@
 --- old.typeofStripsFreshness.js
 +++ new.typeofStripsFreshness.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [typeofStripsFreshness.js]
 -var ALL = "all";
 -var result = new Collection();

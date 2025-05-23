@@ -7,8 +7,8 @@
 -a.ts(3,1): error TS6133: 'ns' is declared but its value is never read.
 +a.ts(3,13): error TS6133: 'ns' is declared but its value is never read.
  a.ts(4,8): error TS6133: 'r' is declared but its value is never read.
- 
- 
+
+
  ==== a.ts (4 errors) ====
      import { Member } from './b';
 -    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

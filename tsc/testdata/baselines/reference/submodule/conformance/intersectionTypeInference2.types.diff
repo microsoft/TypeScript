@@ -2,12 +2,12 @@
 +++ new.intersectionTypeInference2.types
 @@= skipped -11, +11 lines =@@
  >prop : number
- 
+
  declare const b: { prop: string & number };
 ->b : { prop: string & number; }
 +>b : { prop: never; }
  >prop : never
- 
+
  f(a);  // never
 @@= skipped -11, +11 lines =@@
  f(b);  // never
@@ -15,6 +15,5 @@
  >f : <T>(x: { prop: T; }) => T
 ->b : { prop: string & number; }
 +>b : { prop: never; }
- 
+
  // Repro from #18354
- 

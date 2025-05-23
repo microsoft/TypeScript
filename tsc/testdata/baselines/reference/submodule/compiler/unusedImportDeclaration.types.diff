@@ -1,17 +1,17 @@
 --- old.unusedImportDeclaration.types
 +++ new.unusedImportDeclaration.types
 @@= skipped -1, +1 lines =@@
- 
+
  === unusedImportDeclaration_testerA.ts ===
  import B = require("./unusedImportDeclaration_testerB");
 ->B : typeof B
 +>B : typeof TesterB
- 
+
  var thingy: B = {
 ->thingy : B
 +>thingy : TesterB
  >{    me: "A"} : { me: string; }
- 
+
      me: "A"
 @@= skipped -22, +22 lines =@@
  >"IN " + thingy.me : string
@@ -21,4 +21,3 @@
 +>thingy : TesterB
  >me : string
  >"!" : "!"
- 

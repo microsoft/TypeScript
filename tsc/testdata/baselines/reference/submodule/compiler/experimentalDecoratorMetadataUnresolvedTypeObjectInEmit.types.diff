@@ -2,7 +2,7 @@
 +++ new.experimentalDecoratorMetadataUnresolvedTypeObjectInEmit.types
 @@= skipped -14, +14 lines =@@
  >Foo : Foo
- 
+
      f(@decorate user: A.B.C.D.E): void {}
 ->f : (user: A.B.C.D.E) => void
 +>f : (user: E) => void

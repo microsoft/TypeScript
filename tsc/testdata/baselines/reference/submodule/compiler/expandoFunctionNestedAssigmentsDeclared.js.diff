@@ -18,7 +18,7 @@
      {
          Foo.fromForInBodyNested = 1;
      }
- }
+-}
 -
 -
 -//// [expandoFunctionNestedAssigmentsDeclared.d.ts]
@@ -48,4 +48,4 @@
 -    var forIn: any[];
 -    var fromForInBody: number;
 -    var fromForInBodyNested: number;
--}
+ }

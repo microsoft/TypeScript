@@ -17,13 +17,14 @@
 -    var messages = {
 -        foo: function (options) { return "Foo"; },
 -        bar: function (options) { return "Bar"; },
-+    const messages = {
-+        foo: (options) => "Foo",
-+        bar: (options) => "Bar",
-     };
+-    };
 -    var test1 = function (type) {
 -        return messages[type]({ a: "A", b: 0 });
 -    };
++    const messages = {
++        foo: (options) => "Foo",
++        bar: (options) => "Bar",
++    };
 +    const test1 = (type) => messages[type]({ a: "A", b: 0 });
  }
  function test3(items) {

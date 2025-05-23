@@ -1,8 +1,8 @@
 --- old.typeGuardsInForStatement.js
 +++ new.typeGuardsInForStatement.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [typeGuardsInForStatement.js]
 -var cond;
 +let cond;

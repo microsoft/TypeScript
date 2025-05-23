@@ -1,7 +1,7 @@
 --- old.objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.js
 +++ new.objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [objectLiteralShorthandPropertiesErrorFromNoneExistingIdentifier.js]
  var x = {
 -    x: x, // OK

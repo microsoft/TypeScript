@@ -2,7 +2,7 @@
 +++ new.constructorParametersInVariableDeclarations.js
 @@= skipped -18, +18 lines =@@
  }
- 
+
  //// [constructorParametersInVariableDeclarations.js]
 -var A = /** @class */ (function () {
 -    function A(x) {

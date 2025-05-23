@@ -2,7 +2,7 @@
 +++ new.restParameterNotLast.js
 @@= skipped -3, +3 lines =@@
  function f(...x, y) { }
- 
+
  //// [restParameterNotLast.js]
 -function f(y) { }
 +function f(...x, y) { }

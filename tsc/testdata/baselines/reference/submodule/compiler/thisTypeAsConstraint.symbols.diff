@@ -2,7 +2,7 @@
 +++ new.thisTypeAsConstraint.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(thisTypeAsConstraint.ts, 0, 0))
- 
+
    public m<T extends this>() {
 ->m : Symbol(C.m, Decl(thisTypeAsConstraint.ts, 0, 9))
 +>m : Symbol(m, Decl(thisTypeAsConstraint.ts, 0, 9))

@@ -1,8 +1,7 @@
 --- old.jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.errors.txt
 +++ new.jsDeclarationEmitExportAssignedFunctionWithExtraTypedefsMembers.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(9,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +index.js(9,34): error TS7006: Parameter 'options' implicitly has an 'any' type.
 +

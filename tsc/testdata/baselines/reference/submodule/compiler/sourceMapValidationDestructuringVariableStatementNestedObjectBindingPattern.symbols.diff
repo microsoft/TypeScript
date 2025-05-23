@@ -2,20 +2,20 @@
 +++ new.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.symbols
 @@= skipped -11, +11 lines =@@
  >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 2, 1))
- 
+
      name: string;
 ->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 3, 17))
 +>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 3, 17))
- 
+
      skills: {
 ->skills : Symbol(Robot.skills, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 4, 17))
 +>skills : Symbol(skills, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 4, 17))
- 
+
          primary: string;
  >primary : Symbol(primary, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 5, 13))
 @@= skipped -30, +30 lines =@@
  >secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 11, 69))
- 
+
  var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
 ->skills : Symbol(Robot.skills, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 4, 17))
 +>skills : Symbol(skills, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 4, 17))
@@ -24,7 +24,7 @@
  >secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 6, 24))
 @@= skipped -8, +8 lines =@@
  >robotA : Symbol(robotA, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 10, 3))
- 
+
  var { name: nameB, skills: { primary: primaryB, secondary: secondaryB } } = robotB;
 ->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 3, 17))
 +>name : Symbol(name, Decl(sourceMapValidationDestructuringVariableStatementNestedObjectBindingPattern.ts, 3, 17))

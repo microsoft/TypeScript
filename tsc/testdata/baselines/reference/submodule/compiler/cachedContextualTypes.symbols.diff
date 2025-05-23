@@ -2,10 +2,10 @@
 +++ new.cachedContextualTypes.symbols
 @@= skipped -20, +20 lines =@@
  >IMenuWorkbenchToolBarOptions : Symbol(IMenuWorkbenchToolBarOptions, Decl(cachedContextualTypes.ts, 2, 157))
- 
+
      toolbarOptions: {
 ->toolbarOptions : Symbol(IMenuWorkbenchToolBarOptions.toolbarOptions, Decl(cachedContextualTypes.ts, 4, 47))
 +>toolbarOptions : Symbol(toolbarOptions, Decl(cachedContextualTypes.ts, 4, 47))
- 
+
          foo(bar: string): string
  >foo : Symbol(foo, Decl(cachedContextualTypes.ts, 5, 21))

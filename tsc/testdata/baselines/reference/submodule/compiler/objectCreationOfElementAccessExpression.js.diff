@@ -1,8 +1,8 @@
 --- old.objectCreationOfElementAccessExpression.js
 +++ new.objectCreationOfElementAccessExpression.js
 @@= skipped -57, +57 lines =@@
- 
- 
+
+
  //// [objectCreationOfElementAccessExpression.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -46,7 +46,7 @@
 -        var _this = _super.call(this, name) || this;
 -        _this.flavor = flavor;
 -        return _this;
-     }
+-    }
 -    return MonsterFood;
 -}(Food));
 -var IceCream = /** @class */ (function (_super) {
@@ -55,13 +55,7 @@
 -        var _this = _super.call(this, "Ice Cream", flavor) || this;
 -        _this.flavor = flavor;
 -        return _this;
-+}
-+class MonsterFood extends Food {
-+    flavor;
-+    constructor(name, flavor) {
-+        super(name);
-+        this.flavor = flavor;
-     }
+-    }
 -    return IceCream;
 -}(MonsterFood));
 -var Cookie = /** @class */ (function (_super) {
@@ -71,14 +65,7 @@
 -        _this.flavor = flavor;
 -        _this.isGlutenFree = isGlutenFree;
 -        return _this;
-+}
-+class IceCream extends MonsterFood {
-+    flavor;
-+    isDairyFree;
-+    constructor(flavor) {
-+        super("Ice Cream", flavor);
-+        this.flavor = flavor;
-     }
+-    }
 -    return Cookie;
 -}(MonsterFood));
 -var PetFood = /** @class */ (function (_super) {
@@ -87,15 +74,7 @@
 -        var _this = _super.call(this, name) || this;
 -        _this.whereToBuy = whereToBuy;
 -        return _this;
-+}
-+class Cookie extends MonsterFood {
-+    flavor;
-+    isGlutenFree;
-+    constructor(flavor, isGlutenFree) {
-+        super("Cookie", flavor);
-+        this.flavor = flavor;
-+        this.isGlutenFree = isGlutenFree;
-     }
+-    }
 -    return PetFood;
 -}(Food));
 -var ExpensiveOrganicDogFood = /** @class */ (function (_super) {
@@ -104,13 +83,7 @@
 -        var _this = _super.call(this, "Origen", whereToBuy) || this;
 -        _this.whereToBuy = whereToBuy;
 -        return _this;
-+}
-+class PetFood extends Food {
-+    whereToBuy;
-+    constructor(name, whereToBuy) {
-+        super(name);
-+        this.whereToBuy = whereToBuy;
-     }
+-    }
 -    return ExpensiveOrganicDogFood;
 -}(PetFood));
 -var ExpensiveOrganicCatFood = /** @class */ (function (_super) {
@@ -120,17 +93,53 @@
 -        _this.whereToBuy = whereToBuy;
 -        _this.containsFish = containsFish;
 -        return _this;
+-    }
+-    return ExpensiveOrganicCatFood;
+-}(PetFood));
+-var Slug = /** @class */ (function () {
+-    function Slug() {
+-    }
+-    return Slug;
+-}());
++    }
++}
++class MonsterFood extends Food {
++    flavor;
++    constructor(name, flavor) {
++        super(name);
++        this.flavor = flavor;
++    }
++}
++class IceCream extends MonsterFood {
++    flavor;
++    isDairyFree;
++    constructor(flavor) {
++        super("Ice Cream", flavor);
++        this.flavor = flavor;
++    }
++}
++class Cookie extends MonsterFood {
++    flavor;
++    isGlutenFree;
++    constructor(flavor, isGlutenFree) {
++        super("Cookie", flavor);
++        this.flavor = flavor;
++        this.isGlutenFree = isGlutenFree;
++    }
++}
++class PetFood extends Food {
++    whereToBuy;
++    constructor(name, whereToBuy) {
++        super(name);
++        this.whereToBuy = whereToBuy;
++    }
 +}
 +class ExpensiveOrganicDogFood extends PetFood {
 +    whereToBuy;
 +    constructor(whereToBuy) {
 +        super("Origen", whereToBuy);
 +        this.whereToBuy = whereToBuy;
-     }
--    return ExpensiveOrganicCatFood;
--}(PetFood));
--var Slug = /** @class */ (function () {
--    function Slug() {
++    }
 +}
 +class ExpensiveOrganicCatFood extends PetFood {
 +    whereToBuy;
@@ -139,9 +148,7 @@
 +        super("Nature's Logic", whereToBuy);
 +        this.whereToBuy = whereToBuy;
 +        this.containsFish = containsFish;
-     }
--    return Slug;
--}());
++    }
 +}
 +class Slug {
 +}

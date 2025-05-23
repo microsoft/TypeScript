@@ -2,7 +2,7 @@
 +++ new.commentOnSignature1.js
 @@= skipped -37, +37 lines =@@
  }
- 
+
  //// [a.js]
 -/*!=================
 -    Keep this pinned
@@ -12,13 +12,14 @@
  }
 -var c = /** @class */ (function () {
 -    function c(a) {
-+class c {
-+    constructor(a) {
-     }
+-    }
 -    c.prototype.foo = function (a) {
 -    };
 -    return c;
 -}());
++class c {
++    constructor(a) {
++    }
 +    foo(a) {
 +    }
 +}

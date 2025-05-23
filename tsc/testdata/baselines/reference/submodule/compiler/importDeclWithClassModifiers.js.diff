@@ -1,8 +1,8 @@
 --- old.importDeclWithClassModifiers.js
 +++ new.importDeclWithClassModifiers.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [importDeclWithClassModifiers.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

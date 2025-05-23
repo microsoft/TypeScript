@@ -4,18 +4,13 @@
  ===================================================================
 -JsFile: all.js
 -mapUrl: all.js.map
-+JsFile: a.js
-+mapUrl: a.js.map
- sourceRoot: 
+-sourceRoot: 
 -sources: ref/a.ts,b.ts
-+sources: a.ts
- ===================================================================
- -------------------------------------------------------------------
+-===================================================================
+--------------------------------------------------------------------
 -emittedFile:all.js
 -sourceFile:ref/a.ts
-+emittedFile:ref/a.js
-+sourceFile:a.ts
- -------------------------------------------------------------------
+--------------------------------------------------------------------
 ->>>var __extends = (this && this.__extends) || (function () {
 ->>>    var extendStatics = function (d, b) {
 ->>>        extendStatics = Object.setPrototypeOf ||
@@ -41,11 +36,7 @@
 ->>>            A = /** @class */ (function () {
 -1 >^^^^^^^^^^^^
 -2 >            ^^^^^^^^^^^^^^^^^^^->
-+>>>"use strict";
-+>>>Object.defineProperty(exports, "__esModule", { value: true });
-+>>>exports.A = void 0;
-+>>>class A {
- 1 >
+-1 >
 -1 >Emitted(23, 13) Source(1, 1) + SourceIndex(0)
 ----
 ->>>                function A() {
@@ -77,8 +68,7 @@
 -3 >             
 -4 >             ^^^^
 -5 >                 ^^^^^^^^^^^^^^->
-+2 >^^->
- 1 >
+-1 >
 -2 >            }
 -3 >             
 -4 >             export class A { }
@@ -86,8 +76,7 @@
 -2 >Emitted(27, 14) Source(1, 19) + SourceIndex(0)
 -3 >Emitted(27, 14) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(27, 18) Source(1, 19) + SourceIndex(0)
-+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
- ---
+----
 ->>>            exports_1("A", A);
 ->>>        }
 -1->^^^^^^^^
@@ -97,12 +86,33 @@
 -2 >        
 -1->Emitted(29, 9) Source(2, 1) + SourceIndex(0)
 -2 >Emitted(29, 10) Source(2, 2) + SourceIndex(0)
+----
+--------------------------------------------------------------------
+-emittedFile:all.js
++JsFile: a.js
++mapUrl: a.js.map
++sourceRoot: 
++sources: a.ts
++===================================================================
++-------------------------------------------------------------------
++emittedFile:ref/a.js
++sourceFile:a.ts
++-------------------------------------------------------------------
++>>>"use strict";
++>>>Object.defineProperty(exports, "__esModule", { value: true });
++>>>exports.A = void 0;
++>>>class A {
++1 >
++2 >^^->
++1 >
++1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
++---
 +>>>}
 +1->^
 +2 > ^^^^^^^^^^^^^^->
 +1->export class A { }
 +1->Emitted(5, 2) Source(1, 19) + SourceIndex(0)
- ---
++---
 +>>>exports.A = A;
 +>>>//# sourceMappingURL=a.js.map===================================================================
 +JsFile: b.js
@@ -110,8 +120,7 @@
 +sourceRoot: 
 +sources: b.ts
 +===================================================================
- -------------------------------------------------------------------
--emittedFile:all.js
++-------------------------------------------------------------------
 +emittedFile:b.js
  sourceFile:b.ts
  -------------------------------------------------------------------
@@ -132,7 +141,24 @@
 -1 >^^^^^^^^^^^^
 -2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 -1 >import {A} from "./ref/a";
--  >
++>>>"use strict";
++>>>Object.defineProperty(exports, "__esModule", { value: true });
++>>>exports.B = void 0;
++>>>const a_1 = require("./ref/a");
++1 >
++2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++1 >
++2 >import {A} from "./ref/a";
++1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
++2 >Emitted(4, 32) Source(1, 27) + SourceIndex(0)
++---
++>>>class B extends a_1.A {
++1 >
++2 >^^^^^^^
++3 >       ^^^^^^^^^
++4 >                ^^^^^
++1 >
+   >
 -1 >Emitted(43, 13) Source(2, 1) + SourceIndex(1)
 ----
 ->>>                __extends(B, _super);
@@ -146,18 +172,9 @@
 ->>>                function B() {
 -1 >^^^^^^^^^^^^^^^^
 -2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+>>>"use strict";
-+>>>Object.defineProperty(exports, "__esModule", { value: true });
-+>>>exports.B = void 0;
-+>>>const a_1 = require("./ref/a");
- 1 >
+-1 >
 -1 >Emitted(45, 17) Source(2, 1) + SourceIndex(1)
-+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-+1 >
-+2 >import {A} from "./ref/a";
-+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
-+2 >Emitted(4, 32) Source(1, 27) + SourceIndex(0)
- ---
+----
 ->>>                    return _super !== null && _super.apply(this, arguments) || this;
 ->>>                }
 -1->^^^^^^^^^^^^^^^^
@@ -184,8 +201,7 @@
 -5 >              ^^^^^
 -6 >                   ^^^
 -7 >                      ^^^^^^^^^->
-+>>>class B extends a_1.A {
- 1 >
+-1 >
 -2 >            }
 -3 >             
 -4 >             export class B extends 
@@ -197,19 +213,7 @@
 -4 >Emitted(49, 15) Source(2, 24) + SourceIndex(1)
 -5 >Emitted(49, 20) Source(2, 25) + SourceIndex(1)
 -6 >Emitted(49, 23) Source(2, 29) + SourceIndex(1)
-+2 >^^^^^^^
-+3 >       ^^^^^^^^^
-+4 >                ^^^^^
-+1 >
-+  >
-+2 >export class B 
-+3 >       extends 
-+4 >                A
-+1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
-+2 >Emitted(5, 8) Source(2, 16) + SourceIndex(0)
-+3 >Emitted(5, 17) Source(2, 24) + SourceIndex(0)
-+4 >Emitted(5, 22) Source(2, 25) + SourceIndex(0)
- ---
+----
 ->>>            exports_2("B", B);
 ->>>        }
 -1->^^^^^^^^
@@ -218,14 +222,23 @@
 -2 >        
 -1->Emitted(51, 9) Source(2, 29) + SourceIndex(1)
 -2 >Emitted(51, 10) Source(2, 30) + SourceIndex(1)
+----
+->>>    };
+->>>});
+->>>//# sourceMappingURL=all.js.map
++2 >export class B 
++3 >       extends 
++4 >                A
++1 >Emitted(5, 1) Source(2, 1) + SourceIndex(0)
++2 >Emitted(5, 8) Source(2, 16) + SourceIndex(0)
++3 >Emitted(5, 17) Source(2, 24) + SourceIndex(0)
++4 >Emitted(5, 22) Source(2, 25) + SourceIndex(0)
++---
 +>>>}
 +1 >^
 +2 > ^^^^^^^^^^^^^^->
 +1 > { }
 +1 >Emitted(6, 2) Source(2, 29) + SourceIndex(0)
- ---
-->>>    };
-->>>});
-->>>//# sourceMappingURL=all.js.map
++---
 +>>>exports.B = B;
 +>>>//# sourceMappingURL=b.js.map

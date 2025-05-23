@@ -1,7 +1,7 @@
 --- old.thisInArrowFunctionInStaticInitializer1.js
 +++ new.thisInArrowFunctionInStaticInitializer1.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [thisInArrowFunctionInStaticInitializer1.js]
  function log(a) { }
 -var Vector = /** @class */ (function () {

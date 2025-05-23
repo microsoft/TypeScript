@@ -1,7 +1,7 @@
 --- old.strictModeReservedWordInDestructuring.js
 +++ new.strictModeReservedWordInDestructuring.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [strictModeReservedWordInDestructuring.js]
  "use strict";
 -var public = [1][0];

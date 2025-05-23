@@ -2,7 +2,7 @@
 +++ new.spreadIntersection.js
 @@= skipped -9, +9 lines =@@
  var o2 = { ...intersection, c: false };
- 
+
  //// [spreadIntersection.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

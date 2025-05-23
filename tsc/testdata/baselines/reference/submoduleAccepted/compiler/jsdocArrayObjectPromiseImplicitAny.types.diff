@@ -8,7 +8,7 @@
 +>anyArray : any
  >[5] : number[]
  >5 : 5
- 
+
 @@= skipped -15, +15 lines =@@
   * @return {Array}
   */
@@ -17,12 +17,12 @@
 ->arr : any[]
 +>returnAnyArray : (arr: any) => any
 +>arr : any
- 
+
    return arr;
 ->arr : any[]
 +>arr : any
  }
- 
+
  /** @type {Promise} */
  var anyPromise = Promise.resolve(5);
 ->anyPromise : Promise<any>
@@ -38,12 +38,12 @@
 ->pr : Promise<any>
 +>returnAnyPromise : (pr: any) => any
 +>pr : any
- 
+
    return pr;
 ->pr : Promise<any>
 +>pr : any
  }
- 
+
  /** @type {Object} */
  var anyObject = {valueOf: 1}; // not an error since assigning to any.
 ->anyObject : any
@@ -51,7 +51,7 @@
  >{valueOf: 1} : { valueOf: number; }
  >valueOf : number
  >1 : 1
- 
+
  /** @type {Object<string, number>} */
  var paramedObject = {valueOf: 1};
 ->paramedObject : { [x: string]: number; }
@@ -67,9 +67,8 @@
 ->obj : any
 +>returnAnyObject : (obj: Object) => Object
 +>obj : Object
- 
+
    return obj;
 ->obj : any
 +>obj : Object
  }
- 

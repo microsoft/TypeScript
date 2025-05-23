@@ -8,7 +8,7 @@
 +>notAnyArray : any
  >[5] : number[]
  >5 : 5
- 
+
 @@= skipped -15, +15 lines =@@
   * @return {Array}
   */
@@ -17,12 +17,12 @@
 ->arr : any[]
 +>returnNotAnyArray : (arr: any) => any
 +>arr : any
- 
+
    return arr;
 ->arr : any[]
 +>arr : any
  }
- 
+
  /** @type {Promise} */
  var notAnyPromise = Promise.resolve(5);
 ->notAnyPromise : Promise<any>
@@ -38,15 +38,15 @@
 ->pr : Promise<any>
 +>returnNotAnyPromise : (pr: any) => any
 +>pr : any
- 
+
    return pr;
 ->pr : Promise<any>
 +>pr : any
  }
- 
+
  /** @type {Object} */
 @@= skipped -16, +16 lines =@@
- 
+
  /** @type {Object<string, number>} */
  var paramedObject = {valueOf: 1};
 ->paramedObject : { [x: string]: number; }

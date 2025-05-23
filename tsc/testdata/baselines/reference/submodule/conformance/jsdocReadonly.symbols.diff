@@ -6,17 +6,17 @@
      x = 1
 ->x : Symbol(LOL.x, Decl(jsdocReadonly.js, 0, 11))
 +>x : Symbol(x, Decl(jsdocReadonly.js, 0, 11))
- 
+
      /** @readonly */
      y = 2
 ->y : Symbol(LOL.y, Decl(jsdocReadonly.js, 7, 9))
 +>y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
- 
+
      /** @readonly Definitely not here */
      static z = 3
 ->z : Symbol(LOL.z, Decl(jsdocReadonly.js, 9, 9))
 +>z : Symbol(z, Decl(jsdocReadonly.js, 9, 9))
- 
+
      /** @readonly This is OK too */
      constructor() {
          /** ok */
@@ -26,7 +26,7 @@
  >this : Symbol(LOL, Decl(jsdocReadonly.js, 0, 0))
 ->y : Symbol(LOL.y, Decl(jsdocReadonly.js, 7, 9))
 +>y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
- 
+
          /** @readonly ok */
          this.ka = 2
 ->this.ka : Symbol(LOL.ka, Decl(jsdocReadonly.js, 15, 18))
@@ -36,12 +36,12 @@
 +>ka : Symbol(ka, Decl(jsdocReadonly.js, 15, 18))
      }
  }
- 
+
  var l = new LOL()
 ->l : Symbol(l, Decl(jsdocReadonly.js, 21, 3), Decl(jsdocReadonly.js, 21, 17))
 +>l : Symbol(l, Decl(jsdocReadonly.js, 21, 3))
  >LOL : Symbol(LOL, Decl(jsdocReadonly.js, 0, 0))
- 
+
  l.y = 12
 ->l.y : Symbol(LOL.y, Decl(jsdocReadonly.js, 7, 9))
 ->l : Symbol(l, Decl(jsdocReadonly.js, 21, 3), Decl(jsdocReadonly.js, 21, 17))
@@ -49,4 +49,3 @@
 +>l.y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
 +>l : Symbol(l, Decl(jsdocReadonly.js, 21, 3))
 +>y : Symbol(y, Decl(jsdocReadonly.js, 7, 9))
- 

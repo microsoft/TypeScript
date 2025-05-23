@@ -2,7 +2,7 @@
 +++ new.parserSuperExpression1.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [parserSuperExpression1.js]
 -var C = /** @class */ (function () {
 -    function C() {

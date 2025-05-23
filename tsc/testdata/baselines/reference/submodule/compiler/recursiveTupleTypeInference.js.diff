@@ -1,7 +1,7 @@
 --- old.recursiveTupleTypeInference.js
 +++ new.recursiveTupleTypeInference.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [recursiveTupleTypeInference.js]
  "use strict";
 -// Repro from #37475

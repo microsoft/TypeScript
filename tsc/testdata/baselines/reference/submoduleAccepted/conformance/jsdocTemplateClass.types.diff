@@ -1,7 +1,7 @@
 --- old.jsdocTemplateClass.types
 +++ new.jsdocTemplateClass.types
 @@= skipped -15, +15 lines =@@
- 
+
          this.a = x
  >this.a = x : T
 ->this.a : any
@@ -22,7 +22,7 @@
 ->y : Id<T>
 +>y : (t: T) => T
  >alpha : (t: T) => T
- 
+
          return alpha(y(x))
  >alpha(y(x)) : T
  >alpha : (t: T) => T

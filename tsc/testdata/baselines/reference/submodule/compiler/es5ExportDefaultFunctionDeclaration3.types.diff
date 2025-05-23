@@ -1,7 +1,7 @@
 --- old.es5ExportDefaultFunctionDeclaration3.types
 +++ new.es5ExportDefaultFunctionDeclaration3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === es5ExportDefaultFunctionDeclaration3.ts ===
  var before: typeof func = func();
 ->before : () => typeof func
@@ -12,18 +12,18 @@
 +>func : () => ???
 +>func() : () => ???
 +>func : () => ???
- 
+
  export default function func(): typeof func {
 ->func : () => typeof func
 ->func : () => typeof func
 +>func : () => ???
 +>func : () => ???
- 
+
      return func;
 ->func : () => typeof func
 +>func : () => ???
  }
- 
+
  var after: typeof func = func();
 ->after : () => typeof func
 ->func : () => typeof func
@@ -33,4 +33,3 @@
 +>func : () => ???
 +>func() : () => ???
 +>func : () => ???
- 

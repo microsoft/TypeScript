@@ -2,7 +2,7 @@
 +++ new.accessorParameterAccessibilityModifier.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [accessorParameterAccessibilityModifier.js]
 -var C = /** @class */ (function () {
 -    function C() {

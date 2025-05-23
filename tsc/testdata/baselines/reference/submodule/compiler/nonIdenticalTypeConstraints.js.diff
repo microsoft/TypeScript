@@ -2,7 +2,7 @@
 +++ new.nonIdenticalTypeConstraints.js
 @@= skipped -40, +40 lines =@@
  }
- 
+
  //// [nonIdenticalTypeConstraints.js]
 -var Different = /** @class */ (function () {
 -    function Different() {

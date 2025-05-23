@@ -2,7 +2,7 @@
 +++ new.collisionThisExpressionAndLocalVarWithSuperExperssion.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [collisionThisExpressionAndLocalVarWithSuperExperssion.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var a = /** @class */ (function () {
 -    function a() {
-+class a {
-+    foo() {
-     }
+-    }
 -    a.prototype.foo = function () {
 -    };
 -    return a;
@@ -35,6 +33,9 @@
 -    }
 -    b.prototype.foo = function () {
 -        var _this_1 = this;
++class a {
++    foo() {
++    }
 +}
 +class b extends a {
 +    foo() {

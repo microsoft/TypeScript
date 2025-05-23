@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -b.ts(1,10): error TS2724: '"./a"' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
 +b.ts(1,10): error TS2724: '"a"' has no exported member named 'assertNevar'. Did you mean 'assertNever'?
- 
- 
+
+
  ==== a.ts (0 errors) ====
 @@= skipped -8, +8 lines =@@
  ==== b.ts (1 errors) ====

@@ -1,7 +1,7 @@
 --- old.APISample_compile.js
 +++ new.APISample_compile.js
 @@= skipped -47, +47 lines =@@
- 
+
  //// [APISample_compile.js]
  "use strict";
 -/*

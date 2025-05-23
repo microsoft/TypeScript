@@ -1,8 +1,8 @@
 --- old.keyofAndIndexedAccessErrors.js
 +++ new.keyofAndIndexedAccessErrors.js
 @@= skipped -172, +172 lines =@@
- 
- 
+
+
  //// [keyofAndIndexedAccessErrors.js]
 -var Shape = /** @class */ (function () {
 -    function Shape() {

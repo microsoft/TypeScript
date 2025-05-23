@@ -1,8 +1,8 @@
 --- old.nonNullableTypes1.js
 +++ new.nonNullableTypes1.js
 @@= skipped -37, +37 lines =@@
- 
- 
+
+
  //// [nonNullableTypes1.js]
 -"use strict";
  function f1(x) {
@@ -20,14 +20,18 @@
  }
  function f4(obj) {
 -    if ((obj === null || obj === void 0 ? void 0 : obj.x) === "hello") {
-+    if (obj?.x === "hello") {
-         obj; // NonNullable<T>
-     }
+-        obj; // NonNullable<T>
+-    }
 -    if (obj === null || obj === void 0 ? void 0 : obj.x) {
-+    if (obj?.x) {
-         obj; // NonNullable<T>
-     }
+-        obj; // NonNullable<T>
+-    }
 -    if (typeof (obj === null || obj === void 0 ? void 0 : obj.x) === "string") {
++    if (obj?.x === "hello") {
++        obj; // NonNullable<T>
++    }
++    if (obj?.x) {
++        obj; // NonNullable<T>
++    }
 +    if (typeof obj?.x === "string") {
          obj; // NonNullable<T>
      }

@@ -1,7 +1,7 @@
 --- old.checkJsxChildrenProperty3.js
 +++ new.checkJsxChildrenProperty3.js
 @@= skipped -42, +42 lines =@@
- 
+
  //// [file.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -47,7 +47,7 @@
  }
  function UserName1() {
      return (<FetchUser>
- 
+
 -            {function (user) { return (<h1>{user.Name}</h1>); }}
 +            {user => (<h1>{user.Name}</h1>)}
          </FetchUser>);

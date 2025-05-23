@@ -1,8 +1,8 @@
 --- old.unknownPropertiesAreAssignableToObjectUnion.js
 +++ new.unknownPropertiesAreAssignableToObjectUnion.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [unknownPropertiesAreAssignableToObjectUnion.js]
 -var x = { x: 0 };
 -var y = { x: 0 };

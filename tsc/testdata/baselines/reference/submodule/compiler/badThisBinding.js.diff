@@ -2,7 +2,7 @@
 +++ new.badThisBinding.js
 @@= skipped -15, +15 lines =@@
  } 
- 
+
  //// [badThisBinding.js]
 -var Greeter = /** @class */ (function () {
 -    function Greeter() {

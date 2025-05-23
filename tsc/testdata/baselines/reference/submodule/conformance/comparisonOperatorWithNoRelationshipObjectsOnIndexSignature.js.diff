@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js
 @@= skipped -113, +113 lines =@@
  var r8b4 = b4 !== a4;
- 
+
  //// [comparisonOperatorWithNoRelationshipObjectsOnIndexSignature.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

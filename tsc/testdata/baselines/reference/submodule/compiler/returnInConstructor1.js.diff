@@ -1,8 +1,8 @@
 --- old.returnInConstructor1.js
 +++ new.returnInConstructor1.js
 @@= skipped -68, +68 lines =@@
- 
- 
+
+
  //// [returnInConstructor1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

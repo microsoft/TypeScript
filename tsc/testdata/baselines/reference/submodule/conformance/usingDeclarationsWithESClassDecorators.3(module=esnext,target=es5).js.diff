@@ -2,7 +2,7 @@
 +++ new.usingDeclarationsWithESClassDecorators.3(module=esnext,target=es5).js
 @@= skipped -13, +13 lines =@@
  void C;
- 
+
  //// [usingDeclarationsWithESClassDecorators.3.js]
 -export { _default as default };
  var before, C, _default;

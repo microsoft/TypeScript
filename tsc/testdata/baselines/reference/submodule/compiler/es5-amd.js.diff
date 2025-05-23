@@ -2,7 +2,7 @@
 +++ new.es5-amd.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [es5-amd.js]
 -var A = /** @class */ (function () {
 -    function A() {

@@ -1,8 +1,8 @@
 --- old.typeGuardOfFormTypeOfPrimitiveSubtype.js
 +++ new.typeGuardOfFormTypeOfPrimitiveSubtype.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [typeGuardOfFormTypeOfPrimitiveSubtype.js]
 -var a;
 -var b;

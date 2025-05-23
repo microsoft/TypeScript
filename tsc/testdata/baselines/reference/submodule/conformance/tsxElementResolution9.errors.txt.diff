@@ -27,8 +27,8 @@
 -  Its return type '{ x: number; } & { x: number; y: string; }' is not a valid JSX element.
 -    Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
 +  Property 'something' is missing in type '{ x: number; } & { x: number; y: string; }' but required in type 'Element'.
- 
- 
+
+
  ==== file.tsx (5 errors) ====
 @@= skipped -34, +26 lines =@@
      <Obj1 />; // Error, return type is not an object type

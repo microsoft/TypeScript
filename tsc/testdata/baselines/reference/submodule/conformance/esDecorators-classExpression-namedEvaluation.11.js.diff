@@ -1,7 +1,7 @@
 --- old.esDecorators-classExpression-namedEvaluation.11.js
 +++ new.esDecorators-classExpression-namedEvaluation.11.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [esDecorators-classExpression-namedEvaluation.11.js]
  // No NamedEvaluation, no class name
 -((() => {

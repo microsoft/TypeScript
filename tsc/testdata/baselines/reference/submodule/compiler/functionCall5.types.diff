@@ -2,7 +2,7 @@
 +++ new.functionCall5.types
 @@= skipped -6, +6 lines =@@
  >a : any
- 
+
  function foo():m1.c1{return new m1.c1();}; 
 ->foo : () => m1.c1
 +>foo : () => c1
@@ -14,7 +14,7 @@
  >m1 : typeof m1
 ->c1 : typeof m1.c1
 +>c1 : typeof c1
- 
+
  var x = foo();
 ->x : m1.c1
 ->foo() : m1.c1
@@ -22,4 +22,3 @@
 +>x : c1
 +>foo() : c1
 +>foo : () => c1
- 

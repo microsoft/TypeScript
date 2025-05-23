@@ -1,7 +1,7 @@
 --- old.declarationEmitTypeParameterNameShadowedInternally.types
 +++ new.declarationEmitTypeParameterNameShadowedInternally.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmitTypeParameterNameShadowedInternally.ts ===
  export const foo = <T,>(x: T) => {
 ->foo : <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1]
@@ -9,7 +9,7 @@
 +>foo : <T>(x: T) => <T>(y: T) => readonly [T, T]
 +><T,>(x: T) => {	const inner = <T,>(y: T) => [x, y] as const;	return inner;} : <T>(x: T) => <T>(y: T) => readonly [T, T]
  >x : T
- 
+
  	const inner = <T,>(y: T) => [x, y] as const;
 ->inner : <T_1>(y: T_1) => readonly [T, T_1]
 -><T,>(y: T) => [x, y] as const : <T_1>(y: T_1) => readonly [T, T_1]
@@ -23,9 +23,8 @@
 +>[x, y] : readonly [T, T]
 +>x : T
  >y : T
- 
+
  	return inner;
 ->inner : <T_1>(y: T_1) => readonly [T, T_1]
 +>inner : <T>(y: T) => readonly [T, T]
  }
- 

@@ -1,7 +1,7 @@
 --- old.staticPropertyNameConflicts(usedefineforclassfields=false).js
 +++ new.staticPropertyNameConflicts(usedefineforclassfields=false).js
 @@= skipped -351, +351 lines =@@
- 
+
  //// [staticPropertyNameConflicts.js]
  "use strict";
 -var _a, _b, _c, _d, _e;
@@ -455,16 +455,16 @@
 -        }
 -        return StaticName;
 -    }());
--})(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
--var ExportedStaticName = /** @class */ (function () {
--    function ExportedStaticName() {
 +    class StaticName {
 +        static name; // error without useDefineForClassFields
 +        name; // ok
-     }
++    }
+ })(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
+-var ExportedStaticName = /** @class */ (function () {
+-    function ExportedStaticName() {
+-    }
 -    return ExportedStaticName;
 -}());
-+})(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
 +class ExportedStaticName {
 +    static [FunctionPropertyNames.name]; // error without useDefineForClassFields
 +    [FunctionPropertyNames.name]; // ok
@@ -480,18 +480,18 @@
 -        StaticNameFn.prototype.name = function () { }; // ok
 -        return StaticNameFn;
 -    }());
--})(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
--var ExportedStaticNameFn = /** @class */ (function () {
--    function ExportedStaticNameFn() {
 +    class StaticNameFn {
 +        static name() { } // error without useDefineForClassFields
 +        name() { } // ok
-     }
++    }
+ })(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
+-var ExportedStaticNameFn = /** @class */ (function () {
+-    function ExportedStaticNameFn() {
+-    }
 -    ExportedStaticNameFn[FunctionPropertyNames.name] = function () { }; // error without useDefineForClassFields
 -    ExportedStaticNameFn.prototype[FunctionPropertyNames.name] = function () { }; // ok
 -    return ExportedStaticNameFn;
 -}());
-+})(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
 +class ExportedStaticNameFn {
 +    static [FunctionPropertyNames.name]() { } // error without useDefineForClassFields
 +    [FunctionPropertyNames.name]() { } // ok

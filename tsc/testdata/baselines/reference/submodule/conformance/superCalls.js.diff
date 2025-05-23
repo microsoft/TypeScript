@@ -1,8 +1,8 @@
 --- old.superCalls.js
 +++ new.superCalls.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [superCalls.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -46,7 +46,7 @@
 +        var p = super('');
          var p = v();
 -        return _this;
-     }
+-    }
 -    return Derived;
 -}(Base));
 -var OtherBase = /** @class */ (function () {
@@ -57,6 +57,7 @@
 -var OtherDerived = /** @class */ (function (_super) {
 -    __extends(OtherDerived, _super);
 -    function OtherDerived() {
++    }
 +}
 +class OtherBase {
 +}

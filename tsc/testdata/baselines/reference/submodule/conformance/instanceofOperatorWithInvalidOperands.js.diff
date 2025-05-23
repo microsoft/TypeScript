@@ -2,7 +2,7 @@
 +++ new.instanceofOperatorWithInvalidOperands.js
 @@= skipped -48, +48 lines =@@
  var rc1 = '' instanceof {};
- 
+
  //// [instanceofOperatorWithInvalidOperands.js]
 -var C = /** @class */ (function () {
 -    function C() {

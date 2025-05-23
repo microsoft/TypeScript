@@ -1,7 +1,7 @@
 --- old.exportDefaultAbstractClass.js
 +++ new.exportDefaultAbstractClass.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [a.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

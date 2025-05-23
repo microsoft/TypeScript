@@ -1,8 +1,8 @@
 --- old.destructuringWithLiteralInitializers2.js
 +++ new.destructuringWithLiteralInitializers2.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [destructuringWithLiteralInitializers2.js]
 -"use strict";
 -function f00(_a) {

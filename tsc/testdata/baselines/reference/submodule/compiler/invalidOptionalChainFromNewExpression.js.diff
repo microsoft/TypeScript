@@ -1,8 +1,8 @@
 --- old.invalidOptionalChainFromNewExpression.js
 +++ new.invalidOptionalChainFromNewExpression.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [invalidOptionalChainFromNewExpression.js]
 -var _a, _b;
 -var A = /** @class */ (function () {

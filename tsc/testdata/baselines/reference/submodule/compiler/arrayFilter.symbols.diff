@@ -2,7 +2,7 @@
 +++ new.arrayFilter.symbols
 @@= skipped -15, +15 lines =@@
  ]
- 
+
  foo.filter(x => x.name); //should accepted all possible types not only boolean! 
 ->foo.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>foo.filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

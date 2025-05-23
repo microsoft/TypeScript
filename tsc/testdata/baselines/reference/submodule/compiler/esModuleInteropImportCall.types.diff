@@ -12,4 +12,3 @@
 +>then : <TResult1, TResult2>(onfulfilled?: (value: { default: () => void; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >f => {    f.default;} : (f: { default: () => void; }) => void
  >f : { default: () => void; }
- 

@@ -1,6 +1,6 @@
 --- old.declarationEmitCastReusesTypeNode5(strictnullchecks=true).js
 +++ new.declarationEmitCastReusesTypeNode5(strictnullchecks=true).js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitCastReusesTypeNode5.ts] ////
 -
 -//// [declarationEmitCastReusesTypeNode5.ts]
@@ -51,5 +51,4 @@
 -    reuseType9?: this | this;
 -}
 -export {};
-@@= skipped --1, +1 lines =@@
 +<no content>

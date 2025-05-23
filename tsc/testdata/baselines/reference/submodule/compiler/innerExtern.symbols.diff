@@ -2,7 +2,7 @@
 +++ new.innerExtern.symbols
 @@= skipped -16, +16 lines =@@
  >C : Symbol(C, Decl(innerExtern.ts, 4, 21))
- 
+
              x = BB.Elephant.X;
 ->x : Symbol(C.x, Decl(innerExtern.ts, 5, 24))
 ->BB.Elephant : Symbol(BB.Elephant, Decl(innerExtern.ts, 2, 18))

@@ -1,12 +1,12 @@
 --- old.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
 +++ new.jsDocDeclarationEmitDoesNotUseNodeModulesPathWithoutError.types
 @@= skipped -1, +1 lines =@@
- 
+
  === node_modules/@lion/ajax/dist-types/src/index.d.ts ===
  export type LionRequestInit = import('../types/types.js').LionRequestInit;
 ->LionRequestInit : import("node_modules/@lion/ajax/dist-types/types/types").LionRequestInit
 +>LionRequestInit : LionRequestInit
- 
+
  === node_modules/@lion/ajax/dist-types/types/types.d.ts ===
  export interface LionRequestInit {
 @@= skipped -19, +19 lines =@@
@@ -18,7 +18,7 @@
 +>case5_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit | undefined) => void
 +>init : LionRequestInit | undefined
  }
- 
+
  /**
 @@= skipped -9, +9 lines =@@
   */
@@ -31,4 +31,3 @@
  >prototype : NewAjax
 ->case6_unexpectedlyResolvesPathToNodeModules : (init?: LionRequestInit) => void
 +>case6_unexpectedlyResolvesPathToNodeModules : any
- 

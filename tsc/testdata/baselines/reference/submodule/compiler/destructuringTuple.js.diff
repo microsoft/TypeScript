@@ -1,8 +1,8 @@
 --- old.destructuringTuple.js
 +++ new.destructuringTuple.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [destructuringTuple.js]
 -"use strict";
 -var a = tuple[0], b = tuple[1], c = tuple[2], rest = tuple.slice(3);

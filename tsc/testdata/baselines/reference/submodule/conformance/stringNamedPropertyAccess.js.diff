@@ -2,7 +2,7 @@
 +++ new.stringNamedPropertyAccess.js
 @@= skipped -25, +25 lines =@@
  var r4 = b["a b"];
- 
+
  //// [stringNamedPropertyAccess.js]
 -var C = /** @class */ (function () {
 -    function C() {

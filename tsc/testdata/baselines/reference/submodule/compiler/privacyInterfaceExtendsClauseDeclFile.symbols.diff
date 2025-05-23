@@ -1,7 +1,7 @@
 --- old.privacyInterfaceExtendsClauseDeclFile.symbols
 +++ new.privacyInterfaceExtendsClauseDeclFile.symbols
 @@= skipped -30, +30 lines =@@
- 
+
      interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
  >privateInterfaceImplementingFromPrivateModuleInterface : Symbol(privateInterfaceImplementingFromPrivateModuleInterface, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 14, 5))
 ->privateModule.publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 25, 22))
@@ -18,10 +18,10 @@
 ->publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 25, 22))
 +>publicInterfaceInPrivateModule : Symbol(publicInterfaceInPrivateModule, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 25, 22))
      }
- 
+
      export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
 @@= skipped -89, +89 lines =@@
- 
+
  interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
  >privateInterfaceImplementingFromPrivateModuleInterface : Symbol(privateInterfaceImplementingFromPrivateModuleInterface, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 62, 1))
 ->privateModule.publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 25, 22))
@@ -38,5 +38,5 @@
 ->publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 25, 22))
 +>publicInterfaceInPrivateModule : Symbol(publicInterfaceInPrivateModule, Decl(privacyInterfaceExtendsClauseDeclFile_externalModule.ts, 25, 22))
  }
- 
+
  === privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts ===

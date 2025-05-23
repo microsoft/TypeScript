@@ -1,8 +1,8 @@
 --- old.unionTypeWithRecursiveSubtypeReduction2.js
 +++ new.unionTypeWithRecursiveSubtypeReduction2.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [unionTypeWithRecursiveSubtypeReduction2.js]
 -var Module = /** @class */ (function () {
 -    function Module() {

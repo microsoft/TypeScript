@@ -2,12 +2,12 @@
 +++ new.typeGuardsInFunctionAndModuleBlock.types
 @@= skipped -3, +3 lines =@@
  // typeguards are scoped in function/module block
- 
+
  function foo(x: number | string | boolean) {
 ->foo : (x: number | string | boolean) => string
 +>foo : (x: string | number | boolean) => string
  >x : string | number | boolean
- 
+
      return typeof x === "string"
 @@= skipped -44, +44 lines =@@
          } ();
@@ -16,7 +16,7 @@
 ->foo2 : (x: number | string | boolean) => string
 +>foo2 : (x: string | number | boolean) => string
  >x : string | number | boolean
- 
+
      return typeof x === "string"
 @@= skipped -46, +46 lines =@@
  >x : number | boolean
@@ -25,7 +25,7 @@
 ->foo3 : (x: number | string | boolean) => string
 +>foo3 : (x: string | number | boolean) => string
  >x : string | number | boolean
- 
+
      return typeof x === "string"
 @@= skipped -44, +44 lines =@@
          })();
@@ -34,7 +34,7 @@
 ->foo4 : (x: number | string | boolean) => string
 +>foo4 : (x: string | number | boolean) => string
  >x : string | number | boolean
- 
+
      return typeof x === "string"
 @@= skipped -47, +47 lines =@@
  }
@@ -43,5 +43,5 @@
 ->foo5 : (x: number | string | boolean) => void
 +>foo5 : (x: string | number | boolean) => void
  >x : string | number | boolean
- 
+
      if (typeof x === "string") {

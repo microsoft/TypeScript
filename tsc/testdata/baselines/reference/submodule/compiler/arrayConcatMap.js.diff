@@ -1,7 +1,7 @@
 --- old.arrayConcatMap.js
 +++ new.arrayConcatMap.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [arrayConcatMap.js]
  var x = [].concat([{ a: 1 }], [{ a: 2 }])
 -    .map(function (b) { return b.a; });

@@ -2,7 +2,7 @@
 +++ new.constEnumBadPropertyNames.js
 @@= skipped -4, +4 lines =@@
  var x = E["B"]
- 
+
  //// [constEnumBadPropertyNames.js]
 +var E;
 +(function (E) {

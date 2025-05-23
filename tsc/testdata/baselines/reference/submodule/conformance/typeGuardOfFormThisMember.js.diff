@@ -1,8 +1,8 @@
 --- old.typeGuardOfFormThisMember.js
 +++ new.typeGuardOfFormThisMember.js
 @@= skipped -84, +84 lines =@@
- 
- 
+
+
  //// [typeGuardOfFormThisMember.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

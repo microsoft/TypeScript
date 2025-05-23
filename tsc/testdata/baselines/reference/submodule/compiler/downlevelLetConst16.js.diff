@@ -36,76 +36,89 @@
 -    }
 -    A.prototype.m1 = function () {
 -        var x = 1;
-+class A {
-+    m1() {
-+        let x = 1;
-         use(x);
+-        use(x);
 -        var y = [1][0];
-+        let [y] = [1];
-         use(y);
+-        use(y);
 -        var z = { a: 1 }.a;
-+        let { a: z } = { a: 1 };
-         use(z);
+-        use(z);
 -    };
 -    A.prototype.m2 = function () {
-+    }
-+    m2() {
-         {
+-        {
 -            var x_2 = 1;
 -            use(x_2);
 -            var y_2 = [1][0];
 -            use(y_2);
 -            var z_2 = { a: 1 }.a;
 -            use(z_2);
-+            let x = 1;
-+            use(x);
-+            let [y] = [1];
-+            use(y);
-+            let { a: z } = { a: 1 };
-+            use(z);
-         }
-         use(x);
+-        }
+-        use(x);
 -    };
 -    return A;
 -}());
 -var B = /** @class */ (function () {
 -    function B() {
-     }
+-    }
 -    B.prototype.m1 = function () {
 -        var x = 1;
-+}
-+class B {
-+    m1() {
-+        const x = 1;
-         use(x);
+-        use(x);
 -        var y = [1][0];
-+        const [y] = [1];
-         use(y);
+-        use(y);
 -        var z = { a: 1 }.a;
-+        const { a: z } = { a: 1 };
-         use(z);
+-        use(z);
 -    };
 -    B.prototype.m2 = function () {
-+    }
-+    m2() {
-         {
+-        {
 -            var x_3 = 1;
 -            use(x_3);
 -            var y_3 = [1][0];
 -            use(y_3);
 -            var z_3 = { a: 1 }.a;
 -            use(z_3);
+-        }
+-        use(x);
+-    };
+-    return B;
+-}());
++class A {
++    m1() {
++        let x = 1;
++        use(x);
++        let [y] = [1];
++        use(y);
++        let { a: z } = { a: 1 };
++        use(z);
++    }
++    m2() {
++        {
++            let x = 1;
++            use(x);
++            let [y] = [1];
++            use(y);
++            let { a: z } = { a: 1 };
++            use(z);
++        }
++        use(x);
++    }
++}
++class B {
++    m1() {
++        const x = 1;
++        use(x);
++        const [y] = [1];
++        use(y);
++        const { a: z } = { a: 1 };
++        use(z);
++    }
++    m2() {
++        {
 +            const x = 1;
 +            use(x);
 +            const [y] = [1];
 +            use(y);
 +            const { a: z } = { a: 1 };
 +            use(z);
-         }
-         use(x);
--    };
--    return B;
--}());
++        }
++        use(x);
 +    }
 +}
  function bar1() {
@@ -201,16 +214,18 @@
  function foo3() {
 -    for (var x_7;;) {
 -        use(x_7);
-+    for (let x;;) {
-+        use(x);
-     }
+-    }
 -    for (var y_7 = [][0];;) {
 -        use(y_7);
-+    for (let [y] = [];;) {
-+        use(y);
-     }
+-    }
 -    for (var z_7 = { a: 1 }.a;;) {
 -        use(z_7);
++    for (let x;;) {
++        use(x);
++    }
++    for (let [y] = [];;) {
++        use(y);
++    }
 +    for (let { a: z } = { a: 1 };;) {
 +        use(z);
      }
@@ -219,16 +234,18 @@
  function foo4() {
 -    for (var x_8 = 1;;) {
 -        use(x_8);
-+    for (const x = 1;;) {
-+        use(x);
-     }
+-    }
 -    for (var y_8 = [][0];;) {
 -        use(y_8);
-+    for (const [y] = [];;) {
-+        use(y);
-     }
+-    }
 -    for (var z_8 = { a: 1 }.a;;) {
 -        use(z_8);
++    for (const x = 1;;) {
++        use(x);
++    }
++    for (const [y] = [];;) {
++        use(y);
++    }
 +    for (const { a: z } = { a: 1 };;) {
 +        use(z);
      }

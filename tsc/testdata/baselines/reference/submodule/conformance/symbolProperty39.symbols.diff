@@ -2,7 +2,7 @@
 +++ new.symbolProperty39.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(symbolProperty39.ts, 0, 0))
- 
+
      [Symbol.iterator](x: string): string;
 ->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty39.ts, 0, 9), Decl(symbolProperty39.ts, 1, 41), Decl(symbolProperty39.ts, 2, 41), Decl(symbolProperty39.ts, 5, 5))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -12,7 +12,7 @@
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  >x : Symbol(x, Decl(symbolProperty39.ts, 1, 22))
- 
+
      [Symbol.iterator](x: number): number;
 ->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty39.ts, 0, 9), Decl(symbolProperty39.ts, 1, 41), Decl(symbolProperty39.ts, 2, 41), Decl(symbolProperty39.ts, 5, 5))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -22,7 +22,7 @@
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  >x : Symbol(x, Decl(symbolProperty39.ts, 2, 22))
- 
+
      [Symbol.iterator](x: any) {
 ->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty39.ts, 0, 9), Decl(symbolProperty39.ts, 1, 41), Decl(symbolProperty39.ts, 2, 41), Decl(symbolProperty39.ts, 5, 5))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -32,7 +32,7 @@
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  >x : Symbol(x, Decl(symbolProperty39.ts, 3, 22))
- 
+
          return undefined;
  >undefined : Symbol(undefined)
      }
@@ -45,5 +45,5 @@
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  >x : Symbol(x, Decl(symbolProperty39.ts, 6, 22))
- 
+
          return undefined;

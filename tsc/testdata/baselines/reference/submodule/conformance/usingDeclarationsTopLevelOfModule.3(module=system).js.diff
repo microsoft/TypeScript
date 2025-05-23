@@ -1,8 +1,8 @@
 --- old.usingDeclarationsTopLevelOfModule.3(module=system).js
 +++ new.usingDeclarationsTopLevelOfModule.3(module=system).js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [usingDeclarationsTopLevelOfModule.3.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

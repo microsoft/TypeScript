@@ -2,7 +2,7 @@
 +++ new.augmentExportEquals5.js
 @@= skipped -80, +80 lines =@@
  const y = x.id;
- 
+
  //// [augmentation.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

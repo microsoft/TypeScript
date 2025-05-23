@@ -1,15 +1,15 @@
 --- old.circularBaseTypes.js
 +++ new.circularBaseTypes.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [circularBaseTypes.js]
 -"use strict";
 -// Repro from #38098
  ; // Error
  function f(m) {
      return m.value;
- }
+-}
 -
 -
 -//// [circularBaseTypes.d.ts]
@@ -27,4 +27,4 @@
 -};
 -interface Y extends X<Y> {
 -    a: "";
--}
+ }

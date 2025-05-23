@@ -3,7 +3,7 @@
 @@= skipped -2, +2 lines =@@
  [7m2[0m     duplicate1: () => string;
  [7m [0m [91m    ~~~~~~~~~~[0m
- 
+
 -  [96mfile2.ts[0m:[93m2[0m:[93m5[0m
 +  [96mfile2.ts[0m:[93m2[0m:[93m5[0m - 'duplicate1' was also declared here.
      [7m2[0m     duplicate1(): number;
@@ -11,10 +11,10 @@
 -    'duplicate1' was also declared here.
 +
  [96mfile1.ts[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
- 
+
  [7m3[0m     duplicate2: () => string;
  [7m [0m [91m    ~~~~~~~~~~[0m
- 
+
 -  [96mfile2.ts[0m:[93m3[0m:[93m5[0m
 +  [96mfile2.ts[0m:[93m3[0m:[93m5[0m - 'duplicate2' was also declared here.
      [7m3[0m     duplicate2(): number;
@@ -22,10 +22,10 @@
 -    'duplicate2' was also declared here.
 +
  [96mfile1.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
- 
+
  [7m4[0m     duplicate3: () => string;
  [7m [0m [91m    ~~~~~~~~~~[0m
- 
+
 -  [96mfile2.ts[0m:[93m4[0m:[93m5[0m
 +  [96mfile2.ts[0m:[93m4[0m:[93m5[0m - 'duplicate3' was also declared here.
      [7m4[0m     duplicate3(): number;
@@ -33,10 +33,10 @@
 -    'duplicate3' was also declared here.
 +
  [96mfile2.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
- 
+
  [7m2[0m     duplicate1(): number;
  [7m [0m [91m    ~~~~~~~~~~[0m
- 
+
 -  [96mfile1.ts[0m:[93m2[0m:[93m5[0m
 +  [96mfile1.ts[0m:[93m2[0m:[93m5[0m - 'duplicate1' was also declared here.
      [7m2[0m     duplicate1: () => string;
@@ -44,10 +44,10 @@
 -    'duplicate1' was also declared here.
 +
  [96mfile2.ts[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
- 
+
  [7m3[0m     duplicate2(): number;
  [7m [0m [91m    ~~~~~~~~~~[0m
- 
+
 -  [96mfile1.ts[0m:[93m3[0m:[93m5[0m
 +  [96mfile1.ts[0m:[93m3[0m:[93m5[0m - 'duplicate2' was also declared here.
      [7m3[0m     duplicate2: () => string;
@@ -55,17 +55,17 @@
 -    'duplicate2' was also declared here.
 +
  [96mfile2.ts[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
- 
+
  [7m4[0m     duplicate3(): number;
  [7m [0m [91m    ~~~~~~~~~~[0m
- 
+
 -  [96mfile1.ts[0m:[93m4[0m:[93m5[0m
 +  [96mfile1.ts[0m:[93m4[0m:[93m5[0m - 'duplicate3' was also declared here.
      [7m4[0m     duplicate3: () => string;
      [7m [0m [96m    ~~~~~~~~~~[0m
 -    'duplicate3' was also declared here.
- 
- 
+
+
  ==== file1.ts (3 errors) ====
 @@= skipped -87, +86 lines =@@
  Errors  Files

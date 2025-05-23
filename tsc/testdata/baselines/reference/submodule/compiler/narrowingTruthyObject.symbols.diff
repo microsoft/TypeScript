@@ -2,7 +2,7 @@
 +++ new.narrowingTruthyObject.symbols
 @@= skipped -9, +9 lines =@@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
- 
+
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -13,7 +13,7 @@
      if (typeof x === 'object' && x) {
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
- 
+
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -24,7 +24,7 @@
      if (x && typeof x === 'object') {
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
- 
+
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -36,7 +36,7 @@
  >b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
 @@= skipped -28, +28 lines =@@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
- 
+
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -48,7 +48,7 @@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 @@= skipped -10, +10 lines =@@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
- 
+
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -60,7 +60,7 @@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
 @@= skipped -11, +11 lines =@@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
- 
+
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -72,7 +72,7 @@
  >b : Symbol(b, Decl(narrowingTruthyObject.ts, 0, 24))
 @@= skipped -13, +13 lines =@@
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 0, 13))
- 
+
          x.toString();
 ->x.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -81,7 +81,7 @@
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
      }
  }
- 
+
 @@= skipped -15, +15 lines =@@
      return x && typeof x === 'object' && x.hasOwnProperty('x');
  >x : Symbol(x, Decl(narrowingTruthyObject.ts, 26, 12))
@@ -92,4 +92,3 @@
 ->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 +>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
  }
- 

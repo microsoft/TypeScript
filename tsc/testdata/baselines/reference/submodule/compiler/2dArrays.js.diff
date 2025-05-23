@@ -2,7 +2,7 @@
 +++ new.2dArrays.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [2dArrays.js]
 -var Cell = /** @class */ (function () {
 -    function Cell() {

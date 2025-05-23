@@ -1,8 +1,8 @@
 --- old.jsdocLinkTag6.js
 +++ new.jsdocLinkTag6.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [a.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

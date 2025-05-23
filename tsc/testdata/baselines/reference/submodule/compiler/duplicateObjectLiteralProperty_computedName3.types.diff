@@ -1,18 +1,18 @@
 --- old.duplicateObjectLiteralProperty_computedName3.types
 +++ new.duplicateObjectLiteralProperty_computedName3.types
 @@= skipped -19, +19 lines =@@
- 
+
  === b.ts ===
  import * as keys from "./a";
 ->keys : typeof keys
 +>keys : typeof import("a")
- 
+
  const t1 = {
 ->t1 : { 1: number; }
 ->{    [keys.n]: 1,    [keys.n]: 1, // duplicate} : { 1: number; }
 +>t1 : { [keys.n]: number; }
 +>{    [keys.n]: 1,    [keys.n]: 1, // duplicate} : { [keys.n]: number; }
- 
+
      [keys.n]: 1,
  >[keys.n] : number
  >keys.n : 1
@@ -20,7 +20,7 @@
 +>keys : typeof import("a")
  >n : 1
  >1 : 1
- 
+
      [keys.n]: 1, // duplicate
  >[keys.n] : number
  >keys.n : 1
@@ -37,7 +37,7 @@
 +>keys : typeof import("a")
  >s : "s"
  >1 : 1
- 
+
      [keys.s]: 1, // duplicate
  >[keys.s] : number
  >keys.s : "s"
@@ -47,7 +47,7 @@
  >1 : 1
  }
 @@= skipped -18, +18 lines =@@
- 
+
      [keys.E1.A]: 1,
  >[keys.E1.A] : number
 ->keys.E1.A : keys.E1
@@ -61,7 +61,7 @@
 +>E1 : typeof E1
 +>A : E1
  >1 : 1
- 
+
      [keys.E1.A]: 1, // duplicate
  >[keys.E1.A] : number
 ->keys.E1.A : keys.E1
@@ -76,13 +76,13 @@
 +>A : E1
  >1 : 1
  }
- 
+
  const t4 = {
 ->t4 : { 0: number; }
 ->{    [keys.E2.B]: 1,    [keys.E2.B]: 1, // duplicate} : { 0: number; }
 +>t4 : { [keys.E2.B]: number; }
 +>{    [keys.E2.B]: 1,    [keys.E2.B]: 1, // duplicate} : { [keys.E2.B]: number; }
- 
+
      [keys.E2.B]: 1,
  >[keys.E2.B] : number
 ->keys.E2.B : keys.E2
@@ -96,7 +96,7 @@
 +>E2 : typeof E2
 +>B : E2
  >1 : 1
- 
+
      [keys.E2.B]: 1, // duplicate
  >[keys.E2.B] : number
 ->keys.E2.B : keys.E2
@@ -111,4 +111,3 @@
 +>B : E2
  >1 : 1
  }
- 

@@ -11,7 +11,7 @@
  >v : number
 @@= skipped -10, +10 lines =@@
  >toString : (radix?: number) => string
- 
+
  function f2({ "show": showRename = v => v.toString() }: Show) {}
 ->f2 : ({ "show": showRename }: Show) => void
 +>f2 : (__0: Show) => void
@@ -20,7 +20,7 @@
  >v : number
 @@= skipped -10, +10 lines =@@
  >toString : (radix?: number) => string
- 
+
  function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 ->f3 : ({ ["show"]: showRename }: Show) => void
 +>f3 : (__0: Show) => void
@@ -53,4 +53,3 @@
 +>h : (__0: StringUnion) => void
  >prop : "bar" | "foo"
  >"foo" : "foo"
- 

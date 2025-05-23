@@ -2,7 +2,7 @@
 +++ new.keyRemappingKeyofResult.types
 @@= skipped -50, +50 lines =@@
  >f : <T>() => void
- 
+
      type Orig = { [k: string]: any, str: any, [sym]: any } & T;
 ->Orig : { [k: string]: any; str: any; [sym]: any; } & T
 +>Orig : Orig
@@ -15,7 +15,7 @@
      type Remapped = { [K in keyof Orig as {} extends Record<K, any> ? never : K]: any }
 ->Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 +>Remapped : Remapped
- 
+
      /* type Remapped = {
          str: any;
 @@= skipped -9, +9 lines =@@
@@ -24,27 +24,27 @@
      type Oops = keyof Remapped;
 ->Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 +>Oops : keyof Remapped
- 
+
      let x: Oops;
 ->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 +>x : keyof Remapped
- 
+
      x = sym;
  >x = sym : unique symbol
 ->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 +>x : keyof Remapped
  >sym : unique symbol
- 
+
      x = "str";
  >x = "str" : "str"
 ->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as {} extends Record<K, any> ? never : K]: any; }
 +>x : keyof Remapped
  >"str" : "str"
  }
- 
+
 @@= skipped -21, +21 lines =@@
  >g : <T>() => void
- 
+
      type Orig = { [k: string]: any, str: any, [sym]: any } & T;
 ->Orig : { [k: string]: any; str: any; [sym]: any; } & T
 +>Orig : Orig
@@ -53,11 +53,11 @@
  >[sym] : any
 @@= skipped -30, +30 lines =@@
      // type Okay = string | number | typeof sym
- 
+
      type NonIndex<T extends PropertyKey> = {} extends Record<T, any> ? never : T;
 ->NonIndex : {} extends Record<T, any> ? never : T
 +>NonIndex : NonIndex<T>
- 
+
      type DistributiveNonIndex<T extends PropertyKey> = T extends unknown ? NonIndex<T> : never;
 ->DistributiveNonIndex : T extends unknown ? {} extends Record<T, any> ? never : T : never
 +>DistributiveNonIndex : DistributiveNonIndex<T>
@@ -65,7 +65,7 @@
      type Remapped = { [K in keyof Orig as DistributiveNonIndex<K>]: any }
 ->Remapped : { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 +>Remapped : Remapped
- 
+
      /* type Remapped = {
          str: any;
 @@= skipped -15, +15 lines =@@
@@ -74,21 +74,20 @@
      type Oops = keyof Remapped;
 ->Oops : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 +>Oops : keyof Remapped
- 
+
      let x: Oops;
 ->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 +>x : keyof Remapped
- 
+
      x = sym;
  >x = sym : unique symbol
 ->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 +>x : keyof Remapped
  >sym : unique symbol
- 
+
      x = "str";
  >x = "str" : "str"
 ->x : keyof { [K in keyof ({ [k: string]: any; str: any; [sym]: any; } & T) as K extends unknown ? {} extends Record<K, any> ? never : K : never]: any; }
 +>x : keyof Remapped
  >"str" : "str"
  }
- 

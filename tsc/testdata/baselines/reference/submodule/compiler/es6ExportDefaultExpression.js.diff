@@ -1,7 +1,7 @@
 --- old.es6ExportDefaultExpression.js
 +++ new.es6ExportDefaultExpression.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [es6ExportDefaultExpression.js]
  export default (1 + 2);
 -

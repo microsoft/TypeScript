@@ -1,8 +1,8 @@
 --- old.jsxComponentTypeErrors.js
 +++ new.jsxComponentTypeErrors.js
 @@= skipped -41, +41 lines =@@
- 
- 
+
+
  //// [jsxComponentTypeErrors.jsx]
 -"use strict";
 -function FunctionComponent(_a) {

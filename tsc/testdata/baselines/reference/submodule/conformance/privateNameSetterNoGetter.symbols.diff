@@ -2,23 +2,23 @@
 +++ new.privateNameSetterNoGetter.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
- 
+
      set #x(x) {}
 ->#x : Symbol(C.#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
 +>#x : Symbol(#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
  >x : Symbol(x, Decl(privateNameSetterNoGetter.ts, 1, 11))
- 
+
      m() {
 ->m : Symbol(C.m, Decl(privateNameSetterNoGetter.ts, 1, 16))
 +>m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
- 
+
          this.#x += 2; // Error
 ->this.#x : Symbol(C.#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
 +>this.#x : Symbol(#x, Decl(privateNameSetterNoGetter.ts, 0, 17))
  >this : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 9))
      }
  }
- 
+
  console.log(new C().m());
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -30,4 +30,3 @@
  >C : Symbol(C, Decl(privateNameSetterNoGetter.ts, 0, 5))
 ->m : Symbol(C.m, Decl(privateNameSetterNoGetter.ts, 1, 16))
 +>m : Symbol(m, Decl(privateNameSetterNoGetter.ts, 1, 16))
- 

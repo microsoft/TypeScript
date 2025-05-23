@@ -1,7 +1,7 @@
 --- old.neverAsDiscriminantType(strict=true).js
 +++ new.neverAsDiscriminantType(strict=true).js
 @@= skipped -68, +68 lines =@@
- 
+
  //// [neverAsDiscriminantType.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

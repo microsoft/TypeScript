@@ -1,7 +1,7 @@
 --- old.varRequireFromTypescript.types
 +++ new.varRequireFromTypescript.types
 @@= skipped -1, +1 lines =@@
- 
+
  === use.js ===
  var ex = require('./ex')
 ->ex : typeof ex
@@ -10,7 +10,7 @@
 +>require('./ex') : typeof import("ex")
  >require : any
  >'./ex' : "./ex"
- 
+
  // values work
  var crunch = new ex.Crunch(1);
 ->crunch : ex.Crunch
@@ -24,14 +24,14 @@
 +>ex : typeof import("ex")
 +>Crunch : typeof Crunch
  >1 : 1
- 
+
  crunch.n
  >crunch.n : number
 ->crunch : ex.Crunch
 +>crunch : Crunch
  >n : number
- 
- 
+
+
 @@= skipped -26, +26 lines =@@
   * @param {ex.Crunch} wrap
   */
@@ -42,17 +42,16 @@
 +>f : (greatest: Greatest, wrap: Crunch) => void
 +>greatest : Greatest
 +>wrap : Crunch
- 
+
      greatest.day
  >greatest.day : 1
 ->greatest : ex.Greatest
 +>greatest : Greatest
  >day : 1
- 
+
      wrap.n
  >wrap.n : number
 ->wrap : ex.Crunch
 +>wrap : Crunch
  >n : number
  }
- 

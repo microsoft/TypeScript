@@ -2,7 +2,7 @@
 +++ new.fatarrowfunctionsOptionalArgsErrors1.js
 @@= skipped -9, +9 lines =@@
  (arg1 = 1, arg2) => 1; 
- 
+
  //// [fatarrowfunctionsOptionalArgsErrors1.js]
 -(function (arg1, arg2) { return 101; });
 -(function () {

@@ -1,11 +1,10 @@
 --- old.mappedTypeProperties.types
 +++ new.mappedTypeProperties.types
 @@= skipped -36, +36 lines =@@
- 
+
      [placeType in PlaceType]?: void;
      model(duration: number): 'hour' | 'day';
 ->model : (duration: number) => "hour" | "day"
 +>model : (duration: number) => "day" | "hour"
  >duration : number
  }
- 

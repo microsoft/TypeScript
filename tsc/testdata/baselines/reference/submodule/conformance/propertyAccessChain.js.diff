@@ -2,7 +2,7 @@
 +++ new.propertyAccessChain.js
 @@= skipped -27, +27 lines =@@
  o2?.b!.c!;
- 
+
  //// [propertyAccessChain.js]
 -"use strict";
 -var _a, _b, _c, _d, _e, _f;

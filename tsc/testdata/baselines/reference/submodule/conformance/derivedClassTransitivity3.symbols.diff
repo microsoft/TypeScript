@@ -2,7 +2,7 @@
 +++ new.derivedClassTransitivity3.symbols
 @@= skipped -7, +7 lines =@@
  >T : Symbol(T, Decl(derivedClassTransitivity3.ts, 2, 8))
- 
+
      foo(x: T, y: T) { }
 ->foo : Symbol(C.foo, Decl(derivedClassTransitivity3.ts, 2, 12))
 +>foo : Symbol(foo, Decl(derivedClassTransitivity3.ts, 2, 12))
@@ -11,7 +11,7 @@
  >y : Symbol(y, Decl(derivedClassTransitivity3.ts, 3, 13))
 @@= skipped -14, +14 lines =@@
  >T : Symbol(T, Decl(derivedClassTransitivity3.ts, 6, 8))
- 
+
      foo(x: T) { } // ok to drop parameters
 ->foo : Symbol(D.foo, Decl(derivedClassTransitivity3.ts, 6, 25))
 +>foo : Symbol(foo, Decl(derivedClassTransitivity3.ts, 6, 25))
@@ -20,7 +20,7 @@
  }
 @@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(derivedClassTransitivity3.ts, 10, 8))
- 
+
      foo(x: T, y?: number) { } // ok to add optional parameters
 ->foo : Symbol(E.foo, Decl(derivedClassTransitivity3.ts, 10, 25))
 +>foo : Symbol(foo, Decl(derivedClassTransitivity3.ts, 10, 25))
@@ -28,7 +28,7 @@
  >T : Symbol(T, Decl(derivedClassTransitivity3.ts, 10, 8))
  >y : Symbol(y, Decl(derivedClassTransitivity3.ts, 11, 13))
 @@= skipped -24, +24 lines =@@
- 
+
  var r = c.foo('', '');
  >r : Symbol(r, Decl(derivedClassTransitivity3.ts, 18, 3))
 ->c.foo : Symbol(C.foo, Decl(derivedClassTransitivity3.ts, 2, 12))
@@ -36,7 +36,7 @@
  >c : Symbol(c, Decl(derivedClassTransitivity3.ts, 14, 3))
 ->foo : Symbol(C.foo, Decl(derivedClassTransitivity3.ts, 2, 12))
 +>foo : Symbol(foo, Decl(derivedClassTransitivity3.ts, 2, 12))
- 
+
  var r2 = e.foo('', 1);
  >r2 : Symbol(r2, Decl(derivedClassTransitivity3.ts, 19, 3))
 ->e.foo : Symbol(E.foo, Decl(derivedClassTransitivity3.ts, 10, 25))
@@ -44,4 +44,3 @@
  >e : Symbol(e, Decl(derivedClassTransitivity3.ts, 16, 3))
 ->foo : Symbol(E.foo, Decl(derivedClassTransitivity3.ts, 10, 25))
 +>foo : Symbol(foo, Decl(derivedClassTransitivity3.ts, 10, 25))
- 

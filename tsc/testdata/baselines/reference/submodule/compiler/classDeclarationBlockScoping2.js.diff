@@ -1,7 +1,7 @@
 --- old.classDeclarationBlockScoping2.js
 +++ new.classDeclarationBlockScoping2.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [classDeclarationBlockScoping2.js]
  function f() {
 -    var C = /** @class */ (function () {

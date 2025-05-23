@@ -15,8 +15,8 @@
  prefixPostfix.js(18,21): error TS7006: Parameter 'a' implicitly has an 'any' type.
  prefixPostfix.js(18,39): error TS7006: Parameter 'h' implicitly has an 'any' type.
  prefixPostfix.js(18,48): error TS7006: Parameter 'k' implicitly has an 'any' type.
- 
- 
+
+
 -==== prefixPostfix.js (14 errors) ====
 +==== prefixPostfix.js (3 errors) ====
      /**

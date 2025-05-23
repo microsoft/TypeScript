@@ -1,7 +1,7 @@
 --- old.circularObjectLiteralAccessors.js
 +++ new.circularObjectLiteralAccessors.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [circularObjectLiteralAccessors.js]
  // Repro from #6000
 -var a = {

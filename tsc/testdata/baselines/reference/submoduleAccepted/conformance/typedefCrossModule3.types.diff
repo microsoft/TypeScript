@@ -7,7 +7,7 @@
 ->ns : typeof ns
 +>ns : {}
  >{} : {}
- 
+
  ns.Foo = class {}
  >ns.Foo = class {} : typeof Foo
 ->ns.Foo : typeof Foo
@@ -17,7 +17,7 @@
 +>ns : {}
 +>Foo : any
  >class {} : typeof Foo
- 
+
  module.exports = ns;
 ->module.exports = ns : typeof ns
 ->module.exports : typeof ns
@@ -29,5 +29,4 @@
 +>module : { readonly ns: {}; }
 +>exports : {}
 +>ns : {}
- 
- 
+

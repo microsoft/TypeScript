@@ -2,7 +2,7 @@
 +++ new.classSideInheritance2.js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [classSideInheritance2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,16 +23,17 @@
 -    __extends(SubText, _super);
 -    function SubText(text, span) {
 -        return _super.call(this) || this;
-+class SubText extends TextBase {
-+    constructor(text, span) {
-+        super();
-     }
+-    }
 -    return SubText;
 -}(TextBase));
 -var TextBase = /** @class */ (function () {
 -    function TextBase() {
 -    }
 -    TextBase.prototype.subText = function (span) {
++class SubText extends TextBase {
++    constructor(text, span) {
++        super();
++    }
 +}
 +class TextBase {
 +    foo;

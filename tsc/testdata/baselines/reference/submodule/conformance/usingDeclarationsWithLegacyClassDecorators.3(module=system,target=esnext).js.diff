@@ -1,8 +1,8 @@
 --- old.usingDeclarationsWithLegacyClassDecorators.3(module=system,target=esnext).js
 +++ new.usingDeclarationsWithLegacyClassDecorators.3(module=system,target=esnext).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [usingDeclarationsWithLegacyClassDecorators.3.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

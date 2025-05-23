@@ -1,16 +1,16 @@
 --- old.tsxSpreadAttributesResolution5.types
 +++ new.tsxSpreadAttributesResolution5.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
 +>React : typeof __React
- 
+
  interface PoisonedProp {
      x: string;
 @@= skipped -12, +12 lines =@@
- 
+
  class Poisoned extends React.Component<PoisonedProp, {}> {
  >Poisoned : Poisoned
 ->React.Component : React.Component<PoisonedProp, {}>
@@ -19,11 +19,11 @@
 +>React.Component : Component<PoisonedProp, {}>
 +>React : typeof __React
 +>Component : typeof Component
- 
+
      render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
          return <div>Hello</div>;
 -><div>Hello</div> : JSX.Element
 +><div>Hello</div> : Element
@@ -31,7 +31,7 @@
  >div : any
      }
 @@= skipped -30, +30 lines =@@
- 
+
  // Error as "obj" has type { x: string; y: number }
  let p = <Poisoned {...obj} />;
 ->p : JSX.Element
@@ -40,7 +40,7 @@
 +><Poisoned {...obj} /> : Element
  >Poisoned : typeof Poisoned
  >obj : { x: string; y: number; }
- 
+
  class EmptyProp extends React.Component<{}, {}> {
  >EmptyProp : EmptyProp
 ->React.Component : React.Component<{}, {}>
@@ -49,11 +49,11 @@
 +>React.Component : Component<{}, {}>
 +>React : typeof __React
 +>Component : typeof Component
- 
+
      render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
          return <div>Default hi</div>;
 -><div>Default hi</div> : JSX.Element
 +><div>Default hi</div> : Element
@@ -70,4 +70,3 @@
 +><EmptyProp {...o} /> : Element
  >EmptyProp : typeof EmptyProp
  >o : { prop1: boolean; }
- 

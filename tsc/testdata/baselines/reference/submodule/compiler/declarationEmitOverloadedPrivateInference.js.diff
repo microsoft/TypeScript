@@ -15,11 +15,7 @@
 +class Wrapper {
 +    proxy(fn) {
          return null;
-+    }
-+    Proxies = {
-+        Failure: this.proxy(noArgs, true),
-+        Success: this.proxy(oneArg),
-     };
+-    };
 -    return Wrapper;
 -}());
 -exports.Wrapper = Wrapper;
@@ -31,6 +27,10 @@
 -    Proxies: {
 -        Failure: (options?: unknown) => string;
 -        Success: (options: string) => string;
--    };
++    }
++    Proxies = {
++        Failure: this.proxy(noArgs, true),
++        Success: this.proxy(oneArg),
+     };
  }
 +exports.Wrapper = Wrapper;

@@ -1,7 +1,7 @@
 --- old.transformNestedGeneratorsWithTry.js
 +++ new.transformNestedGeneratorsWithTry.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [main.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

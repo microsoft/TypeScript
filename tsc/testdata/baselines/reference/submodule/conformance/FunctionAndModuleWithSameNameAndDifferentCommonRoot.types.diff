@@ -10,4 +10,3 @@
 ->Point : typeof B.Point
 +>Point : typeof Point
  >Origin : { x: number; y: number; }
- 

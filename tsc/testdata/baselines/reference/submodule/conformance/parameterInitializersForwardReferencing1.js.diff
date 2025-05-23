@@ -1,8 +1,8 @@
 --- old.parameterInitializersForwardReferencing1.js
 +++ new.parameterInitializersForwardReferencing1.js
 @@= skipped -40, +40 lines =@@
- 
- 
+
+
  //// [parameterInitializersForwardReferencing1.js]
 -var foo = "";
 -function f1(bar) {
@@ -24,16 +24,20 @@
 -function f3(bar, foo) {
 -    if (bar === void 0) { bar = foo; }
 -    if (foo === void 0) { foo = 2; }
-+function f3(bar = foo, foo = 2) {
-     return bar;
- }
+-    return bar;
+-}
 -function f4(foo, bar) {
 -    if (bar === void 0) { bar = foo; }
-+function f4(foo, bar = foo) {
-     return bar;
- }
+-    return bar;
+-}
 -function f5(a) {
 -    if (a === void 0) { a = a; }
++function f3(bar = foo, foo = 2) {
++    return bar;
++}
++function f4(foo, bar = foo) {
++    return bar;
++}
 +function f5(a = a) {
      return a;
  }

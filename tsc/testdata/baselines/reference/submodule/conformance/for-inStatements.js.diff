@@ -1,8 +1,8 @@
 --- old.for-inStatements.js
 +++ new.for-inStatements.js
 @@= skipped -82, +82 lines =@@
- 
- 
+
+
  //// [for-inStatements.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

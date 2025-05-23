@@ -7,14 +7,14 @@
 ->getFooFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo
 +>getFooFrom : <T extends "./a" | "./b">(v: T) => any
  >v : T
- 
+
      return undefined as any;
 @@= skipped -9, +9 lines =@@
  }
- 
+
  export function getFooValueFrom<T extends "./a" | "./b">(v: T): import(T).Foo["a"] {
 ->getFooValueFrom : <T extends "./a" | "./b">(v: T) => import(T).Foo["a"]
 +>getFooValueFrom : <T extends "./a" | "./b">(v: T) => any
  >v : T
- 
+
      return undefined as any;

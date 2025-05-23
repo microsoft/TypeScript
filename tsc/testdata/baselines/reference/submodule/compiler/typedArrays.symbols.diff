@@ -1,7 +1,7 @@
 --- old.typedArrays.symbols
 +++ new.typedArrays.symbols
 @@= skipped -167, +167 lines =@@
- 
+
      typedArrays[0] = Int8Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -10,7 +10,7 @@
 ->from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[1] = Uint8Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -19,7 +19,7 @@
 ->from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[2] = Int16Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -28,7 +28,7 @@
 ->from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[3] = Uint16Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -37,7 +37,7 @@
 ->from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[4] = Int32Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -46,7 +46,7 @@
 ->from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[5] = Uint32Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -55,7 +55,7 @@
 ->from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[6] = Float32Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -64,7 +64,7 @@
 ->from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[7] = Float64Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -73,7 +73,7 @@
 ->from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 46, 7))
 ->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -82,10 +82,10 @@
 ->from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 45, 44))
- 
+
      return typedArrays;
 @@= skipped -75, +75 lines =@@
- 
+
      typedArrays[0] = Int8Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -94,7 +94,7 @@
 ->from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[1] = Uint8Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -103,7 +103,7 @@
 ->from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[2] = Int16Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -112,7 +112,7 @@
 ->from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[3] = Uint16Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -121,7 +121,7 @@
 ->from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[4] = Int32Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -130,7 +130,7 @@
 ->from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[5] = Uint32Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -139,7 +139,7 @@
 ->from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[6] = Float32Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -148,7 +148,7 @@
 ->from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[7] = Float64Array.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -157,7 +157,7 @@
 ->from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 61, 7))
 ->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -166,10 +166,10 @@
 ->from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 60, 47))
- 
+
      return typedArrays;
 @@= skipped -74, +74 lines =@@
- 
+
      typedArrays[0] = Int8Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Int8Array.of : Symbol(Int8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -178,7 +178,7 @@
 ->of : Symbol(Int8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[1] = Uint8Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Uint8Array.of : Symbol(Uint8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -187,7 +187,7 @@
 ->of : Symbol(Uint8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[2] = Int16Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Int16Array.of : Symbol(Int16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -196,7 +196,7 @@
 ->of : Symbol(Int16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[3] = Uint16Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Uint16Array.of : Symbol(Uint16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -205,7 +205,7 @@
 ->of : Symbol(Uint16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[4] = Int32Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Int32Array.of : Symbol(Int32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -214,7 +214,7 @@
 ->of : Symbol(Int32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[5] = Uint32Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Uint32Array.of : Symbol(Uint32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -223,7 +223,7 @@
 ->of : Symbol(Uint32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[6] = Float32Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Float32Array.of : Symbol(Float32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -232,7 +232,7 @@
 ->of : Symbol(Float32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[7] = Float64Array.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Float64Array.of : Symbol(Float64ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -241,7 +241,7 @@
 ->of : Symbol(Float64ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      typedArrays[8] = Uint8ClampedArray.of(...obj);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 76, 7))
 ->Uint8ClampedArray.of : Symbol(Uint8ClampedArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -250,10 +250,10 @@
 ->of : Symbol(Uint8ClampedArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 75, 29))
- 
+
      return typedArrays;
 @@= skipped -73, +73 lines =@@
- 
+
      typedArrays[0] = Int8Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Int8Array.of : Symbol(Int8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -261,7 +261,7 @@
  >Int8Array : Symbol(Int8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Int8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[1] = Uint8Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Uint8Array.of : Symbol(Uint8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -269,7 +269,7 @@
  >Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Uint8ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[2] = Int16Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Int16Array.of : Symbol(Int16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -277,7 +277,7 @@
  >Int16Array : Symbol(Int16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Int16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[3] = Uint16Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Uint16Array.of : Symbol(Uint16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -285,7 +285,7 @@
  >Uint16Array : Symbol(Uint16Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Uint16ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[4] = Int32Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Int32Array.of : Symbol(Int32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -293,7 +293,7 @@
  >Int32Array : Symbol(Int32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Int32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[5] = Uint32Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Uint32Array.of : Symbol(Uint32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -301,7 +301,7 @@
  >Uint32Array : Symbol(Uint32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Uint32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[6] = Float32Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Float32Array.of : Symbol(Float32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -309,7 +309,7 @@
  >Float32Array : Symbol(Float32Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Float32ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[7] = Float64Array.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Float64Array.of : Symbol(Float64ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -317,7 +317,7 @@
  >Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Float64ArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      typedArrays[8] = Uint8ClampedArray.of(1,2,3,4);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 ->Uint8ClampedArray.of : Symbol(Uint8ClampedArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
@@ -325,11 +325,11 @@
  >Uint8ClampedArray : Symbol(Uint8ClampedArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->of : Symbol(Uint8ClampedArrayConstructor.of, Decl(lib.es5.d.ts, --, --))
 +>of : Symbol(of, Decl(lib.es5.d.ts, --, --))
- 
+
      return typedArrays;
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 91, 7))
 @@= skipped -72, +72 lines =@@
- 
+
      typedArrays[0] = Int8Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -339,7 +339,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[1] = Uint8Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -349,7 +349,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[2] = Int16Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -359,7 +359,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[3] = Uint16Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -369,7 +369,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[4] = Int32Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -379,7 +379,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[5] = Uint32Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -389,7 +389,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[6] = Float32Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -399,7 +399,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[7] = Float64Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -409,7 +409,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 106, 7))
 ->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -419,9 +419,9 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 105, 40))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 105, 57))
- 
+
 @@= skipped -87, +87 lines =@@
- 
+
      typedArrays[0] = Int8Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -431,7 +431,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[1] = Uint8Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -441,7 +441,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[2] = Int16Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -451,7 +451,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[3] = Uint16Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -461,7 +461,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[4] = Int32Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -471,7 +471,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[5] = Uint32Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -481,7 +481,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[6] = Float32Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -491,7 +491,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[7] = Float64Array.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -501,7 +501,7 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 121, 7))
 ->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -511,9 +511,9 @@
 +>from : Symbol(from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >obj : Symbol(obj, Decl(typedArrays.ts, 120, 36))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 120, 58))
- 
+
 @@= skipped -88, +88 lines =@@
- 
+
      typedArrays[0] = Int8Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -524,7 +524,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[1] = Uint8Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -535,7 +535,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[2] = Int16Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -546,7 +546,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[3] = Uint16Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -557,7 +557,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[4] = Int32Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -568,7 +568,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[5] = Uint32Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -579,7 +579,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[6] = Float32Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -590,7 +590,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[7] = Float64Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -601,7 +601,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 135, 38))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 136, 7))
 ->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -613,7 +613,7 @@
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 135, 60))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 135, 98))
 @@= skipped -100, +100 lines =@@
- 
+
      typedArrays[0] = Int8Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Int8Array.from : Symbol(Int8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -624,7 +624,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[1] = Uint8Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Uint8Array.from : Symbol(Uint8ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -635,7 +635,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[2] = Int16Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Int16Array.from : Symbol(Int16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -646,7 +646,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[3] = Uint16Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Uint16Array.from : Symbol(Uint16ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -657,7 +657,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[4] = Int32Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Int32Array.from : Symbol(Int32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -668,7 +668,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[5] = Uint32Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Uint32Array.from : Symbol(Uint32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -679,7 +679,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[6] = Float32Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Float32Array.from : Symbol(Float32ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -690,7 +690,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[7] = Float64Array.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Float64Array.from : Symbol(Float64ArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
@@ -701,7 +701,7 @@
  >obj : Symbol(obj, Decl(typedArrays.ts, 150, 42))
  >mapFn : Symbol(mapFn, Decl(typedArrays.ts, 150, 59))
  >thisArg : Symbol(thisArg, Decl(typedArrays.ts, 150, 92))
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj, mapFn, thisArg);
  >typedArrays : Symbol(typedArrays, Decl(typedArrays.ts, 151, 7))
 ->Uint8ClampedArray.from : Symbol(Uint8ClampedArrayConstructor.from, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))

@@ -2,7 +2,7 @@
 +++ new.globalMergeWithCommonJSAssignmentDeclaration.types
 @@= skipped -13, +13 lines =@@
  >console : Console
- 
+
  module.exports = 'anything';
 ->module.exports = 'anything' : string
 ->module.exports : string
@@ -13,5 +13,4 @@
 +>module : { export=: "anything"; }
 +>exports : "anything"
  >'anything' : "anything"
- 
- 
+

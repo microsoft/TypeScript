@@ -1,7 +1,7 @@
 --- old.amdLikeInputDeclarationEmit.types
 +++ new.amdLikeInputDeclarationEmit.types
 @@= skipped -1, +1 lines =@@
- 
+
  === typing.d.ts ===
  declare function define<T=unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T);
 ->define : <T = unknown>(name: string, modules: string[], ready: (...modules: unknown[]) => T) => any
@@ -39,11 +39,11 @@
 +>BaseClass : typeof BaseClass
 +>extends : <A>(a: A) => new () => A & BaseClass
  >{        f: function() {            return "something";        }    } : { f: () => "something"; }
- 
+
          f: function() {
 @@= skipped -26, +26 lines =@@
  >{} : {}
- 
+
      module.exports = ExtendedClass
 ->module.exports = ExtendedClass : any
 +>module.exports = ExtendedClass : new () => { f: () => "something"; } & BaseClass
@@ -52,6 +52,6 @@
  >exports : any
 ->ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
 +>ExtendedClass : new () => { f: () => "something"; } & BaseClass
- 
+
      return module.exports;
  >module.exports : any

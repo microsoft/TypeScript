@@ -1,13 +1,13 @@
 --- old.jsEnumCrossFileExport.types
 +++ new.jsEnumCrossFileExport.types
 @@= skipped -1, +1 lines =@@
- 
+
  === enumDef.js ===
  var Host = {};
 ->Host : typeof Host
 +>Host : {}
  >{} : {}
- 
+
  Host.UserMetrics = {};
 ->Host.UserMetrics = {} : typeof Host.UserMetrics
 ->Host.UserMetrics : typeof Host.UserMetrics
@@ -18,7 +18,7 @@
 +>Host : {}
 +>UserMetrics : any
  >{} : {}
- 
+
  /** @enum {number} */
  Host.UserMetrics.Action = {
  >Host.UserMetrics.Action = {    WindowDocked: 1,    WindowUndocked: 2,    ScriptsBreakpointSet: 3,    TimelineStarted: 4,} : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
@@ -33,7 +33,7 @@
 +>UserMetrics : any
 +>Action : any
  >{    WindowDocked: 1,    WindowUndocked: 2,    ScriptsBreakpointSet: 3,    TimelineStarted: 4,} : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
- 
+
      WindowDocked: 1,
 @@= skipped -45, +45 lines =@@
   */
@@ -50,7 +50,7 @@
 +>UserMetrics : any
 +>Blah : any
  >{    x: 12} : { x: number; }
- 
+
      x: 12
 @@= skipped -13, +13 lines =@@
  }
@@ -59,7 +59,7 @@
 ->Other : typeof Other
 +>Other : {}
  >{} : {}
- 
+
  Other.Cls = class {
  >Other.Cls = class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : typeof Cls
 ->Other.Cls : typeof Cls
@@ -69,7 +69,7 @@
 +>Other : {}
 +>Cls : any
  >class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : typeof Cls
- 
+
      /**
       * @param {!Host.UserMetrics.Action} p
       */
@@ -78,10 +78,10 @@
 ->p : number
 +>method : (p: Action) => void
 +>p : Action
- 
+
      usage() {
  >usage : () => void
- 
+
          this.method(Host.UserMetrics.Action.WindowDocked);
  >this.method(Host.UserMetrics.Action.WindowDocked) : void
 ->this.method : (p: Host.UserMetrics.Action) => void
@@ -105,7 +105,7 @@
 +>WindowDocked : any
      }
  }
- 
+
 @@= skipped -39, +39 lines =@@
   * @type {Host.UserMetrics.Bargh}
   */
@@ -113,7 +113,7 @@
 ->x : string
 +>x : Bargh
  >"ok" : "ok"
- 
+
  /**
   * @type {Host.UserMetrics.Blah}
   */
@@ -121,4 +121,3 @@
 ->y : string
 +>y : Blah
  >"ok" : "ok"
- 

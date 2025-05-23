@@ -1,7 +1,7 @@
 --- old.emptyModuleName.js
 +++ new.emptyModuleName.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [emptyModuleName.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

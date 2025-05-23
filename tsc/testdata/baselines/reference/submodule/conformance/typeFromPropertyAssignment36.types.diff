@@ -2,7 +2,7 @@
 +++ new.typeFromPropertyAssignment36.types
 @@= skipped -104, +104 lines =@@
  >s : string
- 
+
  function d() {
 ->d : typeof d
 +>d : { (): void; e: number; q: boolean; r: number; }
@@ -14,13 +14,13 @@
 +>d : { (): void; e: number; q: boolean; r: number; }
  >e : number
  >12 : 12
- 
+
  d.e
  >d.e : number
 ->d : typeof d
 +>d : { (): void; e: number; q: boolean; r: number; }
  >e : number
- 
+
  if (!!false) {
 @@= skipped -22, +22 lines =@@
      d.q = false
@@ -36,7 +36,7 @@
 ->d : typeof d
 +>d : { (): void; e: number; q: boolean; r: number; }
  >q : boolean
- 
+
  if (!!false) {
 @@= skipped -17, +17 lines =@@
      d.q = false
@@ -61,7 +61,7 @@
 ->d : typeof d
 +>d : { (): void; e: number; q: boolean; r: number; }
  >q : boolean
- 
+
  if (!!false) {
 @@= skipped -17, +17 lines =@@
      d.r = 1
@@ -86,5 +86,5 @@
 ->d : typeof d
 +>d : { (): void; e: number; q: boolean; r: number; }
  >r : number
- 
+
  // test function expressions too

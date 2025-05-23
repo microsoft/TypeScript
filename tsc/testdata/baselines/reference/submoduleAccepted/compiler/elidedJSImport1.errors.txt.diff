@@ -5,8 +5,8 @@
 -caller.js(2,8): error TS18042: 'TruffleContract' is a type and cannot be imported in JavaScript files. Use 'import("@truffle/contract").TruffleContract' in a JSDoc type annotation.
  caller.js(4,43): error TS2708: Cannot use namespace 'TruffleContract' as a value.
  caller.js(4,60): error TS2708: Cannot use namespace 'TruffleContract' as a value.
- 
- 
+
+
 -==== caller.js (4 errors) ====
 +==== caller.js (3 errors) ====
      import * as fs from 'fs';

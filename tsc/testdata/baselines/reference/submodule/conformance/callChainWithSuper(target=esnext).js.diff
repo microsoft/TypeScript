@@ -2,7 +2,7 @@
 +++ new.callChainWithSuper(target=esnext).js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [callChainWithSuper.js]
 -"use strict";
  // GH#34952

@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithCallSignatures3.js
 +++ new.assignmentCompatWithCallSignatures3.js
 @@= skipped -102, +102 lines =@@
- 
+
  //// [assignmentCompatWithCallSignatures3.js]
  // these are all permitted with the current rules, since we do not do contextual signature instantiation
 -var __extends = (this && this.__extends) || (function () {

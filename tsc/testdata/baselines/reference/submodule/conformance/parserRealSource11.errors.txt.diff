@@ -7,8 +7,8 @@
  parserRealSource11.ts(17,38): error TS2304: Cannot find name 'CompilerDiagnostics'.
 @@= skipped -510, +509 lines =@@
  parserRealSource11.ts(2356,48): error TS2304: Cannot find name 'TokenID'.
- 
- 
+
+
 -==== parserRealSource11.ts (511 errors) ====
 +==== parserRealSource11.ts (510 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

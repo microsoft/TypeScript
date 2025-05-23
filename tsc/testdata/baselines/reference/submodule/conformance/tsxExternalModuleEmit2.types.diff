@@ -1,7 +1,7 @@
 --- old.tsxExternalModuleEmit2.types
 +++ new.tsxExternalModuleEmit2.types
 @@= skipped -20, +20 lines =@@
- 
+
  // Should see mod_1['default'] in emit here
  <Foo handler={Main}></Foo>;
 -><Foo handler={Main}></Foo> : error
@@ -10,7 +10,7 @@
  >handler : any
  >Main : any
 @@= skipped -8, +8 lines =@@
- 
+
  // Should see mod_1['default'] in emit here
  <Foo {...Main}></Foo>;
 -><Foo {...Main}></Foo> : error

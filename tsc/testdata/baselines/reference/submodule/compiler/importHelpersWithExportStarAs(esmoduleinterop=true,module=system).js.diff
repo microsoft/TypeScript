@@ -2,7 +2,7 @@
 +++ new.importHelpersWithExportStarAs(esmoduleinterop=true,module=system).js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [a.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

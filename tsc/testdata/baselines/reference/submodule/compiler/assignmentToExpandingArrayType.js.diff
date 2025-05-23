@@ -1,7 +1,7 @@
 --- old.assignmentToExpandingArrayType.js
 +++ new.assignmentToExpandingArrayType.js
 @@= skipped -30, +30 lines =@@
- 
+
  //// [assignmentToExpandingArrayType.js]
  // Fixes exponential time/space in #14628
 -var x = [];

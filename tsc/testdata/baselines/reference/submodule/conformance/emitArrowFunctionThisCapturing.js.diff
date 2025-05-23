@@ -1,8 +1,8 @@
 --- old.emitArrowFunctionThisCapturing.js
 +++ new.emitArrowFunctionThisCapturing.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [emitArrowFunctionThisCapturing.js]
 -var _this = this;
 -var f1 = function () {

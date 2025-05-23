@@ -2,7 +2,7 @@
 +++ new.callChain.3.js
 @@= skipped -12, +12 lines =@@
  t1 = a!.m!({x: 12});
- 
+
  //// [callChain.3.js]
 -"use strict";
 -var _a, _b, _c, _d, _e;

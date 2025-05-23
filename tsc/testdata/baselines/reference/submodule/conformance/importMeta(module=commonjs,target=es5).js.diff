@@ -2,7 +2,7 @@
 +++ new.importMeta(module=commonjs,target=es5).js
 @@= skipped -38, +38 lines =@@
  const { a, b, c } = import.meta.wellKnownProperty;
- 
+
  //// [example.js]
 -"use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

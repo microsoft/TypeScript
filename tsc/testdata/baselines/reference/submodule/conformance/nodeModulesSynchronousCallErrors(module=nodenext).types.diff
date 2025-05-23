@@ -2,22 +2,22 @@
 +++ new.nodeModulesSynchronousCallErrors(module=nodenext).types
 @@= skipped -5, +5 lines =@@
  >h : () => Promise<void>
- 
+
  import mod = require("../index.js");
 ->mod : typeof mod
 +>mod : typeof import("index")
- 
+
  import {f as _f} from "./index.js";
  >f : () => Promise<void>
  >_f : () => Promise<void>
- 
+
  import mod2 = require("./index.js");
 ->mod2 : typeof mod2
 +>mod2 : typeof import("subfolder/index")
- 
+
  export async function f() {
  >f : () => Promise<void>
- 
+
      const mod3 = await import ("../index.js");
 ->mod3 : typeof mod
 ->await import ("../index.js") : typeof mod
@@ -26,7 +26,7 @@
 +>await import ("../index.js") : typeof import("index")
 +>import ("../index.js") : Promise<typeof import("index")>
  >"../index.js" : "../index.js"
- 
+
      const mod4 = await import ("./index.js");
 ->mod4 : { f(): Promise<void>; default: typeof mod2; }
 ->await import ("./index.js") : { f(): Promise<void>; default: typeof mod2; }
@@ -35,25 +35,25 @@
 +>await import ("./index.js") : typeof import("subfolder/index")
 +>import ("./index.js") : Promise<typeof import("subfolder/index")>
  >"./index.js" : "./index.js"
- 
+
      h();
 @@= skipped -35, +35 lines =@@
  >_h : () => Promise<void>
- 
+
  import mod = require("./index.js");
 ->mod : typeof mod
 +>mod : typeof import("index")
- 
+
  import {f} from "./subfolder/index.js";
  >f : () => Promise<void>
- 
+
  import mod2 = require("./subfolder/index.js");
 ->mod2 : typeof mod2
 +>mod2 : typeof import("subfolder/index")
- 
+
  export async function h() {
  >h : () => Promise<void>
- 
+
      const mod3 = await import ("./index.js");
 ->mod3 : typeof mod
 ->await import ("./index.js") : typeof mod
@@ -62,7 +62,7 @@
 +>await import ("./index.js") : typeof import("index")
 +>import ("./index.js") : Promise<typeof import("index")>
  >"./index.js" : "./index.js"
- 
+
      const mod4 = await import ("./subfolder/index.js");
 ->mod4 : { f(): Promise<void>; default: typeof mod2; }
 ->await import ("./subfolder/index.js") : { f(): Promise<void>; default: typeof mod2; }
@@ -71,5 +71,5 @@
 +>await import ("./subfolder/index.js") : typeof import("subfolder/index")
 +>import ("./subfolder/index.js") : Promise<typeof import("subfolder/index")>
  >"./subfolder/index.js" : "./subfolder/index.js"
- 
+
      f();

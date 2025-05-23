@@ -1,8 +1,8 @@
 --- old.controlFlowForStatement.js
 +++ new.controlFlowForStatement.js
 @@= skipped -44, +44 lines =@@
- 
- 
+
+
  //// [controlFlowForStatement.js]
 -var cond;
 +let cond;

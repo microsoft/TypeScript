@@ -6,7 +6,7 @@
  import BaseComponent = require('BaseComponent');
 ->BaseComponent : React.Component<any, {}>
 +>BaseComponent : Component<any, {}>
- 
+
  class TestComponent extends React.Component<any, {}> {
  >TestComponent : TestComponent
 ->React.Component : React.Component<any, {}>
@@ -14,27 +14,26 @@
  >React : typeof React
 ->Component : typeof React.Component
 +>Component : typeof Component
- 
+
      render() {
  >render : () => any
- 
+
          return <BaseComponent />;
  ><BaseComponent /> : any
 ->BaseComponent : React.Component<any, {}>
 +>BaseComponent : Component<any, {}>
      }
  }
- 
+
 @@= skipped -32, +32 lines =@@
  >"BaseComponent" : typeof import("BaseComponent")
- 
+
      var base: React.Component<any, {}>;
 ->base : React.Component<any, {}>
 +>base : Component<any, {}>
  >React : any
- 
+
      export = base;
 ->base : React.Component<any, {}>
 +>base : Component<any, {}>
  }
- 

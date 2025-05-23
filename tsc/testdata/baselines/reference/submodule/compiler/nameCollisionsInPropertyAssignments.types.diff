@@ -2,7 +2,7 @@
 +++ new.nameCollisionsInPropertyAssignments.types
 @@= skipped -5, +5 lines =@@
  >1 : 1
- 
+
  var y = { x() { x++; } }; 
 ->y : { x(): void; }
 ->{ x() { x++; } } : { x(): void; }

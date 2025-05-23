@@ -1,6 +1,6 @@
 --- old.declarationEmitClassMemberWithComputedPropertyName.js
 +++ new.declarationEmitClassMemberWithComputedPropertyName.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitClassMemberWithComputedPropertyName.ts] ////
 -
 -//// [declarationEmitClassMemberWithComputedPropertyName.ts]
@@ -91,5 +91,4 @@
 -export declare const t11: number;
 -export declare const t12: number;
 -export {};
-@@= skipped --1, +1 lines =@@
 +<no content>

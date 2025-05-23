@@ -5,8 +5,8 @@
 -/a.js(15,5): error TS2322: Type '1' is not assignable to type '"script"'.
 +/a.js(1,15): error TS2305: Module '"/node_modules/@types/foo/index"' has no exported member 'Import'.
 +/a.js(12,15): error TS2749: 'Require' refers to a value, but is being used as a type here. Did you mean 'typeof Require'?
- 
- 
+
+
  ==== /node_modules/@types/foo/package.json (0 errors) ====
 @@= skipped -21, +21 lines =@@
      

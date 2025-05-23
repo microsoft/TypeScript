@@ -8,7 +8,7 @@
 +>c : Symbol(c, Decl(newTarget.es6.ts, 4, 5))
  >new.target : Symbol((Anonymous function), Decl(newTarget.es6.ts, 5, 14))
  >target : Symbol((Anonymous function), Decl(newTarget.es6.ts, 5, 14))
- 
+
      d = function () { return new.target; }
 ->d : Symbol(A.d, Decl(newTarget.es6.ts, 5, 49))
 +>d : Symbol(d, Decl(newTarget.es6.ts, 5, 49))

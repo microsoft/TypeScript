@@ -6,6 +6,6 @@
  >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
 ->{      type: A,      resolve() {        return {          foo: 100,        };      },    } : { type: any; resolve(): { foo: number; }; }
 +>{      type: A,      resolve() {        return {          foo: 100,        };      },    } : { type: any; resolve: () => { foo: number; }; }
- 
+
        type: A,
  >type : any

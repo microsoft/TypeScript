@@ -2,16 +2,16 @@
 +++ new.typesVersionsDeclarationEmit.multiFileBackReferenceToSelf.types
 @@= skipped -4, +4 lines =@@
  >fa : any
- 
+
  import { fb } from "ext/other";
 ->fb : () => import("node_modules/ext/other").B
 +>fb : () => B
- 
+
  export const va = fa();
  >va : any
 @@= skipped -8, +8 lines =@@
  >fa : any
- 
+
  export const vb = fb();
 ->vb : import("node_modules/ext/other").B
 ->fb() : import("node_modules/ext/other").B
@@ -19,6 +19,6 @@
 +>vb : B
 +>fb() : B
 +>fb : () => B
- 
+
  === node_modules/ext/other.d.ts ===
  export interface B {}

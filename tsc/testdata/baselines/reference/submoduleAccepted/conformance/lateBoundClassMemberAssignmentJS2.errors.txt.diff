@@ -1,8 +1,7 @@
 --- old.lateBoundClassMemberAssignmentJS2.errors.txt
 +++ new.lateBoundClassMemberAssignmentJS2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +lateBoundClassMemberAssignmentJS2.js(4,9): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'MyClass'.
 +  Property 'my-fake-sym' does not exist on type 'MyClass'.
 +lateBoundClassMemberAssignmentJS2.js(8,9): error TS7053: Element implicitly has an 'any' type because expression of type '"my-fake-sym"' can't be used to index type 'MyClass'.

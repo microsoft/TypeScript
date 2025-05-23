@@ -10,10 +10,10 @@
 ->x : any
 +>x : number
  >0 : 0
- 
+
  /** @implements A*/
 @@= skipped -24, +24 lines =@@
- 
+
      constructor() { this.x = 10 }
  >this.x = 10 : 10
 ->this.x : any
@@ -23,4 +23,3 @@
 +>x : number
  >10 : 10
  }
- 

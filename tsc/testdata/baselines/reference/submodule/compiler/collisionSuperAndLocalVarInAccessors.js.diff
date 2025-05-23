@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndLocalVarInAccessors.js
 @@= skipped -34, +34 lines =@@
  }
- 
+
  //// [collisionSuperAndLocalVarInAccessors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -22,11 +22,7 @@
  var _super = 10; // No Error
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+class Foo {
-+    get prop1() {
-+        var _super = 10; // No error
-+        return 10;
-     }
+-    }
 -    Object.defineProperty(Foo.prototype, "prop1", {
 -        get: function () {
 -            var _super = 10; // No error
@@ -44,34 +40,14 @@
 -    __extends(b, _super_1);
 -    function b() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
-+    set prop1(val) {
-+        var _super = 10; // No error
-     }
+-    }
 -    Object.defineProperty(b.prototype, "prop2", {
 -        get: function () {
-+}
-+class b extends Foo {
-+    get prop2() {
-+        var _super = 10; // Should be error
-+        return 10;
-+    }
-+    set prop2(val) {
-+        var _super = 10; // Should be error
-+    }
-+}
-+class c extends Foo {
-+    get prop2() {
-+        var x = () => {
-             var _super = 10; // Should be error
+-            var _super = 10; // Should be error
 -            return 10;
 -        },
 -        set: function (val) {
-+        };
-+        return 10;
-+    }
-+    set prop2(val) {
-+        var x = () => {
-             var _super = 10; // Should be error
+-            var _super = 10; // Should be error
 -        },
 -        enumerable: false,
 -        configurable: true
@@ -82,8 +58,7 @@
 -    __extends(c, _super_1);
 -    function c() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
-+        };
-     }
+-    }
 -    Object.defineProperty(c.prototype, "prop2", {
 -        get: function () {
 -            var x = function () {
@@ -101,4 +76,34 @@
 -    });
 -    return c;
 -}(Foo));
++class Foo {
++    get prop1() {
++        var _super = 10; // No error
++        return 10;
++    }
++    set prop1(val) {
++        var _super = 10; // No error
++    }
++}
++class b extends Foo {
++    get prop2() {
++        var _super = 10; // Should be error
++        return 10;
++    }
++    set prop2(val) {
++        var _super = 10; // Should be error
++    }
++}
++class c extends Foo {
++    get prop2() {
++        var x = () => {
++            var _super = 10; // Should be error
++        };
++        return 10;
++    }
++    set prop2(val) {
++        var x = () => {
++            var _super = 10; // Should be error
++        };
++    }
 +}

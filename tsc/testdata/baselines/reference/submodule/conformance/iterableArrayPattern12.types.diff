@@ -2,7 +2,7 @@
 +++ new.iterableArrayPattern12.types
 @@= skipped -42, +42 lines =@@
  }
- 
+
  function fun([a, ...b] = new FooIterator) { }
 ->fun : ([a, ...b]?: FooIterator) => void
 +>fun : (__0?: FooIterator) => void
@@ -10,11 +10,10 @@
  >b : Foo[]
  >new FooIterator : FooIterator
 @@= skipped -8, +8 lines =@@
- 
+
  fun(new FooIterator);
  >fun(new FooIterator) : void
 ->fun : ([a, ...b]?: FooIterator) => void
 +>fun : (__0?: FooIterator) => void
  >new FooIterator : FooIterator
  >FooIterator : typeof FooIterator
- 

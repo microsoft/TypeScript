@@ -1,7 +1,7 @@
 --- old.derivedClassTransitivity3.js
 +++ new.derivedClassTransitivity3.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [derivedClassTransitivity3.js]
  // subclassing is not transitive when you can remove required parameters and add optional parameters
 -var __extends = (this && this.__extends) || (function () {

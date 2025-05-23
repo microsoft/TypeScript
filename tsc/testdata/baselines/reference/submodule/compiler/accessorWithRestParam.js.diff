@@ -2,7 +2,7 @@
 +++ new.accessorWithRestParam.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [accessorWithRestParam.js]
 -var C = /** @class */ (function () {
 -    function C() {

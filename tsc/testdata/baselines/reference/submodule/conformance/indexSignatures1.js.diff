@@ -1,8 +1,8 @@
 --- old.indexSignatures1.js
 +++ new.indexSignatures1.js
 @@= skipped -324, +324 lines =@@
- 
- 
+
+
  //// [indexSignatures1.js]
 -"use strict";
  // Symbol index signature checking

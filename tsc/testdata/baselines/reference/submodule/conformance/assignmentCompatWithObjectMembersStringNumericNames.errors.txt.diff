@@ -21,7 +21,7 @@
 +assignmentCompatWithObjectMembersStringNumericNames.ts(82,5): error TS2741: Property ''1.0'' is missing in type '{ 1.0: string; baz?: string; }' but required in type '{ '1.0': string; }'.
  assignmentCompatWithObjectMembersStringNumericNames.ts(83,5): error TS2741: Property ''1.0'' is missing in type 'T2' but required in type '{ '1.0': string; }'.
  assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Property ''1.0'' is missing in type 'T' but required in type '{ '1.0': string; }'.
- 
+
 @@= skipped -142, +142 lines =@@
      
          a = b; // error

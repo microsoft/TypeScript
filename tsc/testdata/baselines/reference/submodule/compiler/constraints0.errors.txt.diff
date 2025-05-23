@@ -4,8 +4,8 @@
 -constraints0.ts(14,11): error TS2344: Type 'B' does not satisfy the constraint 'A'.
 -  Property 'a' is missing in type 'B' but required in type 'A'.
 +constraints0.ts(14,11): error TS2741: Property 'a' is missing in type 'B' but required in type 'A'.
- 
- 
+
+
  ==== constraints0.ts (1 errors) ====
 @@= skipped -17, +16 lines =@@
      var v1: C<A>; // should work

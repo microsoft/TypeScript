@@ -2,7 +2,7 @@
 +++ new.exportAsNamespace1(module=amd).js
 @@= skipped -15, +15 lines =@@
  foo.ns.b;
- 
+
  //// [0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

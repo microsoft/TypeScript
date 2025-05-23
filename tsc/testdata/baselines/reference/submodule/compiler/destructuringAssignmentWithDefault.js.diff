@@ -1,8 +1,8 @@
 --- old.destructuringAssignmentWithDefault.js
 +++ new.destructuringAssignmentWithDefault.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [destructuringAssignmentWithDefault.js]
 -var _a;
 -var a = {};

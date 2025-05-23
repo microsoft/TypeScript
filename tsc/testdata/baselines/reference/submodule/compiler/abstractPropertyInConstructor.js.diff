@@ -1,8 +1,8 @@
 --- old.abstractPropertyInConstructor.js
 +++ new.abstractPropertyInConstructor.js
 @@= skipped -95, +95 lines =@@
- 
- 
+
+
  //// [abstractPropertyInConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -72,7 +72,7 @@
          other.cb(other.prop);
          yetAnother.cb(yetAnother.prop);
 -        return _this;
-     }
+-    }
 -    return DerivedAbstractClass;
 -}(AbstractClass));
 -var Implementation = /** @class */ (function (_super) {
@@ -83,6 +83,9 @@
 -        _this.cb = function (s) { };
 -        _this.cb(_this.prop);
 -        return _this;
+-    }
+-    Implementation.prototype.method = function (n) {
++    }
 +}
 +class Implementation extends DerivedAbstractClass {
 +    prop = "";
@@ -90,8 +93,7 @@
 +    constructor(str, other, yetAnother) {
 +        super(str, other, yetAnother);
 +        this.cb(this.prop);
-     }
--    Implementation.prototype.method = function (n) {
++    }
 +    method(n) {
          this.cb(this.prop + n);
 -    };
@@ -116,15 +118,7 @@
 -        var self = this; // ok
 -        var _b = this, x = _b.x, y1 = _b.y; // error
 -        (_a = this, x = _a.x, y1 = _a.y, y1 = _a["y"]); // error
-+}
-+class C1 {
-+    x;
-+    y;
-+    constructor() {
-+        let self = this; // ok
-+        let { x, y: y1 } = this; // error
-+        ({ x, y: y1, "y": y1 } = this); // error
-     }
+-    }
 -    return C1;
 -}());
 -var C2 = /** @class */ (function () {
@@ -133,6 +127,18 @@
 -        var self = this; // ok
 -        var _b = this, x = _b.x, y1 = _b.y; // ok
 -        (_a = this, x = _a.x, y1 = _a.y, y1 = _a["y"]); // ok
+-    }
+-    return C2;
+-}());
++}
++class C1 {
++    x;
++    y;
++    constructor() {
++        let self = this; // ok
++        let { x, y: y1 } = this; // error
++        ({ x, y: y1, "y": y1 } = this); // error
++    }
 +}
 +class C2 {
 +    x;
@@ -141,7 +147,5 @@
 +        let self = this; // ok
 +        let { x, y: y1 } = this; // ok
 +        ({ x, y: y1, "y": y1 } = this); // ok
-     }
--    return C2;
--}());
++    }
 +}

@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationClass.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [sourceMapValidationClass.js]
 -var Greeter = /** @class */ (function () {
 -    function Greeter(greeting) {
@@ -21,11 +21,7 @@
          return "<h1>" + this.greeting + "</h1>";
 -    };
 -    Greeter.prototype.fn = function () {
-+    }
-+    x;
-+    x1 = 10;
-+    fn() {
-         return this.greeting;
+-        return this.greeting;
 -    };
 -    Object.defineProperty(Greeter.prototype, "greetings", {
 -        get: function () {
@@ -39,6 +35,11 @@
 -    });
 -    return Greeter;
 -}());
++    }
++    x;
++    x1 = 10;
++    fn() {
++        return this.greeting;
 +    }
 +    get greetings() {
 +        return this.greeting;

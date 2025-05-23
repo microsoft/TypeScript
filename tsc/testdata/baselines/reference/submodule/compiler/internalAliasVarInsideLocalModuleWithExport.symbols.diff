@@ -6,6 +6,6 @@
  >a : Symbol(a, Decl(internalAliasVarInsideLocalModuleWithExport.ts, 0, 0))
 ->x : Symbol(b, Decl(internalAliasVarInsideLocalModuleWithExport.ts, 1, 14))
 +>x : Symbol(x, Decl(internalAliasVarInsideLocalModuleWithExport.ts, 1, 14))
- 
+
      export var bVal = b;
  >bVal : Symbol(bVal, Decl(internalAliasVarInsideLocalModuleWithExport.ts, 6, 14))

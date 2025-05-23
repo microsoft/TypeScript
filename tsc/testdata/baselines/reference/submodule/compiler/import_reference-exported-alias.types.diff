@@ -1,12 +1,12 @@
 --- old.import_reference-exported-alias.types
 +++ new.import_reference-exported-alias.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file2.ts ===
  import appJs = require("file1");
 ->appJs : typeof appJs
 +>appJs : any
- 
+
  import Services = appJs.Services;
 ->Services : typeof appJs.Services
 ->appJs : typeof appJs
@@ -14,7 +14,7 @@
 +>Services : any
 +>appJs : any
 +>Services : any
- 
+
  import UserServices = Services.UserServices;
 ->UserServices : typeof Services.UserServices
 ->Services : typeof appJs.Services
@@ -22,7 +22,7 @@
 +>UserServices : any
 +>Services : any
 +>UserServices : any
- 
+
  var x = new UserServices().getUserName();
 ->x : string
 ->new UserServices().getUserName() : string
@@ -30,13 +30,7 @@
 ->new UserServices() : Services.UserServices
 ->UserServices : typeof Services.UserServices
 ->getUserName : () => string
-+>x : any
-+>new UserServices().getUserName() : any
-+>new UserServices().getUserName : any
-+>new UserServices() : any
-+>UserServices : any
-+>getUserName : any
- 
+-
 -=== file1.ts ===
 -module App {
 ->App : typeof App
@@ -63,4 +57,9 @@
 -
 -export = Mod;
 ->Mod : typeof App
--
++>x : any
++>new UserServices().getUserName() : any
++>new UserServices().getUserName : any
++>new UserServices() : any
++>UserServices : any
++>getUserName : any

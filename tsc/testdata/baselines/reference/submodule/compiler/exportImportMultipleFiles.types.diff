@@ -1,12 +1,12 @@
 --- old.exportImportMultipleFiles.types
 +++ new.exportImportMultipleFiles.types
 @@= skipped -1, +1 lines =@@
- 
+
  === exportImportMultipleFiles_userCode.ts ===
  import lib = require('./exportImportMultipleFiles_library');
 ->lib : typeof lib
 +>lib : typeof import("exportImportMultipleFiles_library")
- 
+
  lib.math.add(3, 4); // Shouldnt be error
  >lib.math.add(3, 4) : any
 ->lib.math.add : (a: any, b: any) => any
@@ -21,7 +21,7 @@
 +>add : any
  >3 : 3
  >4 : 4
- 
+
 -=== exportImportMultipleFiles_math.ts ===
 -export function add(a, b) { return a + b; }
 ->add : (a: any, b: any) => any
@@ -35,7 +35,7 @@
  export import math = require("exportImportMultipleFiles_math");
 ->math : typeof math
 +>math : any
- 
+
  math.add(3, 4); // OK
  >math.add(3, 4) : any
 ->math.add : (a: any, b: any) => any
@@ -46,4 +46,3 @@
 +>add : any
  >3 : 3
  >4 : 4
- 

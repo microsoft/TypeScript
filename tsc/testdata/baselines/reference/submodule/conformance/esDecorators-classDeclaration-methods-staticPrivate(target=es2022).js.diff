@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-methods-staticPrivate(target=es2022).js
 +++ new.esDecorators-classDeclaration-methods-staticPrivate(target=es2022).js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-methods-staticPrivate.js]
 -let C = (() => {
 -    let _staticExtraInitializers = [];

@@ -2,18 +2,17 @@
 +++ new.genericFunctionSpecializations1.types
 @@= skipped -5, +5 lines =@@
  >test : string
- 
+
  function foo3<T>(test: T) { }
 ->foo3 : <T_1>(test: string) => any
 +>foo3 : <T>(test: string) => any
  >test : T
- 
+
  function foo4<T>(test: string); // valid
 @@= skipped -8, +8 lines =@@
  >test : string
- 
+
  function foo4<T extends String>(test: T) { }
 ->foo4 : <T_1>(test: string) => any
 +>foo4 : <T>(test: string) => any
  >test : T
- 

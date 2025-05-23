@@ -6,6 +6,6 @@
  import WinJS = require('./moduleInTypePosition1_0');
 ->WinJS : typeof WinJS
 +>WinJS : typeof import("moduleInTypePosition1_0")
- 
+
  var x = (w1: WinJS) => { };
  >x : (w1: WinJS) => void

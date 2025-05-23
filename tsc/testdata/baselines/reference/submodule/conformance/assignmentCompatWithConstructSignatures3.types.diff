@@ -2,28 +2,28 @@
 +++ new.assignmentCompatWithConstructSignatures3.types
 @@= skipped -83, +83 lines =@@
  >bar : string
- 
+
  var a12: new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 ->a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 +>a12 : new (x: Base[], y: Derived2[]) => Derived[]
  >x : Base[]
  >y : Derived2[]
- 
+
  var a13: new (x: Array<Base>, y: Array<Derived>) => Array<Derived>;
 ->a13 : new (x: Array<Base>, y: Array<Derived>) => Array<Derived>
 +>a13 : new (x: Base[], y: Derived[]) => Derived[]
  >x : Base[]
  >y : Derived[]
- 
+
 @@= skipped -241, +241 lines =@@
  >a11 : new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
- 
+
  var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
 ->b12 : new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>
 +>b12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
  >x : Base[]
  >y : T
- 
+
  a12 = b12; // ok
 ->a12 = b12 : new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>
 ->a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
@@ -31,7 +31,7 @@
 +>a12 = b12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
 +>a12 : new (x: Base[], y: Derived2[]) => Derived[]
 +>b12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
- 
+
  b12 = a12; // ok
 ->b12 = a12 : new (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 ->b12 : new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>
@@ -39,13 +39,13 @@
 +>b12 = a12 : new (x: Base[], y: Derived2[]) => Derived[]
 +>b12 : new <T extends Base[]>(x: Base[], y: T) => Derived[]
 +>a12 : new (x: Base[], y: Derived2[]) => Derived[]
- 
+
  var b13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
 ->b13 : new <T extends Array<Derived>>(x: Array<Base>, y: T) => T
 +>b13 : new <T extends Derived[]>(x: Base[], y: T) => T
  >x : Base[]
  >y : T
- 
+
  a13 = b13; // ok
 ->a13 = b13 : new <T extends Array<Derived>>(x: Array<Base>, y: T) => T
 ->a13 : new (x: Array<Base>, y: Array<Derived>) => Array<Derived>
@@ -53,7 +53,7 @@
 +>a13 = b13 : new <T extends Derived[]>(x: Base[], y: T) => T
 +>a13 : new (x: Base[], y: Derived[]) => Derived[]
 +>b13 : new <T extends Derived[]>(x: Base[], y: T) => T
- 
+
  b13 = a13; // ok
 ->b13 = a13 : new (x: Array<Base>, y: Array<Derived>) => Array<Derived>
 ->b13 : new <T extends Array<Derived>>(x: Array<Base>, y: T) => T
@@ -61,6 +61,6 @@
 +>b13 = a13 : new (x: Base[], y: Derived[]) => Derived[]
 +>b13 : new <T extends Derived[]>(x: Base[], y: T) => T
 +>a13 : new (x: Base[], y: Derived[]) => Derived[]
- 
+
  var b14: new <T>(x: { a: T; b: T }) => T; 
  >b14 : new <T>(x: { a: T; b: T; }) => T

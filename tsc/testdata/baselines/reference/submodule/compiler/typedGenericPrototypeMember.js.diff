@@ -1,8 +1,8 @@
 --- old.typedGenericPrototypeMember.js
 +++ new.typedGenericPrototypeMember.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [typedGenericPrototypeMember.js]
 -var List = /** @class */ (function () {
 -    function List() {

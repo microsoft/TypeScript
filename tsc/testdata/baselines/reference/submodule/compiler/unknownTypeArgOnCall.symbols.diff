@@ -2,15 +2,15 @@
 +++ new.unknownTypeArgOnCall.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(unknownTypeArgOnCall.ts, 0, 10))
- 
+
    public clone<U>() {
 ->clone : Symbol(Foo.clone, Decl(unknownTypeArgOnCall.ts, 0, 14))
 +>clone : Symbol(clone, Decl(unknownTypeArgOnCall.ts, 0, 14))
  >U : Symbol(U, Decl(unknownTypeArgOnCall.ts, 1, 15))
- 
+
     return null;
 @@= skipped -12, +12 lines =@@
- 
+
  var r = f.clone<Uhhhh>()
  >r : Symbol(r, Decl(unknownTypeArgOnCall.ts, 6, 3))
 ->f.clone : Symbol(Foo.clone, Decl(unknownTypeArgOnCall.ts, 0, 14))
@@ -19,4 +19,3 @@
 ->clone : Symbol(Foo.clone, Decl(unknownTypeArgOnCall.ts, 0, 14))
 +>clone : Symbol(clone, Decl(unknownTypeArgOnCall.ts, 0, 14))
  >Uhhhh : Symbol(Uhhhh)
- 

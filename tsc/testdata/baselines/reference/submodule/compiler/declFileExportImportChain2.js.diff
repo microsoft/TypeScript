@@ -3,7 +3,7 @@
 @@= skipped -19, +19 lines =@@
  import c = require("declFileExportImportChain2_c");
  export var x: c.b.m2.c1;
- 
+
 -//// [declFileExportImportChain2_a.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

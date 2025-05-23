@@ -2,7 +2,7 @@
 +++ new.genericRestArgs.js
 @@= skipped -14, +14 lines =@@
  var a2Gc = makeArrayG<any[]>(1, ""); // error
- 
+
  //// [genericRestArgs.js]
 -function makeArrayG() {
 -    var items = [];

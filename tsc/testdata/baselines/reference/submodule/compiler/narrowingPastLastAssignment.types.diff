@@ -1,27 +1,27 @@
 --- old.narrowingPastLastAssignment.types
 +++ new.narrowingPastLastAssignment.types
 @@= skipped -66, +66 lines =@@
- 
+
      };
      let o = {
 ->o : { foo(): void; }
 ->{        foo() { x /* number */ }    } : { foo(): void; }
 +>o : { foo: () => void; }
 +>{        foo() { x /* number */ }    } : { foo: () => void; }
- 
+
          foo() { x /* number */ }
  >foo : () => void
 @@= skipped -325, +325 lines =@@
  }
- 
+
  function makeAdder(n?: number) {
 ->makeAdder : (n?: number) => (m: number) => number
 +>makeAdder : (n?: number | undefined) => (m: number) => number
  >n : number | undefined
- 
+
      n ??= 0;
 @@= skipped -99, +99 lines =@@
- 
+
          foo.toLocaleLowerCase();
  >foo.toLocaleLowerCase() : string
 ->foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }

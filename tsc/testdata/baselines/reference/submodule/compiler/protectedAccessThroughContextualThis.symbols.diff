@@ -2,19 +2,19 @@
 +++ new.protectedAccessThroughContextualThis.symbols
 @@= skipped -4, +4 lines =@@
  >Foo : Symbol(Foo, Decl(protectedAccessThroughContextualThis.ts, 0, 0))
- 
+
    protected protec = 'bar';
 ->protec : Symbol(Foo.protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
 +>protec : Symbol(protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
- 
+
    private privat = '';
 ->privat : Symbol(Foo.privat, Decl(protectedAccessThroughContextualThis.ts, 1, 27))
 +>privat : Symbol(privat, Decl(protectedAccessThroughContextualThis.ts, 1, 27))
- 
+
    copy!: string
 ->copy : Symbol(Foo.copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
 +>copy : Symbol(copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
- 
+
    constructor() {
      bindCopy.call(this)
 ->bindCopy.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
@@ -23,7 +23,7 @@
 ->call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 +>call : Symbol(call, Decl(lib.es5.d.ts, --, --))
  >this : Symbol(Foo, Decl(protectedAccessThroughContextualThis.ts, 0, 0))
- 
+
      bindCopy2.call(this)
 ->bindCopy2.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 +>bindCopy2.call : Symbol(call, Decl(lib.es5.d.ts, --, --))
@@ -35,19 +35,21 @@
  }
 @@= skipped -29, +29 lines =@@
  >Foo : Symbol(Foo, Decl(protectedAccessThroughContextualThis.ts, 0, 0))
- 
+
    this.copy = this.protec; // Should OK
 ->this.copy : Symbol(Foo.copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
-+>this.copy : Symbol(copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
- >this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 10, 18))
+->this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 10, 18))
 ->copy : Symbol(Foo.copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
 ->this.protec : Symbol(Foo.protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
+->this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 10, 18))
+->protec : Symbol(Foo.protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
++>this.copy : Symbol(copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
++>this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 10, 18))
 +>copy : Symbol(copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
 +>this.protec : Symbol(protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
- >this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 10, 18))
-->protec : Symbol(Foo.protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
++>this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 10, 18))
 +>protec : Symbol(protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
- 
+
    console.log(this.privat); // Should error
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -60,23 +62,25 @@
 ->privat : Symbol(Foo.privat, Decl(protectedAccessThroughContextualThis.ts, 1, 27))
 +>privat : Symbol(privat, Decl(protectedAccessThroughContextualThis.ts, 1, 27))
  }
- 
+
  type BindingFunction = (this: Foo) => void;
 @@= skipped -26, +26 lines =@@
  >BindingFunction : Symbol(BindingFunction, Decl(protectedAccessThroughContextualThis.ts, 13, 1))
- 
+
    this.copy = this.protec; // Should OK
 ->this.copy : Symbol(Foo.copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
-+>this.copy : Symbol(copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
- >this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 15, 24))
+->this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 15, 24))
 ->copy : Symbol(Foo.copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
 ->this.protec : Symbol(Foo.protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
+->this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 15, 24))
+->protec : Symbol(Foo.protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
++>this.copy : Symbol(copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
++>this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 15, 24))
 +>copy : Symbol(copy, Decl(protectedAccessThroughContextualThis.ts, 2, 22))
 +>this.protec : Symbol(protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
- >this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 15, 24))
-->protec : Symbol(Foo.protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
++>this : Symbol(this, Decl(protectedAccessThroughContextualThis.ts, 15, 24))
 +>protec : Symbol(protec, Decl(protectedAccessThroughContextualThis.ts, 0, 11))
- 
+
    console.log(this.privat); // Should error
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))

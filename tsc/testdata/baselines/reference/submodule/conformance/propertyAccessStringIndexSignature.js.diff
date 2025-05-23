@@ -1,7 +1,7 @@
 --- old.propertyAccessStringIndexSignature.js
 +++ new.propertyAccessStringIndexSignature.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [propertyAccessStringIndexSignature.js]
  ;
 -var flags;

@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithCallSignatures4.js
 +++ new.assignmentCompatWithCallSignatures4.js
 @@= skipped -101, +101 lines =@@
- 
+
  //// [assignmentCompatWithCallSignatures4.js]
  // These are mostly permitted with the current loose rules. All ok unless otherwise noted.
 -var __extends = (this && this.__extends) || (function () {

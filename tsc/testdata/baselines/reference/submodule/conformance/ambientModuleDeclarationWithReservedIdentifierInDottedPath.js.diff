@@ -1,7 +1,7 @@
 --- old.ambientModuleDeclarationWithReservedIdentifierInDottedPath.js
 +++ new.ambientModuleDeclarationWithReservedIdentifierInDottedPath.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [ambientModuleDeclarationWithReservedIdentifierInDottedPath.js]
  "use strict";
 -// https://github.com/microsoft/TypeScript/issues/7840

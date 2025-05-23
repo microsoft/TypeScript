@@ -10,7 +10,7 @@
  >_sym : "my-fake-sym"
  >"ok" : "ok"
 @@= skipped -11, +11 lines =@@
- 
+
          this[_sym] = "yep";
  >this[_sym] = "yep" : "yep"
 ->this[_sym] : string
@@ -18,7 +18,7 @@
  >this : this
  >_sym : "my-fake-sym"
  >"yep" : "yep"
- 
+
          const x = this[_sym];
 ->x : string
 ->this[_sym] : string

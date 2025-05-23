@@ -2,7 +2,7 @@
 +++ new.ModuleWithExportedAndNonExportedImportAlias.types
 @@= skipped -22, +22 lines =@@
  >Line : Line
- 
+
          constructor(public start: A.Point, public end: A.Point) { }
 ->start : A.Point
 +>start : Point
@@ -14,13 +14,13 @@
  }
 @@= skipped -15, +15 lines =@@
  >A : any
- 
+
      import Lines = B;
 ->Lines : typeof Lines
 ->B : typeof Lines
 +>Lines : typeof B
 +>B : typeof B
- 
+
      export var Origin: Points.Point = { x: 0, y: 0 };
 ->Origin : Points.Point
 +>Origin : Point
@@ -28,7 +28,7 @@
  >{ x: 0, y: 0 } : { x: number; y: number; }
  >x : number
 @@= skipped -14, +14 lines =@@
- 
+
      // this is valid since B.Line _is_ visible outside Geometry
      export var Unit: Lines.Line = new Lines.Line(Origin, { x: 1, y: 0 });
 ->Unit : Lines.Line
@@ -48,7 +48,7 @@
  >x : number
  >1 : 1
 @@= skipped -27, +27 lines =@@
- 
+
  var p = Geometry.Origin;
  >p : { x: number; y: number; }
 ->Geometry.Origin : A.Point
@@ -56,11 +56,11 @@
  >Geometry : typeof Geometry
 ->Origin : A.Point
 +>Origin : Point
- 
+
  var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
  >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
 @@= skipped -15, +15 lines =@@
- 
+
  var line = Geometry.Unit;
  >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
 ->Geometry.Unit : B.Line
@@ -68,6 +68,6 @@
  >Geometry : typeof Geometry
 ->Unit : B.Line
 +>Unit : Line
- 
+
  // not expected to work since non are exported
  var line = Geometry.Lines.Line;

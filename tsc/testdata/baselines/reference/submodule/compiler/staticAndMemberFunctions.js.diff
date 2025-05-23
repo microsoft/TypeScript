@@ -2,7 +2,7 @@
 +++ new.staticAndMemberFunctions.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [staticAndMemberFunctions.js]
 -var T = /** @class */ (function () {
 -    function T() {

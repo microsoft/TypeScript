@@ -83,14 +83,7 @@
 -};
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+}
-+class B extends A {
-+}
-+@dec
-+class C {
-+    method(x) {
-     }
+-    }
 -    return A;
 -}());
 -var B = /** @class */ (function (_super) {
@@ -116,6 +109,14 @@
 -    ], C);
 -    return C;
 -}());
++class A {
++}
++class B extends A {
++}
++@dec
++class C {
++    method(x) {
++    }
 +}
  function id(x) {
      return x;

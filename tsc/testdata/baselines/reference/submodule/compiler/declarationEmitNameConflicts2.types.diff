@@ -7,11 +7,11 @@
 ->E : E
 +>E : base.E
  }
- 
+
  module X.Y.base.Z {
 @@= skipped -20, +20 lines =@@
  >f : () => void
- 
+
      export var C = X.Y.base.C; // Should be base.C
 ->C : typeof base.C
 ->X.Y.base.C : typeof base.C
@@ -24,7 +24,7 @@
  >base : typeof base
 ->C : typeof base.C
 +>C : typeof C
- 
+
      export var M = X.Y.base.M; // Should be base.M
 ->M : typeof base.M
 ->X.Y.base.M : typeof base.M
@@ -37,7 +37,7 @@
  >base : typeof base
 ->M : typeof base.M
 +>M : typeof M
- 
+
      export var E = X.Y.base.E; // Should be base.E
 ->E : typeof base.E
 ->X.Y.base.E : typeof base.E

@@ -1,8 +1,8 @@
 --- old.specializedLambdaTypeArguments.js
 +++ new.specializedLambdaTypeArguments.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [specializedLambdaTypeArguments.js]
 -var X = /** @class */ (function () {
 -    function X() {

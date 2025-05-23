@@ -2,7 +2,7 @@
 +++ new.tsxReactEmit4.js
 @@= skipped -19, +19 lines =@@
  var spread1 = <div {...p} x={0} />;
- 
+
  //// [file.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

@@ -2,15 +2,15 @@
 +++ new.classPropInitializationInferenceWithElementAccess.types
 @@= skipped -5, +5 lines =@@
  >Cls : Cls
- 
+
      x;
 ->x : number[]
 +>x : any
- 
+
      y;
 ->y : { seed: number; }
 +>y : any
- 
+
      z;
 ->z : string
 +>z : any
@@ -18,10 +18,10 @@
      0;
 ->0 : number[]
 +>0 : any
- 
+
      constructor(seed: number) {
  >seed : number
- 
+
          this['x'] = [seed];
  >this['x'] = [seed] : number[]
 ->this['x'] : number[]
@@ -30,7 +30,7 @@
  >'x' : "x"
  >[seed] : number[]
 @@= skipped -24, +24 lines =@@
- 
+
          this['y'] = { seed };
  >this['y'] = { seed } : { seed: number; }
 ->this['y'] : { seed: number; }
@@ -39,7 +39,7 @@
  >'y' : "y"
  >{ seed } : { seed: number; }
 @@= skipped -8, +8 lines =@@
- 
+
          this['z'] = `${seed}`;
  >this['z'] = `${seed}` : string
 ->this['z'] : string
@@ -48,7 +48,7 @@
  >'z' : "z"
  >`${seed}` : string
 @@= skipped -8, +8 lines =@@
- 
+
          this[0] = [seed];
  >this[0] = [seed] : number[]
 ->this[0] : number[]

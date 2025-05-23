@@ -2,7 +2,7 @@
 +++ new.memberFunctionsWithPublicPrivateOverloads.js
 @@= skipped -64, +64 lines =@@
  var r2 = d.foo(2); // error
- 
+
  //// [memberFunctionsWithPublicPrivateOverloads.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -2,7 +2,7 @@
 +++ new.crashInsourcePropertyIsRelatableToTargetProperty.types
 @@= skipped -12, +12 lines =@@
  >C : C
- 
+
  function foo(x: "hi", items: string[]): typeof foo;
 ->foo : (x: "hi", items: string[]) => typeof foo
 +>foo : (x: "hi", items: string[]) => ???
@@ -10,7 +10,7 @@
  >items : string[]
 ->foo : (x: "hi", items: string[]) => typeof foo
 +>foo : (x: "hi", items: string[]) => ???
- 
+
  function foo(x: string, items: string[]): typeof foo {
 ->foo : (x: "hi", items: string[]) => typeof foo
 +>foo : (x: "hi", items: string[]) => ???
@@ -18,7 +18,7 @@
  >items : string[]
 ->foo : (x: "hi", items: string[]) => typeof foo
 +>foo : (x: "hi", items: string[]) => ???
- 
+
      return null;
  }
  var a: D = foo("hi", []);
@@ -29,4 +29,3 @@
 +>foo : (x: "hi", items: string[]) => ???
  >"hi" : "hi"
  >[] : undefined[]
- 

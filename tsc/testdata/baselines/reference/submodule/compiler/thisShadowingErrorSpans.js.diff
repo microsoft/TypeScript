@@ -1,8 +1,8 @@
 --- old.thisShadowingErrorSpans.js
 +++ new.thisShadowingErrorSpans.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [thisShadowingErrorSpans.js]
 -"use strict";
 -var C = /** @class */ (function () {

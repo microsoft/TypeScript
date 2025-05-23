@@ -1,7 +1,7 @@
 --- old.asyncFunctionTempVariableScoping.js
 +++ new.asyncFunctionTempVariableScoping.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [asyncFunctionTempVariableScoping.js]
  // https://github.com/Microsoft/TypeScript/issues/19187
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

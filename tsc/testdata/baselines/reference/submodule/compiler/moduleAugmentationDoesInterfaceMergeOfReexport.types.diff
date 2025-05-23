@@ -6,27 +6,27 @@
  import * as ns from "./reexport";
 ->ns : typeof ns
 +>ns : typeof import("reexport")
- 
+
  declare module "./reexport" {
 ->"./reexport" : typeof ns
 +>"./reexport" : typeof import("reexport")
- 
+
      export interface Foo {
          self: Foo;
 @@= skipped -12, +12 lines =@@
  }
- 
+
  declare const f: ns.Foo;
 ->f : ns.Foo
 +>f : Foo
  >ns : any
- 
+
  f.x;
  >f.x : number
 ->f : ns.Foo
 +>f : Foo
  >x : number
- 
+
  f.self;
 ->f.self : ns.Foo
 ->f : ns.Foo
@@ -34,7 +34,7 @@
 +>f.self : Foo
 +>f : Foo
 +>self : Foo
- 
+
  f.self.x;
  >f.self.x : number
 ->f.self : ns.Foo
@@ -44,7 +44,7 @@
 +>f : Foo
 +>self : Foo
  >x : number
- 
+
  f.self.self;
 ->f.self.self : ns.Foo
 ->f.self : ns.Foo
@@ -56,4 +56,3 @@
 +>f : Foo
 +>self : Foo
 +>self : Foo
- 

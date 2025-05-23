@@ -1,8 +1,8 @@
 --- old.classExpression4.js
 +++ new.classExpression4.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [classExpression4.js]
 -var C = /** @class */ (function () {
 -    function C() {

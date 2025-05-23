@@ -1,8 +1,8 @@
 --- old.narrowingUnionToNeverAssigment.js
 +++ new.narrowingUnionToNeverAssigment.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [narrowingUnionToNeverAssigment.js]
 -"use strict";
  function fx1(x) {

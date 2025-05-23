@@ -6,10 +6,12 @@
 +/a.ts(3,34): error TS2307: Cannot find module '@scoped/nodemodulescache' or its corresponding type declarations.
  /a.ts(4,36): error TS2307: Cannot find module '@mangled/nodemodulescache' or its corresponding type declarations.
  /a.ts(5,30): error TS2307: Cannot find module '@scoped/attypescache' or its corresponding type declarations.
-+/a.ts(6,37): error TS2307: Cannot find module '@mangled/attypescache' or its corresponding type declarations.
- 
- 
+-
+-
 -==== /a.ts (3 errors) ====
++/a.ts(6,37): error TS2307: Cannot find module '@mangled/attypescache' or its corresponding type declarations.
++
++
 +==== /a.ts (6 errors) ====
      import { typesCache } from "@scoped/typescache";
 +                               ~~~~~~~~~~~~~~~~~~~~

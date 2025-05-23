@@ -2,7 +2,7 @@
 +++ new.restParamAsOptional.js
 @@= skipped -4, +4 lines =@@
  function f2(...x = []) { }
- 
+
  //// [restParamAsOptional.js]
 -function f() {
 -    var x = [];

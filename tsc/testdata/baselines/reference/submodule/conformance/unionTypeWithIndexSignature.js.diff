@@ -1,8 +1,8 @@
 --- old.unionTypeWithIndexSignature.js
 +++ new.unionTypeWithIndexSignature.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [unionTypeWithIndexSignature.js]
 -"use strict";
  u.foo = 'bye';

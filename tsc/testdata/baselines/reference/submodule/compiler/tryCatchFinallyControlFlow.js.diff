@@ -1,8 +1,8 @@
 --- old.tryCatchFinallyControlFlow.js
 +++ new.tryCatchFinallyControlFlow.js
 @@= skipped -331, +331 lines =@@
- 
- 
+
+
  //// [tryCatchFinallyControlFlow.js]
 -"use strict";
  // Repro from #34797

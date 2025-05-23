@@ -2,11 +2,11 @@
 +++ new.typeParameterConstModifiersWithIntersection.types
 @@= skipped -10, +10 lines =@@
  }
- 
+
  declare function test<
 ->test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
 +>test : <T1 extends { type: string; }, TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
- 
+
    T1 extends { type: string },
  >type : string
 @@= skipped -13, +13 lines =@@
@@ -16,5 +16,5 @@
 ->test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
 +>test : <T1 extends { type: string; }, TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
  >{  produceThing: {} as {    type: "foo";  },  useIt: {    type: "foo",  },  extra: 10,} : { produceThing: { type: "foo"; }; useIt: { type: "foo"; }; extra: 10; }
- 
+
    produceThing: {} as {

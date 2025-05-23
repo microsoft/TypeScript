@@ -11,7 +11,7 @@
  >multiM : typeof multiM
 ->b : typeof multiM.b
 +>b : typeof b
- 
+
  new multiM.c();
 ->new multiM.c() : multiM.c
 ->multiM.c : typeof multiM.c
@@ -20,4 +20,3 @@
  >multiM : typeof multiM
 ->c : typeof multiM.c
 +>c : typeof c
- 

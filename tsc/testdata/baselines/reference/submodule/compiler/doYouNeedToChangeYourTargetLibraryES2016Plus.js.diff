@@ -1,7 +1,7 @@
 --- old.doYouNeedToChangeYourTargetLibraryES2016Plus.js
 +++ new.doYouNeedToChangeYourTargetLibraryES2016Plus.js
 @@= skipped -50, +50 lines =@@
- 
+
  //// [doYouNeedToChangeYourTargetLibraryES2016Plus.js]
  // es2016
 -var testIncludes = ["hello"].includes("world");

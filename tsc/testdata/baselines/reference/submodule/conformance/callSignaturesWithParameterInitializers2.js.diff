@@ -2,7 +2,7 @@
 +++ new.callSignaturesWithParameterInitializers2.js
 @@= skipped -27, +27 lines =@@
  b.foo(1);
- 
+
  //// [callSignaturesWithParameterInitializers2.js]
 -// Optional parameters allow initializers only in implementation signatures
 -// All the below declarations are errors

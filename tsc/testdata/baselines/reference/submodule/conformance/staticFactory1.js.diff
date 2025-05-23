@@ -2,7 +2,7 @@
 +++ new.staticFactory1.js
 @@= skipped -15, +15 lines =@@
  d.foo();  
- 
+
  //// [staticFactory1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,8 +1,8 @@
 --- old.strictModeReservedWord.js
 +++ new.strictModeReservedWord.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [strictModeReservedWord.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

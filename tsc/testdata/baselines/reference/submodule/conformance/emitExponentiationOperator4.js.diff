@@ -1,7 +1,7 @@
 --- old.emitExponentiationOperator4.js
 +++ new.emitExponentiationOperator4.js
 @@= skipped -40, +40 lines =@@
- 
+
  //// [emitExponentiationOperator4.js]
  var temp;
 -Math.pow(temp, 3);

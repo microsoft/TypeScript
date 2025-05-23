@@ -1,8 +1,8 @@
 --- old.thisTypeInAccessorsNegative.js
 +++ new.thisTypeInAccessorsNegative.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [thisTypeInAccessorsNegative.js]
 -var mismatch = {
 +const mismatch = {

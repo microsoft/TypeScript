@@ -6,7 +6,7 @@
  >c1 : Symbol(c1, Decl(augmentedTypesClass.ts, 0, 0))
 ->foo : Symbol(c1.foo, Decl(augmentedTypesClass.ts, 1, 10))
 +>foo : Symbol(foo, Decl(augmentedTypesClass.ts, 1, 10))
- 
+
  var c1 = 1; // error
  >c1 : Symbol(c1, Decl(augmentedTypesClass.ts, 2, 3))
 @@= skipped -8, +8 lines =@@
@@ -15,9 +15,8 @@
  >c4 : Symbol(c4, Decl(augmentedTypesClass.ts, 2, 11))
 ->foo : Symbol(c4.foo, Decl(augmentedTypesClass.ts, 5, 10))
 +>foo : Symbol(foo, Decl(augmentedTypesClass.ts, 5, 10))
- 
+
  enum c4 { One } // error
  >c4 : Symbol(c4, Decl(augmentedTypesClass.ts, 5, 29))
 ->One : Symbol(c4.One, Decl(augmentedTypesClass.ts, 6, 9))
 +>One : Symbol(One, Decl(augmentedTypesClass.ts, 6, 9))
- 

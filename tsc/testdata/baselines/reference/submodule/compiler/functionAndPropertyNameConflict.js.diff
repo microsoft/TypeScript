@@ -2,7 +2,7 @@
 +++ new.functionAndPropertyNameConflict.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [functionAndPropertyNameConflict.js]
 -var C65 = /** @class */ (function () {
 -    function C65() {

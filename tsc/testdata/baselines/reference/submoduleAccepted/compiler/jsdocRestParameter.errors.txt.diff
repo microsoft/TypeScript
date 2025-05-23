@@ -5,8 +5,8 @@
 -/a.js(8,6): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 +/a.js(8,6): error TS2554: Expected 1 arguments, but got 2.
 +/a.js(9,6): error TS2554: Expected 1 arguments, but got 2.
- 
- 
+
+
  ==== /a.js (2 errors) ====
 @@= skipped -9, +9 lines =@@
          arguments[0];

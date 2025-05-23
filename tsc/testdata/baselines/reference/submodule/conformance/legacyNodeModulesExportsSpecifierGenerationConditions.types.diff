@@ -1,7 +1,7 @@
 --- old.legacyNodeModulesExportsSpecifierGenerationConditions.types
 +++ new.legacyNodeModulesExportsSpecifierGenerationConditions.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.ts ===
  export const a = async () => (await import("inner")).x();
 ->a : () => Promise<import("node_modules/inner/private").Thing>
@@ -21,11 +21,11 @@
  >"inner" : "inner"
 ->x : () => import("node_modules/inner/private").Thing
 +>x : () => Thing
- 
+
  === node_modules/inner/index.d.ts ===
  export { x } from "./other.js";
 ->x : () => import("node_modules/inner/private").Thing
 +>x : () => Thing
- 
+
  === node_modules/inner/other.d.ts ===
  import { Thing } from "./private.js"

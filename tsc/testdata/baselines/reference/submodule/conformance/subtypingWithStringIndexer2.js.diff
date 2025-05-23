@@ -2,6 +2,6 @@
 +++ new.subtypingWithStringIndexer2.js
 @@= skipped -45, +45 lines =@@
  }
- 
+
  //// [subtypingWithStringIndexer2.js]
 -// Derived type indexer must be subtype of base type indexer

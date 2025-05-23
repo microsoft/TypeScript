@@ -6,163 +6,163 @@
  var S;
 ->S : string
 +>S : String
- 
+
  /** @type {string} */
  var s;
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {Number} */
  var N;
 ->N : number
 +>N : Number
- 
+
  /** @type {number} */
  var n;
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {Boolean} */
  var B;
 ->B : boolean
 +>B : Boolean
- 
+
  /** @type {boolean} */
  var b;
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {Void} */
  var V;
 ->V : void
 +>V : Void
- 
+
  /** @type {void} */
  var v;
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {Undefined} */
  var U;
 ->U : undefined
 +>U : Undefined
- 
+
  /** @type {undefined} */
  var u;
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {Null} */
  var Nl;
 ->Nl : null
 +>Nl : Null
- 
+
  /** @type {null} */
  var nl;
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {Array} */
  var A;
 ->A : any[]
 +>A : any
- 
+
  /** @type {array} */
  var a;
 ->a : any[]
 +>a : array
- 
+
  /** @type {Promise} */
  var P;
 ->P : Promise<any>
 +>P : any
- 
+
  /** @type {promise} */
  var p;
 ->p : Promise<any>
 +>p : promise
- 
+
  /** @type {?number} */
  var nullable;
 @@= skipped -20, +20 lines =@@
- 
+
  /** @type {Object} */
  var Obj;
 ->Obj : any
 +>Obj : Object
- 
+
  /** @type {object} */
  var obj;
 ->obj : any
 +>obj : object
- 
+
  /** @type {Function} */
  var Func;
 @@= skipped -20, +20 lines =@@
- 
+
  === b.ts ===
  var S: string;
 ->S : string
 +>S : String
- 
+
  var s: string;
  >s : string
- 
+
  var N: number;
 ->N : number
 +>N : Number
- 
+
  var n: number
  >n : number
- 
+
  var B: boolean;
 ->B : boolean
 +>B : Boolean
- 
+
  var b: boolean;
  >b : boolean
- 
+
  var V :void;
 ->V : void
 +>V : Void
- 
+
  var v: void;
  >v : void
- 
+
  var U: undefined;
 ->U : undefined
 +>U : Undefined
- 
+
  var u: undefined;
  >u : undefined
- 
+
  var Nl: null;
 ->Nl : null
 +>Nl : Null
- 
+
  var nl: null;
  >nl : null
- 
+
  var A: any[];
 ->A : any[]
 +>A : any
- 
+
  var a: any[];
 ->a : any[]
 +>a : array
- 
+
  var P: Promise<any>;
 ->P : Promise<any>
 +>P : any
- 
+
  var p: Promise<any>;
 ->p : Promise<any>
 +>p : promise
- 
+
  var nullable: number | null;
  >nullable : number | null
- 
+
  var Obj: any;
 ->Obj : any
 +>Obj : Object
- 
+
  var obj: any;
 ->obj : any
 +>obj : object
- 
+
  var Func: Function;
  >Func : Function

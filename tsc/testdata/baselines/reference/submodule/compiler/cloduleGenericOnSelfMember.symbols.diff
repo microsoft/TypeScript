@@ -2,7 +2,7 @@
 +++ new.cloduleGenericOnSelfMember.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(cloduleGenericOnSelfMember.ts, 0, 18))
- 
+
      field: T;
 ->field : Symbol(ServiceBase.field, Decl(cloduleGenericOnSelfMember.ts, 0, 22))
 +>field : Symbol(field, Decl(cloduleGenericOnSelfMember.ts, 0, 22))

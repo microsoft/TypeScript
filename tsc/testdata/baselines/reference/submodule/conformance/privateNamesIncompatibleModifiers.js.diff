@@ -1,8 +1,8 @@
 --- old.privateNamesIncompatibleModifiers.js
 +++ new.privateNamesIncompatibleModifiers.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [privateNamesIncompatibleModifiers.js]
 -"use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

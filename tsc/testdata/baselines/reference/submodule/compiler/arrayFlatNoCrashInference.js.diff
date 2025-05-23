@@ -2,7 +2,7 @@
 +++ new.arrayFlatNoCrashInference.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [arrayFlatNoCrashInference.js]
 -"use strict";
  function foo(arr, depth) {

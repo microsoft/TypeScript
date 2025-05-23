@@ -1,6 +1,6 @@
 --- old.declarationFileOverwriteError.errors.txt
 +++ new.declarationFileOverwriteError.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5055: Cannot write file 'a.d.ts' because it would overwrite input file.
 -  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 -
@@ -14,5 +14,4 @@
 -==== a.ts (0 errors) ====
 -    class d {
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

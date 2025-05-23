@@ -2,7 +2,7 @@
 +++ new.controlFlowDestructuringLoop.js
 @@= skipped -24, +24 lines =@@
  }
- 
+
  //// [controlFlowDestructuringLoop.js]
 -"use strict";
 -// Repro from #28758

@@ -10,5 +10,5 @@
 ->from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
 +>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
  >i : Iterator<string, undefined, any>
- 
+
      await using it3 = new MyIterator();

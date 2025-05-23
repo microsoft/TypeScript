@@ -2,7 +2,7 @@
 +++ new.importTypeAmdBundleRewrite.symbols
 @@= skipped -4, +4 lines =@@
  >Foo : Symbol(Foo, Decl(c.ts, 0, 0))
- 
+
      x: 12;
 ->x : Symbol(Foo.x, Decl(c.ts, 0, 22))
 +>x : Symbol(x, Decl(c.ts, 0, 22))

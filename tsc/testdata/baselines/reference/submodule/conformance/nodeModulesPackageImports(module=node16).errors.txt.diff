@@ -1,6 +1,6 @@
 --- old.nodeModulesPackageImports(module=node16).errors.txt
 +++ new.nodeModulesPackageImports(module=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#mjs")' call instead.
 -index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("#type")' call instead.
 -
@@ -45,5 +45,4 @@
 -            "#type": "./index.js"
 -        }
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

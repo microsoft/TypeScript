@@ -1,8 +1,8 @@
 --- old.privateNameFieldParenthesisLeftAssignment.js
 +++ new.privateNameFieldParenthesisLeftAssignment.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [privateNameFieldParenthesisLeftAssignment.js]
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");

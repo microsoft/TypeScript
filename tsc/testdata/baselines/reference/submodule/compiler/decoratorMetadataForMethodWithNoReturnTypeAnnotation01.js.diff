@@ -1,14 +1,12 @@
 --- old.decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js
 +++ new.decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js]
 -var MyClass = /** @class */ (function () {
 -    function MyClass(test, test2) {
-+class MyClass {
-+    constructor(test, test2) {
-     }
+-    }
 -    MyClass.prototype.doSomething = function () {
 -    };
 -    __decorate([
@@ -19,6 +17,9 @@
 -    ], MyClass.prototype, "doSomething", null);
 -    return MyClass;
 -}());
++class MyClass {
++    constructor(test, test2) {
++    }
 +    @decorator
 +    doSomething() {
 +    }

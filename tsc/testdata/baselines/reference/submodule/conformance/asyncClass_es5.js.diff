@@ -2,7 +2,7 @@
 +++ new.asyncClass_es5.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [asyncClass_es5.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -2,13 +2,13 @@
 +++ new.propertyAccessChain.2.types
 @@= skipped -22, +22 lines =@@
  >c : string
- 
+
  declare const o3: { b: undefined | { c: string } };
 ->o3 : { b: undefined | { c: string; }; }
 +>o3 : { b: { c: string; }; }
  >b : { c: string; }
  >c : string
- 
+
  o3.b?.c;
  >o3.b?.c : string
  >o3.b : { c: string; }
@@ -16,4 +16,3 @@
 +>o3 : { b: { c: string; }; }
  >b : { c: string; }
  >c : string
- 

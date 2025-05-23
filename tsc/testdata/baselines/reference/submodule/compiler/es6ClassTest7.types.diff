@@ -1,7 +1,7 @@
 --- old.es6ClassTest7.types
 +++ new.es6ClassTest7.types
 @@= skipped -10, +10 lines =@@
- 
+
  class Bar extends M.Foo {
  >Bar : Bar
 ->M.Foo : M.Foo
@@ -10,4 +10,3 @@
 ->Foo : typeof M.Foo
 +>Foo : typeof Foo
  }
- 

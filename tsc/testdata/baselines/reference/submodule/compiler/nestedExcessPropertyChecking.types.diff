@@ -7,29 +7,29 @@
 ->x : { a?: string; }
 +>x : { a?: string | undefined; }
  >a : string | undefined
- 
+
  type B1 = { x: { b?: string } };
  >B1 : B1
 ->x : { b?: string; }
 +>x : { b?: string | undefined; }
  >b : string | undefined
- 
+
  type C1 = { x: { c: string } };
 @@= skipped -62, +62 lines =@@
  }
- 
+
  const foo1: Partial<{ something: any }> & { variables: {
 ->foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>; }
 +>foo1 : Partial<{ something: any; }> & { variables: { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>; }
  >something : any
 ->variables : { overrides?: OverridesInput; } & Partial<{ overrides?: OverridesInput; }>
 +>variables : { overrides?: OverridesInput | undefined; } & Partial<{ overrides?: OverridesInput | undefined; }>
- 
+
      overrides?: OverridesInput;
  >overrides : OverridesInput | undefined
 @@= skipped -49, +49 lines =@@
  >T1 : T1
- 
+
      primary: { __typename?: 'Feature' } & { colors: { light: number, dark: number } },
 ->primary : { __typename?: "Feature"; } & { colors: { light: number; dark: number; }; }
 +>primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; dark: number; }; }
@@ -38,7 +38,7 @@
  >light : number
 @@= skipped -12, +12 lines =@@
  >T2 : T2
- 
+
      primary: { __typename?: 'Feature' } & { colors: { light: number } },
 ->primary : { __typename?: "Feature"; } & { colors: { light: number; }; }
 +>primary : { __typename?: "Feature" | undefined; } & { colors: { light: number; }; }

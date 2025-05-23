@@ -1,7 +1,7 @@
 --- old.emitClassExpressionInDeclarationFile.js
 +++ new.emitClassExpressionInDeclarationFile.js
 @@= skipped -33, +33 lines =@@
- 
+
  //// [emitClassExpressionInDeclarationFile.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -67,11 +67,7 @@
 -        class_1.prototype.tags = function () { };
 -        return class_1;
 -    }(Base));
-+    return class extends Base {
-+        static getTags() { }
-+        tags() { }
-+    };
- }
+-}
 -var Test = /** @class */ (function (_super) {
 -    __extends(Test, _super);
 -    function Test() {
@@ -79,6 +75,11 @@
 -    }
 -    return Test;
 -}(WithTags(FooItem)));
++    return class extends Base {
++        static getTags() { }
++        tags() { }
++    };
++}
 +class Test extends WithTags(FooItem) {
 +}
  exports.Test = Test;

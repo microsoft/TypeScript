@@ -2,7 +2,7 @@
 +++ new.umdNamedAmdMode.js
 @@= skipped -4, +4 lines =@@
  export const a = 1;
- 
+
  //// [main.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

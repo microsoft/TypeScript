@@ -1,8 +1,8 @@
 --- old.typeOfThisInStaticMembers8(target=es5).js
 +++ new.typeOfThisInStaticMembers8(target=es5).js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [typeOfThisInStaticMembers8.js]
 -var C = /** @class */ (function () {
 -    function C() {

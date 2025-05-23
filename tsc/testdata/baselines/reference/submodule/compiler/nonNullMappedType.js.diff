@@ -2,7 +2,7 @@
 +++ new.nonNullMappedType.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [nonNullMappedType.js]
 -"use strict";
  function f(p0, p1) {

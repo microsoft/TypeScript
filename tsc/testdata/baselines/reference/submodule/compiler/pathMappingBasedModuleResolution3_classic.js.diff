@@ -3,7 +3,7 @@
 @@= skipped -15, +15 lines =@@
  //// [file4.ts]
  export var y = 100;
- 
+
 +//// [file1.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

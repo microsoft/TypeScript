@@ -1,8 +1,8 @@
 --- old.mixinClassesAnonymous.js
 +++ new.mixinClassesAnonymous.js
 @@= skipped -67, +67 lines =@@
- 
- 
+
+
  //// [mixinClassesAnonymous.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -36,13 +36,7 @@
 -        var _this = _super.call(this, x, y) || this;
 -        _this.z = z;
 -        return _this;
-+}
-+class Derived extends Base {
-+    z;
-+    constructor(x, y, z) {
-+        super(x, y);
-+        this.z = z;
-     }
+-    }
 -    return Derived;
 -}(Base));
 -var Printable = function (superClass) { var _a; return _a = /** @class */ (function (_super) {
@@ -57,6 +51,13 @@
 -    }(superClass)),
 -    _a.message = "hello",
 -    _a; };
++}
++class Derived extends Base {
++    z;
++    constructor(x, y, z) {
++        super(x, y);
++        this.z = z;
++    }
 +}
 +const Printable = (superClass) => class extends superClass {
 +    static message = "hello";

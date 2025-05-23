@@ -1,7 +1,7 @@
 --- old.emitClassDeclarationWithLiteralPropertyNameInES6.js
 +++ new.emitClassDeclarationWithLiteralPropertyNameInES6.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [emitClassDeclarationWithLiteralPropertyNameInES6.js]
  class B {
 -    constructor() {

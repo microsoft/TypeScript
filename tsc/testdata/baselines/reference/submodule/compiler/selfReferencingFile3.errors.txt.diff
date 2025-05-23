@@ -1,6 +1,6 @@
 --- old.selfReferencingFile3.errors.txt
 +++ new.selfReferencingFile3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -selfReferencingFile3.ts(1,21): error TS1006: A file cannot have a reference to itself.
 -
 -
@@ -12,5 +12,4 @@
 -    class selfReferencingFile3 {
 -    
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

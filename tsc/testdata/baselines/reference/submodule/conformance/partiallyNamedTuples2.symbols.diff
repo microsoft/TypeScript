@@ -2,7 +2,7 @@
 +++ new.partiallyNamedTuples2.symbols
 @@= skipped -7, +7 lines =@@
  >Value : Symbol(Value, Decl(partiallyNamedTuples2.ts, 1, 54))
- 
+
    get<Key extends GetKeys<Keys>>(...key: Key): GetResult<Keys, Key, Value>;
 ->get : Symbol(MultiKeyMap.get, Decl(partiallyNamedTuples2.ts, 1, 63))
 +>get : Symbol(get, Decl(partiallyNamedTuples2.ts, 1, 63))
@@ -10,7 +10,7 @@
  >GetKeys : Symbol(GetKeys, Decl(partiallyNamedTuples2.ts, 3, 1))
  >Keys : Symbol(Keys, Decl(partiallyNamedTuples2.ts, 1, 22))
 @@= skipped -72, +72 lines =@@
- 
+
  const matches = x.get(id1);
  >matches : Symbol(matches, Decl(partiallyNamedTuples2.ts, 21, 5))
 ->x.get : Symbol(MultiKeyMap.get, Decl(partiallyNamedTuples2.ts, 1, 63))
@@ -19,4 +19,3 @@
 ->get : Symbol(MultiKeyMap.get, Decl(partiallyNamedTuples2.ts, 1, 63))
 +>get : Symbol(get, Decl(partiallyNamedTuples2.ts, 1, 63))
  >id1 : Symbol(id1, Decl(partiallyNamedTuples2.ts, 20, 5))
- 

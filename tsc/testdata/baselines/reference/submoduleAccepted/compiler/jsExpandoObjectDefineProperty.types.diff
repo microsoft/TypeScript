@@ -1,13 +1,13 @@
 --- old.jsExpandoObjectDefineProperty.types
 +++ new.jsExpandoObjectDefineProperty.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  var chrome = {}
 ->chrome : typeof chrome
 +>chrome : {}
  >{} : {}
- 
+
  Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
 ->Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true }) : typeof chrome
 +>Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true }) : {}
@@ -20,7 +20,7 @@
  >{ value: {}, enumerable: true } : { value: {}; enumerable: true; }
  >value : {}
 @@= skipped -18, +18 lines =@@
- 
+
  chrome.devtools.inspectedWindow = {}
  >chrome.devtools.inspectedWindow = {} : {}
 ->chrome.devtools.inspectedWindow : {}
@@ -34,4 +34,3 @@
 +>devtools : any
 +>inspectedWindow : any
  >{} : {}
- 

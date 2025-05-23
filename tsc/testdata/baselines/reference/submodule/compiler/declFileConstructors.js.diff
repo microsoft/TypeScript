@@ -131,51 +131,32 @@
 -}());
 -var GlobalConstructorWithOverloads = /** @class */ (function () {
 -    function GlobalConstructorWithOverloads(a) {
-+}
-+class GlobalConstructorWithOverloads {
-+    constructor(a) {
-     }
+-    }
 -    return GlobalConstructorWithOverloads;
 -}());
 -var GlobalConstructorWithPublicParameterProperty = /** @class */ (function () {
 -    function GlobalConstructorWithPublicParameterProperty(x) {
-+}
-+class GlobalConstructorWithPublicParameterProperty {
-+    x;
-+    constructor(x) {
-         this.x = x;
-     }
+-        this.x = x;
+-    }
 -    return GlobalConstructorWithPublicParameterProperty;
 -}());
 -var GlobalConstructorWithPrivateParameterProperty = /** @class */ (function () {
 -    function GlobalConstructorWithPrivateParameterProperty(x) {
-+}
-+class GlobalConstructorWithPrivateParameterProperty {
-+    x;
-+    constructor(x) {
-         this.x = x;
-     }
+-        this.x = x;
+-    }
 -    return GlobalConstructorWithPrivateParameterProperty;
 -}());
 -var GlobalConstructorWithOptionalParameterProperty = /** @class */ (function () {
 -    function GlobalConstructorWithOptionalParameterProperty(x) {
-+}
-+class GlobalConstructorWithOptionalParameterProperty {
-+    x;
-+    constructor(x) {
-         this.x = x;
-     }
+-        this.x = x;
+-    }
 -    return GlobalConstructorWithOptionalParameterProperty;
 -}());
 -var GlobalConstructorWithParameterInitializer = /** @class */ (function () {
 -    function GlobalConstructorWithParameterInitializer(x) {
 -        if (x === void 0) { x = "hello"; }
-+}
-+class GlobalConstructorWithParameterInitializer {
-+    x;
-+    constructor(x = "hello") {
-         this.x = x;
-     }
+-        this.x = x;
+-    }
 -    return GlobalConstructorWithParameterInitializer;
 -}());
 -
@@ -184,7 +165,7 @@
 -export declare class SimpleConstructor {
 -    /** This comment should appear for foo*/
 -    constructor();
- }
+-}
 -export declare class ConstructorWithParameters {
 -    /** This is comment for function signature*/
 -    constructor(/** this is comment about a*/ a: string, 
@@ -247,4 +228,32 @@
 -declare class GlobalConstructorWithParameterInitializer {
 -    x: string;
 -    constructor(x?: string);
--}
++}
++class GlobalConstructorWithOverloads {
++    constructor(a) {
++    }
++}
++class GlobalConstructorWithPublicParameterProperty {
++    x;
++    constructor(x) {
++        this.x = x;
++    }
++}
++class GlobalConstructorWithPrivateParameterProperty {
++    x;
++    constructor(x) {
++        this.x = x;
++    }
++}
++class GlobalConstructorWithOptionalParameterProperty {
++    x;
++    constructor(x) {
++        this.x = x;
++    }
++}
++class GlobalConstructorWithParameterInitializer {
++    x;
++    constructor(x = "hello") {
++        this.x = x;
++    }
+ }

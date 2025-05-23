@@ -11,4 +11,3 @@
 +>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
  >[fetch1] : [Promise<string[]>]
  >fetch1 : Promise<string[]>
- 

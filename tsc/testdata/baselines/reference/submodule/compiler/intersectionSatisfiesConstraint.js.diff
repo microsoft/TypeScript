@@ -1,8 +1,8 @@
 --- old.intersectionSatisfiesConstraint.js
 +++ new.intersectionSatisfiesConstraint.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [intersectionSatisfiesConstraint.js]
 -"use strict";
 -var myFirstFunction = function (param1) {

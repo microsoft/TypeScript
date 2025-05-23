@@ -1,8 +1,8 @@
 --- old.exportAssignmentCircularModules.js
 +++ new.exportAssignmentCircularModules.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [foo_1.js]
 -define(["require", "exports", "./foo_2"], function (require, exports, foo2) {
 -    "use strict";

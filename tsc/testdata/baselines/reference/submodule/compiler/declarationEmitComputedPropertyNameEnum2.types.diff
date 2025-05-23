@@ -2,7 +2,7 @@
 +++ new.declarationEmitComputedPropertyNameEnum2.types
 @@= skipped -13, +13 lines =@@
  >Type : any
- 
+
  export const foo = { ...({} as Type) };
 ->foo : { x?: { [Enum.A]: 0; }; }
 ->{ ...({} as Type) } : { x?: { [Enum.A]: 0; }; }

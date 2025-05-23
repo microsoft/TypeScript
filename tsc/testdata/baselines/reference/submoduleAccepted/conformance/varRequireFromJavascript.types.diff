@@ -1,7 +1,7 @@
 --- old.varRequireFromJavascript.types
 +++ new.varRequireFromJavascript.types
 @@= skipped -1, +1 lines =@@
- 
+
  === use.js ===
  var ex = require('./ex')
 ->ex : typeof ex
@@ -10,7 +10,7 @@
 +>require('./ex') : typeof import("ex")
  >require : any
  >'./ex' : "./ex"
- 
+
  // values work
  var crunch = new ex.Crunch(1);
 ->crunch : ex.Crunch
@@ -24,14 +24,14 @@
 +>ex : typeof import("ex")
 +>Crunch : typeof Crunch
  >1 : 1
- 
+
  crunch.n
  >crunch.n : number
 ->crunch : ex.Crunch
 +>crunch : Crunch
  >n : number
- 
- 
+
+
 @@= skipped -25, +25 lines =@@
   * @param {ex.Crunch} wrap
   */
@@ -40,24 +40,23 @@
 ->wrap : ex.Crunch
 +>f : (wrap: Crunch) => void
 +>wrap : Crunch
- 
+
      wrap.n
  >wrap.n : number
 ->wrap : ex.Crunch
 +>wrap : Crunch
  >n : number
  }
- 
+
 @@= skipped -19, +19 lines =@@
- 
+
          this.n = n
  >this.n = n : number
 ->this.n : any
 +>this.n : number
  >this : this
 ->n : any
- >n : number
 +>n : number
+ >n : number
      }
      m() {
- >m : () => number

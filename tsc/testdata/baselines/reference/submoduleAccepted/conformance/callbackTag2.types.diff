@@ -9,7 +9,7 @@
 +>s => "120" : (s: any) => string
 +>s : any
  >"120" : "120"
- 
+
  /** @template S
 @@= skipped -10, +10 lines =@@
   * @return {S}
@@ -17,7 +17,7 @@
  class SharedClass {
 ->SharedClass : SharedClass
 +>SharedClass : SharedClass<S>
- 
+
      constructor() {
          /** @type {SharedId<S>} */
          this.id;
@@ -40,7 +40,7 @@
 +>n + 1 : any
 +>n : any
  >1 : 1
- 
+
  /** @type {Final<{ fantasy }, { heroes }>} */
  var noreturn = (barts, tidus, noctis) => "cecil"
  >noreturn : Final<{ fantasy: any; }, { heroes: any; }>
@@ -53,5 +53,5 @@
 +>tidus : any
 +>noctis : any
  >"cecil" : "cecil"
- 
+
  /**

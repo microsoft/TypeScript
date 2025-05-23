@@ -1,8 +1,8 @@
 --- old.duplicatePropertyNames.js
 +++ new.duplicatePropertyNames.js
 @@= skipped -50, +50 lines =@@
- 
- 
+
+
  //// [duplicatePropertyNames.js]
 -// duplicate property names are an error in all types
 -var C = /** @class */ (function () {

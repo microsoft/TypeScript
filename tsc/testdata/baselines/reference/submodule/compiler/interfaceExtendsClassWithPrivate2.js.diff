@@ -2,7 +2,7 @@
 +++ new.interfaceExtendsClassWithPrivate2.js
 @@= skipped -25, +25 lines =@@
  } 
- 
+
  //// [interfaceExtendsClassWithPrivate2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

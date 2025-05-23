@@ -10,7 +10,7 @@
 +errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Type 'typeof ctor' is not assignable to type 'ConstructableA | (IDirectiveLinkFn<number>) | IDirectivePrePost<number>'.
    Type 'typeof ctor' is not assignable to type 'ConstructableA'.
      Property 'somePropA' is missing in type 'ctor' but required in type '{ somePropA: any; }'.
- 
+
 @@= skipped -22, +22 lines =@@
      
      export let blah: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = (x: string) => {}

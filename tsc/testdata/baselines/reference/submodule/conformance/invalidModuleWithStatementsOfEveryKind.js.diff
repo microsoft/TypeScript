@@ -1,7 +1,7 @@
 --- old.invalidModuleWithStatementsOfEveryKind.js
 +++ new.invalidModuleWithStatementsOfEveryKind.js
 @@= skipped -81, +81 lines =@@
- 
+
  //// [invalidModuleWithStatementsOfEveryKind.js]
  // All of these should be an error
 -var __extends = (this && this.__extends) || (function () {

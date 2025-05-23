@@ -2,31 +2,31 @@
 +++ new.inferTypesWithExtends1.types
 @@= skipped -309, +309 lines =@@
  >IfEquals : IfEquals<X, Y, A, B>
- 
+
  declare const x1: <T>() => (T extends infer U extends number ? 1 : 0);
 ->x1 : <T>() => (T extends infer U extends number ? 1 : 0)
 +>x1 : <T>() => T extends infer U extends number ? 1 : 0
- 
+
  function f1() {
 ->f1 : () => <T>() => (T extends infer U extends number ? 1 : 0)
 +>f1 : () => <T>() => T extends infer U extends number ? 1 : 0
- 
+
      return x1;
 ->x1 : <T>() => (T extends infer U extends number ? 1 : 0)
 +>x1 : <T>() => T extends infer U extends number ? 1 : 0
  }
- 
+
  type ExpectNumber<T extends number> = T;
  >ExpectNumber : T
- 
+
  declare const x2: <T>() => (T extends ExpectNumber<infer U> ? 1 : 0);
 ->x2 : <T>() => (T extends ExpectNumber<infer U> ? 1 : 0)
 +>x2 : <T>() => T extends infer U extends number ? 1 : 0
- 
+
  function f2() {
 ->f2 : () => <T>() => (T extends ExpectNumber<infer U> ? 1 : 0)
 +>f2 : () => <T>() => T extends infer U extends number ? 1 : 0
- 
+
      return x2;
 ->x2 : <T>() => (T extends ExpectNumber<infer U> ? 1 : 0)
 +>x2 : <T>() => T extends infer U extends number ? 1 : 0

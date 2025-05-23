@@ -2,8 +2,8 @@
 +++ new.pathMappingBasedModuleResolution7_classic.js
 @@= skipped -27, +27 lines =@@
  export let x: number;
- 
- 
+
+
 -//// [module2.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

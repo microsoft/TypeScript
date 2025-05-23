@@ -15,7 +15,7 @@
  >f() : void
 ->f : (p?: number, q?: number | undefined, r?: number) => void
 +>f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
- 
+
  f(undefined, undefined, undefined)
  >f(undefined, undefined, undefined) : void
 ->f : (p?: number, q?: number | undefined, r?: number) => void
@@ -23,7 +23,7 @@
  >undefined : undefined
  >undefined : undefined
  >undefined : undefined
- 
+
  f(1, 2, 3)
  >f(1, 2, 3) : void
 ->f : (p?: number, q?: number | undefined, r?: number) => void

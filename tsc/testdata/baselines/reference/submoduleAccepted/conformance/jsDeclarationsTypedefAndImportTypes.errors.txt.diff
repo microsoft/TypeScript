@@ -1,8 +1,7 @@
 --- old.jsDeclarationsTypedefAndImportTypes.errors.txt
 +++ new.jsDeclarationsTypedefAndImportTypes.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +conn.js(11,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +usage.js(11,37): error TS2694: Namespace 'Conn' has no exported member 'Whatever'.
 +usage.js(16,1): error TS2309: An export assignment cannot be used in a module with other exported elements.

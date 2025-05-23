@@ -1,8 +1,8 @@
 --- old.intersectionsAndOptionalProperties.js
 +++ new.intersectionsAndOptionalProperties.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [intersectionsAndOptionalProperties.js]
 -"use strict";
  x = y; // Error

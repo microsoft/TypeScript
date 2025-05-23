@@ -2,17 +2,13 @@
 +++ new.declFilePrivateMethodOverloads.js
 @@= skipped -24, +24 lines =@@
  }
- 
+
  //// [declFilePrivateMethodOverloads.js]
 -var c1 = /** @class */ (function () {
 -    function c1() {
-+class c1 {
-+    _forEachBindingContext(context, fn) {
-+        // Function here
-     }
+-    }
 -    c1.prototype._forEachBindingContext = function (context, fn) {
-+    overloadWithArityDifference(context) {
-         // Function here
+-        // Function here
 -    };
 -    c1.prototype.overloadWithArityDifference = function (context) {
 -        // Function here
@@ -24,8 +20,7 @@
 -//// [declFilePrivateMethodOverloads.d.ts]
 -interface IContext {
 -    someMethod(): any;
-+    }
- }
+-}
 -declare class c1 {
 -    private _forEachBindingContext;
 -    private overloadWithArityDifference;
@@ -33,4 +28,11 @@
 -declare class c2 {
 -    private overload1;
 -    private overload2;
--}
++class c1 {
++    _forEachBindingContext(context, fn) {
++        // Function here
++    }
++    overloadWithArityDifference(context) {
++        // Function here
++    }
+ }

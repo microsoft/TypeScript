@@ -2,7 +2,7 @@
 +++ new.superMethodCall.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [superMethodCall.js]
 -"use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

@@ -1,8 +1,8 @@
 --- old.bases.js
 +++ new.bases.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [bases.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

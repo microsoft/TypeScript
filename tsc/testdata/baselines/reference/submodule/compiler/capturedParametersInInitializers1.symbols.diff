@@ -8,7 +8,7 @@
 +>c : Symbol(c, Decl(capturedParametersInInitializers1.ts, 1, 25))
  >x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))
  >x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))
- 
+
      new y().c;
 ->new y().c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
 +>new y().c : Symbol(c, Decl(capturedParametersInInitializers1.ts, 1, 25))
@@ -16,5 +16,5 @@
 ->c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
 +>c : Symbol(c, Decl(capturedParametersInInitializers1.ts, 1, 25))
  }
- 
+
  // ok - used in file

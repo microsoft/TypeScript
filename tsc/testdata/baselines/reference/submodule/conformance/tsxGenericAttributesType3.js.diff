@@ -1,7 +1,7 @@
 --- old.tsxGenericAttributesType3.js
 +++ new.tsxGenericAttributesType3.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [file.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

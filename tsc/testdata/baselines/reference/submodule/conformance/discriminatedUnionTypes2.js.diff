@@ -1,8 +1,8 @@
 --- old.discriminatedUnionTypes2.js
 +++ new.discriminatedUnionTypes2.js
 @@= skipped -146, +146 lines =@@
- 
- 
+
+
  //// [discriminatedUnionTypes2.js]
 -"use strict";
  function f10(x) {

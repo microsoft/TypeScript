@@ -2,7 +2,7 @@
 +++ new.classExpressionWithStaticProperties2.js
 @@= skipped -10, +10 lines =@@
   };
- 
+
  //// [classExpressionWithStaticProperties2.js]
 -var _a;
 -var v = (_a = /** @class */ (function () {

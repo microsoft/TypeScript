@@ -1,8 +1,8 @@
 --- old.overloadOnConstInheritance4.js
 +++ new.overloadOnConstInheritance4.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [overloadOnConstInheritance4.js]
 -var C = /** @class */ (function () {
 -    function C() {

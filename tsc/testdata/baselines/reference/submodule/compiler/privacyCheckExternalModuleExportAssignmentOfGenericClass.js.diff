@@ -1,7 +1,7 @@
 --- old.privacyCheckExternalModuleExportAssignmentOfGenericClass.js
 +++ new.privacyCheckExternalModuleExportAssignmentOfGenericClass.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.js]
  "use strict";
 -var Foo = /** @class */ (function () {

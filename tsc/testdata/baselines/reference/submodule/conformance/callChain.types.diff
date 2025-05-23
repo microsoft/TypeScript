@@ -1,18 +1,18 @@
 --- old.callChain.types
 +++ new.callChain.types
 @@= skipped -258, +258 lines =@@
- 
+
  // GH#33744
  declare const o5: <T>() => undefined | (() => void);
 ->o5 : <T>() => undefined | (() => void)
 +>o5 : <T>() => (() => void) | undefined
- 
+
  o5<number>()?.();
  >o5<number>()?.() : void | undefined
  >o5<number>() : (() => void) | undefined
 ->o5 : <T>() => undefined | (() => void)
 +>o5 : <T>() => (() => void) | undefined
- 
+
  // GH#36031
  o2?.b()!.toString;
 ->o2?.b()!.toString : ((radix?: number) => string) | undefined
@@ -24,7 +24,7 @@
  >b : ((...args: any[]) => number) | undefined
 ->toString : ((radix?: number) => string) | undefined
 +>toString : ((radix?: number | undefined) => string) | undefined
- 
+
  o2?.b()!.toString!;
 ->o2?.b()!.toString! : (radix?: number) => string
 ->o2?.b()!.toString : ((radix?: number) => string) | undefined
@@ -37,4 +37,3 @@
  >b : ((...args: any[]) => number) | undefined
 ->toString : ((radix?: number) => string) | undefined
 +>toString : ((radix?: number | undefined) => string) | undefined
- 

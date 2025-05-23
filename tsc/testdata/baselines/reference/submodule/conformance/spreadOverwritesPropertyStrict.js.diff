@@ -1,8 +1,8 @@
 --- old.spreadOverwritesPropertyStrict.js
 +++ new.spreadOverwritesPropertyStrict.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [spreadOverwritesPropertyStrict.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

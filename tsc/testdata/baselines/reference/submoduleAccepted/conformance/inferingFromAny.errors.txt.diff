@@ -1,8 +1,7 @@
 --- old.inferingFromAny.errors.txt
 +++ new.inferingFromAny.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(2,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'unknown'.
 +a.js(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type '[any, any]', but here has type '[unknown, unknown]'.
 +a.js(4,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'unknown'.

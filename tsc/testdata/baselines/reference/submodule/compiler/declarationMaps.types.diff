@@ -2,27 +2,26 @@
 +++ new.declarationMaps.types
 @@= skipped -20, +20 lines =@@
  }
- 
+
  var m2: {
 ->m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 +>m2 : { (): connectExport; test1: connectModule; test2: () => connectModule; }
- 
+
      (): m2.connectExport;
  >m2 : any
- 
+
      test1: m2.connectModule;
 ->test1 : m2.connectModule
 +>test1 : connectModule
  >m2 : any
- 
+
      test2(): m2.connectModule;
 ->test2 : () => m2.connectModule
 +>test2 : () => connectModule
  >m2 : any
- 
+
  };
- 
+
  export = m2;
 ->m2 : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 +>m2 : { (): connectExport; test1: connectModule; test2: () => connectModule; }
- 

@@ -3,7 +3,7 @@
 @@= skipped -34, +34 lines =@@
  }
  new multiM.d();
- 
+
 -//// [commentsMultiModuleMultiFile_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,7 +1,7 @@
 --- old.inferringClassMembersFromAssignments.types
 +++ new.inferringClassMembersFromAssignments.types
 @@= skipped -12, +12 lines =@@
- 
+
              this.inConstructor = 0;
  >this.inConstructor = 0 : 0
 ->this.inConstructor : any

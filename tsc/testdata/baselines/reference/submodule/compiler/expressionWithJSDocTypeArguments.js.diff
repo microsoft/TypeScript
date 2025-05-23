@@ -1,8 +1,8 @@
 --- old.expressionWithJSDocTypeArguments.js
 +++ new.expressionWithJSDocTypeArguments.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [expressionWithJSDocTypeArguments.js]
 -"use strict";
  // Repro from #51802

@@ -5,8 +5,8 @@
    Type 'undefined[]' has no construct signatures.
 -genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
 +genericArrayAssignmentCompatErrors.ts(4,14): error TS2314: Generic type 'T[]' requires 1 type argument(s).
- 
- 
+
+
  ==== genericArrayAssignmentCompatErrors.ts (2 errors) ====
 @@= skipped -11, +11 lines =@@
      var myCars3 = new Array({});

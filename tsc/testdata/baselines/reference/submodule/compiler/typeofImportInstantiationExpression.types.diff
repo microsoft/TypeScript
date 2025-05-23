@@ -2,7 +2,7 @@
 +++ new.typeofImportInstantiationExpression.types
 @@= skipped -13, +13 lines =@@
  }
- 
+
  export function myFunction<T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) { return (arg.params || {}) as U }
 ->myFunction : <T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) => U
 +>myFunction : <T, U extends Record<string, any>>(arg: Arg<T, U>) => U
@@ -10,17 +10,16 @@
  >(arg.params || {}) as U : U
  >(arg.params || {}) : U | {}
 @@= skipped -12, +12 lines =@@
- 
+
  === main.ts ===
  type T1 = typeof import('./input.js').myFunction;
 ->T1 : <T = any, U extends Record<string, any> = Record<string, any>>(arg: Arg<T, U>) => U
 ->myFunction : error
 +>T1 : <T, U extends Record<string, any>>(arg: Arg<T, U>) => U
 +>myFunction : any
- 
+
  type T2 = typeof import('./input.js').myFunction<any, { slug: 'hello' }>;
  >T2 : (arg: Arg<any, { slug: "hello"; }>) => { slug: "hello"; }
 ->myFunction : error
 +>myFunction : any
  >slug : "hello"
- 

@@ -2,7 +2,7 @@
 +++ new.instanceMemberAssignsToClassPrototype.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [instanceMemberAssignsToClassPrototype.js]
 -var C = /** @class */ (function () {
 -    function C() {

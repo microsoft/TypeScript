@@ -1,8 +1,8 @@
 --- old.inferTypeParameterConstraints.js
 +++ new.inferTypeParameterConstraints.js
 @@= skipped -40, +40 lines =@@
- 
- 
+
+
  //// [inferTypeParameterConstraints.js]
 -"use strict";
 -// Repro from #42636

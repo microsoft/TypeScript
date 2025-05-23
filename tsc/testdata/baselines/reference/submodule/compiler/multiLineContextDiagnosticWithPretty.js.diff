@@ -1,8 +1,8 @@
 --- old.multiLineContextDiagnosticWithPretty.js
 +++ new.multiLineContextDiagnosticWithPretty.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [multiLineContextDiagnosticWithPretty.js]
 -var x = {
 +const x = {

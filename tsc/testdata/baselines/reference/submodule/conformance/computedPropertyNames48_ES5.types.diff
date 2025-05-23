@@ -6,7 +6,7 @@
  >extractIndexer : <T>(p: { [n: number]: T; }) => T
 ->{    [E.x]: ""} : { 0: string; }
 +>{    [E.x]: ""} : { [E.x]: string; }
- 
+
      [E.x]: ""
  >[E.x] : string
 @@= skipped -14, +14 lines =@@
@@ -15,6 +15,6 @@
  >extractIndexer : <T>(p: { [n: number]: T; }) => T
 ->{    ["" || 0]: ""} : { 0: string; }
 +>{    ["" || 0]: ""} : { ["" || 0]: string; }
- 
+
      ["" || 0]: ""
  >["" || 0] : string

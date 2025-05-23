@@ -2,7 +2,7 @@
 +++ new.indexSignatureTypeCheck2.js
 @@= skipped -16, +16 lines =@@
  }
- 
+
  //// [indexSignatureTypeCheck2.js]
 -var IPropertySet = /** @class */ (function () {
 -    function IPropertySet() {

@@ -34,12 +34,7 @@
  3 >Emitted(2, 14) Source(7, 14) + SourceIndex(0)
  4 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
 -5 >Emitted(2, 17) Source(7, 31) + SourceIndex(0)
-+5 >Emitted(2, 16) Source(7, 16) + SourceIndex(0)
-+6 >Emitted(2, 18) Source(7, 18) + SourceIndex(0)
-+7 >Emitted(2, 23) Source(7, 23) + SourceIndex(0)
-+8 >Emitted(2, 24) Source(7, 31) + SourceIndex(0)
-+9 >Emitted(2, 26) Source(7, 33) + SourceIndex(0)
- ---
+----
 ->>>    var nameA = _a[1];
 -1->^^^^^^^^
 -2 >        ^^^^^
@@ -51,7 +46,12 @@
 -1->Emitted(3, 9) Source(7, 18) + SourceIndex(0)
 -2 >Emitted(3, 14) Source(7, 23) + SourceIndex(0)
 -3 >Emitted(3, 22) Source(7, 23) + SourceIndex(0)
-----
++5 >Emitted(2, 16) Source(7, 16) + SourceIndex(0)
++6 >Emitted(2, 18) Source(7, 18) + SourceIndex(0)
++7 >Emitted(2, 23) Source(7, 23) + SourceIndex(0)
++8 >Emitted(2, 24) Source(7, 31) + SourceIndex(0)
++9 >Emitted(2, 26) Source(7, 33) + SourceIndex(0)
+ ---
  >>>    console.log(nameA);
 -1->^^^^
 +1 >^^^^
@@ -128,6 +128,18 @@
 -3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
 -4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
 -5 >Emitted(6, 17) Source(11, 31) + SourceIndex(0)
+----
+->>>    var numberB = _a[0];
+-1->^^^^^^^^
+-2 >        ^^^^^^^
+-3 >               ^^^^^^^^
+-4 >                       ^^^->
+-1->
+-2 >        numberB
+-3 >               
+-1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
+-2 >Emitted(7, 16) Source(11, 23) + SourceIndex(0)
+-3 >Emitted(7, 24) Source(11, 23) + SourceIndex(0)
 +5 >              [
 +6 >               numberB
 +7 >                      ]: Robot
@@ -141,21 +153,8 @@
 +7 >Emitted(5, 24) Source(11, 31) + SourceIndex(0)
 +8 >Emitted(5, 26) Source(11, 33) + SourceIndex(0)
  ---
-->>>    var numberB = _a[0];
--1->^^^^^^^^
--2 >        ^^^^^^^
--3 >               ^^^^^^^^
--4 >                       ^^^->
--1->
--2 >        numberB
--3 >               
--1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
--2 >Emitted(7, 16) Source(11, 23) + SourceIndex(0)
--3 >Emitted(7, 24) Source(11, 23) + SourceIndex(0)
-----
  >>>    console.log(numberB);
  1->^^^^
- 2 >    ^^^^^^^
 @@= skipped -60, +57 lines =@@
  6 >                ^^^^^^^
  7 >                       ^
@@ -229,27 +228,7 @@
 -3 >Emitted(10, 14) Source(15, 14) + SourceIndex(0)
 -4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
 -5 >Emitted(10, 17) Source(15, 49) + SourceIndex(0)
-+5 >              [
-+6 >               numberA2
-+7 >                       , 
-+8 >                         nameA2
-+9 >                               , 
-+10>                                 skillA2
-+11>                                        ]: Robot
-+12>                                         ) 
-+1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
-+2 >Emitted(8, 10) Source(15, 10) + SourceIndex(0)
-+3 >Emitted(8, 14) Source(15, 14) + SourceIndex(0)
-+4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
-+5 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
-+6 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
-+7 >Emitted(8, 26) Source(15, 26) + SourceIndex(0)
-+8 >Emitted(8, 32) Source(15, 32) + SourceIndex(0)
-+9 >Emitted(8, 34) Source(15, 34) + SourceIndex(0)
-+10>Emitted(8, 41) Source(15, 41) + SourceIndex(0)
-+11>Emitted(8, 42) Source(15, 49) + SourceIndex(0)
-+12>Emitted(8, 44) Source(15, 51) + SourceIndex(0)
- ---
+----
 ->>>    var numberA2 = _a[0], nameA2 = _a[1], skillA2 = _a[2];
 -1->^^^^^^^^
 -2 >        ^^^^^^^^
@@ -278,10 +257,29 @@
 -7 >Emitted(11, 43) Source(15, 34) + SourceIndex(0)
 -8 >Emitted(11, 50) Source(15, 41) + SourceIndex(0)
 -9 >Emitted(11, 58) Source(15, 41) + SourceIndex(0)
-----
++5 >              [
++6 >               numberA2
++7 >                       , 
++8 >                         nameA2
++9 >                               , 
++10>                                 skillA2
++11>                                        ]: Robot
++12>                                         ) 
++1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
++2 >Emitted(8, 10) Source(15, 10) + SourceIndex(0)
++3 >Emitted(8, 14) Source(15, 14) + SourceIndex(0)
++4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
++5 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
++6 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
++7 >Emitted(8, 26) Source(15, 26) + SourceIndex(0)
++8 >Emitted(8, 32) Source(15, 32) + SourceIndex(0)
++9 >Emitted(8, 34) Source(15, 34) + SourceIndex(0)
++10>Emitted(8, 41) Source(15, 41) + SourceIndex(0)
++11>Emitted(8, 42) Source(15, 49) + SourceIndex(0)
++12>Emitted(8, 44) Source(15, 51) + SourceIndex(0)
+ ---
  >>>    console.log(nameA2);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -77, +68 lines =@@
  6 >                ^^^^^^
  7 >                      ^
@@ -354,25 +352,7 @@
 -3 >Emitted(14, 14) Source(19, 14) + SourceIndex(0)
 -4 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
 -5 >Emitted(14, 17) Source(19, 47) + SourceIndex(0)
-+5 >              [
-+6 >               numberA3
-+7 >                       , 
-+8 >                         ...
-+9 >                            robotAInfo
-+10>                                      ]: Robot
-+11>                                       ) 
-+1->Emitted(11, 1) Source(19, 1) + SourceIndex(0)
-+2 >Emitted(11, 10) Source(19, 10) + SourceIndex(0)
-+3 >Emitted(11, 14) Source(19, 14) + SourceIndex(0)
-+4 >Emitted(11, 15) Source(19, 15) + SourceIndex(0)
-+5 >Emitted(11, 16) Source(19, 16) + SourceIndex(0)
-+6 >Emitted(11, 24) Source(19, 24) + SourceIndex(0)
-+7 >Emitted(11, 26) Source(19, 26) + SourceIndex(0)
-+8 >Emitted(11, 29) Source(19, 29) + SourceIndex(0)
-+9 >Emitted(11, 39) Source(19, 39) + SourceIndex(0)
-+10>Emitted(11, 40) Source(19, 47) + SourceIndex(0)
-+11>Emitted(11, 42) Source(19, 49) + SourceIndex(0)
- ---
+----
 ->>>    var numberA3 = _a[0], robotAInfo = _a.slice(1);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^
@@ -392,10 +372,27 @@
 -4 >Emitted(15, 27) Source(19, 29) + SourceIndex(0)
 -5 >Emitted(15, 37) Source(19, 39) + SourceIndex(0)
 -6 >Emitted(15, 51) Source(19, 39) + SourceIndex(0)
-----
++5 >              [
++6 >               numberA3
++7 >                       , 
++8 >                         ...
++9 >                            robotAInfo
++10>                                      ]: Robot
++11>                                       ) 
++1->Emitted(11, 1) Source(19, 1) + SourceIndex(0)
++2 >Emitted(11, 10) Source(19, 10) + SourceIndex(0)
++3 >Emitted(11, 14) Source(19, 14) + SourceIndex(0)
++4 >Emitted(11, 15) Source(19, 15) + SourceIndex(0)
++5 >Emitted(11, 16) Source(19, 16) + SourceIndex(0)
++6 >Emitted(11, 24) Source(19, 24) + SourceIndex(0)
++7 >Emitted(11, 26) Source(19, 26) + SourceIndex(0)
++8 >Emitted(11, 29) Source(19, 29) + SourceIndex(0)
++9 >Emitted(11, 39) Source(19, 39) + SourceIndex(0)
++10>Emitted(11, 40) Source(19, 47) + SourceIndex(0)
++11>Emitted(11, 42) Source(19, 49) + SourceIndex(0)
+ ---
  >>>    console.log(robotAInfo);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -68, +65 lines =@@
  6 >                ^^^^^^^^^^
  7 >                          ^

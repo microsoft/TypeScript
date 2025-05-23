@@ -2,7 +2,7 @@
 +++ new.assignmentTypeNarrowing.symbols
 @@= skipped -78, +78 lines =@@
  >x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 32, 35))
- 
+
  arr.push({ x: "ok" });
 ->arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>arr.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -10,4 +10,3 @@
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 33, 10))
- 

@@ -1,8 +1,8 @@
 --- old.genericContextualTypes1.js
 +++ new.genericContextualTypes1.js
 @@= skipped -52, +52 lines =@@
- 
- 
+
+
  //// [genericContextualTypes1.js]
 -"use strict";
 -var f00 = list;

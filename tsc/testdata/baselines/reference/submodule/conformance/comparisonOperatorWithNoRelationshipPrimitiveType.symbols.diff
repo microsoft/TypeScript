@@ -10,6 +10,6 @@
 +>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipPrimitiveType.ts, 0, 8))
 +>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipPrimitiveType.ts, 0, 11))
 +>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipPrimitiveType.ts, 0, 14))
- 
+
  var a: number;
  >a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipPrimitiveType.ts, 2, 3))

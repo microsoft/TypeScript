@@ -1,8 +1,7 @@
 --- old.typeReferenceDirectives5.errors.txt
 +++ new.typeReferenceDirectives5.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/app.ts(4,15): error TS2693: '$' only refers to a type, but is being used as a value here.
 +
 +

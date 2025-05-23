@@ -3,7 +3,7 @@
 @@= skipped -8, +8 lines =@@
  //// [missingFunctionImplementation2_b.ts]
  export function f(a?, b?);
- 
+
 -//// [missingFunctionImplementation2_a.js]
 +//// [missingFunctionImplementation2_b.js]
  "use strict";

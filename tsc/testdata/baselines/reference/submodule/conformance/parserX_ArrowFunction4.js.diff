@@ -2,7 +2,7 @@
 +++ new.parserX_ArrowFunction4.js
 @@= skipped -5, +5 lines =@@
  };
- 
+
  //// [parserX_ArrowFunction4.js]
 -var v = function (a, b) {
 +var v = (a, b) => {

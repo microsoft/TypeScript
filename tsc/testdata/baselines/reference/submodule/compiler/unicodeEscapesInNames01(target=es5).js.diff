@@ -118,16 +118,17 @@
 -    function PrivateIdentifierWithEscape1() {
 -        _PrivateIdentifierWithEscape1_x.set(this, void 0);
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 0, "f");
-+class PrivateIdentifierWithEscape1 {
-+    #\u0078;
-+    constructor() {
-+        this.#\u0078 = 0;
-     }
+-    }
 -    PrivateIdentifierWithEscape1.prototype.doThing = function () {
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 42, "f");
 -    };
 -    return PrivateIdentifierWithEscape1;
 -}());
++class PrivateIdentifierWithEscape1 {
++    #\u0078;
++    constructor() {
++        this.#\u0078 = 0;
++    }
 +    doThing() {
 +        this.#x = 42;
 +    }
@@ -150,16 +151,17 @@
 -    function PrivateIdentifierWithEscape2() {
 -        _PrivateIdentifierWithEscape2_xx.set(this, void 0);
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 0, "f");
-+class PrivateIdentifierWithEscape2 {
-+    #x\u0078;
-+    constructor() {
-+        this.#x\u0078 = 0;
-     }
+-    }
 -    PrivateIdentifierWithEscape2.prototype.doThing = function () {
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 42, "f");
 -    };
 -    return PrivateIdentifierWithEscape2;
 -}());
++class PrivateIdentifierWithEscape2 {
++    #x\u0078;
++    constructor() {
++        this.#x\u0078 = 0;
++    }
 +    doThing() {
 +        this.#xx = 42;
 +    }
@@ -182,16 +184,17 @@
 -    function PrivateIdentifierWithExtendedEscape1() {
 -        _PrivateIdentifierWithExtendedEscape1_x.set(this, void 0);
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 0, "f");
-+class PrivateIdentifierWithExtendedEscape1 {
-+    #\u{78};
-+    constructor() {
-+        this.#\u{78} = 0;
-     }
+-    }
 -    PrivateIdentifierWithExtendedEscape1.prototype.doThing = function () {
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 42, "f");
 -    };
 -    return PrivateIdentifierWithExtendedEscape1;
 -}());
++class PrivateIdentifierWithExtendedEscape1 {
++    #\u{78};
++    constructor() {
++        this.#\u{78} = 0;
++    }
 +    doThing() {
 +        this.#x = 42;
 +    }
@@ -214,16 +217,17 @@
 -    function PrivateIdentifierWithExtendedEscape2() {
 -        _PrivateIdentifierWithExtendedEscape2_xx.set(this, void 0);
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 0, "f");
-+class PrivateIdentifierWithExtendedEscape2 {
-+    #x\u{78};
-+    constructor() {
-+        this.#x\u{78} = 0;
-     }
+-    }
 -    PrivateIdentifierWithExtendedEscape2.prototype.doThing = function () {
 -        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 42, "f");
 -    };
 -    return PrivateIdentifierWithExtendedEscape2;
 -}());
++class PrivateIdentifierWithExtendedEscape2 {
++    #x\u{78};
++    constructor() {
++        this.#x\u{78} = 0;
++    }
 +    doThing() {
 +        this.#xx = 42;
 +    }

@@ -1,7 +1,7 @@
 --- old.jsdocParseErrorsInTypescript.js
 +++ new.jsdocParseErrorsInTypescript.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [jsdocParseErrorsInTypescript.js]
  // parse error (blocks grammar errors from checker)
 -function parse1(n) {

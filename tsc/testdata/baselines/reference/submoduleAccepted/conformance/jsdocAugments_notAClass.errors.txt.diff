@@ -1,6 +1,6 @@
 --- old.jsdocAugments_notAClass.errors.txt
 +++ new.jsdocAugments_notAClass.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/b.js(3,10): error TS8022: JSDoc '@augments' is not attached to a class.
 -
 -
@@ -11,5 +11,4 @@
 -             ~
 -!!! error TS8022: JSDoc '@augments' is not attached to a class.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

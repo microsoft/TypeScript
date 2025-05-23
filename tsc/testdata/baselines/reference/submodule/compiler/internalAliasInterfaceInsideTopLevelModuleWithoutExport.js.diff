@@ -1,8 +1,8 @@
 --- old.internalAliasInterfaceInsideTopLevelModuleWithoutExport.js
 +++ new.internalAliasInterfaceInsideTopLevelModuleWithoutExport.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [internalAliasInterfaceInsideTopLevelModuleWithoutExport.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

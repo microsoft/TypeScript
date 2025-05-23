@@ -7,7 +7,7 @@
 ->f : (this: { n: number; }, s: string) => number
 +>f : (s: string) => number
  >s : string
- 
+
      return this.n + s.length
 ->this.n + s.length : number
 ->this.n : number
@@ -21,17 +21,17 @@
  >s : string
  >length : number
  }
- 
+
  const o = {
 ->o : { f: (this: { n: number; }, s: string) => number; n: number; }
 ->{    f,    n: 1} : { f: (this: { n: number; }, s: string) => number; n: number; }
 +>o : { f: (s: string) => number; n: number; }
 +>{    f,    n: 1} : { f: (s: string) => number; n: number; }
- 
+
      f,
 ->f : (this: { n: number; }, s: string) => number
 +>f : (s: string) => number
- 
+
      n: 1
  >n : number
 @@= skipped -26, +26 lines =@@
@@ -45,4 +45,3 @@
 +>o : { f: (s: string) => number; n: number; }
 +>f : (s: string) => number
  >'hi' : "hi"
- 

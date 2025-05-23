@@ -1,7 +1,7 @@
 --- old.emitCapturingThisInTupleDestructuring2.js
 +++ new.emitCapturingThisInTupleDestructuring2.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [emitCapturingThisInTupleDestructuring2.js]
  var array1 = [1, 2];
 -var B = /** @class */ (function () {

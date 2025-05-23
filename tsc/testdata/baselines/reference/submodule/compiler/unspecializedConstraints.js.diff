@@ -1,8 +1,8 @@
 --- old.unspecializedConstraints.js
 +++ new.unspecializedConstraints.js
 @@= skipped -155, +155 lines =@@
- 
- 
+
+
  //// [unspecializedConstraints.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -45,54 +45,34 @@
              return true;
 -        };
 -        Type.prototype.getProperties = function () {
-+        }
-+        getProperties() {
-             return [];
+-            return [];
 -        };
 -        Type.prototype.getProperty = function (index) {
-+        }
-+        getProperty(index) {
-             return undefined;
+-            return undefined;
 -        };
 -        Type.prototype.getPropertyByName = function (name) {
-+        }
-+        getPropertyByName(name) {
-             return undefined;
+-            return undefined;
 -        };
 -        Type.prototype.getPropertyCount = function () {
-+        }
-+        getPropertyCount() {
-             return 0;
+-            return 0;
 -        };
 -        Type.prototype.getSignature = function (index) {
-+        }
-+        getSignature(index) {
-             return undefined;
+-            return undefined;
 -        };
 -        Type.prototype.getSignatureCount = function () {
-+        }
-+        getSignatureCount() {
-             return 0;
+-            return 0;
 -        };
 -        Type.prototype.getSignatures = function () {
-+        }
-+        getSignatures() {
-             return [];
+-            return [];
 -        };
 -        Type.prototype.isPrimitive = function () {
-+        }
-+        isPrimitive() {
-             return false;
+-            return false;
 -        };
 -        Type.prototype.isObjectType = function () {
-+        }
-+        isObjectType() {
-             return false;
+-            return false;
 -        };
 -        Type.prototype.isTypeParameter = function () {
-+        }
-+        isTypeParameter() {
-             return false;
+-            return false;
 -        };
 -        Type.prototype.isSubTypeOf = function (type) {
 -        };
@@ -106,8 +86,39 @@
 -            _this.type = type;
 -            _this.flags = flags;
 -            return _this;
-         }
+-        }
 -        Property.prototype.equals = function (other) {
++        }
++        getProperties() {
++            return [];
++        }
++        getProperty(index) {
++            return undefined;
++        }
++        getPropertyByName(name) {
++            return undefined;
++        }
++        getPropertyCount() {
++            return 0;
++        }
++        getSignature(index) {
++            return undefined;
++        }
++        getSignatureCount() {
++            return 0;
++        }
++        getSignatures() {
++            return [];
++        }
++        isPrimitive() {
++            return false;
++        }
++        isObjectType() {
++            return false;
++        }
++        isTypeParameter() {
++            return false;
++        }
 +        isSubTypeOf(type) {
 +        }
 +    }
@@ -177,8 +188,9 @@
 -            _this.type = type;
 -            _this.flags = flags;
 -            return _this;
-         }
+-        }
 -        Parameter.prototype.equals = function (other) {
++        }
 +    }
 +    class Parameter extends Symbol {
 +        name;

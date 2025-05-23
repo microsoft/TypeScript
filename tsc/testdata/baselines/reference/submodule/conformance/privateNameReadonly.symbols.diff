@@ -2,15 +2,15 @@
 +++ new.privateNameReadonly.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(privateNameReadonly.ts, 0, 5))
- 
+
      #bar() {}
 ->#bar : Symbol(C.#bar, Decl(privateNameReadonly.ts, 0, 17))
 +>#bar : Symbol(#bar, Decl(privateNameReadonly.ts, 0, 17))
- 
+
      foo() {
 ->foo : Symbol(C.foo, Decl(privateNameReadonly.ts, 1, 13))
 +>foo : Symbol(foo, Decl(privateNameReadonly.ts, 1, 13))
- 
+
          this.#bar = console.log("should log this then throw");
 ->this.#bar : Symbol(C.#bar, Decl(privateNameReadonly.ts, 0, 17))
 +>this.#bar : Symbol(#bar, Decl(privateNameReadonly.ts, 0, 17))
@@ -22,7 +22,7 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
      }
  }
- 
+
  console.log(new C().foo());
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -34,4 +34,3 @@
  >C : Symbol(C, Decl(privateNameReadonly.ts, 0, 5))
 ->foo : Symbol(C.foo, Decl(privateNameReadonly.ts, 1, 13))
 +>foo : Symbol(foo, Decl(privateNameReadonly.ts, 1, 13))
- 

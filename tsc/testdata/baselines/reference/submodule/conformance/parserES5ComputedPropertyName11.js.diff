@@ -2,7 +2,7 @@
 +++ new.parserES5ComputedPropertyName11.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [parserES5ComputedPropertyName11.js]
 -var C = /** @class */ (function () {
 -    function C() {

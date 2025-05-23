@@ -1,18 +1,18 @@
 --- old.declarationEmitReadonlyComputedProperty.types
 +++ new.declarationEmitReadonlyComputedProperty.types
 @@= skipped -26, +26 lines =@@
- 
+
  === index.ts ===
  import { createInstance } from './bug'
 ->createInstance : () => import("bug").Interface
 +>createInstance : () => Interface
- 
+
  export const spread = {
 ->spread : { [SYMBOL]: string; }
 ->{  ...createInstance(),} : { [SYMBOL]: string; }
 +>spread : { (Unique symbol): string; }
 +>{  ...createInstance(),} : { (Unique symbol): string; }
- 
+
    ...createInstance(),
 ->createInstance() : import("bug").Interface
 ->createInstance : () => import("bug").Interface

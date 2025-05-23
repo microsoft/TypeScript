@@ -10,7 +10,7 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(parserForInStatement8.ts, 2, 10))
- 
+
  for (let {x = 'a' in {}} in { '': 0 }) console.log(x)
  >x : Symbol(x, Decl(parserForInStatement8.ts, 3, 10))
  >'' : Symbol('', Decl(parserForInStatement8.ts, 3, 29))
@@ -20,4 +20,3 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(parserForInStatement8.ts, 3, 10))
- 

@@ -1,7 +1,7 @@
 --- old.awaitUnionPromise.js
 +++ new.awaitUnionPromise.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [awaitUnionPromise.js]
  // https://github.com/Microsoft/TypeScript/issues/18186
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

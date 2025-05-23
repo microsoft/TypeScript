@@ -1,8 +1,7 @@
 --- old.constructorFunctionMethodTypeParameters.errors.txt
 +++ new.constructorFunctionMethodTypeParameters.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +constructorFunctionMethodTypeParameters.js(22,16): error TS2304: Cannot find name 'T'.
 +constructorFunctionMethodTypeParameters.js(24,17): error TS2304: Cannot find name 'T'.
 +

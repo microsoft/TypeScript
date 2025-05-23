@@ -1,12 +1,12 @@
 --- old.collisionCodeGenModuleWithModuleReopening.types
 +++ new.collisionCodeGenModuleWithModuleReopening.types
 @@= skipped -1, +1 lines =@@
- 
+
  === collisionCodeGenModuleWithModuleReopening.ts ===
  module m1 {
 ->m1 : typeof globalThis.m1
 +>m1 : typeof m1
- 
+
      export class m1 {
  >m1 : m1
      }
@@ -15,17 +15,18 @@
 ->foo : m1.m1
 ->new m1.m1() : m1.m1
 ->m1.m1 : typeof m1.m1
+->m1 : typeof m1
+->m1 : typeof m1.m1
 +>foo : m1
 +>new m1.m1() : m1
 +>m1.m1 : typeof m1
- >m1 : typeof m1
-->m1 : typeof m1.m1
 +>m1 : typeof m1
- 
++>m1 : typeof m1
+
  module m1 {
 ->m1 : typeof globalThis.m1
 +>m1 : typeof m1
- 
+
      export class c1 {
  >c1 : c1
 @@= skipped -30, +30 lines =@@
@@ -41,11 +42,11 @@
  >m1 : typeof m1
 ->c1 : typeof m1.c1
 +>c1 : typeof c1
- 
+
  module m2 {
 ->m2 : typeof globalThis.m2
 +>m2 : typeof m2
- 
+
      export class c1 {
  >c1 : c1
 @@= skipped -22, +22 lines =@@
@@ -61,11 +62,11 @@
  >m2 : typeof m2
 ->c1 : typeof m2.c1
 +>c1 : typeof c1
- 
+
  module m2 {
 ->m2 : typeof globalThis.m2
 +>m2 : typeof m2
- 
+
      export class m2 {
  >m2 : m2
 @@= skipped -27, +27 lines =@@
@@ -81,15 +82,15 @@
  >m2 : typeof m2
 ->c1 : typeof m2.c1
 +>c1 : typeof c1
- 
+
  var foo2 = new m2.m2();
 ->foo2 : m1.c1
 ->new m2.m2() : m2.m2
 ->m2.m2 : typeof m2.m2
+->m2 : typeof m2
+->m2 : typeof m2.m2
 +>foo2 : c1
 +>new m2.m2() : m2
 +>m2.m2 : typeof m2
- >m2 : typeof m2
-->m2 : typeof m2.m2
 +>m2 : typeof m2
- 
++>m2 : typeof m2

@@ -10,7 +10,7 @@
 +>h : (x: any) => any
 +>x : any
 +>x : any
- 
+
  /** @type {(x: number) => string} */
  var f = x => x
  >f : (x: number) => string
@@ -18,7 +18,7 @@
 +>x => x : (x: number) => number
  >x : number
  >x : number
- 
+
  /** @type {(x: number) => string} */
  var g = function (x) { return x }
  >g : (x: number) => string
@@ -26,7 +26,7 @@
 +>function (x) { return x } : (x: number) => number
  >x : number
  >x : number
- 
+
  /** @type {{ (x: number): string }} */
  function i(x) { return x }
 ->i : (x: number) => string
@@ -35,7 +35,7 @@
 +>i : (x: any) => any
 +>x : any
 +>x : any
- 
+
  /** @type {{ (x: number): string }} */
  var j = x => x
  >j : (x: number) => string
@@ -43,7 +43,7 @@
 +>x => x : (x: number) => number
  >x : number
  >x : number
- 
+
  /** @type {{ (x: number): string }} */
  var k = function (x) { return x }
  >k : (x: number) => string
@@ -51,7 +51,7 @@
 +>function (x) { return x } : (x: number) => number
  >x : number
  >x : number
- 
+
 @@= skipped -42, +42 lines =@@
  /** @typedef {(x: 'hi' | 'bye') => 0 | 1 | 2} Argle */
  /** @type {Argle} */
@@ -60,7 +60,7 @@
 ->s : "bye" | "hi"
 +>blargle : (s: any) => number
 +>s : any
- 
+
      return 0;
  >0 : 0
 @@= skipped -10, +10 lines =@@
@@ -72,5 +72,5 @@
 +>blargle('hi') : number
 +>blargle : (s: any) => number
  >'hi' : "hi"
- 
+
  /** @typedef {{(s: string): 0 | 1; (b: boolean): 2 | 3 }} Gioconda */

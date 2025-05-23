@@ -1,7 +1,7 @@
 --- old.destructuringObjectBindingPatternAndAssignment3.js
 +++ new.destructuringObjectBindingPatternAndAssignment3.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [destructuringObjectBindingPatternAndAssignment3.js]
  // Error
 -var h = { h: 1 }.h;

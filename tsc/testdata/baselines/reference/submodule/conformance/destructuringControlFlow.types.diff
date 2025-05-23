@@ -1,7 +1,7 @@
 --- old.destructuringControlFlow.types
 +++ new.destructuringControlFlow.types
 @@= skipped -1, +1 lines =@@
- 
+
  === destructuringControlFlow.ts ===
  function f1(obj: { a?: string }) {
 ->f1 : (obj: { a?: string; }) => void
@@ -9,26 +9,26 @@
 +>f1 : (obj: { a?: string | undefined; }) => void
 +>obj : { a?: string | undefined; }
  >a : string | undefined
- 
+
      if (obj.a) {
  >obj.a : string | undefined
 ->obj : { a?: string; }
 +>obj : { a?: string | undefined; }
  >a : string | undefined
- 
+
          obj = {};
  >obj = {} : {}
 ->obj : { a?: string; }
 +>obj : { a?: string | undefined; }
  >{} : {}
- 
+
          let a1 = obj["a"];  // string | undefined
  >a1 : string | undefined
  >obj["a"] : string | undefined
 ->obj : { a?: string; }
 +>obj : { a?: string | undefined; }
  >"a" : "a"
- 
+
          let a2 = obj.a;  // string | undefined
  >a2 : string | undefined
  >obj.a : string | undefined
@@ -37,16 +37,16 @@
  >a : string | undefined
      }
  }
- 
+
  function f2(obj: [number, string] | null[]) {
 ->f2 : (obj: [number, string] | null[]) => void
 +>f2 : (obj: null[] | [number, string]) => void
  >obj : null[] | [number, string]
- 
+
      let a0 = obj[0];  // number | null
 @@= skipped -94, +94 lines =@@
  }
- 
+
  function f3(obj: { a?: number, b?: string }) {
 ->f3 : (obj: { a?: number; b?: string; }) => void
 ->obj : { a?: number; b?: string; }
@@ -54,7 +54,7 @@
 +>obj : { a?: number | undefined; b?: string | undefined; }
  >a : number | undefined
  >b : string | undefined
- 
+
      if (obj.a && obj.b) {
  >obj.a && obj.b : string | 0 | undefined
  >obj.a : number | undefined
@@ -65,13 +65,13 @@
 ->obj : { a?: number; b?: string; }
 +>obj : { a?: number | undefined; b?: string | undefined; }
  >b : string | undefined
- 
+
          let { a, b } = obj;  // number, string
  >a : number
  >b : string
 ->obj : { a?: number; b?: string; }
 +>obj : { a?: number | undefined; b?: string | undefined; }
- 
+
          ({ a, b } = obj);
 ->({ a, b } = obj) : { a?: number; b?: string; }
 ->{ a, b } = obj : { a?: number; b?: string; }
@@ -84,4 +84,3 @@
 +>obj : { a?: number | undefined; b?: string | undefined; }
      }
  }
- 

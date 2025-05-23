@@ -1,7 +1,7 @@
 --- old.reexportMissingDefault8.js
 +++ new.reexportMissingDefault8.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [b.js]
  "use strict";
 -var b = null;

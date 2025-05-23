@@ -2,7 +2,7 @@
 +++ new.callSignaturesThatDifferOnlyByReturnType2.symbols
 @@= skipped -8, +8 lines =@@
  >T : Symbol(T, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 12))
- 
+
      foo(x: number): T;
 ->foo : Symbol(I.foo, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 16))
 +>foo : Symbol(foo, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 16))
@@ -18,7 +18,7 @@
  >x : Symbol(x, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 9, 3))
 ->foo : Symbol(I.foo, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 16))
 +>foo : Symbol(foo, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 16))
- 
+
  var r2 = x.foo(''); // error
  >r2 : Symbol(r2, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 12, 3))
 ->x.foo : Symbol(I.foo, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 16))
@@ -26,4 +26,3 @@
  >x : Symbol(x, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 9, 3))
 ->foo : Symbol(I.foo, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 16))
 +>foo : Symbol(foo, Decl(callSignaturesThatDifferOnlyByReturnType2.ts, 3, 16))
- 

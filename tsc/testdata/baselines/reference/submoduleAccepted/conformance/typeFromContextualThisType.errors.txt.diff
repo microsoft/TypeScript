@@ -1,8 +1,7 @@
 --- old.typeFromContextualThisType.errors.txt
 +++ new.typeFromContextualThisType.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +bug25926.js(4,18): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +bug25926.js(11,27): error TS7006: Parameter 'm' implicitly has an 'any' type.
 +

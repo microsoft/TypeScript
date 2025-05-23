@@ -1,8 +1,7 @@
 --- old.jsDeclarationsMissingTypeParameters.errors.txt
 +++ new.jsDeclarationsMissingTypeParameters.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +file.js(2,13): error TS2314: Generic type 'T[]' requires 1 type argument(s).
 +file.js(12,14): error TS2314: Generic type 'T[]' requires 1 type argument(s).
 +file.js(12,19): error TS8020: JSDoc types can only be used inside documentation comments.

@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-classThisReference.es5.js
 +++ new.esDecorators-classDeclaration-classThisReference.es5.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-classThisReference.es5.js]
 -var C = function () {
 -    var _classDecorators = [dec];

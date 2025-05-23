@@ -2,7 +2,7 @@
 +++ new.logicalAssignment4(target=es2020).symbols
 @@= skipped -5, +5 lines =@@
  >results : Symbol(results, Decl(logicalAssignment4.ts, 0, 14))
- 
+
      (results ||= []).push(100);
 ->(results ||= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>(results ||= []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -10,11 +10,11 @@
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function foo2(results: number[] | undefined) {
 @@= skipped -10, +10 lines =@@
  >results : Symbol(results, Decl(logicalAssignment4.ts, 4, 14))
- 
+
      (results ??= []).push(100);
 ->(results ??= []).push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>(results ??= []).push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -22,11 +22,11 @@
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function foo3(results: number[] | undefined) {
 @@= skipped -13, +13 lines =@@
  >results : Symbol(results, Decl(logicalAssignment4.ts, 8, 14))
- 
+
      results.push(100);
 ->results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>results.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -34,11 +34,11 @@
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function foo4(results: number[] | undefined) {
 @@= skipped -13, +13 lines =@@
  >results : Symbol(results, Decl(logicalAssignment4.ts, 13, 14))
- 
+
      results.push(100);
 ->results.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>results.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -46,14 +46,14 @@
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  interface ThingWithOriginal {
  >ThingWithOriginal : Symbol(ThingWithOriginal, Decl(logicalAssignment4.ts, 16, 1))
- 
+
      name: string;
 ->name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
- 
+
      original?: ThingWithOriginal
 ->original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
 +>original : Symbol(original, Decl(logicalAssignment4.ts, 19, 17))
@@ -61,7 +61,7 @@
  }
  declare const v: number
 @@= skipped -30, +30 lines =@@
- 
+
          if (thing &&= thing.original) {
  >thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
 ->thing.original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
@@ -69,7 +69,7 @@
  >thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
 ->original : Symbol(ThingWithOriginal.original, Decl(logicalAssignment4.ts, 19, 17))
 +>original : Symbol(original, Decl(logicalAssignment4.ts, 19, 17))
- 
+
              thing.name;
 ->thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>thing.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
@@ -81,14 +81,14 @@
      else if (v === 2) {
 @@= skipped -18, +18 lines =@@
  >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
- 
+
              thing.name;
 ->thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>thing.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
  >thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
 ->name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
- 
+
              defaultValue.name
 ->defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>defaultValue.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
@@ -100,14 +100,14 @@
      else if (v === 3) {
 @@= skipped -18, +18 lines =@@
  >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
- 
+
              thing.name;
 ->thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>thing.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
  >thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
 ->name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
- 
+
              defaultValue.name;
 ->defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>defaultValue.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
@@ -119,14 +119,14 @@
      else {
 @@= skipped -16, +16 lines =@@
  >defaultValue : Symbol(defaultValue, Decl(logicalAssignment4.ts, 23, 67))
- 
+
              thing.name;
 ->thing.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>thing.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
  >thing : Symbol(thing, Decl(logicalAssignment4.ts, 23, 30))
 ->name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))
- 
+
              defaultValue.name;
 ->defaultValue.name : Symbol(ThingWithOriginal.name, Decl(logicalAssignment4.ts, 18, 29))
 +>defaultValue.name : Symbol(name, Decl(logicalAssignment4.ts, 18, 29))

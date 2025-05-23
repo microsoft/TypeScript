@@ -2,7 +2,7 @@
 +++ new.classVarianceResolveCircularity1.js
 @@= skipped -11, +11 lines =@@
  declare function callme(x: object): string;
- 
+
  //// [classVarianceResolveCircularity1.js]
 -"use strict";
  // Issue #52813

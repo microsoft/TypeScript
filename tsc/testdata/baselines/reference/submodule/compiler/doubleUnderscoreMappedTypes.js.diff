@@ -1,7 +1,7 @@
 --- old.doubleUnderscoreMappedTypes.js
 +++ new.doubleUnderscoreMappedTypes.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [doubleUnderscoreMappedTypes.js]
  // As expected, I can make an object satisfying this interface
 -var ok = {

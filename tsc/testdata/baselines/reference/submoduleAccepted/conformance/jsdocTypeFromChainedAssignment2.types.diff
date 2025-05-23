@@ -1,7 +1,7 @@
 --- old.jsdocTypeFromChainedAssignment2.types
 +++ new.jsdocTypeFromChainedAssignment2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === use.js ===
  var mod = require('./mod');
 ->mod : typeof mod
@@ -10,7 +10,7 @@
 +>require('./mod') : typeof import("mod")
  >require : any
  >'./mod' : "./mod"
- 
+
  mod.f('no')
 ->mod.f('no') : number
 ->mod.f : (n: number) => number
@@ -21,7 +21,7 @@
 +>mod : typeof import("mod")
 +>f : (n: any) => any
  >'no' : "no"
- 
+
  mod.g('also no')
 ->mod.g('also no') : number
 ->mod.g : (n: number) => number
@@ -32,7 +32,7 @@
 +>mod : typeof import("mod")
 +>g : any
  >'also no' : "also no"
- 
+
  mod.h(0)
  >mod.h(0) : string
 ->mod.h : (mom: string) => string
@@ -42,7 +42,7 @@
 +>mod : typeof import("mod")
 +>h : (mom: any) => string
  >0 : 0
- 
+
  mod.i(1)
 ->mod.i(1) : string
 ->mod.i : (mom: string) => string
@@ -53,31 +53,33 @@
 +>mod : typeof import("mod")
 +>i : any
  >1 : 1
- 
+
  === mod.js ===
  /** @param {number} n */
  exports.f = exports.g = function fg(n) {
 ->exports.f = exports.g = function fg(n) {    return n + 1} : (n: number) => number
 ->exports.f : (n: number) => number
-+>exports.f = exports.g = function fg(n) {    return n + 1} : (n: any) => any
-+>exports.f : (n: any) => any
- >exports : typeof import("mod")
+->exports : typeof import("mod")
 ->f : (n: number) => number
 ->exports.g = function fg(n) {    return n + 1} : (n: number) => number
 ->exports.g : (n: number) => number
-+>f : (n: any) => any
-+>exports.g = function fg(n) {    return n + 1} : (n: any) => any
-+>exports.g : any
- >exports : typeof import("mod")
+->exports : typeof import("mod")
 ->g : (n: number) => number
 ->function fg(n) {    return n + 1} : (n: number) => number
 ->fg : (n: number) => number
 ->n : number
++>exports.f = exports.g = function fg(n) {    return n + 1} : (n: any) => any
++>exports.f : (n: any) => any
++>exports : typeof import("mod")
++>f : (n: any) => any
++>exports.g = function fg(n) {    return n + 1} : (n: any) => any
++>exports.g : any
++>exports : typeof import("mod")
 +>g : any
 +>function fg(n) {    return n + 1} : (n: any) => any
 +>fg : (n: any) => any
 +>n : any
- 
+
      return n + 1
 ->n + 1 : number
 ->n : number
@@ -117,10 +119,9 @@
 +>function hi(mom) {    return `hi, ${mom}!`;} : (mom: any) => string
 +>hi : (mom: any) => string
 +>mom : any
- 
+
      return `hi, ${mom}!`;
  >`hi, ${mom}!` : string
 ->mom : string
 +>mom : any
  }
- 

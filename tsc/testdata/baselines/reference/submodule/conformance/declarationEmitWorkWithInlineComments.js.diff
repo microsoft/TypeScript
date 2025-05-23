@@ -49,7 +49,8 @@
      }
 -    return Baz;
 -}());
--exports.Baz = Baz;
++}
+ exports.Baz = Baz;
 -
 -
 -//// [declarationEmitWorkWithInlineComments.d.ts]
@@ -63,11 +64,10 @@
 -    /** @internal */ isInternal2: string, /** @internal */ isInternal3: string, isInternal4: string, 
 -    /** @internal */
 -    isInternal5: string, isInternal6: string, isInternal7: string, /** @internal */ notInternal1: string, notInternal2: string, notInternal3: string);
- }
+-}
 -export declare class Bar {
 -    constructor(/* @internal */ isInternal1: string);
 -}
 -export declare class Baz {
 -    constructor(/* @internal */ isInternal: string);
 -}
-+exports.Baz = Baz;

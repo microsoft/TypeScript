@@ -2,7 +2,7 @@
 +++ new.systemModuleWithSuperClass.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [foo.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

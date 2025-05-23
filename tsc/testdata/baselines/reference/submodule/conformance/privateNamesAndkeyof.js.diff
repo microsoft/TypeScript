@@ -1,8 +1,8 @@
 --- old.privateNamesAndkeyof.js
 +++ new.privateNamesAndkeyof.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [privateNamesAndkeyof.js]
 -"use strict";
 -var _A_instances, _A_fooField, _A_fooMethod, _A_fooProp_get, _A_fooProp_set;
@@ -13,13 +13,16 @@
 -        this.bar = 3;
 -        this.baz = 3;
 -    }
+-    ;
+-    ;
+-    ;
 +    #fooField = 3;
 +    #fooMethod() { }
-     ;
++    ;
 +    get #fooProp() { return 1; }
-     ;
++    ;
 +    set #fooProp(value) { }
-     ;
++    ;
 +    bar = 3;
 +    baz = 3;
  }

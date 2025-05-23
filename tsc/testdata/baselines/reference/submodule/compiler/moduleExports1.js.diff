@@ -2,7 +2,7 @@
 +++ new.moduleExports1.js
 @@= skipped -15, +15 lines =@@
  if (!module.exports) module.exports = "";
- 
+
  //// [moduleExports1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

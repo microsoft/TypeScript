@@ -1,8 +1,8 @@
 --- old.asyncFunctionDeclarationCapturesArguments_es5.js
 +++ new.asyncFunctionDeclarationCapturesArguments_es5.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [asyncFunctionDeclarationCapturesArguments_es5.js]
 -var C = /** @class */ (function () {
 -    function C() {

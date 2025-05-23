@@ -1,8 +1,8 @@
 --- old.protectedMembers.js
 +++ new.protectedMembers.js
 @@= skipped -117, +117 lines =@@
- 
- 
+
+
  //// [protectedMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -44,10 +44,7 @@
 -    __extends(C2, _super);
 -    function C2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+class C2 extends C1 {
-+    f() {
-+        return super.f() + this.x;
-     }
+-    }
 -    C2.prototype.f = function () {
 -        return _super.prototype.f.call(this) + this.x;
 -    };
@@ -56,6 +53,10 @@
 -    };
 -    return C2;
 -}(C1));
++class C2 extends C1 {
++    f() {
++        return super.f() + this.x;
++    }
 +    static sf() {
 +        return super.sf() + this.sx;
 +    }
@@ -65,12 +66,7 @@
 -    __extends(C3, _super);
 -    function C3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+class C3 extends C2 {
-+    x;
-+    static sx;
-+    f() {
-+        return super.f();
-     }
+-    }
 -    C3.prototype.f = function () {
 -        return _super.prototype.f.call(this);
 -    };
@@ -79,6 +75,12 @@
 -    };
 -    return C3;
 -}(C2));
++class C3 extends C2 {
++    x;
++    static sx;
++    f() {
++        return super.f();
++    }
 +    static sf() {
 +        return super.sf();
 +    }
@@ -129,18 +131,12 @@
 -    __extends(D, _super);
 -    function D() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    return D;
 -}(C));
 -var CC = /** @class */ (function () {
 -    function CC() {
-+}
-+class D extends C {
-+    d;
-+}
-+class CC {
-+    constructor() {
-     }
+-    }
 -    return CC;
 -}());
 -var A1 = /** @class */ (function () {
@@ -153,6 +149,14 @@
 -    }
 -    return B1;
 -}());
++    }
++}
++class D extends C {
++    d;
++}
++class CC {
++    constructor() {
++    }
 +}
 +class A1 {
 +    x;

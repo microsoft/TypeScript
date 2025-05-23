@@ -1,8 +1,8 @@
 --- old.inheritanceOfGenericConstructorMethod1.js
 +++ new.inheritanceOfGenericConstructorMethod1.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [inheritanceOfGenericConstructorMethod1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

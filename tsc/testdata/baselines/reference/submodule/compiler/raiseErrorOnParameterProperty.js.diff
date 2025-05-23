@@ -1,8 +1,8 @@
 --- old.raiseErrorOnParameterProperty.js
 +++ new.raiseErrorOnParameterProperty.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [raiseErrorOnParameterProperty.js]
 -var C1 = /** @class */ (function () {
 -    function C1(x) {

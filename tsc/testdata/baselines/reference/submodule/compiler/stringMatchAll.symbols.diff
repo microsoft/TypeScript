@@ -8,6 +8,6 @@
 ->matchAll : Symbol(String.matchAll, Decl(lib.es2020.string.d.ts, --, --))
 +>"matchAll".matchAll : Symbol(matchAll, Decl(lib.es2020.string.d.ts, --, --))
 +>matchAll : Symbol(matchAll, Decl(lib.es2020.string.d.ts, --, --))
- 
+
  const array = [...matches];
  >array : Symbol(array, Decl(stringMatchAll.ts, 1, 5))

@@ -1,6 +1,6 @@
 --- old.packageJsonExportsOptionsCompat.errors.txt
 +++ new.packageJsonExportsOptionsCompat.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/tsconfig.json(4,5): error TS5098: Option 'customConditions' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
 -/tsconfig.json(5,5): error TS5098: Option 'resolvePackageJsonExports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
 -/tsconfig.json(6,5): error TS5098: Option 'resolvePackageJsonImports' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
@@ -25,5 +25,4 @@
 -    
 -==== /index.ts (0 errors) ====
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,8 +1,7 @@
 --- old.jsdocParseStarEquals.errors.txt
 +++ new.jsdocParseStarEquals.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(3,12): error TS2370: A rest parameter must be of an array type.
 +a.js(3,19): error TS1047: A rest parameter cannot be optional.
 +a.js(12,14): error TS7006: Parameter 'f' implicitly has an 'any' type.

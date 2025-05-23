@@ -5,8 +5,8 @@
 -intersectionAsWeakTypeSource.ts(18,7): error TS2739: Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
 +intersectionAsWeakTypeSource.ts(18,7): error TS2322: Type 'Brand<{ view: number; styleMedia: string; }>' is not assignable to type 'ViewStyle'.
 +  Type 'Number & { __brand: { view: number; styleMedia: string; }; }' is missing the following properties from type 'ViewStyle': view, styleMedia
- 
- 
+
+
  ==== intersectionAsWeakTypeSource.ts (2 errors) ====
 @@= skipped -23, +24 lines =@@
      const wrapped = create({ first: { view: 0, styleMedia: "???" } });

@@ -2,8 +2,8 @@
 +++ new.duplicateIdentifierRelatedSpans6.js
 @@= skipped -20, +20 lines =@@
  export {};
- 
- 
+
+
 -//// [file1.js]
  //// [file2.js]
  "use strict";

@@ -2,7 +2,7 @@
 +++ new.invalidNewTarget.es5.js
 @@= skipped -26, +26 lines =@@
  };
- 
+
  //// [invalidNewTarget.es5.js]
 -var _a;
 -var a = _newTarget;

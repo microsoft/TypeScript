@@ -2,7 +2,7 @@
 +++ new.superAccess2.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [superAccess2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -45,10 +45,7 @@
 -        _this.z = z;
 -        _this.xx = _super.prototype.;
 -        return _this;
-+    constructor(z = super., zz = super., zzz = () => super.) {
-+        super();
-+        this.z = z;
-     }
+-    }
 -    Q.prototype.foo = function (zz) {
 -        if (zz === void 0) { zz = _super.prototype.; }
 -        _super.prototype.x.call(this);
@@ -62,6 +59,10 @@
 -    Q.yy = _super.; // error for static initializer accessing super
 -    return Q;
 -}(P));
++    constructor(z = super., zz = super., zzz = () => super.) {
++        super();
++        this.z = z;
++    }
 +    foo(zz = super.) {
 +        super.x();
 +        super.y(); // error

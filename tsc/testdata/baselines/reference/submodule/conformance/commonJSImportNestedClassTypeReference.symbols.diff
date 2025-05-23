@@ -2,28 +2,28 @@
 +++ new.commonJSImportNestedClassTypeReference.symbols
 @@= skipped -11, +11 lines =@@
  >k : Symbol(k, Decl(main.js, 2, 11))
- 
+
      k.values()
 ->k.values : Symbol(K.values, Decl(mod1.js, 1, 13))
  >k : Symbol(k, Decl(main.js, 2, 11))
 ->values : Symbol(K.values, Decl(mod1.js, 1, 13))
  }
- 
+
  === mod1.js ===
  var NS = {}
 ->NS : Symbol(NS, Decl(mod1.js, 0, 3), Decl(mod1.js, 0, 11))
 +>NS : Symbol(NS, Decl(mod1.js, 0, 3))
- 
+
  NS.K =class {
 ->NS.K : Symbol(K, Decl(mod1.js, 0, 11))
 ->NS : Symbol(NS, Decl(mod1.js, 0, 3), Decl(mod1.js, 0, 11))
 ->K : Symbol(K, Decl(mod1.js, 0, 11))
 +>NS : Symbol(NS, Decl(mod1.js, 0, 3))
- 
+
      values() {
 ->values : Symbol(K.values, Decl(mod1.js, 1, 13))
 +>values : Symbol(values, Decl(mod1.js, 1, 13))
- 
+
          return new NS.K()
 ->NS.K : Symbol(K, Decl(mod1.js, 0, 11))
 ->NS : Symbol(NS, Decl(mod1.js, 0, 3), Decl(mod1.js, 0, 11))
@@ -40,4 +40,3 @@
 ->NS : Symbol(NS, Decl(mod1.js, 0, 3), Decl(mod1.js, 0, 11))
 ->K : Symbol(K, Decl(mod1.js, 0, 11))
 +>NS : Symbol(NS, Decl(mod1.js, 0, 3))
- 

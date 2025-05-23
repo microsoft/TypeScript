@@ -1,8 +1,8 @@
 --- old.privateNameMethodInStaticFieldInit.js
 +++ new.privateNameMethodInStaticFieldInit.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [privateNameMethodInStaticFieldInit.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

@@ -6,11 +6,11 @@
  import obj1 from "./sub1/uses.js"
 ->obj1 : ImportInterface
 +>obj1 : any
- 
+
  import obj2 from "./sub2/uses.js"
 ->obj2 : typeof obj2
 +>obj2 : RequireInterface
- 
+
  export default [obj1, obj2.default] as const;
 ->[obj1, obj2.default] as const : readonly [ImportInterface, RequireInterface]
 ->[obj1, obj2.default] : readonly [ImportInterface, RequireInterface]
@@ -18,13 +18,7 @@
 ->obj2.default : RequireInterface
 ->obj2 : typeof obj2
 ->default : RequireInterface
-+>[obj1, obj2.default] as const : readonly [any, any]
-+>[obj1, obj2.default] : readonly [any, any]
-+>obj1 : any
-+>obj2.default : any
-+>obj2 : RequireInterface
-+>default : any
- 
+-
 -=== /node_modules/pkg/import.d.ts ===
 -export {};
 -declare global {
@@ -36,6 +30,13 @@
 -    function getInterI(): ImportInterface;
 ->getInterI : () => ImportInterface
 -}
++>[obj1, obj2.default] as const : readonly [any, any]
++>[obj1, obj2.default] : readonly [any, any]
++>obj1 : any
++>obj2.default : any
++>obj2 : RequireInterface
++>default : any
++
  === /node_modules/pkg/require.d.ts ===
  export {};
  declare global {
@@ -47,6 +48,6 @@
 ->getInterI : () => ImportInterface
 +>getInterI() : any
 +>getInterI : any
- 
+
  === /sub2/uses.ts ===
  /// <reference types="pkg" preserve="true" />

@@ -12,7 +12,7 @@
  })(m || (m = {}));
  export var x = 10;
  //// [client.js]
- export * from "server";
+-export * from "server";
 -
 -
 -//// [server.d.ts]
@@ -27,4 +27,4 @@
 -export declare namespace uninstantiated {
 -}
 -//// [client.d.ts]
--export * from "server";
+ export * from "server";

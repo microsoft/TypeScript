@@ -1,7 +1,7 @@
 --- old.lateBoundAssignmentDeclarationSupport2.types
 +++ new.lateBoundAssignmentDeclarationSupport2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === usage.js ===
  const x = require("./lateBoundAssignmentDeclarationSupport2.js");
 ->x : typeof x
@@ -10,14 +10,14 @@
 +>require("./lateBoundAssignmentDeclarationSupport2.js") : typeof import("lateBoundAssignmentDeclarationSupport2")
  >require : any
  >"./lateBoundAssignmentDeclarationSupport2.js" : "./lateBoundAssignmentDeclarationSupport2.js"
- 
+
  const y = x["my-fake-sym"];
  >y : any
  >x["my-fake-sym"] : any
 ->x : typeof x
 +>x : typeof import("lateBoundAssignmentDeclarationSupport2")
  >"my-fake-sym" : "my-fake-sym"
- 
+
  const z = x[x.S];
  >z : any
  >x[x.S] : any
@@ -27,7 +27,7 @@
 ->x : typeof x
 +>x : typeof import("lateBoundAssignmentDeclarationSupport2")
  >S : unique symbol
- 
+
  === lateBoundAssignmentDeclarationSupport2.js ===
 @@= skipped -33, +33 lines =@@
  module.exports[_sym] = "ok";
@@ -41,7 +41,7 @@
 +>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
  >_sym : unique symbol
  >"ok" : "ok"
- 
+
  module.exports[_str] = "ok";
  >module.exports[_str] = "ok" : "ok"
  >module.exports[_str] : any
@@ -53,7 +53,7 @@
 +>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
  >_str : "my-fake-sym"
  >"ok" : "ok"
- 
+
  module.exports.S = _sym;
  >module.exports.S = _sym : unique symbol
  >module.exports.S : unique symbol
@@ -65,4 +65,3 @@
 +>exports : typeof import("lateBoundAssignmentDeclarationSupport2")
  >S : unique symbol
  >_sym : unique symbol
- 

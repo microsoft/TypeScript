@@ -1,7 +1,7 @@
 --- old.checkSuperCallBeforeThisAccess.js
 +++ new.checkSuperCallBeforeThisAccess.js
 @@= skipped -84, +84 lines =@@
- 
+
  //// [checkSuperCallBeforeThisAccess.js]
  class A {
 -    constructor() {

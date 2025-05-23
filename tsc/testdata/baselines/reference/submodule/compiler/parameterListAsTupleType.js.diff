@@ -10,19 +10,11 @@
 -    var args = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        args[_i] = arguments[_i];
-+const x = (a) => 5;
-+const a = ['should-not-work']; // works, but shouldn't
-+function t(...args) { } // should work
-+class C {
-+    constructor(a, b) {
-     }
+-    }
 -} // should work
 -var C = /** @class */ (function () {
 -    function C(a, b) {
-+}
-+class D {
-+    constructor(a, ...rest) {
-     }
+-    }
 -    return C;
 -}());
 -var D = /** @class */ (function () {
@@ -34,4 +26,14 @@
 -    }
 -    return D;
 -}());
++const x = (a) => 5;
++const a = ['should-not-work']; // works, but shouldn't
++function t(...args) { } // should work
++class C {
++    constructor(a, b) {
++    }
++}
++class D {
++    constructor(a, ...rest) {
++    }
 +}

@@ -1,8 +1,8 @@
 --- old.privateNameConstructorReserved.js
 +++ new.privateNameConstructorReserved.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [privateNameConstructorReserved.js]
 -var _A_instances, _A_constructor;
  class A {

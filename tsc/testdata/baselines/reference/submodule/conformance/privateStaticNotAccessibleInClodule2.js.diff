@@ -1,7 +1,7 @@
 --- old.privateStaticNotAccessibleInClodule2.js
 +++ new.privateStaticNotAccessibleInClodule2.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [privateStaticNotAccessibleInClodule2.js]
  // Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
 -var __extends = (this && this.__extends) || (function () {

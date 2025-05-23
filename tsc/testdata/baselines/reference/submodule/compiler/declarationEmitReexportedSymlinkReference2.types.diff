@@ -2,7 +2,7 @@
 +++ new.declarationEmitReexportedSymlinkReference2.types
 @@= skipped -7, +7 lines =@@
  >MetadataAccessor : typeof MetadataAccessor
- 
+
  export const ADMIN = MetadataAccessor.create<boolean>('1');
 ->ADMIN : MetadataAccessor<boolean, import("monorepo/pkg1/dist/types").IdType>
 ->MetadataAccessor.create<boolean>('1') : MetadataAccessor<boolean, import("monorepo/pkg1/dist/types").IdType>
@@ -14,11 +14,11 @@
 ->create : <T, D extends import("monorepo/pkg1/dist/types").IdType = import("monorepo/pkg1/dist/types").IdType>(key: string) => MetadataAccessor<T, D>
 +>create : <T, D extends IdType>(key: string) => MetadataAccessor<T, D>
  >'1' : "1"
- 
+
  === monorepo/pkg1/dist/index.d.ts ===
 @@= skipped -39, +39 lines =@@
  >toString : () => string
- 
+
      static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
 ->create : <T, D extends IdType = IdType>(key: string) => MetadataAccessor<T, D>
 +>create : <T, D extends IdType>(key: string) => MetadataAccessor<T, D>
@@ -31,6 +31,6 @@
  export {MetadataAccessor} from '@raymondfeng/pkg1';
 ->MetadataAccessor : typeof import("monorepo/pkg1/dist/types").MetadataAccessor
 +>MetadataAccessor : typeof MetadataAccessor
- 
+
  === monorepo/pkg2/dist/secondary.d.ts ===
  export {IdType} from '@raymondfeng/pkg1';

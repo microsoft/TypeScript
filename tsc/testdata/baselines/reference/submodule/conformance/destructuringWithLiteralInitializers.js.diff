@@ -1,7 +1,7 @@
 --- old.destructuringWithLiteralInitializers.js
 +++ new.destructuringWithLiteralInitializers.js
 @@= skipped -69, +69 lines =@@
- 
+
  //// [destructuringWithLiteralInitializers.js]
  // (arg: { x: any, y: any }) => void
 -function f1(_a) {

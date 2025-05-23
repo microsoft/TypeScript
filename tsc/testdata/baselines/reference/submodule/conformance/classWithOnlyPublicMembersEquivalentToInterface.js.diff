@@ -1,7 +1,7 @@
 --- old.classWithOnlyPublicMembersEquivalentToInterface.js
 +++ new.classWithOnlyPublicMembersEquivalentToInterface.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [classWithOnlyPublicMembersEquivalentToInterface.js]
  // no errors expected
 -var C = /** @class */ (function () {

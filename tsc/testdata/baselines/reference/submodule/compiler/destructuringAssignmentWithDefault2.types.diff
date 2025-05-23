@@ -1,7 +1,7 @@
 --- old.destructuringAssignmentWithDefault2.types
 +++ new.destructuringAssignmentWithDefault2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === destructuringAssignmentWithDefault2.ts ===
  const a: { x?: number; y?: number } = { };
 ->a : { x?: number; y?: number; }
@@ -10,7 +10,7 @@
  >y : number | undefined
  >{ } : {}
 @@= skipped -10, +10 lines =@@
- 
+
  // Should not error out
  ({ x = 0 } = a);
 ->({ x = 0 } = a) : { x?: number; y?: number; }
@@ -22,7 +22,7 @@
  >0 : 0
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  ({ x: x = 0} = a);
 ->({ x: x = 0} = a) : { x?: number; y?: number; }
 ->{ x: x = 0} = a : { x?: number; y?: number; }
@@ -35,7 +35,7 @@
  >0 : 0
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  ({ y: x = 0} = a);
 ->({ y: x = 0} = a) : { x?: number; y?: number; }
 ->{ y: x = 0} = a : { x?: number; y?: number; }
@@ -48,7 +48,7 @@
  >0 : 0
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  // Should be error
  ({ x = undefined } = a);
 ->({ x = undefined } = a) : { x?: number; y?: number; }
@@ -60,7 +60,7 @@
  >undefined : undefined
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  ({ x: x = undefined } = a);
 ->({ x: x = undefined } = a) : { x?: number; y?: number; }
 ->{ x: x = undefined } = a : { x?: number; y?: number; }
@@ -73,7 +73,7 @@
  >undefined : undefined
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  ({ y: x = undefined } = a);
 ->({ y: x = undefined } = a) : { x?: number; y?: number; }
 ->{ y: x = undefined } = a : { x?: number; y?: number; }
@@ -86,28 +86,28 @@
  >undefined : undefined
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  const { x: z1 } = a;
  >x : any
  >z1 : number | undefined
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  const { x: z2 = 0 } = a;
  >x : any
  >z2 : number
  >0 : 0
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
+
  const { x: z3 = undefined } = a;
  >x : any
  >z3 : number | undefined
  >undefined : undefined
 ->a : { x?: number; y?: number; }
 +>a : { x?: number | undefined; y?: number | undefined; }
- 
- 
+
+
  declare const r: Iterator<number>;
 @@= skipped -91, +91 lines =@@
  >false : false
@@ -118,7 +118,7 @@
  >r : Iterator<number, any, any>
 ->next : (...[value]: [] | [any]) => IteratorResult<number, any>
 +>next : (...__0: [] | [any]) => IteratorResult<number, any>
- 
+
  ({ done: done = false, value } = r.next());
  >({ done: done = false, value } = r.next()) : IteratorResult<number, any>
 @@= skipped -14, +14 lines =@@
@@ -130,4 +130,3 @@
  >r : Iterator<number, any, any>
 ->next : (...[value]: [] | [any]) => IteratorResult<number, any>
 +>next : (...__0: [] | [any]) => IteratorResult<number, any>
- 

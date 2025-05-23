@@ -7,4 +7,3 @@
 ->public : Symbol(Outer.public, Decl(parserAccessibilityAfterStatic4.ts, 1, 1))
 +>public : Symbol(public, Decl(parserAccessibilityAfterStatic4.ts, 1, 1))
  }
- 

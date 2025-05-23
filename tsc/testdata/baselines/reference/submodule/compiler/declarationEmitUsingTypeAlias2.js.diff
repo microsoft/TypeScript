@@ -1,8 +1,8 @@
 --- old.declarationEmitUsingTypeAlias2.js
 +++ new.declarationEmitUsingTypeAlias2.js
 @@= skipped -42, +42 lines =@@
- 
- 
+
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

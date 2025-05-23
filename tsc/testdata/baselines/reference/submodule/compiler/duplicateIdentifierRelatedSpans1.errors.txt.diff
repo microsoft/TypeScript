@@ -3,7 +3,7 @@
 @@= skipped -2, +2 lines =@@
  [7m1[0m class Foo { }
  [7m [0m [91m      ~~~[0m
- 
+
 -  [96mfile2.ts[0m:[93m1[0m:[93m6[0m
 +  [96mfile2.ts[0m:[93m1[0m:[93m6[0m - 'Foo' was also declared here.
      [7m1[0m type Foo = number;
@@ -17,10 +17,10 @@
 -    and here.
 +
  [96mfile1.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
- 
+
  [7m2[0m const Bar = 3;
  [7m [0m [91m      ~~~[0m
- 
+
 -  [96mfile2.ts[0m:[93m2[0m:[93m7[0m
 +  [96mfile2.ts[0m:[93m2[0m:[93m7[0m - 'Bar' was also declared here.
      [7m2[0m class Bar {}
@@ -34,10 +34,10 @@
 -    and here.
 +
  [96mfile2.ts[0m:[93m1[0m:[93m6[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
- 
+
  [7m1[0m type Foo = number;
  [7m [0m [91m     ~~~[0m
- 
+
 -  [96mfile1.ts[0m:[93m1[0m:[93m7[0m
 +  [96mfile1.ts[0m:[93m1[0m:[93m7[0m - 'Foo' was also declared here.
      [7m1[0m class Foo { }
@@ -45,10 +45,10 @@
 -    'Foo' was also declared here.
 +
  [96mfile2.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
- 
+
  [7m2[0m class Bar {}
  [7m [0m [91m      ~~~[0m
- 
+
 -  [96mfile1.ts[0m:[93m2[0m:[93m7[0m
 +  [96mfile1.ts[0m:[93m2[0m:[93m7[0m - 'Bar' was also declared here.
      [7m2[0m const Bar = 3;
@@ -56,10 +56,10 @@
 -    'Bar' was also declared here.
 +
  [96mfile3.ts[0m:[93m1[0m:[93m6[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
- 
+
  [7m1[0m type Foo = 54;
  [7m [0m [91m     ~~~[0m
- 
+
 -  [96mfile1.ts[0m:[93m1[0m:[93m7[0m
 +  [96mfile1.ts[0m:[93m1[0m:[93m7[0m - 'Foo' was also declared here.
      [7m1[0m class Foo { }
@@ -67,17 +67,17 @@
 -    'Foo' was also declared here.
 +
  [96mfile3.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
- 
+
  [7m2[0m let Bar = 42
  [7m [0m [91m    ~~~[0m
- 
+
 -  [96mfile1.ts[0m:[93m2[0m:[93m7[0m
 +  [96mfile1.ts[0m:[93m2[0m:[93m7[0m - 'Bar' was also declared here.
      [7m2[0m const Bar = 3;
      [7m [0m [96m      ~~~[0m
 -    'Bar' was also declared here.
- 
- 
+
+
  ==== file1.ts (2 errors) ====
 @@= skipped -64, +63 lines =@@
            ~~~

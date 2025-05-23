@@ -2,7 +2,7 @@
 +++ new.declarationEmitComputedNameCausesImportToBePainted.types
 @@= skipped -26, +26 lines =@@
  }
- 
+
  export const withContext = ({ [Key]: value }: Context) => value;
 ->withContext : ({ [Key]: value }: Context) => string
 ->({ [Key]: value }: Context) => value : ({ [Key]: value }: Context) => string

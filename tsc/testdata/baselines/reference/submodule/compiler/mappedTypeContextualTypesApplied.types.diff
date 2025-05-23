@@ -7,34 +7,34 @@
 ->mapped1 : <T extends { [P in string]: TakeString; }>(obj: T) => void
 +>mapped1 : <T extends { [x: string]: TakeString; }>(obj: T) => void
  >obj : T
- 
+
  declare function mapped2<T extends {[P in keyof T]: TakeString}>(obj: T): void;
 @@= skipped -8, +8 lines =@@
  >obj : T
- 
+
  declare function mapped3<T extends {[P in keyof any]: TakeString}>(obj: T): void;
 ->mapped3 : <T extends { [P in keyof any]: TakeString; }>(obj: T) => void
 +>mapped3 : <T extends { [x: string]: TakeString; }>(obj: T) => void
  >obj : T
- 
+
  declare function mapped4<T>(obj: T & {[P in keyof T]: TakeString}): void;
 @@= skipped -16, +16 lines =@@
  >obj : { [P in K]: TakeString; }
- 
+
  declare function mapped7<K extends keyof any>(obj: {[P in K]: TakeString}): void;
 ->mapped7 : <K extends keyof any>(obj: { [P in K]: TakeString; }) => void
 +>mapped7 : <K extends string | number | symbol>(obj: { [P in K]: TakeString; }) => void
  >obj : { [P in K]: TakeString; }
- 
+
  declare function mapped8<K extends 'foo'>(obj: {[P in K]: TakeString}): void;
 @@= skipped -8, +8 lines =@@
  >obj : { [P in K]: TakeString; }
- 
+
  declare function mapped9<K extends 'foo'|'bar'>(obj: {[P in K]: TakeString}): void;
 ->mapped9 : <K extends "foo" | "bar">(obj: { [P in K]: TakeString; }) => void
 +>mapped9 : <K extends "bar" | "foo">(obj: { [P in K]: TakeString; }) => void
  >obj : { [P in K]: TakeString; }
- 
+
  mapped1({foo: s => 42});
  >mapped1({foo: s => 42}) : void
 ->mapped1 : <T extends { [P in string]: TakeString; }>(obj: T) => void
@@ -43,7 +43,7 @@
  >foo : (s: string) => number
  >s => 42 : (s: string) => number
 @@= skipped -23, +23 lines =@@
- 
+
  mapped3({foo: s => 42});
  >mapped3({foo: s => 42}) : void
 ->mapped3 : <T extends { [P in keyof any]: TakeString; }>(obj: T) => void
@@ -52,7 +52,7 @@
  >foo : (s: string) => number
  >s => 42 : (s: string) => number
 @@= skipped -36, +36 lines =@@
- 
+
  mapped7({foo: s => 42});
  >mapped7({foo: s => 42}) : void
 ->mapped7 : <K extends keyof any>(obj: { [P in K]: TakeString; }) => void
@@ -61,7 +61,7 @@
  >foo : (s: string) => number
  >s => 42 : (s: string) => number
 @@= skipped -18, +18 lines =@@
- 
+
  mapped9({foo: s => 42});
  >mapped9({foo: s => 42}) : void
 ->mapped9 : <K extends "foo" | "bar">(obj: { [P in K]: TakeString; }) => void

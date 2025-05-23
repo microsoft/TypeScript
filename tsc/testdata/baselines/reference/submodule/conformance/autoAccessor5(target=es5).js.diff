@@ -2,7 +2,7 @@
 +++ new.autoAccessor5(target=es5).js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [autoAccessor5.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

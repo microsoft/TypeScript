@@ -1,7 +1,7 @@
 --- old.constructSignatureAssignabilityInInheritance4.js
 +++ new.constructSignatureAssignabilityInInheritance4.js
 @@= skipped -62, +62 lines =@@
- 
+
  //// [constructSignatureAssignabilityInInheritance4.js]
  // checking subtype relations for function types as it relates to contextual signature instantiation
 -var __extends = (this && this.__extends) || (function () {

@@ -1,8 +1,8 @@
 --- old.classExpression3.js
 +++ new.classExpression3.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [classExpression3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

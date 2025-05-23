@@ -11,7 +11,7 @@
  >myAssert.equal : any
 @@= skipped -8, +8 lines =@@
  >equal : any
- 
+
  exports.equal()
 ->exports.equal() : error
 ->exports.equal : error
@@ -19,4 +19,3 @@
 +>exports.equal : any
  >exports : typeof import("app")
  >equal : any
- 

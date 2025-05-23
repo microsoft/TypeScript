@@ -2,11 +2,11 @@
 +++ new.systemModuleTargetES6.symbols
 @@= skipped -7, +7 lines =@@
  >MyClass2 : Symbol(MyClass2, Decl(systemModuleTargetES6.ts, 0, 24))
- 
+
      static value = 42;
 ->value : Symbol(MyClass2.value, Decl(systemModuleTargetES6.ts, 1, 23))
 +>value : Symbol(value, Decl(systemModuleTargetES6.ts, 1, 23))
- 
+
      static getInstance() { return MyClass2.value; }
 ->getInstance : Symbol(MyClass2.getInstance, Decl(systemModuleTargetES6.ts, 2, 22))
 ->MyClass2.value : Symbol(MyClass2.value, Decl(systemModuleTargetES6.ts, 1, 23))
@@ -16,5 +16,5 @@
 ->value : Symbol(MyClass2.value, Decl(systemModuleTargetES6.ts, 1, 23))
 +>value : Symbol(value, Decl(systemModuleTargetES6.ts, 1, 23))
  }
- 
+
  export function myFunction() {

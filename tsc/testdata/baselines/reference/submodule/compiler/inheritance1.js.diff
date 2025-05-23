@@ -2,7 +2,7 @@
 +++ new.inheritance1.js
 @@= skipped -63, +63 lines =@@
  l1 = c;
- 
+
  //// [inheritance1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

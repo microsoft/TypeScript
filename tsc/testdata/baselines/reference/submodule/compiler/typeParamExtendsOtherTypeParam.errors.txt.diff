@@ -25,8 +25,8 @@
 +typeParamExtendsOtherTypeParam.ts(17,37): error TS2741: Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: number; }'.
 +typeParamExtendsOtherTypeParam.ts(28,15): error TS2741: Property 'b' is missing in type 'I1' but required in type 'I2'.
 +typeParamExtendsOtherTypeParam.ts(29,15): error TS2741: Property 'b' is missing in type 'I1' but required in type 'I2'.
- 
- 
+
+
  ==== typeParamExtendsOtherTypeParam.ts (8 errors) ====
 @@= skipped -31, +25 lines =@@
      // Below should be in error

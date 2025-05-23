@@ -2,7 +2,7 @@
 +++ new.numericIndexerConstrainsPropertyDeclarations.js
 @@= skipped -99, +99 lines =@@
  }
- 
+
  //// [numericIndexerConstrainsPropertyDeclarations.js]
 -// String indexer types constrain the types of named properties in their containing type
 -var C = /** @class */ (function () {
@@ -18,6 +18,18 @@
 -        configurable: true
 -    });
 -    C.prototype.foo = function () {
+-        return '';
+-    };
+-    C.foo = function () { }; // ok
+-    Object.defineProperty(C, "X", {
+-        get: function () {
+-            return 1;
+-        },
+-        enumerable: false,
+-        configurable: true
+-    });
+-    return C;
+-}());
 +class C {
 +    constructor() { } // ok
 +    a; // ok
@@ -31,18 +43,7 @@
 +    "4.0"; // error
 +    3.0; // error
 +    get X() {
-         return '';
--    };
--    C.foo = function () { }; // ok
--    Object.defineProperty(C, "X", {
--        get: function () {
--            return 1;
--        },
--        enumerable: false,
--        configurable: true
--    });
--    return C;
--}());
++        return '';
 +    }
 +    set X(v) { } // ok
 +    foo() {

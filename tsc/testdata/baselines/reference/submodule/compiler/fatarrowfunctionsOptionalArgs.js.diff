@@ -5,12 +5,14 @@
  // valid
  // no params
 -(function () { return 1; });
+-// one param, no type
+-(function (arg) { return 2; });
+-// one param, no type
+-(function (arg) { return 2; });
 +() => 1;
- // one param, no type
--(function (arg) { return 2; });
++// one param, no type
 +(arg) => 2;
- // one param, no type
--(function (arg) { return 2; });
++// one param, no type
 +arg => 2;
  // one param, no type with default value
 -(function (arg) {

@@ -1,8 +1,8 @@
 --- old.interfaceDeclaration5.js
 +++ new.interfaceDeclaration5.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [interfaceDeclaration5.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

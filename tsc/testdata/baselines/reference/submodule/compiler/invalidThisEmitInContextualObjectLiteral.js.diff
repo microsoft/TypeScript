@@ -1,8 +1,8 @@
 --- old.invalidThisEmitInContextualObjectLiteral.js
 +++ new.invalidThisEmitInContextualObjectLiteral.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [invalidThisEmitInContextualObjectLiteral.js]
 -var TestController = /** @class */ (function () {
 -    function TestController() {

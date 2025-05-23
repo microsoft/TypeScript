@@ -193,8 +193,8 @@
 +comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(165,12): error TS2367: This comparison appears to be unintentional because the types '{ fn: () => C; }' and '{ fn: () => Base; }' have no overlap.
 +comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(166,12): error TS2367: This comparison appears to be unintentional because the types '{ fn: (a?: C) => void; }' and '{ fn: (a?: Base) => void; }' have no overlap.
 +comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts(167,12): error TS2367: This comparison appears to be unintentional because the types '{ fn: (...a: C[]) => void; }' and '{ fn: (...a: Base[]) => void; }' have no overlap.
- 
- 
+
+
  ==== comparisonOperatorWithNoRelationshipObjectsOnCallSignature.ts (96 errors) ====
 @@= skipped -132, +132 lines =@@
      // operator <

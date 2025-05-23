@@ -1,7 +1,7 @@
 --- old.readonlyConstructorAssignment.js
 +++ new.readonlyConstructorAssignment.js
 @@= skipped -42, +42 lines =@@
- 
+
  //// [readonlyConstructorAssignment.js]
  // Tests that readonly parameter properties behave like regular readonly properties
 -var __extends = (this && this.__extends) || (function () {

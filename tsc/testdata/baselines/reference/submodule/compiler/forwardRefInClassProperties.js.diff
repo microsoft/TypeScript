@@ -1,8 +1,8 @@
 --- old.forwardRefInClassProperties.js
 +++ new.forwardRefInClassProperties.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [forwardRefInClassProperties.js]
 -var Test = /** @class */ (function () {
 -    function Test() {

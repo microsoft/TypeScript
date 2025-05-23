@@ -6,6 +6,6 @@
  declare global {
 ->global : Symbol(global, Decl(require.d.ts, 0, 10))
 +>global : Symbol((Missing), Decl(require.d.ts, 0, 10))
- 
+
      interface RequireInterface {}
  >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 1, 16))

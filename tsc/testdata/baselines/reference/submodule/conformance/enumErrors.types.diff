@@ -1,19 +1,19 @@
 --- old.enumErrors.types
 +++ new.enumErrors.types
 @@= skipped -133, +133 lines =@@
- 
+
      postColonValueComma: 2,
  >postColonValueComma : E13.postColonValueComma
 ->2 : (typeof E13)["2"]
 +>2 : E13.2
- 
+
      postColonValueSemicolon: 3;
  >postColonValueSemicolon : E13.postColonValueSemicolon
 ->3 : (typeof E13)["3"]
 +>3 : E13.3
- 
+
  };
- 
+
 @@= skipped -14, +14 lines =@@
  >b : E14.b
  >any : E14.any
@@ -22,4 +22,3 @@
 +>1 : E14.1
  >c : E14.c
  >d : E14.d
- 

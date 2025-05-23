@@ -2,7 +2,7 @@
 +++ new.mergeSymbolReexportInterface.types
 @@= skipped -15, +15 lines =@@
  >'' : ""
- 
+
   
 -=== ./a.d.ts ===
 +=== a.d.ts ===
@@ -23,4 +23,3 @@
 +=== common.d.ts ===
  export interface Row2 { b: string }
  >b : string
- 

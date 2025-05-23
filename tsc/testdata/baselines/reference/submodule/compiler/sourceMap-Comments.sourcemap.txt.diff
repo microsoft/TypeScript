@@ -140,29 +140,36 @@
  1->Emitted(4, 5) Source(1, 12) + SourceIndex(0)
  2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
  3 >Emitted(4, 21) Source(1, 17) + SourceIndex(0)
-+4 >Emitted(4, 23) Source(1, 18) + SourceIndex(0)
- ---
+----
 ->>>        var Test = /** @class */ (function () {
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^->
--1-> {
++4 >Emitted(4, 23) Source(1, 18) + SourceIndex(0)
++---
 +>>>        class Test {
 +1 >^^^^^^^^
 +2 >        ^^^^^^
 +3 >              ^^^^
 +4 >                  ^^->
 +1 >{
-   >    
--1->Emitted(5, 9) Source(2, 5) + SourceIndex(0)
++  >    
 +2 >        export class 
 +3 >              Test
 +1 >Emitted(5, 9) Source(2, 5) + SourceIndex(0)
 +2 >Emitted(5, 15) Source(2, 18) + SourceIndex(0)
 +3 >Emitted(5, 19) Source(2, 22) + SourceIndex(0)
- ---
-->>>            function Test() {
++---
 +>>>            doX() {
- 1->^^^^^^^^^^^^
++1->^^^^^^^^^^^^
++2 >            ^^^
++3 >               ^^^
++4 >                  ^^^^^^^^^->
+ 1-> {
+-  >    
+-1->Emitted(5, 9) Source(2, 5) + SourceIndex(0)
+----
+->>>            function Test() {
+-1->^^^^^^^^^^^^
 -2 >            ^^->
 -1->
 -1->Emitted(6, 13) Source(2, 5) + SourceIndex(0)
@@ -196,10 +203,6 @@
 -2 >            ^^^^^^^^^^^^^^^^^^
 -3 >                              ^^^
 -1->
-+2 >            ^^^
-+3 >               ^^^
-+4 >                  ^^^^^^^^^->
-+1-> {
 +  >        public 
  2 >            doX
 -3 >                              
@@ -380,16 +383,12 @@
  1 >^^^^^^^^^^^^
  2 >            ^
 -3 >             ^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >        
 -2 >            }
 -1 >Emitted(21, 13) Source(16, 9) + SourceIndex(0)
 -2 >Emitted(21, 14) Source(16, 10) + SourceIndex(0)
-+2 >            
-+  >                    }
-+1 >Emitted(19, 13) Source(15, 14) + SourceIndex(0)
-+2 >Emitted(19, 14) Source(16, 10) + SourceIndex(0)
- ---
+----
 ->>>            return Test;
 -1->^^^^^^^^^^^^
 -2 >            ^^^^^^^^^^^
@@ -405,10 +404,7 @@
 -3 >         
 -4 >         ^^^^
 -5 >             ^^^^^^^^^^^^^^->
-+>>>        }
-+1 >^^^^^^^^^
-+2 >         ^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >        }
 -3 >         
 -4 >         export class Test {
@@ -431,6 +427,16 @@
 -2 >Emitted(23, 10) Source(17, 6) + SourceIndex(0)
 -3 >Emitted(23, 10) Source(2, 5) + SourceIndex(0)
 -4 >Emitted(23, 14) Source(17, 6) + SourceIndex(0)
++1 >
++2 >            
++  >                    }
++1 >Emitted(19, 13) Source(15, 14) + SourceIndex(0)
++2 >Emitted(19, 14) Source(16, 10) + SourceIndex(0)
++---
++>>>        }
++1 >^^^^^^^^^
++2 >         ^^^^^^^^^^^^^^^^^^->
++1 >
 +  >    }
 +1 >Emitted(20, 10) Source(17, 6) + SourceIndex(0)
  ---

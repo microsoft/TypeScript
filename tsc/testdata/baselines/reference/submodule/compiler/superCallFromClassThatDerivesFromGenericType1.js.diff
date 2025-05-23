@@ -1,8 +1,8 @@
 --- old.superCallFromClassThatDerivesFromGenericType1.js
 +++ new.superCallFromClassThatDerivesFromGenericType1.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [superCallFromClassThatDerivesFromGenericType1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

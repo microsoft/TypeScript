@@ -1,8 +1,8 @@
 --- old.tsxReactEmit1.js
 +++ new.tsxReactEmit1.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [file.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

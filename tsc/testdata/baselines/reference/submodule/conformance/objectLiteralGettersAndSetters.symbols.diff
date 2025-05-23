@@ -12,7 +12,7 @@
  >p : Symbol(p, Decl(objectLiteralGettersAndSetters.ts, 1, 59), Decl(objectLiteralGettersAndSetters.ts, 1, 70))
  >n : Symbol(n, Decl(objectLiteralGettersAndSetters.ts, 1, 51))
 @@= skipped -45, +45 lines =@@
- 
+
  var sameName6a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string; } };
  >sameName6a : Symbol(sameName6a, Decl(objectLiteralGettersAndSetters.ts, 6, 3))
 ->'a' : Symbol('a', Decl(objectLiteralGettersAndSetters.ts, 6, 18), Decl(objectLiteralGettersAndSetters.ts, 6, 44))

@@ -1,8 +1,8 @@
 --- old.declarationEmitPrivateReadonlyLiterals.js
 +++ new.declarationEmitPrivateReadonlyLiterals.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [declarationEmitPrivateReadonlyLiterals.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

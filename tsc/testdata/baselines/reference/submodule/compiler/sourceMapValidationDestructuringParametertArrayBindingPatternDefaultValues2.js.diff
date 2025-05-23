@@ -1,7 +1,7 @@
 --- old.sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.js
 +++ new.sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.js
 @@= skipped -32, +32 lines =@@
- 
+
  //// [sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.js]
  var robotA = ["trimmer", ["trimming", "edging"]];
 -function foo1(_a) {

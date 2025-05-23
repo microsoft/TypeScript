@@ -11,7 +11,7 @@
  >m : number
 @@= skipped -9, +9 lines =@@
  >1 : 1
- 
+
  module.exports = exports['default'];
 ->module.exports = exports['default'] : error
 ->module.exports : error
@@ -24,4 +24,3 @@
 ->exports : any
 +>exports : typeof import("async")
  >'default' : "default"
- 

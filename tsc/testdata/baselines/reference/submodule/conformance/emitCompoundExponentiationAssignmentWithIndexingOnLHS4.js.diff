@@ -2,7 +2,7 @@
 +++ new.emitCompoundExponentiationAssignmentWithIndexingOnLHS4.js
 @@= skipped -16, +16 lines =@@
  array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2;
- 
+
  //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS4.js]
 -var _a, _b, _c, _d, _e, _f, _g, _h;
  var globalCounter = 0;

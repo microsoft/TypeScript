@@ -2,7 +2,7 @@
 +++ new.exportEmptyArrayBindingPattern(module=system,target=es5).js
 @@= skipped -3, +3 lines =@@
  export const [] = [];
- 
+
  //// [exportEmptyArrayBindingPattern.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

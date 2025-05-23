@@ -1,7 +1,7 @@
 --- old.typedefTagExtraneousProperty.types
 +++ new.typedefTagExtraneousProperty.types
 @@= skipped -6, +6 lines =@@
- 
+
  /** @type {Mmap} */
  var y = { bye: "no" };
 ->y : { [x: string]: string; }
@@ -9,11 +9,11 @@
  >{ bye: "no" } : { bye: string; }
  >bye : string
  >"no" : "no"
- 
+
  y
 ->y : { [x: string]: string; }
 +>y : any
- 
+
  y.ignoreMe = "ok but just because of the index signature"
  >y.ignoreMe = "ok but just because of the index signature" : "ok but just because of the index signature"
 ->y.ignoreMe : string
@@ -23,7 +23,7 @@
 +>y : any
 +>ignoreMe : any
  >"ok but just because of the index signature" : "ok but just because of the index signature"
- 
+
  y['hi'] = "yes"
  >y['hi'] = "yes" : "yes"
 ->y['hi'] : string
@@ -32,4 +32,3 @@
 +>y : any
  >'hi' : "hi"
  >"yes" : "yes"
- 

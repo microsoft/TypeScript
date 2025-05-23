@@ -1,7 +1,7 @@
 --- old.typeFromParamTagForFunction.types
 +++ new.typeFromParamTagForFunction.types
 @@= skipped -10, +10 lines =@@
- 
+
  === a-ext.js ===
  exports.A = function () {
 ->exports.A = function () {    this.x = 1;} : typeof A
@@ -13,7 +13,7 @@
 ->function () {    this.x = 1;} : typeof A
 +>A : any
 +>function () {    this.x = 1;} : () => void
- 
+
      this.x = 1;
  >this.x = 1 : 1
  >this.x : any
@@ -21,9 +21,9 @@
 +>this : any
  >x : any
  >1 : 1
- 
+
 @@= skipped -17, +17 lines =@@
- 
+
  === a.js ===
  const { A } = require("./a-ext");
 ->A : typeof A
@@ -40,7 +40,7 @@
  >p : A
 ->x : number
 +>x : any
- 
+
  === b-ext.js ===
  exports.B = class {
 @@= skipped -15, +15 lines =@@
@@ -64,12 +64,12 @@
  >p : B
 ->x : number
 +>x : any
- 
+
  === c-ext.js ===
  export function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.x = 1;
  >this.x = 1 : 1
  >this.x : any
@@ -78,7 +78,7 @@
  >x : any
  >1 : 1
  }
- 
+
  === c.js ===
  const { C } = require("./c-ext");
 ->C : typeof C
@@ -95,14 +95,14 @@
  >p : C
 ->x : number
 +>x : any
- 
+
  === d-ext.js ===
  export var D = function() {
 ->D : typeof D
 ->function() {    this.x = 1;} : typeof D
 +>D : () => void
 +>function() {    this.x = 1;} : () => void
- 
+
      this.x = 1;
  >this.x = 1 : 1
  >this.x : any
@@ -110,9 +110,9 @@
 +>this : any
  >x : any
  >1 : 1
- 
+
 @@= skipped -20, +20 lines =@@
- 
+
  === d.js ===
  const { D } = require("./d-ext");
 ->D : typeof D
@@ -129,7 +129,7 @@
  >p : D
 ->x : number
 +>x : any
- 
+
  === e-ext.js ===
  export class E {
 @@= skipped -11, +11 lines =@@
@@ -145,14 +145,14 @@
      }
  }
 @@= skipped -24, +24 lines =@@
- 
+
  === f.js ===
  var F = function () {
 ->F : typeof F
 ->function () {    this.x = 1;} : typeof F
 +>F : () => void
 +>function () {    this.x = 1;} : () => void
- 
+
      this.x = 1;
  >this.x = 1 : 1
  >this.x : any
@@ -160,7 +160,7 @@
 +>this : any
  >x : any
  >1 : 1
- 
+
 @@= skipped -16, +16 lines =@@
  function f(p) { p.x; }
  >f : (p: F) => void
@@ -170,12 +170,12 @@
  >p : F
 ->x : number
 +>x : any
- 
+
  === g.js ===
  function G() {
 ->G : typeof G
 +>G : () => void
- 
+
      this.x = 1;
  >this.x = 1 : 1
  >this.x : any
@@ -193,7 +193,7 @@
  >p : G
 ->x : number
 +>x : any
- 
+
  === h.js ===
  class H {
 @@= skipped -11, +11 lines =@@

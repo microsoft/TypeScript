@@ -2,7 +2,7 @@
 +++ new.tripleSlashTypesReferenceWithMissingExports(module=nodenext).js
 @@= skipped -13, +13 lines =@@
  const a: GlobalThing = { a: 0 };
- 
+
  //// [usage.js]
 -"use strict";
  /// <reference types="pkg" />

@@ -1,8 +1,8 @@
 --- old.divergentAccessors1.js
 +++ new.divergentAccessors1.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [divergentAccessors1.js]
 -"use strict";
  // Accessors in interfaces/types

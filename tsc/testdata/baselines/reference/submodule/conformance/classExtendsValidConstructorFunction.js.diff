@@ -2,7 +2,7 @@
 +++ new.classExtendsValidConstructorFunction.js
 @@= skipped -7, +7 lines =@@
  class C extends foo { } // error, cannot extend it though
- 
+
  //// [classExtendsValidConstructorFunction.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

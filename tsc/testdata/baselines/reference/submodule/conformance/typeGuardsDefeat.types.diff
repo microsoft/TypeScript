@@ -7,7 +7,7 @@
 ->foo : (x: number | string) => number
 +>foo : (x: string | number) => number
  >x : string | number
- 
+
      function f() {
 @@= skipped -33, +33 lines =@@
      }
@@ -16,7 +16,7 @@
 ->foo2 : (x: number | string) => number
 +>foo2 : (x: string | number) => number
  >x : string | number
- 
+
      if (typeof x === "string") {
 @@= skipped -36, +36 lines =@@
  >f : () => number
@@ -25,5 +25,5 @@
 ->foo3 : (x: number | string) => number
 +>foo3 : (x: string | number) => number
  >x : string | number
- 
+
      if (typeof x === "string") {

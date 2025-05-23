@@ -2,24 +2,24 @@
 +++ new.reverseMappedTypeIntersectionConstraint.types
 @@= skipped -20, +20 lines =@@
  };
- 
+
  declare function createMachine<
 ->createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 +>createMachine : <TConfig extends StateConfig<TAction>, TAction extends string>(config: { [K in keyof TConfig & (keyof StateConfig<any>)]: TConfig[K]; }) => [TAction, TConfig]
- 
+
    TConfig extends StateConfig<TAction>,
    TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string,
  >(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K] }): [TAction, TConfig];
 ->config : { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }
 +>config : { [K in keyof TConfig & (keyof StateConfig<any>)]: TConfig[K]; }
- 
+
  const inferredParams1 = createMachine({
  >inferredParams1 : ["foo", StateConfig<"foo">]
  >createMachine({  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,}) : ["foo", StateConfig<"foo">]
 ->createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 +>createMachine : <TConfig extends StateConfig<TAction>, TAction extends string>(config: { [K in keyof TConfig & (keyof StateConfig<any>)]: TConfig[K]; }) => [TAction, TConfig]
  >{  entry: "foo",  states: {    a: {      entry: "bar",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "bar"; }; }; extra: number; }
- 
+
    entry: "foo",
 @@= skipped -40, +40 lines =@@
  const inferredParams2 = createMachine({
@@ -28,33 +28,33 @@
 ->createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 +>createMachine : <TConfig extends StateConfig<TAction>, TAction extends string>(config: { [K in keyof TConfig & (keyof StateConfig<any>)]: TConfig[K]; }) => [TAction, TConfig]
  >{  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }
- 
+
    entry: "foo",
 @@= skipped -75, +75 lines =@@
  }
- 
+
  function doStuffWithStuff<T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K] } ): T {
 ->doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K]; }) => T
 ->s : { [K in keyof T & keyof Stuff]: T[K]; }
 +>doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & (keyof Stuff)]: T[K]; }) => T
 +>s : { [K in keyof T & (keyof Stuff)]: T[K]; }
- 
+
      if(Math.random() > 0.5) {
  >Math.random() > 0.5 : boolean
 @@= skipped -13, +13 lines =@@
- 
+
        return s as T
  >s as T : T
 ->s : { [K in keyof T & keyof Stuff]: T[K]; }
 +>s : { [K in keyof T & (keyof Stuff)]: T[K]; }
- 
+
      } else {
        return s
 ->s : { [K in keyof T & keyof Stuff]: T[K]; }
 +>s : { [K in keyof T & (keyof Stuff)]: T[K]; }
      }
  }
- 
+
  doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 })
  >doStuffWithStuff({ field: 1, anotherField: 'a', extra: 123 }) : { field: 1; anotherField: "a"; }
 ->doStuffWithStuff : <T extends Stuff>(s: { [K in keyof T & keyof Stuff]: T[K]; }) => T
@@ -64,54 +64,54 @@
  >1 : 1
 @@= skipped -20, +20 lines =@@
  >123 : 123
- 
+
  function doStuffWithStuffArr<T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K] }[]): T[] {
 ->doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K]; }[]) => T[]
 ->arr : { [K in keyof T & keyof Stuff]: T[K]; }[]
 +>doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & (keyof Stuff)]: T[K]; }[]) => T[]
 +>arr : { [K in keyof T & (keyof Stuff)]: T[K]; }[]
- 
+
      if(Math.random() > 0.5) {
  >Math.random() > 0.5 : boolean
 @@= skipped -13, +13 lines =@@
- 
+
        return arr as T[]
  >arr as T[] : T[]
 ->arr : { [K in keyof T & keyof Stuff]: T[K]; }[]
 +>arr : { [K in keyof T & (keyof Stuff)]: T[K]; }[]
- 
+
      } else {
        return arr
 ->arr : { [K in keyof T & keyof Stuff]: T[K]; }[]
 +>arr : { [K in keyof T & (keyof Stuff)]: T[K]; }[]
      }
  }
- 
+
  doStuffWithStuffArr([
  >doStuffWithStuffArr([    { field: 1, anotherField: 'a', extra: 123 },]) : { field: 1; anotherField: "a"; }[]
 ->doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & keyof Stuff]: T[K]; }[]) => T[]
 +>doStuffWithStuffArr : <T extends Stuff>(arr: { [K in keyof T & (keyof Stuff)]: T[K]; }[]) => T[]
  >[    { field: 1, anotherField: 'a', extra: 123 },] : { field: 1; anotherField: "a"; extra: number; }[]
- 
+
      { field: 1, anotherField: 'a', extra: 123 },
 @@= skipped -31, +31 lines =@@
  >x : number
- 
+
  declare function foo<T extends XNumber>(props: {[K in keyof T & keyof XNumber]: T[K]}): void;
 ->foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
 +>foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
  >props : { [K in keyof T & "x"]: T[K]; }
- 
+
  function bar(props: {x: number, y: string}) {
 @@= skipped -11, +11 lines =@@
- 
+
    return foo(props); // no error because lack of excess property check by design
  >foo(props) : void
 ->foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
 +>foo : <T extends XNumber>(props: { [K in keyof T & "x"]: T[K]; }) => void
  >props : { x: number; y: string; }
  }
- 
+
  foo({x: 1, y: 'foo'});
  >foo({x: 1, y: 'foo'}) : void
 ->foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
@@ -120,7 +120,7 @@
  >x : 1
  >1 : 1
 @@= skipped -15, +15 lines =@@
- 
+
  foo({...{x: 1, y: 'foo'}}); // no error because lack of excess property check by design
  >foo({...{x: 1, y: 'foo'}}) : void
 ->foo : <T extends XNumber>(props: { [K in keyof T & keyof XNumber]: T[K]; }) => void
@@ -130,13 +130,13 @@
  >x : 1
 @@= skipped -16, +16 lines =@@
  >y : string | undefined
- 
+
  declare function baz<T extends NoErrWithOptProps>(props: {[K in keyof T & keyof NoErrWithOptProps]: T[K]}): void;
 ->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
 ->props : { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }
 +>baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & (keyof NoErrWithOptProps)]: T[K]; }) => void
 +>props : { [K in keyof T & (keyof NoErrWithOptProps)]: T[K]; }
- 
+
  baz({x: 1});
  >baz({x: 1}) : void
 ->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
@@ -144,7 +144,7 @@
  >{x: 1} : { x: 1; }
  >x : 1
  >1 : 1
- 
+
  baz({x: 1, z: 123});
  >baz({x: 1, z: 123}) : void
 ->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
@@ -153,7 +153,7 @@
  >x : 1
  >1 : 1
 @@= skipped -21, +21 lines =@@
- 
+
  baz({x: 1, y: 'foo'});
  >baz({x: 1, y: 'foo'}) : void
 ->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
@@ -162,7 +162,7 @@
  >x : 1
  >1 : 1
 @@= skipped -9, +9 lines =@@
- 
+
  baz({x: 1, y: 'foo', z: 123});
  >baz({x: 1, y: 'foo', z: 123}) : void
 ->baz : <T extends NoErrWithOptProps>(props: { [K in keyof T & keyof NoErrWithOptProps]: T[K]; }) => void
@@ -172,13 +172,13 @@
  >1 : 1
 @@= skipped -24, +24 lines =@@
  }
- 
+
  declare function withNestedProp<T extends WithNestedProp>(props: {[K in keyof T & keyof WithNestedProp]: T[K]}): T;
 ->withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & keyof WithNestedProp]: T[K]; }) => T
 ->props : { [K in keyof T & keyof WithNestedProp]: T[K]; }
 +>withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & (keyof WithNestedProp)]: T[K]; }) => T
 +>props : { [K in keyof T & (keyof WithNestedProp)]: T[K]; }
- 
+
  const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
  >wnp : { prop: "foo"; nested: { prop: string; }; }
  >withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 }) : { prop: "foo"; nested: { prop: string; }; }
@@ -188,35 +188,35 @@
  >prop : "foo"
  >'foo' : "foo"
 @@= skipped -47, +47 lines =@@
- 
+
  interface MachineConfig<TActor extends ProvidedActor> {
    types?: {
 ->types : { actors?: TActor; } | undefined
 +>types : { actors?: TActor | undefined; } | undefined
- 
+
      actors?: TActor;
  >actors : TActor | undefined
 @@= skipped -25, +25 lines =@@
  }
- 
+
  declare function createXMachine<
 ->createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
 +>createXMachine : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor>(config: { [K in (keyof MachineConfig<any>) & keyof TConfig]: TConfig[K]; }) => TConfig
- 
+
    const TConfig extends MachineConfig<TActor>,
    TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor} } ? TConfig["types"]["actors"] : ProvidedActor,
 @@= skipped -8, +8 lines =@@
  >actors : ProvidedActor
- 
+
  >(config: {[K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K] }): TConfig;
 ->config : { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }
 +>config : { [K in (keyof MachineConfig<any>) & keyof TConfig]: TConfig[K]; }
- 
+
  const child = () => Promise.resolve("foo");
  >child : () => any
 @@= skipped -12, +12 lines =@@
  >"foo" : "foo"
- 
+
  const config = createXMachine({
 ->config : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
 ->createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
@@ -226,18 +226,18 @@
 +>createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: () => any; }; }; invoke: { readonly src: "str"; }; }
 +>createXMachine : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor>(config: { [K in (keyof MachineConfig<any>) & keyof TConfig]: TConfig[K]; }) => TConfig
 +>{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: () => any; }; }; invoke: { src: "str"; }; extra: number; }
- 
+
    types: {} as {
 ->types : { actors: { src: "str"; logic: typeof child; }; }
 ->{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: typeof child; }; }
 +>types : { actors: { src: "str"; logic: () => any; }; }
 +>{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: () => any; }; }
  >{} : {}
- 
+
      actors: {
 ->actors : { src: "str"; logic: typeof child; }
 +>actors : { src: "str"; logic: () => any; }
- 
+
        src: "str";
  >src : "str"
 @@= skipped -40, +40 lines =@@
@@ -247,5 +247,5 @@
 ->createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
 +>createXMachine : <TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor>(config: { [K in (keyof MachineConfig<any>) & keyof TConfig]: TConfig[K]; }) => TConfig
  >{  invoke: {    src: "whatever",  },  extra: 10} : { invoke: { src: "whatever"; }; extra: number; }
- 
+
    invoke: {

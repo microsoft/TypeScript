@@ -1,7 +1,7 @@
 --- old.anonClassDeclarationEmitIsAnon.js
 +++ new.anonClassDeclarationEmitIsAnon.js
 @@= skipped -35, +35 lines =@@
- 
+
  //// [wrapClass.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -94,7 +94,8 @@
      }
 -    return TimestampedUser;
 -}((0, wrapClass_1.Timestamped)(User)));
--exports.TimestampedUser = TimestampedUser;
++}
+ exports.TimestampedUser = TimestampedUser;
 -
 -
 -//// [wrapClass.d.ts]
@@ -118,7 +119,7 @@
 -export default _default;
 -export declare class User {
 -    name: string;
- }
+-}
 -declare const TimestampedUser_base: {
 -    new (...args: any[]): {
 -        timestamp: number;
@@ -127,4 +128,3 @@
 -export declare class TimestampedUser extends TimestampedUser_base {
 -    constructor();
 -}
-+exports.TimestampedUser = TimestampedUser;

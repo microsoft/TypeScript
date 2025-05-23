@@ -7,11 +7,10 @@
 ->f : (args: ["a"] | I) => void
 +>f : (args: I | ["a"]) => void
  >args : I | ["a"]
- 
+
  f(["a"]);
  >f(["a"]) : void
 ->f : (args: ["a"] | I) => void
 +>f : (args: I | ["a"]) => void
  >["a"] : ["a"]
  >"a" : "a"
- 

@@ -2,7 +2,7 @@
 +++ new.commentOnStaticMember1.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [commentOnStaticMember1.js]
 -var Greeter = /** @class */ (function () {
 -    function Greeter() {

@@ -2,18 +2,13 @@
 +++ new.dynamicImportWithNestedThis_es2015.js
 @@= skipped -13, +13 lines =@@
  c.dynamic();
- 
+
  //// [dynamicImportWithNestedThis_es2015.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
 -        if (v !== undefined) module.exports = v;
-+// https://github.com/Microsoft/TypeScript/issues/17564
-+class C {
-+    _path = './other';
-+    dynamic() {
-+        return Promise.resolve(`${this._path}`).then(s => require(s));
-     }
+-    }
 -    else if (typeof define === "function" && define.amd) {
 -        define(["require", "exports"], factory);
 -    }
@@ -33,6 +28,12 @@
 -    const c = new C();
 -    c.dynamic();
 -});
++// https://github.com/Microsoft/TypeScript/issues/17564
++class C {
++    _path = './other';
++    dynamic() {
++        return Promise.resolve(`${this._path}`).then(s => require(s));
++    }
 +}
 +const c = new C();
 +c.dynamic();

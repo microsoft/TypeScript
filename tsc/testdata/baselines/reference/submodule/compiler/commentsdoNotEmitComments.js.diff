@@ -1,7 +1,7 @@
 --- old.commentsdoNotEmitComments.js
 +++ new.commentsdoNotEmitComments.js
 @@= skipped -95, +95 lines =@@
- 
+
  //// [commentsdoNotEmitComments.js]
  var myVariable = 10;
 -function foo(p) {
@@ -13,13 +13,9 @@
 -var c = (function () {
 -    function c() {
 -        this.b = 10;
-+class c {
-+    constructor() {
-     }
+-    }
 -    c.prototype.myFoo = function () {
-+    b = 10;
-+    myFoo() {
-         return this.b;
+-        return this.b;
 -    };
 -    Object.defineProperty(c.prototype, "prop1", {
 -        get: function () {
@@ -32,6 +28,12 @@
 -        configurable: true
 -    });
 -    c.prototype.foo1 = function (aOrb) {
++class c {
++    constructor() {
++    }
++    b = 10;
++    myFoo() {
++        return this.b;
 +    }
 +    get prop1() {
 +        return this.b;

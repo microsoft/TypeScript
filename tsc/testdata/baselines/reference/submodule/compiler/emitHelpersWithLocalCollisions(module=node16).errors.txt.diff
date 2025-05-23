@@ -1,6 +1,6 @@
 --- old.emitHelpersWithLocalCollisions(module=node16).errors.txt
 +++ new.emitHelpersWithLocalCollisions(module=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5109: Option 'moduleResolution' must be set to 'Node16' (or left unspecified) when option 'module' is set to 'Node16'.
 -
 -
@@ -13,5 +13,4 @@
 -    const o = { a: 1 };
 -    const y = { ...o };
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

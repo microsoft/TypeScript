@@ -2,7 +2,7 @@
 +++ new.Protected4.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [Protected4.js]
 -var C = /** @class */ (function () {
 -    function C() {

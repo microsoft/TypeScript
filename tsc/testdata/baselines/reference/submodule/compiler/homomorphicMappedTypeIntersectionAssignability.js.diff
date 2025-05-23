@@ -1,8 +1,8 @@
 --- old.homomorphicMappedTypeIntersectionAssignability.js
 +++ new.homomorphicMappedTypeIntersectionAssignability.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [homomorphicMappedTypeIntersectionAssignability.js]
 -"use strict";
  function f(a, b, c) {

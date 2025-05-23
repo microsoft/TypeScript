@@ -2,7 +2,7 @@
 +++ new.asyncAwait_es5.js
 @@= skipped -48, +48 lines =@@
  }
- 
+
  //// [asyncAwait_es5.js]
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -12,24 +12,7 @@
 -        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
 -        step((generator = generator.apply(thisArg, _arguments || [])).next());
 -    });
-+async function f0() { }
-+async function f1() { }
-+async function f3() { }
-+let f4 = async function () { };
-+let f5 = async function () { };
-+let f6 = async function () { };
-+let f7 = async () => { };
-+let f8 = async () => { };
-+let f9 = async () => { };
-+let f10 = async () => p;
-+let f11 = async () => mp;
-+let f12 = async () => mp;
-+let f13 = async () => p;
-+let o = {
-+    async m1() { },
-+    async m2() { },
-+    async m3() { }
- };
+-};
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
 -    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
@@ -62,14 +45,7 @@
 -    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
 -        return [2 /*return*/];
 -    }); });
-+class C {
-+    async m1() { }
-+    async m2() { }
-+    async m3() { }
-+    static async m4() { }
-+    static async m5() { }
-+    static async m6() { }
- }
+-}
 -function f1() {
 -    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
 -        return [2 /*return*/];
@@ -168,6 +144,32 @@
 -    };
 -    return C;
 -}());
++async function f0() { }
++async function f1() { }
++async function f3() { }
++let f4 = async function () { };
++let f5 = async function () { };
++let f6 = async function () { };
++let f7 = async () => { };
++let f8 = async () => { };
++let f9 = async () => { };
++let f10 = async () => p;
++let f11 = async () => mp;
++let f12 = async () => mp;
++let f13 = async () => p;
++let o = {
++    async m1() { },
++    async m2() { },
++    async m3() { }
++};
++class C {
++    async m1() { }
++    async m2() { }
++    async m3() { }
++    static async m4() { }
++    static async m5() { }
++    static async m6() { }
++}
  var M;
  (function (M) {
 -    function f1() {

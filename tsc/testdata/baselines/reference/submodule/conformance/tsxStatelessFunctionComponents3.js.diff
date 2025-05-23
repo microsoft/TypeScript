@@ -2,7 +2,7 @@
 +++ new.tsxStatelessFunctionComponents3.js
 @@= skipped -19, +19 lines =@@
  );
- 
+
  //// [file.jsx]
 -define(["require", "exports", "react"], function (require, exports, React) {
 -    "use strict";

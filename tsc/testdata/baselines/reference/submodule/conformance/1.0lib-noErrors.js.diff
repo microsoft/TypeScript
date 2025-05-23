@@ -1,8 +1,8 @@
 --- old.1.0lib-noErrors.js
 +++ new.1.0lib-noErrors.js
-@@= skipped -1145, +1145 lines =@@
- }
- 
+@@= skipped -1146, +1146 lines =@@
+
+
  //// [1.0lib-noErrors.js]
 -/* *****************************************************************************
 -Copyright (c) Microsoft Corporation. All rights reserved.

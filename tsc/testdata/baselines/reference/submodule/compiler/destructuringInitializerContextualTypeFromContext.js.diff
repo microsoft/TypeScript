@@ -1,8 +1,8 @@
 --- old.destructuringInitializerContextualTypeFromContext.js
 +++ new.destructuringInitializerContextualTypeFromContext.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [destructuringInitializerContextualTypeFromContext.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

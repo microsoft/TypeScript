@@ -1,7 +1,7 @@
 --- old.useBeforeDeclaration_propertyAssignment.js
 +++ new.useBeforeDeclaration_propertyAssignment.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [useBeforeDeclaration_propertyAssignment.js]
  export class C {
 -    constructor() {

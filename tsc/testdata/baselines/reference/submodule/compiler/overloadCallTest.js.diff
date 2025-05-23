@@ -1,8 +1,8 @@
 --- old.overloadCallTest.js
 +++ new.overloadCallTest.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [overloadCallTest.js]
 -var foo = /** @class */ (function () {
 -    function foo() {

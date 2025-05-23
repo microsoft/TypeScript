@@ -2,16 +2,16 @@
 +++ new.logicalAssignment3(target=es2020).symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
- 
+
      baz: 0 | 1 | 42 | undefined | ''
 ->baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 +>baz : Symbol(baz, Decl(logicalAssignment3.ts, 0, 13))
  }
- 
+
  declare const result: A;
 @@= skipped -20, +20 lines =@@
  >A : Symbol(A, Decl(logicalAssignment3.ts, 0, 0))
- 
+
  (a.baz) &&= result.baz;
 ->a.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 +>a.baz : Symbol(baz, Decl(logicalAssignment3.ts, 0, 13))
@@ -23,7 +23,7 @@
  >result : Symbol(result, Decl(logicalAssignment3.ts, 4, 13))
 ->baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 +>baz : Symbol(baz, Decl(logicalAssignment3.ts, 0, 13))
- 
+
  (b.baz) ||= result.baz;
 ->b.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 +>b.baz : Symbol(baz, Decl(logicalAssignment3.ts, 0, 13))
@@ -35,7 +35,7 @@
  >result : Symbol(result, Decl(logicalAssignment3.ts, 4, 13))
 ->baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 +>baz : Symbol(baz, Decl(logicalAssignment3.ts, 0, 13))
- 
+
  (c.baz) ??= result.baz;
 ->c.baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 +>c.baz : Symbol(baz, Decl(logicalAssignment3.ts, 0, 13))
@@ -47,5 +47,4 @@
  >result : Symbol(result, Decl(logicalAssignment3.ts, 4, 13))
 ->baz : Symbol(A.baz, Decl(logicalAssignment3.ts, 0, 13))
 +>baz : Symbol(baz, Decl(logicalAssignment3.ts, 0, 13))
- 
- 
+

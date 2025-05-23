@@ -2,7 +2,7 @@
 +++ new.subtypingWithNumericIndexer5.js
 @@= skipped -45, +45 lines =@@
  }
- 
+
  //// [subtypingWithNumericIndexer5.js]
 -// Derived type indexer must be subtype of base type indexer
 -var B = /** @class */ (function () {

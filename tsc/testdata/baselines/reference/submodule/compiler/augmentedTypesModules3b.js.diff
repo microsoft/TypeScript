@@ -1,8 +1,8 @@
 --- old.augmentedTypesModules3b.js
 +++ new.augmentedTypesModules3b.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [augmentedTypesModules3b.js]
 -var m3b = /** @class */ (function () {
 -    function m3b() {

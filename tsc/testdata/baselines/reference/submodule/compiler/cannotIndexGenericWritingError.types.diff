@@ -2,7 +2,7 @@
 +++ new.cannotIndexGenericWritingError.types
 @@= skipped -16, +16 lines =@@
  }
- 
+
  function foo2<T extends number[] & { [s: string]: number | string }>(target: T, p: string | number) {
 ->foo2 : <T extends number[] & { [s: string]: number | string; }>(target: T, p: string | number) => void
 +>foo2 : <T extends number[] & { [s: string]: string | number; }>(target: T, p: string | number) => void

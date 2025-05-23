@@ -1,30 +1,30 @@
 --- old.exportDefault.types
 +++ new.exportDefault.types
 @@= skipped -5, +5 lines =@@
- 
+
  === /b.ts ===
  import type * as types from './a';
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  export default types;
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  === /c.ts ===
  import * as types from './a';
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  export default types;
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  === /d.ts ===
  import types from './b';
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  new types.A(); // Error
 ->new types.A() : types.A
 ->types.A : typeof types.A
@@ -34,24 +34,24 @@
 +>types.A : typeof A
 +>types : typeof import("/a")
 +>A : typeof A
- 
+
  === /e.ts ===
  import types = require('./b');
 ->types : typeof types
 +>types : typeof import("/b")
- 
+
  new types.A(); // Error
  >new types.A() : any
  >types.A : any
 ->types : typeof types
 +>types : typeof import("/b")
  >A : any
- 
+
  === /f.ts ===
  import * as types from './b';
 ->types : typeof types
 +>types : typeof import("/b")
- 
+
  new types.default.A(); // Error
  >new types.default.A() : any
  >types.default.A : any
@@ -60,10 +60,10 @@
 +>types : typeof import("/b")
  >default : any
  >A : any
- 
+
 @@= skipped -49, +49 lines =@@
  >types : any
- 
+
  new types.A(); // Error
 ->new types.A() : types.A
 ->types.A : typeof types.A
@@ -73,4 +73,3 @@
 +>types.A : typeof A
 +>types : typeof import("/a")
 +>A : typeof A
- 

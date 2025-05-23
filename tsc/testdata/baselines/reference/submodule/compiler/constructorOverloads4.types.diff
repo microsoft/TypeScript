@@ -1,7 +1,7 @@
 --- old.constructorOverloads4.types
 +++ new.constructorOverloads4.types
 @@= skipped -21, +21 lines =@@
- 
+
  (new M.Function("return 5"))();
  >(new M.Function("return 5"))() : any
 ->(new M.Function("return 5")) : M.Function
@@ -14,7 +14,7 @@
 ->Function : typeof M.Function
 +>Function : typeof Function
  >"return 5" : "return 5"
- 
+
  M.Function("yo");
  >M.Function("yo") : any
 ->M.Function : typeof M.Function
@@ -23,4 +23,3 @@
 ->Function : typeof M.Function
 +>Function : typeof Function
  >"yo" : "yo"
- 

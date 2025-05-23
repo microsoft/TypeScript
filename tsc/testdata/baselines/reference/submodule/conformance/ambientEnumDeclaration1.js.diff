@@ -2,6 +2,6 @@
 +++ new.ambientEnumDeclaration1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [ambientEnumDeclaration1.js]
 -// In ambient enum declarations, all values specified in enum member declarations must be classified as constant enum expressions.

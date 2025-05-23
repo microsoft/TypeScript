@@ -10,7 +10,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; (arrayLike: Iterable<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[1] = Uint8Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -22,7 +22,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; (arrayLike: Iterable<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[2] = Int16Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -34,7 +34,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; (arrayLike: Iterable<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[3] = Uint16Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -46,7 +46,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; (arrayLike: Iterable<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[4] = Int32Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -58,7 +58,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; (arrayLike: Iterable<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[5] = Uint32Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -70,7 +70,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; (arrayLike: Iterable<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[6] = Float32Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -82,7 +82,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; (arrayLike: Iterable<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[7] = Float64Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -94,7 +94,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; (arrayLike: Iterable<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float64Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; }
  >obj : number[]
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -106,7 +106,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; (arrayLike: Iterable<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; }
  >obj : number[]
- 
+
      return typedArrays;
 @@= skipped -23, +23 lines =@@
  >typedArrays : any[]
@@ -118,7 +118,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; (arrayLike: Iterable<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[1] = Uint8Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -130,7 +130,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; (arrayLike: Iterable<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[2] = Int16Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -142,7 +142,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; (arrayLike: Iterable<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[3] = Uint16Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -154,7 +154,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; (arrayLike: Iterable<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[4] = Int32Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -166,7 +166,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; (arrayLike: Iterable<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[5] = Uint32Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -178,7 +178,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; (arrayLike: Iterable<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[6] = Float32Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -190,7 +190,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; (arrayLike: Iterable<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[7] = Float64Array.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -202,7 +202,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; (arrayLike: Iterable<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float64Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      typedArrays[8] = Uint8ClampedArray.from(obj);
 @@= skipped -11, +11 lines =@@
  >typedArrays : any[]
@@ -214,7 +214,7 @@
 ->from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; (arrayLike: Iterable<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; }
 +>from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; }
  >obj : ArrayLike<number>
- 
+
      return typedArrays;
 @@= skipped -283, +283 lines =@@
  >typedArrays : any[]
@@ -227,7 +227,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >1 : 1
@@ -239,7 +239,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >2 : 2
@@ -251,7 +251,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >3 : 3
@@ -263,7 +263,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >4 : 4
@@ -275,7 +275,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >5 : 5
@@ -287,7 +287,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >6 : 6
@@ -299,7 +299,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >7 : 7
@@ -311,7 +311,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float64Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >8 : 8
@@ -323,7 +323,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; }
  >obj : ArrayLike<T>
  >mapFn : (n: T, v: number) => number
- 
+
 @@= skipped -27, +27 lines =@@
  >typedArrays : any[]
  >0 : 0
@@ -335,7 +335,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Int8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >1 : 1
@@ -347,7 +347,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint8Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >2 : 2
@@ -359,7 +359,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Int16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >3 : 3
@@ -371,7 +371,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint16Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint16Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >4 : 4
@@ -383,7 +383,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Int32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Int32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >5 : 5
@@ -395,7 +395,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >6 : 6
@@ -407,7 +407,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Float32Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float32Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >7 : 7
@@ -419,7 +419,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Float64Array<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Float64Array<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -12, +12 lines =@@
  >typedArrays : any[]
  >8 : 8
@@ -431,7 +431,7 @@
 +>from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; (arrayLike: Iterable<number, any, any>): Uint8ClampedArray<ArrayBuffer>; <T>(arrayLike: Iterable<T, any, any>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>; }
  >obj : ArrayLike<number>
  >mapFn : (n: number, v: number) => number
- 
+
 @@= skipped -28, +28 lines =@@
  >typedArrays : any[]
  >0 : 0

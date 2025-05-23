@@ -2,7 +2,7 @@
 +++ new.interfaceWithPropertyThatIsPrivateInBaseType2.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [interfaceWithPropertyThatIsPrivateInBaseType2.js]
 -var Base = /** @class */ (function () {
 -    function Base() {

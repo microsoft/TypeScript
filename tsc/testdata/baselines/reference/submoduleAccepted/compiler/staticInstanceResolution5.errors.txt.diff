@@ -4,10 +4,12 @@
 -staticInstanceResolution5_1.ts(4,14): error TS2709: Cannot use namespace 'WinJS' as a type.
 -staticInstanceResolution5_1.ts(5,23): error TS2709: Cannot use namespace 'WinJS' as a type.
 -staticInstanceResolution5_1.ts(6,16): error TS2709: Cannot use namespace 'WinJS' as a type.
-+staticInstanceResolution5_1.ts(1,24): error TS2307: Cannot find module 'staticInstanceResolution5_0' or its corresponding type declarations.
- 
- 
+-
+-
 -==== staticInstanceResolution5_1.ts (3 errors) ====
++staticInstanceResolution5_1.ts(1,24): error TS2307: Cannot find module 'staticInstanceResolution5_0' or its corresponding type declarations.
++
++
 +==== staticInstanceResolution5_1.ts (1 errors) ====
      import WinJS = require('staticInstanceResolution5_0');
 +                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

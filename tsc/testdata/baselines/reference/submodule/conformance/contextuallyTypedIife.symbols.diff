@@ -11,7 +11,7 @@
 +>every : Symbol(every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 31))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 17, 31))
- 
+
  ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
  >mixed : Symbol(mixed, Decl(contextuallyTypedIife.ts, 18, 2))
 ->mixed.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -21,7 +21,7 @@
 +>every : Symbol(every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 27))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 18, 27))
- 
+
  ((...noNumbers) => noNumbers.some(n => n > 0))();
  >noNumbers : Symbol(noNumbers, Decl(contextuallyTypedIife.ts, 19, 2))
 ->noNumbers.some : Symbol(Array.some, Decl(lib.es5.d.ts, --, --))
@@ -31,7 +31,7 @@
 +>some : Symbol(some, Decl(lib.es5.d.ts, --, --))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 19, 34))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 19, 34))
- 
+
 @@= skipped -26, +26 lines =@@
  >first : Symbol(first, Decl(contextuallyTypedIife.ts, 20, 2))
  >rest : Symbol(rest, Decl(contextuallyTypedIife.ts, 20, 8))
@@ -43,4 +43,3 @@
 +>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 20, 43))
  >n : Symbol(n, Decl(contextuallyTypedIife.ts, 20, 43))
- 

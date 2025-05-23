@@ -1,7 +1,7 @@
 --- old.emitClassExpressionInDeclarationFile2.js
 +++ new.emitClassExpressionInDeclarationFile2.js
 @@= skipped -32, +32 lines =@@
- 
+
  //// [emitClassExpressionInDeclarationFile2.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -38,13 +38,7 @@
 -    __setFunctionName(_a, "noPrivates"),
 -    _a.ps = -1,
 -    _a);
-+var noPrivates = class {
-+    static getTags() { }
-+    tags() { }
-+    static ps = -1;
-+    p = 12;
-+}
- // altered repro from #15066 to add private property
+-// altered repro from #15066 to add private property
 -var FooItem = /** @class */ (function () {
 -    function FooItem() {
 -        this.property = "capitalism";
@@ -52,6 +46,13 @@
 -    FooItem.prototype.foo = function () { };
 -    return FooItem;
 -}());
++var noPrivates = class {
++    static getTags() { }
++    tags() { }
++    static ps = -1;
++    p = 12;
++}
++// altered repro from #15066 to add private property
 +;
 +exports.noPrivates = noPrivates;
 +// altered repro from #15066 to add private property
@@ -71,11 +72,7 @@
 -        class_2.prototype.tags = function () { };
 -        return class_2;
 -    }(Base));
-+    return class extends Base {
-+        static getTags() { }
-+        tags() { }
-+    };
- }
+-}
 -var Test = /** @class */ (function (_super) {
 -    __extends(Test, _super);
 -    function Test() {
@@ -83,6 +80,11 @@
 -    }
 -    return Test;
 -}(WithTags(FooItem)));
++    return class extends Base {
++        static getTags() { }
++        tags() { }
++    };
++}
 +class Test extends WithTags(FooItem) {
 +}
  exports.Test = Test;

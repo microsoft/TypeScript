@@ -1,8 +1,7 @@
 --- old.jsDeclarationsTypedefPropertyAndExportAssignment.errors.txt
 +++ new.jsDeclarationsTypedefPropertyAndExportAssignment.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(3,37): error TS2694: Namespace '"module".export=' has no exported member 'TaskGroup'.
 +index.js(21,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +module.js(11,38): error TS2304: Cannot find name 'P'.

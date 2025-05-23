@@ -7,7 +7,7 @@
 ->C : typeof C
 +>C : (x: number) => void
  >x : number
- 
+
      this.x = x
  >this.x = x : number
  >this.x : any
@@ -25,7 +25,7 @@
  >prototype : any
  >m : any
  >function() {    this.y = 12} : () => void
- 
+
      this.y = 12
  >this.y = 12 : 12
 ->this.y : number | undefined
@@ -44,7 +44,7 @@
 +>new C(1) : any
 +>C : (x: number) => void
  >1 : 1
- 
+
  c.x = undefined // should error
  >c.x = undefined : undefined
 ->c.x : number
@@ -54,7 +54,7 @@
 +>c : any
 +>x : any
  >undefined : undefined
- 
+
  c.y = undefined // ok
  >c.y = undefined : undefined
 ->c.y : number | undefined
@@ -64,13 +64,13 @@
 +>c : any
 +>y : any
  >undefined : undefined
- 
+
  /** @param {number} x */
  function A(x) {
 ->A : typeof A
 +>A : (x: number) => any
  >x : number
- 
+
      if (!(this instanceof A)) {
  >!(this instanceof A) : boolean
  >(this instanceof A) : boolean
@@ -79,7 +79,7 @@
 ->A : typeof A
 +>this : any
 +>A : (x: number) => any
- 
+
          return new A(x)
 ->new A(x) : A
 ->A : typeof A
@@ -103,7 +103,7 @@
 +>A(1) : any
 +>A : (x: number) => any
  >1 : 1
- 
+
  var j = new A(2)
 ->j : A
 ->new A(2) : A
@@ -112,7 +112,7 @@
 +>new A(2) : any
 +>A : (x: number) => any
  >2 : 2
- 
+
  k.x === j.x
  >k.x === j.x : boolean
 ->k.x : number | undefined
@@ -127,4 +127,3 @@
 +>j.x : any
 +>j : any
 +>x : any
- 

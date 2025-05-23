@@ -2,7 +2,7 @@
 +++ new.superSymbolIndexedAccess6.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [superSymbolIndexedAccess6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -34,12 +34,13 @@
 -    __extends(Bar, _super);
 -    function Bar() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Bar[symbol] = function () {
 -        return _super[symbol].call(this);
 -    };
 -    return Bar;
 -}(Foo));
++    }
 +}
 +class Bar extends Foo {
 +    static [symbol]() {

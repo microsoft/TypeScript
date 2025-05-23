@@ -2,7 +2,7 @@
 +++ new.fluentInterfaces.symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(fluentInterfaces.ts, 0, 0))
- 
+
      foo(): this;
 ->foo : Symbol(A.foo, Decl(fluentInterfaces.ts, 0, 13))
 +>foo : Symbol(foo, Decl(fluentInterfaces.ts, 0, 13))
@@ -10,7 +10,7 @@
  interface B extends A {
  >B : Symbol(B, Decl(fluentInterfaces.ts, 2, 1))
  >A : Symbol(A, Decl(fluentInterfaces.ts, 0, 0))
- 
+
      bar(): this;
 ->bar : Symbol(B.bar, Decl(fluentInterfaces.ts, 3, 23))
 +>bar : Symbol(bar, Decl(fluentInterfaces.ts, 3, 23))
@@ -18,7 +18,7 @@
  interface C extends B {
  >C : Symbol(C, Decl(fluentInterfaces.ts, 5, 1))
  >B : Symbol(B, Decl(fluentInterfaces.ts, 2, 1))
- 
+
      baz(): this;
 ->baz : Symbol(C.baz, Decl(fluentInterfaces.ts, 6, 23))
 +>baz : Symbol(baz, Decl(fluentInterfaces.ts, 6, 23))
@@ -26,7 +26,7 @@
  var c: C;
  >c : Symbol(c, Decl(fluentInterfaces.ts, 9, 3))
 @@= skipped -22, +22 lines =@@
- 
+
  var z = c.foo().bar().baz();  // Fluent pattern
  >z : Symbol(z, Decl(fluentInterfaces.ts, 10, 3))
 ->c.foo().bar().baz : Symbol(C.baz, Decl(fluentInterfaces.ts, 6, 23))
@@ -42,4 +42,3 @@
 +>foo : Symbol(foo, Decl(fluentInterfaces.ts, 0, 13))
 +>bar : Symbol(bar, Decl(fluentInterfaces.ts, 3, 23))
 +>baz : Symbol(baz, Decl(fluentInterfaces.ts, 6, 23))
- 

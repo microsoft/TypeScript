@@ -1,8 +1,8 @@
 --- old.typePredicateFreshLiteralWidening.js
 +++ new.typePredicateFreshLiteralWidening.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [typePredicateFreshLiteralWidening.js]
 -var satisfies = function () {
 -    return function (narrow) {

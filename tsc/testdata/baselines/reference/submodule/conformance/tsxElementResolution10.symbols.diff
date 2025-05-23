@@ -2,7 +2,7 @@
 +++ new.tsxElementResolution10.symbols
 @@= skipped -10, +10 lines =@@
  >ElementClass : Symbol(ElementClass, Decl(file.tsx, 1, 22))
- 
+
  		render: any;
 ->render : Symbol(ElementClass.render, Decl(file.tsx, 2, 25))
 +>render : Symbol(render, Decl(file.tsx, 2, 25))

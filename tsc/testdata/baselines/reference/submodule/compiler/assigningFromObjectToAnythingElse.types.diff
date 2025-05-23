@@ -10,7 +10,7 @@
 ->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  >"" : ""
- 
+
  var c: String = Object.create<Number>(1);
  >c : String
  >Object.create<Number>(1) : any
@@ -20,5 +20,5 @@
 ->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  >1 : 1
- 
+
  var w: Error = new Object();

@@ -4,8 +4,8 @@
 -usingDeclarationsWithIteratorObject.ts(20,17): error TS2850: The initializer of a 'using' declaration must be either an object with a '[Symbol.dispose]()' method, or be 'null' or 'undefined'.
 -  Property '[Symbol.dispose]' is missing in type 'Iterator<string, undefined, any>' but required in type 'Disposable'.
 +usingDeclarationsWithIteratorObject.ts(20,17): error TS2741: Property '[Symbol.dispose]' is missing in type 'Iterator<string, undefined, any>' but required in type 'Disposable'.
- 
- 
+
+
  ==== usingDeclarationsWithIteratorObject.ts (1 errors) ====
 @@= skipped -23, +22 lines =@@
          // should fail

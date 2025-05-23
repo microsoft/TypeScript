@@ -2,7 +2,7 @@
 +++ new.reexportMissingDefault7.js
 @@= skipped -7, +7 lines =@@
  export { default } from "./b";
- 
+
  //// [b.js]
 -export var b = null;
 +export const b = null;

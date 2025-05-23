@@ -2,7 +2,7 @@
 +++ new.isolatedDeclarationErrorsEnums.js
 @@= skipped -48, +48 lines =@@
  }
- 
+
  //// [isolatedDeclarationErrorsEnums.js]
 -"use strict";
  var E;

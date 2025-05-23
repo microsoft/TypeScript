@@ -6,7 +6,7 @@
  import { createNamed } from "./b";
 ->createNamed : () => import("b").Named
 +>createNamed : () => Named
- 
+
  export const Value = createNamed();
 ->Value : import("b").Named
 ->createNamed() : import("b").Named
@@ -14,4 +14,3 @@
 +>Value : Named
 +>createNamed() : Named
 +>createNamed : () => Named
- 

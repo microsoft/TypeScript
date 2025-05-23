@@ -2,7 +2,7 @@
 +++ new.ambientExternalModuleInAnotherExternalModule.js
 @@= skipped -12, +12 lines =@@
  var x = ext;
- 
+
  //// [ambientExternalModuleInAnotherExternalModule.js]
 -define(["require", "exports", "ext"], function (require, exports, ext) {
 -    "use strict";

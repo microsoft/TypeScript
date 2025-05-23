@@ -2,7 +2,7 @@
 +++ new.extendBaseClassBeforeItsDeclared.js
 @@= skipped -5, +5 lines =@@
  class base { constructor (public n: number) { } }
- 
+
  //// [extendBaseClassBeforeItsDeclared.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

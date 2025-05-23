@@ -1,8 +1,8 @@
 --- old.indexersInClassType.js
 +++ new.indexersInClassType.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [indexersInClassType.js]
 -var C = /** @class */ (function () {
 -    function C() {

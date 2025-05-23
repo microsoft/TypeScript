@@ -20,7 +20,7 @@
  >0 : 0
 @@= skipped -13, +13 lines =@@
  >Date : DateConstructor
- 
+
  const [ part ] = new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000);
 ->part : Intl.DateTimeRangeFormatPart
 ->new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000) : Intl.DateTimeRangeFormatPart[]
@@ -39,4 +39,3 @@
 +>formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => DateTimeRangeFormatPart[]
  >1000 : 1000
  >1000000000 : 1000000000
- 

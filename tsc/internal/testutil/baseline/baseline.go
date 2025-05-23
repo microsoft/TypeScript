@@ -11,8 +11,9 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
-	"github.com/pkg/diff"
+	"github.com/peter-evans/patience"
 	"gotest.tools/v3/assert"
 )
 
@@ -102,6 +103,16 @@ func readFileOrNoContent(fileName string) string {
 	return string(content)
 }
 
+func diffText(oldName string, newName string, expected string, actual string) string {
+	lines := patience.Diff(stringutil.SplitLines(expected), stringutil.SplitLines(actual))
+	return patience.UnifiedDiffTextWithOptions(lines, patience.UnifiedDiffOptions{
+		Precontext:  3,
+		Postcontext: 3,
+		SrcHeader:   oldName,
+		DstHeader:   newName,
+	})
+}
+
 func getBaselineDiff(t *testing.T, actual string, expected string, fileName string, fixupOld func(string) string) string {
 	if fixupOld != nil {
 		expected = fixupOld(expected)
@@ -109,14 +120,10 @@ func getBaselineDiff(t *testing.T, actual string, expected string, fileName stri
 	if actual == expected {
 		return NoContent
 	}
-	var b strings.Builder
-	if err := diff.Text("old."+fileName, "new."+fileName, expected, actual, &b); err != nil {
-		return fmt.Sprintf("failed to diff the actual and expected content: %v\n", err)
-	}
+	s := diffText("old."+fileName, "new."+fileName, expected, actual)
 
 	// Remove line numbers from unified diff headers; this avoids adding/deleting
 	// lines in our baselines from causing knock-on header changes later in the diff.
-	s := b.String()
 
 	aCurLine := 1
 	bCurLine := 1

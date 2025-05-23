@@ -1,8 +1,8 @@
 --- old.stringLiteralsWithEqualityChecks04.js
 +++ new.stringLiteralsWithEqualityChecks04.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [stringLiteralsWithEqualityChecks04.js]
 -var x;
 -var y;

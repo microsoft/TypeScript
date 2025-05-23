@@ -15,7 +15,7 @@
 ->Yellow : A.Color.Green
 +>Color : typeof Color
 +>Yellow : Color.Green
- 
+
      t = A.Color.Red;
 ->t = A.Color.Red : A.Color.Red
 ->t : A.Color
@@ -31,4 +31,3 @@
 +>Color : typeof Color
 +>Red : Color.Red
  }
- 

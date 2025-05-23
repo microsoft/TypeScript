@@ -20,5 +20,5 @@
  >i1 : Symbol(i1, Decl(privateInterfaceProperties.ts, 0, 0))
 ->name : Symbol(c2.name, Decl(privateInterfaceProperties.ts, 6, 24))
 +>name : Symbol(name, Decl(privateInterfaceProperties.ts, 6, 24))
- 
+
   

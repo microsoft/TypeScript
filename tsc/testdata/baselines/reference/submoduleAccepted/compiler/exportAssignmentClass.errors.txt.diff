@@ -1,8 +1,7 @@
 --- old.exportAssignmentClass.errors.txt
 +++ new.exportAssignmentClass.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +exportAssignmentClass_B.ts(1,20): error TS2307: Cannot find module 'exportAssignmentClass_A' or its corresponding type declarations.
 +
 +

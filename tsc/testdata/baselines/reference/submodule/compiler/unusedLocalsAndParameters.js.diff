@@ -5,13 +5,11 @@
  fexp(0);
  // arrow function paramter
 -var farrow = function (a) {
-+var farrow = (a) => {
- };
+-};
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
-+class C {
-     // Method declaration paramter
+-    // Method declaration paramter
 -    C.prototype.method = function (a) {
 -    };
 -    Object.defineProperty(C.prototype, "x", {
@@ -25,14 +23,8 @@
 -}());
 -var E = /** @class */ (function () {
 -    function class_1() {
-+    method(a) {
-     }
-+    // Accessor declaration paramter
-+    set x(v) {
-+    }
-+}
-+var E = class {
-     // Method declaration paramter
+-    }
+-    // Method declaration paramter
 -    class_1.prototype.method = function (a) {
 -    };
 -    Object.defineProperty(class_1.prototype, "x", {
@@ -44,6 +36,18 @@
 -    });
 -    return class_1;
 -}());
++var farrow = (a) => {
++};
++class C {
++    // Method declaration paramter
++    method(a) {
++    }
++    // Accessor declaration paramter
++    set x(v) {
++    }
++}
++var E = class {
++    // Method declaration paramter
 +    method(a) {
 +    }
 +    // Accessor declaration paramter

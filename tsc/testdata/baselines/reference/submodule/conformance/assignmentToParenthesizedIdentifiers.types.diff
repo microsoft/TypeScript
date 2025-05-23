@@ -12,7 +12,7 @@
  >{ x: 3 } : { x: number; }
  >x : number
  >3 : 3
- 
+
  (M2).M3 = { x: 3 }; // OK
  >(M2).M3 = { x: 3 } : { x: number; }
 ->(M2).M3 : typeof M2.M3
@@ -24,7 +24,7 @@
  >{ x: 3 } : { x: number; }
  >x : number
  >3 : 3
- 
+
  (M2.M3) = { x: 3 }; // OK
  >(M2.M3) = { x: 3 } : { x: number; }
 ->(M2.M3) : typeof M2.M3
@@ -37,7 +37,7 @@
  >{ x: 3 } : { x: number; }
  >x : number
  >3 : 3
- 
+
  M2.M3 = { x: '' }; // Error
  >M2.M3 = { x: '' } : { x: string; }
 ->M2.M3 : typeof M2.M3
@@ -48,7 +48,7 @@
  >{ x: '' } : { x: string; }
  >x : string
  >'' : ""
- 
+
  (M2).M3 = { x: '' }; // Error
  >(M2).M3 = { x: '' } : { x: string; }
 ->(M2).M3 : typeof M2.M3
@@ -60,7 +60,7 @@
  >{ x: '' } : { x: string; }
  >x : string
  >'' : ""
- 
+
  (M2.M3) = { x: '' }; // Error
  >(M2.M3) = { x: '' } : { x: string; }
 ->(M2.M3) : typeof M2.M3

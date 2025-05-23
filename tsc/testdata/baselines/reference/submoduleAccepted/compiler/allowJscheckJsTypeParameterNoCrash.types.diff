@@ -6,17 +6,17 @@
  >vextend : (options: ComponentOptions<{}>) => void
 ->{  watch: {    data1(val) {      this.data2 = 1;    },    data2(val) { },  }} : { watch: { data1(val: any): void; }; }
 +>{  watch: {    data1(val) {      this.data2 = 1;    },    data2(val) { },  }} : { watch: { data1: (val: any) => void; data2: any; }; }
- 
+
    watch: {
 ->watch : { data1(val: any): void; }
 ->{    data1(val) {      this.data2 = 1;    },    data2(val) { },  } : { data1(val: any): void; }
 +>watch : { data1: (val: any) => void; data2: any; }
 +>{    data1(val) {      this.data2 = 1;    },    data2(val) { },  } : { data1: (val: any) => void; data2: any; }
- 
+
      data1(val) {
  >data1 : (val: any) => void
 @@= skipped -12, +12 lines =@@
- 
+
        this.data2 = 1;
  >this.data2 = 1 : 1
 ->this.data2 : (val: any) => void
@@ -26,5 +26,5 @@
 +>this : any
 +>data2 : any
  >1 : 1
- 
+
      },

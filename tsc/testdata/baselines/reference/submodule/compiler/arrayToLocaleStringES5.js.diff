@@ -1,8 +1,8 @@
 --- old.arrayToLocaleStringES5.js
 +++ new.arrayToLocaleStringES5.js
 @@= skipped -58, +58 lines =@@
- 
- 
+
+
  //// [arrayToLocaleStringES5.js]
 -var str;
 -var arr = [1, 2, 3];

@@ -1,8 +1,8 @@
 --- old.thisTypeInFunctions.js
 +++ new.thisTypeInFunctions.js
 @@= skipped -196, +196 lines =@@
- 
- 
+
+
  //// [thisTypeInFunctions.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,24 +23,14 @@
  // body checking
 -var B = /** @class */ (function () {
 -    function B() {
-+class B {
-+    n;
-+}
-+class C {
-+    n;
-+    explicitThis(m) {
-+        return this.n + m;
-     }
+-    }
 -    return B;
 -}());
 -var C = /** @class */ (function () {
 -    function C() {
-+    explicitC(m) {
-+        return this.n + m;
-     }
+-    }
 -    C.prototype.explicitThis = function (m) {
-+    explicitProperty(m) {
-         return this.n + m;
+-        return this.n + m;
 -    };
 -    C.prototype.explicitC = function (m) {
 -        return this.n + m;
@@ -49,6 +39,19 @@
 -        return this.n + m;
 -    };
 -    C.prototype.explicitVoid = function (m) {
++class B {
++    n;
++}
++class C {
++    n;
++    explicitThis(m) {
++        return this.n + m;
++    }
++    explicitC(m) {
++        return this.n + m;
++    }
++    explicitProperty(m) {
++        return this.n + m;
 +    }
 +    explicitVoid(m) {
          return m + 1;
@@ -78,16 +81,20 @@
 -    explicitVoid2: function () { return _this.a; }, // ok, this: any because it refers to some outer object (window?)
 -    explicitVoid1: function () { return 12; },
 -    explicitStructural: function () {
+-        return this.a;
+-    },
+-    explicitInterface: function () {
+-        return this.a;
+-    },
+-    explicitThis: function () {
 +    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)
 +    explicitVoid1() { return 12; },
 +    explicitStructural() {
-         return this.a;
-     },
--    explicitInterface: function () {
++        return this.a;
++    },
 +    explicitInterface() {
-         return this.a;
-     },
--    explicitThis: function () {
++        return this.a;
++    },
 +    explicitThis() {
          return this.a;
      },

@@ -1,8 +1,8 @@
 --- old.inheritanceGrandParentPublicMemberCollisionWithPrivateMember.js
 +++ new.inheritanceGrandParentPublicMemberCollisionWithPrivateMember.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [inheritanceGrandParentPublicMemberCollisionWithPrivateMember.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

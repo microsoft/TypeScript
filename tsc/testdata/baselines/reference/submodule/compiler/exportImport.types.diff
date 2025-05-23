@@ -1,17 +1,17 @@
 --- old.exportImport.types
 +++ new.exportImport.types
 @@= skipped -1, +1 lines =@@
- 
+
  === consumer.ts ===
  import e = require('./exporter');
 ->e : typeof e
 +>e : typeof import("exporter")
- 
+
  export function w(): e.w { // Should be OK
 ->w : () => e.w
 +>w : () => Widget1
  >e : any
- 
+
      return new e.w();
 ->new e.w() : e.w
 ->e.w : typeof e.w
@@ -25,9 +25,8 @@
  === w1.ts ===
  export = Widget1
 @@= skipped -23, +23 lines =@@
- 
+
  === exporter.ts ===
  export import w = require('./w1');
 ->w : typeof w
 +>w : typeof Widget1
- 

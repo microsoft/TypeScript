@@ -8,10 +8,10 @@
 +>prop : Symbol(prop, Decl(typeArgumentInferenceWithClassExpression3.ts, 0, 27))
  >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression3.ts, 0, 13))
  >T : Symbol(T, Decl(typeArgumentInferenceWithClassExpression3.ts, 0, 13))
- 
+
 @@= skipped -9, +9 lines =@@
  }
- 
+
  foo(class { prop = "hello" }).length;
 ->foo(class { prop = "hello" }).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>foo(class { prop = "hello" }).length : Symbol(length, Decl(lib.es5.d.ts, --, --))
@@ -20,4 +20,3 @@
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>prop : Symbol(prop, Decl(typeArgumentInferenceWithClassExpression3.ts, 4, 11))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 

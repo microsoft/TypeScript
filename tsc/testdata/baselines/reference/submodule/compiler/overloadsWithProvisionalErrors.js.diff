@@ -1,7 +1,7 @@
 --- old.overloadsWithProvisionalErrors.js
 +++ new.overloadsWithProvisionalErrors.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [overloadsWithProvisionalErrors.js]
  var func;
 -func(function (s) { return ({}); }); // Error for no applicable overload (object type is missing a and b)

@@ -1,8 +1,8 @@
 --- old.privacyCheckCallbackOfInterfaceMethodWithTypeParameter.js
 +++ new.privacyCheckCallbackOfInterfaceMethodWithTypeParameter.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [privacyCheckCallbackOfInterfaceMethodWithTypeParameter.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

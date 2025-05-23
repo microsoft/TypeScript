@@ -2,7 +2,7 @@
 +++ new.commentOnAmbientModule.js
 @@= skipped -24, +24 lines =@@
  }
- 
+
  //// [a.js]
 -/*!=========
 -    Keep this pinned comment

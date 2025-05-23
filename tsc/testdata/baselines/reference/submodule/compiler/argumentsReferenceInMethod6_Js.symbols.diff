@@ -2,11 +2,11 @@
 +++ new.argumentsReferenceInMethod6_Js.symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(a.js, 0, 0))
- 
+
  	m() {
 ->m : Symbol(A.m, Decl(a.js, 0, 9))
 +>m : Symbol(m, Decl(a.js, 0, 9))
- 
+
  		/**
  		 * @type object
  		 */

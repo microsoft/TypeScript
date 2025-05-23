@@ -2,7 +2,7 @@
 +++ new.genericConstraintDeclaration.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(genericConstraintDeclaration.ts, 0, 11))
- 
+
      static empty<T extends {}>(): List<T>{return null;}
 ->empty : Symbol(List.empty, Decl(genericConstraintDeclaration.ts, 0, 25))
 +>empty : Symbol(empty, Decl(genericConstraintDeclaration.ts, 0, 25))

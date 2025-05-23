@@ -9,8 +9,8 @@
 +second.js(1,1): error TS2304: Cannot find name 'exports'.
 +second.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +second.js(2,1): error TS2304: Cannot find name 'exports'.
- 
- 
+
+
  ==== mod.js (0 errors) ====
      // Based on a pattern from adonis
      exports.formatters = {}

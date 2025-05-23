@@ -1,6 +1,6 @@
 --- old.resolutionModeTypeOnlyImport1(moduleresolution=classic).errors.txt
 +++ new.resolutionModeTypeOnlyImport1(moduleresolution=classic).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS2688: Cannot find type definition file for 'foo'.
 -  The file is in the program because:
 -    Entry point for implicit type library 'foo'
@@ -61,5 +61,4 @@
 -==== /other.ts (0 errors) ====
 -    export const x = "other";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

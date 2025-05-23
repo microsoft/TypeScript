@@ -8,6 +8,6 @@
 ->Two : Symbol(TokenType.Two, Decl(assignmentCompatForEnums.ts, 0, 21))
 +>One : Symbol(One, Decl(assignmentCompatForEnums.ts, 0, 16))
 +>Two : Symbol(Two, Decl(assignmentCompatForEnums.ts, 0, 21))
- 
+
  var list = {};
  >list : Symbol(list, Decl(assignmentCompatForEnums.ts, 2, 3))

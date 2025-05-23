@@ -13,8 +13,8 @@
 +systemModule9.ts(5,25): error TS2307: Cannot find module 'file5' or its corresponding type declarations.
 +systemModule9.ts(6,22): error TS2307: Cannot find module 'file6' or its corresponding type declarations.
 +systemModule9.ts(16,15): error TS2307: Cannot find module 'file7' or its corresponding type declarations.
- 
- 
+
+
  ==== systemModule9.ts (6 errors) ====
      import * as ns from 'file1';
                          ~~~~~~~

@@ -2,7 +2,7 @@
 +++ new.genericRestTypes.js
 @@= skipped -29, +29 lines =@@
  }
- 
+
  //// [genericRestTypes.js]
 -"use strict";
 -// Repro from #25793

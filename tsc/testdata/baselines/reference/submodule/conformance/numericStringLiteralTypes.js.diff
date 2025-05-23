@@ -1,8 +1,8 @@
 --- old.numericStringLiteralTypes.js
 +++ new.numericStringLiteralTypes.js
 @@= skipped -40, +40 lines =@@
- 
- 
+
+
  //// [numericStringLiteralTypes.js]
 -"use strict";
  function f1(a, x) {

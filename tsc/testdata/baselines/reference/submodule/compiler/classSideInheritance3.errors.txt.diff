@@ -11,8 +11,8 @@
 -    Type 'new (x: string, data: string) => B' is not assignable to type 'new (x: string) => A'.
 -      Target signature provides too few arguments. Expected 2 or more, but got 1.
 +  Target signature provides too few arguments. Expected 2 or more, but got 1.
- 
- 
+
+
  ==== classSideInheritance3.ts (2 errors) ====
 @@= skipped -26, +22 lines =@@
      var r1: typeof A = B; // error

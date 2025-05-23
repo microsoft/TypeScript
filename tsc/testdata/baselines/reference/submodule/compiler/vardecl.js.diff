@@ -6,23 +6,27 @@
      var m3;
 -    var C = /** @class */ (function () {
 -        function C(b) {
-+    class C {
-+        b;
-+        constructor(b) {
-             this.b = b;
-         }
+-            this.b = b;
+-        }
 -        return C;
 -    }());
 -    var C2 = /** @class */ (function () {
 -        function C2(b) {
+-            this.b = b;
+-        }
+-        return C2;
+-    }());
++    class C {
++        b;
++        constructor(b) {
++            this.b = b;
++        }
 +    }
 +    class C2 {
 +        b;
 +        constructor(b) {
-             this.b = b;
-         }
--        return C2;
--    }());
++            this.b = b;
++        }
 +    }
      m2.C2 = C2;
      var m;

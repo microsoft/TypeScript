@@ -2,7 +2,7 @@
 +++ new.jsxNestedWithinTernaryParsesCorrectly.js
 @@= skipped -15, +15 lines =@@
  );
- 
+
  //// [jsxNestedWithinTernaryParsesCorrectly.jsx]
 -var emptyMessage = null;
 -var a = (<div>

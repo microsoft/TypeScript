@@ -1,7 +1,7 @@
 --- old.jsDeclarationsTypedefPropertyAndExportAssignment.types
 +++ new.jsDeclarationsTypedefPropertyAndExportAssignment.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  const {taskGroups, taskNameToGroup} = require('./module.js');
 ->taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
@@ -12,7 +12,7 @@
 +>require('./module.js') : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
  >require : any
  >'./module.js' : "./module.js"
- 
+
 @@= skipped -24, +24 lines =@@
       * @param {TaskNode} y
       */
@@ -21,7 +21,7 @@
 +>x : any
  >y : TaskNode
  }
- 
+
  module.exports = MainThreadTasks;
  >module.exports = MainThreadTasks : typeof MainThreadTasks
  >module.exports : typeof MainThreadTasks
@@ -29,7 +29,7 @@
 +>module : { MainThreadTasks: typeof MainThreadTasks; }
  >exports : typeof MainThreadTasks
  >MainThreadTasks : typeof MainThreadTasks
- 
+
 @@= skipped -25, +25 lines =@@
   * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
   */
@@ -38,42 +38,42 @@
 ->{    parseHTML: {        id: 'parseHTML',        label: 'Parse HTML & CSS'    },    styleLayout: {        id: 'styleLayout',        label: 'Style & Layout'    },} : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
 +>taskGroups : { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }
 +>{    parseHTML: {        id: 'parseHTML',        label: 'Parse HTML & CSS'    },    styleLayout: {        id: 'styleLayout',        label: 'Style & Layout'    },} : { parseHTML: { id: string; label: string; }; styleLayout: { id: string; label: string; }; }
- 
+
      parseHTML: {
 ->parseHTML : { id: "parseHTML"; label: string; }
 ->{        id: 'parseHTML',        label: 'Parse HTML & CSS'    } : { id: "parseHTML"; label: string; }
 +>parseHTML : { id: string; label: string; }
 +>{        id: 'parseHTML',        label: 'Parse HTML & CSS'    } : { id: string; label: string; }
- 
+
          id: 'parseHTML',
 ->id : "parseHTML"
 +>id : string
  >'parseHTML' : "parseHTML"
- 
+
          label: 'Parse HTML & CSS'
 @@= skipped -17, +17 lines =@@
- 
+
      },
      styleLayout: {
 ->styleLayout : { id: "styleLayout"; label: string; }
 ->{        id: 'styleLayout',        label: 'Style & Layout'    } : { id: "styleLayout"; label: string; }
 +>styleLayout : { id: string; label: string; }
 +>{        id: 'styleLayout',        label: 'Style & Layout'    } : { id: string; label: string; }
- 
+
          id: 'styleLayout',
 ->id : "styleLayout"
 +>id : string
  >'styleLayout' : "styleLayout"
- 
+
          label: 'Style & Layout'
 @@= skipped -16, +16 lines =@@
- 
+
  /** @type {Object<string, TaskGroup>} */
  const taskNameToGroup = {};
 ->taskNameToGroup : { [x: string]: TaskGroup; }
 +>taskNameToGroup : any
  >{} : {}
- 
+
  module.exports = {
 ->module.exports = {    taskGroups,    taskNameToGroup,} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -85,13 +85,13 @@
 +>module : { export=: { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }; }
 +>exports : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
 +>{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
- 
+
      taskGroups,
 ->taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
 +>taskGroups : { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }
- 
+
      taskNameToGroup,
 ->taskNameToGroup : { [x: string]: TaskGroup; }
 +>taskNameToGroup : any
- 
+
  };

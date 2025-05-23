@@ -9,7 +9,7 @@
  >prototype : any
  >m : any
  >function () {    this.p = 1} : () => void
- 
+
      this.p = 1
  >this.p = 1 : 1
 ->this.p : number
@@ -23,7 +23,7 @@
  function OOOrder() {
 ->OOOrder : typeof OOOrder
 +>OOOrder : () => void
- 
+
      this.x = 1
  >this.x = 1 : 1
  >this.x : any

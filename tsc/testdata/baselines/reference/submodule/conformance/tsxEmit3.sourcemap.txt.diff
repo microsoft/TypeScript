@@ -84,10 +84,7 @@
 +3 >                      {
 +4 >                         }
  1->Emitted(4, 9) Source(7, 21) + SourceIndex(0)
-+2 >Emitted(4, 23) Source(7, 35) + SourceIndex(0)
-+3 >Emitted(4, 25) Source(7, 36) + SourceIndex(0)
-+4 >Emitted(4, 26) Source(7, 38) + SourceIndex(0)
- ---
+----
 ->>>        }
 -1->^^^^^^^^
 -2 >        ^
@@ -96,12 +93,7 @@
 -2 >        }
 -1->Emitted(5, 9) Source(7, 37) + SourceIndex(0)
 -2 >Emitted(5, 10) Source(7, 38) + SourceIndex(0)
-+>>>    }
-+1 >^^^^^
-+2 >     ^^^^^^^^^^^^->
-+1 > }
-+1 >Emitted(5, 6) Source(7, 40) + SourceIndex(0)
- ---
+----
 ->>>        return Foo;
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^
@@ -124,7 +116,16 @@
 -2 >Emitted(7, 6) Source(7, 40) + SourceIndex(0)
 -3 >Emitted(7, 6) Source(7, 2) + SourceIndex(0)
 -4 >Emitted(7, 10) Source(7, 40) + SourceIndex(0)
-----
++2 >Emitted(4, 23) Source(7, 35) + SourceIndex(0)
++3 >Emitted(4, 25) Source(7, 36) + SourceIndex(0)
++4 >Emitted(4, 26) Source(7, 38) + SourceIndex(0)
++---
++>>>    }
++1 >^^^^^
++2 >     ^^^^^^^^^^^^->
++1 > }
++1 >Emitted(5, 6) Source(7, 40) + SourceIndex(0)
+ ---
  >>>    M.Foo = Foo;
  1->^^^^
 -2 >    ^^^^^
@@ -213,23 +214,13 @@
 +1->{
    >		
 -1->Emitted(11, 9) Source(9, 3) + SourceIndex(0)
-+2 >        export class 
-+3 >              Bar
-+1->Emitted(9, 9) Source(9, 3) + SourceIndex(0)
-+2 >Emitted(9, 15) Source(9, 16) + SourceIndex(0)
-+3 >Emitted(9, 18) Source(9, 19) + SourceIndex(0)
- ---
+----
 ->>>            function Bar() {
 -1->^^^^^^^^^^^^
 -2 >            ^^->
 -1->
 -1->Emitted(12, 13) Source(9, 3) + SourceIndex(0)
-+>>>        }
-+1 >^^^^^^^^^
-+2 >         ^^^^^^^^^^^^->
-+1 > { }
-+1 >Emitted(10, 10) Source(9, 23) + SourceIndex(0)
- ---
+----
 ->>>            }
 -1->^^^^^^^^^^^^
 -2 >            ^
@@ -261,7 +252,18 @@
 -2 >Emitted(15, 10) Source(9, 23) + SourceIndex(0)
 -3 >Emitted(15, 10) Source(9, 3) + SourceIndex(0)
 -4 >Emitted(15, 14) Source(9, 23) + SourceIndex(0)
-----
++2 >        export class 
++3 >              Bar
++1->Emitted(9, 9) Source(9, 3) + SourceIndex(0)
++2 >Emitted(9, 15) Source(9, 16) + SourceIndex(0)
++3 >Emitted(9, 18) Source(9, 19) + SourceIndex(0)
++---
++>>>        }
++1 >^^^^^^^^^
++2 >         ^^^^^^^^^^^^->
++1 > { }
++1 >Emitted(10, 10) Source(9, 23) + SourceIndex(0)
+ ---
  >>>        S.Bar = Bar;
  1->^^^^^^^^
 -2 >        ^^^^^
@@ -781,10 +783,11 @@
  6 >         ^
  7 >          ^^^^^^^^
  1 >
-+2 >
-   >
+-  >
 -  >
 -2 >}
++2 >
++  >
 +  >}
  3 > 
  4 >   M

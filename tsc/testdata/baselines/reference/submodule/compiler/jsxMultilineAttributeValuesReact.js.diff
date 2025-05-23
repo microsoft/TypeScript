@@ -1,8 +1,8 @@
 --- old.jsxMultilineAttributeValuesReact.js
 +++ new.jsxMultilineAttributeValuesReact.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [jsxMultilineAttributeValuesReact.js]
 -var a = React.createElement("input", { value: "\nfoo: 23\n" });
 -var b = React.createElement("input", { value: '\nfoo: 23\n' });

@@ -2,7 +2,7 @@
 +++ new.genericClassesInModule.types
 @@= skipped -11, +11 lines =@@
  }
- 
+
  var a = new Foo.B<Foo.A>();
 ->a : Foo.B<Foo.A>
 ->new Foo.B<Foo.A>() : Foo.B<Foo.A>
@@ -14,4 +14,3 @@
 ->B : typeof Foo.B
 +>B : typeof B
  >Foo : any
- 

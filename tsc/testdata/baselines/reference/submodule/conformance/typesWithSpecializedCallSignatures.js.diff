@@ -1,7 +1,7 @@
 --- old.typesWithSpecializedCallSignatures.js
 +++ new.typesWithSpecializedCallSignatures.js
 @@= skipped -44, +44 lines =@@
- 
+
  //// [typesWithSpecializedCallSignatures.js]
  // basic uses of specialized signatures without errors
 -var __extends = (this && this.__extends) || (function () {

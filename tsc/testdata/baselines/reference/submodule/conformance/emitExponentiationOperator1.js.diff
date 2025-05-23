@@ -2,7 +2,7 @@
 +++ new.emitExponentiationOperator1.js
 @@= skipped -33, +33 lines =@@
  (2 / 3) ** 4;
- 
+
  //// [emitExponentiationOperator1.js]
 -Math.pow(1, -2);
 -Math.pow(1, 2);

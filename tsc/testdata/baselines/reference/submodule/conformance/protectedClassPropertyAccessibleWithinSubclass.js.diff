@@ -1,7 +1,7 @@
 --- old.protectedClassPropertyAccessibleWithinSubclass.js
 +++ new.protectedClassPropertyAccessibleWithinSubclass.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [protectedClassPropertyAccessibleWithinSubclass.js]
  // no errors
 -var __extends = (this && this.__extends) || (function () {

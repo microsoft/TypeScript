@@ -1,8 +1,7 @@
 --- old.checkJsxChildrenProperty16.errors.txt
 +++ new.checkJsxChildrenProperty16.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +checkJsxChildrenProperty16.tsx(19,14): error TS7006: Parameter 'value' implicitly has an 'any' type.
 +
 +

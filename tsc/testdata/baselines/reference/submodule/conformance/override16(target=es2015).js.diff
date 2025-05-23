@@ -1,7 +1,7 @@
 --- old.override16(target=es2015).js
 +++ new.override16(target=es2015).js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [override16.js]
  class A {
 +    foo;

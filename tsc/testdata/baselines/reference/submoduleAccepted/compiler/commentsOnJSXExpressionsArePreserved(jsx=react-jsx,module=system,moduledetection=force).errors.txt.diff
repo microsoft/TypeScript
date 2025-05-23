@@ -1,6 +1,6 @@
 --- old.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=system,moduledetection=force).errors.txt
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=system,moduledetection=force).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -commentsOnJSXExpressionsArePreserved.tsx(5,16): error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 -
 -
@@ -40,5 +40,4 @@
 -!!! error TS2792: Cannot find module 'react/jsx-runtime'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 -        }
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.derivedClassOverridesWithoutSubtype.js
 @@= skipped -25, +25 lines =@@
  }
- 
+
  //// [derivedClassOverridesWithoutSubtype.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

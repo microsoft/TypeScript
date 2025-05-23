@@ -1,8 +1,8 @@
 --- old.restParameterNoTypeAnnotation.js
 +++ new.restParameterNoTypeAnnotation.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [restParameterNoTypeAnnotation.js]
 -function foo() {
 -    var rest = [];

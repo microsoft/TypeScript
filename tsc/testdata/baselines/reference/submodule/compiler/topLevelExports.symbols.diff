@@ -2,7 +2,7 @@
 +++ new.topLevelExports.symbols
 @@= skipped -9, +9 lines =@@
  >n : Symbol(n, Decl(topLevelExports.ts, 2, 13))
- 
+
  void log(foo).toString();
 ->log(foo).toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>log(foo).toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -10,4 +10,3 @@
  >foo : Symbol(foo, Decl(topLevelExports.ts, 0, 10))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 

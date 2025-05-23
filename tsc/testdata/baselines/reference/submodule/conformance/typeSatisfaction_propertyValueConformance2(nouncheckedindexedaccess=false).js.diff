@@ -1,8 +1,8 @@
 --- old.typeSatisfaction_propertyValueConformance2(nouncheckedindexedaccess=false).js
 +++ new.typeSatisfaction_propertyValueConformance2(nouncheckedindexedaccess=false).js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [typeSatisfaction_propertyValueConformance2.js]
 -var x = {
 +const x = {

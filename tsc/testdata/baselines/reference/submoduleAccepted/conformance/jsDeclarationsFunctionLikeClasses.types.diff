@@ -8,7 +8,7 @@
 +>Point : (x: number, y: number) => any
  >x : number
  >y : number
- 
+
 @@= skipped -8, +8 lines =@@
  >!(this instanceof Point) : boolean
  >(this instanceof Point) : boolean
@@ -17,7 +17,7 @@
 ->Point : typeof Point
 +>this : any
 +>Point : (x: number, y: number) => any
- 
+
          return new Point(x, y);
 ->new Point(x, y) : Point
 ->Point : typeof Point
@@ -33,7 +33,7 @@
 +>this : any
  >x : any
  >x : number
- 
+
      this.y = y;
  >this.y = y : number
  >this.y : any
@@ -42,12 +42,12 @@
  >y : any
  >y : number
  }
- 
+
  === referencer.js ===
  import {Point} from "./source";
 ->Point : typeof Point
 +>Point : (x: number, y: number) => any
- 
+
  /**
   * @param {Point} p
 @@= skipped -42, +42 lines =@@
@@ -68,4 +68,3 @@
 +>y : any
  >2 : 2
  }
- 

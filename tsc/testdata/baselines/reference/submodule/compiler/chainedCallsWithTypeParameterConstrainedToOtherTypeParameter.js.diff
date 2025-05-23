@@ -2,7 +2,7 @@
 +++ new.chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.js
 @@= skipped -21, +21 lines =@@
  (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
- 
+
  //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -34,7 +34,7 @@
 -}());
 -var A = /** @class */ (function () {
 -    function A() {
-     }
+-    }
 -    return A;
 -}());
 -var B = /** @class */ (function (_super) {
@@ -51,6 +51,7 @@
 -    }
 -    return C;
 -}(B));
++    }
 +}
 +class A {
 +    x;

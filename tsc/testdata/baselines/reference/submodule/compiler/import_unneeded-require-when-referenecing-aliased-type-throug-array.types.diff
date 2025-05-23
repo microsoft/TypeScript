@@ -2,11 +2,11 @@
 +++ new.import_unneeded-require-when-referenecing-aliased-type-throug-array.types
 @@= skipped -5, +5 lines =@@
  >ITest : any
- 
+
  var testData: ITest[];
 ->testData : ITest[]
 +>testData : Name[]
- 
+
  var p = testData[0].name;
  >p : string
  >testData[0].name : string

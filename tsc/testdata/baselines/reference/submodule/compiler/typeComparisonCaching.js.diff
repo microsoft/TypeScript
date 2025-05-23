@@ -1,8 +1,8 @@
 --- old.typeComparisonCaching.js
 +++ new.typeComparisonCaching.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [typeComparisonCaching.js]
 -// Check that we only cache results of type comparisons that are free of assumptions
  var a;

@@ -1,7 +1,7 @@
 --- old.emptyVariableDeclarationBindingPatterns02_ES5.js
 +++ new.emptyVariableDeclarationBindingPatterns02_ES5.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [emptyVariableDeclarationBindingPatterns02_ES5.js]
  (function () {
 -    var _a = void 0;

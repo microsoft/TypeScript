@@ -2,7 +2,7 @@
 +++ new.typeParameterInConstraint1.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [typeParameterInConstraint1.js]
 -var C = /** @class */ (function () {
 -    function C() {

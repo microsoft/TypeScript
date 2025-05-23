@@ -1,8 +1,8 @@
 --- old.constAssertionOnEnum.js
 +++ new.constAssertionOnEnum.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [enum.js]
 -export var Foo;
 +export { Foo };

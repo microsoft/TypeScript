@@ -2,7 +2,7 @@
 +++ new.arrayconcat.js
 @@= skipped -30, +30 lines =@@
  }
- 
+
  //// [arrayconcat.js]
 -var parser = /** @class */ (function () {
 -    function parser() {

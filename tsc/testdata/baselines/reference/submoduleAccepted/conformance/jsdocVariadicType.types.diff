@@ -13,7 +13,7 @@
 +>a : any
 +>b : any
  >r : any[]
- 
+
  === b.ts ===
  foo(false, '');
 ->foo(false, '') : void
@@ -22,4 +22,3 @@
 +>foo : function
  >false : false
  >'' : ""
- 

@@ -2,16 +2,15 @@
 +++ new.enumAssignmentCompat.types
 @@= skipped -108, +108 lines =@@
  >a : W.a
- 
+
  W.D;
 ->W.D : typeof W.D
 +>W.D : typeof D
  >W : typeof W
 ->D : typeof W.D
 +>D : typeof D
- 
+
  var p: W.D;
 ->p : W.D
 +>p : D
  >W : any
- 

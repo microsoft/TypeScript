@@ -2,7 +2,7 @@
 +++ new.controlFlowWithIncompleteTypes.js
 @@= skipped -29, +29 lines =@@
  }
- 
+
  //// [controlFlowWithIncompleteTypes.js]
 -// Repro from #11000
  function foo1() {

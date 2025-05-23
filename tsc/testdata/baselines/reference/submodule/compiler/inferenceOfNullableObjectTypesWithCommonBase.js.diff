@@ -1,8 +1,8 @@
 --- old.inferenceOfNullableObjectTypesWithCommonBase.js
 +++ new.inferenceOfNullableObjectTypesWithCommonBase.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [inferenceOfNullableObjectTypesWithCommonBase.js]
 -"use strict";
  function equal(a, b) { }

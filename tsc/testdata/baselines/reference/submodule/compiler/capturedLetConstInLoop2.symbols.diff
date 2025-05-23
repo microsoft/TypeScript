@@ -1,7 +1,7 @@
 --- old.capturedLetConstInLoop2.symbols
 +++ new.capturedLetConstInLoop2.symbols
 @@= skipped -10, +10 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 3, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -9,11 +9,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 2, 12))
 @@= skipped -23, +23 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 11, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -21,11 +21,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 10, 12))
 @@= skipped -25, +25 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 19, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -33,7 +33,7 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 18, 12))
 @@= skipped -21, +21 lines =@@
@@ -45,11 +45,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 25, 14))
 @@= skipped -24, +24 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 36, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -57,11 +57,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 35, 11))
 @@= skipped -26, +26 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 44, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -69,11 +69,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          let x = 1;
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 45, 11))
 @@= skipped -29, +29 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 53, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -81,11 +81,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 52, 12))
 @@= skipped -28, +28 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 63, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -93,11 +93,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 62, 11))
 @@= skipped -27, +27 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 72, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -105,11 +105,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 71, 11))
 @@= skipped -32, +32 lines =@@
- 
+
          let a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 82, 11))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -117,11 +117,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 81, 11))
 @@= skipped -25, +25 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 90, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -129,11 +129,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 89, 14))
 @@= skipped -23, +23 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 98, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -141,11 +141,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 97, 14))
 @@= skipped -24, +24 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 106, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -153,7 +153,7 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 105, 14))
 @@= skipped -21, +21 lines =@@
@@ -165,11 +165,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 112, 16))
 @@= skipped -24, +24 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 123, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -177,11 +177,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 122, 13))
 @@= skipped -25, +25 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 131, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -189,11 +189,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          const x = 1;
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 132, 13))
 @@= skipped -28, +28 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 140, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -201,11 +201,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 139, 14))
 @@= skipped -28, +28 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 150, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -213,11 +213,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 149, 13))
 @@= skipped -27, +27 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 159, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -225,11 +225,11 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 158, 13))
 @@= skipped -31, +31 lines =@@
- 
+
          const a = arguments.length;
  >a : Symbol(a, Decl(capturedLetConstInLoop2.ts, 169, 13))
 ->arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
@@ -237,6 +237,6 @@
  >arguments : Symbol(arguments)
 ->length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          (function() { return x + y + a });
  >x : Symbol(x, Decl(capturedLetConstInLoop2.ts, 168, 13))

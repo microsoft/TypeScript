@@ -1,7 +1,7 @@
 --- old.es5ExportDefaultClassDeclaration3.types
 +++ new.es5ExportDefaultClassDeclaration3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === es5ExportDefaultClassDeclaration3.ts ===
  var before: C = new C();
 ->before : C
@@ -10,15 +10,15 @@
 +>before : default
 +>new C() : default
 +>C : typeof default
- 
+
  export default class C {
 ->C : C
 +>C : default
- 
+
      method(): C {
 ->method : () => C
 +>method : () => default
- 
+
          return new C();
 ->new C() : C
 ->C : typeof C
@@ -26,7 +26,7 @@
 +>C : typeof default
      }
  }
- 
+
  var after: C = new C();
 ->after : C
 ->new C() : C
@@ -34,7 +34,7 @@
 +>after : default
 +>new C() : default
 +>C : typeof default
- 
+
  var t: typeof C = C;
 ->t : typeof C
 ->C : typeof C
@@ -42,5 +42,4 @@
 +>t : typeof default
 +>C : typeof default
 +>C : typeof default
- 
- 
+

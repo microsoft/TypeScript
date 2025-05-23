@@ -2,8 +2,8 @@
 +++ new.moduleResolutionNoResolve.js
 @@= skipped -6, +6 lines =@@
  export var c = '';
- 
- 
+
+
 -//// [a.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

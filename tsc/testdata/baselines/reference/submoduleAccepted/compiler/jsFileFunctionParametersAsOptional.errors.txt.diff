@@ -1,8 +1,7 @@
 --- old.jsFileFunctionParametersAsOptional.errors.txt
 +++ new.jsFileFunctionParametersAsOptional.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +bar.ts(1,1): error TS2554: Expected 3 arguments, but got 0.
 +bar.ts(2,1): error TS2554: Expected 3 arguments, but got 1.
 +bar.ts(3,1): error TS2554: Expected 3 arguments, but got 2.

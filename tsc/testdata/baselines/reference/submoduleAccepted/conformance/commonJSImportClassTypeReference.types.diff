@@ -2,7 +2,7 @@
 +++ new.commonJSImportClassTypeReference.types
 @@= skipped -12, +12 lines =@@
  >k : K
- 
+
      k.values()
 ->k.values() : K
 ->k.values : () => K
@@ -12,5 +12,5 @@
 ->values : () => K
 +>values : any
  }
- 
+
  === mod1.js ===

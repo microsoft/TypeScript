@@ -1,7 +1,7 @@
 --- old.collisionThisExpressionAndNameResolution.js
 +++ new.collisionThisExpressionAndNameResolution.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [collisionThisExpressionAndNameResolution.js]
  var console;
 -var Foo = /** @class */ (function () {

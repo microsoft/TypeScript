@@ -2,7 +2,7 @@
 +++ new.identicalTypesNoDifferByCheckOrder.js
 @@= skipped -38, +38 lines =@@
  needsComponentOfSomeProps2({ renderAs: comp2 });
- 
+
  //// [identicalTypesNoDifferByCheckOrder.js]
 -function needsComponentOfSomeProps3() {
 -    var x = [];

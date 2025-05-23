@@ -2,7 +2,7 @@
 +++ new.classWithEmptyTypeParameter.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [classWithEmptyTypeParameter.js]
 -var C = /** @class */ (function () {
 -    function C() {

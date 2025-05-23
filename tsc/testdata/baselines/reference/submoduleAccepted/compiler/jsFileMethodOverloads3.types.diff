@@ -7,11 +7,11 @@
 ->id : { (x: number): any; (x: string): any; }
 +>id : (x: string | number) => string | number
  >x : string | number
- 
+
      return x;
 @@= skipped -8, +8 lines =@@
  }
- 
+
  export let a = id(123);
 ->a : any
 ->id(123) : any
@@ -20,7 +20,7 @@
 +>id(123) : string | number
 +>id : (x: string | number) => string | number
  >123 : 123
- 
+
  export let b = id("hello");
 ->b : any
 ->id("hello") : any
@@ -29,4 +29,3 @@
 +>id("hello") : string | number
 +>id : (x: string | number) => string | number
  >"hello" : "hello"
- 

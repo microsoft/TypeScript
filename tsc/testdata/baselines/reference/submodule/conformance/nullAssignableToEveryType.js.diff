@@ -2,7 +2,7 @@
 +++ new.nullAssignableToEveryType.js
 @@= skipped -45, +45 lines =@@
  //}
- 
+
  //// [nullAssignableToEveryType.js]
 -var C = /** @class */ (function () {
 -    function C() {

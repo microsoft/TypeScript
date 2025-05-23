@@ -1,8 +1,8 @@
 --- old.thisInInnerFunctions.js
 +++ new.thisInInnerFunctions.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [thisInInnerFunctions.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

@@ -2,22 +2,22 @@
 +++ new.narrowingUnionToUnion.types
 @@= skipped -32, +32 lines =@@
  >x : T | undefined
- 
+
          x;  // T & Falsy | undefined
 ->x : (T & null) | (T & "") | (T & 0) | (T & false) | (T & 0n) | undefined
 +>x : T & null | T & "" | T & 0 | T & 0n | T & false | undefined
      }
  }
- 
+
 @@= skipped -14, +14 lines =@@
  >x : string | number
- 
+
          x;  // T & "" | T & 0
 ->x : (T & "") | (T & 0)
 +>x : T & "" | T & 0
      }
  }
- 
+
 @@= skipped -198, +198 lines =@@
          }
      },
@@ -25,7 +25,7 @@
 ->(value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    } : (value?: string) => void
 +>(value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    } : (value?: string | undefined) => void
  >value : string | undefined
- 
+
          if (isMaybeEmptyString(value)) {
 @@= skipped -46, +46 lines =@@
          }
@@ -34,7 +34,7 @@
 ->(value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    } : (value?: number) => void
 +>(value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    } : (value?: number | undefined) => void
  >value : number | undefined
- 
+
          if (isMaybeZero(value)) {
 @@= skipped -46, +46 lines =@@
          }
@@ -43,52 +43,52 @@
 ->(value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    } : (value?: string[]) => void
 +>(value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    } : (value?: string[] | undefined) => void
  >value : string[] | undefined
- 
+
          if (isMaybeEmptyArray(value)) {
 @@= skipped -24, +24 lines =@@
  >EmptyString : EmptyString
- 
+
  function isEmpty(value: string | EmptyString): value is EmptyString {
 ->isEmpty : (value: string | EmptyString) => value is EmptyString
 +>isEmpty : (value: string | null | undefined) => value is EmptyString
  >value : string | null | undefined
- 
+
      return value === '' || value === null || value === undefined;
 @@= skipped -21, +21 lines =@@
- 
+
  if (isEmpty(test)) {
  >isEmpty(test) : boolean
 ->isEmpty : (value: string | EmptyString) => value is EmptyString
 +>isEmpty : (value: string | null | undefined) => value is EmptyString
  >test : string | null | undefined
- 
+
      test;  // EmptyString
 @@= skipped -14, +14 lines =@@
  >value : any
- 
+
  function test1(foo: number | string | boolean) {
 ->test1 : (foo: number | string | boolean) => void
 +>test1 : (foo: string | number | boolean) => void
  >foo : string | number | boolean
- 
+
      assert<1 | string>(foo);
 @@= skipped -15, +15 lines =@@
  // Repro from #46909
- 
+
  function check1(x: unknown): x is (string | 0) {
 ->check1 : (x: unknown) => x is (string | 0)
 +>check1 : (x: unknown) => x is string | 0
  >x : unknown
- 
+
  	return typeof x === "string" || x === 0;
 @@= skipped -15, +15 lines =@@
  }
- 
+
  function check2(x: unknown): x is ("hello" | 0) {
 ->check2 : (x: unknown) => x is ("hello" | 0)
 +>check2 : (x: unknown) => x is "hello" | 0
  >x : unknown
- 
+
  	return x === "hello" || x === 0;
 @@= skipped -45, +45 lines =@@
  	}
@@ -97,14 +97,14 @@
 ->check1 : (x: unknown) => x is (string | 0)
 +>check1 : (x: unknown) => x is string | 0
  >x : unknown
- 
+
  		x;  // string | 0
 @@= skipped -8, +8 lines =@@
- 
+
  		if (check2(x)) {
  >check2(x) : boolean
 ->check2 : (x: unknown) => x is ("hello" | 0)
 +>check2 : (x: unknown) => x is "hello" | 0
  >x : string | 0
- 
+
  			x;  // 0 | "hello"

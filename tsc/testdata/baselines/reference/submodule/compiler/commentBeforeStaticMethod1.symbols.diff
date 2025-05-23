@@ -6,6 +6,6 @@
    public static foo(): string {
 ->foo : Symbol(C.foo, Decl(commentBeforeStaticMethod1.ts, 0, 9))
 +>foo : Symbol(foo, Decl(commentBeforeStaticMethod1.ts, 0, 9))
- 
+
      return "bar";
    }

@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -/a.js(6,5): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type 'Record<Keys, unknown>'.
  /a.js(14,11): error TS2339: Property 'd' does not exist on type '{ a: number; b: string; x: number; }'.
- 
- 
+
+
 -==== /a.js (2 errors) ====
 +==== /a.js (1 errors) ====
      /** @typedef {"a" | "b" | "c" | "d"} Keys */

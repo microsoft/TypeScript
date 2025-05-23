@@ -7,7 +7,7 @@
 ->getTypeName : { (x: number): "number"; (x: string): "string"; (x: boolean): "boolean"; }
 +>getTypeName : (x: unknown) => string
  >x : unknown
- 
+
    return typeof x;
 @@= skipped -39, +39 lines =@@
   * @returns {unknown[]}
@@ -19,7 +19,7 @@
  >iterable : (x: unknown) => unknown
 ->identity : <T_1>(x: T_1) => T_1
 +>identity : <T>(x: T) => T
- 
+
    /** @type {unknown[]} */
    const result = [];
 @@= skipped -29, +29 lines =@@

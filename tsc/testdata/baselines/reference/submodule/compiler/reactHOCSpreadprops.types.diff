@@ -2,7 +2,7 @@
 +++ new.reactHOCSpreadprops.types
 @@= skipped -5, +5 lines =@@
  >React : typeof React
- 
+
  function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
 ->f : <P>(App: React.ComponentClass<P> | React.StatelessComponent<P>) => void
 ->App : React.ComponentClass<P, any> | React.StatelessComponent<P>
@@ -10,7 +10,7 @@
 +>App : ComponentClass<P, any> | StatelessComponent<P>
  >React : any
  >React : any
- 
+
      class C extends React.Component<P & { x: number }> {
 ->C : C
 ->React.Component : React.Component<P & { x: number; }, {}, any>
@@ -20,11 +20,11 @@
 ->Component : typeof React.Component
 +>Component : typeof Component
  >x : number
- 
+
          render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
              return <App {...this.props} />;
 -><App {...this.props} /> : JSX.Element
 ->App : React.ComponentClass<P, any> | React.StatelessComponent<P>

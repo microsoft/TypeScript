@@ -1,8 +1,8 @@
 --- old.constDeclarations-es5.js
 +++ new.constDeclarations-es5.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [constDeclarations-es5.js]
 -var z7 = false;
 -var z8 = 23;

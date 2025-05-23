@@ -2,7 +2,7 @@
 +++ new.templateStringInSwitchAndCase.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [templateStringInSwitchAndCase.js]
 -switch ("abc".concat(0, "abc")) {
 -    case "abc":

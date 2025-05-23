@@ -2,19 +2,19 @@
 +++ new.subtypingWithCallSignatures.types
 @@= skipped -4, +4 lines =@@
  >CallSignature : typeof CallSignature
- 
+
      declare function foo1(cb: (x: number) => void): typeof cb;
 ->foo1 : { (cb: (x: number) => void): typeof cb; (cb: any): any; }
 +>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
  >cb : (x: number) => void
  >x : number
  >cb : (x: number) => void
- 
+
      declare function foo1(cb: any): any;
 ->foo1 : { (cb: (x: number) => void): typeof cb; (cb: any): any; }
 +>foo1 : { (cb: (x: number) => void): (x: number) => void; (cb: any): any; }
  >cb : any
- 
+
      var r = foo1((x: number) => 1); // ok because base returns void
  >r : (x: number) => void
  >foo1((x: number) => 1) : (x: number) => void
@@ -32,7 +32,7 @@
  ><T>(x: T) => '' : <T>(x: T) => string
  >x : T
  >'' : ""
- 
+
      declare function foo2(cb: (x: number, y: number) => void): typeof cb;
 ->foo2 : { (cb: (x: number, y: number) => void): typeof cb; (cb: any): any; }
 +>foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
@@ -40,12 +40,12 @@
  >x : number
  >y : number
  >cb : (x: number, y: number) => void
- 
+
      declare function foo2(cb: any): any;
 ->foo2 : { (cb: (x: number, y: number) => void): typeof cb; (cb: any): any; }
 +>foo2 : { (cb: (x: number, y: number) => void): (x: number, y: number) => void; (cb: any): any; }
  >cb : any
- 
+
      var r3 = foo2((x: number, y: number) => 1); // ok because base returns void
  >r3 : (x: number, y: number) => void
  >foo2((x: number, y: number) => 1) : (x: number, y: number) => void

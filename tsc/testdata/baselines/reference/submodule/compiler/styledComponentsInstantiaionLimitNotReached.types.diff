@@ -7,21 +7,21 @@
 ->children : React.ReactNode
 +>children : ReactNode
  >React : any
- 
+
      : {};
  export type IntrinsicElementsKeys = keyof JSX.IntrinsicElements;
 ->IntrinsicElementsKeys : keyof JSX.IntrinsicElements
 +>IntrinsicElementsKeys : keyof IntrinsicElements
  >JSX : any
- 
+
  type WithOptionalTheme<P extends { theme?: T }, T> = Omit<P, 'theme'> & {
 @@= skipped -84, +84 lines =@@
  >React : any
- 
+
      withComponent<WithC extends AnyStyledComponent>(
 ->withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC_1 extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC_1): StyledComponent<WithC_1, T, O, A>; }
 +>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends ComponentType<any> | keyof IntrinsicElements>(component: WithC): StyledComponent<WithC, T, O, A>; }
- 
+
          component: WithC,
  >component : WithC
 @@= skipped -12, +12 lines =@@
@@ -32,4 +32,3 @@
 +>withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC extends ComponentType<any> | keyof IntrinsicElements>(component: WithC): StyledComponent<WithC, T, O, A>; }
  >JSX : any
  >React : any
- 

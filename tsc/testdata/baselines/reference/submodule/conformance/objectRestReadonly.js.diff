@@ -1,8 +1,8 @@
 --- old.objectRestReadonly.js
 +++ new.objectRestReadonly.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [objectRestReadonly.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

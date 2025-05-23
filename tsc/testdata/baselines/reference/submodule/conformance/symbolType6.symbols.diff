@@ -9,6 +9,6 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->for : Symbol(SymbolConstructor.for, Decl(lib.es2015.symbol.d.ts, --, --))
 +>for : Symbol(for, Decl(lib.es2015.symbol.d.ts, --, --))
- 
+
  var a: any;
  >a : Symbol(a, Decl(symbolType6.ts, 1, 3))

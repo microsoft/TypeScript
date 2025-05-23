@@ -1,7 +1,7 @@
 --- old.privateIndexer.js
 +++ new.privateIndexer.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [privateIndexer.js]
  // private indexers not allowed
 -var C = /** @class */ (function () {

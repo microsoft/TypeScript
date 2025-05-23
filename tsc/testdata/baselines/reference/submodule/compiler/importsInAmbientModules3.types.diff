@@ -2,7 +2,7 @@
 +++ new.importsInAmbientModules3.types
 @@= skipped -4, +4 lines =@@
  >"M" : typeof import("M")
- 
+
      import C = require("external");
 ->C : typeof C
 +>C : any

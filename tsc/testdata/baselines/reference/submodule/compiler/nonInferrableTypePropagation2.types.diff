@@ -2,11 +2,11 @@
 +++ new.nonInferrableTypePropagation2.types
 @@= skipped -30, +30 lines =@@
  }
- 
+
  declare const filter: {
 ->filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>; <A>(predicate: Predicate<A>): <B extends A>(bs: ReadonlyArray<B>) => ReadonlyArray<B>; <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => ReadonlyArray<A>; }
 +>filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: readonly A[]) => readonly B[]; <A>(predicate: Predicate<A>): <B extends A>(bs: readonly B[]) => readonly B[]; <A>(predicate: Predicate<A>): (as: readonly A[]) => readonly A[]; }
- 
+
      <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>
  >refinement : Refinement<A, B>
 @@= skipped -36, +36 lines =@@

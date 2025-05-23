@@ -1,8 +1,8 @@
 --- old.genericArrayWithoutTypeAnnotation.js
 +++ new.genericArrayWithoutTypeAnnotation.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [genericArrayWithoutTypeAnnotation.js]
 -var Bar = /** @class */ (function () {
 -    function Bar() {

@@ -2,7 +2,7 @@
 +++ new.emitRestParametersFunction.js
 @@= skipped -4, +4 lines =@@
  function foo(x: number, y: string, ...rest) { }
- 
+
  //// [emitRestParametersFunction.js]
 -function bar() {
 -    var rest = [];

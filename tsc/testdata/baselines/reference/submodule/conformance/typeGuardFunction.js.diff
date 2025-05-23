@@ -2,7 +2,7 @@
 +++ new.typeGuardFunction.js
 @@= skipped -84, +84 lines =@@
  let union3: boolean | B = isA(union2) || union2;
- 
+
  //// [typeGuardFunction.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

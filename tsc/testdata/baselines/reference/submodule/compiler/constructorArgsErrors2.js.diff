@@ -1,8 +1,8 @@
 --- old.constructorArgsErrors2.js
 +++ new.constructorArgsErrors2.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [constructorArgsErrors2.js]
 -var foo = /** @class */ (function () {
 -    function foo(a) {

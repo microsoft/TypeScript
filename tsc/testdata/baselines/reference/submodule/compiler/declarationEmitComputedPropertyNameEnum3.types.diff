@@ -9,11 +9,11 @@
  >Foo : typeof Foo
 ->Enum : typeof Foo.Enum
 +>Enum : typeof Enum
- 
+
  === index.ts ===
  import { type Type } from "./type";
  >Type : any
- 
+
  export const foo = { ...({} as Type) };
 ->foo : { x?: {}; }
 ->{ ...({} as Type) } : { x?: {}; }

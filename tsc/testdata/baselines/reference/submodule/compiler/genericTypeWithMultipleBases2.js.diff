@@ -1,8 +1,8 @@
 --- old.genericTypeWithMultipleBases2.js
 +++ new.genericTypeWithMultipleBases2.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [genericTypeWithMultipleBases2.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

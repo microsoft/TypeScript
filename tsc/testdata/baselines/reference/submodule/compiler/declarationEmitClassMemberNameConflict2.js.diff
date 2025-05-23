@@ -2,7 +2,7 @@
 +++ new.declarationEmitClassMemberNameConflict2.js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [declarationEmitClassMemberNameConflict2.js]
 -var Bar = 'bar';
 +const Bar = 'bar';
@@ -30,6 +30,14 @@
 -declare const Bar = "bar";
 -declare enum Hello {
 -    World = 0
+-}
+-declare enum Hello1 {
+-    World1 = 0
+-}
+-declare class Foo {
+-    Bar: string;
+-    Hello: typeof Hello;
+-    Hello2: typeof Hello1;
 +class Foo {
 +    // Same names + string => OK
 +    Bar = Bar;
@@ -38,11 +46,3 @@
 +    // Different names + enum => OK
 +    Hello2 = Hello1;
  }
--declare enum Hello1 {
--    World1 = 0
--}
--declare class Foo {
--    Bar: string;
--    Hello: typeof Hello;
--    Hello2: typeof Hello1;
--}

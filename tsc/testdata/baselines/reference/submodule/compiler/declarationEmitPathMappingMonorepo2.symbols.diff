@@ -3,7 +3,7 @@
 @@= skipped -6, +6 lines =@@
  export default createSvgIcon("Hello", "ArrowLeft");
  >createSvgIcon : Symbol(createSvgIcon, Decl(index.ts, 0, 8))
- 
+
 -=== packages/core/src/SvgIcon.d.ts ===
 -import { StyledComponentProps } from "@ts-bug/styles";
 ->StyledComponentProps : Symbol(StyledComponentProps, Decl(SvgIcon.d.ts, 0, 8))

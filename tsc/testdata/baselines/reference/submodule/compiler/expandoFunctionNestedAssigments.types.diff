@@ -1,12 +1,12 @@
 --- old.expandoFunctionNestedAssigments.types
 +++ new.expandoFunctionNestedAssigments.types
 @@= skipped -1, +1 lines =@@
- 
+
  === expandoFunctionNestedAssigments.ts ===
  function Foo(): void {
 ->Foo : typeof Foo
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
- 
+
  }
  let d: number = (Foo.inVariableInit = 1);
 @@= skipped -8, +8 lines =@@
@@ -17,7 +17,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >inVariableInit : number
  >1 : 1
- 
+
 @@= skipped -11, +11 lines =@@
  >(Foo.inNestedFunction = 1) : 1
  >Foo.inNestedFunction = 1 : 1
@@ -26,7 +26,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >inNestedFunction : any
  >1 : 1
- 
+
 @@= skipped -12, +12 lines =@@
  >(Foo.bla = { foo: 1}) : { foo: number; }
  >Foo.bla = { foo: 1} : { foo: number; }
@@ -51,7 +51,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >bar : number
  >0 : 0
- 
+
  if(Foo.fromIf = 1) {
  >Foo.fromIf = 1 : 1
  >Foo.fromIf : number
@@ -59,7 +59,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >fromIf : number
  >1 : 1
- 
+
      Foo.inIf = 1;
  >Foo.inIf = 1 : 1
  >Foo.inIf : number
@@ -76,7 +76,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >fromWhileCondition : number
  >1 : 1
- 
+
      Foo.fromWhileBody = 1;
  >Foo.fromWhileBody = 1 : 1
  >Foo.fromWhileBody : number
@@ -117,7 +117,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >fromDoCondition : number
  >1 : 1
- 
+
  for(Foo.forInit = 1; (Foo.forCond = 1) > 1; Foo.forIncr = 1){
  >Foo.forInit = 1 : 1
  >Foo.forInit : number
@@ -140,7 +140,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >forIncr : number
  >1 : 1
- 
+
      Foo.fromForBody = 1;
  >Foo.fromForBody = 1 : 1
  >Foo.fromForBody : number
@@ -165,7 +165,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >forOf : any[]
  >[] : undefined[]
- 
+
      Foo.fromForOfBody = 1;
  >Foo.fromForOfBody = 1 : 1
  >Foo.fromForOfBody : number
@@ -190,7 +190,7 @@
 +>Foo : { (): void; inVariableInit: number; bla: { foo: number; }; baz: number; bar: number; fromIf: number; inIf: number; fromWhileCondition: number; fromWhileBody: number; fromWhileBodyNested: number; fromDoBody: number; fromDoBodyNested: number; fromDoCondition: number; forInit: number; forCond: number; forIncr: number; fromForBody: number; fromForBodyNested: number; forOf: any[]; fromForOfBody: number; fromForOfBodyNested: number; forIn: any[]; fromForInBody: number; fromForInBodyNested: number; }
  >forIn : any[]
  >[] : undefined[]
- 
+
      Foo.fromForInBody = 1;
  >Foo.fromForInBody = 1 : 1
  >Foo.fromForInBody : number

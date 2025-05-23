@@ -1,6 +1,6 @@
 --- old.mappedTypeGenericInstantiationPreservesInlineForm.js
 +++ new.mappedTypeGenericInstantiationPreservesInlineForm.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/mappedTypeGenericInstantiationPreservesInlineForm.ts] ////
 -
 -//// [mappedTypeGenericInstantiationPreservesInlineForm.ts]
@@ -22,5 +22,4 @@
 -export declare function test2<T = Record<string, never>>(schema: {
 -    [K in keyof Required<T>]: T[K];
 -}): void;
-@@= skipped --1, +1 lines =@@
 +<no content>

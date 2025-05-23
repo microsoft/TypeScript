@@ -3,7 +3,7 @@
 @@= skipped -9, +9 lines =@@
  import A = require('m1')
  var v = A.V;
- 
+
 -//// [m1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

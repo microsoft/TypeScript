@@ -1,8 +1,8 @@
 --- old.specializedInheritedConstructors1.js
 +++ new.specializedInheritedConstructors1.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [specializedInheritedConstructors1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

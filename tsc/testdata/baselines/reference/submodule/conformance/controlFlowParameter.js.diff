@@ -1,8 +1,8 @@
 --- old.controlFlowParameter.js
 +++ new.controlFlowParameter.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [controlFlowParameter.js]
 -function f1(required) {
 -    if (required === void 0) { required = (function () {

@@ -2,7 +2,7 @@
 +++ new.propertyAndFunctionWithSameName.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [propertyAndFunctionWithSameName.js]
 -var C = /** @class */ (function () {
 -    function C() {

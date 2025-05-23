@@ -2,23 +2,22 @@
 +++ new.jsxParsingError4(strict=false).symbols
 @@= skipped -18, +18 lines =@@
  >a : Symbol(a, Decl(a.tsx, 7, 5))
- 
+
    <public-foo></public-foo>
 ->public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 ->public-foo : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 +>public-foo : Symbol((Missing), Decl(a.tsx, 2, 33))
 +>public-foo : Symbol((Missing), Decl(a.tsx, 2, 33))
- 
+
  );
- 
+
 @@= skipped -9, +9 lines =@@
  >b : Symbol(b, Decl(a.tsx, 11, 5))
- 
+
    <public></public>
 ->public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 ->public : Symbol(JSX.IntrinsicElements.__index, Decl(a.tsx, 2, 33))
 +>public : Symbol((Missing), Decl(a.tsx, 2, 33))
 +>public : Symbol((Missing), Decl(a.tsx, 2, 33))
- 
+
  );
- 

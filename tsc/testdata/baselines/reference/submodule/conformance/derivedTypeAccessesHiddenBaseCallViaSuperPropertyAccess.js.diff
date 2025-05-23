@@ -2,7 +2,7 @@
 +++ new.derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.js
 @@= skipped -19, +19 lines =@@
  }
- 
+
  //// [derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,9 +23,7 @@
 -    function Base() {
 -    }
 -    Base.prototype.foo = function (x) {
-+class Base {
-+    foo(x) {
-         return null;
+-        return null;
 -    };
 -    return Base;
 -}());
@@ -33,16 +31,21 @@
 -    __extends(Derived, _super);
 -    function Derived() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Derived.prototype.foo = function (x) {
-+}
-+class Derived extends Base {
-+    foo(x) {
-         return null;
+-        return null;
 -    };
 -    Derived.prototype.bar = function () {
 -        var r = _super.prototype.foo.call(this, { a: 1 }); // { a: number }
 -        var r2 = _super.prototype.foo.call(this, { a: 1, b: 2 }); // { a: number }
++class Base {
++    foo(x) {
++        return null;
++    }
++}
++class Derived extends Base {
++    foo(x) {
++        return null;
 +    }
 +    bar() {
 +        var r = super.foo({ a: 1 }); // { a: number }

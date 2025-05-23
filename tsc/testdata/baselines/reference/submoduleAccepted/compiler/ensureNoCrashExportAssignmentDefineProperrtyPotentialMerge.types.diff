@@ -1,7 +1,7 @@
 --- old.ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.types
 +++ new.ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  const _item = require("./namespacer");
 ->_item : typeof _item
@@ -10,7 +10,7 @@
 +>require("./namespacer") : {}
  >require : any
  >"./namespacer" : "./namespacer"
- 
+
  module.exports = 12;
 ->module.exports = 12 : number
 ->module.exports : number
@@ -21,7 +21,7 @@
 +>module : { export=: 12; }
 +>exports : 12
  >12 : 12
- 
+
  Object.defineProperty(module, "exports", { value: "oh no" });
 ->Object.defineProperty(module, "exports", { value: "oh no" }) : typeof module
 +>Object.defineProperty(module, "exports", { value: "oh no" }) : any
@@ -34,13 +34,13 @@
  >{ value: "oh no" } : { value: string; }
  >value : string
 @@= skipped -25, +25 lines =@@
- 
+
  === namespacey.js ===
  const A = {}
 ->A : typeof A
 +>A : {}
  >{} : {}
- 
+
  A.bar = class Q {}
  >A.bar = class Q {} : typeof Q
 ->A.bar : typeof Q
@@ -51,7 +51,7 @@
 +>bar : any
  >class Q {} : typeof Q
  >Q : typeof Q
- 
+
  module.exports = A;
 ->module.exports = A : typeof A
 ->module.exports : typeof A
@@ -63,13 +63,13 @@
 +>module : { readonly A: {}; }
 +>exports : {}
 +>A : {}
- 
+
  === namespacer.js ===
  const B = {}
 ->B : typeof B
 +>B : {}
  >{} : {}
- 
+
  B.NS = require("./namespacey");
 ->B.NS = require("./namespacey") : typeof A
 ->B.NS : string | typeof A
@@ -83,7 +83,7 @@
 +>require("./namespacey") : any
  >require : any
  >"./namespacey" : "./namespacey"
- 
+
  Object.defineProperty(B, "NS", { value: "why though", writable: true });
 ->Object.defineProperty(B, "NS", { value: "why though", writable: true }) : typeof B
 +>Object.defineProperty(B, "NS", { value: "why though", writable: true }) : {}
@@ -97,7 +97,7 @@
  >value : string
 @@= skipped -46, +46 lines =@@
  >true : true
- 
+
  module.exports = B;
 ->module.exports = B : typeof B
 ->module.exports : typeof B
@@ -109,4 +109,3 @@
 +>module : { readonly B: {}; }
 +>exports : {}
 +>B : {}
- 

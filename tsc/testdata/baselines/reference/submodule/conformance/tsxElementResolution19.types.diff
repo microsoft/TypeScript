@@ -6,12 +6,11 @@
  import * as React from 'react';
 ->React : typeof React
 +>React : typeof import("react")
- 
+
  import {MyClass} from './file1';
  >MyClass : typeof MyClass
- 
+
  <MyClass />;
 -><MyClass /> : error
 +><MyClass /> : any
  >MyClass : typeof MyClass
- 

@@ -1,16 +1,16 @@
 --- old.aliasUsageInTypeArgumentOfExtendsClause.types
 +++ new.aliasUsageInTypeArgumentOfExtendsClause.types
 @@= skipped -1, +1 lines =@@
- 
+
  === aliasUsageInTypeArgumentOfExtendsClause_main.ts ===
  import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 ->Backbone : typeof Backbone
 +>Backbone : typeof import("aliasUsageInTypeArgumentOfExtendsClause_backbone")
- 
+
  import moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
 ->moduleA : typeof moduleA
 +>moduleA : typeof import("aliasUsageInTypeArgumentOfExtendsClause_moduleA")
- 
+
  interface IHasVisualizationModel {
      VisualizationModel: typeof Backbone.Model;
 ->VisualizationModel : typeof Backbone.Model
@@ -26,7 +26,7 @@
  >C : C<T>
 @@= skipped -23, +23 lines =@@
  >C : C<IHasVisualizationModel>
- 
+
      x = moduleA;
 ->x : typeof moduleA
 ->moduleA : typeof moduleA
@@ -36,12 +36,12 @@
  === aliasUsageInTypeArgumentOfExtendsClause_backbone.ts ===
  export class Model {
 @@= skipped -13, +13 lines =@@
- 
+
  === aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts ===
  import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 ->Backbone : typeof Backbone
 +>Backbone : typeof import("aliasUsageInTypeArgumentOfExtendsClause_backbone")
- 
+
  export class VisualizationModel extends Backbone.Model {
  >VisualizationModel : VisualizationModel
 ->Backbone.Model : Backbone.Model
@@ -50,6 +50,6 @@
 +>Backbone.Model : Model
 +>Backbone : typeof import("aliasUsageInTypeArgumentOfExtendsClause_backbone")
 +>Model : typeof Model
- 
+
      // interesting stuff here
  }

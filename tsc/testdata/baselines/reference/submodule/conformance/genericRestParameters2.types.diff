@@ -2,7 +2,7 @@
 +++ new.genericRestParameters2.types
 @@= skipped -50, +50 lines =@@
  >x : [string, ...boolean[]]
- 
+
  declare let f12: (a: number, b: string, ...x: [...boolean[]]) => void;
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
 +>f12 : (a: number, b: string, ...x: boolean[]) => void
@@ -10,14 +10,14 @@
  >b : string
  >x : boolean[]
 @@= skipped -177, +177 lines =@@
- 
+
  f12(42, "hello");
  >f12(42, "hello") : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
 +>f12 : (a: number, b: string, ...x: boolean[]) => void
  >42 : 42
  >"hello" : "hello"
- 
+
  f12(42, "hello", true);
  >f12(42, "hello", true) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
@@ -25,7 +25,7 @@
  >42 : 42
  >"hello" : "hello"
  >true : true
- 
+
  f12(42, "hello", true, false);
  >f12(42, "hello", true, false) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
@@ -34,7 +34,7 @@
  >"hello" : "hello"
  >true : true
 @@= skipped -21, +21 lines =@@
- 
+
  f12(t1[0], t1[1], t1[2], t1[3]);
  >f12(t1[0], t1[1], t1[2], t1[3]) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
@@ -43,14 +43,14 @@
  >t1 : [number, string, ...boolean[]]
  >0 : 0
 @@= skipped -16, +16 lines =@@
- 
+
  f12(...t1);
  >f12(...t1) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
 +>f12 : (a: number, b: string, ...x: boolean[]) => void
  >...t1 : string | number | boolean
  >t1 : [number, string, ...boolean[]]
- 
+
  f12(42, ...t2);
  >f12(42, ...t2) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
@@ -58,7 +58,7 @@
  >42 : 42
  >...t2 : string | boolean
  >t2 : [string, ...boolean[]]
- 
+
  f12(42, "hello", ...t3);
  >f12(42, "hello", ...t3) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
@@ -67,7 +67,7 @@
  >"hello" : "hello"
  >...t3 : boolean
 @@= skipped -21, +21 lines =@@
- 
+
  f12(42, "hello", true, ...t4);
  >f12(42, "hello", true, ...t4) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void
@@ -76,7 +76,7 @@
  >"hello" : "hello"
  >true : true
 @@= skipped -9, +9 lines =@@
- 
+
  f12(42, "hello", true, ...t4, false, ...t3);
  >f12(42, "hello", true, ...t4, false, ...t3) : void
 ->f12 : (a: number, b: string, ...x: [...boolean[]]) => void

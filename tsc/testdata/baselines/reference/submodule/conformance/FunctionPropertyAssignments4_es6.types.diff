@@ -1,7 +1,7 @@
 --- old.FunctionPropertyAssignments4_es6.types
 +++ new.FunctionPropertyAssignments4_es6.types
 @@= skipped -1, +1 lines =@@
- 
+
  === FunctionPropertyAssignments4_es6.ts ===
  var v = { * }
 ->v : { ""(): any; }
@@ -9,4 +9,3 @@
 +>v : { : () => any; }
 +>{ * } : { : () => any; }
  > : () => any
- 

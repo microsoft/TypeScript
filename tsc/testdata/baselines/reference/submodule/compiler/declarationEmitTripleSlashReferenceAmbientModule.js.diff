@@ -1,6 +1,6 @@
 --- old.declarationEmitTripleSlashReferenceAmbientModule.js
 +++ new.declarationEmitTripleSlashReferenceAmbientModule.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitTripleSlashReferenceAmbientModule.ts] ////
 -
 -//// [index.d.ts]
@@ -29,5 +29,4 @@
 -export declare const thing: import("url").Url;
 -//// [usage3.d.ts]
 -export declare const thing: import("url").Url;
-@@= skipped --1, +1 lines =@@
 +<no content>

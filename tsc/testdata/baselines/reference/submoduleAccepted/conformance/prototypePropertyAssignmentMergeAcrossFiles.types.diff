@@ -1,12 +1,12 @@
 --- old.prototypePropertyAssignmentMergeAcrossFiles.types
 +++ new.prototypePropertyAssignmentMergeAcrossFiles.types
 @@= skipped -1, +1 lines =@@
- 
+
  === prototypePropertyAssignmentMergeAcrossFiles.js ===
  function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.a = 1
  >this.a = 1 : 1
  >this.a : any
@@ -15,7 +15,7 @@
  >a : any
  >1 : 1
  }
- 
+
  === other.js ===
  C.prototype.foo = function() { return this.a }
 ->C.prototype.foo = function() { return this.a } : () => number
@@ -34,4 +34,3 @@
 +>this.a : any
 +>this : any
 +>a : any
- 

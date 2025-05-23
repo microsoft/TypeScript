@@ -48,13 +48,14 @@
      }
 -    return ExportedClass4;
 -}());
--exports.ExportedClass4 = ExportedClass4;
++}
+ exports.ExportedClass4 = ExportedClass4;
 -
 -
 -//// [declarationEmitClassPrivateConstructor.d.ts]
 -export declare class ExportedClass1 {
 -    private constructor();
- }
+-}
 -export declare class ExportedClass2 {
 -    private data;
 -    private constructor();
@@ -69,4 +70,3 @@
 -    n: number;
 -    private constructor();
 -}
-+exports.ExportedClass4 = ExportedClass4;

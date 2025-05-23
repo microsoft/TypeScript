@@ -19,8 +19,8 @@
 +b.mts(26,3): error TS2339: Property 'default' does not exist on type '() => void'.
 +b.mts(27,14): error TS2339: Property 'default' does not exist on type '() => void'.
 +b.mts(28,10): error TS2339: Property 'default' does not exist on type '() => void'.
- 
- 
+
+
  ==== mod.cts (0 errors) ====
 @@= skipped -30, +24 lines =@@
      

@@ -1,7 +1,7 @@
 --- old.strictNullEmptyDestructuring.js
 +++ new.strictNullEmptyDestructuring.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [strictNullEmptyDestructuring.js]
  // Repro from #20873
 -var _a = null;

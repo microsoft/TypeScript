@@ -1,8 +1,8 @@
 --- old.tsxNamespacedTagName2.js
 +++ new.tsxNamespacedTagName2.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [a.js]
 -var a = React.createElement("svg:path", null);
 -var b = React.createElement("svg:path", null);

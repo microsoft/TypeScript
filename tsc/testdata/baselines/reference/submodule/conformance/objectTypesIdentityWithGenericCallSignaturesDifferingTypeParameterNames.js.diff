@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.js
 +++ new.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.js
 @@= skipped -103, +103 lines =@@
- 
+
  //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterNames.js]
  // object types are identical structurally
 -var A = /** @class */ (function () {

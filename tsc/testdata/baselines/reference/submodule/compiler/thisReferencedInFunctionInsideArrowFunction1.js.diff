@@ -2,7 +2,7 @@
 +++ new.thisReferencedInFunctionInsideArrowFunction1.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [thisReferencedInFunctionInsideArrowFunction1.js]
 -var foo = function (dummy) { };
 +var foo = (dummy) => { };

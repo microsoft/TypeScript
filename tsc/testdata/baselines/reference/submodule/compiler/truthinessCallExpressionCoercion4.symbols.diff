@@ -2,7 +2,7 @@
 +++ new.truthinessCallExpressionCoercion4.symbols
 @@= skipped -4, +4 lines =@@
  >fn : Symbol(fn, Decl(a.js, 0, 0))
- 
+
  if (typeof module === 'object' && module.exports) {
 ->module : Symbol(module, Decl(a.js, 2, 51))
 ->module.exports : Symbol(module.exports, Decl(a.js, 0, 0))
@@ -11,7 +11,7 @@
 +>module.exports : Symbol(fn, Decl(a.js, 0, 0))
 +>module : Symbol(module.exports)
 +>exports : Symbol(fn, Decl(a.js, 0, 0))
- 
+
      module.exports = fn;
 ->module.exports : Symbol(module.exports, Decl(a.js, 0, 0))
 ->module : Symbol(export=, Decl(a.js, 2, 51))
@@ -21,4 +21,3 @@
 +>exports : Symbol(fn, Decl(a.js, 0, 0))
  >fn : Symbol(fn, Decl(a.js, 0, 0))
  }
- 

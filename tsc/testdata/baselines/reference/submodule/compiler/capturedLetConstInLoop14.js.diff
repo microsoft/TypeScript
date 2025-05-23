@@ -1,8 +1,8 @@
 --- old.capturedLetConstInLoop14.js
 +++ new.capturedLetConstInLoop14.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [capturedLetConstInLoop14.js]
 -"use strict";
  function use(v) { }

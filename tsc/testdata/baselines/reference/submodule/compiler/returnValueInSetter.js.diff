@@ -1,8 +1,8 @@
 --- old.returnValueInSetter.js
 +++ new.returnValueInSetter.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [returnValueInSetter.js]
 -var f = /** @class */ (function () {
 -    function f() {

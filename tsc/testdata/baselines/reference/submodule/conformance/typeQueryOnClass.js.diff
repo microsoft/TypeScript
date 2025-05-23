@@ -2,7 +2,7 @@
 +++ new.typeQueryOnClass.js
 @@= skipped -58, +58 lines =@@
  var r4: typeof d;
- 
+
  //// [typeQueryOnClass.js]
 -var C = /** @class */ (function () {
 -    function C(x) {
@@ -13,7 +13,7 @@
          this.x = x;
 -        this.ia = 1;
 -        this.ib = function () { return _this.ia; };
-     }
+-    }
 -    C.foo = function (x) { };
 -    C.bar = function (x) { };
 -    Object.defineProperty(C, "sc", {
@@ -53,6 +53,7 @@
 -    C.sb = function () { return 1; };
 -    return C;
 -}());
++    }
 +    static foo(x) { }
 +    static bar(x) { }
 +    static sa = 1;

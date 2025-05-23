@@ -1,7 +1,7 @@
 --- old.functionLiteralForOverloads.js
 +++ new.functionLiteralForOverloads.js
 @@= skipped -24, +24 lines =@@
- 
+
  //// [functionLiteralForOverloads.js]
  // basic uses of function literals with overloads
 -var f = function (x) { return x; };

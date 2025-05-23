@@ -1,12 +1,12 @@
 --- old.declarationEmitWithDefaultAsComputedName2.types
 +++ new.declarationEmitWithDefaultAsComputedName2.types
 @@= skipped -27, +27 lines =@@
- 
+
  === main.ts ===
  import * as other2 from "./other";
 ->other2 : typeof other2
 +>other2 : typeof import("other")
- 
+
  export const obj = {
  >obj : { foo: number; }
 @@= skipped -9, +9 lines =@@
@@ -21,4 +21,3 @@
 +>default : Experiment<"foo">
  >name : "foo"
  >1 : 1
- 

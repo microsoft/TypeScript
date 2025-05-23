@@ -7,5 +7,4 @@
 ->I : Symbol(A.I, Decl(A.ts, 0, 10))
 +>I : Symbol(I, Decl(A.ts, 0, 10))
  }
- 
- 
+

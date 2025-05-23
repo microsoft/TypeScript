@@ -1,8 +1,8 @@
 --- old.overloadEquivalenceWithStatics.js
 +++ new.overloadEquivalenceWithStatics.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [overloadEquivalenceWithStatics.js]
 -var A1 = /** @class */ (function () {
 -    function A1() {

@@ -1,7 +1,7 @@
 --- old.iterableArrayPattern4.js
 +++ new.iterableArrayPattern4.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [iterableArrayPattern4.js]
  class Bar {
 +    x;

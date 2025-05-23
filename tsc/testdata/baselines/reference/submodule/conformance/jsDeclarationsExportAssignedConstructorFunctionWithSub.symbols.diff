@@ -10,7 +10,7 @@
 +>module : Symbol(module.exports)
  >exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
  >p : Symbol(p, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 27))
- 
+
      this.t = 12 + p;
 ->this.t : Symbol(exports.t, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 31))
 ->this : Symbol(exports, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 3, 16))
@@ -26,7 +26,7 @@
 +>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
- 
+
      this.instance = new module.exports(10);
 ->this.instance : Symbol(Sub.instance, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 6, 33))
 ->this : Symbol(Sub, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 6, 20))
@@ -49,4 +49,3 @@
 +>module.exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(jsDeclarationsExportAssignedConstructorFunctionWithSub.js, 0, 0))
- 

@@ -2,7 +2,7 @@
 +++ new.argumentsAsPropertyName.symbols
 @@= skipped -35, +35 lines =@@
  >x : Symbol(x, Decl(argumentsAsPropertyName.ts, 11, 13))
- 
+
          [1, 2, 3].forEach(function(j) { use(x); })
 ->[1, 2, 3].forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 ->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))

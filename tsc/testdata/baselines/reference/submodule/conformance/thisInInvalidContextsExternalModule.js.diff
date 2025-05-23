@@ -1,7 +1,7 @@
 --- old.thisInInvalidContextsExternalModule.js
 +++ new.thisInInvalidContextsExternalModule.js
 @@= skipped -46, +46 lines =@@
- 
+
  //// [thisInInvalidContextsExternalModule.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

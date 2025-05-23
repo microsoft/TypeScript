@@ -2,11 +2,11 @@
 +++ new.typeGuardsOnClassProperty.types
 @@= skipped -59, +59 lines =@@
  }
- 
+
  var o: {
 ->o : { prop1: number | string; prop2: boolean | string; }
 +>o : { prop1: string | number; prop2: string | boolean; }
- 
+
      prop1: number|string;
  >prop1 : string | number
 @@= skipped -25, +25 lines =@@
@@ -24,12 +24,12 @@
 +>o : { prop1: string | number; prop2: string | boolean; }
  >prop1 : string
  >toLowerCase : () => string
- 
+
  var prop1 = o.prop1;
  >prop1 : string | number
  >o.prop1 : string | number
 ->o : { prop1: number | string; prop2: boolean | string; }
 +>o : { prop1: string | number; prop2: string | boolean; }
  >prop1 : string | number
- 
+
  if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }

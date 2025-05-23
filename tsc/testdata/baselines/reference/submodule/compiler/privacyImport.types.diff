@@ -2,7 +2,7 @@
 +++ new.privacyImport.types
 @@= skipped -66, +66 lines =@@
  >m1_M1_public : typeof m1_M1_public
- 
+
      export var m1_im1_private_v1_public = m1_im1_private.c1;
 ->m1_im1_private_v1_public : typeof m1_im1_private.c1
 ->m1_im1_private.c1 : typeof m1_im1_private.c1
@@ -11,7 +11,7 @@
  >m1_im1_private : typeof m1_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im1_private_v2_public = new m1_im1_private.c1();
 ->m1_im1_private_v2_public : m1_im1_private.c1
 ->new m1_im1_private.c1() : m1_im1_private.c1
@@ -22,7 +22,7 @@
  >m1_im1_private : typeof m1_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im1_private_v3_public = m1_im1_private.f1;
 ->m1_im1_private_v3_public : () => m1_im1_private.c1
 ->m1_im1_private.f1 : () => m1_im1_private.c1
@@ -31,7 +31,7 @@
  >m1_im1_private : typeof m1_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
+
      export var m1_im1_private_v4_public = m1_im1_private.f1();
 ->m1_im1_private_v4_public : m1_im1_private.c1
 ->m1_im1_private.f1() : m1_im1_private.c1
@@ -42,7 +42,7 @@
  >m1_im1_private : typeof m1_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
+
      var m1_im1_private_v1_private = m1_im1_private.c1;
 ->m1_im1_private_v1_private : typeof m1_im1_private.c1
 ->m1_im1_private.c1 : typeof m1_im1_private.c1
@@ -51,7 +51,7 @@
  >m1_im1_private : typeof m1_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im1_private_v2_private = new m1_im1_private.c1();
 ->m1_im1_private_v2_private : m1_im1_private.c1
 ->new m1_im1_private.c1() : m1_im1_private.c1
@@ -62,7 +62,7 @@
  >m1_im1_private : typeof m1_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im1_private_v3_private = m1_im1_private.f1;
 ->m1_im1_private_v3_private : () => m1_im1_private.c1
 ->m1_im1_private.f1 : () => m1_im1_private.c1
@@ -71,7 +71,7 @@
  >m1_im1_private : typeof m1_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
+
      var m1_im1_private_v4_private = m1_im1_private.f1();
 ->m1_im1_private_v4_private : m1_im1_private.c1
 ->m1_im1_private.f1() : m1_im1_private.c1
@@ -82,12 +82,12 @@
  >m1_im1_private : typeof m1_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
- 
+
+
      import m1_im2_private = m1_M2_private;
 @@= skipped -57, +57 lines =@@
  >m1_M2_private : typeof m1_M2_private
- 
+
      export var m1_im2_private_v1_public = m1_im2_private.c1;
 ->m1_im2_private_v1_public : typeof m1_im2_private.c1
 ->m1_im2_private.c1 : typeof m1_im2_private.c1
@@ -96,7 +96,7 @@
  >m1_im2_private : typeof m1_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im2_private_v2_public = new m1_im2_private.c1();
 ->m1_im2_private_v2_public : m1_im2_private.c1
 ->new m1_im2_private.c1() : m1_im2_private.c1
@@ -107,7 +107,7 @@
  >m1_im2_private : typeof m1_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im2_private_v3_public = m1_im2_private.f1;
 ->m1_im2_private_v3_public : () => m1_im2_private.c1
 ->m1_im2_private.f1 : () => m1_im2_private.c1
@@ -116,7 +116,7 @@
  >m1_im2_private : typeof m1_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      export var m1_im2_private_v4_public = m1_im2_private.f1();
 ->m1_im2_private_v4_public : m1_im2_private.c1
 ->m1_im2_private.f1() : m1_im2_private.c1
@@ -127,7 +127,7 @@
  >m1_im2_private : typeof m1_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      var m1_im2_private_v1_private = m1_im2_private.c1;
 ->m1_im2_private_v1_private : typeof m1_im2_private.c1
 ->m1_im2_private.c1 : typeof m1_im2_private.c1
@@ -136,7 +136,7 @@
  >m1_im2_private : typeof m1_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im2_private_v2_private = new m1_im2_private.c1();
 ->m1_im2_private_v2_private : m1_im2_private.c1
 ->new m1_im2_private.c1() : m1_im2_private.c1
@@ -147,7 +147,7 @@
  >m1_im2_private : typeof m1_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im2_private_v3_private = m1_im2_private.f1;
 ->m1_im2_private_v3_private : () => m1_im2_private.c1
 ->m1_im2_private.f1 : () => m1_im2_private.c1
@@ -156,7 +156,7 @@
  >m1_im2_private : typeof m1_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      var m1_im2_private_v4_private = m1_im2_private.f1();
 ->m1_im2_private_v4_private : m1_im2_private.c1
 ->m1_im2_private.f1() : m1_im2_private.c1
@@ -167,12 +167,12 @@
  >m1_im2_private : typeof m1_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      //import m1_im3_private = require("m1_M3_public");
      //export var m1_im3_private_v1_public = m1_im3_private.c1;
 @@= skipped -149, +149 lines =@@
  >m2_M1_public : typeof m2_M1_public
- 
+
      export var m1_im1_private_v1_public = m1_im1_private.c1;
 ->m1_im1_private_v1_public : typeof m1_im1_private.c1
 ->m1_im1_private.c1 : typeof m1_im1_private.c1
@@ -181,7 +181,7 @@
  >m1_im1_private : typeof m2_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im1_private_v2_public = new m1_im1_private.c1();
 ->m1_im1_private_v2_public : m1_im1_private.c1
 ->new m1_im1_private.c1() : m1_im1_private.c1
@@ -192,7 +192,7 @@
  >m1_im1_private : typeof m2_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im1_private_v3_public = m1_im1_private.f1;
 ->m1_im1_private_v3_public : () => m1_im1_private.c1
 ->m1_im1_private.f1 : () => m1_im1_private.c1
@@ -201,7 +201,7 @@
  >m1_im1_private : typeof m2_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
+
      export var m1_im1_private_v4_public = m1_im1_private.f1();
 ->m1_im1_private_v4_public : m1_im1_private.c1
 ->m1_im1_private.f1() : m1_im1_private.c1
@@ -212,7 +212,7 @@
  >m1_im1_private : typeof m2_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
+
      var m1_im1_private_v1_private = m1_im1_private.c1;
 ->m1_im1_private_v1_private : typeof m1_im1_private.c1
 ->m1_im1_private.c1 : typeof m1_im1_private.c1
@@ -221,7 +221,7 @@
  >m1_im1_private : typeof m2_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im1_private_v2_private = new m1_im1_private.c1();
 ->m1_im1_private_v2_private : m1_im1_private.c1
 ->new m1_im1_private.c1() : m1_im1_private.c1
@@ -232,7 +232,7 @@
  >m1_im1_private : typeof m2_M1_public
 ->c1 : typeof m1_im1_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im1_private_v3_private = m1_im1_private.f1;
 ->m1_im1_private_v3_private : () => m1_im1_private.c1
 ->m1_im1_private.f1 : () => m1_im1_private.c1
@@ -241,7 +241,7 @@
  >m1_im1_private : typeof m2_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
+
      var m1_im1_private_v4_private = m1_im1_private.f1();
 ->m1_im1_private_v4_private : m1_im1_private.c1
 ->m1_im1_private.f1() : m1_im1_private.c1
@@ -252,12 +252,12 @@
  >m1_im1_private : typeof m2_M1_public
 ->f1 : () => m1_im1_private.c1
 +>f1 : () => c1
- 
- 
+
+
      import m1_im2_private = m2_M2_private;
 @@= skipped -57, +57 lines =@@
  >m2_M2_private : typeof m2_M2_private
- 
+
      export var m1_im2_private_v1_public = m1_im2_private.c1;
 ->m1_im2_private_v1_public : typeof m1_im2_private.c1
 ->m1_im2_private.c1 : typeof m1_im2_private.c1
@@ -266,7 +266,7 @@
  >m1_im2_private : typeof m2_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im2_private_v2_public = new m1_im2_private.c1();
 ->m1_im2_private_v2_public : m1_im2_private.c1
 ->new m1_im2_private.c1() : m1_im2_private.c1
@@ -277,7 +277,7 @@
  >m1_im2_private : typeof m2_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      export var m1_im2_private_v3_public = m1_im2_private.f1;
 ->m1_im2_private_v3_public : () => m1_im2_private.c1
 ->m1_im2_private.f1 : () => m1_im2_private.c1
@@ -286,7 +286,7 @@
  >m1_im2_private : typeof m2_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      export var m1_im2_private_v4_public = m1_im2_private.f1();
 ->m1_im2_private_v4_public : m1_im2_private.c1
 ->m1_im2_private.f1() : m1_im2_private.c1
@@ -297,7 +297,7 @@
  >m1_im2_private : typeof m2_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      var m1_im2_private_v1_private = m1_im2_private.c1;
 ->m1_im2_private_v1_private : typeof m1_im2_private.c1
 ->m1_im2_private.c1 : typeof m1_im2_private.c1
@@ -306,7 +306,7 @@
  >m1_im2_private : typeof m2_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im2_private_v2_private = new m1_im2_private.c1();
 ->m1_im2_private_v2_private : m1_im2_private.c1
 ->new m1_im2_private.c1() : m1_im2_private.c1
@@ -317,7 +317,7 @@
  >m1_im2_private : typeof m2_M2_private
 ->c1 : typeof m1_im2_private.c1
 +>c1 : typeof c1
- 
+
      var m1_im2_private_v3_private = m1_im2_private.f1;
 ->m1_im2_private_v3_private : () => m1_im2_private.c1
 ->m1_im2_private.f1 : () => m1_im2_private.c1
@@ -326,7 +326,7 @@
  >m1_im2_private : typeof m2_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      var m1_im2_private_v4_private = m1_im2_private.f1();
 ->m1_im2_private_v4_private : m1_im2_private.c1
 ->m1_im2_private.f1() : m1_im2_private.c1
@@ -337,12 +337,12 @@
  >m1_im2_private : typeof m2_M2_private
 ->f1 : () => m1_im2_private.c1
 +>f1 : () => c1
- 
+
      //import m1_im3_private = require("m2_M3_public");
      //export var m1_im3_private_v1_public = m1_im3_private.c1;
 @@= skipped -148, +148 lines =@@
  >glo_M1_public : typeof glo_M1_public
- 
+
  export var glo_im1_private_v1_public = glo_im1_private.c1;
 ->glo_im1_private_v1_public : typeof glo_im1_private.c1
 ->glo_im1_private.c1 : typeof glo_im1_private.c1
@@ -351,7 +351,7 @@
  >glo_im1_private : typeof glo_M1_public
 ->c1 : typeof glo_im1_private.c1
 +>c1 : typeof c1
- 
+
  export var glo_im1_private_v2_public = new glo_im1_private.c1();
 ->glo_im1_private_v2_public : glo_im1_private.c1
 ->new glo_im1_private.c1() : glo_im1_private.c1
@@ -362,7 +362,7 @@
  >glo_im1_private : typeof glo_M1_public
 ->c1 : typeof glo_im1_private.c1
 +>c1 : typeof c1
- 
+
  export var glo_im1_private_v3_public = glo_im1_private.f1;
 ->glo_im1_private_v3_public : () => glo_im1_private.c1
 ->glo_im1_private.f1 : () => glo_im1_private.c1
@@ -371,7 +371,7 @@
  >glo_im1_private : typeof glo_M1_public
 ->f1 : () => glo_im1_private.c1
 +>f1 : () => c1
- 
+
  export var glo_im1_private_v4_public = glo_im1_private.f1();
 ->glo_im1_private_v4_public : glo_im1_private.c1
 ->glo_im1_private.f1() : glo_im1_private.c1
@@ -382,7 +382,7 @@
  >glo_im1_private : typeof glo_M1_public
 ->f1 : () => glo_im1_private.c1
 +>f1 : () => c1
- 
+
  var glo_im1_private_v1_private = glo_im1_private.c1;
 ->glo_im1_private_v1_private : typeof glo_im1_private.c1
 ->glo_im1_private.c1 : typeof glo_im1_private.c1
@@ -391,7 +391,7 @@
  >glo_im1_private : typeof glo_M1_public
 ->c1 : typeof glo_im1_private.c1
 +>c1 : typeof c1
- 
+
  var glo_im1_private_v2_private = new glo_im1_private.c1();
 ->glo_im1_private_v2_private : glo_im1_private.c1
 ->new glo_im1_private.c1() : glo_im1_private.c1
@@ -402,7 +402,7 @@
  >glo_im1_private : typeof glo_M1_public
 ->c1 : typeof glo_im1_private.c1
 +>c1 : typeof c1
- 
+
  var glo_im1_private_v3_private = glo_im1_private.f1;
 ->glo_im1_private_v3_private : () => glo_im1_private.c1
 ->glo_im1_private.f1 : () => glo_im1_private.c1
@@ -411,7 +411,7 @@
  >glo_im1_private : typeof glo_M1_public
 ->f1 : () => glo_im1_private.c1
 +>f1 : () => c1
- 
+
  var glo_im1_private_v4_private = glo_im1_private.f1();
 ->glo_im1_private_v4_private : glo_im1_private.c1
 ->glo_im1_private.f1() : glo_im1_private.c1
@@ -422,12 +422,12 @@
  >glo_im1_private : typeof glo_M1_public
 ->f1 : () => glo_im1_private.c1
 +>f1 : () => c1
- 
- 
+
+
  //import glo_im2_private = require("glo_M2_public");
 @@= skipped -67, +67 lines =@@
  >glo_M3_private : typeof glo_M3_private
- 
+
  export var glo_im3_private_v1_public = glo_im3_private.c1;
 ->glo_im3_private_v1_public : typeof glo_im3_private.c1
 ->glo_im3_private.c1 : typeof glo_im3_private.c1
@@ -436,7 +436,7 @@
  >glo_im3_private : typeof glo_M3_private
 ->c1 : typeof glo_im3_private.c1
 +>c1 : typeof c1
- 
+
  export var glo_im3_private_v2_public = new glo_im3_private.c1();
 ->glo_im3_private_v2_public : glo_im3_private.c1
 ->new glo_im3_private.c1() : glo_im3_private.c1
@@ -447,7 +447,7 @@
  >glo_im3_private : typeof glo_M3_private
 ->c1 : typeof glo_im3_private.c1
 +>c1 : typeof c1
- 
+
  export var glo_im3_private_v3_public = glo_im3_private.f1;
 ->glo_im3_private_v3_public : () => glo_im3_private.c1
 ->glo_im3_private.f1 : () => glo_im3_private.c1
@@ -456,7 +456,7 @@
  >glo_im3_private : typeof glo_M3_private
 ->f1 : () => glo_im3_private.c1
 +>f1 : () => c1
- 
+
  export var glo_im3_private_v4_public = glo_im3_private.f1();
 ->glo_im3_private_v4_public : glo_im3_private.c1
 ->glo_im3_private.f1() : glo_im3_private.c1
@@ -467,7 +467,7 @@
  >glo_im3_private : typeof glo_M3_private
 ->f1 : () => glo_im3_private.c1
 +>f1 : () => c1
- 
+
  var glo_im3_private_v1_private = glo_im3_private.c1;
 ->glo_im3_private_v1_private : typeof glo_im3_private.c1
 ->glo_im3_private.c1 : typeof glo_im3_private.c1
@@ -476,7 +476,7 @@
  >glo_im3_private : typeof glo_M3_private
 ->c1 : typeof glo_im3_private.c1
 +>c1 : typeof c1
- 
+
  var glo_im3_private_v2_private = new glo_im3_private.c1();
 ->glo_im3_private_v2_private : glo_im3_private.c1
 ->new glo_im3_private.c1() : glo_im3_private.c1
@@ -487,7 +487,7 @@
  >glo_im3_private : typeof glo_M3_private
 ->c1 : typeof glo_im3_private.c1
 +>c1 : typeof c1
- 
+
  var glo_im3_private_v3_private = glo_im3_private.f1;
 ->glo_im3_private_v3_private : () => glo_im3_private.c1
 ->glo_im3_private.f1 : () => glo_im3_private.c1
@@ -496,7 +496,7 @@
  >glo_im3_private : typeof glo_M3_private
 ->f1 : () => glo_im3_private.c1
 +>f1 : () => c1
- 
+
  var glo_im3_private_v4_private = glo_im3_private.f1();
 ->glo_im3_private_v4_private : glo_im3_private.c1
 ->glo_im3_private.f1() : glo_im3_private.c1
@@ -507,6 +507,6 @@
  >glo_im3_private : typeof glo_M3_private
 ->f1 : () => glo_im3_private.c1
 +>f1 : () => c1
- 
+
  //import glo_im4_private = require("glo_M4_private");
  //export var glo_im4_private_v1_public = glo_im4_private.c1;

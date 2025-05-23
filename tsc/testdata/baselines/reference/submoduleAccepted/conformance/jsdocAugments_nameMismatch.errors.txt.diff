@@ -1,6 +1,6 @@
 --- old.jsdocAugments_nameMismatch.errors.txt
 +++ new.jsdocAugments_nameMismatch.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/b.js(4,15): error TS8023: JSDoc '@augments A' does not match the 'extends B' clause.
 -
 -
@@ -13,5 +13,4 @@
 -!!! error TS8023: JSDoc '@augments A' does not match the 'extends B' clause.
 -    class C extends B {}
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

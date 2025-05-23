@@ -1,7 +1,7 @@
 --- old.typePredicateInLoop.js
 +++ new.typePredicateInLoop.js
 @@= skipped -24, +24 lines =@@
- 
+
  //// [typePredicateInLoop.js]
  "use strict";
 -// Repro from #12101

@@ -11,11 +11,11 @@
 +>{ a: "a" } : { a: string; }
 +>a : string
  >"a" : "a"
- 
+
  /** @type {(m: string) => string} */
 @@= skipped -18, +18 lines =@@
  >0 : 0
- 
+
  const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
 ->t6 : [number, number]
 ->([1, 2]) : [number, number]
@@ -25,4 +25,3 @@
 +>[1, 2] : number[]
  >1 : 1
  >2 : 2
- 

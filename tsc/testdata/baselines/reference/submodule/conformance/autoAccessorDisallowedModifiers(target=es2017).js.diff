@@ -1,8 +1,8 @@
 --- old.autoAccessorDisallowedModifiers(target=es2017).js
 +++ new.autoAccessorDisallowedModifiers(target=es2017).js
 @@= skipped -41, +41 lines =@@
- 
- 
+
+
  //// [autoAccessorDisallowedModifiers.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
@@ -68,13 +68,15 @@
 -    }
 -    get g() { return __classPrivateFieldGet(this, _C2_g_accessor_storage, "f"); }
 -    set g(value) { __classPrivateFieldSet(this, _C2_g_accessor_storage, value, "f"); }
-+    accessor g;
- }
+-}
 -_C2_g_accessor_storage = new WeakMap();
 -class C3 {
-+accessor class C3 {
- }
+-}
 -accessor var E1;
++    accessor g;
++}
++accessor class C3 {
++}
 +var E1;
  (function (E1) {
  })(E1 || (E1 = {}));

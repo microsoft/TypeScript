@@ -105,12 +105,9 @@
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
-+        super.w();
-+    }
-+    static {
-         let Reflect;
-         (function (Reflect) {
-         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+-        let Reflect;
+-        (function (Reflect) {
+-        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
@@ -124,6 +121,12 @@
 -        Reflect.get(_b, "w", _a).call(_a);
 -    })(),
 -    (() => {
++        super.w();
++    }
++    static {
++        let Reflect;
++        (function (Reflect) {
++        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {

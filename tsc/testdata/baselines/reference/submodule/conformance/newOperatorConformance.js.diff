@@ -1,8 +1,8 @@
 --- old.newOperatorConformance.js
 +++ new.newOperatorConformance.js
 @@= skipped -64, +64 lines =@@
- 
- 
+
+
  //// [newOperatorConformance.js]
 -var C0 = /** @class */ (function () {
 -    function C0() {

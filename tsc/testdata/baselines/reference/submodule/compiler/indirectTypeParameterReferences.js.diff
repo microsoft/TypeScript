@@ -1,8 +1,8 @@
 --- old.indirectTypeParameterReferences.js
 +++ new.indirectTypeParameterReferences.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [indirectTypeParameterReferences.js]
 -// Repro from #19043
 -var flowtypes = function (b) {

@@ -2,7 +2,7 @@
 +++ new.accessorAccidentalCallDiagnostic.symbols
 @@= skipped -5, +5 lines =@@
  >Test24554 : Symbol(Test24554, Decl(accessorAccidentalCallDiagnostic.ts, 0, 0))
- 
+
      get property(): number { return 1; }
 ->property : Symbol(Test24554.property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
 +>property : Symbol(property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
@@ -11,7 +11,7 @@
  >test24554 : Symbol(test24554, Decl(accessorAccidentalCallDiagnostic.ts, 3, 1))
 @@= skipped -8, +8 lines =@@
  >Test24554 : Symbol(Test24554, Decl(accessorAccidentalCallDiagnostic.ts, 0, 0))
- 
+
      return x.property();
 ->x.property : Symbol(Test24554.property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
 +>x.property : Symbol(property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
@@ -19,4 +19,3 @@
 ->property : Symbol(Test24554.property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
 +>property : Symbol(property, Decl(accessorAccidentalCallDiagnostic.ts, 1, 17))
  }
- 

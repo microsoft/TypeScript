@@ -2,7 +2,7 @@
 +++ new.classConstructorParametersAccessibility3.js
 @@= skipped -15, +15 lines =@@
  d.p;  // public, OK
- 
+
  //// [classConstructorParametersAccessibility3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,11 +21,8 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base(p) {
-+class Base {
-+    p;
-+    constructor(p) {
-         this.p = p;
-     }
+-        this.p = p;
+-    }
 -    return Base;
 -}());
 -var Derived = /** @class */ (function (_super) {
@@ -35,6 +32,14 @@
 -        _this.p = p;
 -        _this.p; // OK
 -        return _this;
+-    }
+-    return Derived;
+-}(Base));
++class Base {
++    p;
++    constructor(p) {
++        this.p = p;
++    }
 +}
 +class Derived extends Base {
 +    p;
@@ -42,9 +47,7 @@
 +        super(p);
 +        this.p = p;
 +        this.p; // OK
-     }
--    return Derived;
--}(Base));
++    }
 +}
  var d;
  d.p; // public, OK

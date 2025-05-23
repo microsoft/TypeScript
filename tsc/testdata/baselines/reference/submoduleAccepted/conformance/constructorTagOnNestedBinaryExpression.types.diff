@@ -16,7 +16,7 @@
 +>b : any
 +>function c () {    console.log(this)} : () => void
 +>c : () => void
- 
+
      console.log(this)
  >console.log(this) : void
  >console.log : (...data: any[]) => void
@@ -24,6 +24,5 @@
  >log : (...data: any[]) => void
 ->this : this
 +>this : any
- 
+
  };
- 

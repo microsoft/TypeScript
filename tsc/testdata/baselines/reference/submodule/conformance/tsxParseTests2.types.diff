@@ -2,7 +2,7 @@
 +++ new.tsxParseTests2.types
 @@= skipped -8, +8 lines =@@
  }
- 
+
  var x = </**/div></div>;
 ->x : JSX.Element
 -></**/div></div> : JSX.Element
@@ -10,4 +10,3 @@
 +></**/div></div> : Element
  >div : any
  >div : any
- 

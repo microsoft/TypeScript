@@ -1,8 +1,8 @@
 --- old.importCallExpressionAsyncES5UMD.js
 +++ new.importCallExpressionAsyncES5UMD.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [test.js]
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -38,28 +38,13 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
-+exports.fn = fn;
-+async function fn() {
-+    const req = await Promise.resolve().then(() => require('./test')); // ONE
-+}
-+class cl1 {
-+    async m() {
-+        const req = await Promise.resolve().then(() => require('./test')); // TWO
-     }
+-    }
 -};
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
 -        if (v !== undefined) module.exports = v;
-+}
-+exports.cl1 = cl1;
-+exports.obj = {
-+    m: async () => {
-+        const req = await Promise.resolve().then(() => require('./test')); // THREE
-     }
+-    }
 -    else if (typeof define === "function" && define.amd) {
 -        define(["require", "exports"], factory);
 -    }
@@ -85,6 +70,23 @@
 -    }
 -    var cl1 = /** @class */ (function () {
 -        function cl1() {
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
++exports.fn = fn;
++async function fn() {
++    const req = await Promise.resolve().then(() => require('./test')); // ONE
++}
++class cl1 {
++    async m() {
++        const req = await Promise.resolve().then(() => require('./test')); // TWO
++    }
++}
++exports.cl1 = cl1;
++exports.obj = {
++    m: async () => {
++        const req = await Promise.resolve().then(() => require('./test')); // THREE
++    }
 +};
 +class cl2 {
 +    p = {

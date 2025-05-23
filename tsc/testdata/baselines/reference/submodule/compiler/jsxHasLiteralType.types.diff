@@ -1,12 +1,12 @@
 --- old.jsxHasLiteralType.types
 +++ new.jsxHasLiteralType.types
 @@= skipped -1, +1 lines =@@
- 
+
  === jsxHasLiteralType.tsx ===
  import * as React from "react";
 ->React : typeof React
 +>React : typeof __React
- 
+
  interface Props {
      x?: "a" | "b";
 @@= skipped -8, +8 lines =@@
@@ -19,7 +19,7 @@
 +>React.Component : Component<P, {}>
 +>React : typeof __React
 +>Component : typeof Component
- 
+
  const m = <MyComponent x="a"/>
 ->m : JSX.Element
 -><MyComponent x="a"/> : JSX.Element
@@ -27,4 +27,3 @@
 +><MyComponent x="a"/> : Element
  >MyComponent : typeof MyComponent
  >x : "a"
- 

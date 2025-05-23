@@ -1,7 +1,7 @@
 --- old.unusedVariablesWithUnderscoreInForOfLoop.js
 +++ new.unusedVariablesWithUnderscoreInForOfLoop.js
 @@= skipped -32, +32 lines =@@
- 
+
  //// [unusedVariablesWithUnderscoreInForOfLoop.js]
  function t1() {
 -    for (var _i = 0, _c = [['key', 1]]; _i < _c.length; _i++) {

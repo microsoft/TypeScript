@@ -1,8 +1,8 @@
 --- old.partiallyAnnotatedFunctionInferenceWithTypeParameter.js
 +++ new.partiallyAnnotatedFunctionInferenceWithTypeParameter.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [partiallyAnnotatedFunctionInferenceWithTypeParameter.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

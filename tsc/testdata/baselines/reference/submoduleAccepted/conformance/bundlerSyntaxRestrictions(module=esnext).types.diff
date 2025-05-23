@@ -2,11 +2,11 @@
 +++ new.bundlerSyntaxRestrictions(module=esnext).types
 @@= skipped -17, +17 lines =@@
  >"path" : typeof import("path")
- 
+
      import fs = require("fs"); // ok
 ->fs : typeof fs
 +>fs : typeof import("fs")
- 
+
      namespace path {
  >path : typeof path
 @@= skipped -15, +15 lines =@@
@@ -16,7 +16,7 @@
 ->import("./a") : Promise<typeof _>
 +>import("./a") : Promise<typeof import("/a")>
  >"./a" : "./a"
- 
+
  const _ = require("./a");
 ->_ : typeof _
 ->require("./a") : typeof _
@@ -24,18 +24,18 @@
 +>require("./a") : typeof import("/a")
  >require : (...args: any[]) => any
  >"./a" : "./a"
- 
+
  _.a; // any
  >_.a : "a"
 ->_ : typeof _
 +>_ : typeof import("/a")
  >a : "a"
- 
+
  === /main.ts ===
  import {} from "./a";
  import _ = require("./a"); // Error in esnext
 ->_ : typeof _
 +>_ : typeof import("/a")
- 
+
  export = {}; // Error
  >{} : {}

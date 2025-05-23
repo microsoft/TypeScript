@@ -1,8 +1,8 @@
 --- old.typePredicateTopLevelTypeParameter.js
 +++ new.typePredicateTopLevelTypeParameter.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [typePredicateTopLevelTypeParameter.js]
 -"use strict";
  // Repro from #51980

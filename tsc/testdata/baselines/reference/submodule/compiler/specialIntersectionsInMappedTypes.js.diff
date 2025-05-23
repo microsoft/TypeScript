@@ -1,8 +1,8 @@
 --- old.specialIntersectionsInMappedTypes.js
 +++ new.specialIntersectionsInMappedTypes.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [specialIntersectionsInMappedTypes.js]
 -"use strict";
 -// Repro from #50683

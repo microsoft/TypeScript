@@ -1,7 +1,7 @@
 --- old.nodeModulesExportsSpecifierGenerationConditions(module=nodenext).js
 +++ new.nodeModulesExportsSpecifierGenerationConditions(module=nodenext).js
 @@= skipped -34, +34 lines =@@
- 
+
  //// [index.js]
  export const a = (await import("inner")).x();
 -

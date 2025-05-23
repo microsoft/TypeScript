@@ -1,8 +1,8 @@
 --- old.thisTypeInObjectLiterals.js
 +++ new.thisTypeInObjectLiterals.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [thisTypeInObjectLiterals.js]
 -var o = {
 +let o = {

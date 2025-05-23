@@ -10,7 +10,7 @@
 +        let dis = this;
          return dis.a != null && dis.b != null && dis.c != null;
      }
- };
+-};
 -
 -
 -//// [declarationEmitThisPredicates02.d.ts]
@@ -21,4 +21,4 @@
 -}
 -export declare const obj: {
 -    m(): this is Foo;
--};
+ };

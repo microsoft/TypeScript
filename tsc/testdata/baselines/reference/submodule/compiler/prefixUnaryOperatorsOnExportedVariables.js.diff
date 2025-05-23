@@ -2,7 +2,7 @@
 +++ new.prefixUnaryOperatorsOnExportedVariables.js
 @@= skipped -31, +31 lines =@@
  }
- 
+
  //// [prefixUnaryOperatorsOnExportedVariables.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

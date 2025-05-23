@@ -1,7 +1,7 @@
 --- old.parameterDestructuringObjectLiteral.js
 +++ new.parameterDestructuringObjectLiteral.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [parameterDestructuringObjectLiteral.js]
  // Repro from #22644
 -var fn1 = function (options) { };

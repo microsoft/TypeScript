@@ -1,8 +1,8 @@
 --- old.noUncheckedIndexedAccessDestructuring.js
 +++ new.noUncheckedIndexedAccessDestructuring.js
 @@= skipped -75, +75 lines =@@
- 
- 
+
+
  //// [noUncheckedIndexedAccessDestructuring.js]
 -"use strict";
 -var __rest = (this && this.__rest) || function (s, e) {

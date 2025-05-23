@@ -1,11 +1,11 @@
 --- old.localTypeParameterInferencePriority.types
 +++ new.localTypeParameterInferencePriority.types
 @@= skipped -18, +18 lines =@@
- 
+
      // Removing this line, removes the error 
      getRows<C extends keyof S>(): Array<UnrollOnHover<Pick<S, C>>> {
 ->getRows : <C extends keyof S>() => Array<UnrollOnHover<Pick<S, C>>>
 +>getRows : <C extends keyof S>() => UnrollOnHover<Pick<S, C>>[]
- 
+
          return null!
  >null! : null

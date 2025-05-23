@@ -1,7 +1,7 @@
 --- old.usingDeclarationsWithLegacyClassDecorators.1(module=commonjs,target=es2015).js
 +++ new.usingDeclarationsWithLegacyClassDecorators.1(module=commonjs,target=es2015).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [usingDeclarationsWithLegacyClassDecorators.1.js]
  "use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

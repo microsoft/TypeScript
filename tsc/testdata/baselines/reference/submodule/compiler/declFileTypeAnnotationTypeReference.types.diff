@@ -1,13 +1,13 @@
 --- old.declFileTypeAnnotationTypeReference.types
 +++ new.declFileTypeAnnotationTypeReference.types
 @@= skipped -35, +35 lines =@@
- 
+
  // Qualified name
  function foo3(): m.c {
 ->foo3 : () => m.c
 +>foo3 : () => c
  >m : any
- 
+
      return new m.c();
 ->new m.c() : m.c
 ->m.c : typeof m.c
@@ -20,7 +20,7 @@
  function foo4() {
 ->foo4 : () => m.c
 +>foo4 : () => c
- 
+
      return new m.c();
 ->new m.c() : m.c
 ->m.c : typeof m.c
@@ -30,16 +30,16 @@
 ->c : typeof m.c
 +>c : typeof c
  }
- 
+
  // Just the name with type arguments
 @@= skipped -37, +37 lines =@@
- 
+
  // Qualified name with type arguments
  function foo7(): m.g<number> {
 ->foo7 : () => m.g<number>
 +>foo7 : () => g<number>
  >m : any
- 
+
      return new m.g<number>();
 ->new m.g<number>() : m.g<number>
 ->m.g : typeof m.g
@@ -52,7 +52,7 @@
  function foo8() {
 ->foo8 : () => m.g<number>
 +>foo8 : () => g<number>
- 
+
      return new m.g<number>();
 ->new m.g<number>() : m.g<number>
 ->m.g : typeof m.g

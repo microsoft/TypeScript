@@ -1,7 +1,7 @@
 --- old.optionalChainWithInstantiationExpression1(target=es2020).types
 +++ new.optionalChainWithInstantiationExpression1(target=es2020).types
 @@= skipped -23, +23 lines =@@
- 
+
  a?.b<c>.d;
  >a?.b<c>.d : number
 ->a?.b<c> : { new (x: unknown): A.b<unknown>; d: number; prototype: A.b<any>; }
@@ -12,7 +12,7 @@
 ->b : typeof A.b
 +>b : typeof b
  >d : number
- 
+
  a?.b.d
  >a?.b.d : number
 ->a?.b : typeof A.b
@@ -21,4 +21,3 @@
 ->b : typeof A.b
 +>b : typeof b
  >d : number
- 

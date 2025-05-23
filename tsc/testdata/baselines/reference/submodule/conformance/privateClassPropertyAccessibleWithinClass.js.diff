@@ -1,7 +1,7 @@
 --- old.privateClassPropertyAccessibleWithinClass.js
 +++ new.privateClassPropertyAccessibleWithinClass.js
 @@= skipped -34, +34 lines =@@
- 
+
  //// [privateClassPropertyAccessibleWithinClass.js]
  // no errors
 -var C = /** @class */ (function () {

@@ -1,6 +1,6 @@
 --- old.globalThisDeclarationEmit.errors.txt
 +++ new.globalThisDeclarationEmit.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.ts(2,14): error TS4025: Exported variable 'globalThis' has or is using private name 'globalThis'.
 -
 -
@@ -12,5 +12,4 @@
 -    
 -==== variable.ts (0 errors) ====
 -    export const variable = globalThis;
-@@= skipped --1, +1 lines =@@
 +<no content>

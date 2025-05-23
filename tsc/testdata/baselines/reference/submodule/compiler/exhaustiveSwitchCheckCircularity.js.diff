@@ -1,8 +1,8 @@
 --- old.exhaustiveSwitchCheckCircularity.js
 +++ new.exhaustiveSwitchCheckCircularity.js
 @@= skipped -39, +39 lines =@@
- 
- 
+
+
  //// [exhaustiveSwitchCheckCircularity.js]
 -"use strict";
 -// Repro from #47539

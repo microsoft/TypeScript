@@ -10,7 +10,7 @@
 ->Point : typeof A.Point
 +>Point : typeof Point
  >Origin : { x: number; y: number; }
- 
+
  var p = new A.Point(0, 0); // unexpected error here, bug 840000
  >p : { x: number; y: number; }
 ->new A.Point(0, 0) : A.Point
@@ -22,4 +22,3 @@
 +>Point : typeof Point
  >0 : 0
  >0 : 0
- 

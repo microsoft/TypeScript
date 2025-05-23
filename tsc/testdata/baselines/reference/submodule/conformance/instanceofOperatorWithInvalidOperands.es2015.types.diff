@@ -1,7 +1,7 @@
 --- old.instanceofOperatorWithInvalidOperands.es2015.types
 +++ new.instanceofOperatorWithInvalidOperands.es2015.types
 @@= skipped -169, +169 lines =@@
- 
+
  // @@hasInstance restricts LHS
  var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
 ->o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
@@ -15,7 +15,7 @@
  >o5 : { y: string; }
 ->o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
 +>o4 : { [Symbol.hasInstance]: (value: { x: number; }) => boolean; }
- 
+
  // invalid @@hasInstance method return type on RHS
  var o6: {[Symbol.hasInstance](value: unknown): number;};
 ->o6 : { [Symbol.hasInstance](value: unknown): number; }
@@ -29,4 +29,3 @@
  >x : any
 ->o6 : { [Symbol.hasInstance](value: unknown): number; }
 +>o6 : { [Symbol.hasInstance]: (value: unknown) => number; }
- 

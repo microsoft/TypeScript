@@ -2,12 +2,12 @@
 +++ new.throwInEnclosingStatements.types
 @@= skipped -88, +88 lines =@@
  }
- 
+
  var aa = {
 ->aa : { id: number; biz(): never; }
 ->{    id:12,    biz() {        throw this;    }} : { id: number; biz(): never; }
 +>aa : { id: number; biz: () => never; }
 +>{    id:12,    biz() {        throw this;    }} : { id: number; biz: () => never; }
- 
+
      id:12,
  >id : number

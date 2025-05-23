@@ -6,8 +6,8 @@
 -  Property 'a' is missing in type '{}' but required in type 'I1'.
 +typeSatisfaction.ts(13,16): error TS2741: Property 'a' is missing in type '{}' but required in type 'I1'.
  typeSatisfaction.ts(24,23): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'A'.
- 
- 
+
+
 @@= skipped -20, +19 lines =@@
  !!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'I1'.
      const t3 = { } satisfies I1; // Error

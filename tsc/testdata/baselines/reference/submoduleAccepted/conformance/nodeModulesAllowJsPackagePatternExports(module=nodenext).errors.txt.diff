@@ -1,6 +1,6 @@
 --- old.nodeModulesAllowJsPackagePatternExports(module=nodenext).errors.txt
 +++ new.nodeModulesAllowJsPackagePatternExports(module=nodenext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.cjs(3,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 -node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 -node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
@@ -79,5 +79,4 @@
 -            "./js/*": "./*.js"
 -        }
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

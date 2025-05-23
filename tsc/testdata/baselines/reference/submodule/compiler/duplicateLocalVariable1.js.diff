@@ -1,7 +1,7 @@
 --- old.duplicateLocalVariable1.js
 +++ new.duplicateLocalVariable1.js
 @@= skipped -346, +346 lines =@@
- 
+
  //// [duplicateLocalVariable1.js]
  "use strict";
 -//import FileManager = require('filemanager');

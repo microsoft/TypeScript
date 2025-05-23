@@ -1,7 +1,7 @@
 --- old.targetEs6DecoratorMetadataImportNotElided.js
 +++ new.targetEs6DecoratorMetadataImportNotElided.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [deps.js]
  export function Input() { }
 -var TemplateRef = /** @class */ (function () {

@@ -1,6 +1,6 @@
 --- old.jsdocParamTagInvalid.errors.txt
 +++ new.jsdocParamTagInvalid.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(1,21): error TS8024: JSDoc '@param' tag has name 'colour', but there is no parameter with that name.
 -
 -
@@ -10,5 +10,4 @@
 -!!! error TS8024: JSDoc '@param' tag has name 'colour', but there is no parameter with that name.
 -    function f(color) {}
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

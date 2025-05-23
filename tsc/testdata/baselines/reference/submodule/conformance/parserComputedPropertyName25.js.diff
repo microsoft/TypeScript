@@ -2,7 +2,7 @@
 +++ new.parserComputedPropertyName25.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [parserComputedPropertyName25.js]
 -var _a;
  class C {

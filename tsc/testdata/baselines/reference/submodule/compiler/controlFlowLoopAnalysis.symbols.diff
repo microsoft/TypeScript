@@ -14,7 +14,7 @@
  >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
 @@= skipped -18, +18 lines =@@
  >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
- 
+
              result.push(mapping(value, index));
 ->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))

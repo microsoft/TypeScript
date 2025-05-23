@@ -1,8 +1,8 @@
 --- old.mixinClassesMembers.js
 +++ new.mixinClassesMembers.js
 @@= skipped -100, +100 lines =@@
- 
- 
+
+
  //// [mixinClassesMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -87,13 +87,7 @@
 -        _this.b;
 -        _this.p;
 -        return _this;
-+class C2 extends Mixed1 {
-+    constructor() {
-+        super("hello");
-+        this.a;
-+        this.b;
-+        this.p;
-     }
+-    }
 -    return C2;
 -}(Mixed1));
 -var C3 = /** @class */ (function (_super) {
@@ -105,15 +99,7 @@
 -        _this.p;
 -        _this.f();
 -        return _this;
-+}
-+class C3 extends Mixed3 {
-+    constructor() {
-+        super(42);
-+        this.a;
-+        this.b;
-+        this.p;
-+        this.f();
-     }
+-    }
 -    C3.prototype.f = function () { return _super.prototype.f.call(this); };
 -    return C3;
 -}(Mixed3));
@@ -126,8 +112,7 @@
 -    private c;
 -    constructor(s: string);
 -    constructor(n: number);
-+    f() { return super.f(); }
- }
+-}
 -declare class M1 {
 -    constructor(...args: any[]);
 -    p: number;
@@ -155,4 +140,21 @@
 -declare class C3 extends Mixed3 {
 -    constructor();
 -    f(): number;
--}
++class C2 extends Mixed1 {
++    constructor() {
++        super("hello");
++        this.a;
++        this.b;
++        this.p;
++    }
++}
++class C3 extends Mixed3 {
++    constructor() {
++        super(42);
++        this.a;
++        this.b;
++        this.p;
++        this.f();
++    }
++    f() { return super.f(); }
+ }

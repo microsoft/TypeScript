@@ -1,8 +1,8 @@
 --- old.narrowingDestructuring.js
 +++ new.narrowingDestructuring.js
 @@= skipped -42, +42 lines =@@
- 
- 
+
+
  //// [narrowingDestructuring.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

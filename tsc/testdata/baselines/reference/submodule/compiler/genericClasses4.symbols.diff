@@ -10,7 +10,7 @@
 ->y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
 +>y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
  >A : Symbol(A, Decl(genericClasses4.ts, 1, 13))
- 
+
      fmap<B>(f: (a: A) => B): Vec2_T<B> {
 ->fmap : Symbol(Vec2_T.fmap, Decl(genericClasses4.ts, 3, 45))
 +>fmap : Symbol(fmap, Decl(genericClasses4.ts, 3, 45))
@@ -26,7 +26,7 @@
  >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
 ->x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
 +>x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
- 
+
          var y:B = f(this.y);
  >y : Symbol(y, Decl(genericClasses4.ts, 6, 11))
  >B : Symbol(B, Decl(genericClasses4.ts, 4, 9))
@@ -36,7 +36,7 @@
  >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
 ->y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
 +>y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
- 
+
          var retval: Vec2_T<B> = new Vec2_T(x, y);
  >retval : Symbol(retval, Decl(genericClasses4.ts, 7, 11))
 @@= skipped -24, +24 lines =@@
@@ -62,7 +62,7 @@
  >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
 ->x : Symbol(Vec2_T.x, Decl(genericClasses4.ts, 3, 16))
 +>x : Symbol(x, Decl(genericClasses4.ts, 3, 16))
- 
+
          var y:B = f.y(this.y);
  >y : Symbol(y, Decl(genericClasses4.ts, 12, 11))
  >B : Symbol(B, Decl(genericClasses4.ts, 10, 10))
@@ -76,6 +76,6 @@
  >this : Symbol(Vec2_T, Decl(genericClasses4.ts, 0, 0))
 ->y : Symbol(Vec2_T.y, Decl(genericClasses4.ts, 3, 28))
 +>y : Symbol(y, Decl(genericClasses4.ts, 3, 28))
- 
+
          var retval: Vec2_T<B> = new Vec2_T(x, y);
  >retval : Symbol(retval, Decl(genericClasses4.ts, 13, 11))

@@ -1,8 +1,8 @@
 --- old.noExcessiveStackDepthError.js
 +++ new.noExcessiveStackDepthError.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [noExcessiveStackDepthError.js]
 -"use strict";
 -// Repro from #46631

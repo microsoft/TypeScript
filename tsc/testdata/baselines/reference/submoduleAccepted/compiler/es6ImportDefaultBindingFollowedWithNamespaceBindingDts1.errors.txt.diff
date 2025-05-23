@@ -1,8 +1,7 @@
 --- old.es6ImportDefaultBindingFollowedWithNamespaceBindingDts1.errors.txt
 +++ new.es6ImportDefaultBindingFollowedWithNamespaceBindingDts1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +client.ts(1,51): error TS2307: Cannot find module 'server' or its corresponding type declarations.
 +
 +

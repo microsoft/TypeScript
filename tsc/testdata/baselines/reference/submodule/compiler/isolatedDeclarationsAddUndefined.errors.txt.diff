@@ -1,6 +1,6 @@
 --- old.isolatedDeclarationsAddUndefined.errors.txt
 +++ new.isolatedDeclarationsAddUndefined.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -file2.ts(4,38): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 -
 -
@@ -25,5 +25,4 @@
 -        readonly r = 1;
 -        f = 2;
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

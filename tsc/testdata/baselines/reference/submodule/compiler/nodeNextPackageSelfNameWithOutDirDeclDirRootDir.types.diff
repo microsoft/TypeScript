@@ -1,12 +1,12 @@
 --- old.nodeNextPackageSelfNameWithOutDirDeclDirRootDir.types
 +++ new.nodeNextPackageSelfNameWithOutDirDeclDirRootDir.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /pkg/src/index.ts ===
  import * as me from "@this/package";
 ->me : typeof me
 +>me : any
- 
+
  me.thing();
 ->me.thing() : void
 ->me.thing : () => void
@@ -16,6 +16,6 @@
 +>me.thing : any
 +>me : any
 +>thing : any
- 
+
  export function thing(): void {}
  >thing : () => void

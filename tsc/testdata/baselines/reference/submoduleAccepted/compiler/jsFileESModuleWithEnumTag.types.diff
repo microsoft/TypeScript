@@ -10,7 +10,7 @@
  >ChangeDetectionStrategy.OnPush : number
  >ChangeDetectionStrategy : { OnPush: number; Default: number; }
 @@= skipped -9, +9 lines =@@
- 
+
  ChangeDetectionStrategy[ChangeDetectionStrategy.Default] = 'Default';
  >ChangeDetectionStrategy[ChangeDetectionStrategy.Default] = 'Default' : "Default"
 ->ChangeDetectionStrategy[ChangeDetectionStrategy.Default] : error
@@ -19,11 +19,10 @@
  >ChangeDetectionStrategy.Default : number
  >ChangeDetectionStrategy : { OnPush: number; Default: number; }
 @@= skipped -20, +20 lines =@@
- 
+
  /** @type {number} */
  ChangeDetectionStrategy["bField"];
 ->ChangeDetectionStrategy["bField"] : error
 +>ChangeDetectionStrategy["bField"] : any
  >ChangeDetectionStrategy : { OnPush: number; Default: number; }
  >"bField" : "bField"
- 

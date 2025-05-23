@@ -1,6 +1,6 @@
 --- old.jsdocPrototypePropertyAccessWithType.errors.txt
 +++ new.jsdocPrototypePropertyAccessWithType.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(1,16): error TS2322: Type 'boolean' is not assignable to type 'number'.
 -
 -
@@ -12,5 +12,4 @@
 -    C.prototype.x;
 -    new C().x;
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

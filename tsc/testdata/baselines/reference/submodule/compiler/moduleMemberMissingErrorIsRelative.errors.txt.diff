@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -folder/bar.ts(1,9): error TS2305: Module '"./foo"' has no exported member 'nosuch'.
 +folder/bar.ts(1,9): error TS2305: Module '"folder/foo"' has no exported member 'nosuch'.
- 
- 
+
+
  ==== folder/foo.ts (0 errors) ====
 @@= skipped -5, +5 lines =@@
  ==== folder/bar.ts (1 errors) ====

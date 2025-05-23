@@ -2,10 +2,10 @@
 +++ new.unusedLocalsAndParametersTypeAliases2.types
 @@= skipped -9, +9 lines =@@
  >foo : () => void
- 
+
      type handler2 = () => void;
 ->handler2 : () => void
 +>handler2 : handler2
- 
+
      foo();
  >foo() : void

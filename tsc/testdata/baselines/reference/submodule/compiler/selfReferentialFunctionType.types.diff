@@ -1,7 +1,7 @@
 --- old.selfReferentialFunctionType.types
 +++ new.selfReferentialFunctionType.types
 @@= skipped -1, +1 lines =@@
- 
+
  === selfReferentialFunctionType.ts ===
  declare function f<T>(args: typeof f<T>): T;
 ->f : <T>(args: typeof f<T>) => T
@@ -10,17 +10,16 @@
 +>f : <T>(args: (args: ???) => T) => T
 +>args : (args: ???) => T
 +>f : <T>(args: (args: ???) => T) => T
- 
+
  declare function g<T = typeof g>(args: T): T;
 ->g : <T = typeof g>(args: T) => T
 ->g : <T = typeof g>(args: T) => T
 +>g : <T>(args: T) => T
 +>g : <T>(args: T) => T
  >args : T
- 
+
  declare function h<T>(): typeof h<T>;
 ->h : <T>() => typeof h<T>
 ->h : <T>() => typeof h<T>
 +>h : <T>() => () => ???
 +>h : <T>() => () => ???
- 

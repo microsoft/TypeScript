@@ -2,7 +2,7 @@
 +++ new.detachedCommentAtStartOfFunctionBody2.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [detachedCommentAtStartOfFunctionBody2.js]
 -var TestFile = /** @class */ (function () {
 -    function TestFile() {

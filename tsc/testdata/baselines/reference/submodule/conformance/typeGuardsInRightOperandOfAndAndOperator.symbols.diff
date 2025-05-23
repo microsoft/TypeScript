@@ -1,7 +1,7 @@
 --- old.typeGuardsInRightOperandOfAndAndOperator.symbols
 +++ new.typeGuardsInRightOperandOfAndAndOperator.symbols
 @@= skipped -8, +8 lines =@@
- 
+
      return typeof x === "string" && x.length === 10; // string
  >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 2, 13))
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
@@ -21,7 +21,7 @@
  >x : Symbol(x, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 32, 14))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
          // do not change value
          : ((y = x) && x.toString()))); // x is boolean
  >y : Symbol(y, Decl(typeGuardsInRightOperandOfAndAndOperator.ts, 33, 7))
@@ -32,4 +32,3 @@
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  }
- 

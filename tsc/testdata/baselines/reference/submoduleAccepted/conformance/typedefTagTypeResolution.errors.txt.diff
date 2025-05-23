@@ -4,8 +4,8 @@
  github20832.js(2,15): error TS2304: Cannot find name 'U'.
 -github20832.js(17,12): error TS2304: Cannot find name 'V'.
 +github20832.js(26,12): error TS2304: Cannot find name 'Cb'.
- 
- 
+
+
  ==== github20832.js (2 errors) ====
 @@= skipped -21, +21 lines =@@
      /**

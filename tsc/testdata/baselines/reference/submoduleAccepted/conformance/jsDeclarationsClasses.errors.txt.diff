@@ -1,8 +1,7 @@
 --- old.jsDeclarationsClasses.errors.txt
 +++ new.jsDeclarationsClasses.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(173,24): error TS2314: Generic type 'N<T>' requires 1 type argument(s).
 +
 +

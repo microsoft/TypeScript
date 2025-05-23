@@ -1,8 +1,8 @@
 --- old.unmatchedParameterPositions.js
 +++ new.unmatchedParameterPositions.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [unmatchedParameterPositions.js]
 -"use strict";
 -// Repros from #40251

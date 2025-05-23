@@ -1,7 +1,7 @@
 --- old.privateNameWeakMapCollision.js
 +++ new.privateNameWeakMapCollision.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [privateNameWeakMapCollision.js]
  function test() {
 -    var _C_x;

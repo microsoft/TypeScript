@@ -2,7 +2,7 @@
 +++ new.callWithMissingVoid.types
 @@= skipped -189, +189 lines =@@
  >4 : 4
- 
+
  function c(x: number | void, y: void, z: void | string | number): void  {
 ->c : (x: number | void, y: void, z: void | string | number) => void
 +>c : (x: void | number, y: void, z: void | string | number) => void
@@ -10,7 +10,7 @@
  >y : void
  >z : void | string | number
 @@= skipped -9, +9 lines =@@
- 
+
  c(3, void 0, void 0); // ok
  >c(3, void 0, void 0) : void
 ->c : (x: number | void, y: void, z: void | string | number) => void
@@ -19,7 +19,7 @@
  >void 0 : undefined
  >0 : 0
 @@= skipped -9, +9 lines =@@
- 
+
  c(3, void 0); // ok
  >c(3, void 0) : void
 ->c : (x: number | void, y: void, z: void | string | number) => void
@@ -27,19 +27,19 @@
  >3 : 3
  >void 0 : undefined
  >0 : 0
- 
+
  c(3); // ok
  >c(3) : void
 ->c : (x: number | void, y: void, z: void | string | number) => void
 +>c : (x: void | number, y: void, z: void | string | number) => void
  >3 : 3
- 
+
  c(); // ok
  >c() : void
 ->c : (x: number | void, y: void, z: void | string | number) => void
 +>c : (x: void | number, y: void, z: void | string | number) => void
- 
- 
+
+
  // Spread Parameters
 @@= skipped -80, +80 lines =@@
  call((x: number | void, y: number | void) => 42) // ok

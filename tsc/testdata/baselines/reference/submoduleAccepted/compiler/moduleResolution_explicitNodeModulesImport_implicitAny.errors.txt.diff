@@ -1,8 +1,7 @@
 --- old.moduleResolution_explicitNodeModulesImport_implicitAny.errors.txt
 +++ new.moduleResolution_explicitNodeModulesImport_implicitAny.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/src/index.ts(1,10): error TS2305: Module '"/node_modules/foo/index"' has no exported member 'y'.
 +
 +

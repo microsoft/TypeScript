@@ -1,9 +1,9 @@
 --- old.scannertest1.js
 +++ new.scannertest1.js
 @@= skipped -25, +25 lines =@@
- 
- 
- 
+
+
+
 +//// [References.js]
  //// [scannertest1.js]
  ///<reference path='References.ts' />

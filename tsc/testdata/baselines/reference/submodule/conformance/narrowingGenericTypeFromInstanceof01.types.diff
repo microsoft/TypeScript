@@ -1,34 +1,34 @@
 --- old.narrowingGenericTypeFromInstanceof01.types
 +++ new.narrowingGenericTypeFromInstanceof01.types
 @@= skipped -30, +30 lines =@@
- 
+
          acceptA(x);
  >acceptA(x) : void
 ->acceptA : <T_1>(a: A<T_1>) => void
 +>acceptA : <T>(a: A<T>) => void
  >x : B<T>
      }
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
          acceptA(x);
  >acceptA(x) : void
 ->acceptA : <T_1>(a: A<T_1>) => void
 +>acceptA : <T>(a: A<T>) => void
  >x : A<T>
      }
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
          acceptB(x);
  >acceptB(x) : void
 ->acceptB : <T_1>(b: B<T_1>) => void
 +>acceptB : <T>(b: B<T>) => void
  >x : B<T>
      }
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
          acceptB(x);
  >acceptB(x) : void
 ->acceptB : <T_1>(b: B<T_1>) => void

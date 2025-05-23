@@ -2,7 +2,7 @@
 +++ new.innerAliases2.types
 @@= skipped -16, +16 lines =@@
  >consumer : typeof consumer
- 
+
                  import provider = _provider;
 ->provider : typeof provider
 ->_provider : typeof provider
@@ -18,7 +18,7 @@
 ->use : () => provider.UsefulClass
 +>use : () => UsefulClass
  >provider : any
- 
+
                                  var p2:provider.UsefulClass= new provider.UsefulClass();
 ->p2 : provider.UsefulClass
 +>p2 : UsefulClass
@@ -31,10 +31,9 @@
 +>provider.UsefulClass : typeof UsefulClass
 +>provider : typeof _provider
 +>UsefulClass : typeof UsefulClass
- 
+
                                  return p2; 
 ->p2 : provider.UsefulClass
 +>p2 : UsefulClass
                  }
  }
- 

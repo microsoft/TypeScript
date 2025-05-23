@@ -1,6 +1,6 @@
 --- old.parserArrowFunctionExpression15.errors.txt
 +++ new.parserArrowFunctionExpression15.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -fileJs.js(1,18): error TS8010: Type annotations can only be used in TypeScript files.
 -
 -
@@ -12,5 +12,4 @@
 -==== fileTs.ts (0 errors) ====
 -    false ? (param): string => param : null
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

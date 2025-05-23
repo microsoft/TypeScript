@@ -7,5 +7,5 @@
 ->getXOrYadda : <T_1>(x: T_1) => T_1 | Yadda
 +>getXOrYadda : <T>(x: T) => T | Yadda
  >x : T
- 
+
    return yaddable;

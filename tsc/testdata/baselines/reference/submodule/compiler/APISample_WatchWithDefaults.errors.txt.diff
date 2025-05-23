@@ -1,8 +1,7 @@
 --- old.APISample_WatchWithDefaults.errors.txt
 +++ new.APISample_WatchWithDefaults.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +APISample_WatchWithDefaults.ts(8,21): error TS2307: Cannot find module 'typescript' or its corresponding type declarations.
 +APISample_WatchWithDefaults.ts(32,27): error TS7006: Parameter 'rootNames' implicitly has an 'any' type.
 +APISample_WatchWithDefaults.ts(32,38): error TS7006: Parameter 'options' implicitly has an 'any' type.

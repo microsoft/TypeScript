@@ -2,7 +2,7 @@
 +++ new.templateLiteralTypesPatternsPrefixSuffixAssignability.js
 @@= skipped -6, +6 lines =@@
  const s4: `:${string}:${string}:` = ":::"; // ok
- 
+
  //// [templateLiteralTypesPatternsPrefixSuffixAssignability.js]
 -var s1 = ":"; // should error
 -var s2 = "::"; // ok

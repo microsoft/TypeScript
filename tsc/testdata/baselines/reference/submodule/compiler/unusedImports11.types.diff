@@ -2,15 +2,15 @@
 +++ new.unusedImports11.types
 @@= skipped -9, +9 lines =@@
  >M : typeof Member
- 
+
  import * as ns from './b';
 ->ns : typeof ns
 +>ns : typeof import("b")
- 
+
  import r = require("./b");
 ->r : typeof ns
 +>r : typeof import("b")
- 
+
  new Member();
  >new Member() : Member
 @@= skipped -20, +20 lines =@@
@@ -20,12 +20,12 @@
 ->ns : typeof ns
 +>ns : typeof import("b")
  >Member : typeof Member
- 
+
  new r.Member();
  >new r.Member() : Member
  >r.Member : typeof Member
 ->r : typeof ns
 +>r : typeof import("b")
  >Member : typeof Member
- 
+
  === b.ts ===

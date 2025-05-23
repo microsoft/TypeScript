@@ -8,10 +8,10 @@
 ->require : Symbol(require)
 ->'./second' : Symbol("second", Decl(second.js, 0, 0))
 ->nested : Symbol(nested, Decl(second.js, 0, 18))
- 
+
  hardline
  >hardline : Symbol(hardline, Decl(main.js, 0, 7))
- 
+-
 -=== first.js ===
 -const hardline = { type: "hard" }
 ->hardline : Symbol(hardline, Decl(first.js, 0, 5))
@@ -39,4 +39,3 @@
 ->'./first' : Symbol("first", Decl(first.js, 0, 0))
 -
 -};
--

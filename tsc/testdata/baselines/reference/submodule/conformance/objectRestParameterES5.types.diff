@@ -1,7 +1,7 @@
 --- old.objectRestParameterES5.types
 +++ new.objectRestParameterES5.types
 @@= skipped -1, +1 lines =@@
- 
+
  === objectRestParameterES5.ts ===
  function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 ->cloneAgain : ({ a, ...clone }: { a: number; b: string; }) => void
@@ -29,7 +29,7 @@
  >12 : 12
 @@= skipped -27, +27 lines =@@
  >C : C
- 
+
      m({ a, ...clone }: { a: number, b: string}): void {
 ->m : ({ a, ...clone }: { a: number; b: string; }) => void
 +>m : (__0: { a: number; b: string; }) => void
@@ -51,7 +51,7 @@
  >foobar() : void
 ->foobar : ({ bar, ...opts }?: any) => void
 +>foobar : (__0?: any) => void
- 
+
  foobar({ baz: 'hello' });
  >foobar({ baz: 'hello' }) : void
 ->foobar : ({ bar, ...opts }?: any) => void
@@ -59,7 +59,7 @@
  >{ baz: 'hello' } : { baz: string; }
  >baz : string
  >'hello' : "hello"
- 
+
  foobar({ bar: { greeting: 'hello' } });
  >foobar({ bar: { greeting: 'hello' } }) : void
 ->foobar : ({ bar, ...opts }?: any) => void

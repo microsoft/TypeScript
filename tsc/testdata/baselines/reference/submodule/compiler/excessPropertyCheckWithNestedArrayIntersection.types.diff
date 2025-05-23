@@ -6,7 +6,7 @@
      fields: Array<{
 ->fields : { value: number | null; }[]
 +>fields : { value: number; }[]
- 
+
          value: number | null;
  >value : number
 @@= skipped -9, +9 lines =@@
@@ -15,6 +15,6 @@
      fields: Array<{
 ->fields : { key: string | null; value: number | null; }[]
 +>fields : { key: string; value: number; }[]
- 
+
          key: string | null;
  >key : string

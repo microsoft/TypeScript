@@ -2,16 +2,16 @@
 +++ new.commaOperatorWithSecondOperandObjectType.symbols
 @@= skipped -20, +20 lines =@@
  >CLASS : Symbol(CLASS, Decl(commaOperatorWithSecondOperandObjectType.ts, 4, 19))
- 
+
      num: number;
 ->num : Symbol(CLASS.num, Decl(commaOperatorWithSecondOperandObjectType.ts, 6, 13))
 +>num : Symbol(num, Decl(commaOperatorWithSecondOperandObjectType.ts, 6, 13))
  }
- 
+
  //The second operand type is Object
 @@= skipped -66, +66 lines =@@
  >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
- 
+
  STRING.toLowerCase(), new CLASS()
 ->STRING.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>STRING.toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
@@ -19,10 +19,10 @@
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
  >CLASS : Symbol(CLASS, Decl(commaOperatorWithSecondOperandObjectType.ts, 4, 19))
- 
+
  var resultIsObject6 = (null, OBJECT);
 @@= skipped -29, +29 lines =@@
- 
+
  var resultIsObject11 = (STRING.toLowerCase(), new CLASS());
  >resultIsObject11 : Symbol(resultIsObject11, Decl(commaOperatorWithSecondOperandObjectType.ts, 37, 3))
 ->STRING.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
@@ -31,4 +31,3 @@
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
  >CLASS : Symbol(CLASS, Decl(commaOperatorWithSecondOperandObjectType.ts, 4, 19))
- 

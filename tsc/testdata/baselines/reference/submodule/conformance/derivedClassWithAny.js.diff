@@ -1,8 +1,8 @@
 --- old.derivedClassWithAny.js
 +++ new.derivedClassWithAny.js
 @@= skipped -61, +61 lines =@@
- 
- 
+
+
  //// [derivedClassWithAny.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,21 +21,14 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    x;
-+    get X() { return 1; }
-+    foo() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(C.prototype, "X", {
 -        get: function () { return 1; },
 -        enumerable: false,
 -        configurable: true
 -    });
 -    C.prototype.foo = function () {
-+    static y;
-+    static get Y() {
-         return 1;
+-        return 1;
 -    };
 -    Object.defineProperty(C, "Y", {
 -        get: function () {
@@ -45,9 +38,7 @@
 -        configurable: true
 -    });
 -    C.bar = function () {
-+    }
-+    static bar() {
-         return 1;
+-        return 1;
 -    };
 -    return C;
 -}());
@@ -55,7 +46,7 @@
 -    __extends(D, _super);
 -    function D() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Object.defineProperty(D.prototype, "X", {
 -        get: function () {
 -            return null;
@@ -64,14 +55,7 @@
 -        configurable: true
 -    });
 -    D.prototype.foo = function () {
-+}
-+class D extends C {
-+    x;
-+    get X() {
-+        return null;
-+    }
-+    foo() {
-         return 1;
+-        return 1;
 -    };
 -    Object.defineProperty(D, "Y", {
 -        get: function () {
@@ -81,13 +65,35 @@
 -        configurable: true
 -    });
 -    D.bar = function () {
-+    }
-+    static y;
-+    static get Y() {
-         return null;
+-        return null;
 -    };
 -    return D;
 -}(C));
++class C {
++    x;
++    get X() { return 1; }
++    foo() {
++        return 1;
++    }
++    static y;
++    static get Y() {
++        return 1;
++    }
++    static bar() {
++        return 1;
++    }
++}
++class D extends C {
++    x;
++    get X() {
++        return null;
++    }
++    foo() {
++        return 1;
++    }
++    static y;
++    static get Y() {
++        return null;
 +    }
 +    static bar() {
 +        return null;
@@ -98,21 +104,14 @@
 -    __extends(E, _super);
 -    function E() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+class E extends D {
-+    x;
-+    get X() { return ''; }
-+    foo() {
-+        return '';
-     }
+-    }
 -    Object.defineProperty(E.prototype, "X", {
 -        get: function () { return ''; },
 -        enumerable: false,
 -        configurable: true
 -    });
 -    E.prototype.foo = function () {
-+    static y;
-+    static get Y() {
-         return '';
+-        return '';
 -    };
 -    Object.defineProperty(E, "Y", {
 -        get: function () {
@@ -122,12 +121,22 @@
 -        configurable: true
 -    });
 -    E.bar = function () {
-+    }
-+    static bar() {
-         return '';
+-        return '';
 -    };
 -    return E;
 -}(D));
++class E extends D {
++    x;
++    get X() { return ''; }
++    foo() {
++        return '';
++    }
++    static y;
++    static get Y() {
++        return '';
++    }
++    static bar() {
++        return '';
 +    }
 +}
  var c;

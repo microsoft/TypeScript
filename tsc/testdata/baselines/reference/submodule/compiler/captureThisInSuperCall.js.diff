@@ -2,7 +2,7 @@
 +++ new.captureThisInSuperCall.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [captureThisInSuperCall.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

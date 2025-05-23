@@ -2,22 +2,11 @@
 +++ new.twoAccessorsWithSameName.js
 @@= skipped -36, +36 lines =@@
  }
- 
+
  //// [twoAccessorsWithSameName.js]
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    get x() { return 1; }
-+    get x() { return 1; } // error
-+}
-+class D {
-+    set x(v) { }
-+    set x(v) { } // error
-+}
-+class E {
-+    get x() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(C.prototype, "x", {
 -        get: function () { return 1; },
 -        enumerable: false,
@@ -48,6 +37,18 @@
 -    });
 -    return E;
 -}());
++class C {
++    get x() { return 1; }
++    get x() { return 1; } // error
++}
++class D {
++    set x(v) { }
++    set x(v) { } // error
++}
++class E {
++    get x() {
++        return 1;
++    }
 +    set x(v) { }
 +}
  var x = {

@@ -1,8 +1,8 @@
 --- old.propertyAccessOnObjectLiteral.js
 +++ new.propertyAccessOnObjectLiteral.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [propertyAccessOnObjectLiteral.js]
 -var A = /** @class */ (function () {
 -    function A() {

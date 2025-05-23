@@ -9,6 +9,6 @@
  >x : Symbol(x, Decl(generatorTypeCheck30.ts, 2, 13))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
      } ()
  }

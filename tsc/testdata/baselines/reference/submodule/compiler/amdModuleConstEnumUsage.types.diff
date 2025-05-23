@@ -6,11 +6,11 @@
  import { CharCode } from 'defs/cc';
 ->CharCode : typeof CharCode
 +>CharCode : any
- 
+
  export class User {
  >User : User
 @@= skipped -11, +11 lines =@@
- 
+
          if (CharCode.A === input) {}
  >CharCode.A === input : boolean
 ->CharCode.A : CharCode.A

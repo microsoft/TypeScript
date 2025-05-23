@@ -1,8 +1,8 @@
 --- old.typeSatisfaction_propNameConstraining.js
 +++ new.typeSatisfaction_propNameConstraining.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [typeSatisfaction_propNameConstraining.js]
 -var p = {
 +const p = {

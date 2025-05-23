@@ -1,8 +1,8 @@
 --- old.clodulesDerivedClasses.js
 +++ new.clodulesDerivedClasses.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [clodulesDerivedClasses.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

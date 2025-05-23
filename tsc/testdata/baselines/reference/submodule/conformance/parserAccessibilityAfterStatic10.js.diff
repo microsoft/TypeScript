@@ -1,8 +1,8 @@
 --- old.parserAccessibilityAfterStatic10.js
 +++ new.parserAccessibilityAfterStatic10.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [parserAccessibilityAfterStatic10.js]
 -var Outer = /** @class */ (function () {
 -    function Outer() {

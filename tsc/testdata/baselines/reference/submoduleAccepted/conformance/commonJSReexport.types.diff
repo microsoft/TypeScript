@@ -1,7 +1,7 @@
 --- old.commonJSReexport.types
 +++ new.commonJSReexport.types
 @@= skipped -1, +1 lines =@@
- 
+
  === main.js ===
  const { hardline } = require('./second').nested;
 ->hardline : { type: string; }
@@ -14,11 +14,10 @@
  >'./second' : "./second"
 ->nested : typeof import("first")
 +>nested : any
- 
+
  hardline
 ->hardline : { type: string; }
-+>hardline : any
- 
+-
 -=== first.js ===
 -const hardline = { type: "hard" }
 ->hardline : { type: string; }
@@ -53,4 +52,4 @@
 ->'./first' : "./first"
 -
 -};
--
++>hardline : any

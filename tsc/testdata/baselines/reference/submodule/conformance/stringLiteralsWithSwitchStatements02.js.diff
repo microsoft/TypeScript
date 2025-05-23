@@ -1,8 +1,8 @@
 --- old.stringLiteralsWithSwitchStatements02.js
 +++ new.stringLiteralsWithSwitchStatements02.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [stringLiteralsWithSwitchStatements02.js]
 -var x;
 -var y;

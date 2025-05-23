@@ -1,7 +1,7 @@
 --- old.typeFromPropertyAssignment5.symbols
 +++ new.typeFromPropertyAssignment5.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  export default function MyClass() {
 ->MyClass : Symbol(MyClass, Decl(a.js, 0, 0), Decl(a.js, 1, 1))
@@ -23,17 +23,17 @@
 +>MyClass.bar : Symbol(bar, Decl(a.js, 1, 1))
 +>MyClass : Symbol(default, Decl(a.js, 0, 0))
 +>bar : Symbol(bar, Decl(a.js, 1, 1))
- 
+
  === b.js ===
  import MC from './a'
  >MC : Symbol(MC, Decl(b.js, 0, 6))
- 
+
  MC.bar
 ->MC.bar : Symbol(MC.bar, Decl(a.js, 1, 1))
 +>MC.bar : Symbol(bar, Decl(a.js, 1, 1))
  >MC : Symbol(MC, Decl(b.js, 0, 6))
 ->bar : Symbol(MC.bar, Decl(a.js, 1, 1))
 +>bar : Symbol(bar, Decl(a.js, 1, 1))
- 
+
  /** @type {MC.bar} */
  var x

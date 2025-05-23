@@ -2,7 +2,7 @@
 +++ new.arrayReferenceWithoutTypeArgs.types
 @@= skipped -4, +4 lines =@@
  >X : X
- 
+
      public f(a: Array) { }
 ->f : (a: Array) => void
 +>f : (a: any) => void

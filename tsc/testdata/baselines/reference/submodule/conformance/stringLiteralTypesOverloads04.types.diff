@@ -1,7 +1,7 @@
 --- old.stringLiteralTypesOverloads04.types
 +++ new.stringLiteralTypesOverloads04.types
 @@= skipped -1, +1 lines =@@
- 
+
  === stringLiteralTypesOverloads04.ts ===
  declare function f(x: (p: "foo" | "bar") => "foo");
 ->f : (x: (p: "foo" | "bar") => "foo") => any
@@ -9,11 +9,10 @@
 +>f : (x: (p: "bar" | "foo") => "foo") => any
 +>x : (p: "bar" | "foo") => "foo"
  >p : "bar" | "foo"
- 
+
  f(y => {
  >f(y => {    const z = y = "foo";    return z;}) : any
 ->f : (x: (p: "foo" | "bar") => "foo") => any
 +>f : (x: (p: "bar" | "foo") => "foo") => any
  >y => {    const z = y = "foo";    return z;} : (y: "bar" | "foo") => "foo"
  >y : "bar" | "foo"
- 

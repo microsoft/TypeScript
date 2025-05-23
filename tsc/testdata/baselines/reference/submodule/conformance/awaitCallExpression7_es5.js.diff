@@ -2,7 +2,7 @@
 +++ new.awaitCallExpression7_es5.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [awaitCallExpression7_es5.js]
 -function func() {
 -    return __awaiter(this, void 0, void 0, function () {

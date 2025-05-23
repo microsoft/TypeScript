@@ -1,8 +1,8 @@
 --- old.overrideBaseIntersectionMethod.js
 +++ new.overrideBaseIntersectionMethod.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [overrideBaseIntersectionMethod.js]
 -"use strict";
 -// Repro from #14615

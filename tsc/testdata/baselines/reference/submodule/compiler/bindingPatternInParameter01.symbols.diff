@@ -2,7 +2,7 @@
 +++ new.bindingPatternInParameter01.symbols
 @@= skipped -4, +4 lines =@@
  >nestedArray : Symbol(nestedArray, Decl(bindingPatternInParameter01.ts, 0, 5))
- 
+
  nestedArray.forEach(([[a, b]]) => {
 ->nestedArray.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 +>nestedArray.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
@@ -11,7 +11,7 @@
 +>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(bindingPatternInParameter01.ts, 2, 23))
  >b : Symbol(b, Decl(bindingPatternInParameter01.ts, 2, 25))
- 
+
    console.log(a, b);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -20,4 +20,3 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >a : Symbol(a, Decl(bindingPatternInParameter01.ts, 2, 23))
  >b : Symbol(b, Decl(bindingPatternInParameter01.ts, 2, 25))
- 

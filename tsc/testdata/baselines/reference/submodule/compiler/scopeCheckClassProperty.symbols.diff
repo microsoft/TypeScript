@@ -1,7 +1,7 @@
 --- old.scopeCheckClassProperty.symbols
 +++ new.scopeCheckClassProperty.symbols
 @@= skipped -5, +5 lines =@@
- 
+
    constructor() {
      new A().p; // ok
 ->new A().p : Symbol(A.p, Decl(scopeCheckClassProperty.ts, 6, 9))
@@ -21,9 +21,8 @@
  }
  class A {
  >A : Symbol(A, Decl(scopeCheckClassProperty.ts, 5, 1))
- 
+
    public p = '';
 ->p : Symbol(A.p, Decl(scopeCheckClassProperty.ts, 6, 9))
 +>p : Symbol(p, Decl(scopeCheckClassProperty.ts, 6, 9))
  }
- 

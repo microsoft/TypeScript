@@ -2,15 +2,18 @@
 +++ new.templateStringMultiline3.js
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/conformance/es6/templates/templateStringMultiline3.ts] ////
- 
+
  //// [templateStringMultiline3.ts]
--// newlines are <CR>
--`
--\
--`
-+// newlines are <CR>`\`
- 
++
++
+ // newlines are <CR>
+ `
+ \
+@@= skipped -7, +9 lines =@@
+
  //// [templateStringMultiline3.js]
  // newlines are <CR>
 -"\n";
-+`\`;
++`
++\
++`;

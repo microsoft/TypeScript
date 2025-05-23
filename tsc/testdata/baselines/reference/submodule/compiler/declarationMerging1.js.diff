@@ -2,7 +2,7 @@
 +++ new.declarationMerging1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [file1.js]
 -var A = /** @class */ (function () {
 -    function A() {

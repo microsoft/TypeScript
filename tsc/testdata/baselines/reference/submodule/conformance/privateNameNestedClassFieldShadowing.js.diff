@@ -1,8 +1,8 @@
 --- old.privateNameNestedClassFieldShadowing.js
 +++ new.privateNameNestedClassFieldShadowing.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [privateNameNestedClassFieldShadowing.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

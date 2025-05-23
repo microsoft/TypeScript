@@ -2,7 +2,7 @@
 +++ new.commentOnArrayElement3.js
 @@= skipped -10, +10 lines =@@
  ];
- 
+
  //// [commentOnArrayElement3.js]
 -var array = [
 +const array = [

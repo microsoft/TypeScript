@@ -1,8 +1,8 @@
 --- old.parser.numericSeparators.octal.js
 +++ new.parser.numericSeparators.octal.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [parser.numericSeparators.octal.js]
 -9;
 -1;

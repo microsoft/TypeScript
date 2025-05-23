@@ -1,7 +1,7 @@
 --- old.classStaticBlock27.js
 +++ new.classStaticBlock27.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [classStaticBlock27.js]
  // https://github.com/microsoft/TypeScript/issues/44872
 -var _a;

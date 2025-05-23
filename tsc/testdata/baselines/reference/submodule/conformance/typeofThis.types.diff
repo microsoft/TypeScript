@@ -2,15 +2,15 @@
 +++ new.typeofThis.types
 @@= skipped -278, +278 lines =@@
  >Test10 : Test10
- 
+
      a?: { b?: string }
 ->a : { b?: string; } | undefined
 +>a : { b?: string | undefined; } | undefined
  >b : string | undefined
- 
+
      foo() {
  >foo : () => void
- 
+
          let a: typeof this.a = undefined as any;
 ->a : { b?: string; } | undefined
 ->this.a : { b?: string; } | undefined
@@ -21,14 +21,14 @@
 +>a : { b?: string | undefined; } | undefined
  >undefined as any : any
  >undefined : undefined
- 
+
          if (this.a) {
 ->this.a : { b?: string; } | undefined
 +>this.a : { b?: string | undefined; } | undefined
  >this : this
 ->a : { b?: string; } | undefined
 +>a : { b?: string | undefined; } | undefined
- 
+
              let a: typeof this.a = undefined as any;    // should narrow to { b?: string }
 ->a : { b?: string; }
 ->this.a : { b?: string; }
@@ -39,7 +39,7 @@
 +>a : { b?: string | undefined; }
  >undefined as any : any
  >undefined : undefined
- 
+
              let b: typeof this.a.b = undefined as any;
  >b : string | undefined
  >this.a.b : string | undefined
@@ -51,7 +51,7 @@
  >b : string | undefined
  >undefined as any : any
  >undefined : undefined
- 
+
              if (this.a.b) {
  >this.a.b : string | undefined
 ->this.a : { b?: string; }
@@ -60,7 +60,7 @@
 ->a : { b?: string; }
 +>a : { b?: string | undefined; }
  >b : string | undefined
- 
+
                  let b: typeof this.a.b = undefined as any;   // should narrow to string
  >b : string
  >this.a.b : string
@@ -74,7 +74,7 @@
  >undefined : undefined
 @@= skipped -62, +62 lines =@@
  >Test11 : Test11
- 
+
      this?: { x?: string };
 ->this : { x?: string; } | undefined
 +>this : { x?: string | undefined; } | undefined
@@ -83,7 +83,7 @@
      foo() {
 @@= skipped -11, +11 lines =@@
  >this : this
- 
+
          let bar: typeof o.this = {};
 ->bar : { x?: string; } | undefined
 ->o.this : { x?: string; } | undefined
@@ -93,7 +93,7 @@
 ->this : { x?: string; } | undefined
 +>this : { x?: string | undefined; } | undefined
  >{} : {}
- 
+
          if (o.this && o.this.x) {
  >o.this && o.this.x : string | undefined
 ->o.this : { x?: string; } | undefined
@@ -108,7 +108,7 @@
 ->this : { x?: string; }
 +>this : { x?: string | undefined; }
  >x : string | undefined
- 
+
              let y: string = o.this.x;   // should narrow to string
  >y : string
  >o.this.x : string

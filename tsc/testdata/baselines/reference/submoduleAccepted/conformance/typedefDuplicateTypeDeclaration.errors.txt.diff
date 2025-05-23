@@ -1,6 +1,6 @@
 --- old.typedefDuplicateTypeDeclaration.errors.txt
 +++ new.typedefDuplicateTypeDeclaration.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -typedefDuplicateTypeDeclaration.js(4,16): error TS8033: A JSDoc '@typedef' comment may not contain multiple '@type' tags.
 -
 -
@@ -14,5 +14,4 @@
 -    
 -!!! error TS8033: A JSDoc '@typedef' comment may not contain multiple '@type' tags.
 -!!! related TS8034 typedefDuplicateTypeDeclaration.js:1:1: The tag was first specified here.
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.typeofClass2.js
 @@= skipped -23, +23 lines =@@
  var r2: typeof d;
- 
+
  //// [typeofClass2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

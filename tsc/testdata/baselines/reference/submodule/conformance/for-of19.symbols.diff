@@ -2,11 +2,11 @@
 +++ new.for-of19.symbols
 @@= skipped -7, +7 lines =@@
  >FooIterator : Symbol(FooIterator, Decl(for-of19.ts, 0, 13))
- 
+
      next() {
 ->next : Symbol(FooIterator.next, Decl(for-of19.ts, 1, 19))
 +>next : Symbol(next, Decl(for-of19.ts, 1, 19))
- 
+
          return {
              value: new Foo,
 @@= skipped -13, +13 lines =@@
@@ -20,6 +20,6 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
- 
+
          return this;
  >this : Symbol(FooIterator, Decl(for-of19.ts, 0, 13))

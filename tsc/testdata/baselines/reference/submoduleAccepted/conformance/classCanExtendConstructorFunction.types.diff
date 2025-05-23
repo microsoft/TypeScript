@@ -7,7 +7,7 @@
 ->Wagon : typeof Wagon
 +>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
  >numberOxen : number
- 
+
      this.numberOxen = numberOxen
  >this.numberOxen = numberOxen : number
  >this.numberOxen : any
@@ -30,7 +30,7 @@
 +>circle : (wagons: any) => any
 +>function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons: any) => any
 +>wagons : any
- 
+
      return wagons ? wagons.length : 3.14;
 ->wagons ? wagons.length : 3.14 : number
 ->wagons : Wagon[]
@@ -85,7 +85,7 @@
 +>length : any
  >-1 : -1
  >1 : 1
- 
+
 @@= skipped -60, +60 lines =@@
  >Wagon.prototype.speed = function () {    return this.numberOxen / this.weight()} : () => number
  >Wagon.prototype.speed : any
@@ -95,7 +95,7 @@
  >prototype : any
  >speed : any
  >function () {    return this.numberOxen / this.weight()} : () => number
- 
+
      return this.numberOxen / this.weight()
  >this.numberOxen / this.weight() : number
 ->this.numberOxen : number
@@ -118,13 +118,13 @@
  >Sql : Sql
 ->Wagon : Wagon
 +>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
- 
+
      constructor() {
          super(); // error: not enough arguments
  >super() : void
 ->super : typeof Wagon
 +>super : any
- 
+
          this.foonly = 12
  >this.foonly = 12 : 12
 ->this.foonly : any
@@ -143,7 +143,7 @@
 +>load : (files: string[], format: "csv" | "json" | "xmlolololol") => void
  >files : string[]
  >format : "csv" | "json" | "xmlolololol"
- 
+
 @@= skipped -16, +16 lines =@@
          }
          else {
@@ -156,7 +156,7 @@
 +>super.speed : any
 +>super : any
 +>speed : any
- 
+
              if (super.weight() < 0) {
  >super.weight() < 0 : boolean
 ->super.weight() : number
@@ -168,10 +168,10 @@
 +>super : any
 +>weight : any
  >0 : 0
- 
+
                  // ????????????????????????
 @@= skipped -25, +25 lines =@@
- 
+
  db.numberOxen = db.foonly
  >db.numberOxen = db.foonly : number
 ->db.numberOxen : number
@@ -188,7 +188,7 @@
  >Conestoga : Conestoga
 ->Wagon : Wagon
 +>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
- 
+
      constructor(public drunkOO: true) {
  >drunkOO : true
 @@= skipped -9, +9 lines =@@
@@ -207,7 +207,7 @@
 +>circle : (others: { (numberOxen: number): void; circle: (wagons: any) => any; }[]) => number
 +>others : { (numberOxen: number): void; circle: (wagons: any) => any; }[]
 +>Wagon : { (numberOxen: number): void; circle: (wagons: any) => any; }
- 
+
          return others.length
  >others.length : number
 ->others : (typeof Wagon)[]
@@ -217,14 +217,14 @@
  }
 @@= skipped -27, +27 lines =@@
  >drunkOO : true
- 
+
  c.numberOxen
 ->c.numberOxen : number
 +>c.numberOxen : any
  >c : Conestoga
 ->numberOxen : number
 +>numberOxen : any
- 
+
  === generic.js ===
  /**
 @@= skipped -10, +10 lines =@@
@@ -234,7 +234,7 @@
 ->Soup : typeof Soup
 +>Soup : <T>(flavour: T) => void
  >flavour : T
- 
+
      this.flavour = flavour
  >this.flavour = flavour : T
  >this.flavour : any
@@ -248,11 +248,11 @@
  >Chowder : Chowder
 ->Soup : Soup<{ claim: "ignorant" | "malicious"; }>
 +>Soup : <T>(flavour: T) => void
- 
+
      log() {
 ->log : () => { claim: "ignorant" | "malicious"; }
 +>log : () => any
- 
+
          return this.flavour
 ->this.flavour : { claim: "ignorant" | "malicious"; }
 +>this.flavour : any
@@ -261,7 +261,7 @@
 +>flavour : any
      }
  }
- 
+
  var soup = new Soup(1);
 ->soup : Soup<number>
 ->new Soup(1) : Soup<number>
@@ -270,7 +270,7 @@
 +>new Soup(1) : any
 +>Soup : <T>(flavour: T) => void
  >1 : 1
- 
+
  soup.flavour
 ->soup.flavour : number
 ->soup : Soup<number>
@@ -278,7 +278,7 @@
 +>soup.flavour : any
 +>soup : any
 +>flavour : any
- 
+
  var chowder = new Chowder({ claim: "ignorant" });
  >chowder : Chowder
  >new Chowder({ claim: "ignorant" }) : Chowder
@@ -288,7 +288,7 @@
 +>{ claim: "ignorant" } : { claim: string; }
 +>claim : string
  >"ignorant" : "ignorant"
- 
+
  chowder.flavour.claim
 ->chowder.flavour.claim : "ignorant" | "malicious"
 ->chowder.flavour : { claim: "ignorant" | "malicious"; }
@@ -299,6 +299,6 @@
 ->claim : "ignorant" | "malicious"
 +>flavour : any
 +>claim : any
- 
+
  var errorNoArgs = new Chowder();
  >errorNoArgs : Chowder

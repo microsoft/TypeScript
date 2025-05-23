@@ -2,7 +2,7 @@
 +++ new.controlFlowCommaExpressionFunctionCall.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [controlFlowCommaExpressionFunctionCall.js]
 -var otherValue = function () { return true; };
 -var value = null;

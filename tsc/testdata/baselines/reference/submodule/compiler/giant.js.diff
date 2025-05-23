@@ -2,7 +2,7 @@
 +++ new.giant.js
 @@= skipped -683, +683 lines =@@
  }
- 
+
  //// [giant.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -23,47 +23,9 @@
 -        MAX DEPTH 3 LEVELS
 -    */
 -    var p = "propName";
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.eM = exports.eC = exports.eV = void 0;
-+exports.eF = eF;
-+/*
-+    Prefixes
-+    p -> public
-+    r -> private
-+    i -> import
-+    e -> export
-+    a -> ambient
-+    t -> static
-+    s -> set
-+    g -> get
-+
-+    MAX DEPTH 3 LEVELS
-+*/
-+const p = "propName";
-+var V;
-+function F() { }
-+;
-+class C {
-+    constructor() { }
-+    pV;
-+    rV;
-+    pF() { }
-+    rF() { }
-+    pgF() { }
-+    psF(param) { }
-+    rgF() { }
-+    rsF(param) { }
-+    static tV;
-+    static tF() { }
-+    static tsF(param) { }
-+    static tgF() { }
-+}
-+var M;
-+(function (M_1) {
-     var V;
-     function F() { }
-     ;
+-    var V;
+-    function F() { }
+-    ;
 -    var C = /** @class */ (function () {
 -        function C() {
 -        }
@@ -110,26 +72,9 @@
 -    }());
 -    var M;
 -    (function (M_1) {
-+    class C {
-+        constructor() { }
-+        pV;
-+        rV;
-+        pF() { }
-+        rF() { }
-+        pgF() { }
-+        psF(param) { }
-+        rgF() { }
-+        rsF(param) { }
-+        static tV;
-+        static tF() { }
-+        static tsF(param) { }
-+        static tgF() { }
-+    }
-+    let M;
-+    (function (M) {
-         var V;
-         function F() { }
-         ;
+-        var V;
+-        function F() { }
+-        ;
 -        var C = /** @class */ (function () {
 -            function C() {
 -            }
@@ -203,15 +148,9 @@
 -            ;
 -            ;
 -        })(M || (M = {}));
-+        class C {
-+        }
-+        ;
-+        ;
-+        ;
-         function eF() { }
+-        function eF() { }
 -        M_1.eF = eF;
-+        M.eF = eF;
-         ;
+-        ;
 -        var eC = /** @class */ (function () {
 -            function eC() {
 -            }
@@ -286,19 +225,10 @@
 -            ;
 -            ;
 -        })(eM = M_1.eM || (M_1.eM = {}));
-+        class eC {
-+        }
-+        M.eC = eC;
-         ;
-+        ;
-+        ;
-+        ;
-+        ;
-+        ;
-     })(M || (M = {}));
-     function eF() { }
-+    M_1.eF = eF;
-     ;
+-        ;
+-    })(M || (M = {}));
+-    function eF() { }
+-    ;
 -    var eC = /** @class */ (function () {
 -        function eC() {
 -        }
@@ -346,27 +276,9 @@
 -    exports.eC = eC;
 -    var eM;
 -    (function (eM_1) {
-+    class eC {
-+        constructor() { }
-+        pV;
-+        rV;
-+        pF() { }
-+        rF() { }
-+        pgF() { }
-+        psF(param) { }
-+        rgF() { }
-+        rsF(param) { }
-+        static tV;
-+        static tF() { }
-+        static tsF(param) { }
-+        static tgF() { }
-+    }
-+    M_1.eC = eC;
-+    let eM;
-+    (function (eM) {
-         var V;
-         function F() { }
-         ;
+-        var V;
+-        function F() { }
+-        ;
 -        var C = /** @class */ (function () {
 -            function C() {
 -            }
@@ -440,15 +352,9 @@
 -            ;
 -            ;
 -        })(M || (M = {}));
-+        class C {
-+        }
-+        ;
-+        ;
-+        ;
-         function eF() { }
+-        function eF() { }
 -        eM_1.eF = eF;
-+        eM.eF = eF;
-         ;
+-        ;
 -        var eC = /** @class */ (function () {
 -            function eC() {
 -            }
@@ -523,18 +429,9 @@
 -            ;
 -            ;
 -        })(eM = eM_1.eM || (eM_1.eM = {}));
-+        class eC {
-+        }
-+        eM.eC = eC;
-         ;
+-        ;
 -    })(eM || (exports.eM = eM = {}));
-+        ;
-+        ;
-+        ;
-+        ;
-+        ;
-+    })(eM = M_1.eM || (M_1.eM = {}));
-     ;
+-    ;
 -});
 -
 -
@@ -562,24 +459,7 @@
 -    static set tsF(param: any);
 -    static tgF(): void;
 -    static get tgF(): any;
-+})(M || (M = {}));
-+function eF() { }
-+;
-+class eC {
-+    constructor() { }
-+    pV;
-+    rV;
-+    pF() { }
-+    rF() { }
-+    pgF() { }
-+    psF(param) { }
-+    rgF() { }
-+    rsF(param) { }
-+    static tV;
-+    static tF() { }
-+    static tsF(param) { }
-+    static tgF() { }
- }
+-}
 -export interface eI {
 -    (): any;
 -    (): number;
@@ -742,33 +622,14 @@
 -export declare namespace eaM {
 -    var V: any;
 -    function F(): void;
-+exports.eC = eC;
-+var eM;
-+(function (eM_1) {
-+    var V;
-+    function F() { }
-+    ;
-     class C {
+-    class C {
 -        constructor();
 -        pV: any;
 -        private rV;
 -        pF(): void;
 -        static tV: any;
 -        static tF(): void;
-+        constructor() { }
-+        pV;
-+        rV;
-+        pF() { }
-+        rF() { }
-+        pgF() { }
-+        psF(param) { }
-+        rgF() { }
-+        rsF(param) { }
-+        static tV;
-+        static tF() { }
-+        static tsF(param) { }
-+        static tgF() { }
-     }
+-    }
 -    interface I {
 -        (): any;
 -        (): number;
@@ -800,26 +661,15 @@
 -    namespace M {
 -        var V: any;
 -        function F(): void;
-+    let M;
-+    (function (M) {
-+        var V;
-+        function F() { }
-+        ;
-         class C {
-         }
+-        class C {
+-        }
 -        interface I {
 -        }
 -        namespace M { }
 -        var eV: any;
 -        function eF(): void;
-+        ;
-+        ;
-+        ;
-+        function eF() { }
-+        M.eF = eF;
-+        ;
-         class eC {
-         }
+-        class eC {
+-        }
 -        interface eI {
 -        }
 -        namespace eM { }
@@ -831,38 +681,14 @@
 -    }
 -    var eV: any;
 -    function eF(): void;
-+        M.eC = eC;
-+        ;
-+        ;
-+        ;
-+        ;
-+        ;
-+        ;
-+    })(M || (M = {}));
-+    function eF() { }
-+    eM_1.eF = eF;
-+    ;
-     class eC {
+-    class eC {
 -        constructor();
 -        pV: any;
 -        private rV;
 -        pF(): void;
 -        static tV: any;
 -        static tF(): void;
-+        constructor() { }
-+        pV;
-+        rV;
-+        pF() { }
-+        rF() { }
-+        pgF() { }
-+        psF(param) { }
-+        rgF() { }
-+        rsF(param) { }
-+        static tV;
-+        static tF() { }
-+        static tsF(param) { }
-+        static tgF() { }
-     }
+-    }
 -    interface eI {
 -        (): any;
 -        (): number;
@@ -895,31 +721,237 @@
 -    namespace eM {
 -        var V: any;
 -        function F(): void;
-+    eM_1.eC = eC;
-+    let eM;
-+    (function (eM) {
-+        var V;
-+        function F() { }
-+        ;
-         class C {
-         }
+-        class C {
+-        }
 -        namespace M { }
 -        var eV: any;
 -        function eF(): void;
-+        ;
-+        ;
-+        ;
-+        function eF() { }
-+        eM.eF = eF;
-+        ;
-         class eC {
-         }
+-        class eC {
+-        }
 -        interface eI {
 -        }
 -        namespace eM { }
 -    }
 -}
 -export {};
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.eM = exports.eC = exports.eV = void 0;
++exports.eF = eF;
++/*
++    Prefixes
++    p -> public
++    r -> private
++    i -> import
++    e -> export
++    a -> ambient
++    t -> static
++    s -> set
++    g -> get
++
++    MAX DEPTH 3 LEVELS
++*/
++const p = "propName";
++var V;
++function F() { }
++;
++class C {
++    constructor() { }
++    pV;
++    rV;
++    pF() { }
++    rF() { }
++    pgF() { }
++    psF(param) { }
++    rgF() { }
++    rsF(param) { }
++    static tV;
++    static tF() { }
++    static tsF(param) { }
++    static tgF() { }
++}
++var M;
++(function (M_1) {
++    var V;
++    function F() { }
++    ;
++    class C {
++        constructor() { }
++        pV;
++        rV;
++        pF() { }
++        rF() { }
++        pgF() { }
++        psF(param) { }
++        rgF() { }
++        rsF(param) { }
++        static tV;
++        static tF() { }
++        static tsF(param) { }
++        static tgF() { }
++    }
++    let M;
++    (function (M) {
++        var V;
++        function F() { }
++        ;
++        class C {
++        }
++        ;
++        ;
++        ;
++        function eF() { }
++        M.eF = eF;
++        ;
++        class eC {
++        }
++        M.eC = eC;
++        ;
++        ;
++        ;
++        ;
++        ;
++        ;
++    })(M || (M = {}));
++    function eF() { }
++    M_1.eF = eF;
++    ;
++    class eC {
++        constructor() { }
++        pV;
++        rV;
++        pF() { }
++        rF() { }
++        pgF() { }
++        psF(param) { }
++        rgF() { }
++        rsF(param) { }
++        static tV;
++        static tF() { }
++        static tsF(param) { }
++        static tgF() { }
++    }
++    M_1.eC = eC;
++    let eM;
++    (function (eM) {
++        var V;
++        function F() { }
++        ;
++        class C {
++        }
++        ;
++        ;
++        ;
++        function eF() { }
++        eM.eF = eF;
++        ;
++        class eC {
++        }
++        eM.eC = eC;
++        ;
++        ;
++        ;
++        ;
++        ;
++        ;
++    })(eM = M_1.eM || (M_1.eM = {}));
++    ;
++})(M || (M = {}));
++function eF() { }
++;
++class eC {
++    constructor() { }
++    pV;
++    rV;
++    pF() { }
++    rF() { }
++    pgF() { }
++    psF(param) { }
++    rgF() { }
++    rsF(param) { }
++    static tV;
++    static tF() { }
++    static tsF(param) { }
++    static tgF() { }
++}
++exports.eC = eC;
++var eM;
++(function (eM_1) {
++    var V;
++    function F() { }
++    ;
++    class C {
++        constructor() { }
++        pV;
++        rV;
++        pF() { }
++        rF() { }
++        pgF() { }
++        psF(param) { }
++        rgF() { }
++        rsF(param) { }
++        static tV;
++        static tF() { }
++        static tsF(param) { }
++        static tgF() { }
++    }
++    let M;
++    (function (M) {
++        var V;
++        function F() { }
++        ;
++        class C {
++        }
++        ;
++        ;
++        ;
++        function eF() { }
++        M.eF = eF;
++        ;
++        class eC {
++        }
++        M.eC = eC;
++        ;
++        ;
++        ;
++        ;
++        ;
++        ;
++    })(M || (M = {}));
++    function eF() { }
++    eM_1.eF = eF;
++    ;
++    class eC {
++        constructor() { }
++        pV;
++        rV;
++        pF() { }
++        rF() { }
++        pgF() { }
++        psF(param) { }
++        rgF() { }
++        rsF(param) { }
++        static tV;
++        static tF() { }
++        static tsF(param) { }
++        static tgF() { }
++    }
++    eM_1.eC = eC;
++    let eM;
++    (function (eM) {
++        var V;
++        function F() { }
++        ;
++        class C {
++        }
++        ;
++        ;
++        ;
++        function eF() { }
++        eM.eF = eF;
++        ;
++        class eC {
++        }
 +        eM.eC = eC;
 +        ;
 +        ;

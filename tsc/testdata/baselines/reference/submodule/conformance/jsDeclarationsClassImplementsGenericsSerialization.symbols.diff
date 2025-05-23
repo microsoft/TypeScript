@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsClassImplementsGenericsSerialization.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(interface.ts, 0, 25))
- 
+
      encode(value: T): Uint8Array
 ->encode : Symbol(Encoder.encode, Decl(interface.ts, 0, 29))
 +>encode : Symbol(encode, Decl(interface.ts, 0, 29))
@@ -16,5 +16,5 @@
 ->encode : Symbol(Encoder.encode, Decl(lib.js, 4, 22))
 +>encode : Symbol(encode, Decl(lib.js, 4, 22))
  >value : Symbol(value, Decl(lib.js, 8, 11))
- 
+
          return new Uint8Array(0)

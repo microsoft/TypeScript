@@ -10,13 +10,13 @@
 +>f : function
 +>(value) => {    value = 1 // should error} : (value: any) => void
 +>value : any
- 
+
      value = 1 // should error
  >value = 1 : 1
 ->value : string
 +>value : any
  >1 : 1
- 
+
  };
  /** @type {(s: string) => void} */
  function g(s) {
@@ -24,11 +24,10 @@
 ->s : string
 +>g : (s: any) => void
 +>s : any
- 
+
      s = 1 // Should error
  >s = 1 : 1
 ->s : string
 +>s : any
  >1 : 1
  }
- 

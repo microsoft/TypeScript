@@ -2,29 +2,31 @@
 +++ new.classAbstractSingleLineDecl.js
 @@= skipped -14, +14 lines =@@
  new C;
- 
+
  //// [classAbstractSingleLineDecl.js]
 -var A = /** @class */ (function () {
 -    function A() {
 -    }
 -    return A;
 -}());
-+class A {
-+}
- abstract;
+-abstract;
 -var B = /** @class */ (function () {
 -    function B() {
 -    }
 -    return B;
 -}());
-+class B {
-+}
- abstract;
+-abstract;
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    return C;
 -}());
++class A {
++}
++abstract;
++class B {
++}
++abstract;
 +class C {
 +}
  new A;

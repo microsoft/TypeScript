@@ -1,8 +1,8 @@
 --- old.classStaticBlock5(target=es5).js
 +++ new.classStaticBlock5(target=es5).js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [classStaticBlock5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,18 +21,7 @@
 -})();
 -var B = /** @class */ (function () {
 -    function B() {
-+class B {
-+    static a = 1;
-+    static b = 2;
-+}
-+class C extends B {
-+    static b = 3;
-+    static c = super.a;
-+    static {
-+        this.b;
-+        super.b;
-+        super.a;
-     }
+-    }
 -    B.a = 1;
 -    B.b = 2;
 -    return B;
@@ -53,4 +42,16 @@
 -    })();
 -    return C;
 -}(B));
++class B {
++    static a = 1;
++    static b = 2;
++}
++class C extends B {
++    static b = 3;
++    static c = super.a;
++    static {
++        this.b;
++        super.b;
++        super.a;
++    }
 +}

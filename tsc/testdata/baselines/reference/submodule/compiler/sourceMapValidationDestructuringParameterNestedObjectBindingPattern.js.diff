@@ -1,7 +1,7 @@
 --- old.sourceMapValidationDestructuringParameterNestedObjectBindingPattern.js
 +++ new.sourceMapValidationDestructuringParameterNestedObjectBindingPattern.js
 @@= skipped -34, +34 lines =@@
- 
+
  //// [sourceMapValidationDestructuringParameterNestedObjectBindingPattern.js]
  var robotA = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 -function foo1(_a) {

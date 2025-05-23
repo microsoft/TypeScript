@@ -2,19 +2,19 @@
 +++ new.coAndContraVariantInferences6.types
 @@= skipped -40, +40 lines =@@
  >props : P
- 
+
  declare function createElementIsolated<P extends {}>(
 ->createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
 +>createElementIsolated : <P extends {}>(type: string | (ComponentClass<P>) | (FunctionComponent<P>), props?: P | null | undefined) => void
- 
+
    type: FunctionComponent<P> | ComponentClass<P> | string,
 ->type : string | ComponentClass<P> | FunctionComponent<P>
 +>type : string | (ComponentClass<P>) | (FunctionComponent<P>)
- 
+
    props?: P | null,
  >props : P | null | undefined
 @@= skipped -15, +15 lines =@@
- 
+
  createElementIsolated(WrapperIsolated, { value: "C" });
  >createElementIsolated(WrapperIsolated, { value: "C" }) : void
 ->createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void

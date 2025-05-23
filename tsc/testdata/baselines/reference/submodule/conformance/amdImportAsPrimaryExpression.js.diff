@@ -1,8 +1,8 @@
 --- old.amdImportAsPrimaryExpression.js
 +++ new.amdImportAsPrimaryExpression.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [foo_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

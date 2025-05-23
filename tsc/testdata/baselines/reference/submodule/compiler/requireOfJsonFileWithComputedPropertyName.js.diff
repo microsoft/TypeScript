@@ -3,7 +3,7 @@
 @@= skipped -12, +12 lines =@@
      [a]: 10
  }
- 
+
 -//// [b.json]
 -var _a;
 -_a = {},

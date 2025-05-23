@@ -1,8 +1,8 @@
 --- old.objectSpreadWithinMethodWithinObjectWithSpread.js
 +++ new.objectSpreadWithinMethodWithinObjectWithSpread.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [objectSpreadWithinMethodWithinObjectWithSpread.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

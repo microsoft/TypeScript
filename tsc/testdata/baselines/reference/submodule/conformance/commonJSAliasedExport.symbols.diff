@@ -5,13 +5,14 @@
  >funky : Symbol(funky, Decl(bug43713.js, 0, 7))
  >require : Symbol(require)
 ->'./commonJSAliasedExport' : Symbol("commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
- 
+
  /** @type {boolean} */
  var diddy
-@@= skipped -11, +10 lines =@@
+@@= skipped -10, +9 lines =@@
+ >diddy : Symbol(diddy, Decl(bug43713.js, 2, 3), Decl(bug43713.js, 3, 3))
  >funky : Symbol(funky, Decl(bug43713.js, 0, 7))
- 
- 
+
+-
 -=== commonJSAliasedExport.js ===
 -const donkey = (ast) =>  ast;
 ->donkey : Symbol(donkey, Decl(commonJSAliasedExport.js, 0, 5))
@@ -37,4 +38,3 @@
 ->exports : Symbol(module.exports, Decl(commonJSAliasedExport.js, 0, 0))
 ->funky : Symbol(funky, Decl(commonJSAliasedExport.js, 5, 24))
 ->funky : Symbol(funky, Decl(commonJSAliasedExport.js, 0, 29))
--

@@ -9,13 +9,13 @@
  >2 : 2
  >3 : 3
 @@= skipped -72, +73 lines =@@
- 
+
          /** @this {Test} */
          function (d) {
 ->function (d) {            console.log(d === this.data.length)        } : (this: Test, d: number) => void
 +>function (d) {            console.log(d === this.data.length)        } : (d: number) => void
  >d : number
- 
+
              console.log(d === this.data.length)
 @@= skipped -10, +10 lines =@@
  >log : (...data: any[]) => void
@@ -31,17 +31,17 @@
 +>this : any
 +>data : any
 +>length : any
- 
+
          }, this)
  >this : this
 @@= skipped -23, +23 lines =@@
- 
+
          /** @this {Test} */
          function (d) {
 ->function (d) {            return d === this.data.length        } : (this: Test, d: number) => boolean
 +>function (d) {            return d === this.data.length        } : (d: number) => boolean
  >d : number
- 
+
              return d === this.data.length
  >d === this.data.length : boolean
  >d : number
@@ -55,6 +55,6 @@
 +>this : any
 +>data : any
 +>length : any
- 
+
          }, this)
  >this : this

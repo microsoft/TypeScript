@@ -1,7 +1,7 @@
 --- old.circularTypeofWithFunctionModule.js
 +++ new.circularTypeofWithFunctionModule.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [circularTypeofWithFunctionModule.js]
  // Repro from #6072
 -var __extends = (this && this.__extends) || (function () {

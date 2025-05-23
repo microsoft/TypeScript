@@ -2,7 +2,7 @@
 +++ new.undeclaredMethod.types
 @@= skipped -12, +12 lines =@@
  }
- 
+
  var c:M.C = new M.C();
 ->c : M.C
 +>c : C
@@ -14,19 +14,18 @@
  >M : typeof M
 ->C : typeof M.C
 +>C : typeof C
- 
+
  c.salt();	// cool
  >c.salt() : void
  >c.salt : () => void
 ->c : M.C
 +>c : C
  >salt : () => void
- 
+
  c.saltbar();	// crash
  >c.saltbar() : any
  >c.saltbar : any
 ->c : M.C
 +>c : C
  >saltbar : any
- 
- 
+

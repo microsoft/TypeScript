@@ -1,8 +1,7 @@
 --- old.argumentsReferenceInMethod3_Js.errors.txt
 +++ new.argumentsReferenceInMethod3_Js.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/a.js(20,18): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 +
 +

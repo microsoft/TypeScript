@@ -1,7 +1,7 @@
 --- old.tsxStatelessFunctionComponents2.js
 +++ new.tsxStatelessFunctionComponents2.js
 @@= skipped -40, +40 lines =@@
- 
+
  //// [file.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

@@ -1,7 +1,7 @@
 --- old.declFileWithClassNameConflictingWithClassReferredByExtendsClause.types
 +++ new.declFileWithClassNameConflictingWithClassReferredByExtendsClause.types
 @@= skipped -19, +19 lines =@@
- 
+
      export class W extends A.B.Base.W {
  >W : W
 ->A.B.Base.W : A.B.Base.W
@@ -17,11 +17,11 @@
 +>B : typeof B
 +>Base : typeof Base
 +>W : typeof W
- 
+
          name: string;
  >name : string
 @@= skipped -21, +21 lines =@@
- 
+
      export class W<TValue> extends X.Y.base.W {
  >W : W<TValue>
 ->X.Y.base.W : base.W
@@ -33,6 +33,6 @@
  >base : typeof base
 ->W : typeof base.W
 +>W : typeof W
- 
+
          value: boolean;
  >value : boolean

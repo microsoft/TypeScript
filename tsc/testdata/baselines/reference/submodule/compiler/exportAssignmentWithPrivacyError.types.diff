@@ -2,18 +2,17 @@
 +++ new.exportAssignmentWithPrivacyError.types
 @@= skipped -17, +17 lines =@@
  }
- 
+
  var server: {
 ->server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }
 +>server : { (): connectexport; test1: connectmodule; test2: () => connectmodule; }
- 
+
      (): connectexport;
      test1: connectmodule;
 @@= skipped -12, +12 lines =@@
  };
- 
+
  export = server;
 ->server : { (): connectexport; test1: connectmodule; test2(): connectmodule; }
 +>server : { (): connectexport; test1: connectmodule; test2: () => connectmodule; }
- 
- 
+

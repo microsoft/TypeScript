@@ -2,7 +2,7 @@
 +++ new.staticVisibility2.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [staticVisibility2.js]
 -var Square = /** @class */ (function () {
 -    function Square(sideLength) {

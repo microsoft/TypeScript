@@ -6,15 +6,15 @@
      export module inst { // one error
 ->inst : typeof M.inst
 +>inst : typeof inst
- 
+
          var t;
  >t : any
 @@= skipped -45, +45 lines =@@
- 
+
      module C { }
      export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
 ->C : typeof M.C
 +>C : typeof C
- 
+
          var t;
  >t : any

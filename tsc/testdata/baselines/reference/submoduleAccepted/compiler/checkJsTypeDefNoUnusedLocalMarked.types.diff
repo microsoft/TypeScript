@@ -2,7 +2,7 @@
 +++ new.checkJsTypeDefNoUnusedLocalMarked.types
 @@= skipped -23, +23 lines =@@
  /** @typedef {(foo: Foo) => string} FooFun */
- 
+
  module.exports = /** @type {FooFun} */(void 0);
 ->module.exports = /** @type {FooFun} */(void 0) : (foo: Foo) => string
 ->module.exports : (foo: Foo) => string
@@ -17,4 +17,3 @@
 +>void 0 : (foo: typeof Foo) => string
  >void 0 : undefined
  >0 : 0
- 

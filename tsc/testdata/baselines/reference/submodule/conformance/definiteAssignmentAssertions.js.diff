@@ -1,8 +1,8 @@
 --- old.definiteAssignmentAssertions.js
 +++ new.definiteAssignmentAssertions.js
 @@= skipped -84, +84 lines =@@
- 
- 
+
+
  //// [definiteAssignmentAssertions.js]
 -"use strict";
  // Suppress strict property initialization check
@@ -87,10 +87,7 @@
 -    var a;
 -    var b = 1;
 -    var c = 1;
-+    let a;
-+    let b = 1;
-+    let c = 1;
- }
+-}
 -
 -
 -//// [definiteAssignmentAssertions.d.ts]
@@ -122,4 +119,7 @@
 -declare var v2: number;
 -declare namespace foo {
 -    var v: number;
--}
++    let a;
++    let b = 1;
++    let c = 1;
+ }

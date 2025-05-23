@@ -1,8 +1,8 @@
 --- old.genericWithOpenTypeParameters1.js
 +++ new.genericWithOpenTypeParameters1.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [genericWithOpenTypeParameters1.js]
 -var B = /** @class */ (function () {
 -    function B() {

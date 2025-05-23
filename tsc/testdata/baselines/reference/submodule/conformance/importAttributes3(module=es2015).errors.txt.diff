@@ -9,8 +9,8 @@
 +2.ts(1,31): error TS2857: Import attributes cannot be used with type-only imports or exports.
  2.ts(2,33): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
 +2.ts(2,33): error TS2857: Import attributes cannot be used with type-only imports or exports.
- 
- 
+
+
  ==== 0.ts (0 errors) ====
      export interface I { }
      

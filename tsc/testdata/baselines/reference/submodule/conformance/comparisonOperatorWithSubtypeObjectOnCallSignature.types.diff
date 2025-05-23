@@ -2,136 +2,136 @@
 +++ new.comparisonOperatorWithSubtypeObjectOnCallSignature.types
 @@= skipped -16, +16 lines =@@
  }
- 
+
  var a1: { fn(): void };
 ->a1 : { fn(): void; }
 +>a1 : { fn: () => void; }
  >fn : () => void
- 
+
  var b1: { fn(): void };
 ->b1 : { fn(): void; }
 +>b1 : { fn: () => void; }
  >fn : () => void
- 
+
  var a2: { fn(a: number, b: string): void };
 ->a2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
  >fn : (a: number, b: string) => void
  >a : number
  >b : string
- 
+
  var b2: { fn(a: number, b: string): void };
 ->b2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
  >fn : (a: number, b: string) => void
  >a : number
  >b : string
- 
+
  var a3: { fn(a: number, b: string): void };
 ->a3 : { fn(a: number, b: string): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
  >fn : (a: number, b: string) => void
  >a : number
  >b : string
- 
+
  var b3: { fn(a: number): void };
 ->b3 : { fn(a: number): void; }
 +>b3 : { fn: (a: number) => void; }
  >fn : (a: number) => void
  >a : number
- 
+
  var a4: { fn(a: number, b: string): void };
 ->a4 : { fn(a: number, b: string): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
  >fn : (a: number, b: string) => void
  >a : number
  >b : string
- 
+
  var b4: { fn(): void };
 ->b4 : { fn(): void; }
 +>b4 : { fn: () => void; }
  >fn : () => void
- 
+
  var a5: { fn(a: Base): void };
 ->a5 : { fn(a: Base): void; }
 +>a5 : { fn: (a: Base) => void; }
  >fn : (a: Base) => void
  >a : Base
- 
+
  var b5: { fn(a: Derived): void };
 ->b5 : { fn(a: Derived): void; }
 +>b5 : { fn: (a: Derived) => void; }
  >fn : (a: Derived) => void
  >a : Derived
- 
+
  var a6: { fn(a: Derived, b: Base): void };
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
  >fn : (a: Derived, b: Base) => void
  >a : Derived
  >b : Base
- 
+
  var b6: { fn(a: Base, b: Derived): void };
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
  >fn : (a: Base, b: Derived) => void
  >a : Base
  >b : Derived
- 
+
  var a7: { fn(): void };
 ->a7 : { fn(): void; }
 +>a7 : { fn: () => void; }
  >fn : () => void
- 
+
  var b7: { fn(): Base };
 ->b7 : { fn(): Base; }
 +>b7 : { fn: () => Base; }
  >fn : () => Base
- 
+
  var a8: { fn(): Base };
 ->a8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
  >fn : () => Base
- 
+
  var b8: { fn(): Base };
 ->b8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
  >fn : () => Base
- 
+
  var a9: { fn(): Base };
 ->a9 : { fn(): Base; }
 +>a9 : { fn: () => Base; }
  >fn : () => Base
- 
+
  var b9: { fn(): Derived };
 ->b9 : { fn(): Derived; }
 +>b9 : { fn: () => Derived; }
  >fn : () => Derived
- 
+
  var a10: { fn(a?: Base): void };
 ->a10 : { fn(a?: Base): void; }
 +>a10 : { fn: (a?: Base) => void; }
  >fn : (a?: Base) => void
  >a : Base
- 
+
  var b10: { fn(a?: Derived): void };
 ->b10 : { fn(a?: Derived): void; }
 +>b10 : { fn: (a?: Derived) => void; }
  >fn : (a?: Derived) => void
  >a : Derived
- 
+
  var a11: { fn(...a: Base[]): void };
 ->a11 : { fn(...a: Base[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
  >fn : (...a: Base[]) => void
  >a : Base[]
- 
+
  var b11: { fn(...a: Derived[]): void };
 ->b11 : { fn(...a: Derived[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
  >fn : (...a: Derived[]) => void
  >a : Derived[]
- 
+
 @@= skipped -113, +113 lines =@@
  var r1a1 = a1 < b1;
  >r1a1 : boolean
@@ -140,7 +140,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r1a2 = a2 < b2;
  >r1a2 : boolean
  >a2 < b2 : boolean
@@ -148,7 +148,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r1a3 = a3 < b3;
  >r1a3 : boolean
  >a3 < b3 : boolean
@@ -156,7 +156,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r1a4 = a4 < b4;
  >r1a4 : boolean
  >a4 < b4 : boolean
@@ -164,7 +164,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r1a5 = a5 < b5;
  >r1a5 : boolean
  >a5 < b5 : boolean
@@ -172,7 +172,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r1a6 = a6 < b6;
  >r1a6 : boolean
  >a6 < b6 : boolean
@@ -180,7 +180,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r1a7 = a7 < b7;
  >r1a7 : boolean
  >a7 < b7 : boolean
@@ -188,7 +188,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r1a8 = a8 < b8;
  >r1a8 : boolean
  >a8 < b8 : boolean
@@ -196,7 +196,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r1a9 = a9 < b9;
  >r1a9 : boolean
  >a9 < b9 : boolean
@@ -204,7 +204,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r1a10 = a10 < b10;
  >r1a10 : boolean
  >a10 < b10 : boolean
@@ -212,7 +212,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r1a11 = a11 < b11;
  >r1a11 : boolean
  >a11 < b11 : boolean
@@ -220,9 +220,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r1a12 = a12 < b12;
- 
+
  var r1b1 = b1 < a1;
  >r1b1 : boolean
  >b1 < a1 : boolean
@@ -230,7 +230,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r1b2 = b2 < a2;
  >r1b2 : boolean
  >b2 < a2 : boolean
@@ -238,7 +238,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r1b3 = b3 < a3;
  >r1b3 : boolean
  >b3 < a3 : boolean
@@ -246,7 +246,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r1b4 = b4 < a4;
  >r1b4 : boolean
  >b4 < a4 : boolean
@@ -254,7 +254,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r1b5 = b5 < a5;
  >r1b5 : boolean
  >b5 < a5 : boolean
@@ -262,7 +262,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r1b6 = b6 < a6;
  >r1b6 : boolean
  >b6 < a6 : boolean
@@ -270,7 +270,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r1b7 = b7 < a7;
  >r1b7 : boolean
  >b7 < a7 : boolean
@@ -278,7 +278,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r1b8 = b8 < a8;
  >r1b8 : boolean
  >b8 < a8 : boolean
@@ -286,7 +286,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r1b9 = b9 < a9;
  >r1b9 : boolean
  >b9 < a9 : boolean
@@ -294,7 +294,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r1b10 = b10 < a10;
  >r1b10 : boolean
  >b10 < a10 : boolean
@@ -302,7 +302,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r1b11 = b11 < a11;
  >r1b11 : boolean
  >b11 < a11 : boolean
@@ -310,9 +310,9 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r1b12 = b12 < a12;
- 
+
 @@= skipped -137, +137 lines =@@
  var r2a1 = a1 > b1;
  >r2a1 : boolean
@@ -321,7 +321,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r2a2 = a2 > b2;
  >r2a2 : boolean
  >a2 > b2 : boolean
@@ -329,7 +329,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r2a3 = a3 > b3;
  >r2a3 : boolean
  >a3 > b3 : boolean
@@ -337,7 +337,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r2a4 = a4 > b4;
  >r2a4 : boolean
  >a4 > b4 : boolean
@@ -345,7 +345,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r2a5 = a5 > b5;
  >r2a5 : boolean
  >a5 > b5 : boolean
@@ -353,7 +353,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r2a6 = a6 > b6;
  >r2a6 : boolean
  >a6 > b6 : boolean
@@ -361,7 +361,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r2a7 = a7 > b7;
  >r2a7 : boolean
  >a7 > b7 : boolean
@@ -369,7 +369,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r2a8 = a8 > b8;
  >r2a8 : boolean
  >a8 > b8 : boolean
@@ -377,7 +377,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r2a9 = a9 > b9;
  >r2a9 : boolean
  >a9 > b9 : boolean
@@ -385,7 +385,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r2a10 = a10 > b10;
  >r2a10 : boolean
  >a10 > b10 : boolean
@@ -393,7 +393,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r2a11 = a11 > b11;
  >r2a11 : boolean
  >a11 > b11 : boolean
@@ -401,9 +401,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r2a12 = a12 > b12;
- 
+
  var r2b1 = b1 > a1;
  >r2b1 : boolean
  >b1 > a1 : boolean
@@ -411,7 +411,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r2b2 = b2 > a2;
  >r2b2 : boolean
  >b2 > a2 : boolean
@@ -419,7 +419,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r2b3 = b3 > a3;
  >r2b3 : boolean
  >b3 > a3 : boolean
@@ -427,7 +427,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r2b4 = b4 > a4;
  >r2b4 : boolean
  >b4 > a4 : boolean
@@ -435,7 +435,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r2b5 = b5 > a5;
  >r2b5 : boolean
  >b5 > a5 : boolean
@@ -443,7 +443,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r2b6 = b6 > a6;
  >r2b6 : boolean
  >b6 > a6 : boolean
@@ -451,7 +451,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r2b7 = b7 > a7;
  >r2b7 : boolean
  >b7 > a7 : boolean
@@ -459,7 +459,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r2b8 = b8 > a8;
  >r2b8 : boolean
  >b8 > a8 : boolean
@@ -467,7 +467,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r2b9 = b9 > a9;
  >r2b9 : boolean
  >b9 > a9 : boolean
@@ -475,7 +475,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r2b10 = b10 > a10;
  >r2b10 : boolean
  >b10 > a10 : boolean
@@ -483,7 +483,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r2b11 = b11 > a11;
  >r2b11 : boolean
  >b11 > a11 : boolean
@@ -491,9 +491,9 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r2b12 = b12 > a12;
- 
+
 @@= skipped -137, +137 lines =@@
  var r3a1 = a1 <= b1;
  >r3a1 : boolean
@@ -502,7 +502,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r3a2 = a2 <= b2;
  >r3a2 : boolean
  >a2 <= b2 : boolean
@@ -510,7 +510,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r3a3 = a3 <= b3;
  >r3a3 : boolean
  >a3 <= b3 : boolean
@@ -518,7 +518,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r3a4 = a4 <= b4;
  >r3a4 : boolean
  >a4 <= b4 : boolean
@@ -526,7 +526,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r3a5 = a5 <= b5;
  >r3a5 : boolean
  >a5 <= b5 : boolean
@@ -534,7 +534,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r3a6 = a6 <= b6;
  >r3a6 : boolean
  >a6 <= b6 : boolean
@@ -542,7 +542,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r3a7 = a7 <= b7;
  >r3a7 : boolean
  >a7 <= b7 : boolean
@@ -550,7 +550,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r3a8 = a8 <= b8;
  >r3a8 : boolean
  >a8 <= b8 : boolean
@@ -558,7 +558,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r3a9 = a9 <= b9;
  >r3a9 : boolean
  >a9 <= b9 : boolean
@@ -566,7 +566,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r3a10 = a10 <= b10;
  >r3a10 : boolean
  >a10 <= b10 : boolean
@@ -574,7 +574,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r3a11 = a11 <= b11;
  >r3a11 : boolean
  >a11 <= b11 : boolean
@@ -582,9 +582,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r3a12 = a12 <= b12;
- 
+
  var r3b1 = b1 <= a1;
  >r3b1 : boolean
  >b1 <= a1 : boolean
@@ -592,7 +592,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r3b2 = b2 <= a2;
  >r3b2 : boolean
  >b2 <= a2 : boolean
@@ -600,7 +600,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r3b3 = b3 <= a3;
  >r3b3 : boolean
  >b3 <= a3 : boolean
@@ -608,7 +608,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r3b4 = b4 <= a4;
  >r3b4 : boolean
  >b4 <= a4 : boolean
@@ -616,7 +616,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r3b5 = b5 <= a5;
  >r3b5 : boolean
  >b5 <= a5 : boolean
@@ -624,7 +624,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r3b6 = b6 <= a6;
  >r3b6 : boolean
  >b6 <= a6 : boolean
@@ -632,7 +632,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r3b7 = b7 <= a7;
  >r3b7 : boolean
  >b7 <= a7 : boolean
@@ -640,7 +640,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r3b8 = b8 <= a8;
  >r3b8 : boolean
  >b8 <= a8 : boolean
@@ -648,7 +648,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r3b9 = b9 <= a9;
  >r3b9 : boolean
  >b9 <= a9 : boolean
@@ -656,7 +656,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r3b10 = b10 <= a10;
  >r3b10 : boolean
  >b10 <= a10 : boolean
@@ -664,7 +664,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r3b11 = b11 <= a11;
  >r3b11 : boolean
  >b11 <= a11 : boolean
@@ -672,9 +672,9 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r3b12 = b12 <= a12;
- 
+
 @@= skipped -137, +137 lines =@@
  var r4a1 = a1 >= b1;
  >r4a1 : boolean
@@ -683,7 +683,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r4a2 = a2 >= b2;
  >r4a2 : boolean
  >a2 >= b2 : boolean
@@ -691,7 +691,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r4a3 = a3 >= b3;
  >r4a3 : boolean
  >a3 >= b3 : boolean
@@ -699,7 +699,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r4a4 = a4 >= b4;
  >r4a4 : boolean
  >a4 >= b4 : boolean
@@ -707,7 +707,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r4a5 = a5 >= b5;
  >r4a5 : boolean
  >a5 >= b5 : boolean
@@ -715,7 +715,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r4a6 = a6 >= b6;
  >r4a6 : boolean
  >a6 >= b6 : boolean
@@ -723,7 +723,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r4a7 = a7 >= b7;
  >r4a7 : boolean
  >a7 >= b7 : boolean
@@ -731,7 +731,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r4a8 = a8 >= b8;
  >r4a8 : boolean
  >a8 >= b8 : boolean
@@ -739,7 +739,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r4a9 = a9 >= b9;
  >r4a9 : boolean
  >a9 >= b9 : boolean
@@ -747,7 +747,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r4a10 = a10 >= b10;
  >r4a10 : boolean
  >a10 >= b10 : boolean
@@ -755,7 +755,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r4a11 = a11 >= b11;
  >r4a11 : boolean
  >a11 >= b11 : boolean
@@ -763,9 +763,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r4a12 = a12 >= b12;
- 
+
  var r4b1 = b1 >= a1;
  >r4b1 : boolean
  >b1 >= a1 : boolean
@@ -773,7 +773,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r4b2 = b2 >= a2;
  >r4b2 : boolean
  >b2 >= a2 : boolean
@@ -781,7 +781,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r4b3 = b3 >= a3;
  >r4b3 : boolean
  >b3 >= a3 : boolean
@@ -789,7 +789,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r4b4 = b4 >= a4;
  >r4b4 : boolean
  >b4 >= a4 : boolean
@@ -797,7 +797,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r4b5 = b5 >= a5;
  >r4b5 : boolean
  >b5 >= a5 : boolean
@@ -805,7 +805,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r4b6 = b6 >= a6;
  >r4b6 : boolean
  >b6 >= a6 : boolean
@@ -813,7 +813,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r4b7 = b7 >= a7;
  >r4b7 : boolean
  >b7 >= a7 : boolean
@@ -821,7 +821,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r4b8 = b8 >= a8;
  >r4b8 : boolean
  >b8 >= a8 : boolean
@@ -829,7 +829,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r4b9 = b9 >= a9;
  >r4b9 : boolean
  >b9 >= a9 : boolean
@@ -837,7 +837,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r4b10 = b10 >= a10;
  >r4b10 : boolean
  >b10 >= a10 : boolean
@@ -845,7 +845,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r4b11 = b11 >= a11;
  >r4b11 : boolean
  >b11 >= a11 : boolean
@@ -853,9 +853,9 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r4b12 = b12 >= a12;
- 
+
 @@= skipped -137, +137 lines =@@
  var r5a1 = a1 == b1;
  >r5a1 : boolean
@@ -864,7 +864,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r5a2 = a2 == b2;
  >r5a2 : boolean
  >a2 == b2 : boolean
@@ -872,7 +872,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r5a3 = a3 == b3;
  >r5a3 : boolean
  >a3 == b3 : boolean
@@ -880,7 +880,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r5a4 = a4 == b4;
  >r5a4 : boolean
  >a4 == b4 : boolean
@@ -888,7 +888,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r5a5 = a5 == b5;
  >r5a5 : boolean
  >a5 == b5 : boolean
@@ -896,7 +896,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r5a6 = a6 == b6;
  >r5a6 : boolean
  >a6 == b6 : boolean
@@ -904,7 +904,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r5a7 = a7 == b7;
  >r5a7 : boolean
  >a7 == b7 : boolean
@@ -912,7 +912,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r5a8 = a8 == b8;
  >r5a8 : boolean
  >a8 == b8 : boolean
@@ -920,7 +920,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r5a9 = a9 == b9;
  >r5a9 : boolean
  >a9 == b9 : boolean
@@ -928,7 +928,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r5a10 = a10 == b10;
  >r5a10 : boolean
  >a10 == b10 : boolean
@@ -936,7 +936,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r5a11 = a11 == b11;
  >r5a11 : boolean
  >a11 == b11 : boolean
@@ -944,9 +944,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r5a12 = a12 == b12;
- 
+
  var r5b1 = b1 == a1;
  >r5b1 : boolean
  >b1 == a1 : boolean
@@ -954,7 +954,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r5b2 = b2 == a2;
  >r5b2 : boolean
  >b2 == a2 : boolean
@@ -962,7 +962,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r5b3 = b3 == a3;
  >r5b3 : boolean
  >b3 == a3 : boolean
@@ -970,7 +970,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r5b4 = b4 == a4;
  >r5b4 : boolean
  >b4 == a4 : boolean
@@ -978,7 +978,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r5b5 = b5 == a5;
  >r5b5 : boolean
  >b5 == a5 : boolean
@@ -986,7 +986,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r5b6 = b6 == a6;
  >r5b6 : boolean
  >b6 == a6 : boolean
@@ -994,7 +994,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r5b7 = b7 == a7;
  >r5b7 : boolean
  >b7 == a7 : boolean
@@ -1002,7 +1002,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r5b8 = b8 == a8;
  >r5b8 : boolean
  >b8 == a8 : boolean
@@ -1010,7 +1010,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r5b9 = b9 == a9;
  >r5b9 : boolean
  >b9 == a9 : boolean
@@ -1018,7 +1018,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r5b10 = b10 == a10;
  >r5b10 : boolean
  >b10 == a10 : boolean
@@ -1026,7 +1026,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r5b11 = b11 == a11;
  >r5b11 : boolean
  >b11 == a11 : boolean
@@ -1034,9 +1034,9 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r5b12 = b12 == a12;
- 
+
 @@= skipped -137, +137 lines =@@
  var r6a1 = a1 != b1;
  >r6a1 : boolean
@@ -1045,7 +1045,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r6a2 = a2 != b2;
  >r6a2 : boolean
  >a2 != b2 : boolean
@@ -1053,7 +1053,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r6a3 = a3 != b3;
  >r6a3 : boolean
  >a3 != b3 : boolean
@@ -1061,7 +1061,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r6a4 = a4 != b4;
  >r6a4 : boolean
  >a4 != b4 : boolean
@@ -1069,7 +1069,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r6a5 = a5 != b5;
  >r6a5 : boolean
  >a5 != b5 : boolean
@@ -1077,7 +1077,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r6a6 = a6 != b6;
  >r6a6 : boolean
  >a6 != b6 : boolean
@@ -1085,7 +1085,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r6a7 = a7 != b7;
  >r6a7 : boolean
  >a7 != b7 : boolean
@@ -1093,7 +1093,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r6a8 = a8 != b8;
  >r6a8 : boolean
  >a8 != b8 : boolean
@@ -1101,7 +1101,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r6a9 = a9 != b9;
  >r6a9 : boolean
  >a9 != b9 : boolean
@@ -1109,7 +1109,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r6a10 = a10 != b10;
  >r6a10 : boolean
  >a10 != b10 : boolean
@@ -1117,7 +1117,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r6a11 = a11 != b11;
  >r6a11 : boolean
  >a11 != b11 : boolean
@@ -1125,9 +1125,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r6a12 = a12 != b12;
- 
+
  var r6b1 = b1 != a1;
  >r6b1 : boolean
  >b1 != a1 : boolean
@@ -1135,7 +1135,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r6b2 = b2 != a2;
  >r6b2 : boolean
  >b2 != a2 : boolean
@@ -1143,7 +1143,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r6b3 = b3 != a3;
  >r6b3 : boolean
  >b3 != a3 : boolean
@@ -1151,7 +1151,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r6b4 = b4 != a4;
  >r6b4 : boolean
  >b4 != a4 : boolean
@@ -1159,7 +1159,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r6b5 = b5 != a5;
  >r6b5 : boolean
  >b5 != a5 : boolean
@@ -1167,7 +1167,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r6b6 = b6 != a6;
  >r6b6 : boolean
  >b6 != a6 : boolean
@@ -1175,7 +1175,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r6b7 = b7 != a7;
  >r6b7 : boolean
  >b7 != a7 : boolean
@@ -1183,7 +1183,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r6b8 = b8 != a8;
  >r6b8 : boolean
  >b8 != a8 : boolean
@@ -1191,7 +1191,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r6b9 = b9 != a9;
  >r6b9 : boolean
  >b9 != a9 : boolean
@@ -1199,7 +1199,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r6b10 = b10 != a10;
  >r6b10 : boolean
  >b10 != a10 : boolean
@@ -1207,7 +1207,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r6b11 = b11 != a11;
  >r6b11 : boolean
  >b11 != a11 : boolean
@@ -1215,9 +1215,9 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r6b12 = b12 != a12;
- 
+
 @@= skipped -137, +137 lines =@@
  var r7a1 = a1 === b1;
  >r7a1 : boolean
@@ -1226,7 +1226,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r7a2 = a2 === b2;
  >r7a2 : boolean
  >a2 === b2 : boolean
@@ -1234,7 +1234,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r7a3 = a3 === b3;
  >r7a3 : boolean
  >a3 === b3 : boolean
@@ -1242,7 +1242,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r7a4 = a4 === b4;
  >r7a4 : boolean
  >a4 === b4 : boolean
@@ -1250,7 +1250,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r7a5 = a5 === b5;
  >r7a5 : boolean
  >a5 === b5 : boolean
@@ -1258,7 +1258,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r7a6 = a6 === b6;
  >r7a6 : boolean
  >a6 === b6 : boolean
@@ -1266,7 +1266,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r7a7 = a7 === b7;
  >r7a7 : boolean
  >a7 === b7 : boolean
@@ -1274,7 +1274,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r7a8 = a8 === b8;
  >r7a8 : boolean
  >a8 === b8 : boolean
@@ -1282,7 +1282,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r7a9 = a9 === b9;
  >r7a9 : boolean
  >a9 === b9 : boolean
@@ -1290,7 +1290,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r7a10 = a10 === b10;
  >r7a10 : boolean
  >a10 === b10 : boolean
@@ -1298,7 +1298,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r7a11 = a11 === b11;
  >r7a11 : boolean
  >a11 === b11 : boolean
@@ -1306,9 +1306,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r7a12 = a12 === b12;
- 
+
  var r7b1 = b1 === a1;
  >r7b1 : boolean
  >b1 === a1 : boolean
@@ -1316,7 +1316,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r7b2 = b2 === a2;
  >r7b2 : boolean
  >b2 === a2 : boolean
@@ -1324,7 +1324,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r7b3 = b3 === a3;
  >r7b3 : boolean
  >b3 === a3 : boolean
@@ -1332,7 +1332,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r7b4 = b4 === a4;
  >r7b4 : boolean
  >b4 === a4 : boolean
@@ -1340,7 +1340,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r7b5 = b5 === a5;
  >r7b5 : boolean
  >b5 === a5 : boolean
@@ -1348,7 +1348,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r7b6 = b6 === a6;
  >r7b6 : boolean
  >b6 === a6 : boolean
@@ -1356,7 +1356,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r7b7 = b7 === a7;
  >r7b7 : boolean
  >b7 === a7 : boolean
@@ -1364,7 +1364,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r7b8 = b8 === a8;
  >r7b8 : boolean
  >b8 === a8 : boolean
@@ -1372,7 +1372,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r7b9 = b9 === a9;
  >r7b9 : boolean
  >b9 === a9 : boolean
@@ -1380,7 +1380,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r7b10 = b10 === a10;
  >r7b10 : boolean
  >b10 === a10 : boolean
@@ -1388,7 +1388,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r7b11 = b11 === a11;
  >r7b11 : boolean
  >b11 === a11 : boolean
@@ -1396,9 +1396,9 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r7b12 = b12 === a12;
- 
+
 @@= skipped -137, +137 lines =@@
  var r8a1 = a1 !== b1;
  >r8a1 : boolean
@@ -1407,7 +1407,7 @@
 ->b1 : { fn(): void; }
 +>a1 : { fn: () => void; }
 +>b1 : { fn: () => void; }
- 
+
  var r8a2 = a2 !== b2;
  >r8a2 : boolean
  >a2 !== b2 : boolean
@@ -1415,7 +1415,7 @@
 ->b2 : { fn(a: number, b: string): void; }
 +>a2 : { fn: (a: number, b: string) => void; }
 +>b2 : { fn: (a: number, b: string) => void; }
- 
+
  var r8a3 = a3 !== b3;
  >r8a3 : boolean
  >a3 !== b3 : boolean
@@ -1423,7 +1423,7 @@
 ->b3 : { fn(a: number): void; }
 +>a3 : { fn: (a: number, b: string) => void; }
 +>b3 : { fn: (a: number) => void; }
- 
+
  var r8a4 = a4 !== b4;
  >r8a4 : boolean
  >a4 !== b4 : boolean
@@ -1431,7 +1431,7 @@
 ->b4 : { fn(): void; }
 +>a4 : { fn: (a: number, b: string) => void; }
 +>b4 : { fn: () => void; }
- 
+
  var r8a5 = a5 !== b5;
  >r8a5 : boolean
  >a5 !== b5 : boolean
@@ -1439,7 +1439,7 @@
 ->b5 : { fn(a: Derived): void; }
 +>a5 : { fn: (a: Base) => void; }
 +>b5 : { fn: (a: Derived) => void; }
- 
+
  var r8a6 = a6 !== b6;
  >r8a6 : boolean
  >a6 !== b6 : boolean
@@ -1447,7 +1447,7 @@
 ->b6 : { fn(a: Base, b: Derived): void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
- 
+
  var r8a7 = a7 !== b7;
  >r8a7 : boolean
  >a7 !== b7 : boolean
@@ -1455,7 +1455,7 @@
 ->b7 : { fn(): Base; }
 +>a7 : { fn: () => void; }
 +>b7 : { fn: () => Base; }
- 
+
  var r8a8 = a8 !== b8;
  >r8a8 : boolean
  >a8 !== b8 : boolean
@@ -1463,7 +1463,7 @@
 ->b8 : { fn(): Base; }
 +>a8 : { fn: () => Base; }
 +>b8 : { fn: () => Base; }
- 
+
  var r8a9 = a9 !== b9;
  >r8a9 : boolean
  >a9 !== b9 : boolean
@@ -1471,7 +1471,7 @@
 ->b9 : { fn(): Derived; }
 +>a9 : { fn: () => Base; }
 +>b9 : { fn: () => Derived; }
- 
+
  var r8a10 = a10 !== b10;
  >r8a10 : boolean
  >a10 !== b10 : boolean
@@ -1479,7 +1479,7 @@
 ->b10 : { fn(a?: Derived): void; }
 +>a10 : { fn: (a?: Base) => void; }
 +>b10 : { fn: (a?: Derived) => void; }
- 
+
  var r8a11 = a11 !== b11;
  >r8a11 : boolean
  >a11 !== b11 : boolean
@@ -1487,9 +1487,9 @@
 ->b11 : { fn(...a: Derived[]): void; }
 +>a11 : { fn: (...a: Base[]) => void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
- 
+
  //var r8a12 = a12 !== b12;
- 
+
  var r8b1 = b1 !== a1;
  >r8b1 : boolean
  >b1 !== a1 : boolean
@@ -1497,7 +1497,7 @@
 ->a1 : { fn(): void; }
 +>b1 : { fn: () => void; }
 +>a1 : { fn: () => void; }
- 
+
  var r8b2 = b2 !== a2;
  >r8b2 : boolean
  >b2 !== a2 : boolean
@@ -1505,7 +1505,7 @@
 ->a2 : { fn(a: number, b: string): void; }
 +>b2 : { fn: (a: number, b: string) => void; }
 +>a2 : { fn: (a: number, b: string) => void; }
- 
+
  var r8b3 = b3 !== a3;
  >r8b3 : boolean
  >b3 !== a3 : boolean
@@ -1513,7 +1513,7 @@
 ->a3 : { fn(a: number, b: string): void; }
 +>b3 : { fn: (a: number) => void; }
 +>a3 : { fn: (a: number, b: string) => void; }
- 
+
  var r8b4 = b4 !== a4;
  >r8b4 : boolean
  >b4 !== a4 : boolean
@@ -1521,7 +1521,7 @@
 ->a4 : { fn(a: number, b: string): void; }
 +>b4 : { fn: () => void; }
 +>a4 : { fn: (a: number, b: string) => void; }
- 
+
  var r8b5 = b5 !== a5;
  >r8b5 : boolean
  >b5 !== a5 : boolean
@@ -1529,7 +1529,7 @@
 ->a5 : { fn(a: Base): void; }
 +>b5 : { fn: (a: Derived) => void; }
 +>a5 : { fn: (a: Base) => void; }
- 
+
  var r8b6 = b6 !== a6;
  >r8b6 : boolean
  >b6 !== a6 : boolean
@@ -1537,7 +1537,7 @@
 ->a6 : { fn(a: Derived, b: Base): void; }
 +>b6 : { fn: (a: Base, b: Derived) => void; }
 +>a6 : { fn: (a: Derived, b: Base) => void; }
- 
+
  var r8b7 = b7 !== a7;
  >r8b7 : boolean
  >b7 !== a7 : boolean
@@ -1545,7 +1545,7 @@
 ->a7 : { fn(): void; }
 +>b7 : { fn: () => Base; }
 +>a7 : { fn: () => void; }
- 
+
  var r8b8 = b8 !== a8;
  >r8b8 : boolean
  >b8 !== a8 : boolean
@@ -1553,7 +1553,7 @@
 ->a8 : { fn(): Base; }
 +>b8 : { fn: () => Base; }
 +>a8 : { fn: () => Base; }
- 
+
  var r8b9 = b9 !== a9;
  >r8b9 : boolean
  >b9 !== a9 : boolean
@@ -1561,7 +1561,7 @@
 ->a9 : { fn(): Base; }
 +>b9 : { fn: () => Derived; }
 +>a9 : { fn: () => Base; }
- 
+
  var r8b10 = b10 !== a10;
  >r8b10 : boolean
  >b10 !== a10 : boolean
@@ -1569,7 +1569,7 @@
 ->a10 : { fn(a?: Base): void; }
 +>b10 : { fn: (a?: Derived) => void; }
 +>a10 : { fn: (a?: Base) => void; }
- 
+
  var r8b11 = b11 !== a11;
  >r8b11 : boolean
  >b11 !== a11 : boolean
@@ -1577,5 +1577,5 @@
 ->a11 : { fn(...a: Base[]): void; }
 +>b11 : { fn: (...a: Derived[]) => void; }
 +>a11 : { fn: (...a: Base[]) => void; }
- 
+
  //var r8b12 = b12 !== a12;

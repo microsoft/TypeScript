@@ -1,8 +1,8 @@
 --- old.dependentDestructuredVariables.js
 +++ new.dependentDestructuredVariables.js
 @@= skipped -467, +467 lines =@@
- 
- 
+
+
  //// [dependentDestructuredVariables.js]
 -"use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

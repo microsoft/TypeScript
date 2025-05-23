@@ -1,7 +1,7 @@
 --- old.templateLiteralIntersection.js
 +++ new.templateLiteralIntersection.js
 @@= skipped -31, +31 lines =@@
- 
+
  //// [templateLiteralIntersection.js]
  // https://github.com/microsoft/TypeScript/issues/48034
 -var a = 'a';

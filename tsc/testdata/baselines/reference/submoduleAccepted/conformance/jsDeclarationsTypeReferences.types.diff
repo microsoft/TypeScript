@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsTypeReferences.types
 @@= skipped -3, +3 lines =@@
  /// <reference types="node" />
- 
+
  const Something = require("fs").Something;
 ->Something : typeof Something
 ->require("fs").Something : typeof Something
@@ -14,7 +14,7 @@
  >"fs" : "fs"
 ->Something : typeof Something
 +>Something : any
- 
+
  const thing = new Something();
 ->thing : Something
 ->new Something() : Something
@@ -22,7 +22,7 @@
 +>thing : any
 +>new Something() : any
 +>Something : any
- 
+
  module.exports = {
 ->module.exports = {    thing} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -34,10 +34,9 @@
 +>module : { export=: { thing: any; }; }
 +>exports : { thing: any; }
 +>{    thing} : { thing: any; }
- 
+
      thing
 ->thing : Something
 +>thing : any
- 
+
  };
- 

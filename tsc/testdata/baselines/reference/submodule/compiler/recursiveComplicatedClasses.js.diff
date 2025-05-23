@@ -2,7 +2,7 @@
 +++ new.recursiveComplicatedClasses.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [recursiveComplicatedClasses.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -47,7 +47,7 @@
 -    __extends(InferenceSymbol, _super);
 -    function InferenceSymbol() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    return InferenceSymbol;
 -}(Symbol));
 -var ParameterSymbol = /** @class */ (function (_super) {
@@ -64,6 +64,7 @@
 -    }
 -    return TypeSymbol;
 -}(InferenceSymbol));
++    }
 +}
 +class InferenceSymbol extends Symbol {
 +}

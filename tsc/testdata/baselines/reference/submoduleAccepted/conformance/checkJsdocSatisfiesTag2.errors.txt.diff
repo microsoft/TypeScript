@@ -1,8 +1,7 @@
 --- old.checkJsdocSatisfiesTag2.errors.txt
 +++ new.checkJsdocSatisfiesTag2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/a.js(1,15): error TS2315: Type 'Object' is not generic.
 +/a.js(1,21): error TS8020: JSDoc types can only be used inside documentation comments.
 +

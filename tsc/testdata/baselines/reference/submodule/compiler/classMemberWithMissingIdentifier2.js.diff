@@ -2,7 +2,7 @@
 +++ new.classMemberWithMissingIdentifier2.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [classMemberWithMissingIdentifier2.js]
 -var C = /** @class */ (function () {
 -    function C() {

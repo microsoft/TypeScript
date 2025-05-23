@@ -6,10 +6,10 @@
  foo;
 ->foo : number
 +>foo : any
- 
+
  bar;
  >bar : number
- 
+
  export {};
 -=== /node_modules/pkg/import.d.ts ===
 -export {};

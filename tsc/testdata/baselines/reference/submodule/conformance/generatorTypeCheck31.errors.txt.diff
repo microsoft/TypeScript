@@ -5,8 +5,8 @@
 -  Type 'Generator<(x: any) => any, void, unknown>' provides no match for the signature '(): Iterable<(x: string) => number>'.
 +generatorTypeCheck31.ts(2,11): error TS2322: Type 'Generator<(x: any) => any, void, unknown>' is not assignable to type '() => Iterable<(x: string) => number, any, any>'.
 +  Type 'Generator<(x: any) => any, void, unknown>' provides no match for the signature '(): Iterable<(x: string) => number, any, any>'.
- 
- 
+
+
  ==== generatorTypeCheck31.ts (1 errors) ====
 @@= skipped -9, +9 lines =@@
      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -2,14 +2,14 @@
 +++ new.typeGuardOfFormInstanceOf.symbols
 @@= skipped -10, +10 lines =@@
  >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOf.ts, 0, 0))
- 
+
      p1: string;
 ->p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
 +>p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
  }
  class C2 {
  >C2 : Symbol(C2, Decl(typeGuardOfFormInstanceOf.ts, 8, 1))
- 
+
      p2: number;
 ->p2 : Symbol(C2.p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
 +>p2 : Symbol(p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
@@ -17,14 +17,14 @@
  class D1 extends C1 {
  >D1 : Symbol(D1, Decl(typeGuardOfFormInstanceOf.ts, 11, 1))
  >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOf.ts, 0, 0))
- 
+
      p3: number;
 ->p3 : Symbol(D1.p3, Decl(typeGuardOfFormInstanceOf.ts, 12, 21))
 +>p3 : Symbol(p3, Decl(typeGuardOfFormInstanceOf.ts, 12, 21))
  }
  class C3 {
  >C3 : Symbol(C3, Decl(typeGuardOfFormInstanceOf.ts, 14, 1))
- 
+
      p4: number;
 ->p4 : Symbol(C3.p4, Decl(typeGuardOfFormInstanceOf.ts, 15, 10))
 +>p4 : Symbol(p4, Decl(typeGuardOfFormInstanceOf.ts, 15, 10))
@@ -40,7 +40,7 @@
  >ctor1 : Symbol(ctor1, Decl(typeGuardOfFormInstanceOf.ts, 22, 3))
 ->p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
 +>p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
- 
+
  num = ctor1 instanceof C2 && ctor1.p2; // C2
  >num : Symbol(num, Decl(typeGuardOfFormInstanceOf.ts, 19, 3))
  >ctor1 : Symbol(ctor1, Decl(typeGuardOfFormInstanceOf.ts, 22, 3))
@@ -50,7 +50,7 @@
  >ctor1 : Symbol(ctor1, Decl(typeGuardOfFormInstanceOf.ts, 22, 3))
 ->p2 : Symbol(C2.p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
 +>p2 : Symbol(p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
- 
+
  str = ctor1 instanceof D1 && ctor1.p1; // D1
  >str : Symbol(str, Decl(typeGuardOfFormInstanceOf.ts, 18, 3))
  >ctor1 : Symbol(ctor1, Decl(typeGuardOfFormInstanceOf.ts, 22, 3))
@@ -60,7 +60,7 @@
  >ctor1 : Symbol(ctor1, Decl(typeGuardOfFormInstanceOf.ts, 22, 3))
 ->p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
 +>p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
- 
+
  num = ctor1 instanceof D1 && ctor1.p3; // D1
  >num : Symbol(num, Decl(typeGuardOfFormInstanceOf.ts, 19, 3))
  >ctor1 : Symbol(ctor1, Decl(typeGuardOfFormInstanceOf.ts, 22, 3))
@@ -70,7 +70,7 @@
  >ctor1 : Symbol(ctor1, Decl(typeGuardOfFormInstanceOf.ts, 22, 3))
 ->p3 : Symbol(D1.p3, Decl(typeGuardOfFormInstanceOf.ts, 12, 21))
 +>p3 : Symbol(p3, Decl(typeGuardOfFormInstanceOf.ts, 12, 21))
- 
+
  var ctor2: C2 | D1;
  >ctor2 : Symbol(ctor2, Decl(typeGuardOfFormInstanceOf.ts, 28, 3))
 @@= skipped -37, +37 lines =@@
@@ -82,7 +82,7 @@
  >ctor2 : Symbol(ctor2, Decl(typeGuardOfFormInstanceOf.ts, 28, 3))
 ->p2 : Symbol(C2.p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
 +>p2 : Symbol(p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
- 
+
  num = ctor2 instanceof D1 && ctor2.p3; // D1
  >num : Symbol(num, Decl(typeGuardOfFormInstanceOf.ts, 19, 3))
  >ctor2 : Symbol(ctor2, Decl(typeGuardOfFormInstanceOf.ts, 28, 3))
@@ -92,7 +92,7 @@
  >ctor2 : Symbol(ctor2, Decl(typeGuardOfFormInstanceOf.ts, 28, 3))
 ->p3 : Symbol(D1.p3, Decl(typeGuardOfFormInstanceOf.ts, 12, 21))
 +>p3 : Symbol(p3, Decl(typeGuardOfFormInstanceOf.ts, 12, 21))
- 
+
  str = ctor2 instanceof D1 && ctor2.p1; // D1
  >str : Symbol(str, Decl(typeGuardOfFormInstanceOf.ts, 18, 3))
  >ctor2 : Symbol(ctor2, Decl(typeGuardOfFormInstanceOf.ts, 28, 3))
@@ -102,12 +102,12 @@
  >ctor2 : Symbol(ctor2, Decl(typeGuardOfFormInstanceOf.ts, 28, 3))
 ->p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
 +>p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
- 
+
  var r2: D1 | C2 = ctor2 instanceof C1 && ctor2; // C2 | D1
  >r2 : Symbol(r2, Decl(typeGuardOfFormInstanceOf.ts, 32, 3))
 @@= skipped -38, +38 lines =@@
  >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOf.ts, 0, 0))
- 
+
      ctor3.p1; // C1
 ->ctor3.p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
 +>ctor3.p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
@@ -123,11 +123,11 @@
 ->p2 : Symbol(C2.p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
 +>p2 : Symbol(p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
  }
- 
+
  var ctor4: C1 | C2 | C3;
 @@= skipped -22, +22 lines =@@
  >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOf.ts, 0, 0))
- 
+
      ctor4.p1; // C1
 ->ctor4.p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
 +>ctor4.p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
@@ -138,7 +138,7 @@
  else if (ctor4 instanceof C2) {
  >ctor4 : Symbol(ctor4, Decl(typeGuardOfFormInstanceOf.ts, 42, 3))
  >C2 : Symbol(C2, Decl(typeGuardOfFormInstanceOf.ts, 8, 1))
- 
+
      ctor4.p2; // C2
 ->ctor4.p2 : Symbol(C2.p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
 +>ctor4.p2 : Symbol(p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
@@ -154,11 +154,11 @@
 ->p4 : Symbol(C3.p4, Decl(typeGuardOfFormInstanceOf.ts, 15, 10))
 +>p4 : Symbol(p4, Decl(typeGuardOfFormInstanceOf.ts, 15, 10))
  }
- 
+
  var ctor5: C1 | D1 | C2;
 @@= skipped -31, +31 lines =@@
  >C1 : Symbol(C1, Decl(typeGuardOfFormInstanceOf.ts, 0, 0))
- 
+
      ctor5.p1; // C1
 ->ctor5.p1 : Symbol(C1.p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
 +>ctor5.p1 : Symbol(p1, Decl(typeGuardOfFormInstanceOf.ts, 6, 10))
@@ -174,7 +174,7 @@
 ->p2 : Symbol(C2.p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
 +>p2 : Symbol(p2, Decl(typeGuardOfFormInstanceOf.ts, 9, 10))
  }
- 
+
  var ctor6: C1 | C2 | C3;
 @@= skipped -25, +25 lines =@@
  }

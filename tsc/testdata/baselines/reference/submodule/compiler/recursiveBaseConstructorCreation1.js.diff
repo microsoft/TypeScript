@@ -1,8 +1,8 @@
 --- old.recursiveBaseConstructorCreation1.js
 +++ new.recursiveBaseConstructorCreation1.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [recursiveBaseConstructorCreation1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

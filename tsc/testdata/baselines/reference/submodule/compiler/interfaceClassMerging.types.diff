@@ -2,26 +2,25 @@
 +++ new.interfaceClassMerging.types
 @@= skipped -93, +93 lines =@@
  >2 : 2
- 
+
  var obj: {
 ->obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 +>obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
- 
+
      method(a: number): string;
  >method : (a: number) => string
 @@= skipped -19, +19 lines =@@
  };
- 
+
  bar = obj;
 ->bar = obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 +>bar = obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
  >bar : Bar
 ->obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 +>obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
- 
+
  obj = bar;
  >obj = bar : Bar
 ->obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 +>obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
  >bar : Bar
- 

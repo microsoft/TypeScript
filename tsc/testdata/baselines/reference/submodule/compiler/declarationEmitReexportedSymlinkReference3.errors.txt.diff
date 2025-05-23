@@ -1,6 +1,6 @@
 --- old.declarationEmitReexportedSymlinkReference3.errors.txt
 +++ new.declarationEmitReexportedSymlinkReference3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -monorepo/pkg3/src/keys.ts(3,14): error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 -
 -
@@ -61,5 +61,4 @@
 -        "main": "dist/index.js",
 -        "typings": "dist/index.d.ts"
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

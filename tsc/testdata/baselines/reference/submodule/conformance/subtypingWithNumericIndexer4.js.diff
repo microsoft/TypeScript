@@ -2,7 +2,7 @@
 +++ new.subtypingWithNumericIndexer4.js
 @@= skipped -29, +29 lines =@@
  }
- 
+
  //// [subtypingWithNumericIndexer4.js]
 -// Derived type indexer must be subtype of base type indexer
 -var __extends = (this && this.__extends) || (function () {

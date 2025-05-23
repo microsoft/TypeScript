@@ -2,7 +2,7 @@
 +++ new.typeofObjectInference.types
 @@= skipped -5, +5 lines =@@
  >1 : 1
- 
+
  function decorateA<O extends any>(fn: (first: {value: typeof val}) => O) {
 ->decorateA : <O extends unknown>(fn: (first: { value: typeof val; }) => O) => () => O
 ->fn : (first: { value: typeof val; }) => O
@@ -12,7 +12,7 @@
 +>first : { value: number; }
  >value : number
  >val : number
- 
+
      return (): O => fn({value: val})
  >(): O => fn({value: val}) : () => O
  >fn({value: val}) : O
@@ -31,7 +31,7 @@
 +>({value}) => 5 : (__0: { value: number; }) => number
  >value : number
  >5 : 5
- 
+
  function decorateB<O extends any>(fn: (first: typeof val) => O) {
 ->decorateB : <O extends unknown>(fn: (first: typeof val) => O) => () => O
 ->fn : (first: typeof val) => O
@@ -39,7 +39,7 @@
 +>fn : (first: number) => O
  >first : number
  >val : number
- 
+
      return (): O => fn(val)
  >(): O => fn(val) : () => O
  >fn(val) : O
@@ -63,7 +63,7 @@
 +>({value}) => 5 : (__0: { value: number; }) => number
  >value : number
  >5 : 5
- 
+
 @@= skipped -26, +26 lines =@@
  >d : () => number
  >decorateD(({value}) => 5) : () => number
@@ -72,4 +72,3 @@
 +>({value}) => 5 : (__0: First) => number
  >value : number
  >5 : 5
- 

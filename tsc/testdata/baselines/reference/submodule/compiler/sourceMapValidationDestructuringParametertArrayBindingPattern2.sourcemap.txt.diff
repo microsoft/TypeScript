@@ -34,12 +34,7 @@
  3 >Emitted(2, 14) Source(7, 14) + SourceIndex(0)
  4 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
 -5 >Emitted(2, 17) Source(7, 32) + SourceIndex(0)
-+5 >Emitted(2, 16) Source(7, 16) + SourceIndex(0)
-+6 >Emitted(2, 18) Source(7, 18) + SourceIndex(0)
-+7 >Emitted(2, 24) Source(7, 24) + SourceIndex(0)
-+8 >Emitted(2, 25) Source(7, 32) + SourceIndex(0)
-+9 >Emitted(2, 27) Source(7, 34) + SourceIndex(0)
- ---
+----
 ->>>    var skillA = _a[1];
 -1->^^^^^^^^
 -2 >        ^^^^^^
@@ -51,7 +46,12 @@
 -1->Emitted(3, 9) Source(7, 18) + SourceIndex(0)
 -2 >Emitted(3, 15) Source(7, 24) + SourceIndex(0)
 -3 >Emitted(3, 23) Source(7, 24) + SourceIndex(0)
-----
++5 >Emitted(2, 16) Source(7, 16) + SourceIndex(0)
++6 >Emitted(2, 18) Source(7, 18) + SourceIndex(0)
++7 >Emitted(2, 24) Source(7, 24) + SourceIndex(0)
++8 >Emitted(2, 25) Source(7, 32) + SourceIndex(0)
++9 >Emitted(2, 27) Source(7, 34) + SourceIndex(0)
+ ---
  >>>    console.log(skillA);
 -1->^^^^
 +1 >^^^^
@@ -128,6 +128,18 @@
 -3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
 -4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
 -5 >Emitted(6, 17) Source(11, 30) + SourceIndex(0)
+----
+->>>    var nameMB = _a[0];
+-1->^^^^^^^^
+-2 >        ^^^^^^
+-3 >              ^^^^^^^^
+-4 >                      ^^^->
+-1->
+-2 >        nameMB
+-3 >              
+-1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
+-2 >Emitted(7, 15) Source(11, 22) + SourceIndex(0)
+-3 >Emitted(7, 23) Source(11, 22) + SourceIndex(0)
 +5 >              [
 +6 >               nameMB
 +7 >                     ]: Robot
@@ -141,21 +153,8 @@
 +7 >Emitted(5, 23) Source(11, 30) + SourceIndex(0)
 +8 >Emitted(5, 25) Source(11, 32) + SourceIndex(0)
  ---
-->>>    var nameMB = _a[0];
--1->^^^^^^^^
--2 >        ^^^^^^
--3 >              ^^^^^^^^
--4 >                      ^^^->
--1->
--2 >        nameMB
--3 >              
--1->Emitted(7, 9) Source(11, 16) + SourceIndex(0)
--2 >Emitted(7, 15) Source(11, 22) + SourceIndex(0)
--3 >Emitted(7, 23) Source(11, 22) + SourceIndex(0)
-----
  >>>    console.log(nameMB);
  1->^^^^
- 2 >    ^^^^^^^
 @@= skipped -60, +57 lines =@@
  6 >                ^^^^^^
  7 >                      ^
@@ -231,31 +230,7 @@
 -3 >Emitted(10, 14) Source(15, 14) + SourceIndex(0)
 -4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
 -5 >Emitted(10, 17) Source(15, 64) + SourceIndex(0)
-+5 >              [
-+6 >               nameMA
-+7 >                     , 
-+8 >                       [
-+9 >                        primarySkillA
-+10>                                     , 
-+11>                                       secondarySkillA
-+12>                                                      ]
-+13>                                                       ]: Robot
-+14>                                                        ) 
-+1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
-+2 >Emitted(8, 10) Source(15, 10) + SourceIndex(0)
-+3 >Emitted(8, 14) Source(15, 14) + SourceIndex(0)
-+4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
-+5 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
-+6 >Emitted(8, 22) Source(15, 22) + SourceIndex(0)
-+7 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
-+8 >Emitted(8, 25) Source(15, 25) + SourceIndex(0)
-+9 >Emitted(8, 38) Source(15, 38) + SourceIndex(0)
-+10>Emitted(8, 40) Source(15, 40) + SourceIndex(0)
-+11>Emitted(8, 55) Source(15, 55) + SourceIndex(0)
-+12>Emitted(8, 56) Source(15, 56) + SourceIndex(0)
-+13>Emitted(8, 57) Source(15, 64) + SourceIndex(0)
-+14>Emitted(8, 59) Source(15, 66) + SourceIndex(0)
- ---
+----
 ->>>    var nameMA = _a[0], _b = _a[1], primarySkillA = _b[0], secondarySkillA = _b[1];
 -1->^^^^^^^^
 -2 >        ^^^^^^
@@ -290,10 +265,33 @@
 -9 >Emitted(11, 60) Source(15, 40) + SourceIndex(0)
 -10>Emitted(11, 75) Source(15, 55) + SourceIndex(0)
 -11>Emitted(11, 83) Source(15, 55) + SourceIndex(0)
-----
++5 >              [
++6 >               nameMA
++7 >                     , 
++8 >                       [
++9 >                        primarySkillA
++10>                                     , 
++11>                                       secondarySkillA
++12>                                                      ]
++13>                                                       ]: Robot
++14>                                                        ) 
++1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
++2 >Emitted(8, 10) Source(15, 10) + SourceIndex(0)
++3 >Emitted(8, 14) Source(15, 14) + SourceIndex(0)
++4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
++5 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
++6 >Emitted(8, 22) Source(15, 22) + SourceIndex(0)
++7 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
++8 >Emitted(8, 25) Source(15, 25) + SourceIndex(0)
++9 >Emitted(8, 38) Source(15, 38) + SourceIndex(0)
++10>Emitted(8, 40) Source(15, 40) + SourceIndex(0)
++11>Emitted(8, 55) Source(15, 55) + SourceIndex(0)
++12>Emitted(8, 56) Source(15, 56) + SourceIndex(0)
++13>Emitted(8, 57) Source(15, 64) + SourceIndex(0)
++14>Emitted(8, 59) Source(15, 66) + SourceIndex(0)
+ ---
  >>>    console.log(nameMA);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -83, +74 lines =@@
  6 >                ^^^^^^
  7 >                      ^
@@ -364,6 +362,17 @@
 -3 >Emitted(14, 14) Source(19, 14) + SourceIndex(0)
 -4 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
 -5 >Emitted(14, 17) Source(19, 42) + SourceIndex(0)
+----
+->>>    var multiRobotAInfo = _a.slice(0);
+-1->^^^^^^^^
+-2 >        ^^^^^^^^^^^^^^^
+-3 >                       ^^^^^^^^^^^^^^
+-1->
+-2 >        multiRobotAInfo
+-3 >                       
+-1->Emitted(15, 9) Source(19, 19) + SourceIndex(0)
+-2 >Emitted(15, 24) Source(19, 34) + SourceIndex(0)
+-3 >Emitted(15, 38) Source(19, 34) + SourceIndex(0)
 +5 >              [
 +6 >               ...
 +7 >                  multiRobotAInfo
@@ -379,20 +388,8 @@
 +8 >Emitted(11, 35) Source(19, 42) + SourceIndex(0)
 +9 >Emitted(11, 37) Source(19, 44) + SourceIndex(0)
  ---
-->>>    var multiRobotAInfo = _a.slice(0);
--1->^^^^^^^^
--2 >        ^^^^^^^^^^^^^^^
--3 >                       ^^^^^^^^^^^^^^
--1->
--2 >        multiRobotAInfo
--3 >                       
--1->Emitted(15, 9) Source(19, 19) + SourceIndex(0)
--2 >Emitted(15, 24) Source(19, 34) + SourceIndex(0)
--3 >Emitted(15, 38) Source(19, 34) + SourceIndex(0)
-----
  >>>    console.log(multiRobotAInfo);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -59, +59 lines =@@
  6 >                ^^^^^^^^^^^^^^^
  7 >                               ^

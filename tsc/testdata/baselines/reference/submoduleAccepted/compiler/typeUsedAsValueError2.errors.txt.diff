@@ -5,8 +5,8 @@
 -world.ts(5,1): error TS2708: Cannot use namespace 'HelloNamespace' as a value.
 +world.ts(1,33): error TS2307: Cannot find module 'helloInterface' or its corresponding type declarations.
 +world.ts(2,33): error TS2307: Cannot find module 'helloNamespace' or its corresponding type declarations.
- 
- 
+
+
  ==== world.ts (2 errors) ====
      import HelloInterface = require("helloInterface");
 +                                    ~~~~~~~~~~~~~~~~

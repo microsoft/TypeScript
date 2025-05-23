@@ -1,8 +1,8 @@
 --- old.typeGuardNarrowsIndexedAccessOfKnownProperty10.js
 +++ new.typeGuardNarrowsIndexedAccessOfKnownProperty10.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [typeGuardNarrowsIndexedAccessOfKnownProperty10.js]
 -"use strict";
 -var bar = {};

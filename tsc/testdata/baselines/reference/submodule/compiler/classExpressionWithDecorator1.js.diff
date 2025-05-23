@@ -2,7 +2,7 @@
 +++ new.classExpressionWithDecorator1.js
 @@= skipped -3, +3 lines =@@
  var v = @decorate class C { static p = 1 };
- 
+
  //// [classExpressionWithDecorator1.js]
 -var _a;
 -var v = (_a = /** @class */ (function () {

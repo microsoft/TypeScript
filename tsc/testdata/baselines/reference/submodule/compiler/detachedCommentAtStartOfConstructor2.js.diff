@@ -2,7 +2,7 @@
 +++ new.detachedCommentAtStartOfConstructor2.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [detachedCommentAtStartOfConstructor2.js]
 -var TestFile = /** @class */ (function () {
 -    function TestFile(message) {

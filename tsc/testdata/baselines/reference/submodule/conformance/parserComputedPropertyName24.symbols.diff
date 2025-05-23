@@ -2,7 +2,7 @@
 +++ new.parserComputedPropertyName24.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(parserComputedPropertyName24.ts, 0, 0))
- 
+
      set [e](v) { }
 ->[e] : Symbol(C[e], Decl(parserComputedPropertyName24.ts, 0, 9))
 +>[e] : Symbol([e], Decl(parserComputedPropertyName24.ts, 0, 9))

@@ -1,7 +1,7 @@
 --- old.argumentsObjectIterator02_ES5.js
 +++ new.argumentsObjectIterator02_ES5.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [argumentsObjectIterator02_ES5.js]
  function doubleAndReturnAsArray(x, y, z) {
 -    var blah = arguments[Symbol.iterator];

@@ -2,7 +2,7 @@
 +++ new.decoratorOnClass1.es6.js
 @@= skipped -9, +9 lines =@@
  let c = new C();
- 
+
  //// [decoratorOnClass1.es6.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

@@ -1,8 +1,8 @@
 --- old.classExtendsInterface_not.js
 +++ new.classExtendsInterface_not.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [classExtendsInterface_not.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,13 +2,11 @@
 +++ new.restParameterAssignmentCompatibility.js
 @@= skipped -28, +28 lines =@@
  t1 = s; // Similar to above, but optionality does not matter here.
- 
+
  //// [restParameterAssignmentCompatibility.js]
 -var T = /** @class */ (function () {
 -    function T() {
-+class T {
-+    m(...p3) {
-     }
+-    }
 -    T.prototype.m = function () {
 -        var p3 = [];
 -        for (var _i = 0; _i < arguments.length; _i++) {
@@ -19,14 +17,18 @@
 -}());
 -var S = /** @class */ (function () {
 -    function S() {
-+}
-+class S {
-+    m(p1, p2) {
-     }
+-    }
 -    S.prototype.m = function (p1, p2) {
 -    };
 -    return S;
 -}());
++class T {
++    m(...p3) {
++    }
++}
++class S {
++    m(p1, p2) {
++    }
 +}
  var t;
  var s;

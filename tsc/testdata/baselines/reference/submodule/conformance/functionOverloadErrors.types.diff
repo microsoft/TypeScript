@@ -1,40 +1,40 @@
 --- old.functionOverloadErrors.types
 +++ new.functionOverloadErrors.types
 @@= skipped -21, +21 lines =@@
- 
+
  }
  function fn2b(n: number[]);
 ->fn2b : { (n: number[]): any; (n: Array<number>): any; }
 +>fn2b : { (n: number[]): any; (n: number[]): any; }
  >n : number[]
- 
+
  function fn2b(n: Array<number>);
 ->fn2b : { (n: number[]): any; (n: Array<number>): any; }
 +>fn2b : { (n: number[]): any; (n: number[]): any; }
  >n : number[]
- 
+
  function fn2b() {
 ->fn2b : { (n: number[]): any; (n: Array<number>): any; }
 +>fn2b : { (n: number[]): any; (n: number[]): any; }
  }
- 
+
  //Multiple function overload signatures that differ only by return type
 @@= skipped -90, +90 lines =@@
- 
+
  //Function overloads that differ only by type parameter constraints where constraints are structually identical
  function fn11<T extends Window>();
 ->fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
 +>fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
- 
+
  function fn11<S extends typeof window>();
 ->fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
 +>fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
  >window : Window & typeof globalThis
- 
+
  function fn11() { }
 ->fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
 +>fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
- 
+
  //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
  interface List<T> {
 @@= skipped -15, +15 lines =@@
@@ -43,23 +43,23 @@
  function fn12<T extends List<List<any>>>();
 ->fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
 +>fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
- 
+
  function fn12<T extends List<any>>();
 ->fn12 : { <T_1 extends List<List<any>>>(): any; <T extends List<any>>(): any; }
 +>fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
- 
+
  function fn12() { }
  >fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
 @@= skipped -111, +111 lines =@@
- 
+
  //Function overloads where return types are different infinitely recursive type reference
  function fn15<T extends List<List<any>>>(): T;
 ->fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
 +>fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
- 
+
  function fn15<T extends List<any>>(): T;
 ->fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
 +>fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
- 
+
  function fn15() {
  >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }

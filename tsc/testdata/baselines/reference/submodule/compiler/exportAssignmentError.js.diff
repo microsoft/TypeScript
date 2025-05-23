@@ -1,8 +1,8 @@
 --- old.exportAssignmentError.js
 +++ new.exportAssignmentError.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [exportEqualsModule_A.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

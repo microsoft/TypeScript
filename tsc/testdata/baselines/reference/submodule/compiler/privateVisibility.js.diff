@@ -1,8 +1,8 @@
 --- old.privateVisibility.js
 +++ new.privateVisibility.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [privateVisibility.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

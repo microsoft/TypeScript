@@ -2,7 +2,7 @@
 +++ new.conflictMarkerDiff3Trivia1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [conflictMarkerDiff3Trivia1.js]
 -var C = /** @class */ (function () {
 -    function C() {

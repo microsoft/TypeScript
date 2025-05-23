@@ -1,7 +1,7 @@
 --- old.conflictingTypeParameterSymbolTransfer.js
 +++ new.conflictingTypeParameterSymbolTransfer.js
 @@= skipped -37, +37 lines =@@
- 
+
  //// [conflictingTypeParameterSymbolTransfer.js]
  "use strict";
 -// @strict

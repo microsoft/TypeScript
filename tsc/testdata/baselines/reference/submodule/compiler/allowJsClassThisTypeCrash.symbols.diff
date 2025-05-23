@@ -2,7 +2,7 @@
 +++ new.allowJsClassThisTypeCrash.symbols
 @@= skipped -8, +8 lines =@@
  >f : Symbol(f, Decl(app.js, 0, 5))
- 
+
  g.prototype.m = function () {
 ->g.prototype : Symbol(g.m, Decl(app.js, 1, 10))
 +>g.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
@@ -10,6 +10,6 @@
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->m : Symbol(g.m, Decl(app.js, 1, 10))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 
+
    this;
  };

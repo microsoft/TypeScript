@@ -1,7 +1,7 @@
 --- old.jsxParsingError1.js
 +++ new.jsxParsingError1.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [file.jsx]
  // This should be a parse error
 -var class1 = "foo";

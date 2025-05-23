@@ -1,7 +1,7 @@
 --- old.jsxIssuesErrorWhenTagExpectsTooManyArguments.js
 +++ new.jsxIssuesErrorWhenTagExpectsTooManyArguments.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [jsxIssuesErrorWhenTagExpectsTooManyArguments.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

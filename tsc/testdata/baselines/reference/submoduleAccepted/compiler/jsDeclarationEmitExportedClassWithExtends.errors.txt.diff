@@ -1,6 +1,6 @@
 --- old.jsDeclarationEmitExportedClassWithExtends.errors.txt
 +++ new.jsDeclarationEmitExportedClassWithExtends.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 -
 -
@@ -45,5 +45,4 @@
 -    import { LitElement, LitElement as LitElement2 } from "lit";
 -    export class ElementB extends LitElement {}
 -    export class ElementC extends LitElement2 {}
-@@= skipped --1, +1 lines =@@
 +<no content>

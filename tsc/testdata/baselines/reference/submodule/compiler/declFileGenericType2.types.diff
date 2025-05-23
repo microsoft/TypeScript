@@ -2,7 +2,7 @@
 +++ new.declFileGenericType2.types
 @@= skipped -26, +26 lines =@@
  >mvc : typeof mvc
- 
+
          getControllers(): mvc.IController<mvc.IModel>[];
 ->getControllers : () => mvc.IController<mvc.IModel>[]
 +>getControllers : () => IController<IModel>[]
@@ -34,7 +34,7 @@
 ->AbstractController : typeof templa.mvc.AbstractController
 +>mvc : typeof mvc
 +>AbstractController : typeof AbstractController
- 
+
          constructor() {
              super();
  >super() : void
@@ -45,7 +45,7 @@
  }
 @@= skipped -34, +34 lines =@@
  >AbstractElementController : typeof AbstractElementController
- 
+
          public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
 ->_controllers : templa.mvc.IController<templa.mvc.IModel>[]
 +>_controllers : IController<IModel>[]
@@ -53,7 +53,7 @@
  >mvc : any
  >templa : any
 @@= skipped -13, +13 lines =@@
- 
+
              this._controllers = [];
  >this._controllers = [] : undefined[]
 ->this._controllers : templa.mvc.IController<templa.mvc.IModel>[]

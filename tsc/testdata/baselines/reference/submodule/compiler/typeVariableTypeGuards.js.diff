@@ -1,8 +1,8 @@
 --- old.typeVariableTypeGuards.js
 +++ new.typeVariableTypeGuards.js
 @@= skipped -92, +92 lines =@@
- 
- 
+
+
  //// [typeVariableTypeGuards.js]
 -"use strict";
 -// Repro from #14091
@@ -44,10 +44,9 @@
          this.a = a;
      }
 -    Monkey.prototype.render = function () {
-+    render() {
-         if (this.a) {
-             this.a.color;
-         }
+-        if (this.a) {
+-            this.a.color;
+-        }
 -    };
 -    return Monkey;
 -}());
@@ -55,17 +54,25 @@
 -    __extends(BigMonkey, _super);
 -    function BigMonkey() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    BigMonkey.prototype.render = function () {
-+}
-+class BigMonkey extends Monkey {
-+    render() {
-         if (this.a) {
-             this.a.color;
-         }
+-        if (this.a) {
+-            this.a.color;
+-        }
 -    };
 -    return BigMonkey;
 -}(Monkey));
++    render() {
++        if (this.a) {
++            this.a.color;
++        }
++    }
++}
++class BigMonkey extends Monkey {
++    render() {
++        if (this.a) {
++            this.a.color;
++        }
 +    }
 +}
  function f1(obj) {

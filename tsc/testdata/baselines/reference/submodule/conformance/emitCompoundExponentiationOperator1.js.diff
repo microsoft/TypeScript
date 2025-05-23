@@ -1,7 +1,7 @@
 --- old.emitCompoundExponentiationOperator1.js
 +++ new.emitCompoundExponentiationOperator1.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [emitCompoundExponentiationOperator1.js]
  var comp;
 -comp = Math.pow(comp, 1);

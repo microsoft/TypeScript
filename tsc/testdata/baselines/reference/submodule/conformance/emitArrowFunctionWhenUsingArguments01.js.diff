@@ -2,7 +2,7 @@
 +++ new.emitArrowFunctionWhenUsingArguments01.js
 @@= skipped -33, +33 lines =@@
  }
- 
+
  //// [emitArrowFunctionWhenUsingArguments01.js]
 -var a = function () {
 +var a = () => {

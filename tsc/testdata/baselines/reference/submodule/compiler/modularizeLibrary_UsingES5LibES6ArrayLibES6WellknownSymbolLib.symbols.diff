@@ -2,7 +2,7 @@
 +++ new.modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.symbols
 @@= skipped -7, +7 lines =@@
  >z : Symbol(z, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 0, 32))
- 
+
      return Array.from(arguments);
 ->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 +>Array.from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
@@ -11,9 +11,9 @@
 +>from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
  >arguments : Symbol(arguments)
  }
- 
+
 @@= skipped -14, +14 lines =@@
- 
+
  a[Symbol.isConcatSpreadable] = false;
  >a : Symbol(a, Decl(modularizeLibrary_UsingES5LibES6ArrayLibES6WellknownSymbolLib.ts, 5, 3))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -21,4 +21,3 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 

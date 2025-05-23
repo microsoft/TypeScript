@@ -8,8 +8,8 @@
 +a.js(8,12): error TS7006: Parameter 's' implicitly has an 'any' type.
  a.js(12,1): error TS2554: Expected 1 arguments, but got 0.
  a.js(13,1): error TS2554: Expected 1 arguments, but got 0.
- 
- 
+
+
 -==== a.js (3 errors) ====
 +==== a.js (6 errors) ====
      /** @type {function(string): void} */

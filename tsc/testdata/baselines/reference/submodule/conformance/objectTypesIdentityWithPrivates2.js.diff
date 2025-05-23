@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithPrivates2.js
 +++ new.objectTypesIdentityWithPrivates2.js
 @@= skipped -41, +41 lines =@@
- 
+
  //// [objectTypesIdentityWithPrivates2.js]
  // object types are identical structurally
 -var __extends = (this && this.__extends) || (function () {

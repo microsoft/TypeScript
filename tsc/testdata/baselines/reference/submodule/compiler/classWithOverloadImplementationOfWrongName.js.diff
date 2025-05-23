@@ -2,7 +2,7 @@
 +++ new.classWithOverloadImplementationOfWrongName.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [classWithOverloadImplementationOfWrongName.js]
 -var C = /** @class */ (function () {
 -    function C() {

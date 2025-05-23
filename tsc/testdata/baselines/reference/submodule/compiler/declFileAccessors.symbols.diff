@@ -1,12 +1,12 @@
 --- old.declFileAccessors.symbols
 +++ new.declFileAccessors.symbols
 @@= skipped -6, +6 lines =@@
- 
+
      /** getter property*/
      public get p3() {
 ->p3 : Symbol(c1.p3, Decl(declFileAccessors_0.ts, 1, 17), Decl(declFileAccessors_0.ts, 5, 5))
 +>p3 : Symbol(p3, Decl(declFileAccessors_0.ts, 1, 17), Decl(declFileAccessors_0.ts, 5, 5))
- 
+
          return 10;
      }
      /** setter property*/
@@ -19,7 +19,7 @@
      private get pp3() {
 ->pp3 : Symbol(c1.pp3, Decl(declFileAccessors_0.ts, 8, 5), Decl(declFileAccessors_0.ts, 12, 5))
 +>pp3 : Symbol(pp3, Decl(declFileAccessors_0.ts, 8, 5), Decl(declFileAccessors_0.ts, 12, 5))
- 
+
          return 10;
      }
      /** private setter property*/
@@ -32,7 +32,7 @@
      static get s3() {
 ->s3 : Symbol(c1.s3, Decl(declFileAccessors_0.ts, 15, 5), Decl(declFileAccessors_0.ts, 19, 5))
 +>s3 : Symbol(s3, Decl(declFileAccessors_0.ts, 15, 5), Decl(declFileAccessors_0.ts, 19, 5))
- 
+
          return 10;
      }
      /** setter property*/
@@ -44,7 +44,7 @@
      public get nc_p3() {
 ->nc_p3 : Symbol(c1.nc_p3, Decl(declFileAccessors_0.ts, 22, 5), Decl(declFileAccessors_0.ts, 25, 5))
 +>nc_p3 : Symbol(nc_p3, Decl(declFileAccessors_0.ts, 22, 5), Decl(declFileAccessors_0.ts, 25, 5))
- 
+
          return 10;
      }
      public set nc_p3(value: number) {
@@ -55,7 +55,7 @@
      private get nc_pp3() {
 ->nc_pp3 : Symbol(c1.nc_pp3, Decl(declFileAccessors_0.ts, 27, 5), Decl(declFileAccessors_0.ts, 30, 5))
 +>nc_pp3 : Symbol(nc_pp3, Decl(declFileAccessors_0.ts, 27, 5), Decl(declFileAccessors_0.ts, 30, 5))
- 
+
          return 10;
      }
      private set nc_pp3(value: number) {
@@ -66,7 +66,7 @@
      static get nc_s3() {
 ->nc_s3 : Symbol(c1.nc_s3, Decl(declFileAccessors_0.ts, 32, 5), Decl(declFileAccessors_0.ts, 35, 5))
 +>nc_s3 : Symbol(nc_s3, Decl(declFileAccessors_0.ts, 32, 5), Decl(declFileAccessors_0.ts, 35, 5))
- 
+
          return "";
      }
      static set nc_s3(value: string) {
@@ -74,15 +74,15 @@
 +>nc_s3 : Symbol(nc_s3, Decl(declFileAccessors_0.ts, 32, 5), Decl(declFileAccessors_0.ts, 35, 5))
  >value : Symbol(value, Decl(declFileAccessors_0.ts, 36, 21))
      }
- 
+
      // Only getter property
      public get onlyGetter() {
 ->onlyGetter : Symbol(c1.onlyGetter, Decl(declFileAccessors_0.ts, 37, 5))
 +>onlyGetter : Symbol(onlyGetter, Decl(declFileAccessors_0.ts, 37, 5))
- 
+
          return 10;
      }
- 
+
      // Only setter property
      public set onlySetter(value: number) {
 ->onlySetter : Symbol(c1.onlySetter, Decl(declFileAccessors_0.ts, 42, 5))
@@ -91,12 +91,12 @@
      }
  }
 @@= skipped -80, +80 lines =@@
- 
+
      /** getter property*/
      public get p3() {
 ->p3 : Symbol(c2.p3, Decl(declFileAccessors_1.ts, 1, 10), Decl(declFileAccessors_1.ts, 5, 5))
 +>p3 : Symbol(p3, Decl(declFileAccessors_1.ts, 1, 10), Decl(declFileAccessors_1.ts, 5, 5))
- 
+
          return 10;
      }
      /** setter property*/
@@ -109,7 +109,7 @@
      private get pp3() {
 ->pp3 : Symbol(c2.pp3, Decl(declFileAccessors_1.ts, 8, 5), Decl(declFileAccessors_1.ts, 12, 5))
 +>pp3 : Symbol(pp3, Decl(declFileAccessors_1.ts, 8, 5), Decl(declFileAccessors_1.ts, 12, 5))
- 
+
          return 10;
      }
      /** private setter property*/
@@ -122,7 +122,7 @@
      static get s3() {
 ->s3 : Symbol(c2.s3, Decl(declFileAccessors_1.ts, 15, 5), Decl(declFileAccessors_1.ts, 19, 5))
 +>s3 : Symbol(s3, Decl(declFileAccessors_1.ts, 15, 5), Decl(declFileAccessors_1.ts, 19, 5))
- 
+
          return 10;
      }
      /** setter property*/
@@ -134,7 +134,7 @@
      public get nc_p3() {
 ->nc_p3 : Symbol(c2.nc_p3, Decl(declFileAccessors_1.ts, 22, 5), Decl(declFileAccessors_1.ts, 25, 5))
 +>nc_p3 : Symbol(nc_p3, Decl(declFileAccessors_1.ts, 22, 5), Decl(declFileAccessors_1.ts, 25, 5))
- 
+
          return 10;
      }
      public set nc_p3(value: number) {
@@ -145,7 +145,7 @@
      private get nc_pp3() {
 ->nc_pp3 : Symbol(c2.nc_pp3, Decl(declFileAccessors_1.ts, 27, 5), Decl(declFileAccessors_1.ts, 30, 5))
 +>nc_pp3 : Symbol(nc_pp3, Decl(declFileAccessors_1.ts, 27, 5), Decl(declFileAccessors_1.ts, 30, 5))
- 
+
          return 10;
      }
      private set nc_pp3(value: number) {
@@ -156,7 +156,7 @@
      static get nc_s3() {
 ->nc_s3 : Symbol(c2.nc_s3, Decl(declFileAccessors_1.ts, 32, 5), Decl(declFileAccessors_1.ts, 35, 5))
 +>nc_s3 : Symbol(nc_s3, Decl(declFileAccessors_1.ts, 32, 5), Decl(declFileAccessors_1.ts, 35, 5))
- 
+
          return "";
      }
      static set nc_s3(value: string) {
@@ -164,15 +164,15 @@
 +>nc_s3 : Symbol(nc_s3, Decl(declFileAccessors_1.ts, 32, 5), Decl(declFileAccessors_1.ts, 35, 5))
  >value : Symbol(value, Decl(declFileAccessors_1.ts, 36, 21))
      }
- 
+
      // Only getter property
      public get onlyGetter() {
 ->onlyGetter : Symbol(c2.onlyGetter, Decl(declFileAccessors_1.ts, 37, 5))
 +>onlyGetter : Symbol(onlyGetter, Decl(declFileAccessors_1.ts, 37, 5))
- 
+
          return 10;
      }
- 
+
      // Only setter property
      public set onlySetter(value: number) {
 ->onlySetter : Symbol(c2.onlySetter, Decl(declFileAccessors_1.ts, 42, 5))

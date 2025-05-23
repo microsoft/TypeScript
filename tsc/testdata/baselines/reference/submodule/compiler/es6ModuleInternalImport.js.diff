@@ -2,7 +2,7 @@
 +++ new.es6ModuleInternalImport.js
 @@= skipped -21, +21 lines =@@
  }
- 
+
  //// [es6ModuleInternalImport.js]
 -export var m;
 +export { m };

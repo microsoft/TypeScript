@@ -1,7 +1,7 @@
 --- old.forStatementsMultipleInvalidDecl.types
 +++ new.forStatementsMultipleInvalidDecl.types
 @@= skipped -147, +147 lines =@@
- 
+
  for( var m = M.A;;){}
  >m : typeof M
 ->M.A : typeof M.A
@@ -9,4 +9,3 @@
  >M : typeof M
 ->A : typeof M.A
 +>A : typeof A
- 

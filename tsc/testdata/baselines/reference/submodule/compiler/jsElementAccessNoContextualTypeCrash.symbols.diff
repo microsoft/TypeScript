@@ -1,12 +1,12 @@
 --- old.jsElementAccessNoContextualTypeCrash.symbols
 +++ new.jsElementAccessNoContextualTypeCrash.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === jsElementAccessNoContextualTypeCrash.js ===
  var Common = {};
 ->Common : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3), Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
 +>Common : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3))
- 
+
  self['Common'] = self['Common'] || {};
 ->self : Symbol(self, Decl(lib.dom.d.ts, --, --), Decl(jsElementAccessNoContextualTypeCrash.js, 0, 16))
 ->'Common' : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3), Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
@@ -16,7 +16,7 @@
 +>'Common' : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3))
 +>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
 +>'Common' : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3))
- 
+
  /**
   * @param {string} string
   * @return {string}
@@ -27,5 +27,5 @@
 ->localize : Symbol(Common.localize, Decl(jsElementAccessNoContextualTypeCrash.js, 1, 38))
 +>Common : Symbol(Common, Decl(jsElementAccessNoContextualTypeCrash.js, 0, 3))
  >string : Symbol(string, Decl(jsElementAccessNoContextualTypeCrash.js, 6, 28))
- 
+
      return string;

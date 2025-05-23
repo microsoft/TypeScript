@@ -6,8 +6,8 @@
    Types of parameters 'y' and 'y' are incompatible.
      Type 'U' is not assignable to type 'T'.
        'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
- 
- 
+
+
 -!!! error TS5102: Option 'noStrictGenericChecks' has been removed. Please remove it from your configuration.
  ==== noStrictGenericChecks.ts (1 errors) ====
      type A = <T, U>(x: T, y: U) => [T, U];

@@ -2,7 +2,7 @@
 +++ new.classAttributeInferenceTemplate.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [classAttributeInferenceTemplate.js]
 -"use strict";
 -var MyClass = /** @class */ (function () {

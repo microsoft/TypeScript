@@ -1,8 +1,8 @@
 --- old.unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.js
 +++ new.unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.js]
 -var count = 0;
 -forEach({ toString: 123 }, function () { return count++; });

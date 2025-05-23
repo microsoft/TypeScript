@@ -1,7 +1,7 @@
 --- old.noImplicitSymbolToString.js
 +++ new.noImplicitSymbolToString.js
 @@= skipped -50, +50 lines =@@
- 
+
  //// [noImplicitSymbolToString.js]
  // Fix #19666
 -var symbol;

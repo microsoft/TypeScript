@@ -1,8 +1,8 @@
 --- old.implementingAnInterfaceExtendingClassWithProtecteds.js
 +++ new.implementingAnInterfaceExtendingClassWithProtecteds.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [implementingAnInterfaceExtendingClassWithProtecteds.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

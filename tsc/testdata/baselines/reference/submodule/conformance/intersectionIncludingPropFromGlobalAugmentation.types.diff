@@ -1,11 +1,11 @@
 --- old.intersectionIncludingPropFromGlobalAugmentation.types
 +++ new.intersectionIncludingPropFromGlobalAugmentation.types
 @@= skipped -14, +14 lines =@@
- 
+
  const target: Test2 = { ...source };
  >target : Test2
 ->{ ...source } : { toString: null | "string"; }
 +>{ ...source } : { toString: "string" | null; }
  >source : Test1
- 
+
  const toString = target.toString;

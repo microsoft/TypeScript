@@ -7,5 +7,5 @@
 ->N : error
 +>N : any
  }
- 
+
  import r = M.X;

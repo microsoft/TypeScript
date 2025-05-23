@@ -2,7 +2,7 @@
 +++ new.declarationEmitTypeofThisInClass.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [declarationEmitTypeofThisInClass.js]
 -"use strict";
 -var Foo = /** @class */ (function () {

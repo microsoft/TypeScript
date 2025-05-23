@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-fields-staticPrivateAccessor(target=es2022).js
 +++ new.esDecorators-classDeclaration-fields-staticPrivateAccessor(target=es2022).js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-fields-staticPrivateAccessor.js]
 -let C = (() => {
 -    let _static_private_field1_decorators;

@@ -1,7 +1,7 @@
 --- old.templateExpressionNoInlininingOfConstantBindingWithInitializer.js
 +++ new.templateExpressionNoInlininingOfConstantBindingWithInitializer.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [templateExpressionNoInlininingOfConstantBindingWithInitializer.js]
  function example(parameters) {
 -    var _a = parameters.value, value = _a === void 0 ? '123' : _a;

@@ -1,11 +1,11 @@
 --- old.moduleWithStatementsOfEveryKind.types
 +++ new.moduleWithStatementsOfEveryKind.types
 @@= skipped -1, +1 lines =@@
- 
+
  === moduleWithStatementsOfEveryKind.ts ===
  module A {
 ->A : typeof globalThis.A
 +>A : typeof A
- 
+
      class A { s: string }
  >A : A

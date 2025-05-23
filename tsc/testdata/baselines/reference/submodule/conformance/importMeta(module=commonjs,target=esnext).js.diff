@@ -2,7 +2,7 @@
 +++ new.importMeta(module=commonjs,target=esnext).js
 @@= skipped -38, +38 lines =@@
  const { a, b, c } = import.meta.wellKnownProperty;
- 
+
  //// [example.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

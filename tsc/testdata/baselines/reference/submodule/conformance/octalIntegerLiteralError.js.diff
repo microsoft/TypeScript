@@ -1,7 +1,7 @@
 --- old.octalIntegerLiteralError.js
 +++ new.octalIntegerLiteralError.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [octalIntegerLiteralError.js]
  // error
 -var oct1 = 5852;

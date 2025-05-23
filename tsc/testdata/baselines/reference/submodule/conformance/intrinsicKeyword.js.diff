@@ -1,8 +1,8 @@
 --- old.intrinsicKeyword.js
 +++ new.intrinsicKeyword.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [intrinsicKeyword.js]
 -"use strict";
 -var e1;

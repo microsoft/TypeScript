@@ -1,7 +1,7 @@
 --- old.tsxSpreadAttributesResolution10.js
 +++ new.tsxSpreadAttributesResolution10.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [file.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

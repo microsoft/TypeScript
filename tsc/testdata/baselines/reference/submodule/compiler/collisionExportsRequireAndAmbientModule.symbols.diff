@@ -6,7 +6,7 @@
  >require : Symbol(require, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 0, 0))
 ->I : Symbol(require.I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 0, 31))
 +>I : Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 0, 31))
- 
+
      return null;
  }
 @@= skipped -17, +17 lines =@@
@@ -15,6 +15,6 @@
  >exports : Symbol(exports, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 8, 1))
 ->I : Symbol(exports.I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 9, 31))
 +>I : Symbol(I, Decl(collisionExportsRequireAndAmbientModule_externalmodule.ts, 9, 31))
- 
+
      return null;
  }

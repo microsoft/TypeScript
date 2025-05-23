@@ -2,7 +2,7 @@
 +++ new.pathsValidation3.js
 @@= skipped -3, +3 lines =@@
  let x = 1;
- 
+
  //// [a.js]
 -var x = 1;
 +let x = 1;

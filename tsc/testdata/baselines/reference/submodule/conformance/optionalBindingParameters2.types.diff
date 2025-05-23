@@ -1,7 +1,7 @@
 --- old.optionalBindingParameters2.types
 +++ new.optionalBindingParameters2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === optionalBindingParameters2.ts ===
  function foo({ x, y, z }?: { x: string; y: number; z: boolean }) {
 ->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => void
@@ -10,7 +10,7 @@
  >y : number
  >z : boolean
 @@= skipped -12, +12 lines =@@
- 
+
  foo({ x: "", y: 0, z: false });
  >foo({ x: "", y: 0, z: false }) : void
 ->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => void
@@ -19,7 +19,7 @@
  >x : string
  >"" : ""
 @@= skipped -11, +11 lines =@@
- 
+
  foo({ x: false, y: 0, z: "" });
  >foo({ x: false, y: 0, z: "" }) : void
 ->foo : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => void

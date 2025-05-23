@@ -45,8 +45,8 @@
  7.ts(1,6): error TS1125: Hexadecimal digit expected.
 -8.ts(1,6): error TS1125: Hexadecimal digit expected.
  9.ts(1,5): error TS1125: Hexadecimal digit expected.
- 
- 
+
+
 @@= skipped -58, +44 lines =@@
            
  !!! error TS1199: Unterminated Unicode escape sequence.

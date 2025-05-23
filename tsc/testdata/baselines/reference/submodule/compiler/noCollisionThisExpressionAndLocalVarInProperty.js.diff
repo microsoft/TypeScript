@@ -2,7 +2,7 @@
 +++ new.noCollisionThisExpressionAndLocalVarInProperty.js
 @@= skipped -21, +21 lines =@@
  }
- 
+
  //// [noCollisionThisExpressionAndLocalVarInProperty.js]
 -var class1 = /** @class */ (function () {
 -    function class1() {

@@ -11,4 +11,3 @@
 +>IFoo : Symbol(IFoo, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 0, 12))
  >T : Symbol(T, Decl(genericClassImplementingGenericInterfaceFromAnotherModule.ts, 4, 21))
  }
- 

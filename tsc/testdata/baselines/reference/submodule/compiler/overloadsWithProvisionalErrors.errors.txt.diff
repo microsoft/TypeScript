@@ -17,7 +17,7 @@
 +  The last overload gave the following error.
      Property 'b' is missing in type '{ a: any; }' but required in type '{ a: number; b: number; }'.
  overloadsWithProvisionalErrors.ts(8,17): error TS2304: Cannot find name 'blah'.
- 
+
 @@= skipped -18, +14 lines =@@
      };
      

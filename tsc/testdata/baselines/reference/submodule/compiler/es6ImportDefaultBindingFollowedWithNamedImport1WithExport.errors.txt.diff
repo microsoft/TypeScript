@@ -25,8 +25,8 @@
 -client.ts(11,34): error TS2614: Module '"./server"' has no exported member 'm'. Did you mean to use 'import m from "./server"' instead?
 +client.ts(11,34): error TS2614: Module '"server"' has no exported member 'm'. Did you mean to use 'import m from "server"' instead?
  client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
- 
- 
+
+
 @@= skipped -32, +32 lines =@@
      ~~~~~~
  !!! error TS1191: An import declaration cannot have modifiers.

@@ -1,8 +1,8 @@
 --- old.noImplicitThisFunctions.js
 +++ new.noImplicitThisFunctions.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [noImplicitThisFunctions.js]
 -var _this = this;
  function f1(x) {

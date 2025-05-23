@@ -2,7 +2,7 @@
 +++ new.promisePermutations2.js
 @@= skipped -168, +168 lines =@@
  var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok
- 
+
  //// [promisePermutations2.js]
 -// same as promisePermutations but without the same overloads in Promise<T>
  var r1;

@@ -14,16 +14,16 @@
 -        };
 -        return C;
 -    }());
--    var c = new C();
++        }
++    }
+     var c = new C();
 -    var r = c.foo(function (x) { return ''; }); // {}
 -    var r2 = c.foo(function (x) { return ''; }); // string 
 -    var r3 = c.foo(function (x) { return ''; }); // {}
 -    var C2 = /** @class */ (function () {
 -        function C2() {
-         }
+-        }
 -        C2.prototype.foo = function (x) {
-+    }
-+    var c = new C();
 +    var r = c.foo((x) => ''); // {}
 +    var r2 = c.foo((x) => ''); // string 
 +    var r3 = c.foo(x => ''); // {}

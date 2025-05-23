@@ -2,10 +2,12 @@
 +++ new.unmetTypeConstraintInJSDocImportCall.errors.txt
 @@= skipped -0, +0 lines =@@
 -file2.js(3,36): error TS2344: Type 'T' does not satisfy the constraint 'string'.
-+file1.js(3,21): error TS2304: Cannot find name 'T'.
- 
- 
+-
+-
 -==== file1.js (0 errors) ====
++file1.js(3,21): error TS2304: Cannot find name 'T'.
++
++
 +==== file1.js (1 errors) ====
      /**
       * @template {string} T

@@ -6,6 +6,6 @@
  import * as await from "./other";
 ->await : typeof await
 +>await : typeof import("other")
- 
+
  === other.ts ===
  declare const _await: any;

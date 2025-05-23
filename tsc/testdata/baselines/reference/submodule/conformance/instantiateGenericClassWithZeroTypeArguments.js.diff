@@ -1,7 +1,7 @@
 --- old.instantiateGenericClassWithZeroTypeArguments.js
 +++ new.instantiateGenericClassWithZeroTypeArguments.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [instantiateGenericClassWithZeroTypeArguments.js]
  // no errors expected when instantiating a generic type with no type arguments provided
 -var C = /** @class */ (function () {

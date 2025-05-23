@@ -1,8 +1,8 @@
 --- old.jsxSpreadTag(target=esnext).js
 +++ new.jsxSpreadTag(target=esnext).js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [a.js]
 -const t1 = React.createElement("div", { ...React.createElement("span", null) });
 -const t2 = React.createElement("div", { ...React.createElement("span", { className: "foo" }) });

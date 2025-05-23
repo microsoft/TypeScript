@@ -2,7 +2,7 @@
 +++ new.typeInferenceReturnTypeCallback.js
 @@= skipped -23, +23 lines =@@
  }
- 
+
  //// [typeInferenceReturnTypeCallback.js]
 -var Nil = /** @class */ (function () {
 -    function Nil() {

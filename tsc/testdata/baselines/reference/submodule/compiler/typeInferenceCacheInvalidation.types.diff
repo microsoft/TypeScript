@@ -2,7 +2,7 @@
 +++ new.typeInferenceCacheInvalidation.types
 @@= skipped -43, +43 lines =@@
  >'42' : "42"
- 
+
  example(42, (foo, bar) => ({
 ->example(42, (foo, bar) => ({    t() {        let s: string = bar;    }}), '42') : (foo: number, bar: string) => { t(): void; }
 +>example(42, (foo, bar) => ({    t() {        let s: string = bar;    }}), '42') : (foo: number, bar: string) => { t: () => void; }
@@ -16,6 +16,6 @@
 ->{    t() {        let s: string = bar;    }} : { t(): void; }
 +>({    t() {        let s: string = bar;    }}) : { t: () => void; }
 +>{    t() {        let s: string = bar;    }} : { t: () => void; }
- 
+
      t() {
  >t : () => void

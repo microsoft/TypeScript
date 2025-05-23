@@ -1,7 +1,7 @@
 --- old.declarationEmitThisPredicates01.js
 +++ new.declarationEmitThisPredicates01.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [declarationEmitThisPredicates01.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -31,23 +31,24 @@
 -    };
 -    return C;
 -}());
--exports.C = C;
++    }
++}
+ exports.C = C;
 -var D = /** @class */ (function (_super) {
 -    __extends(D, _super);
 -    function D() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    return D;
 -}(C));
--exports.D = D;
++class D extends C {
++}
+ exports.D = D;
 -
 -
 -//// [declarationEmitThisPredicates01.d.ts]
 -export declare class C {
 -    m(): this is D;
- }
+-}
 -export declare class D extends C {
-+exports.C = C;
-+class D extends C {
- }
-+exports.D = D;
+-}

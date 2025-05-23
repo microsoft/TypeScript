@@ -23,8 +23,7 @@
  }
  else {
 -    var d = x;
-+    let d = x;
- }
+-}
 -
 -
 -//// [stringLiteralTypesAsTags02.d.ts]
@@ -43,3 +42,5 @@
 -declare function hasKind(entity: Entity, kind: "A"): entity is A;
 -declare function hasKind(entity: Entity, kind: "B"): entity is B;
 -declare let x: A;
++    let d = x;
++}

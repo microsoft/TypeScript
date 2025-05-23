@@ -2,7 +2,7 @@
 +++ new.staticInstanceResolution.js
 @@= skipped -16, +16 lines =@@
  }
- 
+
  //// [staticInstanceResolution.js]
 -var Comment = /** @class */ (function () {
 -    function Comment() {

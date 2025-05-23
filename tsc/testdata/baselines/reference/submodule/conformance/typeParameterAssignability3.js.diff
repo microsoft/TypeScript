@@ -1,7 +1,7 @@
 --- old.typeParameterAssignability3.js
 +++ new.typeParameterAssignability3.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [typeParameterAssignability3.js]
  // type parameters are not assignable to one another unless directly or indirectly constrained to one another
 -var Foo = /** @class */ (function () {

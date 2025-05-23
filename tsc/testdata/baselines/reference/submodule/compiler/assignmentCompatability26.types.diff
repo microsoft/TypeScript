@@ -14,4 +14,3 @@
  >__test1__ : typeof __test1__
 ->__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 +>__val__obj4 : interfaceWithPublicAndOptional<number, string>
- 

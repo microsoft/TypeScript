@@ -2,7 +2,7 @@
 +++ new.noErrorsInCallback.js
 @@= skipped -10, +10 lines =@@
   
- 
+
  //// [noErrorsInCallback.js]
 -var Bar = /** @class */ (function () {
 -    function Bar(foo) {

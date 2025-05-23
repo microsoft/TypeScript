@@ -2,7 +2,7 @@
 +++ new.augmentedTypeBracketNamedPropertyAccess.types
 @@= skipped -23, +23 lines =@@
  >'data' : "data"
- 
+
  var r2 = o['functionData']; // Should be any (no property found)
 ->r2 : error
 ->o['functionData'] : error
@@ -10,4 +10,3 @@
 +>o['functionData'] : any
  >o : {}
  >'functionData' : "functionData"
- 

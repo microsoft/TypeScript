@@ -5,8 +5,8 @@
  subfolder/index.ts(3,7): error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
 -subfolder/index.ts(4,7): error TS2725: Class name cannot be 'Object' when targeting ES5 with module NodeNext.
  subfolder/index.ts(5,14): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
- 
- 
+
+
 -==== subfolder/index.ts (4 errors) ====
 +==== subfolder/index.ts (3 errors) ====
      // cjs format file

@@ -1,8 +1,8 @@
 --- old.privateNameInInExpressionUnused(target=esnext).js
 +++ new.privateNameInInExpressionUnused(target=esnext).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [privateNameInInExpressionUnused.js]
 -"use strict";
  class Foo {

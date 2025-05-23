@@ -29,7 +29,7 @@
  >0 : 0
      }
 @@= skipped -30, +30 lines =@@
- 
+
  new C().foo().then(console.log);
  >new C().foo().then(console.log) : Promise<void>
 ->new C().foo().then : <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>

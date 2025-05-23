@@ -2,7 +2,7 @@
 +++ new.errorSpanForUnclosedJsxTag.js
 @@= skipped -13, +13 lines =@@
  let y = <   Baz >Hello
- 
+
  //// [errorSpanForUnclosedJsxTag.js]
 -var Foo = {
 -    Bar: function () { }

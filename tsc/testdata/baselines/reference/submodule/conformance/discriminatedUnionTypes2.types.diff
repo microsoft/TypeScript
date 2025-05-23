@@ -1,14 +1,14 @@
 --- old.discriminatedUnionTypes2.types
 +++ new.discriminatedUnionTypes2.types
 @@= skipped -382, +382 lines =@@
- 
+
  function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
  >foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
 ->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
 +>x : { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }
  >type : "number"
  >type : "string"
- 
+
      if (x.type === 'number') {
  >x.type === 'number' : boolean
  >x.type : "number" | "string"
@@ -16,4 +16,3 @@
 +>x : { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }
  >type : "number" | "string"
  >'number' : "number"
- 

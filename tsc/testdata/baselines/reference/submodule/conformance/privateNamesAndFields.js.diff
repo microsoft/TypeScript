@@ -1,8 +1,8 @@
 --- old.privateNamesAndFields.js
 +++ new.privateNamesAndFields.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [privateNamesAndFields.js]
 -"use strict";
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {

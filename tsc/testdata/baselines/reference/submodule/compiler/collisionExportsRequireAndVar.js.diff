@@ -2,7 +2,7 @@
 +++ new.collisionExportsRequireAndVar.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [collisionExportsRequireAndVar_externalmodule.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

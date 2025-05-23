@@ -1,8 +1,8 @@
 --- old.typingsLookupAmd.js
 +++ new.typingsLookupAmd.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [foo.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

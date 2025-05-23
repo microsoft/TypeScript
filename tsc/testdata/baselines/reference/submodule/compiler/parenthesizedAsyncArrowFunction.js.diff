@@ -1,7 +1,7 @@
 --- old.parenthesizedAsyncArrowFunction.js
 +++ new.parenthesizedAsyncArrowFunction.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [parenthesizedAsyncArrowFunction.js]
  // Repro from #20096
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

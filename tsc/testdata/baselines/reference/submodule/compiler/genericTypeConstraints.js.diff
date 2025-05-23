@@ -2,7 +2,7 @@
 +++ new.genericTypeConstraints.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [genericTypeConstraints.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,17 +21,7 @@
 -})();
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+class Foo {
-+    fooMethod() { }
-+}
-+class FooExtended {
-+}
-+class Bar {
-+}
-+class BarExtended extends Bar {
-+    constructor() {
-+        super();
-     }
+-    }
 -    Foo.prototype.fooMethod = function () { };
 -    return Foo;
 -}());
@@ -52,4 +42,15 @@
 -    }
 -    return BarExtended;
 -}(Bar));
++class Foo {
++    fooMethod() { }
++}
++class FooExtended {
++}
++class Bar {
++}
++class BarExtended extends Bar {
++    constructor() {
++        super();
++    }
 +}

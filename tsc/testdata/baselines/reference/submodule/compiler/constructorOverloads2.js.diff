@@ -1,8 +1,8 @@
 --- old.constructorOverloads2.js
 +++ new.constructorOverloads2.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [constructorOverloads2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var FooBase = /** @class */ (function () {
 -    function FooBase(x) {
-+class FooBase {
-+    constructor(x) {
-     }
+-    }
 -    FooBase.prototype.bar1 = function () { };
 -    return FooBase;
 -}());
@@ -31,15 +29,19 @@
 -    __extends(Foo, _super);
 -    function Foo(x, y) {
 -        return _super.call(this, x) || this;
+-    }
+-    Foo.prototype.bar1 = function () { };
+-    return Foo;
+-}(FooBase));
++class FooBase {
++    constructor(x) {
++    }
 +    bar1() { }
 +}
 +class Foo extends FooBase {
 +    constructor(x, y) {
 +        super(x);
-     }
--    Foo.prototype.bar1 = function () { };
--    return Foo;
--}(FooBase));
++    }
 +    bar1() { }
 +}
  var f1 = new Foo("hey");

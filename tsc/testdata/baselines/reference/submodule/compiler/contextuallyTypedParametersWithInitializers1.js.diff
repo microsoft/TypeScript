@@ -133,21 +133,17 @@
  function id(input) { return input; }
 -function getFoo(_a) {
 -    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
-+function getFoo({ foo = 42 }) {
-     return foo;
- }
+-    return foo;
+-}
 -var newGetFoo = id(getFoo);
 -var newGetFoo2 = id(function getFoo(_a) {
 -    var _b = _a.foo, foo = _b === void 0 ? 42 : _b;
-+const newGetFoo = id(getFoo);
-+const newGetFoo2 = id(function getFoo({ foo = 42 }) {
-     return foo;
- });
+-    return foo;
+-});
 -function add(x, y) {
 -    if (y === void 0) { y = 0; }
-+function add(x, y = 0) {
-     return x + y;
- }
+-    return x + y;
+-}
 -var memoizedAdd = memoize(add);
 -var add2 = function (x, y) {
 -    if (y === void 0) { y = 0; }
@@ -158,6 +154,16 @@
 -    if (y === void 0) { y = 0; }
 -    return x + y;
 -});
++function getFoo({ foo = 42 }) {
++    return foo;
++}
++const newGetFoo = id(getFoo);
++const newGetFoo2 = id(function getFoo({ foo = 42 }) {
++    return foo;
++});
++function add(x, y = 0) {
++    return x + y;
++}
 +const memoizedAdd = memoize(add);
 +const add2 = (x, y = 0) => x + y;
 +const memoizedAdd2 = memoize(add2);

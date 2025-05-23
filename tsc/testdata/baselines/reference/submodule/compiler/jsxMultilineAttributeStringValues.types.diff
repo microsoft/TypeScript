@@ -1,7 +1,7 @@
 --- old.jsxMultilineAttributeStringValues.types
 +++ new.jsxMultilineAttributeStringValues.types
 @@= skipped -1, +1 lines =@@
- 
+
  === jsxMultilineAttributeStringValues.tsx ===
  const a = <input value="
 ->a : error
@@ -10,10 +10,10 @@
 +><input value="  foo: 23"></input> : any
  >input : any
  >value : string
- 
+
 @@= skipped -10, +10 lines =@@
  >input : any
- 
+
  const b = <input value='
 ->b : error
 -><input value='foo: 23'></input> : error
@@ -21,4 +21,3 @@
 +><input value='foo: 23'></input> : any
  >input : any
  >value : string
- 

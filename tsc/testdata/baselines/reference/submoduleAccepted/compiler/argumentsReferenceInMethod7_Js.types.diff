@@ -2,18 +2,18 @@
 +++ new.argumentsReferenceInMethod7_Js.types
 @@= skipped -4, +4 lines =@@
  >A : A
- 
+
  	m() {
 ->m : (...args: any[]) => void
 +>m : () => void
- 
+
  		/**
  		 * @type Function
-@@= skipped -11, +11 lines =@@
+@@= skipped -10, +10 lines =@@
+ >this.callee : Function
  >this : this
  >callee : Function
- >arguments.callee : Function
 +>arguments.callee : Function
+ >arguments.callee : Function
  >arguments : IArguments
  >callee : Function
- 	}

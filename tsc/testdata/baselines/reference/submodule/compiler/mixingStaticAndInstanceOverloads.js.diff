@@ -2,7 +2,7 @@
 +++ new.mixingStaticAndInstanceOverloads.js
 @@= skipped -37, +37 lines =@@
  }
- 
+
  //// [mixingStaticAndInstanceOverloads.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

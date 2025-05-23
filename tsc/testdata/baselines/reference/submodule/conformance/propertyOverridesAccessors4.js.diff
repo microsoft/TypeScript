@@ -1,8 +1,8 @@
 --- old.propertyOverridesAccessors4.js
 +++ new.propertyOverridesAccessors4.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [propertyOverridesAccessors4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

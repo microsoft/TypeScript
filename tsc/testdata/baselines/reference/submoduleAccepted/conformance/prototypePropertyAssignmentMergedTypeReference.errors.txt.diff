@@ -1,8 +1,7 @@
 --- old.prototypePropertyAssignmentMergedTypeReference.errors.txt
 +++ new.prototypePropertyAssignmentMergedTypeReference.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +prototypePropertyAssignmentMergedTypeReference.js(7,22): error TS2749: 'f' refers to a value, but is being used as a type here. Did you mean 'typeof f'?
 +prototypePropertyAssignmentMergedTypeReference.js(8,5): error TS2322: Type '() => number' is not assignable to type 'new () => f'.
 +  Type '() => number' provides no match for the signature 'new (): f'.

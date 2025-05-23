@@ -2,7 +2,7 @@
 +++ new.emitArrowFunction.js
 @@= skipped -9, +9 lines =@@
  foo(() => { return false; });
- 
+
  //// [emitArrowFunction.js]
 -var f1 = function () { };
 -var f2 = function (x, y) { };

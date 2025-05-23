@@ -1,8 +1,8 @@
 --- old.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js
 +++ new.ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndGenericClassStaticFunctionOfTheSameName.js]
 -var clodule = /** @class */ (function () {
 -    function clodule() {

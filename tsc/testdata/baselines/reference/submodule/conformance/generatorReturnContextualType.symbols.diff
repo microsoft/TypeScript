@@ -2,7 +2,7 @@
 +++ new.generatorReturnContextualType.symbols
 @@= skipped -44, +44 lines =@@
  >x : Symbol(x, Decl(generatorReturnContextualType.ts, 18, 43))
- 
+
    return Promise.resolve({ x: 'x' });
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -11,10 +11,10 @@
 +>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
  >x : Symbol(x, Decl(generatorReturnContextualType.ts, 19, 26))
  }
- 
+
 @@= skipped -12, +12 lines =@@
  >x : Symbol(x, Decl(generatorReturnContextualType.ts, 22, 42))
- 
+
    return Promise.resolve({ x: 'x' });
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -23,10 +23,10 @@
 +>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
  >x : Symbol(x, Decl(generatorReturnContextualType.ts, 23, 26))
  }
- 
+
 @@= skipped -16, +16 lines =@@
  >x : Symbol(x, Decl(generatorReturnContextualType.ts, 27, 15))
- 
+
    return Promise.resolve(ret); // Error
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -35,10 +35,10 @@
 +>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
  >ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 27, 7))
  }
- 
+
 @@= skipped -16, +16 lines =@@
  >x : Symbol(x, Decl(generatorReturnContextualType.ts, 32, 15))
- 
+
    return Promise.resolve(ret); // Error
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -47,4 +47,3 @@
 +>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
  >ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 32, 7))
  }
- 

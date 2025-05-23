@@ -2,10 +2,9 @@
 +++ new.tsxDynamicTagName4.types
 @@= skipped -16, +16 lines =@@
  >"h1" : "h1"
- 
+
  <CustomTag> Hello World </CustomTag>
 -><CustomTag> Hello World </CustomTag> : JSX.Element
 +><CustomTag> Hello World </CustomTag> : Element
  >CustomTag : "h1"
  >CustomTag : "h1"
- 

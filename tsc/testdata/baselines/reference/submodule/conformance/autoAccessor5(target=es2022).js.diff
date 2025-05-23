@@ -2,7 +2,7 @@
 +++ new.autoAccessor5(target=es2022).js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [autoAccessor5.js]
 -var _a;
  class C1 {

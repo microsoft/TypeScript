@@ -1,7 +1,7 @@
 --- old.jsDeclarationsCrossfileMerge.types
 +++ new.jsDeclarationsCrossfileMerge.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  const m = require("./exporter");
 ->m : typeof m
@@ -10,7 +10,7 @@
 +>require("./exporter") : typeof import("exporter")
  >require : any
  >"./exporter" : "./exporter"
- 
+
  module.exports = m.default;
 ->module.exports = m.default : typeof m.default
 ->module.exports : typeof m.default
@@ -26,7 +26,7 @@
 +>m.default : () => void
 +>m : typeof import("exporter")
 +>default : () => void
- 
+
  module.exports.memberName = "thing";
  >module.exports.memberName = "thing" : "thing"
 ->module.exports.memberName : "thing"
@@ -40,13 +40,12 @@
 +>exports : () => void
 +>memberName : any
  >"thing" : "thing"
- 
+
  === exporter.js ===
  function validate() {}
 ->validate : typeof validate
 +>validate : () => void
- 
+
  export default validate;
 ->validate : typeof validate
 +>validate : () => void
- 

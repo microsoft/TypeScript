@@ -2,7 +2,7 @@
 +++ new.superCallInsideObjectLiteralExpression.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [superCallInsideObjectLiteralExpression.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

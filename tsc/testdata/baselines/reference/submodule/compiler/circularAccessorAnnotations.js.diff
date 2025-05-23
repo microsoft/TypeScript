@@ -1,8 +1,8 @@
 --- old.circularAccessorAnnotations.js
 +++ new.circularAccessorAnnotations.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [circularAccessorAnnotations.js]
 -"use strict";
 -

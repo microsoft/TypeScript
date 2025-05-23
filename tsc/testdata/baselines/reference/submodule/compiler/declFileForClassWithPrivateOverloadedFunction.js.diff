@@ -2,7 +2,7 @@
 +++ new.declFileForClassWithPrivateOverloadedFunction.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [declFileForClassWithPrivateOverloadedFunction.js]
 -var C = /** @class */ (function () {
 -    function C() {

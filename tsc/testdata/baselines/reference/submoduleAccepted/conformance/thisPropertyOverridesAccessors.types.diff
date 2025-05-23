@@ -1,7 +1,7 @@
 --- old.thisPropertyOverridesAccessors.types
 +++ new.thisPropertyOverridesAccessors.types
 @@= skipped -24, +24 lines =@@
- 
+
          this.p = 2
  >this.p = 2 : 2
 ->this.p : any

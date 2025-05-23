@@ -2,7 +2,7 @@
 +++ new.typeofClass.js
 @@= skipped -13, +13 lines =@@
  k2.bar;
- 
+
  //// [typeofClass.js]
 -var K = /** @class */ (function () {
 -    function K() {

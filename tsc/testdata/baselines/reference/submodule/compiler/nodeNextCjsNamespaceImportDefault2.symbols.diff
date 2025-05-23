@@ -2,12 +2,12 @@
 +++ new.nodeNextCjsNamespaceImportDefault2.symbols
 @@= skipped -18, +18 lines =@@
  >ns : Symbol(ns, Decl(foo.mts, 2, 13))
- 
+
  d.a;
 ->d.a : Symbol(d.a, Decl(a.cts, 0, 12))
  >d : Symbol(d, Decl(foo.mts, 0, 6))
 ->a : Symbol(d.a, Decl(a.cts, 0, 12))
- 
+
  ns.default.a;
 ->ns.default.a : Symbol(d.a, Decl(a.cts, 0, 12))
 ->ns.default : Symbol(d.default)
@@ -16,4 +16,3 @@
 ->default : Symbol(d.default)
 ->a : Symbol(d.a, Decl(a.cts, 0, 12))
 +>default : Symbol(default, Decl(a.cts, 0, 27))
- 

@@ -1,8 +1,8 @@
 --- old.potentiallyUncalledDecorators.js
 +++ new.potentiallyUncalledDecorators.js
 @@= skipped -80, +80 lines =@@
- 
- 
+
+
  //// [potentiallyUncalledDecorators.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -36,12 +36,7 @@
 -    tracked('args')
 -], MultiplyByTwo.prototype, "multiplied", null);
 -let A = class A {
-+@noArgs
-+class A {
-+    @noArgs
-+    foo;
-+    @noArgs
-     bar() { }
+-    bar() { }
 -};
 -__decorate([
 -    noArgs
@@ -53,13 +48,7 @@
 -    noArgs
 -], A);
 -let B = class B {
-+}
-+@allRest
-+class B {
-+    @allRest
-+    foo;
-+    @allRest
-     bar() { }
+-    bar() { }
 -};
 -__decorate([
 -    allRest
@@ -71,13 +60,7 @@
 -    allRest
 -], B);
 -let C = class C {
-+}
-+@oneOptional
-+class C {
-+    @oneOptional
-+    foo;
-+    @oneOptional
-     bar() { }
+-    bar() { }
 -};
 -__decorate([
 -    oneOptional
@@ -89,13 +72,7 @@
 -    oneOptional
 -], C);
 -let D = class D {
-+}
-+@twoOptional
-+class D {
-+    @twoOptional
-+    foo;
-+    @twoOptional
-     bar() { }
+-    bar() { }
 -};
 -__decorate([
 -    twoOptional
@@ -107,13 +84,7 @@
 -    twoOptional
 -], D);
 -let E = class E {
-+}
-+@threeOptional
-+class E {
-+    @threeOptional
-+    foo;
-+    @threeOptional
-     bar() { }
+-    bar() { }
 -};
 -__decorate([
 -    threeOptional
@@ -125,13 +96,7 @@
 -    threeOptional
 -], E);
 -let F = class F {
-+}
-+@oneOptionalWithRest
-+class F {
-+    @oneOptionalWithRest
-+    foo;
-+    @oneOptionalWithRest
-     bar() { }
+-    bar() { }
 -};
 -__decorate([
 -    oneOptionalWithRest
@@ -143,13 +108,7 @@
 -    oneOptionalWithRest
 -], F);
 -let G = class G {
-+}
-+@anyDec
-+class G {
-+    @anyDec
-+    foo;
-+    @anyDec
-     bar() { }
+-    bar() { }
 -};
 -__decorate([
 -    anyDec
@@ -160,5 +119,53 @@
 -G = __decorate([
 -    anyDec
 -], G);
++@noArgs
++class A {
++    @noArgs
++    foo;
++    @noArgs
++    bar() { }
++}
++@allRest
++class B {
++    @allRest
++    foo;
++    @allRest
++    bar() { }
++}
++@oneOptional
++class C {
++    @oneOptional
++    foo;
++    @oneOptional
++    bar() { }
++}
++@twoOptional
++class D {
++    @twoOptional
++    foo;
++    @twoOptional
++    bar() { }
++}
++@threeOptional
++class E {
++    @threeOptional
++    foo;
++    @threeOptional
++    bar() { }
++}
++@oneOptionalWithRest
++class F {
++    @oneOptionalWithRest
++    foo;
++    @oneOptionalWithRest
++    bar() { }
++}
++@anyDec
++class G {
++    @anyDec
++    foo;
++    @anyDec
++    bar() { }
 +}
  export {};

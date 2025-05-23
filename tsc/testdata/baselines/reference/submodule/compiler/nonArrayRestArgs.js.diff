@@ -2,7 +2,7 @@
 +++ new.nonArrayRestArgs.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [nonArrayRestArgs.js]
 -function foo() {
 -    var rest = [];

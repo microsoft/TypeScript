@@ -1,7 +1,7 @@
 --- old.autoAccessor6(target=es2022,usedefineforclassfields=false).js
 +++ new.autoAccessor6(target=es2022,usedefineforclassfields=false).js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [autoAccessor6.js]
  class C1 {
 -    #a_accessor_storage;

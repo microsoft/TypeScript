@@ -1,8 +1,8 @@
 --- old.simpleRecursionWithBaseCase1.js
 +++ new.simpleRecursionWithBaseCase1.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [simpleRecursionWithBaseCase1.js]
 -"use strict";
  function fn1(n) {

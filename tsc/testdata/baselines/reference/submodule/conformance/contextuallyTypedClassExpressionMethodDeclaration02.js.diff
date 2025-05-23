@@ -1,35 +1,28 @@
 --- old.contextuallyTypedClassExpressionMethodDeclaration02.js
 +++ new.contextuallyTypedClassExpressionMethodDeclaration02.js
 @@= skipped -52, +52 lines =@@
- 
+
  //// [contextuallyTypedClassExpressionMethodDeclaration02.js]
  function getFoo1() {
 -    return /** @class */ (function () {
 -        function class_1() {
+-        }
+-        class_1.prototype.method1 = function (arg) {
 +    return class {
 +        method1(arg) {
-+            arg.numProp = 10;
-         }
--        class_1.prototype.method1 = function (arg) {
-+        method2(arg) {
-+            arg.strProp = "hello";
-+        }
-+    };
-+}
-+function getFoo2() {
-+    return class {
-+        method1 = (arg) => {
              arg.numProp = 10;
-         };
+-        };
 -        class_1.prototype.method2 = function (arg) {
-+        method2 = (arg) => {
++        }
++        method2(arg) {
              arg.strProp = "hello";
-         };
+-        };
 -        return class_1;
 -    }());
++        }
 +    };
  }
--function getFoo2() {
+ function getFoo2() {
 -    return /** @class */ (function () {
 -        function class_2() {
 -            this.method1 = function (arg) {
@@ -41,7 +34,15 @@
 -        }
 -        return class_2;
 -    }());
--}
++    return class {
++        method1 = (arg) => {
++            arg.numProp = 10;
++        };
++        method2 = (arg) => {
++            arg.strProp = "hello";
++        };
++    };
+ }
  function getFoo3() {
 -    return /** @class */ (function () {
 -        function class_3() {

@@ -1,8 +1,8 @@
 --- old.iterableTReturnTNext(strictbuiltiniteratorreturn=true).js
 +++ new.iterableTReturnTNext(strictbuiltiniteratorreturn=true).js
 @@= skipped -48, +48 lines =@@
- 
- 
+
+
  //// [iterableTReturnTNext.js]
 -"use strict";
  // based on:

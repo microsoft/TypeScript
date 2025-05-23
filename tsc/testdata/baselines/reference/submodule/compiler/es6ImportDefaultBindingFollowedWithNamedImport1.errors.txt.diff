@@ -13,8 +13,8 @@
 +es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(7,44): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamedImport1_0' or its corresponding type declarations.
 +es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(9,43): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamedImport1_0' or its corresponding type declarations.
 +es6ImportDefaultBindingFollowedWithNamedImport1_1.ts(11,38): error TS2307: Cannot find module 'es6ImportDefaultBindingFollowedWithNamedImport1_0' or its corresponding type declarations.
- 
- 
+
+
  ==== es6ImportDefaultBindingFollowedWithNamedImport1_0.ts (0 errors) ====
 @@= skipped -11, +11 lines =@@
      

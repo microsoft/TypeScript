@@ -2,15 +2,14 @@
 +++ new.namespaces1.types
 @@= skipped -8, +8 lines =@@
  }
- 
+
  var x: X.Y.Z;
 ->x : X.Y.Z
 +>x : Z
  >X : any
  >Y : any
- 
+
  var x2: X.Y;
 ->x2 : X.Y
 +>x2 : Y
  >X : any
- 

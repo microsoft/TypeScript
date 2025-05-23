@@ -12,13 +12,13 @@
 ->observer : unique symbol
 +>observer : symbol
  }
- 
+
  const obj = {
 ->obj : { [Symbol.observer]: number; }
 ->{    [Symbol.observer]: 0} : { [Symbol.observer]: number; }
 +>obj : { [x: symbol]: number; }
 +>{    [Symbol.observer]: 0} : { [x: symbol]: number; }
- 
+
      [Symbol.observer]: 0
  >[Symbol.observer] : number
 ->Symbol.observer : unique symbol
@@ -27,5 +27,5 @@
 ->observer : unique symbol
 +>observer : symbol
  >0 : 0
- 
+
  };

@@ -1,8 +1,8 @@
 --- old.privateNamesInNestedClasses-1.js
 +++ new.privateNamesInNestedClasses-1.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [privateNamesInNestedClasses-1.js]
 -"use strict";
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {

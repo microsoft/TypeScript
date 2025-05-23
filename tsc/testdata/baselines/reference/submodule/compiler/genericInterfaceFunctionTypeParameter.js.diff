@@ -1,8 +1,8 @@
 --- old.genericInterfaceFunctionTypeParameter.js
 +++ new.genericInterfaceFunctionTypeParameter.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [genericInterfaceFunctionTypeParameter.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -2,7 +2,7 @@
 +++ new.extendNonClassSymbol2.js
 @@= skipped -7, +7 lines =@@
  class C extends Foo {} // error, could not find symbol Foo
- 
+
  //// [extendNonClassSymbol2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

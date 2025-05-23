@@ -2,7 +2,7 @@
 +++ new.symlinkedWorkspaceDependenciesNoDirectLinkGeneratesDeepNonrelativeName.js
 @@= skipped -39, +39 lines =@@
  export const a = pkg.invoke();
- 
+
  //// [index.js]
 -"use strict";
 -var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

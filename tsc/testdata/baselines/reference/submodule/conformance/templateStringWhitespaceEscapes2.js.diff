@@ -1,7 +1,7 @@
 --- old.templateStringWhitespaceEscapes2.js
 +++ new.templateStringWhitespaceEscapes2.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [templateStringWhitespaceEscapes2.js]
  // <TAB>, <VT>, <FF>, <SP>, <NBSP>, <BOM>
 -"\t\v\f \u00A0\uFEFF";

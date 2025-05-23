@@ -12,8 +12,8 @@
 ->s : string
 +>s : any
  >"!" : "!"
- 
- 
+
+
  /** @type {NoReturn} */
  var noreturn = obj => void obj.title
  >noreturn : NoReturn
@@ -28,6 +28,6 @@
 +>obj.title : any
 +>obj : any
 +>title : any
- 
+
  /**
   * @callback NoReturn

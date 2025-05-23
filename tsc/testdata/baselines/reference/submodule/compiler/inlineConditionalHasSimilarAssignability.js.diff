@@ -1,7 +1,7 @@
 --- old.inlineConditionalHasSimilarAssignability.js
 +++ new.inlineConditionalHasSimilarAssignability.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [inlineConditionalHasSimilarAssignability.js]
  function foo(a) {
 -    var b = 0;

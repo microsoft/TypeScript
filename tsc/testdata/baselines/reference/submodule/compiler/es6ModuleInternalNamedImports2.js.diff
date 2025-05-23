@@ -1,8 +1,8 @@
 --- old.es6ModuleInternalNamedImports2.js
 +++ new.es6ModuleInternalNamedImports2.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [es6ModuleInternalNamedImports2.js]
 -export var M;
 +export { M };

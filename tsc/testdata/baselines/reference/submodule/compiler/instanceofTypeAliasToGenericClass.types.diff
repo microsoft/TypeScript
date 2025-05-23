@@ -2,10 +2,10 @@
 +++ new.instanceofTypeAliasToGenericClass.types
 @@= skipped -21, +21 lines =@@
  }
- 
+
  function fn2<T extends TableClass>(o: T) {
 ->fn2 : <T extends TableClass>(o: T) => boolean
 +>fn2 : <T extends TableClass<any>>(o: T) => boolean
  >o : T
- 
+
      return o instanceof TableClass;

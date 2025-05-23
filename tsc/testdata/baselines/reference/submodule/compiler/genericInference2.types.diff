@@ -8,7 +8,7 @@
 ->{        name: ko.observable("Bob"),        age: ko.observable(37)     } : { name: ko.Observable<string>; age: ko.Observable<number>; }
 +>o : { name: Observable<string>; age: Observable<number>; }
 +>{        name: ko.observable("Bob"),        age: ko.observable(37)     } : { name: Observable<string>; age: Observable<number>; }
- 
+
         name: ko.observable("Bob"), 
 ->name : ko.Observable<string>
 ->ko.observable("Bob") : ko.Observable<string>
@@ -20,7 +20,7 @@
 ->observable : <T>(value: T) => ko.Observable<T>
 +>observable : <T>(value: T) => Observable<T>
  >"Bob" : "Bob"
- 
+
         age: ko.observable(37) 
 ->age : ko.Observable<number>
 ->ko.observable(37) : ko.Observable<number>
@@ -32,7 +32,7 @@
 ->observable : <T>(value: T) => ko.Observable<T>
 +>observable : <T>(value: T) => Observable<T>
  >37 : 37
- 
+
      }; 
 @@= skipped -24, +24 lines =@@
  >x_v : number
@@ -45,7 +45,7 @@
 +>o : { name: Observable<string>; age: Observable<number>; }
 +>name : Observable<string>
  >length : number
- 
+
      var age_v = o.age();  // should be 'number'
  >age_v : number
  >o.age() : number
@@ -55,7 +55,7 @@
 +>o.age : Observable<number>
 +>o : { name: Observable<string>; age: Observable<number>; }
 +>age : Observable<number>
- 
+
      var name_v = o.name("Robert");  // should be 'any'
  >name_v : any
  >o.name("Robert") : any
@@ -66,7 +66,7 @@
 +>o : { name: Observable<string>; age: Observable<number>; }
 +>name : Observable<string>
  >"Robert" : "Robert"
- 
+
      var zz_v = o.name.N;  // should be 'number'
  >zz_v : number
  >o.name.N : number
@@ -77,7 +77,7 @@
 +>o : { name: Observable<string>; age: Observable<number>; }
 +>name : Observable<string>
  >N : number
- 
+
      var yy_v = o.name.g;  // should be 'boolean'
  >yy_v : boolean
  >o.name.g : boolean
@@ -88,7 +88,7 @@
 +>o : { name: Observable<string>; age: Observable<number>; }
 +>name : Observable<string>
  >g : boolean
- 
+
      var rr_v = o.name.r;  // should be 'string'
  >rr_v : string
  >o.name.r : string
@@ -99,4 +99,3 @@
 +>o : { name: Observable<string>; age: Observable<number>; }
 +>name : Observable<string>
  >r : string
- 

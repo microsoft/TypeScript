@@ -1,7 +1,7 @@
 --- old.typeFromPropertyAssignment9.types
 +++ new.typeFromPropertyAssignment9.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  var my = my || {};
 ->my : typeof my
@@ -11,7 +11,7 @@
 +>my || {} : any
 +>my : any
  >{} : {}
- 
+
  /** @param {number} n */
  my.method = function(n) {
 ->my.method = function(n) {    return n + 1;} : (n: number) => number
@@ -26,7 +26,7 @@
 +>method : any
 +>function(n) {    return n + 1;} : (n: any) => any
 +>n : any
- 
+
      return n + 1;
 ->n + 1 : number
 ->n : number
@@ -43,7 +43,7 @@
 +>my : any
 +>number : any
  >1 : 1
- 
+
  my.object = {};
  >my.object = {} : {}
 ->my.object : {}
@@ -53,7 +53,7 @@
 +>my : any
 +>object : any
  >{} : {}
- 
+
  my.predicate = my.predicate || {};
 ->my.predicate = my.predicate || {} : typeof my.predicate
 ->my.predicate : typeof my.predicate
@@ -72,7 +72,7 @@
 +>my : any
 +>predicate : any
  >{} : {}
- 
+
  my.predicate.query = function () {
 ->my.predicate.query = function () {    var me = this;    me.property = false;} : typeof query
 ->my.predicate.query : typeof query
@@ -88,13 +88,13 @@
 +>predicate : any
 +>query : any
 +>function () {    var me = this;    me.property = false;} : () => void
- 
+
      var me = this;
 ->me : this
 ->this : this
 +>me : any
 +>this : any
- 
+
      me.property = false;
  >me.property = false : false
  >me.property : any
@@ -102,7 +102,7 @@
 +>me : any
  >property : any
  >false : false
- 
+
  };
  var q = new my.predicate.query();
 ->q : query
@@ -119,7 +119,7 @@
 +>my : any
 +>predicate : any
 +>query : any
- 
+
  my.predicate.query.another = function () {
  >my.predicate.query.another = function () {    return 1;} : () => number
 ->my.predicate.query.another : () => number
@@ -137,7 +137,7 @@
 +>query : any
 +>another : any
  >function () {    return 1;} : () => number
- 
+
      return 1;
 @@= skipped -90, +90 lines =@@
  }
@@ -158,7 +158,7 @@
 +>query : any
 +>result : any
  >'none' : "none"
- 
+
  /** @param {number} first
   *  @param {number} second
   */
@@ -193,7 +193,7 @@
 +>function (first, second) {    return first > second ? first : second;} : (first: any, second: any) => any
 +>first : any
 +>second : any
- 
+
      return first > second ? first : second;
 ->first > second ? first : second : number
 +>first > second ? first : second : any
@@ -220,10 +220,10 @@
 +>predicate : any
 +>type : any
  >class {    m() { return 101; }} : typeof type
- 
+
      m() { return 101; }
 @@= skipped -54, +54 lines =@@
- 
+
  // global-ish prefixes
  var min = window.min || {};
 ->min : typeof min
@@ -236,7 +236,7 @@
 ->min : typeof min
 +>min : any
  >{} : {}
- 
+
  min.nest = this.min.nest || function () { };
 ->min.nest = this.min.nest || function () { } : { (): void; other: typeof other; }
 ->min.nest : { (): void; other: typeof other; }
@@ -259,7 +259,7 @@
 +>min : any
 +>nest : any
 +>function () { } : () => void
- 
+
  min.nest.other = self.min.nest.other || class { };
 ->min.nest.other = self.min.nest.other || class { } : typeof other
 ->min.nest.other : typeof other
@@ -289,7 +289,7 @@
 +>nest : any
 +>other : any
  >class { } : typeof other
- 
+
  min.property = global.min.property || {};
 ->min.property = global.min.property || {} : {}
 ->min.property : {}

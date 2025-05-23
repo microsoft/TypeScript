@@ -1,7 +1,7 @@
 --- old.es6ExportEqualsInterop.js
 +++ new.es6ExportEqualsInterop.js
 @@= skipped -207, +207 lines =@@
- 
+
  //// [main.js]
  "use strict";
 -/// <reference path="modules.d.ts"/>

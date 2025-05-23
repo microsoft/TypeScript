@@ -9,14 +9,16 @@
 -mod1.js(4,1): error TS2323: Cannot redeclare exported variable 'bothBefore'.
 -mod1.js(5,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
 -mod1.js(10,1): error TS2323: Cannot redeclare exported variable 'bothAfter'.
+-
+-
+-==== a.js (2 errors) ====
 +a.js(6,6): error TS2339: Property 'justProperty' does not exist on type '{ (): void; justExport: number; bothBefore: number; bothAfter: number; }'.
 +mod1.js(2,1): error TS2322: Type 'string' is not assignable to type 'number'.
 +mod1.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +mod1.js(10,1): error TS2322: Type 'string' is not assignable to type 'number'.
 +mod1.js(11,16): error TS2339: Property 'justProperty' does not exist on type '{ (): void; justExport: number; bothBefore: number; bothAfter: number; }'.
- 
- 
--==== a.js (2 errors) ====
++
++
 +==== a.js (1 errors) ====
      /// <reference path='./requires.d.ts' />
      var mod1 = require('./mod1')

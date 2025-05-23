@@ -10,7 +10,7 @@
 ->priv2 : any
 +>priv2 : number
  >1 : 1
- 
+
          /**
 @@= skipped -12, +12 lines =@@
           */
@@ -22,7 +22,7 @@
 ->prot2 : any
 +>prot2 : number
  >2 : 2
- 
+
          /**
 @@= skipped -12, +12 lines =@@
           */

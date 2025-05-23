@@ -2,7 +2,7 @@
 +++ new.decoratorOnClassProperty3.symbols
 @@= skipped -9, +9 lines =@@
  >C : Symbol(C, Decl(decoratorOnClassProperty3.ts, 0, 61))
- 
+
      public @dec prop;
 ->public : Symbol(C.public, Decl(decoratorOnClassProperty3.ts, 2, 9))
 +>public : Symbol(public, Decl(decoratorOnClassProperty3.ts, 2, 9))

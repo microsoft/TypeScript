@@ -3,7 +3,7 @@
 @@= skipped -467, +467 lines =@@
      }
  }
- 
+
 +//// [typescript.js]
  //// [parserRealSource8.js]
  // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
@@ -41,13 +41,15 @@
              this.select = select;
              this.stop = stop;
 -            this.result = null;
-         }
+-        }
 -        ScopeSearchFilter.prototype.reset = function () {
-+        result = null;
-+        reset() {
-             this.result = null;
+-            this.result = null;
 -        };
 -        ScopeSearchFilter.prototype.update = function (b) {
++        }
++        result = null;
++        reset() {
++            this.result = null;
 +        }
 +        update(b) {
              this.result = this.select(this.result, b);

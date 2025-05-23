@@ -1,8 +1,8 @@
 --- old.privateNameDeclaration.js
 +++ new.privateNameDeclaration.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [privateNameDeclaration.js]
 -var _A_foo, _A_bar;
  class A {
@@ -17,7 +17,7 @@
 +    qux = 6;
      quux() {
      }
- }
+-}
 -_A_foo = new WeakMap(), _A_bar = new WeakMap();
 -
 -
@@ -27,4 +27,4 @@
 -    baz: string;
 -    qux: number;
 -    quux(): void;
--}
+ }

@@ -1,12 +1,12 @@
 --- old.pathMappingBasedModuleResolution7_node.types
 +++ new.pathMappingBasedModuleResolution7_node.types
 @@= skipped -1, +1 lines =@@
- 
+
  === c:/root/src/file1.ts ===
  import {x} from "./project/file2";
 ->x : number
 +>x : any
- 
+
  import {y} from "module3";
  >y : number
 @@= skipped -12, +12 lines =@@
@@ -21,13 +21,14 @@
 +>x.toFixed : any
 +>x : any
 +>toFixed : any
- 
+
  use(y.toFixed());
  >use(y.toFixed()) : any
-@@= skipped -17, +17 lines =@@
+@@= skipped -16, +16 lines =@@
+ === c:/root/src/file3/index.d.ts ===
  export let x: number;
  >x : number
- 
+-
 -=== c:/root/generated/src/project/file2.ts ===
 -import {a} from "module1";
 ->a : number
@@ -54,7 +55,6 @@
 -=== c:/root/generated/src/templates/module2.ts ===
 -export let b: number;
 ->b : number
--
+
  === c:/node_modules/module3.d.ts ===
  export let y: number;
- >y : number

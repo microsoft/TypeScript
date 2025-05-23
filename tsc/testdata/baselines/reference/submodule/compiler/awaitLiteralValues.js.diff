@@ -1,7 +1,7 @@
 --- old.awaitLiteralValues.js
 +++ new.awaitLiteralValues.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [awaitLiteralValues.js]
  function awaitString() {
 -    yield 'literal';

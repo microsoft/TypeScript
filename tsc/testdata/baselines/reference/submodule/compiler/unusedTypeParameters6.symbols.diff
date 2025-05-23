@@ -7,4 +7,3 @@
 ->a : Symbol(C.a, Decl(b.ts, 0, 16))
 +>a : Symbol(a, Decl(b.ts, 0, 16))
  >T : Symbol(T, Decl(a.ts, 0, 8), Decl(b.ts, 0, 12))
- 

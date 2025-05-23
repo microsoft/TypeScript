@@ -14,20 +14,21 @@
 -        }
 -        return D;
 -    }());
--})(M || (M = {}));
++    class C {
++    }
++    class D {
++    }
+ })(M || (M = {}));
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+    class C {
-     }
+-    }
 -    return Foo;
 -}());
 -var Bar = /** @class */ (function () {
 -    function Bar() {
-+    class D {
-     }
+-    }
 -    return Bar;
 -}());
-+})(M || (M = {}));
 +class Foo {
 +    b;
 +}

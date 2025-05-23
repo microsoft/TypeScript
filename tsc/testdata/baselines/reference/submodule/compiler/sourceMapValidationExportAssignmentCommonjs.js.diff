@@ -1,7 +1,7 @@
 --- old.sourceMapValidationExportAssignmentCommonjs.js
 +++ new.sourceMapValidationExportAssignmentCommonjs.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [sourceMapValidationExportAssignmentCommonjs.js]
  "use strict";
 -var a = /** @class */ (function () {

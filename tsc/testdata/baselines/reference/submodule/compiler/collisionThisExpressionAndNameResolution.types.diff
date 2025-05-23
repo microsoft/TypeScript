@@ -1,12 +1,12 @@
 --- old.collisionThisExpressionAndNameResolution.types
 +++ new.collisionThisExpressionAndNameResolution.types
 @@= skipped -1, +1 lines =@@
- 
+
  === collisionThisExpressionAndNameResolution.ts ===
  var console : {
 ->console : { log(message: any): any; }
 +>console : { log: (message: any) => any; }
- 
+
      log(message: any);
  >log : (message: any) => any
 @@= skipped -22, +22 lines =@@
@@ -17,4 +17,3 @@
 +>console : { log: (message: any) => any; }
  >log : (message: any) => any
  >_this : number
- 

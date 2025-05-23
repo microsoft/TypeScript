@@ -19,8 +19,8 @@
 +specializedSignatureAsCallbackParameter1.ts(8,4): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
      Argument of type 'number' is not assignable to parameter of type 'string'.
- 
- 
+
+
 @@= skipped -21, +13 lines =@@
      }
      // both are errors

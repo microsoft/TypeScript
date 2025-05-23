@@ -1,8 +1,8 @@
 --- old.exportAssignmentTopLevelClodule.js
 +++ new.exportAssignmentTopLevelClodule.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [foo_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

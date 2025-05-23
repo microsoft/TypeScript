@@ -1,7 +1,7 @@
 --- old.emitClassDeclarationWithMethodInES6.js
 +++ new.emitClassDeclarationWithMethodInES6.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [emitClassDeclarationWithMethodInES6.js]
  class D {
 +    _bar;

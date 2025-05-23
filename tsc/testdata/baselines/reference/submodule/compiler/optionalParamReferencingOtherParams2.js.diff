@@ -1,7 +1,7 @@
 --- old.optionalParamReferencingOtherParams2.js
 +++ new.optionalParamReferencingOtherParams2.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [optionalParamReferencingOtherParams2.js]
  var a = 1;
 -function strange(x, y) {

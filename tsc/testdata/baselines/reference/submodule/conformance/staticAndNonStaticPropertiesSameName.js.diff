@@ -2,7 +2,7 @@
 +++ new.staticAndNonStaticPropertiesSameName.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [staticAndNonStaticPropertiesSameName.js]
 -var C = /** @class */ (function () {
 -    function C() {

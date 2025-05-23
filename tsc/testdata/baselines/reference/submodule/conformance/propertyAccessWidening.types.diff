@@ -2,7 +2,7 @@
 +++ new.propertyAccessWidening.types
 @@= skipped -55, +55 lines =@@
  // Object in property or element access is widened when target of assignment
- 
+
  function foo(options?: { a: string, b: number }) {
 ->foo : (options?: { a: string; b: number; }) => void
 +>foo : (options?: { a: string; b: number; } | undefined) => void

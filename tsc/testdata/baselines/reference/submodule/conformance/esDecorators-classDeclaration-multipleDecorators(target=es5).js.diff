@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-multipleDecorators(target=es5).js
 +++ new.esDecorators-classDeclaration-multipleDecorators(target=es5).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-multipleDecorators.js]
 -var C = function () {
 -    var _classDecorators = [dec1, dec2];

@@ -1,6 +1,6 @@
 --- old.regularExpressionUnicodePropertyValueExpressionSuggestions.errors.txt
 +++ new.regularExpressionUnicodePropertyValueExpressionSuggestions.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,19): error TS1529: Unknown Unicode property name or value.
 -regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,28): error TS1524: Unknown Unicode property name.
 -regularExpressionUnicodePropertyValueExpressionSuggestions.ts(1,45): error TS1526: Unknown Unicode property value.
@@ -29,5 +29,4 @@
 -                                                                                                         ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

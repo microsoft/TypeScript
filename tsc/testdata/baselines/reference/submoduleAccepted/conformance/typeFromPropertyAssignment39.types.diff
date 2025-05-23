@@ -1,13 +1,13 @@
 --- old.typeFromPropertyAssignment39.types
 +++ new.typeFromPropertyAssignment39.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  const foo = {};
 ->foo : typeof foo
 +>foo : {}
  >{} : {}
- 
+
  foo["baz"] = {};
 ->foo["baz"] = {} : typeof foo.baz
 ->foo["baz"] : typeof foo.baz
@@ -17,7 +17,7 @@
 +>foo : {}
  >"baz" : "baz"
  >{} : {}
- 
+
  foo["baz"]["blah"] = 3;
  >foo["baz"]["blah"] = 3 : 3
 ->foo["baz"]["blah"] : number

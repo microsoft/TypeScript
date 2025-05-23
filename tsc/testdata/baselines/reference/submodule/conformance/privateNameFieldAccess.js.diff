@@ -1,8 +1,8 @@
 --- old.privateNameFieldAccess.js
 +++ new.privateNameFieldAccess.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [privateNameFieldAccess.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

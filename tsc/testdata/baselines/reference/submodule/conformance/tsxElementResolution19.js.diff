@@ -1,8 +1,8 @@
 --- old.tsxElementResolution19.js
 +++ new.tsxElementResolution19.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [file1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

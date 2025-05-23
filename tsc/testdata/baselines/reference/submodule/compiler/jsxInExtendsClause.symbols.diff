@@ -11,7 +11,7 @@
 ->ComponentClass : Symbol(React.ComponentClass, Decl(jsxInExtendsClause.tsx, 1, 25))
 +>ComponentClass : Symbol(ComponentClass, Decl(jsxInExtendsClause.tsx, 1, 25))
  >P : Symbol(P, Decl(jsxInExtendsClause.tsx, 5, 38))
- 
+
  class Foo extends createComponentClass(() => class extends React.Component<{}, {}> {
  >Foo : Symbol(Foo, Decl(jsxInExtendsClause.tsx, 5, 106))
  >createComponentClass : Symbol(createComponentClass, Decl(jsxInExtendsClause.tsx, 4, 1))
@@ -20,10 +20,10 @@
  >React : Symbol(React, Decl(jsxInExtendsClause.tsx, 0, 0))
 ->Component : Symbol(React.Component, Decl(jsxInExtendsClause.tsx, 2, 59))
 +>Component : Symbol(Component, Decl(jsxInExtendsClause.tsx, 2, 59))
- 
+
    render() {
 ->render : Symbol((Anonymous class).render, Decl(jsxInExtendsClause.tsx, 6, 84))
 +>render : Symbol(render, Decl(jsxInExtendsClause.tsx, 6, 84))
- 
+
      return <span>Hello, world!</span>;
    }

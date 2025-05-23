@@ -2,23 +2,25 @@
 +++ new.useBeforeDeclaration_jsx.types
 @@= skipped -8, +8 lines =@@
  >C : C
- 
+
      static a = <C.z></C.z>;
 ->a : JSX.Element
 -><C.z></C.z> : JSX.Element
 ->C.z : () => JSX.Element
+->C : typeof C
+->z : () => JSX.Element
+->C.z : () => JSX.Element
+->C : typeof C
+->z : () => JSX.Element
 +>a : Element
 +><C.z></C.z> : Element
 +>C.z : () => Element
- >C : typeof C
-->z : () => JSX.Element
-->C.z : () => JSX.Element
++>C : typeof C
 +>z : () => Element
 +>C.z : () => Element
- >C : typeof C
-->z : () => JSX.Element
++>C : typeof C
 +>z : () => Element
- 
+
      static b = <C.z/>;
 ->b : JSX.Element
 -><C.z/> : JSX.Element
@@ -29,7 +31,7 @@
  >C : typeof C
 ->z : () => JSX.Element
 +>z : () => Element
- 
+
      static c = <span {...C.x}></span>;
 ->c : JSX.Element
 -><span {...C.x}></span> : JSX.Element
@@ -40,7 +42,7 @@
  >C : typeof C
 @@= skipped -26, +26 lines =@@
  >span : any
- 
+
      static d = <span id={C.y}></span>;
 ->d : JSX.Element
 -><span id={C.y}></span> : JSX.Element
@@ -51,7 +53,7 @@
  >C.y : string
 @@= skipped -10, +10 lines =@@
  >span : any
- 
+
      static e = <span>{C.y}</span>;
 ->e : JSX.Element
 -><span>{C.y}</span> : JSX.Element
@@ -62,7 +64,7 @@
  >C : typeof C
 @@= skipped -17, +17 lines =@@
  >'' : ""
- 
+
      static z = () => <b></b>;
 ->z : () => JSX.Element
 ->() => <b></b> : () => JSX.Element

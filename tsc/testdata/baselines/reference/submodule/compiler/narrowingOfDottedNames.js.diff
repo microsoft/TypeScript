@@ -1,8 +1,8 @@
 --- old.narrowingOfDottedNames.js
 +++ new.narrowingOfDottedNames.js
 @@= skipped -93, +93 lines =@@
- 
- 
+
+
  //// [narrowingOfDottedNames.js]
 -"use strict";
  // Repro from #8383

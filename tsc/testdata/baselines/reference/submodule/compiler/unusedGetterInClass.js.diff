@@ -2,7 +2,7 @@
 +++ new.unusedGetterInClass.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [unusedGetterInClass.js]
 -var Employee = /** @class */ (function () {
 -    function Employee() {

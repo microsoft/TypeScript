@@ -1,8 +1,8 @@
 --- old.instantiateContextualTypes.js
 +++ new.instantiateContextualTypes.js
 @@= skipped -186, +186 lines =@@
- 
- 
+
+
  //// [instantiateContextualTypes.js]
 -// #6611
  function fn(values, value) {
@@ -31,13 +31,14 @@
 -                if (1 < 2) {
 -                    return 'SOMETHING';
 -                }
-+    compiles = () => {
-+        return Promise.resolve().then(() => {
-+            if (1 < 2) {
-                 return 'SOMETHING';
+-                return 'SOMETHING';
 -            });
 -        };
 -    }
++    compiles = () => {
++        return Promise.resolve().then(() => {
++            if (1 < 2) {
++                return 'SOMETHING';
 +            }
 +            return 'ELSE';
 +        });

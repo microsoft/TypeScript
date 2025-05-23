@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsReexportedCjsAlias.symbols
 @@= skipped -8, +8 lines =@@
  >'./lib' : Symbol("lib", Decl(lib.js, 0, 0))
- 
+
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(main.js, 0, 0))
 ->module : Symbol(module, Decl(main.js, 0, 59))
@@ -10,20 +10,20 @@
 +>module.exports : Symbol(export=, Decl(main.js, 0, 59))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(main.js, 0, 59))
- 
+
      SomeClass,
  >SomeClass : Symbol(SomeClass, Decl(main.js, 2, 18))
 @@= skipped -27, +27 lines =@@
  >SomeClass : Symbol(SomeClass, Decl(lib.js, 5, 1))
- 
+
      a() {
 ->a : Symbol(SomeClass.a, Decl(lib.js, 7, 17))
 +>a : Symbol(a, Decl(lib.js, 7, 17))
- 
+
          return 1;
      }
  }
- 
+
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(lib.js, 0, 0))
 ->module : Symbol(module, Decl(lib.js, 11, 1))
@@ -31,6 +31,6 @@
 +>module.exports : Symbol(export=, Decl(lib.js, 11, 1))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(lib.js, 11, 1))
- 
+
      bar,
  >bar : Symbol(bar, Decl(lib.js, 13, 18))

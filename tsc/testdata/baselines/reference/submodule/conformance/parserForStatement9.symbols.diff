@@ -10,7 +10,7 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(parserForStatement9.ts, 2, 10))
- 
+
  for (let {x = 'a' in {}} = {}; !x; x = !x) console.log(x)
 @@= skipped -10, +10 lines =@@
  >x : Symbol(x, Decl(parserForStatement9.ts, 3, 10))
@@ -22,4 +22,3 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(parserForStatement9.ts, 3, 10))
- 

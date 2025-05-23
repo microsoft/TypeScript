@@ -8,7 +8,7 @@
 ->a : { fix: boolean; }
 +>demo : (a: any) => void
 +>a : any
- 
+
      a.fix
 ->a.fix : boolean
 ->a : { fix: boolean; }
@@ -17,4 +17,3 @@
 +>a : any
 +>fix : any
  }
- 

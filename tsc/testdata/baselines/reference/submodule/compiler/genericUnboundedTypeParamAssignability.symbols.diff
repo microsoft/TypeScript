@@ -2,7 +2,7 @@
 +++ new.genericUnboundedTypeParamAssignability.symbols
 @@= skipped -17, +17 lines =@@
  >T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 4, 12))
- 
+
    o.toString(); // no error
 ->o.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>o.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -10,11 +10,11 @@
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function f3<T extends Record<string, any>>(o: T) {
 @@= skipped -13, +13 lines =@@
  >T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 8, 12))
- 
+
    o.toString(); // no error
 ->o.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>o.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -22,5 +22,5 @@
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function user<T>(t: T) {

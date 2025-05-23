@@ -1,7 +1,7 @@
 --- old.parenthesizedJSDocCastAtReturnStatement.types
 +++ new.parenthesizedJSDocCastAtReturnStatement.types
 @@= skipped -20, +20 lines =@@
- 
+
      return /** @type {string} */ (cache.get(key))
  >(cache.get(key)) : string
 +>cache.get(key) : string

@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment37.errors.txt
 +++ new.typeFromPropertyAssignment37.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +mod.js(1,14): error TS2304: Cannot find name 'exports'.
 +mod.js(1,24): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +mod.js(3,10): error TS2339: Property 'existy' does not exist on type '{}'.

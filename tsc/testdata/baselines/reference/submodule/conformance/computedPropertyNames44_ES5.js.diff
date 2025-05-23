@@ -2,7 +2,7 @@
 +++ new.computedPropertyNames44_ES5.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [computedPropertyNames44_ES5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

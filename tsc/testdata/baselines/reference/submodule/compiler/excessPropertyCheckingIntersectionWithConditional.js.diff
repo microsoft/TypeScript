@@ -2,7 +2,7 @@
 +++ new.excessPropertyCheckingIntersectionWithConditional.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [excessPropertyCheckingIntersectionWithConditional.js]
 -var createDefaultExample = function (x) {
 +const createDefaultExample = (x) => {

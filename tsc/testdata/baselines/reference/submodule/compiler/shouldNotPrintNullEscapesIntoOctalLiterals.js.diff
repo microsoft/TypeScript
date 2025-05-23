@@ -1,7 +1,7 @@
 --- old.shouldNotPrintNullEscapesIntoOctalLiterals.js
 +++ new.shouldNotPrintNullEscapesIntoOctalLiterals.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [shouldNotPrintNullEscapesIntoOctalLiterals.js]
  "use strict";
 -"\x001";

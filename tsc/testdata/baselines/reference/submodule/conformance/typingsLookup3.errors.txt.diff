@@ -1,6 +1,6 @@
 --- old.typingsLookup3.errors.txt
 +++ new.typingsLookup3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.ts(1,23): error TS2688: Cannot find type definition file for 'JqUeRy'.
 -
 -
@@ -16,5 +16,4 @@
 -==== /node_modules/@types/jquery/index.d.ts (0 errors) ====
 -    declare var $: { x: any };
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

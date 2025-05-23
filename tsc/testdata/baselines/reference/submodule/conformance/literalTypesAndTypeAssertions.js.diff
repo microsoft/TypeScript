@@ -1,8 +1,8 @@
 --- old.literalTypesAndTypeAssertions.js
 +++ new.literalTypesAndTypeAssertions.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [literalTypesAndTypeAssertions.js]
 -var obj = {
 +const obj = {

@@ -1,7 +1,7 @@
 --- old.extBaseClass1.types
 +++ new.extBaseClass1.types
 @@= skipped -31, +31 lines =@@
- 
+
      export class C3 extends M.B {
  >C3 : C3
 ->M.B : M.B
@@ -11,4 +11,3 @@
 +>B : typeof B
      }
  }
- 

@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-fields-nonStaticPrivate(target=es2022).js
 +++ new.esDecorators-classDeclaration-fields-nonStaticPrivate(target=es2022).js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-fields-nonStaticPrivate.js]
 -let C = (() => {
 -    let _private_field1_decorators;

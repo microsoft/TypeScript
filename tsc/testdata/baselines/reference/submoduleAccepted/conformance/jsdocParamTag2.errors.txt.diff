@@ -1,6 +1,6 @@
 --- old.jsdocParamTag2.errors.txt
 +++ new.jsdocParamTag2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -0.js(68,19): error TS2339: Property 'a' does not exist on type 'String'.
 -0.js(68,22): error TS2339: Property 'b' does not exist on type 'String'.
 -0.js(70,20): error TS8024: JSDoc '@param' tag has name 'y', but there is no parameter with that name.
@@ -87,5 +87,4 @@
 -     */
 -    function bad2(x, {a, b}) {}
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

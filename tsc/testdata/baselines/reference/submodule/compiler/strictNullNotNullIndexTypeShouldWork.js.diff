@@ -2,7 +2,7 @@
 +++ new.strictNullNotNullIndexTypeShouldWork.js
 @@= skipped -34, +34 lines =@@
  }
- 
+
  //// [strictNullNotNullIndexTypeShouldWork.js]
 -var Test = /** @class */ (function () {
 -    function Test() {

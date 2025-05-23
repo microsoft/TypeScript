@@ -1,8 +1,7 @@
 --- old.symbolProperty37.errors.txt
 +++ new.symbolProperty37.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +symbolProperty37.ts(2,5): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
 +symbolProperty37.ts(3,5): error TS2300: Duplicate identifier '[Symbol.isConcatSpreadable]'.
 +

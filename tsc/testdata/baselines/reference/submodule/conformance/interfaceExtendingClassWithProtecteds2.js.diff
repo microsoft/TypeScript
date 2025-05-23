@@ -2,7 +2,7 @@
 +++ new.interfaceExtendingClassWithProtecteds2.js
 @@= skipped -29, +29 lines =@@
  var r3 = i.y; // error
- 
+
  //// [interfaceExtendingClassWithProtecteds2.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

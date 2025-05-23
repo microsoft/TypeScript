@@ -2,7 +2,7 @@
 +++ new.inferSecondaryParameter.js
 @@= skipped -11, +11 lines =@@
  });
- 
+
  //// [inferSecondaryParameter.js]
 -// type inference on 'bug' should give 'any'
  var b = { m: function (test, fn) { } };

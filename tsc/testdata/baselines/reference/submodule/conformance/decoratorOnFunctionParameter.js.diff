@@ -2,7 +2,7 @@
 +++ new.decoratorOnFunctionParameter.js
 @@= skipped -8, +8 lines =@@
  function called(@dec() this: C) { return this.n; }
- 
+
  //// [decoratorOnFunctionParameter.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -2,7 +2,7 @@
 +++ new.genericMemberFunction.symbols
 @@= skipped -7, +7 lines =@@
  >C : Symbol(C, Decl(genericMemberFunction.ts, 0, 29))
- 
+
    public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
 ->parent : Symbol(BuildError.parent, Decl(genericMemberFunction.ts, 0, 33))
 +>parent : Symbol(parent, Decl(genericMemberFunction.ts, 0, 33))
@@ -11,7 +11,7 @@
  >A : Symbol(A, Decl(genericMemberFunction.ts, 1, 16))
 @@= skipped -21, +21 lines =@@
  >C : Symbol(C, Decl(genericMemberFunction.ts, 5, 33))
- 
+
    public errors<A, B extends A, C>(): BuildError<A, B, C>[] {
 ->errors : Symbol(FileWithErrors.errors, Decl(genericMemberFunction.ts, 5, 37))
 +>errors : Symbol(errors, Decl(genericMemberFunction.ts, 5, 37))
@@ -29,7 +29,7 @@
  >A : Symbol(A, Decl(genericMemberFunction.ts, 9, 16))
 @@= skipped -21, +21 lines =@@
  >C : Symbol(C, Decl(genericMemberFunction.ts, 13, 30))
- 
+
    public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
 ->merge : Symbol(BuildResult.merge, Decl(genericMemberFunction.ts, 13, 34))
 +>merge : Symbol(merge, Decl(genericMemberFunction.ts, 13, 34))

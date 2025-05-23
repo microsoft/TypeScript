@@ -1,8 +1,8 @@
 --- old.privateNameFieldInitializer.js
 +++ new.privateNameFieldInitializer.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [privateNameFieldInitializer.js]
 -var _A_field, _A_uninitialized;
  class A {

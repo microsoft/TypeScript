@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment19.errors.txt
 +++ new.typeFromPropertyAssignment19.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(2,19): error TS2306: File 'semver.js' is not a module.
 +semver.js(2,1): error TS2304: Cannot find name 'exports'.
 +

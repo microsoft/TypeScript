@@ -2,21 +2,21 @@
 +++ new.spyComparisonChecking.types
 @@= skipped -25, +25 lines =@@
  }
- 
+
  declare function createSpyObj<T>(
 ->createSpyObj : <T>(name: string, names: Array<keyof T>) => SpyObj<T>
 +>createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
- 
+
      name: string, names: Array<keyof T>): SpyObj<T>;
  >name : string
  >names : (keyof T)[]
- 
+
  function mock<T>(spyName: string, methodNames: Array<keyof T>): SpyObj<T> {
 ->mock : <T>(spyName: string, methodNames: Array<keyof T>) => SpyObj<T>
 +>mock : <T>(spyName: string, methodNames: (keyof T)[]) => SpyObj<T>
  >spyName : string
  >methodNames : (keyof T)[]
- 
+
      const spyObj = createSpyObj<T>(spyName, methodNames);
  >spyObj : SpyObj<T>
  >createSpyObj<T>(spyName, methodNames) : SpyObj<T>
@@ -24,4 +24,3 @@
 +>createSpyObj : <T>(name: string, names: (keyof T)[]) => SpyObj<T>
  >spyName : string
  >methodNames : (keyof T)[]
- 

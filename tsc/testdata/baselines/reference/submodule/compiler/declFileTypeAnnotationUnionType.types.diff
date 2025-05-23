@@ -1,7 +1,7 @@
 --- old.declFileTypeAnnotationUnionType.types
 +++ new.declFileTypeAnnotationUnionType.types
 @@= skipped -31, +31 lines =@@
- 
+
  // Just the name
  var k: c | m.c = new c() || new m.c();
 ->k : c | m.c
@@ -18,7 +18,7 @@
  >m : typeof m
 ->c : typeof m.c
 +>c : typeof c
- 
+
  var l = new c() || new m.c();
 ->l : c | m.c
 ->new c() || new m.c() : c | m.c
@@ -33,7 +33,7 @@
  >m : typeof m
 ->c : typeof m.c
 +>c : typeof c
- 
+
  var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
 ->x : m.g<number> | g<string> | (() => c)
 +>x : g<number> | g<string> | (() => c)
@@ -55,7 +55,7 @@
  >() => new c() : () => c
  >new c() : c
  >c : typeof c
- 
+
  var y = new g<string>() || new m.g<number>() || (() => new c());
 ->y : m.g<number> | g<string> | (() => c)
 ->new g<string>() || new m.g<number>() || (() => new c()) : m.g<number> | g<string> | (() => c)

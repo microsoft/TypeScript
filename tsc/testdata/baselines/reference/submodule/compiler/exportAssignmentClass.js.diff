@@ -3,7 +3,7 @@
 @@= skipped -10, +10 lines =@@
  var d = new D();
  var x = d.p;
- 
+
 -//// [exportAssignmentClass_A.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

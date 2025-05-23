@@ -6,8 +6,8 @@
  parseUnmatchedTypeAssertion.ts(1,12): error TS2304: Cannot find name 'obju2c77'.
 -parseUnmatchedTypeAssertion.ts(1,21): error TS1109: Expression expected.
  parseUnmatchedTypeAssertion.ts(2,1): error TS1005: '{' expected.
- 
- 
+
+
 -==== parseUnmatchedTypeAssertion.ts (5 errors) ====
 +==== parseUnmatchedTypeAssertion.ts (4 errors) ====
      @<[[import(obju2c77,

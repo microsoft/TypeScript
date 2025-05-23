@@ -2,12 +2,12 @@
 +++ new.definiteAssignmentAssertionsWithObjectShortHand.types
 @@= skipped -10, +10 lines =@@
  >a : string
- 
+
  const bar = {
 ->bar : { a?(): void; }
 ->{    a ? () { }} : { a?(): void; }
 +>bar : { a?: (() => void) | undefined; }
 +>{    a ? () { }} : { a?: (() => void) | undefined; }
- 
+
      a ? () { }
  >a : (() => void) | undefined

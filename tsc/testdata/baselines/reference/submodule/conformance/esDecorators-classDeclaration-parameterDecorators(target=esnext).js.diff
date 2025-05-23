@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-parameterDecorators(target=esnext).js
 +++ new.esDecorators-classDeclaration-parameterDecorators(target=esnext).js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [esDecorators-classDeclaration-parameterDecorators.js]
  class C {
 -    constructor(

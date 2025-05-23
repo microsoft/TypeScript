@@ -38,4 +38,3 @@
  >__test1__ : Symbol(__test1__, Decl(assignmentCompatability43.ts, 0, 0))
 ->__val__obj4 : Symbol(__test1__.__val__obj4, Decl(assignmentCompatability43.ts, 2, 14))
 +>__val__obj4 : Symbol(__val__obj4, Decl(assignmentCompatability43.ts, 2, 14))
- 

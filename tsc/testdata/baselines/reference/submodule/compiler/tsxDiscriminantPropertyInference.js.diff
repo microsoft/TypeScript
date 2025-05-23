@@ -1,7 +1,7 @@
 --- old.tsxDiscriminantPropertyInference.js
 +++ new.tsxDiscriminantPropertyInference.js
 @@= skipped -34, +34 lines =@@
- 
+
  //// [tsxDiscriminantPropertyInference.jsx]
  // simple inference
 -void (<Comp disc cb={function (s) { return parseInt(s); }}/>);

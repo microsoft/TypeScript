@@ -117,13 +117,13 @@
 -        };
 -        return C1_public;
 -    }());
--    exportTests.C1_public = C1_public;
++        }
++    }
+     exportTests.C1_public = C1_public;
 -    var C2_private = /** @class */ (function () {
 -        function C2_private() {
-         }
+-        }
 -        C2_private.prototype.f2 = function () {
-+    }
-+    exportTests.C1_public = C1_public;
 +    class C2_private {
 +        f2() {
              return 30;
@@ -137,12 +137,9 @@
 -    }());
 -    var C3_public = /** @class */ (function () {
 -        function C3_public() {
-         }
+-        }
 -        C3_public.prototype.getC2_private = function () {
-+    }
-+    class C3_public {
-+        getC2_private() {
-             return new C2_private();
+-            return new C2_private();
 -        };
 -        C3_public.prototype.setC2_private = function (arg) {
 -        };
@@ -154,14 +151,7 @@
 -            configurable: true
 -        });
 -        C3_public.prototype.getC1_public = function () {
-+        }
-+        setC2_private(arg) {
-+        }
-+        get c2() {
-+            return new C2_private();
-+        }
-+        getC1_public() {
-             return new C1_public();
+-            return new C1_public();
 -        };
 -        C3_public.prototype.setC1_public = function (arg) {
 -        };
@@ -174,6 +164,19 @@
 -        });
 -        return C3_public;
 -    }());
++        }
++    }
++    class C3_public {
++        getC2_private() {
++            return new C2_private();
++        }
++        setC2_private(arg) {
++        }
++        get c2() {
++            return new C2_private();
++        }
++        getC1_public() {
++            return new C1_public();
 +        }
 +        setC1_public(arg) {
 +        }

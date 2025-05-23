@@ -1,7 +1,7 @@
 --- old.genericCallWithFunctionTypedArguments4.js
 +++ new.genericCallWithFunctionTypedArguments4.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [genericCallWithFunctionTypedArguments4.js]
  // No inference is made from function typed arguments which have multiple call signatures
 -var C = /** @class */ (function () {

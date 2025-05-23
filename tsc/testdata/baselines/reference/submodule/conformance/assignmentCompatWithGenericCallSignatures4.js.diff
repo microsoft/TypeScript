@@ -1,8 +1,8 @@
 --- old.assignmentCompatWithGenericCallSignatures4.js
 +++ new.assignmentCompatWithGenericCallSignatures4.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [assignmentCompatWithGenericCallSignatures4.js]
 -// some complex cases of assignment compat of generic signatures.
  var x;

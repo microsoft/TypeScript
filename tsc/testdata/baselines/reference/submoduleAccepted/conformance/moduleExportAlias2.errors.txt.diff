@@ -1,8 +1,7 @@
 --- old.moduleExportAlias2.errors.txt
 +++ new.moduleExportAlias2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(4,13): error TS2351: This expression is not constructable.
 +  Type 'typeof import("semver")' has no construct signatures.
 +semver.js(2,1): error TS2631: Cannot assign to '"semver"' because it is a namespace.

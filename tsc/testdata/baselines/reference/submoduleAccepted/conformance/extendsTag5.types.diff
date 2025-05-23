@@ -6,7 +6,7 @@
  >B : B
 ->A : A<{ a: string; b: string[]; }>
 +>A : typeof A
- 
+
  /**
   * @extends {A<{
 @@= skipped -10, +10 lines =@@
@@ -15,7 +15,7 @@
  >C : C
 ->A : A<{ a: string; b: string; }>
 +>A : typeof A
- 
+
  /**
   * @extends {A<{a: string, b: string[]}>}
   */
@@ -23,7 +23,7 @@
  >D : D
 ->A : A<{ a: string; b: string[]; }>
 +>A : typeof A
- 
+
  /**
   * @extends {A<{a: string, b: string}>}
   */
@@ -31,4 +31,3 @@
  >E : E
 ->A : A<{ a: string; b: string; }>
 +>A : typeof A
- 

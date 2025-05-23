@@ -17,7 +17,7 @@
  >options : { readonly localeMatcher: "lookup"; }
  >join : (separator?: string) => string
  >', ' : ", "
- 
+
  const [ part ] = new Intl.NumberFormat().formatToParts();
 ->part : Intl.NumberFormatPart
 ->new Intl.NumberFormat().formatToParts() : Intl.NumberFormatPart[]
@@ -34,7 +34,7 @@
 ->formatToParts : (number?: number | bigint) => Intl.NumberFormatPart[]
 +>NumberFormat : NumberFormatConstructor
 +>formatToParts : (number?: number | bigint) => NumberFormatPart[]
- 
+
  console.log(part.type, part.value);
  >console.log(part.type, part.value) : void
  >console.log : (...data: any[]) => void
@@ -50,4 +50,3 @@
 ->part : Intl.NumberFormatPart
 +>part : NumberFormatPart
  >value : string
- 

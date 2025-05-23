@@ -1,7 +1,7 @@
 --- old.declarationEmitLocalClassDeclarationMixin.js
 +++ new.declarationEmitLocalClassDeclarationMixin.js
 @@= skipped -33, +33 lines =@@
- 
+
  //// [declarationEmitLocalClassDeclarationMixin.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -76,14 +76,15 @@
 -    };
 -    return FilteredThing;
 -}(Filter(Unmixed)));
--exports.FilteredThing = FilteredThing;
++    }
++}
+ exports.FilteredThing = FilteredThing;
 -
 -
 -//// [declarationEmitLocalClassDeclarationMixin.d.ts]
 -export declare class Unmixed {
 -    foo: number;
-+    }
- }
+-}
 -export declare const Mixed: {
 -    new (...args: any[]): {
 -        bar: number;
@@ -97,4 +98,3 @@
 -    match(path: string): boolean;
 -}
 -export {};
-+exports.FilteredThing = FilteredThing;

@@ -10,7 +10,7 @@
 ->statische : () => void
 +>statische : any
  >function() { } : () => void
- 
+
  const Strings = {
 @@= skipped -21, +21 lines =@@
  module.exports = Handler;
@@ -20,7 +20,7 @@
 +>module : { Handler: typeof Handler; }
  >exports : typeof Handler
  >Handler : typeof Handler
- 
+
  module.exports.Strings = Strings
  >module.exports.Strings = Strings : { a: string; b: string; }
 ->module.exports.Strings : { a: string; b: string; }
@@ -29,9 +29,8 @@
 ->module : { exports: typeof Handler; }
 +>module : { Handler: typeof Handler; }
  >exports : typeof Handler
+->Strings : { a: string; b: string; }
 +>Strings : any
  >Strings : { a: string; b: string; }
-->Strings : { a: string; b: string; }
- 
+
  /**
-  * @typedef {Object} HandlerOptions

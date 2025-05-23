@@ -1,8 +1,8 @@
 --- old.thisExpressionOfGenericObject.js
 +++ new.thisExpressionOfGenericObject.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [thisExpressionOfGenericObject.js]
 -var MyClass1 = /** @class */ (function () {
 -    function MyClass1() {

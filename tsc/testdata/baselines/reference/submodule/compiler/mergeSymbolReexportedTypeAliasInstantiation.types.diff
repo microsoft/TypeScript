@@ -3,7 +3,7 @@
 @@= skipped -17, +17 lines =@@
  >s : string
  >'' : ""
- 
+
 -=== ./a.d.ts ===
 +=== a.d.ts ===
  import '.'
@@ -12,14 +12,14 @@
 @@= skipped -13, +13 lines =@@
  >s : string
  }
- 
+
 -=== ./index.d.ts ===
 +=== index.d.ts ===
  export type {Row2} from './common';
 ->Row2 : import("common").Row2
 +>Row2 : Row2
- 
+
 -=== ./common.d.ts ===
 +=== common.d.ts ===
- 
+
  export interface Row2 {}

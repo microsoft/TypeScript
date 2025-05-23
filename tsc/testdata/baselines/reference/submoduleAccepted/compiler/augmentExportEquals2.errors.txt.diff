@@ -1,6 +1,6 @@
 --- old.augmentExportEquals2.errors.txt
 +++ new.augmentExportEquals2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -file2.ts(4,16): error TS2671: Cannot augment module './file1' because it resolves to a non-module entity.
 -file3.ts(3,8): error TS2503: Cannot find namespace 'x'.
 -
@@ -25,5 +25,4 @@
 -        interface A { a }
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

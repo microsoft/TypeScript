@@ -2,7 +2,7 @@
 +++ new.amdDependencyComment2.js
 @@= skipped -6, +6 lines =@@
  m1.f();
- 
+
  //// [amdDependencyComment2.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

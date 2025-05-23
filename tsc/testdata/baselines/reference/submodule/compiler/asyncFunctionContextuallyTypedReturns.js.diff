@@ -1,8 +1,8 @@
 --- old.asyncFunctionContextuallyTypedReturns.js
 +++ new.asyncFunctionContextuallyTypedReturns.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [asyncFunctionContextuallyTypedReturns.js]
 -"use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -25,16 +25,22 @@
 +h(async v => v ? (def) => { } : Promise.reject());
  // repro from #29196
 -const increment = (num, str) => __awaiter(void 0, void 0, void 0, function* () {
-+const increment = async (num, str) => {
-     return a => {
-         return a.length;
-     };
+-    return a => {
+-        return a.length;
+-    };
 -});
 -const increment2 = (num, str) => __awaiter(void 0, void 0, void 0, function* () {
+-    return a => {
+-        return a.length;
+-    };
+-});
++const increment = async (num, str) => {
++    return a => {
++        return a.length;
++    };
 +};
 +const increment2 = async (num, str) => {
-     return a => {
-         return a.length;
-     };
--});
++    return a => {
++        return a.length;
++    };
 +};

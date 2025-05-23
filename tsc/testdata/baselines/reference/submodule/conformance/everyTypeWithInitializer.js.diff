@@ -1,8 +1,8 @@
 --- old.everyTypeWithInitializer.js
 +++ new.everyTypeWithInitializer.js
 @@= skipped -51, +51 lines =@@
- 
- 
+
+
  //// [everyTypeWithInitializer.js]
 -var C = /** @class */ (function () {
 -    function C() {

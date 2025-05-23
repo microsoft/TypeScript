@@ -2,7 +2,7 @@
 +++ new.numericIndexingResults.js
 @@= skipped -58, +58 lines =@@
  var r6 = b2[3];
- 
+
  //// [numericIndexingResults.js]
 -var C = /** @class */ (function () {
 -    function C() {

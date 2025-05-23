@@ -2,7 +2,7 @@
 +++ new.overrideParameterProperty.js
 @@= skipped -34, +34 lines =@@
  }
- 
+
  //// [overrideParameterProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,16 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
-+class Base {
-+    p1;
-+}
-+class C1 extends Base {
-+    p1;
-+    constructor(p1) {
-+        super();
-+        this.p1 = p1;
-+        this.p1;
-     }
+-    }
 -    return Base;
 -}());
 -var C1 = /** @class */ (function (_super) {
@@ -40,14 +31,7 @@
 -        _this.p1 = p1;
 -        _this.p1;
 -        return _this;
-+}
-+class C2 extends Base {
-+    p1;
-+    constructor(p1) {
-+        super();
-+        this.p1 = p1;
-+        this.p1;
-     }
+-    }
 -    return C1;
 -}(Base));
 -var C2 = /** @class */ (function (_super) {
@@ -57,14 +41,7 @@
 -        _this.p1 = p1;
 -        _this.p1;
 -        return _this;
-+}
-+class C3 extends Base {
-+    p1;
-+    constructor(p1) {
-+        super();
-+        this.p1 = p1;
-+        this.p1;
-     }
+-    }
 -    return C2;
 -}(Base));
 -var C3 = /** @class */ (function (_super) {
@@ -74,14 +51,7 @@
 -        _this.p1 = p1;
 -        _this.p1;
 -        return _this;
-+    m(p1) { }
-+}
-+class C4 extends Base {
-+    p2;
-+    constructor(p2) {
-+        super();
-+        this.p2 = p2;
-     }
+-    }
 -    C3.prototype.m = function (p1) { };
 -    return C3;
 -}(Base));
@@ -94,4 +64,38 @@
 -    }
 -    return C4;
 -}(Base));
++class Base {
++    p1;
++}
++class C1 extends Base {
++    p1;
++    constructor(p1) {
++        super();
++        this.p1 = p1;
++        this.p1;
++    }
++}
++class C2 extends Base {
++    p1;
++    constructor(p1) {
++        super();
++        this.p1 = p1;
++        this.p1;
++    }
++}
++class C3 extends Base {
++    p1;
++    constructor(p1) {
++        super();
++        this.p1 = p1;
++        this.p1;
++    }
++    m(p1) { }
++}
++class C4 extends Base {
++    p2;
++    constructor(p2) {
++        super();
++        this.p2 = p2;
++    }
 +}

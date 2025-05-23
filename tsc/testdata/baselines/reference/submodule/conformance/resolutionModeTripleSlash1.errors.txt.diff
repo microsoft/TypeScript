@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -/app.ts(3,1): error TS2552: Cannot find name 'SCRIPT'. Did you mean 'WScript'?
 +/app.ts(2,1): error TS2304: Cannot find name 'MODULE'.
- 
- 
+
+
  ==== /tsconfig.json (0 errors) ====
 @@= skipped -13, +13 lines =@@
  ==== /app.ts (1 errors) ====

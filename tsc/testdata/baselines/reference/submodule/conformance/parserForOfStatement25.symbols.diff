@@ -1,7 +1,7 @@
 --- old.parserForOfStatement25.symbols
 +++ new.parserForOfStatement25.symbols
 @@= skipped -4, +4 lines =@@
- 
+
  for (let [x = 'a' in {}] of [[]]) console.log(x)
  >x : Symbol(x, Decl(parserForOfStatement25.ts, 2, 10))
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -10,7 +10,7 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(parserForOfStatement25.ts, 2, 10))
- 
+
  for (let {x = 'a' in {}} of [{}]) console.log(x)
  >x : Symbol(x, Decl(parserForOfStatement25.ts, 3, 10))
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -19,4 +19,3 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(parserForOfStatement25.ts, 3, 10))
- 

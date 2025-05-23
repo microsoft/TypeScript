@@ -1,7 +1,7 @@
 --- old.checkSuperCallBeforeThisAccessing9.types
 +++ new.checkSuperCallBeforeThisAccessing9.types
 @@= skipped -13, +13 lines =@@
- 
+
          this.x = 10;
  >this.x = 10 : 10
 ->this.x : any
@@ -10,5 +10,5 @@
 ->x : any
 +>x : number
  >10 : 10
- 
+
          var that = this;

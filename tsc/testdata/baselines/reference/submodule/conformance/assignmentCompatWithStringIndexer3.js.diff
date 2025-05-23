@@ -2,7 +2,7 @@
 +++ new.assignmentCompatWithStringIndexer3.js
 @@= skipped -25, +25 lines =@@
  }
- 
+
  //// [assignmentCompatWithStringIndexer3.js]
 -// Derived type indexer must be subtype of base type indexer
  var a;

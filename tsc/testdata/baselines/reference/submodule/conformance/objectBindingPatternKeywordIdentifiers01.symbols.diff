@@ -7,4 +7,3 @@
 -> : Symbol((Missing), Decl(objectBindingPatternKeywordIdentifiers01.ts, 0, 5))
 +> : Symbol(, Decl(objectBindingPatternKeywordIdentifiers01.ts, 0, 5))
  >while : Symbol(while, Decl(objectBindingPatternKeywordIdentifiers01.ts, 0, 17))
- 

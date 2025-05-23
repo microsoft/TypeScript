@@ -2,8 +2,8 @@
 +++ new.isolatedModulesShadowGlobalTypeNotValue(isolatedmodules=true,verbatimmodulesyntax=false).errors.txt
 @@= skipped -1, +1 lines =@@
  bad.ts(1,16): error TS2866: Import 'Event' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.
- 
- 
+
+
 -==== ./types.ts (0 errors) ====
 +==== types.ts (0 errors) ====
      export interface Date {

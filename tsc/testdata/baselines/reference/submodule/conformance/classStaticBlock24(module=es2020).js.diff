@@ -1,8 +1,8 @@
 --- old.classStaticBlock24(module=es2020).js
 +++ new.classStaticBlock24(module=es2020).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [classStaticBlock24.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -21,6 +21,9 @@
 -/main3.cjs(12,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 -/main3.cjs(14,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
 -/main3.cjs(17,8): error TS1293: ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.
+-
+-
+-==== /a.js (1 errors) ====
 +/main3.cjs(1,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 +/main3.cjs(1,13): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 +/main3.cjs(5,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
@@ -30,9 +33,8 @@
 +/main3.cjs(14,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 +/main3.cjs(17,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 +/main4.cjs(1,13): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
- 
- 
--==== /a.js (1 errors) ====
++
++
 +==== /a.js (0 errors) ====
      export const x = 0;
      module.exports.y = 0; // Error

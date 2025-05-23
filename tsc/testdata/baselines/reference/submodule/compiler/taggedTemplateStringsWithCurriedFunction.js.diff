@@ -1,7 +1,7 @@
 --- old.taggedTemplateStringsWithCurriedFunction.js
 +++ new.taggedTemplateStringsWithCurriedFunction.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [taggedTemplateStringsWithCurriedFunction.js]
  // Originated from #38558
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {

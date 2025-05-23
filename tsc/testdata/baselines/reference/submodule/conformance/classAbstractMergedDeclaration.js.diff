@@ -2,7 +2,7 @@
 +++ new.classAbstractMergedDeclaration.js
 @@= skipped -42, +42 lines =@@
  new DCC2;
- 
+
  //// [classAbstractMergedDeclaration.js]
 -var CM = /** @class */ (function () {
 -    function CM() {

@@ -2,7 +2,7 @@
 +++ new.cloduleSplitAcrossFiles.js
 @@= skipped -9, +9 lines =@@
  D.y;
- 
+
  //// [cloduleSplitAcrossFiles_class.js]
 -var D = /** @class */ (function () {
 -    function D() {

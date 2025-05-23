@@ -1,8 +1,8 @@
 --- old.binaryIntegerLiteral.js
 +++ new.binaryIntegerLiteral.js
 @@= skipped -44, +44 lines =@@
- 
- 
+
+
  //// [binaryIntegerLiteral.js]
 -var bin1 = 26;
 -var bin2 = 26;
@@ -34,18 +34,17 @@
 +    b: 0B11010,
 +    0B11111111111111111111111111111111111111111111111101001010100000010111110001111111111: false,
  };
+-obj1[26]; // string
 +obj1[0b11010]; // string
  obj1[26]; // string
--obj1[26]; // string
  obj1["26"]; // string
  obj1["0b11010"]; // any
- obj1["a"]; // number
+@@= skipped -26, +26 lines =@@
  obj1["b"]; // number
  obj1["bin1"]; // number
  obj1["Infinity"]; // boolean
+-obj2[26]; // string
 +obj2[0B11010]; // string
  obj2[26]; // string
--obj2[26]; // string
  obj2["26"]; // string
  obj2["0B11010"]; // any
- obj2["a"]; // number

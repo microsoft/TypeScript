@@ -2,19 +2,19 @@
 +++ new.TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.symbols
 @@= skipped -10, +10 lines =@@
  >Point : Symbol(Point, Decl(part1.ts, 1, 21))
- 
+
              x: number;
 ->x : Symbol(Point.x, Decl(part1.ts, 2, 32))
 +>x : Symbol(x, Decl(part1.ts, 2, 32))
- 
+
              y: number;
 ->y : Symbol(Point.y, Decl(part1.ts, 3, 22))
 +>y : Symbol(y, Decl(part1.ts, 3, 22))
          }
- 
+
          export module Utils {
 @@= skipped -18, +18 lines =@@
- 
+
                  return { x: p.y, y: p.x };
  >x : Symbol(x, Decl(part1.ts, 9, 24))
 ->p.y : Symbol(Point.y, Decl(part1.ts, 3, 22))
@@ -41,23 +41,25 @@
 +>Point : Symbol(Point, Decl(part1.ts, 1, 21))
  >x : Symbol(x, Decl(part2.ts, 3, 43))
  >y : Symbol(y, Decl(part2.ts, 3, 49))
- 
+
 @@= skipped -12, +12 lines =@@
  >Plane : Symbol(Plane, Decl(part2.ts, 5, 29))
- 
+
                  constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
 ->tl : Symbol(Plane.tl, Decl(part2.ts, 7, 28))
-+>tl : Symbol(tl, Decl(part2.ts, 7, 28))
- >Root : Symbol(Root, Decl(part1.ts, 0, 0))
+->Root : Symbol(Root, Decl(part1.ts, 0, 0))
 ->A : Symbol(Root.A, Decl(part1.ts, 0, 13))
 ->Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
 ->br : Symbol(Plane.br, Decl(part2.ts, 7, 52))
+->Root : Symbol(Root, Decl(part1.ts, 0, 0))
+->A : Symbol(Root.A, Decl(part1.ts, 0, 13))
+->Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
++>tl : Symbol(tl, Decl(part2.ts, 7, 28))
++>Root : Symbol(Root, Decl(part1.ts, 0, 0))
 +>A : Symbol(A, Decl(part1.ts, 0, 13))
 +>Point : Symbol(Point, Decl(part1.ts, 1, 21))
 +>br : Symbol(br, Decl(part2.ts, 7, 52))
- >Root : Symbol(Root, Decl(part1.ts, 0, 0))
-->A : Symbol(Root.A, Decl(part1.ts, 0, 13))
-->Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
++>Root : Symbol(Root, Decl(part1.ts, 0, 0))
 +>A : Symbol(A, Decl(part1.ts, 0, 13))
 +>Point : Symbol(Point, Decl(part1.ts, 1, 21))
              }

@@ -10,8 +10,8 @@
  parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
 @@= skipped -109, +105 lines =@@
  parserharness.ts(2030,32): error TS2304: Cannot find name 'Diff'.
- 
- 
+
+
 -==== parserharness.ts (110 errors) ====
 +==== parserharness.ts (106 errors) ====
      //﻿

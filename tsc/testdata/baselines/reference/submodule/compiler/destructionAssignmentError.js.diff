@@ -2,7 +2,7 @@
 +++ new.destructionAssignmentError.js
 @@= skipped -14, +14 lines =@@
  = fn();
- 
+
  //// [destructionAssignmentError.js]
 -var _a, _b;
 -var a;

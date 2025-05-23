@@ -2,7 +2,7 @@
 +++ new.declarationEmitInferredUndefinedPropFromFunctionInArray.types
 @@= skipped -3, +3 lines =@@
  // repro from https://github.com/microsoft/TypeScript/issues/53914
- 
+
  export let b = [{ foo: 0, m() {} }, { bar: 1 }];
 ->b : ({ foo: number; m(): void; bar?: undefined; } | { foo?: undefined; m?: undefined; bar: number; })[]
 ->[{ foo: 0, m() {} }, { bar: 1 }] : ({ foo: number; m(): void; } | { bar: number; })[]

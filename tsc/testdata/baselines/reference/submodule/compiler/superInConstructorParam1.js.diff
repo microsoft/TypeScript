@@ -2,7 +2,7 @@
 +++ new.superInConstructorParam1.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [superInConstructorParam1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -35,9 +35,10 @@
 -        if (a === void 0) { a = _super.prototype.foo.call(_this); }
 -        var _this = this;
 -        return _this;
-     }
+-    }
 -    return C;
 -}(B));
++    }
 +}
 +class C extends B {
 +    constructor(a = super.foo()) {

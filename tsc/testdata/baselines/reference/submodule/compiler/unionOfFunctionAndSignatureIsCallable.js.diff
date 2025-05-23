@@ -1,7 +1,7 @@
 --- old.unionOfFunctionAndSignatureIsCallable.js
 +++ new.unionOfFunctionAndSignatureIsCallable.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [unionOfFunctionAndSignatureIsCallable.js]
  function f1(c1, c2, callable) {
 -    var a = c1();

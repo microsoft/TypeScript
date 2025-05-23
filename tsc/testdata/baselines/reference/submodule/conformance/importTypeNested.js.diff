@@ -1,7 +1,7 @@
 --- old.importTypeNested.js
 +++ new.importTypeNested.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [chainer.js]
  export const x = "yes";
 -

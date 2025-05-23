@@ -7,7 +7,7 @@
 ->'text\' : Symbol('text\
 -', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
 +>'text\' : Symbol(text, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
- 
+
  ':'hello'}
  x.text = "bar"
 ->x.text : Symbol('text\
@@ -17,4 +17,3 @@
 ->text : Symbol('text\
 -', Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
 +>text : Symbol(text, Decl(stringLiteralPropertyNameWithLineContinuation1.ts, 0, 9))
- 

@@ -1,8 +1,8 @@
 --- old.castingTuple.js
 +++ new.castingTuple.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [castingTuple.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -30,22 +30,13 @@
 -    }
 -    return C;
 -}());
-+class A {
-+    a = 10;
-+}
-+class C {
-+    c;
-+}
- ;
+-;
 -var D = /** @class */ (function () {
 -    function D() {
 -    }
 -    return D;
 -}());
-+class D {
-+    d;
-+}
- ;
+-;
 -var E = /** @class */ (function (_super) {
 -    __extends(E, _super);
 -    function E() {
@@ -53,10 +44,7 @@
 -    }
 -    return E;
 -}(A));
-+class E extends A {
-+    e;
-+}
- ;
+-;
 -var F = /** @class */ (function (_super) {
 -    __extends(F, _super);
 -    function F() {
@@ -64,6 +52,21 @@
 -    }
 -    return F;
 -}(A));
++class A {
++    a = 10;
++}
++class C {
++    c;
++}
++;
++class D {
++    d;
++}
++;
++class E extends A {
++    e;
++}
++;
 +class F extends A {
 +    f;
 +}

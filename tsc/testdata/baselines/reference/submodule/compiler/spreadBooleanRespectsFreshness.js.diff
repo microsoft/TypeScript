@@ -2,7 +2,7 @@
 +++ new.spreadBooleanRespectsFreshness.js
 @@= skipped -9, +9 lines =@@
  foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
- 
+
  //// [spreadBooleanRespectsFreshness.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

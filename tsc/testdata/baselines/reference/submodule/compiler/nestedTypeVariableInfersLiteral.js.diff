@@ -1,8 +1,8 @@
 --- old.nestedTypeVariableInfersLiteral.js
 +++ new.nestedTypeVariableInfersLiteral.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [nestedTypeVariableInfersLiteral.js]
 -var directUnionSingle = direct("z");
 -var directUnionArray = direct(["z", "y"]);

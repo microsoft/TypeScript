@@ -13,7 +13,7 @@
 ->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
- 
+
  String.prototype.slice(0);
 ->String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 ->String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
@@ -24,7 +24,7 @@
 ->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
- 
+
  String.prototype.slice(0,1);
 ->String.prototype.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 ->String.prototype : Symbol(StringConstructor.prototype, Decl(lib.es5.d.ts, --, --))
@@ -35,4 +35,3 @@
 ->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
- 

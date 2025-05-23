@@ -1,8 +1,7 @@
 --- old.requireAsFunctionInExternalModule.errors.txt
 +++ new.requireAsFunctionInExternalModule.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +c.js(1,25): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 +m.js(1,8): error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
 +

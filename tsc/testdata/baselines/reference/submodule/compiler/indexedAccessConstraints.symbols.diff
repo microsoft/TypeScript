@@ -10,5 +10,5 @@
 ->length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  // Repro from #54837

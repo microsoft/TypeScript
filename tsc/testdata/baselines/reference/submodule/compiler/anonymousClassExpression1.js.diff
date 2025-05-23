@@ -1,7 +1,7 @@
 --- old.anonymousClassExpression1.js
 +++ new.anonymousClassExpression1.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [anonymousClassExpression1.js]
  function f() {
 -    return typeof /** @class */ (function () {

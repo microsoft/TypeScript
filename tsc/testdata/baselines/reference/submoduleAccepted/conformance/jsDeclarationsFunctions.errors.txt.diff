@@ -1,8 +1,7 @@
 --- old.jsDeclarationsFunctions.errors.txt
 +++ new.jsDeclarationsFunctions.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(38,21): error TS2349: This expression is not callable.
 +  Type '{ y: ???; }' has no call signatures.
 +index.js(48,21): error TS2349: This expression is not callable.

@@ -2,13 +2,13 @@
 +++ new.importOnAliasedIdentifiers.types
 @@= skipped -16, +16 lines =@@
  >n : number
- 
+
      import Y = A; // Alias only for module A
 ->Y : typeof Y
 ->A : typeof Y
 +>Y : typeof A
 +>A : typeof A
- 
+
      import Z = A.X; // Alias for both type and member A.X
 ->Z : Y.X
 ->A : typeof Y
@@ -16,7 +16,7 @@
 +>Z : X
 +>A : typeof A
 +>X : X
- 
+
      var v: Z = Z;
 ->v : Y.X
 ->Z : Y.X

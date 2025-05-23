@@ -1,7 +1,7 @@
 --- old.staticFieldWithInterfaceContext.types
 +++ new.staticFieldWithInterfaceContext.types
 @@= skipped -108, +108 lines =@@
- 
+
  let [ c7 ]: I[] = [class { static x = { a: "a" } }];
  >c7 : I
 ->[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]

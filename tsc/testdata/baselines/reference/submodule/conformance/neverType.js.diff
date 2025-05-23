@@ -8,27 +8,31 @@
 -    function C() {
 -    }
 -    C.prototype.void1 = function () {
-+class C {
-+    void1() {
-         throw new Error();
+-        throw new Error();
 -    };
 -    C.prototype.void2 = function () {
-+    }
-+    void2() {
-         while (true) { }
+-        while (true) { }
 -    };
 -    C.prototype.never1 = function () {
-+    }
-+    never1() {
-         throw new Error();
+-        throw new Error();
 -    };
 -    C.prototype.never2 = function () {
-+    }
-+    never2() {
-         while (true) { }
+-        while (true) { }
 -    };
 -    return C;
 -}());
++class C {
++    void1() {
++        throw new Error();
++    }
++    void2() {
++        while (true) { }
++    }
++    never1() {
++        throw new Error();
++    }
++    never2() {
++        while (true) { }
 +    }
 +}
  function f1(x) {

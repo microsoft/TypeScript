@@ -2,7 +2,7 @@
 +++ new.controlFlowForInStatement2.js
 @@= skipped -27, +27 lines =@@
  }
- 
+
  //// [controlFlowForInStatement2.js]
 -var keywordA = 'a';
 -var keywordB = 'b';

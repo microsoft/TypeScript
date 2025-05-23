@@ -2,7 +2,7 @@
 +++ new.truthinessCallExpressionCoercion2.types
 @@= skipped -15, +15 lines =@@
  }
- 
+
  function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
 ->test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) => void
 +>test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: (() => boolean) | undefined) => void
@@ -30,22 +30,22 @@
 ->table : (tabularData?: any, properties?: string[]) => void
 +>table : (tabularData?: any, properties?: string[] | undefined) => void
  }
- 
+
  function checksPropertyAccess() {
  >checksPropertyAccess : () => void
- 
+
      const x = {
 ->x : { foo: { bar(): boolean; }; }
 ->{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
 +>x : { foo: { bar: () => boolean; }; }
 +>{        foo: {            bar() { return true; }        }    } : { foo: { bar: () => boolean; }; }
- 
+
          foo: {
 ->foo : { bar(): boolean; }
 ->{            bar() { return true; }        } : { bar(): boolean; }
 +>foo : { bar: () => boolean; }
 +>{            bar() { return true; }        } : { bar: () => boolean; }
- 
+
              bar() { return true; }
  >bar : () => boolean
 @@= skipped -35, +35 lines =@@
@@ -94,7 +94,7 @@
 +>x : { foo: { bar: () => boolean; }; }
 +>foo : { bar: () => boolean; }
  >bar : () => boolean
- 
+
      // ok
 @@= skipped -16, +16 lines =@@
  >x.foo.bar && 1 && x.foo.bar() : boolean
@@ -117,5 +117,5 @@
 +>x : { foo: { bar: () => boolean; }; }
 +>foo : { bar: () => boolean; }
  >bar : () => boolean
- 
+
      // ok

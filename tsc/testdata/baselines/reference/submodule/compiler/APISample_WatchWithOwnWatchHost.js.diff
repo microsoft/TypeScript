@@ -1,7 +1,7 @@
 --- old.APISample_WatchWithOwnWatchHost.js
 +++ new.APISample_WatchWithOwnWatchHost.js
 @@= skipped -64, +64 lines =@@
- 
+
  //// [APISample_WatchWithOwnWatchHost.js]
  "use strict";
 -/*

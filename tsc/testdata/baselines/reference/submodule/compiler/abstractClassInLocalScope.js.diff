@@ -1,8 +1,8 @@
 --- old.abstractClassInLocalScope.js
 +++ new.abstractClassInLocalScope.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [abstractClassInLocalScope.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

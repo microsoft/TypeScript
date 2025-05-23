@@ -1,6 +1,6 @@
 --- old.deprecatedCompilerOptions5.errors.txt
 +++ new.deprecatedCompilerOptions5.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/foo/tsconfig.json(3,19): error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
 -/foo/tsconfig.json(4,9): error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
 -/foo/tsconfig.json(5,9): error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
@@ -47,5 +47,4 @@
 -==== /foo/a.ts (0 errors) ====
 -    const a = 1;
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

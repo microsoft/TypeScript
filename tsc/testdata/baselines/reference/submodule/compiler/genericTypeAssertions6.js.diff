@@ -2,7 +2,7 @@
 +++ new.genericTypeAssertions6.js
 @@= skipped -26, +26 lines =@@
  var c: A<Date, Date> = <A<Date, Date>>b;
- 
+
  //// [genericTypeAssertions6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.inlineSourceMap.symbols
 @@= skipped -4, +4 lines =@@
  >x : Symbol(x, Decl(inlineSourceMap.ts, 0, 3))
- 
+
  console.log(x);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -10,4 +10,3 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >x : Symbol(x, Decl(inlineSourceMap.ts, 0, 3))
- 

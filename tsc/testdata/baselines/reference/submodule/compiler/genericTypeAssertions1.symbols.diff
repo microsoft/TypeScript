@@ -8,4 +8,3 @@
 +>foo : Symbol(foo, Decl(genericTypeAssertions1.ts, 0, 12))
  >x : Symbol(x, Decl(genericTypeAssertions1.ts, 0, 17))
  >T : Symbol(T, Decl(genericTypeAssertions1.ts, 0, 8))
- 

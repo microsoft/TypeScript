@@ -1,8 +1,8 @@
 --- old.regExpWithOpenBracketInCharClass(target=es5).js
 +++ new.regExpWithOpenBracketInCharClass(target=es5).js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [regExpWithOpenBracketInCharClass.js]
 -var regexes = [
 +const regexes = [

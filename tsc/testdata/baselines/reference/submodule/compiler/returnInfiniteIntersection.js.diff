@@ -1,7 +1,7 @@
 --- old.returnInfiniteIntersection.js
 +++ new.returnInfiniteIntersection.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [returnInfiniteIntersection.js]
  function recursive() {
 -    var x = function (subkey) { return recursive(); };

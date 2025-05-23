@@ -2,7 +2,7 @@
 +++ new.es6-sourcemap-amd.symbols
 @@= skipped -9, +9 lines =@@
      }
- 
+
      public B()
 ->B : Symbol(A.B, Decl(es6-sourcemap-amd.ts, 5, 5))
 +>B : Symbol(B, Decl(es6-sourcemap-amd.ts, 5, 5))

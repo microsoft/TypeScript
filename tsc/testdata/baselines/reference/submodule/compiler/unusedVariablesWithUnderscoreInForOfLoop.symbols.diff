@@ -2,7 +2,7 @@
 +++ new.unusedVariablesWithUnderscoreInForOfLoop.symbols
 @@= skipped -8, +8 lines =@@
  >b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 1, 19))
- 
+
          console.log(b);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -11,10 +11,10 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 1, 19))
      }
- 
+
 @@= skipped -11, +11 lines =@@
  >_b : Symbol(_b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 5, 18))
- 
+
          console.log(a);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -23,4 +23,3 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 5, 16))
      }
- 

@@ -1,7 +1,7 @@
 --- old.configFileExtendsAsList.js
 +++ new.configFileExtendsAsList.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [index.js]
  function f(x) { } // noImplicitAny error
 -var y;

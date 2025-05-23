@@ -2,7 +2,7 @@
 +++ new.types.asyncGenerators.es2018.2.symbols
 @@= skipped -15, +15 lines =@@
  >inferReturnType3 : Symbol(inferReturnType3, Decl(types.asyncGenerators.es2018.2.ts, 5, 1))
- 
+
      yield* Promise.resolve([1, 2]);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))

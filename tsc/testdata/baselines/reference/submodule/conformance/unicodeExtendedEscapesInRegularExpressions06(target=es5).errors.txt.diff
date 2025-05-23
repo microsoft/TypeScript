@@ -1,6 +1,6 @@
 --- old.unicodeExtendedEscapesInRegularExpressions06(target=es5).errors.txt
 +++ new.unicodeExtendedEscapesInRegularExpressions06(target=es5).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -unicodeExtendedEscapesInRegularExpressions06.ts(3,22): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -
 -
@@ -11,5 +11,4 @@
 -                         ~
 -!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

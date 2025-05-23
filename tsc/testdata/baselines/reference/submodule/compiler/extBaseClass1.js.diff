@@ -1,8 +1,8 @@
 --- old.extBaseClass1.js
 +++ new.extBaseClass1.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [extBaseClass1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

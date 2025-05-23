@@ -1,8 +1,8 @@
 --- old.constIndexedAccess.js
 +++ new.constIndexedAccess.js
 @@= skipped -31, +31 lines =@@
- 
- 
+
+
  //// [constIndexedAccess.js]
 -var test;
 -var s = test[0];

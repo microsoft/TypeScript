@@ -1,8 +1,7 @@
 --- old.jsDeclarationsMissingGenerics.errors.txt
 +++ new.jsDeclarationsMissingGenerics.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +file.js(2,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
 +file.js(6,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
 +

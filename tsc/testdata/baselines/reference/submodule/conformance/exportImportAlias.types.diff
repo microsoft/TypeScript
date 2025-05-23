@@ -2,14 +2,14 @@
 +++ new.exportImportAlias.types
 @@= skipped -28, +28 lines =@@
  >C : typeof C
- 
+
      export import a = A;
 ->a : typeof a
 ->A : typeof a
 +>a : typeof A
 +>A : typeof A
  }
- 
+
  var a: string = C.a.x;
 @@= skipped -16, +16 lines =@@
  >b : { x: number; y: number; }
@@ -26,9 +26,9 @@
 +>Point : typeof Point
  >0 : 0
  >0 : 0
- 
+
 @@= skipped -47, +47 lines =@@
- 
+
      // 'y' should be a fundule here
      export import y = X.Y;
 ->y : typeof y
@@ -37,7 +37,7 @@
 ->Y : typeof y
 +>Y : typeof Y
  }
- 
+
  var m: number = Z.y();
  >m : number
  >Z.y() : number
@@ -46,7 +46,7 @@
  >Z : typeof Z
 ->y : typeof X.Y
 +>y : typeof Y
- 
+
  var n: { x: number; y: number; } = new Z.y.Point(0, 0);
  >n : { x: number; y: number; }
  >x : number
@@ -64,10 +64,10 @@
 +>Point : typeof Point
  >0 : 0
  >0 : 0
- 
+
 @@= skipped -56, +56 lines =@@
  >M : typeof M
- 
+
      export import D = K.L;
 ->D : typeof D
 +>D : typeof L
@@ -75,10 +75,10 @@
 ->L : D
 +>L : L
  }
- 
+
  var o: { name: string };
 @@= skipped -11, +11 lines =@@
- 
+
  var o = new M.D('Hello');
  >o : { name: string; }
 ->new M.D('Hello') : K.L
@@ -89,5 +89,5 @@
 ->D : typeof K.L
 +>D : typeof L
  >'Hello' : "Hello"
- 
+
  var p: { x: number; y: number; }

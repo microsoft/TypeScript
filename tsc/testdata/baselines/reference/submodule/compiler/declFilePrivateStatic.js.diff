@@ -2,7 +2,7 @@
 +++ new.declFilePrivateStatic.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [declFilePrivateStatic.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -7,5 +7,5 @@
 ->next : (value?: T) => Promise<IteratorResult<T>>
 +>next : (value?: T) => Promise<IteratorResult<T, any>>
  >value : T
- 
+
          if (value != null) {

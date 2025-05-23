@@ -2,7 +2,7 @@
 +++ new.es5-asyncFunctionSwitchStatements.js
 @@= skipped -69, +69 lines =@@
  }
- 
+
  //// [es5-asyncFunctionSwitchStatements.js]
 -function switchStatement0() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -18,16 +18,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function switchStatement0() {
-+    switch (x) {
-+        case y:
-+            a;
-+            break;
-+        default:
-+            b;
-+            break;
-+    }
- }
+-}
 -function switchStatement1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -46,16 +37,7 @@
 -            }
 -        });
 -    });
-+async function switchStatement1() {
-+    switch (await x) {
-+        case y:
-+            a;
-+            break;
-+        default:
-+            b;
-+            break;
-+    }
- }
+-}
 -function switchStatement2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -79,16 +61,7 @@
 -            }
 -        });
 -    });
-+async function switchStatement2() {
-+    switch (x) {
-+        case await y:
-+            a;
-+            break;
-+        default:
-+            b;
-+            break;
-+    }
- }
+-}
 -function switchStatement3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -111,16 +84,7 @@
 -            }
 -        });
 -    });
-+async function switchStatement3() {
-+    switch (x) {
-+        case y:
-+            await a;
-+            break;
-+        default:
-+            b;
-+            break;
-+    }
- }
+-}
 -function switchStatement4() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -143,16 +107,7 @@
 -            }
 -        });
 -    });
-+async function switchStatement4() {
-+    switch (x) {
-+        case y:
-+            a;
-+            break;
-+        default:
-+            await b;
-+            break;
-+    }
- }
+-}
 -function switchStatement5() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -179,16 +134,7 @@
 -            }
 -        });
 -    });
-+async function switchStatement5() {
-+    switch (x) {
-+        case y:
-+            a;
-+            break;
-+        case await z:
-+            b;
-+            break;
-+    }
- }
+-}
 -function switchStatement6() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -216,19 +162,7 @@
 -            }
 -        });
 -    });
-+async function switchStatement6() {
-+    switch (x) {
-+        default:
-+            c;
-+            break;
-+        case await y:
-+            a;
-+            break;
-+        case z:
-+            b;
-+            break;
-+    }
- }
+-}
 -function switchStatement7() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -258,19 +192,7 @@
 -            }
 -        });
 -    });
-+async function switchStatement7() {
-+    switch (x) {
-+        default:
-+            c;
-+            break;
-+        case y:
-+            a;
-+            break;
-+        case await z:
-+            b;
-+            break;
-+    }
- }
+-}
 -function switchStatement8() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -300,6 +222,92 @@
 -            }
 -        });
 -    });
++async function switchStatement0() {
++    switch (x) {
++        case y:
++            a;
++            break;
++        default:
++            b;
++            break;
++    }
++}
++async function switchStatement1() {
++    switch (await x) {
++        case y:
++            a;
++            break;
++        default:
++            b;
++            break;
++    }
++}
++async function switchStatement2() {
++    switch (x) {
++        case await y:
++            a;
++            break;
++        default:
++            b;
++            break;
++    }
++}
++async function switchStatement3() {
++    switch (x) {
++        case y:
++            await a;
++            break;
++        default:
++            b;
++            break;
++    }
++}
++async function switchStatement4() {
++    switch (x) {
++        case y:
++            a;
++            break;
++        default:
++            await b;
++            break;
++    }
++}
++async function switchStatement5() {
++    switch (x) {
++        case y:
++            a;
++            break;
++        case await z:
++            b;
++            break;
++    }
++}
++async function switchStatement6() {
++    switch (x) {
++        default:
++            c;
++            break;
++        case await y:
++            a;
++            break;
++        case z:
++            b;
++            break;
++    }
++}
++async function switchStatement7() {
++    switch (x) {
++        default:
++            c;
++            break;
++        case y:
++            a;
++            break;
++        case await z:
++            b;
++            break;
++    }
++}
 +async function switchStatement8() {
 +    switch (x) {
 +        default: c;

@@ -2,7 +2,7 @@
 +++ new.literalsInComputedProperties1.js
 @@= skipped -52, +52 lines =@@
  // TODO: make sure that enum still disallow template literals as member names
- 
+
  //// [literalsInComputedProperties1.js]
 -var _a;
 -var x = (_a = {

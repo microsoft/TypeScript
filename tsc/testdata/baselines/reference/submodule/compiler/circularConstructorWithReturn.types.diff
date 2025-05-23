@@ -11,10 +11,10 @@
    }
 @@= skipped -10, +10 lines =@@
  }
- 
+
  export function applyModelsAndClientExtensions(client: Client) {
 ->applyModelsAndClientExtensions : (client: Client) => PrismaClient
 +>applyModelsAndClientExtensions : (client: PrismaClient) => PrismaClient
  >client : PrismaClient
- 
+
    return client;

@@ -1,8 +1,7 @@
 --- old.typeFromJSInitializer3.errors.txt
 +++ new.typeFromJSInitializer3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(2,10): error TS7010: 'f1', which lacks return-type annotation, implicitly has an 'any' return type.
 +a.js(8,10): error TS7010: 'f2', which lacks return-type annotation, implicitly has an 'any' return type.
 +

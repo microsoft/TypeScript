@@ -7,8 +7,8 @@
  parserRealSource13.ts(10,34): error TS2304: Cannot find name 'AST'.
 @@= skipped -115, +114 lines =@@
  parserRealSource13.ts(135,36): error TS2304: Cannot find name 'NodeType'.
- 
- 
+
+
 -==== parserRealSource13.ts (116 errors) ====
 +==== parserRealSource13.ts (115 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

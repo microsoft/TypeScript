@@ -5,6 +5,9 @@
 -validate.ts(15,3): error TS2540: Cannot assign to 'houseNumber' because it is a read-only property.
 -validate.ts(16,1): error TS2322: Type 'number' is not assignable to type 'string'.
 -validate.ts(17,3): error TS2540: Cannot assign to 'middleInit' because it is a read-only property.
+-
+-
+-==== validate.ts (4 errors) ====
 +index.js(19,10): error TS2741: Property 'name' is missing in type '{}' but required in type '{ name: string; }'.
 +index.js(23,11): error TS2339: Property 'zip' does not exist on type '{}'.
 +index.js(28,11): error TS2339: Property 'houseNumber' does not exist on type '{}'.
@@ -21,9 +24,8 @@
 +validate.ts(15,3): error TS2339: Property 'houseNumber' does not exist on type '{}'.
 +validate.ts(16,3): error TS2339: Property 'zipStr' does not exist on type '{}'.
 +validate.ts(17,3): error TS2339: Property 'middleInit' does not exist on type '{}'.
- 
- 
--==== validate.ts (4 errors) ====
++
++
 +==== validate.ts (13 errors) ====
      // Validate in TS as simple validations would usually be interpreted as more special assignments
      import x = require("./");

@@ -1,8 +1,8 @@
 --- old.internalAliasEnumInsideTopLevelModuleWithoutExport.js
 +++ new.internalAliasEnumInsideTopLevelModuleWithoutExport.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [internalAliasEnumInsideTopLevelModuleWithoutExport.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

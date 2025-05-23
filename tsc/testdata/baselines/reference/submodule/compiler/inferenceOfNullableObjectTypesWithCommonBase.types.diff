@@ -8,7 +8,7 @@
 +>v as string & { tag: 'foo' } | undefined : string & { tag: "foo"; } | undefined
  >v : never
  >tag : "foo"
- 
+
  equal(v as string & { tag: 'foo' } | undefined, v as string);
  >equal(v as string & { tag: 'foo' } | undefined, v as string) : void
  >equal : <T>(a: T, b: T) => void

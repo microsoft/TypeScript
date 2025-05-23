@@ -6,7 +6,7 @@
  >super : typeof CBase
 ->{            method(p) {                p.length;            }        } : { method(p: string): void; }
 +>{            method(p) {                p.length;            }        } : { method: (p: string) => void; }
- 
+
              method(p) {
  >method : (p: string) => void
 @@= skipped -20, +20 lines =@@
@@ -15,6 +15,6 @@
  >foo : (param: ContextualType<string>) => void
 ->{            method(p) {                p.length;            }        } : { method(p: string): void; }
 +>{            method(p) {                p.length;            }        } : { method: (p: string) => void; }
- 
+
              method(p) {
  >method : (p: string) => void

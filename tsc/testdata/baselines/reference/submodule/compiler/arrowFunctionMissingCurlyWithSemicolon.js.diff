@@ -1,7 +1,7 @@
 --- old.arrowFunctionMissingCurlyWithSemicolon.js
 +++ new.arrowFunctionMissingCurlyWithSemicolon.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [arrowFunctionMissingCurlyWithSemicolon.js]
  // Should error at semicolon.
 -var f = function () { return ; };

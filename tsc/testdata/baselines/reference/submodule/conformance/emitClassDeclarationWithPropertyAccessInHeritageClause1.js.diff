@@ -2,7 +2,7 @@
 +++ new.emitClassDeclarationWithPropertyAccessInHeritageClause1.js
 @@= skipped -7, +7 lines =@@
  class C extends (foo()).B {}
- 
+
  //// [emitClassDeclarationWithPropertyAccessInHeritageClause1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

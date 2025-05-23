@@ -1,8 +1,8 @@
 --- old.inferenceDoesNotAddUndefinedOrNull.js
 +++ new.inferenceDoesNotAddUndefinedOrNull.js
 @@= skipped -33, +33 lines =@@
- 
- 
+
+
  //// [inferenceDoesNotAddUndefinedOrNull.js]
 -"use strict";
  function flatMapChildren(node, cb) {

@@ -1,7 +1,7 @@
 --- old.jsdocTemplateTag4.symbols
 +++ new.jsdocTemplateTag4.symbols
 @@= skipped -11, +11 lines =@@
- 
+
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
 ->this._map : Symbol(Multimap._map, Decl(a.js, 6, 21))
@@ -9,7 +9,7 @@
 ->_map : Symbol(Multimap._map, Decl(a.js, 6, 21))
 -
  };
- 
+
  /**
 @@= skipped -11, +7 lines =@@
   * @returns {V} the value ok
@@ -22,16 +22,16 @@
 ->get : Symbol(Multimap.get, Decl(a.js, 9, 2))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >key : Symbol(key, Decl(a.js, 15, 35))
- 
+
      return this._map[key + ''];
 ->this._map : Symbol(Multimap._map, Decl(a.js, 6, 21))
 ->this : Symbol(Multimap, Decl(a.js, 0, 0))
 ->_map : Symbol(Multimap._map, Decl(a.js, 6, 21))
  >key : Symbol(key, Decl(a.js, 15, 35))
  }
- 
+
 @@= skipped -24, +20 lines =@@
- 
+
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
 ->this._map : Symbol(Multimap2._map, Decl(a.js, 25, 28))
@@ -39,7 +39,7 @@
 ->_map : Symbol(Multimap2._map, Decl(a.js, 25, 28))
 -
  };
- 
+
  /**
 @@= skipped -11, +7 lines =@@
   * @returns {V} the value ok
@@ -52,18 +52,18 @@
 ->get : Symbol(Multimap2.get, Decl(a.js, 28, 2))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >key : Symbol(key, Decl(a.js, 34, 36))
- 
+
      return this._map[key + ''];
 ->this._map : Symbol(Multimap2._map, Decl(a.js, 25, 28))
 ->this : Symbol(Multimap2, Decl(a.js, 25, 15))
 ->_map : Symbol(Multimap2._map, Decl(a.js, 25, 28))
  >key : Symbol(key, Decl(a.js, 34, 36))
  }
- 
+
  var Ns = {};
 ->Ns : Symbol(Ns, Decl(a.js, 38, 3), Decl(a.js, 38, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 38, 3))
- 
+
  /**
   * Should work for expando-namespaced initialisers too
 @@= skipped -23, +19 lines =@@
@@ -74,16 +74,16 @@
 ->Ns : Symbol(Ns, Decl(a.js, 38, 3), Decl(a.js, 38, 12))
 ->Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 38, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 38, 3))
- 
+
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
 ->this._map : Symbol(Multimap3._map, Decl(a.js, 45, 27))
 ->this : Symbol(Multimap3, Decl(a.js, 45, 14))
 ->_map : Symbol(Multimap3._map, Decl(a.js, 45, 27))
 +>this : Symbol((Anonymous type), Decl(a.js, 38, 8))
- 
+
  };
- 
+
 @@= skipped -17, +13 lines =@@
   * @returns {V} the value ok
   */
@@ -96,11 +96,10 @@
 ->get : Symbol(Ns.Multimap3.get, Decl(a.js, 48, 2))
 +>Ns : Symbol(Ns, Decl(a.js, 38, 3))
  >key : Symbol(key, Decl(a.js, 54, 39))
- 
+
      return this._map[key + ''];
 ->this._map : Symbol(Multimap3._map, Decl(a.js, 45, 27))
 ->this : Symbol(Multimap3, Decl(a.js, 45, 14))
 ->_map : Symbol(Multimap3._map, Decl(a.js, 45, 27))
  >key : Symbol(key, Decl(a.js, 54, 39))
  }
- 

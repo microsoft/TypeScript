@@ -2,19 +2,19 @@
 +++ new.tsxInferenceShouldNotYieldAnyOnUnions.types
 @@= skipped -19, +19 lines =@@
  }
- 
+
  function ShouldInferFromData<T>(props: Props<T>): JSX.Element {
 ->ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
 +>ShouldInferFromData : <T>(props: Props<T>) => Element
  >props : Props<T>
  >JSX : any
- 
+
      return <div />;
 -><div /> : JSX.Element
 +><div /> : Element
  >div : any
  }
- 
+
  // Sanity check: function call equivalent versions work fine
  ShouldInferFromData({ data: "1" });
 ->ShouldInferFromData({ data: "1" }) : JSX.Element
@@ -24,7 +24,7 @@
  >{ data: "1" } : { data: string; }
  >data : string
  >"1" : "1"
- 
+
  ShouldInferFromData({ data: "1", convert: n => "" + n });
 ->ShouldInferFromData({ data: "1", convert: n => "" + n }) : JSX.Element
 ->ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
@@ -35,7 +35,7 @@
  >"1" : "1"
 @@= skipped -31, +31 lines =@@
  >n : string
- 
+
  ShouldInferFromData({ data: 2, convert: n => "" + n });
 ->ShouldInferFromData({ data: 2, convert: n => "" + n }) : JSX.Element
 ->ShouldInferFromData : <T>(props: Props<T>) => JSX.Element
@@ -45,8 +45,8 @@
  >data : number
  >2 : 2
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  const f1 = <ShouldInferFromData data={"1"} />;
 ->f1 : JSX.Element
 -><ShouldInferFromData data={"1"} /> : JSX.Element
@@ -56,7 +56,7 @@
 +>ShouldInferFromData : <T>(props: Props<T>) => Element
  >data : string
  >"1" : "1"
- 
+
  const f2 = <ShouldInferFromData data={"1"} convert={n => "" + n} />;
 ->f2 : JSX.Element
 -><ShouldInferFromData data={"1"} convert={n => "" + n} /> : JSX.Element
@@ -69,7 +69,7 @@
  >convert : (n: string) => string
 @@= skipped -20, +20 lines =@@
  >n : string
- 
+
  const f3 = <ShouldInferFromData data={2} convert={n => "" + n} />;
 ->f3 : JSX.Element
 -><ShouldInferFromData data={2} convert={n => "" + n} /> : JSX.Element

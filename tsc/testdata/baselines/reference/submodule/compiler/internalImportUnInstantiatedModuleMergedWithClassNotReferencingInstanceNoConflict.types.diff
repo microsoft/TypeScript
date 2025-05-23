@@ -1,7 +1,7 @@
 --- old.internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.types
 +++ new.internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstanceNoConflict.types
 @@= skipped -13, +13 lines =@@
- 
+
  module B {
      import Y = A;
 ->Y : typeof Y
@@ -9,4 +9,3 @@
 +>Y : typeof A
 +>A : A
  }
- 

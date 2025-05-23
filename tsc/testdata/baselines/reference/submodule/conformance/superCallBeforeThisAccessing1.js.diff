@@ -1,8 +1,8 @@
 --- old.superCallBeforeThisAccessing1.js
 +++ new.superCallBeforeThisAccessing1.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [superCallBeforeThisAccessing1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

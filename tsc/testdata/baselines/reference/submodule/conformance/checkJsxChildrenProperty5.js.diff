@@ -1,7 +1,7 @@
 --- old.checkJsxChildrenProperty5.js
 +++ new.checkJsxChildrenProperty5.js
 @@= skipped -33, +33 lines =@@
- 
+
  //// [file.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

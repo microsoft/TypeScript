@@ -2,7 +2,7 @@
 +++ new.asyncFunctionDeclaration9_es6.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [asyncFunctionDeclaration9_es6.js]
 -function foo() {
 -    return __awaiter(this, void 0, void 0, function* () {

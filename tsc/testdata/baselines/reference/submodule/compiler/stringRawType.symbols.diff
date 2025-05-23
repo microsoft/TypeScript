@@ -1,7 +1,7 @@
 --- old.stringRawType.symbols
 +++ new.stringRawType.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === stringRawType.ts ===
  String.raw({ raw: ["foo", "bar", "baz"] }, 1, 2);
 ->String.raw : Symbol(StringConstructor.raw, Decl(lib.es2015.core.d.ts, --, --))
@@ -10,4 +10,3 @@
 ->raw : Symbol(StringConstructor.raw, Decl(lib.es2015.core.d.ts, --, --))
 +>raw : Symbol(raw, Decl(lib.es2015.core.d.ts, --, --))
  >raw : Symbol(raw, Decl(stringRawType.ts, 0, 12))
- 

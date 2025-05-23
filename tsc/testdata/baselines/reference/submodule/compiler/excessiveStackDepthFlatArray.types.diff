@@ -8,7 +8,7 @@
 +>ul : HTMLAttributes<HTMLUListElement>
  >React : any
  >React : any
- 
+
      li: React.DetailedHTMLProps<React.HTMLAttributes<HTMLLIElement>, HTMLLIElement>;
 ->li : React.HTMLAttributes<HTMLLIElement>
 +>li : HTMLAttributes<HTMLLIElement>

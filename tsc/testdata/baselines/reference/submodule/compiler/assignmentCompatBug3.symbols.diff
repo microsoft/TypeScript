@@ -2,7 +2,7 @@
 +++ new.assignmentCompatBug3.symbols
 @@= skipped -20, +20 lines =@@
  >dist : Symbol(dist, Decl(assignmentCompatBug3.ts, 3, 29))
- 
+
  			return Math.sqrt(x*x+y*y); // shouldn't be picking up "x" and "y" from the object lit
 ->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 +>Math.sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))
@@ -14,10 +14,10 @@
  >y : Symbol(y, Decl(assignmentCompatBug3.ts, 0, 29))
 @@= skipped -15, +15 lines =@@
  >C : Symbol(C, Decl(assignmentCompatBug3.ts, 10, 1))
- 
+
      get x() {
 ->x : Symbol(C.x, Decl(assignmentCompatBug3.ts, 12, 9))
 +>x : Symbol(x, Decl(assignmentCompatBug3.ts, 12, 9))
- 
+
          return 0;
      }

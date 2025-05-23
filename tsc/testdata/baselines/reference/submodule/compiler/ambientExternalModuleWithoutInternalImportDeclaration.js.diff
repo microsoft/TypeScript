@@ -1,7 +1,7 @@
 --- old.ambientExternalModuleWithoutInternalImportDeclaration.js
 +++ new.ambientExternalModuleWithoutInternalImportDeclaration.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [ambientExternalModuleWithoutInternalImportDeclaration_0.js]
  //// [ambientExternalModuleWithoutInternalImportDeclaration_1.js]
 -define(["require", "exports", "M"], function (require, exports, A) {

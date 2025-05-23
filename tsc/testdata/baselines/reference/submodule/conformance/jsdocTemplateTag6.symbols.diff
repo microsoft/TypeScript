@@ -7,10 +7,10 @@
 ->foo : Symbol(C.foo, Decl(a.js, 64, 21))
 +>foo : Symbol(foo, Decl(a.js, 64, 21))
  >x : Symbol(x, Decl(a.js, 70, 8))
- 
+
          return x;
 @@= skipped -18, +18 lines =@@
- 
+
  const t14 = t13.foo(["a", ["b", "c"]]);
  >t14 : Symbol(t14, Decl(a.js, 76, 5))
 ->t13.foo : Symbol(C.foo, Decl(a.js, 64, 21))
@@ -18,6 +18,6 @@
  >t13 : Symbol(t13, Decl(a.js, 75, 5))
 ->foo : Symbol(C.foo, Decl(a.js, 64, 21))
 +>foo : Symbol(foo, Decl(a.js, 64, 21))
- 
+
  /**
   * @template {readonly unknown[]} const T

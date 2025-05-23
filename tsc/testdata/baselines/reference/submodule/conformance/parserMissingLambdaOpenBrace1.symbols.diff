@@ -2,7 +2,7 @@
 +++ new.parserMissingLambdaOpenBrace1.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(parserMissingLambdaOpenBrace1.ts, 0, 0))
- 
+
      where(filter: Iterator<T, boolean>): Query<T> {
 ->where : Symbol(C.where, Decl(parserMissingLambdaOpenBrace1.ts, 0, 9))
 +>where : Symbol(where, Decl(parserMissingLambdaOpenBrace1.ts, 0, 9))

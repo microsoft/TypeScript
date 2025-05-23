@@ -6,16 +6,16 @@
  >Thing : Symbol(Thing, Decl(mod.js, 0, 0))
 ->x : Symbol(Thing.x, Decl(mod.js, 0, 14))
 +>x : Symbol(x, Decl(mod.js, 0, 14))
- 
+
  class AnotherThing { y = 2  }
  >AnotherThing : Symbol(AnotherThing, Decl(mod.js, 0, 22))
 ->y : Symbol(AnotherThing.y, Decl(mod.js, 1, 20))
 +>y : Symbol(y, Decl(mod.js, 1, 20))
- 
+
  function foo() { return 3 }
  >foo : Symbol(foo, Decl(mod.js, 1, 29))
 @@= skipped -14, +14 lines =@@
- 
+
  /** @typedef {() => number} buz */
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
@@ -23,11 +23,11 @@
 +>module.exports : Symbol(export=, Decl(mod.js, 3, 27))
 +>module : Symbol(module.exports)
  >exports : Symbol(export=, Decl(mod.js, 3, 27))
- 
+
      Thing,
 @@= skipped -44, +44 lines =@@
  >g : Symbol(g, Decl(main.js, 9, 34))
- 
+
      return a.x + b.y + c() + d() + e() + f() + g.length
 ->a.x : Symbol(Thing.x, Decl(mod.js, 0, 14))
  >a : Symbol(a, Decl(main.js, 9, 17))
@@ -43,11 +43,11 @@
  >g : Symbol(g, Decl(main.js, 9, 34))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  /**
 @@= skipped -35, +29 lines =@@
  >g : Symbol(g, Decl(main.js, 22, 35))
- 
+
      return a.length + b.length + c() + d() + e() + f() + g.length
 ->a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
 +>a.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
@@ -69,18 +69,18 @@
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  === index.ts ===
 @@= skipped -36, +36 lines =@@
- 
+
      f: import('./mod').buz,
  >f : Symbol(f, Decl(index.ts, 5, 27))
 ->buz : Symbol(buz, Decl(mod.js, 4, 4))
- 
+
      g: import('./mod').literal,
  >g : Symbol(g, Decl(index.ts, 6, 27))
 @@= skipped -48, +47 lines =@@
- 
+
  ) {
      return a.length + b.length + c() + d() + e() + f() + g.length
 ->a.length : Symbol(Function.length, Decl(lib.es5.d.ts, --, --))
@@ -103,4 +103,3 @@
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  }
- 

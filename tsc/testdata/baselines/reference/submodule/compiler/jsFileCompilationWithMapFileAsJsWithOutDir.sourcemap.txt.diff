@@ -5,30 +5,24 @@
  sourceFile:../a.ts
  -------------------------------------------------------------------
 ->>>var c = /** @class */ (function () {
-+>>>class c {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^->
+-1 >
++>>>class c {
++1 >
 +2 >^^^^^^
 +3 >      ^
- 1 >
++1 >
 +2 >class 
 +3 >      c
  1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
-+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
- ---
+----
 ->>>    function c() {
 -1->^^^^
 -2 >    ^^->
 -1->
 -1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+1 > {
-+  >}
-+1 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
- ---
+----
 ->>>    }
 -1->^^^^
 -2 >    ^
@@ -62,10 +56,18 @@
 -2 >Emitted(5, 2) Source(2, 2) + SourceIndex(0)
 -3 >Emitted(5, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(5, 6) Source(2, 2) + SourceIndex(0)
-----
++2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
++3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 > {
++  >}
++1 >Emitted(2, 2) Source(2, 2) + SourceIndex(0)
+ ---
  >>>//# sourceMappingURL=a.js.map===================================================================
  JsFile: b.js
- mapUrl: b.js.map
 @@= skipped -60, +32 lines =@@
  1 >
  2 >^^^^^^^^^

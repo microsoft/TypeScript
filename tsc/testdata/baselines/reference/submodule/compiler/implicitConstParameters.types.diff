@@ -2,12 +2,12 @@
 +++ new.implicitConstParameters.types
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function fn(x: number | string) {
 ->fn : (x: number | string) => void
 +>fn : (x: string | number) => void
  >x : string | number
- 
+
    if (typeof x === 'number') {
 @@= skipped -14, +14 lines =@@
  >doSomething : (cb: () => void) => void
@@ -20,4 +20,3 @@
 +>toFixed : (fractionDigits?: number | undefined) => string
    }
  }
- 

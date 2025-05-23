@@ -2,16 +2,16 @@
 +++ new.jsxNamespacedNameNotComparedToNonMatchingIndexSignature.types
 @@= skipped -3, +3 lines =@@
  /// <reference path="react16.d.ts" />
- 
+
  declare module "react" {
 ->"react" : typeof import("react")
 +>"react" : typeof React
- 
+
      interface Attributes {
          [key: `do-${string}`]: Function;
 @@= skipped -12, +12 lines =@@
  }
- 
+
  export const tag = <div ns:thing="a"/>
 ->tag : JSX.Element
 -><div ns:thing="a"/> : JSX.Element
@@ -23,4 +23,3 @@
 ->thing : error
 +>ns : any
 +>thing : any
- 

@@ -2,20 +2,20 @@
 +++ new.inKeywordTypeguard(strict=false).types
 @@= skipped -965, +965 lines =@@
  }
- 
+
  function f14(x: { a: string | undefined }) {
 ->f14 : (x: { a: string | undefined; }) => void
 ->x : { a: string | undefined; }
 +>f14 : (x: { a: string; }) => void
 +>x : { a: string; }
  >a : string
- 
+
      if ("a" in x) {
  >"a" in x : boolean
  >"a" : "a"
 ->x : { a: string | undefined; }
 +>x : { a: string; }
- 
+
          x;
 ->x : { a: string | undefined; }
 +>x : { a: string; }
@@ -24,20 +24,20 @@
          x;
 @@= skipped -19, +19 lines =@@
  }
- 
+
  function f15(x: { a?: string | undefined }) {
 ->f15 : (x: { a?: string | undefined; }) => void
 ->x : { a?: string | undefined; }
 +>f15 : (x: { a?: string; }) => void
 +>x : { a?: string; }
  >a : string
- 
+
      if ("a" in x) {
  >"a" in x : boolean
  >"a" : "a"
 ->x : { a?: string | undefined; }
 +>x : { a?: string; }
- 
+
          x;
 ->x : { a?: string | undefined; }
 +>x : { a?: string; }
@@ -48,24 +48,24 @@
 +>x : { a?: string; }
      }
  }
- 
+
 @@= skipped -75, +75 lines =@@
  // Repro from #51501
- 
+
  function isHTMLTable<T extends object | null>(table: T): boolean {
 ->isHTMLTable : <T extends object | null>(table: T) => boolean
 +>isHTMLTable : <T extends object>(table: T) => boolean
  >table : T
- 
+
      return !!table && 'html' in table;
 @@= skipped -16, +16 lines =@@
  // Repro from #51549
- 
+
  const f = <P extends object>(a: P & {}) => {
 ->f : <P extends object>(a: P & {}) => void
 -><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
 +>f : <P extends object>(a: P) => void
 +><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P) => void
  >a : P
- 
+
      "foo" in a;

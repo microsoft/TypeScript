@@ -2,7 +2,7 @@
 +++ new.tsxOpeningClosingNames.types
 @@= skipped -14, +14 lines =@@
  }
- 
+
  <A.B.C.D>foo</A . B . C.D>
 -><A.B.C.D>foo</A . B . C.D> : JSX.Element
 +><A.B.C.D>foo</A . B . C.D> : Element
@@ -28,4 +28,3 @@
 +>B : typeof B
 +>C : typeof C
  >D : any
- 

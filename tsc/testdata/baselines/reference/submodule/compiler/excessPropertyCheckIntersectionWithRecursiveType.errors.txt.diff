@@ -9,7 +9,7 @@
 +excessPropertyCheckIntersectionWithRecursiveType.ts(52,9): error TS2353: Object literal may only specify known properties, and 'invalid' does not exist in type 'Example<{ l2: boolean; }> & { l2: { type: "boolean"; } & Example<false> | { type: "boolean"; } & Example<true>; }'.
  excessPropertyCheckIntersectionWithRecursiveType.ts(86,11): error TS2353: Object literal may only specify known properties, and 'children' does not exist in type 'User'.
  excessPropertyCheckIntersectionWithRecursiveType.ts(102,35): error TS2339: Property 'children' does not exist on type 'User'.
- 
+
 @@= skipped -36, +36 lines =@@
              l2: { type: 'boolean' },
              invalid: false,

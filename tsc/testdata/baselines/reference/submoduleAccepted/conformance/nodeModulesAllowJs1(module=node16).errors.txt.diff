@@ -1,6 +1,6 @@
 --- old.nodeModulesAllowJs1(module=node16).errors.txt
 +++ new.nodeModulesAllowJs1(module=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.cjs(2,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
 -index.cjs(3,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
 -index.cjs(6,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
@@ -664,5 +664,4 @@
 -    {
 -        "type": "module"
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

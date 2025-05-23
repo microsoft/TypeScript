@@ -6,18 +6,18 @@
  declare var console: {
 ->console : { log(msg: string): void; }
 +>console : { log: (msg: string) => void; }
- 
+
      log(msg: string): void;
  >log : (msg: string) => void
 @@= skipped -19, +19 lines =@@
  >"mowing" : "mowing"
- 
+
  function foo1({ name: nameA }: Robot) {
 ->foo1 : ({ name: nameA }: Robot) => void
 +>foo1 : (__0: Robot) => void
  >name : any
  >nameA : string
- 
+
      console.log(nameA);
  >console.log(nameA) : void
  >console.log : (msg: string) => void
@@ -45,7 +45,7 @@
 ->foo3 : ({ name }: Robot) => void
 +>foo3 : (__0: Robot) => void
  >name : string
- 
+
      console.log(name);
  >console.log(name) : void
  >console.log : (msg: string) => void
@@ -54,13 +54,13 @@
  >log : (msg: string) => void
  >name : string
  }
- 
+
  foo1(robotA);
  >foo1(robotA) : void
 ->foo1 : ({ name: nameA }: Robot) => void
 +>foo1 : (__0: Robot) => void
  >robotA : Robot
- 
+
  foo1({ name: "Edger", skill: "cutting edges" });
  >foo1({ name: "Edger", skill: "cutting edges" }) : void
 ->foo1 : ({ name: nameA }: Robot) => void
@@ -69,13 +69,13 @@
  >name : string
  >"Edger" : "Edger"
 @@= skipped -32, +32 lines =@@
- 
+
  foo2(robotA);
  >foo2(robotA) : void
 ->foo2 : ({ name: nameB, skill: skillB }: Robot) => void
 +>foo2 : (__0: Robot) => void
  >robotA : Robot
- 
+
  foo2({ name: "Edger", skill: "cutting edges" });
  >foo2({ name: "Edger", skill: "cutting edges" }) : void
 ->foo2 : ({ name: nameB, skill: skillB }: Robot) => void
@@ -84,13 +84,13 @@
  >name : string
  >"Edger" : "Edger"
 @@= skipped -14, +14 lines =@@
- 
+
  foo3(robotA);
  >foo3(robotA) : void
 ->foo3 : ({ name }: Robot) => void
 +>foo3 : (__0: Robot) => void
  >robotA : Robot
- 
+
  foo3({ name: "Edger", skill: "cutting edges" });
  >foo3({ name: "Edger", skill: "cutting edges" }) : void
 ->foo3 : ({ name }: Robot) => void

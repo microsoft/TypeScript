@@ -2,10 +2,12 @@
 +++ new.conditionalExportsResolutionFallback(moduleresolution=nodenext).errors.txt
 @@= skipped -0, +0 lines =@@
 -error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
-+/index.mts(1,16): error TS2307: Cannot find module 'dep' or its corresponding type declarations.
- 
- 
+-
+-
 -!!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
++/index.mts(1,16): error TS2307: Cannot find module 'dep' or its corresponding type declarations.
++
++
  ==== /node_modules/dep/package.json (0 errors) ====
      {
        "name": "dep",

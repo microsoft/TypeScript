@@ -1,8 +1,8 @@
 --- old.numericUnderscoredSeparator(target=es5).js
 +++ new.numericUnderscoredSeparator(target=es5).js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [numericUnderscoredSeparator.js]
 -1000000000000;
 -41349;

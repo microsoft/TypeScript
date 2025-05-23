@@ -2,8 +2,7 @@
 +++ new.extensionLoadingPriority(moduleresolution=node).types
 @@= skipped -20, +20 lines =@@
  >a : "a.js"
- 
+
  import dir from "./dir";
 ->dir : "dir/index.ts"
 +>dir : "dir.js"
- 

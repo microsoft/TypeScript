@@ -2,7 +2,7 @@
 +++ new.scopeCheckInsideStaticMethod1.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [scopeCheckInsideStaticMethod1.js]
 -var C = /** @class */ (function () {
 -    function C() {

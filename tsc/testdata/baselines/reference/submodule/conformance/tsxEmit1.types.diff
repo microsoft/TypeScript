@@ -2,14 +2,14 @@
 +++ new.tsxEmit1.types
 @@= skipped -12, +12 lines =@@
  >p : any
- 
+
  var selfClosed1 = <div />;
 ->selfClosed1 : JSX.Element
 -><div /> : JSX.Element
 +>selfClosed1 : Element
 +><div /> : Element
  >div : any
- 
+
  var selfClosed2 = <div x="1" />;
 ->selfClosed2 : JSX.Element
 -><div x="1" /> : JSX.Element
@@ -17,7 +17,7 @@
 +><div x="1" /> : Element
  >div : any
  >x : string
- 
+
  var selfClosed3 = <div x='1' />;
 ->selfClosed3 : JSX.Element
 -><div x='1' /> : JSX.Element
@@ -25,7 +25,7 @@
 +><div x='1' /> : Element
  >div : any
  >x : string
- 
+
  var selfClosed4 = <div x="1" y='0' />;
 ->selfClosed4 : JSX.Element
 -><div x="1" y='0' /> : JSX.Element
@@ -34,7 +34,7 @@
  >div : any
  >x : string
  >y : string
- 
+
  var selfClosed5 = <div x={0} y='0' />;
 ->selfClosed5 : JSX.Element
 -><div x={0} y='0' /> : JSX.Element
@@ -44,7 +44,7 @@
  >x : number
  >0 : 0
  >y : string
- 
+
  var selfClosed6 = <div x={"1"} y='0' />;
 ->selfClosed6 : JSX.Element
 -><div x={"1"} y='0' /> : JSX.Element
@@ -54,7 +54,7 @@
  >x : string
  >"1" : "1"
  >y : string
- 
+
  var selfClosed7 = <div x={p} y='p' />;
 ->selfClosed7 : JSX.Element
 -><div x={p} y='p' /> : JSX.Element
@@ -64,7 +64,7 @@
  >x : any
  >p : any
  >y : string
- 
+
  var openClosed1 = <div></div>;
 ->openClosed1 : JSX.Element
 -><div></div> : JSX.Element
@@ -72,7 +72,7 @@
 +><div></div> : Element
  >div : any
  >div : any
- 
+
  var openClosed2 = <div n='m'>foo</div>;
 ->openClosed2 : JSX.Element
 -><div n='m'>foo</div> : JSX.Element
@@ -81,7 +81,7 @@
  >div : any
  >n : string
  >div : any
- 
+
  var openClosed3 = <div n='m'>{p}</div>;
 ->openClosed3 : JSX.Element
 -><div n='m'>{p}</div> : JSX.Element
@@ -91,7 +91,7 @@
  >n : string
  >p : any
  >div : any
- 
+
  var openClosed4 = <div n='m'>{p < p}</div>;
 ->openClosed4 : JSX.Element
 -><div n='m'>{p < p}</div> : JSX.Element
@@ -102,7 +102,7 @@
  >p < p : boolean
 @@= skipped -79, +79 lines =@@
  >div : any
- 
+
  var openClosed5 = <div n='m'>{p > p}</div>;
 ->openClosed5 : JSX.Element
 -><div n='m'>{p > p}</div> : JSX.Element
@@ -113,7 +113,7 @@
  >p > p : boolean
 @@= skipped -16, +16 lines =@@
  >f : () => void
- 
+
  		var rewrites1 = <div>{() => this}</div>;
 ->rewrites1 : JSX.Element
 -><div>{() => this}</div> : JSX.Element
@@ -123,7 +123,7 @@
  >() => this : () => this
  >this : this
  >div : any
- 
+
  		var rewrites2 = <div>{[p, ...p, p]}</div>;
 ->rewrites2 : JSX.Element
 -><div>{[p, ...p, p]}</div> : JSX.Element
@@ -134,7 +134,7 @@
  >p : any
 @@= skipped -19, +19 lines =@@
  >div : any
- 
+
  		var rewrites3 = <div>{{p}}</div>;
 ->rewrites3 : JSX.Element
 -><div>{{p}}</div> : JSX.Element
@@ -144,7 +144,7 @@
  >{p} : { p: any; }
  >p : any
  >div : any
- 
+
  		var rewrites4 = <div a={() => this}></div>;
 ->rewrites4 : JSX.Element
 -><div a={() => this}></div> : JSX.Element
@@ -155,7 +155,7 @@
  >() => this : () => this
 @@= skipped -17, +17 lines =@@
  >div : any
- 
+
  		var rewrites5 = <div a={[p, ...p, p]}></div>;
 ->rewrites5 : JSX.Element
 -><div a={[p, ...p, p]}></div> : JSX.Element
@@ -166,7 +166,7 @@
  >[p, ...p, p] : any[]
 @@= skipped -12, +12 lines =@@
  >div : any
- 
+
  		var rewrites6 = <div a={{p}}></div>;
 ->rewrites6 : JSX.Element
 -><div a={{p}}></div> : JSX.Element
@@ -177,7 +177,7 @@
  >{p} : { p: any; }
 @@= skipped -11, +11 lines =@@
  }
- 
+
  var whitespace1 = <div>      </div>;
 ->whitespace1 : JSX.Element
 -><div>      </div> : JSX.Element
@@ -185,7 +185,7 @@
 +><div>      </div> : Element
  >div : any
  >div : any
- 
+
  var whitespace2 = <div>  {p}    </div>;
 ->whitespace2 : JSX.Element
 -><div>  {p}    </div> : JSX.Element
@@ -194,12 +194,12 @@
  >div : any
  >p : any
  >div : any
- 
+
  var whitespace3 = <div>  
 ->whitespace3 : JSX.Element
 -><div>        {p}          </div> : JSX.Element
 +>whitespace3 : Element
 +><div>        {p}          </div> : Element
  >div : any
- 
+
        {p}    

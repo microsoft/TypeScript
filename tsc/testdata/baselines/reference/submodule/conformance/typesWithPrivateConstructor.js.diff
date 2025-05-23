@@ -2,7 +2,7 @@
 +++ new.typesWithPrivateConstructor.js
 @@= skipped -16, +16 lines =@@
  var r2: (x: number) => void = c2.constructor;
- 
+
  //// [typesWithPrivateConstructor.js]
 -var C = /** @class */ (function () {
 -    function C() {

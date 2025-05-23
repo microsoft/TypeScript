@@ -1,12 +1,12 @@
 --- old.exportAssignmentConstrainedGenericType.types
 +++ new.exportAssignmentConstrainedGenericType.types
 @@= skipped -1, +1 lines =@@
- 
+
  === foo_1.ts ===
  import foo = require("./foo_0");
 ->foo : typeof foo
 +>foo : typeof Foo
- 
+
  var x = new foo(true); // Should error
 ->x : foo<{ a: string; b: number; }>
 ->new foo(true) : foo<{ a: string; b: number; }>
@@ -15,7 +15,7 @@
 +>new foo(true) : Foo<{ a: string; b: number; }>
 +>foo : typeof Foo
  >true : true
- 
+
  var y = new foo({a: "test", b: 42}); // Should be OK
 ->y : foo<{ a: string; b: number; }>
 ->new foo({a: "test", b: 42}) : foo<{ a: string; b: number; }>
@@ -34,4 +34,3 @@
 +>y : Foo<{ a: string; b: number; }>
  >test : { a: string; b: number; }
  >b : number
- 

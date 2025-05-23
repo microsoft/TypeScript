@@ -1,13 +1,13 @@
 --- old.checkSpecialPropertyAssignments.types
 +++ new.checkSpecialPropertyAssignments.types
 @@= skipped -1, +1 lines =@@
- 
+
  === bug24252.js ===
  var A = {};
 ->A : typeof A
 +>A : {}
  >{} : {}
- 
+
  A.B = class {
  >A.B = class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
 ->A.B : typeof B
@@ -17,5 +17,5 @@
 +>A : {}
 +>B : any
  >class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
- 
+
      m() {

@@ -8,7 +8,7 @@
 +>module : { readonly BaseFactory: { (): Base; Base: typeof Base; }; }
  >exports : { (): Base; Base: typeof Base; }
  >BaseFactory : { (): Base; Base: typeof Base; }
- 
+
 @@= skipped -13, +13 lines =@@
   * @returns {InstanceType<BaseFactory["Base"]>}
   */
@@ -18,5 +18,5 @@
 +>test : (base: Base) => Base
 +>(base) => {    return base;} : (base: Base) => Base
  >base : Base
- 
+
      return base;

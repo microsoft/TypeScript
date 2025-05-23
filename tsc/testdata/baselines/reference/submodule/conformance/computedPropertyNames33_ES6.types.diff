@@ -6,6 +6,6 @@
  >foo<T>() : string
 ->foo : <T_1>() => string
 +>foo : <T>() => string
- 
+
          };
          return 0;

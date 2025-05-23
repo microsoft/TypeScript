@@ -2,7 +2,7 @@
 +++ new.noImplicitAnyParametersInClass.js
 @@= skipped -93, +93 lines =@@
  }
- 
+
  //// [noImplicitAnyParametersInClass.js]
 -var C = /** @class */ (function () {
 -    function C() {
@@ -78,8 +78,7 @@
 -            r[_i] = arguments[_i];
 -        }
 -    };
-+    pub_f6(...r) { }
-     // Implicit-'any'/'any[]' errors for x, r.
+-    // Implicit-'any'/'any[]' errors for x, r.
 -    C.prototype.pub_f7 = function (x) {
 -        var r = [];
 -        for (var _i = 1; _i < arguments.length; _i++) {
@@ -87,6 +86,8 @@
 -        }
 -    };
 -    C.prototype.pub_f8 = function (x3, y3) { };
++    pub_f6(...r) { }
++    // Implicit-'any'/'any[]' errors for x, r.
 +    pub_f7(x, ...r) { }
 +    pub_f8(x3, y3) { }
 +    // No implicit-'any' errors.
@@ -124,8 +125,7 @@
 -            r[_i] = arguments[_i];
 -        }
 -    };
-+    priv_f6(...r) { }
-     // Implicit-'any'/'any[]' errors for x, r.
+-    // Implicit-'any'/'any[]' errors for x, r.
 -    C.prototype.priv_f7 = function (x) {
 -        var r = [];
 -        for (var _i = 1; _i < arguments.length; _i++) {
@@ -135,6 +135,8 @@
 -    C.prototype.priv_f8 = function (x3, y3) { };
 -    return C;
 -}());
++    priv_f6(...r) { }
++    // Implicit-'any'/'any[]' errors for x, r.
 +    priv_f7(x, ...r) { }
 +    priv_f8(x3, y3) { }
 +    // No implicit-'any' errors.

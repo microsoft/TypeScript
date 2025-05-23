@@ -2,17 +2,17 @@
 +++ new.genericWithIndexerOfTypeParameterType1.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 16))
- 
+
      private objects = <{ [objectId: string]: T; }>{};
 ->objects : Symbol(LazyArray.objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
 +>objects : Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
  >objectId : Symbol(objectId, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 26))
  >T : Symbol(T, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 16))
- 
+
      array() {
 ->array : Symbol(LazyArray.array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
 +>array : Symbol(array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
- 
+
          return this.objects;
 ->this.objects : Symbol(LazyArray.objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
 +>this.objects : Symbol(objects, Decl(genericWithIndexerOfTypeParameterType1.ts, 0, 20))
@@ -23,7 +23,7 @@
  }
  var lazyArray = new LazyArray<string>();
 @@= skipped -19, +19 lines =@@
- 
+
  var value: string = lazyArray.array()["test"]; // used to be an error
  >value : Symbol(value, Decl(genericWithIndexerOfTypeParameterType1.ts, 7, 3))
 ->lazyArray.array : Symbol(LazyArray.array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
@@ -31,4 +31,3 @@
  >lazyArray : Symbol(lazyArray, Decl(genericWithIndexerOfTypeParameterType1.ts, 6, 3))
 ->array : Symbol(LazyArray.array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
 +>array : Symbol(array, Decl(genericWithIndexerOfTypeParameterType1.ts, 1, 53))
- 

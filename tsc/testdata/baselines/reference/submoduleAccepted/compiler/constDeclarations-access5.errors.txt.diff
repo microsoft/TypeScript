@@ -19,10 +19,12 @@
 -constDeclarations_access_2.ts(20,5): error TS2540: Cannot assign to 'x' because it is a read-only property.
 -constDeclarations_access_2.ts(22,7): error TS2540: Cannot assign to 'x' because it is a read-only property.
 -constDeclarations_access_2.ts(24,3): error TS2540: Cannot assign to 'x' because it is a read-only property.
-+constDeclarations_access_2.ts(2,20): error TS2307: Cannot find module 'constDeclarations_access_1' or its corresponding type declarations.
- 
- 
+-
+-
 -==== constDeclarations_access_2.ts (18 errors) ====
++constDeclarations_access_2.ts(2,20): error TS2307: Cannot find module 'constDeclarations_access_1' or its corresponding type declarations.
++
++
 +==== constDeclarations_access_2.ts (1 errors) ====
      ///<reference path='constDeclarations_access_1.ts'/>
      import m = require('constDeclarations_access_1');

@@ -1,25 +1,25 @@
 --- old.tsxStatelessFunctionComponents1.types
 +++ new.tsxStatelessFunctionComponents1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  function EmptyPropSFC() {
 ->EmptyPropSFC : () => JSX.Element
 +>EmptyPropSFC : () => Element
- 
+
      return <div> Default Greeting </div>;
 -><div> Default Greeting </div> : JSX.Element
 +><div> Default Greeting </div> : Element
  >div : any
  >div : any
  }
- 
+
  function Greet(x: {name: string}) {
 ->Greet : (x: { name: string; }) => JSX.Element
 +>Greet : (x: { name: string; }) => Element
  >x : { name: string; }
  >name : string
- 
+
  	return <div>Hello, {x}</div>;
 -><div>Hello, {x}</div> : JSX.Element
 +><div>Hello, {x}</div> : Element
@@ -32,7 +32,7 @@
 +>Meet : (__0: { name?: string; }) => Element
  >name : string
  >'world' : "world"
- 
+
  	return <div>Hello, {name}</div>;
 -><div>Hello, {name}</div> : JSX.Element
 +><div>Hello, {name}</div> : Element
@@ -45,14 +45,14 @@
 +>MeetAndGreet : (k: { "prop-name": string; }) => Element
  >k : { "prop-name": string; }
  >"prop-name" : string
- 
+
  	return <div>Hi Hi</div>;
 -><div>Hi Hi</div> : JSX.Element
 +><div>Hi Hi</div> : Element
  >div : any
  >div : any
  }
- 
+
  // OK
  let a = <Greet name='world' />;
 ->a : JSX.Element
@@ -62,7 +62,7 @@
 +><Greet name='world' /> : Element
 +>Greet : (x: { name: string; }) => Element
  >name : string
- 
+
  let a1 = <Greet name='world' extra-prop />;
 ->a1 : JSX.Element
 -><Greet name='world' extra-prop /> : JSX.Element
@@ -72,7 +72,7 @@
 +>Greet : (x: { name: string; }) => Element
  >name : string
  >extra-prop : true
- 
+
  // Error
  let b = <Greet naaame='world' />;
 ->b : JSX.Element
@@ -82,7 +82,7 @@
 +><Greet naaame='world' /> : Element
 +>Greet : (x: { name: string; }) => Element
  >naaame : string
- 
+
  // OK
  let c = <Meet />;
 ->c : JSX.Element
@@ -91,7 +91,7 @@
 +>c : Element
 +><Meet /> : Element
 +>Meet : (__0: { name?: string; }) => Element
- 
+
  let c1 = <Meet extra-prop/>;
 ->c1 : JSX.Element
 -><Meet extra-prop/> : JSX.Element
@@ -100,7 +100,7 @@
 +><Meet extra-prop/> : Element
 +>Meet : (__0: { name?: string; }) => Element
  >extra-prop : true
- 
+
  // OK
  let d = <Meet name='me' />;
 ->d : JSX.Element
@@ -110,7 +110,7 @@
 +><Meet name='me' /> : Element
 +>Meet : (__0: { name?: string; }) => Element
  >name : string
- 
+
  // Error
  let e = <Meet name={42} />;
 ->e : JSX.Element
@@ -121,7 +121,7 @@
 +>Meet : (__0: { name?: string; }) => Element
  >name : number
  >42 : 42
- 
+
  // Error
  let f = <Meet naaaaaaame='no' />;
 ->f : JSX.Element
@@ -131,7 +131,7 @@
 +><Meet naaaaaaame='no' /> : Element
 +>Meet : (__0: { name?: string; }) => Element
  >naaaaaaame : string
- 
+
  // OK
  let g = <MeetAndGreet prop-name="Bob" />;
 ->g : JSX.Element
@@ -141,7 +141,7 @@
 +><MeetAndGreet prop-name="Bob" /> : Element
 +>MeetAndGreet : (k: { "prop-name": string; }) => Element
  >prop-name : string
- 
+
  // Error
  let h = <MeetAndGreet extra-prop-name="World" />;
 ->h : JSX.Element
@@ -151,7 +151,7 @@
 +><MeetAndGreet extra-prop-name="World" /> : Element
 +>MeetAndGreet : (k: { "prop-name": string; }) => Element
  >extra-prop-name : string
- 
+
  // Error
  let i = <EmptyPropSFC prop1 />
 ->i : JSX.Element
@@ -161,7 +161,7 @@
 +><EmptyPropSFC prop1 /> : Element
 +>EmptyPropSFC : () => Element
  >prop1 : true
- 
+
  let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
 ->i1 : JSX.Element
 -><EmptyPropSFC ref={x => x.greeting.substr(10)} /> : JSX.Element
@@ -173,7 +173,7 @@
  >x => x.greeting.substr(10) : (x: any) => any
  >x : any
 @@= skipped -143, +143 lines =@@
- 
+
  // OK as access properties are allow when spread
  let i2 = <EmptyPropSFC {...o} />
 ->i2 : JSX.Element
@@ -183,10 +183,10 @@
 +><EmptyPropSFC {...o} /> : Element
 +>EmptyPropSFC : () => Element
  >o : { prop1: boolean; }
- 
+
  let o1: any;
 @@= skipped -10, +10 lines =@@
- 
+
  // OK
  let j = <EmptyPropSFC {...o1} />
 ->j : JSX.Element
@@ -196,7 +196,7 @@
 +><EmptyPropSFC {...o1} /> : Element
 +>EmptyPropSFC : () => Element
  >o1 : any
- 
+
  let j1 = <EmptyPropSFC />
 ->j1 : JSX.Element
 -><EmptyPropSFC /> : JSX.Element
@@ -204,7 +204,7 @@
 +>j1 : Element
 +><EmptyPropSFC /> : Element
 +>EmptyPropSFC : () => Element
- 
+
  let j2 = <EmptyPropSFC data-prop />
 ->j2 : JSX.Element
 -><EmptyPropSFC data-prop /> : JSX.Element
@@ -213,7 +213,7 @@
 +><EmptyPropSFC data-prop /> : Element
 +>EmptyPropSFC : () => Element
  >data-prop : true
- 
+
  let j3 = <EmptyPropSFC {...{}} />
 ->j3 : JSX.Element
 -><EmptyPropSFC {...{}} /> : JSX.Element
@@ -222,7 +222,7 @@
 +><EmptyPropSFC {...{}} /> : Element
 +>EmptyPropSFC : () => Element
  >{} : {}
- 
+
  let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
 ->j4 : JSX.Element
 -><EmptyPropSFC {...{ "data-info": "hi"}} /> : JSX.Element

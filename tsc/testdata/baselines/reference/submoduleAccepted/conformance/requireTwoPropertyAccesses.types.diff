@@ -1,7 +1,7 @@
 --- old.requireTwoPropertyAccesses.types
 +++ new.requireTwoPropertyAccesses.types
 @@= skipped -1, +1 lines =@@
- 
+
  === requireTwoPropertyAccesses.js ===
  const value = require("./mod").x.y
 ->value : error
@@ -18,7 +18,7 @@
 ->y : string
 +>x : any
 +>y : any
- 
+
  console.log(value)
  >console.log(value) : void
  >console.log : (...data: any[]) => void
@@ -26,7 +26,7 @@
  >log : (...data: any[]) => void
 ->value : error
 +>value : any
- 
+
  === mod.js ===
  module.exports = {
  >module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
@@ -35,4 +35,3 @@
 +>module : { export=: { x: { y: string; }; }; }
  >exports : { x: { y: string; }; }
  >{    x: {        y: "value"    }} : { x: { y: string; }; }
- 

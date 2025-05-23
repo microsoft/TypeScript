@@ -1,11 +1,11 @@
 --- old.es6ModuleInternalNamedImports.types
 +++ new.es6ModuleInternalNamedImports.types
 @@= skipped -27, +27 lines =@@
- 
+
      // enum
      export enum M_E { }
 ->M_E : M_E
 +>M_E : M.M_E
- 
+
      // type
      export type M_T = number;

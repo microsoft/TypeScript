@@ -6,21 +6,21 @@
  function fn1() {
 ->fn1 : () => string
 +>fn1 : () => number
- 
+
    return 42;
  >42 : 42
 @@= skipped -16, +16 lines =@@
- 
+
  /** @type (arg: string) => string */
  function fn3(arg) {
 ->fn3 : (arg: string) => string
 ->arg : string
 +>fn3 : (arg: any) => any
 +>arg : any
- 
+
    return arg;
 ->arg : string
 +>arg : any
  }
- 
+
  /** @type ({ type: 'foo' } | { type: 'bar' }) & { prop: number } */

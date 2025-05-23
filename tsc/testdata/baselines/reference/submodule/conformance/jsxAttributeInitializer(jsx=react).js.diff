@@ -1,8 +1,8 @@
 --- old.jsxAttributeInitializer(jsx=react).js
 +++ new.jsxAttributeInitializer(jsx=react).js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [a.js]
 -React.createElement("div", null,
 -    React.createElement("div", { attr: React.createElement("div", null) }),

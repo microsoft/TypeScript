@@ -6,6 +6,6 @@
  function f1() {
 ->f1 : () => string | undefined
 +>f1 : () => string
- 
+
      return "hello world";
  >"hello world" : "hello world"

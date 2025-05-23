@@ -2,7 +2,7 @@
 +++ new.emptyTuplesTypeAssertion02.js
 @@= skipped -4, +4 lines =@@
  let y = x[0];
- 
+
  //// [emptyTuplesTypeAssertion02.js]
 -var x = [];
 -var y = x[0];

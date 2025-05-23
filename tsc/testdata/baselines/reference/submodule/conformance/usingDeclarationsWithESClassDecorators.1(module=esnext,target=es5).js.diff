@@ -1,7 +1,7 @@
 --- old.usingDeclarationsWithESClassDecorators.1(module=esnext,target=es5).js
 +++ new.usingDeclarationsWithESClassDecorators.1(module=esnext,target=es5).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [usingDeclarationsWithESClassDecorators.1.js]
  var before, C;
 -var env_1 = { stack: [], error: void 0, hasError: false };

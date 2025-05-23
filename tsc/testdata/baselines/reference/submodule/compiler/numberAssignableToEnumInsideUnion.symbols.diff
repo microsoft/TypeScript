@@ -8,6 +8,6 @@
 ->B : Symbol(E.B, Decl(numberAssignableToEnumInsideUnion.ts, 0, 11))
 +>A : Symbol(A, Decl(numberAssignableToEnumInsideUnion.ts, 0, 8))
 +>B : Symbol(B, Decl(numberAssignableToEnumInsideUnion.ts, 0, 11))
- 
+
  let n: number;
  >n : Symbol(n, Decl(numberAssignableToEnumInsideUnion.ts, 1, 3))

@@ -3,7 +3,7 @@
 @@= skipped -8, +8 lines =@@
  class Bar extends Error {}
  export = Bar;
- 
+
 -//// [Foo.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

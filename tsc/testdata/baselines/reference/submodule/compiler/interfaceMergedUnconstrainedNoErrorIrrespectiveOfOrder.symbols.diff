@@ -2,7 +2,7 @@
 +++ new.interfaceMergedUnconstrainedNoErrorIrrespectiveOfOrder.symbols
 @@= skipped -10, +10 lines =@@
  >args : Symbol(args, Decl(working.ts, 2, 34))
- 
+
          throttle(): Function<T>;
 ->throttle : Symbol(Function.throttle, Decl(working.ts, 2, 57))
 +>throttle : Symbol(throttle, Decl(working.ts, 2, 57))
@@ -11,7 +11,7 @@
      }
 @@= skipped -9, +9 lines =@@
  >T : Symbol(T, Decl(working.ts, 2, 23), Decl(working.ts, 5, 23))
- 
+
          unary(): Function<() => ReturnType<T>>;
 ->unary : Symbol(Function.unary, Decl(working.ts, 5, 27))
 +>unary : Symbol(unary, Decl(working.ts, 5, 27))
@@ -20,7 +20,7 @@
  >T : Symbol(T, Decl(working.ts, 2, 23), Decl(working.ts, 5, 23))
 @@= skipped -15, +15 lines =@@
  >T : Symbol(T, Decl(regression.ts, 1, 23), Decl(regression.ts, 4, 23))
- 
+
          unary(): Function<() => ReturnType<T>>;
 ->unary : Symbol(Function.unary, Decl(regression.ts, 1, 27))
 +>unary : Symbol(unary, Decl(regression.ts, 1, 27))
@@ -29,7 +29,7 @@
  >T : Symbol(T, Decl(regression.ts, 1, 23), Decl(regression.ts, 4, 23))
 @@= skipped -11, +11 lines =@@
  >args : Symbol(args, Decl(regression.ts, 4, 34))
- 
+
          throttle(): Function<T>;
 ->throttle : Symbol(Function.throttle, Decl(regression.ts, 4, 57))
 +>throttle : Symbol(throttle, Decl(regression.ts, 4, 57))

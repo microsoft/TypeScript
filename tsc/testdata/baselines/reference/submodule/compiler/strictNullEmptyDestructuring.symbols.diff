@@ -2,21 +2,21 @@
 +++ new.strictNullEmptyDestructuring.symbols
 @@= skipped -15, +15 lines =@@
  >undefined : Symbol(undefined)
- 
+
  let { } = Math.random() ? {} : null;
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
- 
+
  ({} = Math.random() ? {} : null);
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
- 
+
  let { } = Math.random() ? {} : undefined;
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
@@ -24,7 +24,7 @@
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >undefined : Symbol(undefined)
- 
+
  ({} = Math.random() ? {} : undefined);
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
@@ -32,7 +32,7 @@
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >undefined : Symbol(undefined)
- 
+
  let { } = Math.random() ? null : undefined;
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
@@ -40,7 +40,7 @@
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >undefined : Symbol(undefined)
- 
+
  ({} = Math.random() ? null : undefined);
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
@@ -48,4 +48,3 @@
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >undefined : Symbol(undefined)
- 

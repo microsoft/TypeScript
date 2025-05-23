@@ -1,12 +1,12 @@
 --- old.tsxStatelessFunctionComponentsWithTypeArguments1.types
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  import React = require('react')
 ->React : typeof React
 +>React : typeof __React
- 
+
  declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 ->ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
 +>ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => Element
@@ -15,7 +15,7 @@
  >value : V
 @@= skipped -16, +16 lines =@@
  >value : U
- 
+
      let a0 = <ComponentWithTwoAttributes key1={key1} value={value} />
 ->a0 : JSX.Element
 -><ComponentWithTwoAttributes key1={key1} value={value} /> : JSX.Element
@@ -27,7 +27,7 @@
  >key1 : T
  >value : U
  >value : U
- 
+
      let a1 = <ComponentWithTwoAttributes {...{key1, value: value}} key="Component" />
 ->a1 : JSX.Element
 -><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : JSX.Element
@@ -40,7 +40,7 @@
  >value : U
 @@= skipped -20, +20 lines =@@
  }
- 
+
  declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 ->Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
 +>Link : <U>(l: { func: (arg: U) => void; }) => Element
@@ -49,7 +49,7 @@
  >arg : U
 @@= skipped -13, +13 lines =@@
  >a : number
- 
+
      let o = <Link func={func} />
 ->o : JSX.Element
 -><Link func={func} /> : JSX.Element
@@ -62,7 +62,7 @@
  }
 @@= skipped -13, +13 lines =@@
  >a : number
- 
+
      let o = <Link func={func} />
 ->o : JSX.Element
 -><Link func={func} /> : JSX.Element
@@ -75,13 +75,13 @@
  }
 @@= skipped -17, +17 lines =@@
  }
- 
+
  declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 ->InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
 +>InferParamComponent : <T>(attr: InferParamProp<T>) => Element
  >attr : InferParamProp<T>
  >JSX : any
- 
+
  // OK
  let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;
 ->i : JSX.Element

@@ -1,8 +1,8 @@
 --- old.importHelpersWithLocalCollisions(module=system).js
 +++ new.importHelpersWithLocalCollisions(module=system).js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [a.js]
 -System.register(["tslib"], function (exports_1, context_1) {
 -    "use strict";

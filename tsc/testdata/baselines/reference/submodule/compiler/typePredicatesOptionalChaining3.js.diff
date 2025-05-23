@@ -1,8 +1,8 @@
 --- old.typePredicatesOptionalChaining3.js
 +++ new.typePredicatesOptionalChaining3.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [typePredicatesOptionalChaining3.js]
 -"use strict";
  function getBreedSizeWithoutFunction(animal) {

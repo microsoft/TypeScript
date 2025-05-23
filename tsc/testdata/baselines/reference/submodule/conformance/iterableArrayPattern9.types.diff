@@ -1,7 +1,7 @@
 --- old.iterableArrayPattern9.types
 +++ new.iterableArrayPattern9.types
 @@= skipped -1, +1 lines =@@
- 
+
  === iterableArrayPattern9.ts ===
  function fun([a, b] = new FooIterator) { }
 ->fun : ([a, b]?: FooIterator) => void

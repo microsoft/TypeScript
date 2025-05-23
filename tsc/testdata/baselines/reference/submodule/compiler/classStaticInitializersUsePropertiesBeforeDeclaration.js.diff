@@ -1,8 +1,8 @@
 --- old.classStaticInitializersUsePropertiesBeforeDeclaration.js
 +++ new.classStaticInitializersUsePropertiesBeforeDeclaration.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [classStaticInitializersUsePropertiesBeforeDeclaration.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

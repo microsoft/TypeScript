@@ -6,7 +6,7 @@
  function Multimap() {
 ->Multimap : typeof Multimap
 +>Multimap : <K extends string, V>() => void
- 
+
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
 ->this._map = {} : {}
@@ -19,7 +19,7 @@
 +>_map : any
 +>{} : any
  >{} : {}
- 
+
  };
 @@= skipped -17, +18 lines =@@
   * @returns {V} the value ok
@@ -37,7 +37,7 @@
 ->key : K
 +>function (key) {    return this._map[key + ''];} : (key: any) => any
 +>key : any
- 
+
      return this._map[key + ''];
 ->this._map[key + ''] : V
 ->this._map : { [x: string]: V; }
@@ -52,7 +52,7 @@
 +>key : any
  >'' : ""
  }
- 
+
 @@= skipped -26, +26 lines =@@
   * @template V
   */
@@ -61,7 +61,7 @@
 ->function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : typeof Multimap2
 +>Multimap2 : <K extends string, V>() => void
 +>function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : <K extends string, V>() => void
- 
+
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
 ->this._map = {} : {}
@@ -74,7 +74,7 @@
 +>_map : any
 +>{} : any
  >{} : {}
- 
+
  };
 @@= skipped -18, +19 lines =@@
   * @returns {V} the value ok
@@ -92,7 +92,7 @@
 ->key : K
 +>function (key) {    return this._map[key + ''];} : (key: any) => any
 +>key : any
- 
+
      return this._map[key + ''];
 ->this._map[key + ''] : V
 ->this._map : { [x: string]: V; }
@@ -107,12 +107,12 @@
 +>key : any
  >'' : ""
  }
- 
+
  var Ns = {};
 ->Ns : typeof Ns
 +>Ns : {}
  >{} : {}
- 
+
  /**
 @@= skipped -30, +30 lines =@@
   * @template V
@@ -128,7 +128,7 @@
 +>Ns : {}
 +>Multimap3 : any
 +>function() {    /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */    this._map = {};} : () => void
- 
+
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
 ->this._map = {} : {}
@@ -141,7 +141,7 @@
 +>_map : any
 +>{} : any
  >{} : {}
- 
+
  };
 @@= skipped -21, +22 lines =@@
   * @returns {V} the value ok
@@ -163,7 +163,7 @@
 ->key : K
 +>function (key) {    return this._map[key + ''];} : (key: any) => any
 +>key : any
- 
+
      return this._map[key + ''];
 ->this._map[key + ''] : V
 ->this._map : { [x: string]: V; }
@@ -178,4 +178,3 @@
 +>key : any
  >'' : ""
  }
- 

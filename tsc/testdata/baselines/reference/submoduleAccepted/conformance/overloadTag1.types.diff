@@ -8,7 +8,7 @@
 +>overloaded : (a: string | number, b: string | number) => string | number
  >a : string | number
  >b : string | number
- 
+
 @@= skipped -42, +42 lines =@@
  >"Invalid arguments" : "Invalid arguments"
  }
@@ -21,7 +21,7 @@
 +>overloaded : (a: string | number, b: string | number) => string | number
  >1 : 1
  >2 : 2
- 
+
  var o2 = overloaded("zero", "one")
 ->o2 : never
 ->overloaded("zero", "one") : never
@@ -31,7 +31,7 @@
 +>overloaded : (a: string | number, b: string | number) => string | number
  >"zero" : "zero"
  >"one" : "one"
- 
+
  var o3 = overloaded("a",false)
 ->o3 : string
 ->overloaded("a",false) : string
@@ -41,7 +41,7 @@
 +>overloaded : (a: string | number, b: string | number) => string | number
  >"a" : "a"
  >false : false
- 
+
 @@= skipped -32, +32 lines =@@
   * @returns {string}
   */
@@ -50,7 +50,7 @@
 +>uncheckedInternally : (a: any, b: any) => any
  >a : any
  >b : any
- 
+
 @@= skipped -10, +10 lines =@@
  >b : any
  }
@@ -61,7 +61,7 @@
 +>uncheckedInternally : (a: any, b: any) => any
  >1 : 1
  >2 : 2
- 
+
  uncheckedInternally("zero", "one")
 ->uncheckedInternally("zero", "one") : never
 ->uncheckedInternally : { (a: number, b: number): number; (a: string, b: boolean): string; }
@@ -69,4 +69,3 @@
 +>uncheckedInternally : (a: any, b: any) => any
  >"zero" : "zero"
  >"one" : "one"
- 

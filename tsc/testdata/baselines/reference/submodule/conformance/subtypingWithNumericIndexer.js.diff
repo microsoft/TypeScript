@@ -2,7 +2,7 @@
 +++ new.subtypingWithNumericIndexer.js
 @@= skipped -41, +41 lines =@@
  }
- 
+
  //// [subtypingWithNumericIndexer.js]
 -// Derived type indexer must be subtype of base type indexer
 -var __extends = (this && this.__extends) || (function () {
@@ -22,36 +22,31 @@
 -})();
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+}
-+class B extends A {
-+}
-+class B2 extends A {
-+}
-+var Generics;
-+(function (Generics) {
-+    class A {
-     }
+-    }
 -    return A;
 -}());
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    class B extends A {
-     }
+-    }
 -    return B;
 -}(A));
 -var B2 = /** @class */ (function (_super) {
 -    __extends(B2, _super);
 -    function B2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    class B2 extends A {
-     }
+-    }
 -    return B2;
 -}(A));
--var Generics;
--(function (Generics) {
++class A {
++}
++class B extends A {
++}
++class B2 extends A {
++}
+ var Generics;
+ (function (Generics) {
 -    var A = /** @class */ (function () {
 -        function A() {
 -        }
@@ -85,6 +80,12 @@
 -        }
 -        return B4;
 -    }(A));
++    class A {
++    }
++    class B extends A {
++    }
++    class B2 extends A {
++    }
 +    class B3 extends A {
 +    }
 +    class B4 extends A {

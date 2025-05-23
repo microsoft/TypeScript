@@ -1,8 +1,8 @@
 --- old.restElementAssignable.js
 +++ new.restElementAssignable.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [restElementAssignable.js]
 -"use strict";
 -var __rest = (this && this.__rest) || function (s, e) {

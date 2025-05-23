@@ -18,7 +18,7 @@
 @@= skipped -17, +17 lines =@@
      <Foo />
      <Foo />
- 
+
 -    {/* JsxOpeningElement */}
 +    
      <Foo></Foo>

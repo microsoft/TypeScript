@@ -1,7 +1,7 @@
 --- old.jsContainerMergeTsDeclaration.types
 +++ new.jsContainerMergeTsDeclaration.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  var /*1*/x = function foo() {
 ->x : { (): void; a(): void; }
@@ -28,4 +28,3 @@
 +>x : () => void
  >function () {    return 1;}() : number
  >function () {    return 1;} : () => number
- 

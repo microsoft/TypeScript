@@ -1,8 +1,8 @@
 --- old.exportEqualCallable.js
 +++ new.exportEqualCallable.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [exportEqualCallable_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

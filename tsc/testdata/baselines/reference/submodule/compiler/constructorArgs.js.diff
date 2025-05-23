@@ -1,8 +1,8 @@
 --- old.constructorArgs.js
 +++ new.constructorArgs.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [constructorArgs.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var Super = /** @class */ (function () {
 -    function Super(value) {
-+class Super {
-+    constructor(value) {
-     }
+-    }
 -    return Super;
 -}());
 -var Sub = /** @class */ (function (_super) {
@@ -32,13 +30,17 @@
 -        var _this = _super.call(this, options.value) || this;
 -        _this.options = options;
 -        return _this;
+-    }
+-    return Sub;
+-}(Super));
++class Super {
++    constructor(value) {
++    }
 +}
 +class Sub extends Super {
 +    options;
 +    constructor(options) {
 +        super(options.value);
 +        this.options = options;
-     }
--    return Sub;
--}(Super));
++    }
 +}

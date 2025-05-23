@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndLocalFunctionInMethod.js
 @@= skipped -30, +30 lines =@@
  }
- 
+
  //// [collisionSuperAndLocalFunctionInMethod.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -25,10 +25,8 @@
 -    function Foo() {
 -    }
 -    Foo.prototype.x = function () {
-+class Foo {
-+    x() {
-         function _super() {
-         }
+-        function _super() {
+-        }
 -    };
 -    Foo.prototype._super = function () {
 -    };
@@ -38,15 +36,10 @@
 -    __extends(b, _super_1);
 -    function b() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
-     }
+-    }
 -    b.prototype.foo = function () {
-+    _super() {
-+    }
-+}
-+class b extends Foo {
-+    foo() {
-         function _super() {
-         }
+-        function _super() {
+-        }
 -    };
 -    b.prototype._super = function () {
 -    };
@@ -56,9 +49,22 @@
 -    __extends(c, _super_1);
 -    function c() {
 -        return _super_1 !== null && _super_1.apply(this, arguments) || this;
-     }
+-    }
 -    c.prototype.foo = function () {
 -        var x = function () {
++class Foo {
++    x() {
++        function _super() {
++        }
++    }
++    _super() {
++    }
++}
++class b extends Foo {
++    foo() {
++        function _super() {
++        }
++    }
 +    _super() {
 +    }
 +}

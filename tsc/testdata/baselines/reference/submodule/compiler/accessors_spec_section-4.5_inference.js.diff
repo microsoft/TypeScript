@@ -2,7 +2,7 @@
 +++ new.accessors_spec_section-4.5_inference.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [accessors_spec_section-4.5_inference.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.derivedClassFunctionOverridesBaseClassAccessor.js
 @@= skipped -16, +16 lines =@@
  }
- 
+
  //// [derivedClassFunctionOverridesBaseClassAccessor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,10 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
-+class Base {
-+    get x() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(Base.prototype, "x", {
 -        get: function () {
 -            return 1;
@@ -36,16 +33,20 @@
 -    });
 -    return Base;
 -}());
--// error
++class Base {
++    get x() {
++        return 1;
++    }
++    set x(v) {
++    }
++}
+ // error
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    set x(v) {
-     }
+-    }
 -    Derived.prototype.x = function () {
-+}
-+// error
 +class Derived extends Base {
 +    x() {
          return 1;

@@ -1,12 +1,12 @@
 --- old.cachedContextualTypes.types
 +++ new.cachedContextualTypes.types
 @@= skipped -10, +10 lines =@@
- 
+
  export interface IMenuWorkbenchToolBarOptions {
      toolbarOptions: {
 ->toolbarOptions : { foo(bar: string): string; }
 +>toolbarOptions : { foo: (bar: string) => string; }
- 
+
          foo(bar: string): string
  >foo : (bar: string) => string
 @@= skipped -23, +23 lines =@@
@@ -15,12 +15,12 @@
  >MenuWorkbenchToolBar : typeof MenuWorkbenchToolBar
 ->{    toolbarOptions: {        foo(bar) { return bar; }    }} : { toolbarOptions: { foo(bar: string): string; }; }
 +>{    toolbarOptions: {        foo(bar) { return bar; }    }} : { toolbarOptions: { foo: (bar: string) => string; }; }
- 
+
      toolbarOptions: {
 ->toolbarOptions : { foo(bar: string): string; }
 ->{        foo(bar) { return bar; }    } : { foo(bar: string): string; }
 +>toolbarOptions : { foo: (bar: string) => string; }
 +>{        foo(bar) { return bar; }    } : { foo: (bar: string) => string; }
- 
+
          foo(bar) { return bar; }
  >foo : (bar: string) => string

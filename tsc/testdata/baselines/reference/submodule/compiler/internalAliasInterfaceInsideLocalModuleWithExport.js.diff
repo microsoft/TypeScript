@@ -1,8 +1,8 @@
 --- old.internalAliasInterfaceInsideLocalModuleWithExport.js
 +++ new.internalAliasInterfaceInsideLocalModuleWithExport.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [internalAliasInterfaceInsideLocalModuleWithExport.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,8 +1,8 @@
 --- old.derivedClassSuperStatementPosition.js
 +++ new.derivedClassSuperStatementPosition.js
 @@= skipped -98, +98 lines =@@
- 
- 
+
+
  //// [derivedClassSuperStatementPosition.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -25,11 +25,7 @@
 -        var _this = _super.call(this) || this;
 -        _this.prop = 1;
 -        return _this;
-+class DerivedBasic extends Object {
-+    prop = 1;
-+    constructor() {
-+        super();
-     }
+-    }
 -    return DerivedBasic;
 -}(Object));
 -var DerivedAfterParameterDefault = /** @class */ (function (_super) {
@@ -41,15 +37,7 @@
 -        _this = _super.call(this, x) || this;
 -        _this.x2 = x;
 -        return _this;
-+}
-+class DerivedAfterParameterDefault extends Object {
-+    x1;
-+    x2;
-+    constructor(x = false) {
-+        this.x1 = x;
-+        super(x);
-+        this.x2 = x;
-     }
+-    }
 -    return DerivedAfterParameterDefault;
 -}(Object));
 -var DerivedAfterRestParameter = /** @class */ (function (_super) {
@@ -64,6 +52,27 @@
 -        _this = _super.call(this, x) || this;
 -        _this.x2 = x;
 -        return _this;
+-    }
+-    return DerivedAfterRestParameter;
+-}(Object));
+-var DerivedComments = /** @class */ (function (_super) {
+-    __extends(DerivedComments, _super);
+-    function DerivedComments() {
+-        var _this = this;
++class DerivedBasic extends Object {
++    prop = 1;
++    constructor() {
++        super();
++    }
++}
++class DerivedAfterParameterDefault extends Object {
++    x1;
++    x2;
++    constructor(x = false) {
++        this.x1 = x;
++        super(x);
++        this.x2 = x;
++    }
 +}
 +class DerivedAfterRestParameter extends Object {
 +    x1;
@@ -72,13 +81,7 @@
 +        this.x1 = x;
 +        super(x);
 +        this.x2 = x;
-     }
--    return DerivedAfterRestParameter;
--}(Object));
--var DerivedComments = /** @class */ (function (_super) {
--    __extends(DerivedComments, _super);
--    function DerivedComments() {
--        var _this = this;
++    }
 +}
 +class DerivedComments extends Object {
 +    x;

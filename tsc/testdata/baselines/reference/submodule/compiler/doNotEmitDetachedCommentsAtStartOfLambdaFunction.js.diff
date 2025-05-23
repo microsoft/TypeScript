@@ -1,26 +1,30 @@
 --- old.doNotEmitDetachedCommentsAtStartOfLambdaFunction.js
 +++ new.doNotEmitDetachedCommentsAtStartOfLambdaFunction.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [doNotEmitDetachedCommentsAtStartOfLambdaFunction.js]
 -(function () {
-+() => {
-     return 0;
+-    return 0;
 -});
 -(function () {
-+};
-+() => {
-     return 0;
+-    return 0;
 -});
 -(function () {
-+};
-+() => {
-     return 0;
+-    return 0;
 -});
 -(function () {
+-    return 0;
+-});
++() => {
++    return 0;
 +};
 +() => {
-     return 0;
--});
++    return 0;
++};
++() => {
++    return 0;
++};
++() => {
++    return 0;
 +};

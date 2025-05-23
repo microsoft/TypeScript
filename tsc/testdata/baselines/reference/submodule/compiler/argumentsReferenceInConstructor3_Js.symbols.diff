@@ -2,11 +2,11 @@
 +++ new.argumentsReferenceInConstructor3_Js.symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(a.js, 0, 0))
- 
+
  	get arguments() {
 ->arguments : Symbol(A.arguments, Decl(a.js, 0, 9))
 +>arguments : Symbol(arguments, Decl(a.js, 0, 9))
- 
+
  		return { bar: {} };
  >bar : Symbol(bar, Decl(a.js, 2, 10))
 @@= skipped -26, +26 lines =@@
@@ -19,7 +19,7 @@
 ->foo : Symbol(B.foo, Decl(a.js, 13, 10))
 +>foo : Symbol(foo, Decl(a.js, 13, 10))
  >foo : Symbol(foo, Decl(a.js, 12, 13))
- 
+
  		/**
  		 * @type object
  		 */
@@ -36,4 +36,3 @@
 +>arguments : Symbol(arguments, Decl(a.js, 0, 9))
  	}
  }
- 

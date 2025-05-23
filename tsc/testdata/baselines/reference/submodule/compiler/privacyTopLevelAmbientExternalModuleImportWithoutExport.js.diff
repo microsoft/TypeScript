@@ -1,7 +1,7 @@
 --- old.privacyTopLevelAmbientExternalModuleImportWithoutExport.js
 +++ new.privacyTopLevelAmbientExternalModuleImportWithoutExport.js
 @@= skipped -48, +48 lines =@@
- 
+
  //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.js]
  //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.js]
 -//// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.js]

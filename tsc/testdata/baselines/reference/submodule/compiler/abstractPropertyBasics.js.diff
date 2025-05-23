@@ -2,7 +2,7 @@
 +++ new.abstractPropertyBasics.js
 @@= skipped -23, +23 lines =@@
  }
- 
+
  //// [abstractPropertyBasics.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.narrowingOfQualifiedNames.js
 @@= skipped -88, +88 lines =@@
  }
- 
+
  //// [narrowingOfQualifiedNames.js]
 -"use strict";
 -// Repro from #43411

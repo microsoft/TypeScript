@@ -1,8 +1,8 @@
 --- old.defaultParameterAddsUndefinedWithStrictNullChecks.js
 +++ new.defaultParameterAddsUndefinedWithStrictNullChecks.js
 @@= skipped -61, +61 lines =@@
- 
- 
+
+
  //// [defaultParameterAddsUndefinedWithStrictNullChecks.js]
 -function f(addUndefined1, addUndefined2) {
 -    if (addUndefined1 === void 0) { addUndefined1 = "J"; }

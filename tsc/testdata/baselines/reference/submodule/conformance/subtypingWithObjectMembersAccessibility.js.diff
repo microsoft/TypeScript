@@ -1,7 +1,7 @@
 --- old.subtypingWithObjectMembersAccessibility.js
 +++ new.subtypingWithObjectMembersAccessibility.js
 @@= skipped -36, +36 lines =@@
- 
+
  //// [subtypingWithObjectMembersAccessibility.js]
  // Derived member is private, base member is not causes errors
 -var __extends = (this && this.__extends) || (function () {

@@ -2,7 +2,7 @@
 +++ new.getterSetterNonAccessor.symbols
 @@= skipped -8, +8 lines =@@
  >v : Symbol(v, Decl(getterSetterNonAccessor.ts, 1, 17))
- 
+
  Object.defineProperty({}, "0", <PropertyDescriptor>({
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -10,5 +10,5 @@
 ->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
- 
+
            get: getFunc,

@@ -2,7 +2,7 @@
 +++ new.parameterPropertyInitializerInInitializers.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [parameterPropertyInitializerInInitializers.js]
 -var Foo = /** @class */ (function () {
 -    function Foo(x, y) {

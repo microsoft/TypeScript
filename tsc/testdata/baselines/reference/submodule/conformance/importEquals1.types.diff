@@ -1,30 +1,30 @@
 --- old.importEquals1.types
 +++ new.importEquals1.types
 @@= skipped -5, +5 lines =@@
- 
+
  === /b.ts ===
  import type * as types from './a';
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  export = types; // Error
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  === /c.ts ===
  import * as types from './a';
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  export = types;
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  === /d.ts ===
  import types from './b';
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  new types.A(); // Error
 ->new types.A() : types.A
 ->types.A : typeof types.A
@@ -34,12 +34,12 @@
 +>types.A : typeof A
 +>types : typeof import("/a")
 +>A : typeof A
- 
+
  === /e.ts ===
  import types = require('./b');
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  new types.A(); // Error
 ->new types.A() : types.A
 ->types.A : typeof types.A
@@ -49,12 +49,12 @@
 +>types.A : typeof A
 +>types : typeof import("/a")
 +>A : typeof A
- 
+
  === /f.ts ===
  import * as types from './b';
 ->types : typeof types
 +>types : typeof import("/a")
- 
+
  new types.A(); // Error
 ->new types.A() : types.A
 ->types.A : typeof types.A
@@ -64,11 +64,11 @@
 +>types.A : typeof A
 +>types : typeof import("/a")
 +>A : typeof A
- 
+
  === /g.ts ===
  import type types from './c'
  >types : any
- 
+
  new types.A(); // Error
 ->new types.A() : types.A
 ->types.A : typeof types.A
@@ -78,4 +78,3 @@
 +>types.A : typeof A
 +>types : typeof import("/a")
 +>A : typeof A
- 

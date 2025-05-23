@@ -1,7 +1,7 @@
 --- old.metadataImportType.js
 +++ new.metadataImportType.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [metadataImportType.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

@@ -1,6 +1,6 @@
 --- old.optionsStrictPropertyInitializationStrictNullChecks.errors.txt
 +++ new.optionsStrictPropertyInitializationStrictNullChecks.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5052: Option 'strictPropertyInitialization' cannot be specified without specifying option 'strictNullChecks'.
 -
 -
@@ -8,5 +8,4 @@
 -==== optionsStrictPropertyInitializationStrictNullChecks.ts (0 errors) ====
 -    var x;
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

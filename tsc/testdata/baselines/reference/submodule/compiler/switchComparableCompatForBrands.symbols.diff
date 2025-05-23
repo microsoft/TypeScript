@@ -7,5 +7,5 @@
 ->_a : Symbol(MyBrand._a, Decl(switchComparableCompatForBrands.ts, 1, 1))
 +>_a : Symbol(_a, Decl(switchComparableCompatForBrands.ts, 1, 1))
  }
- 
+
  function test(strInput: string & MyBrand) {

@@ -1,7 +1,7 @@
 --- old.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js
 +++ new.typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [typePartameterConstraintInstantiatedWithDefaultWhenCheckingDefault.js]
  // implement
 -var Identity = /** @class */ (function () {
@@ -17,11 +17,13 @@
 -    };
 -    return Identity;
 -}());
+-;
+-var test1;
+-;
+-var test2;
 +    }
 +}
- ;
--var test1;
++;
 +let test1;
- ;
--var test2;
++;
 +let test2;

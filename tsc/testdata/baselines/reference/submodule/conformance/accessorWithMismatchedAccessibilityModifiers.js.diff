@@ -2,14 +2,11 @@
 +++ new.accessorWithMismatchedAccessibilityModifiers.js
 @@= skipped -33, +33 lines =@@
  }
- 
+
  //// [accessorWithMismatchedAccessibilityModifiers.js]
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    get x() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(C.prototype, "x", {
 -        get: function () {
 -            return 1;
@@ -23,8 +20,7 @@
 -}());
 -var D = /** @class */ (function () {
 -    function D() {
-+    set x(v) {
-     }
+-    }
 -    Object.defineProperty(D.prototype, "x", {
 -        get: function () {
 -            return 1;
@@ -38,11 +34,7 @@
 -}());
 -var E = /** @class */ (function () {
 -    function E() {
-+}
-+class D {
-+    get x() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(E.prototype, "x", {
 -        get: function () {
 -            return 1;
@@ -56,8 +48,7 @@
 -}());
 -var F = /** @class */ (function () {
 -    function F() {
-+    set x(v) {
-     }
+-    }
 -    Object.defineProperty(F, "x", {
 -        get: function () {
 -            return 1;
@@ -69,6 +60,19 @@
 -    });
 -    return F;
 -}());
++class C {
++    get x() {
++        return 1;
++    }
++    set x(v) {
++    }
++}
++class D {
++    get x() {
++        return 1;
++    }
++    set x(v) {
++    }
 +}
 +class E {
 +    set x(v) {

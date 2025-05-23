@@ -11,12 +11,12 @@
  >prototype : Point
 ->{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
 +>{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => Point; }
- 
+
      x: 0,
  >x : number
 @@= skipped -15, +15 lines =@@
  >0 : 0
- 
+
      add: function(dx, dy) {
 ->add : (dx: number, dy: number) => Point
 ->function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
@@ -26,7 +26,7 @@
 +>function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: any, dy: any) => Point
 +>dx : any
 +>dy : any
- 
+
          return new Point(this.x + dx, this.y + dy);
  >new Point(this.x + dx, this.y + dy) : Point
 @@= skipped -12, +12 lines =@@
@@ -43,26 +43,26 @@
 +>dy : any
      }
  };
- 
+
 @@= skipped -62, +62 lines =@@
  }
- 
+
  C.prototype = 
 ->C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
 +>C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: any, d: any) => any; }
  >C.prototype : C
  >C : typeof C
  >prototype : C
- 
+
  	{	a:0,
 ->{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
 +>{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: any, d: any) => any; }
  >a : number
  >0 : 0
- 
+
 @@= skipped -15, +15 lines =@@
  >0 : 0
- 
+
  		C1M1: function(c,d) {     
 ->C1M1 : (c: number, d: number) => any
 ->function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: number, d: number) => any
@@ -72,7 +72,7 @@
 +>function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: any, d: any) => any
 +>c : any
 +>d : any
- 
+
  				return (this.a + c) + (this.b + d);
  >(this.a + c) + (this.b + d) : any
 @@= skipped -12, +12 lines =@@
@@ -90,4 +90,3 @@
 +>d : any
  			}
  	};
- 

@@ -1,6 +1,6 @@
 --- old.jsFileCompilationEnumSyntax.errors.txt
 +++ new.jsFileCompilationEnumSyntax.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5055: Cannot write file 'a.js' because it would overwrite input file.
 -  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 -a.js(1,6): error TS8006: 'enum' declarations can only be used in TypeScript files.
@@ -12,5 +12,4 @@
 -    enum E { }
 -         ~
 -!!! error TS8006: 'enum' declarations can only be used in TypeScript files.
-@@= skipped --1, +1 lines =@@
 +<no content>

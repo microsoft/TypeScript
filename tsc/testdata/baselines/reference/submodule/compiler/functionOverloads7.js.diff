@@ -1,8 +1,8 @@
 --- old.functionOverloads7.js
 +++ new.functionOverloads7.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [functionOverloads7.js]
 -var foo = /** @class */ (function () {
 -    function foo() {

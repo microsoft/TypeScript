@@ -1,8 +1,8 @@
 --- old.deepKeysIndexing.js
 +++ new.deepKeysIndexing.js
 @@= skipped -58, +58 lines =@@
- 
- 
+
+
  //// [deepKeysIndexing.js]
 -var Bar = /** @class */ (function () {
 -    function Bar() {

@@ -6,9 +6,8 @@
  >a : any
 ->I : b
 +>I : I
- 
+
      export var x: b;
 ->x : b
 +>x : I
  }
- 

@@ -1,6 +1,6 @@
 --- old.isolatedDeclarationErrorsEnums.errors.txt
 +++ new.isolatedDeclarationErrorsEnums.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -isolatedDeclarationErrorsEnums.ts(12,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 -isolatedDeclarationErrorsEnums.ts(13,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 -isolatedDeclarationErrorsEnums.ts(29,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
@@ -71,5 +71,4 @@
 -        ~~
 -!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

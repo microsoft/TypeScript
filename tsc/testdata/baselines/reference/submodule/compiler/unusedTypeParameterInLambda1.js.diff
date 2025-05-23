@@ -2,7 +2,7 @@
 +++ new.unusedTypeParameterInLambda1.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [unusedTypeParameterInLambda1.js]
 -var A = /** @class */ (function () {
 -    function A() {

@@ -10,5 +10,5 @@
 ->p : any
 +>p : number
  >1 : 1
- 
+
  // Property assignment does nothing.

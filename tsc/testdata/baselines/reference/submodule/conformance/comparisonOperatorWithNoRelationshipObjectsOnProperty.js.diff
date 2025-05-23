@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnProperty.js
 @@= skipped -78, +78 lines =@@
  var r8b2 = b2 !== a2;
- 
+
  //// [comparisonOperatorWithNoRelationshipObjectsOnProperty.js]
 -var A1 = /** @class */ (function () {
 -    function A1() {

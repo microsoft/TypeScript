@@ -1,7 +1,7 @@
 --- old.jsxHash.types
 +++ new.jsxHash.types
 @@= skipped -1, +1 lines =@@
- 
+
  === jsxHash.tsx ===
  var t02 = <a>{0}#</a>;
 ->t02 : error
@@ -11,7 +11,7 @@
  >a : any
  >0 : 0
  >a : any
- 
+
  var t03 = <a>#{0}</a>;
 ->t03 : error
 -><a>#{0}</a> : error
@@ -20,7 +20,7 @@
  >a : any
  >0 : 0
  >a : any
- 
+
  var t04 = <a>#{0}#</a>;
 ->t04 : error
 -><a>#{0}#</a> : error
@@ -29,7 +29,7 @@
  >a : any
  >0 : 0
  >a : any
- 
+
  var t05 = <a>#<i></i></a>;
 ->t05 : error
 -><a>#<i></i></a> : error
@@ -41,7 +41,7 @@
  >i : any
  >i : any
  >a : any
- 
+
  var t06 = <a>#<i></i></a>;
 ->t06 : error
 -><a>#<i></i></a> : error
@@ -53,7 +53,7 @@
  >i : any
  >i : any
  >a : any
- 
+
  var t07 = <a>#<i>#</i></a>;
 ->t07 : error
 -><a>#<i>#</i></a> : error
@@ -65,7 +65,7 @@
  >i : any
  >i : any
  >a : any
- 
+
  var t08 = <a><i></i>#</a>;
 ->t08 : error
 -><a><i></i>#</a> : error
@@ -77,7 +77,7 @@
  >i : any
  >i : any
  >a : any
- 
+
  var t09 = <a>#<i></i>#</a>;
 ->t09 : error
 -><a>#<i></i>#</a> : error
@@ -89,7 +89,7 @@
  >i : any
  >i : any
  >a : any
- 
+
  var t10 = <a><i/>#</a>;
 ->t10 : error
 -><a><i/>#</a> : error
@@ -100,7 +100,7 @@
 +><i/> : any
  >i : any
  >a : any
- 
+
  var t11 = <a>#<i/></a>;
 ->t11 : error
 -><a>#<i/></a> : error
@@ -111,7 +111,7 @@
 +><i/> : any
  >i : any
  >a : any
- 
+
  var t12 = <a>#</a>;
 ->t12 : error
 -><a>#</a> : error
@@ -119,4 +119,3 @@
 +><a>#</a> : any
  >a : any
  >a : any
- 

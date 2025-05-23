@@ -1,8 +1,7 @@
 --- old.callbackCrossModule.errors.txt
 +++ new.callbackCrossModule.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +use.js(1,30): error TS2694: Namespace 'C' has no exported member 'Con'.
 +
 +

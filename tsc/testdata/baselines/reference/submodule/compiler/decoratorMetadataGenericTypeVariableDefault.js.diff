@@ -1,7 +1,7 @@
 --- old.decoratorMetadataGenericTypeVariableDefault.js
 +++ new.decoratorMetadataGenericTypeVariableDefault.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [decoratorMetadataGenericTypeVariableDefault.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

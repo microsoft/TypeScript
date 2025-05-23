@@ -5,8 +5,8 @@
  parameterPropertyInConstructor2.ts(3,17): error TS2369: A parameter property is only allowed in a constructor implementation.
 +parameterPropertyInConstructor2.ts(3,24): error TS2300: Duplicate identifier 'names'.
  parameterPropertyInConstructor2.ts(4,24): error TS2300: Duplicate identifier 'names'.
- 
- 
+
+
 -==== parameterPropertyInConstructor2.ts (3 errors) ====
 +==== parameterPropertyInConstructor2.ts (4 errors) ====
      module mod {

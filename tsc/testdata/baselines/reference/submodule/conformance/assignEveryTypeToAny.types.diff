@@ -2,7 +2,7 @@
 +++ new.assignEveryTypeToAny.types
 @@= skipped -135, +135 lines =@@
  >i : () => string
- 
+
  x = { f() { return 1; } }
 ->x = { f() { return 1; } } : { f(): number; }
 +>x = { f() { return 1; } } : { f: () => number; }
@@ -11,7 +11,7 @@
 +>{ f() { return 1; } } : { f: () => number; }
  >f : () => number
  >1 : 1
- 
+
  x = { f<T>(x: T) { return x; } }
 ->x = { f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
 +>x = { f<T>(x: T) { return x; } } : { f: <T>(x: T) => T; }

@@ -2,7 +2,7 @@
 +++ new.prototypeOnConstructorFunctions.symbols
 @@= skipped -4, +4 lines =@@
  >I1 : Symbol(I1, Decl(prototypeOnConstructorFunctions.ts, 0, 0))
- 
+
      const: new (options?, element?) => any;
 ->const : Symbol(I1.const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
 +>const : Symbol(const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
@@ -10,8 +10,8 @@
  >element : Symbol(element, Decl(prototypeOnConstructorFunctions.ts, 1, 25))
  }
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  i.const.prototype.prop = "yo";
 ->i.const.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->i.const : Symbol(I1.const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
@@ -22,4 +22,3 @@
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>const : Symbol(const, Decl(prototypeOnConstructorFunctions.ts, 0, 14))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 

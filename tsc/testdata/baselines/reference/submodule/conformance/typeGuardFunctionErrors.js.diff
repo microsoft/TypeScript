@@ -1,8 +1,8 @@
 --- old.typeGuardFunctionErrors.js
 +++ new.typeGuardFunctionErrors.js
 @@= skipped -169, +169 lines =@@
- 
- 
+
+
  //// [typeGuardFunctionErrors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -77,10 +77,8 @@
  // Non-compatiable type predicate positions for signature declarations
 -var D = /** @class */ (function () {
 -    function D(p1) {
-+class D {
-+    constructor(p1) {
-         return true;
-     }
+-        return true;
+-    }
 -    Object.defineProperty(D.prototype, "m1", {
 -        get: function (p1) {
 -            return true;
@@ -97,6 +95,10 @@
 -    });
 -    return D;
 -}());
++class D {
++    constructor(p1) {
++        return true;
++    }
 +    get m1(p1) {
 +        return true;
 +    }
@@ -118,16 +120,20 @@
  // Reference to binding pattern
 -function b5(_a, p2, p3) {
 -    var a = _a.a, b = _a.b, p1 = _a.p1;
-+function b5({ a, b, p1 }, p2, p3) {
-     return true;
- }
+-    return true;
+-}
 -function b6(_a, p2, p3) {
 -    var a = _a[0], b = _a[1], p1 = _a[2];
-+function b6([a, b, p1], p2, p3) {
-     return true;
- }
+-    return true;
+-}
 -function b7(_a, p2, p3) {
 -    var a = _a.a, b = _a.b, p1 = _a.c.p1;
++function b5({ a, b, p1 }, p2, p3) {
++    return true;
++}
++function b6([a, b, p1], p2, p3) {
++    return true;
++}
 +function b7({ a, b, c: { p1 } }, p2, p3) {
      return true;
  }

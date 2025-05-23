@@ -1,7 +1,7 @@
 --- old.nestedRecursiveLambda.js
 +++ new.nestedRecursiveLambda.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [nestedRecursiveLambda.js]
  function f(a) {
 -    void (function (r) { return (function (r) { return r; }); });

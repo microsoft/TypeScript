@@ -8,9 +8,8 @@
 +>z : Z
  >X : any
  >Y : any
- 
+
  var z2: X.Y;
 ->z2 : X.Y
 +>z2 : Y
  >X : any
- 

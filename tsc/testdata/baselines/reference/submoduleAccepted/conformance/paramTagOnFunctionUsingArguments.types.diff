@@ -6,7 +6,7 @@
  function concat(/* first, second, ... */) {
 ->concat : (...args: any[]) => string
 +>concat : () => string
- 
+
    var s = ''
  >s : string
 @@= skipped -34, +34 lines =@@
@@ -15,11 +15,11 @@
  function correct() {
 ->correct : (...args: string[]) => void
 +>correct : () => void
- 
+
      arguments
  >arguments : IArguments
 @@= skipped -8, +8 lines =@@
- 
+
  correct(1,2,3) // oh no
  >correct(1,2,3) : void
 ->correct : (...args: string[]) => void

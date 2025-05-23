@@ -1,8 +1,8 @@
 --- old.privateNameComputedPropertyName3(target=es2015).js
 +++ new.privateNameComputedPropertyName3(target=es2015).js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [privateNameComputedPropertyName3.js]
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
@@ -29,13 +29,13 @@
          class Bar {
 -            constructor() {
 -                _Bar_y.set(this, 100);
+-            }
+-            [(_Bar_y = new WeakMap(), __classPrivateFieldGet(obj, _Foo_name, "f"))]() {
+-                return x + __classPrivateFieldGet(this, _Bar_y, "f");
 +            #y = 100;
 +            [obj.#name]() {
 +                return x + this.#y;
              }
--            [(_Bar_y = new WeakMap(), __classPrivateFieldGet(obj, _Foo_name, "f"))]() {
--                return x + __classPrivateFieldGet(this, _Bar_y, "f");
--            }
          }
 -        return new Bar()[__classPrivateFieldGet(obj, _Foo_name, "f")]();
 +        return new Bar()[obj.#name]();

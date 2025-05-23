@@ -2,7 +2,7 @@
 +++ new.unusedTypeParameters3.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [unusedTypeParameters3.js]
 -var greeter = /** @class */ (function () {
 -    function greeter() {

@@ -2,32 +2,32 @@
 +++ new.genericClassWithStaticFactory.symbols
 @@= skipped -8, +8 lines =@@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
          public next: List<T>;
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
          public prev: List<T>;
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
          private listFactory: ListFactory<T>;
 ->listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 +>listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
  >ListFactory : Symbol(ListFactory, Decl(genericClassWithStaticFactory.ts, 106, 5))
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
          constructor(public isHead: boolean, public data: T) {
 ->isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 ->data : Symbol(List.data, Decl(genericClassWithStaticFactory.ts, 7, 43))
 +>isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
              this.listFactory = new ListFactory<T>();
 ->this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 +>this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
@@ -38,7 +38,7 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
             
          }
- 
+
          public add(data: T): List<T> {
 ->add : Symbol(List.add, Decl(genericClassWithStaticFactory.ts, 10, 9))
 +>add : Symbol(add, Decl(genericClassWithStaticFactory.ts, 10, 9))
@@ -46,7 +46,7 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
  >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 @@= skipped -37, +37 lines =@@
- 
+
              var entry = this.listFactory.MakeEntry(data);
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
 ->this.listFactory.MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
@@ -71,7 +71,7 @@
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
- 
+
              entry.next = this;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -79,7 +79,7 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
- 
+
              entry.prev = this.prev;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -91,7 +91,7 @@
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
- 
+
              this.prev = entry;
 ->this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -99,19 +99,19 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 13, 15))
- 
+
              return entry;
 @@= skipped -40, +40 lines =@@
          }
- 
+
          public count(): number {
 ->count : Symbol(List.count, Decl(genericClassWithStaticFactory.ts, 20, 9))
 +>count : Symbol(count, Decl(genericClassWithStaticFactory.ts, 20, 9))
- 
+
              var entry: List<T>;
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
 @@= skipped -12, +12 lines =@@
- 
+
              entry = this.next;
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
 ->this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -119,7 +119,7 @@
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- 
+
              for (i = 0; !(entry.isHead); i++) {
  >i : Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
 ->entry.isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
@@ -128,7 +128,7 @@
 ->isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
  >i : Symbol(i, Decl(genericClassWithStaticFactory.ts, 24, 15))
- 
+
                  entry = entry.next;
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 23, 15))
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -137,15 +137,15 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
              }
- 
+
              return (i);
 @@= skipped -23, +23 lines =@@
          }
- 
+
          public isEmpty(): boolean {
 ->isEmpty : Symbol(List.isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
 +>isEmpty : Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
- 
+
              return (this.next == this);
 ->this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -154,12 +154,12 @@
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
          }
- 
+
          public first(): T {
 ->first : Symbol(List.first, Decl(genericClassWithStaticFactory.ts, 36, 9))
 +>first : Symbol(first, Decl(genericClassWithStaticFactory.ts, 36, 9))
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
              if (this.isEmpty())
 ->this.isEmpty : Symbol(List.isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
 +>this.isEmpty : Symbol(isEmpty, Decl(genericClassWithStaticFactory.ts, 32, 9))
@@ -182,21 +182,21 @@
                  return null;
 @@= skipped -31, +31 lines =@@
          }
- 
+
          public pushEntry(entry: List<T>): void {
 ->pushEntry : Symbol(List.pushEntry, Decl(genericClassWithStaticFactory.ts, 46, 9))
 +>pushEntry : Symbol(pushEntry, Decl(genericClassWithStaticFactory.ts, 46, 9))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
  >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
              entry.isHead = false;
 ->entry.isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>entry.isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
 ->isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
- 
+
              entry.next = this.next;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -208,7 +208,7 @@
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- 
+
              entry.prev = this;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -216,7 +216,7 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
- 
+
              this.next = entry;
 ->this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -224,7 +224,7 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
- 
+
              entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
 ->entry.next.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -237,13 +237,13 @@
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 48, 25))
          }
- 
+
          public push(data: T): void {
 ->push : Symbol(List.push, Decl(genericClassWithStaticFactory.ts, 54, 9))
 +>push : Symbol(push, Decl(genericClassWithStaticFactory.ts, 54, 9))
  >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
              var entry = this.listFactory.MakeEntry(data);
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
 ->this.listFactory.MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
@@ -256,7 +256,7 @@
 +>listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 +>MakeEntry : Symbol(MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
  >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
- 
+
              entry.data = data;
 ->entry.data : Symbol(List.data, Decl(genericClassWithStaticFactory.ts, 7, 43))
 +>entry.data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
@@ -264,14 +264,14 @@
 ->data : Symbol(List.data, Decl(genericClassWithStaticFactory.ts, 7, 43))
 +>data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 7, 43))
  >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 56, 20))
- 
+
              entry.isHead = false;
 ->entry.isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>entry.isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
 ->isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
- 
+
              entry.next = this.next;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -283,7 +283,7 @@
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- 
+
              entry.prev = this;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -291,7 +291,7 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
- 
+
              this.next = entry;
 ->this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -299,7 +299,7 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
- 
+
              entry.next.prev = entry;  // entry.next.prev does not show intellisense, but entry.prev.prev does
 ->entry.next.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -312,7 +312,7 @@
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 57, 15))
          }
- 
+
          public popEntry(head: List<T>): List<T> {
 ->popEntry : Symbol(List.popEntry, Decl(genericClassWithStaticFactory.ts, 64, 9))
 +>popEntry : Symbol(popEntry, Decl(genericClassWithStaticFactory.ts, 64, 9))
@@ -321,7 +321,7 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 @@= skipped -102, +102 lines =@@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
              if (this.next.isHead) {
 ->this.next.isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 ->this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -332,28 +332,30 @@
 ->isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
- 
+
                  return null;
              }
              else {
                  return this.listFactory.RemoveEntry(this.next);
 ->this.listFactory.RemoveEntry : Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
 ->this.listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
-+>this.listFactory.RemoveEntry : Symbol(RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
-+>this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
- >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+->this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->listFactory : Symbol(List.listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 ->RemoveEntry : Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
 ->this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+->this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
+->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
++>this.listFactory.RemoveEntry : Symbol(RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
++>this.listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
++>this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 +>listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 +>RemoveEntry : Symbol(RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
 +>this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
-->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
++>this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
              }
          }
- 
+
          public insertEntry(entry: List<T>): List<T> {
 ->insertEntry : Symbol(List.insertEntry, Decl(genericClassWithStaticFactory.ts, 73, 9))
 +>insertEntry : Symbol(insertEntry, Decl(genericClassWithStaticFactory.ts, 73, 9))
@@ -362,14 +364,14 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 @@= skipped -30, +30 lines =@@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
              entry.isHead = false;
 ->entry.isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>entry.isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
 ->isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
- 
+
              this.prev.next = entry;
 ->this.prev.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 ->this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -381,7 +383,7 @@
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
- 
+
              entry.next = this;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -389,7 +391,7 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
- 
+
              entry.prev = this.prev;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -401,7 +403,7 @@
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
- 
+
              this.prev = entry;
 ->this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -409,11 +411,11 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 75, 27))
- 
+
              return entry;
 @@= skipped -37, +37 lines =@@
          }
- 
+
          public insertAfter(data: T): List<T> {
 ->insertAfter : Symbol(List.insertAfter, Decl(genericClassWithStaticFactory.ts, 82, 9))
 +>insertAfter : Symbol(insertAfter, Decl(genericClassWithStaticFactory.ts, 82, 9))
@@ -434,7 +436,7 @@
 +>listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 +>MakeEntry : Symbol(MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
  >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 84, 27))
- 
+
              entry.next = this.next;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -446,7 +448,7 @@
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- 
+
              entry.prev = this;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -454,7 +456,7 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
- 
+
              this.next = entry;
 ->this.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>this.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -462,7 +464,7 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
- 
+
              entry.next.prev = entry;// entry.next.prev does not show intellisense, but entry.prev.prev does
 ->entry.next.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -474,11 +476,11 @@
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 85, 15))
- 
+
              return entry;
 @@= skipped -40, +40 lines =@@
          }
- 
+
          public insertEntryBefore(entry: List<T>): List<T> {
 ->insertEntryBefore : Symbol(List.insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
 +>insertEntryBefore : Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
@@ -487,7 +489,7 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
 @@= skipped -8, +8 lines =@@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
- 
+
              this.prev.next = entry;
 ->this.prev.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 ->this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -499,7 +501,7 @@
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
- 
+
              entry.next = this;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -507,7 +509,7 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
- 
+
              entry.prev = this.prev;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -519,7 +521,7 @@
  >this : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
- 
+
              this.prev = entry;
 ->this.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>this.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -527,11 +529,11 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 93, 33))
- 
+
              return entry;
 @@= skipped -32, +32 lines =@@
          }
- 
+
          public insertBefore(data: T): List<T> {
 ->insertBefore : Symbol(List.insertBefore, Decl(genericClassWithStaticFactory.ts, 100, 9))
 +>insertBefore : Symbol(insertBefore, Decl(genericClassWithStaticFactory.ts, 100, 9))
@@ -539,7 +541,7 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 2, 22))
  >List : Symbol(List, Decl(genericClassWithStaticFactory.ts, 0, 15))
 @@= skipped -8, +8 lines =@@
- 
+
              var entry = this.listFactory.MakeEntry(data);
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 103, 15))
 ->this.listFactory.MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
@@ -552,7 +554,7 @@
 +>listFactory : Symbol(listFactory, Decl(genericClassWithStaticFactory.ts, 4, 29))
 +>MakeEntry : Symbol(MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
  >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 102, 28))
- 
+
              return this.insertEntryBefore(entry);
 ->this.insertEntryBefore : Symbol(List.insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
 +>this.insertEntryBefore : Symbol(insertEntryBefore, Decl(genericClassWithStaticFactory.ts, 91, 9))
@@ -564,7 +566,7 @@
      }
 @@= skipped -20, +20 lines =@@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 108, 29))
- 
+
          public MakeHead<T>(): List<T> {
 ->MakeHead : Symbol(ListFactory.MakeHead, Decl(genericClassWithStaticFactory.ts, 108, 33))
 +>MakeHead : Symbol(MakeHead, Decl(genericClassWithStaticFactory.ts, 108, 33))
@@ -573,7 +575,7 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
 @@= skipped -13, +13 lines =@@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 110, 24))
- 
+
              entry.prev = entry;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -581,7 +583,7 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
- 
+
              entry.next = entry;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -589,11 +591,11 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 111, 15))
- 
+
              return entry;
 @@= skipped -16, +16 lines =@@
          }
- 
+
          public MakeEntry<T>(data: T): List<T> {
 ->MakeEntry : Symbol(ListFactory.MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
 +>MakeEntry : Symbol(MakeEntry, Decl(genericClassWithStaticFactory.ts, 115, 9))
@@ -602,7 +604,7 @@
  >T : Symbol(T, Decl(genericClassWithStaticFactory.ts, 117, 25))
 @@= skipped -16, +16 lines =@@
  >data : Symbol(data, Decl(genericClassWithStaticFactory.ts, 117, 28))
- 
+
              entry.prev = entry;
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
@@ -610,7 +612,7 @@
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
- 
+
              entry.next = entry;
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
@@ -618,11 +620,11 @@
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 118, 15))
- 
+
              return entry;
 @@= skipped -16, +16 lines =@@
          }
- 
+
          public RemoveEntry<T>(entry: List<T>): List<T> {
 ->RemoveEntry : Symbol(ListFactory.RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
 +>RemoveEntry : Symbol(RemoveEntry, Decl(genericClassWithStaticFactory.ts, 122, 9))
@@ -638,7 +640,7 @@
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 ->isHead : Symbol(List.isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
 +>isHead : Symbol(isHead, Decl(genericClassWithStaticFactory.ts, 7, 20))
- 
+
              // Can't remove the head of a list!
                  return null;
              }
@@ -646,34 +648,38 @@
                  entry.next.prev = entry.prev;
 ->entry.next.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
-+>entry.next.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
-+>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
+->entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
+->entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
+->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
++>entry.next.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
++>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
++>entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
- >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
-->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
++>entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
- 
+
                  entry.prev.next = entry.next;
 ->entry.prev.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 ->entry.prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
-+>entry.prev.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
-+>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
- >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
+->entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 ->prev : Symbol(List.prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 ->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 ->entry.next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
+->entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
+->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
++>entry.prev.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
++>entry.prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
++>entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 +>prev : Symbol(prev, Decl(genericClassWithStaticFactory.ts, 3, 29))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
 +>entry.next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
-->next : Symbol(List.next, Decl(genericClassWithStaticFactory.ts, 2, 26))
++>entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))
 +>next : Symbol(next, Decl(genericClassWithStaticFactory.ts, 2, 26))
- 
+
                  return entry;
  >entry : Symbol(entry, Decl(genericClassWithStaticFactory.ts, 124, 30))

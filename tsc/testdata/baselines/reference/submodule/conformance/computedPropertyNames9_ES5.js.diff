@@ -2,7 +2,7 @@
 +++ new.computedPropertyNames9_ES5.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [computedPropertyNames9_ES5.js]
 -var _a;
  function f(x) { }

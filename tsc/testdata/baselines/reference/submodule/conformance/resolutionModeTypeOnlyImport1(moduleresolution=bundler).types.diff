@@ -1,33 +1,33 @@
 --- old.resolutionModeTypeOnlyImport1(moduleresolution=bundler).types
 +++ new.resolutionModeTypeOnlyImport1(moduleresolution=bundler).types
 @@= skipped -9, +9 lines =@@
- 
+
  === /app.ts ===
  import type { x as Default } from "foo";
 ->x : "module"
 +>x : "script"
  >Default : any
- 
+
  import type { x as Import } from "foo" assert { "resolution-mode": "import" };
 ->x : "module"
 +>x : "script"
  >Import : any
- 
+
  import type { x as Require } from "foo" assert { "resolution-mode": "require" };
 @@= skipped -12, +12 lines =@@
  >Require : any
- 
+
  type _Default = typeof Default;
 ->_Default : "module"
 ->Default : "module"
 +>_Default : "script"
 +>Default : "script"
- 
+
  type _Import = typeof Import;
 ->_Import : "module"
 ->Import : "module"
 +>_Import : "script"
 +>Import : "script"
- 
+
  type _Require = typeof Require;
  >_Require : "script"

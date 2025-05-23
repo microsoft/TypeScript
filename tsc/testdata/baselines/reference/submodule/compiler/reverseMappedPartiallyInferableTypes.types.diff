@@ -1,14 +1,14 @@
 --- old.reverseMappedPartiallyInferableTypes.types
 +++ new.reverseMappedPartiallyInferableTypes.types
 @@= skipped -46, +46 lines =@@
- 
- 
+
+
  declare function extend<T>({ props }: { props: PropsDefinition<T> }):  PropsDefinition<T>;
 ->extend : <T>({ props }: { props: PropsDefinition<T>; }) => PropsDefinition<T>
 +>extend : <T>(__0: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
  >props : RecordPropsDefinition<T>
  >props : RecordPropsDefinition<T>
- 
+
 @@= skipped -12, +12 lines =@@
  const r = extend({
  >r : RecordPropsDefinition<{ notResolved: MyType; explicit: MyType; }>
@@ -16,7 +16,7 @@
 ->extend : <T>({ props }: { props: PropsDefinition<T>; }) => PropsDefinition<T>
 +>extend : <T>(__0: { props: RecordPropsDefinition<T>; }) => RecordPropsDefinition<T>
  >{    props: {        notResolved: {            type: Object as PropType<MyType>,            validator: x => {                return x.valid;            }        },        explicit: {            type: Object as PropType<MyType>,            validator: (x: MyType) => {                return x.valid;            }        }    }} : { props: { notResolved: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; explicit: { type: PropType<MyType>; validator: (x: MyType) => boolean; }; }; }
- 
+
      props: {
 @@= skipped -122, +122 lines =@@
  >obj2 : Mapped<{ foo: string; }>
@@ -24,13 +24,13 @@
  >id : <T>(arg: Mapped<T>) => Mapped<T>
 ->{    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }} : { foo: { contents: string; contains(k: string): boolean; }; }
 +>{    foo: {        contents: "",        contains(k) {            return k.length > 0;        }    }} : { foo: { contents: string; contains: (k: string) => boolean; }; }
- 
+
      foo: {
 ->foo : { contents: string; contains(k: string): boolean; }
 ->{        contents: "",        contains(k) {            return k.length > 0;        }    } : { contents: string; contains(k: string): boolean; }
 +>foo : { contents: string; contains: (k: string) => boolean; }
 +>{        contents: "",        contains(k) {            return k.length > 0;        }    } : { contents: string; contains: (k: string) => boolean; }
- 
+
          contents: "",
  >contents : string
 @@= skipped -30, +30 lines =@@
@@ -39,12 +39,12 @@
  >id : <T>(arg: Mapped<T>) => Mapped<T>
 ->{    foo: {        contains(k) {            return k.length > 0;        }    }} : { foo: { contains(k: unknown): boolean; }; }
 +>{    foo: {        contains(k) {            return k.length > 0;        }    }} : { foo: { contains: (k: unknown) => boolean; }; }
- 
+
      foo: {
 ->foo : { contains(k: unknown): boolean; }
 ->{        contains(k) {            return k.length > 0;        }    } : { contains(k: unknown): boolean; }
 +>foo : { contains: (k: unknown) => boolean; }
 +>{        contains(k) {            return k.length > 0;        }    } : { contains: (k: unknown) => boolean; }
- 
+
          contains(k) {
  >contains : (k: unknown) => boolean

@@ -10,7 +10,7 @@
 +>g : { x: ???; }
 +>x : { x: ???; }
 +>g : { x: ???; }
- 
+
  var g: typeof g.x;
 ->g : { x: typeof g; }
 ->g.x : { x: typeof g; }
@@ -20,13 +20,13 @@
 +>g.x : { x: ???; }
 +>g : { x: ???; }
 +>x : { x: ???; }
- 
+
  var h: () => typeof h;
 ->h : () => typeof h
 ->h : () => typeof h
 +>h : () => ???
 +>h : () => ???
- 
+
  var h = h();
 ->h : () => typeof h
 ->h() : () => typeof h
@@ -34,7 +34,7 @@
 +>h : () => ???
 +>h() : () => ???
 +>h : () => ???
- 
+
  var i: (x: typeof i) => typeof x;
 ->i : (x: typeof i) => typeof x
 ->x : (x: typeof i) => typeof x
@@ -44,7 +44,7 @@
 +>x : (x: ???) => ???
 +>i : (x: ???) => ???
 +>x : (x: ???) => ???
- 
+
  var i = i(i);
 ->i : (x: typeof i) => typeof x
 ->i(i) : (x: typeof i) => typeof x
@@ -54,14 +54,14 @@
 +>i(i) : (x: ???) => ???
 +>i : (x: ???) => ???
 +>i : (x: ???) => ???
- 
+
  var j: <T extends typeof j>(x: T) => T;
 ->j : <T extends typeof j>(x: T) => T
 ->j : <T extends typeof j>(x: T) => T
 +>j : <T extends ???>(x: T) => T
 +>j : <T extends ???>(x: T) => T
  >x : T
- 
+
  var j = j(j);
 ->j : <T extends typeof j>(x: T) => T
 ->j(j) : <T extends typeof j>(x: T) => T
@@ -71,14 +71,14 @@
 +>j(j) : <T extends ???>(x: T) => T
 +>j : <T extends ???>(x: T) => T
 +>j : <T extends ???>(x: T) => T
- 
+
  // Same as h, i, j with construct signatures
  var h2: new () => typeof h2;
 ->h2 : new () => typeof h2
 ->h2 : new () => typeof h2
 +>h2 : new () => ???
 +>h2 : new () => ???
- 
+
  var h2 = new h2();
 ->h2 : new () => typeof h2
 ->new h2() : new () => typeof h2
@@ -86,7 +86,7 @@
 +>h2 : new () => ???
 +>new h2() : new () => ???
 +>h2 : new () => ???
- 
+
  var i2: new (x: typeof i2) => typeof x;
 ->i2 : new (x: typeof i2) => typeof x
 ->x : new (x: typeof i2) => typeof x
@@ -96,7 +96,7 @@
 +>x : new (x: ???) => ???
 +>i2 : new (x: ???) => ???
 +>x : new (x: ???) => ???
- 
+
  var i2 = new i2(i2);
 ->i2 : new (x: typeof i2) => typeof x
 ->new i2(i2) : new (x: typeof i2) => typeof x
@@ -106,14 +106,14 @@
 +>new i2(i2) : new (x: ???) => ???
 +>i2 : new (x: ???) => ???
 +>i2 : new (x: ???) => ???
- 
+
  var j2: new <T extends typeof j2>(x: T) => T;
 ->j2 : new <T extends typeof j2>(x: T) => T
 ->j2 : new <T extends typeof j2>(x: T) => T
 +>j2 : new <T extends ???>(x: T) => T
 +>j2 : new <T extends ???>(x: T) => T
  >x : T
- 
+
  var j2 = new j2(j2);
 ->j2 : new <T extends typeof j2>(x: T) => T
 ->new j2(j2) : new <T extends typeof j2>(x: T) => T
@@ -123,7 +123,7 @@
 +>new j2(j2) : new <T extends ???>(x: T) => T
 +>j2 : new <T extends ???>(x: T) => T
 +>j2 : new <T extends ???>(x: T) => T
- 
+
  // Indexers
  var k: { [n: number]: typeof k;[s: string]: typeof k };
 ->k : { [n: number]: any; [s: string]: any; }
@@ -134,7 +134,7 @@
  >s : string
 ->k : { [n: number]: any; [s: string]: any; }
 +>k : { [n: number]: ???; [s: string]: ???; }
- 
+
  var k = k[0];
 ->k : { [n: number]: any; [s: string]: any; }
 ->k[0] : { [n: number]: any; [s: string]: any; }
@@ -143,7 +143,7 @@
 +>k[0] : { [n: number]: ???; [s: string]: ???; }
 +>k : { [n: number]: ???; [s: string]: ???; }
  >0 : 0
- 
+
  var k = k[''];
 ->k : { [n: number]: any; [s: string]: any; }
 ->k[''] : { [n: number]: any; [s: string]: any; }
@@ -152,7 +152,7 @@
 +>k[''] : { [n: number]: ???; [s: string]: ???; }
 +>k : { [n: number]: ???; [s: string]: ???; }
  >'' : ""
- 
+
  // Hybrid - contains type literals as well as type arguments
  // These two are recursive
  var hy1: { x: typeof hy1 }[];
@@ -162,7 +162,7 @@
 +>hy1 : { x: ???; }[]
 +>x : { x: ???; }[]
 +>hy1 : { x: ???; }[]
- 
+
  var hy1 = hy1[0].x;
 ->hy1 : { x: typeof hy1; }[]
 ->hy1[0].x : { x: typeof hy1; }[]
@@ -175,7 +175,7 @@
  >0 : 0
 ->x : { x: typeof hy1; }[]
 +>x : { x: ???; }[]
- 
+
  var hy2: { x: Array<typeof hy2> };
 ->hy2 : { x: Array<typeof hy2>; }
 ->x : { x: Array<typeof hy2>; }[]
@@ -183,7 +183,7 @@
 +>hy2 : { x: ???[]; }
 +>x : { x: ???; }[]
 +>hy2 : { x: ???[]; }
- 
+
  var hy2 = hy2.x[0];
 ->hy2 : { x: Array<typeof hy2>; }
 ->hy2.x[0] : { x: Array<typeof hy2>; }
@@ -196,5 +196,5 @@
 +>hy2 : { x: ???[]; }
 +>x : { x: ???; }[]
  >0 : 0
- 
+
  interface Foo2<T, U> { }

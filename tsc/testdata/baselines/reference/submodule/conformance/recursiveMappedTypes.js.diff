@@ -1,7 +1,7 @@
 --- old.recursiveMappedTypes.js
 +++ new.recursiveMappedTypes.js
 @@= skipped -95, +95 lines =@@
- 
+
  //// [recursiveMappedTypes.js]
  "use strict";
 -// Recursive mapped types simply appear empty

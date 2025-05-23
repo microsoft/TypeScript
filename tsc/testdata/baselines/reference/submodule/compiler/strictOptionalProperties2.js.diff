@@ -1,8 +1,8 @@
 --- old.strictOptionalProperties2.js
 +++ new.strictOptionalProperties2.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [strictOptionalProperties2.js]
 -"use strict";
 -// Repro from #44567

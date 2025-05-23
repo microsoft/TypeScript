@@ -123,8 +123,8 @@
  privateNameDuplicateField.ts(388,16): error TS2300: Duplicate identifier '#foo'.
 @@= skipped -11, +16 lines =@@
  privateNameDuplicateField.ts(400,20): error TS2300: Duplicate identifier '#foo'.
- 
- 
+
+
 -==== privateNameDuplicateField.ts (83 errors) ====
 +==== privateNameDuplicateField.ts (120 errors) ====
      function Field() {
@@ -177,14 +177,14 @@
          // Error
          class A_Method_Field {
              #foo() { }
--            #foo = "foo";
++            ~~~~
++!!! error TS2300: Duplicate identifier '#foo'.
+             #foo = "foo";
              ~~~~
  !!! error TS2300: Duplicate identifier '#foo'.
-+            #foo = "foo";
-             ~~~~
+-            ~~~~
 -!!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
 -!!! related TS6203 privateNameDuplicateField.ts:55:9: '#foo' was also declared here.
-+!!! error TS2300: Duplicate identifier '#foo'.
          }
      
          // Error
@@ -399,14 +399,14 @@
          // Error
          class A_StaticMethod_StaticField {
              static #foo() { }
--            static #foo = "foo";
++                   ~~~~
++!!! error TS2300: Duplicate identifier '#foo'.
+             static #foo = "foo";
                     ~~~~
  !!! error TS2300: Duplicate identifier '#foo'.
-+            static #foo = "foo";
-                    ~~~~
+-                   ~~~~
 -!!! error TS2717: Subsequent property declarations must have the same type.  Property '#foo' must be of type '() => void', but here has type 'string'.
 -!!! related TS6203 privateNameDuplicateField.ts:280:16: '#foo' was also declared here.
-+!!! error TS2300: Duplicate identifier '#foo'.
          }
      
          // Error

@@ -2,14 +2,14 @@
 +++ new.contextualOuterTypeParameters.types
 @@= skipped -14, +14 lines =@@
  >t : T
- 
+
      type isArray = (typeof t)[] extends string[] ? true : false;
 ->isArray : T[] extends string[] ? true : false
 +>isArray : isArray
  >t : T
  >true : true
  >false : false
- 
+
      type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
 +>IsObject : IsObject
@@ -18,14 +18,14 @@
  >x : string
 @@= skipped -22, +22 lines =@@
  >t : T
- 
+
      type isArray = (typeof t)[] extends string[] ? true : false;
 ->isArray : T[] extends string[] ? true : false
 +>isArray : isArray
  >t : T
  >true : true
  >false : false
- 
+
      type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
 +>IsObject : IsObject
@@ -34,14 +34,14 @@
  >x : string
 @@= skipped -23, +23 lines =@@
  >t : T
- 
+
      type isArray = (typeof t)[] extends string[] ? true : false;
 ->isArray : T[] extends string[] ? true : false
 +>isArray : isArray
  >t : T
  >true : true
  >false : false
- 
+
      type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
 +>IsObject : IsObject
@@ -54,18 +54,18 @@
  >x : T
 ->{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f<T>(t: T): void; }
 +>{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f: <T>(t: T) => void; }
- 
+
      f(t) {
  >f : <T>(t: T) => void
  >t : T
- 
+
          type isArray = (typeof t)[] extends string[] ? true : false;
 ->isArray : T[] extends string[] ? true : false
 +>isArray : isArray
  >t : T
  >true : true
  >false : false
- 
+
          type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
 +>IsObject : IsObject

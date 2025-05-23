@@ -224,13 +224,14 @@
  3 >Emitted(5, 22) Source(2, 18) + SourceIndex(0)
  ---
 ->>>        var Greeter = /** @class */ (function () {
-+>>>        "use strict";
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++>>>        "use strict";
++1->^^^^^^^^
 +2 >        ^^^^^^^^^^^^
 +3 >                    ^
 +4 >                     ^^^->
- 1->
++1->
 +2 >        "use strict"
 +3 >                    ;
 +1->Emitted(6, 9) Source(2, 5) + SourceIndex(0)
@@ -242,24 +243,26 @@
 +2 >        ^^^^^^
 +3 >              ^^^^^^^
 +4 >                     ^->
-+1->
+ 1->
    >
    >    
 -1->Emitted(6, 9) Source(4, 5) + SourceIndex(0)
-+2 >        class 
-+3 >              Greeter
-+1->Emitted(7, 9) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(7, 15) Source(4, 11) + SourceIndex(0)
-+3 >Emitted(7, 22) Source(4, 18) + SourceIndex(0)
- ---
+----
 ->>>            function Greeter(greeting) {
-+>>>            greeting;
- 1->^^^^^^^^^^^^
+-1->^^^^^^^^^^^^
 -2 >            ^^^^^^^^^^^^^^^^^
 -3 >                             ^^^^^^^^
 -4 >                                     ^^^^^->
 -1->class Greeter {
 -  >        
++2 >        class 
++3 >              Greeter
++1->Emitted(7, 9) Source(4, 5) + SourceIndex(0)
++2 >Emitted(7, 15) Source(4, 11) + SourceIndex(0)
++3 >Emitted(7, 22) Source(4, 18) + SourceIndex(0)
++---
++>>>            greeting;
++1->^^^^^^^^^^^^
 +2 >            ^^^^^^^^
 +3 >                    ^^^^^^^^^^^^^^^^->
 +1-> {
@@ -388,16 +391,12 @@
  1 >^^^^^^^^^^^^
  2 >            ^
 -3 >             ^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >        
 -2 >            }
 -1 >Emitted(12, 13) Source(10, 9) + SourceIndex(0)
 -2 >Emitted(12, 14) Source(10, 10) + SourceIndex(0)
-+2 >            
-+  >                    }
-+1 >Emitted(14, 13) Source(9, 53) + SourceIndex(0)
-+2 >Emitted(14, 14) Source(10, 10) + SourceIndex(0)
- ---
+----
 ->>>            return Greeter;
 -1->^^^^^^^^^^^^
 -2 >            ^^^^^^^^^^^^^^
@@ -413,10 +412,7 @@
 -3 >         
 -4 >         ^^^^
 -5 >             ^^^^^^^^^^^^^^^^^^^^->
-+>>>        }
-+1 >^^^^^^^^^
-+2 >         ^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >        }
 -3 >         
 -4 >         class Greeter {
@@ -431,6 +427,16 @@
 -2 >Emitted(14, 10) Source(11, 6) + SourceIndex(0)
 -3 >Emitted(14, 10) Source(4, 5) + SourceIndex(0)
 -4 >Emitted(14, 14) Source(11, 6) + SourceIndex(0)
++1 >
++2 >            
++  >                    }
++1 >Emitted(14, 13) Source(9, 53) + SourceIndex(0)
++2 >Emitted(14, 14) Source(10, 10) + SourceIndex(0)
++---
++>>>        }
++1 >^^^^^^^^^
++2 >         ^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >    }
 +1 >Emitted(15, 10) Source(11, 6) + SourceIndex(0)
  ---
@@ -597,24 +603,7 @@
 -3 >Emitted(20, 22) Source(21, 18) + SourceIndex(0)
 -4 >Emitted(20, 23) Source(21, 19) + SourceIndex(0)
 -5 >Emitted(20, 31) Source(21, 35) + SourceIndex(0)
-+6 >                              , 
-+7 >                                ...
-+8 >                                   restGreetings
-+9 >                                                 
-+10>                                                 /* more greeting */: string[]
-+11>                                                                    ) 
-+1->Emitted(21, 9) Source(21, 5) + SourceIndex(0)
-+2 >Emitted(21, 18) Source(21, 14) + SourceIndex(0)
-+3 >Emitted(21, 22) Source(21, 18) + SourceIndex(0)
-+4 >Emitted(21, 23) Source(21, 19) + SourceIndex(0)
-+5 >Emitted(21, 31) Source(21, 35) + SourceIndex(0)
-+6 >Emitted(21, 33) Source(21, 37) + SourceIndex(0)
-+7 >Emitted(21, 36) Source(21, 40) + SourceIndex(0)
-+8 >Emitted(21, 49) Source(21, 53) + SourceIndex(0)
-+9 >Emitted(21, 50) Source(21, 54) + SourceIndex(0)
-+10>Emitted(21, 69) Source(21, 83) + SourceIndex(0)
-+11>Emitted(21, 71) Source(21, 85) + SourceIndex(0)
- ---
+----
 ->>>            var restGreetings /* more greeting */ = [];
 -1->^^^^^^^^^^^^
 -2 >            ^^^^^^^^^^^^^^^^^^
@@ -659,6 +648,24 @@
 -2 >Emitted(23, 55) Source(21, 83) + SourceIndex(0)
 ----
 ->>>            }
++6 >                              , 
++7 >                                ...
++8 >                                   restGreetings
++9 >                                                 
++10>                                                 /* more greeting */: string[]
++11>                                                                    ) 
++1->Emitted(21, 9) Source(21, 5) + SourceIndex(0)
++2 >Emitted(21, 18) Source(21, 14) + SourceIndex(0)
++3 >Emitted(21, 22) Source(21, 18) + SourceIndex(0)
++4 >Emitted(21, 23) Source(21, 19) + SourceIndex(0)
++5 >Emitted(21, 31) Source(21, 35) + SourceIndex(0)
++6 >Emitted(21, 33) Source(21, 37) + SourceIndex(0)
++7 >Emitted(21, 36) Source(21, 40) + SourceIndex(0)
++8 >Emitted(21, 49) Source(21, 53) + SourceIndex(0)
++9 >Emitted(21, 50) Source(21, 54) + SourceIndex(0)
++10>Emitted(21, 69) Source(21, 83) + SourceIndex(0)
++11>Emitted(21, 71) Source(21, 85) + SourceIndex(0)
++---
  >>>            var greeters = []; /* inline block comment */
  1 >^^^^^^^^^^^^
  2 >            ^^^^

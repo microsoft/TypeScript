@@ -11,9 +11,9 @@
 +>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
      }
  }
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
      constructor() {
          return Object.create(null);
 ->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

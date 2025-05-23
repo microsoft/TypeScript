@@ -2,7 +2,7 @@
 +++ new.commentOnParameter3.js
 @@= skipped -7, +7 lines =@@
  ) { }
- 
+
  //// [commentOnParameter3.js]
 -function commentedParameters(a /* parameter a */, b /* parameter b */) { }
 +function commentedParameters(a /* parameter a */, b /* parameter b */

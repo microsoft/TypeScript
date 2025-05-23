@@ -2,7 +2,7 @@
 +++ new.declarationEmitWithDefaultAsComputedName.symbols
 @@= skipped -38, +38 lines =@@
  >obj : Symbol(obj, Decl(main.ts, 1, 12))
- 
+
      [other.name]: 1,
 ->[other.name] : Symbol([other.name], Decl(main.ts, 1, 20))
 +>[other.name] : Symbol(foo, Decl(main.ts, 1, 20))

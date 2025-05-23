@@ -1,7 +1,7 @@
 --- old.objectTypeWithRecursiveWrappedProperty2.js
 +++ new.objectTypeWithRecursiveWrappedProperty2.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [objectTypeWithRecursiveWrappedProperty2.js]
  // Basic recursive type
 -var List = /** @class */ (function () {

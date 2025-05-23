@@ -1,8 +1,8 @@
 --- old.spreadNonPrimitive.js
 +++ new.spreadNonPrimitive.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [spreadNonPrimitive.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

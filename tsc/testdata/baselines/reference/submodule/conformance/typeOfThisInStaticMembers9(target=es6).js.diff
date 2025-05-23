@@ -1,13 +1,12 @@
 --- old.typeOfThisInStaticMembers9(target=es6).js
 +++ new.typeOfThisInStaticMembers9(target=es6).js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [typeOfThisInStaticMembers9.js]
 -var _a, _b;
  class C {
-+    static f = 1;
- }
+-}
 -C.f = 1;
 -class D extends (_b = C) {
 -}
@@ -26,6 +25,14 @@
 -    class C {
 -        constructor() {
 -            this.a = super.f + 5;
+-        }
+-        method() {
+-            return super.f + 6;
+-        }
+-    }
+-})();
++    static f = 1;
++}
 +class D extends C {
 +    static arrowFunctionBoundary = () => super.f + 1;
 +    static functionExprBoundary = function () { return super.f + 2; };
@@ -35,16 +42,12 @@
 +    static functionAndClassDeclBoundary = (() => {
 +        function foo() {
 +            return super.f + 4;
-         }
--        method() {
--            return super.f + 6;
++        }
 +        class C {
 +            a = super.f + 5;
 +            method() {
 +                return super.f + 6;
 +            }
-         }
--    }
--})();
++        }
 +    })();
 +}

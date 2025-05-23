@@ -98,14 +98,15 @@
 +4 >              ^^^^^^->
  1-> {
 -  >    \u{102A7}: string;
-   >    
+-  >    
 -1->Emitted(11, 5) Source(14, 5) + SourceIndex(0)
++  >    
 +2 >    \u{102A7}
 +3 >             : string;
 +1->Emitted(11, 5) Source(13, 5) + SourceIndex(0)
 +2 >Emitted(11, 14) Source(13, 14) + SourceIndex(0)
 +3 >Emitted(11, 15) Source(13, 23) + SourceIndex(0)
- ---
++---
 +>>>    constructor() {
 +1->^^^^
 +2 >    ^^^^^^^^^^^^^^
@@ -115,10 +116,9 @@
 +2 >    constructor() 
 +1->Emitted(12, 5) Source(14, 5) + SourceIndex(0)
 +2 >Emitted(12, 19) Source(14, 19) + SourceIndex(0)
-+---
+ ---
  >>>        this.\u{102A7} = " world";
  1->^^^^^^^^
- 2 >        ^^^^
 @@= skipped -16, +31 lines =@@
  5 >                      ^^^
  6 >                         ^^^^^^^^

@@ -1,8 +1,8 @@
 --- old.privateNameSetterExprReturnValue.js
 +++ new.privateNameSetterExprReturnValue.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [privateNameSetterExprReturnValue.js]
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");

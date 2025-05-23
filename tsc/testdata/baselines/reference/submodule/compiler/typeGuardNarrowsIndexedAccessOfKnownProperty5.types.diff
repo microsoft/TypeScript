@@ -1,7 +1,7 @@
 --- old.typeGuardNarrowsIndexedAccessOfKnownProperty5.types
 +++ new.typeGuardNarrowsIndexedAccessOfKnownProperty5.types
 @@= skipped -1, +1 lines =@@
- 
+
  === typeGuardNarrowsIndexedAccessOfKnownProperty5.ts ===
  const a: { key?: { x?: number } } = {};
 ->a : { key?: { x?: number; }; }
@@ -10,9 +10,9 @@
 +>key : { x?: number | undefined; } | undefined
  >x : number | undefined
  >{} : {}
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
  if (a[aIndex] && a[aIndex].x) {
  >a[aIndex] && a[aIndex].x : number | undefined
 ->a[aIndex] : { x?: number; } | undefined
@@ -27,7 +27,7 @@
 +>a : { key?: { x?: number | undefined; } | undefined; }
  >aIndex : "key"
  >x : number | undefined
- 
+
      a[aIndex].x // number
  >a[aIndex].x : number
 ->a[aIndex] : { x?: number; }
@@ -37,7 +37,7 @@
  >aIndex : "key"
  >x : number
  }
- 
+
  const b: { key: { x?: number } } = { key: {} };
 ->b : { key: { x?: number; }; }
 ->key : { x?: number; }
@@ -47,7 +47,7 @@
  >{ key: {} } : { key: {}; }
  >key : {}
 @@= skipped -31, +31 lines =@@
- 
+
  if (b[bIndex].x) {
  >b[bIndex].x : number | undefined
 ->b[bIndex] : { x?: number; }
@@ -56,7 +56,7 @@
 +>b : { key: { x?: number | undefined; }; }
  >bIndex : "key"
  >x : number | undefined
- 
+
      b[bIndex].x // number
  >b[bIndex].x : number
 ->b[bIndex] : { x?: number; }

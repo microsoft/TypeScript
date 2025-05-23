@@ -2,7 +2,7 @@
 +++ new.implementingAnInterfaceExtendingClassWithPrivates2.js
 @@= skipped -87, +87 lines =@@
  }
- 
+
  //// [implementingAnInterfaceExtendingClassWithPrivates2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,6 +21,30 @@
 -})();
 -var Foo = /** @class */ (function () {
 -    function Foo() {
+-    }
+-    return Foo;
+-}());
+-var Bar = /** @class */ (function (_super) {
+-    __extends(Bar, _super);
+-    function Bar() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Bar;
+-}(Foo));
+-var Bar2 = /** @class */ (function (_super) {
+-    __extends(Bar2, _super);
+-    function Bar2() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Bar2;
+-}(Foo));
+-var Bar3 = /** @class */ (function (_super) {
+-    __extends(Bar3, _super);
+-    function Bar3() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return Bar3;
+-}(Foo));
 +class Foo {
 +    x;
 +}
@@ -35,46 +59,9 @@
 +    x;
 +    y;
 +}
-+// another level of indirection
-+var M;
-+(function (M) {
-+    class Foo {
-+        x;
-     }
--    return Foo;
--}());
--var Bar = /** @class */ (function (_super) {
--    __extends(Bar, _super);
--    function Bar() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    class Baz extends Foo {
-+        z;
-     }
--    return Bar;
--}(Foo));
--var Bar2 = /** @class */ (function (_super) {
--    __extends(Bar2, _super);
--    function Bar2() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    class Bar extends Foo {
-+        y;
-+        z;
-     }
--    return Bar2;
--}(Foo));
--var Bar3 = /** @class */ (function (_super) {
--    __extends(Bar3, _super);
--    function Bar3() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    class Bar2 extends Foo {
-+        x;
-+        y;
-     }
--    return Bar3;
--}(Foo));
--// another level of indirection
--var M;
--(function (M) {
+ // another level of indirection
+ var M;
+ (function (M) {
 -    var Foo = /** @class */ (function () {
 -        function Foo() {
 -        }
@@ -108,6 +95,20 @@
 -        }
 -        return Bar3;
 -    }(Foo));
++    class Foo {
++        x;
++    }
++    class Baz extends Foo {
++        z;
++    }
++    class Bar extends Foo {
++        y;
++        z;
++    }
++    class Bar2 extends Foo {
++        x;
++        y;
++    }
 +    class Bar3 extends Foo {
 +        x;
 +        y;

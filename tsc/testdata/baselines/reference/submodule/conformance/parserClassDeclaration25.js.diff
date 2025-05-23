@@ -1,8 +1,8 @@
 --- old.parserClassDeclaration25.js
 +++ new.parserClassDeclaration25.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [parserClassDeclaration25.js]
 -var List = /** @class */ (function () {
 -    function List() {

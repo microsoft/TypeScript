@@ -2,7 +2,7 @@
 +++ new.es6ImportWithoutFromClauseAmd.js
 @@= skipped -12, +12 lines =@@
  var _b = 10;
- 
+
  //// [es6ImportWithoutFromClauseAmd_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

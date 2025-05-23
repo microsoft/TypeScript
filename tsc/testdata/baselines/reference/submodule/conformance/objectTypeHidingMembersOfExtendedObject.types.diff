@@ -2,11 +2,11 @@
 +++ new.objectTypeHidingMembersOfExtendedObject.types
 @@= skipped -143, +143 lines =@@
  >'hm' : "hm"
- 
+
  var b: {
 ->b : { [x: string]: any; valueOf(): void; data: B; }
 +>b : { [x: string]: any; valueOf: () => void; data: B; }
- 
+
      valueOf(): void;
  >valueOf : () => void
 @@= skipped -16, +16 lines =@@
@@ -16,4 +16,3 @@
 ->b : { [x: string]: any; valueOf(): void; data: B; }
 +>b : { [x: string]: any; valueOf: () => void; data: B; }
  >valueOf : () => void
- 

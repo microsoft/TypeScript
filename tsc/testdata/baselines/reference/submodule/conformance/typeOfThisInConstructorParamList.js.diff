@@ -1,7 +1,7 @@
 --- old.typeOfThisInConstructorParamList.js
 +++ new.typeOfThisInConstructorParamList.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [typeOfThisInConstructorParamList.js]
  //type of 'this' in constructor param list is the class instance type (error)
 -var ErrClass = /** @class */ (function () {

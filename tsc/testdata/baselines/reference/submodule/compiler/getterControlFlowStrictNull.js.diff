@@ -2,7 +2,7 @@
 +++ new.getterControlFlowStrictNull.js
 @@= skipped -32, +32 lines =@@
  }
- 
+
  //// [getterControlFlowStrictNull.js]
 -var A = /** @class */ (function () {
 -    function A() {
@@ -19,7 +19,7 @@
 -}());
 -var B = /** @class */ (function () {
 -    function B() {
-     }
+-    }
 -    Object.defineProperty(B.prototype, "a", {
 -        get: function () {
 -            if (Math.random() > 0.5) {
@@ -34,14 +34,7 @@
 -}());
 -var C = /** @class */ (function () {
 -    function C() {
-+}
-+class B {
-+    get a() {
-+        if (Math.random() > 0.5) {
-+            return '';
-+        }
-+        // it should error here because it returns undefined
-     }
+-    }
 -    Object.defineProperty(C.prototype, "a", {
 -        get: function () {
 -            if (Math.random() > 0.5) {
@@ -56,6 +49,15 @@
 -    });
 -    return C;
 -}());
++    }
++}
++class B {
++    get a() {
++        if (Math.random() > 0.5) {
++            return '';
++        }
++        // it should error here because it returns undefined
++    }
 +}
 +class C {
 +    get a() {

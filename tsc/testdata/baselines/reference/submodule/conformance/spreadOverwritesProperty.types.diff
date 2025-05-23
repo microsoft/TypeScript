@@ -2,14 +2,14 @@
 +++ new.spreadOverwritesProperty.types
 @@= skipped -32, +32 lines =@@
  >abq : { a: number; b?: number; }
- 
+
  function g(obj: { x: number | undefined }) {
 ->g : (obj: { x: number | undefined; }) => { x: number | undefined; }
 ->obj : { x: number | undefined; }
 +>g : (obj: { x: number; }) => { x: number; }
 +>obj : { x: number; }
  >x : number
- 
+
      return { x: 1, ...obj };
 ->{ x: 1, ...obj } : { x: number | undefined; }
 +>{ x: 1, ...obj } : { x: number; }

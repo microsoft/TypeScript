@@ -1,6 +1,6 @@
 --- old.exportPropertyAssignmentNameResolution.errors.txt
 +++ new.exportPropertyAssignmentNameResolution.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -bug24492.js(2,5): error TS2304: Cannot find name 'D'.
 -
 -
@@ -10,5 +10,4 @@
 -        ~
 -!!! error TS2304: Cannot find name 'D'.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

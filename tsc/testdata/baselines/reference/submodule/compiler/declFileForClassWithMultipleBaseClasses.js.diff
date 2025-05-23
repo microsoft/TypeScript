@@ -2,7 +2,7 @@
 +++ new.declFileForClassWithMultipleBaseClasses.js
 @@= skipped -28, +28 lines =@@
  }
- 
+
  //// [declFileForClassWithMultipleBaseClasses.js]
 -var A = /** @class */ (function () {
 -    function A() {
@@ -30,22 +30,13 @@
 -//// [declFileForClassWithMultipleBaseClasses.d.ts]
 -declare class A {
 -    foo(): void;
-+class A {
-+    foo() { }
- }
+-}
 -declare class B {
 -    bar(): void;
-+class B {
-+    bar() { }
- }
+-}
 -interface I {
 -    baz(): any;
-+class D {
-+    baz() { }
-+    bat() { }
-+    foo() { }
-+    bar() { }
- }
+-}
 -interface J {
 -    bat(): any;
 -}
@@ -56,4 +47,15 @@
 -    bar(): void;
 -}
 -interface I extends A, B {
--}
++class A {
++    foo() { }
++}
++class B {
++    bar() { }
++}
++class D {
++    baz() { }
++    bat() { }
++    foo() { }
++    bar() { }
+ }

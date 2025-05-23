@@ -2,7 +2,7 @@
 +++ new.ClassDeclarationWithInvalidConstOnPropertyDeclaration.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration.js]
 -var AtomicNumbers = /** @class */ (function () {
 -    function AtomicNumbers() {

@@ -1,7 +1,7 @@
 --- old.emptyAssignmentPatterns01_ES5.js
 +++ new.emptyAssignmentPatterns01_ES5.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [emptyAssignmentPatterns01_ES5.js]
  var a;
 -(a);

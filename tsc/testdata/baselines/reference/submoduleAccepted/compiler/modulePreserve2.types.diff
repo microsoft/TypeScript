@@ -1,22 +1,21 @@
 --- old.modulePreserve2.types
 +++ new.modulePreserve2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /main.js ===
  import { esm } from "dep";
 ->esm : "esm"
 +>esm : any
- 
+
  const cjs = require("dep");
  >cjs : "cjs"
-@@= skipped -8, +8 lines =@@
+ >require("dep") : "cjs"
  >require : any
  >"dep" : "dep"
- 
+-
 -=== /node_modules/dep/import.d.mts ===
 -export const esm: "esm";
 ->esm : "esm"
--
+
  === /node_modules/dep/require.d.ts ===
  declare const cjs: "cjs";
- >cjs : "cjs"

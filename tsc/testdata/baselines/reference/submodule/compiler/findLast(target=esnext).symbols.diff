@@ -10,7 +10,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 0, 53))
  >item : Symbol(item, Decl(findLast.ts, 0, 53))
- 
+
  const itemString: string | undefined = ["string"].findLast((item) => item === "string");
  >itemString : Symbol(itemString, Decl(findLast.ts, 1, 5))
 ->["string"].findLast : Symbol(Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -19,7 +19,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 1, 60))
  >item : Symbol(item, Decl(findLast.ts, 1, 60))
- 
+
  new Int8Array().findLast((item) => item === 0);
 ->new Int8Array().findLast : Symbol(Int8Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Int8Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -28,7 +28,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 2, 26))
  >item : Symbol(item, Decl(findLast.ts, 2, 26))
- 
+
  new Uint8Array().findLast((item) => item === 0);
 ->new Uint8Array().findLast : Symbol(Uint8Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint8Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -37,7 +37,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 3, 27))
  >item : Symbol(item, Decl(findLast.ts, 3, 27))
- 
+
  new Uint8ClampedArray().findLast((item) => item === 0);
 ->new Uint8ClampedArray().findLast : Symbol(Uint8ClampedArray.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint8ClampedArray().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -46,7 +46,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 4, 34))
  >item : Symbol(item, Decl(findLast.ts, 4, 34))
- 
+
  new Int16Array().findLast((item) => item === 0);
 ->new Int16Array().findLast : Symbol(Int16Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Int16Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -55,7 +55,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 5, 27))
  >item : Symbol(item, Decl(findLast.ts, 5, 27))
- 
+
  new Uint16Array().findLast((item) => item === 0);
 ->new Uint16Array().findLast : Symbol(Uint16Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint16Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -64,7 +64,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 6, 28))
  >item : Symbol(item, Decl(findLast.ts, 6, 28))
- 
+
  new Int32Array().findLast((item) => item === 0);
 ->new Int32Array().findLast : Symbol(Int32Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Int32Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -73,7 +73,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 7, 27))
  >item : Symbol(item, Decl(findLast.ts, 7, 27))
- 
+
  new Uint32Array().findLast((item) => item === 0);
 ->new Uint32Array().findLast : Symbol(Uint32Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint32Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -82,7 +82,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 8, 28))
  >item : Symbol(item, Decl(findLast.ts, 8, 28))
- 
+
  new Float32Array().findLast((item) => item === 0);
 ->new Float32Array().findLast : Symbol(Float32Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Float32Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -91,7 +91,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 9, 29))
  >item : Symbol(item, Decl(findLast.ts, 9, 29))
- 
+
  new Float64Array().findLast((item) => item === 0);
 ->new Float64Array().findLast : Symbol(Float64Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new Float64Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -100,7 +100,7 @@
 +>findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 10, 29))
  >item : Symbol(item, Decl(findLast.ts, 10, 29))
- 
+
  new BigInt64Array().findLast((item) => item === BigInt(0));
 ->new BigInt64Array().findLast : Symbol(BigInt64Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new BigInt64Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -110,7 +110,7 @@
  >item : Symbol(item, Decl(findLast.ts, 11, 30))
  >item : Symbol(item, Decl(findLast.ts, 11, 30))
  >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
- 
+
  new BigUint64Array().findLast((item) => item === BigInt(0));
 ->new BigUint64Array().findLast : Symbol(BigUint64Array.findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
 +>new BigUint64Array().findLast : Symbol(findLast, Decl(lib.es2023.array.d.ts, --, --), Decl(lib.es2023.array.d.ts, --, --))
@@ -120,7 +120,7 @@
  >item : Symbol(item, Decl(findLast.ts, 12, 31))
  >item : Symbol(item, Decl(findLast.ts, 12, 31))
  >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
- 
+
  const indexNumber: number = [0].findLastIndex((item) => item === 0);
  >indexNumber : Symbol(indexNumber, Decl(findLast.ts, 14, 5))
 ->[0].findLastIndex : Symbol(Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -129,7 +129,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 14, 47))
  >item : Symbol(item, Decl(findLast.ts, 14, 47))
- 
+
  const indexString: number = ["string"].findLastIndex((item) => item === "string");
  >indexString : Symbol(indexString, Decl(findLast.ts, 15, 5))
 ->["string"].findLastIndex : Symbol(Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -138,7 +138,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 15, 54))
  >item : Symbol(item, Decl(findLast.ts, 15, 54))
- 
+
  new Int8Array().findLastIndex((item) => item === 0);
 ->new Int8Array().findLastIndex : Symbol(Int8Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Int8Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -147,7 +147,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 16, 31))
  >item : Symbol(item, Decl(findLast.ts, 16, 31))
- 
+
  new Uint8Array().findLastIndex((item) => item === 0);
 ->new Uint8Array().findLastIndex : Symbol(Uint8Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint8Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -156,7 +156,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 17, 32))
  >item : Symbol(item, Decl(findLast.ts, 17, 32))
- 
+
  new Uint8ClampedArray().findLastIndex((item) => item === 0);
 ->new Uint8ClampedArray().findLastIndex : Symbol(Uint8ClampedArray.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint8ClampedArray().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -165,7 +165,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 18, 39))
  >item : Symbol(item, Decl(findLast.ts, 18, 39))
- 
+
  new Int16Array().findLastIndex((item) => item === 0);
 ->new Int16Array().findLastIndex : Symbol(Int16Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Int16Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -174,7 +174,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 19, 32))
  >item : Symbol(item, Decl(findLast.ts, 19, 32))
- 
+
  new Uint16Array().findLastIndex((item) => item === 0);
 ->new Uint16Array().findLastIndex : Symbol(Uint16Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint16Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -183,7 +183,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 20, 33))
  >item : Symbol(item, Decl(findLast.ts, 20, 33))
- 
+
  new Int32Array().findLastIndex((item) => item === 0);
 ->new Int32Array().findLastIndex : Symbol(Int32Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Int32Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -192,7 +192,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 21, 32))
  >item : Symbol(item, Decl(findLast.ts, 21, 32))
- 
+
  new Uint32Array().findLastIndex((item) => item === 0);
 ->new Uint32Array().findLastIndex : Symbol(Uint32Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Uint32Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -201,7 +201,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 22, 33))
  >item : Symbol(item, Decl(findLast.ts, 22, 33))
- 
+
  new Float32Array().findLastIndex((item) => item === 0);
 ->new Float32Array().findLastIndex : Symbol(Float32Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Float32Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -210,7 +210,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 23, 34))
  >item : Symbol(item, Decl(findLast.ts, 23, 34))
- 
+
  new Float64Array().findLastIndex((item) => item === 0);
 ->new Float64Array().findLastIndex : Symbol(Float64Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new Float64Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -219,7 +219,7 @@
 +>findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
  >item : Symbol(item, Decl(findLast.ts, 24, 34))
  >item : Symbol(item, Decl(findLast.ts, 24, 34))
- 
+
  new BigInt64Array().findLastIndex((item) => item === BigInt(0));
 ->new BigInt64Array().findLastIndex : Symbol(BigInt64Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new BigInt64Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
@@ -229,7 +229,7 @@
  >item : Symbol(item, Decl(findLast.ts, 25, 35))
  >item : Symbol(item, Decl(findLast.ts, 25, 35))
  >BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
- 
+
  new BigUint64Array().findLastIndex((item) => item === BigInt(0));
 ->new BigUint64Array().findLastIndex : Symbol(BigUint64Array.findLastIndex, Decl(lib.es2023.array.d.ts, --, --))
 +>new BigUint64Array().findLastIndex : Symbol(findLastIndex, Decl(lib.es2023.array.d.ts, --, --))

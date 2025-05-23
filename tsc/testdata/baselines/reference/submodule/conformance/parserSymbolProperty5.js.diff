@@ -1,7 +1,7 @@
 --- old.parserSymbolProperty5.js
 +++ new.parserSymbolProperty5.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [parserSymbolProperty5.js]
  class C {
 +    [Symbol.toPrimitive];

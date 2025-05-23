@@ -1,8 +1,8 @@
 --- old.typeParameterConstModifiers.js
 +++ new.typeParameterConstModifiers.js
 @@= skipped -186, +186 lines =@@
- 
- 
+
+
  //// [typeParameterConstModifiers.js]
 -"use strict";
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {

@@ -1,6 +1,6 @@
 --- old.declarationEmitHigherOrderRetainedGenerics.js
 +++ new.declarationEmitHigherOrderRetainedGenerics.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitHigherOrderRetainedGenerics.ts] ////
 -
 -//// [declarationEmitHigherOrderRetainedGenerics.ts]
@@ -184,5 +184,4 @@
 -    <R2, O2, E2, B>(that: Kind<F, R2, O2, E2, B>): <R1, O1, E1, _>(self: Kind<F, R1, O1, E1, _>) => Kind<F, R1 & R2, O2 | O1, E2 | E1, B>;
 -    <R1, O1_1, E1_1, __1, R2, O2_1, E2_1, B_1>(self: Kind<F, R1, O1_1, E1_1, __1>, that: Kind<F, R2, O2_1, E2_1, B_1>): Kind<F, R1 & R2, O1_1 | O2_1, E1_1 | E2_1, B_1>;
 -};
-@@= skipped --1, +1 lines =@@
 +<no content>

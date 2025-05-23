@@ -1,7 +1,7 @@
 --- old.objectLiteralWithSemicolons2.js
 +++ new.objectLiteralWithSemicolons2.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [objectLiteralWithSemicolons2.js]
  var v = {
 -    a: a,

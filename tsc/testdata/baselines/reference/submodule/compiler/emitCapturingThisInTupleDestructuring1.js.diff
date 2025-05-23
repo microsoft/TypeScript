@@ -2,7 +2,7 @@
 +++ new.emitCapturingThisInTupleDestructuring1.js
 @@= skipped -6, +6 lines =@@
  });
- 
+
  //// [emitCapturingThisInTupleDestructuring1.js]
 -var _this = this;
 -wrapper(function (array) {

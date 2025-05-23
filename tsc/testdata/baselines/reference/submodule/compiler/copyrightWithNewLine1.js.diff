@@ -2,7 +2,7 @@
 +++ new.copyrightWithNewLine1.js
 @@= skipped -11, +11 lines =@@
  greeter.start();
- 
+
  //// [copyrightWithNewLine1.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

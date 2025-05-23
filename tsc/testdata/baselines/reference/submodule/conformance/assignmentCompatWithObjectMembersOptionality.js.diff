@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithObjectMembersOptionality.js
 +++ new.assignmentCompatWithObjectMembersOptionality.js
 @@= skipped -91, +91 lines =@@
- 
+
  //// [assignmentCompatWithObjectMembersOptionality.js]
  // Derived member is not optional but base member is, should be ok
 -var __extends = (this && this.__extends) || (function () {

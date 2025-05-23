@@ -2,7 +2,7 @@
 +++ new.thisInPropertyBoundDeclarations.js
 @@= skipped -69, +69 lines =@@
  }
- 
+
  //// [thisInPropertyBoundDeclarations.js]
 -var Bug = /** @class */ (function () {
 -    function Bug() {
@@ -29,13 +29,7 @@
 -var A = /** @class */ (function () {
 -    function A() {
 -        this.prop1 = function () {
-+class A {
-+    prop1 = function () {
-+        this;
-+    };
-+    prop2 = function () {
-+        function inner() {
-             this;
+-            this;
 -        };
 -        this.prop2 = function () {
 -            var _this = this;
@@ -50,6 +44,13 @@
 -            }
 -        };
 -        this.prop4 = {
++class A {
++    prop1 = function () {
++        this;
++    };
++    prop2 = function () {
++        function inner() {
++            this;
 +        }
 +        () => this;
 +    };
@@ -69,24 +70,7 @@
 -            return {
 -                a: function () { return this; },
 -            };
-+    };
-+}
-+class B {
-+    prop1 = this;
-+    prop2 = () => this;
-+    prop3 = () => () => () => () => this;
-+    prop4 = '  ' +
-+        function () {
-+        } +
-+        ' ' +
-+        (() => () => () => this);
-+    prop5 = {
-+        a: () => { return this; }
-+    };
-+    prop6 = () => {
-+        return {
-+            a: () => { return this; }
-         };
+-        };
 -    }
 -    return A;
 -}());
@@ -112,5 +96,23 @@
 -    }
 -    return B;
 -}());
++    };
++}
++class B {
++    prop1 = this;
++    prop2 = () => this;
++    prop3 = () => () => () => () => this;
++    prop4 = '  ' +
++        function () {
++        } +
++        ' ' +
++        (() => () => () => this);
++    prop5 = {
++        a: () => { return this; }
++    };
++    prop6 = () => {
++        return {
++            a: () => { return this; }
++        };
 +    };
 +}

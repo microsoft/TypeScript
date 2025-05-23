@@ -1,7 +1,7 @@
 --- old.sourceMapValidationDestructuringParametertArrayBindingPattern.js
 +++ new.sourceMapValidationDestructuringParametertArrayBindingPattern.js
 @@= skipped -36, +36 lines =@@
- 
+
  //// [sourceMapValidationDestructuringParametertArrayBindingPattern.js]
  var robotA = [1, "mower", "mowing"];
 -function foo1(_a) {

@@ -2,7 +2,7 @@
 +++ new.incorrectClassOverloadChain.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [incorrectClassOverloadChain.js]
 -var C = /** @class */ (function () {
 -    function C() {

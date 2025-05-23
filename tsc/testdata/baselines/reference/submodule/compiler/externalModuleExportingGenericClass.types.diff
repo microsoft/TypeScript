@@ -1,12 +1,12 @@
 --- old.externalModuleExportingGenericClass.types
 +++ new.externalModuleExportingGenericClass.types
 @@= skipped -1, +1 lines =@@
- 
+
  === externalModuleExportingGenericClass_file1.ts ===
  import a = require('./externalModuleExportingGenericClass_file0');
 ->a : typeof a
 +>a : typeof C
- 
+
  var v: a; // this should report error
  >v : any
 @@= skipped -8, +8 lines =@@
@@ -20,7 +20,7 @@
 +>new a() : C<unknown>
 +>a : typeof C
  >foo : unknown
- 
+
  var v3: number = (new a<number>()).foo;
  >v3 : number
  >(new a<number>()).foo : number
@@ -31,5 +31,5 @@
 +>new a<number>() : C<number>
 +>a : typeof C
  >foo : number
- 
+
  === externalModuleExportingGenericClass_file0.ts ===

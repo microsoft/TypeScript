@@ -2,7 +2,7 @@
 +++ new.errorForUsingPropertyOfTypeAsType02.types
 @@= skipped -9, +9 lines =@@
  >x : T
- 
+
          let a: T.abc = x.abc;
 ->a : T.abc
 +>a : abc

@@ -7,5 +7,5 @@
 ->getGamepads : { (): (Gamepad | null)[]; (func?: any): any; }
 +>getGamepads : { (): Gamepad[]; (func?: any): any; }
  >func : any
- 
+
      webkitGetGamepads(func?: any): any

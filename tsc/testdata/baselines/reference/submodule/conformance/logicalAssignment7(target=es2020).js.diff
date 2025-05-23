@@ -1,8 +1,8 @@
 --- old.logicalAssignment7(target=es2020).js
 +++ new.logicalAssignment7(target=es2020).js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [logicalAssignment7.js]
 -"use strict";
  function foo1(results, results1) {

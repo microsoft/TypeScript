@@ -2,7 +2,7 @@
 +++ new.typeSatisfactionWithDefaultExport.types
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfactionWithDefaultExport.ts] ////
- 
+
 -=== ./a.ts ===
 +=== a.ts ===
  interface Foo {
@@ -11,7 +11,7 @@
 @@= skipped -8, +8 lines =@@
  >{} satisfies Foo : {}
  >{} : {}
- 
+
 -=== ./b.ts ===
 +=== b.ts ===
  interface Foo {

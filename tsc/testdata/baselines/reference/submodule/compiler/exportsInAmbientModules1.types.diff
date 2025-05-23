@@ -2,7 +2,7 @@
 +++ new.exportsInAmbientModules1.types
 @@= skipped -8, +8 lines =@@
  >"M" : typeof import("M")
- 
+
      export {x} from "external"
 ->x : number
 +>x : any

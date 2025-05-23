@@ -1,8 +1,8 @@
 --- old.noUnusedLocals_destructuringAssignment.js
 +++ new.noUnusedLocals_destructuringAssignment.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [noUnusedLocals_destructuringAssignment.js]
 -var C = /** @class */ (function () {
 -    function C() {

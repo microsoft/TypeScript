@@ -2,17 +2,17 @@
 +++ new.mixinOverMappedTypeNoCrash.types
 @@= skipped -20, +20 lines =@@
  >Constructor : Constructor<I, C>
- 
+
  function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
 ->cloneClass : <T extends Constructor<{}>>(OriginalClass: T) => T
 +>cloneClass : <T extends Constructor<{}, any>>(OriginalClass: T) => T
  >OriginalClass : T
- 
+
      class AnotherOriginalClass extends OriginalClass {
 ->AnotherOriginalClass : AnotherOriginalClass
 +>AnotherOriginalClass : AnotherOriginalClass<T>
  >OriginalClass : {}
- 
+
          constructor(...args: any[]) {
 @@= skipped -18, +18 lines =@@
          }

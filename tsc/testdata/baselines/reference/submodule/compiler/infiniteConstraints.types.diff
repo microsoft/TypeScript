@@ -2,11 +2,11 @@
 +++ new.infiniteConstraints.types
 @@= skipped -16, +16 lines =@@
  >a : string
- 
+
  declare function myBug<
 ->myBug : <T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never; }>(arg: T) => T
 +>myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
- 
+
    T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
  >(arg: T): T
 @@= skipped -9, +9 lines =@@
@@ -20,11 +20,11 @@
  >{a: "test"} : { a: string; }
 @@= skipped -15, +15 lines =@@
  >val : V
- 
+
  declare function ensureNoDuplicates<
 ->ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"] ? never : any; }>(vals: T) => void
 +>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
- 
+
    T extends {
      [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
 @@= skipped -13, +13 lines =@@

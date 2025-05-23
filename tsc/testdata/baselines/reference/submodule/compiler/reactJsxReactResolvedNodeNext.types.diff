@@ -1,7 +1,7 @@
 --- old.reactJsxReactResolvedNodeNext.types
 +++ new.reactJsxReactResolvedNodeNext.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  export const a = <div></div>;
 ->a : error
@@ -10,4 +10,3 @@
 +><div></div> : any
  >div : any
  >div : any
- 

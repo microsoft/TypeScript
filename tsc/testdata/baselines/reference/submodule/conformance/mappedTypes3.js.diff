@@ -2,7 +2,7 @@
 +++ new.mappedTypes3.js
 @@= skipped -40, +40 lines =@@
  }
- 
+
  //// [mappedTypes3.js]
 -var Box = /** @class */ (function () {
 -    function Box() {
@@ -32,10 +32,7 @@
 -    var b = unboxify(bb); // Explicit type parameter required
 -    var bool = b.isPerfect;
 -    var weight = bb.weight;
-+    let b = unboxify(bb); // Explicit type parameter required
-+    let bool = b.isPerfect;
-+    let weight = bb.weight;
- }
+-}
 -
 -
 -//// [mappedTypes3.d.ts]
@@ -58,3 +55,7 @@
 -declare function f1(b: Bacon): void;
 -declare function f2(bb: Boxified<Bacon>): void;
 -declare function f3(bb: BoxifiedBacon): void;
++    let b = unboxify(bb); // Explicit type parameter required
++    let bool = b.isPerfect;
++    let weight = bb.weight;
++}

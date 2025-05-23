@@ -1,8 +1,8 @@
 --- old.elementAccessChain.2.js
 +++ new.elementAccessChain.2.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [elementAccessChain.2.js]
 -var _a, _b;
 -o1 === null || o1 === void 0 ? void 0 : o1["b"];

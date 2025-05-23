@@ -2,7 +2,7 @@
 +++ new.moduleAugmentationsImports3.types
 @@= skipped -11, +11 lines =@@
  >a : A
- 
+
  let b = a.getB().x.toFixed();
 ->b : string
 ->a.getB().x.toFixed() : string
@@ -23,7 +23,7 @@
 +>getB : any
 +>x : any
 +>toFixed : any
- 
+
  let c = a.getCls().y.toLowerCase();
 ->c : string
 ->a.getCls().y.toLowerCase() : string
@@ -44,11 +44,11 @@
 +>getCls : any
 +>y : any
 +>toLowerCase : any
- 
+
  === a.ts ===
  export class A {}
  >A : A
- 
+
 -=== b.ts ===
 -export class B {x: number;}
 ->B : B
@@ -66,25 +66,26 @@
  === d.d.ts ===
  declare module "D" {
  >"D" : typeof import("D")
- 
+
      import {A} from "a";
 ->A : typeof A
 +>A : any
- 
+
      import {B} from "b";
 ->B : typeof B
 +>B : any
- 
+
      module "a" {
 ->"a" : typeof import("a")
 +>"a" : any
- 
+
          interface A {
              getB(): B;
-@@= skipped -61, +47 lines =@@
-     }
- }
- 
+ >getB : () => B
+         }
+-    }
+-}
+-
 -=== e.ts ===
 -/// <reference path="c.d.ts" preserve="true"/>
 -import {A} from "./a";
@@ -109,6 +110,5 @@
 -    interface A {
 -        getCls(): Cls;
 ->getCls : () => Cls
--    }
--}
--
+     }
+ }

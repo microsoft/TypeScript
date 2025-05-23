@@ -1,8 +1,8 @@
 --- old.controlFlowTypeofObject.js
 +++ new.controlFlowTypeofObject.js
 @@= skipped -71, +71 lines =@@
- 
- 
+
+
  //// [controlFlowTypeofObject.js]
 -"use strict";
  function f1(x) {

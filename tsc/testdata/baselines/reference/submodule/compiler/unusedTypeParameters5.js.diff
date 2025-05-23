@@ -2,7 +2,7 @@
 +++ new.unusedTypeParameters5.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [unusedTypeParameters5.js]
 -var A = /** @class */ (function () {
 -    function A() {

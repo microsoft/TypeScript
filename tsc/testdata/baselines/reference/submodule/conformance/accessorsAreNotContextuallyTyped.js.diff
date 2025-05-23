@@ -1,14 +1,12 @@
 --- old.accessorsAreNotContextuallyTyped.js
 +++ new.accessorsAreNotContextuallyTyped.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [accessorsAreNotContextuallyTyped.js]
  // accessors are not contextually typed
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    set x(v) {
-     }
+-    }
 -    Object.defineProperty(C.prototype, "x", {
 -        get: function () {
 -            return function (x) { return ""; };
@@ -20,6 +18,9 @@
 -    });
 -    return C;
 -}());
++class C {
++    set x(v) {
++    }
 +    get x() {
 +        return (x) => "";
 +    }

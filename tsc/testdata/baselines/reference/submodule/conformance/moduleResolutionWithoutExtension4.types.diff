@@ -6,4 +6,3 @@
  import { foo } from "./foo"; // should error, suggest adding ".js"
 ->foo : any
 +>foo : () => string
- 

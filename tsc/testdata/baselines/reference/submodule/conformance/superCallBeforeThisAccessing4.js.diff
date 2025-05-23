@@ -2,7 +2,7 @@
 +++ new.superCallBeforeThisAccessing4.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [superCallBeforeThisAccessing4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -25,12 +25,7 @@
 -        var _this = this;
 -        _this._t;
 -        return _this = _super.call(this) || this;
-+class D extends null {
-+    _t;
-+    constructor() {
-+        this._t;
-+        super();
-     }
+-    }
 -    return D;
 -}(null));
 -var E = /** @class */ (function (_super) {
@@ -39,13 +34,20 @@
 -        var _this = _super.call(this) || this;
 -        _this._t;
 -        return _this;
+-    }
+-    return E;
+-}(null));
++class D extends null {
++    _t;
++    constructor() {
++        this._t;
++        super();
++    }
 +}
 +class E extends null {
 +    _t;
 +    constructor() {
 +        super();
 +        this._t;
-     }
--    return E;
--}(null));
++    }
 +}

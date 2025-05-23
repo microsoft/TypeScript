@@ -2,7 +2,7 @@
 +++ new.classImplementsClass2.js
 @@= skipped -15, +15 lines =@@
  c2 = c;
- 
+
  //// [classImplementsClass2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

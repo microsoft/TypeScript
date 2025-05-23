@@ -1,7 +1,7 @@
 --- old.mappedTypeWithAsClauseAndLateBoundProperty2.js
 +++ new.mappedTypeWithAsClauseAndLateBoundProperty2.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [mappedTypeWithAsClauseAndLateBoundProperty2.js]
  export const thing = null;
 -

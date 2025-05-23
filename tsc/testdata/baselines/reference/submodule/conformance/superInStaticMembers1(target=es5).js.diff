@@ -59,22 +59,15 @@
 +        (() => {
              var Reflect; // collision (es2015-es2021 only)
 -            _super.w.call(_a);
-+            super.w();
-         })(),
+-        })(),
 -        (function () {
 -            var Reflect = { Reflect: null }.Reflect; // collision (es2015-es2021 only)
 -            _super.w.call(_a);
-+        (() => {
-+            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
-+            super.w();
-         })(),
+-        })(),
 -        (function () {
 -            var Reflect = [null][0]; // collision (es2015-es2021 only)
 -            _super.w.call(_a);
-+        (() => {
-+            var [Reflect] = [null]; // collision (es2015-es2021 only)
-+            super.w();
-         })(),
+-        })(),
 -        (function () {
 -            var Reflect = /** @class */ (function () {
 -                function Reflect() {
@@ -82,45 +75,61 @@
 -                return Reflect;
 -            }()); // collision (es2015-es2021 only)
 -            _super.w.call(_a);
+-        })(),
+-        (function () {
++            super.w();
++        })(),
++        (() => {
++            var { Reflect } = { Reflect: null }; // collision (es2015-es2021 only)
++            super.w();
++        })(),
++        (() => {
++            var [Reflect] = [null]; // collision (es2015-es2021 only)
++            super.w();
++        })(),
 +        (() => {
 +            class Reflect {
 +            } // collision (es2015-es2021 only)
 +            super.w();
-         })(),
--        (function () {
++        })(),
 +        (() => {
              function Reflect() { } // collision (es2015-es2021 only)
 -            _super.w.call(_a);
-+            super.w();
-         })(),
+-        })(),
 -        (function () {
 -            var Reflect;
-+        (() => {
-+            let Reflect;
-             (function (Reflect) {
-             })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+-            (function (Reflect) {
+-            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -            _super.w.call(_a);
-+            super.w();
-         })(),
+-        })(),
 -        (function () {
 -            _super.w.call(_a);
+-        })(),
+-        (function () {
+-            _super.w.call(_a);
+-        })(),
+-        (function () {
++            super.w();
++        })(),
 +        (() => {
 +            let Reflect;
 +            (function (Reflect) {
 +            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +            super.w();
-         })(),
--        (function () {
--            _super.w.call(_a);
++        })(),
++        (() => {
++            let Reflect;
++            (function (Reflect) {
++            })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
++            super.w();
++        })(),
 +        (() => {
 +            super.w();
-         })(),
--        (function () {
++        })(),
 +        (() => {
              ; // no collision
 -            _super.w.call(_a);
-+            super.w();
-         })(),
+-        })(),
 -        (function () {
 -            (/** @class */ (function () {
 -                function Reflect() {
@@ -128,12 +137,15 @@
 -                return Reflect;
 -            }())); // no collision
 -            _super.w.call(_a);
+-        })(),
+-        (function () {
++            super.w();
++        })(),
 +        (() => {
 +            (class Reflect {
 +            }); // no collision
 +            super.w();
-         })(),
--        (function () {
++        })(),
 +        (() => {
              (function Reflect() { }); // no collision
 -            _super.w.call(_a);
@@ -183,12 +195,8 @@
 -    })();
 -    (function () {
 -        var Reflect;
-+        super.w();
-+    }
-+    static {
-+        let Reflect;
-         (function (Reflect) {
-         })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
+-        (function (Reflect) {
+-        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 -        _super.w.call(_a);
 -    })();
 -    (function () {
@@ -209,6 +217,12 @@
 -        _super.w.call(_a);
 -    })();
 -    (function () {
++        super.w();
++    }
++    static {
++        let Reflect;
++        (function (Reflect) {
++        })(Reflect || (Reflect = {})); // collision (es2015-es2021 only)
 +        super.w();
 +    }
 +    static {

@@ -1,16 +1,16 @@
 --- old.typesVersionsDeclarationEmit.ambient.types
 +++ new.typesVersionsDeclarationEmit.ambient.types
 @@= skipped -1, +1 lines =@@
- 
+
  === main.ts ===
  import { fa } from "ext";
 ->fa : () => import("ext").A
 +>fa : () => A
- 
+
  import { fb } from "ext/other";
 ->fb : () => import("ext/other").B
 +>fb : () => B
- 
+
  export const va = fa();
 ->va : import("ext").A
 ->fa() : import("ext").A
@@ -18,7 +18,7 @@
 +>va : A
 +>fa() : A
 +>fa : () => A
- 
+
  export const vb = fb();
 ->vb : import("ext/other").B
 ->fb() : import("ext/other").B
@@ -26,6 +26,6 @@
 +>vb : B
 +>fb() : B
 +>fb : () => B
- 
+
  === node_modules/ext/ts3.1/index.d.ts ===
  declare module "ext" {

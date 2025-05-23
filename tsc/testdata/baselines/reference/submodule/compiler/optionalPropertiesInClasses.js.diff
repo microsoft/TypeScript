@@ -2,7 +2,7 @@
 +++ new.optionalPropertiesInClasses.js
 @@= skipped -19, +19 lines =@@
  }
- 
+
  //// [optionalPropertiesInClasses.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

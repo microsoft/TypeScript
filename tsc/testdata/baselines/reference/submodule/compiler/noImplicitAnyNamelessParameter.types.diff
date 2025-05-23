@@ -2,16 +2,16 @@
 +++ new.noImplicitAnyNamelessParameter.types
 @@= skipped -4, +4 lines =@@
  >C : C
- 
+
  declare var a: { m(...string): void }
 ->a : { m(...string: any[]): void; }
 +>a : { m: (...string: any[]) => void; }
  >m : (...string: any[]) => void
  >string : any[]
- 
+
 @@= skipped -15, +15 lines =@@
  >number : any
- 
+
  declare var d: { m(boolean, C, object, undefined): void }
 ->d : { m(boolean: any, C: any, object: any, undefined: any): void; }
 +>d : { m: (boolean: any, C: any, object: any, undefined: any) => void; }

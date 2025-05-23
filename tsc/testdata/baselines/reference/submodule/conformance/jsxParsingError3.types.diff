@@ -1,7 +1,7 @@
 --- old.jsxParsingError3.types
 +++ new.jsxParsingError3.types
 @@= skipped -10, +10 lines =@@
- 
+
  === Error1.tsx ===
  let x1 = <div>}</div>;
 ->x1 : JSX.Element
@@ -10,7 +10,7 @@
 +><div>}</div> : Element
  >div : any
  >div : any
- 
+
  === Error2.tsx ===
  let x2 = <div>></div>;
 ->x2 : JSX.Element
@@ -19,7 +19,7 @@
 +><div>></div> : Element
  >div : any
  >div : any
- 
+
  === Error3.tsx ===
  let x3 = <div>{"foo"}}</div>;
 ->x3 : JSX.Element
@@ -29,7 +29,7 @@
  >div : any
  >"foo" : "foo"
  >div : any
- 
+
  === Error4.tsx ===
  let x4 = <div>{"foo"}></div>;
 ->x4 : JSX.Element
@@ -39,7 +39,7 @@
  >div : any
  >"foo" : "foo"
  >div : any
- 
+
  === Error5.tsx ===
  let x5 = <div>}{"foo"}</div>;
 ->x5 : JSX.Element
@@ -49,7 +49,7 @@
  >div : any
  >"foo" : "foo"
  >div : any
- 
+
  === Error6.tsx ===
  let x6 = <div>>{"foo"}</div>;
 ->x6 : JSX.Element

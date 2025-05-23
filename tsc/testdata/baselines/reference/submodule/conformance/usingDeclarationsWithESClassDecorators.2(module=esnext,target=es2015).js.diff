@@ -1,8 +1,8 @@
 --- old.usingDeclarationsWithESClassDecorators.2(module=esnext,target=es2015).js
 +++ new.usingDeclarationsWithESClassDecorators.2(module=esnext,target=es2015).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [usingDeclarationsWithESClassDecorators.2.js]
 -export { C };
  var before, C;

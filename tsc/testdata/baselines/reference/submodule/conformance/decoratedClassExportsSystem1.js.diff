@@ -2,7 +2,7 @@
 +++ new.decoratedClassExportsSystem1.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [a.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

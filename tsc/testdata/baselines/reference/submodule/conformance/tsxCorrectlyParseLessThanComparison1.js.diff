@@ -1,7 +1,7 @@
 --- old.tsxCorrectlyParseLessThanComparison1.js
 +++ new.tsxCorrectlyParseLessThanComparison1.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [tsxCorrectlyParseLessThanComparison1.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

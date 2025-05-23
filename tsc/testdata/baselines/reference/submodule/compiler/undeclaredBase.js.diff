@@ -1,8 +1,8 @@
 --- old.undeclaredBase.js
 +++ new.undeclaredBase.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [undeclaredBase.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

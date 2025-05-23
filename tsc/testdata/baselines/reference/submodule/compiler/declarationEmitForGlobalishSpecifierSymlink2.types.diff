@@ -6,11 +6,11 @@
  import * as _whatever from "p2";
 ->_whatever : typeof _whatever
 +>_whatever : typeof import("/p2/index")
- 
+
  import { getA } from "typescript-fsa";
 ->getA : () => import("/cache/typescript-fsa/index").A
 +>getA : () => A
- 
+
  export const a = getA();
 ->a : import("/cache/typescript-fsa/index").A
 ->getA() : import("/cache/typescript-fsa/index").A
@@ -18,10 +18,9 @@
 +>a : A
 +>getA() : A
 +>getA : () => A
- 
+
  === /p2/index.d.ts ===
  export const a: import("typescript-fsa").A;
 ->a : import("/cache/typescript-fsa/index").A
 +>a : A
- 
- 
+

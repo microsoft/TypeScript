@@ -1,7 +1,7 @@
 --- old.heterogeneousArrayLiterals.js
 +++ new.heterogeneousArrayLiterals.js
 @@= skipped -134, +134 lines =@@
- 
+
  //// [heterogeneousArrayLiterals.js]
  // type of an array is the best common type of its elements (plus its contextual type if it exists)
 -var __extends = (this && this.__extends) || (function () {

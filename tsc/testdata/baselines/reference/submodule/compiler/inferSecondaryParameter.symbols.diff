@@ -1,7 +1,7 @@
 --- old.inferSecondaryParameter.symbols
 +++ new.inferSecondaryParameter.symbols
 @@= skipped -4, +4 lines =@@
- 
+
  interface Ib { m(test: string, fn: Function); }
  >Ib : Symbol(Ib, Decl(inferSecondaryParameter.ts, 0, 0))
 ->m : Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
@@ -11,7 +11,7 @@
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 @@= skipped -14, +14 lines =@@
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
  b.m("test", function (bug) {
 ->b.m : Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
 +>b.m : Symbol(m, Decl(inferSecondaryParameter.ts, 2, 14))
@@ -19,5 +19,5 @@
 ->m : Symbol(Ib.m, Decl(inferSecondaryParameter.ts, 2, 14))
 +>m : Symbol(m, Decl(inferSecondaryParameter.ts, 2, 14))
  >bug : Symbol(bug, Decl(inferSecondaryParameter.ts, 6, 22))
- 
+
      var a: number = bug;

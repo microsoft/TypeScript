@@ -1,7 +1,7 @@
 --- old.restParametersOfNonArrayTypes.js
 +++ new.restParametersOfNonArrayTypes.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [restParametersOfNonArrayTypes.js]
  // Rest parameters must be an array type if they have a type annotation, so all these are errors
 -function foo() {

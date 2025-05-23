@@ -1,8 +1,7 @@
 --- old.typeReferenceDirectives6.errors.txt
 +++ new.typeReferenceDirectives6.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/app.ts(4,8): error TS2749: '$' refers to a value, but is being used as a type here. Did you mean 'typeof $'?
 +
 +

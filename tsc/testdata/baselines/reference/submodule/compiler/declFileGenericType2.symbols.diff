@@ -2,7 +2,7 @@
 +++ new.declFileGenericType2.symbols
 @@= skipped -48, +48 lines =@@
  >IModel : Symbol(IModel, Decl(declFileGenericType2.ts, 0, 27))
- 
+
          getControllers(): mvc.IController<mvc.IModel>[];
 ->getControllers : Symbol(ICompositeControllerModel.getControllers, Decl(declFileGenericType2.ts, 13, 60))
 +>getControllers : Symbol(getControllers, Decl(declFileGenericType2.ts, 13, 60))
@@ -41,7 +41,7 @@
  >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 24, 43))
  >IElementController : Symbol(IElementController, Decl(declFileGenericType2.ts, 17, 23))
  >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 24, 43))
- 
+
          constructor() {
              super();
 ->super : Symbol(templa.mvc.AbstractController, Decl(declFileGenericType2.ts, 8, 27))
@@ -62,23 +62,27 @@
  >templa.dom : Symbol(dom, Decl(declFileGenericType2.ts, 17, 14), Decl(declFileGenericType2.ts, 22, 14), Decl(declFileGenericType2.ts, 31, 14))
 @@= skipped -12, +12 lines =@@
  >ModelType : Symbol(ModelType, Decl(declFileGenericType2.ts, 32, 52))
- 
+
          public _controllers: templa.mvc.IController<templa.mvc.IModel>[];
 ->_controllers : Symbol(AbstractCompositeElementController._controllers, Decl(declFileGenericType2.ts, 32, 179))
-+>_controllers : Symbol(_controllers, Decl(declFileGenericType2.ts, 32, 179))
- >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
- >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
+->templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
+->mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
 ->IController : Symbol(templa.mvc.IController, Decl(declFileGenericType2.ts, 4, 27))
-+>IController : Symbol(IController, Decl(declFileGenericType2.ts, 4, 27))
- >templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
- >mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
+->templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
+->mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
 ->IModel : Symbol(templa.mvc.IModel, Decl(declFileGenericType2.ts, 0, 27))
++>_controllers : Symbol(_controllers, Decl(declFileGenericType2.ts, 32, 179))
++>templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
++>mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
++>IController : Symbol(IController, Decl(declFileGenericType2.ts, 4, 27))
++>templa : Symbol(templa, Decl(declFileGenericType2.ts, 0, 0), Decl(declFileGenericType2.ts, 3, 1), Decl(declFileGenericType2.ts, 7, 1), Decl(declFileGenericType2.ts, 11, 1), Decl(declFileGenericType2.ts, 16, 1) ... and 2 more)
++>mvc : Symbol(mvc, Decl(declFileGenericType2.ts, 0, 22), Decl(declFileGenericType2.ts, 4, 22), Decl(declFileGenericType2.ts, 8, 22), Decl(declFileGenericType2.ts, 12, 22))
 +>IModel : Symbol(IModel, Decl(declFileGenericType2.ts, 0, 27))
- 
+
          constructor() {
              super();
  >super : Symbol(AbstractElementController, Decl(declFileGenericType2.ts, 22, 23))
- 
+
              this._controllers = [];
 ->this._controllers : Symbol(AbstractCompositeElementController._controllers, Decl(declFileGenericType2.ts, 32, 179))
 +>this._controllers : Symbol(_controllers, Decl(declFileGenericType2.ts, 32, 179))

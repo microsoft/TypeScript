@@ -1,7 +1,7 @@
 --- old.templateStringInFunctionExpression.js
 +++ new.templateStringInFunctionExpression.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [templateStringInFunctionExpression.js]
  var x = function y() {
 -    "abc".concat(0, "def");

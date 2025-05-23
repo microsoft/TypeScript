@@ -49,8 +49,8 @@
 -overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type 'D' does not satisfy the constraint 'A'.
 -  Property 'x' is missing in type 'D' but required in type 'A'.
 +overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
- 
- 
+
+
  ==== overloadresolutionWithConstraintCheckingDeferred.ts (6 errors) ====
 @@= skipped -54, +32 lines =@@
      declare function foo(arg: (x: B) => any): number;
@@ -71,8 +71,9 @@
  !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
  !!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
 -!!! related TS6502 overloadresolutionWithConstraintCheckingDeferred.ts:10:27: The expected type comes from the return type of this signature.
- !!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
 -!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+-!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
++!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
 +!!! related TS2771 overloadresolutionWithConstraintCheckingDeferred.ts:12:18: The last overload is declared here.
                                          ~
 -!!! error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
@@ -96,8 +97,9 @@
  !!! error TS2769:       Types of parameters 'x' and 'x' are incompatible.
  !!! error TS2769:         Property 'q' is missing in type 'B' but required in type 'D'.
 -!!! related TS6502 overloadresolutionWithConstraintCheckingDeferred.ts:10:27: The expected type comes from the return type of this signature.
- !!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
 -!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
+-!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
++!!! related TS2728 overloadresolutionWithConstraintCheckingDeferred.ts:4:15: 'q' is declared here.
 +!!! related TS2771 overloadresolutionWithConstraintCheckingDeferred.ts:12:18: The last overload is declared here.
                                           ~~~~~~~~
 -!!! error TS2344: Type 'D' does not satisfy the constraint 'A'.

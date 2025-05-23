@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithSubtypeObjectOnIndexSignature.js
 @@= skipped -109, +109 lines =@@
  var r8b1 = b4 !== a4;
- 
+
  //// [comparisonOperatorWithSubtypeObjectOnIndexSignature.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

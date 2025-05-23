@@ -1,8 +1,8 @@
 --- old.privateNameAndStaticInitializer(target=es2015).js
 +++ new.privateNameAndStaticInitializer(target=es2015).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [privateNameAndStaticInitializer.js]
 -var _A_foo, _A_prop;
  class A {

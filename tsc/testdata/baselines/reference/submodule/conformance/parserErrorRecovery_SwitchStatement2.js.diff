@@ -2,7 +2,7 @@
 +++ new.parserErrorRecovery_SwitchStatement2.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [parserErrorRecovery_SwitchStatement2.js]
 -var C = /** @class */ (function () {
 -    function C() {

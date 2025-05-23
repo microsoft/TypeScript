@@ -1,8 +1,8 @@
 --- old.arrayBindingPatternOmittedExpressions.types
 +++ new.arrayBindingPatternOmittedExpressions.types
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  function f([, a, , b, , , , s, , , ] = results) {
 ->f : ([, a, , b, , , , s, , ,]?: string[]) => void
 +>f : (__0?: string[]) => void

@@ -17,4 +17,3 @@
 ->C : Symbol(A.B.C, Decl(namespaces2.ts, 1, 21))
 +>B : Symbol(B, Decl(namespaces2.ts, 0, 10))
 +>C : Symbol(C, Decl(namespaces2.ts, 1, 21))
- 

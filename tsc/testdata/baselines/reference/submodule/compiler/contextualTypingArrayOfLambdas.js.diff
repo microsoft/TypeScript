@@ -1,8 +1,8 @@
 --- old.contextualTypingArrayOfLambdas.js
 +++ new.contextualTypingArrayOfLambdas.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [contextualTypingArrayOfLambdas.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

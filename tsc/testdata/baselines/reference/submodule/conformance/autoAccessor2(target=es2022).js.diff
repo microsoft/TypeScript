@@ -1,7 +1,7 @@
 --- old.autoAccessor2(target=es2022).js
 +++ new.autoAccessor2(target=es2022).js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [autoAccessor2.js]
  class C1 {
 -    #a_accessor_storage;

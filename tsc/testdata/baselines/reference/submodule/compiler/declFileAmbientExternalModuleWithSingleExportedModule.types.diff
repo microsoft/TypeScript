@@ -6,7 +6,7 @@
  import SubModule = require('SubModule');
 ->SubModule : typeof SubModule
 +>SubModule : typeof import("SubModule")
- 
+
  export var x: SubModule.m.m3.c;
 ->x : SubModule.m.m3.c
 +>x : c

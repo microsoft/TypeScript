@@ -3,7 +3,7 @@
 @@= skipped -13, +13 lines =@@
  export interface $ { x }
  >x : any
- 
+
 -=== /types/lib/index.d.ts ===
 -declare let $: { x: number }
 ->$ : { x: number; }

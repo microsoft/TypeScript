@@ -1,11 +1,11 @@
 --- old.neverTypeErrors2.types
 +++ new.neverTypeErrors2.types
 @@= skipped -92, +92 lines =@@
- 
+
  function func(): { value: Union[] } {
  >func : () => { value: Union[]; }
 ->value : never[]
 +>value : Union[]
- 
+
      return {
  >{        value: [],    } : { value: never[]; }

@@ -2,7 +2,7 @@
 +++ new.privacyTypeParameterOfFunctionDeclFile.types
 @@= skipped -185, +185 lines =@@
  >privateModule : any
- 
+
      myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
 ->myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
 +>myMethod : <T extends publicClass>() => publicClass
@@ -11,7 +11,7 @@
  }
 @@= skipped -8, +8 lines =@@
  >publicClassWithWithPrivateModuleTypeParameters : publicClassWithWithPrivateModuleTypeParameters
- 
+
      static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
 ->myPublicStaticMethod : <T extends privateModule.publicClass>() => void
 +>myPublicStaticMethod : <T extends publicClass>() => void
@@ -28,10 +28,10 @@
 +>publicFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
  >privateModule : any
  }
- 
+
 @@= skipped -24, +24 lines =@@
  >privateModule : any
- 
+
      myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;
 ->myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
 +>myMethod : <T extends publicClass>() => publicClass
@@ -40,7 +40,7 @@
  }
 @@= skipped -8, +8 lines =@@
  >privateClassWithWithPrivateModuleTypeParameters : privateClassWithWithPrivateModuleTypeParameters
- 
+
      static myPublicStaticMethod<T extends privateModule.publicClass>() {
 ->myPublicStaticMethod : <T extends privateModule.publicClass>() => void
 +>myPublicStaticMethod : <T extends publicClass>() => void
@@ -57,10 +57,10 @@
 +>privateFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
  >privateModule : any
  }
- 
+
 @@= skipped -202, +202 lines =@@
  >privateModule : any
- 
+
          myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  // Error
 ->myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
 +>myMethod : <T extends publicClass>() => publicClass
@@ -69,7 +69,7 @@
      }
 @@= skipped -8, +8 lines =@@
  >publicClassWithWithPrivateModuleTypeParameters : publicClassWithWithPrivateModuleTypeParameters
- 
+
          static myPublicStaticMethod<T extends privateModule.publicClass>() {  // Error
 ->myPublicStaticMethod : <T extends privateModule.publicClass>() => void
 +>myPublicStaticMethod : <T extends publicClass>() => void
@@ -86,10 +86,10 @@
 +>publicFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
  >privateModule : any
      }
- 
+
 @@= skipped -24, +24 lines =@@
  >privateModule : any
- 
+
          myMethod<T extends privateModule.publicClass>(): privateModule.publicClass;  
 ->myMethod : <T extends privateModule.publicClass>() => privateModule.publicClass
 +>myMethod : <T extends publicClass>() => publicClass
@@ -98,7 +98,7 @@
      }
 @@= skipped -8, +8 lines =@@
  >privateClassWithWithPrivateModuleTypeParameters : privateClassWithWithPrivateModuleTypeParameters
- 
+
          static myPublicStaticMethod<T extends privateModule.publicClass>() {  
 ->myPublicStaticMethod : <T extends privateModule.publicClass>() => void
 +>myPublicStaticMethod : <T extends publicClass>() => void
@@ -115,4 +115,3 @@
 +>privateFunctionWithPrivateMopduleTypeParameters : <T extends publicClass>() => void
  >privateModule : any
      }
- 

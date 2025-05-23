@@ -2,12 +2,12 @@
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit5(module=node16).js
 @@= skipped -24, +24 lines =@@
  export interface LocalInterface extends ImportInterface, RequireInterface {}
- 
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });
- /// <reference types="pkg" resolution-mode="import" preserve="true" />
- /// <reference types="pkg" resolution-mode="require" preserve="true" />
+-/// <reference types="pkg" resolution-mode="import" preserve="true" />
+-/// <reference types="pkg" resolution-mode="require" preserve="true" />
 -
 -
 -//// [index.d.ts]
@@ -15,4 +15,6 @@
 -/// <reference types="pkg" resolution-mode="require" preserve="true" />
 -export interface LocalInterface extends ImportInterface, RequireInterface {
 -}
++/// <reference types="pkg" resolution-mode="import" preserve="true" />
++/// <reference types="pkg" resolution-mode="require" preserve="true" />
 +export {};

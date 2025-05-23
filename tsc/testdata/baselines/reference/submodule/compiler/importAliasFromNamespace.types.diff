@@ -2,15 +2,15 @@
 +++ new.importAliasFromNamespace.types
 @@= skipped -14, +14 lines =@@
  >Foo : Foo
- 
+
          private _which: Internal.WhichThing;
 ->_which : Internal.WhichThing
 +>_which : WhichThing
  >Internal : any
- 
+
          constructor() {
 @@= skipped -12, +12 lines =@@
- 
+
              Internal.WhichThing.A ? "foo" : "bar";
  >Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
 ->Internal.WhichThing.A : Internal.WhichThing.A

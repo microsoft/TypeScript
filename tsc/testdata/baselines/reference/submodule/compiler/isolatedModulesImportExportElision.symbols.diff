@@ -1,7 +1,7 @@
 --- old.isolatedModulesImportExportElision.symbols
 +++ new.isolatedModulesImportExportElision.symbols
 @@= skipped -11, +11 lines =@@
- 
+
  class C extends c2.C {
  >C : Symbol(C, Decl(file1.ts, 2, 28))
 ->c2.C : Symbol(c)
@@ -10,5 +10,5 @@
 ->C : Symbol(c)
 +>C : Symbol(unknown)
  }
- 
+
  let x = new c();

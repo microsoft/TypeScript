@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsExportDoubleAssignmentInClosure.types
 @@= skipped -5, +5 lines =@@
  >foo : () => void
- 
+
      module.exports = exports = function (o) {
 ->module.exports = exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : { (o: any): any; methods: () => void; }
 ->module.exports : { (o: any): any; methods: () => void; }
@@ -16,7 +16,7 @@
  >exports : any
  >function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
  >o : any
- 
+
          return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
 ->(o == null) ? create(base) : defineProperties(Object(o), descriptors) : error
 +>(o == null) ? create(base) : defineProperties(Object(o), descriptors) : any
@@ -38,7 +38,7 @@
  >o : any
 ->descriptors : error
 +>descriptors : any
- 
+
      };
      const m = function () {
 @@= skipped -34, +34 lines =@@

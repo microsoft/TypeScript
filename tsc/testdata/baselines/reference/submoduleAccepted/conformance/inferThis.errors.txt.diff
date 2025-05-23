@@ -1,8 +1,7 @@
 --- old.inferThis.errors.txt
 +++ new.inferThis.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/a.js(8,9): error TS2322: Type 'typeof C' is not assignable to type 'T'.
 +  'T' could be instantiated with an arbitrary type which could be unrelated to 'typeof C'.
 +/a.js(17,9): error TS2322: Type 'this' is not assignable to type 'T'.

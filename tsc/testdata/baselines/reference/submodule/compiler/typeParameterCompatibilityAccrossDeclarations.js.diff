@@ -1,8 +1,8 @@
 --- old.typeParameterCompatibilityAccrossDeclarations.js
 +++ new.typeParameterCompatibilityAccrossDeclarations.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [typeParameterCompatibilityAccrossDeclarations.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

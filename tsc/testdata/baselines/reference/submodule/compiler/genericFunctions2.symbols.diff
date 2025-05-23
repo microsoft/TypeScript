@@ -9,5 +9,4 @@
  >x : Symbol(x, Decl(genericFunctions2.ts, 3, 26))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
- 
+

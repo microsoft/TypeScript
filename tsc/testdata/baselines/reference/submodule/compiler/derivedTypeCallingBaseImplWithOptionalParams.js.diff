@@ -2,7 +2,7 @@
 +++ new.derivedTypeCallingBaseImplWithOptionalParams.js
 @@= skipped -15, +15 lines =@@
  y.myMethod(); // error
- 
+
  //// [derivedTypeCallingBaseImplWithOptionalParams.js]
 -var MyClass = /** @class */ (function () {
 -    function MyClass() {

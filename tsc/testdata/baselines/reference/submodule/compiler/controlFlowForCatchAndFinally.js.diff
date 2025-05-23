@@ -2,7 +2,7 @@
 +++ new.controlFlowForCatchAndFinally.js
 @@= skipped -42, +42 lines =@@
  }
- 
+
  //// [controlFlowForCatchAndFinally.js]
 -"use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -39,15 +39,7 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+async function test() {
-+    let browser = undefined;
-+    let page = undefined;
-+    try {
-+        browser = await test1();
-+        page = await test2(browser);
-+        return await page.content();
-+        ;
-     }
+-    }
 -};
 -function test() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -85,6 +77,15 @@
 -            }
 -        });
 -    });
++async function test() {
++    let browser = undefined;
++    let page = undefined;
++    try {
++        browser = await test1();
++        page = await test2(browser);
++        return await page.content();
++        ;
++    }
 +    finally {
 +        if (page) {
 +            await page.close(); // ok

@@ -2,8 +2,8 @@
 +++ new.pathMappingBasedModuleResolution6_node.js
 @@= skipped -10, +10 lines =@@
  export let x: number;
- 
- 
+
+
 -//// [file3.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

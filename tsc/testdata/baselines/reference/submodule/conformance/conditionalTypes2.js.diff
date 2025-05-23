@@ -1,8 +1,8 @@
 --- old.conditionalTypes2.js
 +++ new.conditionalTypes2.js
 @@= skipped -247, +247 lines =@@
- 
- 
+
+
  //// [conditionalTypes2.js]
 -"use strict";
  function f1(a, b) {
@@ -34,30 +34,34 @@
  // Repros from #22860
 -var Opt = /** @class */ (function () {
 -    function Opt() {
-+class Opt {
-+    toVector() {
-+        return undefined;
-     }
+-    }
 -    Opt.prototype.toVector = function () {
-+}
-+class Vector {
-+    tail() {
-         return undefined;
+-        return undefined;
 -    };
 -    return Opt;
 -}());
 -var Vector = /** @class */ (function () {
 -    function Vector() {
-     }
+-    }
 -    Vector.prototype.tail = function () {
-+    partition2(predicate) {
-         return undefined;
+-        return undefined;
 -    };
 -    Vector.prototype.partition2 = function (predicate) {
 -        return undefined;
 -    };
 -    return Vector;
 -}());
++class Opt {
++    toVector() {
++        return undefined;
++    }
++}
++class Vector {
++    tail() {
++        return undefined;
++    }
++    partition2(predicate) {
++        return undefined;
 +    }
 +}
  function foo(value) {

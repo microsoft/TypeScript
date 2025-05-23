@@ -2,7 +2,7 @@
 +++ new.numericLiteralTypes3.types
 @@= skipped -13, +13 lines =@@
  >D : D
- 
+
  function f1(a: A, b: B, c: C, d: D) {
 ->f1 : (a: A, b: B, c: C, d: D) => void
 +>f1 : (a: 1, b: B, c: C, d: D) => void
@@ -11,7 +11,7 @@
  >c : C
 @@= skipped -28, +28 lines =@@
  }
- 
+
  function f2(a: A, b: B, c: C, d: D) {
 ->f2 : (a: A, b: B, c: C, d: D) => void
 +>f2 : (a: 1, b: B, c: C, d: D) => void
@@ -20,7 +20,7 @@
  >c : C
 @@= skipped -28, +28 lines =@@
  }
- 
+
  function f3(a: A, b: B, c: C, d: D) {
 ->f3 : (a: A, b: B, c: C, d: D) => void
 +>f3 : (a: 1, b: B, c: C, d: D) => void
@@ -29,7 +29,7 @@
  >c : C
 @@= skipped -28, +28 lines =@@
  }
- 
+
  function f4(a: A, b: B, c: C, d: D) {
 ->f4 : (a: A, b: B, c: C, d: D) => void
 +>f4 : (a: 1, b: B, c: C, d: D) => void
@@ -38,7 +38,7 @@
  >c : C
 @@= skipped -28, +28 lines =@@
  }
- 
+
  function f5(a: A, b: B, c: C, d: D) {
 ->f5 : (a: A, b: B, c: C, d: D) => void
 +>f5 : (a: 1, b: B, c: C, d: D) => void
@@ -47,7 +47,7 @@
  >c : C
 @@= skipped -88, +88 lines =@@
  }
- 
+
  function f6(a: A, b: B, c: C, d: D) {
 ->f6 : (a: A, b: B, c: C, d: D) => void
 +>f6 : (a: 1, b: B, c: C, d: D) => void
@@ -56,7 +56,7 @@
  >c : C
 @@= skipped -88, +88 lines =@@
  }
- 
+
  function f7(a: A, b: B, c: C, d: D) {
 ->f7 : (a: A, b: B, c: C, d: D) => void
 +>f7 : (a: 1, b: B, c: C, d: D) => void

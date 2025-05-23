@@ -6,6 +6,6 @@
  >f : (options: number | Options) => void
 ->{    m(x) { },} : { m(x: number): void; }
 +>{    m(x) { },} : { m: (x: number) => void; }
- 
+
      m(x) { },
  >m : (x: number) => void

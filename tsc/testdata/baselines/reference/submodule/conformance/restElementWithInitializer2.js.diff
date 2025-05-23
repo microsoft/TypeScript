@@ -1,8 +1,8 @@
 --- old.restElementWithInitializer2.js
 +++ new.restElementWithInitializer2.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [restElementWithInitializer2.js]
 -var _a;
  var a;

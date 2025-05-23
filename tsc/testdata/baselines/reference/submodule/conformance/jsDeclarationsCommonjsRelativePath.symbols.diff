@@ -8,7 +8,7 @@
 ->require : Symbol(require)
 ->'./thing' : Symbol("thing", Decl(thing.js, 0, 0))
 ->Thing : Symbol(Thing, Decl(thing.js, 2, 18))
- 
+
  module.exports = { Thing }
 ->module.exports : Symbol(module.exports, Decl(reexport.js, 0, 0))
 ->module : Symbol(module, Decl(reexport.js, 1, 38))
@@ -17,7 +17,7 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(reexport.js, 1, 38))
  >Thing : Symbol(Thing, Decl(reexport.js, 2, 18))
- 
+-
 -=== thing.js ===
 -'use strict';
 -class Thing {}
@@ -28,4 +28,3 @@
 ->module : Symbol(module, Decl(thing.js, 1, 14))
 ->exports : Symbol(module.exports, Decl(thing.js, 0, 0))
 ->Thing : Symbol(Thing, Decl(thing.js, 2, 18))
--

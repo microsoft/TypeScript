@@ -10,5 +10,5 @@
 ->asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
  >syncGenerator : Symbol(syncGenerator, Decl(generatorAssignability.ts, 59, 9))
- 
+
      for await (const x of o) {

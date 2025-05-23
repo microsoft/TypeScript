@@ -1,8 +1,8 @@
 --- old.baseCheck.js
 +++ new.baseCheck.js
 @@= skipped -31, +31 lines =@@
- 
- 
+
+
  //// [baseCheck.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,24 +21,14 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C(x, y) {
-+class C {
-+    constructor(x, y) { }
-+}
-+class ELoc extends C {
-+    constructor(x) {
-+        super(0, x);
-     }
+-    }
 -    return C;
 -}());
 -var ELoc = /** @class */ (function (_super) {
 -    __extends(ELoc, _super);
 -    function ELoc(x) {
 -        return _super.call(this, 0, x) || this;
-+}
-+class ELocVar extends C {
-+    constructor(x) {
-+        super(0, loc);
-     }
+-    }
 -    return ELoc;
 -}(C));
 -var ELocVar = /** @class */ (function (_super) {
@@ -47,6 +37,18 @@
 -        return _super.call(this, 0, loc) || this;
 -    }
 -    ELocVar.prototype.m = function () {
++class C {
++    constructor(x, y) { }
++}
++class ELoc extends C {
++    constructor(x) {
++        super(0, x);
++    }
++}
++class ELocVar extends C {
++    constructor(x) {
++        super(0, loc);
++    }
 +    m() {
          var loc = 10;
 -    };
@@ -58,7 +60,7 @@
 -        var _this = _super.call(this, _this.z) || this;
 -        _this.z = z;
 -        return _this;
-     }
+-    }
 -    return D;
 -}(C)); // too few params
 -var E = /** @class */ (function (_super) {
@@ -67,13 +69,7 @@
 -        var _this = _super.call(this, 0, _this.z) || this;
 -        _this.z = z;
 -        return _this;
-+}
-+class D extends C {
-+    z;
-+    constructor(z) {
-+        super(this.z);
-+        this.z = z;
-     }
+-    }
 -    return E;
 -}(C));
 -var F = /** @class */ (function (_super) {
@@ -82,15 +78,24 @@
 -        var _this = _super.call(this, "hello", _this.z) || this;
 -        _this.z = z;
 -        return _this;
+-    }
+-    return F;
+-}(C)); // first param type
++    }
++}
++class D extends C {
++    z;
++    constructor(z) {
++        super(this.z);
++        this.z = z;
++    }
 +} // too few params
 +class E extends C {
 +    z;
 +    constructor(z) {
 +        super(0, this.z);
 +        this.z = z;
-     }
--    return F;
--}(C)); // first param type
++    }
 +}
 +class F extends C {
 +    z;

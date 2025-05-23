@@ -2,128 +2,128 @@
 +++ new.templateLiteralTypesPatterns.types
 @@= skipped -17, +17 lines =@@
  >Protocol : `${T}://${U}`
- 
+
  function download(hostSpec: Protocol<"http" | "https" | "ftp", string>) { }
 ->download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
 +>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
  >hostSpec : `ftp://${string}` | `http://${string}` | `https://${string}`
- 
+
  // ok, has protocol
  download("http://example.com/protocol");
  >download("http://example.com/protocol") : void
 ->download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
 +>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
  >"http://example.com/protocol" : "http://example.com/protocol"
- 
+
  // issues error - no protocol
  download("example.com/noprotocol");
  >download("example.com/noprotocol") : void
 ->download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
 +>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
  >"example.com/noprotocol" : "example.com/noprotocol"
- 
+
  // issues error, incorrect protocol
  download("gopher://example.com/protocol");
  >download("gopher://example.com/protocol") : void
 ->download : (hostSpec: Protocol<"http" | "https" | "ftp", string>) => void
 +>download : (hostSpec: `ftp://${string}` | `http://${string}` | `https://${string}`) => void
  >"gopher://example.com/protocol" : "gopher://example.com/protocol"
- 
+
  const q: RequiresLeadingSlash extends string ? true : false = true;
 @@= skipped -28, +28 lines =@@
  >true : true
- 
+
  declare function bools(x: `${boolean}`): void;
 ->bools : (x: `${boolean}`) => void
 +>bools : (x: "false" | "true") => void
  >x : "false" | "true"
- 
+
  // ok
  bools("true");
  >bools("true") : void
 ->bools : (x: `${boolean}`) => void
 +>bools : (x: "false" | "true") => void
  >"true" : "true"
- 
+
  bools("false");
  >bools("false") : void
 ->bools : (x: `${boolean}`) => void
 +>bools : (x: "false" | "true") => void
  >"false" : "false"
- 
+
  // not ok
  bools("other");
  >bools("other") : void
 ->bools : (x: `${boolean}`) => void
 +>bools : (x: "false" | "true") => void
  >"other" : "other"
- 
+
  type Pat<T extends string | null | undefined> = `${T}`
  >Pat : `${T}`
- 
+
  declare function nullishes(x: Pat<null | undefined>): void;
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >x : "null" | "undefined"
- 
+
  // ok
  nullishes("null");
  >nullishes("null") : void
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >"null" : "null"
- 
+
  nullishes("undefined");
  >nullishes("undefined") : void
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >"undefined" : "undefined"
- 
+
  // not ok
  nullishes("0");
  >nullishes("0") : void
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >"0" : "0"
- 
+
  nullishes("false");
  >nullishes("false") : void
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >"false" : "false"
- 
+
  nullishes("NaN");
  >nullishes("NaN") : void
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >"NaN" : "NaN"
- 
+
  nullishes("");
  >nullishes("") : void
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >"" : ""
- 
+
  nullishes("other");
  >nullishes("other") : void
 ->nullishes : (x: Pat<null | undefined>) => void
 +>nullishes : (x: "null" | "undefined") => void
  >"other" : "other"
- 
+
  declare function numbers(x: `${number}`): void;
 @@= skipped -572, +572 lines =@@
  >BB : BB
- 
+
      abstract get(id: Id<AA>): void;
 ->get : (id: Id<AA>) => void
 +>get : (id: `${string}-${string}`) => void
  >id : `${string}-${string}`
- 
+
      update(id: Id<AA>): void {
 ->update : (id: Id<AA>) => void
 +>update : (id: `${string}-${string}`) => void
  >id : `${string}-${string}`
- 
+
          this.get(id!);
  >this.get(id!) : void
 ->this.get : (id: Id<AA>) => void
@@ -135,52 +135,52 @@
  >id : `${string}-${string}`
      }
 @@= skipped -19, +19 lines =@@
- 
+
  // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
  function conversionTest(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string}Downcast` & {}) {}
 ->conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | (`${string}Downcast` & {})) => void
 ->groupName : "dataDowncast" | "downcast" | "editingDowncast" | (`${string}Downcast` & {})
 +>conversionTest : (groupName: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast` & {}) => void
 +>groupName : "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast` & {}
- 
+
  conversionTest("testDowncast");
  >conversionTest("testDowncast") : void
 ->conversionTest : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | (`${string}Downcast` & {})) => void
 +>conversionTest : (groupName: "dataDowncast" | "downcast" | "editingDowncast" | `${string}Downcast` & {}) => void
  >"testDowncast" : "testDowncast"
- 
+
  function conversionTest2(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | {} & `${string}Downcast`) {}
 ->conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
 ->groupName : "dataDowncast" | "downcast" | "editingDowncast" | ({} & `${string}Downcast`)
 +>conversionTest2 : (groupName: "dataDowncast" | "downcast" | "editingDowncast" | {} & `${string}Downcast`) => void
 +>groupName : "dataDowncast" | "downcast" | "editingDowncast" | {} & `${string}Downcast`
- 
+
  conversionTest2("testDowncast");
  >conversionTest2("testDowncast") : void
 ->conversionTest2 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | ({} & `${string}Downcast`)) => void
 +>conversionTest2 : (groupName: "dataDowncast" | "downcast" | "editingDowncast" | {} & `${string}Downcast`) => void
  >"testDowncast" : "testDowncast"
- 
+
  function conversionTest3(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) {}
 ->conversionTest3 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
 +>conversionTest3 : (groupName: "downcast" | `${string & {}}Downcast`) => void
  >groupName : "downcast" | `${string & {}}Downcast`
- 
+
  conversionTest3("testDowncast");
  >conversionTest3("testDowncast") : void
 ->conversionTest3 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${string & {}}Downcast`) => void
 +>conversionTest3 : (groupName: "downcast" | `${string & {}}Downcast`) => void
  >"testDowncast" : "testDowncast"
- 
+
  function conversionTest4(groupName: | "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) {}
 ->conversionTest4 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
 +>conversionTest4 : (groupName: "downcast" | `${{} & string}Downcast`) => void
  >groupName : "downcast" | `${{} & string}Downcast`
- 
+
  conversionTest4("testDowncast");
  >conversionTest4("testDowncast") : void
 ->conversionTest4 : (groupName: "downcast" | "dataDowncast" | "editingDowncast" | `${{} & string}Downcast`) => void
 +>conversionTest4 : (groupName: "downcast" | `${{} & string}Downcast`) => void
  >"testDowncast" : "testDowncast"
- 
+
  function foo(str: `${`a${string}` & `${string}a`}Test`) {}

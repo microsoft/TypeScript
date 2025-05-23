@@ -1,7 +1,7 @@
 --- old.symbolProperty19.symbols
 +++ new.symbolProperty19.symbols
 @@= skipped -5, +5 lines =@@
- 
+
      [Symbol.iterator]: { p: null },
  >[Symbol.iterator] : Symbol([Symbol.iterator], Decl(symbolProperty19.ts, 0, 9))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -10,7 +10,7 @@
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
  >p : Symbol(p, Decl(symbolProperty19.ts, 1, 24))
- 
+
      [Symbol.toStringTag]() { return { p: undefined }; }
  >[Symbol.toStringTag] : Symbol([Symbol.toStringTag], Decl(symbolProperty19.ts, 1, 35))
 ->Symbol.toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -30,7 +30,7 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
- 
+
  var str = i[Symbol.toStringTag]();
  >str : Symbol(str, Decl(symbolProperty19.ts, 6, 3))
  >i : Symbol(i, Decl(symbolProperty19.ts, 0, 3))
@@ -39,4 +39,3 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->toStringTag : Symbol(SymbolConstructor.toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>toStringTag : Symbol(toStringTag, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 

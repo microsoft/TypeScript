@@ -8,4 +8,3 @@
 +>module : { "Eloquent": typeof import("Eloquent"); }
  >exports : typeof import("Eloquent")
  >exports : typeof import("Eloquent")
- 

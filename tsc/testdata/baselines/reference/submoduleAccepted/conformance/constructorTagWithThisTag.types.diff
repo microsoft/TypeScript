@@ -6,7 +6,7 @@
  function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.e = this.m + 1
 ->this.e = this.m + 1 : number
 ->this.e : number
@@ -26,4 +26,3 @@
 +>m : any
  >1 : 1
  }
- 

@@ -17,10 +17,11 @@
      (function (e) {
          e[e["weekday"] = 0] = "weekday";
          e[e["weekend"] = 1] = "weekend";
-@@= skipped -25, +22 lines =@@
+@@= skipped -24, +21 lines =@@
+     mc: { cl: m1.c },
      me: { en: m1.e },
      mh: m1.e.holiday
- };
+-};
 -
 -
 -//// [declFileTypeofInAnonymousType.d.ts]
@@ -54,4 +55,4 @@
 -        en: typeof m1.e;
 -    };
 -    mh: m1.e;
--};
+ };

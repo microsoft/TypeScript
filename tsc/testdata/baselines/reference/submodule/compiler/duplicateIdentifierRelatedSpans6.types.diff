@@ -2,17 +2,17 @@
 +++ new.duplicateIdentifierRelatedSpans6.types
 @@= skipped -3, +3 lines =@@
  /// <reference path="./file1" />
- 
+
  declare module "someMod" {
 ->"someMod" : typeof import("someMod")
 +>"someMod" : any
- 
+
      export interface TopLevel {
          duplicate1(): number;
 @@= skipped -15, +15 lines =@@
  }
  export {};
- 
+
 -=== file1.ts ===
 -declare module "someMod" {
 ->"someMod" : typeof import("someMod")

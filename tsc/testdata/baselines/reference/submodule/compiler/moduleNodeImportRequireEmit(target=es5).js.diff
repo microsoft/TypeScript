@@ -1,7 +1,7 @@
 --- old.moduleNodeImportRequireEmit(target=es5).js
 +++ new.moduleNodeImportRequireEmit(target=es5).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [index.js]
  import { createRequire as _createRequire } from "module";
 -var __require = _createRequire(import.meta.url);

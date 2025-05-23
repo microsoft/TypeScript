@@ -1,8 +1,8 @@
 --- old.switchAssignmentCompat.js
 +++ new.switchAssignmentCompat.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [switchAssignmentCompat.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

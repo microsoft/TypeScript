@@ -1,8 +1,8 @@
 --- old.callWithSpread.js
 +++ new.callWithSpread.js
 @@= skipped -60, +60 lines =@@
- 
- 
+
+
  //// [callWithSpread.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -84,8 +84,7 @@
 +    constructor(x, y, ...z) {
          this.foo(x, y);
 -        this.foo.apply(this, __spreadArray([x, y], z, false));
-+        this.foo(x, y, ...z);
-     }
+-    }
 -    C.prototype.foo = function (x, y) {
 -        var z = [];
 -        for (var _i = 2; _i < arguments.length; _i++) {
@@ -99,14 +98,17 @@
 -    function D() {
 -        var _this = _super.call(this, 1, 2) || this;
 -        return _super.apply(this, __spreadArray([1, 2], a, false)) || this;
-+    foo(x, y, ...z) {
-     }
+-    }
 -    D.prototype.foo = function () {
 -        _super.prototype.foo.call(this, 1, 2);
 -        _super.prototype.foo.apply(this, __spreadArray([1, 2], a, false));
 -    };
 -    return D;
 -}(C));
++        this.foo(x, y, ...z);
++    }
++    foo(x, y, ...z) {
++    }
 +}
 +class D extends C {
 +    constructor() {

@@ -1,8 +1,8 @@
 --- old.conditionalOperatorWithIdenticalBCT.js
 +++ new.conditionalOperatorWithIdenticalBCT.js
 @@= skipped -49, +49 lines =@@
- 
- 
+
+
  //// [conditionalOperatorWithIdenticalBCT.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -25,12 +25,7 @@
 -    }
 -    return X;
 -}());
-+class X {
-+    propertyX;
-+    propertyX1;
-+    propertyX2;
-+}
- ;
+-;
 -var A = /** @class */ (function (_super) {
 -    __extends(A, _super);
 -    function A() {
@@ -38,10 +33,7 @@
 -    }
 -    return A;
 -}(X));
-+class A extends X {
-+    propertyA;
-+}
- ;
+-;
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B() {
@@ -49,6 +41,16 @@
 -    }
 -    return B;
 -}(X));
++class X {
++    propertyX;
++    propertyX1;
++    propertyX2;
++}
++;
++class A extends X {
++    propertyA;
++}
++;
 +class B extends X {
 +    propertyB;
 +}

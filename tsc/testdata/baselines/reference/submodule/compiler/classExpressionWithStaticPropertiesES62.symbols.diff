@@ -2,19 +2,19 @@
 +++ new.classExpressionWithStaticPropertiesES62.symbols
 @@= skipped -5, +5 lines =@@
  >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 7))
- 
+
      static a = 1;
 ->a : Symbol(C.a, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 17))
 +>a : Symbol(a, Decl(classExpressionWithStaticPropertiesES62.ts, 0, 17))
- 
+
      static b
 ->b : Symbol(C.b, Decl(classExpressionWithStaticPropertiesES62.ts, 1, 17))
 +>b : Symbol(b, Decl(classExpressionWithStaticPropertiesES62.ts, 1, 17))
- 
+
      static c = {
 ->c : Symbol(C.c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
 +>c : Symbol(c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
- 
+
          x: "hi"
  >x : Symbol(x, Decl(classExpressionWithStaticPropertiesES62.ts, 3, 16))
      }
@@ -28,5 +28,5 @@
 ->c : Symbol(C.c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
 +>c : Symbol(c, Decl(classExpressionWithStaticPropertiesES62.ts, 2, 12))
  >x : Symbol(x, Decl(classExpressionWithStaticPropertiesES62.ts, 3, 16))
- 
+
   };

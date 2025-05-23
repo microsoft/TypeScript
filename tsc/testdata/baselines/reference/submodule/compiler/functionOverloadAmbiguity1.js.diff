@@ -1,7 +1,7 @@
 --- old.functionOverloadAmbiguity1.js
 +++ new.functionOverloadAmbiguity1.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [functionOverloadAmbiguity1.js]
  function callb(a) { }
 -callb(function (a) { a.length; }); // error, chose first overload

@@ -6,7 +6,7 @@
    get path() {
 ->path : Symbol(VFile.path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
 +>path : Symbol(path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
- 
+
      return ''
    }
 @@= skipped -9, +9 lines =@@

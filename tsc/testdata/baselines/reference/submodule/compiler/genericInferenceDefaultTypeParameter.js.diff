@@ -1,8 +1,8 @@
 --- old.genericInferenceDefaultTypeParameter.js
 +++ new.genericInferenceDefaultTypeParameter.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [genericInferenceDefaultTypeParameter.js]
 -"use strict";
 -// Repro from #50858

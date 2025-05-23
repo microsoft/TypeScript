@@ -1,7 +1,7 @@
 --- old.TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.types
 +++ new.TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.types
 @@= skipped -45, +45 lines =@@
- 
+
          // have to be fully qualified since in different root
          export var Origin: Root.A.Point = { x: 0, y: 0 };
 ->Origin : Root.A.Point
@@ -11,7 +11,7 @@
  >{ x: 0, y: 0 } : { x: number; y: number; }
 @@= skipped -16, +16 lines =@@
  >Plane : Plane
- 
+
                  constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
 ->tl : Root.A.Point
 +>tl : Point

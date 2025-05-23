@@ -1,8 +1,8 @@
 --- old.tsxEmit1.js
 +++ new.tsxEmit1.js
 @@= skipped -42, +42 lines =@@
- 
- 
+
+
  //// [file.jsx]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

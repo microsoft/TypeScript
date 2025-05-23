@@ -1,6 +1,6 @@
 --- old.jsdocImplements_signatures.errors.txt
 +++ new.jsdocImplements_signatures.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(2,7): error TS2420: Class 'B' incorrectly implements interface 'Sig'.
 -  Index signature for type 'string' is missing in type 'B'.
 -
@@ -17,5 +17,4 @@
 -!!! error TS2420:   Index signature for type 'string' is missing in type 'B'.
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

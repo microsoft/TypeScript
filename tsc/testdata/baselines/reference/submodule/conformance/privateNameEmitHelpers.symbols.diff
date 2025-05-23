@@ -2,18 +2,18 @@
 +++ new.privateNameEmitHelpers.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(main.ts, 0, 0))
- 
+
      #a = 1;
 ->#a : Symbol(C.#a, Decl(main.ts, 0, 16))
 +>#a : Symbol(#a, Decl(main.ts, 0, 16))
- 
+
      #b() { this.#c = 42; }
 ->#b : Symbol(C.#b, Decl(main.ts, 1, 11))
 ->this.#c : Symbol(C.#c, Decl(main.ts, 2, 26))
 +>#b : Symbol(#b, Decl(main.ts, 1, 11))
 +>this.#c : Symbol(#c, Decl(main.ts, 2, 26))
  >this : Symbol(C, Decl(main.ts, 0, 0))
- 
+
      set #c(v: number) { this.#a += v; }
 ->#c : Symbol(C.#c, Decl(main.ts, 2, 26))
 +>#c : Symbol(#c, Decl(main.ts, 2, 26))
@@ -41,7 +41,7 @@
 +>T : Symbol(T, Decl(tslib.d.ts, 1, 47))
 +>state : Symbol(state, Decl(tslib.d.ts, 1, 80))
 +>V : Symbol(V, Decl(tslib.d.ts, 1, 64))
- 
+
  export declare function __classPrivateFieldSet<T extends object, V>(receiver: T, state: any, value: V): V;
 ->__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(tslib.d.ts, --, --))
 ->T : Symbol(T, Decl(tslib.d.ts, --, --))
@@ -61,4 +61,3 @@
 +>value : Symbol(value, Decl(tslib.d.ts, 2, 92))
 +>V : Symbol(V, Decl(tslib.d.ts, 2, 64))
 +>V : Symbol(V, Decl(tslib.d.ts, 2, 64))
- 

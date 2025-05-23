@@ -1,7 +1,7 @@
 --- old.trivialSubtypeReductionNoStructuralCheck2.js
 +++ new.trivialSubtypeReductionNoStructuralCheck2.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [trivialSubtypeReductionNoStructuralCheck2.js]
  "use strict";
 -var __assign = (this && this.__assign) || function () {

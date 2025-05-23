@@ -8,14 +8,14 @@
 +>module : { Conn: typeof Conn; }
  >exports : typeof Conn
  >Conn : typeof Conn
- 
+
 @@= skipped -16, +16 lines =@@
       * @param {Conn} c
       */
      constructor(c) {
 ->c : import("conn")
 +>c : Conn
- 
+
          this.connItem = c.item;
  >this.connItem = c.item : number
 ->this.connItem : any
@@ -27,7 +27,7 @@
 ->c : import("conn")
 +>c : Conn
  >item : number
- 
+
          /** @type {import("./conn").Whatever} */
          this.another = "";
 ->this.another = "" : ""
@@ -41,7 +41,7 @@
  >"" : ""
      }
  }
- 
+
  module.exports = {
 ->module.exports = {    Wrap} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -52,5 +52,5 @@
 +>module : { export=: { Wrap: typeof Wrap; }; }
 +>exports : { Wrap: typeof Wrap; }
  >{    Wrap} : { Wrap: typeof Wrap; }
- 
+
      Wrap

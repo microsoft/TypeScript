@@ -1,7 +1,7 @@
 --- old.decoratorMetadataNoLibIsolatedModulesTypes.js
 +++ new.decoratorMetadataNoLibIsolatedModulesTypes.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [decoratorMetadataNoLibIsolatedModulesTypes.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

@@ -2,7 +2,7 @@
 +++ new.contextuallyTypedStringLiteralsInJsxAttributes01.types
 @@= skipped -12, +12 lines =@@
  }
- 
+
  const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
 ->FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
 ->(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
@@ -17,7 +17,7 @@
  >props : { foo: "A" | "B" | "C"; }
 @@= skipped -12, +12 lines =@@
  >span : any
- 
+
  <FooComponent foo={"A"} />;
 -><FooComponent foo={"A"} /> : JSX.Element
 ->FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
@@ -25,14 +25,14 @@
 +>FooComponent : (props: { foo: "A" | "B" | "C"; }) => Element
  >foo : "A"
  >"A" : "A"
- 
+
  <FooComponent foo="A"   />;
 -><FooComponent foo="A"   /> : JSX.Element
 ->FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
 +><FooComponent foo="A"   /> : Element
 +>FooComponent : (props: { foo: "A" | "B" | "C"; }) => Element
  >foo : "A"
- 
+
  <FooComponent foo={"f"} />;
 -><FooComponent foo={"f"} /> : JSX.Element
 ->FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
@@ -40,11 +40,10 @@
 +>FooComponent : (props: { foo: "A" | "B" | "C"; }) => Element
  >foo : "f"
  >"f" : "f"
- 
+
  <FooComponent foo="f"   />;
 -><FooComponent foo="f"   /> : JSX.Element
 ->FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
 +><FooComponent foo="f"   /> : Element
 +>FooComponent : (props: { foo: "A" | "B" | "C"; }) => Element
  >foo : "f"
- 

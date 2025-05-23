@@ -2,10 +2,10 @@
 +++ new.typeGuardNarrowsIndexedAccessOfKnownProperty1.types
 @@= skipped -290, +290 lines =@@
  }
- 
+
  export function g(pair: [number, string?]): string {
 ->g : (pair: [number, string?]) => string
 +>g : (pair: [number, (string | undefined)?]) => string
  >pair : [number, (string | undefined)?]
- 
+
      return pair[1] ? pair[1] : 'nope';

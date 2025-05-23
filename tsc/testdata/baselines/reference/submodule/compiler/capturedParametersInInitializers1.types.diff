@@ -1,7 +1,7 @@
 --- old.capturedParametersInInitializers1.types
 +++ new.capturedParametersInInitializers1.types
 @@= skipped -19, +19 lines =@@
- 
+
  // ok - used in file
  function foo2(y = function(x: typeof z) {}, z = 1) {
 ->foo2 : (y?: (x: typeof z) => void, z?: number) => void
@@ -15,7 +15,7 @@
  >z : number
 @@= skipped -15, +15 lines =@@
  >a : any
- 
+
  function foo3(y = { x: <typeof z>a }, z = 1) {
 ->foo3 : (y?: { x: typeof z; }, z?: number) => void
 ->y : { x: typeof z; }

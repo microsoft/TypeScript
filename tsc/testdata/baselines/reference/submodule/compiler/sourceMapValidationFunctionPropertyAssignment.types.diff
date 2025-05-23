@@ -1,7 +1,7 @@
 --- old.sourceMapValidationFunctionPropertyAssignment.types
 +++ new.sourceMapValidationFunctionPropertyAssignment.types
 @@= skipped -1, +1 lines =@@
- 
+
  === sourceMapValidationFunctionPropertyAssignment.ts ===
  var x = { n() { } };
 ->x : { n(): void; }
@@ -9,4 +9,3 @@
 +>x : { n: () => void; }
 +>{ n() { } } : { n: () => void; }
  >n : () => void
- 

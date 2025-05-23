@@ -2,7 +2,7 @@
 +++ new.exportEqualsAmd.js
 @@= skipped -3, +3 lines =@@
  export = { ["hi"]: "there" };
- 
+
  //// [exportEqualsAmd.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

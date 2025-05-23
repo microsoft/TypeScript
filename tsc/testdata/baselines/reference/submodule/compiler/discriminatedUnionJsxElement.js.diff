@@ -1,8 +1,8 @@
 --- old.discriminatedUnionJsxElement.js
 +++ new.discriminatedUnionJsxElement.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [discriminatedUnionJsxElement.jsx]
 -"use strict";
 -// Repro from #46021

@@ -2,13 +2,13 @@
 +++ new.looseThisTypeInFunctions.types
 @@= skipped -69, +69 lines =@@
  >explicitThis : (this: C, m: number) => number
- 
+
  let o = {
 ->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 ->{    n: 101,    explicitThis: function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    },    implicitThis(m: number): number { return m; }} : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 +>o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
 +>{    n: 101,    explicitThis: function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    },    implicitThis(m: number): number { return m; }} : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
- 
+
      n: 101,
  >n : number
 @@= skipped -17, +17 lines =@@
@@ -19,14 +19,14 @@
 +>this : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
  >n : number
  >length : any
- 
+
 @@= skipped -13, +13 lines =@@
  };
  let i: I = o;
  >i : I
 ->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 +>o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
- 
+
  let o2: I = {
  >o2 : I
 @@= skipped -66, +66 lines =@@

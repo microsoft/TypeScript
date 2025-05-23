@@ -2,7 +2,7 @@
 +++ new.internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.types
 @@= skipped -21, +21 lines =@@
  >b : typeof b
- 
+
      export var x: b.c = new b.c();
 ->x : b.c
 +>x : c
@@ -15,5 +15,5 @@
 ->c : typeof b.c
 +>c : typeof c
  }
- 
+
  export var d = new c.b.c();

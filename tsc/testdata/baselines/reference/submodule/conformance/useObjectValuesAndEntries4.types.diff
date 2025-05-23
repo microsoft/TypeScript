@@ -10,7 +10,7 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >o : { a: number; b: number; }
- 
+
      let y = x;
 @@= skipped -13, +13 lines =@@
  var entries = Object.entries(o);
@@ -22,4 +22,3 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >o : { a: number; b: number; }
- 

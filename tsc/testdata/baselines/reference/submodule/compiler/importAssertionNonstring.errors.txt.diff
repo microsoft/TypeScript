@@ -25,8 +25,8 @@
  mod.mts(9,52): error TS2837: Import assertion values must be string literal expressions.
 +mod.mts(11,37): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
  mod.mts(11,66): error TS2837: Import assertion values must be string literal expressions.
- 
- 
+
+
 -==== mod.mts (10 errors) ====
 +==== mod.mts (16 errors) ====
      import * as thing1 from "./mod.mjs" assert {field: 0};

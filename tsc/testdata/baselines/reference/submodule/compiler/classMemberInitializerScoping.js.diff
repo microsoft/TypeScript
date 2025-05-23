@@ -1,7 +1,7 @@
 --- old.classMemberInitializerScoping.js
 +++ new.classMemberInitializerScoping.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [classMemberInitializerScoping.js]
  var aaa = 1;
 -var CCC = /** @class */ (function () {

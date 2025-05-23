@@ -6,6 +6,6 @@
  declare global {
 ->global : Symbol(global, Decl(index.d.ts, 5, 1))
 +>global : Symbol((Missing), Decl(index.d.ts, 5, 1))
- 
+
      namespace JSX {
  >JSX : Symbol(JSX, Decl(index.d.ts, 6, 16))

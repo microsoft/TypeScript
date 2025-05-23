@@ -1,7 +1,7 @@
 --- old.reactReadonlyHOCAssignabilityReal.js
 +++ new.reactReadonlyHOCAssignabilityReal.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [reactReadonlyHOCAssignabilityReal.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

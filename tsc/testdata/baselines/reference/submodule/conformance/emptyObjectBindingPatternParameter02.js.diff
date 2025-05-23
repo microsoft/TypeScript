@@ -2,7 +2,7 @@
 +++ new.emptyObjectBindingPatternParameter02.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [emptyObjectBindingPatternParameter02.js]
 -function f(a, _a) {
 +function f(a, {}) {

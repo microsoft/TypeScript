@@ -1,7 +1,7 @@
 --- old.controlFlowComputedPropertyNames.types
 +++ new.controlFlowComputedPropertyNames.types
 @@= skipped -131, +131 lines =@@
- 
+
              obj[key].toFixed();
  >obj[key].toFixed() : string
 ->obj[key].toFixed : (fractionDigits?: number) => string

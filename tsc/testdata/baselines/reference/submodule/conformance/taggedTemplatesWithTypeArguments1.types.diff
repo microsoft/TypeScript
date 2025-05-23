@@ -1,7 +1,7 @@
 --- old.taggedTemplatesWithTypeArguments1.types
 +++ new.taggedTemplatesWithTypeArguments1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === taggedTemplatesWithTypeArguments1.ts ===
  declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
 ->f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
@@ -16,5 +16,5 @@
 ->f : <T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>) => void
 +>f : <T>(strs: TemplateStringsArray, ...callbacks: ((x: T) => any)[]) => void
  >`    hello    ${stuff => stuff.x}    brave    ${stuff => stuff.y}    world    ${stuff => stuff.z}` : string
- 
+
      hello

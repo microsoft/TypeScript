@@ -1,8 +1,8 @@
 --- old.typeGuardNarrowsPrimitiveIntersection.js
 +++ new.typeGuardNarrowsPrimitiveIntersection.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [typeGuardNarrowsPrimitiveIntersection.js]
 -var value;
 +let value;

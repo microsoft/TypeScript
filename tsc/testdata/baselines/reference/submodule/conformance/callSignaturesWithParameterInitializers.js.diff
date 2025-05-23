@@ -1,7 +1,7 @@
 --- old.callSignaturesWithParameterInitializers.js
 +++ new.callSignaturesWithParameterInitializers.js
 @@= skipped -60, +60 lines =@@
- 
+
  //// [callSignaturesWithParameterInitializers.js]
  // Optional parameters allow initializers only in implementation signatures
 -function foo(x) {

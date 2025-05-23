@@ -2,7 +2,7 @@
 +++ new.keepImportsInDts2.js
 @@= skipped -5, +5 lines =@@
  import "./folder/test"
- 
+
  //// [test.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

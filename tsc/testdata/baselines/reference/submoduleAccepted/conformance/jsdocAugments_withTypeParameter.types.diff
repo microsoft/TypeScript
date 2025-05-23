@@ -6,11 +6,11 @@
  >B : B
 ->A : A<number>
 +>A : typeof A
- 
+
      m() {
 ->m : () => number
 +>m : () => any
- 
+
          return this.x;
 ->this.x : number
 +>this.x : any
@@ -19,4 +19,3 @@
 +>x : any
      }
  }
- 

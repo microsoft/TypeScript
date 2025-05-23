@@ -2,7 +2,7 @@
 +++ new.optionalBindingParametersInOverloads1.js
 @@= skipped -10, +10 lines =@@
  foo([false, 0, ""]);
- 
+
  //// [optionalBindingParametersInOverloads1.js]
 -function foo() {
 -    var rest = [];

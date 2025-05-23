@@ -13,7 +13,7 @@
  >exports.x : 1
  >exports : typeof import("assignmentToVoidZero1")
 @@= skipped -19, +19 lines =@@
- 
+
  exports.y = 2;
  >exports.y = 2 : 2
 ->exports.y : 2
@@ -22,4 +22,3 @@
 ->y : 2
 +>y : undefined
  >2 : 2
- 

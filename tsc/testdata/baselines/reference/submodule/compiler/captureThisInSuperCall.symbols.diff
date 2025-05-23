@@ -9,7 +9,7 @@
  >this : Symbol(B, Decl(captureThisInSuperCall.ts, 2, 1))
 ->someMethod : Symbol(B.someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
 +>someMethod : Symbol(someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
- 
+
      someMethod() {}
 ->someMethod : Symbol(B.someMethod, Decl(captureThisInSuperCall.ts, 5, 62))
 +>someMethod : Symbol(someMethod, Decl(captureThisInSuperCall.ts, 5, 62))

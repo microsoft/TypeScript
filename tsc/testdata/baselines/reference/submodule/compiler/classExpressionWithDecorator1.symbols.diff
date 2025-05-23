@@ -6,4 +6,3 @@
  >C : Symbol(C, Decl(classExpressionWithDecorator1.ts, 0, 7))
 ->p : Symbol(C.p, Decl(classExpressionWithDecorator1.ts, 0, 27))
 +>p : Symbol(p, Decl(classExpressionWithDecorator1.ts, 0, 27))
- 

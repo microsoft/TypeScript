@@ -10,5 +10,5 @@
 ->debugger : typeof chrome.debugger
 +>debugger : typeof debugger
  >tabId : number
- 
+
  declare namespace test.class {}

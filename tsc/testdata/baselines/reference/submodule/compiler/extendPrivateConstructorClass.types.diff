@@ -1,7 +1,7 @@
 --- old.extendPrivateConstructorClass.types
 +++ new.extendPrivateConstructorClass.types
 @@= skipped -12, +12 lines =@@
- 
+
  class C extends abc.XYZ {
  >C : C
 ->abc.XYZ : abc.XYZ
@@ -10,4 +10,3 @@
 ->XYZ : typeof abc.XYZ
 +>XYZ : typeof XYZ
  }
- 

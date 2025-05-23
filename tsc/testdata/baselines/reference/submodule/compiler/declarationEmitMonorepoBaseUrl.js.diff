@@ -1,8 +1,8 @@
 --- old.declarationEmitMonorepoBaseUrl.js
 +++ new.declarationEmitMonorepoBaseUrl.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

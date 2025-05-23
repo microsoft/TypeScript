@@ -1,7 +1,7 @@
 --- old.ambiguousGenericAssertion1.js
 +++ new.ambiguousGenericAssertion1.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [ambiguousGenericAssertion1.js]
  function f(x) { return null; }
 -var r = function (x) { return x; };

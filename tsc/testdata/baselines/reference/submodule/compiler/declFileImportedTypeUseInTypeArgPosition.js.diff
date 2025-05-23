@@ -1,8 +1,8 @@
 --- old.declFileImportedTypeUseInTypeArgPosition.js
 +++ new.declFileImportedTypeUseInTypeArgPosition.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [declFileImportedTypeUseInTypeArgPosition.js]
 -var List = /** @class */ (function () {
 -    function List() {
@@ -13,8 +13,7 @@
 -
 -//// [declFileImportedTypeUseInTypeArgPosition.d.ts]
 -declare class List<T> {
-+class List {
- }
+-}
 -declare module 'mod1' {
 -    class Foo {
 -    }
@@ -22,4 +21,5 @@
 -declare module 'moo' {
 -    import x = require('mod1');
 -    var p: List<x.Foo>;
--}
++class List {
+ }

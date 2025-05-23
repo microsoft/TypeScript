@@ -1,8 +1,8 @@
 --- old.numericIndexerConstraint4.js
 +++ new.numericIndexerConstraint4.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [numericIndexerConstraint4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,7 +1,7 @@
 --- old.capturedLetConstInLoop3.js
 +++ new.capturedLetConstInLoop3.js
 @@= skipped -220, +220 lines =@@
- 
+
  //// [capturedLetConstInLoop3.js]
  function foo0(x) {
 -    var _loop_1 = function (x_1) {

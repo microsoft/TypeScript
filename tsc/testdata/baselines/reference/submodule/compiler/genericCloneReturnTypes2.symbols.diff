@@ -2,19 +2,19 @@
 +++ new.genericCloneReturnTypes2.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
- 
+
      public size: number;
 ->size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
 +>size : Symbol(size, Decl(genericCloneReturnTypes2.ts, 0, 17))
- 
+
      public data: T[];
 ->data : Symbol(MyList.data, Decl(genericCloneReturnTypes2.ts, 1, 24))
 +>data : Symbol(data, Decl(genericCloneReturnTypes2.ts, 1, 24))
  >T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
- 
+
      constructor(n: number) {
  >n : Symbol(n, Decl(genericCloneReturnTypes2.ts, 3, 16))
- 
+
          this.size = n;
 ->this.size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
 +>this.size : Symbol(size, Decl(genericCloneReturnTypes2.ts, 0, 17))
@@ -22,7 +22,7 @@
 ->size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
 +>size : Symbol(size, Decl(genericCloneReturnTypes2.ts, 0, 17))
  >n : Symbol(n, Decl(genericCloneReturnTypes2.ts, 3, 16))
- 
+
          this.data = new Array<T>(this.size);
 ->this.data : Symbol(MyList.data, Decl(genericCloneReturnTypes2.ts, 1, 24))
 +>this.data : Symbol(data, Decl(genericCloneReturnTypes2.ts, 1, 24))
@@ -40,7 +40,7 @@
      public clone() {
 ->clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
 +>clone : Symbol(clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
- 
+
          return new MyList<T>(this.size);
  >MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
  >T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
@@ -61,7 +61,7 @@
  >a : Symbol(a, Decl(genericCloneReturnTypes2.ts, 11, 3))
 ->clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
 +>clone : Symbol(clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
- 
+
  var c: MyList<string> = a.clone(); // bug was there was an error on this line
  >c : Symbol(c, Decl(genericCloneReturnTypes2.ts, 13, 3))
  >MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
@@ -70,7 +70,7 @@
  >a : Symbol(a, Decl(genericCloneReturnTypes2.ts, 11, 3))
 ->clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
 +>clone : Symbol(clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
- 
+
  var d: MyList<number> = a.clone(); // error
  >d : Symbol(d, Decl(genericCloneReturnTypes2.ts, 14, 3))
  >MyList : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
@@ -79,4 +79,3 @@
  >a : Symbol(a, Decl(genericCloneReturnTypes2.ts, 11, 3))
 ->clone : Symbol(MyList.clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
 +>clone : Symbol(clone, Decl(genericCloneReturnTypes2.ts, 6, 5))
- 

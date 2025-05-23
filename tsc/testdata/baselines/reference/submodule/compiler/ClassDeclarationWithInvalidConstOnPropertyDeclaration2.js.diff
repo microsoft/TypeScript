@@ -2,7 +2,7 @@
 +++ new.ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [ClassDeclarationWithInvalidConstOnPropertyDeclaration2.js]
 -var C = /** @class */ (function () {
 -    function C() {

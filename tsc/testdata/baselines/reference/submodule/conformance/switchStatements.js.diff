@@ -1,8 +1,8 @@
 --- old.switchStatements.js
 +++ new.switchStatements.js
 @@= skipped -57, +57 lines =@@
- 
- 
+
+
  //// [switchStatements.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -79,14 +79,15 @@
 -    };
 -    return B;
 -}(class_1.A));
--exports.B = B;
++}
+ exports.B = B;
 -
 -
 -//// [class.d.ts]
 -export declare const enum TestEnum {
 -    Test1 = "123123",
 -    Test2 = "12312312312"
- }
+-}
 -export interface ITest {
 -    [TestEnum.Test1]: string;
 -    [TestEnum.Test2]: string;
@@ -103,4 +104,3 @@
 -        a: string;
 -    };
 -}
-+exports.B = B;

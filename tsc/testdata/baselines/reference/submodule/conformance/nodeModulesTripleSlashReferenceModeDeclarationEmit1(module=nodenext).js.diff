@@ -2,15 +2,16 @@
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit1(module=nodenext).js
 @@= skipped -23, +23 lines =@@
  export interface LocalInterface extends RequireInterface {}
- 
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });
- /// <reference types="pkg" preserve="true" />
+-/// <reference types="pkg" preserve="true" />
 -
 -
 -//// [index.d.ts]
 -/// <reference types="pkg" preserve="true" />
 -export interface LocalInterface extends RequireInterface {
 -}
++/// <reference types="pkg" preserve="true" />
 +export {};

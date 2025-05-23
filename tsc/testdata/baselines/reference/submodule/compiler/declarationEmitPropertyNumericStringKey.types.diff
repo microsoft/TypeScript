@@ -2,7 +2,7 @@
 +++ new.declarationEmitPropertyNumericStringKey.types
 @@= skipped -3, +3 lines =@@
  // https://github.com/microsoft/TypeScript/issues/55292
- 
+
  const STATUS = {
 ->STATUS : { readonly "404": "not found"; }
 ->{    ["404"]: "not found",} as const : { readonly "404": "not found"; }
@@ -10,12 +10,12 @@
 +>STATUS : { readonly ["404"]: "not found"; }
 +>{    ["404"]: "not found",} as const : { readonly ["404"]: "not found"; }
 +>{    ["404"]: "not found",} : { readonly ["404"]: "not found"; }
- 
+
      ["404"]: "not found",
  >["404"] : "not found"
 @@= skipped -16, +16 lines =@@
  >"100" : "100"
- 
+
  const obj = { [hundredStr]: "foo" };
 ->obj : { "100": string; }
 ->{ [hundredStr]: "foo" } : { "100": string; }
@@ -26,7 +26,7 @@
  >"foo" : "foo"
 @@= skipped -11, +11 lines =@@
  >100 : 100
- 
+
  const obj2 = { [hundredNum]: "bar" };
 ->obj2 : { 100: string; }
 ->{ [hundredNum]: "bar" } : { 100: string; }

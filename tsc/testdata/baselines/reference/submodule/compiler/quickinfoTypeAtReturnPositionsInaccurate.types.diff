@@ -7,12 +7,12 @@
 ->isBuilderProgram : <T extends BuilderProgram>(program: Program | T) => program is T
 +>isBuilderProgram : <T extends BuilderProgram>(program: T | Program) => program is T
  >program : T | Program
- 
+
  export function listFiles<T extends BuilderProgram>(program: Program | T) {
 ->listFiles : <T extends BuilderProgram>(program: Program | T) => void
 +>listFiles : <T extends BuilderProgram>(program: T | Program) => void
  >program : T | Program
- 
+
      const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
  >x : Program
  >isBuilderProgram(program) ? program.getProgram() : program : Program

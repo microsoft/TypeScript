@@ -1,6 +1,6 @@
 --- old.outModuleConcatUmd.errors.txt
 +++ new.outModuleConcatUmd.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 -
 -
@@ -11,5 +11,4 @@
 -==== b.ts (0 errors) ====
 -    import {A} from "./ref/a";
 -    export class B extends A { }
-@@= skipped --1, +1 lines =@@
 +<no content>

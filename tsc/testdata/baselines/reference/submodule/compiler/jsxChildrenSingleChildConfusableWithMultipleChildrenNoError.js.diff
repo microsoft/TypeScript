@@ -1,7 +1,7 @@
 --- old.jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.js
 +++ new.jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [jsxChildrenSingleChildConfusableWithMultipleChildrenNoError.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

@@ -1,7 +1,7 @@
 --- old.subtypingWithConstructSignatures4.js
 +++ new.subtypingWithConstructSignatures4.js
 @@= skipped -114, +114 lines =@@
- 
+
  //// [subtypingWithConstructSignatures4.js]
  // checking subtype relations for function types as it relates to contextual signature instantiation
 -var __extends = (this && this.__extends) || (function () {

@@ -12,7 +12,7 @@
 +>a : any
 +>b : any
 +>c : any
- 
+
      return a + b + c;
 ->a + b + c : number
 ->a + b : number
@@ -25,4 +25,3 @@
 +>b : any
 +>c : any
  }
- 

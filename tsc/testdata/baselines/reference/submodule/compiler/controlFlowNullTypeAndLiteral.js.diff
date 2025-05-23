@@ -1,8 +1,8 @@
 --- old.controlFlowNullTypeAndLiteral.js
 +++ new.controlFlowNullTypeAndLiteral.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [controlFlowNullTypeAndLiteral.js]
 -"use strict";
  // Repros from #23771

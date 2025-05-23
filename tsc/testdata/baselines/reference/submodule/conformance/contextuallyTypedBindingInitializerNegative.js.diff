@@ -1,8 +1,8 @@
 --- old.contextuallyTypedBindingInitializerNegative.js
 +++ new.contextuallyTypedBindingInitializerNegative.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [contextuallyTypedBindingInitializerNegative.js]
 -function f(_a) {
 -    var _b = _a.show, showRename = _b === void 0 ? function (v) { return v; } : _b;

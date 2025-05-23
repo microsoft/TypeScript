@@ -12,7 +12,7 @@
 +>f : (x: any) => void
 +>(x) => {} : (x: any) => void
 +>x : any
- 
+
  /**
   * @type {Contravariant<string>}
   */
@@ -26,7 +26,7 @@
 +>f : (x: any) => void
 +>(x) => {} : (x: any) => void
 +>x : any
- 
+
  super_contravariant = sub_contravariant;  // Error
  >super_contravariant = sub_contravariant : Contravariant<string>
 @@= skipped -36, +36 lines =@@
@@ -41,7 +41,7 @@
 +>f : (x: any) => void
 +>(x) => {} : (x: any) => void
 +>x : any
- 
+
  /**
   * @type {Invariant<string>}
   */
@@ -56,7 +56,7 @@
 +>(x) => { return "" } : (x: any) => string
 +>x : any
  >"" : ""
- 
+
  super_invariant = sub_invariant;  // Error
 @@= skipped -31, +31 lines =@@
   * @param {T} x
@@ -65,4 +65,3 @@
 ->f : <in T>(x: T) => void
 +>f : <T>(x: T) => void
  >x : T
- 

@@ -2,7 +2,7 @@
 +++ new.assignmentLHSIsValue.js
 @@= skipped -72, +72 lines =@@
  (foo()) = value;
- 
+
  //// [assignmentLHSIsValue.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

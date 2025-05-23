@@ -10,10 +10,10 @@
 ->E : typeof N.E
 +>E : typeof E
  >foo : string
- 
+
  module M {
 @@= skipped -20, +20 lines =@@
- 
+
      export class E extends M.D { baz: number; }
  >E : E
 ->M.D : typeof M.D
@@ -23,9 +23,9 @@
 +>D : typeof D
  >baz : number
  }
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
      class C2<T> extends Q.E2<T> { foo: T; } // error
  >C2 : C2<T>
 ->Q.E2 : typeof Q.E2
@@ -34,10 +34,10 @@
 ->E2 : typeof Q.E2
 +>E2 : typeof E2
  >foo : T
- 
+
      module P {
 @@= skipped -19, +19 lines =@@
- 
+
          export class E2<T> extends P.D2<T> { baz: T; }
  >E2 : E2<T>
 ->P.D2 : typeof P.D2

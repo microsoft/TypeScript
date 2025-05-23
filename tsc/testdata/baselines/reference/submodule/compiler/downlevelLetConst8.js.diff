@@ -2,7 +2,7 @@
 +++ new.downlevelLetConst8.js
 @@= skipped -3, +3 lines =@@
  let a = 1
- 
+
  //// [downlevelLetConst8.js]
 -var a = 1;
 +let a = 1;

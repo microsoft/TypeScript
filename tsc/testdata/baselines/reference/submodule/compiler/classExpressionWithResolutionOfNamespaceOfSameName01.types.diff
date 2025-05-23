@@ -2,7 +2,7 @@
 +++ new.classExpressionWithResolutionOfNamespaceOfSameName01.types
 @@= skipped -11, +11 lines =@@
  >C : typeof C
- 
+
      prop: C.type;
 ->prop : C.type
 +>prop : type

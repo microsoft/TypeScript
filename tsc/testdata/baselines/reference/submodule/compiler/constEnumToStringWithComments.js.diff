@@ -1,8 +1,8 @@
 --- old.constEnumToStringWithComments.js
 +++ new.constEnumToStringWithComments.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [constEnumToStringWithComments.js]
 -var x0 = 100 /* Foo.X */.toString();
 -var x1 = 100 /* Foo["X"] */.toString();

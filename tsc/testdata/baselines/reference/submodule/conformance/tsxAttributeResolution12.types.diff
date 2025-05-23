@@ -2,15 +2,15 @@
 +++ new.tsxAttributeResolution12.types
 @@= skipped -39, +39 lines =@@
  >callBack : () => any
- 
+
  	render(): JSX.Element;
 ->render : () => JSX.Element
 +>render : () => Element
  >JSX : any
- 
+
  	props: P;
 @@= skipped -32, +32 lines =@@
- 
+
  // Errors correctly
  const T = TestMod.Test;
 ->T : TestMod.TestClass
@@ -20,7 +20,7 @@
  >TestMod : typeof TestMod
 ->Test : TestMod.TestClass
 +>Test : TestClass
- 
+
  var t1 = <T />;
 ->t1 : JSX.Element
 -><T /> : JSX.Element
@@ -28,7 +28,7 @@
 +>t1 : Element
 +><T /> : Element
 +>T : TestClass
- 
+
  // Should error
  var t2 = <TestMod.Test />;
 ->t2 : JSX.Element
@@ -40,5 +40,4 @@
  >TestMod : typeof TestMod
 ->Test : TestMod.TestClass
 +>Test : TestClass
- 
- 
+

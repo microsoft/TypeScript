@@ -2,7 +2,7 @@
 +++ new.setterWithReturn.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [setterWithReturn.js]
 -var C234 = /** @class */ (function () {
 -    function C234() {

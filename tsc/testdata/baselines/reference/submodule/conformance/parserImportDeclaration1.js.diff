@@ -2,6 +2,6 @@
 +++ new.parserImportDeclaration1.js
 @@= skipped -3, +3 lines =@@
  import TypeScript = TypeScriptServices.TypeScript;
- 
+
  //// [parserImportDeclaration1.js]
 -var TypeScript = TypeScriptServices.TypeScript;

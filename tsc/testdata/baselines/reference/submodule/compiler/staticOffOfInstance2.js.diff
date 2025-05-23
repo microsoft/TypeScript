@@ -1,8 +1,8 @@
 --- old.staticOffOfInstance2.js
 +++ new.staticOffOfInstance2.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [staticOffOfInstance2.js]
 -var List = /** @class */ (function () {
 -    function List() {

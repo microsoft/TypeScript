@@ -25,8 +25,8 @@
 ->x : Symbol(A.B.x, Decl(dottedModuleName2.ts, 2, 12))
 +>B : Symbol(B, Decl(dottedModuleName2.ts, 0, 9), Decl(dottedModuleName2.ts, 21, 9))
 +>x : Symbol(x, Decl(dottedModuleName2.ts, 2, 12))
- 
- 
+
+
  module A.B.C
 @@= skipped -36, +36 lines =@@
   
@@ -52,4 +52,3 @@
 +>C : Symbol(C, Decl(dottedModuleName2.ts, 21, 11))
   
  }
- 

@@ -1,8 +1,8 @@
 --- old.typeGuardConstructorDerivedClass.js
 +++ new.typeGuardConstructorDerivedClass.js
 @@= skipped -68, +68 lines =@@
- 
- 
+
+
  //// [typeGuardConstructorDerivedClass.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,8 +1,8 @@
 --- old.bundlerImportESM(module=esnext).js
 +++ new.bundlerImportESM(module=esnext).js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [esm.mjs]
 -export var esm = 0;
 +export const esm = 0;

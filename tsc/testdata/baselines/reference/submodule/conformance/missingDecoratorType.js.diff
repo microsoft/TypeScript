@@ -1,7 +1,7 @@
 --- old.missingDecoratorType.js
 +++ new.missingDecoratorType.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [a.js]
  //// [b.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

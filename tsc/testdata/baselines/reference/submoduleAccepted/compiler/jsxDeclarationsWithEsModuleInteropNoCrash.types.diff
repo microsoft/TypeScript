@@ -6,16 +6,16 @@
  import PropTypes from 'prop-types';
 ->PropTypes : typeof PropTypes
 +>PropTypes : typeof import("prop-types")
- 
+
  import React from 'react';
  >React : typeof React
- 
+
  const propTypes = {
 ->propTypes : { bar: PropTypes.Requireable<boolean>; }
 ->{  bar: PropTypes.bool,} : { bar: PropTypes.Requireable<boolean>; }
 +>propTypes : { bar: Requireable<boolean>; }
 +>{  bar: PropTypes.bool,} : { bar: Requireable<boolean>; }
- 
+
    bar: PropTypes.bool,
 ->bar : PropTypes.Requireable<boolean>
 ->PropTypes.bool : PropTypes.Requireable<boolean>
@@ -25,17 +25,17 @@
 +>PropTypes.bool : Requireable<boolean>
 +>PropTypes : typeof import("prop-types")
 +>bool : Requireable<boolean>
- 
+
  };
- 
+
 @@= skipped -28, +28 lines =@@
  };
- 
+
  function Foo({ bar }) {
 ->Foo : typeof Foo
 +>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
  >bar : any
- 
+
    return <div>{bar}</div>;
 -><div>{bar}</div> : JSX.Element
 +><div>{bar}</div> : Element
@@ -43,7 +43,7 @@
  >bar : any
  >div : any
  }
- 
+
  Foo.propTypes = propTypes;
 ->Foo.propTypes = propTypes : { bar: PropTypes.Requireable<boolean>; }
 ->Foo.propTypes : { bar: PropTypes.Requireable<boolean>; }
@@ -55,7 +55,7 @@
 +>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
 +>propTypes : { bar: Requireable<boolean>; }
 +>propTypes : { bar: Requireable<boolean>; }
- 
+
  Foo.defaultProps = defaultProps;
  >Foo.defaultProps = defaultProps : { bar: boolean; }
  >Foo.defaultProps : { bar: boolean; }
@@ -63,8 +63,7 @@
 +>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
  >defaultProps : { bar: boolean; }
  >defaultProps : { bar: boolean; }
- 
+
  export default Foo;
 ->Foo : typeof Foo
 +>Foo : { (__0: { bar: any; }): Element; propTypes: { bar: Requireable<boolean>; }; defaultProps: { bar: boolean; }; }
- 

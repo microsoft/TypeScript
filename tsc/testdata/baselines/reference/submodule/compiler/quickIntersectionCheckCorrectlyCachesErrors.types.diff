@@ -2,10 +2,10 @@
 +++ new.quickIntersectionCheckCorrectlyCachesErrors.types
 @@= skipped -18, +18 lines =@@
  >CC : F<CP>
- 
+
      class WU {
 ->WU : WU
 +>WU : WU<CP>
- 
+
          m() {
  >m : () => any

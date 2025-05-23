@@ -2,7 +2,7 @@
 +++ new.generics4.js
 @@= skipped -9, +9 lines =@@
  a = b; // Not ok - return types of "f" are different
- 
+
  //// [generics4.js]
 -var C = /** @class */ (function () {
 -    function C() {

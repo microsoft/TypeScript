@@ -1,8 +1,8 @@
 --- old.unionTypeReadonly.js
 +++ new.unionTypeReadonly.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [unionTypeReadonly.js]
 -var base;
 +let base;

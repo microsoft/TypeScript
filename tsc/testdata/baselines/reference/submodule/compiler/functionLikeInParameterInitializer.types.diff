@@ -12,4 +12,3 @@
 +>{ f() { return foo } } : { f: () => string; }
  >f : () => string
  >foo : string
- 

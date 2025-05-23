@@ -2,7 +2,7 @@
 +++ new.genericAssignmentCompatWithInterfaces1.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 21))
- 
+
     compareTo(other: T): number;
 ->compareTo : Symbol(Comparable.compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 25))
 +>compareTo : Symbol(compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 0, 25))
@@ -11,7 +11,7 @@
  }
 @@= skipped -9, +9 lines =@@
  >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 12))
- 
+
      x: Comparable<T>;
 ->x : Symbol(I.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 16))
 +>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 3, 16))
@@ -20,7 +20,7 @@
  }
 @@= skipped -9, +9 lines =@@
  >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 12))
- 
+
     x: A<T>;
 ->x : Symbol(K.x, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 16))
 +>x : Symbol(x, Decl(genericAssignmentCompatWithInterfaces1.ts, 6, 16))
@@ -35,4 +35,3 @@
 +>compareTo : Symbol(compareTo, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 37))
  >other : Symbol(other, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 48))
  >T : Symbol(T, Decl(genericAssignmentCompatWithInterfaces1.ts, 9, 8))
- 

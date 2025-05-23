@@ -2,7 +2,7 @@
 +++ new.qualifiedName_entity-name-resolution-does-not-affect-class-heritage.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [qualifiedName_entity-name-resolution-does-not-affect-class-heritage.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

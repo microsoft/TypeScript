@@ -1,7 +1,7 @@
 --- old.constructorFunctionTypeIsAssignableToBaseType2.js
 +++ new.constructorFunctionTypeIsAssignableToBaseType2.js
 @@= skipped -35, +35 lines =@@
- 
+
  //// [constructorFunctionTypeIsAssignableToBaseType2.js]
  // the constructor function itself does not need to be a subtype of the base type constructor function
 -var __extends = (this && this.__extends) || (function () {
@@ -21,27 +21,29 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base(x) {
-+class Base {
-+    static foo;
-+    constructor(x) {
-     }
+-    }
 -    return Base;
 -}());
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived(x) {
 -        return _super.call(this, x) || this;
+-    }
+-    return Derived;
+-}(Base));
+-var Derived2 = /** @class */ (function (_super) {
+-    __extends(Derived2, _super);
++class Base {
++    static foo;
++    constructor(x) {
++    }
 +}
 +class Derived extends Base {
 +    // ok
 +    static foo;
 +    constructor(x) {
 +        super(x);
-     }
--    return Derived;
--}(Base));
--var Derived2 = /** @class */ (function (_super) {
--    __extends(Derived2, _super);
++    }
 +}
 +class Derived2 extends Base {
 +    static foo;

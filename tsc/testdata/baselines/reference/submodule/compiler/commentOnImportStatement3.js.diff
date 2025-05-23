@@ -1,7 +1,7 @@
 --- old.commentOnImportStatement3.js
 +++ new.commentOnImportStatement3.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [commentOnImportStatement3.js]
  "use strict";
 -/* copyright */

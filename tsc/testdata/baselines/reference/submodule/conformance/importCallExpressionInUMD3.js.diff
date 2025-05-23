@@ -2,7 +2,7 @@
 +++ new.importCallExpressionInUMD3.js
 @@= skipped -13, +13 lines =@@
  foo();
- 
+
  //// [0.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {
@@ -33,9 +33,7 @@
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
 -        if (v !== undefined) module.exports = v;
-+async function foo() {
-+    class C extends (await Promise.resolve().then(() => require("./0"))).B {
-     }
+-    }
 -    else if (typeof define === "function" && define.amd) {
 -        define(["require", "exports"], factory);
 -    }
@@ -50,6 +48,9 @@
 -    }
 -    foo();
 -});
++async function foo() {
++    class C extends (await Promise.resolve().then(() => require("./0"))).B {
++    }
 +    var c = new C();
 +    c.print();
 +}

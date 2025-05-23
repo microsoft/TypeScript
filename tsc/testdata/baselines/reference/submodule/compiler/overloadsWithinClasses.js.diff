@@ -1,21 +1,12 @@
 --- old.overloadsWithinClasses.js
 +++ new.overloadsWithinClasses.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [overloadsWithinClasses.js]
 -var foo = /** @class */ (function () {
 -    function foo() {
-+class foo {
-+    static fnOverload() { }
-+    static fnOverload(foo) { } // error
-+}
-+class bar {
-+    static fnOverload(foo) { } // no error
-+}
-+class X {
-+    attr(first, second) {
-     }
+-    }
 -    foo.fnOverload = function () { };
 -    foo.fnOverload = function (foo) { }; // error
 -    return foo;
@@ -33,4 +24,14 @@
 -    };
 -    return X;
 -}());
++class foo {
++    static fnOverload() { }
++    static fnOverload(foo) { } // error
++}
++class bar {
++    static fnOverload(foo) { } // no error
++}
++class X {
++    attr(first, second) {
++    }
 +}

@@ -5,13 +5,13 @@
  >C : Symbol(C, Decl(index.js, 1, 5))
  >require : Symbol(require, Decl(types.d.ts, 0, 11))
 ->"./semver" : Symbol("semver", Decl(semver.js, 0, 0))
- 
+
  var two = C.f(1)
  >two : Symbol(two, Decl(index.js, 2, 3))
 ->C.f : Symbol(C.f, Decl(semver.js, 1, 28))
  >C : Symbol(C, Decl(index.js, 1, 5))
 ->f : Symbol(C.f, Decl(semver.js, 1, 28))
- 
+
  === types.d.ts ===
  declare var require: any;
 @@= skipped -18, +15 lines =@@
@@ -25,7 +25,7 @@
 ->C : Symbol(C, Decl(semver.js, 2, 16), Decl(semver.js, 1, 28))
 +>module : Symbol(module, Decl(types.d.ts, 1, 11))
 +>C : Symbol(C, Decl(semver.js, 2, 16))
- 
+
  C.f = n => n + 1
 ->C.f : Symbol(C.f, Decl(semver.js, 1, 28))
 ->C : Symbol(C, Decl(semver.js, 2, 16), Decl(semver.js, 1, 28))
@@ -35,11 +35,11 @@
 +>f : Symbol(f, Decl(semver.js, 1, 28))
  >n : Symbol(n, Decl(semver.js, 2, 5))
  >n : Symbol(n, Decl(semver.js, 2, 5))
- 
+
  function C() {
 ->C : Symbol(C, Decl(semver.js, 2, 16), Decl(semver.js, 1, 28))
 +>C : Symbol(C, Decl(semver.js, 2, 16))
- 
+
      this.p = 1
 ->this.p : Symbol(C.p, Decl(semver.js, 3, 14))
 ->this : Symbol(C, Decl(semver.js, 2, 16), Decl(semver.js, 1, 28))

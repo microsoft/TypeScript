@@ -1,8 +1,8 @@
 --- old.intersectionTypeReadonly.js
 +++ new.intersectionTypeReadonly.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [intersectionTypeReadonly.js]
 -var base;
 +let base;

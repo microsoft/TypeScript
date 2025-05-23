@@ -1,8 +1,8 @@
 --- old.intlNumberFormatES5UseGrouping.js
 +++ new.intlNumberFormatES5UseGrouping.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [intlNumberFormatES5UseGrouping.js]
 -"use strict";
  new Intl.NumberFormat('en-GB', { useGrouping: true });

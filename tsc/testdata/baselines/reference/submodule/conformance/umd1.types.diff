@@ -7,17 +7,17 @@
 ->Foo : typeof Foo
 +>Foo : typeof import("foo")
  >fn : () => void
- 
+
  let x: Foo.Thing;
 ->x : Foo.Thing
 +>x : Thing
  >Foo : any
- 
+
  let y: number = x.n;
  >y : number
  >x.n : number
 ->x : Foo.Thing
 +>x : Thing
  >n : number
- 
+
  === foo.d.ts ===

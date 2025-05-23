@@ -2,7 +2,7 @@
 +++ new.asyncArrowFunction3_es5.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [asyncArrowFunction3_es5.js]
 -function f(await) {
 -    if (await === void 0) { await = await; }

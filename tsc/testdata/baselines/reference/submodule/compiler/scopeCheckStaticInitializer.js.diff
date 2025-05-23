@@ -1,8 +1,8 @@
 --- old.scopeCheckStaticInitializer.js
 +++ new.scopeCheckStaticInitializer.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [scopeCheckStaticInitializer.js]
 -var X = /** @class */ (function () {
 -    function X() {

@@ -2,18 +2,18 @@
 +++ new.errorsOnUnionsOfOverlappingObjects01.types
 @@= skipped -64, +64 lines =@@
  >'' : ""
- 
+
  declare function h(x: Foo | Bar | Other): any;
 ->h : (x: Foo | Bar | Other) => any
 +>h : (x: Bar | Foo | Other) => any
  >x : Bar | Foo | Other
- 
+
  h(x);
  >h(x) : any
 ->h : (x: Foo | Bar | Other) => any
 +>h : (x: Bar | Foo | Other) => any
  >x : { a: string; b: string; }
- 
+
  h({ a: '', b: '' })
  >h({ a: '', b: '' }) : any
 ->h : (x: Foo | Bar | Other) => any

@@ -2,7 +2,7 @@
 +++ new.propertyAccessOnTypeParameterWithConstraints4.js
 @@= skipped -34, +34 lines =@@
  var r4 = b.foo(new Date());
- 
+
  //// [propertyAccessOnTypeParameterWithConstraints4.js]
 -var C = /** @class */ (function () {
 -    function C() {

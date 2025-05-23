@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -b.ts(1,10): error TS2459: Module '"./a"' declares 'Foo' locally, but it is not exported.
 +b.ts(1,10): error TS2459: Module '"a"' declares 'Foo' locally, but it is not exported.
- 
- 
+
+
  ==== a.ts (0 errors) ====
 @@= skipped -9, +9 lines =@@
  ==== b.ts (1 errors) ====

@@ -2,7 +2,7 @@
 +++ new.parserES5SymbolProperty6.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [parserES5SymbolProperty6.js]
 -var _a;
 -var C = /** @class */ (function () {

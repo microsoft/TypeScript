@@ -7,7 +7,7 @@
 ->eval : (x: string) => any
 +>eval : { (x: string): any; (x: string): any; }
  >x : string
- 
+
  /**
 @@= skipped -11, +11 lines =@@
    * All other strings are considered decimal.
@@ -17,7 +17,7 @@
 +>parseInt : { (string: string, radix?: number): number; (s: string, radix?: number): number; }
  >s : string
  >radix : number
- 
+
 @@= skipped -9, +9 lines =@@
    * @param string A string that contains a floating-point number. 
    */
@@ -25,7 +25,7 @@
 ->parseFloat : (string: string) => number
 +>parseFloat : { (string: string): number; (string: string): number; }
  >string : string
- 
+
  /**
 @@= skipped -8, +8 lines =@@
    * @param number A numeric value.
@@ -34,7 +34,7 @@
 ->isNaN : (number: number) => boolean
 +>isNaN : { (number: number): boolean; (number: number): boolean; }
  >number : number
- 
+
  /** 
 @@= skipped -8, +8 lines =@@
    * @param number Any numeric value.
@@ -43,7 +43,7 @@
 ->isFinite : (number: number) => boolean
 +>isFinite : { (number: number): boolean; (number: number): boolean; }
  >number : number
- 
+
  /**
 @@= skipped -8, +8 lines =@@
    * @param encodedURI A value representing an encoded URI.
@@ -52,7 +52,7 @@
 ->decodeURI : (encodedURI: string) => string
 +>decodeURI : { (encodedURI: string): string; (encodedURI: string): string; }
  >encodedURI : string
- 
+
  /**
 @@= skipped -8, +8 lines =@@
    * @param encodedURIComponent A value representing an encoded URI component.
@@ -61,7 +61,7 @@
 ->decodeURIComponent : (encodedURIComponent: string) => string
 +>decodeURIComponent : { (encodedURIComponent: string): string; (encodedURIComponent: string): string; }
  >encodedURIComponent : string
- 
+
  /** 
 @@= skipped -8, +8 lines =@@
    * @param uri A value representing an encoded URI.
@@ -70,7 +70,7 @@
 ->encodeURI : (uri: string) => string
 +>encodeURI : { (uri: string): string; (uri: string): string; }
  >uri : string
- 
+
  /**
 @@= skipped -8, +8 lines =@@
    * @param uriComponent A value representing an encoded URI component.
@@ -79,38 +79,38 @@
 ->encodeURIComponent : (uriComponent: string | number | boolean) => string
 +>encodeURIComponent : { (uriComponent: string | number | boolean): string; (uriComponent: string | number | boolean): string; }
  >uriComponent : string | number | boolean
- 
+
  interface PropertyDescriptor {
 @@= skipped -17, +17 lines =@@
  >writable : boolean
- 
+
      get?(): any;
 ->get : () => any
 +>get : { (): any; (): any; }
- 
+
      set?(v: any): void;
 ->set : (v: any) => void
 +>set : { (v: any): void; (v: any): void; }
  >v : any
  }
- 
+
 @@= skipped -19, +19 lines =@@
- 
+
      /** Returns a string representation of an object. */
      toString(): string;
 ->toString : () => string
 +>toString : { (): string; (): string; }
- 
+
      /** Returns a date converted to a string using the current locale. */
      toLocaleString(): string;
 ->toLocaleString : () => string
 +>toLocaleString : { (): string; (): string; }
- 
+
      /** Returns the primitive value of the specified object. */
      valueOf(): Object;
 ->valueOf : () => Object
 +>valueOf : { (): Object; (): Object; }
- 
+
      /**
        * Determines whether an object has a property with the specified name. 
        * @param v A property name.
@@ -119,7 +119,7 @@
 ->hasOwnProperty : (v: string) => boolean
 +>hasOwnProperty : { (v: PropertyKey): boolean; (v: string): boolean; }
  >v : string
- 
+
      /**
 @@= skipped -23, +23 lines =@@
        * @param v Another object whose prototype chain is to be checked.
@@ -128,7 +128,7 @@
 ->isPrototypeOf : (v: Object) => boolean
 +>isPrototypeOf : { (v: Object): boolean; (v: Object): boolean; }
  >v : Object
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param v A property name.
@@ -138,14 +138,14 @@
 +>propertyIsEnumerable : { (v: PropertyKey): boolean; (v: string): boolean; }
  >v : string
  }
- 
+
 @@= skipped -8, +8 lines =@@
    * Provides functionality common to all JavaScript objects.
    */
  declare var Object: {
 ->Object : { (): any; (value: any): any; new (value?: any): Object; prototype: Object; getPrototypeOf(o: any): any; getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor; getOwnPropertyNames(o: any): string[]; create(o: any, properties?: PropertyDescriptorMap): any; defineProperty(o: any, p: string, attributes: PropertyDescriptor): any; defineProperties(o: any, properties: PropertyDescriptorMap): any; seal(o: any): any; freeze(o: any): any; preventExtensions(o: any): any; isSealed(o: any): boolean; isFrozen(o: any): boolean; isExtensible(o: any): boolean; keys(o: any): string[]; }
 +>Object : ObjectConstructor
- 
+
      new (value?: any): Object;
  >value : any
 @@= skipped -140, +140 lines =@@
@@ -156,7 +156,7 @@
 +>apply : { (this: Function, thisArg: any, argArray?: any): any; (thisArg: any, argArray?: any): any; }
  >thisArg : any
  >argArray : any
- 
+
 @@= skipped -10, +10 lines =@@
        * @param argArray A list of arguments to be passed to the method.
        */
@@ -165,7 +165,7 @@
 +>call : { (this: Function, thisArg: any, ...argArray: any[]): any; (thisArg: any, ...argArray: any[]): any; }
  >thisArg : any
  >argArray : any[]
- 
+
 @@= skipped -11, +11 lines =@@
        * @param argArray A list of arguments to be passed to the new function.
        */
@@ -174,14 +174,14 @@
 +>bind : { (this: Function, thisArg: any, ...argArray: any[]): any; (thisArg: any, ...argArray: any[]): any; }
  >thisArg : any
  >argArray : any[]
- 
+
 @@= skipped -19, +19 lines =@@
  }
- 
+
  declare var Function: {
 ->Function : { (...args: string[]): Function; new (...args: string[]): Function; prototype: Function; }
 +>Function : FunctionConstructor
- 
+
      /** 
        * Creates a new function.
 @@= skipped -30, +30 lines =@@
@@ -190,7 +190,7 @@
      toString(): string;
 ->toString : () => string
 +>toString : { (): string; (): string; }
- 
+
      /**
        * Returns the character at the specified index.
        * @param pos The zero-based index of the desired character.
@@ -199,7 +199,7 @@
 ->charAt : (pos: number) => string
 +>charAt : { (pos: number): string; (pos: number): string; }
  >pos : number
- 
+
      /** 
 @@= skipped -15, +15 lines =@@
        * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
@@ -208,7 +208,7 @@
 ->charCodeAt : (index: number) => number
 +>charCodeAt : { (index: number): number; (index: number): number; }
  >index : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param strings The strings to append to the end of the string.  
@@ -217,7 +217,7 @@
 ->concat : (...strings: string[]) => string
 +>concat : { (...strings: string[]): string; (...strings: string[]): string; }
  >strings : string[]
- 
+
      /**
 @@= skipped -9, +9 lines =@@
        * @param position The index at which to begin searching the String object. If omitted, search starts at the beginning of the string.
@@ -227,7 +227,7 @@
 +>indexOf : { (searchString: string, position?: number): number; (searchString: string, position?: number): number; }
  >searchString : string
  >position : number
- 
+
 @@= skipped -10, +10 lines =@@
        * @param position The index at which to begin searching. If omitted, the search begins at the end of the string.
        */
@@ -236,7 +236,7 @@
 +>lastIndexOf : { (searchString: string, position?: number): number; (searchString: string, position?: number): number; }
  >searchString : string
  >position : number
- 
+
 @@= skipped -9, +9 lines =@@
        * @param that String to compare to target string
        */
@@ -244,7 +244,7 @@
 ->localeCompare : (that: string) => number
 +>localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: CollatorOptions): number; (that: string): number; }
  >that : string
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param regexp A variable name or string literal containing the regular expression pattern and flags.
@@ -253,7 +253,7 @@
 ->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
 +>match : { (regexp: string | RegExp): RegExpMatchArray; (regexp: string): string[]; (regexp: RegExp): string[]; }
  >regexp : string
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param regexp A regular expression object that contains the regular expression pattern and applicable flags. 
@@ -262,7 +262,7 @@
 ->match : { (regexp: string): string[]; (regexp: RegExp): string[]; }
 +>match : { (regexp: string | RegExp): RegExpMatchArray; (regexp: string): string[]; (regexp: RegExp): string[]; }
  >regexp : RegExp
- 
+
      /**
 @@= skipped -9, +9 lines =@@
        * @param replaceValue A String object or string literal containing the text to replace for every successful match of rgExp in stringObj.
@@ -272,7 +272,7 @@
 +>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
  >searchValue : string
  >replaceValue : string
- 
+
 @@= skipped -10, +10 lines =@@
        * @param replaceValue A function that returns the replacement text.
        */
@@ -290,7 +290,7 @@
 +>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: string, replaceValue: string): string; (searchValue: string, replaceValue: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string; }
  >searchValue : RegExp
  >replaceValue : string
- 
+
 @@= skipped -10, +10 lines =@@
        * @param replaceValue A function that returns the replacement text.
        */
@@ -307,7 +307,7 @@
 ->search : { (regexp: string): number; (regexp: RegExp): number; }
 +>search : { (regexp: string | RegExp): number; (regexp: string): number; (regexp: RegExp): number; }
  >regexp : string
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param regexp The regular expression pattern and applicable flags. 
@@ -316,7 +316,7 @@
 ->search : { (regexp: string): number; (regexp: RegExp): number; }
 +>search : { (regexp: string | RegExp): number; (regexp: string): number; (regexp: RegExp): number; }
  >regexp : RegExp
- 
+
      /**
 @@= skipped -10, +10 lines =@@
        * If this value is not specified, the substring continues to the end of stringObj.
@@ -326,7 +326,7 @@
 +>slice : { (start?: number, end?: number): string; (start?: number, end?: number): string; }
  >start : number
  >end : number
- 
+
 @@= skipped -10, +10 lines =@@
        * @param limit A value used to limit the number of elements returned in the array.
        */
@@ -335,7 +335,7 @@
 +>split : { (separator: string | RegExp, limit?: number): string[]; (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
  >separator : string
  >limit : number
- 
+
 @@= skipped -10, +10 lines =@@
        * @param limit A value used to limit the number of elements returned in the array.
        */
@@ -344,7 +344,7 @@
 +>split : { (separator: string | RegExp, limit?: number): string[]; (separator: string, limit?: number): string[]; (separator: RegExp, limit?: number): string[]; }
  >separator : RegExp
  >limit : number
- 
+
 @@= skipped -11, +11 lines =@@
        * If end is omitted, the characters from start through the end of the original string are returned.
        */
@@ -353,32 +353,32 @@
 +>substring : { (start: number, end?: number): string; (start: number, end?: number): string; }
  >start : number
  >end : number
- 
+
      /** Converts all the alphabetic characters in a string to lowercase. */
      toLowerCase(): string;
 ->toLowerCase : () => string
 +>toLowerCase : { (): string; (): string; }
- 
+
      /** Converts all alphabetic characters to lowercase, taking into account the host environment's current locale. */
      toLocaleLowerCase(): string;
 ->toLocaleLowerCase : () => string
 +>toLocaleLowerCase : { (locales?: string | string[]): string; (): string; }
- 
+
      /** Converts all the alphabetic characters in a string to uppercase. */
      toUpperCase(): string;
 ->toUpperCase : () => string
 +>toUpperCase : { (): string; (): string; }
- 
+
      /** Returns a string where all alphabetic characters have been converted to uppercase, taking into account the host environment's current locale. */
      toLocaleUpperCase(): string;
 ->toLocaleUpperCase : () => string
 +>toLocaleUpperCase : { (locales?: string | string[]): string; (): string; }
- 
+
      /** Removes the leading and trailing white space and line terminator characters from a string. */
      trim(): string;
 ->trim : () => string
 +>trim : { (): string; (): string; }
- 
+
      /** Returns the length of a String object. */
      length: number;
 @@= skipped -35, +35 lines =@@
@@ -389,14 +389,14 @@
 +>substr : { (from: number, length?: number): string; (from: number, length?: number): string; }
  >from : number
  >length : number
- 
+
 @@= skipped -12, +12 lines =@@
    * Allows manipulation and formatting of text strings and determination and location of substrings within strings. 
    */
  declare var String: {
 ->String : { (value?: any): string; new (value?: any): String; prototype: String; fromCharCode(...codes: number[]): string; }
 +>String : StringConstructor
- 
+
      new (value?: any): String;
  >value : any
 @@= skipped -19, +19 lines =@@
@@ -405,7 +405,7 @@
  declare var Boolean: {
 ->Boolean : { (value?: any): boolean; new (value?: any): Boolean; prototype: Boolean; }
 +>Boolean : BooleanConstructor
- 
+
      new (value?: any): Boolean;
  >value : any
 @@= skipped -18, +18 lines =@@
@@ -415,7 +415,7 @@
 ->toString : (radix?: number) => string
 +>toString : { (radix?: number): string; (radix?: number): string; }
  >radix : number
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
@@ -424,7 +424,7 @@
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : { (fractionDigits?: number): string; (fractionDigits?: number): string; }
  >fractionDigits : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param fractionDigits Number of digits after the decimal point. Must be in the range 0 - 20, inclusive.
@@ -433,7 +433,7 @@
 ->toExponential : (fractionDigits?: number) => string
 +>toExponential : { (fractionDigits?: number): string; (fractionDigits?: number): string; }
  >fractionDigits : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param precision Number of significant digits. Must be in the range 1 - 21, inclusive.
@@ -443,12 +443,12 @@
 +>toPrecision : { (precision?: number): string; (precision?: number): string; }
  >precision : number
  }
- 
+
  /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
  declare var Number: {
 ->Number : { (value?: any): number; new (value?: any): Number; prototype: Number; MAX_VALUE: number; MIN_VALUE: number; NaN: number; NEGATIVE_INFINITY: number; POSITIVE_INFINITY: number; }
 +>Number : NumberConstructor
- 
+
      new (value?: any): Number;
  >value : any
 @@= skipped -86, +86 lines =@@
@@ -458,7 +458,7 @@
 ->abs : (x: number) => number
 +>abs : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression.
@@ -467,7 +467,7 @@
 ->acos : (x: number) => number
 +>acos : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression.
@@ -476,7 +476,7 @@
 ->asin : (x: number) => number
 +>asin : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression for which the arctangent is needed.
@@ -485,7 +485,7 @@
 ->atan : (x: number) => number
 +>atan : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -9, +9 lines =@@
        * @param x A numeric expression representing the cartesian x-coordinate.
@@ -495,7 +495,7 @@
 +>atan2 : { (y: number, x: number): number; (y: number, x: number): number; }
  >y : number
  >x : number
- 
+
 @@= skipped -9, +9 lines =@@
        * @param x A numeric expression.
        */
@@ -503,7 +503,7 @@
 ->ceil : (x: number) => number
 +>ceil : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression that contains an angle measured in radians.
@@ -512,7 +512,7 @@
 ->cos : (x: number) => number
 +>cos : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression representing the power of e.
@@ -521,7 +521,7 @@
 ->exp : (x: number) => number
 +>exp : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression.
@@ -530,7 +530,7 @@
 ->floor : (x: number) => number
 +>floor : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression.
@@ -539,7 +539,7 @@
 ->log : (x: number) => number
 +>log : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param values Numeric expressions to be evaluated.
@@ -548,7 +548,7 @@
 ->max : (...values: number[]) => number
 +>max : { (...values: number[]): number; (...values: number[]): number; }
  >values : number[]
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param values Numeric expressions to be evaluated.
@@ -557,7 +557,7 @@
 ->min : (...values: number[]) => number
 +>min : { (...values: number[]): number; (...values: number[]): number; }
  >values : number[]
- 
+
      /**
 @@= skipped -9, +9 lines =@@
        * @param y The exponent value of the expression.
@@ -567,12 +567,12 @@
 +>pow : { (x: number, y: number): number; (x: number, y: number): number; }
  >x : number
  >y : number
- 
+
      /** Returns a pseudorandom number between 0 and 1. */
      random(): number;
 ->random : () => number
 +>random : { (): number; (): number; }
- 
+
      /** 
        * Returns a supplied numeric expression rounded to the nearest number.
        * @param x The value to be rounded to the nearest number.
@@ -581,7 +581,7 @@
 ->round : (x: number) => number
 +>round : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -21, +21 lines =@@
        * @param x A numeric expression that contains an angle measured in radians.
@@ -590,7 +590,7 @@
 ->sin : (x: number) => number
 +>sin : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression.
@@ -599,7 +599,7 @@
 ->sqrt : (x: number) => number
 +>sqrt : { (x: number): number; (x: number): number; }
  >x : number
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param x A numeric expression that contains an angle measured in radians.
@@ -616,127 +616,127 @@
      toString(): string;
 ->toString : () => string
 +>toString : { (): string; (): string; }
- 
+
      /** Returns a date as a string value. */
      toDateString(): string;
 ->toDateString : () => string
 +>toDateString : { (): string; (): string; }
- 
+
      /** Returns a time as a string value. */
      toTimeString(): string;
 ->toTimeString : () => string
 +>toTimeString : { (): string; (): string; }
- 
+
      /** Returns a value as a string value appropriate to the host environment's current locale. */
      toLocaleString(): string;
 ->toLocaleString : () => string
 +>toLocaleString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; (): string; }
- 
+
      /** Returns a date as a string value appropriate to the host environment's current locale. */
      toLocaleDateString(): string;
 ->toLocaleDateString : () => string
 +>toLocaleDateString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; (): string; }
- 
+
      /** Returns a time as a string value appropriate to the host environment's current locale. */
      toLocaleTimeString(): string;
 ->toLocaleTimeString : () => string
 +>toLocaleTimeString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; (): string; }
- 
+
      /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
      valueOf(): number;
 ->valueOf : () => number
 +>valueOf : { (): number; (): number; }
- 
+
      /** Gets the time value in milliseconds. */
      getTime(): number;
 ->getTime : () => number
 +>getTime : { (): number; (): number; }
- 
+
      /** Gets the year, using local time. */
      getFullYear(): number;
 ->getFullYear : () => number
 +>getFullYear : { (): number; (): number; }
- 
+
      /** Gets the year using Universal Coordinated Time (UTC). */
      getUTCFullYear(): number;
 ->getUTCFullYear : () => number
 +>getUTCFullYear : { (): number; (): number; }
- 
+
      /** Gets the month, using local time. */
      getMonth(): number;
 ->getMonth : () => number
 +>getMonth : { (): number; (): number; }
- 
+
      /** Gets the month of a Date object using Universal Coordinated Time (UTC). */
      getUTCMonth(): number;
 ->getUTCMonth : () => number
 +>getUTCMonth : { (): number; (): number; }
- 
+
      /** Gets the day-of-the-month, using local time. */
      getDate(): number;
 ->getDate : () => number
 +>getDate : { (): number; (): number; }
- 
+
      /** Gets the day-of-the-month, using Universal Coordinated Time (UTC). */
      getUTCDate(): number;
 ->getUTCDate : () => number
 +>getUTCDate : { (): number; (): number; }
- 
+
      /** Gets the day of the week, using local time. */
      getDay(): number;
 ->getDay : () => number
 +>getDay : { (): number; (): number; }
- 
+
      /** Gets the day of the week using Universal Coordinated Time (UTC). */
      getUTCDay(): number;
 ->getUTCDay : () => number
 +>getUTCDay : { (): number; (): number; }
- 
+
      /** Gets the hours in a date, using local time. */
      getHours(): number;
 ->getHours : () => number
 +>getHours : { (): number; (): number; }
- 
+
      /** Gets the hours value in a Date object using Universal Coordinated Time (UTC). */
      getUTCHours(): number;
 ->getUTCHours : () => number
 +>getUTCHours : { (): number; (): number; }
- 
+
      /** Gets the minutes of a Date object, using local time. */
      getMinutes(): number;
 ->getMinutes : () => number
 +>getMinutes : { (): number; (): number; }
- 
+
      /** Gets the minutes of a Date object using Universal Coordinated Time (UTC). */
      getUTCMinutes(): number;
 ->getUTCMinutes : () => number
 +>getUTCMinutes : { (): number; (): number; }
- 
+
      /** Gets the seconds of a Date object, using local time. */
      getSeconds(): number;
 ->getSeconds : () => number
 +>getSeconds : { (): number; (): number; }
- 
+
      /** Gets the seconds of a Date object using Universal Coordinated Time (UTC). */
      getUTCSeconds(): number;
 ->getUTCSeconds : () => number
 +>getUTCSeconds : { (): number; (): number; }
- 
+
      /** Gets the milliseconds of a Date, using local time. */
      getMilliseconds(): number;
 ->getMilliseconds : () => number
 +>getMilliseconds : { (): number; (): number; }
- 
+
      /** Gets the milliseconds of a Date object using Universal Coordinated Time (UTC). */
      getUTCMilliseconds(): number;
 ->getUTCMilliseconds : () => number
 +>getUTCMilliseconds : { (): number; (): number; }
- 
+
      /** Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer. */
      getTimezoneOffset(): number;
 ->getTimezoneOffset : () => number
 +>getTimezoneOffset : { (): number; (): number; }
- 
+
      /** 
        * Sets the date and time value in the Date object.
        * @param time A numeric value representing the number of elapsed milliseconds since midnight, January 1, 1970 GMT. 
@@ -745,7 +745,7 @@
 ->setTime : (time: number) => number
 +>setTime : { (time: number): number; (time: number): number; }
  >time : number
- 
+
      /**
 @@= skipped -111, +111 lines =@@
        * @param ms A numeric value equal to the millisecond value.
@@ -754,7 +754,7 @@
 ->setMilliseconds : (ms: number) => number
 +>setMilliseconds : { (ms: number): number; (ms: number): number; }
  >ms : number
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param ms A numeric value equal to the millisecond value. 
@@ -763,7 +763,7 @@
 ->setUTCMilliseconds : (ms: number) => number
 +>setUTCMilliseconds : { (ms: number): number; (ms: number): number; }
  >ms : number
- 
+
      /**
 @@= skipped -9, +9 lines =@@
        * @param ms A numeric value equal to the milliseconds value.
@@ -773,7 +773,7 @@
 +>setSeconds : { (sec: number, ms?: number): number; (sec: number, ms?: number): number; }
  >sec : number
  >ms : number
- 
+
 @@= skipped -10, +10 lines =@@
        * @param ms A numeric value equal to the milliseconds value.
        */
@@ -782,7 +782,7 @@
 +>setUTCSeconds : { (sec: number, ms?: number): number; (sec: number, ms?: number): number; }
  >sec : number
  >ms : number
- 
+
 @@= skipped -11, +11 lines =@@
        * @param ms A numeric value equal to the milliseconds value.
        */
@@ -826,7 +826,7 @@
 ->setDate : (date: number) => number
 +>setDate : { (date: number): number; (date: number): number; }
  >date : number
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param date A numeric value equal to the day of the month. 
@@ -835,7 +835,7 @@
 ->setUTCDate : (date: number) => number
 +>setUTCDate : { (date: number): number; (date: number): number; }
  >date : number
- 
+
      /** 
 @@= skipped -9, +9 lines =@@
        * @param date A numeric value representing the day of the month. If this value is not supplied, the value from a call to the getDate method is used.
@@ -845,7 +845,7 @@
 +>setMonth : { (month: number, date?: number): number; (month: number, date?: number): number; }
  >month : number
  >date : number
- 
+
 @@= skipped -10, +10 lines =@@
        * @param date A numeric value representing the day of the month. If it is not supplied, the value from a call to the getUTCDate method is used.
        */
@@ -854,7 +854,7 @@
 +>setUTCMonth : { (month: number, date?: number): number; (month: number, date?: number): number; }
  >month : number
  >date : number
- 
+
 @@= skipped -11, +11 lines =@@
        * @param date A numeric value equal for the day of the month.
        */
@@ -873,28 +873,28 @@
  >year : number
  >month : number
  >date : number
- 
+
      /** Returns a date converted to a string using Universal Coordinated Time (UTC). */
      toUTCString(): string;
 ->toUTCString : () => string
 +>toUTCString : { (): string; (): string; }
- 
+
      /** Returns a date as a string value in ISO format. */
      toISOString(): string;
 ->toISOString : () => string
 +>toISOString : { (): string; (): string; }
- 
+
      /** Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization. */
      toJSON(key?: any): string;
 ->toJSON : (key?: any) => string
 +>toJSON : { (key?: any): string; (key?: any): string; }
  >key : any
  }
- 
+
  declare var Date: {
 ->Date : { (): string; new (): Date; new (value: number): Date; new (value: string): Date; new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date; prototype: Date; parse(s: string): number; UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number; now(): number; }
 +>Date : DateConstructor
- 
+
      new (): Date;
      new (value: number): Date;
 @@= skipped -215, +215 lines =@@
@@ -904,7 +904,7 @@
 ->exec : (string: string) => RegExpExecArray
 +>exec : { (string: string): RegExpExecArray; (string: string): RegExpExecArray; }
  >string : string
- 
+
      /** 
 @@= skipped -8, +8 lines =@@
        * @param string String on which to perform the search.
@@ -913,10 +913,10 @@
 ->test : (string: string) => boolean
 +>test : { (string: string): boolean; (string: string): boolean; }
  >string : string
- 
+
      /** Returns a copy of the text of the regular expression pattern. Read-only. The rgExp argument is a Regular expression object. It can be a variable name or a literal. */
 @@= skipped -24, +24 lines =@@
- 
+
      // Non-standard extensions
      compile(): RegExp;
 ->compile : () => RegExp
@@ -925,7 +925,7 @@
  declare var RegExp: {
 ->RegExp : { (pattern: string, flags?: string): RegExp; new (pattern: string, flags?: string): RegExp; $1: string; $2: string; $3: string; $4: string; $5: string; $6: string; $7: string; $8: string; $9: string; lastMatch: string; }
 +>RegExp : RegExpConstructor
- 
+
      new (pattern: string, flags?: string): RegExp;
  >pattern : string
 @@= skipped -53, +53 lines =@@
@@ -934,7 +934,7 @@
  declare var Error: {
 ->Error : { (message?: string): Error; new (message?: string): Error; prototype: Error; }
 +>Error : ErrorConstructor
- 
+
      new (message?: string): Error;
  >message : string
 @@= skipped -15, +15 lines =@@
@@ -943,7 +943,7 @@
  declare var EvalError: {
 ->EvalError : { (message?: string): EvalError; new (message?: string): EvalError; prototype: EvalError; }
 +>EvalError : EvalErrorConstructor
- 
+
      new (message?: string): EvalError;
  >message : string
 @@= skipped -15, +15 lines =@@
@@ -952,7 +952,7 @@
  declare var RangeError: {
 ->RangeError : { (message?: string): RangeError; new (message?: string): RangeError; prototype: RangeError; }
 +>RangeError : RangeErrorConstructor
- 
+
      new (message?: string): RangeError;
  >message : string
 @@= skipped -15, +15 lines =@@
@@ -961,7 +961,7 @@
  declare var ReferenceError: {
 ->ReferenceError : { (message?: string): ReferenceError; new (message?: string): ReferenceError; prototype: ReferenceError; }
 +>ReferenceError : ReferenceErrorConstructor
- 
+
      new (message?: string): ReferenceError;
  >message : string
 @@= skipped -15, +15 lines =@@
@@ -970,7 +970,7 @@
  declare var SyntaxError: {
 ->SyntaxError : { (message?: string): SyntaxError; new (message?: string): SyntaxError; prototype: SyntaxError; }
 +>SyntaxError : SyntaxErrorConstructor
- 
+
      new (message?: string): SyntaxError;
  >message : string
 @@= skipped -15, +15 lines =@@
@@ -979,7 +979,7 @@
  declare var TypeError: {
 ->TypeError : { (message?: string): TypeError; new (message?: string): TypeError; prototype: TypeError; }
 +>TypeError : TypeErrorConstructor
- 
+
      new (message?: string): TypeError;
  >message : string
 @@= skipped -15, +15 lines =@@
@@ -988,7 +988,7 @@
  declare var URIError: {
 ->URIError : { (message?: string): URIError; new (message?: string): URIError; prototype: URIError; }
 +>URIError : URIErrorConstructor
- 
+
      new (message?: string): URIError;
  >message : string
 @@= skipped -20, +20 lines =@@
@@ -1007,7 +1007,7 @@
 ->stringify : { (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
 +>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
  >value : any
- 
+
      /**
 @@= skipped -9, +9 lines =@@
        * @param replacer A function that transforms the results.
@@ -1026,7 +1026,7 @@
 +>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; (value: any): string; (value: any, replacer: (key: string, value: any) => any): string; (value: any, replacer: any[]): string; (value: any, replacer: (key: string, value: any) => any, space: any): string; (value: any, replacer: any[], space: any): string; }
  >value : any
  >replacer : any[]
- 
+
 @@= skipped -11, +11 lines =@@
        * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
        */
@@ -1051,11 +1051,11 @@
      toString(): string;
 ->toString : () => string
 +>toString : { (): string; (): string; }
- 
+
      toLocaleString(): string;
 ->toLocaleString : () => string
 +>toLocaleString : { (): string; (): string; }
- 
+
      /**
        * Combines two or more arrays.
        * @param items Additional items to add to the end of array1.
@@ -1064,7 +1064,7 @@
 ->concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
 +>concat : { (...items: ConcatArray<T>[]): T[]; (...items: (T | ConcatArray<T>)[]): T[]; <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
  >items : U[]
- 
+
      /**
 @@= skipped -18, +18 lines =@@
        * @param items Additional items to add to the end of array1.
@@ -1073,7 +1073,7 @@
 ->concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
 +>concat : { (...items: ConcatArray<T>[]): T[]; (...items: (T | ConcatArray<T>)[]): T[]; <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
  >items : T[]
- 
+
      /**
 @@= skipped -8, +8 lines =@@
        * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1082,14 +1082,14 @@
 ->join : (separator?: string) => string
 +>join : { (separator?: string): string; (separator?: string): string; }
  >separator : string
- 
+
      /**
        * Removes the last element from an array and returns it.
        */
      pop(): T;
 ->pop : () => T
 +>pop : { (): T; (): T; }
- 
+
      /**
        * Appends new elements to an array, and returns the new length of the array.
        * @param items New elements of the Array.
@@ -1098,21 +1098,21 @@
 ->push : (...items: T[]) => number
 +>push : { (...items: T[]): number; (...items: T[]): number; }
  >items : T[]
- 
+
      /**
        * Reverses the elements in an Array. 
        */
      reverse(): T[];
 ->reverse : () => T[]
 +>reverse : { (): T[]; (): T[]; }
- 
+
      /**
        * Removes the first element from an array and returns it.
        */
      shift(): T;
 ->shift : () => T
 +>shift : { (): T; (): T; }
- 
+
      /** 
        * Returns a section of an array.
 @@= skipped -35, +35 lines =@@
@@ -1123,7 +1123,7 @@
 +>slice : { (start?: number, end?: number): T[]; (start?: number, end?: number): T[]; }
  >start : number
  >end : number
- 
+
 @@= skipped -9, +9 lines =@@
        * @param compareFn The name of the function used to determine the order of the elements. If omitted, the elements are sorted in ascending, ASCII character order.
        */
@@ -1140,7 +1140,7 @@
 ->splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 +>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
  >start : number
- 
+
      /**
 @@= skipped -10, +10 lines =@@
        * @param items Elements to insert into the array in place of the deleted elements.
@@ -1158,7 +1158,7 @@
 ->unshift : (...items: T[]) => number
 +>unshift : { (...items: T[]): number; (...items: T[]): number; }
  >items : T[]
- 
+
      /**
 @@= skipped -9, +9 lines =@@
        * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
@@ -1168,7 +1168,7 @@
 +>indexOf : { (searchElement: T, fromIndex?: number): number; (searchElement: T, fromIndex?: number): number; }
  >searchElement : T
  >fromIndex : number
- 
+
 @@= skipped -10, +10 lines =@@
        * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at the last index in the array.
        */
@@ -1177,7 +1177,7 @@
 +>lastIndexOf : { (searchElement: T, fromIndex?: number): number; (searchElement: T, fromIndex?: number): number; }
  >searchElement : T
  >fromIndex : number
- 
+
 @@= skipped -10, +10 lines =@@
        * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
        */
@@ -1265,6 +1265,6 @@
  declare var Array: {
 ->Array : { (arrayLength?: number): any[]; <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new (arrayLength?: number): any[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): boolean; prototype: Array<any>; }
 +>Array : ArrayConstructor
- 
+
      new (arrayLength?: number): any[];
  >arrayLength : number

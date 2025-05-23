@@ -1,7 +1,7 @@
 --- old.additionOperatorWithInvalidOperands.js
 +++ new.additionOperatorWithInvalidOperands.js
 @@= skipped -43, +43 lines =@@
- 
+
  //// [additionOperatorWithInvalidOperands.js]
  function foo() { }
 -var C = /** @class */ (function () {

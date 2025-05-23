@@ -2,19 +2,16 @@
 +++ new.duplicateIdentifierRelatedSpans6.errors.txt
 @@= skipped -0, +0 lines =@@
 -[96mfile1.ts[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
-+[96mfile2.ts[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'someMod' cannot be found.
- 
+-
 -[7m3[0m         duplicate1: () => string;
 -[7m [0m [91m        ~~~~~~~~~~[0m
-+[7m3[0m declare module "someMod" {
-+[7m [0m [91m               ~~~~~~~~~[0m
- 
+-
 -  [96mfile2.ts[0m:[93m5[0m:[93m9[0m
 -    [7m5[0m         duplicate1(): number;
 -    [7m [0m [96m        ~~~~~~~~~~[0m
 -    'duplicate1' was also declared here.
 -[96mfile1.ts[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
- 
+-
 -[7m4[0m         duplicate2: () => string;
 -[7m [0m [91m        ~~~~~~~~~~[0m
 -
@@ -61,6 +58,12 @@
 -
 -
 -==== file2.ts (3 errors) ====
++[96mfile2.ts[0m:[93m3[0m:[93m16[0m - [91merror[0m[90m TS2664: [0mInvalid module name in augmentation, module 'someMod' cannot be found.
++
++[7m3[0m declare module "someMod" {
++[7m [0m [91m               ~~~~~~~~~[0m
++
++
 +==== file2.ts (1 errors) ====
      /// <reference path="./file1" />
      
@@ -104,7 +107,7 @@
      }
 -Found 6 errors in 2 files.
 +Found 1 error in file2.ts[90m:3[0m
- 
+
 -Errors  Files
 -     3  file1.ts[90m:3[0m
 -     3  file2.ts[90m:5[0m

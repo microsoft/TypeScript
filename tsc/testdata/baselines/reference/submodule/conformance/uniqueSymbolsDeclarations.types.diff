@@ -1,16 +1,16 @@
 --- old.uniqueSymbolsDeclarations.types
 +++ new.uniqueSymbolsDeclarations.types
 @@= skipped -101, +101 lines =@@
- 
+
  // function return value with type query
  function funcReturnConstCallWithTypeQuery(): typeof constCall { return constCall; }
 ->funcReturnConstCallWithTypeQuery : () => typeof constCall
 +>funcReturnConstCallWithTypeQuery : () => unique symbol
  >constCall : unique symbol
  >constCall : unique symbol
- 
+
 @@= skipped -22, +22 lines =@@
- 
+
  // generator function yield with return type query
  function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
 ->genFuncYieldConstCallWithTypeQuery : () => IterableIterator<typeof constCall>
@@ -20,13 +20,13 @@
  >constCall : unique symbol
 @@= skipped -303, +303 lines =@@
  >x : T
- 
+
  declare function g(x: typeof s): void;
 ->g : { (x: typeof s): void; (x: typeof N.s): void; }
 +>g : { (x: unique symbol): void; (x: unique symbol): void; }
  >x : unique symbol
  >s : unique symbol
- 
+
  declare function g(x: typeof N.s): void;
 ->g : { (x: typeof s): void; (x: typeof N.s): void; }
 +>g : { (x: unique symbol): void; (x: unique symbol): void; }
@@ -34,24 +34,24 @@
  >N.s : unique symbol
  >N : typeof N
 @@= skipped -52, +52 lines =@@
- 
+
  // property assignments/methods
  const o2 = {
 ->o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
 ->{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; }} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
 +>o2 : { a: symbol; b: symbol; c: symbol; method1: () => symbol; method2: () => Promise<symbol>; method3: () => AsyncGenerator<symbol, void, unknown>; method4: () => Generator<symbol, void, unknown>; method5: (p?: symbol) => symbol; }
 +>{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; }} : { a: symbol; b: symbol; c: symbol; method1: () => symbol; method2: () => Promise<symbol>; method3: () => AsyncGenerator<symbol, void, unknown>; method4: () => Generator<symbol, void, unknown>; method5: (p?: symbol) => symbol; }
- 
+
      a: s,
  >a : symbol
 @@= skipped -189, +189 lines =@@
- 
+
  g(s);
  >g(s) : void
 ->g : { (x: typeof s): void; (x: typeof N.s): void; }
 +>g : { (x: unique symbol): void; (x: unique symbol): void; }
  >s : unique symbol
- 
+
  g(N.s);
  >g(N.s) : void
 ->g : { (x: typeof s): void; (x: typeof N.s): void; }
@@ -59,7 +59,7 @@
  >N.s : unique symbol
  >N : typeof N
  >s : unique symbol
- 
+
  g(N["s"]);
  >g(N["s"]) : void
 ->g : { (x: typeof s): void; (x: typeof N.s): void; }
@@ -68,28 +68,28 @@
  >N : typeof N
  >"s" : "s"
 @@= skipped -122, +122 lines =@@
- 
+
  interface Context {
      method1(): typeof s;
 ->method1 : () => typeof s
 +>method1 : () => unique symbol
  >s : unique symbol
- 
+
      method2(): Promise<typeof s>;
 ->method2 : () => Promise<typeof s>
 +>method2 : () => Promise<unique symbol>
  >s : unique symbol
- 
+
      method3(): AsyncIterableIterator<typeof s>;
 ->method3 : () => AsyncIterableIterator<typeof s>
 +>method3 : () => AsyncIterableIterator<unique symbol, any, any>
  >s : unique symbol
- 
+
      method4(): IterableIterator<typeof s>;
 ->method4 : () => IterableIterator<typeof s>
 +>method4 : () => IterableIterator<unique symbol, any, any>
  >s : unique symbol
- 
+
      method5(p?: typeof s): typeof s;
 ->method5 : (p?: typeof s) => typeof s
 +>method5 : (p?: unique symbol) => unique symbol
@@ -97,11 +97,11 @@
  >s : unique symbol
  >s : unique symbol
 @@= skipped -24, +24 lines =@@
- 
+
  const o4: Context = {
  >o4 : Context
 ->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    }} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol): unique symbol; }
 +>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    }} : { method1: () => unique symbol; method2: () => Promise<unique symbol>; method3: () => AsyncGenerator<unique symbol, void, any>; method4: () => Generator<unique symbol, void, any>; method5: (p?: unique symbol) => unique symbol; }
- 
+
      method1() {
  >method1 : () => unique symbol

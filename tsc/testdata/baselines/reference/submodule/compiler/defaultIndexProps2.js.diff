@@ -1,8 +1,8 @@
 --- old.defaultIndexProps2.js
 +++ new.defaultIndexProps2.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [defaultIndexProps2.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

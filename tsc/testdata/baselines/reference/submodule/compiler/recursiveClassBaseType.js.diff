@@ -1,8 +1,8 @@
 --- old.recursiveClassBaseType.js
 +++ new.recursiveClassBaseType.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [recursiveClassBaseType.js]
 -"use strict";
 -// Repro from #44281
@@ -67,9 +67,7 @@
 -    x: C[];
 -};
 -declare class C extends C_base {
-+    }
-+} {
- }
+-}
 -declare abstract class Base1 {
 -    abstract root(): Derived1;
 -}
@@ -79,4 +77,6 @@
 -    };
 -};
 -declare class Derived1 extends Derived1_base {
--}
++    }
++} {
+ }

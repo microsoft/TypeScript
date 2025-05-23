@@ -1,7 +1,7 @@
 --- old.callSignatureWithOptionalParameterAndInitializer.js
 +++ new.callSignatureWithOptionalParameterAndInitializer.js
 @@= skipped -58, +58 lines =@@
- 
+
  //// [callSignatureWithOptionalParameterAndInitializer.js]
  // Optional parameters cannot also have initializer expressions, these are all errors
 -function foo(x) {

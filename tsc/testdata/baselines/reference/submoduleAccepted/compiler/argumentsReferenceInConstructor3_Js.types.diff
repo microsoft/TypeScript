@@ -7,7 +7,7 @@
 ->foo : any
 +>foo : object
  >{} : {}
- 
+
  		super();
 @@= skipped -11, +11 lines =@@
  		 * @type object
@@ -23,7 +23,7 @@
 +>foo : object
 +>foo : object
 +>foo : object
- 
+
  		/**
  		 * @type object
  		 */

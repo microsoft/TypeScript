@@ -2,7 +2,7 @@
 +++ new.relativeNamesInClassicResolution.js
 @@= skipped -6, +6 lines =@@
  export let x = 1;
- 
+
  //// [a.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,12 +1,12 @@
 --- old.moduleExportAlias.types
 +++ new.moduleExportAlias.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.ts ===
  import b = require("./b.js");
 ->b : typeof b
 +>b : {}
- 
+
  b.func1;
 ->b.func1 : () => void
 ->b : typeof b
@@ -14,7 +14,7 @@
 +>b.func1 : any
 +>b : {}
 +>func1 : any
- 
+
  b.func2;
 ->b.func2 : () => void
 ->b : typeof b
@@ -22,7 +22,7 @@
 +>b.func2 : any
 +>b : {}
 +>func2 : any
- 
+
  b.func3;
 ->b.func3 : () => void
 ->b : typeof b
@@ -30,7 +30,7 @@
 +>b.func3 : any
 +>b : {}
 +>func3 : any
- 
+
  b.func4;
 ->b.func4 : () => void
 ->b : typeof b
@@ -38,7 +38,7 @@
 +>b.func4 : any
 +>b : {}
 +>func4 : any
- 
+
  b.func5;
 ->b.func5 : () => void
 ->b : typeof b
@@ -46,7 +46,7 @@
 +>b.func5 : any
 +>b : {}
 +>func5 : any
- 
+
  b.func6;
 ->b.func6 : () => void
 ->b : typeof b
@@ -54,7 +54,7 @@
 +>b.func6 : any
 +>b : {}
 +>func6 : any
- 
+
  b.func7;
 ->b.func7 : () => void
 ->b : typeof b
@@ -62,7 +62,7 @@
 +>b.func7 : any
 +>b : {}
 +>func7 : any
- 
+
  b.func8;
 ->b.func8 : () => void
 ->b : typeof b
@@ -70,7 +70,7 @@
 +>b.func8 : any
 +>b : {}
 +>func8 : any
- 
+
  b.func9;
 ->b.func9 : () => void
 ->b : typeof b
@@ -78,7 +78,7 @@
 +>b.func9 : any
 +>b : {}
 +>func9 : any
- 
+
  b.func10;
 ->b.func10 : () => void
 ->b : typeof b
@@ -86,7 +86,7 @@
 +>b.func10 : any
 +>b : {}
 +>func10 : any
- 
+
  b.func11;
 ->b.func11 : () => void
 ->b : typeof b
@@ -94,7 +94,7 @@
 +>b.func11 : any
 +>b : {}
 +>func11 : any
- 
+
  b.func12;
 ->b.func12 : () => void
 ->b : typeof b
@@ -102,7 +102,7 @@
 +>b.func12 : any
 +>b : {}
 +>func12 : any
- 
+
  b.func13;
 ->b.func13 : () => void
 ->b : typeof b
@@ -110,7 +110,7 @@
 +>b.func13 : any
 +>b : {}
 +>func13 : any
- 
+
  b.func14;
 ->b.func14 : () => void
 ->b : typeof b
@@ -118,7 +118,7 @@
 +>b.func14 : any
 +>b : {}
 +>func14 : any
- 
+
  b.func15;
 ->b.func15 : () => void
 ->b : typeof b
@@ -126,7 +126,7 @@
 +>b.func15 : any
 +>b : {}
 +>func15 : any
- 
+
  b.func16;
 ->b.func16 : () => void
 ->b : typeof b
@@ -134,7 +134,7 @@
 +>b.func16 : any
 +>b : {}
 +>func16 : any
- 
+
  b.func17;
 ->b.func17 : () => void
 ->b : typeof b
@@ -142,7 +142,7 @@
 +>b.func17 : any
 +>b : {}
 +>func17 : any
- 
+
  b.func18;
 ->b.func18 : () => void
 ->b : typeof b
@@ -150,7 +150,7 @@
 +>b.func18 : any
 +>b : {}
 +>func18 : any
- 
+
  b.func19;
 ->b.func19 : () => void
 ->b : typeof b
@@ -158,7 +158,7 @@
 +>b.func19 : any
 +>b : {}
 +>func19 : any
- 
+
  b.func20;
 ->b.func20 : () => void
 ->b : typeof b
@@ -166,11 +166,11 @@
 +>b.func20 : any
 +>b : {}
 +>func20 : any
- 
- 
+
+
  === b.js ===
 @@= skipped -110, +110 lines =@@
- 
+
  exportsAlias.func1 = function () { };
  >exportsAlias.func1 = function () { } : () => void
 ->exportsAlias.func1 : () => void
@@ -179,7 +179,7 @@
 ->func1 : () => void
 +>func1 : any
  >function () { } : () => void
- 
+
  exports.func2 = function () { };
  >exports.func2 = function () { } : () => void
 ->exports.func2 : () => void
@@ -188,7 +188,7 @@
 ->func2 : () => void
 +>func2 : any
  >function () { } : () => void
- 
+
  var moduleExportsAlias = module.exports;
 ->moduleExportsAlias : typeof module.exports
 ->module.exports : typeof module.exports
@@ -198,7 +198,7 @@
 +>module.exports : {}
 +>module : { export=: {}; }
 +>exports : {}
- 
+
  moduleExportsAlias.func3 = function () { };
  >moduleExportsAlias.func3 = function () { } : () => void
 ->moduleExportsAlias.func3 : () => void
@@ -208,7 +208,7 @@
 +>moduleExportsAlias : {}
 +>func3 : any
  >function () { } : () => void
- 
+
  module.exports.func4 = function () { };
  >module.exports.func4 = function () { } : () => void
 ->module.exports.func4 : () => void
@@ -222,7 +222,7 @@
 +>exports : {}
 +>func4 : any
  >function () { } : () => void
- 
+
  var multipleDeclarationAlias1 = exports = module.exports;
 ->multipleDeclarationAlias1 : typeof module.exports
 ->exports = module.exports : typeof module.exports
@@ -236,7 +236,7 @@
 +>module.exports : {}
 +>module : { export=: {}; }
 +>exports : {}
- 
+
  multipleDeclarationAlias1.func5 = function () { };
  >multipleDeclarationAlias1.func5 = function () { } : () => void
 ->multipleDeclarationAlias1.func5 : () => void
@@ -246,7 +246,7 @@
 +>multipleDeclarationAlias1 : {}
 +>func5 : any
  >function () { } : () => void
- 
+
  var multipleDeclarationAlias2 = module.exports = exports;
 ->multipleDeclarationAlias2 : typeof module.exports
 ->module.exports = exports : typeof module.exports
@@ -259,7 +259,7 @@
 +>module : { export=: {}; }
 +>exports : {}
  >exports : typeof import("b")
- 
+
  multipleDeclarationAlias2.func6 = function () { };
  >multipleDeclarationAlias2.func6 = function () { } : () => void
 ->multipleDeclarationAlias2.func6 : () => void
@@ -269,10 +269,10 @@
 +>multipleDeclarationAlias2 : typeof import("b")
 +>func6 : any
  >function () { } : () => void
- 
+
  var someOtherVariable;
 @@= skipped -75, +75 lines =@@
- 
+
  multipleDeclarationAlias3.func7 = function () { };
  >multipleDeclarationAlias3.func7 = function () { } : () => void
 ->multipleDeclarationAlias3.func7 : () => void
@@ -281,7 +281,7 @@
 ->func7 : () => void
 +>func7 : any
  >function () { } : () => void
- 
+
  var multipleDeclarationAlias4 = someOtherVariable = module.exports;
 ->multipleDeclarationAlias4 : typeof module.exports
 ->someOtherVariable = module.exports : typeof module.exports
@@ -294,7 +294,7 @@
 +>module.exports : {}
 +>module : { export=: {}; }
 +>exports : {}
- 
+
  multipleDeclarationAlias4.func8 = function () { };
  >multipleDeclarationAlias4.func8 = function () { } : () => void
 ->multipleDeclarationAlias4.func8 : () => void
@@ -304,7 +304,7 @@
 +>multipleDeclarationAlias4 : {}
 +>func8 : any
  >function () { } : () => void
- 
+
  var multipleDeclarationAlias5 = module.exports = exports = {};
 ->multipleDeclarationAlias5 : typeof module.exports
 ->module.exports = exports = {} : typeof module.exports
@@ -320,7 +320,7 @@
 ->exports : typeof import("b")
 +>exports : any
  >{} : {}
- 
+
  multipleDeclarationAlias5.func9 = function () { };
  >multipleDeclarationAlias5.func9 = function () { } : () => void
 ->multipleDeclarationAlias5.func9 : () => void
@@ -330,7 +330,7 @@
 +>multipleDeclarationAlias5 : {}
 +>func9 : any
  >function () { } : () => void
- 
+
  var multipleDeclarationAlias6 = exports = module.exports = {};
 ->multipleDeclarationAlias6 : typeof module.exports
 ->exports = module.exports = {} : typeof module.exports
@@ -347,97 +347,125 @@
 +>module : { export=: {}; }
 +>exports : {}
  >{} : {}
- 
+
  multipleDeclarationAlias6.func10 = function () { };
  >multipleDeclarationAlias6.func10 = function () { } : () => void
 ->multipleDeclarationAlias6.func10 : () => void
 ->multipleDeclarationAlias6 : typeof module.exports
 ->func10 : () => void
+->function () { } : () => void
+-
+-exports = module.exports = someOtherVariable = {};
+->exports = module.exports = someOtherVariable = {} : typeof module.exports
+->exports : typeof import("b")
+->module.exports = someOtherVariable = {} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->someOtherVariable = {} : {}
+->someOtherVariable : any
+->{} : {}
+-
+-exports.func11 = function () { };
+->exports.func11 = function () { } : () => void
+->exports.func11 : () => void
+->exports : typeof import("b")
+->func11 : () => void
+->function () { } : () => void
+-
+-module.exports.func12 = function () { };
+->module.exports.func12 = function () { } : () => void
+->module.exports.func12 : () => void
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->func12 : () => void
+->function () { } : () => void
+-
+-exports = module.exports = someOtherVariable = {};
+->exports = module.exports = someOtherVariable = {} : typeof module.exports
+->exports : typeof import("b")
+->module.exports = someOtherVariable = {} : typeof module.exports
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->someOtherVariable = {} : {}
+->someOtherVariable : any
+->{} : {}
+-
+-exports.func11 = function () { };
+->exports.func11 = function () { } : () => void
+->exports.func11 : () => void
+->exports : typeof import("b")
+->func11 : () => void
+->function () { } : () => void
+-
+-module.exports.func12 = function () { };
+->module.exports.func12 = function () { } : () => void
+->module.exports.func12 : () => void
+->module.exports : typeof module.exports
+->module : { exports: typeof module.exports; }
+->exports : typeof module.exports
+->func12 : () => void
 +>multipleDeclarationAlias6.func10 : any
 +>multipleDeclarationAlias6 : {}
 +>func10 : any
- >function () { } : () => void
- 
- exports = module.exports = someOtherVariable = {};
-->exports = module.exports = someOtherVariable = {} : typeof module.exports
-->exports : typeof import("b")
-->module.exports = someOtherVariable = {} : typeof module.exports
-->module.exports : typeof module.exports
-->module : { exports: typeof module.exports; }
-->exports : typeof module.exports
++>function () { } : () => void
++
++exports = module.exports = someOtherVariable = {};
 +>exports = module.exports = someOtherVariable = {} : {}
 +>exports : any
 +>module.exports = someOtherVariable = {} : {}
 +>module.exports : {}
 +>module : { export=: {}; }
 +>exports : {}
- >someOtherVariable = {} : {}
- >someOtherVariable : any
- >{} : {}
- 
- exports.func11 = function () { };
- >exports.func11 = function () { } : () => void
-->exports.func11 : () => void
++>someOtherVariable = {} : {}
++>someOtherVariable : any
++>{} : {}
++
++exports.func11 = function () { };
++>exports.func11 = function () { } : () => void
 +>exports.func11 : any
- >exports : typeof import("b")
-->func11 : () => void
++>exports : typeof import("b")
 +>func11 : any
- >function () { } : () => void
- 
- module.exports.func12 = function () { };
- >module.exports.func12 = function () { } : () => void
-->module.exports.func12 : () => void
-->module.exports : typeof module.exports
-->module : { exports: typeof module.exports; }
-->exports : typeof module.exports
-->func12 : () => void
++>function () { } : () => void
++
++module.exports.func12 = function () { };
++>module.exports.func12 = function () { } : () => void
 +>module.exports.func12 : any
 +>module.exports : {}
 +>module : { export=: {}; }
 +>exports : {}
 +>func12 : any
- >function () { } : () => void
- 
- exports = module.exports = someOtherVariable = {};
-->exports = module.exports = someOtherVariable = {} : typeof module.exports
-->exports : typeof import("b")
-->module.exports = someOtherVariable = {} : typeof module.exports
-->module.exports : typeof module.exports
-->module : { exports: typeof module.exports; }
-->exports : typeof module.exports
++>function () { } : () => void
++
++exports = module.exports = someOtherVariable = {};
 +>exports = module.exports = someOtherVariable = {} : {}
 +>exports : any
 +>module.exports = someOtherVariable = {} : {}
 +>module.exports : {}
 +>module : { export=: {}; }
 +>exports : {}
- >someOtherVariable = {} : {}
- >someOtherVariable : any
- >{} : {}
- 
- exports.func11 = function () { };
- >exports.func11 = function () { } : () => void
-->exports.func11 : () => void
++>someOtherVariable = {} : {}
++>someOtherVariable : any
++>{} : {}
++
++exports.func11 = function () { };
++>exports.func11 = function () { } : () => void
 +>exports.func11 : any
- >exports : typeof import("b")
-->func11 : () => void
++>exports : typeof import("b")
 +>func11 : any
- >function () { } : () => void
- 
- module.exports.func12 = function () { };
- >module.exports.func12 = function () { } : () => void
-->module.exports.func12 : () => void
-->module.exports : typeof module.exports
-->module : { exports: typeof module.exports; }
-->exports : typeof module.exports
-->func12 : () => void
++>function () { } : () => void
++
++module.exports.func12 = function () { };
++>module.exports.func12 = function () { } : () => void
 +>module.exports.func12 : any
 +>module.exports : {}
 +>module : { export=: {}; }
 +>exports : {}
 +>func12 : any
  >function () { } : () => void
- 
+
  exports = module.exports = {};
 ->exports = module.exports = {} : typeof module.exports
 ->exports : typeof import("b")
@@ -452,7 +480,7 @@
 +>module : { export=: {}; }
 +>exports : {}
  >{} : {}
- 
+
  exports.func13 = function () { };
  >exports.func13 = function () { } : () => void
 ->exports.func13 : () => void
@@ -461,7 +489,7 @@
 ->func13 : () => void
 +>func13 : any
  >function () { } : () => void
- 
+
  module.exports.func14 = function () { };
  >module.exports.func14 = function () { } : () => void
 ->module.exports.func14 : () => void
@@ -475,7 +503,7 @@
 +>exports : {}
 +>func14 : any
  >function () { } : () => void
- 
+
  exports = module.exports = {};
 ->exports = module.exports = {} : typeof module.exports
 ->exports : typeof import("b")
@@ -490,7 +518,7 @@
 +>module : { export=: {}; }
 +>exports : {}
  >{} : {}
- 
+
  exports.func15 = function () { };
  >exports.func15 = function () { } : () => void
 ->exports.func15 : () => void
@@ -499,7 +527,7 @@
 ->func15 : () => void
 +>func15 : any
  >function () { } : () => void
- 
+
  module.exports.func16 = function () { };
  >module.exports.func16 = function () { } : () => void
 ->module.exports.func16 : () => void
@@ -513,7 +541,7 @@
 +>exports : {}
 +>func16 : any
  >function () { } : () => void
- 
+
  module.exports = exports = {};
 ->module.exports = exports = {} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -527,7 +555,7 @@
 ->exports : typeof import("b")
 +>exports : any
  >{} : {}
- 
+
  exports.func17 = function () { };
  >exports.func17 = function () { } : () => void
 ->exports.func17 : () => void
@@ -536,7 +564,7 @@
 ->func17 : () => void
 +>func17 : any
  >function () { } : () => void
- 
+
  module.exports.func18 = function () { };
  >module.exports.func18 = function () { } : () => void
 ->module.exports.func18 : () => void
@@ -550,7 +578,7 @@
 +>exports : {}
 +>func18 : any
  >function () { } : () => void
- 
+
  module.exports = {};
 ->module.exports = {} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -561,7 +589,7 @@
 +>module : { export=: {}; }
 +>exports : {}
  >{} : {}
- 
+
  exports.func19 = function () { };
  >exports.func19 = function () { } : () => void
 ->exports.func19 : () => void
@@ -570,7 +598,7 @@
 ->func19 : () => void
 +>func19 : any
  >function () { } : () => void
- 
+
  module.exports.func20 = function () { };
  >module.exports.func20 = function () { } : () => void
 ->module.exports.func20 : () => void
@@ -584,5 +612,4 @@
 +>exports : {}
 +>func20 : any
  >function () { } : () => void
- 
- 
+

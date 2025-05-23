@@ -1,7 +1,7 @@
 --- old.esDecorators-classExpression-commentPreservation(target=es2015).js
 +++ new.esDecorators-classExpression-commentPreservation(target=es2015).js
 @@= skipped -85, +85 lines =@@
- 
+
  //// [esDecorators-classExpression-commentPreservation.js]
  /*1*/
 -((() => {

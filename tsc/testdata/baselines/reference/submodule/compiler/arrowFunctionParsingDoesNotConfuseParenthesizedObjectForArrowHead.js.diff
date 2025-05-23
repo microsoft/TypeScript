@@ -1,8 +1,8 @@
 --- old.arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.js
 +++ new.arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [arrowFunctionParsingDoesNotConfuseParenthesizedObjectForArrowHead.js]
 -var test = function () { return ({
 +const test = () => ({

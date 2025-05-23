@@ -4,8 +4,8 @@
 -file.tsx(2,19): error TS2741: Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
 +file.tsx(2,19): error TS2322: Type '{}' is not assignable to type 'IntrinsicClassAttributes<T>'.
 +  Property 'ref' is missing in type '{}' but required in type 'IntrinsicClassAttributesAlias<T>'.
- 
- 
+
+
  ==== file.tsx (1 errors) ====
      class App {}
      export const a = <App></App>;

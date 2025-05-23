@@ -20,8 +20,8 @@
 ->B : typeof A.B
 +>B : typeof B
  >x : number
- 
- 
+
+
 @@= skipped -34, +34 lines =@@
  {
   
@@ -50,4 +50,3 @@
 +>C : typeof C
   
  }
- 

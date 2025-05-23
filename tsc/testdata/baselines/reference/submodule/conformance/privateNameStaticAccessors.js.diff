@@ -1,8 +1,8 @@
 --- old.privateNameStaticAccessors.js
 +++ new.privateNameStaticAccessors.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [privateNameStaticAccessors.js]
 -"use strict";
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {

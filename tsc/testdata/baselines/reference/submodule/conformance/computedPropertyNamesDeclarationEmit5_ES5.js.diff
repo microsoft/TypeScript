@@ -2,7 +2,7 @@
 +++ new.computedPropertyNamesDeclarationEmit5_ES5.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [computedPropertyNamesDeclarationEmit5_ES5.js]
 -var _a;
 -var v = (_a = {},

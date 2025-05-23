@@ -9,6 +9,6 @@
  >s : Symbol(s, Decl(restTuplesFromContextualTypes.ts, 69, 27))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
  let g7 = pipe((x, y) => 42, x => "" + x);
  >g7 : Symbol(g7, Decl(restTuplesFromContextualTypes.ts, 70, 3))

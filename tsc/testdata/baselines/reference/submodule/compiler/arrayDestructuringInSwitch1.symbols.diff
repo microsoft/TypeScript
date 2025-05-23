@@ -2,7 +2,7 @@
 +++ new.arrayDestructuringInSwitch1.symbols
 @@= skipped -15, +15 lines =@@
  >Expression : Symbol(Expression, Decl(arrayDestructuringInSwitch1.ts, 0, 0))
- 
+
    if (Array.isArray(expression)) {
 ->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 +>Array.isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
@@ -10,10 +10,10 @@
 ->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 +>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
  >expression : Symbol(expression, Decl(arrayDestructuringInSwitch1.ts, 3, 25))
- 
+
      const [operator, ...operands] = expression;
 @@= skipped -15, +15 lines =@@
- 
+
        case 'and': {
          return operands.every((child) => evaluate(child));
 ->operands.every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

@@ -2,7 +2,7 @@
 +++ new.typeGuardsInIfStatement.symbols
 @@= skipped -12, +12 lines =@@
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 4, 13))
- 
+
          return x.length; // string
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>x.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
@@ -21,7 +21,7 @@
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 83, 14))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          return x === "hello"; // string
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 83, 14))
 @@= skipped -68, +68 lines =@@
@@ -33,7 +33,7 @@
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
              )
              : (
 @@= skipped -10, +10 lines =@@
@@ -45,12 +45,12 @@
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 107, 15))
 ->toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
              );
      }
 @@= skipped -17, +17 lines =@@
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))
- 
+
          return x.toString(); // string | number | boolean - x changed in else branch
 ->x.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -62,13 +62,13 @@
          x = 10;
 @@= skipped -16, +16 lines =@@
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))
- 
+
              ? x.toString() // number
 ->x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>x.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
              : x.toString(); // boolean | string
  >x : Symbol(x, Decl(typeGuardsInIfStatement.ts, 127, 15))

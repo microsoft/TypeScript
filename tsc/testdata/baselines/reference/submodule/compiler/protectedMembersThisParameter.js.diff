@@ -1,8 +1,8 @@
 --- old.protectedMembersThisParameter.js
 +++ new.protectedMembersThisParameter.js
 @@= skipped -98, +98 lines =@@
- 
- 
+
+
  //// [protectedMembersThisParameter.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -47,7 +47,7 @@
 -}());
 -var A = /** @class */ (function () {
 -    function A() {
-     }
+-    }
 -    A.prototype.a = function () { };
 -    return A;
 -}());
@@ -73,6 +73,7 @@
 -    Z.prototype.z = function () { };
 -    return Z;
 -}());
++    }
 +}
 +class A {
 +    a() { }
@@ -98,37 +99,45 @@
 -    }
 -    D.prototype.d = function () { };
 -    D.prototype.derived1 = function (arg) {
+-        arg.d();
+-        arg.d1(); // should error
+-    };
+-    D.prototype.derived1ThisD = function (arg) {
+-        arg.d();
+-        arg.d1(); // should error
+-    };
+-    D.prototype.derived1ThisD1 = function (arg) {
 +class D {
 +    d() { }
 +    derived1(arg) {
-         arg.d();
-         arg.d1(); // should error
--    };
--    D.prototype.derived1ThisD = function (arg) {
++        arg.d();
++        arg.d1(); // should error
 +    }
 +    derived1ThisD(arg) {
-         arg.d();
-         arg.d1(); // should error
--    };
--    D.prototype.derived1ThisD1 = function (arg) {
++        arg.d();
++        arg.d1(); // should error
 +    }
 +    derived1ThisD1(arg) {
          arg.d();
          arg.d1();
 -    };
 -    D.prototype.derived2 = function (arg) {
-+    }
-+    derived2(arg) {
-         arg.d(); // should error because of overridden method in D2
-         arg.d2(); // should error
+-        arg.d(); // should error because of overridden method in D2
+-        arg.d2(); // should error
 -    };
 -    D.prototype.derived2ThisD = function (arg) {
-+    }
-+    derived2ThisD(arg) {
-         arg.d(); // should error because of overridden method in D2
-         arg.d2(); // should error
+-        arg.d(); // should error because of overridden method in D2
+-        arg.d2(); // should error
 -    };
 -    D.prototype.derived2ThisD2 = function (arg) {
++    }
++    derived2(arg) {
++        arg.d(); // should error because of overridden method in D2
++        arg.d2(); // should error
++    }
++    derived2ThisD(arg) {
++        arg.d(); // should error because of overridden method in D2
++        arg.d2(); // should error
 +    }
 +    derived2ThisD2(arg) {
          arg.d();
@@ -140,7 +149,7 @@
 -    __extends(D1, _super);
 -    function D1() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    D1.prototype.d1 = function () { };
 -    return D1;
 -}(D));
@@ -153,6 +162,7 @@
 -    D2.prototype.d2 = function () { };
 -    return D2;
 -}(D));
++    }
 +}
 +class D1 extends D {
 +    d1() { }

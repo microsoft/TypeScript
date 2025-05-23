@@ -1,8 +1,7 @@
 --- old.superNoModifiersCrash.errors.txt
 +++ new.superNoModifiersCrash.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +File.js(3,9): error TS2335: 'super' can only be referenced in a derived class.
 +File.js(3,29): error TS2461: Type 'IArguments' is not an array type.
 +File.js(9,5): error TS2416: Property 'initialize' in type 'Child' is not assignable to the same property in base type 'Parent'.

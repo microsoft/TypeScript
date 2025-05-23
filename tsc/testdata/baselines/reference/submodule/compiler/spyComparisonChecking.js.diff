@@ -1,7 +1,7 @@
 --- old.spyComparisonChecking.js
 +++ new.spyComparisonChecking.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [spyComparisonChecking.js]
  function mock(spyName, methodNames) {
 -    var spyObj = createSpyObj(spyName, methodNames);

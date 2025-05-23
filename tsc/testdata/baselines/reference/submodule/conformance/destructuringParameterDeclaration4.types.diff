@@ -2,21 +2,21 @@
 +++ new.destructuringParameterDeclaration4.types
 @@= skipped -20, +20 lines =@@
  >x : [number, number, string]
- 
+
  function a1(...x: (number|string)[]) { }
 ->a1 : (...x: (number | string)[]) => void
 +>a1 : (...x: (string | number)[]) => void
  >x : (string | number)[]
- 
+
  function a2(...a: someArray) { }  // Error, rest parameter must be array type
 @@= skipped -8, +8 lines =@@
  >a : someArray
- 
+
  function a3(...b?) { }            // Error, can't be optional
 ->a3 : (...b?: any[]) => void
 +>a3 : (...b: any[]) => void
  >b : any[]
- 
+
  function a4(...b = [1,2,3]) { }   // Error, can't have initializer
 ->a4 : (...b?: number[]) => void
 +>a4 : (...b: number[]) => void
@@ -25,14 +25,14 @@
  >1 : 1
 @@= skipped -12, +12 lines =@@
  >3 : 3
- 
+
  function a5([a, b, [[c]]]) { }
 ->a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 +>a5 : (__0: [any, any, [[any]]]) => void
  >a : any
  >b : any
  >c : any
- 
+
  function a6([a, b, c, ...x]: number[]) { }
 ->a6 : ([a, b, c, ...x]: number[]) => void
 +>a6 : (__0: number[]) => void
@@ -40,7 +40,7 @@
  >b : number
  >c : number
 @@= skipped -15, +15 lines =@@
- 
+
  a1(1, 2, "hello", true);  // Error, parameter type is (number|string)[]
  >a1(1, 2, "hello", true) : void
 ->a1 : (...x: (number | string)[]) => void
@@ -49,14 +49,14 @@
  >2 : 2
  >"hello" : "hello"
 @@= skipped -8, +8 lines =@@
- 
+
  a1(...array2);            // Error parameter type is (number|string)[]
  >a1(...array2) : void
 ->a1 : (...x: (number | string)[]) => void
 +>a1 : (...x: (string | number)[]) => void
  >...array2 : any
  >array2 : any
- 
+
  a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
  >a5([1, 2, "string", false, true]) : void
 ->a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
@@ -65,7 +65,7 @@
  >1 : 1
  >2 : 2
 @@= skipped -16, +16 lines =@@
- 
+
  a5([1, 2]);                              // Error, parameter type is [any, any, [[any]]]
  >a5([1, 2]) : void
 ->a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
@@ -73,7 +73,7 @@
  >[1, 2] : [number, number]
  >1 : 1
  >2 : 2
- 
+
  a6([1, 2, "string"]);                   // Error, parameter type is number[]
  >a6([1, 2, "string"]) : void
 ->a6 : ([a, b, c, ...x]: number[]) => void

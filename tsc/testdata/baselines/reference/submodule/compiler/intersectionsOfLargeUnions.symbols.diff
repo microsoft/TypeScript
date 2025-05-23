@@ -9,11 +9,11 @@
  >node : Symbol(node, Decl(intersectionsOfLargeUnions.ts, 2, 32))
 ->nodeType : Symbol(Node.nodeType, Decl(lib.dom.d.ts, --, --))
 +>nodeType : Symbol(nodeType, Decl(lib.dom.d.ts, --, --))
- 
+
      return nodeType === 1;
  >nodeType : Symbol(nodeType, Decl(intersectionsOfLargeUnions.ts, 3, 7))
 @@= skipped -32, +32 lines =@@
- 
+
          const nodeTagName = node.tagName.toLowerCase();
  >nodeTagName : Symbol(nodeTagName, Decl(intersectionsOfLargeUnions.ts, 11, 13))
 ->node.tagName.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
@@ -25,6 +25,6 @@
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>tagName : Symbol(tagName, Decl(lib.dom.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
- 
+
           return nodeTagName === tagName;
  >nodeTagName : Symbol(nodeTagName, Decl(intersectionsOfLargeUnions.ts, 11, 13))

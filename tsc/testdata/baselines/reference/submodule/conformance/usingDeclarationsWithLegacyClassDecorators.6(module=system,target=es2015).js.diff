@@ -2,7 +2,7 @@
 +++ new.usingDeclarationsWithLegacyClassDecorators.6(module=system,target=es2015).js
 @@= skipped -13, +13 lines =@@
  export { C as D };
- 
+
  //// [usingDeclarationsWithLegacyClassDecorators.6.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

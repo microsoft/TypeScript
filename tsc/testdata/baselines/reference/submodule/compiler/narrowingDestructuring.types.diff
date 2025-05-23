@@ -13,10 +13,10 @@
  >rest : { a: string; }
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function farr<T extends [number, string, string] | [string, number, number]>(x: T) {
 ->farr : <T extends [number, string, string] | [string, number, number]>(x: T) => void
 +>farr : <T extends [string, number, number] | [number, string, string]>(x: T) => void
  >x : T
- 
+
      const [head, ...tail] = x;

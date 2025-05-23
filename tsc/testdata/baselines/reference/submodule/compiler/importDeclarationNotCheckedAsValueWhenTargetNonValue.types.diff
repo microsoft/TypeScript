@@ -10,7 +10,7 @@
 +>charting : typeof charting
 +>axis2d : typeof axis2d
 +>common : common
- 
+
      export = exp;
 ->exp : exp
 +>exp : common

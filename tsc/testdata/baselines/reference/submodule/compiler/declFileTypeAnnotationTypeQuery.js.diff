@@ -2,7 +2,7 @@
 +++ new.declFileTypeAnnotationTypeQuery.js
 @@= skipped -44, +44 lines =@@
  }
- 
+
  //// [declFileTypeAnnotationTypeQuery.js]
 -var c = /** @class */ (function () {
 -    function c() {

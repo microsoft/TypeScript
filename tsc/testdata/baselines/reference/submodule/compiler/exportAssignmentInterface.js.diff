@@ -1,9 +1,9 @@
 --- old.exportAssignmentInterface.js
 +++ new.exportAssignmentInterface.js
 @@= skipped -13, +13 lines =@@
- 
+
  var n: number = i.p1;
- 
+
 -//// [exportAssignmentInterface_A.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

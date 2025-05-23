@@ -2,7 +2,7 @@
 +++ new.classAbstractAsIdentifier.js
 @@= skipped -7, +7 lines =@@
  new abstract;
- 
+
  //// [classAbstractAsIdentifier.js]
 -var abstract = /** @class */ (function () {
 -    function abstract() {

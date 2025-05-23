@@ -2,7 +2,7 @@
 +++ new.twoInterfacesDifferentRootModule.js
 @@= skipped -31, +31 lines =@@
  }
- 
+
  //// [twoInterfacesDifferentRootModule.js]
 -// two interfaces with different root modules should not merge
  var M2;

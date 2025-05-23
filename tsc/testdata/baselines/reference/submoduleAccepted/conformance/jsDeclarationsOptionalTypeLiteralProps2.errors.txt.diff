@@ -1,8 +1,7 @@
 --- old.jsDeclarationsOptionalTypeLiteralProps2.errors.txt
 +++ new.jsDeclarationsOptionalTypeLiteralProps2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +foo.js(11,16): error TS7031: Binding element 'a' implicitly has an 'any' type.
 +foo.js(11,19): error TS7031: Binding element 'b' implicitly has an 'any' type.
 +foo.js(11,22): error TS7031: Binding element 'c' implicitly has an 'any' type.

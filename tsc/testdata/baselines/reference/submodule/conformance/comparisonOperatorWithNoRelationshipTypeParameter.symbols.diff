@@ -10,6 +10,6 @@
 +>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 8))
 +>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 11))
 +>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 14))
- 
+
  var a: boolean;
  >a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))

@@ -11,14 +11,14 @@
 +>Inner : any
  >class I {    n(a, b) { }} : typeof I
  >I : typeof I
- 
+
 @@= skipped -14, +14 lines =@@
  }
  /** @type {Outer} */
  var si
 ->si : O
 +>si : Outer
- 
+
  si.m
 ->si.m : (x: any, y: any) => void
 ->si : O
@@ -26,12 +26,12 @@
 +>si.m : any
 +>si : Outer
 +>m : any
- 
+
  /** @type {Outer.Inner} */
  var oi
 ->oi : I
 +>oi : Inner
- 
+
  oi.n
 ->oi.n : (a: any, b: any) => void
 ->oi : I
@@ -39,5 +39,4 @@
 +>oi.n : any
 +>oi : Inner
 +>n : any
- 
- 
+

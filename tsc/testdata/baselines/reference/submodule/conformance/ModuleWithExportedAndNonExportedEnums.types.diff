@@ -1,7 +1,7 @@
 --- old.ModuleWithExportedAndNonExportedEnums.types
 +++ new.ModuleWithExportedAndNonExportedEnums.types
 @@= skipped -16, +16 lines =@@
- 
+
  // not an error since exported
  var a: A.Color = A.Color.Red;
 ->a : A.Color
@@ -16,6 +16,6 @@
 ->Red : A.Color.Red
 +>Color : typeof Color
 +>Red : Color.Red
- 
+
  // error not exported
  var b = A.Day.Monday;

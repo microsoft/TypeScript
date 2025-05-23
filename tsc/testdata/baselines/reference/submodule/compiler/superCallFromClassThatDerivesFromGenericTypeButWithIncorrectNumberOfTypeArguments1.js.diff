@@ -2,7 +2,7 @@
 +++ new.superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [superCallFromClassThatDerivesFromGenericTypeButWithIncorrectNumberOfTypeArguments1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

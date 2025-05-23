@@ -1,7 +1,7 @@
 --- old.declFileWithInternalModuleNameConflictsInExtendsClause2.symbols
 +++ new.declFileWithInternalModuleNameConflictsInExtendsClause2.symbols
 @@= skipped -17, +17 lines =@@
- 
+
      export class W implements A.C.Z { // This can refer to it as A.C.Z
  >W : Symbol(W, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 4, 16))
 ->A.C.Z : Symbol(A.C.Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 14))
@@ -13,4 +13,3 @@
 +>Z : Symbol(Z, Decl(declFileWithInternalModuleNameConflictsInExtendsClause2.ts, 0, 14))
      }
  }
- 

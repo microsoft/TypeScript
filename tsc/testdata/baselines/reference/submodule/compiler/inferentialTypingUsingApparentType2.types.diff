@@ -1,7 +1,7 @@
 --- old.inferentialTypingUsingApparentType2.types
 +++ new.inferentialTypingUsingApparentType2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === inferentialTypingUsingApparentType2.ts ===
  function foo<T extends { m(p: string): number }>(x: T): T {
 ->foo : <T extends { m(p: string): number; }>(x: T) => T
@@ -11,7 +11,7 @@
  >x : T
 @@= skipped -10, +10 lines =@@
  }
- 
+
  foo({ m(x) { return x.length } });
 ->foo({ m(x) { return x.length } }) : { m(x: string): number; }
 ->foo : <T extends { m(p: string): number; }>(x: T) => T

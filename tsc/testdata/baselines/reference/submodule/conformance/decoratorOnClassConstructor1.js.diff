@@ -2,7 +2,7 @@
 +++ new.decoratorOnClassConstructor1.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [decoratorOnClassConstructor1.js]
 -var C = /** @class */ (function () {
 -    function C() {

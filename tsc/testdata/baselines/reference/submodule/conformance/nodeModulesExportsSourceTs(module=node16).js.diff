@@ -3,13 +3,13 @@
 @@= skipped -26, +26 lines =@@
      "exports": "./index.ts"
  }
- 
+
 -//// [other.js]
 -export const x = null;
- //// [index.js]
+-//// [index.js]
 -// esm format file
 -export { x } from "./other.js";
--//// [index.js]
+ //// [index.js]
  export const a = (await import("inner")).x();
 -
 -

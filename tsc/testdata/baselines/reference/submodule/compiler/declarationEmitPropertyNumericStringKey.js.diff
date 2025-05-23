@@ -1,7 +1,7 @@
 --- old.declarationEmitPropertyNumericStringKey.js
 +++ new.declarationEmitPropertyNumericStringKey.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [declarationEmitPropertyNumericStringKey.js]
  // https://github.com/microsoft/TypeScript/issues/55292
 -var _a, _b, _c;
@@ -17,9 +17,7 @@
 -//// [declarationEmitPropertyNumericStringKey.d.ts]
 -declare const STATUS: {
 -    readonly "404": "not found";
-+const STATUS = {
-+    ["404"]: "not found",
- };
+-};
 -declare const hundredStr = "100";
 -declare const obj: {
 -    "100": string;
@@ -28,6 +26,9 @@
 -declare const obj2: {
 -    100: string;
 -};
++const STATUS = {
++    ["404"]: "not found",
++};
 +const hundredStr = "100";
 +const obj = { [hundredStr]: "foo" };
 +const hundredNum = 100;

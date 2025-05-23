@@ -2,7 +2,7 @@
 +++ new.noImplicitAnyMissingSetAccessor.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [noImplicitAnyMissingSetAccessor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,12 +21,7 @@
 -})();
 -var Parent = /** @class */ (function () {
 -    function Parent() {
-+class Parent {
-+}
-+class Child extends Parent {
-+    get message() {
-+        return "";
-     }
+-    }
 -    return Parent;
 -}());
 -var Child = /** @class */ (function (_super) {
@@ -43,4 +38,10 @@
 -    });
 -    return Child;
 -}(Parent));
++class Parent {
++}
++class Child extends Parent {
++    get message() {
++        return "";
++    }
 +}

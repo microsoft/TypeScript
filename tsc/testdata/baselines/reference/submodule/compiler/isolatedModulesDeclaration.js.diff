@@ -1,7 +1,7 @@
 --- old.isolatedModulesDeclaration.js
 +++ new.isolatedModulesDeclaration.js
 @@= skipped -4, +4 lines =@@
- 
+
  //// [file1.js]
  export var x;
 -

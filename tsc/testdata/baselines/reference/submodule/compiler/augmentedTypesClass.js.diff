@@ -1,7 +1,7 @@
 --- old.augmentedTypesClass.js
 +++ new.augmentedTypesClass.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [augmentedTypesClass.js]
  //// class then var
 -var c1 = /** @class */ (function () {

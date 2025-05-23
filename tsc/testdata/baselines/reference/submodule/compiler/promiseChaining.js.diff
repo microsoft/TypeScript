@@ -1,8 +1,8 @@
 --- old.promiseChaining.js
 +++ new.promiseChaining.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [promiseChaining.js]
 -var Chain = /** @class */ (function () {
 -    function Chain(value) {

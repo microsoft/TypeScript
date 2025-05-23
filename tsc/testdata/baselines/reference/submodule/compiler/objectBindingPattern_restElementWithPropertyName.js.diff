@@ -1,8 +1,8 @@
 --- old.objectBindingPattern_restElementWithPropertyName.js
 +++ new.objectBindingPattern_restElementWithPropertyName.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [objectBindingPattern_restElementWithPropertyName.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

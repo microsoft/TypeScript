@@ -10,7 +10,7 @@
 ->a : typeof a
 +>a : any
  >{} : {}
- 
+
  /** @enum {string} */
  module.exports.b = {};
  >module.exports.b = {} : {}
@@ -25,4 +25,3 @@
 +>exports : typeof import("enumTagOnExports")
 +>b : any
  >{} : {}
- 

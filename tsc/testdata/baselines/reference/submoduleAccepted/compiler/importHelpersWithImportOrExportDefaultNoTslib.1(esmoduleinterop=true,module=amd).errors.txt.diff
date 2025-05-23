@@ -1,6 +1,6 @@
 --- old.importHelpersWithImportOrExportDefaultNoTslib.1(esmoduleinterop=true,module=amd).errors.txt
 +++ new.importHelpersWithImportOrExportDefaultNoTslib.1(esmoduleinterop=true,module=amd).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -b.ts(1,10): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
 -
 -
@@ -12,5 +12,4 @@
 -             ~~~~~~~
 -!!! error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

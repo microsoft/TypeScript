@@ -2,7 +2,7 @@
 +++ new.objectTypesIdentityWithPrivates3.js
 @@= skipped -27, +27 lines =@@
  <C4>c3; // Should fail (private x originates in the same declaration, but different types)
- 
+
  //// [objectTypesIdentityWithPrivates3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

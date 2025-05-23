@@ -7,7 +7,7 @@
 ->v : M.D
 +>v : D
  >M : any
- 
+
      export var w = M.D.f; // error, should be typeof M.D.f
  >w : () => void
  >M.D.f : () => void
@@ -17,7 +17,7 @@
 ->D : typeof M.D
 +>D : typeof D
  >f : () => void
- 
+
      export var x = M.C.f; // error, should be typeof M.C.f
  >x : () => void
  >M.C.f : () => void
@@ -27,7 +27,7 @@
 ->C : typeof M.C
 +>C : typeof C
  >f : () => void
- 
+
      export var x = M.E.f; // error, should be typeof M.E.f
  >x : () => void
  >M.E.f : () => void

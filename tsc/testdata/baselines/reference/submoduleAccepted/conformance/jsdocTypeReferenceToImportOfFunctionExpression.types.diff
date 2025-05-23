@@ -1,7 +1,7 @@
 --- old.jsdocTypeReferenceToImportOfFunctionExpression.types
 +++ new.jsdocTypeReferenceToImportOfFunctionExpression.types
 @@= skipped -10, +10 lines =@@
- 
+
  /** @class */
  module.exports = function MC() {
 ->module.exports = function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : { (): MW; new (): MC; }
@@ -16,7 +16,7 @@
 +>exports : () => MW
 +>function MC() {    /** @type {any} */    var x = {}    return new MW(x);} : () => MW
 +>MC : () => MW
- 
+
      /** @type {any} */
      var x = {}
 @@= skipped -29, +29 lines =@@
@@ -25,7 +25,7 @@
    constructor(compiler) {
 ->compiler : { (): MW; new (): MC; }
 +>compiler : any
- 
+
      this.compiler = compiler;
 ->this.compiler = compiler : { (): MW; new (): MC; }
 +>this.compiler = compiler : any
@@ -36,7 +36,7 @@
 +>compiler : any
    }
  }
- 
+
  module.exports = MW;
  >module.exports = MW : typeof MW
  >module.exports : typeof MW
@@ -44,4 +44,3 @@
 +>module : { MW: typeof MW; }
  >exports : typeof MW
  >MW : typeof MW
- 

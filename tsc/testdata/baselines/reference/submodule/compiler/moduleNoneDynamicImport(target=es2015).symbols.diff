@@ -5,6 +5,5 @@
  const foo = import("./b");
  >foo : Symbol(foo, Decl(a.ts, 0, 5))
 ->"./b" : Symbol("/b", Decl(b.js, 0, 0))
- 
+
  === /b.js ===
- 

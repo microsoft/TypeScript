@@ -19,8 +19,8 @@
 +index7.js(2,26): error TS2304: Cannot find name 'T'.
 +index8.js(4,12): error TS2749: 'fn' refers to a value, but is being used as a type here. Did you mean 'typeof fn'?
  index8.js(4,15): error TS2304: Cannot find name 'T'.
- 
- 
+
+
 -==== index.js (1 errors) ====
 +==== index.js (2 errors) ====
      /**

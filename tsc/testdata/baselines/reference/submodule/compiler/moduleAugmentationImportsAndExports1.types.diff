@@ -12,4 +12,3 @@
 ->foo : () => import("f2").B
 +>foo : () => B
  >n : number
- 

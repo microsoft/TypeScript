@@ -1,12 +1,12 @@
 --- old.isolatedDeclarationErrorsExpandoFunctions.types
 +++ new.isolatedDeclarationErrorsExpandoFunctions.types
 @@= skipped -1, +1 lines =@@
- 
+
  === isolatedDeclarationErrorsExpandoFunctions.ts ===
  export function foo() {}
 ->foo : typeof foo
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
- 
+
  foo.apply = () => {}
  >foo.apply = () => {} : () => void
  >foo.apply : () => void
@@ -14,7 +14,7 @@
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
  >apply : () => void
  >() => {} : () => void
- 
+
  foo.call = ()=> {}
  >foo.call = ()=> {} : () => void
  >foo.call : () => void
@@ -22,7 +22,7 @@
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
  >call : () => void
  >()=> {} : () => void
- 
+
  foo.bind = ()=> {}
  >foo.bind = ()=> {} : () => void
  >foo.bind : () => void
@@ -30,7 +30,7 @@
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
  >bind : () => void
  >()=> {} : () => void
- 
+
  foo.caller = ()=> {}
  >foo.caller = ()=> {} : () => void
  >foo.caller : () => void
@@ -38,7 +38,7 @@
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
  >caller : () => void
  >()=> {} : () => void
- 
+
  foo.toString = ()=> {}
  >foo.toString = ()=> {} : () => void
  >foo.toString : () => void
@@ -46,7 +46,7 @@
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
  >toString : () => void
  >()=> {} : () => void
- 
+
  foo.length = 10
  >foo.length = 10 : 10
  >foo.length : number
@@ -54,7 +54,7 @@
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
  >length : number
  >10 : 10
- 
+
  foo.length = 10
  >foo.length = 10 : 10
  >foo.length : number
@@ -62,4 +62,3 @@
 +>foo : { (): void; apply: () => void; call: () => void; bind: () => void; caller: () => void; toString: () => void; length: number; }
  >length : number
  >10 : 10
- 

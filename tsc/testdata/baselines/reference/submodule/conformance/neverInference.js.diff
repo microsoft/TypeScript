@@ -1,8 +1,8 @@
 --- old.neverInference.js
 +++ new.neverInference.js
 @@= skipped -31, +31 lines =@@
- 
- 
+
+
  //// [neverInference.js]
 -"use strict";
  let neverArray = [];

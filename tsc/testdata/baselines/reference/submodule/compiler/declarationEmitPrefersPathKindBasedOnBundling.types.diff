@@ -6,15 +6,15 @@
  import { scalar } from '../lib/operators/scalar';
 ->scalar : (value: string) => import("src/lib/operators/scalar").Scalar
 +>scalar : (value: string) => Scalar
- 
+
  export default {
 ->{	get xs() {		return scalar("14px");	}} : { readonly xs: import("src/lib/operators/scalar").Scalar; }
 +>{	get xs() {		return scalar("14px");	}} : { readonly xs: Scalar; }
- 
+
  	get xs() {
 ->xs : import("src/lib/operators/scalar").Scalar
 +>xs : Scalar
- 
+
  		return scalar("14px");
 ->scalar("14px") : import("src/lib/operators/scalar").Scalar
 ->scalar : (value: string) => import("src/lib/operators/scalar").Scalar

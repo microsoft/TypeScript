@@ -2,7 +2,7 @@
 +++ new.asyncYieldStarContextualType.symbols
 @@= skipped -7, +7 lines =@@
  >E : Symbol(E, Decl(asyncYieldStarContextualType.ts, 1, 19))
- 
+
      [Symbol.iterator](): Generator<E, T, unknown>
 ->[Symbol.iterator] : Symbol(Result[Symbol.iterator], Decl(asyncYieldStarContextualType.ts, 1, 24))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -24,7 +24,7 @@
 ->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 +>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >mapper : Symbol(mapper, Decl(asyncYieldStarContextualType.ts, 10, 13))
- 
+
      // With yield*, the type of test2 is
 @@= skipped -10, +10 lines =@@
      // But this codepath has no way to produce BookWithAuthor
@@ -36,5 +36,5 @@
 ->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 +>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >mapper : Symbol(mapper, Decl(asyncYieldStarContextualType.ts, 10, 13))
- 
+
      const x1 = yield* g();

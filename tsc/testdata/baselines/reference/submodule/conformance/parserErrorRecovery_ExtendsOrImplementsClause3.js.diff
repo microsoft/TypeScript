@@ -2,7 +2,7 @@
 +++ new.parserErrorRecovery_ExtendsOrImplementsClause3.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [parserErrorRecovery_ExtendsOrImplementsClause3.js]
 -var C = /** @class */ (function () {
 -    function C() {

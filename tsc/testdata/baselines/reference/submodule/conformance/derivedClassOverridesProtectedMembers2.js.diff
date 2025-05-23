@@ -1,8 +1,8 @@
 --- old.derivedClassOverridesProtectedMembers2.js
 +++ new.derivedClassOverridesProtectedMembers2.js
 @@= skipped -65, +65 lines =@@
- 
- 
+
+
  //// [derivedClassOverridesProtectedMembers2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

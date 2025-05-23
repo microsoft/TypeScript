@@ -2,20 +2,20 @@
 +++ new.contextuallyTypedStringLiteralsInJsxAttributes01.symbols
 @@= skipped -7, +7 lines =@@
  >IntrinsicElements : Symbol(IntrinsicElements, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 0, 15))
- 
+
          span: {};
 ->span : Symbol(IntrinsicElements.span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
 +>span : Symbol(span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
      }
      export interface Element {
  >Element : Symbol(Element, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 3, 5))
- 
+
  		something?: any;
 ->something : Symbol(Element.something, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 4, 30))
 +>something : Symbol(something, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 4, 30))
      }
  }
- 
+
 @@= skipped -14, +14 lines =@@
  >FooComponent : Symbol(FooComponent, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 5))
  >props : Symbol(props, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 22))
@@ -27,6 +27,6 @@
  >foo : Symbol(foo, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 30))
 ->span : Symbol(JSX.IntrinsicElements.span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
 +>span : Symbol(span, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 1, 40))
- 
+
  <FooComponent foo={"A"} />;
  >FooComponent : Symbol(FooComponent, Decl(contextuallyTypedStringLiteralsInJsxAttributes01.tsx, 9, 5))

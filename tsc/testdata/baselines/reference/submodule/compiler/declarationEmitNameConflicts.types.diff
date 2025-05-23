@@ -1,28 +1,28 @@
 --- old.declarationEmitNameConflicts.types
 +++ new.declarationEmitNameConflicts.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmit_nameConflicts_0.ts ===
  import im = require('./declarationEmit_nameConflicts_1');
 ->im : typeof im
 +>im : typeof f
- 
+
  export module M {
  >M : typeof M
 @@= skipped -35, +35 lines =@@
  >N : typeof N
- 
+
      export import d = im;
 ->d : typeof d
 ->im : typeof d
 +>d : typeof f
 +>im : typeof f
  }
- 
+
  export module M.P {
 @@= skipped -35, +35 lines =@@
  >a : () => void
- 
+
      export var b = M.b; // ok
 ->b : typeof M.C
 ->M.b : typeof M.C
@@ -31,7 +31,7 @@
  >M : typeof M
 ->b : typeof M.C
 +>b : typeof C
- 
+
      export var c = M.c; // ok
 ->c : typeof M.N
 ->M.c : typeof M.N
@@ -40,7 +40,7 @@
  >M : typeof M
 ->c : typeof M.N
 +>c : typeof N
- 
+
      export var g = M.c.g; // ok
  >g : () => void
  >M.c.g : () => void
@@ -50,7 +50,7 @@
 ->c : typeof M.N
 +>c : typeof N
  >g : () => void
- 
+
      export var d = M.d; // emitted incorrectly as typeof im
 ->d : typeof M.d
 ->M.d : typeof M.d
@@ -60,18 +60,18 @@
 ->d : typeof M.d
 +>d : typeof f
  }
- 
+
  export module M.Q {
 @@= skipped -48, +48 lines =@@
  >M : typeof M
- 
+
      export interface I extends M.c.I { } // ok
 ->M.c : typeof M.N
 +>M.c : typeof N
  >M : typeof M
 ->c : typeof M.N
 +>c : typeof N
- 
+
      export module c {
          export interface I extends M.c.I { } // ok
 ->M.c : typeof M.N

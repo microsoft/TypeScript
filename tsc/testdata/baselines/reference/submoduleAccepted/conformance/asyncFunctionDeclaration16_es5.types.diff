@@ -8,12 +8,12 @@
 ->str : string
 +>async str => {    return str;} : (str: any) => Promise<any>
 +>str : any
- 
+
      return str;
 ->str : string
 +>str : any
  }
- 
+
  /**
 @@= skipped -23, +23 lines =@@
  /** @type {T2} */
@@ -23,12 +23,12 @@
 ->str : string
 +>async str => {    return str;} : (str: any) => Promise<any>
 +>str : any
- 
+
      return str;
 ->str : string
 +>str : any
  }
- 
+
  /** @type {T3} */
  const f5 = async str => {
  >f5 : T3
@@ -36,9 +36,8 @@
 ->str : string
 +>async str => {    return str;} : (str: any) => Promise<any>
 +>str : any
- 
+
      return str;
 ->str : string
 +>str : any
  }
- 

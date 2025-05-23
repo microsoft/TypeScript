@@ -2,7 +2,7 @@
 +++ new.definiteAssignmentOfDestructuredVariable.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [definiteAssignmentOfDestructuredVariable.js]
 -var C = /** @class */ (function () {
 -    function C() {

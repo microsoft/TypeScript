@@ -2,7 +2,7 @@
 +++ new.staticMemberExportAccess.js
 @@= skipped -22, +22 lines =@@
  Sammy.bar();
- 
+
  //// [staticMemberExportAccess.js]
 -var Sammy = /** @class */ (function () {
 -    function Sammy() {

@@ -2,7 +2,7 @@
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsx,module=commonjs,moduledetection=force).js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [commentsOnJSXExpressionsArePreserved.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

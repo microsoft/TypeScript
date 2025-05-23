@@ -1,7 +1,7 @@
 --- old.lateBoundAssignmentDeclarationSupport4.types
 +++ new.lateBoundAssignmentDeclarationSupport4.types
 @@= skipped -1, +1 lines =@@
- 
+
  === usage.js ===
  const x = require("./lateBoundAssignmentDeclarationSupport4.js");
 ->x : typeof x
@@ -10,7 +10,7 @@
 +>require("./lateBoundAssignmentDeclarationSupport4.js") : typeof import("lateBoundAssignmentDeclarationSupport4")
  >require : any
  >"./lateBoundAssignmentDeclarationSupport4.js" : "./lateBoundAssignmentDeclarationSupport4.js"
- 
+
  const inst =  new x.F();
 ->inst : x.F
 ->new x.F() : x.F
@@ -22,14 +22,14 @@
 +>x.F : () => void
 +>x : typeof import("lateBoundAssignmentDeclarationSupport4")
 +>F : () => void
- 
+
  const y = inst["my-fake-sym"];
  >y : any
  >inst["my-fake-sym"] : any
 ->inst : x.F
 +>inst : any
  >"my-fake-sym" : "my-fake-sym"
- 
+
  const z = inst[x.S];
  >z : any
  >inst[x.S] : any
@@ -39,11 +39,11 @@
 ->x : typeof x
 +>x : typeof import("lateBoundAssignmentDeclarationSupport4")
  >S : unique symbol
- 
+
  === lateBoundAssignmentDeclarationSupport4.js ===
 @@= skipped -38, +38 lines =@@
  >"my-fake-sym" : "my-fake-sym"
- 
+
  function F() {
 ->F : typeof F
 +>F : () => void
@@ -66,7 +66,7 @@
  >prototype : any
  >_str : "my-fake-sym"
  >"ok" : "ok"
- 
+
  const inst =  new F();
 ->inst : F
 ->new F() : F
@@ -74,21 +74,21 @@
 +>inst : any
 +>new F() : any
 +>F : () => void
- 
+
  const _y = inst[_str];
  >_y : any
  >inst[_str] : any
 ->inst : F
 +>inst : any
  >_str : "my-fake-sym"
- 
+
  const _z = inst[_sym];
  >_z : any
  >inst[_sym] : any
 ->inst : F
 +>inst : any
  >_sym : unique symbol
- 
+
  module.exports.F = F;
 ->module.exports.F = F : typeof F
 ->module.exports.F : typeof F
@@ -104,7 +104,7 @@
 +>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
 +>F : () => void
 +>F : () => void
- 
+
  module.exports.S = _sym;
  >module.exports.S = _sym : unique symbol
  >module.exports.S : unique symbol
@@ -116,4 +116,3 @@
 +>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
  >S : unique symbol
  >_sym : unique symbol
- 

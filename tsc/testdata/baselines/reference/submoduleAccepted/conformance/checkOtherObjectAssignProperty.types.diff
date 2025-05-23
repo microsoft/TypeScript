@@ -1,7 +1,7 @@
 --- old.checkOtherObjectAssignProperty.types
 +++ new.checkOtherObjectAssignProperty.types
 @@= skipped -1, +1 lines =@@
- 
+
  === importer.js ===
  const mod = require("./mod1");
 ->mod : typeof mod
@@ -10,7 +10,7 @@
 +>require("./mod1") : any
  >require : any
  >"./mod1" : "./mod1"
- 
+
  mod.thing;
 ->mod.thing : number
 ->mod : typeof mod
@@ -18,25 +18,25 @@
 +>mod.thing : any
 +>mod : any
 +>thing : any
- 
+
  mod.other;
  >mod.other : any
 ->mod : typeof mod
 +>mod : any
  >other : any
- 
+
  mod.prop;
  >mod.prop : any
 ->mod : typeof mod
 +>mod : any
  >prop : any
- 
+
  mod.bad1;
  >mod.bad1 : any
 ->mod : typeof mod
 +>mod : any
  >bad1 : any
- 
+
  mod.bad2;
 ->mod.bad2 : string
 ->mod : typeof mod
@@ -44,14 +44,14 @@
 +>mod.bad2 : any
 +>mod : any
 +>bad2 : any
- 
+
  mod.bad3;
  >mod.bad3 : any
 ->mod : typeof mod
 +>mod : any
  >bad3 : any
- 
- 
+
+
  mod.thing = 0;
  >mod.thing = 0 : 0
 ->mod.thing : number
@@ -61,7 +61,7 @@
 +>mod : any
 +>thing : any
  >0 : 0
- 
+
  mod.other = 0;
  >mod.other = 0 : 0
  >mod.other : any
@@ -69,7 +69,7 @@
 +>mod : any
  >other : any
  >0 : 0
- 
+
  mod.prop = 0;
  >mod.prop = 0 : 0
  >mod.prop : any
@@ -77,7 +77,7 @@
 +>mod : any
  >prop : any
  >0 : 0
- 
+
  mod.bad1 = 0;
  >mod.bad1 = 0 : 0
  >mod.bad1 : any
@@ -85,7 +85,7 @@
 +>mod : any
  >bad1 : any
  >0 : 0
- 
+
  mod.bad2 = 0;
  >mod.bad2 = 0 : 0
  >mod.bad2 : any
@@ -93,7 +93,7 @@
 +>mod : any
  >bad2 : any
  >0 : 0
- 
+
  mod.bad3 = 0;
  >mod.bad3 = 0 : 0
  >mod.bad3 : any
@@ -101,10 +101,10 @@
 +>mod : any
  >bad3 : any
  >0 : 0
- 
+
 @@= skipped -88, +88 lines =@@
  >true : true
- 
+
  Object.defineProperty(exports, "thing", obj);
 ->Object.defineProperty(exports, "thing", obj) : typeof import("mod1")
 +>Object.defineProperty(exports, "thing", obj) : any
@@ -115,14 +115,14 @@
 +>exports : any
  >"thing" : "thing"
  >obj : { value: number; writable: boolean; }
- 
+
 @@= skipped -14, +14 lines =@@
  let str = /** @type {string} */("other");
  >str : string
  >("other") : string
 +>"other" : string
  >"other" : "other"
- 
+
  Object.defineProperty(exports, str, { value: 42, writable: true });
 ->Object.defineProperty(exports, str, { value: 42, writable: true }) : typeof import("mod1")
 +>Object.defineProperty(exports, str, { value: 42, writable: true }) : any
@@ -136,7 +136,7 @@
  >value : number
 @@= skipped -20, +21 lines =@@
  >"prop" : "prop"
- 
+
  Object.defineProperty(exports, propName, { value: 42, writable: true });
 ->Object.defineProperty(exports, propName, { value: 42, writable: true }) : typeof import("mod1")
 +>Object.defineProperty(exports, propName, { value: 42, writable: true }) : any
@@ -149,8 +149,8 @@
  >{ value: 42, writable: true } : { value: number; writable: true; }
  >value : number
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  Object.defineProperty(exports, "bad1", { });
 ->Object.defineProperty(exports, "bad1", { }) : typeof import("mod1")
 +>Object.defineProperty(exports, "bad1", { }) : any
@@ -161,7 +161,7 @@
 +>exports : any
  >"bad1" : "bad1"
  >{ } : {}
- 
+
  Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" });
 ->Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" }) : typeof import("mod1")
 +>Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" }) : any
@@ -177,7 +177,7 @@
  >12 : 12
  >value : string
  >"no" : "no"
- 
+
  Object.defineProperty(exports, "bad3", { writable: true });
 ->Object.defineProperty(exports, "bad3", { writable: true }) : typeof import("mod1")
 +>Object.defineProperty(exports, "bad3", { writable: true }) : any

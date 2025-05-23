@@ -2,7 +2,7 @@
 +++ new.inheritanceStaticAccessorOverridingAccessor.js
 @@= skipped -19, +19 lines =@@
  }
- 
+
  //// [inheritanceStaticAccessorOverridingAccessor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,10 +21,7 @@
 -})();
 -var a = /** @class */ (function () {
 -    function a() {
-+class a {
-+    static get x() {
-+        return "20";
-     }
+-    }
 -    Object.defineProperty(a, "x", {
 -        get: function () {
 -            return "20";
@@ -40,8 +37,7 @@
 -    __extends(b, _super);
 -    function b() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    static set x(aValue) {
-     }
+-    }
 -    Object.defineProperty(b, "x", {
 -        get: function () {
 -            return "20";
@@ -53,6 +49,12 @@
 -    });
 -    return b;
 -}(a));
++class a {
++    static get x() {
++        return "20";
++    }
++    static set x(aValue) {
++    }
 +}
 +class b extends a {
 +    static get x() {

@@ -2,7 +2,7 @@
 +++ new.moduleExportAssignment6.symbols
 @@= skipped -8, +8 lines =@@
  >x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
- 
+
          this.x = x
 ->this.x : Symbol(C.x, Decl(webpackLibNormalModule.js, 2, 20))
 +>this.x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 20))
@@ -10,7 +10,7 @@
 ->x : Symbol(C.x, Decl(webpackLibNormalModule.js, 2, 20))
 +>x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 20))
  >x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 16))
- 
+
          this.exports = [x]
 ->this.exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
 +>this.exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
@@ -24,7 +24,7 @@
 ->m : Symbol(C.m, Decl(webpackLibNormalModule.js, 5, 5))
 +>m : Symbol(m, Decl(webpackLibNormalModule.js, 5, 5))
  >y : Symbol(y, Decl(webpackLibNormalModule.js, 7, 6))
- 
+
          return this.x + y
 ->this.x : Symbol(C.x, Decl(webpackLibNormalModule.js, 2, 20))
 +>this.x : Symbol(x, Decl(webpackLibNormalModule.js, 2, 20))
@@ -36,7 +36,7 @@
  }
 @@= skipped -31, +31 lines =@@
  >C : Symbol(C, Decl(webpackLibNormalModule.js, 0, 0))
- 
+
      return module.exports; // should be fine because `module` is defined locally
 ->module.exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
 +>module.exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
@@ -44,10 +44,10 @@
 ->exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
 +>exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
  }
- 
+
  function tricky() {
 @@= skipped -15, +15 lines =@@
- 
+
      return () => {
          return module.exports;
 ->module.exports : Symbol(C.exports, Decl(webpackLibNormalModule.js, 3, 18))
@@ -57,4 +57,3 @@
 +>exports : Symbol(exports, Decl(webpackLibNormalModule.js, 3, 18))
      }
  }
- 

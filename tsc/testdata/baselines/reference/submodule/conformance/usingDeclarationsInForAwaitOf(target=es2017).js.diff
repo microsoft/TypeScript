@@ -37,9 +37,10 @@
 +        const env_1 = { stack: [], error: void 0, hasError: false };
          try {
 -            if (!_d && !_a && (_b = _e.return)) await _b.call(_e);
-+            const d1 = __addDisposableResource(env_1, d1_1, false);
-         }
+-        }
 -        finally { if (e_1) throw e_1.error; }
++            const d1 = __addDisposableResource(env_1, d1_1, false);
++        }
 +        catch (e_1) {
 +            env_1.error = e_1;
 +            env_1.hasError = true;

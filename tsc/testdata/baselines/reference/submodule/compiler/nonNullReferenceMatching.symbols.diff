@@ -2,18 +2,18 @@
 +++ new.nonNullReferenceMatching.symbols
 @@= skipped -29, +29 lines =@@
  >Component : Symbol(Component, Decl(nonNullReferenceMatching.ts, 9, 1))
- 
+
      props!: ComponentProps;
 ->props : Symbol(Component.props, Decl(nonNullReferenceMatching.ts, 11, 17))
 +>props : Symbol(props, Decl(nonNullReferenceMatching.ts, 11, 17))
  >ComponentProps : Symbol(ComponentProps, Decl(nonNullReferenceMatching.ts, 4, 1))
- 
+
      public thumbYElementRef = (ref: HTMLElement | null) => {
 ->thumbYElementRef : Symbol(Component.thumbYElementRef, Decl(nonNullReferenceMatching.ts, 12, 27))
 +>thumbYElementRef : Symbol(thumbYElementRef, Decl(nonNullReferenceMatching.ts, 12, 27))
  >ref : Symbol(ref, Decl(nonNullReferenceMatching.ts, 13, 31))
  >HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
- 
+
          typeof this.props.thumbYProps!.elementRef === 'function' && this.props.thumbYProps!.elementRef(ref);
  >this.props.thumbYProps!.elementRef : Symbol(elementRef, Decl(nonNullReferenceMatching.ts, 2, 19))
  >this.props.thumbYProps : Symbol(thumbYProps, Decl(nonNullReferenceMatching.ts, 6, 23))

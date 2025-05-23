@@ -2,7 +2,7 @@
 +++ new.wrappedAndRecursiveConstraints3.symbols
 @@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(wrappedAndRecursiveConstraints3.ts, 2, 8))
- 
+
      foo<U extends T>(x: U) {
 ->foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints3.ts, 3, 25))
 +>foo : Symbol(foo, Decl(wrappedAndRecursiveConstraints3.ts, 3, 25))
@@ -10,7 +10,7 @@
  >T : Symbol(T, Decl(wrappedAndRecursiveConstraints3.ts, 2, 8))
  >x : Symbol(x, Decl(wrappedAndRecursiveConstraints3.ts, 4, 21))
 @@= skipped -28, +28 lines =@@
- 
+
  var r = c.foo({ length: 3, charAt: (x: number) => { '' } });
  >r : Symbol(r, Decl(wrappedAndRecursiveConstraints3.ts, 13, 3))
 ->c.foo : Symbol(C.foo, Decl(wrappedAndRecursiveConstraints3.ts, 3, 25))

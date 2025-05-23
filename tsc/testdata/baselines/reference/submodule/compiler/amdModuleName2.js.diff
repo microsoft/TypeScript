@@ -1,8 +1,8 @@
 --- old.amdModuleName2.js
 +++ new.amdModuleName2.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [amdModuleName2.js]
 -define("SecondModuleName", ["require", "exports"], function (require, exports) {
 -    "use strict";

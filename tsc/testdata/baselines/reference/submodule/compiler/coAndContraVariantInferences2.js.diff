@@ -1,8 +1,8 @@
 --- old.coAndContraVariantInferences2.js
 +++ new.coAndContraVariantInferences2.js
 @@= skipped -121, +121 lines =@@
- 
- 
+
+
  //// [coAndContraVariantInferences2.js]
 -"use strict";
  function f1(a, b) {

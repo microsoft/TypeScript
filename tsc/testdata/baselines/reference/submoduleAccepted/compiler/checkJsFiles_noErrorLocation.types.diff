@@ -1,7 +1,7 @@
 --- old.checkJsFiles_noErrorLocation.types
 +++ new.checkJsFiles_noErrorLocation.types
 @@= skipped -26, +26 lines =@@
- 
+
      this.foo = () => 3;
  >this.foo = () => 3 : () => number
 ->this.foo : any

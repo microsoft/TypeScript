@@ -1,6 +1,6 @@
 --- old.jsdocParamTagTypeLiteral.errors.txt
 +++ new.jsdocParamTagTypeLiteral.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -0.js(3,20): error TS8024: JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name.
 -
 -
@@ -79,5 +79,4 @@
 -    
 -    foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]);
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,7 +1,7 @@
 --- old.declFileGenericType.js
 +++ new.declFileGenericType.js
 @@= skipped -42, +42 lines =@@
- 
+
  //// [declFileGenericType.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

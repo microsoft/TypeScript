@@ -1,8 +1,8 @@
 --- old.nestedExcessPropertyChecking.js
 +++ new.nestedExcessPropertyChecking.js
 @@= skipped -91, +91 lines =@@
- 
- 
+
+
  //// [nestedExcessPropertyChecking.js]
 -"use strict";
 -var ab1 = {}; // Error

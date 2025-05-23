@@ -7,8 +7,7 @@
 ->x : typeof x
 +>x : any
  >c : any
- 
+
  export = x;
 ->x : typeof x
 +>x : any
- 

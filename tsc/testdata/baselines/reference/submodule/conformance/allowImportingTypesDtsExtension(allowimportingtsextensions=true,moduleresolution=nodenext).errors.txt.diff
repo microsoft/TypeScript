@@ -1,6 +1,6 @@
 --- old.allowImportingTypesDtsExtension(allowimportingtsextensions=true,moduleresolution=nodenext).errors.txt
 +++ new.allowImportingTypesDtsExtension(allowimportingtsextensions=true,moduleresolution=nodenext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 -
 -
@@ -20,5 +20,4 @@
 -        return user;
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

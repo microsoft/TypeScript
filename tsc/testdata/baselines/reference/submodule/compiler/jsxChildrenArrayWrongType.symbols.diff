@@ -2,7 +2,7 @@
 +++ new.jsxChildrenArrayWrongType.symbols
 @@= skipped -9, +9 lines =@@
  >PropsType : Symbol(PropsType, Decl(index.tsx, 0, 0))
- 
+
      children: [string, number] | boolean[];
 ->children : Symbol(PropsType.children, Decl(index.tsx, 5, 21))
 +>children : Symbol(children, Decl(index.tsx, 5, 21))
@@ -15,14 +15,14 @@
 ->Component : Symbol(React.Component, Decl(react18.d.ts, 427, 50), Decl(react18.d.ts, 430, 90))
 +>Component : Symbol(Component, Decl(react18.d.ts, 427, 50), Decl(react18.d.ts, 430, 90))
  >PropsType : Symbol(PropsType, Decl(index.tsx, 0, 0))
- 
+
  const b = (
 @@= skipped -16, +16 lines =@@
  >Foo : Symbol(Foo, Decl(index.tsx, 7, 1))
- 
+
          {<div/> as unknown}
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react18.d.ts, 3174, 110))
 +>div : Symbol(div, Decl(react18.d.ts, 3174, 110))
- 
+
          {"aa"}
      </Foo>

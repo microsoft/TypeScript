@@ -2,7 +2,7 @@
 +++ new.stringLiteralsWithTypeAssertions01.js
 @@= skipped -10, +10 lines =@@
  let f = "baz" as typeof fooOrBar;
- 
+
  //// [stringLiteralsWithTypeAssertions01.js]
 -var fooOrBar;
 -var a = "foo";

@@ -1,8 +1,8 @@
 --- old.typeOfThisInStaticMembers11(target=es5).js
 +++ new.typeOfThisInStaticMembers11(target=es5).js
 @@= skipped -50, +50 lines =@@
- 
- 
+
+
  //// [typeOfThisInStaticMembers11.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -27,21 +27,7 @@
 -};
 -var C = /** @class */ (function () {
 -    function C() {
-+@foo
-+class C {
-+    static a = 1;
-+    static b = this.a + 1;
-+}
-+@foo
-+class D extends C {
-+    static c = 2;
-+    static d = this.c + 1;
-+    static e = super.a + this.c + 1;
-+    static f = () => this.c + 1;
-+    static ff = function () { this.c + 1; };
-+    static foo() {
-+        return this.c + 1;
-     }
+-    }
 -    Object.defineProperty(C, "a", {
 -        enumerable: true,
 -        configurable: true,
@@ -63,9 +49,7 @@
 -    __extends(D, _super);
 -    function D() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    static get fa() {
-+        return this.c + 1;
-     }
+-    }
 -    Object.defineProperty(D, "foo", {
 -        enumerable: false,
 -        configurable: true,
@@ -121,9 +105,7 @@
 -}(C));
 -var CC = /** @class */ (function () {
 -    function CC() {
-+    static set fa(v) {
-+        this.c = v + 1;
-     }
+-    }
 -    var _a;
 -    _a = CC;
 -    Object.defineProperty(CC, "a", {
@@ -144,20 +126,7 @@
 -    __extends(DD, _super);
 -    function DD() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+}
-+class CC {
-+    static a = 1;
-+    static b = this.a + 1;
-+}
-+class DD extends CC {
-+    static c = 2;
-+    static d = this.c + 1;
-+    static e = super.a + this.c + 1;
-+    static f = () => this.c + 1;
-+    static ff = function () { this.c + 1; };
-+    static foo() {
-+        return this.c + 1;
-     }
+-    }
 -    Object.defineProperty(DD, "foo", {
 -        enumerable: false,
 -        configurable: true,
@@ -210,6 +179,41 @@
 -    });
 -    return DD;
 -}(CC));
++@foo
++class C {
++    static a = 1;
++    static b = this.a + 1;
++}
++@foo
++class D extends C {
++    static c = 2;
++    static d = this.c + 1;
++    static e = super.a + this.c + 1;
++    static f = () => this.c + 1;
++    static ff = function () { this.c + 1; };
++    static foo() {
++        return this.c + 1;
++    }
++    static get fa() {
++        return this.c + 1;
++    }
++    static set fa(v) {
++        this.c = v + 1;
++    }
++}
++class CC {
++    static a = 1;
++    static b = this.a + 1;
++}
++class DD extends CC {
++    static c = 2;
++    static d = this.c + 1;
++    static e = super.a + this.c + 1;
++    static f = () => this.c + 1;
++    static ff = function () { this.c + 1; };
++    static foo() {
++        return this.c + 1;
++    }
 +    static get fa() {
 +        return this.c + 1;
 +    }

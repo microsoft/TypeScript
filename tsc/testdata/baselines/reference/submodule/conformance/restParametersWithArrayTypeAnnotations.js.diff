@@ -1,7 +1,7 @@
 --- old.restParametersWithArrayTypeAnnotations.js
 +++ new.restParametersWithArrayTypeAnnotations.js
 @@= skipped -55, +55 lines =@@
- 
+
  //// [restParametersWithArrayTypeAnnotations.js]
  // Rest parameters must be an array type if they have a type annotation, errors only for the functions with 2 rest params
 -function foo() {

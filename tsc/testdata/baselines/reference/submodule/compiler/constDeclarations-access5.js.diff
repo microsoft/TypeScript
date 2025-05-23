@@ -1,8 +1,8 @@
 --- old.constDeclarations-access5.js
 +++ new.constDeclarations-access5.js
 @@= skipped -46, +46 lines =@@
- 
- 
+
+
  //// [constDeclarations_access_1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

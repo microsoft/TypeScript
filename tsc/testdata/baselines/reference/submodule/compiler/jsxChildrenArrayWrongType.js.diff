@@ -2,7 +2,7 @@
 +++ new.jsxChildrenArrayWrongType.js
 @@= skipped -17, +17 lines =@@
  );
- 
+
  //// [index.js]
 -"use strict";
  /// <reference path="react18/react18.d.ts" />

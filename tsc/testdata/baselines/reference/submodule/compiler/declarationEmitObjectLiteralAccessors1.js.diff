@@ -1,6 +1,6 @@
 --- old.declarationEmitObjectLiteralAccessors1.js
 +++ new.declarationEmitObjectLiteralAccessors1.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitObjectLiteralAccessors1.ts] ////
 -
 -//// [declarationEmitObjectLiteralAccessors1.ts]
@@ -58,5 +58,4 @@
 -    /** my awesome setter */
 -    x: number;
 -};
-@@= skipped --1, +1 lines =@@
 +<no content>

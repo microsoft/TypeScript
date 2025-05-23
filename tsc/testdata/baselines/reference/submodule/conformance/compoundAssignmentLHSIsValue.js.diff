@@ -2,7 +2,7 @@
 +++ new.compoundAssignmentLHSIsValue.js
 @@= skipped -124, +124 lines =@@
  (foo()) += value;
- 
+
  //// [compoundAssignmentLHSIsValue.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -24,24 +24,31 @@
  // this
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    constructor() {
-         this *= value;
-         this += value;
-     }
+-        this *= value;
+-        this += value;
+-    }
 -    C.prototype.foo = function () {
-+    foo() {
-         this *= value;
-         this += value;
+-        this *= value;
+-        this += value;
 -    };
 -    C.sfoo = function () {
-+    }
-+    static sfoo() {
-         this *= value;
-         this += value;
+-        this *= value;
+-        this += value;
 -    };
 -    return C;
 -}());
++class C {
++    constructor() {
++        this *= value;
++        this += value;
++    }
++    foo() {
++        this *= value;
++        this += value;
++    }
++    static sfoo() {
++        this *= value;
++        this += value;
 +    }
 +}
  function foo() {
@@ -58,12 +65,7 @@
 -        _super.prototype. *= value;
 -        _super.prototype. += value;
 -        return _this;
-+class Derived extends C {
-+    constructor() {
-+        super();
-+        super. *= value;
-+        super. += value;
-     }
+-    }
 -    Derived.prototype.foo = function () {
 -        _super.prototype. *= value;
 -        _super.prototype. += value;
@@ -74,6 +76,12 @@
 -    };
 -    return Derived;
 -}(C));
++class Derived extends C {
++    constructor() {
++        super();
++        super. *= value;
++        super. += value;
++    }
 +    foo() {
 +        super. *= value;
 +        super. += value;

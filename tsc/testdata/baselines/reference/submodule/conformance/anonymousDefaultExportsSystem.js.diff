@@ -2,7 +2,7 @@
 +++ new.anonymousDefaultExportsSystem.js
 @@= skipped -6, +6 lines =@@
  export default function() {}
- 
+
  //// [a.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

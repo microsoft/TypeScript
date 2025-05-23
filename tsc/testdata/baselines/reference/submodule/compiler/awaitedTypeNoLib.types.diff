@@ -2,11 +2,11 @@
 +++ new.awaitedTypeNoLib.types
 @@= skipped -20, +20 lines =@@
  >a : Receiver<T>
- 
+
    private handleResolve<TResult>(
 ->handleResolve : <TResult>(result: NotPromise<TResult> | Thenable<NotPromise<TResult>>, resolve: Receiver<TResult>) => void
 +>handleResolve : <TResult>(result: Thenable<NotPromise<TResult>> | NotPromise<TResult>, resolve: Receiver<TResult>) => void
- 
+
      result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
  >result : Thenable<NotPromise<TResult>> | NotPromise<TResult>
 @@= skipped -17, +17 lines =@@

@@ -2,7 +2,7 @@
 +++ new.exportAssignmentMergedInterface.js
 @@= skipped -22, +22 lines =@@
  z = x.d;
- 
+
  //// [foo_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -7,7 +7,7 @@
 ->B1<number>() : B1<number>.(Anonymous class)
 +>B1<number>() : (Anonymous class)<number>
  >B1 : <U>() => typeof (Anonymous class)
- 
+
      namae: string;
 @@= skipped -8, +8 lines =@@
  }
@@ -21,7 +21,7 @@
  >B2 : typeof B2
 ->anon : typeof (Anonymous class)
 +>anon : { new (): (Anonymous class)<number>; prototype: (Anonymous class)<any>; }
- 
+
      name: string;
  >name : string
  }
@@ -31,11 +31,11 @@
 +>b3Number : { new <TInner>(): Inner<number, TInner>; prototype: Inner<any, any>; }
 +>B3<number>() : { new <TInner>(): Inner<number, TInner>; prototype: Inner<any, any>; }
  >B3 : <W>() => typeof Inner
- 
+
  class S extends b3Number<string> {
  >S : S
 ->b3Number : B3<number>.Inner<string>
 +>b3Number : Inner<number, string>
- 
+
      nom: string;
  >nom : string

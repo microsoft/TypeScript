@@ -2,7 +2,7 @@
 +++ new.staticMemberWithStringAndNumberNames.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [staticMemberWithStringAndNumberNames.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -unusedTypeParameterInMethod5.ts(2,25): error TS6133: 'X' is declared but its value is never read.
 +unusedTypeParameterInMethod5.ts(2,26): error TS6196: 'X' is declared but never used.
- 
- 
+
+
  ==== unusedTypeParameterInMethod5.ts (1 errors) ====
      class A {
          public f1 = function<X>() {

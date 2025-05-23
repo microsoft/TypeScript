@@ -2,7 +2,7 @@
 +++ new.deduplicateImportsInSystem.symbols
 @@= skipped -19, +19 lines =@@
  >F : Symbol(F, Decl(deduplicateImportsInSystem.ts, 5, 8))
- 
+
  console.log(A + B + C + D + E + F)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))

@@ -2,15 +2,15 @@
 +++ new.indexedAccessAndNullableNarrowing.types
 @@= skipped -84, +84 lines =@@
  }
- 
+
  export function syncStoreProp<
 ->syncStoreProp : <S extends State, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
 +>syncStoreProp : <S extends AnyObject, P extends Partial<S>, K extends keyof S>(store: Store<S>, props: P, key: K) => void
- 
+
      S extends State,
      P extends Partial<S>,
 @@= skipped -29, +29 lines =@@
- 
+
      store.setState(key, value);
  >store.setState(key, value) : void
 ->store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
@@ -20,9 +20,9 @@
 +>setState : <K extends keyof S>(key: K, value: S[K]) => void
  >key : K
  >value : P[K] & ({} | null)
- 
+
 @@= skipped -13, +13 lines =@@
- 
+
      store.setState(key, value);
  >store.setState(key, value) : void
 ->store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void

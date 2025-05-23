@@ -1,7 +1,7 @@
 --- old.variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.js
 +++ new.variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.js]
  "use strict";
 -var _a;

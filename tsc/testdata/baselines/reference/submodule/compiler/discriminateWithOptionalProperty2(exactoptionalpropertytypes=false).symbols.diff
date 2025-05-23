@@ -9,7 +9,7 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 ->asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
    async function mapResult(
  >mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
 @@= skipped -32, +32 lines =@@
@@ -22,17 +22,17 @@
 ->value : Symbol(IteratorYieldResult.value, Decl(lib.es2015.iterable.d.ts, --, --))
 +>value : Symbol(value, Decl(lib.es2015.iterable.d.ts, --, --))
  >done : Symbol(done, Decl(discriminateWithOptionalProperty2.ts, 18, 51))
- 
+
      } catch (error) {
  >error : Symbol(error, Decl(discriminateWithOptionalProperty2.ts, 19, 13))
- 
+
        if (typeof iterator.return === "function") {
 ->iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>iterator.return : Symbol(return, Decl(lib.es2018.asynciterable.d.ts, --, --))
  >iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
 ->return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>return : Symbol(return, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
          try {
            await iterator.return();
 ->iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
@@ -40,11 +40,11 @@
  >iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
 ->return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>return : Symbol(return, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
          } catch (_e) {}
  >_e : Symbol(_e, Decl(discriminateWithOptionalProperty2.ts, 23, 17))
 @@= skipped -33, +33 lines =@@
- 
+
        return mapResult(await iterator.next());
  >mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
 ->iterator.next : Symbol(AsyncIterator.next, Decl(lib.es2018.asynciterable.d.ts, --, --))
@@ -52,19 +52,19 @@
  >iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
 ->next : Symbol(AsyncIterator.next, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>next : Symbol(next, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
      },
      async return(value: R): Promise<IteratorResult<U, R>> {
 @@= skipped -15, +15 lines =@@
  >R : Symbol(R, Decl(discriminateWithOptionalProperty2.ts, 4, 31))
- 
+
        return typeof iterator.return === "function"
 ->iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>iterator.return : Symbol(return, Decl(lib.es2018.asynciterable.d.ts, --, --))
  >iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
 ->return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>return : Symbol(return, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
          ? mapResult(await iterator.return(value))
  >mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
 ->iterator.return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
@@ -73,18 +73,18 @@
 ->return : Symbol(AsyncIterator.return, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>return : Symbol(return, Decl(lib.es2018.asynciterable.d.ts, --, --))
  >value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 33, 17))
- 
+
          : { value: undefined as any, done: true };
 @@= skipped -22, +22 lines =@@
  >error : Symbol(error, Decl(discriminateWithOptionalProperty2.ts, 38, 16))
- 
+
        if (typeof iterator.throw === "function") {
 ->iterator.throw : Symbol(AsyncIterator.throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>iterator.throw : Symbol(throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
  >iterator : Symbol(iterator, Decl(discriminateWithOptionalProperty2.ts, 8, 7))
 ->throw : Symbol(AsyncIterator.throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>throw : Symbol(throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
          return mapResult(await iterator.throw(error));
  >mapResult : Symbol(mapResult, Decl(discriminateWithOptionalProperty2.ts, 8, 52))
 ->iterator.throw : Symbol(AsyncIterator.throw, Decl(lib.es2018.asynciterable.d.ts, --, --))
@@ -104,7 +104,7 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 ->asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
        return this;
  >this : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 @@= skipped -10, +10 lines =@@
@@ -116,7 +116,7 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 ->asyncDispose : Symbol(SymbolConstructor.asyncDispose, Decl(lib.esnext.disposable.d.ts, --, --))
 +>asyncDispose : Symbol(asyncDispose, Decl(lib.esnext.disposable.d.ts, --, --))
- 
+
        await this.return(undefined!);
 ->this.return : Symbol(AsyncGenerator.return, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 +>this.return : Symbol(return, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
@@ -127,7 +127,7 @@
      }
    };
 @@= skipped -21, +21 lines =@@
- 
+
    [Symbol.asyncIterator]() {
  >[Symbol.asyncIterator] : Symbol([Symbol.asyncIterator], Decl(discriminateWithOptionalProperty2.ts, 55, 18))
 ->Symbol.asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
@@ -135,30 +135,30 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 ->asyncIterator : Symbol(SymbolConstructor.asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 +>asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
- 
+
      return this;
 ->this : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 16))
 +>this : Symbol((Anonymous type), Decl(discriminateWithOptionalProperty2.ts, 55, 16))
- 
+
    },
    next() {
 @@= skipped -16, +16 lines =@@
  >items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
- 
+
      items.shift();
 ->items.shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
 +>items.shift : Symbol(shift, Decl(lib.es5.d.ts, --, --))
  >items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
 ->shift : Symbol(Array.shift, Decl(lib.es5.d.ts, --, --))
 +>shift : Symbol(shift, Decl(lib.es5.d.ts, --, --))
- 
+
      return Promise.resolve({
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
  >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 ->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
- 
+
        done: items.length === 0,
  >done : Symbol(done, Decl(discriminateWithOptionalProperty2.ts, 62, 28))
 ->items.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
@@ -166,6 +166,6 @@
  >items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
 ->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
        value,
  >value : Symbol(value, Decl(discriminateWithOptionalProperty2.ts, 63, 31))

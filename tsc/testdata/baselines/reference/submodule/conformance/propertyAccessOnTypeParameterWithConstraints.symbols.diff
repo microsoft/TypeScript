@@ -2,11 +2,11 @@
 +++ new.propertyAccessOnTypeParameterWithConstraints.symbols
 @@= skipped -9, +9 lines =@@
  >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
- 
+
      f() {
 ->f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
 +>f : Symbol(f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
- 
+
          var x: T;
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 5, 11))
 @@= skipped -9, +9 lines =@@
@@ -15,7 +15,7 @@
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 5, 11))
 ->'getDate' : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 +>'getDate' : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
- 
+
          return a + x.getDate();
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 6, 11))
 ->x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
@@ -25,7 +25,7 @@
 +>getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
      }
  }
- 
+
  var r = (new C<Date>()).f();
  >r : Symbol(r, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 11, 3))
 ->(new C<Date>()).f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
@@ -34,12 +34,12 @@
  >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 ->f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
 +>f : Symbol(f, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 3, 25))
- 
+
  interface I<T extends Date> {
  >I : Symbol(I, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 11, 28))
 @@= skipped -23, +23 lines =@@
  >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
- 
+
      foo: T;
 ->foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 13, 29))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 13, 29))
@@ -47,7 +47,7 @@
  }
  var i: I<Date>;
 @@= skipped -10, +10 lines =@@
- 
+
  var r2 = i.foo.getDate();
  >r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 17, 3))
 ->i.foo.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
@@ -59,7 +59,7 @@
 ->getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 13, 29))
 +>getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
- 
+
  var r2b = i.foo['getDate']();
  >r2b : Symbol(r2b, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 18, 3))
 ->i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 13, 29))
@@ -69,7 +69,7 @@
 ->'getDate' : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 13, 29))
 +>'getDate' : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
- 
+
  var a: {
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 20, 3))
 @@= skipped -23, +23 lines =@@
@@ -82,13 +82,13 @@
  >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 ->getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 +>getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
- 
+
  var r3b = a()['getDate']();
  >r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 24, 3))
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 20, 3))
 ->'getDate' : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 +>'getDate' : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
- 
+
  var b = {
  >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 26, 3))
 @@= skipped -23, +23 lines =@@
@@ -97,7 +97,7 @@
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 27, 26))
 ->'getDate' : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
 +>'getDate' : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
- 
+
          return a + x.getDate();
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints.ts, 28, 11))
 ->x.getDate : Symbol(Date.getDate, Decl(lib.es5.d.ts, --, --))
@@ -107,4 +107,3 @@
 +>getDate : Symbol(getDate, Decl(lib.es5.d.ts, --, --))
      }
  }
- 

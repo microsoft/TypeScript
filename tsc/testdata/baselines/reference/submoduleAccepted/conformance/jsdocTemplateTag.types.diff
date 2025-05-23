@@ -7,7 +7,7 @@
 ->g : <T>(a: T) => () => T
 +>g : <T>(a: T) => function
  >a : T
- 
+
      return () => a
 @@= skipped -8, +8 lines =@@
  >a : T
@@ -22,7 +22,7 @@
 +>g('hi') : function
 +>g : <T>(a: T) => function
  >'hi' : "hi"
- 
+
  /**
   * @param {Array.<Object>} keyframes - Can't look up types on Element since it's a global in another file. (But it shouldn't crash).
   */
@@ -40,4 +40,3 @@
 +>animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
 +>function(keyframes) {} : (keyframes: Keyframe[] | PropertyIndexedKeyframes) => void
 +>keyframes : Keyframe[] | PropertyIndexedKeyframes
- 

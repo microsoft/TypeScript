@@ -2,7 +2,7 @@
 +++ new.strictModeReservedWordInClassDeclaration.js
 @@= skipped -30, +30 lines =@@
  class H extends package.A { }
- 
+
  //// [strictModeReservedWordInClassDeclaration.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -47,7 +47,7 @@
 -}());
 -var D = /** @class */ (function () {
 -    function D() {
-     }
+-    }
 -    return D;
 -}());
 -var E = /** @class */ (function () {
@@ -79,6 +79,7 @@
 -    }
 -    return H;
 -}(package.A));
++    }
 +    pulbic() { } // No Error;
 +}
 +class D {

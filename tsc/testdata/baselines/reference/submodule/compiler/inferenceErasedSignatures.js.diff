@@ -1,8 +1,8 @@
 --- old.inferenceErasedSignatures.js
 +++ new.inferenceErasedSignatures.js
 @@= skipped -55, +55 lines =@@
- 
- 
+
+
  //// [inferenceErasedSignatures.js]
 -"use strict";
 -// Repro from #37163

@@ -2,7 +2,7 @@
 +++ new.declarationEmitExpandoWithGenericConstraint.types
 @@= skipped -17, +17 lines =@@
  }
- 
+
  export const Point = (x: number, y: number): Point => ({ x, y });
 ->Point : { (x: number, y: number): Point; zero(): Point; }
 ->(x: number, y: number): Point => ({ x, y }) : { (x: number, y: number): Point; zero(): Point; }
@@ -24,4 +24,3 @@
 +>Point : { (x: number, y: number): Point; zero: () => Point; }
  >0 : 0
  >0 : 0
- 

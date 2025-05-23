@@ -2,7 +2,7 @@
 +++ new.declFileClassWithIndexSignature.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [declFileClassWithIndexSignature.js]
 -var BlockIntrinsics = /** @class */ (function () {
 -    function BlockIntrinsics() {

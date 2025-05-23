@@ -1,7 +1,7 @@
 --- old.typeReferenceDirectives7.js
 +++ new.typeReferenceDirectives7.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [app.js]
  "use strict";
 -/// <reference types="lib"/>

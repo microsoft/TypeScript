@@ -41,8 +41,7 @@
 - * Hello class
 - */
 -declare class Hello {
-+class Hola {
- }
+-}
 -//// [test2.d.ts]
 -/**
 - * Hi class
@@ -54,4 +53,5 @@
 - * Hola class
 - */
 -declare class Hola {
--}
++class Hola {
+ }

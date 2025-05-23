@@ -3,7 +3,7 @@
 @@= skipped -20, +20 lines =@@
  import ClassB = require("recursiveExportAssignmentAndFindAliasedType6_moduleB");
  export var b: ClassB; // This should result in type ClassB
- 
+
 -//// [recursiveExportAssignmentAndFindAliasedType6_moduleE.js]
 -define(["require", "exports", "recursiveExportAssignmentAndFindAliasedType6_moduleC"], function (require, exports, self) {
 -    "use strict";

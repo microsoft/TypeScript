@@ -9,6 +9,6 @@
  >n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 6, 9))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
  let o = {
  >o : Symbol(o, Decl(parseErrorIncorrectReturnToken.ts, 7, 3))

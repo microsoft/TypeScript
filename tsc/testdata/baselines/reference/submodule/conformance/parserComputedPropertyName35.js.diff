@@ -1,7 +1,7 @@
 --- old.parserComputedPropertyName35.js
 +++ new.parserComputedPropertyName35.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [parserComputedPropertyName35.js]
  var x = {
 -    [0, 1]: {}

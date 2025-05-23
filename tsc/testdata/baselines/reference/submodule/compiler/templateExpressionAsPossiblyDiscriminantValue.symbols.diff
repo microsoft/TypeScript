@@ -11,4 +11,3 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >ev : Symbol(ev, Decl(templateExpressionAsPossiblyDiscriminantValue.ts, 18, 12))
  }
- 

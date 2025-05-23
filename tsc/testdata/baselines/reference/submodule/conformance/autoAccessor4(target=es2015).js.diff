@@ -1,8 +1,8 @@
 --- old.autoAccessor4(target=es2015).js
 +++ new.autoAccessor4(target=es2015).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [autoAccessor4.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

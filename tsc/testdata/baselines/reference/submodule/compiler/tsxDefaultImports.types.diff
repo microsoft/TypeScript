@@ -6,18 +6,18 @@
  export default class SomeClass {
 ->SomeClass : SomeClass
 +>SomeClass : default
- 
+
    public static E = SomeEnum;
  >E : typeof SomeEnum
 @@= skipped -9, +9 lines =@@
- 
+
  === b.ts ===
  import {default as Def} from "./a"
 ->default : typeof Def
 ->Def : typeof Def
 +>default : typeof default
 +>Def : typeof default
- 
+
  let a = Def.E.one;
  >a : SomeEnum
  >Def.E.one : SomeEnum
@@ -26,4 +26,3 @@
 +>Def : typeof default
  >E : typeof SomeEnum
  >one : SomeEnum
- 

@@ -12,7 +12,7 @@
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 0, 53))
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 0, 53))
 @@= skipped -13, +13 lines =@@
- 
+
  export let a = numTuple.map(x => x * x);
  >a : Symbol(a, Decl(mapOnTupleTypes01.ts, 5, 10))
 ->numTuple.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -24,7 +24,7 @@
  >x : Symbol(x, Decl(mapOnTupleTypes01.ts, 5, 28))
  >x : Symbol(x, Decl(mapOnTupleTypes01.ts, 5, 28))
 @@= skipped -20, +20 lines =@@
- 
+
  export let b = numNum.map(n => n * n);
  >b : Symbol(b, Decl(mapOnTupleTypes01.ts, 13, 10))
 ->numNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -35,21 +35,23 @@
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 13, 26))
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 13, 26))
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 13, 26))
- 
+
  export let c = strStr.map(s => s.charCodeAt(0));
  >c : Symbol(c, Decl(mapOnTupleTypes01.ts, 14, 10))
 ->strStr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 +>strStr.map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >strStr : Symbol(strStr, Decl(mapOnTupleTypes01.ts, 10, 3))
 ->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
-+>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
- >s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
+->s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
 ->s.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
-+>s.charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
- >s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
+->s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
 ->charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
++>s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
++>s.charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
++>s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
 +>charCodeAt : Symbol(charCodeAt, Decl(lib.es5.d.ts, --, --))
- 
+
  export let d = numStr.map(x => x);
  >d : Symbol(d, Decl(mapOnTupleTypes01.ts, 15, 10))
 ->numStr.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -59,9 +61,9 @@
 +>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(mapOnTupleTypes01.ts, 15, 26))
  >x : Symbol(x, Decl(mapOnTupleTypes01.ts, 15, 26))
- 
+
 @@= skipped -32, +32 lines =@@
- 
+
  export let e = numNumNum.map(n => n * n);
  >e : Symbol(e, Decl(mapOnTupleTypes01.ts, 21, 10))
 ->numNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -73,7 +75,7 @@
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 21, 29))
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 21, 29))
 @@= skipped -14, +14 lines =@@
- 
+
  export let f = numNumNumNum.map(n => n * n);
  >f : Symbol(f, Decl(mapOnTupleTypes01.ts, 27, 10))
 ->numNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -85,7 +87,7 @@
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 27, 32))
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 27, 32))
 @@= skipped -14, +14 lines =@@
- 
+
  export let g = numNumNumNumNum.map(n => n * n);
  >g : Symbol(g, Decl(mapOnTupleTypes01.ts, 33, 10))
 ->numNumNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -97,7 +99,7 @@
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 33, 35))
  >n : Symbol(n, Decl(mapOnTupleTypes01.ts, 33, 35))
 @@= skipped -15, +15 lines =@@
- 
+
  export let h = numNumNumNumNum.map(n => n * n);
  >h : Symbol(h, Decl(mapOnTupleTypes01.ts, 40, 10))
 ->numNumNumNumNum.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

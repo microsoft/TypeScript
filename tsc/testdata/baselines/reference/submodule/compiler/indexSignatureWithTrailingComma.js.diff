@@ -1,8 +1,8 @@
 --- old.indexSignatureWithTrailingComma.js
 +++ new.indexSignatureWithTrailingComma.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [indexSignatureWithTrailingComma.js]
 -var C = /** @class */ (function () {
 -    function C() {

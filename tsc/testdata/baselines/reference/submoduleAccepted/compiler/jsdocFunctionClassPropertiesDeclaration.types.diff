@@ -8,7 +8,7 @@
 +>Foo : (x: number | undefined, y: number | undefined) => any
  >x : number | undefined
  >y : number | undefined
- 
+
 @@= skipped -8, +8 lines =@@
  >!(this instanceof Foo) : boolean
  >(this instanceof Foo) : boolean
@@ -17,7 +17,7 @@
 ->Foo : typeof Foo
 +>this : any
 +>Foo : (x: number | undefined, y: number | undefined) => any
- 
+
          return new Foo(x, y);
 ->new Foo(x, y) : Foo
 ->Foo : typeof Foo
@@ -33,7 +33,7 @@
 +>this : any
  >x : any
  >x : number | undefined
- 
+
      this.y = y;
  >this.y = y : number | undefined
  >this.y : any

@@ -1,16 +1,16 @@
 --- old.exportedEnumTypeAndValue.types
 +++ new.exportedEnumTypeAndValue.types
 @@= skipped -15, +15 lines =@@
- 
+
  };
  export default MyEnum;
 ->MyEnum : number
 +>MyEnum : { a: number; b: number; }
- 
+
  === use.js ===
  import MyEnum from "./def";
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {MyEnum} */
  const v = MyEnum.b;
 ->v : number

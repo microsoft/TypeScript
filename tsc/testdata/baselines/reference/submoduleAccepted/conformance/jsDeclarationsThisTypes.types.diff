@@ -7,5 +7,5 @@
 ->Base : Base
 +>Base : default
  >A : A
- 
+
      // This method is required to reproduce #35932

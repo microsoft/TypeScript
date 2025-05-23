@@ -2,7 +2,7 @@
 +++ new.recursiveTypeRelations.symbols
 @@= skipped -18, +18 lines =@@
  >A : Symbol(A, Decl(recursiveTypeRelations.ts, 6, 12))
- 
+
      multiply<B extends Attributes<keyof B>>(x: B): Query<A & B>;
 ->multiply : Symbol(Query.multiply, Decl(recursiveTypeRelations.ts, 6, 44))
 +>multiply : Symbol(multiply, Decl(recursiveTypeRelations.ts, 6, 44))
@@ -10,7 +10,7 @@
  >Attributes : Symbol(Attributes, Decl(recursiveTypeRelations.ts, 0, 0))
  >B : Symbol(B, Decl(recursiveTypeRelations.ts, 7, 13))
 @@= skipped -51, +51 lines =@@
- 
+
    const args = classNames.map(arg => {
  >args : Symbol(args, Decl(recursiveTypeRelations.ts, 18, 7))
 ->classNames.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -19,11 +19,11 @@
 ->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 +>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
- 
+
      if (arg == null) {
 @@= skipped -21, +21 lines =@@
  >arg : Symbol(arg, Decl(recursiveTypeRelations.ts, 18, 30))
- 
+
        return Object.keys(arg).reduce<ClassNameObject>((obj: ClassNameObject, key: keyof S) => {
 ->Object.keys(arg).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))

@@ -1,8 +1,8 @@
 --- old.unionTypesAssignability.js
 +++ new.unionTypesAssignability.js
 @@= skipped -75, +75 lines =@@
- 
- 
+
+
  //// [unionTypesAssignability.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

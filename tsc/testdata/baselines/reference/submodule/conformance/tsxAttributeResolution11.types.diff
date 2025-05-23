@@ -1,7 +1,7 @@
 --- old.tsxAttributeResolution11.types
 +++ new.tsxAttributeResolution11.types
 @@= skipped -32, +32 lines =@@
- 
+
  // Should be an OK
  var x = <MyComponent bar='world' />;
 ->x : JSX.Element
@@ -10,4 +10,3 @@
 +><MyComponent bar='world' /> : Element
  >MyComponent : typeof MyComponent
  >bar : string
- 

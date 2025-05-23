@@ -2,7 +2,7 @@
 +++ new.privateNameWhenNotUseDefineForClassFieldsInEsNext(target=es2020).js
 @@= skipped -53, +53 lines =@@
  }
- 
+
  //// [privateNameWhenNotUseDefineForClassFieldsInEsNext.js]
 -"use strict";
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
@@ -49,21 +49,15 @@
 -    },
 -    _Inner_foo = new WeakMap(),
 -    _a.C = class InnerInner {
-+    };
-+}
-+class TestNonStatics {
-+    #prop = 0;
-+    dd = new TestNonStatics().#prop; // OK
-+    ["X_ z_ zz"] = class Inner {
-+        #foo = 10;
-         m() {
+-        m() {
 -            __classPrivateFieldGet(new TestWithStatics(), _TestWithStatics_prop, "f"); // OK
 -            __classPrivateFieldGet(new _a(), _Inner_foo, "f"); // OK
-+            new TestNonStatics().#prop; // Ok
-         }
+-        }
 -    },
 -    _a);
--class TestNonStatics {
++    };
++}
+ class TestNonStatics {
 -    constructor() {
 -        var _Inner_foo_1, _b;
 -        _TestNonStatics_prop.set(this, 0);
@@ -78,6 +72,13 @@
 -                        }
 -                    };
 -                }
++    #prop = 0;
++    dd = new TestNonStatics().#prop; // OK
++    ["X_ z_ zz"] = class Inner {
++        #foo = 10;
++        m() {
++            new TestNonStatics().#prop; // Ok
++        }
 +        C = class InnerInner {
 +            m() {
 +                new TestNonStatics().#prop; // Ok
@@ -88,9 +89,7 @@
 +            return class {
                  m() {
 -                    __classPrivateFieldGet(new TestNonStatics(), _TestNonStatics_prop, "f"); // Ok
-+                    new TestNonStatics().#prop; // OK
-+                    new Inner().#foo; // OK
-                 }
+-                }
 -                static M() {
 -                    return class {
 -                        m() {
@@ -103,6 +102,9 @@
 -            _Inner_foo_1 = new WeakMap(),
 -            _b);
 -    }
++                    new TestNonStatics().#prop; // OK
++                    new Inner().#foo; // OK
++                }
 +            };
 +        }
 +    };

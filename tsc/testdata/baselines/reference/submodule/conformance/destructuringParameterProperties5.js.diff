@@ -2,7 +2,7 @@
 +++ new.destructuringParameterProperties5.js
 @@= skipped -14, +14 lines =@@
  var [a_x1, a_x2, a_x3, a_y, a_z] = [a.x1, a.x2, a.x3, a.y, a.z];
- 
+
  //// [destructuringParameterProperties5.js]
 -var C1 = /** @class */ (function () {
 -    function C1(_a) {

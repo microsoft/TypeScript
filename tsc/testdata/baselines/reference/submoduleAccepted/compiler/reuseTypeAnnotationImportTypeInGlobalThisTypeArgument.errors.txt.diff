@@ -3,11 +3,13 @@
 @@= skipped -0, +0 lines =@@
 -/types.js(3,21): error TS2304: Cannot find name 'Keyword'.
 -/types.js(3,30): error TS2304: Cannot find name 'ParamValueTyped'.
+-
+-
+-==== /contractHelper.d.ts (0 errors) ====
 +/contractHelper.d.ts(3,67): error TS2694: Namespace '"/types"' has no exported member 'ParamStateRecord'.
 +/exported.d.ts(2,10): error TS2305: Module '"/types"' has no exported member 'ParamStateRecord'.
- 
- 
--==== /contractHelper.d.ts (0 errors) ====
++
++
 +==== /contractHelper.d.ts (1 errors) ====
      export function handleParamGovernance(zcf: any): {
        publicMixin: {

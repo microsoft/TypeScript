@@ -1,27 +1,27 @@
 --- old.importAssertion2(module=esnext).types
 +++ new.importAssertion2(module=esnext).types
 @@= skipped -10, +10 lines =@@
- 
+
  === 1.ts ===
  export {} from './0' assert { type: "json" }
 ->type : error
 +>type : any
- 
+
  export { a, b } from './0' assert { type: "json" }
  >a : 1
  >b : 2
 ->type : error
 +>type : any
- 
+
  export * from './0' assert { type: "json" }
 ->type : error
 +>type : any
- 
+
  export * as ns from './0' assert { type: "json" }
  >ns : typeof import("0")
 ->type : error
 +>type : any
- 
+
  === 2.ts ===
  export { a, b } from './0' assert {}
 @@= skipped -24, +24 lines =@@
@@ -34,4 +34,3 @@
 +>a : any
 +>b : any
 +>c : any
- 

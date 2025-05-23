@@ -10,5 +10,5 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >map : { A: () => unknown; B: () => unknown; C: (args_0: string) => unknown; D: (args_0: number) => unknown; }
- 
+
    fn(...args);

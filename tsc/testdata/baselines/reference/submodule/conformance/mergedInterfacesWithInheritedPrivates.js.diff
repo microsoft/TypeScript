@@ -2,7 +2,7 @@
 +++ new.mergedInterfacesWithInheritedPrivates.js
 @@= skipped -28, +28 lines =@@
  var r = a.x; // error
- 
+
  //// [mergedInterfacesWithInheritedPrivates.js]
 -var C = /** @class */ (function () {
 -    function C() {

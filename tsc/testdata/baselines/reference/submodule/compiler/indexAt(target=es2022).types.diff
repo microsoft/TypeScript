@@ -1,7 +1,7 @@
 --- old.indexAt(target=es2022).types
 +++ new.indexAt(target=es2022).types
 @@= skipped -10, +10 lines =@@
- 
+
  "foo".at(0);
  >"foo".at(0) : string
 ->"foo".at : (index: number) => string | undefined
@@ -10,7 +10,7 @@
 ->at : (index: number) => string | undefined
 +>at : (index: number) => string
  >0 : 0
- 
+
  new Int8Array().at(0);
  >new Int8Array().at(0) : number
 ->new Int8Array().at : (index: number) => number | undefined
@@ -20,7 +20,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Uint8Array().at(0);
  >new Uint8Array().at(0) : number
 ->new Uint8Array().at : (index: number) => number | undefined
@@ -30,7 +30,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Uint8ClampedArray().at(0);
  >new Uint8ClampedArray().at(0) : number
 ->new Uint8ClampedArray().at : (index: number) => number | undefined
@@ -40,7 +40,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Int16Array().at(0);
  >new Int16Array().at(0) : number
 ->new Int16Array().at : (index: number) => number | undefined
@@ -50,7 +50,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Uint16Array().at(0);
  >new Uint16Array().at(0) : number
 ->new Uint16Array().at : (index: number) => number | undefined
@@ -60,7 +60,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Int32Array().at(0);
  >new Int32Array().at(0) : number
 ->new Int32Array().at : (index: number) => number | undefined
@@ -70,7 +70,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Uint32Array().at(0);
  >new Uint32Array().at(0) : number
 ->new Uint32Array().at : (index: number) => number | undefined
@@ -80,7 +80,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Float32Array().at(0);
  >new Float32Array().at(0) : number
 ->new Float32Array().at : (index: number) => number | undefined
@@ -90,7 +90,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new Float64Array().at(0);
  >new Float64Array().at(0) : number
 ->new Float64Array().at : (index: number) => number | undefined
@@ -100,7 +100,7 @@
 ->at : (index: number) => number | undefined
 +>at : (index: number) => number
  >0 : 0
- 
+
  new BigInt64Array().at(0);
  >new BigInt64Array().at(0) : bigint
 ->new BigInt64Array().at : (index: number) => bigint | undefined
@@ -110,7 +110,7 @@
 ->at : (index: number) => bigint | undefined
 +>at : (index: number) => bigint
  >0 : 0
- 
+
  new BigUint64Array().at(0);
  >new BigUint64Array().at(0) : bigint
 ->new BigUint64Array().at : (index: number) => bigint | undefined
@@ -120,4 +120,3 @@
 ->at : (index: number) => bigint | undefined
 +>at : (index: number) => bigint
  >0 : 0
- 

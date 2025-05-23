@@ -15,8 +15,8 @@
 +test.js(24,5): error TS2322: Type 'number' is not assignable to type '0 | 1 | 2'.
  test.js(34,5): error TS2322: Type '1 | 2' is not assignable to type '2 | 3'.
    Type '1' is not assignable to type '2 | 3'.
- 
- 
+
+
 -==== test.js (8 errors) ====
 +==== test.js (6 errors) ====
      // all 6 should error on return statement/expression

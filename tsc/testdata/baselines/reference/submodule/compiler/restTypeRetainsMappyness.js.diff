@@ -1,7 +1,7 @@
 --- old.restTypeRetainsMappyness.js
 +++ new.restTypeRetainsMappyness.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [restTypeRetainsMappyness.js]
  function test(fn) {
 -    var arr = {};

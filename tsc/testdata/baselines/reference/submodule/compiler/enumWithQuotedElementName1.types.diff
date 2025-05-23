@@ -2,7 +2,7 @@
 +++ new.enumWithQuotedElementName1.types
 @@= skipped -4, +4 lines =@@
  >E : E
- 
+
     'fo"o',
 ->'fo"o' : (typeof E)["fo\"o"]
 +>'fo"o' : E.'fo"o'

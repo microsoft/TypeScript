@@ -1,8 +1,8 @@
 --- old.taggedPrimitiveNarrowing.js
 +++ new.taggedPrimitiveNarrowing.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [taggedPrimitiveNarrowing.js]
 -"use strict";
  function getHashLength(hash) {

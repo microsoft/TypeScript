@@ -10,10 +10,10 @@
 ->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 +>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
  >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
- 
+
          MaybePromise(1),
 @@= skipped -29, +29 lines =@@
- 
+
  	// Should result in `Promise<T>` instead of `Promise<Awaited<T>>`.
  	async post<T = D>() { return this.request<T>(); }
 ->post : <T = D>() => Promise<T>
@@ -24,7 +24,7 @@
  >this : this
 ->request : <D_1>() => Promise<D_1>
 +>request : <D>() => Promise<D>
- 
+
  	async request<D>(): Promise<D> { throw new Error(); }
  >request : <D>() => Promise<D>
 @@= skipped -25, +25 lines =@@
@@ -37,5 +37,5 @@
 ->post : <T_1 = {}>() => Promise<T_1>
 +>post : <T>() => Promise<T>
  }
- 
+
  // helps with tests where '.types' just prints out the type alias name

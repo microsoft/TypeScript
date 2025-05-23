@@ -2,7 +2,7 @@
 +++ new.inheritanceStaticFuncOverridingAccessorOfFuncType.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [inheritanceStaticFuncOverridingAccessorOfFuncType.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,10 +21,7 @@
 -})();
 -var a = /** @class */ (function () {
 -    function a() {
-+class a {
-+    static get x() {
-+        return null;
-     }
+-    }
 -    Object.defineProperty(a, "x", {
 -        get: function () {
 -            return null;
@@ -40,6 +37,10 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    b.x = function () {
++class a {
++    static get x() {
++        return null;
++    }
 +}
 +class b extends a {
 +    static x() {

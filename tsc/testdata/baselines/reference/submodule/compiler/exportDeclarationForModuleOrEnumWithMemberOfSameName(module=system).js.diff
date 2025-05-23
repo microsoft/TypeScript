@@ -1,13 +1,10 @@
 --- old.exportDeclarationForModuleOrEnumWithMemberOfSameName(module=system).js
 +++ new.exportDeclarationForModuleOrEnumWithMemberOfSameName(module=system).js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [exportDeclarationForModuleOrEnumWithMemberOfSameName.js]
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.B = exports.A = void 0;
- // https://github.com/microsoft/TypeScript/issues/55038
+-// https://github.com/microsoft/TypeScript/issues/55038
 -System.register([], function (exports_1, context_1) {
 -    "use strict";
 -    var A, B;
@@ -24,6 +21,10 @@
 -        }
 -    };
 -});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.B = exports.A = void 0;
++// https://github.com/microsoft/TypeScript/issues/55038
 +var A;
 +// https://github.com/microsoft/TypeScript/issues/55038
 +(function (A_1) {

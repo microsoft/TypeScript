@@ -7,7 +7,7 @@
 ->ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
 +>ComponentClass : Symbol(ComponentClass, Decl(react16.d.ts, 421, 9))
  >ComposedComponentProps : Symbol(ComposedComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 4, 15))
- 
+
  ) => {
 @@= skipped -12, +12 lines =@@
      const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;
@@ -16,5 +16,5 @@
 ->ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
 +>ComponentClass : Symbol(ComponentClass, Decl(react16.d.ts, 421, 9))
  >WrapperComponentProps : Symbol(WrapperComponentProps, Decl(jsxExcessPropsAndAssignability.tsx, 6, 6))
- 
+
      const props: ComposedComponentProps = null as any;

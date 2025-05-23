@@ -1,7 +1,7 @@
 --- old.optionalChainingInParameterBindingPattern(target=es5).js
 +++ new.optionalChainingInParameterBindingPattern(target=es5).js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [optionalChainingInParameterBindingPattern.js]
  // https://github.com/microsoft/TypeScript/issues/36295
 -var a = function () { return undefined; };

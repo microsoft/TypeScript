@@ -1,6 +1,6 @@
 --- old.jsFileCompilationWithMapFileAsJsWithOutDir.errors.txt
 +++ new.jsFileCompilationWithMapFileAsJsWithOutDir.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS6054: File 'b.js.map' has an unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx', '.cts', '.d.cts', '.cjs', '.mts', '.d.mts', '.mjs'.
 -  The file is in the program because:
 -    Root file specified for compilation
@@ -20,5 +20,4 @@
 -==== b.js (0 errors) ====
 -    function bar() {
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

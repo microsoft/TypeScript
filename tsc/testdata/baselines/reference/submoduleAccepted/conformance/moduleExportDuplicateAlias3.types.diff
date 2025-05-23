@@ -1,7 +1,7 @@
 --- old.moduleExportDuplicateAlias3.types
 +++ new.moduleExportDuplicateAlias3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === test.js ===
  const { apply } = require('./moduleExportAliasDuplicateAlias')
 ->apply : number
@@ -10,19 +10,14 @@
 +>require('./moduleExportAliasDuplicateAlias') : any
  >require : any
  >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
- 
+
  const result = apply.toFixed()
 ->result : string
 ->apply.toFixed() : string
 ->apply.toFixed : (fractionDigits?: number) => string
 ->apply : number
 ->toFixed : (fractionDigits?: number) => string
-+>result : any
-+>apply.toFixed() : any
-+>apply.toFixed : any
-+>apply : any
-+>toFixed : any
- 
+-
 -=== moduleExportAliasDuplicateAlias.js ===
 -exports.apply = undefined;
 ->exports.apply = undefined : undefined
@@ -76,4 +71,8 @@
 ->exports : typeof import("moduleExportAliasDuplicateAlias")
 ->apply : "ok" | 1 | (() => void) | undefined
 ->1 : 1
--
++>result : any
++>apply.toFixed() : any
++>apply.toFixed : any
++>apply : any
++>toFixed : any

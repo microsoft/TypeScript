@@ -1,8 +1,8 @@
 --- old.discriminantPropertyInference.js
 +++ new.discriminantPropertyInference.js
 @@= skipped -41, +41 lines =@@
- 
- 
+
+
  //// [discriminantPropertyInference.js]
 -// Repro from #41759
  // simple inference

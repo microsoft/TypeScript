@@ -1,7 +1,7 @@
 --- old.noCircularDefinitionOnExportOfPrivateInMergedNamespace.js
 +++ new.noCircularDefinitionOnExportOfPrivateInMergedNamespace.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [noCircularDefinitionOnExportOfPrivateInMergedNamespace.js]
  "use strict";
 -var cat = 12;

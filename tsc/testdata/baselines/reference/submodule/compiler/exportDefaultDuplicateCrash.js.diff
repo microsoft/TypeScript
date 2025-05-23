@@ -1,7 +1,7 @@
 --- old.exportDefaultDuplicateCrash.js
 +++ new.exportDefaultDuplicateCrash.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [exportDefaultDuplicateCrash.js]
  "use strict";
 -// #38214

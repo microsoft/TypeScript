@@ -9,7 +9,7 @@
  >var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          // variables in function declaration
          var var2: string | number;
 @@= skipped -11, +11 lines =@@
@@ -21,7 +21,7 @@
  >var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 14, 11))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          // parameters in function declaration
          num = typeof param === "string" && param.length; // string
  >num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))
@@ -31,7 +31,7 @@
  >param : Symbol(param, Decl(typeGuardsObjectMethods.ts, 9, 11))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          return strOrNum;
  >strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
 @@= skipped -23, +23 lines =@@
@@ -43,7 +43,7 @@
  >var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          // variables in function declaration
          var var2: string | number;
 @@= skipped -11, +11 lines =@@
@@ -55,7 +55,7 @@
  >var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 27, 11))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          return strOrNum;
  >strOrNum : Symbol(strOrNum, Decl(typeGuardsObjectMethods.ts, 5, 3))
 @@= skipped -16, +16 lines =@@
@@ -67,7 +67,7 @@
  >var1 : Symbol(var1, Decl(typeGuardsObjectMethods.ts, 6, 3))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          // variables in function declaration
          var var2: string | number;
 @@= skipped -11, +11 lines =@@
@@ -79,7 +79,7 @@
  >var2 : Symbol(var2, Decl(typeGuardsObjectMethods.ts, 37, 11))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          // parameters in function declaration
          num = typeof param === "string" && param.length; // string
  >num : Symbol(num, Decl(typeGuardsObjectMethods.ts, 4, 3))

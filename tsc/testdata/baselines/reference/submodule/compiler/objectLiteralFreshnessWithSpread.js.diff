@@ -1,8 +1,8 @@
 --- old.objectLiteralFreshnessWithSpread.js
 +++ new.objectLiteralFreshnessWithSpread.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [objectLiteralFreshnessWithSpread.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

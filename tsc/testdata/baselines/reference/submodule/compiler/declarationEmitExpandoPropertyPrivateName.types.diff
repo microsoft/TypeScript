@@ -2,11 +2,11 @@
 +++ new.declarationEmitExpandoPropertyPrivateName.types
 @@= skipped -10, +10 lines =@@
  >f : () => I
- 
+
  export function q() {}
 ->q : typeof q
 +>q : { (): void; val: I; }
- 
+
  q.val = f();
  >q.val = f() : I
  >q.val : I

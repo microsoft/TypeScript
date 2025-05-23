@@ -1,7 +1,7 @@
 --- old.varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.js
 +++ new.varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.js
 @@= skipped -69, +69 lines =@@
- 
+
  //// [varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

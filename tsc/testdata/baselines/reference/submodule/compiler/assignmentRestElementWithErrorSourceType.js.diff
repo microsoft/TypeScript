@@ -1,7 +1,7 @@
 --- old.assignmentRestElementWithErrorSourceType.js
 +++ new.assignmentRestElementWithErrorSourceType.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [assignmentRestElementWithErrorSourceType.js]
  var tuple;
 -c = tupel.slice(0); // intentionally misspelled

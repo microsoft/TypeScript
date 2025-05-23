@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js
 @@= skipped -58, +58 lines =@@
  }
- 
+
  //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js]
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
  var robotA = [1, "mower", "mowing"];

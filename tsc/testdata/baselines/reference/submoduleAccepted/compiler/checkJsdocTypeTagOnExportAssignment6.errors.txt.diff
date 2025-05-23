@@ -1,6 +1,6 @@
 --- old.checkJsdocTypeTagOnExportAssignment6.errors.txt
 +++ new.checkJsdocTypeTagOnExportAssignment6.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -a.js(8,30): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
 -
 -
@@ -22,5 +22,4 @@
 -    import a from "./a";
 -    a;
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

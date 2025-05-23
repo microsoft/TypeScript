@@ -8,22 +8,22 @@
 ->type : string
 +>type => {    /** @type {LogEntry} */    const logEntry = {        time: Date.now(),        type,    };} : (type: Thing) => void
 +>type : Thing
- 
+
      /** @type {LogEntry} */
      const logEntry = {
  >logEntry : LogEntry
 ->{        time: Date.now(),        type,    } : { time: number; type: string; }
 +>{        time: Date.now(),        type,    } : { time: number; type: Thing; }
- 
+
          time: Date.now(),
  >time : number
 @@= skipped -16, +16 lines =@@
  >now : () => number
- 
+
          type,
 ->type : string
 +>type : Thing
- 
+
      };
  });
 @@= skipped -10, +10 lines =@@
@@ -36,7 +36,7 @@
 ->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 +>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | object; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
  >{    a: "thing",    b: "chill"} : { a: "thing"; b: "chill"; }
- 
+
      a: "thing",
 @@= skipped -27, +27 lines =@@
   */
@@ -44,6 +44,6 @@
  >useThing : (x: Thing) => void
 ->x : string
 +>x : Thing
- 
+
  exports.useThing = useThing;
  >exports.useThing = useThing : (x: Thing) => void

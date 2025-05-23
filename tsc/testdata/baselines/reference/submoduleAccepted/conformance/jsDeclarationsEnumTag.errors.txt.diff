@@ -1,8 +1,7 @@
 --- old.jsDeclarationsEnumTag.errors.txt
 +++ new.jsDeclarationsEnumTag.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(23,12): error TS2749: 'Target' refers to a value, but is being used as a type here. Did you mean 'typeof Target'?
 +index.js(24,12): error TS2749: 'Second' refers to a value, but is being used as a type here. Did you mean 'typeof Second'?
 +index.js(25,12): error TS2749: 'Fs' refers to a value, but is being used as a type here. Did you mean 'typeof Fs'?

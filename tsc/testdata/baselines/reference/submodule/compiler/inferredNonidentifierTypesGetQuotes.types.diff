@@ -2,7 +2,7 @@
 +++ new.inferredNonidentifierTypesGetQuotes.types
 @@= skipped -9, +9 lines =@@
  >{} : {}
- 
+
  var y = [{ ["a-b"]: "string" }, {}];
 ->y : ({ "a-b": string; } | { "a-b"?: undefined; })[]
 ->[{ ["a-b"]: "string" }, {}] : ({ "a-b": string; } | {})[]

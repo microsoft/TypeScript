@@ -2,7 +2,7 @@
 +++ new.propertyNameWithoutTypeAnnotation.js
 @@= skipped -23, +23 lines =@@
  var r4 = b.foo;
- 
+
  //// [propertyNameWithoutTypeAnnotation.js]
 -var C = /** @class */ (function () {
 -    function C() {

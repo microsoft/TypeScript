@@ -2,7 +2,7 @@
 +++ new.jsExportMemberMergedWithModuleAugmentation.types
 @@= skipped -9, +9 lines =@@
  }
- 
+
  module.exports = {
 ->module.exports = {  Abcde} : typeof module."./test"
 ->module.exports : typeof module."./test"
@@ -13,14 +13,14 @@
 +>module : { export=: { Abcde: typeof Abcde; }; }
 +>exports : { Abcde: typeof Abcde; }
  >{  Abcde} : { Abcde: typeof Abcde; }
- 
+
    Abcde
 @@= skipped -16, +16 lines =@@
  >Abcde : typeof Abcde
- 
+
  declare module "./test" {
 ->"./test" : typeof import("/test")
 +>"./test" : any
- 
+
    interface Abcde { b: string }
  >b : string

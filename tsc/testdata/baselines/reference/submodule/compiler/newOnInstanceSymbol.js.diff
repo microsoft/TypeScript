@@ -2,7 +2,7 @@
 +++ new.newOnInstanceSymbol.js
 @@= skipped -5, +5 lines =@@
  new x(); // should error
- 
+
  //// [newOnInstanceSymbol.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -9,7 +9,7 @@
  >maker : Symbol(maker, Decl(circularTypeofWithFunctionModule.ts, 2, 12), Decl(circularTypeofWithFunctionModule.ts, 6, 1))
 ->Bar : Symbol(maker.Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
 +>Bar : Symbol(Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
- 
+
      return maker.Bar;
 ->maker.Bar : Symbol(maker.Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
 +>maker.Bar : Symbol(Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
@@ -17,5 +17,5 @@
 ->Bar : Symbol(maker.Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
 +>Bar : Symbol(Bar, Decl(circularTypeofWithFunctionModule.ts, 8, 17))
  }
- 
+
  namespace maker {

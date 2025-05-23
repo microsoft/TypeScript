@@ -2,7 +2,7 @@
 +++ new.typePredicateInherit.js
 @@= skipped -55, +55 lines =@@
  }
- 
+
  //// [typePredicateInherit.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,42 +21,25 @@
 -})();
 -var B = /** @class */ (function () {
 -    function B() {
-+class B {
-+    method1() { } // should error
-+    method2() { } // should error
-+    method3() {
-+        return true;
-     }
+-    }
 -    B.prototype.method1 = function () { }; // should error
 -    B.prototype.method2 = function () { }; // should error
 -    B.prototype.method3 = function () {
-+}
-+class C {
-+    method1() {
-         return true;
+-        return true;
 -    };
 -    return B;
 -}());
 -var C = /** @class */ (function () {
 -    function C() {
-     }
+-    }
 -    C.prototype.method1 = function () {
-+    method2() {
-         return true;
+-        return true;
 -    };
 -    C.prototype.method2 = function () {
-+    }
-+    method3() {
-         return true;
+-        return true;
 -    };
 -    C.prototype.method3 = function () {
-+    }
-+}
-+class D extends C {
-+    method1() {
-+    }
-+    method2() {
-         return true;
+-        return true;
 -    };
 -    return C;
 -}());
@@ -64,17 +47,42 @@
 -    __extends(D, _super);
 -    function D() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    D.prototype.method1 = function () {
 -    };
 -    D.prototype.method2 = function () {
-+    method3() {
-         return true;
+-        return true;
 -    };
 -    D.prototype.method3 = function () {
 -        return true;
 -    };
 -    return D;
 -}(C));
++class B {
++    method1() { } // should error
++    method2() { } // should error
++    method3() {
++        return true;
++    }
++}
++class C {
++    method1() {
++        return true;
++    }
++    method2() {
++        return true;
++    }
++    method3() {
++        return true;
++    }
++}
++class D extends C {
++    method1() {
++    }
++    method2() {
++        return true;
++    }
++    method3() {
++        return true;
 +    }
 +}

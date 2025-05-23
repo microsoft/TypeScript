@@ -2,7 +2,7 @@
 +++ new.objectAssignLikeNonUnionResult.js
 @@= skipped -20, +20 lines =@@
  type e1 = Explode<typeof data1>;
- 
+
  //// [objectAssignLikeNonUnionResult.js]
 -var defaultValue = { field: 1 };
 +const defaultValue = { field: 1 };

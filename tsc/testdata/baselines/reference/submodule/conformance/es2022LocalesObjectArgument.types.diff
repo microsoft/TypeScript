@@ -1,7 +1,7 @@
 --- old.es2022LocalesObjectArgument.types
 +++ new.es2022LocalesObjectArgument.types
 @@= skipped -1, +1 lines =@@
- 
+
  === es2022LocalesObjectArgument.ts ===
  const enUS = new Intl.Locale("en-US");
 ->enUS : Intl.Locale
@@ -14,7 +14,7 @@
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >"en-US" : "en-US"
- 
+
  const deDE = new Intl.Locale("de-DE");
 ->deDE : Intl.Locale
 ->new Intl.Locale("de-DE") : Intl.Locale
@@ -26,7 +26,7 @@
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >"de-DE" : "de-DE"
- 
+
  const jaJP = new Intl.Locale("ja-JP");
 ->jaJP : Intl.Locale
 ->new Intl.Locale("ja-JP") : Intl.Locale
@@ -38,7 +38,7 @@
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >"ja-JP" : "ja-JP"
- 
+
  new Intl.Segmenter(enUS);
 ->new Intl.Segmenter(enUS) : Intl.Segmenter
 ->Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
@@ -49,7 +49,7 @@
 ->enUS : Intl.Locale
 +>Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
 +>enUS : Locale
- 
+
  new Intl.Segmenter([deDE, jaJP]);
 ->new Intl.Segmenter([deDE, jaJP]) : Intl.Segmenter
 ->Intl.Segmenter : { new (locales?: Intl.LocalesArgument, options?: Intl.SegmenterOptions): Intl.Segmenter; prototype: Intl.Segmenter; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
@@ -64,7 +64,7 @@
 +>[deDE, jaJP] : Locale[]
 +>deDE : Locale
 +>jaJP : Locale
- 
+
  Intl.Segmenter.supportedLocalesOf(enUS);
  >Intl.Segmenter.supportedLocalesOf(enUS) : string[]
 ->Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
@@ -78,7 +78,7 @@
 +>Segmenter : { new (locales?: LocalesArgument, options?: SegmenterOptions): Segmenter; prototype: Segmenter; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]; }
 +>supportedLocalesOf : (locales: LocalesArgument, options?: Pick<SegmenterOptions, "localeMatcher">) => string[]
 +>enUS : Locale
- 
+
  Intl.Segmenter.supportedLocalesOf([deDE, jaJP]);
  >Intl.Segmenter.supportedLocalesOf([deDE, jaJP]) : string[]
 ->Intl.Segmenter.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.SegmenterOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
@@ -96,4 +96,3 @@
 +>[deDE, jaJP] : Locale[]
 +>deDE : Locale
 +>jaJP : Locale
- 

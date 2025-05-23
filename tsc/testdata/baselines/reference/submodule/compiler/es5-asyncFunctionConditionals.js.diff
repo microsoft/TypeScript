@@ -2,7 +2,7 @@
 +++ new.es5-asyncFunctionConditionals.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [es5-asyncFunctionConditionals.js]
 -function conditional0() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -15,9 +15,7 @@
 -            }
 -        });
 -    });
-+async function conditional0() {
-+    a = (await x) ? y : z;
- }
+-}
 -function conditional1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -38,9 +36,7 @@
 -            }
 -        });
 -    });
-+async function conditional1() {
-+    a = x ? await y : z;
- }
+-}
 -function conditional2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -60,6 +56,12 @@
 -            }
 -        });
 -    });
++async function conditional0() {
++    a = (await x) ? y : z;
++}
++async function conditional1() {
++    a = x ? await y : z;
++}
 +async function conditional2() {
 +    a = x ? y : await z;
  }

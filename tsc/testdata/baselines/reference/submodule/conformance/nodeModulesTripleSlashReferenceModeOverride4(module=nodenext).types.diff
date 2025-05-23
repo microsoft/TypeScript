@@ -6,18 +6,18 @@
  foo; // foo should resolve while bar should not, since even though index.js is cjs, the refernce is esm
 ->foo : number
 +>foo : any
- 
+
  bar;
 ->bar : any
 +>bar : number
- 
+
  export {};
 -=== /node_modules/pkg/import.d.ts ===
 +=== /node_modules/pkg/require.d.ts ===
  export {};
  declare global {
  >global : typeof global
- 
+
 -    var foo: number;
 ->foo : number
 +    var bar: number;

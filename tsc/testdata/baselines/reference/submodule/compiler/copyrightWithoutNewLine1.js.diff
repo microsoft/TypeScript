@@ -2,7 +2,7 @@
 +++ new.copyrightWithoutNewLine1.js
 @@= skipped -10, +10 lines =@@
  greeter.start();
- 
+
  //// [copyrightWithoutNewLine1.js]
 -define(["require", "exports", "./greeter"], function (require, exports, model) {
 -    "use strict";

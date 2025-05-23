@@ -12,7 +12,7 @@
 +>Item : any
  >class I {} : typeof I
  >I : typeof I
- 
+
  Common.Object = class extends First.Item {}
  >Common.Object = class extends First.Item {} : typeof Object
 ->Common.Object : typeof Object
@@ -28,7 +28,7 @@
 +>First.Item : any
 +>First : {}
 +>Item : any
- 
+
  Workspace.Object = class extends Common.Object {}
  >Workspace.Object = class extends Common.Object {} : typeof Object
 ->Workspace.Object : typeof Object
@@ -44,24 +44,23 @@
 +>Common.Object : any
 +>Common : {}
 +>Object : any
- 
+
  /** @type {Workspace.Object} */
  var am;
 @@= skipped -32, +32 lines =@@
- 
+
  === roots.js ===
  var First = {};
 ->First : typeof First
 +>First : {}
  >{} : {}
- 
+
  var Common = {};
 ->Common : typeof Common
 +>Common : {}
  >{} : {}
- 
+
  var Workspace = {};
 ->Workspace : typeof Workspace
 +>Workspace : {}
  >{} : {}
- 

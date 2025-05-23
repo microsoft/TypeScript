@@ -2,7 +2,7 @@
 +++ new.indexSignatureMustHaveTypeAnnotation.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [indexSignatureMustHaveTypeAnnotation.js]
 -var C = /** @class */ (function () {
 -    function C() {

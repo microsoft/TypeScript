@@ -1,7 +1,7 @@
 --- old.bindingPatternOmittedExpressionNesting.js
 +++ new.bindingPatternOmittedExpressionNesting.js
 @@= skipped -4, +4 lines =@@
- 
+
  //// [bindingPatternOmittedExpressionNesting.js]
  "use strict";
 -var _a, _b, _c, _d;

@@ -1,8 +1,8 @@
 --- old.intersectionNarrowing.js
 +++ new.intersectionNarrowing.js
 @@= skipped -40, +40 lines =@@
- 
- 
+
+
  //// [intersectionNarrowing.js]
 -"use strict";
  // Repros from #43130

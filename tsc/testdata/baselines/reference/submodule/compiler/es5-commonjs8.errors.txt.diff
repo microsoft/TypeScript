@@ -1,8 +1,7 @@
 --- old.es5-commonjs8.errors.txt
 +++ new.es5-commonjs8.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +es5-commonjs8.ts(2,12): error TS1216: Identifier expected. '__esModule' is reserved as an exported marker when transforming ECMAScript modules.
 +
 +

@@ -1,8 +1,8 @@
 --- old.exportAndImport-es5-amd.js
 +++ new.exportAndImport-es5-amd.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [m1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

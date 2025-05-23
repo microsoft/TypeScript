@@ -1,8 +1,8 @@
 --- old.spreadOverwritesProperty.js
 +++ new.spreadOverwritesProperty.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [spreadOverwritesProperty.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

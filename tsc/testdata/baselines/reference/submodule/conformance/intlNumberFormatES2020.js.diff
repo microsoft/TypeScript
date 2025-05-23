@@ -1,8 +1,8 @@
 --- old.intlNumberFormatES2020.js
 +++ new.intlNumberFormatES2020.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [intlNumberFormatES2020.js]
 -"use strict";
  // New/updated resolved options in ES2020

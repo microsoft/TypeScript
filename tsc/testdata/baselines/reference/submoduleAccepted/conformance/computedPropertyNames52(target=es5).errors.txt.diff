@@ -1,8 +1,7 @@
 --- old.computedPropertyNames52(target=es5).errors.txt
 +++ new.computedPropertyNames52(target=es5).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +computedPropertyNames52.js(4,9): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 +computedPropertyNames52.js(4,9): error TS2411: Property '[i]' of type '() => typeof C' is not assignable to 'number' index type 'number'.
 +computedPropertyNames52.js(5,16): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

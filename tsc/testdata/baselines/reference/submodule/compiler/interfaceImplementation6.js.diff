@@ -1,8 +1,8 @@
 --- old.interfaceImplementation6.js
 +++ new.interfaceImplementation6.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [interfaceImplementation6.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,7 +1,7 @@
 --- old.arrayLiterals.js
 +++ new.arrayLiterals.js
 @@= skipped -39, +39 lines =@@
- 
+
  //// [arrayLiterals.js]
  // Empty array literal with no contextual type has type Undefined[]
 -var __extends = (this && this.__extends) || (function () {

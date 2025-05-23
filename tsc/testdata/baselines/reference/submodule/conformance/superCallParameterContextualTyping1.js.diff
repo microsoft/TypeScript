@@ -1,8 +1,8 @@
 --- old.superCallParameterContextualTyping1.js
 +++ new.superCallParameterContextualTyping1.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [superCallParameterContextualTyping1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

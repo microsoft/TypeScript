@@ -1,8 +1,8 @@
 --- old.templateStringWithCommentsInArrowFunction.js
 +++ new.templateStringWithCommentsInArrowFunction.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [templateStringWithCommentsInArrowFunction.js]
 -var a = 1;
 -var f1 = function () {

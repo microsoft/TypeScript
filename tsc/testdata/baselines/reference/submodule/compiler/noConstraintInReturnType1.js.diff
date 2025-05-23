@@ -1,8 +1,8 @@
 --- old.noConstraintInReturnType1.js
 +++ new.noConstraintInReturnType1.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [noConstraintInReturnType1.js]
 -var List = /** @class */ (function () {
 -    function List() {

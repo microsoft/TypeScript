@@ -9,7 +9,7 @@
  >Dialogs : typeof Dialogs
 ->DialogResult : ReExportedEnum
 +>DialogResult : DialogResult
- 
+
      /**
       * Not exported to show difference. No javascript is emmitted (as expected)
       */
@@ -19,7 +19,7 @@
  >Dialogs : typeof Dialogs
 ->MessageBoxButtons : DialogButtons
 +>MessageBoxButtons : MessageBoxButtons
- 
+
      /**
       * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
 @@= skipped -18, +18 lines =@@
@@ -28,7 +28,7 @@
  >Dialogs : typeof Dialogs
 ->DialogResultCallback : Callback
 +>DialogResultCallback : DialogResultCallback
- 
+
      export class SomeUsagesOfTheseConsts {
  >SomeUsagesOfTheseConsts : SomeUsagesOfTheseConsts
 @@= skipped -8, +8 lines =@@
@@ -43,7 +43,7 @@
 +>ReExportedEnum.Cancel : DialogResult.Cancel
 +>ReExportedEnum : typeof DialogResult
 +>Cancel : DialogResult.Cancel
- 
+
              console.log(value1);
  >console.log(value1) : void
  >console.log : (...data: any[]) => void
@@ -51,7 +51,7 @@
  >log : (...data: any[]) => void
 ->value1 : ReExportedEnum.Cancel
 +>value1 : DialogResult.Cancel
- 
+
              const value2 = DialogButtons.OKCancel;
 ->value2 : DialogButtons.OKCancel
 ->DialogButtons.OKCancel : DialogButtons.OKCancel
@@ -61,7 +61,7 @@
 +>DialogButtons.OKCancel : MessageBoxButtons.OKCancel
 +>DialogButtons : typeof MessageBoxButtons
 +>OKCancel : MessageBoxButtons.OKCancel
- 
+
              console.log(value2);
  >console.log(value2) : void
  >console.log : (...data: any[]) => void

@@ -1,8 +1,7 @@
 --- old.typedefCrossModule.errors.txt
 +++ new.typedefCrossModule.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +mod1.js(5,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +use.js(1,29): error TS2694: Namespace 'C' has no exported member 'Both'.
 +

@@ -2,7 +2,7 @@
 +++ new.invalidTypeOfTarget.js
 @@= skipped -10, +10 lines =@@
  var x8: typeof /123/;
- 
+
  //// [invalidTypeOfTarget.js]
 -var x1, _a = void 0;
 +var x1, {};

@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-commonjs-classNamespaceMerge.js
 +++ new.esDecorators-classDeclaration-commonjs-classNamespaceMerge.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [esDecorators-classDeclaration-commonjs-classNamespaceMerge.js]
  "use strict";
 -var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {

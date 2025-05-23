@@ -1,8 +1,7 @@
 --- old.expandoFunctionContextualTypesJs.errors.txt
 +++ new.expandoFunctionContextualTypesJs.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +input.js(5,48): error TS2304: Cannot find name 'P'.
 +input.js(48,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +

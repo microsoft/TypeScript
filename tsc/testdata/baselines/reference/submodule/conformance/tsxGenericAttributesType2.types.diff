@@ -1,12 +1,12 @@
 --- old.tsxGenericAttributesType2.types
 +++ new.tsxGenericAttributesType2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
 +>React : typeof __React
- 
+
  const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
 ->decorator4 : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
 ->function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} y={"blah"} ></Component>} : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
@@ -17,7 +17,7 @@
 +>Component : StatelessComponent<T>
  >React : any
  >React : any
- 
+
      return (props) => <Component {...props} y={"blah"} ></Component>
 ->(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
 ->props : T & { children?: React.ReactNode; }
@@ -33,5 +33,5 @@
  >"blah" : "blah"
 ->Component : React.StatelessComponent<T>
 +>Component : StatelessComponent<T>
- 
+
  };

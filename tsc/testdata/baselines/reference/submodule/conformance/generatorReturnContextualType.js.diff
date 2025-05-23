@@ -1,8 +1,8 @@
 --- old.generatorReturnContextualType.js
 +++ new.generatorReturnContextualType.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [generatorReturnContextualType.js]
 -"use strict";
  // #35995

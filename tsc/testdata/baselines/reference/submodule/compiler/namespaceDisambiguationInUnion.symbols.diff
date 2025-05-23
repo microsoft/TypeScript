@@ -10,7 +10,7 @@
 ->Yep : Symbol(Bar.Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
 +>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
  >x : Symbol(x, Decl(namespaceDisambiguationInUnion.ts, 8, 5))
- 
+
  const y = [{ type: "a" }, { type: "b" }];
 @@= skipped -13, +13 lines =@@
  const val2: [Foo.Yep, Bar.Yep] = y;
@@ -22,4 +22,3 @@
 ->Yep : Symbol(Bar.Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
 +>Yep : Symbol(Yep, Decl(namespaceDisambiguationInUnion.ts, 4, 15))
  >y : Symbol(y, Decl(namespaceDisambiguationInUnion.ts, 11, 5))
- 

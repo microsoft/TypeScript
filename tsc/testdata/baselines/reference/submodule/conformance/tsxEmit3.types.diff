@@ -1,7 +1,7 @@
 --- old.tsxEmit3.types
 +++ new.tsxEmit3.types
 @@= skipped -27, +27 lines =@@
- 
+
  	// Emit M.Foo
  	Foo, <Foo />;
 ->Foo, <Foo /> : JSX.Element
@@ -10,10 +10,10 @@
 -><Foo /> : JSX.Element
 +><Foo /> : Element
  >Foo : typeof Foo
- 
+
  	export module S {
 @@= skipped -10, +10 lines =@@
- 
+
  		// Emit M.Foo
  		Foo, <Foo />;
 ->Foo, <Foo /> : JSX.Element
@@ -22,7 +22,7 @@
 -><Foo /> : JSX.Element
 +><Foo /> : Element
  >Foo : typeof Foo
- 
+
  		// Emit S.Bar
  		Bar, <Bar />;
 ->Bar, <Bar /> : JSX.Element
@@ -32,35 +32,37 @@
 +><Bar /> : Element
  >Bar : typeof Bar
  	}
- 
+
 @@= skipped -20, +20 lines =@@
- 
+
  	// Emit M.S.Bar
  	S.Bar, <S.Bar />;
 ->S.Bar, <S.Bar /> : JSX.Element
 ->S.Bar : typeof S.Bar
-+>S.Bar, <S.Bar /> : Element
-+>S.Bar : typeof Bar
- >S : typeof S
+->S : typeof S
 ->Bar : typeof S.Bar
 -><S.Bar /> : JSX.Element
 ->S.Bar : typeof S.Bar
+->S : typeof S
+->Bar : typeof S.Bar
++>S.Bar, <S.Bar /> : Element
++>S.Bar : typeof Bar
++>S : typeof S
 +>Bar : typeof Bar
 +><S.Bar /> : Element
 +>S.Bar : typeof Bar
- >S : typeof S
-->Bar : typeof S.Bar
++>S : typeof S
 +>Bar : typeof Bar
  }
- 
+
  module M {
 ->M : typeof globalThis.M
 +>M : typeof M
- 
+
  	var M = 100;
  >M : number
 @@= skipped -19, +19 lines =@@
- 
+
  	// Emit M_1.Foo
  	Foo, <Foo />;
 ->Foo, <Foo /> : JSX.Element
@@ -70,4 +72,3 @@
 +><Foo /> : Element
  >Foo : typeof Foo
  }
- 

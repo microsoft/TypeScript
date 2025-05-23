@@ -2,7 +2,7 @@
 +++ new.decoratorReferences.symbols
 @@= skipped -21, +21 lines =@@
  >T : Symbol(T, Decl(decoratorReferences.ts, 3, 8))
- 
+
      method(@y x, y) {} // <-- decorator y should be resolved at the class declaration, not the parameter.
 ->method : Symbol(C.method, Decl(decoratorReferences.ts, 3, 12))
 +>method : Symbol(method, Decl(decoratorReferences.ts, 3, 12))

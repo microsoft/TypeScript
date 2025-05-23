@@ -2,7 +2,7 @@
 +++ new.contextuallyTypeAsyncFunctionReturnTypeFromUnion.symbols
 @@= skipped -7, +7 lines =@@
  >T : Symbol(T, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 2, 27))
- 
+
    onDone: (a: T) => void;
 ->onDone : Symbol(StateMachine.onDone, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 2, 31))
 +>onDone : Symbol(onDone, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 2, 31))
@@ -10,7 +10,7 @@
  >T : Symbol(T, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 2, 27))
  }
 @@= skipped -29, +29 lines =@@
- 
+
      test: async () => Promise.reject("some err"),
  >test : Symbol(test, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 11, 13))
 ->Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
@@ -18,22 +18,22 @@
  >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 ->reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 +>reject : Symbol(reject, Decl(lib.es2015.promise.d.ts, --, --))
- 
+
      async test2() {
  >test2 : Symbol(test2, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 12, 49))
- 
+
        return Promise.reject("some err");
 ->Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.reject : Symbol(reject, Decl(lib.es2015.promise.d.ts, --, --))
  >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 ->reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 +>reject : Symbol(reject, Decl(lib.es2015.promise.d.ts, --, --))
- 
+
      },
    },
 @@= skipped -24, +24 lines =@@
  >count : Symbol(count, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 19, 65))
- 
+
    return async () => Promise.reject('some err')
 ->Promise.reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.reject : Symbol(reject, Decl(lib.es2015.promise.d.ts, --, --))
@@ -41,7 +41,7 @@
 ->reject : Symbol(PromiseConstructor.reject, Decl(lib.es2015.promise.d.ts, --, --))
 +>reject : Symbol(reject, Decl(lib.es2015.promise.d.ts, --, --))
  }
- 
+
  // repro #47682 issuecomment-1174099713
 @@= skipped -19, +19 lines =@@
  const cb1: LoadCallback = async () => load().then(m => m);
@@ -54,7 +54,7 @@
 +>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >m : Symbol(m, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 30, 50))
  >m : Symbol(m, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 30, 50))
- 
+
 @@= skipped -14, +14 lines =@@
  const cb3: LoadCallback = () => load().then(m => m);
  >cb3 : Symbol(cb3, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 32, 5))
@@ -66,4 +66,3 @@
 +>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >m : Symbol(m, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 32, 44))
  >m : Symbol(m, Decl(contextuallyTypeAsyncFunctionReturnTypeFromUnion.ts, 32, 44))
- 

@@ -1,8 +1,8 @@
 --- old.bindingPatternCannotBeOnlyInferenceSource.js
 +++ new.bindingPatternCannotBeOnlyInferenceSource.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [bindingPatternCannotBeOnlyInferenceSource.js]
 -var _a = f(); // error (only in strictNullChecks)
 -var p1 = f().p1; // error

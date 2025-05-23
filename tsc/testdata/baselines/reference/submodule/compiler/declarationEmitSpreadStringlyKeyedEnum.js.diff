@@ -1,7 +1,7 @@
 --- old.declarationEmitSpreadStringlyKeyedEnum.js
 +++ new.declarationEmitSpreadStringlyKeyedEnum.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [declarationEmitSpreadStringlyKeyedEnum.js]
  "use strict";
 -var __assign = (this && this.__assign) || function () {

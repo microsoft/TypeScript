@@ -1,7 +1,7 @@
 --- old.stringLiteralTypesAndTuples01.js
 +++ new.stringLiteralTypesAndTuples01.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [stringLiteralTypesAndTuples01.js]
  // Should all be strings.
 -var _a = ["Hello", "Brave", "New", "World"], hello = _a[0], brave = _a[1], newish = _a[2], world = _a[3];

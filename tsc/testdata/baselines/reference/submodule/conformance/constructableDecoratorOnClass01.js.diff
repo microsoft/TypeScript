@@ -1,8 +1,8 @@
 --- old.constructableDecoratorOnClass01.js
 +++ new.constructableDecoratorOnClass01.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [constructableDecoratorOnClass01.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

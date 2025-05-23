@@ -2,7 +2,7 @@
 +++ new.assignmentCompatWithGenericCallSignatures3.types
 @@= skipped -15, +15 lines =@@
  >y : S
- 
+
  var h: <T>(x: T) => <S>(y: S) => { <U>(f: (x: T) => (y: S) => U): U }
 ->h : <T>(x: T) => <S>(y: S) => { <U>(f: (x: T) => (y: S) => U): U; }
 +>h : <T>(x: T) => <S>(y: S) => <U>(f: (x: T) => (y: S) => U) => U
@@ -11,11 +11,10 @@
  >f : (x: T) => (y: S) => U
 @@= skipped -8, +8 lines =@@
  >y : S
- 
+
  g = h // ok
 ->g = h : <T>(x: T) => <S>(y: S) => { <U>(f: (x: T) => (y: S) => U): U; }
 +>g = h : <T>(x: T) => <S>(y: S) => <U>(f: (x: T) => (y: S) => U) => U
  >g : <T>(x: T) => <S>(y: S) => I<T, S>
 ->h : <T>(x: T) => <S>(y: S) => { <U>(f: (x: T) => (y: S) => U): U; }
 +>h : <T>(x: T) => <S>(y: S) => <U>(f: (x: T) => (y: S) => U) => U
- 

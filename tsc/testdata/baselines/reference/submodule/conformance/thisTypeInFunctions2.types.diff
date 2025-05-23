@@ -6,7 +6,7 @@
  >extend1 : (args: IndexedWithThis) => void
 ->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
 +>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init: (this: IndexedWithThis) => void; mine: number; foo: (this: any) => void; }
- 
+
      init() {
  >init : (this: IndexedWithThis) => void
 @@= skipped -36, +36 lines =@@
@@ -15,7 +15,7 @@
  >extend2 : (args: IndexedWithoutThis) => void
 ->{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init(): void; mine: number; foo(): void; }
 +>{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init: () => void; mine: number; foo: () => void; }
- 
+
      init() {
  >init : () => void
 @@= skipped -34, +34 lines =@@
@@ -24,6 +24,6 @@
  >simple : (arg: SimpleInterface) => void
 ->{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): number; bar(): number; }
 +>{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo: (n: string) => number; bar: () => number; }
- 
+
      foo(n) {
  >foo : (n: string) => number

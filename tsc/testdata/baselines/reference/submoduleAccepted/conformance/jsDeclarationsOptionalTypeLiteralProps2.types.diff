@@ -12,7 +12,7 @@
 +>a : any
 +>b : any
 +>c : any
- 
+
      return a + (b ?? 0) + (c ?? 0);
 ->a + (b ?? 0) + (c ?? 0) : number
 ->a + (b ?? 0) : number
@@ -35,4 +35,3 @@
 +>c : any
  >0 : 0
  }
- 

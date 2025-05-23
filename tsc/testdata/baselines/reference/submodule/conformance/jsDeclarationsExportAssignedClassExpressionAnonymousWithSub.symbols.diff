@@ -1,7 +1,7 @@
 --- old.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.symbols
 +++ new.jsDeclarationsExportAssignedClassExpressionAnonymousWithSub.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  module.exports = class {
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -10,12 +10,12 @@
 +>module.exports : Symbol(exports, Decl(index.js, 0, 16))
 +>module : Symbol(module.exports)
 +>exports : Symbol(exports, Decl(index.js, 0, 16))
- 
+
      /**
       * @param {number} p
 @@= skipped -11, +11 lines =@@
  >p : Symbol(p, Decl(index.js, 4, 16))
- 
+
          this.t = 12 + p;
 ->this.t : Symbol(exports.t, Decl(index.js, 4, 20))
 +>this.t : Symbol(t, Decl(index.js, 4, 20))
@@ -34,7 +34,7 @@
 +>module.exports : Symbol(exports, Decl(index.js, 0, 16))
 +>module : Symbol(module.exports)
 +>exports : Symbol(exports, Decl(index.js, 0, 16))
- 
+
      constructor() {
          this.instance = new module.exports(10);
 ->this.instance : Symbol(Sub.instance, Decl(index.js, 9, 19))
@@ -50,4 +50,3 @@
 +>exports : Symbol(exports, Decl(index.js, 0, 16))
      }
  }
- 

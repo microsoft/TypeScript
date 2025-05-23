@@ -22,6 +22,6 @@
 +>s.toLowerCase : any
 +>s : any
 +>toLowerCase : any
- 
+
  /** @satisfies {{ f: (x: string) => string }} */
  const t2 = { g: "oops" }; // should error

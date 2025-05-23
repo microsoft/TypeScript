@@ -1,7 +1,7 @@
 --- old.crashInEmitTokenWithComment.js
 +++ new.crashInEmitTokenWithComment.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [crashInEmitTokenWithComment.js]
  // GH#32358
 -var fn = function (param) { return undefined; };

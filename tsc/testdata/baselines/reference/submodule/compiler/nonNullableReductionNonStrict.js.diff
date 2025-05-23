@@ -1,8 +1,8 @@
 --- old.nonNullableReductionNonStrict.js
 +++ new.nonNullableReductionNonStrict.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [nonNullableReductionNonStrict.js]
 -// Repros from #43425
  function test(f1, f2) {

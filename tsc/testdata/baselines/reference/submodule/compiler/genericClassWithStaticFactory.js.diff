@@ -119,13 +119,13 @@
 -        };
 -        return List;
 -    }());
--    Editor.List = List;
++        }
++    }
+     Editor.List = List;
 -    var ListFactory = /** @class */ (function () {
 -        function ListFactory() {
-         }
+-        }
 -        ListFactory.prototype.MakeHead = function () {
-+    }
-+    Editor.List = List;
 +    class ListFactory {
 +        MakeHead() {
              var entry = new List(true, null);

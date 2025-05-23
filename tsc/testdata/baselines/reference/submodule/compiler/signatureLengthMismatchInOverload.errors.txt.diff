@@ -10,7 +10,7 @@
 +  The last overload gave the following error.
      Argument of type '(arg: number, arg2: number) => void' is not assignable to parameter of type '(arg: number) => void'.
        Target signature provides too few arguments. Expected 2 or more, but got 1.
- 
+
 @@= skipped -15, +11 lines =@@
      f((arg: number, arg2: number) => {});
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

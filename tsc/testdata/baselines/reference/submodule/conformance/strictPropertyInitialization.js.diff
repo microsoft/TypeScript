@@ -1,8 +1,8 @@
 --- old.strictPropertyInitialization.js
 +++ new.strictPropertyInitialization.js
 @@= skipped -162, +162 lines =@@
- 
- 
+
+
  //// [strictPropertyInitialization.js]
 -"use strict";
  // Properties with non-undefined types require initialization
@@ -165,7 +165,7 @@
      constructor() {
          this[E.A] = 1;
      }
- }
+-}
 -E.A;
 -
 -
@@ -250,4 +250,4 @@
 -declare class C13 {
 -    [E.A]: number;
 -    constructor();
--}
+ }

@@ -2,11 +2,11 @@
 +++ new.elidedJSImport2(module=commonjs).types
 @@= skipped -4, +4 lines =@@
  >Foo : any
- 
+
  import * as other from "./other.js";
 ->other : typeof other
 +>other : typeof import("other")
- 
+
  import defaultFoo from "./other.js";
  >defaultFoo : any
 @@= skipped -14, +14 lines =@@
@@ -16,14 +16,14 @@
 ->other : typeof other
 +>other : typeof import("other")
  >Foo : any
- 
+
  const z = new defaultFoo();
 @@= skipped -29, +29 lines =@@
  }
- 
+
  export default class Bar {
 ->Bar : Bar
 +>Bar : default
- 
+
      foo = 1.2;
  >foo : number

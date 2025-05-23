@@ -1,8 +1,8 @@
 --- old.privateNameStaticMethodCallExpression.js
 +++ new.privateNameStaticMethodCallExpression.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [privateNameStaticMethodCallExpression.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
@@ -11,10 +11,12 @@
 -};
 -var _a, _AA_method, _AA_method2;
  class AA {
+-    ;
+-    ;
 +    static #method() { this.x = 10; }
-     ;
++    ;
 +    static #method2(a, ...b) { }
-     ;
++    ;
 +    static x = 1;
      test() {
 -        var _b, _c, _d;

@@ -13,12 +13,12 @@
      }
      slicey() {
 @@= skipped -32, +32 lines =@@
- 
+
  /** @class */
  function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.x = 0;
  >this.x = 0 : 0
  >this.x : any
@@ -26,7 +26,7 @@
 +>this : any
  >x : any
  >0 : 0
- 
+
      this.x = function() { this.x.toString(); }
  >this.x = function() { this.x.toString(); } : () => void
  >this.x : any
@@ -47,4 +47,3 @@
 +>x : any
 +>toString : any
  }
- 

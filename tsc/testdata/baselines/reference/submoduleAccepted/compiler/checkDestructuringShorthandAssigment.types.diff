@@ -9,7 +9,7 @@
  >b : string
  >'' : ""
  >{} : {}
- 
+
  Test(({ b = '5' } = {}));
  >Test(({ b = '5' } = {})) : void
 ->Test : ({ b }?: { b?: string; }) => void

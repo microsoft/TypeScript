@@ -18,4 +18,3 @@
 +>function loader(options) {} : (options: any) => void
 +>loader : (options: any) => void
 +>options : any
- 

@@ -2,7 +2,7 @@
 +++ new.derivedClassOverridesProtectedMembers3.js
 @@= skipped -72, +72 lines =@@
  }
- 
+
  //// [derivedClassOverridesProtectedMembers3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

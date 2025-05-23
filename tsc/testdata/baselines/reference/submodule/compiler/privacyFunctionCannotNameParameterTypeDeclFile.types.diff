@@ -1,15 +1,15 @@
 --- old.privacyFunctionCannotNameParameterTypeDeclFile.types
 +++ new.privacyFunctionCannotNameParameterTypeDeclFile.types
 @@= skipped -1, +1 lines =@@
- 
+
  === privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts ===
  import exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
 ->exporter : typeof exporter
 +>exporter : typeof import("privacyFunctionCannotNameParameterTypeDeclFile_exporter")
- 
+
  export class publicClassWithWithPrivateParmeterTypes {
  >publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
 ->myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
 ->param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -101,7 +101,7 @@
  }
  export class publicClassWithWithPrivateParmeterTypes1 {
  >publicClassWithWithPrivateParmeterTypes1 : publicClassWithWithPrivateParmeterTypes1
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget3()) { // Error
 ->myPublicStaticMethod : (param?: import("GlobalWidgets").Widget3) => void
 ->param : import("GlobalWidgets").Widget3
@@ -191,10 +191,10 @@
 +>createExportedWidget3 : () => Widget3
      }
  }
- 
+
 @@= skipped -113, +113 lines =@@
  >privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
 ->myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
 ->param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -286,7 +286,7 @@
  }
  class privateClassWithWithPrivateParmeterTypes2 {
  >privateClassWithWithPrivateParmeterTypes2 : privateClassWithWithPrivateParmeterTypes2
- 
+
      static myPublicStaticMethod(param = exporter.createExportedWidget3()) {
 ->myPublicStaticMethod : (param?: import("GlobalWidgets").Widget3) => void
 ->param : import("GlobalWidgets").Widget3
@@ -376,7 +376,7 @@
 +>createExportedWidget3 : () => Widget3
      }
  }
- 
+
  export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
 ->publicFunctionWithPrivateParmeterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
 ->param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -433,11 +433,11 @@
 +>exporter : typeof import("privacyFunctionCannotNameParameterTypeDeclFile_exporter")
 +>createExportedWidget3 : () => Widget3
  }
- 
- 
+
+
 @@= skipped -141, +141 lines =@@
  >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget2()) { // Error
 ->myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
 ->param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -501,7 +501,7 @@
  }
  export class publicClassWithPrivateModuleParameterTypes2 {
  >publicClassWithPrivateModuleParameterTypes2 : publicClassWithPrivateModuleParameterTypes2
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget4()) { // Error
 ->myPublicStaticMethod : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
 ->param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -591,11 +591,11 @@
 +>exporter : typeof import("privacyFunctionCannotNameParameterTypeDeclFile_exporter")
 +>createExportedWidget4 : () => Widget4
  }
- 
- 
+
+
 @@= skipped -92, +92 lines =@@
  >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget2()) {
 ->myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
 ->param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -659,7 +659,7 @@
  }
  class privateClassWithPrivateModuleParameterTypes1 {
  >privateClassWithPrivateModuleParameterTypes1 : privateClassWithPrivateModuleParameterTypes1
- 
+
      static myPublicStaticMethod(param= exporter.createExportedWidget4()) {
 ->myPublicStaticMethod : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
 ->param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -757,15 +757,15 @@
  import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 ->Widgets : typeof Widgets
 +>Widgets : typeof import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets")
- 
+
  import Widgets1 = require("GlobalWidgets");
 ->Widgets1 : typeof Widgets1
 +>Widgets1 : typeof import("GlobalWidgets")
- 
+
  export function createExportedWidget1() {
 ->createExportedWidget1 : () => Widgets.Widget1
 +>createExportedWidget1 : () => Widget1
- 
+
      return Widgets.createWidget1();
 ->Widgets.createWidget1() : Widgets.Widget1
 ->Widgets.createWidget1 : () => Widgets.Widget1
@@ -779,7 +779,7 @@
  export function createExportedWidget2() {
 ->createExportedWidget2 : () => Widgets.SpecializedWidget.Widget2
 +>createExportedWidget2 : () => Widget2
- 
+
      return Widgets.SpecializedWidget.createWidget2();
 ->Widgets.SpecializedWidget.createWidget2() : Widgets.SpecializedWidget.Widget2
 ->Widgets.SpecializedWidget.createWidget2 : () => Widgets.SpecializedWidget.Widget2
@@ -797,7 +797,7 @@
  export function createExportedWidget3() {
 ->createExportedWidget3 : () => Widgets1.Widget3
 +>createExportedWidget3 : () => Widget3
- 
+
      return Widgets1.createWidget3();
 ->Widgets1.createWidget3() : Widgets1.Widget3
 ->Widgets1.createWidget3 : () => Widgets1.Widget3
@@ -811,7 +811,7 @@
  export function createExportedWidget4() {
 ->createExportedWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
 +>createExportedWidget4 : () => Widget4
- 
+
      return Widgets1.SpecializedGlobalWidget.createWidget4();
 ->Widgets1.SpecializedGlobalWidget.createWidget4() : Widgets1.SpecializedGlobalWidget.Widget4
 ->Widgets1.SpecializedGlobalWidget.createWidget4 : () => Widgets1.SpecializedGlobalWidget.Widget4
@@ -826,4 +826,3 @@
 +>SpecializedGlobalWidget : typeof SpecializedGlobalWidget
 +>createWidget4 : () => Widget4
  }
- 

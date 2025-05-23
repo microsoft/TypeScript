@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-methods-static(target=es2015).js
 +++ new.esDecorators-classDeclaration-methods-static(target=es2015).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [esDecorators-classDeclaration-methods-static.js]
  const method3 = "method3";
 -let C = (() => {

@@ -1,8 +1,8 @@
 --- old.partiallyNamedTuples2.js
 +++ new.partiallyNamedTuples2.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [partiallyNamedTuples2.js]
 -"use strict";
 -var x = null;

@@ -1,8 +1,8 @@
 --- old.privateNameStaticEmitHelpers.js
 +++ new.privateNameStaticEmitHelpers.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [main.js]
 -var _a, _S_a, _S_b, _S_c_get;
 -import { __classPrivateFieldGet, __classPrivateFieldSet } from "tslib";

@@ -10,18 +10,18 @@
 ->a : number
 +>a : any
  >10 : 10
- 
+
  this.a;
 ->this.a : number
 +>this.a : any
  >this : typeof globalThis
 ->a : number
 +>a : any
- 
+
  a;
 ->a : number
 +>a : any
- 
+
  === b.js ===
  this.a;
 ->this.a : number
@@ -29,8 +29,7 @@
  >this : typeof globalThis
 ->a : number
 +>a : any
- 
+
  a;
 ->a : number
 +>a : any
- 

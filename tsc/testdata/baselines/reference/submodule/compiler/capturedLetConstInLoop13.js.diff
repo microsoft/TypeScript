@@ -2,7 +2,7 @@
 +++ new.capturedLetConstInLoop13.js
 @@= skipped -24, +24 lines =@@
  new Main();
- 
+
  //// [capturedLetConstInLoop13.js]
 -var Main = /** @class */ (function () {
 -    function Main() {
@@ -15,12 +15,7 @@
 -        var names = [];
 -        for (var _i = 0; _i < arguments.length; _i++) {
 -            names[_i] = arguments[_i];
-+    register(...names) {
-+        for (let name of names) {
-+            this.bar({
-+                [name + ".a"]: () => { this.foo(name); },
-+            });
-         }
+-        }
 -        var _loop_1 = function (name_1) {
 -            var _b;
 -            this_1.bar((_b = {},
@@ -37,6 +32,12 @@
 -    Main.prototype.foo = function (name) { };
 -    return Main;
 -}());
++    register(...names) {
++        for (let name of names) {
++            this.bar({
++                [name + ".a"]: () => { this.foo(name); },
++            });
++        }
 +    }
 +    bar(a) { }
 +    foo(name) { }

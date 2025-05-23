@@ -1,7 +1,7 @@
 --- old.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).js
 +++ new.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).js
 @@= skipped -24, +24 lines =@@
- 
+
  //// [jsxJsxsCjsTransformNestedSelfClosingChild.js]
  "use strict";
 -var _this = this;

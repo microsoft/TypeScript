@@ -1,6 +1,6 @@
 --- old.resolutionCandidateFromPackageJsonField2(moduleresolution=bundler).errors.txt
 +++ new.resolutionCandidateFromPackageJsonField2(moduleresolution=bundler).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -tsconfig.json(2,5): error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
 -test.ts(1,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 -
@@ -29,5 +29,4 @@
 -!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 -    import { b } from "baz/main.ts";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

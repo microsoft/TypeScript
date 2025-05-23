@@ -1,8 +1,8 @@
 --- old.pathMappingBasedModuleResolution5_classic.js
 +++ new.pathMappingBasedModuleResolution5_classic.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [file1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

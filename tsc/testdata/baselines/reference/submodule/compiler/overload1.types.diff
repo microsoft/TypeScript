@@ -2,12 +2,12 @@
 +++ new.overload1.types
 @@= skipped -58, +58 lines =@@
  }
- 
+
  declare var x:O.I;
 ->x : O.I
 +>x : I
  >O : any
- 
+
  var e:string=x.g(new O.A()); // matches overload but bad assignment
  >e : string
 ->x.g(new O.A()) : O.C
@@ -25,7 +25,7 @@
  >O : typeof O
 ->A : typeof O.A
 +>A : typeof A
- 
+
  var y:string=x.f(3); // good
  >y : string
  >x.f(3) : string
@@ -34,7 +34,7 @@
 +>x : I
  >f : { (s: string): number; (n: number): string; }
  >3 : 3
- 
+
 @@= skipped -27, +27 lines =@@
  >y : string
  >x.f("nope") : number
@@ -43,7 +43,7 @@
 +>x : I
  >f : { (s: string): number; (n: number): string; }
  >"nope" : "nope"
- 
+
  var z:string=x.g(x.g(3,3)); // good
  >z : string
  >x.g(x.g(3,3)) : string
@@ -62,7 +62,7 @@
 +>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
  >3 : 3
  >3 : 3
- 
+
 @@= skipped -21, +21 lines =@@
  >z=x.g(2,2,2) : never
  >z : string
@@ -86,7 +86,7 @@
 +>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
 +>x : I
 +>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
- 
+
  z=x.g(new O.B()); // ambiguous (up and down conversion)
 ->z=x.g(new O.B()) : O.C
 +>z=x.g(new O.B()) : C
@@ -106,7 +106,7 @@
  >O : typeof O
 ->B : typeof O.B
 +>B : typeof B
- 
+
  z=x.h(2,2); // no match
  >z=x.h(2,2) : never
  >z : string
@@ -126,7 +126,7 @@
  >h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
  >"hello" : "hello"
  >0 : 0
- 
+
  var v=x.g;
 ->v : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
 ->x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
@@ -136,5 +136,4 @@
 +>x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
 +>x : I
 +>g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
- 
- 
+

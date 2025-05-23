@@ -1,8 +1,8 @@
 --- old.didYouMeanStringLiteral.js
 +++ new.didYouMeanStringLiteral.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [didYouMeanStringLiteral.js]
 -var t1 = "strong";
 -var t2 = "strong";

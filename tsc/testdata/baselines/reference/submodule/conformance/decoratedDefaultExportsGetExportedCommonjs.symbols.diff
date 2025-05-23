@@ -2,10 +2,10 @@
 +++ new.decoratedDefaultExportsGetExportedCommonjs.symbols
 @@= skipped -8, +8 lines =@@
  >decorator : Symbol(decorator, Decl(a.ts, 0, 3))
- 
+
  export default class Foo {}
 ->Foo : Symbol(Foo, Decl(a.ts, 0, 30))
 +>Foo : Symbol(default, Decl(a.ts, 0, 30))
- 
+
  === b.ts ===
  var decorator: ClassDecorator;

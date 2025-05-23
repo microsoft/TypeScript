@@ -7,4 +7,3 @@
 ->f2 : (_: ReadonlyArray<number>) => void
 +>f2 : (_: readonly number[]) => void
  >_ : readonly number[]
- 

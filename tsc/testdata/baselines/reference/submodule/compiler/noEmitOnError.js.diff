@@ -2,8 +2,8 @@
 +++ new.noEmitOnError.js
 @@= skipped -3, +3 lines =@@
  var x: number = "";
- 
- 
+
+
 -
 -
 -!!!! File noEmitOnError.d.ts missing from original emit, but present in noCheck emit

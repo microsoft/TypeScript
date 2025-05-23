@@ -1,8 +1,8 @@
 --- old.mappedTypeIndexedAccess.js
 +++ new.mappedTypeIndexedAccess.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [mappedTypeIndexedAccess.js]
 -"use strict";
 -// Repro from #15756

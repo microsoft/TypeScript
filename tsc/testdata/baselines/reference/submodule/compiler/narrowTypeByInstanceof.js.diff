@@ -1,31 +1,34 @@
 --- old.narrowTypeByInstanceof.js
 +++ new.narrowTypeByInstanceof.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [narrowTypeByInstanceof.js]
 -var Match = /** @class */ (function () {
 -    function Match() {
 -    }
 -    Match.prototype.range = function () {
-+class Match {
-+    range() {
-         return undefined;
+-        return undefined;
 -    };
 -    return Match;
 -}());
 -var FileMatch = /** @class */ (function () {
 -    function FileMatch() {
-     }
+-    }
 -    FileMatch.prototype.resource = function () {
-+}
-+class FileMatch {
-+    resource() {
-         return undefined;
+-        return undefined;
 -    };
 -    return FileMatch;
 -}());
 -var elementA, elementB;
++class Match {
++    range() {
++        return undefined;
++    }
++}
++class FileMatch {
++    resource() {
++        return undefined;
 +    }
 +}
 +let elementA, elementB;

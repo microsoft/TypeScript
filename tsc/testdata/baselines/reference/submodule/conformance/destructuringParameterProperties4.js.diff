@@ -1,7 +1,7 @@
 --- old.destructuringParameterProperties4.js
 +++ new.destructuringParameterProperties4.js
 @@= skipped -29, +29 lines =@@
- 
+
  //// [destructuringParameterProperties4.js]
  class C1 {
 +    k;

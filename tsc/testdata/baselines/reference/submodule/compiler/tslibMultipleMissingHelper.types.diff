@@ -2,7 +2,7 @@
 +++ new.tslibMultipleMissingHelper.types
 @@= skipped -13, +13 lines =@@
  >noop : () => Promise<void>
- 
+
  export function spread({ a, ...rest }: { a: number, b: number}) {
 ->spread : ({ a, ...rest }: { a: number; b: number; }) => { b: number; c: string; }
 +>spread : (__0: { a: number; b: number; }) => { b: number; c: string; }

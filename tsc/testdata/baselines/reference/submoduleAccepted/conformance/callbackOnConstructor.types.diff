@@ -1,7 +1,7 @@
 --- old.callbackOnConstructor.types
 +++ new.callbackOnConstructor.types
 @@= skipped -18, +18 lines =@@
- 
+
  /** @type {ValueGetter_2} */
  var ooscope2 = s => s.length > 0
 ->ooscope2 : (name: string) => boolean | number | string | undefined
@@ -18,4 +18,3 @@
 +>s : any
 +>length : any
  >0 : 0
- 

@@ -6,8 +6,8 @@
 +  Type '(user: IUser) => Element' is not assignable to type 'any[] | ReactElement<any>'.
  file.tsx(39,15): error TS2322: Type '(user: IUser) => Element' is not assignable to type 'boolean | any[] | ReactChild'.
 +  Type '(user: IUser) => Element' is not assignable to type 'any[] | ReactElement<any>'.
- 
- 
+
+
  ==== file.tsx (3 errors) ====
 @@= skipped -48, +50 lines =@@
                  ) }

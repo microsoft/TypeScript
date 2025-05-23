@@ -10,8 +10,8 @@
  numericNamedPropertyDuplicates.ts(10,5): error TS2300: Duplicate identifier '2'.
 @@= skipped -6, +8 lines =@@
  numericNamedPropertyDuplicates.ts(20,5): error TS1005: ',' expected.
- 
- 
+
+
 -==== numericNamedPropertyDuplicates.ts (7 errors) ====
 +==== numericNamedPropertyDuplicates.ts (9 errors) ====
      class C {

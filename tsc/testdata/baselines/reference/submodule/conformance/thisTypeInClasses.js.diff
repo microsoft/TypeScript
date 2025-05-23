@@ -1,8 +1,8 @@
 --- old.thisTypeInClasses.js
 +++ new.thisTypeInClasses.js
 @@= skipped -52, +52 lines =@@
- 
- 
+
+
  //// [thisTypeInClasses.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

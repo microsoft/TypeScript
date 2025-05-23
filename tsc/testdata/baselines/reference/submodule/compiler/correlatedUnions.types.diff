@@ -9,9 +9,9 @@
  >v : number
 ->toExponential : (fractionDigits?: number) => string
 +>toExponential : (fractionDigits?: number | undefined) => string
- 
+
  // --------
- 
+
 @@= skipped -116, +116 lines =@@
  >n => n.toFixed(2) : (n: number) => string
  >n : number
@@ -22,25 +22,25 @@
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
  >2 : 2
- 
+
  };
 @@= skipped -46, +46 lines =@@
  ];
- 
+
  function process<K extends Keys>(data: DataEntry<K>[]) {
 ->process : <K extends Keys>(data: DataEntry<K>[]) => void
 +>process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
  >data : DataEntry<K>[]
- 
+
      data.forEach(block => {
 @@= skipped -34, +34 lines =@@
- 
+
  process(data);
  >process(data) : void
 ->process : <K extends Keys>(data: DataEntry<K>[]) => void
 +>process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
  >data : DataEntry<keyof TypeMap>[]
- 
+
  process([{ type: 'foo', data: 'abc' }]);
  >process([{ type: 'foo', data: 'abc' }]) : void
 ->process : <K extends Keys>(data: DataEntry<K>[]) => void
@@ -50,24 +50,24 @@
  >type : "foo"
 @@= skipped -27, +27 lines =@@
  >x : Record<P, LetterMap[P]>
- 
+
  function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void {
 ->call : <K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>) => void
 +>call : <K extends keyof LetterMap>(__0: LetterCaller<K>) => void
  >letter : Record<K, LetterMap[K]>
  >caller : (x: Record<K, LetterMap[K]>) => void
- 
+
 @@= skipped -35, +35 lines =@@
- 
+
  call(xx);
  >call(xx) : void
 ->call : <K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>) => void
 +>call : <K extends keyof LetterMap>(__0: LetterCaller<K>) => void
  >xx : { letter: A; caller: ACaller; } | { letter: B; caller: BCaller; }
- 
+
  // --------
 @@= skipped -30, +30 lines =@@
- 
+
          document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
  >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
 ->document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
@@ -80,7 +80,7 @@
  >name : K
 @@= skipped -22, +22 lines =@@
  }
- 
+
  function createEventListener<K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>): Ev<K> {
 ->createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
 +>createEventListener : <K extends keyof DocumentEventMap>(__0: Ev<K>) => Ev<K>
@@ -89,7 +89,7 @@
  >false : false
 @@= skipped -14, +14 lines =@@
  }
- 
+
  const clickEvent = createEventListener({
 ->clickEvent : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
 ->createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean; readonly callback: (ev: MouseEvent) => void; }
@@ -98,11 +98,11 @@
 +>createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
 +>createEventListener : <K extends keyof DocumentEventMap>(__0: Ev<K>) => Ev<K>
  >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent) => void; }
- 
+
      name: "click",
 @@= skipped -22, +22 lines =@@
  });
- 
+
  const scrollEvent = createEventListener({
 ->scrollEvent : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
 ->createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean; readonly callback: (ev: Event) => void; }
@@ -111,7 +111,7 @@
 +>createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
 +>createEventListener : <K extends keyof DocumentEventMap>(__0: Ev<K>) => Ev<K>
  >{    name: "scroll",    callback: ev => console.log(ev),} : { name: "scroll"; callback: (ev: Event) => void; }
- 
+
      name: "scroll",
 @@= skipped -24, +24 lines =@@
  processEvents([clickEvent, scrollEvent]);
@@ -123,16 +123,16 @@
 +>[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; })[]
 +>clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
 +>scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
- 
+
  processEvents([
  >processEvents([    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },]) : void
 @@= skipped -43, +43 lines =@@
  >ff1 : () => void
- 
+
      type ArgMap = {
 ->ArgMap : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }
 +>ArgMap : ArgMap
- 
+
          sum: [a: number, b: number],
  >sum : [a: number, b: number]
 @@= skipped -9, +9 lines =@@
@@ -141,13 +141,13 @@
      type Keys = keyof ArgMap;
 ->Keys : keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }
 +>Keys : keyof ArgMap
- 
+
      const funs: { [P in Keys]: (...args: ArgMap[P]) => void } = {
  >funs : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }
 ->args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[P]
 +>args : ArgMap[P]
  >{        sum: (a, b) => a + b,        concat: (a, b, c) => a + b + c    } : { sum: (a: number, b: number) => number; concat: (a: string, b: string, c: string) => string; }
- 
+
          sum: (a, b) => a + b,
 @@= skipped -29, +29 lines =@@
  >c : string
@@ -158,7 +158,7 @@
  >funKey : K
 ->args : { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]
 +>args : ArgMap[K]
- 
+
          const fn = funs[funKey];
  >fn : { concat: (a: string, b: string, c: string) => void; sum: (a: number, b: number) => void; }[K]
 @@= skipped -14, +14 lines =@@
@@ -187,29 +187,29 @@
  >'str2' : "str2"
 @@= skipped -72, +72 lines =@@
  }
- 
+
  function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
 ->f4 : <K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) => void
 +>f4 : <K extends keyof ArgMap>(x: Func<"a"> | Func<"b">, y: Funcs[K]) => void
  >x : Func<"a"> | Func<"b">
  >y : Funcs[K]
- 
+
 @@= skipped -89, +89 lines =@@
  }
- 
+
  function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
 ->foo : <T extends keyof Foo>(prop: T, f: Required<Foo>) => void
 +>foo : <T extends "bar">(prop: T, f: Required<Foo>) => void
  >prop : T
  >f : Required<Foo>
- 
+
 @@= skipped -19, +19 lines =@@
  // Repro from #48246
- 
+
  declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
 ->makeCompleteLookupMapping : <T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
 +>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
- 
+
      ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
  >ops : T
 @@= skipped -20, +20 lines =@@
@@ -220,15 +220,15 @@
 +>makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
  >ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
  >'name' : "name"
- 
+
 @@= skipped -53, +53 lines =@@
  >MappedFromOriginal : SameKeys<Original>
- 
+
  const getStringAndNumberFromOriginalAndMapped = <
 ->getStringAndNumberFromOriginalAndMapped : <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
 -><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends KeyOfOriginal, N extends NestedKeyOfOriginalFor<K>>(original: Original, mappedFromOriginal: MappedFromOriginal, key: K, nestedKey: N) => [Original[K][N], MappedFromOriginal[K][N]]
 +>getStringAndNumberFromOriginalAndMapped : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
 +><  K extends KeyOfOriginal,  N extends NestedKeyOfOriginalFor<K>>(  original: Original,  mappedFromOriginal: MappedFromOriginal,  key: K,  nestedKey: N): [Original[K][N], MappedFromOriginal[K][N]] => {  return [original[key][nestedKey], mappedFromOriginal[key][nestedKey]];} : <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]]
- 
+
    K extends KeyOfOriginal,
    N extends NestedKeyOfOriginalFor<K>

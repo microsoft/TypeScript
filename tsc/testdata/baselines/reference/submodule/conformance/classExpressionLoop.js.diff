@@ -1,8 +1,8 @@
 --- old.classExpressionLoop.js
 +++ new.classExpressionLoop.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [classExpressionLoop.js]
 -var arr = [];
 -var _loop_1 = function (i) {

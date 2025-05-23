@@ -2,20 +2,20 @@
 +++ new.mappedTypesArraysTuples.types
 @@= skipped -143, +143 lines =@@
  >x21 : (number | undefined)[]
- 
+
  declare let x22: { a: number | undefined, b?: string[] };
 ->x22 : { a: number | undefined; b?: string[]; }
 +>x22 : { a: number | undefined; b?: string[] | undefined; }
  >a : number | undefined
  >b : string[] | undefined
- 
+
 @@= skipped -8, +8 lines =@@
  >y22 : { a: number; b: string[]; }
  >nonpartial(x22) : { a: number; b: string[]; }
  >nonpartial : <T>(x: Partial<T>) => T
 ->x22 : { a: number | undefined; b?: string[]; }
 +>x22 : { a: number | undefined; b?: string[] | undefined; }
- 
+
  type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
  >__Awaited : __Awaited<T>
 @@= skipped -105, +105 lines =@@
@@ -26,4 +26,3 @@
 +>mapArray : <T extends any[]>(arr: T) => Mapped<T>
  >arr : T
  }
- 

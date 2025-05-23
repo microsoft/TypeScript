@@ -1,7 +1,7 @@
 --- old.reactReduxLikeDeferredInferenceAllowsAssignment.js
 +++ new.reactReduxLikeDeferredInferenceAllowsAssignment.js
 @@= skipped -150, +150 lines =@@
- 
+
  //// [reactReduxLikeDeferredInferenceAllowsAssignment.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

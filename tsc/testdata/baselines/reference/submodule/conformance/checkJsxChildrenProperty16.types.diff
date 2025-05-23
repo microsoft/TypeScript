@@ -2,27 +2,27 @@
 +++ new.checkJsxChildrenProperty16.types
 @@= skipped -28, +28 lines =@@
      };
- 
+
  export declare function Foo(props: Props): JSX.Element;
 ->Foo : (props: Props) => JSX.Element
 +>Foo : (props: Props) => Element
  >props : Props
  >JSX : any
- 
+
  export const Test = () => {
 ->Test : () => JSX.Element
 ->() => {  return (    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  );} : () => JSX.Element
 +>Test : () => Element
 +>() => {  return (    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  );} : () => Element
- 
+
    return (
 ->(    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  ) : JSX.Element
 +>(    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  ) : Element
- 
+
      <>
 -><>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </> : JSX.Element
 +><>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </> : Element
- 
+
        <Foo>{(value) => {}}</Foo>
 -><Foo>{(value) => {}}</Foo> : JSX.Element
 ->Foo : (props: Props) => JSX.Element
@@ -34,7 +34,7 @@
 +>(value) => {} : (value: any) => void
 +>value : any
 +>Foo : (props: Props) => Element
- 
+
        <Foo renderNumber>{(value) => {}}</Foo>
 -><Foo renderNumber>{(value) => {}}</Foo> : JSX.Element
 ->Foo : (props: Props) => JSX.Element
@@ -45,7 +45,7 @@
  >value : number
 ->Foo : (props: Props) => JSX.Element
 +>Foo : (props: Props) => Element
- 
+
        <Foo children={(value) => {}} />
 -><Foo children={(value) => {}} /> : JSX.Element
 ->Foo : (props: Props) => JSX.Element
@@ -54,7 +54,7 @@
  >children : (value: string) => void
  >(value) => {} : (value: string) => void
  >value : string
- 
+
        <Foo renderNumber children={(value) => {}} />
 -><Foo renderNumber children={(value) => {}} /> : JSX.Element
 ->Foo : (props: Props) => JSX.Element

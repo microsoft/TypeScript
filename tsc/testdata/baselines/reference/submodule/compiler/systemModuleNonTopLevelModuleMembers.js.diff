@@ -2,7 +2,7 @@
 +++ new.systemModuleNonTopLevelModuleMembers.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [systemModuleNonTopLevelModuleMembers.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

@@ -16,7 +16,7 @@
 +>exports : typeof Q
 +>class Q {    constructor() {        this.x = new A();    }} : typeof Q
 +>Q : typeof Q
- 
+
      constructor() {
          this.x = new A();
  >this.x = new A() : A
@@ -42,4 +42,3 @@
 +>exports : typeof Q
 +>Another : any
  >Q : typeof Q
- 

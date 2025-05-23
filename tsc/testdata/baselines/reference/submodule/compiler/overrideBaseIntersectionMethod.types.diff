@@ -2,7 +2,7 @@
 +++ new.overrideBaseIntersectionMethod.types
 @@= skipped -7, +7 lines =@@
  >args : any[]
- 
+
  const WithLocation = <T extends Constructor<Point>>(Base: T) => class extends Base {
 ->WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
 -><T extends Constructor<Point>>(Base: T) => class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
@@ -12,10 +12,10 @@
 ->class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
 +>class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
  >Base : Point
- 
+
    getLocation(): [number, number] {
 @@= skipped -51, +51 lines =@@
- 
+
  class Foo extends WithLocation(Point) {
  >Foo : Foo
 ->WithLocation(Point) : WithLocation<typeof Point>.(Anonymous class) & Point
@@ -23,7 +23,7 @@
 +>WithLocation(Point) : (Anonymous class)<typeof Point> & Point
 +>WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
  >Point : typeof Point
- 
+
    calculate() {
 @@= skipped -22, +22 lines =@@
      return super.getLocation()

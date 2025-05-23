@@ -2,7 +2,7 @@
 +++ new.paramPropertiesInSignatures.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [paramPropertiesInSignatures.js]
 -var C1 = /** @class */ (function () {
 -    function C1(p3) {

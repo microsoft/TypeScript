@@ -1,7 +1,7 @@
 --- old.indexClassByNumber.js
 +++ new.indexClassByNumber.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [indexClassByNumber.js]
  // Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
 -var foo = /** @class */ (function () {

@@ -9,7 +9,7 @@
  >m1 : Symbol(m1, Decl(commentsModules.ts, 0, 0))
 ->fooExport : Symbol(m1.fooExport, Decl(commentsModules.ts, 15, 5))
 +>fooExport : Symbol(fooExport, Decl(commentsModules.ts, 15, 5))
- 
+
  var myvar = new m1.m2.c();
  >myvar : Symbol(myvar, Decl(commentsModules.ts, 38, 3))
 ->m1.m2.c : Symbol(m1.m2.c, Decl(commentsModules.ts, 9, 22))
@@ -21,7 +21,7 @@
 ->c : Symbol(m1.m2.c, Decl(commentsModules.ts, 9, 22))
 +>m2 : Symbol(m2, Decl(commentsModules.ts, 7, 5))
 +>c : Symbol(c, Decl(commentsModules.ts, 9, 22))
- 
+
  /** module comment of m2.m3*/
  module m2.m3 {
 @@= skipped -23, +23 lines =@@
@@ -37,7 +37,7 @@
 ->c : Symbol(m2.m3.c, Decl(commentsModules.ts, 40, 14))
 +>m3 : Symbol(m3, Decl(commentsModules.ts, 40, 10))
 +>c : Symbol(c, Decl(commentsModules.ts, 40, 14))
- 
+
  /** module comment of m3.m4.m5*/
  module m3.m4.m5 {
 @@= skipped -18, +18 lines =@@
@@ -57,7 +57,7 @@
 +>m4 : Symbol(m4, Decl(commentsModules.ts, 47, 10))
 +>m5 : Symbol(m5, Decl(commentsModules.ts, 47, 13))
 +>c : Symbol(c, Decl(commentsModules.ts, 47, 17))
- 
+
  /** module comment of m4.m5.m6*/
  module m4.m5.m6 {
 @@= skipped -24, +24 lines =@@
@@ -81,7 +81,7 @@
 +>m6 : Symbol(m6, Decl(commentsModules.ts, 54, 13))
 +>m7 : Symbol(m7, Decl(commentsModules.ts, 54, 17))
 +>c : Symbol(c, Decl(commentsModules.ts, 55, 22))
- 
+
  /** module comment of m5.m6.m7*/
  module m5.m6.m7 {
 @@= skipped -27, +27 lines =@@
@@ -105,7 +105,7 @@
 +>m7 : Symbol(m7, Decl(commentsModules.ts, 63, 13))
 +>m8 : Symbol(m8, Decl(commentsModules.ts, 63, 17))
 +>c : Symbol(c, Decl(commentsModules.ts, 65, 22))
- 
+
  module m6.m7 {
  >m6 : Symbol(m6, Decl(commentsModules.ts, 71, 20))
 @@= skipped -24, +24 lines =@@
@@ -125,7 +125,7 @@
 +>m7 : Symbol(m7, Decl(commentsModules.ts, 72, 10))
 +>m8 : Symbol(m8, Decl(commentsModules.ts, 72, 14))
 +>c : Symbol(c, Decl(commentsModules.ts, 73, 22))
- 
+
  module m7.m8 {
  >m7 : Symbol(m7, Decl(commentsModules.ts, 79, 17))
 @@= skipped -33, +33 lines =@@
@@ -145,4 +145,3 @@
 +>m8 : Symbol(m8, Decl(commentsModules.ts, 80, 10))
 +>m9 : Symbol(m9, Decl(commentsModules.ts, 80, 14))
 +>c : Symbol(c, Decl(commentsModules.ts, 82, 22))
- 

@@ -1,7 +1,7 @@
 --- old.privateInterfaceProperties.js
 +++ new.privateInterfaceProperties.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [privateInterfaceProperties.js]
  // should be an error 
 -var c1 = /** @class */ (function () {

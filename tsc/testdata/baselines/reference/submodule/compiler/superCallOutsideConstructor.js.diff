@@ -1,8 +1,8 @@
 --- old.superCallOutsideConstructor.js
 +++ new.superCallOutsideConstructor.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [superCallOutsideConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.declFileClassExtendsNull.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [declFileClassExtendsNull.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

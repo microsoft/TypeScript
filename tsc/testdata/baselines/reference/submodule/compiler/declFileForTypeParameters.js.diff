@@ -2,7 +2,7 @@
 +++ new.declFileForTypeParameters.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [declFileForTypeParameters.js]
 -var C = /** @class */ (function () {
 -    function C() {

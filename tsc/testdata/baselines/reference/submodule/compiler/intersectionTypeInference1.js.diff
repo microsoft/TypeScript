@@ -1,7 +1,7 @@
 --- old.intersectionTypeInference1.js
 +++ new.intersectionTypeInference1.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [intersectionTypeInference1.js]
  "use strict";
 -// Repro from #8801

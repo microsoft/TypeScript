@@ -1,8 +1,8 @@
 --- old.destructuringParameterProperties2.js
 +++ new.destructuringParameterProperties2.js
 @@= skipped -31, +31 lines =@@
- 
- 
+
+
  //// [destructuringParameterProperties2.js]
 -var C1 = /** @class */ (function () {
 -    function C1(k, _a) {

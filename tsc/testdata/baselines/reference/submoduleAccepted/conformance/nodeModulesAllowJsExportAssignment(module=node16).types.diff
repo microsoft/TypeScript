@@ -8,10 +8,10 @@
 +>module : { readonly a: {}; }
  >exports : {}
  >a : {}
- 
+
 @@= skipped -21, +21 lines =@@
  >{} : {}
- 
+
  module.exports = a;
 ->module.exports = a : any
 ->module.exports : any
@@ -22,4 +22,3 @@
 +>module : { readonly a: {}; }
 +>exports : {}
  >a : {}
- 

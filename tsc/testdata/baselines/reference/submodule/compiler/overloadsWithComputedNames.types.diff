@@ -2,15 +2,15 @@
 +++ new.overloadsWithComputedNames.types
 @@= skipped -10, +10 lines =@@
  >a : number
- 
+
      ["A"](a: string|number): number | string {
 ->["A"] : (a: string | number) => number | string
 +>["A"] : (a: string | number) => string | number
  >"A" : "A"
  >a : string | number
- 
+
 @@= skipped -15, +15 lines =@@
- 
+
  p.A(0)
  >p.A(0) : string | number
 ->p.A : (a: string | number) => number | string
@@ -19,5 +19,5 @@
 ->A : (a: string | number) => number | string
 +>A : (a: string | number) => string | number
  >0 : 0
- 
+
  p.B(0)

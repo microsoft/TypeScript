@@ -14,7 +14,7 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol("jsDeclarationsExportAssignedConstructorFunction", Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
 +>MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
- 
+
      this.x = 1
 ->this.x : Symbol(MyClass.x, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 1, 37))
 ->this : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 1, 24))
@@ -33,6 +33,6 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol("jsDeclarationsExportAssignedConstructorFunction", Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
 +>MyClass : Symbol(MyClass, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 0, 0))
- 
+
      a: function() {
  >a : Symbol(a, Decl(jsDeclarationsExportAssignedConstructorFunction.js, 4, 36))

@@ -1,6 +1,6 @@
 --- old.jsdocTypedefNoCrash2.errors.txt
 +++ new.jsdocTypedefNoCrash2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -export.js(1,13): error TS2451: Cannot redeclare block-scoped variable 'foo'.
 -export.js(1,13): error TS8008: Type aliases can only be used in TypeScript files.
 -export.js(6,14): error TS2451: Cannot redeclare block-scoped variable 'foo'.
@@ -19,5 +19,4 @@
 -    export const foo = 5;
 -                 ~~~
 -!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
-@@= skipped --1, +1 lines =@@
 +<no content>

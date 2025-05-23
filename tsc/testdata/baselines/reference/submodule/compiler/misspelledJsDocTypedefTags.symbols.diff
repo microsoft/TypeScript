@@ -6,9 +6,8 @@
  Animation.AnimationModel.ScreenshotCapture.Request;
 ->Animation : Symbol(Animation, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(a.js, 1, 51))
 +>Animation : Symbol(Animation, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
- 
+
  /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
  Animation.AnimationModel.ScreenshotCapture.Request;
 ->Animation : Symbol(Animation, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(a.js, 1, 51))
 +>Animation : Symbol(Animation, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
- 

@@ -2,7 +2,7 @@
 +++ new.nearbyIdenticalGenericLambdasAssignable.js
 @@= skipped -30, +30 lines =@@
  //             ~~ previously an error
- 
+
  //// [nearbyIdenticalGenericLambdasAssignable.js]
 -var fB = function () {
 +const fB = () => {

@@ -1,8 +1,8 @@
 --- old.typeofUsedBeforeBlockScoped.js
 +++ new.typeofUsedBeforeBlockScoped.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [typeofUsedBeforeBlockScoped.js]
 -var C = /** @class */ (function () {
 -    function C() {

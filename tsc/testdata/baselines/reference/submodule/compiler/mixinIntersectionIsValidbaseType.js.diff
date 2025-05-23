@@ -1,7 +1,7 @@
 --- old.mixinIntersectionIsValidbaseType.js
 +++ new.mixinIntersectionIsValidbaseType.js
 @@= skipped -30, +30 lines =@@
- 
+
  //// [mixinIntersectionIsValidbaseType.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

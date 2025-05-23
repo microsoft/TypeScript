@@ -1,8 +1,8 @@
 --- old.nullishCoalescingOperator10.js
 +++ new.nullishCoalescingOperator10.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [nullishCoalescingOperator10.js]
 -"use strict";
 -var _a;

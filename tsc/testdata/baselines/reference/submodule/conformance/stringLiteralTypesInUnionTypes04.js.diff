@@ -2,7 +2,7 @@
 +++ new.stringLiteralTypesInUnionTypes04.js
 @@= skipped -38, +38 lines =@@
  }
- 
+
  //// [stringLiteralTypesInUnionTypes04.js]
 -var x = undefined;
 -var y = undefined;

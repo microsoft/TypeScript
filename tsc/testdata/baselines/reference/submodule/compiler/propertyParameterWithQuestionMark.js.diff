@@ -2,7 +2,7 @@
 +++ new.propertyParameterWithQuestionMark.js
 @@= skipped -11, +11 lines =@@
  var v3: { x } = new C; // Should fail
- 
+
  //// [propertyParameterWithQuestionMark.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

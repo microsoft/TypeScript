@@ -1,7 +1,7 @@
 --- old.jsDeclarationsExportSpecifierNonlocal.types
 +++ new.jsDeclarationsExportSpecifierNonlocal.types
 @@= skipped -8, +8 lines =@@
- 
+
  === index.js ===
  export { Thing, OtherThing as default } from "./source";
 ->Thing : typeof import("source").Thing
@@ -10,4 +10,3 @@
 +>Thing : typeof Thing
 +>OtherThing : typeof OtherThing
 +>default : typeof OtherThing
- 

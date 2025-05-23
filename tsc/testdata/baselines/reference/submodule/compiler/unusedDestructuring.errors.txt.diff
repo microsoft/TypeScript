@@ -13,8 +13,8 @@
  unusedDestructuring.ts(10,24): error TS6133: 'c' is declared but its value is never read.
 -unusedDestructuring.ts(10,32): error TS6133: 'e' is declared but its value is never read.
 +unusedDestructuring.ts(10,34): error TS6133: 'e' is declared but its value is never read.
- 
- 
+
+
  ==== unusedDestructuring.ts (9 errors) ====
 @@= skipped -19, +19 lines =@@
  !!! error TS6133: 'c' is declared but its value is never read.

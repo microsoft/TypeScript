@@ -1,8 +1,7 @@
 --- old.moduleResolutionWithSymlinks_notInNodeModules.errors.txt
 +++ new.moduleResolutionWithSymlinks_notInNodeModules.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/src/app.ts(1,19): error TS2307: Cannot find module './shared/abc' or its corresponding type declarations.
 +/src/app.ts(2,25): error TS2307: Cannot find module './shared2/abc' or its corresponding type declarations.
 +

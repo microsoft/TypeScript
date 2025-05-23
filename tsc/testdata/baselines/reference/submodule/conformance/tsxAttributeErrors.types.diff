@@ -1,7 +1,7 @@
 --- old.tsxAttributeErrors.types
 +++ new.tsxAttributeErrors.types
 @@= skipped -20, +20 lines =@@
- 
+
  // Error, number is not assignable to string
  <div text={42} />;
 -><div text={42} /> : JSX.Element
@@ -9,7 +9,7 @@
  >div : any
  >text : number
  >42 : 42
- 
+
  // Error, string is not assignable to number
  <div width={'foo'} />;
 -><div width={'foo'} /> : JSX.Element
@@ -19,13 +19,13 @@
  >'foo' : "foo"
 @@= skipped -20, +20 lines =@@
  >100 : 100
- 
+
  <div {...attribs} />;
 -><div {...attribs} /> : JSX.Element
 +><div {...attribs} /> : Element
  >div : any
  >attribs : { text: number; }
- 
+
  // No errors here
  <span foo='bar' bar={'foo'} />;
 -><span foo='bar' bar={'foo'} /> : JSX.Element

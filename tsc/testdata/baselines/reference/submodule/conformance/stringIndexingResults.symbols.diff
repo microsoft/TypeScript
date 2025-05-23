@@ -2,12 +2,12 @@
 +++ new.stringIndexingResults.symbols
 @@= skipped -7, +7 lines =@@
  >x : Symbol(x, Decl(stringIndexingResults.ts, 1, 5))
- 
+
      y = '';
 ->y : Symbol(C.y, Decl(stringIndexingResults.ts, 1, 24))
 +>y : Symbol(y, Decl(stringIndexingResults.ts, 1, 24))
  }
- 
+
  var c: C;
 @@= skipped -10, +10 lines =@@
  var r1 = c['y']; 
@@ -15,17 +15,17 @@
  >c : Symbol(c, Decl(stringIndexingResults.ts, 5, 3))
 ->'y' : Symbol(C.y, Decl(stringIndexingResults.ts, 1, 24))
 +>'y' : Symbol(y, Decl(stringIndexingResults.ts, 1, 24))
- 
+
  var r2 = c['a'];
  >r2 : Symbol(r2, Decl(stringIndexingResults.ts, 7, 3))
 @@= skipped -17, +17 lines =@@
  >x : Symbol(x, Decl(stringIndexingResults.ts, 11, 5))
- 
+
      y: string;
 ->y : Symbol(I.y, Decl(stringIndexingResults.ts, 11, 24))
 +>y : Symbol(y, Decl(stringIndexingResults.ts, 11, 24))
  }
- 
+
  var i: I
 @@= skipped -10, +10 lines =@@
  var r4 = i['y'];
@@ -33,6 +33,6 @@
  >i : Symbol(i, Decl(stringIndexingResults.ts, 15, 3))
 ->'y' : Symbol(I.y, Decl(stringIndexingResults.ts, 11, 24))
 +>'y' : Symbol(y, Decl(stringIndexingResults.ts, 11, 24))
- 
+
  var r5 = i['a'];
  >r5 : Symbol(r5, Decl(stringIndexingResults.ts, 17, 3))

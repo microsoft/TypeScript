@@ -1,8 +1,8 @@
 --- old.ES5For-of19.js
 +++ new.ES5For-of19.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [ES5For-of19.js]
 -for (var _i = 0, _a = []; _i < _a.length; _i++) {
 -    var v = _a[_i];

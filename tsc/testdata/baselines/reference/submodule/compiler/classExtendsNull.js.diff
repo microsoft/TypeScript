@@ -2,7 +2,7 @@
 +++ new.classExtendsNull.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [classExtendsNull.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,21 +23,25 @@
 -    __extends(C, _super);
 -    function C() {
 -        var _this = _super.call(this) || this;
-+class C extends null {
-+    constructor() {
-+        super();
-         return Object.create(null);
-     }
+-        return Object.create(null);
+-    }
 -    return C;
 -}(null));
 -var D = /** @class */ (function (_super) {
 -    __extends(D, _super);
 -    function D() {
+-        return Object.create(null);
+-    }
+-    return D;
+-}(null));
++class C extends null {
++    constructor() {
++        super();
++        return Object.create(null);
++    }
 +}
 +class D extends null {
 +    constructor() {
-         return Object.create(null);
-     }
--    return D;
--}(null));
++        return Object.create(null);
++    }
 +}

@@ -1,7 +1,7 @@
 --- old.libTypeScriptOverrideSimpleConfig.js
 +++ new.libTypeScriptOverrideSimpleConfig.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [index.js]
  /// <reference lib="dom" />
 -var a = { abc: "Hello" };

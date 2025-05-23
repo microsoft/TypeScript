@@ -1,7 +1,7 @@
 --- old.decoratorMetadataElidedImport(module=commonjs).js
 +++ new.decoratorMetadataElidedImport(module=commonjs).js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [index.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

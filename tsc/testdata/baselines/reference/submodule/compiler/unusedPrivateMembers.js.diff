@@ -1,8 +1,8 @@
 --- old.unusedPrivateMembers.js
 +++ new.unusedPrivateMembers.js
 @@= skipped -65, +65 lines =@@
- 
- 
+
+
  //// [unusedPrivateMembers.js]
 -var Test1 = /** @class */ (function () {
 -    function Test1() {
@@ -34,7 +34,7 @@
 -}());
 -var Test3 = /** @class */ (function () {
 -    function Test3() {
-     }
+-    }
 -    Object.defineProperty(Test3.prototype, "x", {
 -        get: function () {
 -            return 0;
@@ -43,6 +43,7 @@
 -        configurable: true
 -    });
 -    Test3.prototype.test = function () {
++    }
 +}
 +class Test3 {
 +    get x() {
@@ -56,7 +57,7 @@
 -}());
 -var Test4 = /** @class */ (function () {
 -    function Test4() {
-     }
+-    }
 -    Object.defineProperty(Test4.prototype, "x", {
 -        set: function (v) {
 -            v;
@@ -65,6 +66,7 @@
 -        configurable: true
 -    });
 -    Test4.prototype.test = function () {
++    }
 +}
 +class Test4 {
 +    set x(v) {
@@ -92,7 +94,7 @@
 -var Test6 = /** @class */ (function () {
 -    function Test6() {
 -        this.b = 0;
-     }
+-    }
 -    Object.defineProperty(Test6.prototype, "a", {
 -        get: function () {
 -            return 0;
@@ -104,6 +106,7 @@
 -        configurable: true
 -    });
 -    Test6.prototype.test = function () {
++    }
 +}
 +class Test6 {
 +    get a() {

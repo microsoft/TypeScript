@@ -1,8 +1,8 @@
 --- old.arrowFunctionContexts.js
 +++ new.arrowFunctionContexts.js
 @@= skipped -97, +97 lines =@@
- 
- 
+
+
  //// [arrowFunctionContexts.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -28,13 +28,7 @@
  // Arrow function as argument to super call
 -var Base = /** @class */ (function () {
 -    function Base(n) {
-+class Base {
-+    constructor(n) { }
-+}
-+class Derived extends Base {
-+    constructor() {
-+        super(() => this);
-     }
+-    }
 -    return Base;
 -}());
 -var Derived = /** @class */ (function (_super) {
@@ -45,6 +39,13 @@
 -    }
 -    return Derived;
 -}(Base));
++class Base {
++    constructor(n) { }
++}
++class Derived extends Base {
++    constructor() {
++        super(() => this);
++    }
 +}
  // Arrow function as function argument
 -window.setTimeout(function () { return null; }, 100);
@@ -87,13 +88,7 @@
      // Arrow function as argument to super call
 -    var Base = /** @class */ (function () {
 -        function Base(n) {
-+    class Base {
-+        constructor(n) { }
-+    }
-+    class Derived extends Base {
-+        constructor() {
-+            super(() => this);
-         }
+-        }
 -        return Base;
 -    }());
 -    var Derived = /** @class */ (function (_super) {
@@ -104,6 +99,13 @@
 -        }
 -        return Derived;
 -    }(Base));
++    class Base {
++        constructor(n) { }
++    }
++    class Derived extends Base {
++        constructor() {
++            super(() => this);
++        }
 +    }
      // Arrow function as function argument
 -    window.setTimeout(function () { return null; }, 100);

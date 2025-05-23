@@ -2,7 +2,7 @@
 +++ new.functionImplementations.js
 @@= skipped -158, +158 lines =@@
  }
- 
+
  //// [functionImplementations.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -104,22 +104,32 @@
      return x.toString();
  };
 -var f8 = function (x) {
-+var f8 = x => {
-     return new Base();
-     return new Derived2();
- };
+-    return new Base();
+-    return new Derived2();
+-};
 -var f9 = function (x) {
-+var f9 = x => {
-     return new Base();
-     return new Derived();
-     return new Derived2();
- };
+-    return new Base();
+-    return new Derived();
+-    return new Derived2();
+-};
 -var f10 = function (x) {
-+var f10 = x => {
-     return new Derived();
-     return new Derived2();
- };
+-    return new Derived();
+-    return new Derived2();
+-};
 -var f11 = function (x) {
++var f8 = x => {
++    return new Base();
++    return new Derived2();
++};
++var f9 = x => {
++    return new Base();
++    return new Derived();
++    return new Derived2();
++};
++var f10 = x => {
++    return new Derived();
++    return new Derived2();
++};
 +var f11 = x => {
      return new Base();
      return new AnotherClass();

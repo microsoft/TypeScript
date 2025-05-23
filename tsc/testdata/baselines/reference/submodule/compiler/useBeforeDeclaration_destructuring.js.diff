@@ -1,7 +1,7 @@
 --- old.useBeforeDeclaration_destructuring.js
 +++ new.useBeforeDeclaration_destructuring.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [useBeforeDeclaration_destructuring.js]
  a;
 -var _a = { a: '', b: 1 }, a = _a.a, _b = _a.b, b = _b === void 0 ? a : _b;

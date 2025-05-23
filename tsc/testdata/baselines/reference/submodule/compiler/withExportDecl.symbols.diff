@@ -2,7 +2,7 @@
 +++ new.withExportDecl.symbols
 @@= skipped -57, +57 lines =@@
  >y : Symbol(y, Decl(withExportDecl.ts, 22, 41))
- 
+
  exportedArrayVar.push({ x: 30, y : 'hello world' });
 ->exportedArrayVar.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>exportedArrayVar.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -11,10 +11,10 @@
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(withExportDecl.ts, 23, 23))
  >y : Symbol(y, Decl(withExportDecl.ts, 23, 30))
- 
+
 @@= skipped -53, +53 lines =@@
  >foo : Symbol(foo, Decl(withExportDecl.ts, 48, 18))
- 
+
          return m1.foo();
 ->m1.foo : Symbol(m1.foo, Decl(withExportDecl.ts, 37, 11))
 +>m1.foo : Symbol(foo, Decl(withExportDecl.ts, 37, 11))
@@ -23,4 +23,3 @@
 +>foo : Symbol(foo, Decl(withExportDecl.ts, 37, 11))
      }
  }
- 

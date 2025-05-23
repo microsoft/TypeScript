@@ -8,7 +8,7 @@
 +>({a}) => a : (__0: { a: any; }) => any
  >a : any
  >a : any
- 
+
  trans(([b,c]) => 'foo');
  >trans(([b,c]) => 'foo') : number
  >trans : <T>(f: (x: T) => string) => number

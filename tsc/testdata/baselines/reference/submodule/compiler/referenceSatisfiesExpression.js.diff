@@ -1,8 +1,8 @@
 --- old.referenceSatisfiesExpression.js
 +++ new.referenceSatisfiesExpression.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [referenceSatisfiesExpression.js]
 -var a = 10;
 +let a = 10;

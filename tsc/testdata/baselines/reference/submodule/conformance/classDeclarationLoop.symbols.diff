@@ -2,7 +2,7 @@
 +++ new.classDeclarationLoop.symbols
 @@= skipped -12, +12 lines =@@
  >C : Symbol(C, Decl(classDeclarationLoop.ts, 1, 30))
- 
+
          prop = i;
 ->prop : Symbol(C.prop, Decl(classDeclarationLoop.ts, 2, 13))
 +>prop : Symbol(prop, Decl(classDeclarationLoop.ts, 2, 13))
@@ -16,4 +16,3 @@
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >C : Symbol(C, Decl(classDeclarationLoop.ts, 1, 30))
  }
- 

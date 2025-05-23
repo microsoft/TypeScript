@@ -2,7 +2,7 @@
 +++ new.staticClassMemberError.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [staticClassMemberError.js]
 -var C = /** @class */ (function () {
 -    function C() {

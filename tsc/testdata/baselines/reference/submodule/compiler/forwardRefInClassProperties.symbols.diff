@@ -11,11 +11,11 @@
  >this : Symbol(Test, Decl(forwardRefInClassProperties.ts, 0, 0))
 ->_a : Symbol(Test._a, Decl(forwardRefInClassProperties.ts, 2, 17))
 +>_a : Symbol(_a, Decl(forwardRefInClassProperties.ts, 2, 17))
- 
+
      _a = 3;
 ->_a : Symbol(Test._a, Decl(forwardRefInClassProperties.ts, 2, 17))
 +>_a : Symbol(_a, Decl(forwardRefInClassProperties.ts, 2, 17))
- 
+
      static _B = Test._A; // undefined, no error/warning
 ->_B : Symbol(Test._B, Decl(forwardRefInClassProperties.ts, 3, 11))
 ->Test._A : Symbol(Test._A, Decl(forwardRefInClassProperties.ts, 5, 24))
@@ -24,11 +24,11 @@
  >Test : Symbol(Test, Decl(forwardRefInClassProperties.ts, 0, 0))
 ->_A : Symbol(Test._A, Decl(forwardRefInClassProperties.ts, 5, 24))
 +>_A : Symbol(_A, Decl(forwardRefInClassProperties.ts, 5, 24))
- 
+
      static _A = 3;
 ->_A : Symbol(Test._A, Decl(forwardRefInClassProperties.ts, 5, 24))
 +>_A : Symbol(_A, Decl(forwardRefInClassProperties.ts, 5, 24))
- 
+
      method()
 ->method : Symbol(Test.method, Decl(forwardRefInClassProperties.ts, 6, 18))
 +>method : Symbol(method, Decl(forwardRefInClassProperties.ts, 6, 18))

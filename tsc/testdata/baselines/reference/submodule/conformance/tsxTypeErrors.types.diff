@@ -10,7 +10,7 @@
 +><div id="foo" /> : any
  >div : any
  >id : string
- 
+
  // A built-in element with a mistyped property (error)
  var a2 = <img srce="foo.jpg" />
 ->a2 : error
@@ -19,10 +19,10 @@
 +><img srce="foo.jpg" /> : any
  >img : any
  >srce : string
- 
+
 @@= skipped -20, +20 lines =@@
  >100 : 100
- 
+
  var a3 = <div id={thing} />
 ->a3 : error
 -><div id={thing} /> : error
@@ -31,7 +31,7 @@
  >div : any
  >id : { oops: number; }
  >thing : { oops: number; }
- 
+
  // Mistyped html name (error)
  var e1 = <imag src="bar.jpg" />
 ->e1 : error
@@ -40,7 +40,7 @@
 +><imag src="bar.jpg" /> : any
  >imag : any
  >src : string
- 
+
 @@= skipped -36, +36 lines =@@
  // Let's use it
  // TODO: Error on missing 'reqd'

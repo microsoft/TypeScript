@@ -1,8 +1,8 @@
 --- old.awaitUsingDeclarationsInForAwaitOf.3(target=es5).js
 +++ new.awaitUsingDeclarationsInForAwaitOf.3(target=es5).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [awaitUsingDeclarationsInForAwaitOf.3.js]
 -// https://github.com/microsoft/TypeScript/pull/55558#issuecomment-1817595357
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -101,7 +101,7 @@
 +                await result_2;
          }
      }
- }
+-}
 -catch (e_1_1) { e_1 = { error: e_1_1 }; }
 -finally {
 -    try {
@@ -169,4 +169,4 @@
 -            }
 -        });
 -    });
--}
+ }

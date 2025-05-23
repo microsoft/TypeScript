@@ -2,7 +2,7 @@
 +++ new.es5-asyncFunctionBinaryExpressions.js
 @@= skipped -124, +124 lines =@@
  }
- 
+
  //// [es5-asyncFunctionBinaryExpressions.js]
 -function binaryPlus0() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -15,9 +15,7 @@
 -            }
 -        });
 -    });
-+async function binaryPlus0() {
-+    (await x) + y;
- }
+-}
 -function binaryPlus1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -32,9 +30,7 @@
 -            }
 -        });
 -    });
-+async function binaryPlus1() {
-+    x + await y;
- }
+-}
 -function binaryLogicalAnd0() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -46,9 +42,7 @@
 -            }
 -        });
 -    });
-+async function binaryLogicalAnd0() {
-+    (await x) && y;
- }
+-}
 -function binaryLogicalAnd1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -67,9 +61,7 @@
 -            }
 -        });
 -    });
-+async function binaryLogicalAnd1() {
-+    x && await y;
- }
+-}
 -function binaryAssignment0() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -81,9 +73,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment0() {
-+    x = await y;
- }
+-}
 -function binaryAssignment1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -98,9 +88,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment1() {
-+    x.a = await y;
- }
+-}
 -function binaryAssignment2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -115,9 +103,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment2() {
-+    x.a.b = await y;
- }
+-}
 -function binaryAssignment3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b;
@@ -133,9 +119,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment3() {
-+    x[z] = await y;
- }
+-}
 -function binaryAssignment4() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -150,9 +134,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment4() {
-+    x[z].b = await y;
- }
+-}
 -function binaryAssignment5() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b;
@@ -168,9 +150,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment5() {
-+    x.a[z] = await y;
- }
+-}
 -function binaryAssignment6() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -182,9 +162,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment6() {
-+    (await x).a = y;
- }
+-}
 -function binaryAssignment7() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -196,9 +174,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment7() {
-+    (await x.a).b = y;
- }
+-}
 -function binaryAssignment8() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -210,9 +186,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment8() {
-+    (await x)[z] = y;
- }
+-}
 -function binaryAssignment9() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -227,9 +201,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment9() {
-+    x[await z] = y;
- }
+-}
 -function binaryAssignment10() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -244,9 +216,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment10() {
-+    x[await z].b = y;
- }
+-}
 -function binaryAssignment11() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -258,9 +228,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment11() {
-+    (await x[z]).b = y;
- }
+-}
 -function binaryAssignment12() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -275,9 +243,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment12() {
-+    x.a[await z] = y;
- }
+-}
 -function binaryAssignment13() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -289,9 +255,7 @@
 -            }
 -        });
 -    });
-+async function binaryAssignment13() {
-+    (await x.a)[z] = y;
- }
+-}
 -function binaryCompoundAssignment0() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -306,9 +270,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment0() {
-+    x += await y;
- }
+-}
 -function binaryCompoundAssignment1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b;
@@ -324,9 +286,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment1() {
-+    x.a += await y;
- }
+-}
 -function binaryCompoundAssignment2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c;
@@ -343,9 +303,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment2() {
-+    x[a] += await y;
- }
+-}
 -function binaryCompoundAssignment3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -357,9 +315,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment3() {
-+    (await x).a += y;
- }
+-}
 -function binaryCompoundAssignment4() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -371,9 +327,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment4() {
-+    (await x)[a] += y;
- }
+-}
 -function binaryCompoundAssignment5() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a;
@@ -388,9 +342,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment5() {
-+    x[await a] += y;
- }
+-}
 -function binaryCompoundAssignment6() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b;
@@ -407,9 +359,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment6() {
-+    (await x).a += await y;
- }
+-}
 -function binaryCompoundAssignment7() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c;
@@ -427,9 +377,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment7() {
-+    (await x)[a] += await y;
- }
+-}
 -function binaryCompoundAssignment8() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c;
@@ -448,9 +396,7 @@
 -            }
 -        });
 -    });
-+async function binaryCompoundAssignment8() {
-+    x[await a] += await y;
- }
+-}
 -function binaryExponentiation() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _d, _e;
@@ -470,10 +416,7 @@
 -            }
 -        });
 -    });
-+async function binaryExponentiation() {
-+    (await x) ** y;
-+    x ** await y;
- }
+-}
 -function binaryComma0() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -483,9 +426,7 @@
 -            }
 -        });
 -    });
-+async function binaryComma0() {
-+    return (await x), y;
- }
+-}
 -function binaryComma1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -497,6 +438,94 @@
 -            }
 -        });
 -    });
++async function binaryPlus0() {
++    (await x) + y;
++}
++async function binaryPlus1() {
++    x + await y;
++}
++async function binaryLogicalAnd0() {
++    (await x) && y;
++}
++async function binaryLogicalAnd1() {
++    x && await y;
++}
++async function binaryAssignment0() {
++    x = await y;
++}
++async function binaryAssignment1() {
++    x.a = await y;
++}
++async function binaryAssignment2() {
++    x.a.b = await y;
++}
++async function binaryAssignment3() {
++    x[z] = await y;
++}
++async function binaryAssignment4() {
++    x[z].b = await y;
++}
++async function binaryAssignment5() {
++    x.a[z] = await y;
++}
++async function binaryAssignment6() {
++    (await x).a = y;
++}
++async function binaryAssignment7() {
++    (await x.a).b = y;
++}
++async function binaryAssignment8() {
++    (await x)[z] = y;
++}
++async function binaryAssignment9() {
++    x[await z] = y;
++}
++async function binaryAssignment10() {
++    x[await z].b = y;
++}
++async function binaryAssignment11() {
++    (await x[z]).b = y;
++}
++async function binaryAssignment12() {
++    x.a[await z] = y;
++}
++async function binaryAssignment13() {
++    (await x.a)[z] = y;
++}
++async function binaryCompoundAssignment0() {
++    x += await y;
++}
++async function binaryCompoundAssignment1() {
++    x.a += await y;
++}
++async function binaryCompoundAssignment2() {
++    x[a] += await y;
++}
++async function binaryCompoundAssignment3() {
++    (await x).a += y;
++}
++async function binaryCompoundAssignment4() {
++    (await x)[a] += y;
++}
++async function binaryCompoundAssignment5() {
++    x[await a] += y;
++}
++async function binaryCompoundAssignment6() {
++    (await x).a += await y;
++}
++async function binaryCompoundAssignment7() {
++    (await x)[a] += await y;
++}
++async function binaryCompoundAssignment8() {
++    x[await a] += await y;
++}
++async function binaryExponentiation() {
++    (await x) ** y;
++    x ** await y;
++}
++async function binaryComma0() {
++    return (await x), y;
++}
 +async function binaryComma1() {
 +    return x, await y;
  }

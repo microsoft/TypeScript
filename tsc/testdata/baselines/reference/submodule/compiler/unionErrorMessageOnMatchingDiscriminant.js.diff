@@ -2,7 +2,7 @@
 +++ new.unionErrorMessageOnMatchingDiscriminant.js
 @@= skipped -24, +24 lines =@@
  };
- 
+
  //// [unionErrorMessageOnMatchingDiscriminant.js]
 -"use strict";
  // error

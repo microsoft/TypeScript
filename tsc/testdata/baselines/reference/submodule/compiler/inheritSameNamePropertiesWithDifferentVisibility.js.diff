@@ -2,7 +2,7 @@
 +++ new.inheritSameNamePropertiesWithDifferentVisibility.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [inheritSameNamePropertiesWithDifferentVisibility.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -12,8 +12,8 @@
 +index.js(27,39): error TS2350: Only a void function can be called with the 'new' keyword.
 +index.js(31,15): error TS2350: Only a void function can be called with the 'new' keyword.
  index.js(55,13): error TS2554: Expected 1 arguments, but got 0.
- 
- 
+
+
 -==== index.js (3 errors) ====
 +==== index.js (9 errors) ====
      function C1() {

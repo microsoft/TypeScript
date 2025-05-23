@@ -2,11 +2,11 @@
 +++ new.computedPropertyNames24_ES6.symbols
 @@= skipped -4, +4 lines =@@
  >Base : Symbol(Base, Decl(computedPropertyNames24_ES6.ts, 0, 0))
- 
+
      bar() {
 ->bar : Symbol(Base.bar, Decl(computedPropertyNames24_ES6.ts, 0, 12))
 +>bar : Symbol(bar, Decl(computedPropertyNames24_ES6.ts, 0, 12))
- 
+
          return 0;
      }
 @@= skipped -12, +12 lines =@@

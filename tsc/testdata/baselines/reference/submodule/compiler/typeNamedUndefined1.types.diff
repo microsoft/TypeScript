@@ -2,10 +2,9 @@
 +++ new.typeNamedUndefined1.types
 @@= skipped -22, +22 lines =@@
  }
- 
+
  export function x(p: ns.undefined) { // undefined from the namespace
 ->x : (p: ns.undefined) => symbol
 +>x : (p: unique symbol) => symbol
  >p : unique symbol
  >ns : any
- 

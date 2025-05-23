@@ -6,6 +6,6 @@
  >namespaceModule : Symbol(namespaceModule, Decl(globalThisAmbientModules.ts, 4, 44))
 ->typ : Symbol(namespaceModule.typ, Decl(globalThisAmbientModules.ts, 5, 27))
 +>typ : Symbol(typ, Decl(globalThisAmbientModules.ts, 5, 27))
- 
+
  const bad1: (typeof globalThis)["\"ambientModule\""] = 'ambientModule'
  >bad1 : Symbol(bad1, Decl(globalThisAmbientModules.ts, 10, 5))

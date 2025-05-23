@@ -2,11 +2,11 @@
 +++ new.jsDeclarationsFunctions.types
 @@= skipped -4, +4 lines =@@
  >a : () => void
- 
+
  export function b() {}
 ->b : typeof b
 +>b : { (): void; cat: string; }
- 
+
  b.cat = "cat";
  >b.cat = "cat" : "cat"
  >b.cat : string
@@ -14,11 +14,11 @@
 +>b : { (): void; cat: string; }
  >cat : string
  >"cat" : "cat"
- 
+
  export function c() {}
 ->c : typeof c
 +>c : { (): void; Cls: typeof Cls; }
- 
+
  c.Cls = class {}
  >c.Cls = class {} : typeof Cls
  >c.Cls : typeof Cls
@@ -26,13 +26,13 @@
 +>c : { (): void; Cls: typeof Cls; }
  >Cls : typeof Cls
  >class {} : typeof Cls
- 
+
 @@= skipped -29, +29 lines =@@
  >a : number
  >b : number
  >(null) : any
 +>null : any
- 
+
  /**
   * @template T,U
 @@= skipped -12, +13 lines =@@
@@ -40,7 +40,7 @@
  >b : U
  >(null) : any
 +>null : any
- 
+
  /**
   * @template T
   * @param {T} a
@@ -49,7 +49,7 @@
 ->f : typeof f
 +>f : { <T>(a: T): T; self: ???; }
  >a : T
- 
+
      return a;
  >a : T
  }
@@ -64,7 +64,7 @@
 +>f : { <T>(a: T): T; self: ???; }
 +>self : { <T>(a: T): T; self: ???; }
 +>f : { <T>(a: T): T; self: ???; }
- 
+
  /**
   * @param {{x: string}} a
   * @param {{y: typeof b}} b
@@ -75,7 +75,7 @@
  >a : { x: string; }
 ->b : { y: typeof import("index").b; }
 +>b : { y: ???; }
- 
+
      return a.x && b.y();
 ->a.x && b.y() : void
 +>a.x && b.y() : any
@@ -91,11 +91,11 @@
 +>b : { y: ???; }
 +>y : { y: ???; }
  }
- 
+
  export { g };
 ->g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
 +>g : (a: { x: string; }, b: { y: ???; }) => any
- 
+
  /**
   * @param {{x: string}} a
   * @param {{y: typeof b}} b
@@ -106,7 +106,7 @@
  >a : { x: string; }
 ->b : { y: typeof import("index").b; }
 +>b : { y: ???; }
- 
+
      return a.x && b.y();
 ->a.x && b.y() : void
 +>a.x && b.y() : any
@@ -122,12 +122,12 @@
 +>b : { y: ???; }
 +>y : { y: ???; }
  }
- 
+
  export { hh as h };
 ->hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
 ->h : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
 +>hh : (a: { x: string; }, b: { y: ???; }) => any
 +>h : (a: { x: string; }, b: { y: ???; }) => any
- 
+
  export function i() {}
  >i : () => void

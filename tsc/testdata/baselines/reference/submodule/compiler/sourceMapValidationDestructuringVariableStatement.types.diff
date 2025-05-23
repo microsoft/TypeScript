@@ -6,7 +6,7 @@
  declare var console: {
 ->console : { log(msg: string): void; }
 +>console : { log: (msg: string) => void; }
- 
+
      log(msg: string): void;
  >log : (msg: string) => void
 @@= skipped -57, +57 lines =@@

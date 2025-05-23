@@ -1,7 +1,7 @@
 --- old.typeGuardsTypeParameters.js
 +++ new.typeGuardsTypeParameters.js
 @@= skipped -37, +37 lines =@@
- 
+
  //// [typeGuardsTypeParameters.js]
  // Type guards involving type parameters produce intersection types
 -var C = /** @class */ (function () {

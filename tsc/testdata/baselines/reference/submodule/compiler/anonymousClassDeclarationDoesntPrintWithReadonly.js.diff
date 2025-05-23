@@ -1,7 +1,7 @@
 --- old.anonymousClassDeclarationDoesntPrintWithReadonly.js
 +++ new.anonymousClassDeclarationDoesntPrintWithReadonly.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [anonymousClassDeclarationDoesntPrintWithReadonly.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

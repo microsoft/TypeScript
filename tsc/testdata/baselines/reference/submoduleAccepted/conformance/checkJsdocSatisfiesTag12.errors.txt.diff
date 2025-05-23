@@ -1,6 +1,6 @@
 --- old.checkJsdocSatisfiesTag12.errors.txt
 +++ new.checkJsdocSatisfiesTag12.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(24,20): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
 -/a.js(44,25): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T2'.
 -/a.js(51,6): error TS1360: Type 'number' does not satisfy the expected type 'string'.
@@ -65,5 +65,4 @@
 -         ~~~~~~~~~
 -!!! error TS1360: Type 'number' does not satisfy the expected type 'string'.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

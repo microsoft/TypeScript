@@ -1,7 +1,7 @@
 --- old.convertClassExpressionToFunctionFromObjectProperty2.js
 +++ new.convertClassExpressionToFunctionFromObjectProperty2.js
 @@= skipped -242, +242 lines =@@
- 
+
  //// [convertClassExpressionToFunctionFromObjectProperty2.js]
  ({
 -    x: /** @class */ (function () {

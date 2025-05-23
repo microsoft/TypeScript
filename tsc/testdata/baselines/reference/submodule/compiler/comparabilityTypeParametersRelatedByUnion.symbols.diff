@@ -2,12 +2,12 @@
 +++ new.comparabilityTypeParametersRelatedByUnion.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(comparabilityTypeParametersRelatedByUnion.ts, 0, 8))
- 
+
    constructor(readonly x: T) {}
 ->x : Symbol(C.x, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 14))
 +>x : Symbol(x, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 14))
  >T : Symbol(T, Decl(comparabilityTypeParametersRelatedByUnion.ts, 0, 8))
- 
+
    good<U extends T>(y: U) {
 ->good : Symbol(C.good, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 31))
 +>good : Symbol(good, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 31))
@@ -15,7 +15,7 @@
  >T : Symbol(T, Decl(comparabilityTypeParametersRelatedByUnion.ts, 0, 8))
  >y : Symbol(y, Decl(comparabilityTypeParametersRelatedByUnion.ts, 3, 20))
 @@= skipped -12, +12 lines =@@
- 
+
        if (y === this.x) {}
  >y : Symbol(y, Decl(comparabilityTypeParametersRelatedByUnion.ts, 3, 20))
 ->this.x : Symbol(C.x, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 14))
@@ -24,7 +24,7 @@
 ->x : Symbol(C.x, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 14))
 +>x : Symbol(x, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 14))
    }
- 
+
    bad<U extends T | string>(y: U) {
 ->bad : Symbol(C.bad, Decl(comparabilityTypeParametersRelatedByUnion.ts, 5, 3))
 +>bad : Symbol(bad, Decl(comparabilityTypeParametersRelatedByUnion.ts, 5, 3))
@@ -32,7 +32,7 @@
  >T : Symbol(T, Decl(comparabilityTypeParametersRelatedByUnion.ts, 0, 8))
  >y : Symbol(y, Decl(comparabilityTypeParametersRelatedByUnion.ts, 7, 28))
 @@= skipped -14, +14 lines =@@
- 
+
        if (y === this.x) {}
  >y : Symbol(y, Decl(comparabilityTypeParametersRelatedByUnion.ts, 7, 28))
 ->this.x : Symbol(C.x, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 14))
@@ -42,4 +42,3 @@
 +>x : Symbol(x, Decl(comparabilityTypeParametersRelatedByUnion.ts, 1, 14))
    }
  }
- 

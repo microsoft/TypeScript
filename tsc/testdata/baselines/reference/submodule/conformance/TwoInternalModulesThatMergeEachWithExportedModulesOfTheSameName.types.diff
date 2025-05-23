@@ -10,5 +10,5 @@
 ->B : typeof A.B
 +>B : typeof B
  >x : number
- 
+
  module X.Y.Z {

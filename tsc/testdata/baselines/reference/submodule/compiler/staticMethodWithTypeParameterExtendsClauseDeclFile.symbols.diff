@@ -2,7 +2,7 @@
 +++ new.staticMethodWithTypeParameterExtendsClauseDeclFile.symbols
 @@= skipped -12, +12 lines =@@
  >publicClassWithWithPrivateTypeParameters : Symbol(publicClassWithWithPrivateTypeParameters, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 4, 1))
- 
+
      private static myPrivateStaticMethod1<T extends privateClass>() { // do not emit extends clause
 ->myPrivateStaticMethod1 : Symbol(publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 6, 55))
 +>myPrivateStaticMethod1 : Symbol(myPrivateStaticMethod1, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 6, 55))

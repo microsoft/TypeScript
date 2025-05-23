@@ -1,7 +1,7 @@
 --- old.functionParameterObjectRestAndInitializers.js
 +++ new.functionParameterObjectRestAndInitializers.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [functionParameterObjectRestAndInitializers.js]
  // https://github.com/microsoft/TypeScript/issues/47079
 -var __rest = (this && this.__rest) || function (s, e) {

@@ -1,8 +1,8 @@
 --- old.emitHelpersWithLocalCollisions(module=none).js
 +++ new.emitHelpersWithLocalCollisions(module=none).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [a.js]
 -"use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

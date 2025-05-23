@@ -2,7 +2,7 @@
 +++ new.alwaysStrict.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [alwaysStrict.js]
 -"use strict";
  function f() {

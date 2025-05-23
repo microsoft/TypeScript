@@ -7,5 +7,5 @@
 ->intrinsic : Symbol(intrinsic.intrinsic)
 +>intrinsic : Symbol(intrinsic)
  }
- 
+
  function f2(intrinsic: string) {

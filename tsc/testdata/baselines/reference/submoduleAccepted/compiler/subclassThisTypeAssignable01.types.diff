@@ -2,7 +2,7 @@
 +++ new.subclassThisTypeAssignable01.types
 @@= skipped -38, +38 lines =@@
  >C : C
- 
+
  	view(v: Vnode<MyAttrs>) { return 0; }
 ->view : (v: Vnode<MyAttrs>) => number
 +>view : (v: Vnode<MyAttrs, Lifecycle<MyAttrs, any>>) => number

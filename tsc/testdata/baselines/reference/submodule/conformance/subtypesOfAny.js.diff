@@ -2,7 +2,7 @@
 +++ new.subtypesOfAny.js
 @@= skipped -135, +135 lines =@@
  }
- 
+
  //// [subtypesOfAny.js]
 -// every type is a subtype of any, no errors expected
 -var A = /** @class */ (function () {

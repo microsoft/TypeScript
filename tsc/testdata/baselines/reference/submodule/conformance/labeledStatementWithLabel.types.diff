@@ -1,9 +1,8 @@
 --- old.labeledStatementWithLabel.types
 +++ new.labeledStatementWithLabel.types
 @@= skipped -46, +46 lines =@@
- 
+
  label: type T = {}
  >label : any
 ->T : {}
 +>T : T
- 

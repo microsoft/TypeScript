@@ -7,8 +7,8 @@
 -    Property 'render' is missing in type '{ x: number; }' but required in type 'ElementClass'.
 +  Property 'render' is missing in type '{ x: number; }' but required in type 'ElementClass'.
  file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
- 
- 
+
+
 @@= skipped -22, +21 lines =@@
  !!! error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
       ~~~~

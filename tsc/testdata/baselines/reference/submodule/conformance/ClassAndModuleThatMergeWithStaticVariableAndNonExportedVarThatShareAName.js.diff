@@ -2,7 +2,7 @@
 +++ new.ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.js
 @@= skipped -24, +24 lines =@@
  }
- 
+
  //// [ClassAndModuleThatMergeWithStaticVariableAndNonExportedVarThatShareAName.js]
 -var Point = /** @class */ (function () {
 -    function Point(x, y) {

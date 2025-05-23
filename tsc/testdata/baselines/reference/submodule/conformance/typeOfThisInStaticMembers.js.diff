@@ -1,8 +1,8 @@
 --- old.typeOfThisInStaticMembers.js
 +++ new.typeOfThisInStaticMembers.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [typeOfThisInStaticMembers.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

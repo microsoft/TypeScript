@@ -2,7 +2,7 @@
 +++ new.moduleImport.types
 @@= skipped -33, +33 lines =@@
  >X : typeof X
- 
+
  	import ABC = A.B.C;
 ->ABC : typeof ABC
 +>ABC : typeof C
@@ -11,7 +11,7 @@
 ->C : typeof ABC
 +>B : typeof B
 +>C : typeof C
- 
+
  	export function pong(x: number) {
  >pong : (x: number) => void
 @@= skipped -15, +15 lines =@@

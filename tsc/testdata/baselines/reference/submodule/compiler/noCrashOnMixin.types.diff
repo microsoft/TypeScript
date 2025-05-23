@@ -2,20 +2,20 @@
 +++ new.noCrashOnMixin.types
 @@= skipped -17, +17 lines =@@
  >args : any[]
- 
+
  function Mixin<TBase extends Constructor>(Base: TBase) {
 ->Mixin : <TBase extends Constructor>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
 +>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
  >Base : TBase
- 
+
      return class extends Base {
 ->class extends Base {    } : { new (...args: any[]): (Anonymous class); prototype: Mixin<any>.(Anonymous class); } & TBase
 +>class extends Base {    } : { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
  >Base : {}
- 
+
      };
 @@= skipped -16, +16 lines =@@
- 
+
  class CrashTrigger extends Mixin(Empty) {
  >CrashTrigger : CrashTrigger
 ->Mixin(Empty) : Mixin<typeof Empty>.(Anonymous class) & Empty
@@ -23,5 +23,5 @@
 +>Mixin(Empty) : (Anonymous class)<typeof Empty> & Empty
 +>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
  >Empty : typeof Empty
- 
+
      public trigger() {

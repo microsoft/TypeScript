@@ -1,7 +1,7 @@
 --- old.parserClassDeclaration11.symbols
 +++ new.parserClassDeclaration11.symbols
 @@= skipped -5, +5 lines =@@
- 
+
     constructor();
     foo() { }
 ->foo : Symbol(C.foo, Decl(parserClassDeclaration11.ts, 1, 17))

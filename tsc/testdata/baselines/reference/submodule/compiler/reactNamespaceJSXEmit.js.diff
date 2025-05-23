@@ -1,8 +1,8 @@
 --- old.reactNamespaceJSXEmit.js
 +++ new.reactNamespaceJSXEmit.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [reactNamespaceJSXEmit.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

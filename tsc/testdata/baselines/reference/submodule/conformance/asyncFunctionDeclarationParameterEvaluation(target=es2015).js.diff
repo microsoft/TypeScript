@@ -1,7 +1,7 @@
 --- old.asyncFunctionDeclarationParameterEvaluation(target=es2015).js
 +++ new.asyncFunctionDeclarationParameterEvaluation(target=es2015).js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [asyncFunctionDeclarationParameterEvaluation.js]
  // https://github.com/microsoft/TypeScript/issues/40410
 -function f1(x_1) {

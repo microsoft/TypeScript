@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment2.errors.txt
 +++ new.typeFromPropertyAssignment2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(9,12): error TS2749: 'Outer' refers to a value, but is being used as a type here. Did you mean 'typeof Outer'?
 +a.js(12,12): error TS2503: Cannot find namespace 'Outer'.
 +

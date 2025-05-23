@@ -1,6 +1,6 @@
 --- old.typeTagCircularReferenceOnConstructorFunction.errors.txt
 +++ new.typeTagCircularReferenceOnConstructorFunction.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -bug27346.js(2,11): error TS8030: The type of a function declaration must match the function's signature.
 -
 -
@@ -13,5 +13,4 @@
 -    function MyClass() { }
 -    MyClass.prototype = {};
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,8 +1,8 @@
 --- old.noUnusedLocals_writeOnly.js
 +++ new.noUnusedLocals_writeOnly.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [noUnusedLocals_writeOnly.js]
 -"use strict";
 -function f(x, b) {

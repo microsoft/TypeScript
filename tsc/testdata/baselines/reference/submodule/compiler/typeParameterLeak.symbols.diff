@@ -7,19 +7,19 @@
 ->data : Symbol(Box.data, Decl(typeParameterLeak.ts, 2, 18))
 +>data : Symbol(data, Decl(typeParameterLeak.ts, 2, 18))
  >T : Symbol(T, Decl(typeParameterLeak.ts, 2, 14))
- 
+
  type BoxTypes = Box<{ x: string }> | Box<{ y: string }>;
 @@= skipped -30, +30 lines =@@
  >A : Symbol(A, Decl(typeParameterLeak.ts, 9, 21))
- 
+
    getBox(): A,
 ->getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25))
 +>getBox : Symbol(getBox, Decl(typeParameterLeak.ts, 9, 25))
  >A : Symbol(A, Decl(typeParameterLeak.ts, 9, 21))
  }
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
  const b = f({ x: "", y: "" })?.getBox();
  >b : Symbol(b, Decl(typeParameterLeak.ts, 14, 5))
 ->f({ x: "", y: "" })?.getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25), Decl(typeParameterLeak.ts, 9, 25))
@@ -29,10 +29,10 @@
  >y : Symbol(y, Decl(typeParameterLeak.ts, 14, 20))
 ->getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25), Decl(typeParameterLeak.ts, 9, 25))
 +>getBox : Symbol(getBox, Decl(typeParameterLeak.ts, 9, 25), Decl(typeParameterLeak.ts, 9, 25))
- 
+
  if (b) {
  >b : Symbol(b, Decl(typeParameterLeak.ts, 14, 5))
- 
+
    const x = b.data;
  >x : Symbol(x, Decl(typeParameterLeak.ts, 16, 7))
 ->b.data : Symbol(Box.data, Decl(typeParameterLeak.ts, 2, 18), Decl(typeParameterLeak.ts, 2, 18))
@@ -41,4 +41,3 @@
 ->data : Symbol(Box.data, Decl(typeParameterLeak.ts, 2, 18), Decl(typeParameterLeak.ts, 2, 18))
 +>data : Symbol(data, Decl(typeParameterLeak.ts, 2, 18), Decl(typeParameterLeak.ts, 2, 18))
  }
- 

@@ -1,8 +1,8 @@
 --- old.classAppearsToHaveMembersOfObject.js
 +++ new.classAppearsToHaveMembersOfObject.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [classAppearsToHaveMembersOfObject.js]
 -var C = /** @class */ (function () {
 -    function C() {

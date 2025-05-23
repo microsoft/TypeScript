@@ -14,7 +14,7 @@
  >span : any
  > : any
  >div : any
- 
+
  === Error2.tsx ===
  let x2 = <div></span>;
 ->x2 : JSX.Element
@@ -23,8 +23,8 @@
 +><div></span> : Element
  >div : any
  >span : any
- 
- 
+
+
  === Error3.tsx ===
  let x3 = <div>;
 ->x3 : JSX.Element
@@ -32,10 +32,10 @@
 +>x3 : Element
 +><div>; : Element
  >div : any
- 
- 
+
+
 @@= skipped -27, +27 lines =@@
- 
+
  === Error4.tsx ===
  let x4 = <div><div></span>;
 ->x4 : JSX.Element
@@ -47,9 +47,9 @@
 +><div></span> : Element
  >div : any
  >span : any
- 
+
 @@= skipped -11, +11 lines =@@
- 
+
  === Error5.tsx ===
  let x5 = <div><span>
 ->x5 : JSX.Element
@@ -60,5 +60,4 @@
 -><span> : JSX.Element
 +><span> : Element
  >span : any
- 
- 
+

@@ -2,7 +2,7 @@
 +++ new.controlFlowFinallyNoCatchAssignments.js
 @@= skipped -16, +16 lines =@@
  console.log(a); // <- error here
- 
+
  //// [controlFlowFinallyNoCatchAssignments.js]
 -"use strict";
 -var x;

@@ -7,6 +7,6 @@
 ->obj.title : Symbol(title, Decl(cb.js, 15, 34))
  >obj : Symbol(obj, Decl(cb.js, 11, 14))
 ->title : Symbol(title, Decl(cb.js, 15, 34))
- 
+
  /**
   * @callback NoReturn

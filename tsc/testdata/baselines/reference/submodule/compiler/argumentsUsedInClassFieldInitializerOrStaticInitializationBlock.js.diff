@@ -1,7 +1,7 @@
 --- old.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js
 +++ new.argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js
 @@= skipped -32, +32 lines =@@
- 
+
  //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
  function A() {
 -    return /** @class */ (function () {

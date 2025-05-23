@@ -2,7 +2,7 @@
 +++ new.uniqueSymbolJs.symbols
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/compiler/uniqueSymbolJs.ts] ////
- 
+
 -=== ./a.js ===
 +=== a.js ===
  /** @type {unique symbol} */

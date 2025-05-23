@@ -9,4 +9,3 @@
 +>[1, 2, 3].map : Symbol(map, Decl(lib.es5.d.ts, --, --))
 +>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >identity : Symbol(identity, Decl(inferentialTypingWithFunctionType2.ts, 0, 0))
- 

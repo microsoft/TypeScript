@@ -2,7 +2,7 @@
 +++ new.decoratorOnClassConstructor4.js
 @@= skipped -16, +16 lines =@@
  }
- 
+
  //// [decoratorOnClassConstructor4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

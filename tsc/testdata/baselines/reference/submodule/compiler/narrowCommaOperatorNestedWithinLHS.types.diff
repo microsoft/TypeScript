@@ -2,13 +2,13 @@
 +++ new.narrowCommaOperatorNestedWithinLHS.types
 @@= skipped -6, +6 lines =@@
  >true : true
- 
+
  const value: { inner: number | string } = null as any;
 ->value : { inner: number | string; }
 +>value : { inner: string | number; }
  >inner : string | number
  >null as any : any
- 
+
 @@= skipped -16, +16 lines =@@
  >typeof (otherValue(), value).inner === 'number' : boolean
  >typeof (otherValue(), value).inner : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -23,14 +23,14 @@
 +>value : { inner: string | number; }
  >inner : string | number
  >'number' : "number"
- 
+
      const a = value.inner; // number
  >a : number
  >value.inner : number
 ->value : { inner: number | string; }
 +>value : { inner: string | number; }
  >inner : number
- 
+
      const b: number = (otherValue(), value).inner; // string | number , but should be number
  >b : number
  >(otherValue(), value).inner : number
@@ -44,7 +44,7 @@
 +>value : { inner: string | number; }
  >inner : number
  }
- 
+
 @@= skipped -29, +29 lines =@@
  >isNumber((otherValue(), value).inner) : boolean
  >isNumber : (obj: any) => obj is number
@@ -58,14 +58,14 @@
 ->value : { inner: number | string; }
 +>value : { inner: string | number; }
  >inner : string | number
- 
+
      const a = value.inner; // number
  >a : number
  >value.inner : number
 ->value : { inner: number | string; }
 +>value : { inner: string | number; }
  >inner : number
- 
+
      const b: number = (otherValue(), value).inner; // string | number , but should be number
  >b : number
  >(otherValue(), value).inner : number

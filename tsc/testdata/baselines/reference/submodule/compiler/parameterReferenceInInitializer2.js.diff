@@ -2,7 +2,7 @@
 +++ new.parameterReferenceInInitializer2.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [parameterReferenceInInitializer2.js]
 -function Example(x) {
 -    if (x === void 0) { x = function (x) { return x; }; }

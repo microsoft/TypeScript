@@ -1,7 +1,7 @@
 --- old.implicitAnyDeclareFunctionExprWithoutFormalType.js
 +++ new.implicitAnyDeclareFunctionExprWithoutFormalType.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [implicitAnyDeclareFunctionExprWithoutFormalType.js]
  // these should be errors for implicit any parameter
 -var lambda = function (l1) { }; // Error at "l1"

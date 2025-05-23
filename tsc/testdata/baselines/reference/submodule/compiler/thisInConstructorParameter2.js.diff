@@ -2,7 +2,7 @@
 +++ new.thisInConstructorParameter2.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [thisInConstructorParameter2.js]
 -var P = /** @class */ (function () {
 -    function P(z, zz, zzz) {

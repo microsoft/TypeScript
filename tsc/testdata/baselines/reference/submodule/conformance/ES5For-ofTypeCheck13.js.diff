@@ -2,7 +2,7 @@
 +++ new.ES5For-ofTypeCheck13.js
 @@= skipped -6, +6 lines =@@
  for (const str of strSet) { }
- 
+
  //// [ES5For-ofTypeCheck13.js]
 -var strSet = new Set();
 +const strSet = new Set();

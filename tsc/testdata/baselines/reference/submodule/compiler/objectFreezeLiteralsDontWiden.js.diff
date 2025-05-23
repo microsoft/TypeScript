@@ -1,8 +1,8 @@
 --- old.objectFreezeLiteralsDontWiden.js
 +++ new.objectFreezeLiteralsDontWiden.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [objectFreezeLiteralsDontWiden.js]
 -var PUPPETEER_REVISIONS = Object.freeze({
 +const PUPPETEER_REVISIONS = Object.freeze({

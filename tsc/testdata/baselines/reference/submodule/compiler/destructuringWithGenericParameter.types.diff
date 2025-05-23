@@ -7,5 +7,5 @@
 ->({greeting}) => {    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string} : ({ greeting }: { greeting: string; }) => void
 +>({greeting}) => {    var s = greeting.toLocaleLowerCase();  // Greeting should be of type string} : (__0: { greeting: string; }) => void
  >greeting : string
- 
+
      var s = greeting.toLocaleLowerCase();  // Greeting should be of type string

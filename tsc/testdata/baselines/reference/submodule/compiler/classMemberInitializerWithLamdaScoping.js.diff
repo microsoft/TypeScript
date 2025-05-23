@@ -2,7 +2,7 @@
 +++ new.classMemberInitializerWithLamdaScoping.js
 @@= skipped -32, +32 lines =@@
  }
- 
+
  //// [classMemberInitializerWithLamdaScoping.js]
 -var Test = /** @class */ (function () {
 -    function Test(field) {

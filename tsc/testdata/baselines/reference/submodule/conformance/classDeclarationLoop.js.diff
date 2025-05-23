@@ -1,8 +1,8 @@
 --- old.classDeclarationLoop.js
 +++ new.classDeclarationLoop.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [classDeclarationLoop.js]
 -var arr = [];
 -var _loop_1 = function (i) {

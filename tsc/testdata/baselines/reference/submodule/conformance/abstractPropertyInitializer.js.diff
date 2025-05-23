@@ -1,8 +1,8 @@
 --- old.abstractPropertyInitializer.js
 +++ new.abstractPropertyInitializer.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [abstractPropertyInitializer.js]
 -"use strict";
 -var C = /** @class */ (function () {

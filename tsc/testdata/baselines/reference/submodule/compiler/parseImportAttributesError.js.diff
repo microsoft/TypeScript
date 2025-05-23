@@ -1,8 +1,8 @@
 --- old.parseImportAttributesError.js
 +++ new.parseImportAttributesError.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

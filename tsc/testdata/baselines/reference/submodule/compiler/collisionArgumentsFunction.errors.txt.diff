@@ -1,6 +1,6 @@
 --- old.collisionArgumentsFunction.errors.txt
 +++ new.collisionArgumentsFunction.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -collisionArgumentsFunction.ts(2,13): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 -collisionArgumentsFunction.ts(5,25): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
 -collisionArgumentsFunction.ts(25,13): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
@@ -60,5 +60,4 @@
 -    declare function f52(i: string, ...arguments); // no codegen no error
 -    declare function f6(arguments: number); // no codegen no error
 -    declare function f6(arguments: string); // no codegen no error
-@@= skipped --1, +1 lines =@@
 +<no content>

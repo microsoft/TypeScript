@@ -1,8 +1,8 @@
 --- old.arrayAssignmentTest2.js
 +++ new.arrayAssignmentTest2.js
 @@= skipped -61, +61 lines =@@
- 
- 
+
+
  //// [arrayAssignmentTest2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -51,5 +51,5 @@
 +    CM3M1() { return 3; }
 +}
  /*
- 
+
  This behaves unexpectedly with the following types:

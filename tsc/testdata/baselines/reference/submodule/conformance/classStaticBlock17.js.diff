@@ -2,7 +2,7 @@
 +++ new.classStaticBlock17.js
 @@= skipped -33, +33 lines =@@
  a.getX();
- 
+
  //// [classStaticBlock17.js]
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
@@ -27,13 +27,13 @@
      getX() {
 -        return __classPrivateFieldGet(this, _A_x, "f");
 +        return this.#x;
-     }
++    }
 +    static {
 +        friendA = {
 +            getX(obj) { return obj.#x; },
 +            setX(obj, value) { obj.#x = value; }
 +        };
-+    }
+     }
  }
 -_A_x = new WeakMap();
 -(() => {

@@ -1,7 +1,7 @@
 --- old.controlFlowDestructuringDeclaration.js
 +++ new.controlFlowDestructuringDeclaration.js
 @@= skipped -61, +61 lines =@@
- 
+
  //// [controlFlowDestructuringDeclaration.js]
  function f1() {
 -    var x = 1;

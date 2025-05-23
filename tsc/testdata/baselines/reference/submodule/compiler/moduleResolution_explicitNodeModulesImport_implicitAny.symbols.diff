@@ -3,7 +3,7 @@
 @@= skipped -3, +3 lines =@@
  import { y } from "../node_modules/foo";
  >y : Symbol(y, Decl(index.ts, 0, 8))
- 
+
 +=== /node_modules/foo/index.js ===
 +exports.x = 0;
 +>exports.x : Symbol(x, Decl(index.js, 0, 0))

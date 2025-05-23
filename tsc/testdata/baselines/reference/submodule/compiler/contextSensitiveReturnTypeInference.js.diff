@@ -1,8 +1,8 @@
 --- old.contextSensitiveReturnTypeInference.js
 +++ new.contextSensitiveReturnTypeInference.js
 @@= skipped -59, +59 lines =@@
- 
- 
+
+
  //// [contextSensitiveReturnTypeInference.js]
 -"use strict";
 -// Repro from #34849
@@ -11,24 +11,29 @@
      foo: 1
  };
 -test(function (deps, data) { return ({
-+test((deps, data) => ({
-     fn1: function () { return deps.foo; },
-     fn2: data.bar
--}); }, DEPS);
--test(function (deps, data) { return ({
-+}), DEPS);
-+test((deps, data) => ({
-     fn1: function () { return deps.foo; },
-     fn2: data.bar
+-    fn1: function () { return deps.foo; },
+-    fn2: data.bar
 -}); }, DEPS);
 -test(function (deps, data) { return ({
 -    fn1: function () { return deps.foo; },
+-    fn2: data.bar
+-}); }, DEPS);
+-test(function (deps, data) { return ({
+-    fn1: function () { return deps.foo; },
+-    fn2: data.bar
+-}); }, DEPS);
+-test(function (deps, data) {
++test((deps, data) => ({
++    fn1: function () { return deps.foo; },
++    fn2: data.bar
++}), DEPS);
++test((deps, data) => ({
++    fn1: function () { return deps.foo; },
++    fn2: data.bar
 +}), DEPS);
 +test((deps, data) => ({
 +    fn1: () => deps.foo,
-     fn2: data.bar
--}); }, DEPS);
--test(function (deps, data) {
++    fn2: data.bar
 +}), DEPS);
 +test((deps, data) => {
      return {

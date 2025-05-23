@@ -1,8 +1,8 @@
 --- old.spreadObjectOrFalsy.js
 +++ new.spreadObjectOrFalsy.js
 @@= skipped -53, +53 lines =@@
- 
- 
+
+
  //// [spreadObjectOrFalsy.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {
@@ -81,10 +81,10 @@
 -}>(a: A): T;
 -interface DatafulFoo<T> {
 -    data: T;
-+    }
- }
+-}
 -declare class Foo<T extends string> {
 -    data: T | undefined;
 -    bar(): void;
 -    hasData(): this is DatafulFoo<T>;
--}
++    }
+ }

@@ -1,8 +1,8 @@
 --- old.inDoesNotOperateOnPrimitiveTypes.js
 +++ new.inDoesNotOperateOnPrimitiveTypes.js
 @@= skipped -68, +68 lines =@@
- 
- 
+
+
  //// [inDoesNotOperateOnPrimitiveTypes.js]
 -var validHasKey = function (thing, key) {
 +const validHasKey = (thing, key) => {

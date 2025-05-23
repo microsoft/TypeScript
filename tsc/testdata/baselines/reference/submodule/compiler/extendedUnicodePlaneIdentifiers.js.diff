@@ -1,8 +1,8 @@
 --- old.extendedUnicodePlaneIdentifiers.js
 +++ new.extendedUnicodePlaneIdentifiers.js
 @@= skipped -45, +45 lines =@@
- 
- 
+
+
  //// [extendedUnicodePlaneIdentifiers.js]
 -var _K_𝑚, _K_𝑀;
  const 𝑚 = 4;

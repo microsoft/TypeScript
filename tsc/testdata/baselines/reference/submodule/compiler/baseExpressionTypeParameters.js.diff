@@ -1,7 +1,7 @@
 --- old.baseExpressionTypeParameters.js
 +++ new.baseExpressionTypeParameters.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [baseExpressionTypeParameters.js]
  // Repro from #17829
 -var __extends = (this && this.__extends) || (function () {

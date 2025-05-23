@@ -12,4 +12,3 @@
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(a.js, 20, 30))
  >b : Symbol(b, Decl(a.js, 20, 32))
- 

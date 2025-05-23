@@ -2,7 +2,7 @@
 +++ new.classExtendingNull.js
 @@= skipped -6, +6 lines =@@
  class C4 extends (null) { x = 1; }
- 
+
  //// [classExtendingNull.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

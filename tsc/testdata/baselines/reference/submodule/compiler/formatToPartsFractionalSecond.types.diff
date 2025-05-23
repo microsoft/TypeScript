@@ -1,7 +1,7 @@
 --- old.formatToPartsFractionalSecond.types
 +++ new.formatToPartsFractionalSecond.types
 @@= skipped -1, +1 lines =@@
- 
+
  === formatToPartsFractionalSecond.ts ===
  new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractionalSecond')
 ->new Intl.DateTimeFormat().formatToParts().find((val) => val.type === 'fractionalSecond') : Intl.DateTimeFormatPart
@@ -35,4 +35,3 @@
 +>val : DateTimeFormatPart
 +>type : keyof DateTimeFormatPartTypesRegistry
  >'fractionalSecond' : "fractionalSecond"
- 

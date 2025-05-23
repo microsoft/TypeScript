@@ -1,6 +1,6 @@
 --- old.declarationEmitCastReusesTypeNode2(strictnullchecks=true).js
 +++ new.declarationEmitCastReusesTypeNode2(strictnullchecks=true).js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitCastReusesTypeNode2.ts] ////
 -
 -//// [declarationEmitCastReusesTypeNode2.ts]
@@ -80,5 +80,4 @@
 -export declare function fnWithPartialAnnotationOnDefaultparam(x: ({} & {
 -    name: string;
 -}) | undefined, b: number): void;
-@@= skipped --1, +1 lines =@@
 +<no content>

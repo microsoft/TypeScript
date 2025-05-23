@@ -2,7 +2,7 @@
 +++ new.symbolProperty6.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [symbolProperty6.js]
 -var _a;
  class C {

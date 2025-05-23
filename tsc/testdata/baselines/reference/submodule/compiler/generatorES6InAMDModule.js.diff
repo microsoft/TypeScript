@@ -2,7 +2,7 @@
 +++ new.generatorES6InAMDModule.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [generatorES6InAMDModule.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

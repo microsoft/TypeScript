@@ -2,7 +2,7 @@
 +++ new.allowSyntheticDefaultImports2.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [a.js]
 -System.register(["./b"], function (exports_1, context_1) {
 -    "use strict";

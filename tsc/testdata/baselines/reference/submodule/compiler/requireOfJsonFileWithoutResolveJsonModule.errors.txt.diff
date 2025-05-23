@@ -5,8 +5,8 @@
 -file1.ts(3,21): error TS2732: Cannot find module './b.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 +file1.ts(1,21): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
 +file1.ts(3,21): error TS2307: Cannot find module './b.json' or its corresponding type declarations.
- 
- 
+
+
  ==== file1.ts (2 errors) ====
      import b1 = require('./b.json'); // error
                          ~~~~~~~~~~

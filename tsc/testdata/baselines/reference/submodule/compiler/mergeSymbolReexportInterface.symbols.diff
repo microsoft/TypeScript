@@ -2,7 +2,7 @@
 +++ new.mergeSymbolReexportInterface.symbols
 @@= skipped -14, +14 lines =@@
  >s : Symbol(s, Decl(main.ts, 2, 15))
- 
+
   
 -=== ./a.d.ts ===
 +=== a.d.ts ===
@@ -24,4 +24,3 @@
  >Row2 : Symbol(Row2, Decl(common.d.ts, 0, 0))
 ->b : Symbol(Row2.b, Decl(common.d.ts, 0, 23))
 +>b : Symbol(b, Decl(common.d.ts, 0, 23))
- 

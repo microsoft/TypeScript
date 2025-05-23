@@ -10,7 +10,7 @@
 ->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
 +>fromAsync : { <T>(iterableOrArrayLike: ArrayLike<T | PromiseLike<T>> | AsyncIterable<T, any, any> | Iterable<T | PromiseLike<T>, any, any>): Promise<T[]>; <T, U>(iterableOrArrayLike: ArrayLike<T> | AsyncIterable<T, any, any> | Iterable<T, any, any>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
  >arrLike : { 0: Promise<number>; 1: Promise<number>; 2: Promise<number>; 3: Promise<number>; length: number; }
- 
+
  const sameArr2 = await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]);
  >sameArr2 : number[]
  >await Array.fromAsync([Promise.resolve(0), Promise.resolve(2), Promise.resolve(4), Promise.resolve(6)]) : number[]
@@ -47,12 +47,12 @@
  >asyncGen(4) : AsyncGenerator<number, void, unknown>
  >asyncGen : (n: any) => AsyncGenerator<number, void, unknown>
  >4 : 4
- 
+
  function Data (n) {}
 ->Data : typeof Data
 +>Data : { (n: any): void; fromAsync: { <T>(iterableOrArrayLike: ArrayLike<T | PromiseLike<T>> | AsyncIterable<T, any, any> | Iterable<T | PromiseLike<T>, any, any>): Promise<T[]>; <T, U>(iterableOrArrayLike: ArrayLike<T> | AsyncIterable<T, any, any> | Iterable<T, any, any>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }; }
  >n : any
- 
+
  Data.fromAsync = Array.fromAsync;
 ->Data.fromAsync = Array.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
 ->Data.fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
@@ -67,7 +67,7 @@
  >Array : ArrayConstructor
 ->fromAsync : { <T>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T | PromiseLike<T>> | ArrayLike<T | PromiseLike<T>>): Promise<T[]>; <T, U>(iterableOrArrayLike: AsyncIterable<T> | Iterable<T> | ArrayLike<T>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
 +>fromAsync : { <T>(iterableOrArrayLike: ArrayLike<T | PromiseLike<T>> | AsyncIterable<T, any, any> | Iterable<T | PromiseLike<T>, any, any>): Promise<T[]>; <T, U>(iterableOrArrayLike: ArrayLike<T> | AsyncIterable<T, any, any> | Iterable<T, any, any>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
- 
+
  const sameArr5 = await Data.fromAsync(asyncGen(4));
  >sameArr5 : number[]
  >await Data.fromAsync(asyncGen(4)) : number[]
@@ -119,7 +119,7 @@
  >2 : 2
 @@= skipped -20, +20 lines =@@
  >Error : ErrorConstructor
- 
+
  const badIterable = { [Symbol.iterator] () { throw err; } };
 ->badIterable : { [Symbol.iterator](): never; }
 ->{ [Symbol.iterator] () { throw err; } } : { [Symbol.iterator](): never; }
@@ -139,7 +139,7 @@
 ->badIterable : { [Symbol.iterator](): never; }
 +>fromAsync : { <T>(iterableOrArrayLike: ArrayLike<T | PromiseLike<T>> | AsyncIterable<T, any, any> | Iterable<T | PromiseLike<T>, any, any>): Promise<T[]>; <T, U>(iterableOrArrayLike: ArrayLike<T> | AsyncIterable<T, any, any> | Iterable<T, any, any>, mapFn: (value: Awaited<T>, index: number) => U, thisArg?: any): Promise<Awaited<U>[]>; }
 +>badIterable : { [Symbol.iterator]: () => never; }
- 
+
  const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
  >withIndexResult : { index: number; str: string; }[]
  >await Array.fromAsync(["a", "b"], (str, index) => ({ index, str })) : { index: number; str: string; }[]

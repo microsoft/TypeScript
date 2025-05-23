@@ -1,7 +1,7 @@
 --- old.asiPreventsParsingAsNamespace05.types
 +++ new.asiPreventsParsingAsNamespace05.types
 @@= skipped -18, +18 lines =@@
- 
+
  a.b.c
  >a.b.c : number
 ->a.b : typeof a.b

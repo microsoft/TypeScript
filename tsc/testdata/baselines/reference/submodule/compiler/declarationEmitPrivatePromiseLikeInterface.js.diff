@@ -35,7 +35,11 @@
      }
 -    return Api;
 -}());
--exports.Api = Api;
++    abc1 = () => this.http.request();
++    abc2 = () => this.http.request();
++    abc3 = () => this.http.request();
++}
+ exports.Api = Api;
 -
 -
 -//// [http-client.d.ts]
@@ -46,12 +50,8 @@
 -export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
 -    data: D;
 -    error: E;
-+    abc1 = () => this.http.request();
-+    abc2 = () => this.http.request();
-+    abc3 = () => this.http.request();
- }
+-}
 -export declare class HttpClient<SecurityDataType = unknown> {
 -    request: <T = any, E = any>() => TPromise<HttpResponse<T, E>>;
 -}
 -export {};
-+exports.Api = Api;

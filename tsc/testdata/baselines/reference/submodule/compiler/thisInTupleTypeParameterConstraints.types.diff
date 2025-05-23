@@ -7,15 +7,15 @@
 ->map : <U>(arg: this) => void
 +>map : { <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; <U>(arg: this): void; }
  >arg : this
- 
+
      reduceRight<U>(arg: this): void;
 ->reduceRight : <U>(arg: this) => void
 +>reduceRight : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; <U>(arg: this): void; }
  >arg : this
- 
+
      reduce<U>(arg: this): void;
 ->reduce : <U>(arg: this) => void
 +>reduce : { (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; (callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; <U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; <U>(arg: this): void; }
  >arg : this
- 
+
      reduce2<U>(arg: this): void;

@@ -1,7 +1,7 @@
 --- old.binaryIntegerLiteralError.js
 +++ new.binaryIntegerLiteralError.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [binaryIntegerLiteralError.js]
  // error
 -var bin1 = 6;

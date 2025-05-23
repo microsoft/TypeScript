@@ -6,6 +6,6 @@
  >EmptyTuple : Symbol(EmptyTuple, Decl(contextualTypeWithTuple.ts, 29, 25))
 ->extraInfo : Symbol(MyEmptyTuple.extraInfo, Decl(contextualTypeWithTuple.ts, 33, 43))
 +>extraInfo : Symbol(extraInfo, Decl(contextualTypeWithTuple.ts, 33, 43))
- 
+
  const withExtra: MyEmptyTuple = []
  >withExtra : Symbol(withExtra, Decl(contextualTypeWithTuple.ts, 34, 5))

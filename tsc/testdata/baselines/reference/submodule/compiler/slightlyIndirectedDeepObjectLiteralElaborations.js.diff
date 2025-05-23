@@ -1,8 +1,8 @@
 --- old.slightlyIndirectedDeepObjectLiteralElaborations.js
 +++ new.slightlyIndirectedDeepObjectLiteralElaborations.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [slightlyIndirectedDeepObjectLiteralElaborations.js]
 -var q;
 -var x = (void 0, {

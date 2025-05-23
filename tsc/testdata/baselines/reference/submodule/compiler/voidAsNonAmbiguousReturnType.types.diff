@@ -6,7 +6,7 @@
  import fs = require("./voidAsNonAmbiguousReturnType_0");
 ->fs : typeof fs
 +>fs : typeof import("voidAsNonAmbiguousReturnType_0")
- 
+
  function main() {
  >main : () => void
 @@= skipped -8, +8 lines =@@

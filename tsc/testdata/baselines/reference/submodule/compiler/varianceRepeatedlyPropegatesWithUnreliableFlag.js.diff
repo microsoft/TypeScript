@@ -2,7 +2,7 @@
 +++ new.varianceRepeatedlyPropegatesWithUnreliableFlag.js
 @@= skipped -19, +19 lines =@@
  const _i: I<A> = i;
- 
+
  //// [varianceRepeatedlyPropegatesWithUnreliableFlag.js]
 -var i = null;
 -var p2 = null;

@@ -1,8 +1,8 @@
 --- old.initializerWithThisPropertyAccess.js
 +++ new.initializerWithThisPropertyAccess.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [initializerWithThisPropertyAccess.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -86,12 +86,10 @@
 -    c: () => number;
 -    d: number;
 -    constructor();
- }
+-}
 -declare class B extends A {
 -    x: number;
-+class Bar {
-+    prop = false;
- }
+-}
 -declare class C {
 -    a: number;
 -    b: number;
@@ -103,4 +101,7 @@
 -}
 -declare class Bar {
 -    readonly prop = false;
--}
++}
++class Bar {
++    prop = false;
+ }

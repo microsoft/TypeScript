@@ -1,8 +1,8 @@
 --- old.thisInSuperCall2.js
 +++ new.thisInSuperCall2.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [thisInSuperCall2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,14 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base(a) {
-+class Base {
-+    constructor(a) { }
-+}
-+class Foo extends Base {
-+    x;
-+    constructor() {
-+        super(this); // error: "super" has to be called before "this" accessing
-     }
+-    }
 -    return Base;
 -}());
 -var Foo = /** @class */ (function (_super) {
@@ -36,12 +29,7 @@
 -    function Foo() {
 -        var _this = _super.call(this, _this) || this; // error: "super" has to be called before "this" accessing
 -        return _this;
-+}
-+class Foo2 extends Base {
-+    x = 0;
-+    constructor() {
-+        super(this); // error
-     }
+-    }
 -    return Foo;
 -}(Base));
 -var Foo2 = /** @class */ (function (_super) {
@@ -53,4 +41,18 @@
 -    }
 -    return Foo2;
 -}(Base));
++class Base {
++    constructor(a) { }
++}
++class Foo extends Base {
++    x;
++    constructor() {
++        super(this); // error: "super" has to be called before "this" accessing
++    }
++}
++class Foo2 extends Base {
++    x = 0;
++    constructor() {
++        super(this); // error
++    }
 +}

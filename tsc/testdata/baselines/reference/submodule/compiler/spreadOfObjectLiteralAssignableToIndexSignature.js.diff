@@ -2,7 +2,7 @@
 +++ new.spreadOfObjectLiteralAssignableToIndexSignature.js
 @@= skipped -15, +15 lines =@@
  recordsOfRecordsOrEmpty.propC = {...(foo !== undefined && {foo})} // OK
- 
+
  //// [spreadOfObjectLiteralAssignableToIndexSignature.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

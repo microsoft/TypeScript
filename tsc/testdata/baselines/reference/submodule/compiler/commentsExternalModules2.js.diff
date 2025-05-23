@@ -2,8 +2,8 @@
 +++ new.commentsExternalModules2.js
 @@= skipped -59, +59 lines =@@
  export var newVar2 = new extMod.m4.m2.c();
- 
- 
+
+
 -//// [commentsExternalModules2_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

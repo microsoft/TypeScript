@@ -1,7 +1,7 @@
 --- old.declarationEmitDefaultExport1.symbols
 +++ new.declarationEmitDefaultExport1.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmitDefaultExport1.ts ===
  export default class C {
 ->C : Symbol(C, Decl(declarationEmitDefaultExport1.ts, 0, 0))

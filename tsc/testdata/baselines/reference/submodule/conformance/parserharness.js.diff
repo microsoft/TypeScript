@@ -2,8 +2,8 @@
 +++ new.parserharness.js
 @@= skipped -2082, +2082 lines =@@
  }
- 
- 
+
+
 +//// [io.js]
 +//// [typescript.js]
 +//// [typescriptServices.js]
@@ -366,14 +366,14 @@
          })(Clock = Perf.Clock || (Perf.Clock = {}));
 -        var Timer = /** @class */ (function () {
 -            function Timer() {
+-                this.time = 0;
+-            }
+-            Timer.prototype.start = function () {
 +        class Timer {
 +            startTime;
 +            time = 0;
 +            start() {
                  this.time = 0;
--            }
--            Timer.prototype.start = function () {
--                this.time = 0;
                  this.startTime = Clock.now();
 -            };
 -            Timer.prototype.end = function () {
@@ -384,14 +384,14 @@
 -            };
 -            return Timer;
 -        }());
--        Perf.Timer = Timer;
++            }
++        }
+         Perf.Timer = Timer;
 -        var Dataset = /** @class */ (function () {
 -            function Dataset() {
 -                this.data = [];
-             }
+-            }
 -            Dataset.prototype.add = function (value) {
-+        }
-+        Perf.Timer = Timer;
 +        class Dataset {
 +            data = [];
 +            add(value) {
@@ -686,19 +686,21 @@
 -                var _this = this;
 -                it(desc + " is assignable to ", function () {
 -                    _this.assertAssignmentCompatibleWith(these);
+-                });
+-                it(desc + " not assignable to ", function () {
+-                    _this.assertNotAssignmentCompatibleWith(notThese);
+-                });
+-            };
+-            return Type;
+-        }());
 +            }
 +            assertThisCanBeAssignedTo(desc, these, notThese) {
 +                it(desc + " is assignable to ", () => {
 +                    this.assertAssignmentCompatibleWith(these);
-                 });
--                it(desc + " not assignable to ", function () {
--                    _this.assertNotAssignmentCompatibleWith(notThese);
++                });
 +                it(desc + " not assignable to ", () => {
 +                    this.assertNotAssignmentCompatibleWith(notThese);
-                 });
--            };
--            return Type;
--        }());
++                });
 +            }
 +        }
          Compiler.Type = Type;
@@ -948,16 +950,16 @@
 -        };
 -        return ScriptInfo;
 -    }());
--    Harness.ScriptInfo = ScriptInfo;
++        }
++    }
+     Harness.ScriptInfo = ScriptInfo;
 -    var TypeScriptLS = /** @class */ (function () {
 -        function TypeScriptLS() {
 -            this.ls = null;
 -            this.scripts = [];
 -            this.maxScriptVersions = 100;
-         }
+-        }
 -        TypeScriptLS.prototype.addDefaultLibrary = function () {
-+    }
-+    Harness.ScriptInfo = ScriptInfo;
 +    class TypeScriptLS {
 +        ls = null;
 +        scripts = [];

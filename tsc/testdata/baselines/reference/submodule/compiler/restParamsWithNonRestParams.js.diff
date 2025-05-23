@@ -2,7 +2,7 @@
 +++ new.restParamsWithNonRestParams.js
 @@= skipped -8, +8 lines =@@
  foo3(); // error but shouldn't be
- 
+
  //// [restParamsWithNonRestParams.js]
 -function foo() {
 -    var b = [];

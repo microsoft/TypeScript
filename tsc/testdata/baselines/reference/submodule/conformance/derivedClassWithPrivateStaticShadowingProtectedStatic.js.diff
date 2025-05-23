@@ -2,7 +2,7 @@
 +++ new.derivedClassWithPrivateStaticShadowingProtectedStatic.js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [derivedClassWithPrivateStaticShadowingProtectedStatic.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -36,17 +36,17 @@
 -    });
 -    return Base;
 -}());
--// should be error
++    }
++    static get a() { return 1; }
++    static set a(v) { }
++}
+ // should be error
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Derived.fn = function () {
-+    static get a() { return 1; }
-+    static set a(v) { }
-+}
-+// should be error
 +class Derived extends Base {
 +    static x;
 +    static fn() {

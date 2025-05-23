@@ -10,4 +10,3 @@
 ->c : typeof g
 +>c : typeof c
  }
- 

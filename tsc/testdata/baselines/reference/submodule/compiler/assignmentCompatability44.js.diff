@@ -1,8 +1,8 @@
 --- old.assignmentCompatability44.js
 +++ new.assignmentCompatability44.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [assignmentCompatability44.js]
 -var Foo = /** @class */ (function () {
 -    function Foo(x) {

@@ -2,7 +2,7 @@
 +++ new.classSideInheritance1.js
 @@= skipped -17, +17 lines =@@
  C2.bar(); // valid
- 
+
  //// [classSideInheritance1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

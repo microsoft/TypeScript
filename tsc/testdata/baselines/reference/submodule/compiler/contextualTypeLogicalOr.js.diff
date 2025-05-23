@@ -1,7 +1,7 @@
 --- old.contextualTypeLogicalOr.js
 +++ new.contextualTypeLogicalOr.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [contextualTypeLogicalOr.js]
  // Repro from #18005
 -var x = 123;

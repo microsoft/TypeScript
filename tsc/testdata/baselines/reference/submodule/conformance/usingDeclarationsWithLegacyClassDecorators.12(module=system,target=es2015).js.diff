@@ -1,8 +1,8 @@
 --- old.usingDeclarationsWithLegacyClassDecorators.12(module=system,target=es2015).js
 +++ new.usingDeclarationsWithLegacyClassDecorators.12(module=system,target=es2015).js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [usingDeclarationsWithLegacyClassDecorators.12.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

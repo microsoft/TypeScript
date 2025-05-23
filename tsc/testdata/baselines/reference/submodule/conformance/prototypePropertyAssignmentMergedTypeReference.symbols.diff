@@ -2,7 +2,7 @@
 +++ new.prototypePropertyAssignmentMergedTypeReference.symbols
 @@= skipped -7, +7 lines =@@
  };
- 
+
  f.prototype.a = "a";
 ->f.prototype : Symbol(f.a, Decl(prototypePropertyAssignmentMergedTypeReference.js, 2, 2))
 +>f.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
@@ -10,6 +10,6 @@
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->a : Symbol(f.a, Decl(prototypePropertyAssignmentMergedTypeReference.js, 2, 2))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 
+
  /** @type {new () => f} */
  var x = f;

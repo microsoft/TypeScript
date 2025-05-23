@@ -2,7 +2,7 @@
 +++ new.recursiveFunctionTypes1.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [recursiveFunctionTypes1.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,8 +1,8 @@
 --- old.excessPropertyCheckWithSpread.js
 +++ new.excessPropertyCheckWithSpread.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [excessPropertyCheckWithSpread.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

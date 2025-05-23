@@ -2,7 +2,7 @@
 +++ new.jsxFactoryIdentifierAsParameter.types
 @@= skipped -15, +15 lines =@@
  >createElement : any
- 
+
          return <div />;
 -><div /> : error
 +><div /> : any

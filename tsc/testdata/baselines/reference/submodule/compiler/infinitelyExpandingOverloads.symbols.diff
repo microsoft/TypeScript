@@ -2,7 +2,7 @@
 +++ new.infinitelyExpandingOverloads.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 0, 32))
- 
+
      target: KnockoutObservableBase2<T>;
 ->target : Symbol(KnockoutSubscription2.target, Decl(infinitelyExpandingOverloads.ts, 0, 36))
 +>target : Symbol(target, Decl(infinitelyExpandingOverloads.ts, 0, 36))
@@ -11,7 +11,7 @@
  }
 @@= skipped -9, +9 lines =@@
  >T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 3, 34))
- 
+
      subscribe(callback: (newValue: T) => void, target?: any, topic?: string): KnockoutSubscription2<T>;
 ->subscribe : Symbol(KnockoutObservableBase2.subscribe, Decl(infinitelyExpandingOverloads.ts, 3, 38))
 +>subscribe : Symbol(subscribe, Decl(infinitelyExpandingOverloads.ts, 3, 38))
@@ -20,7 +20,7 @@
  >T : Symbol(T, Decl(infinitelyExpandingOverloads.ts, 3, 34))
 @@= skipped -14, +14 lines =@@
  >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 6, 31))
- 
+
      initialize(validatable: Validatable2<TValue>): void;
 ->initialize : Symbol(ValidationPlacement2.initialize, Decl(infinitelyExpandingOverloads.ts, 6, 40))
 +>initialize : Symbol(initialize, Decl(infinitelyExpandingOverloads.ts, 6, 40))
@@ -29,7 +29,7 @@
  >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 6, 31))
 @@= skipped -10, +10 lines =@@
  >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 9, 23))
- 
+
      validators: KnockoutObservableBase2<Validator2<TValue>>;
 ->validators : Symbol(Validatable2.validators, Decl(infinitelyExpandingOverloads.ts, 9, 32))
 +>validators : Symbol(validators, Decl(infinitelyExpandingOverloads.ts, 9, 32))
@@ -38,7 +38,7 @@
  >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 9, 23))
 @@= skipped -10, +10 lines =@@
  >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 12, 17))
- 
+
      private _subscription: KnockoutSubscription2<TValue>;
 ->_subscription : Symbol(Validator2._subscription, Decl(infinitelyExpandingOverloads.ts, 12, 26))
 +>_subscription : Symbol(_subscription, Decl(infinitelyExpandingOverloads.ts, 12, 26))
@@ -47,7 +47,7 @@
  }
 @@= skipped -9, +9 lines =@@
  >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 15, 16))
- 
+
      public validationPlacements: Array<ValidationPlacement2<TValue>> = new Array<ValidationPlacement2<TValue>>();
 ->validationPlacements : Symbol(ViewModel.validationPlacements, Decl(infinitelyExpandingOverloads.ts, 15, 25))
 +>validationPlacements : Symbol(validationPlacements, Decl(infinitelyExpandingOverloads.ts, 15, 25))
@@ -62,4 +62,3 @@
 +>options : Symbol(options, Decl(infinitelyExpandingOverloads.ts, 21, 5))
  >ViewModel : Symbol(ViewModel, Decl(infinitelyExpandingOverloads.ts, 14, 1))
  >TValue : Symbol(TValue, Decl(infinitelyExpandingOverloads.ts, 18, 13))
- 

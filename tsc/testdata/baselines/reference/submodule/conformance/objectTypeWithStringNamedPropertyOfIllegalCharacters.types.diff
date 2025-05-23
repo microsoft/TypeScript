@@ -2,7 +2,7 @@
 +++ new.objectTypeWithStringNamedPropertyOfIllegalCharacters.types
 @@= skipped -29, +29 lines =@@
  >"   " : "   "
- 
+
  var r2 = c["    "];
 ->r2 : error
 ->c["    "] : error
@@ -10,10 +10,10 @@
 +>c["    "] : any
  >c : C
  >"    " : "    "
- 
+
 @@= skipped -39, +39 lines =@@
  >"   " : "   "
- 
+
  var r2 = i["    "];
 ->r2 : error
 ->i["    "] : error
@@ -21,14 +21,14 @@
 +>i["    "] : any
  >i : I
  >"    " : "    "
- 
+
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  var a: {
 ->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
- 
+
      "   ": number;
  >"   " : number
 @@= skipped -15, +15 lines =@@
@@ -38,7 +38,7 @@
 ->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"   " : "   "
- 
+
  var r2 = a["    "];
 ->r2 : error
 ->a["    "] : error
@@ -47,14 +47,14 @@
 +>a["    "] : any
 +>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"    " : "    "
- 
+
  var r3 = a["a   b"];
  >r3 : string
  >a["a   b"] : string
 ->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"a   b" : "a   b"
- 
+
  // BUG 817263
  var r4 = a["~!@#$%^&*()_+{}|:'<>?\/.,`"];
  >r4 : number
@@ -62,13 +62,13 @@
 ->a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"~!@#$%^&*()_+{}|:'<>?\/.,`" : "~!@#$%^&*()_+{}|:'<>?/.,`"
- 
+
  var b = {
 ->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 ->{    "   ": 1,    "a   b": "",    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,} : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 +>{    "   ": 1,    "a   b": "",    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,} : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
- 
+
      "   ": 1,
  >"   " : number
 @@= skipped -42, +42 lines =@@
@@ -78,7 +78,7 @@
 ->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"   " : "   "
- 
+
  var r2 = b["    "];
 ->r2 : error
 ->b["    "] : error
@@ -87,14 +87,14 @@
 +>b["    "] : any
 +>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"    " : "    "
- 
+
  var r3 = b["a   b"];
  >r3 : string
  >b["a   b"] : string
 ->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"a   b" : "a   b"
- 
+
  // BUG 817263
  var r4 = b["~!@#$%^&*()_+{}|:'<>?\/.,`"];
  >r4 : number
@@ -102,4 +102,3 @@
 ->b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?/.,`": number; }
 +>b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
  >"~!@#$%^&*()_+{}|:'<>?\/.,`" : "~!@#$%^&*()_+{}|:'<>?/.,`"
- 

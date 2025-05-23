@@ -1,8 +1,8 @@
 --- old.override6.js
 +++ new.override6.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [override6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -29,7 +29,7 @@
          this.foo = foo;
          this.bar = bar;
 -        this.baz = 1;
-     }
+-    }
 -    return B;
 -}());
 -var D = /** @class */ (function (_super) {
@@ -40,16 +40,7 @@
 -        _this.baz = baz;
 -        _this.bar = 1;
 -        return _this;
-+}
-+class D extends B {
-+    foo;
-+    baz;
-+    bar = 1;
-+    constructor(foo, baz) {
-+        super(foo, 42);
-+        this.foo = foo;
-+        this.baz = baz;
-     }
+-    }
 -    return D;
 -}(B));
 -
@@ -60,10 +51,20 @@
 -    bar: number;
 -    baz: number;
 -    constructor(foo: string, bar: number);
++    }
  }
 -declare class D extends B {
 -    foo: string;
 -    baz: number;
 -    bar: number;
 -    constructor(foo: string, baz: number);
--}
++class D extends B {
++    foo;
++    baz;
++    bar = 1;
++    constructor(foo, baz) {
++        super(foo, 42);
++        this.foo = foo;
++        this.baz = baz;
++    }
+ }

@@ -2,11 +2,11 @@
 +++ new.instanceMemberInitialization.types
 @@= skipped -43, +43 lines =@@
  >MyMap : MyMap<K, V>
- 
+
      constructor(private readonly Map_: { new<K, V>(): any }) {}
 ->Map_ : new <K_1, V_1>() => any
 +>Map_ : new <K, V>() => any
- 
+
      private readonly store = new this.Map_<K, V>();
  >store : any
  >new this.Map_<K, V>() : any

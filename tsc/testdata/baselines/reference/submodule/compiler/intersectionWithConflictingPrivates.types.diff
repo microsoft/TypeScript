@@ -11,10 +11,9 @@
 +>bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
  >node : CommitFileNode | ResultsFileNode
  	}
- 
+
    private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
 ->bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
 +>bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
  >node : CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode
  >options : {} | undefined
- 

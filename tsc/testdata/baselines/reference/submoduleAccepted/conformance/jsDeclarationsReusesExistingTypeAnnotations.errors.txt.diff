@@ -1,8 +1,7 @@
 --- old.jsDeclarationsReusesExistingTypeAnnotations.errors.txt
 +++ new.jsDeclarationsReusesExistingTypeAnnotations.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(45,17): error TS1051: A 'set' accessor cannot have an optional parameter.
 +index.js(83,17): error TS1051: A 'set' accessor cannot have an optional parameter.
 +

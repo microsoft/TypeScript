@@ -1,14 +1,14 @@
 --- old.typeFromPrototypeAssignment.types
 +++ new.typeFromPrototypeAssignment.types
 @@= skipped -4, +4 lines =@@
- 
+
  /** @constructor */
  var Multimap = function() {
 ->Multimap : typeof Multimap
 ->function() {    this._map = {};    this._map    this.set    this.get    this.addon} : typeof Multimap
 +>Multimap : () => void
 +>function() {    this._map = {};    this._map    this.set    this.get    this.addon} : () => void
- 
+
      this._map = {};
  >this._map = {} : {}
  >this._map : any
@@ -16,7 +16,7 @@
 +>this : any
  >_map : any
  >{} : {}
- 
+
      this._map
 ->this._map : {}
 ->this : this
@@ -24,7 +24,7 @@
 +>this._map : any
 +>this : any
 +>_map : any
- 
+
      this.set
 ->this.set : () => void
 ->this : this
@@ -32,7 +32,7 @@
 +>this.set : any
 +>this : any
 +>set : any
- 
+
      this.get
 ->this.get : () => void
 ->this : this
@@ -40,7 +40,7 @@
 +>this.get : any
 +>this : any
 +>get : any
- 
+
      this.addon
 ->this.addon : () => void
 ->this : this
@@ -48,9 +48,9 @@
 +>this.addon : any
 +>this : any
 +>addon : any
- 
+
  };
- 
+
  Multimap.prototype = {
 ->Multimap.prototype = {    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get(): void; }
 ->Multimap.prototype : { set: () => void; get(): void; }
@@ -62,11 +62,11 @@
 +>Multimap : () => void
 +>prototype : any
 +>{    set: function() {        this._map        this.set        this.get        this.addon    },    get() {        this._map        this.set        this.get        this.addon    }} : { set: () => void; get: () => void; }
- 
+
      set: function() {
  >set : () => void
  >function() {        this._map        this.set        this.get        this.addon    } : () => void
- 
+
          this._map
 ->this._map : {}
 ->this : this
@@ -74,7 +74,7 @@
 +>this._map : any
 +>this : any
 +>_map : any
- 
+
          this.set
 ->this.set : () => void
 ->this : this
@@ -82,7 +82,7 @@
 +>this.set : any
 +>this : any
 +>set : any
- 
+
          this.get
 ->this.get : () => void
 ->this : this
@@ -90,7 +90,7 @@
 +>this.get : any
 +>this : any
 +>get : any
- 
+
          this.addon
 ->this.addon : () => void
 ->this : this
@@ -98,11 +98,11 @@
 +>this.addon : any
 +>this : any
 +>addon : any
- 
+
      },
      get() {
  >get : () => void
- 
+
          this._map
 ->this._map : {}
 ->this : this
@@ -110,7 +110,7 @@
 +>this._map : any
 +>this : any
 +>_map : any
- 
+
          this.set
 ->this.set : () => void
 ->this : this
@@ -118,7 +118,7 @@
 +>this.set : any
 +>this : any
 +>set : any
- 
+
          this.get
 ->this.get : () => void
 ->this : this
@@ -126,7 +126,7 @@
 +>this.get : any
 +>this : any
 +>get : any
- 
+
          this.addon
 ->this.addon : () => void
 ->this : this
@@ -136,7 +136,7 @@
 +>addon : any
      }
  }
- 
+
  Multimap.prototype.addon = function () {
  >Multimap.prototype.addon = function () {    this._map    this.set    this.get    this.addon} : () => void
  >Multimap.prototype.addon : any
@@ -148,7 +148,7 @@
 +>prototype : any
  >addon : any
  >function () {    this._map    this.set    this.get    this.addon} : () => void
- 
+
      this._map
 ->this._map : {}
 ->this : this
@@ -156,7 +156,7 @@
 +>this._map : any
 +>this : any
 +>_map : any
- 
+
      this.set
 ->this.set : () => void
 ->this : this
@@ -164,7 +164,7 @@
 +>this.set : any
 +>this : any
 +>set : any
- 
+
      this.get
 ->this.get : () => void
 ->this : this
@@ -172,7 +172,7 @@
 +>this.get : any
 +>this : any
 +>get : any
- 
+
      this.addon
 ->this.addon : () => void
 ->this : this
@@ -181,7 +181,7 @@
 +>this : any
 +>addon : any
  }
- 
+
  var mm = new Multimap();
 ->mm : Multimap
 ->new Multimap() : Multimap
@@ -189,7 +189,7 @@
 +>mm : any
 +>new Multimap() : any
 +>Multimap : () => void
- 
+
  mm._map
 ->mm._map : {}
 ->mm : Multimap
@@ -197,7 +197,7 @@
 +>mm._map : any
 +>mm : any
 +>_map : any
- 
+
  mm.set
 ->mm.set : () => void
 ->mm : Multimap
@@ -205,7 +205,7 @@
 +>mm.set : any
 +>mm : any
 +>set : any
- 
+
  mm.get
 ->mm.get : () => void
 ->mm : Multimap
@@ -213,7 +213,7 @@
 +>mm.get : any
 +>mm : any
 +>get : any
- 
+
  mm.addon
 ->mm.addon : () => void
 ->mm : Multimap
@@ -221,4 +221,3 @@
 +>mm.addon : any
 +>mm : any
 +>addon : any
- 

@@ -2,7 +2,7 @@
 +++ new.asiPreventsParsingAsNamespace05.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [asiPreventsParsingAsNamespace05.js]
 -var namespace = 10;
 +let namespace = 10;

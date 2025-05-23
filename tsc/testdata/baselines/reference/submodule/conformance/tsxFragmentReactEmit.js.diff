@@ -2,7 +2,7 @@
 +++ new.tsxFragmentReactEmit.js
 @@= skipped -17, +17 lines =@@
  <>#</>; // # would cause scanning error if not in jsxtext
- 
+
  //// [file.js]
 -React.createElement(React.Fragment, null); // no whitespace
 -React.createElement(React.Fragment, null); // lots of whitespace

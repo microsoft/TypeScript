@@ -2,7 +2,7 @@
 +++ new.selfReferencingFile2.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [selfReferencingFile2.js]
 +//// [selfReferencingFile2.js]
  ///<reference path='../selfReferencingFile2.ts'/>

@@ -1,8 +1,8 @@
 --- old.thisWhenTypeCheckFails.js
 +++ new.thisWhenTypeCheckFails.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [thisWhenTypeCheckFails.js]
 -var c = /** @class */ (function () {
 -    function c() {

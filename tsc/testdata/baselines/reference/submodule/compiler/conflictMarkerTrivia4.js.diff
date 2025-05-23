@@ -2,7 +2,7 @@
 +++ new.conflictMarkerTrivia4.js
 @@= skipped -4, +4 lines =@@
  <<<<<<< HEAD
- 
+
  //// [conflictMarkerTrivia4.js]
 -var x = ;
 +const x = ;

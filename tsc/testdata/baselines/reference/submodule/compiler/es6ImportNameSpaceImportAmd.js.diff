@@ -1,8 +1,8 @@
 --- old.es6ImportNameSpaceImportAmd.js
 +++ new.es6ImportNameSpaceImportAmd.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [es6ImportNameSpaceImportAmd_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

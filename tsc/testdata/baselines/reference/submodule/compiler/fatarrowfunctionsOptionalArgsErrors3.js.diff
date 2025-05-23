@@ -1,8 +1,8 @@
 --- old.fatarrowfunctionsOptionalArgsErrors3.js
 +++ new.fatarrowfunctionsOptionalArgsErrors3.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [fatarrowfunctionsOptionalArgsErrors3.js]
 -(function () {
 -    var  = [];

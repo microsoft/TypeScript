@@ -2,21 +2,21 @@
 +++ new.initializationOrdering1(target=esnext,usedefineforclassfields=true).symbols
 @@= skipped -4, +4 lines =@@
  >Helper : Symbol(Helper, Decl(initializationOrdering1.ts, 0, 0))
- 
+
      create(): boolean {
 ->create : Symbol(Helper.create, Decl(initializationOrdering1.ts, 0, 14))
 +>create : Symbol(create, Decl(initializationOrdering1.ts, 0, 14))
- 
+
          return true
      }
 @@= skipped -10, +10 lines =@@
  >Broken : Symbol(Broken, Decl(initializationOrdering1.ts, 4, 1))
- 
+
      constructor(readonly facade: Helper) {
 ->facade : Symbol(Broken.facade, Decl(initializationOrdering1.ts, 7, 16))
 +>facade : Symbol(facade, Decl(initializationOrdering1.ts, 7, 16))
  >Helper : Symbol(Helper, Decl(initializationOrdering1.ts, 0, 0))
- 
+
          console.log(this.bug)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -41,6 +41,5 @@
 ->create : Symbol(Helper.create, Decl(initializationOrdering1.ts, 0, 14))
 +>facade : Symbol(facade, Decl(initializationOrdering1.ts, 7, 16))
 +>create : Symbol(create, Decl(initializationOrdering1.ts, 0, 14))
- 
+
  }
- 

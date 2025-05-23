@@ -1,8 +1,8 @@
 --- old.returnTypeTypeArguments.js
 +++ new.returnTypeTypeArguments.js
 @@= skipped -78, +78 lines =@@
- 
- 
+
+
  //// [returnTypeTypeArguments.js]
 -var One = /** @class */ (function () {
 -    function One() {

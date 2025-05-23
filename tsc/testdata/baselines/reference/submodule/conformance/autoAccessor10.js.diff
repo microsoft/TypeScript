@@ -1,7 +1,7 @@
 --- old.autoAccessor10.js
 +++ new.autoAccessor10.js
 @@= skipped -31, +31 lines =@@
- 
+
  //// [autoAccessor10.js]
  class C1 {
 -    #a0_accessor_storage = 1;

@@ -2,7 +2,7 @@
 +++ new.typeParameterConstraintInstantiation.symbols
 @@= skipped -7, +7 lines =@@
  >T : Symbol(T, Decl(typeParameterConstraintInstantiation.ts, 2, 17))
- 
+
      map<U extends T, V extends U[]>(f: (item: T) => U): V;
 ->map : Symbol(Mapper.map, Decl(typeParameterConstraintInstantiation.ts, 2, 21))
 +>map : Symbol(map, Decl(typeParameterConstraintInstantiation.ts, 2, 21))
@@ -10,7 +10,7 @@
  >T : Symbol(T, Decl(typeParameterConstraintInstantiation.ts, 2, 17))
  >V : Symbol(V, Decl(typeParameterConstraintInstantiation.ts, 3, 20))
 @@= skipped -18, +18 lines =@@
- 
+
  var a = m.map((x: string) => x);  // string[]
  >a : Symbol(a, Decl(typeParameterConstraintInstantiation.ts, 7, 3))
 ->m.map : Symbol(Mapper.map, Decl(typeParameterConstraintInstantiation.ts, 2, 21))
@@ -20,4 +20,3 @@
 +>map : Symbol(map, Decl(typeParameterConstraintInstantiation.ts, 2, 21))
  >x : Symbol(x, Decl(typeParameterConstraintInstantiation.ts, 7, 15))
  >x : Symbol(x, Decl(typeParameterConstraintInstantiation.ts, 7, 15))
- 

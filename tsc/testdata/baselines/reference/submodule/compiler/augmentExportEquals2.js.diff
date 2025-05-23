@@ -2,14 +2,14 @@
 +++ new.augmentExportEquals2.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [file3.ts]
 +
 +//// [file3.ts]
  import x = require("./file1");
  import "./file2";
  let a: x.A; // should not work
- 
+
 -//// [file1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

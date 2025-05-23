@@ -1,8 +1,8 @@
 --- old.bigIntWithTargetLessThanES2016.js
 +++ new.bigIntWithTargetLessThanES2016.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [bigIntWithTargetLessThanES2016.js]
 -Math.pow(BigInt(1), BigInt(1)); // should error
 +BigInt(1) ** BigInt(1); // should error

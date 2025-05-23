@@ -18,6 +18,6 @@
 +>"35-44" : Symbol("35-44", Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 55))
 +>"45-59" : Symbol("45-59", Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 65))
 +>"60-150" : Symbol("60-150", Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 0, 75))
- 
+
  export const SpotifyAgeGroupEnum = { ...AgeGroups };
  >SpotifyAgeGroupEnum : Symbol(SpotifyAgeGroupEnum, Decl(declarationEmitSpreadStringlyKeyedEnum.ts, 1, 12))

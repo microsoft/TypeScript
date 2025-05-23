@@ -10,5 +10,5 @@
 ->map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
 +>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
  >f : (x: T) => U
- 
+
  const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);

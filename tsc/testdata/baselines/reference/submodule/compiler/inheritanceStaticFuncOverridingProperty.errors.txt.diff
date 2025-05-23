@@ -5,7 +5,7 @@
 +inheritanceStaticFuncOverridingProperty.ts(5,7): error TS2417: Class static side 'typeof b' incorrectly extends base class static side '{ x: string; prototype: a; }'.
    Types of property 'x' are incompatible.
      Type '() => string' is not assignable to type 'string'.
- 
+
 @@= skipped -9, +9 lines =@@
      
      class b extends a {

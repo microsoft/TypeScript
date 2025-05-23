@@ -1,8 +1,7 @@
 --- old.constructorFunctions3.errors.txt
 +++ new.constructorFunctions3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +a.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +a.js(23,28): error TS7006: Parameter 'n' implicitly has an 'any' type.

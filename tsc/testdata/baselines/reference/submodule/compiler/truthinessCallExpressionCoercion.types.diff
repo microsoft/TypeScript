@@ -1,33 +1,33 @@
 --- old.truthinessCallExpressionCoercion.types
 +++ new.truthinessCallExpressionCoercion.types
 @@= skipped -1, +1 lines =@@
- 
+
  === truthinessCallExpressionCoercion.ts ===
  function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {
 ->onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: () => boolean) => void
 +>onlyErrorsWhenTestingNonNullableFunctionType : (required: () => boolean, optional?: (() => boolean) | undefined) => void
  >required : () => boolean
  >optional : (() => boolean) | undefined
- 
+
 @@= skipped -108, +108 lines =@@
  >checksPropertyAccess : () => void
- 
+
      const x = {
 ->x : { foo: { bar(): boolean; }; }
 ->{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
 +>x : { foo: { bar: () => boolean; }; }
 +>{        foo: {            bar() { return true; }        }    } : { foo: { bar: () => boolean; }; }
- 
+
          foo: {
 ->foo : { bar(): boolean; }
 ->{            bar() { return true; }        } : { bar(): boolean; }
 +>foo : { bar: () => boolean; }
 +>{            bar() { return true; }        } : { bar: () => boolean; }
- 
+
              bar() { return true; }
  >bar : () => boolean
 @@= skipped -15, +15 lines =@@
- 
+
      if (x.foo.bar) { // error
  >x.foo.bar : () => boolean
 ->x.foo : { bar(): boolean; }
@@ -38,7 +38,7 @@
 +>foo : { bar: () => boolean; }
  >bar : () => boolean
      }
- 
+
      if (x.foo.bar) { // ok
  >x.foo.bar : () => boolean
 ->x.foo : { bar(): boolean; }
@@ -48,7 +48,7 @@
 +>x : { foo: { bar: () => boolean; }; }
 +>foo : { bar: () => boolean; }
  >bar : () => boolean
- 
+
          x.foo.bar;
  >x.foo.bar : () => boolean
 ->x.foo : { bar(): boolean; }

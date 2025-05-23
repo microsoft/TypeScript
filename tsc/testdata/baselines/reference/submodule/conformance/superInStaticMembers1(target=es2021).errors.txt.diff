@@ -1,6 +1,6 @@
 --- old.superInStaticMembers1(target=es2021).errors.txt
 +++ new.superInStaticMembers1(target=es2021).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -classDeclInContainingScopeStaticBlock.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
 -classDeclInContainingScopeStaticField.ts(3,7): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
 -constEnumInContainingScopeStaticBlock.ts(3,12): error TS2818: Duplicate identifier 'Reflect'. Compiler reserves name 'Reflect' when emitting 'super' references in static initializers.
@@ -631,5 +631,4 @@
 -        }
 -    });
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

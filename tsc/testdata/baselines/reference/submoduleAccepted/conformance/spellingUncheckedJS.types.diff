@@ -2,7 +2,7 @@
 +++ new.spellingUncheckedJS.types
 @@= skipped -5, +5 lines =@@
  >1 : 1
- 
+
  inmodule.toFixed()
 ->inmodule.toFixed() : error
 ->inmodule.toFixed : error
@@ -10,10 +10,10 @@
 +>inmodule.toFixed : any
  >inmodule : any
  >toFixed : any
- 
+
 @@= skipped -15, +15 lines =@@
  >true : true
- 
+
      locale.toFixed()
 ->locale.toFixed() : error
 ->locale.toFixed : error
@@ -21,7 +21,7 @@
 +>locale.toFixed : any
  >locale : any
  >toFixed : any
- 
+
      // @ts-expect-error
      localf.toExponential()
 ->localf.toExponential() : error
@@ -30,9 +30,9 @@
 +>localf.toExponential : any
  >localf : any
  >toExponential : any
- 
+
 @@= skipped -28, +28 lines =@@
- 
+
          // no error on 'this' references
          return this.none
 ->this.none : error
@@ -41,7 +41,7 @@
  >none : any
      }
 @@= skipped -14, +14 lines =@@
- 
+
          // no error on 'super' references
          return super.none
 ->super.none : error
@@ -57,7 +57,7 @@
 +>object.spaaaace : any
  >object : { spaaace: number; }
  >spaaaace : any
- 
+
  object.spaace = 12 // error on write
  >object.spaace = 12 : 12
 ->object.spaace : error
@@ -65,7 +65,7 @@
  >object : { spaaace: number; }
  >spaace : any
  >12 : 12
- 
+
  object.fresh = 12 // OK
  >object.fresh = 12 : 12
 ->object.fresh : error
@@ -75,7 +75,7 @@
  >12 : 12
 @@= skipped -24, +24 lines =@@
  >puuuce : any
- 
+
  new Date().getGMTDate() // OK, from another file
 ->new Date().getGMTDate() : error
 ->new Date().getGMTDate : error
@@ -84,7 +84,7 @@
  >new Date() : Date
  >Date : DateConstructor
  >getGMTDate : any
- 
+
  // No suggestions for globals from other files
  const atoc = setIntegral(() => console.log('ok'), 500)
 ->atoc : error
@@ -98,26 +98,26 @@
  >console.log : (...data: any[]) => void
 @@= skipped -20, +20 lines =@@
  >500 : 500
- 
+
  AudioBuffin // etc
 ->AudioBuffin : error
 +>AudioBuffin : any
- 
+
  Jimmy
  >Jimmy : number
- 
+
  Jon
 ->Jon : error
 +>Jon : any
- 
+
  === other.js ===
  var Jimmy = 1
 @@= skipped -18, +18 lines =@@
  >2 : 2
- 
+
  Jon // error, it's from the same file
 ->Jon : error
 +>Jon : any
- 
+
  var other = {
  >other : { puuce: number; }

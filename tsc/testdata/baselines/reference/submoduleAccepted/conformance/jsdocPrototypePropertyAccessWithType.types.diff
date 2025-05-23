@@ -1,7 +1,7 @@
 --- old.jsdocPrototypePropertyAccessWithType.types
 +++ new.jsdocPrototypePropertyAccessWithType.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /a.js ===
  function C() { this.x = false; };
 ->C : typeof C
@@ -14,7 +14,7 @@
 +>this : any
 +>x : any
  >false : false
- 
+
  /** @type {number} */
  C.prototype.x;
  >C.prototype.x : any
@@ -23,7 +23,7 @@
 +>C : () => void
  >prototype : any
  >x : any
- 
+
  new C().x;
 ->new C().x : number
 ->new C() : C
@@ -33,4 +33,3 @@
 +>new C() : any
 +>C : () => void
 +>x : any
- 

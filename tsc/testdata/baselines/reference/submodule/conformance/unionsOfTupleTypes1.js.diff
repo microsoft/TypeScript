@@ -1,8 +1,8 @@
 --- old.unionsOfTupleTypes1.js
 +++ new.unionsOfTupleTypes1.js
 @@= skipped -65, +65 lines =@@
- 
- 
+
+
  //// [unionsOfTupleTypes1.js]
 -"use strict";
  function f1(t1, t2, t3, t4, x) {

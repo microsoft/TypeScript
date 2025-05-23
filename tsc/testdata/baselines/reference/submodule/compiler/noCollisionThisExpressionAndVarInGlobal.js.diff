@@ -1,7 +1,7 @@
 --- old.noCollisionThisExpressionAndVarInGlobal.js
 +++ new.noCollisionThisExpressionAndVarInGlobal.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [noCollisionThisExpressionAndVarInGlobal.js]
  var _this = 1;
 -var f = function () { return _this; };

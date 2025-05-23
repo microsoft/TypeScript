@@ -2,7 +2,7 @@
 +++ new.classWithStaticMembers.js
 @@= skipped -21, +21 lines =@@
  var r3 = r.foo;
- 
+
  //// [classWithStaticMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,21 +2,21 @@
 +++ new.genericTypeReferenceWithoutTypeArgument2.types
 @@= skipped -12, +12 lines =@@
  >c : any
- 
+
  var a: { x: I };
 ->a : { x: I; }
 +>a : { x: any; }
  >x : any
- 
+
  var b: { (x: I): I };
 ->b : (x: I) => I
 +>b : (x: any) => any
  >x : any
- 
+
  var d: { [x: I]: I };
 @@= skipped -12, +12 lines =@@
  >x : any
- 
+
  var e = (x: I) => { var y: I; return y; }
 ->e : (x: I) => any
 ->(x: I) => { var y: I; return y; } : (x: I) => any
@@ -25,14 +25,14 @@
  >x : any
  >y : any
  >y : any
- 
+
  function f(x: I): I { var y: I; return y; }
 ->f : (x: I) => I
 +>f : (x: any) => any
  >x : any
  >y : any
  >y : any
- 
+
  var g = function f(x: I): I { var y: I; return y; }
 ->g : (x: I) => I
 ->function f(x: I): I { var y: I; return y; } : (x: I) => I
@@ -45,15 +45,14 @@
  >y : any
 @@= skipped -45, +45 lines =@@
  >M : any
- 
+
  function h<T extends I>(x: T) { }
 ->h : <T extends I>(x: T) => void
 +>h : <T extends any>(x: T) => void
  >x : T
- 
+
  function i<T extends M.E>(x: T) { }
 ->i : <T extends M.E>(x: T) => void
 +>i : <T extends any>(x: T) => void
  >M : any
  >x : T
- 

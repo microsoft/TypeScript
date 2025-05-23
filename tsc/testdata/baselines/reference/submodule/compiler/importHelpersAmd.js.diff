@@ -2,7 +2,7 @@
 +++ new.importHelpersAmd.js
 @@= skipped -19, +19 lines =@@
  export declare function __exportStar(m: any, exports: any): void;
- 
+
  //// [a.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,7 +1,7 @@
 --- old.decoratorMetadata.types
 +++ new.decoratorMetadata.types
 @@= skipped -1, +1 lines =@@
- 
+
  === service.ts ===
  export default class Service {
 ->Service : Service
@@ -11,15 +11,15 @@
  import Service from "./service";
 ->Service : typeof Service
 +>Service : typeof default
- 
+
  declare var decorator: any;
  >decorator : any
 @@= skipped -16, +16 lines =@@
  >MyComponent : MyComponent
- 
+
      constructor(public Service: Service) {
 ->Service : Service
 +>Service : default
      }
- 
+
      @decorator

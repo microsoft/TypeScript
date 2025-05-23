@@ -1,8 +1,7 @@
 --- old.unannotatedParametersAreOptional.errors.txt
 +++ new.unannotatedParametersAreOptional.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +test.js(2,1): error TS2554: Expected 1 arguments, but got 0.
 +test.js(10,3): error TS2554: Expected 1 arguments, but got 0.
 +test.js(11,9): error TS2554: Expected 1 arguments, but got 0.

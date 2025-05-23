@@ -11,4 +11,3 @@
  >ns : Symbol(ns, Decl(c.ts, 0, 8))
 ->A : Symbol(ns.A, Decl(a.ts, 0, 0))
 +>A : Symbol(A, Decl(a.ts, 0, 0))
- 

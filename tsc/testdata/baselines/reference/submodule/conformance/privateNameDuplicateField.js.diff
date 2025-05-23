@@ -1,8 +1,8 @@
 --- old.privateNameDuplicateField.js
 +++ new.privateNameDuplicateField.js
 @@= skipped -405, +405 lines =@@
- 
- 
+
+
  //// [privateNameDuplicateField.js]
 -"use strict";
  function Field() {

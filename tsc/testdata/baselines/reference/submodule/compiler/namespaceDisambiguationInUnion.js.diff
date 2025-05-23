@@ -1,8 +1,8 @@
 --- old.namespaceDisambiguationInUnion.js
 +++ new.namespaceDisambiguationInUnion.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [namespaceDisambiguationInUnion.js]
 -var x = { type: "wat.nup" };
 -var val1 = x;

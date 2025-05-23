@@ -1,7 +1,7 @@
 --- old.declarationEmitPrivateAsync.js
 +++ new.declarationEmitPrivateAsync.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [declarationEmitPrivateAsync.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

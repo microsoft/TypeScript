@@ -1,7 +1,7 @@
 --- old.excessPropertyChecksWithNestedIntersections.js
 +++ new.excessPropertyChecksWithNestedIntersections.js
 @@= skipped -74, +74 lines =@@
- 
+
  //// [excessPropertyChecksWithNestedIntersections.js]
  "use strict";
 -// https://github.com/Microsoft/TypeScript/issues/13813

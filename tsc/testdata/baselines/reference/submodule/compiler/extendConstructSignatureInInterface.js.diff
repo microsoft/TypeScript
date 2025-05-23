@@ -1,8 +1,8 @@
 --- old.extendConstructSignatureInInterface.js
 +++ new.extendConstructSignatureInInterface.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [extendConstructSignatureInInterface.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

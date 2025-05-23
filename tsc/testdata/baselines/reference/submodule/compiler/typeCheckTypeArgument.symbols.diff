@@ -2,7 +2,7 @@
 +++ new.typeCheckTypeArgument.symbols
 @@= skipped -24, +24 lines =@@
  >Foo2 : Symbol(Foo2, Decl(typeCheckTypeArgument.ts, 6, 37))
- 
+
      method<T extends UNKNOWN>() { }
 ->method : Symbol(Foo2.method, Decl(typeCheckTypeArgument.ts, 8, 12))
 +>method : Symbol(method, Decl(typeCheckTypeArgument.ts, 8, 12))

@@ -1,6 +1,6 @@
 --- old.checkForObjectTooStrict.errors.txt
 +++ new.checkForObjectTooStrict.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -checkForObjectTooStrict.ts(3,18): error TS2725: Class name cannot be 'Object' when targeting ES5 with module CommonJS.
 -
 -
@@ -38,5 +38,4 @@
 -    
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.computedPropertyNames27_ES5.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [computedPropertyNames27_ES5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

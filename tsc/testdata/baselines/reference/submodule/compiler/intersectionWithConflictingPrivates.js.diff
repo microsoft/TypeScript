@@ -1,8 +1,8 @@
 --- old.intersectionWithConflictingPrivates.js
 +++ new.intersectionWithConflictingPrivates.js
 @@= skipped -59, +59 lines =@@
- 
- 
+
+
  //// [intersectionWithConflictingPrivates.js]
 -"use strict";
  class A {

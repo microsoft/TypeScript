@@ -2,7 +2,7 @@
 +++ new.staticsInConstructorBodies.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [staticsInConstructorBodies.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -16,14 +16,10 @@
 +exports.p2 = Promise.resolve().then(() => require("./0"));
  function foo() {
 -    var p2 = Promise.resolve().then(function () { return require("./0"); });
-+    const p2 = Promise.resolve().then(() => require("./0"));
- }
+-}
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    method() {
-+        const loadAsync = Promise.resolve().then(() => require("./0"));
-     }
+-    }
 -    C.prototype.method = function () {
 -        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
 -    };
@@ -31,15 +27,22 @@
 -}());
 -var D = /** @class */ (function () {
 -    function D() {
-+}
-+class D {
-+    method() {
-+        const loadAsync = Promise.resolve().then(() => require("./0"));
-     }
+-    }
 -    D.prototype.method = function () {
 -        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
 -    };
 -    return D;
 -}());
++    const p2 = Promise.resolve().then(() => require("./0"));
++}
++class C {
++    method() {
++        const loadAsync = Promise.resolve().then(() => require("./0"));
++    }
++}
++class D {
++    method() {
++        const loadAsync = Promise.resolve().then(() => require("./0"));
++    }
 +}
  exports.D = D;

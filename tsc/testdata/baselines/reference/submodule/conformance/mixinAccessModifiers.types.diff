@@ -2,10 +2,10 @@
 +++ new.mixinAccessModifiers.types
 @@= skipped -329, +329 lines =@@
  }
- 
+
  function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 ->f7 : (x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) => void
 +>f7 : (x: ProtectedGeneric<{}>) => void
  >x : ProtectedGeneric<{}>
- 
+
  	x.privateMethod(); // Error, private constituent makes method inaccessible

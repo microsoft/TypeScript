@@ -1,7 +1,7 @@
 --- old.isolatedDeclarationsAddUndefined.types
 +++ new.isolatedDeclarationsAddUndefined.types
 @@= skipped -29, +29 lines =@@
- 
+
  === file2.ts ===
  export function foo(p = (ip = 10, v: number): void => {}): void{
 ->foo : (p?: (ip: number | undefined, v: number) => void) => void
@@ -15,7 +15,7 @@
  >v : number
 @@= skipped -11, +11 lines =@@
  >T : number
- 
+
  export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
 ->foo2 : (p?: (ip: T | undefined, v: number) => void) => void
 ->p : (ip: T | undefined, v: number) => void

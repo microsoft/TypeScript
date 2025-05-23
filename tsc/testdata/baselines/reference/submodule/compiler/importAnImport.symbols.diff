@@ -6,13 +6,13 @@
  >a : Symbol(a, Decl(importAnImport.ts, 0, 9))
 ->b : Symbol(ma.b, Decl(importAnImport.ts, 0, 11))
 +>b : Symbol(b, Decl(importAnImport.ts, 0, 11))
- 
+
      import ma = a;
  >ma : Symbol(ma, Decl(importAnImport.ts, 0, 14))
 ->a : Symbol(ma, Decl(importAnImport.ts, 0, 9))
 +>a : Symbol(a, Decl(importAnImport.ts, 0, 9))
  }
- 
+
  module m0 {
 @@= skipped -13, +13 lines =@@
      import m8 = c.a.b.ma;

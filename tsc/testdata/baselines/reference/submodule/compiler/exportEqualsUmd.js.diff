@@ -2,7 +2,7 @@
 +++ new.exportEqualsUmd.js
 @@= skipped -3, +3 lines =@@
  export = { ["hi"]: "there" };
- 
+
  //// [exportEqualsUmd.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

@@ -10,7 +10,7 @@
  >folder : (s: S, t: T) => T
  >s : S
 @@= skipped -13, +13 lines =@@
- 
+
  utils.fold(); // no error
  >utils.fold() : unknown
 ->utils.fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
@@ -18,7 +18,7 @@
  >utils : Utils
 ->fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
 +>fold : <T, S>(c?: T[], folder?: (s: S, t: T) => T, init?: S) => T
- 
+
  utils.fold(null); // no error
  >utils.fold(null) : unknown
 ->utils.fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
@@ -26,7 +26,7 @@
  >utils : Utils
 ->fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
 +>fold : <T, S>(c?: T[], folder?: (s: S, t: T) => T, init?: S) => T
- 
+
  utils.fold(null, null); // no error
  >utils.fold(null, null) : unknown
 ->utils.fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
@@ -34,7 +34,7 @@
  >utils : Utils
 ->fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
 +>fold : <T, S>(c?: T[], folder?: (s: S, t: T) => T, init?: S) => T
- 
+
  utils.fold(null, null, null); // no error
  >utils.fold(null, null, null) : unknown
 ->utils.fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
@@ -42,4 +42,3 @@
  >utils : Utils
 ->fold : <T, S>(c?: Array<T>, folder?: (s: S, t: T) => T, init?: S) => T
 +>fold : <T, S>(c?: T[], folder?: (s: S, t: T) => T, init?: S) => T
- 

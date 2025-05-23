@@ -2,7 +2,7 @@
 +++ new.inheritanceMemberAccessorOverridingProperty.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [inheritanceMemberAccessorOverridingProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,21 +21,14 @@
 -})();
 -var a = /** @class */ (function () {
 -    function a() {
-+class a {
-+    x;
-+}
-+class b extends a {
-+    get x() {
-+        return "20";
-     }
+-    }
 -    return a;
 -}());
 -var b = /** @class */ (function (_super) {
 -    __extends(b, _super);
 -    function b() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    set x(aValue) {
-     }
+-    }
 -    Object.defineProperty(b.prototype, "x", {
 -        get: function () {
 -            return "20";
@@ -47,4 +40,13 @@
 -    });
 -    return b;
 -}(a));
++class a {
++    x;
++}
++class b extends a {
++    get x() {
++        return "20";
++    }
++    set x(aValue) {
++    }
 +}

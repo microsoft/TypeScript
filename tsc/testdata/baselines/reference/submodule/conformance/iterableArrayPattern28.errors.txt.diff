@@ -16,8 +16,8 @@
 +iterableArrayPattern28.ts(2,52): error TS2769: No overload matches this call.
 +  The last overload gave the following error.
      Type 'boolean' is not assignable to type 'number'.
- 
- 
+
+
  ==== iterableArrayPattern28.ts (1 errors) ====
      function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
      takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));

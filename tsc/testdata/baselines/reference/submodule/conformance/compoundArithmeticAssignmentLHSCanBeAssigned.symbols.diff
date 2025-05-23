@@ -10,6 +10,6 @@
 +>a : Symbol(a, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 8))
 +>b : Symbol(b, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 11))
 +>c : Symbol(c, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 0, 14))
- 
+
  var a: any;
  >a : Symbol(a, Decl(compoundArithmeticAssignmentLHSCanBeAssigned.ts, 2, 3))

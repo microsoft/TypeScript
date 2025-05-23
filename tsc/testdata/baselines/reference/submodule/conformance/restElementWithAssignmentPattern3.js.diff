@@ -2,7 +2,7 @@
 +++ new.restElementWithAssignmentPattern3.js
 @@= skipped -5, +5 lines =@@
  [...[a, b = 0]] = tuple;
- 
+
  //// [restElementWithAssignmentPattern3.js]
 -var _a, _b;
  var a, b;

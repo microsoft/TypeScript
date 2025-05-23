@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-commonjs.js
 +++ new.esDecorators-classDeclaration-commonjs.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [esDecorators-classDeclaration-commonjs.js]
  "use strict";
 -var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {

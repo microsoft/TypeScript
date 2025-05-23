@@ -1,12 +1,12 @@
 --- old.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.types
 +++ new.sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.types
 @@= skipped -1, +1 lines =@@
- 
+
  === sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.ts ===
  declare var console: {
 ->console : { log(msg: string): void; }
 +>console : { log: (msg: string) => void; }
- 
+
      log(msg: string): void;
  >log : (msg: string) => void
 @@= skipped -144, +144 lines =@@

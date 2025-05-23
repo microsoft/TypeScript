@@ -7,7 +7,7 @@
 ->foo : () => require.I
 +>foo : () => I
  >require : any
- 
+
      return null;
 @@= skipped -10, +10 lines =@@
      }
@@ -16,5 +16,5 @@
 ->foo2 : () => exports.I
 +>foo2 : () => I
  >exports : any
- 
+
      return null;

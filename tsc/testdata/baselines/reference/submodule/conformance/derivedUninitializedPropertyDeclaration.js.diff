@@ -1,8 +1,8 @@
 --- old.derivedUninitializedPropertyDeclaration.js
 +++ new.derivedUninitializedPropertyDeclaration.js
 @@= skipped -84, +84 lines =@@
- 
- 
+
+
  //// [derivedUninitializedPropertyDeclaration.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -23,39 +23,7 @@
 -var A = /** @class */ (function () {
 -    function A() {
 -        this.property = 'x';
-+class A {
-+    property = 'x';
-+    m() { return 1; }
-+}
-+class B extends A {
-+    property; // error
-+}
-+class BD extends A {
-+}
-+class BDBang extends A {
-+}
-+class BOther extends A {
-+    m() { return 2; } // not allowed on methods
-+}
-+class U {
-+}
-+class C {
-+    p;
-+}
-+class D extends C {
-+    p; // error
-+}
-+class DD extends C {
-+}
-+class F extends E {
-+    p1;
-+}
-+class G extends E {
-+    p1;
-+    constructor() {
-+        super();
-+        this.p1 = 'z';
-     }
+-    }
 -    A.prototype.m = function () { return 1; };
 -    return A;
 -}());
@@ -148,6 +116,39 @@
 -    }
 -    return K;
 -}(J));
++class A {
++    property = 'x';
++    m() { return 1; }
++}
++class B extends A {
++    property; // error
++}
++class BD extends A {
++}
++class BDBang extends A {
++}
++class BOther extends A {
++    m() { return 2; } // not allowed on methods
++}
++class U {
++}
++class C {
++    p;
++}
++class D extends C {
++    p; // error
++}
++class DD extends C {
++}
++class F extends E {
++    p1;
++}
++class G extends E {
++    p1;
++    constructor() {
++        super();
++        this.p1 = 'z';
++    }
 +}
 +class H extends E {
 +    p1;

@@ -2,7 +2,7 @@
 +++ new.superInLambdas.js
 @@= skipped -69, +69 lines =@@
  }
- 
+
  //// [superInLambdas.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

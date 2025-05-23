@@ -18,7 +18,7 @@
  >exports : { x: number; }
 ->x : Item
 +>x : { x: number; }
- 
+
  === index.js ===
  /** @type {(typeof import("./folder/mod1"))[]} */
  const items = [{x: 12}];
@@ -28,7 +28,7 @@
  >{x: 12} : { x: number; }
  >x : number
  >12 : 12
- 
+
  module.exports = items;
 ->module.exports = items : import("folder/mod1").Item[]
 ->module.exports : import("folder/mod1").Item[]
@@ -40,4 +40,3 @@
 +>module : { readonly items: { x: number; }[]; }
 +>exports : { x: number; }[]
 +>items : { x: number; }[]
- 

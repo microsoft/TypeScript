@@ -2,11 +2,11 @@
 +++ new.importDeclFromTypeNodeInJsSource.types
 @@= skipped -7, +7 lines =@@
  >"events" : typeof import("events")
- 
+
      namespace EventEmitter {
 ->EventEmitter : typeof import("events")
 +>EventEmitter : typeof EventEmitter
- 
+
          class EventEmitter {
  >EventEmitter : EventEmitter
 @@= skipped -31, +31 lines =@@
@@ -30,15 +30,15 @@
  >a : typeof a
 ->b : typeof d
 +>b : typeof b
- 
+
      export = d;
 ->d : typeof d
 +>d : typeof b
  }
- 
+
  === /src/b.js ===
 @@= skipped -26, +26 lines =@@
- 
+
  export class Foo2 extends n3.c {
  >Foo2 : Foo2
 ->n3.c : n3.c
@@ -47,5 +47,5 @@
 ->c : typeof n3.c
 +>c : typeof c
  }
- 
+
  export class Foo3 extends d {

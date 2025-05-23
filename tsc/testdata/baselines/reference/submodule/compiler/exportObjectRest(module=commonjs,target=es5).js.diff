@@ -1,7 +1,7 @@
 --- old.exportObjectRest(module=commonjs,target=es5).js
 +++ new.exportObjectRest(module=commonjs,target=es5).js
 @@= skipped -4, +4 lines =@@
- 
+
  //// [exportObjectRest.js]
  "use strict";
 -var _a;

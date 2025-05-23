@@ -1,7 +1,7 @@
 --- old.APISample_linter.js
 +++ new.APISample_linter.js
 @@= skipped -73, +73 lines =@@
- 
+
  //// [APISample_linter.js]
  "use strict";
 -/*

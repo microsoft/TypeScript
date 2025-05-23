@@ -2,7 +2,7 @@
 +++ new.noImplicitAnyInCastExpression.js
 @@= skipped -17, +17 lines =@@
  (<IFoo>{ c: null });
- 
+
  //// [noImplicitAnyInCastExpression.js]
 -// verify no noImplictAny errors reported with cast expression
  // Expr type not assignable to target type

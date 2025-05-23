@@ -1,7 +1,7 @@
 --- old.overloadAssignmentCompat.js
 +++ new.overloadAssignmentCompat.js
 @@= skipped -40, +40 lines =@@
- 
+
  //// [overloadAssignmentCompat.js]
  // ok - overload signatures are assignment compatible with their implementation
 -var Accessor = /** @class */ (function () {

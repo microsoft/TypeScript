@@ -2,7 +2,7 @@
 +++ new.staticPropSuper.js
 @@= skipped -37, +37 lines =@@
  }
- 
+
  //// [staticPropSuper.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -34,8 +34,7 @@
 +    constructor() {
          var x = 1; // should not error
 -        return _super.call(this) || this;
-+        super();
-     }
+-    }
 -    B.s = 9;
 -    return B;
 -}(A));
@@ -44,13 +43,9 @@
 -    function C() {
 -        var _this = this;
 -        _this.p = 10;
-+}
-+class C extends A {
-+    p = 10;
-+    constructor() {
-         var x = 1; // should error
+-        var x = 1; // should error
 -        return _this;
-     }
+-    }
 -    return C;
 -}(A));
 -var D = /** @class */ (function (_super) {
@@ -58,13 +53,9 @@
 -    function D() {
 -        var _this = this;
 -        _this.p = 11;
-+}
-+class D extends A {
-+    p = 11;
-+    constructor() {
-         var x = 1; // should error
+-        var x = 1; // should error
 -        return _this;
-     }
+-    }
 -    return D;
 -}(A));
 -var E = /** @class */ (function (_super) {
@@ -72,13 +63,29 @@
 -    function E() {
 -        var _this = this;
 -        _this.p = 12;
+-        var x = 1; // should error
+-        return _this;
+-    }
+-    return E;
+-}(A));
++        super();
++    }
++}
++class C extends A {
++    p = 10;
++    constructor() {
++        var x = 1; // should error
++    }
++}
++class D extends A {
++    p = 11;
++    constructor() {
++        var x = 1; // should error
++    }
 +}
 +class E extends A {
 +    p = 12;
 +    constructor() {
-         var x = 1; // should error
--        return _this;
-     }
--    return E;
--}(A));
++        var x = 1; // should error
++    }
 +}

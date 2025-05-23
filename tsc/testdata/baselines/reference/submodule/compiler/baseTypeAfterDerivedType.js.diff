@@ -1,8 +1,8 @@
 --- old.baseTypeAfterDerivedType.js
 +++ new.baseTypeAfterDerivedType.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [baseTypeAfterDerivedType.js]
 -var Derived2 = /** @class */ (function () {
 -    function Derived2() {

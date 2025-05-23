@@ -1,8 +1,8 @@
 --- old.superCallInStaticMethod.js
 +++ new.superCallInStaticMethod.js
 @@= skipped -48, +48 lines =@@
- 
- 
+
+
  //// [superCallInStaticMethod.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var Doing = /** @class */ (function () {
 -    function Doing() {
-+class Doing {
-+    static staticMethod() {
-     }
+-    }
 -    Doing.staticMethod = function () {
 -    };
 -    return Doing;
@@ -33,6 +31,9 @@
 -    function Other() {
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
++class Doing {
++    static staticMethod() {
++    }
 +}
 +class Other extends Doing {
      // in static method

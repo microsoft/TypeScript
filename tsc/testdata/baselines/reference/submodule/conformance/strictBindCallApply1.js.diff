@@ -1,8 +1,8 @@
 --- old.strictBindCallApply1.js
 +++ new.strictBindCallApply1.js
 @@= skipped -102, +102 lines =@@
- 
- 
+
+
  //// [strictBindCallApply1.js]
 -"use strict";
 -var f00 = foo.bind(undefined);
@@ -98,10 +98,8 @@
  // Repro from #32964
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+class Foo {
-+    constructor() {
-         this.fn.bind(this);
-     }
+-        this.fn.bind(this);
+-    }
 -    Foo.prototype.fn = function () {
 -        var args = [];
 -        for (var _i = 0; _i < arguments.length; _i++) {
@@ -112,12 +110,8 @@
 -}());
 -var Bar = /** @class */ (function () {
 -    function Bar() {
-+    fn(...args) { }
-+}
-+class Bar {
-+    constructor() {
-         this.fn.bind(this);
-     }
+-        this.fn.bind(this);
+-    }
 -    Bar.prototype.fn = function () {
 -        var args = [];
 -        for (var _i = 0; _i < arguments.length; _i++) {
@@ -126,5 +120,15 @@
 -    };
 -    return Bar;
 -}());
++class Foo {
++    constructor() {
++        this.fn.bind(this);
++    }
++    fn(...args) { }
++}
++class Bar {
++    constructor() {
++        this.fn.bind(this);
++    }
 +    fn(...args) { }
 +}

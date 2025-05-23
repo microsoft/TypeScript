@@ -1,8 +1,8 @@
 --- old.covariantCallbacks.js
 +++ new.covariantCallbacks.js
 @@= skipped -110, +110 lines =@@
- 
- 
+
+
  //// [covariantCallbacks.js]
 -"use strict";
 -// Test that callback parameters are related covariantly

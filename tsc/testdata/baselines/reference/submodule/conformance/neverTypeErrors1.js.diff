@@ -1,7 +1,7 @@
 --- old.neverTypeErrors1.js
 +++ new.neverTypeErrors1.js
 @@= skipped -50, +50 lines =@@
- 
+
  //// [neverTypeErrors1.js]
  function f1() {
 -    var x;

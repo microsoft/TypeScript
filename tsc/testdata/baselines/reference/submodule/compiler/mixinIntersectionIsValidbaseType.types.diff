@@ -8,10 +8,10 @@
 -><K extends Constructor<Initable> & Initable>(    SuperClass: K) => {    const LocalMixin = (InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    };    let ResultClass = LocalMixin(SuperClass);    return ResultClass;} : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal; init(...args: any[]): void; prototype: Serializable<any>.SerializableLocal; } & K
 +>Serializable : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
 +><K extends Constructor<Initable> & Initable>(    SuperClass: K) => {    const LocalMixin = (InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    };    let ResultClass = LocalMixin(SuperClass);    return ResultClass;} : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
- 
+
      SuperClass: K
  >SuperClass : K
- 
+
  ) => {
      const LocalMixin = (InnerSuperClass: K) => {
 ->LocalMixin : (InnerSuperClass: K) => { new (...args: any[]): SerializableLocal; init(...args: any[]): void; prototype: Serializable<any>.SerializableLocal; } & K
@@ -19,7 +19,7 @@
 +>LocalMixin : (InnerSuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
 +>(InnerSuperClass: K) => {        return class SerializableLocal extends InnerSuperClass {        }    } : (InnerSuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
  >InnerSuperClass : K
- 
+
          return class SerializableLocal extends InnerSuperClass {
 ->class SerializableLocal extends InnerSuperClass {        } : { new (...args: any[]): SerializableLocal; init(...args: any[]): void; prototype: Serializable<any>.SerializableLocal; } & K
 ->SerializableLocal : { new (...args: any[]): SerializableLocal; init(...args: any[]): void; prototype: Serializable<any>.SerializableLocal; } & K
@@ -36,16 +36,16 @@
 +>LocalMixin(SuperClass) : { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
 +>LocalMixin : (InnerSuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
  >SuperClass : K
- 
+
      return ResultClass;
 ->ResultClass : { new (...args: any[]): SerializableLocal; init(...args: any[]): void; prototype: Serializable<any>.SerializableLocal; } & K
 +>ResultClass : { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
- 
+
  };
- 
+
 @@= skipped -35, +35 lines =@@
  >SuperClass : K
- 
+
      let SomeHowOkay = class A extends SuperClass {
 ->SomeHowOkay : { new (...args: any[]): A; init(...args: any[]): void; prototype: AMixin<any>.A; } & K
 ->class A extends SuperClass {    } : { new (...args: any[]): A; init(...args: any[]): void; prototype: AMixin<any>.A; } & K
@@ -54,9 +54,9 @@
 +>class A extends SuperClass {    } : { new (...args: any[]): A<K>; init: (...args: any[]) => void; prototype: A<any>; } & K
 +>A : { new (...args: any[]): A<K>; init: (...args: any[]) => void; prototype: A<any>; } & K
  >SuperClass : Initable
- 
+
      };
- 
+
      let SomeHowNotOkay = class A extends Serializable(SuperClass) {
 ->SomeHowNotOkay : { new (...args: any[]): A; init(...args: any[]): void; prototype: AMixin<any>.A; } & K
 ->class A extends Serializable(SuperClass) {    } : { new (...args: any[]): A; init(...args: any[]): void; prototype: AMixin<any>.A; } & K
@@ -69,5 +69,5 @@
 +>Serializable(SuperClass) : SerializableLocal<K> & Initable
 +>Serializable : <K extends Constructor<Initable> & Initable>(SuperClass: K) => { new (...args: any[]): SerializableLocal<K>; init: (...args: any[]) => void; prototype: SerializableLocal<any>; } & K
  >SuperClass : K
- 
+
      };

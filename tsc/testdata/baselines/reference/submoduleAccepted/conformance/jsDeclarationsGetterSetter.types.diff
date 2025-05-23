@@ -6,7 +6,7 @@
  >"x" : "x"
 ->{    get() {        return 12;    }} : { get(): number; }
 +>{    get() {        return 12;    }} : { get: () => number; }
- 
+
      get() {
  >get : () => number
 @@= skipped -22, +22 lines =@@
@@ -15,7 +15,7 @@
  >"x" : "x"
 ->{    /**     * @param {number} _arg     */    set(_arg) {}} : { set(_arg: number): void; }
 +>{    /**     * @param {number} _arg     */    set(_arg) {}} : { set: (_arg: number) => void; }
- 
+
      /**
       * @param {number} _arg
 @@= skipped -23, +23 lines =@@
@@ -24,7 +24,7 @@
  >"x" : "x"
 ->{    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}} : { get(): number; set(_arg: number): void; }
 +>{    get() {        return 12;    },    /**     * @param {number} _arg     */    set(_arg) {}} : { get: () => number; set: (_arg: number) => void; }
- 
+
      get() {
  >get : () => number
 @@= skipped -30, +30 lines =@@
@@ -33,7 +33,7 @@
  >"x" : "x"
 ->{    /**     * @param {number[]} args     */    set(...args) {}} : { set(...args: number[]): void; }
 +>{    /**     * @param {number[]} args     */    set(...args) {}} : { set: (...args: number[]) => void; }
- 
+
      /**
       * @param {number[]} args
 @@= skipped -23, +23 lines =@@
@@ -42,6 +42,6 @@
  >"x" : "x"
 ->{    set() {}} : { set(): void; }
 +>{    set() {}} : { set: () => void; }
- 
+
      set() {}
  >set : () => void

@@ -1,8 +1,8 @@
 --- old.crashIntypeCheckInvocationExpression.js
 +++ new.crashIntypeCheckInvocationExpression.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [crashIntypeCheckInvocationExpression.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

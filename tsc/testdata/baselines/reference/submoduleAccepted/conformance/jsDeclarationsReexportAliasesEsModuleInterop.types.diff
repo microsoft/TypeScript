@@ -8,14 +8,14 @@
 +>module : { Foo: typeof Foo; }
  >exports : typeof Foo
  >Foo : typeof Foo
- 
+
  === usage.js ===
  import {default as Fooa} from "./cls";
 ->default : typeof Fooa
 ->Fooa : typeof Fooa
 +>default : typeof Foo
 +>Fooa : typeof Foo
- 
+
  export const x = new Fooa();
 ->x : Fooa
 ->new Fooa() : Fooa
@@ -23,10 +23,9 @@
 +>x : Foo
 +>new Fooa() : Foo
 +>Fooa : typeof Foo
- 
+
  export {default as Foob} from "./cls";
 ->default : typeof Fooa
 ->Foob : typeof Fooa
 +>default : typeof Foo
 +>Foob : typeof Foo
- 

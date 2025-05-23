@@ -2,7 +2,7 @@
 +++ new.mixingApparentTypeOverrides.js
 @@= skipped -30, +30 lines =@@
  }
- 
+
  //// [mixingApparentTypeOverrides.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

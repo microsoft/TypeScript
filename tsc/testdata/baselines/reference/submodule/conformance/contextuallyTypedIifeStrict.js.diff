@@ -1,7 +1,7 @@
 --- old.contextuallyTypedIifeStrict.js
 +++ new.contextuallyTypedIifeStrict.js
 @@= skipped -36, +36 lines =@@
- 
+
  //// [contextuallyTypedIifeStrict.js]
  // arrow
 -(function (jake) { })("build");

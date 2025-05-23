@@ -1,8 +1,8 @@
 --- old.correlatedUnions.js
 +++ new.correlatedUnions.js
 @@= skipped -303, +303 lines =@@
- 
- 
+
+
  //// [correlatedUnions.js]
 -"use strict";
 -// Various repros from #30581

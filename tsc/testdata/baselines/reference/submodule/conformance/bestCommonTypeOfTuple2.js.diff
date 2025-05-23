@@ -1,8 +1,8 @@
 --- old.bestCommonTypeOfTuple2.js
 +++ new.bestCommonTypeOfTuple2.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [bestCommonTypeOfTuple2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

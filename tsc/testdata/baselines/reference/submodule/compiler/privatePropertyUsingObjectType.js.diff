@@ -1,8 +1,8 @@
 --- old.privatePropertyUsingObjectType.js
 +++ new.privatePropertyUsingObjectType.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [privatePropertyUsingObjectType.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

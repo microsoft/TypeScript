@@ -2,8 +2,8 @@
 +++ new.moduleImportedForTypeArgumentPosition.js
 @@= skipped -10, +10 lines =@@
  }
- 
- 
+
+
 -//// [moduleImportedForTypeArgumentPosition_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

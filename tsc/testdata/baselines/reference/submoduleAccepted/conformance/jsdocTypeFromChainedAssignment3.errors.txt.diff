@@ -1,8 +1,7 @@
 --- old.jsdocTypeFromChainedAssignment3.errors.txt
 +++ new.jsdocTypeFromChainedAssignment3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(1,28): error TS2339: Property 'selectSeries' does not exist on type 'typeof import("a")'.
 +a.js(1,51): error TS2339: Property 'selectLimit' does not exist on type 'typeof import("a")'.
 +a.js(1,73): error TS2339: Property 'select' does not exist on type 'typeof import("a")'.

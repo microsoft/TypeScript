@@ -2,7 +2,7 @@
 +++ new.duplicatePropertiesInTypeAssertions01.js
 @@= skipped -3, +3 lines =@@
  let x = <{a: number; a: number}>{};
- 
+
  //// [duplicatePropertiesInTypeAssertions01.js]
 -var x = {};
 -

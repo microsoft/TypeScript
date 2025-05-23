@@ -1,12 +1,12 @@
 --- old.multipleDeclarations.types
 +++ new.multipleDeclarations.types
 @@= skipped -1, +1 lines =@@
- 
+
  === input.js ===
  function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.m = null;
  >this.m = null : null
  >this.m : any
@@ -23,7 +23,7 @@
  >prototype : any
  >m : any
  >function() {    this.nothing();} : () => void
- 
+
      this.nothing();
 ->this.nothing() : error
 ->this.nothing : error

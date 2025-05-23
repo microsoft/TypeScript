@@ -2,19 +2,18 @@
 +++ new.constAssertions.types
 @@= skipped -382, +382 lines =@@
  >t2 : "bar"
- 
+
  function ff1(x: 'foo' | 'bar', y: 1 | 2) {
 ->ff1 : (x: "foo" | "bar", y: 1 | 2) => "bar-1" | "bar-2" | "foo-1" | "foo-2"
 +>ff1 : (x: "bar" | "foo", y: 1 | 2) => "bar-1" | "bar-2" | "foo-1" | "foo-2"
  >x : "bar" | "foo"
  >y : 1 | 2
- 
+
 @@= skipped -60, +60 lines =@@
  >'right' : "right"
- 
+
  function ff3(x: 'foo' | 'bar', y: object) {
 ->ff3 : (x: "foo" | "bar", y: object) => `bar${string}` | `foo${string}`
 +>ff3 : (x: "bar" | "foo", y: object) => `bar${string}` | `foo${string}`
  >x : "bar" | "foo"
  >y : object
- 

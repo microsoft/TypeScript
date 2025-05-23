@@ -1,8 +1,8 @@
 --- old.importTypeAmbient.js
 +++ new.importTypeAmbient.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [importTypeAmbient.js]
 -var x = { x: 0, y: 0 };
 -var y = { a: "", b: 0 };

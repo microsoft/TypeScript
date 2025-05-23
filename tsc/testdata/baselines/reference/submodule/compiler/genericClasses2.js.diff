@@ -2,7 +2,7 @@
 +++ new.genericClasses2.js
 @@= skipped -17, +17 lines =@@
  var z = v1.z.a; // should be 'number'
- 
+
  //// [genericClasses2.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -6,7 +6,7 @@
  function MyClass() { }
 ->MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0), Decl(bug27346.js, 3, 22))
 +>MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0))
- 
+
  MyClass.prototype = {};
 ->MyClass.prototype : Symbol(MyClass.prototype, Decl(bug27346.js, 3, 22))
 ->MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0), Decl(bug27346.js, 3, 22))
@@ -14,4 +14,3 @@
 +>MyClass.prototype : Symbol(prototype, Decl(bug27346.js, 3, 22))
 +>MyClass : Symbol(MyClass, Decl(bug27346.js, 0, 0))
 +>prototype : Symbol(prototype, Decl(bug27346.js, 3, 22))
- 

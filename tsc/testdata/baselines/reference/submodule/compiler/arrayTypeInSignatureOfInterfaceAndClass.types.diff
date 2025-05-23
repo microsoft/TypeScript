@@ -10,7 +10,7 @@
  >options : any
  >WinJS : any
 @@= skipped -10, +10 lines =@@
- 
+
          //removeIndices: WinJS.Promise<IListItem<T>[]>;
          public removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
 ->removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>

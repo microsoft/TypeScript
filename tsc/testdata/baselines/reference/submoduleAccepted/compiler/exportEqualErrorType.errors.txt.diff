@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -exportEqualErrorType_1.ts(3,23): error TS2339: Property 'static' does not exist on type '{ (): connectExport; foo: Date; }'.
 +exportEqualErrorType_1.ts(2,26): error TS2307: Cannot find module 'exportEqualErrorType_0' or its corresponding type declarations.
- 
- 
+
+
  ==== exportEqualErrorType_1.ts (1 errors) ====
      ///<reference path='exportEqualErrorType_0.ts'/>
      import connect = require('exportEqualErrorType_0');

@@ -1,8 +1,8 @@
 --- old.privateNameHashCharName.js
 +++ new.privateNameHashCharName.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [privateNameHashCharName.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

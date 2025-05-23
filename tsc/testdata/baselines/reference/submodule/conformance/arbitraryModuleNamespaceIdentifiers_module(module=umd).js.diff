@@ -1,8 +1,8 @@
 --- old.arbitraryModuleNamespaceIdentifiers_module(module=umd).js
 +++ new.arbitraryModuleNamespaceIdentifiers_module(module=umd).js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [arbitraryModuleNamespaceIdentifiers_module.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

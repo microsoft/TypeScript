@@ -2,7 +2,7 @@
 +++ new.recursiveTypeComparison2.types
 @@= skipped -76, +76 lines =@@
  }
- 
+
  var stuck: Bacon.Bus<number> = new Bacon.Bus();
 ->stuck : Bacon.Bus<number>
 +>stuck : Bus<number>
@@ -14,4 +14,3 @@
  >Bacon : typeof Bacon
 ->Bus : new <T>() => Bacon.Bus<T>
 +>Bus : new <T>() => Bus<T>
- 

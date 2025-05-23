@@ -2,7 +2,7 @@
 +++ new.allowImportClausesToMergeWithTypes.types
 @@= skipped -17, +17 lines =@@
  >zzz : 123
- 
+
  const x: zzz = { x: "" };
 ->x : zzz
 +>x : default
@@ -11,7 +11,7 @@
  >"" : ""
 @@= skipped -17, +17 lines =@@
  >zzz : 123
- 
+
  const x: zzz = { x: "" };
 ->x : zzz
 +>x : default
@@ -19,9 +19,8 @@
  >x : string
  >"" : ""
 @@= skipped -16, +16 lines =@@
- 
+
  const y: originalZZZ = x;
  >y : originalZZZ
 ->x : zzz
 +>x : default
- 

@@ -1,6 +1,6 @@
 --- old.inlineSourceMap2.errors.txt
 +++ new.inlineSourceMap2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5053: Option 'mapRoot' cannot be specified with option 'inlineSourceMap'.
 -error TS5053: Option 'sourceMap' cannot be specified with option 'inlineSourceMap'.
 -
@@ -13,5 +13,4 @@
 -    var x = 0;
 -    console.log(x);
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

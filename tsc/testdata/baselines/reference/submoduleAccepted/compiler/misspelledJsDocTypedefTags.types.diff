@@ -13,7 +13,7 @@
  >AnimationModel : any
  >ScreenshotCapture : any
  >Request : any
- 
+
  /** @typedef {{ endTime: number, screenshots: !B.<string>}} */
  Animation.AnimationModel.ScreenshotCapture.Request;
 ->Animation.AnimationModel.ScreenshotCapture.Request : error

@@ -1,8 +1,8 @@
 --- old.restTuplesFromContextualTypes.js
 +++ new.restTuplesFromContextualTypes.js
 @@= skipped -101, +101 lines =@@
- 
- 
+
+
  //// [restTuplesFromContextualTypes.js]
 -"use strict";
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
@@ -268,31 +268,16 @@
 -    }
 -});
 -var funcUnionTupleNoRest = function (num, strOrErr) {
-+let g0 = f5(() => "hello");
-+let g1 = f5((x, y) => 42);
-+let g2 = f5((x, y) => 42);
-+let g3 = f5((x, y) => x + y);
-+let g4 = f5((...args) => true);
-+let g5 = pipe(() => true, b => 42);
-+let g6 = pipe(x => "hello", s => s.length);
-+let g7 = pipe((x, y) => 42, x => "" + x);
-+let g8 = pipe((x, y) => 42, x => "" + x);
-+(function foo(a, b) { }(...tuple));
-+(function foo(...rest) { }(1, ''));
-+take(function (...rest) { });
-+const funcUnionTupleNoRest = (num, strOrErr) => {
-     return num;
- };
+-    return num;
+-};
 -var funcUnionTupleRest = function () {
 -    var params = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        params[_i] = arguments[_i];
 -    }
 -    var num = params[0], strOrErr = params[1];
-+const funcUnionTupleRest = (...params) => {
-+    const [num, strOrErr] = params;
-     return num;
- };
+-    return num;
+-};
 -
 -
 -//// [restTuplesFromContextualTypes.d.ts]
@@ -320,3 +305,22 @@
 -type TupleUnionFunc = (...params: ArgsUnion) => number;
 -declare const funcUnionTupleNoRest: TupleUnionFunc;
 -declare const funcUnionTupleRest: TupleUnionFunc;
++let g0 = f5(() => "hello");
++let g1 = f5((x, y) => 42);
++let g2 = f5((x, y) => 42);
++let g3 = f5((x, y) => x + y);
++let g4 = f5((...args) => true);
++let g5 = pipe(() => true, b => 42);
++let g6 = pipe(x => "hello", s => s.length);
++let g7 = pipe((x, y) => 42, x => "" + x);
++let g8 = pipe((x, y) => 42, x => "" + x);
++(function foo(a, b) { }(...tuple));
++(function foo(...rest) { }(1, ''));
++take(function (...rest) { });
++const funcUnionTupleNoRest = (num, strOrErr) => {
++    return num;
++};
++const funcUnionTupleRest = (...params) => {
++    const [num, strOrErr] = params;
++    return num;
++};

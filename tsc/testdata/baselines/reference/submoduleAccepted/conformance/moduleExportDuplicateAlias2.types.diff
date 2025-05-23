@@ -1,7 +1,7 @@
 --- old.moduleExportDuplicateAlias2.types
 +++ new.moduleExportDuplicateAlias2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === test.js ===
  const { apply } = require('./moduleExportAliasDuplicateAlias')
 ->apply : () => void
@@ -10,7 +10,7 @@
 +>require('./moduleExportAliasDuplicateAlias') : any
  >require : any
  >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
- 
+
  apply()
 ->apply() : void
 ->apply : () => void
@@ -22,10 +22,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>apply() : any
- >apply : any
+->apply : any
 ->undefined : undefined
- 
+-
 -function a() { }
 ->a : () => void
 -
@@ -54,4 +53,5 @@
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 ->apply : () => void
--
++>apply() : any
++>apply : any

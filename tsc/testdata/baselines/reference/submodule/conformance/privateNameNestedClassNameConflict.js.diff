@@ -1,8 +1,8 @@
 --- old.privateNameNestedClassNameConflict.js
 +++ new.privateNameNestedClassNameConflict.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [privateNameNestedClassNameConflict.js]
 -var _A_foo;
  class A {

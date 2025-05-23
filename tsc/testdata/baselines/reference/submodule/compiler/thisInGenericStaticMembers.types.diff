@@ -1,7 +1,7 @@
 --- old.thisInGenericStaticMembers.types
 +++ new.thisInGenericStaticMembers.types
 @@= skipped -20, +20 lines =@@
- 
+
          return this.one<T>(source, 42);
  >this.one<T>(source, 42) : T
 ->this.one : <T_1>(source: T_1, value: number) => T_1

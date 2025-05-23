@@ -1,8 +1,8 @@
 --- old.narrowByInstanceof.js
 +++ new.narrowByInstanceof.js
 @@= skipped -72, +72 lines =@@
- 
- 
+
+
  //// [narrowByInstanceof.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -42,7 +42,7 @@
 -var cls = new PersonMixin();
 -var Person = /** @class */ (function () {
 -    function Person() {
-     }
+-    }
 -    Person.prototype.work = function () { console.log("work"); };
 -    Person.prototype.sayHi = function () { console.log("Hi"); };
 -    return Person;
@@ -53,6 +53,7 @@
 -    Car.prototype.sayHi = function () { console.log("Wof Wof"); };
 -    return Car;
 -}());
++    }
 +}
 +const cls = new PersonMixin();
 +class Person {

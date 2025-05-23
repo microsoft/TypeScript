@@ -1,8 +1,7 @@
 --- old.pathMappingBasedModuleResolution5_classic.errors.txt
 +++ new.pathMappingBasedModuleResolution5_classic.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +c:/root/folder1/file1.ts(4,18): error TS2307: Cannot find module 'file4' or its corresponding type declarations.
 +
 +

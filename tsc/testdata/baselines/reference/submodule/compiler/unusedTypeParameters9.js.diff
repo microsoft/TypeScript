@@ -1,7 +1,7 @@
 --- old.unusedTypeParameters9.js
 +++ new.unusedTypeParameters9.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [unusedTypeParameters9.js]
  // clas + interface
 -var C1 = /** @class */ (function () {

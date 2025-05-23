@@ -1,7 +1,7 @@
 --- old.genericClassWithStaticsUsingTypeArguments.js
 +++ new.genericClassWithStaticsUsingTypeArguments.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [genericClassWithStaticsUsingTypeArguments.js]
  // Should be error to use 'T' in all declarations within Foo.
 -var Foo = /** @class */ (function () {

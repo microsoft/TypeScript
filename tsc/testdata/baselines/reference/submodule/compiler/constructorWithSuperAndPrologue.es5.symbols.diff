@@ -1,7 +1,7 @@
 --- old.constructorWithSuperAndPrologue.es5.symbols
 +++ new.constructorWithSuperAndPrologue.es5.symbols
 @@= skipped -8, +8 lines =@@
- 
+
      public constructor() {
          console.log("A")
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -11,7 +11,7 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
      }
  }
- 
+
 @@= skipped -13, +13 lines =@@
      constructor() {
          "ngInject";
@@ -21,6 +21,6 @@
  >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
- 
+
          super();
  >super : Symbol(A, Decl(constructorWithSuperAndPrologue.es5.ts, 1, 13))

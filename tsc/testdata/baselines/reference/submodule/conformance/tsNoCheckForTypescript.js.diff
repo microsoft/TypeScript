@@ -1,7 +1,7 @@
 --- old.tsNoCheckForTypescript.js
 +++ new.tsNoCheckForTypescript.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [file.js]
  "use strict";
 -// @ts-nocheck
@@ -15,16 +15,17 @@
 -    }
 -    return Bet;
 -}());
--exports.Bet = Bet;
++class Bet {
++    q = "lol"; // And so will this implements error
++}
+ exports.Bet = Bet;
 -
 -
 -//// [file.d.ts]
 -export declare const a: any;
 -export interface Aleph {
 -    q: number;
-+class Bet {
-+    q = "lol"; // And so will this implements error
- }
+-}
 -export declare class Bet implements Aleph {
 -    q: string;
 -}
@@ -49,4 +50,3 @@
 -!!! error TS2416:   Type 'string' is not assignable to type 'number'.
 -    }
 -    
-+exports.Bet = Bet;

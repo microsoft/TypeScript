@@ -14,7 +14,7 @@
  }
 @@= skipped -390, +390 lines =@@
  >hoge : Symbol(hoge, Decl(tryCatchFinallyControlFlow.ts, 228, 7))
- 
+
              hoge.length;
 ->hoge.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>hoge.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
@@ -26,7 +26,7 @@
      }
 @@= skipped -78, +78 lines =@@
  >tag : Symbol(tag, Decl(tryCatchFinallyControlFlow.ts, 261, 31), Decl(tryCatchFinallyControlFlow.ts, 261, 48))
- 
+
              console.log(state.tag);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))

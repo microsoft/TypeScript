@@ -2,7 +2,7 @@
 +++ new.unusedPrivateVariableInClass5.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [unusedPrivateVariableInClass5.js]
 -var greeter = /** @class */ (function () {
 -    function greeter() {

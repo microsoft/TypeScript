@@ -1,8 +1,8 @@
 --- old.unknownTypeArgOnCall.js
 +++ new.unknownTypeArgOnCall.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [unknownTypeArgOnCall.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

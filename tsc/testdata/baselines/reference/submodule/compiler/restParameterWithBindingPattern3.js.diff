@@ -2,7 +2,7 @@
 +++ new.restParameterWithBindingPattern3.js
 @@= skipped -11, +11 lines =@@
  function e(...{0: a = 1, 1: b = true, ...rest: rest}: [boolean, string, number]) { }
- 
+
  //// [restParameterWithBindingPattern3.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

@@ -1,12 +1,12 @@
 --- old.classFieldSuperAccessibleJs1.symbols
 +++ new.classFieldSuperAccessibleJs1.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  class C {
 ->C : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
 +>C : Symbol(C, Decl(index.js, 0, 0))
- 
+
    static blah1 = 123;
 ->blah1 : Symbol(C.blah1, Decl(index.js, 0, 9))
 +>blah1 : Symbol(blah1, Decl(index.js, 0, 9))
@@ -16,12 +16,12 @@
 ->C : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
 ->blah2 : Symbol(C.blah2, Decl(index.js, 2, 1))
 +>C : Symbol(C, Decl(index.js, 0, 0))
- 
+
  class D extends C {
  >D : Symbol(D, Decl(index.js, 3, 14))
 ->C : Symbol(C, Decl(index.js, 0, 0), Decl(index.js, 2, 1))
 +>C : Symbol(C, Decl(index.js, 0, 0))
- 
+
    static {
      console.log(super.blah1);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -35,7 +35,7 @@
 +>super.blah1 : Symbol(blah1, Decl(index.js, 0, 9))
 +>super : Symbol(C, Decl(index.js, 0, 0))
 +>blah1 : Symbol(blah1, Decl(index.js, 0, 9))
- 
+
      console.log(super.blah2);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -48,4 +48,3 @@
 +>super : Symbol(C, Decl(index.js, 0, 0))
    }
  }
- 

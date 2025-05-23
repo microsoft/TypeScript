@@ -1,8 +1,8 @@
 --- old.crashInresolveReturnStatement.js
 +++ new.crashInresolveReturnStatement.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [crashInresolveReturnStatement.js]
 -var WorkItemToolbar = /** @class */ (function () {
 -    function WorkItemToolbar() {

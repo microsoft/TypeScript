@@ -1,8 +1,8 @@
 --- old.staticIndexSignature4.js
 +++ new.staticIndexSignature4.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [staticIndexSignature4.js]
 -"use strict";
 -var B = /** @class */ (function () {

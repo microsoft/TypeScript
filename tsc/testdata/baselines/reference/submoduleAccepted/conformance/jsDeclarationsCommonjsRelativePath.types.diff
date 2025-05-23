@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsCommonjsRelativePath.types
 @@= skipped -4, +4 lines =@@
  >'use strict' : "use strict"
- 
+
  const Thing = require('./thing').Thing
 ->Thing : typeof Thing
 ->require('./thing').Thing : typeof Thing
@@ -13,22 +13,15 @@
  >require : any
  >'./thing' : "./thing"
 ->Thing : typeof Thing
-+>Thing : any
- 
- module.exports = { Thing }
+-
+-module.exports = { Thing }
 ->module.exports = { Thing } : typeof module.exports
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
 ->{ Thing } : { Thing: typeof Thing; }
 ->Thing : typeof Thing
-+>module.exports = { Thing } : { Thing: any; }
-+>module.exports : { Thing: any; }
-+>module : { export=: { Thing: any; }; }
-+>exports : { Thing: any; }
-+>{ Thing } : { Thing: any; }
-+>Thing : any
- 
+-
 -=== thing.js ===
 -'use strict';
 ->'use strict' : "use strict"
@@ -43,4 +36,12 @@
 ->exports : typeof module.exports
 ->{ Thing } : { Thing: typeof Thing; }
 ->Thing : typeof Thing
--
++>Thing : any
++
++module.exports = { Thing }
++>module.exports = { Thing } : { Thing: any; }
++>module.exports : { Thing: any; }
++>module : { export=: { Thing: any; }; }
++>exports : { Thing: any; }
++>{ Thing } : { Thing: any; }
++>Thing : any

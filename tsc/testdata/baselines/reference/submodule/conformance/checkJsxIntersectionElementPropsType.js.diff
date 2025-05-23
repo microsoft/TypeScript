@@ -2,7 +2,7 @@
 +++ new.checkJsxIntersectionElementPropsType.js
 @@= skipped -14, +14 lines =@@
  const x = <C foobar="example" />
- 
+
  //// [checkJsxIntersectionElementPropsType.jsx]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {

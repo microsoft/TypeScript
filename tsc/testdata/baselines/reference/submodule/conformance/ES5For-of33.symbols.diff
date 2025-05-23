@@ -2,7 +2,7 @@
 +++ new.ES5For-of33.symbols
 @@= skipped -4, +4 lines =@@
  >v : Symbol(v, Decl(ES5For-of33.ts, 0, 8))
- 
+
      console.log(v);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))

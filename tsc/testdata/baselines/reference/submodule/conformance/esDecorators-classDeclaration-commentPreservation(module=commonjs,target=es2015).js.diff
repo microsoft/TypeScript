@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-commentPreservation(module=commonjs,target=es2015).js
 +++ new.esDecorators-classDeclaration-commentPreservation(module=commonjs,target=es2015).js
 @@= skipped -120, +120 lines =@@
- 
+
  //// [file1.js]
  /*1*/
 -let C = (() => {

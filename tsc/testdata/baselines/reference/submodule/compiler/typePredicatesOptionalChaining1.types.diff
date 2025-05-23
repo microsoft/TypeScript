@@ -2,11 +2,11 @@
 +++ new.typePredicatesOptionalChaining1.types
 @@= skipped -4, +4 lines =@@
  >X : X
- 
+
    y?: {
 ->y : { z?: string; } | undefined
 +>y : { z?: string | undefined; } | undefined
- 
+
      z?: string;
  >z : string | undefined
 @@= skipped -52, +52 lines =@@
@@ -28,4 +28,3 @@
 ->y : { z?: string; }
 +>y : { z?: string | undefined; }
  >z : string
- 

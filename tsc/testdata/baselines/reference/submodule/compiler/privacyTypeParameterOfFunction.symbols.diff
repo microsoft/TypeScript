@@ -1,7 +1,7 @@
 --- old.privacyTypeParameterOfFunction.symbols
 +++ new.privacyTypeParameterOfFunction.symbols
 @@= skipped -25, +25 lines =@@
- 
+
      // TypeParameter_0_of_method_from_exported_interface_has_or_is_using_private_type_1
      myMethod<T extends privateClass>(): privateClass;
 ->myMethod : Symbol(publicInterfaceWithPrivateTypeParameters.myMethod, Decl(privacyTypeParameterOfFunction.ts, 11, 45))
@@ -11,7 +11,7 @@
  >privateClass : Symbol(privateClass, Decl(privacyTypeParameterOfFunction.ts, 0, 0))
 @@= skipped -20, +20 lines =@@
  >publicClass : Symbol(publicClass, Decl(privacyTypeParameterOfFunction.ts, 1, 1))
- 
+
      myMethod<T extends publicClass>(): publicClass;
 ->myMethod : Symbol(publicInterfaceWithPublicTypeParameters.myMethod, Decl(privacyTypeParameterOfFunction.ts, 19, 43))
 +>myMethod : Symbol(myMethod, Decl(privacyTypeParameterOfFunction.ts, 19, 43))
@@ -20,7 +20,7 @@
  >publicClass : Symbol(publicClass, Decl(privacyTypeParameterOfFunction.ts, 1, 1))
 @@= skipped -20, +20 lines =@@
  >privateClass : Symbol(privateClass, Decl(privacyTypeParameterOfFunction.ts, 0, 0))
- 
+
      myMethod<T extends privateClass>(): privateClass;
 ->myMethod : Symbol(privateInterfaceWithPrivateTypeParameters.myMethod, Decl(privacyTypeParameterOfFunction.ts, 25, 45))
 +>myMethod : Symbol(myMethod, Decl(privacyTypeParameterOfFunction.ts, 25, 45))
@@ -29,7 +29,7 @@
  >privateClass : Symbol(privateClass, Decl(privacyTypeParameterOfFunction.ts, 0, 0))
 @@= skipped -20, +20 lines =@@
  >publicClass : Symbol(publicClass, Decl(privacyTypeParameterOfFunction.ts, 1, 1))
- 
+
      myMethod<T extends publicClass>(): publicClass;
 ->myMethod : Symbol(privateInterfaceWithPublicTypeParameters.myMethod, Decl(privacyTypeParameterOfFunction.ts, 31, 43))
 +>myMethod : Symbol(myMethod, Decl(privacyTypeParameterOfFunction.ts, 31, 43))
@@ -37,7 +37,7 @@
  >publicClass : Symbol(publicClass, Decl(privacyTypeParameterOfFunction.ts, 1, 1))
  >publicClass : Symbol(publicClass, Decl(privacyTypeParameterOfFunction.ts, 1, 1))
 @@= skipped -11, +11 lines =@@
- 
+
      // TypeParameter_0_of_public_static_method_from_exported_class_has_or_is_using_private_type_1
      static myPublicStaticMethod<T extends privateClass>() {
 ->myPublicStaticMethod : Symbol(publicClassWithWithPrivateTypeParameters.myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 35, 55))
@@ -66,7 +66,7 @@
      }
 @@= skipped -26, +26 lines =@@
  >publicClassWithWithPublicTypeParameters : Symbol(publicClassWithWithPublicTypeParameters, Decl(privacyTypeParameterOfFunction.ts, 46, 1))
- 
+
      static myPublicStaticMethod<T extends publicClass>() {
 ->myPublicStaticMethod : Symbol(publicClassWithWithPublicTypeParameters.myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 48, 54))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 48, 54))
@@ -93,7 +93,7 @@
      }
 @@= skipped -25, +25 lines =@@
  >privateClassWithWithPrivateTypeParameters : Symbol(privateClassWithWithPrivateTypeParameters, Decl(privacyTypeParameterOfFunction.ts, 57, 1))
- 
+
      static myPublicStaticMethod<T extends privateClass>() {
 ->myPublicStaticMethod : Symbol(privateClassWithWithPrivateTypeParameters.myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 59, 49))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 59, 49))
@@ -120,7 +120,7 @@
      }
 @@= skipped -25, +25 lines =@@
  >privateClassWithWithPublicTypeParameters : Symbol(privateClassWithWithPublicTypeParameters, Decl(privacyTypeParameterOfFunction.ts, 68, 1))
- 
+
      static myPublicStaticMethod<T extends publicClass>() {
 ->myPublicStaticMethod : Symbol(privateClassWithWithPublicTypeParameters.myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 70, 48))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 70, 48))
@@ -147,7 +147,7 @@
      }
 @@= skipped -58, +58 lines =@@
  >publicClass : Symbol(publicClass, Decl(privacyTypeParameterOfFunction.ts, 1, 1))
- 
+
      myMethod<T>(): publicClass;
 ->myMethod : Symbol(publicInterfaceWithPublicTypeParametersWithoutExtends.myMethod, Decl(privacyTypeParameterOfFunction.ts, 96, 23))
 +>myMethod : Symbol(myMethod, Decl(privacyTypeParameterOfFunction.ts, 96, 23))
@@ -156,7 +156,7 @@
  }
 @@= skipped -17, +17 lines =@@
  >publicClass : Symbol(publicClass, Decl(privacyTypeParameterOfFunction.ts, 1, 1))
- 
+
      myMethod<T>(): publicClass;
 ->myMethod : Symbol(privateInterfaceWithPublicTypeParametersWithoutExtends.myMethod, Decl(privacyTypeParameterOfFunction.ts, 102, 23))
 +>myMethod : Symbol(myMethod, Decl(privacyTypeParameterOfFunction.ts, 102, 23))
@@ -165,7 +165,7 @@
  }
 @@= skipped -9, +9 lines =@@
  >publicClassWithWithPublicTypeParametersWithoutExtends : Symbol(publicClassWithWithPublicTypeParametersWithoutExtends, Decl(privacyTypeParameterOfFunction.ts, 104, 1))
- 
+
      static myPublicStaticMethod<T>() {
 ->myPublicStaticMethod : Symbol(publicClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 106, 68))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 106, 68))
@@ -189,7 +189,7 @@
  }
 @@= skipped -20, +20 lines =@@
  >privateClassWithWithPublicTypeParametersWithoutExtends : Symbol(privateClassWithWithPublicTypeParametersWithoutExtends, Decl(privacyTypeParameterOfFunction.ts, 115, 1))
- 
+
      static myPublicStaticMethod<T>() {
 ->myPublicStaticMethod : Symbol(privateClassWithWithPublicTypeParametersWithoutExtends.myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 116, 62))
 +>myPublicStaticMethod : Symbol(myPublicStaticMethod, Decl(privacyTypeParameterOfFunction.ts, 116, 62))

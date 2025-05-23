@@ -1,7 +1,7 @@
 --- old.importNonExportedMember12.symbols
 +++ new.importNonExportedMember12.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === /node_modules/foo/src/index.js ===
  module.exports = 1;
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -9,12 +9,12 @@
 +>module.exports : Symbol(export=, Decl(index.js, 0, 0))
 +>module : Symbol(module.exports)
  >exports : Symbol(export=, Decl(index.js, 0, 0))
- 
+
  === /a.js ===
  export const A = require("foo");
  >A : Symbol(A, Decl(a.js, 0, 12))
 ->require : Symbol(require)
 ->"foo" : Symbol("/node_modules/foo/src/index", Decl(index.js, 0, 0))
- 
+
  === /b.ts ===
  import { A } from "./a";

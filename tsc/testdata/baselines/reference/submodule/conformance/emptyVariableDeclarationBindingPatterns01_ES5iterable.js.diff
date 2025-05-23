@@ -2,7 +2,7 @@
 +++ new.emptyVariableDeclarationBindingPatterns01_ES5iterable.js
 @@= skipped -50, +50 lines =@@
  })();
- 
+
  //// [emptyVariableDeclarationBindingPatterns01_ES5iterable.js]
 -var __read = (this && this.__read) || function (o, n) {
 -    var m = typeof Symbol === "function" && o[Symbol.iterator];
@@ -81,45 +81,38 @@
 -        for (var ns_1 = __values(ns), ns_1_1 = ns_1.next(); !ns_1_1.done; ns_1_1 = ns_1.next()) {
 -            var _g = ns_1_1.value;
 -        }
-+    const ns = [];
-+    for (var {} of ns) {
-     }
+-    }
 -    catch (e_1_1) { e_1 = { error: e_1_1 }; }
 -    finally {
 -        try {
 -            if (ns_1_1 && !ns_1_1.done && (_a = ns_1.return)) _a.call(ns_1);
 -        }
 -        finally { if (e_1) throw e_1.error; }
-+    for (let {} of ns) {
-     }
+-    }
 -    try {
 -        for (var ns_2 = __values(ns), ns_2_1 = ns_2.next(); !ns_2_1.done; ns_2_1 = ns_2.next()) {
 -            var _h = ns_2_1.value;
 -        }
-+    for (const {} of ns) {
-     }
+-    }
 -    catch (e_2_1) { e_2 = { error: e_2_1 }; }
 -    finally {
 -        try {
 -            if (ns_2_1 && !ns_2_1.done && (_b = ns_2.return)) _b.call(ns_2);
 -        }
 -        finally { if (e_2) throw e_2.error; }
-+    for (var [] of ns) {
-     }
+-    }
 -    try {
 -        for (var ns_3 = __values(ns), ns_3_1 = ns_3.next(); !ns_3_1.done; ns_3_1 = ns_3.next()) {
 -            var _j = ns_3_1.value;
 -        }
-+    for (let [] of ns) {
-     }
+-    }
 -    catch (e_3_1) { e_3 = { error: e_3_1 }; }
 -    finally {
 -        try {
 -            if (ns_3_1 && !ns_3_1.done && (_c = ns_3.return)) _c.call(ns_3);
 -        }
 -        finally { if (e_3) throw e_3.error; }
-+    for (const [] of ns) {
-     }
+-    }
 -    try {
 -        for (var ns_4 = __values(ns), ns_4_1 = ns_4.next(); !ns_4_1.done; ns_4_1 = ns_4.next()) {
 -            var _k = __read(ns_4_1.value, 0);
@@ -155,5 +148,17 @@
 -            if (ns_6_1 && !ns_6_1.done && (_f = ns_6.return)) _f.call(ns_6);
 -        }
 -        finally { if (e_6) throw e_6.error; }
--    }
++    const ns = [];
++    for (var {} of ns) {
++    }
++    for (let {} of ns) {
++    }
++    for (const {} of ns) {
++    }
++    for (var [] of ns) {
++    }
++    for (let [] of ns) {
++    }
++    for (const [] of ns) {
+     }
  })();

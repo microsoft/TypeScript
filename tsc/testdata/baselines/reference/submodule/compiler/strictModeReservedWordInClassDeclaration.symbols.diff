@@ -11,7 +11,7 @@
  }
 @@= skipped -9, +9 lines =@@
  >C : Symbol(C, Decl(strictModeReservedWordInClassDeclaration.ts, 7, 1))
- 
+
      constructor(public public, let) {
 ->public : Symbol(C.public, Decl(strictModeReservedWordInClassDeclaration.ts, 10, 16))
 +>public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 10, 16))
@@ -25,10 +25,10 @@
  >public : Symbol(public, Decl(strictModeReservedWordInClassDeclaration.ts, 12, 25))
 @@= skipped -18, +18 lines =@@
      }
- 
+
      public pulbic() { } // No Error;
 ->pulbic : Symbol(C.pulbic, Decl(strictModeReservedWordInClassDeclaration.ts, 15, 5))
 +>pulbic : Symbol(pulbic, Decl(strictModeReservedWordInClassDeclaration.ts, 15, 5))
  }
- 
+
  class D<public, private>{ }

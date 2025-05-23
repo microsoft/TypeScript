@@ -2,7 +2,7 @@
 +++ new.typeArgumentInferenceOrdering.js
 @@= skipped -16, +16 lines =@@
  var x = foo(new C()).x; // was Error that property x does not exist on type {}
- 
+
  //// [typeArgumentInferenceOrdering.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -2,7 +2,7 @@
 +++ new.classConstructorAccessibility4.js
 @@= skipped -31, +31 lines =@@
  }
- 
+
  //// [classConstructorAccessibility4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -57,13 +57,7 @@
 -            function E() {
 -            }
 -            E.prototype.method = function () {
-+}
-+class D {
-+    constructor() { }
-+    method() {
-+        class E {
-+            method() {
-                 new D(); // OK
+-                new D(); // OK
 -            };
 -            return E;
 -        }());
@@ -71,7 +65,7 @@
 -            __extends(F, _super);
 -            function F() {
 -                return _super !== null && _super.apply(this, arguments) || this;
-             }
+-            }
 -            return F;
 -        }(D));
 -    };
@@ -83,12 +77,19 @@
 -declare class A {
 -    private constructor();
 -    method(): void;
+ }
+-declare class D {
+-    protected constructor();
+-    method(): void;
++class D {
++    constructor() { }
++    method() {
++        class E {
++            method() {
++                new D(); // OK
++            }
 +        }
 +        class F extends D {
 +        }
 +    }
  }
--declare class D {
--    protected constructor();
--    method(): void;
--}

@@ -2,13 +2,13 @@
 +++ new.aliasDoesNotDuplicateSignatures.types
 @@= skipped -10, +10 lines =@@
  >'demoModule' : typeof import("demoModule")
- 
+
      import alias = demoNS;
 ->alias : typeof alias
 ->demoNS : typeof alias
 +>alias : typeof demoNS
 +>demoNS : typeof demoNS
- 
+
      export = alias;
 ->alias : typeof alias
 +>alias : typeof demoNS

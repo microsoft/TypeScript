@@ -6,9 +6,8 @@
  >x : any
 ->c : a
 +>c : c
- 
+
      var b: a;
 ->b : a
 +>b : c
  }
- 

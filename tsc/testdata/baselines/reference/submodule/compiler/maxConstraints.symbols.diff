@@ -2,7 +2,7 @@
 +++ new.maxConstraints.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(maxConstraints.ts, 0, 21))
- 
+
      compareTo(other: T): number;
 ->compareTo : Symbol(Comparable.compareTo, Decl(maxConstraints.ts, 0, 25))
 +>compareTo : Symbol(compareTo, Decl(maxConstraints.ts, 0, 25))

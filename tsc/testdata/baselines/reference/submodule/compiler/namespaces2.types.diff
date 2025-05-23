@@ -2,7 +2,7 @@
 +++ new.namespaces2.types
 @@= skipped -12, +12 lines =@@
  }
- 
+
  var c: A.B.C = new A.B.C();
 ->c : A.B.C
 +>c : C
@@ -19,4 +19,3 @@
 ->C : typeof A.B.C
 +>B : typeof B
 +>C : typeof C
- 

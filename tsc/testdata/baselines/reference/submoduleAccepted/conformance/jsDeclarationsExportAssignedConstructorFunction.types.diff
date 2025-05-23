@@ -18,7 +18,7 @@
 +>exports : typeof import("jsDeclarationsExportAssignedConstructorFunction")
 +>MyClass : any
 +>function() {    this.x = 1} : () => void
- 
+
      this.x = 1
  >this.x = 1 : 1
  >this.x : any
@@ -44,5 +44,5 @@
 +>MyClass : any
 +>prototype : any
  >{    a: function() {    }} : { a: () => void; }
- 
+
      a: function() {

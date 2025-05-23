@@ -40,7 +40,7 @@
 +>o : { o: string; }
 +>p : { p: string; }
 +>q : { q: string; }
- 
+
      console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q)
  >console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q) : void
 @@= skipped -25, +25 lines =@@
@@ -114,5 +114,5 @@
 ->q : Q
 +>q : { q: string; }
  >q : string
- 
+
      /** @type {Alpha} */

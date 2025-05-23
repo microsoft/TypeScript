@@ -2,7 +2,7 @@
 +++ new.controlFlowIterationErrorsAsync.symbols
 @@= skipped -8, +8 lines =@@
  >s : Symbol(s, Decl(controlFlowIterationErrorsAsync.ts, 2, 19))
- 
+
      return s.length;
 ->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
@@ -10,7 +10,7 @@
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  async function f1() {
 @@= skipped -306, +306 lines =@@
      lastId = entities[entities.length - 1];
@@ -23,4 +23,3 @@
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
    } 
  }
- 

@@ -8,7 +8,7 @@
 ->match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
 +>''.match : Symbol(match, Decl(lib.es5.d.ts, --, --))
 +>match : Symbol(match, Decl(lib.es5.d.ts, --, --))
- 
+
  if (match !== null) {
  >match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
 @@= skipped -9, +9 lines =@@
@@ -17,6 +17,6 @@
  >match : Symbol(match, Decl(firstMatchRegExpMatchArray.ts, 0, 5))
 ->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 +>0 : Symbol(0, Decl(lib.es5.d.ts, --, --))
- 
+
      const bar: string = match[1]
  >bar : Symbol(bar, Decl(firstMatchRegExpMatchArray.ts, 4, 9))

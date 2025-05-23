@@ -17,8 +17,8 @@
 -instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g<U>(): U; }' and 'boolean'.
 +instantiationExpressionErrors.ts(45,12): error TS2365: Operator '<' cannot be applied to types '{ <T>(): T; g: <U>() => U; }' and 'boolean'.
  instantiationExpressionErrors.ts(45,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'number'.
- 
- 
+
+
 @@= skipped -46, +46 lines =@@
  !!! error TS1109: Expression expected.
      const a9 = (f<number>)<number>;  // Error, no applicable signatures

@@ -2,7 +2,7 @@
 +++ new.topLevelExports.js
 @@= skipped -7, +7 lines =@@
  void log(foo).toString();
- 
+
  //// [topLevelExports.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

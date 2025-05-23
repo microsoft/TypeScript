@@ -2,7 +2,7 @@
 +++ new.mappedTypes1.js
 @@= skipped -41, +41 lines =@@
  let x4 = f4();
- 
+
  //// [mappedTypes1.js]
 -var x1 = f1();
 -var x2 = f2();

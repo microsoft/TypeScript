@@ -2,7 +2,7 @@
 +++ new.duplicateTypeParameters2.js
 @@= skipped -6, +6 lines =@@
  interface I<T extends A, T extends B> {}
- 
+
  //// [duplicateTypeParameters2.js]
 -var A = /** @class */ (function () {
 -    function A() {

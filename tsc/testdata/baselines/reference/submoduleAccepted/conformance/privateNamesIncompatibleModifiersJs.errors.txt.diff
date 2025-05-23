@@ -1,6 +1,6 @@
 --- old.privateNamesIncompatibleModifiersJs.errors.txt
 +++ new.privateNamesIncompatibleModifiersJs.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -privateNamesIncompatibleModifiersJs.js(3,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 -privateNamesIncompatibleModifiersJs.js(8,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
 -privateNamesIncompatibleModifiersJs.js(13,8): error TS18010: An accessibility modifier cannot be used with a private identifier.
@@ -111,5 +111,4 @@
 -        set #cProp(value) { }
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

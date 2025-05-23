@@ -1,7 +1,7 @@
 --- old.nonPrimitiveAndEmptyObject.js
 +++ new.nonPrimitiveAndEmptyObject.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [nonPrimitiveAndEmptyObject.js]
  "use strict";
 -// Repro from #49480

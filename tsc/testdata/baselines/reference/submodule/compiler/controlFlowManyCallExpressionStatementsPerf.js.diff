@@ -1,8 +1,8 @@
 --- old.controlFlowManyCallExpressionStatementsPerf.js
 +++ new.controlFlowManyCallExpressionStatementsPerf.js
 @@= skipped -65, +65 lines =@@
- 
- 
+
+
  //// [controlFlowManyCallExpressionStatementsPerf.js]
 -"use strict";
  function test(x) { return x; }

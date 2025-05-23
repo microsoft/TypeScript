@@ -1,8 +1,8 @@
 --- old.noImplicitAnyNamelessParameter.js
 +++ new.noImplicitAnyNamelessParameter.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [noImplicitAnyNamelessParameter.js]
 -var C = /** @class */ (function () {
 -    function C() {

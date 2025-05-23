@@ -2,16 +2,15 @@
 +++ new.unionTypeConstructSignatures.types
 @@= skipped -367, +367 lines =@@
  >unionWithRestParameter3 : (new (a: string, ...b: number[]) => string) | (new (a: string) => number)
- 
+
  var unionWithAbstractSignature: (abstract new (a: string) => string) | (new (a: string) => string);
 ->unionWithAbstractSignature : (abstract new (a: string) => string) | (new (a: string) => string)
 +>unionWithAbstractSignature : (new (a: string) => string) | (new (a: string) => string)
  >a : string
  >a : string
- 
+
  new unionWithAbstractSignature('hello');
  >new unionWithAbstractSignature('hello') : any
 ->unionWithAbstractSignature : (abstract new (a: string) => string) | (new (a: string) => string)
 +>unionWithAbstractSignature : (new (a: string) => string) | (new (a: string) => string)
  >'hello' : "hello"
- 

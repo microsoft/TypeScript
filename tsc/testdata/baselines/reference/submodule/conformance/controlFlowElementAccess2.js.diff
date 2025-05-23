@@ -1,8 +1,8 @@
 --- old.controlFlowElementAccess2.js
 +++ new.controlFlowElementAccess2.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [controlFlowElementAccess2.js]
 -"use strict";
  if (typeof config['works'] !== 'boolean') {

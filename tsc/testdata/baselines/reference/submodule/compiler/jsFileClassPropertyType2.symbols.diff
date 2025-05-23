@@ -11,7 +11,7 @@
 +>p : Symbol(p, Decl(foo.js, 1, 19))
    }
  }
- 
+
  === bar.ts ===
  (new C()).p.push("string");
 ->(new C()).p.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
@@ -23,4 +23,3 @@
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>p : Symbol(p, Decl(foo.js, 1, 19))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
- 

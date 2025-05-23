@@ -2,7 +2,7 @@
 +++ new.privateClassPropertyAccessibleWithinClass.types
 @@= skipped -26, +26 lines =@@
  >x : string
- 
+
      private foo() { return this.foo; }
 ->foo : () => any
 ->this.foo : () => any
@@ -11,12 +11,12 @@
  >this : this
 ->foo : () => any
 +>foo : () => ???
- 
+
      private static x: string;
  >x : string
 @@= skipped -26, +26 lines =@@
  >x : string
- 
+
      private static foo() { return this.foo; }
 ->foo : () => typeof C.foo
 ->this.foo : () => typeof C.foo
@@ -25,7 +25,7 @@
  >this : typeof C
 ->foo : () => typeof C.foo
 +>foo : () => ???
- 
+
      private static bar() { this.foo(); }
  >bar : () => void
 ->this.foo() : () => typeof C.foo
@@ -36,5 +36,5 @@
 ->foo : () => typeof C.foo
 +>foo : () => ???
  }
- 
+
  // added level of function nesting

@@ -2,7 +2,7 @@
 +++ new.intersectionWithIndexSignatures.symbols
 @@= skipped -91, +91 lines =@@
  >s : Symbol(s, Decl(intersectionWithIndexSignatures.ts, 20, 105))
- 
+
  q["asd"].a.substr(1);
 ->q["asd"].a.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 +>q["asd"].a.substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
@@ -11,6 +11,6 @@
  >a : Symbol(a, Decl(intersectionWithIndexSignatures.ts, 22, 38))
 ->substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
 +>substr : Symbol(substr, Decl(lib.es5.d.ts, --, --))
- 
+
  q["asd"].b;  // Error
  >q : Symbol(q, Decl(intersectionWithIndexSignatures.ts, 24, 13))

@@ -2,7 +2,7 @@
 +++ new.inheritSameNamePrivatePropertiesFromDifferentOrigins.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [inheritSameNamePrivatePropertiesFromDifferentOrigins.js]
 -var C = /** @class */ (function () {
 -    function C() {

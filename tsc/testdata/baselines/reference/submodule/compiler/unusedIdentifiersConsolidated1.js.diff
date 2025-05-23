@@ -2,7 +2,7 @@
 +++ new.unusedIdentifiersConsolidated1.js
 @@= skipped -103, +103 lines =@@
  }
- 
+
  //// [unusedIdentifiersConsolidated1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -70,29 +70,29 @@
 -        };
 -        return LettersOnlyValidator;
 -    }());
--    Validation.LettersOnlyValidator = LettersOnlyValidator;
--    var ZipCodeValidator = /** @class */ (function () {
--        function ZipCodeValidator() {
-         }
--        ZipCodeValidator.prototype.isAcceptable = function (s3) {
++        }
 +        unUsedPrivateFunction() {
 +        }
 +    }
-+    Validation.LettersOnlyValidator = LettersOnlyValidator;
+     Validation.LettersOnlyValidator = LettersOnlyValidator;
+-    var ZipCodeValidator = /** @class */ (function () {
+-        function ZipCodeValidator() {
+-        }
+-        ZipCodeValidator.prototype.isAcceptable = function (s3) {
 +    class ZipCodeValidator {
 +        isAcceptable(s3) {
              return s3.length === 5;
 -        };
 -        return ZipCodeValidator;
 -    }());
--    Validation.ZipCodeValidator = ZipCodeValidator;
++        }
++    }
+     Validation.ZipCodeValidator = ZipCodeValidator;
 -    var dummy = /** @class */ (function () {
 -        function dummy() {
-         }
+-        }
 -        return dummy;
 -    }());
-+    }
-+    Validation.ZipCodeValidator = ZipCodeValidator;
 +    class dummy {
 +    }
  })(Validation || (Validation = {}));

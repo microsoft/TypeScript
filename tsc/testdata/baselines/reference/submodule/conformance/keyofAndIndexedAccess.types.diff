@@ -2,12 +2,12 @@
 +++ new.keyofAndIndexedAccess.types
 @@= skipped -507, +507 lines =@@
  }
- 
+
  function f32<K extends "width" | "height">(key: K) {
 ->f32 : <K extends "width" | "height">(key: K) => Shape[K]
 +>f32 : <K extends "height" | "width">(key: K) => Shape[K]
  >key : K
- 
+
      const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
 @@= skipped -29, +29 lines =@@
      let name = getProperty(shape, "name");
@@ -17,7 +17,7 @@
 +>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
  >shape : S
  >"name" : "name"
- 
+
      let prop = getProperty(shape, key);
  >prop : S[K]
  >getProperty(shape, key) : S[K]
@@ -25,10 +25,10 @@
 +>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
  >shape : S
  >key : K
- 
+
 @@= skipped -228, +228 lines =@@
  }
- 
+
  function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 ->f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) => void
 ->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
@@ -36,7 +36,7 @@
 +>func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
  >k1 : keyof T & keyof U
  >k2 : keyof T | keyof U
- 
+
      func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
  >func<{ a: any, b: any }, { a: any, c: any }>('a', 'a') : void
 ->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
@@ -45,7 +45,7 @@
  >b : any
  >a : any
 @@= skipped -17, +17 lines =@@
- 
+
      func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
  >func<{ a: any, b: any }, { a: any, c: any }>('a', 'b') : void
 ->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
@@ -54,7 +54,7 @@
  >b : any
  >a : any
 @@= skipped -10, +10 lines =@@
- 
+
      func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
  >func<{ a: any, b: any }, { a: any, c: any }>('a', 'c') : void
 ->func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
@@ -64,7 +64,7 @@
  >a : any
 @@= skipped -45, +45 lines =@@
  }
- 
+
  function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
 ->f72 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
 ->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
@@ -102,7 +102,7 @@
  >1 : 1
 @@= skipped -13, +13 lines =@@
  }
- 
+
  function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
 ->f73 : (func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) => void
 ->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
@@ -140,7 +140,7 @@
  >1 : 1
 @@= skipped -13, +13 lines =@@
  }
- 
+
  function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
 ->f74 : (func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) => void
 ->func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
@@ -169,7 +169,7 @@
  >1 : 1
 @@= skipped -246, +246 lines =@@
  };
- 
+
  function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
 ->f90 : <T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) => void
 +>f90 : <T extends S2, K extends keyof S2>(x1: string, x2: T[keyof S2], x3: S2[K]) => void
@@ -178,20 +178,20 @@
  >x3 : S2[K]
 @@= skipped -193, +193 lines =@@
  // Modified repro from #12544
- 
+
  function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
 ->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1], K3 extends keyof T_1[K1_1][K2]>(obj: T_1, key1: K1_1, key2: K2, key3: K3): T_1[K1_1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
 +>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
  >obj : T
  >key1 : K1
- 
+
  function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
 ->path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T_1, K1_1 extends keyof T_1, K2_1 extends keyof T_1[K1_1], K3 extends keyof T_1[K1_1][K2_1]>(obj: T_1, key1: K1_1, key2: K2_1, key3: K3): T_1[K1_1][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
 +>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
  >obj : T
  >key1 : K1
  >key2 : K2
- 
+
  function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
 ->path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T_1, K1_1 extends keyof T_1, K2_1 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2_1): T_1[K1_1][K2_1]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
 +>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
@@ -200,42 +200,42 @@
  >key2 : K2
 @@= skipped -172, +172 lines =@@
  >options : Options1<Data, Computed>
- 
+
      get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
 ->get : <K extends keyof (Data & Computed)>(key: K) => (Data & Computed)[K]
 +>get : <K extends keyof Computed | keyof Data>(key: K) => Data & Computed[K]
  >key : K
  }
- 
+
 @@= skipped -44, +44 lines =@@
  >options : Options2<Data, Computed>
- 
+
      get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
 ->get : <K extends keyof Data | keyof Computed>(key: K) => (Data & Computed)[K]
 +>get : <K extends keyof Computed | keyof Data>(key: K) => Data & Computed[K]
  >key : K
  }
- 
+
 @@= skipped -12, +12 lines =@@
  }
- 
+
  function f<K extends keyof R>(p: K) {
 ->f : <K extends keyof R>(p: K) => void
 +>f : <K extends "p">(p: K) => void
  >p : K
- 
+
      let a: any;
 @@= skipped -176, +176 lines =@@
  // Repro from #13514
- 
+
  declare function head<T extends Array<any>>(list: T): T[0];
 ->head : <T extends Array<any>>(list: T) => T[0]
 +>head : <T extends any[]>(list: T) => T[0]
  >list : T
- 
+
  // Repro from #13604
 @@= skipped -45, +45 lines =@@
- 
+
          this.childFormFactories[prop](value)
  >this.childFormFactories[prop](value) : Form<T[K]>
 ->this.childFormFactories[prop] : { [K_1 in keyof T]: (v: T[K_1]) => Form<T[K_1]>; }[K]
@@ -270,7 +270,7 @@
  >foo : Foo
      }
 @@= skipped -10, +10 lines =@@
- 
+
          this.props.foo.concat;
  >this.props.foo.concat : (...strings: string[]) => string
 ->this.props.foo : (T & Foo)["foo"]
@@ -284,7 +284,7 @@
      }
  }
 @@= skipped -143, +143 lines =@@
- 
+
      take<{} | null | undefined>(o[k]);
  >take<{} | null | undefined>(o[k]) : void
 ->take : <T_1>(p: T_1) => void
@@ -292,7 +292,7 @@
  >o[k] : T[K]
  >o : T
  >k : K
- 
+
      take<any>(o[k]);
  >take<any>(o[k]) : void
 ->take : <T_1>(p: T_1) => void
@@ -302,16 +302,16 @@
  >k : K
 @@= skipped -38, +38 lines =@@
  >Foo7 : T
- 
+
  declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
 ->f7 : <K extends keyof I7>(type: K) => Foo7<I7[K]>
 +>f7 : <K extends "x">(type: K) => I7[K]
  >type : K
- 
+
  // Repro from #21770
 @@= skipped -66, +66 lines =@@
  };
- 
+
  const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
 ->cf2 : <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void
 -><T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>{    const s: string = t[k];    t.cool;} : <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void

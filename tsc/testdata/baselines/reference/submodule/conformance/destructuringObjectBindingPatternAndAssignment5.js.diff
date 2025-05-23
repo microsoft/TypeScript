@@ -1,8 +1,8 @@
 --- old.destructuringObjectBindingPatternAndAssignment5.js
 +++ new.destructuringObjectBindingPatternAndAssignment5.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [destructuringObjectBindingPatternAndAssignment5.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

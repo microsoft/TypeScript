@@ -1,7 +1,7 @@
 --- old.controlFlowIIFE.types
 +++ new.controlFlowIIFE.types
 @@= skipped -145, +145 lines =@@
- 
+
      test.slice(1); // No error
  >test.slice(1) : string
 ->test.slice : (start?: number, end?: number) => string
@@ -10,5 +10,5 @@
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
  >1 : 1
- 
+
  })();

@@ -10,4 +10,3 @@
 +>function (a, b) { } : (a: string | number, b?: number) => void
  >a : string | number
  >b : number
- 

@@ -2,7 +2,7 @@
 +++ new.letKeepNamesOfTopLevelItems.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [letKeepNamesOfTopLevelItems.js]
 -var x;
 +let x;

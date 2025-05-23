@@ -2,7 +2,7 @@
 +++ new.typeofThisInMethodSignature.types
 @@= skipped -10, +10 lines =@@
  >1 : 1
- 
+
  	a(x: typeof this.x): void {}
 ->a : (x: typeof this.x) => void
 +>a : (x: number) => void
@@ -20,4 +20,3 @@
 ->a : (x: typeof this.x) => void
 +>a : (x: number) => void
  >1 : 1
- 

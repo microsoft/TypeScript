@@ -15,10 +15,7 @@
          m2.f2 = f2;
 -        var C2 = /** @class */ (function () {
 -            function C2() {
-+        class C2 {
-+            get p1(arg) {
-+                return new C1();
-             }
+-            }
 -            Object.defineProperty(C2.prototype, "p1", {
 -                get: function (arg) {
 -                    return new C1();
@@ -29,6 +26,10 @@
 -                configurable: true
 -            });
 -            C2.prototype.f55 = function () {
++        class C2 {
++            get p1(arg) {
++                return new C1();
++            }
 +            set p1(arg1) {
 +            }
 +            f55() {

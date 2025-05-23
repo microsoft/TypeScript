@@ -1,8 +1,8 @@
 --- old.noImplicitAnyLoopCrash.js
 +++ new.noImplicitAnyLoopCrash.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [noImplicitAnyLoopCrash.js]
 -var foo = function () { };
 -var bar;

@@ -8,10 +8,10 @@
 +>require("./index") : { Render: typeof Render; }
  >require : any
  >"./index" : "./index"
- 
+
 @@= skipped -10, +10 lines =@@
  >Render : typeof Render
- 
+
  render.addRectangle();
 ->render.addRectangle() : import("rectangle").Rectangle
 ->render.addRectangle : () => import("rectangle").Rectangle
@@ -20,7 +20,7 @@
  >render : Render
 ->addRectangle : () => import("rectangle").Rectangle
 +>addRectangle : () => Rectangle
- 
+
  console.log("Objects", render.objects);
  >console.log("Objects", render.objects) : void
 @@= skipped -11, +11 lines =@@
@@ -32,12 +32,12 @@
  >render : Render
 ->objects : import("rectangle").Rectangle[]
 +>objects : Rectangle[]
- 
+
  === rectangle.js ===
  class Rectangle {
 @@= skipped -19, +19 lines =@@
  }
- 
+
  module.exports = { Rectangle };
 ->module.exports = { Rectangle } : typeof module.exports
 ->module.exports : typeof module.exports
@@ -49,7 +49,7 @@
 +>exports : { Rectangle: typeof Rectangle; }
  >{ Rectangle } : { Rectangle: typeof Rectangle; }
  >Rectangle : typeof Rectangle
- 
+
  === index.js ===
  const {Rectangle} = require('./rectangle');
  >Rectangle : typeof Rectangle
@@ -57,7 +57,7 @@
 +>require('./rectangle') : { Rectangle: typeof Rectangle; }
  >require : any
  >'./rectangle' : "./rectangle"
- 
+
 @@= skipped -23, +23 lines =@@
           * @type {Rectangle[]}
           */
@@ -73,7 +73,7 @@
      /**
 @@= skipped -34, +35 lines =@@
  }
- 
+
  module.exports = { Render };
 ->module.exports = { Render } : typeof module.exports
 ->module.exports : typeof module.exports
@@ -85,4 +85,3 @@
 +>exports : { Render: typeof Render; }
  >{ Render } : { Render: typeof Render; }
  >Render : typeof Render
- 

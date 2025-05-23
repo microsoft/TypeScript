@@ -8,4 +8,3 @@
 +>module : { export=: { str: string; }; }
  >exports : { str: string; }
  >{  str: 'x',} : { str: string; }
- 

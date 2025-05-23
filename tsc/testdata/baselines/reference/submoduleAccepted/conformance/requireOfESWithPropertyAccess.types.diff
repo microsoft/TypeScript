@@ -1,7 +1,7 @@
 --- old.requireOfESWithPropertyAccess.types
 +++ new.requireOfESWithPropertyAccess.types
 @@= skipped -1, +1 lines =@@
- 
+
  === main.js ===
  const x = require('./ch').x
 ->x : { grey: {}; }
@@ -14,11 +14,11 @@
  >'./ch' : "./ch"
 ->x : { grey: {}; }
 +>x : any
- 
+
  x
 ->x : { grey: {}; }
 +>x : any
- 
+
  x.grey
 ->x.grey : {}
 ->x : { grey: {}; }
@@ -26,13 +26,11 @@
 +>x.grey : any
 +>x : any
 +>grey : any
- 
+
  x.x.grey
  >x.x.grey : any
  >x.x : any
 ->x : { grey: {}; }
- >x : any
 +>x : any
+ >x : any
  >grey : any
- 
- === ch.js ===

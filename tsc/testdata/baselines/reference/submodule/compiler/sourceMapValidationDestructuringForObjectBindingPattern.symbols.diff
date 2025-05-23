@@ -2,32 +2,32 @@
 +++ new.sourceMapValidationDestructuringForObjectBindingPattern.symbols
 @@= skipped -11, +11 lines =@@
  >Robot : Symbol(Robot, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 2, 1))
- 
+
      name: string;
 ->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 3, 17))
 +>name : Symbol(name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 3, 17))
- 
+
      skill: string;
 ->skill : Symbol(Robot.skill, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 4, 17))
 +>skill : Symbol(skill, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 4, 17))
  }
- 
+
  interface MultiRobot {
  >MultiRobot : Symbol(MultiRobot, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 6, 1))
- 
+
      name: string;
 ->name : Symbol(MultiRobot.name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 8, 22))
 +>name : Symbol(name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 8, 22))
- 
+
      skills: {
 ->skills : Symbol(MultiRobot.skills, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 9, 17))
 +>skills : Symbol(skills, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 9, 17))
- 
+
          primary: string;
  >primary : Symbol(primary, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 10, 13))
 @@= skipped -52, +52 lines =@@
  }
- 
+
  for (let {name: nameA } = robot, i = 0; i < 1; i++) {
 ->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 3, 17))
 +>name : Symbol(name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 3, 17))
@@ -81,7 +81,7 @@
  >secondary : Symbol(secondary, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 11, 24))
 @@= skipped -26, +26 lines =@@
  }
- 
+
  for (let {name: nameA, skill: skillA } = robot, i = 0; i < 1; i++) {
 ->name : Symbol(Robot.name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 3, 17))
 +>name : Symbol(name, Decl(sourceMapValidationDestructuringForObjectBindingPattern.ts, 3, 17))

@@ -2,7 +2,7 @@
 +++ new.inheritedConstructorWithRestParams2.js
 @@= skipped -36, +36 lines =@@
  new Derived("", 3, "", "");
- 
+
  //// [inheritedConstructorWithRestParams2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

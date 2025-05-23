@@ -1,6 +1,6 @@
 --- old.jsDeclarationsInterfaces.errors.txt
 +++ new.jsDeclarationsInterfaces.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.js(4,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 -index.js(6,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
 -index.js(10,18): error TS8006: 'interface' declarations can only be used in TypeScript files.
@@ -213,5 +213,4 @@
 -        [idx: number]: {x: 0, y: 0};
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

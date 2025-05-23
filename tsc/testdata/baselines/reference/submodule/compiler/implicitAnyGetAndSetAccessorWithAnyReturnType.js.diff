@@ -1,17 +1,13 @@
 --- old.implicitAnyGetAndSetAccessorWithAnyReturnType.js
 +++ new.implicitAnyGetAndSetAccessorWithAnyReturnType.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [implicitAnyGetAndSetAccessorWithAnyReturnType.js]
  // these should be errors
 -var GetAndSet = /** @class */ (function () {
 -    function GetAndSet() {
 -        this.getAndSet = null; // error at "getAndSet"
-+class GetAndSet {
-+    getAndSet = null; // error at "getAndSet"
-+    get haveGetAndSet() {
-+        return this.getAndSet;
-     }
+-    }
 -    Object.defineProperty(GetAndSet.prototype, "haveGetAndSet", {
 -        get: function () {
 -            return this.getAndSet;
@@ -27,10 +23,7 @@
 -}());
 -var SetterOnly = /** @class */ (function () {
 -    function SetterOnly() {
-+    // this shouldn't be an error
-+    set haveGetAndSet(value) {
-+        this.getAndSet = value;
-     }
+-    }
 -    Object.defineProperty(SetterOnly.prototype, "haveOnlySet", {
 -        set: function (newXValue) {
 -        },
@@ -41,10 +34,7 @@
 -}());
 -var GetterOnly = /** @class */ (function () {
 -    function GetterOnly() {
-+}
-+class SetterOnly {
-+    set haveOnlySet(newXValue) {
-     }
+-    }
 -    Object.defineProperty(GetterOnly.prototype, "haveOnlyGet", {
 -        get: function () {
 -            return null;
@@ -54,6 +44,19 @@
 -    });
 -    return GetterOnly;
 -}());
++class GetAndSet {
++    getAndSet = null; // error at "getAndSet"
++    get haveGetAndSet() {
++        return this.getAndSet;
++    }
++    // this shouldn't be an error
++    set haveGetAndSet(value) {
++        this.getAndSet = value;
++    }
++}
++class SetterOnly {
++    set haveOnlySet(newXValue) {
++    }
 +}
 +class GetterOnly {
 +    get haveOnlyGet() {

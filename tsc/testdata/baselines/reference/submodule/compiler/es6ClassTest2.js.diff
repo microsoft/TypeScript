@@ -1,8 +1,8 @@
 --- old.es6ClassTest2.js
 +++ new.es6ClassTest2.js
 @@= skipped -160, +160 lines =@@
- 
- 
+
+
  //// [es6ClassTest2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -147,20 +147,12 @@
 -    function PrototypeMonster() {
 -        this.age = 1;
 -        this.b = foo();
-+class PrototypeMonster {
-+    age = 1;
-+    name;
-+    b = foo();
-+}
-+class SuperParent {
-+    constructor(a) {
-     }
+-    }
 -    return PrototypeMonster;
 -}());
 -var SuperParent = /** @class */ (function () {
 -    function SuperParent(a) {
-+    b(b) {
-     }
+-    }
 -    SuperParent.prototype.b = function (b) {
 -    };
 -    SuperParent.prototype.c = function () {
@@ -171,8 +163,7 @@
 -    __extends(SuperChild, _super);
 -    function SuperChild() {
 -        return _super.call(this, 1) || this;
-+    c() {
-     }
+-    }
 -    SuperChild.prototype.b = function () {
 -        _super.prototype.b.call(this, 'str');
 -    };
@@ -183,12 +174,25 @@
 -}(SuperParent));
 -var Statics = /** @class */ (function () {
 -    function Statics() {
+-    }
+-    Statics.baz = function () {
++class PrototypeMonster {
++    age = 1;
++    name;
++    b = foo();
++}
++class SuperParent {
++    constructor(a) {
++    }
++    b(b) {
++    }
++    c() {
++    }
 +}
 +class SuperChild extends SuperParent {
 +    constructor() {
 +        super(1);
-     }
--    Statics.baz = function () {
++    }
 +    b() {
 +        super.b('str');
 +    }

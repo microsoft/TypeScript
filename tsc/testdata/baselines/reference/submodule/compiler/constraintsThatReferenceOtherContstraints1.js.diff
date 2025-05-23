@@ -1,8 +1,8 @@
 --- old.constraintsThatReferenceOtherContstraints1.js
 +++ new.constraintsThatReferenceOtherContstraints1.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [constraintsThatReferenceOtherContstraints1.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

@@ -8,7 +8,7 @@
 +>(pose?: number) => true : (pose?: number | undefined) => true
  >pose : number | undefined
  >true : true
- 
+
 @@= skipped -8, +8 lines =@@
  >b : number | undefined
  >filter((pose?: number, _?: number) => true) : number | undefined

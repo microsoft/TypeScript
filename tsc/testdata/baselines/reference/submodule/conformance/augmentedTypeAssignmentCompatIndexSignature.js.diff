@@ -1,7 +1,7 @@
 --- old.augmentedTypeAssignmentCompatIndexSignature.js
 +++ new.augmentedTypeAssignmentCompatIndexSignature.js
 @@= skipped -24, +24 lines =@@
- 
+
  //// [augmentedTypeAssignmentCompatIndexSignature.js]
  var o = {};
 -var f = function () { };

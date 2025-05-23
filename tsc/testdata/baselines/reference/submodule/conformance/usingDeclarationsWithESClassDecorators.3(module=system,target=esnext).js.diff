@@ -2,7 +2,7 @@
 +++ new.usingDeclarationsWithESClassDecorators.3(module=system,target=esnext).js
 @@= skipped -13, +13 lines =@@
  void C;
- 
+
  //// [usingDeclarationsWithESClassDecorators.3.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

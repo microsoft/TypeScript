@@ -1,7 +1,7 @@
 --- old.objectLiteralMemberWithoutBlock1.types
 +++ new.objectLiteralMemberWithoutBlock1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === objectLiteralMemberWithoutBlock1.ts ===
  var v = { foo(); }
 ->v : { foo(): any; }
@@ -9,4 +9,3 @@
 +>v : { foo: () => any; }
 +>{ foo(); } : { foo: () => any; }
  >foo : () => any
- 

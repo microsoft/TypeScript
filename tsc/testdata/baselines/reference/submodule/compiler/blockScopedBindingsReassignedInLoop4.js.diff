@@ -1,7 +1,7 @@
 --- old.blockScopedBindingsReassignedInLoop4.js
 +++ new.blockScopedBindingsReassignedInLoop4.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [blockScopedBindingsReassignedInLoop4.js]
  function f1() {
 -    var _loop_1 = function (x, y) {

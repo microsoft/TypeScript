@@ -2,7 +2,7 @@
 +++ new.undefinedTypeArgument2.symbols
 @@= skipped -6, +6 lines =@@
  >T : Symbol(T, Decl(undefinedTypeArgument2.ts, 1, 16))
- 
+
      selectMany<U>(selector: (item: T) => U[]): Query<U>;
 ->selectMany : Symbol(Query.selectMany, Decl(undefinedTypeArgument2.ts, 1, 20), Decl(undefinedTypeArgument2.ts, 2, 56))
 +>selectMany : Symbol(selectMany, Decl(undefinedTypeArgument2.ts, 1, 20), Decl(undefinedTypeArgument2.ts, 2, 56))
@@ -11,7 +11,7 @@
  >item : Symbol(item, Decl(undefinedTypeArgument2.ts, 2, 29))
 @@= skipped -10, +10 lines =@@
  >U : Symbol(U, Decl(undefinedTypeArgument2.ts, 2, 15))
- 
+
      selectMany<U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>;
 ->selectMany : Symbol(Query.selectMany, Decl(undefinedTypeArgument2.ts, 1, 20), Decl(undefinedTypeArgument2.ts, 2, 56))
 +>selectMany : Symbol(selectMany, Decl(undefinedTypeArgument2.ts, 1, 20), Decl(undefinedTypeArgument2.ts, 2, 56))

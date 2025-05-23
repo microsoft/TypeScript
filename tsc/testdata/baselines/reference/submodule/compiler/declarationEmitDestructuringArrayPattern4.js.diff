@@ -2,7 +2,7 @@
 +++ new.declarationEmitDestructuringArrayPattern4.js
 @@= skipped -11, +11 lines =@@
  var [x19, y19, z19, ...a13] = [1, "hello", true];
- 
+
  //// [declarationEmitDestructuringArrayPattern4.js]
 -var a5 = [1, 2, 3].slice(0);
 -var _a = [1, 2, 3], x14 = _a[0], a6 = _a.slice(1);

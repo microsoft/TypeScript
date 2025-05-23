@@ -1,8 +1,7 @@
 --- old.declFileExportImportChain2.errors.txt
 +++ new.declFileExportImportChain2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +declFileExportImportChain2_d.ts(1,20): error TS2307: Cannot find module 'declFileExportImportChain2_c' or its corresponding type declarations.
 +
 +

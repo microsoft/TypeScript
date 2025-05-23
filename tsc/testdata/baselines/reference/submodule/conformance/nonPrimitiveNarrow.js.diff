@@ -1,8 +1,8 @@
 --- old.nonPrimitiveNarrow.js
 +++ new.nonPrimitiveNarrow.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [nonPrimitiveNarrow.js]
 -var Narrow = /** @class */ (function () {
 -    function Narrow() {

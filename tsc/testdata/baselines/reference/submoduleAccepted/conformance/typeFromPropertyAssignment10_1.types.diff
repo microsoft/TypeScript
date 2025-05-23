@@ -1,7 +1,7 @@
 --- old.typeFromPropertyAssignment10_1.types
 +++ new.typeFromPropertyAssignment10_1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === module.js ===
  var Outer = Outer ?? {};
 ->Outer : typeof Outer
@@ -11,7 +11,7 @@
 +>Outer ?? {} : any
 +>Outer : any
  >{} : {}
- 
+
  Outer.app = Outer.app ?? {};
 ->Outer.app = Outer.app ?? {} : typeof Outer.app
 ->Outer.app : typeof Outer.app
@@ -30,7 +30,7 @@
 +>Outer : any
 +>app : any
  >{} : {}
- 
+
  === someview.js ===
  Outer.app.SomeView = (function () {
  >Outer.app.SomeView = (function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
@@ -62,7 +62,7 @@
 +>app : any
 +>Inner : any
  >class {    constructor() {        /** @type {number} */        this.y = 12;    }} : typeof Inner
- 
+
      constructor() {
          /** @type {number} */
          this.y = 12;
@@ -90,7 +90,7 @@
 +>Outer : any
 +>app : any
 +>Inner : any
- 
+
  example.y;
 ->example.y : number
 ->example : Inner
@@ -98,7 +98,7 @@
 +>example.y : any
 +>example : any
 +>y : any
- 
+
  /** @param {number} k */
  Outer.app.statische = function (k) {
 ->Outer.app.statische = function (k) {    return k ** k;} : (k: number) => number
@@ -117,7 +117,7 @@
 +>statische : any
 +>function (k) {    return k ** k;} : (k: any) => number
 +>k : any
- 
+
      return k ** k;
  >k ** k : number
 ->k : number
@@ -145,7 +145,7 @@
 +>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;})() : () => void
 +>(function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;}) : () => () => void
 +>function () {    /**     * Application main class.     * Will be instantiated & initialized by HTML page     */    var Application = function () {        var me = this;        me.view = new Outer.app.SomeView();    };    return Application;} : () => () => void
- 
+
      /**
       * Application main class.
       * Will be instantiated & initialized by HTML page
@@ -155,13 +155,13 @@
 ->function () {        var me = this;        me.view = new Outer.app.SomeView();    } : typeof Application
 +>Application : () => void
 +>function () {        var me = this;        me.view = new Outer.app.SomeView();    } : () => void
- 
+
          var me = this;
 ->me : this
 ->this : this
 +>me : any
 +>this : any
- 
+
          me.view = new Outer.app.SomeView();
  >me.view = new Outer.app.SomeView() : any
  >me.view : any
@@ -179,12 +179,12 @@
 +>Outer : any
 +>app : any
 +>SomeView : any
- 
+
      };
      return Application;
 ->Application : typeof Application
 +>Application : () => void
- 
+
  })();
  === main.js ===
  var app = new Outer.app.Application();
@@ -202,7 +202,7 @@
 +>Outer : any
 +>app : any
 +>Application : any
- 
+
  var inner = new Outer.app.Inner();
 ->inner : Inner
 ->new Outer.app.Inner() : Inner
@@ -218,7 +218,7 @@
 +>Outer : any
 +>app : any
 +>Inner : any
- 
+
  inner.y;
 ->inner.y : number
 ->inner : Inner
@@ -226,18 +226,18 @@
 +>inner.y : any
 +>inner : any
 +>y : any
- 
+
  /** @type {Outer.app.Inner} */
  var x;
  >x : Inner
- 
+
  x.y;
 ->x.y : number
 +>x.y : any
  >x : Inner
 ->y : number
 +>y : any
- 
+
  Outer.app.statische(101); // Infinity, duh
 ->Outer.app.statische(101) : number
 ->Outer.app.statische : (k: number) => number
@@ -252,4 +252,3 @@
 +>app : any
 +>statische : any
  >101 : 101
- 

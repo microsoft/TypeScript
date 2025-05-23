@@ -1,7 +1,7 @@
 --- old.declarationEmitPromise.js
 +++ new.declarationEmitPromise.js
 @@= skipped -24, +24 lines =@@
- 
+
  //// [declarationEmitPromise.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -28,12 +28,7 @@
 -        let rfunc = func; // <- This is the only difference
 -        return rfunc;
 -    });
-+async function runSampleWorks(a, b, c, d, e) {
-+    let result = await bluebird.all([a, b, c, d, e].filter(el => !!el));
-+    let func = (f) => f.apply(this, result);
-+    let rfunc = func; // <- This is the only difference
-+    return rfunc;
- }
+-}
 -function runSampleBreaks(a, b, c, d, e) {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        let result = yield bluebird.all([a, b, c, d, e].filter(el => !!el));
@@ -41,12 +36,7 @@
 -        let rfunc = func; // <- This is the only difference
 -        return rfunc;
 -    });
-+async function runSampleBreaks(a, b, c, d, e) {
-+    let result = await bluebird.all([a, b, c, d, e].filter(el => !!el));
-+    let func = (f) => f.apply(this, result);
-+    let rfunc = func; // <- This is the only difference
-+    return rfunc;
- }
+-}
 -
 -
 -//// [declarationEmitPromise.d.ts]
@@ -55,3 +45,15 @@
 -}
 -export declare function runSampleWorks<A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>): Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>;
 -export declare function runSampleBreaks<A, B, C, D, E>(a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>): Promise<(<T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T)>;
++async function runSampleWorks(a, b, c, d, e) {
++    let result = await bluebird.all([a, b, c, d, e].filter(el => !!el));
++    let func = (f) => f.apply(this, result);
++    let rfunc = func; // <- This is the only difference
++    return rfunc;
++}
++async function runSampleBreaks(a, b, c, d, e) {
++    let result = await bluebird.all([a, b, c, d, e].filter(el => !!el));
++    let func = (f) => f.apply(this, result);
++    let rfunc = func; // <- This is the only difference
++    return rfunc;
++}

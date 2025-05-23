@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationVarInDownLevelGenerator.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [sourceMapValidationVarInDownLevelGenerator.js]
 -function f() {
 -    var x, y;

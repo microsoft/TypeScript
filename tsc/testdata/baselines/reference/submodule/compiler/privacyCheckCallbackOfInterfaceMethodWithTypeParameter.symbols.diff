@@ -2,7 +2,7 @@
 +++ new.privacyCheckCallbackOfInterfaceMethodWithTypeParameter.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 19))
- 
+
      f1(callback: (p: T) => any); 
 ->f1 : Symbol(A.f1, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 23))
 +>f1 : Symbol(f1, Decl(privacyCheckCallbackOfInterfaceMethodWithTypeParameter.ts, 0, 23))

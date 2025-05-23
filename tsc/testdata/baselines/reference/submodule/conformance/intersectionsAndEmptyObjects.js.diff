@@ -1,8 +1,8 @@
 --- old.intersectionsAndEmptyObjects.js
 +++ new.intersectionsAndEmptyObjects.js
 @@= skipped -92, +92 lines =@@
- 
- 
+
+
  //// [intersectionsAndEmptyObjects.js]
 -// Empty object type literals are removed from intersections types
 -// that contain other object types

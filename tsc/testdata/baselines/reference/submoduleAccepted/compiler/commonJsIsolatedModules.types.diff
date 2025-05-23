@@ -1,7 +1,7 @@
 --- old.commonJsIsolatedModules.types
 +++ new.commonJsIsolatedModules.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  module.exports = {}
 ->module.exports = {} : typeof module.exports
@@ -13,5 +13,5 @@
 +>module : { export=: {}; }
 +>exports : {}
  >{} : {}
- 
+
  var x = 1

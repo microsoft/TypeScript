@@ -1,12 +1,12 @@
 --- old.localTypes1.types
 +++ new.localTypes1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === localTypes1.ts ===
  function f1() {
 ->f1 : () => I[]
 +>f1 : () => A
- 
+
      enum E {
  >E : E
 @@= skipped -21, +21 lines =@@
@@ -15,7 +15,7 @@
      type A = I[];
 ->A : I[]
 +>A : A
- 
+
      let a: A = [new C()];
 ->a : I[]
 +>a : A
@@ -33,20 +33,20 @@
  >E.B : E.B
 @@= skipped -8, +8 lines =@@
  >B : E.B
- 
+
      return a;
 ->a : I[]
 +>a : A
  }
- 
+
  function f2() {
 ->f2 : () => I[]
 +>f2 : () => A
- 
+
      function g() {
 ->g : () => I[]
 +>g : () => A
- 
+
          enum E {
  >E : E
 @@= skipped -28, +28 lines =@@
@@ -55,7 +55,7 @@
          type A = I[];
 ->A : I[]
 +>A : A
- 
+
          let a: A = [new C()];
 ->a : I[]
 +>a : A
@@ -73,7 +73,7 @@
  >E.B : E.B
 @@= skipped -8, +8 lines =@@
  >B : E.B
- 
+
          return a;
 ->a : I[]
 +>a : A
@@ -84,12 +84,12 @@
 +>g() : A
 +>g : () => A
  }
- 
+
  function f3(b: boolean) {
 ->f3 : (b: boolean) => I[]
 +>f3 : (b: boolean) => A
  >b : boolean
- 
+
      if (true) {
 @@= skipped -36, +36 lines =@@
  >x : E
@@ -97,7 +97,7 @@
              type A = I[];
 ->A : I[]
 +>A : A
- 
+
              let a: A = [new C()];
 ->a : I[]
 +>a : A
@@ -115,7 +115,7 @@
  >E.B : E.B
 @@= skipped -8, +8 lines =@@
  >B : E.B
- 
+
              return a;
 ->a : I[]
 +>a : A
@@ -128,7 +128,7 @@
              type C = J[];
 ->C : J[]
 +>C : C
- 
+
              let c: C = [new A()];
 ->c : J[]
 +>c : C
@@ -146,7 +146,7 @@
  >E.B : E.B
 @@= skipped -8, +8 lines =@@
  >B : E.B
- 
+
              return c;
 ->c : J[]
 +>c : C

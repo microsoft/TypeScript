@@ -11,7 +11,7 @@
  >a : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.b !== undefined && { b: config.b.toString() },
  >config.b !== undefined && { b: config.b.toString() } : false | { b: string; }
 @@= skipped -16, +16 lines =@@
@@ -25,7 +25,7 @@
  >b : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.c !== undefined && { c: config.c.toString() },
  >config.c !== undefined && { c: config.c.toString() } : false | { c: string; }
 @@= skipped -16, +16 lines =@@
@@ -39,7 +39,7 @@
  >c : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.d !== undefined && { d: config.d.toString() },
  >config.d !== undefined && { d: config.d.toString() } : false | { d: string; }
 @@= skipped -16, +16 lines =@@
@@ -53,7 +53,7 @@
  >d : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.e !== undefined && { e: config.e.toString() },
  >config.e !== undefined && { e: config.e.toString() } : false | { e: string; }
 @@= skipped -16, +16 lines =@@
@@ -67,7 +67,7 @@
  >e : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.f !== undefined && { f: config.f.toString() },
  >config.f !== undefined && { f: config.f.toString() } : false | { f: string; }
 @@= skipped -16, +16 lines =@@
@@ -81,7 +81,7 @@
  >f : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.g !== undefined && { g: config.g.toString() },
  >config.g !== undefined && { g: config.g.toString() } : false | { g: string; }
 @@= skipped -16, +16 lines =@@
@@ -95,7 +95,7 @@
  >g : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.h !== undefined && { h: config.h.toString() },
  >config.h !== undefined && { h: config.h.toString() } : false | { h: string; }
 @@= skipped -16, +16 lines =@@
@@ -109,7 +109,7 @@
  >h : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.i !== undefined && { i: config.i.toString() },
  >config.i !== undefined && { i: config.i.toString() } : false | { i: string; }
 @@= skipped -16, +16 lines =@@
@@ -123,7 +123,7 @@
  >i : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.j !== undefined && { j: config.j.toString() },
  >config.j !== undefined && { j: config.j.toString() } : false | { j: string; }
 @@= skipped -16, +16 lines =@@
@@ -137,7 +137,7 @@
  >j : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.k !== undefined && { k: config.k.toString() },
  >config.k !== undefined && { k: config.k.toString() } : false | { k: string; }
 @@= skipped -16, +16 lines =@@
@@ -151,7 +151,7 @@
  >k : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.l !== undefined && { l: config.l.toString() },
  >config.l !== undefined && { l: config.l.toString() } : false | { l: string; }
 @@= skipped -16, +16 lines =@@
@@ -165,7 +165,7 @@
  >l : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.m !== undefined && { m: config.m.toString() },
  >config.m !== undefined && { m: config.m.toString() } : false | { m: string; }
 @@= skipped -16, +16 lines =@@
@@ -179,7 +179,7 @@
  >m : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.n !== undefined && { n: config.n.toString() },
  >config.n !== undefined && { n: config.n.toString() } : false | { n: string; }
 @@= skipped -16, +16 lines =@@
@@ -193,7 +193,7 @@
  >n : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.o !== undefined && { o: config.o.toString() },
  >config.o !== undefined && { o: config.o.toString() } : false | { o: string; }
 @@= skipped -16, +16 lines =@@
@@ -207,7 +207,7 @@
  >o : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.p !== undefined && { p: config.p.toString() },
  >config.p !== undefined && { p: config.p.toString() } : false | { p: string; }
 @@= skipped -16, +16 lines =@@
@@ -221,7 +221,7 @@
  >p : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.q !== undefined && { q: config.q.toString() },
  >config.q !== undefined && { q: config.q.toString() } : false | { q: string; }
 @@= skipped -16, +16 lines =@@
@@ -235,7 +235,7 @@
  >q : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.r !== undefined && { r: config.r.toString() },
  >config.r !== undefined && { r: config.r.toString() } : false | { r: string; }
 @@= skipped -16, +16 lines =@@
@@ -249,7 +249,7 @@
  >r : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.s !== undefined && { s: config.s.toString() },
  >config.s !== undefined && { s: config.s.toString() } : false | { s: string; }
 @@= skipped -16, +16 lines =@@
@@ -263,7 +263,7 @@
  >s : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.t !== undefined && { t: config.t.toString() },
  >config.t !== undefined && { t: config.t.toString() } : false | { t: string; }
 @@= skipped -16, +16 lines =@@
@@ -277,7 +277,7 @@
  >t : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.u !== undefined && { u: config.u.toString() },
  >config.u !== undefined && { u: config.u.toString() } : false | { u: string; }
 @@= skipped -16, +16 lines =@@
@@ -291,7 +291,7 @@
  >u : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.v !== undefined && { v: config.v.toString() },
  >config.v !== undefined && { v: config.v.toString() } : false | { v: string; }
 @@= skipped -16, +16 lines =@@
@@ -305,7 +305,7 @@
  >v : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.w !== undefined && { w: config.w.toString() },
  >config.w !== undefined && { w: config.w.toString() } : false | { w: string; }
 @@= skipped -16, +16 lines =@@
@@ -319,7 +319,7 @@
  >w : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.x !== undefined && { x: config.x.toString() },
  >config.x !== undefined && { x: config.x.toString() } : false | { x: string; }
 @@= skipped -16, +16 lines =@@
@@ -333,7 +333,7 @@
  >x : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.y !== undefined && { y: config.y.toString() },
  >config.y !== undefined && { y: config.y.toString() } : false | { y: string; }
 @@= skipped -16, +16 lines =@@
@@ -347,7 +347,7 @@
  >y : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
          ...config.z !== undefined && { z: config.z.toString() }
  >config.z !== undefined && { z: config.z.toString() } : false | { z: string; }
 @@= skipped -16, +16 lines =@@
@@ -363,4 +363,3 @@
 +>toString : (radix?: number | undefined) => string
      }
  }
- 

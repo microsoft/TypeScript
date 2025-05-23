@@ -2,7 +2,7 @@
 +++ new.parameterDestructuringObjectLiteral.types
 @@= skipped -18, +18 lines =@@
  >1 : 1
- 
+
  const fn2 = ({ headers = {} }) => { };
 ->fn2 : ({ headers }: { headers?: {}; }) => void
 ->({ headers = {} }) => { } : ({ headers }: { headers?: {}; }) => void
@@ -10,7 +10,7 @@
 +>({ headers = {} }) => { } : (__0: { headers?: {}; }) => void
  >headers : {}
  >{} : {}
- 
+
  fn2({ headers: { foo: 1 } });
  >fn2({ headers: { foo: 1 } }) : void
 ->fn2 : ({ headers }: { headers?: {}; }) => void

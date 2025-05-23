@@ -1,8 +1,8 @@
 --- old.tupleLengthCheck.js
 +++ new.tupleLengthCheck.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [tupleLengthCheck.js]
 -var a1 = a[1];
 -var a2 = a[2];

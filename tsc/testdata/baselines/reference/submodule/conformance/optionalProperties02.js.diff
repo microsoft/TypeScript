@@ -2,7 +2,7 @@
 +++ new.optionalProperties02.js
 @@= skipped -8, +8 lines =@@
  <Foo>{ a: undefined };
- 
+
  //// [optionalProperties02.js]
 -({ a: undefined });
 -

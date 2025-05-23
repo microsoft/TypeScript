@@ -1,22 +1,17 @@
 --- old.es5-umd4.js
 +++ new.es5-umd4.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [es5-umd4.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {
 -        var v = factory(require, exports);
 -        if (v !== undefined) module.exports = v;
-+"use strict";
-+class A {
-+    constructor() {
-     }
+-    }
 -    else if (typeof define === "function" && define.amd) {
 -        define(["require", "exports"], factory);
-+    B() {
-+        return 42;
-     }
+-    }
 -})(function (require, exports) {
 -    "use strict";
 -    var A = /** @class */ (function () {
@@ -29,5 +24,12 @@
 -    }());
 -    return A;
 -});
++"use strict";
++class A {
++    constructor() {
++    }
++    B() {
++        return 42;
++    }
 +}
 +module.exports = A;

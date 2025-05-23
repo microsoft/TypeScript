@@ -19,8 +19,8 @@
 -values-type-as.ts(1,10): error TS2305: Module '"./values-valid"' has no exported member 'type'.
 +values-type-as.ts(1,10): error TS2305: Module '"values-valid"' has no exported member 'type'.
  values-type-as.ts(1,18): error TS1003: Identifier expected.
- 
- 
+
+
 @@= skipped -40, +40 lines =@@
  ==== values-type-as.ts (2 errors) ====
      import { type as "invalid 4" } from "./values-valid";

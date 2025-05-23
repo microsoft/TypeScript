@@ -7,4 +7,3 @@
 ->E : Symbol(E, Decl(bug27142.js, 1, 5), Decl(bug27142.js, 0, 4))
 +>E : Symbol(E, Decl(bug27142.js, 1, 5))
  >x : Symbol(x, Decl(bug27142.js, 1, 11))
- 

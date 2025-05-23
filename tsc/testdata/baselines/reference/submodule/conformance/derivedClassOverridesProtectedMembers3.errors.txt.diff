@@ -24,8 +24,8 @@
 +  Property 't' is protected in type 'typeof Derived9' but public in type '{ r: { foo: string; }; s: (a: { foo: string; }) => void; t: { foo: string; }; u: (a: { foo: string; }) => void; prototype: Base; }'.
 +derivedClassOverridesProtectedMembers3.ts(67,7): error TS2417: Class static side 'typeof Derived10' incorrectly extends base class static side '{ r: { foo: string; }; s: (a: { foo: string; }) => void; t: { foo: string; }; u: (a: { foo: string; }) => void; prototype: Base; }'.
 +  Property 'u' is protected in type 'typeof Derived10' but public in type '{ r: { foo: string; }; s: (a: { foo: string; }) => void; t: { foo: string; }; u: (a: { foo: string; }) => void; prototype: Base; }'.
- 
- 
+
+
  ==== derivedClassOverridesProtectedMembers3.ts (10 errors) ====
 @@= skipped -76, +76 lines =@@
      

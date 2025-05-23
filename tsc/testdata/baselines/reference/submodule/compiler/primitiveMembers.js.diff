@@ -1,8 +1,8 @@
 --- old.primitiveMembers.js
 +++ new.primitiveMembers.js
 @@= skipped -33, +33 lines =@@
- 
- 
+
+
  //// [primitiveMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -37,9 +37,7 @@
 -    function baz() {
 -    }
 -    baz.prototype.bar = function () { };
-+class baz {
-+    bar() { }
-     ;
+-    ;
 -    return baz;
 -}());
 -var foo = /** @class */ (function (_super) {
@@ -48,10 +46,14 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    foo.prototype.bar = function () { return undefined; };
+-    ;
+-    return foo;
+-}(baz));
++class baz {
++    bar() { }
++    ;
 +}
 +class foo extends baz {
 +    bar() { return undefined; }
-     ;
--    return foo;
--}(baz));
++    ;
 +}

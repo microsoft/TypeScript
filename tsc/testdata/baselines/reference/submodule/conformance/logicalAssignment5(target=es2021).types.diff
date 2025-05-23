@@ -1,56 +1,55 @@
 --- old.logicalAssignment5(target=es2021).types
 +++ new.logicalAssignment5(target=es2021).types
 @@= skipped -1, +1 lines =@@
- 
+
  === logicalAssignment5.ts ===
  function foo1 (f?: (a: number) => void) {
 ->foo1 : (f?: (a: number) => void) => void
 +>foo1 : (f?: ((a: number) => void) | undefined) => void
  >f : ((a: number) => void) | undefined
  >a : number
- 
+
 @@= skipped -19, +19 lines =@@
  }
- 
+
  function foo2 (f?: (a: number) => void) {
 ->foo2 : (f?: (a: number) => void) => void
 +>foo2 : (f?: ((a: number) => void) | undefined) => void
  >f : ((a: number) => void) | undefined
  >a : number
- 
+
 @@= skipped -19, +19 lines =@@
  }
- 
+
  function foo3 (f?: (a: number) => void) {
 ->foo3 : (f?: (a: number) => void) => void
 +>foo3 : (f?: ((a: number) => void) | undefined) => void
  >f : ((a: number) => void) | undefined
  >a : number
- 
+
 @@= skipped -19, +19 lines =@@
  }
- 
+
  function bar1 (f?: (a: number) => void) {
 ->bar1 : (f?: (a: number) => void) => void
 +>bar1 : (f?: ((a: number) => void) | undefined) => void
  >f : ((a: number) => void) | undefined
  >a : number
- 
+
 @@= skipped -25, +25 lines =@@
  }
- 
+
  function bar2 (f?: (a: number) => void) {
 ->bar2 : (f?: (a: number) => void) => void
 +>bar2 : (f?: ((a: number) => void) | undefined) => void
  >f : ((a: number) => void) | undefined
  >a : number
- 
+
 @@= skipped -25, +25 lines =@@
  }
- 
+
  function bar3 (f?: (a: number) => void) {
 ->bar3 : (f?: (a: number) => void) => void
 +>bar3 : (f?: ((a: number) => void) | undefined) => void
  >f : ((a: number) => void) | undefined
  >a : number
- 

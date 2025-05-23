@@ -9,6 +9,6 @@
  >m : Symbol(m, Decl(a.js, 27, 35))
 ->substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
 +>substring : Symbol(substring, Decl(lib.es5.d.ts, --, --))
- 
+
  const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
  >t6 : Symbol(t6, Decl(a.js, 28, 5))

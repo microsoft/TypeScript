@@ -2,7 +2,7 @@
 +++ new.systemModule11.js
 @@= skipped -32, +32 lines =@@
  export * from 'a';
- 
+
  //// [file1.js]
 -System.register(["bar"], function (exports_1, context_1) {
 -    "use strict";

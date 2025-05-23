@@ -1,14 +1,12 @@
 --- old.asyncMethodWithSuper_es5.js
 +++ new.asyncMethodWithSuper_es5.js
 @@= skipped -57, +57 lines =@@
- 
- 
+
+
  //// [asyncMethodWithSuper_es5.js]
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+    x() {
-     }
+-    }
 -    A.prototype.x = function () {
 -    };
 -    A.prototype.y = function () {
@@ -19,8 +17,12 @@
 -    __extends(B, _super);
 -    function B() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+-    }
++class A {
++    x() {
++    }
 +    y() {
-     }
++    }
 +}
 +class B extends A {
      // async method with only call/get on 'super' does not require a binding

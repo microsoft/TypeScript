@@ -1,8 +1,8 @@
 --- old.propertyWrappedInTry.js
 +++ new.propertyWrappedInTry.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [propertyWrappedInTry.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

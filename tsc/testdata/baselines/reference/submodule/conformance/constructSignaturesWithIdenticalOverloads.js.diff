@@ -1,7 +1,7 @@
 --- old.constructSignaturesWithIdenticalOverloads.js
 +++ new.constructSignaturesWithIdenticalOverloads.js
 @@= skipped -52, +52 lines =@@
- 
+
  //// [constructSignaturesWithIdenticalOverloads.js]
  // Duplicate overloads of construct signatures should generate errors
 -var C = /** @class */ (function () {

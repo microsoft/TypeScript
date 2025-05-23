@@ -1,8 +1,8 @@
 --- old.objectTypeWithCallSignatureHidingMembersOfFunction.js
 +++ new.objectTypeWithCallSignatureHidingMembersOfFunction.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [objectTypeWithCallSignatureHidingMembersOfFunction.js]
 -// object types with call signatures can override members of Function
 -// no errors expected below 

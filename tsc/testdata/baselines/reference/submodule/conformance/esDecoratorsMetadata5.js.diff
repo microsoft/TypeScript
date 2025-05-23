@@ -1,8 +1,8 @@
 --- old.esDecoratorsMetadata5.js
 +++ new.esDecoratorsMetadata5.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [foo.js]
 -var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
 -    var useValue = arguments.length > 2;

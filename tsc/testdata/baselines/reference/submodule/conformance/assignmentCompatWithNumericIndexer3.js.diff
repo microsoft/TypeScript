@@ -2,7 +2,7 @@
 +++ new.assignmentCompatWithNumericIndexer3.js
 @@= skipped -42, +42 lines =@@
  }
- 
+
  //// [assignmentCompatWithNumericIndexer3.js]
 -// Derived type indexer must be subtype of base type indexer
 -var __extends = (this && this.__extends) || (function () {

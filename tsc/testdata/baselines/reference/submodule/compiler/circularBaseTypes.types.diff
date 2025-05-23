@@ -2,10 +2,10 @@
 +++ new.circularBaseTypes.types
 @@= skipped -11, +11 lines =@@
  >M3 : any
- 
+
  function f(m: M3) {
 ->f : (m: M3) => any
 +>f : (m: any) => any
  >m : any
- 
+
    return m.value;

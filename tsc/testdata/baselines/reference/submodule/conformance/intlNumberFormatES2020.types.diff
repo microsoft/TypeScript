@@ -22,7 +22,7 @@
  >'en-NZ' : "en-NZ"
 ->resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 +>resolvedOptions : () => ResolvedNumberFormatOptions
- 
+
  // Empty options
  new Intl.NumberFormat('en-NZ', {});
 ->new Intl.NumberFormat('en-NZ', {}) : Intl.NumberFormat
@@ -34,7 +34,7 @@
 +>NumberFormat : NumberFormatConstructor
  >'en-NZ' : "en-NZ"
  >{} : {}
- 
+
  // Override numbering system
  new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' });
 ->new Intl.NumberFormat('en-NZ', { numberingSystem: 'arab' }) : Intl.NumberFormat
@@ -71,7 +71,7 @@
  >'accounting' : "accounting"
 ->resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 +>resolvedOptions : () => ResolvedNumberFormatOptions
- 
+
  // Units
  const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
  >unit : string | undefined
@@ -96,7 +96,7 @@
  >'narrow' : "narrow"
 ->resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 +>resolvedOptions : () => ResolvedNumberFormatOptions
- 
+
  // Compact
  const { compactDisplay } = new Intl.NumberFormat('en-NZ', { notation: 'compact', compactDisplay: 'long' }).resolvedOptions();
  >compactDisplay : "long" | "short" | undefined
@@ -119,7 +119,7 @@
  >'long' : "long"
 ->resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 +>resolvedOptions : () => ResolvedNumberFormatOptions
- 
+
  // Sign display
  new Intl.NumberFormat('en-NZ', { signDisplay: 'always' });
 ->new Intl.NumberFormat('en-NZ', { signDisplay: 'always' }) : Intl.NumberFormat
@@ -133,7 +133,7 @@
  >{ signDisplay: 'always' } : { signDisplay: "always"; }
  >signDisplay : "always"
 @@= skipped -32, +32 lines =@@
- 
+
  // New additions to NumberFormatPartTypes
  const types: Intl.NumberFormatPartTypes[] = [ 'compact', 'unit', 'unknown' ];
 ->types : (keyof Intl.NumberFormatPartTypeRegistry)[]

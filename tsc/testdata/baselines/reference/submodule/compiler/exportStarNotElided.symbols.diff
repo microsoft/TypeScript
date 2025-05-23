@@ -2,7 +2,7 @@
 +++ new.exportStarNotElided.symbols
 @@= skipped -8, +8 lines =@@
  >data : Symbol(data, Decl(register.ts, 1, 25))
- 
+
    r.push(data);
 ->r.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>r.push : Symbol(push, Decl(lib.es5.d.ts, --, --))

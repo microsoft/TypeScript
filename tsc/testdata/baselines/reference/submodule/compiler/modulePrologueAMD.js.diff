@@ -2,7 +2,7 @@
 +++ new.modulePrologueAMD.js
 @@= skipped -5, +5 lines =@@
  export class Foo {}
- 
+
  //// [modulePrologueAMD.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

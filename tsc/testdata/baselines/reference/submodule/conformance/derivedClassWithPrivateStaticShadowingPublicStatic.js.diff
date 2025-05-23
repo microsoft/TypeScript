@@ -2,7 +2,7 @@
 +++ new.derivedClassWithPrivateStaticShadowingPublicStatic.js
 @@= skipped -35, +35 lines =@@
  Derived.a = 2; // error
- 
+
  //// [derivedClassWithPrivateStaticShadowingPublicStatic.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

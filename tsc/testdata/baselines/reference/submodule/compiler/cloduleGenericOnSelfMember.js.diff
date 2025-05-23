@@ -2,7 +2,7 @@
 +++ new.cloduleGenericOnSelfMember.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [cloduleGenericOnSelfMember.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

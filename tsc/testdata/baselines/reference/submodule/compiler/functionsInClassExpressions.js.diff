@@ -2,7 +2,7 @@
 +++ new.functionsInClassExpressions.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [functionsInClassExpressions.js]
 -var Foo = /** @class */ (function () {
 -    function class_1() {

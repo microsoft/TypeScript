@@ -1,7 +1,7 @@
 --- old.commentsOnPropertyOfObjectLiteral1.js
 +++ new.commentsOnPropertyOfObjectLiteral1.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [commentsOnPropertyOfObjectLiteral1.js]
  var resolve = {
 -    id: /*! @ngInject */ function (details) { return details.id; },

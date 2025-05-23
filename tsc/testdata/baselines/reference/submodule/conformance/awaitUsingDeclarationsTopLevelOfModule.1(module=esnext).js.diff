@@ -1,8 +1,8 @@
 --- old.awaitUsingDeclarationsTopLevelOfModule.1(module=esnext).js
 +++ new.awaitUsingDeclarationsTopLevelOfModule.1(module=esnext).js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [awaitUsingDeclarationsTopLevelOfModule.1.js]
 +var z, y, _default;
  export const x = 1;

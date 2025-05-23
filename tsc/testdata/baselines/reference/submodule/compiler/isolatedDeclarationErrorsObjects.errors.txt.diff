@@ -20,9 +20,11 @@
 -isolatedDeclarationErrorsObjects.ts(75,5): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
 -isolatedDeclarationErrorsObjects.ts(77,5): error TS9016: Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.
 -isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain spread assignments can't be inferred with --isolatedDeclarations.
- 
- 
+-
+-
 -==== isolatedDeclarationErrorsObjects.ts (19 errors) ====
++
++
 +==== isolatedDeclarationErrorsObjects.ts (2 errors) ====
      export let o = {
          a: 1,

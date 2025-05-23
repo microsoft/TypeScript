@@ -2,7 +2,7 @@
 +++ new.templateStringWithEmbeddedConditional.js
 @@= skipped -3, +3 lines =@@
  var x = `abc${ true ? false : " " }def`;
- 
+
  //// [templateStringWithEmbeddedConditional.js]
 -var x = "abc".concat(true ? false : " ", "def");
 +var x = `abc${true ? false : " "}def`;

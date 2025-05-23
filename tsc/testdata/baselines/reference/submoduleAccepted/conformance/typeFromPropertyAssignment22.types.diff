@@ -1,12 +1,12 @@
 --- old.typeFromPropertyAssignment22.types
 +++ new.typeFromPropertyAssignment22.types
 @@= skipped -1, +1 lines =@@
- 
+
  === npm-install.js ===
  function Installer () {
 ->Installer : typeof Installer
 +>Installer : () => void
- 
+
      this.args = 0
  >this.args = 0 : 0
  >this.args : any
@@ -25,7 +25,7 @@
  >loadArgMetadata : any
  >function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
 @@= skipped -13, +13 lines =@@
- 
+
          this.args = 'hi'
  >this.args = 'hi' : "hi"
 ->this.args : number
@@ -35,7 +35,7 @@
 +>this : any
 +>args : any
  >'hi' : "hi"
- 
+
          this.newProperty = 1
  >this.newProperty = 1 : 1
 ->this.newProperty : number | undefined
@@ -54,7 +54,7 @@
 +>i : any
 +>new Installer() : any
 +>Installer : () => void
- 
+
  i.newProperty = i.args // ok, number ==> number | undefined
 ->i.newProperty = i.args : number
 ->i.newProperty : number | undefined
@@ -70,4 +70,3 @@
 +>i.args : any
 +>i : any
 +>args : any
- 

@@ -1,8 +1,8 @@
 --- old.enumUsedBeforeDeclaration.js
 +++ new.enumUsedBeforeDeclaration.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [enumUsedBeforeDeclaration.js]
 -var v = Color.Green;
 -var v2 = 1 /* ConstColor.Green */;

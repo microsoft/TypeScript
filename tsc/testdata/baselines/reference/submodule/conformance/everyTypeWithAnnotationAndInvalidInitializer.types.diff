@@ -2,7 +2,7 @@
 +++ new.everyTypeWithAnnotationAndInvalidInitializer.types
 @@= skipped -141, +141 lines =@@
  >N : typeof N
- 
+
  var aClassInModule: M.A = new N.A();
 ->aClassInModule : M.A
 +>aClassInModule : A
@@ -14,6 +14,6 @@
  >N : typeof N
 ->A : typeof N.A
 +>A : typeof A
- 
+
  var aFunctionInModule: typeof M.F2 = F2;
  >aFunctionInModule : (x: number) => string

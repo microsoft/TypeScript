@@ -1,8 +1,8 @@
 --- old.narrowingTypeofDiscriminant.js
 +++ new.narrowingTypeofDiscriminant.js
 @@= skipped -45, +45 lines =@@
- 
- 
+
+
  //// [narrowingTypeofDiscriminant.js]
 -"use strict";
  function f1(obj) {

@@ -1,8 +1,8 @@
 --- old.esDecoratorsMetadata2(target=es2022).js
 +++ new.esDecoratorsMetadata2(target=es2022).js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [foo.js]
 -var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
 -    var useValue = arguments.length > 2;

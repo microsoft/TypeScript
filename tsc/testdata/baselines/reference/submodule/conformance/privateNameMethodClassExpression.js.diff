@@ -1,8 +1,8 @@
 --- old.privateNameMethodClassExpression.js
 +++ new.privateNameMethodClassExpression.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [privateNameMethodClassExpression.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

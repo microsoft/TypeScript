@@ -2,7 +2,7 @@
 +++ new.classExpressionInClassStaticDeclarations.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [classExpressionInClassStaticDeclarations.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -10,9 +10,7 @@
 -            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
 -            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
 -        return extendStatics(d, b);
-+class C {
-+    static D = class extends C {
-     };
+-    };
 -    return function (d, b) {
 -        if (typeof b !== "function" && b !== null)
 -            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
@@ -40,5 +38,7 @@
 -    static D: {
 -        new (): {};
 -        D: /*elided*/ any;
--    };
++class C {
++    static D = class extends C {
+     };
  }

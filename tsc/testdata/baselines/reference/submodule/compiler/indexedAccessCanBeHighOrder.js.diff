@@ -1,7 +1,7 @@
 --- old.indexedAccessCanBeHighOrder.js
 +++ new.indexedAccessCanBeHighOrder.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [indexedAccessCanBeHighOrder.js]
  function impl(a, b) {
 -    var item = get(a, b);

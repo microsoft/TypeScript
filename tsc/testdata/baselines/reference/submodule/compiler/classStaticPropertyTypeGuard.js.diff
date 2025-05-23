@@ -1,7 +1,7 @@
 --- old.classStaticPropertyTypeGuard.js
 +++ new.classStaticPropertyTypeGuard.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [classStaticPropertyTypeGuard.js]
  // Repro from #8923
 -var A = /** @class */ (function () {

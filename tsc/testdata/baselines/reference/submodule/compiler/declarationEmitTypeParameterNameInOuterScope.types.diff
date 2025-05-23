@@ -2,7 +2,7 @@
 +++ new.declarationEmitTypeParameterNameInOuterScope.types
 @@= skipped -15, +15 lines =@@
  >x : A
- 
+
  var a3 = <A,>(x: A) => new A();
 ->a3 : <A>(x: A) => globalThis.A
 -><A,>(x: A) => new A() : <A>(x: A) => globalThis.A
@@ -12,7 +12,7 @@
 ->new A() : globalThis.A
 +>new A() : A
  >A : typeof A
- 
+
  function a4<A,>(x: A) { return new A() }
 ->a4 : <A>(x: A) => globalThis.A
 +>a4 : <A>(x: A) => A
@@ -20,5 +20,4 @@
 ->new A() : globalThis.A
 +>new A() : A
  >A : typeof A
- 
- 
+

@@ -1,8 +1,8 @@
 --- old.constructorReturnsInvalidType.js
 +++ new.constructorReturnsInvalidType.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [constructorReturnsInvalidType.js]
 -var X = /** @class */ (function () {
 -    function X() {

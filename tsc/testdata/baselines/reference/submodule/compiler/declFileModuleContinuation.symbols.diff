@@ -1,7 +1,7 @@
 --- old.declFileModuleContinuation.symbols
 +++ new.declFileModuleContinuation.symbols
 @@= skipped -16, +16 lines =@@
- 
+
      export class W implements A.C.Z {
  >W : Symbol(W, Decl(declFileModuleContinuation.ts, 5, 14))
 ->A.C.Z : Symbol(A.C.Z, Decl(declFileModuleContinuation.ts, 0, 12))

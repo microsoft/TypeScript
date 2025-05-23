@@ -8,7 +8,7 @@
 +>module : { Foo: typeof Foo; }
  >exports : typeof Foo
  >Foo : typeof Foo
- 
+
  module.exports.Strings = Strings;
  >module.exports.Strings = Strings : { a: string; b: string; }
 ->module.exports.Strings : { a: string; b: string; }
@@ -17,7 +17,6 @@
 ->module : { exports: typeof Foo; }
 +>module : { Foo: typeof Foo; }
  >exports : typeof Foo
+->Strings : { a: string; b: string; }
 +>Strings : any
  >Strings : { a: string; b: string; }
-->Strings : { a: string; b: string; }
- 

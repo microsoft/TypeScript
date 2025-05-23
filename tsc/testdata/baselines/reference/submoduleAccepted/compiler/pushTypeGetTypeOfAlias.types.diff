@@ -1,7 +1,7 @@
 --- old.pushTypeGetTypeOfAlias.types
 +++ new.pushTypeGetTypeOfAlias.types
 @@= skipped -1, +1 lines =@@
- 
+
  === bar.js ===
  module.exports = function () {};
 ->module.exports = function () {} : { (): void; blah: any; }
@@ -13,7 +13,7 @@
 +>module : { export=: () => void; }
 +>exports : () => void
  >function () {} : () => void
- 
+
  exports.blah = exports.someProp;
  >exports.blah = exports.someProp : any
  >exports.blah : any
@@ -24,4 +24,3 @@
 ->exports : { (): void; blah: any; }
 +>exports : typeof import("bar")
  >someProp : any
- 

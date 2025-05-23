@@ -1,7 +1,7 @@
 --- old.sourceMapValidationFunctionExpressions.js
 +++ new.sourceMapValidationFunctionExpressions.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [sourceMapValidationFunctionExpressions.js]
  var greetings = 0;
 -var greet = function (greeting) {

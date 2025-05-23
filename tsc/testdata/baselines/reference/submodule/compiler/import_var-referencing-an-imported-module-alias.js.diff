@@ -3,7 +3,7 @@
 @@= skipped -8, +8 lines =@@
  var v = new hostVar.Host();
   
- 
+
 -//// [host.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

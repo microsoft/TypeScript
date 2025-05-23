@@ -2,7 +2,7 @@
 +++ new.importedAliasedConditionalTypeInstantiation.symbols
 @@= skipped -119, +119 lines =@@
  >Handler : Symbol(Handler, Decl(index.d.ts, 0, 8))
- 
+
          event(event: HandlerEvent<T>): this;
 ->event : Symbol(LambdaTester.event, Decl(index.d.ts, 20, 43))
 +>event : Symbol(event, Decl(index.d.ts, 20, 43))
@@ -16,7 +16,7 @@
 ->LambdaTester : Symbol(lambdaTester.LambdaTester, Decl(index.d.ts, 18, 24))
 +>LambdaTester : Symbol(LambdaTester, Decl(index.d.ts, 18, 24))
  >T : Symbol(T, Decl(index.d.ts, 25, 30))
- 
+
  export = lambdaTester;
 @@= skipped -16, +16 lines =@@
  type Actual = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler>>;
@@ -28,7 +28,7 @@
 ->HandlerResult : Symbol(lambdaTester.HandlerResult, Decl(index.d.ts, 2, 92))
 +>HandlerResult : Symbol(HandlerResult, Decl(index.d.ts, 2, 92))
  >Handler : Symbol(Handler, Decl(index.ts, 1, 8))
- 
+
  type Expected = lambdaTester.Verifier<lambdaTester.HandlerResult<Handler<any, any>>>;
  >Expected : Symbol(Expected, Decl(index.ts, 3, 73))
  >lambdaTester : Symbol(lambdaTester, Decl(index.ts, 0, 6))
@@ -38,4 +38,3 @@
 ->HandlerResult : Symbol(lambdaTester.HandlerResult, Decl(index.d.ts, 2, 92))
 +>HandlerResult : Symbol(HandlerResult, Decl(index.d.ts, 2, 92))
  >Handler : Symbol(Handler, Decl(index.ts, 1, 8))
- 

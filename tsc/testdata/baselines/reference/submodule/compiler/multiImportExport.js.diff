@@ -1,7 +1,7 @@
 --- old.multiImportExport.js
 +++ new.multiImportExport.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [Adder.js]
  "use strict";
 -var Adder = /** @class */ (function () {

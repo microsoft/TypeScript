@@ -1,8 +1,8 @@
 --- old.convertClassExpressionToFunctionFromObjectProperty1.js
 +++ new.convertClassExpressionToFunctionFromObjectProperty1.js
 @@= skipped -242, +242 lines =@@
- 
- 
+
+
  //// [convertClassExpressionToFunctionFromObjectProperty1.js]
 -var foo = {};
 +const foo = {};

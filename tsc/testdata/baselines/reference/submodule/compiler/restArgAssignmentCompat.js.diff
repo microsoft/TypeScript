@@ -1,8 +1,8 @@
 --- old.restArgAssignmentCompat.js
 +++ new.restArgAssignmentCompat.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [restArgAssignmentCompat.js]
 -function f() {
 -    var x = [];

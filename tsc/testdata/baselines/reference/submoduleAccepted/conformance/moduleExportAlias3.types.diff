@@ -13,5 +13,5 @@
 +>module : { export=: { C: typeof C; }; }
 +>exports : { C: typeof C; }
  >{    C} : { C: typeof C; }
- 
+
      C

@@ -1,7 +1,7 @@
 --- old.amdDependencyCommentName1.js
 +++ new.amdDependencyCommentName1.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [amdDependencyCommentName1.js]
  "use strict";
 -///<amd-dependency path='bar' name='b'/>

@@ -1,18 +1,18 @@
 --- old.aliasInstantiationExpressionGenericIntersectionNoCrash2.types
 +++ new.aliasInstantiationExpressionGenericIntersectionNoCrash2.types
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  type ClassAlias<T> = typeof Class<T>;
 ->ClassAlias : typeof Class<T>
 +>ClassAlias : { new (): Class<T>; prototype: Class<any>; }
  >Class : typeof Class
- 
+
  type FnAlias<T> = typeof fn<T>;
 ->FnAlias : typeof fn<T>
 ->fn : <T_1>() => T_1
 +>FnAlias : () => T
 +>fn : <T>() => T
- 
+
  type Wat<T> = ClassAlias<T> & FnAlias<T>;
  >Wat : Wat<T>

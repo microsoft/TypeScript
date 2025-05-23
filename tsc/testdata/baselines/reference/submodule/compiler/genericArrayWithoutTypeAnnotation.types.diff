@@ -2,7 +2,7 @@
 +++ new.genericArrayWithoutTypeAnnotation.types
 @@= skipped -6, +6 lines =@@
  >Bar : Bar
- 
+
      public getBar(foo: IFoo[]) {
 ->getBar : (foo: IFoo[]) => void
 +>getBar : (foo: any[]) => void

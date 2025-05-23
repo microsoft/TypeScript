@@ -2,7 +2,7 @@
 +++ new.recursiveLetConst.types
 @@= skipped -53, +53 lines =@@
  >[] : []
- 
+
  let z0 = () => z0;
 ->z0 : () => any
 ->() => z0 : () => any
@@ -10,7 +10,7 @@
 +>z0 : () => ???
 +>() => z0 : () => ???
 +>z0 : () => ???
- 
+
  let z1 = function () { return z1; }
 ->z1 : () => any
 ->function () { return z1; } : () => any
@@ -18,7 +18,7 @@
 +>z1 : () => ???
 +>function () { return z1; } : () => ???
 +>z1 : () => ???
- 
+
  let z2 = { f() { return z2;}}
 ->z2 : { f(): any; }
 ->{ f() { return z2;}} : { f(): { f(): any; }; }
@@ -28,4 +28,3 @@
 +>{ f() { return z2;}} : { f: () => { f: ???; }; }
 +>f : () => { f: ???; }
 +>z2 : { f: () => ???; }
- 

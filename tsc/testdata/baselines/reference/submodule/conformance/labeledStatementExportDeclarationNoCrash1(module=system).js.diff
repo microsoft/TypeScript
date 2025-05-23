@@ -1,8 +1,8 @@
 --- old.labeledStatementExportDeclarationNoCrash1(module=system).js
 +++ new.labeledStatementExportDeclarationNoCrash1(module=system).js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [labeledStatementExportDeclarationNoCrash1.js]
 -// https://github.com/microsoft/TypeScript/issues/59372
 -System.register([], function (exports_1, context_1) {

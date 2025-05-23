@@ -2,7 +2,7 @@
 +++ new.genericIndexedAccessVarianceComparisonResultCorrect.js
 @@= skipped -28, +28 lines =@@
  c = d;
- 
+
  //// [genericIndexedAccessVarianceComparisonResultCorrect.js]
 -var A = /** @class */ (function () {
 -    function A() {

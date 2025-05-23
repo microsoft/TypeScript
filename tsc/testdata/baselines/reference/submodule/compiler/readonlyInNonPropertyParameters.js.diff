@@ -1,7 +1,7 @@
 --- old.readonlyInNonPropertyParameters.js
 +++ new.readonlyInNonPropertyParameters.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [readonlyInNonPropertyParameters.js]
  // `readonly` won't work outside of property parameters
 -var X = /** @class */ (function () {

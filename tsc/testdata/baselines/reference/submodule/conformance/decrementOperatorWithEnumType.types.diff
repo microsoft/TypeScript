@@ -6,6 +6,6 @@
  >B : ENUM1.B
 ->"" : (typeof ENUM1)[""]
 +>"" : ENUM1.""
- 
+
  // expression
  var ResultIsNumber1 = --ENUM1["A"];

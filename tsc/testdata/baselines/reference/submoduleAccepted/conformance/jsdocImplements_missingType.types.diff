@@ -10,5 +10,5 @@
 ->x : any
 +>x : number
  >0 : 0
- 
+
  /** @implements */

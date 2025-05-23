@@ -1,8 +1,8 @@
 --- old.importCallExpressionInUMD5.js
 +++ new.importCallExpressionInUMD5.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [0.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

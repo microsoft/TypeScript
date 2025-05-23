@@ -1,7 +1,7 @@
 --- old.specedNoStackBlown.js
 +++ new.specedNoStackBlown.js
 @@= skipped -39, +39 lines =@@
- 
+
  //// [specedNoStackBlown.js]
  "use strict";
 -// Type definitions for spected 0.7

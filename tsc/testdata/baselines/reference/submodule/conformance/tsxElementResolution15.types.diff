@@ -2,7 +2,7 @@
 +++ new.tsxElementResolution15.types
 @@= skipped -17, +17 lines =@@
  >Obj1 : Obj1type
- 
+
  <Obj1 x={10} />; // Error
 -><Obj1 x={10} /> : JSX.Element
 +><Obj1 x={10} /> : Element

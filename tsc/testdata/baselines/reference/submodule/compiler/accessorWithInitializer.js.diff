@@ -2,7 +2,7 @@
 +++ new.accessorWithInitializer.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [accessorWithInitializer.js]
 -var C = /** @class */ (function () {
 -    function C() {

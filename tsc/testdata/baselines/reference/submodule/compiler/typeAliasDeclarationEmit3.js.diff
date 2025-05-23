@@ -1,7 +1,7 @@
 --- old.typeAliasDeclarationEmit3.js
 +++ new.typeAliasDeclarationEmit3.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [typeAliasDeclarationEmit3.js]
  function f1() {
 -    for (var i = 0; i < 1; i++)

@@ -1,7 +1,7 @@
 --- old.moduleExportAssignment3.symbols
 +++ new.moduleExportAssignment3.symbols
 @@= skipped -10, +10 lines =@@
- 
+
  === mod.js ===
  module.exports = function x() { }
 ->module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
@@ -10,7 +10,7 @@
 +>module : Symbol(module.exports)
  >exports : Symbol(export=, Decl(mod.js, 0, 0))
  >x : Symbol(x, Decl(mod.js, 0, 16))
- 
+
  module.exports() // should be callable
 ->module.exports : Symbol(module.exports, Decl(mod.js, 0, 0))
 ->module : Symbol(module, Decl(mod.js, 0, 0))
@@ -18,4 +18,3 @@
 +>module.exports : Symbol(export=, Decl(mod.js, 0, 0))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(mod.js, 0, 0))
- 

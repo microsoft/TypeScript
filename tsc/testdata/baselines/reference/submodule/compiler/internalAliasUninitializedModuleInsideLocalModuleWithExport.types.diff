@@ -2,12 +2,12 @@
 +++ new.internalAliasUninitializedModuleInsideLocalModuleWithExport.types
 @@= skipped -18, +18 lines =@@
  >b : any
- 
+
      export var x: b.I;
 ->x : b.I
 +>x : I
  >b : any
- 
+
      x.foo();
  >x.foo() : any
  >x.foo : () => any

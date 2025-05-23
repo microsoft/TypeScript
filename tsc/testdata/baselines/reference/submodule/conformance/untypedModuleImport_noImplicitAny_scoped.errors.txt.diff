@@ -4,8 +4,8 @@
 -/a.ts(1,22): error TS7016: Could not find a declaration file for module '@foo/bar'. '/node_modules/@foo/bar/index.js' implicitly has an 'any' type.
 -  Try `npm i --save-dev @types/foo__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@foo/bar';`
 +/a.ts(1,22): error TS2307: Cannot find module '@foo/bar' or its corresponding type declarations.
- 
- 
+
+
  ==== /a.ts (1 errors) ====
      import * as foo from "@foo/bar";
                           ~~~~~~~~~~

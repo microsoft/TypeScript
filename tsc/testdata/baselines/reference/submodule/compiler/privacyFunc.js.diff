@@ -17,17 +17,12 @@
      m1.C1_public = C1_public;
 -    var C2_private = /** @class */ (function () {
 -        function C2_private() {
-+    class C2_private {
-+    }
-+    class C3_public {
-+        constructor(m1_c3_c1_2) {
-         }
+-        }
 -        return C2_private;
 -    }());
 -    var C3_public = /** @class */ (function () {
 -        function C3_public(m1_c3_c1_2) {
-+        f1_private(m1_c3_f1_arg) {
-         }
+-        }
 -        C3_public.prototype.f1_private = function (m1_c3_f1_arg) {
 -        };
 -        C3_public.prototype.f2_public = function (m1_c3_f2_arg) {
@@ -37,6 +32,19 @@
 -        C3_public.prototype.f4_public = function (m1_c3_f4_arg) {
 -        };
 -        C3_public.prototype.f5_private = function () {
+-            return new C1_public();
+-        };
+-        C3_public.prototype.f6_public = function () {
+-            return new C1_public();
+-        };
+-        C3_public.prototype.f7_private = function () {
++    class C2_private {
++    }
++    class C3_public {
++        constructor(m1_c3_c1_2) {
++        }
++        f1_private(m1_c3_f1_arg) {
++        }
 +        f2_public(m1_c3_f2_arg) {
 +        }
 +        f3_private(m1_c3_f3_arg) {
@@ -44,14 +52,10 @@
 +        f4_public(m1_c3_f4_arg) {
 +        }
 +        f5_private() {
-             return new C1_public();
--        };
--        C3_public.prototype.f6_public = function () {
++            return new C1_public();
 +        }
 +        f6_public() {
-             return new C1_public();
--        };
--        C3_public.prototype.f7_private = function () {
++            return new C1_public();
 +        }
 +        f7_private() {
              return new C2_private();
@@ -62,16 +66,18 @@
              return new C2_private(); // error
 -        };
 -        C3_public.prototype.f9_private = function () {
-+        }
-+        f9_private() {
-             return new C1_public();
+-            return new C1_public();
 -        };
 -        C3_public.prototype.f10_public = function () {
-+        }
-+        f10_public() {
-             return new C1_public();
+-            return new C1_public();
 -        };
 -        C3_public.prototype.f11_private = function () {
++        }
++        f9_private() {
++            return new C1_public();
++        }
++        f10_public() {
++            return new C1_public();
 +        }
 +        f11_private() {
              return new C2_private();
@@ -88,9 +94,7 @@
      m1.C3_public = C3_public;
 -    var C4_private = /** @class */ (function () {
 -        function C4_private(m1_c4_c1_2) {
-+    class C4_private {
-+        constructor(m1_c4_c1_2) {
-         }
+-        }
 -        C4_private.prototype.f1_private = function (m1_c4_f1_arg) {
 -        };
 -        C4_private.prototype.f2_public = function (m1_c4_f2_arg) {
@@ -100,6 +104,39 @@
 -        C4_private.prototype.f4_public = function (m1_c4_f4_arg) {
 -        };
 -        C4_private.prototype.f5_private = function () {
+-            return new C1_public();
+-        };
+-        C4_private.prototype.f6_public = function () {
+-            return new C1_public();
+-        };
+-        C4_private.prototype.f7_private = function () {
+-            return new C2_private();
+-        };
+-        C4_private.prototype.f8_public = function () {
+-            return new C2_private();
+-        };
+-        C4_private.prototype.f9_private = function () {
+-            return new C1_public();
+-        };
+-        C4_private.prototype.f10_public = function () {
+-            return new C1_public();
+-        };
+-        C4_private.prototype.f11_private = function () {
+-            return new C2_private();
+-        };
+-        C4_private.prototype.f12_public = function () {
+-            return new C2_private();
+-        };
+-        return C4_private;
+-    }());
+-    var C5_public = /** @class */ (function () {
+-        function C5_public(m1_c5_c) {
+-        }
+-        return C5_public;
+-    }());
++    class C4_private {
++        constructor(m1_c4_c1_2) {
++        }
 +        f1_private(m1_c4_f1_arg) {
 +        }
 +        f2_public(m1_c4_f2_arg) {
@@ -109,50 +146,29 @@
 +        f4_public(m1_c4_f4_arg) {
 +        }
 +        f5_private() {
-             return new C1_public();
--        };
--        C4_private.prototype.f6_public = function () {
++            return new C1_public();
 +        }
 +        f6_public() {
-             return new C1_public();
--        };
--        C4_private.prototype.f7_private = function () {
++            return new C1_public();
 +        }
 +        f7_private() {
-             return new C2_private();
--        };
--        C4_private.prototype.f8_public = function () {
++            return new C2_private();
 +        }
 +        f8_public() {
-             return new C2_private();
--        };
--        C4_private.prototype.f9_private = function () {
++            return new C2_private();
 +        }
 +        f9_private() {
-             return new C1_public();
--        };
--        C4_private.prototype.f10_public = function () {
++            return new C1_public();
 +        }
 +        f10_public() {
-             return new C1_public();
--        };
--        C4_private.prototype.f11_private = function () {
++            return new C1_public();
 +        }
 +        f11_private() {
-             return new C2_private();
--        };
--        C4_private.prototype.f12_public = function () {
++            return new C2_private();
 +        }
 +        f12_public() {
-             return new C2_private();
--        };
--        return C4_private;
--    }());
--    var C5_public = /** @class */ (function () {
--        function C5_public(m1_c5_c) {
-         }
--        return C5_public;
--    }());
++            return new C2_private();
++        }
 +    }
 +    class C5_public {
 +        constructor(m1_c5_c) {
@@ -161,19 +177,21 @@
      m1.C5_public = C5_public;
 -    var C6_private = /** @class */ (function () {
 -        function C6_private(m1_c6_c) {
-+    class C6_private {
-+        constructor(m1_c6_c) {
-         }
+-        }
 -        return C6_private;
 -    }());
 -    var C7_public = /** @class */ (function () {
 -        function C7_public(m1_c7_c) {
+-        }
+-        return C7_public;
+-    }());
++    class C6_private {
++        constructor(m1_c6_c) {
++        }
 +    }
 +    class C7_public {
 +        constructor(m1_c7_c) {
-         }
--        return C7_public;
--    }());
++        }
 +    }
      m1.C7_public = C7_public;
 -    var C8_private = /** @class */ (function () {
@@ -193,49 +211,56 @@
  })(m1 || (m1 = {}));
 -var C6_public = /** @class */ (function () {
 -    function C6_public() {
-+class C6_public {
-+}
-+class C7_public {
-+    constructor(c7_c1_2) {
-     }
+-    }
 -    return C6_public;
 -}());
 -var C7_public = /** @class */ (function () {
 -    function C7_public(c7_c1_2) {
-+    f1_private(c7_f1_arg) {
-     }
+-    }
 -    C7_public.prototype.f1_private = function (c7_f1_arg) {
 -    };
 -    C7_public.prototype.f2_public = function (c7_f2_arg) {
 -    };
 -    C7_public.prototype.f5_private = function () {
-+    f2_public(c7_f2_arg) {
-+    }
-+    f5_private() {
-         return new C6_public();
+-        return new C6_public();
 -    };
 -    C7_public.prototype.f6_public = function () {
-+    }
-+    f6_public() {
-         return new C6_public();
+-        return new C6_public();
 -    };
 -    C7_public.prototype.f9_private = function () {
-+    }
-+    f9_private() {
-         return new C6_public();
+-        return new C6_public();
 -    };
 -    C7_public.prototype.f10_public = function () {
-+    }
-+    f10_public() {
-         return new C6_public();
+-        return new C6_public();
 -    };
 -    return C7_public;
 -}());
 -var C9_public = /** @class */ (function () {
 -    function C9_public(c9_c) {
-     }
+-    }
 -    return C9_public;
 -}());
++class C6_public {
++}
++class C7_public {
++    constructor(c7_c1_2) {
++    }
++    f1_private(c7_f1_arg) {
++    }
++    f2_public(c7_f2_arg) {
++    }
++    f5_private() {
++        return new C6_public();
++    }
++    f6_public() {
++        return new C6_public();
++    }
++    f9_private() {
++        return new C6_public();
++    }
++    f10_public() {
++        return new C6_public();
++    }
 +}
 +class C9_public {
 +    constructor(c9_c) {

@@ -6,6 +6,6 @@
  >my : typeof my
 ->data : typeof my.data
 +>data : typeof data
- 
+
      function data(my) {
  >data : (my: any) => void

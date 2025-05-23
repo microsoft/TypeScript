@@ -8,8 +8,8 @@
 -  Property 'method' is missing in type 'B3' but required in type 'A'.
 +/a.js(23,4): error TS2339: Property 'C1' does not exist on type '{}'.
 +/a.js(47,4): error TS2339: Property 'C5' does not exist on type '{}'.
- 
- 
+
+
  ==== /a.js (2 errors) ====
 @@= skipped -18, +15 lines =@@
      class B2  {

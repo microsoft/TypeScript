@@ -6,7 +6,7 @@
  declare var console: {
 ->console : { log(msg: any): any; }
 +>console : { log: (msg: any) => any; }
- 
+
      log(msg: any);
  >log : (msg: any) => any
 @@= skipped -16, +16 lines =@@
@@ -24,7 +24,7 @@
  declare var console: {
 ->console : { log(msg: any): any; }
 +>console : { log: (msg: any) => any; }
- 
+
      log(msg: any);
  >log : (msg: any) => any
 @@= skipped -24, +24 lines =@@

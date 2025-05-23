@@ -6,7 +6,7 @@
      "a": true,
 ->"a" : Symbol("a", Decl(test.json, 0, 1))
 +>"a" : Symbol(a, Decl(test.json, 0, 1))
- 
+
      "b": "hello"
 ->"b" : Symbol("b", Decl(test.json, 1, 14))
 +>"b" : Symbol(b, Decl(test.json, 1, 14))

@@ -1,7 +1,7 @@
 --- old.parserErrorRecovery_ParameterList1.types
 +++ new.parserErrorRecovery_ParameterList1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === parserErrorRecovery_ParameterList1.ts ===
  function f(a {
 ->f : (a: any, {}: {}) => any

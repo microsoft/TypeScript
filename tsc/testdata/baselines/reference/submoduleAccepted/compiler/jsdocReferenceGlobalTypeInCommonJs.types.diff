@@ -1,16 +1,16 @@
 --- old.jsdocReferenceGlobalTypeInCommonJs.types
 +++ new.jsdocReferenceGlobalTypeInCommonJs.types
 @@= skipped -8, +8 lines =@@
- 
+
  /** @type {Puppeteer.Keyboard} */
  var ppk;
 ->ppk : Puppeteer.Keyboard
 +>ppk : Keyboard
- 
+
  Puppeteer.connect;
  >Puppeteer.connect : (name: string) => void
 ->Puppeteer : typeof Puppeteer
 +>Puppeteer : typeof import("puppet")
  >connect : (name: string) => void
- 
+
  === puppet.d.ts ===

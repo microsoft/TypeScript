@@ -5,7 +5,7 @@
  >f1 : U
  >(null) : any
 +>null : any
- 
+
      /**
       * @param {U} _p
 @@= skipped -14, +15 lines =@@
@@ -13,7 +13,7 @@
  >f2 : U
  >(null) : any
 +>null : any
- 
+
      /**
       * @param {U} _p
 @@= skipped -133, +134 lines =@@
@@ -26,7 +26,7 @@
 ->p1 : any
 +>p1 : number
  >12 : 12
- 
+
          this.p2 = "ok";
  >this.p2 = "ok" : "ok"
 ->this.p2 : any
@@ -36,7 +36,7 @@
 +>p2 : string
  >"ok" : "ok"
      }
- 
+
 @@= skipped -33, +33 lines =@@
      constructor() {
          this.prop = 12;
@@ -50,7 +50,7 @@
      }
  }
 @@= skipped -27, +27 lines =@@
- 
+
          this.another = param;
  >this.another = param : T
 ->this.another : any
@@ -67,17 +67,17 @@
  >O : O<U>
 ->N : N<U>
 +>N : typeof N
- 
+
      /**
       * @param {U} param 
 @@= skipped -10, +10 lines =@@
- 
+
          super(param);
  >super(param) : void
 ->super : typeof N
 +>super : any
  >param : U
- 
+
          this.another2 = param;
  >this.another2 = param : U
 ->this.another2 : any
@@ -93,6 +93,6 @@
  >x : any
  >(null) : any
 +>null : any
- 
+
  export class VariableBase extends x {}
  >VariableBase : VariableBase

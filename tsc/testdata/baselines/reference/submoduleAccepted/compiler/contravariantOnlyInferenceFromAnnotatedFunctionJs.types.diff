@@ -1,10 +1,10 @@
 --- old.contravariantOnlyInferenceFromAnnotatedFunctionJs.types
 +++ new.contravariantOnlyInferenceFromAnnotatedFunctionJs.types
 @@= skipped -18, +18 lines =@@
- 
+
    return /** @type {any} */ (null);
  >(null) : any
 +>null : any
  }
- 
+
  const result = foo({

@@ -1,7 +1,7 @@
 --- old.reactSFCAndFunctionResolvable.js
 +++ new.reactSFCAndFunctionResolvable.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [reactSFCAndFunctionResolvable.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

@@ -1,8 +1,8 @@
 --- old.autolift3.js
 +++ new.autolift3.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [autolift3.js]
 -var B = /** @class */ (function () {
 -    function B() {

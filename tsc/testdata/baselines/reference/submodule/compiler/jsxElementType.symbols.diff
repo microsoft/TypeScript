@@ -1,21 +1,21 @@
 --- old.jsxElementType.symbols
 +++ new.jsxElementType.symbols
 @@= skipped -14, +14 lines =@@
- 
+
    | React.ReactElement<any>
  >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
 ->ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
 +>ReactElement : Symbol(ReactElement, Decl(react16.d.ts, 135, 9))
- 
+
    | string
    | number
 @@= skipped -9, +9 lines =@@
- 
+
    | React.ReactPortal
  >React : Symbol(React, Decl(jsxElementType.tsx, 1, 6))
 ->ReactPortal : Symbol(React.ReactPortal, Decl(react16.d.ts, 172, 9))
 +>ReactPortal : Symbol(ReactPortal, Decl(react16.d.ts, 172, 9))
- 
+
    | boolean
    | null
 @@= skipped -23, +23 lines =@@
@@ -25,16 +25,16 @@
 ->Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 +>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
- 
+
  declare global {
 ->global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
 +>global : Symbol((Missing), Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
- 
+
    namespace JSX {
  >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
 @@= skipped -17, +17 lines =@@
  >IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
- 
+
        ['my-custom-element']: React.DOMAttributes<unknown>;
 ->['my-custom-element'] : Symbol(IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
 ->'my-custom-element' : Symbol(IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
@@ -55,7 +55,7 @@
  >title : Symbol(title, Decl(jsxElementType.tsx, 31, 24))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 +>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
- 
+
  Component = RenderElement;
  >Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
 @@= skipped -44, +44 lines =@@
@@ -67,7 +67,7 @@
  >title : Symbol(title, Decl(jsxElementType.tsx, 43, 23))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
  Component = RenderNumber;
  >Component : Symbol(Component, Decl(jsxElementType.tsx, 29, 3))
 @@= skipped -64, +64 lines =@@
@@ -80,11 +80,11 @@
 ->Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 +>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
- 
+
    render() {
 ->render : Symbol(RenderStringClass.render, Decl(jsxElementType.tsx, 63, 68))
 +>render : Symbol(render, Decl(jsxElementType.tsx, 63, 68))
- 
+
      return this.props.title;
  >this.props.title : Symbol(title, Decl(jsxElementType.tsx, 63, 49))
 ->this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
@@ -96,16 +96,16 @@
    }
  }
 @@= skipped -33, +33 lines =@@
- 
+
  // Host element types still work
  <div />;
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 +>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
- 
+
  <my-custom-element />;
 ->my-custom-element : Symbol(JSX.IntrinsicElements['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
 +>my-custom-element : Symbol(['my-custom-element'], Decl(jsxElementType.tsx, 23, 33))
- 
+
  // Undeclared host element types are still rejected
  <boop />;
 @@= skipped -25, +25 lines =@@
@@ -115,7 +115,7 @@
 ->ForwardedRef : Symbol(React.ForwardedRef, Decl(react16.d.ts, 2355, 9))
 +>ForwardedRef : Symbol(ForwardedRef, Decl(react16.d.ts, 2355, 9))
  >ReactNativeFlatList : Symbol(ReactNativeFlatList, Decl(jsxElementType.tsx, 83, 43))
- 
+
  ) {
 @@= skipped -15, +15 lines =@@
  >T : Symbol(T, Decl(jsxElementType.tsx, 93, 12))
@@ -125,19 +125,19 @@
 +>ReactElement : Symbol(ReactElement, Decl(react16.d.ts, 135, 9))
  >Component : Symbol(Component, Decl(jsxElementType.tsx, 93, 62))
  >T : Symbol(T, Decl(jsxElementType.tsx, 93, 12))
- 
+
 @@= skipped -13, +13 lines =@@
  >foo : Symbol(foo, Decl(jsxElementType.tsx, 98, 11))
- 
+
  declare global {
 ->global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
 +>global : Symbol((Missing), Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
- 
+
      namespace JSX {
  >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
 @@= skipped -9, +9 lines =@@
  >IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
- 
+
            ['a:b']: { a: string };
 ->['a:b'] : Symbol(IntrinsicElements['a:b'], Decl(jsxElementType.tsx, 102, 35))
 ->'a:b' : Symbol(IntrinsicElements['a:b'], Decl(jsxElementType.tsx, 102, 35))

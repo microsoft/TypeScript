@@ -2,7 +2,7 @@
 +++ new.declarationEmitDestructuringArrayPattern5.js
 @@= skipped -5, +5 lines =@@
  var [, , [, b, ]] = [3,5,[0, 1]];
- 
+
  //// [declarationEmitDestructuringArrayPattern5.js]
 -var _a = [1, 2, 4], z = _a[2];
 -var _b = [3, 4, 5], a = _b[1];

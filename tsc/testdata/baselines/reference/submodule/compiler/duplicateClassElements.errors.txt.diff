@@ -16,8 +16,8 @@
  duplicateClassElements.ts(36,9): error TS2300: Duplicate identifier 'z2'.
  duplicateClassElements.ts(39,9): error TS2300: Duplicate identifier 'z2'.
  duplicateClassElements.ts(41,12): error TS2300: Duplicate identifier 'z2'.
- 
- 
+
+
 -==== duplicateClassElements.ts (14 errors) ====
 +==== duplicateClassElements.ts (16 errors) ====
      class a {

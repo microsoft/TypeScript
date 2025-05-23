@@ -2,7 +2,7 @@
 +++ new.inexistentPropertyInsideToStringType.symbols
 @@= skipped -4, +4 lines =@@
  >toString : Symbol(toString, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
- 
+
      this.yadda
 ->this : Symbol(toString, Decl(lib.dom.d.ts, --, --), Decl(index.js, 0, 0))
 -

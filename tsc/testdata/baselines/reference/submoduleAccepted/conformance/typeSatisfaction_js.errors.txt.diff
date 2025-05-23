@@ -1,6 +1,6 @@
 --- old.typeSatisfaction_js.errors.txt
 +++ new.typeSatisfaction_js.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/src/a.js(1,29): error TS8037: Type satisfaction expressions can only be used in TypeScript files.
 -
 -
@@ -9,5 +9,4 @@
 -                                ~
 -!!! error TS8037: Type satisfaction expressions can only be used in TypeScript files.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

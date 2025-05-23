@@ -1,7 +1,7 @@
 --- old.typeofInObjectLiteralType.types
 +++ new.typeofInObjectLiteralType.types
 @@= skipped -1, +1 lines =@@
- 
+
  === typeofInObjectLiteralType.ts ===
  var a: { b: number; c: typeof b }; // Should give error for attempting to use type query on b.
 ->a : { b: number; c: typeof b; }

@@ -2,7 +2,7 @@
 +++ new.commentsOnReturnStatement1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [commentsOnReturnStatement1.js]
 -var DebugClass = /** @class */ (function () {
 -    function DebugClass() {

@@ -1,8 +1,8 @@
 --- old.privacyGloClass.js
 +++ new.privacyGloClass.js
 @@= skipped -62, +62 lines =@@
- 
- 
+
+
  //// [privacyGloClass.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -128,7 +128,13 @@
 -        }
 -        return m1_C11_public;
 -    }(m1_c_public));
--    m1.m1_C11_public = m1_C11_public;
++    class m1_C9_private extends m1_c_public {
++    }
++    class m1_C10_private extends m1_c_private {
++    }
++    class m1_C11_public extends m1_c_public {
++    }
+     m1.m1_C11_public = m1_C11_public;
 -    var m1_C12_public = /** @class */ (function (_super) {
 -        __extends(m1_C12_public, _super);
 -        function m1_C12_public() {
@@ -136,12 +142,13 @@
 -        }
 -        return m1_C12_public;
 -    }(m1_c_private));
--    m1.m1_C12_public = m1_C12_public;
--})(m1 || (m1 = {}));
++    class m1_C12_public extends m1_c_private {
++    }
+     m1.m1_C12_public = m1_C12_public;
+ })(m1 || (m1 = {}));
 -var glo_c_public = /** @class */ (function () {
 -    function glo_c_public() {
-+    class m1_C9_private extends m1_c_public {
-     }
+-    }
 -    glo_c_public.prototype.f1 = function () {
 -    };
 -    return glo_c_public;
@@ -150,27 +157,21 @@
 -    __extends(glo_C3_public, _super);
 -    function glo_C3_public() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    class m1_C10_private extends m1_c_private {
-     }
+-    }
 -    return glo_C3_public;
 -}(glo_c_public));
 -var glo_C7_public = /** @class */ (function () {
 -    function glo_C7_public() {
-+    class m1_C11_public extends m1_c_public {
-     }
+-    }
 -    return glo_C7_public;
 -}());
 -var glo_C11_public = /** @class */ (function (_super) {
 -    __extends(glo_C11_public, _super);
 -    function glo_C11_public() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    m1.m1_C11_public = m1_C11_public;
-+    class m1_C12_public extends m1_c_private {
-     }
+-    }
 -    return glo_C11_public;
 -}(glo_c_public));
-+    m1.m1_C12_public = m1_C12_public;
-+})(m1 || (m1 = {}));
 +class glo_c_public {
 +    f1() {
 +    }

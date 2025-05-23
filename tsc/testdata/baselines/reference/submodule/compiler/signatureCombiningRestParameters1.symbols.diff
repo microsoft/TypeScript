@@ -10,5 +10,5 @@
 ->entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 +>entries : Symbol(entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
  >map : Symbol(map, Decl(signatureCombiningRestParameters1.ts, 9, 13))
- 
+
    fn(...args);

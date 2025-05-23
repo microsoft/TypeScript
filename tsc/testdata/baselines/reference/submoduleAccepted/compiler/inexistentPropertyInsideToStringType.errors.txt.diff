@@ -1,6 +1,6 @@
 --- old.inexistentPropertyInsideToStringType.errors.txt
 +++ new.inexistentPropertyInsideToStringType.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.js(2,10): error TS2339: Property 'yadda' does not exist on type 'toString'.
 -
 -
@@ -11,5 +11,4 @@
 -!!! error TS2339: Property 'yadda' does not exist on type 'toString'.
 -        this.someValue = "";
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

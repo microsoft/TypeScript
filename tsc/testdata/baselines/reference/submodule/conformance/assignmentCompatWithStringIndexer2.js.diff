@@ -2,7 +2,7 @@
 +++ new.assignmentCompatWithStringIndexer2.js
 @@= skipped -55, +55 lines =@@
  }
- 
+
  //// [assignmentCompatWithStringIndexer2.js]
 -// index signatures must be compatible in assignments
  var a;

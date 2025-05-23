@@ -2,7 +2,7 @@
 +++ new.newWithSpread.js
 @@= skipped -98, +98 lines =@@
  new i["a-b"][1](1, 2, ...a, "string");
- 
+
  //// [newWithSpread.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
@@ -19,15 +19,13 @@
 -    for (var _i = 2; _i < arguments.length; _i++) {
 -        z[_i - 2] = arguments[_i];
 -    }
-+function f(x, y, ...z) {
- }
+-}
 -function f2() {
 -    var x = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        x[_i] = arguments[_i];
 -    }
-+function f2(...x) {
- }
+-}
 -var B = /** @class */ (function () {
 -    function B(x, y) {
 -        var z = [];
@@ -37,6 +35,10 @@
 -    }
 -    return B;
 -}());
++function f(x, y, ...z) {
++}
++function f2(...x) {
++}
 +class B {
 +    constructor(x, y, ...z) { }
 +}

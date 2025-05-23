@@ -1,8 +1,8 @@
 --- old.objectSpreadIndexSignature.js
 +++ new.objectSpreadIndexSignature.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [objectSpreadIndexSignature.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

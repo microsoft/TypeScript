@@ -2,7 +2,7 @@
 +++ new.interfaceWithMultipleDeclarations.js
 @@= skipped -39, +39 lines =@@
  }
- 
+
  //// [interfaceWithMultipleDeclarations.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

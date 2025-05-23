@@ -2,7 +2,7 @@
 +++ new.declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.js
 @@= skipped -3, +3 lines =@@
  type A<T extends Unknown> = {}
- 
+
  //// [declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.js]
 -
 -

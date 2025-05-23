@@ -2,11 +2,11 @@
 +++ new.localTypes3.types
 @@= skipped -49, +49 lines =@@
  >x : X
- 
+
          class C<Y> {
 ->C : C<Y>
 +>C : C<X, Y>
- 
+
              public x = x;
  >x : X
 @@= skipped -13, +13 lines =@@
@@ -19,7 +19,7 @@
 +>f(10) : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
  >f : <X>(x: X) => typeof C
  >10 : 10
- 
+
      let v = new C("hello");
 ->v : f<number>.C<string>
 ->new C("hello") : f<number>.C<string>
@@ -28,14 +28,14 @@
 +>new C("hello") : C<number, string>
 +>C : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
  >"hello" : "hello"
- 
+
      let x = v.x;
  >x : number
  >v.x : number
 ->v : f<number>.C<string>
 +>v : C<number, string>
  >x : number
- 
+
      let y = v.y;
  >y : string
  >v.y : string
@@ -43,14 +43,14 @@
 +>v : C<number, string>
  >y : string
  }
- 
+
 @@= skipped -33, +33 lines =@@
  >y : Y
- 
+
          class C {
 ->C : C
 +>C : C<X, Y>
- 
+
              public x = x;
  >x : X
 @@= skipped -14, +14 lines =@@
@@ -64,7 +64,7 @@
  >f : <X, Y>(x: X, y: Y) => typeof C
  >10 : 10
  >"hello" : "hello"
- 
+
      let v = new C();
 ->v : f<number, string>.C
 ->new C() : f<number, string>.C
@@ -72,14 +72,14 @@
 +>v : C<number, string>
 +>new C() : C<number, string>
 +>C : { new (): C<number, string>; prototype: C<any, any>; }
- 
+
      let x = v.x;
  >x : number
  >v.x : number
 ->v : f<number, string>.C
 +>v : C<number, string>
  >x : number
- 
+
      let y = v.y;
  >y : string
  >v.y : string
@@ -87,4 +87,3 @@
 +>v : C<number, string>
  >y : string
  }
- 

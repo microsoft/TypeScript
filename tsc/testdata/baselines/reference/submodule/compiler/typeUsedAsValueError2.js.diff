@@ -3,7 +3,7 @@
 @@= skipped -20, +20 lines =@@
  HelloInterface.world;
  HelloNamespace.world;
- 
+
 -//// [helloInterface.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

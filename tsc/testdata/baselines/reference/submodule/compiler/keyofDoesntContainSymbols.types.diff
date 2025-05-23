@@ -2,7 +2,7 @@
 +++ new.keyofDoesntContainSymbols.types
 @@= skipped -10, +10 lines =@@
  >0 : 0
- 
+
  const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
 ->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 ->{ num: 0, str: 's', [num]: num as 0, [sym]: sym } : { num: number; str: string; 0: 0; [sym]: symbol; }
@@ -19,7 +19,7 @@
 +>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
  >'str' : "str"
  >'' : ""
- 
+
 @@= skipped -9, +9 lines =@@
  >valB : number
  >set(obj, 'num', '') : number
@@ -28,7 +28,7 @@
 +>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
  >'num' : "num"
  >'' : ""
- 
+
 @@= skipped -10, +10 lines =@@
  >valC : symbol
  >set(obj, sym, sym) : symbol
@@ -37,7 +37,7 @@
 +>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
  >sym : unique symbol
  >sym : unique symbol
- 
+
 @@= skipped -10, +10 lines =@@
  >valD : 0
  >set(obj, num, num) : 0
@@ -46,20 +46,19 @@
 +>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
  >num : 0
  >num : 0
- 
+
 @@= skipped -8, +8 lines =@@
  // Argument of type '0' is not assignable to parameter of type "str" | "num"
  type KeyofObj = keyof typeof obj;
  >KeyofObj : "num" | "str" | 0 | unique symbol
 ->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 +>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
- 
+
  // "str" | "num"
  type Values<T> = T[keyof T];
 @@= skipped -8, +8 lines =@@
- 
+
  type ValuesOfObj = Values<typeof obj>;
  >ValuesOfObj : ValuesOfObj
 ->obj : { num: number; str: string; 0: 0; [sym]: symbol; }
 +>obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
- 

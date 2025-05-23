@@ -1,7 +1,7 @@
 --- old.legacyNodeModulesExportsSpecifierGenerationConditions.js
 +++ new.legacyNodeModulesExportsSpecifierGenerationConditions.js
 @@= skipped -32, +32 lines =@@
- 
+
  //// [index.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

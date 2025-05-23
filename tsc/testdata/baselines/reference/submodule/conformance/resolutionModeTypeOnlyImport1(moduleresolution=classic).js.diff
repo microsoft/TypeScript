@@ -1,6 +1,6 @@
 --- old.resolutionModeTypeOnlyImport1(moduleresolution=classic).js
 +++ new.resolutionModeTypeOnlyImport1(moduleresolution=classic).js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/conformance/moduleResolution/resolutionModeTypeOnlyImport1.ts] ////
 -
 -//// [package.json]
@@ -63,5 +63,4 @@
 -type _ImportRelative = typeof ImportRelative;
 -type _RequireRelative = typeof RequireRelative;
 -export { _Default, _Import, _Require, _ImportRelative, _RequireRelative };
-@@= skipped --1, +1 lines =@@
 +<no content>

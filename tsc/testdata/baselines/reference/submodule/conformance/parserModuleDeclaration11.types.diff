@@ -2,9 +2,8 @@
 +++ new.parserModuleDeclaration11.types
 @@= skipped -16, +16 lines =@@
  >"abc" : "abc"
- 
+
  var x: string.X;
 ->x : string.X
 +>x : X
  >string : any
- 

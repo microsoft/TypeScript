@@ -1,8 +1,7 @@
 --- old.defaultPropsEmptyCurlyBecomesAnyForJs.errors.txt
 +++ new.defaultPropsEmptyCurlyBecomesAnyForJs.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +typed_component.ts(5,20): error TS2339: Property 'x' does not exist on type '{}'.
 +typed_component.ts(6,20): error TS2339: Property 'y' does not exist on type '{}'.
 +typed_component.ts(7,20): error TS2339: Property 'value' does not exist on type '{}'.

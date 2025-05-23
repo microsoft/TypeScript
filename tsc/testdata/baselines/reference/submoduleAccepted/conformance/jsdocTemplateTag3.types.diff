@@ -14,24 +14,26 @@
  >length : number
  >u.a - u.b.length : number
 ->u.a : any
-+>u.a : number
- >u : U
+->u : U
 ->a : any
 ->u.b.length : any
 ->u.b : any
+->u : U
+->b : any
+->length : any
++>u.a : number
++>u : U
 +>a : number
 +>u.b.length : number
 +>u.b : string
- >u : U
-->b : any
-->length : any
++>u : U
 +>b : string
 +>length : number
  >v.c : boolean
  >v : V
  >c : boolean
 @@= skipped -21, +21 lines =@@
- 
+
  f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
  >f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : "nope" | 101
 ->f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
@@ -40,7 +42,7 @@
  >a : number
  >12 : 12
 @@= skipped -20, +20 lines =@@
- 
+
  f({ a: 12  }, undefined, undefined, 101, 'nope');
  >f({ a: 12  }, undefined, undefined, 101, 'nope') : "nope" | 101
 ->f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X

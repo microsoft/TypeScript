@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-classSuper.2.js
 +++ new.esDecorators-classDeclaration-classSuper.2.js
 @@= skipped -29, +29 lines =@@
- 
+
  //// [esDecorators-classDeclaration-classSuper.2.js]
  // class expression in extends should not get an assigned name
 -let C1 = (() => {

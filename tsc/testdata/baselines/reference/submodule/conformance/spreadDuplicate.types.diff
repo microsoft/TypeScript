@@ -2,12 +2,12 @@
 +++ new.spreadDuplicate.types
 @@= skipped -7, +7 lines =@@
  >a : string
- 
+
  declare let b: { a?: string };
 ->b : { a?: string; }
 +>b : { a?: string | undefined; }
  >a : string | undefined
- 
+
  declare let c: { a: string | undefined };
 @@= skipped -26, +26 lines =@@
  >{ a: 123, ...b } : { a: string | number; }
@@ -15,7 +15,7 @@
  >123 : 123
 ->b : { a?: string; }
 +>b : { a?: string | undefined; }
- 
+
  let c1 = { a: 123, ...c };  // string | undefined (Error)
  >c1 : { a: string | undefined; }
 @@= skipped -32, +32 lines =@@
@@ -30,5 +30,5 @@
 ->b : { a?: string; }
 +>b : { a?: string | undefined; }
  >{} : {}
- 
+
  let c2 = { a: 123, ...(t ? c : {}) };  // string | number

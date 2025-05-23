@@ -2,7 +2,7 @@
 +++ new.importHelpersWithImportOrExportDefault(esmoduleinterop=false,module=system).js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [a.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

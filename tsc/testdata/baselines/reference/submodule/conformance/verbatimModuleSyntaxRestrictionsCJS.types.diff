@@ -2,19 +2,19 @@
 +++ new.verbatimModuleSyntaxRestrictionsCJS.types
 @@= skipped -25, +25 lines =@@
  >esmy : () => void
- 
+
  import * as esmy2 from "./decl"; // error
 ->esmy2 : typeof esmy2
 +>esmy2 : typeof import("/decl")
- 
+
  import { funciton } from "./decl"; // error
  >funciton : () => void
 @@= skipped -64, +64 lines =@@
- 
+
  === /main5.ts ===
  export default class C {} // error
 ->C : C
 +>C : default
- 
+
  === /main6.ts ===
  interface I {}

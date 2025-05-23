@@ -2,7 +2,7 @@
 +++ new.exportAsNamespace4(module=system).js
 @@= skipped -21, +21 lines =@@
  foo1.b;
- 
+
  //// [0.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

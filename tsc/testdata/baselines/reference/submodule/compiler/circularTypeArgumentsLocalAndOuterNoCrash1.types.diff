@@ -1,10 +1,9 @@
 --- old.circularTypeArgumentsLocalAndOuterNoCrash1.types
 +++ new.circularTypeArgumentsLocalAndOuterNoCrash1.types
 @@= skipped -7, +7 lines =@@
- 
+
    interface NumArray<T extends number> extends Array<T> {}
    type X = NumArray<X extends {} ? number : number>;
 ->X : NumArray<any>
 +>X : X
  }
- 

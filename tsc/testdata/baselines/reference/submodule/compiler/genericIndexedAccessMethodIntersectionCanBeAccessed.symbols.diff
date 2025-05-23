@@ -1,7 +1,7 @@
 --- old.genericIndexedAccessMethodIntersectionCanBeAccessed.symbols
 +++ new.genericIndexedAccessMethodIntersectionCanBeAccessed.symbols
 @@= skipped -45, +45 lines =@@
- 
+
  ) => {
      Object.keys(ServiceCtr).forEach(key => {
 ->Object.keys(ServiceCtr).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
@@ -15,5 +15,5 @@
 ->forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 +>forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --))
  >key : Symbol(key, Decl(genericIndexedAccessMethodIntersectionCanBeAccessed.ts, 14, 36))
- 
+
          const method = (ServiceCtr)[key as keyof T];

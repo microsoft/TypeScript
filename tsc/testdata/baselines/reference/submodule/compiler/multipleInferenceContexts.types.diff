@@ -2,11 +2,11 @@
 +++ new.multipleInferenceContexts.types
 @@= skipped -21, +21 lines =@@
  }
- 
+
  declare var Moon: {
 ->Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
 +>Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
- 
+
      <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
  >options : ConstructorOptions<Data> | undefined
 @@= skipped -10, +10 lines =@@
@@ -17,6 +17,6 @@
 ->{    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },} : { data: { msg: string; }; render(): unknown; }
 +>Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
 +>{    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },} : { data: { msg: string; }; render: () => unknown; }
- 
+
      data: { msg: "" },
  >data : { msg: string; }

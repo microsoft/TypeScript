@@ -1,8 +1,8 @@
 --- old.classDeclarationShouldBeOutOfScopeInComputedNames.js
 +++ new.classDeclarationShouldBeOutOfScopeInComputedNames.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [classDeclarationShouldBeOutOfScopeInComputedNames.js]
 -var A = /** @class */ (function () {
 -    function A() {

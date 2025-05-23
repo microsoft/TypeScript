@@ -8,7 +8,7 @@
 ->{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar(): void; }
 +>x : { bar: () => void; }
 +>{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar: () => void; }
- 
+
      bar() {
  >bar : () => void
 @@= skipped -9, +9 lines =@@

@@ -2,7 +2,7 @@
 +++ new.thisTypeAsConstraint.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [thisTypeAsConstraint.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,8 +1,8 @@
 --- old.deeplyNestedCheck.js
 +++ new.deeplyNestedCheck.js
 @@= skipped -56, +56 lines =@@
- 
- 
+
+
  //// [deeplyNestedCheck.js]
 -// Repro from #14794
 -var x = {

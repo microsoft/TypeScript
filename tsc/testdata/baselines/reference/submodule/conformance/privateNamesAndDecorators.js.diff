@@ -1,8 +1,8 @@
 --- old.privateNamesAndDecorators.js
 +++ new.privateNamesAndDecorators.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [privateNamesAndDecorators.js]
 -var _A_instances, _A_foo, _A_bar;
 -var A = /** @class */ (function () {

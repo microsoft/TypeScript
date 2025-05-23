@@ -1,7 +1,7 @@
 --- old.moduleExportAliasUnknown.symbols
 +++ new.moduleExportAliasUnknown.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === bug27025.js ===
  module.exports = window.nonprop;
 ->module.exports : Symbol(module.exports, Decl(bug27025.js, 0, 0))
@@ -11,9 +11,8 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(unknown)
  >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
- 
+
  exports.foo = bar;
 ->exports : Symbol(foo, Decl(bug27025.js, 0, 32))
 ->foo : Symbol(foo, Decl(bug27025.js, 0, 32))
 +>exports : Symbol("bug27025", Decl(bug27025.js, 0, 0))
- 

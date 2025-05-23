@@ -6,6 +6,6 @@
      static readonlyType;
 ->readonlyType : unique symbol
 +>readonlyType : symbol
- 
+
      /**
       * @type {unique symbol}

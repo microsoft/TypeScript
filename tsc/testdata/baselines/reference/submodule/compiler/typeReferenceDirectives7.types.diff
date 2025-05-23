@@ -3,7 +3,7 @@
 @@= skipped -15, +15 lines =@@
  >() => x : () => number
  >x : number
- 
+
 -=== /types/lib/index.d.ts ===
 -declare let $: { x: number }
 ->$ : { x: number; }

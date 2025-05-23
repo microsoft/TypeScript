@@ -10,7 +10,7 @@
 +>require("./semver") : typeof import("semver")
  >require : (name: string) => any
  >"./semver" : "./semver"
- 
+
  var two = C.f(1)
  >two : any
  >C.f(1) : any
@@ -21,7 +21,7 @@
 +>C : typeof import("semver")
 +>f : any
  >1 : 1
- 
+
  var c = new C
 ->c : C
 ->new C : C
@@ -29,7 +29,7 @@
 +>c : any
 +>new C : any
 +>C : typeof import("semver")
- 
+
  === node.d.ts ===
  declare function require(name: string): any;
 @@= skipped -33, +33 lines =@@
@@ -50,7 +50,7 @@
 +>module : { "semver": typeof import("semver"); }
 +>exports : typeof import("semver")
 +>C : () => void
- 
+
  exports.f = n => n + 1
  >exports.f = n => n + 1 : (n: any) => any
 ->exports.f : (n: any) => any
@@ -64,11 +64,11 @@
  >n + 1 : any
 @@= skipped -20, +20 lines =@@
  >1 : 1
- 
+
  function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.p = 1
  >this.p = 1 : 1
  >this.p : any

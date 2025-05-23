@@ -2,7 +2,7 @@
 +++ new.accessStaticMemberFromInstanceMethod01.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [accessStaticMemberFromInstanceMethod01.js]
 -var C = /** @class */ (function () {
 -    function C() {

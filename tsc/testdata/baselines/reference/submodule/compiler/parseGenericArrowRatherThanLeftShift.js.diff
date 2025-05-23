@@ -1,7 +1,7 @@
 --- old.parseGenericArrowRatherThanLeftShift.js
 +++ new.parseGenericArrowRatherThanLeftShift.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [parseGenericArrowRatherThanLeftShift.js]
  function foo(_x) { }
 -var b = foo(function () { return 1; });

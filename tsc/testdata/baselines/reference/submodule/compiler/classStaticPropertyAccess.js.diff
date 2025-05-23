@@ -1,8 +1,8 @@
 --- old.classStaticPropertyAccess.js
 +++ new.classStaticPropertyAccess.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [classStaticPropertyAccess.js]
 -"use strict";
 -var A = /** @class */ (function () {

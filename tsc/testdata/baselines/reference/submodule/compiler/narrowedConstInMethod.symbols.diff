@@ -9,11 +9,11 @@
  >x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          };
      }
 @@= skipped -19, +19 lines =@@
- 
+
          return class {
              bar() { return x.length; }  // ok
 ->bar : Symbol((Anonymous class).bar, Decl(narrowedConstInMethod.ts, 13, 22))
@@ -23,6 +23,6 @@
  >x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          };
      }

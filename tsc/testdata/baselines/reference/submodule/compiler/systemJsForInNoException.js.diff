@@ -2,7 +2,7 @@
 +++ new.systemJsForInNoException.js
 @@= skipped -5, +5 lines =@@
      console.log(obj[key]);
- 
+
  //// [systemJsForInNoException.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

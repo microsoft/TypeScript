@@ -13,7 +13,7 @@
 ->next : (...[value]: [] | [unknown]) => IteratorResult<number, any>
 +>next : (...__0: [] | [unknown]) => IteratorResult<number, any>
  >value : any
- 
+
  // based on: https://github.com/gcanti/fp-ts/blob/89a772e95e414acee679f42f56527606f7b61f30/src/Map.ts#L246
 @@= skipped -19, +19 lines =@@
  const r2: Next<number> = map.values().next(); // error when strictBuiltinIteratorReturn is true as result is potentially `{ done: true, value: undefined }`
@@ -27,7 +27,7 @@
  >values : () => MapIterator<number>
 ->next : (...[value]: [] | [unknown]) => IteratorResult<number, any>
 +>next : (...__0: [] | [unknown]) => IteratorResult<number, any>
- 
+
  // based on: https://github.com/graphql/graphql-js/blob/e15c3ec4dc21d9fd1df34fe9798cadf3bf02c6ea/src/execution/__tests__/mapAsyncIterable-test.ts#L175
  async function* source() { yield 1; yield 2; yield 3; }
 @@= skipped -33, +33 lines =@@
@@ -43,5 +43,5 @@
 ->next : (...[value]: [] | [unknown]) => IteratorResult<number, any>
 +>next : (...__0: [] | [unknown]) => IteratorResult<number, any>
  >value : any
- 
+
  // based on: https://github.com/microsoft/TypeScript/blob/15f67e0b482faf9f6a3ab9965f3c11196bf3e99b/src/harness/compilerImpl.ts#L77

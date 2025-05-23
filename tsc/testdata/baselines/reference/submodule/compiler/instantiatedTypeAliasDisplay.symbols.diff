@@ -2,7 +2,7 @@
 +++ new.instantiatedTypeAliasDisplay.symbols
 @@= skipped -7, +7 lines =@@
  >A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 2, 12))
- 
+
      a: A;
 ->a : Symbol(X.a, Decl(instantiatedTypeAliasDisplay.ts, 2, 16))
 +>a : Symbol(a, Decl(instantiatedTypeAliasDisplay.ts, 2, 16))
@@ -11,7 +11,7 @@
  interface Y<B> {
 @@= skipped -8, +8 lines =@@
  >B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 5, 12))
- 
+
      b: B;
 ->b : Symbol(Y.b, Decl(instantiatedTypeAliasDisplay.ts, 5, 16))
 +>b : Symbol(b, Decl(instantiatedTypeAliasDisplay.ts, 5, 16))

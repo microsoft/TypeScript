@@ -2,9 +2,8 @@
 +++ new.moduleInTypePosition1.symbols
 @@= skipped -14, +14 lines =@@
  >Promise : Symbol(Promise, Decl(moduleInTypePosition1_0.ts, 0, 0))
- 
+
      foo: string;
 ->foo : Symbol(Promise.foo, Decl(moduleInTypePosition1_0.ts, 0, 22))
 +>foo : Symbol(foo, Decl(moduleInTypePosition1_0.ts, 0, 22))
  }
- 

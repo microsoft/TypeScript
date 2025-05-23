@@ -2,7 +2,7 @@
 +++ new.classMemberInitializerWithLamdaScoping5.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [classMemberInitializerWithLamdaScoping5.js]
 -var Greeter = /** @class */ (function () {
 -    function Greeter(message) {

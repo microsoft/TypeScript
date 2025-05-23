@@ -2,7 +2,7 @@
 +++ new.nodeModulesImportAssertions(module=node16).types
 @@= skipped -10, +10 lines =@@
  >type : any
- 
+
  const json2 = import("./package.json", { assert: { type: "json" } }); // should be fine
 ->json2 : Promise<{ default: { name: string; private: boolean; type: string; }; }>
 ->import("./package.json", { assert: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>

@@ -1,8 +1,7 @@
 --- old.importTag16.errors.txt
 +++ new.importTag16.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +b.js(1,13): error TS1363: A type-only import can specify a default import or named bindings, but not both.
 +
 +

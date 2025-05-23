@@ -1,7 +1,7 @@
 --- old.derivedClassConstructorWithoutSuperCall.js
 +++ new.derivedClassConstructorWithoutSuperCall.js
 @@= skipped -35, +35 lines =@@
- 
+
  //// [derivedClassConstructorWithoutSuperCall.js]
  // derived class constructors must contain a super call
 -var __extends = (this && this.__extends) || (function () {
@@ -21,12 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
-+class Base {
-+    x;
-+}
-+class Derived extends Base {
-+    constructor() {
-     }
+-    }
 -    return Base;
 -}());
 -var Derived = /** @class */ (function (_super) {
@@ -34,23 +29,12 @@
 -    function Derived() {
 -        var _this = this;
 -        return _this;
-+}
-+class Base2 {
-+    x;
-+}
-+class Derived2 extends Base2 {
-+    constructor() {
-+        var r2 = () => super(); // error for misplaced super call (nested function)
-     }
+-    }
 -    return Derived;
 -}(Base));
 -var Base2 = /** @class */ (function () {
 -    function Base2() {
-+}
-+class Derived3 extends Base2 {
-+    constructor() {
-+        var r = function () { super(); }; // error
-     }
+-    }
 -    return Base2;
 -}());
 -var Derived2 = /** @class */ (function (_super) {
@@ -59,11 +43,7 @@
 -        var _this = this;
 -        var r2 = function () { return _this = _super.call(this) || this; }; // error for misplaced super call (nested function)
 -        return _this;
-+}
-+class Derived4 extends Base2 {
-+    constructor() {
-+        var r = super(); // ok
-     }
+-    }
 -    return Derived2;
 -}(Base2));
 -var Derived3 = /** @class */ (function (_super) {
@@ -84,4 +64,28 @@
 -    }
 -    return Derived4;
 -}(Base2));
++class Base {
++    x;
++}
++class Derived extends Base {
++    constructor() {
++    }
++}
++class Base2 {
++    x;
++}
++class Derived2 extends Base2 {
++    constructor() {
++        var r2 = () => super(); // error for misplaced super call (nested function)
++    }
++}
++class Derived3 extends Base2 {
++    constructor() {
++        var r = function () { super(); }; // error
++    }
++}
++class Derived4 extends Base2 {
++    constructor() {
++        var r = super(); // ok
++    }
 +}

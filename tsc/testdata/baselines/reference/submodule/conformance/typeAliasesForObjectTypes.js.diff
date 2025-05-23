@@ -1,8 +1,8 @@
 --- old.typeAliasesForObjectTypes.js
 +++ new.typeAliasesForObjectTypes.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [typeAliasesForObjectTypes.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

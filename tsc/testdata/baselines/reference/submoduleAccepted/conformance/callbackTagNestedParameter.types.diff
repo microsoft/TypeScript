@@ -2,7 +2,7 @@
 +++ new.callbackTagNestedParameter.types
 @@= skipped -18, +18 lines =@@
  >callback : WorksWithPeopleCallback
- 
+
      callback({ name: "Empty" });
 ->callback({ name: "Empty" }) : void
 +>callback({ name: "Empty" }) : any

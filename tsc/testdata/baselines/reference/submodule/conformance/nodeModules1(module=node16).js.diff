@@ -14,45 +14,46 @@
  //// [index.cjs]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
-@@= skipped -321, +318 lines =@@
+@@= skipped -320, +317 lines =@@
+ const _m45 = import("./subfolder2/another/index");
  // esm format file
  const x = 1;
+-export { x };
+-
+-
+-//// [index.d.ts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.cts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.mts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.ts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.cts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.mts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.ts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.mts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.cts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.cts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.ts]
+-declare const x = 1;
+-export { x };
+-//// [index.d.mts]
+-declare const x = 1;
  export { x };
--
--
--//// [index.d.ts]
--declare const x = 1;
--export { x };
--//// [index.d.cts]
--declare const x = 1;
--export { x };
--//// [index.d.mts]
--declare const x = 1;
--export { x };
--//// [index.d.ts]
--declare const x = 1;
--export { x };
--//// [index.d.cts]
--declare const x = 1;
--export { x };
--//// [index.d.mts]
--declare const x = 1;
--export { x };
--//// [index.d.ts]
--declare const x = 1;
--export { x };
--//// [index.d.mts]
--declare const x = 1;
--export { x };
--//// [index.d.cts]
--declare const x = 1;
--export { x };
--//// [index.d.cts]
--declare const x = 1;
--export { x };
--//// [index.d.ts]
--declare const x = 1;
--export { x };
--//// [index.d.mts]
--declare const x = 1;
--export { x };

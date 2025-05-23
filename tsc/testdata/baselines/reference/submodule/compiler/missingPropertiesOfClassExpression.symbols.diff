@@ -7,5 +7,5 @@
 ->reset : Symbol((Anonymous class).reset, Decl(missingPropertiesOfClassExpression.ts, 0, 28))
 +>reset : Symbol(reset, Decl(missingPropertiesOfClassExpression.ts, 0, 28))
  >this : Symbol((Anonymous class), Decl(missingPropertiesOfClassExpression.ts, 0, 20))
- 
+
      constructor() {

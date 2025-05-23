@@ -1,8 +1,8 @@
 --- old.allowSyntheticDefaultImports5.js
 +++ new.allowSyntheticDefaultImports5.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [a.js]
 -System.register(["./b"], function (exports_1, context_1) {
 -    "use strict";

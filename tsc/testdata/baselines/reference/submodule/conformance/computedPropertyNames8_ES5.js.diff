@@ -1,7 +1,7 @@
 --- old.computedPropertyNames8_ES5.js
 +++ new.computedPropertyNames8_ES5.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [computedPropertyNames8_ES5.js]
  function f() {
 -    var _a;

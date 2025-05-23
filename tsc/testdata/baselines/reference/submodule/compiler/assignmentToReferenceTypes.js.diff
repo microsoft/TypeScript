@@ -2,7 +2,7 @@
 +++ new.assignmentToReferenceTypes.js
 @@= skipped -25, +25 lines =@@
  }
- 
+
  //// [assignmentToReferenceTypes.js]
 -// Should all be allowed
  M = null;

@@ -2,7 +2,7 @@
 +++ new.classAbstractCrashedOnce.js
 @@= skipped -12, +12 lines =@@
  var x = new bar();
- 
+
  //// [classAbstractCrashedOnce.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

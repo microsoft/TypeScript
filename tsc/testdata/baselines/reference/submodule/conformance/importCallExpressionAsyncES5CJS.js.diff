@@ -1,7 +1,7 @@
 --- old.importCallExpressionAsyncES5CJS.js
 +++ new.importCallExpressionAsyncES5CJS.js
 @@= skipped -31, +31 lines =@@
- 
+
  //// [test.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

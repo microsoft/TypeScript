@@ -3,7 +3,7 @@
 @@= skipped -2, +2 lines =@@
  [7m22[0m                 thing: {}
  [7m  [0m [91m                ~~~~~[0m
- 
+
 -  [96mdeeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m
 +  [96mdeeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m - 'a' is declared here.
      [7m2[0m     a: number;
@@ -17,10 +17,10 @@
 -    The expected type comes from property 'thing' which is declared here on type '{ thing: A; }'
 +
  [96mdeeplyNestedAssignabilityIssue.ts[0m:[93m25[0m:[93m17[0m - [91merror[0m[90m TS2741: [0mProperty 'a' is missing in type '{}' but required in type 'A'.
- 
+
  [7m25[0m                 another: {}
  [7m  [0m [91m                ~~~~~~~[0m
- 
+
 -  [96mdeeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m
 +  [96mdeeplyNestedAssignabilityIssue.ts[0m:[93m2[0m:[93m5[0m - 'a' is declared here.
      [7m2[0m     a: number;
@@ -32,6 +32,6 @@
      [7m12[0m                 another: A;
      [7m  [0m [96m                ~~~~~~~[0m
 -    The expected type comes from property 'another' which is declared here on type '{ another: A; }'
- 
- 
+
+
  ==== deeplyNestedAssignabilityIssue.ts (2 errors) ====

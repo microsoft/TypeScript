@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js
 +++ new.objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js
 @@= skipped -79, +79 lines =@@
- 
+
  //// [objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js]
  // object types are identical structurally
 -var B = /** @class */ (function () {

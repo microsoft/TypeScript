@@ -14,5 +14,5 @@
 ->_render : Symbol(Hello._render, Decl(weird.js, 7, 9))
 +>_render : Symbol(_render, Decl(weird.js, 7, 9))
  >error : Symbol(error, Decl(weird.js, 8, 16))
- 
+
              const message = error.message || DEFAULT_MESSAGE;

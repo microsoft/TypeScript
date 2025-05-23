@@ -2,13 +2,11 @@
 +++ new.commentsTypeParameters.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [commentsTypeParameters.js]
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    method(a) {
-     }
+-    }
 -    C.prototype.method = function (a) {
 -    };
 -    C.staticmethod = function (a) {
@@ -19,6 +17,9 @@
 -    };
 -    return C;
 -}());
++class C {
++    method(a) {
++    }
 +    static staticmethod(a) {
 +    }
 +    privatemethod(a) {

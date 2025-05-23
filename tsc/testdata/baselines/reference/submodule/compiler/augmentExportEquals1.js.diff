@@ -2,7 +2,7 @@
 +++ new.augmentExportEquals1.js
 @@= skipped -18, +18 lines =@@
  let a: x.A; // should not work
- 
+
  //// [file1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

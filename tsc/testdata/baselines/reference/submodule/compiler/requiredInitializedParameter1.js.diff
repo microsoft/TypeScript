@@ -2,7 +2,7 @@
 +++ new.requiredInitializedParameter1.js
 @@= skipped -21, +21 lines =@@
  f4(0);
- 
+
  //// [requiredInitializedParameter1.js]
 -function f1(a, b, c) {
 -    if (b === void 0) { b = 0; }

@@ -1,16 +1,16 @@
 --- old.excessPropertyCheckWithSpread.types
 +++ new.excessPropertyCheckWithSpread.types
 @@= skipped -1, +1 lines =@@
- 
+
  === excessPropertyCheckWithSpread.ts ===
  declare function f({ a: number }): void
 ->f : ({ a: number }: { a: any; }) => void
 +>f : (__0: { a: any; }) => void
  >a : any
  >number : any
- 
+
 @@= skipped -13, +13 lines =@@
- 
+
  f({ a: 1, ...i });
  >f({ a: 1, ...i }) : void
 ->f : ({ a: number }: { a: any; }) => void
@@ -19,7 +19,7 @@
  >a : number
  >1 : 1
 @@= skipped -22, +22 lines =@@
- 
+
  f({ a: 1, ...l, ...r });
  >f({ a: 1, ...l, ...r }) : void
 ->f : ({ a: number }: { a: any; }) => void

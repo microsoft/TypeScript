@@ -1,8 +1,8 @@
 --- old.destructuringInVariableDeclarations4.js
 +++ new.destructuringInVariableDeclarations4.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [destructuringInVariableDeclarations4.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

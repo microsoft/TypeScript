@@ -30,8 +30,8 @@
  collisionArgumentsClassConstructor.ts(68,17): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
 @@= skipped -28, +23 lines =@@
  collisionArgumentsClassConstructor.ts(70,13): error TS1210: Code contained in a class is evaluated in JavaScript's strict mode which does not allow this use of 'arguments'. For more information, see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode.
- 
- 
+
+
 -==== collisionArgumentsClassConstructor.ts (29 errors) ====
 +==== collisionArgumentsClassConstructor.ts (24 errors) ====
      // Constructors

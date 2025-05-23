@@ -6,6 +6,6 @@
  >A : typeof A
 ->M : typeof A.M
 +>M : typeof M
- 
+
      interface M { }
      import M = Z.M;

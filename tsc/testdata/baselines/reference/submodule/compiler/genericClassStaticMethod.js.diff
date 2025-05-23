@@ -1,8 +1,8 @@
 --- old.genericClassStaticMethod.js
 +++ new.genericClassStaticMethod.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [genericClassStaticMethod.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+class Foo {
-+    static getFoo() {
-     }
+-    }
 -    Foo.getFoo = function () {
 -    };
 -    return Foo;
@@ -32,12 +30,16 @@
 -    __extends(Bar, _super);
 -    function Bar() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+}
-+class Bar extends Foo {
-+    static getFoo() {
-     }
+-    }
 -    Bar.getFoo = function () {
 -    };
 -    return Bar;
 -}(Foo));
++class Foo {
++    static getFoo() {
++    }
++}
++class Bar extends Foo {
++    static getFoo() {
++    }
 +}

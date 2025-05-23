@@ -1,8 +1,8 @@
 --- old.templateLiteralTypes4.js
 +++ new.templateLiteralTypes4.js
 @@= skipped -306, +306 lines =@@
- 
- 
+
+
  //// [templateLiteralTypes4.js]
 -"use strict";
 +// infer from literal enums

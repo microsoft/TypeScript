@@ -2,7 +2,7 @@
 +++ new.doubleMixinConditionalTypeBaseClassWorks.js
 @@= skipped -10, +10 lines =@@
  class C extends Mixin2(Mixin1(Object)) {}
- 
+
  //// [doubleMixinConditionalTypeBaseClassWorks.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -12,12 +12,12 @@
 +>foo : any
 +>bar() : any
 +>bar : any
- 
+
  === /a.ts ===
  import * as foo from "foo";
 ->foo : error
 +>foo : any
- 
+
  foo.bar();
 ->foo.bar() : error
 ->foo.bar : error
@@ -25,13 +25,12 @@
 +>foo.bar : any
  >foo : any
  >bar : any
- 
+
 @@= skipped -20, +20 lines =@@
  >foo : any
- 
+
  foo();
 ->foo() : error
 ->foo : error
 +>foo() : any
 +>foo : any
- 

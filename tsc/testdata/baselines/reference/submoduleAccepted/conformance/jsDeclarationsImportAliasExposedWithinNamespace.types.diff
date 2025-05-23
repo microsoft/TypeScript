@@ -7,20 +7,20 @@
 ->myTypes : { [x: string]: any; }
 +>myTypes : any
  >{    // SOME PROPS HERE} : {}
- 
+
      // SOME PROPS HERE
 @@= skipped -17, +17 lines =@@
  /** @typedef {myTypes.typeB|Function} myTypes.typeC */
- 
+
  export {myTypes};
 ->myTypes : { [x: string]: any; }
 +>myTypes : any
- 
+
  === file2.js ===
  import {myTypes} from './file.js';
 ->myTypes : { [x: string]: any; }
 +>myTypes : any
- 
+
  /**
   * @namespace testFnTypes
 @@= skipped -12, +12 lines =@@
@@ -30,7 +30,7 @@
 ->testFnTypes : { [x: string]: any; }
 +>testFnTypes : any
  >{    // SOME PROPS HERE} : {}
- 
+
      // SOME PROPS HERE
 @@= skipped -15, +15 lines =@@
   * @returns {number|null} Result.
@@ -40,28 +40,27 @@
 ->input : import("file2").testFnTypes.input
 +>testFn : (input: input) => number
 +>input : input
- 
+
      if (typeof input === 'number') {
  >typeof input === 'number' : boolean
  >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->input : import("file2").testFnTypes.input
 +>input : input
  >'number' : "number"
- 
+
          return 2 * input;
  >2 * input : number
  >2 : 2
 ->input : never
 +>input : number
- 
+
      } else {
          return null;
 @@= skipped -20, +20 lines =@@
  }
- 
+
  export {testFn, testFnTypes};
 ->testFn : (input: testFnTypes.input) => number | null
 ->testFnTypes : { [x: string]: any; }
 +>testFn : (input: input) => number
 +>testFnTypes : any
- 

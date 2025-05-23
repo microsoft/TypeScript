@@ -1,7 +1,7 @@
 --- old.jsxImportSourceNonPragmaComment.js
 +++ new.jsxImportSourceNonPragmaComment.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [jsxImportSourceNonPragmaComment.jsx]
  "use strict";
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {

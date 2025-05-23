@@ -30,8 +30,12 @@
 -        class_1.prototype.get = function (domNode) { };
 -        return class_1;
 -    }(Base));
--};
--exports.mixin = mixin;
++const mixin = (Base) => {
++    return class extends Base {
++        get(domNode) { }
++    };
+ };
+ exports.mixin = mixin;
 -
 -
 -//// [dom.d.ts]
@@ -45,10 +49,6 @@
 -    new (...args: any[]): {
 -        [x: string]: any;
 -        get(domNode: DOMNode): void;
-+const mixin = (Base) => {
-+    return class extends Base {
-+        get(domNode) { }
-     };
- };
+-    };
+-};
 -export {};
-+exports.mixin = mixin;

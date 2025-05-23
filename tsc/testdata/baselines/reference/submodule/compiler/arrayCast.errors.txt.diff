@@ -4,8 +4,8 @@
 -arrayCast.ts(3,23): error TS2352: Conversion of type '{ foo: string; }[]' to type '{ id: number; }[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 -  Object literal may only specify known properties, and 'foo' does not exist in type '{ id: number; }'.
 +arrayCast.ts(3,23): error TS2353: Object literal may only specify known properties, and 'foo' does not exist in type '{ id: number; }'.
- 
- 
+
+
  ==== arrayCast.ts (1 errors) ====
 @@= skipped -6, +5 lines =@@
      // has type { foo: string }[], which is not assignable to { id: number }[].

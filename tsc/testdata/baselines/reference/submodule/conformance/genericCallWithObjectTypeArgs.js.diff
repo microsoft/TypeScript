@@ -2,7 +2,7 @@
 +++ new.genericCallWithObjectTypeArgs.js
 @@= skipped -23, +23 lines =@@
  var r2 = foo(c1, c1); // ok
- 
+
  //// [genericCallWithObjectTypeArgs.js]
 -var C = /** @class */ (function () {
 -    function C() {

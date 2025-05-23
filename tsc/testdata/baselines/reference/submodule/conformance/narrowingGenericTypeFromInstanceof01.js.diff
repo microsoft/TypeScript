@@ -2,7 +2,7 @@
 +++ new.narrowingGenericTypeFromInstanceof01.js
 @@= skipped -29, +29 lines =@@
  }
- 
+
  //// [narrowingGenericTypeFromInstanceof01.js]
 -var A = /** @class */ (function () {
 -    function A(a) {

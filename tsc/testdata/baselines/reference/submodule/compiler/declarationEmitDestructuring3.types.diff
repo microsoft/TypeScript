@@ -1,7 +1,7 @@
 --- old.declarationEmitDestructuring3.types
 +++ new.declarationEmitDestructuring3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmitDestructuring3.ts ===
  function bar([x, z, ...w]) { }
 ->bar : ([x, z, ...w]: [any, any, ...any[]]) => void
@@ -9,7 +9,7 @@
  >x : any
  >z : any
  >w : any[]
- 
+
  function foo([x, ...y] = [1, "string", true]) { }
 ->foo : ([x, ...y]?: [number, string, boolean]) => void
 +>foo : (__0?: [number, string, boolean]) => void

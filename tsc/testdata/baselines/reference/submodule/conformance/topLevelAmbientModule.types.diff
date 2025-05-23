@@ -6,7 +6,7 @@
  import foo = require("foo");
 ->foo : typeof foo
 +>foo : typeof import("foo")
- 
+
  var z = foo.x + 10;
  >z : number
  >foo.x + 10 : number
@@ -15,4 +15,3 @@
 +>foo : typeof import("foo")
  >x : number
  >10 : 10
- 

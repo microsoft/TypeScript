@@ -2,14 +2,13 @@
 +++ new.overloadsAndTypeArgumentArityErrors.types
 @@= skipped -23, +23 lines =@@
  >'s' : "s"
- 
+
  declare function f<A, B = {}>(arg: number): void;
 ->f : <A, B = {}>(arg: number) => void
 +>f : <A, B>(arg: number) => void
  >arg : number
- 
+
  f<number>(); // wrong number of arguments (#25683)
  >f<number>() : void
 ->f : <A, B = {}>(arg: number) => void
 +>f : <A, B>(arg: number) => void
- 

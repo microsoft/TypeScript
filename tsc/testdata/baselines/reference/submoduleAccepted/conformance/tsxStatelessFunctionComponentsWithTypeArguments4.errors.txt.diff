@@ -22,8 +22,8 @@
 -      Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
 +      Type 'T & { "ignore-prop": true; }' is not assignable to type '{ b: unknown; a: unknown; }'.
 +        Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
- 
- 
+
+
  ==== file.tsx (2 errors) ====
 @@= skipped -28, +19 lines =@@
          let a0 = <OverloadComponent a={arg1.b}/>

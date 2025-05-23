@@ -2,33 +2,33 @@
 +++ new.varianceAnnotations.types
 @@= skipped -201, +201 lines =@@
  >T23 : T
- 
+
  declare function f1<in T>(x: T): void;  // Error
 ->f1 : <in T>(x: T) => void
 +>f1 : <T>(x: T) => void
  >x : T
- 
+
  declare function f2<out T>(): T;  // Error
 ->f2 : <out T>() => T
 +>f2 : <T>() => T
- 
+
  class C {
  >C : C
 @@= skipped -58, +58 lines =@@
  }
- 
+
  function fn<A>(inp: Child<A>) {
 ->fn : <A>(inp: Child<A>) => void
 +>fn : <A>(inp: Child<A, unknown>) => void
  >inp : Child<A, unknown>
- 
+
      const a: Child<unknown> = inp;
 @@= skipped -90, +90 lines =@@
  >class <out T> {    foo(): InstanceType<(typeof Anon<T>)> {        return this;    }} : typeof Anon
- 
+
      foo(): InstanceType<(typeof Anon<T>)> {
 ->foo : () => InstanceType<(typeof Anon<T>)>
 +>foo : () => Anon<T>
  >Anon : typeof Anon
- 
+
          return this;

@@ -1,8 +1,8 @@
 --- old.thisExpressionInCallExpressionWithTypeArguments.js
 +++ new.thisExpressionInCallExpressionWithTypeArguments.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [thisExpressionInCallExpressionWithTypeArguments.js]
 -var C = /** @class */ (function () {
 -    function C() {

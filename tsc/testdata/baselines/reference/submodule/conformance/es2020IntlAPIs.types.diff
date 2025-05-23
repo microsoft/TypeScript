@@ -30,7 +30,7 @@
  >format : { (value: number): string; (value: number | bigint): string; }
  >count : 26254.39
 @@= skipped -37, +37 lines =@@
- 
+
  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/RelativeTimeFormat
  const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'narrow' });
 ->rtf1 : Intl.RelativeTimeFormat
@@ -57,7 +57,7 @@
 +>format : (value: number, unit: RelativeTimeFormatUnit) => string
  >3 : 3
  >'quarter' : "quarter"
- 
+
 @@= skipped -14, +14 lines =@@
  >console : Console
  >log : (...data: any[]) => void
@@ -73,7 +73,7 @@
  >'day' : "day"
 @@= skipped -10, +10 lines =@@
  //expected output: "1 day ago"
- 
+
  const rtf2 = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
 ->rtf2 : Intl.RelativeTimeFormat
 ->new Intl.RelativeTimeFormat('es', { numeric: 'auto' }) : Intl.RelativeTimeFormat
@@ -99,9 +99,9 @@
 +>format : (value: number, unit: RelativeTimeFormatUnit) => string
  >2 : 2
  >'day' : "day"
- 
+
 @@= skipped -10, +10 lines =@@
- 
+
  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames
  const regionNamesInEnglish = new Intl.DisplayNames(['en'], { type: 'region' });
 ->regionNamesInEnglish : Intl.DisplayNames
@@ -118,7 +118,7 @@
  >{ type: 'region' } : { type: "region"; }
 @@= skipped -12, +12 lines =@@
  >'region' : "region"
- 
+
  const regionNamesInTraditionalChinese = new Intl.DisplayNames(['zh-Hant'], { type: 'region' });
 ->regionNamesInTraditionalChinese : Intl.DisplayNames
 ->new Intl.DisplayNames(['zh-Hant'], { type: 'region' }) : Intl.DisplayNames
@@ -143,7 +143,7 @@
 +>regionNamesInEnglish : DisplayNames
 +>of : (code: string) => string
  >'US' : "US"
- 
+
  // expected output: "United States"
 @@= skipped -13, +13 lines =@@
  >console : Console
@@ -156,7 +156,7 @@
 +>regionNamesInTraditionalChinese : DisplayNames
 +>of : (code: string) => string
  >'US' : "US"
- 
+
  // expected output: "美國"
 @@= skipped -29, +29 lines =@@
  >Intl.DisplayNames.supportedLocalesOf(locales1, options1).join(', ') : string
@@ -175,7 +175,7 @@
  >options1 : { readonly localeMatcher: "lookup"; }
  >join : (separator?: string) => string
  >', ' : ", "
- 
+
  new Intl.Locale(); // should error
 ->new Intl.Locale() : Intl.Locale
 ->Intl.Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
@@ -184,24 +184,26 @@
  >Intl : typeof Intl
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
- 
+
  new Intl.Locale(new Intl.Locale('en-US'));
 ->new Intl.Locale(new Intl.Locale('en-US')) : Intl.Locale
 ->Intl.Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
-+>new Intl.Locale(new Intl.Locale('en-US')) : Locale
-+>Intl.Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
- >Intl : typeof Intl
+->Intl : typeof Intl
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 ->new Intl.Locale('en-US') : Intl.Locale
 ->Intl.Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
+->Intl : typeof Intl
+->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
++>new Intl.Locale(new Intl.Locale('en-US')) : Locale
++>Intl.Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
++>Intl : typeof Intl
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
 +>new Intl.Locale('en-US') : Locale
 +>Intl.Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
- >Intl : typeof Intl
-->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
++>Intl : typeof Intl
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >'en-US' : "en-US"
- 
+
  new Intl.DisplayNames(); // TypeError: invalid_argument
 ->new Intl.DisplayNames() : Intl.DisplayNames
 ->Intl.DisplayNames : { new (locales: Intl.LocalesArgument, options: Intl.DisplayNamesOptions): Intl.DisplayNames; prototype: Intl.DisplayNames; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
@@ -210,7 +212,7 @@
  >Intl : typeof Intl
 ->DisplayNames : { new (locales: Intl.LocalesArgument, options: Intl.DisplayNamesOptions): Intl.DisplayNames; prototype: Intl.DisplayNames; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
 +>DisplayNames : { new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames; prototype: DisplayNames; supportedLocalesOf: (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]; }
- 
+
  new Intl.DisplayNames('en'); // TypeError: invalid_argument
 ->new Intl.DisplayNames('en') : Intl.DisplayNames
 ->Intl.DisplayNames : { new (locales: Intl.LocalesArgument, options: Intl.DisplayNamesOptions): Intl.DisplayNames; prototype: Intl.DisplayNames; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
@@ -220,7 +222,7 @@
 ->DisplayNames : { new (locales: Intl.LocalesArgument, options: Intl.DisplayNamesOptions): Intl.DisplayNames; prototype: Intl.DisplayNames; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
 +>DisplayNames : { new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames; prototype: DisplayNames; supportedLocalesOf: (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]; }
  >'en' : "en"
- 
+
  new Intl.DisplayNames('en', {}); // TypeError: invalid_argument
 ->new Intl.DisplayNames('en', {}) : Intl.DisplayNames
 ->Intl.DisplayNames : { new (locales: Intl.LocalesArgument, options: Intl.DisplayNamesOptions): Intl.DisplayNames; prototype: Intl.DisplayNames; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
@@ -231,7 +233,7 @@
 +>DisplayNames : { new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames; prototype: DisplayNames; supportedLocalesOf: (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]; }
  >'en' : "en"
  >{} : {}
- 
+
 @@= skipped -54, +54 lines =@@
  >console : Console
  >log : (...data: any[]) => void
@@ -254,7 +256,7 @@
 ->of : (code: string) => string | undefined
 +>of : (code: string) => string
  >'en-GB' : "en-GB"
- 
+
  const localesArg = ["es-ES", new Intl.Locale("en-US")];
 ->localesArg : (string | Intl.Locale)[]
 ->["es-ES", new Intl.Locale("en-US")] : (string | Intl.Locale)[]
@@ -269,7 +271,7 @@
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >"en-US" : "en-US"
- 
+
  console.log((new Intl.DisplayNames(localesArg, {type: 'language'})).resolvedOptions().locale); // "es-ES"
 @@= skipped -29, +29 lines =@@
  >console : Console
@@ -296,7 +298,7 @@
 ->resolvedOptions : () => Intl.ResolvedDisplayNamesOptions
 +>resolvedOptions : () => ResolvedDisplayNamesOptions
  >locale : string
- 
+
  console.log(Intl.DisplayNames.supportedLocalesOf(localesArg)); // ["es-ES", "en-US"]
 @@= skipped -20, +20 lines =@@
  >console : Console
@@ -313,7 +315,7 @@
 +>DisplayNames : { new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames; prototype: DisplayNames; supportedLocalesOf: (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]; }
 +>supportedLocalesOf : (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]
 +>localesArg : (string | Locale)[]
- 
+
  console.log(Intl.DisplayNames.supportedLocalesOf()); // []
  >console.log(Intl.DisplayNames.supportedLocalesOf()) : void
 @@= skipped -13, +13 lines =@@
@@ -329,7 +331,7 @@
 ->supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.RelativeTimeFormatLocaleMatcher; }) => Intl.UnicodeBCP47LocaleIdentifier[]
 +>DisplayNames : { new (locales: LocalesArgument, options: DisplayNamesOptions): DisplayNames; prototype: DisplayNames; supportedLocalesOf: (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]; }
 +>supportedLocalesOf : (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]
- 
+
  console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})); // ["es-ES", "en-US"]
  >console.log(Intl.DisplayNames.supportedLocalesOf(localesArg, {})) : void
 @@= skipped -12, +12 lines =@@
@@ -348,4 +350,3 @@
 +>supportedLocalesOf : (locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }) => string[]
 +>localesArg : (string | Locale)[]
  >{} : {}
- 

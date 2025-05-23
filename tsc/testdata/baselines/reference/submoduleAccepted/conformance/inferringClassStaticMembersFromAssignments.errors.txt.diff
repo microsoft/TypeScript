@@ -1,8 +1,7 @@
 --- old.inferringClassStaticMembersFromAssignments.errors.txt
 +++ new.inferringClassStaticMembersFromAssignments.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(2,4): error TS2339: Property 'staticProp' does not exist on type 'typeof C1'.
 +a.js(8,4): error TS2339: Property 'staticProp' does not exist on type 'typeof C2'.
 +a.js(11,4): error TS2339: Property 'staticProp' does not exist on type '() => void'.

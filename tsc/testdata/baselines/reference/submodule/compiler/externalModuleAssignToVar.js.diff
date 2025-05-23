@@ -1,8 +1,8 @@
 --- old.externalModuleAssignToVar.js
 +++ new.externalModuleAssignToVar.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [externalModuleAssignToVar_core_require.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

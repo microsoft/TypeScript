@@ -2,7 +2,7 @@
 +++ new.decoratorOnClass9.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [decoratorOnClass9.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -5,18 +5,18 @@
  sourceFile:sourceMapValidationClassWithDefaultConstructor.ts
  -------------------------------------------------------------------
 ->>>var Greeter = /** @class */ (function () {
-+>>>class Greeter {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
++>>>class Greeter {
++1 >
 +2 >^^^^^^
 +3 >      ^^^^^^^
- 1 >
++1 >
 +2 >class 
 +3 >      Greeter
  1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
-+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
- ---
+----
 ->>>    function Greeter() {
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^->
@@ -61,6 +61,9 @@
 -5 >Emitted(4, 28) Source(3, 26) + SourceIndex(0)
 ----
 ->>>    }
++2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
++3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
++---
 +>>>    a = 10;
  1 >^^^^
  2 >    ^
@@ -110,10 +113,7 @@
 +5 >Emitted(3, 19) Source(3, 26) + SourceIndex(0)
  ---
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -129,6 +129,10 @@
 -2 >Emitted(7, 2) Source(4, 2) + SourceIndex(0)
 -3 >Emitted(7, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(7, 6) Source(4, 2) + SourceIndex(0)
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(4, 2) Source(4, 2) + SourceIndex(0)
  ---

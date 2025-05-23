@@ -1,8 +1,8 @@
 --- old.destructuringParameterDeclaration4.js
 +++ new.destructuringParameterDeclaration4.js
 @@= skipped -39, +39 lines =@@
- 
- 
+
+
  //// [destructuringParameterDeclaration4.js]
 -// If the parameter is a rest parameter, the parameter type is any[]
 -// A type annotation for a rest parameter must denote an array type.
@@ -69,13 +69,13 @@
      } // Error, rest parameter can't have properties
 -    return C;
 -}());
--// Rest parameter with generic
++}
+ // Rest parameter with generic
 -function foo1() {
 -    var a = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        a[_i] = arguments[_i];
 -    }
- }
-+// Rest parameter with generic
+-}
 +function foo1(...a) { }
  foo1(1, 2, "string", E1.a, E.b); // Error

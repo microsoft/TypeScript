@@ -1,7 +1,7 @@
 --- old.jsxIntrinsicElementsTypeArgumentErrors.types
 +++ new.jsxIntrinsicElementsTypeArgumentErrors.types
 @@= skipped -6, +6 lines =@@
- 
+
  // opening + closing
  const a = <div<>></div>; // empty type args
 ->a : JSX.Element
@@ -10,7 +10,7 @@
 +><div<>></div> : Element
  >div : any
  >div : any
- 
+
  const b = <div<number,>></div>; // trailing comma type args
 ->b : JSX.Element
 -><div<number,>></div> : JSX.Element
@@ -18,7 +18,7 @@
 +><div<number,>></div> : Element
  >div : any
  >div : any
- 
+
  const c = <div<Missing>></div>; // nonexistant type args
 ->c : JSX.Element
 -><div<Missing>></div> : JSX.Element
@@ -26,7 +26,7 @@
 +><div<Missing>></div> : Element
  >div : any
  >div : any
- 
+
  const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
 ->d : JSX.Element
 -><div<Missing<AlsoMissing>>></div> : JSX.Element
@@ -34,7 +34,7 @@
 +><div<Missing<AlsoMissing>>></div> : Element
  >div : any
  >div : any
- 
+
  const e = <div<Record<object, object>>></div>; // existing but incorrect nested type args
 ->e : JSX.Element
 -><div<Record<object, object>>></div> : JSX.Element
@@ -42,7 +42,7 @@
 +><div<Record<object, object>>></div> : Element
  >div : any
  >div : any
- 
+
  const f = <div<number>></div>; // existing type argument with no internal issues
 ->f : JSX.Element
 -><div<number>></div> : JSX.Element
@@ -50,7 +50,7 @@
 +><div<number>></div> : Element
  >div : any
  >div : any
- 
+
  // self-closing
  const g = <div<>/>; // empty type args
 ->g : JSX.Element
@@ -58,39 +58,38 @@
 +>g : Element
 +><div<>/> : Element
  >div : any
- 
+
  const h = <div<number,>/>; // trailing comma type args
 ->h : JSX.Element
 -><div<number,>/> : JSX.Element
 +>h : Element
 +><div<number,>/> : Element
  >div : any
- 
+
  const i = <div<Missing>/>; // nonexistant type args
 ->i : JSX.Element
 -><div<Missing>/> : JSX.Element
 +>i : Element
 +><div<Missing>/> : Element
  >div : any
- 
+
  const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
 ->j : JSX.Element
 -><div<Missing<AlsoMissing>>/> : JSX.Element
 +>j : Element
 +><div<Missing<AlsoMissing>>/> : Element
  >div : any
- 
+
  const k = <div<Record<object, object>>/>; // existing but incorrect nested type args
 ->k : JSX.Element
 -><div<Record<object, object>>/> : JSX.Element
 +>k : Element
 +><div<Record<object, object>>/> : Element
  >div : any
- 
+
  const l = <div<number>/>; // existing type argument with no internal issues
 ->l : JSX.Element
 -><div<number>/> : JSX.Element
 +>l : Element
 +><div<number>/> : Element
  >div : any
- 

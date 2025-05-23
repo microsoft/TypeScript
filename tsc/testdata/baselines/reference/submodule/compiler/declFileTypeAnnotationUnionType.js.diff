@@ -2,7 +2,7 @@
 +++ new.declFileTypeAnnotationUnionType.js
 @@= skipped -23, +23 lines =@@
  var y = new g<string>() || new m.g<number>() || (() => new c());
- 
+
  //// [declFileTypeAnnotationUnionType.js]
 -var c = /** @class */ (function () {
 -    function c() {

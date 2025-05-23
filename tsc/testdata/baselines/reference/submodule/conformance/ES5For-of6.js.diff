@@ -2,7 +2,7 @@
 +++ new.ES5For-of6.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [ES5For-of6.js]
 -for (var _i = 0, _a = []; _i < _a.length; _i++) {
 -    var w = _a[_i];

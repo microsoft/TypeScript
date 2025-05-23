@@ -1,8 +1,7 @@
 --- old.multipleDeclarations.errors.txt
 +++ new.multipleDeclarations.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +input.js(10,9): error TS2322: Type 'string' is not assignable to type '() => void'.
 +input.js(18,1): error TS2322: Type 'boolean' is not assignable to type '() => void'.
 +input.js(28,9): error TS2322: Type 'string' is not assignable to type '() => void'.

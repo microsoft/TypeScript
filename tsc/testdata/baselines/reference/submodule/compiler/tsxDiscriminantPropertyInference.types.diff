@@ -2,13 +2,13 @@
 +++ new.tsxDiscriminantPropertyInference.types
 @@= skipped -33, +33 lines =@@
  >Props : Props
- 
+
  declare function Comp(props: DiscriminatorTrue | DiscriminatorFalse): JSX.Element;
 ->Comp : (props: DiscriminatorTrue | DiscriminatorFalse) => JSX.Element
 +>Comp : (props: DiscriminatorFalse | DiscriminatorTrue) => Element
  >props : DiscriminatorFalse | DiscriminatorTrue
  >JSX : any
- 
+
  // simple inference
  void (<Comp disc cb={s => parseInt(s)} />);
  >void (<Comp disc cb={s => parseInt(s)} />) : undefined
@@ -26,7 +26,7 @@
 ->parseInt : (string: string, radix?: number) => number
 +>parseInt : (string: string, radix?: number | undefined) => number
  >s : string
- 
+
  // simple inference
  void (<Comp disc={false} cb={n => n.toFixed()} />);
  >void (<Comp disc={false} cb={n => n.toFixed()} />) : undefined
@@ -47,7 +47,7 @@
  >n : number
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
- 
+
  // simple inference when strict-null-checks are enabled
  void (<Comp disc={undefined} cb={n => n.toFixed()} />);
  >void (<Comp disc={undefined} cb={n => n.toFixed()} />) : undefined
@@ -68,7 +68,7 @@
  >n : number
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
- 
+
  // requires checking type information since discriminator is missing from object
  void (<Comp cb={n => n.toFixed()} />);
  >void (<Comp cb={n => n.toFixed()} />) : undefined
@@ -87,4 +87,3 @@
  >n : number
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
- 

@@ -2,7 +2,7 @@
 +++ new.checkSuperCallBeforeThisAccessing1.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [checkSuperCallBeforeThisAccessing1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,16 +21,7 @@
 -})();
 -var Based = /** @class */ (function () {
 -    function Based() {
-+class Based {
-+}
-+class Derived extends Based {
-+    x;
-+    constructor() {
-+        super();
-+        this;
-+        this.x = 10;
-+        var that = this;
-     }
+-    }
 -    return Based;
 -}());
 -var Derived = /** @class */ (function (_super) {
@@ -44,4 +35,14 @@
 -    }
 -    return Derived;
 -}(Based));
++class Based {
++}
++class Derived extends Based {
++    x;
++    constructor() {
++        super();
++        this;
++        this.x = 10;
++        var that = this;
++    }
 +}

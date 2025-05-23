@@ -11,11 +11,11 @@
 +>await import("package/cjs") : typeof import("index")
 +>import("package/cjs") : Promise<typeof import("index")>
  >"package/cjs" : "package/cjs"
- 
+
  export const b = await import("package/mjs");
 @@= skipped -32, +32 lines =@@
  >"inner/cjs" : "inner/cjs"
- 
+
  export const e = await import("inner/mjs");
 ->e : typeof import("node_modules/inner/index")
 ->await import("inner/mjs") : typeof import("node_modules/inner/index")
@@ -24,7 +24,7 @@
 +>await import("inner/mjs") : { esm: true; default: typeof import("node_modules/inner/index"); }
 +>import("inner/mjs") : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
  >"inner/mjs" : "inner/mjs"
- 
+
  === other.mts ===
  // esm format file
  export const a = await import("package/cjs");
@@ -35,11 +35,11 @@
 +>await import("package/cjs") : typeof import("index")
 +>import("package/cjs") : Promise<typeof import("index")>
  >"package/cjs" : "package/cjs"
- 
+
  export const b = await import("package/mjs");
 @@= skipped -40, +40 lines =@@
  >"inner/cjs" : "inner/cjs"
- 
+
  export const e = await import("inner/mjs");
 ->e : typeof import("node_modules/inner/index")
 ->await import("inner/mjs") : typeof import("node_modules/inner/index")
@@ -48,7 +48,7 @@
 +>await import("inner/mjs") : { esm: true; default: typeof import("node_modules/inner/index"); }
 +>import("inner/mjs") : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
  >"inner/mjs" : "inner/mjs"
- 
+
  === other.cts ===
  // cjs format file, no TLA
  export const a = import("package/cjs");
@@ -57,30 +57,30 @@
 +>a : Promise<typeof import("index")>
 +>import("package/cjs") : Promise<typeof import("index")>
  >"package/cjs" : "package/cjs"
- 
+
  export const b = import("package/mjs");
 ->b : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 ->import("package/mjs") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 +>b : Promise<typeof import("index")>
 +>import("package/mjs") : Promise<typeof import("index")>
  >"package/mjs" : "package/mjs"
- 
+
  export const c = import("package");
 ->c : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 ->import("package") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 +>c : Promise<typeof import("index")>
 +>import("package") : Promise<typeof import("index")>
  >"package" : "package"
- 
+
  export const f = import("inner");
 @@= skipped -35, +35 lines =@@
  >"inner/cjs" : "inner/cjs"
- 
+
  export const e = import("inner/mjs");
 ->e : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
 ->import("inner/mjs") : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
 +>e : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
 +>import("inner/mjs") : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
  >"inner/mjs" : "inner/mjs"
- 
+
  === node_modules/inner/index.d.ts ===

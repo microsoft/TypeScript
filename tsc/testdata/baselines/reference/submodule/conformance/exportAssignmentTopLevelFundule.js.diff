@@ -1,8 +1,8 @@
 --- old.exportAssignmentTopLevelFundule.js
 +++ new.exportAssignmentTopLevelFundule.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [foo_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

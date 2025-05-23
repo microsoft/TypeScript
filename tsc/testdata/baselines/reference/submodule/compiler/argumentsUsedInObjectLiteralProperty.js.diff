@@ -2,7 +2,7 @@
 +++ new.argumentsUsedInObjectLiteralProperty.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [argumentsUsedInObjectLiteralProperty.js]
 -var A = /** @class */ (function () {
 -    function A() {

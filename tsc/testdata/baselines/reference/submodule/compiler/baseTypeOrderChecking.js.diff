@@ -1,8 +1,8 @@
 --- old.baseTypeOrderChecking.js
 +++ new.baseTypeOrderChecking.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [baseTypeOrderChecking.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

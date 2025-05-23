@@ -2,7 +2,7 @@
 +++ new.staticPrototypeProperty.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [staticPrototypeProperty.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -11,19 +11,19 @@
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >param : Symbol(param, Decl(controlFlowBindingElement.ts, 3, 11))
  }
- 
+
 @@= skipped -72, +72 lines =@@
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 44, 1))
- 
+
          window: Window;
 ->window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 45, 22))
 +>window : Symbol(window, Decl(controlFlowBindingElement.ts, 45, 22))
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 44, 1))
      }
- 
+
 @@= skipped -12, +12 lines =@@
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 44, 1))
- 
+
      window.window = window;
 ->window.window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 45, 22))
 +>window.window : Symbol(window, Decl(controlFlowBindingElement.ts, 45, 22))
@@ -31,20 +31,20 @@
 ->window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 45, 22))
 +>window : Symbol(window, Decl(controlFlowBindingElement.ts, 45, 22))
  >window : Symbol(window, Decl(controlFlowBindingElement.ts, 50, 7))
- 
+
      const { [(() => { foo = ""; return 'window' as const })()]:
 @@= skipped -23, +23 lines =@@
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 59, 1))
- 
+
          window: Window;
 ->window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 60, 22))
 +>window : Symbol(window, Decl(controlFlowBindingElement.ts, 60, 22))
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 59, 1))
      }
- 
+
 @@= skipped -12, +12 lines =@@
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 59, 1))
- 
+
      window.window = window;
 ->window.window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 60, 22))
 +>window.window : Symbol(window, Decl(controlFlowBindingElement.ts, 60, 22))
@@ -52,20 +52,20 @@
 ->window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 60, 22))
 +>window : Symbol(window, Decl(controlFlowBindingElement.ts, 60, 22))
  >window : Symbol(window, Decl(controlFlowBindingElement.ts, 65, 7))
- 
+
      const { [(() => {  return 'window' as const })()]:
 @@= skipped -23, +23 lines =@@
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 74, 1))
- 
+
          window: Window;
 ->window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 75, 22))
 +>window : Symbol(window, Decl(controlFlowBindingElement.ts, 75, 22))
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 74, 1))
      }
- 
+
 @@= skipped -12, +12 lines =@@
  >Window : Symbol(Window, Decl(controlFlowBindingElement.ts, 74, 1))
- 
+
      window.window = window;
 ->window.window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 75, 22))
 +>window.window : Symbol(window, Decl(controlFlowBindingElement.ts, 75, 22))
@@ -73,5 +73,5 @@
 ->window : Symbol(Window.window, Decl(controlFlowBindingElement.ts, 75, 22))
 +>window : Symbol(window, Decl(controlFlowBindingElement.ts, 75, 22))
  >window : Symbol(window, Decl(controlFlowBindingElement.ts, 80, 7))
- 
+
      const { [(() => { return 'window' as const })()]:

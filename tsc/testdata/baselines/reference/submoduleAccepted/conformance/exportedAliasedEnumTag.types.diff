@@ -1,7 +1,7 @@
 --- old.exportedAliasedEnumTag.types
 +++ new.exportedAliasedEnumTag.types
 @@= skipped -1, +1 lines =@@
- 
+
  === exportedAliasedEnumTag.js ===
  var middlewarify = module.exports = {};
 ->middlewarify : typeof module.exports
@@ -15,7 +15,7 @@
 +>module : any
 +>exports : any
  >{} : {}
- 
+
  /** @enum */
  middlewarify.Type = {
  >middlewarify.Type = {  BEFORE: 'before'} : { BEFORE: string; }
@@ -26,5 +26,5 @@
 +>middlewarify : {}
 +>Type : any
  >{  BEFORE: 'before'} : { BEFORE: string; }
- 
+
    BEFORE: 'before'

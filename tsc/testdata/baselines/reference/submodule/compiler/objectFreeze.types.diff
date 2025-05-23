@@ -22,7 +22,7 @@
 ->freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | null | undefined | object; }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
 +>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: U | object; }, U extends string | number | bigint | symbol | boolean>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
  >C : typeof C
- 
+
  new c(1);
 @@= skipped -13, +13 lines =@@
  const a = Object.freeze([1, 2, 3]);

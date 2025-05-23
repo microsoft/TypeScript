@@ -1,7 +1,7 @@
 --- old.classExtendingPrimitive.js
 +++ new.classExtendingPrimitive.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [classExtendingPrimitive.js]
  // classes cannot extend primitives
 -var __extends = (this && this.__extends) || (function () {

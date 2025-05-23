@@ -1,6 +1,6 @@
 --- old.jsdocTypedefMissingType.errors.txt
 +++ new.jsdocTypedefMissingType.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(2,14): error TS8021: JSDoc '@typedef' tag should either have a type annotation or be followed by '@property' or '@member' tags.
 -
 -
@@ -21,5 +21,4 @@
 -    /** @type Person */
 -    const person = { name: "" };
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

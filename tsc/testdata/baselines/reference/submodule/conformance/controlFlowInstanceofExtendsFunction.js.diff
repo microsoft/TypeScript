@@ -18,9 +18,10 @@
 -}());
 -var Y = /** @class */ (function () {
 -    function Y() {
-     }
+-    }
 -    return Y;
 -}());
++    }
 +    why() {
 +    }
 +}

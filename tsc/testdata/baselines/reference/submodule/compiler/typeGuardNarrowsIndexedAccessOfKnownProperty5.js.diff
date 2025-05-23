@@ -1,8 +1,8 @@
 --- old.typeGuardNarrowsIndexedAccessOfKnownProperty5.js
 +++ new.typeGuardNarrowsIndexedAccessOfKnownProperty5.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [typeGuardNarrowsIndexedAccessOfKnownProperty5.js]
 -"use strict";
 -var a = {};

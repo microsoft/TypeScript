@@ -2,7 +2,7 @@
 +++ new.privateNameAndObjectRestSpread.js
 @@= skipped -18, +18 lines =@@
  }
- 
+
  //// [privateNameAndObjectRestSpread.js]
 -"use strict";
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {

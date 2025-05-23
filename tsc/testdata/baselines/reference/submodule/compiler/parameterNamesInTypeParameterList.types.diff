@@ -1,17 +1,17 @@
 --- old.parameterNamesInTypeParameterList.types
 +++ new.parameterNamesInTypeParameterList.types
 @@= skipped -1, +1 lines =@@
- 
+
  === parameterNamesInTypeParameterList.ts ===
  function f0<T extends typeof a>(a: T) {
 ->f0 : <T extends typeof a>(a: T) => void
 +>f0 : <T extends any>(a: T) => void
  >a : any
  >a : T
- 
+
 @@= skipped -11, +11 lines =@@
  }
- 
+
  function f1<T extends typeof a>({a}: {a:T}) {
 ->f1 : <T extends typeof a>({ a }: { a: T; }) => void
 +>f1 : <T extends any>(__0: { a: T; }) => void
@@ -20,22 +20,22 @@
  >a : T
 @@= skipped -12, +12 lines =@@
  }
- 
+
  function f2<T extends typeof a>([a]: T[]) {
 ->f2 : <T extends typeof a>([a]: T[]) => void
 +>f2 : <T extends any>(__0: T[]) => void
  >a : any
  >a : T
- 
+
 @@= skipped -14, +14 lines =@@
  >A : A
- 
+
  	m0<T extends typeof a>(a: T) {
 ->m0 : <T extends typeof a>(a: T) => void
 +>m0 : <T extends any>(a: T) => void
  >a : any
  >a : T
- 
+
 @@= skipped -10, +10 lines =@@
  >b : any
  	}
@@ -53,4 +53,3 @@
 +>m2 : <T extends any>(__0: T[]) => void
  >a : any
  >a : T
- 

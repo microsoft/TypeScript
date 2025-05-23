@@ -2,7 +2,7 @@
 +++ new.classWithBaseClassButNoConstructor.js
 @@= skipped -42, +42 lines =@@
  var d6 = new D(1); // ok
- 
+
  //// [classWithBaseClassButNoConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

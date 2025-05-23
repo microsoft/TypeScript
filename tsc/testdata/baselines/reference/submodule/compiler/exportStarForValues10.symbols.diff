@@ -6,6 +6,6 @@
  >Foo : Symbol(Foo, Decl(file1.ts, 0, 0))
 ->x : Symbol(Foo.x, Decl(file1.ts, 0, 22))
 +>x : Symbol(x, Decl(file1.ts, 0, 22))
- 
+
  === file2.ts ===
  export * from "file0";

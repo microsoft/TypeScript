@@ -4,7 +4,7 @@
 +enums.js(1,1): error TS2739: Type '{}' is missing the following properties from type 'typeof Order': ASC, DESC
  enums.js(2,10): error TS2540: Cannot assign to 'DESC' because it is a read-only property.
  enums.js(3,10): error TS2540: Cannot assign to 'ASC' because it is a read-only property.
- 
+
 @@= skipped -7, +8 lines =@@
          export enum Order { ASC, DESC }
      }

@@ -6,7 +6,7 @@
    export module C {
 ->C : typeof M.C
 +>C : typeof C
- 
+
      export var C = M.C
 ->C : typeof M.C
 ->M.C : typeof M.C
@@ -15,6 +15,6 @@
  >M : typeof M
 ->C : typeof M.C
 +>C : typeof C
- 
+
    };
  };

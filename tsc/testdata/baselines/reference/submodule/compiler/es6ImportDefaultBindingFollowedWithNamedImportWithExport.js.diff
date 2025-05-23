@@ -1,8 +1,8 @@
 --- old.es6ImportDefaultBindingFollowedWithNamedImportWithExport.js
 +++ new.es6ImportDefaultBindingFollowedWithNamedImportWithExport.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [server.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

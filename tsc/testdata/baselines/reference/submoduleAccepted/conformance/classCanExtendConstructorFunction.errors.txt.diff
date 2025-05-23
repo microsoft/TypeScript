@@ -24,11 +24,13 @@
 -        Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
 -          Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
 -second.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+-
+-
+-==== first.js (3 errors) ====
 +second.ts(14,25): error TS2507: Type '{ (numberOxen: number): void; circle: (wagons: any) => any; }' is not a constructor function type.
 +second.ts(26,3): error TS2339: Property 'numberOxen' does not exist on type 'Conestoga'.
- 
- 
--==== first.js (3 errors) ====
++
++
 +==== first.js (4 errors) ====
      /**
       * @constructor

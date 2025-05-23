@@ -2,7 +2,7 @@
 +++ new.anonterface.types
 @@= skipped -7, +7 lines =@@
  >C : C
- 
+
          m(fn:{ (n:number):string; },n2:number):string {
 ->m : (fn: { (n: number): string; }, n2: number) => string
 +>m : (fn: (n: number) => string, n2: number) => string
@@ -11,7 +11,7 @@
  >n2 : number
 @@= skipped -14, +14 lines =@@
  }
- 
+
  var c=new M.C();
 ->c : M.C
 ->new M.C() : M.C
@@ -22,7 +22,7 @@
  >M : typeof M
 ->C : typeof M.C
 +>C : typeof C
- 
+
  c.m(function(n) { return "hello: "+n; },18);
  >c.m(function(n) { return "hello: "+n; },18) : string
 ->c.m : (fn: { (n: number): string; }, n2: number) => string

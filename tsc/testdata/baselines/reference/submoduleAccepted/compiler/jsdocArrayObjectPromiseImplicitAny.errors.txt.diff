@@ -1,8 +1,7 @@
 --- old.jsdocArrayObjectPromiseImplicitAny.errors.txt
 +++ new.jsdocArrayObjectPromiseImplicitAny.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +jsdocArrayObjectPromiseImplicitAny.js(1,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
 +jsdocArrayObjectPromiseImplicitAny.js(8,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
 +jsdocArrayObjectPromiseImplicitAny.js(9,13): error TS2314: Generic type 'T[]' requires 1 type argument(s).

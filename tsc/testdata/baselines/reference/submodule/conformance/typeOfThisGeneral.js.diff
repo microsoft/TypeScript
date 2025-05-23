@@ -1,7 +1,7 @@
 --- old.typeOfThisGeneral.js
 +++ new.typeOfThisGeneral.js
 @@= skipped -180, +180 lines =@@
- 
+
  //// [typeOfThisGeneral.js]
  class MyTestClass {
 +    canary;

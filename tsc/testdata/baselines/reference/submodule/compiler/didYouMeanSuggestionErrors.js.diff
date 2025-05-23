@@ -2,7 +2,7 @@
 +++ new.didYouMeanSuggestionErrors.js
 @@= skipped -30, +30 lines =@@
  });
- 
+
  //// [didYouMeanSuggestionErrors.js]
 -describe("my test suite", function () {
 -    it("should run", function () {

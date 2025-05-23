@@ -2,7 +2,7 @@
 +++ new.classVarianceCircularity.js
 @@= skipped -16, +16 lines =@@
  }
- 
+
  //// [classVarianceCircularity.js]
 -"use strict";
  // Issue #52813

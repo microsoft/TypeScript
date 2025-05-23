@@ -1,7 +1,7 @@
 --- old.intersectionTypeInference3.symbols
 +++ new.intersectionTypeInference3.symbols
 @@= skipped -10, +10 lines =@@
- 
+
      [Symbol.species]: Kind;
  >[Symbol.species] : Symbol([Symbol.species], Decl(intersectionTypeInference3.ts, 2, 50))
 ->Symbol.species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
@@ -10,10 +10,10 @@
 ->species : Symbol(SymbolConstructor.species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>species : Symbol(species, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  >Kind : Symbol(Kind, Decl(intersectionTypeInference3.ts, 2, 13))
- 
+
  };
 @@= skipped -23, +23 lines =@@
- 
+
  const c1 = Array.from(a).concat(Array.from(b));
  >c1 : Symbol(c1, Decl(intersectionTypeInference3.ts, 11, 5))
 ->Array.from(a).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -32,5 +32,5 @@
 ->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 +>from : Symbol(from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
  >b : Symbol(b, Decl(intersectionTypeInference3.ts, 9, 13))
- 
+
  // Simpler repro

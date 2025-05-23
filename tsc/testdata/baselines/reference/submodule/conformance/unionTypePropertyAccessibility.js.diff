@@ -1,8 +1,8 @@
 --- old.unionTypePropertyAccessibility.js
 +++ new.unionTypePropertyAccessibility.js
 @@= skipped -50, +50 lines =@@
- 
- 
+
+
  //// [unionTypePropertyAccessibility.js]
 -var Default = /** @class */ (function () {
 -    function Default() {

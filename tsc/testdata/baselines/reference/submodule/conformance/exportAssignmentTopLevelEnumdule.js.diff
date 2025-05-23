@@ -1,8 +1,8 @@
 --- old.exportAssignmentTopLevelEnumdule.js
 +++ new.exportAssignmentTopLevelEnumdule.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [foo_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

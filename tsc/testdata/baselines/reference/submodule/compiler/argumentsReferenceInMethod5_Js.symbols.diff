@@ -7,7 +7,7 @@
 ->m : Symbol(A.m, Decl(a.js, 4, 9))
 +>m : Symbol(m, Decl(a.js, 4, 9))
  >foo : Symbol(foo, Decl(a.js, 8, 3))
- 
+
  		/**
  		 * @type object
  		 */
@@ -18,7 +18,7 @@
 ->foo : Symbol(A.foo, Decl(a.js, 8, 14))
 +>foo : Symbol(foo, Decl(a.js, 8, 14))
  >foo : Symbol(foo, Decl(a.js, 8, 3))
- 
+
  		/**
  		 * @type object
  		 */

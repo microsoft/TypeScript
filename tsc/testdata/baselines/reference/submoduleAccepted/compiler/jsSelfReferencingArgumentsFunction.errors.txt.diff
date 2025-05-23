@@ -1,8 +1,7 @@
 --- old.jsSelfReferencingArgumentsFunction.errors.txt
 +++ new.jsSelfReferencingArgumentsFunction.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +foo.js(4,12): error TS2350: Only a void function can be called with the 'new' keyword.
 +
 +

@@ -1,8 +1,8 @@
 --- old.mergedInheritedMembersSatisfyAbstractBase.js
 +++ new.mergedInheritedMembersSatisfyAbstractBase.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [mergedInheritedMembersSatisfyAbstractBase.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.nonNullParameterExtendingStringAssignableToString.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [nonNullParameterExtendingStringAssignableToString.js]
 -"use strict";
  function fn(one, two) {

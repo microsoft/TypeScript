@@ -7,7 +7,7 @@
 ->f : <U>(x: U) => T
 +>f : <U>(x: U) => U
  >x : U
- 
+
      return x;
 @@= skipped -28, +28 lines =@@
  /** @type {Cb} */
@@ -17,4 +17,3 @@
 ->x : V
 +>x => {} : (x: any) => void
 +>x : any
- 

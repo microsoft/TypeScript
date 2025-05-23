@@ -2,10 +2,10 @@
 +++ new.defaultExportsCannotMerge01.types
 @@= skipped -42, +42 lines =@@
  >x : Entity
- 
+
  var y: Entity.I;
 ->y : Entity.I
 +>y : I
  >Entity : any
- 
+
  Entity.x;

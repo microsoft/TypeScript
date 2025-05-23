@@ -2,7 +2,7 @@
 +++ new.inferentialTypingObjectLiteralMethod1.symbols
 @@= skipped -6, +6 lines =@@
  >U : Symbol(U, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 16))
- 
+
      method(x: T): U;
 ->method : Symbol(Int.method, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 21))
 +>method : Symbol(method, Decl(inferentialTypingObjectLiteralMethod1.ts, 0, 21))

@@ -2,7 +2,7 @@
 +++ new.jsxChildrenGenericContextualTypes.js
 @@= skipped -24, +24 lines =@@
  const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
- 
+
  //// [jsxChildrenGenericContextualTypes.jsx]
 -"use strict";
 -var Elem = function (p) { return <div></div>; };

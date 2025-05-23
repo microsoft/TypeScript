@@ -1,8 +1,8 @@
 --- old.spreadExcessProperty.js
 +++ new.spreadExcessProperty.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [spreadExcessProperty.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

@@ -2,7 +2,7 @@
 +++ new.inferentialTypingUsingApparentType3.js
 @@= skipped -28, +28 lines =@@
  person.fields.id;
- 
+
  //// [inferentialTypingUsingApparentType3.js]
 -var CharField = /** @class */ (function () {
 -    function CharField() {

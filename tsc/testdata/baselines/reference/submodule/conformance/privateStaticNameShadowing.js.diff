@@ -2,7 +2,7 @@
 +++ new.privateStaticNameShadowing.js
 @@= skipped -15, +15 lines =@@
    
- 
+
  //// [privateStaticNameShadowing.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
@@ -15,13 +15,13 @@
      constructor() {
 -        __classPrivateFieldGet(_b, _b, "m", _X_m).call(_b);
 +        X.#m();
-     }
++    }
 +    static #m() {
 +        const X = {}; // shadow the class
 +        const _a = {}; // shadow the first generated var
 +        X.#m(); // Should check with X as the receiver with _b as the class constructor 
 +        return 1;
-+    }
+     }
  }
 -_b = X, _X_m = function _X_m() {
 -    const X = {}; // shadow the class

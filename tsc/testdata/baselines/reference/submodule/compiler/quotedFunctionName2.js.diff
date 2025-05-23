@@ -2,7 +2,7 @@
 +++ new.quotedFunctionName2.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [quotedFunctionName2.js]
 -var Test1 = /** @class */ (function () {
 -    function Test1() {

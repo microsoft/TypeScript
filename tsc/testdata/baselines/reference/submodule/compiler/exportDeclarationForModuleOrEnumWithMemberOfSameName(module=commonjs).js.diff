@@ -1,7 +1,7 @@
 --- old.exportDeclarationForModuleOrEnumWithMemberOfSameName(module=commonjs).js
 +++ new.exportDeclarationForModuleOrEnumWithMemberOfSameName(module=commonjs).js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [exportDeclarationForModuleOrEnumWithMemberOfSameName.js]
  "use strict";
 -// https://github.com/microsoft/TypeScript/issues/55038

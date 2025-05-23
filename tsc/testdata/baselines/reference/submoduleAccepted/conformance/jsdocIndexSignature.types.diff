@@ -6,23 +6,23 @@
  var o1;
 ->o1 : { [x: string]: number; }
 +>o1 : any
- 
+
  /** @type {Object.<number, boolean>} */
  var o2;
 ->o2 : { [x: number]: boolean; }
 +>o2 : any
- 
+
  /** @type {Object.<boolean, string>} */
  var o3;
 @@= skipped -12, +12 lines =@@
- 
+
  /** @param {Object.<string, boolean>} o */
  function f(o) {
 ->f : (o: {    [x: string]: boolean;}) => void
 ->o : { [x: string]: boolean; }
 +>f : (o: any) => void
 +>o : any
- 
+
      o.foo = 1; // error
  >o.foo = 1 : 1
 ->o.foo : boolean
@@ -32,7 +32,7 @@
 +>o : any
 +>foo : any
  >1 : 1
- 
+
      o.bar = false; // ok
  >o.bar = false : false
 ->o.bar : boolean
@@ -43,4 +43,3 @@
 +>bar : any
  >false : false
  }
- 

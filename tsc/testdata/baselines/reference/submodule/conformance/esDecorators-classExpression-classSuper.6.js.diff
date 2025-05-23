@@ -1,7 +1,7 @@
 --- old.esDecorators-classExpression-classSuper.6.js
 +++ new.esDecorators-classExpression-classSuper.6.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [esDecorators-classExpression-classSuper.6.js]
  // none of the following should result in caching `super`
 -((() => {

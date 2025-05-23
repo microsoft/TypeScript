@@ -1,7 +1,7 @@
 --- old.genericCallWithObjectTypeArgsAndInitializers.js
 +++ new.genericCallWithObjectTypeArgsAndInitializers.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [genericCallWithObjectTypeArgsAndInitializers.js]
  // Generic typed parameters with initializers
 -function foo(x) {

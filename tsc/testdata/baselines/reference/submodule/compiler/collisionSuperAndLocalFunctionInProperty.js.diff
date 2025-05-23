@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndLocalFunctionInProperty.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [collisionSuperAndLocalFunctionInProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -27,11 +27,7 @@
 -            doStuff: function () {
 -                function _super() {
 -                }
-+class Foo {
-+    prop1 = {
-+        doStuff: () => {
-+            function _super() {
-             }
+-            }
 -        };
 -    }
 -    return Foo;
@@ -44,6 +40,17 @@
 -            doStuff: function () {
 -                function _super() {
 -                }
+-            }
+-        };
+-        return _this;
+-    }
+-    return b;
+-}(Foo));
++class Foo {
++    prop1 = {
++        doStuff: () => {
++            function _super() {
++            }
 +        }
 +    };
 +}
@@ -51,12 +58,7 @@
 +    prop2 = {
 +        doStuff: () => {
 +            function _super() {
-             }
--        };
--        return _this;
--    }
--    return b;
--}(Foo));
++            }
 +        }
 +    };
 +}

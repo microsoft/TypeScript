@@ -1,6 +1,6 @@
 --- old.globalThisCollision.errors.txt
 +++ new.globalThisCollision.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -globalThisCollision.js(1,5): error TS2397: Declaration name conflicts with built-in global identifier 'globalThis'.
 -
 -
@@ -8,5 +8,4 @@
 -    var globalThis;
 -        ~~~~~~~~~~
 -!!! error TS2397: Declaration name conflicts with built-in global identifier 'globalThis'.
-@@= skipped --1, +1 lines =@@
 +<no content>

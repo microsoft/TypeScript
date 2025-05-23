@@ -2,16 +2,12 @@
 +++ new.computedPropertyNames49_ES5.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [computedPropertyNames49_ES5.js]
 -var _a;
 -var x = (_a = {
 -        p1: 10
-+var x = {
-+    p1: 10,
-+    get [1 + 1]() {
-+        throw 10;
-     },
+-    },
 -    Object.defineProperty(_a, 1 + 1, {
 -        get: function () {
 -            throw 10;
@@ -21,6 +17,11 @@
 -    }),
 -    Object.defineProperty(_a, 1 + 1, {
 -        get: function () {
++var x = {
++    p1: 10,
++    get [1 + 1]() {
++        throw 10;
++    },
 +    get [1 + 1]() {
 +        return 10;
 +    },

@@ -1,8 +1,8 @@
 --- old.classExtendingNonConstructor.js
 +++ new.classExtendingNonConstructor.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [classExtendingNonConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

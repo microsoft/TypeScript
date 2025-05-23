@@ -1,7 +1,7 @@
 --- old.typeFromPropertyAssignment8.types
 +++ new.typeFromPropertyAssignment8.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  var my = my || {};
 ->my : typeof my
@@ -11,7 +11,7 @@
 +>my || {} : any
 +>my : any
  >{} : {}
- 
+
  my.app = my.app || {};
 ->my.app = my.app || {} : typeof my.app
 ->my.app : typeof my.app
@@ -30,7 +30,7 @@
 +>my : any
 +>app : any
  >{} : {}
- 
+
  my.app.Application = (function () {
  >my.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
 ->my.app.Application : () => void
@@ -47,7 +47,7 @@
  >(function () {var Application = function () {    //...};return Application;}) : () => () => void
  >function () {var Application = function () {    //...};return Application;} : () => () => void
 @@= skipped -38, +38 lines =@@
- 
+
  })();
  my.app.Application()
 ->my.app.Application() : void
@@ -62,7 +62,7 @@
 +>my : any
 +>app : any
 +>Application : any
- 
+
  === b.js ===
  var min = window.min || {};
 ->min : typeof min
@@ -75,7 +75,7 @@
 ->min : typeof min
 +>min : any
  >{} : {}
- 
+
  min.app = min.app || {};
 ->min.app = min.app || {} : typeof min.app
 ->min.app : typeof min.app
@@ -94,7 +94,7 @@
 +>min : any
 +>app : any
  >{} : {}
- 
+
  min.app.Application = (function () {
  >min.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
 ->min.app.Application : () => void
@@ -111,7 +111,7 @@
  >(function () {var Application = function () {    //...};return Application;}) : () => () => void
  >function () {var Application = function () {    //...};return Application;} : () => () => void
 @@= skipped -49, +49 lines =@@
- 
+
  })();
  min.app.Application()
 ->min.app.Application() : void
@@ -126,4 +126,3 @@
 +>min : any
 +>app : any
 +>Application : any
- 

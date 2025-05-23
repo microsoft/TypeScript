@@ -2,10 +2,10 @@
 +++ new.ambientExternalModuleWithRelativeModuleName.types
 @@= skipped -8, +8 lines =@@
  }
- 
+
  declare module ".\\relativeModule" {
 ->".\\relativeModule" : typeof import(".\\relativeModule")
 +>".\\relativeModule" : typeof import(".\relativeModule")
- 
+
      var x: string;
  >x : string

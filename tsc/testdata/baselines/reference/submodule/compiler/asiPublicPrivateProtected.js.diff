@@ -1,69 +1,67 @@
 --- old.asiPublicPrivateProtected.js
 +++ new.asiPublicPrivateProtected.js
 @@= skipped -43, +43 lines =@@
- 
+
  //// [asiPublicPrivateProtected.js]
  public;
 -var NonPublicClass = /** @class */ (function () {
 -    function NonPublicClass() {
-+class NonPublicClass {
-+    s() {
-     }
+-    }
 -    NonPublicClass.prototype.s = function () {
 -    };
 -    return NonPublicClass;
 -}());
 -var NonPublicClass2 = /** @class */ (function () {
 -    function NonPublicClass2() {
-+}
-+class NonPublicClass2 {
-+    public;
-+    nonPublicFunction() {
-     }
+-    }
 -    NonPublicClass2.prototype.nonPublicFunction = function () {
 -    };
 -    return NonPublicClass2;
 -}());
++class NonPublicClass {
++    s() {
++    }
++}
++class NonPublicClass2 {
++    public;
++    nonPublicFunction() {
++    }
 +}
  private;
 -var NonPrivateClass = /** @class */ (function () {
 -    function NonPrivateClass() {
-+class NonPrivateClass {
-+    s() {
-     }
+-    }
 -    NonPrivateClass.prototype.s = function () {
 -    };
 -    return NonPrivateClass;
 -}());
 -var NonPrivateClass2 = /** @class */ (function () {
 -    function NonPrivateClass2() {
-+}
-+class NonPrivateClass2 {
-+    private;
-+    nonPrivateFunction() {
-     }
+-    }
 -    NonPrivateClass2.prototype.nonPrivateFunction = function () {
 -    };
 -    return NonPrivateClass2;
 -}());
++class NonPrivateClass {
++    s() {
++    }
++}
++class NonPrivateClass2 {
++    private;
++    nonPrivateFunction() {
++    }
 +}
  protected;
 -var NonProtectedClass = /** @class */ (function () {
 -    function NonProtectedClass() {
-+class NonProtectedClass {
-+    s() {
-     }
+-    }
 -    NonProtectedClass.prototype.s = function () {
 -    };
 -    return NonProtectedClass;
 -}());
 -var NonProtectedClass2 = /** @class */ (function () {
 -    function NonProtectedClass2() {
-+}
-+class NonProtectedClass2 {
-+    protected;
-+    nonProtectedFunction() {
-     }
+-    }
 -    NonProtectedClass2.prototype.nonProtectedFunction = function () {
 -    };
 -    return NonProtectedClass2;
@@ -73,6 +71,14 @@
 -    }
 -    return ClassWithThreeMembers;
 -}());
++class NonProtectedClass {
++    s() {
++    }
++}
++class NonProtectedClass2 {
++    protected;
++    nonProtectedFunction() {
++    }
 +}
 +class ClassWithThreeMembers {
 +    public;

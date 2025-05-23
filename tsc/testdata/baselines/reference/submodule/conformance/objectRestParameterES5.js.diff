@@ -1,8 +1,8 @@
 --- old.objectRestParameterES5.js
 +++ new.objectRestParameterES5.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [objectRestParameterES5.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};
@@ -17,8 +17,7 @@
 -};
 -function cloneAgain(_a) {
 -    var a = _a.a, clone = __rest(_a, ["a"]);
-+function cloneAgain({ a, ...clone }) {
- }
+-}
 -suddenly(function (_a) {
 -    var a = _a.x, rest = __rest(_a, ["x"]);
 -    return rest.y;
@@ -30,16 +29,10 @@
 -});
 -var C = /** @class */ (function () {
 -    function C() {
-+suddenly(({ x: a, ...rest }) => rest.y);
-+suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
-+class C {
-+    m({ a, ...clone }) {
-+        // actually, never mind, don't clone
-     }
+-    }
 -    C.prototype.m = function (_a) {
 -        var a = _a.a, clone = __rest(_a, ["a"]);
-+    set p({ a, ...clone }) {
-         // actually, never mind, don't clone
+-        // actually, never mind, don't clone
 -    };
 -    Object.defineProperty(C.prototype, "p", {
 -        set: function (_a) {
@@ -54,10 +47,19 @@
 -function foobar(_a) {
 -    if (_a === void 0) { _a = {}; }
 -    var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
-+    }
- }
-+function foobar({ bar = {}, ...opts } = {}) {
++function cloneAgain({ a, ...clone }) {
 +}
++suddenly(({ x: a, ...rest }) => rest.y);
++suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
++class C {
++    m({ a, ...clone }) {
++        // actually, never mind, don't clone
++    }
++    set p({ a, ...clone }) {
++        // actually, never mind, don't clone
++    }
++}
++function foobar({ bar = {}, ...opts } = {}) {
+ }
  foobar();
  foobar({ baz: 'hello' });
- foobar({ bar: { greeting: 'hello' } });

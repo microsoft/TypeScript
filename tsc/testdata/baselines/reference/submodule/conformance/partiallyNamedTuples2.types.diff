@@ -2,7 +2,7 @@
 +++ new.partiallyNamedTuples2.types
 @@= skipped -35, +35 lines =@@
  >"abc" : "abc"
- 
+
  const matches = x.get(id1);
 ->matches : Iterable<[id2: string, object]>
 ->x.get(id1) : Iterable<[id2: string, object]>

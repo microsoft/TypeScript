@@ -1,7 +1,7 @@
 --- old.usingDeclarationsWithESClassDecorators.8(module=commonjs,target=es5).js
 +++ new.usingDeclarationsWithESClassDecorators.8(module=commonjs,target=es5).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [usingDeclarationsWithESClassDecorators.8.js]
  "use strict";
 +var after;

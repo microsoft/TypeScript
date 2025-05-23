@@ -6,7 +6,7 @@
  >remove : () => void
 ->function () {  this.parentNode?.removeChild(this);} : (this: Node) => void
 +>function () {  this.parentNode?.removeChild(this);} : () => void
- 
+
    this.parentNode?.removeChild(this);
 ->this.parentNode?.removeChild(this) : Node | undefined
 +>this.parentNode?.removeChild(this) : Element | undefined
@@ -18,6 +18,5 @@
  >removeChild : (<T extends Node>(child: T) => T) | undefined
 ->this : Node
 +>this : Element
- 
+
  };
- 

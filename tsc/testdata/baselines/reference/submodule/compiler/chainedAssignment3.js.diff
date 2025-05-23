@@ -1,8 +1,8 @@
 --- old.chainedAssignment3.js
 +++ new.chainedAssignment3.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [chainedAssignment3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

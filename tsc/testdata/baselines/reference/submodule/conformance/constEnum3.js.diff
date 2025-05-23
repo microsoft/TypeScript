@@ -1,8 +1,8 @@
 --- old.constEnum3.js
 +++ new.constEnum3.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [constEnum3.js]
 +var TestType;
 +(function (TestType) {

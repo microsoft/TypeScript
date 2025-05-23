@@ -7,5 +7,5 @@
 ->x : Symbol(I.x, Decl(typeofSimple.ts, 4, 16))
 +>x : Symbol(x, Decl(typeofSimple.ts, 4, 16))
  >T : Symbol(T, Decl(typeofSimple.ts, 4, 12))
- 
+
  interface J { }

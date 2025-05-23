@@ -6,7 +6,7 @@
  >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 0, 0))
 ->I : Symbol(Z.I, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 5, 5))
 +>I : Symbol(I, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 5, 5))
- 
+
      export function bar() {
  >bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt3.ts, 10, 19))
      }

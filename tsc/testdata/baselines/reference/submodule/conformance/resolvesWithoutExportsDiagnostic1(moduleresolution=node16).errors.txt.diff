@@ -1,6 +1,6 @@
 --- old.resolvesWithoutExportsDiagnostic1(moduleresolution=node16).errors.txt
 +++ new.resolvesWithoutExportsDiagnostic1(moduleresolution=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 -error TS6504: File '/node_modules/bar/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 -  The file is in the program because:
@@ -99,5 +99,4 @@
 -                        ~~~~~
 -!!! error TS7016: Could not find a declaration file for module 'bar'. '/node_modules/bar/index.mjs' implicitly has an 'any' type.
 -!!! error TS7016:   There are types at '/node_modules/@types/bar/index.d.ts', but this result could not be resolved when respecting package.json "exports". The '@types/bar' library may need to update its package.json or typings.
-@@= skipped --1, +1 lines =@@
 +<no content>

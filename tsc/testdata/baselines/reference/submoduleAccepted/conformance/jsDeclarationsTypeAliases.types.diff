@@ -13,5 +13,5 @@
 +>module : { export=: { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }; }
 +>exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
  >{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
- 
+
      doTheThing,

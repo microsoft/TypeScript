@@ -5,31 +5,30 @@
  sourceFile:sourceMapValidationClass.ts
  -------------------------------------------------------------------
 ->>>var Greeter = /** @class */ (function () {
-+>>>class Greeter {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
++>>>class Greeter {
++1 >
 +2 >^^^^^^
 +3 >      ^^^^^^^
 +4 >             ^->
- 1 >
++1 >
 +2 >class 
 +3 >      Greeter
  1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
-+3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
- ---
+----
 ->>>    function Greeter(greeting) {
-+>>>    greeting;
- 1->^^^^
+-1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^
 -3 >                     ^^^^^^^^
 -1->class Greeter {
 -  >    
--2 >    constructor(public 
--3 >                     greeting: string
--1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
--2 >Emitted(2, 22) Source(2, 24) + SourceIndex(0)
--3 >Emitted(2, 30) Source(2, 40) + SourceIndex(0)
++2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
++3 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
++---
++>>>    greeting;
++1->^^^^
 +2 >    ^^^^^^^^
 +3 >            ^^^^^^^^^^^^^^^^^^^^^^->
 +1-> {
@@ -37,7 +36,23 @@
 +2 >    greeting
 +1->Emitted(2, 5) Source(2, 24) + SourceIndex(0)
 +2 >Emitted(2, 13) Source(2, 32) + SourceIndex(0)
- ---
++---
++>>>    constructor(greeting, ...b) {
++1->^^^^
++2 >    ^^^^^^^^^^^^
++3 >                ^^^^^^^^
++4 >                        ^^
++5 >                          ^^^
++6 >                             ^
++7 >                              ^^
++8 >                                ^^->
++1->
+ 2 >    constructor(public 
+-3 >                     greeting: string
+-1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+-2 >Emitted(2, 22) Source(2, 24) + SourceIndex(0)
+-3 >Emitted(2, 30) Source(2, 40) + SourceIndex(0)
+----
 ->>>        var b = [];
 -1 >^^^^^^^^
 -2 >        ^^^^^^^^^^^
@@ -54,16 +69,7 @@
 -4 >                         ^^^^^^^^^^^^^^^^^^^^^
 -5 >                                              ^^
 -6 >                                                ^^^^
-+>>>    constructor(greeting, ...b) {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^
-+3 >                ^^^^^^^^
-+4 >                        ^^
-+5 >                          ^^^
-+6 >                             ^
-+7 >                              ^^
-+8 >                                ^^->
- 1->
+-1->
 -2 >             ...b: string[]
 -3 >                       
 -4 >                         ...b: string[]
@@ -75,7 +81,16 @@
 -4 >Emitted(4, 47) Source(2, 56) + SourceIndex(0)
 -5 >Emitted(4, 49) Source(2, 42) + SourceIndex(0)
 -6 >Emitted(4, 53) Source(2, 56) + SourceIndex(0)
-+2 >    constructor(public 
+----
+->>>            b[_i - 1] = arguments[_i];
+-1 >^^^^^^^^^^^^
+-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1 >
+-2 >            ...b: string[]
+-1 >Emitted(5, 13) Source(2, 42) + SourceIndex(0)
+-2 >Emitted(5, 39) Source(2, 56) + SourceIndex(0)
+----
+->>>        }
 +3 >                greeting: string
 +4 >                        , 
 +5 >                          ...
@@ -88,16 +103,7 @@
 +5 >Emitted(3, 30) Source(2, 45) + SourceIndex(0)
 +6 >Emitted(3, 31) Source(2, 56) + SourceIndex(0)
 +7 >Emitted(3, 33) Source(2, 58) + SourceIndex(0)
- ---
-->>>            b[_i - 1] = arguments[_i];
--1 >^^^^^^^^^^^^
--2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^
--1 >
--2 >            ...b: string[]
--1 >Emitted(5, 13) Source(2, 42) + SourceIndex(0)
--2 >Emitted(5, 39) Source(2, 56) + SourceIndex(0)
-----
-->>>        }
++---
  >>>        this.greeting = greeting;
 -1 >^^^^^^^^
 -2 >        ^^^^^^^^^^^^^
@@ -114,13 +120,7 @@
 -3 >Emitted(7, 25) Source(2, 24) + SourceIndex(0)
 -4 >Emitted(7, 33) Source(2, 32) + SourceIndex(0)
 -5 >Emitted(7, 34) Source(2, 40) + SourceIndex(0)
-+1->^^^^^^^^^^^^^^^^^^^^^^^^
-+2 >                        ^^^^^^^^
-+1->
-+2 >                        greeting
-+1->Emitted(4, 25) Source(2, 24) + SourceIndex(0)
-+2 >Emitted(4, 33) Source(2, 32) + SourceIndex(0)
- ---
+----
 ->>>        this.x1 = 10;
 -1 >^^^^^^^^
 -2 >        ^^^^^^^
@@ -143,7 +143,13 @@
 -3 >Emitted(8, 19) Source(8, 26) + SourceIndex(0)
 -4 >Emitted(8, 21) Source(8, 28) + SourceIndex(0)
 -5 >Emitted(8, 22) Source(8, 29) + SourceIndex(0)
-----
++1->^^^^^^^^^^^^^^^^^^^^^^^^
++2 >                        ^^^^^^^^
++1->
++2 >                        greeting
++1->Emitted(4, 25) Source(2, 24) + SourceIndex(0)
++2 >Emitted(4, 33) Source(2, 32) + SourceIndex(0)
+ ---
  >>>    }
  1 >^^^^
  2 >    ^
@@ -205,6 +211,25 @@
 -8 >Emitted(11, 41) Source(5, 41) + SourceIndex(0)
 -9 >Emitted(11, 48) Source(5, 48) + SourceIndex(0)
 -10>Emitted(11, 49) Source(5, 49) + SourceIndex(0)
+----
+->>>    };
+-1 >^^^^
+-2 >    ^
+-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1 >
+-  >    
+-2 >    }
+-1 >Emitted(12, 5) Source(6, 5) + SourceIndex(0)
+-2 >Emitted(12, 6) Source(6, 6) + SourceIndex(0)
+----
+->>>    Greeter.prototype.fn = function () {
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^^^
+-3 >                        ^^^
+-4 >                           ^^^->
+-1->
+-  >    private x: string;
+-  >    private x1: number = 10;
 +1->Emitted(7, 9) Source(5, 9) + SourceIndex(0)
 +2 >Emitted(7, 16) Source(5, 16) + SourceIndex(0)
 +3 >Emitted(7, 22) Source(5, 22) + SourceIndex(0)
@@ -215,36 +240,24 @@
 +8 >Emitted(7, 41) Source(5, 41) + SourceIndex(0)
 +9 >Emitted(7, 48) Source(5, 48) + SourceIndex(0)
 +10>Emitted(7, 49) Source(5, 49) + SourceIndex(0)
- ---
-->>>    };
++---
 +>>>    }
- 1 >^^^^
- 2 >    ^
--3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >^^^^
++2 >    ^
 +3 >     ^^->
- 1 >
--  >    
--2 >    }
--1 >Emitted(12, 5) Source(6, 5) + SourceIndex(0)
--2 >Emitted(12, 6) Source(6, 6) + SourceIndex(0)
++1 >
 +2 >    
 +  >        }
 +1 >Emitted(8, 5) Source(5, 49) + SourceIndex(0)
 +2 >Emitted(8, 6) Source(6, 6) + SourceIndex(0)
- ---
-->>>    Greeter.prototype.fn = function () {
++---
 +>>>    x;
- 1->^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^^
--3 >                        ^^^
--4 >                           ^^^->
++1->^^^^
 +2 >    ^
 +3 >     ^
 +4 >      ^^^^^^^->
- 1->
--  >    private x: string;
--  >    private x1: number = 10;
-   >    private 
++1->
++  >    private 
 +2 >    x
 +3 >     : string;
 +1->Emitted(9, 5) Source(7, 13) + SourceIndex(0)
@@ -275,7 +288,7 @@
 +3 >      ^^^
 +4 >         ^^^^^^^^^^^^^^^^^^^^^->
 +1 >
-+  >    private 
+   >    private 
  2 >    fn
 -3 >                        
 -1->Emitted(13, 5) Source(9, 13) + SourceIndex(0)
@@ -345,13 +358,7 @@
 -1->Emitted(16, 5) Source(12, 5) + SourceIndex(0)
 -2 >Emitted(16, 27) Source(12, 9) + SourceIndex(0)
 -3 >Emitted(16, 57) Source(12, 18) + SourceIndex(0)
-+3 >        greetings
-+4 >                 () 
-+1->Emitted(14, 5) Source(12, 5) + SourceIndex(0)
-+2 >Emitted(14, 9) Source(12, 9) + SourceIndex(0)
-+3 >Emitted(14, 18) Source(12, 18) + SourceIndex(0)
-+4 >Emitted(14, 21) Source(12, 21) + SourceIndex(0)
- ---
+----
 ->>>        get: function () {
 -1 >^^^^^^^^^^^^^
 -2 >             ^^^^^^^^^^^^^^^^^^^^^->
@@ -366,15 +373,7 @@
 -5 >                        ^^^^^^^^
 -6 >                                ^
 -1->get greetings() {
-+>>>        return this.greeting;
-+1->^^^^^^^^
-+2 >        ^^^^^^^
-+3 >               ^^^^
-+4 >                   ^
-+5 >                    ^^^^^^^^
-+6 >                            ^
-+1->{
-   >        
+-  >        
 -2 >            return 
 -3 >                   this
 -4 >                       .
@@ -386,68 +385,30 @@
 -4 >Emitted(18, 25) Source(13, 21) + SourceIndex(0)
 -5 >Emitted(18, 33) Source(13, 29) + SourceIndex(0)
 -6 >Emitted(18, 34) Source(13, 30) + SourceIndex(0)
-+2 >        return 
-+3 >               this
-+4 >                   .
-+5 >                    greeting
-+6 >                            ;
-+1->Emitted(15, 9) Source(13, 9) + SourceIndex(0)
-+2 >Emitted(15, 16) Source(13, 16) + SourceIndex(0)
-+3 >Emitted(15, 20) Source(13, 20) + SourceIndex(0)
-+4 >Emitted(15, 21) Source(13, 21) + SourceIndex(0)
-+5 >Emitted(15, 29) Source(13, 29) + SourceIndex(0)
-+6 >Emitted(15, 30) Source(13, 30) + SourceIndex(0)
- ---
+----
 ->>>        },
 -1 >^^^^^^^^
 -2 >        ^
 -3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+>>>    }
-+1 >^^^^
-+2 >    ^
-+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >        }
 -1 >Emitted(19, 9) Source(14, 5) + SourceIndex(0)
 -2 >Emitted(19, 10) Source(14, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(16, 5) Source(13, 30) + SourceIndex(0)
-+2 >Emitted(16, 6) Source(14, 6) + SourceIndex(0)
- ---
+----
 ->>>        set: function (greetings) {
 -1->^^^^^^^^^^^^^
 -2 >             ^^^^^^^^^^
 -3 >                       ^^^^^^^^^
 -4 >                                ^^^^^^^->
-+>>>    set greetings(greetings) {
-+1->^^^^
-+2 >    ^^^^
-+3 >        ^^^^^^^^^
-+4 >                 ^
-+5 >                  ^^^^^^^^^
-+6 >                           ^^
-+7 >                             ^^^^^^->
- 1->
-   >    
+-1->
+-  >    
 -2 >             set greetings(
 -3 >                       greetings: string
 -1->Emitted(20, 14) Source(15, 5) + SourceIndex(0)
 -2 >Emitted(20, 24) Source(15, 19) + SourceIndex(0)
 -3 >Emitted(20, 33) Source(15, 36) + SourceIndex(0)
-+2 >    set 
-+3 >        greetings
-+4 >                 (
-+5 >                  greetings: string
-+6 >                           ) 
-+1->Emitted(17, 5) Source(15, 5) + SourceIndex(0)
-+2 >Emitted(17, 9) Source(15, 9) + SourceIndex(0)
-+3 >Emitted(17, 18) Source(15, 18) + SourceIndex(0)
-+4 >Emitted(17, 19) Source(15, 19) + SourceIndex(0)
-+5 >Emitted(17, 28) Source(15, 36) + SourceIndex(0)
-+6 >Emitted(17, 30) Source(15, 38) + SourceIndex(0)
- ---
+----
 ->>>            this.greeting = greetings;
 -1->^^^^^^^^^^^^
 -2 >            ^^^^
@@ -457,16 +418,7 @@
 -6 >                            ^^^^^^^^^
 -7 >                                     ^
 -1->) {
-+>>>        this.greeting = greetings;
-+1->^^^^^^^^
-+2 >        ^^^^
-+3 >            ^
-+4 >             ^^^^^^^^
-+5 >                     ^^^
-+6 >                        ^^^^^^^^^
-+7 >                                 ^
-+1->{
-   >        
+-  >        
 -2 >            this
 -3 >                .
 -4 >                 greeting
@@ -480,37 +432,17 @@
 -5 >Emitted(21, 29) Source(16, 25) + SourceIndex(0)
 -6 >Emitted(21, 38) Source(16, 34) + SourceIndex(0)
 -7 >Emitted(21, 39) Source(16, 35) + SourceIndex(0)
-+2 >        this
-+3 >            .
-+4 >             greeting
-+5 >                      = 
-+6 >                        greetings
-+7 >                                 ;
-+1->Emitted(18, 9) Source(16, 9) + SourceIndex(0)
-+2 >Emitted(18, 13) Source(16, 13) + SourceIndex(0)
-+3 >Emitted(18, 14) Source(16, 14) + SourceIndex(0)
-+4 >Emitted(18, 22) Source(16, 22) + SourceIndex(0)
-+5 >Emitted(18, 25) Source(16, 25) + SourceIndex(0)
-+6 >Emitted(18, 34) Source(16, 34) + SourceIndex(0)
-+7 >Emitted(18, 35) Source(16, 35) + SourceIndex(0)
- ---
+----
 ->>>        },
 -1 >^^^^^^^^
 -2 >        ^
 -3 >         ^^^^^^^^^^^^^^^^^^->
-+>>>    }
-+1 >^^^^
-+2 >    ^
- 1 >
+-1 >
 -  >    
 -2 >        }
 -1 >Emitted(22, 9) Source(17, 5) + SourceIndex(0)
 -2 >Emitted(22, 10) Source(17, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(19, 5) Source(16, 35) + SourceIndex(0)
-+2 >Emitted(19, 6) Source(17, 6) + SourceIndex(0)
- ---
+----
 ->>>        enumerable: false,
 ->>>        configurable: true
 ->>>    });
@@ -520,9 +452,54 @@
 -1->Emitted(25, 8) Source(14, 6) + SourceIndex(0)
 ----
 ->>>    return Greeter;
--1->^^^^
++3 >        greetings
++4 >                 () 
++1->Emitted(14, 5) Source(12, 5) + SourceIndex(0)
++2 >Emitted(14, 9) Source(12, 9) + SourceIndex(0)
++3 >Emitted(14, 18) Source(12, 18) + SourceIndex(0)
++4 >Emitted(14, 21) Source(12, 21) + SourceIndex(0)
++---
++>>>        return this.greeting;
++1->^^^^^^^^
++2 >        ^^^^^^^
++3 >               ^^^^
++4 >                   ^
++5 >                    ^^^^^^^^
++6 >                            ^
++1->{
++  >        
++2 >        return 
++3 >               this
++4 >                   .
++5 >                    greeting
++6 >                            ;
++1->Emitted(15, 9) Source(13, 9) + SourceIndex(0)
++2 >Emitted(15, 16) Source(13, 16) + SourceIndex(0)
++3 >Emitted(15, 20) Source(13, 20) + SourceIndex(0)
++4 >Emitted(15, 21) Source(13, 21) + SourceIndex(0)
++5 >Emitted(15, 29) Source(13, 29) + SourceIndex(0)
++6 >Emitted(15, 30) Source(13, 30) + SourceIndex(0)
++---
++>>>    }
++1 >^^^^
++2 >    ^
++3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
++2 >    
++  >        }
++1 >Emitted(16, 5) Source(13, 30) + SourceIndex(0)
++2 >Emitted(16, 6) Source(14, 6) + SourceIndex(0)
++---
++>>>    set greetings(greetings) {
+ 1->^^^^
 -2 >    ^^^^^^^^^^^^^^
--1->
++2 >    ^^^^
++3 >        ^^^^^^^^^
++4 >                 ^
++5 >                  ^^^^^^^^^
++6 >                           ^^
++7 >                             ^^^^^^->
+ 1->
 -  >    set greetings(greetings: string) {
 -  >        this.greeting = greetings;
 -  >    }
@@ -532,10 +509,7 @@
 -2 >Emitted(26, 19) Source(18, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -565,6 +539,56 @@
 -2 >Emitted(27, 2) Source(18, 2) + SourceIndex(0)
 -3 >Emitted(27, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(27, 6) Source(18, 2) + SourceIndex(0)
++  >    
++2 >    set 
++3 >        greetings
++4 >                 (
++5 >                  greetings: string
++6 >                           ) 
++1->Emitted(17, 5) Source(15, 5) + SourceIndex(0)
++2 >Emitted(17, 9) Source(15, 9) + SourceIndex(0)
++3 >Emitted(17, 18) Source(15, 18) + SourceIndex(0)
++4 >Emitted(17, 19) Source(15, 19) + SourceIndex(0)
++5 >Emitted(17, 28) Source(15, 36) + SourceIndex(0)
++6 >Emitted(17, 30) Source(15, 38) + SourceIndex(0)
++---
++>>>        this.greeting = greetings;
++1->^^^^^^^^
++2 >        ^^^^
++3 >            ^
++4 >             ^^^^^^^^
++5 >                     ^^^
++6 >                        ^^^^^^^^^
++7 >                                 ^
++1->{
++  >        
++2 >        this
++3 >            .
++4 >             greeting
++5 >                      = 
++6 >                        greetings
++7 >                                 ;
++1->Emitted(18, 9) Source(16, 9) + SourceIndex(0)
++2 >Emitted(18, 13) Source(16, 13) + SourceIndex(0)
++3 >Emitted(18, 14) Source(16, 14) + SourceIndex(0)
++4 >Emitted(18, 22) Source(16, 22) + SourceIndex(0)
++5 >Emitted(18, 25) Source(16, 25) + SourceIndex(0)
++6 >Emitted(18, 34) Source(16, 34) + SourceIndex(0)
++7 >Emitted(18, 35) Source(16, 35) + SourceIndex(0)
++---
++>>>    }
++1 >^^^^
++2 >    ^
++1 >
++2 >    
++  >        }
++1 >Emitted(19, 5) Source(16, 35) + SourceIndex(0)
++2 >Emitted(19, 6) Source(17, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(20, 2) Source(18, 2) + SourceIndex(0)
  ---

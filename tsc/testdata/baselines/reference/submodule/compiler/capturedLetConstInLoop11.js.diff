@@ -2,7 +2,7 @@
 +++ new.capturedLetConstInLoop11.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [capturedLetConstInLoop11.js]
 -var _loop_1 = function () {
 -    var x = 1;

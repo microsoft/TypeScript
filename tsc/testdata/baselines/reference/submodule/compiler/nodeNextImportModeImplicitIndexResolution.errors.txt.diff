@@ -1,6 +1,6 @@
 --- old.nodeNextImportModeImplicitIndexResolution.errors.txt
 +++ new.nodeNextImportModeImplicitIndexResolution.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.ts(2,31): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 -index.ts(3,31): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 -
@@ -32,5 +32,4 @@
 -                                  ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

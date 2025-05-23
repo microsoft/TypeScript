@@ -2,7 +2,7 @@
 +++ new.tsconfigMapOptionsAreCaseInsensitive.js
 @@= skipped -10, +10 lines =@@
  };
- 
+
  //// [other.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

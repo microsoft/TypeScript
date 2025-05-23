@@ -1,13 +1,13 @@
 --- old.neverReturningFunctions1.types
 +++ new.neverReturningFunctions1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === neverReturningFunctions1.ts ===
  function fail(message?: string): never {
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >message : string | undefined
- 
+
      throw new Error(message);
 @@= skipped -18, +18 lines =@@
  >x : string | undefined
@@ -16,28 +16,28 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"undefined argument" : "undefined argument"
- 
+
      x.length;  // string
 @@= skipped -21, +21 lines =@@
- 
+
      fail("negative number");
  >fail("negative number") : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"negative number" : "negative number"
- 
+
      x;  // Unreachable
 @@= skipped -16, +16 lines =@@
- 
+
      fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
      x;  // Unreachable
  >x : string
  }
- 
+
  function f11(x: string | undefined, fail: (message?: string) => never) {
 ->f11 : (x: string | undefined, fail: (message?: string) => never) => void
 +>f11 : (x: string | undefined, fail: (message?: string | undefined) => never) => void
@@ -45,7 +45,7 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >message : string | undefined
- 
+
      if (x === undefined) fail("undefined argument");
 @@= skipped -17, +17 lines =@@
  >x : string | undefined
@@ -54,11 +54,11 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"undefined argument" : "undefined argument"
- 
+
      x.length;  // string
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function f12(x: number, fail: (message?: string) => never): number {
 ->f12 : (x: number, fail: (message?: string) => never) => number
 +>f12 : (x: number, fail: (message?: string | undefined) => never) => number
@@ -66,20 +66,20 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >message : string | undefined
- 
+
      if (x >= 0) return x;
 @@= skipped -13, +13 lines =@@
- 
+
      fail("negative number");
  >fail("negative number") : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"negative number" : "negative number"
- 
+
      x;  // Unreachable
 @@= skipped -8, +8 lines =@@
  }
- 
+
  function f13(x: string, fail: (message?: string) => never) {
 ->f13 : (x: string, fail: (message?: string) => never) => void
 +>f13 : (x: string, fail: (message?: string | undefined) => never) => void
@@ -87,26 +87,26 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >message : string | undefined
- 
+
      x;  // string
 @@= skipped -10, +10 lines =@@
- 
+
      fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
      x;  // Unreachable
  >x : string
 @@= skipped -10, +10 lines =@@
  >Debug : typeof Debug
- 
+
      export declare function fail(message?: string): never;
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >message : string | undefined
  }
- 
+
 @@= skipped -13, +13 lines =@@
  >x : string | undefined
  >undefined : undefined
@@ -117,10 +117,10 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"undefined argument" : "undefined argument"
- 
+
      x.length;  // string
 @@= skipped -23, +23 lines =@@
- 
+
      Debug.fail("negative number");
  >Debug.fail("negative number") : never
 ->Debug.fail : (message?: string) => never
@@ -129,10 +129,10 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"negative number" : "negative number"
- 
+
      x;  // Unreachable
 @@= skipped -18, +18 lines =@@
- 
+
      Debug.fail();
  >Debug.fail() : never
 ->Debug.fail : (message?: string) => never
@@ -140,11 +140,11 @@
  >Debug : typeof Debug
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
      x;  // Unreachable
  >x : string
 @@= skipped -17, +17 lines =@@
- 
+
      ((Debug).fail)();
  >((Debug).fail)() : never
 ->((Debug).fail) : (message?: string) => never
@@ -155,17 +155,17 @@
  >Debug : typeof Debug
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
      x;  // Unreachable
  >x : string
 @@= skipped -14, +14 lines =@@
  >Test : Test
- 
+
      fail(message?: string): never {
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >message : string | undefined
- 
+
          throw new Error(message);
 @@= skipped -17, +17 lines =@@
  >x : string | undefined
@@ -177,10 +177,10 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"undefined argument" : "undefined argument"
- 
+
          x.length;  // string
 @@= skipped -22, +22 lines =@@
- 
+
          this.fail("negative number");
  >this.fail("negative number") : never
 ->this.fail : (message?: string) => never
@@ -189,10 +189,10 @@
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
  >"negative number" : "negative number"
- 
+
          x;  // Unreachable
 @@= skipped -17, +17 lines =@@
- 
+
          this.fail();
  >this.fail() : never
 ->this.fail : (message?: string) => never
@@ -200,102 +200,102 @@
  >this : this
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
          x;  // Unreachable
  >x : string
 @@= skipped -21, +21 lines =@@
- 
+
          fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
          x;  // Unreachable
  >x : string | number | undefined
 @@= skipped -19, +19 lines =@@
- 
+
              fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
              x;  // Unreachable
  >x : string | number | undefined
 @@= skipped -11, +11 lines =@@
- 
+
              fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
              x;  // Unreachable
  >x : string | number | undefined
 @@= skipped -27, +27 lines =@@
- 
+
          fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
          x;    // Unreachable
  >x : { a: string | number; }
 @@= skipped -29, +29 lines =@@
- 
+
          fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
          x;  // Unreachable
  >x : number
 @@= skipped -11, +11 lines =@@
- 
+
          fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
          x;  // Unreachable
  >x : number
 @@= skipped -23, +23 lines =@@
- 
+
          fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
          x;  // Unreachable
  >x : number
 @@= skipped -19, +19 lines =@@
- 
+
          fail();
  >fail() : never
 ->fail : (message?: string) => never
 +>fail : (message?: string | undefined) => never
- 
+
          x;  // Unreachable
  >x : number
 @@= skipped -72, +72 lines =@@
  >system : any
- 
+
  	init(data?: T): void;
 ->init : (data?: T) => void
 +>init : (data?: T | undefined) => void
  >data : T | undefined
- 
+
  	pause(): void;
 @@= skipped -39, +39 lines =@@
  >id : string
- 
+
  	prototype: T & {
 ->prototype : T & { name: string; system: unknown; play(): void; pause(): void; }
 +>prototype : T & { name: string; system: unknown; play: () => void; pause: () => void; }
- 
+
  		name: string;
  >name : string
 @@= skipped -32, +32 lines =@@
  >ComponentDefinition : ComponentDefinition<T>
- 
+
  const Component = registerComponent('test-component', {
 ->Component : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
 ->registerComponent('test-component', {	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}}) : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
@@ -305,19 +305,19 @@
  >'test-component' : "test-component"
 ->{	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}} : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }
 +>{	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}} : { schema: { myProperty: { default: never[]; parse: () => boolean[]; }; string: { type: string; }; num: number; }; init: () => void; update: () => void; tick: () => void; remove: () => void; pause: () => void; play: () => void; multiply: (f: number) => number; }
- 
+
  	schema: {
 ->schema : { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }
 ->{		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	} : { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }
 +>schema : { myProperty: { default: never[]; parse: () => boolean[]; }; string: { type: string; }; num: number; }
 +>{		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	} : { myProperty: { default: never[]; parse: () => boolean[]; }; string: { type: string; }; num: number; }
- 
+
  		myProperty: {
 ->myProperty : { default: never[]; parse(): boolean[]; }
 ->{			default: [],			parse() {				return [true];			}		} : { default: never[]; parse(): boolean[]; }
 +>myProperty : { default: never[]; parse: () => boolean[]; }
 +>{			default: [],			parse() {				return [true];			}		} : { default: never[]; parse: () => boolean[]; }
- 
+
  			default: [],
  >default : never[]
 @@= skipped -44, +44 lines =@@

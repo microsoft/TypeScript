@@ -1,7 +1,7 @@
 --- old.nestedNamespace.symbols
 +++ new.nestedNamespace.symbols
 @@= skipped -13, +13 lines =@@
- 
+
  interface B extends a.types.A {}
  >B : Symbol(B, Decl(b.ts, 0, 30))
 ->a.types.A : Symbol(a.types.A, Decl(a.ts, 0, 24))
@@ -13,4 +13,3 @@
 ->A : Symbol(a.types.A, Decl(a.ts, 0, 24))
 +>types : Symbol(types, Decl(a.ts, 0, 0))
 +>A : Symbol(A, Decl(a.ts, 0, 24))
- 

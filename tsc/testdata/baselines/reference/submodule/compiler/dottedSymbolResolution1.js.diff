@@ -2,7 +2,7 @@
 +++ new.dottedSymbolResolution1.js
 @@= skipped -27, +27 lines =@@
  }
- 
+
  //// [dottedSymbolResolution1.js]
 -var Base = /** @class */ (function () {
 -    function Base() {

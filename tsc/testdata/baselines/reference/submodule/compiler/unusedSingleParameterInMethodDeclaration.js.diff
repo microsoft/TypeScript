@@ -2,7 +2,7 @@
 +++ new.unusedSingleParameterInMethodDeclaration.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [unusedSingleParameterInMethodDeclaration.js]
 -var Dummy = /** @class */ (function () {
 -    function Dummy() {

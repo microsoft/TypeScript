@@ -10,4 +10,3 @@
 +><Button></Button> : any
  >Button : (attributes: Attributes | undefined, contents: string[]) => string
  >Button : (attributes: Attributes | undefined, contents: string[]) => string
- 

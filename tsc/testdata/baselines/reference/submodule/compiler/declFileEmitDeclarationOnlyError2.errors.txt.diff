@@ -1,6 +1,6 @@
 --- old.declFileEmitDeclarationOnlyError2.errors.txt
 +++ new.declFileEmitDeclarationOnlyError2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
 -
 -
@@ -8,5 +8,4 @@
 -==== hello.ts (0 errors) ====
 -    var hello = "yo!";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -12,7 +12,7 @@
 +>this.p : Symbol(p, Decl(a.js, 1, 25))
 +>this : Symbol(C, Decl(a.js, 0, 0))
 +>p : Symbol(p, Decl(a.js, 1, 25))
- 
+
  // Property assignment does nothing.
  // You have to use Object.defineProperty(C, "prototype", { q: 2 })
  // and that only works on classes with no superclass.
@@ -25,18 +25,18 @@
 +>C : Symbol(C, Decl(a.js, 0, 0))
 +>prototype : Symbol(prototype)
  >q : Symbol(q, Decl(a.js, 6, 15))
- 
+
  const c = new C()
  >c : Symbol(c, Decl(a.js, 8, 5))
 ->C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
 +>C : Symbol(C, Decl(a.js, 0, 0))
- 
+
  c.p
 ->c.p : Symbol(C.p, Decl(a.js, 1, 25))
 +>c.p : Symbol(p, Decl(a.js, 1, 25))
  >c : Symbol(c, Decl(a.js, 8, 5))
 ->p : Symbol(C.p, Decl(a.js, 1, 25))
 +>p : Symbol(p, Decl(a.js, 1, 25))
- 
+
  c.q
  >c : Symbol(c, Decl(a.js, 8, 5))

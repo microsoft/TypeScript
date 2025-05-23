@@ -2,7 +2,7 @@
 +++ new.ES5For-of21.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [ES5For-of21.js]
 -for (var _a = 0, _b = []; _a < _b.length; _a++) {
 -    var v = _b[_a];

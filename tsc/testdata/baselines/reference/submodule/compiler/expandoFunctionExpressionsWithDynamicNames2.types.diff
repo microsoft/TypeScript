@@ -6,6 +6,6 @@
  >foo : Foo
 ->() => {} : { (): void; [mySymbol]: true; }
 +>() => {} : { (): void; foo[mySymbol]: true; }
- 
+
  foo[mySymbol] = true;
  >foo[mySymbol] = true : true

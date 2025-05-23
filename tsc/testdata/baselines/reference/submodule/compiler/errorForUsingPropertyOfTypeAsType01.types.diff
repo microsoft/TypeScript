@@ -2,13 +2,13 @@
 +++ new.errorForUsingPropertyOfTypeAsType01.types
 @@= skipped -9, +9 lines =@@
      }
- 
+
      var x: Foo.bar = "";
 ->x : Foo.bar
 +>x : bar
  >Foo : any
  >"" : ""
- 
+
      var y: Test1.Foo.bar = "";
 ->y : Test1.Foo.bar
 +>y : bar
@@ -17,13 +17,13 @@
  >"" : ""
 @@= skipped -22, +22 lines =@@
      }
- 
+
      var x: Foo.bar = "";
 ->x : Foo.bar
 +>x : bar
  >Foo : any
  >"" : ""
- 
+
      var y: Test2.Foo.bar = "";
 ->y : Test2.Foo.bar
 +>y : bar
@@ -32,13 +32,13 @@
  >"" : ""
 @@= skipped -22, +22 lines =@@
      }
- 
+
      var x: Foo.bar = "";
 ->x : Foo.bar
 +>x : bar
  >Foo : any
  >"" : ""
- 
+
      var y: Test3.Foo.bar = "";
 ->y : Test3.Foo.bar
 +>y : bar
@@ -47,13 +47,13 @@
  >"" : ""
 @@= skipped -22, +22 lines =@@
  >bar : string
- 
+
      var x: Foo.bar = "";
 ->x : Foo.bar
 +>x : bar
  >Foo : any
  >"" : ""
- 
+
      var y: Test4.Foo.bar = "";
 ->y : Test4.Foo.bar
 +>y : bar
@@ -62,13 +62,13 @@
  >"" : ""
 @@= skipped -22, +22 lines =@@
  >wat : string
- 
+
      var x: Foo.bar = "";
 ->x : Foo.bar
 +>x : bar
  >Foo : any
  >"" : ""
- 
+
      var y: Test5.Foo.bar = "";
 ->y : Test5.Foo.bar
 +>y : bar

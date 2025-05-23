@@ -2,7 +2,7 @@
 +++ new.customAsyncIterator.symbols
 @@= skipped -9, +9 lines =@@
  >T : Symbol(T, Decl(customAsyncIterator.ts, 1, 23))
- 
+
      constructor(private constant: T) {
 ->constant : Symbol(ConstantIterator.constant, Decl(customAsyncIterator.ts, 2, 16))
 +>constant : Symbol(constant, Decl(customAsyncIterator.ts, 2, 16))

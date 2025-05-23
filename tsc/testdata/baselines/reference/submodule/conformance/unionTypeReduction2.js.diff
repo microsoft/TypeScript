@@ -1,8 +1,8 @@
 --- old.unionTypeReduction2.js
 +++ new.unionTypeReduction2.js
 @@= skipped -67, +67 lines =@@
- 
- 
+
+
  //// [unionTypeReduction2.js]
 -"use strict";
  function f1(x, y) {

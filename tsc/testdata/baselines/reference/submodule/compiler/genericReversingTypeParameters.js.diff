@@ -2,7 +2,7 @@
 +++ new.genericReversingTypeParameters.js
 @@= skipped -12, +12 lines =@@
  var r2b = i.get(1); 
- 
+
  //// [genericReversingTypeParameters.js]
 -var BiMap = /** @class */ (function () {
 -    function BiMap() {

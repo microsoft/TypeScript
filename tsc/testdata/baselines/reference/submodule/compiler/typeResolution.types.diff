@@ -30,7 +30,7 @@
 ->c1 : SubModule2.SubSubModule2.ClassA
 +>c1 : ClassA
  >AisIn1_2_2 : () => void
- 
+
                      var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
 ->c2 : TopLevelModule2.SubModule3.ClassA
 +>c2 : ClassA
@@ -45,7 +45,7 @@
                      // Interface reference
 @@= skipped -57, +57 lines =@@
  >AisIn1_1_1 : () => void
- 
+
                          var c1: TopLevelModule1.SubModule2.SubSubModule2.ClassA; c1.AisIn1_2_2();
 ->c1 : SubModule2.SubSubModule2.ClassA
 +>c1 : ClassA
@@ -57,11 +57,11 @@
 ->c1 : SubModule2.SubSubModule2.ClassA
 +>c1 : ClassA
  >AisIn1_2_2 : () => void
- 
+
                          var d1: InterfaceX; d1.XisIn1_1_1();
 @@= skipped -17, +17 lines =@@
  >XisIn1_1_1 : () => any
- 
+
                          var c2: TopLevelModule2.SubModule3.ClassA; c2.AisIn2_3();
 ->c2 : TopLevelModule2.SubModule3.ClassA
 +>c2 : ClassA
@@ -76,7 +76,7 @@
                  }
 @@= skipped -21, +21 lines =@@
  >AA : () => void
- 
+
                      var a2: SubSubModule1.ClassA; a2.AisIn1_1_1();
 ->a2 : SubSubModule1.ClassA
 +>a2 : ClassA
@@ -86,7 +86,7 @@
 ->a2 : SubSubModule1.ClassA
 +>a2 : ClassA
  >AisIn1_1_1 : () => void
- 
+
                      var a3: SubModule1.SubSubModule1.ClassA; a3.AisIn1_1_1();
 ->a3 : SubSubModule1.ClassA
 +>a3 : ClassA
@@ -97,7 +97,7 @@
 ->a3 : SubSubModule1.ClassA
 +>a3 : ClassA
  >AisIn1_1_1 : () => void
- 
+
                      var a4: TopLevelModule1.SubModule1.SubSubModule1.ClassA; a4.AisIn1_1_1();
 ->a4 : SubSubModule1.ClassA
 +>a4 : ClassA

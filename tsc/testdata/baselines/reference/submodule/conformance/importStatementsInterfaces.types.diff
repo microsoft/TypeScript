@@ -2,12 +2,12 @@
 +++ new.importStatementsInterfaces.types
 @@= skipped -42, +42 lines =@@
  >a : any
- 
+
      var p: b.Point3D;
 ->p : b.Point3D
 +>p : Point3D
  >b : any
- 
+
      var p = {x:0, y:0, z: 0 };
 ->p : b.Point3D
 +>p : Point3D
@@ -16,23 +16,23 @@
  >0 : 0
 @@= skipped -23, +23 lines =@@
  >A : any
- 
+
      var p : a.Point;
 ->p : a.Point
 +>p : Point
  >a : any
  }
- 
+
 @@= skipped -14, +14 lines =@@
  >inA : any
- 
+
      export function xDist(x: a.Point3D) {
 ->xDist : (x: a.Point3D) => number
 ->x : a.Point3D
 +>xDist : (x: Point3D) => number
 +>x : Point3D
  >a : any
- 
+
          return 0 - x.x;
  >0 - x.x : number
  >0 : 0

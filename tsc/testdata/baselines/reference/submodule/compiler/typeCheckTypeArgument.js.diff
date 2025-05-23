@@ -1,7 +1,7 @@
 --- old.typeCheckTypeArgument.js
 +++ new.typeCheckTypeArgument.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [typeCheckTypeArgument.js]
  var f;
 -var Foo = /** @class */ (function () {

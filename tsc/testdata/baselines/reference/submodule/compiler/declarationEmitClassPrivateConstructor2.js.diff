@@ -20,14 +20,15 @@
 -    }
 -    return ExportedClass2;
 -}());
--exports.ExportedClass2 = ExportedClass2;
++class ExportedClass2 {
++    constructor(data) { }
++}
+ exports.ExportedClass2 = ExportedClass2;
 -
 -
 -//// [declarationEmitClassPrivateConstructor2.d.ts]
 -interface PrivateInterface {
-+class ExportedClass2 {
-+    constructor(data) { }
- }
+-}
 -export declare class ExportedClass1 {
 -    data: PrivateInterface;
 -    private constructor();
@@ -36,4 +37,3 @@
 -    protected constructor(data: PrivateInterface);
 -}
 -export {};
-+exports.ExportedClass2 = ExportedClass2;

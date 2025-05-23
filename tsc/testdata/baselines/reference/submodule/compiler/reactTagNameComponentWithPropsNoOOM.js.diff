@@ -1,7 +1,7 @@
 --- old.reactTagNameComponentWithPropsNoOOM.js
 +++ new.reactTagNameComponentWithPropsNoOOM.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [reactTagNameComponentWithPropsNoOOM.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

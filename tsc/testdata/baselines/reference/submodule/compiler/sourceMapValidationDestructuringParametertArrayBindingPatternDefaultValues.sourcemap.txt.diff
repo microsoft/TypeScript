@@ -67,23 +67,7 @@
  3 >Emitted(2, 14) Source(7, 14) + SourceIndex(0)
  4 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
 -5 >Emitted(2, 17) Source(7, 66) + SourceIndex(0)
-+5 >Emitted(2, 16) Source(7, 16) + SourceIndex(0)
-+6 >Emitted(2, 18) Source(7, 18) + SourceIndex(0)
-+7 >Emitted(2, 23) Source(7, 23) + SourceIndex(0)
-+8 >Emitted(2, 26) Source(7, 26) + SourceIndex(0)
-+9 >Emitted(2, 34) Source(7, 34) + SourceIndex(0)
-+10>Emitted(2, 35) Source(7, 35) + SourceIndex(0)
-+11>Emitted(2, 38) Source(7, 45) + SourceIndex(0)
-+12>Emitted(2, 39) Source(7, 46) + SourceIndex(0)
-+13>Emitted(2, 40) Source(7, 47) + SourceIndex(0)
-+14>Emitted(2, 41) Source(7, 48) + SourceIndex(0)
-+15>Emitted(2, 43) Source(7, 50) + SourceIndex(0)
-+16>Emitted(2, 49) Source(7, 56) + SourceIndex(0)
-+17>Emitted(2, 51) Source(7, 58) + SourceIndex(0)
-+18>Emitted(2, 58) Source(7, 65) + SourceIndex(0)
-+19>Emitted(2, 59) Source(7, 66) + SourceIndex(0)
-+20>Emitted(2, 61) Source(7, 68) + SourceIndex(0)
- ---
+----
 ->>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[1], nameA = _c === void 0 ? "noName" : _c;
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^
@@ -139,10 +123,25 @@
 -16>Emitted(3, 94) Source(7, 26) + SourceIndex(0)
 -17>Emitted(3, 102) Source(7, 34) + SourceIndex(0)
 -18>Emitted(3, 107) Source(7, 34) + SourceIndex(0)
-----
++5 >Emitted(2, 16) Source(7, 16) + SourceIndex(0)
++6 >Emitted(2, 18) Source(7, 18) + SourceIndex(0)
++7 >Emitted(2, 23) Source(7, 23) + SourceIndex(0)
++8 >Emitted(2, 26) Source(7, 26) + SourceIndex(0)
++9 >Emitted(2, 34) Source(7, 34) + SourceIndex(0)
++10>Emitted(2, 35) Source(7, 35) + SourceIndex(0)
++11>Emitted(2, 38) Source(7, 45) + SourceIndex(0)
++12>Emitted(2, 39) Source(7, 46) + SourceIndex(0)
++13>Emitted(2, 40) Source(7, 47) + SourceIndex(0)
++14>Emitted(2, 41) Source(7, 48) + SourceIndex(0)
++15>Emitted(2, 43) Source(7, 50) + SourceIndex(0)
++16>Emitted(2, 49) Source(7, 56) + SourceIndex(0)
++17>Emitted(2, 51) Source(7, 58) + SourceIndex(0)
++18>Emitted(2, 58) Source(7, 65) + SourceIndex(0)
++19>Emitted(2, 59) Source(7, 66) + SourceIndex(0)
++20>Emitted(2, 61) Source(7, 68) + SourceIndex(0)
+ ---
  >>>    console.log(nameA);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -85, +73 lines =@@
  6 >                ^^^^^
  7 >                     ^
@@ -224,43 +223,7 @@
 -3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
 -4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
 -5 >Emitted(6, 17) Source(11, 60) + SourceIndex(0)
-+5 >              [
-+6 >               numberB
-+7 >                       = 
-+8 >                         -
-+9 >                          1
-+10>                           ]
-+11>                            : Robot = 
-+12>                               [
-+13>                                -
-+14>                                 1
-+15>                                  , 
-+16>                                    "name"
-+17>                                          , 
-+18>                                            "skill"
-+19>                                                   ]
-+20>                                                    ) 
-+1->Emitted(5, 1) Source(11, 1) + SourceIndex(0)
-+2 >Emitted(5, 10) Source(11, 10) + SourceIndex(0)
-+3 >Emitted(5, 14) Source(11, 14) + SourceIndex(0)
-+4 >Emitted(5, 15) Source(11, 15) + SourceIndex(0)
-+5 >Emitted(5, 16) Source(11, 16) + SourceIndex(0)
-+6 >Emitted(5, 23) Source(11, 23) + SourceIndex(0)
-+7 >Emitted(5, 26) Source(11, 26) + SourceIndex(0)
-+8 >Emitted(5, 27) Source(11, 27) + SourceIndex(0)
-+9 >Emitted(5, 28) Source(11, 28) + SourceIndex(0)
-+10>Emitted(5, 29) Source(11, 29) + SourceIndex(0)
-+11>Emitted(5, 32) Source(11, 39) + SourceIndex(0)
-+12>Emitted(5, 33) Source(11, 40) + SourceIndex(0)
-+13>Emitted(5, 34) Source(11, 41) + SourceIndex(0)
-+14>Emitted(5, 35) Source(11, 42) + SourceIndex(0)
-+15>Emitted(5, 37) Source(11, 44) + SourceIndex(0)
-+16>Emitted(5, 43) Source(11, 50) + SourceIndex(0)
-+17>Emitted(5, 45) Source(11, 52) + SourceIndex(0)
-+18>Emitted(5, 52) Source(11, 59) + SourceIndex(0)
-+19>Emitted(5, 53) Source(11, 60) + SourceIndex(0)
-+20>Emitted(5, 55) Source(11, 62) + SourceIndex(0)
- ---
+----
 ->>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberB = _c === void 0 ? -1 : _c;
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^
@@ -319,10 +282,45 @@
 -17>Emitted(7, 97) Source(11, 27) + SourceIndex(0)
 -18>Emitted(7, 98) Source(11, 28) + SourceIndex(0)
 -19>Emitted(7, 103) Source(11, 28) + SourceIndex(0)
-----
++5 >              [
++6 >               numberB
++7 >                       = 
++8 >                         -
++9 >                          1
++10>                           ]
++11>                            : Robot = 
++12>                               [
++13>                                -
++14>                                 1
++15>                                  , 
++16>                                    "name"
++17>                                          , 
++18>                                            "skill"
++19>                                                   ]
++20>                                                    ) 
++1->Emitted(5, 1) Source(11, 1) + SourceIndex(0)
++2 >Emitted(5, 10) Source(11, 10) + SourceIndex(0)
++3 >Emitted(5, 14) Source(11, 14) + SourceIndex(0)
++4 >Emitted(5, 15) Source(11, 15) + SourceIndex(0)
++5 >Emitted(5, 16) Source(11, 16) + SourceIndex(0)
++6 >Emitted(5, 23) Source(11, 23) + SourceIndex(0)
++7 >Emitted(5, 26) Source(11, 26) + SourceIndex(0)
++8 >Emitted(5, 27) Source(11, 27) + SourceIndex(0)
++9 >Emitted(5, 28) Source(11, 28) + SourceIndex(0)
++10>Emitted(5, 29) Source(11, 29) + SourceIndex(0)
++11>Emitted(5, 32) Source(11, 39) + SourceIndex(0)
++12>Emitted(5, 33) Source(11, 40) + SourceIndex(0)
++13>Emitted(5, 34) Source(11, 41) + SourceIndex(0)
++14>Emitted(5, 35) Source(11, 42) + SourceIndex(0)
++15>Emitted(5, 37) Source(11, 44) + SourceIndex(0)
++16>Emitted(5, 43) Source(11, 50) + SourceIndex(0)
++17>Emitted(5, 45) Source(11, 52) + SourceIndex(0)
++18>Emitted(5, 52) Source(11, 59) + SourceIndex(0)
++19>Emitted(5, 53) Source(11, 60) + SourceIndex(0)
++20>Emitted(5, 55) Source(11, 62) + SourceIndex(0)
+ ---
  >>>    console.log(numberB);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -107, +92 lines =@@
  6 >                ^^^^^^^
  7 >                       ^
@@ -412,59 +410,7 @@
 -3 >Emitted(10, 14) Source(15, 14) + SourceIndex(0)
 -4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
 -5 >Emitted(10, 17) Source(15, 97) + SourceIndex(0)
-+5 >              [
-+6 >               numberA2
-+7 >                        = 
-+8 >                          -
-+9 >                           1
-+10>                            , 
-+11>                              nameA2
-+12>                                     = 
-+13>                                       "name"
-+14>                                             , 
-+15>                                               skillA2
-+16>                                                       = 
-+17>                                                         "skill"
-+18>                                                                ]
-+19>                                                                 : Robot = 
-+20>                                                                    [
-+21>                                                                     -
-+22>                                                                      1
-+23>                                                                       , 
-+24>                                                                         "name"
-+25>                                                                               , 
-+26>                                                                                 "skill"
-+27>                                                                                        ]
-+28>                                                                                         ) 
-+1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
-+2 >Emitted(8, 10) Source(15, 10) + SourceIndex(0)
-+3 >Emitted(8, 14) Source(15, 14) + SourceIndex(0)
-+4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
-+5 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
-+6 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
-+7 >Emitted(8, 27) Source(15, 27) + SourceIndex(0)
-+8 >Emitted(8, 28) Source(15, 28) + SourceIndex(0)
-+9 >Emitted(8, 29) Source(15, 29) + SourceIndex(0)
-+10>Emitted(8, 31) Source(15, 31) + SourceIndex(0)
-+11>Emitted(8, 37) Source(15, 37) + SourceIndex(0)
-+12>Emitted(8, 40) Source(15, 40) + SourceIndex(0)
-+13>Emitted(8, 46) Source(15, 46) + SourceIndex(0)
-+14>Emitted(8, 48) Source(15, 48) + SourceIndex(0)
-+15>Emitted(8, 55) Source(15, 55) + SourceIndex(0)
-+16>Emitted(8, 58) Source(15, 58) + SourceIndex(0)
-+17>Emitted(8, 65) Source(15, 65) + SourceIndex(0)
-+18>Emitted(8, 66) Source(15, 66) + SourceIndex(0)
-+19>Emitted(8, 69) Source(15, 76) + SourceIndex(0)
-+20>Emitted(8, 70) Source(15, 77) + SourceIndex(0)
-+21>Emitted(8, 71) Source(15, 78) + SourceIndex(0)
-+22>Emitted(8, 72) Source(15, 79) + SourceIndex(0)
-+23>Emitted(8, 74) Source(15, 81) + SourceIndex(0)
-+24>Emitted(8, 80) Source(15, 87) + SourceIndex(0)
-+25>Emitted(8, 82) Source(15, 89) + SourceIndex(0)
-+26>Emitted(8, 89) Source(15, 96) + SourceIndex(0)
-+27>Emitted(8, 90) Source(15, 97) + SourceIndex(0)
-+28>Emitted(8, 92) Source(15, 99) + SourceIndex(0)
- ---
+----
 ->>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberA2 = _c === void 0 ? -1 : _c, _d = _b[1], nameA2 = _d === void 0 ? "name" : _d, _e = _b[2], skillA2 = _e === void 0 ? "skill" : _e;
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^
@@ -565,10 +511,61 @@
 -31>Emitted(11, 194) Source(15, 58) + SourceIndex(0)
 -32>Emitted(11, 201) Source(15, 65) + SourceIndex(0)
 -33>Emitted(11, 206) Source(15, 65) + SourceIndex(0)
-----
++5 >              [
++6 >               numberA2
++7 >                        = 
++8 >                          -
++9 >                           1
++10>                            , 
++11>                              nameA2
++12>                                     = 
++13>                                       "name"
++14>                                             , 
++15>                                               skillA2
++16>                                                       = 
++17>                                                         "skill"
++18>                                                                ]
++19>                                                                 : Robot = 
++20>                                                                    [
++21>                                                                     -
++22>                                                                      1
++23>                                                                       , 
++24>                                                                         "name"
++25>                                                                               , 
++26>                                                                                 "skill"
++27>                                                                                        ]
++28>                                                                                         ) 
++1->Emitted(8, 1) Source(15, 1) + SourceIndex(0)
++2 >Emitted(8, 10) Source(15, 10) + SourceIndex(0)
++3 >Emitted(8, 14) Source(15, 14) + SourceIndex(0)
++4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
++5 >Emitted(8, 16) Source(15, 16) + SourceIndex(0)
++6 >Emitted(8, 24) Source(15, 24) + SourceIndex(0)
++7 >Emitted(8, 27) Source(15, 27) + SourceIndex(0)
++8 >Emitted(8, 28) Source(15, 28) + SourceIndex(0)
++9 >Emitted(8, 29) Source(15, 29) + SourceIndex(0)
++10>Emitted(8, 31) Source(15, 31) + SourceIndex(0)
++11>Emitted(8, 37) Source(15, 37) + SourceIndex(0)
++12>Emitted(8, 40) Source(15, 40) + SourceIndex(0)
++13>Emitted(8, 46) Source(15, 46) + SourceIndex(0)
++14>Emitted(8, 48) Source(15, 48) + SourceIndex(0)
++15>Emitted(8, 55) Source(15, 55) + SourceIndex(0)
++16>Emitted(8, 58) Source(15, 58) + SourceIndex(0)
++17>Emitted(8, 65) Source(15, 65) + SourceIndex(0)
++18>Emitted(8, 66) Source(15, 66) + SourceIndex(0)
++19>Emitted(8, 69) Source(15, 76) + SourceIndex(0)
++20>Emitted(8, 70) Source(15, 77) + SourceIndex(0)
++21>Emitted(8, 71) Source(15, 78) + SourceIndex(0)
++22>Emitted(8, 72) Source(15, 79) + SourceIndex(0)
++23>Emitted(8, 74) Source(15, 81) + SourceIndex(0)
++24>Emitted(8, 80) Source(15, 87) + SourceIndex(0)
++25>Emitted(8, 82) Source(15, 89) + SourceIndex(0)
++26>Emitted(8, 89) Source(15, 96) + SourceIndex(0)
++27>Emitted(8, 90) Source(15, 97) + SourceIndex(0)
++28>Emitted(8, 92) Source(15, 99) + SourceIndex(0)
+ ---
  >>>    console.log(nameA2);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -149, +116 lines =@@
  6 >                ^^^^^^
  7 >                      ^
@@ -653,49 +650,7 @@
 -3 >Emitted(14, 14) Source(19, 14) + SourceIndex(0)
 -4 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
 -5 >Emitted(14, 17) Source(19, 76) + SourceIndex(0)
-+5 >              [
-+6 >               numberA3
-+7 >                        = 
-+8 >                          -
-+9 >                           1
-+10>                            , 
-+11>                              ...
-+12>                                 robotAInfo
-+13>                                           ]
-+14>                                            : Robot = 
-+15>                                               [
-+16>                                                -
-+17>                                                 1
-+18>                                                  , 
-+19>                                                    "name"
-+20>                                                          , 
-+21>                                                            "skill"
-+22>                                                                   ]
-+23>                                                                    ) 
-+1->Emitted(11, 1) Source(19, 1) + SourceIndex(0)
-+2 >Emitted(11, 10) Source(19, 10) + SourceIndex(0)
-+3 >Emitted(11, 14) Source(19, 14) + SourceIndex(0)
-+4 >Emitted(11, 15) Source(19, 15) + SourceIndex(0)
-+5 >Emitted(11, 16) Source(19, 16) + SourceIndex(0)
-+6 >Emitted(11, 24) Source(19, 24) + SourceIndex(0)
-+7 >Emitted(11, 27) Source(19, 27) + SourceIndex(0)
-+8 >Emitted(11, 28) Source(19, 28) + SourceIndex(0)
-+9 >Emitted(11, 29) Source(19, 29) + SourceIndex(0)
-+10>Emitted(11, 31) Source(19, 31) + SourceIndex(0)
-+11>Emitted(11, 34) Source(19, 34) + SourceIndex(0)
-+12>Emitted(11, 44) Source(19, 44) + SourceIndex(0)
-+13>Emitted(11, 45) Source(19, 45) + SourceIndex(0)
-+14>Emitted(11, 48) Source(19, 55) + SourceIndex(0)
-+15>Emitted(11, 49) Source(19, 56) + SourceIndex(0)
-+16>Emitted(11, 50) Source(19, 57) + SourceIndex(0)
-+17>Emitted(11, 51) Source(19, 58) + SourceIndex(0)
-+18>Emitted(11, 53) Source(19, 60) + SourceIndex(0)
-+19>Emitted(11, 59) Source(19, 66) + SourceIndex(0)
-+20>Emitted(11, 61) Source(19, 68) + SourceIndex(0)
-+21>Emitted(11, 68) Source(19, 75) + SourceIndex(0)
-+22>Emitted(11, 69) Source(19, 76) + SourceIndex(0)
-+23>Emitted(11, 71) Source(19, 78) + SourceIndex(0)
- ---
+----
 ->>>    var _b = _a === void 0 ? [-1, "name", "skill"] : _a, _c = _b[0], numberA3 = _c === void 0 ? -1 : _c, robotAInfo = _b.slice(1);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^
@@ -763,10 +718,51 @@
 -20>Emitted(15, 106) Source(19, 34) + SourceIndex(0)
 -21>Emitted(15, 116) Source(19, 44) + SourceIndex(0)
 -22>Emitted(15, 130) Source(19, 44) + SourceIndex(0)
-----
++5 >              [
++6 >               numberA3
++7 >                        = 
++8 >                          -
++9 >                           1
++10>                            , 
++11>                              ...
++12>                                 robotAInfo
++13>                                           ]
++14>                                            : Robot = 
++15>                                               [
++16>                                                -
++17>                                                 1
++18>                                                  , 
++19>                                                    "name"
++20>                                                          , 
++21>                                                            "skill"
++22>                                                                   ]
++23>                                                                    ) 
++1->Emitted(11, 1) Source(19, 1) + SourceIndex(0)
++2 >Emitted(11, 10) Source(19, 10) + SourceIndex(0)
++3 >Emitted(11, 14) Source(19, 14) + SourceIndex(0)
++4 >Emitted(11, 15) Source(19, 15) + SourceIndex(0)
++5 >Emitted(11, 16) Source(19, 16) + SourceIndex(0)
++6 >Emitted(11, 24) Source(19, 24) + SourceIndex(0)
++7 >Emitted(11, 27) Source(19, 27) + SourceIndex(0)
++8 >Emitted(11, 28) Source(19, 28) + SourceIndex(0)
++9 >Emitted(11, 29) Source(19, 29) + SourceIndex(0)
++10>Emitted(11, 31) Source(19, 31) + SourceIndex(0)
++11>Emitted(11, 34) Source(19, 34) + SourceIndex(0)
++12>Emitted(11, 44) Source(19, 44) + SourceIndex(0)
++13>Emitted(11, 45) Source(19, 45) + SourceIndex(0)
++14>Emitted(11, 48) Source(19, 55) + SourceIndex(0)
++15>Emitted(11, 49) Source(19, 56) + SourceIndex(0)
++16>Emitted(11, 50) Source(19, 57) + SourceIndex(0)
++17>Emitted(11, 51) Source(19, 58) + SourceIndex(0)
++18>Emitted(11, 53) Source(19, 60) + SourceIndex(0)
++19>Emitted(11, 59) Source(19, 66) + SourceIndex(0)
++20>Emitted(11, 61) Source(19, 68) + SourceIndex(0)
++21>Emitted(11, 68) Source(19, 75) + SourceIndex(0)
++22>Emitted(11, 69) Source(19, 76) + SourceIndex(0)
++23>Emitted(11, 71) Source(19, 78) + SourceIndex(0)
+ ---
  >>>    console.log(robotAInfo);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -116, +101 lines =@@
  6 >                ^^^^^^^^^^
  7 >                          ^

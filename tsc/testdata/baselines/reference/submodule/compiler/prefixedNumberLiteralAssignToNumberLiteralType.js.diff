@@ -2,7 +2,7 @@
 +++ new.prefixedNumberLiteralAssignToNumberLiteralType.js
 @@= skipped -5, +5 lines =@@
  let y: -1 = -1;
- 
+
  //// [prefixedNumberLiteralAssignToNumberLiteralType.js]
 -var x = +1;
 -var y = -1;

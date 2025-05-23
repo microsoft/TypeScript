@@ -1,7 +1,7 @@
 --- old.asyncImportedPromise_es5.js
 +++ new.asyncImportedPromise_es5.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [task.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

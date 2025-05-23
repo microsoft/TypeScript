@@ -2,7 +2,7 @@
 +++ new.ES5SymbolProperty1.js
 @@= skipped -12, +12 lines =@@
  obj[Symbol.foo];
- 
+
  //// [ES5SymbolProperty1.js]
 -var _a;
  var Symbol;

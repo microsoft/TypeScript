@@ -16,14 +16,7 @@
 -var C = /** @class */ (function () {
 -    function C() {
 -        this.s = foo(this);
-+class C {
-+    s = foo(this);
-+}
-+class D {
-+    // Error expected
-+    get x() {
-+        return this.x;
-     }
+-    }
 -    return C;
 -}());
 -var D = /** @class */ (function () {
@@ -39,4 +32,12 @@
 -    });
 -    return D;
 -}());
++class C {
++    s = foo(this);
++}
++class D {
++    // Error expected
++    get x() {
++        return this.x;
++    }
 +}

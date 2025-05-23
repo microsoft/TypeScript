@@ -1,7 +1,7 @@
 --- old.typeGuardConstructorNarrowPrimitivesInUnion.js
 +++ new.typeGuardConstructorNarrowPrimitivesInUnion.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [typeGuardConstructorNarrowPrimitivesInUnion.js]
  // Union of primitives, number, arrays, and C1
 -var var1;

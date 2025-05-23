@@ -6,15 +6,15 @@
  function f() {
 ->f : () => { bar(): number; } | undefined
 +>f : () => { bar: () => number; } | undefined
- 
+
      const x: string | null = <any>{};
  >x : string | null
 @@= skipped -12, +12 lines =@@
  >x : string | null
- 
+
          return {
 ->{            bar() { return x.length; }  // ok        } : { bar(): number; }
 +>{            bar() { return x.length; }  // ok        } : { bar: () => number; }
- 
+
              bar() { return x.length; }  // ok
  >bar : () => number

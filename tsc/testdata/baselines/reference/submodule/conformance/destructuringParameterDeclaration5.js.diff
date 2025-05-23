@@ -2,7 +2,7 @@
 +++ new.destructuringParameterDeclaration5.js
 @@= skipped -52, +52 lines =@@
  d3({ y: "world" });
- 
+
  //// [destructuringParameterDeclaration5.js]
 -// Parameter Declaration with generic
 -var __extends = (this && this.__extends) || (function () {
@@ -46,32 +46,36 @@
 -}(D));
 -function d0(_a) {
 -    var _b = _a === void 0 ? { x: new Class() } : _a, x = _b.x;
-+class Class {
-+    constructor() { }
- }
+-}
 -function d1(_a) {
 -    var x = _a.x;
+-}
+-function d2(_a) {
+-    var x = _a.x;
+-}
+-function d3(_a) {
+-    var y = _a.y;
+-}
+-function d4(_a) {
+-    var _b = _a === void 0 ? { y: new D() } : _a, y = _b.y;
+-}
++class Class {
++    constructor() { }
++}
 +class SubClass extends Class {
 +    foo;
 +    constructor() { super(); }
- }
--function d2(_a) {
--    var x = _a.x;
++}
 +class D {
 +    foo;
 +    constructor() { }
- }
--function d3(_a) {
--    var y = _a.y;
++}
 +class SubD extends D {
 +    bar;
 +    constructor() {
 +        super();
 +    }
- }
--function d4(_a) {
--    var _b = _a === void 0 ? { y: new D() } : _a, y = _b.y;
--}
++}
 +function d0({ x } = { x: new Class() }) { }
 +function d1({ x }) { }
 +function d2({ x }) { }

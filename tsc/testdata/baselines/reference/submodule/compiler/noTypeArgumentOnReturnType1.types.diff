@@ -6,6 +6,6 @@
   foo(): A{
 ->foo : () => A
 +>foo : () => any
- 
+
    return null;
   }

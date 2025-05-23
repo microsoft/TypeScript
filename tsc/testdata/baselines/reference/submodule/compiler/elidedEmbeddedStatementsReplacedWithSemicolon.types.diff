@@ -2,8 +2,7 @@
 +++ new.elidedEmbeddedStatementsReplacedWithSemicolon.types
 @@= skipped -48, +48 lines =@@
  >window : Window & typeof globalThis
- 
+
      const enum H {}
 ->H : error
 +>H : any
- 

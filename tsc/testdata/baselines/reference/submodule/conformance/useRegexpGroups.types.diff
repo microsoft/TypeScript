@@ -10,7 +10,7 @@
 ->exec : (string: string) => RegExpExecArray | null
 +>exec : (string: string) => RegExpExecArray
  >"2015-01-02" : "2015-01-02"
- 
+
  let date = result[0];
 @@= skipped -59, +59 lines =@@
  >"foo".match(/(?<bar>foo)/)!.groups : { [key: string]: string; }

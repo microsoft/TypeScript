@@ -19,8 +19,8 @@
 -  Overload 2 of 2, '(bar: { a: string; }): string', gave the following error.
 +  The last overload gave the following error.
      Type 'boolean' is not assignable to type 'string'.
- 
- 
+
+
 @@= skipped -24, +18 lines =@@
      var x111 = foo([{a:"s"}]); // error - does not match any signature
                       ~

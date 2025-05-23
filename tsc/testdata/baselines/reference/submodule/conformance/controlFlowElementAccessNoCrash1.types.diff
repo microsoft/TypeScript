@@ -2,10 +2,10 @@
 +++ new.controlFlowElementAccessNoCrash1.types
 @@= skipped -32, +32 lines =@@
  >input : TestTscCompile
- 
+
  function verifyTscEditDiscrepancies({
 ->verifyTscEditDiscrepancies : ({ index, edits, commandLineArgs, }: VerifyTscEditDiscrepanciesInput) => void
 +>verifyTscEditDiscrepancies : (__0: VerifyTscEditDiscrepanciesInput) => void
- 
+
    index,
  >index : number

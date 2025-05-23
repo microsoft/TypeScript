@@ -2,6 +2,6 @@
 +++ new.declareModifierOnImport1.js
 @@= skipped -3, +3 lines =@@
  declare import a = b;
- 
+
  //// [declareModifierOnImport1.js]
 -var a = b;

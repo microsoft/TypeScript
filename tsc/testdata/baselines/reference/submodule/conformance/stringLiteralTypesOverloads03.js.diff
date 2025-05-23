@@ -2,7 +2,7 @@
 +++ new.stringLiteralTypesOverloads03.js
 @@= skipped -46, +46 lines =@@
  let gResult3 = g(helloOrWorld);
- 
+
  //// [stringLiteralTypesOverloads03.js]
 -var hello;
 -var world;
@@ -12,12 +12,8 @@
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        args[_i] = arguments[_i];
 -    }
-+let hello;
-+let world;
-+let helloOrWorld;
-+function f(...args) {
-     return undefined;
- }
+-    return undefined;
+-}
 -var fResult1 = f(hello);
 -var fResult2 = f(world);
 -var fResult3 = f(helloOrWorld);
@@ -26,12 +22,8 @@
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        args[_i] = arguments[_i];
 -    }
-+let fResult1 = f(hello);
-+let fResult2 = f(world);
-+let fResult3 = f(helloOrWorld);
-+function g(...args) {
-     return undefined;
- }
+-    return undefined;
+-}
 -var gResult1 = g(hello);
 -var gResult2 = g(world);
 -var gResult3 = g(helloOrWorld);
@@ -68,6 +60,18 @@
 -declare let gResult1: JustHello;
 -declare let gResult2: JustWorld;
 -declare let gResult3: Base;
++let hello;
++let world;
++let helloOrWorld;
++function f(...args) {
++    return undefined;
++}
++let fResult1 = f(hello);
++let fResult2 = f(world);
++let fResult3 = f(helloOrWorld);
++function g(...args) {
++    return undefined;
++}
 +let gResult1 = g(hello);
 +let gResult2 = g(world);
 +let gResult3 = g(helloOrWorld);

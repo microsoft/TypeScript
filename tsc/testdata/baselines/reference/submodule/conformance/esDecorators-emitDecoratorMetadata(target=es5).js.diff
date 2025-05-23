@@ -2,7 +2,7 @@
 +++ new.esDecorators-emitDecoratorMetadata(target=es5).js
 @@= skipped -48, +48 lines =@@
  });
- 
+
  //// [esDecorators-emitDecoratorMetadata.js]
 -var C = function () {
 -    var _classDecorators = [dec];

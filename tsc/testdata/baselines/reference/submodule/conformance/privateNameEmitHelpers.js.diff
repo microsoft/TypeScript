@@ -1,8 +1,8 @@
 --- old.privateNameEmitHelpers.js
 +++ new.privateNameEmitHelpers.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [main.js]
 -var _C_instances, _C_a, _C_b, _C_c_set;
 -import { __classPrivateFieldGet, __classPrivateFieldSet } from "tslib";

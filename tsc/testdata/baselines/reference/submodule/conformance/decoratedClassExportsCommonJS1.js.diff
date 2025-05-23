@@ -2,7 +2,7 @@
 +++ new.decoratedClassExportsCommonJS1.js
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/conformance/decorators/class/decoratedClassExportsCommonJS1.ts] ////
- 
+
 -//// [decoratedClassExportsCommonJS1.ts]
 +//// [a.ts]
 +declare function forwardRef(x: any): any;
@@ -12,7 +12,7 @@
 @@= skipped -7, +8 lines =@@
      static prop1 = Testing123.prop0;
  }
- 
+
 -//// [decoratedClassExportsCommonJS1.js]
 +//// [a.js]
  "use strict";

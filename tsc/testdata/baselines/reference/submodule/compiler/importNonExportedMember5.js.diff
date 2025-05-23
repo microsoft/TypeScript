@@ -1,7 +1,7 @@
 --- old.importNonExportedMember5.js
 +++ new.importNonExportedMember5.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [a.js]
  "use strict";
 -var Foo = /** @class */ (function () {

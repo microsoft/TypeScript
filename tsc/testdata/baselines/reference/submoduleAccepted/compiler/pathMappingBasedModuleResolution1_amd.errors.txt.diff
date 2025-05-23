@@ -1,6 +1,6 @@
 --- old.pathMappingBasedModuleResolution1_amd.errors.txt
 +++ new.pathMappingBasedModuleResolution1_amd.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -c:/root/tsconfig.json(5,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 -c:/root/tsconfig.json(6,17): error TS5090: Non-relative paths are not allowed when 'baseUrl' is not set. Did you forget a leading './'?
 -
@@ -24,5 +24,4 @@
 -==== c:/root/f1.ts (0 errors) ====
 -    export var x = 1;
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -15,11 +15,11 @@
 ->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
  >n : Symbol(n, Decl(classStaticBlock23.ts, 0, 27))
- 
+
  class C {
 @@= skipped -17, +17 lines =@@
  >nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
- 
+
          console.log(nn)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -31,7 +31,7 @@
    }
 @@= skipped -20, +20 lines =@@
  >nums : Symbol(nums, Decl(classStaticBlock23.ts, 0, 5))
- 
+
            console.log(nn)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))

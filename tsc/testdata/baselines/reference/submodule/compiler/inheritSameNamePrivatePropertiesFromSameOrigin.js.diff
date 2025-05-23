@@ -2,7 +2,7 @@
 +++ new.inheritSameNamePrivatePropertiesFromSameOrigin.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [inheritSameNamePrivatePropertiesFromSameOrigin.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

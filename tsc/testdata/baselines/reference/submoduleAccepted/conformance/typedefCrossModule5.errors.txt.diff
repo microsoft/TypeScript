@@ -1,6 +1,6 @@
 --- old.typedefCrossModule5.errors.txt
 +++ new.typedefCrossModule5.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -[96mmod1.js[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
 -
 -[7m1[0m /** @typedef {number} Foo */
@@ -64,5 +64,4 @@
 -Errors  Files
 -     2  mod1.js[90m:1[0m
 -     2  mod2.js[90m:1[0m
-@@= skipped --1, +1 lines =@@
 +<no content>

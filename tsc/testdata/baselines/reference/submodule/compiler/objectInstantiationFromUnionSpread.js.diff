@@ -1,8 +1,8 @@
 --- old.objectInstantiationFromUnionSpread.js
 +++ new.objectInstantiationFromUnionSpread.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [objectInstantiationFromUnionSpread.js]
 -// #40995
 -var __assign = (this && this.__assign) || function () {

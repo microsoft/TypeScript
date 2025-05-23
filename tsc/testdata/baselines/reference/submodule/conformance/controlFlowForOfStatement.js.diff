@@ -1,8 +1,8 @@
 --- old.controlFlowForOfStatement.js
 +++ new.controlFlowForOfStatement.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [controlFlowForOfStatement.js]
 -var obj;
 -var x;

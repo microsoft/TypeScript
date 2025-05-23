@@ -6,7 +6,7 @@
  >A : Symbol(A, Decl(reboundBaseClassSymbol.ts, 0, 0))
 ->a : Symbol(A.a, Decl(reboundBaseClassSymbol.ts, 0, 13))
 +>a : Symbol(a, Decl(reboundBaseClassSymbol.ts, 0, 13))
- 
+
  module Foo {
  >Foo : Symbol(Foo, Decl(reboundBaseClassSymbol.ts, 0, 26))
 @@= skipped -11, +11 lines =@@

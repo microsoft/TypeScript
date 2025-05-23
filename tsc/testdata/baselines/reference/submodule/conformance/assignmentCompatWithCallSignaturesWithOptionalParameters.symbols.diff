@@ -2,33 +2,33 @@
 +++ new.assignmentCompatWithCallSignaturesWithOptionalParameters.symbols
 @@= skipped -6, +6 lines =@@
  >Base : Symbol(Base, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 0, 0))
- 
+
      a: () => number;
 ->a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a2: (x?: number) => number;
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
  >x : Symbol(x, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 9))
- 
+
      a3: (x: number) => number;
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
  >x : Symbol(x, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 9))
- 
+
      a4: (x: number, y?: number) => number;
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
  >x : Symbol(x, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 9))
  >y : Symbol(y, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 19))
- 
+
      a5: (x?: number, y?: number) => number;
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
  >x : Symbol(x, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 9))
  >y : Symbol(y, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 20))
- 
+
      a6: (x: number, y: number) => number;
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
@@ -36,7 +36,7 @@
  >y : Symbol(y, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 8, 19))
  }
 @@= skipped -45, +45 lines =@@
- 
+
      a = b.a; // ok
  >a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
@@ -44,7 +44,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a = b.a2; // ok
  >a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
@@ -52,7 +52,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
- 
+
      a = b.a3; // error
  >a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
@@ -60,7 +60,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
- 
+
      a = b.a4; // error
  >a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
@@ -68,7 +68,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
- 
+
      a = b.a5; // ok
  >a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
@@ -76,7 +76,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
- 
+
      a = b.a6; // error
  >a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
@@ -84,11 +84,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
- 
+
  var a2: (x?: number) => number; 
  >a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 23, 3))
 @@= skipped -51, +51 lines =@@
- 
+
      a2 = b.a; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 23, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
@@ -96,7 +96,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a2 = b.a2; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 23, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
@@ -104,7 +104,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
- 
+
      a2 = b.a3; // ok, same number of params
  >a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 23, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
@@ -112,7 +112,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
- 
+
      a2 = b.a4; // ok, excess params are optional in b.a3
  >a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 23, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
@@ -120,7 +120,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
- 
+
      a2 = b.a5; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 23, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
@@ -128,7 +128,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
- 
+
      a2 = b.a6; // error
  >a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 23, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
@@ -136,11 +136,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
- 
+
  var a3: (x: number) => number; 
  >a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 34, 3))
 @@= skipped -56, +56 lines =@@
- 
+
      a3 = b.a; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 34, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
@@ -148,7 +148,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a3 = b.a2; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 34, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
@@ -156,7 +156,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
- 
+
      a3 = b.a3; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 34, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
@@ -164,7 +164,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
- 
+
      a3 = b.a4; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 34, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
@@ -172,7 +172,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
- 
+
      a3 = b.a5; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 34, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
@@ -180,7 +180,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
- 
+
      a3 = b.a6; // error
  >a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 34, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
@@ -188,11 +188,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
- 
+
  var a4: (x: number, y?: number) => number;
  >a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 46, 3))
 @@= skipped -58, +58 lines =@@
- 
+
      a4 = b.a; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 46, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
@@ -200,7 +200,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a4 = b.a2; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 46, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
@@ -208,7 +208,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
- 
+
      a4 = b.a3; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 46, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
@@ -216,7 +216,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
- 
+
      a4 = b.a4; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 46, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
@@ -224,7 +224,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
- 
+
      a4 = b.a5; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 46, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
@@ -232,7 +232,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
- 
+
      a4 = b.a6; // ok, same number of params
  >a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 46, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
@@ -240,11 +240,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
- 
+
  var a5: (x?: number, y?: number) => number;
  >a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 58, 3))
 @@= skipped -58, +58 lines =@@
- 
+
      a5 = b.a; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 58, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
@@ -252,7 +252,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a5 = b.a2; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 58, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
@@ -260,7 +260,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 3, 20))
- 
+
      a5 = b.a3; // ok, fewer params in b.a3
  >a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 58, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
@@ -268,7 +268,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 4, 31))
- 
+
      a5 = b.a4; // ok, same number of params
  >a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 58, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
@@ -276,7 +276,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 5, 30))
- 
+
      a5 = b.a5; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 58, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
@@ -284,7 +284,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 6, 42))
- 
+
      a5 = b.a6; // ok, same number of params
  >a5 : Symbol(a5, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 58, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
@@ -292,4 +292,3 @@
  >b : Symbol(b, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithCallSignaturesWithOptionalParameters.ts, 7, 43))
- 

@@ -2,19 +2,19 @@
 +++ new.accessorsOverrideProperty9.types
 @@= skipped -47, +47 lines =@@
  >args : any[]
- 
+
    abstract class MixedClass extends baseClass implements ApiItemContainerMixin {
 ->MixedClass : MixedClass
 +>MixedClass : MixedClass<TBaseClass>
  >baseClass : ApiItem
- 
+
      public constructor(...args: any[]) {
 @@= skipped -22, +22 lines =@@
    }
- 
+
    return MixedClass;
 ->MixedClass : ((abstract new (...args: any[]) => MixedClass) & { prototype: ApiItemContainerMixin<any>.MixedClass; }) & TBaseClass
 +>MixedClass : { new (...args: any[]): MixedClass<TBaseClass>; prototype: MixedClass<any>; } & TBaseClass
  }
- 
+
  // Subclass inheriting from mixin

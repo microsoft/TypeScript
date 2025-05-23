@@ -2,7 +2,7 @@
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=react-jsxdev,module=system,moduledetection=legacy).js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [commentsOnJSXExpressionsArePreserved.js]
 -var _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
 -var Component = /** @class */ (function () {

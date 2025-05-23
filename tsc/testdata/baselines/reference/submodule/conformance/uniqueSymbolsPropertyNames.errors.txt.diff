@@ -16,9 +16,11 @@
  uniqueSymbolsPropertyNames.ts(63,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  uniqueSymbolsPropertyNames.ts(64,3): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 -uniqueSymbolsPropertyNames.ts(64,3): error TS2300: Duplicate identifier '[getUniqueSymbol1()]'.
- 
- 
+-
+-
 -==== uniqueSymbolsPropertyNames.ts (15 errors) ====
++
++
 +==== uniqueSymbolsPropertyNames.ts (16 errors) ====
      interface OpTypes {
        readonly equal: unique symbol;

@@ -2,7 +2,7 @@
 +++ new.partialTypeNarrowedToByTypeGuard.js
 @@= skipped -27, +27 lines =@@
  }
- 
+
  //// [partialTypeNarrowedToByTypeGuard.js]
 -"use strict";
  // type PartialUser = {

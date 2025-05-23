@@ -42,8 +42,8 @@
  overshifts.ts(60,9): error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
 @@= skipped -53, +17 lines =@@
  overshifts.ts(86,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
- 
- 
+
+
 -==== overshifts.ts (54 errors) ====
 +==== overshifts.ts (18 errors) ====
      1 << 1; // ok

@@ -14,9 +14,8 @@
 +/a.ts(3,1): error TS2304: Cannot find name 'nodeModulesCache'.
  /a.ts(4,1): error TS2304: Cannot find name 'mangledNodeModules'.
 -/a.ts(5,1): error TS2552: Cannot find name 'atTypesCache'. Did you mean 'typesCache'?
-+/a.ts(5,1): error TS2304: Cannot find name 'atTypesCache'.
- 
- 
+-
+-
 -!!! error TS2688: Cannot find type definition file for '@mangled/nodemodulescache'.
 -!!! error TS2688:   The file is in the program because:
 -!!! error TS2688:     Entry point of type library '@mangled/nodemodulescache' specified in compilerOptions
@@ -27,6 +26,9 @@
 -!!! error TS2688:   The file is in the program because:
 -!!! error TS2688:     Entry point of type library '@scoped/attypescache' specified in compilerOptions
 -==== /a.ts (2 errors) ====
++/a.ts(5,1): error TS2304: Cannot find name 'atTypesCache'.
++
++
 +==== /a.ts (4 errors) ====
      typesCache;
 +    ~~~~~~~~~~

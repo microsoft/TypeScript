@@ -1,8 +1,8 @@
 --- old.classOrder2.js
 +++ new.classOrder2.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [classOrder2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

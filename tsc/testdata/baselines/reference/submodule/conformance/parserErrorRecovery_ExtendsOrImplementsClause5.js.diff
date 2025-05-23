@@ -2,7 +2,7 @@
 +++ new.parserErrorRecovery_ExtendsOrImplementsClause5.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [parserErrorRecovery_ExtendsOrImplementsClause5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

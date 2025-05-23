@@ -2,7 +2,7 @@
 +++ new.optionalParamReferencingOtherParams3.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [optionalParamReferencingOtherParams3.js]
 -function right(a, b) {
 -    if (a === void 0) { a = b; }

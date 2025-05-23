@@ -1,8 +1,8 @@
 --- old.destructuringWithConstraint.js
 +++ new.destructuringWithConstraint.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [destructuringWithConstraint.js]
 -"use strict";
 -// Repro from #22823

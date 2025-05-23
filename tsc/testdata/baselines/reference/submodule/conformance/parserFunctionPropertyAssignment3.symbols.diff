@@ -6,4 +6,3 @@
  >v : Symbol(v, Decl(parserFunctionPropertyAssignment3.ts, 0, 3))
 ->"foo" : Symbol("foo", Decl(parserFunctionPropertyAssignment3.ts, 0, 9))
 +>"foo" : Symbol(foo, Decl(parserFunctionPropertyAssignment3.ts, 0, 9))
- 

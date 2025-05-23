@@ -2,7 +2,7 @@
 +++ new.strictSubtypeAndNarrowing.types
 @@= skipped -278, +278 lines =@@
  // Type of x = y is y with freshness preserved
- 
+
  function fx10(obj1: { x?: number }, obj2: { x?: number, y?: number }) {
 ->fx10 : (obj1: { x?: number; }, obj2: { x?: number; y?: number; }) => void
 ->obj1 : { x?: number; }
@@ -13,7 +13,7 @@
 +>obj2 : { x?: number | undefined; y?: number | undefined; }
  >x : number | undefined
  >y : number | undefined
- 
+
      obj1 = obj2 = { x: 1, y: 2 };
  >obj1 = obj2 = { x: 1, y: 2 } : { x: number; y: number; }
 ->obj1 : { x?: number; }
@@ -25,7 +25,7 @@
  >x : number
  >1 : 1
 @@= skipped -20, +20 lines =@@
- 
+
      obj2 = obj1 = { x: 1, y: 2 };
  >obj2 = obj1 = { x: 1, y: 2 } : { x: number; y: number; }
 ->obj2 : { x?: number; y?: number; }
@@ -38,18 +38,18 @@
  >1 : 1
 @@= skipped -11, +11 lines =@@
  }
- 
+
  function fx11(): { x?: number } {
 ->fx11 : () => { x?: number; }
 +>fx11 : () => { x?: number | undefined; }
  >x : number | undefined
- 
+
      let obj: { x?: number, y?: number };
 ->obj : { x?: number; y?: number; }
 +>obj : { x?: number | undefined; y?: number | undefined; }
  >x : number | undefined
  >y : number | undefined
- 
+
      return obj = { x: 1, y: 2 };
  >obj = { x: 1, y: 2 } : { x: number; y: number; }
 ->obj : { x?: number; y?: number; }
@@ -59,7 +59,7 @@
  >1 : 1
 @@= skipped -48, +48 lines =@@
  }
- 
+
  function ff2(value: { [index: number]: boolean, length: number } | string) {
 ->ff2 : (value: { [index: number]: boolean; length: number; } | string) => void
 +>ff2 : (value: string | { [index: number]: boolean; length: number; }) => void
@@ -68,7 +68,7 @@
  >length : number
 @@= skipped -22, +22 lines =@@
  }
- 
+
  function ff3(value: string | string[] | { [index: number]: boolean, length: number } | [number, boolean] | number | { length: string } | { a: string } | null | undefined) {
 ->ff3 : (value: string | string[] | { [index: number]: boolean; length: number; } | [number, boolean] | number | { length: string; } | { a: string; } | null | undefined) => void
 +>ff3 : (value: string | number | string[] | { [index: number]: boolean; length: number; } | { length: string; } | { a: string; } | [number, boolean] | null | undefined) => void
@@ -76,17 +76,17 @@
  >index : number
  >length : number
 @@= skipped -50, +50 lines =@@
- 
- 
+
+
  declare function doesValueAtDeepPathSatisfy<
 ->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
 +>doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
- 
+
      ObjT extends object,
      const DeepPathT extends ReadonlyArray<number | string>,
 @@= skipped -41, +41 lines =@@
  >condition : boolean
- 
+
  function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 ->test1 : (foo: Foo) => { value: { type: "A"; }; a?: number; }
 +>test1 : (foo: Foo) => { value: { type: "A"; }; a?: number | undefined; }
@@ -104,12 +104,12 @@
  >'value' : "value"
 @@= skipped -8, +8 lines =@@
  >isA : (arg: unknown) => arg is "A"
- 
+
      return foo;
 ->foo : { value: { type: "A"; }; a?: number; }
 +>foo : { value: { type: "A"; }; a?: number | undefined; }
  }
- 
+
  function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 ->test2 : (foo: Foo) => { value: { type: "A"; }; a?: number; }
 +>test2 : (foo: Foo) => { value: { type: "A"; }; a?: number | undefined; }
@@ -127,10 +127,10 @@
  >'value' : "value"
 @@= skipped -8, +8 lines =@@
  >isB : (arg: unknown) => arg is "B"
- 
+
      return foo;
 ->foo : { value: { type: "A"; }; a?: number; }
 +>foo : { value: { type: "A"; }; a?: number | undefined; }
  }
- 
+
  // Repro from #53063

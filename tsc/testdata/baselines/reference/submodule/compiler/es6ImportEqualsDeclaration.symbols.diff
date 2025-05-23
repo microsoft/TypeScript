@@ -3,7 +3,7 @@
 @@= skipped -3, +3 lines =@@
  import a = require("server");
  >a : Symbol(a, Decl(client.ts, 0, 0))
- 
+
 -=== server.ts ===
 -var a = 10;
 ->a : Symbol(a, Decl(server.ts, 0, 3))

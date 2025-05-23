@@ -1,7 +1,7 @@
 --- old.optionalChainingInArrow.js
 +++ new.optionalChainingInArrow.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [optionalChainingInArrow.js]
  // https://github.com/microsoft/TypeScript/issues/41814
 -var test = function (names) {

@@ -1,10 +1,9 @@
 --- old.checkJsdocTypedefOnlySourceFile.types
 +++ new.checkJsdocTypedefOnlySourceFile.types
 @@= skipped -16, +16 lines =@@
- 
+
  /** @type {exports.SomeName} */
  const myString = 'str';
 ->myString : exports.SomeName
 +>myString : SomeName
  >'str' : "str"
- 

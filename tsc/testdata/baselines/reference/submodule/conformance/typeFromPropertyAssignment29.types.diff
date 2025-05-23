@@ -1,13 +1,13 @@
 --- old.typeFromPropertyAssignment29.types
 +++ new.typeFromPropertyAssignment29.types
 @@= skipped -1, +1 lines =@@
- 
+
  === typeFromPropertyAssignment29.ts ===
  function ExpandoDecl(n: number) {
 ->ExpandoDecl : typeof ExpandoDecl
 +>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
  >n : number
- 
+
      return n.toString();
 @@= skipped -12, +12 lines =@@
  ExpandoDecl.prop = 2
@@ -17,7 +17,7 @@
 +>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
  >prop : number
  >2 : 2
- 
+
  ExpandoDecl.m = function(n: number) {
  >ExpandoDecl.m = function(n: number) {    return n + 1;} : (n: number) => number
  >ExpandoDecl.m : (n: number) => number
@@ -45,14 +45,14 @@
 +>ExpandoDecl : { (n: number): string; prop: number; m: (n: number) => number; }
  >101 : 101
  >length : number
- 
+
  const ExpandoExpr = function (n: number) {
 ->ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m(n: number): number; }
 ->function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m(n: number): number; }
 +>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
 +>function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
  >n : number
- 
+
      return n.toString();
 @@= skipped -27, +27 lines =@@
  ExpandoExpr.prop = { x: 2 }
@@ -102,7 +102,7 @@
 +>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { x?: undefined; y: string; }; m: (n: number) => number; }
  >101 : 101
  >length : number
- 
+
  const ExpandoArrow = (n: number) => n.toString();
 ->ExpandoArrow : { (n: number): string; prop: number; m(n: number): number; }
 ->(n: number) => n.toString() : { (n: number): string; prop: number; m(n: number): number; }
@@ -119,7 +119,7 @@
 +>ExpandoArrow : { (n: number): string; prop: number; m: (n: number) => number; }
  >prop : number
  >2 : 2
- 
+
  ExpandoArrow.m = function(n: number) {
  >ExpandoArrow.m = function(n: number) {    return n + 1;} : (n: number) => number
  >ExpandoArrow.m : (n: number) => number
@@ -130,12 +130,12 @@
  >n : number
 @@= skipped -20, +20 lines =@@
  }
- 
+
  function ExpandoNested(n: number) {
 ->ExpandoNested : typeof ExpandoNested
 +>ExpandoNested : { (n: number): { (m: number): number; total: number; }; also: number; }
  >n : number
- 
+
      const nested = function (m: number) {
 @@= skipped -29, +29 lines =@@
  ExpandoNested.also = -1;

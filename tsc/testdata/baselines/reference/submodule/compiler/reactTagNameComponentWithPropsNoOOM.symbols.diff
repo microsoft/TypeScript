@@ -6,6 +6,6 @@
  >React : Symbol(React, Decl(reactTagNameComponentWithPropsNoOOM.tsx, 2, 6))
 ->ReactHTML : Symbol(React.ReactHTML, Decl(react16.d.ts, 2089, 9))
 +>ReactHTML : Symbol(ReactHTML, Decl(react16.d.ts, 2089, 9))
- 
+
  const classes = "";
  >classes : Symbol(classes, Decl(reactTagNameComponentWithPropsNoOOM.tsx, 5, 5))

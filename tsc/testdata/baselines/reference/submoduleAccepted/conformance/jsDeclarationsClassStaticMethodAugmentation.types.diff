@@ -2,12 +2,12 @@
 +++ new.jsDeclarationsClassStaticMethodAugmentation.types
 @@= skipped -4, +4 lines =@@
  >Clazz : Clazz
- 
+
      static method() { }
 ->method : typeof Clazz.method
 +>method : () => void
  }
- 
+
  Clazz.method.prop = 5;
  >Clazz.method.prop = 5 : 5
 ->Clazz.method.prop : number
@@ -20,4 +20,3 @@
 +>method : () => void
 +>prop : any
  >5 : 5
- 

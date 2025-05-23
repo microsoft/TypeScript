@@ -1,8 +1,8 @@
 --- old.keyofObjectWithGlobalSymbolIncluded.js
 +++ new.keyofObjectWithGlobalSymbolIncluded.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [keyofObjectWithGlobalSymbolIncluded.js]
 -"use strict";
  const obj = {

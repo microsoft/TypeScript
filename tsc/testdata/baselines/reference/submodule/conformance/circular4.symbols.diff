@@ -10,7 +10,7 @@
 +>T : Symbol(T, Decl(b.ts, 2, 27))
    }
  }
- 
+
 @@= skipped -18, +18 lines =@@
      export type T = ns1.nested.T;
  >T : Symbol(T, Decl(b.ts, 2, 27))
@@ -21,4 +21,3 @@
 +>T : Symbol(T, Decl(a.ts, 2, 27))
    }
  }
- 

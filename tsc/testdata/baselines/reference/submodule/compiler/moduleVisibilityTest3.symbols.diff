@@ -1,7 +1,7 @@
 --- old.moduleVisibilityTest3.symbols
 +++ new.moduleVisibilityTest3.symbols
 @@= skipped -21, +21 lines =@@
- 
+
   import modes = _modes;
  >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
 ->_modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 0, 0))
@@ -21,7 +21,7 @@
  >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
 ->Mode : Symbol(modes.Mode)
 +>Mode : Symbol(Mode)
- 
+
           var x:modes.Mode;
  >x : Symbol(x, Decl(moduleVisibilityTest3.ts, 20, 12))
  >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))

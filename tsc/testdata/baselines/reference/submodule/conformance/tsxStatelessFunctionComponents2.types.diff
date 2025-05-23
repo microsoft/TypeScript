@@ -1,18 +1,18 @@
 --- old.tsxStatelessFunctionComponents2.types
 +++ new.tsxStatelessFunctionComponents2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
 +>React : typeof __React
- 
+
  function Greet(x: {name?: string}) {
 ->Greet : (x: { name?: string; }) => JSX.Element
 +>Greet : (x: { name?: string; }) => Element
  >x : { name?: string; }
  >name : string
- 
+
  	return <div>Hello, {x}</div>;
 -><div>Hello, {x}</div> : JSX.Element
 +><div>Hello, {x}</div> : Element
@@ -20,7 +20,7 @@
  >x : { name?: string; }
  >div : any
 @@= skipped -16, +16 lines =@@
- 
+
  class BigGreeter extends React.Component<{ name?: string }, {}> {
  >BigGreeter : BigGreeter
 ->React.Component : React.Component<{ name?: string; }, {}>
@@ -30,11 +30,11 @@
 +>React : typeof __React
 +>Component : typeof Component
  >name : string
- 
+
  	render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
  		return <div></div>;
 -><div></div> : JSX.Element
 +><div></div> : Element
@@ -42,7 +42,7 @@
  >div : any
  	}
 @@= skipped -19, +19 lines =@@
- 
+
  // OK
  let a = <Greet />;
 ->a : JSX.Element
@@ -51,7 +51,7 @@
 +>a : Element
 +><Greet /> : Element
 +>Greet : (x: { name?: string; }) => Element
- 
+
  // OK - always valid to specify 'key'
  let b = <Greet key="k" />;
 ->b : JSX.Element
@@ -61,7 +61,7 @@
 +><Greet key="k" /> : Element
 +>Greet : (x: { name?: string; }) => Element
  >key : string
- 
+
  // Error - not allowed to specify 'ref' on SFCs
  let c = <Greet ref="myRef" />;
 ->c : JSX.Element
@@ -71,8 +71,8 @@
 +><Greet ref="myRef" /> : Element
 +>Greet : (x: { name?: string; }) => Element
  >ref : string
- 
- 
+
+
  // OK - ref is valid for classes
  let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 ->d : JSX.Element
@@ -83,7 +83,7 @@
  >ref : (x: BigGreeter) => string
  >x => x.greeting.substr(10) : (x: BigGreeter) => string
 @@= skipped -37, +37 lines =@@
- 
+
  // Error ('subtr' not on string)
  let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
 ->e : JSX.Element
@@ -94,7 +94,7 @@
  >ref : (x: BigGreeter) => any
  >x => x.greeting.subtr(10) : (x: BigGreeter) => any
 @@= skipped -16, +16 lines =@@
- 
+
  // Error (ref callback is contextually typed)
  let f = <BigGreeter ref={x => x.notARealProperty} />;
 ->f : JSX.Element
@@ -105,7 +105,7 @@
  >ref : (x: BigGreeter) => any
  >x => x.notARealProperty : (x: BigGreeter) => any
 @@= skipped -12, +12 lines =@@
- 
+
  // OK - key is always valid
  let g = <BigGreeter key={100} />;
 ->g : JSX.Element
@@ -115,7 +115,7 @@
  >BigGreeter : typeof BigGreeter
  >key : number
  >100 : 100
- 
+
  // OK - contextually typed intrinsic ref callback parameter
  let h = <div ref={x => x.innerText} />;
 ->h : JSX.Element
@@ -126,7 +126,7 @@
  >ref : (x: HTMLDivElement) => string
  >x => x.innerText : (x: HTMLDivElement) => string
 @@= skipped -20, +20 lines =@@
- 
+
  // Error - property not on ontextually typed intrinsic ref callback parameter
  let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 ->i : JSX.Element

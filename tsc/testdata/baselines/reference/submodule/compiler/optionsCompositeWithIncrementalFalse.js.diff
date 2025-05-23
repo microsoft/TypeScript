@@ -1,8 +1,8 @@
 --- old.optionsCompositeWithIncrementalFalse.js
 +++ new.optionsCompositeWithIncrementalFalse.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [optionsCompositeWithIncrementalFalse.js]
 -var x = "Hello World";
 -

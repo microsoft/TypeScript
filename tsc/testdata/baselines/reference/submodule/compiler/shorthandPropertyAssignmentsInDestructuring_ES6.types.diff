@@ -2,7 +2,7 @@
 +++ new.shorthandPropertyAssignmentsInDestructuring_ES6.types
 @@= skipped -426, +426 lines =@@
  });
- 
+
  function foo({a = 4, b = { x: 5 }}) {
 ->foo : ({ a, b }: { a?: number; b?: { x: number; }; }) => void
 +>foo : (__0: { a?: number; b?: { x: number; }; }) => void

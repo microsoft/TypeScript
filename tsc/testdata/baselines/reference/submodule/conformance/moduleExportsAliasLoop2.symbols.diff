@@ -1,7 +1,7 @@
 --- old.moduleExportsAliasLoop2.symbols
 +++ new.moduleExportsAliasLoop2.symbols
 @@= skipped -9, +9 lines =@@
- 
+
  exports.fn2 = Foo.min;
  >exports.fn2 : Symbol(fn2, Decl(x.js, 1, 14))
 ->exports : Symbol(fn2, Decl(x.js, 1, 14))
@@ -12,4 +12,3 @@
  >Foo : Symbol(Foo, Decl(x.js, 0, 5))
 ->min : Symbol(fn2, Decl(x.js, 0, 13))
 +>min : Symbol(min, Decl(x.js, 0, 13))
- 

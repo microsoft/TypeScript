@@ -2,7 +2,7 @@
 +++ new.errorOnEnumReferenceInCondition.js
 @@= skipped -48, +48 lines =@@
  }
- 
+
  //// [errorOnEnumReferenceInCondition.js]
 -"use strict";
  var Nums;

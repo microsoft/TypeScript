@@ -2,7 +2,7 @@
 +++ new.classPropertyAsProtected.js
 @@= skipped -25, +25 lines =@@
  C.foo();
- 
+
  //// [classPropertyAsProtected.js]
 -var C = /** @class */ (function () {
 -    function C() {

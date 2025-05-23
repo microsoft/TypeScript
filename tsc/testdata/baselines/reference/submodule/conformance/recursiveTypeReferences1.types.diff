@@ -2,22 +2,22 @@
 +++ new.recursiveTypeReferences1.types
 @@= skipped -183, +183 lines =@@
  >RecArray : RecArray<T>
- 
+
  declare function flat<T>(a: RecArray<T>): Array<T>;
 ->flat : <T>(a: RecArray<T>) => Array<T>
 +>flat : <T>(a: RecArray<T>) => T[]
  >a : RecArray<T>
- 
+
  declare function flat1<T>(a: Array<T | Array<T>>): Array<T>
 ->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
 +>flat1 : <T>(a: (T | T[])[]) => T[]
  >a : (T | T[])[]
- 
+
  declare function flat2<T>(a: Array<T | Array<T | Array<T>>>): Array<T>;
 ->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
 +>flat2 : <T>(a: (T | (T | T[])[])[]) => T[]
  >a : (T | (T | T[])[])[]
- 
+
  flat([1, [2, [3]]]);  // number[]
  >flat([1, [2, [3]]]) : number[]
 ->flat : <T>(a: RecArray<T>) => Array<T>
@@ -26,7 +26,7 @@
  >1 : 1
  >[2, [3]] : (number | number[])[]
 @@= skipped -23, +23 lines =@@
- 
+
  flat([[[0]]]);  // number[]
  >flat([[[0]]]) : number[]
 ->flat : <T>(a: RecArray<T>) => Array<T>
@@ -35,7 +35,7 @@
  >[[0]] : number[][]
  >[0] : number[]
 @@= skipped -8, +8 lines =@@
- 
+
  flat([[[[[[[[[[[4]]]]]]]]]]]);  // number[]
  >flat([[[[[[[[[[[4]]]]]]]]]]]) : number[]
 ->flat : <T>(a: RecArray<T>) => Array<T>
@@ -48,7 +48,7 @@
  >[[[[[[[[4]]]]]]]] : number[][][][][][][][]
  >[[[[[[[4]]]]]]] : number[][][][][][][]
 @@= skipped -16, +16 lines =@@
- 
+
  flat([1, 'a', [2]]);  // (string | number)[]
  >flat([1, 'a', [2]]) : (string | number)[]
 ->flat : <T>(a: RecArray<T>) => Array<T>
@@ -57,7 +57,7 @@
  >1 : 1
  >'a' : "a"
 @@= skipped -9, +9 lines =@@
- 
+
  flat([1, [2, 'a']]);  // (string | number)[]
  >flat([1, [2, 'a']]) : (string | number)[]
 ->flat : <T>(a: RecArray<T>) => Array<T>
@@ -66,7 +66,7 @@
  >1 : 1
  >[2, 'a'] : (string | number)[]
 @@= skipped -9, +9 lines =@@
- 
+
  flat([1, ['a']]);  // Error
  >flat([1, ['a']]) : string[]
 ->flat : <T>(a: RecArray<T>) => Array<T>
@@ -75,7 +75,7 @@
  >1 : 1
  >['a'] : string[]
 @@= skipped -8, +8 lines =@@
- 
+
  flat1([1, [2, [3]]]);  // (number | number[])[]
  >flat1([1, [2, [3]]]) : (number | number[])[]
 ->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
@@ -84,7 +84,7 @@
  >1 : 1
  >[2, [3]] : (number | number[])[]
 @@= skipped -10, +10 lines =@@
- 
+
  flat1([[[0]]]);  // number[][]
  >flat1([[[0]]]) : number[][]
 ->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
@@ -93,7 +93,7 @@
  >[[0]] : number[][]
  >[0] : number[]
 @@= skipped -8, +8 lines =@@
- 
+
  flat1([1, 'a', [2]]);  // (string | number)[]
  >flat1([1, 'a', [2]]) : (string | number)[]
 ->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
@@ -102,7 +102,7 @@
  >1 : 1
  >'a' : "a"
 @@= skipped -9, +9 lines =@@
- 
+
  flat1([1, [2, 'a']]);  // (string | number)[]
  >flat1([1, [2, 'a']]) : (string | number)[]
 ->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
@@ -111,7 +111,7 @@
  >1 : 1
  >[2, 'a'] : (string | number)[]
 @@= skipped -9, +9 lines =@@
- 
+
  flat1([1, ['a']]);  // Error
  >flat1([1, ['a']]) : string[]
 ->flat1 : <T>(a: Array<T | Array<T>>) => Array<T>
@@ -120,7 +120,7 @@
  >1 : 1
  >['a'] : string[]
 @@= skipped -8, +8 lines =@@
- 
+
  flat2([1, [2, [3]]]);  // number[]
  >flat2([1, [2, [3]]]) : number[]
 ->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
@@ -129,7 +129,7 @@
  >1 : 1
  >[2, [3]] : (number | number[])[]
 @@= skipped -10, +10 lines =@@
- 
+
  flat2([[[0]]]);  // number[]
  >flat2([[[0]]]) : number[]
 ->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
@@ -138,7 +138,7 @@
  >[[0]] : number[][]
  >[0] : number[]
 @@= skipped -8, +8 lines =@@
- 
+
  flat2([1, 'a', [2]]);  // (string | number)[]
  >flat2([1, 'a', [2]]) : (string | number)[]
 ->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
@@ -147,7 +147,7 @@
  >1 : 1
  >'a' : "a"
 @@= skipped -9, +9 lines =@@
- 
+
  flat2([1, [2, 'a']]);  // (string | number)[]
  >flat2([1, [2, 'a']]) : (string | number)[]
 ->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>
@@ -156,7 +156,7 @@
  >1 : 1
  >[2, 'a'] : (string | number)[]
 @@= skipped -9, +9 lines =@@
- 
+
  flat2([1, ['a']]);  // Error
  >flat2([1, ['a']]) : string[]
 ->flat2 : <T>(a: Array<T | Array<T | Array<T>>>) => Array<T>

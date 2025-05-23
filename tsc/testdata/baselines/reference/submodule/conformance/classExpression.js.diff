@@ -2,7 +2,7 @@
 +++ new.classExpression.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [classExpression.js]
 -var x = /** @class */ (function () {
 -    function C() {

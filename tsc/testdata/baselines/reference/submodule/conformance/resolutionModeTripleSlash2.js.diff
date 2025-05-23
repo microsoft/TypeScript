@@ -1,6 +1,6 @@
 --- old.resolutionModeTripleSlash2.js
 +++ new.resolutionModeTripleSlash2.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/conformance/moduleResolution/resolutionModeTripleSlash2.ts] ////
 -
 -//// [package.json]
@@ -39,5 +39,4 @@
 -
 -//// [app.d.ts]
 -declare function foo(): any;
-@@= skipped --1, +1 lines =@@
 +<no content>

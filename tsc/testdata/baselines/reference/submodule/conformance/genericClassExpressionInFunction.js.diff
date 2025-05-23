@@ -1,8 +1,8 @@
 --- old.genericClassExpressionInFunction.js
 +++ new.genericClassExpressionInFunction.js
 @@= skipped -33, +33 lines =@@
- 
- 
+
+
  //// [genericClassExpressionInFunction.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -36,9 +36,7 @@
 -        }
 -        return class_1;
 -    }(A));
-+    return class extends A {
-+    };
- }
+-}
 -var B2 = /** @class */ (function () {
 -    function B2() {
 -        this.anon = /** @class */ (function (_super) {
@@ -51,6 +49,9 @@
 -    }
 -    return B2;
 -}());
++    return class extends A {
++    };
++}
 +class B2 {
 +    anon = class extends A {
 +    };

@@ -2,7 +2,7 @@
 +++ new.parserClassDeclaration3.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [parserClassDeclaration3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

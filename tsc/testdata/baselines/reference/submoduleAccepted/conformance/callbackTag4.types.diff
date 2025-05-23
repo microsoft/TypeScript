@@ -2,7 +2,7 @@
 +++ new.callbackTag4.types
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/conformance/jsdoc/callbackTag4.ts] ////
- 
+
 -=== ./a.js ===
 +=== a.js ===
  /**
@@ -18,10 +18,10 @@
 +>function (a, b) {    this    return true} : (a: any, b: any) => boolean
 +>a : any
 +>b : any
- 
+
      this
 ->this : { a: string; b: number; }
 +>this : any
- 
+
      return true
  >true : true

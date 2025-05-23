@@ -1,7 +1,7 @@
 --- old.blockScopedBindingUsedBeforeDef.js
 +++ new.blockScopedBindingUsedBeforeDef.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [blockScopedBindingUsedBeforeDef.js]
  // 1:
 -for (var _i = 0, _a = [{}]; _i < _a.length; _i++) {

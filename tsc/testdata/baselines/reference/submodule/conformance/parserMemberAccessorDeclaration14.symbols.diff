@@ -2,7 +2,7 @@
 +++ new.parserMemberAccessorDeclaration14.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(parserMemberAccessorDeclaration14.ts, 0, 0))
- 
+
     set Foo(a: number, b: number) { }
 ->Foo : Symbol(C.Foo, Decl(parserMemberAccessorDeclaration14.ts, 0, 9))
 +>Foo : Symbol(Foo, Decl(parserMemberAccessorDeclaration14.ts, 0, 9))

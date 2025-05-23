@@ -2,7 +2,7 @@
 +++ new.conditionalAnyCheckTypePicksBothBranches.js
 @@= skipped -11, +11 lines =@@
  y = 0; // error
- 
+
  //// [conditionalAnyCheckTypePicksBothBranches.js]
 -var x;
 +let x;

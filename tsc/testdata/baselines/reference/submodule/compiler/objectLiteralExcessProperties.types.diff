@@ -1,7 +1,7 @@
 --- old.objectLiteralExcessProperties.types
 +++ new.objectLiteralExcessProperties.types
 @@= skipped -133, +133 lines =@@
- 
+
      // Excess property checks only on non-generic parts of unions
      const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
 ->obj4 : { name: string; } | (T & { prop: boolean; })

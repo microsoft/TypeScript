@@ -11,15 +11,8 @@
 ->beta.b : string
 ->beta : { b: string; }
 ->b : string
-+>alpha.a + beta.b : any
-+>alpha.a : any
-+>alpha : any
-+>a : any
-+>beta.b : any
-+>beta : any
-+>b : any
- 
- 
+-
+-
 -=== /test/types/alpha/index.d.ts ===
 -/// <reference types="beta" />
 -declare var alpha: { a: string };
@@ -31,4 +24,11 @@
 -declare var beta: { b: string };
 ->beta : { b: string; }
 ->b : string
--
++>alpha.a + beta.b : any
++>alpha.a : any
++>alpha : any
++>a : any
++>beta.b : any
++>beta : any
++>b : any
++

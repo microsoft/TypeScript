@@ -1,8 +1,8 @@
 --- old.functionOverloadsRecursiveGenericReturnType.js
 +++ new.functionOverloadsRecursiveGenericReturnType.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [functionOverloadsRecursiveGenericReturnType.js]
 -var B = /** @class */ (function () {
 -    function B() {

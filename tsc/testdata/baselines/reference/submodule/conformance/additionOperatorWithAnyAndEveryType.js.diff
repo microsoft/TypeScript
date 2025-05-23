@@ -1,7 +1,7 @@
 --- old.additionOperatorWithAnyAndEveryType.js
 +++ new.additionOperatorWithAnyAndEveryType.js
 @@= skipped -42, +42 lines =@@
- 
+
  //// [additionOperatorWithAnyAndEveryType.js]
  function foo() { }
 -var C = /** @class */ (function () {

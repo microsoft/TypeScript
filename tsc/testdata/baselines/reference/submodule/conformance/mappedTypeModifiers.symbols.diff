@@ -2,7 +2,7 @@
 +++ new.mappedTypeModifiers.symbols
 @@= skipped -370, +370 lines =@@
  >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
- 
+
      (x["other"] || 0).toFixed();
 ->(x["other"] || 0).toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>(x["other"] || 0).toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
@@ -10,11 +10,11 @@
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function f2(x: Readonly<Foo>) {
 @@= skipped -17, +17 lines =@@
  >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
- 
+
      x["other"].toFixed();
 ->x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>x["other"].toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
@@ -22,11 +22,11 @@
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function f3(x: Boxified<Foo>) {
 @@= skipped -17, +17 lines =@@
  >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
- 
+
      x["other"].x.toFixed();
 ->x["other"].x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>x["other"].x.toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
@@ -36,11 +36,11 @@
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function f4(x: { [P in keyof Foo]: Foo[P] }) {
 @@= skipped -21, +21 lines =@@
  >prop : Symbol(prop, Decl(mappedTypeModifiers.ts, 76, 12))
- 
+
      x["other"].toFixed();
 ->x["other"].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>x["other"].toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
@@ -48,4 +48,3 @@
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
  }
- 

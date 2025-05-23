@@ -1,8 +1,8 @@
 --- old.constEnum4.js
 +++ new.constEnum4.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [constEnum4.js]
 -if (1)
 -    ;

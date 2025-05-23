@@ -1,8 +1,8 @@
 --- old.emitThisInSuperMethodCall.js
 +++ new.emitThisInSuperMethodCall.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [emitThisInSuperMethodCall.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var User = /** @class */ (function () {
 -    function User() {
-+class User {
-+    sayHello() {
-     }
+-    }
 -    User.prototype.sayHello = function () {
 -    };
 -    return User;
@@ -35,6 +33,9 @@
 -    }
 -    RegisteredUser.prototype.f = function () {
 -        (function () {
++class User {
++    sayHello() {
++    }
 +}
 +class RegisteredUser extends User {
 +    f() {
@@ -46,28 +47,32 @@
 -        });
 -    };
 -    RegisteredUser.prototype.g = function () {
-+        };
-+    }
-+    g() {
-         function inner() {
+-        function inner() {
 -            var _this = this;
 -            (function () {
 -                _super.sayHello.call(_this);
 -            });
-+            () => {
-+                super.sayHello();
-+            };
-         }
+-        }
 -    };
 -    RegisteredUser.prototype.h = function () {
-+    }
-+    h() {
-         function inner() {
+-        function inner() {
 -            _super.sayHello.call(this);
-+            super.sayHello();
-         }
+-        }
 -    };
 -    return RegisteredUser;
 -}(User));
++        };
++    }
++    g() {
++        function inner() {
++            () => {
++                super.sayHello();
++            };
++        }
++    }
++    h() {
++        function inner() {
++            super.sayHello();
++        }
 +    }
 +}

@@ -11,14 +11,16 @@
 -    "  ",
 -    p,
 -    "    ");
-+<div>  {p}    </div>;
- // Emit only p
+-// Emit only p
 -React.createElement("div", null, p);
+-// Emit only p
+-React.createElement("div", null, p);
++<div>  {p}    </div>;
++// Emit only p
 +<div>  
 +      {p}    
 +      </div>;
- // Emit only p
--React.createElement("div", null, p);
++// Emit only p
 +<div>
 +  {p}
 +    </div>;

@@ -2,7 +2,7 @@
 +++ new.wrappedAndRecursiveConstraints2.js
 @@= skipped -8, +8 lines =@@
  var c = new C(new C('')); // error
- 
+
  //// [wrappedAndRecursiveConstraints2.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

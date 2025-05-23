@@ -8,4 +8,3 @@
 +>bar : Symbol(bar, Decl(a.js, 8, 21))
  >value : Symbol(value, Decl(a.js, 13, 8))
  }
- 

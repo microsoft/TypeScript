@@ -1,8 +1,8 @@
 --- old.classAbstractInheritance2.js
 +++ new.classAbstractInheritance2.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [classAbstractInheritance2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

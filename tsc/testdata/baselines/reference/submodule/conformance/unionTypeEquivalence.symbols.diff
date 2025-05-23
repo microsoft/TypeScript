@@ -6,6 +6,6 @@
  >C : Symbol(C, Decl(unionTypeEquivalence.ts, 0, 0))
 ->foo : Symbol(D.foo, Decl(unionTypeEquivalence.ts, 2, 19))
 +>foo : Symbol(foo, Decl(unionTypeEquivalence.ts, 2, 19))
- 
+
  var x: C;
  >x : Symbol(x, Decl(unionTypeEquivalence.ts, 3, 3), Decl(unionTypeEquivalence.ts, 4, 3))

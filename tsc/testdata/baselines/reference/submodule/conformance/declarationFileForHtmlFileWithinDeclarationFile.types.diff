@@ -1,12 +1,12 @@
 --- old.declarationFileForHtmlFileWithinDeclarationFile.types
 +++ new.declarationFileForHtmlFileWithinDeclarationFile.types
 @@= skipped -27, +27 lines =@@
- 
+
  === main.ts ===
  import { mod } from "./file.js";
 ->mod : typeof mod
 +>mod : typeof import("component.d.html")
- 
+
  window.customElements.define("my-html5-element", mod.HTML5Element);
  >window.customElements.define("my-html5-element", mod.HTML5Element) : void
 @@= skipped -10, +10 lines =@@
@@ -19,7 +19,7 @@
 +>mod.HTML5Element : typeof HTML5Element
 +>mod : typeof import("component.d.html")
 +>HTML5Element : typeof HTML5Element
- 
+
  if (document !== mod.default) {
  >document !== mod.default : boolean
  >document : Document
@@ -27,7 +27,7 @@
 ->mod : typeof mod
 +>mod : typeof import("component.d.html")
  >default : Document
- 
+
      document.body.appendChild(mod.blogPost);
 @@= skipped -19, +19 lines =@@
  >body : HTMLElement

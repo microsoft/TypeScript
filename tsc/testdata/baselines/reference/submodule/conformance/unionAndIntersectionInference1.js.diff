@@ -1,8 +1,8 @@
 --- old.unionAndIntersectionInference1.js
 +++ new.unionAndIntersectionInference1.js
 @@= skipped -99, +99 lines =@@
- 
- 
+
+
  //// [unionAndIntersectionInference1.js]
 -// Repro from #2264
  var y = undefined;

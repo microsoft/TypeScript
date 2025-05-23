@@ -2,7 +2,7 @@
 +++ new.protectedAccessThroughContextualThis.js
 @@= skipped -23, +23 lines =@@
  }
- 
+
  //// [protectedAccessThroughContextualThis.js]
 -"use strict";
 -var Foo = /** @class */ (function () {

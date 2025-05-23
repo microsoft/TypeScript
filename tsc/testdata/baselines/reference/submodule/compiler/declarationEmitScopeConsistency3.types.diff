@@ -2,7 +2,7 @@
 +++ new.declarationEmitScopeConsistency3.types
 @@= skipped -6, +6 lines =@@
  >v : "outer"
- 
+
      const f = (v: "inner") => () => null! as typeof v;
 ->f : (v: "inner") => () => typeof v
 ->(v: "inner") => () => null! as typeof v : (v: "inner") => () => typeof v
@@ -21,5 +21,5 @@
 ->f : (v: "inner") => () => typeof v
 +>f : (v: "inner") => () => "inner"
  >null! : never
- 
+
      return r;

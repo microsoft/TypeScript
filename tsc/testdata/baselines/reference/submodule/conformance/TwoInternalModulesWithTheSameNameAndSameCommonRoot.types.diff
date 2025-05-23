@@ -1,7 +1,7 @@
 --- old.TwoInternalModulesWithTheSameNameAndSameCommonRoot.types
 +++ new.TwoInternalModulesWithTheSameNameAndSameCommonRoot.types
 @@= skipped -71, +71 lines =@@
- 
+
  var o = A.Origin;
  >o : { x: number; y: number; }
 ->A.Origin : A.Point
@@ -9,7 +9,7 @@
  >A : typeof A
 ->Origin : A.Point
 +>Origin : Point
- 
+
  var o = A.Utils.mirror(o);
  >o : { x: number; y: number; }
  >A.Utils.mirror(o) : { x: number; y: number; }
@@ -23,7 +23,7 @@
 +>Utils : typeof Utils
 +>mirror : <T extends Point>(p: T) => { x: number; y: number; }
  >o : { x: number; y: number; }
- 
+
  var p: { tl: A.Point; br: A.Point };
 ->p : { tl: A.Point; br: A.Point; }
 ->tl : A.Point
@@ -33,13 +33,13 @@
 ->br : A.Point
 +>br : Point
  >A : any
- 
+
  var p: A.Utils.Plane;
 ->p : { tl: A.Point; br: A.Point; }
 +>p : { tl: Point; br: Point; }
  >A : any
  >Utils : any
- 
+
  var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 ->p : { tl: A.Point; br: A.Point; }
 ->new A.Utils.Plane(o, { x: 1, y: 1 }) : A.Utils.Plane

@@ -17,8 +17,8 @@
  plainJSBinderErrors.js(34,13): error TS1107: Jump target cannot cross function boundary.
  plainJSBinderErrors.js(39,7): error TS1215: Invalid use of 'eval'. Modules are automatically in strict mode.
  plainJSBinderErrors.js(40,7): error TS1215: Invalid use of 'arguments'. Modules are automatically in strict mode.
- 
- 
+
+
 -==== plainJSBinderErrors.js (17 errors) ====
 +==== plainJSBinderErrors.js (21 errors) ====
      export default 12

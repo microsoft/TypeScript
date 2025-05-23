@@ -26,7 +26,7 @@
 ->MakeEntry : <T_1>(data: T_1) => List<T_1>
 +>MakeEntry : <T>(data: T) => List<T>
  >data : T
- 
+
              entry.data = data;
 @@= skipped -70, +70 lines =@@
              else {
@@ -54,7 +54,7 @@
 ->MakeEntry : <T_1>(data: T_1) => List<T_1>
 +>MakeEntry : <T>(data: T) => List<T>
  >data : T
- 
+
              entry.next = this.next;
 @@= skipped -90, +90 lines =@@
              var entry = this.listFactory.MakeEntry(data);
@@ -68,5 +68,5 @@
 ->MakeEntry : <T_1>(data: T_1) => List<T_1>
 +>MakeEntry : <T>(data: T) => List<T>
  >data : T
- 
+
              return this.insertEntryBefore(entry);

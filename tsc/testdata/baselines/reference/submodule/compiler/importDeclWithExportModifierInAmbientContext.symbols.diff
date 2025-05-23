@@ -6,6 +6,6 @@
  >x : Symbol(x, Decl(importDeclWithExportModifierInAmbientContext.ts, 0, 20))
 ->c : Symbol(a, Decl(importDeclWithExportModifierInAmbientContext.ts, 1, 14))
 +>c : Symbol(c, Decl(importDeclWithExportModifierInAmbientContext.ts, 1, 14))
- 
+
      var b: a;
  >b : Symbol(b, Decl(importDeclWithExportModifierInAmbientContext.ts, 6, 7))

@@ -1,8 +1,8 @@
 --- old.instantiatedReturnTypeContravariance.js
 +++ new.instantiatedReturnTypeContravariance.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [instantiatedReturnTypeContravariance.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,9 +23,7 @@
 -    function c() {
 -    }
 -    c.prototype.foo = function () {
-+class c {
-+    foo() {
-         return null;
+-        return null;
 -    };
 -    return c;
 -}());
@@ -33,14 +31,19 @@
 -    __extends(d, _super);
 -    function d() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    d.prototype.foo = function () {
-+}
-+class d extends c {
-+    foo() {
-         return null;
+-        return null;
 -    };
 -    return d;
 -}(c));
++class c {
++    foo() {
++        return null;
++    }
++}
++class d extends c {
++    foo() {
++        return null;
 +    }
 +}

@@ -8,7 +8,7 @@
 +    Types of property 'str' are incompatible.
        Type 'number' is not assignable to type 'string'.
  intraExpressionInferences.ts(133,26): error TS2339: Property 'nonexistent' does not exist on type 'Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>'.
- 
+
 @@= skipped -138, +138 lines =@@
          map(inputs) {
          ~~~

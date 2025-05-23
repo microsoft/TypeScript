@@ -2,7 +2,7 @@
 +++ new.classExpression5.js
 @@= skipped -7, +7 lines =@@
  }().hi();
- 
+
  //// [classExpression5.js]
 -new /** @class */ (function () {
 -    function class_1() {

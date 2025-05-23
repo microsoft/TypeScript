@@ -1,7 +1,7 @@
 --- old.symbolProperty57.types
 +++ new.symbolProperty57.types
 @@= skipped -15, +15 lines =@@
- 
+
  // Should give type 'any'.
  obj[Symbol["nonsense"]];
 ->obj[Symbol["nonsense"]] : error
@@ -11,4 +11,3 @@
 +>Symbol["nonsense"] : any
  >Symbol : SymbolConstructor
  >"nonsense" : "nonsense"
- 

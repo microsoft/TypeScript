@@ -3,7 +3,7 @@
 @@= skipped -8, +8 lines =@@
  >require : Symbol(require)
  >"dep" : Symbol("/node_modules/dep/require", Decl(require.d.ts, 0, 0))
- 
+
 -=== /node_modules/dep/import.d.mts ===
 -export const esm: "esm";
 ->esm : Symbol(esm, Decl(import.d.mts, 0, 12))

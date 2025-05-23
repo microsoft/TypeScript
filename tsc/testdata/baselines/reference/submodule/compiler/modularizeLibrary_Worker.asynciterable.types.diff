@@ -16,4 +16,3 @@
 +>then : <TResult1, TResult2>(onfulfilled?: (value: FileSystemDirectoryHandle) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >async directory => {    for await (const [key, handle] of directory) {        handle.kind;    }} : (directory: FileSystemDirectoryHandle) => Promise<void>
  >directory : FileSystemDirectoryHandle
- 

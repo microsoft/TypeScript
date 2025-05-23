@@ -1,7 +1,7 @@
 --- old.intlNumberFormatES5UseGrouping.types
 +++ new.intlNumberFormatES5UseGrouping.types
 @@= skipped -1, +1 lines =@@
- 
+
  === intlNumberFormatES5UseGrouping.ts ===
  new Intl.NumberFormat('en-GB', { useGrouping: true });
 ->new Intl.NumberFormat('en-GB', { useGrouping: true }) : Intl.NumberFormat
@@ -15,7 +15,7 @@
  >{ useGrouping: true } : { useGrouping: true; }
  >useGrouping : true
  >true : true
- 
+
  new Intl.NumberFormat('en-GB', { useGrouping: 'true' }); // expect error
 ->new Intl.NumberFormat('en-GB', { useGrouping: 'true' }) : Intl.NumberFormat
 ->Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -28,7 +28,7 @@
  >{ useGrouping: 'true' } : { useGrouping: string; }
  >useGrouping : string
  >'true' : "true"
- 
+
  new Intl.NumberFormat('en-GB', { useGrouping: 'always' }); // expect error
 ->new Intl.NumberFormat('en-GB', { useGrouping: 'always' }) : Intl.NumberFormat
 ->Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -41,7 +41,7 @@
  >{ useGrouping: 'always' } : { useGrouping: string; }
  >useGrouping : string
 @@= skipped -31, +31 lines =@@
- 
+
  const { useGrouping } = new Intl.NumberFormat('en-GB').resolvedOptions();
  >useGrouping : boolean
 ->new Intl.NumberFormat('en-GB').resolvedOptions() : Intl.ResolvedNumberFormatOptions
@@ -58,4 +58,3 @@
  >'en-GB' : "en-GB"
 ->resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 +>resolvedOptions : () => ResolvedNumberFormatOptions
- 

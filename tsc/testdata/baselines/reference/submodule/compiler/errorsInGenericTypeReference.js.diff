@@ -1,8 +1,8 @@
 --- old.errorsInGenericTypeReference.js
 +++ new.errorsInGenericTypeReference.js
 @@= skipped -73, +73 lines =@@
- 
- 
+
+
  //// [errorsInGenericTypeReference.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

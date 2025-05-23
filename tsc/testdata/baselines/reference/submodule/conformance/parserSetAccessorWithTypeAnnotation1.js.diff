@@ -2,7 +2,7 @@
 +++ new.parserSetAccessorWithTypeAnnotation1.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [parserSetAccessorWithTypeAnnotation1.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,7 +1,7 @@
 --- old.esDecorators-classExpression-classSuper.5.js
 +++ new.esDecorators-classExpression-classSuper.5.js
 @@= skipped -50, +50 lines =@@
- 
+
  //// [esDecorators-classExpression-classSuper.5.js]
  const x = "x";
 -((() => {

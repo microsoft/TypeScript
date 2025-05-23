@@ -2,7 +2,7 @@
 +++ new.cloduleWithPriorInstantiatedModule.symbols
 @@= skipped -8, +8 lines =@@
  >Someinterface : Symbol(Someinterface, Decl(cloduleWithPriorInstantiatedModule.ts, 1, 18))
- 
+
          foo(): void;
 ->foo : Symbol(Someinterface.foo, Decl(cloduleWithPriorInstantiatedModule.ts, 2, 36))
 +>foo : Symbol(foo, Decl(cloduleWithPriorInstantiatedModule.ts, 2, 36))

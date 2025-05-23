@@ -1,8 +1,8 @@
 --- old.propertyAccessWidening.js
 +++ new.propertyAccessWidening.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [propertyAccessWidening.js]
 -"use strict";
  // Repro from #31762

@@ -1,7 +1,7 @@
 --- old.constructorWithAssignableReturnExpression.js
 +++ new.constructorWithAssignableReturnExpression.js
 @@= skipped -38, +38 lines =@@
- 
+
  //// [constructorWithAssignableReturnExpression.js]
  // a class constructor may return an expression, it must be assignable to the class instance type to be valid
 -var C = /** @class */ (function () {

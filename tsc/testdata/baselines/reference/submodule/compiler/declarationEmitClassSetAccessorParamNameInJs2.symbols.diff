@@ -7,4 +7,3 @@
 ->bar : Symbol(Foo.bar, Decl(foo.js, 0, 18))
 +>bar : Symbol(bar, Decl(foo.js, 0, 18))
  }
- 

@@ -6,7 +6,7 @@
  >m : Symbol(m, Decl(declFileTypeAnnotationTypeLiteral.ts, 3, 1))
 ->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
 +>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
- 
+
      // Indexers
      [n: number]: c;
 @@= skipped -45, +45 lines =@@
@@ -15,4 +15,3 @@
  >m : Symbol(m, Decl(declFileTypeAnnotationTypeLiteral.ts, 3, 1))
 ->c : Symbol(m.c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
 +>c : Symbol(c, Decl(declFileTypeAnnotationTypeLiteral.ts, 4, 10))
- 

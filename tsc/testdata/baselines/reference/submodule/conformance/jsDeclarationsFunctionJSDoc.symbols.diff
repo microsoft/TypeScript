@@ -11,7 +11,7 @@
 +>field : Symbol(field, Decl(source.js, 16, 23))
  >b : Symbol(b, Decl(source.js, 16, 18))
      }
- 
+
 @@= skipped -11, +11 lines =@@
       * @returns {void}
       */
@@ -19,5 +19,5 @@
 ->doIt : Symbol(Aleph.doIt, Decl(source.js, 21, 5))
 +>doIt : Symbol(doIt, Decl(source.js, 21, 5))
  }
- 
+
  /**

@@ -2,7 +2,7 @@
 +++ new.parserVariableDeclaration3.types
 @@= skipped -22, +22 lines =@@
  >WriterAggregator : any
- 
+
        , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
 ->compiler : TypeScript.TypeScriptCompiler
 -><TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr) : TypeScript.TypeScriptCompiler

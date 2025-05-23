@@ -2,7 +2,7 @@
 +++ new.typeGuardOfFormTypeOfEqualEqualHasNoEffect.js
 @@= skipped -37, +37 lines =@@
  }
- 
+
  //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.js]
 -var C = /** @class */ (function () {
 -    function C() {

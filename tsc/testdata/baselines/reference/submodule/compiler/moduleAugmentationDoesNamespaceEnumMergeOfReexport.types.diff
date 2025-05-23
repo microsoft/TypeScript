@@ -6,22 +6,22 @@
  import * as ns from "./reexport";
 ->ns : typeof ns
 +>ns : typeof import("reexport")
- 
+
  declare module "./reexport" {
 ->"./reexport" : typeof ns
 +>"./reexport" : typeof import("reexport")
- 
+
      // Merging an enum into a type-only NS is OK
      export enum Root {
 @@= skipped -21, +21 lines =@@
  }
- 
+
  declare const f: ns.Root.Foo;
 ->f : ns.Root.Foo
 +>f : Foo
  >ns : any
  >Root : any
- 
+
  const g: ns.Root = ns.Root.A;
 ->g : ns.Root
 +>g : Root
@@ -36,10 +36,9 @@
 +>ns : typeof import("reexport")
 +>Root : typeof Root
 +>A : Root.A
- 
+
  f.x;
  >f.x : number
 ->f : ns.Root.Foo
 +>f : Foo
  >x : number
- 

@@ -8,7 +8,7 @@
 ->image : new (width?: number, height?: number) => HTMLImageElement
 +>process : (image: Image) => any
 +>image : Image
- 
+
      return new image(1, 1)
 ->new image(1, 1) : HTMLImageElement
 ->image : new (width?: number, height?: number) => HTMLImageElement

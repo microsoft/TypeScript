@@ -1,14 +1,14 @@
 --- old.circularResolvedSignature.types
 +++ new.circularResolvedSignature.types
 @@= skipped -1, +1 lines =@@
- 
+
  === circularResolvedSignature.ts ===
  declare function useState<S>(initialState: (() => S)): [S, (s: S) => void];
 ->useState : <S>(initialState: (() => S)) => [S, (s: S) => void]
 +>useState : <S>(initialState: () => S) => [S, (s: S) => void]
  >initialState : () => S
  >s : S
- 
+
 @@= skipped -27, +27 lines =@@
  >state : Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>
  >setState : (s: Readonly<{ value: number; foo: (arg: any) => void; bar: (arg: any) => void; }>) => void

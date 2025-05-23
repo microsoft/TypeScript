@@ -2,11 +2,11 @@
 +++ new.typeFromPropertyAssignment20.types
 @@= skipped -13, +13 lines =@@
  >inner : () => void
- 
+
          function Async() {
 ->Async : typeof Async
 +>Async : () => void
- 
+
              this._trampolineEnabled = true;
  >this._trampolineEnabled = true : true
  >this._trampolineEnabled : any
@@ -25,7 +25,7 @@
  >disableTrampolineIfNecessary : any
  >function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        } : (b: any) => void
 @@= skipped -12, +12 lines =@@
- 
+
                  this._trampolineEnabled = false;
  >this._trampolineEnabled = false : false
 ->this._trampolineEnabled : boolean

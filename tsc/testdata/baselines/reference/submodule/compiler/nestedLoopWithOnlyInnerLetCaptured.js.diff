@@ -2,7 +2,7 @@
 +++ new.nestedLoopWithOnlyInnerLetCaptured.js
 @@= skipped -7, +7 lines =@@
          doSomething(() => a2);
- 
+
  //// [nestedLoopWithOnlyInnerLetCaptured.js]
 -for (var _i = 0, _a = []; _i < _a.length; _i++) {
 -    var a1 = _a[_i];

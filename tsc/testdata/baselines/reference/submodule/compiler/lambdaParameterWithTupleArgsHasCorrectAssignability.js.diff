@@ -1,8 +1,8 @@
 --- old.lambdaParameterWithTupleArgsHasCorrectAssignability.js
 +++ new.lambdaParameterWithTupleArgsHasCorrectAssignability.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [lambdaParameterWithTupleArgsHasCorrectAssignability.js]
 -"use strict";
 -var GenericClass = /** @class */ (function () {

@@ -2,7 +2,7 @@
 +++ new.importCallExpressionNestedUMD2.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [foo.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

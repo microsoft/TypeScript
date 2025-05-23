@@ -2,18 +2,18 @@
 +++ new.topLevelAwait.1(module=system,target=es2015).symbols
 @@= skipped -41, +41 lines =@@
  >C1 : Symbol(C1, Decl(index.ts, 16, 18))
- 
+
      await() {}
 ->await : Symbol(C1.await, Decl(index.ts, 19, 10))
 +>await : Symbol(await, Decl(index.ts, 19, 10))
  }
  class C2 {
  >C2 : Symbol(C2, Decl(index.ts, 21, 1))
- 
+
      get await() { return 1; }
 ->await : Symbol(C2.await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
 +>await : Symbol(await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
- 
+
      set await(value) { }
 ->await : Symbol(C2.await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
 +>await : Symbol(await, Decl(index.ts, 22, 10), Decl(index.ts, 23, 29))
@@ -21,7 +21,7 @@
  }
  class C3 {
  >C3 : Symbol(C3, Decl(index.ts, 25, 1))
- 
+
      await = 1;
 ->await : Symbol(C3.await, Decl(index.ts, 26, 10))
 +>await : Symbol(await, Decl(index.ts, 26, 10))
@@ -29,7 +29,7 @@
  ({
      await() {}
 @@= skipped -40, +40 lines =@@
- 
+
  // property access name should be ok
  C1.prototype.await;
 ->C1.prototype.await : Symbol(C1.await, Decl(index.ts, 19, 10))
@@ -41,7 +41,7 @@
 ->await : Symbol(C1.await, Decl(index.ts, 19, 10))
 +>prototype : Symbol(prototype)
 +>await : Symbol(await, Decl(index.ts, 19, 10))
- 
+
  // await in decorators
  declare const dec: any;
 @@= skipped -49, +49 lines =@@
@@ -53,6 +53,6 @@
  >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
- 
+
  for await (const item of arr) {
  >item : Symbol(item, Decl(other.ts, 8, 16))

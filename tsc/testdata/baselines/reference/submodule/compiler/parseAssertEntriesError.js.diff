@@ -1,8 +1,8 @@
 --- old.parseAssertEntriesError.js
 +++ new.parseAssertEntriesError.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

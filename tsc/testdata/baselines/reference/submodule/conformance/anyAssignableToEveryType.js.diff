@@ -1,7 +1,7 @@
 --- old.anyAssignableToEveryType.js
 +++ new.anyAssignableToEveryType.js
 @@= skipped -48, +48 lines =@@
- 
+
  //// [anyAssignableToEveryType.js]
  var a;
 -var C = /** @class */ (function () {

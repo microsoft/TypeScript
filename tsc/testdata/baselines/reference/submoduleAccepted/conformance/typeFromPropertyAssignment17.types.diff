@@ -10,7 +10,7 @@
 +>require('./minimatch') : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
  >require : any
  >'./minimatch' : "./minimatch"
- 
+
  mini.M.defaults()
  >mini.M.defaults() : any
  >mini.M.defaults : (def: any) => any
@@ -21,7 +21,7 @@
 +>mini : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
 +>M : { (): void; defaults: (def: any) => any; }
  >defaults : (def: any) => any
- 
+
  var m = new mini.M()
 ->m : M
 ->new mini.M() : M
@@ -33,7 +33,7 @@
 +>mini.M : { (): void; defaults: (def: any) => any; }
 +>mini : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
 +>M : { (): void; defaults: (def: any) => any; }
- 
+
  m.m()
 ->m.m() : void
 ->m.m : () => void
@@ -43,14 +43,14 @@
 +>m.m : any
 +>m : any
 +>m : any
- 
+
  mini.filter()
  >mini.filter() : void
  >mini.filter : () => void
 ->mini : typeof mini
 +>mini : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
  >filter : () => void
- 
+
  === types.d.ts ===
 @@= skipped -42, +42 lines =@@
  === minimatch.js ===
@@ -66,7 +66,7 @@
 +>module : { minimatch: { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }; }
 +>exports : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
 +>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
- 
+
  minimatch.M = M
 ->minimatch.M = M : typeof M
 ->minimatch.M : typeof M
@@ -78,7 +78,7 @@
 +>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
 +>M : { (): void; defaults: (def: any) => any; }
 +>M : { (): void; defaults: (def: any) => any; }
- 
+
  minimatch.filter = filter
  >minimatch.filter = filter : () => void
  >minimatch.filter : () => void
@@ -86,9 +86,9 @@
 +>minimatch : { (): void; M: { (): void; defaults: (def: any) => any; }; filter: () => void; }
  >filter : () => void
  >filter : () => void
- 
+
 @@= skipped -25, +25 lines =@@
- 
+
      return minimatch()
  >minimatch() : void
 ->minimatch : typeof minimatch
@@ -120,4 +120,3 @@
 ->M : typeof M
 +>M : { (): void; defaults: (def: any) => any; }
  }
- 

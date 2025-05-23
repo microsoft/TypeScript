@@ -2,39 +2,39 @@
 +++ new.checkJsdocTypeTagOnObjectProperty1.types
 @@= skipped -6, +6 lines =@@
  >"hello Lol" : "hello Lol"
- 
+
  const obj = {
 ->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
 ->{  /** @type {string|undefined} */  foo: undefined,  /** @type {string|undefined} */  bar: "42",  /** @type {function(number): number} */  method1(n1) {      return n1 + 42;  },  /** @type {string} */  lol,  /** @type {number} */  ['b' + 'ar1']: 42,  /** @type {function(number): number} */  arrowFunc: (num) => num + 42} : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
 +>obj : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
 +>{  /** @type {string|undefined} */  foo: undefined,  /** @type {string|undefined} */  bar: "42",  /** @type {function(number): number} */  method1(n1) {      return n1 + 42;  },  /** @type {string} */  lol,  /** @type {number} */  ['b' + 'ar1']: 42,  /** @type {function(number): number} */  arrowFunc: (num) => num + 42} : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
- 
+
    /** @type {string|undefined} */
    foo: undefined,
  >foo : string | undefined
 +>undefined : string | undefined
  >undefined : undefined
- 
+
    /** @type {string|undefined} */
    bar: "42",
  >bar : string | undefined
 +>"42" : string | undefined
  >"42" : "42"
- 
+
    /** @type {function(number): number} */
    method1(n1) {
 ->method1 : (n1: number) => number
 ->n1 : number
 +>method1 : (n1: any) => any
 +>n1 : any
- 
+
        return n1 + 42;
 ->n1 + 42 : number
 ->n1 : number
 +>n1 + 42 : any
 +>n1 : any
  >42 : 42
- 
+
    },
 @@= skipped -34, +36 lines =@@
  >'b' + 'ar1' : string
@@ -42,7 +42,7 @@
  >'ar1' : "ar1"
 +>42 : number
  >42 : 42
- 
+
    /** @type {function(number): number} */
    arrowFunc: (num) => num + 42
 ->arrowFunc : (arg0: number) => number
@@ -65,13 +65,13 @@
 +>obj : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
  >foo : string | undefined
  >'string' : "string"
- 
+
  obj.lol
  >obj.lol : string
 ->obj : { [x: string]: string | number | ((arg0: number) => number) | undefined; foo: string | undefined; bar: string | undefined; method1(arg0: number): number; lol: string; arrowFunc: (arg0: number) => number; }
 +>obj : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
  >lol : string
- 
+
  obj.bar = undefined;
  >obj.bar = undefined : undefined
  >obj.bar : string | undefined
@@ -79,7 +79,7 @@
 +>obj : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
  >bar : string | undefined
  >undefined : undefined
- 
+
  var k = obj.method1(0);
 ->k : number
 ->obj.method1(0) : number
@@ -92,7 +92,7 @@
 +>obj : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
 +>method1 : (n1: any) => any
  >0 : 0
- 
+
  obj.bar1 = "42";
  >obj.bar1 = "42" : "42"
 ->obj.bar1 : string | number | ((arg0: number) => number) | undefined
@@ -102,7 +102,7 @@
 +>obj : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
 +>bar1 : any
  >"42" : "42"
- 
+
  obj.arrowFunc(0);
 ->obj.arrowFunc(0) : number
 ->obj.arrowFunc : (arg0: number) => number
@@ -113,4 +113,3 @@
 +>obj : { [x: string]: any; foo: string | undefined; bar: string | undefined; method1: (n1: any) => any; lol: string; arrowFunc: function; }
 +>arrowFunc : function
  >0 : 0
- 

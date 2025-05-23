@@ -1,8 +1,8 @@
 --- old.genericRestArityStrict.js
 +++ new.genericRestArityStrict.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [genericRestArityStrict.js]
 -"use strict";
 -// Repro from #25559

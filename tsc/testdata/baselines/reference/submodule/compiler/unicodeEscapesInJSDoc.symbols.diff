@@ -2,7 +2,7 @@
 +++ new.unicodeEscapesInJSDoc.symbols
 @@= skipped -10, +10 lines =@@
  >aa : Symbol(aa, Decl(file.js, 4, 15))
- 
+
      console.log(a + aa);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -14,7 +14,7 @@
  }
 @@= skipped -17, +17 lines =@@
  >aa : Symbol(aa, Decl(file.js, 12, 15))
- 
+
      console.log(a + aa);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))

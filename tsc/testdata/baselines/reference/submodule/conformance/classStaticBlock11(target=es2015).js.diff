@@ -1,8 +1,8 @@
 --- old.classStaticBlock11(target=es2015).js
 +++ new.classStaticBlock11(target=es2015).js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [classStaticBlock11.js]
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");
@@ -23,11 +23,11 @@
 -        _C_x.set(this, 1);
 -        __classPrivateFieldSet(this, _C_x, x, "f");
 +        this.#x = x;
-     }
++    }
 +    static {
 +        // getX has privileged access to #x
 +        getX = (obj) => obj.#x;
-+    }
+     }
  }
 -_C_x = new WeakMap();
 -(() => {

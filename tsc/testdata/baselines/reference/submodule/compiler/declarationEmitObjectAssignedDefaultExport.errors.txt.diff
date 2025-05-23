@@ -1,6 +1,6 @@
 --- old.declarationEmitObjectAssignedDefaultExport.errors.txt
 +++ new.declarationEmitObjectAssignedDefaultExport.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.ts(7,1): error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
 -
 -
@@ -48,5 +48,4 @@
 -    ~~~
 -!!! error TS2742: The inferred type of 'default' cannot be named without a reference to 'styled-components/node_modules/hoist-non-react-statics'. This is likely not portable. A type annotation is necessary.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

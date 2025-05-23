@@ -1,7 +1,7 @@
 --- old.es5andes6module.types
 +++ new.es5andes6module.types
 @@= skipped -1, +1 lines =@@
- 
+
  === es5andes6module.ts ===
  export default class A
 ->A : A

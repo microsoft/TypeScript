@@ -1,7 +1,7 @@
 --- old.classMergedWithInterfaceMultipleBasesNoError.js
 +++ new.classMergedWithInterfaceMultipleBasesNoError.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [classMergedWithInterfaceMultipleBasesNoError.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

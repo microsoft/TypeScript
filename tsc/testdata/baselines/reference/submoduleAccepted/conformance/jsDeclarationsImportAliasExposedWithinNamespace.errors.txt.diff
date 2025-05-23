@@ -2,6 +2,9 @@
 +++ new.jsDeclarationsImportAliasExposedWithinNamespace.errors.txt
 @@= skipped -0, +0 lines =@@
 -file2.js(1,9): error TS18042: 'myTypes' is a type and cannot be imported in JavaScript files. Use 'import("./file.js").myTypes' in a JSDoc type annotation.
+-
+-
+-==== file.js (0 errors) ====
 +file.js(4,11): error TS2315: Type 'Object' is not generic.
 +file.js(10,51): error TS2300: Duplicate identifier 'myTypes'.
 +file.js(13,13): error TS2300: Duplicate identifier 'myTypes'.
@@ -10,9 +13,8 @@
 +file2.js(6,11): error TS2315: Type 'Object' is not generic.
 +file2.js(12,23): error TS2702: 'myTypes' only refers to a type, but is being used as a namespace here.
 +file2.js(17,12): error TS2702: 'testFnTypes' only refers to a type, but is being used as a namespace here.
- 
- 
--==== file.js (0 errors) ====
++
++
 +==== file.js (5 errors) ====
      /**
       * @namespace myTypes

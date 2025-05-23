@@ -1,8 +1,8 @@
 --- old.memberAccessMustUseModuleInstances.js
 +++ new.memberAccessMustUseModuleInstances.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [memberAccessMustUseModuleInstances_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

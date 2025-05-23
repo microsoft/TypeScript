@@ -1,8 +1,8 @@
 --- old.ifDoWhileStatements.js
 +++ new.ifDoWhileStatements.js
 @@= skipped -164, +164 lines =@@
- 
- 
+
+
  //// [ifDoWhileStatements.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -6,27 +6,22 @@
  exports.publicClassWithWithPrivateTypeParameters = exports.publicClass = void 0;
 -var privateClass = /** @class */ (function () {
 -    function privateClass() {
-+class privateClass {
-+}
-+class publicClass {
-+}
-+exports.publicClass = publicClass;
-+class publicClassWithWithPrivateTypeParameters {
-+    static myPrivateStaticMethod1() {
-     }
+-    }
 -    return privateClass;
 -}());
 -var publicClass = /** @class */ (function () {
 -    function publicClass() {
-+    myPrivateMethod1() {
-     }
+-    }
 -    return publicClass;
 -}());
--exports.publicClass = publicClass;
++class privateClass {
++}
++class publicClass {
++}
+ exports.publicClass = publicClass;
 -var publicClassWithWithPrivateTypeParameters = /** @class */ (function () {
 -    function publicClassWithWithPrivateTypeParameters() {
-+    static myPrivateStaticMethod2() {
-     }
+-    }
 -    publicClassWithWithPrivateTypeParameters.myPrivateStaticMethod1 = function () {
 -    };
 -    publicClassWithWithPrivateTypeParameters.prototype.myPrivateMethod1 = function () {
@@ -41,18 +36,26 @@
 -    };
 -    return publicClassWithWithPrivateTypeParameters;
 -}());
--exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
--
--
--//// [staticMethodWithTypeParameterExtendsClauseDeclFile.d.ts]
--export declare class publicClass {
++class publicClassWithWithPrivateTypeParameters {
++    static myPrivateStaticMethod1() {
++    }
++    myPrivateMethod1() {
++    }
++    static myPrivateStaticMethod2() {
++    }
 +    myPrivateMethod2() {
 +    }
 +    static myPublicStaticMethod() {
 +    }
 +    myPublicMethod() {
 +    }
- }
++}
+ exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;
+-
+-
+-//// [staticMethodWithTypeParameterExtendsClauseDeclFile.d.ts]
+-export declare class publicClass {
+-}
 -export declare class publicClassWithWithPrivateTypeParameters {
 -    private static myPrivateStaticMethod1;
 -    private myPrivateMethod1;
@@ -61,4 +64,3 @@
 -    static myPublicStaticMethod<T extends publicClass>(): void;
 -    myPublicMethod<T extends publicClass>(): void;
 -}
-+exports.publicClassWithWithPrivateTypeParameters = publicClassWithWithPrivateTypeParameters;

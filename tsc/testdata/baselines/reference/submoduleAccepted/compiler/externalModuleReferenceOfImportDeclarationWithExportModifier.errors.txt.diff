@@ -1,8 +1,7 @@
 --- old.externalModuleReferenceOfImportDeclarationWithExportModifier.errors.txt
 +++ new.externalModuleReferenceOfImportDeclarationWithExportModifier.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +externalModuleReferenceOfImportDeclarationWithExportModifier_1.ts(1,31): error TS2307: Cannot find module 'externalModuleReferenceOfImportDeclarationWithExportModifier_0' or its corresponding type declarations.
 +
 +

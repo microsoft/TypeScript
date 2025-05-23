@@ -1,8 +1,8 @@
 --- old.bindingPatternInParameter01.js
 +++ new.bindingPatternInParameter01.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [bindingPatternInParameter01.js]
 -var nestedArray = [[[1, 2]], [[3, 4]]];
 -nestedArray.forEach(function (_a) {

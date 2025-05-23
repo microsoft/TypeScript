@@ -1,7 +1,7 @@
 --- old.taggedTemplatesInDifferentScopes.js
 +++ new.taggedTemplatesInDifferentScopes.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [taggedTemplatesInDifferentScopes.js]
  "use strict";
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {

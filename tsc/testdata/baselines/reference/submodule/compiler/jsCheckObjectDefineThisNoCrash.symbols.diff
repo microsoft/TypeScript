@@ -11,7 +11,7 @@
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >this : Symbol(C, Decl(jsCheckObjectDefineThisNoCrash.js, 0, 0))
  >value : Symbol(value, Decl(jsCheckObjectDefineThisNoCrash.js, 3, 46))
- 
+
          Object.defineProperty(this._prop, "num", { value: 12 });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))

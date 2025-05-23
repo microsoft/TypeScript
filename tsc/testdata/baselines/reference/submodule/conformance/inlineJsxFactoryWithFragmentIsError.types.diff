@@ -6,6 +6,6 @@
  import * as React from "./renderer";
 ->React : typeof React
 +>React : typeof import("renderer")
- 
+
  <><h></h></>
  ><><h></h></> : any

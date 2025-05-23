@@ -2,7 +2,7 @@
 +++ new.commentsOnJSXExpressionsArePreserved(jsx=preserve,module=commonjs,moduledetection=auto).js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [commentsOnJSXExpressionsArePreserved.jsx]
 -var Component = /** @class */ (function () {
 -    function Component() {

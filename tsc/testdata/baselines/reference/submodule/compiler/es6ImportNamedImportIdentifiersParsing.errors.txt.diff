@@ -19,8 +19,8 @@
  es6ImportNamedImportIdentifiersParsing.ts(5,21): error TS2300: Duplicate identifier 'default'.
 -es6ImportNamedImportIdentifiersParsing.ts(5,36): error TS2792: Cannot find module 'somemodule'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 +es6ImportNamedImportIdentifiersParsing.ts(5,36): error TS2307: Cannot find module 'somemodule' or its corresponding type declarations.
- 
- 
+
+
  ==== es6ImportNamedImportIdentifiersParsing.ts (13 errors) ====
 @@= skipped -17, +17 lines =@@
               ~~~~~

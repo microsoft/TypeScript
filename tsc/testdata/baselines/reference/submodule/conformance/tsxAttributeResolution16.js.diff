@@ -1,7 +1,7 @@
 --- old.tsxAttributeResolution16.js
 +++ new.tsxAttributeResolution16.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [file.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

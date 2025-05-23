@@ -9,7 +9,7 @@
  >foo : string | undefined
  >bar : string | undefined
  >baz : boolean | undefined
- 
+
  let c1 = !true ? {} : opts;
 ->c1 : { foo?: string; bar?: string; baz?: boolean; }
 ->!true ? {} : opts : { foo?: string; bar?: string; baz?: boolean; }
@@ -20,7 +20,7 @@
  >{} : {}
 ->opts : { foo?: string; bar?: string; baz?: boolean; }
 +>opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
- 
+
  let c2 = !true ? opts : {};
 ->c2 : { foo?: string; bar?: string; baz?: boolean; }
 ->!true ? opts : {} : { foo?: string; bar?: string; baz?: boolean; }
@@ -31,5 +31,5 @@
 ->opts : { foo?: string; bar?: string; baz?: boolean; }
 +>opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
  >{} : {}
- 
+
  let c3 = !true ? { a: 0, b: 0 } : {};

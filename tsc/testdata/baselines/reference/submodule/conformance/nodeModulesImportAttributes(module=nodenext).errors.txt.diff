@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 +index.ts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
  otherc.cts(1,35): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
- 
- 
+
+
 -==== index.ts (0 errors) ====
 +==== index.ts (1 errors) ====
      import json from "./package.json" with { type: "json" };

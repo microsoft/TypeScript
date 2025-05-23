@@ -1,8 +1,7 @@
 --- old.jsDeclarationsTypeReferences.errors.txt
 +++ new.jsDeclarationsTypeReferences.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(3,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +
 +

@@ -1,8 +1,8 @@
 --- old.privateNamesNoDelete.js
 +++ new.privateNamesNoDelete.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [privateNamesNoDelete.js]
 -"use strict";
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {

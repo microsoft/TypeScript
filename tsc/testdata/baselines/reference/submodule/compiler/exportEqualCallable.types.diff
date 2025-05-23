@@ -6,11 +6,11 @@
  import connect = require('exportEqualCallable_0');
 ->connect : () => any
 +>connect : any
- 
+
  connect();
  >connect() : any
 ->connect : () => any
 +>connect : any
- 
+
  === exportEqualCallable_0.ts ===
  var server: {

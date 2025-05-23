@@ -2,7 +2,7 @@
 +++ new.objectTypeWithCallSignatureHidingMembersOfExtendedFunction.types
 @@= skipped -56, +56 lines =@@
  >data : number
- 
+
  var r1e = i['hm']; // should be Object
 ->r1e : error
 ->i['hm'] : error
@@ -10,11 +10,11 @@
 +>i['hm'] : any
  >i : I
  >'hm' : "hm"
- 
+
  var x: {
 ->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 +>x : { (): void; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
- 
+
      (): void;
      apply(a: any, b?: any): void;
 @@= skipped -25, +25 lines =@@
@@ -24,7 +24,7 @@
 ->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 +>x : { (): void; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
  >apply : (a: any, b?: any) => void
- 
+
  var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
 @@= skipped -8, +8 lines =@@
  >thisArg : number
@@ -33,21 +33,21 @@
 ->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 +>x : { (): void; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
  >call : (thisArg: number, ...argArray: number[]) => any
- 
+
  var r2c = x.arguments;
  >r2c : any
  >x.arguments : any
 ->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 +>x : { (): void; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
  >arguments : any
- 
+
  var r2d = x.data;
  >r2d : number
  >x.data : number
 ->x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 +>x : { (): void; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
  >data : number
- 
+
  var r2e = x['hm']; // should be Object
 ->r2e : error
 ->x['hm'] : error
@@ -56,4 +56,3 @@
 +>x['hm'] : any
 +>x : { (): void; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
  >'hm' : "hm"
- 

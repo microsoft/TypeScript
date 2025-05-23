@@ -2,14 +2,14 @@
 +++ new.commentsExternalModules.symbols
 @@= skipped -5, +5 lines =@@
  >extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
- 
+
  extMod.m1.fooExport();
 ->extMod.m1.fooExport : Symbol(extMod.m1.fooExport, Decl(commentsExternalModules_0.ts, 15, 5))
 ->extMod.m1 : Symbol(extMod.m1, Decl(commentsExternalModules_0.ts, 0, 0))
  >extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
 ->m1 : Symbol(extMod.m1, Decl(commentsExternalModules_0.ts, 0, 0))
 ->fooExport : Symbol(extMod.m1.fooExport, Decl(commentsExternalModules_0.ts, 15, 5))
- 
+
  var newVar = new extMod.m1.m2.c();
  >newVar : Symbol(newVar, Decl(commentsExternalModules_1.ts, 3, 3))
 ->extMod.m1.m2.c : Symbol(extMod.m1.m2.c, Decl(commentsExternalModules_0.ts, 9, 22))
@@ -19,14 +19,14 @@
 ->m1 : Symbol(extMod.m1, Decl(commentsExternalModules_0.ts, 0, 0))
 ->m2 : Symbol(extMod.m1.m2, Decl(commentsExternalModules_0.ts, 7, 5))
 ->c : Symbol(extMod.m1.m2.c, Decl(commentsExternalModules_0.ts, 9, 22))
- 
+
  extMod.m4.fooExport();
 ->extMod.m4.fooExport : Symbol(extMod.m4.fooExport, Decl(commentsExternalModules_0.ts, 41, 5))
 ->extMod.m4 : Symbol(extMod.m4, Decl(commentsExternalModules_0.ts, 22, 26))
  >extMod : Symbol(extMod, Decl(commentsExternalModules_1.ts, 0, 0))
 ->m4 : Symbol(extMod.m4, Decl(commentsExternalModules_0.ts, 22, 26))
 ->fooExport : Symbol(extMod.m4.fooExport, Decl(commentsExternalModules_0.ts, 41, 5))
- 
+
  var newVar2 = new extMod.m4.m2.c();
  >newVar2 : Symbol(newVar2, Decl(commentsExternalModules_1.ts, 5, 3))
 ->extMod.m4.m2.c : Symbol(extMod.m4.m2.c, Decl(commentsExternalModules_0.ts, 35, 22))
@@ -36,7 +36,7 @@
 ->m4 : Symbol(extMod.m4, Decl(commentsExternalModules_0.ts, 22, 26))
 ->m2 : Symbol(extMod.m4.m2, Decl(commentsExternalModules_0.ts, 32, 5))
 ->c : Symbol(extMod.m4.m2.c, Decl(commentsExternalModules_0.ts, 35, 22))
- 
+-
 -=== commentsExternalModules_0.ts ===
 -/** Module comment*/
 -export module m1 {
@@ -139,4 +139,3 @@
 ->m4 : Symbol(m4, Decl(commentsExternalModules_0.ts, 22, 26))
 ->m2 : Symbol(m4.m2, Decl(commentsExternalModules_0.ts, 32, 5))
 ->c : Symbol(m4.m2.c, Decl(commentsExternalModules_0.ts, 35, 22))
--

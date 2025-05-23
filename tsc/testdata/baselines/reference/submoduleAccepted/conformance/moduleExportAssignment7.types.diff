@@ -1,7 +1,7 @@
 --- old.moduleExportAssignment7.types
 +++ new.moduleExportAssignment7.types
 @@= skipped -20, +20 lines =@@
- 
+
  /** @typedef {() => number} buz */
  module.exports = {
 ->module.exports = {    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
@@ -14,7 +14,7 @@
 +>module : { export=: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }; }
 +>exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
 +>{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz: () => number; literal: string; }
- 
+
      Thing,
  >Thing : typeof Thing
 @@= skipped -38, +38 lines =@@
@@ -37,7 +37,7 @@
 +>e : any
 +>f : any
 +>g : any
- 
+
      return a.x + b.y + c() + d() + e() + f() + g.length
 ->a.x + b.y + c() + d() + e() + f() + g.length : number
 ->a.x + b.y + c() + d() + e() + f() : number
@@ -86,7 +86,7 @@
 +>g : any
 +>length : any
  }
- 
+
  /**
 @@= skipped -45, +45 lines =@@
   * @param {typeof import("./mod").literal} g
@@ -98,21 +98,21 @@
  >b : typeof AnotherThing
  >c : () => number
 @@= skipped -37, +37 lines =@@
- 
+
  === index.ts ===
  function types(
 ->types : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: import("./mod").foo, d: import("./mod").qux, e: import("./mod").baz, f: import("./mod").buz, g: import("./mod").literal) => any
 +>types : (a: any, b: any, c: any, d: any, e: any, f: any, g: any) => any
- 
+
      a: import('./mod').Thing,
  >a : any
 @@= skipped -18, +18 lines =@@
  >e : any
- 
+
      f: import('./mod').buz,
 ->f : import("mod").buz
 +>f : any
- 
+
      g: import('./mod').literal,
  >g : any
 @@= skipped -25, +25 lines =@@
@@ -127,10 +127,10 @@
  >g : any
  >length : any
  }
- 
+
  function values(
 ->values : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: typeof import("./mod").buz, g: typeof import("./mod").literal) => any
 +>values : (a: typeof Thing, b: typeof AnotherThing, c: () => number, d: () => number, e: () => number, f: any, g: string) => any
- 
+
      a: typeof import('./mod').Thing,
  >a : typeof Thing

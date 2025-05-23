@@ -12,8 +12,8 @@
 -noInfer.ts(66,14): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ foo: number; }'.
 -  Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
 +noInfer.ts(66,14): error TS2741: Property 'foo' is missing in type '{}' but required in type '{ foo: number; }'.
- 
- 
+
+
  ==== noInfer.ts (10 errors) ====
 @@= skipped -79, +77 lines =@@
      const g = { x: 3, y: 2 };

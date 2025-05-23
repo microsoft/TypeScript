@@ -2,10 +2,9 @@
 +++ new.unusedTypeParametersNotCheckedByNoUnusedLocals.types
 @@= skipped -4, +4 lines =@@
  >f : <T>() => void
- 
+
  type T<T> = { };
 ->T : globalThis.T<T>
 +>T : T<T>
- 
+
  interface I<T> { };
- 

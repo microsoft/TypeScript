@@ -1,8 +1,8 @@
 --- old.privateNamesUnique-1.js
 +++ new.privateNamesUnique-1.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [privateNamesUnique-1.js]
 -"use strict";
 -var _A_foo, _B_foo;

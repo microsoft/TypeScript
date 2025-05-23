@@ -2,7 +2,7 @@
 +++ new.classExtendingClass.js
 @@= skipped -33, +33 lines =@@
  var r8 = D2.other(1);
- 
+
  //// [classExtendingClass.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

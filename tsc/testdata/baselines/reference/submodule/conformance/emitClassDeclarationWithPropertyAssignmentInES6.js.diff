@@ -1,7 +1,7 @@
 --- old.emitClassDeclarationWithPropertyAssignmentInES6.js
 +++ new.emitClassDeclarationWithPropertyAssignmentInES6.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [emitClassDeclarationWithPropertyAssignmentInES6.js]
  class C {
 -    constructor() {

@@ -2,16 +2,15 @@
 +++ new.genericCloduleInModule.types
 @@= skipped -22, +22 lines =@@
  }
- 
+
  var b: A.B<number>;
 ->b : A.B<number>
 +>b : B<number>
  >A : any
- 
+
  b.foo();
  >b.foo() : void
  >b.foo : () => void
 ->b : A.B<number>
 +>b : B<number>
  >foo : () => void
- 

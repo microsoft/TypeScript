@@ -2,7 +2,7 @@
 +++ new.enumLiteralTypes2.js
 @@= skipped -115, +115 lines =@@
  }
- 
+
  //// [enumLiteralTypes2.js]
 +var Choice;
 +(function (Choice) {

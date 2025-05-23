@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-fields-nonStaticAbstract(target=es5).js
 +++ new.esDecorators-classDeclaration-fields-nonStaticAbstract(target=es5).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-fields-nonStaticAbstract.js]
 -var field3 = "field3";
 -var C = /** @class */ (function () {

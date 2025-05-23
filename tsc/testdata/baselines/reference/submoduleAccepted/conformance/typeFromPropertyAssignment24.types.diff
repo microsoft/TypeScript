@@ -15,9 +15,9 @@
 +>Inner : any
 +>Message : any
  >function() {} : () => void
- 
+
  };
- 
+
  var y = new Outer.Inner()
 ->y : Inner
 ->new Outer.Inner() : Inner
@@ -29,7 +29,7 @@
 +>Outer.Inner : any
 +>Outer : {}
 +>Inner : any
- 
+
  y.name
 ->y.name : () => string
 ->y : Inner
@@ -37,24 +37,24 @@
 +>y.name : any
 +>y : any
 +>name : any
- 
+
  /** @type {Outer.Inner} should be instance type, not static type */
  var x;
  >x : Inner
- 
+
  x.name
 ->x.name : () => string
 +>x.name : any
  >x : Inner
 ->name : () => string
 +>name : any
- 
+
  === def.js ===
  var Outer = {}
 ->Outer : typeof Outer
 +>Outer : {}
  >{} : {}
- 
+
  Outer.Inner = class {
  >Outer.Inner = class {  name() {    return 'hi'  }} : typeof Inner
 ->Outer.Inner : typeof Inner
@@ -64,5 +64,5 @@
 +>Outer : {}
 +>Inner : any
  >class {  name() {    return 'hi'  }} : typeof Inner
- 
+
    name() {

@@ -9,7 +9,7 @@
  >Object : ObjectConstructor
 ->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
- 
+
  var t = Object.create({ a: 1, b: "" });  // {a: number, b: string }
  >t : any
  >Object.create({ a: 1, b: "" }) : any
@@ -31,7 +31,7 @@
 ->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  >union : { a: number; b: string; }
- 
+
  var e = Object.create({});               // {}
  >e : any
  >Object.create({}) : any
@@ -41,7 +41,7 @@
 ->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  >{} : {}
- 
+
  var o = Object.create(<object>{});       // object
  >o : any
  >Object.create(<object>{}) : any
@@ -52,7 +52,7 @@
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  ><object>{} : object
  >{} : {}
- 
+
  var a = Object.create(null, {});           // any
  >a : any
  >Object.create(null, {}) : any
@@ -62,7 +62,7 @@
 ->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  >{} : {}
- 
+
  var a = Object.create({ a: 1, b: "" }, {});
  >a : any
  >Object.create({ a: 1, b: "" }, {}) : any
@@ -85,7 +85,7 @@
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  >union : { a: number; b: string; }
  >{} : {}
- 
+
  var a = Object.create({}, {});
  >a : any
  >Object.create({}, {}) : any
@@ -96,7 +96,7 @@
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  >{} : {}
  >{} : {}
- 
+
  var a = Object.create(<object>{}, {});
  >a : any
  >Object.create(<object>{}, {}) : any

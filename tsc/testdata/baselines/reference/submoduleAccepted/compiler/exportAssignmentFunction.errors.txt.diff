@@ -1,8 +1,7 @@
 --- old.exportAssignmentFunction.errors.txt
 +++ new.exportAssignmentFunction.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +exportAssignmentFunction_B.ts(1,26): error TS2307: Cannot find module 'exportAssignmentFunction_A' or its corresponding type declarations.
 +
 +

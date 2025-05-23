@@ -6,4 +6,3 @@
  function f() {}
 ->f : () => number
 +>f : () => void
- 

@@ -1,7 +1,7 @@
 --- old.tsxReactEmit6.js
 +++ new.tsxReactEmit6.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [file.js]
  //// [react-consumer.js]
 -var __assign = (this && this.__assign) || function () {

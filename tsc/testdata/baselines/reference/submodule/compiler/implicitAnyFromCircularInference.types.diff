@@ -2,12 +2,12 @@
 +++ new.implicitAnyFromCircularInference.types
 @@= skipped -20, +20 lines =@@
  >d : any
- 
+
  function f() { return f; }
 ->f : () => typeof f
 ->f : () => typeof f
 +>f : () => ???
 +>f : () => ???
- 
+
  // Error expected
  function g() { return g(); }

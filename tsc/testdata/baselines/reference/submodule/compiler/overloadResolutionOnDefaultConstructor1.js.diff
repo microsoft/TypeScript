@@ -2,7 +2,7 @@
 +++ new.overloadResolutionOnDefaultConstructor1.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [overloadResolutionOnDefaultConstructor1.js]
 -var Bar = /** @class */ (function () {
 -    function Bar() {

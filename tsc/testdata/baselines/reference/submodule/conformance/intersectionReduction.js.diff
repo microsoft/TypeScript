@@ -1,7 +1,7 @@
 --- old.intersectionReduction.js
 +++ new.intersectionReduction.js
 @@= skipped -144, +144 lines =@@
- 
+
  //// [intersectionReduction.js]
  ab.kind; // Error
 -var a = x;

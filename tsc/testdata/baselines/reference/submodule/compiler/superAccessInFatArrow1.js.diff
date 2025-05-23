@@ -2,7 +2,7 @@
 +++ new.superAccessInFatArrow1.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [superAccessInFatArrow1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

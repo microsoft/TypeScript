@@ -1,7 +1,7 @@
 --- old.privateFieldAssignabilityFromUnknown.js
 +++ new.privateFieldAssignabilityFromUnknown.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [privateFieldAssignabilityFromUnknown.js]
  "use strict";
 -var _Class_field;

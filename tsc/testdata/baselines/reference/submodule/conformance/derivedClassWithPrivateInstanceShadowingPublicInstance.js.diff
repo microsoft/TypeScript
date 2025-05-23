@@ -2,7 +2,7 @@
 +++ new.derivedClassWithPrivateInstanceShadowingPublicInstance.js
 @@= skipped -34, +34 lines =@@
  Derived.a = 2; // error
- 
+
  //// [derivedClassWithPrivateInstanceShadowingPublicInstance.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -36,17 +36,17 @@
 -    });
 -    return Base;
 -}());
--// error, not a subtype
++    }
++    get a() { return 1; }
++    set a(v) { }
++}
+ // error, not a subtype
 -var Derived = /** @class */ (function (_super) {
 -    __extends(Derived, _super);
 -    function Derived() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Derived.prototype.fn = function () {
-+    get a() { return 1; }
-+    set a(v) { }
-+}
-+// error, not a subtype
 +class Derived extends Base {
 +    x;
 +    fn() {

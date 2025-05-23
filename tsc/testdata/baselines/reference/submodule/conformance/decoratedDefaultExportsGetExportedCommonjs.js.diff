@@ -1,7 +1,7 @@
 --- old.decoratedDefaultExportsGetExportedCommonjs.js
 +++ new.decoratedDefaultExportsGetExportedCommonjs.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [a.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

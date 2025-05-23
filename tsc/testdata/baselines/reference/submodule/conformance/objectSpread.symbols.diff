@@ -8,6 +8,6 @@
 ->m : Symbol(C.m, Decl(objectSpread.ts, 72, 16))
 +>p : Symbol(p, Decl(objectSpread.ts, 72, 9))
 +>m : Symbol(m, Decl(objectSpread.ts, 72, 16))
- 
+
  let c: C = new C()
  >c : Symbol(c, Decl(objectSpread.ts, 73, 3))

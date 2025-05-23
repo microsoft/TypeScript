@@ -7,16 +7,16 @@
 ->test : string
 +>test : any
  >'add' : "add"
- 
+
  /** @type {import("./mod1").TestEnum} */
  const tost = 'remove'
 ->tost : string
 +>tost : any
  >'remove' : "remove"
- 
+
  === value.js ===
 @@= skipped -14, +14 lines =@@
- 
+
  /** @type {TestEnum} */
  const tist = TestEnum.ADD
 ->tist : string

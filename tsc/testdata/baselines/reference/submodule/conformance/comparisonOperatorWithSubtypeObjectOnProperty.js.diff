@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithSubtypeObjectOnProperty.js
 @@= skipped -80, +80 lines =@@
  var rh4 = b2 !== a2;
- 
+
  //// [comparisonOperatorWithSubtypeObjectOnProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

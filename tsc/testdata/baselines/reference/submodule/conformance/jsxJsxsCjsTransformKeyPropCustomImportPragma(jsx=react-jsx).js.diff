@@ -1,7 +1,7 @@
 --- old.jsxJsxsCjsTransformKeyPropCustomImportPragma(jsx=react-jsx).js
 +++ new.jsxJsxsCjsTransformKeyPropCustomImportPragma(jsx=react-jsx).js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [preact.js]
  "use strict";
 -var __assign = (this && this.__assign) || function () {

@@ -9,4 +9,3 @@
 +>method : (functionDeclaration: any) => void
 +>functionDeclaration : any
  }
- 

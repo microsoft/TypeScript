@@ -7,7 +7,7 @@
 ->this.x : Symbol(C.x, Decl(a.js, 0, 14), Decl(a.js, 0, 33))
 ->this : Symbol(C, Decl(a.js, 0, 0))
 ->x : Symbol(C.x, Decl(a.js, 0, 14), Decl(a.js, 0, 33))
- 
+
  /** @type {number} */
  C.prototype.x;
 ->C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
@@ -15,9 +15,8 @@
  >C : Symbol(C, Decl(a.js, 0, 0))
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 
+
  new C().x;
 ->new C().x : Symbol(C.x, Decl(a.js, 0, 14), Decl(a.js, 0, 33))
  >C : Symbol(C, Decl(a.js, 0, 0))
 ->x : Symbol(C.x, Decl(a.js, 0, 14), Decl(a.js, 0, 33))
- 

@@ -5,8 +5,8 @@
 -use.js(6,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 +use.js(3,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +use.js(4,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
- 
- 
+
+
  ==== use.js (2 errors) ====
      /// <reference path='./types.d.ts'/>
      var mod = require('./mod');

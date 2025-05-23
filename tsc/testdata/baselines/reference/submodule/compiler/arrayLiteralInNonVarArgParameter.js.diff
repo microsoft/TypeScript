@@ -1,8 +1,8 @@
 --- old.arrayLiteralInNonVarArgParameter.js
 +++ new.arrayLiteralInNonVarArgParameter.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [arrayLiteralInNonVarArgParameter.js]
 -function panic(val) {
 -    var opt = [];

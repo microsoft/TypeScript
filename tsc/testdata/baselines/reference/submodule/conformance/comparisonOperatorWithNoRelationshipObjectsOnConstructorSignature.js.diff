@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.js
 @@= skipped -170, +170 lines =@@
  var r8b7 = b7 !== a7;
- 
+
  //// [comparisonOperatorWithNoRelationshipObjectsOnConstructorSignature.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

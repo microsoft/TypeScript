@@ -11,7 +11,7 @@
 +        Type '???' is not assignable to type '???'. Two different types with this name exist, but they are unrelated.
  varianceAnnotationValidation.ts(27,1): error TS2322: Type 'AnimalContainer<Animal>' is not assignable to type 'AnimalContainer<Dog>'.
    Property 'bark' is missing in type 'Animal' but required in type 'Dog'.
- 
+
 @@= skipped -13, +13 lines =@@
      
      interface Controller<out T> {

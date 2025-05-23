@@ -2,7 +2,7 @@
 +++ new.unreachableDeclarations(preserveconstenums=false).symbols
 @@= skipped -7, +7 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 6, 11))
- 
+
      console.log(EnumA.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -14,7 +14,7 @@
  >EnumA : Symbol(EnumA, Decl(unreachableDeclarations.ts, 11, 5))
 ->Value : Symbol(EnumA.Value, Decl(unreachableDeclarations.ts, 13, 16))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 13, 16))
- 
+
      console.log(EnumB.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -26,12 +26,12 @@
  >EnumB : Symbol(EnumB, Decl(unreachableDeclarations.ts, 13, 24))
 ->Value : Symbol(EnumB.Value, Decl(unreachableDeclarations.ts, 14, 22))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 14, 22))
- 
+
      return;
- 
+
 @@= skipped -21, +21 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 6, 11))
- 
+
          console.log(EnumA.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -43,7 +43,7 @@
  >EnumA : Symbol(EnumA, Decl(unreachableDeclarations.ts, 11, 5))
 ->Value : Symbol(EnumA.Value, Decl(unreachableDeclarations.ts, 13, 16))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 13, 16))
- 
+
          console.log(EnumB.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -56,22 +56,22 @@
 ->Value : Symbol(EnumB.Value, Decl(unreachableDeclarations.ts, 14, 22))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 14, 22))
      }
- 
+
      enum EnumA { Value }
  >EnumA : Symbol(EnumA, Decl(unreachableDeclarations.ts, 11, 5))
 ->Value : Symbol(EnumA.Value, Decl(unreachableDeclarations.ts, 13, 16))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 13, 16))
- 
+
      const enum EnumB { Value }
  >EnumB : Symbol(EnumB, Decl(unreachableDeclarations.ts, 13, 24))
 ->Value : Symbol(EnumB.Value, Decl(unreachableDeclarations.ts, 14, 22))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 14, 22))
  }
- 
+
  function func2() {
 @@= skipped -32, +32 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 22, 11))
- 
+
      console.log(EnumA.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -83,12 +83,12 @@
  >EnumA : Symbol(EnumA, Decl(unreachableDeclarations.ts, 26, 5))
 ->Value : Symbol(EnumA.Value, Decl(unreachableDeclarations.ts, 28, 16))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 28, 16))
- 
+
      return;
- 
+
 @@= skipped -13, +13 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 22, 11))
- 
+
          console.log(EnumA.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -101,17 +101,17 @@
 ->Value : Symbol(EnumA.Value, Decl(unreachableDeclarations.ts, 28, 16))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 28, 16))
      }
- 
+
      enum EnumA { Value }
  >EnumA : Symbol(EnumA, Decl(unreachableDeclarations.ts, 26, 5))
 ->Value : Symbol(EnumA.Value, Decl(unreachableDeclarations.ts, 28, 16))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 28, 16))
  }
- 
+
  function func3() {
 @@= skipped -20, +20 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 36, 11))
- 
+
      console.log(EnumB.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -123,12 +123,12 @@
  >EnumB : Symbol(EnumB, Decl(unreachableDeclarations.ts, 40, 5))
 ->Value : Symbol(EnumB.Value, Decl(unreachableDeclarations.ts, 42, 22))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 42, 22))
- 
+
      return;
- 
+
 @@= skipped -13, +13 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 36, 11))
- 
+
          console.log(EnumB.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -141,17 +141,17 @@
 ->Value : Symbol(EnumB.Value, Decl(unreachableDeclarations.ts, 42, 22))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 42, 22))
      }
- 
+
      const enum EnumB { Value }
  >EnumB : Symbol(EnumB, Decl(unreachableDeclarations.ts, 40, 5))
 ->Value : Symbol(EnumB.Value, Decl(unreachableDeclarations.ts, 42, 22))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 42, 22))
  }
- 
+
  function func4() {
 @@= skipped -20, +20 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 50, 11))
- 
+
      console.log(ClassA.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -163,12 +163,12 @@
  >ClassA : Symbol(ClassA, Decl(unreachableDeclarations.ts, 54, 5))
 ->Value : Symbol(ClassA.Value, Decl(unreachableDeclarations.ts, 56, 18))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 56, 18))
- 
+
      return;
- 
+
 @@= skipped -13, +13 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 50, 11))
- 
+
          console.log(ClassA.Value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -181,17 +181,17 @@
 ->Value : Symbol(ClassA.Value, Decl(unreachableDeclarations.ts, 56, 18))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 56, 18))
      }
- 
+
      class ClassA { static Value = 1234; }
  >ClassA : Symbol(ClassA, Decl(unreachableDeclarations.ts, 54, 5))
 ->Value : Symbol(ClassA.Value, Decl(unreachableDeclarations.ts, 56, 18))
 +>Value : Symbol(Value, Decl(unreachableDeclarations.ts, 56, 18))
  }
- 
+
  function func5() {
 @@= skipped -20, +20 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 68, 8))
- 
+
  	console.log(Bar.A);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -203,7 +203,7 @@
  >Bar : Symbol(Bar, Decl(unreachableDeclarations.ts, 77, 29))
 ->A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
 +>A : Symbol(A, Decl(unreachableDeclarations.ts, 79, 11))
- 
+
  	console.log(blah.prop);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -213,7 +213,7 @@
  >blah.prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
  >blah : Symbol(blah, Decl(unreachableDeclarations.ts, 77, 6))
  >prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
- 
+
  	console.log(new Foo())
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -221,7 +221,7 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >Foo : Symbol(Foo, Decl(unreachableDeclarations.ts, 79, 15))
- 
+
  	console.log(Baz.value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -233,12 +233,12 @@
  >Baz : Symbol(Baz, Decl(unreachableDeclarations.ts, 81, 23))
 ->value : Symbol(Baz.value, Decl(unreachableDeclarations.ts, 83, 29))
 +>value : Symbol(value, Decl(unreachableDeclarations.ts, 83, 29))
- 
- 
+
+
  	return;
 @@= skipped -36, +36 lines =@@
  >aFunc : Symbol(aFunc, Decl(unreachableDeclarations.ts, 68, 8))
- 
+
  		console.log(Bar.A);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -250,7 +250,7 @@
  >Bar : Symbol(Bar, Decl(unreachableDeclarations.ts, 77, 29))
 ->A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
 +>A : Symbol(A, Decl(unreachableDeclarations.ts, 79, 11))
- 
+
  		console.log(blah.prop);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -260,7 +260,7 @@
  >blah.prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
  >blah : Symbol(blah, Decl(unreachableDeclarations.ts, 77, 6))
  >prop : Symbol(prop, Decl(unreachableDeclarations.ts, 77, 15))
- 
+
  		console.log(new Foo())
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -268,7 +268,7 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >Foo : Symbol(Foo, Decl(unreachableDeclarations.ts, 79, 15))
- 
+
  		console.log(Baz.value);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -281,19 +281,19 @@
 ->value : Symbol(Baz.value, Decl(unreachableDeclarations.ts, 83, 29))
 +>value : Symbol(value, Decl(unreachableDeclarations.ts, 83, 29))
  	}
- 
+
  	const blah = { prop: 1234 };
 @@= skipped -36, +36 lines =@@
- 
+
  	enum Bar { A }
  >Bar : Symbol(Bar, Decl(unreachableDeclarations.ts, 77, 29))
 ->A : Symbol(Bar.A, Decl(unreachableDeclarations.ts, 79, 11))
 +>A : Symbol(A, Decl(unreachableDeclarations.ts, 79, 11))
- 
+
  	class Foo { x = 1234 }
  >Foo : Symbol(Foo, Decl(unreachableDeclarations.ts, 79, 15))
 ->x : Symbol(Foo.x, Decl(unreachableDeclarations.ts, 81, 12))
 +>x : Symbol(x, Decl(unreachableDeclarations.ts, 81, 12))
- 
+
  	namespace Baz { export const value = 1234 }
  >Baz : Symbol(Baz, Decl(unreachableDeclarations.ts, 81, 23))

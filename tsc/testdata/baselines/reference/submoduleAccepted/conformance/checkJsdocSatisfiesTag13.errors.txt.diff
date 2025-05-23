@@ -1,6 +1,6 @@
 --- old.checkJsdocSatisfiesTag13.errors.txt
 +++ new.checkJsdocSatisfiesTag13.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(5,14): error TS2353: Object literal may only specify known properties, and 'g' does not exist in type '{ f: (x: string) => string; }'.
 -
 -
@@ -13,5 +13,4 @@
 -                 ~
 -!!! error TS2353: Object literal may only specify known properties, and 'g' does not exist in type '{ f: (x: string) => string; }'.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

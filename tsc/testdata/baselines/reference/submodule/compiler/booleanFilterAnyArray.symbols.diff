@@ -2,7 +2,7 @@
 +++ new.booleanFilterAnyArray.symbols
 @@= skipped -23, +23 lines =@@
  >T : Symbol(T, Decl(booleanFilterAnyArray.ts, 6, 14))
- 
+
      filter<S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>;
 ->filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 90))
 +>filter : Symbol(filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 90))
@@ -11,7 +11,7 @@
  >cb1 : Symbol(cb1, Decl(booleanFilterAnyArray.ts, 7, 24))
 @@= skipped -14, +14 lines =@@
  >S : Symbol(S, Decl(booleanFilterAnyArray.ts, 7, 11))
- 
+
      filter(cb2: (value: T) => unknown): Ari<T>;
 ->filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 90))
 +>filter : Symbol(filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 90))
@@ -19,7 +19,7 @@
  >value : Symbol(value, Decl(booleanFilterAnyArray.ts, 8, 17))
  >T : Symbol(T, Decl(booleanFilterAnyArray.ts, 6, 14))
 @@= skipped -21, +21 lines =@@
- 
+
  var xs = anys.filter(Bullean)
  >xs : Symbol(xs, Decl(booleanFilterAnyArray.ts, 12, 3), Decl(booleanFilterAnyArray.ts, 13, 3))
 ->anys.filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 90))
@@ -28,10 +28,10 @@
 ->filter : Symbol(Ari.filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 90))
 +>filter : Symbol(filter, Decl(booleanFilterAnyArray.ts, 6, 18), Decl(booleanFilterAnyArray.ts, 7, 90))
  >Bullean : Symbol(Bullean, Decl(booleanFilterAnyArray.ts, 0, 0), Decl(booleanFilterAnyArray.ts, 10, 11))
- 
+
  declare let realanys: any[];
 @@= skipped -13, +13 lines =@@
- 
+
  var ys = realanys.filter(Boolean)
  >ys : Symbol(ys, Decl(booleanFilterAnyArray.ts, 16, 3), Decl(booleanFilterAnyArray.ts, 17, 3))
 ->realanys.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -40,10 +40,10 @@
 ->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
  var foo = [{ name: 'x' }]
 @@= skipped -16, +16 lines =@@
- 
+
  var foor = foo.filter(x => x.name)
  >foor : Symbol(foor, Decl(booleanFilterAnyArray.ts, 20, 3), Decl(booleanFilterAnyArray.ts, 21, 3))
 ->foo.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -55,7 +55,7 @@
  >x.name : Symbol(name, Decl(booleanFilterAnyArray.ts, 19, 12))
  >x : Symbol(x, Decl(booleanFilterAnyArray.ts, 21, 22))
 @@= skipped -14, +14 lines =@@
- 
+
  var foos = [true, true, false, null].filter((thing): thing is boolean => thing !== null)
  >foos : Symbol(foos, Decl(booleanFilterAnyArray.ts, 22, 3), Decl(booleanFilterAnyArray.ts, 23, 3))
 ->[true, true, false, null].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))

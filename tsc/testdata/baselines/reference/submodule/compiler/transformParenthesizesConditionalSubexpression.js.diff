@@ -2,7 +2,7 @@
 +++ new.transformParenthesizesConditionalSubexpression.js
 @@= skipped -5, +5 lines =@@
  var b = { p  : (true ? { [K] : 'v'} as any : null) }
- 
+
  //// [transformParenthesizesConditionalSubexpression.js]
 -var _a, _b;
  var K = 'k';

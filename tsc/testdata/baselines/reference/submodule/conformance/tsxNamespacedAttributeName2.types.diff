@@ -2,7 +2,7 @@
 +++ new.tsxNamespacedAttributeName2.types
 @@= skipped -4, +4 lines =@@
  >React : any
- 
+
  const a = <svg:path a:b={1}></svg:path>;
 ->a : error
 -><svg:path a:b={1}></svg:path> : error
@@ -22,7 +22,7 @@
 ->path : error
 +>svg : any
 +>path : any
- 
+
  const b = <svg : path a:b={1}></svg : path>;
 ->b : error
 -><svg : path a:b={1}></svg : path> : error
@@ -42,4 +42,3 @@
 ->path : error
 +>svg : any
 +>path : any
- 

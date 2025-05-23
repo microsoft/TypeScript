@@ -1,7 +1,7 @@
 --- old.thisTypeInFunctions2.js
 +++ new.thisTypeInFunctions2.js
 @@= skipped -56, +56 lines =@@
- 
+
  //// [thisTypeInFunctions2.js]
  extend1({
 -    init: function () {

@@ -2,7 +2,7 @@
 +++ new.argumentsObjectIterator02_ES5.symbols
 @@= skipped -18, +18 lines =@@
  >blah : Symbol(blah, Decl(argumentsObjectIterator02_ES5.ts, 1, 7))
- 
+
          result.push(arg + arg);
 ->result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>result.push : Symbol(push, Decl(lib.es5.d.ts, --, --))

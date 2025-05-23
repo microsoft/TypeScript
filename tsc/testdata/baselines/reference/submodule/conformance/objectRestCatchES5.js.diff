@@ -2,7 +2,7 @@
 +++ new.objectRestCatchES5.js
 @@= skipped -4, +4 lines =@@
  try {} catch ({ a, ...b }) {}
- 
+
  //// [objectRestCatchES5.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

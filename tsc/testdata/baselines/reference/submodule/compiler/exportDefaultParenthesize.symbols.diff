@@ -8,6 +8,5 @@
 ->'foo' : Symbol(['foo'], Decl(comma.ts, 0, 16))
 +>['foo'] : Symbol(foo, Decl(comma.ts, 0, 16))
 +>'foo' : Symbol(foo, Decl(comma.ts, 0, 16))
- 
+
  };
- 

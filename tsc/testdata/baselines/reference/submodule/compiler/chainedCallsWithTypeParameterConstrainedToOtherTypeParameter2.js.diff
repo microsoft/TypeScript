@@ -2,7 +2,7 @@
 +++ new.chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.js
 @@= skipped -43, +43 lines =@@
  }
- 
+
  //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.js]
 -var Chain = /** @class */ (function () {
 -    function Chain(value) {

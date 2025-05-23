@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
 +crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => ???' is not assignable to type 'D'.
- 
- 
+
+
  ==== crashInsourcePropertyIsRelatableToTargetProperty.ts (1 errors) ====
 @@= skipped -11, +11 lines =@@
      }

@@ -2,7 +2,7 @@
 +++ new.exhaustiveSwitchStatements1.js
 @@= skipped -251, +251 lines =@@
  }
- 
+
  //// [exhaustiveSwitchStatements1.js]
 -"use strict";
  function f1(x) {

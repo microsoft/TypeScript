@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndLocalFunctionInConstructor.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [collisionSuperAndLocalFunctionInConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,25 +23,19 @@
  }
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+class Foo {
-+    constructor() {
-         function _super() {
-         }
-     }
+-        function _super() {
+-        }
+-    }
 -    return Foo;
 -}());
 -var b = /** @class */ (function (_super_1) {
 -    __extends(b, _super_1);
 -    function b() {
 -        var _this = _super_1.call(this) || this;
-+}
-+class b extends Foo {
-+    constructor() {
-+        super();
-         function _super() {
-         }
+-        function _super() {
+-        }
 -        return _this;
-     }
+-    }
 -    return b;
 -}(Foo));
 -var c = /** @class */ (function (_super_1) {
@@ -49,6 +43,18 @@
 -    function c() {
 -        var _this = _super_1.call(this) || this;
 -        var x = function () {
++class Foo {
++    constructor() {
++        function _super() {
++        }
++    }
++}
++class b extends Foo {
++    constructor() {
++        super();
++        function _super() {
++        }
++    }
 +}
 +class c extends Foo {
 +    constructor() {

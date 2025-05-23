@@ -8,12 +8,12 @@
 +>module : { Alias: typeof Alias; }
  >exports : typeof Alias
  >Alias : typeof Alias
- 
+
  === main.js ===
  import A from './mod1'
 ->A : typeof A
 +>A : typeof Alias
- 
+
  A.prototype.foo = 0
  >A.prototype.foo = 0 : 0
  >A.prototype.foo : any
@@ -25,7 +25,7 @@
 +>prototype : Alias
  >foo : any
  >0 : 0
- 
+
  A.prototype.func = function() { this._func = 0; }
  >A.prototype.func = function() { this._func = 0; } : () => void
  >A.prototype.func : any
@@ -43,7 +43,7 @@
 +>this : any
  >_func : any
  >0 : 0
- 
+
  Object.defineProperty(A.prototype, "def", { value: 0 });
 ->Object.defineProperty(A.prototype, "def", { value: 0 }) : A
 +>Object.defineProperty(A.prototype, "def", { value: 0 }) : Alias
@@ -60,7 +60,7 @@
  >{ value: 0 } : { value: number; }
  >value : number
 @@= skipped -46, +46 lines =@@
- 
+
  new A().bar
  >new A().bar : () => number
 ->new A() : A
@@ -68,7 +68,7 @@
 +>new A() : Alias
 +>A : typeof Alias
  >bar : () => number
- 
+
  new A().foo
  >new A().foo : any
 ->new A() : A
@@ -76,7 +76,7 @@
 +>new A() : Alias
 +>A : typeof Alias
  >foo : any
- 
+
  new A().func()
  >new A().func() : any
  >new A().func : any
@@ -85,7 +85,7 @@
 +>new A() : Alias
 +>A : typeof Alias
  >func : any
- 
+
  new A().def
  >new A().def : any
 ->new A() : A
@@ -93,4 +93,3 @@
 +>new A() : Alias
 +>A : typeof Alias
  >def : any
- 

@@ -10,10 +10,10 @@
 ->Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
 +>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >P : Symbol(P, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 4, 14))
- 
+
          render() {
 ->render : Symbol(MyComponent.render, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 8, 50))
 +>render : Symbol(render, Decl(tsxNotUsingApparentTypeOfSFC.tsx, 8, 50))
- 
+
              return <>hello</>;
          }

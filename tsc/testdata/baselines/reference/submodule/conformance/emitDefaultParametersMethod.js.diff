@@ -1,8 +1,8 @@
 --- old.emitDefaultParametersMethod.js
 +++ new.emitDefaultParametersMethod.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [emitDefaultParametersMethod.js]
 -var C = /** @class */ (function () {
 -    function C(t, z, x, y) {

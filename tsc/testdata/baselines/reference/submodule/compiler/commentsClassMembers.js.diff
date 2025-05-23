@@ -1,20 +1,46 @@
 --- old.commentsClassMembers.js
 +++ new.commentsClassMembers.js
 @@= skipped -220, +220 lines =@@
- 
+
  //// [commentsClassMembers.js]
  /** This is comment for c1*/
 -var c1 = /** @class */ (function () {
--    /** Constructor method*/
--    function c1() {
--    }
 +class c1 {
 +    /** p1 is property of c1*/
 +    p1;
-     /** sum with property*/
--    c1.prototype.p2 = function (/** number to add*/ b) {
++    /** sum with property*/
 +    p2(/** number to add*/ b) {
-         return this.p1 + b;
++        return this.p1 + b;
++    } /* trailing comment of method*/
++    /** getter property*/
++    get p3() {
++        return this.p2(this.p1);
++    } // trailing comment Getter
++    /** setter property*/
++    set p3(/** this is value*/ value) {
++        this.p1 = this.p2(value);
++    } // trailing comment Setter
++    /** pp1 is property of c1*/
++    pp1;
++    /** sum with property*/
++    pp2(/** number to add*/ b) {
++        return this.p1 + b;
++    } // trailing comment of method
++    /** getter property*/
++    get pp3() {
++        return this.pp2(this.pp1);
++    }
++    /** setter property*/
++    set pp3(/** this is value*/ value) {
++        this.pp1 = this.pp2(value);
++    }
+     /** Constructor method*/
+-    function c1() {
++    constructor() {
+     }
+-    /** sum with property*/
+-    c1.prototype.p2 = function (/** number to add*/ b) {
+-        return this.p1 + b;
 -    }; /* trailing comment of method*/
 -    Object.defineProperty(c1.prototype, "p3", {
 -        /** getter property*/
@@ -30,21 +56,9 @@
 -        enumerable: false,
 -        configurable: true
 -    });
-+    } /* trailing comment of method*/
-+    /** getter property*/
-+    get p3() {
-+        return this.p2(this.p1);
-+    } // trailing comment Getter
-+    /** setter property*/
-+    set p3(/** this is value*/ value) {
-+        this.p1 = this.p2(value);
-+    } // trailing comment Setter
-+    /** pp1 is property of c1*/
-+    pp1;
-     /** sum with property*/
+-    /** sum with property*/
 -    c1.prototype.pp2 = function (/** number to add*/ b) {
-+    pp2(/** number to add*/ b) {
-         return this.p1 + b;
+-        return this.p1 + b;
 -    }; // trailing comment of method
 -    Object.defineProperty(c1.prototype, "pp3", {
 -        /** getter property*/
@@ -58,18 +72,6 @@
 -        enumerable: false,
 -        configurable: true
 -    });
-+    } // trailing comment of method
-+    /** getter property*/
-+    get pp3() {
-+        return this.pp2(this.pp1);
-+    }
-+    /** setter property*/
-+    set pp3(/** this is value*/ value) {
-+        this.pp1 = this.pp2(value);
-+    }
-+    /** Constructor method*/
-+    constructor() {
-+    }
 +    /** s1 is static property of c1*/
 +    static s1;
      /** static sum with property*/
@@ -157,19 +159,9 @@
 -        enumerable: false,
 -        configurable: true
 -    });
-+    }
-+    static get nc_s3() {
-+        return c1.nc_s2(c1.nc_s1);
-+    }
-+    static set nc_s3(value) {
-+        c1.nc_s1 = c1.nc_s2(value);
-+    }
-+    // p1 is property of c1
-+    a_p1;
-     // sum with property
+-    // sum with property
 -    c1.prototype.a_p2 = function (b) {
-+    a_p2(b) {
-         return this.a_p1 + b;
+-        return this.a_p1 + b;
 -    };
 -    Object.defineProperty(c1.prototype, "a_p3", {
 -        // getter property
@@ -183,21 +175,9 @@
 -        enumerable: false,
 -        configurable: true
 -    });
-+    }
-+    // getter property
-+    get a_p3() {
-+        return this.a_p2(this.a_p1);
-+    }
-+    // setter property
-+    set a_p3(value) {
-+        this.a_p1 = this.a_p2(value);
-+    }
-+    // pp1 is property of c1
-+    a_pp1;
-     // sum with property
+-    // sum with property
 -    c1.prototype.a_pp2 = function (b) {
-+    a_pp2(b) {
-         return this.a_p1 + b;
+-        return this.a_p1 + b;
 -    };
 -    Object.defineProperty(c1.prototype, "a_pp3", {
 -        // getter property
@@ -211,6 +191,32 @@
 -        enumerable: false,
 -        configurable: true
 -    });
++    }
++    static get nc_s3() {
++        return c1.nc_s2(c1.nc_s1);
++    }
++    static set nc_s3(value) {
++        c1.nc_s1 = c1.nc_s2(value);
++    }
++    // p1 is property of c1
++    a_p1;
++    // sum with property
++    a_p2(b) {
++        return this.a_p1 + b;
++    }
++    // getter property
++    get a_p3() {
++        return this.a_p2(this.a_p1);
++    }
++    // setter property
++    set a_p3(value) {
++        this.a_p1 = this.a_p2(value);
++    }
++    // pp1 is property of c1
++    a_pp1;
++    // sum with property
++    a_pp2(b) {
++        return this.a_p1 + b;
 +    }
 +    // getter property
 +    get a_pp3() {
@@ -239,21 +245,9 @@
 -        enumerable: false,
 -        configurable: true
 -    });
-+    }
-+    // static getter property
-+    static get a_s3() {
-+        return c1.s2(c1.s1);
-+    }
-+    // setter property
-+    static set a_s3(value) {
-+        c1.a_s1 = c1.a_s2(value);
-+    }
-+    /** p1 is property of c1 */
-+    b_p1;
-     /** sum with property */
+-    /** sum with property */
 -    c1.prototype.b_p2 = function (b) {
-+    b_p2(b) {
-         return this.b_p1 + b;
+-        return this.b_p1 + b;
 -    };
 -    Object.defineProperty(c1.prototype, "b_p3", {
 -        /** getter property */
@@ -267,21 +261,9 @@
 -        enumerable: false,
 -        configurable: true
 -    });
-+    }
-+    /** getter property */
-+    get b_p3() {
-+        return this.b_p2(this.b_p1);
-+    }
-+    /** setter property */
-+    set b_p3(value) {
-+        this.b_p1 = this.b_p2(value);
-+    }
-+    /** pp1 is property of c1 */
-+    b_pp1;
-     /** sum with property */
+-    /** sum with property */
 -    c1.prototype.b_pp2 = function (b) {
-+    b_pp2(b) {
-         return this.b_p1 + b;
+-        return this.b_p1 + b;
 -    };
 -    Object.defineProperty(c1.prototype, "b_pp3", {
 -        /** getter property */
@@ -295,6 +277,34 @@
 -        enumerable: false,
 -        configurable: true
 -    });
++    }
++    // static getter property
++    static get a_s3() {
++        return c1.s2(c1.s1);
++    }
++    // setter property
++    static set a_s3(value) {
++        c1.a_s1 = c1.a_s2(value);
++    }
++    /** p1 is property of c1 */
++    b_p1;
++    /** sum with property */
++    b_p2(b) {
++        return this.b_p1 + b;
++    }
++    /** getter property */
++    get b_p3() {
++        return this.b_p2(this.b_p1);
++    }
++    /** setter property */
++    set b_p3(value) {
++        this.b_p1 = this.b_p2(value);
++    }
++    /** pp1 is property of c1 */
++    b_pp1;
++    /** sum with property */
++    b_pp2(b) {
++        return this.b_p1 + b;
 +    }
 +    /** getter property */
 +    get b_pp3() {
@@ -352,15 +362,7 @@
 -    function cProperties() {
 -        this.x = 10; /*trailing comment for property*/
 -        this.y = 10; // trailing comment of // style
-+class cProperties {
-+    val;
-+    /** getter only property*/
-+    get p1() {
-+        return this.val;
-+    } // trailing comment of only getter
-+    get nc_p1() {
-+        return this.val;
-     }
+-    }
 -    Object.defineProperty(cProperties.prototype, "p1", {
 -        /** getter only property*/
 -        get: function () {
@@ -394,6 +396,15 @@
 -    });
 -    return cProperties;
 -}());
++class cProperties {
++    val;
++    /** getter only property*/
++    get p1() {
++        return this.val;
++    } // trailing comment of only getter
++    get nc_p1() {
++        return this.val;
++    }
 +    /**setter only property*/
 +    set p2(value) {
 +        this.val = value;

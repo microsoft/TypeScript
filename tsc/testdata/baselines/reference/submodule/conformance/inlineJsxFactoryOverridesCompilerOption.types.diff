@@ -2,19 +2,18 @@
 +++ new.inlineJsxFactoryOverridesCompilerOption.types
 @@= skipped -23, +23 lines =@@
  >dom : () => void
- 
+
  <h></h>
 -><h></h> : error
 +><h></h> : any
  >h : any
  >h : any
- 
+
 @@= skipped -9, +9 lines =@@
  >p : () => void
- 
+
  <h></h>
 -><h></h> : error
 +><h></h> : any
  >h : any
  >h : any
- 

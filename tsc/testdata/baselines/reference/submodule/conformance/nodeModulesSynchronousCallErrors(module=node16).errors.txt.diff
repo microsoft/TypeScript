@@ -1,6 +1,6 @@
 --- old.nodeModulesSynchronousCallErrors(module=node16).errors.txt
 +++ new.nodeModulesSynchronousCallErrors(module=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.ts(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 -subfolder/index.ts(2,17): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("../index.js")' call instead.
 -  To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
@@ -46,5 +46,4 @@
 -    {
 -        "type": "commonjs"
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

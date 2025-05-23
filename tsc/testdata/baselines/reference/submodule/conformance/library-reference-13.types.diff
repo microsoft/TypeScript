@@ -1,14 +1,14 @@
 --- old.library-reference-13.types
 +++ new.library-reference-13.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /a/types/jquery/index.d.ts ===
  declare var $: { foo(): void };
 ->$ : { foo(): void; }
 +>$ : { foo: () => void; }
  >foo : () => void
- 
- 
+
+
 @@= skipped -8, +8 lines =@@
  $.foo();
  >$.foo() : void
@@ -16,4 +16,3 @@
 ->$ : { foo(): void; }
 +>$ : { foo: () => void; }
  >foo : () => void
- 

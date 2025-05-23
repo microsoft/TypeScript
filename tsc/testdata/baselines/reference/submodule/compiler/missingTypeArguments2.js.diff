@@ -2,7 +2,7 @@
 +++ new.missingTypeArguments2.js
 @@= skipped -8, +8 lines =@@
  (): A => null;
- 
+
  //// [missingTypeArguments2.js]
 -var A = /** @class */ (function () {
 -    function A() {

@@ -1,8 +1,8 @@
 --- old.spellingSuggestionGlobal3.js
 +++ new.spellingSuggestionGlobal3.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [spellingSuggestionGlobal3.js]
 -var global = { x: true };
 +const global = { x: true };

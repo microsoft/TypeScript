@@ -1,8 +1,8 @@
 --- old.esDecoratorsMetadata3(target=es2015).js
 +++ new.esDecoratorsMetadata3(target=es2015).js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [foo.js]
 -var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
 -    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }

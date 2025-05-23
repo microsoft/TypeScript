@@ -2,12 +2,12 @@
 +++ new.importTypeGenericTypes.types
 @@= skipped -44, +44 lines =@@
  >Bar : Bar<T>
- 
+
      item: Bar.I<T>;
 ->item : Bar.I<T>
 +>item : I<T>
  >Bar : any
- 
+
      constructor(input: Baz.J<T>) {}
 ->input : Baz.J<T>
 +>input : J<T>
@@ -15,7 +15,7 @@
  }
  export { Bar }
 @@= skipped -12, +12 lines =@@
- 
+
  === usage.ts ===
  export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
 ->x : import("foo")<{ x: number; }>
@@ -25,7 +25,7 @@
  >x : number
 @@= skipped -13, +13 lines =@@
  >12 : 12
- 
+
  export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
 ->y : import("foo2").Bar.I<{ x: number; }>
 +>y : I<{ x: number; }>

@@ -21,8 +21,8 @@
 -unusedVariablesWithUnderscoreInBindingElement.ts(75,9): error TS6133: 'd3' is declared but its value is never read.
 +unusedVariablesWithUnderscoreInBindingElement.ts(67,11): error TS6198: All destructured elements are unused.
  unusedVariablesWithUnderscoreInBindingElement.ts(81,11): error TS6198: All destructured elements are unused.
- 
- 
+
+
 -==== unusedVariablesWithUnderscoreInBindingElement.ts (17 errors) ====
 +==== unusedVariablesWithUnderscoreInBindingElement.ts (9 errors) ====
      function t1() {

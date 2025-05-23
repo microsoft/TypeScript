@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -b.js(1,1): error TS8006: 'export type' declarations can only be used in TypeScript files.
  c.js(2,1): error TS1362: 'A' cannot be used as a value because it was exported using 'export type'.
- 
- 
+
+
  ==== a.js (0 errors) ====
      export class A {}
      

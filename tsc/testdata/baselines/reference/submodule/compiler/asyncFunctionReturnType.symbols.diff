@@ -2,20 +2,20 @@
 +++ new.asyncFunctionReturnType.symbols
 @@= skipped -20, +20 lines =@@
  >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
- 
+
      stringProp: string;
 ->stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
- 
+
      anyProp: any;
 ->anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
  }
- 
+
  async function fIndexedTypeForStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 @@= skipped -14, +14 lines =@@
  >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
- 
+
      return obj.stringProp;
 ->obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>obj.stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
@@ -23,11 +23,11 @@
 ->stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
  }
- 
+
  async function fIndexedTypeForPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 @@= skipped -13, +13 lines =@@
  >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
- 
+
      return Promise.resolve(obj.stringProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -40,11 +40,11 @@
 ->stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
  }
- 
+
  async function fIndexedTypeForExplicitPromiseOfStringProp(obj: Obj): Promise<Obj["stringProp"]> {
 @@= skipped -16, +16 lines =@@
  >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
- 
+
      return Promise.resolve<Obj["stringProp"]>(obj.stringProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -58,11 +58,11 @@
 ->stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
  }
- 
+
  async function fIndexedTypeForAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 @@= skipped -17, +17 lines =@@
  >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
- 
+
      return obj.anyProp;
 ->obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>obj.anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
@@ -70,11 +70,11 @@
 ->anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
  }
- 
+
  async function fIndexedTypeForPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 @@= skipped -13, +13 lines =@@
  >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
- 
+
      return Promise.resolve(obj.anyProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -87,11 +87,11 @@
 ->anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
  }
- 
+
  async function fIndexedTypeForExplicitPromiseOfAnyProp(obj: Obj): Promise<Obj["anyProp"]> {
 @@= skipped -16, +16 lines =@@
  >Obj : Symbol(Obj, Decl(asyncFunctionReturnType.ts, 8, 1))
- 
+
      return Promise.resolve<Obj["anyProp"]>(obj.anyProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -105,11 +105,11 @@
 ->anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
  }
- 
+
  async function fGenericIndexedTypeForStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 @@= skipped -19, +19 lines =@@
  >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 40, 48))
- 
+
      return obj.stringProp;
 ->obj.stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>obj.stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
@@ -117,11 +117,11 @@
 ->stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
  }
- 
+
  async function fGenericIndexedTypeForPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 @@= skipped -15, +15 lines =@@
  >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 44, 57))
- 
+
      return Promise.resolve(obj.stringProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -134,11 +134,11 @@
 ->stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
  }
- 
+
  async function fGenericIndexedTypeForExplicitPromiseOfStringProp<TObj extends Obj>(obj: TObj): Promise<TObj["stringProp"]> {
 @@= skipped -18, +18 lines =@@
  >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 48, 65))
- 
+
      return Promise.resolve<TObj["stringProp"]>(obj.stringProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -152,11 +152,11 @@
 ->stringProp : Symbol(Obj.stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
 +>stringProp : Symbol(stringProp, Decl(asyncFunctionReturnType.ts, 11, 15))
  }
- 
+
  async function fGenericIndexedTypeForAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 @@= skipped -19, +19 lines =@@
  >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 52, 45))
- 
+
      return obj.anyProp;
 ->obj.anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>obj.anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
@@ -164,11 +164,11 @@
 ->anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
  }
- 
+
  async function fGenericIndexedTypeForPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 @@= skipped -15, +15 lines =@@
  >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 56, 54))
- 
+
      return Promise.resolve(obj.anyProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -181,11 +181,11 @@
 ->anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
  }
- 
+
  async function fGenericIndexedTypeForExplicitPromiseOfAnyProp<TObj extends Obj>(obj: TObj): Promise<TObj["anyProp"]> {
 @@= skipped -18, +18 lines =@@
  >TObj : Symbol(TObj, Decl(asyncFunctionReturnType.ts, 60, 62))
- 
+
      return Promise.resolve<TObj["anyProp"]>(obj.anyProp);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -199,11 +199,11 @@
 ->anyProp : Symbol(Obj.anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
 +>anyProp : Symbol(anyProp, Decl(asyncFunctionReturnType.ts, 12, 23))
  }
- 
+
  async function fGenericIndexedTypeForKProp<TObj extends Obj, K extends keyof TObj>(obj: TObj, key: K): Promise<TObj[K]> {
 @@= skipped -43, +43 lines =@@
  >K : Symbol(K, Decl(asyncFunctionReturnType.ts, 68, 69))
- 
+
      return Promise.resolve(obj[key]);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
@@ -215,7 +215,7 @@
  }
 @@= skipped -22, +22 lines =@@
  >K : Symbol(K, Decl(asyncFunctionReturnType.ts, 72, 77))
- 
+
      return Promise.resolve<TObj[K]>(obj[key]);
 ->Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 +>Promise.resolve : Symbol(resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))

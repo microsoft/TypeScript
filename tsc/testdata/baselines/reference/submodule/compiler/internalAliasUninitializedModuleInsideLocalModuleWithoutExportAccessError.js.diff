@@ -2,7 +2,7 @@
 +++ new.internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.js
 @@= skipped -18, +18 lines =@@
  export var z: c.b.I;
- 
+
  //// [internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

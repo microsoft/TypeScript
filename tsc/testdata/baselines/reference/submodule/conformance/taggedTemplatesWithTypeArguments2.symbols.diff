@@ -2,7 +2,7 @@
 +++ new.taggedTemplatesWithTypeArguments2.symbols
 @@= skipped -62, +62 lines =@@
  >C : Symbol(C, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 20))
- 
+
      a!: A; b!: B; c!: C;
 ->a : Symbol(SomeBase.a, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 25))
 +>a : Symbol(a, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 25))
@@ -14,4 +14,3 @@
 +>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments2.ts, 30, 17))
  >C : Symbol(C, Decl(taggedTemplatesWithTypeArguments2.ts, 29, 20))
  }
- 

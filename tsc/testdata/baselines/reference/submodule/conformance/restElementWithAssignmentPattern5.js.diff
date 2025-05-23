@@ -2,7 +2,7 @@
 +++ new.restElementWithAssignmentPattern5.js
 @@= skipped -4, +4 lines =@@
  [...[s, s2]] = ["", ""];
- 
+
  //// [restElementWithAssignmentPattern5.js]
 -var _a;
  var s, s2;

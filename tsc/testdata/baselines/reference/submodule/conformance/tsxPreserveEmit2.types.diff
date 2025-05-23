@@ -2,11 +2,10 @@
 +++ new.tsxPreserveEmit2.types
 @@= skipped -4, +4 lines =@@
  >Route : any
- 
+
  var routes1 = <Route />;
 ->routes1 : error
 -><Route /> : error
 +>routes1 : any
 +><Route /> : any
  >Route : any
- 

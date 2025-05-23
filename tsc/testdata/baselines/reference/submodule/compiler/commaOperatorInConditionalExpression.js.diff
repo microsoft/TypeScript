@@ -1,7 +1,7 @@
 --- old.commaOperatorInConditionalExpression.js
 +++ new.commaOperatorInConditionalExpression.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [commaOperatorInConditionalExpression.js]
  function f(m) {
 -    [1, 2, 3].map(function (i) {

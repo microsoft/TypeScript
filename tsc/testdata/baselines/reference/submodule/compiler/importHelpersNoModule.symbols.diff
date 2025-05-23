@@ -2,7 +2,7 @@
 +++ new.importHelpersNoModule.symbols
 @@= skipped -17, +17 lines =@@
  >C : Symbol(C, Decl(external.ts, 3, 21))
- 
+
      method(@dec x: number) {
 ->method : Symbol(C.method, Decl(external.ts, 6, 9))
 +>method : Symbol(method, Decl(external.ts, 6, 9))
@@ -11,7 +11,7 @@
      }
 @@= skipped -24, +24 lines =@@
  >C : Symbol(C, Decl(script.ts, 3, 21))
- 
+
      method(@dec x: number) {
 ->method : Symbol(C.method, Decl(script.ts, 6, 9))
 +>method : Symbol(method, Decl(script.ts, 6, 9))

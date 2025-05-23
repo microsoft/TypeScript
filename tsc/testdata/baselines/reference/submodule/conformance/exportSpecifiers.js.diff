@@ -1,8 +1,8 @@
 --- old.exportSpecifiers.js
 +++ new.exportSpecifiers.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [exports.js]
 -var type = 0;
 -var as = 0;

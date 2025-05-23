@@ -6,7 +6,7 @@
  >JSX : Symbol(JSX, Decl(tsxDiscriminantPropertyInference.tsx, 0, 0))
 ->Element : Symbol(JSX.Element, Decl(tsxDiscriminantPropertyInference.tsx, 1, 15))
 +>Element : Symbol(Element, Decl(tsxDiscriminantPropertyInference.tsx, 1, 15))
- 
+
  // simple inference
  void (<Comp disc cb={s => parseInt(s)} />);
 @@= skipped -17, +17 lines =@@
@@ -18,7 +18,7 @@
  >n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 23, 29))
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
- 
+
  // simple inference when strict-null-checks are enabled
  void (<Comp disc={undefined} cb={n => n.toFixed()} />);
 @@= skipped -11, +11 lines =@@
@@ -30,7 +30,7 @@
  >n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 26, 33))
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
- 
+
  // requires checking type information since discriminator is missing from object
  void (<Comp cb={n => n.toFixed()} />);
  >Comp : Symbol(Comp, Decl(tsxDiscriminantPropertyInference.tsx, 15, 52))
@@ -41,4 +41,3 @@
  >n : Symbol(n, Decl(tsxDiscriminantPropertyInference.tsx, 29, 16))
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
- 

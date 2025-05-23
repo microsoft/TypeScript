@@ -7,7 +7,7 @@
 ->I : Symbol(X.I, Decl(exportSpecifierAndLocalMemberDeclaration.ts, 1, 14))
 +>I : Symbol(I, Decl(exportSpecifierAndLocalMemberDeclaration.ts, 1, 14))
  }
- 
+
  declare module "m2" {
 @@= skipped -9, +9 lines =@@
      function Z2(): X.I;

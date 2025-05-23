@@ -13,7 +13,7 @@
      m() {
 ->m : Symbol(C.m, Decl(Compilation.js, 8, 5))
 +>m : Symbol(m, Decl(Compilation.js, 8, 5))
- 
+
          mappy(this.assets)
  >mappy : Symbol(mappy, Decl(Compilation.js, 0, 0))
 ->this.assets : Symbol(C.assets, Decl(Compilation.js, 5, 19))
@@ -23,4 +23,3 @@
 +>assets : Symbol(assets, Decl(Compilation.js, 5, 19))
      }
  }
- 

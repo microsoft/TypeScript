@@ -1,8 +1,7 @@
 --- old.typeReferenceDirectives9.errors.txt
 +++ new.typeReferenceDirectives9.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/mod1.ts(8,16): error TS2304: Cannot find name 'Lib'.
 +/mod1.ts(11,25): error TS2304: Cannot find name 'Lib'.
 +

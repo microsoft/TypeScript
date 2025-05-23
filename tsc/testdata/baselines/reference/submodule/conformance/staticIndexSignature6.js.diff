@@ -2,7 +2,7 @@
 +++ new.staticIndexSignature6.js
 @@= skipped -19, +19 lines =@@
  c.foo(1);
- 
+
  //// [staticIndexSignature6.js]
 -"use strict";
  function foo() {

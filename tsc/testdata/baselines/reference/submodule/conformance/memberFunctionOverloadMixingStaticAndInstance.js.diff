@@ -2,7 +2,7 @@
 +++ new.memberFunctionOverloadMixingStaticAndInstance.js
 @@= skipped -21, +21 lines =@@
  }
- 
+
  //// [memberFunctionOverloadMixingStaticAndInstance.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,12 +1,12 @@
 --- old.importedAliasesInTypePositions.types
 +++ new.importedAliasesInTypePositions.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file2.ts ===
  import RT_ALIAS = require("file1");
 ->RT_ALIAS : typeof RT_ALIAS
 +>RT_ALIAS : any
- 
+
  import ReferredTo = RT_ALIAS.elaborate.nested.mod.name.ReferredTo;
 ->ReferredTo : typeof ReferredTo
 ->RT_ALIAS : typeof RT_ALIAS
@@ -22,7 +22,7 @@
 +>mod : any
 +>name : any
 +>ReferredTo : any
- 
+
  export module ImportingModule {
  >ImportingModule : typeof ImportingModule
 @@= skipped -21, +21 lines =@@

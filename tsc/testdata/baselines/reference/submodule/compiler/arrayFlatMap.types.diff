@@ -1,7 +1,7 @@
 --- old.arrayFlatMap.types
 +++ new.arrayFlatMap.types
 @@= skipped -10, +10 lines =@@
- 
+
  array.flatMap((): ReadonlyArray<number> => []); // ok
  >array.flatMap((): ReadonlyArray<number> => []) : number[]
 ->array.flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
@@ -12,7 +12,7 @@
 +>flatMap : <U, This>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
 +>(): ReadonlyArray<number> => [] : () => readonly number[]
  >[] : undefined[]
- 
+
  readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
  >readonlyArray.flatMap((): ReadonlyArray<number> => []) : number[]
 ->readonlyArray.flatMap : <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
@@ -23,4 +23,3 @@
 +>flatMap : <U, This>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This) => U[]
 +>(): ReadonlyArray<number> => [] : () => readonly number[]
  >[] : undefined[]
- 

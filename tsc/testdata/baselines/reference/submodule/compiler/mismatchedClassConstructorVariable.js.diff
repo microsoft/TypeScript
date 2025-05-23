@@ -1,7 +1,7 @@
 --- old.mismatchedClassConstructorVariable.js
 +++ new.mismatchedClassConstructorVariable.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [mismatchedClassConstructorVariable.js]
  var baz;
 -var baz = /** @class */ (function () {

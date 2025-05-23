@@ -1,8 +1,8 @@
 --- old.genericTypeWithCallableMembers.js
 +++ new.genericTypeWithCallableMembers.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [genericTypeWithCallableMembers.js]
 -var C = /** @class */ (function () {
 -    function C(data, data2) {

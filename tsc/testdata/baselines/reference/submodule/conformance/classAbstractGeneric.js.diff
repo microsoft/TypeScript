@@ -2,7 +2,7 @@
 +++ new.classAbstractGeneric.js
 @@= skipped -27, +27 lines =@@
  }
- 
+
  //// [classAbstractGeneric.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

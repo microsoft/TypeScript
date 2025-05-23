@@ -1,8 +1,8 @@
 --- old.varianceAnnotationValidation.js
 +++ new.varianceAnnotationValidation.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [varianceAnnotationValidation.js]
 -"use strict";
 -// Repro from #49607
@@ -11,14 +11,16 @@
 -    function Dog() {
 -    }
 -    Dog.prototype.run = function () { };
-+class Dog {
-+    run() { }
-     ;
+-    ;
 -    Dog.prototype.bark = function () { };
-+    bark() { }
-     ;
+-    ;
 -    return Dog;
 -}());
++class Dog {
++    run() { }
++    ;
++    bark() { }
++    ;
 +}
  ca = cd; // Ok
  cd = ca; // Error

@@ -2,7 +2,7 @@
 +++ new.jsdocParameterParsingInvalidName.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [jsdocParameterParsingInvalidName.js]
 -var c = /** @class */ (function () {
 -    function c() {

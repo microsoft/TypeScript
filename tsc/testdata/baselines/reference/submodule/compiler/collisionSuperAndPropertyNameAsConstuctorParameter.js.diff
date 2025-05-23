@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndPropertyNameAsConstuctorParameter.js
 @@= skipped -32, +32 lines =@@
  }
- 
+
  //// [collisionSuperAndPropertyNameAsConstuctorParameter.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,25 +21,14 @@
 -})();
 -var a = /** @class */ (function () {
 -    function a() {
-+class a {
-+}
-+class b1 extends a {
-+    constructor(_super) {
-+        super();
-     }
+-    }
 -    return a;
 -}());
 -var b1 = /** @class */ (function (_super_1) {
 -    __extends(b1, _super_1);
 -    function b1(_super) {
 -        return _super_1.call(this) || this;
-+}
-+class b2 extends a {
-+    _super;
-+    constructor(_super) {
-+        super();
-+        this._super = _super;
-     }
+-    }
 -    return b1;
 -}(a));
 -var b2 = /** @class */ (function (_super_1) {
@@ -48,24 +37,14 @@
 -        var _this = _super_1.call(this) || this;
 -        _this._super = _super;
 -        return _this;
-+}
-+class b3 extends a {
-+    constructor(_super) {
-+        super();
-     }
+-    }
 -    return b2;
 -}(a));
 -var b3 = /** @class */ (function (_super_1) {
 -    __extends(b3, _super_1);
 -    function b3(_super) {
 -        return _super_1.call(this) || this;
-+}
-+class b4 extends a {
-+    _super;
-+    constructor(_super) {
-+        super();
-+        this._super = _super;
-     }
+-    }
 -    return b3;
 -}(a));
 -var b4 = /** @class */ (function (_super_1) {
@@ -77,4 +56,29 @@
 -    }
 -    return b4;
 -}(a));
++class a {
++}
++class b1 extends a {
++    constructor(_super) {
++        super();
++    }
++}
++class b2 extends a {
++    _super;
++    constructor(_super) {
++        super();
++        this._super = _super;
++    }
++}
++class b3 extends a {
++    constructor(_super) {
++        super();
++    }
++}
++class b4 extends a {
++    _super;
++    constructor(_super) {
++        super();
++        this._super = _super;
++    }
 +}

@@ -1,8 +1,8 @@
 --- old.optionalParameterRetainsNull.js
 +++ new.optionalParameterRetainsNull.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [optionalParameterRetainsNull.js]
 -var a = {
 -    test: function (a, b) { }

@@ -9,4 +9,3 @@
  >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->E : Symbol(Math.E, Decl(lib.es5.d.ts, --, --))
 +>E : Symbol(E, Decl(lib.es5.d.ts, --, --))
- 

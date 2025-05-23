@@ -1,8 +1,7 @@
 --- old.jsDeclarationsClassMethod.errors.txt
 +++ new.jsDeclarationsClassMethod.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +jsDeclarationsClassMethod.js(8,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
 +jsDeclarationsClassMethod.js(8,30): error TS7006: Parameter 'y' implicitly has an 'any' type.
 +jsDeclarationsClassMethod.js(19,33): error TS7006: Parameter 'x' implicitly has an 'any' type.

@@ -1,7 +1,7 @@
 --- old.multiLinePropertyAccessAndArrowFunctionIndent1.types
 +++ new.multiLinePropertyAccessAndArrowFunctionIndent1.types
 @@= skipped -27, +27 lines =@@
- 
+
              .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
  >then : any
 ->(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: ng.IHttpPromiseCallbackArg<Role>) => any
@@ -13,4 +13,3 @@
 ->data : ng.IHttpPromiseCallbackArg<Role>
 +>data : IHttpPromiseCallbackArg<Role>
  >data : any
- 

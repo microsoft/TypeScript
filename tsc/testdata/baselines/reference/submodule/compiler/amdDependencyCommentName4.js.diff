@@ -2,7 +2,7 @@
 +++ new.amdDependencyCommentName4.js
 @@= skipped -22, +22 lines =@@
  import "unaliasedModule2";
- 
+
  //// [amdDependencyCommentName4.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

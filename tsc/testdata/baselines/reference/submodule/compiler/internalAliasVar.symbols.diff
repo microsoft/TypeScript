@@ -6,6 +6,6 @@
  >a : Symbol(a, Decl(internalAliasVar.ts, 0, 0))
 ->x : Symbol(b, Decl(internalAliasVar.ts, 1, 14))
 +>x : Symbol(x, Decl(internalAliasVar.ts, 1, 14))
- 
+
      export var bVal = b;
  >bVal : Symbol(bVal, Decl(internalAliasVar.ts, 6, 14))

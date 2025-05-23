@@ -2,7 +2,7 @@
 +++ new.overloadOnConstConstraintChecks2.symbols
 @@= skipped -12, +12 lines =@@
  >A : Symbol(A, Decl(overloadOnConstConstraintChecks2.ts, 0, 0))
- 
+
      public foo() { }
 ->foo : Symbol(C.foo, Decl(overloadOnConstConstraintChecks2.ts, 2, 19))
 +>foo : Symbol(foo, Decl(overloadOnConstConstraintChecks2.ts, 2, 19))

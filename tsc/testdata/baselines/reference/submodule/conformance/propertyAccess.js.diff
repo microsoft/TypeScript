@@ -1,8 +1,8 @@
 --- old.propertyAccess.js
 +++ new.propertyAccess.js
 @@= skipped -152, +152 lines =@@
- 
- 
+
+
  //// [propertyAccess.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

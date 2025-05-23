@@ -10,8 +10,8 @@
 +  Property 'literalElementAccess' does not exist on type 'YaddaBase'.
 +index.js(26,22): error TS2339: Property 'justProp' does not exist on type 'YaddaBase'.
 +index.js(29,22): error TS2339: Property 'literalElementAccess' does not exist on type 'YaddaBase'.
- 
- 
+
+
  ==== index.js (4 errors) ====
 @@= skipped -11, +12 lines =@@
              this.roots = "hi";

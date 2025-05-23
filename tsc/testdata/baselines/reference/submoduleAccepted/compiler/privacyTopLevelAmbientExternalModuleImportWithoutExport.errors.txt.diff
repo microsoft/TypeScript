@@ -5,8 +5,8 @@
 +privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(7,39): error TS2307: Cannot find module 'privacyTopLevelAmbientExternalModuleImportWithoutExport_require1' or its corresponding type declarations.
  privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(15,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
  privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts(17,12): error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
- 
- 
+
+
 -==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (2 errors) ====
 +==== privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts (4 errors) ====
      ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>

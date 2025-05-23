@@ -1,8 +1,8 @@
 --- old.collisionExportsRequireAndAmbientModule.js
 +++ new.collisionExportsRequireAndAmbientModule.js
 @@= skipped -94, +94 lines =@@
- 
- 
+
+
  //// [collisionExportsRequireAndAmbientModule_externalmodule.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

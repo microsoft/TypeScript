@@ -2,16 +2,16 @@
 +++ new.jsxElementsAsIdentifierNames.types
 @@= skipped -15, +15 lines =@@
  >A : () => any
- 
+
      return <package />
 -><package /> : error
 +><package /> : any
  >package : any
  }
- 
+
 @@= skipped -8, +8 lines =@@
  >B : () => any
- 
+
      return <package></package>
 -><package></package> : error
 +><package></package> : any

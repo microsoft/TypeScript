@@ -2,25 +2,25 @@
 +++ new.privacyAccessorDeclFile.types
 @@= skipped -308, +308 lines =@@
  >publicClassWithPrivateModuleGetAccessorTypes : publicClassWithPrivateModuleGetAccessorTypes
- 
+
      static get myPublicStaticMethod(): privateModule.publicClass { // Error
 ->myPublicStaticMethod : privateModule.publicClass
 +>myPublicStaticMethod : publicClass
  >privateModule : any
- 
+
          return null;
      }
      get myPublicMethod(): privateModule.publicClass { // Error
 ->myPublicMethod : privateModule.publicClass
 +>myPublicMethod : publicClass
  >privateModule : any
- 
+
          return null;
      }
      static get myPublicStaticMethod1() { // Error
 ->myPublicStaticMethod1 : privateModule.publicClass
 +>myPublicStaticMethod1 : publicClass
- 
+
          return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -33,7 +33,7 @@
      get myPublicMethod1() { // Error
 ->myPublicMethod1 : privateModule.publicClass
 +>myPublicMethod1 : publicClass
- 
+
          return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -44,10 +44,10 @@
 +>publicClass : typeof publicClass
      }
  }
- 
+
 @@= skipped -35, +35 lines =@@
  >publicClassWithPrivateModuleSetAccessorTypes : publicClassWithPrivateModuleSetAccessorTypes
- 
+
      static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
 ->myPublicStaticMethod : privateModule.publicClass
 ->param : privateModule.publicClass
@@ -65,25 +65,25 @@
  }
 @@= skipped -15, +15 lines =@@
  >privateClassWithPrivateModuleGetAccessorTypes : privateClassWithPrivateModuleGetAccessorTypes
- 
+
      static get myPublicStaticMethod(): privateModule.publicClass {
 ->myPublicStaticMethod : privateModule.publicClass
 +>myPublicStaticMethod : publicClass
  >privateModule : any
- 
+
          return null;
      }
      get myPublicMethod(): privateModule.publicClass {
 ->myPublicMethod : privateModule.publicClass
 +>myPublicMethod : publicClass
  >privateModule : any
- 
+
          return null;
      }
      static get myPublicStaticMethod1() {
 ->myPublicStaticMethod1 : privateModule.publicClass
 +>myPublicStaticMethod1 : publicClass
- 
+
          return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -96,7 +96,7 @@
      get myPublicMethod1() {
 ->myPublicMethod1 : privateModule.publicClass
 +>myPublicMethod1 : publicClass
- 
+
          return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -107,10 +107,10 @@
 +>publicClass : typeof publicClass
      }
  }
- 
+
 @@= skipped -35, +35 lines =@@
  >privateClassWithPrivateModuleSetAccessorTypes : privateClassWithPrivateModuleSetAccessorTypes
- 
+
      static set myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : privateModule.publicClass
 ->param : privateModule.publicClass
@@ -128,25 +128,25 @@
  }
 @@= skipped -321, +321 lines =@@
  >publicClassWithPrivateModuleGetAccessorTypes : publicClassWithPrivateModuleGetAccessorTypes
- 
+
          static get myPublicStaticMethod(): privateModule.publicClass { // Error
 ->myPublicStaticMethod : privateModule.publicClass
 +>myPublicStaticMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          get myPublicMethod(): privateModule.publicClass { // Error
 ->myPublicMethod : privateModule.publicClass
 +>myPublicMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          static get myPublicStaticMethod1() { // Error
 ->myPublicStaticMethod1 : privateModule.publicClass
 +>myPublicStaticMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -159,7 +159,7 @@
          get myPublicMethod1() { // Error
 ->myPublicMethod1 : privateModule.publicClass
 +>myPublicMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -170,10 +170,10 @@
 +>publicClass : typeof publicClass
          }
      }
- 
+
 @@= skipped -35, +35 lines =@@
  >publicClassWithPrivateModuleSetAccessorTypes : publicClassWithPrivateModuleSetAccessorTypes
- 
+
          static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
 ->myPublicStaticMethod : privateModule.publicClass
 ->param : privateModule.publicClass
@@ -191,25 +191,25 @@
      }
 @@= skipped -15, +15 lines =@@
  >privateClassWithPrivateModuleGetAccessorTypes : privateClassWithPrivateModuleGetAccessorTypes
- 
+
          static get myPublicStaticMethod(): privateModule.publicClass {
 ->myPublicStaticMethod : privateModule.publicClass
 +>myPublicStaticMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          get myPublicMethod(): privateModule.publicClass {
 ->myPublicMethod : privateModule.publicClass
 +>myPublicMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          static get myPublicStaticMethod1() {
 ->myPublicStaticMethod1 : privateModule.publicClass
 +>myPublicStaticMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -222,7 +222,7 @@
          get myPublicMethod1() {
 ->myPublicMethod1 : privateModule.publicClass
 +>myPublicMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -233,10 +233,10 @@
 +>publicClass : typeof publicClass
          }
      }
- 
+
 @@= skipped -35, +35 lines =@@
  >privateClassWithPrivateModuleSetAccessorTypes : privateClassWithPrivateModuleSetAccessorTypes
- 
+
          static set myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : privateModule.publicClass
 ->param : privateModule.publicClass
@@ -254,25 +254,25 @@
      }
 @@= skipped -1216, +1216 lines =@@
  >publicClassWithPrivateModuleGetAccessorTypes : publicClassWithPrivateModuleGetAccessorTypes
- 
+
          static get myPublicStaticMethod(): privateModule.publicClass { // Error
 ->myPublicStaticMethod : privateModule.publicClass
 +>myPublicStaticMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          get myPublicMethod(): privateModule.publicClass { // Error
 ->myPublicMethod : privateModule.publicClass
 +>myPublicMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          static get myPublicStaticMethod1() { // Error
 ->myPublicStaticMethod1 : privateModule.publicClass
 +>myPublicStaticMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -285,7 +285,7 @@
          get myPublicMethod1() { // Error
 ->myPublicMethod1 : privateModule.publicClass
 +>myPublicMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -296,10 +296,10 @@
 +>publicClass : typeof publicClass
          }
      }
- 
+
 @@= skipped -35, +35 lines =@@
  >publicClassWithPrivateModuleSetAccessorTypes : publicClassWithPrivateModuleSetAccessorTypes
- 
+
          static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
 ->myPublicStaticMethod : privateModule.publicClass
 ->param : privateModule.publicClass
@@ -317,25 +317,25 @@
      }
 @@= skipped -15, +15 lines =@@
  >privateClassWithPrivateModuleGetAccessorTypes : privateClassWithPrivateModuleGetAccessorTypes
- 
+
          static get myPublicStaticMethod(): privateModule.publicClass {
 ->myPublicStaticMethod : privateModule.publicClass
 +>myPublicStaticMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          get myPublicMethod(): privateModule.publicClass {
 ->myPublicMethod : privateModule.publicClass
 +>myPublicMethod : publicClass
  >privateModule : any
- 
+
              return null;
          }
          static get myPublicStaticMethod1() {
 ->myPublicStaticMethod1 : privateModule.publicClass
 +>myPublicStaticMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -348,7 +348,7 @@
          get myPublicMethod1() {
 ->myPublicMethod1 : privateModule.publicClass
 +>myPublicMethod1 : publicClass
- 
+
              return new privateModule.publicClass();
 ->new privateModule.publicClass() : privateModule.publicClass
 ->privateModule.publicClass : typeof privateModule.publicClass
@@ -359,10 +359,10 @@
 +>publicClass : typeof publicClass
          }
      }
- 
+
 @@= skipped -35, +35 lines =@@
  >privateClassWithPrivateModuleSetAccessorTypes : privateClassWithPrivateModuleSetAccessorTypes
- 
+
          static set myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : privateModule.publicClass
 ->param : privateModule.publicClass

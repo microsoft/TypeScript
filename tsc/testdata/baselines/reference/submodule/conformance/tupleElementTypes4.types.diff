@@ -1,7 +1,7 @@
 --- old.tupleElementTypes4.types
 +++ new.tupleElementTypes4.types
 @@= skipped -1, +1 lines =@@
- 
+
  === tupleElementTypes4.ts ===
  function f([a, b] = [0, undefined]) { }
 ->f : ([a, b]?: [number, any]) => void

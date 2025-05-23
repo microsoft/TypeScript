@@ -2,7 +2,7 @@
 +++ new.recursiveBaseCheck5.js
 @@= skipped -6, +6 lines =@@
  (new X).blah;
- 
+
  //// [recursiveBaseCheck5.js]
 -var X = /** @class */ (function () {
 -    function X() {

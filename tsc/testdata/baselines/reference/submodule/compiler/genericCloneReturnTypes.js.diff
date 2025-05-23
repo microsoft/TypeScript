@@ -2,7 +2,7 @@
 +++ new.genericCloneReturnTypes.js
 @@= skipped -27, +27 lines =@@
  b = b3;
- 
+
  //// [genericCloneReturnTypes.js]
 -var Bar = /** @class */ (function () {
 -    function Bar(x) {

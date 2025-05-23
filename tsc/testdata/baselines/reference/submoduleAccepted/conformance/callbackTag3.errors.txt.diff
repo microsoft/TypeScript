@@ -1,8 +1,7 @@
 --- old.callbackTag3.errors.txt
 +++ new.callbackTag3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +cb.js(4,12): error TS2304: Cannot find name 'Miracle'.
 +
 +

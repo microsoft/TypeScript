@@ -1,8 +1,7 @@
 --- old.jsDeclarationsImportAliasExposedWithinNamespaceCjs.errors.txt
 +++ new.jsDeclarationsImportAliasExposedWithinNamespaceCjs.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +file.js(4,11): error TS2315: Type 'Object' is not generic.
 +file.js(10,51): error TS2300: Duplicate identifier 'myTypes'.
 +file.js(13,13): error TS2300: Duplicate identifier 'myTypes'.

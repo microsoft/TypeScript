@@ -1,8 +1,8 @@
 --- old.ambiguousCallsWhereReturnTypesAgree.js
 +++ new.ambiguousCallsWhereReturnTypesAgree.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [ambiguousCallsWhereReturnTypesAgree.js]
 -var TestClass = /** @class */ (function () {
 -    function TestClass() {

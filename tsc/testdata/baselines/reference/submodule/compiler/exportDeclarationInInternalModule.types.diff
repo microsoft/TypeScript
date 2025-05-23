@@ -2,9 +2,8 @@
 +++ new.exportDeclarationInInternalModule.types
 @@= skipped -26, +26 lines =@@
  }
- 
+
  var a: Bbb.SomeType;
 ->a : Bbb.SomeType
 +>a : SomeType
  >Bbb : any
- 

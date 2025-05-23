@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsTypedefPropertyAndExportAssignment.symbols
 @@= skipped -29, +29 lines =@@
  }
- 
+
  module.exports = MainThreadTasks;
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
 ->module : Symbol(export=, Decl(index.js, 18, 1))
@@ -11,11 +11,11 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
  >MainThreadTasks : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
- 
+
  === module.js ===
 @@= skipped -48, +48 lines =@@
  >taskNameToGroup : Symbol(taskNameToGroup, Decl(module.js, 24, 5))
- 
+
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(module.js, 0, 0))
 ->module : Symbol(module, Decl(module.js, 24, 27))
@@ -23,6 +23,6 @@
 +>module.exports : Symbol(export=, Decl(module.js, 24, 27))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(module.js, 24, 27))
- 
+
      taskGroups,
  >taskGroups : Symbol(taskGroups, Decl(module.js, 26, 18))

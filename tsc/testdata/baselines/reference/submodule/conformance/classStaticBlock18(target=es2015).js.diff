@@ -1,8 +1,8 @@
 --- old.classStaticBlock18(target=es2015).js
 +++ new.classStaticBlock18(target=es2015).js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [classStaticBlock18.js]
 -var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";

@@ -2,10 +2,10 @@
 +++ new.deepKeysIndexing.types
 @@= skipped -74, +74 lines =@@
  >value : V
- 
+
    workaround<
 ->workaround : <K1 extends keyof O, K2 extends keys2workaround<O, K1>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
 +>workaround : <K1 extends keyof O, K2 extends Extract<O[K1] extends object ? keyof O[K1] : never, string>, V extends O[K1][K2]>(k1: K1, k2: K2, value: V) => void
- 
+
      K1 extends keyof O,
      K2 extends keys2workaround<O, K1>,

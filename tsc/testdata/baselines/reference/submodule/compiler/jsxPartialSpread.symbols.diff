@@ -8,6 +8,6 @@
 ->p : Symbol(JSX.IntrinsicElements.p, Decl(react16.d.ts, 2593, 102))
 +>p : Symbol(p, Decl(react16.d.ts, 2593, 102))
 +>p : Symbol(p, Decl(react16.d.ts, 2593, 102))
- 
+
  import React from 'react';
  >React : Symbol(React, Decl(jsxPartialSpread.tsx, 2, 6))

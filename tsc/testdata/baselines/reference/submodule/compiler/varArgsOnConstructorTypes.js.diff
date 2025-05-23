@@ -1,8 +1,8 @@
 --- old.varArgsOnConstructorTypes.js
 +++ new.varArgsOnConstructorTypes.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [varArgsOnConstructorTypes.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

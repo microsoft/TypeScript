@@ -2,16 +2,16 @@
 +++ new.declarationFileForHtmlImport(allowarbitraryextensions=false).symbols
 @@= skipped -20, +20 lines =@@
  >HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
- 
+
      connectedCallback(): void;
 ->connectedCallback : Symbol(HTML5Element.connectedCallback, Decl(component.d.html.ts, 9, 47))
 +>connectedCallback : Symbol(connectedCallback, Decl(component.d.html.ts, 9, 47))
  }
- 
+
  === file.ts ===
 @@= skipped -8, +8 lines =@@
  >mod : Symbol(mod, Decl(file.ts, 0, 6))
- 
+
  window.customElements.define("my-html5-element", mod.HTML5Element);
 ->window.customElements.define : Symbol(CustomElementRegistry.define, Decl(lib.dom.d.ts, --, --))
 +>window.customElements.define : Symbol(define, Decl(lib.dom.d.ts, --, --))
@@ -23,13 +23,13 @@
 +>mod.HTML5Element : Symbol(HTML5Element, Decl(component.d.html.ts, 7, 31))
  >mod : Symbol(mod, Decl(file.ts, 0, 6))
 +>HTML5Element : Symbol(HTML5Element, Decl(component.d.html.ts, 7, 31))
- 
+
  if (document !== mod.default) {
  >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
 +>mod.default : Symbol(default, Decl(component.d.html.ts, 3, 26))
  >mod : Symbol(mod, Decl(file.ts, 0, 6))
 +>default : Symbol(default, Decl(component.d.html.ts, 3, 26))
- 
+
      document.body.appendChild(mod.blogPost);
 ->document.body.appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
 ->document.body : Symbol(Document.body, Decl(lib.dom.d.ts, --, --))

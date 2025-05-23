@@ -1,8 +1,8 @@
 --- old.conditionalTypeBasedContextualTypeReturnTypeWidening.js
 +++ new.conditionalTypeBasedContextualTypeReturnTypeWidening.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [conditionalTypeBasedContextualTypeReturnTypeWidening.js]
 -var func1 = useState1(function () { return function () { return 0; }; });
 -var func2 = useState2(function () { return function () { return 0; }; });

@@ -1,7 +1,7 @@
 --- old.relationalOperatorComparable.js
 +++ new.relationalOperatorComparable.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [relationalOperatorComparable.js]
  function f(onethree, two) {
 -    var t = true;

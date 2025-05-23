@@ -8,7 +8,7 @@
 +>foo : <T>(x: T) => T
  >b : { [x: string]: T; }
  }
- 
+
 @@= skipped -15, +15 lines =@@
      var r2 = foo(b);
  >r2 : { [x: string]: T; }
@@ -16,7 +16,7 @@
 ->foo : <T_1>(x: T_1) => T_1
 +>foo : <T>(x: T) => T
  >b : { [x: string]: T; }
- 
+
      var d: Date = r2['hm']; // ok
 @@= skipped -21, +21 lines =@@
      var r2 = foo(b);
@@ -25,5 +25,5 @@
 ->foo : <T_1>(x: T_1) => T_1
 +>foo : <T>(x: T) => T
  >b : { [x: string]: T; }
- 
+
      var d: Date = r2['hm']; // ok

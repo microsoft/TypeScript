@@ -1,7 +1,7 @@
 --- old.ES3For-ofTypeCheck6.js
 +++ new.ES3For-ofTypeCheck6.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [ES3For-ofTypeCheck6.js]
  var union;
 -for (var _i = 0, union_1 = union; _i < union_1.length; _i++) {

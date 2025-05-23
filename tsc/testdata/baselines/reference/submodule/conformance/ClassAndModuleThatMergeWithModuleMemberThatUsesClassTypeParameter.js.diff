@@ -1,7 +1,7 @@
 --- old.ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js
 +++ new.ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js
 @@= skipped -52, +52 lines =@@
- 
+
  //// [ClassAndModuleThatMergeWithModuleMemberThatUsesClassTypeParameter.js]
  // all expected to be errors
 -var clodule1 = /** @class */ (function () {
@@ -32,16 +32,16 @@
 -        }
 -        return D;
 -    }());
--})(clodule2 || (clodule2 = {}));
--var clodule3 = /** @class */ (function () {
--    function clodule3() {
 +    class D {
 +        id;
 +        value;
-     }
++    }
+ })(clodule2 || (clodule2 = {}));
+-var clodule3 = /** @class */ (function () {
+-    function clodule3() {
+-    }
 -    return clodule3;
 -}());
-+})(clodule2 || (clodule2 = {}));
 +class clodule3 {
 +    id;
 +    value;

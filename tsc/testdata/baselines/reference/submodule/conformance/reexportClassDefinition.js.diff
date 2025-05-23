@@ -1,7 +1,7 @@
 --- old.reexportClassDefinition.js
 +++ new.reexportClassDefinition.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [foo1.js]
  "use strict";
 -var x = /** @class */ (function () {

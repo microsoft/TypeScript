@@ -1,8 +1,8 @@
 --- old.typeGuardOfFromPropNameInUnionType.js
 +++ new.typeGuardOfFromPropNameInUnionType.js
 @@= skipped -108, +108 lines =@@
- 
- 
+
+
  //// [typeGuardOfFromPropNameInUnionType.js]
 -var A = /** @class */ (function () {
 -    function A() {
@@ -58,9 +58,8 @@
      }
      else {
 -        var z = x.b;
-+        let z = x.b;
-     }
- }
+-    }
+-}
 -var AWithOptionalProp = /** @class */ (function () {
 -    function AWithOptionalProp() {
 -    }
@@ -71,6 +70,9 @@
 -    }
 -    return BWithOptionalProp;
 -}());
++        let z = x.b;
++    }
++}
 +class AWithOptionalProp {
 +    a;
 +}
@@ -95,14 +97,16 @@
      }
      else {
 -        var z = x.b;
-+        let z = x.b;
-     }
- }
+-    }
+-}
 -var ClassWithUnionProp = /** @class */ (function () {
 -    function ClassWithUnionProp() {
 -    }
 -    return ClassWithUnionProp;
 -}());
++        let z = x.b;
++    }
++}
 +class ClassWithUnionProp {
 +    prop;
 +}
@@ -113,14 +117,16 @@
      }
      else {
 -        var z = x.prop.b;
-+        let z = x.prop.b;
-     }
- }
+-    }
+-}
 -var NestedClassWithProp = /** @class */ (function () {
 -    function NestedClassWithProp() {
 -    }
 -    return NestedClassWithProp;
 -}());
++        let z = x.prop.b;
++    }
++}
 +class NestedClassWithProp {
 +    outer;
 +}
@@ -152,13 +158,13 @@
 -    };
 -    return InMemberOfClass;
 -}());
--// added for completeness
++    }
++}
+ // added for completeness
 -var SelfAssert = /** @class */ (function () {
 -    function SelfAssert() {
-     }
+-    }
 -    SelfAssert.prototype.inThis = function () {
-+}
-+// added for completeness
 +class SelfAssert {
 +    a;
 +    inThis() {

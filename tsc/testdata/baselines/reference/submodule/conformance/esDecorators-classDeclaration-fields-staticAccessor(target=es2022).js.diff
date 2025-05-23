@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-fields-staticAccessor(target=es2022).js
 +++ new.esDecorators-classDeclaration-fields-staticAccessor(target=es2022).js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [esDecorators-classDeclaration-fields-staticAccessor.js]
  const field3 = "field3";
 -let C = (() => {

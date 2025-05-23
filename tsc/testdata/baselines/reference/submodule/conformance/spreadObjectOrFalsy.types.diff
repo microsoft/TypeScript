@@ -2,41 +2,41 @@
 +++ new.spreadObjectOrFalsy.types
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function f2<T>(a: T | T & undefined) {
 ->f2 : <T>(a: T | (T & undefined)) => T | (T & undefined)
 ->a : T | (T & undefined)
 +>f2 : <T>(a: T | T & undefined) => T | T & undefined
 +>a : T | T & undefined
- 
+
      return { ...a };
 ->{ ...a } : T | (T & undefined)
 ->a : T | (T & undefined)
 +>{ ...a } : T | T & undefined
 +>a : T | T & undefined
  }
- 
+
  function f3<T extends undefined>(a: T) {
 @@= skipped -18, +18 lines =@@
  }
- 
+
  function f4<T extends undefined>(a: object | T) {
 ->f4 : <T extends undefined>(a: object | T) => {}
 +>f4 : <T extends undefined>(a: T | object) => {}
  >a : T | object
- 
+
      return { ...a };
 @@= skipped -29, +29 lines =@@
  // Repro from #46976
- 
+
  function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
 ->g1 : <T extends {}, A extends { z: (T | undefined) & T; }>(a: A) => T
 +>g1 : <T extends {}, A extends { z: T; }>(a: A) => T
  >z : T
  >a : A
- 
+
 @@= skipped -41, +41 lines =@@
- 
+
              this.data.toLocaleLowerCase();
  >this.data.toLocaleLowerCase() : string
 ->this.data.toLocaleLowerCase : (locales?: string | string[]) => string

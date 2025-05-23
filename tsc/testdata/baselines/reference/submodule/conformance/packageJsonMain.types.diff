@@ -2,7 +2,7 @@
 +++ new.packageJsonMain.types
 @@= skipped -10, +10 lines =@@
  >baz : any
- 
+
  foo + bar + baz;
 ->foo + bar + baz : error
 ->foo + bar : error
@@ -14,4 +14,3 @@
 +>foo : any
 +>bar : any
 +>baz : any
- 

@@ -2,7 +2,7 @@
 +++ new.reverseMappedTypeContextualTypeNotCircular.js
 @@= skipped -13, +13 lines =@@
  });
- 
+
  //// [reverseMappedTypeContextualTypeNotCircular.js]
 -var editable = function () { return ({}); };
 -var mapStateToProps = createStructuredSelector({

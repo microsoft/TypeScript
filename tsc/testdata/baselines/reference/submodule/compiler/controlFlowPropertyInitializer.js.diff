@@ -1,7 +1,7 @@
 --- old.controlFlowPropertyInitializer.js
 +++ new.controlFlowPropertyInitializer.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [controlFlowPropertyInitializer.js]
  // Repro from #8967
 -var LANG = "Turbo Pascal";

@@ -1,7 +1,7 @@
 --- old.recursiveBaseCheck2.types
 +++ new.recursiveBaseCheck2.types
 @@= skipped -26, +26 lines =@@
- 
+
      export class b2ContactListener extends Box2D.Collision.Shapes.b2Shape {
  >b2ContactListener : b2ContactListener
 ->Box2D.Collision.Shapes.b2Shape : Collision.Shapes.b2Shape

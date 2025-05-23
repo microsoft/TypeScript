@@ -2,7 +2,7 @@
 +++ new.mergedDeclarations5.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [a.js]
 -var A = /** @class */ (function () {
 -    function A() {

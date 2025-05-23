@@ -50,12 +50,7 @@
 -var moduleA = require("./aliasUsage1_moduleA");
 -var C2 = /** @class */ (function () {
 -    function C2() {
-+const moduleA = require("./aliasUsage1_moduleA");
-+class C2 {
-+    x;
-+    get A() {
-+        return this.x;
-     }
+-    }
 -    Object.defineProperty(C2.prototype, "A", {
 -        get: function () {
 -            return this.x;
@@ -68,6 +63,12 @@
 -    });
 -    return C2;
 -}());
++const moduleA = require("./aliasUsage1_moduleA");
++class C2 {
++    x;
++    get A() {
++        return this.x;
++    }
 +    set A(x) {
 +        x = moduleA;
 +    }

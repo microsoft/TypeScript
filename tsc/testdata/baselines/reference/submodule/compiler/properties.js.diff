@@ -2,14 +2,11 @@
 +++ new.properties.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [properties.js]
 -var MyClass = /** @class */ (function () {
 -    function MyClass() {
-+class MyClass {
-+    get Count() {
-+        return 42;
-     }
+-    }
 -    Object.defineProperty(MyClass.prototype, "Count", {
 -        get: function () {
 -            return 42;
@@ -28,6 +25,10 @@
 -declare class MyClass {
 -    get Count(): number;
 -    set Count(value: number);
++class MyClass {
++    get Count() {
++        return 42;
++    }
 +    set Count(value) {
 +        //
 +    }

@@ -2,7 +2,7 @@
 +++ new.fillInMissingTypeArgsOnConstructCalls.symbols
 @@= skipped -6, +6 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
        list: T ;
 ->list : Symbol(A.list, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 26))
 +>list : Symbol(list, Decl(fillInMissingTypeArgsOnConstructCalls.ts, 0, 26))

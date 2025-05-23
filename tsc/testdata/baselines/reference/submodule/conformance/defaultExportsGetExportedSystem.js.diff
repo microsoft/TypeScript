@@ -1,8 +1,8 @@
 --- old.defaultExportsGetExportedSystem.js
 +++ new.defaultExportsGetExportedSystem.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [a.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

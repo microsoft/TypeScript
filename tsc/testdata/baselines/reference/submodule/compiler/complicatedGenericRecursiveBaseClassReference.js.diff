@@ -1,8 +1,8 @@
 --- old.complicatedGenericRecursiveBaseClassReference.js
 +++ new.complicatedGenericRecursiveBaseClassReference.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [complicatedGenericRecursiveBaseClassReference.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

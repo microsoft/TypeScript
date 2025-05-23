@@ -2,7 +2,7 @@
 +++ new.circularInlineMappedGenericTupleTypeNoCrash.symbols
 @@= skipped -5, +5 lines =@@
  >Elements : Symbol(Elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 10))
- 
+
    public readonly elements: { [P in keyof Elements]: { bar: Elements[P] } };
 ->elements : Symbol(Foo.elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 48))
 +>elements : Symbol(elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 48))
@@ -10,7 +10,7 @@
  >Elements : Symbol(Elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 10))
  >bar : Symbol(bar, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 1, 54))
 @@= skipped -18, +18 lines =@@
- 
+
    ) {
      this.elements = elements;
 ->this.elements : Symbol(Foo.elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 48))
@@ -20,13 +20,13 @@
 +>elements : Symbol(elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 48))
  >elements : Symbol(elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 3, 21))
    }
- 
+
    public add(): Foo<[...Elements, "abc"]> {
 ->add : Symbol(Foo.add, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 7, 3))
 +>add : Symbol(add, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 7, 3))
  >Foo : Symbol(Foo, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 0))
  >Elements : Symbol(Elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 10))
- 
+
      return new Foo<[...Elements, "abc"]>(...this.elements, { bar: "abc" });
  >Foo : Symbol(Foo, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 0))
  >Elements : Symbol(Elements, Decl(circularInlineMappedGenericTupleTypeNoCrash.ts, 0, 10))

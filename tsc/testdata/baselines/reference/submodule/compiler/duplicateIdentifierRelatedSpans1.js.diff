@@ -1,8 +1,8 @@
 --- old.duplicateIdentifierRelatedSpans1.js
 +++ new.duplicateIdentifierRelatedSpans1.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [file1.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

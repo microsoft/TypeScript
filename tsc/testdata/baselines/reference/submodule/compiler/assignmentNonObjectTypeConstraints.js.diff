@@ -1,8 +1,8 @@
 --- old.assignmentNonObjectTypeConstraints.js
 +++ new.assignmentNonObjectTypeConstraints.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [assignmentNonObjectTypeConstraints.js]
 +var E;
 +(function (E) {

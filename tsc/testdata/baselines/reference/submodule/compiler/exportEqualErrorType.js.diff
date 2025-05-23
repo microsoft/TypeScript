@@ -1,8 +1,8 @@
 --- old.exportEqualErrorType.js
 +++ new.exportEqualErrorType.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [exportEqualErrorType_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

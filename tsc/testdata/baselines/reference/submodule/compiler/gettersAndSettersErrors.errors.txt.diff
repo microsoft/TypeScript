@@ -9,8 +9,8 @@
  gettersAndSettersErrors.ts(7,16): error TS1095: A 'set' accessor cannot have a return type annotation.
  gettersAndSettersErrors.ts(11,17): error TS2808: A get accessor must be at least as accessible as the setter
  gettersAndSettersErrors.ts(12,16): error TS2808: A get accessor must be at least as accessible as the setter
- 
- 
+
+
 -==== gettersAndSettersErrors.ts (6 errors) ====
 +==== gettersAndSettersErrors.ts (7 errors) ====
      class C {

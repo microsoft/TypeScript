@@ -1,8 +1,7 @@
 --- old.callbackTag1.errors.txt
 +++ new.callbackTag1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +cb.js(7,12): error TS2304: Cannot find name 'Sid'.
 +cb.js(11,12): error TS2304: Cannot find name 'NoReturn'.
 +

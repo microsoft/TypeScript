@@ -13,8 +13,8 @@
 +unusedTypeParametersWithUnderscore.ts(7,13): error TS6196: 'U' is declared but never used.
 +unusedTypeParametersWithUnderscore.ts(8,18): error TS6196: 'W' is declared but never used.
 +unusedTypeParametersWithUnderscore.ts(11,14): error TS6196: 'U' is declared but never used.
- 
- 
+
+
  ==== unusedTypeParametersWithUnderscore.ts (6 errors) ====
      function f<_T, U>() { }
                     ~

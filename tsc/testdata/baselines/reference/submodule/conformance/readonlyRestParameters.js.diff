@@ -1,8 +1,8 @@
 --- old.readonlyRestParameters.js
 +++ new.readonlyRestParameters.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [readonlyRestParameters.js]
 -"use strict";
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {

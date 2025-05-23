@@ -1,7 +1,7 @@
 --- old.genericCallWithObjectTypeArgsAndConstraints3.js
 +++ new.genericCallWithObjectTypeArgsAndConstraints3.js
 @@= skipped -40, +40 lines =@@
- 
+
  //// [genericCallWithObjectTypeArgsAndConstraints3.js]
  // Generic call with constraints infering type parameter from object member properties
 -var __extends = (this && this.__extends) || (function () {

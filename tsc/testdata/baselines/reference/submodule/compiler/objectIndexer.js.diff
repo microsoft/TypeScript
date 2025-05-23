@@ -1,8 +1,8 @@
 --- old.objectIndexer.js
 +++ new.objectIndexer.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [objectIndexer.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

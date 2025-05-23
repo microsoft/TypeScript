@@ -1,8 +1,8 @@
 --- old.constAssertions.js
 +++ new.constAssertions.js
 @@= skipped -122, +122 lines =@@
- 
- 
+
+
  //// [constAssertions.js]
 -"use strict";
  let v1 = 'abc';

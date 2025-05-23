@@ -1,7 +1,7 @@
 --- old.mappedTypeProperties.js
 +++ new.mappedTypeProperties.js
 @@= skipped -45, +45 lines =@@
- 
+
  //// [mappedTypeProperties.js]
  "use strict";
 -var _a, _b;

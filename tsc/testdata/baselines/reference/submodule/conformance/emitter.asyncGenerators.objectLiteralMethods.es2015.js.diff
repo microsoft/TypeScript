@@ -1,8 +1,8 @@
 --- old.emitter.asyncGenerators.objectLiteralMethods.es2015.js
 +++ new.emitter.asyncGenerators.objectLiteralMethods.es2015.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [O1.js]
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {

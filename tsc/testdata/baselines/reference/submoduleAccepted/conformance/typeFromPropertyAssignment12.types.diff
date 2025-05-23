@@ -1,7 +1,7 @@
 --- old.typeFromPropertyAssignment12.types
 +++ new.typeFromPropertyAssignment12.types
 @@= skipped -1, +1 lines =@@
- 
+
  === module.js ===
  var Outer = function(element, config) {};
 ->Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
@@ -10,7 +10,7 @@
 +>function(element, config) {} : (element: any, config: any) => void
  >element : any
  >config : any
- 
+
  === usage.js ===
  /** @constructor */
  Outer.Pos = function (line, ch) {};
@@ -26,7 +26,7 @@
 +>function (line, ch) {} : (line: any, ch: any) => void
  >line : any
  >ch : any
- 
+
 @@= skipped -20, +20 lines =@@
  Outer.Pos.prototype.line;
  >Outer.Pos.prototype.line : any
@@ -39,7 +39,7 @@
 +>Pos : any
  >prototype : any
  >line : any
- 
+
  var pos = new Outer.Pos(1, 'x');
 ->pos : Pos
 ->new Outer.Pos(1, 'x') : Pos
@@ -53,7 +53,7 @@
 +>Pos : any
  >1 : 1
  >'x' : "x"
- 
+
  pos.line;
 ->pos.line : number
 ->pos : Pos
@@ -61,5 +61,4 @@
 +>pos.line : any
 +>pos : any
 +>line : any
- 
- 
+

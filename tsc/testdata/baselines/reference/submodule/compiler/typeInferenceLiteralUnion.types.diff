@@ -7,7 +7,7 @@
 ->extent : <T extends Numeric>(array: Array<T | Primitive>) => [T | Primitive, T | Primitive] | [undefined, undefined]
 +>extent : <T extends Numeric>(array: (T | Primitive)[]) => [undefined, undefined] | [T | Primitive, T | Primitive]
  >array : (T | Primitive)[]
- 
+
      return [undefined, undefined];
 @@= skipped -17, +17 lines =@@
  >extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [NumCoercible | Primitive, NumCoercible | Primitive]

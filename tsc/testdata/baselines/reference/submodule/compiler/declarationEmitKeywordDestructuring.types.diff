@@ -2,7 +2,7 @@
 +++ new.declarationEmitKeywordDestructuring.types
 @@= skipped -24, +24 lines =@@
  };
- 
+
  function f1({ enum: _enum, ...rest }: P) {
 ->f1 : ({ enum: _enum, ...rest }: P) => { function: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
 +>f1 : (__0: P) => { function: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
@@ -11,7 +11,7 @@
  >rest : { function: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function f2({ function: _function, ...rest }: P) {
 ->f2 : ({ function: _function, ...rest }: P) => { enum: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
 +>f2 : (__0: P) => { enum: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
@@ -20,7 +20,7 @@
  >rest : { enum: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function f3({ abstract: _abstract, ...rest }: P) {
 ->f3 : ({ abstract: _abstract, ...rest }: P) => { enum: boolean; function: boolean; async: boolean; await: boolean; one: boolean; }
 +>f3 : (__0: P) => { enum: boolean; function: boolean; async: boolean; await: boolean; one: boolean; }
@@ -29,7 +29,7 @@
  >rest : { enum: boolean; function: boolean; async: boolean; await: boolean; one: boolean; }
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function f4({ async: _async, ...rest }: P) {
 ->f4 : ({ async: _async, ...rest }: P) => { enum: boolean; function: boolean; abstract: boolean; await: boolean; one: boolean; }
 +>f4 : (__0: P) => { enum: boolean; function: boolean; abstract: boolean; await: boolean; one: boolean; }
@@ -38,7 +38,7 @@
  >rest : { enum: boolean; function: boolean; abstract: boolean; await: boolean; one: boolean; }
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function f5({ await: _await, ...rest }: P) {
 ->f5 : ({ await: _await, ...rest }: P) => { enum: boolean; function: boolean; abstract: boolean; async: boolean; one: boolean; }
 +>f5 : (__0: P) => { enum: boolean; function: boolean; abstract: boolean; async: boolean; one: boolean; }

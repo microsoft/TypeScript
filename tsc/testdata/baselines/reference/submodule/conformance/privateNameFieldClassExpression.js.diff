@@ -1,8 +1,8 @@
 --- old.privateNameFieldClassExpression.js
 +++ new.privateNameFieldClassExpression.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [privateNameFieldClassExpression.js]
 -var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";

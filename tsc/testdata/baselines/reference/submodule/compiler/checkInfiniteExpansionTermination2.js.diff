@@ -1,8 +1,8 @@
 --- old.checkInfiniteExpansionTermination2.js
 +++ new.checkInfiniteExpansionTermination2.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [checkInfiniteExpansionTermination2.js]
 -// Regression test for #1002
 -// Before fix this code would cause infinite loop

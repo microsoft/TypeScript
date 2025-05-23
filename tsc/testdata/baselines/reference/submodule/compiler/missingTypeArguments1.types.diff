@@ -2,7 +2,7 @@
 +++ new.missingTypeArguments1.types
 @@= skipped -8, +8 lines =@@
  >X : X<T>
- 
+
      p1: () => X;
 ->p1 : () => X
 +>p1 : () => any
@@ -11,7 +11,7 @@
  >a : X<number>
 @@= skipped -46, +46 lines =@@
  >X6 : X6<T>
- 
+
      p6: () => Y;
 ->p6 : () => Y
 +>p6 : () => any

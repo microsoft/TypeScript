@@ -1,12 +1,12 @@
 --- old.defaultDeclarationEmitShadowedNamedCorrectly.types
 +++ new.defaultDeclarationEmitShadowedNamedCorrectly.types
 @@= skipped -1, +1 lines =@@
- 
+
  === this.ts ===
  import * as me from "./this";
 ->me : typeof me
 +>me : typeof import("this")
- 
+
  export interface Things<P, T> {
      p: P;
 @@= skipped -10, +10 lines =@@
@@ -17,14 +17,14 @@
 +>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
  >x : new () => CTor & { props: P; }
  >props : P
- 
+
 @@= skipped -12, +12 lines =@@
  }
- 
+
  export default class MyComponent {
 ->MyComponent : me.default
 +>MyComponent : default
- 
+
      props: Props;
 ->props : me.Props
 +>props : Props
@@ -32,11 +32,11 @@
  export namespace Something {
 ->Something : typeof me.Something
 +>Something : typeof Something
- 
+
      let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
  >MyComponent : number
  >2 : 2
- 
+
      export const create = make(me.default);
 ->create : me.Things<me.Props, me.default>
 ->make(me.default) : me.Things<me.Props, me.default>

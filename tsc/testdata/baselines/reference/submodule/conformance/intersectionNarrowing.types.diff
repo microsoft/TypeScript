@@ -2,64 +2,64 @@
 +++ new.intersectionNarrowing.types
 @@= skipped -3, +3 lines =@@
  // Repros from #43130
- 
+
  function f1<T>(x: T & string | T & undefined) {
 ->f1 : <T>(x: (T & string) | (T & undefined)) => void
 ->x : (T & undefined) | (T & string)
 +>f1 : <T>(x: T & undefined | T & string) => void
 +>x : T & undefined | T & string
- 
+
      if (x) {
 ->x : (T & undefined) | (T & string)
 +>x : T & undefined | T & string
- 
+
          x;  // Should narrow to T & string
  >x : T & string
 @@= skipped -12, +12 lines =@@
  }
- 
+
  function f2<T>(x: T & string | T & undefined) {
 ->f2 : <T>(x: (T & string) | (T & undefined)) => void
 ->x : (T & undefined) | (T & string)
 +>f2 : <T>(x: T & undefined | T & string) => void
 +>x : T & undefined | T & string
- 
+
      if (x !== undefined) {
  >x !== undefined : boolean
 ->x : (T & undefined) | (T & string)
 +>x : T & undefined | T & string
  >undefined : undefined
- 
+
          x;  // Should narrow to T & string
 @@= skipped -18, +18 lines =@@
  }
- 
+
  function f3<T>(x: T & string | T & number) {
 ->f3 : <T>(x: (T & string) | (T & number)) => void
 ->x : (T & string) | (T & number)
 +>f3 : <T>(x: T & string | T & number) => void
 +>x : T & string | T & number
- 
+
      if (typeof x === "string") {
  >typeof x === "string" : boolean
  >typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->x : (T & string) | (T & number)
 +>x : T & string | T & number
  >"string" : "string"
- 
+
          x;  // Should narrow to T & string
 @@= skipped -19, +19 lines =@@
  }
- 
+
  function f4<T>(x: T & 1 | T & 2) {
 ->f4 : <T>(x: (T & 1) | (T & 2)) => void
 ->x : (T & 1) | (T & 2)
 +>f4 : <T>(x: T & 1 | T & 2) => void
 +>x : T & 1 | T & 2
- 
+
      switch (x) {
 ->x : (T & 1) | (T & 2)
 +>x : T & 1 | T & 2
- 
+
          case 1: x; break;  // T & 1
  >1 : 1

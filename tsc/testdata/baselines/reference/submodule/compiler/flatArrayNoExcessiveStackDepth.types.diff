@@ -23,4 +23,3 @@
 +>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray | null; }): RegExpMatchArray | null; }
  >/anything/ : RegExp
  >[] : []
- 

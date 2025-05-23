@@ -1,6 +1,6 @@
 --- old.isolatedDeclarationErrorsDefault.errors.txt
 +++ new.isolatedDeclarationErrorsDefault.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -a.ts(1,16): error TS9037: Default exports can't be inferred with --isolatedDeclarations.
 -b.ts(1,23): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 -c.ts(1,16): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
@@ -45,5 +45,4 @@
 -==== f.ts (0 errors) ====
 -    const a = { foo: 1 };
 -    export default a;
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -10,8 +10,8 @@
    Types of property '[c0]' are incompatible.
 @@= skipped -6, +10 lines =@@
      Type 'number' is not assignable to type 'string'.
- 
- 
+
+
 -==== dynamicNamesErrors.ts (3 errors) ====
 +==== dynamicNamesErrors.ts (7 errors) ====
      const c0 = "1";
@@ -34,9 +34,8 @@
 +        ~~~~
 +!!! error TS2300: Duplicate identifier '[c0]'.
          [c1]: string;
-         ~~~~
-+!!! error TS2300: Duplicate identifier '[c0]'.
 +        ~~~~
++!!! error TS2300: Duplicate identifier '[c0]'.
+         ~~~~
  !!! error TS2717: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
  !!! related TS6203 dynamicNamesErrors.ts:18:5: '[c1]' was also declared here.
-     }

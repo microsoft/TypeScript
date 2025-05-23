@@ -2,7 +2,7 @@
 +++ new.typeParametersInStaticAccessors.js
 @@= skipped -6, +6 lines =@@
  } 
- 
+
  //// [typeParametersInStaticAccessors.js]
 -var foo = /** @class */ (function () {
 -    function foo() {

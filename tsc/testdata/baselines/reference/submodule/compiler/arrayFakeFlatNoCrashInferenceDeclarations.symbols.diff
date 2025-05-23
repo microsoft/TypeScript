@@ -2,12 +2,12 @@
 +++ new.arrayFakeFlatNoCrashInferenceDeclarations.symbols
 @@= skipped -7, +7 lines =@@
  >obj : Symbol(obj, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 48))
- 
+
      "done": Arr,
 ->"done" : Symbol("done", Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 54))
 +>"done" : Symbol(done, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 54))
  >Arr : Symbol(Arr, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 0, 18))
- 
+
      "recur": Arr extends ReadonlyArray<infer InnerArr>
 ->"recur" : Symbol("recur", Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 1, 16))
 +>"recur" : Symbol(recur, Decl(arrayFakeFlatNoCrashInferenceDeclarations.ts, 1, 16))

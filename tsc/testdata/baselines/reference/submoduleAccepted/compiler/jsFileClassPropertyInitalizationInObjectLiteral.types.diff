@@ -8,7 +8,7 @@
 +>module : { export=: () => { c: number; }; }
  >exports : () => { c: number; }
  >function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
- 
+
 @@= skipped -13, +13 lines =@@
      c: A.b = 1,
  >c : number

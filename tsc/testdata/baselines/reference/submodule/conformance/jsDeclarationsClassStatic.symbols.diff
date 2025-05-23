@@ -1,19 +1,19 @@
 --- old.jsDeclarationsClassStatic.symbols
 +++ new.jsDeclarationsClassStatic.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === source.js ===
  class Handler {
 ->Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
 +>Handler : Symbol(Handler, Decl(source.js, 0, 0))
- 
+
  	static get OPTIONS() {
 ->OPTIONS : Symbol(Handler.OPTIONS, Decl(source.js, 0, 15))
 +>OPTIONS : Symbol(OPTIONS, Decl(source.js, 0, 15))
- 
+
  		return 1;
  	}
- 
+
  	process() {
 ->process : Symbol(Handler.process, Decl(source.js, 3, 2))
 +>process : Symbol(process, Decl(source.js, 3, 2))
@@ -24,12 +24,12 @@
 ->Handler : Symbol(Handler, Decl(source.js, 0, 0), Decl(source.js, 7, 1))
 ->statische : Symbol(Handler.statische, Decl(source.js, 7, 1))
 +>Handler : Symbol(Handler, Decl(source.js, 0, 0))
- 
+
  const Strings = {
  >Strings : Symbol(Strings, Decl(source.js, 9, 5))
 @@= skipped -28, +26 lines =@@
  }
- 
+
  module.exports = Handler;
 ->module.exports : Symbol(module.exports, Decl(source.js, 0, 0))
 ->module : Symbol(export=, Decl(source.js, 12, 1))
@@ -39,7 +39,7 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Handler, Decl(source.js, 0, 0))
 +>Handler : Symbol(Handler, Decl(source.js, 0, 0))
- 
+
  module.exports.Strings = Strings
 ->module.exports.Strings : Symbol(Strings, Decl(source.js, 14, 25))
 ->module.exports : Symbol(Strings, Decl(source.js, 14, 25))
@@ -50,5 +50,5 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Handler, Decl(source.js, 0, 0))
  >Strings : Symbol(Strings, Decl(source.js, 9, 5))
- 
+
  /**

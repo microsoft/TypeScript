@@ -1,8 +1,8 @@
 --- old.classUsedBeforeInitializedVariables.js
 +++ new.classUsedBeforeInitializedVariables.js
 @@= skipped -49, +49 lines =@@
- 
- 
+
+
  //// [classUsedBeforeInitializedVariables.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -10,27 +10,14 @@
 -            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
 -            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
 -        return extendStatics(d, b);
-+class Test {
-+    p1 = 0;
-+    p2 = this.p1;
-+    p3 = this.p4;
-+    p4 = 0;
-+    p5;
-+    p6;
-+    p7 = {
-+        hello: (this.p6 = "string"),
-     };
+-    };
 -    return function (d, b) {
 -        if (typeof b !== "function" && b !== null)
 -            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
 -        extendStatics(d, b);
 -        function __() { this.constructor = d; }
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-+    directlyAssigned = this.directlyAssigned;
-+    withinArrowFunction = () => this.withinArrowFunction;
-+    withinFunction = function () {
-+        return this.withinFunction;
-     };
+-    };
 -})();
 -var Test = /** @class */ (function () {
 -    function Test() {
@@ -83,6 +70,21 @@
 -    }
 -    return Test;
 -}());
++class Test {
++    p1 = 0;
++    p2 = this.p1;
++    p3 = this.p4;
++    p4 = 0;
++    p5;
++    p6;
++    p7 = {
++        hello: (this.p6 = "string"),
++    };
++    directlyAssigned = this.directlyAssigned;
++    withinArrowFunction = () => this.withinArrowFunction;
++    withinFunction = function () {
++        return this.withinFunction;
++    };
 +    withinObjectLiteral = {
 +        [this.withinObjectLiteral]: true,
 +    };

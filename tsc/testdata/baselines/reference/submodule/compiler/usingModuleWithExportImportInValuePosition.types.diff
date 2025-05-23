@@ -2,14 +2,14 @@
 +++ new.usingModuleWithExportImportInValuePosition.types
 @@= skipped -25, +25 lines =@@
  >C : typeof C
- 
+
      export import a = A;
 ->a : typeof a
 ->A : typeof a
 +>a : typeof A
 +>A : typeof A
  }
- 
+
  var a: string = C.a.x;
 @@= skipped -16, +16 lines =@@
  >b : { x: number; y: number; }
@@ -26,4 +26,3 @@
 +>Point : typeof Point
  >0 : 0
  >0 : 0
- 

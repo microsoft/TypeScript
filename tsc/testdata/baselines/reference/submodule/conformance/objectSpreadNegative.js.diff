@@ -1,8 +1,8 @@
 --- old.objectSpreadNegative.js
 +++ new.objectSpreadNegative.js
 @@= skipped -77, +77 lines =@@
- 
- 
+
+
  //// [objectSpreadNegative.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {
@@ -32,6 +32,9 @@
 -var o2 = __assign(__assign({}, publicX), privateOptionalX);
 -var sn = o2.x; // error, x is private
 -var allOptional = __assign(__assign({}, optionalString), optionalNumber);
+-;
+-;
+-var spread = __assign({ b: true }, { s: "foo" });
 +class PrivateOptionalX {
 +    x;
 +}
@@ -41,9 +44,8 @@
 +let o2 = { ...publicX, ...privateOptionalX };
 +let sn = o2.x; // error, x is private
 +let allOptional = { ...optionalString, ...optionalNumber };
- ;
- ;
--var spread = __assign({ b: true }, { s: "foo" });
++;
++;
 +let spread = { ...{ b: true }, ...{ s: "foo" } };
  spread = { s: "foo" }; // error, missing 'b'
 -var b = { b: false };

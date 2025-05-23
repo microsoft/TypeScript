@@ -1,7 +1,7 @@
 --- old.parserFunctionPropertyAssignment1.types
 +++ new.parserFunctionPropertyAssignment1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === parserFunctionPropertyAssignment1.ts ===
  var v = { foo() { } };
 ->v : { foo(): void; }
@@ -9,4 +9,3 @@
 +>v : { foo: () => void; }
 +>{ foo() { } } : { foo: () => void; }
  >foo : () => void
- 

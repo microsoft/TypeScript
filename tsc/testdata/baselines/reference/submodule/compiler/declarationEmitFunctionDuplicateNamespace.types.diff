@@ -1,23 +1,23 @@
 --- old.declarationEmitFunctionDuplicateNamespace.types
 +++ new.declarationEmitFunctionDuplicateNamespace.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmitFunctionDuplicateNamespace.ts ===
  function f(a: 0): 0;
 ->f : typeof f
 +>f : { (a: 0): 0; (a: 1): 1; x: number; }
  >a : 0
- 
+
  function f(a: 1): 1;
 ->f : typeof f
 +>f : { (a: 0): 0; (a: 1): 1; x: number; }
  >a : 1
- 
+
  function f(a: 0 | 1) {
 ->f : typeof f
 +>f : { (a: 0): 0; (a: 1): 1; x: number; }
  >a : 0 | 1
- 
+
      return a;
 @@= skipped -18, +18 lines =@@
  f.x = 2;
@@ -27,4 +27,3 @@
 +>f : { (a: 0): 0; (a: 1): 1; x: number; }
  >x : number
  >2 : 2
- 

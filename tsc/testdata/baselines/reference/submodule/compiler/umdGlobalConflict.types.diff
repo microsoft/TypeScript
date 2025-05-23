@@ -1,16 +1,16 @@
 --- old.umdGlobalConflict.types
 +++ new.umdGlobalConflict.types
 @@= skipped -15, +15 lines =@@
- 
+
  === consumer.ts ===
  import * as v1 from './v1';
 ->v1 : typeof v1
 +>v1 : typeof import("v1/index")
- 
+
  import * as v2 from './v2';
 ->v2 : typeof v2
 +>v2 : typeof import("v2/index")
- 
+
  === global.ts ===
  // Should be OK, first in wins
  const p: string = Alpha.x;
@@ -19,4 +19,3 @@
 ->Alpha : typeof Alpha
 +>Alpha : typeof import("v1/index")
  >x : string
- 

@@ -1,8 +1,8 @@
 --- old.destructuringUnspreadableIntoRest.js
 +++ new.destructuringUnspreadableIntoRest.js
 @@= skipped -90, +90 lines =@@
- 
- 
+
+
  //// [destructuringUnspreadableIntoRest.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

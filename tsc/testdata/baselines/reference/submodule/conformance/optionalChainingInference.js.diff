@@ -1,8 +1,8 @@
 --- old.optionalChainingInference.js
 +++ new.optionalChainingInference.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [optionalChainingInference.js]
 -var b1 = { value: su === null || su === void 0 ? void 0 : su.length };
 -var v1 = unbox(b1);

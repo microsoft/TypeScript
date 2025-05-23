@@ -2,7 +2,7 @@
 +++ new.systemModule15.js
 @@= skipped -28, +28 lines =@@
  export var value2 = "v";
- 
+
  //// [file3.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

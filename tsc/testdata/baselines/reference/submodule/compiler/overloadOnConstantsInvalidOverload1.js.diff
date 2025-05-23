@@ -2,7 +2,7 @@
 +++ new.overloadOnConstantsInvalidOverload1.js
 @@= skipped -13, +13 lines =@@
  foo("HI");
- 
+
  //// [overloadOnConstantsInvalidOverload1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

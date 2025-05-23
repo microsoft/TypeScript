@@ -2,28 +2,28 @@
 +++ new.generatorYieldContextualType.types
 @@= skipped -20, +20 lines =@@
  });
- 
+
  declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>): void;
 ->f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
 ->gen : () => Generator<R, T, S> | AsyncGenerator<R, T, S>
 +>f2 : <T, R, S>(gen: () => AsyncGenerator<R, T, S> | Generator<R, T, S>) => void
 +>gen : () => AsyncGenerator<R, T, S> | Generator<R, T, S>
- 
+
  f2<0, 0, 1>(async function* () {
  >f2<0, 0, 1>(async function* () {	const a = yield 0;	return 0;}) : void
 ->f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
 +>f2 : <T, R, S>(gen: () => AsyncGenerator<R, T, S> | Generator<R, T, S>) => void
  >async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1>
- 
+
  	const a = yield 0;
 @@= skipped -39, +39 lines =@@
  >Directive : typeof Directive
- 
+
    export function is<T>(value: Directive | T): value is Directive {
 ->is : <T>(value: Directive | T) => value is Directive
 +>is : <T>(value: T | Directive) => value is Directive
  >value : T | Directive
- 
+
      return typeof value === "number" && Directive[value] != null;
 @@= skipped -10, +10 lines =@@
  >value : T | Directive
@@ -36,23 +36,23 @@
 +>value : Directive | T & number
    }
  }
- 
+
 @@= skipped -122, +122 lines =@@
  };
- 
+
  function canPickStepContinue<T extends QuickPickStep>(
 ->canPickStepContinue : <T extends QuickPickStep>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
 +>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
- 
+
    _step: T,
  >_step : T
 @@= skipped -28, +28 lines =@@
  }
- 
+
  function* showStep<
 ->showStep : <State extends PartialStepState & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
 +>showStep : <State extends Partial<unknown> & { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
- 
+
    State extends PartialStepState & { repo: any },
  >repo : any
 @@= skipped -38, +38 lines =@@

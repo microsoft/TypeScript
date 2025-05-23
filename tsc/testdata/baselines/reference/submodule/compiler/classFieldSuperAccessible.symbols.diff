@@ -1,7 +1,7 @@
 --- old.classFieldSuperAccessible.symbols
 +++ new.classFieldSuperAccessible.symbols
 @@= skipped -6, +6 lines =@@
- 
+
      static {
          console.log(super.name);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -18,7 +18,7 @@
  }
  class B extends Number {
 @@= skipped -14, +14 lines =@@
- 
+
      static {
          console.log(super.EPSILON);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -36,11 +36,11 @@
  class C extends Array {
 @@= skipped -13, +13 lines =@@
  >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
- 
+
      foo() {
 ->foo : Symbol(C.foo, Decl(classFieldSuperAccessible.ts, 10, 23))
 +>foo : Symbol(foo, Decl(classFieldSuperAccessible.ts, 10, 23))
- 
+
          console.log(super.length);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -54,10 +54,10 @@
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
      }
  }
- 
+
 @@= skipped -16, +16 lines =@@
  >D : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
- 
+
      accessor b = () => {}
 ->b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
 +>b : Symbol(b, Decl(classFieldSuperAccessible.ts, 16, 9))
@@ -65,11 +65,11 @@
  class E extends D {
  >E : Symbol(E, Decl(classFieldSuperAccessible.ts, 18, 1))
  >D : Symbol(D, Decl(classFieldSuperAccessible.ts, 14, 1))
- 
+
      foo() {
 ->foo : Symbol(E.foo, Decl(classFieldSuperAccessible.ts, 19, 19))
 +>foo : Symbol(foo, Decl(classFieldSuperAccessible.ts, 19, 19))
- 
+
          super.b()
 ->super.b : Symbol(D.b, Decl(classFieldSuperAccessible.ts, 16, 9))
 +>super.b : Symbol(b, Decl(classFieldSuperAccessible.ts, 16, 9))
@@ -78,4 +78,3 @@
 +>b : Symbol(b, Decl(classFieldSuperAccessible.ts, 16, 9))
      }
  }
- 

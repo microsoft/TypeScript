@@ -1,7 +1,7 @@
 --- old.typeParameterDirectlyConstrainedToItself.js
 +++ new.typeParameterDirectlyConstrainedToItself.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [typeParameterDirectlyConstrainedToItself.js]
  // all of the below should be errors
 -var C = /** @class */ (function () {

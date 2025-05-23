@@ -1,8 +1,8 @@
 --- old.mutuallyRecursiveInference.js
 +++ new.mutuallyRecursiveInference.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [mutuallyRecursiveInference.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

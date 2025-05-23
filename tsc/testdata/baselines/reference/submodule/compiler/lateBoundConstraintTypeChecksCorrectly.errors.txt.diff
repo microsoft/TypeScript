@@ -1,6 +1,6 @@
 --- old.lateBoundConstraintTypeChecksCorrectly.errors.txt
 +++ new.lateBoundConstraintTypeChecksCorrectly.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
 -
 -
@@ -26,5 +26,4 @@
 -        const def2: T[typeof barProp] = x[barProp];
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

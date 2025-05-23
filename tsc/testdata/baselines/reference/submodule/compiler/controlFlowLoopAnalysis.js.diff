@@ -1,7 +1,7 @@
 --- old.controlFlowLoopAnalysis.js
 +++ new.controlFlowLoopAnalysis.js
 @@= skipped -52, +52 lines =@@
- 
+
  //// [controlFlowLoopAnalysis.js]
  // Repro from #8418
 -var cond;

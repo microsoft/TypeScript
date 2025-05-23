@@ -1,7 +1,7 @@
 --- old.unionOfFunctionAndSignatureIsCallable.types
 +++ new.unionOfFunctionAndSignatureIsCallable.types
 @@= skipped -1, +1 lines =@@
- 
+
  === unionOfFunctionAndSignatureIsCallable.ts ===
  function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
 ->f1 : (c1: Function, c2: () => object, callable: typeof c1 | typeof c2) => void
@@ -11,7 +11,7 @@
  >callable : Function | (() => object)
 @@= skipped -18, +18 lines =@@
  >c2 : () => object
- 
+
      const c = callable();
 ->c : error
 ->callable() : error
@@ -19,12 +19,12 @@
 +>callable() : any
  >callable : Function | (() => object)
  }
- 
+
  function f2(fetcherParams: object | (() => object)) {
 ->f2 : (fetcherParams: object | (() => object)) => void
 +>f2 : (fetcherParams: (() => object) | object) => void
  >fetcherParams : (() => object) | object
- 
+
      const data = typeof fetcherParams === 'function'
 ->data : error
 ->typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : error
@@ -34,10 +34,10 @@
  >typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
  >fetcherParams : (() => object) | object
  >'function' : "function"
- 
+
          ? fetcherParams()
 ->fetcherParams() : error
 +>fetcherParams() : any
  >fetcherParams : Function | (() => object)
- 
+
          : fetcherParams

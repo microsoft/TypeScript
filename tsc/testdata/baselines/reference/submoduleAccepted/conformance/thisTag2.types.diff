@@ -6,9 +6,8 @@
  export function f1() {}
 ->f1 : (this: string) => void
 +>f1 : () => void
- 
+
  /** @this */
  export function f2() {}
 ->f2 : (this: any) => void
 +>f2 : () => void
- 

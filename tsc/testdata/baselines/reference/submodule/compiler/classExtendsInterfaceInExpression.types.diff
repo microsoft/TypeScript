@@ -2,12 +2,12 @@
 +++ new.classExtendsInterfaceInExpression.types
 @@= skipped -3, +3 lines =@@
  interface A {}
- 
+
  function factory(a: any): {new(): Object} {
 ->factory : (a: any) => { new (): Object; }
 +>factory : (a: any) => new () => Object
  >a : any
- 
+
    return null;
 @@= skipped -9, +9 lines =@@
  class C extends factory(A) {}
@@ -16,4 +16,3 @@
 ->factory : (a: any) => { new (): Object; }
 +>factory : (a: any) => new () => Object
  >A : any
- 

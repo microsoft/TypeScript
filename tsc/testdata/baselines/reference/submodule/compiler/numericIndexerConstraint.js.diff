@@ -2,7 +2,7 @@
 +++ new.numericIndexerConstraint.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [numericIndexerConstraint.js]
 -var C = /** @class */ (function () {
 -    function C() {

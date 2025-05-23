@@ -1,7 +1,7 @@
 --- old.jsExportMemberMergedWithModuleAugmentation2.types
 +++ new.jsExportMemberMergedWithModuleAugmentation2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /test.js ===
  module.exports = {
 ->module.exports = {  a: "ok"} : { a: string | number; }
@@ -13,14 +13,14 @@
 +>module : { export=: { a: string; }; }
 +>exports : { a: string; }
  >{  a: "ok"} : { a: string; }
- 
+
    a: "ok"
 @@= skipped -17, +17 lines =@@
  >a : string
- 
+
  declare module "./test" {
 ->"./test" : { a: string | number; }
 +>"./test" : typeof import("./test")
- 
+
    export const a: number;
  >a : number

@@ -1,8 +1,8 @@
 --- old.keyofAndIndexedAccess.js
 +++ new.keyofAndIndexedAccess.js
 @@= skipped -660, +660 lines =@@
- 
- 
+
+
  //// [keyofAndIndexedAccess.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -171,14 +171,15 @@
  function f34(ts) {
 -    var tag1 = f33(ts, "tag");
 -    var tag2 = getProperty(ts, "tag");
-+    let tag1 = f33(ts, "tag");
-+    let tag2 = getProperty(ts, "tag");
- }
+-}
 -var C = /** @class */ (function () {
 -    function C() {
 -    }
 -    return C;
 -}());
++    let tag1 = f33(ts, "tag");
++    let tag2 = getProperty(ts, "tag");
++}
 +class C {
 +    x;
 +    y;
@@ -382,8 +383,9 @@
 -        var _this = _super.call(this) || this;
 -        _this.set("parts", parts);
 -        return _this;
-     }
+-    }
 -    Person.prototype.getParts = function () {
++    }
 +}
 +class Person extends Base {
 +    parts;
@@ -503,13 +505,13 @@
 -    };
 -    return B;
 -}(A));
--// Repro from #13749
++    }
++}
+ // Repro from #13749
 -var Form = /** @class */ (function () {
 -    function Form() {
-     }
+-    }
 -    Form.prototype.set = function (prop, value) {
-+}
-+// Repro from #13749
 +class Form {
 +    childFormFactories;
 +    set(prop, value) {
@@ -583,16 +585,12 @@
  // Repro from #26409
 -var cf1 = function (t, k) {
 -    var s = t[k];
-+const cf1 = (t, k) => {
-+    const s = t[k];
-     t.cool;
- };
+-    t.cool;
+-};
 -var cf2 = function (t, k) {
 -    var s = t[k];
-+const cf2 = (t, k) => {
-+    const s = t[k];
-     t.cool;
- };
+-    t.cool;
+-};
 -
 -
 -//// [keyofAndIndexedAccess.d.ts]
@@ -930,3 +928,11 @@
 -    cool: string;
 -}, K extends keyof T>(t: T, k: K) => void;
 -declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;
++const cf1 = (t, k) => {
++    const s = t[k];
++    t.cool;
++};
++const cf2 = (t, k) => {
++    const s = t[k];
++    t.cool;
++};

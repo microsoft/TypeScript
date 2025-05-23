@@ -8,7 +8,7 @@
 ->callback : (...arg0: [any][]) => any
 +>g : (callback: any) => void
 +>callback : any
- 
+
      callback([1], [2], [3])
  >callback([1], [2], [3]) : any
 ->callback : (...arg0: [any][]) => any
@@ -23,7 +23,7 @@
 +>[3] : number[]
  >3 : 3
  }
- 
+
 @@= skipped -19, +19 lines =@@
   * @inner
   */

@@ -28,16 +28,16 @@
    >
  2 >var 
  3 >    endsWithCarriageReturnLineFeed
-@@= skipped -146, +146 lines =@@
+@@= skipped -149, +149 lines =@@
  >>>line 2";
  1 >^^^^^^^
  2 >       ^
 -3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 +3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >"line 1\  >line 2"
+ 1 >"line 1\
+   >line 2"
  2 >       ;
- 1 >Emitted(14, 8) Source(15, 8) + SourceIndex(0)
-@@= skipped -24, +24 lines =@@
+@@= skipped -25, +25 lines =@@
  >>>line 2";
  1 >^^^^^^^
  2 >       ^

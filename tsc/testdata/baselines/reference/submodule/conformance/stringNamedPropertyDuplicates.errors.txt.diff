@@ -14,8 +14,8 @@
 +stringNamedPropertyDuplicates.ts(14,5): error TS2300: Duplicate identifier '"a b"'.
 +stringNamedPropertyDuplicates.ts(15,5): error TS2300: Duplicate identifier '"a b"'.
  stringNamedPropertyDuplicates.ts(20,5): error TS1005: ',' expected.
- 
- 
+
+
 -==== stringNamedPropertyDuplicates.ts (7 errors) ====
 +==== stringNamedPropertyDuplicates.ts (9 errors) ====
      class C {

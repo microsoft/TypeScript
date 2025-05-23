@@ -1,7 +1,7 @@
 --- old.dynamicImportsDeclaration.symbols
 +++ new.dynamicImportsDeclaration.symbols
 @@= skipped -23, +23 lines =@@
- 
+
      case 0:
        return await import("./case0.js");
 ->"./case0.js" : Symbol("/case0", Decl(case0.ts, 0, 0))

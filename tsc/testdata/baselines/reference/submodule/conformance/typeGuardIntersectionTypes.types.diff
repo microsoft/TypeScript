@@ -1,11 +1,11 @@
 --- old.typeGuardIntersectionTypes.types
 +++ new.typeGuardIntersectionTypes.types
 @@= skipped -93, +93 lines =@@
- 
+
  // a function that turns an A into an A & B
  function union(a: A): A & B | null {
 ->union : (a: A) => (A & B) | null
 +>union : (a: A) => A & B | null
  >a : A
- 
+
    if (isB(a)) {

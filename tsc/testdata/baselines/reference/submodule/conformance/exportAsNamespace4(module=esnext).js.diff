@@ -2,7 +2,7 @@
 +++ new.exportAsNamespace4(module=esnext).js
 @@= skipped -21, +21 lines =@@
  foo1.b;
- 
+
  //// [0.js]
 -export var a = 1;
 -export var b = 2;

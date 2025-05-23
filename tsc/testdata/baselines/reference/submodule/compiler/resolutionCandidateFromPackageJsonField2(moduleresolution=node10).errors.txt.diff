@@ -1,6 +1,6 @@
 --- old.resolutionCandidateFromPackageJsonField2(moduleresolution=node10).errors.txt
 +++ new.resolutionCandidateFromPackageJsonField2(moduleresolution=node10).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -test.ts(1,19): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 -
 -
@@ -26,5 +26,4 @@
 -!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
 -    import { b } from "baz/main.ts";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

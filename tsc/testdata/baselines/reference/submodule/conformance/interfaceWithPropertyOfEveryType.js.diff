@@ -2,7 +2,7 @@
 +++ new.interfaceWithPropertyOfEveryType.js
 @@= skipped -44, +44 lines =@@
  }
- 
+
  //// [interfaceWithPropertyOfEveryType.js]
 -var C = /** @class */ (function () {
 -    function C() {

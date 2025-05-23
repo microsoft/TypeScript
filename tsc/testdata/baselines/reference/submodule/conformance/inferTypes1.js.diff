@@ -1,8 +1,8 @@
 --- old.inferTypes1.js
 +++ new.inferTypes1.js
 @@= skipped -189, +189 lines =@@
- 
- 
+
+
  //// [inferTypes1.js]
 -"use strict";
  function f1(s) {
@@ -24,17 +24,24 @@
 -}());
 -var z1 = ex.customClass;
 -var z2 = ex.obj.nested.attr;
--// Repros from #26856
++class C {
++    x = 0;
++    y = 0;
++}
++class Abstract {
++    x = 0;
++    y = 0;
++}
++const z1 = ex.customClass;
++const z2 = ex.obj.nested.attr;
+ // Repros from #26856
 -function invoker(key) {
 -    var args = [];
 -    for (var _i = 1; _i < arguments.length; _i++) {
 -        args[_i - 1] = arguments[_i];
 -    }
 -    return function (obj) { return obj[key].apply(obj, args); };
-+class C {
-+    x = 0;
-+    y = 0;
- }
+-}
 -var result = invoker('test', true)({ test: function (a) { return 123; } });
 -
 -
@@ -54,19 +61,11 @@
 -declare class C {
 -    x: number;
 -    y: number;
-+class Abstract {
-+    x = 0;
-+    y = 0;
- }
+-}
 -declare abstract class Abstract {
 -    x: number;
 -    y: number;
-+const z1 = ex.customClass;
-+const z2 = ex.obj.nested.attr;
-+// Repros from #26856
-+function invoker(key, ...args) {
-+    return (obj) => obj[key](...args);
- }
+-}
 -type T10 = ReturnType<() => string>;
 -type T11 = ReturnType<(s: string) => void>;
 -type T12 = ReturnType<(<T>() => T)>;
@@ -238,4 +237,7 @@
 -declare function invoker<K extends string | number | symbol, A extends any[]>(key: K, ...args: A): <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>;
 -declare const result: number;
 -type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
++function invoker(key, ...args) {
++    return (obj) => obj[key](...args);
++}
 +const result = invoker('test', true)({ test: (a) => 123 });

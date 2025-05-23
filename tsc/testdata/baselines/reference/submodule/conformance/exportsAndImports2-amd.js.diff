@@ -1,8 +1,8 @@
 --- old.exportsAndImports2-amd.js
 +++ new.exportsAndImports2-amd.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [t1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

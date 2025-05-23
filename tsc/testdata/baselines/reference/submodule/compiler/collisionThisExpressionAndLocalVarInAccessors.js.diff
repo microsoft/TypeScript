@@ -2,20 +2,11 @@
 +++ new.collisionThisExpressionAndLocalVarInAccessors.js
 @@= skipped -45, +45 lines =@@
  }
- 
+
  //// [collisionThisExpressionAndLocalVarInAccessors.js]
 -var class1 = /** @class */ (function () {
 -    function class1() {
-+class class1 {
-+    get a() {
-+        var x2 = {
-+            doStuff: (callback) => () => {
-+                var _this = 2;
-+                return callback(this);
-+            }
-+        };
-+        return 10;
-     }
+-    }
 -    Object.defineProperty(class1.prototype, "a", {
 -        get: function () {
 -            var _this_1 = this;
@@ -43,14 +34,7 @@
 -}());
 -var class2 = /** @class */ (function () {
 -    function class2() {
-+    set a(val) {
-+        var x2 = {
-+            doStuff: (callback) => () => {
-+                var _this = 2;
-+                return callback(this);
-+            }
-+        };
-     }
+-    }
 -    Object.defineProperty(class2.prototype, "a", {
 -        get: function () {
 -            var _this_1 = this;
@@ -76,6 +60,24 @@
 -    });
 -    return class2;
 -}());
++class class1 {
++    get a() {
++        var x2 = {
++            doStuff: (callback) => () => {
++                var _this = 2;
++                return callback(this);
++            }
++        };
++        return 10;
++    }
++    set a(val) {
++        var x2 = {
++            doStuff: (callback) => () => {
++                var _this = 2;
++                return callback(this);
++            }
++        };
++    }
 +}
 +class class2 {
 +    get a() {

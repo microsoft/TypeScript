@@ -2,37 +2,26 @@
 +++ new.classConstructorOverloadsAccessibility.js
 @@= skipped -34, +34 lines =@@
  }
- 
+
  //// [classConstructorOverloadsAccessibility.js]
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+    constructor() {
-     }
+-    }
 -    return A;
 -}());
 -var B = /** @class */ (function () {
 -    function B() {
-+}
-+class B {
-+    constructor() {
-     }
+-    }
 -    return B;
 -}());
 -var C = /** @class */ (function () {
 -    function C() {
-+}
-+class C {
-+    constructor() {
-     }
+-    }
 -    return C;
 -}());
 -var D = /** @class */ (function () {
 -    function D() {
-+}
-+class D {
-+    constructor() {
-     }
+-    }
 -    return D;
 -}());
 -
@@ -42,7 +31,7 @@
 -    constructor(a: boolean);
 -    protected constructor(a: number);
 -    private constructor();
- }
+-}
 -declare class B {
 -    protected constructor(a: number);
 -    constructor(a: string);
@@ -54,4 +43,19 @@
 -declare class D {
 -    constructor(a: number);
 -    constructor(a: string);
--}
++class A {
++    constructor() {
++    }
++}
++class B {
++    constructor() {
++    }
++}
++class C {
++    constructor() {
++    }
++}
++class D {
++    constructor() {
++    }
+ }

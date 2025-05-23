@@ -1,8 +1,8 @@
 --- old.voidUndefinedReduction.js
 +++ new.voidUndefinedReduction.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [voidUndefinedReduction.js]
 -"use strict";
  // Repro from #42786

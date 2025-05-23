@@ -7,8 +7,8 @@
  scannertest1.ts(9,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
 @@= skipped -15, +14 lines =@@
  scannertest1.ts(20,23): error TS2304: Cannot find name 'CharacterCodes'.
- 
- 
+
+
 -==== scannertest1.ts (16 errors) ====
 +==== scannertest1.ts (15 errors) ====
      ///<reference path='References.ts' />

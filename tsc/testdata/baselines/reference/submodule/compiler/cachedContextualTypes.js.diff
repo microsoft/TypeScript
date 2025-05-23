@@ -1,7 +1,7 @@
 --- old.cachedContextualTypes.js
 +++ new.cachedContextualTypes.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [cachedContextualTypes.js]
  "use strict";
 -// Repro from #52198

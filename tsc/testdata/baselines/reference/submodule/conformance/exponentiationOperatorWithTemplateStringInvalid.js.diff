@@ -2,7 +2,7 @@
 +++ new.exponentiationOperatorWithTemplateStringInvalid.js
 @@= skipped -19, +19 lines =@@
   
- 
+
  //// [exponentiationOperatorWithTemplateStringInvalid.js]
 -var a = Math.pow(1, "".concat(3));
 -var b = Math.pow(1, "2".concat(3));

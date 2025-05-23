@@ -2,7 +2,7 @@
 +++ new.jsxHasLiteralType.symbols
 @@= skipped -7, +7 lines =@@
  >Props : Symbol(Props, Decl(jsxHasLiteralType.tsx, 0, 31))
- 
+
      x?: "a" | "b";
 ->x : Symbol(Props.x, Decl(jsxHasLiteralType.tsx, 2, 17))
 +>x : Symbol(x, Decl(jsxHasLiteralType.tsx, 2, 17))
@@ -18,5 +18,5 @@
 ->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 +>Component : Symbol(Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
  >P : Symbol(P, Decl(jsxHasLiteralType.tsx, 5, 18))
- 
+
  const m = <MyComponent x="a"/>

@@ -8,14 +8,14 @@
 ->somebody : <T>(m: boolean) => string
 +>sayHello : (somebody: <T>(m: any) => string) => string
 +>somebody : <T>(m: any) => string
- 
+
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: boolean) => string
 +>somebody : <T>(m: any) => string
  }
- 
+
  === index2.js ===
 @@= skipped -14, +14 lines =@@
   * @param {<T>(m: Void<T>) => string} somebody
@@ -25,15 +25,15 @@
 ->somebody : <T>(m: void) => string
 +>sayHello2 : (somebody: <T>(m: Void<T>) => string) => string
 +>somebody : <T>(m: Void<T>) => string
- 
+
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: void) => string
 +>somebody : <T>(m: Void<T>) => string
  }
- 
- 
+
+
 @@= skipped -15, +15 lines =@@
   * @param {<T>(m: Undefined<T>) => string} somebody
   */
@@ -42,15 +42,15 @@
 ->somebody : <T>(m: undefined) => string
 +>sayHello3 : (somebody: <T>(m: Undefined<T>) => string) => string
 +>somebody : <T>(m: Undefined<T>) => string
- 
+
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: undefined) => string
 +>somebody : <T>(m: Undefined<T>) => string
  }
- 
- 
+
+
 @@= skipped -15, +15 lines =@@
   * @param {<T>(m: Function<T>) => string} somebody
   */
@@ -59,15 +59,15 @@
 ->somebody : <T>(m: Function) => string
 +>sayHello4 : (somebody: <T>(m: any) => string) => string
 +>somebody : <T>(m: any) => string
- 
+
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: Function) => string
 +>somebody : <T>(m: any) => string
  }
- 
- 
+
+
 @@= skipped -15, +15 lines =@@
   * @param {<T>(m: String<T>) => string} somebody
   */
@@ -76,15 +76,15 @@
 ->somebody : <T>(m: string) => string
 +>sayHello5 : (somebody: <T>(m: any) => string) => string
 +>somebody : <T>(m: any) => string
- 
+
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: string) => string
 +>somebody : <T>(m: any) => string
  }
- 
- 
+
+
 @@= skipped -15, +15 lines =@@
   * @param {<T>(m: Number<T>) => string} somebody
   */
@@ -93,15 +93,15 @@
 ->somebody : <T>(m: number) => string
 +>sayHello6 : (somebody: <T>(m: any) => string) => string
 +>somebody : <T>(m: any) => string
- 
+
      return 'Hello ' + somebody;
  >'Hello ' + somebody : string
  >'Hello ' : "Hello "
 ->somebody : <T>(m: number) => string
 +>somebody : <T>(m: any) => string
  }
- 
- 
+
+
 @@= skipped -32, +32 lines =@@
   * @param {fn<T>} somebody
   */
@@ -110,4 +110,3 @@
 ->somebody : () => void
 +>sayHello8 : (somebody: fn<T>) => void
 +>somebody : fn<T>
- 

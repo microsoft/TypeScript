@@ -2,7 +2,7 @@
 +++ new.typeQueryWithReservedWords.symbols
 @@= skipped -4, +4 lines =@@
  >Controller : Symbol(Controller, Decl(typeQueryWithReservedWords.ts, 0, 0))
- 
+
      create() {
 ->create : Symbol(Controller.create, Decl(typeQueryWithReservedWords.ts, 0, 18))
 +>create : Symbol(create, Decl(typeQueryWithReservedWords.ts, 0, 18))
@@ -16,10 +16,10 @@
 +>var : Symbol(var, Decl(typeQueryWithReservedWords.ts, 4, 5))
      }
  }
- 
+
 @@= skipped -14, +14 lines =@@
  >IScope : Symbol(IScope, Decl(typeQueryWithReservedWords.ts, 7, 1))
- 
+
      create: typeof Controller.prototype.create;  
 ->create : Symbol(IScope.create, Decl(typeQueryWithReservedWords.ts, 9, 18))
 ->Controller.prototype.create : Symbol(Controller.create, Decl(typeQueryWithReservedWords.ts, 0, 18))
@@ -32,7 +32,7 @@
 ->create : Symbol(Controller.create, Decl(typeQueryWithReservedWords.ts, 0, 18))
 +>prototype : Symbol(prototype)
 +>create : Symbol(create, Decl(typeQueryWithReservedWords.ts, 0, 18))
- 
+
      delete: typeof Controller.prototype.delete;  // Should not error
 ->delete : Symbol(IScope.delete, Decl(typeQueryWithReservedWords.ts, 10, 47))
 ->Controller.prototype.delete : Symbol(Controller.delete, Decl(typeQueryWithReservedWords.ts, 2, 5))
@@ -45,7 +45,7 @@
 ->delete : Symbol(Controller.delete, Decl(typeQueryWithReservedWords.ts, 2, 5))
 +>prototype : Symbol(prototype)
 +>delete : Symbol(delete, Decl(typeQueryWithReservedWords.ts, 2, 5))
- 
+
      var: typeof Controller.prototype.var;        // Should not error
 ->var : Symbol(IScope.var, Decl(typeQueryWithReservedWords.ts, 11, 47))
 ->Controller.prototype.var : Symbol(Controller.var, Decl(typeQueryWithReservedWords.ts, 4, 5))
@@ -59,4 +59,3 @@
 +>prototype : Symbol(prototype)
 +>var : Symbol(var, Decl(typeQueryWithReservedWords.ts, 4, 5))
  }
- 

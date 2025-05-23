@@ -2,10 +2,10 @@
 +++ new.isolatedDeclarationErrorsExpressions.types
 @@= skipped -549, +549 lines =@@
  >2 : 2
- 
+
  export function foo([, , b]: [
 ->foo : ([, , b]?: [number, number, number]) => void
 +>foo : (__0?: [number, number, number]) => void
  >b : number
- 
+
      number,

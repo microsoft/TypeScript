@@ -2,7 +2,7 @@
 +++ new.declarationEmitPromise.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(declarationEmitPromise.ts, 0, 22))
- 
+
      static all: Array<bluebird<any>>;
 ->all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
 +>all : Symbol(all, Decl(declarationEmitPromise.ts, 0, 26))
@@ -10,7 +10,7 @@
  >bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
  }
 @@= skipped -32, +32 lines =@@
- 
+
      let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
  >result : Symbol(result, Decl(declarationEmitPromise.ts, 6, 7))
 ->bluebird.all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
@@ -29,10 +29,10 @@
 +>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >el : Symbol(el, Decl(declarationEmitPromise.ts, 6, 68))
  >el : Symbol(el, Decl(declarationEmitPromise.ts, 6, 68))
- 
+
 @@= skipped -31, +31 lines =@@
  >T : Symbol(T, Decl(declarationEmitPromise.ts, 7, 16))
- 
+
          f.apply(this, result);
 ->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 +>f.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
@@ -40,10 +40,10 @@
 ->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 +>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
  >result : Symbol(result, Decl(declarationEmitPromise.ts, 6, 7))
- 
+
      let rfunc: typeof func & {} = func as any; // <- This is the only difference
 @@= skipped -41, +41 lines =@@
- 
+
      let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
  >result : Symbol(result, Decl(declarationEmitPromise.ts, 15, 7))
 ->bluebird.all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
@@ -62,10 +62,10 @@
 +>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >el : Symbol(el, Decl(declarationEmitPromise.ts, 15, 68))
  >el : Symbol(el, Decl(declarationEmitPromise.ts, 15, 68))
- 
+
 @@= skipped -31, +31 lines =@@
  >T : Symbol(T, Decl(declarationEmitPromise.ts, 16, 16))
- 
+
          f.apply(this, result);
 ->f.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 +>f.apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
@@ -73,5 +73,5 @@
 ->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 +>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
  >result : Symbol(result, Decl(declarationEmitPromise.ts, 15, 7))
- 
+
      let rfunc: typeof func = func as any; // <- This is the only difference

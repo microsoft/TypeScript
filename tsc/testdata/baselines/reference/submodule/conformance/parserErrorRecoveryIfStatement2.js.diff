@@ -2,7 +2,7 @@
 +++ new.parserErrorRecoveryIfStatement2.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [parserErrorRecoveryIfStatement2.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

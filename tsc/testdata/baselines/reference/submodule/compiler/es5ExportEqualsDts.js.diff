@@ -1,7 +1,7 @@
 --- old.es5ExportEqualsDts.js
 +++ new.es5ExportEqualsDts.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [es5ExportEqualsDts.js]
  "use strict";
 -var A = /** @class */ (function () {
@@ -15,7 +15,9 @@
 -    };
 -    return A;
 -}());
--module.exports = A;
++    }
++}
+ module.exports = A;
 -
 -
 -//// [es5ExportEqualsDts.d.ts]
@@ -24,7 +26,6 @@
 -}
 -declare namespace A {
 -    interface B {
-     }
- }
+-    }
+-}
 -export = A;
-+module.exports = A;

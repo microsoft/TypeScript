@@ -1,8 +1,8 @@
 --- old.typeGuardNarrowsToLiteralType.js
 +++ new.typeGuardNarrowsToLiteralType.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [typeGuardNarrowsToLiteralType.js]
 -var value;
 +let value;

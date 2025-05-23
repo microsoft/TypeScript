@@ -1,8 +1,8 @@
 --- old.templateLiteralTypes3.js
 +++ new.templateLiteralTypes3.js
 @@= skipped -205, +205 lines =@@
- 
- 
+
+
  //// [templateLiteralTypes3.js]
 -"use strict";
 -// Inference from template literal type to template literal type

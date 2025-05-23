@@ -1,8 +1,8 @@
 --- old.baseTypeWrappingInstantiationChain.js
 +++ new.baseTypeWrappingInstantiationChain.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [baseTypeWrappingInstantiationChain.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

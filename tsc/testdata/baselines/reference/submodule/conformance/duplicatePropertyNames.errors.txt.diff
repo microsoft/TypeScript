@@ -14,8 +14,8 @@
  duplicatePropertyNames.ts(31,5): error TS2300: Duplicate identifier 'foo'.
 @@= skipped -14, +16 lines =@@
  duplicatePropertyNames.ts(46,5): error TS1117: An object literal cannot have multiple properties with the same name.
- 
- 
+
+
 -==== duplicatePropertyNames.ts (16 errors) ====
 +==== duplicatePropertyNames.ts (18 errors) ====
      // duplicate property names are an error in all types

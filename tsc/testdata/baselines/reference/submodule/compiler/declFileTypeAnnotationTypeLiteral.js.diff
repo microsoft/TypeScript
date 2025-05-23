@@ -2,7 +2,7 @@
 +++ new.declFileTypeAnnotationTypeLiteral.js
 @@= skipped -40, +40 lines =@@
  var z: new (a: string) => m.c;
- 
+
  //// [declFileTypeAnnotationTypeLiteral.js]
 -var c = /** @class */ (function () {
 -    function c() {

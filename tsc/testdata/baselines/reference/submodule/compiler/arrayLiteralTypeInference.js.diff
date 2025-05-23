@@ -1,8 +1,8 @@
 --- old.arrayLiteralTypeInference.js
 +++ new.arrayLiteralTypeInference.js
 @@= skipped -53, +53 lines =@@
- 
- 
+
+
  //// [arrayLiteralTypeInference.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

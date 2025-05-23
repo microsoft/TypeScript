@@ -1,25 +1,25 @@
 --- old.contextualTypeBasedOnIntersectionWithAnyInTheMix5.types
 +++ new.contextualTypeBasedOnIntersectionWithAnyInTheMix5.types
 @@= skipped -39, +39 lines =@@
- 
+
  interface App {
    mixin(mixin: ComponentOptions): this;
 ->mixin : (mixin: ComponentOptions) => this
 +>mixin : (mixin: ComponentOptions<any, any>) => this
  >mixin : ComponentOptions<any, any>
  }
- 
+
 @@= skipped -24, +24 lines =@@
  >ThemeSymbol : InjectionKey<ThemeInstance>
- 
+
  declare function inject(
 ->inject : (this: ComponentPublicInstance, key: InjectionKey<any> | string) => any
 +>inject : (this: ExtractComputedReturns<{}>, key: string | InjectionKey<any>) => any
- 
+
    this: ComponentPublicInstance,
  >this : ExtractComputedReturns<{}>
 @@= skipped -15, +15 lines =@@
- 
+
  app.mixin({
  >app.mixin({  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },}) : App
 ->app.mixin : (mixin: ComponentOptions) => App
@@ -29,13 +29,13 @@
 ->{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify(): Ref<{ theme: any; }>; }; }
 +>mixin : (mixin: ComponentOptions<any, any>) => App
 +>{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify: () => Ref<{ theme: any; }>; }; }
- 
+
    computed: {
 ->computed : { $vuetify(): Ref<{ theme: any; }>; }
 ->{    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  } : { $vuetify(): Ref<{ theme: any; }>; }
 +>computed : { $vuetify: () => Ref<{ theme: any; }>; }
 +>{    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  } : { $vuetify: () => Ref<{ theme: any; }>; }
- 
+
      $vuetify() {
  >$vuetify : () => Ref<{ theme: any; }>
 @@= skipped -22, +22 lines =@@

@@ -1,8 +1,8 @@
 --- old.modulePreserveImportHelpers.js
 +++ new.modulePreserveImportHelpers.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [a.mjs]
 -import { __esDecorate, __runInitializers } from "tslib";
 -let A = (() => {

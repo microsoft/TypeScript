@@ -1,6 +1,6 @@
 --- old.checkJsdocSatisfiesTag1.errors.txt
 +++ new.checkJsdocSatisfiesTag1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(21,44): error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
 -/a.js(22,17): error TS1360: Type '{}' does not satisfy the expected type 'T1'.
 -  Property 'a' is missing in type '{}' but required in type 'T1'.
@@ -48,5 +48,4 @@
 -                                                    ~
 -!!! error TS2353: Object literal may only specify known properties, and 'b' does not exist in type 'T4'.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationDecorators.js
 @@= skipped -56, +56 lines =@@
  }
- 
+
  //// [sourceMapValidationDecorators.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -33,15 +33,7 @@
          return "<h1>" + this.greeting + "</h1>";
 -    };
 -    Greeter.prototype.fn = function (x) {
-+    }
-+    @PropertyDecorator1
-+    @PropertyDecorator2(50)
-+    x;
-+    @PropertyDecorator1
-+    @PropertyDecorator2(60)
-+    static x1 = 10;
-+    fn(x) {
-         return this.greeting;
+-        return this.greeting;
 -    };
 -    Object.defineProperty(Greeter.prototype, "greetings", {
 -        get: function () {
@@ -86,6 +78,15 @@
 -    ], Greeter);
 -    return Greeter;
 -}());
++    }
++    @PropertyDecorator1
++    @PropertyDecorator2(50)
++    x;
++    @PropertyDecorator1
++    @PropertyDecorator2(60)
++    static x1 = 10;
++    fn(x) {
++        return this.greeting;
 +    }
 +    @PropertyDecorator1
 +    @PropertyDecorator2(80)

@@ -9,7 +9,7 @@
  >i : Symbol(i, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 7, 3))
 ->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 +>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
- 
+
  var b: {
  >b : Symbol(b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 11, 3))
 @@= skipped -18, +18 lines =@@
@@ -21,4 +21,3 @@
  >b : Symbol(b, Decl(objectTypeWithCallSignatureAppearsToBeFunctionType.ts, 11, 3))
 ->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 +>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
- 

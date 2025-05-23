@@ -1,6 +1,6 @@
 --- old.verbatimModuleSyntaxAmbientConstEnum.errors.txt
 +++ new.verbatimModuleSyntaxAmbientConstEnum.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.ts(1,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 -/a.ts(4,1): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 -/b.ts(1,10): error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
@@ -28,5 +28,4 @@
 -!!! error TS2748: Cannot access ambient const enums when 'verbatimModuleSyntax' is enabled.
 -    export type { E as _E } from "pkg"; // Ok
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

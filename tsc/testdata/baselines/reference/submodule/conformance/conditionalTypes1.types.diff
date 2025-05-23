@@ -2,82 +2,82 @@
 +++ new.conditionalTypes1.types
 @@= skipped -334, +334 lines =@@
  };
- 
+
  function f10(part: DeepReadonly<Part>) {
 ->f10 : (part: DeepReadonly<Part>) => void
 +>f10 : (part: DeepReadonlyObject<Part>) => void
  >part : DeepReadonlyObject<Part>
- 
+
      let name: string = part.name;
 @@= skipped -71, +71 lines =@@
  >false : false
- 
+
  function zeroOf<T extends number | string | boolean>(value: T) {
 ->zeroOf : <T extends number | string | boolean>(value: T) => ZeroOf<T>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >value : T
- 
+
      return <ZeroOf<T>>(typeof value === "number" ? 0 : typeof value === "string" ? "" : false);
 @@= skipped -30, +30 lines =@@
- 
+
      zeroOf(5);  // 0
  >zeroOf(5) : 0
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >5 : 5
- 
+
      zeroOf("hello");  // ""
  >zeroOf("hello") : ""
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >"hello" : "hello"
- 
+
      zeroOf(true);  // false
  >zeroOf(true) : false
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >true : true
- 
+
      zeroOf(n);  // 0
  >zeroOf(n) : 0
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >n : number
- 
+
      zeroOf(b);  // False
  >zeroOf(b) : false
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >b : boolean
- 
+
      zeroOf(x);  // 0 | false
  >zeroOf(x) : 0 | false
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >x : number | boolean
- 
+
      zeroOf(y);  // ZeroOf<T>
  >zeroOf(y) : ZeroOf<T>
 ->zeroOf : <T_1 extends number | string | boolean>(value: T_1) => ZeroOf<T_1>
 +>zeroOf : <T extends string | number | boolean>(value: T) => ZeroOf<T>
  >y : T
  }
- 
+
  function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
 ->f21 : <T extends number | string>(x: T, y: ZeroOf<T>) => void
 +>f21 : <T extends string | number>(x: T, y: ZeroOf<T>) => void
  >x : T
  >y : ZeroOf<T>
- 
+
 @@= skipped -234, +234 lines =@@
  >T52 : false
- 
+
  function f22<T>(x: T extends (infer U)[] ? U[] : never) {
 ->f22 : <T>(x: T extends (infer U)[] ? U[] : never) => void
 ->x : T extends (infer U)[] ? U[] : never
 +>f22 : <T>(x: T extends (infer U)[] ? (U)[] : never) => void
 +>x : T extends (infer U)[] ? (U)[] : never
- 
+
      let e = x[0];  // {}
  >e : unknown
  >x[0] : unknown
@@ -85,13 +85,13 @@
 +>x : T extends (infer U)[] ? (U)[] : never
  >0 : 0
  }
- 
+
  function f23<T extends string[]>(x: T extends (infer U)[] ? U[] : never) {
 ->f23 : <T extends string[]>(x: T extends (infer U)[] ? U[] : never) => void
 ->x : T extends (infer U)[] ? U[] : never
 +>f23 : <T extends string[]>(x: T extends (infer U)[] ? (U)[] : never) => void
 +>x : T extends (infer U)[] ? (U)[] : never
- 
+
      let e = x[0];  // string
  >e : string
  >x[0] : string
@@ -99,10 +99,10 @@
 +>x : T extends (infer U)[] ? (U)[] : never
  >0 : 0
  }
- 
+
 @@= skipped -119, +119 lines =@@
  >Baz : Baz<T>
- 
+
  const convert2 = <T>(value: Foo<T>): Baz<T> => value;
 ->convert2 : <T>(value: Foo<T>) => Baz<T>
 -><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Baz<T>
@@ -110,69 +110,69 @@
 +><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Foo<T>
  >value : Foo<T>
  >value : Foo<T>
- 
+
 @@= skipped -9, +9 lines =@@
  >f31 : <T>() => void
- 
+
      type T1 = T extends string ? boolean : number;
 ->T1 : T extends string ? boolean : number
 +>T1 : T1
- 
+
      type T2 = T extends string ? boolean : number;
 ->T2 : T extends string ? boolean : number
 +>T2 : T2
- 
+
      var x: T1;
 ->x : T extends string ? boolean : number
 +>x : T1
- 
+
      var x: T2;
 ->x : T extends string ? boolean : number
 +>x : T1
  }
- 
+
  function f32<T, U>() {
  >f32 : <T, U>() => void
- 
+
      type T1 = T & U extends string ? boolean : number;
 ->T1 : T & U extends string ? boolean : number
 +>T1 : T1
- 
+
      type T2 = Foo<T & U>;
  >T2 : Foo<T & U>
- 
+
      var z: T1;
 ->z : T & U extends string ? boolean : number
 +>z : T1
- 
+
      var z: T2;  // Error, T2 is distributive, T1 isn't
 ->z : T & U extends string ? boolean : number
 +>z : T1
  }
- 
+
  function f33<T, U>() {
 @@= skipped -107, +107 lines =@@
  >f50 : () => void
- 
+
      type Eq<T, U> = T extends U ? U extends T ? true : false : false;
 ->Eq : T extends U ? U extends T ? true : false : false
 +>Eq : Eq<T, U>
  >true : true
  >false : false
  >false : false
- 
+
      type If<S, T, U> = S extends false ? U : T;
 ->If : S extends false ? U : T
 +>If : If<S, T, U>
  >false : false
- 
+
      type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
 ->Omit : { [P in keyof T]: (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends never ? never : false : never : never) extends infer T_2 ? T_2 extends (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends never ? never : false : never : never) ? T_2 extends false ? P : never : never : never; }[keyof T]
 +>Omit : Omit<T>
- 
+
      type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
 ->Omit2 : { [P in keyof T]: (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends U ? U extends T_1 ? true : false : false : never : never) extends infer T_2 ? T_2 extends (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends U ? U extends T_1 ? true : false : false : never : never) ? T_2 extends false ? P : never : never : never; }[keyof T]
 +>Omit2 : Omit2<T, U>
- 
+
      type A = Omit<{ a: void; b: never; }>;  // 'a'
  >A : "a"

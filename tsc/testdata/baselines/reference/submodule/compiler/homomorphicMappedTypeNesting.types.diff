@@ -2,9 +2,8 @@
 +++ new.homomorphicMappedTypeNesting.types
 @@= skipped -19, +19 lines =@@
  >Identity : Identity<T>
- 
+
  declare function fnBad<T extends Array<Box<string>>>(...args: T): Test<Identity<UnboxArray<T>>>;
 ->fnBad : <T extends Array<Box<string>>>(...args: T) => Test<Identity<UnboxArray<T>>>
 +>fnBad : <T extends Box<string>[]>(...args: T) => Identity<UnboxArray<T>>
  >args : T
- 

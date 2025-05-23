@@ -1,8 +1,8 @@
 --- old.destructuringAssignabilityCheck.js
 +++ new.destructuringAssignabilityCheck.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [destructuringAssignabilityCheck.js]
 -"use strict";
 -var _a = {}; // should be error
@@ -10,18 +10,22 @@
 -(function (_a) { return 0; })({}); // should be error
 -(function (_a) { return 0; })(undefined); // should be error
 -function foo(_a) {
+-    return 0;
+-}
+-function bar(_a) {
+-    return 0;
+-}
+-var _c = 1;
+-var _d = {};
 +const [] = {}; // should be error
 +const {} = undefined; // error correctly
 +(([]) => 0)({}); // should be error
 +(({}) => 0)(undefined); // should be error
 +function foo({}) {
-     return 0;
- }
--function bar(_a) {
++    return 0;
++}
 +function bar([]) {
-     return 0;
- }
--var _c = 1;
--var _d = {};
++    return 0;
++}
 +const {} = 1;
 +const [] = {};

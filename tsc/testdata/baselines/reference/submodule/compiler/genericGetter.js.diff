@@ -2,7 +2,7 @@
 +++ new.genericGetter.js
 @@= skipped -11, +11 lines =@@
  var r: string = c.x;
- 
+
  //// [genericGetter.js]
 -var C = /** @class */ (function () {
 -    function C() {

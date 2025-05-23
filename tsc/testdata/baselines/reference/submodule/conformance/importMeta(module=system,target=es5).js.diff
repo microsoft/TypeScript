@@ -2,7 +2,7 @@
 +++ new.importMeta(module=system,target=es5).js
 @@= skipped -38, +38 lines =@@
  const { a, b, c } = import.meta.wellKnownProperty;
- 
+
  //// [example.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

@@ -10,7 +10,7 @@
 +>require('./bug24024') : typeof C
  >require : any
  >'./bug24024' : "./bug24024"
- 
+
  module.exports = class C {}
 ->module.exports = class C {} : typeof wat
 ->module.exports : typeof wat
@@ -24,7 +24,7 @@
 +>exports : typeof C
 +>class C {} : typeof C
 +>C : typeof C
- 
+
  module.exports.D = class D { }
 ->module.exports.D = class D { } : typeof wat.D
 ->module.exports.D : typeof wat.D
@@ -42,4 +42,3 @@
 +>D : any
 +>class D { } : typeof D
 +>D : typeof D
- 

@@ -1,8 +1,8 @@
 --- old.varianceAnnotations.js
 +++ new.varianceAnnotations.js
 @@= skipped -177, +177 lines =@@
- 
- 
+
+
  //// [varianceAnnotations.js]
 -"use strict";
  super_covariant = sub_covariant;
@@ -41,20 +41,15 @@
 -    function class_1() {
 -    }
 -    class_1.prototype.foo = function () {
-+let Anon = class {
-+    foo() {
-         return this;
+-        return this;
 -    };
 -    return class_1;
 -}());
 -var OuterC = /** @class */ (function () {
 -    function C() {
-     }
+-    }
 -    C.prototype.foo = function () {
-+};
-+let OuterC = class C {
-+    foo() {
-         return this;
+-        return this;
 -    };
 -    return C;
 -}());
@@ -63,8 +58,7 @@
 -//// [varianceAnnotations.d.ts]
 -type Covariant<out T> = {
 -    x: T;
-+    }
- };
+-};
 -declare let super_covariant: Covariant<unknown>;
 -declare let sub_covariant: Covariant<string>;
 -type Contravariant<in T> = {
@@ -175,4 +169,13 @@
 -    new <out T>(): {
 -        foo(): /*elided*/ any;
 -    };
--};
++let Anon = class {
++    foo() {
++        return this;
++    }
++};
++let OuterC = class C {
++    foo() {
++        return this;
++    }
+ };

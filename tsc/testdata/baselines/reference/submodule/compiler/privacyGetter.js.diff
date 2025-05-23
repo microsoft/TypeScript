@@ -2,7 +2,7 @@
 +++ new.privacyGetter.js
 @@= skipped -209, +209 lines =@@
  }
- 
+
  //// [privacyGetter.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -208,35 +208,20 @@
 -    })(m2 || (m2 = {}));
 -    var C5_private = /** @class */ (function () {
 -        function C5_private() {
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.C7_public = exports.C6_public = exports.m1 = void 0;
-+var m1;
-+(function (m1) {
-+    class C1_public {
-+        f1() {
-         }
+-        }
 -        C5_private.prototype.f = function () {
 -        };
 -        return C5_private;
 -    }());
 -    var C6_public = /** @class */ (function () {
 -        function C6_public() {
-+    }
-+    m1.C1_public = C1_public;
-+    class C2_private {
-+    }
-+    class C3_public {
-+        get p1_private() {
-+            return new C1_public();
-         }
+-        }
 -        return C6_public;
 -    }());
 -    exports.C6_public = C6_public;
 -    var C7_public = /** @class */ (function () {
 -        function C7_public() {
-+        set p1_private(m1_c3_p1_arg) {
-         }
+-        }
 -        Object.defineProperty(C7_public.prototype, "p1_private", {
 -            get: function () {
 -                return new C6_public();
@@ -278,9 +263,7 @@
 -    exports.C7_public = C7_public;
 -    var C8_private = /** @class */ (function () {
 -        function C8_private() {
-+        get p2_private() {
-+            return new C1_public();
-         }
+-        }
 -        Object.defineProperty(C8_private.prototype, "p1_private", {
 -            get: function () {
 -                return new C6_public();
@@ -320,6 +303,27 @@
 -        return C8_private;
 -    }());
 -});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.C7_public = exports.C6_public = exports.m1 = void 0;
++var m1;
++(function (m1) {
++    class C1_public {
++        f1() {
++        }
++    }
++    m1.C1_public = C1_public;
++    class C2_private {
++    }
++    class C3_public {
++        get p1_private() {
++            return new C1_public();
++        }
++        set p1_private(m1_c3_p1_arg) {
++        }
++        get p2_private() {
++            return new C1_public();
++        }
 +        set p2_private(m1_c3_p2_arg) {
 +        }
 +        get p3_private() {

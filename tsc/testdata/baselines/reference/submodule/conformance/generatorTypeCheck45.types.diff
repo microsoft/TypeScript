@@ -1,7 +1,7 @@
 --- old.generatorTypeCheck45.types
 +++ new.generatorTypeCheck45.types
 @@= skipped -1, +1 lines =@@
- 
+
  === generatorTypeCheck45.ts ===
  declare function foo<T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T): T;
 ->foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T) => T
@@ -12,7 +12,7 @@
  >x : T
  >fun2 : (y: U) => T
  >y : U
- 
+
  foo("", function* () { yield x => x.length }, p => undefined); // T is fixed, should be string
  >foo("", function* () { yield x => x.length }, p => undefined) : string
 ->foo : <T, U>(x: T, fun: () => Iterator<(x: T) => U>, fun2: (y: U) => T) => T

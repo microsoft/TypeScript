@@ -1,8 +1,8 @@
 --- old.letConstMatchingParameterNames.js
 +++ new.letConstMatchingParameterNames.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [letConstMatchingParameterNames.js]
 -var parent = true;
 -var parent2 = true;

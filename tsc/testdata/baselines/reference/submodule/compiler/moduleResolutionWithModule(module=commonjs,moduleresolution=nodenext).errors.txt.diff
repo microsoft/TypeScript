@@ -1,6 +1,6 @@
 --- old.moduleResolutionWithModule(module=commonjs,moduleresolution=nodenext).errors.txt
 +++ new.moduleResolutionWithModule(module=commonjs,moduleresolution=nodenext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 -
 -
@@ -16,5 +16,4 @@
 -==== index.ts (0 errors) ====
 -    import * as p from "pkg";
 -    p.thing();
-@@= skipped --1, +1 lines =@@
 +<no content>

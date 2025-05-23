@@ -7,8 +7,8 @@
  parserRealSource5.ts(52,38): error TS2304: Cannot find name 'AST'.
 @@= skipped -8, +7 lines =@@
  parserRealSource5.ts(61,65): error TS2304: Cannot find name 'IAstWalker'.
- 
- 
+
+
 -==== parserRealSource5.ts (9 errors) ====
 +==== parserRealSource5.ts (8 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

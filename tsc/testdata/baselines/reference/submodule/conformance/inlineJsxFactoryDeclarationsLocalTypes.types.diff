@@ -8,7 +8,7 @@
 +>dom : () => Element
  >dom : any
  >JSX : any
- 
+
 @@= skipped -35, +35 lines =@@
      }
  }
@@ -17,13 +17,13 @@
 +>predom : () => Element
  >predom : any
  >JSX : any
- 
+
  === component.tsx ===
  /** @jsx predom */
  import { predom } from "./renderer2"
 ->predom : () => predom.JSX.Element
 +>predom : () => Element
- 
+
  export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
 ->MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
 ->(props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p> : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
@@ -66,10 +66,10 @@
 ->predom : () => predom.JSX.Element
 +>predom : () => Element
  >JSX : any
- 
+
      __predomBrand!: void;
  >__predomBrand : void
- 
+
      constructor(public props: {x: number, y: number, children?: predom.JSX.Element[]}) {}
 ->props : { x: number; y: number; children?: predom.JSX.Element[]; }
 +>props : { x: number; y: number; children?: Element[]; }
@@ -79,16 +79,16 @@
 +>children : Element[]
  >predom : any
  >JSX : any
- 
+
      render() {
 ->render : () => predom.JSX.Element
 +>render : () => Element
- 
+
          return <p>
 -><p>            {this.props.x} + {this.props.y} = {this.props.x + this.props.y}            {...this.props.children}        </p> : predom.JSX.Element
 +><p>            {this.props.x} + {this.props.y} = {this.props.x + this.props.y}            {...this.props.children}        </p> : Element
  >p : any
- 
+
              {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
  >this.props.x : number
 ->this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
@@ -119,7 +119,7 @@
 ->props : { x: number; y: number; children?: predom.JSX.Element[]; }
 +>props : { x: number; y: number; children?: Element[]; }
  >y : number
- 
+
              {...this.props.children}
 ->this.props.children : predom.JSX.Element[]
 ->this.props : { x: number; y: number; children?: predom.JSX.Element[]; }
@@ -130,7 +130,7 @@
 ->children : predom.JSX.Element[]
 +>props : { x: number; y: number; children?: Element[]; }
 +>children : Element[]
- 
+
          </p>;
  >p : any
      }
@@ -162,19 +162,19 @@
  >6 : 6
 ->MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
 +>MySFC : (props: { x: number; y: number; children?: Element[]; }) => Element
- 
+
  export default <h></h>
 -><h></h> : predom.JSX.Element
 +><h></h> : Element
  >h : any
  >h : any
- 
+
  === index.tsx ===
  /** @jsx dom */
  import { dom } from "./renderer"
 ->dom : () => dom.JSX.Element
 +>dom : () => Element
- 
+
  import prerendered, {MySFC, MyClass, tree} from "./component";
 ->prerendered : import("renderer2").predom.JSX.Element
 ->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
@@ -183,13 +183,13 @@
  >MyClass : typeof MyClass
 ->tree : import("renderer2").predom.JSX.Element
 +>tree : Element
- 
+
  let elem = prerendered;
 ->elem : import("renderer2").predom.JSX.Element
 ->prerendered : import("renderer2").predom.JSX.Element
 +>elem : Element
 +>prerendered : Element
- 
+
  elem = <h></h>; // Expect assignability error here
 ->elem = <h></h> : dom.JSX.Element
 ->elem : import("renderer2").predom.JSX.Element
@@ -199,7 +199,7 @@
 +><h></h> : Element
  >h : any
  >h : any
- 
+
  const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
 ->DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
 ->(props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
@@ -240,17 +240,17 @@
 +>props : { x: number; y: number; children?: Element[]; }
 +>children : Element[]
  >p : any
- 
+
  class DOMClass implements dom.JSX.Element {
  >DOMClass : DOMClass
  >dom.JSX : any
 ->dom : () => dom.JSX.Element
 +>dom : () => Element
  >JSX : any
- 
+
      __domBrand!: void;
  >__domBrand : void
- 
+
      constructor(public props: {x: number, y: number, children?: dom.JSX.Element[]}) {}
 ->props : { x: number; y: number; children?: dom.JSX.Element[]; }
 +>props : { x: number; y: number; children?: Element[]; }
@@ -260,11 +260,11 @@
 +>children : Element[]
  >dom : any
  >JSX : any
- 
+
      render() {
 ->render : () => dom.JSX.Element
 +>render : () => Element
- 
+
          return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
 -><p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p> : dom.JSX.Element
 +><p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p> : Element
@@ -310,7 +310,7 @@
  >p : any
      }
  }
- 
+
  // Should work, everything is a DOM element
  const _tree = <DOMSFC x={1} y={2}><DOMClass x={3} y={4} /><DOMClass x={5} y={6} /></DOMSFC>
 ->_tree : dom.JSX.Element
@@ -339,7 +339,7 @@
  >6 : 6
 ->DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
 +>DOMSFC : (props: { x: number; y: number; children?: Element[]; }) => Element
- 
+
  // Should fail, no dom elements
  const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
 ->_brokenTree : dom.JSX.Element
@@ -368,7 +368,7 @@
  >6 : 6
 ->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
 +>MySFC : (props: { x: number; y: number; children?: Element[]; }) => Element
- 
+
  // Should fail, nondom isn't allowed as children of dom
  const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 ->_brokenTree2 : dom.JSX.Element
@@ -387,4 +387,3 @@
 +>tree : Element
 +>tree : Element
 +>DOMSFC : (props: { x: number; y: number; children?: Element[]; }) => Element
- 

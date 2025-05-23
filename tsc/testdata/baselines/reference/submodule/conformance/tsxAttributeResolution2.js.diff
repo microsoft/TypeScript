@@ -1,7 +1,7 @@
 --- old.tsxAttributeResolution2.js
 +++ new.tsxAttributeResolution2.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [file.jsx]
  // OK
 -<test1 c1={function (x) { return x.length; }}/>; // OK

@@ -1,8 +1,7 @@
 --- old.outModuleConcatUmd.js.map
 +++ new.outModuleConcatUmd.js.map
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +//// [b.js.map]
 +{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":";;;AAAA,+BAA0B;AAC1B,OAAe,SAAQ,KAAC;CAAI"}
 +//// [a.js.map]

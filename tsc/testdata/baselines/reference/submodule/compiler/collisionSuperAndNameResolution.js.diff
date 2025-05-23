@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndNameResolution.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [collisionSuperAndNameResolution.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

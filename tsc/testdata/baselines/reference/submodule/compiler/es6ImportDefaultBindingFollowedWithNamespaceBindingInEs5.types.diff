@@ -6,11 +6,10 @@
  >defaultBinding : any
 ->nameSpaceBinding : typeof nameSpaceBinding
 +>nameSpaceBinding : typeof import("es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0")
- 
+
  var x: number = nameSpaceBinding.a;
  >x : number
  >nameSpaceBinding.a : number
 ->nameSpaceBinding : typeof nameSpaceBinding
 +>nameSpaceBinding : typeof import("es6ImportDefaultBindingFollowedWithNamespaceBindingInEs5_0")
  >a : number
- 

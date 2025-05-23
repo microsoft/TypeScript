@@ -2,11 +2,11 @@
 +++ new.importHelpersES6.symbols
 @@= skipped -8, +8 lines =@@
  >A : Symbol(A, Decl(a.ts, 0, 21))
- 
+
      #x: number = 1;
 ->#x : Symbol(A.#x, Decl(a.ts, 1, 21))
 +>#x : Symbol(#x, Decl(a.ts, 1, 21))
- 
+
      async f() { this.#x = await this.#x; }
 ->f : Symbol(A.f, Decl(a.ts, 2, 19))
 ->this.#x : Symbol(A.#x, Decl(a.ts, 1, 21))
@@ -16,7 +16,7 @@
 ->this.#x : Symbol(A.#x, Decl(a.ts, 1, 21))
 +>this.#x : Symbol(#x, Decl(a.ts, 1, 21))
  >this : Symbol(A, Decl(a.ts, 0, 21))
- 
+
      g(u) { return #x in u; }
 ->g : Symbol(A.g, Decl(a.ts, 3, 42))
 +>g : Symbol(g, Decl(a.ts, 3, 42))
@@ -25,9 +25,9 @@
 +>#x : Symbol(#x, Decl(a.ts, 1, 21))
  >u : Symbol(u, Decl(a.ts, 4, 6))
  }
- 
+
 @@= skipped -26, +26 lines =@@
- 
+
  === tslib.d.ts ===
  export declare function __extends(d: Function, b: Function): void;
 ->__extends : Symbol(__extends, Decl(tslib.d.ts, --, --))
@@ -38,7 +38,7 @@
 ->b : Symbol(b, Decl(tslib.d.ts, --, --))
 +>b : Symbol(b, Decl(tslib.d.ts, 0, 46))
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
+
  export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
 ->__decorate : Symbol(__decorate, Decl(tslib.d.ts, --, --))
 ->decorators : Symbol(decorators, Decl(tslib.d.ts, --, --))
@@ -51,7 +51,7 @@
 +>target : Symbol(target, Decl(tslib.d.ts, 1, 58))
 +>key : Symbol(key, Decl(tslib.d.ts, 1, 71))
 +>desc : Symbol(desc, Decl(tslib.d.ts, 1, 94))
- 
+
  export declare function __param(paramIndex: number, decorator: Function): Function;
 ->__param : Symbol(__param, Decl(tslib.d.ts, --, --))
 ->paramIndex : Symbol(paramIndex, Decl(tslib.d.ts, --, --))
@@ -61,7 +61,7 @@
 +>decorator : Symbol(decorator, Decl(tslib.d.ts, 2, 51))
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
+
  export declare function __metadata(metadataKey: any, metadataValue: any): Function;
 ->__metadata : Symbol(__metadata, Decl(tslib.d.ts, --, --))
 ->metadataKey : Symbol(metadataKey, Decl(tslib.d.ts, --, --))
@@ -70,7 +70,7 @@
 +>metadataKey : Symbol(metadataKey, Decl(tslib.d.ts, 3, 35))
 +>metadataValue : Symbol(metadataValue, Decl(tslib.d.ts, 3, 52))
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
+
  export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 ->__awaiter : Symbol(__awaiter, Decl(tslib.d.ts, --, --))
 ->thisArg : Symbol(thisArg, Decl(tslib.d.ts, --, --))
@@ -84,7 +84,7 @@
 ->generator : Symbol(generator, Decl(tslib.d.ts, --, --))
 +>generator : Symbol(generator, Decl(tslib.d.ts, 4, 77))
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
+
  export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
 ->__classPrivateFieldGet : Symbol(__classPrivateFieldGet, Decl(tslib.d.ts, --, --))
 ->a : Symbol(a, Decl(tslib.d.ts, --, --))
@@ -96,7 +96,7 @@
 +>b : Symbol(b, Decl(tslib.d.ts, 5, 54))
 +>c : Symbol(c, Decl(tslib.d.ts, 5, 62))
 +>d : Symbol(d, Decl(tslib.d.ts, 5, 70))
- 
+
  export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
 ->__classPrivateFieldSet : Symbol(__classPrivateFieldSet, Decl(tslib.d.ts, --, --))
 ->a : Symbol(a, Decl(tslib.d.ts, --, --))
@@ -110,7 +110,7 @@
 +>c : Symbol(c, Decl(tslib.d.ts, 6, 62))
 +>d : Symbol(d, Decl(tslib.d.ts, 6, 70))
 +>e : Symbol(e, Decl(tslib.d.ts, 6, 78))
- 
+
  export declare function __classPrivateFieldIn(a: any, b: any): boolean;
 ->__classPrivateFieldIn : Symbol(__classPrivateFieldIn, Decl(tslib.d.ts, --, --))
 ->a : Symbol(a, Decl(tslib.d.ts, --, --))
@@ -118,4 +118,3 @@
 +>__classPrivateFieldIn : Symbol(__classPrivateFieldIn, Decl(tslib.d.ts, 6, 92))
 +>a : Symbol(a, Decl(tslib.d.ts, 7, 46))
 +>b : Symbol(b, Decl(tslib.d.ts, 7, 53))
- 

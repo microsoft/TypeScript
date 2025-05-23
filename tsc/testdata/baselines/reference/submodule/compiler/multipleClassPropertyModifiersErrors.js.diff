@@ -2,7 +2,7 @@
 +++ new.multipleClassPropertyModifiersErrors.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [multipleClassPropertyModifiersErrors.js]
 -var C = /** @class */ (function () {
 -    function C() {

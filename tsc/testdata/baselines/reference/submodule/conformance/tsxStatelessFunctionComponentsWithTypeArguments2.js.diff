@@ -1,8 +1,8 @@
 --- old.tsxStatelessFunctionComponentsWithTypeArguments2.js
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments2.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [file.jsx]
 -define(["require", "exports", "react"], function (require, exports, React) {
 -    "use strict";

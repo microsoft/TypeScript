@@ -1,16 +1,16 @@
 --- old.noInferUnionExcessPropertyCheck1.types
 +++ new.noInferUnionExcessPropertyCheck1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === noInferUnionExcessPropertyCheck1.ts ===
  declare function test1<T extends { x: string }>(
 ->test1 : <T extends { x: string; }>(a: T, b: NoInfer<T> | (() => NoInfer<T>)) => void
 +>test1 : <T extends { x: string; }>(a: T, b: (() => NoInfer<T>) | NoInfer<T>) => void
  >x : string
- 
+
    a: T,
 @@= skipped -13, +13 lines =@@
- 
+
  test1({ x: "foo" }, { x: "bar" }); // no error
  >test1({ x: "foo" }, { x: "bar" }) : void
 ->test1 : <T extends { x: string; }>(a: T, b: NoInfer<T> | (() => NoInfer<T>)) => void
@@ -19,7 +19,7 @@
  >x : string
  >"foo" : "foo"
 @@= skipped -10, +10 lines =@@
- 
+
  test1({ x: "foo" }, { x: "bar", y: 42 }); // epc error
  >test1({ x: "foo" }, { x: "bar", y: 42 }) : void
 ->test1 : <T extends { x: string; }>(a: T, b: NoInfer<T> | (() => NoInfer<T>)) => void

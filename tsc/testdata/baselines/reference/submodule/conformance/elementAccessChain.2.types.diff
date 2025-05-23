@@ -2,13 +2,13 @@
 +++ new.elementAccessChain.2.types
 @@= skipped -29, +29 lines =@@
  >"c" : "c"
- 
+
  declare const o3: { b: undefined | { c: string } };
 ->o3 : { b: undefined | { c: string; }; }
 +>o3 : { b: { c: string; }; }
  >b : { c: string; }
  >c : string
- 
+
  o3["b"]?.c;
  >o3["b"]?.c : string
  >o3["b"] : { c: string; }
@@ -16,7 +16,7 @@
 +>o3 : { b: { c: string; }; }
  >"b" : "b"
  >c : string
- 
+
  o3.b?.["c"];
  >o3.b?.["c"] : string
  >o3.b : { c: string; }
@@ -24,4 +24,3 @@
 +>o3 : { b: { c: string; }; }
  >b : { c: string; }
  >"c" : "c"
- 

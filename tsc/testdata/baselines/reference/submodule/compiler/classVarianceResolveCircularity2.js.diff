@@ -1,7 +1,7 @@
 --- old.classVarianceResolveCircularity2.js
 +++ new.classVarianceResolveCircularity2.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [classVarianceResolveCircularity2.js]
  "use strict";
 -// Issue #52813

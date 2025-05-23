@@ -2,7 +2,7 @@
 +++ new.typeAliasDeclarationEmit2.js
 @@= skipped -3, +3 lines =@@
  export type A<a> = { value: a };
- 
+
  //// [typeAliasDeclarationEmit2.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

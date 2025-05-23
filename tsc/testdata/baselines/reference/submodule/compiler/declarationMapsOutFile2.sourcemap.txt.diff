@@ -1,6 +1,6 @@
 --- old.declarationMapsOutFile2.sourcemap.txt
 +++ new.declarationMapsOutFile2.sourcemap.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -===================================================================
 -JsFile: bundle.d.ts
 -mapUrl: bundle.d.ts.map
@@ -142,5 +142,4 @@
 -2 >Emitted(12, 3) Source(4, 28) + SourceIndex(1)
 ----
 ->>>//# sourceMappingURL=bundle.d.ts.map
-@@= skipped --1, +1 lines =@@
 +<no content>

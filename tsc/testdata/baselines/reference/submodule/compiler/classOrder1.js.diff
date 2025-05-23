@@ -1,8 +1,8 @@
 --- old.classOrder1.js
 +++ new.classOrder1.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [classOrder1.js]
 -var A = /** @class */ (function () {
 -    function A() {

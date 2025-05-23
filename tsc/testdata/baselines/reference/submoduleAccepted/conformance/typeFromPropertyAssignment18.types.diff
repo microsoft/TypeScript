@@ -1,7 +1,7 @@
 --- old.typeFromPropertyAssignment18.types
 +++ new.typeFromPropertyAssignment18.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  var GLOBSTAR = m.GLOBSTAR = {}
 ->GLOBSTAR : typeof m.GLOBSTAR
@@ -15,7 +15,7 @@
 +>m : { (): void; GLOBSTAR: {}; }
 +>GLOBSTAR : {}
  >{} : {}
- 
+
  function m() {
 ->m : typeof m
 +>m : { (): void; GLOBSTAR: {}; }
@@ -29,7 +29,7 @@
 +>GLOBSTAR : {}
 +>p : any
  >1 : 1
- 
+
  m.GLOBSTAR.q = 2
  >m.GLOBSTAR.q = 2 : 2
 ->m.GLOBSTAR.q : number
@@ -43,7 +43,7 @@
 +>GLOBSTAR : {}
 +>q : any
  >2 : 2
- 
+
  GLOBSTAR.p
 ->GLOBSTAR.p : number
 ->GLOBSTAR : typeof m.GLOBSTAR
@@ -51,7 +51,7 @@
 +>GLOBSTAR.p : any
 +>GLOBSTAR : {}
 +>p : any
- 
+
  GLOBSTAR.q
 ->GLOBSTAR.q : number
 ->GLOBSTAR : typeof m.GLOBSTAR
@@ -59,7 +59,7 @@
 +>GLOBSTAR.q : any
 +>GLOBSTAR : {}
 +>q : any
- 
+
  m.GLOBSTAR.p
 ->m.GLOBSTAR.p : number
 ->m.GLOBSTAR : typeof m.GLOBSTAR
@@ -71,7 +71,7 @@
 +>m : { (): void; GLOBSTAR: {}; }
 +>GLOBSTAR : {}
 +>p : any
- 
+
  m.GLOBSTAR.q
 ->m.GLOBSTAR.q : number
 ->m.GLOBSTAR : typeof m.GLOBSTAR
@@ -83,4 +83,3 @@
 +>m : { (): void; GLOBSTAR: {}; }
 +>GLOBSTAR : {}
 +>q : any
- 

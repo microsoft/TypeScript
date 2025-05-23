@@ -2,7 +2,7 @@
 +++ new.es5-asyncFunctionTryStatements.js
 @@= skipped -124, +124 lines =@@
  }
- 
+
  //// [es5-asyncFunctionTryStatements.js]
 -function tryCatch0() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -17,15 +17,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function tryCatch0() {
-+    var x, y;
-+    try {
-+        x;
-+    }
-+    catch (e) {
-+        y;
-+    }
- }
+-}
 -function tryCatch1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y, e_1;
@@ -45,15 +37,7 @@
 -            }
 -        });
 -    });
-+async function tryCatch1() {
-+    var x, y;
-+    try {
-+        await x;
-+    }
-+    catch (e) {
-+        y;
-+    }
- }
+-}
 -function tryCatch2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y, e_2;
@@ -73,15 +57,7 @@
 -            }
 -        });
 -    });
-+async function tryCatch2() {
-+    var x, y;
-+    try {
-+        x;
-+    }
-+    catch (e) {
-+        await y;
-+    }
- }
+-}
 -function tryCatch3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y, e_3;
@@ -100,15 +76,7 @@
 -            }
 -        });
 -    });
-+async function tryCatch3() {
-+    var x, y;
-+    try {
-+        await x;
-+    }
-+    catch (e) {
-+        return () => e;
-+    }
- }
+-}
 -function tryFinally0() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y;
@@ -122,15 +90,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function tryFinally0() {
-+    var x, y;
-+    try {
-+        x;
-+    }
-+    finally {
-+        y;
-+    }
- }
+-}
 -function tryFinally1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y;
@@ -149,15 +109,7 @@
 -            }
 -        });
 -    });
-+async function tryFinally1() {
-+    var x, y;
-+    try {
-+        await x;
-+    }
-+    finally {
-+        y;
-+    }
- }
+-}
 -function tryFinally2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y;
@@ -175,15 +127,7 @@
 -            }
 -        });
 -    });
-+async function tryFinally2() {
-+    var x, y;
-+    try {
-+        x;
-+    }
-+    finally {
-+        await y;
-+    }
- }
+-}
 -function tryCatchFinally0() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y, z;
@@ -200,18 +144,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function tryCatchFinally0() {
-+    var x, y, z;
-+    try {
-+        x;
-+    }
-+    catch (e) {
-+        y;
-+    }
-+    finally {
-+        z;
-+    }
- }
+-}
 -function tryCatchFinally1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y, z, e_4;
@@ -234,18 +167,7 @@
 -            }
 -        });
 -    });
-+async function tryCatchFinally1() {
-+    var x, y, z;
-+    try {
-+        await x;
-+    }
-+    catch (e) {
-+        y;
-+    }
-+    finally {
-+        z;
-+    }
- }
+-}
 -function tryCatchFinally2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y, z, e_5;
@@ -268,18 +190,7 @@
 -            }
 -        });
 -    });
-+async function tryCatchFinally2() {
-+    var x, y, z;
-+    try {
-+        x;
-+    }
-+    catch (e) {
-+        await y;
-+    }
-+    finally {
-+        z;
-+    }
- }
+-}
 -function tryCatchFinally3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var x, y, z, e_6;
@@ -301,6 +212,105 @@
 -            }
 -        });
 -    });
++async function tryCatch0() {
++    var x, y;
++    try {
++        x;
++    }
++    catch (e) {
++        y;
++    }
++}
++async function tryCatch1() {
++    var x, y;
++    try {
++        await x;
++    }
++    catch (e) {
++        y;
++    }
++}
++async function tryCatch2() {
++    var x, y;
++    try {
++        x;
++    }
++    catch (e) {
++        await y;
++    }
++}
++async function tryCatch3() {
++    var x, y;
++    try {
++        await x;
++    }
++    catch (e) {
++        return () => e;
++    }
++}
++async function tryFinally0() {
++    var x, y;
++    try {
++        x;
++    }
++    finally {
++        y;
++    }
++}
++async function tryFinally1() {
++    var x, y;
++    try {
++        await x;
++    }
++    finally {
++        y;
++    }
++}
++async function tryFinally2() {
++    var x, y;
++    try {
++        x;
++    }
++    finally {
++        await y;
++    }
++}
++async function tryCatchFinally0() {
++    var x, y, z;
++    try {
++        x;
++    }
++    catch (e) {
++        y;
++    }
++    finally {
++        z;
++    }
++}
++async function tryCatchFinally1() {
++    var x, y, z;
++    try {
++        await x;
++    }
++    catch (e) {
++        y;
++    }
++    finally {
++        z;
++    }
++}
++async function tryCatchFinally2() {
++    var x, y, z;
++    try {
++        x;
++    }
++    catch (e) {
++        await y;
++    }
++    finally {
++        z;
++    }
++}
 +async function tryCatchFinally3() {
 +    var x, y, z;
 +    try {

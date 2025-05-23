@@ -1,8 +1,8 @@
 --- old.discriminantNarrowingCouldBeCircular.js
 +++ new.discriminantNarrowingCouldBeCircular.js
 @@= skipped -40, +40 lines =@@
- 
- 
+
+
  //// [discriminantNarrowingCouldBeCircular.js]
 -"use strict";
 -var o = {};

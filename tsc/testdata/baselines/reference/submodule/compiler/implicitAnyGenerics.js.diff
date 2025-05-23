@@ -2,7 +2,7 @@
 +++ new.implicitAnyGenerics.js
 @@= skipped -27, +27 lines =@@
      
- 
+
  //// [implicitAnyGenerics.js]
 -var C = /** @class */ (function () {
 -    function C() {

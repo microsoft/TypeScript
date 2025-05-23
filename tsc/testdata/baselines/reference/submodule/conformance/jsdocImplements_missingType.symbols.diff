@@ -9,6 +9,6 @@
  >this : Symbol(A, Decl(a.js, 0, 0))
 ->x : Symbol(A.x, Decl(a.js, 0, 25))
 +>x : Symbol(x, Decl(a.js, 0, 25))
- 
+
  /** @implements */
  class B  {

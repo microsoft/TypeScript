@@ -1,7 +1,7 @@
 --- old.arrayOfExportedClass.js
 +++ new.arrayOfExportedClass.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [arrayOfExportedClass_0.js]
  "use strict";
 -var Car = /** @class */ (function () {

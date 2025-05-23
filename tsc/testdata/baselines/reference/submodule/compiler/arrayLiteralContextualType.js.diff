@@ -2,7 +2,7 @@
 +++ new.arrayLiteralContextualType.js
 @@= skipped -31, +31 lines =@@
  bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
- 
+
  //// [arrayLiteralContextualType.js]
 -var Giraffe = /** @class */ (function () {
 -    function Giraffe() {

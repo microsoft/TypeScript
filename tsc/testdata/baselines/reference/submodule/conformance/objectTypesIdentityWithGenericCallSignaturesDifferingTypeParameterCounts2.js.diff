@@ -2,7 +2,7 @@
 +++ new.objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.js
 @@= skipped -42, +42 lines =@@
  function foo15(x: any) { }
- 
+
  //// [objectTypesIdentityWithGenericCallSignaturesDifferingTypeParameterCounts2.js]
 -// object types are identical structurally
  var a;

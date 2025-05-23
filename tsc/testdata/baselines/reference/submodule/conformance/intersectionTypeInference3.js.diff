@@ -1,8 +1,8 @@
 --- old.intersectionTypeInference3.js
 +++ new.intersectionTypeInference3.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [intersectionTypeInference3.js]
 -"use strict";
 -// Repro from #19682

@@ -2,23 +2,23 @@
 +++ new.parenthesizedContexualTyping2.types
 @@= skipped -13, +13 lines =@@
  >x : <T>(p: T) => T
- 
+
  function fun<T>(f: FuncType, x: T): T;
 ->fun : { <T>(f: FuncType, x: T): T; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 +>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
  >f : FuncType
  >x : T
- 
+
  function fun<T>(f: FuncType, g: FuncType, x: T): T;
 ->fun : { <T_1>(f: FuncType, x: T_1): T_1; <T>(f: FuncType, g: FuncType, x: T): T; }
 +>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
  >f : FuncType
  >g : FuncType
  >x : T
- 
+
  function fun<T>(...rest: any[]): T {
 ->fun : { <T_1>(f: FuncType, x: T_1): T_1; <T_1>(f: FuncType, g: FuncType, x: T_1): T_1; }
 +>fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
  >rest : any[]
- 
+
      return undefined;

@@ -1,8 +1,8 @@
 --- old.mergedInheritedClassInterface.js
 +++ new.mergedInheritedClassInterface.js
 @@= skipped -48, +48 lines =@@
- 
- 
+
+
  //// [mergedInheritedClassInterface.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.undeclaredModuleError.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [undeclaredModuleError.js]
 -define(["require", "exports", "fs"], function (require, exports, fs) {
 -    "use strict";

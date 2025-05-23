@@ -1,7 +1,7 @@
 --- old.tsxNamespacedAttributeName1.types
 +++ new.tsxNamespacedAttributeName1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.tsx ===
  const a = <svg:path a:b={1}></svg:path>;
 ->a : error
@@ -22,7 +22,7 @@
 ->path : error
 +>svg : any
 +>path : any
- 
+
  const b = <svg : path a:b={1}></svg : path>;
 ->b : error
 -><svg : path a:b={1}></svg : path> : error
@@ -42,4 +42,3 @@
 ->path : error
 +>svg : any
 +>path : any
- 

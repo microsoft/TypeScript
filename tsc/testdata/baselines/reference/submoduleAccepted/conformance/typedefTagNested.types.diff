@@ -2,25 +2,24 @@
 +++ new.typedefTagNested.types
 @@= skipped -64, +64 lines =@@
  >"ok" : "ok"
- 
+
  sala.name
 ->sala.name : string
 +>sala.name : any
  >sala : Upp
 ->name : string
 +>name : any
- 
+
  sala.not
 ->sala.not : Object
 +>sala.not : any
  >sala : Upp
 ->not : Object
 +>not : any
- 
+
  sala.nested
 ->sala.nested : string
 +>sala.nested : any
  >sala : Upp
 ->nested : string
 +>nested : any
- 

@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -b.ts(1,15): error TS2460: Module '"./a"' declares 'bar' locally, but it is exported as 'baz'.
 +b.ts(1,15): error TS2460: Module '"a"' declares 'bar' locally, but it is exported as 'baz'.
- 
- 
+
+
  ==== a.ts (0 errors) ====
 @@= skipped -8, +8 lines =@@
  ==== b.ts (1 errors) ====

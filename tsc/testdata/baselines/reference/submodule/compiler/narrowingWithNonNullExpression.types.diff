@@ -10,5 +10,5 @@
 ->match : (regexp: string | RegExp) => RegExpMatchArray | null
 +>match : (regexp: string | RegExp) => RegExpMatchArray
  >'' : ""
- 
+
  m! && m[0];

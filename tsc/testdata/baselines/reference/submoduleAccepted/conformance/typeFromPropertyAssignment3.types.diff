@@ -1,7 +1,7 @@
 --- old.typeFromPropertyAssignment3.types
 +++ new.typeFromPropertyAssignment3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  var Outer = function O() {
 ->Outer : typeof O
@@ -10,7 +10,7 @@
 +>Outer : () => void
 +>function O() {    this.y = 2} : () => void
 +>O : () => void
- 
+
      this.y = 2
  >this.y = 2 : 2
  >this.y : any
@@ -29,7 +29,7 @@
 +>Inner : any
  >class I {    constructor() {        this.x = 1    }} : typeof I
  >I : typeof I
- 
+
      constructor() {
          this.x = 1
  >this.x = 1 : 1
@@ -45,7 +45,7 @@
  var ja
 ->ja : O
 +>ja : Outer
- 
+
  ja.y
 ->ja.y : number
 ->ja : O
@@ -53,12 +53,12 @@
 +>ja.y : any
 +>ja : Outer
 +>y : any
- 
+
  /** @type {Outer.Inner} */
  var da
 ->da : I
 +>da : Inner
- 
+
  da.x
 ->da.x : number
 ->da : I
@@ -66,4 +66,3 @@
 +>da.x : any
 +>da : Inner
 +>x : any
- 

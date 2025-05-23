@@ -2,11 +2,11 @@
 +++ new.narrowByParenthesizedSwitchExpression.types
 @@= skipped -22, +22 lines =@@
  }
- 
+
  function getV(): Foo | Bar {
 ->getV : () => Foo | Bar
 +>getV : () => Bar | Foo
- 
+
    return null!;
  >null! : never
 @@= skipped -9, +9 lines =@@
@@ -15,6 +15,6 @@
  >getV() : Bar | Foo
 ->getV : () => Foo | Bar
 +>getV : () => Bar | Foo
- 
+
  switch ((v.type)) {
  >(v.type) : "bar" | "foo"

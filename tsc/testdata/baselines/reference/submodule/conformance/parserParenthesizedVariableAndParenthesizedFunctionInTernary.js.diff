@@ -1,8 +1,8 @@
 --- old.parserParenthesizedVariableAndParenthesizedFunctionInTernary.js
 +++ new.parserParenthesizedVariableAndParenthesizedFunctionInTernary.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [parserParenthesizedVariableAndParenthesizedFunctionInTernary.js]
 -var a;
 -var c = true ? (a) : (function () { });

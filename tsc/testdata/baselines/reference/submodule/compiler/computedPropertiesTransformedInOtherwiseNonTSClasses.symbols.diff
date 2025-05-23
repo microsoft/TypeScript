@@ -2,7 +2,7 @@
 +++ new.computedPropertiesTransformedInOtherwiseNonTSClasses.symbols
 @@= skipped -11, +11 lines =@@
  >NotTransformed : Symbol(NotTransformed, Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 1, 30))
- 
+
          [NS.x]: number;
 ->[NS.x] : Symbol(NotTransformed[NS.x], Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 3, 26))
 +>[NS.x] : Symbol([NS.x], Decl(computedPropertiesTransformedInOtherwiseNonTSClasses.ts, 3, 26))

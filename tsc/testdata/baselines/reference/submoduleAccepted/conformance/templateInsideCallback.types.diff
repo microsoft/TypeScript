@@ -19,7 +19,7 @@
  >iterable : (x: unknown) => unknown
 ->identity : any
 +>identity : Call<T>
- 
+
    /** @type {unknown[]} */
    const result = [];
 @@= skipped -29, +29 lines =@@

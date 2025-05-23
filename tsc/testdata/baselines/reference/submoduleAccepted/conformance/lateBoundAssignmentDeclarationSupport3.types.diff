@@ -1,7 +1,7 @@
 --- old.lateBoundAssignmentDeclarationSupport3.types
 +++ new.lateBoundAssignmentDeclarationSupport3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === usage.js ===
  const x = require("./lateBoundAssignmentDeclarationSupport3.js");
 ->x : typeof x
@@ -10,14 +10,14 @@
 +>require("./lateBoundAssignmentDeclarationSupport3.js") : typeof import("lateBoundAssignmentDeclarationSupport3")
  >require : any
  >"./lateBoundAssignmentDeclarationSupport3.js" : "./lateBoundAssignmentDeclarationSupport3.js"
- 
+
  const y = x["my-fake-sym"];
  >y : any
  >x["my-fake-sym"] : any
 ->x : typeof x
 +>x : typeof import("lateBoundAssignmentDeclarationSupport3")
  >"my-fake-sym" : "my-fake-sym"
- 
+
  const z = x[x.S];
  >z : any
  >x[x.S] : any
@@ -27,11 +27,11 @@
 ->x : typeof x
 +>x : typeof import("lateBoundAssignmentDeclarationSupport3")
  >S : unique symbol
- 
+
  === lateBoundAssignmentDeclarationSupport3.js ===
 @@= skipped -31, +31 lines =@@
  >"my-fake-sym" : "my-fake-sym"
- 
+
  Object.defineProperty(module.exports, _sym, { value: "ok" });
 ->Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof module.exports
 +>Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof import("lateBoundAssignmentDeclarationSupport3")
@@ -48,7 +48,7 @@
  >{ value: "ok" } : { value: string; }
  >value : string
  >"ok" : "ok"
- 
+
  Object.defineProperty(module.exports, _str, { value: "ok" });
 ->Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof module.exports
 +>Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof import("lateBoundAssignmentDeclarationSupport3")
@@ -76,4 +76,3 @@
 +>exports : typeof import("lateBoundAssignmentDeclarationSupport3")
  >S : unique symbol
  >_sym : unique symbol
- 

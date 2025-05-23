@@ -1,8 +1,8 @@
 --- old.internalAliasVarInsideTopLevelModuleWithExport.js
 +++ new.internalAliasVarInsideTopLevelModuleWithExport.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [internalAliasVarInsideTopLevelModuleWithExport.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,8 +1,8 @@
 --- old.templateLiteralTypes2.js
 +++ new.templateLiteralTypes2.js
 @@= skipped -121, +121 lines =@@
- 
- 
+
+
  //// [templateLiteralTypes2.js]
 -"use strict";
  function ft1(s, n, u, t) {

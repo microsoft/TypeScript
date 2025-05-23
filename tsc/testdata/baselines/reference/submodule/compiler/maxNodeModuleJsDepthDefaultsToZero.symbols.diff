@@ -2,18 +2,18 @@
 +++ new.maxNodeModuleJsDepthDefaultsToZero.symbols
 @@= skipped -13, +13 lines =@@
  >foo : Symbol(foo, Decl(index.ts, 1, 6))
- 
+
  foo.x // found in index.d.ts
 ->foo.x : Symbol(foo.x, Decl(index.d.ts, 1, 14))
 +>foo.x : Symbol(x, Decl(index.d.ts, 1, 14))
  >foo : Symbol(foo, Decl(index.ts, 1, 6))
 ->x : Symbol(foo.x, Decl(index.d.ts, 1, 14))
 +>x : Symbol(x, Decl(index.d.ts, 1, 14))
- 
+
  foo.y // ignored from shortid/index.js
  >foo : Symbol(foo, Decl(index.ts, 1, 6))
- 
- 
+
++
 +=== /node_modules/shortid/node_modules/z/index.js ===
 +// z will not be found because maxNodeModulesJsDepth: 0
 +module.exports = { z: 'no' };
@@ -37,4 +37,3 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(y, Decl(index.js, 1, 3))
 +>y : Symbol(y, Decl(index.js, 1, 3))
-+

@@ -1,8 +1,7 @@
 --- old.duplicatePackage_subModule.errors.txt
 +++ new.duplicatePackage_subModule.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/index.ts(4,7): error TS2322: Type 'import("/node_modules/a/node_modules/foo/Foo").default' is not assignable to type 'import("/node_modules/foo/Foo").default'.
 +  Property 'source' is protected but type 'default' is not a class derived from 'default'.
 +

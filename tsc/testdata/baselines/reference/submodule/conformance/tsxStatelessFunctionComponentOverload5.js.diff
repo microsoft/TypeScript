@@ -2,7 +2,7 @@
 +++ new.tsxStatelessFunctionComponentOverload5.js
 @@= skipped -58, +58 lines =@@
  const b8 = <MainButton data-format />;  // incorrect type for specified hyphanated name
- 
+
  //// [file.jsx]
 -define(["require", "exports", "react"], function (require, exports, React) {
 -    "use strict";

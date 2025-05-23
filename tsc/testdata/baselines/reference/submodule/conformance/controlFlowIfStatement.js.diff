@@ -1,8 +1,8 @@
 --- old.controlFlowIfStatement.js
 +++ new.controlFlowIfStatement.js
 @@= skipped -64, +64 lines =@@
- 
- 
+
+
  //// [controlFlowIfStatement.js]
 -var x;
 -var cond;

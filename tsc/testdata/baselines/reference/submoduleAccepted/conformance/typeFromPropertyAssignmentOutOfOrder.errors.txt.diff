@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignmentOutOfOrder.errors.txt
 +++ new.typeFromPropertyAssignmentOutOfOrder.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.js(1,7): error TS2339: Property 'Item' does not exist on type '{}'.
 +index.js(2,8): error TS2339: Property 'Object' does not exist on type '{}'.
 +index.js(2,37): error TS2339: Property 'Item' does not exist on type '{}'.

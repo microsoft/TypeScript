@@ -2,7 +2,7 @@
 +++ new.primitiveConstraints2.js
 @@= skipped -11, +11 lines =@@
  x.bar2<string>(2, ""); // should error
- 
+
  //// [primitiveConstraints2.js]
 -var C = /** @class */ (function () {
 -    function C() {

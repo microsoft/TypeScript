@@ -2,7 +2,7 @@
 +++ new.contextualTyping4.js
 @@= skipped -3, +3 lines =@@
  class foo { public bar:{id:number;} = {id:5, name:"foo"}; }
- 
+
  //// [contextualTyping4.js]
 -var foo = /** @class */ (function () {
 -    function foo() {

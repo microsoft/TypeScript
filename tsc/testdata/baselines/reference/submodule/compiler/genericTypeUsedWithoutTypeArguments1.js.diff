@@ -1,8 +1,8 @@
 --- old.genericTypeUsedWithoutTypeArguments1.js
 +++ new.genericTypeUsedWithoutTypeArguments1.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [genericTypeUsedWithoutTypeArguments1.js]
 -var Bar = /** @class */ (function () {
 -    function Bar() {

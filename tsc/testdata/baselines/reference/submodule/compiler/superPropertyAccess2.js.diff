@@ -2,7 +2,7 @@
 +++ new.superPropertyAccess2.js
 @@= skipped -29, +29 lines =@@
  }
- 
+
  //// [superPropertyAccess2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,11 +21,7 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    static foo() { }
-+    get x() {
-+        return 1;
-     }
+-    }
 -    C.foo = function () { };
 -    Object.defineProperty(C.prototype, "x", {
 -        get: function () {
@@ -44,13 +40,7 @@
 -        _super.prototype.bar.call(_this); // error
 -        _super.prototype.x; // error
 -        return _this;
-+    static bar() { }
-+}
-+class D extends C {
-+    static foo() {
-+        super.bar(); // OK
-+        super.x; // error
-     }
+-    }
 -    D.foo = function () {
 -        _super.bar.call(this); // OK
 -        _super.x; // error
@@ -66,6 +56,18 @@
 -    });
 -    return D;
 -}(C));
++class C {
++    static foo() { }
++    get x() {
++        return 1;
++    }
++    static bar() { }
++}
++class D extends C {
++    static foo() {
++        super.bar(); // OK
++        super.x; // error
++    }
 +    constructor() {
 +        super();
 +        super.bar(); // error

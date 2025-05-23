@@ -2,7 +2,7 @@
 +++ new.typeofObjectInference.js
 @@= skipped -24, +24 lines =@@
  let d = decorateD(({value}) => 5)
- 
+
  //// [typeofObjectInference.js]
 -var val = 1;
 +let val = 1;

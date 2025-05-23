@@ -1,7 +1,7 @@
 --- old.emitSkipsThisWithRestParameter.js
 +++ new.emitSkipsThisWithRestParameter.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [emitSkipsThisWithRestParameter.js]
  function rebase(fn) {
 -    return function () {

@@ -2,7 +2,7 @@
 +++ new.declarationEmitProtectedMembers.js
 @@= skipped -51, +51 lines =@@
  }
- 
+
  //// [declarationEmitProtectedMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -64,10 +64,7 @@
 -    __extends(C2, _super);
 -    function C2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+class C2 extends C1 {
-+    f() {
-+        return super.f() + this.x;
-     }
+-    }
 -    C2.prototype.f = function () {
 -        return _super.prototype.f.call(this) + this.x;
 -    };
@@ -76,6 +73,10 @@
 -    };
 -    return C2;
 -}(C1));
++class C2 extends C1 {
++    f() {
++        return super.f() + this.x;
++    }
 +    static sf() {
 +        return super.sf() + this.sx;
 +    }
@@ -85,12 +86,7 @@
 -    __extends(C3, _super);
 -    function C3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+class C3 extends C2 {
-+    x;
-+    static sx;
-+    f() {
-+        return super.f();
-     }
+-    }
 -    C3.prototype.f = function () {
 -        return _super.prototype.f.call(this);
 -    };
@@ -104,6 +100,12 @@
 -    });
 -    return C3;
 -}(C2));
++class C3 extends C2 {
++    x;
++    static sx;
++    f() {
++        return super.f();
++    }
 +    static sf() {
 +        return super.sf();
 +    }
@@ -133,7 +135,7 @@
 -    protected static sf(): number;
 -    protected static set staticSetter(a: number);
 -    protected static get staticGetter(): number;
- }
+-}
 -declare class C2 extends C1 {
 -    protected f(): number;
 -    protected static sf(): number;
@@ -149,4 +151,4 @@
 -    protected a: number;
 -    protected b: any;
 -    constructor(a: number, b: any);
--}
+ }

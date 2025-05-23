@@ -11,5 +11,5 @@
 +>{ a: "a" } : { a: string; }
 +>a : string
  >"a" : "a"
- 
+
  /** @satisfies {string} */ const t8 = (1);

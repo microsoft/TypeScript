@@ -1,8 +1,8 @@
 --- old.esnextmodulekindWithES5Target2.js
 +++ new.esnextmodulekindWithES5Target2.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [esnextmodulekindWithES5Target2.js]
 -var C = /** @class */ (function () {
 -    function C() {

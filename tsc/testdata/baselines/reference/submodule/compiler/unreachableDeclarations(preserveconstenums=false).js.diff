@@ -1,8 +1,8 @@
 --- old.unreachableDeclarations(preserveconstenums=false).js
 +++ new.unreachableDeclarations(preserveconstenums=false).js
 @@= skipped -88, +88 lines =@@
- 
- 
+
+
  //// [unreachableDeclarations.js]
 -"use strict";
  function func1() {

@@ -1,7 +1,7 @@
 --- old.errorMessagesIntersectionTypes03.js
 +++ new.errorMessagesIntersectionTypes03.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [errorMessagesIntersectionTypes03.js]
  function f() {
 -    var t;

@@ -2,7 +2,7 @@
 +++ new.blockScopedFunctionDeclarationInStrictClass.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [blockScopedFunctionDeclarationInStrictClass.js]
 -var c = /** @class */ (function () {
 -    function c() {

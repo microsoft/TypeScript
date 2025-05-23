@@ -8,13 +8,13 @@
 +>foo : Symbol(foo, Decl(genericTypeAssertions2.ts, 0, 12))
  >x : Symbol(x, Decl(genericTypeAssertions2.ts, 0, 17))
  >T : Symbol(T, Decl(genericTypeAssertions2.ts, 0, 8))
- 
+
 @@= skipped -11, +11 lines =@@
  >T : Symbol(T, Decl(genericTypeAssertions2.ts, 1, 8))
- 
+
      bar(): T {
 ->bar : Symbol(B.bar, Decl(genericTypeAssertions2.ts, 1, 25))
 +>bar : Symbol(bar, Decl(genericTypeAssertions2.ts, 1, 25))
  >T : Symbol(T, Decl(genericTypeAssertions2.ts, 1, 8))
- 
+
          return null;

@@ -1,8 +1,8 @@
 --- old.badInferenceLowerPriorityThanGoodInference.js
 +++ new.badInferenceLowerPriorityThanGoodInference.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [badInferenceLowerPriorityThanGoodInference.js]
 -// Repro from #13118
 -var result = canYouInferThis(function () { return ({

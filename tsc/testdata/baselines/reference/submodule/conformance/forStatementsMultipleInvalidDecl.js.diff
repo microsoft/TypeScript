@@ -2,7 +2,7 @@
 +++ new.forStatementsMultipleInvalidDecl.js
 @@= skipped -55, +55 lines =@@
  for( var m = M.A;;){}
- 
+
  //// [forStatementsMultipleInvalidDecl.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

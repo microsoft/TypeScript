@@ -1,7 +1,7 @@
 --- old.typeGuardsInExternalModule.js
 +++ new.typeGuardsInExternalModule.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [typeGuardsInExternalModule.js]
  "use strict";
 -// Note that type guards affect types of variables and parameters only and 

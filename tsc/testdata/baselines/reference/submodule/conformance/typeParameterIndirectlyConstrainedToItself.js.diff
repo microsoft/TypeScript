@@ -1,8 +1,8 @@
 --- old.typeParameterIndirectlyConstrainedToItself.js
 +++ new.typeParameterIndirectlyConstrainedToItself.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [typeParameterIndirectlyConstrainedToItself.js]
 -var C = /** @class */ (function () {
 -    function C() {

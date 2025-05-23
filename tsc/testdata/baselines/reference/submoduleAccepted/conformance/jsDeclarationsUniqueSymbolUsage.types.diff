@@ -8,9 +8,8 @@
 ->value : import("a").WithSymbol
 +>b : (value: any) => any
 +>value : any
- 
+
      return value;
 ->value : import("a").WithSymbol
 +>value : any
  }
- 

@@ -8,6 +8,6 @@
 ->b : Symbol(E.b, Decl(additionOperatorWithTypeParameter.ts, 1, 11))
 +>a : Symbol(a, Decl(additionOperatorWithTypeParameter.ts, 1, 8))
 +>b : Symbol(b, Decl(additionOperatorWithTypeParameter.ts, 1, 11))
- 
+
  function foo<T, U>(t: T, u: U) {
  >foo : Symbol(foo, Decl(additionOperatorWithTypeParameter.ts, 1, 15))

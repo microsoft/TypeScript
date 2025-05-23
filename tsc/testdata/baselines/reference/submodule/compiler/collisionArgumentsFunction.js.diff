@@ -1,7 +1,7 @@
 --- old.collisionArgumentsFunction.js
 +++ new.collisionArgumentsFunction.js
 @@= skipped -47, +47 lines =@@
- 
+
  //// [collisionArgumentsFunction.js]
  // Functions
 -function f1(arguments) {

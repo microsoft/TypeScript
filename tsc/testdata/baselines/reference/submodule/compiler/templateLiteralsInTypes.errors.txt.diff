@@ -5,8 +5,8 @@
 -templateLiteralsInTypes.ts(3,8): error TS2339: Property 'foo' does not exist on type '`${string}:\t${number}\r\n`'.
 +templateLiteralsInTypes.ts(3,8): error TS2339: Property 'foo' does not exist on type '`${string}:	${number}
 +`'.
- 
- 
+
+
  ==== templateLiteralsInTypes.ts (2 errors) ====
 @@= skipped -9, +10 lines =@@
  !!! error TS2554: Expected 2 arguments, but got 1.

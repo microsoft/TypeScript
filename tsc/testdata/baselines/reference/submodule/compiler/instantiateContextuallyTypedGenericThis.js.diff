@@ -1,8 +1,8 @@
 --- old.instantiateContextuallyTypedGenericThis.js
 +++ new.instantiateContextuallyTypedGenericThis.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [instantiateContextuallyTypedGenericThis.js]
 -var $;
 -var lines;

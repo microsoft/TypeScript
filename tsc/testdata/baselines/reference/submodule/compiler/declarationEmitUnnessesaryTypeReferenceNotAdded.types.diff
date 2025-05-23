@@ -1,20 +1,20 @@
 --- old.declarationEmitUnnessesaryTypeReferenceNotAdded.types
 +++ new.declarationEmitUnnessesaryTypeReferenceNotAdded.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /index.ts ===
  import minimist = require('minimist');
 ->minimist : (x: any) => minimist.ParsedArgs
 +>minimist : (x: any) => ParsedArgs
- 
+
  import process = require('process');
  >process : any
- 
+
  export default function parseArgs(): minimist.ParsedArgs {
 ->parseArgs : () => minimist.ParsedArgs
 +>parseArgs : () => ParsedArgs
  >minimist : any
- 
+
    return minimist(process.argv.slice(2));
 ->minimist(process.argv.slice(2)) : minimist.ParsedArgs
 ->minimist : (x: any) => minimist.ParsedArgs
@@ -31,10 +31,10 @@
 +>thing : (x: any) => ParsedArgs
  >x : any
  >thing : any
- 
+
  export = thing;
 ->thing : (x: any) => thing.ParsedArgs
 +>thing : (x: any) => ParsedArgs
- 
+
  === /node_modules/@types/process/process.d.ts ===
  declare const thing: any;

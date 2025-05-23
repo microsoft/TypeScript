@@ -22,12 +22,8 @@
 -        };
 -        return class_1 = _classThis;
 -    })();
-+    let x = 
-+    @dec
-+    class {
-+    };
- }
- {
+-}
+-{
 -    let x = (() => {
 -        let _y_decorators;
 -        let _y_initializers = [];
@@ -46,12 +42,8 @@
 -            }
 -        };
 -    })();
-+    let x = class {
-+        @dec
-+        y;
-+    };
- }
- {
+-}
+-{
 -    const x = (() => {
 -        let _classDecorators = [dec];
 -        let _classDescriptor;
@@ -70,12 +62,8 @@
 -        };
 -        return class_2 = _classThis;
 -    })();
-+    const x = 
-+    @dec
-+    class {
-+    };
- }
- {
+-}
+-{
 -    const x = (() => {
 -        let _y_decorators;
 -        let _y_initializers = [];
@@ -94,6 +82,24 @@
 -            }
 -        };
 -    })();
++    let x = 
++    @dec
++    class {
++    };
++}
++{
++    let x = class {
++        @dec
++        y;
++    };
++}
++{
++    const x = 
++    @dec
++    class {
++    };
++}
++{
 +    const x = class {
 +        @dec
 +        y;

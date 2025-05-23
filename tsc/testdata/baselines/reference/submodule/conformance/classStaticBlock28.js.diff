@@ -2,7 +2,7 @@
 +++ new.classStaticBlock28.js
 @@= skipped -11, +11 lines =@@
  console.log(foo)
- 
+
  //// [classStaticBlock28.js]
 -"use strict";
 -var foo;

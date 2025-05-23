@@ -1,22 +1,22 @@
 --- old.parserindenter.types
 +++ new.parserindenter.types
 @@= skipped -35, +35 lines =@@
- 
+
          constructor(
              public logger: TypeScript.ILogger,
 ->logger : TypeScript.ILogger
 +>logger : ILogger
  >TypeScript : any
- 
+
              public tree: ParseTree,
 @@= skipped -13, +13 lines =@@
  >languageHostIndentation : string
- 
+
              public editorOptions: Services.EditorOptions,
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >Services : any
- 
+
              public firstToken: TokenSpan,
 @@= skipped -81, +81 lines =@@
              if (this.logger.information()) {
@@ -28,7 +28,7 @@
 ->logger : TypeScript.ILogger
 +>logger : ILogger
  >information : any
- 
+
                  this.logger.log("GetIndentationEdits(" +
  >this.logger.log("GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")") : any
  >this.logger.log : any
@@ -50,7 +50,7 @@
 ->logger : TypeScript.ILogger
 +>logger : ILogger
  >information : any
- 
+
                  for (var i = 0; i < result.count() ; i++) {
 @@= skipped -28, +28 lines =@@
                      this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"");
@@ -66,7 +66,7 @@
  >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) : string
 @@= skipped -483, +483 lines =@@
          }
- 
+
          static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
 ->GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 +>GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
@@ -74,7 +74,7 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >Services : any
- 
+
              return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
  >GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false) : any
  >GetIndentSizeFromText : any
@@ -83,7 +83,7 @@
 +>editorOptions : EditorOptions
  >false : false
          }
- 
+
          static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
 ->GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
 +>GetIndentSizeFromText : (text: string, editorOptions: EditorOptions, includeNonIndentChars: boolean) => number
@@ -92,7 +92,7 @@
 +>editorOptions : EditorOptions
  >Services : any
  >includeNonIndentChars : boolean
- 
+
 @@= skipped -56, +56 lines =@@
  >indentSize + editorOptions.TabSize : any
  >indentSize : number
@@ -107,7 +107,7 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >TabSize : any
- 
+
                  else if (c == ' ')
 @@= skipped -767, +767 lines =@@
                      if (this.logger.debug()) {
@@ -119,7 +119,7 @@
 ->logger : TypeScript.ILogger
 +>logger : ILogger
  >debug : any
- 
+
                          // Verify that currentIndentText is all whitespaces
 @@= skipped -77, +77 lines =@@
              var indentSize = this.editorOptions.IndentSize;
@@ -131,7 +131,7 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >IndentSize : any
- 
+
              var tabSize = this.editorOptions.TabSize;
  >tabSize : any
  >this.editorOptions.TabSize : any
@@ -141,7 +141,7 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >TabSize : any
- 
+
              var convertTabsToSpaces = this.editorOptions.ConvertTabsToSpaces;
  >convertTabsToSpaces : any
  >this.editorOptions.ConvertTabsToSpaces : any
@@ -151,7 +151,7 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >ConvertTabsToSpaces : any
- 
+
              if (level < 0) {
 @@= skipped -345, +345 lines =@@
              var currentIndentSize = Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions);
@@ -168,7 +168,7 @@
  >this : this
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
- 
+
              var newIndentSize = currentIndentSize + delta;
  >newIndentSize : number
 @@= skipped -33, +33 lines =@@
@@ -188,7 +188,7 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >ConvertTabsToSpaces : any
- 
+
              if (newIndent != null) {
 @@= skipped -98, +98 lines =@@
                  var origIndentSize = Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true);
@@ -206,7 +206,7 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
  >true : true
- 
+
                  var newIndentSize = Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions);
  >newIndentSize : number
  >Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions) : number
@@ -221,7 +221,7 @@
  >this : this
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
- 
+
                  // Check the child's position whether it's before the parent position
                  // if so indent the child based on the first token on the line as opposed to the parent position
 @@= skipped -69, +69 lines =@@
@@ -239,7 +239,7 @@
  >this : this
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
- 
+
                      if (childIndentSize < origIndentSize)
  >childIndentSize < origIndentSize : boolean
 @@= skipped -17, +17 lines =@@
@@ -258,5 +258,5 @@
 ->editorOptions : Services.EditorOptions
 +>editorOptions : EditorOptions
                  }
- 
+
                  indentationDeltaSize = newIndentSize - origIndentSize;

@@ -1,44 +1,46 @@
 --- old.expandoFunctionNestedAssigmentsDeclared.symbols
 +++ new.expandoFunctionNestedAssigmentsDeclared.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === expandoFunctionNestedAssigmentsDeclared.ts ===
  function Foo(): void {
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
- 
+
  }
  declare namespace Foo {
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
- 
+
      var bla: {
  >bla : Symbol(bla, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 4, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 1))
 @@= skipped -79, +79 lines =@@
- 
+
  (Foo.bla = { foo: 1}).foo = (Foo.baz = 1) + (Foo.bar  = 0);
  >(Foo.bla = { foo: 1}).foo : Symbol(foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 12))
 ->Foo.bla : Symbol(Foo.bla, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 4, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 1))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
 ->bla : Symbol(Foo.bla, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 4, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 1))
-+>Foo.bla : Symbol(bla, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 4, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 1))
-+>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
-+>bla : Symbol(bla, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 4, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 1))
- >foo : Symbol(foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 12))
- >foo : Symbol(foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 12))
+->foo : Symbol(foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 12))
+->foo : Symbol(foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 12))
 ->Foo.baz : Symbol(Foo.baz, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 7, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 29))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
 ->baz : Symbol(Foo.baz, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 7, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 29))
 ->Foo.bar : Symbol(Foo.bar, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 8, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 45))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
 ->bar : Symbol(Foo.bar, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 8, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 45))
++>Foo.bla : Symbol(bla, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 4, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 1))
++>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
++>bla : Symbol(bla, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 4, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 1))
++>foo : Symbol(foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 12))
++>foo : Symbol(foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 12))
 +>Foo.baz : Symbol(baz, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 7, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 29))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>baz : Symbol(baz, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 7, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 29))
 +>Foo.bar : Symbol(bar, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 8, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 45))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>bar : Symbol(bar, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 8, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 30, 45))
- 
+
  if(Foo.fromIf = 1) {
 ->Foo.fromIf : Symbol(Foo.fromIf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 9, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
@@ -46,7 +48,7 @@
 +>Foo.fromIf : Symbol(fromIf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 9, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>fromIf : Symbol(fromIf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 9, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3))
- 
+
      Foo.inIf = 1;
 ->Foo.inIf : Symbol(Foo.inIf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 10, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 20))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
@@ -55,7 +57,7 @@
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>inIf : Symbol(inIf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 10, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 20))
  }
- 
+
  while(Foo.fromWhileCondition = 1) {
 ->Foo.fromWhileCondition : Symbol(Foo.fromWhileCondition, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 11, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
@@ -63,7 +65,7 @@
 +>Foo.fromWhileCondition : Symbol(fromWhileCondition, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 11, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>fromWhileCondition : Symbol(fromWhileCondition, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 11, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6))
- 
+
      Foo.fromWhileBody = 1;
 ->Foo.fromWhileBody : Symbol(Foo.fromWhileBody, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 12, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 35))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
@@ -81,7 +83,7 @@
 +>fromWhileBodyNested : Symbol(fromWhileBodyNested, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 13, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 38, 5))
      }
  }
- 
+
  do {
      Foo.fromDoBody = 1;
 ->Foo.fromDoBody : Symbol(Foo.fromDoBody, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 14, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 43, 4))
@@ -106,7 +108,7 @@
 +>Foo.fromDoCondition : Symbol(fromDoCondition, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 16, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>fromDoCondition : Symbol(fromDoCondition, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 16, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8))
- 
+
  for(Foo.forInit = 1; (Foo.forCond = 1) > 1; Foo.forIncr = 1){
 ->Foo.forInit : Symbol(Foo.forInit, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 17, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 50, 4))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
@@ -126,7 +128,7 @@
 +>Foo.forIncr : Symbol(forIncr, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 21, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 50, 43))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>forIncr : Symbol(forIncr, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 21, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 50, 43))
- 
+
      Foo.fromForBody = 1;
 ->Foo.fromForBody : Symbol(Foo.fromForBody, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 19, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 50, 61))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
@@ -144,7 +146,7 @@
 +>fromForBodyNested : Symbol(fromForBodyNested, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 20, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 52, 5))
      }
  }
- 
+
  for(let f of (Foo.forOf = []) ){
  >f : Symbol(f, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 57, 7))
 ->Foo.forOf : Symbol(Foo.forOf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 22, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 57, 14))
@@ -153,7 +155,7 @@
 +>Foo.forOf : Symbol(forOf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 22, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 57, 14))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>forOf : Symbol(forOf, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 22, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 57, 14))
- 
+
      Foo.fromForOfBody = 1;
 ->Foo.fromForOfBody : Symbol(Foo.fromForOfBody, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 23, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 57, 32))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)
@@ -171,8 +173,8 @@
 +>fromForOfBodyNested : Symbol(fromForOfBodyNested, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 24, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 59, 5))
      }
  }
- 
- 
+
+
  for(let f in (Foo.forIn = []) ){
  >f : Symbol(f, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 7))
 ->Foo.forIn : Symbol(Foo.forIn, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
@@ -181,7 +183,7 @@
 +>Foo.forIn : Symbol(forIn, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
 +>Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1))
 +>forIn : Symbol(forIn, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 25, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 14))
- 
+
      Foo.fromForInBody = 1;
 ->Foo.fromForInBody : Symbol(Foo.fromForInBody, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 26, 7), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 65, 32))
 ->Foo : Symbol(Foo, Decl(expandoFunctionNestedAssigmentsDeclared.ts, 0, 0), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 2, 1), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 32, 3), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 36, 6), Decl(expandoFunctionNestedAssigmentsDeclared.ts, 48, 8) ... and 2 more)

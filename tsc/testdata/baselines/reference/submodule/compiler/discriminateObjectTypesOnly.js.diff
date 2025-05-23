@@ -1,8 +1,8 @@
 --- old.discriminateObjectTypesOnly.js
 +++ new.discriminateObjectTypesOnly.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [discriminateObjectTypesOnly.js]
 -"use strict";
 -var k = { toFixed: null }; // OK, satisfies object

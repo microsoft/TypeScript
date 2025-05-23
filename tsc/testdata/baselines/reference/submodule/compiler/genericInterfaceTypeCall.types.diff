@@ -2,7 +2,7 @@
 +++ new.genericInterfaceTypeCall.types
 @@= skipped -15, +15 lines =@@
  >arg : T
- 
+
      fail2(func2: { (arg: T): void; }): void;
 ->fail2 : (func2: { (arg: T): void; }) => void
 +>fail2 : (func2: (arg: T) => void) => void

@@ -1,13 +1,13 @@
 --- old.typeFromPropertyAssignment4.types
 +++ new.typeFromPropertyAssignment4.types
 @@= skipped -1, +1 lines =@@
- 
+
  === def.js ===
  var Outer = {};
 ->Outer : typeof Outer
 +>Outer : {}
  >{} : {}
- 
+
  === a.js ===
  Outer.Inner = class {
  >Outer.Inner = class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof Inner
@@ -18,7 +18,7 @@
 +>Outer : {}
 +>Inner : any
  >class {    constructor() {        /** @type {number} */        this.y = 12    }} : typeof Inner
- 
+
      constructor() {
          /** @type {number} */
          this.y = 12
@@ -33,14 +33,14 @@
  }
 @@= skipped -27, +28 lines =@@
  >local : Inner
- 
+
  local.y
 ->local.y : number
 +>local.y : any
  >local : Inner
 ->y : number
 +>y : any
- 
+
  var inner = new Outer.Inner()
 ->inner : Inner
 ->new Outer.Inner() : Inner
@@ -52,7 +52,7 @@
 +>Outer.Inner : any
 +>Outer : {}
 +>Inner : any
- 
+
  inner.y
 ->inner.y : number
 ->inner : Inner
@@ -60,19 +60,19 @@
 +>inner.y : any
 +>inner : any
 +>y : any
- 
+
  === b.js ===
  /** @type {Outer.Inner} */
 @@= skipped -22, +22 lines =@@
  >x : Inner
- 
+
  x.y
 ->x.y : number
 +>x.y : any
  >x : Inner
 ->y : number
 +>y : any
- 
+
  var z = new Outer.Inner()
 ->z : Inner
 ->new Outer.Inner() : Inner
@@ -84,7 +84,7 @@
 +>Outer.Inner : any
 +>Outer : {}
 +>Inner : any
- 
+
  z.y
 ->z.y : number
 ->z : Inner
@@ -92,4 +92,3 @@
 +>z.y : any
 +>z : any
 +>y : any
- 

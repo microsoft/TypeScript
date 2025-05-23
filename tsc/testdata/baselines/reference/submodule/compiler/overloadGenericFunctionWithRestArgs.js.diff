@@ -2,7 +2,7 @@
 +++ new.overloadGenericFunctionWithRestArgs.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [overloadGenericFunctionWithRestArgs.js]
 -var B = /** @class */ (function () {
 -    function B() {

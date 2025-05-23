@@ -17,7 +17,7 @@
 +>DropdownMenu : ComponentType<Props>
  >React : any
  >DropdownMenu : any
- 
+
  <DropdownMenu icon="move" label="Select a direction">
 -><DropdownMenu icon="move" label="Select a direction">  {({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}</DropdownMenu> : JSX.Element
 ->DropdownMenu : React.ComponentType<DropdownMenu.Props>
@@ -25,19 +25,19 @@
 +>DropdownMenu : ComponentType<Props>
  >icon : string
  >label : string
- 
+
    {({ onClose }) => (
 ->({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
 +>({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : (__0: { onClose: () => void; }) => Element
  >onClose : () => void
 ->(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
 +>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : Element
- 
+
      <div>
 -><div>      <button onClick={onClose}>Click me</button>    </div> : JSX.Element
 +><div>      <button onClick={onClose}>Click me</button>    </div> : Element
  >div : any
- 
+
        <button onClick={onClose}>Click me</button>
 -><button onClick={onClose}>Click me</button> : JSX.Element
 +><button onClick={onClose}>Click me</button> : Element
@@ -45,23 +45,23 @@
  >onClick : () => void
  >onClose : () => void
 @@= skipped -31, +31 lines =@@
- 
+
    )}
  </DropdownMenu>;
 ->DropdownMenu : React.ComponentType<DropdownMenu.Props>
 +>DropdownMenu : ComponentType<Props>
- 
+
  <DropdownMenu
 -><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : JSX.Element
 ->DropdownMenu : React.ComponentType<DropdownMenu.Props>
 +><DropdownMenu  icon="move"  label="Select a direction"  children={({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  )}/> : Element
 +>DropdownMenu : ComponentType<Props>
- 
+
    icon="move"
  >icon : string
 @@= skipped -13, +13 lines =@@
  >label : string
- 
+
    children={({ onClose }) => (
 ->children : ({ onClose }: { onClose: () => void; }) => JSX.Element
 ->({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
@@ -70,12 +70,12 @@
  >onClose : () => void
 ->(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
 +>(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : Element
- 
+
      <div>
 -><div>      <button onClick={onClose}>Click me</button>    </div> : JSX.Element
 +><div>      <button onClick={onClose}>Click me</button>    </div> : Element
  >div : any
- 
+
        <button onClick={onClose}>Click me</button>
 -><button onClick={onClose}>Click me</button> : JSX.Element
 +><button onClick={onClose}>Click me</button> : Element

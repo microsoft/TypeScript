@@ -1,8 +1,8 @@
 --- old.genericIsNeverEmptyObject.js
 +++ new.genericIsNeverEmptyObject.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [genericIsNeverEmptyObject.js]
 -"use strict";
  // Repro from #29067

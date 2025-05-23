@@ -1,7 +1,7 @@
 --- old.parser553699.symbols
 +++ new.parser553699.symbols
 @@= skipped -5, +5 lines =@@
- 
+
    constructor() { }
    public banana (x: public) { }
 ->banana : Symbol(Foo.banana, Decl(parser553699.ts, 1, 19))

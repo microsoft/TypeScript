@@ -1,8 +1,8 @@
 --- old.tsxElementResolution.js
 +++ new.tsxElementResolution.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [tsxElementResolution.jsx]
 -var foundFirst = /** @class */ (function () {
 -    function foundFirst() {

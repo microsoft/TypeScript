@@ -2,7 +2,7 @@
 +++ new.weakTypesAndLiterals01.types
 @@= skipped -35, +35 lines =@@
  >"A" : "A"
- 
+
          return arg;
 ->arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
@@ -11,7 +11,7 @@
          return arg;
 @@= skipped -19, +19 lines =@@
  >"A" : "A"
- 
+
          return arg;
 ->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
@@ -20,7 +20,7 @@
          return arg;
 @@= skipped -19, +19 lines =@@
  >aOrB : "A" | "B"
- 
+
          return arg;
 ->arg : "A" | "B" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : "A" | "B" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
@@ -29,7 +29,7 @@
          return arg;
 @@= skipped -19, +19 lines =@@
  >aOrB : "A" | "B"
- 
+
          return arg;
 ->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }

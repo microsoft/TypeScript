@@ -2,8 +2,8 @@
 +++ new.moduleResolutionWithSymlinks_notInNodeModules.js
 @@= skipped -8, +8 lines =@@
  x + x2;
- 
- 
+
+
 -//// [/src/bin/shared/abc.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

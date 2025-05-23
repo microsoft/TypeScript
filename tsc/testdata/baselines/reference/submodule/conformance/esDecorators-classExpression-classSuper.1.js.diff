@@ -1,7 +1,7 @@
 --- old.esDecorators-classExpression-classSuper.1.js
 +++ new.esDecorators-classExpression-classSuper.1.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [esDecorators-classExpression-classSuper.1.js]
  const method = "method";
 -((() => {

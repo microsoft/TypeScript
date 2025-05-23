@@ -1,8 +1,8 @@
 --- old.privateNameComputedPropertyName1(target=es2015).js
 +++ new.privateNameComputedPropertyName1(target=es2015).js
 @@= skipped -39, +39 lines =@@
- 
- 
+
+
  //// [privateNameComputedPropertyName1.js]
 -var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
 -    if (kind === "m") throw new TypeError("Private method is not writable");

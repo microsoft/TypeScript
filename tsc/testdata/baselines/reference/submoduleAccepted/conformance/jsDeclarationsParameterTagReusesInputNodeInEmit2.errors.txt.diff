@@ -1,8 +1,7 @@
 --- old.jsDeclarationsParameterTagReusesInputNodeInEmit2.errors.txt
 +++ new.jsDeclarationsParameterTagReusesInputNodeInEmit2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +base.js(11,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +
 +

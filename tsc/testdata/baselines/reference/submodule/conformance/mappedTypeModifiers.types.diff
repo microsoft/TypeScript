@@ -1,7 +1,7 @@
 --- old.mappedTypeModifiers.types
 +++ new.mappedTypeModifiers.types
 @@= skipped -230, +230 lines =@@
- 
+
      (x["other"] || 0).toFixed();
  >(x["other"] || 0).toFixed() : string
 ->(x["other"] || 0).toFixed : (fractionDigits?: number) => string
@@ -15,10 +15,10 @@
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
  }
- 
+
  function f2(x: Readonly<Foo>) {
 @@= skipped -21, +21 lines =@@
- 
+
      x["other"].toFixed();
  >x["other"].toFixed() : string
 ->x["other"].toFixed : (fractionDigits?: number) => string
@@ -29,10 +29,10 @@
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
  }
- 
+
  function f3(x: Boxified<Foo>) {
 @@= skipped -18, +18 lines =@@
- 
+
      x["other"].x.toFixed();
  >x["other"].x.toFixed() : string
 ->x["other"].x.toFixed : (fractionDigits?: number) => string
@@ -45,15 +45,15 @@
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
  }
- 
+
  function f4(x: { [P in keyof Foo]: Foo[P] }) {
 ->f4 : (x: { [P in keyof Foo]: Foo[P]; }) => void
 +>f4 : (x: { [x: string]: number; prop: number; }) => void
  >x : { [x: string]: number; prop: number; }
- 
+
      x.prop; // ok
 @@= skipped -20, +20 lines =@@
- 
+
      x["other"].toFixed();
  >x["other"].toFixed() : string
 ->x["other"].toFixed : (fractionDigits?: number) => string
@@ -64,4 +64,3 @@
 ->toFixed : (fractionDigits?: number) => string
 +>toFixed : (fractionDigits?: number | undefined) => string
  }
- 

@@ -2,10 +2,9 @@
 +++ new.moduleSymbolMerging.types
 @@= skipped -8, +8 lines =@@
  >B : typeof B
- 
+
  	export function f(): A.I { return null; }
 ->f : () => A.I
 +>f : () => I
  >A : any
  }
- 

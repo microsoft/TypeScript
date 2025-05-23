@@ -2,18 +2,17 @@
 +++ new.augmentExportEquals2.types
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/compiler/augmentExportEquals2.ts] ////
- 
+
  === file3.ts ===
--import x = require("./file1");
++
+ import x = require("./file1");
 ->x : () => void
- 
-+import x = require("./file1");
+-
  import "./file2";
  let a: x.A; // should not work
 ->a : x.A
 ->x : any
-+=== file3.ts ===
- 
+-
 -=== file1.ts ===
 -function foo() {}
 ->foo : () => void
@@ -32,4 +31,4 @@
 -    interface A { a }
 ->a : any
 -}
--
++=== file3.ts ===

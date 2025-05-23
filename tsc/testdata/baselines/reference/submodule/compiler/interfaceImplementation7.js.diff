@@ -1,8 +1,8 @@
 --- old.interfaceImplementation7.js
 +++ new.interfaceImplementation7.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [interfaceImplementation7.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

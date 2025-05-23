@@ -9,18 +9,18 @@
 +>ResizeObserver : { new (callback: ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
 +>([entry]) => {    entry} : (__0: ResizeObserverEntry[]) => void
  >entry : ResizeObserverEntry
- 
+
      entry
 @@= skipped -25, +25 lines =@@
  }
- 
+
  export function series<T>(tasks: Task<T>[], callback: Callback<T[]>): void {
 ->series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
 ->tasks : Task<T>[]
 +>series : <T>(tasks: (Task<T>)[], callback: Callback<T[]>) => void
 +>tasks : (Task<T>)[]
  >callback : Callback<T[]>
- 
+
      let index = 0
 @@= skipped -18, +18 lines =@@
          let task = tasks[index]
@@ -29,16 +29,16 @@
 ->tasks : Task<T>[]
 +>tasks : (Task<T>)[]
  >index : number
- 
+
          if (!task) {
 @@= skipped -53, +53 lines =@@
- 
+
  series([
  >series([    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),], (error, results) => {    if (error) {        console.error(error)    } else {        console.log(results)    }}) : void
 ->series : <T>(tasks: Task<T>[], callback: Callback<T[]>) => void
 +>series : <T>(tasks: (Task<T>)[], callback: Callback<T[]>) => void
  >[    cb => setTimeout(() => cb(null, 1), 300),    cb => setTimeout(() => cb(null, 2), 200),    cb => setTimeout(() => cb(null, 3), 100),] : ((cb: Callback<unknown>) => number)[]
- 
+
      cb => setTimeout(() => cb(null, 1), 300),
  >cb => setTimeout(() => cb(null, 1), 300) : (cb: Callback<unknown>) => number
  >cb : Callback<unknown>

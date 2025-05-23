@@ -1,7 +1,7 @@
 --- old.localTypeParameterInferencePriority.js
 +++ new.localTypeParameterInferencePriority.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [localTypeParameterInferencePriority.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

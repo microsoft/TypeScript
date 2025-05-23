@@ -2,7 +2,7 @@
 +++ new.superErrors.js
 @@= skipped -53, +53 lines =@@
  }
- 
+
  //// [superErrors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

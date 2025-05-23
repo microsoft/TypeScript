@@ -1,8 +1,8 @@
 --- old.equalityWithEnumTypes.js
 +++ new.equalityWithEnumTypes.js
 @@= skipped -44, +44 lines =@@
- 
- 
+
+
  //// [equalityWithEnumTypes.js]
 -"use strict";
  // Literal enum type

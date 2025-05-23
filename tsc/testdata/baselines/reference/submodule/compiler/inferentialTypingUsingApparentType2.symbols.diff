@@ -9,4 +9,3 @@
  >x : Symbol(x, Decl(inferentialTypingUsingApparentType2.ts, 4, 8))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 

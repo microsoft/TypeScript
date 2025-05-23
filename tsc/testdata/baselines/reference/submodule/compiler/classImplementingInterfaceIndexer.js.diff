@@ -2,7 +2,7 @@
 +++ new.classImplementingInterfaceIndexer.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [classImplementingInterfaceIndexer.js]
 -var A = /** @class */ (function () {
 -    function A() {

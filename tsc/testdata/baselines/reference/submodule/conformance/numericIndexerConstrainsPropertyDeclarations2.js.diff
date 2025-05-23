@@ -1,7 +1,7 @@
 --- old.numericIndexerConstrainsPropertyDeclarations2.js
 +++ new.numericIndexerConstrainsPropertyDeclarations2.js
 @@= skipped -48, +48 lines =@@
- 
+
  //// [numericIndexerConstrainsPropertyDeclarations2.js]
  // String indexer providing a constraint of a user defined type
 -var __extends = (this && this.__extends) || (function () {

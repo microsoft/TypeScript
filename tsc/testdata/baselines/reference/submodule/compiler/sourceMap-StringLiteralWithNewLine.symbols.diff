@@ -2,7 +2,7 @@
 +++ new.sourceMap-StringLiteralWithNewLine.symbols
 @@= skipped -7, +7 lines =@@
  >Window : Symbol(Window, Decl(sourceMap-StringLiteralWithNewLine.ts, 1, 1))
- 
+
      document: Document;
 ->document : Symbol(Window.document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))
 +>document : Symbol(document, Decl(sourceMap-StringLiteralWithNewLine.ts, 2, 18))

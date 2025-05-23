@@ -2,12 +2,12 @@
 +++ new.narrowingByTypeofInSwitch.types
 @@= skipped -440, +440 lines =@@
  >y : number
- 
+
  function exhaustiveChecks(x: number | string | L | R): string {
 ->exhaustiveChecks : (x: number | string | L | R) => string
 +>exhaustiveChecks : (x: string | number | L | R) => string
  >x : string | number | L | R
- 
+
      switch (typeof x) {
 @@= skipped -10, +10 lines =@@
          case 'number': return x.toString(2);
@@ -19,16 +19,16 @@
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
  >2 : 2
- 
+
          case 'string': return x;
 @@= skipped -24, +24 lines =@@
  }
- 
+
  function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
 ->exhaustiveChecksGenerics : <T extends L | R | number | string>(x: T) => string
 +>exhaustiveChecksGenerics : <T extends string | number | L | R>(x: T) => string
  >x : T
- 
+
      switch (typeof x) {
 @@= skipped -10, +10 lines =@@
          case 'number': return x.toString(2);
@@ -40,19 +40,19 @@
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
  >2 : 2
- 
+
          case 'string': return x;
 @@= skipped -59, +59 lines =@@
  }
- 
+
  function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 ->multipleGenericFuse : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
 +>multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
  >xy : X | Y
- 
+
      switch (typeof xy) {
 @@= skipped -21, +21 lines =@@
- 
+
          case 'number': return [xy]
  >'number' : "number"
 ->[xy] : [(X & number) | (Y & number)]
@@ -61,27 +61,27 @@
 +>xy : X & number | Y & number
      }
  }
- 
+
 @@= skipped -306, +306 lines =@@
  }
- 
+
  function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 ->narrowingNarrows2 : (x: true | 3 | "hello" | undefined) => void
 +>narrowingNarrows2 : (x: "hello" | 3 | true | undefined) => void
  >x : "hello" | 3 | true | undefined
  >true : true
- 
+
 @@= skipped -213, +213 lines =@@
  /* Both string literals and template literals */
- 
+
  function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 ->multipleGenericFuseWithBoth : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
 +>multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X | Y] | [X, number] | [Y, string]
  >xy : X | Y
- 
+
      switch (typeof xy) {
 @@= skipped -21, +21 lines =@@
- 
+
          case `number`: return [xy]
  >`number` : "number"
 ->[xy] : [(X & number) | (Y & number)]
@@ -90,4 +90,3 @@
 +>xy : X & number | Y & number
      }
  }
- 

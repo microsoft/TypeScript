@@ -1,6 +1,6 @@
 --- old.classReferencedInContextualParameterWithinItsOwnBaseExpression.js
 +++ new.classReferencedInContextualParameterWithinItsOwnBaseExpression.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/classReferencedInContextualParameterWithinItsOwnBaseExpression.ts] ////
 -
 -//// [classReferencedInContextualParameterWithinItsOwnBaseExpression.ts]
@@ -69,5 +69,4 @@
 -export declare class A extends A_base {
 -}
 -export {};
-@@= skipped --1, +1 lines =@@
 +<no content>

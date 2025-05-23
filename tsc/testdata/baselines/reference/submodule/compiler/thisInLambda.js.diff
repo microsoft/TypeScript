@@ -2,7 +2,7 @@
 +++ new.thisInLambda.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [thisInLambda.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

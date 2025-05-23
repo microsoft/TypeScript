@@ -134,20 +134,22 @@
  2 >Emitted(14, 2) Source(10, 2) + SourceIndex(0)
  ---
 ->>>var Foo = /** @class */ (function () {
-+>>>class Foo {
- 1->
+-1->
 -2 >^^^^^^^^^^^^^^^^^^^^^->
+-1->
+-  >
+-  >
++>>>class Foo {
++1->
 +2 >^^^^^^
 +3 >      ^^^
- 1->
-   >
-   >
++1->
++  >
++  >
 +2 >class 
 +3 >      Foo
  1->Emitted(15, 1) Source(12, 1) + SourceIndex(0)
-+2 >Emitted(15, 7) Source(12, 7) + SourceIndex(0)
-+3 >Emitted(15, 10) Source(12, 10) + SourceIndex(0)
- ---
+----
 ->>>    function Foo() {
 -1->^^^^
 -2 >    ^^->
@@ -156,14 +158,13 @@
 ----
 ->>>    }
 -1->^^^^
++2 >Emitted(15, 7) Source(12, 7) + SourceIndex(0)
++3 >Emitted(15, 10) Source(12, 10) + SourceIndex(0)
++---
 +>>>    u;
 +1 >^^^^
  2 >    ^
-+3 >     ^
-+1 > {
-+  >    \
-+2 >    u
- 3 >     
+-3 >     
 -4 >     ^^^^^^^^^^^->
 -1->class Foo {
 -  >    \u
@@ -172,10 +173,7 @@
 -1->Emitted(17, 5) Source(13, 7) + SourceIndex(0)
 -2 >Emitted(17, 6) Source(13, 8) + SourceIndex(0)
 -3 >Emitted(17, 6) Source(13, 7) + SourceIndex(0)
-+1 >Emitted(16, 5) Source(13, 6) + SourceIndex(0)
-+2 >Emitted(16, 6) Source(13, 7) + SourceIndex(0)
-+3 >Emitted(16, 7) Source(13, 7) + SourceIndex(0)
- ---
+----
 ->>>    return Foo;
 -1->^^^^
 -2 >    ^^^^^^^^^^
@@ -185,10 +183,7 @@
 -2 >Emitted(18, 15) Source(13, 8) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > 
@@ -204,6 +199,19 @@
 -3 >Emitted(19, 2) Source(13, 7) + SourceIndex(0)
 -4 >Emitted(19, 2) Source(12, 1) + SourceIndex(0)
 -5 >Emitted(19, 6) Source(13, 7) + SourceIndex(0)
++3 >     ^
++1 > {
++  >    \
++2 >    u
++3 >     
++1 >Emitted(16, 5) Source(13, 6) + SourceIndex(0)
++2 >Emitted(16, 6) Source(13, 7) + SourceIndex(0)
++3 >Emitted(16, 7) Source(13, 7) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^->
++1 >
 +1 >Emitted(17, 2) Source(13, 7) + SourceIndex(0)
  ---
  >>>{
@@ -450,7 +458,7 @@
 +3 >Emitted(35, 16) Source(18, 20) + SourceIndex(0)
 +4 >Emitted(35, 17) Source(18, 21) + SourceIndex(0)
 +5 >Emitted(35, 18) Source(18, 21) + SourceIndex(0)
- ---
++---
 +>>>    ;
 +1 >^^^^
 +2 >    ^
@@ -458,7 +466,7 @@
 +2 >    
 +1 >Emitted(36, 5) Source(18, 22) + SourceIndex(0)
 +2 >Emitted(36, 6) Source(18, 23) + SourceIndex(0)
-+---
+ ---
  >>>}
  1 >
  2 >^
@@ -533,24 +541,28 @@
 +1 >(
 +2 >)
  3 > 
--1 >Emitted(41, 1) Source(22, 29) + SourceIndex(0)
--2 >Emitted(41, 2) Source(22, 30) + SourceIndex(0)
--3 >Emitted(41, 3) Source(22, 30) + SourceIndex(0)
 +1 >Emitted(40, 1) Source(22, 28) + SourceIndex(0)
 +2 >Emitted(40, 2) Source(22, 29) + SourceIndex(0)
 +3 >Emitted(40, 3) Source(22, 29) + SourceIndex(0)
- ---
- >>>{
- 1 >
- 2 >^
- 3 > ^^^^^^^^->
- 1 >
++---
++>>>{
++1 >
++2 >^
++3 > ^^^^^^^^->
++1 >
++2 >.
+ 1 >Emitted(41, 1) Source(22, 29) + SourceIndex(0)
+ 2 >Emitted(41, 2) Source(22, 30) + SourceIndex(0)
+-3 >Emitted(41, 3) Source(22, 30) + SourceIndex(0)
+----
+->>>{
+-1 >
+-2 >^
+-3 > ^^^^^^^^->
+-1 >
 -2 >{
 -1 >Emitted(42, 1) Source(22, 30) + SourceIndex(0)
 -2 >Emitted(42, 2) Source(22, 31) + SourceIndex(0)
-+2 >.
-+1 >Emitted(41, 1) Source(22, 29) + SourceIndex(0)
-+2 >Emitted(41, 2) Source(22, 30) + SourceIndex(0)
  ---
  >>>    102;
  1->^^^^

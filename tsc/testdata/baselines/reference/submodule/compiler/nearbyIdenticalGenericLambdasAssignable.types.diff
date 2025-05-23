@@ -2,22 +2,22 @@
 +++ new.nearbyIdenticalGenericLambdasAssignable.types
 @@= skipped -46, +46 lines =@@
  >v : T
- 
+
  declare function accA(x: TA): void;
 ->accA : (x: TA) => void
 +>accA : (x: <T>() => { v: T; }) => void
  >x : <T>() => { v: T; }
- 
+
  declare function accB(x: TB): void;
 ->accB : (x: TB) => void
 +>accB : (x: <T>() => { v: T; }) => void
  >x : <T>() => { v: T; }
- 
+
  declare function accC(x: TC): void;
 ->accC : (x: TC) => void
 +>accC : (x: <T>() => { v: T; }) => void
  >x : <T>() => { v: T; }
- 
+
  declare function accL(x: TL): void;
 @@= skipped -18, +18 lines =@@
  // These should all be OK, every type is identical
@@ -34,7 +34,7 @@
 ->accA : (x: TA) => void
 +>accA : (x: <T>() => { v: T; }) => void
  >fC : <T>() => { v: T; }
- 
+
  //             ~~ previously an error
  accB(fA); accB(fB); accB(fC);
  >accB(fA) : void
@@ -49,7 +49,7 @@
 ->accB : (x: TB) => void
 +>accB : (x: <T>() => { v: T; }) => void
  >fC : <T>() => { v: T; }
- 
+
  //             OK
  accC(fA); accC(fB); accC(fC);
  >accC(fA) : void
@@ -64,5 +64,5 @@
 ->accC : (x: TC) => void
 +>accC : (x: <T>() => { v: T; }) => void
  >fC : <T>() => { v: T; }
- 
+
  //             ~~ previously an error

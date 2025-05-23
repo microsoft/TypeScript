@@ -6,7 +6,7 @@
  import BaseComponent from 'BaseComponent';
 ->BaseComponent : typeof BaseComponent
 +>BaseComponent : typeof default
- 
+
  class TestComponent extends React.Component<any, {}> {
  >TestComponent : TestComponent
 ->React.Component : React.Component<any, {}>
@@ -14,10 +14,10 @@
  >React : typeof React
 ->Component : typeof React.Component
 +>Component : typeof Component
- 
+
      render() {
  >render : () => any
- 
+
          return <BaseComponent />;
 -><BaseComponent /> : error
 ->BaseComponent : typeof BaseComponent
@@ -25,10 +25,10 @@
 +>BaseComponent : typeof default
      }
  }
- 
+
 @@= skipped -32, +32 lines =@@
  >"BaseComponent" : typeof import("BaseComponent")
- 
+
      export default class extends React.Component<any, {}> {
 ->React.Component : React.Component<any, {}>
 +>React.Component : Component<any, {}>
@@ -37,4 +37,3 @@
 +>Component : typeof Component
      }
  }
- 

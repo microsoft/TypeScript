@@ -2,7 +2,7 @@
 +++ new.objectRestSpread.js
 @@= skipped -24, +24 lines =@@
  }) {}
- 
+
  //// [objectRestSpread.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

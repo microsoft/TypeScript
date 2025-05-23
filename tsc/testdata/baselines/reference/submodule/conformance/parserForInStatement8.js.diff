@@ -1,7 +1,7 @@
 --- old.parserForInStatement8.js
 +++ new.parserForInStatement8.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [parserForInStatement8.js]
  // repro from https://github.com/microsoft/TypeScript/issues/54769
 -for (var _a = (void 0)[0], x = _a === void 0 ? 'a' in {} : _a in { '': 0 })

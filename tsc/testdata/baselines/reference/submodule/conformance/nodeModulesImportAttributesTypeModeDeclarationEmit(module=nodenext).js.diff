@@ -1,8 +1,8 @@
 --- old.nodeModulesImportAttributesTypeModeDeclarationEmit(module=nodenext).js
 +++ new.nodeModulesImportAttributesTypeModeDeclarationEmit(module=nodenext).js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

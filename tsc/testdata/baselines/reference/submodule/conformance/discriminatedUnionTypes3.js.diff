@@ -2,7 +2,7 @@
 +++ new.discriminatedUnionTypes3.js
 @@= skipped -19, +19 lines =@@
  }
- 
+
  //// [discriminatedUnionTypes3.js]
 -"use strict";
 -// Repro from #44435

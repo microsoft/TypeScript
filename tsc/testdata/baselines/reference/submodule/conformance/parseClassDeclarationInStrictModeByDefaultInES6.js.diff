@@ -1,7 +1,7 @@
 --- old.parseClassDeclarationInStrictModeByDefaultInES6.js
 +++ new.parseClassDeclarationInStrictModeByDefaultInES6.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [parseClassDeclarationInStrictModeByDefaultInES6.js]
  class C {
 -    constructor() {

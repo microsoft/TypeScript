@@ -1,7 +1,7 @@
 --- old.destructuringAssignmentWithExportedName.js
 +++ new.destructuringAssignmentWithExportedName.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [destructuringAssignmentWithExportedName.js]
  "use strict";
 -var _a, _b, _c, _d, _e;
@@ -13,18 +13,24 @@
  exports.nfoo = exports.nonexportedFoo = nonexportedFoo = null;
  if (null) {
 -    (_a = null, exports.foo = exports.exportedFoo = _a.exportedFoo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _a.nonexportedFoo);
-+    ({ exportedFoo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, nonexportedFoo: { set value(value_1) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_1; } }.value } = null);
- }
- else if (null) {
+-}
+-else if (null) {
 -    (_b = null, exports.foo = exports.exportedFoo = _b.foo, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _b.bar);
-+    ({ foo: { set value(value_2) { exports.foo = exports.exportedFoo = value_2; } }.value, bar: { set value(value_3) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_3; } }.value } = null);
- }
- else if (null) {
+-}
+-else if (null) {
 -    (_c = null.foo, exports.foo = exports.exportedFoo = _c.bar, exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _c.baz);
-+    ({ foo: { bar: { set value(value_4) { exports.foo = exports.exportedFoo = value_4; } }.value, baz: { set value(value_5) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_5; } }.value } } = null);
- }
- else if (null) {
+-}
+-else if (null) {
 -    (_d = null, exports.foo = exports.exportedFoo = _d[0], exports.nfoo = exports.nonexportedFoo = nonexportedFoo = _d[1]);
++    ({ exportedFoo: { set value(value) { exports.foo = exports.exportedFoo = value; } }.value, nonexportedFoo: { set value(value_1) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_1; } }.value } = null);
++}
++else if (null) {
++    ({ foo: { set value(value_2) { exports.foo = exports.exportedFoo = value_2; } }.value, bar: { set value(value_3) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_3; } }.value } = null);
++}
++else if (null) {
++    ({ foo: { bar: { set value(value_4) { exports.foo = exports.exportedFoo = value_4; } }.value, baz: { set value(value_5) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_5; } }.value } } = null);
++}
++else if (null) {
 +    ([{ set value(value_6) { exports.foo = exports.exportedFoo = value_6; } }.value, { set value(value_7) { exports.nfoo = exports.nonexportedFoo = nonexportedFoo = value_7; } }.value] = null);
  }
  else {

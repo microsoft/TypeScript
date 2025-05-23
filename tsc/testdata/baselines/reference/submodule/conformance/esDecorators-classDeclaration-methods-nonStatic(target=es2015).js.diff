@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-methods-nonStatic(target=es2015).js
 +++ new.esDecorators-classDeclaration-methods-nonStatic(target=es2015).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [esDecorators-classDeclaration-methods-nonStatic.js]
  const method3 = "method3";
 -let C = (() => {

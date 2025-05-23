@@ -1,6 +1,6 @@
 --- old.preserveValueImports_errors(isolatedmodules=false).errors.txt
 +++ new.preserveValueImports_errors(isolatedmodules=false).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5102: Option 'preserveValueImports' has been removed. Please remove it from your configuration.
 -  Use 'verbatimModuleSyntax' instead.
 -
@@ -51,5 +51,4 @@
 -    import type { B } from "./b";
 -    export type { A, B as BB };
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

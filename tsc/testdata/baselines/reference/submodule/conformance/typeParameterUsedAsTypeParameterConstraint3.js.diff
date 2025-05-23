@@ -2,7 +2,7 @@
 +++ new.typeParameterUsedAsTypeParameterConstraint3.js
 @@= skipped -52, +52 lines =@@
  //}
- 
+
  //// [typeParameterUsedAsTypeParameterConstraint3.js]
 -// Type parameters are in scope in their own and other type parameter lists
 -// Object types

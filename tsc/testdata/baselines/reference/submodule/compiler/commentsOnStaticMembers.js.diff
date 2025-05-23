@@ -2,7 +2,7 @@
 +++ new.commentsOnStaticMembers.js
 @@= skipped -21, +21 lines =@@
  }
- 
+
  //// [commentsOnStaticMembers.js]
 -var test = /** @class */ (function () {
 -    function test() {
@@ -13,11 +13,11 @@
       */
 -    test.p1 = "";
 +    static p1 = "";
-     /**
++    /**
 +     * p2 comment does not appear in output
 +     */
 +    static p2;
-+    /**
+     /**
       * p3 comment appears in output
       */
 -    test.p3 = "";

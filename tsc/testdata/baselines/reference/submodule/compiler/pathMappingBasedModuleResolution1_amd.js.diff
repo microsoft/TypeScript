@@ -1,8 +1,8 @@
 --- old.pathMappingBasedModuleResolution1_amd.js
 +++ new.pathMappingBasedModuleResolution1_amd.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [f1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

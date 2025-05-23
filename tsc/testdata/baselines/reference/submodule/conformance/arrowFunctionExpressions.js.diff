@@ -1,7 +1,7 @@
 --- old.arrowFunctionExpressions.js
 +++ new.arrowFunctionExpressions.js
 @@= skipped -102, +102 lines =@@
- 
+
  //// [arrowFunctionExpressions.js]
  // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 -var a = function (p) { return p.length; };

@@ -1,8 +1,8 @@
 --- old.errorElaboration.js
 +++ new.errorElaboration.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [errorElaboration.js]
 -// Repro for #5712
 -var a;

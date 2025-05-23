@@ -2,7 +2,7 @@
 +++ new.topLevelVarHoistingSystem.js
 @@= skipped -11, +11 lines =@@
  export { y };
- 
+
  //// [topLevelVarHoistingSystem.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

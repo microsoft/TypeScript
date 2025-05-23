@@ -8,17 +8,17 @@
 +>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
  >x : new () => CTor & { props: P; }
  >props : P
- 
+
 @@= skipped -12, +12 lines =@@
  }
- 
+
  export default class MyComponent {
 ->MyComponent : MyComponent
 +>MyComponent : default
- 
+
      props: Props;
  >props : Props
- 
+
      static create = make(MyComponent);
 ->create : Things<Props, MyComponent>
 ->make(MyComponent) : Things<Props, MyComponent>

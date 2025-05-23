@@ -1,7 +1,7 @@
 --- old.matchReturnTypeInAllBranches.js
 +++ new.matchReturnTypeInAllBranches.js
 @@= skipped -38, +38 lines =@@
- 
+
  //// [matchReturnTypeInAllBranches.js]
  // Represents a monster who enjoys ice cream
 -var IceCreamMonster = /** @class */ (function () {

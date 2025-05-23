@@ -2,24 +2,24 @@
 +++ new.noPropertyAccessFromIndexSignature1.symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 0))
- 
+
      foo: string
 ->foo : Symbol(A.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 13))
 +>foo : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 13))
  }
- 
+
  interface B {
 @@= skipped -14, +14 lines =@@
  >C : Symbol(C, Decl(noPropertyAccessFromIndexSignature1.ts, 6, 1))
- 
+
      foo: string
 ->foo : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
 +>foo : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
- 
+
      [k: string]: string
  >k : Symbol(k, Decl(noPropertyAccessFromIndexSignature1.ts, 10, 5))
 @@= skipped -24, +24 lines =@@
- 
+
  // access property
  a.foo;
 ->a.foo : Symbol(A.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 13))
@@ -27,12 +27,12 @@
  >a : Symbol(a, Decl(noPropertyAccessFromIndexSignature1.ts, 13, 13))
 ->foo : Symbol(A.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 13))
 +>foo : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 13))
- 
+
  a["foo"]
  >a : Symbol(a, Decl(noPropertyAccessFromIndexSignature1.ts, 13, 13))
 ->"foo" : Symbol(A.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 13))
 +>"foo" : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 0, 13))
- 
+
  // access index signature
  b.foo;
 ->b.foo : Symbol(B.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 4, 13))
@@ -40,10 +40,10 @@
  >b : Symbol(b, Decl(noPropertyAccessFromIndexSignature1.ts, 14, 13))
 ->foo : Symbol(B.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 4, 13))
 +>foo : Symbol((Missing), Decl(noPropertyAccessFromIndexSignature1.ts, 4, 13))
- 
+
  b["foo"];
  >b : Symbol(b, Decl(noPropertyAccessFromIndexSignature1.ts, 14, 13))
- 
+
  // access property
  c.foo;
 ->c.foo : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
@@ -51,12 +51,12 @@
  >c : Symbol(c, Decl(noPropertyAccessFromIndexSignature1.ts, 15, 13))
 ->foo : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
 +>foo : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
- 
+
  c["foo"]
  >c : Symbol(c, Decl(noPropertyAccessFromIndexSignature1.ts, 15, 13))
 ->"foo" : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
 +>"foo" : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
- 
+
  // access index signature
  c.bar;
 ->c.bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
@@ -64,10 +64,10 @@
  >c : Symbol(c, Decl(noPropertyAccessFromIndexSignature1.ts, 15, 13))
 ->bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 +>bar : Symbol((Missing), Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
- 
+
  c["bar"];
  >c : Symbol(c, Decl(noPropertyAccessFromIndexSignature1.ts, 15, 13))
- 
+
  // optional access property
  d?.foo;
 ->d?.foo : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
@@ -75,12 +75,12 @@
  >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))
 ->foo : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
 +>foo : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
- 
+
  d?.["foo"]
  >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))
 ->"foo" : Symbol(C.foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
 +>"foo" : Symbol(foo, Decl(noPropertyAccessFromIndexSignature1.ts, 8, 13))
- 
+
  // optional access index signature
  d?.bar;
 ->d?.bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
@@ -88,6 +88,6 @@
  >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))
 ->bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 +>bar : Symbol((Missing), Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
- 
+
  d?.["bar"];
  >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))

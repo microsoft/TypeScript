@@ -1,8 +1,8 @@
 --- old.contravariantInferenceAndTypeGuard.js
 +++ new.contravariantInferenceAndTypeGuard.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [contravariantInferenceAndTypeGuard.js]
 -"use strict";
 -var list2 = new List();

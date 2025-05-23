@@ -1,7 +1,7 @@
 --- old.jsFileClassPropertyType3.types
 +++ new.jsFileClassPropertyType3.types
 @@= skipped -9, +9 lines =@@
- 
+
              this.p = null;
  >this.p = null : null
 ->this.p : any

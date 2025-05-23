@@ -1,6 +1,6 @@
 --- old.declarationMapsMultifile.sourcemap.txt
 +++ new.declarationMapsMultifile.sourcemap.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -===================================================================
 -JsFile: a.d.ts
 -mapUrl: a.d.ts.map
@@ -207,5 +207,4 @@
 -8 >Emitted(6, 19) Source(7, 19) + SourceIndex(0)
 ----
 ->>>//# sourceMappingURL=index.d.ts.map
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.complexClassRelationships.js
 @@= skipped -49, +49 lines =@@
  }
- 
+
  //// [complexClassRelationships.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -36,16 +36,12 @@
 -var BaseCollection = /** @class */ (function () {
 -    function BaseCollection(f) {
 -        (function (item) { return [item.Components]; });
-     }
+-    }
 -    return BaseCollection;
 -}());
 -var Base = /** @class */ (function () {
 -    function Base() {
-+}
-+class BaseCollection {
-+    constructor(f) {
-+        (item) => { return [item.Components]; };
-     }
+-    }
 -    return Base;
 -}());
 -var Thing = /** @class */ (function () {
@@ -62,6 +58,12 @@
 -    function ComponentCollection() {
 -    }
 -    ComponentCollection.sortComponents = function (p) {
++    }
++}
++class BaseCollection {
++    constructor(f) {
++        (item) => { return [item.Components]; };
++    }
 +}
 +class Base {
 +    ownerCollection;
@@ -77,7 +79,7 @@
 -}());
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-     }
+-    }
 -    Object.defineProperty(Foo.prototype, "prop1", {
 -        get: function () {
 -            return new GenericType(this);
@@ -86,6 +88,7 @@
 -        configurable: true
 -    });
 -    Foo.prototype.populate = function () {
++    }
 +}
 +class Foo {
 +    get prop1() {
@@ -105,18 +108,20 @@
 -}());
 -var GenericType = /** @class */ (function () {
 -    function GenericType(parent) {
-     }
+-    }
 -    return GenericType;
 -}());
 -var FooBase = /** @class */ (function () {
 -    function FooBase() {
-+    get prop2() {
-+        return new BaseCollection(Derived.createEmpty);
-     }
+-    }
 -    FooBase.prototype.populate = function () {
 -    };
 -    return FooBase;
 -}());
++    }
++    get prop2() {
++        return new BaseCollection(Derived.createEmpty);
++    }
 +}
 +class GenericType {
 +    constructor(parent) { }

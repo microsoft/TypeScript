@@ -2,7 +2,7 @@
 +++ new.objectTypeWithStringAndNumberIndexSignatureToAny.js
 @@= skipped -95, +95 lines =@@
  }
- 
+
  //// [objectTypeWithStringAndNumberIndexSignatureToAny.js]
 -"use strict";
 -// When checking compatibility between two types,

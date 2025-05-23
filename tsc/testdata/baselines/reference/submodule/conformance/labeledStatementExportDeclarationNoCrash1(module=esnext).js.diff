@@ -1,7 +1,7 @@
 --- old.labeledStatementExportDeclarationNoCrash1(module=esnext).js
 +++ new.labeledStatementExportDeclarationNoCrash1(module=esnext).js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [labeledStatementExportDeclarationNoCrash1.js]
  // https://github.com/microsoft/TypeScript/issues/59372
 -export var box;

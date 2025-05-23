@@ -2,18 +2,17 @@
 +++ new.strictNullLogicalAndOr.types
 @@= skipped -31, +31 lines =@@
  >PI : number
- 
+
  function sq(n?: number): number {
 ->sq : (n?: number) => number
 +>sq : (n?: number | undefined) => number
  >n : number | undefined
- 
+
    const r = n !== undefined && n*n || 0;
 @@= skipped -21, +21 lines =@@
- 
+
  sq(3);
  >sq(3) : number
 ->sq : (n?: number) => number
 +>sq : (n?: number | undefined) => number
  >3 : 3
- 

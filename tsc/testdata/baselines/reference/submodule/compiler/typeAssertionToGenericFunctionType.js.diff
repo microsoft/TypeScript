@@ -1,7 +1,7 @@
 --- old.typeAssertionToGenericFunctionType.js
 +++ new.typeAssertionToGenericFunctionType.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [typeAssertionToGenericFunctionType.js]
  var x = {
 -    a: (function (x) { return 1; }),

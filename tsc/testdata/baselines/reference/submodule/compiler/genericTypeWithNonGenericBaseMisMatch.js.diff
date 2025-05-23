@@ -1,8 +1,8 @@
 --- old.genericTypeWithNonGenericBaseMisMatch.js
 +++ new.genericTypeWithNonGenericBaseMisMatch.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [genericTypeWithNonGenericBaseMisMatch.js]
 -var X = /** @class */ (function () {
 -    function X() {

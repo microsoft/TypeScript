@@ -2,7 +2,7 @@
 +++ new.arrowFunctionWithObjectLiteralBody5.js
 @@= skipped -9, +9 lines =@@
  var d = () => ((<Error>({ name: "foo", message: "bar" })));
- 
+
  //// [arrowFunctionWithObjectLiteralBody5.js]
 -var a = function () { return ({ name: "foo", message: "bar" }); };
 -var b = function () { return ({ name: "foo", message: "bar" }); };

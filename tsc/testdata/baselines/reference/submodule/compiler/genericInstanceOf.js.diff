@@ -2,7 +2,7 @@
 +++ new.genericInstanceOf.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [genericInstanceOf.js]
 -var C = /** @class */ (function () {
 -    function C(a, b) {

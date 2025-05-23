@@ -1,8 +1,8 @@
 --- old.recursiveClassReferenceTest.js
 +++ new.recursiveClassReferenceTest.js
 @@= skipped -104, +104 lines =@@
- 
- 
+
+
  //// [recursiveClassReferenceTest.js]
 -// Scenario 1: Test reqursive function call with "this" parameter
 -// Scenario 2: Test recursive function call with cast and "this" parameter
@@ -129,15 +129,15 @@
 -                    State.prototype.getMode = function () { return mode; };
 -                    return State;
 -                }());
--                PlainText.State = State;
++                    }
++                    getMode() { return mode; }
++                }
+                 PlainText.State = State;
 -                var Mode = /** @class */ (function (_super) {
 -                    __extends(Mode, _super);
 -                    function Mode() {
 -                        return _super !== null && _super.apply(this, arguments) || this;
-                     }
-+                    getMode() { return mode; }
-+                }
-+                PlainText.State = State;
+-                    }
 +                class Mode extends AbstractMode {
                      // scenario 2
 -                    Mode.prototype.getInitialState = function () {

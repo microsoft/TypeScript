@@ -1,8 +1,8 @@
 --- old.genericRecursiveImplicitConstructorErrors3.js
 +++ new.genericRecursiveImplicitConstructorErrors3.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [genericRecursiveImplicitConstructorErrors3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

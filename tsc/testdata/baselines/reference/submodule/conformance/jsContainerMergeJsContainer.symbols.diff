@@ -1,18 +1,18 @@
 --- old.jsContainerMergeJsContainer.symbols
 +++ new.jsContainerMergeJsContainer.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  const a = {};
 ->a : Symbol(a, Decl(a.js, 0, 5), Decl(a.js, 0, 13), Decl(b.js, 0, 0))
 +>a : Symbol(a, Decl(a.js, 0, 5))
- 
+
  a.d = function() {};
 ->a.d : Symbol(a.d, Decl(a.js, 0, 13), Decl(b.js, 0, 2))
 ->a : Symbol(a, Decl(a.js, 0, 5), Decl(a.js, 0, 13), Decl(b.js, 0, 0))
 ->d : Symbol(a.d, Decl(a.js, 0, 13), Decl(b.js, 0, 2))
 +>a : Symbol(a, Decl(a.js, 0, 5))
- 
+
  === b.js ===
  a.d.prototype = {};
 ->a.d.prototype : Symbol(a.d.prototype, Decl(b.js, 0, 0))
@@ -21,4 +21,3 @@
 ->d : Symbol(a.d, Decl(a.js, 0, 13), Decl(b.js, 0, 2))
 ->prototype : Symbol(a.d.prototype, Decl(b.js, 0, 0))
 +>a : Symbol(a, Decl(a.js, 0, 5))
- 

@@ -1,8 +1,8 @@
 --- old.nonPrimitiveAccessProperty.js
 +++ new.nonPrimitiveAccessProperty.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [nonPrimitiveAccessProperty.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

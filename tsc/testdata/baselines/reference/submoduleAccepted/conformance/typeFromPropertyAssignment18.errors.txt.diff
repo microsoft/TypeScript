@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment18.errors.txt
 +++ new.typeFromPropertyAssignment18.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(4,10): error TS2339: Property 'p' does not exist on type '{}'.
 +a.js(5,12): error TS2339: Property 'q' does not exist on type '{}'.
 +a.js(7,10): error TS2339: Property 'p' does not exist on type '{}'.

@@ -9,14 +9,14 @@
  >m : typeof m
 ->c : a
 +>c : c
- 
+
  export import b = m.c;
 ->b : typeof a
 +>b : typeof c
  >m : typeof m
 ->c : a
 +>c : c
- 
+
  var x = new a();
 ->x : a
 ->new a() : a
@@ -24,7 +24,7 @@
 +>x : c
 +>new a() : c
 +>a : typeof c
- 
+
  var y = new b();
 ->y : a
 ->new b() : a
@@ -32,4 +32,3 @@
 +>y : c
 +>new b() : c
 +>b : typeof c
- 

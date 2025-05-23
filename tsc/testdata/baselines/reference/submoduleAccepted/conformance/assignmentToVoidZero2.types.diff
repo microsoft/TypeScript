@@ -1,7 +1,7 @@
 --- old.assignmentToVoidZero2.types
 +++ new.assignmentToVoidZero2.types
 @@= skipped -9, +9 lines =@@
- 
+
  exports.k = void 0;
  >exports.k = void 0 : undefined
 ->exports.k : any
@@ -11,12 +11,12 @@
 +>k : undefined
  >void 0 : undefined
  >0 : 0
- 
+
  var o = {}
 ->o : typeof o
 +>o : {}
  >{} : {}
- 
+
  o.x = 1
  >o.x = 1 : 1
 ->o.x : number
@@ -26,7 +26,7 @@
 +>o : {}
 +>x : any
  >1 : 1
- 
+
  o.y = void 0
  >o.y = void 0 : undefined
  >o.y : any
@@ -35,7 +35,7 @@
  >y : any
  >void 0 : undefined
  >0 : 0
- 
+
  o.x + o.y
  >o.x + o.y : any
 ->o.x : number
@@ -48,11 +48,11 @@
 ->o : typeof o
 +>o : {}
  >y : any
- 
+
  function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.p = 1
  >this.p = 1 : 1
  >this.p : any
@@ -60,7 +60,7 @@
 +>this : any
  >p : any
  >1 : 1
- 
+
      this.q = void 0
  >this.q = void 0 : undefined
  >this.q : any
@@ -77,7 +77,7 @@
 +>c : any
 +>new C() : any
 +>C : () => void
- 
+
  c.p + c.q
  >c.p + c.q : any
 ->c.p : number
@@ -90,16 +90,15 @@
 ->c : C
 +>c : any
  >q : any
- 
+
  === importer.js ===
  import { j, k } from './assignmentToVoidZero2'
  >j : 1
 ->k : any
 +>k : undefined
- 
+
  j + k
  >j + k : any
  >j : 1
 ->k : any
 +>k : undefined
- 

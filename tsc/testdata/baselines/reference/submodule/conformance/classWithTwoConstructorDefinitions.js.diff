@@ -2,7 +2,7 @@
 +++ new.classWithTwoConstructorDefinitions.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [classWithTwoConstructorDefinitions.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,8 +1,8 @@
 --- old.classStaticBlock12.js
 +++ new.classStaticBlock12.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [classStaticBlock12.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

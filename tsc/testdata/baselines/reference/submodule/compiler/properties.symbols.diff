@@ -9,7 +9,7 @@
      {
          return 42;
      }
- 
+
      public set Count(value: number)
 ->Count : Symbol(MyClass.Count, Decl(properties.ts, 1, 1), Decl(properties.ts, 5, 5))
 +>Count : Symbol(Count, Decl(properties.ts, 1, 1), Decl(properties.ts, 5, 5))

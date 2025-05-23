@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-methods-nonStatic(target=es5).js
 +++ new.esDecorators-classDeclaration-methods-nonStatic(target=es5).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-methods-nonStatic.js]
 -var method3 = "method3";
 -var C = function () {

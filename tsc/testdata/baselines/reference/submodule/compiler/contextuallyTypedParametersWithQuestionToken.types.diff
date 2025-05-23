@@ -10,19 +10,18 @@
 +>self : (a: string, b?: number | undefined) => void
  >a : string
  >b : number | undefined
- 
+
 @@= skipped -12, +12 lines =@@
- 
+
    self("");
  >self("") : void
 ->self : (a: string, b?: number) => void
 +>self : (a: string, b?: number | undefined) => void
  >"" : ""
- 
+
    self("", undefined);
  >self("", undefined) : void
 ->self : (a: string, b?: number) => void
 +>self : (a: string, b?: number | undefined) => void
  >"" : ""
  >undefined : undefined
- 

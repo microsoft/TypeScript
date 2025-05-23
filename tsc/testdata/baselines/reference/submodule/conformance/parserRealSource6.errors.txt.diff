@@ -7,8 +7,8 @@
  parserRealSource6.ts(10,69): error TS2304: Cannot find name 'TypeChecker'.
 @@= skipped -59, +58 lines =@@
  parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
- 
- 
+
+
 -==== parserRealSource6.ts (60 errors) ====
 +==== parserRealSource6.ts (59 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

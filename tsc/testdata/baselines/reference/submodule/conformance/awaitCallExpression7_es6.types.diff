@@ -2,7 +2,7 @@
 +++ new.awaitCallExpression7_es6.types
 @@= skipped -13, +13 lines =@@
  >arg2 : boolean
- 
+
  declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
 ->o : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
 +>o : { fn: (arg0: boolean, arg1: boolean, arg2: boolean) => void; }
@@ -11,7 +11,7 @@
  >arg1 : boolean
 @@= skipped -13, +13 lines =@@
  >arg2 : boolean
- 
+
  declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 ->po : Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>
 +>po : Promise<{ fn: (arg0: boolean, arg1: boolean, arg2: boolean) => void; }>

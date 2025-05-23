@@ -1,14 +1,14 @@
 --- old.exportDefaultAsyncFunction2.types
 +++ new.exportDefaultAsyncFunction2.types
 @@= skipped -10, +10 lines =@@
- 
+
  === a.ts ===
  import { async, await } from 'asyncawait';
 ->async : <T>(...args: any[]) => any
 ->await : (...args: any[]) => any
 +>async : any
 +>await : any
- 
+
  export default async(() => await(Promise.resolve(1)));
  >async(() => await(Promise.resolve(1))) : any
 ->async : <T>(...args: any[]) => any
@@ -21,40 +21,40 @@
  >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
  >Promise : PromiseConstructor
 @@= skipped -22, +22 lines =@@
- 
+
  === c.ts ===
  import { async, await } from 'asyncawait';
 ->async : <T>(...args: any[]) => any
 ->await : (...args: any[]) => any
 +>async : any
 +>await : any
- 
+
  export default async<number>();
  >async<number>() : any
 ->async : <T>(...args: any[]) => any
 +>async : any
- 
+
  === d.ts ===
  import { async, await } from 'asyncawait';
 ->async : <T>(...args: any[]) => any
 ->await : (...args: any[]) => any
 +>async : any
 +>await : any
- 
+
  export default async;
 ->async : <T>(...args: any[]) => any
 +>async : any
- 
+
  === e.ts ===
  import { async, await } from 'asyncawait';
 ->async : <T>(...args: any[]) => any
 ->await : (...args: any[]) => any
 +>async : any
 +>await : any
- 
+
  export default async
 ->async : <T>(...args: any[]) => any
 +>async : any
- 
+
  export function foo() { }
  >foo : () => void

@@ -2,7 +2,7 @@
 +++ new.callChainWithSuper(target=es5).js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [callChainWithSuper.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {

@@ -2,7 +2,7 @@
 +++ new.constEnumMergingWithValues5.js
 @@= skipped -7, +7 lines =@@
  export = foo
- 
+
  //// [m1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

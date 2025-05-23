@@ -1,7 +1,7 @@
 --- old.parserEnumDeclaration4.symbols
 +++ new.parserEnumDeclaration4.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === parserEnumDeclaration4.ts ===
  enum void {
 -> : Symbol((Missing), Decl(parserEnumDeclaration4.ts, 0, 0))

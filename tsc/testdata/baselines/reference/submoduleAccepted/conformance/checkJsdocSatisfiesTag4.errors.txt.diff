@@ -1,6 +1,6 @@
 --- old.checkJsdocSatisfiesTag4.errors.txt
 +++ new.checkJsdocSatisfiesTag4.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(5,21): error TS1360: Type '{}' does not satisfy the expected type 'Foo'.
 -  Property 'a' is missing in type '{}' but required in type 'Foo'.
 -
@@ -23,5 +23,4 @@
 -     */
 -    
 -    export default /** @satisfies {Foo} */ ({ a: 1 });
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,7 +1,7 @@
 --- old.typeParameterFixingWithConstraints.js
 +++ new.typeParameterFixingWithConstraints.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [typeParameterFixingWithConstraints.js]
  var foo;
 -foo.foo({ bar: null }, function (bar) { return null; }, function (bar) { return null; });

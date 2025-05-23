@@ -10,6 +10,6 @@
 +>a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 8))
 +>b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 11))
 +>c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 14))
- 
+
  function foo<T>(t: T) {
  >foo : Symbol(foo, Decl(comparisonOperatorWithOneOperandIsNull.ts, 0, 18))

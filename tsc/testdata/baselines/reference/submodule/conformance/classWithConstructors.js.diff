@@ -2,7 +2,7 @@
 +++ new.classWithConstructors.js
 @@= skipped -51, +51 lines =@@
  }
- 
+
  //// [classWithConstructors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

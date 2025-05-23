@@ -20,7 +20,7 @@
          }
      }
  }
- 
+
  === bar.ts ===
  (new C()).p = "string"; // Error
 ->(new C()).p : Symbol(C.p, Decl(foo.js, 2, 19), Decl(foo.js, 5, 14))
@@ -28,4 +28,3 @@
  >C : Symbol(C, Decl(foo.js, 0, 0))
 ->p : Symbol(C.p, Decl(foo.js, 2, 19), Decl(foo.js, 5, 14))
 +>p : Symbol(p, Decl(foo.js, 2, 19), Decl(foo.js, 5, 14))
- 

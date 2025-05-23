@@ -1,7 +1,7 @@
 --- old.jsDeclarationsImportAliasExposedWithinNamespaceCjs.types
 +++ new.jsDeclarationsImportAliasExposedWithinNamespaceCjs.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file2.js ===
  const {myTypes} = require('./file.js');
 ->myTypes : { [x: string]: any; }
@@ -16,7 +16,7 @@
 ->testFnTypes : { [x: string]: any; }
 +>testFnTypes : any
  >{    // SOME PROPS HERE} : {}
- 
+
      // SOME PROPS HERE
 @@= skipped -15, +15 lines =@@
   * @returns {number|null} Result.
@@ -26,25 +26,25 @@
 ->input : boolean | myTypes.typeC
 +>testFn : (input: input) => number
 +>input : input
- 
+
      if (typeof input === 'number') {
  >typeof input === 'number' : boolean
  >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->input : boolean | myTypes.typeC
 +>input : input
  >'number' : "number"
- 
+
          return 2 * input;
  >2 * input : number
  >2 : 2
 ->input : never
 +>input : number
- 
+
      } else {
          return null;
 @@= skipped -20, +20 lines =@@
  }
- 
+
  module.exports = {testFn, testFnTypes};
 ->module.exports = {testFn, testFnTypes} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -60,7 +60,7 @@
 +>{testFn, testFnTypes} : { testFn: (input: input) => number; testFnTypes: any; }
 +>testFn : (input: input) => number
 +>testFnTypes : any
- 
+
  === file.js ===
  /**
 @@= skipped -15, +15 lines =@@
@@ -70,11 +70,11 @@
 ->myTypes : { [x: string]: any; }
 +>myTypes : any
  >{    // SOME PROPS HERE} : {}
- 
+
      // SOME PROPS HERE
 @@= skipped -17, +17 lines =@@
  /** @typedef {myTypes.typeB|Function} myTypes.typeC */
- 
+
  exports.myTypes = myTypes;
 ->exports.myTypes = myTypes : { [x: string]: any; }
 ->exports.myTypes : { [x: string]: any; }
@@ -85,4 +85,3 @@
 ->myTypes : { [x: string]: any; }
 +>myTypes : any
 +>myTypes : any
- 

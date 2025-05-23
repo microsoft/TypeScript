@@ -2,7 +2,7 @@
 +++ new.privateInstanceMemberAccessibility.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [privateInstanceMemberAccessibility.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,14 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
-+class Base {
-+    foo;
-+}
-+class Derived extends Base {
-+    x = super.foo; // error
-+    y() {
-+        return super.foo; // error
-     }
+-    }
 -    return Base;
 -}());
 -var Derived = /** @class */ (function (_super) {
@@ -43,6 +36,14 @@
 -    };
 -    return Derived;
 -}(Base));
++class Base {
++    foo;
++}
++class Derived extends Base {
++    x = super.foo; // error
++    y() {
++        return super.foo; // error
++    }
 +    z; // error
 +    a;
 +    foo; // error

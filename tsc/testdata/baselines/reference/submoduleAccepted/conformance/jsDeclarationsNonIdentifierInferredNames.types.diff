@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsNonIdentifierInferredNames.types
 @@= skipped -9, +9 lines =@@
  >"data-dyn" : "data-dyn"
- 
+
  export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (
 ->ExampleFunctionalComponent : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-dyn": any; "data-testid": any; }) => JSX.Element
 ->({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-dyn": any; "data-testid": any; }) => JSX.Element
@@ -13,9 +13,9 @@
  >dynProp : any
 ->(    <>Hello</>) : JSX.Element
 +>(    <>Hello</>) : Element
- 
+
      <>Hello</>
 -><>Hello</> : JSX.Element
 +><>Hello</> : Element
- 
+
  );

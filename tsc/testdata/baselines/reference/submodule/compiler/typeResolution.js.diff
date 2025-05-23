@@ -1,8 +1,8 @@
 --- old.typeResolution.js
 +++ new.typeResolution.js
 @@= skipped -112, +112 lines =@@
- 
- 
+
+
  //// [typeResolution.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -160,7 +160,7 @@
 -                            var c2;
 -                            c2.AisIn2_3();
 -                        }
-                     }
+-                    }
 -                    return NonExportedClassQ;
 -                }());
 -            })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
@@ -178,7 +178,7 @@
 -                        var d2;
 -                        d2.XisIn1_1_1();
 -                    }
-                 }
+-                }
 -                return ClassA;
 -            }());
 -        })(SubModule1 = TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {}));
@@ -212,7 +212,7 @@
 -        })(SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
 -        var ClassA = /** @class */ (function () {
 -            function ClassA() {
-             }
+-            }
 -            ClassA.prototype.AisIn1 = function () { };
 -            return ClassA;
 -        }());
@@ -220,21 +220,7 @@
 -        (function (NotExportedModule) {
 -            var ClassA = /** @class */ (function () {
 -                function ClassA() {
-+        })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
-+        // Should have no effect on S1.SS1.ClassA above because it is not exported
-+        class ClassA {
-+            constructor() {
-+                function AA() {
-+                    var a2;
-+                    a2.AisIn1_1_1();
-+                    var a3;
-+                    a3.AisIn1_1_1();
-+                    var a4;
-+                    a4.AisIn1_1_1();
-+                    // Interface reference
-+                    var d2;
-+                    d2.XisIn1_1_1();
-                 }
+-                }
 -                return ClassA;
 -            }());
 -            NotExportedModule.ClassA = ClassA;
@@ -254,6 +240,24 @@
 -        })(SubModule3 = TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {}));
 -    })(TopLevelModule2 || (TopLevelModule2 = {}));
 -});
++                    }
++                }
++            }
++        })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
++        // Should have no effect on S1.SS1.ClassA above because it is not exported
++        class ClassA {
++            constructor() {
++                function AA() {
++                    var a2;
++                    a2.AisIn1_1_1();
++                    var a3;
++                    a3.AisIn1_1_1();
++                    var a4;
++                    a4.AisIn1_1_1();
++                    // Interface reference
++                    var d2;
++                    d2.XisIn1_1_1();
++                }
 +            }
 +        }
 +    })(SubModule1 = TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {}));

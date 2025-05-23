@@ -2,7 +2,7 @@
 +++ new.constraintCheckInGenericBaseTypeReference.js
 @@= skipped -21, +21 lines =@@
  }
- 
+
  //// [constraintCheckInGenericBaseTypeReference.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

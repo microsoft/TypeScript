@@ -2,7 +2,7 @@
 +++ new.objectSpreadRepeatedNullCheckPerf.js
 @@= skipped -63, +63 lines =@@
  parseWithSpread({ a: 1, b: 2, z: 26 })
- 
+
  //// [objectSpreadRepeatedNullCheckPerf.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

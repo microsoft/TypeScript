@@ -2,7 +2,7 @@
 +++ new.forStatements.types
 @@= skipped -129, +129 lines =@@
  >M : typeof M
- 
+
  for(var aClassInModule: M.A = new M.A();;){}
 ->aClassInModule : M.A
 +>aClassInModule : A
@@ -14,6 +14,6 @@
  >M : typeof M
 ->A : typeof M.A
 +>A : typeof A
- 
+
  for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
  >aFunctionInModule : (x: number) => string

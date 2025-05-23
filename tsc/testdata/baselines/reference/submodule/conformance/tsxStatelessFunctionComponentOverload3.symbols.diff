@@ -2,7 +2,7 @@
 +++ new.tsxStatelessFunctionComponentOverload3.symbols
 @@= skipped -4, +4 lines =@@
  >Context : Symbol(Context, Decl(file.tsx, 0, 0))
- 
+
      color: any;
 ->color : Symbol(Context.color, Decl(file.tsx, 0, 19))
 +>color : Symbol(color, Decl(file.tsx, 0, 19))
@@ -12,7 +12,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Context): JSX.Element;
  >ZeroThingOrTwoThing : Symbol(ZeroThingOrTwoThing, Decl(file.tsx, 2, 1), Decl(file.tsx, 3, 52))
 @@= skipped -15, +15 lines =@@
@@ -21,7 +21,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  let obj2: any;
  >obj2 : Symbol(obj2, Decl(file.tsx, 6, 3))
 @@= skipped -38, +38 lines =@@
@@ -30,7 +30,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function ThreeThing(l: {y2: string}): JSX.Element;
  >ThreeThing : Symbol(ThreeThing, Decl(file.tsx, 13, 58), Decl(file.tsx, 15, 58), Decl(file.tsx, 16, 58))
  >l : Symbol(l, Decl(file.tsx, 16, 28))
@@ -38,7 +38,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function ThreeThing(l: {yy: number, yy1: string}, context: Context, updater: any): JSX.Element;
  >ThreeThing : Symbol(ThreeThing, Decl(file.tsx, 13, 58), Decl(file.tsx, 15, 58), Decl(file.tsx, 16, 58))
 @@= skipped -18, +18 lines =@@
@@ -47,6 +47,6 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  // OK
  const three1 = <ThreeThing yy={99} yy1="hello world" />;

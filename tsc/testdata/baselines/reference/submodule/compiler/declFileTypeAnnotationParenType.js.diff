@@ -2,7 +2,7 @@
 +++ new.declFileTypeAnnotationParenType.js
 @@= skipped -11, +11 lines =@@
  var l = (() => new c()) || "";
- 
+
  //// [declFileTypeAnnotationParenType.js]
 -var c = /** @class */ (function () {
 -    function c() {

@@ -1,7 +1,7 @@
 --- old.contextualTyping.js
 +++ new.contextualTyping.js
 @@= skipped -227, +227 lines =@@
- 
+
  //// [contextualTyping.js]
  // CONTEXT: Class property declaration
 -var C1T5 = /** @class */ (function () {

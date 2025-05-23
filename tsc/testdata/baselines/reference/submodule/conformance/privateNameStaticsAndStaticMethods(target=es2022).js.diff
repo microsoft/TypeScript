@@ -1,8 +1,8 @@
 --- old.privateNameStaticsAndStaticMethods(target=es2022).js
 +++ new.privateNameStaticsAndStaticMethods(target=es2022).js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [privateNameStaticsAndStaticMethods.js]
 -"use strict";
  class A {

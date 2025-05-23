@@ -2,32 +2,32 @@
 +++ new.restParametersWithArrayTypeAnnotations.types
 @@= skipped -37, +37 lines =@@
  }
- 
+
  var a: {
 ->a : { (...x: number[]): any; foo(...x: number[]): any; }
 +>a : { (...x: number[]): any; foo: (...x: number[]) => any; }
- 
+
      (...x: number[]);
  >x : number[]
 @@= skipped -11, +11 lines =@@
  }
- 
+
  var b = {
 ->b : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
 ->{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
 +>b : { foo: (...x: number[]) => void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
 +>{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo: (...x: number[]) => void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
- 
+
      foo(...x: number[]) { },
  >foo : (...x: number[]) => void
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  function foo2(...x: Array<string>) { }
 ->foo2 : (...x: Array<string>) => void
 +>foo2 : (...x: string[]) => void
  >x : string[]
- 
+
  var f3 = function foo(...x: Array<string>) { }
 ->f3 : (...x: Array<string>) => void
 ->function foo(...x: Array<string>) { } : (...x: Array<string>) => void
@@ -36,7 +36,7 @@
 +>function foo(...x: Array<string>) { } : (...x: string[]) => void
 +>foo : (...x: string[]) => void
  >x : string[]
- 
+
  var f4 = (...x: Array<string>, ...y: Array<string>) => { }
 ->f4 : (...x: Array<string>, ...y: Array<string>) => void
 ->(...x: Array<string>, ...y: Array<string>) => { } : (...x: Array<string>, ...y: Array<string>) => void
@@ -44,50 +44,50 @@
 +>(...x: Array<string>, ...y: Array<string>) => { } : (...x: string[], ...y: string[]) => void
  >x : string[]
  >y : string[]
- 
+
 @@= skipped -19, +19 lines =@@
  >C2 : C2
- 
+
      foo(...x: Array<string>) { }
 ->foo : (...x: Array<string>) => void
 +>foo : (...x: string[]) => void
  >x : string[]
  }
- 
+
 @@= skipped -9, +9 lines =@@
  >x : string[]
- 
+
      foo(...x: Array<string>, ...y: Array<string>);
 ->foo : (...x: Array<string>, ...y: Array<string>) => any
 +>foo : (...x: string[], ...y: string[]) => any
  >x : string[]
  >y : string[]
  }
- 
+
  var a2: {
 ->a2 : { (...x: Array<string>): any; foo(...x: Array<string>): any; }
 +>a2 : { (...x: string[]): any; foo: (...x: string[]) => any; }
- 
+
      (...x: Array<string>);
  >x : string[]
- 
+
      foo(...x: Array<string>);
 ->foo : (...x: Array<string>) => any
 +>foo : (...x: string[]) => any
  >x : string[]
  }
- 
+
  var b2 = {
 ->b2 : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
 ->{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
 +>b2 : { foo: (...x: string[]) => void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
 +>{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo: (...x: string[]) => void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
- 
+
      foo(...x: Array<string>) { },
 ->foo : (...x: Array<string>) => void
 +>foo : (...x: string[]) => void
  >x : string[]
- 
+
      a: function foo(...x: Array<string>, ...y: Array<string>) { },
 ->a : (...x: Array<string>, ...y: Array<string>) => void
 ->function foo(...x: Array<string>, ...y: Array<string>) { } : (...x: Array<string>, ...y: Array<string>) => void
@@ -97,7 +97,7 @@
 +>foo : (...x: string[], ...y: string[]) => void
  >x : string[]
  >y : string[]
- 
+
      b: (...x: Array<string>) => { }
 ->b : (...x: Array<string>) => void
 ->(...x: Array<string>) => { } : (...x: Array<string>) => void

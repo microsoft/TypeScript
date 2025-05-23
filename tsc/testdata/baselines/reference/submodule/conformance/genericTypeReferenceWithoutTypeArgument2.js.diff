@@ -2,7 +2,7 @@
 +++ new.genericTypeReferenceWithoutTypeArgument2.js
 @@= skipped -39, +39 lines =@@
  var k = <M.E>null;
- 
+
  //// [genericTypeReferenceWithoutTypeArgument2.js]
 -// it is an error to use a generic type without type arguments
 -// all of these are errors 

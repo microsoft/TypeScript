@@ -1,6 +1,6 @@
 --- old.optionsCompositeWithIncrementalFalse.errors.txt
 +++ new.optionsCompositeWithIncrementalFalse.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS6379: Composite projects may not disable incremental compilation.
 -
 -
@@ -8,5 +8,4 @@
 -==== optionsCompositeWithIncrementalFalse.ts (0 errors) ====
 -    const x = "Hello World";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

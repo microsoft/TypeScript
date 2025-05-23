@@ -2,7 +2,7 @@
 +++ new.instanceMemberInitialization.js
 @@= skipped -19, +19 lines =@@
  }
- 
+
  //// [instanceMemberInitialization.js]
 -var C = /** @class */ (function () {
 -    function C() {

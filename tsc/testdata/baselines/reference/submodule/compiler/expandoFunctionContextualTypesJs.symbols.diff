@@ -6,21 +6,21 @@
  const MyComponent = () => /* @type {any} */(null);
 ->MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5), Decl(input.js, 9, 50))
 +>MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5))
- 
+
  MyComponent.defaultProps = {
  >MyComponent.defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
 ->MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5), Decl(input.js, 9, 50))
 +>MyComponent : Symbol(MyComponent, Decl(input.js, 9, 5))
  >defaultProps : Symbol(defaultProps, Decl(input.js, 4, 23))
- 
+
      color: "red"
 @@= skipped -13, +13 lines =@@
  };
- 
+
  const MyComponent2 = () => null;
 ->MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
 +>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5))
- 
+
  /**
   * @type {MyComponentProps}
   */
@@ -31,7 +31,7 @@
 +>MyComponent2.defaultProps : Symbol(defaultProps, Decl(input.js, 15, 32))
 +>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5))
 +>defaultProps : Symbol(defaultProps, Decl(input.js, 15, 32))
- 
+
      color: "red"
  >color : Symbol(color, Decl(input.js, 20, 29))
 @@= skipped -19, +19 lines =@@
@@ -40,7 +40,7 @@
  >check : Symbol(check, Decl(input.js, 27, 5))
 ->MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5), Decl(input.js, 15, 32))
 +>MyComponent2 : Symbol(MyComponent2, Decl(input.js, 15, 5))
- 
+
  /**
   * 
 @@= skipped -17, +17 lines =@@
@@ -51,12 +51,12 @@
 ->this : Symbol(foo, Decl(input.js, 33, 28))
 ->props : Symbol(foo.props, Decl(input.js, 35, 16))
  >color : Symbol(color, Decl(input.js, 39, 18))
- 
+
      expectLiteral(this);
  >expectLiteral : Symbol(expectLiteral, Decl(input.js, 27, 27))
 ->this : Symbol(foo, Decl(input.js, 33, 28))
  }
- 
+
  /**
   * @type {MyComponentProps}
   */
@@ -66,7 +66,7 @@
 +>module.exports : Symbol(export=, Decl(input.js, 42, 1))
 +>module : Symbol(module.exports)
  >exports : Symbol(export=, Decl(input.js, 42, 1))
- 
+
      color: "red"
 @@= skipped -25, +21 lines =@@
  expectLiteral({ props: module.exports });
@@ -78,4 +78,3 @@
 +>module.exports : Symbol(export=, Decl(input.js, 42, 1))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(input.js, 42, 1))
- 

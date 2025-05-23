@@ -1,6 +1,6 @@
 --- old.extendsTagEmit.errors.txt
 +++ new.extendsTagEmit.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -main.js(2,15): error TS2304: Cannot find name 'Mismatch'.
 -main.js(2,15): error TS8023: JSDoc '@extends Mismatch' does not match the 'extends B' clause.
 -
@@ -18,5 +18,4 @@
 -    class C extends B { }
 -    
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

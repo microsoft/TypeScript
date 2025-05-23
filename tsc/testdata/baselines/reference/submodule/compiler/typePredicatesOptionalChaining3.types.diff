@@ -2,12 +2,12 @@
 +++ new.typePredicatesOptionalChaining3.types
 @@= skipped -10, +10 lines =@@
  }
- 
+
  declare function isNil(value: unknown): value is undefined | null;
 ->isNil : (value: unknown) => value is undefined | null
 +>isNil : (value: unknown) => value is null | undefined
  >value : unknown
- 
+
  function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
 @@= skipped -35, +35 lines =@@
    if (!isNil(animal?.breed?.size)) {

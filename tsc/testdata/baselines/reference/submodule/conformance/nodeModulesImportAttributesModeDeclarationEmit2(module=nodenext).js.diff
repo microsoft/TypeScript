@@ -1,7 +1,7 @@
 --- old.nodeModulesImportAttributesModeDeclarationEmit2(module=nodenext).js
 +++ new.nodeModulesImportAttributesModeDeclarationEmit2(module=nodenext).js
 @@= skipped -33, +33 lines =@@
- 
+
  //// [index.js]
  export {};
 -

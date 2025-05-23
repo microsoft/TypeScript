@@ -1,7 +1,7 @@
 --- old.classWithPredefinedTypesAsNames2.js
 +++ new.classWithPredefinedTypesAsNames2.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [classWithPredefinedTypesAsNames2.js]
  // classes cannot use predefined types as names
 -var default_1 = /** @class */ (function () {

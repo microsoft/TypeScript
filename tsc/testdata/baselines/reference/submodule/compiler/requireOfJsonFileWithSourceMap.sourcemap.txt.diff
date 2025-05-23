@@ -5,14 +5,16 @@
  >>>"use strict";
  >>>Object.defineProperty(exports, "__esModule", { value: true });
 ->>>var b1 = require("./b.json");
-+>>>const b1 = require("./b.json");
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-1 >
+-2 >import b1 = require('./b.json');
++>>>const b1 = require("./b.json");
++1 >
 +2 >^^^^^^
 +3 >      ^^
 +4 >        ^^^^^^^^^^^^^^^^^^^^^^^
- 1 >
--2 >import b1 = require('./b.json');
++1 >
 +2 >import 
 +3 >      b1
 +4 >         = require('./b.json');

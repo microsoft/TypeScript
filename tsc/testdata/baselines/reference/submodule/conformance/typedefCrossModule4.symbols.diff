@@ -2,7 +2,7 @@
 +++ new.typedefCrossModule4.symbols
 @@= skipped -5, +5 lines =@@
  >Bar : Symbol(Bar, Decl(mod3.js, 0, 0))
- 
+
  module.exports = { Foo: Bar };
 ->module.exports : Symbol(module.exports, Decl(mod3.js, 0, 0))
 ->module : Symbol(export=, Decl(mod3.js, 1, 13))

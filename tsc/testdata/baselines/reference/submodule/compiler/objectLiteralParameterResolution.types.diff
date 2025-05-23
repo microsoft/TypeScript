@@ -8,7 +8,7 @@
 +>extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
  >target : T
  >objs : any[]
- 
+
      extend<T>(deep: boolean, target: T, ...objs: any[]): T;
 ->extend : { <T_1>(target: T_1, ...objs: any[]): T_1; <T>(deep: boolean, target: T, ...objs: any[]): T; }
 +>extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }

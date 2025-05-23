@@ -2,15 +2,15 @@
 +++ new.arbitraryModuleNamespaceIdentifiers_module(module=preserve).types
 @@= skipped -33, +33 lines =@@
  >"should be someValue" : "should be someValue"
- 
+
  export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_module";
 ->"<Z>" : typeof valueZ
 +>"<Z>" : typeof import("arbitraryModuleNamespaceIdentifiers_module")
- 
+
  import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_module";
 ->valueZ : typeof valueZ
 +>valueZ : typeof import("arbitraryModuleNamespaceIdentifiers_module")
- 
+
  if (valueZ["<X>"] !== "someValue") throw "should be someValue";
  >valueZ["<X>"] !== "someValue" : boolean
  >valueZ["<X>"] : "someValue"
@@ -28,7 +28,7 @@
  >"<Y>" : "<Y>"
  >"someValue" : "someValue"
  >"should be someValue" : "should be someValue"
- 
+
  if (valueZ["<Z>"] !== valueZ) throw "should be export namespace";
  >valueZ["<Z>"] !== valueZ : boolean
 ->valueZ["<Z>"] : typeof valueZ
@@ -39,18 +39,18 @@
 ->valueZ : typeof valueZ
 +>valueZ : typeof import("arbitraryModuleNamespaceIdentifiers_module")
  >"should be export namespace" : "should be export namespace"
- 
+
  export { type someType as "<A>" };
 @@= skipped -35, +35 lines =@@
  >"expect error about someType" : "expect error about someType"
- 
+
  export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_module";
 ->"<C>" : typeof valueZ
 +>"<C>" : typeof import("arbitraryModuleNamespaceIdentifiers_module")
- 
+
  import { type "<C>" as typeC } from "./arbitraryModuleNamespaceIdentifiers_module";
 ->typeC : typeof valueZ
 +>typeC : typeof import("arbitraryModuleNamespaceIdentifiers_module")
- 
+
  export type otherType = "otherType";
  >otherType : "otherType"

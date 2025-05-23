@@ -5,13 +5,13 @@
  >apply : Symbol(apply, Decl(test.js, 0, 7))
  >require : Symbol(require)
 ->'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
- 
+
  const result = apply.toFixed()
  >result : Symbol(result, Decl(test.js, 1, 5))
 ->apply.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
  >apply : Symbol(apply, Decl(test.js, 0, 7))
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
- 
+-
 -=== moduleExportAliasDuplicateAlias.js ===
 -exports.apply = undefined;
 ->exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
@@ -56,4 +56,3 @@
 ->exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 ->exports : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 ->apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
--

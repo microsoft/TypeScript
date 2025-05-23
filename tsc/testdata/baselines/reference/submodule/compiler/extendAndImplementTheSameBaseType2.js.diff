@@ -2,7 +2,7 @@
 +++ new.extendAndImplementTheSameBaseType2.js
 @@= skipped -18, +18 lines =@@
  var r4: number = d.bar();
- 
+
  //// [extendAndImplementTheSameBaseType2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,21 +1,24 @@
 --- old.inferenceOptionalProperties.js
 +++ new.inferenceOptionalProperties.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [inferenceOptionalProperties.js]
 -"use strict";
 -var y1 = test(x1);
 -var y2 = test(x2);
-+const y1 = test(x1);
-+const y2 = test(x2);
- var v1;
- var v1;
- var v2;
-@@= skipped -15, +14 lines =@@
- var v5;
- var v6;
- var v6;
+-var v1;
+-var v1;
+-var v2;
+-var v2;
+-var v3;
+-var v3;
+-var v4;
+-var v4;
+-var v5;
+-var v5;
+-var v6;
+-var v6;
 -
 -
 -//// [inferenceOptionalProperties.d.ts]
@@ -80,3 +83,17 @@
 -    a: string;
 -    b: string | undefined;
 -};
++const y1 = test(x1);
++const y2 = test(x2);
++var v1;
++var v1;
++var v2;
++var v2;
++var v3;
++var v3;
++var v4;
++var v4;
++var v5;
++var v5;
++var v6;
++var v6;

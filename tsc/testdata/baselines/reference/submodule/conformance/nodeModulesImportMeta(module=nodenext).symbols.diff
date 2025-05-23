@@ -11,7 +11,7 @@
 ->url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 +>meta : Symbol(meta)
 +>url : Symbol(url, Decl(lib.dom.d.ts, --, --))
- 
+
  export {x};
  >x : Symbol(x, Decl(index.ts, 2, 8))
 @@= skipped -12, +12 lines =@@
@@ -25,6 +25,6 @@
 ->url : Symbol(ImportMeta.url, Decl(lib.dom.d.ts, --, --))
 +>meta : Symbol(meta)
 +>url : Symbol(url, Decl(lib.dom.d.ts, --, --))
- 
+
  export {x};
  >x : Symbol(x, Decl(index.ts, 2, 8))

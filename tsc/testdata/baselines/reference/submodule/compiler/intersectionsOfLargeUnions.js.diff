@@ -1,7 +1,7 @@
 --- old.intersectionsOfLargeUnions.js
 +++ new.intersectionsOfLargeUnions.js
 @@= skipped -29, +29 lines =@@
- 
+
  //// [intersectionsOfLargeUnions.js]
  "use strict";
 -// Repro from #23977

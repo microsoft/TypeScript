@@ -1,8 +1,8 @@
 --- old.typeOfThisInStaticMembers6.js
 +++ new.typeOfThisInStaticMembers6.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [typeOfThisInStaticMembers6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

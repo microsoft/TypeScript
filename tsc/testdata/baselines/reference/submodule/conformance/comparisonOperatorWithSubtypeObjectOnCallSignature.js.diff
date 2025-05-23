@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithSubtypeObjectOnCallSignature.js
 @@= skipped -261, +261 lines =@@
  //var r8b12 = b12 !== a12;
- 
+
  //// [comparisonOperatorWithSubtypeObjectOnCallSignature.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

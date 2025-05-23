@@ -1,8 +1,8 @@
 --- old.inferenceOptionalPropertiesToIndexSignatures.js
 +++ new.inferenceOptionalPropertiesToIndexSignatures.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [inferenceOptionalPropertiesToIndexSignatures.js]
 -"use strict";
  let a1 = foo(x1); // string | number

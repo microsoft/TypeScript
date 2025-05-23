@@ -1,7 +1,7 @@
 --- old.duplicateIdentifierBindingElementInParameterDeclaration2.js
 +++ new.duplicateIdentifierBindingElementInParameterDeclaration2.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [duplicateIdentifierBindingElementInParameterDeclaration2.js]
  "use strict";
 -function f0(a, _a, _b) {

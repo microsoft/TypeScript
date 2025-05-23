@@ -1,7 +1,7 @@
 --- old.literalTypeWidening.js
 +++ new.literalTypeWidening.js
 @@= skipped -147, +147 lines =@@
- 
+
  //// [literalTypeWidening.js]
  "use strict";
 -// Widening vs. non-widening literal types

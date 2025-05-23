@@ -2,7 +2,7 @@
 +++ new.es2022IntlAPIs.types
 @@= skipped -17, +17 lines =@@
  >timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
- 
+
    var formatter = new Intl.DateTimeFormat('en-US', {
 ->formatter : Intl.DateTimeFormat
 ->new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : Intl.DateTimeFormat
@@ -15,4 +15,3 @@
 +>DateTimeFormat : DateTimeFormatConstructor
  >'en-US' : "en-US"
  >{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"; }
- 

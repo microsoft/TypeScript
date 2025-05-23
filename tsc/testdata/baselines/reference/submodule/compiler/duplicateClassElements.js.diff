@@ -2,15 +2,11 @@
 +++ new.duplicateClassElements.js
 @@= skipped -46, +46 lines =@@
  }
- 
+
  //// [duplicateClassElements.js]
 -var a = /** @class */ (function () {
 -    function a() {
-+class a {
-+    a;
-+    a;
-+    b() {
-     }
+-    }
 -    a.prototype.b = function () {
 -    };
 -    a.prototype.b = function () {
@@ -66,6 +62,11 @@
 -    };
 -    return a;
 -}());
++class a {
++    a;
++    a;
++    b() {
++    }
 +    b() {
 +    }
 +    x;

@@ -2,7 +2,7 @@
 +++ new.asyncSetter_es5.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [asyncSetter_es5.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,7 +1,7 @@
 --- old.parserUsingConstructorAsIdentifier.symbols
 +++ new.parserUsingConstructorAsIdentifier.symbols
 @@= skipped -51, +51 lines =@@
- 
+
                  constructor.prototype = Object.create(basePrototype);
  >constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
 ->Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -10,10 +10,10 @@
 ->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >basePrototype : Symbol(basePrototype, Decl(parserUsingConstructorAsIdentifier.ts, 15, 19))
- 
+
                  PluginUtilities.Utilities.markSupportedForProcessing(constructor);
  >constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
- 
+
                  Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))

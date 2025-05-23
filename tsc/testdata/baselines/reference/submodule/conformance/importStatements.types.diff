@@ -9,28 +9,28 @@
 +>a : typeof A
 +>A : typeof A
  }
- 
+
  // no code gen expected
 @@= skipped -9, +9 lines =@@
  >C : typeof C
- 
+
      import a = A; //Error generates 'var <Alias> = <EntityName>;'
 ->a : typeof a
 ->A : typeof a
 +>a : typeof A
 +>A : typeof A
- 
+
      var m: typeof a;
 ->m : typeof a
 ->a : typeof a
 +>m : typeof A
 +>a : typeof A
- 
+
      var p: a.Point;
 ->p : a.Point
 +>p : Point
  >a : any
- 
+
      var p = {x:0, y:0 };
 ->p : a.Point
 +>p : Point
@@ -39,13 +39,13 @@
  >0 : 0
 @@= skipped -25, +25 lines =@@
  >D : typeof D
- 
+
      import a = A;
 ->a : typeof a
 ->A : typeof a
 +>a : typeof A
 +>A : typeof A
- 
+
      var p = new a.Point(1, 1);
 ->p : a.Point
 ->new a.Point(1, 1) : a.Point
@@ -62,20 +62,20 @@
  }
 @@= skipped -17, +17 lines =@@
  >E : typeof E
- 
+
      import a = A;
 ->a : typeof a
 ->A : typeof a
 +>a : typeof A
 +>A : typeof A
- 
+
      export function xDist(x: a.Point) {
 ->xDist : (x: a.Point) => number
 ->x : a.Point
 +>xDist : (x: Point) => number
 +>x : Point
  >a : any
- 
+
          return (a.Origin.x - x.x);
  >(a.Origin.x - x.x) : number
  >a.Origin.x - x.x : number

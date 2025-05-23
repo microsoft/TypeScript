@@ -1,7 +1,7 @@
 --- old.contextuallyTypedJsxAttribute2.symbols
 +++ new.contextuallyTypedJsxAttribute2.symbols
 @@= skipped -25, +25 lines =@@
- 
+
  ) {
    return <a></a>;
 ->a : Symbol(JSX.IntrinsicElements.a, Decl(react16.d.ts, 2516, 41))
@@ -9,7 +9,7 @@
 +>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
 +>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
  }
- 
+
  <UnwrappedLink onClick={(e) => {}} />;
 @@= skipped -30, +30 lines =@@
    },
@@ -20,5 +20,5 @@
 +>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
 +>a : Symbol(a, Decl(react16.d.ts, 2516, 41))
  }
- 
+
  <UnwrappedLink2 onClick={(e) => {}} />;

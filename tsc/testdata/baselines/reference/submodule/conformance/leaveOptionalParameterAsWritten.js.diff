@@ -1,6 +1,6 @@
 --- old.leaveOptionalParameterAsWritten.js
 +++ new.leaveOptionalParameterAsWritten.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/conformance/declarationEmit/leaveOptionalParameterAsWritten.ts] ////
 -
 -//// [a.ts]
@@ -38,5 +38,4 @@
 -type Foo = teams.calling.Foo;
 -export declare const bar: (p?: Foo) => void;
 -export {};
-@@= skipped --1, +1 lines =@@
 +<no content>

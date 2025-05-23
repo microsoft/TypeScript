@@ -1,7 +1,7 @@
 --- old.mappedTypesAndObjects.js
 +++ new.mappedTypesAndObjects.js
 @@= skipped -46, +46 lines =@@
- 
+
  //// [mappedTypesAndObjects.js]
  function f1(x, y) {
 -    var obj;
@@ -37,9 +37,7 @@
 -    };
 -    bar: any;
 -    baz: any;
-+class Form {
-+    values = {};
- }
+-}
 -interface E1<T> extends Base {
 -    foo: T;
 -}
@@ -55,4 +53,6 @@
 -}
 -declare class Form<T> {
 -    private values;
--}
++class Form {
++    values = {};
+ }

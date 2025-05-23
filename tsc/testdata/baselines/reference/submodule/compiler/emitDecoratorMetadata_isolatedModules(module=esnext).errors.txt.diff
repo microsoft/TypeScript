@@ -1,6 +1,6 @@
 --- old.emitDecoratorMetadata_isolatedModules(module=esnext).errors.txt
 +++ new.emitDecoratorMetadata_isolatedModules(module=esnext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.ts(9,23): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
 -index.ts(15,8): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
 -index.ts(24,28): error TS1272: A type referenced in a decorated signature must be imported with 'import type' or a namespace import when 'isolatedModules' and 'emitDecoratorMetadata' are enabled.
@@ -52,5 +52,4 @@
 -!!! related TS1376 index.ts:1:10: 'T1' was imported here.
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

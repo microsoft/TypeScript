@@ -2,11 +2,13 @@
 +++ new.classFieldSuperAccessibleJs1.errors.txt
 @@= skipped -0, +0 lines =@@
 -index.js(9,23): error TS2565: Property 'blah2' is used before being assigned.
+-
+-
+-==== index.js (1 errors) ====
 +index.js(4,3): error TS2551: Property 'blah2' does not exist on type 'typeof C'. Did you mean 'blah1'?
 +index.js(9,23): error TS2551: Property 'blah2' does not exist on type 'typeof C'. Did you mean 'blah1'?
- 
- 
--==== index.js (1 errors) ====
++
++
 +==== index.js (2 errors) ====
      class C {
        static blah1 = 123;

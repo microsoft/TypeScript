@@ -1,8 +1,8 @@
 --- old.newTarget.es5.js
 +++ new.newTarget.es5.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [newTarget.es5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -28,11 +28,7 @@
 -        };
 -        var a = _newTarget;
 -        var b = function () { return _newTarget; };
-+class A {
-+    constructor() {
-+        const a = new.target;
-+        const b = () => new.target;
-     }
+-    }
 -    A.c = function _a() {
 -        var _newTarget = this && this instanceof _a ? this.constructor : void 0;
 -        return _newTarget;
@@ -47,6 +43,14 @@
 -        var e = _newTarget;
 -        var f = function () { return _newTarget; };
 -        return _this;
+-    }
+-    return B;
+-}(A));
++class A {
++    constructor() {
++        const a = new.target;
++        const b = () => new.target;
++    }
 +    static c = function () { return new.target; };
 +    d = function () { return new.target; };
 +}
@@ -55,9 +59,7 @@
 +        super();
 +        const e = new.target;
 +        const f = () => new.target;
-     }
--    return B;
--}(A));
++    }
 +}
  function f1() {
 -    var _newTarget = this && this instanceof f1 ? this.constructor : void 0;

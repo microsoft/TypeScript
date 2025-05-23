@@ -2,10 +2,10 @@
 +++ new.declarationEmitImportInExportAssignmentModule.types
 @@= skipped -4, +4 lines =@@
  >m : typeof m
- 
+
      export module c {
 ->c : typeof m.c
 +>c : typeof c
- 
+
          export class c {
  >c : c

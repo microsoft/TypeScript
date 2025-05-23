@@ -2,7 +2,7 @@
 +++ new.templateStringWithEmbeddedComments.js
 @@= skipped -14, +14 lines =@@
  tail`;
- 
+
  //// [templateStringWithEmbeddedComments.js]
 -"head".concat(// single line comment
 -10, "\nmiddle").concat(

@@ -1,8 +1,8 @@
 --- old.capturedShorthandPropertyAssignmentNoCheck.js
 +++ new.capturedShorthandPropertyAssignmentNoCheck.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [capturedShorthandPropertyAssignmentNoCheck.js]
 -var fns = [];
 -var _loop_1 = function (value) {

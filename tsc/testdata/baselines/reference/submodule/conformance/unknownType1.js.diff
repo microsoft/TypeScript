@@ -1,8 +1,8 @@
 --- old.unknownType1.js
 +++ new.unknownType1.js
 @@= skipped -185, +185 lines =@@
- 
- 
+
+
  //// [unknownType1.js]
 -"use strict";
 -// In an intersection everything absorbs unknown

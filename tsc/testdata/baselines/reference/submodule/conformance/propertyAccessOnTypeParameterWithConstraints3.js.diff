@@ -1,7 +1,7 @@
 --- old.propertyAccessOnTypeParameterWithConstraints3.js
 +++ new.propertyAccessOnTypeParameterWithConstraints3.js
 @@= skipped -59, +59 lines =@@
- 
+
  //// [propertyAccessOnTypeParameterWithConstraints3.js]
  // generic types should behave as if they have properties of their constraint type
 -var __extends = (this && this.__extends) || (function () {

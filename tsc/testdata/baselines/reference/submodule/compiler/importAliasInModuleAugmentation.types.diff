@@ -6,12 +6,12 @@
  >A : typeof A
 ->y : x
 +>y : y
- 
+
      // Should still error
      import f = require("fs");
 @@= skipped -12, +12 lines =@@
  >x : 34
- 
+
  let s: x = { s: "" };
 ->s : x
 +>s : y
@@ -25,4 +25,3 @@
 ->s : x
 +>s : y
  >s : string
- 

@@ -1,7 +1,7 @@
 --- old.typeGuardsAsAssertions.js
 +++ new.typeGuardsAsAssertions.js
 @@= skipped -129, +129 lines =@@
- 
+
  //// [typeGuardsAsAssertions.js]
  "use strict";
 -// Repro from #8513

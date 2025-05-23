@@ -9,17 +9,17 @@
  >d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
 ->e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
 +>e : Symbol(e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
- 
+
      d.e
 ->d.e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
 +>d.e : Symbol(e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
  >d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
 ->e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
 +>e : Symbol(e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
- 
+
      if (b) {
  >b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
- 
+
          d.q = false
 ->d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
 +>d.q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
@@ -34,10 +34,10 @@
  >d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
 ->q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
 +>q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
- 
+
      if (b) {
  >b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
- 
+
          d.q = false
 ->d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
 +>d.q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
@@ -59,10 +59,10 @@
  >d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
 ->q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
 +>q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
- 
+
      if (b) {
  >b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
- 
+
          d.r = 1
 ->d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
 +>d.r : Symbol(r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
@@ -84,10 +84,10 @@
  >d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
 ->r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
 +>r : Symbol(r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
- 
+
      if (b) {
  >b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
- 
+
          d.s = 'hi'
 ->d.s : Symbol(d.s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
 +>d.s : Symbol(s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
@@ -106,7 +106,7 @@
  >f : Symbol(f, Decl(typeFromPropertyAssignment36.ts, 0, 0))
 ->s : Symbol(d.s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
 +>s : Symbol(s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
- 
+
  function d() {
 ->d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
 +>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20))
@@ -118,7 +118,7 @@
 +>d.e : Symbol(e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
 +>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20))
 +>e : Symbol(e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
- 
+
  d.e
 ->d.e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
 ->d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
@@ -126,7 +126,7 @@
 +>d.e : Symbol(e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
 +>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20))
 +>e : Symbol(e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
- 
+
  if (!!false) {
      d.q = false
 ->d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
@@ -143,7 +143,7 @@
 +>d.q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
 +>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20))
 +>q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
- 
+
  if (!!false) {
      d.q = false
 ->d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
@@ -169,7 +169,7 @@
 +>d.q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
 +>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20))
 +>q : Symbol(q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
- 
+
  if (!!false) {
      d.r = 1
 ->d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
@@ -195,7 +195,7 @@
 +>d.r : Symbol(r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
 +>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20))
 +>r : Symbol(r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
- 
+
  // test function expressions too
  const g = function() {
 @@= skipped -68, +68 lines =@@
@@ -214,7 +214,7 @@
  >g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
 ->expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
 +>expando : Symbol(expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
- 
+
  if (!!false) {
      g.both = 'hi'
 ->g.both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
@@ -237,4 +237,3 @@
  >g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
 ->both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
 +>both : Symbol(both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
- 

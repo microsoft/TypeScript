@@ -15,8 +15,8 @@
 +      Type 'Constraint<Runtype<any>>' is not assignable to type 'Constraint<Num>'.
 +        Types of property 'underlying' are incompatible.
 +          Property 'tag' is missing in type 'Runtype<any>' but required in type 'Num'.
- 
- 
+
+
  ==== invariantGenericErrorElaboration.ts (2 errors) ====
 @@= skipped -15, +19 lines =@@
  !!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.

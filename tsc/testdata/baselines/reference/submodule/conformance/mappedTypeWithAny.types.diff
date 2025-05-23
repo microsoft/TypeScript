@@ -2,7 +2,7 @@
 +++ new.mappedTypeWithAny.types
 @@= skipped -78, +78 lines =@@
  >IndirectArrayish : Objectish<U>
- 
+
  function bar(arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) {
 ->bar : (arrayish: Arrayish<any>, objectish: Objectish<any>, indirectArrayish: IndirectArrayish<any>) => void
 +>bar : (arrayish: any[], objectish: Objectish<any>, indirectArrayish: Objectish<any>) => void

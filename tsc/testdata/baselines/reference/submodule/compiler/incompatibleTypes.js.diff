@@ -1,8 +1,8 @@
 --- old.incompatibleTypes.js
 +++ new.incompatibleTypes.js
 @@= skipped -77, +77 lines =@@
- 
- 
+
+
  //// [incompatibleTypes.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {
@@ -27,7 +27,7 @@
 -}());
 -var C3 = /** @class */ (function () {
 -    function C3() {
-     }
+-    }
 -    return C3;
 -}());
 -var C4 = /** @class */ (function () {
@@ -35,6 +35,7 @@
 -    }
 -    return C4;
 -}());
++    }
 +}
 +class C3 {
 +    p1;

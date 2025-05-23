@@ -1,8 +1,8 @@
 --- old.usingDeclarationsTopLevelOfModule.3(module=esnext).js
 +++ new.usingDeclarationsTopLevelOfModule.3(module=esnext).js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [usingDeclarationsTopLevelOfModule.3.js]
 +var z;
  export { y };

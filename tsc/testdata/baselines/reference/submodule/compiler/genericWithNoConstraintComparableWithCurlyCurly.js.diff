@@ -2,7 +2,7 @@
 +++ new.genericWithNoConstraintComparableWithCurlyCurly.js
 @@= skipped -31, +31 lines =@@
  }
- 
+
  //// [genericWithNoConstraintComparableWithCurlyCurly.js]
 -"use strict";
  function foo() {

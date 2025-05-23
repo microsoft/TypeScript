@@ -621,35 +621,20 @@
  1 > {
 -  >    #\u0078: number;
 -  >
-   >    
+-  >    
 -1 >Emitted(9, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #\u0078
-+3 >           : number;
-+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
-+3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithEscape1_x.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                          ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^->
- 1->
+-1->
 -2 >        #\u0078: number;
 -1->Emitted(10, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(10, 59) Source(2, 21) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 0, "f");
-+>>>        this.#\u0078 = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -659,6 +644,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #\u0078
++3 >           : number;
++1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
++3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#\u0078 = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^
@@ -833,35 +838,20 @@
  1 > {
 -  >    #x\u0078: number;
 -  >
-   >    
+-  >    
 -1 >Emitted(9, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #x\u0078
-+3 >            : number;
-+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
-+3 >Emitted(2, 14) Source(2, 22) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithEscape2_xx.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                           ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^^->
- 1->
+-1->
 -2 >        #x\u0078: number;
 -1->Emitted(10, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(10, 60) Source(2, 22) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 0, "f");
-+>>>        this.#x\u0078 = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -871,6 +861,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #x\u0078
++3 >            : number;
++1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
++3 >Emitted(2, 14) Source(2, 22) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#x\u0078 = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^^
@@ -1045,35 +1055,20 @@
  1 > {
 -  >    #\u{78}: number;
 -  >
-   >    
+-  >    
 -1 >Emitted(9, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #\u{78}
-+3 >           : number;
-+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
-+3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithExtendedEscape1_x.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                                  ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^->
- 1->
+-1->
 -2 >        #\u{78}: number;
 -1->Emitted(10, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(10, 67) Source(2, 21) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 0, "f");
-+>>>        this.#\u{78} = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1083,6 +1078,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #\u{78}
++3 >           : number;
++1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
++3 >Emitted(2, 13) Source(2, 21) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#\u{78} = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^
@@ -1257,35 +1272,20 @@
  1 > {
 -  >    #x\u{78}: number;
 -  >
-   >    
+-  >    
 -1 >Emitted(9, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #x\u{78}
-+3 >            : number;
-+1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
-+3 >Emitted(2, 14) Source(2, 22) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithExtendedEscape2_xx.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                                   ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^^->
- 1->
+-1->
 -2 >        #x\u{78}: number;
 -1->Emitted(10, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(10, 68) Source(2, 22) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 0, "f");
-+>>>        this.#x\u{78} = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1295,6 +1295,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #x\u{78}
++3 >            : number;
++1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
++3 >Emitted(2, 14) Source(2, 22) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(3, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#x\u{78} = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^^

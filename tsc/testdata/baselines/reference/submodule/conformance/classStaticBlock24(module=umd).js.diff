@@ -1,8 +1,8 @@
 --- old.classStaticBlock24(module=umd).js
 +++ new.classStaticBlock24(module=umd).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [classStaticBlock24.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

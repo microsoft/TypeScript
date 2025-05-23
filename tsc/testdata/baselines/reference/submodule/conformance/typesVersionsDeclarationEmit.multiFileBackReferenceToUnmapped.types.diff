@@ -1,18 +1,18 @@
 --- old.typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.types
 +++ new.typesVersionsDeclarationEmit.multiFileBackReferenceToUnmapped.types
 @@= skipped -1, +1 lines =@@
- 
+
  === main.ts ===
  import { fa } from "ext";
 ->fa : () => import("node_modules/ext/other").A2
 +>fa : () => A2
- 
+
  import { fa as fa2 } from "ext/other";
 ->fa : () => import("node_modules/ext/other").A2
 ->fa2 : () => import("node_modules/ext/other").A2
 +>fa : () => A2
 +>fa2 : () => A2
- 
+
  export const va = fa();
 ->va : import("node_modules/ext/other").A2
 ->fa() : import("node_modules/ext/other").A2
@@ -20,7 +20,7 @@
 +>va : A2
 +>fa() : A2
 +>fa : () => A2
- 
+
  export const va2 = fa2();
 ->va2 : import("node_modules/ext/other").A2
 ->fa2() : import("node_modules/ext/other").A2
@@ -28,6 +28,6 @@
 +>va2 : A2
 +>fa2() : A2
 +>fa2 : () => A2
- 
+
  === node_modules/ext/other.d.ts ===
  export interface A2 {}

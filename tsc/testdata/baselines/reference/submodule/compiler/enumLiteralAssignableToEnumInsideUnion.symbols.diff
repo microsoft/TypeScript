@@ -2,7 +2,7 @@
 +++ new.enumLiteralAssignableToEnumInsideUnion.symbols
 @@= skipped -7, +7 lines =@@
  >Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 10))
- 
+
          A, B
 ->A : Symbol(Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 1, 21))
 ->B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 2, 10))
@@ -13,7 +13,7 @@
  module Y {
 @@= skipped -11, +11 lines =@@
  >Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 5, 10))
- 
+
          A, B
 ->A : Symbol(Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
 ->B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 7, 10))
@@ -24,11 +24,11 @@
  module Z {
 @@= skipped -11, +11 lines =@@
  >Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
- 
+
          A = 1 << 1,
 ->A : Symbol(Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
- 
+
          B = 1 << 2,
 ->B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 12, 19))
 +>B : Symbol(B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 12, 19))
@@ -37,11 +37,11 @@
  module Ka {
 @@= skipped -13, +13 lines =@@
  >Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 16, 11))
- 
+
          A = 1 << 10,
 ->A : Symbol(Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 17, 21))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 17, 21))
- 
+
          B = 1 << 11,
 ->B : Symbol(Foo.B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 18, 20))
 +>B : Symbol(B, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 18, 20))
@@ -61,7 +61,7 @@
 ->A : Symbol(Y.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
 +>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 5, 10))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 6, 21))
- 
+
  const e1: X.Foo | boolean = Z.Foo.A; // not legal, Z is computed
  >e1 : Symbol(e1, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 23, 5))
  >X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
@@ -76,7 +76,7 @@
 ->A : Symbol(Z.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
 +>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
- 
+
  const e2: X.Foo.A | X.Foo.B | boolean = Z.Foo.A; // still not legal
  >e2 : Symbol(e2, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 24, 5))
  >X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
@@ -98,7 +98,7 @@
 ->A : Symbol(Z.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
 +>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
- 
+
  const e3: X.Foo.B | boolean = Z.Foo.A; // not legal
  >e3 : Symbol(e3, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 25, 5))
  >X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
@@ -115,7 +115,7 @@
 ->A : Symbol(Z.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
 +>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
- 
+
  const e4: X.Foo.A | boolean = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
  >e4 : Symbol(e4, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 26, 5))
  >X : Symbol(X, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 0, 0))
@@ -132,7 +132,7 @@
 ->A : Symbol(Z.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
 +>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
- 
+
  const e5: Ka.Foo | boolean = Z.Foo.A; // ok
  >e5 : Symbol(e5, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 27, 5))
  >Ka : Symbol(Ka, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 15, 1))
@@ -147,4 +147,3 @@
 ->A : Symbol(Z.Foo.A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
 +>Foo : Symbol(Foo, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 10, 10))
 +>A : Symbol(A, Decl(enumLiteralAssignableToEnumInsideUnion.ts, 11, 21))
- 

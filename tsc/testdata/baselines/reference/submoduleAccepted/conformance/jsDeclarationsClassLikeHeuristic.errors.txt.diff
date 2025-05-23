@@ -1,6 +1,6 @@
 --- old.jsDeclarationsClassLikeHeuristic.errors.txt
 +++ new.jsDeclarationsClassLikeHeuristic.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.js(4,3): error TS2339: Property 'prototype' does not exist on type '{}'.
 -
 -
@@ -11,5 +11,4 @@
 -    A.prototype.b = {};
 -      ~~~~~~~~~
 -!!! error TS2339: Property 'prototype' does not exist on type '{}'.
-@@= skipped --1, +1 lines =@@
 +<no content>

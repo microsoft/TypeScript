@@ -1,8 +1,8 @@
 --- old.stringLiteralTypesAndLogicalOrExpressions01.js
 +++ new.stringLiteralTypesAndLogicalOrExpressions01.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [stringLiteralTypesAndLogicalOrExpressions01.js]
 -var a = "foo";
 -var b = a || "foo";

@@ -2,10 +2,10 @@
 +++ new.reuseInnerModuleMember.types
 @@= skipped -6, +6 lines =@@
  }
- 
+
  import f = require('./reuseInnerModuleMember_0');
 ->f : typeof f
 +>f : typeof import("reuseInnerModuleMember_0")
- 
+
  module bar {
  >bar : typeof bar

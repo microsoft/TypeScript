@@ -1,8 +1,8 @@
 --- old.overloadReturnTypes.js
 +++ new.overloadReturnTypes.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [overloadReturnTypes.js]
 -var Accessor = /** @class */ (function () {
 -    function Accessor() {

@@ -1,8 +1,8 @@
 --- old.objectRestAssignment.js
 +++ new.objectRestAssignment.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [objectRestAssignment.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

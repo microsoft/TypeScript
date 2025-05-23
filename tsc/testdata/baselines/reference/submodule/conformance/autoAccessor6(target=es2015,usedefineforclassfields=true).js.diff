@@ -1,8 +1,8 @@
 --- old.autoAccessor6(target=es2015,usedefineforclassfields=true).js
 +++ new.autoAccessor6(target=es2015,usedefineforclassfields=true).js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [autoAccessor6.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

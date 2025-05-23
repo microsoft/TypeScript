@@ -2,7 +2,7 @@
 +++ new.amdImportAsPrimaryExpression.symbols
 @@= skipped -4, +4 lines =@@
  >foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
- 
+
  if(foo.E1.A === 0){
 ->foo.E1.A : Symbol(foo.E1.A, Decl(foo_0.ts, 0, 16))
 ->foo.E1 : Symbol(foo.E1, Decl(foo_0.ts, 0, 0))
@@ -13,12 +13,12 @@
 ->A : Symbol(foo.E1.A, Decl(foo_0.ts, 0, 16))
 +>E1 : Symbol(E1, Decl(foo_0.ts, 0, 0))
 +>A : Symbol(A, Decl(foo_0.ts, 0, 16))
- 
+
  	// Should cause runtime import - interesting optimization possibility, as gets inlined to 0.
  }
 @@= skipped -14, +14 lines =@@
  >E1 : Symbol(E1, Decl(foo_0.ts, 0, 0))
- 
+
  	A,B,C
 ->A : Symbol(E1.A, Decl(foo_0.ts, 0, 16))
 ->B : Symbol(E1.B, Decl(foo_0.ts, 1, 3))
@@ -27,4 +27,3 @@
 +>B : Symbol(B, Decl(foo_0.ts, 1, 3))
 +>C : Symbol(C, Decl(foo_0.ts, 1, 5))
  }
- 

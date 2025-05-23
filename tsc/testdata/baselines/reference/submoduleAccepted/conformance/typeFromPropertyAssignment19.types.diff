@@ -10,7 +10,7 @@
 +>require("./semver") : any
  >require : any
  >"./semver" : "./semver"
- 
+
  var two = C.f(1)
  >two : any
  >C.f(1) : any
@@ -21,7 +21,7 @@
 +>C : any
 +>f : any
  >1 : 1
- 
+
  === types.d.ts ===
 @@= skipped -23, +23 lines =@@
  === semver.js ===
@@ -41,7 +41,7 @@
 +>module : any
 +>exports : any
 +>C : { (): void; f: (n: any) => any; }
- 
+
  C.f = n => n + 1
  >C.f = n => n + 1 : (n: any) => any
  >C.f : (n: any) => any
@@ -52,11 +52,11 @@
  >n : any
 @@= skipped -20, +20 lines =@@
  >1 : 1
- 
+
  function C() {
 ->C : typeof C
 +>C : { (): void; f: (n: any) => any; }
- 
+
      this.p = 1
  >this.p = 1 : 1
  >this.p : any

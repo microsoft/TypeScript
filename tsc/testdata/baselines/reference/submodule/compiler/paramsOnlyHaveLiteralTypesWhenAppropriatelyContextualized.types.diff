@@ -2,15 +2,15 @@
 +++ new.paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.types
 @@= skipped -8, +8 lines =@@
  >Lower : Lower<T>
- 
+
  export function appendToOptionalArray<
 ->appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
 +>appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[] | undefined; }, key: K, value: T) => void
- 
+
    K extends string | number | symbol,
    T
 @@= skipped -44, +44 lines =@@
- 
+
  // e.g.
  const foo: {x?: number[]; y?: string[]; } = {};
 ->foo : { x?: number[]; y?: string[]; }
@@ -18,7 +18,7 @@
  >x : number[] | undefined
  >y : string[] | undefined
  >{} : {}
- 
+
  appendToOptionalArray(foo, 'x', 123);   // ok
  >appendToOptionalArray(foo, 'x', 123) : void
 ->appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
@@ -27,7 +27,7 @@
 +>foo : { x?: number[] | undefined; y?: string[] | undefined; }
  >'x' : "x"
  >123 : 123
- 
+
  appendToOptionalArray(foo, 'y', 'bar'); // ok
  >appendToOptionalArray(foo, 'y', 'bar') : void
 ->appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
@@ -36,7 +36,7 @@
 +>foo : { x?: number[] | undefined; y?: string[] | undefined; }
  >'y' : "y"
  >'bar' : "bar"
- 
+
  appendToOptionalArray(foo, 'y', 12);    // should fail
  >appendToOptionalArray(foo, 'y', 12) : void
 ->appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
@@ -45,7 +45,7 @@
 +>foo : { x?: number[] | undefined; y?: string[] | undefined; }
  >'y' : "y"
  >12 : 12
- 
+
  appendToOptionalArray(foo, 'x', "no");  // should fail
  >appendToOptionalArray(foo, 'x', "no") : void
 ->appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
@@ -54,4 +54,3 @@
 +>foo : { x?: number[] | undefined; y?: string[] | undefined; }
  >'x' : "x"
  >"no" : "no"
- 

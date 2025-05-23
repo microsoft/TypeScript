@@ -2,7 +2,7 @@
 +++ new.typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.symbols
 @@= skipped -16, +16 lines =@@
  >TreeNode : Symbol(TreeNode, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts, 0, 0))
- 
+
  nodes.map(n => n.name);
 ->nodes.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 +>nodes.map : Symbol(map, Decl(lib.es5.d.ts, --, --))

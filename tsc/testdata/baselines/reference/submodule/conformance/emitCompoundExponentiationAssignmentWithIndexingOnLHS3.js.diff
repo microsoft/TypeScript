@@ -2,7 +2,7 @@
 +++ new.emitCompoundExponentiationAssignmentWithIndexingOnLHS3.js
 @@= skipped -14, +14 lines =@@
  object[0] **= object[0] ** 2;
- 
+
  //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS3.js]
 -var _a, _b, _c, _d, _e, _f, _g, _h;
  var object = {

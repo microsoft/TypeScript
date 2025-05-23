@@ -2,11 +2,11 @@
 +++ new.declarationEmitQualifiedAliasTypeArgument.types
 @@= skipped -37, +37 lines =@@
  >Q : any
- 
+
  import { create } from "./bbb";
 ->create : <T>() => () => import("bbb").INode<T>
 +>create : <T>() => () => INode<T>
- 
+
  export const fun = create<T>();
 ->fun : () => import("bbb").INode<T>
 ->create<T>() : () => import("bbb").INode<T>
@@ -14,7 +14,7 @@
 +>fun : () => INode<T>
 +>create<T>() : () => INode<T>
 +>create : <T>() => () => INode<T>
- 
+
  export const fun2 = create<Q>();
 ->fun2 : () => import("bbb").INode<Q>
 ->create<Q>() : () => import("bbb").INode<Q>
@@ -22,4 +22,3 @@
 +>fun2 : () => INode<Q>
 +>create<Q>() : () => INode<Q>
 +>create : <T>() => () => INode<T>
- 

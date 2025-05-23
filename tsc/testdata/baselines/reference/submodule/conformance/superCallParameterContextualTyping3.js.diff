@@ -2,7 +2,7 @@
 +++ new.superCallParameterContextualTyping3.js
 @@= skipped -33, +33 lines =@@
  }
- 
+
  //// [superCallParameterContextualTyping3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var CBase = /** @class */ (function () {
 -    function CBase(param) {
-+class CBase {
-+    constructor(param) {
-     }
+-    }
 -    CBase.prototype.foo = function (param) {
 -    };
 -    return CBase;
@@ -31,32 +29,45 @@
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C() {
+-        // Should be okay.
+-        // 'p' should have type 'string'.
+-        var _this = _super.call(this, {
+-            method: function (p) {
+-                p.length;
+-            }
+-        }) || this;
+-        // Should be okay.
+-        // 'p' should have type 'string'.
+-        _super.prototype.foo.call(_this, {
+-            method: function (p) {
+-                p.length;
+-            }
+-        });
+-        return _this;
+-    }
+-    return C;
+-}(CBase));
++class CBase {
++    constructor(param) {
++    }
 +    foo(param) {
 +    }
 +}
 +class C extends CBase {
 +    constructor() {
-         // Should be okay.
-         // 'p' should have type 'string'.
--        var _this = _super.call(this, {
--            method: function (p) {
++        // Should be okay.
++        // 'p' should have type 'string'.
 +        super({
 +            method(p) {
-                 p.length;
-             }
--        }) || this;
++                p.length;
++            }
 +        });
-         // Should be okay.
-         // 'p' should have type 'string'.
--        _super.prototype.foo.call(_this, {
--            method: function (p) {
++        // Should be okay.
++        // 'p' should have type 'string'.
 +        super.foo({
 +            method(p) {
-                 p.length;
-             }
-         });
--        return _this;
-     }
--    return C;
--}(CBase));
++                p.length;
++            }
++        });
++    }
 +}

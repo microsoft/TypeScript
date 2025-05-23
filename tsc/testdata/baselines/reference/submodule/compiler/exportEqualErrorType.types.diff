@@ -6,7 +6,7 @@
  import connect = require('exportEqualErrorType_0');
 ->connect : { (): connect.connectExport; foo: Date; }
 +>connect : any
- 
+
  connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
 ->connect().use(connect.static('foo')) : connect.connectExport
 ->connect().use : (mod: connect.connectModule) => connect.connectExport
@@ -24,18 +24,18 @@
 +>connect : any
  >static : any
  >'foo' : "foo"
- 
+
 @@= skipped -29, +29 lines =@@
      }
  }
  var server: {
 ->server : { (): server.connectExport; foo: Date; }
 +>server : { (): connectExport; foo: Date; }
- 
+
      (): server.connectExport;
  >server : any
 @@= skipped -10, +10 lines =@@
- 
+
  };
  export = server;
 ->server : { (): server.connectExport; foo: Date; }

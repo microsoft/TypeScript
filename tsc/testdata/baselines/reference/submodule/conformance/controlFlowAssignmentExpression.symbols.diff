@@ -1,7 +1,7 @@
 --- old.controlFlowAssignmentExpression.symbols
 +++ new.controlFlowAssignmentExpression.symbols
 @@= skipped -11, +11 lines =@@
- 
+
  x = x.length;
  >x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
@@ -9,7 +9,7 @@
  >x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
  x; // number
  >x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
 @@= skipped -14, +14 lines =@@
@@ -21,6 +21,6 @@
  >x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
  x; // number
  >x : Symbol(x, Decl(controlFlowAssignmentExpression.ts, 0, 3))

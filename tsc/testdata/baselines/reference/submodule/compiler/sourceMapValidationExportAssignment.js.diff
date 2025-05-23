@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationExportAssignment.js
 @@= skipped -6, +6 lines =@@
  export = a;
- 
+
  //// [sourceMapValidationExportAssignment.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

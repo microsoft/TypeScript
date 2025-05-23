@@ -2,10 +2,10 @@
 +++ new.typeParameterDiamond3.types
 @@= skipped -7, +7 lines =@@
  >diamondMiddle : <T, U>() => void
- 
+
          function diamondBottom<Bottom extends Top | T | U>() {
 ->diamondBottom : <Bottom extends Top | T | U>() => void
 +>diamondBottom : <Bottom extends T | Top | U>() => void
- 
+
              var top: Top;
  >top : Top

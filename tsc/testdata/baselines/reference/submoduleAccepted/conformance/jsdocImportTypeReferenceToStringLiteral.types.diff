@@ -6,4 +6,3 @@
  let x;
 ->x : "foo"
 +>x : any
- 

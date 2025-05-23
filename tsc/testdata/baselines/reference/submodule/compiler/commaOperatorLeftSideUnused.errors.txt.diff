@@ -5,9 +5,11 @@
  commaOperatorLeftSideUnused.ts(40,7): error TS2695: Left side of comma operator is unused and has no side effects.
  commaOperatorLeftSideUnused.ts(41,7): error TS2695: Left side of comma operator is unused and has no side effects.
 -commaOperatorLeftSideUnused.ts(42,7): error TS2695: Left side of comma operator is unused and has no side effects.
- 
- 
+-
+-
 -==== commaOperatorLeftSideUnused.ts (24 errors) ====
++
++
 +==== commaOperatorLeftSideUnused.ts (23 errors) ====
      var xx: any;
      var yy: any;

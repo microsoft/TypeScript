@@ -8,7 +8,7 @@
 ->y : Symbol(P.y, Decl(primaryExpressionMods.ts, 2, 35))
 +>x : Symbol(x, Decl(primaryExpressionMods.ts, 2, 24))
 +>y : Symbol(y, Decl(primaryExpressionMods.ts, 2, 35))
- 
+
      export var a = 1;
  >a : Symbol(a, Decl(primaryExpressionMods.ts, 3, 14))
 @@= skipped -9, +9 lines =@@
@@ -17,11 +17,11 @@
  >M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
 ->P : Symbol(M.P, Decl(primaryExpressionMods.ts, 1, 1))
 +>P : Symbol(P, Decl(primaryExpressionMods.ts, 1, 1))
- 
+
  var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
  >m : Symbol(m, Decl(primaryExpressionMods.ts, 6, 3))
 @@= skipped -14, +14 lines =@@
- 
+
  var x1 = M.a;           // Used as PrimaryExpression
  >x1 : Symbol(x1, Decl(primaryExpressionMods.ts, 8, 3))
 ->M.a : Symbol(M.a, Decl(primaryExpressionMods.ts, 3, 14))
@@ -29,7 +29,7 @@
  >M : Symbol(M, Decl(primaryExpressionMods.ts, 0, 0))
 ->a : Symbol(M.a, Decl(primaryExpressionMods.ts, 3, 14))
 +>a : Symbol(a, Decl(primaryExpressionMods.ts, 3, 14))
- 
+
  var x2 = m.a;           // Same as M.a
  >x2 : Symbol(x2, Decl(primaryExpressionMods.ts, 9, 3))
 @@= skipped -11, +11 lines =@@
@@ -38,4 +38,3 @@
  >m : Symbol(m)
 ->P : Symbol(m.P)
 +>P : Symbol(P)
- 

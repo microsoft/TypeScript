@@ -2,7 +2,7 @@
 +++ new.unknownSymbolOffContextualType1.symbols
 @@= skipped -8, +8 lines =@@
  >Document : Symbol(Document, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 0, 31))
- 
+
      getElementById(elementId: string): HTMLElement;
 ->getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
 +>getElementById : Symbol(getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
@@ -11,7 +11,7 @@
  }
 @@= skipped -8, +8 lines =@@
  >HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 3, 1))
- 
+
      isDisabled: boolean;
 ->isDisabled : Symbol(HTMLElement.isDisabled, Decl(unknownSymbolOffContextualType1.ts, 4, 23))
 +>isDisabled : Symbol(isDisabled, Decl(unknownSymbolOffContextualType1.ts, 4, 23))
@@ -19,7 +19,7 @@
  function getMaxWidth(elementNames: string[]) {
  >getMaxWidth : Symbol(getMaxWidth, Decl(unknownSymbolOffContextualType1.ts, 6, 1))
 @@= skipped -8, +8 lines =@@
- 
+
      var elements = elementNames.map(function (name) {
  >elements : Symbol(elements, Decl(unknownSymbolOffContextualType1.ts, 8, 7))
 ->elementNames.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
@@ -28,7 +28,7 @@
 ->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 +>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >name : Symbol(name, Decl(unknownSymbolOffContextualType1.ts, 8, 46))
- 
+
          return document.getElementById(name);
 ->document.getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
 +>document.getElementById : Symbol(getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
@@ -36,7 +36,7 @@
 ->getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
 +>getElementById : Symbol(getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
  >name : Symbol(name, Decl(unknownSymbolOffContextualType1.ts, 8, 46))
- 
+
      });
      var enabled = elements.filter(function (e) {
  >enabled : Symbol(enabled, Decl(unknownSymbolOffContextualType1.ts, 11, 7))
@@ -46,14 +46,14 @@
 ->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >e : Symbol(e, Decl(unknownSymbolOffContextualType1.ts, 11, 44))
- 
+
          return !e.isDisabled;
 ->e.isDisabled : Symbol(HTMLElement.isDisabled, Decl(unknownSymbolOffContextualType1.ts, 4, 23))
 +>e.isDisabled : Symbol(isDisabled, Decl(unknownSymbolOffContextualType1.ts, 4, 23))
  >e : Symbol(e, Decl(unknownSymbolOffContextualType1.ts, 11, 44))
 ->isDisabled : Symbol(HTMLElement.isDisabled, Decl(unknownSymbolOffContextualType1.ts, 4, 23))
 +>isDisabled : Symbol(isDisabled, Decl(unknownSymbolOffContextualType1.ts, 4, 23))
- 
+
      });
      var widths = enabled.map(function (e) {
  >widths : Symbol(widths, Decl(unknownSymbolOffContextualType1.ts, 14, 7))
@@ -63,7 +63,7 @@
 ->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 +>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >e : Symbol(e, Decl(unknownSymbolOffContextualType1.ts, 14, 39))
- 
+
          return e.xyxyxyx;  // error expected here
 @@= skipped -38, +38 lines =@@
      });
@@ -76,4 +76,3 @@
 +>reduce : Symbol(reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(unknownSymbolOffContextualType1.ts, 17, 43))
  >b : Symbol(b, Decl(unknownSymbolOffContextualType1.ts, 17, 45))
- 

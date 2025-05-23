@@ -2,13 +2,13 @@
 +++ new.stringLiteralTypesAsTypeParameterConstraint01.types
 @@= skipped -10, +10 lines =@@
  }
- 
+
  function bar<T extends "foo" | "bar">(f: (x: T) => T) {
 ->bar : <T extends "foo" | "bar">(f: (x: T) => T) => (x: T) => T
 +>bar : <T extends "bar" | "foo">(f: (x: T) => T) => (x: T) => T
  >f : (x: T) => T
  >x : T
- 
+
 @@= skipped -40, +40 lines =@@
  let h = bar(x => x);
  >h : (x: "bar" | "foo") => "bar" | "foo"

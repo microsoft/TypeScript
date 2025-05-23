@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 +symbolProperty44.ts(2,9): error TS2300: Duplicate identifier '[Symbol.hasInstance]'.
  symbolProperty44.ts(5,9): error TS2300: Duplicate identifier '[Symbol.hasInstance]'.
- 
- 
+
+
 -==== symbolProperty44.ts (1 errors) ====
 +==== symbolProperty44.ts (2 errors) ====
      class C {

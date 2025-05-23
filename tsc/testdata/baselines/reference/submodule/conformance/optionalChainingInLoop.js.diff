@@ -2,7 +2,7 @@
 +++ new.optionalChainingInLoop.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [optionalChainingInLoop.js]
 -var _a;
  // https://github.com/microsoft/TypeScript/issues/40643

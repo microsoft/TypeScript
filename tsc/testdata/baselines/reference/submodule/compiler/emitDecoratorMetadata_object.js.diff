@@ -1,8 +1,8 @@
 --- old.emitDecoratorMetadata_object.js
 +++ new.emitDecoratorMetadata_object.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [emitDecoratorMetadata_object.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

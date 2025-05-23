@@ -1,7 +1,7 @@
 --- old.tsxStatelessComponentDefaultProps.js
 +++ new.tsxStatelessComponentDefaultProps.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [tsxStatelessComponentDefaultProps.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

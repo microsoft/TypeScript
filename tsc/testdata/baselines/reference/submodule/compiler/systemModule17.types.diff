@@ -6,7 +6,7 @@
  >N : typeof N
 ->I : II
 +>I : I
- 
+
  import { A, A as EA, I as EI } from "f1";
 ->A : typeof A
 ->A : typeof A
@@ -16,29 +16,29 @@
 +>EA : any
  >I : any
  >EI : any
- 
+
 @@= skipped -24, +24 lines =@@
  >I1 : any
- 
+
  export {A};
 ->A : typeof A
 +>A : any
- 
+
  export {A as A1};
 ->A : typeof A
 ->A1 : typeof A
 +>A : any
 +>A1 : any
- 
+
  export {EA};
 ->EA : typeof A
 +>EA : any
- 
+
  export {EA as EA1};
 ->EA : typeof A
 ->EA1 : typeof A
 +>EA : any
 +>EA1 : any
- 
+
  export {EI };
  >EI : any

@@ -8,7 +8,7 @@
 +>(a: number | string, index: number) => {     return index} : (a: string | number, index: number) => number
  >a : string | number
  >index : number
- 
+
 @@= skipped -15, +15 lines =@@
  >arr.reduce : { (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string): string; (callbackfn: (previousValue: string, currentValue: string, currentIndex: number, array: string[]) => string, initialValue: string): string; <U>(callbackfn: (previousValue: U, currentValue: string, currentIndex: number, array: string[]) => U, initialValue: U): U; } | { (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number): number; (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: number[]) => number, initialValue: number): number; <U>(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: number[]) => U, initialValue: U): U; }
  >arr : string[] | number[]
@@ -26,7 +26,7 @@
 +>(a: number | string, index: number) => {     return index} : (a: string | number, index: number) => number
  >a : string | number
  >index : number
- 
+
 @@= skipped -127, +127 lines =@@
  // note, you must annotate `result` for now
  a.doThing().then((result: Bar | Baz) => {
@@ -41,4 +41,3 @@
 +>then : (<TResult1, TResult2>(onfulfilled?: ((value: Bar) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>) | (<TResult1, TResult2>(onfulfilled?: ((value: Baz) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>)
  >(result: Bar | Baz) => {	// whatever} : (result: Bar | Baz) => void
  >result : Bar | Baz
- 

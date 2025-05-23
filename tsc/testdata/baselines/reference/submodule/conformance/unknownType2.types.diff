@@ -11,4 +11,3 @@
 +>toString : (radix?: number | undefined) => string
  >10 : 10
  }
- 

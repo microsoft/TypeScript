@@ -2,29 +2,29 @@
 +++ new.propertyAccessOnTypeParameterWithConstraints3.symbols
 @@= skipped -6, +6 lines =@@
  >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 0, 0))
- 
+
      foo(): string { return ''; }
 ->foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
  }
- 
+
  class B extends A {
 @@= skipped -8, +8 lines =@@
  >A : Symbol(A, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 0, 0))
- 
+
      bar(): string {
 ->bar : Symbol(B.bar, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 6, 19))
 +>bar : Symbol(bar, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 6, 19))
- 
+
          return '';
      }
 @@= skipped -14, +14 lines =@@
  >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 12, 8))
- 
+
      f() {
 ->f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 12, 35))
 +>f : Symbol(f, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 12, 35))
- 
+
          var x: T;
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 14, 11))
 @@= skipped -10, +10 lines =@@
@@ -33,7 +33,7 @@
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 14, 11))
 ->'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>'foo' : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
          return a + x.foo();
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 16, 11))
 ->x.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
@@ -42,20 +42,20 @@
 ->foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
      }
- 
+
      g(x: U) {
 ->g : Symbol(C.g, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 18, 5))
 +>g : Symbol(g, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 18, 5))
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 20, 6))
  >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 12, 8))
- 
+
 @@= skipped -18, +18 lines =@@
          var a = x['foo'](); // should be string
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 22, 11))
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 20, 6))
 ->'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>'foo' : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
          return a + x.foo();
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 22, 11))
 ->x.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
@@ -65,7 +65,7 @@
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
      }
  }
- 
+
  var r1a = (new C<A, B>()).f();
  >r1a : Symbol(r1a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 27, 3))
 ->(new C<A, B>()).f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 12, 35))
@@ -75,7 +75,7 @@
  >B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 4, 1))
 ->f : Symbol(C.f, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 12, 35))
 +>f : Symbol(f, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 12, 35))
- 
+
  var r1b = (new C<A, B>()).g(new B());
  >r1b : Symbol(r1b, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 28, 3))
 ->(new C<A, B>()).g : Symbol(C.g, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 18, 5))
@@ -86,11 +86,11 @@
 ->g : Symbol(C.g, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 18, 5))
 +>g : Symbol(g, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 18, 5))
  >B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 4, 1))
- 
+
  interface I<U extends A, T extends U> {
 @@= skipped -35, +35 lines =@@
  >U : Symbol(U, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 30, 12))
- 
+
      foo: T;
 ->foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 30, 39))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 30, 39))
@@ -98,7 +98,7 @@
  }
  var i: I<A, B>;
 @@= skipped -11, +11 lines =@@
- 
+
  var r2 = i.foo.foo();
  >r2 : Symbol(r2, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 34, 3))
 ->i.foo.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
@@ -110,7 +110,7 @@
 ->foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 30, 39))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
  var r2b = i.foo['foo']();
  >r2b : Symbol(r2b, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 35, 3))
 ->i.foo : Symbol(I.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 30, 39))
@@ -120,7 +120,7 @@
 ->'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 30, 39))
 +>'foo' : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
  var a: {
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 37, 3))
 @@= skipped -34, +34 lines =@@
@@ -132,13 +132,13 @@
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 37, 3))
 ->foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
  var r3b = a()['foo']();
  >r3b : Symbol(r3b, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 42, 3))
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 37, 3))
 ->'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>'foo' : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
  // parameter supplied for type argument inference for U
  var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred as B, which has a foo
  >r3c : Symbol(r3c, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 44, 3))
@@ -148,14 +148,14 @@
  >B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 4, 1))
 ->foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
  var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferred as B, which has a foo
  >r3d : Symbol(r3d, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 45, 3))
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 37, 3))
  >B : Symbol(B, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 4, 1))
 ->'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>'foo' : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
  var b = {
  >b : Symbol(b, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 47, 3))
 @@= skipped -39, +39 lines =@@
@@ -164,7 +164,7 @@
  >x : Symbol(x, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 48, 36))
 ->'foo' : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
 +>'foo' : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
- 
+
          return a + x.foo();
  >a : Symbol(a, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 50, 11))
 ->x.foo : Symbol(A.foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
@@ -174,4 +174,3 @@
 +>foo : Symbol(foo, Decl(propertyAccessOnTypeParameterWithConstraints3.ts, 2, 9))
      }
  }
- 

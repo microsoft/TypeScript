@@ -1,8 +1,8 @@
 --- old.declFileGenericClassWithGenericExtendedClass.js
 +++ new.declFileGenericClassWithGenericExtendedClass.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [declFileGenericClassWithGenericExtendedClass.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -41,18 +41,20 @@
 -//// [declFileGenericClassWithGenericExtendedClass.d.ts]
 -interface IFoo {
 -    baz: Baz;
-+class Base {
- }
+-}
 -declare class Base<T> {
-+class Derived extends Base {
- }
+-}
 -declare class Derived<T> extends Base<T> {
-+class Baz {
-+    derived;
- }
+-}
 -interface IBar<T> {
 -    derived: Derived<T>;
 -}
 -declare class Baz implements IBar<Baz> {
 -    derived: Derived<Baz>;
--}
++class Base {
++}
++class Derived extends Base {
++}
++class Baz {
++    derived;
+ }

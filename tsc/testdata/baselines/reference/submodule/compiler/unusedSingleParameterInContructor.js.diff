@@ -2,7 +2,7 @@
 +++ new.unusedSingleParameterInContructor.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [unusedSingleParameterInContructor.js]
 -var Dummy = /** @class */ (function () {
 -    function Dummy(person) {

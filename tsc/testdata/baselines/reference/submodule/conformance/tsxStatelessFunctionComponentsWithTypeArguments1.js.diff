@@ -2,7 +2,7 @@
 +++ new.tsxStatelessFunctionComponentsWithTypeArguments1.js
 @@= skipped -32, +32 lines =@@
  let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} />;
- 
+
  //// [file.jsx]
 -define(["require", "exports", "react"], function (require, exports, React) {
 -    "use strict";

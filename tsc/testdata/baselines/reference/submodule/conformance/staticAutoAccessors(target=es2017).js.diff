@@ -1,7 +1,7 @@
 --- old.staticAutoAccessors(target=es2017).js
 +++ new.staticAutoAccessors(target=es2017).js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [staticAutoAccessors.js]
  // https://github.com/microsoft/TypeScript/issues/53752
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {

@@ -10,5 +10,5 @@
 ->getElementById : (elementId: string) => HTMLElement | null
 +>getElementById : (elementId: string) => HTMLElement
  >'content' : "content"
- 
+
  var greeter = new model.Greeter(el);

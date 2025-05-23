@@ -2,7 +2,7 @@
 +++ new.octalIntegerLiteral.js
 @@= skipped -42, +42 lines =@@
  obj2["Infinity"];  // any
- 
+
  //// [octalIntegerLiteral.js]
 -var oct1 = 19230;
 -var oct2 = 19230;

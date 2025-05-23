@@ -2,7 +2,7 @@
 +++ new.emitMethodCalledNew.symbols
 @@= skipped -14, +14 lines =@@
  >b : Symbol(b, Decl(emitMethodCalledNew.ts, 5, 12))
- 
+
    "new"(x: number) { return x + 1 }
 ->"new" : Symbol("new", Decl(emitMethodCalledNew.ts, 5, 18))
 +>"new" : Symbol(new, Decl(emitMethodCalledNew.ts, 5, 18))
@@ -11,7 +11,7 @@
  }
 @@= skipped -8, +8 lines =@@
  >c : Symbol(c, Decl(emitMethodCalledNew.ts, 8, 12))
- 
+
    ["new"](x: number) { return x + 1 }
 ->["new"] : Symbol(["new"], Decl(emitMethodCalledNew.ts, 8, 18))
 ->"new" : Symbol(["new"], Decl(emitMethodCalledNew.ts, 8, 18))

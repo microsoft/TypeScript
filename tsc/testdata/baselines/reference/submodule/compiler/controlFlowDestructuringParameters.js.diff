@@ -1,7 +1,7 @@
 --- old.controlFlowDestructuringParameters.js
 +++ new.controlFlowDestructuringParameters.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [controlFlowDestructuringParameters.js]
  // Repro for #8376
 -[{ x: 1 }].map(function (_a) {

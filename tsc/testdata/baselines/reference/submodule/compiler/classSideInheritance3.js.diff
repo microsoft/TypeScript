@@ -2,7 +2,7 @@
 +++ new.classSideInheritance3.js
 @@= skipped -20, +20 lines =@@
  var r3: typeof A = C; // ok
- 
+
  //// [classSideInheritance3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -34,26 +34,28 @@
 -        var _this = _super.call(this, x) || this;
 -        _this.data = data;
 -        return _this;
-+}
-+class B extends A {
-+    data;
-+    constructor(x, data) {
-+        super(x);
-+        this.data = data;
-     }
+-    }
 -    return B;
 -}(A));
 -var C = /** @class */ (function (_super) {
 -    __extends(C, _super);
 -    function C(x) {
 -        return _super.call(this, x) || this;
+-    }
+-    return C;
+-}(A));
++}
++class B extends A {
++    data;
++    constructor(x, data) {
++        super(x);
++        this.data = data;
++    }
 +}
 +class C extends A {
 +    constructor(x) {
 +        super(x);
-     }
--    return C;
--}(A));
++    }
 +}
  var r1 = B; // error
  var r2 = B; // error

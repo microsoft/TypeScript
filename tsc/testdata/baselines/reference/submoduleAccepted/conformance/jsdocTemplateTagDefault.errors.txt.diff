@@ -12,8 +12,8 @@
 -file.js(60,17): error TS2744: Type parameter defaults can only reference previously declared type parameters.
 +file.js(60,17): error TS2304: Cannot find name 'U'.
 +file.js(61,17): error TS2304: Cannot find name 'T'.
- 
- 
+
+
  ==== file.js (7 errors) ====
      /**
       * @template {string | number} [T=string] - ok: defaults are permitted

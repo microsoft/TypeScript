@@ -2,12 +2,12 @@
 +++ new.tsxStatelessComponentDefaultProps.types
 @@= skipped -11, +11 lines =@@
  }
- 
+
  function BackButton(_props: Props) {
 ->BackButton : typeof BackButton
 +>BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
  >_props : Props
- 
+
      return <div />
 -><div /> : JSX.Element
 +><div /> : Element
@@ -20,9 +20,9 @@
 +>BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
  >defaultProps : { text: string; }
  >{    text: 'Go Back',} : { text: string; }
- 
+
 @@= skipped -20, +20 lines =@@
- 
+
  };
  let a = <BackButton />
 ->a : JSX.Element
@@ -31,4 +31,3 @@
 +>a : Element
 +><BackButton /> : Element
 +>BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
- 

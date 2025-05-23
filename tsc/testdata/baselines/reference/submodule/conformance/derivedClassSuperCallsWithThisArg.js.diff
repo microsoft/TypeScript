@@ -2,7 +2,7 @@
 +++ new.derivedClassSuperCallsWithThisArg.js
 @@= skipped -30, +30 lines =@@
  }
- 
+
  //// [derivedClassSuperCallsWithThisArg.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,14 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base(a) {
-+class Base {
-+    x;
-+    constructor(a) { }
-+}
-+class Derived extends Base {
-+    constructor() {
-+        super(this); // ok
-     }
+-    }
 -    return Base;
 -}());
 -var Derived = /** @class */ (function (_super) {
@@ -36,13 +29,7 @@
 -    function Derived() {
 -        var _this = _super.call(this, _this) || this; // ok
 -        return _this;
-+}
-+class Derived2 extends Base {
-+    a;
-+    constructor(a) {
-+        super(this); // error
-+        this.a = a;
-     }
+-    }
 -    return Derived;
 -}(Base));
 -var Derived2 = /** @class */ (function (_super) {
@@ -51,13 +38,7 @@
 -        var _this = _super.call(this, _this) || this; // error
 -        _this.a = a;
 -        return _this;
-+}
-+class Derived3 extends Base {
-+    a;
-+    constructor(a) {
-+        super(() => this); // error
-+        this.a = a;
-     }
+-    }
 -    return Derived2;
 -}(Base));
 -var Derived3 = /** @class */ (function (_super) {
@@ -66,13 +47,7 @@
 -        var _this = _super.call(this, function () { return _this; }) || this; // error
 -        _this.a = a;
 -        return _this;
-+}
-+class Derived4 extends Base {
-+    a;
-+    constructor(a) {
-+        super(function () { return this; }); // ok
-+        this.a = a;
-     }
+-    }
 -    return Derived3;
 -}(Base));
 -var Derived4 = /** @class */ (function (_super) {
@@ -84,4 +59,33 @@
 -    }
 -    return Derived4;
 -}(Base));
++class Base {
++    x;
++    constructor(a) { }
++}
++class Derived extends Base {
++    constructor() {
++        super(this); // ok
++    }
++}
++class Derived2 extends Base {
++    a;
++    constructor(a) {
++        super(this); // error
++        this.a = a;
++    }
++}
++class Derived3 extends Base {
++    a;
++    constructor(a) {
++        super(() => this); // error
++        this.a = a;
++    }
++}
++class Derived4 extends Base {
++    a;
++    constructor(a) {
++        super(function () { return this; }); // ok
++        this.a = a;
++    }
 +}

@@ -2,7 +2,7 @@
 +++ new.unionExcessPropertyCheckNoApparentPropTypeMismatchErrors.types
 @@= skipped -10, +10 lines =@@
  }
- 
+
  declare function forEach<T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any);
 ->forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
 +>forEach : <T>(from: INumberDictionary<T> | IStringDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
@@ -10,7 +10,7 @@
  >callback : (entry: { key: any; value: T; }, remove: () => void) => any
  >entry : { key: any; value: T; }
 @@= skipped -14, +14 lines =@@
- 
+
  forEach({ toString: 123 }, () => count++);
  >forEach({ toString: 123 }, () => count++) : any
 ->forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any

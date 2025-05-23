@@ -2,7 +2,7 @@
 +++ new.primitiveUnionDetection.types
 @@= skipped -6, +6 lines =@@
  >Kind : Kind
- 
+
  declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
 ->getInterfaceFromString : <T extends Kind>(options?: { type?: T; } & { type?: Kind; }) => T
 ->options : ({ type?: T; } & { type?: Kind; }) | undefined
@@ -10,7 +10,7 @@
 +>options : { type?: T | undefined; } & { type?: Kind | undefined; } | undefined
  >type : T | undefined
  >type : Kind | undefined
- 
+
  const result = getInterfaceFromString({ type: 'two' });
  >result : "two"
  >getInterfaceFromString({ type: 'two' }) : "two"

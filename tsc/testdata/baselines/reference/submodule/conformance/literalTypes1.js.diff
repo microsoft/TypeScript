@@ -2,7 +2,7 @@
 +++ new.literalTypes1.js
 @@= skipped -90, +90 lines =@@
  }
- 
+
  //// [literalTypes1.js]
 -var zero = 0;
 -var one = 1;

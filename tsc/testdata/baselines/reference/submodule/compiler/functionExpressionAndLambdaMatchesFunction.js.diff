@@ -1,8 +1,8 @@
 --- old.functionExpressionAndLambdaMatchesFunction.js
 +++ new.functionExpressionAndLambdaMatchesFunction.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [functionExpressionAndLambdaMatchesFunction.js]
 -var CDoc = /** @class */ (function () {
 -    function CDoc() {

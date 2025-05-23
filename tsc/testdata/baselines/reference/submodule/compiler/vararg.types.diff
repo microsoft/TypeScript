@@ -2,7 +2,7 @@
 +++ new.vararg.types
 @@= skipped -88, +88 lines =@@
  }
- 
+
  var x=new M.C();
 ->x : M.C
 ->new M.C() : M.C
@@ -13,7 +13,7 @@
  >M : typeof M
 ->C : typeof M.C
 +>C : typeof C
- 
+
  var result="";
  >result : string
 @@= skipped -15, +15 lines =@@
@@ -27,7 +27,7 @@
 +>x : C
  >3 : 3
  >3 : 3
- 
+
 @@= skipped -11, +11 lines =@@
  >result : string
  >x.f(3,"hello",3) : string
@@ -54,7 +54,7 @@
 +>x : C
  >f : (x: string, ...rest: number[]) => string
  >"hello" : "hello"
- 
+
 @@= skipped -9, +9 lines =@@
  >result : string
  >x.fonly(3) : any
@@ -63,7 +63,7 @@
 +>x : C
  >fonly : (...rest: string[]) => any
  >3 : 3
- 
+
 @@= skipped -9, +9 lines =@@
  >result : string
  >x.fonly(x) : any
@@ -73,7 +73,7 @@
  >fonly : (...rest: string[]) => any
 ->x : M.C
 +>x : C
- 
+
  result+=x.fonly("a"); // ok 
  >result+=x.fonly("a") : string
  >result : string
@@ -83,7 +83,7 @@
 +>x : C
  >fonly : (...rest: string[]) => any
  >"a" : "a"
- 
+
 @@= skipped -18, +18 lines =@@
  >result : string
  >x.fonly("a","b","c","d") : any

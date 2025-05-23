@@ -1,8 +1,7 @@
 --- old.library-reference-1.errors.txt
 +++ new.library-reference-1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/src/consumer.ts(2,1): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
 +
 +

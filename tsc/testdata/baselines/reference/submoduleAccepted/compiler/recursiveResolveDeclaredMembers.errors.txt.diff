@@ -1,8 +1,7 @@
 --- old.recursiveResolveDeclaredMembers.errors.txt
 +++ new.recursiveResolveDeclaredMembers.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +types.ts(2,9): error TS2304: Cannot find name 'E'.
 +
 +

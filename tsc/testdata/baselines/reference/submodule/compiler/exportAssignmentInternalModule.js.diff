@@ -1,9 +1,9 @@
 --- old.exportAssignmentInternalModule.js
 +++ new.exportAssignmentInternalModule.js
 @@= skipped -11, +11 lines =@@
- 
+
  var n: number = modM.x;
- 
+
 -//// [exportAssignmentInternalModule_A.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

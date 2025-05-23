@@ -1,8 +1,8 @@
 --- old.propertyAccessChain.2.js
 +++ new.propertyAccessChain.2.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [propertyAccessChain.2.js]
 -var _a;
 -o1 === null || o1 === void 0 ? void 0 : o1.b;

@@ -2,10 +2,10 @@
 +++ new.moduleDuplicateIdentifiers.types
 @@= skipped -43, +43 lines =@@
  }
- 
+
  export class Kettle { // Should error
 ->Kettle : import("moduleDuplicateIdentifiers").Kettle
 +>Kettle : Kettle
- 
+
  	member2 = 42;
  >member2 : number

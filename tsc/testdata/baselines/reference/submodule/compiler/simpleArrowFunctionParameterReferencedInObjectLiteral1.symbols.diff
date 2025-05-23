@@ -1,7 +1,7 @@
 --- old.simpleArrowFunctionParameterReferencedInObjectLiteral1.symbols
 +++ new.simpleArrowFunctionParameterReferencedInObjectLiteral1.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === simpleArrowFunctionParameterReferencedInObjectLiteral1.ts ===
  [].map(() => [].map(p => ({ X: p })));
 ->[].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

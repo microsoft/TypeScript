@@ -2,12 +2,12 @@
 +++ new.decoratorOnClass3.es6.types
 @@= skipped -8, +8 lines =@@
  >dec : <T>(target: T) => T
- 
+
  export default class C {
 ->C : C
 +>C : default
  }
- 
+
  let c = new C();
 ->c : C
 ->new C() : C
@@ -15,4 +15,3 @@
 +>c : default
 +>new C() : default
 +>C : typeof default
- 

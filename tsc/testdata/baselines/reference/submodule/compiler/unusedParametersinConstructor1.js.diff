@@ -2,7 +2,7 @@
 +++ new.unusedParametersinConstructor1.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [unusedParametersinConstructor1.js]
 -var greeter = /** @class */ (function () {
 -    function greeter(param1) {

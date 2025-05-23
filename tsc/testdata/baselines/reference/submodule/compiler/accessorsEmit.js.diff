@@ -2,27 +2,16 @@
 +++ new.accessorsEmit.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [accessorsEmit.js]
 -var Result = /** @class */ (function () {
 -    function Result() {
-+class Result {
-+}
-+class Test {
-+    get Property() {
-+        var x = 1;
-+        return null;
-     }
+-    }
 -    return Result;
 -}());
 -var Test = /** @class */ (function () {
 -    function Test() {
-+}
-+class Test2 {
-+    get Property() {
-+        var x = 1;
-+        return null;
-     }
+-    }
 -    Object.defineProperty(Test.prototype, "Property", {
 -        get: function () {
 -            var x = 1;
@@ -46,4 +35,17 @@
 -    });
 -    return Test2;
 -}());
++class Result {
++}
++class Test {
++    get Property() {
++        var x = 1;
++        return null;
++    }
++}
++class Test2 {
++    get Property() {
++        var x = 1;
++        return null;
++    }
 +}

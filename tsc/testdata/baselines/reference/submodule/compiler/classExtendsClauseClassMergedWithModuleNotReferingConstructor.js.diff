@@ -2,7 +2,7 @@
 +++ new.classExtendsClauseClassMergedWithModuleNotReferingConstructor.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [classExtendsClauseClassMergedWithModuleNotReferingConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

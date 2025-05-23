@@ -2,16 +2,16 @@
 +++ new.discriminantUsingEvaluatableTemplateExpression.types
 @@= skipped -15, +15 lines =@@
  >x : number
- 
+
  declare function foo(foo: S | N): void;
 ->foo : (foo: S | N) => void
 +>foo : (foo: N | S) => void
  >foo : N | S
- 
+
  foo({
  >foo({  d: `${"s"}`,  cb: (x) => {    x; // string  },}) : void
 ->foo : (foo: S | N) => void
 +>foo : (foo: N | S) => void
  >{  d: `${"s"}`,  cb: (x) => {    x; // string  },} : { d: "s"; cb: (x: string) => void; }
- 
+
    d: `${"s"}`,

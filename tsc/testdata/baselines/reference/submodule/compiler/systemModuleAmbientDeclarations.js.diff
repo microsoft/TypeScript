@@ -1,8 +1,8 @@
 --- old.systemModuleAmbientDeclarations.js
 +++ new.systemModuleAmbientDeclarations.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [file1.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

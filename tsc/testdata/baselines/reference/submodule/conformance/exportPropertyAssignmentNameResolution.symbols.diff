@@ -11,7 +11,6 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol("bug24492", Decl(bug24492.js, 0, 0))
  >D : Symbol(D, Decl(bug24492.js, 0, 0))
- 
+
  new D()
 +>D : Symbol(D, Decl(bug24492.js, 0, 0))
- 

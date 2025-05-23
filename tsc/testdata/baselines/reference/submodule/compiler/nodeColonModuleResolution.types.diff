@@ -6,7 +6,7 @@
  import * as ph from 'node:ph'
 ->ph : typeof ph
 +>ph : typeof import("node:ph")
- 
+
  console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
  >console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE) : void
 @@= skipped -8, +8 lines =@@
@@ -20,4 +20,3 @@
 +>ph : typeof import("node:ph")
 +>constants : typeof constants
  >NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
- 

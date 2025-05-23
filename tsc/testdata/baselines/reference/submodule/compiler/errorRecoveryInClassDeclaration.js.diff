@@ -2,7 +2,7 @@
 +++ new.errorRecoveryInClassDeclaration.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [errorRecoveryInClassDeclaration.js]
 -var C = /** @class */ (function () {
 -    function C() {

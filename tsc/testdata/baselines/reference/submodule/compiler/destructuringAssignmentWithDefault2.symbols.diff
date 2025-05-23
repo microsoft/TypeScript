@@ -9,7 +9,7 @@
  >r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 19, 13))
 ->next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
 +>next : Symbol(next, Decl(lib.es2015.iterable.d.ts, --, --))
- 
+
  ({ done: done = false, value } = r.next());
  >done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 24, 2))
  >done : Symbol(done, Decl(destructuringAssignmentWithDefault2.ts, 20, 3))
@@ -19,4 +19,3 @@
  >r : Symbol(r, Decl(destructuringAssignmentWithDefault2.ts, 19, 13))
 ->next : Symbol(Iterator.next, Decl(lib.es2015.iterable.d.ts, --, --))
 +>next : Symbol(next, Decl(lib.es2015.iterable.d.ts, --, --))
- 

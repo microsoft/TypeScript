@@ -11,8 +11,8 @@
 +es6modulekindWithES5Target9.ts(5,20): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
 +es6modulekindWithES5Target9.ts(13,15): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
 +es6modulekindWithES5Target9.ts(15,17): error TS2307: Cannot find module 'mod' or its corresponding type declarations.
- 
- 
+
+
  ==== es6modulekindWithES5Target9.ts (5 errors) ====
      import d from "mod";
                    ~~~~~

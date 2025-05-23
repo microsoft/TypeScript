@@ -1,8 +1,8 @@
 --- old.duplicateObjectLiteralProperty_computedName2.js
 +++ new.duplicateObjectLiteralProperty_computedName2.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [duplicateObjectLiteralProperty_computedName2.js]
 -var _a, _b, _c, _d;
 -var n = 1;

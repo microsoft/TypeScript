@@ -1,8 +1,8 @@
 --- old.modifiersInObjectLiterals.js
 +++ new.modifiersInObjectLiterals.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [modifiersInObjectLiterals.js]
 -var data = {
 +let data = {

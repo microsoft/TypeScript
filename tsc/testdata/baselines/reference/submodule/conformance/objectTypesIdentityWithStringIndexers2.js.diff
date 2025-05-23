@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithStringIndexers2.js
 +++ new.objectTypesIdentityWithStringIndexers2.js
 @@= skipped -128, +128 lines =@@
- 
+
  //// [objectTypesIdentityWithStringIndexers2.js]
  // object types are identical structurally
 -var __extends = (this && this.__extends) || (function () {

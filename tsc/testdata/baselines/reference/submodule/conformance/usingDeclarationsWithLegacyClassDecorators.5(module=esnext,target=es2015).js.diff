@@ -2,7 +2,7 @@
 +++ new.usingDeclarationsWithLegacyClassDecorators.5(module=esnext,target=es2015).js
 @@= skipped -13, +13 lines =@@
  export { C };
- 
+
  //// [usingDeclarationsWithLegacyClassDecorators.5.js]
 -export { C };
  var before, C;

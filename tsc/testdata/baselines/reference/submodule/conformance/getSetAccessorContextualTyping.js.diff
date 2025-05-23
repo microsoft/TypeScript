@@ -6,11 +6,7 @@
  // return expressions are contextually typed by the type given in the set accessor's parameter type annotation.
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    set X(x) { }
-+    get X() {
-+        return "string"; // Error; get contextual type by set accessor parameter type annotation
-     }
+-    }
 -    Object.defineProperty(C.prototype, "X", {
 -        get: function () {
 -            return "string"; // Error; get contextual type by set accessor parameter type annotation
@@ -45,6 +41,11 @@
 -    });
 -    return C;
 -}());
++class C {
++    set X(x) { }
++    get X() {
++        return "string"; // Error; get contextual type by set accessor parameter type annotation
++    }
 +    set Y(y) { }
 +    get Y() {
 +        return true;

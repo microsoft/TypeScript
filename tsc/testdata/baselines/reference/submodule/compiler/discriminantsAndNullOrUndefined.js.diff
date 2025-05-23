@@ -2,7 +2,7 @@
 +++ new.discriminantsAndNullOrUndefined.js
 @@= skipped -25, +25 lines =@@
  }
- 
+
  //// [discriminantsAndNullOrUndefined.js]
 -// Repro from #10228
  function never(_) {

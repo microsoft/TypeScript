@@ -2,7 +2,7 @@
 +++ new.thisInStatics.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [thisInStatics.js]
 -var C = /** @class */ (function () {
 -    function C() {

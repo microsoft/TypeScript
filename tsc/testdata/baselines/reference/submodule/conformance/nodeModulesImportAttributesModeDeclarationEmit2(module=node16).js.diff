@@ -1,7 +1,7 @@
 --- old.nodeModulesImportAttributesModeDeclarationEmit2(module=node16).js
 +++ new.nodeModulesImportAttributesModeDeclarationEmit2(module=node16).js
 @@= skipped -33, +33 lines =@@
- 
+
  //// [index.js]
  export {};
 -

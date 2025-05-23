@@ -1,7 +1,7 @@
 --- old.jsDeclarationsTypeReferences2.types
 +++ new.jsDeclarationsTypeReferences2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  const{ a, m } = require("./something").o;
 ->a : number
@@ -16,7 +16,7 @@
  >"./something" : "./something"
 ->o : { a: number; m: number; }
 +>o : any
- 
+
  const thing = a + m
 ->thing : number
 ->a + m : number
@@ -26,7 +26,7 @@
 +>a + m : any
 +>a : any
 +>m : any
- 
+
  module.exports = {
 ->module.exports = {    thing} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -38,10 +38,9 @@
 +>module : { export=: { thing: any; }; }
 +>exports : { thing: any; }
 +>{    thing} : { thing: any; }
- 
+
      thing
 ->thing : number
 +>thing : any
- 
+
  };
- 

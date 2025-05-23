@@ -6,8 +6,8 @@
 -    Type 'new (x: number) => Foo' is not assignable to type 'new () => Foo'.
 -      Target signature provides too few arguments. Expected 1 or more, but got 0.
 +  Target signature provides too few arguments. Expected 1 or more, but got 0.
- 
- 
+
+
  ==== assignmentCompatability44.ts (1 errors) ====
 @@= skipped -11, +9 lines =@@
      const foo: { new(): Foo } = Foo;

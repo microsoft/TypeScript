@@ -1,8 +1,8 @@
 --- old.typeOfThisInStaticMembers9(target=es5).js
 +++ new.typeOfThisInStaticMembers9(target=es5).js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [typeOfThisInStaticMembers9.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -10,15 +10,7 @@
 -            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
 -            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
 -        return extendStatics(d, b);
-+class C {
-+    static f = 1;
-+}
-+class D extends C {
-+    static arrowFunctionBoundary = () => super.f + 1;
-+    static functionExprBoundary = function () { return super.f + 2; };
-+    static classExprBoundary = class {
-+        a = super.f + 3;
-     };
+-    };
 -    return function (d, b) {
 -        if (typeof b !== "function" && b !== null)
 -            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
@@ -47,6 +39,15 @@
 -        return class_1;
 -    }());
 -    D.functionAndClassDeclBoundary = (function () {
++class C {
++    static f = 1;
++}
++class D extends C {
++    static arrowFunctionBoundary = () => super.f + 1;
++    static functionExprBoundary = function () { return super.f + 2; };
++    static classExprBoundary = class {
++        a = super.f + 3;
++    };
 +    static functionAndClassDeclBoundary = (() => {
          function foo() {
 -            return _super.f + 4;

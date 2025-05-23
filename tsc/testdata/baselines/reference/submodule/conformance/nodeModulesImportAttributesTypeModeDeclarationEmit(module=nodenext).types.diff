@@ -1,15 +1,15 @@
 --- old.nodeModulesImportAttributesTypeModeDeclarationEmit(module=nodenext).types
 +++ new.nodeModulesImportAttributesTypeModeDeclarationEmit(module=nodenext).types
 @@= skipped -1, +1 lines =@@
- 
+
  === /index.ts ===
  export type LocalInterface =
 ->LocalInterface : LocalInterface
 +>LocalInterface : any
- 
+
      & import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface
      & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
- 
+
  export const a = (null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface);
 ->a : import("/node_modules/pkg/require").RequireInterface
 ->(null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
@@ -18,7 +18,7 @@
 +>(null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface) : RequireInterface
 +>null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface : RequireInterface
  >null as any : any
- 
+
  export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
 ->b : import("/node_modules/pkg/import").ImportInterface
 ->(null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
@@ -27,10 +27,10 @@
 +>(null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface) : any
 +>null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface : any
  >null as any : any
- 
+
 -=== /node_modules/pkg/import.d.ts ===
 -
 -export interface ImportInterface {}
  === /node_modules/pkg/require.d.ts ===
- 
+
  export interface RequireInterface {}

@@ -1,8 +1,8 @@
 --- old.destructuringParameterDeclaration3ES6.js
 +++ new.destructuringParameterDeclaration3ES6.js
 @@= skipped -47, +47 lines =@@
- 
- 
+
+
  //// [destructuringParameterDeclaration3ES6.js]
 -// If the parameter is a rest parameter, the parameter type is any[]
 -// A type annotation for a rest parameter must denote an array type.

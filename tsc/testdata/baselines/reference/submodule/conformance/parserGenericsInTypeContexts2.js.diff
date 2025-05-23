@@ -1,8 +1,8 @@
 --- old.parserGenericsInTypeContexts2.js
 +++ new.parserGenericsInTypeContexts2.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [parserGenericsInTypeContexts2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

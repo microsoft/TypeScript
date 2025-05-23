@@ -2,7 +2,7 @@
 +++ new.genericCallbacksAndClassHierarchy.js
 @@= skipped -25, +25 lines =@@
  }
- 
+
  //// [genericCallbacksAndClassHierarchy.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

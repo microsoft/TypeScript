@@ -2,7 +2,7 @@
 +++ new.emptyGenericParamList.js
 @@= skipped -4, +4 lines =@@
  var x: I<>;
- 
+
  //// [emptyGenericParamList.js]
 -var I = /** @class */ (function () {
 -    function I() {

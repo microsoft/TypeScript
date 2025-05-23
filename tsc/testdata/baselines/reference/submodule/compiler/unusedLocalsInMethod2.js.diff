@@ -2,7 +2,7 @@
 +++ new.unusedLocalsInMethod2.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [unusedLocalsInMethod2.js]
 -var greeter = /** @class */ (function () {
 -    function greeter() {

@@ -2,7 +2,7 @@
 +++ new.typeofThis.js
 @@= skipped -145, +145 lines =@@
  }
- 
+
  //// [typeofThis.js]
 -"use strict";
 -var Test = /** @class */ (function () {
@@ -43,8 +43,7 @@
  }
  function Test4() {
 -    var x = 1;
-+    let x = 1;
- }
+-}
 -var Test5 = /** @class */ (function () {
 -    function Test5() {
 -        this.no = 1;
@@ -55,6 +54,8 @@
 -    }
 -    return Test5;
 -}());
++    let x = 1;
++}
 +class Test5 {
 +    no = 1;
 +    f = () => {
@@ -120,7 +121,7 @@
 -}());
 -var Test9D1 = /** @class */ (function () {
 -    function Test9D1() {
-     }
+-    }
 -    Test9D1.prototype.f1 = function () { };
 -    return Test9D1;
 -}());
@@ -135,6 +136,7 @@
 -    }
 -    Test10.prototype.foo = function () {
 -        var a = undefined;
++    }
 +}
 +class Test9D1 {
 +    f1() { }
@@ -180,10 +182,11 @@
 -}());
 -var Tests12 = /** @class */ (function () {
 -    function Tests12() {
-     }
+-    }
 -    Tests12.prototype.test1 = function () {
 -    };
 -    Tests12.prototype.test2 = function () {
++    }
 +}
 +class Tests12 {
 +    test1() {

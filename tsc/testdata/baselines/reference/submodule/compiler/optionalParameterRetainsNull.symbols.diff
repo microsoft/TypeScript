@@ -8,6 +8,6 @@
 ->foo : Symbol(Bar.foo, Decl(optionalParameterRetainsNull.ts, 0, 29))
 +>bar : Symbol(bar, Decl(optionalParameterRetainsNull.ts, 0, 15))
 +>foo : Symbol(foo, Decl(optionalParameterRetainsNull.ts, 0, 29))
- 
+
  let a = {
  >a : Symbol(a, Decl(optionalParameterRetainsNull.ts, 2, 3))

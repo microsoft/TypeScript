@@ -1,7 +1,7 @@
 --- old.jsDeclarationsExportAssignedClassExpression.types
 +++ new.jsDeclarationsExportAssignedClassExpression.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  module.exports = class Thing {
 ->module.exports = class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
@@ -16,11 +16,11 @@
 +>exports : typeof Thing
 +>class Thing {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof Thing
 +>Thing : typeof Thing
- 
+
      /**
       * @param {number} p
 @@= skipped -15, +15 lines =@@
- 
+
          this.t = 12 + p;
  >this.t = 12 + p : number
 ->this.t : any

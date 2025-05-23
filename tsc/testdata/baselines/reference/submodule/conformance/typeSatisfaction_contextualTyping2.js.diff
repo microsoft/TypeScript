@@ -1,8 +1,8 @@
 --- old.typeSatisfaction_contextualTyping2.js
 +++ new.typeSatisfaction_contextualTyping2.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [typeSatisfaction_contextualTyping2.js]
 -"use strict";
 -var obj = {

@@ -2,7 +2,7 @@
 +++ new.propertyNamedPrototype.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [propertyNamedPrototype.js]
 -var C = /** @class */ (function () {
 -    function C() {

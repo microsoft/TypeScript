@@ -1,8 +1,8 @@
 --- old.classConstructorParametersAccessibility.js
 +++ new.classConstructorParametersAccessibility.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [classConstructorParametersAccessibility.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

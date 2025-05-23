@@ -2,7 +2,7 @@
 +++ new.numericNamedPropertyDuplicates.js
 @@= skipped -23, +23 lines =@@
  }
- 
+
  //// [numericNamedPropertyDuplicates.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,8 +1,8 @@
 --- old.destructuringObjectBindingPatternAndAssignment8(target=es5).js
 +++ new.destructuringObjectBindingPatternAndAssignment8(target=es5).js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [destructuringObjectBindingPatternAndAssignment8.js]
 -var K = {
 +const K = {

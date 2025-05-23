@@ -1,8 +1,8 @@
 --- old.parentheses.js
 +++ new.parentheses.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [parentheses.js]
 -var _a;
 -(o1)(o1 !== null && o1 !== void 0 ? o1 : 1);

@@ -1,8 +1,8 @@
 --- old.classStaticBlock24(module=amd).js
 +++ new.classStaticBlock24(module=amd).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [classStaticBlock24.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

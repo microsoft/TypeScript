@@ -11,7 +11,7 @@
 +  The last overload gave the following error.
      Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
        Index signature for type 'string' is missing in type '(string | number | boolean)[]'.
- 
+
 @@= skipped -34, +30 lines =@@
      var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
      

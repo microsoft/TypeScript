@@ -1,8 +1,8 @@
 --- old.genericObjectRest.js
 +++ new.genericObjectRest.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [genericObjectRest.js]
 -"use strict";
 -var __rest = (this && this.__rest) || function (s, e) {

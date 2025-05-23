@@ -2,7 +2,7 @@
 +++ new.invalidVoidValues.types
 @@= skipped -58, +58 lines =@@
  >b : I
- 
+
  x = { f() {} }
 ->x = { f() {} } : { f(): void; }
 +>x = { f() {} } : { f: () => void; }
@@ -10,5 +10,5 @@
 ->{ f() {} } : { f(): void; }
 +>{ f() {} } : { f: () => void; }
  >f : () => void
- 
+
  module M { export var x = 1; }

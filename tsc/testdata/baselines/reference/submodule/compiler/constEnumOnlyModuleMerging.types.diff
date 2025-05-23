@@ -2,13 +2,13 @@
 +++ new.constEnumOnlyModuleMerging.types
 @@= skipped -18, +18 lines =@@
  >B : typeof B
- 
+
      import O = Outer;
 ->O : typeof O
 ->Outer : typeof O
 +>O : typeof Outer
 +>Outer : typeof Outer
- 
+
      var x = O.A.X;
 ->x : O.A
 ->O.A.X : O.A
@@ -22,7 +22,7 @@
 +>O : typeof Outer
 +>A : typeof A
 +>X : A
- 
+
      var y = O.x;
  >y : number
  >O.x : number

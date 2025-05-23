@@ -1,8 +1,8 @@
 --- old.narrowingAssignmentReadonlyRespectsAssertion.js
 +++ new.narrowingAssignmentReadonlyRespectsAssertion.js
 @@= skipped -42, +42 lines =@@
- 
- 
+
+
  //// [narrowingAssignmentReadonlyRespectsAssertion.js]
 -// https://github.com/microsoft/TypeScript/issues/41984
  function subDataFunc() {

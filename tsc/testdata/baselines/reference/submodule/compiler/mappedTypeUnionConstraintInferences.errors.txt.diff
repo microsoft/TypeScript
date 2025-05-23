@@ -1,6 +1,6 @@
 --- old.mappedTypeUnionConstraintInferences.errors.txt
 +++ new.mappedTypeUnionConstraintInferences.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5102: Option 'keyofStringsOnly' has been removed. Please remove it from your configuration.
 -
 -
@@ -24,5 +24,4 @@
 -    export let b = doSomething_Expected({ prop: "test" });
 -    b = {} // fine
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

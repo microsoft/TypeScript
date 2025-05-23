@@ -2,7 +2,7 @@
 +++ new.genericConstraint1.js
 @@= skipped -10, +10 lines =@@
  x.bar2<string>(2, "");
- 
+
  //// [genericConstraint1.js]
 -var C = /** @class */ (function () {
 -    function C() {

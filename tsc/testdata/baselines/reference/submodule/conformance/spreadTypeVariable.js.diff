@@ -1,8 +1,8 @@
 --- old.spreadTypeVariable.js
 +++ new.spreadTypeVariable.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [spreadTypeVariable.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

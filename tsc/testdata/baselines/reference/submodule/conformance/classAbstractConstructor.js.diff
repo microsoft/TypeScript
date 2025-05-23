@@ -2,7 +2,7 @@
 +++ new.classAbstractConstructor.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [classAbstractConstructor.js]
 -var A = /** @class */ (function () {
 -    function A() {

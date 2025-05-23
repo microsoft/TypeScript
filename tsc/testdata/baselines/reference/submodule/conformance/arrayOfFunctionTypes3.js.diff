@@ -1,7 +1,7 @@
 --- old.arrayOfFunctionTypes3.js
 +++ new.arrayOfFunctionTypes3.js
 @@= skipped -29, +29 lines =@@
- 
+
  //// [arrayOfFunctionTypes3.js]
  // valid uses of arrays of function types
 -var x = [function () { return 1; }, function () { }];

@@ -1,7 +1,7 @@
 --- old.discriminableUnionWithIntersectedMembers.js
 +++ new.discriminableUnionWithIntersectedMembers.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [discriminableUnionWithIntersectedMembers.js]
  // error
 -var x = 4;

@@ -10,7 +10,7 @@
  >my : typeof my
  >div : any
 @@= skipped -8, +8 lines =@@
- 
+
  // Error
  <my.other />;
 -><my.other /> : JSX.Element
@@ -20,13 +20,13 @@
  >other : any
 @@= skipped -9, +9 lines =@@
  >q : typeof q
- 
+
      import mine = my;
 ->mine : typeof mine
 ->my : typeof mine
 +>mine : typeof my
 +>my : typeof my
- 
+
      // OK
      <mine.div n='x' />;
 -><mine.div n='x' /> : JSX.Element
@@ -36,7 +36,7 @@
 +>mine : typeof my
  >div : any
  >n : string
- 
+
      // Error
      <mine.non />;
 -><mine.non /> : JSX.Element
@@ -46,4 +46,3 @@
 +>mine : typeof my
  >non : any
  }
- 

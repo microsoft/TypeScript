@@ -1,7 +1,7 @@
 --- old.constructorsWithSpecializedSignatures.js
 +++ new.constructorsWithSpecializedSignatures.js
 @@= skipped -46, +46 lines =@@
- 
+
  //// [constructorsWithSpecializedSignatures.js]
  // errors
 -var D = /** @class */ (function () {

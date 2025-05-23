@@ -2,7 +2,7 @@
 +++ new.getAndSetNotIdenticalType.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [getAndSetNotIdenticalType.js]
 -var C = /** @class */ (function () {
 -    function C() {

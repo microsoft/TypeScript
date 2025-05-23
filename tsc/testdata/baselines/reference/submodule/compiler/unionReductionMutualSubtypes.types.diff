@@ -1,16 +1,16 @@
 --- old.unionReductionMutualSubtypes.types
 +++ new.unionReductionMutualSubtypes.types
 @@= skipped -9, +9 lines =@@
- 
+
  const k: ReturnVal = { something() { } }
  >k : ReturnVal
 ->{ something() { } } : { something(): void; }
 +>{ something() { } } : { something: () => void; }
  >something : () => void
- 
+
  declare const val: ReturnVal;
  >val : ReturnVal
- 
+
  function run(options: { something?(b?: string): void }) {
 ->run : (options: { something?(b?: string): void; }) => void
 ->options : { something?(b?: string): void; }
@@ -19,7 +19,7 @@
 +>options : { something?: ((b?: string | undefined) => void) | undefined; }
 +>something : ((b?: string | undefined) => void) | undefined
  >b : string | undefined
- 
+
      const something = options.something ?? val.something;
 ->something : (b?: string) => void
 ->options.something ?? val.something : (b?: string) => void
@@ -34,11 +34,10 @@
  >val.something : () => void
  >val : ReturnVal
  >something : () => void
- 
+
      something('');
  >something('') : void
 ->something : (b?: string) => void
 +>something : (b?: string | undefined) => void
  >'' : ""
  }
- 

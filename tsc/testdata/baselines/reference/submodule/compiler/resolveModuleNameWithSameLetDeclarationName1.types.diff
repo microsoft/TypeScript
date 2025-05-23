@@ -2,9 +2,8 @@
 +++ new.resolveModuleNameWithSameLetDeclarationName1.types
 @@= skipped -8, +8 lines =@@
  }
- 
+
  let foo: foo.Bar; 
 ->foo : foo.Bar
 +>foo : Bar
  >foo : any
- 

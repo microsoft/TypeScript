@@ -1,12 +1,12 @@
 --- old.pathMappingBasedModuleResolution4_classic.types
 +++ new.pathMappingBasedModuleResolution4_classic.types
 @@= skipped -1, +1 lines =@@
- 
+
  === c:/root/folder1/file1.ts ===
  import {x} from "folder2/file2"
 ->x : number
 +>x : any
- 
+
  declare function use(a: any): void;
  >use : (a: any) => void
 @@= skipped -9, +9 lines =@@
@@ -21,18 +21,18 @@
 +>x.toExponential : any
 +>x : any
 +>toExponential : any
- 
+
  === c:/root/folder2/file2.ts ===
  import {x as a} from "./file3"  // found with baseurl
 @@= skipped -11, +11 lines =@@
  >a : number
- 
+
  import {y as b} from "file4"    // found with fallback
 ->y : number
 ->b : number
 +>y : any
 +>b : any
- 
+
  export var x = a + b;
 ->x : number
 ->a + b : number
@@ -41,14 +41,13 @@
  >a : number
 ->b : number
 +>b : any
- 
+
  === c:/root/folder2/file3.ts ===
  export var x = 1;
  >x : number
  >1 : 1
- 
+-
 -=== c:/file4.ts ===
 -export var y = 100;
 ->y : number
 ->100 : 100
--

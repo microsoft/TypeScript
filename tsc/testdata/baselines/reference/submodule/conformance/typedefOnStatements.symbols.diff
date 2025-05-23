@@ -2,7 +2,7 @@
 +++ new.typedefOnStatements.symbols
 @@= skipped -97, +97 lines =@@
  >q : Symbol(q, Decl(typedefOnStatements.js, 70, 48))
- 
+
      console.log(a.a, b.b, c.c, d.d, e.e, f.f, g.g, h.h, i.i, j.j, k.k, l.l, m.m, n.n, o.o, p.p, q.q)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))

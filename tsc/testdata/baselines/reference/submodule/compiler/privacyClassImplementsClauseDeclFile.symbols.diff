@@ -1,7 +1,7 @@
 --- old.privacyClassImplementsClauseDeclFile.symbols
 +++ new.privacyClassImplementsClauseDeclFile.symbols
 @@= skipped -30, +30 lines =@@
- 
+
      class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
  >privateClassImplementingFromPrivateModuleInterface : Symbol(privateClassImplementingFromPrivateModuleInterface, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 14, 5))
 ->privateModule.publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 25, 22))
@@ -18,10 +18,10 @@
 ->publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 25, 22))
 +>publicInterfaceInPrivateModule : Symbol(publicInterfaceInPrivateModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 25, 22))
      }
- 
+
      export class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
 @@= skipped -89, +89 lines =@@
- 
+
  class privateClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
  >privateClassImplementingFromPrivateModuleInterface : Symbol(privateClassImplementingFromPrivateModuleInterface, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 62, 1))
 ->privateModule.publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 25, 22))
@@ -38,5 +38,5 @@
 ->publicInterfaceInPrivateModule : Symbol(privateModule.publicInterfaceInPrivateModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 25, 22))
 +>publicInterfaceInPrivateModule : Symbol(publicInterfaceInPrivateModule, Decl(privacyClassImplementsClauseDeclFile_externalModule.ts, 25, 22))
  }
- 
+
  === privacyClassImplementsClauseDeclFile_GlobalFile.ts ===

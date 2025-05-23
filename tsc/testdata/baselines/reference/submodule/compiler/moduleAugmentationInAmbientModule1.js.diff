@@ -1,7 +1,7 @@
 --- old.moduleAugmentationInAmbientModule1.js
 +++ new.moduleAugmentationInAmbientModule1.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [main.js]
  "use strict";
 -/// <reference path="O.d.ts" />

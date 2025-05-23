@@ -2,7 +2,7 @@
 +++ new.genericIndexedAccessMethodIntersectionCanBeAccessed.types
 @@= skipped -42, +42 lines =@@
  >key : string
- 
+
          const method = (ServiceCtr)[key as keyof T];
 ->method : (ExtendedService<T> & Service<T>)[keyof T]
 ->(ServiceCtr)[key as keyof T] : (ExtendedService<T> & Service<T>)[keyof T]
@@ -17,6 +17,6 @@
  >id : string | undefined
 ->method : (ExtendedService<T> & Service<T>)[keyof T]
 +>method : ExtendedService<T> & Service<T>[keyof T]
- 
+
      })
  }

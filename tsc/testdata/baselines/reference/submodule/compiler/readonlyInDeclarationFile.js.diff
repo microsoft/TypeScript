@@ -2,7 +2,7 @@
 +++ new.readonlyInDeclarationFile.js
 @@= skipped -55, +55 lines =@@
  }
- 
+
  //// [readonlyInDeclarationFile.js]
 -var C = /** @class */ (function () {
 -    function C() {

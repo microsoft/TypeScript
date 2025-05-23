@@ -1,7 +1,7 @@
 --- old.isolatedModulesImportExportElision.js
 +++ new.isolatedModulesImportExportElision.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [file1.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

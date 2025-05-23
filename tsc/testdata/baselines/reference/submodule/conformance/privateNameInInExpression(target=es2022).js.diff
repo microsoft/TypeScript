@@ -1,8 +1,8 @@
 --- old.privateNameInInExpression(target=es2022).js
 +++ new.privateNameInInExpression(target=es2022).js
 @@= skipped -118, +118 lines =@@
- 
- 
+
+
  //// [privateNameInInExpression.js]
 -"use strict";
  class Foo {

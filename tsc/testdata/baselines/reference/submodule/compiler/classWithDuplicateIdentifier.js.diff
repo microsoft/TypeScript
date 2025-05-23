@@ -1,8 +1,8 @@
 --- old.classWithDuplicateIdentifier.js
 +++ new.classWithDuplicateIdentifier.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [classWithDuplicateIdentifier.js]
 -var C = /** @class */ (function () {
 -    function C() {

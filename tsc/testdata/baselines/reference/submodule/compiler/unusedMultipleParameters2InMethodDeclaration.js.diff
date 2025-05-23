@@ -2,7 +2,7 @@
 +++ new.unusedMultipleParameters2InMethodDeclaration.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [unusedMultipleParameters2InMethodDeclaration.js]
 -var Dummy = /** @class */ (function () {
 -    function Dummy() {

@@ -2,7 +2,7 @@
 +++ new.mapOnTupleTypes02.symbols
 @@= skipped -9, +9 lines =@@
  >Point : Symbol(Point, Decl(mapOnTupleTypes02.ts, 0, 0))
- 
+
    return point.map(d => d + 1);
 ->point.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 +>point.map : Symbol(map, Decl(lib.es5.d.ts, --, --))

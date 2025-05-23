@@ -1,8 +1,8 @@
 --- old.constEnums.js
 +++ new.constEnums.js
 @@= skipped -180, +180 lines =@@
- 
- 
+
+
  //// [constEnums.js]
 +var Enum1;
 +(function (Enum1) {

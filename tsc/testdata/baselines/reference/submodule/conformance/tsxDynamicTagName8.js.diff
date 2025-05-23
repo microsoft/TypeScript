@@ -1,7 +1,7 @@
 --- old.tsxDynamicTagName8.js
 +++ new.tsxDynamicTagName8.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [app.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

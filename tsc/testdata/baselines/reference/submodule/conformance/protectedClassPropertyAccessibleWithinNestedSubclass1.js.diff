@@ -2,7 +2,7 @@
 +++ new.protectedClassPropertyAccessibleWithinNestedSubclass1.js
 @@= skipped -116, +116 lines =@@
  d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
- 
+
  //// [protectedClassPropertyAccessibleWithinNestedSubclass1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

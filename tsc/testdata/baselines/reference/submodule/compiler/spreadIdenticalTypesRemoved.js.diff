@@ -1,8 +1,8 @@
 --- old.spreadIdenticalTypesRemoved.js
 +++ new.spreadIdenticalTypesRemoved.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [spreadIdenticalTypesRemoved.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

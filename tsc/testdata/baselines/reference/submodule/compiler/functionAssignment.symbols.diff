@@ -2,7 +2,7 @@
 +++ new.functionAssignment.symbols
 @@= skipped -12, +12 lines =@@
  >foo : Symbol(foo, Decl(functionAssignment.ts, 1, 19))
- 
+
      get(handler: (bar: number)=>void): void;
 ->get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
 +>get : Symbol(get, Decl(functionAssignment.ts, 3, 15))
@@ -11,7 +11,7 @@
  }
 @@= skipped -9, +9 lines =@@
  >baz : Symbol(baz, Decl(functionAssignment.ts, 5, 1))
- 
+
      get(callback: Function): number;
 ->get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
 +>get : Symbol(get, Decl(functionAssignment.ts, 7, 15))
@@ -20,7 +20,7 @@
  }
 @@= skipped -14, +14 lines =@@
  >foo : Symbol(foo, Decl(functionAssignment.ts, 1, 19))
- 
+
  test.get(function (param) {
 ->test.get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
 +>test.get : Symbol(get, Decl(functionAssignment.ts, 3, 15))
@@ -28,7 +28,7 @@
 ->get : Symbol(foo.get, Decl(functionAssignment.ts, 3, 15))
 +>get : Symbol(get, Decl(functionAssignment.ts, 3, 15))
  >param : Symbol(param, Decl(functionAssignment.ts, 14, 19))
- 
+
      var x = barbaz.get(function () { });
  >x : Symbol(x, Decl(functionAssignment.ts, 15, 7))
 ->barbaz.get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
@@ -36,6 +36,5 @@
  >barbaz : Symbol(barbaz, Decl(functionAssignment.ts, 11, 3))
 ->get : Symbol(baz.get, Decl(functionAssignment.ts, 7, 15))
 +>get : Symbol(get, Decl(functionAssignment.ts, 7, 15))
- 
+
  });
- 

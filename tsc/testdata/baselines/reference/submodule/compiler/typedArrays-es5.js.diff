@@ -1,8 +1,8 @@
 --- old.typedArrays-es5.js
 +++ new.typedArrays-es5.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [typedArrays-es5.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

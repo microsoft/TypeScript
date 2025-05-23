@@ -19,7 +19,7 @@
 +  Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
  index.tsx(24,42): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
  index.tsx(24,48): error TS2741: Property '__domBrand' is missing in type 'import("renderer2").predom.JSX.Element' but required in type 'import("renderer").dom.JSX.Element'.
- 
+
 @@= skipped -105, +102 lines =@@
      const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
                           ~~~~~

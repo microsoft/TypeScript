@@ -1,8 +1,8 @@
 --- old.override3.js
 +++ new.override3.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [override3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -52,24 +52,15 @@
 -declare class B {
 -    foo(): void;
 -    bar(): void;
-+class DB extends B {
-+    foo() { }
-+    bar() { }
- }
+-}
 -declare class D extends B {
 -    foo(): void;
 -    bar(): void;
-+class DD extends D {
-+    foo() { }
-+    bar() { }
- }
+-}
 -declare class DB extends B {
 -    foo(): void;
 -    bar(): void;
-+class EB extends D {
-+    foo() { }
-+    bar() { }
- }
+-}
 -declare class DD extends D {
 -    foo(): void;
 -    bar(): void;
@@ -77,4 +68,15 @@
 -declare class EB extends D {
 -    foo(): void;
 -    bar(): void;
--}
++class DB extends B {
++    foo() { }
++    bar() { }
++}
++class DD extends D {
++    foo() { }
++    bar() { }
++}
++class EB extends D {
++    foo() { }
++    bar() { }
+ }

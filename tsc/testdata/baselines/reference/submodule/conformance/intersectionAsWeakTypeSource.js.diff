@@ -1,8 +1,8 @@
 --- old.intersectionAsWeakTypeSource.js
 +++ new.intersectionAsWeakTypeSource.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [intersectionAsWeakTypeSource.js]
 -var xy = { x: 'x', y: 10 };
 -var z1 = xy; // error, {xy} doesn't overlap with {z}

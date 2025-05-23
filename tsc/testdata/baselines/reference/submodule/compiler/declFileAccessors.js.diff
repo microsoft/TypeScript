@@ -84,9 +84,54 @@
 -    });
 -    return c1;
 -}());
--exports.c1 = c1;
--//// [declFileAccessors_1.js]
--/** This is comment for c2 - the global class*/
++class c1 {
++    /** getter property*/
++    get p3() {
++        return 10;
++    }
++    /** setter property*/
++    set p3(/** this is value*/ value) {
++    }
++    /** private getter property*/
++    get pp3() {
++        return 10;
++    }
++    /** private setter property*/
++    set pp3(/** this is value*/ value) {
++    }
++    /** static getter property*/
++    static get s3() {
++        return 10;
++    }
++    /** setter property*/
++    static set s3(/** this is value*/ value) {
++    }
++    get nc_p3() {
++        return 10;
++    }
++    set nc_p3(value) {
++    }
++    get nc_pp3() {
++        return 10;
++    }
++    set nc_pp3(value) {
++    }
++    static get nc_s3() {
++        return "";
++    }
++    static set nc_s3(value) {
++    }
++    // Only getter property
++    get onlyGetter() {
++        return 10;
++    }
++    // Only setter property
++    set onlySetter(value) {
++    }
++}
+ exports.c1 = c1;
+ //// [declFileAccessors_1.js]
+ /** This is comment for c2 - the global class*/
 -var c2 = /** @class */ (function () {
 -    function c2() {
 -    }
@@ -172,31 +217,17 @@
 -//// [declFileAccessors_0.d.ts]
 -/** This is comment for c1*/
 -export declare class c1 {
-+class c1 {
-     /** getter property*/
+-    /** getter property*/
 -    get p3(): number;
-+    get p3() {
-+        return 10;
-+    }
-     /** setter property*/
+-    /** setter property*/
 -    set p3(/** this is value*/ value: number);
-+    set p3(/** this is value*/ value) {
-+    }
-     /** private getter property*/
+-    /** private getter property*/
 -    private get pp3();
-+    get pp3() {
-+        return 10;
-+    }
-     /** private setter property*/
+-    /** private setter property*/
 -    private set pp3(value);
-+    set pp3(/** this is value*/ value) {
-+    }
-     /** static getter property*/
+-    /** static getter property*/
 -    static get s3(): number;
-+    static get s3() {
-+        return 10;
-+    }
-     /** setter property*/
+-    /** setter property*/
 -    static set s3(/** this is value*/ value: number);
 -    get nc_p3(): number;
 -    set nc_p3(value: number);
@@ -206,61 +237,21 @@
 -    static set nc_s3(value: string);
 -    get onlyGetter(): number;
 -    set onlySetter(value: number);
-+    static set s3(/** this is value*/ value) {
-+    }
-+    get nc_p3() {
-+        return 10;
-+    }
-+    set nc_p3(value) {
-+    }
-+    get nc_pp3() {
-+        return 10;
-+    }
-+    set nc_pp3(value) {
-+    }
-+    static get nc_s3() {
-+        return "";
-+    }
-+    static set nc_s3(value) {
-+    }
-+    // Only getter property
-+    get onlyGetter() {
-+        return 10;
-+    }
-+    // Only setter property
-+    set onlySetter(value) {
-+    }
- }
+-}
 -//// [declFileAccessors_1.d.ts]
-+exports.c1 = c1;
-+//// [declFileAccessors_1.js]
- /** This is comment for c2 - the global class*/
+-/** This is comment for c2 - the global class*/
 -declare class c2 {
-+class c2 {
-     /** getter property*/
+-    /** getter property*/
 -    get p3(): number;
-+    get p3() {
-+        return 10;
-+    }
-     /** setter property*/
+-    /** setter property*/
 -    set p3(/** this is value*/ value: number);
-+    set p3(/** this is value*/ value) {
-+    }
-     /** private getter property*/
+-    /** private getter property*/
 -    private get pp3();
-+    get pp3() {
-+        return 10;
-+    }
-     /** private setter property*/
+-    /** private setter property*/
 -    private set pp3(value);
-+    set pp3(/** this is value*/ value) {
-+    }
-     /** static getter property*/
+-    /** static getter property*/
 -    static get s3(): number;
-+    static get s3() {
-+        return 10;
-+    }
-     /** setter property*/
+-    /** setter property*/
 -    static set s3(/** this is value*/ value: number);
 -    get nc_p3(): number;
 -    set nc_p3(value: number);
@@ -270,6 +261,26 @@
 -    static set nc_s3(value: string);
 -    get onlyGetter(): number;
 -    set onlySetter(value: number);
++class c2 {
++    /** getter property*/
++    get p3() {
++        return 10;
++    }
++    /** setter property*/
++    set p3(/** this is value*/ value) {
++    }
++    /** private getter property*/
++    get pp3() {
++        return 10;
++    }
++    /** private setter property*/
++    set pp3(/** this is value*/ value) {
++    }
++    /** static getter property*/
++    static get s3() {
++        return 10;
++    }
++    /** setter property*/
 +    static set s3(/** this is value*/ value) {
 +    }
 +    get nc_p3() {

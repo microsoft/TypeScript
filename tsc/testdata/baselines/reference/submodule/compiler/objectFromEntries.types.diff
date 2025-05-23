@@ -24,7 +24,7 @@
  >new URLSearchParams() : URLSearchParams
 ->URLSearchParams : { new (init?: string[][] | Record<string, string> | string | URLSearchParams): URLSearchParams; prototype: URLSearchParams; }
 +>URLSearchParams : { new (init?: string | string[][] | Record<string, string> | URLSearchParams): URLSearchParams; prototype: URLSearchParams; }
- 
+
  const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
  >o3 : { [k: string]: string; }
  >Object.fromEntries(new Map([[Symbol("key"), "value"]])) : { [k: string]: string; }
@@ -58,7 +58,7 @@
 ->fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 +>fromEntries : { <T>(entries: Iterable<readonly [PropertyKey, T], any, any>): { [k: string]: T; }; (entries: Iterable<readonly any[], any, any>): any; }
  >frozenArray : readonly (string | number)[][]
- 
+
  const frozenArray2: readonly [string, number][] = Object.freeze([['a', 1], ['b', 2], ['c', 3]]);
  >frozenArray2 : readonly [string, number][]
  >Object.freeze([['a', 1], ['b', 2], ['c', 3]]) : readonly [string, number][]
@@ -80,4 +80,3 @@
 ->fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 +>fromEntries : { <T>(entries: Iterable<readonly [PropertyKey, T], any, any>): { [k: string]: T; }; (entries: Iterable<readonly any[], any, any>): any; }
  >frozenArray2 : readonly [string, number][]
- 

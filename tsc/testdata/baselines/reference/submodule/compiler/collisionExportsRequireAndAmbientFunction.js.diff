@@ -2,7 +2,7 @@
 +++ new.collisionExportsRequireAndAmbientFunction.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [collisionExportsRequireAndAmbientFunction.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

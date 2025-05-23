@@ -1,6 +1,6 @@
 --- old.arrayFakeFlatNoCrashInferenceDeclarations.errors.txt
 +++ new.arrayFakeFlatNoCrashInferenceDeclarations.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -arrayFakeFlatNoCrashInferenceDeclarations.ts(13,10): error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 -
 -
@@ -22,5 +22,4 @@
 -!!! error TS5088: The inferred type of 'foo' references a type with a cyclic structure which cannot be trivially serialized. A type annotation is necessary.
 -        return flat(arr, depth);
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

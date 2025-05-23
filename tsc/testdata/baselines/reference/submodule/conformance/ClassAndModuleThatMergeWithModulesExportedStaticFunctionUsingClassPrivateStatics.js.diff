@@ -1,8 +1,8 @@
 --- old.ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.js
 +++ new.ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.js]
 -var clodule = /** @class */ (function () {
 -    function clodule() {

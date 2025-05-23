@@ -6,6 +6,6 @@
  >a : Symbol(a, Decl(internalAliasFunctionInsideLocalModuleWithoutExport.ts, 0, 0))
 ->foo : Symbol(b, Decl(internalAliasFunctionInsideLocalModuleWithoutExport.ts, 0, 17))
 +>foo : Symbol(foo, Decl(internalAliasFunctionInsideLocalModuleWithoutExport.ts, 0, 17))
- 
+
      var bVal = b(10);
  >bVal : Symbol(bVal, Decl(internalAliasFunctionInsideLocalModuleWithoutExport.ts, 8, 7))

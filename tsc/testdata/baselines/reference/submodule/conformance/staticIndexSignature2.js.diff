@@ -2,7 +2,7 @@
 +++ new.staticIndexSignature2.js
 @@= skipped -13, +13 lines =@@
  const bar = C[42] 
- 
+
  //// [staticIndexSignature2.js]
 -var C = /** @class */ (function () {
 -    function C() {

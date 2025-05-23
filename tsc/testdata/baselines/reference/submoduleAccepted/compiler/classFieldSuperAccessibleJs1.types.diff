@@ -10,7 +10,7 @@
 ->blah2 : number
 +>blah2 : any
  >456 : 456
- 
+
  class D extends C {
 @@= skipped -24, +24 lines =@@
  >console.log : (...data: any[]) => void
@@ -23,4 +23,3 @@
 +>blah2 : any
    }
  }
- 

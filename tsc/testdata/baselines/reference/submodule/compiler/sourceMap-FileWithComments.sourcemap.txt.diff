@@ -107,7 +107,7 @@
  1->Emitted(5, 5) Source(10, 5) + SourceIndex(0)
 +2 >Emitted(5, 11) Source(10, 18) + SourceIndex(0)
 +3 >Emitted(5, 16) Source(10, 23) + SourceIndex(0)
- ---
++---
 +>>>        x;
 +1 >^^^^^^^^
 +2 >        ^
@@ -127,7 +127,7 @@
 +2 >        y
 +1->Emitted(7, 9) Source(12, 46) + SourceIndex(0)
 +2 >Emitted(7, 10) Source(12, 47) + SourceIndex(0)
-+---
+ ---
  >>>        // Constructor
  1->^^^^^^^^
  2 >        ^^^^^^^^^^^^^^
@@ -481,6 +481,17 @@
 -9 >Emitted(14, 38) Source(18, 39) + SourceIndex(0)
 -10>Emitted(14, 39) Source(18, 40) + SourceIndex(0)
 -11>Emitted(14, 40) Source(18, 41) + SourceIndex(0)
+----
+->>>        return Point;
+-1 >^^^^^^^^
+-2 >        ^^^^^^^^^^^^
+-1 >
+-  >    
+-2 >        }
+-1 >Emitted(15, 9) Source(19, 5) + SourceIndex(0)
+-2 >Emitted(15, 21) Source(19, 6) + SourceIndex(0)
+----
+->>>    }());
 +  >        
 +2 >        static
 +3 >               
@@ -507,17 +518,7 @@
 +11>Emitted(16, 39) Source(18, 39) + SourceIndex(0)
 +12>Emitted(16, 40) Source(18, 40) + SourceIndex(0)
 +13>Emitted(16, 41) Source(18, 41) + SourceIndex(0)
- ---
-->>>        return Point;
--1 >^^^^^^^^
--2 >        ^^^^^^^^^^^^
--1 >
--  >    
--2 >        }
--1 >Emitted(15, 9) Source(19, 5) + SourceIndex(0)
--2 >Emitted(15, 21) Source(19, 6) + SourceIndex(0)
-----
-->>>    }());
++---
 +>>>    }
  1 >^^^^^
 -2 >     

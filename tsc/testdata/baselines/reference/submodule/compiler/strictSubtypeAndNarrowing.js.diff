@@ -1,8 +1,8 @@
 --- old.strictSubtypeAndNarrowing.js
 +++ new.strictSubtypeAndNarrowing.js
 @@= skipped -233, +233 lines =@@
- 
- 
+
+
  //// [strictSubtypeAndNarrowing.js]
 -"use strict";
 -// Check that `any` is a strict supertype of `unknown`

@@ -2,7 +2,7 @@
 +++ new.es6ModuleConstEnumDeclaration2.js
 @@= skipped -47, +47 lines =@@
  }
- 
+
  //// [es6ModuleConstEnumDeclaration2.js]
 -export var e1;
 +export { e1 };

@@ -2,7 +2,7 @@
 +++ new.nonNullReferenceMatching.js
 @@= skipped -35, +35 lines =@@
  }
- 
+
  //// [nonNullReferenceMatching.js]
 -"use strict";
 -var Component = /** @class */ (function () {

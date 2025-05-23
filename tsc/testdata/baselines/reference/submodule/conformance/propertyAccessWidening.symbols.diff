@@ -1,7 +1,7 @@
 --- old.propertyAccessWidening.symbols
 +++ new.propertyAccessWidening.symbols
 @@= skipped -13, +13 lines =@@
- 
+
      const table = [{cells: headerNames }].concat(t);
  >table : Symbol(table, Decl(propertyAccessWidening.ts, 4, 9))
 ->[{cells: headerNames }].concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -12,7 +12,7 @@
 +>concat : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >t : Symbol(t, Decl(propertyAccessWidening.ts, 3, 7))
  }
- 
+
 @@= skipped -20, +20 lines =@@
  >table : Symbol(table, Decl(propertyAccessWidening.ts, 9, 9))
  >cells : Symbol(cells, Decl(propertyAccessWidening.ts, 9, 20))
@@ -21,4 +21,3 @@
 +>"concat" : Symbol(concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >t : Symbol(t, Decl(propertyAccessWidening.ts, 8, 7))
  }
- 

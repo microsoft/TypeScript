@@ -1,8 +1,8 @@
 --- old.ExportClassWithInaccessibleTypeInTypeParameterConstraint.js
 +++ new.ExportClassWithInaccessibleTypeInTypeParameterConstraint.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [ExportClassWithInaccessibleTypeInTypeParameterConstraint.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

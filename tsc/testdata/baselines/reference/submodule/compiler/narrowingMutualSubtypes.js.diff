@@ -1,8 +1,8 @@
 --- old.narrowingMutualSubtypes.js
 +++ new.narrowingMutualSubtypes.js
 @@= skipped -144, +144 lines =@@
- 
- 
+
+
  //// [narrowingMutualSubtypes.js]
 -"use strict";
 -// Check that `any` is a strict supertype of `unknown`

@@ -7,8 +7,8 @@
 -recursiveClassReferenceTest.ts(95,21): error TS2345: Argument of type 'Window' is not assignable to parameter of type 'IMode'.
 -  Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
 +recursiveClassReferenceTest.ts(95,21): error TS2741: Property 'getInitialState' is missing in type 'Window' but required in type 'IMode'.
- 
- 
+
+
  ==== recursiveClassReferenceTest.ts (4 errors) ====
 @@= skipped -107, +106 lines =@@
      		public getInitialState(): IState {

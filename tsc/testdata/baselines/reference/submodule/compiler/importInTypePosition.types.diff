@@ -2,7 +2,7 @@
 +++ new.importInTypePosition.types
 @@= skipped -22, +22 lines =@@
  module B {
- 
+
      import a = A; //Error generates 'var <Alias> = <EntityName>;'
 ->a : typeof a
 ->A : typeof a
@@ -12,24 +12,24 @@
  // no code gen expected
  module C {
  >C : typeof C
- 
+
      import a = A; //Error generates 'var <Alias> = <EntityName>;'
 ->a : typeof a
 ->A : typeof a
 +>a : typeof A
 +>A : typeof A
- 
+
      var m: typeof a;
 ->m : typeof a
 ->a : typeof a
 +>m : typeof A
 +>a : typeof A
- 
+
      var p: a.Point;
 ->p : a.Point
 +>p : Point
  >a : any
- 
+
      var p = { x: 0, y: 0 };
 ->p : a.Point
 +>p : Point

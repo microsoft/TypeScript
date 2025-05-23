@@ -71,17 +71,12 @@
  1 >
  2 >^
 -3 > ^^^^^->
-+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >
 -2 >}
 -1 >Emitted(15, 1) Source(3, 1) + SourceIndex(0)
 -2 >Emitted(15, 2) Source(3, 2) + SourceIndex(0)
-+2 >
-+  >}
-+1 >Emitted(3, 1) Source(2, 21) + SourceIndex(0)
-+2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
- ---
+----
 ->>>try {
 ->>>    for (var _b = __values(['a', 'b', 'c']), _c = _b.next(); !_c.done; _c = _b.next()) {
 -1->^^^^
@@ -100,25 +95,8 @@
 -14>                                           ^^^^^^^^^^^^^^^^
 -15>                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -16>                                                                                       ^
-+>>>for (foo().x of ['a', 'b', 'c']) {
- 1->
-+2 >^^^^^
-+3 >     ^^^
-+4 >        ^^
-+5 >          ^
-+6 >           ^
-+7 >            ^^^^
-+8 >                ^
-+9 >                 ^^^
-+10>                    ^^
-+11>                      ^^^
-+12>                         ^^
-+13>                           ^^^
-+14>                              ^
-+15>                               ^^
-+16>                                 ^
-+1->
-   >
+-1->
+-  >
 -2 >    for (foo().x of 
 -3 >         
 -4 >             
@@ -150,6 +128,84 @@
 -14>Emitted(17, 60) Source(4, 32) + SourceIndex(0)
 -15>Emitted(17, 88) Source(4, 34) + SourceIndex(0)
 -16>Emitted(17, 89) Source(4, 35) + SourceIndex(0)
+----
+->>>        foo().x = _c.value;
+-1 >^^^^^^^^
+-2 >        ^^^
+-3 >           ^^
+-4 >             ^
+-5 >              ^
+-6 >               ^^^^^^^^^^^
+-1 >
+-2 >        foo
+-3 >           ()
+-4 >             .
+-5 >              x
+-6 >               
+-1 >Emitted(18, 9) Source(4, 6) + SourceIndex(0)
+-2 >Emitted(18, 12) Source(4, 9) + SourceIndex(0)
+-3 >Emitted(18, 14) Source(4, 11) + SourceIndex(0)
+-4 >Emitted(18, 15) Source(4, 12) + SourceIndex(0)
+-5 >Emitted(18, 16) Source(4, 13) + SourceIndex(0)
+-6 >Emitted(18, 27) Source(4, 13) + SourceIndex(0)
+----
+->>>        var p = foo().x;
+-1 >^^^^^^^^
+-2 >        ^^^^
+-3 >            ^
+-4 >             ^^^
+-5 >                ^^^
+-6 >                   ^^
+-7 >                     ^
+-8 >                      ^
+-9 >                       ^
+-1 > of ['a', 'b', 'c']) {
+-  >    
+-2 >        var 
+-3 >            p
+-4 >              = 
+-5 >                foo
+-6 >                   ()
+-7 >                     .
+-8 >                      x
+-9 >                       ;
+-1 >Emitted(19, 9) Source(5, 5) + SourceIndex(0)
+-2 >Emitted(19, 13) Source(5, 9) + SourceIndex(0)
+-3 >Emitted(19, 14) Source(5, 10) + SourceIndex(0)
+-4 >Emitted(19, 17) Source(5, 13) + SourceIndex(0)
+-5 >Emitted(19, 20) Source(5, 16) + SourceIndex(0)
+-6 >Emitted(19, 22) Source(5, 18) + SourceIndex(0)
+-7 >Emitted(19, 23) Source(5, 19) + SourceIndex(0)
+-8 >Emitted(19, 24) Source(5, 20) + SourceIndex(0)
+-9 >Emitted(19, 25) Source(5, 21) + SourceIndex(0)
+----
+->>>    }
++3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
++2 >
++  >}
++1 >Emitted(3, 1) Source(2, 21) + SourceIndex(0)
++2 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
++---
++>>>for (foo().x of ['a', 'b', 'c']) {
++1->
++2 >^^^^^
++3 >     ^^^
++4 >        ^^
++5 >          ^
++6 >           ^
++7 >            ^^^^
++8 >                ^
++9 >                 ^^^
++10>                    ^^
++11>                      ^^^
++12>                         ^^
++13>                           ^^^
++14>                              ^
++15>                               ^^
++16>                                 ^
++1->
++  >
 +2 >for (
 +3 >     foo
 +4 >        ()
@@ -181,16 +237,10 @@
 +14>Emitted(4, 32) Source(4, 32) + SourceIndex(0)
 +15>Emitted(4, 34) Source(4, 34) + SourceIndex(0)
 +16>Emitted(4, 35) Source(4, 35) + SourceIndex(0)
- ---
-->>>        foo().x = _c.value;
--1 >^^^^^^^^
--2 >        ^^^
--3 >           ^^
--4 >             ^
--5 >              ^
--6 >               ^^^^^^^^^^^
++---
 +>>>    var p = foo().x;
-+1 >^^^^
+ 1 >^^^^
+-2 >    ^
 +2 >    ^^^^
 +3 >        ^
 +4 >         ^^^
@@ -199,48 +249,8 @@
 +7 >                 ^
 +8 >                  ^
 +9 >                   ^
- 1 >
--2 >        foo
--3 >           ()
--4 >             .
--5 >              x
--6 >               
--1 >Emitted(18, 9) Source(4, 6) + SourceIndex(0)
--2 >Emitted(18, 12) Source(4, 9) + SourceIndex(0)
--3 >Emitted(18, 14) Source(4, 11) + SourceIndex(0)
--4 >Emitted(18, 15) Source(4, 12) + SourceIndex(0)
--5 >Emitted(18, 16) Source(4, 13) + SourceIndex(0)
--6 >Emitted(18, 27) Source(4, 13) + SourceIndex(0)
-----
-->>>        var p = foo().x;
--1 >^^^^^^^^
--2 >        ^^^^
--3 >            ^
--4 >             ^^^
--5 >                ^^^
--6 >                   ^^
--7 >                     ^
--8 >                      ^
--9 >                       ^
--1 > of ['a', 'b', 'c']) {
-   >    
--2 >        var 
--3 >            p
--4 >              = 
--5 >                foo
--6 >                   ()
--7 >                     .
--8 >                      x
--9 >                       ;
--1 >Emitted(19, 9) Source(5, 5) + SourceIndex(0)
--2 >Emitted(19, 13) Source(5, 9) + SourceIndex(0)
--3 >Emitted(19, 14) Source(5, 10) + SourceIndex(0)
--4 >Emitted(19, 17) Source(5, 13) + SourceIndex(0)
--5 >Emitted(19, 20) Source(5, 16) + SourceIndex(0)
--6 >Emitted(19, 22) Source(5, 18) + SourceIndex(0)
--7 >Emitted(19, 23) Source(5, 19) + SourceIndex(0)
--8 >Emitted(19, 24) Source(5, 20) + SourceIndex(0)
--9 >Emitted(19, 25) Source(5, 21) + SourceIndex(0)
++1 >
++  >    
 +2 >    var 
 +3 >        p
 +4 >          = 
@@ -258,15 +268,12 @@
 +7 >Emitted(5, 19) Source(5, 19) + SourceIndex(0)
 +8 >Emitted(5, 20) Source(5, 20) + SourceIndex(0)
 +9 >Emitted(5, 21) Source(5, 21) + SourceIndex(0)
- ---
-->>>    }
--1 >^^^^
--2 >    ^
++---
 +>>>}
- 1 >
++1 >
 +2 >^
 +3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+1 >
+ 1 >
    >
 -2 >    }
 -1 >Emitted(20, 5) Source(6, 1) + SourceIndex(0)

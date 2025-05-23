@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment23.errors.txt
 +++ new.typeFromPropertyAssignment23.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(23,18): error TS2339: Property 'identifier' does not exist on type 'Module'.
 +a.js(24,18): error TS2339: Property 'size' does not exist on type 'Module'.
 +

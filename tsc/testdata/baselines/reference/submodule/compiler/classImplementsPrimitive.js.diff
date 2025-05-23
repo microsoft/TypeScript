@@ -1,7 +1,7 @@
 --- old.classImplementsPrimitive.js
 +++ new.classImplementsPrimitive.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [classImplementsPrimitive.js]
  // classes cannot implement primitives
 -var C = /** @class */ (function () {

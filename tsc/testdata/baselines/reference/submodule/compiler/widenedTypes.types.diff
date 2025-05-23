@@ -2,7 +2,7 @@
 +++ new.widenedTypes.types
 @@= skipped -65, +65 lines =@@
  >"" : ""
- 
+
  var ob: { x: typeof undefined } = { x: "" };
 ->ob : { x: typeof undefined; }
 +>ob : { x: any; }

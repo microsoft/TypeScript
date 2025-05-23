@@ -2,7 +2,7 @@
 +++ new.implementsClauseAlreadySeen.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [implementsClauseAlreadySeen.js]
 -var C = /** @class */ (function () {
 -    function C() {

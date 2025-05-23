@@ -10,7 +10,7 @@
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
  >"abc" : "abc"
- 
+
          x;  // string
 @@= skipped -38, +38 lines =@@
  >x = x.slice() : string
@@ -25,7 +25,7 @@
          else {
              x = "abc";
 @@= skipped -139, +139 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -34,11 +34,11 @@
  >x : string | null | undefined
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
- 
+
      x = "";
  >x = "" : ""
 @@= skipped -12, +12 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -47,11 +47,11 @@
  >x : string
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
- 
+
      x = undefined;
  >x = undefined : undefined
 @@= skipped -12, +12 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -60,11 +60,11 @@
  >x : string | null | undefined
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
- 
+
      x = null;
  >x = null : null
 @@= skipped -11, +11 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -73,11 +73,11 @@
  >x : string | null | undefined
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
- 
+
      x = <undefined | null>undefined;
  >x = <undefined | null>undefined : null | undefined
 @@= skipped -13, +13 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -86,11 +86,11 @@
  >x : string | null | undefined
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
- 
+
      x = <string | undefined>"";
  >x = <string | undefined>"" : string | undefined
 @@= skipped -13, +13 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -99,11 +99,11 @@
  >x : string | undefined
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
- 
+
      x = <string | null>"";
  >x = <string | null>"" : string | null
 @@= skipped -13, +13 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -113,10 +113,10 @@
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
  }
- 
+
  function f7() {
 @@= skipped -14, +14 lines =@@
- 
+
      x!.slice();
  >x!.slice() : string
 ->x!.slice : (start?: number, end?: number) => string
@@ -126,4 +126,3 @@
 ->slice : (start?: number, end?: number) => string
 +>slice : (start?: number | undefined, end?: number | undefined) => string
  }
- 

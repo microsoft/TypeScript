@@ -1,7 +1,7 @@
 --- old.parserShorthandPropertyAssignment5.js
 +++ new.parserShorthandPropertyAssignment5.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [parserShorthandPropertyAssignment5.js]
  var greet = "hello";
 -var obj = { greet: greet };

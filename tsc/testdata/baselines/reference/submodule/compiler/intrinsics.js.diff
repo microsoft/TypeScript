@@ -19,16 +19,16 @@
 -    }
 -    return Foo;
 -}());
--var foo;
++class Foo {
++}
+ var foo;
 -
 -
 -//// [intrinsics.d.ts]
 -declare var hasOwnProperty: hasOwnProperty;
 -declare namespace m1 {
 -    var __proto__: any;
-+class Foo {
- }
+-}
 -declare class Foo<__proto__> {
 -}
 -declare var foo: (__proto__: number) => void;
-+var foo;

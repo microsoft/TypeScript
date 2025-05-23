@@ -2,11 +2,11 @@
 +++ new.typeofThisInMethodSignature.symbols
 @@= skipped -6, +6 lines =@@
  >A : Symbol(A, Decl(typeofThisInMethodSignature.ts, 0, 0))
- 
+
  	x = 1
 ->x : Symbol(A.x, Decl(typeofThisInMethodSignature.ts, 2, 16))
 +>x : Symbol(x, Decl(typeofThisInMethodSignature.ts, 2, 16))
- 
+
  	a(x: typeof this.x): void {}
 ->a : Symbol(A.a, Decl(typeofThisInMethodSignature.ts, 3, 6))
 +>a : Symbol(a, Decl(typeofThisInMethodSignature.ts, 3, 6))
@@ -17,7 +17,7 @@
 ->x : Symbol(A.x, Decl(typeofThisInMethodSignature.ts, 2, 16))
 +>x : Symbol(x, Decl(typeofThisInMethodSignature.ts, 2, 16))
  }
- 
+
  const a = new A().a(1);
  >a : Symbol(a, Decl(typeofThisInMethodSignature.ts, 7, 5))
 ->new A().a : Symbol(A.a, Decl(typeofThisInMethodSignature.ts, 3, 6))
@@ -25,4 +25,3 @@
  >A : Symbol(A, Decl(typeofThisInMethodSignature.ts, 0, 0))
 ->a : Symbol(A.a, Decl(typeofThisInMethodSignature.ts, 3, 6))
 +>a : Symbol(a, Decl(typeofThisInMethodSignature.ts, 3, 6))
- 

@@ -10,14 +10,14 @@
 ->test : Symbol(foo.test, Decl(foo_0.ts, 0, 44))
 +>test : Symbol(test, Decl(foo_0.ts, 0, 44))
  >b : Symbol(b, Decl(foo_1.ts, 2, 27))
- 
+
  === foo_0.ts ===
 @@= skipped -13, +13 lines =@@
  >b : Symbol(b, Decl(foo_0.ts, 0, 31))
- 
+
  	test: T;
 ->test : Symbol(Foo.test, Decl(foo_0.ts, 0, 44))
 +>test : Symbol(test, Decl(foo_0.ts, 0, 44))
  >T : Symbol(T, Decl(foo_0.ts, 0, 10))
- 
+
  	constructor(x: T){}

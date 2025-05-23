@@ -9,7 +9,7 @@
  >M : typeof M
 ->f : typeof M.f
 +>f : typeof f
- 
+
  M.f.hello;
  >M.f.hello : number
 ->M.f : typeof M.f
@@ -18,4 +18,3 @@
 ->f : typeof M.f
 +>f : typeof f
  >hello : number
- 

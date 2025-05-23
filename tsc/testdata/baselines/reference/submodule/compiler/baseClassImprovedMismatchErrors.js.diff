@@ -2,7 +2,7 @@
 +++ new.baseClassImprovedMismatchErrors.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [baseClassImprovedMismatchErrors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,10 +23,7 @@
 -    function Base() {
 -    }
 -    Base.prototype.fn = function () {
-+class Base {
-+    n;
-+    fn() {
-         return 10;
+-        return 10;
 -    };
 -    return Base;
 -}());
@@ -34,27 +31,35 @@
 -    __extends(Derived, _super);
 -    function Derived() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Derived.prototype.fn = function () {
-+}
-+class Derived extends Base {
-+    n;
-+    fn() {
-         return 10;
+-        return 10;
 -    };
 -    return Derived;
 -}(Base));
 -var DerivedInterface = /** @class */ (function () {
 -    function DerivedInterface() {
-     }
+-    }
 -    DerivedInterface.prototype.fn = function () {
+-        return 10;
+-    };
+-    return DerivedInterface;
+-}());
++class Base {
++    n;
++    fn() {
++        return 10;
++    }
++}
++class Derived extends Base {
++    n;
++    fn() {
++        return 10;
++    }
 +}
 +class DerivedInterface {
 +    n;
 +    fn() {
-         return 10;
--    };
--    return DerivedInterface;
--}());
++        return 10;
 +    }
 +}

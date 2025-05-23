@@ -2,7 +2,7 @@
 +++ new.declarationEmitDestructuringObjectLiteralPattern1.js
 @@= skipped -9, +9 lines =@@
  var { x9: a2, y9: b2 } = { x9: 5, y9: "hello" };
- 
+
  //// [declarationEmitDestructuringObjectLiteralPattern1.js]
 -var _a = { x: 5, y: "hello" };
 -var x4 = { x4: 5, y4: "hello" }.x4;

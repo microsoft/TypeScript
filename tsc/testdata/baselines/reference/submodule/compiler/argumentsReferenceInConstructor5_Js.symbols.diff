@@ -10,7 +10,7 @@
 ->foo : Symbol(A.foo, Decl(a.js, 10, 24))
 +>foo : Symbol(foo, Decl(a.js, 10, 24))
  >foo : Symbol(foo, Decl(a.js, 10, 13))
- 
+
  		/**
  		 * @type object
  		 */

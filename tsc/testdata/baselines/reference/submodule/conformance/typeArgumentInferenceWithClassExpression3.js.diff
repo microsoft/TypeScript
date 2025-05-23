@@ -2,7 +2,7 @@
 +++ new.typeArgumentInferenceWithClassExpression3.js
 @@= skipped -7, +7 lines =@@
  foo(class { prop = "hello" }).length;
- 
+
  //// [typeArgumentInferenceWithClassExpression3.js]
 -function foo(x) {
 -    if (x === void 0) { x = /** @class */ (function () {

@@ -8,11 +8,11 @@
 ->f : () => any
 +>function f() {    return f;} : () => ???
 +>f : () => ???
- 
+
      return f;
 ->f : () => any
 +>f : () => ???
- 
+
  };
  var a: any = function f() {
 @@= skipped -21, +21 lines =@@
@@ -23,16 +23,15 @@
 ->f : () => any
 +>function f() {    var x = f;    return x;} : () => ???
 +>f : () => ???
- 
+
      var x = f;
 ->x : () => any
 ->f : () => any
 +>x : () => ???
 +>f : () => ???
- 
+
      return x;
 ->x : () => any
 +>x : () => ???
- 
+
  };
- 

@@ -2,7 +2,7 @@
 +++ new.parserParameterList10.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [parserParameterList10.js]
 -var C = /** @class */ (function () {
 -    function C() {

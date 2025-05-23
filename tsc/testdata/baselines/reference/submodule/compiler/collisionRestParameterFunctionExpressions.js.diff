@@ -1,7 +1,7 @@
 --- old.collisionRestParameterFunctionExpressions.js
 +++ new.collisionRestParameterFunctionExpressions.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [collisionRestParameterFunctionExpressions.js]
  function foo() {
 -    function f1(_i) {

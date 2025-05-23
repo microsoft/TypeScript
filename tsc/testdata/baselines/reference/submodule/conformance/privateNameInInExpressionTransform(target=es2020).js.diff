@@ -1,8 +1,8 @@
 --- old.privateNameInInExpressionTransform(target=es2020).js
 +++ new.privateNameInInExpressionTransform(target=es2020).js
 @@= skipped -48, +48 lines =@@
- 
- 
+
+
  //// [privateNameInInExpressionTransform.js]
 -var __classPrivateFieldIn = (this && this.__classPrivateFieldIn) || function(state, receiver) {
 -    if (receiver === null || (typeof receiver !== "object" && typeof receiver !== "function")) throw new TypeError("Cannot use 'in' operator on non-object");

@@ -1,7 +1,7 @@
 --- old.intersectionOfUnionNarrowing.types
 +++ new.intersectionOfUnionNarrowing.types
 @@= skipped -21, +21 lines =@@
- 
+
  if (q.a !== undefined) {
  >q.a !== undefined : boolean
 ->q.a : ({ aProp: string; } & object) | undefined
@@ -10,5 +10,5 @@
 ->a : ({ aProp: string; } & object) | undefined
 +>a : { aProp: string; } & object | undefined
  >undefined : undefined
- 
+
    q.a.aProp;

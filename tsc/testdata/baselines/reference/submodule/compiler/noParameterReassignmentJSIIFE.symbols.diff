@@ -8,7 +8,7 @@
 +>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
  >importScripts : Symbol(importScripts, Decl(lib.webworker.importscripts.d.ts, --, --))
  >importScripts : Symbol(importScripts, Decl(index.js, 0, 32))
- 
+
      return function () {
          return importScripts.apply(this, arguments);
 ->importScripts.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
@@ -17,5 +17,5 @@
 ->apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 +>apply : Symbol(apply, Decl(lib.es5.d.ts, --, --))
  >arguments : Symbol(arguments)
- 
+
      };

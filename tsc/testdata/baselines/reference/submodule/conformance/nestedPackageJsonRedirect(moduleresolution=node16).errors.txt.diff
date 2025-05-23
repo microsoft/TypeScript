@@ -1,6 +1,6 @@
 --- old.nestedPackageJsonRedirect(moduleresolution=node16).errors.txt
 +++ new.nestedPackageJsonRedirect(moduleresolution=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 -
 -
@@ -29,5 +29,4 @@
 -==== /main.ts (0 errors) ====
 -    import {} from "@restart/hooks/useMergedRefs";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

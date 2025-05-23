@@ -1,8 +1,8 @@
 --- old.exportNonInitializedVariablesUMD.js
 +++ new.exportNonInitializedVariablesUMD.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [exportNonInitializedVariablesUMD.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

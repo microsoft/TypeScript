@@ -2,7 +2,7 @@
 +++ new.untypedArgumentInLambdaExpression.js
 @@= skipped -8, +8 lines =@@
   
- 
+
  //// [untypedArgumentInLambdaExpression.js]
 -f(function (input) {
 +f((input) => {

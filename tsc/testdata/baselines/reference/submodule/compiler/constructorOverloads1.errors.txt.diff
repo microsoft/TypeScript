@@ -15,8 +15,8 @@
 -  Overload 2 of 2, '(n: number): Foo', gave the following error.
 +  The last overload gave the following error.
      Argument of type 'Foo[]' is not assignable to parameter of type 'number'.
- 
- 
+
+
 @@= skipped -38, +34 lines =@@
      var f3 = new Foo(f1);
                       ~~

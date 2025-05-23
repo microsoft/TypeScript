@@ -31,8 +31,8 @@
 -    Argument of type 'string' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
 +  The last overload gave the following error.
 +    Argument of type 'string' is not assignable to parameter of type '{ (): ???; (a: ???): () => number; (a: number): number; (a?: ???): ???; }'.
- 
- 
+
+
  ==== recursiveFunctionTypes.ts (13 errors) ====
      function fn(): typeof fn { return 1; }
                                 ~~~~~~

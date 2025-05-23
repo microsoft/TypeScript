@@ -6,7 +6,7 @@
  import * as stuff from './f1';
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
- 
+
  var n = 'baz';
  >n : string
 @@= skipped -9, +9 lines =@@
@@ -17,7 +17,7 @@
 +>stuff : typeof import("f1")
  >x : any
  >0 : 0
- 
+
  stuff['x'] = 1;
  >stuff['x'] = 1 : 1
  >stuff['x'] : any
@@ -25,7 +25,7 @@
 +>stuff : typeof import("f1")
  >'x' : "x"
  >1 : 1
- 
+
  stuff.blah = 2;
  >stuff.blah = 2 : 2
  >stuff.blah : any
@@ -33,7 +33,7 @@
 +>stuff : typeof import("f1")
  >blah : any
  >2 : 2
- 
+
  stuff[n] = 3;
  >stuff[n] = 3 : 3
  >stuff[n] : any
@@ -41,35 +41,35 @@
 +>stuff : typeof import("f1")
  >n : string
  >3 : 3
- 
+
  stuff.x++;
  >stuff.x++ : number
  >stuff.x : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >x : any
- 
+
  stuff['x']++;
  >stuff['x']++ : number
  >stuff['x'] : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >'x' : "x"
- 
+
  stuff['blah']++;
  >stuff['blah']++ : number
  >stuff['blah'] : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >'blah' : "blah"
- 
+
  stuff[n]++;
  >stuff[n]++ : number
  >stuff[n] : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >n : string
- 
+
  (stuff.x) = 0;
  >(stuff.x) = 0 : 0
  >(stuff.x) : any
@@ -78,7 +78,7 @@
 +>stuff : typeof import("f1")
  >x : any
  >0 : 0
- 
+
 @@= skipped -61, +61 lines =@@
  >(stuff['x']) = 1 : 1
  >(stuff['x']) : any
@@ -87,7 +87,7 @@
 +>stuff : typeof import("f1")
  >'x' : "x"
  >1 : 1
- 
+
 @@= skipped -8, +8 lines =@@
  >(stuff.blah) = 2 : 2
  >(stuff.blah) : any
@@ -96,7 +96,7 @@
 +>stuff : typeof import("f1")
  >blah : any
  >2 : 2
- 
+
 @@= skipped -8, +8 lines =@@
  >(stuff[n]) = 3 : 3
  >(stuff[n]) : any
@@ -105,7 +105,7 @@
 +>stuff : typeof import("f1")
  >n : string
  >3 : 3
- 
+
 @@= skipped -8, +8 lines =@@
  >(stuff.x)++ : number
  >(stuff.x) : any
@@ -113,7 +113,7 @@
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >x : any
- 
+
  (stuff['x'])++;
  >(stuff['x'])++ : number
  >(stuff['x']) : any
@@ -121,7 +121,7 @@
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >'x' : "x"
- 
+
  (stuff['blah'])++;
  >(stuff['blah'])++ : number
  >(stuff['blah']) : any
@@ -129,7 +129,7 @@
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >'blah' : "blah"
- 
+
  (stuff[n])++;
  >(stuff[n])++ : number
  >(stuff[n]) : any
@@ -137,63 +137,63 @@
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >n : string
- 
+
  for (stuff.x in []) {}
  >stuff.x : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >x : any
  >[] : undefined[]
- 
+
  for (stuff.x of []) {}
  >stuff.x : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >x : any
  >[] : undefined[]
- 
+
  for (stuff['x'] in []) {}
  >stuff['x'] : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >'x' : "x"
  >[] : undefined[]
- 
+
  for (stuff['x'] of []) {}
  >stuff['x'] : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >'x' : "x"
  >[] : undefined[]
- 
+
  for (stuff.blah in []) {}
  >stuff.blah : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >blah : any
  >[] : undefined[]
- 
+
  for (stuff.blah of []) {}
  >stuff.blah : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >blah : any
  >[] : undefined[]
- 
+
  for (stuff[n] in []) {}
  >stuff[n] : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >n : string
  >[] : undefined[]
- 
+
  for (stuff[n] of []) {}
  >stuff[n] : any
 ->stuff : typeof stuff
 +>stuff : typeof import("f1")
  >n : string
  >[] : undefined[]
- 
+
  for ((stuff.x) in []) {}
  >(stuff.x) : any
  >stuff.x : any
@@ -201,7 +201,7 @@
 +>stuff : typeof import("f1")
  >x : any
  >[] : undefined[]
- 
+
  for ((stuff.x) of []) {}
  >(stuff.x) : any
  >stuff.x : any
@@ -209,7 +209,7 @@
 +>stuff : typeof import("f1")
  >x : any
  >[] : undefined[]
- 
+
  for ((stuff['x']) in []) {}
  >(stuff['x']) : any
  >stuff['x'] : any
@@ -217,7 +217,7 @@
 +>stuff : typeof import("f1")
  >'x' : "x"
  >[] : undefined[]
- 
+
  for ((stuff['x']) of []) {}
  >(stuff['x']) : any
  >stuff['x'] : any
@@ -225,7 +225,7 @@
 +>stuff : typeof import("f1")
  >'x' : "x"
  >[] : undefined[]
- 
+
  for ((stuff.blah) in []) {}
  >(stuff.blah) : any
  >stuff.blah : any
@@ -233,7 +233,7 @@
 +>stuff : typeof import("f1")
  >blah : any
  >[] : undefined[]
- 
+
  for ((stuff.blah) of []) {}
  >(stuff.blah) : any
  >stuff.blah : any
@@ -241,7 +241,7 @@
 +>stuff : typeof import("f1")
  >blah : any
  >[] : undefined[]
- 
+
  for ((stuff[n]) in []) {}
  >(stuff[n]) : any
  >stuff[n] : any
@@ -249,7 +249,7 @@
 +>stuff : typeof import("f1")
  >n : string
  >[] : undefined[]
- 
+
  for ((stuff[n]) of []) {}
  >(stuff[n]) : any
  >stuff[n] : any
@@ -257,4 +257,3 @@
 +>stuff : typeof import("f1")
  >n : string
  >[] : undefined[]
- 

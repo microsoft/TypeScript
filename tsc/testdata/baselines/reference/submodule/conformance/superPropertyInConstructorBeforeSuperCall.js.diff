@@ -2,7 +2,7 @@
 +++ new.superPropertyInConstructorBeforeSuperCall.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [superPropertyInConstructorBeforeSuperCall.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,15 +21,7 @@
 -})();
 -var B = /** @class */ (function () {
 -    function B(x) {
-+class B {
-+    constructor(x) { }
-+    x() { return ""; }
-+}
-+class C1 extends B {
-+    constructor() {
-+        super.x();
-+        super();
-     }
+-    }
 -    B.prototype.x = function () { return ""; };
 -    return B;
 -}());
@@ -40,11 +32,7 @@
 -        _super.prototype.x.call(_this);
 -        _this = _super.call(this) || this;
 -        return _this;
-+}
-+class C2 extends B {
-+    constructor() {
-+        super(super.x());
-     }
+-    }
 -    return C1;
 -}(B));
 -var C2 = /** @class */ (function (_super) {
@@ -55,4 +43,18 @@
 -    }
 -    return C2;
 -}(B));
++class B {
++    constructor(x) { }
++    x() { return ""; }
++}
++class C1 extends B {
++    constructor() {
++        super.x();
++        super();
++    }
++}
++class C2 extends B {
++    constructor() {
++        super(super.x());
++    }
 +}

@@ -1,8 +1,8 @@
 --- old.templateStringWithEmptyLiteralPortions.js
 +++ new.templateStringWithEmptyLiteralPortions.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [templateStringWithEmptyLiteralPortions.js]
 -var a = "";
 -var b = "".concat(0);

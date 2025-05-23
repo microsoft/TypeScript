@@ -1,7 +1,7 @@
 --- old.tsxSpreadDoesNotReportExcessProps.types
 +++ new.tsxSpreadDoesNotReportExcessProps.types
 @@= skipped -7, +7 lines =@@
- 
+
  class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
  >MyComponent : MyComponent
 ->React.Component : React.Component<{ dataSource: number[]; onClick?: any; }, {}, any>
@@ -11,11 +11,11 @@
 +>Component : typeof Component
  >dataSource : number[]
  >onClick : any
- 
+
      render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
          return (<div {...this.props} className="ok"></div>);
 ->(<div {...this.props} className="ok"></div>) : JSX.Element
 -><div {...this.props} className="ok"></div> : JSX.Element

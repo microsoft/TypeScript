@@ -2,7 +2,7 @@
 +++ new.logicalAssignment10(target=es2021).types
 @@= skipped -25, +25 lines =@@
  }
- 
+
  obj[incr()] ??= incr();
 ->obj[incr()] ??= incr() : error
 ->obj[incr()] : error
@@ -13,7 +13,7 @@
  >incr : () => number
 @@= skipped -9, +9 lines =@@
  >incr : () => number
- 
+
  oobj["obj"][incr()] ??= incr();
 ->oobj["obj"][incr()] ??= incr() : error
 ->oobj["obj"][incr()] : error

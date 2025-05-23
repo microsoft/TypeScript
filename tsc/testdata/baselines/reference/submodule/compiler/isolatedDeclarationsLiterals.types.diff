@@ -2,12 +2,12 @@
 +++ new.isolatedDeclarationsLiterals.types
 @@= skipped -119, +119 lines =@@
  >`1` : "1"
- 
+
  export const mutableObject = {
 ->mutableObject : { one: number; oneOctal: number; oneHex: number; pOne: number; mOne: number; onen: bigint; mOnen: bigint; method(): void; }
 ->{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** A method */    method(): void {    },} : { one: number; oneOctal: number; oneHex: number; pOne: number; mOne: number; onen: bigint; mOnen: bigint; method(): void; }
 +>mutableObject : { one: number; oneOctal: number; oneHex: number; pOne: number; mOne: number; onen: bigint; mOnen: bigint; method: () => void; }
 +>{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** A method */    method(): void {    },} : { one: number; oneOctal: number; oneHex: number; pOne: number; mOne: number; onen: bigint; mOnen: bigint; method: () => void; }
- 
+
      /** Value Of 1 */
      one: 1,

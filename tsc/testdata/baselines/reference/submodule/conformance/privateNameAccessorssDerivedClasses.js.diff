@@ -1,8 +1,8 @@
 --- old.privateNameAccessorssDerivedClasses.js
 +++ new.privateNameAccessorssDerivedClasses.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [privateNameAccessorssDerivedClasses.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

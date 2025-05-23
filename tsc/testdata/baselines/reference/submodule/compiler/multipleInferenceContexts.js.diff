@@ -1,8 +1,8 @@
 --- old.multipleInferenceContexts.js
 +++ new.multipleInferenceContexts.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [multipleInferenceContexts.js]
 -"use strict";
 -var r2 = Moon({

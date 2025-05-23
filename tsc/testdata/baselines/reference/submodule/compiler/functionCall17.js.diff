@@ -1,8 +1,8 @@
 --- old.functionCall17.js
 +++ new.functionCall17.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [functionCall17.js]
 -function foo(a, b, c) {
 -    var d = [];

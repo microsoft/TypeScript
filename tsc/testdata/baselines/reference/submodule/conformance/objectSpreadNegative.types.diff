@@ -2,17 +2,17 @@
 +++ new.objectSpreadNegative.types
 @@= skipped -40, +40 lines =@@
  >x : any
- 
+
  declare let optionalString: { sn?: string };
 ->optionalString : { sn?: string; }
 +>optionalString : { sn?: string | undefined; }
  >sn : string | undefined
- 
+
  declare let optionalNumber: { sn?: number };
 ->optionalNumber : { sn?: number; }
 +>optionalNumber : { sn?: number | undefined; }
  >sn : number | undefined
- 
+
  let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
  >allOptional : { sn: string | number; }
  >sn : string | number
@@ -21,12 +21,12 @@
 ->optionalNumber : { sn?: number; }
 +>optionalString : { sn?: string | undefined; }
 +>optionalNumber : { sn?: number | undefined; }
- 
+
  // error, 'sn' is optional in source, required in target
- 
+
 @@= skipped -168, +168 lines =@@
  >"in the middle" : number
- 
+
      { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
 ->{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { a: number; b: string; c: boolean; "in the middle": number; }
 +>{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { a: number; b: string; c: boolean; ['in the middle']: number; }

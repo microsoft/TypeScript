@@ -2,13 +2,13 @@
 +++ new.genericCallWithOverloadedFunctionTypedArguments2.types
 @@= skipped -17, +17 lines =@@
      }
- 
+
      function foo4(cb: typeof a) {
 ->foo4 : (cb: typeof a) => { (x: boolean): boolean; (x: string): string; }
 +>foo4 : (cb: { (x: boolean): boolean; (x: string): string; }) => { (x: boolean): boolean; (x: string): string; }
  >cb : { (x: boolean): boolean; (x: string): string; }
  >a : { (x: boolean): boolean; (x: string): string; }
- 
+
 @@= skipped -11, +11 lines =@@
      var r3 = foo4(<T, U>(x: T) => { var r: U; return r }); // ok
  >r3 : { (x: boolean): boolean; (x: string): string; }

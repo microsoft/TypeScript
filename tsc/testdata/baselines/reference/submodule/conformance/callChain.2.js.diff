@@ -1,8 +1,8 @@
 --- old.callChain.2.js
 +++ new.callChain.2.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [callChain.2.js]
 -var _a;
 -o1 === null || o1 === void 0 ? void 0 : o1();

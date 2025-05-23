@@ -2,15 +2,11 @@
 +++ new.propertyAndAccessorWithSameName.js
 @@= skipped -21, +21 lines =@@
  }
- 
+
  //// [propertyAndAccessorWithSameName.js]
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    x;
-+    get x() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(C.prototype, "x", {
 -        get: function () {
 -            return 1;
@@ -22,16 +18,7 @@
 -}());
 -var D = /** @class */ (function () {
 -    function D() {
-+}
-+class D {
-+    x;
-+    set x(v) { } // error
-+}
-+class E {
-+    x;
-+    get x() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(D.prototype, "x", {
 -        set: function (v) { } // error
 -        ,
@@ -53,5 +40,20 @@
 -    });
 -    return E;
 -}());
++class C {
++    x;
++    get x() {
++        return 1;
++    }
++}
++class D {
++    x;
++    set x(v) { } // error
++}
++class E {
++    x;
++    get x() {
++        return 1;
++    }
 +    set x(v) { }
 +}

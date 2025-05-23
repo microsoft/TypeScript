@@ -1,8 +1,8 @@
 --- old.doYouNeedToChangeYourTargetLibraryES2015.js
 +++ new.doYouNeedToChangeYourTargetLibraryES2015.js
 @@= skipped -94, +94 lines =@@
- 
- 
+
+
  //// [doYouNeedToChangeYourTargetLibraryES2015.js]
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
 -    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
@@ -23,26 +23,11 @@
 -var testReflectSet = Reflect.set({}, "", 0);
 -var testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {});
 -var testArrayFind = [""].find(function (val, idx, obj) {
-+const noOp = () => { };
-+const testReflectApply = Reflect.apply(noOp, this, []);
-+const testReflectConstruct = Reflect.construct(noOp, []);
-+const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
-+const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
-+const testReflectGet = Reflect.get({}, "");
-+const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
-+const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
-+const testReflectIsExtensible = Reflect.isExtensible({});
-+const testReflectOwnKeys = Reflect.ownKeys({});
-+const testReflectPreventExtensions = Reflect.preventExtensions({});
-+const testReflectSet = Reflect.set({}, "", 0);
-+const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {});
-+const testArrayFind = [""].find((val, idx, obj) => {
-     return true;
- });
+-    return true;
+-});
 -var testArrayFindIndex = [""].findIndex(function (val, idx, obj) {
-+const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
-     return true;
- });
+-    return true;
+-});
 -var testArrayFill = [""].fill("fill");
 -var testArrayCopyWithin = [""].copyWithin(0, 0);
 -var testArrayEntries = [""].entries();
@@ -114,6 +99,25 @@
 -var testRegExpFlags = /abc/g.flags;
 -var testRegExpSticky = /abc/g.sticky;
 -var testRegExpUnicode = /abc/g.unicode;
++const noOp = () => { };
++const testReflectApply = Reflect.apply(noOp, this, []);
++const testReflectConstruct = Reflect.construct(noOp, []);
++const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
++const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
++const testReflectGet = Reflect.get({}, "");
++const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
++const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
++const testReflectIsExtensible = Reflect.isExtensible({});
++const testReflectOwnKeys = Reflect.ownKeys({});
++const testReflectPreventExtensions = Reflect.preventExtensions({});
++const testReflectSet = Reflect.set({}, "", 0);
++const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {});
++const testArrayFind = [""].find((val, idx, obj) => {
++    return true;
++});
++const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
++    return true;
++});
 +const testArrayFill = [""].fill("fill");
 +const testArrayCopyWithin = [""].copyWithin(0, 0);
 +const testArrayEntries = [""].entries();

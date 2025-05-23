@@ -1,8 +1,8 @@
 --- old.constEnumPropertyAccess3.js
 +++ new.constEnumPropertyAccess3.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [constEnumPropertyAccess3.js]
 -(-2 /* E.A */).toString();
 -(-1 /* E.B */).toString();

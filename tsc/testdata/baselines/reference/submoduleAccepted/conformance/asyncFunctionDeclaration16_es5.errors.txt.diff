@@ -12,8 +12,8 @@
 +/a.js(27,12): error TS2304: Cannot find name 'T1'.
 +/a.js(40,12): error TS2304: Cannot find name 'T2'.
 +/a.js(45,12): error TS2304: Cannot find name 'T3'.
- 
- 
+
+
  ==== /types.d.ts (0 errors) ====
      declare class Thenable { then(): void; }
      

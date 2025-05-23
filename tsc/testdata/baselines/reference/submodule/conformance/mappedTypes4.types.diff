@@ -1,12 +1,12 @@
 --- old.mappedTypes4.types
 +++ new.mappedTypes4.types
 @@= skipped -28, +28 lines =@@
- 
+
          for (let k in obj) {
  >k : Extract<keyof T, string>
 ->obj : (T & null) | (T & object)
 +>obj : T & null | T & object
- 
+
              result[k] = { value: obj[k] };
 ->result[k] = { value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }
 +>result[k] = { value: obj[k] } : { value: T & object[Extract<keyof T, string>]; }

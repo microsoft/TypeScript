@@ -2,7 +2,7 @@
 +++ new.compoundExponentiationAssignmentLHSIsReference.js
 @@= skipped -28, +28 lines =@@
  (x3['a']) **= value;
- 
+
  //// [compoundExponentiationAssignmentLHSIsReference.js]
 -var _a, _b, _c;
  var value;

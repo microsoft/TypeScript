@@ -1,8 +1,8 @@
 --- old.noInfer.js
 +++ new.noInfer.js
 @@= skipped -84, +84 lines =@@
- 
- 
+
+
  //// [noInfer.js]
 -"use strict";
 -// NoInfer<T> is erased for primitives
@@ -29,14 +29,9 @@
 -var mutate1 = mutate(function (a, b) { return b; });
 -var OkClass = /** @class */ (function () {
 -    function OkClass(clazz, _value) {
-+const mutate1 = mutate((a, b) => b);
-+class OkClass {
-+    clazz;
-+    _value;
-+    constructor(clazz, _value) {
-         this.clazz = clazz;
-         this._value = _value;
-     }
+-        this.clazz = clazz;
+-        this._value = _value;
+-    }
 -    Object.defineProperty(OkClass.prototype, "value", {
 -        get: function () {
 -            return this._value; // ok
@@ -48,17 +43,9 @@
 -}());
 -var OkClass2 = /** @class */ (function () {
 -    function OkClass2(clazz, _value) {
-+    get value() {
-+        return this._value; // ok
-+    }
-+}
-+class OkClass2 {
-+    clazz;
-+    _value;
-+    constructor(clazz, _value) {
-         this.clazz = clazz;
-         this._value = _value;
-     }
+-        this.clazz = clazz;
+-        this._value = _value;
+-    }
 -    return OkClass2;
 -}());
 -
@@ -100,7 +87,7 @@
 -}>): void;
 -declare class Animal {
 -    move(): void;
- }
+-}
 -declare class Dog extends Animal {
 -    woof(): void;
 -}
@@ -135,4 +122,23 @@
 -    private clazz;
 -    _value: NoInfer<T>;
 -    constructor(clazz: ExampleClass<T>, _value: NoInfer<T>);
--}
++const mutate1 = mutate((a, b) => b);
++class OkClass {
++    clazz;
++    _value;
++    constructor(clazz, _value) {
++        this.clazz = clazz;
++        this._value = _value;
++    }
++    get value() {
++        return this._value; // ok
++    }
++}
++class OkClass2 {
++    clazz;
++    _value;
++    constructor(clazz, _value) {
++        this.clazz = clazz;
++        this._value = _value;
++    }
+ }

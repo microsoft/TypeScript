@@ -16,7 +16,7 @@
 ->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 +>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
  >b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
- 
+
          return false;
      }
      if (Object.keys(a).length !== Object.keys(b).length) { // Error here
@@ -40,6 +40,6 @@
  >b : Symbol(b, Decl(unknownControlFlow.ts, 247, 28))
 ->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          return false;
      }

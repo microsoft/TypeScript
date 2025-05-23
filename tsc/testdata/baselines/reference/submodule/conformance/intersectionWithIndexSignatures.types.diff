@@ -1,7 +1,7 @@
 --- old.intersectionWithIndexSignatures.types
 +++ new.intersectionWithIndexSignatures.types
 @@= skipped -75, +75 lines =@@
- 
+
  q["asd"].a.substr(1);
  >q["asd"].a.substr(1) : string
 ->q["asd"].a.substr : (from: number, length?: number) => string
@@ -14,5 +14,5 @@
 ->substr : (from: number, length?: number) => string
 +>substr : (from: number, length?: number | undefined) => string
  >1 : 1
- 
+
  q["asd"].b;  // Error

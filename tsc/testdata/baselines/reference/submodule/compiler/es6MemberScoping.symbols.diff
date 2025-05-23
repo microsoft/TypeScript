@@ -2,11 +2,11 @@
 +++ new.es6MemberScoping.symbols
 @@= skipped -7, +7 lines =@@
  >store : Symbol(store, Decl(es6MemberScoping.ts, 1, 16))
- 
+
      public foo() {
 ->foo : Symbol(Foo.foo, Decl(es6MemberScoping.ts, 1, 34))
 +>foo : Symbol(foo, Decl(es6MemberScoping.ts, 1, 34))
- 
+
          return this._store.length; 
 ->this._store : Symbol(Foo._store, Decl(es6MemberScoping.ts, 5, 5))
 +>this._store : Symbol(_store, Decl(es6MemberScoping.ts, 5, 5))
@@ -18,7 +18,7 @@
 ->_store : Symbol(Foo._store, Decl(es6MemberScoping.ts, 5, 5))
 +>_store : Symbol(_store, Decl(es6MemberScoping.ts, 5, 5))
  }
- 
+
  class Foo2 {
  >Foo2 : Symbol(Foo2, Decl(es6MemberScoping.ts, 7, 1))
   
@@ -27,4 +27,3 @@
 +>Foo2 : Symbol(Foo2, Decl(es6MemberScoping.ts, 9, 12))
   
  }
- 

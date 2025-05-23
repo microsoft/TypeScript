@@ -2,11 +2,11 @@
 +++ new.newTargetNarrowing.types
 @@= skipped -6, +6 lines =@@
  >true : true
- 
+
  function f() {
 ->f : typeof f
 +>f : { (): void; marked: boolean; }
- 
+
    if (new.target.marked === true) {
  >new.target.marked === true : boolean
  >new.target.marked : boolean
@@ -16,7 +16,7 @@
 +>target : { (): void; marked: boolean; }
  >marked : boolean
  >true : true
- 
+
 @@= skipped -14, +14 lines =@@
  >foo(new.target.marked) : void
  >foo : (x: true) => void
@@ -36,4 +36,3 @@
 +>f : { (): void; marked: boolean; }
  >marked : boolean
  >true : true
- 

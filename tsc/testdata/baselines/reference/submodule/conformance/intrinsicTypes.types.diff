@@ -2,10 +2,10 @@
 +++ new.intrinsicTypes.types
 @@= skipped -128, +128 lines =@@
  }
- 
+
  function foo2<T extends 'foo' | 'bar'>(x: Uppercase<T>) {
 ->foo2 : <T extends "foo" | "bar">(x: Uppercase<T>) => void
 +>foo2 : <T extends "bar" | "foo">(x: Uppercase<T>) => void
  >x : Uppercase<T>
- 
+
      let s: 'FOO' | 'BAR' = x;

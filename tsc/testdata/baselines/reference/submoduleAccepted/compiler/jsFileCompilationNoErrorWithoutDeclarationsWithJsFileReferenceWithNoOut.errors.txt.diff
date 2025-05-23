@@ -1,6 +1,6 @@
 --- old.jsFileCompilationNoErrorWithoutDeclarationsWithJsFileReferenceWithNoOut.errors.txt
 +++ new.jsFileCompilationNoErrorWithoutDeclarationsWithJsFileReferenceWithNoOut.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5055: Cannot write file 'c.js' because it would overwrite input file.
 -  Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 -
@@ -20,5 +20,4 @@
 -==== c.js (0 errors) ====
 -    function bar() {
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

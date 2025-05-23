@@ -2,15 +2,15 @@
 +++ new.fatArrowSelf.types
 @@= skipped -25, +25 lines =@@
  >EventEmitterConsummer : EventEmitterConsummer
- 
+
          constructor (private emitter: Events.EventEmitter) { }
 ->emitter : Events.EventEmitter
 +>emitter : EventEmitter
  >Events : any
- 
+
          private register() {
 @@= skipped -8, +8 lines =@@
- 
+
              this.emitter.addListener('change', (e) => {
  >this.emitter.addListener('change', (e) => {                this.changed();            }) : void
 ->this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void

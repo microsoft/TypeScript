@@ -1,7 +1,7 @@
 --- old.reachabilityChecks2.js
 +++ new.reachabilityChecks2.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [reachabilityChecks2.js]
  while (true) { }
 +var E;

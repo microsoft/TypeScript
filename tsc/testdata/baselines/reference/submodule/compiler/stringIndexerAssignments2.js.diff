@@ -2,7 +2,7 @@
 +++ new.stringIndexerAssignments2.js
 @@= skipped -22, +22 lines =@@
  x = b;
- 
+
  //// [stringIndexerAssignments2.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

@@ -1,8 +1,8 @@
 --- old.controlFlowSuperPropertyAccess.js
 +++ new.controlFlowSuperPropertyAccess.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [controlFlowSuperPropertyAccess.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,12 +21,7 @@
 -})();
 -var B = /** @class */ (function () {
 -    function B() {
-+class B {
-+}
-+class C extends B {
-+    body() {
-+        super.m && super.m();
-     }
+-    }
 -    return B;
 -}());
 -var C = /** @class */ (function (_super) {
@@ -39,4 +34,10 @@
 -    };
 -    return C;
 -}(B));
++class B {
++}
++class C extends B {
++    body() {
++        super.m && super.m();
++    }
 +}

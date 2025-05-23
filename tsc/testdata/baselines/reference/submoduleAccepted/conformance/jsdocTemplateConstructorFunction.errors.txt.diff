@@ -1,6 +1,6 @@
 --- old.jsdocTemplateConstructorFunction.errors.txt
 +++ new.jsdocTemplateConstructorFunction.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -templateTagOnConstructorFunctions.js(24,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 -
 -
@@ -32,5 +32,4 @@
 -    ~~~
 -!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,19 +2,19 @@
 +++ new.inKeywordAndUnknown.types
 @@= skipped -136, +136 lines =@@
  }
- 
+
  function f6<T extends {}>(x: T & {}) {
 ->f6 : <T extends {}>(x: T & {}) => x is T & Object & Record<"a", unknown>
 +>f6 : <T extends {}>(x: T) => x is T & Object & Record<"a", unknown>
  >x : T
- 
+
      return x instanceof Object && 'a' in x;
 @@= skipped -14, +14 lines =@@
  }
- 
+
  function f7<T extends object>(x: T & {}) {
 ->f7 : <T extends object>(x: T & {}) => x is T & Record<"a", unknown>
 +>f7 : <T extends object>(x: T) => x is T & Record<"a", unknown>
  >x : T
- 
+
      return x instanceof Object && 'a' in x;

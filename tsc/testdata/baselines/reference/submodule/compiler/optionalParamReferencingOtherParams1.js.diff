@@ -2,7 +2,7 @@
 +++ new.optionalParamReferencingOtherParams1.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [optionalParamReferencingOtherParams1.js]
 -function strange(x, y, z) {
 -    if (y === void 0) { y = x * 1; }

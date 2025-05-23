@@ -11,9 +11,11 @@
    Target signature provides too few arguments. Expected 1 or more, but got 0.
 -test.js(34,3): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
 -  Target signature provides too few arguments. Expected 1 or more, but got 0.
- 
- 
+-
+-
 -==== test.js (7 errors) ====
++
++
 +==== test.js (3 errors) ====
      /** @type {number} */
 -               ~~~~~~

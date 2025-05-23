@@ -2,7 +2,7 @@
 +++ new.parser553699.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [parser553699.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

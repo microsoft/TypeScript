@@ -1,8 +1,8 @@
 --- old.emitRestParametersFunctionExpression.js
 +++ new.emitRestParametersFunctionExpression.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [emitRestParametersFunctionExpression.js]
 -var funcExp = function () {
 -    var rest = [];

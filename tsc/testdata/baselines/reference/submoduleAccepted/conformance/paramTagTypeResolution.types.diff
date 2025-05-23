@@ -1,7 +1,7 @@
 --- old.paramTagTypeResolution.types
 +++ new.paramTagTypeResolution.types
 @@= skipped -1, +1 lines =@@
- 
+
  === main.js ===
  var f = require('./first');
 ->f : <T>(x: T, k: (t: T) => void) => void
@@ -10,7 +10,7 @@
 +>require('./first') : (x: any, k: any) => any
  >require : any
  >'./first' : "./first"
- 
+
  f(1, n => { })
 ->f(1, n => { }) : void
 ->f : <T>(x: T, k: (t: T) => void) => void
@@ -21,7 +21,7 @@
 ->n : number
 +>n => { } : (n: any) => void
 +>n : any
- 
+
  === first.js ===
  /** @template T
 @@= skipped -18, +18 lines =@@
@@ -48,4 +48,3 @@
 +>k(x) : any
 +>k : any
 +>x : any
- 

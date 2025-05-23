@@ -1,7 +1,7 @@
 --- old.esnextmodulekind.types
 +++ new.esnextmodulekind.types
 @@= skipped -1, +1 lines =@@
- 
+
  === esnextmodulekind.ts ===
  export default class A
 ->A : A

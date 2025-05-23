@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -parserRealSource4.ts(4,21): error TS6053: File 'typescript.ts' not found.
  parserRealSource4.ts(195,38): error TS1011: An element access expression should take an argument.
- 
- 
+
+
 -==== parserRealSource4.ts (2 errors) ====
 +==== parserRealSource4.ts (1 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

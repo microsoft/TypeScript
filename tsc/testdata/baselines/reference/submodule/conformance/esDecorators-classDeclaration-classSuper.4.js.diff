@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-classSuper.4.js
 +++ new.esDecorators-classDeclaration-classSuper.4.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [esDecorators-classDeclaration-classSuper.4.js]
  const method = "method";
 -let C = (() => {

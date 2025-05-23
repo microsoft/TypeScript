@@ -1,7 +1,7 @@
 --- old.unreachableFlowAfterFinally.js
 +++ new.unreachableFlowAfterFinally.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [unreachableFlowAfterFinally.js]
  function f() {
 -    var x = 100;

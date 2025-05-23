@@ -1,7 +1,7 @@
 --- old.noParameterReassignmentIIFEAnnotated.types
 +++ new.noParameterReassignmentIIFEAnnotated.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  self.importScripts = (function (importScripts) {
 ->self.importScripts = (function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };})(importScripts) : (...args: unknown[]) => any
@@ -16,13 +16,13 @@
 +>(function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };}) : (importScripts: (...urls: string[]) => void) => () => any
 +>function (importScripts) {    /**     * @param {...unknown} rest     */    return function () {        return importScripts.apply(this, arguments);    };} : (importScripts: (...urls: string[]) => void) => () => any
  >importScripts : (...urls: string[]) => void
- 
+
      /**
       * @param {...unknown} rest
       */
      return function () {
 ->function () {        return importScripts.apply(this, arguments);    } : (...args: unknown[]) => any
 +>function () {        return importScripts.apply(this, arguments);    } : () => any
- 
+
          return importScripts.apply(this, arguments);
  >importScripts.apply(this, arguments) : any

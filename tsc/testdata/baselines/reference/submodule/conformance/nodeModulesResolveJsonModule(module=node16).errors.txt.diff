@@ -7,10 +7,12 @@
 +index.mts(5,33): error TS2339: Property 'name' does not exist on type 'string'.
  index.ts(1,34): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
  index.ts(3,38): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
-+index.ts(5,33): error TS2339: Property 'name' does not exist on type 'string'.
- 
- 
+-
+-
 -==== index.ts (2 errors) ====
++index.ts(5,33): error TS2339: Property 'name' does not exist on type 'string'.
++
++
 +==== index.ts (3 errors) ====
      import pkg from "./package.json" with { type: "json" };
                                       ~~~~~~~~~~~~~~~~~~~~~

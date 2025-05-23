@@ -1,18 +1,19 @@
 --- old.constructorOverloads1.js
 +++ new.constructorOverloads1.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [constructorOverloads1.js]
 -var Foo = /** @class */ (function () {
 -    function Foo(x) {
-+class Foo {
-+    constructor(x) {
-     }
+-    }
 -    Foo.prototype.bar1 = function () { };
 -    Foo.prototype.bar2 = function () { };
 -    return Foo;
 -}());
++class Foo {
++    constructor(x) {
++    }
 +    constructor(x) {
 +    }
 +    bar1() { }

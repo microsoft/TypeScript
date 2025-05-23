@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithCallSignatures6.js
 +++ new.assignmentCompatWithCallSignatures6.js
 @@= skipped -45, +45 lines =@@
- 
+
  //// [assignmentCompatWithCallSignatures6.js]
  // checking assignment compatibility relations for function types. All valid
 -var __extends = (this && this.__extends) || (function () {

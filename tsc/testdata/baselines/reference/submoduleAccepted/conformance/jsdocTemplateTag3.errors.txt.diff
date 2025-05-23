@@ -7,10 +7,12 @@
 -  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
 -a.js(24,15): error TS2304: Cannot find name 'NoLongerAllowed'.
 -a.js(25,2): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
-+a.js(21,3): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
- 
- 
+-
+-
 -==== a.js (5 errors) ====
++a.js(21,3): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
++
++
 +==== a.js (1 errors) ====
      /**
       * @template {{ a: number, b: string }} T,U A Comment

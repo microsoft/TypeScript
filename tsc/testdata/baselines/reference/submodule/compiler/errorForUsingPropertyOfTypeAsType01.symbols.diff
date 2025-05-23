@@ -2,18 +2,18 @@
 +++ new.errorForUsingPropertyOfTypeAsType01.symbols
 @@= skipped -7, +7 lines =@@
  >Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 0, 17))
- 
+
          bar: string;
 ->bar : Symbol(Foo.bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 1, 26))
 +>bar : Symbol(bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 1, 26))
      }
- 
+
      var x: Foo.bar = "";
  >x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType01.ts, 5, 7))
  >Foo : Symbol(Foo)
 ->bar : Symbol(Foo.bar)
 +>bar : Symbol(bar)
- 
+
      var y: Test1.Foo.bar = "";
  >y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 6, 7))
  >Test1 : Symbol(Test1, Decl(errorForUsingPropertyOfTypeAsType01.ts, 0, 0))
@@ -22,22 +22,22 @@
 +>Foo : Symbol(Foo)
 +>bar : Symbol(bar)
  }
- 
+
  namespace Test2 {
 @@= skipped -22, +22 lines =@@
  >Foo : Symbol(Foo, Decl(errorForUsingPropertyOfTypeAsType01.ts, 9, 17))
- 
+
          bar: string;
 ->bar : Symbol(Foo.bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 10, 22))
 +>bar : Symbol(bar, Decl(errorForUsingPropertyOfTypeAsType01.ts, 10, 22))
      }
- 
+
      var x: Foo.bar = "";
  >x : Symbol(x, Decl(errorForUsingPropertyOfTypeAsType01.ts, 14, 7))
  >Foo : Symbol(Foo)
 ->bar : Symbol(Foo.bar)
 +>bar : Symbol(bar)
- 
+
      var y: Test2.Foo.bar = "";
  >y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 15, 7))
  >Test2 : Symbol(Test2, Decl(errorForUsingPropertyOfTypeAsType01.ts, 7, 1))
@@ -46,7 +46,7 @@
 +>Foo : Symbol(Foo)
 +>bar : Symbol(bar)
  }
- 
+
  namespace Test3 {
 @@= skipped -28, +28 lines =@@
      var x: Foo.bar = "";
@@ -54,7 +54,7 @@
  >Foo : Symbol(Foo)
 ->bar : Symbol(Foo.bar)
 +>bar : Symbol(bar)
- 
+
      var y: Test3.Foo.bar = "";
  >y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 24, 7))
  >Test3 : Symbol(Test3, Decl(errorForUsingPropertyOfTypeAsType01.ts, 16, 1))
@@ -63,7 +63,7 @@
 +>Foo : Symbol(Foo)
 +>bar : Symbol(bar)
  }
- 
+
  namespace Test4 {
 @@= skipped -22, +22 lines =@@
      var x: Foo.bar = "";
@@ -71,7 +71,7 @@
  >Foo : Symbol(Foo)
 ->bar : Symbol(Foo.bar)
 +>bar : Symbol(bar)
- 
+
      var y: Test4.Foo.bar = "";
  >y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 32, 7))
  >Test4 : Symbol(Test4, Decl(errorForUsingPropertyOfTypeAsType01.ts, 25, 1))
@@ -80,7 +80,7 @@
 +>Foo : Symbol(Foo)
 +>bar : Symbol(bar)
  }
- 
+
  namespace Test5 {
 @@= skipped -22, +22 lines =@@
      var x: Foo.bar = "";
@@ -88,7 +88,7 @@
  >Foo : Symbol(Foo)
 ->bar : Symbol(Foo.bar)
 +>bar : Symbol(bar)
- 
+
      var y: Test5.Foo.bar = "";
  >y : Symbol(y, Decl(errorForUsingPropertyOfTypeAsType01.ts, 40, 7))
  >Test5 : Symbol(Test5, Decl(errorForUsingPropertyOfTypeAsType01.ts, 33, 1))
@@ -97,5 +97,5 @@
 +>Foo : Symbol(Foo)
 +>bar : Symbol(bar)
  }
- 
+
  import lol = Test5.Foo.

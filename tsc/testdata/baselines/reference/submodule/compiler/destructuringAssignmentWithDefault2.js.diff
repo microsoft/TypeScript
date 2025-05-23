@@ -2,7 +2,7 @@
 +++ new.destructuringAssignmentWithDefault2.js
 @@= skipped -27, +27 lines =@@
  ({ done: done = false, value } = r.next());
- 
+
  //// [destructuringAssignmentWithDefault2.js]
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 -var a = {};

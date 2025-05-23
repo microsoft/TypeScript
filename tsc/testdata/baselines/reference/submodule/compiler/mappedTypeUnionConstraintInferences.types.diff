@@ -2,21 +2,21 @@
 +++ new.mappedTypeUnionConstraintInferences.types
 @@= skipped -7, +7 lines =@@
  >PartialProperties : PartialProperties<T, K>
- 
+
  export function doSomething_Actual<T extends {
 ->doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 +>doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
- 
+
      prop: string;
  >prop : string
 @@= skipped -9, +9 lines =@@
  >a : T
- 
+
      const x: { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; } = null as any;
 ->x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 +>x : { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
  >null as any : any
- 
+
      return x;
 ->x : { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 +>x : { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
@@ -24,7 +24,7 @@
  export declare function doSomething_Expected<T extends {
 ->doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 +>doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in "prop" | Exclude<keyof T, "prop">]: PartialProperties<T, "prop">[P]; }
- 
+
      prop: string;
  >prop : string
 @@= skipped -18, +18 lines =@@

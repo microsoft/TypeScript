@@ -9,8 +9,7 @@
  >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
  >resolve : Symbol(resolve, Decl(usePromiseFinally.ts, 0, 36))
  >reject : Symbol(reject, Decl(usePromiseFinally.ts, 0, 44))
- 
+
                  .finally(function() {});
 ->finally : Symbol(Promise.finally, Decl(lib.es2018.promise.d.ts, --, --))
 +>finally : Symbol(finally, Decl(lib.es2018.promise.d.ts, --, --))
- 

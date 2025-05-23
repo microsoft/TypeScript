@@ -2,7 +2,7 @@
 +++ new.noImplicitUseStrict_amd.js
 @@= skipped -3, +3 lines =@@
  export var x = 0;
- 
+
  //// [noImplicitUseStrict_amd.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

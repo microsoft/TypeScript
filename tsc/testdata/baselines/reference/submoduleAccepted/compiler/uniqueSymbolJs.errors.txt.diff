@@ -1,6 +1,6 @@
 --- old.uniqueSymbolJs.errors.txt
 +++ new.uniqueSymbolJs.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -a.js(5,18): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
 -a.js(5,28): error TS1005: ';' expected.
 -
@@ -16,5 +16,4 @@
 -                               ~~~~~~~
 -!!! error TS1005: ';' expected.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

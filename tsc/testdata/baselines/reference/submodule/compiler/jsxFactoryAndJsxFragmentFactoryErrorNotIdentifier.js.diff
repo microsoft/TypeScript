@@ -2,7 +2,7 @@
 +++ new.jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.js
 @@= skipped -6, +6 lines =@@
  <><span>1</span><><span>2.1</span><span>2.2</span></></>;
- 
+
  //// [jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.js]
 -h(React.Fragment, null);
 -h(React.Fragment, null,

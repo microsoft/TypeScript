@@ -2,7 +2,7 @@
 +++ new.genericTypeAssertions4.js
 @@= skipped -27, +27 lines =@@
  }
- 
+
  //// [genericTypeAssertions4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

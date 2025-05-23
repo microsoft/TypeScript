@@ -2,7 +2,7 @@
 +++ new.awaitedTypeNoLib.js
 @@= skipped -28, +28 lines =@@
  }
- 
+
  //// [awaitedTypeNoLib.js]
 -var Thenable = /** @class */ (function () {
 -    function Thenable() {

@@ -1,8 +1,8 @@
 --- old.privateNameMethod.js
 +++ new.privateNameMethod.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [privateNameMethod.js]
 -"use strict";
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {

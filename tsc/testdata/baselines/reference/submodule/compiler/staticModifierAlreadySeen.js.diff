@@ -2,7 +2,7 @@
 +++ new.staticModifierAlreadySeen.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [staticModifierAlreadySeen.js]
 -var C = /** @class */ (function () {
 -    function C() {

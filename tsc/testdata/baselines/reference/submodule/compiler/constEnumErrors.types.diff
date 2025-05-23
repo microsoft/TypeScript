@@ -2,12 +2,12 @@
 +++ new.constEnumErrors.types
 @@= skipped -73, +73 lines =@@
  >E2 : typeof E2
- 
+
  var y = [E2];
 ->y : (typeof E2)[]
 ->[E2] : (typeof E2)[]
 +>y : typeof E2[]
 +>[E2] : typeof E2[]
  >E2 : typeof E2
- 
+
  function foo(t: any): void {

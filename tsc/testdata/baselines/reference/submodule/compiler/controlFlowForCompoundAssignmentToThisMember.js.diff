@@ -2,7 +2,7 @@
 +++ new.controlFlowForCompoundAssignmentToThisMember.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [controlFlowForCompoundAssignmentToThisMember.js]
 -var DatasourceCommandWidgetElement = /** @class */ (function () {
 -    function DatasourceCommandWidgetElement(target) {

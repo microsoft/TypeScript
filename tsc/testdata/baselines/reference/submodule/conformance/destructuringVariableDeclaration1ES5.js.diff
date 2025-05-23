@@ -1,8 +1,8 @@
 --- old.destructuringVariableDeclaration1ES5.js
 +++ new.destructuringVariableDeclaration1ES5.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [destructuringVariableDeclaration1ES5.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

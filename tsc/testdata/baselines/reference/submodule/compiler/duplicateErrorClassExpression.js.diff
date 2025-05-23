@@ -2,7 +2,7 @@
 +++ new.duplicateErrorClassExpression.js
 @@= skipped -22, +22 lines =@@
  obj[x];
- 
+
  //// [duplicateErrorClassExpression.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {

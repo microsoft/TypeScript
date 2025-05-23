@@ -2,7 +2,7 @@
 +++ new.classAndVariableWithSameName.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [classAndVariableWithSameName.js]
 -var C = /** @class */ (function () {
 -    function C() {

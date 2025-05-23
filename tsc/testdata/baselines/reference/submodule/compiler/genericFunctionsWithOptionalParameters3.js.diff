@@ -1,8 +1,8 @@
 --- old.genericFunctionsWithOptionalParameters3.js
 +++ new.genericFunctionsWithOptionalParameters3.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [genericFunctionsWithOptionalParameters3.js]
 -var Collection = /** @class */ (function () {
 -    function Collection() {

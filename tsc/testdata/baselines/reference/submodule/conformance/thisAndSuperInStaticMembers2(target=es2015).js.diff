@@ -1,8 +1,8 @@
 --- old.thisAndSuperInStaticMembers2(target=es2015).js
 +++ new.thisAndSuperInStaticMembers2(target=es2015).js
 @@= skipped -41, +41 lines =@@
- 
- 
+
+
  //// [thisAndSuperInStaticMembers2.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

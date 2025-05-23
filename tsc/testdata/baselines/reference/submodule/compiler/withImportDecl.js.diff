@@ -2,7 +2,7 @@
 +++ new.withImportDecl.js
 @@= skipped -43, +43 lines =@@
  b.foo;
- 
+
  //// [withImportDecl_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -40,22 +40,6 @@
 -            y: "word",
 -            n: 2
 -        };
--    }
--    var m1;
--    (function (m1) {
--        function foo() {
--            return "Hello";
--        }
--        m1.foo = foo;
--    })(m1 || (m1 = {}));
--    var b = new m3.A();
--    b.foo;
--});
--
--
--//// [withImportDecl_0.d.ts]
--export declare class A {
--    foo: string;
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +///<reference path='withImportDecl_0.ts'/>
@@ -72,14 +56,30 @@
 +        y: "word",
 +        n: 2
 +    };
- }
--//// [withImportDecl_1.d.ts]
--export {};
++}
 +var m1;
 +(function (m1) {
 +    function foo() {
 +        return "Hello";
-+    }
+     }
+-    var m1;
+-    (function (m1) {
+-        function foo() {
+-            return "Hello";
+-        }
+-        m1.foo = foo;
+-    })(m1 || (m1 = {}));
+-    var b = new m3.A();
+-    b.foo;
+-});
+-
+-
+-//// [withImportDecl_0.d.ts]
+-export declare class A {
+-    foo: string;
+-}
+-//// [withImportDecl_1.d.ts]
+-export {};
 +    m1.foo = foo;
 +})(m1 || (m1 = {}));
 +const m3 = require("withImportDecl_0");

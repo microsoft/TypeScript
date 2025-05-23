@@ -2,7 +2,7 @@
 +++ new.anonymousDefaultExportsAmd.js
 @@= skipped -6, +6 lines =@@
  export default function() {}
- 
+
  //// [a.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

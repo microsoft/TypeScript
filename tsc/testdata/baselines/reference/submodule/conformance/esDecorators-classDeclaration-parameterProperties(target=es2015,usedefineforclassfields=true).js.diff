@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-parameterProperties(target=es2015,usedefineforclassfields=true).js
 +++ new.esDecorators-classDeclaration-parameterProperties(target=es2015,usedefineforclassfields=true).js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-parameterProperties.js]
 -let C = (() => {
 -    var _a;

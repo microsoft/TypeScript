@@ -1,7 +1,7 @@
 --- old.controlFlowOuterVariable.js
 +++ new.controlFlowOuterVariable.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [controlFlowOuterVariable.js]
  // Repros from #10641
 -var CONFIG = {

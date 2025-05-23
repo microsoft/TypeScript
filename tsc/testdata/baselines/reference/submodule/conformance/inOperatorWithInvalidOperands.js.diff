@@ -2,7 +2,7 @@
 +++ new.inOperatorWithInvalidOperands.js
 @@= skipped -49, +49 lines =@@
  var rc1 = {} in '';
- 
+
  //// [inOperatorWithInvalidOperands.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

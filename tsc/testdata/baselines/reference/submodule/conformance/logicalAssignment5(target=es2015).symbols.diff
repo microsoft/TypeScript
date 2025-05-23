@@ -1,7 +1,7 @@
 --- old.logicalAssignment5(target=es2015).symbols
 +++ new.logicalAssignment5(target=es2015).symbols
 @@= skipped -79, +79 lines =@@
- 
+
      f &&= (f.toString(), (a => a))
  >f : Symbol(f, Decl(logicalAssignment5.ts, 25, 15))
 ->f.toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
@@ -11,4 +11,3 @@
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(logicalAssignment5.ts, 26, 26))
  >a : Symbol(a, Decl(logicalAssignment5.ts, 26, 26))
- 

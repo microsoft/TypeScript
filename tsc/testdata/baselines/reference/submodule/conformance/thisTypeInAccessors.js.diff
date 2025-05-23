@@ -1,8 +1,8 @@
 --- old.thisTypeInAccessors.js
 +++ new.thisTypeInAccessors.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [thisTypeInAccessors.js]
 -var explicit = {
 +const explicit = {

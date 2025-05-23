@@ -1,8 +1,7 @@
 --- old.callbackTagVariadicType.errors.txt
 +++ new.callbackTagVariadicType.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +callbackTagVariadicType.js(7,12): error TS2304: Cannot find name 'Foo'.
 +
 +

@@ -28,19 +28,19 @@
  }
 @@= skipped -12, +12 lines =@@
  >X : Symbol(X, Decl(overloadsWithinClasses.ts, 14, 1))
- 
+
     public attr(name:string):string;
 ->attr : Symbol(X.attr, Decl(overloadsWithinClasses.ts, 16, 9), Decl(overloadsWithinClasses.ts, 17, 35), Decl(overloadsWithinClasses.ts, 18, 44))
 +>attr : Symbol(attr, Decl(overloadsWithinClasses.ts, 16, 9), Decl(overloadsWithinClasses.ts, 17, 35), Decl(overloadsWithinClasses.ts, 18, 44))
  >name : Symbol(name, Decl(overloadsWithinClasses.ts, 17, 15))
- 
+
     public attr(name:string, value:string):X;
 ->attr : Symbol(X.attr, Decl(overloadsWithinClasses.ts, 16, 9), Decl(overloadsWithinClasses.ts, 17, 35), Decl(overloadsWithinClasses.ts, 18, 44))
 +>attr : Symbol(attr, Decl(overloadsWithinClasses.ts, 16, 9), Decl(overloadsWithinClasses.ts, 17, 35), Decl(overloadsWithinClasses.ts, 18, 44))
  >name : Symbol(name, Decl(overloadsWithinClasses.ts, 18, 15))
  >value : Symbol(value, Decl(overloadsWithinClasses.ts, 18, 27))
  >X : Symbol(X, Decl(overloadsWithinClasses.ts, 14, 1))
- 
+
     public attr(first:any, second?:any):any {
 ->attr : Symbol(X.attr, Decl(overloadsWithinClasses.ts, 16, 9), Decl(overloadsWithinClasses.ts, 17, 35), Decl(overloadsWithinClasses.ts, 18, 44))
 +>attr : Symbol(attr, Decl(overloadsWithinClasses.ts, 16, 9), Decl(overloadsWithinClasses.ts, 17, 35), Decl(overloadsWithinClasses.ts, 18, 44))

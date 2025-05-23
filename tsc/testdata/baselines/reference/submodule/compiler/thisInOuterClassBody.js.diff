@@ -2,7 +2,7 @@
 +++ new.thisInOuterClassBody.js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [thisInOuterClassBody.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

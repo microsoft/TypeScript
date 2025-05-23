@@ -1,8 +1,8 @@
 --- old.nestedSuperCallEmit.js
 +++ new.nestedSuperCallEmit.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [nestedSuperCallEmit.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,8 +1,8 @@
 --- old.moduleVisibilityTest4.js
 +++ new.moduleVisibilityTest4.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [moduleVisibilityTest4.js]
 -var a1;
 -var b1;

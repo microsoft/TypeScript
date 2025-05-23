@@ -26,9 +26,11 @@
  isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
  isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
 -isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
- 
- 
+-
+-
 -==== isolatedDeclarationErrorsClasses.ts (25 errors) ====
++
++
 +==== isolatedDeclarationErrorsClasses.ts (11 errors) ====
      export class Cls {
      

@@ -1,8 +1,8 @@
 --- old.typeGuardFunctionOfFormThis.js
 +++ new.typeGuardFunctionOfFormThis.js
 @@= skipped -143, +143 lines =@@
- 
- 
+
+
  //// [typeGuardFunctionOfFormThis.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -38,12 +38,9 @@
 -    __extends(LeadGuard, _super);
 -    function LeadGuard() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    LeadGuard.prototype.lead = function () { };
-+}
-+class LeadGuard extends RoyalGuard {
-+    lead() { }
-     ;
+-    ;
 -    return LeadGuard;
 -}(RoyalGuard));
 -var FollowerGuard = /** @class */ (function (_super) {
@@ -52,13 +49,19 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    FollowerGuard.prototype.follow = function () { };
-+}
-+class FollowerGuard extends RoyalGuard {
-+    follow() { }
-     ;
+-    ;
 -    return FollowerGuard;
 -}(RoyalGuard));
 -var a = new FollowerGuard();
++    }
++}
++class LeadGuard extends RoyalGuard {
++    lead() { }
++    ;
++}
++class FollowerGuard extends RoyalGuard {
++    follow() { }
++    ;
 +}
 +let a = new FollowerGuard();
  if (a.isLeader()) {
@@ -147,12 +150,9 @@
 -    function MimicGuard() {
 -    }
 -    MimicGuard.prototype.isLeader = function () { return this instanceof MimicLeader; };
-+class MimicGuard {
-+    isLeader() { return this instanceof MimicLeader; }
-     ;
+-    ;
 -    MimicGuard.prototype.isFollower = function () { return this instanceof MimicFollower; };
-+    isFollower() { return this instanceof MimicFollower; }
-     ;
+-    ;
 -    return MimicGuard;
 -}());
 -var MimicLeader = /** @class */ (function (_super) {
@@ -172,6 +172,11 @@
 -    return MimicFollower;
 -}(MimicGuard));
 -var mimic = new MimicGuard();
++class MimicGuard {
++    isLeader() { return this instanceof MimicLeader; }
++    ;
++    isFollower() { return this instanceof MimicFollower; }
++    ;
 +}
 +class MimicLeader extends MimicGuard {
 +    lead() { }
@@ -185,7 +190,7 @@
  if (mimic.isFollower()) {
      mimic.follow();
      mimic.isFollower = a.isFollower;
- }
+-}
 -
 -
 -//// [typeGuardFunctionOfFormThis.d.ts]
@@ -244,4 +249,4 @@
 -interface MimicGuardInterface {
 -    isLeader(): this is LeadGuard;
 -    isFollower(): this is FollowerGuard;
--}
+ }

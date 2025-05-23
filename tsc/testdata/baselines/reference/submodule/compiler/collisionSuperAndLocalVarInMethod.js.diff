@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndLocalVarInMethod.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [collisionSuperAndLocalVarInMethod.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

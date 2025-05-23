@@ -12,5 +12,5 @@
 ->getA : () => import("A").A
 +>getA : () => A
  >x : number
- 
+
  === array.d.ts ===

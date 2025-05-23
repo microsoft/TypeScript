@@ -11,7 +11,7 @@
 +>groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >x : Symbol(x, Decl(mapGroupBy.ts, 0, 36))
  >x : Symbol(x, Decl(mapGroupBy.ts, 0, 36))
- 
+
  const chars = Map.groupBy('a string', c => c);
  >chars : Symbol(chars, Decl(mapGroupBy.ts, 2, 5))
 ->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
@@ -21,9 +21,9 @@
 +>groupBy : Symbol(groupBy, Decl(lib.es2024.collection.d.ts, --, --))
  >c : Symbol(c, Decl(mapGroupBy.ts, 2, 37))
  >c : Symbol(c, Decl(mapGroupBy.ts, 2, 37))
- 
+
 @@= skipped -27, +27 lines =@@
- 
+
  const byRole = Map.groupBy(employees, x => x.role);
  >byRole : Symbol(byRole, Decl(mapGroupBy.ts, 6, 5))
 ->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))
@@ -35,7 +35,7 @@
  >x : Symbol(x, Decl(mapGroupBy.ts, 6, 37))
  >x.role : Symbol(role, Decl(mapGroupBy.ts, 4, 31))
 @@= skipped -11, +11 lines =@@
- 
+
  const byNonKey = Map.groupBy(employees, x => x);
  >byNonKey : Symbol(byNonKey, Decl(mapGroupBy.ts, 8, 5))
 ->Map.groupBy : Symbol(MapConstructor.groupBy, Decl(lib.es2024.collection.d.ts, --, --))

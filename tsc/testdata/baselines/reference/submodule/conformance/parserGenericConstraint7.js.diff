@@ -2,7 +2,7 @@
 +++ new.parserGenericConstraint7.js
 @@= skipped -4, +4 lines =@@
  }
- 
+
  //// [parserGenericConstraint7.js]
 -var C = /** @class */ (function () {
 -    function C() {

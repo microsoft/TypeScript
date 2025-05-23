@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithCallSignatures.js
 +++ new.objectTypesIdentityWithCallSignatures.js
 @@= skipped -103, +103 lines =@@
- 
+
  //// [objectTypesIdentityWithCallSignatures.js]
  // object types are identical structurally
 -var A = /** @class */ (function () {

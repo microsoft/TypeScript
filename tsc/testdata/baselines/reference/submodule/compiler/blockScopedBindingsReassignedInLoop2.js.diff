@@ -2,7 +2,7 @@
 +++ new.blockScopedBindingsReassignedInLoop2.js
 @@= skipped -43, +43 lines =@@
  }
- 
+
  //// [blockScopedBindingsReassignedInLoop2.js]
 -var _loop_1 = function (x, y) {
 -    var a = function () { return x++ + y++; };
@@ -10,11 +10,10 @@
 +    let a = () => x++ + y++;
      if (x == 1) {
 -        return out_x_1 = x, out_y_1 = y, "break";
-+        break;
-     }
-     else {
-         y = 5;
-     }
+-    }
+-    else {
+-        y = 5;
+-    }
 -    out_x_1 = x;
 -    out_y_1 = y;
 -};
@@ -24,19 +23,16 @@
 -    x = out_x_1;
 -    y = out_y_1;
 -    if (state_1 === "break")
--        break;
- }
+         break;
+-}
 -var _loop_2 = function (x, y) {
 -    var a = function () { return x++ + y++; };
-+for (let x = 1, y = 2; x < y; ++x, --y) {
-+    let a = () => x++ + y++;
-     if (x == 1) {
+-    if (x == 1) {
 -        return out_x_2 = x, out_y_2 = y, "continue";
-+        continue;
-     }
-     else {
-         y = 5;
-     }
+-    }
+-    else {
+-        y = 5;
+-    }
 -    out_x_2 = x;
 -    out_y_2 = y;
 -};
@@ -45,18 +41,15 @@
 -    _loop_2(x, y);
 -    x = out_x_2;
 -    y = out_y_2;
- }
+-}
 -var _loop_3 = function (x, y) {
 -    var a = function () { return x++ + y++; };
-+loop: for (let x = 1, y = 2; x < y; ++x, --y) {
-+    let a = () => x++ + y++;
-     if (x == 1) {
+-    if (x == 1) {
 -        return out_x_3 = x, out_y_3 = y, "break-loop";
-+        break loop;
-     }
-     else {
-         y = 5;
-     }
+-    }
+-    else {
+-        y = 5;
+-    }
 -    out_x_3 = x;
 -    out_y_3 = y;
 -};
@@ -68,18 +61,15 @@
 -    switch (state_2) {
 -        case "break-loop": break loop;
 -    }
- }
+-}
 -var _loop_4 = function (x, y) {
 -    var a = function () { return x++ + y++; };
-+loop: for (let x = 1, y = 2; x < y; ++x, --y) {
-+    let a = () => x++ + y++;
-     if (x == 1) {
+-    if (x == 1) {
 -        return out_x_4 = x, out_y_4 = y, "continue-loop";
-+        continue loop;
-     }
-     else {
-         y = 5;
-     }
+-    }
+-    else {
+-        y = 5;
+-    }
 -    out_x_4 = x;
 -    out_y_4 = y;
 -};
@@ -90,5 +80,35 @@
 -    y = out_y_4;
 -    switch (state_3) {
 -        case "continue-loop": continue loop;
--    }
++    }
++    else {
++        y = 5;
++    }
++}
++for (let x = 1, y = 2; x < y; ++x, --y) {
++    let a = () => x++ + y++;
++    if (x == 1) {
++        continue;
++    }
++    else {
++        y = 5;
++    }
++}
++loop: for (let x = 1, y = 2; x < y; ++x, --y) {
++    let a = () => x++ + y++;
++    if (x == 1) {
++        break loop;
++    }
++    else {
++        y = 5;
++    }
++}
++loop: for (let x = 1, y = 2; x < y; ++x, --y) {
++    let a = () => x++ + y++;
++    if (x == 1) {
++        continue loop;
++    }
++    else {
++        y = 5;
+     }
  }

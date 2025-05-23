@@ -2,7 +2,7 @@
 +++ new.emitter.forAwait(target=es2017).js
 @@= skipped -50, +50 lines =@@
  }
- 
+
  //// [file1.js]
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -20,15 +20,15 @@
 -            _d = false;
 -            const x = _c;
 -        }
-+    for await (const x of y) {
-     }
+-    }
 -    catch (e_1_1) { e_1 = { error: e_1_1 }; }
 -    finally {
 -        try {
 -            if (!_d && !_a && (_b = y_1.return)) await _b.call(y_1);
 -        }
 -        finally { if (e_1) throw e_1.error; }
--    }
++    for await (const x of y) {
+     }
  }
  //// [file2.js]
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
@@ -47,15 +47,15 @@
 -            _d = false;
 -            x = _c;
 -        }
-+    for await (x of y) {
-     }
+-    }
 -    catch (e_1_1) { e_1 = { error: e_1_1 }; }
 -    finally {
 -        try {
 -            if (!_d && !_a && (_b = y_1.return)) await _b.call(y_1);
 -        }
 -        finally { if (e_1) throw e_1.error; }
--    }
++    for await (x of y) {
+     }
  }
  //// [file3.js]
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
@@ -166,16 +166,16 @@
 -            const x = _c;
 -            continue outer;
 -        }
-+    outer: for await (const x of y) {
-+        continue outer;
-     }
+-    }
 -    catch (e_1_1) { e_1 = { error: e_1_1 }; }
 -    finally {
 -        try {
 -            if (!_d && !_a && (_b = y_1.return)) await _b.call(y_1);
 -        }
 -        finally { if (e_1) throw e_1.error; }
--    }
++    outer: for await (const x of y) {
++        continue outer;
+     }
  }
  //// [file6.js]
 -var __asyncValues = (this && this.__asyncValues) || function (o) {

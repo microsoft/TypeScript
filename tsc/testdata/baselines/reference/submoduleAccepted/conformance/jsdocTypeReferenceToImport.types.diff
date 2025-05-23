@@ -1,7 +1,7 @@
 --- old.jsdocTypeReferenceToImport.types
 +++ new.jsdocTypeReferenceToImport.types
 @@= skipped -1, +1 lines =@@
- 
+
  === jsdocTypeReferenceToImport.js ===
  const C = require('./ex').C;
 ->C : typeof C
@@ -14,7 +14,7 @@
  >'./ex' : "./ex"
 ->C : typeof C
 +>C : any
- 
+
  const D = require('./ex')?.C;
 ->D : typeof C
 ->require('./ex')?.C : typeof C
@@ -26,7 +26,7 @@
  >'./ex' : "./ex"
 ->C : typeof C
 +>C : any
- 
+
  /** @type {C} c */
  var c = new C()
  >c : C
@@ -34,21 +34,21 @@
 ->C : typeof C
 +>new C() : any
 +>C : any
- 
+
  c.start
 ->c.start : number
 +>c.start : any
  >c : C
 ->start : number
 +>start : any
- 
+
  c.end
 ->c.end : number
 +>c.end : any
  >c : C
 ->end : number
 +>end : any
- 
+
  /** @type {D} c */
  var d = new D()
 ->d : C
@@ -57,7 +57,7 @@
 +>d : D
 +>new D() : any
 +>D : any
- 
+
  d.start
 ->d.start : number
 ->d : C
@@ -65,7 +65,7 @@
 +>d.start : any
 +>d : D
 +>start : any
- 
+
  d.end
 ->d.end : number
 ->d : C
@@ -73,6 +73,6 @@
 +>d.end : any
 +>d : D
 +>end : any
- 
+
  === ex.d.ts ===
  export class C {

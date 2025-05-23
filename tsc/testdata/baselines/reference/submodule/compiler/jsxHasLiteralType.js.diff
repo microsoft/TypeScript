@@ -1,7 +1,7 @@
 --- old.jsxHasLiteralType.js
 +++ new.jsxHasLiteralType.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [jsxHasLiteralType.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

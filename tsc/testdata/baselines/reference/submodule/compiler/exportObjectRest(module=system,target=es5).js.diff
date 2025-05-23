@@ -2,7 +2,7 @@
 +++ new.exportObjectRest(module=system,target=es5).js
 @@= skipped -3, +3 lines =@@
  export const { x, ...rest } = { x: 'x', y: 'y' };
- 
+
  //// [exportObjectRest.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

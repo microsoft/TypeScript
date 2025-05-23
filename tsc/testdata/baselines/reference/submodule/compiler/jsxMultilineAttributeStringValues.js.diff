@@ -1,8 +1,8 @@
 --- old.jsxMultilineAttributeStringValues.js
 +++ new.jsxMultilineAttributeStringValues.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [jsxMultilineAttributeStringValues.jsx]
 -var a = <input value="
 +const a = <input value="

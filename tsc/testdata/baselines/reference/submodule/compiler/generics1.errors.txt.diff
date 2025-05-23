@@ -6,7 +6,7 @@
 +generics1.ts(10,14): error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
  generics1.ts(13,9): error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
  generics1.ts(14,9): error TS2314: Generic type 'G<T, U>' requires 2 type argument(s).
- 
+
 @@= skipped -15, +14 lines =@@
      var v2: G<{ a: string }, C>;   // Ok, equivalent to G<A, C>
      var v3: G<A, A>;               // Error, A not valid argument for U

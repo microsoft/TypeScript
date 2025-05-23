@@ -1,13 +1,13 @@
 --- old.moduleExportPropertyAssignmentDefault.types
 +++ new.moduleExportPropertyAssignmentDefault.types
 @@= skipped -1, +1 lines =@@
- 
+
  === axios.js ===
  var axios = {}
 ->axios : typeof axios
 +>axios : {}
  >{} : {}
- 
+
  module.exports = axios // both assignments should be ok
 ->module.exports = axios : typeof axios
 ->module.exports : typeof axios
@@ -19,7 +19,7 @@
 +>module : { axios: {}; }
 +>exports : {}
 +>axios : {}
- 
+
  module.exports.default = axios
 ->module.exports.default = axios : typeof axios
 ->module.exports.default : typeof axios
@@ -35,4 +35,3 @@
 +>exports : {}
 +>default : any
 +>axios : {}
- 

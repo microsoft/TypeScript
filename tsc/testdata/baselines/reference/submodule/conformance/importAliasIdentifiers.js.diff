@@ -19,14 +19,17 @@
      moduleA.Point = Point;
  })(moduleA || (moduleA = {}));
 -var alias = moduleA;
- var p;
- var p;
- var p;
+-var p;
+-var p;
+-var p;
 -var clodule = /** @class */ (function () {
 -    function clodule() {
 -    }
 -    return clodule;
 -}());
++var p;
++var p;
++var p;
 +class clodule {
 +    name;
 +}

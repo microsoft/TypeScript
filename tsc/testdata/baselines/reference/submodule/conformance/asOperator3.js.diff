@@ -2,7 +2,7 @@
 +++ new.asOperator3.js
 @@= skipped -12, +12 lines =@@
  var h = tag `Hello` as string;
- 
+
  //// [asOperator3.js]
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
 -    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }

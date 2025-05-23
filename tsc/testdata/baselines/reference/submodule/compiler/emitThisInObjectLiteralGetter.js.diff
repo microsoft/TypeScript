@@ -1,8 +1,8 @@
 --- old.emitThisInObjectLiteralGetter.js
 +++ new.emitThisInObjectLiteralGetter.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [emitThisInObjectLiteralGetter.js]
 -var example = {
 +const example = {

@@ -2,13 +2,13 @@
 +++ new.elementAccessChain.types
 @@= skipped -29, +29 lines =@@
  >"c" : "c"
- 
+
  declare const o3: { b: undefined | { c: string } };
 ->o3 : { b: undefined | { c: string; }; }
 +>o3 : { b: { c: string; } | undefined; }
  >b : { c: string; } | undefined
  >c : string
- 
+
  o3["b"]?.c;
  >o3["b"]?.c : string | undefined
  >o3["b"] : { c: string; } | undefined
@@ -16,7 +16,7 @@
 +>o3 : { b: { c: string; } | undefined; }
  >"b" : "b"
  >c : string | undefined
- 
+
  o3.b?.["c"];
  >o3.b?.["c"] : string | undefined
  >o3.b : { c: string; } | undefined
@@ -24,7 +24,7 @@
 +>o3 : { b: { c: string; } | undefined; }
  >b : { c: string; } | undefined
  >"c" : "c"
- 
+
  declare const o4: { b?: { c: { d?: { e: string } } } };
 ->o4 : { b?: { c: { d?: { e: string; }; }; }; }
 ->b : { c: { d?: { e: string; }; }; } | undefined
@@ -34,7 +34,7 @@
 +>c : { d?: { e: string; } | undefined; }
  >d : { e: string; } | undefined
  >e : string
- 
+
  o4.b?.["c"].d?.e;
  >o4.b?.["c"].d?.e : string | undefined
  >o4.b?.["c"].d : { e: string; } | undefined
@@ -64,7 +64,7 @@
  >"c" : "c"
  >d : { e: string; } | undefined
  >"e" : "e"
- 
+
  declare const o5: { b?(): { c: { d?: { e: string } } } };
 ->o5 : { b?(): { c: { d?: { e: string; }; }; }; }
 ->b : (() => { c: { d?: { e: string; }; }; }) | undefined
@@ -74,7 +74,7 @@
 +>c : { d?: { e: string; } | undefined; }
  >d : { e: string; } | undefined
  >e : string
- 
+
  o5.b?.()["c"].d?.e;
  >o5.b?.()["c"].d?.e : string | undefined
  >o5.b?.()["c"].d : { e: string; } | undefined
@@ -139,18 +139,18 @@
  >"c" : "c"
  >d : { e: string; } | undefined
 @@= skipped -11, +11 lines =@@
- 
+
  // GH#33744
  declare const o6: <T>() => undefined | ({ x: number });
 ->o6 : <T>() => undefined | ({ x: number; })
 +>o6 : <T>() => { x: number; } | undefined
  >x : number
- 
+
  o6<number>()?.["x"];
  >o6<number>()?.["x"] : number | undefined
  >o6<number>() : { x: number; } | undefined
 ->o6 : <T>() => undefined | ({ x: number; })
 +>o6 : <T>() => { x: number; } | undefined
  >"x" : "x"
- 
+
  // GH#36031

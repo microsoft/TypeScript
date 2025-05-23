@@ -1,8 +1,8 @@
 --- old.arrayBestCommonTypes.js
 +++ new.arrayBestCommonTypes.js
 @@= skipped -109, +109 lines =@@
- 
- 
+
+
  //// [arrayBestCommonTypes.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

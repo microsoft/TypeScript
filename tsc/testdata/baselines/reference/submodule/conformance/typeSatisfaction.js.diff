@@ -1,8 +1,8 @@
 --- old.typeSatisfaction.js
 +++ new.typeSatisfaction.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [typeSatisfaction.js]
 -var t1 = { a: 1 }; // Ok
 -var t2 = { a: 1, b: 1 }; // Error

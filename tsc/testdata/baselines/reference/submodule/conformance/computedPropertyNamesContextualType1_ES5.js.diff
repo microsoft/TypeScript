@@ -2,7 +2,7 @@
 +++ new.computedPropertyNamesContextualType1_ES5.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [computedPropertyNamesContextualType1_ES5.js]
 -var _a;
 -var o = (_a = {},

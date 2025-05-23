@@ -1,8 +1,8 @@
 --- old.controlFlowDestructuringVariablesInTryCatch.js
 +++ new.controlFlowDestructuringVariablesInTryCatch.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [controlFlowDestructuringVariablesInTryCatch.js]
 -"use strict";
  try {

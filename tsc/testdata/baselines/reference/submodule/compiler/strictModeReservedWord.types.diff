@@ -2,19 +2,19 @@
 +++ new.strictModeReservedWord.types
 @@= skipped -60, +60 lines =@@
  >public : number
- 
+
      var b: public.bar;
 ->b : public.bar
 +>b : bar
  >public : any
- 
+
      function foo(x: private.x) { }
 ->foo : (x: private.x) => void
 ->x : private.x
 +>foo : (x: x) => void
 +>x : x
  >private : any
- 
+
      function foo1(x: private.package.x) { }
 ->foo1 : (x: private.package.x) => void
 ->x : private.package.x
@@ -22,7 +22,7 @@
 +>x : x
  >private : any
  >package : any
- 
+
      function foo2(x: private.package.protected) { }
 ->foo2 : (x: private.package.protected) => void
 ->x : private.package.protected
@@ -30,7 +30,7 @@
 +>x : protected
  >private : any
  >package : any
- 
+
      let b: interface.package.implements.B;
 ->b : interface.package.implements.B
 +>b : B

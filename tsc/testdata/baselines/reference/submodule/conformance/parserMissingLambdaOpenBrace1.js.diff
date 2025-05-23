@@ -2,7 +2,7 @@
 +++ new.parserMissingLambdaOpenBrace1.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [parserMissingLambdaOpenBrace1.js]
 -var C = /** @class */ (function () {
 -    function C() {

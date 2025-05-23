@@ -6,4 +6,3 @@
  static public
 ->public : Symbol(Outer.public, Decl(parserAccessibilityAfterStatic6.ts, 1, 1))
 +>public : Symbol(public, Decl(parserAccessibilityAfterStatic6.ts, 1, 1))
- 

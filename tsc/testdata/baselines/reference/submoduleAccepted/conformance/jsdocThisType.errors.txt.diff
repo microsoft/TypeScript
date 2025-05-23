@@ -8,8 +8,8 @@
 -/a.js(23,10): error TS2339: Property 'test' does not exist on type 'Foo'.
 -/a.js(28,10): error TS2339: Property 'test' does not exist on type 'Foo'.
 +/a.js(21,12): error TS2552: Cannot find name 'function'. Did you mean 'Function'?
- 
- 
+
+
  ==== /types.d.ts (0 errors) ====
 @@= skipped -12, +9 lines =@@
      

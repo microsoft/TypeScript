@@ -1,7 +1,7 @@
 --- old.spreadParameterTupleType.js
 +++ new.spreadParameterTupleType.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [spreadParameterTupleType.js]
  function f1() {
 -    return function fn() {

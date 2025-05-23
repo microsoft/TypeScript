@@ -2,7 +2,7 @@
 +++ new.systemDefaultExportCommentValidity.js
 @@= skipped -6, +6 lines =@@
  // There is intentionally no semicolon on the prior line, this comment should not break emit
- 
+
  //// [systemDefaultExportCommentValidity.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

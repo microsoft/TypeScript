@@ -2,7 +2,7 @@
 +++ new.contextualTyping15.js
 @@= skipped -3, +3 lines =@@
  class foo { public bar: { (): number; (i: number): number; } = function() { return 1 }; }
- 
+
  //// [contextualTyping15.js]
 -var foo = /** @class */ (function () {
 -    function foo() {

@@ -1,8 +1,8 @@
 --- old.umdDependencyCommentName2.js
 +++ new.umdDependencyCommentName2.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [umdDependencyCommentName2.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

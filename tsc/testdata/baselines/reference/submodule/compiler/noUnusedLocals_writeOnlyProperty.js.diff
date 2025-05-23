@@ -1,8 +1,8 @@
 --- old.noUnusedLocals_writeOnlyProperty.js
 +++ new.noUnusedLocals_writeOnlyProperty.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [noUnusedLocals_writeOnlyProperty.js]
 -var C = /** @class */ (function () {
 -    function C() {

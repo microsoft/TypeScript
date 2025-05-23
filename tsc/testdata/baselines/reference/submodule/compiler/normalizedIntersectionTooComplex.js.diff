@@ -1,8 +1,8 @@
 --- old.normalizedIntersectionTooComplex.js
 +++ new.normalizedIntersectionTooComplex.js
 @@= skipped -39, +39 lines =@@
- 
- 
+
+
  //// [normalizedIntersectionTooComplex.js]
 -"use strict";
 -// Repro from #30050

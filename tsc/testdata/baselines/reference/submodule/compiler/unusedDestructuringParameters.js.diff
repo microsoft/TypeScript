@@ -2,7 +2,7 @@
 +++ new.unusedDestructuringParameters.js
 @@= skipped -8, +8 lines =@@
  f3([10]);
- 
+
  //// [unusedDestructuringParameters.js]
 -var f = function (_a) {
 -    var a = _a[0];

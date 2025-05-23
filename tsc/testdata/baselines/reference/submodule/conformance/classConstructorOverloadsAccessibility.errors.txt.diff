@@ -4,10 +4,12 @@
 -classConstructorOverloadsAccessibility.ts(2,2): error TS2385: Overload signatures must all be public, private or protected.
 -classConstructorOverloadsAccessibility.ts(3,2): error TS2385: Overload signatures must all be public, private or protected.
 -classConstructorOverloadsAccessibility.ts(11,2): error TS2385: Overload signatures must all be public, private or protected.
-+error TS2385: Overload signatures must all be public, private or protected.
- 
- 
+-
+-
 -==== classConstructorOverloadsAccessibility.ts (3 errors) ====
++error TS2385: Overload signatures must all be public, private or protected.
++
++
 +!!! error TS2385: Overload signatures must all be public, private or protected.
 +==== classConstructorOverloadsAccessibility.ts (0 errors) ====
      class A {

@@ -6,6 +6,6 @@
  >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12))
 ->Element : Symbol(JSX.Element, Decl(react16.d.ts, 2494, 23))
 +>Element : Symbol(Element, Decl(react16.d.ts, 2494, 23))
- 
+
  export const Test = () => {
  >Test : Symbol(Test, Decl(checkJsxChildrenProperty16.tsx, 15, 12))

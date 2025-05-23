@@ -6,7 +6,7 @@
  >require : Symbol(require)
 ->"./lateBoundAssignmentDeclarationSupport4.js" : Symbol(x, Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
 +>"./lateBoundAssignmentDeclarationSupport4.js" : Symbol("lateBoundAssignmentDeclarationSupport4", Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
- 
+
  const inst =  new x.F();
  >inst : Symbol(inst, Decl(usage.js, 1, 5))
 ->x.F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
@@ -14,7 +14,7 @@
  >x : Symbol(x, Decl(usage.js, 0, 5))
 ->F : Symbol(x.F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
 +>F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
- 
+
  const y = inst["my-fake-sym"];
  >y : Symbol(y, Decl(usage.js, 2, 5))
 @@= skipped -15, +15 lines =@@
@@ -26,7 +26,7 @@
  >x : Symbol(x, Decl(usage.js, 0, 5))
 ->S : Symbol(x.S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
 +>S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
- 
+
  === lateBoundAssignmentDeclarationSupport4.js ===
  // currently unsupported
 @@= skipped -17, +17 lines =@@
@@ -39,7 +39,7 @@
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
- 
+
  F.prototype[_str] = "ok";
 ->F.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>F.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
@@ -47,10 +47,10 @@
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 5))
- 
+
  const inst =  new F();
 @@= skipped -27, +27 lines =@@
- 
+
  module.exports.F = F;
  >module.exports.F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
 ->module.exports : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
@@ -61,7 +61,7 @@
 +>exports : Symbol("lateBoundAssignmentDeclarationSupport4", Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
  >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 10, 22))
  >F : Symbol(F, Decl(lateBoundAssignmentDeclarationSupport4.js, 2, 27))
- 
+
  module.exports.S = _sym;
  >module.exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
 ->module.exports : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
@@ -72,4 +72,3 @@
 +>exports : Symbol("lateBoundAssignmentDeclarationSupport4", Decl(lateBoundAssignmentDeclarationSupport4.js, 0, 0))
  >S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport4.js, 11, 21))
  >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport4.js, 1, 5))
- 

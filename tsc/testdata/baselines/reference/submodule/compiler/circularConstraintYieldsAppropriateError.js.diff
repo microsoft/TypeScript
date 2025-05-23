@@ -2,7 +2,7 @@
 +++ new.circularConstraintYieldsAppropriateError.js
 @@= skipped -19, +19 lines =@@
  foo.bar.test
- 
+
  //// [circularConstraintYieldsAppropriateError.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

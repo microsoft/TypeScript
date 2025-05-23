@@ -1,18 +1,14 @@
 --- old.typeOfThisInStatics.js
 +++ new.typeOfThisInStatics.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [typeOfThisInStatics.js]
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    static foo() {
-+        var r = this;
-     }
+-    }
 -    C.foo = function () {
-+    static get x() {
-         var r = this;
+-        var r = this;
 -    };
 -    Object.defineProperty(C, "x", {
 -        get: function () {
@@ -24,6 +20,12 @@
 -    });
 -    return C;
 -}());
++class C {
++    static foo() {
++        var r = this;
++    }
++    static get x() {
++        var r = this;
 +        return 1;
 +    }
 +}

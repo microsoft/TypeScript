@@ -1,8 +1,8 @@
 --- old.didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js
 +++ new.didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js]
 -var Bar = /** @class */ (function () {
 -    function Bar() {

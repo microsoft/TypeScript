@@ -2,7 +2,7 @@
 +++ new.indexerSignatureWithRestParam.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [indexerSignatureWithRestParam.js]
 -var C = /** @class */ (function () {
 -    function C() {

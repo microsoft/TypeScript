@@ -2,14 +2,14 @@
 +++ new.errorOnUnionVsObjectShouldDeeplyDisambiguate2.types
 @@= skipped -36, +36 lines =@@
  }
- 
+
  function foo(): Stuff | Date {
 ->foo : () => Stuff | Date
 +>foo : () => Date | Stuff
- 
+
    return {
 ->{    a() { return [123] },    b: () => "hello",    c: () => "hello",    d: () => "hello",    e: () => "hello",    f: () => "hello",    g: () => "hello",    h: () => "hello",    i: () => "hello",    j: () => "hello",    k: () => 123  } : { a(): number[]; b: () => string; c: () => string; d: () => string; e: () => string; f: () => string; g: () => string; h: () => string; i: () => string; j: () => string; k: () => number; }
 +>{    a() { return [123] },    b: () => "hello",    c: () => "hello",    d: () => "hello",    e: () => "hello",    f: () => "hello",    g: () => "hello",    h: () => "hello",    i: () => "hello",    j: () => "hello",    k: () => 123  } : { a: () => number[]; b: () => string; c: () => string; d: () => string; e: () => string; f: () => string; g: () => string; h: () => string; i: () => string; j: () => string; k: () => number; }
- 
+
      a() { return [123] },
  >a : () => number[]

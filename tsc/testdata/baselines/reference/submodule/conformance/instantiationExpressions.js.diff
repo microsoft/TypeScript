@@ -1,8 +1,8 @@
 --- old.instantiationExpressions.js
 +++ new.instantiationExpressions.js
 @@= skipped -175, +175 lines =@@
- 
- 
+
+
  //// [instantiationExpressions.js]
 -"use strict";
  function f1() {
@@ -131,8 +131,7 @@
  }
  function makeBox(value) {
 -    return { value: value };
-+    return { value };
- }
+-}
 -
 -
 -//// [instantiationExpressions.d.ts]
@@ -245,3 +244,5 @@
 -};
 -type T50<U extends string> = typeof g3<U>;
 -type T51<U extends number> = typeof g3<U, any>;
++    return { value };
++}

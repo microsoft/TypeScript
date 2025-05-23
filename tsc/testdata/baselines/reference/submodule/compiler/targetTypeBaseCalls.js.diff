@@ -1,8 +1,8 @@
 --- old.targetTypeBaseCalls.js
 +++ new.targetTypeBaseCalls.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [targetTypeBaseCalls.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

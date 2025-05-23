@@ -1,8 +1,8 @@
 --- old.destructuringObjectAssignmentPatternWithNestedSpread(target=es5).js
 +++ new.destructuringObjectAssignmentPatternWithNestedSpread(target=es5).js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [destructuringObjectAssignmentPatternWithNestedSpread.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

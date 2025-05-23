@@ -1,8 +1,7 @@
 --- old.jsdocImportTypeReferenceToClassAlias.errors.txt
 +++ new.jsdocImportTypeReferenceToClassAlias.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +test.js(1,32): error TS2694: Namespace '"mod1"' has no exported member 'C'.
 +
 +

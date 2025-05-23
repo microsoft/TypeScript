@@ -2,7 +2,7 @@
 +++ new.inferenceAndSelfReferentialConstraint.types
 @@= skipped -20, +20 lines =@@
  }
- 
+
  const res1 = test({
 ->res1 : { foo: true; bar(): void; }
 ->test({  foo: true,  bar() {  }}) : { foo: true; bar(): void; }
@@ -11,6 +11,6 @@
  >test : <T extends Test<keyof T>>(arg: T) => T
 ->{  foo: true,  bar() {  }} : { foo: true; bar(): void; }
 +>{  foo: true,  bar() {  }} : { foo: true; bar: () => void; }
- 
+
    foo: true,
  >foo : true

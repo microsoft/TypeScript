@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-methods-staticPrivate(target=es2015).js
 +++ new.esDecorators-classDeclaration-methods-staticPrivate(target=es2015).js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-methods-staticPrivate.js]
 -let C = (() => {
 -    var _a, _C_method1_get;

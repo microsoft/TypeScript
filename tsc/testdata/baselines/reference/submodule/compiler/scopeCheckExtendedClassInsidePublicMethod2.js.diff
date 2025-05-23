@@ -2,7 +2,7 @@
 +++ new.scopeCheckExtendedClassInsidePublicMethod2.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [scopeCheckExtendedClassInsidePublicMethod2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

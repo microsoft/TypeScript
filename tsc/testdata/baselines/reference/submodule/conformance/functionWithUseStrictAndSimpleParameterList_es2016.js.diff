@@ -46,8 +46,7 @@
 +    "use strict";
  }
  function invalidPrologue(a = 10, b = 20) {
-     "foo";
 +    "foo";
+     "foo";
      const c = 1;
      "use strict";
- }

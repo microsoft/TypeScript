@@ -13,8 +13,8 @@
 +/main.mts(8,41): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 +/main.mts(9,42): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 +/main.mts(11,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
- 
- 
+
+
  ==== /node_modules/not.json/package.json (0 errors) ====
 @@= skipped -43, +43 lines =@@
  ==== /main.mts (5 errors) ====

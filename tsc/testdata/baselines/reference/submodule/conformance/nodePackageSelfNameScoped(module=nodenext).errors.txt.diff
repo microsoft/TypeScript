@@ -1,6 +1,6 @@
 --- old.nodePackageSelfNameScoped(module=nodenext).errors.txt
 +++ new.nodePackageSelfNameScoped(module=nodenext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.cts(2,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("@scope/package")' call instead.
 -
 -
@@ -25,5 +25,4 @@
 -        "type": "module",
 -        "exports": "./index.js"
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

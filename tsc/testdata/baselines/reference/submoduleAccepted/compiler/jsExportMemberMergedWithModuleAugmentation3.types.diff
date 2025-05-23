@@ -15,7 +15,7 @@
 +>exports : any
 +>x : any
  >1 : 1
- 
+
  module.exports = require("./y.js");
 ->module.exports = require("./y.js") : typeof import("/y")
 ->module.exports : typeof import("/y")
@@ -29,4 +29,3 @@
 +>require("./y.js") : any
  >require : any
  >"./y.js" : "./y.js"
- 

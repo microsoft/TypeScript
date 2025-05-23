@@ -2,7 +2,7 @@
 +++ new.typeGuardsNestedAssignments.js
 @@= skipped -47, +47 lines =@@
  }
- 
+
  //// [typeGuardsNestedAssignments.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

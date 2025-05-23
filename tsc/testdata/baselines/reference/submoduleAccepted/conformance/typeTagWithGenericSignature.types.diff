@@ -8,12 +8,12 @@
 ->param : T | undefined
 +>typed : (param: any) => any
 +>param : any
- 
+
      return param;
 ->param : T | undefined
 +>param : any
  }
- 
+
  var n = typed(1);
 ->n : number | undefined
 ->typed(1) : 1 | undefined
@@ -22,5 +22,4 @@
 +>typed(1) : any
 +>typed : (param: any) => any
  >1 : 1
- 
- 
+

@@ -6,16 +6,17 @@
  import ext = require('externalModuleAssignToVar_core_require');
 ->ext : typeof ext
 +>ext : any
- 
+
  var y1: { C: new() => ext.C; } = ext;
 ->y1 : { C: new () => ext.C; }
 ->C : new () => ext.C
+->ext : any
+->ext : typeof ext
 +>y1 : { C: new () => C; }
 +>C : new () => C
- >ext : any
-->ext : typeof ext
 +>ext : any
- 
++>ext : any
+
  y1 = ext; // ok
 ->y1 = ext : typeof ext
 ->y1 : { C: new () => ext.C; }
@@ -23,39 +24,38 @@
 +>y1 = ext : any
 +>y1 : { C: new () => C; }
 +>ext : any
- 
+
  import ext2 = require('externalModuleAssignToVar_core_require2');
 ->ext2 : typeof ext2
 +>ext2 : any
- 
+
  var y2: new() => ext2 = ext2;
  >y2 : new () => ext2
 ->ext2 : typeof ext2
 +>ext2 : any
- 
+
  y2 = ext2; // ok
 ->y2 = ext2 : typeof ext2
 +>y2 = ext2 : any
  >y2 : new () => ext2
 ->ext2 : typeof ext2
 +>ext2 : any
- 
+
  import ext3 = require('externalModuleAssignToVar_ext');
 ->ext3 : typeof ext3
 +>ext3 : any
- 
+
  var y3: new () => ext3 = ext3;
  >y3 : new () => ext3
 ->ext3 : typeof ext3
 +>ext3 : any
- 
+
  y3 = ext3; // ok
 ->y3 = ext3 : typeof ext3
 +>y3 = ext3 : any
  >y3 : new () => ext3
 ->ext3 : typeof ext3
-+>ext3 : any
- 
+-
 -=== externalModuleAssignToVar_ext.ts ===
 -class D { foo: string; }
 ->D : D
@@ -63,12 +63,13 @@
 -
 -export = D;
 ->D : D
--
++>ext3 : any
+
  === externalModuleAssignToVar_core_require.ts ===
  export class C { bar: string; }
  >C : C
  >bar : string
- 
+-
 -=== externalModuleAssignToVar_core_require2.ts ===
 -class C { baz: string; }
 ->C : C
@@ -76,4 +77,3 @@
 -
 -export = C;
 ->C : C
--

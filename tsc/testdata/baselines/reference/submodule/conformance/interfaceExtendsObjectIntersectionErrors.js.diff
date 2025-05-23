@@ -1,8 +1,8 @@
 --- old.interfaceExtendsObjectIntersectionErrors.js
 +++ new.interfaceExtendsObjectIntersectionErrors.js
 @@= skipped -50, +50 lines =@@
- 
- 
+
+
  //// [interfaceExtendsObjectIntersectionErrors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

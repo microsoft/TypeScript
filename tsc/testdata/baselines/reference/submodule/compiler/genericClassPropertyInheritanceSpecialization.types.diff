@@ -1,7 +1,7 @@
 --- old.genericClassPropertyInheritanceSpecialization.types
 +++ new.genericClassPropertyInheritanceSpecialization.types
 @@= skipped -140, +140 lines =@@
- 
+
      export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
  >Validator : Validator<TValue>
 ->Portal.Controls.Validators.Validator : Portal.Controls.Validators.Validator<TValue>
@@ -17,10 +17,10 @@
 +>Controls : typeof Controls
 +>Validators : typeof Validators
 +>Validator : typeof Validator
- 
+
          constructor(message?: string) {
  >message : string
- 
+
              super(message);
  >super(message) : void
 ->super : typeof Portal.Controls.Validators.Validator
@@ -30,7 +30,7 @@
      }
 @@= skipped -23, +23 lines =@@
  interface Contract<TValue> {
- 
+
      validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>;
 ->validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
 +>validators : KnockoutObservableArray<Validator<TValue>>
@@ -39,7 +39,7 @@
  >Controls : any
 @@= skipped -12, +12 lines =@@
  >ViewModel : ViewModel<TValue>
- 
+
      public validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>> = ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>();
 ->validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
 +>validators : KnockoutObservableArray<Validator<TValue>>

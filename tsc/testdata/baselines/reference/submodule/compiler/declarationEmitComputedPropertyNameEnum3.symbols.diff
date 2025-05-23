@@ -2,11 +2,11 @@
 +++ new.declarationEmitComputedPropertyNameEnum3.symbols
 @@= skipped -7, +7 lines =@@
  >Enum : Symbol(Enum, Decl(type.ts, 0, 22))
- 
+
      A = "a",
 ->A : Symbol(Enum.A, Decl(type.ts, 1, 20))
 +>A : Symbol(A, Decl(type.ts, 1, 20))
- 
+
      B = "b",
 ->B : Symbol(Enum.B, Decl(type.ts, 2, 12))
 +>B : Symbol(B, Decl(type.ts, 2, 12))
@@ -21,6 +21,6 @@
  >Foo : Symbol(Foo, Decl(type.ts, 0, 0))
 ->Enum : Symbol(Foo.Enum, Decl(type.ts, 0, 22))
 +>Enum : Symbol(Enum, Decl(type.ts, 0, 22))
- 
+
  === index.ts ===
  import { type Type } from "./type";

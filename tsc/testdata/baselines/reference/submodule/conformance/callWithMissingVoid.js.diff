@@ -1,8 +1,8 @@
 --- old.callWithMissingVoid.js
 +++ new.callWithMissingVoid.js
 @@= skipped -86, +86 lines =@@
- 
- 
+
+
  //// [callWithMissingVoid.js]
 -"use strict";
  // From #4260

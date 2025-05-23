@@ -1,8 +1,8 @@
 --- old.m7Bugs.js
 +++ new.m7Bugs.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [m7Bugs.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

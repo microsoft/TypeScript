@@ -1,7 +1,7 @@
 --- old.performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.js
 +++ new.performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.js
 @@= skipped -91, +91 lines =@@
- 
+
  //// [performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -23,84 +23,97 @@
  exports.B = exports.A = void 0;
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+    filter(callback) {
-+        return undefined;
-     }
+-    }
 -    A.prototype.filter = function (callback) {
-+    map(callback) {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.map = function (callback) {
-+    }
-+    await() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.await = function () {
-+    }
-+    awaitOrdered() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered = function () {
-+    }
-+    awaitOrdered2() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered2 = function () {
-+    }
-+    awaitOrdered3() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered3 = function () {
-+    }
-+    awaitOrdered4() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered4 = function () {
-+    }
-+    awaitOrdered5() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered5 = function () {
-+    }
-+    awaitOrdered6() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered6 = function () {
-+    }
-+    awaitOrdered7() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered7 = function () {
-+    }
-+    awaitOrdered8() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered8 = function () {
-+    }
-+    awaitOrdered9() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitOrdered9 = function () {
-+    }
-+    awaitLatest() {
-         return undefined;
+-        return undefined;
 -    };
 -    A.prototype.awaitLatest = function () {
 -        return undefined;
 -    };
 -    return A;
 -}());
--exports.A = A;
++class A {
++    filter(callback) {
++        return undefined;
++    }
++    map(callback) {
++        return undefined;
++    }
++    await() {
++        return undefined;
++    }
++    awaitOrdered() {
++        return undefined;
++    }
++    awaitOrdered2() {
++        return undefined;
++    }
++    awaitOrdered3() {
++        return undefined;
++    }
++    awaitOrdered4() {
++        return undefined;
++    }
++    awaitOrdered5() {
++        return undefined;
++    }
++    awaitOrdered6() {
++        return undefined;
++    }
++    awaitOrdered7() {
++        return undefined;
++    }
++    awaitOrdered8() {
++        return undefined;
++    }
++    awaitOrdered9() {
++        return undefined;
++    }
++    awaitLatest() {
++        return undefined;
++    }
++}
+ exports.A = A;
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    return B;
 -}(A));
-+}
-+exports.A = A;
 +class B extends A {
 +}
  exports.B = B;

@@ -1,8 +1,7 @@
 --- old.jsdocTypeReferenceToImportOfFunctionExpression.errors.txt
 +++ new.jsdocTypeReferenceToImportOfFunctionExpression.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +MC.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +MW.js(1,15): error TS1340: Module './MC' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./MC')'?
 +MW.js(12,1): error TS2309: An export assignment cannot be used in a module with other exported elements.

@@ -1,8 +1,8 @@
 --- old.derivedClasses.js
 +++ new.derivedClasses.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [derivedClasses.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -36,7 +36,7 @@
 -}(Color));
 -var Color = /** @class */ (function () {
 -    function Color() {
-     }
+-    }
 -    Color.prototype.shade = function () { return "some shade"; };
 -    Color.prototype.hue = function () { return "some hue"; };
 -    return Color;
@@ -49,6 +49,7 @@
 -    Blue.prototype.shade = function () {
 -        var _this = this;
 -        var getHue = function () { return _this.hue(); };
++    }
 +}
 +class Color {
 +    shade() { return "some shade"; }

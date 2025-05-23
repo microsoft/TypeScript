@@ -1,6 +1,6 @@
 --- old.jsDeclarationsDefaultsErr.errors.txt
 +++ new.jsDeclarationsDefaultsErr.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index2.js(2,22): error TS2300: Duplicate identifier 'C'.
 -index2.js(4,31): error TS2300: Duplicate identifier 'default'.
 -
@@ -35,5 +35,4 @@
 -     * @typedef {string | number} default
 -     */
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

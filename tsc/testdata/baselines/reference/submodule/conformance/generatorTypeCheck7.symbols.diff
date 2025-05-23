@@ -2,7 +2,7 @@
 +++ new.generatorTypeCheck7.symbols
 @@= skipped -5, +5 lines =@@
  >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
- 
+
      hello: string;
 ->hello : Symbol(WeirdIter.hello, Decl(generatorTypeCheck7.ts, 0, 54))
 +>hello : Symbol(hello, Decl(generatorTypeCheck7.ts, 0, 54))

@@ -2,7 +2,7 @@
 +++ new.importCallExpressionReturnPromiseOfAny.symbols
 @@= skipped -52, +52 lines =@@
  >defaultModule : Symbol(defaultModule, Decl(1.ts, 0, 6))
- 
+
  p1.then(zero => {
 ->p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 +>p1.then : Symbol(then, Decl(lib.es5.d.ts, --, --))
@@ -10,5 +10,5 @@
 ->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 +>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >zero : Symbol(zero, Decl(1.ts, 14, 8))
- 
+
      return zero.foo();  // ok, zero is any

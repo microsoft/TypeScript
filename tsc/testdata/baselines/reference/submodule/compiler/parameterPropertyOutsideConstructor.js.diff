@@ -2,7 +2,7 @@
 +++ new.parameterPropertyOutsideConstructor.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [parameterPropertyOutsideConstructor.js]
 -var C = /** @class */ (function () {
 -    function C() {

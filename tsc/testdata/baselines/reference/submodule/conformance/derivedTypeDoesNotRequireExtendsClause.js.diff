@@ -2,7 +2,7 @@
 +++ new.derivedTypeDoesNotRequireExtendsClause.js
 @@= skipped -22, +22 lines =@@
  var r: Base[] = [d1, d2];
- 
+
  //// [derivedTypeDoesNotRequireExtendsClause.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

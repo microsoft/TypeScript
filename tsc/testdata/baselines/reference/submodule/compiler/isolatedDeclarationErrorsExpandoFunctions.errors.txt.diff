@@ -1,6 +1,6 @@
 --- old.isolatedDeclarationErrorsExpandoFunctions.errors.txt
 +++ new.isolatedDeclarationErrorsExpandoFunctions.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -isolatedDeclarationErrorsExpandoFunctions.ts(1,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 -isolatedDeclarationErrorsExpandoFunctions.ts(3,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 -isolatedDeclarationErrorsExpandoFunctions.ts(4,1): error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
@@ -36,5 +36,4 @@
 -!!! error TS9023: Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.
 -    foo.length = 10
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

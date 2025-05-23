@@ -1,8 +1,8 @@
 --- old.instantiationExpressionErrors.js
 +++ new.instantiationExpressionErrors.js
 @@= skipped -106, +106 lines =@@
- 
- 
+
+
  //// [instantiationExpressionErrors.js]
 -"use strict";
 -var _a, _b, _c;
@@ -54,12 +54,14 @@
 +const r3 = f < true > -1;
  // All of the following are parsed as instantiation expressions
 -var x2 = (f);
-+const x2 = f;
- true;
+-true;
 -var x3 = (f);
-+const x3 = f;
- true;
+-true;
 -var x4 = (f);
++const x2 = f;
++true;
++const x3 = f;
++true;
 +const x4 = f;
  if (true) { }
 -var x5 = (f);
@@ -174,10 +176,7 @@
 -    g<U>(): U;
 -};
 -interface I {
-+class C1 {
-+    static specialFoo = f;
-+    static bar = 123;
- }
+-}
 -declare let x10: {
 -    (): true;
 -    g<U>(): U;
@@ -192,10 +191,7 @@
 -    g<U>(): U;
 -};
 -declare class C {
-+class C2 {
-+    specialFoo = f;
-+    bar = 123;
- }
+-}
 -declare let x13: {
 -    (): true;
 -    g<U>(): U;
@@ -210,20 +206,14 @@
 -        g<U>(): U;
 -    };
 -    static bar: number;
-+class C3 {
-+    specialFoo = f;
-+    bar = 123;
- }
+-}
 -declare class C2 {
 -    specialFoo: {
 -        (): string;
 -        g<U>(): U;
 -    };
 -    bar: number;
-+class C4 {
-+    specialFoo = f;
-+    bar = 123;
- }
+-}
 -declare class C3 {
 -    private specialFoo;
 -    private bar;
@@ -241,6 +231,22 @@
 -}
 -declare let ver: number;
 -declare const a: boolean;
++class C1 {
++    static specialFoo = f;
++    static bar = 123;
++}
++class C2 {
++    specialFoo = f;
++    bar = 123;
++}
++class C3 {
++    specialFoo = f;
++    bar = 123;
++}
++class C4 {
++    specialFoo = f;
++    bar = 123;
++}
 +// Repro from #49551
 +var MyVer;
 +(function (MyVer) {

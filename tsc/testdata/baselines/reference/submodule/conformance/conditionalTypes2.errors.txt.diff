@@ -16,8 +16,8 @@
 -    Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
 +    Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
 +      Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
- 
- 
+
+
  ==== conditionalTypes2.ts (7 errors) ====
 @@= skipped -119, +122 lines =@@
                 ~

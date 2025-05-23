@@ -1,7 +1,7 @@
 --- old.implicitAnyDeclareMemberWithoutType2.js
 +++ new.implicitAnyDeclareMemberWithoutType2.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [implicitAnyDeclareMemberWithoutType2.js]
  // this should be an error
 -var C = /** @class */ (function () {

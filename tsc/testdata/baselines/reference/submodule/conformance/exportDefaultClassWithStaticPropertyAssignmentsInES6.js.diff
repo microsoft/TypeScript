@@ -2,7 +2,7 @@
 +++ new.exportDefaultClassWithStaticPropertyAssignmentsInES6.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [exportDefaultClassWithStaticPropertyAssignmentsInES6.js]
 -class default_1 {
 +export default class {

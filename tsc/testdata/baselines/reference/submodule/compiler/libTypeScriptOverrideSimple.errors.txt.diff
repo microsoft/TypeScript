@@ -1,6 +1,6 @@
 --- old.libTypeScriptOverrideSimple.errors.txt
 +++ new.libTypeScriptOverrideSimple.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.ts(6,1): error TS2304: Cannot find name 'window'.
 -
 -
@@ -15,5 +15,4 @@
 -    window.localStorage
 -    ~~~~~~
 -!!! error TS2304: Cannot find name 'window'.
-@@= skipped --1, +1 lines =@@
 +<no content>

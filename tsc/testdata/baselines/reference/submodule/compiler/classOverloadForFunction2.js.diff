@@ -2,7 +2,7 @@
 +++ new.classOverloadForFunction2.js
 @@= skipped -4, +4 lines =@@
  class bar {}
- 
+
  //// [classOverloadForFunction2.js]
 -var bar = /** @class */ (function () {
 -    function bar() {

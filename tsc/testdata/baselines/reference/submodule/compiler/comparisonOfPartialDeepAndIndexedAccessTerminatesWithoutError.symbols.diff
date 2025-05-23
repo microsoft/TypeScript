@@ -2,7 +2,7 @@
 +++ new.comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.symbols
 @@= skipped -20, +20 lines =@@
  >T : Symbol(T, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 3, 21))
- 
+
      sortBy(...iteratees: Many<PartialDeep<T>>[]): Collection<T>;
 ->sortBy : Symbol(Collection.sortBy, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 3, 25))
 +>sortBy : Symbol(sortBy, Decl(comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.ts, 3, 25))

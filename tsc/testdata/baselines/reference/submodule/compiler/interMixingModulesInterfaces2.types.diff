@@ -2,9 +2,8 @@
 +++ new.interMixingModulesInterfaces2.types
 @@= skipped -23, +23 lines =@@
  }
- 
+
  var x: A.B = null;
 ->x : A.B
 +>x : B
  >A : any
- 

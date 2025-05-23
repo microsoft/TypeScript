@@ -2,7 +2,7 @@
 +++ new.controlFlowAnalysisOnBareThisKeyword.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [controlFlowAnalysisOnBareThisKeyword.js]
 -"use strict";
  function bigger() {

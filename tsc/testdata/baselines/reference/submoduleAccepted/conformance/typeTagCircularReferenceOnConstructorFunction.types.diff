@@ -6,7 +6,7 @@
  function MyClass() { }
 ->MyClass : typeof MyClass
 +>MyClass : { (): void; prototype: {}; }
- 
+
  MyClass.prototype = {};
  >MyClass.prototype = {} : {}
  >MyClass.prototype : {}
@@ -14,4 +14,3 @@
 +>MyClass : { (): void; prototype: {}; }
  >prototype : {}
  >{} : {}
- 

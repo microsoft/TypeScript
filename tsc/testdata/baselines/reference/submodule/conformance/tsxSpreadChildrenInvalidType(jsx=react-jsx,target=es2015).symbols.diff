@@ -2,18 +2,18 @@
 +++ new.tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es2015).symbols
 @@= skipped -20, +20 lines =@@
  >TodoProp : Symbol(TodoProp, Decl(tsxSpreadChildrenInvalidType.tsx, 6, 23))
- 
+
      id: number;
 ->id : Symbol(TodoProp.id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
 +>id : Symbol(id, Decl(tsxSpreadChildrenInvalidType.tsx, 8, 20))
- 
+
      todo: string;
 ->todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
 +>todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
  }
  interface TodoListProps {
  >TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildrenInvalidType.tsx, 11, 1))
- 
+
      todos: TodoProp[];
 ->todos : Symbol(TodoListProps.todos, Decl(tsxSpreadChildrenInvalidType.tsx, 12, 25))
 +>todos : Symbol(todos, Decl(tsxSpreadChildrenInvalidType.tsx, 12, 25))
@@ -22,7 +22,7 @@
  function Todo(prop: { key: number, todo: string }) {
 @@= skipped -19, +19 lines =@@
  >todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 15, 34))
- 
+
      return <div>{prop.key.toString() + prop.todo}</div>;
 ->prop.key.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>div : Symbol((Missing), Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))
@@ -41,7 +41,7 @@
  >TodoList : Symbol(TodoList, Decl(tsxSpreadChildrenInvalidType.tsx, 17, 1))
 @@= skipped -15, +17 lines =@@
  >TodoListProps : Symbol(TodoListProps, Decl(tsxSpreadChildrenInvalidType.tsx, 11, 1))
- 
+
      return <div>
 +>div : Symbol((Missing), Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))
 +
@@ -59,14 +59,14 @@
  >todos : Symbol(todos, Decl(tsxSpreadChildrenInvalidType.tsx, 18, 19))
 ->todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
 +>todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
- 
+
      </div>;
 +>div : Symbol((Missing), Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))
  }
  function TodoListNoError({ todos }: TodoListProps) {
  >TodoListNoError : Symbol(TodoListNoError, Decl(tsxSpreadChildrenInvalidType.tsx, 22, 1))
 @@= skipped -20, +23 lines =@@
- 
+
      // any is not checked
      return <div>
 +>div : Symbol((Missing), Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))
@@ -85,7 +85,7 @@
  >todos : Symbol(todos, Decl(tsxSpreadChildrenInvalidType.tsx, 23, 26))
 ->todo : Symbol(TodoProp.todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
 +>todo : Symbol(todo, Decl(tsxSpreadChildrenInvalidType.tsx, 9, 15))
- 
+
      </div>;
 +>div : Symbol((Missing), Decl(tsxSpreadChildrenInvalidType.tsx, 2, 30))
  }

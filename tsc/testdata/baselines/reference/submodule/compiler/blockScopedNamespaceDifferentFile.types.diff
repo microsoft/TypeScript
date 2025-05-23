@@ -10,7 +10,7 @@
 ->AA : typeof A.AA
 +>AA : typeof AA
  >func : () => number
- 
+
          static someConst = A.AA.foo;
  >someConst : string
  >A.AA.foo : ""
@@ -20,5 +20,5 @@
 ->AA : typeof A.AA
 +>AA : typeof AA
  >foo : ""
- 
+
          constructor(parameters) {}

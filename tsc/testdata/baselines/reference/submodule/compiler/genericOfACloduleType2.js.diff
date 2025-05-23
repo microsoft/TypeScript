@@ -2,7 +2,7 @@
 +++ new.genericOfACloduleType2.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [genericOfACloduleType2.js]
 -var G = /** @class */ (function () {
 -    function G() {

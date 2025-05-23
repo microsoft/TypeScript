@@ -6,14 +6,14 @@
  >dec : any
 ->C2 : C2
 +>C2 : default
- 
+
  === file3.js ===
  // error
  export @dec default class C3 {}
  >dec : any
 ->C3 : C3
 +>C3 : default
- 
+
  === file4.js ===
  // ok
 @@= skipped -18, +18 lines =@@
@@ -22,7 +22,7 @@
  >dec : any
 ->C5 : C5
 +>C5 : default
- 
+
  === file6.js ===
  // error
 @@= skipped -14, +14 lines =@@
@@ -31,4 +31,3 @@
  >dec : any
 ->C7 : C7
 +>C7 : default
- 

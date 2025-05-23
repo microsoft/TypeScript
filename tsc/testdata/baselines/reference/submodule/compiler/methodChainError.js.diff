@@ -2,7 +2,7 @@
 +++ new.methodChainError.js
 @@= skipped -19, +19 lines =@@
      .method("a");
- 
+
  //// [methodChainError.js]
 -var Builder = /** @class */ (function () {
 -    function Builder() {

@@ -10,7 +10,7 @@
 ->x : number
 +>x : any
  >1 : 1
- 
+
  var y = 2
 @@= skipped -20, +20 lines =@@
  // should work in JS (even though it's a secondary declaration)
@@ -22,4 +22,3 @@
 ->alpha : number
 +>alpha : any
  >4 : 4
- 

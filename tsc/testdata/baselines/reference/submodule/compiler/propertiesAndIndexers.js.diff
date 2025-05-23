@@ -2,7 +2,7 @@
 +++ new.propertiesAndIndexers.js
 @@= skipped -53, +53 lines =@@
  };
- 
+
  //// [propertiesAndIndexers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

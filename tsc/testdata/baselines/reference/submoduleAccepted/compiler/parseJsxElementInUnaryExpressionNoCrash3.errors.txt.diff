@@ -7,8 +7,8 @@
  a.js(1,4): error TS1003: Identifier expected.
  a.js(1,5): error TS1005: '...' expected.
  a.js(3,1): error TS1005: '</' expected.
- 
- 
+
+
 -==== a.js (4 errors) ====
 +==== a.js (6 errors) ====
      !< {:>
@@ -18,11 +18,12 @@
        
  !!! error TS17008: JSX element '' has no corresponding closing tag.
         ~
-@@= skipped -14, +19 lines =@@
+@@= skipped -13, +18 lines =@@
+ !!! error TS1005: '...' expected.
      
      
-     
++    
 +    
 +!!! error TS2872: This kind of expression is always truthy.
-+    
+     
  !!! error TS1005: '</' expected.

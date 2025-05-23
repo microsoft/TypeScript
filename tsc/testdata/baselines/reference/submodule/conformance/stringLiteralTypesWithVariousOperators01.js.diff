@@ -2,7 +2,7 @@
 +++ new.stringLiteralTypesWithVariousOperators01.js
 @@= skipped -29, +29 lines =@@
  let v = abcOrXyz === abcOrXyzOrNumber;
- 
+
  //// [stringLiteralTypesWithVariousOperators01.js]
 -var abc = "ABC";
 -var xyz = "XYZ";

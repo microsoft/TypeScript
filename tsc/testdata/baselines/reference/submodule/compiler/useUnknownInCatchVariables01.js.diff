@@ -2,7 +2,7 @@
 +++ new.useUnknownInCatchVariables01.js
 @@= skipped -35, +35 lines =@@
  }
- 
+
  //// [useUnknownInCatchVariables01.js]
 -var _a;
  try {

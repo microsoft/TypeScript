@@ -1,8 +1,8 @@
 --- old.privateWriteOnlyAccessorRead.js
 +++ new.privateWriteOnlyAccessorRead.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [privateWriteOnlyAccessorRead.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

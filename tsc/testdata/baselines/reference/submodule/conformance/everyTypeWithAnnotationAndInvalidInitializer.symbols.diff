@@ -2,36 +2,36 @@
 +++ new.everyTypeWithAnnotationAndInvalidInitializer.symbols
 @@= skipped -4, +4 lines =@@
  >I : Symbol(I, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 0))
- 
+
      id: number;
 ->id : Symbol(I.id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 13))
 +>id : Symbol(id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 13))
  }
- 
+
  class C implements I {
 @@= skipped -8, +8 lines =@@
  >I : Symbol(I, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 0, 0))
- 
+
      id: number;
 ->id : Symbol(C.id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 4, 22))
 +>id : Symbol(id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 4, 22))
  }
- 
+
  class D<T>{
 @@= skipped -8, +8 lines =@@
  >T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
- 
+
      source: T;
 ->source : Symbol(D.source, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 11))
 +>source : Symbol(source, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 11))
  >T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
- 
+
      recurse: D<T>;
 ->recurse : Symbol(D.recurse, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 9, 14))
 +>recurse : Symbol(recurse, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 9, 14))
  >D : Symbol(D, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 6, 1))
  >T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
- 
+
      wrapped: D<D<T>>
 ->wrapped : Symbol(D.wrapped, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 10, 18))
 +>wrapped : Symbol(wrapped, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 10, 18))
@@ -40,12 +40,12 @@
  >T : Symbol(T, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 8, 8))
 @@= skipped -31, +31 lines =@@
  >A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 17, 10))
- 
+
          name: string;
 ->name : Symbol(A.name, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 18, 20))
 +>name : Symbol(name, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 18, 20))
      }
- 
+
      export function F2(x: number): string { return x.toString(); }
  >F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 20, 5))
  >x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 22, 23))
@@ -55,16 +55,16 @@
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  module N {
 @@= skipped -18, +18 lines =@@
  >A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
- 
+
          id: number;
 ->id : Symbol(A.id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 26, 20))
 +>id : Symbol(id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 26, 20))
      }
- 
+
      export function F2(x: number): string { return x.toString(); }
  >F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 28, 5))
  >x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 30, 23))
@@ -74,7 +74,7 @@
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  var aNumber: number = 'this is a string';
 @@= skipped -72, +72 lines =@@
  var aClassInModule: M.A = new N.A();
@@ -87,7 +87,7 @@
  >N : Symbol(N, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 23, 1))
 ->A : Symbol(N.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
 +>A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
- 
+
  var aFunctionInModule: typeof M.F2 = F2;
  >aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 51, 3))
 ->M.F2 : Symbol(M.F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 20, 5))
@@ -96,5 +96,4 @@
 ->F2 : Symbol(M.F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 20, 5))
 +>F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 20, 5))
  >F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 14, 44))
- 
- 
+

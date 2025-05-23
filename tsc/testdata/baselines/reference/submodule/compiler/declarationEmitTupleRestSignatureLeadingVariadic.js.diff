@@ -2,7 +2,7 @@
 +++ new.declarationEmitTupleRestSignatureLeadingVariadic.js
 @@= skipped -3, +3 lines =@@
  const f = <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]): void => {};
- 
+
  //// [declarationEmitTupleRestSignatureLeadingVariadic.js]
 -var f = function () {
 -    var args = [];

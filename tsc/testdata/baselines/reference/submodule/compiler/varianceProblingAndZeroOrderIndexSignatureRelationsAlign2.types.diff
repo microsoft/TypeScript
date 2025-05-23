@@ -2,10 +2,10 @@
 +++ new.varianceProblingAndZeroOrderIndexSignatureRelationsAlign2.types
 @@= skipped -148, +148 lines =@@
  >null! : never
- 
+
  function tmp2<N extends NeededInfo>(n: N) {}
 ->tmp2 : <N extends NeededInfo>(n: N) => void
 +>tmp2 : <N extends NeededInfo<{}>>(n: N) => void
  >n : N
- 
+
  // tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ?? (see test 1, needs to behave the same)

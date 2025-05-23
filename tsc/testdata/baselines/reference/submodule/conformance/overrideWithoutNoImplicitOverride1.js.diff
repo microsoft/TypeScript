@@ -1,7 +1,7 @@
 --- old.overrideWithoutNoImplicitOverride1.js
 +++ new.overrideWithoutNoImplicitOverride1.js
 @@= skipped -49, +49 lines =@@
- 
+
  //// [overrideWithoutNoImplicitOverride1.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

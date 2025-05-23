@@ -2,7 +2,7 @@
 +++ new.declarationEmitExpressionInExtends.js
 @@= skipped -15, +15 lines =@@
  q.s;
- 
+
  //// [declarationEmitExpressionInExtends.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -32,8 +32,13 @@
 -    }
 -    return B;
 -}(x));
--var q;
--q.s;
++class Q {
++    s;
++}
++class B extends x {
++}
+ var q;
+ q.s;
 -
 -
 -//// [declarationEmitExpressionInExtends.d.ts]
@@ -42,12 +47,7 @@
 -};
 -declare class Q {
 -    s: string;
-+class Q {
-+    s;
- }
+-}
 -declare class B extends x<string> {
-+class B extends x {
- }
+-}
 -declare var q: B;
-+var q;
-+q.s;

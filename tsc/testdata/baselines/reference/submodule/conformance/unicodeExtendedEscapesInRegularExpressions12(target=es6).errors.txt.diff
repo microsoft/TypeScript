@@ -1,6 +1,6 @@
 --- old.unicodeExtendedEscapesInRegularExpressions12(target=es6).errors.txt
 +++ new.unicodeExtendedEscapesInRegularExpressions12(target=es6).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -unicodeExtendedEscapesInRegularExpressions12.ts(1,13): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
 -
 -
@@ -9,5 +9,4 @@
 -                ~~~~~~~~
 -!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

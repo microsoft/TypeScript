@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndParameter1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [collisionSuperAndParameter1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

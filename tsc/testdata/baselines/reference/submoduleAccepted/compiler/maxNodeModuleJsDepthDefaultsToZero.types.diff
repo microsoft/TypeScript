@@ -6,20 +6,20 @@
  import * as foo from "shortid";
 ->foo : typeof foo
 +>foo : typeof import("shortid")
- 
+
  foo.x // found in index.d.ts
  >foo.x : number
 ->foo : typeof foo
 +>foo : typeof import("shortid")
  >x : number
- 
+
  foo.y // ignored from shortid/index.js
  >foo.y : any
 ->foo : typeof foo
 +>foo : typeof import("shortid")
  >y : any
- 
- 
+
++
 +=== /node_modules/shortid/node_modules/z/index.js ===
 +// z will not be found because maxNodeModulesJsDepth: 0
 +module.exports = { z: 'no' };
@@ -50,4 +50,3 @@
 +>module : { y: { y: string; }; }
 +>exports : { y: string; }
 +>y : { y: string; }
-+

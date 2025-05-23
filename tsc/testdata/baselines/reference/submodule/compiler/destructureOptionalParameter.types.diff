@@ -1,7 +1,7 @@
 --- old.destructureOptionalParameter.types
 +++ new.destructureOptionalParameter.types
 @@= skipped -1, +1 lines =@@
- 
+
  === destructureOptionalParameter.ts ===
  declare function f1({ a, b }?: { a: number, b: string }): void;
 ->f1 : ({ a, b }?: { a: number; b: string; }) => void
@@ -10,7 +10,7 @@
  >b : string
  >a : number
  >b : string
- 
+
  function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {
 ->f2 : ({ a, b }?: { a: number; b: number; }) => void
 +>f2 : (__0?: { a: number; b: number; }) => void

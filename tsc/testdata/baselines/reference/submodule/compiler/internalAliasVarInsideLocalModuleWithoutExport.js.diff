@@ -1,8 +1,8 @@
 --- old.internalAliasVarInsideLocalModuleWithoutExport.js
 +++ new.internalAliasVarInsideLocalModuleWithoutExport.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [internalAliasVarInsideLocalModuleWithoutExport.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

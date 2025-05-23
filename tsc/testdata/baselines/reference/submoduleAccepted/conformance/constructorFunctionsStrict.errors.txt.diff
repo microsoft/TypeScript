@@ -2,12 +2,14 @@
 +++ new.constructorFunctionsStrict.errors.txt
 @@= skipped -0, +0 lines =@@
 -a.js(9,1): error TS2322: Type 'undefined' is not assignable to type 'number'.
+-
+-
+-==== a.js (1 errors) ====
 +a.js(8,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +a.js(15,16): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +a.js(20,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
- 
- 
--==== a.js (1 errors) ====
++
++
 +==== a.js (3 errors) ====
      /** @param {number} x */
      function C(x) {

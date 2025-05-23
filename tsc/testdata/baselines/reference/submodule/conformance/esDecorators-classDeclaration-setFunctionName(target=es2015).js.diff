@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-setFunctionName(target=es2015).js
 +++ new.esDecorators-classDeclaration-setFunctionName(target=es2015).js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [a.js]
 -let C = (() => {
 -    let _classDecorators = [dec];

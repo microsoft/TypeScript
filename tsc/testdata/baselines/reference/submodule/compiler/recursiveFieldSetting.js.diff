@@ -1,7 +1,7 @@
 --- old.recursiveFieldSetting.js
 +++ new.recursiveFieldSetting.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [recursiveFieldSetting.js]
  // #32721
 -var Recursive1 = /** @class */ (function () {
@@ -11,7 +11,7 @@
 +    constructor(parent) {
          this.parent = parent;
 -        this.depth = this.parent ? this.parent.depth + 1 : 0;
-     }
+-    }
 -    return Recursive1;
 -}());
 -var Recursive2 = /** @class */ (function () {
@@ -27,6 +27,7 @@
 -    }
 -    return Recursive3;
 -}());
++    }
 +    depth = this.parent ? this.parent.depth + 1 : 0;
 +}
 +class Recursive2 {

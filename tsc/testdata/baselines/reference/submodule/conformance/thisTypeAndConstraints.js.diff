@@ -1,8 +1,8 @@
 --- old.thisTypeAndConstraints.js
 +++ new.thisTypeAndConstraints.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [thisTypeAndConstraints.js]
 -var A = /** @class */ (function () {
 -    function A() {
@@ -24,18 +24,20 @@
  }
 -var B = /** @class */ (function () {
 -    function B() {
-+class B {
-+    foo(x) {
-+        x = x.self();
-     }
+-    }
 -    B.prototype.foo = function (x) {
-+    bar(x) {
-         x = x.self();
+-        x = x.self();
 -    };
 -    B.prototype.bar = function (x) {
 -        x = x.self();
 -    };
 -    return B;
 -}());
++class B {
++    foo(x) {
++        x = x.self();
++    }
++    bar(x) {
++        x = x.self();
 +    }
 +}

@@ -1,8 +1,8 @@
 --- old.classAbstractMixedWithModifiers.js
 +++ new.classAbstractMixedWithModifiers.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [classAbstractMixedWithModifiers.js]
 -var A = /** @class */ (function () {
 -    function A() {

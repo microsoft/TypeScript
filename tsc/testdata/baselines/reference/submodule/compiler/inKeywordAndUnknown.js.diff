@@ -1,8 +1,8 @@
 --- old.inKeywordAndUnknown.js
 +++ new.inKeywordAndUnknown.js
 @@= skipped -53, +53 lines =@@
- 
- 
+
+
  //// [inKeywordAndUnknown.js]
 -"use strict";
  // Repro from #50531

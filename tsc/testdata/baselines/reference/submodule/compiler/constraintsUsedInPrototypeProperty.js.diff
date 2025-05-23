@@ -2,7 +2,7 @@
 +++ new.constraintsUsedInPrototypeProperty.js
 @@= skipped -4, +4 lines =@@
  Foo.prototype; // Foo<any, any, any>
- 
+
  //// [constraintsUsedInPrototypeProperty.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

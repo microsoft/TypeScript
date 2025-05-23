@@ -7,7 +7,7 @@
 ->F : Symbol(E.F)
 +>F : Symbol(F)
  >T : Symbol(T)
- 
+
  var v3: G.H.I<T>;
  >v3 : Symbol(v3, Decl(parserGenericsInTypeContexts1.ts, 5, 3), Decl(parserGenericsInTypeContexts1.ts, 6, 3))
  >G : Symbol(G)
@@ -16,5 +16,5 @@
 +>H : Symbol(H)
 +>I : Symbol(I)
  >T : Symbol(T)
- 
+
  var v6: K<T>[];

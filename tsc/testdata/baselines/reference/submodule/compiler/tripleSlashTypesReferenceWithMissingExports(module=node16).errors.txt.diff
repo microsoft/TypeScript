@@ -1,6 +1,6 @@
 --- old.tripleSlashTypesReferenceWithMissingExports(module=node16).errors.txt
 +++ new.tripleSlashTypesReferenceWithMissingExports(module=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -usage.ts(1,23): error TS2688: Cannot find type definition file for 'pkg'.
 -
 -
@@ -18,5 +18,4 @@
 -!!! error TS2688: Cannot find type definition file for 'pkg'.
 -    
 -    const a: GlobalThing = { a: 0 };
-@@= skipped --1, +1 lines =@@
 +<no content>

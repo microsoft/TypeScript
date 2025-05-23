@@ -1,8 +1,8 @@
 --- old.equalityWithtNullishCoalescingAssignment(strict=true).js
 +++ new.equalityWithtNullishCoalescingAssignment(strict=true).js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [equalityWithtNullishCoalescingAssignment.js]
 -"use strict";
  function f1(a) {

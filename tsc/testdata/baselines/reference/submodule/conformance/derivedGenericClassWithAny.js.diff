@@ -2,7 +2,7 @@
 +++ new.derivedGenericClassWithAny.js
 @@= skipped -44, +44 lines =@@
  var r = c.foo(); // e.foo would return string
- 
+
  //// [derivedGenericClassWithAny.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,23 +21,14 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    x;
-+    get X() { return null; }
-+    foo() {
-+        return null;
-     }
+-    }
 -    Object.defineProperty(C.prototype, "X", {
 -        get: function () { return null; },
 -        enumerable: false,
 -        configurable: true
 -    });
 -    C.prototype.foo = function () {
-+}
-+class D extends C {
-+    x;
-+    get X() {
-         return null;
+-        return null;
 -    };
 -    return C;
 -}());
@@ -45,7 +36,7 @@
 -    __extends(D, _super);
 -    function D() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Object.defineProperty(D.prototype, "X", {
 -        get: function () {
 -            return null;
@@ -54,6 +45,18 @@
 -        configurable: true
 -    });
 -    D.prototype.foo = function () {
++class C {
++    x;
++    get X() { return null; }
++    foo() {
++        return null;
++    }
++}
++class D extends C {
++    x;
++    get X() {
++        return null;
++    }
 +    foo() {
          return 1;
 -    };
@@ -65,19 +68,25 @@
 -        configurable: true
 -    });
 -    D.bar = function () {
-+    }
-+    static y;
-+    static get Y() {
-         return null;
+-        return null;
 -    };
 -    return D;
 -}(C));
--// if D is a valid class definition than E is now not safe tranisitively through C
++    }
++    static y;
++    static get Y() {
++        return null;
++    }
++    static bar() {
++        return null;
++    }
++}
+ // if D is a valid class definition than E is now not safe tranisitively through C
 -var E = /** @class */ (function (_super) {
 -    __extends(E, _super);
 -    function E() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Object.defineProperty(E.prototype, "X", {
 -        get: function () { return ''; } // error
 -        ,
@@ -85,11 +94,6 @@
 -        configurable: true
 -    });
 -    E.prototype.foo = function () {
-+    static bar() {
-+        return null;
-+    }
-+}
-+// if D is a valid class definition than E is now not safe tranisitively through C
 +class E extends D {
 +    x;
 +    get X() { return ''; } // error

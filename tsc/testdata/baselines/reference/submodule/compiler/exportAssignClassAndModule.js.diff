@@ -1,7 +1,7 @@
 --- old.exportAssignClassAndModule.js
 +++ new.exportAssignClassAndModule.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [exportAssignClassAndModule_0.js]
  "use strict";
 -var Foo = /** @class */ (function () {

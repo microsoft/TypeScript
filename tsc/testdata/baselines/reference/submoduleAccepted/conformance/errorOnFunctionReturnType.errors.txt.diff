@@ -11,11 +11,13 @@
 -foo.js(37,5): error TS2322: Type '"asd"' is not assignable to type 'never'.
 -foo.js(40,56): error TS2534: A function returning 'never' cannot have a reachable end point.
 -foo.js(45,18): error TS2534: A function returning 'never' cannot have a reachable end point.
+-
+-
+-==== foo.js (10 errors) ====
 +foo.js(20,12): error TS2304: Cannot find name 'FunctionReturningPromise'.
 +foo.js(44,12): error TS2304: Cannot find name 'FunctionReturningNever'.
- 
- 
--==== foo.js (10 errors) ====
++
++
 +==== foo.js (2 errors) ====
      /**
       * @callback FunctionReturningPromise

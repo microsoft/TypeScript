@@ -2,7 +2,7 @@
 +++ new.jsxInExtendsClause.js
 @@= skipped -13, +13 lines =@@
  }) {}
- 
+
  //// [jsxInExtendsClause.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,10 +23,7 @@
 -    __extends(Foo, _super);
 -    function Foo() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+class Foo extends createComponentClass(() => class extends React.Component {
-+    render() {
-+        return <span>Hello, world!</span>;
-     }
+-    }
 -    return Foo;
 -}(createComponentClass(function () { return /** @class */ (function (_super) {
 -    __extends(class_1, _super);
@@ -38,5 +35,9 @@
 -    };
 -    return class_1;
 -}(React.Component)); })));
++class Foo extends createComponentClass(() => class extends React.Component {
++    render() {
++        return <span>Hello, world!</span>;
++    }
 +}) {
 +}

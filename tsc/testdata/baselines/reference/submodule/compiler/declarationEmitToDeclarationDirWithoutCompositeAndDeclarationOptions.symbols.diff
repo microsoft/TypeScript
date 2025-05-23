@@ -2,7 +2,7 @@
 +++ new.declarationEmitToDeclarationDirWithoutCompositeAndDeclarationOptions.symbols
 @@= skipped -4, +4 lines =@@
  >Foo : Symbol(Foo, Decl(test.ts, 0, 0))
- 
+
      x: number;
 ->x : Symbol(Foo.x, Decl(test.ts, 0, 15))
 +>x : Symbol(x, Decl(test.ts, 0, 15))

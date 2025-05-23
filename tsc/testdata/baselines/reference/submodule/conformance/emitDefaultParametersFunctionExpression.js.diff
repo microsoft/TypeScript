@@ -1,8 +1,8 @@
 --- old.emitDefaultParametersFunctionExpression.js
 +++ new.emitDefaultParametersFunctionExpression.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [emitDefaultParametersFunctionExpression.js]
 -var lambda1 = function (y) {
 -    if (y === void 0) { y = "hello"; }

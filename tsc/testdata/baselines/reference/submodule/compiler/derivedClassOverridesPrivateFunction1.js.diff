@@ -2,7 +2,7 @@
 +++ new.derivedClassOverridesPrivateFunction1.js
 @@= skipped -17, +17 lines =@@
  new DerivedClass();
- 
+
  //// [derivedClassOverridesPrivateFunction1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -33,12 +33,13 @@
 -    __extends(DerivedClass, _super);
 -    function DerivedClass() {
 -        return _super.call(this) || this;
-+    _init() {
-     }
+-    }
 -    DerivedClass.prototype._init = function () {
 -    };
 -    return DerivedClass;
 -}(BaseClass));
++    _init() {
++    }
 +}
 +class DerivedClass extends BaseClass {
 +    constructor() {

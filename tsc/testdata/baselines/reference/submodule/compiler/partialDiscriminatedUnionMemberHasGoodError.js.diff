@@ -2,7 +2,7 @@
 +++ new.partialDiscriminatedUnionMemberHasGoodError.js
 @@= skipped -25, +25 lines =@@
  });
- 
+
  //// [partialDiscriminatedUnionMemberHasGoodError.js]
 -var foo = [];
 +const foo = [];

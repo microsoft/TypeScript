@@ -2,14 +2,16 @@
 +++ new.interfacedecl.js
 @@= skipped -48, +48 lines =@@
  var instance2 = new c1();
- 
+
  //// [interfacedecl.js]
 -var c1 = /** @class */ (function () {
 -    function c1() {
 -    }
 -    return c1;
 -}());
--var instance2 = new c1();
++class c1 {
++}
+ var instance2 = new c1();
 -
 -
 -//// [interfacedecl.d.ts]
@@ -29,8 +31,7 @@
 -    f2?(): any;
 -    f3(a: string): number;
 -    f4?(s: number): string;
-+class c1 {
- }
+-}
 -interface a1 {
 -    [n: number]: number;
 -}
@@ -48,4 +49,3 @@
 -declare class c1 implements a {
 -}
 -declare var instance2: c1;
-+var instance2 = new c1();

@@ -2,7 +2,7 @@
 +++ new.typeGuardOfFormThisMemberErrors.js
 @@= skipped -34, +34 lines =@@
  }
- 
+
  //// [typeGuardOfFormThisMemberErrors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

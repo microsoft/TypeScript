@@ -1,8 +1,7 @@
 --- old.jsDeclarationsGlobalFileConstFunctionNamed.errors.txt
 +++ new.jsDeclarationsGlobalFileConstFunctionNamed.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +file.js(15,42): error TS2350: Only a void function can be called with the 'new' keyword.
 +
 +

@@ -1,6 +1,6 @@
 --- old.jsdocPropertyTagInvalid.errors.txt
 +++ new.jsdocPropertyTagInvalid.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(3,15): error TS2552: Cannot find name 'sting'. Did you mean 'string'?
 -
 -
@@ -19,5 +19,4 @@
 -    import { f } from "./a.js"
 -    f({ x: 42 })
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

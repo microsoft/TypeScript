@@ -33,11 +33,7 @@
      })(m2 || (m2 = {}));
 -    var c = /** @class */ (function () {
 -        function c() {
-+    class c {
-+        // getter with annotation
-+        get foo1() {
-+            return;
-         }
+-        }
 -        Object.defineProperty(c.prototype, "foo1", {
 -            // getter with annotation
 -            get: function () {
@@ -169,22 +165,15 @@
 -        });
 -        return c;
 -    }());
--    m.c = c;
--})(m || (m = {}));
--
--
--//// [declFileTypeAnnotationVisibilityErrorAccessors.d.ts]
--declare namespace m {
--    class private1 {
--    }
--    export class public1 {
--    }
--    namespace m2 {
--        class public2 {
++    class c {
++        // getter with annotation
++        get foo1() {
++            return;
++        }
 +        // getter without annotation
 +        get foo2() {
 +            return new private1();
-         }
++        }
 +        // setter with annotation
 +        set foo3(param) {
 +        }
@@ -246,7 +235,21 @@
 +        }
 +        set foo115(param) {
 +        }
-     }
++    }
+     m.c = c;
+ })(m || (m = {}));
+-
+-
+-//// [declFileTypeAnnotationVisibilityErrorAccessors.d.ts]
+-declare namespace m {
+-    class private1 {
+-    }
+-    export class public1 {
+-    }
+-    namespace m2 {
+-        class public2 {
+-        }
+-    }
 -    export class c {
 -        get foo1(): private1;
 -        get foo2(): private1;
@@ -272,5 +275,3 @@
 -    }
 -    export {};
 -}
-+    m.c = c;
-+})(m || (m = {}));

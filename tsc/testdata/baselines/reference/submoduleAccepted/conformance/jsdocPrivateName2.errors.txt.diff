@@ -1,6 +1,6 @@
 --- old.jsdocPrivateName2.errors.txt
 +++ new.jsdocPrivateName2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -jsdocPrivateName1.js(6,23): error TS1003: Identifier expected.
 -
 -
@@ -15,5 +15,4 @@
 -!!! error TS1003: Identifier expected.
 -     */
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,19 +1,19 @@
 --- old.visibilityOfCrossModuleTypeUsage.types
 +++ new.visibilityOfCrossModuleTypeUsage.types
 @@= skipped -1, +1 lines =@@
- 
+
  === visibilityOfCrossModuleTypeUsage_fs.ts ===
  import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 ->commands : typeof commands
 +>commands : typeof import("visibilityOfCrossModuleTypeUsage_commands")
- 
+
  function run(configuration: commands.IConfiguration) {
 ->run : (configuration: commands.IConfiguration) => void
 ->configuration : commands.IConfiguration
 +>run : (configuration: IConfiguration) => void
 +>configuration : IConfiguration
  >commands : any
- 
+
      var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
  >absoluteWorkspacePath : string
  >configuration.workspace.toAbsolutePath(configuration.server) : string
@@ -38,20 +38,19 @@
  import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
 ->fs : typeof fs
 +>fs : typeof import("visibilityOfCrossModuleTypeUsage_fs")
- 
+
  import server = require('./visibilityOfCrossModuleTypeUsage_server');
 ->server : typeof server
 +>server : typeof import("visibilityOfCrossModuleTypeUsage_server")
- 
+
  export interface IConfiguration {
      workspace: server.IWorkspace;
 ->workspace : server.IWorkspace
 +>workspace : IWorkspace
  >server : any
- 
+
      server?: server.IServer;
 ->server : server.IServer
 +>server : IServer
  >server : any
  }
- 

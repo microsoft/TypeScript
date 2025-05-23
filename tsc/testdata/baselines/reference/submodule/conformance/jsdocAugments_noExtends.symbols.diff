@@ -9,14 +9,14 @@
  >this : Symbol(A, Decl(b.js, 0, 0))
 ->x : Symbol(A.x, Decl(b.js, 0, 25))
 +>x : Symbol(x, Decl(b.js, 0, 25))
- 
+
  /** @augments A */
  class B {
  >B : Symbol(B, Decl(b.js, 0, 41))
- 
+
      m() {
 ->m : Symbol(B.m, Decl(b.js, 3, 9))
 +>m : Symbol(m, Decl(b.js, 3, 9))
- 
+
          return this.x;
  >this : Symbol(B, Decl(b.js, 0, 41))

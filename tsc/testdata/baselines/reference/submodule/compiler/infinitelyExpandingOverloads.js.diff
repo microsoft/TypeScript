@@ -2,27 +2,17 @@
 +++ new.infinitelyExpandingOverloads.js
 @@= skipped -28, +28 lines =@@
  }
- 
+
  //// [infinitelyExpandingOverloads.js]
 -var Validator2 = /** @class */ (function () {
 -    function Validator2() {
-+class Validator2 {
-+    _subscription;
-+}
-+class ViewModel {
-+    validationPlacements = new Array();
-+}
-+class Widget {
-+    constructor(viewModelType) {
-     }
+-    }
 -    return Validator2;
 -}());
 -var ViewModel = /** @class */ (function () {
 -    function ViewModel() {
 -        this.validationPlacements = new Array();
-+    get options() {
-+        return null;
-     }
+-    }
 -    return ViewModel;
 -}());
 -var Widget = /** @class */ (function () {
@@ -37,4 +27,16 @@
 -    });
 -    return Widget;
 -}());
++class Validator2 {
++    _subscription;
++}
++class ViewModel {
++    validationPlacements = new Array();
++}
++class Widget {
++    constructor(viewModelType) {
++    }
++    get options() {
++        return null;
++    }
 +}

@@ -9,7 +9,7 @@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
      let current: Partial<T> = Object.create(null);
  >current : Symbol(current, Decl(mappedTypes5.ts, 37, 7))
  >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
@@ -19,7 +19,7 @@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
      let args1: Args1<T> = { previous, current };
  >args1 : Symbol(args1, Decl(mappedTypes5.ts, 38, 7))
 @@= skipped -73, +73 lines =@@
@@ -31,7 +31,7 @@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
      let current: Partial<State2> = Object.create(null);
  >current : Symbol(current, Decl(mappedTypes5.ts, 56, 7))
  >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
@@ -41,6 +41,6 @@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>create : Symbol(create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
      let args1: Args3 = { previous, current };
  >args1 : Symbol(args1, Decl(mappedTypes5.ts, 57, 7))

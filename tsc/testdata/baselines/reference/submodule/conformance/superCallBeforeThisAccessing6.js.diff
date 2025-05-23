@@ -1,8 +1,8 @@
 --- old.superCallBeforeThisAccessing6.js
 +++ new.superCallBeforeThisAccessing6.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [superCallBeforeThisAccessing6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,14 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base(c) {
-+class Base {
-+    constructor(c) { }
-+}
-+class D extends Base {
-+    _t;
-+    constructor() {
-+        super(this);
-     }
+-    }
 -    return Base;
 -}());
 -var D = /** @class */ (function (_super) {
@@ -39,4 +32,12 @@
 -    }
 -    return D;
 -}(Base));
++class Base {
++    constructor(c) { }
++}
++class D extends Base {
++    _t;
++    constructor() {
++        super(this);
++    }
 +}

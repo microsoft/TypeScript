@@ -1,7 +1,7 @@
 --- old.ignoredJsxAttributes.js
 +++ new.ignoredJsxAttributes.js
 @@= skipped -24, +24 lines =@@
- 
+
  //// [ignoredJsxAttributes.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

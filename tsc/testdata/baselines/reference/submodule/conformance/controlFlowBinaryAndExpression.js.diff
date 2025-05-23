@@ -1,8 +1,8 @@
 --- old.controlFlowBinaryAndExpression.js
 +++ new.controlFlowBinaryAndExpression.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [controlFlowBinaryAndExpression.js]
 -var x;
 -var cond;

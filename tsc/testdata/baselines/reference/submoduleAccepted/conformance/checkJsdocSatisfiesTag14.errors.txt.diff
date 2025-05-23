@@ -1,6 +1,6 @@
 --- old.checkJsdocSatisfiesTag14.errors.txt
 +++ new.checkJsdocSatisfiesTag14.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(7,15): error TS1005: '{' expected.
 -/a.js(8,2): error TS1005: '}' expected.
 -/a.js(10,27): error TS1005: '{' expected.
@@ -27,5 +27,4 @@
 -                                 
 -!!! error TS1005: '}' expected.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

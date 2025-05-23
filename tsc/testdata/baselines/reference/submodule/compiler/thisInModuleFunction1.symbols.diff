@@ -9,4 +9,3 @@
  >bar : Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 0))
 ->bar : Symbol(bar.bar, Decl(thisInModuleFunction1.ts, 0, 12))
 +>bar : Symbol(bar, Decl(thisInModuleFunction1.ts, 0, 12))
- 

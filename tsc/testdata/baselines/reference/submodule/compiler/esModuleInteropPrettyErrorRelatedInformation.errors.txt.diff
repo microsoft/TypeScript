@@ -1,6 +1,6 @@
 --- old.esModuleInteropPrettyErrorRelatedInformation.errors.txt
 +++ new.esModuleInteropPrettyErrorRelatedInformation.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -[96mindex.ts[0m:[93m3[0m:[93m8[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ default: () => void; }' is not assignable to parameter of type '() => void'.
 -  Type '{ default: () => void; }' provides no match for the signature '(): void'.
 -
@@ -28,5 +28,4 @@
 -    
 -Found 1 error in index.ts[90m:3[0m
 -
-@@= skipped --1, +1 lines =@@
 +<no content>

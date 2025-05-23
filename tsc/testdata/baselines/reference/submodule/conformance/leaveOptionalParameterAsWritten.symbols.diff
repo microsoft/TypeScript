@@ -8,6 +8,6 @@
 ->Foo : Symbol(teams.calling.Foo, Decl(b.ts, 3, 30))
 +>calling : Symbol(calling, Decl(b.ts, 2, 19))
 +>Foo : Symbol(Foo, Decl(b.ts, 3, 30))
- 
+
  export const bar = (p?: Foo) => {}
  >bar : Symbol(bar, Decl(c.ts, 1, 12))

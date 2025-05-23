@@ -86,9 +86,7 @@
  })(m1 || (m1 = {}));
 -var glo_C1_public = /** @class */ (function () {
 -    function glo_C1_public() {
-+class glo_C1_public {
-+    f1() {
-     }
+-    }
 -    glo_C1_public.prototype.f1 = function () {
 -    };
 -    return glo_C1_public;
@@ -102,6 +100,9 @@
 -    }
 -    return glo_C3_public;
 -}());
++class glo_C1_public {
++    f1() {
++    }
 +}
 +class glo_C3_public {
 +    glo_C3_v1_private;

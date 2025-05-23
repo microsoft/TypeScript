@@ -1,40 +1,40 @@
 --- old.noUsedBeforeDefinedErrorInTypeContext.types
 +++ new.noUsedBeforeDefinedErrorInTypeContext.types
 @@= skipped -9, +9 lines =@@
- 
+
  var foo = {
  >foo : any
 ->{    one: {} as IThing<typeof foo>,} : { one: IThing<typeof foo>; }
 +>{    one: {} as IThing<typeof foo>,} : { one: IThing<any>; }
- 
+
      one: {} as IThing<typeof foo>,
  >one : IThing<any>
 @@= skipped -10, +10 lines =@@
  }
- 
+
  let baz = {
 ->baz : { two: IThing<typeof bar>; }
 ->{    two: {} as IThing<typeof bar>,} : { two: IThing<typeof bar>; }
 +>baz : { two: IThing<any>; }
 +>{    two: {} as IThing<typeof bar>,} : { two: IThing<any>; }
- 
+
      two: {} as IThing<typeof bar>,
  >two : IThing<any>
 @@= skipped -12, +12 lines =@@
- 
+
  let bar = {
  >bar : any
 ->{    three: {} as IThing<typeof bar>,} : { three: IThing<typeof bar>; }
 +>{    three: {} as IThing<typeof bar>,} : { three: IThing<any>; }
- 
+
      three: {} as IThing<typeof bar>,
  >three : IThing<any>
 @@= skipped -11, +11 lines =@@
- 
+
  const qwe = {
  >qwe : any
 ->{    four: {} as IThing<typeof qwe>,} : { four: IThing<typeof qwe>; }
 +>{    four: {} as IThing<typeof qwe>,} : { four: IThing<any>; }
- 
+
      four: {} as IThing<typeof qwe>,
  >four : IThing<any>

@@ -6,21 +6,21 @@
  >B : Symbol(B, Decl(b.ts, 0, 0))
 ->x : Symbol(B.x, Decl(b.ts, 0, 16))
 +>x : Symbol(x, Decl(b.ts, 0, 16))
- 
+
  === c.d.ts ===
  declare module "C" {
 @@= skipped -8, +8 lines =@@
- 
+
      class Cls {y: string; }
  >Cls : Symbol(Cls, Decl(c.d.ts, 0, 20))
 ->y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 +>y : Symbol(y, Decl(c.d.ts, 1, 15))
  }
- 
+
  === d.ts ===
 @@= skipped -13, +13 lines =@@
  >B : Symbol(B, Decl(d.ts, 3, 8))
- 
+
  A.prototype.getB = function () { return undefined; }
 ->A.prototype.getB : Symbol(A.getB, Decl(d.ts, 8, 17))
 ->A.prototype : Symbol(A.prototype)
@@ -32,11 +32,11 @@
 +>prototype : Symbol(prototype)
 +>getB : Symbol(getB, Decl(d.ts, 8, 17))
  >undefined : Symbol(undefined)
- 
+
  declare module "./a" {
 @@= skipped -14, +14 lines =@@
  >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.ts, 7, 22), Decl(e.ts, 5, 22))
- 
+
          getB(): B;
 ->getB : Symbol(A.getB, Decl(d.ts, 8, 17))
 +>getB : Symbol(getB, Decl(d.ts, 8, 17))
@@ -45,7 +45,7 @@
  }
 @@= skipped -13, +13 lines =@@
  >Cls : Symbol(Cls, Decl(e.ts, 1, 8))
- 
+
  A.prototype.getCls = function () { return undefined; }
 ->A.prototype.getCls : Symbol(A.getCls, Decl(e.ts, 6, 17))
 ->A.prototype : Symbol(A.prototype)
@@ -57,11 +57,11 @@
 +>prototype : Symbol(prototype)
 +>getCls : Symbol(getCls, Decl(e.ts, 6, 17))
  >undefined : Symbol(undefined)
- 
+
  declare module "./a" {
 @@= skipped -14, +14 lines =@@
  >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.ts, 7, 22), Decl(e.ts, 5, 22))
- 
+
          getCls(): Cls;
 ->getCls : Symbol(A.getCls, Decl(e.ts, 6, 17))
 +>getCls : Symbol(getCls, Decl(e.ts, 6, 17))
@@ -69,7 +69,7 @@
      }
  }
 @@= skipped -18, +18 lines =@@
- 
+
  let b = a.getB().x.toFixed();
  >b : Symbol(b, Decl(main.ts, 5, 3))
 ->a.getB().x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
@@ -85,7 +85,7 @@
 +>getB : Symbol(getB, Decl(d.ts, 8, 17))
 +>x : Symbol(x, Decl(b.ts, 0, 16))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
- 
+
  let c = a.getCls().y.toLowerCase();
  >c : Symbol(c, Decl(main.ts, 6, 3))
 ->a.getCls().y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
@@ -101,4 +101,3 @@
 +>getCls : Symbol(getCls, Decl(e.ts, 6, 17))
 +>y : Symbol(y, Decl(c.d.ts, 1, 15))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
- 

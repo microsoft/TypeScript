@@ -10,16 +10,16 @@
 ->x : any
 +>x : number
  >0 : 0
- 
+
  /** @augments */
  class B extends A {
  >B : B
 ->A : typeof A
 +>A : A
- 
+
      m() {
  >m : () => void
- 
+
          this.x
 ->this.x : any
 +>this.x : number
@@ -28,4 +28,3 @@
 +>x : number
      }
  }
- 

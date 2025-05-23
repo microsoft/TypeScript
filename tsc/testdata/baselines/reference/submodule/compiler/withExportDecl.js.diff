@@ -2,7 +2,7 @@
 +++ new.withExportDecl.js
 @@= skipped -60, +60 lines =@@
  export var eVar3 = 10, eVar4, eVar5;
- 
+
  //// [withExportDecl.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -69,6 +69,12 @@
 -};
 -export declare namespace m2 {
 -    var a: number;
+-}
+-export declare namespace m3 {
+-    function foo(): string;
+-}
+-export declare var eVar1: any, eVar2: number;
+-export declare var eVar3: number, eVar4: any, eVar5: any;
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.eVar5 = exports.eVar4 = exports.eVar3 = exports.eVar2 = exports.eVar1 = exports.m3 = exports.exportedArrayVar = exports.exportedWithComplicatedValue = exports.exportedVarWithInitialValue = exports.exportedSimpleVar = void 0;
@@ -89,14 +95,10 @@
 +        y: "word",
 +        n: 2
 +    };
- }
--export declare namespace m3 {
--    function foo(): string;
++}
 +function exportedFunction() {
 +    return simpleFunction();
- }
--export declare var eVar1: any, eVar2: number;
--export declare var eVar3: number, eVar4: any, eVar5: any;
++}
 +var m1;
 +(function (m1) {
 +    function foo() {

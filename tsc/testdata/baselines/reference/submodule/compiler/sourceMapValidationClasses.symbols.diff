@@ -2,16 +2,16 @@
 +++ new.sourceMapValidationClasses.symbols
 @@= skipped -10, +10 lines =@@
  >Greeter : Symbol(Greeter, Decl(sourceMapValidationClasses.ts, 1, 17))
- 
+
          constructor(public greeting: string) {
 ->greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
 +>greeting : Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
          }
- 
+
          greet() {
 ->greet : Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
 +>greet : Symbol(greet, Decl(sourceMapValidationClasses.ts, 5, 9))
- 
+
              return "<h1>" + this.greeting + "</h1>";
 ->this.greeting : Symbol(Greeter.greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
 +>this.greeting : Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
@@ -20,9 +20,9 @@
 +>greeting : Symbol(greeting, Decl(sourceMapValidationClasses.ts, 4, 20))
          }
      }
- 
+
 @@= skipped -30, +30 lines =@@
- 
+
      var str = greeter.greet();
  >str : Symbol(str, Decl(sourceMapValidationClasses.ts, 18, 7))
 ->greeter.greet : Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
@@ -30,7 +30,7 @@
  >greeter : Symbol(greeter, Decl(sourceMapValidationClasses.ts, 17, 7))
 ->greet : Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
 +>greet : Symbol(greet, Decl(sourceMapValidationClasses.ts, 5, 9))
- 
+
      function foo2(greeting: string, ...restGreetings /* more greeting */: string[]) {
  >foo2 : Symbol(foo2, Decl(sourceMapValidationClasses.ts, 18, 30))
 @@= skipped -21, +21 lines =@@
@@ -43,7 +43,7 @@
 ->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >i : Symbol(i, Decl(sourceMapValidationClasses.ts, 23, 16))
- 
+
              greeters.push(new Greeter(restGreetings[i]));
 ->greeters.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>greeters.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -63,7 +63,7 @@
 ->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >j : Symbol(j, Decl(sourceMapValidationClasses.ts, 32, 12))
- 
+
          b[j].greet();
 ->b[j].greet : Symbol(Greeter.greet, Decl(sourceMapValidationClasses.ts, 5, 9))
 +>b[j].greet : Symbol(greet, Decl(sourceMapValidationClasses.ts, 5, 9))

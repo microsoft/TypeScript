@@ -1,8 +1,8 @@
 --- old.spreadUnion3.js
 +++ new.spreadUnion3.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [spreadUnion3.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

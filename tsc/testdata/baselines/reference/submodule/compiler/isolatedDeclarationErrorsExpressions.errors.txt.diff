@@ -1,6 +1,6 @@
 --- old.isolatedDeclarationErrorsExpressions.errors.txt
 +++ new.isolatedDeclarationErrorsExpressions.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -isolatedDeclarationErrorsExpressions.ts(3,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 -isolatedDeclarationErrorsExpressions.ts(4,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
 -isolatedDeclarationErrorsExpressions.ts(5,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
@@ -346,5 +346,4 @@
 -    ] = [0, 1, 2]): void {
 -    
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

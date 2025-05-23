@@ -6,7 +6,7 @@
  >m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
 ->c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
 +>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
- 
+
      return [new m.c()];
 ->m.c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
 +>m.c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
@@ -16,7 +16,7 @@
  }
  function foo4() {
  >foo4 : Symbol(foo4, Decl(declFileTypeAnnotationArrayType.ts, 22, 1))
- 
+
      return m.c;
 ->m.c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
 +>m.c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
@@ -24,7 +24,7 @@
 ->c : Symbol(m.c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
 +>c : Symbol(c, Decl(declFileTypeAnnotationArrayType.ts, 2, 10))
  }
- 
+
  // Just the name with type arguments
 @@= skipped -35, +35 lines =@@
  function foo7(): m.g<number>[] {
@@ -32,7 +32,7 @@
  >m : Symbol(m, Decl(declFileTypeAnnotationArrayType.ts, 1, 1))
 ->g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
 +>g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
- 
+
      return [new m.g<number>()];
 ->m.g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
 +>m.g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
@@ -42,7 +42,7 @@
  }
  function foo8() {
  >foo8 : Symbol(foo8, Decl(declFileTypeAnnotationArrayType.ts, 38, 1))
- 
+
      return [new m.g<number>()];
 ->m.g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
 +>m.g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
@@ -50,5 +50,5 @@
 ->g : Symbol(m.g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
 +>g : Symbol(g, Decl(declFileTypeAnnotationArrayType.ts, 4, 5))
  }
- 
+
  // Array of function types

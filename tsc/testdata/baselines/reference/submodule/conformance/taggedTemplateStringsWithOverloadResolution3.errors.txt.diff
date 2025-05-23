@@ -22,7 +22,7 @@
 +  The last overload gave the following error.
      Argument of type 'boolean' is not assignable to parameter of type 'string'.
  taggedTemplateStringsWithOverloadResolution3.ts(69,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
- 
+
 @@= skipped -29, +23 lines =@@
      fn1 `${ {} }`; // Error
              ~~

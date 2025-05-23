@@ -2,7 +2,7 @@
 +++ new.noCollisionThisExpressionAndClassInGlobal.js
 @@= skipped -5, +5 lines =@@
  var f = () => _this;
- 
+
  //// [noCollisionThisExpressionAndClassInGlobal.js]
 -var _this = /** @class */ (function () {
 -    function _this() {

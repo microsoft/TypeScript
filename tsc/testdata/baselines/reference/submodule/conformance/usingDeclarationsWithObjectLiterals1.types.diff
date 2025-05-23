@@ -1,7 +1,7 @@
 --- old.usingDeclarationsWithObjectLiterals1.types
 +++ new.usingDeclarationsWithObjectLiterals1.types
 @@= skipped -13, +13 lines =@@
- 
+
  {
    using _ = { [Symbol.dispose]() {} };
 ->_ : { [Symbol.dispose](): void; }
@@ -12,7 +12,7 @@
  >Symbol.dispose : unique symbol
  >Symbol : SymbolConstructor
 @@= skipped -10, +10 lines =@@
- 
+
  {
    using _ = { [Symbol.dispose]() {}, value: 1 };
 ->_ : { [Symbol.dispose](): void; value: number; }
@@ -43,7 +43,7 @@
  >Symbol.asyncDispose : unique symbol
  >Symbol : SymbolConstructor
 @@= skipped -10, +10 lines =@@
- 
+
    {
      await using _ = { async [Symbol.asyncDispose]() {}, value: 1 };
 ->_ : { [Symbol.asyncDispose](): Promise<void>; value: number; }
@@ -59,6 +59,6 @@
  >_ : MyAsyncDisposable
 ->{      async [Symbol.asyncDispose]() {},      value: 1,      extra: "foo",    } : { [Symbol.asyncDispose](): Promise<void>; value: number; extra: string; }
 +>{      async [Symbol.asyncDispose]() {},      value: 1,      extra: "foo",    } : { [Symbol.asyncDispose]: () => Promise<void>; value: number; extra: string; }
- 
+
        async [Symbol.asyncDispose]() {},
  >[Symbol.asyncDispose] : () => Promise<void>

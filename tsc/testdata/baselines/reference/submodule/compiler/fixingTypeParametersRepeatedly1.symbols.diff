@@ -9,7 +9,7 @@
  >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 1, 16))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
- 
+
  // First overload of g should type check just like f
  declare function g<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
 @@= skipped -27, +27 lines =@@
@@ -21,4 +21,3 @@
  >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 16))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
- 

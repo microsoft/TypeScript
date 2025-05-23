@@ -1,8 +1,8 @@
 --- old.incrementOnTypeParameter.js
 +++ new.incrementOnTypeParameter.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [incrementOnTypeParameter.js]
 -var C = /** @class */ (function () {
 -    function C() {

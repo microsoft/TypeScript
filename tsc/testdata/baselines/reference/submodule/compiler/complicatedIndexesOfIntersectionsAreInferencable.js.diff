@@ -2,7 +2,7 @@
 +++ new.complicatedIndexesOfIntersectionsAreInferencable.js
 @@= skipped -23, +23 lines =@@
  });
- 
+
  //// [complicatedIndexesOfIntersectionsAreInferencable.js]
 -"use strict";
  Func({

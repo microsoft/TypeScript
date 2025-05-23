@@ -1,8 +1,8 @@
 --- old.privateNamesAndIndexedAccess.js
 +++ new.privateNamesAndIndexedAccess.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [privateNamesAndIndexedAccess.js]
 -"use strict";
 -var _C_bar;

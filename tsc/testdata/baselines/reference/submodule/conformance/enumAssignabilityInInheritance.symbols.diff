@@ -1,23 +1,23 @@
 --- old.enumAssignabilityInInheritance.symbols
 +++ new.enumAssignabilityInInheritance.symbols
 @@= skipped -5, +5 lines =@@
- 
+
  enum E { A }
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  interface I0 {
  >I0 : Symbol(I0, Decl(enumAssignabilityInInheritance.ts, 3, 12))
 @@= skipped -10, +10 lines =@@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
- 
+
      foo: E; // identical and subtype, ok
 ->foo : Symbol(I0.foo, Decl(enumAssignabilityInInheritance.ts, 6, 19))
 +>foo : Symbol(foo, Decl(enumAssignabilityInInheritance.ts, 6, 19))
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
  }
- 
+
 @@= skipped -22, +22 lines =@@
  var r = foo(E.A); // E
  >r : Symbol(r, Decl(enumAssignabilityInInheritance.ts, 14, 3))
@@ -27,7 +27,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  var r2 = foo(1); // number
  >r2 : Symbol(r2, Decl(enumAssignabilityInInheritance.ts, 15, 3))
 @@= skipped -25, +25 lines =@@
@@ -39,7 +39,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo3(x: boolean): boolean;
  >foo3 : Symbol(foo3, Decl(enumAssignabilityInInheritance.ts, 21, 19), Decl(enumAssignabilityInInheritance.ts, 23, 43))
 @@= skipped -17, +17 lines =@@
@@ -51,7 +51,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo4(x: Date): Date;
  >foo4 : Symbol(foo4, Decl(enumAssignabilityInInheritance.ts, 26, 19), Decl(enumAssignabilityInInheritance.ts, 28, 37))
 @@= skipped -19, +19 lines =@@
@@ -63,7 +63,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo5(x: RegExp): RegExp;
  >foo5 : Symbol(foo5, Decl(enumAssignabilityInInheritance.ts, 31, 19), Decl(enumAssignabilityInInheritance.ts, 33, 41))
 @@= skipped -19, +19 lines =@@
@@ -75,7 +75,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo6(x: { bar: number }): { bar: number };
  >foo6 : Symbol(foo6, Decl(enumAssignabilityInInheritance.ts, 36, 19), Decl(enumAssignabilityInInheritance.ts, 38, 59))
 @@= skipped -19, +19 lines =@@
@@ -87,7 +87,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo7(x: number[]): number[];
  >foo7 : Symbol(foo7, Decl(enumAssignabilityInInheritance.ts, 41, 19), Decl(enumAssignabilityInInheritance.ts, 43, 45))
 @@= skipped -17, +17 lines =@@
@@ -99,12 +99,12 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  interface I8 { foo: string; }
  >I8 : Symbol(I8, Decl(enumAssignabilityInInheritance.ts, 46, 19))
 ->foo : Symbol(I8.foo, Decl(enumAssignabilityInInheritance.ts, 48, 14))
 +>foo : Symbol(foo, Decl(enumAssignabilityInInheritance.ts, 48, 14))
- 
+
  declare function foo8(x: I8): I8;
  >foo8 : Symbol(foo8, Decl(enumAssignabilityInInheritance.ts, 48, 29), Decl(enumAssignabilityInInheritance.ts, 49, 33))
 @@= skipped -23, +23 lines =@@
@@ -116,12 +116,12 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  class A { foo: number; }
  >A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 52, 19))
 ->foo : Symbol(A.foo, Decl(enumAssignabilityInInheritance.ts, 54, 9))
 +>foo : Symbol(foo, Decl(enumAssignabilityInInheritance.ts, 54, 9))
- 
+
  declare function foo9(x: A): A;
  >foo9 : Symbol(foo9, Decl(enumAssignabilityInInheritance.ts, 54, 24), Decl(enumAssignabilityInInheritance.ts, 55, 31))
 @@= skipped -23, +23 lines =@@
@@ -133,14 +133,14 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  class A2<T> { foo: T; }
  >A2 : Symbol(A2, Decl(enumAssignabilityInInheritance.ts, 58, 19))
  >T : Symbol(T, Decl(enumAssignabilityInInheritance.ts, 60, 9))
 ->foo : Symbol(A2.foo, Decl(enumAssignabilityInInheritance.ts, 60, 13))
 +>foo : Symbol(foo, Decl(enumAssignabilityInInheritance.ts, 60, 13))
  >T : Symbol(T, Decl(enumAssignabilityInInheritance.ts, 60, 9))
- 
+
  declare function foo10(x: A2<number>): A2<number>;
 @@= skipped -25, +25 lines =@@
  var r4 = foo10(E.A);
@@ -151,7 +151,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo11(x: (x) => number): (x) => number;
  >foo11 : Symbol(foo11, Decl(enumAssignabilityInInheritance.ts, 64, 20), Decl(enumAssignabilityInInheritance.ts, 66, 56))
 @@= skipped -19, +19 lines =@@
@@ -163,7 +163,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo12(x: <T>(x: T) => T): <T>(x: T) => T;
  >foo12 : Symbol(foo12, Decl(enumAssignabilityInInheritance.ts, 69, 20), Decl(enumAssignabilityInInheritance.ts, 71, 58))
 @@= skipped -25, +25 lines =@@
@@ -175,12 +175,12 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  enum E2 { A }
  >E2 : Symbol(E2, Decl(enumAssignabilityInInheritance.ts, 74, 20))
 ->A : Symbol(E2.A, Decl(enumAssignabilityInInheritance.ts, 76, 9))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 76, 9))
- 
+
  declare function foo13(x: E2): E2;
  >foo13 : Symbol(foo13, Decl(enumAssignabilityInInheritance.ts, 76, 13), Decl(enumAssignabilityInInheritance.ts, 77, 34))
 @@= skipped -23, +23 lines =@@
@@ -192,7 +192,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  function f() { }
  >f : Symbol(f, Decl(enumAssignabilityInInheritance.ts, 80, 20), Decl(enumAssignabilityInInheritance.ts, 82, 16))
 @@= skipped -28, +28 lines =@@
@@ -204,12 +204,12 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  class CC { baz: string }
  >CC : Symbol(CC, Decl(enumAssignabilityInInheritance.ts, 89, 20), Decl(enumAssignabilityInInheritance.ts, 91, 24))
 ->baz : Symbol(CC.baz, Decl(enumAssignabilityInInheritance.ts, 91, 10))
 +>baz : Symbol(baz, Decl(enumAssignabilityInInheritance.ts, 91, 10))
- 
+
  module CC {
  >CC : Symbol(CC, Decl(enumAssignabilityInInheritance.ts, 89, 20), Decl(enumAssignabilityInInheritance.ts, 91, 24))
 @@= skipped -29, +29 lines =@@
@@ -221,7 +221,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo16(x: Object): Object;
  >foo16 : Symbol(foo16, Decl(enumAssignabilityInInheritance.ts, 98, 20), Decl(enumAssignabilityInInheritance.ts, 100, 42))
 @@= skipped -19, +19 lines =@@
@@ -233,7 +233,7 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 
+
  declare function foo17(x: {}): {};
  >foo17 : Symbol(foo17, Decl(enumAssignabilityInInheritance.ts, 103, 20), Decl(enumAssignabilityInInheritance.ts, 105, 34))
 @@= skipped -17, +17 lines =@@
@@ -245,4 +245,3 @@
  >E : Symbol(E, Decl(enumAssignabilityInInheritance.ts, 0, 0))
 ->A : Symbol(E.A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
 +>A : Symbol(A, Decl(enumAssignabilityInInheritance.ts, 3, 8))
- 

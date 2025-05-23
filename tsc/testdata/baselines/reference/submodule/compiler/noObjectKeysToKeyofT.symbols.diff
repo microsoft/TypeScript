@@ -14,6 +14,6 @@
  >a : Symbol(a, Decl(noObjectKeysToKeyofT.ts, 2, 13))
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
- 
+
  // See also
  // https://stackoverflow.com/questions/55012174/why-doesnt-object-keys-return-a-keyof-type-in-typescript

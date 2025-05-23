@@ -1,7 +1,7 @@
 --- old.neverAsDiscriminantType(strict=true).types
 +++ new.neverAsDiscriminantType(strict=true).types
 @@= skipped -45, +45 lines =@@
- 
+
          foo.a;
  >foo.a : number
 ->foo : { kind?: "a"; a: number; }

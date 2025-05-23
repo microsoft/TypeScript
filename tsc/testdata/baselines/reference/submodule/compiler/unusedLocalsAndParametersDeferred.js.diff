@@ -54,29 +54,29 @@
 -        },
 -        enumerable: false,
 -        configurable: true
--    });
++    }
++    // Accessor declaration paramter
++    set x(v) {
++        defered(() => {
++            v;
++        });
++    }
++    // in a property initalizer
++    p = defered(() => {
++        prop1;
+     });
 -    return C;
 -}());
--new C();
++}
+ new C();
 -var prop2;
 -var E = /** @class */ (function () {
 -    function class_1() {
 -        // in a property initalizer
 -        this.p = defered(function () {
 -            prop2;
-+    }
-+    // Accessor declaration paramter
-+    set x(v) {
-+        defered(() => {
-+            v;
-         });
-     }
-+    // in a property initalizer
-+    p = defered(() => {
-+        prop1;
-+    });
-+}
-+new C();
+-        });
+-    }
 +let prop2;
 +var E = class {
      // Method declaration paramter
@@ -136,40 +136,41 @@
  o;
 -var _loop_1 = function (i) {
 -    defered(function () {
-+// in a for..in statment
+-        i;
+-    });
+-};
+ // in a for..in statment
+-for (var i in o) {
+-    _loop_1(i);
+-}
+-var _loop_2 = function (i) {
+-    defered(function () {
 +for (let i in o) {
 +    defered(() => {
          i;
      });
 -};
--// in a for..in statment
--for (var i in o) {
--    _loop_1(i);
- }
--var _loop_2 = function (i) {
++}
+ // in a for..of statment
+-for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
+-    var i = _a[_i];
+-    _loop_2(i);
+-}
+-var _loop_3 = function (i) {
 -    defered(function () {
-+// in a for..of statment
 +for (let i of [1, 2, 3]) {
 +    defered(() => {
          i;
      });
 -};
--// in a for..of statment
--for (var _i = 0, _a = [1, 2, 3]; _i < _a.length; _i++) {
--    var i = _a[_i];
--    _loop_2(i);
- }
--var _loop_3 = function (i) {
--    defered(function () {
-+// in a for. statment
-+for (let i = 0; i < 10; i++) {
-+    defered(() => {
-         i;
-     });
--};
--// in a for. statment
++}
+ // in a for. statment
 -for (var i = 0; i < 10; i++) {
 -    _loop_3(i);
++for (let i = 0; i < 10; i++) {
++    defered(() => {
++        i;
++    });
  }
  // in a block
 -var condition = false;

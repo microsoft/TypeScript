@@ -18,8 +18,8 @@
 +arbitraryModuleNamespaceIdentifiers_module.ts(26,18): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
 +arbitraryModuleNamespaceIdentifiers_module.ts(27,15): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
  arbitraryModuleNamespaceIdentifiers_module.ts(29,7): error TS2322: Type '"expect error about otherType"' is not assignable to type '"otherType"'.
- 
- 
+
+
 -==== arbitraryModuleNamespaceIdentifiers_module.ts (3 errors) ====
 +==== arbitraryModuleNamespaceIdentifiers_module.ts (17 errors) ====
      const someValue = "someValue";

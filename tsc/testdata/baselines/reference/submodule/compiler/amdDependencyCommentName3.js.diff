@@ -2,7 +2,7 @@
 +++ new.amdDependencyCommentName3.js
 @@= skipped -8, +8 lines =@@
  m1.f();
- 
+
  //// [amdDependencyCommentName3.js]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });

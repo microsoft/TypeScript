@@ -1,7 +1,7 @@
 --- old.classBlockScoping.js
 +++ new.classBlockScoping.js
 @@= skipped -36, +36 lines =@@
- 
+
  //// [classBlockScoping.js]
  function f(b) {
 -    var _a;
@@ -35,14 +35,9 @@
      else {
 -        var Foo_1 = /** @class */ (function () {
 -            function Foo() {
-+        class Foo {
-+            static y = new Foo();
-+            static x() {
-+                new Foo();
-             }
+-            }
 -            Foo.x = function () {
-+            m() {
-                 new Foo();
+-                new Foo();
 -            };
 -            Foo.prototype.m = function () {
 -                new Foo();
@@ -51,6 +46,13 @@
 -            return Foo;
 -        }());
 -        new Foo_1();
++        class Foo {
++            static y = new Foo();
++            static x() {
++                new Foo();
++            }
++            m() {
++                new Foo();
 +            }
 +        }
 +        new Foo();

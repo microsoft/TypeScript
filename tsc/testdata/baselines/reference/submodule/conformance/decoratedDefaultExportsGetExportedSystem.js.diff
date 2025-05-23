@@ -2,7 +2,7 @@
 +++ new.decoratedDefaultExportsGetExportedSystem.js
 @@= skipped -12, +12 lines =@@
  export default class {}
- 
+
  //// [a.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

@@ -6,7 +6,7 @@
    get bar(): number { return 1;}
 ->bar : Symbol(C.bar, Decl(commentOnClassAccessor2.ts, 0, 9), Decl(commentOnClassAccessor2.ts, 4, 32))
 +>bar : Symbol(bar, Decl(commentOnClassAccessor2.ts, 0, 9), Decl(commentOnClassAccessor2.ts, 4, 32))
- 
+
    /**
     * Setter.
     */

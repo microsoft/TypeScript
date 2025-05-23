@@ -9,9 +9,8 @@
 +>foo : (__0?: {}) => any
 +>cause : any
  >{} : {}
- 
+
      return cause;
 ->cause : string
 +>cause : any
  }
- 

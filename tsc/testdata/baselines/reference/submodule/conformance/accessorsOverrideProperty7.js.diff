@@ -1,8 +1,8 @@
 --- old.accessorsOverrideProperty7.js
 +++ new.accessorsOverrideProperty7.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [accessorsOverrideProperty7.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

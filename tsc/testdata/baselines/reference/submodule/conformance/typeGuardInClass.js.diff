@@ -1,8 +1,8 @@
 --- old.typeGuardInClass.js
 +++ new.typeGuardInClass.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [typeGuardInClass.js]
 -var x;
 +let x;

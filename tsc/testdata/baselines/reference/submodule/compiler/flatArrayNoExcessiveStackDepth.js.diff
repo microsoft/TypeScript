@@ -1,8 +1,8 @@
 --- old.flatArrayNoExcessiveStackDepth.js
 +++ new.flatArrayNoExcessiveStackDepth.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [flatArrayNoExcessiveStackDepth.js]
 -"use strict";
 -// Repro from #43493

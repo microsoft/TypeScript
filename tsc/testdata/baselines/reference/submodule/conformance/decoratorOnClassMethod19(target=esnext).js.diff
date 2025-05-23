@@ -1,8 +1,8 @@
 --- old.decoratorOnClassMethod19(target=esnext).js
 +++ new.decoratorOnClassMethod19(target=esnext).js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [decoratorOnClassMethod19.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

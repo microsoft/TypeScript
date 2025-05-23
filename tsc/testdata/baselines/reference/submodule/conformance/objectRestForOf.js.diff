@@ -1,8 +1,8 @@
 --- old.objectRestForOf.js
 +++ new.objectRestForOf.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [objectRestForOf.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

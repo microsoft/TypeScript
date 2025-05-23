@@ -7,8 +7,8 @@
  parserindenter.ts(24,42): error TS2304: Cannot find name 'Dictionary_int_int'.
 @@= skipped -127, +126 lines =@@
  parserindenter.ts(736,38): error TS2304: Cannot find name 'TypeScript'.
- 
- 
+
+
 -==== parserindenter.ts (128 errors) ====
 +==== parserindenter.ts (127 errors) ====
      //﻿

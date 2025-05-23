@@ -9,7 +9,7 @@
  >bigintVal : bigint
 ->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 +>toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
- 
+
  stringVal = bigintVal.toLocaleString('de-DE');
  >stringVal = bigintVal.toLocaleString('de-DE') : string
  >stringVal : string
@@ -20,7 +20,7 @@
 ->toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 +>toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
  >'de-DE' : "de-DE"
- 
+
  stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
  >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
  >stringVal : string

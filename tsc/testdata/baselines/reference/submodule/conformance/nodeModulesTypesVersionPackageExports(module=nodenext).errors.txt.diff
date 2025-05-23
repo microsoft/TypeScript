@@ -1,8 +1,7 @@
 --- old.nodeModulesTypesVersionPackageExports(module=nodenext).errors.txt
 +++ new.nodeModulesTypesVersionPackageExports(module=nodenext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +index.cts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
 +index.mts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.
 +index.ts(3,5): error TS2339: Property 'correctVersionApplied' does not exist on type 'typeof import("node_modules/inner/index")'.

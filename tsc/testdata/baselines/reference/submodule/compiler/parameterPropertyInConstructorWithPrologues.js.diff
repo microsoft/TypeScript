@@ -1,7 +1,7 @@
 --- old.parameterPropertyInConstructorWithPrologues.js
 +++ new.parameterPropertyInConstructorWithPrologues.js
 @@= skipped -85, +85 lines =@@
- 
+
  //// [parameterPropertyInConstructorWithPrologues.js]
  // https://github.com/microsoft/TypeScript/issues/48671
 -var __extends = (this && this.__extends) || (function () {
@@ -27,34 +27,112 @@
 -var Foo1 = /** @class */ (function () {
 -    function Foo1(A) {
 -        "ngInject1";
-+class C {
-+}
-+class Foo1 {
-+    A;
-+    constructor(A) {
-         this.A = A;
+-        this.A = A;
 -    }
 -    return Foo1;
 -}());
 -var Foo2 = /** @class */ (function () {
 -    function Foo2(A, B) {
-         "ngInject1";
+-        "ngInject1";
 -        "ngInject2";
+-        this.A = A;
+-        this.B = B;
+-    }
+-    return Foo2;
+-}());
+-var Foo3 = /** @class */ (function () {
+-    function Foo3(A, B, C) {
+-        "ngInject1";
+-        "ngInject2";
+-        this.A = A;
+-        this.B = B;
+-        this.C = C;
+-    }
+-    return Foo3;
+-}());
+-var Foo4 = /** @class */ (function () {
+-    function Foo4(A) {
+-        "ngInject1";
+-        this.A = A;
+-        console.log("hi");
+-    }
+-    return Foo4;
+-}());
+-var Foo5 = /** @class */ (function () {
+-    function Foo5(A, B) {
+-        "ngInject1";
+-        "ngInject2";
+-        this.A = A;
+-        this.B = B;
+-        console.log("hi");
+-    }
+-    return Foo5;
+-}());
+-var Foo6 = /** @class */ (function () {
+-    function Foo6(A, B, C) {
+-        "ngInject1";
+-        "ngInject2";
+-        this.A = A;
+-        this.B = B;
+-        this.C = C;
+-        console.log("hi");
+-    }
+-    return Foo6;
+-}());
+-var Foo7 = /** @class */ (function (_super) {
+-    __extends(Foo7, _super);
+-    function Foo7(member) {
+-        "ngInject1";
+-        var _this = _super.call(this) || this;
+-        _this.member = member;
+-        console.log("hi");
+-        return _this;
+-    }
+-    return Foo7;
+-}(C));
+-var Foo8 = /** @class */ (function (_super) {
+-    __extends(Foo8, _super);
+-    function Foo8(member) {
+-        "ngInject1";
+-        var _this = _super.call(this) || this;
+-        _this.member = member;
+-        _this.m();
+-        console.log("hi");
+-        return _this;
+-    }
+-    Foo8.prototype.m = function () { };
+-    return Foo8;
+-}(C));
+-var Foo9 = /** @class */ (function (_super) {
+-    __extends(Foo9, _super);
+-    function Foo9() {
+-        "ngInject1";
+-        "ngInject2";
+-        var _this = _super.call(this) || this;
+-        _this.m();
+-        console.log("hi");
+-        return _this;
+-    }
+-    Foo9.prototype.m = function () { };
+-    return Foo9;
+-}(C));
++class C {
++}
++class Foo1 {
++    A;
++    constructor(A) {
++        this.A = A;
++        "ngInject1";
 +    }
 +}
 +class Foo2 {
 +    A;
 +    B;
 +    constructor(A, B) {
-         this.A = A;
-         this.B = B;
--    }
--    return Foo2;
--}());
--var Foo3 = /** @class */ (function () {
--    function Foo3(A, B, C) {
-         "ngInject1";
-         "ngInject2";
++        this.A = A;
++        this.B = B;
++        "ngInject1";
++        "ngInject2";
 +    }
 +}
 +class Foo3 {
@@ -62,122 +140,81 @@
 +    B;
 +    C;
 +    constructor(A, B, C) {
-         this.A = A;
-         this.B = B;
-         this.C = C;
++        this.A = A;
++        this.B = B;
++        this.C = C;
 +        "ngInject1";
 +        "ngInject2";
-     }
--    return Foo3;
--}());
--var Foo4 = /** @class */ (function () {
--    function Foo4(A) {
++    }
 +}
 +class Foo4 {
 +    A;
 +    constructor(A) {
-         "ngInject1";
 +        "ngInject1";
-         this.A = A;
-         console.log("hi");
-     }
--    return Foo4;
--}());
--var Foo5 = /** @class */ (function () {
--    function Foo5(A, B) {
++        "ngInject1";
++        this.A = A;
++        console.log("hi");
++    }
 +}
 +class Foo5 {
 +    A;
 +    B;
 +    constructor(A, B) {
-         "ngInject1";
-         "ngInject2";
 +        "ngInject1";
 +        "ngInject2";
-         this.A = A;
-         this.B = B;
-         console.log("hi");
-     }
--    return Foo5;
--}());
--var Foo6 = /** @class */ (function () {
--    function Foo6(A, B, C) {
++        "ngInject1";
++        "ngInject2";
++        this.A = A;
++        this.B = B;
++        console.log("hi");
++    }
 +}
 +class Foo6 {
 +    A;
 +    B;
 +    C;
 +    constructor(A, B, C) {
-         "ngInject1";
-         "ngInject2";
 +        "ngInject1";
 +        "ngInject2";
-         this.A = A;
-         this.B = B;
-         this.C = C;
-         console.log("hi");
-     }
--    return Foo6;
--}());
--var Foo7 = /** @class */ (function (_super) {
--    __extends(Foo7, _super);
--    function Foo7(member) {
++        "ngInject1";
++        "ngInject2";
++        this.A = A;
++        this.B = B;
++        this.C = C;
++        console.log("hi");
++    }
 +}
 +class Foo7 extends C {
 +    member;
 +    constructor(member) {
-         "ngInject1";
--        var _this = _super.call(this) || this;
--        _this.member = member;
++        "ngInject1";
 +        "ngInject1";
 +        super();
 +        this.member = member;
-         console.log("hi");
--        return _this;
-     }
--    return Foo7;
--}(C));
--var Foo8 = /** @class */ (function (_super) {
--    __extends(Foo8, _super);
--    function Foo8(member) {
++        console.log("hi");
++    }
 +}
 +class Foo8 extends C {
 +    member;
 +    constructor(member) {
-         "ngInject1";
--        var _this = _super.call(this) || this;
--        _this.member = member;
--        _this.m();
++        "ngInject1";
 +        "ngInject1";
 +        super();
 +        this.member = member;
 +        this.m();
-         console.log("hi");
--        return _this;
-     }
--    Foo8.prototype.m = function () { };
--    return Foo8;
--}(C));
--var Foo9 = /** @class */ (function (_super) {
--    __extends(Foo9, _super);
--    function Foo9() {
++        console.log("hi");
++    }
 +    m() { }
 +}
 +class Foo9 extends C {
 +    constructor() {
-         "ngInject1";
-         "ngInject2";
--        var _this = _super.call(this) || this;
--        _this.m();
++        "ngInject1";
++        "ngInject2";
 +        "ngInject1";
 +        "ngInject2";
 +        super();
 +        this.m();
-         console.log("hi");
--        return _this;
-     }
--    Foo9.prototype.m = function () { };
--    return Foo9;
--}(C));
++        console.log("hi");
++    }
 +    m() { }
 +}

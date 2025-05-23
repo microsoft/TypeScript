@@ -1,7 +1,7 @@
 --- old.templateLiteralTypes1.js
 +++ new.templateLiteralTypes1.js
 @@= skipped -258, +258 lines =@@
- 
+
  //// [templateLiteralTypes1.js]
  "use strict";
 -// Template types example from #12754

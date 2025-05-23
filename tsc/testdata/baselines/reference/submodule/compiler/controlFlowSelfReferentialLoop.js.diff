@@ -1,7 +1,7 @@
 --- old.controlFlowSelfReferentialLoop.js
 +++ new.controlFlowSelfReferentialLoop.js
 @@= skipped -123, +123 lines =@@
- 
+
  //// [controlFlowSelfReferentialLoop.js]
  "use strict";
 -// Repro from #12319

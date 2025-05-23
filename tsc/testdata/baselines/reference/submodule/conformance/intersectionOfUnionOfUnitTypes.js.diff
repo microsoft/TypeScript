@@ -1,7 +1,7 @@
 --- old.intersectionOfUnionOfUnitTypes.js
 +++ new.intersectionOfUnionOfUnitTypes.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [intersectionOfUnionOfUnitTypes.js]
  // @strict
 -var x0; // 'a' | 'b' | 'c'

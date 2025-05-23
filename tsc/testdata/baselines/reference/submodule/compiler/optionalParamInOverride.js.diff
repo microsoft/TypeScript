@@ -1,8 +1,8 @@
 --- old.optionalParamInOverride.js
 +++ new.optionalParamInOverride.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [optionalParamInOverride.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

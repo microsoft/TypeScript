@@ -1,7 +1,7 @@
 --- old.jsxViaImport.2.js
 +++ new.jsxViaImport.2.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [consumer.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

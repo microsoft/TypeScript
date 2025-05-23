@@ -1,6 +1,6 @@
 --- old.declarationFilesForNodeNativeModules(allowarbitraryextensions=false).errors.txt
 +++ new.declarationFilesForNodeNativeModules(allowarbitraryextensions=false).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -main.ts(1,22): error TS6263: Module './dir/native.node' was resolved to 'dir/native.d.node.ts', but '--allowArbitraryExtensions' is not set.
 -
 -
@@ -16,5 +16,4 @@
 -    {"type": "commonjs"}
 -==== dir/native.d.node.ts (0 errors) ====
 -    export function doNativeThing(flag: string): unknown;
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -20,13 +20,7 @@
 -                return [2 /*return*/];
 -        }
 -    });
-+function* objectLiteral1() {
-+    const x = {
-+        a: 1,
-+        b: yield 2,
-+        c: 3,
-+    };
- }
+-}
 -function objectLiteral2() {
 -    var x, _a;
 -    var _b;
@@ -45,13 +39,7 @@
 -                return [2 /*return*/];
 -        }
 -    });
-+function* objectLiteral2() {
-+    const x = {
-+        a: 1,
-+        [g()]: yield 2,
-+        c: 3,
-+    };
- }
+-}
 -function objectLiteral3() {
 -    var x, _a;
 -    var _b;
@@ -71,14 +59,7 @@
 -                return [2 /*return*/];
 -        }
 -    });
-+function* objectLiteral3() {
-+    const x = {
-+        a: 1,
-+        b: yield 2,
-+        [g()]: 3,
-+        c: 4,
-+    };
- }
+-}
 -function objectLiteral4() {
 -    var x;
 -    var _a;
@@ -97,14 +78,7 @@
 -                return [2 /*return*/];
 -        }
 -    });
-+function* objectLiteral4() {
-+    const x = {
-+        a: 1,
-+        [g()]: 2,
-+        b: yield 3,
-+        c: 4,
-+    };
- }
+-}
 -function objectLiteral5() {
 -    var x, _a;
 -    var _b;
@@ -123,13 +97,7 @@
 -                return [2 /*return*/];
 -        }
 -    });
-+function* objectLiteral5() {
-+    const x = {
-+        a: 1,
-+        [g()]: yield 2,
-+        c: 4,
-+    };
- }
+-}
 -function objectLiteral6() {
 -    var x;
 -    var _a;
@@ -147,13 +115,7 @@
 -                return [2 /*return*/];
 -        }
 -    });
-+function* objectLiteral6() {
-+    const x = {
-+        a: 1,
-+        [yield]: 2,
-+        c: 4,
-+    };
- }
+-}
 -function objectLiteral7() {
 -    var x, _a;
 -    var _b;
@@ -174,6 +136,50 @@
 -                return [2 /*return*/];
 -        }
 -    });
++function* objectLiteral1() {
++    const x = {
++        a: 1,
++        b: yield 2,
++        c: 3,
++    };
++}
++function* objectLiteral2() {
++    const x = {
++        a: 1,
++        [g()]: yield 2,
++        c: 3,
++    };
++}
++function* objectLiteral3() {
++    const x = {
++        a: 1,
++        b: yield 2,
++        [g()]: 3,
++        c: 4,
++    };
++}
++function* objectLiteral4() {
++    const x = {
++        a: 1,
++        [g()]: 2,
++        b: yield 3,
++        c: 4,
++    };
++}
++function* objectLiteral5() {
++    const x = {
++        a: 1,
++        [g()]: yield 2,
++        c: 4,
++    };
++}
++function* objectLiteral6() {
++    const x = {
++        a: 1,
++        [yield]: 2,
++        c: 4,
++    };
++}
 +function* objectLiteral7() {
 +    const x = {
 +        a: 1,

@@ -2,7 +2,7 @@
 +++ new.moduleExports1.types
 @@= skipped -14, +14 lines =@@
  }
- 
+
  var rue = new TypeScript.Strasse.Street.Rue();
 ->rue : TypeScript.Strasse.Street.Rue
 ->new TypeScript.Strasse.Street.Rue() : TypeScript.Strasse.Street.Rue
@@ -21,7 +21,7 @@
 +>Strasse : typeof Strasse
 +>Street : typeof Street
 +>Rue : typeof Rue
- 
+
  rue.address = "1 Main Street";
  >rue.address = "1 Main Street" : "1 Main Street"
  >rue.address : string
@@ -29,4 +29,3 @@
 +>rue : Rue
  >address : string
  >"1 Main Street" : "1 Main Street"
- 

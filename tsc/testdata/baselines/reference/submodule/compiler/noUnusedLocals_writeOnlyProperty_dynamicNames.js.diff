@@ -1,8 +1,8 @@
 --- old.noUnusedLocals_writeOnlyProperty_dynamicNames.js
 +++ new.noUnusedLocals_writeOnlyProperty_dynamicNames.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [noUnusedLocals_writeOnlyProperty_dynamicNames.js]
 -var x = Symbol("x");
 -var y = Symbol("y");

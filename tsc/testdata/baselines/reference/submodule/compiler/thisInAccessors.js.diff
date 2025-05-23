@@ -1,16 +1,12 @@
 --- old.thisInAccessors.js
 +++ new.thisInAccessors.js
 @@= skipped -33, +33 lines =@@
- 
+
  //// [thisInAccessors.js]
  // this capture only in getter
 -var GetterOnly = /** @class */ (function () {
 -    function GetterOnly() {
-+class GetterOnly {
-+    get Value() {
-+        var fn = () => this;
-+        return '';
-     }
+-    }
 -    Object.defineProperty(GetterOnly.prototype, "Value", {
 -        get: function () {
 -            var _this = this;
@@ -24,16 +20,18 @@
 -    });
 -    return GetterOnly;
 -}());
++class GetterOnly {
++    get Value() {
++        var fn = () => this;
++        return '';
++    }
 +    set Value(val) {
 +    }
 +}
  // this capture only in setter
 -var SetterOnly = /** @class */ (function () {
 -    function SetterOnly() {
-+class SetterOnly {
-+    get Value() {
-+        return '';
-     }
+-    }
 -    Object.defineProperty(SetterOnly.prototype, "Value", {
 -        get: function () {
 -            return '';
@@ -47,6 +45,10 @@
 -    });
 -    return SetterOnly;
 -}());
++class SetterOnly {
++    get Value() {
++        return '';
++    }
 +    set Value(val) {
 +        var fn = () => this;
 +    }
@@ -54,11 +56,7 @@
  // this capture only in both setter and getter
 -var GetterAndSetter = /** @class */ (function () {
 -    function GetterAndSetter() {
-+class GetterAndSetter {
-+    get Value() {
-+        var fn = () => this;
-+        return '';
-     }
+-    }
 -    Object.defineProperty(GetterAndSetter.prototype, "Value", {
 -        get: function () {
 -            var _this = this;
@@ -74,6 +72,11 @@
 -    });
 -    return GetterAndSetter;
 -}());
++class GetterAndSetter {
++    get Value() {
++        var fn = () => this;
++        return '';
++    }
 +    set Value(val) {
 +        var fn = () => this;
 +    }

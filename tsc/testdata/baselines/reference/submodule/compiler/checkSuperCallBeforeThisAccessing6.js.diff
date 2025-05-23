@@ -2,7 +2,7 @@
 +++ new.checkSuperCallBeforeThisAccessing6.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [checkSuperCallBeforeThisAccessing6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -25,9 +25,7 @@
 -        for (var _i = 0; _i < arguments.length; _i++) {
 -            arg[_i] = arguments[_i];
 -        }
-+class Base {
-+    constructor(...arg) {
-     }
+-    }
 -    return Base;
 -}());
 -var Super = /** @class */ (function (_super) {
@@ -36,12 +34,16 @@
 -        var _this = this;
 -        (function () { return _this; }); // No Error
 -        return _this = _super.call(this) || this;
+-    }
+-    return Super;
+-}(Base));
++class Base {
++    constructor(...arg) {
++    }
 +}
 +class Super extends Base {
 +    constructor() {
 +        (() => this); // No Error
 +        super();
-     }
--    return Super;
--}(Base));
++    }
 +}

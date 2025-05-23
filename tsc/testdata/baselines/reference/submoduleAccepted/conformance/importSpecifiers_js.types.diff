@@ -2,14 +2,13 @@
 +++ new.importSpecifiers_js.types
 @@= skipped -0, +0 lines =@@
  //// [tests/cases/conformance/externalModules/typeOnly/importSpecifiers_js.ts] ////
- 
+
 -=== ./a.ts ===
 +=== a.ts ===
- 
+
  export interface A {}
- 
+
 -=== ./a.js ===
 +=== a.js ===
  import { type A } from "./a";
  >A : any
- 

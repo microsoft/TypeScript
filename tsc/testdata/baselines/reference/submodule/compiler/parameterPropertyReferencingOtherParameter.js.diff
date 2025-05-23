@@ -1,8 +1,8 @@
 --- old.parameterPropertyReferencingOtherParameter.js
 +++ new.parameterPropertyReferencingOtherParameter.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [parameterPropertyReferencingOtherParameter.js]
 -var Foo = /** @class */ (function () {
 -    function Foo(x, y) {

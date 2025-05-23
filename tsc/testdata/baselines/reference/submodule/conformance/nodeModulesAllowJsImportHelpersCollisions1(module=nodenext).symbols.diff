@@ -7,7 +7,7 @@
 ->default : Symbol(_fs, Decl(types.d.ts, 0, 0))
 +>default : Symbol("fs", Decl(types.d.ts, 0, 0))
  >_fs : Symbol(_fs, Decl(index.js, 1, 8))
- 
+
  _fs.readFile;
 @@= skipped -15, +15 lines =@@
  === index.js ===
@@ -16,5 +16,5 @@
 ->default : Symbol(_fs, Decl(types.d.ts, 0, 0))
 +>default : Symbol("fs", Decl(types.d.ts, 0, 0))
  >_fs : Symbol(_fs, Decl(index.js, 1, 8))
- 
+
  _fs.readFile;

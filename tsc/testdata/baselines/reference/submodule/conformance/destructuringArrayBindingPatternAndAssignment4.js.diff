@@ -1,8 +1,8 @@
 --- old.destructuringArrayBindingPatternAndAssignment4.js
 +++ new.destructuringArrayBindingPatternAndAssignment4.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [destructuringArrayBindingPatternAndAssignment4.js]
 -"use strict";
 -// #35497

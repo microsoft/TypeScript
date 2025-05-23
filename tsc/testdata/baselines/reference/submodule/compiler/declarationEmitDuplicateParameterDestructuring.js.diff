@@ -1,6 +1,6 @@
 --- old.declarationEmitDuplicateParameterDestructuring.js
 +++ new.declarationEmitDuplicateParameterDestructuring.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitDuplicateParameterDestructuring.ts] ////
 -
 -//// [declarationEmitDuplicateParameterDestructuring.ts]
@@ -20,5 +20,4 @@
 -}, { prop: b }: {
 -    prop: number;
 -}) => number;
-@@= skipped --1, +1 lines =@@
 +<no content>

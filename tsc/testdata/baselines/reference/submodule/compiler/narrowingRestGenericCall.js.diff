@@ -2,7 +2,7 @@
 +++ new.narrowingRestGenericCall.js
 @@= skipped -15, +15 lines =@@
  });
- 
+
  //// [narrowingRestGenericCall.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

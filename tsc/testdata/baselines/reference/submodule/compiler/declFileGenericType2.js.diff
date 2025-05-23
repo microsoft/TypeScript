@@ -1,8 +1,8 @@
 --- old.declFileGenericType2.js
 +++ new.declFileGenericType2.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [declFileGenericType2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,7 +1,7 @@
 --- old.preserveValueImports(isolatedmodules=true).js
 +++ new.preserveValueImports(isolatedmodules=true).js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [a.js]
  export default {};
 -export var b = 0;

@@ -2,7 +2,7 @@
 +++ new.enumAssignmentCompat7.js
 @@= skipped -25, +25 lines =@@
  }
- 
+
  //// [enumAssignmentCompat7.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -38,9 +38,7 @@
  })(second || (second = {}));
 -var Base = /** @class */ (function () {
 -    function Base() {
-+class Base {
-+    method(param) {
-     }
+-    }
 -    Base.prototype.method = function (param) {
 -    };
 -    return Base;
@@ -49,14 +47,18 @@
 -    __extends(Derived, _super);
 -    function Derived() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+}
-+class Derived extends Base {
-+    method(param) {
-     }
+-    }
 -    Derived.prototype.method = function (param) {
 -    };
 -    return Derived;
 -}(Base));
++class Base {
++    method(param) {
++    }
++}
++class Derived extends Base {
++    method(param) {
++    }
 +}
  function overloadingFunction() {
      return second.E.B;

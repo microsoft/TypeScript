@@ -1,16 +1,16 @@
 --- old.defaultPropsEmptyCurlyBecomesAnyForJs.types
 +++ new.defaultPropsEmptyCurlyBecomesAnyForJs.types
 @@= skipped -20, +20 lines =@@
- 
+
  export class MyFoo extends Foo {
  >MyFoo : MyFoo
 ->Foo : Foo<any, any>
 +>Foo : Foo<{}, {}>
- 
+
      member;
  >member : any
 @@= skipped -29, +29 lines =@@
- 
+
          this.props.x;
  >this.props.x : any
 ->this.props : any
@@ -19,7 +19,7 @@
 ->props : any
 +>props : {}
  >x : any
- 
+
          this.props.y;
  >this.props.y : any
 ->this.props : any
@@ -28,7 +28,7 @@
 ->props : any
 +>props : {}
  >y : any
- 
+
          this.state.value;
  >this.state.value : any
 ->this.state : any
@@ -37,5 +37,5 @@
 ->state : any
 +>state : {}
  >value : any
- 
+
          this.member;

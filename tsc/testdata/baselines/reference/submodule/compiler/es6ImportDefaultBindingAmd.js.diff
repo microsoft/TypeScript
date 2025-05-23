@@ -1,8 +1,8 @@
 --- old.es6ImportDefaultBindingAmd.js
 +++ new.es6ImportDefaultBindingAmd.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [es6ImportDefaultBindingAmd_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

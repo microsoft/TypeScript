@@ -2,7 +2,7 @@
 +++ new.awaitBinaryExpression1_es6.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [awaitBinaryExpression1_es6.js]
 -function func() {
 -    return __awaiter(this, void 0, void 0, function* () {

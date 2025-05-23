@@ -1,8 +1,8 @@
 --- old.newTargetNarrowing.js
 +++ new.newTargetNarrowing.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [newTargetNarrowing.js]
 -"use strict";
  function foo(x) { }

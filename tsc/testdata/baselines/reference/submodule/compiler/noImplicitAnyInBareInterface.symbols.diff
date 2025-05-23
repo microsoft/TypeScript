@@ -6,7 +6,7 @@
      few() : any;
 ->few : Symbol(Entry.few, Decl(noImplicitAnyInBareInterface.ts, 2, 11))
 +>few : Symbol(few, Decl(noImplicitAnyInBareInterface.ts, 2, 11))
- 
+
      foo();
 ->foo : Symbol(Entry.foo, Decl(noImplicitAnyInBareInterface.ts, 3, 16))
 +>foo : Symbol(foo, Decl(noImplicitAnyInBareInterface.ts, 3, 16))

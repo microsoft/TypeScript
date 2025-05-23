@@ -6,13 +6,13 @@
  >Z : typeof Z
 ->I : M
 +>I : I
- 
+
      import M = Z.M;
 ->M : typeof Z.M
 +>M : typeof M
  >Z : typeof Z
 ->M : typeof Z.M
 +>M : typeof M
- 
+
      export function bar() {
  >bar : () => void

@@ -7,8 +7,8 @@
  parserRealSource14.ts(48,37): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
 @@= skipped -159, +158 lines =@@
  parserRealSource14.ts(572,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
- 
- 
+
+
 -==== parserRealSource14.ts (160 errors) ====
 +==== parserRealSource14.ts (159 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

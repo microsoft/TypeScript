@@ -25,16 +25,16 @@
      }
      /**
 @@= skipped -58, +58 lines =@@
- 
+
  /** @param {boolean | number} val */
  function foo(val) {
 ->foo : (val: boolean | number) => void
 +>foo : (val: number | boolean) => void
  >val : number | boolean
- 
+
      if (isBoolean(val)) {
 @@= skipped -21, +21 lines =@@
- 
+
  /** @type {Cb} */
  function isNumber(x) { return typeof x === "number" }
 ->isNumber : (x: unknown) => x is number
@@ -46,14 +46,14 @@
 ->x : unknown
 +>x : any
  >"number" : "number"
- 
+
  /** @param {unknown} x */
 @@= skipped -14, +14 lines =@@
- 
+
      if (isNumber(x)) {
  >isNumber(x) : boolean
 ->isNumber : (x: unknown) => x is number
 +>isNumber : (x: any) => x is number
  >x : unknown
- 
+
          x * 2;

@@ -2,7 +2,7 @@
 +++ new.exportAsNamespace3(module=umd).js
 @@= skipped -18, +18 lines =@@
  foo.ns.b;
- 
+
  //// [0.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

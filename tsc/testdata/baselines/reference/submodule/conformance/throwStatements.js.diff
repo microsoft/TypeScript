@@ -1,8 +1,8 @@
 --- old.throwStatements.js
 +++ new.throwStatements.js
 @@= skipped -87, +87 lines =@@
- 
- 
+
+
  //// [throwStatements.js]
 -// all legal
 -var C = /** @class */ (function () {

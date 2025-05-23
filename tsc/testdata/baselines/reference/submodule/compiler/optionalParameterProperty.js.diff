@@ -1,8 +1,8 @@
 --- old.optionalParameterProperty.js
 +++ new.optionalParameterProperty.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [optionalParameterProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,15 +21,7 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    p;
-+}
-+class D extends C {
-+    p;
-+    constructor(p) {
-+        super();
-+        this.p = p;
-     }
+-    }
 -    return C;
 -}());
 -var D = /** @class */ (function (_super) {
@@ -41,4 +33,13 @@
 -    }
 -    return D;
 -}(C));
++class C {
++    p;
++}
++class D extends C {
++    p;
++    constructor(p) {
++        super();
++        this.p = p;
++    }
 +}

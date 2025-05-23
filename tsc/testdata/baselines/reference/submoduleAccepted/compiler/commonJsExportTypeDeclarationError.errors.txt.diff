@@ -6,8 +6,8 @@
 -types2.ts(2,19): error TS1110: Type expected.
 +types2.ts(3,1): error TS1110: Type expected.
  types3.ts(2,13): error TS2456: Type alias 'test' circularly references itself.
- 
- 
+
+
 -==== ./test.js (0 errors) ====
 +==== test.js (0 errors) ====
      module.exports = {
@@ -28,11 +28,11 @@
      import test from "./test";
      export type test = 
 -                      
--!!! error TS1110: Type expected.
-     
--==== ./types3.ts (1 errors) ====
 +    
-+!!! error TS1110: Type expected.
++    
+ !!! error TS1110: Type expected.
+-    
+-==== ./types3.ts (1 errors) ====
 +==== types3.ts (1 errors) ====
      import test from "./test";
      export type test = test;

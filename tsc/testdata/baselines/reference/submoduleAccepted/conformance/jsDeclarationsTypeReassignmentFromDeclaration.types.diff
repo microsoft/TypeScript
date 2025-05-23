@@ -8,4 +8,3 @@
 +>module : { readonly items: Item[]; }
  >exports : Item[]
  >items : Item[]
- 

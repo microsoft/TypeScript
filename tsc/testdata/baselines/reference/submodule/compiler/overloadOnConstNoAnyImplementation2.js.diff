@@ -2,7 +2,7 @@
 +++ new.overloadOnConstNoAnyImplementation2.js
 @@= skipped -23, +23 lines =@@
  c.x1(1, (x: number) => { return 1; } );
- 
+
  //// [overloadOnConstNoAnyImplementation2.js]
 -var C = /** @class */ (function () {
 -    function C() {

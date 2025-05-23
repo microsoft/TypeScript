@@ -6,7 +6,7 @@
  >require : Symbol(require)
 ->'./ex' : Symbol(ex, Decl(ex.js, 0, 0))
 +>'./ex' : Symbol("ex", Decl(ex.js, 0, 0))
- 
+
  // values work
  var crunch = new ex.Crunch(1);
  >crunch : Symbol(crunch, Decl(use.js, 3, 3))
@@ -15,19 +15,19 @@
  >ex : Symbol(ex, Decl(use.js, 0, 3))
 ->Crunch : Symbol(ex.Crunch, Decl(ex.js, 0, 0))
 +>Crunch : Symbol(Crunch, Decl(ex.js, 0, 0))
- 
+
  crunch.n
 ->crunch.n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
 +>crunch.n : Symbol(n, Decl(ex.js, 2, 20))
  >crunch : Symbol(crunch, Decl(use.js, 3, 3))
 ->n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
 +>n : Symbol(n, Decl(ex.js, 2, 20))
- 
- 
+
+
  // types work
 @@= skipped -24, +24 lines =@@
  >wrap : Symbol(wrap, Decl(use.js, 11, 11))
- 
+
      wrap.n
 ->wrap.n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
 +>wrap.n : Symbol(n, Decl(ex.js, 2, 20))
@@ -35,11 +35,11 @@
 ->n : Symbol(ex.Crunch.n, Decl(ex.js, 2, 20))
 +>n : Symbol(n, Decl(ex.js, 2, 20))
  }
- 
+
  === ex.js ===
 @@= skipped -14, +14 lines =@@
  >n : Symbol(n, Decl(ex.js, 2, 16))
- 
+
          this.n = n
 ->this.n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
 +>this.n : Symbol(n, Decl(ex.js, 2, 20))
@@ -51,7 +51,7 @@
      m() {
 ->m : Symbol(Crunch.m, Decl(ex.js, 4, 5))
 +>m : Symbol(m, Decl(ex.js, 4, 5))
- 
+
          return this.n
 ->this.n : Symbol(Crunch.n, Decl(ex.js, 2, 20))
 +>this.n : Symbol(n, Decl(ex.js, 2, 20))
@@ -60,4 +60,3 @@
 +>n : Symbol(n, Decl(ex.js, 2, 20))
      }
  }
- 

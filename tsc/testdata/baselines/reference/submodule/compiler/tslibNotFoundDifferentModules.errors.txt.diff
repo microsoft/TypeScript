@@ -1,6 +1,6 @@
 --- old.tslibNotFoundDifferentModules.errors.txt
 +++ new.tslibNotFoundDifferentModules.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/package2/index.ts(2,16): error TS2354: This syntax requires an imported helper but module 'tslib' cannot be found.
 -
 -
@@ -53,5 +53,4 @@
 -        });
 -    };
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

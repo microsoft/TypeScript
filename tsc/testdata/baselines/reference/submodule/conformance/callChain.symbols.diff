@@ -1,7 +1,7 @@
 --- old.callChain.symbols
 +++ new.callChain.symbols
 @@= skipped -159, +159 lines =@@
- 
+
  // GH#36031
  o2?.b()!.toString;
 ->o2?.b()!.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
@@ -11,7 +11,7 @@
  >b : Symbol(b, Decl(callChain.ts, 6, 31))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
  o2?.b()!.toString!;
 ->o2?.b()!.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>o2?.b()!.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
@@ -20,4 +20,3 @@
  >b : Symbol(b, Decl(callChain.ts, 6, 31))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 

@@ -2,7 +2,7 @@
 +++ new.optionalBindingParameters2.js
 @@= skipped -9, +9 lines =@@
  foo({ x: false, y: 0, z: "" });
- 
+
  //// [optionalBindingParameters2.js]
 -function foo(_a) {
 -    var x = _a.x, y = _a.y, z = _a.z;

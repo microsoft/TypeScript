@@ -1,8 +1,8 @@
 --- old.asyncArrowFunctionCapturesThis_es5.js
 +++ new.asyncArrowFunctionCapturesThis_es5.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [asyncArrowFunctionCapturesThis_es5.js]
 -var C = /** @class */ (function () {
 -    function C() {

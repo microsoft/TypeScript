@@ -1,7 +1,7 @@
 --- old.jsxParsingError1.symbols
 +++ new.jsxParsingError1.symbols
 @@= skipped -23, +23 lines =@@
- 
+
  const elem = <div className={class1, class2}/>;
  >elem : Symbol(elem, Decl(file.tsx, 10, 5))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(file.tsx, 2, 30))

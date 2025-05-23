@@ -1,7 +1,7 @@
 --- old.classExpressionAssignment.js
 +++ new.classExpressionAssignment.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [classExpressionAssignment.js]
  // This is invalid
 -var A = /** @class */ (function () {

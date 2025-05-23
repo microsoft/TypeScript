@@ -2,7 +2,7 @@
 +++ new.tsxStatelessFunctionComponentWithDefaultTypeParameter2.js
 @@= skipped -15, +15 lines =@@
  let i1 = <MyComponent1 values={5}/>;
- 
+
  //// [file.jsx]
 -define(["require", "exports", "react"], function (require, exports, React) {
 -    "use strict";

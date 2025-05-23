@@ -2,7 +2,7 @@
 +++ new.objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.js
 @@= skipped -22, +22 lines =@@
  var v = { class };  // error
- 
+
  //// [objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.js]
 -var _a;
  // errors

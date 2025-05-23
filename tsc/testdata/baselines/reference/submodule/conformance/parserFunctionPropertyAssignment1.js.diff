@@ -2,7 +2,7 @@
 +++ new.parserFunctionPropertyAssignment1.js
 @@= skipped -3, +3 lines =@@
  var v = { foo() { } };
- 
+
  //// [parserFunctionPropertyAssignment1.js]
 -var v = { foo: function () { } };
 +var v = { foo() { } };

@@ -1,8 +1,8 @@
 --- old.exportedVariable1.js
 +++ new.exportedVariable1.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [exportedVariable1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

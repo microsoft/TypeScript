@@ -1,14 +1,14 @@
 --- old.parser.asyncGenerators.objectLiteralMethods.es2018.types
 +++ new.parser.asyncGenerators.objectLiteralMethods.es2018.types
 @@= skipped -1, +1 lines =@@
- 
+
  === methodIsOk.ts ===
  const o1 = {
 ->o1 : { f(): AsyncGenerator<never, void, unknown>; }
 ->{    async * f() {    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o1 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -9, +9 lines =@@
@@ -19,7 +19,7 @@
 ->{    async * await() {    }} : { await(): AsyncGenerator<never, void, unknown>; }
 +>o2 : { await: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * await() {    }} : { await: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * await() {
  >await : () => AsyncGenerator<never, void, unknown>
 @@= skipped -9, +9 lines =@@
@@ -30,7 +30,7 @@
 ->{    async * yield() {    }} : { yield(): AsyncGenerator<never, void, unknown>; }
 +>o3 : { yield: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * yield() {    }} : { yield: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * yield() {
  >yield : () => AsyncGenerator<never, void, unknown>
 @@= skipped -9, +9 lines =@@
@@ -41,7 +41,7 @@
 ->{    async * f(await) {    }} : { f(await: any): AsyncGenerator<never, void, unknown>; }
 +>o4 : { f: (await: any) => AsyncGenerator<never, void, unknown>; }
 +>{    async * f(await) {    }} : { f: (await: any) => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f(await) {
  >f : (await: any) => AsyncGenerator<never, void, unknown>
 @@= skipped -10, +10 lines =@@
@@ -52,7 +52,7 @@
 ->{    async * f(yield) {    }} : { f(yield: any): AsyncGenerator<never, void, unknown>; }
 +>o5 : { f: (yield: any) => AsyncGenerator<never, void, unknown>; }
 +>{    async * f(yield) {    }} : { f: (yield: any) => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f(yield) {
  >f : (yield: any) => AsyncGenerator<never, void, unknown>
 @@= skipped -10, +10 lines =@@
@@ -63,7 +63,7 @@
 ->{    async * f(a = await 1) {    }} : { f(a?: number): AsyncGenerator<never, void, unknown>; }
 +>o6 : { f: (a?: number) => AsyncGenerator<never, void, unknown>; }
 +>{    async * f(a = await 1) {    }} : { f: (a?: number) => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f(a = await 1) {
  >f : (a?: number) => AsyncGenerator<never, void, unknown>
 @@= skipped -12, +12 lines =@@
@@ -74,7 +74,7 @@
 ->{    async * f(a = yield) {    }} : { f(a?: any): AsyncGenerator<never, void, unknown>; }
 +>o7 : { f: (a?: any) => AsyncGenerator<never, void, unknown>; }
 +>{    async * f(a = yield) {    }} : { f: (a?: any) => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f(a = yield) {
  >f : (a?: any) => AsyncGenerator<never, void, unknown>
 @@= skipped -11, +11 lines =@@
@@ -85,7 +85,7 @@
 ->{    async * f() {        async function * g() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o8 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        async function * g() {        }    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -13, +13 lines =@@
@@ -96,7 +96,7 @@
 ->{    async * f() {        function yield() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o9 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        function yield() {        }    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -13, +13 lines =@@
@@ -107,7 +107,7 @@
 ->{    async * f() {        const x = function yield() {        };    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o10 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        const x = function yield() {        };    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -16, +16 lines =@@
@@ -118,7 +118,7 @@
 ->{    async * f() {        function await() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o11 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        function await() {        }    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -13, +13 lines =@@
@@ -129,7 +129,7 @@
 ->{    async * f() {        const x = function await() {        };    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o12 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        const x = function await() {        };    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -16, +16 lines =@@
@@ -140,7 +140,7 @@
 ->{    async * f() {        yield;    }} : { f(): AsyncGenerator<any, void, unknown>; }
 +>o13 : { f: () => AsyncGenerator<any, void, unknown>; }
 +>{    async * f() {        yield;    }} : { f: () => AsyncGenerator<any, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<any, void, unknown>
 @@= skipped -12, +12 lines =@@
@@ -151,7 +151,7 @@
 ->{    async * f() {        yield 1;    }} : { f(): AsyncGenerator<number, void, unknown>; }
 +>o14 : { f: () => AsyncGenerator<number, void, unknown>; }
 +>{    async * f() {        yield 1;    }} : { f: () => AsyncGenerator<number, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<number, void, unknown>
 @@= skipped -13, +13 lines =@@
@@ -162,7 +162,7 @@
 ->{    async * f() {        yield *;    }} : { f(): AsyncGenerator<any, void, any>; }
 +>o15 : { f: () => AsyncGenerator<any, void, any>; }
 +>{    async * f() {        yield *;    }} : { f: () => AsyncGenerator<any, void, any>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<any, void, any>
 @@= skipped -13, +13 lines =@@
@@ -173,7 +173,7 @@
 ->{    async * f() {        yield * [];    }} : { f(): AsyncGenerator<any, void, unknown>; }
 +>o16 : { f: () => AsyncGenerator<any, void, unknown>; }
 +>{    async * f() {        yield * [];    }} : { f: () => AsyncGenerator<any, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<any, void, unknown>
 @@= skipped -13, +13 lines =@@
@@ -184,7 +184,7 @@
 ->{    async * f() {        await 1;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o17 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        await 1;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -13, +13 lines =@@
@@ -195,7 +195,7 @@
 ->{    async * f() {        await;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o18 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        await;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -14, +14 lines =@@
@@ -206,7 +206,7 @@
 ->{    async * f() {        let x: await;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o19 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        let x: await;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -13, +13 lines =@@
@@ -217,7 +217,7 @@
 ->{    async * f() {        let x: yield;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 +>o20 : { f: () => AsyncGenerator<never, void, unknown>; }
 +>{    async * f() {        let x: yield;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<never, void, unknown>
 @@= skipped -12, +12 lines =@@
@@ -228,7 +228,7 @@
 ->{    async * f() {        const x = { [yield]: 1 };    }} : { f(): AsyncGenerator<any, void, unknown>; }
 +>o21 : { f: () => AsyncGenerator<any, void, unknown>; }
 +>{    async * f() {        const x = { [yield]: 1 };    }} : { f: () => AsyncGenerator<any, void, unknown>; }
- 
+
      async * f() {
  >f : () => AsyncGenerator<any, void, unknown>
 @@= skipped -16, +16 lines =@@
@@ -239,7 +239,7 @@
 ->{    async * get x() {        return 1;    }} : { get(): any; x(): number; }
 +>o22 : { get: () => any; x: () => number; }
 +>{    async * get x() {        return 1;    }} : { get: () => any; x: () => number; }
- 
+
      async * get x() {
  >get : () => any
 @@= skipped -13, +13 lines =@@
@@ -250,7 +250,7 @@
 ->{    async * set x(value: number) {    }} : { set(): any; x(value: number): void; }
 +>o23 : { set: () => any; x: (value: number) => void; }
 +>{    async * set x(value: number) {    }} : { set: () => any; x: (value: number) => void; }
- 
+
      async * set x(value: number) {
  >set : () => any
 @@= skipped -11, +11 lines =@@
@@ -261,6 +261,6 @@
 ->{    async * x: 1;} : { x(): 1; }
 +>o24 : { x: () => 1; }
 +>{    async * x: 1;} : { x: () => 1; }
- 
+
      async * x: 1;
  >x : () => 1

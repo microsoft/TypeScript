@@ -1,7 +1,7 @@
 --- old.useObjectValuesAndEntries1.js
 +++ new.useObjectValuesAndEntries1.js
 @@= skipped -33, +33 lines =@@
- 
+
  //// [useObjectValuesAndEntries1.js]
  var o = { a: 1, b: 2 };
 -for (var _i = 0, _a = Object.values(o); _i < _a.length; _i++) {

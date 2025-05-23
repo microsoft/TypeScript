@@ -1,11 +1,11 @@
 --- old.moduleElementsInWrongContext2.types
 +++ new.moduleElementsInWrongContext2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === moduleElementsInWrongContext2.ts ===
  function blah () {
 ->blah : () => void
 +>blah : { (): void; default: any; }
- 
+
      module M { }
      export namespace N {

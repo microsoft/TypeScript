@@ -2,7 +2,7 @@
 +++ new.collisionThisExpressionAndVarInGlobal.js
 @@= skipped -4, +4 lines =@@
  var f = () => this;
- 
+
  //// [collisionThisExpressionAndVarInGlobal.js]
 -var _this_1 = this;
  var _this = 1;

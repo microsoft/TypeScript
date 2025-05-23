@@ -6,10 +6,7 @@
  (function (schema) {
 -    var T = /** @class */ (function () {
 -        function T() {
-+    class T {
-+        get createValidator9() {
-+            return undefined;
-         }
+-        }
 -        Object.defineProperty(T.prototype, "createValidator9", {
 -            get: function () {
 -                return undefined;
@@ -25,11 +22,8 @@
 -        });
 -        return T;
 -    }());
-+        set createValidator10(v) {
-+        }
-+    }
-     schema.T = T;
- })(schema || (schema = {}));
+-    schema.T = T;
+-})(schema || (schema = {}));
 -
 -
 -//// [isDeclarationVisibleNodeKinds.d.ts]
@@ -66,8 +60,15 @@
 -    }>;
 -}
 -declare namespace schema {
--    class T {
+     class T {
 -        get createValidator9(): <T>(data: T) => T;
 -        set createValidator10(v: <T>(data: T) => T);
--    }
++        get createValidator9() {
++            return undefined;
++        }
++        set createValidator10(v) {
++        }
+     }
 -}
++    schema.T = T;
++})(schema || (schema = {}));

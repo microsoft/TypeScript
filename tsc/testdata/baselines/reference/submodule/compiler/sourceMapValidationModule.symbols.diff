@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationModule.symbols
 @@= skipped -23, +23 lines =@@
  >foo : Symbol(foo, Decl(sourceMapValidationModule.ts, 7, 5))
- 
+
          return m4.x;
 ->m4.x : Symbol(m4.x, Decl(sourceMapValidationModule.ts, 6, 18))
 +>m4.x : Symbol(x, Decl(sourceMapValidationModule.ts, 6, 18))

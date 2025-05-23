@@ -2,10 +2,9 @@
 +++ new.renamingDestructuredPropertyInFunctionType2.types
 @@= skipped -122, +122 lines =@@
  >arg : number
- 
+
    method2({ a: string }): any; 
 ->method2 : ({ a: string }: { a: any; }) => any
 +>method2 : (__0: { a: any; }) => any
  >a : any
  >string : any
- 

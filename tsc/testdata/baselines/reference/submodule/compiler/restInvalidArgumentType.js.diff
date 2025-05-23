@@ -1,8 +1,8 @@
 --- old.restInvalidArgumentType.js
 +++ new.restInvalidArgumentType.js
 @@= skipped -57, +57 lines =@@
- 
- 
+
+
  //// [restInvalidArgumentType.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

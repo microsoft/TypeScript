@@ -2,7 +2,7 @@
 +++ new.typeArgumentInferenceWithClassExpression2.js
 @@= skipped -8, +8 lines =@@
  foo(class { static prop = "hello" }).length;
- 
+
  //// [typeArgumentInferenceWithClassExpression2.js]
 -var _a;
 -function foo(x) {

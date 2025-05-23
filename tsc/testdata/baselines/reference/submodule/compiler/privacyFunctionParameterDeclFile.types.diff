@@ -1,18 +1,18 @@
 --- old.privacyFunctionParameterDeclFile.types
 +++ new.privacyFunctionParameterDeclFile.types
 @@= skipped -195, +195 lines =@@
- 
+
  export interface publicInterfaceWithPrivateModuleParameterTypes {
      new (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
      (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
      myMethod(param: privateModule.publicClass): void; // Error
 ->myMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -22,7 +22,7 @@
  }
  export class publicClassWithPrivateModuleParameterTypes {
  >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
- 
+
      static myPublicStaticMethod(param: privateModule.publicClass) { // Error
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -39,12 +39,14 @@
      }
      constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
 ->param : privateModule.publicClass
-+>param : publicClass
- >privateModule : any
+->privateModule : any
 ->param1 : privateModule.publicClass
-+>param1 : publicClass
- >privateModule : any
+->privateModule : any
 ->param2 : privateModule.publicClass
++>param : publicClass
++>privateModule : any
++>param1 : publicClass
++>privateModule : any
 +>param2 : publicClass
  >privateModule : any
      }
@@ -62,18 +64,18 @@
 +>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
 +>param : publicClass
  >privateModule : any
- 
+
  interface privateInterfaceWithPrivateModuleParameterTypes {
      new (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
      (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
      myMethod(param: privateModule.publicClass): void;
 ->myMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -83,7 +85,7 @@
  }
  class privateClassWithPrivateModuleParameterTypes {
  >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
- 
+
      static myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -100,12 +102,14 @@
      }
      constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
 ->param : privateModule.publicClass
-+>param : publicClass
- >privateModule : any
+->privateModule : any
 ->param1 : privateModule.publicClass
-+>param1 : publicClass
- >privateModule : any
+->privateModule : any
 ->param2 : privateModule.publicClass
++>param : publicClass
++>privateModule : any
++>param1 : publicClass
++>privateModule : any
 +>param2 : publicClass
  >privateModule : any
      }
@@ -123,21 +127,21 @@
 +>privateAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
 +>param : publicClass
  >privateModule : any
- 
+
  export module publicModule {
 @@= skipped -289, +289 lines =@@
- 
+
      export interface publicInterfaceWithPrivateModuleParameterTypes {
          new (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          myMethod(param: privateModule.publicClass): void; // Error
 ->myMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -147,7 +151,7 @@
      }
      export class publicClassWithPrivateModuleParameterTypes {
  >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
- 
+
          static myPublicStaticMethod(param: privateModule.publicClass) { // Error
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -164,12 +168,14 @@
          }
          constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
 ->param : privateModule.publicClass
-+>param : publicClass
- >privateModule : any
+->privateModule : any
 ->param1 : privateModule.publicClass
-+>param1 : publicClass
- >privateModule : any
+->privateModule : any
 ->param2 : privateModule.publicClass
++>param : publicClass
++>privateModule : any
++>param1 : publicClass
++>privateModule : any
 +>param2 : publicClass
  >privateModule : any
          }
@@ -187,18 +193,18 @@
 +>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
 +>param : publicClass
  >privateModule : any
- 
+
      interface privateInterfaceWithPrivateModuleParameterTypes {
          new (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          myMethod(param: privateModule.publicClass): void;
 ->myMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -208,7 +214,7 @@
      }
      class privateClassWithPrivateModuleParameterTypes {
  >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
- 
+
          static myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -225,12 +231,14 @@
          }
          constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
 ->param : privateModule.publicClass
-+>param : publicClass
- >privateModule : any
+->privateModule : any
 ->param1 : privateModule.publicClass
-+>param1 : publicClass
- >privateModule : any
+->privateModule : any
 ->param2 : privateModule.publicClass
++>param : publicClass
++>privateModule : any
++>param1 : publicClass
++>privateModule : any
 +>param2 : publicClass
  >privateModule : any
          }
@@ -248,11 +256,11 @@
 +>privateAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
 +>param : publicClass
  >privateModule : any
- 
+
  }
 @@= skipped -298, +298 lines =@@
  >privateModule : any
- 
+
          myMethod(param: privateModule.publicClass): void;
 ->myMethod : (param: privateModule.publicClass) => void
 +>myMethod : (param: publicClass) => void
@@ -261,7 +269,7 @@
      }
 @@= skipped -8, +8 lines =@@
  >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
- 
+
          static myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 +>myPublicStaticMethod : (param: publicClass) => void
@@ -288,10 +296,10 @@
 +>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
  >param : publicClass
  >privateModule : any
- 
+
 @@= skipped -19, +19 lines =@@
  >privateModule : any
- 
+
          myMethod(param: privateModule.publicClass): void;
 ->myMethod : (param: privateModule.publicClass) => void
 +>myMethod : (param: publicClass) => void
@@ -300,7 +308,7 @@
      }
 @@= skipped -8, +8 lines =@@
  >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
- 
+
          static myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 +>myPublicStaticMethod : (param: publicClass) => void
@@ -330,7 +338,7 @@
  }
 @@= skipped -275, +275 lines =@@
  >privateModule : any
- 
+
              myMethod(param: privateModule.publicClass): void;
 ->myMethod : (param: privateModule.publicClass) => void
 +>myMethod : (param: publicClass) => void
@@ -339,7 +347,7 @@
          }
 @@= skipped -8, +8 lines =@@
  >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
- 
+
              static myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 +>myPublicStaticMethod : (param: publicClass) => void
@@ -366,10 +374,10 @@
 +>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
  >param : publicClass
  >privateModule : any
- 
+
 @@= skipped -19, +19 lines =@@
  >privateModule : any
- 
+
              myMethod(param: privateModule.publicClass): void;
 ->myMethod : (param: privateModule.publicClass) => void
 +>myMethod : (param: publicClass) => void
@@ -378,7 +386,7 @@
          }
 @@= skipped -8, +8 lines =@@
  >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
- 
+
              static myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 +>myPublicStaticMethod : (param: publicClass) => void
@@ -407,18 +415,18 @@
  >privateModule : any
      }
 @@= skipped -197, +197 lines =@@
- 
+
      export interface publicInterfaceWithPrivateModuleParameterTypes {
          new (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          (param: privateModule.publicClass): publicClass; // Error
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          myMethod(param: privateModule.publicClass): void; // Error
 ->myMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -428,7 +436,7 @@
      }
      export class publicClassWithPrivateModuleParameterTypes {
  >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
- 
+
          static myPublicStaticMethod(param: privateModule.publicClass) { // Error
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -445,12 +453,14 @@
          }
          constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) { // Error
 ->param : privateModule.publicClass
-+>param : publicClass
- >privateModule : any
+->privateModule : any
 ->param1 : privateModule.publicClass
-+>param1 : publicClass
- >privateModule : any
+->privateModule : any
 ->param2 : privateModule.publicClass
++>param : publicClass
++>privateModule : any
++>param1 : publicClass
++>privateModule : any
 +>param2 : publicClass
  >privateModule : any
          }
@@ -468,18 +478,18 @@
 +>publicAmbientFunctionWithPrivateModuleParameterTypes : (param: publicClass) => void
 +>param : publicClass
  >privateModule : any
- 
+
      interface privateInterfaceWithPrivateModuleParameterTypes {
          new (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          (param: privateModule.publicClass): publicClass;
 ->param : privateModule.publicClass
 +>param : publicClass
  >privateModule : any
- 
+
          myMethod(param: privateModule.publicClass): void;
 ->myMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -489,7 +499,7 @@
      }
      class privateClassWithPrivateModuleParameterTypes {
  >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
- 
+
          static myPublicStaticMethod(param: privateModule.publicClass) {
 ->myPublicStaticMethod : (param: privateModule.publicClass) => void
 ->param : privateModule.publicClass
@@ -506,12 +516,14 @@
          }
          constructor(param: privateModule.publicClass, private param1: privateModule.publicClass, public param2: privateModule.publicClass) {
 ->param : privateModule.publicClass
-+>param : publicClass
- >privateModule : any
+->privateModule : any
 ->param1 : privateModule.publicClass
-+>param1 : publicClass
- >privateModule : any
+->privateModule : any
 ->param2 : privateModule.publicClass
++>param : publicClass
++>privateModule : any
++>param1 : publicClass
++>privateModule : any
 +>param2 : publicClass
  >privateModule : any
          }

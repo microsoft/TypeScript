@@ -1,8 +1,8 @@
 --- old.nonInferrableTypePropagation1.js
 +++ new.nonInferrableTypePropagation1.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [nonInferrableTypePropagation1.js]
 -"use strict";
 -var result1 = createAndUnbox(function () { return thing.pipe(map(function (data) { return box(data); }), tap(function (v) { return log(v); })); });

@@ -2,7 +2,7 @@
 +++ new.override4.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [override4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -57,14 +57,7 @@
 -    p4: () => void;
 -    foo(v: string): void;
 -    fooo(v: string): void;
-+class B {
-+    p1 = 1;
-+    p2 = 1;
-+    p3;
-+    p4;
-+    foo(v) { }
-+    fooo(v) { }
- }
+-}
 -declare class D extends B {
 -    p1: number;
 -    p2: number;
@@ -72,6 +65,18 @@
 -    p4: () => void;
 -    foo(v: string): void;
 -    fooo(v: string): void;
+-}
+-declare class DD extends B {
+-    foo: () => void;
+-    fooo: () => void;
++class B {
++    p1 = 1;
++    p2 = 1;
++    p3;
++    p4;
++    foo(v) { }
++    fooo(v) { }
++}
 +class D extends B {
 +    p1 = 2;
 +    p2 = 3;
@@ -79,10 +84,7 @@
 +    p4;
 +    foo(v) { }
 +    fooo(v) { }
- }
--declare class DD extends B {
--    foo: () => void;
--    fooo: () => void;
++}
 +class DD extends B {
 +    foo;
 +    fooo;

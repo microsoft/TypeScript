@@ -7,4 +7,3 @@
 ->s.toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
  >s : Symbol(s, Decl(paren.js, 1, 7))
 ->toString : Symbol(String.toString, Decl(lib.es5.d.ts, --, --))
- 

@@ -2,7 +2,7 @@
 +++ new.logicalAndOperatorStrictMode.js
 @@= skipped -82, +82 lines =@@
  const z8 = z && z;
- 
+
  //// [logicalAndOperatorStrictMode.js]
 -var a = [0];
 -var s = "";

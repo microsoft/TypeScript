@@ -1,12 +1,12 @@
 --- old.sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.types
 +++ new.sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.types
 @@= skipped -1, +1 lines =@@
- 
+
  === sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues.ts ===
  declare var console: {
 ->console : { log(msg: any): void; }
 +>console : { log: (msg: any) => void; }
- 
+
      log(msg: any): void;
  >log : (msg: any) => void
 @@= skipped -91, +91 lines =@@

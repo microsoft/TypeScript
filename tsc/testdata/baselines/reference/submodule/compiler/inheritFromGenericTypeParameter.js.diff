@@ -2,7 +2,7 @@
 +++ new.inheritFromGenericTypeParameter.js
 @@= skipped -4, +4 lines =@@
  interface I<T> extends T { }
- 
+
  //// [inheritFromGenericTypeParameter.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

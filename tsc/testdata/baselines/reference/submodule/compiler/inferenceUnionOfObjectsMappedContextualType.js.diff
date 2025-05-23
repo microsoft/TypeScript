@@ -1,8 +1,8 @@
 --- old.inferenceUnionOfObjectsMappedContextualType.js
 +++ new.inferenceUnionOfObjectsMappedContextualType.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [inferenceUnionOfObjectsMappedContextualType.js]
 -"use strict";
 -var test = {

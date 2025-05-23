@@ -2,7 +2,7 @@
 +++ new.detachedCommentAtStartOfLambdaFunction1.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [detachedCommentAtStartOfLambdaFunction1.js]
 -var TestFile = /** @class */ (function () {
 -    function TestFile() {

@@ -14,11 +14,11 @@
 +>module : { C: () => void; }
 +>exports : () => void
 +>C : () => void
- 
+
  function C() {
 ->C : typeof C
 +>C : () => void
- 
+
      this.p = 1
  >this.p = 1 : 1
  >this.p : any
@@ -35,7 +35,7 @@
 ->k : import("mod1").Con
 +>f : (k: any) => any
 +>k : any
- 
+
      if (1 === 2 - 1) {
  >1 === 2 - 1 : boolean
 @@= skipped -14, +14 lines =@@

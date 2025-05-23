@@ -1,8 +1,8 @@
 --- old.fallbackToBindingPatternForTypeInference.js
 +++ new.fallbackToBindingPatternForTypeInference.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [fallbackToBindingPatternForTypeInference.js]
 -trans(function (_a) {
 -    var a = _a.a;

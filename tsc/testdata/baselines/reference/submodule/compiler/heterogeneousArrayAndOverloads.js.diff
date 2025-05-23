@@ -2,7 +2,7 @@
 +++ new.heterogeneousArrayAndOverloads.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [heterogeneousArrayAndOverloads.js]
 -var arrTest = /** @class */ (function () {
 -    function arrTest() {

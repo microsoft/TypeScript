@@ -2,7 +2,7 @@
 +++ new.classMethodWithKeywordName1.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [classMethodWithKeywordName1.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 +stringLiteralTypesInImplementationSignatures2.ts(26,5): error TS2300: Duplicate identifier 'foo'.
  stringLiteralTypesInImplementationSignatures2.ts(27,5): error TS2300: Duplicate identifier 'foo'.
- 
- 
+
+
 -==== stringLiteralTypesInImplementationSignatures2.ts (1 errors) ====
 +==== stringLiteralTypesInImplementationSignatures2.ts (2 errors) ====
      // String literal types are only valid in overload signatures

@@ -1,6 +1,6 @@
 --- old.regularExpressionExtendedUnicodeEscapes.errors.txt
 +++ new.regularExpressionExtendedUnicodeEscapes.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -regularExpressionExtendedUnicodeEscapes.ts(2,3): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -regularExpressionExtendedUnicodeEscapes.ts(2,13): error TS1538: Unicode escape sequences are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
 -
@@ -16,5 +16,4 @@
 -    	/\u{10000}[\u{10000}]/v,
 -    ];
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

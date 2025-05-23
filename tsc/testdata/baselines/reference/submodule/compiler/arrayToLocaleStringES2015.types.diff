@@ -9,7 +9,7 @@
  >arr : number[]
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions & DateTimeFormatOptions): string; }
- 
+
  str = arr.toLocaleString('en-US'); // OK
  >str = arr.toLocaleString('en-US') : string
  >str : string
@@ -20,7 +20,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions & DateTimeFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -42,7 +42,7 @@
  >dates : readonly Date[]
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions & DateTimeFormatOptions): string; }
- 
+
  str = dates.toLocaleString('fr'); // OK
  >str = dates.toLocaleString('fr') : string
  >str : string
@@ -53,7 +53,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions & DateTimeFormatOptions): string; }
  >'fr' : "fr"
- 
+
  str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
  >str = dates.toLocaleString('fr', { timeZone: 'UTC' }) : string
  >str : string
@@ -75,7 +75,7 @@
  >mixed : (number | Date)[]
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions & DateTimeFormatOptions): string; }
- 
+
  str = mixed.toLocaleString('fr'); // OK
  >str = mixed.toLocaleString('fr') : string
  >str : string
@@ -86,7 +86,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions & DateTimeFormatOptions): string; }
  >'fr' : "fr"
- 
+
  str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
  >str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -122,7 +122,7 @@
  >int8Array : Int8Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = int8Array.toLocaleString('en-US'); // OK
  >str = int8Array.toLocaleString('en-US') : string
  >str : string
@@ -133,7 +133,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -155,7 +155,7 @@
  >uint8Array : Uint8Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = uint8Array.toLocaleString('en-US'); // OK
  >str = uint8Array.toLocaleString('en-US') : string
  >str : string
@@ -166,7 +166,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -188,7 +188,7 @@
  >uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = uint8ClampedArray.toLocaleString('en-US'); // OK
  >str = uint8ClampedArray.toLocaleString('en-US') : string
  >str : string
@@ -199,7 +199,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -221,7 +221,7 @@
  >int16Array : Int16Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = int16Array.toLocaleString('en-US'); // OK
  >str = int16Array.toLocaleString('en-US') : string
  >str : string
@@ -232,7 +232,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -254,7 +254,7 @@
  >uint16Array : Uint16Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = uint16Array.toLocaleString('en-US'); // OK
  >str = uint16Array.toLocaleString('en-US') : string
  >str : string
@@ -265,7 +265,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -287,7 +287,7 @@
  >int32Array : Int32Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = int32Array.toLocaleString('en-US'); // OK
  >str = int32Array.toLocaleString('en-US') : string
  >str : string
@@ -298,7 +298,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -320,7 +320,7 @@
  >uint32Array : Uint32Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = uint32Array.toLocaleString('en-US'); // OK
  >str = uint32Array.toLocaleString('en-US') : string
  >str : string
@@ -331,7 +331,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -353,7 +353,7 @@
  >float32Array : Float32Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = float32Array.toLocaleString('en-US'); // OK
  >str = float32Array.toLocaleString('en-US') : string
  >str : string
@@ -364,7 +364,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string
@@ -386,7 +386,7 @@
  >float64Array : Float64Array<ArrayBuffer>
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
- 
+
  str = float64Array.toLocaleString('en-US'); // OK
  >str = float64Array.toLocaleString('en-US') : string
  >str : string
@@ -397,7 +397,7 @@
 ->toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
 +>toLocaleString : { (): string; (locales: string | string[], options?: NumberFormatOptions): string; }
  >'en-US' : "en-US"
- 
+
  str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
  >str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
  >str : string

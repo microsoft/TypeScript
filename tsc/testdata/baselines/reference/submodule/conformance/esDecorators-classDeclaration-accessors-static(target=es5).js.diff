@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-accessors-static(target=es5).js
 +++ new.esDecorators-classDeclaration-accessors-static(target=es5).js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-accessors-static.js]
 -var method3 = "method3";
 -var C = function () {

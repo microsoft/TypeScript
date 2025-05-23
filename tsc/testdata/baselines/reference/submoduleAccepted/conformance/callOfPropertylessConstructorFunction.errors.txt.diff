@@ -1,6 +1,6 @@
 --- old.callOfPropertylessConstructorFunction.errors.txt
 +++ new.callOfPropertylessConstructorFunction.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -callOfPropertylessConstructorFunction.js(7,1): error TS2348: Value of type 'typeof Dependency' is not callable. Did you mean to include 'new'?
 -
 -
@@ -15,5 +15,4 @@
 -    ~~~~~~~~~~~~~~
 -!!! error TS2348: Value of type 'typeof Dependency' is not callable. Did you mean to include 'new'?
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

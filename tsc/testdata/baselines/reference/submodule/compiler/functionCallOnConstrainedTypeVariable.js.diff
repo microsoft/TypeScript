@@ -2,7 +2,7 @@
 +++ new.functionCallOnConstrainedTypeVariable.js
 @@= skipped -22, +22 lines =@@
  }
- 
+
  //// [functionCallOnConstrainedTypeVariable.js]
 -"use strict";
 -// Repro from #20196

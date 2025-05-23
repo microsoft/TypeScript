@@ -2,7 +2,7 @@
 +++ new.varianceAnnotationsWithCircularlyReferencesError.js
 @@= skipped -4, +4 lines =@@
  type T2<out out> = T2 // Error: circularly references 
- 
+
  //// [varianceAnnotationsWithCircularlyReferencesError.js]
 -"use strict";
 -

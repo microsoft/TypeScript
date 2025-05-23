@@ -1,7 +1,7 @@
 --- old.jsDeclarationsFunctionPrototypeStatic.types
 +++ new.jsDeclarationsFunctionPrototypeStatic.types
 @@= skipped -1, +1 lines =@@
- 
+
  === source.js ===
  module.exports = MyClass;
 ->module.exports = MyClass : typeof MyClass
@@ -14,11 +14,11 @@
 +>module : { MyClass: { (): void; staticMethod: () => void; staticProperty: number; }; }
 +>exports : { (): void; staticMethod: () => void; staticProperty: number; }
 +>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
- 
+
  function MyClass() {}
 ->MyClass : typeof MyClass
 +>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
- 
+
  MyClass.staticMethod = function() {}
  >MyClass.staticMethod = function() {} : () => void
  >MyClass.staticMethod : () => void
@@ -26,7 +26,7 @@
 +>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
  >staticMethod : () => void
  >function() {} : () => void
- 
+
 @@= skipped -20, +20 lines =@@
  >MyClass.prototype.method = function() {} : () => void
  >MyClass.prototype.method : any
@@ -44,4 +44,3 @@
 +>MyClass : { (): void; staticMethod: () => void; staticProperty: number; }
  >staticProperty : number
  >123 : 123
- 

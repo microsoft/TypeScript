@@ -2,8 +2,8 @@
 +++ new.import_reference-to-type-alias.js
 @@= skipped -16, +16 lines =@@
  var x = new Services.UserServices().getUserName();
- 
- 
+
+
 -//// [file1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,8 +1,8 @@
 --- old.classAbstractAccessor.js
 +++ new.classAbstractAccessor.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [classAbstractAccessor.js]
 -var A = /** @class */ (function () {
 -    function A() {

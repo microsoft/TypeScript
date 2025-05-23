@@ -1,8 +1,8 @@
 --- old.destructuringInVariableDeclarations5.js
 +++ new.destructuringInVariableDeclarations5.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [destructuringInVariableDeclarations5.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

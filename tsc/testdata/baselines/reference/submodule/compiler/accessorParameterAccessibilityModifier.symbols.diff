@@ -2,12 +2,12 @@
 +++ new.accessorParameterAccessibilityModifier.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(accessorParameterAccessibilityModifier.ts, 0, 0))
- 
+
      set X(public v) { }
 ->X : Symbol(C.X, Decl(accessorParameterAccessibilityModifier.ts, 0, 9))
 +>X : Symbol(X, Decl(accessorParameterAccessibilityModifier.ts, 0, 9))
  >v : Symbol(v, Decl(accessorParameterAccessibilityModifier.ts, 1, 10))
- 
+
      static set X(public v2) { }
 ->X : Symbol(C.X, Decl(accessorParameterAccessibilityModifier.ts, 1, 23))
 +>X : Symbol(X, Decl(accessorParameterAccessibilityModifier.ts, 1, 23))

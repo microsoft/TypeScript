@@ -16,8 +16,7 @@
 +    b = 10;
      /** function comment */
 -    c.prototype.myFoo = function () {
-+    myFoo() {
-         return this.b;
+-        return this.b;
 -    };
 -    Object.defineProperty(c.prototype, "prop1", {
 -        /** getter comment*/
@@ -31,6 +30,8 @@
 -        enumerable: false,
 -        configurable: true
 -    });
++    myFoo() {
++        return this.b;
 +    }
 +    /** getter comment*/
 +    get prop1() {

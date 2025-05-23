@@ -1,7 +1,7 @@
 --- old.declFileTypeofFunction.types
 +++ new.declFileTypeofFunction.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declFileTypeofFunction.ts ===
  function f(n: typeof f): string;
 ->f : { (n: typeof f): string; (n: typeof g): string; }
@@ -10,7 +10,7 @@
 +>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 +>n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 +>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
- 
+
  function f(n: typeof g): string;
 ->f : { (n: typeof f): string; (n: typeof g): string; }
 ->n : { (n: typeof g): number; (n: typeof f): number; }
@@ -18,12 +18,12 @@
 +>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 +>n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 +>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
- 
+
  function f() { return undefined; }
 ->f : { (n: typeof f): string; (n: typeof g): string; }
 +>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
  >undefined : undefined
- 
+
  function g(n: typeof g): number;
 ->g : { (n: typeof g): number; (n: typeof f): number; }
 ->n : { (n: typeof g): number; (n: typeof f): number; }
@@ -31,7 +31,7 @@
 +>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 +>n : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 +>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
- 
+
  function g(n: typeof f): number;
 ->g : { (n: typeof g): number; (n: typeof f): number; }
 ->n : { (n: typeof f): string; (n: typeof g): string; }
@@ -39,33 +39,33 @@
 +>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
 +>n : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
 +>f : { (n: ???): string; (n: { (n: ???): number; (n: ???): number; }): string; }
- 
+
  function g() { return undefined; }
 ->g : { (n: typeof g): number; (n: typeof f): number; }
 +>g : { (n: ???): number; (n: { (n: ???): string; (n: ???): string; }): number; }
  >undefined : undefined
- 
+
  var b: () => typeof b;
 ->b : () => typeof b
 ->b : () => typeof b
 +>b : () => ???
 +>b : () => ???
- 
+
  function b1() {
 ->b1 : () => typeof b1
 +>b1 : () => ???
- 
+
      return b1;
 ->b1 : () => typeof b1
 +>b1 : () => ???
  }
- 
+
  function foo(): typeof foo {
 ->foo : () => typeof foo
 ->foo : () => typeof foo
 +>foo : () => ???
 +>foo : () => ???
- 
+
      return null;
  }
  var foo1: typeof foo;
@@ -73,19 +73,19 @@
 ->foo : () => typeof foo
 +>foo1 : () => ???
 +>foo : () => ???
- 
+
  var foo2 = foo;
 ->foo2 : () => typeof foo
 ->foo : () => typeof foo
 +>foo2 : () => ???
 +>foo : () => ???
- 
+
  var foo3 = function () {
 ->foo3 : () => any
 ->function () {    return foo3;} : () => any
 +>foo3 : () => ???
 +>function () {    return foo3;} : () => ???
- 
+
      return foo3;
 ->foo3 : () => any
 +>foo3 : () => ???
@@ -95,10 +95,10 @@
 ->() => {    return x;} : () => any
 +>x : () => ???
 +>() => {    return x;} : () => ???
- 
+
      return x;
 ->x : () => any
 +>x : () => ???
  }
- 
+
  function foo5(x: number) {

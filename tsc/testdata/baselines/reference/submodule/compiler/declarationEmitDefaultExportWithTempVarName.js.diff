@@ -2,7 +2,7 @@
 +++ new.declarationEmitDefaultExportWithTempVarName.js
 @@= skipped -3, +3 lines =@@
  export default 3.14159;
- 
+
  //// [pi.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

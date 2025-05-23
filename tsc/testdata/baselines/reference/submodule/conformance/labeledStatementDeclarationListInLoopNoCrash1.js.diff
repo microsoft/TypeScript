@@ -1,8 +1,8 @@
 --- old.labeledStatementDeclarationListInLoopNoCrash1.js
 +++ new.labeledStatementDeclarationListInLoopNoCrash1.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [labeledStatementDeclarationListInLoopNoCrash1.js]
 -"use strict";
 -var _loop_1 = function (x) {

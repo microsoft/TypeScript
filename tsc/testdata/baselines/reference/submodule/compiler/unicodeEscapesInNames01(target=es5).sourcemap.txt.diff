@@ -344,16 +344,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 21) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return IdentifierNameWithEscape1;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -364,10 +360,7 @@
 -2 >Emitted(11, 37) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -390,6 +383,16 @@
 -2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 21) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---
@@ -548,16 +551,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return IdentifierNameWithEscape2;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -568,10 +567,7 @@
 -2 >Emitted(11, 37) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -594,6 +590,16 @@
 -2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---
@@ -762,16 +768,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 21) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return IdentifierNameWithExtendedEscape1;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -782,10 +784,7 @@
 -2 >Emitted(11, 45) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -808,6 +807,16 @@
 -2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 21) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---
@@ -976,16 +985,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(10, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(10, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return IdentifierNameWithExtendedEscape2;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -996,10 +1001,7 @@
 -2 >Emitted(11, 45) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -1022,6 +1024,16 @@
 -2 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(12, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(12, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---
@@ -1050,12 +1062,14 @@
  >>>Object.defineProperty(exports, "__esModule", { value: true });
  >>>exports.PrivateIdentifierWithEscape1 = void 0;
 ->>>var PrivateIdentifierWithEscape1 = /** @class */ (function () {
-+>>>class PrivateIdentifierWithEscape1 {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+2 >^^^^^^^^^^^^^->
- 1 >
+-1 >
 -1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
++>>>class PrivateIdentifierWithEscape1 {
++1 >
++2 >^^^^^^^^^^^^^->
++1 >
 +1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
  ---
 ->>>    function PrivateIdentifierWithEscape1() {
@@ -1068,35 +1082,20 @@
  1->export class PrivateIdentifierWithEscape1 {
 -  >    #\u0078: number;
 -  >
-   >    
+-  >    
 -1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #\u0078
-+3 >           : number;
-+1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(5, 12) Source(2, 12) + SourceIndex(0)
-+3 >Emitted(5, 13) Source(2, 21) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithEscape1_x.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                          ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^->
- 1->
+-1->
 -2 >        #\u0078: number;
 -1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(13, 59) Source(2, 21) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 0, "f");
-+>>>        this.#\u0078 = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1106,6 +1105,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #\u0078
++3 >           : number;
++1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(5, 12) Source(2, 12) + SourceIndex(0)
++3 >Emitted(5, 13) Source(2, 21) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#\u0078 = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^
@@ -1228,16 +1247,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return PrivateIdentifierWithEscape1;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1248,10 +1263,7 @@
 -2 >Emitted(19, 40) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -1274,6 +1286,16 @@
 -2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---
@@ -1303,12 +1325,14 @@
  >>>Object.defineProperty(exports, "__esModule", { value: true });
  >>>exports.PrivateIdentifierWithEscape2 = void 0;
 ->>>var PrivateIdentifierWithEscape2 = /** @class */ (function () {
-+>>>class PrivateIdentifierWithEscape2 {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+2 >^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
++>>>class PrivateIdentifierWithEscape2 {
++1 >
++2 >^^^^^^^^^^^^^^->
++1 >
 +1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
  ---
 ->>>    function PrivateIdentifierWithEscape2() {
@@ -1321,35 +1345,20 @@
  1->export class PrivateIdentifierWithEscape2 {
 -  >    #x\u0078: number;
 -  >
-   >    
+-  >    
 -1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #x\u0078
-+3 >            : number;
-+1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(5, 13) Source(2, 13) + SourceIndex(0)
-+3 >Emitted(5, 14) Source(2, 22) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithEscape2_xx.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                           ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^^->
- 1->
+-1->
 -2 >        #x\u0078: number;
 -1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(13, 60) Source(2, 22) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 0, "f");
-+>>>        this.#x\u0078 = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1359,6 +1368,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #x\u0078
++3 >            : number;
++1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(5, 13) Source(2, 13) + SourceIndex(0)
++3 >Emitted(5, 14) Source(2, 22) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#x\u0078 = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^^
@@ -1481,16 +1510,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 23) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return PrivateIdentifierWithEscape2;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1501,10 +1526,7 @@
 -2 >Emitted(19, 40) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -1527,6 +1549,16 @@
 -2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 23) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---
@@ -1556,12 +1588,14 @@
  >>>Object.defineProperty(exports, "__esModule", { value: true });
  >>>exports.PrivateIdentifierWithExtendedEscape1 = void 0;
 ->>>var PrivateIdentifierWithExtendedEscape1 = /** @class */ (function () {
-+>>>class PrivateIdentifierWithExtendedEscape1 {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+2 >^^^^^^^^^^^^^->
- 1 >
+-1 >
 -1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
++>>>class PrivateIdentifierWithExtendedEscape1 {
++1 >
++2 >^^^^^^^^^^^^^->
++1 >
 +1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
  ---
 ->>>    function PrivateIdentifierWithExtendedEscape1() {
@@ -1574,35 +1608,20 @@
  1->export class PrivateIdentifierWithExtendedEscape1 {
 -  >    #\u{78}: number;
 -  >
-   >    
+-  >    
 -1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #\u{78}
-+3 >           : number;
-+1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(5, 12) Source(2, 12) + SourceIndex(0)
-+3 >Emitted(5, 13) Source(2, 21) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithExtendedEscape1_x.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                                  ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^->
- 1->
+-1->
 -2 >        #\u{78}: number;
 -1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(13, 67) Source(2, 21) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 0, "f");
-+>>>        this.#\u{78} = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1612,6 +1631,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #\u{78}
++3 >           : number;
++1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(5, 12) Source(2, 12) + SourceIndex(0)
++3 >Emitted(5, 13) Source(2, 21) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#\u{78} = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^
@@ -1734,16 +1773,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return PrivateIdentifierWithExtendedEscape1;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1754,10 +1789,7 @@
 -2 >Emitted(19, 48) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -1780,6 +1812,16 @@
 -2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 22) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---
@@ -1809,12 +1851,14 @@
  >>>Object.defineProperty(exports, "__esModule", { value: true });
  >>>exports.PrivateIdentifierWithExtendedEscape2 = void 0;
 ->>>var PrivateIdentifierWithExtendedEscape2 = /** @class */ (function () {
-+>>>class PrivateIdentifierWithExtendedEscape2 {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+2 >^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
++>>>class PrivateIdentifierWithExtendedEscape2 {
++1 >
++2 >^^^^^^^^^^^^^^->
++1 >
 +1 >Emitted(4, 1) Source(1, 1) + SourceIndex(0)
  ---
 ->>>    function PrivateIdentifierWithExtendedEscape2() {
@@ -1827,35 +1871,20 @@
  1->export class PrivateIdentifierWithExtendedEscape2 {
 -  >    #x\u{78}: number;
 -  >
-   >    
+-  >    
 -1->Emitted(12, 5) Source(4, 5) + SourceIndex(0)
-+2 >    #x\u{78}
-+3 >            : number;
-+1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(5, 13) Source(2, 13) + SourceIndex(0)
-+3 >Emitted(5, 14) Source(2, 22) + SourceIndex(0)
- ---
+----
 ->>>        _PrivateIdentifierWithExtendedEscape2_xx.set(this, void 0);
 -1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                                                   ^^^^^^^^^^^^^^^^^^^^^->
-+>>>    constructor() {
-+1->^^^^
-+2 >    ^^^^^^^^^^^^^^
-+3 >                  ^^^^^^^^^->
- 1->
+-1->
 -2 >        #x\u{78}: number;
 -1->Emitted(13, 9) Source(2, 5) + SourceIndex(0)
 -2 >Emitted(13, 68) Source(2, 22) + SourceIndex(0)
-+  >
-+  >    
-+2 >    constructor() 
-+1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
-+2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
- ---
+----
 ->>>        __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 0, "f");
-+>>>        this.#x\u{78} = 0;
- 1->^^^^^^^^
+-1->^^^^^^^^
 -2 >        ^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                               ^^^^
 -4 >                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1865,6 +1894,26 @@
 -1->
 -  >
 -  >    constructor() {
++  >    
++2 >    #x\u{78}
++3 >            : number;
++1->Emitted(5, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(5, 13) Source(2, 13) + SourceIndex(0)
++3 >Emitted(5, 14) Source(2, 22) + SourceIndex(0)
++---
++>>>    constructor() {
++1->^^^^
++2 >    ^^^^^^^^^^^^^^
++3 >                  ^^^^^^^^^->
++1->
++  >
++  >    
++2 >    constructor() 
++1->Emitted(6, 5) Source(4, 5) + SourceIndex(0)
++2 >Emitted(6, 19) Source(4, 19) + SourceIndex(0)
++---
++>>>        this.#x\u{78} = 0;
++1->^^^^^^^^
 +2 >        ^^^^
 +3 >            ^
 +4 >             ^^^^^^^^
@@ -1987,16 +2036,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(18, 5) Source(10, 5) + SourceIndex(0)
 -2 >Emitted(18, 6) Source(10, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(11, 5) Source(9, 23) + SourceIndex(0)
-+2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
- ---
+----
 ->>>    return PrivateIdentifierWithExtendedEscape2;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2007,10 +2052,7 @@
 -2 >Emitted(19, 48) Source(11, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -2033,6 +2075,16 @@
 -2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
 -3 >Emitted(20, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(20, 6) Source(11, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(11, 5) Source(9, 23) + SourceIndex(0)
++2 >Emitted(11, 6) Source(10, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(12, 2) Source(11, 2) + SourceIndex(0)
  ---

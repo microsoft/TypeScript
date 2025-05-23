@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -unusedTypeParameterInFunction2.ts(1,16): error TS6133: 'Y' is declared but its value is never read.
 +unusedTypeParameterInFunction2.ts(1,16): error TS6196: 'Y' is declared but never used.
- 
- 
+
+
  ==== unusedTypeParameterInFunction2.ts (1 errors) ====
      function f1<X, Y>() {
                     ~

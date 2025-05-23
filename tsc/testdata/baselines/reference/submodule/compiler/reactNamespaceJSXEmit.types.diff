@@ -2,31 +2,31 @@
 +++ new.reactNamespaceJSXEmit.types
 @@= skipped -16, +16 lines =@@
  >x : any
- 
+
  <foo data/>;
 -><foo data/> : error
 +><foo data/> : any
  >foo : any
  >data : true
- 
+
  <Bar x={x} />;
 -><Bar x={x} /> : error
 +><Bar x={x} /> : any
  >Bar : any
  >x : any
  >x : any
- 
+
  <x-component />;
 -><x-component /> : error
 +><x-component /> : any
  >x-component : any
- 
+
  <Bar {...x} />;
 -><Bar {...x} /> : error
 +><Bar {...x} /> : any
  >Bar : any
  >x : any
- 
+
  <Bar { ...x } y={2} />;
 -><Bar { ...x } y={2} /> : error
 +><Bar { ...x } y={2} /> : any
@@ -34,10 +34,9 @@
  >x : any
  >y : number
  >2 : 2
- 
+
  <_Bar { ...x } />;
 -><_Bar { ...x } /> : error
 +><_Bar { ...x } /> : any
  >_Bar : any
  >x : any
- 

@@ -2,7 +2,7 @@
 +++ new.moduleResolutionWithModule(module=node16,moduleresolution=nodenext).js
 @@= skipped -12, +12 lines =@@
  p.thing();
- 
+
  //// [index.js]
 -"use strict";
 -var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {

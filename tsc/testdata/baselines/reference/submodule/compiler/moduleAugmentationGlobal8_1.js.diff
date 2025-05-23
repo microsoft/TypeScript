@@ -1,8 +1,8 @@
 --- old.moduleAugmentationGlobal8_1.js
 +++ new.moduleAugmentationGlobal8_1.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [moduleAugmentationGlobal8_1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

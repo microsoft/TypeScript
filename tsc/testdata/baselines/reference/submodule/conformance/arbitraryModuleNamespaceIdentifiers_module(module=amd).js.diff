@@ -1,8 +1,8 @@
 --- old.arbitraryModuleNamespaceIdentifiers_module(module=amd).js
 +++ new.arbitraryModuleNamespaceIdentifiers_module(module=amd).js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [arbitraryModuleNamespaceIdentifiers_module.js]
 -define(["require", "exports", "./arbitraryModuleNamespaceIdentifiers_module", "./arbitraryModuleNamespaceIdentifiers_module", "./arbitraryModuleNamespaceIdentifiers_module", "./arbitraryModuleNamespaceIdentifiers_module", "./arbitraryModuleNamespaceIdentifiers_module"], function (require, exports, arbitraryModuleNamespaceIdentifiers_module_1, arbitraryModuleNamespaceIdentifiers_module_2, arbitraryModuleNamespaceIdentifiers_module_3, arbitraryModuleNamespaceIdentifiers_module_4, arbitraryModuleNamespaceIdentifiers_module_5) {
 -    "use strict";

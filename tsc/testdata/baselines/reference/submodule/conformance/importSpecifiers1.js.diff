@@ -1,8 +1,8 @@
 --- old.importSpecifiers1.js
 +++ new.importSpecifiers1.js
 @@= skipped -45, +45 lines =@@
- 
- 
+
+
  //// [mod.js]
 -export var as = 0;
 -export var type = 0;
@@ -22,10 +22,11 @@
  //// [e.js]
  import { type as type } from "./mod.js";
  type;
-@@= skipped -13, +13 lines =@@
+@@= skipped -12, +12 lines =@@
+ s; // Error (used in emitting position)
  export {};
  //// [g.js]
- export {};
+-export {};
 -
 -
 -//// [mod.d.ts]
@@ -45,4 +46,4 @@
 -//// [f.d.ts]
 -export {};
 -//// [g.d.ts]
--export {};
+ export {};

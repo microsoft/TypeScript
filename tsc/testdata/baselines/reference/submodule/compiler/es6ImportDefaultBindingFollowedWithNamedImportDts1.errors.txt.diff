@@ -13,8 +13,8 @@
 +client.ts(7,30): error TS2614: Module '"server"' has no exported member 'a'. Did you mean to use 'import a from "server"' instead?
 +client.ts(9,27): error TS2614: Module '"server"' has no exported member 'x'. Did you mean to use 'import x from "server"' instead?
 +client.ts(11,27): error TS2614: Module '"server"' has no exported member 'm'. Did you mean to use 'import m from "server"' instead?
- 
- 
+
+
  ==== server.ts (0 errors) ====
 @@= skipped -14, +14 lines =@@
      export var x1 = new defaultBinding1();

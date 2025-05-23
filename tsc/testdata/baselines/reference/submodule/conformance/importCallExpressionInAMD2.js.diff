@@ -2,7 +2,7 @@
 +++ new.importCallExpressionInAMD2.js
 @@= skipped -16, +16 lines =@@
  foo(import("./0"));
- 
+
  //// [0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

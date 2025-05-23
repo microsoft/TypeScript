@@ -6,6 +6,6 @@
  >M1 : any
 ->I : T
 +>I : I
- 
+
      class C implements T {
  >C : C

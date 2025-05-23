@@ -1,7 +1,7 @@
 --- old.moduleExportAssignment2.types
 +++ new.moduleExportAssignment2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === npm.js ===
  var npm = module.exports = function (tree) {
 ->npm : { (tree: any): void; asReadInstalled: (tree: any) => void; }
@@ -31,13 +31,13 @@
 +>asReadInstalled : any
  >function (tree) {    npm(tree) // both references should be callable    module.exports(tree)} : (tree: any) => void
  >tree : any
- 
+
      npm(tree) // both references should be callable
  >npm(tree) : void
 ->npm : { (tree: any): void; asReadInstalled: (tree: any) => void; }
 +>npm : (tree: any) => void
  >tree : any
- 
+
      module.exports(tree)
 ->module.exports(tree) : void
 ->module.exports : { (tree: any): void; asReadInstalled: (tree: any) => void; }
@@ -49,4 +49,3 @@
 +>exports : typeof import("npm")
  >tree : any
  }
- 

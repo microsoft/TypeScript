@@ -1,7 +1,7 @@
 --- old.typesWithPublicConstructor.symbols
 +++ new.typesWithPublicConstructor.symbols
 @@= skipped -14, +14 lines =@@
- 
+
  var r: () => void = c.constructor;
  >r : Symbol(r, Decl(typesWithPublicConstructor.ts, 7, 3))
 ->c.constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
@@ -9,7 +9,7 @@
  >c : Symbol(c, Decl(typesWithPublicConstructor.ts, 6, 3))
 ->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 +>constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
- 
+
  class C2 {
  >C2 : Symbol(C2, Decl(typesWithPublicConstructor.ts, 7, 34))
 @@= skipped -21, +21 lines =@@
@@ -21,4 +21,3 @@
  >c2 : Symbol(c2, Decl(typesWithPublicConstructor.ts, 14, 3))
 ->constructor : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 +>constructor : Symbol(constructor, Decl(lib.es5.d.ts, --, --))
- 

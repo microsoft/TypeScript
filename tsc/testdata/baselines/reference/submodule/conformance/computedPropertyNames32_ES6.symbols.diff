@@ -2,11 +2,11 @@
 +++ new.computedPropertyNames32_ES6.symbols
 @@= skipped -9, +9 lines =@@
  >T : Symbol(T, Decl(computedPropertyNames32_ES6.ts, 1, 8))
- 
+
      bar() {
 ->bar : Symbol(C.bar, Decl(computedPropertyNames32_ES6.ts, 1, 12))
 +>bar : Symbol(bar, Decl(computedPropertyNames32_ES6.ts, 1, 12))
- 
+
          return 0;
      }
      [foo<T>()]() { }

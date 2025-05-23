@@ -2,7 +2,7 @@
 +++ new.genericCallWithObjectTypeArgs2.js
 @@= skipped -34, +34 lines =@@
  var r4 = f2(i); // Base => Derived
- 
+
  //// [genericCallWithObjectTypeArgs2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

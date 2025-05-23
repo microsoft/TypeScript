@@ -1,8 +1,8 @@
 --- old.importHelpersVerbatimModuleSyntax.js
 +++ new.importHelpersVerbatimModuleSyntax.js
 @@= skipped -44, +44 lines =@@
- 
- 
+
+
  //// [main.cjs]
 -const tslib_1 = require("tslib");
  function foo(args) {

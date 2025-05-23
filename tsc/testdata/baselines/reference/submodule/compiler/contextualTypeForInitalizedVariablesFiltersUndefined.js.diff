@@ -1,8 +1,8 @@
 --- old.contextualTypeForInitalizedVariablesFiltersUndefined.js
 +++ new.contextualTypeForInitalizedVariablesFiltersUndefined.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [contextualTypeForInitalizedVariablesFiltersUndefined.js]
 -"use strict";
 -var fInferred = function (_a) {

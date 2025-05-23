@@ -2,7 +2,7 @@
 +++ new.objectRestParameter.symbols
 @@= skipped -47, +47 lines =@@
  >C : Symbol(C, Decl(objectRestParameter.ts, 5, 107))
- 
+
      m({ a, ...clone }: { a: number, b: string}): void {
 ->m : Symbol(C.m, Decl(objectRestParameter.ts, 7, 9))
 +>m : Symbol(m, Decl(objectRestParameter.ts, 7, 9))

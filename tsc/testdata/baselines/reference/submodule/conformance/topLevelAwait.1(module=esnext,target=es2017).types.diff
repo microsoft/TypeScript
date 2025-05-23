@@ -8,6 +8,6 @@
 ->{    await() {}} : { await(): void; }
 +>({    await() {}}) : { await: () => void; }
 +>{    await() {}} : { await: () => void; }
- 
+
      await() {}
  >await : () => void

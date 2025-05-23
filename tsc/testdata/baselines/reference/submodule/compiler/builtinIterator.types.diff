@@ -23,7 +23,7 @@
 ->{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next(): { done: boolean; value: string; }; }
 +>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
 +>{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next: () => { done: boolean; value: string; }; }
- 
+
    next() {
  >next : () => { done: boolean; value: string; }
 @@= skipped -192, +192 lines =@@
@@ -36,5 +36,5 @@
 ->from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
 +>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
  >g1 : Generator<string, number, boolean>
- 
+
  declare const iter2: IteratorObject<string>;

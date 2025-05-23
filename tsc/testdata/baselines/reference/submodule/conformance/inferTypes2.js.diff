@@ -1,7 +1,7 @@
 --- old.inferTypes2.js
 +++ new.inferTypes2.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [inferTypes2.js]
  "use strict";
 -// Repros from #22755

@@ -19,8 +19,8 @@
  main.ts(47,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 @@= skipped -40, +30 lines =@@
  main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
- 
- 
+
+
 -==== main.ts (41 errors) ====
 +==== main.ts (31 errors) ====
      /// <reference path="modules.d.ts"/>

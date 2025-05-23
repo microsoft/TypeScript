@@ -1,7 +1,7 @@
 --- old.invalidMultipleVariableDeclarations.types
 +++ new.invalidMultipleVariableDeclarations.types
 @@= skipped -147, +147 lines =@@
- 
+
  var m = M.A;
  >m : typeof M
 ->M.A : typeof M.A
@@ -9,4 +9,3 @@
  >M : typeof M
 ->A : typeof M.A
 +>A : typeof A
- 

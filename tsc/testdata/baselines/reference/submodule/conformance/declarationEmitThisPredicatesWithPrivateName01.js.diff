@@ -1,7 +1,7 @@
 --- old.declarationEmitThisPredicatesWithPrivateName01.js
 +++ new.declarationEmitThisPredicatesWithPrivateName01.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [declarationEmitThisPredicatesWithPrivateName01.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -31,12 +31,14 @@
 -    };
 -    return C;
 -}());
--exports.C = C;
++    }
++}
+ exports.C = C;
 -var D = /** @class */ (function (_super) {
 -    __extends(D, _super);
 -    function D() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    return D;
 -}(C));
 -
@@ -44,9 +46,9 @@
 -//// [declarationEmitThisPredicatesWithPrivateName01.d.ts]
 -export declare class C {
 -    m(): this is D;
- }
+-}
 -declare class D extends C {
-+exports.C = C;
-+class D extends C {
- }
+-}
 -export {};
++class D extends C {
++}

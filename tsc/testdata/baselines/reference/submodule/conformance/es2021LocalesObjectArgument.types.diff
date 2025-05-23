@@ -1,7 +1,7 @@
 --- old.es2021LocalesObjectArgument.types
 +++ new.es2021LocalesObjectArgument.types
 @@= skipped -1, +1 lines =@@
- 
+
  === es2021LocalesObjectArgument.ts ===
  const enUS = new Intl.Locale("en-US");
 ->enUS : Intl.Locale
@@ -14,7 +14,7 @@
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >"en-US" : "en-US"
- 
+
  const deDE = new Intl.Locale("de-DE");
 ->deDE : Intl.Locale
 ->new Intl.Locale("de-DE") : Intl.Locale
@@ -26,7 +26,7 @@
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >"de-DE" : "de-DE"
- 
+
  const jaJP = new Intl.Locale("ja-JP");
 ->jaJP : Intl.Locale
 ->new Intl.Locale("ja-JP") : Intl.Locale
@@ -38,7 +38,7 @@
 ->Locale : new (tag: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale, options?: Intl.LocaleOptions) => Intl.Locale
 +>Locale : new (tag: string | Locale, options?: LocaleOptions) => Locale
  >"ja-JP" : "ja-JP"
- 
+
  new Intl.ListFormat(enUS);
 ->new Intl.ListFormat(enUS) : Intl.ListFormat
 ->Intl.ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
@@ -49,7 +49,7 @@
 ->enUS : Intl.Locale
 +>ListFormat : { new (locales?: LocalesArgument, options?: ListFormatOptions): ListFormat; prototype: ListFormat; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<ListFormatOptions, "localeMatcher">) => string[]; }
 +>enUS : Locale
- 
+
  new Intl.ListFormat([deDE, jaJP]);
 ->new Intl.ListFormat([deDE, jaJP]) : Intl.ListFormat
 ->Intl.ListFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.ListFormatOptions): Intl.ListFormat; prototype: Intl.ListFormat; supportedLocalesOf(locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
@@ -64,7 +64,7 @@
 +>[deDE, jaJP] : Locale[]
 +>deDE : Locale
 +>jaJP : Locale
- 
+
  Intl.ListFormat.supportedLocalesOf(enUS);
  >Intl.ListFormat.supportedLocalesOf(enUS) : string[]
 ->Intl.ListFormat.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
@@ -78,7 +78,7 @@
 +>ListFormat : { new (locales?: LocalesArgument, options?: ListFormatOptions): ListFormat; prototype: ListFormat; supportedLocalesOf: (locales: LocalesArgument, options?: Pick<ListFormatOptions, "localeMatcher">) => string[]; }
 +>supportedLocalesOf : (locales: LocalesArgument, options?: Pick<ListFormatOptions, "localeMatcher">) => string[]
 +>enUS : Locale
- 
+
  Intl.ListFormat.supportedLocalesOf([deDE, jaJP]);
  >Intl.ListFormat.supportedLocalesOf([deDE, jaJP]) : string[]
 ->Intl.ListFormat.supportedLocalesOf : (locales: Intl.LocalesArgument, options?: Pick<Intl.ListFormatOptions, "localeMatcher">) => Intl.UnicodeBCP47LocaleIdentifier[]
@@ -96,4 +96,3 @@
 +>[deDE, jaJP] : Locale[]
 +>deDE : Locale
 +>jaJP : Locale
- 

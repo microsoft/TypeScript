@@ -10,7 +10,7 @@
 +>f : function
 +>(value) => {} : (value: any) => void
 +>value : any
- 
+
  };
  /** @type {(s: string) => void} */
  function g(s) {
@@ -26,20 +26,19 @@
 +>h : (s: any) => void
 +>s : any
  }
- 
+
  f() // should error
 ->f() : void
 ->f : (arg0: string) => void
 +>f() : any
 +>f : function
- 
+
  g() // should error
  >g() : void
 ->g : (s: string) => void
 +>g : (s: any) => void
- 
+
  h()
  >h() : void
 ->h : (s: string) => void
 +>h : (s: any) => void
- 

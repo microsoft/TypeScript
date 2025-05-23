@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment16.errors.txt
 +++ new.typeFromPropertyAssignment16.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(3,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 +a.js(4,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 +a.js(9,12): error TS2503: Cannot find namespace 'Outer'.

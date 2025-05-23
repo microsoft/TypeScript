@@ -2,7 +2,7 @@
 +++ new.assignToObjectTypeWithPrototypeProperty.js
 @@= skipped -5, +5 lines =@@
  var x: {prototype: XEvent} = XEvent;
- 
+
  //// [assignToObjectTypeWithPrototypeProperty.js]
 -var XEvent = /** @class */ (function () {
 -    function XEvent() {

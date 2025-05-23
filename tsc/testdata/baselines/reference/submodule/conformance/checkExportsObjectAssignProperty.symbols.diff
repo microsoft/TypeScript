@@ -2,144 +2,144 @@
 +++ new.checkExportsObjectAssignProperty.symbols
 @@= skipped -6, +6 lines =@@
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
- 
+
  m1.thing;
 ->m1.thing : Symbol(m1.thing, Decl(mod1.js, 0, 0))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->thing : Symbol(m1.thing, Decl(mod1.js, 0, 0))
- 
+
  m1.readonlyProp;
 ->m1.readonlyProp : Symbol(m1.readonlyProp, Decl(mod1.js, 0, 71))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->readonlyProp : Symbol(m1.readonlyProp, Decl(mod1.js, 0, 71))
- 
+
  m1.rwAccessors;
 ->m1.rwAccessors : Symbol(m1.rwAccessors, Decl(mod1.js, 1, 84))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->rwAccessors : Symbol(m1.rwAccessors, Decl(mod1.js, 1, 84))
- 
+
  m1.readonlyAccessor;
 ->m1.readonlyAccessor : Symbol(m1.readonlyAccessor, Decl(mod1.js, 2, 97))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->readonlyAccessor : Symbol(m1.readonlyAccessor, Decl(mod1.js, 2, 97))
- 
+
  m1.setonlyAccessor;
 ->m1.setonlyAccessor : Symbol(m1.setonlyAccessor, Decl(mod1.js, 3, 79))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->setonlyAccessor : Symbol(m1.setonlyAccessor, Decl(mod1.js, 3, 79))
- 
+
  // allowed assignments
  m1.thing = 10;
 ->m1.thing : Symbol(m1.thing, Decl(mod1.js, 0, 0))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->thing : Symbol(m1.thing, Decl(mod1.js, 0, 0))
- 
+
  m1.rwAccessors = 11;
 ->m1.rwAccessors : Symbol(m1.rwAccessors, Decl(mod1.js, 1, 84))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->rwAccessors : Symbol(m1.rwAccessors, Decl(mod1.js, 1, 84))
- 
+
  m1.setonlyAccessor = "yes";
 ->m1.setonlyAccessor : Symbol(m1.setonlyAccessor, Decl(mod1.js, 3, 79))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->setonlyAccessor : Symbol(m1.setonlyAccessor, Decl(mod1.js, 3, 79))
- 
+
  // disallowed assignments
  m1.readonlyProp = "name";
 ->m1.readonlyProp : Symbol(m1.readonlyProp, Decl(mod1.js, 0, 71))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->readonlyProp : Symbol(m1.readonlyProp, Decl(mod1.js, 0, 71))
- 
+
  m1.readonlyAccessor = 12;
 ->m1.readonlyAccessor : Symbol(m1.readonlyAccessor, Decl(mod1.js, 2, 97))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->readonlyAccessor : Symbol(m1.readonlyAccessor, Decl(mod1.js, 2, 97))
- 
+
  m1.thing = "no";
 ->m1.thing : Symbol(m1.thing, Decl(mod1.js, 0, 0))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->thing : Symbol(m1.thing, Decl(mod1.js, 0, 0))
- 
+
  m1.rwAccessors = "no";
 ->m1.rwAccessors : Symbol(m1.rwAccessors, Decl(mod1.js, 1, 84))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->rwAccessors : Symbol(m1.rwAccessors, Decl(mod1.js, 1, 84))
- 
+
  m1.setonlyAccessor = 0;
 ->m1.setonlyAccessor : Symbol(m1.setonlyAccessor, Decl(mod1.js, 3, 79))
  >m1 : Symbol(m1, Decl(validator.ts, 0, 12))
 ->setonlyAccessor : Symbol(m1.setonlyAccessor, Decl(mod1.js, 3, 79))
- 
+
  import m2 = require("./mod2");
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
- 
+
  m2.thing;
 ->m2.thing : Symbol(m2.thing, Decl(mod2.js, 0, 0))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->thing : Symbol(m2.thing, Decl(mod2.js, 0, 0))
- 
+
  m2.readonlyProp;
 ->m2.readonlyProp : Symbol(m2.readonlyProp, Decl(mod2.js, 0, 81))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->readonlyProp : Symbol(m2.readonlyProp, Decl(mod2.js, 0, 81))
- 
+
  m2.rwAccessors;
 ->m2.rwAccessors : Symbol(m2.rwAccessors, Decl(mod2.js, 1, 91))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->rwAccessors : Symbol(m2.rwAccessors, Decl(mod2.js, 1, 91))
- 
+
  m2.readonlyAccessor;
 ->m2.readonlyAccessor : Symbol(m2.readonlyAccessor, Decl(mod2.js, 2, 104))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->readonlyAccessor : Symbol(m2.readonlyAccessor, Decl(mod2.js, 2, 104))
- 
+
  m2.setonlyAccessor;
 ->m2.setonlyAccessor : Symbol(m2.setonlyAccessor, Decl(mod2.js, 3, 86))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->setonlyAccessor : Symbol(m2.setonlyAccessor, Decl(mod2.js, 3, 86))
- 
+
  // allowed assignments
  m2.thing = "ok";
 ->m2.thing : Symbol(m2.thing, Decl(mod2.js, 0, 0))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->thing : Symbol(m2.thing, Decl(mod2.js, 0, 0))
- 
+
  m2.rwAccessors = 11;
 ->m2.rwAccessors : Symbol(m2.rwAccessors, Decl(mod2.js, 1, 91))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->rwAccessors : Symbol(m2.rwAccessors, Decl(mod2.js, 1, 91))
- 
+
  m2.setonlyAccessor = "yes";
 ->m2.setonlyAccessor : Symbol(m2.setonlyAccessor, Decl(mod2.js, 3, 86))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->setonlyAccessor : Symbol(m2.setonlyAccessor, Decl(mod2.js, 3, 86))
- 
+
  // disallowed assignments
  m2.readonlyProp = "name";
 ->m2.readonlyProp : Symbol(m2.readonlyProp, Decl(mod2.js, 0, 81))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->readonlyProp : Symbol(m2.readonlyProp, Decl(mod2.js, 0, 81))
- 
+
  m2.readonlyAccessor = 12;
 ->m2.readonlyAccessor : Symbol(m2.readonlyAccessor, Decl(mod2.js, 2, 104))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->readonlyAccessor : Symbol(m2.readonlyAccessor, Decl(mod2.js, 2, 104))
- 
+
  m2.thing = 0;
 ->m2.thing : Symbol(m2.thing, Decl(mod2.js, 0, 0))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->thing : Symbol(m2.thing, Decl(mod2.js, 0, 0))
- 
+
  m2.rwAccessors = "no";
 ->m2.rwAccessors : Symbol(m2.rwAccessors, Decl(mod2.js, 1, 91))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->rwAccessors : Symbol(m2.rwAccessors, Decl(mod2.js, 1, 91))
- 
+
  m2.setonlyAccessor = 0;
 ->m2.setonlyAccessor : Symbol(m2.setonlyAccessor, Decl(mod2.js, 3, 86))
  >m2 : Symbol(m2, Decl(validator.ts, 20, 23))
 ->setonlyAccessor : Symbol(m2.setonlyAccessor, Decl(mod2.js, 3, 86))
- 
+
  === mod1.js ===
  Object.defineProperty(exports, "thing", { value: 42, writable: true });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -151,7 +151,7 @@
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >value : Symbol(value, Decl(mod1.js, 0, 41))
  >writable : Symbol(writable, Decl(mod1.js, 0, 52))
- 
+
  Object.defineProperty(exports, "readonlyProp", { value: "Smith", writable: false });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -162,7 +162,7 @@
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >value : Symbol(value, Decl(mod1.js, 1, 48))
  >writable : Symbol(writable, Decl(mod1.js, 1, 64))
- 
+
  Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -174,7 +174,7 @@
  >get : Symbol(get, Decl(mod1.js, 2, 47))
  >set : Symbol(set, Decl(mod1.js, 2, 71))
  >_ : Symbol(_, Decl(mod1.js, 2, 76))
- 
+
  Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -184,7 +184,7 @@
 ->"readonlyAccessor" : Symbol(readonlyAccessor, Decl(mod1.js, 2, 97))
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >get : Symbol(get, Decl(mod1.js, 3, 52))
- 
+
  Object.defineProperty(exports, "setonlyAccessor", {
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -193,19 +193,19 @@
 ->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->"setonlyAccessor" : Symbol(setonlyAccessor, Decl(mod1.js, 3, 79))
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- 
+
      /** @param {string} str */
      set(str) {
 @@= skipped -186, +124 lines =@@
  >str : Symbol(str, Decl(mod1.js, 6, 8))
- 
+
          this.rwAccessors = Number(str) 
 ->rwAccessors : Symbol(rwAccessors, Decl(mod1.js, 6, 14))
  >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >str : Symbol(str, Decl(mod1.js, 6, 8))
      }
 @@= skipped -8, +7 lines =@@
- 
+
  === mod2.js ===
  Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -219,7 +219,7 @@
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >value : Symbol(value, Decl(mod2.js, 0, 48))
  >writable : Symbol(writable, Decl(mod2.js, 0, 62))
- 
+
  Object.defineProperty(module.exports, "readonlyProp", { value: "Smith", writable: false });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -232,7 +232,7 @@
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >value : Symbol(value, Decl(mod2.js, 1, 55))
  >writable : Symbol(writable, Decl(mod2.js, 1, 71))
- 
+
  Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, set(_) { /*ignore*/ } });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -246,7 +246,7 @@
  >get : Symbol(get, Decl(mod2.js, 2, 54))
  >set : Symbol(set, Decl(mod2.js, 2, 78))
  >_ : Symbol(_, Decl(mod2.js, 2, 83))
- 
+
  Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } });
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -258,7 +258,7 @@
 ->"readonlyAccessor" : Symbol(readonlyAccessor, Decl(mod2.js, 2, 104))
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
  >get : Symbol(get, Decl(mod2.js, 3, 59))
- 
+
  Object.defineProperty(module.exports, "setonlyAccessor", {
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -269,12 +269,12 @@
 ->exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 ->"setonlyAccessor" : Symbol(setonlyAccessor, Decl(mod2.js, 3, 86))
 +>defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
- 
+
      /** @param {string} str */
      set(str) {
 @@= skipped -58, +38 lines =@@
  >str : Symbol(str, Decl(mod2.js, 6, 8))
- 
+
          this.rwAccessors = Number(str) 
 ->rwAccessors : Symbol(rwAccessors, Decl(mod2.js, 6, 14))
  >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -288,7 +288,7 @@
 ->require : Symbol(require)
 ->"./mod1" : Symbol("mod1", Decl(mod1.js, 0, 0))
 ->thing : Symbol(thing, Decl(mod1.js, 0, 0))
- 
+
  /**
   * @type {string}
   */
@@ -298,4 +298,3 @@
 ->require : Symbol(require)
 ->"./mod2" : Symbol("mod2", Decl(mod2.js, 0, 0))
 ->thing : Symbol(thing, Decl(mod2.js, 0, 0))
- 

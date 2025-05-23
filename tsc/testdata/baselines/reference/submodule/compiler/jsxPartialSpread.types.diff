@@ -14,10 +14,10 @@
 +><p></p> : Element
  >p : { value?: unknown; }
  >p : { value?: unknown; }
- 
+
 @@= skipped -12, +12 lines =@@
  >React : typeof React
- 
+
  export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
 ->Repro : ({ SelectProps }: { SelectProps?: Partial<Parameters<typeof Select>[0]>; }) => JSX.Element
 +>Repro : (__0: { SelectProps?: Partial<{ value?: unknown; }> | undefined; }) => Element
@@ -26,11 +26,11 @@
  >SelectProps : Partial<{ value?: unknown; }> | undefined
 ->Select : (p: { value?: unknown; }) => JSX.Element
 +>Select : (p: { value?: unknown; }) => Element
- 
+
      return (
 ->(        <Select value={'test'} {...SelectProps} />    ) : JSX.Element
 +>(        <Select value={'test'} {...SelectProps} />    ) : Element
- 
+
          <Select value={'test'} {...SelectProps} />
 -><Select value={'test'} {...SelectProps} /> : JSX.Element
 ->Select : (p: { value?: unknown; }) => JSX.Element

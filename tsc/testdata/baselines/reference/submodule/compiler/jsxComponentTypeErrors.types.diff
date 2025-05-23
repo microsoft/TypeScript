@@ -2,13 +2,13 @@
 +++ new.jsxComponentTypeErrors.types
 @@= skipped -12, +12 lines =@@
  }
- 
+
  function FunctionComponent<T extends string>({type}: {type?: T}) {
 ->FunctionComponent : typeof FunctionComponent
 +>FunctionComponent : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => Element; }
  >type : T | undefined
  >type : T | undefined
- 
+
 @@= skipped -12, +12 lines =@@
    }
  }
@@ -23,7 +23,7 @@
 +>FunctionComponent : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => Element; }
 +>useThis : () => Element
 +>function() {  return <this type="foo" />;} : () => Element
- 
+
    return <this type="foo" />;
 -><this type="foo" /> : JSX.Element
 ->this : typeof FunctionComponent
@@ -31,10 +31,10 @@
 +>this : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => Element; }
  >type : "foo"
  }
- 
+
 @@= skipped -21, +21 lines =@@
  }
- 
+
  const MixedComponent = Math.random() ? FunctionComponent : ClassComponent;
 ->MixedComponent : typeof FunctionComponent | typeof ClassComponent
 ->Math.random() ? FunctionComponent : ClassComponent : typeof FunctionComponent | typeof ClassComponent
@@ -47,7 +47,7 @@
 ->FunctionComponent : typeof FunctionComponent
 +>FunctionComponent : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => Element; }
  >ClassComponent : typeof ClassComponent
- 
+
  const elem1 = <FunctionComponent type="abc" />;
 ->elem1 : JSX.Element
 -><FunctionComponent type="abc" /> : JSX.Element
@@ -56,7 +56,7 @@
 +><FunctionComponent type="abc" /> : Element
 +>FunctionComponent : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => Element; }
  >type : "abc"
- 
+
  const elem2 = <FunctionComponent<"abc"> />;
 ->elem2 : JSX.Element
 -><FunctionComponent<"abc"> /> : JSX.Element
@@ -64,14 +64,14 @@
 +>elem2 : Element
 +><FunctionComponent<"abc"> /> : Element
 +>FunctionComponent : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => Element; }
- 
+
  const elem3 = <ClassComponent />;
 ->elem3 : JSX.Element
 -><ClassComponent /> : JSX.Element
 +>elem3 : Element
 +><ClassComponent /> : Element
  >ClassComponent : typeof ClassComponent
- 
+
  const elem4 = <MixedComponent />;
 ->elem4 : JSX.Element
 -><MixedComponent /> : JSX.Element
@@ -79,18 +79,18 @@
 +>elem4 : Element
 +><MixedComponent /> : Element
 +>MixedComponent : { <T extends string>(__0: { type?: T | undefined; }): { type: T | undefined; }; useThis: () => Element; } | typeof ClassComponent
- 
+
  const obj = {
 ->obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
 ->{  MemberFunctionComponent() {    return {};  },  MemberClassComponent: class {},} : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
 +>obj : { MemberFunctionComponent: () => {}; MemberClassComponent: typeof MemberClassComponent; }
 +>{  MemberFunctionComponent() {    return {};  },  MemberClassComponent: class {},} : { MemberFunctionComponent: () => {}; MemberClassComponent: typeof MemberClassComponent; }
- 
+
    MemberFunctionComponent() {
  >MemberFunctionComponent : () => {}
 @@= skipped -48, +48 lines =@@
  };
- 
+
  const elem5 = <obj.MemberFunctionComponent />;
 ->elem5 : JSX.Element
 -><obj.MemberFunctionComponent /> : JSX.Element
@@ -100,7 +100,7 @@
 ->obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
 +>obj : { MemberFunctionComponent: () => {}; MemberClassComponent: typeof MemberClassComponent; }
  >MemberFunctionComponent : () => {}
- 
+
  const elem6 = <obj. MemberClassComponent />;
 ->elem6 : JSX.Element
 -><obj. MemberClassComponent /> : JSX.Element
@@ -110,4 +110,3 @@
 ->obj : { MemberFunctionComponent(): {}; MemberClassComponent: typeof MemberClassComponent; }
 +>obj : { MemberFunctionComponent: () => {}; MemberClassComponent: typeof MemberClassComponent; }
  >MemberClassComponent : typeof MemberClassComponent
- 

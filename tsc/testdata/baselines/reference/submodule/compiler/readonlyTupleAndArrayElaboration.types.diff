@@ -2,55 +2,55 @@
 +++ new.readonlyTupleAndArrayElaboration.types
 @@= skipped -11, +11 lines =@@
  >4 : 4
- 
+
  function distanceFromOrigin([x, y]: [number, number]) {
 ->distanceFromOrigin : ([x, y]: [number, number]) => number
 +>distanceFromOrigin : (__0: [number, number]) => number
  >x : number
  >y : number
- 
+
 @@= skipped -20, +20 lines =@@
- 
+
  distanceFromOrigin(point);
  >distanceFromOrigin(point) : number
 ->distanceFromOrigin : ([x, y]: [number, number]) => number
 +>distanceFromOrigin : (__0: [number, number]) => number
  >point : readonly [3, 4]
- 
+
  declare function arryFn(x: number[]): void;
 @@= skipped -13, +13 lines =@@
  >point : readonly [3, 4]
- 
+
  declare function arryFn2(x: Array<number>): void;
 ->arryFn2 : (x: Array<number>) => void
 +>arryFn2 : (x: number[]) => void
  >x : number[]
- 
+
  arryFn2(point);
  >arryFn2(point) : void
 ->arryFn2 : (x: Array<number>) => void
 +>arryFn2 : (x: number[]) => void
  >point : readonly [3, 4]
- 
+
  declare const a: readonly number[];
 @@= skipped -19, +19 lines =@@
- 
+
  arryFn2(a);
  >arryFn2(a) : void
 ->arryFn2 : (x: Array<number>) => void
 +>arryFn2 : (x: number[]) => void
  >a : readonly number[]
- 
+
  arryFn2(b);
  >arryFn2(b) : void
 ->arryFn2 : (x: Array<number>) => void
 +>arryFn2 : (x: number[]) => void
  >b : readonly number[]
- 
+
  arryFn2(c);
  >arryFn2(c) : void
 ->arryFn2 : (x: Array<number>) => void
 +>arryFn2 : (x: number[]) => void
  >c : readonly number[]
- 
+
  const t1: readonly [1] = [1];

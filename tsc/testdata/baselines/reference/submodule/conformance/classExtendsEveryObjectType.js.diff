@@ -2,7 +2,7 @@
 +++ new.classExtendsEveryObjectType.js
 @@= skipped -18, +18 lines =@@
  class C6 extends []{ } // error
- 
+
  //// [classExtendsEveryObjectType.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

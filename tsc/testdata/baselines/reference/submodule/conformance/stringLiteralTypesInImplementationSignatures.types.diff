@@ -2,21 +2,21 @@
 +++ new.stringLiteralTypesInImplementationSignatures.types
 @@= skipped -37, +37 lines =@@
  }
- 
+
  var a: {
 ->a : { (x: "hi"): any; foo(x: "hi"): any; }
 +>a : { (x: "hi"): any; foo: (x: "hi") => any; }
- 
+
      (x: 'hi');
  >x : "hi"
 @@= skipped -11, +11 lines =@@
  }
- 
+
  var b = {
 ->b : { foo(x: "hi"): void; a: (x: "hi", y: "hi") => void; b: (x: "hi") => void; }
 ->{    foo(x: 'hi') { },    a: function foo(x: 'hi', y: 'hi') { },    b: (x: 'hi') => { }} : { foo(x: "hi"): void; a: (x: "hi", y: "hi") => void; b: (x: "hi") => void; }
 +>b : { foo: (x: "hi") => void; a: (x: "hi", y: "hi") => void; b: (x: "hi") => void; }
 +>{    foo(x: 'hi') { },    a: function foo(x: 'hi', y: 'hi') { },    b: (x: 'hi') => { }} : { foo: (x: "hi") => void; a: (x: "hi", y: "hi") => void; b: (x: "hi") => void; }
- 
+
      foo(x: 'hi') { },
  >foo : (x: "hi") => void

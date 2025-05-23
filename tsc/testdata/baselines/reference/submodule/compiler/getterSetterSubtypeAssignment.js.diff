@@ -1,7 +1,7 @@
 --- old.getterSetterSubtypeAssignment.js
 +++ new.getterSetterSubtypeAssignment.js
 @@= skipped -88, +88 lines =@@
- 
+
  //// [getterSetterSubtypeAssignment.js]
  class NumberOrUndefined {
 -    get x() { var _a; return (_a = this._x) !== null && _a !== void 0 ? _a : 0; }

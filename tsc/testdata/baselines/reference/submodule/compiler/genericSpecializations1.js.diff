@@ -2,7 +2,7 @@
 +++ new.genericSpecializations1.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [genericSpecializations1.js]
 -var IntFooBad = /** @class */ (function () {
 -    function IntFooBad() {

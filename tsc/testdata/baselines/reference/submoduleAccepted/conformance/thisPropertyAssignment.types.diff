@@ -1,7 +1,7 @@
 --- old.thisPropertyAssignment.types
 +++ new.thisPropertyAssignment.types
 @@= skipped -9, +9 lines =@@
- 
+
  this.x = {};
  >this.x = {} : {}
 ->this.x : {} | undefined
@@ -10,7 +10,7 @@
 ->x : {} | undefined
 +>x : any
  >{} : {}
- 
+
  this.x.y = {};
  >this.x.y = {} : {}
  >this.x.y : any
@@ -21,7 +21,7 @@
 +>x : any
  >y : any
  >{} : {}
- 
+
  this["y"] = {};
  >this["y"] = {} : {}
 ->this["y"] : {} | undefined
@@ -39,12 +39,12 @@
  >"y" : "y"
  >"z" : "z"
 @@= skipped -8, +8 lines =@@
- 
+
  /** @constructor */
  function F() {
 ->F : typeof F
 +>F : () => void
- 
+
    this.a = {};
  >this.a = {} : {}
  >this.a : any
@@ -52,7 +52,7 @@
 +>this : any
  >a : any
  >{} : {}
- 
+
    this.a.b = {};
  >this.a.b = {} : {}
  >this.a.b : any
@@ -64,7 +64,7 @@
 +>a : any
  >b : any
  >{} : {}
- 
+
    this["b"] = {};
  >this["b"] = {} : {}
  >this["b"] : any
@@ -72,7 +72,7 @@
 +>this : any
  >"b" : "b"
  >{} : {}
- 
+
    this["b"]["c"] = {};
  >this["b"]["c"] = {} : {}
  >this["b"]["c"] : any
@@ -84,7 +84,7 @@
  >"c" : "c"
  >{} : {}
  }
- 
+
  const f = new F();
 ->f : F
 ->new F() : F
@@ -92,7 +92,7 @@
 +>f : any
 +>new F() : any
 +>F : () => void
- 
+
  f.a;
 ->f.a : {}
 ->f : F
@@ -100,7 +100,7 @@
 +>f.a : any
 +>f : any
 +>a : any
- 
+
  f.b;
 ->f.b : {}
 ->f : F
@@ -108,4 +108,3 @@
 +>f.b : any
 +>f : any
 +>b : any
- 

@@ -2,12 +2,12 @@
 +++ new.typeGuardOfFormTypeOfPrimitiveSubtype.types
 @@= skipped -4, +4 lines =@@
  >a : {}
- 
+
  let b: {toString(): string};
 ->b : { toString(): string; }
 +>b : { toString: () => string; }
  >toString : () => string
- 
+
  if (typeof a === "number") {
 @@= skipped -37, +37 lines =@@
  if (typeof b === "number") {
@@ -16,7 +16,7 @@
 ->b : { toString(): string; }
 +>b : { toString: () => string; }
  >"number" : "number"
- 
+
      let c: number = b;
 @@= skipped -10, +10 lines =@@
  if (typeof b === "string") {
@@ -25,7 +25,7 @@
 ->b : { toString(): string; }
 +>b : { toString: () => string; }
  >"string" : "string"
- 
+
      let c: string = b;
 @@= skipped -10, +10 lines =@@
  if (typeof b === "boolean") {
@@ -34,5 +34,5 @@
 ->b : { toString(): string; }
 +>b : { toString: () => string; }
  >"boolean" : "boolean"
- 
+
      let c: boolean = b;

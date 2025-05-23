@@ -2,7 +2,7 @@
 +++ new.implementsInClassExpression.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [implementsInClassExpression.js]
 -var cls = /** @class */ (function () {
 -    function class_1() {

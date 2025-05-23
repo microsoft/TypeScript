@@ -2,7 +2,7 @@
 +++ new.es6ModuleEnumDeclaration.js
 @@= skipped -47, +47 lines =@@
  }
- 
+
  //// [es6ModuleEnumDeclaration.js]
 -export var e1;
 +export { e1 };

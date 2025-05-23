@@ -8,11 +8,11 @@
 ->args : any
 +>f : (...args: any[] | undefined) => any
 +>args : any[] | undefined
- 
+
      return null
  }
 @@= skipped -13, +13 lines =@@
- 
+
  /** @param {function():*=} f */
  function cbf(f) {
 ->cbf : (f?: (() => any) | undefined) => void
@@ -20,4 +20,3 @@
 +>cbf : (f: any) => void
 +>f : any
  }
- 

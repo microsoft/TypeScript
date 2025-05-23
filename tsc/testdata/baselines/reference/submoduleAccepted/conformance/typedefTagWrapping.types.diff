@@ -2,7 +2,7 @@
 +++ new.typedefTagWrapping.types
 @@= skipped -18, +18 lines =@@
  >arg : string
- 
+
    return func(arg);
 ->func(arg) : boolean
 +>func(arg) : any
@@ -11,7 +11,7 @@
  }
 @@= skipped -60, +60 lines =@@
  >num : number
- 
+
    return func(bool, str, num)
 ->func(bool, str, num) : string | number
 +>func(bool, str, num) : any
@@ -20,7 +20,7 @@
  >str : string
 @@= skipped -32, +32 lines =@@
  >num : number
- 
+
    return func(bool, str, num)
 ->func(bool, str, num) : string | number
 +>func(bool, str, num) : any

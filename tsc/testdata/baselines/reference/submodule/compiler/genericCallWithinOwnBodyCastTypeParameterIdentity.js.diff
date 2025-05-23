@@ -1,8 +1,8 @@
 --- old.genericCallWithinOwnBodyCastTypeParameterIdentity.js
 +++ new.genericCallWithinOwnBodyCastTypeParameterIdentity.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [genericCallWithinOwnBodyCastTypeParameterIdentity.js]
 -"use strict";
 -var toThenable = function (fn) {

@@ -5,9 +5,11 @@
  index.js(11,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
  index.js(13,21): error TS7006: Parameter 'ratio' implicitly has an 'any' type.
 -index.js(14,35): error TS2339: Property 'rgb' does not exist on type 'Color'.
- 
- 
+-
+-
 -==== index.js (9 errors) ====
++
++
 +==== index.js (8 errors) ====
      function Color(obj) {
                     ~~~

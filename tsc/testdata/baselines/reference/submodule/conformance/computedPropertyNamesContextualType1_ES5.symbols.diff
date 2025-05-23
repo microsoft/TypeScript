@@ -9,7 +9,7 @@
  >y : Symbol(y, Decl(computedPropertyNamesContextualType1_ES5.ts, 6, 13))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
      ["" + 1]: y => y.length
  >["" + 1] : Symbol(["" + 1], Decl(computedPropertyNamesContextualType1_ES5.ts, 6, 37))
  >y : Symbol(y, Decl(computedPropertyNamesContextualType1_ES5.ts, 7, 13))

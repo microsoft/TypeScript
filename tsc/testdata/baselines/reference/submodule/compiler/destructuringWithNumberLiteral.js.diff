@@ -2,7 +2,7 @@
 +++ new.destructuringWithNumberLiteral.js
 @@= skipped -3, +3 lines =@@
  var { toExponential } = 0;
- 
+
  //// [destructuringWithNumberLiteral.js]
 -var toExponential = 0..toExponential;
 +var { toExponential } = 0;

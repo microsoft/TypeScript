@@ -2,7 +2,7 @@
 +++ new.contextuallyTypeLogicalAnd03.js
 @@= skipped -6, +6 lines =@@
  x = (a => a) && (b => b);
- 
+
  //// [contextuallyTypeLogicalAnd03.js]
 -var x;
 -var y = true;

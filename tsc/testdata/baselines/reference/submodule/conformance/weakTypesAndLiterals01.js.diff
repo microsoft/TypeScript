@@ -1,6 +1,6 @@
 --- old.weakTypesAndLiterals01.js
 +++ new.weakTypesAndLiterals01.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/conformance/types/typeRelationships/comparable/weakTypesAndLiterals01.ts] ////
 -
 -//// [weakTypesAndLiterals01.ts]
@@ -70,5 +70,4 @@
 -declare const g: (arg: WeakTypes) => WeakTypes;
 -declare const h: (arg: LiteralsOrWeakTypes) => LiteralsOrWeakTypes;
 -declare const i: (arg: WeakTypes) => WeakTypes;
-@@= skipped --1, +1 lines =@@
 +<no content>

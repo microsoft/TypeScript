@@ -1,7 +1,7 @@
 --- old.uniqueSymbolAllowsIndexInObjectWithIndexSignature.js
 +++ new.uniqueSymbolAllowsIndexInObjectWithIndexSignature.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [uniqueSymbolAllowsIndexInObjectWithIndexSignature.js]
  "use strict";
 -var _a, _b;

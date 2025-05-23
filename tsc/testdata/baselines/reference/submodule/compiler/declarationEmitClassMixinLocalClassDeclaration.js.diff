@@ -1,7 +1,7 @@
 --- old.declarationEmitClassMixinLocalClassDeclaration.js
 +++ new.declarationEmitClassMixinLocalClassDeclaration.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [declarationEmitClassMixinLocalClassDeclaration.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -51,7 +51,9 @@
 -    }(base));
 -    return XmlElement2;
 -})));
--exports.XmlElement2 = XmlElement2;
++}) {
++}
+ exports.XmlElement2 = XmlElement2;
 -
 -
 -//// [declarationEmitClassMixinLocalClassDeclaration.d.ts]
@@ -60,8 +62,7 @@
 -type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T extends AnyFunction<infer M> ? M : never;
 -export declare const Mixin: MixinHelperFunc;
 -export declare class Base {
-+}) {
- }
+-}
 -declare const XmlElement2_base: {
 -    new (): {
 -        num: number;
@@ -70,4 +71,3 @@
 -export declare class XmlElement2 extends XmlElement2_base {
 -}
 -export {};
-+exports.XmlElement2 = XmlElement2;

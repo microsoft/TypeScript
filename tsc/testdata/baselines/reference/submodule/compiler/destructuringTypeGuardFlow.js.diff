@@ -1,8 +1,8 @@
 --- old.destructuringTypeGuardFlow.js
 +++ new.destructuringTypeGuardFlow.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [destructuringTypeGuardFlow.js]
 -var aFoo = { bar: 3, baz: "b", nested: { a: 1, b: "y" } };
 +const aFoo = { bar: 3, baz: "b", nested: { a: 1, b: "y" } };

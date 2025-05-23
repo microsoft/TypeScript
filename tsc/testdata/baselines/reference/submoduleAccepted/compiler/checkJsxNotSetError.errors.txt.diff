@@ -4,7 +4,7 @@
 -/bar.jsx(1,17): error TS6142: Module '/foo' was resolved to '/foo.jsx', but '--jsx' is not set.
  /bar.jsx(2,11): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
  /foo.jsx(2,5): error TS17004: Cannot use JSX unless the '--jsx' flag is provided.
- 
+
 @@= skipped -10, +9 lines =@@
      );
      export default Foo;

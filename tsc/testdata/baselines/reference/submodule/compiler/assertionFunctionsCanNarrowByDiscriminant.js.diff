@@ -1,8 +1,8 @@
 --- old.assertionFunctionsCanNarrowByDiscriminant.js
 +++ new.assertionFunctionsCanNarrowByDiscriminant.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [assertionFunctionsCanNarrowByDiscriminant.js]
 -"use strict";
 -var animal = { type: 'cat', canMeow: true };

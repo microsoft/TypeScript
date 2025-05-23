@@ -2,7 +2,7 @@
 +++ new.stringEnumLiteralTypes1.js
 @@= skipped -101, +101 lines =@@
  }
- 
+
  //// [stringEnumLiteralTypes1.js]
 +var Choice;
 +(function (Choice) {

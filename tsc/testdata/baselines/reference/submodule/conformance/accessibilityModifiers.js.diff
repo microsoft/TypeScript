@@ -1,7 +1,7 @@
 --- old.accessibilityModifiers.js
 +++ new.accessibilityModifiers.js
 @@= skipped -47, +47 lines =@@
- 
+
  //// [accessibilityModifiers.js]
  // No errors
 -var C = /** @class */ (function () {

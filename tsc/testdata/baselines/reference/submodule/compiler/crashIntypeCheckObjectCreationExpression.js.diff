@@ -1,8 +1,8 @@
 --- old.crashIntypeCheckObjectCreationExpression.js
 +++ new.crashIntypeCheckObjectCreationExpression.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [crashIntypeCheckObjectCreationExpression.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

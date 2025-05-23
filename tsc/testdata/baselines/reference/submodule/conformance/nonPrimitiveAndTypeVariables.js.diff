@@ -1,8 +1,8 @@
 --- old.nonPrimitiveAndTypeVariables.js
 +++ new.nonPrimitiveAndTypeVariables.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [nonPrimitiveAndTypeVariables.js]
 -"use strict";
 -// Repros from #23800

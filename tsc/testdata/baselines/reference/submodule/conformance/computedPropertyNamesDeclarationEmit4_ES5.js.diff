@@ -1,7 +1,7 @@
 --- old.computedPropertyNamesDeclarationEmit4_ES5.js
 +++ new.computedPropertyNamesDeclarationEmit4_ES5.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [computedPropertyNamesDeclarationEmit4_ES5.js]
  var v;
 -

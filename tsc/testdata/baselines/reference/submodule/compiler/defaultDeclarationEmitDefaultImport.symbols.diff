@@ -6,10 +6,10 @@
  >getSomething : Symbol(getSomething, Decl(root.ts, 0, 0))
 ->Something : Symbol(Something, Decl(root.ts, 0, 64))
 +>Something : Symbol(default, Decl(root.ts, 0, 64))
- 
+
  export default class Something {}
 ->Something : Symbol(Something, Decl(root.ts, 0, 64))
 +>Something : Symbol(default, Decl(root.ts, 0, 64))
- 
+
  === main.ts ===
  import Thing, { getSomething } from "./root";

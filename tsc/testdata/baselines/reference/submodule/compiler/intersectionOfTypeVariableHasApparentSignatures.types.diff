@@ -8,20 +8,20 @@
 +>props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
  >children : {} | undefined
  }
- 
+
 @@= skipped -18, +18 lines =@@
  f({
  >f({    props: {        children: (({ x }) => { })    }}) : void
  >f : <T extends Props>(i: Component<T>) => void
 ->{    props: {        children: (({ x }) => { })    }} : { props: { children: ({ x }: { x: number; }) => void; }; }
 +>{    props: {        children: (({ x }) => { })    }} : { props: { children: (__0: { x: number; }) => void; }; }
- 
+
      props: {
 ->props : { children: ({ x }: { x: number; }) => void; }
 ->{        children: (({ x }) => { })    } : { children: ({ x }: { x: number; }) => void; }
 +>props : { children: (__0: { x: number; }) => void; }
 +>{        children: (({ x }) => { })    } : { children: (__0: { x: number; }) => void; }
- 
+
          children: (({ x }) => { })
 ->children : ({ x }: { x: number; }) => void
 ->(({ x }) => { }) : ({ x }: { x: number; }) => void

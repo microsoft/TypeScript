@@ -9,6 +9,6 @@
  >o : Symbol(o, Decl(modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts, 22, 3))
 ->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 +>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
- 
+
  // Using Es6 proxy
  var t = {}

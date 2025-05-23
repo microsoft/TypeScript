@@ -2,6 +2,6 @@
 +++ new.subtypingWithConstructSignaturesWithSpecializedSignatures.js
 @@= skipped -82, +82 lines =@@
  }
- 
+
  //// [subtypingWithConstructSignaturesWithSpecializedSignatures.js]
 -// same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results

@@ -1,7 +1,7 @@
 --- old.checkIndexConstraintOfJavascriptClassExpression.types
 +++ new.checkIndexConstraintOfJavascriptClassExpression.types
 @@= skipped -24, +24 lines =@@
- 
+
              this.foo = "bar";
  >this.foo = "bar" : "bar"
 ->this.foo : any

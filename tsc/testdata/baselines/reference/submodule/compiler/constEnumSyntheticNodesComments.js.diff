@@ -2,7 +2,7 @@
 +++ new.constEnumSyntheticNodesComments.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [constEnumSyntheticNodesComments.js]
 +var En;
 +(function (En) {
@@ -17,15 +17,18 @@
  function verify(a) {
      switch (a) {
 -        case 0 /* En.A */:
-+        case En.A:
-             return assert(a);
+-            return assert(a);
 -        case 1 /* En["B"] */:
-+        case En["B"]:
-             return assert(a);
+-            return assert(a);
 -        case 2 /* En[`C`] */:
-+        case En[`C`]:
-             return assert(a);
+-            return assert(a);
 -        case 3 /* En["\u{44}"] */:
++        case En.A:
++            return assert(a);
++        case En["B"]:
++            return assert(a);
++        case En[`C`]:
++            return assert(a);
 +        case En["\u{44}"]:
              return assert(a);
      }

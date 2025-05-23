@@ -8,4 +8,3 @@
 +>([[a, b]]) => {  console.log(a, b);} : (__0: number[][]) => void
  >a : number
  >b : number
- 

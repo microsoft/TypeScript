@@ -2,7 +2,7 @@
 +++ new.declarationEmitDestructuringArrayPattern1.js
 @@= skipped -10, +10 lines =@@
  var [x3, y3, z3] = a;  // emit x3, y3, z3 
- 
+
  //// [declarationEmitDestructuringArrayPattern1.js]
 -var _a = [1, "hello"]; // Dont emit anything
 -var x = [1, "hello"][0]; // emit x: number

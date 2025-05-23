@@ -1,8 +1,8 @@
 --- old.restArgMissingName.js
 +++ new.restArgMissingName.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [restArgMissingName.js]
 -function sum() {
 -    var  = [];

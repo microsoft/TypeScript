@@ -2,7 +2,7 @@
 +++ new.unusedLocalsinConstructor2.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [unusedLocalsinConstructor2.js]
 -var greeter = /** @class */ (function () {
 -    function greeter() {

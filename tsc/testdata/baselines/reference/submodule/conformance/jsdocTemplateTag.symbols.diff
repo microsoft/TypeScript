@@ -12,4 +12,3 @@
 ->animate : Symbol(Animatable.animate, Decl(lib.dom.d.ts, --, --))
 +>animate : Symbol(animate, Decl(lib.dom.d.ts, --, --))
  >keyframes : Symbol(keyframes, Decl(forgot.js, 22, 37))
- 

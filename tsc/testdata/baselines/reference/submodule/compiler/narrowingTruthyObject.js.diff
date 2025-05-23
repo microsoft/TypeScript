@@ -1,8 +1,8 @@
 --- old.narrowingTruthyObject.js
 +++ new.narrowingTruthyObject.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [narrowingTruthyObject.js]
 -"use strict";
  function foo(x, b) {

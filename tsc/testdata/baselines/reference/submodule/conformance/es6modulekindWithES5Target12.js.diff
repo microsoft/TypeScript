@@ -2,7 +2,7 @@
 +++ new.es6modulekindWithES5Target12.js
 @@= skipped -38, +38 lines =@@
  }
- 
+
  //// [es6modulekindWithES5Target12.js]
 -var C = /** @class */ (function () {
 -    function C() {

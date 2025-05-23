@@ -2,12 +2,12 @@
 +++ new.typeGuardsInConditionalExpression.types
 @@= skipped -8, +8 lines =@@
  // provided the false expression contains no assignments to the variable or parameter.
- 
+
  function foo(x: number | string) {
 ->foo : (x: number | string) => number
 +>foo : (x: string | number) => number
  >x : string | number
- 
+
      return typeof x === "string"
 @@= skipped -20, +20 lines =@@
  >x : number
@@ -16,7 +16,7 @@
 ->foo2 : (x: number | string) => string | number
 +>foo2 : (x: string | number) => string | number
  >x : string | number
- 
+
      return typeof x === "string"
 @@= skipped -23, +23 lines =@@
  >x : number
@@ -25,7 +25,7 @@
 ->foo3 : (x: number | string) => number
 +>foo3 : (x: string | number) => number
  >x : string | number
- 
+
      return typeof x === "string"
 @@= skipped -23, +23 lines =@@
  >x : number
@@ -34,7 +34,7 @@
 ->foo4 : (x: number | string) => string | number
 +>foo4 : (x: string | number) => string | number
  >x : string | number
- 
+
      return typeof x === "string"
 @@= skipped -23, +23 lines =@@
  >x : number
@@ -43,7 +43,7 @@
 ->foo5 : (x: number | string) => string
 +>foo5 : (x: string | number) => string
  >x : string | number
- 
+
      return typeof x === "string"
 @@= skipped -23, +23 lines =@@
  >x : string
@@ -52,7 +52,7 @@
 ->foo6 : (x: number | string) => string | number
 +>foo6 : (x: string | number) => string | number
  >x : string | number
- 
+
      // Modify in both branches
 @@= skipped -30, +30 lines =@@
  >x : string
@@ -61,7 +61,7 @@
 ->foo7 : (x: number | string | boolean) => boolean
 +>foo7 : (x: string | number | boolean) => boolean
  >x : string | number | boolean
- 
+
      return typeof x === "string"
 @@= skipped -31, +31 lines =@@
  >10 : 10
@@ -70,7 +70,7 @@
 ->foo8 : (x: number | string | boolean) => boolean
 +>foo8 : (x: string | number | boolean) => boolean
  >x : string | number | boolean
- 
+
      var b: number | boolean;
 @@= skipped -43, +43 lines =@@
  >10 : 10
@@ -79,7 +79,7 @@
 ->foo9 : (x: number | string) => boolean
 +>foo9 : (x: string | number) => boolean
  >x : string | number
- 
+
      var y = 10;
 @@= skipped -34, +34 lines =@@
  >10 : 10
@@ -88,7 +88,7 @@
 ->foo10 : (x: number | string | boolean) => string
 +>foo10 : (x: string | number | boolean) => string
  >x : string | number | boolean
- 
+
      // Mixing typeguards
 @@= skipped -39, +39 lines =@@
  >toString : (radix?: number) => string
@@ -97,7 +97,7 @@
 ->foo11 : (x: number | string | boolean) => string | number
 +>foo11 : (x: string | number | boolean) => string | number
  >x : string | number | boolean
- 
+
      // Mixing typeguards
 @@= skipped -43, +43 lines =@@
  >x : number
@@ -106,5 +106,5 @@
 ->foo12 : (x: number | string | boolean) => number
 +>foo12 : (x: string | number | boolean) => number
  >x : string | number | boolean
- 
+
      // Mixing typeguards

@@ -1,6 +1,6 @@
 --- old.bundlerConditionsExcludesNode(module=preserve).errors.txt
 +++ new.bundlerConditionsExcludesNode(module=preserve).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS6504: File '/node_modules/conditions/index.node.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
 -  The file is in the program because:
 -    Root file specified for compilation
@@ -45,5 +45,4 @@
 -==== /main.ts (0 errors) ====
 -    import { web } from "conditions";
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

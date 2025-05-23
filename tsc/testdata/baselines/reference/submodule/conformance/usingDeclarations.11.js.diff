@@ -1,8 +1,8 @@
 --- old.usingDeclarations.11.js
 +++ new.usingDeclarations.11.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [usingDeclarations.11.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

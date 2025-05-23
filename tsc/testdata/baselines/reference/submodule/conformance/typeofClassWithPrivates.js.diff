@@ -2,7 +2,7 @@
 +++ new.typeofClassWithPrivates.js
 @@= skipped -12, +12 lines =@@
  var r2: typeof c;
- 
+
  //// [typeofClassWithPrivates.js]
 -var C = /** @class */ (function () {
 -    function C() {

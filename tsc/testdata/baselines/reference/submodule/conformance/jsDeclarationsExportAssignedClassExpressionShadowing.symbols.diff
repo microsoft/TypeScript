@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsExportAssignedClassExpressionShadowing.symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(index.js, 0, 0))
- 
+
      member = new Q();
 ->member : Symbol(A.member, Decl(index.js, 0, 9))
 +>member : Symbol(member, Decl(index.js, 0, 9))
@@ -10,7 +10,7 @@
  }
  class Q {
  >Q : Symbol(Q, Decl(index.js, 2, 1))
- 
+
      x = 42;
 ->x : Symbol(Q.x, Decl(index.js, 3, 9))
 +>x : Symbol(x, Decl(index.js, 3, 9))
@@ -23,7 +23,7 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Q, Decl(index.js, 6, 16))
  >Q : Symbol(Q, Decl(index.js, 6, 16))
- 
+
      constructor() {
          this.x = new A();
 ->this.x : Symbol(Q.x, Decl(index.js, 7, 19))
@@ -44,4 +44,3 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Q, Decl(index.js, 6, 16))
  >Q : Symbol(Q, Decl(index.js, 2, 1))
- 

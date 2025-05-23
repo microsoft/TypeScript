@@ -2,7 +2,7 @@
 +++ new.objectLiteralComputedNameNoDeclarationError.symbols
 @@= skipped -11, +11 lines =@@
  >Baa : Symbol(Baa, Decl(objectLiteralComputedNameNoDeclarationError.ts, 4, 12))
- 
+
      [Foo.BANANA]: 1
 ->[Foo.BANANA] : Symbol([Foo.BANANA], Decl(objectLiteralComputedNameNoDeclarationError.ts, 4, 20))
 +>[Foo.BANANA] : Symbol(banana, Decl(objectLiteralComputedNameNoDeclarationError.ts, 4, 20))

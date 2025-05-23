@@ -1,8 +1,8 @@
 --- old.readonlyArraysAndTuples.js
 +++ new.readonlyArraysAndTuples.js
 @@= skipped -39, +39 lines =@@
- 
- 
+
+
  //// [readonlyArraysAndTuples.js]
 -"use strict";
  function f1(ma, ra, mt, rt) {

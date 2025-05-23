@@ -1,8 +1,8 @@
 --- old.intraExpressionInferences.js
 +++ new.intraExpressionInferences.js
 @@= skipped -333, +333 lines =@@
- 
- 
+
+
  //// [intraExpressionInferences.js]
 -"use strict";
 -// Repros from #47599
@@ -17,20 +17,25 @@
 -    };
 -    return __assign.apply(this, arguments);
 -};
- callIt({
+-callIt({
 -    produce: function () { return 0; },
 -    consume: function (n) { return n.toFixed(); }
-+    produce: () => 0,
-+    consume: n => n.toFixed()
- });
- callIt({
+-});
+-callIt({
 -    produce: function (_a) { return 0; },
 -    consume: function (n) { return n.toFixed(); },
+-});
+-callIt({
+-    produce: function () {
++callIt({
++    produce: () => 0,
++    consume: n => n.toFixed()
++});
++callIt({
 +    produce: _a => 0,
 +    consume: n => n.toFixed(),
- });
- callIt({
--    produce: function () {
++});
++callIt({
 +    produce() {
          return 0;
      },
@@ -58,22 +63,29 @@
 +        foo() { }
      },
 -    action: function (a) { a.foo(); }
-+    action: (a) => { a.foo(); }
- });
- foo({
+-});
+-foo({
 -    a: function () { return 42; },
 -    b: function (a) { },
+-});
+-foo({
+-    a: function () { return 42; },
+-    b: function (a) { },
+-});
+-foo({
+-    a: function () { return 42; },
+-    b: function (a) { },
++    action: (a) => { a.foo(); }
++});
++foo({
 +    a: () => { return 42; },
 +    b(a) { },
- });
- foo({
-     a: function () { return 42; },
--    b: function (a) { },
++});
++foo({
++    a: function () { return 42; },
 +    b(a) { },
- });
- foo({
--    a: function () { return 42; },
--    b: function (a) { },
++});
++foo({
 +    a() { return 42; },
 +    b(a) { },
  });
@@ -145,18 +157,22 @@
  example({
 -    fetch: function (params) { return 123; },
 -    map: function (number) { return String(number); }
+-});
+-example({
+-    fetch: function (params, foo) { return 123; },
+-    map: function (number) { return String(number); }
+-});
+-example({
+-    fetch: function (params, foo) { return 123; },
+-    map: function (number) { return String(number); }
 +    fetch: (params) => 123,
 +    map: (number) => String(number)
- });
- example({
--    fetch: function (params, foo) { return 123; },
--    map: function (number) { return String(number); }
++});
++example({
 +    fetch: (params, foo) => 123,
 +    map: (number) => String(number)
- });
- example({
--    fetch: function (params, foo) { return 123; },
--    map: function (number) { return String(number); }
++});
++example({
 +    fetch: (params, foo) => 123,
 +    map: (number) => String(number)
  });
@@ -188,68 +204,83 @@
      prop: {
 -        produce: function (a) { return [a]; },
 -        consume: function (arg) { return arg.join(","); },
-+        produce: (a) => [a],
-+        consume: (arg) => arg.join(","),
-     },
- });
+-    },
+-});
 -var resTwoConsumers = twoConsumers({
 -    a: function (arg) { return [arg]; },
 -    consume1: function (arg1) { },
 -    consume2: function (arg2) { },
-+const resTwoConsumers = twoConsumers({
-+    a: (arg) => [arg],
-+    consume1: (arg1) => { },
-+    consume2: (arg2) => { },
- });
+-});
 -var resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 -    a: function (arg) { return [arg]; },
 -    b: function (arg) { return Number(arg); },
 -    consume1: function (arg1) { },
 -    consume2: function (arg2) { },
+-});
+-var resWithConditionalExpression = withConditionalExpression({
+-    a: function (arg) { return [arg]; },
+-    b: Math.random() ? function (arg) { return "first"; } : function (arg) { return "two"; },
+-    c: function (arg) { return Boolean(arg); },
+-});
+-var resOnion = onion({
+-    a: function (arg) { return [arg]; },
+-    nested: {
+-        b: function (arg) { return arg.join(","); },
+-        nested2: {
+-            c: function (arg) { return Boolean(arg); },
+-        },
+-    },
+-});
+-var resOnion2 = onion2({
+-    a: function (arg) { return [arg]; },
+-    nested: {
+-        b: function (arg) { return arg.join(","); },
+-        c: function (arg) { return Number(arg); },
+-        nested2: {
+-            d: function (arg) { return Boolean(arg); },
+-        },
+-    },
+-});
+-var distantRes = distant({
++        produce: (a) => [a],
++        consume: (arg) => arg.join(","),
++    },
++});
++const resTwoConsumers = twoConsumers({
++    a: (arg) => [arg],
++    consume1: (arg1) => { },
++    consume2: (arg2) => { },
++});
 +const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 +    a: (arg) => [arg],
 +    b: (arg) => Number(arg),
 +    consume1: (arg1) => { },
 +    consume2: (arg2) => { },
- });
--var resWithConditionalExpression = withConditionalExpression({
--    a: function (arg) { return [arg]; },
--    b: Math.random() ? function (arg) { return "first"; } : function (arg) { return "two"; },
--    c: function (arg) { return Boolean(arg); },
++});
 +const resWithConditionalExpression = withConditionalExpression({
 +    a: (arg) => [arg],
 +    b: Math.random() ? (arg) => "first" : (arg) => "two",
 +    c: (arg) => Boolean(arg),
- });
--var resOnion = onion({
--    a: function (arg) { return [arg]; },
++});
 +const resOnion = onion({
 +    a: (arg) => [arg],
-     nested: {
--        b: function (arg) { return arg.join(","); },
++    nested: {
 +        b: (arg) => arg.join(","),
-         nested2: {
--            c: function (arg) { return Boolean(arg); },
++        nested2: {
 +            c: (arg) => Boolean(arg),
-         },
-     },
- });
--var resOnion2 = onion2({
--    a: function (arg) { return [arg]; },
++        },
++    },
++});
 +const resOnion2 = onion2({
 +    a: (arg) => [arg],
-     nested: {
--        b: function (arg) { return arg.join(","); },
--        c: function (arg) { return Number(arg); },
++    nested: {
 +        b: (arg) => arg.join(","),
 +        c: (arg) => Number(arg),
-         nested2: {
--            d: function (arg) { return Boolean(arg); },
++        nested2: {
 +            d: (arg) => Boolean(arg),
-         },
-     },
- });
--var distantRes = distant({
++        },
++    },
++});
 +const distantRes = distant({
      foo: {
          bar: {

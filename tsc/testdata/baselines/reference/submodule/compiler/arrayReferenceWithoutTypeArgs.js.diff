@@ -2,7 +2,7 @@
 +++ new.arrayReferenceWithoutTypeArgs.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [arrayReferenceWithoutTypeArgs.js]
 -var X = /** @class */ (function () {
 -    function X() {

@@ -12,5 +12,5 @@
 ->c : Symbol(b.c, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 1, 21))
 +>c : Symbol(c, Decl(internalAliasInitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 1, 21))
  }
- 
+
  export var d = new c.b.c();

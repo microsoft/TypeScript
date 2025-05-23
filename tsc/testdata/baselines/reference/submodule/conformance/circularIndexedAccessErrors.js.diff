@@ -1,8 +1,8 @@
 --- old.circularIndexedAccessErrors.js
 +++ new.circularIndexedAccessErrors.js
 @@= skipped -41, +41 lines =@@
- 
- 
+
+
  //// [circularIndexedAccessErrors.js]
 -var x2x = x2.x;
 -var C1 = /** @class */ (function () {
@@ -15,10 +15,16 @@
 -    }
 -    return C2;
 -}());
--function foo() {
 +let x2x = x2.x;
 +class C1 {
 +    x; // Error
++}
++class C2 {
++    x;
++    y;
++    z;
++}
+ function foo() {
  }
 -
 -
@@ -34,15 +40,10 @@
 -declare let x2x: any;
 -interface T3<T extends T3<T>> {
 -    x: T["x"];
-+class C2 {
-+    x;
-+    y;
-+    z;
- }
+-}
 -interface T4<T extends T4<T>> {
 -    x: T4<T>["x"];
-+function foo() {
- }
+-}
 -declare class C1 {
 -    x: C1["x"];
 -}

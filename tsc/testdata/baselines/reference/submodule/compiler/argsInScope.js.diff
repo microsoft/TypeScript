@@ -1,8 +1,8 @@
 --- old.argsInScope.js
 +++ new.argsInScope.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [argsInScope.js]
 -var C = /** @class */ (function () {
 -    function C() {

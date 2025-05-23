@@ -2,7 +2,7 @@
 +++ new.mergedInterfacesWithIndexers.js
 @@= skipped -17, +17 lines =@@
  var r3 = a['hi'];
- 
+
  //// [mergedInterfacesWithIndexers.js]
 -// indexers should behave like other members when merging interface declarations
  var a;

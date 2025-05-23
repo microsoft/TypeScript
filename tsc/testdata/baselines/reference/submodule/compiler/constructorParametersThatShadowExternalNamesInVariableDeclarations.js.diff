@@ -1,7 +1,7 @@
 --- old.constructorParametersThatShadowExternalNamesInVariableDeclarations.js
 +++ new.constructorParametersThatShadowExternalNamesInVariableDeclarations.js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [constructorParametersThatShadowExternalNamesInVariableDeclarations.js]
  var x = 1;
 -var A = /** @class */ (function () {

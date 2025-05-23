@@ -1,7 +1,7 @@
 --- old.contextualReturnTypeOfIIFE3.js
 +++ new.contextualReturnTypeOfIIFE3.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [contextualReturnTypeOfIIFE3.js]
  app.foo.bar = (function () {
 -    return { someFun: function (arg) { } };

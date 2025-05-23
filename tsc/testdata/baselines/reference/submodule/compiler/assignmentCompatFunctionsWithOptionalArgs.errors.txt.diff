@@ -6,8 +6,8 @@
 -assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
 -  Property 'id' is missing in type '{ name: string; }' but required in type '{ id: number; name?: string; }'.
 +assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS2741: Property 'id' is missing in type '{ name: string; }' but required in type '{ id: number; name?: string; }'.
- 
- 
+
+
  ==== assignmentCompatFunctionsWithOptionalArgs.ts (3 errors) ====
 @@= skipped -15, +14 lines =@@
  !!! related TS6500 assignmentCompatFunctionsWithOptionalArgs.ts:1:31: The expected type comes from property 'name' which is declared here on type '{ id: number; name?: string; }'

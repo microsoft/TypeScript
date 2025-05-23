@@ -2,7 +2,7 @@
 +++ new.noEmitHelpers2.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [noEmitHelpers2.js]
 -var A = /** @class */ (function () {
 -    function A(a, b) {

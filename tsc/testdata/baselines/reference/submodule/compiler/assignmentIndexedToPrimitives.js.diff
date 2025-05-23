@@ -1,8 +1,8 @@
 --- old.assignmentIndexedToPrimitives.js
 +++ new.assignmentIndexedToPrimitives.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [assignmentIndexedToPrimitives.js]
 -var n1 = [0];
 -var n2 = ["0"];

@@ -1,8 +1,8 @@
 --- old.ambientShorthand_declarationEmit.js
 +++ new.ambientShorthand_declarationEmit.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [ambientShorthand_declarationEmit.js]
 -
 -

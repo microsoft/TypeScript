@@ -13,8 +13,8 @@
  instantiationExpressions.ts(82,16): error TS2635: Type '{ x: string; } & { y: string; }' has no signatures for which the type argument list is applicable.
 @@= skipped -17, +15 lines =@@
    Type 'number' is not assignable to type 'string'.
- 
- 
+
+
 -==== instantiationExpressions.ts (16 errors) ====
 +==== instantiationExpressions.ts (14 errors) ====
      declare function fx<T>(x: T): T;

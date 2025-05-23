@@ -2,7 +2,7 @@
 +++ new.generatorTypeCheck59.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [generatorTypeCheck59.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

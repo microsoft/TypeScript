@@ -1,13 +1,13 @@
 --- old.templateLiteralTypes4.types
 +++ new.templateLiteralTypes4.types
 @@= skipped -479, +479 lines =@@
- 
+
      // get/set a field by index
      getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
 ->getIndex : <I extends IndicesOf<TDef>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
 +>getIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
  >index : I
- 
+
      setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
 ->setIndex : <I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
 +>setIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void

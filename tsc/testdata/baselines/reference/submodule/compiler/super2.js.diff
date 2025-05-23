@@ -1,8 +1,8 @@
 --- old.super2.js
 +++ new.super2.js
 @@= skipped -52, +52 lines =@@
- 
- 
+
+
  //// [super2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -52,7 +52,7 @@
 -    __extends(SubSub5, _super);
 -    function SubSub5() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    SubSub5.prototype.x = function () {
 -        return _super.prototype.x.call(this);
 -    };
@@ -61,20 +61,21 @@
 -    };
 -    return SubSub5;
 -}(Sub5));
--// Case 6
--var Base6 = /** @class */ (function () {
--    function Base6() {
++    }
 +}
 +class SubSub5 extends Sub5 {
 +    x() {
 +        return super.x();
-     }
--    Base6.prototype.x = function () {
++    }
 +    y() {
 +        return super.y();
 +    }
 +}
-+// Case 6
+ // Case 6
+-var Base6 = /** @class */ (function () {
+-    function Base6() {
+-    }
+-    Base6.prototype.x = function () {
 +class Base6 {
 +    x() {
          return "BaseX";
@@ -98,12 +99,13 @@
 -    __extends(SubSub6, _super);
 -    function SubSub6() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    SubSub6.prototype.y = function () {
 -        return _super.prototype.y.call(this);
 -    };
 -    return SubSub6;
 -}(Sub6));
++    }
 +}
 +class SubSub6 extends Sub6 {
 +    y() {

@@ -45,8 +45,8 @@
  extendedEscapesForAstralsInVarsAndClasses.ts(24,3): error TS1434: Unexpected keyword or identifier.
  extendedEscapesForAstralsInVarsAndClasses.ts(24,8): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
  extendedEscapesForAstralsInVarsAndClasses.ts(24,12): error TS1128: Declaration or statement expected.
- 
- 
+
+
 -!!! error TS-1: Pre-emit (44) and post-emit (45) diagnostic counts do not match! This can indicate that a semantic _error_ was added by the emit resolver - such an error may not be reflected on the command line or in the editor, but may be captured in a baseline here!
 -!!! related TS-1: The excess diagnostics are:
 -!!! related TS2532 extendedEscapesForAstralsInVarsAndClasses.ts:18:16: Object is possibly 'undefined'.
@@ -147,24 +147,27 @@
  ==== astralAsSurrogatePair.ts (6 errors) ====
      import { _𐊧 as \uD800\uDEA7 } from "./extendedEscapesForAstralsInVarsAndClasses.js";
 -              ~~
-+              ~
- !!! error TS1127: Invalid character.
+-!!! error TS1127: Invalid character.
 -                 ~~
 -!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'as'.
 -                    
-+                ~~
-+!!! error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'as'.
-+                   ~
- !!! error TS1127: Invalid character.
+-!!! error TS1127: Invalid character.
 -                     ~~~~~
 -!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
 -                          
+-!!! error TS1127: Invalid character.
+-                           ~~~~~
+-!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
++              ~
++!!! error TS1127: Invalid character.
++                ~~
++!!! error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'as'.
++                   ~
++!!! error TS1127: Invalid character.
 +                    ~~~~~
 +!!! error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'uD800'.
 +                         ~
- !!! error TS1127: Invalid character.
--                           ~~~~~
--!!! error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
++!!! error TS1127: Invalid character.
 +                          ~~~~~
 +!!! error TS2305: Module '"extendedEscapesForAstralsInVarsAndClasses"' has no exported member 'uDEA7'.
      

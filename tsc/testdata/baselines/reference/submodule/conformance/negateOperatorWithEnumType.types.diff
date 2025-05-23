@@ -6,7 +6,7 @@
  >B : ENUM1.B
 ->"" : (typeof ENUM1)[""]
 +>"" : ENUM1.""
- 
+
  // enum type var
  var ResultIsNumber1 = -ENUM;
 @@= skipped -24, +24 lines =@@
@@ -17,4 +17,3 @@
 +>ENUM1[""] : ENUM1.""
  >ENUM1 : typeof ENUM1
  >"" : ""
- 

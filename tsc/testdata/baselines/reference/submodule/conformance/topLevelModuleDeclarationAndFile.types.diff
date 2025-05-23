@@ -6,7 +6,7 @@
  import foo = require("vs/foo_0");
 ->foo : typeof foo
 +>foo : typeof import("vs/foo_0")
- 
+
  var z1 = foo.x + 10;   // Should error, as declaration should win
  >z1 : any
  >foo.x + 10 : any
@@ -15,7 +15,7 @@
 +>foo : typeof import("vs/foo_0")
  >x : any
  >10 : 10
- 
+
 @@= skipped -15, +15 lines =@@
  >foo.y() + 10 : number
  >foo.y() : number
@@ -24,4 +24,3 @@
 +>foo : typeof import("vs/foo_0")
  >y : () => number
  >10 : 10
- 

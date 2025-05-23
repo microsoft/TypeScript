@@ -1,6 +1,6 @@
 --- old.moduleResolutionWithoutExtension3.errors.txt
 +++ new.moduleResolutionWithoutExtension3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/src/bar.mts(2,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './foo.jsx'?
 -
 -
@@ -15,5 +15,4 @@
 -                        ~~~~~~~
 -!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './foo.jsx'?
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

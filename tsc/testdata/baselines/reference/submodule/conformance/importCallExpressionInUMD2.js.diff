@@ -2,7 +2,7 @@
 +++ new.importCallExpressionInUMD2.js
 @@= skipped -16, +16 lines =@@
  foo(import("./0"));
- 
+
  //// [0.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

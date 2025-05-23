@@ -1,8 +1,8 @@
 --- old.super_inside-object-literal-getters-and-setters.js
 +++ new.super_inside-object-literal-getters-and-setters.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [super_inside-object-literal-getters-and-setters.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

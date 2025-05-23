@@ -1,7 +1,7 @@
 --- old.infinitelyExpandingTypes4.symbols
 +++ new.infinitelyExpandingTypes4.symbols
 @@= skipped -6, +6 lines =@@
- 
+
      // ...
      groupBy<K>(keySelector: (item: T) => K): Query<Grouping<K, T>>;
 ->groupBy : Symbol(Query.groupBy, Decl(infinitelyExpandingTypes4.ts, 0, 20))
@@ -10,7 +10,7 @@
  >keySelector : Symbol(keySelector, Decl(infinitelyExpandingTypes4.ts, 2, 15))
  >item : Symbol(item, Decl(infinitelyExpandingTypes4.ts, 2, 29))
 @@= skipped -20, +20 lines =@@
- 
+
      // ...
      groupBy<K>(keySelector: (item: T) => K): QueryEnumerator<Grouping<K, T>>;
 ->groupBy : Symbol(QueryEnumerator.groupBy, Decl(infinitelyExpandingTypes4.ts, 6, 30))
@@ -20,10 +20,9 @@
  >item : Symbol(item, Decl(infinitelyExpandingTypes4.ts, 8, 29))
 @@= skipped -22, +22 lines =@@
  >T : Symbol(T, Decl(infinitelyExpandingTypes4.ts, 12, 21))
- 
+
      key(): K;
 ->key : Symbol(Grouping.key, Decl(infinitelyExpandingTypes4.ts, 12, 43))
 +>key : Symbol(key, Decl(infinitelyExpandingTypes4.ts, 12, 43))
  >K : Symbol(K, Decl(infinitelyExpandingTypes4.ts, 12, 19))
  }
- 

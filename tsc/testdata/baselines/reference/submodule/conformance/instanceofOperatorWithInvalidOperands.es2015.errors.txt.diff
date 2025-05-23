@@ -8,8 +8,8 @@
 -    Property 'x' is missing in type '{ y: string; }' but required in type '{ x: number; }'.
 +  Property 'x' is missing in type '{ y: string; }' but required in type '{ x: number; }'.
  instanceofOperatorWithInvalidOperands.es2015.ts(55,25): error TS2861: An object's '[Symbol.hasInstance]' method must return a boolean value for it to be used on the right-hand side of an 'instanceof' expression.
- 
- 
+
+
 @@= skipped -101, +100 lines =@@
      var ra10 = o5 instanceof o4;
                 ~~

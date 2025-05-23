@@ -2,10 +2,9 @@
 +++ new.invalidInstantiatedModule.types
 @@= skipped -30, +30 lines =@@
  >M2 : typeof M2
- 
+
  var p: m.Point; // Error
 ->p : m.Point
 +>p : Point
  >m : any
- 
- 
+

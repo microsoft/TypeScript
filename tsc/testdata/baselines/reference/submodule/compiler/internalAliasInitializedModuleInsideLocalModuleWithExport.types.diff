@@ -2,7 +2,7 @@
 +++ new.internalAliasInitializedModuleInsideLocalModuleWithExport.types
 @@= skipped -21, +21 lines =@@
  >b : typeof b
- 
+
      export var x: b.c = new b.c();
 ->x : b.c
 +>x : c

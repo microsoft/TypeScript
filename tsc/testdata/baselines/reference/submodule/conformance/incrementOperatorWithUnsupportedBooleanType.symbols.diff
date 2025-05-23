@@ -2,11 +2,11 @@
 +++ new.incrementOperatorWithUnsupportedBooleanType.symbols
 @@= skipped -11, +11 lines =@@
  >A : Symbol(A, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 3, 40))
- 
+
      public a: boolean;
 ->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
- 
+
      static foo() { return true; }
 ->foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
 +>foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
@@ -22,7 +22,7 @@
  >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 13, 3))
 ->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
- 
+
  var ResultIsNumber10 = ++M.n;
  >ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 31, 3))
 ->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
@@ -30,11 +30,11 @@
  >M : Symbol(M, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 8, 1))
 ->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
- 
+
  var ResultIsNumber11 = ++foo();
  >ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 32, 3))
 @@= skipped -16, +16 lines =@@
- 
+
  var ResultIsNumber12 = ++A.foo();
  >ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 33, 3))
 ->A.foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
@@ -42,11 +42,11 @@
  >A : Symbol(A, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 3, 40))
 ->foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
 +>foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
- 
+
  var ResultIsNumber13 = foo()++;
  >ResultIsNumber13 : Symbol(ResultIsNumber13, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 35, 3))
 @@= skipped -10, +10 lines =@@
- 
+
  var ResultIsNumber14 = A.foo()++;
  >ResultIsNumber14 : Symbol(ResultIsNumber14, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 36, 3))
 ->A.foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
@@ -54,7 +54,7 @@
  >A : Symbol(A, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 3, 40))
 ->foo : Symbol(A.foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
 +>foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 6, 22))
- 
+
  var ResultIsNumber15 = objA.a++;
  >ResultIsNumber15 : Symbol(ResultIsNumber15, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 37, 3))
 ->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
@@ -62,7 +62,7 @@
  >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 13, 3))
 ->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
- 
+
  var ResultIsNumber16 = M.n++;
  >ResultIsNumber16 : Symbol(ResultIsNumber16, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 38, 3))
 ->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
@@ -70,26 +70,26 @@
  >M : Symbol(M, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 8, 1))
 ->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
- 
+
  // miss assignment operators
  ++true;
 @@= skipped -25, +25 lines =@@
  >foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 1, 21))
- 
+
  ++objA.a;
 ->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
  >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 13, 3))
 ->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
- 
+
  ++M.n;
 ->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
  >M : Symbol(M, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 8, 1))
 ->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
- 
+
  ++objA.a, M.n;
 ->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
@@ -101,26 +101,26 @@
  >M : Symbol(M, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 8, 1))
 ->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
- 
+
  true++;
  BOOLEAN++;
 @@= skipped -25, +25 lines =@@
  >foo : Symbol(foo, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 1, 21))
- 
+
  objA.a++;
 ->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
  >objA : Symbol(objA, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 13, 3))
 ->a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
- 
+
  M.n++;
 ->M.n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>M.n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
  >M : Symbol(M, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 8, 1))
 ->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
- 
+
  objA.a++, M.n++;
 ->objA.a : Symbol(A.a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
 +>objA.a : Symbol(a, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 5, 9))
@@ -132,4 +132,3 @@
  >M : Symbol(M, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 8, 1))
 ->n : Symbol(M.n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
 +>n : Symbol(n, Decl(incrementOperatorWithUnsupportedBooleanType.ts, 10, 14))
- 

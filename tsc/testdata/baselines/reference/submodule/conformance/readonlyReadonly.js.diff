@@ -2,7 +2,7 @@
 +++ new.readonlyReadonly.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [readonlyReadonly.js]
 -var C = /** @class */ (function () {
 -    function C(y) {

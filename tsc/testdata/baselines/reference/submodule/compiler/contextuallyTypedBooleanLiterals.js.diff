@@ -1,8 +1,8 @@
 --- old.contextuallyTypedBooleanLiterals.js
 +++ new.contextuallyTypedBooleanLiterals.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [contextuallyTypedBooleanLiterals.js]
 -"use strict";
 -// Repro from #48363

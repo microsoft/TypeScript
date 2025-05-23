@@ -1,6 +1,6 @@
 --- old.unicodeExtendedEscapesInRegularExpressions17(target=es6).errors.txt
 +++ new.unicodeExtendedEscapesInRegularExpressions17(target=es6).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -unicodeExtendedEscapesInRegularExpressions17.ts(1,13): error TS1125: Hexadecimal digit expected.
 -unicodeExtendedEscapesInRegularExpressions17.ts(1,14): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
 -unicodeExtendedEscapesInRegularExpressions17.ts(1,18): error TS1125: Hexadecimal digit expected.
@@ -24,5 +24,4 @@
 -                           ~
 -!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

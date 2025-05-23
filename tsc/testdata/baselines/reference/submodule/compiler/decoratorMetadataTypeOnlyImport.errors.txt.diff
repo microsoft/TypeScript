@@ -2,8 +2,8 @@
 +++ new.decoratorMetadataTypeOnlyImport.errors.txt
 @@= skipped -0, +0 lines =@@
  a.ts(1,22): error TS2307: Cannot find module 'unknown-module' or its corresponding type declarations.
- 
- 
+
+
 -==== ./a.ts (1 errors) ====
 +==== a.ts (1 errors) ====
      import { List } from 'unknown-module';

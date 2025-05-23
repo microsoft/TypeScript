@@ -1,7 +1,7 @@
 --- old.classWithOptionalParameter.js
 +++ new.classWithOptionalParameter.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [classWithOptionalParameter.js]
  // classes do not permit optional parameters, these are errors
 -var C = /** @class */ (function () {

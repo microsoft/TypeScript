@@ -2,7 +2,7 @@
 +++ new.superCallInsideClassExpression.js
 @@= skipped -18, +18 lines =@@
  }
- 
+
  //// [superCallInsideClassExpression.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

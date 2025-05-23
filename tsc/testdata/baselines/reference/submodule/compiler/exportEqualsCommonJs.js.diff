@@ -1,7 +1,7 @@
 --- old.exportEqualsCommonJs.js
 +++ new.exportEqualsCommonJs.js
 @@= skipped -4, +4 lines =@@
- 
+
  //// [exportEqualsCommonJs.js]
  "use strict";
 -var _a;

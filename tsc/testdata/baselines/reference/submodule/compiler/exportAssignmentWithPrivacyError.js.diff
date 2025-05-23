@@ -1,8 +1,8 @@
 --- old.exportAssignmentWithPrivacyError.js
 +++ new.exportAssignmentWithPrivacyError.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [exportAssignmentWithPrivacyError.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

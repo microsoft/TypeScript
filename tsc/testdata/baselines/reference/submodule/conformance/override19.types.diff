@@ -2,13 +2,13 @@
 +++ new.override19.types
 @@= skipped -5, +5 lines =@@
  >args : any
- 
+
  declare function CreateMixin<C extends Foo, T extends Foo>(Context: C, Base: T): T & {
 ->CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & { new (...args: any[]): { context: InstanceType<C>; }; }
 +>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
  >Context : C
  >Base : T
- 
+
 @@= skipped -21, +21 lines =@@
  class B extends CreateMixin(Context, A) {
  >B : B
@@ -17,7 +17,7 @@
 +>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
  >Context : typeof Context
  >A : typeof A
- 
+
 @@= skipped -11, +11 lines =@@
  class C extends CreateMixin(Context, A) {
  >C : C
@@ -26,4 +26,3 @@
 +>CreateMixin : <C extends Foo, T extends Foo>(Context: C, Base: T) => T & (new (...args: any[]) => { context: InstanceType<C>; })
  >Context : typeof Context
  >A : typeof A
- 

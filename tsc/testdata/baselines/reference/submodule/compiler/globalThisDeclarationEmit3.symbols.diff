@@ -6,6 +6,6 @@
  >mod : Symbol(mod, Decl(variable.ts, 0, 0))
 ->globalThis : Symbol(mod)
 +>globalThis : Symbol(globalThis)
- 
+
  export { mod as variable };
  >mod : Symbol(mod, Decl(variable.ts, 0, 0))

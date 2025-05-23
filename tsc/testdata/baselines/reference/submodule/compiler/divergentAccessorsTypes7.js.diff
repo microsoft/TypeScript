@@ -1,8 +1,8 @@
 --- old.divergentAccessorsTypes7.js
 +++ new.divergentAccessorsTypes7.js
 @@= skipped -27, +27 lines =@@
- 
- 
+
+
  //// [divergentAccessorsTypes7.js]
 -var Test = /** @class */ (function () {
 -    function Test() {

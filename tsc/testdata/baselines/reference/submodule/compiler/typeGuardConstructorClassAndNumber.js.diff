@@ -1,7 +1,7 @@
 --- old.typeGuardConstructorClassAndNumber.js
 +++ new.typeGuardConstructorClassAndNumber.js
 @@= skipped -133, +133 lines =@@
- 
+
  //// [typeGuardConstructorClassAndNumber.js]
  // Typical case
 -var C1 = /** @class */ (function () {

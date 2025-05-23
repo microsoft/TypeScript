@@ -1,7 +1,7 @@
 --- old.jsFileCompilationBindMultipleDefaultExports.types
 +++ new.jsFileCompilationBindMultipleDefaultExports.types
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  export default class a {
 ->a : a

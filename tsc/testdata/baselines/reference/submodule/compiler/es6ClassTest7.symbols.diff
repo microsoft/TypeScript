@@ -1,7 +1,7 @@
 --- old.es6ClassTest7.symbols
 +++ new.es6ClassTest7.symbols
 @@= skipped -10, +10 lines =@@
- 
+
  class Bar extends M.Foo {
  >Bar : Symbol(Bar, Decl(es6ClassTest7.ts, 3, 1))
 ->M.Foo : Symbol(M.Foo, Decl(es6ClassTest7.ts, 0, 18))
@@ -10,4 +10,3 @@
 ->Foo : Symbol(M.Foo, Decl(es6ClassTest7.ts, 0, 18))
 +>Foo : Symbol(Foo, Decl(es6ClassTest7.ts, 0, 18))
  }
- 

@@ -2,14 +2,14 @@
 +++ new.correctlyMarkAliasAsReferences3.types
 @@= skipped -5, +5 lines =@@
  >cx : any
- 
+
  import * as React from "react";
 ->React : typeof React
 +>React : typeof __React
- 
+
  let buttonProps;
  >buttonProps : any
- 
+
  let k = <button {...buttonProps}>
 ->k : JSX.Element
 -><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : JSX.Element
@@ -17,7 +17,7 @@
 +><button {...buttonProps}>            <span className={cx('class1', { class2: true })} />        </button> : Element
  >button : any
  >buttonProps : undefined
- 
+
              <span className={cx('class1', { class2: true })} />
 -><span className={cx('class1', { class2: true })} /> : JSX.Element
 +><span className={cx('class1', { class2: true })} /> : Element

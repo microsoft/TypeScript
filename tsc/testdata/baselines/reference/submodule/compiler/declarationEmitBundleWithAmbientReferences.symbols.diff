@@ -6,6 +6,6 @@
  >DatastoreResult : Symbol(DatastoreResult, Decl(conditional_directive_field.ts, 0, 6))
 ->T : Symbol(DatastoreResult.T, Decl(datastore_result.ts, 0, 36))
 +>T : Symbol(T)
- 
+
  	return null;
  };

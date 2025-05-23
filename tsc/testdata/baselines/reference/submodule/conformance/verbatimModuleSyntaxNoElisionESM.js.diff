@@ -1,8 +1,8 @@
 --- old.verbatimModuleSyntaxNoElisionESM.js
 +++ new.verbatimModuleSyntaxNoElisionESM.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [a.js]
 -export var a = 0;
 -var AClass = /** @class */ (function () {

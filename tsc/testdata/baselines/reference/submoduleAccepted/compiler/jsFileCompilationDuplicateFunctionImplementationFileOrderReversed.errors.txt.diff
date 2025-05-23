@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
  a.ts(1,10): error TS2393: Duplicate function implementation.
 +b.js(1,10): error TS2393: Duplicate function implementation.
- 
- 
+
+
  ==== a.ts (1 errors) ====
 @@= skipped -7, +8 lines =@@
          return 30;

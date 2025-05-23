@@ -2,15 +2,15 @@
 +++ new.thisTypeAndConstraints.symbols
 @@= skipped -4, +4 lines =@@
  >A : Symbol(A, Decl(thisTypeAndConstraints.ts, 0, 0))
- 
+
      self() {
 ->self : Symbol(A.self, Decl(thisTypeAndConstraints.ts, 0, 9))
 +>self : Symbol(self, Decl(thisTypeAndConstraints.ts, 0, 9))
- 
+
          return this;
  >this : Symbol(A, Decl(thisTypeAndConstraints.ts, 0, 0))
 @@= skipped -23, +23 lines =@@
- 
+
          x = x.self();
  >x : Symbol(x, Decl(thisTypeAndConstraints.ts, 7, 28))
 ->x.self : Symbol(A.self, Decl(thisTypeAndConstraints.ts, 0, 9))
@@ -27,17 +27,17 @@
 ->self : Symbol(A.self, Decl(thisTypeAndConstraints.ts, 0, 9))
 +>self : Symbol(self, Decl(thisTypeAndConstraints.ts, 0, 9))
  }
- 
+
  class B<T extends A> {
 @@= skipped -17, +17 lines =@@
  >A : Symbol(A, Decl(thisTypeAndConstraints.ts, 0, 0))
- 
+
      foo(x: T) {
 ->foo : Symbol(B.foo, Decl(thisTypeAndConstraints.ts, 13, 22))
 +>foo : Symbol(foo, Decl(thisTypeAndConstraints.ts, 13, 22))
  >x : Symbol(x, Decl(thisTypeAndConstraints.ts, 14, 8))
  >T : Symbol(T, Decl(thisTypeAndConstraints.ts, 13, 8))
- 
+
          x = x.self();
  >x : Symbol(x, Decl(thisTypeAndConstraints.ts, 14, 8))
 ->x.self : Symbol(A.self, Decl(thisTypeAndConstraints.ts, 0, 9))
@@ -53,7 +53,7 @@
  >T : Symbol(T, Decl(thisTypeAndConstraints.ts, 13, 8))
  >x : Symbol(x, Decl(thisTypeAndConstraints.ts, 17, 21))
 @@= skipped -19, +19 lines =@@
- 
+
          x = x.self();
  >x : Symbol(x, Decl(thisTypeAndConstraints.ts, 17, 21))
 ->x.self : Symbol(A.self, Decl(thisTypeAndConstraints.ts, 0, 9))
@@ -63,4 +63,3 @@
 +>self : Symbol(self, Decl(thisTypeAndConstraints.ts, 0, 9))
      }
  }
- 

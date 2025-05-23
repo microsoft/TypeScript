@@ -2,18 +2,18 @@
 +++ new.jsxCallElaborationCheckNoCrash1.types
 @@= skipped -9, +9 lines =@@
  >Tags : Tags
- 
+
  export const Hoc = <Tag extends Tags>(
 ->Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC
 -><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => React.SFC
 +>Hoc : <Tag extends Tags>(TagElement: Tag) => SFC<{}>
 +><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => SFC<{}>
- 
+
     TagElement: Tag,
  >TagElement : Tag
 @@= skipped -10, +10 lines =@@
  >React : any
- 
+
     const Component = () => <TagElement />;
 ->Component : () => JSX.Element
 ->() => <TagElement /> : () => JSX.Element
@@ -22,10 +22,9 @@
 +>() => <TagElement /> : () => Element
 +><TagElement /> : Element
  >TagElement : Tag
- 
+
     return Component;
 ->Component : () => JSX.Element
 +>Component : () => Element
- 
+
  };
- 

@@ -1,8 +1,8 @@
 --- old.declFileForFunctionTypeAsTypeParameter.js
 +++ new.declFileForFunctionTypeAsTypeParameter.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [declFileForFunctionTypeAsTypeParameter.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -35,10 +35,11 @@
 -
 -//// [declFileForFunctionTypeAsTypeParameter.d.ts]
 -declare class X<T> {
-+class X {
- }
+-}
 -declare class C extends X<() => number> {
+-}
+-interface I extends X<() => number> {
++class X {
++}
 +class C extends X {
  }
--interface I extends X<() => number> {
--}

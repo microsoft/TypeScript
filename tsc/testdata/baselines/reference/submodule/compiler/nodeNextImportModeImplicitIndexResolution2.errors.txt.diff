@@ -5,8 +5,8 @@
  /index.cts(4,21): error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
 +/index.mts(3,21): error TS2307: Cannot find module 'dedent3' or its corresponding type declarations.
  /index.mts(4,21): error TS2307: Cannot find module 'dedent4' or its corresponding type declarations.
- 
- 
+
+
 @@= skipped -25, +27 lines =@@
  ==== /node_modules/@types/dedent4/index.d.ts (0 errors) ====
      export {};

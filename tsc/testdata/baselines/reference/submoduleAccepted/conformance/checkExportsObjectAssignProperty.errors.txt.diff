@@ -11,6 +11,9 @@
 -validator.ts(39,1): error TS2322: Type 'number' is not assignable to type 'string'.
 -validator.ts(40,1): error TS2322: Type 'string' is not assignable to type 'number'.
 -validator.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
+-
+-
+-==== validator.ts (10 errors) ====
 +index.js(4,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +index.js(9,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +mod1.js(1,23): error TS2304: Cannot find name 'exports'.
@@ -25,9 +28,8 @@
 +mod2.js(5,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +validator.ts(3,21): error TS2306: File 'mod1.js' is not a module.
 +validator.ts(23,21): error TS2306: File 'mod2.js' is not a module.
- 
- 
--==== validator.ts (10 errors) ====
++
++
 +==== validator.ts (2 errors) ====
      import "./";
      

@@ -1,8 +1,8 @@
 --- old.selfReferentialFunctionType.js
 +++ new.selfReferentialFunctionType.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [selfReferentialFunctionType.js]
 -"use strict";
 -

@@ -8,8 +8,8 @@
 -lovefield.js(4,14): error TS2304: Cannot find name 'IThenable'.
 +lovefield.js(1,1): error TS2708: Cannot use namespace 'lf' as a value.
 +lovefield.js(6,1): error TS2708: Cannot use namespace 'lf' as a value.
- 
- 
+
+
  ==== lovefield-ts.d.ts (4 errors) ====
 @@= skipped -22, +22 lines =@@
          stats(): TransactionStats

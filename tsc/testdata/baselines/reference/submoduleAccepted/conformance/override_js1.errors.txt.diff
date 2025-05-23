@@ -1,8 +1,7 @@
 --- old.override_js1.errors.txt
 +++ new.override_js1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(7,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
 +a.js(9,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
 +

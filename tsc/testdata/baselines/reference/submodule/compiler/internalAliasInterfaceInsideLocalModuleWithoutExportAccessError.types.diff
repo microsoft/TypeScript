@@ -6,14 +6,13 @@
  >a : any
 ->I : b
 +>I : I
- 
+
      export var x: b;
 ->x : b
 +>x : I
  }
- 
+
  var x: c.b;
 ->x : c.b
 +>x : b
  >c : any
- 

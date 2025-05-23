@@ -2,7 +2,7 @@
 +++ new.importTypeInJSDoc.types
 @@= skipped -19, +19 lines =@@
  >y : number
- 
+
      constructor(x: MyClass.Bar);
 ->x : MyClass.Bar
 +>x : Bar
@@ -11,7 +11,7 @@
  declare global {
 @@= skipped -19, +19 lines =@@
   */
- 
+
  let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
 ->a : import("externs")
 ->(/** @type {*} */(undefined)) : import("externs")
@@ -21,7 +21,7 @@
  >(undefined) : any
 +>undefined : any
  >undefined : undefined
- 
+
  a = new Foo({doer: Foo.Bar});
 ->a = new Foo({doer: Foo.Bar}) : import("externs")
 ->a : import("externs")
@@ -37,7 +37,7 @@
 ->Foo : typeof import("externs")
 +>Foo : typeof MyClass
  >Bar : (x: string, y?: number) => void
- 
+
  const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 ->q : import("externs").Bar
 ->({ doer: q => q }) : import("externs").Bar

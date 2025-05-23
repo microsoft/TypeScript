@@ -1,8 +1,8 @@
 --- old.override7.js
 +++ new.override7.js
 @@= skipped -55, +55 lines =@@
- 
- 
+
+
  //// [override7.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -25,22 +25,7 @@
 -        this.p2 = 2;
 -        this.p3 = 3;
 -        this.p4 = 4;
-+class B {
-+    p1 = 1;
-+    p2 = 2;
-+    p3 = 3;
-+    p4 = 4;
-+}
-+class D extends B {
-+    p3;
-+    p4;
-+    static sp;
-+    oop;
-+    pp;
-+    op;
-+    constructor() {
-+        super();
-     }
+-    }
 -    return B;
 -}());
 -var D = /** @class */ (function (_super) {
@@ -86,7 +71,7 @@
 -    p2: number;
 -    p3: number;
 -    p4: number;
- }
+-}
 -declare class D extends B {
 -    p1: number;
 -    p2: number;
@@ -97,28 +82,48 @@
 -    pp: number;
 -    op: number;
 -    constructor();
-+class AB {
- }
+-}
 -declare abstract class AB {
 -    abstract f(): void;
 -    abstract b(): void;
-+class AD extends AB {
- }
+-}
 -declare abstract class AD extends AB {
 -    abstract f(): void;
 -    abstract b(): void;
-+class AND {
- }
+-}
 -declare abstract class AND {
 -    abstract f(): void;
 -    abstract b(): void;
+-}
+-declare class ADD extends AD {
+-    f(): void;
+-    b(): void;
++class B {
++    p1 = 1;
++    p2 = 2;
++    p3 = 3;
++    p4 = 4;
++}
++class D extends B {
++    p3;
++    p4;
++    static sp;
++    oop;
++    pp;
++    op;
++    constructor() {
++        super();
++    }
++}
++class AB {
++}
++class AD extends AB {
++}
++class AND {
++}
 +class ADD extends AD {
 +    f() {
 +    }
 +    b() {
 +    }
  }
--declare class ADD extends AD {
--    f(): void;
--    b(): void;
--}

@@ -2,27 +2,29 @@
 +++ new.accessOverriddenBaseClassMember1.symbols
 @@= skipped -4, +4 lines =@@
  >Point : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
- 
+
      constructor(public x: number, public y: number) { }
 ->x : Symbol(Point.x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
 ->y : Symbol(Point.y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
 +>x : Symbol(x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
 +>y : Symbol(y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
- 
+
      public toString() {
 ->toString : Symbol(Point.toString, Decl(accessOverriddenBaseClassMember1.ts, 1, 55))
 +>toString : Symbol(toString, Decl(accessOverriddenBaseClassMember1.ts, 1, 55))
- 
+
          return "x=" + this.x + " y=" + this.y;
 ->this.x : Symbol(Point.x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
-+>this.x : Symbol(x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
- >this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+->this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
 ->x : Symbol(Point.x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
 ->this.y : Symbol(Point.y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
+->this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
+->y : Symbol(Point.y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
++>this.x : Symbol(x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
++>this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
 +>x : Symbol(x, Decl(accessOverriddenBaseClassMember1.ts, 1, 16))
 +>this.y : Symbol(y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
- >this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
-->y : Symbol(Point.y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
++>this : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
 +>y : Symbol(y, Decl(accessOverriddenBaseClassMember1.ts, 1, 33))
      }
  }
@@ -33,7 +35,7 @@
  >y : Symbol(y, Decl(accessOverriddenBaseClassMember1.ts, 7, 26))
 ->color : Symbol(ColoredPoint.color, Decl(accessOverriddenBaseClassMember1.ts, 7, 37))
 +>color : Symbol(color, Decl(accessOverriddenBaseClassMember1.ts, 7, 37))
- 
+
          super(x, y);
  >super : Symbol(Point, Decl(accessOverriddenBaseClassMember1.ts, 0, 0))
 @@= skipped -8, +8 lines =@@
@@ -42,7 +44,7 @@
      public toString() {
 ->toString : Symbol(ColoredPoint.toString, Decl(accessOverriddenBaseClassMember1.ts, 9, 5))
 +>toString : Symbol(toString, Decl(accessOverriddenBaseClassMember1.ts, 9, 5))
- 
+
          return super.toString() + " color=" + this.color;
 ->super.toString : Symbol(Point.toString, Decl(accessOverriddenBaseClassMember1.ts, 1, 55))
 +>super.toString : Symbol(toString, Decl(accessOverriddenBaseClassMember1.ts, 1, 55))
@@ -56,4 +58,3 @@
 +>color : Symbol(color, Decl(accessOverriddenBaseClassMember1.ts, 7, 37))
      }
  }
- 

@@ -2,7 +2,7 @@
 +++ new.typeGuardFunctionOfFormThisErrors.js
 @@= skipped -61, +61 lines =@@
  }
- 
+
  //// [typeGuardFunctionOfFormThisErrors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -38,12 +38,9 @@
 -    __extends(LeadGuard, _super);
 -    function LeadGuard() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    LeadGuard.prototype.lead = function () { };
-+}
-+class LeadGuard extends RoyalGuard {
-+    lead() { }
-     ;
+-    ;
 -    return LeadGuard;
 -}(RoyalGuard));
 -var FollowerGuard = /** @class */ (function (_super) {
@@ -52,14 +49,20 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    FollowerGuard.prototype.follow = function () { };
-+}
-+class FollowerGuard extends RoyalGuard {
-+    follow() { }
-     ;
+-    ;
 -    return FollowerGuard;
 -}(RoyalGuard));
 -var a = new FollowerGuard();
 -var b = new LeadGuard();
++    }
++}
++class LeadGuard extends RoyalGuard {
++    lead() { }
++    ;
++}
++class FollowerGuard extends RoyalGuard {
++    follow() { }
++    ;
 +}
 +let a = new FollowerGuard();
 +let b = new LeadGuard();

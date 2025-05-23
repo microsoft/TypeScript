@@ -2,7 +2,7 @@
 +++ new.elementAccessChain.js
 @@= skipped -32, +32 lines =@@
  o2?.["b"]!["c"]!;
- 
+
  //// [elementAccessChain.js]
 -"use strict";
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;

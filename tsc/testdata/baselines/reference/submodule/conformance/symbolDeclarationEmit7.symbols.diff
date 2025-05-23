@@ -1,7 +1,7 @@
 --- old.symbolDeclarationEmit7.symbols
 +++ new.symbolDeclarationEmit7.symbols
 @@= skipped -5, +5 lines =@@
- 
+
      [Symbol.isConcatSpreadable]: string;
  >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(symbolDeclarationEmit7.ts, 0, 10))
 ->Symbol.isConcatSpreadable : Symbol(SymbolConstructor.isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

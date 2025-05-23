@@ -2,7 +2,7 @@
 +++ new.multipleClassPropertyModifiers.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [multipleClassPropertyModifiers.js]
 -var C = /** @class */ (function () {
 -    function C() {

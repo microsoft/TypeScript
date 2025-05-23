@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -/a.ts(1,20): error TS2732: Cannot find module 'foo/bar/foobar.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
 +/a.ts(1,20): error TS2307: Cannot find module 'foo/bar/foobar.json' or its corresponding type declarations.
- 
- 
+
+
  ==== /tsconfig.json (0 errors) ====
 @@= skipped -15, +15 lines =@@
  ==== /a.ts (1 errors) ====

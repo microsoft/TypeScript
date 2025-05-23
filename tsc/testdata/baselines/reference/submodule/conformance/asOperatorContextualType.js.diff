@@ -1,7 +1,7 @@
 --- old.asOperatorContextualType.js
 +++ new.asOperatorContextualType.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [asOperatorContextualType.js]
  // should error
 -var x = (function (v) { return v; });

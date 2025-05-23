@@ -9,7 +9,7 @@
 +>MyComponent : { (): any; defaultProps?: P; }
 +>() => /* @type {any} */(null) : { (): any; defaultProps: { color: string; }; }
  >(null) : null
- 
+
  MyComponent.defaultProps = {
 ->MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
 ->MyComponent.defaultProps : Partial<MyComponentProps>
@@ -21,20 +21,20 @@
 +>MyComponent : { (): any; defaultProps?: P; }
 +>defaultProps : P
 +>{    color: "red"} : { color: string; }
- 
+
      color: "red"
 ->color : "red"
 +>color : string
  >"red" : "red"
- 
+
  };
- 
+
  const MyComponent2 = () => null;
 ->MyComponent2 : { (): any; defaultProps: MyComponentProps; }
 ->() => null : { (): any; defaultProps: MyComponentProps; }
 +>MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
 +>() => null : { (): any; defaultProps: { color: "blue" | "red"; }; }
- 
+
  /**
   * @type {MyComponentProps}
   */
@@ -49,7 +49,7 @@
 +>defaultProps : { color: "blue" | "red"; }
 +>{    color: "red"} : { color: "blue" | "red"; }
  >{    color: "red"} : { color: "red"; }
- 
+
      color: "red"
 @@= skipped -40, +41 lines =@@
    * @type {StatelessComponent<MyComponentProps>}
@@ -59,7 +59,7 @@
 ->MyComponent2 : { (): any; defaultProps: MyComponentProps; }
 +>check : { (): any; defaultProps?: P; }
 +>MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
- 
+
  /**
   * 
   * @param {{ props: MyComponentProps }} p 
@@ -69,11 +69,11 @@
 ->p : { props: MyComponentProps; }
 +>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
 +>p : { props: { color: "blue" | "red"; }; }
- 
+
  function foo() {
 ->foo : typeof foo
 +>foo : () => void
- 
+
      /**
       * @type {MyComponentProps}
       */
@@ -90,7 +90,7 @@
  >{ color: "red" } : { color: "red"; }
  >color : "red"
  >"red" : "red"
- 
+
      expectLiteral(this);
  >expectLiteral(this) : void
 ->expectLiteral : (p: { props: MyComponentProps; }) => void
@@ -98,7 +98,7 @@
 +>expectLiteral : (p: { props: { color: "blue" | "red"; }; }) => void
 +>this : any
  }
- 
+
  /**
   * @type {MyComponentProps}
   */
@@ -113,10 +113,10 @@
 +>exports : { color: "blue" | "red"; }
 +>{    color: "red"} : { color: "blue" | "red"; }
  >{    color: "red"} : { color: "red"; }
- 
+
      color: "red"
 @@= skipped -49, +51 lines =@@
- 
+
  expectLiteral({ props: module.exports });
  >expectLiteral({ props: module.exports }) : void
 ->expectLiteral : (p: { props: MyComponentProps; }) => void
@@ -131,4 +131,3 @@
 +>module.exports : { color: "blue" | "red"; }
 +>module : { export=: { color: "blue" | "red"; }; }
 +>exports : { color: "blue" | "red"; }
- 

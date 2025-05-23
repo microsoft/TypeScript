@@ -1,12 +1,12 @@
 --- old.tsxDefaultAttributesResolution2.types
 +++ new.tsxDefaultAttributesResolution2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
 +>React : typeof __React
- 
+
  interface Prop {
      x: true;
 @@= skipped -9, +9 lines =@@
@@ -19,11 +19,11 @@
 +>React.Component : Component<Prop, {}>
 +>React : typeof __React
 +>Component : typeof Component
- 
+
      render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
          return <div>Hello</div>;
 -><div>Hello</div> : JSX.Element
 +><div>Hello</div> : Element
@@ -31,7 +31,7 @@
  >div : any
      }
 @@= skipped -16, +16 lines =@@
- 
+
  // OK
  let p = <Poisoned x/>;
 ->p : JSX.Element
@@ -40,4 +40,3 @@
 +><Poisoned x/> : Element
  >Poisoned : typeof Poisoned
  >x : true
- 

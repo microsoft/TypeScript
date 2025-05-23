@@ -2,7 +2,7 @@
 +++ new.twoMergedInterfacesWithDifferingOverloads.js
 @@= skipped -52, +52 lines =@@
  var r3 = d.foo(1, 1); // boolean, last definition wins
- 
+
  //// [twoMergedInterfacesWithDifferingOverloads.js]
 -// interfaces that merge must not have members that conflict
  var b;

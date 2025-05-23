@@ -1,8 +1,8 @@
 --- old.contextuallyTypedJsxAttribute.js
 +++ new.contextuallyTypedJsxAttribute.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [index.jsx]
 -<Test as="bar" callback={function (value) { }}/>;
 +<Test as="bar" callback={(value) => { }}/>;

@@ -1,8 +1,8 @@
 --- old.keywordInJsxIdentifier.js
 +++ new.keywordInJsxIdentifier.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [keywordInJsxIdentifier.js]
 -React.createElement("foo", { "class-id": true });
 -React.createElement("foo", { class: true });

@@ -1,7 +1,7 @@
 --- old.importTypeNonString.js
 +++ new.importTypeNonString.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [importTypeNonString.js]
  export const x = undefined;
 -

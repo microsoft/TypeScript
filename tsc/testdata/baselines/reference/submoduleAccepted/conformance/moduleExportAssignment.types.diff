@@ -1,7 +1,7 @@
 --- old.moduleExportAssignment.types
 +++ new.moduleExportAssignment.types
 @@= skipped -1, +1 lines =@@
- 
+
  === use.js ===
  var npmlog = require('./npmlog')
 ->npmlog : { on(s: string): void; x: number; y: 2; }
@@ -10,7 +10,7 @@
 +>require('./npmlog') : typeof import("npmlog")
  >require : any
  >'./npmlog' : "./npmlog"
- 
+
  npmlog.x
 ->npmlog.x : number
 ->npmlog : { on(s: string): void; x: number; y: 2; }
@@ -18,7 +18,7 @@
 +>npmlog.x : any
 +>npmlog : typeof import("npmlog")
 +>x : any
- 
+
  npmlog.on
 ->npmlog.on : (s: string) => void
 ->npmlog : { on(s: string): void; x: number; y: 2; }
@@ -26,7 +26,7 @@
 +>npmlog.on : any
 +>npmlog : typeof import("npmlog")
 +>on : any
- 
+
  === npmlog.js ===
  class EE {
 @@= skipped -25, +25 lines =@@
@@ -45,7 +45,7 @@
 +>exports : typeof import("npmlog")
  >new EE() : EE
  >EE : typeof EE
- 
+
  npmlog.on('hi') // both references should see EE.on
  >npmlog.on('hi') : void
  >npmlog.on : (s: string) => void
@@ -53,7 +53,7 @@
 +>npmlog : EE
  >on : (s: string) => void
  >'hi' : "hi"
- 
+
  module.exports.on('hi') // here too
 ->module.exports.on('hi') : void
 ->module.exports.on : (s: string) => void
@@ -68,7 +68,7 @@
 +>exports : typeof import("npmlog")
 +>on : any
  >'hi' : "hi"
- 
+
  npmlog.x = 1
  >npmlog.x = 1 : 1
 ->npmlog.x : number
@@ -78,7 +78,7 @@
 +>npmlog : EE
 +>x : any
  >1 : 1
- 
+
  module.exports.y = 2
  >module.exports.y = 2 : 2
  >module.exports.y : 2
@@ -90,7 +90,7 @@
 +>exports : typeof import("npmlog")
  >y : 2
  >2 : 2
- 
+
  npmlog.y
 ->npmlog.y : 2
 ->npmlog : { on(s: string): void; x: number; y: 2; }
@@ -98,7 +98,7 @@
 +>npmlog.y : any
 +>npmlog : EE
 +>y : any
- 
+
  module.exports.x
 ->module.exports.x : number
 ->module.exports : { on(s: string): void; x: number; y: 2; }
@@ -110,4 +110,3 @@
 +>module : { "npmlog": typeof import("npmlog"); }
 +>exports : typeof import("npmlog")
 +>x : any
- 

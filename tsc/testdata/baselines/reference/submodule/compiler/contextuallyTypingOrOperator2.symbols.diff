@@ -11,7 +11,7 @@
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >a : Symbol(a, Decl(contextuallyTypingOrOperator2.ts, 0, 63))
  >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 0, 66))
- 
+
  var v2 = (s: string) => s.length || function (s) { s.aaa };
  >v2 : Symbol(v2, Decl(contextuallyTypingOrOperator2.ts, 2, 3))
  >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 2, 10))
@@ -22,4 +22,3 @@
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 2, 46))
  >s : Symbol(s, Decl(contextuallyTypingOrOperator2.ts, 2, 46))
- 

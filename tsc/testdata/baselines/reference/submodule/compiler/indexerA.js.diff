@@ -2,7 +2,7 @@
 +++ new.indexerA.js
 @@= skipped -12, +12 lines =@@
  jq[0].id;
- 
+
  //// [indexerA.js]
 -var JQueryElement = /** @class */ (function () {
 -    function JQueryElement() {

@@ -2,7 +2,7 @@
 +++ new.typeGuardFunctionGenerics.js
 @@= skipped -34, +34 lines =@@
  let test3: B = funE(isB, 1);
- 
+
  //// [typeGuardFunctionGenerics.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

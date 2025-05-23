@@ -1,8 +1,8 @@
 --- old.objectSpreadNegativeParse.js
 +++ new.objectSpreadNegativeParse.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [objectSpreadNegativeParse.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

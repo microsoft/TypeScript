@@ -35,13 +35,7 @@
  3 >Emitted(3, 14) Source(11, 14) + SourceIndex(0)
  4 >Emitted(3, 15) Source(11, 15) + SourceIndex(0)
 -5 >Emitted(3, 17) Source(11, 37) + SourceIndex(0)
-+5 >Emitted(3, 17) Source(11, 17) + SourceIndex(0)
-+6 >Emitted(3, 21) Source(11, 21) + SourceIndex(0)
-+7 >Emitted(3, 23) Source(11, 23) + SourceIndex(0)
-+8 >Emitted(3, 28) Source(11, 28) + SourceIndex(0)
-+9 >Emitted(3, 30) Source(11, 37) + SourceIndex(0)
-+10>Emitted(3, 32) Source(11, 39) + SourceIndex(0)
- ---
+----
 ->>>    var nameA = _a.name;
 -1->^^^^^^^^
 -2 >        ^^^^^
@@ -53,7 +47,13 @@
 -1->Emitted(4, 9) Source(11, 23) + SourceIndex(0)
 -2 >Emitted(4, 14) Source(11, 28) + SourceIndex(0)
 -3 >Emitted(4, 24) Source(11, 28) + SourceIndex(0)
-----
++5 >Emitted(3, 17) Source(11, 17) + SourceIndex(0)
++6 >Emitted(3, 21) Source(11, 21) + SourceIndex(0)
++7 >Emitted(3, 23) Source(11, 23) + SourceIndex(0)
++8 >Emitted(3, 28) Source(11, 28) + SourceIndex(0)
++9 >Emitted(3, 30) Source(11, 37) + SourceIndex(0)
++10>Emitted(3, 32) Source(11, 39) + SourceIndex(0)
+ ---
  >>>    console.log(nameA);
 -1->^^^^
 +1 >^^^^
@@ -133,6 +133,26 @@
 -3 >Emitted(7, 14) Source(14, 14) + SourceIndex(0)
 -4 >Emitted(7, 15) Source(14, 15) + SourceIndex(0)
 -5 >Emitted(7, 17) Source(14, 52) + SourceIndex(0)
+----
+->>>    var nameB = _a.name, skillB = _a.skill;
+-1->^^^^^^^^
+-2 >        ^^^^^
+-3 >             ^^^^^^^^^^
+-4 >                       ^^
+-5 >                         ^^^^^^
+-6 >                               ^^^^^^^^^^^
+-1->
+-2 >        nameB
+-3 >             
+-4 >                       , skill: 
+-5 >                         skillB
+-6 >                               
+-1->Emitted(8, 9) Source(14, 23) + SourceIndex(0)
+-2 >Emitted(8, 14) Source(14, 28) + SourceIndex(0)
+-3 >Emitted(8, 24) Source(14, 28) + SourceIndex(0)
+-4 >Emitted(8, 26) Source(14, 37) + SourceIndex(0)
+-5 >Emitted(8, 32) Source(14, 43) + SourceIndex(0)
+-6 >Emitted(8, 43) Source(14, 43) + SourceIndex(0)
 +5 >              { 
 +6 >                name
 +7 >                    : 
@@ -158,29 +178,8 @@
 +13>Emitted(6, 45) Source(14, 52) + SourceIndex(0)
 +14>Emitted(6, 47) Source(14, 54) + SourceIndex(0)
  ---
-->>>    var nameB = _a.name, skillB = _a.skill;
--1->^^^^^^^^
--2 >        ^^^^^
--3 >             ^^^^^^^^^^
--4 >                       ^^
--5 >                         ^^^^^^
--6 >                               ^^^^^^^^^^^
--1->
--2 >        nameB
--3 >             
--4 >                       , skill: 
--5 >                         skillB
--6 >                               
--1->Emitted(8, 9) Source(14, 23) + SourceIndex(0)
--2 >Emitted(8, 14) Source(14, 28) + SourceIndex(0)
--3 >Emitted(8, 24) Source(14, 28) + SourceIndex(0)
--4 >Emitted(8, 26) Source(14, 37) + SourceIndex(0)
--5 >Emitted(8, 32) Source(14, 43) + SourceIndex(0)
--6 >Emitted(8, 43) Source(14, 43) + SourceIndex(0)
-----
  >>>    console.log(nameB);
  1 >^^^^
- 2 >    ^^^^^^^
 @@= skipped -67, +73 lines =@@
  6 >                ^^^^^
  7 >                     ^
@@ -248,6 +247,18 @@
 -3 >Emitted(11, 14) Source(17, 14) + SourceIndex(0)
 -4 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
 -5 >Emitted(11, 17) Source(17, 30) + SourceIndex(0)
+----
+->>>    var name = _a.name;
+-1->^^^^^^^^
+-2 >        ^^^^
+-3 >            ^^^^^^^^^^
+-4 >                      ^->
+-1->
+-2 >        name
+-3 >            
+-1->Emitted(12, 9) Source(17, 17) + SourceIndex(0)
+-2 >Emitted(12, 13) Source(17, 21) + SourceIndex(0)
+-3 >Emitted(12, 23) Source(17, 21) + SourceIndex(0)
 +5 >              { 
 +6 >                name
 +7 >                     }: Robot
@@ -261,18 +272,6 @@
 +7 >Emitted(9, 23) Source(17, 30) + SourceIndex(0)
 +8 >Emitted(9, 25) Source(17, 32) + SourceIndex(0)
  ---
-->>>    var name = _a.name;
--1->^^^^^^^^
--2 >        ^^^^
--3 >            ^^^^^^^^^^
--4 >                      ^->
--1->
--2 >        name
--3 >            
--1->Emitted(12, 9) Source(17, 17) + SourceIndex(0)
--2 >Emitted(12, 13) Source(17, 21) + SourceIndex(0)
--3 >Emitted(12, 23) Source(17, 21) + SourceIndex(0)
-----
  >>>    console.log(name);
 -1->^^^^
 +1 >^^^^

@@ -2,7 +2,7 @@
 +++ new.es6ModuleModuleDeclaration.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [es6ModuleModuleDeclaration.js]
 -export var m1;
 +export { m1 };

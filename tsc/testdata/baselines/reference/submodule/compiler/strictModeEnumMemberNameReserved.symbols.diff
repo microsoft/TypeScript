@@ -2,12 +2,12 @@
 +++ new.strictModeEnumMemberNameReserved.symbols
 @@= skipped -5, +5 lines =@@
  >E : Symbol(E, Decl(strictModeEnumMemberNameReserved.ts, 0, 13))
- 
+
      static
 ->static : Symbol(E.static, Decl(strictModeEnumMemberNameReserved.ts, 1, 8))
 +>static : Symbol(static, Decl(strictModeEnumMemberNameReserved.ts, 1, 8))
  }
- 
+
  const x1: E.static = E.static;
  >x1 : Symbol(x1, Decl(strictModeEnumMemberNameReserved.ts, 5, 5))
  >E : Symbol(E, Decl(strictModeEnumMemberNameReserved.ts, 0, 13))
@@ -18,4 +18,3 @@
  >E : Symbol(E, Decl(strictModeEnumMemberNameReserved.ts, 0, 13))
 ->static : Symbol(E.static, Decl(strictModeEnumMemberNameReserved.ts, 1, 8))
 +>static : Symbol(static, Decl(strictModeEnumMemberNameReserved.ts, 1, 8))
- 

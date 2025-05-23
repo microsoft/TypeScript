@@ -1,18 +1,18 @@
 --- old.inferringClassMembersFromAssignments6.types
 +++ new.inferringClassMembersFromAssignments6.types
 @@= skipped -1, +1 lines =@@
- 
+
  === inferringClassMembersFromAssignments6.js ===
  function Foonly() {
 ->Foonly : typeof Foonly
 +>Foonly : () => void
- 
+
      var self = this
 ->self : this
 ->this : this
 +>self : any
 +>this : any
- 
+
      self.x = 1
  >self.x = 1 : 1
  >self.x : any
@@ -20,7 +20,7 @@
 +>self : any
  >x : any
  >1 : 1
- 
+
      self.m = function() {
  >self.m = function() {        console.log(self.x)    } : () => void
  >self.m : any
@@ -28,7 +28,7 @@
 +>self : any
  >m : any
  >function() {        console.log(self.x)    } : () => void
- 
+
 @@= skipped -25, +25 lines =@@
  >console.log : (...data: any[]) => void
  >console : Console
@@ -50,13 +50,13 @@
  >prototype : any
  >mreal : any
  >function() {    var self = this    self.y = 2} : () => void
- 
+
      var self = this
 ->self : this
 ->this : this
 +>self : any
 +>this : any
- 
+
      self.y = 2
  >self.y = 2 : 2
 ->self.y : number | undefined
@@ -74,7 +74,7 @@
 +>foo : any
 +>new Foonly() : any
 +>Foonly : () => void
- 
+
  foo.x
 ->foo.x : number
 ->foo : Foonly
@@ -82,7 +82,7 @@
 +>foo.x : any
 +>foo : any
 +>x : any
- 
+
  foo.y
 ->foo.y : number | undefined
 ->foo : Foonly
@@ -90,7 +90,7 @@
 +>foo.y : any
 +>foo : any
 +>y : any
- 
+
  foo.m()
 ->foo.m() : void
 ->foo.m : () => void
@@ -100,4 +100,3 @@
 +>foo.m : any
 +>foo : any
 +>m : any
- 

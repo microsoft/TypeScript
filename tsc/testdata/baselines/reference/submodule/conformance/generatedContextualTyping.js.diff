@@ -2,7 +2,7 @@
 +++ new.generatedContextualTyping.js
 @@= skipped -356, +356 lines =@@
  var x356 = function(n: Genric<Base>) { }; x356({ func: n => { return [d1, d2]; } });
- 
+
  //// [generatedContextualTyping.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -569,6 +569,208 @@
 -var x97 = /** @class */ (function () {
 -    function x97(parm) {
 -        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x97;
+-}());
+-var x98 = /** @class */ (function () {
+-    function x98(parm) {
+-        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x98;
+-}());
+-var x99 = /** @class */ (function () {
+-    function x99(parm) {
+-        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x99;
+-}());
+-var x100 = /** @class */ (function () {
+-    function x100(parm) {
+-        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x100;
+-}());
+-var x101 = /** @class */ (function () {
+-    function x101(parm) {
+-        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x101;
+-}());
+-var x102 = /** @class */ (function () {
+-    function x102(parm) {
+-        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x102;
+-}());
+-var x103 = /** @class */ (function () {
+-    function x103(parm) {
+-        if (parm === void 0) { parm = [d1, d2]; }
+-        this.parm = parm;
+-    }
+-    return x103;
+-}());
+-var x104 = /** @class */ (function () {
+-    function x104(parm) {
+-        if (parm === void 0) { parm = [d1, d2]; }
+-        this.parm = parm;
+-    }
+-    return x104;
+-}());
+-var x105 = /** @class */ (function () {
+-    function x105(parm) {
+-        if (parm === void 0) { parm = [d1, d2]; }
+-        this.parm = parm;
+-    }
+-    return x105;
+-}());
+-var x106 = /** @class */ (function () {
+-    function x106(parm) {
+-        if (parm === void 0) { parm = { n: [d1, d2] }; }
+-        this.parm = parm;
+-    }
+-    return x106;
+-}());
+-var x107 = /** @class */ (function () {
+-    function x107(parm) {
+-        if (parm === void 0) { parm = function (n) { var n; return null; }; }
+-        this.parm = parm;
+-    }
+-    return x107;
+-}());
+-var x108 = /** @class */ (function () {
+-    function x108(parm) {
+-        if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
+-        this.parm = parm;
+-    }
+-    return x108;
+-}());
+-var x109 = /** @class */ (function () {
+-    function x109(parm) {
+-        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x109;
+-}());
+-var x110 = /** @class */ (function () {
+-    function x110(parm) {
+-        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x110;
+-}());
+-var x111 = /** @class */ (function () {
+-    function x111(parm) {
+-        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x111;
+-}());
+-var x112 = /** @class */ (function () {
+-    function x112(parm) {
+-        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x112;
+-}());
+-var x113 = /** @class */ (function () {
+-    function x113(parm) {
+-        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x113;
+-}());
+-var x114 = /** @class */ (function () {
+-    function x114(parm) {
+-        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+-        this.parm = parm;
+-    }
+-    return x114;
+-}());
+-var x115 = /** @class */ (function () {
+-    function x115(parm) {
+-        if (parm === void 0) { parm = [d1, d2]; }
+-        this.parm = parm;
+-    }
+-    return x115;
+-}());
+-var x116 = /** @class */ (function () {
+-    function x116(parm) {
+-        if (parm === void 0) { parm = [d1, d2]; }
+-        this.parm = parm;
+-    }
+-    return x116;
+-}());
+-var x117 = /** @class */ (function () {
+-    function x117(parm) {
+-        if (parm === void 0) { parm = [d1, d2]; }
+-        this.parm = parm;
+-    }
+-    return x117;
+-}());
+-var x118 = /** @class */ (function () {
+-    function x118(parm) {
+-        if (parm === void 0) { parm = { n: [d1, d2] }; }
+-        this.parm = parm;
+-    }
+-    return x118;
+-}());
+-var x119 = /** @class */ (function () {
+-    function x119(parm) {
+-        if (parm === void 0) { parm = function (n) { var n; return null; }; }
+-        this.parm = parm;
+-    }
+-    return x119;
+-}());
+-var x120 = /** @class */ (function () {
+-    function x120(parm) {
+-        if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
+-        this.parm = parm;
+-    }
+-    return x120;
+-}());
+-function x121(parm) {
+-    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-}
+-function x122(parm) {
+-    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-}
+-function x123(parm) {
+-    if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+-}
+-function x124(parm) {
+-    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-}
+-function x125(parm) {
+-    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
+-}
+-function x126(parm) {
+-    if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
+-}
+-function x127(parm) {
+-    if (parm === void 0) { parm = [d1, d2]; }
+-}
+-function x128(parm) {
+-    if (parm === void 0) { parm = [d1, d2]; }
+-}
+-function x129(parm) {
+-    if (parm === void 0) { parm = [d1, d2]; }
+-}
+-function x130(parm) {
+-    if (parm === void 0) { parm = { n: [d1, d2] }; }
+-}
+-function x131(parm) {
+-    if (parm === void 0) { parm = function (n) { var n; return null; }; }
+-}
+-function x132(parm) {
+-    if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
+-}
+-function x133() { return function () { return [d1, d2]; }; }
 +var x11 = n => { var n; return null; };
 +var x12 = { func: n => { return [d1, d2]; } };
 +class x13 {
@@ -826,300 +1028,147 @@
 +class x97 {
 +    parm;
 +    constructor(parm = () => [d1, d2]) {
-         this.parm = parm;
-     }
--    return x97;
--}());
--var x98 = /** @class */ (function () {
--    function x98(parm) {
--        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x98 {
 +    parm;
 +    constructor(parm = function () { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x98;
--}());
--var x99 = /** @class */ (function () {
--    function x99(parm) {
--        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x99 {
 +    parm;
 +    constructor(parm = function named() { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x99;
--}());
--var x100 = /** @class */ (function () {
--    function x100(parm) {
--        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x100 {
 +    parm;
 +    constructor(parm = () => [d1, d2]) {
-         this.parm = parm;
-     }
--    return x100;
--}());
--var x101 = /** @class */ (function () {
--    function x101(parm) {
--        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x101 {
 +    parm;
 +    constructor(parm = function () { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x101;
--}());
--var x102 = /** @class */ (function () {
--    function x102(parm) {
--        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x102 {
 +    parm;
 +    constructor(parm = function named() { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x102;
--}());
--var x103 = /** @class */ (function () {
--    function x103(parm) {
--        if (parm === void 0) { parm = [d1, d2]; }
++        this.parm = parm;
++    }
 +}
 +class x103 {
 +    parm;
 +    constructor(parm = [d1, d2]) {
-         this.parm = parm;
-     }
--    return x103;
--}());
--var x104 = /** @class */ (function () {
--    function x104(parm) {
--        if (parm === void 0) { parm = [d1, d2]; }
++        this.parm = parm;
++    }
 +}
 +class x104 {
 +    parm;
 +    constructor(parm = [d1, d2]) {
-         this.parm = parm;
-     }
--    return x104;
--}());
--var x105 = /** @class */ (function () {
--    function x105(parm) {
--        if (parm === void 0) { parm = [d1, d2]; }
++        this.parm = parm;
++    }
 +}
 +class x105 {
 +    parm;
 +    constructor(parm = [d1, d2]) {
-         this.parm = parm;
-     }
--    return x105;
--}());
--var x106 = /** @class */ (function () {
--    function x106(parm) {
--        if (parm === void 0) { parm = { n: [d1, d2] }; }
++        this.parm = parm;
++    }
 +}
 +class x106 {
 +    parm;
 +    constructor(parm = { n: [d1, d2] }) {
-         this.parm = parm;
-     }
--    return x106;
--}());
--var x107 = /** @class */ (function () {
--    function x107(parm) {
--        if (parm === void 0) { parm = function (n) { var n; return null; }; }
++        this.parm = parm;
++    }
 +}
 +class x107 {
 +    parm;
 +    constructor(parm = n => { var n; return null; }) {
-         this.parm = parm;
-     }
--    return x107;
--}());
--var x108 = /** @class */ (function () {
--    function x108(parm) {
--        if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
++        this.parm = parm;
++    }
 +}
 +class x108 {
 +    parm;
 +    constructor(parm = { func: n => { return [d1, d2]; } }) {
-         this.parm = parm;
-     }
--    return x108;
--}());
--var x109 = /** @class */ (function () {
--    function x109(parm) {
--        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x109 {
 +    parm;
 +    constructor(parm = () => [d1, d2]) {
-         this.parm = parm;
-     }
--    return x109;
--}());
--var x110 = /** @class */ (function () {
--    function x110(parm) {
--        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x110 {
 +    parm;
 +    constructor(parm = function () { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x110;
--}());
--var x111 = /** @class */ (function () {
--    function x111(parm) {
--        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x111 {
 +    parm;
 +    constructor(parm = function named() { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x111;
--}());
--var x112 = /** @class */ (function () {
--    function x112(parm) {
--        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x112 {
 +    parm;
 +    constructor(parm = () => [d1, d2]) {
-         this.parm = parm;
-     }
--    return x112;
--}());
--var x113 = /** @class */ (function () {
--    function x113(parm) {
--        if (parm === void 0) { parm = function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x113 {
 +    parm;
 +    constructor(parm = function () { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x113;
--}());
--var x114 = /** @class */ (function () {
--    function x114(parm) {
--        if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
++        this.parm = parm;
++    }
 +}
 +class x114 {
 +    parm;
 +    constructor(parm = function named() { return [d1, d2]; }) {
-         this.parm = parm;
-     }
--    return x114;
--}());
--var x115 = /** @class */ (function () {
--    function x115(parm) {
--        if (parm === void 0) { parm = [d1, d2]; }
++        this.parm = parm;
++    }
 +}
 +class x115 {
 +    parm;
 +    constructor(parm = [d1, d2]) {
-         this.parm = parm;
-     }
--    return x115;
--}());
--var x116 = /** @class */ (function () {
--    function x116(parm) {
--        if (parm === void 0) { parm = [d1, d2]; }
++        this.parm = parm;
++    }
 +}
 +class x116 {
 +    parm;
 +    constructor(parm = [d1, d2]) {
-         this.parm = parm;
-     }
--    return x116;
--}());
--var x117 = /** @class */ (function () {
--    function x117(parm) {
--        if (parm === void 0) { parm = [d1, d2]; }
++        this.parm = parm;
++    }
 +}
 +class x117 {
 +    parm;
 +    constructor(parm = [d1, d2]) {
-         this.parm = parm;
-     }
--    return x117;
--}());
--var x118 = /** @class */ (function () {
--    function x118(parm) {
--        if (parm === void 0) { parm = { n: [d1, d2] }; }
++        this.parm = parm;
++    }
 +}
 +class x118 {
 +    parm;
 +    constructor(parm = { n: [d1, d2] }) {
-         this.parm = parm;
-     }
--    return x118;
--}());
--var x119 = /** @class */ (function () {
--    function x119(parm) {
--        if (parm === void 0) { parm = function (n) { var n; return null; }; }
++        this.parm = parm;
++    }
 +}
 +class x119 {
 +    parm;
 +    constructor(parm = n => { var n; return null; }) {
-         this.parm = parm;
-     }
--    return x119;
--}());
--var x120 = /** @class */ (function () {
--    function x120(parm) {
--        if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
++        this.parm = parm;
++    }
 +}
 +class x120 {
 +    parm;
 +    constructor(parm = { func: n => { return [d1, d2]; } }) {
-         this.parm = parm;
-     }
--    return x120;
--}());
--function x121(parm) {
--    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
- }
--function x122(parm) {
--    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
--}
--function x123(parm) {
--    if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
--}
--function x124(parm) {
--    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
--}
--function x125(parm) {
--    if (parm === void 0) { parm = function () { return [d1, d2]; }; }
--}
--function x126(parm) {
--    if (parm === void 0) { parm = function named() { return [d1, d2]; }; }
--}
--function x127(parm) {
--    if (parm === void 0) { parm = [d1, d2]; }
--}
--function x128(parm) {
--    if (parm === void 0) { parm = [d1, d2]; }
--}
--function x129(parm) {
--    if (parm === void 0) { parm = [d1, d2]; }
--}
--function x130(parm) {
--    if (parm === void 0) { parm = { n: [d1, d2] }; }
--}
--function x131(parm) {
--    if (parm === void 0) { parm = function (n) { var n; return null; }; }
--}
--function x132(parm) {
--    if (parm === void 0) { parm = { func: function (n) { return [d1, d2]; } }; }
--}
--function x133() { return function () { return [d1, d2]; }; }
++        this.parm = parm;
++    }
++}
 +function x121(parm = () => [d1, d2]) { }
 +function x122(parm = function () { return [d1, d2]; }) { }
 +function x123(parm = function named() { return [d1, d2]; }) { }

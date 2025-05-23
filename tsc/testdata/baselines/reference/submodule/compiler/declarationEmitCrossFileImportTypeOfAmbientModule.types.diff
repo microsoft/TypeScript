@@ -1,15 +1,14 @@
 --- old.declarationEmitCrossFileImportTypeOfAmbientModule.types
 +++ new.declarationEmitCrossFileImportTypeOfAmbientModule.types
 @@= skipped -16, +16 lines =@@
- 
+
  === packages/secondpackage/index.ts ===
  import { item } from "../somepackage";
 ->item : typeof import("@namespace/component").Foo
 +>item : typeof Foo
- 
+
  export const reeexported = item;
 ->reeexported : typeof import("@namespace/component").Foo
 ->item : typeof import("@namespace/component").Foo
 +>reeexported : typeof Foo
 +>item : typeof Foo
- 

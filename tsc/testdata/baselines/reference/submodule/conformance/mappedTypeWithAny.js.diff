@@ -1,8 +1,8 @@
 --- old.mappedTypeWithAny.js
 +++ new.mappedTypeWithAny.js
 @@= skipped -65, +65 lines =@@
- 
- 
+
+
  //// [mappedTypeWithAny.js]
 -"use strict";
 -for (var id in z) {

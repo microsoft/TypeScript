@@ -1,8 +1,8 @@
 --- old.unionRelationshipCheckPasses.js
 +++ new.unionRelationshipCheckPasses.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [unionRelationshipCheckPasses.js]
 -"use strict";
 -var item = null;

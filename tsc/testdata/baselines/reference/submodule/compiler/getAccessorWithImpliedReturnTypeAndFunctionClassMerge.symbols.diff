@@ -2,7 +2,7 @@
 +++ new.getAccessorWithImpliedReturnTypeAndFunctionClassMerge.symbols
 @@= skipped -49, +49 lines =@@
  >T : Symbol(T, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 14, 16))
- 
+
      each(iterator: _.ListIterator<T, void>, context?: any): void;
 ->each : Symbol(_.each, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 14, 20))
 +>each : Symbol(each, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 14, 20))
@@ -15,10 +15,10 @@
  }
 @@= skipped -15, +15 lines =@@
  >MyClass : Symbol(MyClass, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 18, 17))
- 
+
          public get myGetter() {
 ->myGetter : Symbol(MyClass.myGetter, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 19, 26))
 +>myGetter : Symbol(myGetter, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 19, 26))
- 
+
              var obj:any = {};
  >obj : Symbol(obj, Decl(getAccessorWithImpliedReturnTypeAndFunctionClassMerge.ts, 21, 15))

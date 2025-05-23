@@ -1,7 +1,7 @@
 --- old.jsdocTypeReferenceExports.symbols
 +++ new.jsdocTypeReferenceExports.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === bug27342.js ===
  module.exports = {}
 ->module.exports : Symbol(module.exports, Decl(bug27342.js, 0, 0))
@@ -10,6 +10,6 @@
 +>module.exports : Symbol(export=, Decl(bug27342.js, 0, 0))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(bug27342.js, 0, 0))
- 
+
  /**
   * @type {exports}

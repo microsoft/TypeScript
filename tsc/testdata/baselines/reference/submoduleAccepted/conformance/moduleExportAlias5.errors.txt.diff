@@ -1,8 +1,7 @@
 --- old.moduleExportAlias5.errors.txt
 +++ new.moduleExportAlias5.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +bug24754.js(4,1): error TS2631: Cannot assign to '"bug24754"' because it is a namespace.
 +bug24754.js(4,11): error TS2741: Property 'version' is missing in type '{ (): void; WebpackOptionsDefaulter: number; }' but required in type 'typeof import("bug24754")'.
 +

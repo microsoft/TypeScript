@@ -9,8 +9,8 @@
 +amdDependencyCommentName4.ts(11,26): error TS2307: Cannot find module 'aliasedModule2' or its corresponding type declarations.
 +amdDependencyCommentName4.ts(14,15): error TS2307: Cannot find module 'aliasedModule3' or its corresponding type declarations.
 +amdDependencyCommentName4.ts(17,21): error TS2307: Cannot find module 'aliasedModule4' or its corresponding type declarations.
- 
- 
+
+
  ==== amdDependencyCommentName4.ts (4 errors) ====
 @@= skipped -13, +13 lines =@@
      

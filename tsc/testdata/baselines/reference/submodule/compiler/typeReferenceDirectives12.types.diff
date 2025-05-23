@@ -3,7 +3,7 @@
 @@= skipped -24, +24 lines =@@
  >Cls : typeof Cls
  >bar : () => Lib
- 
+
 -=== /types/lib/index.d.ts ===
 -interface Lib { x }
 ->x : any

@@ -2,7 +2,7 @@
 +++ new.controlFlowCommaExpressionAssertionWithinTernary.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [controlFlowCommaExpressionAssertionWithinTernary.js]
 -"use strict";
  function foo2(param) {

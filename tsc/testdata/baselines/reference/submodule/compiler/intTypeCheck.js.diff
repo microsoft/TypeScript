@@ -2,7 +2,7 @@
 +++ new.intTypeCheck.js
 @@= skipped -207, +207 lines =@@
  var obj87: i8 = new {};
- 
+
  //// [intTypeCheck.js]
 -var Base = /** @class */ (function () {
 -    function Base() {

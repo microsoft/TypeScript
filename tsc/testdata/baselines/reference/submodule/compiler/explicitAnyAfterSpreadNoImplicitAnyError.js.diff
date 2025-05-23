@@ -1,8 +1,8 @@
 --- old.explicitAnyAfterSpreadNoImplicitAnyError.js
 +++ new.explicitAnyAfterSpreadNoImplicitAnyError.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [explicitAnyAfterSpreadNoImplicitAnyError.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

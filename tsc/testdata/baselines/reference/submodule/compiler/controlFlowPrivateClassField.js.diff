@@ -2,7 +2,7 @@
 +++ new.controlFlowPrivateClassField.js
 @@= skipped -28, +28 lines =@@
  }
- 
+
  //// [controlFlowPrivateClassField.js]
 -"use strict";
  class Example {

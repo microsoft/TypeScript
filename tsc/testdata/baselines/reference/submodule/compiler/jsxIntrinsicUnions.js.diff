@@ -1,7 +1,7 @@
 --- old.jsxIntrinsicUnions.js
 +++ new.jsxIntrinsicUnions.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [jsxIntrinsicUnions.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

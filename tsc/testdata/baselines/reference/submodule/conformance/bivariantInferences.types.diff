@@ -1,7 +1,7 @@
 --- old.bivariantInferences.types
 +++ new.bivariantInferences.types
 @@= skipped -4, +4 lines =@@
- 
+
  interface Array<T> {
      equalsShallow<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>): boolean;
 ->equalsShallow : <T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean

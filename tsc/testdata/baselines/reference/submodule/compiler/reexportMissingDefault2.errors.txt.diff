@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -a.ts(2,10): error TS2305: Module '"./b"' has no exported member 'default'.
 +a.ts(2,10): error TS2305: Module '"b"' has no exported member 'default'.
- 
- 
+
+
  ==== b.ts (0 errors) ====
 @@= skipped -7, +7 lines =@@
      export { b } from "./b";

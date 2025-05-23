@@ -2,7 +2,7 @@
 +++ new.emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [emitSuperCallBeforeEmitPropertyDeclarationAndParameterPropertyDeclaration1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -28,6 +28,15 @@
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B(x) {
+-        "use strict";
+-        'someStringForEgngInject';
+-        var _this = _super.call(this) || this;
+-        _this.x = x;
+-        _this.blah = 2;
+-        return _this;
+-    }
+-    return B;
+-}(A));
 +class A {
 +    blub = 6;
 +}
@@ -35,17 +44,11 @@
 +    x;
 +    blah = 2;
 +    constructor(x) {
-         "use strict";
-         'someStringForEgngInject';
--        var _this = _super.call(this) || this;
--        _this.x = x;
--        _this.blah = 2;
--        return _this;
++        "use strict";
++        'someStringForEgngInject';
 +        "use strict";
 +        'someStringForEgngInject';
 +        super();
 +        this.x = x;
-     }
--    return B;
--}(A));
++    }
 +}

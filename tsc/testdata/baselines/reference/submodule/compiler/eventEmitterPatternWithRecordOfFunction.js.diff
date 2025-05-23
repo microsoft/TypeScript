@@ -2,6 +2,6 @@
 +++ new.eventEmitterPatternWithRecordOfFunction.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [eventEmitterPatternWithRecordOfFunction.js]
 -"use strict";

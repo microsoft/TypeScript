@@ -1,8 +1,7 @@
 --- old.typeReferenceDirectives1.errors.txt
 +++ new.typeReferenceDirectives1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/app.ts(3,8): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i --save-dev @types/jquery`.
 +
 +

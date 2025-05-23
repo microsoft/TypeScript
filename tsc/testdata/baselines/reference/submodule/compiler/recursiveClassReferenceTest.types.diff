@@ -2,7 +2,7 @@
 +++ new.recursiveClassReferenceTest.types
 @@= skipped -15, +15 lines =@@
  >destroy : () => any
- 
+
  		gar(runner:(widget:Sample.Thing.IWidget)=>any):any;
 ->gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
 ->runner : (widget: Sample.Thing.IWidget) => any
@@ -12,7 +12,7 @@
  >Sample : any
  >Thing : any
 @@= skipped -42, +42 lines =@@
- 
+
  	export class StartFindAction implements Sample.Thing.IAction {
  >StartFindAction : StartFindAction
 ->Sample.Thing : typeof Sample.Thing
@@ -32,10 +32,10 @@
 +>Thing : ICodeThing
  >Sample : any
  >Thing : any
- 
+
 @@= skipped -32, +32 lines =@@
  >Thing : typeof Thing
- 
+
  		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
 ->gar : (runner: (widget: Sample.Thing.IWidget) => any) => any
 ->runner : (widget: Sample.Thing.IWidget) => any

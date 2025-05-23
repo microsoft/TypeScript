@@ -1,8 +1,8 @@
 --- old.mutuallyRecursiveGenericBaseTypes2.js
 +++ new.mutuallyRecursiveGenericBaseTypes2.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [mutuallyRecursiveGenericBaseTypes2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

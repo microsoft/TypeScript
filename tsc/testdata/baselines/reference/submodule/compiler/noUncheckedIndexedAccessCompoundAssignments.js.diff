@@ -1,8 +1,8 @@
 --- old.noUncheckedIndexedAccessCompoundAssignments.js
 +++ new.noUncheckedIndexedAccessCompoundAssignments.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [noUncheckedIndexedAccessCompoundAssignments.js]
 -"use strict";
  // Each line should have one error

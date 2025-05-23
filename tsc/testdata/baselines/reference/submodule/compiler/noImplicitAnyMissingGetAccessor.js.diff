@@ -2,7 +2,7 @@
 +++ new.noImplicitAnyMissingGetAccessor.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [noImplicitAnyMissingGetAccessor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,13 +21,7 @@
 -})();
 -var Parent = /** @class */ (function () {
 -    function Parent() {
-+class Parent {
-+}
-+class Child extends Parent {
-+    _x;
-+    set message(str) {
-+        this._x = str;
-     }
+-    }
 -    return Parent;
 -}());
 -var Child = /** @class */ (function (_super) {
@@ -44,4 +38,11 @@
 -    });
 -    return Child;
 -}(Parent));
++class Parent {
++}
++class Child extends Parent {
++    _x;
++    set message(str) {
++        this._x = str;
++    }
 +}

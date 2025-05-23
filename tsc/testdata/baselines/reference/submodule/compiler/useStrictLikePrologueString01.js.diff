@@ -2,7 +2,7 @@
 +++ new.useStrictLikePrologueString01.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [useStrictLikePrologueString01.js]
 +"use strict";
  "hey!";

@@ -1,7 +1,7 @@
 --- old.umdGlobalAugmentationNoCrash.symbols
 +++ new.umdGlobalAugmentationNoCrash.symbols
 @@= skipped -24, +24 lines =@@
- 
+
  === emits.ts ===
  console.log("hello");
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -9,6 +9,6 @@
  >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
- 
+
  React.foo;
  >React.foo : Symbol(foo, Decl(module.d.ts, 0, 26))

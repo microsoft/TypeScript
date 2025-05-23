@@ -1,8 +1,8 @@
 --- old.errorSuperCalls.js
 +++ new.errorSuperCalls.js
 @@= skipped -76, +76 lines =@@
- 
- 
+
+
  //// [errorSuperCalls.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -84,16 +84,17 @@
 -}());
 -var Base = /** @class */ (function () {
 -    function Base() {
+-    }
+-    return Base;
+-}());
+-var Derived = /** @class */ (function (_super) {
+-    __extends(Derived, _super);
 +    static k = super();
 +    //super call in static class accessor (get and set) with no base type
 +    static get q() {
 +        super();
 +        return null;
-     }
--    return Base;
--}());
--var Derived = /** @class */ (function (_super) {
--    __extends(Derived, _super);
++    }
 +    static set q(n) {
 +        super();
 +    }
@@ -106,25 +107,12 @@
 -    function Derived() {
 -        var _this = _super.call(this) || this;
 -        return _super.call(this) || this;
-+    constructor() {
-+        super();
-+        super();
-     }
+-    }
 -    return Derived;
 -}(Base));
 -var OtherBase = /** @class */ (function () {
 -    function OtherBase() {
-+}
-+class OtherBase {
-+    n;
-+}
-+class OtherDerived extends OtherBase {
-+    //super call in class member initializer of derived type
-+    t = super();
-+    fn() {
-+        //super call in class member function of derived type
-+        super();
-     }
+-    }
 -    return OtherBase;
 -}());
 -var OtherDerived = /** @class */ (function (_super) {
@@ -134,13 +122,21 @@
 -        //super call in class member initializer of derived type
 -        _this.t = _this = _super.call(this) || this;
 -        return _this;
-+    //super call in class accessor (get and set) of derived type
-+    get foo() {
-+        super();
-+        return null;
-     }
+-    }
 -    OtherDerived.prototype.fn = function () {
--        //super call in class member function of derived type
++    constructor() {
++        super();
++        super();
++    }
++}
++class OtherBase {
++    n;
++}
++class OtherDerived extends OtherBase {
++    //super call in class member initializer of derived type
++    t = super();
++    fn() {
+         //super call in class member function of derived type
 -        _this = _super.call(this) || this;
 -    };
 -    Object.defineProperty(OtherDerived.prototype, "foo", {
@@ -157,6 +153,13 @@
 -    });
 -    return OtherDerived;
 -}(OtherBase));
++        super();
++    }
++    //super call in class accessor (get and set) of derived type
++    get foo() {
++        super();
++        return null;
++    }
 +    set foo(n) {
 +        super();
 +    }

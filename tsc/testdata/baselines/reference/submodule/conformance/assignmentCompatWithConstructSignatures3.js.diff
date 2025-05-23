@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithConstructSignatures3.js
 +++ new.assignmentCompatWithConstructSignatures3.js
 @@= skipped -102, +102 lines =@@
- 
+
  //// [assignmentCompatWithConstructSignatures3.js]
  // checking assignment compatibility relations for function types. All of these are valid.
 -var __extends = (this && this.__extends) || (function () {

@@ -1,8 +1,7 @@
 --- old.untypedModuleImport.errors.txt
 +++ new.untypedModuleImport.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/a.ts(1,22): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
 +/b.ts(1,22): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
 +/c.ts(1,26): error TS2307: Cannot find module 'foo' or its corresponding type declarations.

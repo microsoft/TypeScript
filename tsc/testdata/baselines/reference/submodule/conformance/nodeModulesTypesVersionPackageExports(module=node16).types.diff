@@ -6,7 +6,7 @@
  import * as mod from "inner";
 ->mod : typeof mod
 +>mod : typeof import("node_modules/inner/index")
- 
+
  mod.correctVersionApplied;
 ->mod.correctVersionApplied : true
 ->mod : typeof mod
@@ -14,13 +14,13 @@
 +>mod.correctVersionApplied : any
 +>mod : typeof import("node_modules/inner/index")
 +>correctVersionApplied : any
- 
+
  === index.mts ===
  // esm format file
  import * as mod from "inner";
 ->mod : typeof mod
 +>mod : typeof import("node_modules/inner/index")
- 
+
  mod.correctVersionApplied;
 ->mod.correctVersionApplied : true
 ->mod : typeof mod
@@ -28,13 +28,13 @@
 +>mod.correctVersionApplied : any
 +>mod : typeof import("node_modules/inner/index")
 +>correctVersionApplied : any
- 
+
  === index.cts ===
  // cjs format file
  import * as mod from "inner";
 ->mod : typeof mod
 +>mod : typeof import("node_modules/inner/index")
- 
+
  mod.correctVersionApplied;
 ->mod.correctVersionApplied : true
 ->mod : typeof mod
@@ -42,6 +42,6 @@
 +>mod.correctVersionApplied : any
 +>mod : typeof import("node_modules/inner/index")
 +>correctVersionApplied : any
- 
+
  === node_modules/inner/index.d.ts ===
  // cjs format file

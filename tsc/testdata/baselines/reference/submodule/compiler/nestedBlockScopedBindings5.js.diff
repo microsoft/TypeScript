@@ -1,7 +1,7 @@
 --- old.nestedBlockScopedBindings5.js
 +++ new.nestedBlockScopedBindings5.js
 @@= skipped -83, +83 lines =@@
- 
+
  //// [nestedBlockScopedBindings5.js]
  function a0() {
 -    for (var x in []) {

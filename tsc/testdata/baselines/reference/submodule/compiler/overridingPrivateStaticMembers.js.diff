@@ -2,7 +2,7 @@
 +++ new.overridingPrivateStaticMembers.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [overridingPrivateStaticMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

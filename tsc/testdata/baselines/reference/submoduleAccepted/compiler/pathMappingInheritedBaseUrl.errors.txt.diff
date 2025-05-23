@@ -1,8 +1,7 @@
 --- old.pathMappingInheritedBaseUrl.errors.txt
 +++ new.pathMappingInheritedBaseUrl.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/project/index.ts(1,20): error TS2307: Cannot find module 'p1' or its corresponding type declarations.
 +
 +

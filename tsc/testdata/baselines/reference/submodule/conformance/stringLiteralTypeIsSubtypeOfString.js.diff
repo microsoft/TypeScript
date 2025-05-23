@@ -1,8 +1,8 @@
 --- old.stringLiteralTypeIsSubtypeOfString.js
 +++ new.stringLiteralTypeIsSubtypeOfString.js
 @@= skipped -103, +103 lines =@@
- 
- 
+
+
  //// [stringLiteralTypeIsSubtypeOfString.js]
 -// string literal types are subtypes of string, any
  function f1(x) { }

@@ -6,6 +6,6 @@
      public x2;
 ->x2 : number
 +>x2 : any
- 
+
      get z2() {
  >z2 : string

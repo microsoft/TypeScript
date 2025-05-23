@@ -1,7 +1,7 @@
 --- old.deepComparisons.js
 +++ new.deepComparisons.js
 @@= skipped -41, +41 lines =@@
- 
+
  //// [deepComparisons.js]
  function f1() {
 -    var v1 = 0; // Error

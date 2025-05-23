@@ -2,7 +2,7 @@
 +++ new.es6ImportDefaultBindingFollowedWithNamespaceBinding1WithExport.js
 @@= skipped -8, +8 lines =@@
  export var x: number = defaultBinding;
- 
+
  //// [server.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

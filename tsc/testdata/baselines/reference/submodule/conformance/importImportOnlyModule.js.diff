@@ -1,8 +1,8 @@
 --- old.importImportOnlyModule.js
 +++ new.importImportOnlyModule.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [foo_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -2,7 +2,7 @@
 +++ new.privacyLocalInternalReferenceImportWithoutExport.js
 @@= skipped -154, +154 lines =@@
  }
- 
+
  //// [privacyLocalInternalReferenceImportWithoutExport.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -164,6 +164,12 @@
 -    enum e_private {
 -        Happy = 0,
 -        Grumpy = 1
+-    }
+-    function f_private(): c_private;
+-    var v_private: c_private;
+-    interface i_private {
+-    }
+-    namespace mi_private {
 +    m_private.c_private = c_private;
 +    let e_private;
 +    (function (e_private) {
@@ -172,12 +178,7 @@
 +    })(e_private = m_private.e_private || (m_private.e_private = {}));
 +    function f_private() {
 +        return new c_private();
-     }
--    function f_private(): c_private;
--    var v_private: c_private;
--    interface i_private {
--    }
--    namespace mi_private {
++    }
 +    m_private.f_private = f_private;
 +    m_private.v_private = new c_private();
 +    let mi_private;
@@ -202,6 +203,12 @@
 -    enum e_public {
 -        Happy = 0,
 -        Grumpy = 1
+-    }
+-    function f_public(): c_public;
+-    var v_public: number;
+-    interface i_public {
+-    }
+-    namespace mi_public {
 +    m_public.c_public = c_public;
 +    let e_public;
 +    (function (e_public) {
@@ -210,12 +217,7 @@
 +    })(e_public = m_public.e_public || (m_public.e_public = {}));
 +    function f_public() {
 +        return new c_public();
-     }
--    function f_public(): c_public;
--    var v_public: number;
--    interface i_public {
--    }
--    namespace mi_public {
++    }
 +    m_public.f_public = f_public;
 +    m_public.v_public = 10;
 +    let mi_public;

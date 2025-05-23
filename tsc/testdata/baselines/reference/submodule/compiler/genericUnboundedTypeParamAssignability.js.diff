@@ -1,8 +1,8 @@
 --- old.genericUnboundedTypeParamAssignability.js
 +++ new.genericUnboundedTypeParamAssignability.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [genericUnboundedTypeParamAssignability.js]
 -"use strict";
  function f1(o) {

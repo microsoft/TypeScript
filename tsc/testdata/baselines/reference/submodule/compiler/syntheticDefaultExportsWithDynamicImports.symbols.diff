@@ -1,7 +1,7 @@
 --- old.syntheticDefaultExportsWithDynamicImports.symbols
 +++ new.syntheticDefaultExportsWithDynamicImports.symbols
 @@= skipped -9, +9 lines =@@
- 
+
  === index.ts ===
  import("package").then(({default: foo}) => foo(42));
 ->import("package").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))

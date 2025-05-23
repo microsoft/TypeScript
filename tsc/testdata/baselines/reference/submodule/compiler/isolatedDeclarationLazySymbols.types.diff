@@ -1,14 +1,14 @@
 --- old.isolatedDeclarationLazySymbols.types
 +++ new.isolatedDeclarationLazySymbols.types
 @@= skipped -1, +1 lines =@@
- 
+
  === isolatedDeclarationLazySymbols.ts ===
  export function foo() {
 ->foo : typeof foo
 +>foo : { (): void; b: string; }
- 
+
  }
- 
+
  const o = {
 ->o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 ->{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} as const : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
@@ -16,7 +16,7 @@
 +>o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
 +>{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} as const : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
 +>{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
- 
+
      ["prop.inner"]: "a",
  >["prop.inner"] : "a"
 @@= skipped -27, +27 lines =@@
@@ -30,7 +30,7 @@
 +>o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
  >"prop.inner" : "prop.inner"
  >"A" : "A"
- 
+
  foo[o.prop.inner] = "B";
  >foo[o.prop.inner] = "B" : "B"
  >foo[o.prop.inner] : string
@@ -69,7 +69,7 @@
 +>o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
  >'prop.inner' : "prop.inner"
  >"A" : "A"
- 
+
 @@= skipped -8, +8 lines =@@
  >[o.prop.inner] : string
  >o.prop.inner : "b"

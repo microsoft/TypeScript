@@ -2,7 +2,7 @@
 +++ new.ClassDeclaration14.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [ClassDeclaration14.js]
 -var C = /** @class */ (function () {
 -    function C() {

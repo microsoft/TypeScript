@@ -2,40 +2,40 @@
 +++ new.constEnums.types
 @@= skipped -185, +185 lines =@@
  >Comments : Comments
- 
+
      "//",
 ->"//" : (typeof Comments)["//"]
 +>"//" : Comments."//"
- 
+
      "/*",
 ->"/*" : (typeof Comments)["/*"]
 +>"/*" : Comments."/*"
- 
+
      "*/",
 ->"*/" : (typeof Comments)["*/"]
 +>"*/" : Comments."*/"
- 
+
      "///",
 ->"///" : (typeof Comments)["///"]
 +>"///" : Comments."///"
- 
+
      "#",
 ->"#" : (typeof Comments)["#"]
 +>"#" : Comments."#"
- 
+
      "<!--",
 ->"<!--" : (typeof Comments)["<!--"]
 +>"<!--" : Comments."<!--"
- 
+
      "-->",
 ->"-->" : (typeof Comments)["-->"]
 +>"-->" : Comments."-->"
  }
- 
+
  module A {
 @@= skipped -136, +136 lines =@@
  }
- 
+
  import I = A.B.C.E;
 ->I : typeof I
 +>I : typeof E
@@ -46,27 +46,27 @@
 +>B : typeof B
 +>C : typeof C
 +>E : E
- 
+
  import I1 = A1.B;
 ->I1 : typeof I1
 +>I1 : typeof B
  >A1 : typeof A1
 ->B : typeof I1
 +>B : typeof B
- 
+
  import I2 = A2.B;
 ->I2 : typeof I2
 +>I2 : typeof B
  >A2 : typeof A2
 ->B : typeof I2
 +>B : typeof B
- 
+
  function foo0(e: I): void {
 ->foo0 : (e: I) => void
 ->e : I
 +>foo0 : (e: E) => void
 +>e : E
- 
+
      if (e === I.V1) {
  >e === I.V1 : boolean
 ->e : I
@@ -90,7 +90,7 @@
 +>V2 : E.V2
      }
  }
- 
+
  function foo1(e: I1.C.E): void {
 ->foo1 : (e: I1.C.E) => void
 ->e : I1.C.E
@@ -98,7 +98,7 @@
 +>e : E
  >I1 : any
  >C : any
- 
+
      if (e === I1.C.E.V1) {
  >e === I1.C.E.V1 : boolean
 ->e : I1.C.E
@@ -138,7 +138,7 @@
 +>V2 : E.V2
      }
  }
- 
+
  function foo2(e: I2.C.E): void {
 ->foo2 : (e: I2.C.E) => void
 ->e : I2.C.E
@@ -146,7 +146,7 @@
 +>e : E
  >I2 : any
  >C : any
- 
+
      if (e === I2.C.E.V1) {
  >e === I2.C.E.V1 : boolean
 ->e : I2.C.E
@@ -186,10 +186,10 @@
 +>V2 : E.V2
      }
  }
- 
+
 @@= skipped -249, +249 lines =@@
  }
- 
+
  function bar(e: A.B.C.E): number {
 ->bar : (e: A.B.C.E) => number
 ->e : I
@@ -198,11 +198,11 @@
  >A : any
  >B : any
  >C : any
- 
+
      switch (e) {
 ->e : I
 +>e : E
- 
+
          case A.B.C.E.V1: return 1;
 ->A.B.C.E.V1 : I.V1
 ->A.B.C.E : typeof I
@@ -222,7 +222,7 @@
 +>E : typeof E
 +>V1 : E.V1
  >1 : 1
- 
+
          case A.B.C.E.V2: return 1;
 ->A.B.C.E.V2 : I.V2
 ->A.B.C.E : typeof I
@@ -242,7 +242,7 @@
 +>E : typeof E
 +>V2 : E.V2
  >1 : 1
- 
+
          case A.B.C.E.V3: return 1;
 ->A.B.C.E.V3 : I.V3
 ->A.B.C.E : typeof I
@@ -266,46 +266,45 @@
  }
 @@= skipped -55, +55 lines =@@
  >c : Comments
- 
+
          case Comments["//"]:
 ->Comments["//"] : (typeof Comments)["//"]
 +>Comments["//"] : Comments."//"
  >Comments : typeof Comments
  >"//" : "//"
- 
+
          case Comments["/*"]:
 ->Comments["/*"] : (typeof Comments)["/*"]
 +>Comments["/*"] : Comments."/*"
  >Comments : typeof Comments
  >"/*" : "/*"
- 
+
          case Comments["*/"]:
 ->Comments["*/"] : (typeof Comments)["*/"]
 +>Comments["*/"] : Comments."*/"
  >Comments : typeof Comments
  >"*/" : "*/"
- 
+
          case Comments["///"]:
 ->Comments["///"] : (typeof Comments)["///"]
 +>Comments["///"] : Comments."///"
  >Comments : typeof Comments
  >"///" : "///"
- 
+
          case Comments["#"]:
 ->Comments["#"] : (typeof Comments)["#"]
 +>Comments["#"] : Comments."#"
  >Comments : typeof Comments
  >"#" : "#"
- 
+
          case Comments["<!--"]:
 ->Comments["<!--"] : (typeof Comments)["<!--"]
 +>Comments["<!--"] : Comments."<!--"
  >Comments : typeof Comments
  >"<!--" : "<!--"
- 
+
          case Comments["-->"]:
 ->Comments["-->"] : (typeof Comments)["-->"]
 +>Comments["-->"] : Comments."-->"
  >Comments : typeof Comments
  >"-->" : "-->"
- 

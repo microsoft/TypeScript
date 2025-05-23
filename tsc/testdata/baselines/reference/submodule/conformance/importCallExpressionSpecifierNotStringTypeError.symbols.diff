@@ -2,7 +2,7 @@
 +++ new.importCallExpressionSpecifierNotStringTypeError.symbols
 @@= skipped -20, +20 lines =@@
  >getSpecifier : Symbol(getSpecifier, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 0, 0))
- 
+
  p1.then(zero => {
 ->p1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 +>p1.then : Symbol(then, Decl(lib.es5.d.ts, --, --))
@@ -10,5 +10,5 @@
 ->then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
 +>then : Symbol(then, Decl(lib.es5.d.ts, --, --))
  >zero : Symbol(zero, Decl(importCallExpressionSpecifierNotStringTypeError.ts, 7, 8))
- 
+
      return zero.foo();  // ok, zero is any

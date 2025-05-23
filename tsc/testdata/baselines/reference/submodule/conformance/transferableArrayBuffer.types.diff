@@ -9,6 +9,6 @@
  >buffer : ArrayBuffer
 ->transfer : (newByteLength?: number) => ArrayBuffer
 +>transfer : (newByteLength?: number | undefined) => ArrayBuffer
- 
+
  buffer.detached;
  >buffer.detached : boolean

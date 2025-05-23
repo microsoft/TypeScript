@@ -2,7 +2,7 @@
 +++ new.typePredicateStructuralMatch.symbols
 @@= skipped -36, +36 lines =@@
  >T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 11, 26))
- 
+
      return value.hasOwnProperty('data');
 ->value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 +>value.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
@@ -10,11 +10,11 @@
 ->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 +>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function getResults1(value: Results | { data: Results }): Results {
 @@= skipped -33, +33 lines =@@
  >T : Symbol(T, Decl(typePredicateStructuralMatch.ts, 19, 25))
- 
+
      return !value.hasOwnProperty('data');
 ->value.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 +>value.hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
@@ -22,5 +22,5 @@
 ->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 +>hasOwnProperty : Symbol(hasOwnProperty, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function getResults2(value: Results | { data: Results }): Results {

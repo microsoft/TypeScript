@@ -10,7 +10,7 @@
 +>require("./errors") : { FancyError: typeof FancyError; }
  >require : any
  >"./errors" : "./errors"
- 
+
  module.exports = {
 ->module.exports = {    errors} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -22,16 +22,16 @@
 +>module : { export=: { errors: { FancyError: typeof FancyError; }; }; }
 +>exports : { errors: { FancyError: typeof FancyError; }; }
 +>{    errors} : { errors: { FancyError: typeof FancyError; }; }
- 
+
      errors
 ->errors : typeof errors
 +>errors : { FancyError: typeof FancyError; }
- 
+
  };
  === utils/errors.js ===
 @@= skipped -33, +33 lines =@@
  }
- 
+
  module.exports = {
 ->module.exports = {    FancyError} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -42,5 +42,5 @@
 +>module : { export=: { FancyError: typeof FancyError; }; }
 +>exports : { FancyError: typeof FancyError; }
  >{    FancyError} : { FancyError: typeof FancyError; }
- 
+
      FancyError

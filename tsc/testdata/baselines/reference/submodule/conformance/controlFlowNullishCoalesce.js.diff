@@ -1,8 +1,8 @@
 --- old.controlFlowNullishCoalesce.js
 +++ new.controlFlowNullishCoalesce.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [controlFlowNullishCoalesce.js]
 -"use strict";
  // assignments in shortcutting rhs

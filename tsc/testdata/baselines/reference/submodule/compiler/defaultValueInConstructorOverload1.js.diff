@@ -2,7 +2,7 @@
 +++ new.defaultValueInConstructorOverload1.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [defaultValueInConstructorOverload1.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

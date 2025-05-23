@@ -1,12 +1,12 @@
 --- old.contextuallyTypeAsyncFunctionReturnType.types
 +++ new.contextuallyTypeAsyncFunctionReturnType.types
 @@= skipped -182, +182 lines =@@
- 
+
  };
  declare function scanMetadata(
 ->scanMetadata : (local: ILocalExtension) => Promise<Metadata | undefined>
 +>scanMetadata : (local: ILocalExtension) => Promise<Metadata>
- 
+
    local: ILocalExtension
  >local : ILocalExtension
 @@= skipped -20, +20 lines =@@
@@ -18,7 +18,7 @@
  >Promise : PromiseConstructor
 ->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
 +>all : { <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
- 
+
        fromExtensions
  >fromExtensions        .filter((e) => !e.isApplicationScoped)        .map(async (e) => [e, await scanMetadata(e)]) : Promise<[ILocalExtension, Metadata]>[]
 @@= skipped -28, +28 lines =@@
@@ -28,5 +28,5 @@
 ->scanMetadata : (local: ILocalExtension) => Promise<Metadata | undefined>
 +>scanMetadata : (local: ILocalExtension) => Promise<Metadata>
  >e : ILocalExtension
- 
+
      );

@@ -1,7 +1,7 @@
 --- old.namespaceAssignmentToRequireAlias.types
 +++ new.namespaceAssignmentToRequireAlias.types
 @@= skipped -1, +1 lines =@@
- 
+
  === bug40140.js ===
  const u = require('untyped');
 ->u : any
@@ -10,7 +10,7 @@
 +>require('untyped') : {}
  >require : any
  >'untyped' : "untyped"
- 
+
 @@= skipped -9, +9 lines =@@
  >u.assignment.nested = true : true
  >u.assignment.nested : any
@@ -27,8 +27,8 @@
 ->u : any
 +>u : {}
  >noError : any
- 
- 
+
++
 +=== node_modules/untyped/index.js ===
 +module.exports = {}
 +>module.exports = {} : {}
@@ -36,4 +36,3 @@
 +>module : { export=: {}; }
 +>exports : {}
 +>{} : {}
-+

@@ -2,10 +2,9 @@
 +++ new.reverseMappedTypeRecursiveInference.types
 @@= skipped -33, +33 lines =@@
  >{} : {}
- 
+
  test(bar);
 ->test(bar) : { [x: string]: any; }
 +>test(bar) : { [x: string]: { toString: unknown; charAt: unknown; charCodeAt: unknown; concat: unknown; indexOf: unknown; lastIndexOf: unknown; localeCompare: unknown; match: unknown; replace: unknown; search: unknown; slice: unknown; split: unknown; substring: unknown; toLowerCase: unknown; toLocaleLowerCase: unknown; toUpperCase: unknown; toLocaleUpperCase: unknown; trim: unknown; readonly length: { toString: unknown; toFixed: unknown; toExponential: unknown; toPrecision: unknown; valueOf: unknown; toLocaleString: unknown; }; substr: unknown; valueOf: unknown; } | { [x: string]: { toString: unknown; charAt: unknown; charCodeAt: unknown; concat: unknown; indexOf: unknown; lastIndexOf: unknown; localeCompare: unknown; match: unknown; replace: unknown; search: unknown; slice: unknown; split: unknown; substring: unknown; toLowerCase: unknown; toLocaleLowerCase: unknown; toUpperCase: unknown; toLocaleUpperCase: unknown; trim: unknown; readonly length: unknown; substr: unknown; valueOf: unknown; } | { [x: string]: unknown; }; }; }
  >test : <V>(value: Foo<V>) => V
  >bar : Bar<any>
- 

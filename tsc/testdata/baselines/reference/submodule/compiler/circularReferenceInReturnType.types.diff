@@ -2,19 +2,18 @@
 +++ new.circularReferenceInReturnType.types
 @@= skipped -42, +42 lines =@@
  // https://github.com/microsoft/TypeScript/issues/58616
- 
+
  function foo(arg: Parameters<typeof bar>[0]) {
 ->foo : (arg: Parameters<typeof bar>[0]) => string
 +>foo : (arg: string) => string
  >arg : string
  >bar : (arg: string) => string
- 
+
 @@= skipped -14, +14 lines =@@
- 
+
      return foo(arg);
  >foo(arg) : string
 ->foo : (arg: Parameters<typeof bar>[0]) => string
 +>foo : (arg: string) => string
  >arg : string
  }
- 

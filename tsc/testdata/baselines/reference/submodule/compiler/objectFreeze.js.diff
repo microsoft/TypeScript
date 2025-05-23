@@ -1,8 +1,8 @@
 --- old.objectFreeze.js
 +++ new.objectFreeze.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [objectFreeze.js]
 -var f = Object.freeze(function foo(a, b) { return false; });
 +const f = Object.freeze(function foo(a, b) { return false; });

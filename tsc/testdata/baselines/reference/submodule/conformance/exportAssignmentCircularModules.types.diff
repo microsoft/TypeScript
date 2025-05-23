@@ -1,12 +1,12 @@
 --- old.exportAssignmentCircularModules.types
 +++ new.exportAssignmentCircularModules.types
 @@= skipped -1, +1 lines =@@
- 
+
  === foo_2.ts ===
  import foo0 = require("./foo_0");
 ->foo0 : typeof foo0
 +>foo0 : typeof Foo
- 
+
  module Foo {
  >Foo : typeof Foo
 @@= skipped -8, +8 lines =@@
@@ -19,12 +19,12 @@
  }
  export = Foo;
 @@= skipped -8, +8 lines =@@
- 
+
  === foo_0.ts ===
  import foo1 = require('./foo_1');
 ->foo1 : typeof foo1
 +>foo1 : typeof Foo
- 
+
  module Foo {
  >Foo : typeof Foo
 @@= skipped -8, +8 lines =@@
@@ -37,12 +37,12 @@
  }
  export = Foo;
 @@= skipped -8, +8 lines =@@
- 
+
  === foo_1.ts ===
  import foo2 = require("./foo_2");
 ->foo2 : typeof foo2
 +>foo2 : typeof Foo
- 
+
  module Foo {
  >Foo : typeof Foo
 @@= skipped -8, +8 lines =@@

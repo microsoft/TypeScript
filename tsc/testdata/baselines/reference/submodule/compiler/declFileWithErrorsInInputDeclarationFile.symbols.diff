@@ -9,6 +9,6 @@
  >M : Symbol(M, Decl(declFile.d.ts, 0, 0))
 ->C : Symbol(M.C, Decl(declFile.d.ts, 4, 24))
 +>C : Symbol(C, Decl(declFile.d.ts, 4, 24))
- 
+
  === declFile.d.ts ===
  declare module M {

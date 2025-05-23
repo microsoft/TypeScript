@@ -1,8 +1,7 @@
 --- old.jsFileCompilationDuplicateVariable.errors.txt
 +++ new.jsFileCompilationDuplicateVariable.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +b.js(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'number', but here has type 'string'.
 +
 +

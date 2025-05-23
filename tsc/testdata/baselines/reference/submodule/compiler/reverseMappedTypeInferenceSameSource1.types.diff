@@ -2,11 +2,11 @@
 +++ new.reverseMappedTypeInferenceSameSource1.types
 @@= skipped -34, +34 lines =@@
  }
- 
+
  declare function configureStore<S = any, A extends Action = UnknownAction>(
 ->configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
 +>configureStore : <S, A extends Action<string>>(options: ConfigureStoreOptions<S, A>) => void
- 
+
    options: ConfigureStoreOptions<S, A>,
  >options : ConfigureStoreOptions<S, A>
 @@= skipped -16, +16 lines =@@
@@ -25,5 +25,5 @@
 ->configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
 +>configureStore : <S, A extends Action<string>>(options: ConfigureStoreOptions<S, A>) => void
  >{  reducer: {    counter1: counterReducer1,  },} : { reducer: { counter1: Reducer<number, UnknownAction>; }; }
- 
+
    reducer: {

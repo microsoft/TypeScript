@@ -2,7 +2,7 @@
 +++ new.classExpressionWithStaticProperties3.js
 @@= skipped -11, +11 lines =@@
  arr.forEach(C => console.log(C.y()));
- 
+
  //// [classExpressionWithStaticProperties3.js]
 -var arr = [];
 -var _loop_1 = function (i) {

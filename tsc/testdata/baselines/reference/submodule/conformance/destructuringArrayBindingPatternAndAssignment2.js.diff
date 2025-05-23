@@ -2,7 +2,7 @@
 +++ new.destructuringArrayBindingPatternAndAssignment2.js
 @@= skipped -36, +36 lines =@@
  var [c4, c5, c6] = foo(1);  // Error
- 
+
  //// [destructuringArrayBindingPatternAndAssignment2.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

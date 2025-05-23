@@ -1,8 +1,8 @@
 --- old.deepExcessPropertyCheckingWhenTargetIsIntersection.js
 +++ new.deepExcessPropertyCheckingWhenTargetIsIntersection.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [deepExcessPropertyCheckingWhenTargetIsIntersection.js]
 -var TestComponent = function (props) {
 +const TestComponent = (props) => {

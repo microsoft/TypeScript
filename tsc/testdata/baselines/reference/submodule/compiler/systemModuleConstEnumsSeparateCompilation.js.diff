@@ -2,7 +2,7 @@
 +++ new.systemModuleConstEnumsSeparateCompilation.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [systemModuleConstEnumsSeparateCompilation.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

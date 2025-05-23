@@ -1,7 +1,7 @@
 --- old.deeplyNestedAssignabilityErrorsCombined.types
 +++ new.deeplyNestedAssignabilityErrorsCombined.types
 @@= skipped -1, +1 lines =@@
- 
+
  === deeplyNestedAssignabilityErrorsCombined.ts ===
  let x = { a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } };
 ->x : { a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }
@@ -32,7 +32,7 @@
  >{ g: "hello" } : { g: string; }
  >g : string
  >"hello" : "hello"
- 
+
  let y = { a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } };
 ->y : { a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }
 ->{ a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } } : { a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }
@@ -62,7 +62,7 @@
  >{ g: 12345 } : { g: number; }
  >g : number
  >12345 : 12345
- 
+
  x = y;
 ->x = y : { a: { b: { c: { d: { e: { f(): { g: number; }; }; }; }; }; }; }
 ->x : { a: { b: { c: { d: { e: { f(): { g: string; }; }; }; }; }; }; }
@@ -70,6 +70,6 @@
 +>x = y : { a: { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }; }
 +>x : { a: { b: { c: { d: { e: { f: () => { g: string; }; }; }; }; }; }; }
 +>y : { a: { b: { c: { d: { e: { f: () => { g: number; }; }; }; }; }; }; }
- 
+
  class Ctor1 {
  >Ctor1 : Ctor1

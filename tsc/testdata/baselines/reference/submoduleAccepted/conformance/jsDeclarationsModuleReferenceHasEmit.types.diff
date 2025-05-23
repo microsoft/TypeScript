@@ -6,6 +6,6 @@
  export let el = null;
 ->el : error
 +>el : module
- 
+
  export default A;
  >A : A

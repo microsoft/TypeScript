@@ -1,8 +1,8 @@
 --- old.classDeclaredBeforeClassFactory.js
 +++ new.classDeclaredBeforeClassFactory.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [classDeclaredBeforeClassFactory.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

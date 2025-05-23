@@ -1,8 +1,8 @@
 --- old.templateLiteralIntersection4.js
 +++ new.templateLiteralIntersection4.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [templateLiteralIntersection4.js]
 -"use strict";
 -var _a = createStore({

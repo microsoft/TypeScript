@@ -7,8 +7,8 @@
 -            Property 'x' is missing in type '{}' but required in type 'A'.
 +            Type 'unknown' is not assignable to type 'A'.
 +              Property 'x' is missing in type '{}' but required in type 'A'.
- 
- 
+
+
  ==== genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts (1 errors) ====
 @@= skipped -24, +25 lines =@@
  !!! error TS2322:       Type 'ReturnType<T[string]> | ReturnType<T[number]> | ReturnType<T[symbol]>' is not assignable to type 'A'.

@@ -1,8 +1,8 @@
 --- old.override11.js
 +++ new.override11.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [override11.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -22,15 +22,7 @@
 -var Base = /** @class */ (function () {
 -    function Base() {
 -        this.foo = 1;
-+class Base {
-+    foo = 1;
-+}
-+class Sub extends Base {
-+    foo;
-+    constructor(foo) {
-+        super();
-+        this.foo = foo;
-     }
+-    }
 -    return Base;
 -}());
 -var Sub = /** @class */ (function (_super) {
@@ -42,4 +34,13 @@
 -    }
 -    return Sub;
 -}(Base));
++class Base {
++    foo = 1;
++}
++class Sub extends Base {
++    foo;
++    constructor(foo) {
++        super();
++        this.foo = foo;
++    }
 +}

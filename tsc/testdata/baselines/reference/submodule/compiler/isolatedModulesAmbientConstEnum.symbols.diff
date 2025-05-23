@@ -6,7 +6,7 @@
  >E : Symbol(E, Decl(file1.ts, 0, 0))
 ->X : Symbol(E.X, Decl(file1.ts, 0, 22))
 +>X : Symbol(X, Decl(file1.ts, 0, 22))
- 
+
  export var y = E.X;
  >y : Symbol(y, Decl(file1.ts, 1, 10))
 ->E.X : Symbol(E.X, Decl(file1.ts, 0, 22))
@@ -14,4 +14,3 @@
  >E : Symbol(E, Decl(file1.ts, 0, 0))
 ->X : Symbol(E.X, Decl(file1.ts, 0, 22))
 +>X : Symbol(X, Decl(file1.ts, 0, 22))
- 

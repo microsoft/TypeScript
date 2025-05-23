@@ -1,8 +1,8 @@
 --- old.errorSuperPropertyAccess.js
 +++ new.errorSuperPropertyAccess.js
 @@= skipped -130, +130 lines =@@
- 
- 
+
+
  //// [errorSuperPropertyAccess.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -28,15 +28,16 @@
 -        this.n = _super.prototype.hasOwnProperty.call(this, '');
 -        var a = _super.prototype.prototype;
 -        var b = _super.prototype.hasOwnProperty.call(this, '');
-+class NoBase {
-+    constructor() {
-+        var a = super.prototype;
-+        var b = super.hasOwnProperty('');
-     }
+-    }
 -    NoBase.prototype.fn = function () {
 -        var a = _super.prototype.prototype;
 -        var b = _super.prototype.hasOwnProperty.call(this, '');
 -    };
++class NoBase {
++    constructor() {
++        var a = super.prototype;
++        var b = super.hasOwnProperty('');
++    }
 +    fn() {
 +        var a = super.prototype;
 +        var b = super.hasOwnProperty('');
@@ -65,9 +66,7 @@
 -    function SomeBase() {
 -        this.privateMember = 0;
 -        this.publicMember = 0;
-+    static static1() {
-+        super.hasOwnProperty('');
-     }
+-    }
 -    SomeBase.prototype.privateFunc = function () { };
 -    SomeBase.prototype.publicFunc = function () { };
 -    SomeBase.privateStaticFunc = function () { };
@@ -76,6 +75,9 @@
 -    SomeBase.publicStaticMember = 0;
 -    return SomeBase;
 -}());
++    static static1() {
++        super.hasOwnProperty('');
++    }
 +    static get static2() {
 +        super.hasOwnProperty('');
 +        return '';
@@ -104,11 +106,7 @@
 -        var _this = _super.call(this) || this;
 -        _super.prototype.publicMember = 1;
 -        return _this;
-+class SomeDerived1 extends SomeBase {
-+    constructor() {
-+        super();
-+        super.publicMember = 1;
-     }
+-    }
 -    SomeDerived1.prototype.fn = function () {
 -        var x = _super.prototype.publicMember;
 -    };
@@ -124,6 +122,11 @@
 -        configurable: true
 -    });
 -    SomeDerived1.prototype.fn2 = function () {
++class SomeDerived1 extends SomeBase {
++    constructor() {
++        super();
++        super.publicMember = 1;
++    }
 +    fn() {
 +        var x = super.publicMember;
 +    }
@@ -157,11 +160,7 @@
 -        var _this = _super.call(this) || this;
 -        _super.prototype.privateMember = 1;
 -        return _this;
-+class SomeDerived2 extends SomeBase {
-+    constructor() {
-+        super();
-+        super.privateMember = 1;
-     }
+-    }
 -    SomeDerived2.prototype.fn = function () {
 -        var x = _super.prototype.privateMember;
 -    };
@@ -178,6 +177,11 @@
 -    });
 -    return SomeDerived2;
 -}(SomeBase));
++class SomeDerived2 extends SomeBase {
++    constructor() {
++        super();
++        super.privateMember = 1;
++    }
 +    fn() {
 +        var x = super.privateMember;
 +    }
@@ -197,12 +201,7 @@
 -    __extends(SomeDerived3, _super);
 -    function SomeDerived3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+class SomeDerived3 extends SomeBase {
-+    static fn() {
-+        super.publicStaticMember = 3;
-+        super.privateStaticMember = 3;
-+        super.privateStaticFunc();
-     }
+-    }
 -    SomeDerived3.fn = function () {
 -        _super.publicStaticMember = 3;
 -        _super.privateStaticMember = 3;
@@ -225,6 +224,12 @@
 -    });
 -    return SomeDerived3;
 -}(SomeBase));
++class SomeDerived3 extends SomeBase {
++    static fn() {
++        super.publicStaticMember = 3;
++        super.privateStaticMember = 3;
++        super.privateStaticFunc();
++    }
 +    static get a() {
 +        super.publicStaticMember = 3;
 +        super.privateStaticMember = 3;

@@ -1,8 +1,8 @@
 --- old.literalTypesAndDestructuring.js
 +++ new.literalTypesAndDestructuring.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [literalTypesAndDestructuring.js]
 -"use strict";
 -var _a, _b, _c;

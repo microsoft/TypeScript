@@ -2,7 +2,7 @@
 +++ new.es6ModuleConstEnumDeclaration.js
 @@= skipped -47, +47 lines =@@
  }
- 
+
  //// [es6ModuleConstEnumDeclaration.js]
 -var x = 0 /* e1.a */;
 -var y = 0 /* e2.x */;

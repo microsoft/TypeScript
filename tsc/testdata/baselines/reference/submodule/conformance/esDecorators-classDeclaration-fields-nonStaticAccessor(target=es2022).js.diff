@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-fields-nonStaticAccessor(target=es2022).js
 +++ new.esDecorators-classDeclaration-fields-nonStaticAccessor(target=es2022).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [esDecorators-classDeclaration-fields-nonStaticAccessor.js]
  const field3 = "field3";
 -let C = (() => {

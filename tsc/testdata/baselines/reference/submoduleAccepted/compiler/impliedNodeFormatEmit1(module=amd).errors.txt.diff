@@ -1,6 +1,6 @@
 --- old.impliedNodeFormatEmit1(module=amd).errors.txt
 +++ new.impliedNodeFormatEmit1(module=amd).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5095: Option 'bundler' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.
 -
 -
@@ -38,5 +38,4 @@
 -==== /dummy.ts (0 errors) ====
 -    export {};
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

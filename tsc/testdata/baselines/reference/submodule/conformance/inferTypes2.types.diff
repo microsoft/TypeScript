@@ -1,29 +1,28 @@
 --- old.inferTypes2.types
 +++ new.inferTypes2.types
 @@= skipped -12, +12 lines =@@
- 
+
      return foo(obj);
  >foo(obj) : T extends () => infer P ? P : never
 ->foo : <T_1>(obj: T_1) => T_1 extends () => infer P ? P : never
 +>foo : <T>(obj: T) => T extends () => infer P ? P : never
  >obj : T
  }
- 
+
 @@= skipped -9, +9 lines =@@
  >x : T extends number ? T : string
- 
+
  export declare function foo2<T>(obj: T): T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K] } ? P : never;
 ->foo2 : <T>(obj: T) => T extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K]; } ? P : never
 +>foo2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
  >obj : T
- 
+
  export function bar2<T>(obj: T) {
 @@= skipped -9, +9 lines =@@
- 
+
      return foo2(obj);
  >foo2(obj) : T extends { x: infer P extends number ? infer P : string; } ? P : never
 ->foo2 : <T_1>(obj: T_1) => T_1 extends { [K in keyof BadNested<infer P>]: BadNested<infer P>[K]; } ? P : never
 +>foo2 : <T>(obj: T) => T extends { x: infer P extends number ? infer P : string; } ? P : never
  >obj : T
  }
- 

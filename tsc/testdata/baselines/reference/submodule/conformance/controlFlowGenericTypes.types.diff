@@ -1,7 +1,7 @@
 --- old.controlFlowGenericTypes.types
 +++ new.controlFlowGenericTypes.types
 @@= skipped -109, +109 lines =@@
- 
+
          unbox(x);
  >unbox(x) : T
 ->unbox : <T_1>(x: Box<T_1>) => T_1
@@ -10,7 +10,7 @@
      }
  }
 @@= skipped -17, +17 lines =@@
- 
+
          unbox(x);
  >unbox(x) : T
 ->unbox : <T_1>(x: Box<T_1>) => T_1
@@ -19,7 +19,7 @@
      }
  }
 @@= skipped -17, +17 lines =@@
- 
+
          unbox(x);  // Error
  >unbox(x) : T
 ->unbox : <T_1>(x: Box<T_1>) => T_1
@@ -28,7 +28,7 @@
      }
  }
 @@= skipped -16, +16 lines =@@
- 
+
          unbox(x);  // Error
  >unbox(x) : unknown
 ->unbox : <T_1>(x: Box<T_1>) => T_1
@@ -38,16 +38,16 @@
  }
 @@= skipped -172, +172 lines =@@
  };
- 
+
  function get<K extends keyof A>(key: K, obj: A): number {
 ->get : <K extends keyof A>(key: K, obj: A) => number
 +>get : <K extends "a">(key: K, obj: A) => number
  >key : K
  >obj : A
- 
+
 @@= skipped -28, +28 lines =@@
  >EventEmitter : EventEmitter<ET>
- 
+
      off<K extends keyof ET>(...args: [K, number] | [unknown, string]):void {}
 ->off : <K extends keyof ET>(...args: [K, number] | [unknown, string]) => void
 +>off : <K extends keyof ET>(...args: [unknown, string] | [K, number]) => void
@@ -56,14 +56,14 @@
  function once<ET, T extends EventEmitter<ET>>(emittingObject: T, eventName: keyof ET): void {
 @@= skipped -226, +226 lines =@@
  >title : string | undefined
- 
+
  function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
 ->getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
 +>getColumnProperty : <T>(column: Column<T>, key: "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })) => Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
  >column : Column<T>
 ->key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
 +>key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
- 
+
    return column[key];
 ->column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })]
 +>column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
@@ -71,4 +71,3 @@
 ->key : "title" | keyof (keyof T extends never ? { id?: number | string; } : { id: T; })
 +>key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
  }
- 

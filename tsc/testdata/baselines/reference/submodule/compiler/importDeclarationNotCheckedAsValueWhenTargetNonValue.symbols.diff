@@ -2,7 +2,7 @@
 +++ new.importDeclarationNotCheckedAsValueWhenTargetNonValue.symbols
 @@= skipped -16, +16 lines =@@
  >common : Symbol(common, Decl(file.d.ts, 3, 32), Decl(file.d.ts, 6, 13))
- 
+
                  createText: object;
 ->createText : Symbol(common.createText, Decl(file.d.ts, 4, 30))
 +>createText : Symbol(createText, Decl(file.d.ts, 4, 30))
@@ -11,7 +11,7 @@
  >common : Symbol(common, Decl(file.d.ts, 3, 32), Decl(file.d.ts, 6, 13))
 @@= skipped -9, +9 lines =@@
  >createText : Symbol(createText, Decl(file.d.ts, 7, 30))
- 
+
                      gfx(): string
 ->gfx : Symbol(createText.gfx, Decl(file.d.ts, 8, 38))
 +>gfx : Symbol(gfx, Decl(file.d.ts, 8, 38))
@@ -28,6 +28,6 @@
 +>charting : Symbol(charting, Decl(file.d.ts, 0, 25))
 +>axis2d : Symbol(axis2d, Decl(file.d.ts, 1, 24))
 +>common : Symbol(common, Decl(file.d.ts, 3, 32), Decl(file.d.ts, 6, 13))
- 
+
      export = exp;
  >exp : Symbol(exp, Decl(file.d.ts, 15, 58))

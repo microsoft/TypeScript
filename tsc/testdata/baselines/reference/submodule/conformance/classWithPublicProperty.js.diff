@@ -2,7 +2,7 @@
 +++ new.classWithPublicProperty.js
 @@= skipped -23, +23 lines =@@
  var r8: string = C.g();
- 
+
  //// [classWithPublicProperty.js]
 -var C = /** @class */ (function () {
 -    function C() {

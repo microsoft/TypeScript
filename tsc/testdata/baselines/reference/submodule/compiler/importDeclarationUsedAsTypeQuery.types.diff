@@ -6,12 +6,12 @@
  import a = require('./importDeclarationUsedAsTypeQuery_require');
 ->a : typeof a
 +>a : typeof import("importDeclarationUsedAsTypeQuery_require")
- 
+
  export var x: typeof a;
 ->x : typeof a
 ->a : typeof a
 +>x : typeof import("importDeclarationUsedAsTypeQuery_require")
 +>a : typeof import("importDeclarationUsedAsTypeQuery_require")
- 
+
  === importDeclarationUsedAsTypeQuery_require.ts ===
  export class B {

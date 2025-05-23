@@ -2,20 +2,20 @@
 +++ new.tsxStatelessFunctionComponentOverload6.symbols
 @@= skipped -7, +7 lines =@@
  >ClickableProps : Symbol(ClickableProps, Decl(file.tsx, 0, 31))
- 
+
      children?: string;
 ->children : Symbol(ClickableProps.children, Decl(file.tsx, 2, 33))
 +>children : Symbol(children, Decl(file.tsx, 2, 33))
- 
+
      className?: string;
 ->className : Symbol(ClickableProps.className, Decl(file.tsx, 3, 22))
 +>className : Symbol(className, Decl(file.tsx, 3, 22))
  }
- 
+
  export interface ButtonProps extends ClickableProps {
 @@= skipped -11, +11 lines =@@
  >ClickableProps : Symbol(ClickableProps, Decl(file.tsx, 0, 31))
- 
+
      onClick: React.MouseEventHandler<any>;
 ->onClick : Symbol(ButtonProps.onClick, Decl(file.tsx, 7, 53))
 +>onClick : Symbol(onClick, Decl(file.tsx, 7, 53))
@@ -23,25 +23,25 @@
 ->MouseEventHandler : Symbol(React.MouseEventHandler, Decl(react.d.ts, 389, 66))
 +>MouseEventHandler : Symbol(MouseEventHandler, Decl(react.d.ts, 389, 66))
  }
- 
+
  export interface LinkProps extends ClickableProps {
 @@= skipped -10, +10 lines =@@
  >ClickableProps : Symbol(ClickableProps, Decl(file.tsx, 0, 31))
- 
+
      to: string;
 ->to : Symbol(LinkProps.to, Decl(file.tsx, 11, 51))
 +>to : Symbol(to, Decl(file.tsx, 11, 51))
  }
- 
+
  export interface HyphenProps extends ClickableProps {
 @@= skipped -8, +8 lines =@@
  >ClickableProps : Symbol(ClickableProps, Decl(file.tsx, 0, 31))
- 
+
      "data-format": string;
 ->"data-format" : Symbol(HyphenProps["data-format"], Decl(file.tsx, 15, 53))
 +>"data-format" : Symbol("data-format", Decl(file.tsx, 15, 53))
  }
- 
+
  let obj = {
 @@= skipped -27, +27 lines =@@
  >buttonProps : Symbol(buttonProps, Decl(file.tsx, 28, 27))
@@ -49,7 +49,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  export function MainButton(linkProps: LinkProps): JSX.Element;
  >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
  >linkProps : Symbol(linkProps, Decl(file.tsx, 29, 27))
@@ -57,7 +57,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  export function MainButton(hyphenProps: HyphenProps): JSX.Element;
  >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
  >hyphenProps : Symbol(hyphenProps, Decl(file.tsx, 30, 27))
@@ -65,7 +65,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
  >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 @@= skipped -23, +23 lines =@@
@@ -74,19 +74,19 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
      const linkProps = props as LinkProps;
  >linkProps : Symbol(linkProps, Decl(file.tsx, 32, 9))
 @@= skipped -8, +8 lines =@@
  >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
- 
+
      if(linkProps.to) {
 ->linkProps.to : Symbol(LinkProps.to, Decl(file.tsx, 11, 51))
 +>linkProps.to : Symbol(to, Decl(file.tsx, 11, 51))
  >linkProps : Symbol(linkProps, Decl(file.tsx, 32, 9))
 ->to : Symbol(LinkProps.to, Decl(file.tsx, 11, 51))
 +>to : Symbol(to, Decl(file.tsx, 11, 51))
- 
+
          return this._buildMainLink(props);
  >props : Symbol(props, Decl(file.tsx, 31, 27))
 @@= skipped -57, +57 lines =@@
@@ -98,7 +98,7 @@
  >console : Symbol(console, Decl(lib.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.d.ts, --, --))
- 
+
  const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get retained (See GitHub #13365)
  >b8 : Symbol(b8, Decl(file.tsx, 49, 5))
 @@= skipped -13, +13 lines =@@
@@ -108,7 +108,7 @@
 ->extra-prop : Symbol(extra-prop, Decl(file.tsx, 50, 38))
 +>extra-prop : Symbol("extra-prop", Decl(file.tsx, 50, 38))
  >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
- 
+
  const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
 @@= skipped -16, +16 lines =@@
  >onClick : Symbol(onClick, Decl(file.tsx, 52, 23))
@@ -117,12 +117,11 @@
 ->data-format : Symbol(data-format, Decl(file.tsx, 52, 61))
 +>data-format : Symbol("data-format", Decl(file.tsx, 52, 61))
  >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
- 
+
  const b12 = <MainButton data-format="Hello world" />
  >b12 : Symbol(b12, Decl(file.tsx, 53, 5))
  >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 ->data-format : Symbol(data-format, Decl(file.tsx, 53, 23))
 +>data-format : Symbol("data-format", Decl(file.tsx, 53, 23))
- 
- 
- 
+
+

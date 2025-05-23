@@ -2,7 +2,7 @@
 +++ new.asyncFunctionReturnType.2.symbols
 @@= skipped -5, +5 lines =@@
  >X : Symbol(X, Decl(asyncFunctionReturnType.2.ts, 0, 0))
- 
+
      f = async (): Promise<this> => this;
 ->f : Symbol(X.f, Decl(asyncFunctionReturnType.2.ts, 1, 9))
 +>f : Symbol(f, Decl(asyncFunctionReturnType.2.ts, 1, 9))

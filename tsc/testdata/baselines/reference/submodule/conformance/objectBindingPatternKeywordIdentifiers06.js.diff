@@ -2,7 +2,7 @@
 +++ new.objectBindingPatternKeywordIdentifiers06.js
 @@= skipped -3, +3 lines =@@
  var { as: as } = { as: 1 }
- 
+
  //// [objectBindingPatternKeywordIdentifiers06.js]
 -var as = { as: 1 }.as;
 +var { as: as } = { as: 1 };

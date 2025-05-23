@@ -2,7 +2,7 @@
 +++ new.invalidStaticField.js
 @@= skipped -4, +4 lines =@@
  class B { static NOT_NULL = new B(); }
- 
+
  //// [invalidStaticField.js]
 -var A = /** @class */ (function () {
 -    function A() {

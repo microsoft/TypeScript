@@ -6,6 +6,6 @@
  >Foo : Symbol(Foo)
 ->Thing : Symbol(Foo.Thing)
 +>Thing : Symbol(Thing)
- 
+
  let y: number = x.n;
  >y : Symbol(y, Decl(a.ts, 2, 3))

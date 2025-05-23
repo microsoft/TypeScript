@@ -1,8 +1,8 @@
 --- old.typeSatisfaction_propertyNameFulfillment.js
 +++ new.typeSatisfaction_propertyNameFulfillment.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [typeSatisfaction_propertyNameFulfillment.js]
 -var p = {
 +const p = {

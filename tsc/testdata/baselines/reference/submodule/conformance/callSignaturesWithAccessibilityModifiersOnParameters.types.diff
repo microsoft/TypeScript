@@ -2,21 +2,21 @@
 +++ new.callSignaturesWithAccessibilityModifiersOnParameters.types
 @@= skipped -107, +107 lines =@@
  }
- 
+
  var a: {
 ->a : { foo(x: any, y: any): any; foo2(x: number, y: string): any; }
 +>a : { foo: (x: any, y: any) => any; foo2: (x: number, y: string) => any; }
- 
+
      foo(public x, private y);
  >foo : (x: any, y: any) => any
 @@= skipped -15, +15 lines =@@
  };
- 
+
  var b = {
 ->b : { foo(x: any, y: any): void; a: (x: number, y: string) => void; b: <T>(x: T, y: T) => void; }
 ->{    foo(public x, y) { },    a: function foo(x: number, private y: string) { },    b: <T>(public x: T, private y: T) => { }} : { foo(x: any, y: any): void; a: (x: number, y: string) => void; b: <T>(x: T, y: T) => void; }
 +>b : { foo: (x: any, y: any) => void; a: (x: number, y: string) => void; b: <T>(x: T, y: T) => void; }
 +>{    foo(public x, y) { },    a: function foo(x: number, private y: string) { },    b: <T>(public x: T, private y: T) => { }} : { foo: (x: any, y: any) => void; a: (x: number, y: string) => void; b: <T>(x: T, y: T) => void; }
- 
+
      foo(public x, y) { },
  >foo : (x: any, y: any) => void

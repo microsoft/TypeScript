@@ -11,7 +11,7 @@
 +>a : any
 +>b : any
  >x : string
- 
+
  /**
 @@= skipped -10, +10 lines =@@
   * @param {{c: number, d: number}} OBJECTION
@@ -27,7 +27,7 @@
 +>b : any
 +>c : any
 +>d : any
- 
+
  /**
   * @param {number} x
 @@= skipped -12, +12 lines =@@
@@ -42,7 +42,7 @@
 +>a : any
 +>b : any
  >y : string
- 
+
  /**
   * @param {{a: string, b: string}} obj
   */
@@ -53,7 +53,7 @@
 +>good4 : (__0: { a: any; b: any; }) => void
 +>a : any
 +>b : any
- 
+
  // nested object syntax
  /**
 @@= skipped -22, +22 lines =@@
@@ -67,7 +67,7 @@
 +>a : any
 +>b : any
  >x : string
- 
+
  /**
 @@= skipped -14, +14 lines =@@
   * @param {string} OBJECTION.d - meh
@@ -83,7 +83,7 @@
 +>b : any
 +>c : any
 +>d : any
- 
+
  /**
   * @param {number} x
 @@= skipped -14, +14 lines =@@
@@ -98,7 +98,7 @@
 +>a : any
 +>b : any
  >y : string
- 
+
  /**
 @@= skipped -12, +12 lines =@@
   * @param {string} obj.b
@@ -110,7 +110,7 @@
 +>good8 : (__0: { a: any; b: any; }) => void
 +>a : any
 +>b : any
- 
+
  /**
   * @param {{ a: string }} argument
   */
@@ -119,7 +119,7 @@
 ->a : string
 +>good9 : (__0: { a: any; }) => void
 +>a : any
- 
+
      console.log(arguments, a);
  >console.log(arguments, a) : void
 @@= skipped -17, +17 lines =@@
@@ -129,7 +129,7 @@
 ->a : string
 +>a : any
  }
- 
+
  /**
 @@= skipped -10, +10 lines =@@
   * @param {string} x
@@ -151,4 +151,3 @@
 ->b : string
 +>a : any
 +>b : any
- 

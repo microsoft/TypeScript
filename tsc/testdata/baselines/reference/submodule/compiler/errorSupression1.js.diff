@@ -2,7 +2,7 @@
 +++ new.errorSupression1.js
 @@= skipped -9, +9 lines =@@
    // So we don't want an error on 'concat'.
- 
+
  //// [errorSupression1.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

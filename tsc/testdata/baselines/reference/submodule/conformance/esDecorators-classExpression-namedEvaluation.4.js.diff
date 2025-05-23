@@ -72,12 +72,8 @@
 -        };
 -        return class_2 = _classThis;
 -    })() } = obj;
-+    const { x = 
-+    @dec
-+    class {
-+    } } = obj;
- }
- {
+-}
+-{
 -    const { x = (() => {
 -        let _y_decorators;
 -        let _y_initializers = [];
@@ -96,12 +92,8 @@
 -            }
 -        };
 -    })() } = obj;
-+    const { x = class {
-+        @dec
-+        y;
-+    } } = obj;
- }
- {
+-}
+-{
 -    const { y: x = (() => {
 -        let _classDecorators = [dec];
 -        let _classDescriptor;
@@ -120,12 +112,8 @@
 -        };
 -        return class_3 = _classThis;
 -    })() } = obj;
-+    const { y: x = 
-+    @dec
-+    class {
-+    } } = obj;
- }
- {
+-}
+-{
 -    const { y: x = (() => {
 -        let _y_decorators;
 -        let _y_initializers = [];
@@ -144,6 +132,24 @@
 -            }
 -        };
 -    })() } = obj;
++    const { x = 
++    @dec
++    class {
++    } } = obj;
++}
++{
++    const { x = class {
++        @dec
++        y;
++    } } = obj;
++}
++{
++    const { y: x = 
++    @dec
++    class {
++    } } = obj;
++}
++{
 +    const { y: x = class {
 +        @dec
 +        y;

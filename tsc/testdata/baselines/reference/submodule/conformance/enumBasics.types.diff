@@ -1,7 +1,7 @@
 --- old.enumBasics.types
 +++ new.enumBasics.types
 @@= skipped -142, +142 lines =@@
- 
+
      A = 'foo'['foo']
  >A : E7.A
 ->'foo'['foo'] : error
@@ -10,7 +10,7 @@
  >'foo' : "foo"
  }
 @@= skipped -11, +11 lines =@@
- 
+
      B = 'foo'['foo']
  >B : E8.B
 ->'foo'['foo'] : error

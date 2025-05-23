@@ -1,8 +1,8 @@
 --- old.conditionalTypesSimplifyWhenTrivial.js
 +++ new.conditionalTypesSimplifyWhenTrivial.js
 @@= skipped -67, +67 lines =@@
- 
- 
+
+
  //// [conditionalTypesSimplifyWhenTrivial.js]
 -"use strict";
 -var fn1 = function (params) { return params; };

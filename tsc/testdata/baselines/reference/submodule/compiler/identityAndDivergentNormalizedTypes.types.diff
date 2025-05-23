@@ -2,31 +2,31 @@
 +++ new.identityAndDivergentNormalizedTypes.types
 @@= skipped -29, +29 lines =@@
  >path : PATH
- 
+
  const post = <PATH extends PostPath>(
 ->post : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 -><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 +>post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 +><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
- 
+
      path: PATH,
  >path : PATH
- 
+
      {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}
  >body : PostBody<PATH>
 ->options : { cache?: RequestCache | undefined; credentials?: RequestCredentials | undefined; headers?: HeadersInit | undefined; integrity?: string | undefined; keepalive?: boolean | undefined; method?: string | undefined; mode?: RequestMode | undefined; priority?: RequestPriority | undefined; redirect?: RequestRedirect | undefined; referrer?: string | undefined; referrerPolicy?: ReferrerPolicy | undefined; signal?: (AbortSignal | null) | undefined; window?: null | undefined; }
 +>options : { cache?: RequestCache | undefined; credentials?: RequestCredentials | undefined; headers?: HeadersInit | undefined; integrity?: string | undefined; keepalive?: boolean | undefined; method?: string | undefined; mode?: RequestMode | undefined; priority?: RequestPriority | undefined; redirect?: RequestRedirect | undefined; referrer?: string | undefined; referrerPolicy?: ReferrerPolicy | undefined; signal?: AbortSignal | null | undefined; window?: null | undefined; }
  >body : PostBody<PATH>
- 
+
  ) => {
  }
- 
+
  const tmp = <PATH extends PostPath>(
 ->tmp : <PATH extends PostPath>(path: PATH, body: PostBody<PATH>) => void
 -><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends PostPath>(path: PATH, body: PostBody<PATH>) => void
 +>tmp : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
 +><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
- 
+
    path: PATH,
  >path : PATH
 @@= skipped -27, +27 lines =@@
@@ -39,7 +39,7 @@
  >{ body } : { body: PostBody<PATH>; }
  >body : PostBody<PATH>
  }
- 
+
  function fx1<P extends PostPath>(x: { body: PostBody<P> }, y: { body: PostBody<P> }) {
 ->fx1 : <P extends PostPath>(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void
 +>fx1 : <P extends "/login" | "/user">(x: { body: PostBody<P>; }, y: { body: PostBody<P>; }) => void

@@ -2,7 +2,7 @@
 +++ new.discriminantPropertyCheck.types
 @@= skipped -299, +299 lines =@@
  >Num : Types.Num
- 
+
                  inst.value.toExponential;
 ->inst.value.toExponential : (fractionDigits?: number) => string
 +>inst.value.toExponential : (fractionDigits?: number | undefined) => string
@@ -11,6 +11,6 @@
  >value : number
 ->toExponential : (fractionDigits?: number) => string
 +>toExponential : (fractionDigits?: number | undefined) => string
- 
+
                  break;
              }

@@ -2,7 +2,7 @@
 +++ new.superCallFromClassThatHasNoBaseType1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [superCallFromClassThatHasNoBaseType1.js]
 -var A = /** @class */ (function () {
 -    function A(map) {

@@ -1,8 +1,8 @@
 --- old.keyofGenericExtendingClassDoubleLayer.js
 +++ new.keyofGenericExtendingClassDoubleLayer.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [keyofGenericExtendingClassDoubleLayer.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,16 +21,7 @@
 -})();
 -var Model = /** @class */ (function () {
 -    function Model() {
-+class Model {
-+    createdAt;
-+}
-+class AutoModel extends Model {
-+}
-+class PersonModel extends AutoModel {
-+    age;
-+    toJson() {
-+        let x = 'createdAt';
-     }
+-    }
 -    return Model;
 -}());
 -var AutoModel = /** @class */ (function (_super) {
@@ -50,4 +41,14 @@
 -    };
 -    return PersonModel;
 -}(AutoModel));
++class Model {
++    createdAt;
++}
++class AutoModel extends Model {
++}
++class PersonModel extends AutoModel {
++    age;
++    toJson() {
++        let x = 'createdAt';
++    }
 +}

@@ -6,6 +6,6 @@
  >C : Symbol(C, Decl(implementClausePrecedingExtends.ts, 0, 0))
 ->foo : Symbol(C.foo, Decl(implementClausePrecedingExtends.ts, 0, 9))
 +>foo : Symbol(foo, Decl(implementClausePrecedingExtends.ts, 0, 9))
- 
+
  class D implements C extends C { }
  >D : Symbol(D, Decl(implementClausePrecedingExtends.ts, 0, 23))

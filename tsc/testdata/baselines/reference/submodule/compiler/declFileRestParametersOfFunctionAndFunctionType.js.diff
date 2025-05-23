@@ -1,8 +1,8 @@
 --- old.declFileRestParametersOfFunctionAndFunctionType.js
 +++ new.declFileRestParametersOfFunctionAndFunctionType.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [declFileRestParametersOfFunctionAndFunctionType.js]
 -function f1() {
 -    var args = [];

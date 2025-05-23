@@ -1,7 +1,7 @@
 --- old.inlineJsxFactoryDeclarationsLocalTypes.js
 +++ new.inlineJsxFactoryDeclarationsLocalTypes.js
 @@= skipped -88, +88 lines =@@
- 
+
  //// [component.js]
  "use strict";
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {

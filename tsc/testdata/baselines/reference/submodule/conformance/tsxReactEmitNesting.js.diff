@@ -1,7 +1,7 @@
 --- old.tsxReactEmitNesting.js
 +++ new.tsxReactEmitNesting.js
 @@= skipped -37, +37 lines =@@
- 
+
  //// [file.js]
  // A simple render function with nesting and control statements
 -var render = function (ctrl, model) {

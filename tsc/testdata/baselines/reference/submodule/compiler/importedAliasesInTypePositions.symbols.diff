@@ -14,12 +14,12 @@
 +>mod : Symbol(unknown)
 +>name : Symbol(unknown)
 +>ReferredTo : Symbol(unknown)
- 
+
  export module ImportingModule {
  >ImportingModule : Symbol(ImportingModule, Decl(file2.ts, 1, 66))
 @@= skipped -13, +13 lines =@@
  >UsesReferredType : Symbol(UsesReferredType, Decl(file2.ts, 3, 31))
- 
+
          constructor(private referred: ReferredTo) { }
 ->referred : Symbol(UsesReferredType.referred, Decl(file2.ts, 5, 20))
 +>referred : Symbol(referred, Decl(file2.ts, 5, 20))

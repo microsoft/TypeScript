@@ -2,13 +2,13 @@
 +++ new.objectLiteralThisWidenedOnUse.types
 @@= skipped -4, +4 lines =@@
  >bar : boolean
- 
+
  var GlobalIns = {
 ->GlobalIns : { prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }
 ->{  prop1: 1,  prop2: 2,  prop3: 3,  test () {    this.accept_foo(this);  },  accept_foo (foo: Foo): boolean {    return !!foo && !!foo.bar;  }} : { prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }
 +>GlobalIns : { prop1: number; prop2: number; prop3: number; test: () => void; accept_foo: (foo: Foo) => boolean; }
 +>{  prop1: 1,  prop2: 2,  prop3: 3,  test () {    this.accept_foo(this);  },  accept_foo (foo: Foo): boolean {    return !!foo && !!foo.bar;  }} : { prop1: number; prop2: number; prop3: number; test: () => void; accept_foo: (foo: Foo) => boolean; }
- 
+
    prop1: 1,
  >prop1 : number
 @@= skipped -21, +21 lines =@@
@@ -20,6 +20,6 @@
  >accept_foo : (foo: Foo) => boolean
 ->this : { prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }
 +>this : { prop1: number; prop2: number; prop3: number; test: () => void; accept_foo: (foo: Foo) => boolean; }
- 
+
    },
    accept_foo (foo: Foo): boolean {

@@ -9,7 +9,7 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 +>iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
- 
+
              yield x => x.length
  >x : Symbol(x, Decl(generatorTypeCheck46.ts, 5, 17))
 ->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))

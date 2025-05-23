@@ -2,26 +2,32 @@
 +++ new.parameterInitializersForwardReferencing.js
 @@= skipped -43, +43 lines =@@
  }
- 
+
  //// [parameterInitializersForwardReferencing.js]
 -function left(a, b, c) {
 -    if (b === void 0) { b = a; }
 -    if (c === void 0) { c = b; }
-+function left(a, b = a, c = b) {
-     a;
-     b;
- }
+-    a;
+-    b;
+-}
 -function right(a, b) {
 -    if (a === void 0) { a = b; }
 -    if (b === void 0) { b = a; }
-+function right(a = b, b = a) {
-     a;
-     b;
- }
+-    a;
+-    b;
+-}
 -function right2(a, b, c) {
 -    if (a === void 0) { a = b; }
 -    if (b === void 0) { b = c; }
 -    if (c === void 0) { c = a; }
++function left(a, b = a, c = b) {
++    a;
++    b;
++}
++function right(a = b, b = a) {
++    a;
++    b;
++}
 +function right2(a = b, b = c, c = a) {
      a;
      b;
@@ -43,12 +49,7 @@
 -function defaultArgFunction(a, b) {
 -    if (a === void 0) { a = function () { return b; }; }
 -    if (b === void 0) { b = 1; }
-+function defaultArgFunction(a = function () { return b; }, b = 1) { }
-+function defaultArgArrow(a = () => () => b, b = 3) { }
-+class C {
-+    constructor(a = b, b = 1) { }
-+    method(a = b, b = 1) { }
- }
+-}
 -function defaultArgArrow(a, b) {
 -    if (a === void 0) { a = function () { return function () { return b; }; }; }
 -    if (b === void 0) { b = 3; }
@@ -64,6 +65,12 @@
 -    };
 -    return C;
 -}());
++function defaultArgFunction(a = function () { return b; }, b = 1) { }
++function defaultArgArrow(a = () => () => b, b = 3) { }
++class C {
++    constructor(a = b, b = 1) { }
++    method(a = b, b = 1) { }
++}
  // Function expressions
 -var x = function (a, b, c) {
 -    if (a === void 0) { a = b; }

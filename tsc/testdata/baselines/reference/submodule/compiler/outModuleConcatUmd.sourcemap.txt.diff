@@ -1,8 +1,7 @@
 --- old.outModuleConcatUmd.sourcemap.txt
 +++ new.outModuleConcatUmd.sourcemap.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +===================================================================
 +JsFile: a.js
 +mapUrl: a.js.map

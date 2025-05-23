@@ -2,7 +2,7 @@
 +++ new.unusedMultipleParameter2InContructor.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [unusedMultipleParameter2InContructor.js]
 -var Dummy = /** @class */ (function () {
 -    function Dummy(person, person2, person3) {

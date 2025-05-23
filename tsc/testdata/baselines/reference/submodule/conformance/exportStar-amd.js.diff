@@ -1,8 +1,8 @@
 --- old.exportStar-amd.js
 +++ new.exportStar-amd.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [t1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

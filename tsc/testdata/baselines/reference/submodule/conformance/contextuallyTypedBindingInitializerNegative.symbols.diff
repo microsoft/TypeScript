@@ -2,7 +2,7 @@
 +++ new.contextuallyTypedBindingInitializerNegative.symbols
 @@= skipped -4, +4 lines =@@
  >Show : Symbol(Show, Decl(contextuallyTypedBindingInitializerNegative.ts, 0, 0))
- 
+
      show: (x: number) => string;
 ->show : Symbol(Show.show, Decl(contextuallyTypedBindingInitializerNegative.ts, 0, 16))
 +>show : Symbol(show, Decl(contextuallyTypedBindingInitializerNegative.ts, 0, 16))
@@ -17,7 +17,7 @@
  >v : Symbol(v, Decl(contextuallyTypedBindingInitializerNegative.ts, 3, 31))
 @@= skipped -30, +30 lines =@@
  >Nested : Symbol(Nested, Decl(contextuallyTypedBindingInitializerNegative.ts, 5, 55))
- 
+
      nested: Show
 ->nested : Symbol(Nested.nested, Decl(contextuallyTypedBindingInitializerNegative.ts, 7, 18))
 +>nested : Symbol(nested, Decl(contextuallyTypedBindingInitializerNegative.ts, 7, 18))
@@ -32,7 +32,7 @@
  >v : Symbol(v, Decl(contextuallyTypedBindingInitializerNegative.ts, 10, 44))
 @@= skipped -16, +16 lines =@@
  >StringIdentity : Symbol(StringIdentity, Decl(contextuallyTypedBindingInitializerNegative.ts, 10, 67))
- 
+
      stringIdentity(s: string): string;
 ->stringIdentity : Symbol(StringIdentity.stringIdentity, Decl(contextuallyTypedBindingInitializerNegative.ts, 12, 26))
 +>stringIdentity : Symbol(stringIdentity, Decl(contextuallyTypedBindingInitializerNegative.ts, 12, 26))
@@ -53,7 +53,7 @@
  >x : Symbol(x, Decl(contextuallyTypedBindingInitializerNegative.ts, 15, 82))
 @@= skipped -19, +19 lines =@@
  >Tuples : Symbol(Tuples, Decl(contextuallyTypedBindingInitializerNegative.ts, 15, 91))
- 
+
      prop: [string, number];
 ->prop : Symbol(Tuples.prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 17, 18))
 +>prop : Symbol(prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 17, 18))
@@ -62,7 +62,7 @@
  >g : Symbol(g, Decl(contextuallyTypedBindingInitializerNegative.ts, 19, 1))
 @@= skipped -11, +11 lines =@@
  >StringUnion : Symbol(StringUnion, Decl(contextuallyTypedBindingInitializerNegative.ts, 20, 45))
- 
+
      prop: "foo" | "bar";
 ->prop : Symbol(StringUnion.prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 22, 23))
 +>prop : Symbol(prop, Decl(contextuallyTypedBindingInitializerNegative.ts, 22, 23))

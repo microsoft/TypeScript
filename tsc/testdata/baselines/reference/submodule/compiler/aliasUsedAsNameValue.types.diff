@@ -6,7 +6,7 @@
  import mod = require("./aliasUsedAsNameValue_0");
 ->mod : typeof mod
 +>mod : typeof import("aliasUsedAsNameValue_0")
- 
+
  import b = require("./aliasUsedAsNameValue_1");
 ->b : typeof b
 +>b : typeof import("aliasUsedAsNameValue_1")
@@ -23,5 +23,5 @@
 ->mod : typeof mod
 +>mod : typeof import("aliasUsedAsNameValue_0")
  }
- 
+
  === aliasUsedAsNameValue_0.ts ===

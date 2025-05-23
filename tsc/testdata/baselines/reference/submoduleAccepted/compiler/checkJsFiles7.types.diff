@@ -11,7 +11,7 @@
  >a : boolean
 +>true : boolean
  >true : true
- 
+
  		this.a = !!this.a;
 @@= skipped -13, +14 lines =@@
  >a : boolean

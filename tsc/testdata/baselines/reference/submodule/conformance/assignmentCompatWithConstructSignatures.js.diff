@@ -1,8 +1,8 @@
 --- old.assignmentCompatWithConstructSignatures.js
 +++ new.assignmentCompatWithConstructSignatures.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [assignmentCompatWithConstructSignatures.js]
 -// void returning call signatures can be assigned a non-void returning call signature that otherwise matches
  var t;

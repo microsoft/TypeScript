@@ -12,11 +12,13 @@
  a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
  a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
  a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
+-
+-
+-==== a.js (10 errors) ====
 +a.js(40,12): error TS2345: Argument of type '1' is not assignable to parameter of type 'never'.
 +a.js(41,12): error TS2345: Argument of type '"ok"' is not assignable to parameter of type 'never'.
- 
- 
--==== a.js (10 errors) ====
++
++
 +==== a.js (9 errors) ====
      function A () {
          // should get any on this-assignments in constructor

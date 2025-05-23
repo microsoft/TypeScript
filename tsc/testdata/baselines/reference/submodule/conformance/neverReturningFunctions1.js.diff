@@ -1,7 +1,7 @@
 --- old.neverReturningFunctions1.js
 +++ new.neverReturningFunctions1.js
 @@= skipped -266, +266 lines =@@
- 
+
  //// [neverReturningFunctions1.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -124,11 +124,12 @@
 -    __extends(SuperThrowable, _super);
 -    function SuperThrowable() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    SuperThrowable.prototype.err = function (msg) {
 -        _super.prototype.throw.call(this);
 -    };
 -    SuperThrowable.prototype.ok = function () {
++    }
 +}
 +class SuperThrowable extends MyThrowable {
 +    err(msg) {

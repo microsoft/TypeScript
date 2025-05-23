@@ -1,7 +1,7 @@
 --- old.mappedTypeAsClauseRelationships.js
 +++ new.mappedTypeAsClauseRelationships.js
 @@= skipped -31, +31 lines =@@
- 
+
  //// [mappedTypeAsClauseRelationships.js]
  function fun(val) {
 -    var x = val; // Ok

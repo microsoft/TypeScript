@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsFunctionClassesCjsExportAssignment.symbols
 @@= skipped -8, +8 lines =@@
  >timeout : Symbol(timeout, Decl(timer.js, 3, 15))
- 
+
      this.timeout = timeout;
 ->this.timeout : Symbol(Timer.timeout, Decl(timer.js, 3, 25))
 ->this : Symbol(Timer, Decl(timer.js, 0, 0))
@@ -17,11 +17,11 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Timer, Decl(timer.js, 0, 0))
  >Timer : Symbol(Timer, Decl(timer.js, 0, 0))
- 
+
  === hook.js ===
 @@= skipped -23, +20 lines =@@
  >handle : Symbol(handle, Decl(hook.js, 6, 14))
- 
+
      this.handle = handle;
 ->this.handle : Symbol(Hook.handle, Decl(hook.js, 6, 23))
 ->this : Symbol(Hook, Decl(hook.js, 0, 0))
@@ -36,21 +36,21 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Hook, Decl(hook.js, 0, 0))
  >Hook : Symbol(Hook, Decl(hook.js, 0, 0))
- 
+
  === context.js ===
 @@= skipped -44, +41 lines =@@
   */
- 
+
  function Context(input) {
 ->Context : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
 +>Context : Symbol(Context, Decl(context.js, 0, 0))
  >input : Symbol(input, Decl(context.js, 31, 17))
- 
+
      if (!(this instanceof Context)) {
 ->this : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
 ->Context : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
 +>Context : Symbol(Context, Decl(context.js, 0, 0))
- 
+
        return new Context(input)
 ->Context : Symbol(Context, Decl(context.js, 0, 0), Decl(context.js, 36, 1))
 +>Context : Symbol(Context, Decl(context.js, 0, 0))
@@ -70,7 +70,7 @@
 +>Context.prototype : Symbol(prototype, Decl(context.js, 36, 1))
 +>Context : Symbol(Context, Decl(context.js, 0, 0))
 +>prototype : Symbol(prototype, Decl(context.js, 36, 1))
- 
+
      /**
       * @param {Input} input
 @@= skipped -38, +33 lines =@@
@@ -85,4 +85,3 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Context, Decl(context.js, 0, 0))
 +>Context : Symbol(Context, Decl(context.js, 0, 0))
- 

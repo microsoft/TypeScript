@@ -2,7 +2,7 @@
 +++ new.transformArrowInBlockScopedLoopVarInitializer.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [transformArrowInBlockScopedLoopVarInitializer.js]
 -var _loop_1 = function () {
 -    var local = null;

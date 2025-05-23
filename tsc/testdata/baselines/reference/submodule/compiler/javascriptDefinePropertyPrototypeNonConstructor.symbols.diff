@@ -2,7 +2,7 @@
 +++ new.javascriptDefinePropertyPrototypeNonConstructor.symbols
 @@= skipped -5, +5 lines =@@
  }
- 
+
  Object.defineProperty(Graphic.prototype, "instance", {
 ->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 +>Object.defineProperty : Symbol(defineProperty, Decl(lib.es5.d.ts, --, --))
@@ -15,12 +15,11 @@
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->"instance" : Symbol(Graphic.instance, Decl(a.js, 1, 1))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 
+
    get: function() {
  >get : Symbol(get, Decl(a.js, 3, 54))
- 
+
      return this;
 ->this : Symbol(Graphic, Decl(a.js, 0, 0))
    }
  });
- 

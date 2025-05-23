@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment9_1.errors.txt
 +++ new.typeFromPropertyAssignment9_1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(33,16): error TS2304: Cannot find name 'global'.
 +
 +

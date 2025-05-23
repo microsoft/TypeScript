@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationExportAssignmentCommonjs.symbols
 @@= skipped -4, +4 lines =@@
  >a : Symbol(a, Decl(sourceMapValidationExportAssignmentCommonjs.ts, 0, 0))
- 
+
      public c;
 ->c : Symbol(a.c, Decl(sourceMapValidationExportAssignmentCommonjs.ts, 0, 9))
 +>c : Symbol(c, Decl(sourceMapValidationExportAssignmentCommonjs.ts, 0, 9))

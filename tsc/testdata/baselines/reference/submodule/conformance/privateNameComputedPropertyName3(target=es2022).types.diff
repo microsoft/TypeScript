@@ -2,7 +2,7 @@
 +++ new.privateNameComputedPropertyName3(target=es2022).types
 @@= skipped -45, +45 lines =@@
          }
- 
+
          return new Bar()[obj.#name]();
 ->new Bar()[obj.#name]() : error
 ->new Bar()[obj.#name] : error

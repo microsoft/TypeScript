@@ -9,7 +9,7 @@
 +>unbox : <T>(box: { value: T; }) => T
 +>box : { value: T; }
  >value : T
- 
+
  declare const su: string | undefined;
 @@= skipped -29, +29 lines =@@
  const v1: number = unbox(b1);
@@ -18,7 +18,7 @@
 ->unbox : <T>(box: { value: T | undefined; }) => T
 +>unbox : <T>(box: { value: T; }) => T
  >b1 : { value: number; }
- 
+
  const b2 = { value: su?.length as number | undefined };
 ->b2 : { value: number | undefined; }
 ->{ value: su?.length as number | undefined } : { value: number | undefined; }
@@ -35,7 +35,7 @@
 ->b2 : { value: number | undefined; }
 +>unbox : <T>(box: { value: T; }) => T
 +>b2 : { value: number; }
- 
+
  const b3: { value: number | undefined } = { value: su?.length };
 ->b3 : { value: number | undefined; }
 +>b3 : { value: number; }
@@ -50,7 +50,7 @@
 ->b3 : { value: number | undefined; }
 +>unbox : <T>(box: { value: T; }) => T
 +>b3 : { value: number; }
- 
+
  const b4 = { value: fnu?.() };
  >b4 : { value: number; }
 @@= skipped -13, +13 lines =@@
@@ -60,7 +60,7 @@
 ->unbox : <T>(box: { value: T | undefined; }) => T
 +>unbox : <T>(box: { value: T; }) => T
  >b4 : { value: number; }
- 
+
  const b5 = { value: su?.["length"] };
 @@= skipped -14, +14 lines =@@
  const v5: number = unbox(b5);
@@ -69,7 +69,7 @@
 ->unbox : <T>(box: { value: T | undefined; }) => T
 +>unbox : <T>(box: { value: T; }) => T
  >b5 : { value: number; }
- 
+
  const b6 = { value: osu?.prop.length };
 @@= skipped -16, +16 lines =@@
  const v6: number = unbox(b6);
@@ -78,7 +78,7 @@
 ->unbox : <T>(box: { value: T | undefined; }) => T
 +>unbox : <T>(box: { value: T; }) => T
  >b6 : { value: number; }
- 
+
  const b7 = { value: osu?.prop["length"] };
 @@= skipped -16, +16 lines =@@
  const v7: number = unbox(b7);
@@ -87,7 +87,7 @@
 ->unbox : <T>(box: { value: T | undefined; }) => T
 +>unbox : <T>(box: { value: T; }) => T
  >b7 : { value: number; }
- 
+
  const b8 = { value: ofnu?.prop() };
 @@= skipped -15, +15 lines =@@
  const v8: number = unbox(b8);
@@ -96,5 +96,4 @@
 ->unbox : <T>(box: { value: T | undefined; }) => T
 +>unbox : <T>(box: { value: T; }) => T
  >b8 : { value: number; }
- 
- 
+

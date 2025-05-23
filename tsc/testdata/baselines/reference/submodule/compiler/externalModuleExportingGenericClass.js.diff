@@ -1,7 +1,7 @@
 --- old.externalModuleExportingGenericClass.js
 +++ new.externalModuleExportingGenericClass.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [externalModuleExportingGenericClass_file0.js]
  "use strict";
 -var C = /** @class */ (function () {

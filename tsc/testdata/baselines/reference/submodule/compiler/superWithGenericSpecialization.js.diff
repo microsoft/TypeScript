@@ -2,7 +2,7 @@
 +++ new.superWithGenericSpecialization.js
 @@= skipped -16, +16 lines =@@
  var r2: number = d.y;
- 
+
  //// [superWithGenericSpecialization.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,14 +21,7 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    x;
-+}
-+class D extends C {
-+    y;
-+    constructor() {
-+        super(); // uses the type parameter type of the base class, ie string
-     }
+-    }
 -    return C;
 -}());
 -var D = /** @class */ (function (_super) {
@@ -38,6 +31,14 @@
 -    }
 -    return D;
 -}(C));
++class C {
++    x;
++}
++class D extends C {
++    y;
++    constructor() {
++        super(); // uses the type parameter type of the base class, ie string
++    }
 +}
  var d;
  var r = d.x;

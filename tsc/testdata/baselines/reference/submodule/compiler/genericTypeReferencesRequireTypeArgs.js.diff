@@ -1,8 +1,8 @@
 --- old.genericTypeReferencesRequireTypeArgs.js
 +++ new.genericTypeReferencesRequireTypeArgs.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [genericTypeReferencesRequireTypeArgs.js]
 -var C = /** @class */ (function () {
 -    function C() {

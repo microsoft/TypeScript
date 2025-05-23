@@ -2,24 +2,24 @@
 +++ new.declarationNoDanglingGenerics.types
 @@= skipped -6, +6 lines =@@
  >{} : {}
- 
+
  function register(kind: string): void | never {
 ->register : (kind: string) => void | never
 +>register : (kind: string) => void
  >kind : string
- 
+
    if (kindCache[kind]) {
 @@= skipped -28, +28 lines =@@
- 
+
    register(kind);
  >register(kind) : void
 ->register : (kind: string) => void | never
 +>register : (kind: string) => void
  >kind : TKind
- 
+
    return class {
 @@= skipped -35, +35 lines =@@
- 
+
  export class AKind extends ClassFactory(Kinds.A) {
  >AKind : AKind
 ->ClassFactory(Kinds.A) : ClassFactory<"A">.(Anonymous class)
@@ -28,7 +28,7 @@
  >Kinds.A : "A"
  >Kinds : typeof Kinds
 @@= skipped -9, +9 lines =@@
- 
+
  export class BKind extends ClassFactory(Kinds.B) {
  >BKind : BKind
 ->ClassFactory(Kinds.B) : ClassFactory<"B">.(Anonymous class)
@@ -37,7 +37,7 @@
  >Kinds.B : "B"
  >Kinds : typeof Kinds
 @@= skipped -9, +9 lines =@@
- 
+
  export class CKind extends ClassFactory(Kinds.C) {
  >CKind : CKind
 ->ClassFactory(Kinds.C) : ClassFactory<"C">.(Anonymous class)

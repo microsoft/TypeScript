@@ -1,8 +1,8 @@
 --- old.privateNameAndIndexSignature.js
 +++ new.privateNameAndIndexSignature.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [privateNameAndIndexSignature.js]
 -"use strict";
 -var _A_foo;

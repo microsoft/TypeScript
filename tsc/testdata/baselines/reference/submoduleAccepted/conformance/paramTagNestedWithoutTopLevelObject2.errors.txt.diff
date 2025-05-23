@@ -1,6 +1,6 @@
 --- old.paramTagNestedWithoutTopLevelObject2.errors.txt
 +++ new.paramTagNestedWithoutTopLevelObject2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -paramTagNestedWithoutTopLevelObject2.js(2,20): error TS8032: Qualified name 'xyz.bar' is not allowed without a leading '@param {object} xyz'.
 -
 -
@@ -14,5 +14,4 @@
 -    function g(xyz) {
 -        return xyz.bar.p;
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,7 +1,7 @@
 --- old.contextuallyTypedGenericAssignment.js
 +++ new.contextuallyTypedGenericAssignment.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [contextuallyTypedGenericAssignment.js]
  function foo(arg) { }
 -foo(function (t, u) { return t.a; });

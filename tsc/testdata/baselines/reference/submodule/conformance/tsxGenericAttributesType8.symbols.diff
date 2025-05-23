@@ -6,6 +6,6 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  const decorator = function <U>(props: U) {
  >decorator : Symbol(decorator, Decl(file.tsx, 3, 5))

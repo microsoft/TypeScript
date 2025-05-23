@@ -2,7 +2,7 @@
 +++ new.genericWithIndexerOfTypeParameterType1.js
 @@= skipped -10, +10 lines =@@
  var value: string = lazyArray.array()["test"]; // used to be an error
- 
+
  //// [genericWithIndexerOfTypeParameterType1.js]
 -var LazyArray = /** @class */ (function () {
 -    function LazyArray() {

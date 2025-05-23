@@ -2,7 +2,7 @@
 +++ new.returnTypeParameterWithModules.types
 @@= skipped -4, +4 lines =@@
  >M1 : typeof M1
- 
+
      export function reduce<A>(ar, f, e?): Array<A> {
 ->reduce : <A>(ar: any, f: any, e?: any) => Array<A>
 +>reduce : <A>(ar: any, f: any, e?: any) => A[]
@@ -11,16 +11,16 @@
  >e : any
 @@= skipped -29, +29 lines =@@
  >M2 : typeof M2
- 
+
    import A = M1
 ->A : typeof A
 ->M1 : typeof A
 +>A : typeof M1
 +>M1 : typeof M1
- 
+
    export function compose() {
  >compose : () => void
- 
+
          A.reduce(arguments, compose2);
  >A.reduce(arguments, compose2) : unknown[]
 ->A.reduce : <A>(ar: any, f: any, e?: any) => Array<A>
@@ -31,4 +31,3 @@
 +>reduce : <A>(ar: any, f: any, e?: any) => A[]
  >arguments : IArguments
  >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
- 

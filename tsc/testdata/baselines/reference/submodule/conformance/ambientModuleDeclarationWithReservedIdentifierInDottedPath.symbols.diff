@@ -1,7 +1,7 @@
 --- old.ambientModuleDeclarationWithReservedIdentifierInDottedPath.symbols
 +++ new.ambientModuleDeclarationWithReservedIdentifierInDottedPath.symbols
 @@= skipped -12, +12 lines =@@
- 
+
  export const tabId = chrome.debugger.tabId;
  >tabId : Symbol(tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 6, 12))
 ->chrome.debugger.tabId : Symbol(chrome.debugger.tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 3, 15))
@@ -13,6 +13,6 @@
 ->tabId : Symbol(chrome.debugger.tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 3, 15))
 +>debugger : Symbol(debugger, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 2, 22))
 +>tabId : Symbol(tabId, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 3, 15))
- 
+
  declare module test.class {}
  >test : Symbol(test, Decl(ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts, 6, 43))

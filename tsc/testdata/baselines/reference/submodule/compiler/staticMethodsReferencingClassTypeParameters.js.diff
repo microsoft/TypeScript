@@ -2,7 +2,7 @@
 +++ new.staticMethodsReferencingClassTypeParameters.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [staticMethodsReferencingClassTypeParameters.js]
 -var C = /** @class */ (function () {
 -    function C() {

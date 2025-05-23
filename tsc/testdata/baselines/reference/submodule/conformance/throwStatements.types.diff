@@ -2,7 +2,7 @@
 +++ new.throwStatements.types
 @@= skipped -167, +167 lines =@@
  >M : typeof M
- 
+
  var aClassInModule = new M.A();
 ->aClassInModule : M.A
 ->new M.A() : M.A
@@ -13,10 +13,10 @@
  >M : typeof M
 ->A : typeof M.A
 +>A : typeof A
- 
+
  throw aClassInModule;
 ->aClassInModule : M.A
 +>aClassInModule : A
- 
+
  var aFunctionInModule = M.F2;
  >aFunctionInModule : (x: number) => string

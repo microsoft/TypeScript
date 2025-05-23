@@ -1,7 +1,7 @@
 --- old.contextualTypeArrayReturnType.js
 +++ new.contextualTypeArrayReturnType.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [contextualTypeArrayReturnType.js]
  var style = {
 -    initialLeftPageTransforms: function (width) {

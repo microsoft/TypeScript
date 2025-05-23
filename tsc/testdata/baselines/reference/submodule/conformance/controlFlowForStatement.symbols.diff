@@ -9,7 +9,7 @@
  >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
          x; // number
  >x : Symbol(x, Decl(controlFlowForStatement.ts, 8, 7))
 @@= skipped -20, +20 lines =@@
@@ -22,5 +22,5 @@
 ->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 +>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
  >x : Symbol(x, Decl(controlFlowForStatement.ts, 15, 7))
- 
+
          x; // string

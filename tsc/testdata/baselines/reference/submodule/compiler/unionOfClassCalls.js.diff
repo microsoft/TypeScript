@@ -1,8 +1,8 @@
 --- old.unionOfClassCalls.js
 +++ new.unionOfClassCalls.js
 @@= skipped -79, +79 lines =@@
- 
- 
+
+
  //// [unionOfClassCalls.js]
 -"use strict";
  switch (tmp.get('t')) {
@@ -26,26 +26,34 @@
      return [];
  }, []);
 -arr.forEach(function (a, index) {
-+arr.forEach((a, index) => {
-     return index;
- });
+-    return index;
+-});
 -arr1.map(function (a, index) {
-+arr1.map((a, index) => {
-     return index;
- });
+-    return index;
+-});
 -arr1.reduce(function (acc, a, index) {
++arr.forEach((a, index) => {
++    return index;
++});
++arr1.map((a, index) => {
++    return index;
++});
 +arr1.reduce((acc, a, index) => {
      return [a];
  }, []);
 -arr1.forEach(function (a, index) {
-+arr1.forEach((a, index) => {
-     return index;
- });
+-    return index;
+-});
 -arr2.map(function (a, index) {
-+arr2.map((a, index) => {
-     return index;
- });
+-    return index;
+-});
 -arr2.reduce(function (acc, a, index) {
++arr1.forEach((a, index) => {
++    return index;
++});
++arr2.map((a, index) => {
++    return index;
++});
 +arr2.reduce((acc, a, index) => {
      return [];
  }, []);

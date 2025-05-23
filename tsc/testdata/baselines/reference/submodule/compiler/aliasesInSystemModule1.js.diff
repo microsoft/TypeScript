@@ -2,7 +2,7 @@
 +++ new.aliasesInSystemModule1.js
 @@= skipped -17, +17 lines =@@
    
- 
+
  //// [aliasesInSystemModule1.js]
 -System.register(["foo"], function (exports_1, context_1) {
 -    "use strict";

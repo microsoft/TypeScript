@@ -7,5 +7,5 @@
 ->x : Symbol((Anonymous class).x, Decl(functionLikeInParameterInitializer.ts, 15, 35))
 +>x : Symbol(x, Decl(functionLikeInParameterInitializer.ts, 15, 35))
  >foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 16, 7))
- 
+
      let foo = "in";

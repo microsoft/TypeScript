@@ -1,14 +1,14 @@
 --- old.typeTagOnFunctionReferencesGeneric.types
 +++ new.typeTagOnFunctionReferencesGeneric.types
 @@= skipped -6, +6 lines =@@
- 
+
  /**@type {IFn}*/
  export function inJs(l) {
 ->inJs : <T>(m: T) => T
 ->l : T
 +>inJs : (l: any) => any
 +>l : any
- 
+
      return l;
 ->l : T
 +>l : any
@@ -19,5 +19,5 @@
 +>inJs(1) : any
 +>inJs : (l: any) => any
  >1 : 1
- 
+
  /**@type {IFn}*/

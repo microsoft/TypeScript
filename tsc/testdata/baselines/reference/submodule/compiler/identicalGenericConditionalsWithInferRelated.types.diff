@@ -2,25 +2,25 @@
 +++ new.identicalGenericConditionalsWithInferRelated.types
 @@= skipped -5, +5 lines =@@
  >arg : X
- 
+
      type Cond1 = X extends [infer A] ? A : never;
 ->Cond1 : X extends [infer A] ? A : never
 +>Cond1 : Cond1
- 
+
      type Cond2 = X extends [infer A] ? A : never;
 ->Cond2 : X extends [infer A] ? A : never
 +>Cond2 : Cond2
- 
+
      let x: Cond1 = null as any;
 ->x : X extends [infer A] ? A : never
 +>x : Cond1
  >null as any : any
- 
+
      let y: Cond2 = null as any;
 ->y : X extends [infer A] ? A : never
 +>y : Cond2
  >null as any : any
- 
+
      x = y; // is err, should be ok
 ->x = y : X extends [infer A] ? A : never
 ->x : X extends [infer A] ? A : never
@@ -28,7 +28,7 @@
 +>x = y : Cond2
 +>x : Cond1
 +>y : Cond2
- 
+
      y = x; // is err, should be ok
 ->y = x : X extends [infer A] ? A : never
 ->y : X extends [infer A] ? A : never
@@ -37,5 +37,5 @@
 +>y : Cond2
 +>x : Cond1
  }
- 
+
  // repro from https://github.com/microsoft/TypeScript/issues/26627

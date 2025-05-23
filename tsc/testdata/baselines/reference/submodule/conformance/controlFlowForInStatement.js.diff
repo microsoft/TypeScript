@@ -1,8 +1,8 @@
 --- old.controlFlowForInStatement.js
 +++ new.controlFlowForInStatement.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [controlFlowForInStatement.js]
 -var x;
 -var obj;

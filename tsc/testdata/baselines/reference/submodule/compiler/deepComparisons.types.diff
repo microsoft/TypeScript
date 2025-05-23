@@ -2,11 +2,11 @@
 +++ new.deepComparisons.types
 @@= skipped -77, +77 lines =@@
  );
- 
+
  declare function f<T = any>(): F<T>;
 ->f : <T = any>() => F<T>
 +>f : <T>() => F<T>
- 
+
  function g() {
  >g : () => F<any>
 @@= skipped -8, +8 lines =@@
@@ -16,4 +16,3 @@
 ->f : <T = any>() => F<T>
 +>f : <T>() => F<T>
  }
- 

@@ -1,7 +1,7 @@
 --- old.predicateSemantics.symbols
 +++ new.predicateSemantics.symbols
 @@= skipped -62, +62 lines =@@
- 
+
  // Should be OK
  console.log((cond || undefined) && 1 / cond);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

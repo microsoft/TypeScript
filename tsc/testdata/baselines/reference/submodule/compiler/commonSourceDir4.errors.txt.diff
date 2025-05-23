@@ -1,6 +1,6 @@
 --- old.commonSourceDir4.errors.txt
 +++ new.commonSourceDir4.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5009: Cannot find the common subdirectory path for the input files.
 -
 -
@@ -10,5 +10,4 @@
 -    
 -==== a:/foo/baz.ts (0 errors) ====
 -    var y: number;
-@@= skipped --1, +1 lines =@@
 +<no content>

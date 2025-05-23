@@ -1,8 +1,8 @@
 --- old.staticClassProps.js
 +++ new.staticClassProps.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [staticClassProps.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,11 +1,11 @@
 --- old.noImplicitAnyStringIndexerOnObject.types
 +++ new.noImplicitAnyStringIndexerOnObject.types
 @@= skipped -406, +406 lines =@@
- 
+
  let rover: Dog = { bark() {} };
  >rover : Dog
 ->{ bark() {} } : { bark(): void; }
 +>{ bark() {} } : { bark: () => void; }
  >bark : () => void
- 
+
  declare let map: MyMap<Dog, string>;

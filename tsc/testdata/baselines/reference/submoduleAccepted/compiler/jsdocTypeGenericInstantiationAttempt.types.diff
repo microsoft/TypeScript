@@ -7,5 +7,5 @@
 ->thing : (list: Array<any>) => any[]
 +>thing : (list: any[]) => any[]
  >list : any[]
- 
+
      return list;

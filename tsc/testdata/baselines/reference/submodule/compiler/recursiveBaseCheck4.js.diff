@@ -2,7 +2,7 @@
 +++ new.recursiveBaseCheck4.js
 @@= skipped -4, +4 lines =@@
  (new M).blah;
- 
+
  //// [recursiveBaseCheck4.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

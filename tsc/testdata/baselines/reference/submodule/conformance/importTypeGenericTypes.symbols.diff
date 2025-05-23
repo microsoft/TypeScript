@@ -2,15 +2,15 @@
 +++ new.importTypeGenericTypes.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(foo.ts, 0, 16))
- 
+
      x: number;
 ->x : Symbol(Point.x, Decl(foo.ts, 0, 20))
 +>x : Symbol(x, Decl(foo.ts, 0, 20))
- 
+
      y: number;
 ->y : Symbol(Point.y, Decl(foo.ts, 1, 14))
 +>y : Symbol(y, Decl(foo.ts, 1, 14))
- 
+
      data: T;
 ->data : Symbol(Point.data, Decl(foo.ts, 2, 14))
 +>data : Symbol(data, Decl(foo.ts, 2, 14))
@@ -19,15 +19,15 @@
  export = Point;
 @@= skipped -21, +21 lines =@@
  >T : Symbol(T, Decl(foo2.ts, 1, 23))
- 
+
          a: string;
 ->a : Symbol(I.a, Decl(foo2.ts, 1, 27))
 +>a : Symbol(a, Decl(foo2.ts, 1, 27))
- 
+
          b: number;
 ->b : Symbol(I.b, Decl(foo2.ts, 2, 18))
 +>b : Symbol(b, Decl(foo2.ts, 2, 18))
- 
+
          data: T;
 ->data : Symbol(I.data, Decl(foo2.ts, 3, 18))
 +>data : Symbol(data, Decl(foo2.ts, 3, 18))
@@ -36,15 +36,15 @@
  }
 @@= skipped -19, +19 lines =@@
  >T : Symbol(T, Decl(foo2.ts, 9, 23))
- 
+
          a: number;
 ->a : Symbol(J.a, Decl(foo2.ts, 9, 27))
 +>a : Symbol(a, Decl(foo2.ts, 9, 27))
- 
+
          b: string;
 ->b : Symbol(J.b, Decl(foo2.ts, 10, 18))
 +>b : Symbol(b, Decl(foo2.ts, 10, 18))
- 
+
          data: T;
 ->data : Symbol(J.data, Decl(foo2.ts, 11, 18))
 +>data : Symbol(data, Decl(foo2.ts, 11, 18))
@@ -53,7 +53,7 @@
  }
 @@= skipped -16, +16 lines =@@
  >T : Symbol(T, Decl(foo2.ts, 16, 10))
- 
+
      item: Bar.I<T>;
 ->item : Symbol(Bar.item, Decl(foo2.ts, 16, 14))
 +>item : Symbol(item, Decl(foo2.ts, 16, 14))
@@ -61,7 +61,7 @@
 ->I : Symbol(Bar.I, Decl(foo2.ts, 0, 15))
 +>I : Symbol(I, Decl(foo2.ts, 0, 15))
  >T : Symbol(T, Decl(foo2.ts, 16, 10))
- 
+
      constructor(input: Baz.J<T>) {}
  >input : Symbol(input, Decl(foo2.ts, 18, 16))
  >Baz : Symbol(Baz, Decl(foo2.ts, 6, 1))
@@ -81,7 +81,7 @@
  >b : Symbol(b, Decl(usage.ts, 1, 60))
 @@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(usage.ts, 3, 18))
- 
+
      item: {a: string, b: number, c: object, data: T};
 ->item : Symbol(Bar2.item, Decl(usage.ts, 3, 22))
 +>item : Symbol(item, Decl(usage.ts, 3, 22))

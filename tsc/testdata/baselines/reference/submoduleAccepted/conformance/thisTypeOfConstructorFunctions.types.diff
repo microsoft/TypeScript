@@ -7,7 +7,7 @@
 ->Cp : typeof Cp
 +>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
  >t : T
- 
+
      /** @type {this} */
      this.dit = this
 ->this.dit = this : this
@@ -21,7 +21,7 @@
 +>dit : any
 +>this : any
 +>this : any
- 
+
      this.y = t
  >this.y = t : T
  >this.y : any
@@ -29,7 +29,7 @@
 +>this : any
  >y : any
  >t : T
- 
+
      /** @return {this} */
      this.m3 = () => this
 ->this.m3 = () => this : () => this
@@ -43,7 +43,7 @@
 +>() => this : () => any
 +>this : any
  }
- 
+
  Cp.prototype = {
 ->Cp.prototype = {    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4(): this; }
 ->Cp.prototype : { m4(): this; }
@@ -55,12 +55,12 @@
 +>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
 +>prototype : { m4: () => any; }
 +>{    /** @return {this} */    m4() {        this.z = this.y; return this    }} : { m4: () => any; }
- 
+
      /** @return {this} */
      m4() {
 ->m4 : () => this
 +>m4 : () => any
- 
+
          this.z = this.y; return this
 ->this.z = this.y : T
 ->this.z : T
@@ -80,7 +80,7 @@
 +>this : any
      }
  }
- 
+
 @@= skipped -57, +58 lines =@@
   * @param {T} t
   */
@@ -88,7 +88,7 @@
 ->Cpp : typeof Cpp
 +>Cpp : <T>(t: T) => void
  >t : T
- 
+
      this.y = t
  >this.y = t : T
  >this.y : any
@@ -109,7 +109,7 @@
  >m2 : any
 ->function () {    this.z = this.y; return this} : () => this
 +>function () {    this.z = this.y; return this} : () => any
- 
+
      this.z = this.y; return this
 ->this.z = this.y : T
 ->this.z : T
@@ -128,7 +128,7 @@
 +>y : any
 +>this : any
  }
- 
+
  var cp = new Cp(1)
 ->cp : Cp<number>
 ->new Cp(1) : Cp<number>
@@ -137,7 +137,7 @@
 +>new Cp(1) : any
 +>Cp : { <T>(t: T): void; prototype: { m4: () => any; }; }
  >1 : 1
- 
+
  var cpp = new Cpp(2)
 ->cpp : Cpp<number>
 ->new Cpp(2) : Cpp<number>
@@ -146,7 +146,7 @@
 +>new Cpp(2) : any
 +>Cpp : <T>(t: T) => void
  >2 : 2
- 
+
  cp.dit
 ->cp.dit : Cp<number>
 ->cp : Cp<number>
@@ -154,7 +154,7 @@
 +>cp.dit : any
 +>cp : any
 +>dit : any
- 
+
  /** @type {Cpp<number>} */
  var cppn = cpp.m2()
  >cppn : Cpp<number>
@@ -166,7 +166,7 @@
 +>cpp.m2 : any
 +>cpp : any
 +>m2 : any
- 
+
  /** @type {Cp<number>} */
  var cpn = cp.m3()
  >cpn : Cp<number>
@@ -178,7 +178,7 @@
 +>cp.m3 : any
 +>cp : any
 +>m3 : any
- 
+
  /** @type {Cp<number>} */
  var cpn = cp.m4()
  >cpn : Cp<number>
@@ -190,5 +190,4 @@
 +>cp.m4 : any
 +>cp : any
 +>m4 : any
- 
- 
+

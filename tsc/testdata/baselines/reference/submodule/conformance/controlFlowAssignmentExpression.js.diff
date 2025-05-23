@@ -2,7 +2,7 @@
 +++ new.controlFlowAssignmentExpression.js
 @@= skipped -20, +20 lines =@@
  }
- 
+
  //// [controlFlowAssignmentExpression.js]
 -var x;
 -var obj;

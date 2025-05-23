@@ -1,7 +1,7 @@
 --- old.importEqualsDeclaration.js
 +++ new.importEqualsDeclaration.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [a.js]
  "use strict";
 -var A = /** @class */ (function () {

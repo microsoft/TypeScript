@@ -2,7 +2,7 @@
 +++ new.classPropertyIsPublicByDefault.js
 @@= skipped -24, +24 lines =@@
  C.foo();
- 
+
  //// [classPropertyIsPublicByDefault.js]
 -var C = /** @class */ (function () {
 -    function C() {

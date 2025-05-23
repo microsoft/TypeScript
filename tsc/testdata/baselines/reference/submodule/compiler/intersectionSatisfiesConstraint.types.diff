@@ -13,11 +13,10 @@
  >{ otherProperty: 3 } : { otherProperty: number; }
  >otherProperty : number
 @@= skipped -10, +10 lines =@@
- 
+
      mySecondFunction(newParam)
  >mySecondFunction(newParam) : { commonProperty: number; otherProperty: number; }
 ->mySecondFunction : <T_1 extends { commonProperty: number; otherProperty: number; }>(newParam: T_1) => T_1
 +>mySecondFunction : <T extends { commonProperty: number; otherProperty: number; }>(newParam: T) => T
  >newParam : (FirstInterface | SecondInterface) & { otherProperty: number; }
  }
- 

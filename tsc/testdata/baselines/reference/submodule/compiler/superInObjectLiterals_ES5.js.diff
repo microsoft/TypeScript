@@ -2,7 +2,7 @@
 +++ new.superInObjectLiterals_ES5.js
 @@= skipped -61, +61 lines =@@
  }
- 
+
  //// [superInObjectLiterals_ES5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

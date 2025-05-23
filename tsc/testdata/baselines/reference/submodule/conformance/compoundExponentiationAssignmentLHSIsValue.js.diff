@@ -2,7 +2,7 @@
 +++ new.compoundExponentiationAssignmentLHSIsValue.js
 @@= skipped -87, +87 lines =@@
  (foo()) **= value;
- 
+
  //// [compoundExponentiationAssignmentLHSIsValue.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -26,10 +26,7 @@
 -var C = /** @class */ (function () {
 -    function C() {
 -        this = Math.pow(this, value);
-+class C {
-+    constructor() {
-+        this **= value;
-     }
+-    }
 -    C.prototype.foo = function () {
 -        this = Math.pow(this, value);
 -    };
@@ -38,6 +35,10 @@
 -    };
 -    return C;
 -}());
++class C {
++    constructor() {
++        this **= value;
++    }
 +    foo() {
 +        this **= value;
 +    }
@@ -95,11 +96,7 @@
 -        var _this = _super.call(this) || this;
 -        (_a = _super.prototype). = Math.pow(_a., value);
 -        return _this;
-+class Derived extends C {
-+    constructor() {
-+        super();
-+        super. **= value;
-     }
+-    }
 -    Derived.prototype.foo = function () {
 -        var _a;
 -        (_a = _super.prototype). = Math.pow(_a., value);
@@ -110,6 +107,11 @@
 -    };
 -    return Derived;
 -}(C));
++class Derived extends C {
++    constructor() {
++        super();
++        super. **= value;
++    }
 +    foo() {
 +        super. **= value;
 +    }

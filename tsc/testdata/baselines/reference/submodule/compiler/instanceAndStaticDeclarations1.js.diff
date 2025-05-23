@@ -1,7 +1,7 @@
 --- old.instanceAndStaticDeclarations1.js
 +++ new.instanceAndStaticDeclarations1.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [instanceAndStaticDeclarations1.js]
  // from spec
 -var Point = /** @class */ (function () {

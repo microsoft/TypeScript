@@ -7,9 +7,11 @@
 -isolatedDeclarationLazySymbols.ts(16,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 -isolatedDeclarationLazySymbols.ts(21,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 -isolatedDeclarationLazySymbols.ts(22,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
- 
- 
+-
+-
 -==== isolatedDeclarationLazySymbols.ts (6 errors) ====
++
++
 +==== isolatedDeclarationLazySymbols.ts (1 errors) ====
      export function foo() {
 -                    ~~~

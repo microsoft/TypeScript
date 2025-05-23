@@ -2,26 +2,25 @@
 +++ new.enumAssignmentCompat4.types
 @@= skipped -46, +46 lines =@@
  }
- 
+
  let broken = [
 ->broken : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
 ->[    N.object1,    M.object2] : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
 +>broken : ({ foo: MyEnum; } | { foo: MyEnum; })[]
 +>[    N.object1,    M.object2] : ({ foo: MyEnum; } | { foo: MyEnum; })[]
- 
+
      N.object1,
 ->N.object1 : { foo: N.MyEnum; }
 +>N.object1 : { foo: MyEnum; }
  >N : typeof N
 ->object1 : { foo: N.MyEnum; }
 +>object1 : { foo: MyEnum; }
- 
+
      M.object2
 ->M.object2 : { foo: M.MyEnum; }
 +>M.object2 : { foo: MyEnum; }
  >M : typeof M
 ->object2 : { foo: M.MyEnum; }
 +>object2 : { foo: MyEnum; }
- 
+
  ];
- 

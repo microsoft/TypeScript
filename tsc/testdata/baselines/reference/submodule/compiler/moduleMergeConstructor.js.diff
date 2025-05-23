@@ -1,8 +1,8 @@
 --- old.moduleMergeConstructor.js
 +++ new.moduleMergeConstructor.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [index.js]
 -define(["require", "exports", "foo"], function (require, exports, foo) {
 -    "use strict";

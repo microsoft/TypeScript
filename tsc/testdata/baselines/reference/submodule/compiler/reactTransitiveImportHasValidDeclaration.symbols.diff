@@ -2,7 +2,7 @@
 +++ new.reactTransitiveImportHasValidDeclaration.symbols
 @@= skipped -28, +28 lines =@@
  >T : Symbol(T, Decl(index.d.ts, 2, 36), Decl(index.d.ts, 2, 29))
- 
+
          css?: unknown;
 ->css : Symbol(HTMLAttributes.css, Decl(index.d.ts, 2, 33))
 +>css : Symbol(css, Decl(index.d.ts, 2, 33))
@@ -10,7 +10,7 @@
  }
  export interface StyledOtherComponentList {
  >StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 5, 1))
- 
+
      "div": React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 ->"div" : Symbol(StyledOtherComponentList["div"], Decl(index.d.ts, 6, 43))
 +>"div" : Symbol(div, Decl(index.d.ts, 6, 43))
@@ -19,7 +19,7 @@
  >React : Symbol(React, Decl(index.d.ts, 4, 15))
 @@= skipped -31, +31 lines =@@
  >StyledOtherComponentList : Symbol(StyledOtherComponentList, Decl(index.d.ts, 0, 29))
- 
+
  export default function styled(tag: string): (o: object) => StyledOtherComponent<{}, StyledOtherComponentList["div"], any>;
 ->styled : Symbol(styled, Decl(index.d.ts, 0, 85))
 +>styled : Symbol(default, Decl(index.d.ts, 0, 85))

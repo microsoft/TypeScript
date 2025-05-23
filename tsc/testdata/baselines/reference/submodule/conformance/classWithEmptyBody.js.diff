@@ -2,7 +2,7 @@
 +++ new.classWithEmptyBody.js
 @@= skipped -22, +22 lines =@@
  d = () => { }
- 
+
  //// [classWithEmptyBody.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-accessors-nonStaticPrivate(target=es2015).js
 +++ new.esDecorators-classDeclaration-accessors-nonStaticPrivate(target=es2015).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-accessors-nonStaticPrivate.js]
 -let C = (() => {
 -    var _C_instances, _a, _C_method1_get, _C_method1_set;

@@ -6,4 +6,3 @@
  >M : Symbol(M, Decl(acceptableAlias1.ts, 0, 0))
 ->X : Symbol(M.X, Decl(acceptableAlias1.ts, 2, 5))
 +>X : Symbol(X, Decl(acceptableAlias1.ts, 2, 5))
- 

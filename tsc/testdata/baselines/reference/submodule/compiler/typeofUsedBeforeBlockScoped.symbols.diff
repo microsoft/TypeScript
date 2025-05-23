@@ -14,7 +14,7 @@
  >o : Symbol(o, Decl(typeofUsedBeforeBlockScoped.ts, 6, 3))
 @@= skipped -12, +12 lines =@@
  >C : Symbol(C, Decl(typeofUsedBeforeBlockScoped.ts, 0, 55))
- 
+
      static s = 2;
 ->s : Symbol(C.s, Decl(typeofUsedBeforeBlockScoped.ts, 1, 9))
 +>s : Symbol(s, Decl(typeofUsedBeforeBlockScoped.ts, 1, 9))

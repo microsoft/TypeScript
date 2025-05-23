@@ -12,8 +12,8 @@
 -bitwiseCompoundAssignmentOperators.ts(24,1): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
 +bitwiseCompoundAssignmentOperators.ts(24,3): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
  bitwiseCompoundAssignmentOperators.ts(28,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
- 
- 
+
+
 @@= skipped -11, +11 lines =@@
      var a = true;
      var b = 1;

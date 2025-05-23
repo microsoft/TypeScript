@@ -1,8 +1,8 @@
 --- old.staticInheritance.js
 +++ new.staticInheritance.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [staticInheritance.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

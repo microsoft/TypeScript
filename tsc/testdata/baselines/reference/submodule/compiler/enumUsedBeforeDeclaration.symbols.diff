@@ -9,7 +9,7 @@
  >Color : Symbol(Color, Decl(enumUsedBeforeDeclaration.ts, 1, 40))
 ->Green : Symbol(Color.Green, Decl(enumUsedBeforeDeclaration.ts, 2, 17))
 +>Green : Symbol(Green, Decl(enumUsedBeforeDeclaration.ts, 2, 17))
- 
+
  const v2: ConstColor = ConstColor.Green;
  >v2 : Symbol(v2, Decl(enumUsedBeforeDeclaration.ts, 1, 5))
  >ConstColor : Symbol(ConstColor, Decl(enumUsedBeforeDeclaration.ts, 2, 31))
@@ -18,7 +18,7 @@
  >ConstColor : Symbol(ConstColor, Decl(enumUsedBeforeDeclaration.ts, 2, 31))
 ->Green : Symbol(ConstColor.Green, Decl(enumUsedBeforeDeclaration.ts, 3, 28))
 +>Green : Symbol(Green, Decl(enumUsedBeforeDeclaration.ts, 3, 28))
- 
+
  enum Color { Red, Green, Blue }
  >Color : Symbol(Color, Decl(enumUsedBeforeDeclaration.ts, 1, 40))
 ->Red : Symbol(Color.Red, Decl(enumUsedBeforeDeclaration.ts, 2, 12))
@@ -27,7 +27,7 @@
 +>Red : Symbol(Red, Decl(enumUsedBeforeDeclaration.ts, 2, 12))
 +>Green : Symbol(Green, Decl(enumUsedBeforeDeclaration.ts, 2, 17))
 +>Blue : Symbol(Blue, Decl(enumUsedBeforeDeclaration.ts, 2, 24))
- 
+
  const enum ConstColor { Red, Green, Blue }
  >ConstColor : Symbol(ConstColor, Decl(enumUsedBeforeDeclaration.ts, 2, 31))
 ->Red : Symbol(ConstColor.Red, Decl(enumUsedBeforeDeclaration.ts, 3, 23))
@@ -36,5 +36,4 @@
 +>Red : Symbol(Red, Decl(enumUsedBeforeDeclaration.ts, 3, 23))
 +>Green : Symbol(Green, Decl(enumUsedBeforeDeclaration.ts, 3, 28))
 +>Blue : Symbol(Blue, Decl(enumUsedBeforeDeclaration.ts, 3, 35))
- 
- 
+

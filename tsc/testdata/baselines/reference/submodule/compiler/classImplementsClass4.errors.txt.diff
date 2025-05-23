@@ -6,8 +6,8 @@
 -classImplementsClass4.ts(16,1): error TS2741: Property 'x' is missing in type 'C' but required in type 'A'.
 +classImplementsClass4.ts(16,1): error TS2322: Type 'C' is not assignable to type 'C2'.
 +  Property 'x' is missing in type 'C' but required in type 'A'.
- 
- 
+
+
  ==== classImplementsClass4.ts (2 errors) ====
 @@= skipped -24, +25 lines =@@
      c = c2;

@@ -2,7 +2,7 @@
 +++ new.ambiguousOverloadResolution.js
 @@= skipped -10, +10 lines =@@
  var t: number = f(x, x); // Not an error
- 
+
  //// [ambiguousOverloadResolution.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,6 +1,6 @@
 --- old.declarationEmitComputedPropertyNameEnum3.js
 +++ new.declarationEmitComputedPropertyNameEnum3.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitComputedPropertyNameEnum3.ts] ////
 -
 -//// [type.ts]
@@ -34,5 +34,4 @@
 -export declare const foo: {
 -    x?: {};
 -};
-@@= skipped --1, +1 lines =@@
 +<no content>

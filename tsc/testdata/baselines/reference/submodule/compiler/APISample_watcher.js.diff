@@ -1,7 +1,7 @@
 --- old.APISample_watcher.js
 +++ new.APISample_watcher.js
 @@= skipped -120, +120 lines =@@
- 
+
  //// [APISample_watcher.js]
  "use strict";
 -/*

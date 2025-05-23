@@ -1,7 +1,7 @@
 --- old.genericsAndHigherOrderFunctions.js
 +++ new.genericsAndHigherOrderFunctions.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [genericsAndHigherOrderFunctions.js]
  // no errors expected
 -var combine = function (f) {

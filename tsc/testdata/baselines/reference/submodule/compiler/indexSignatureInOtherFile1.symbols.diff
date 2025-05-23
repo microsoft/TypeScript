@@ -2,16 +2,16 @@
 +++ new.indexSignatureInOtherFile1.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(other.ts, 0, 17), Decl(other.ts, 12, 17), Decl(other.ts, 17, 17))
- 
+
    length: number;
 ->length : Symbol(Array1.length, Decl(other.ts, 0, 21))
 +>length : Symbol(length, Decl(other.ts, 0, 21))
- 
+
    [n: number]: T;
  >n : Symbol(n, Decl(other.ts, 2, 3))
 @@= skipped -25, +25 lines =@@
  >T : Symbol(T, Decl(other.ts, 0, 17), Decl(other.ts, 12, 17), Decl(other.ts, 17, 17))
- 
+
    [Symbol.iterator](): IterableIterator<T>;
 ->[Symbol.iterator] : Symbol(Array1[Symbol.iterator], Decl(other.ts, 12, 21))
 ->Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -34,6 +34,6 @@
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->unscopables : Symbol(SymbolConstructor.unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 +>unscopables : Symbol(unscopables, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
- 
+
        copyWithin: boolean;
  >copyWithin : Symbol(copyWithin, Decl(other.ts, 22, 27))

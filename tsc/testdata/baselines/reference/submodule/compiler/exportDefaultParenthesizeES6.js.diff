@@ -2,7 +2,7 @@
 +++ new.exportDefaultParenthesizeES6.js
 @@= skipped -3, +3 lines =@@
  export default (class Foo {} as any);
- 
+
  //// [classexpr.js]
 -export default (class Foo {
 -});

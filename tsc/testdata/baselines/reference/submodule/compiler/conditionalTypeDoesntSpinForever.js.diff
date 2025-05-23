@@ -2,7 +2,7 @@
 +++ new.conditionalTypeDoesntSpinForever.js
 @@= skipped -120, +120 lines =@@
    const PubSubRecordType = buildPubSubRecordType({});
- 
+
  //// [conditionalTypeDoesntSpinForever.js]
 +export { PubSubRecordIsStoredInRedisAsA };
  // A *self-contained* demonstration of the problem follows...

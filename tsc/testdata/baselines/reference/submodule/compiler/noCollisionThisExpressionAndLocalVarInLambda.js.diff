@@ -1,7 +1,7 @@
 --- old.noCollisionThisExpressionAndLocalVarInLambda.js
 +++ new.noCollisionThisExpressionAndLocalVarInLambda.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [noCollisionThisExpressionAndLocalVarInLambda.js]
  var x = {
 -    doStuff: function (callback) { return function () {

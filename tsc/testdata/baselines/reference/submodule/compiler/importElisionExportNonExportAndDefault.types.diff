@@ -2,7 +2,7 @@
 +++ new.importElisionExportNonExportAndDefault.types
 @@= skipped -4, +4 lines =@@
  >MyFunction : any
- 
+
  MyFunction({msg: "Hello World"});
 ->MyFunction({msg: "Hello World"}) : error
 ->MyFunction : error
@@ -13,7 +13,7 @@
  >"Hello World" : "Hello World"
 @@= skipped -12, +12 lines =@@
  >msg : string
- 
+
  export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${msg}"`);
 ->MyFunction : ({ msg }: MyFunction) => void
 ->({ msg }: MyFunction) => console.log(`Got message "${msg}"`) : ({ msg }: MyFunction) => void

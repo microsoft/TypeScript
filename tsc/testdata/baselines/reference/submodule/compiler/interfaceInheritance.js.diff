@@ -1,8 +1,8 @@
 --- old.interfaceInheritance.js
 +++ new.interfaceInheritance.js
 @@= skipped -42, +42 lines =@@
- 
- 
+
+
  //// [interfaceInheritance.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

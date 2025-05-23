@@ -4,8 +4,8 @@
 -templateStringsArrayTypeRedefinedInES6Mode.ts(7,3): error TS2345: Argument of type '{}' is not assignable to parameter of type 'TemplateStringsArray'.
 -  Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 17 more.
 +templateStringsArrayTypeRedefinedInES6Mode.ts(7,3): error TS2740: Type '{}' is missing the following properties from type 'TemplateStringsArray': raw, length, concat, join, and 17 more.
- 
- 
+
+
  ==== templateStringsArrayTypeRedefinedInES6Mode.ts (1 errors) ====
 @@= skipped -10, +9 lines =@@
      

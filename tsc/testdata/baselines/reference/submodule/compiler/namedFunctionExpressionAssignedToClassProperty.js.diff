@@ -1,8 +1,8 @@
 --- old.namedFunctionExpressionAssignedToClassProperty.js
 +++ new.namedFunctionExpressionAssignedToClassProperty.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [namedFunctionExpressionAssignedToClassProperty.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

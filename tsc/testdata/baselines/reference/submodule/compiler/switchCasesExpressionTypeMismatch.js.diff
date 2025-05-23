@@ -1,8 +1,8 @@
 --- old.switchCasesExpressionTypeMismatch.js
 +++ new.switchCasesExpressionTypeMismatch.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [switchCasesExpressionTypeMismatch.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

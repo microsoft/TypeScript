@@ -1,7 +1,7 @@
 --- old.unicodeEscapesInJsxtags.js
 +++ new.unicodeEscapesInJsxtags.js
 @@= skipped -31, +31 lines =@@
- 
+
  //// [file.js]
  import * as React from "react";
 -const Compa = (x) => React.createElement("div", null, "" + x);

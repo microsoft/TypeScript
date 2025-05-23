@@ -1,8 +1,8 @@
 --- old.typeGuardNarrowsIndexedAccessOfKnownProperty4.js
 +++ new.typeGuardNarrowsIndexedAccessOfKnownProperty4.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [typeGuardNarrowsIndexedAccessOfKnownProperty4.js]
 -"use strict";
 -var Foo = /** @class */ (function () {

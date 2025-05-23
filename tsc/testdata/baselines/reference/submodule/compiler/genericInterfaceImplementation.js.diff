@@ -1,8 +1,8 @@
 --- old.genericInterfaceImplementation.js
 +++ new.genericInterfaceImplementation.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [genericInterfaceImplementation.js]
 -var None = /** @class */ (function () {
 -    function None() {

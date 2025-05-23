@@ -1,8 +1,7 @@
 --- old.externalModuleAssignToVar.errors.txt
 +++ new.externalModuleAssignToVar.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +externalModuleAssignToVar_core.ts(2,22): error TS2307: Cannot find module 'externalModuleAssignToVar_core_require' or its corresponding type declarations.
 +externalModuleAssignToVar_core.ts(6,23): error TS2307: Cannot find module 'externalModuleAssignToVar_core_require2' or its corresponding type declarations.
 +externalModuleAssignToVar_core.ts(10,23): error TS2307: Cannot find module 'externalModuleAssignToVar_ext' or its corresponding type declarations.

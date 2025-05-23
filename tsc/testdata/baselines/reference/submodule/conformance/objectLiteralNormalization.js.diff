@@ -1,8 +1,8 @@
 --- old.objectLiteralNormalization.js
 +++ new.objectLiteralNormalization.js
 @@= skipped -52, +52 lines =@@
- 
- 
+
+
  //// [objectLiteralNormalization.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

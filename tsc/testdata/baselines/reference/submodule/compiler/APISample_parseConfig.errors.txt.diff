@@ -1,8 +1,7 @@
 --- old.APISample_parseConfig.errors.txt
 +++ new.APISample_parseConfig.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +APISample_parseConfig.ts(11,21): error TS2307: Cannot find module 'typescript' or its corresponding type declarations.
 +
 +

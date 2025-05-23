@@ -1,8 +1,8 @@
 --- old.templateLiteralsInTypes.js
 +++ new.templateLiteralsInTypes.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [templateLiteralsInTypes.js]
 -"use strict";
 -var f = function (hdr, val) { return "".concat(hdr, ":\t").concat(val, "\r\n"); };

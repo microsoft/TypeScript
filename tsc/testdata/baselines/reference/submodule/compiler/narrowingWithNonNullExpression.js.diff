@@ -1,8 +1,8 @@
 --- old.narrowingWithNonNullExpression.js
 +++ new.narrowingWithNonNullExpression.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [narrowingWithNonNullExpression.js]
 -var m = ''.match('');
 +const m = ''.match('');

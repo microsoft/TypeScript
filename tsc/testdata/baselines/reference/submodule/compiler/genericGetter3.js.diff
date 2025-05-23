@@ -2,17 +2,11 @@
 +++ new.genericGetter3.js
 @@= skipped -13, +13 lines =@@
  var r: string = c.x;
- 
+
  //// [genericGetter3.js]
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+}
-+class C {
-+    data;
-+    get x() {
-+        return this.data;
-     }
+-    }
 -    return A;
 -}());
 -var C = /** @class */ (function () {
@@ -27,6 +21,13 @@
 -    });
 -    return C;
 -}());
++class A {
++}
++class C {
++    data;
++    get x() {
++        return this.data;
++    }
 +}
  var c = new C();
  var r = c.x;

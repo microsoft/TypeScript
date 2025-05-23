@@ -1,7 +1,7 @@
 --- old.reverseMappedPartiallyInferableTypes.js
 +++ new.reverseMappedPartiallyInferableTypes.js
 @@= skipped -130, +130 lines =@@
- 
+
  //// [reverseMappedPartiallyInferableTypes.js]
  "use strict";
 -// Repro from #30505

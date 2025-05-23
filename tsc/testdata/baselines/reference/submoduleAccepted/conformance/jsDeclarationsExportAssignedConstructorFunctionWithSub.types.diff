@@ -16,7 +16,7 @@
 +>exports : (p: any) => void
 +>function (p) {    this.t = 12 + p;} : (p: any) => void
 +>p : any
- 
+
      this.t = 12 + p;
 ->this.t = 12 + p : number
 +>this.t = 12 + p : any
@@ -45,7 +45,7 @@
 +>exports : (p: any) => void
 +>Sub : any
 +>function() {    this.instance = new module.exports(10);} : () => void
- 
+
      this.instance = new module.exports(10);
 ->this.instance = new module.exports(10) : exports
 +>this.instance = new module.exports(10) : any
@@ -80,4 +80,3 @@
 +>Sub : any
 +>prototype : any
  >{ } : {}
- 

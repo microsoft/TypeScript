@@ -2,7 +2,7 @@
 +++ new.classExtendsMultipleBaseClasses.js
 @@= skipped -5, +5 lines =@@
  class C extends A,B { }
- 
+
  //// [classExtendsMultipleBaseClasses.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

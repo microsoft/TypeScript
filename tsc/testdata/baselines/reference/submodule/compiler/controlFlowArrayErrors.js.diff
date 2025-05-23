@@ -1,7 +1,7 @@
 --- old.controlFlowArrayErrors.js
 +++ new.controlFlowArrayErrors.js
 @@= skipped -68, +68 lines =@@
- 
+
  //// [controlFlowArrayErrors.js]
  function f1() {
 -    var x = []; // Implicit any[] error in some locations

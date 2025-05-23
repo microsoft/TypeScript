@@ -1,7 +1,7 @@
 --- old.jsxJsxsCjsTransformKeyProp(jsx=react-jsx).js
 +++ new.jsxJsxsCjsTransformKeyProp(jsx=react-jsx).js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [jsxJsxsCjsTransformKeyProp.js]
  "use strict";
 -var __assign = (this && this.__assign) || function () {

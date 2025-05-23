@@ -7,5 +7,5 @@
 ->a : Symbol(A.a, Decl(a.ts, 0, 19))
 +>a : Symbol(a, Decl(a.ts, 0, 19))
  >T : Symbol(T, Decl(a.ts, 0, 15))
- 
+
  export type { A as B };

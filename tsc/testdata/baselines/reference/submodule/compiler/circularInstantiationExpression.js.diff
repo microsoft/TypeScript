@@ -1,7 +1,7 @@
 --- old.circularInstantiationExpression.js
 +++ new.circularInstantiationExpression.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [circularInstantiationExpression.js]
  foo("");
 -

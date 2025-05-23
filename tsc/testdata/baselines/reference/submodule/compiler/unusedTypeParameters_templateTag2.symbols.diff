@@ -9,7 +9,7 @@
 ->p : Symbol(C1.p, Decl(a.js, 5, 19))
      }
  }
- 
+
 @@= skipped -24, +22 lines =@@
      constructor() {
          /** @type {T} */

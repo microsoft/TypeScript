@@ -1,6 +1,6 @@
 --- old.dtsEmitTripleSlashAvoidUnnecessaryResolutionMode.js
 +++ new.dtsEmitTripleSlashAvoidUnnecessaryResolutionMode.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/dtsEmitTripleSlashAvoidUnnecessaryResolutionMode.ts] ////
 -
 -//// [package.json]
@@ -29,5 +29,4 @@
 -//// [app.d.mts]
 -/// <reference types="node" preserve="true" />
 -export declare function drainStream(stream: NodeJS.ReadableStream): Promise<void>;
-@@= skipped --1, +1 lines =@@
 +<no content>

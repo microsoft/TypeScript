@@ -2,7 +2,7 @@
 +++ new.unionTypeInference.types
 @@= skipped -213, +213 lines =@@
  >deepPromised : DeepPromised<T>
- 
+
      for (const value of Object.values(deepPromisedWithIndexer)) {
 ->value : Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 ->Object.values(deepPromisedWithIndexer) : (Promise<{ [containsPromises]?: true; } & {}> | {} | ({ [containsPromises]?: true; } & {}) | null | undefined)[]
@@ -14,7 +14,7 @@
 ->values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >deepPromisedWithIndexer : DeepPromised<{ [name: string]: {} | null | undefined; }>
- 
+
          const awaitedValue = await value;
 ->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 ->await value : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
@@ -22,11 +22,11 @@
 +>awaitedValue : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
 +>await value : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
 +>value : Promise<{ [containsPromises]?: true | undefined; } & {}> | {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
- 
+
          if (awaitedValue)
 ->awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
 +>awaitedValue : {} | { [containsPromises]?: true | undefined; } & {} | null | undefined
- 
+
              await fun(awaitedValue);
  >await fun(awaitedValue) : void
  >fun(awaitedValue) : Promise<void>
@@ -35,4 +35,3 @@
 +>awaitedValue : {} | { [containsPromises]?: true | undefined; } & {}
      }
  }
- 

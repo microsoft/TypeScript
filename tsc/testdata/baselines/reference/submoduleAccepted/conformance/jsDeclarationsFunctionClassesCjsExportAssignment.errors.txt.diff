@@ -1,8 +1,7 @@
 --- old.jsDeclarationsFunctionClassesCjsExportAssignment.errors.txt
 +++ new.jsDeclarationsFunctionClassesCjsExportAssignment.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +context.js(4,14): error TS1340: Module './timer' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./timer')'?
 +context.js(5,14): error TS1340: Module './hook' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./hook')'?
 +context.js(6,31): error TS2694: Namespace 'Hook' has no exported member 'HookHandler'.

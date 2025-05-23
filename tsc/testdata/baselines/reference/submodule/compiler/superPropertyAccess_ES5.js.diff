@@ -2,7 +2,7 @@
 +++ new.superPropertyAccess_ES5.js
 @@= skipped -30, +30 lines =@@
  }
- 
+
  //// [superPropertyAccess_ES5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,16 +21,7 @@
 -})();
 -var MyBase = /** @class */ (function () {
 -    function MyBase() {
-+class MyBase {
-+    getValue() { return 1; }
-+    get value() { return 1; }
-+}
-+class MyDerived extends MyBase {
-+    constructor() {
-+        super();
-+        const f1 = super.getValue();
-+        const f2 = super.value;
-     }
+-    }
 -    MyBase.prototype.getValue = function () { return 1; };
 -    Object.defineProperty(MyBase.prototype, "value", {
 -        get: function () { return 1; },
@@ -49,20 +40,22 @@
 -    }
 -    return MyDerived;
 -}(MyBase));
++class MyBase {
++    getValue() { return 1; }
++    get value() { return 1; }
++}
++class MyDerived extends MyBase {
++    constructor() {
++        super();
++        const f1 = super.getValue();
++        const f2 = super.value;
++    }
 +}
  var d = new MyDerived();
  var f3 = d.value;
 -var A = /** @class */ (function () {
 -    function A() {
-+class A {
-+    _property;
-+    get property() { return this._property; }
-+    set property(value) { this._property = value; }
-+}
-+class B extends A {
-+    set property(value) {
-+        super.property = value + " addition";
-     }
+-    }
 -    Object.defineProperty(A.prototype, "property", {
 -        get: function () { return this._property; },
 -        set: function (value) { this._property = value; },
@@ -85,4 +78,13 @@
 -    });
 -    return B;
 -}(A));
++class A {
++    _property;
++    get property() { return this._property; }
++    set property(value) { this._property = value; }
++}
++class B extends A {
++    set property(value) {
++        super.property = value + " addition";
++    }
 +}

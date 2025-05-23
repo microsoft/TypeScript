@@ -1,7 +1,7 @@
 --- old.typeReferenceDirectives13.types
 +++ new.typeReferenceDirectives13.types
 @@= skipped -6, +6 lines =@@
- 
+
  export interface A {
      x: () => typeof $
 ->x : () => typeof $
@@ -9,13 +9,12 @@
 +>x : () => any
 +>$ : any
  }
- 
+
  === /ref.d.ts ===
  export interface $ { x }
  >x : any
- 
+-
 -=== /types/lib/index.d.ts ===
 -declare let $: { x: number }
 ->$ : { x: number; }
 ->x : number
--

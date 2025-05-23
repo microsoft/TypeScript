@@ -1,28 +1,28 @@
 --- old.narrowingOfQualifiedNames.types
 +++ new.narrowingOfQualifiedNames.types
 @@= skipped -57, +57 lines =@@
- 
+
  interface DeepOptional {
      a?: {
 ->a : { b?: { c?: string; }; } | undefined
 +>a : { b?: { c?: string | undefined; } | undefined; } | undefined
- 
+
          b?: {
 ->b : { c?: string; } | undefined
 +>b : { c?: string | undefined; } | undefined
- 
+
              c?: string
  >c : string | undefined
 @@= skipped -16, +16 lines =@@
  >foo : DeepOptional
- 
+
      if (foo.a) {
 ->foo.a : { b?: { c?: string; }; } | undefined
 +>foo.a : { b?: { c?: string | undefined; } | undefined; } | undefined
  >foo : DeepOptional
 ->a : { b?: { c?: string; }; } | undefined
 +>a : { b?: { c?: string | undefined; } | undefined; } | undefined
- 
+
          type A = typeof foo.a;
 ->A : { b?: { c?: string; }; }
 ->foo.a : { b?: { c?: string; }; }
@@ -31,7 +31,7 @@
  >foo : DeepOptional
 ->a : { b?: { c?: string; }; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
- 
+
          type B = typeof foo.a.b;
 ->B : { c?: string; } | undefined
 ->foo.a.b : { c?: string; } | undefined
@@ -44,7 +44,7 @@
 ->b : { c?: string; } | undefined
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; } | undefined
- 
+
          type C = typeof foo.a.b.c;
  >C : string | undefined
  >foo.a.b.c : string | undefined
@@ -58,11 +58,11 @@
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; } | undefined
  >c : string | undefined
- 
+
          for(const _ of [1]) {
 @@= skipped -34, +34 lines =@@
  >1 : 1
- 
+
              type A = typeof foo.a;
 ->A : { b?: { c?: string; }; }
 ->foo.a : { b?: { c?: string; }; }
@@ -71,7 +71,7 @@
  >foo : DeepOptional
 ->a : { b?: { c?: string; }; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
- 
+
              type B = typeof foo.a.b;
 ->B : { c?: string; } | undefined
 ->foo.a.b : { c?: string; } | undefined
@@ -84,7 +84,7 @@
 ->b : { c?: string; } | undefined
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; } | undefined
- 
+
              type C = typeof foo.a.b.c;
  >C : string | undefined
  >foo.a.b.c : string | undefined
@@ -98,7 +98,7 @@
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; } | undefined
  >c : string | undefined
- 
+
              if (foo.a.b) {
 ->foo.a.b : { c?: string; } | undefined
 ->foo.a : { b?: { c?: string; }; }
@@ -109,7 +109,7 @@
 ->b : { c?: string; } | undefined
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; } | undefined
- 
+
                  type A = typeof foo.a;
 ->A : { b?: { c?: string; }; }
 ->foo.a : { b?: { c?: string; }; }
@@ -118,7 +118,7 @@
  >foo : DeepOptional
 ->a : { b?: { c?: string; }; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
- 
+
                  type B = typeof foo.a.b;
 ->B : { c?: string; }
 ->foo.a.b : { c?: string; }
@@ -131,7 +131,7 @@
 ->b : { c?: string; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
- 
+
                  type C = typeof foo.a.b.c;
  >C : string | undefined
  >foo.a.b.c : string | undefined
@@ -145,11 +145,11 @@
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
  >c : string | undefined
- 
+
                  for(const _ of [1]) {
 @@= skipped -60, +60 lines =@@
  >1 : 1
- 
+
                      type A = typeof foo.a;
 ->A : { b?: { c?: string; }; }
 ->foo.a : { b?: { c?: string; }; }
@@ -158,7 +158,7 @@
  >foo : DeepOptional
 ->a : { b?: { c?: string; }; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
- 
+
                      type B = typeof foo.a.b;
 ->B : { c?: string; }
 ->foo.a.b : { c?: string; }
@@ -171,7 +171,7 @@
 ->b : { c?: string; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
- 
+
                      type C = typeof foo.a.b.c;
  >C : string | undefined
  >foo.a.b.c : string | undefined
@@ -185,7 +185,7 @@
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
  >c : string | undefined
- 
+
                      if (foo.a.b.c) {
  >foo.a.b.c : string | undefined
 ->foo.a.b : { c?: string; }
@@ -198,7 +198,7 @@
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
  >c : string | undefined
- 
+
                          type A = typeof foo.a;
 ->A : { b?: { c?: string; }; }
 ->foo.a : { b?: { c?: string; }; }
@@ -207,7 +207,7 @@
  >foo : DeepOptional
 ->a : { b?: { c?: string; }; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
- 
+
                          type B = typeof foo.a.b;
 ->B : { c?: string; }
 ->foo.a.b : { c?: string; }
@@ -220,7 +220,7 @@
 ->b : { c?: string; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
- 
+
                          type C = typeof foo.a.b.c;
  >C : string
  >foo.a.b.c : string
@@ -234,11 +234,11 @@
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
  >c : string
- 
+
                          for(const _ of [1]) {
 @@= skipped -62, +62 lines =@@
  >1 : 1
- 
+
                              type A = typeof foo.a;
 ->A : { b?: { c?: string; }; }
 ->foo.a : { b?: { c?: string; }; }
@@ -247,7 +247,7 @@
  >foo : DeepOptional
 ->a : { b?: { c?: string; }; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
- 
+
                              type B = typeof foo.a.b;
 ->B : { c?: string; }
 ->foo.a.b : { c?: string; }
@@ -260,7 +260,7 @@
 ->b : { c?: string; }
 +>a : { b?: { c?: string | undefined; } | undefined; }
 +>b : { c?: string | undefined; }
- 
+
                              type C = typeof foo.a.b.c;
  >C : string
  >foo.a.b.c : string

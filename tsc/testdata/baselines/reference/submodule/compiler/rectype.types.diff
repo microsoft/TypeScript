@@ -2,24 +2,24 @@
 +++ new.rectype.types
 @@= skipped -7, +7 lines =@@
  >i : I
- 
+
      export function f(p: I) { return f };
 ->f : (p: I) => typeof f
 +>f : (p: I) => ???
  >p : I
 ->f : (p: I) => typeof f
 +>f : (p: I) => ???
- 
+
      var i:I;
  >i : I
- 
+
      f(i);
 ->f(i) : (p: I) => typeof f
 ->f : (p: I) => typeof f
 +>f(i) : (p: I) => ???
 +>f : (p: I) => ???
  >i : I
- 
+
      f(f(i));
 ->f(f(i)) : (p: I) => typeof f
 ->f : (p: I) => typeof f
@@ -30,7 +30,7 @@
 +>f(i) : (p: I) => ???
 +>f : (p: I) => ???
  >i : I
- 
+
      f((f(f(i))));
 ->f((f(f(i)))) : (p: I) => typeof f
 ->f : (p: I) => typeof f
@@ -48,4 +48,3 @@
 +>f : (p: I) => ???
  >i : I
  }
- 

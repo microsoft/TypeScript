@@ -1,7 +1,7 @@
 --- old.arrayToLocaleStringES5.symbols
 +++ new.arrayToLocaleStringES5.symbols
 @@= skipped -8, +8 lines =@@
- 
+
  str = arr.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -9,7 +9,7 @@
  >arr : Symbol(arr, Decl(arrayToLocaleStringES5.ts, 1, 5))
 ->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = arr.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -17,7 +17,7 @@
  >arr : Symbol(arr, Decl(arrayToLocaleStringES5.ts, 1, 5))
 ->toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->arr.toLocaleString : Symbol(Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -27,9 +27,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 4, 35))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 4, 54))
- 
+
 @@= skipped -26, +26 lines =@@
- 
+
  str = dates.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -37,7 +37,7 @@
  >dates : Symbol(dates, Decl(arrayToLocaleStringES5.ts, 6, 5))
 ->toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = dates.toLocaleString('fr'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -45,7 +45,7 @@
  >dates : Symbol(dates, Decl(arrayToLocaleStringES5.ts, 6, 5))
 ->toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->dates.toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -54,10 +54,10 @@
 ->toLocaleString : Symbol(ReadonlyArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >timeZone : Symbol(timeZone, Decl(arrayToLocaleStringES5.ts, 9, 34))
- 
+
  const int8Array = new Int8Array(3);
 @@= skipped -23, +23 lines =@@
- 
+
  str = int8Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -65,7 +65,7 @@
  >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES5.ts, 11, 5))
 ->toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = int8Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -73,7 +73,7 @@
  >int8Array : Symbol(int8Array, Decl(arrayToLocaleStringES5.ts, 11, 5))
 ->toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int8Array.toLocaleString : Symbol(Int8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -83,9 +83,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 14, 41))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 14, 60))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = uint8Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -93,7 +93,7 @@
  >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES5.ts, 16, 5))
 ->toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint8Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -101,7 +101,7 @@
  >uint8Array : Symbol(uint8Array, Decl(arrayToLocaleStringES5.ts, 16, 5))
 ->toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint8Array.toLocaleString : Symbol(Uint8Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -111,9 +111,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 19, 42))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 19, 61))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = uint8ClampedArray.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -121,7 +121,7 @@
  >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES5.ts, 21, 5))
 ->toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint8ClampedArray.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -129,7 +129,7 @@
  >uint8ClampedArray : Symbol(uint8ClampedArray, Decl(arrayToLocaleStringES5.ts, 21, 5))
 ->toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint8ClampedArray.toLocaleString : Symbol(Uint8ClampedArray.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -139,9 +139,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 24, 49))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 24, 68))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = int16Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -149,7 +149,7 @@
  >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES5.ts, 26, 5))
 ->toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = int16Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -157,7 +157,7 @@
  >int16Array : Symbol(int16Array, Decl(arrayToLocaleStringES5.ts, 26, 5))
 ->toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int16Array.toLocaleString : Symbol(Int16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -167,9 +167,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 29, 42))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 29, 61))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = uint16Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -177,7 +177,7 @@
  >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES5.ts, 31, 5))
 ->toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint16Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -185,7 +185,7 @@
  >uint16Array : Symbol(uint16Array, Decl(arrayToLocaleStringES5.ts, 31, 5))
 ->toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint16Array.toLocaleString : Symbol(Uint16Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -195,9 +195,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 34, 43))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 34, 62))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = int32Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -205,7 +205,7 @@
  >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES5.ts, 36, 5))
 ->toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = int32Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -213,7 +213,7 @@
  >int32Array : Symbol(int32Array, Decl(arrayToLocaleStringES5.ts, 36, 5))
 ->toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->int32Array.toLocaleString : Symbol(Int32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -223,9 +223,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 39, 42))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 39, 61))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = uint32Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -233,7 +233,7 @@
  >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES5.ts, 41, 5))
 ->toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint32Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -241,7 +241,7 @@
  >uint32Array : Symbol(uint32Array, Decl(arrayToLocaleStringES5.ts, 41, 5))
 ->toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->uint32Array.toLocaleString : Symbol(Uint32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -251,9 +251,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 44, 43))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 44, 62))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = float32Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -261,7 +261,7 @@
  >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES5.ts, 46, 5))
 ->toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = float32Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -269,7 +269,7 @@
  >float32Array : Symbol(float32Array, Decl(arrayToLocaleStringES5.ts, 46, 5))
 ->toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->float32Array.toLocaleString : Symbol(Float32Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -279,9 +279,9 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 49, 44))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 49, 63))
- 
+
 @@= skipped -24, +24 lines =@@
- 
+
  str = float64Array.toLocaleString(); // OK
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -289,7 +289,7 @@
  >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES5.ts, 51, 5))
 ->toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = float64Array.toLocaleString('en-US'); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -297,7 +297,7 @@
  >float64Array : Symbol(float64Array, Decl(arrayToLocaleStringES5.ts, 51, 5))
 ->toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
- 
+
  str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // should be error
  >str : Symbol(str, Decl(arrayToLocaleStringES5.ts, 0, 3))
 ->float64Array.toLocaleString : Symbol(Float64Array.toLocaleString, Decl(lib.es5.d.ts, --, --))
@@ -307,4 +307,3 @@
 +>toLocaleString : Symbol(toLocaleString, Decl(lib.es5.d.ts, --, --))
  >style : Symbol(style, Decl(arrayToLocaleStringES5.ts, 54, 44))
  >currency : Symbol(currency, Decl(arrayToLocaleStringES5.ts, 54, 63))
- 

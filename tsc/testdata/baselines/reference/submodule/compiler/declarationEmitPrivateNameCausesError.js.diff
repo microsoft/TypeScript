@@ -1,7 +1,7 @@
 --- old.declarationEmitPrivateNameCausesError.js
 +++ new.declarationEmitPrivateNameCausesError.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [file.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -37,7 +37,10 @@
 -        }(ctor)),
 -        _a = IGNORE_EXTRA_VARIABLES,
 -        _b;
--}
++    return class extends ctor {
++        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used
++    };
+ }
 -
 -
 -//// [file.d.ts]
@@ -47,9 +50,6 @@
 -}>(ctor: CtorT): {
 -    new (...args: any[]): {
 -        [IGNORE_EXTRA_VARIABLES]: boolean;
-+    return class extends ctor {
-+        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used
-     };
+-    };
 -} & CtorT;
 -export {};
-+}

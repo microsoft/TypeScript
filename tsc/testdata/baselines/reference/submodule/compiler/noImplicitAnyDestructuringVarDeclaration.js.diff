@@ -2,7 +2,7 @@
 +++ new.noImplicitAnyDestructuringVarDeclaration.js
 @@= skipped -13, +13 lines =@@
  var [a5 = undefined] = []; // error
- 
+
  //// [noImplicitAnyDestructuringVarDeclaration.js]
 -var a = (void 0)[0], b = (void 0).b, c, d; // error
 -var _a = (void 0)[0], a1 = _a === void 0 ? undefined : _a, _b = (void 0).b1, b1 = _b === void 0 ? null : _b, c1 = undefined, d1 = null; // error

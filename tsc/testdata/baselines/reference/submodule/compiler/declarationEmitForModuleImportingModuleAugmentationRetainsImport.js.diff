@@ -21,8 +21,7 @@
  exports.child1 = child1;
  function child1(prototype) {
 -    prototype.add = function (a, b) { return a + b; };
-+    prototype.add = (a, b) => a + b;
- }
+-}
 -
 -
 -//// [parent.d.ts]
@@ -37,3 +36,5 @@
 -    }
 -}
 -export declare function child1(prototype: ParentThing): void;
++    prototype.add = (a, b) => a + b;
++}

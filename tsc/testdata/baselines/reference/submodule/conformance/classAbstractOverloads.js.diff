@@ -2,7 +2,7 @@
 +++ new.classAbstractOverloads.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [classAbstractOverloads.js]
 -var A = /** @class */ (function () {
 -    function A() {

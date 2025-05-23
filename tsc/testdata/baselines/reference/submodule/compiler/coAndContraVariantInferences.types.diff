@@ -2,7 +2,7 @@
 +++ new.coAndContraVariantInferences.types
 @@= skipped -80, +80 lines =@@
  }
- 
+
  const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
 ->printFn : (action: typeof actionA | typeof actionB) => void
 ->(action: typeof actionA | typeof actionB)=> console.log(action) : (action: typeof actionA | typeof actionB) => void
@@ -17,11 +17,10 @@
  >actionA : Action<"ACTION_A", string>
 ->printFn : (action: typeof actionA | typeof actionB) => void
 +>printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
- 
+
  call(actionB, printFn);
  >call(actionB, printFn) : void
  >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
  >actionB : Action<"ACTION_B", boolean>
 ->printFn : (action: typeof actionA | typeof actionB) => void
 +>printFn : (action: Action<"ACTION_A", string> | Action<"ACTION_B", boolean>) => void
- 

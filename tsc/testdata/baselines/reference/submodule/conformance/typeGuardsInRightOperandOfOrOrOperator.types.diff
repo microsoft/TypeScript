@@ -7,7 +7,7 @@
 ->foo : (x: number | string) => boolean
 +>foo : (x: string | number) => boolean
  >x : string | number
- 
+
      return typeof x !== "string" || x.length === 10; // string
 @@= skipped -16, +16 lines =@@
  >10 : 10
@@ -16,7 +16,7 @@
 ->foo2 : (x: number | string) => number | true
 +>foo2 : (x: string | number) => number | true
  >x : string | number
- 
+
      // modify x in right hand operand
 @@= skipped -19, +19 lines =@@
  >x : number
@@ -25,7 +25,7 @@
 ->foo3 : (x: number | string) => string | true
 +>foo3 : (x: string | number) => string | true
  >x : string | number
- 
+
      // modify x in right hand operand with string type itself
 @@= skipped -19, +19 lines =@@
  >x : string
@@ -34,7 +34,7 @@
 ->foo4 : (x: number | string | boolean) => boolean
 +>foo4 : (x: string | number | boolean) => boolean
  >x : string | number | boolean
- 
+
      return typeof x === "string" // string | number | boolean
 @@= skipped -21, +21 lines =@@
  >x : boolean
@@ -43,7 +43,7 @@
 ->foo5 : (x: number | string | boolean) => number | boolean
 +>foo5 : (x: string | number | boolean) => number | boolean
  >x : string | number | boolean
- 
+
      // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
 @@= skipped -32, +32 lines =@@
  >x : boolean
@@ -52,7 +52,7 @@
 ->foo6 : (x: number | string | boolean) => boolean
 +>foo6 : (x: string | number | boolean) => boolean
  >x : string | number | boolean
- 
+
      // Mixing typeguard
 @@= skipped -28, +28 lines =@@
  >10 : 10
@@ -61,5 +61,5 @@
 ->foo7 : (x: number | string | boolean) => string | number | true
 +>foo7 : (x: string | number | boolean) => string | number | true
  >x : string | number | boolean
- 
+
      var y: number| boolean | string;

@@ -1,12 +1,12 @@
 --- old.enumDeclarationEmitInitializerHasImport.types
 +++ new.enumDeclarationEmitInitializerHasImport.types
 @@= skipped -1, +1 lines =@@
- 
+
  === consumer.ts ===
  import provider = require('./provider');
 ->provider : typeof provider
 +>provider : typeof import("provider")
- 
+
  export const value = provider.Enum.Value1;
 ->value : provider.Enum.Value1
 ->provider.Enum.Value1 : provider.Enum.Value1
@@ -20,6 +20,6 @@
 +>provider : typeof import("provider")
 +>Enum : typeof Enum
 +>Value1 : Enum.Value1
- 
+
  === provider.ts ===
  export enum Enum {

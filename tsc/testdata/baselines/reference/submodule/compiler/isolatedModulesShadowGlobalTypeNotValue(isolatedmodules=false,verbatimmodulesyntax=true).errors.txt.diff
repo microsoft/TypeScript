@@ -2,8 +2,8 @@
 +++ new.isolatedModulesShadowGlobalTypeNotValue(isolatedmodules=false,verbatimmodulesyntax=true).errors.txt
 @@= skipped -4, +4 lines =@@
  good.ts(2,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
- 
- 
+
+
 -==== ./types.ts (0 errors) ====
 +==== types.ts (0 errors) ====
      export interface Date {

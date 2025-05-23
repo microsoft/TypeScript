@@ -1,7 +1,7 @@
 --- old.constDeclarationShadowedByVarDeclaration3.js
 +++ new.constDeclarationShadowedByVarDeclaration3.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [constDeclarationShadowedByVarDeclaration3.js]
  // Ensure only checking for const declarations shadowed by vars
 -var Rule = /** @class */ (function () {

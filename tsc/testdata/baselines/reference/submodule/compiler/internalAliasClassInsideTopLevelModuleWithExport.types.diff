@@ -2,14 +2,14 @@
 +++ new.internalAliasClassInsideTopLevelModuleWithExport.types
 @@= skipped -17, +17 lines =@@
  }
- 
+
  export import xc = x.c;
 ->xc : typeof xc
 +>xc : typeof c
  >x : typeof x
 ->c : xc
 +>c : c
- 
+
  export var cProp = new xc();
 ->cProp : xc
 ->new xc() : xc
@@ -17,7 +17,7 @@
 +>cProp : c
 +>new xc() : c
 +>xc : typeof c
- 
+
  var cReturnVal = cProp.foo(10);
  >cReturnVal : number
  >cProp.foo(10) : number
@@ -26,4 +26,3 @@
 +>cProp : c
  >foo : (a: number) => number
  >10 : 10
- 

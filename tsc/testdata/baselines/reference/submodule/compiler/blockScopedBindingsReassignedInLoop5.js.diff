@@ -1,8 +1,8 @@
 --- old.blockScopedBindingsReassignedInLoop5.js
 +++ new.blockScopedBindingsReassignedInLoop5.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [blockScopedBindingsReassignedInLoop5.js]
 -var _loop_1 = function (x, y) {
 -    var a = function () { return x++ + y++; };

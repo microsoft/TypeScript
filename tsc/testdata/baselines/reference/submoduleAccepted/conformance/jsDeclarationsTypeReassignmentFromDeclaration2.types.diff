@@ -1,7 +1,7 @@
 --- old.jsDeclarationsTypeReassignmentFromDeclaration2.types
 +++ new.jsDeclarationsTypeReassignmentFromDeclaration2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  const items = require("./some-mod")();
 ->items : Item[]
@@ -12,7 +12,7 @@
 +>require("./some-mod") : any
  >require : any
  >"./some-mod" : "./some-mod"
- 
+
  module.exports = items;
 ->module.exports = items : Item[]
 ->module.exports : Item[]
@@ -24,6 +24,6 @@
 +>module : { readonly items: any; }
 +>exports : any
 +>items : any
- 
+
  === some-mod.d.ts ===
  interface Item {

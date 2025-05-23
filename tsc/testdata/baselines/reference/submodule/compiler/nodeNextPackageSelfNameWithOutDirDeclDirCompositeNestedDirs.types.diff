@@ -6,7 +6,7 @@
  import * as me from "@this/package";
 ->me : typeof me
 +>me : any
- 
+
  me.thing();
 ->me.thing() : void
 ->me.thing : () => void
@@ -16,6 +16,6 @@
 +>me.thing : any
 +>me : any
 +>thing : any
- 
+
  export function srcthing(): void {}
  >srcthing : () => void

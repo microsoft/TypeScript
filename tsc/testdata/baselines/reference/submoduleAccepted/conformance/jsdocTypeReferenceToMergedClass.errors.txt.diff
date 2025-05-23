@@ -1,8 +1,7 @@
 --- old.jsdocTypeReferenceToMergedClass.errors.txt
 +++ new.jsdocTypeReferenceToMergedClass.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +jsdocTypeReferenceToMergedClass.js(2,12): error TS2503: Cannot find namespace 'Workspace'.
 +jsdocTypeReferenceToMergedClass.js(6,11): error TS2339: Property 'Project' does not exist on type '{}'.
 +jsdocTypeReferenceToMergedClass.js(7,11): error TS2339: Property 'Project' does not exist on type '{}'.

@@ -1,7 +1,7 @@
 --- old.inferStringLiteralUnionForBindingElement.js
 +++ new.inferStringLiteralUnionForBindingElement.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [inferStringLiteralUnionForBindingElement.js]
  function func1() {
 -    var firstKey = func({ keys: ["aa", "bb"] }).firstKey;

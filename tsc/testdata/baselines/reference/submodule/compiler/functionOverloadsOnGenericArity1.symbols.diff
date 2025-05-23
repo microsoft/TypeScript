@@ -2,12 +2,12 @@
 +++ new.functionOverloadsOnGenericArity1.symbols
 @@= skipped -5, +5 lines =@@
  >C : Symbol(C, Decl(functionOverloadsOnGenericArity1.ts, 0, 0))
- 
+
     f<T>(): string;
 ->f : Symbol(C.f, Decl(functionOverloadsOnGenericArity1.ts, 1, 13), Decl(functionOverloadsOnGenericArity1.ts, 2, 18))
 +>f : Symbol(f, Decl(functionOverloadsOnGenericArity1.ts, 1, 13), Decl(functionOverloadsOnGenericArity1.ts, 2, 18))
  >T : Symbol(T, Decl(functionOverloadsOnGenericArity1.ts, 2, 5))
- 
+
     f<T, U>(): string; 
 ->f : Symbol(C.f, Decl(functionOverloadsOnGenericArity1.ts, 1, 13), Decl(functionOverloadsOnGenericArity1.ts, 2, 18))
 +>f : Symbol(f, Decl(functionOverloadsOnGenericArity1.ts, 1, 13), Decl(functionOverloadsOnGenericArity1.ts, 2, 18))

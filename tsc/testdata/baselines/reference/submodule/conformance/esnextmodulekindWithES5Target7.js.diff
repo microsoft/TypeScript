@@ -1,8 +1,8 @@
 --- old.esnextmodulekindWithES5Target7.js
 +++ new.esnextmodulekindWithES5Target7.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [esnextmodulekindWithES5Target7.js]
 -export var N;
 +export { N };

@@ -1,8 +1,8 @@
 --- old.thisTypeAccessibility.js
 +++ new.thisTypeAccessibility.js
 @@= skipped -64, +64 lines =@@
- 
- 
+
+
  //// [thisTypeAccessibility.js]
 -var MyClass = /** @class */ (function () {
 -    function MyClass() {

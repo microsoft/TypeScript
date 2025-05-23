@@ -1,6 +1,6 @@
 --- old.computedPropertiesNarrowed.errors.txt
 +++ new.computedPropertiesNarrowed.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -computedPropertiesNarrowed.ts(5,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 -computedPropertiesNarrowed.ts(11,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 -computedPropertiesNarrowed.ts(18,20): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
@@ -89,5 +89,4 @@
 -!!! related TS9027 computedPropertiesNarrowed.ts:46:14: Add a type annotation to the variable o9.
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

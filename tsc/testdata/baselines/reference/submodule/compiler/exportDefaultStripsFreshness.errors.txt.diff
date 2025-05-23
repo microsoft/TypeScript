@@ -7,8 +7,8 @@
 -  Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
 +index.ts(10,6): error TS2741: Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
 +index.ts(12,6): error TS2741: Property 'foo' is missing in type '{ foob: string; }' but required in type 'IFoo'.
- 
- 
+
+
  ==== items.ts (0 errors) ====
 @@= skipped -23, +21 lines =@@
      

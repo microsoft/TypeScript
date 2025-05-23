@@ -1,7 +1,7 @@
 --- old.checkJsdocTypeTagOnExportAssignment5.types
 +++ new.checkJsdocTypeTagOnExportAssignment5.types
 @@= skipped -10, +10 lines =@@
- 
+
  /** @type {Foo} */
  export default { a: 1, b: 1 };
 +>{ a: 1, b: 1 } : Foo
@@ -9,13 +9,12 @@
  >a : number
  >1 : 1
 @@= skipped -8, +9 lines =@@
- 
+
  === b.js ===
  import a from "./a";
 ->a : import("a").Foo
 +>a : Foo
- 
+
  a;
 ->a : import("a").Foo
 +>a : Foo
- 

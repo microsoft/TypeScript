@@ -8,4 +8,3 @@
 +>obj[key] : any
  >obj : { a: number; }
  >key : string
- 

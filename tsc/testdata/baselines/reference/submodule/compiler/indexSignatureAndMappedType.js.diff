@@ -1,17 +1,18 @@
 --- old.indexSignatureAndMappedType.js
 +++ new.indexSignatureAndMappedType.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [indexSignatureAndMappedType.js]
 -"use strict";
  // A mapped type { [P in K]: X }, where K is a generic type, is related to
  // { [key: string]: Y } if X is related to Y.
  function f1(x, y) {
-@@= skipped -15, +14 lines =@@
+@@= skipped -14, +13 lines =@@
+ function f3(x, y) {
      x = y; // Error
      y = x; // Error
- }
+-}
 -
 -
 -//// [indexSignatureAndMappedType.d.ts]
@@ -33,4 +34,4 @@
 -}
 -interface IEntity<T extends string> extends IBaseEntity {
 -    properties: Record<T, string>;
--}
+ }

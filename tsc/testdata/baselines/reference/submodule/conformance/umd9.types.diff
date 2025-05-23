@@ -8,6 +8,6 @@
 ->Foo : typeof import("foo")
 +>x : typeof Thing
 +>Foo : typeof Thing
- 
+
  === foo.d.ts ===
  declare class Thing {

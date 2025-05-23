@@ -1,7 +1,7 @@
 --- old.esDecorators-classDeclaration-fields-nonStatic(target=es2022,usedefineforclassfields=true).js
 +++ new.esDecorators-classDeclaration-fields-nonStatic(target=es2022,usedefineforclassfields=true).js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [esDecorators-classDeclaration-fields-nonStatic.js]
  const field3 = "field3";
 -let C = (() => {

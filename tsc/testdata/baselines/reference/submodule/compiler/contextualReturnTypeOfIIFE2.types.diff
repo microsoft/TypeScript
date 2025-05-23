@@ -2,12 +2,12 @@
 +++ new.contextualReturnTypeOfIIFE2.types
 @@= skipped -4, +4 lines =@@
  >app : typeof app
- 
+
    function foo(): void;
 ->foo : typeof foo
 +>foo : () => void
  }
- 
+
  app.foo.bar = (function () {
  >app.foo.bar = (function () {  const someFun = (arg: number) => {};  return { someFun };})() : { someFun: (arg: number) => void; }
 ->app.foo.bar : { someFun: (arg: number) => void; }
@@ -24,7 +24,7 @@
  >function () {  const someFun = (arg: number) => {};  return { someFun };} : () => { someFun: (arg: number) => void; }
 @@= skipped -26, +26 lines =@@
  })();
- 
+
  app.foo.bar.someFun(1);
 ->app.foo.bar.someFun(1) : void
 ->app.foo.bar.someFun : (arg: number) => void
@@ -42,4 +42,3 @@
 +>bar : any
 +>someFun : any
  >1 : 1
- 

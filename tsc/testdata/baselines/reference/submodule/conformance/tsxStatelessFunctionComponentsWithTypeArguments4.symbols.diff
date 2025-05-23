@@ -6,7 +6,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
  >OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
 @@= skipped -11, +11 lines =@@
@@ -15,7 +15,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
  >OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
 @@= skipped -12, +12 lines =@@
@@ -24,7 +24,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  // Error
  function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
 @@= skipped -27, +27 lines =@@

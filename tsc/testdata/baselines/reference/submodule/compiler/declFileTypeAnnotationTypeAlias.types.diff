@@ -2,10 +2,10 @@
 +++ new.declFileTypeAnnotationTypeAlias.types
 @@= skipped -25, +25 lines =@@
      }
- 
+
      export type MC = m.c;
 ->MC : m.c
 +>MC : c
  >m : any
- 
+
      export type fc = () => c;

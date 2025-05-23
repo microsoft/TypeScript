@@ -1,8 +1,8 @@
 --- old.thisInSuperCall3.js
 +++ new.thisInSuperCall3.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [thisInSuperCall3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,14 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base(a) {
-+class Base {
-+    constructor(a) { }
-+}
-+class Foo extends Base {
-+    x = 0;
-+    constructor() {
-+        super(this);
-     }
+-    }
 -    return Base;
 -}());
 -var Foo = /** @class */ (function (_super) {
@@ -40,4 +33,12 @@
 -    }
 -    return Foo;
 -}(Base));
++class Base {
++    constructor(a) { }
++}
++class Foo extends Base {
++    x = 0;
++    constructor() {
++        super(this);
++    }
 +}

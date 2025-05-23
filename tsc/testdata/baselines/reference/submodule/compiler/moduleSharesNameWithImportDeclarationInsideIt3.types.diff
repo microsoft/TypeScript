@@ -6,7 +6,7 @@
  >A : typeof A
 ->M : typeof A.M
 +>M : typeof M
- 
+
      import M = Z.M;
  >M : typeof M
 @@= skipped -10, +10 lines =@@
@@ -15,6 +15,6 @@
  >Z : typeof Z
 ->I : Z.I
 +>I : I
- 
+
      export function bar() {
  >bar : () => void

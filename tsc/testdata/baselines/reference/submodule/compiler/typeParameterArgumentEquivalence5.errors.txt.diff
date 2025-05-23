@@ -11,7 +11,7 @@
 +  Type '(item: any) => U' is not assignable to type '(item: any) => T'.
      Type 'U' is not assignable to type 'T'.
        'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
- 
+
 @@= skipped -14, +14 lines =@@
          x = y;  // Should be an error
          ~

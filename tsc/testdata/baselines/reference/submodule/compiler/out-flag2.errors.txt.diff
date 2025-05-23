@@ -1,6 +1,6 @@
 --- old.out-flag2.errors.txt
 +++ new.out-flag2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS6082: Only 'amd' and 'system' modules are supported alongside --outFile.
 -
 -
@@ -11,5 +11,4 @@
 -==== b.ts (0 errors) ====
 -    class B { }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.innerAliases2.symbols
 @@= skipped -7, +7 lines =@@
  >UsefulClass : Symbol(UsefulClass, Decl(innerAliases2.ts, 0, 18))
- 
+
                                  public foo() {
 ->foo : Symbol(UsefulClass.foo, Decl(innerAliases2.ts, 1, 42))
 +>foo : Symbol(foo, Decl(innerAliases2.ts, 1, 42))
@@ -10,7 +10,7 @@
                  }
  }
 @@= skipped -10, +10 lines =@@
- 
+
                  import provider = _provider;
  >provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
 ->_provider : Symbol(provider, Decl(innerAliases2.ts, 0, 0))
@@ -27,7 +27,7 @@
  >provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
 ->UsefulClass : Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
 +>UsefulClass : Symbol(UsefulClass, Decl(innerAliases2.ts, 0, 18))
- 
+
                                  var p2:provider.UsefulClass= new provider.UsefulClass();
  >p2 : Symbol(p2, Decl(innerAliases2.ts, 13, 35))
  >provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
@@ -38,6 +38,6 @@
  >provider : Symbol(provider, Decl(innerAliases2.ts, 7, 17))
 ->UsefulClass : Symbol(provider.UsefulClass, Decl(innerAliases2.ts, 0, 18))
 +>UsefulClass : Symbol(UsefulClass, Decl(innerAliases2.ts, 0, 18))
- 
+
                                  return p2; 
  >p2 : Symbol(p2, Decl(innerAliases2.ts, 13, 35))

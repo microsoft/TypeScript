@@ -1,7 +1,7 @@
 --- old.newWithSpreadES6.types
 +++ new.newWithSpreadES6.types
 @@= skipped -447, +447 lines =@@
- 
+
  // Element access expression with a number
  new i["a-b"][1](1, 2, "string");
 ->new i["a-b"][1](1, 2, "string") : error
@@ -15,7 +15,7 @@
  >1 : 1
 @@= skipped -11, +11 lines =@@
  >"string" : "string"
- 
+
  new i["a-b"][1](1, 2, ...a);
 ->new i["a-b"][1](1, 2, ...a) : error
 ->i["a-b"][1] : error
@@ -28,7 +28,7 @@
  >1 : 1
 @@= skipped -12, +12 lines =@@
  >a : string[]
- 
+
  new i["a-b"][1](1, 2, ...a, "string");
 ->new i["a-b"][1](1, 2, ...a, "string") : error
 ->i["a-b"][1] : error

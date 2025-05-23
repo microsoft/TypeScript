@@ -2,7 +2,7 @@
 +++ new.genericClasses0.js
 @@= skipped -9, +9 lines =@@
  var y = v1.x; // should be 'string'
- 
+
  //// [genericClasses0.js]
 -var C = /** @class */ (function () {
 -    function C() {

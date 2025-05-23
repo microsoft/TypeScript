@@ -11,8 +11,8 @@
  fileTs.ts(1,1): error TS2304: Cannot find name 'a'.
 @@= skipped -9, +5 lines =@@
  fileTs.ts(1,46): error TS2304: Cannot find name 'e'.
- 
- 
+
+
 -==== fileJs.js (7 errors) ====
 +==== fileJs.js (3 errors) ====
      a() ? (b: number, c?: string): void => d() : e; // Not legal JS; "Unexpected token ':'" at first colon

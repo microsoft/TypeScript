@@ -2,7 +2,7 @@
 +++ new.strictBooleanMemberAssignability.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [strictBooleanMemberAssignability.js]
 -"use strict";
 -var Abc = /** @class */ (function () {

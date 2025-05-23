@@ -2,7 +2,7 @@
 +++ new.classExtendsInterfaceThatExtendsClassWithPrivates1.js
 @@= skipped -16, +16 lines =@@
  } 
- 
+
  //// [classExtendsInterfaceThatExtendsClassWithPrivates1.js]
 -var C = /** @class */ (function () {
 -    function C() {

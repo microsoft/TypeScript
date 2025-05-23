@@ -1,7 +1,7 @@
 --- old.typesWithSpecializedConstructSignatures.js
 +++ new.typesWithSpecializedConstructSignatures.js
 @@= skipped -42, +42 lines =@@
- 
+
  //// [typesWithSpecializedConstructSignatures.js]
  // basic uses of specialized signatures without errors
 -var __extends = (this && this.__extends) || (function () {

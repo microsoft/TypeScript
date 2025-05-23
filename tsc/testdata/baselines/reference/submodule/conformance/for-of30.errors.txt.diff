@@ -1,6 +1,6 @@
 --- old.for-of30.errors.txt
 +++ new.for-of30.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -for-of30.ts(16,15): error TS2767: The 'return' property of an iterator must be a method.
 -
 -
@@ -23,5 +23,4 @@
 -    for (var v of new MyStringIterator) { }
 -                  ~~~~~~~~~~~~~~~~~~~~
 -!!! error TS2767: The 'return' property of an iterator must be a method.
-@@= skipped --1, +1 lines =@@
 +<no content>

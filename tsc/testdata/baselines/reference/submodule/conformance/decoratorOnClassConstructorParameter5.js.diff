@@ -2,7 +2,7 @@
 +++ new.decoratorOnClassConstructorParameter5.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [decoratorOnClassConstructorParameter5.js]
 -var BulkEditPreviewProvider_1;
 -let BulkEditPreviewProvider = BulkEditPreviewProvider_1 = class BulkEditPreviewProvider {

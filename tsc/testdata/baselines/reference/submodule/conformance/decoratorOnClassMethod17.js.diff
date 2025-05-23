@@ -1,8 +1,8 @@
 --- old.decoratorOnClassMethod17.js
 +++ new.decoratorOnClassMethod17.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [decoratorOnClassMethod17.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

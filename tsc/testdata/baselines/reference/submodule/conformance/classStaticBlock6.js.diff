@@ -1,8 +1,8 @@
 --- old.classStaticBlock6.js
 +++ new.classStaticBlock6.js
 @@= skipped -65, +65 lines =@@
- 
- 
+
+
  //// [classStaticBlock6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -53,26 +53,11 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+class B {
-+    static a = 1;
-+}
-+class C extends B {
-+    static {
-+        let await = 1;
-+        let arguments = 1;
-+        let eval = 1;
-     }
+-    }
 -};
 -var B = /** @class */ (function () {
 -    function B() {
-+    static {
-+        await ;
-+        if (true) {
-+        }
-+        arguments;
-+        await ;
-+        super();
-     }
+-    }
 -    B.a = 1;
 -    return B;
 -}());
@@ -110,24 +95,12 @@
 -                __extends(CC, _super);
 -                function CC() {
 -                    return _super.call(this) || this;
-+}
-+class CC {
-+    constructor() {
-+        class C extends B {
-+            static {
-+                class CC extends B {
-+                    constructor() {
-+                        super();
-+                    }
-                 }
+-                }
 -                return CC;
 -            }(B));
 -            _this = _super.call(this) || this;
 -        })();
-+                super();
-+            }
-+        }
-     }
+-    }
 -    return CC;
 -}());
 -function foo() {
@@ -142,14 +115,7 @@
 -                return C;
 -            }(B));
 -            (function () {
-+}
-+async function foo() {
-+    class C extends B {
-+        static {
-+            arguments;
-+            await ;
-+            async function ff() {
-                 arguments;
+-                arguments;
 -                yield ;
 -                function ff() {
 -                    var arguments_1 = arguments;
@@ -170,29 +136,69 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+                await ;
-+            }
-+        }
-+    }
++class B {
++    static a = 1;
  }
- function foo1() {
+-function foo1() {
 -    var C = /** @class */ (function (_super) {
 -        __extends(C, _super);
 -        function C() {
 -            return _super !== null && _super.apply(this, arguments) || this;
--        }
++class C extends B {
++    static {
++        let await = 1;
++        let arguments = 1;
++        let eval = 1;
++    }
++    static {
++        await ;
++        if (true) {
+         }
 -        return C;
 -    }(B));
 -    (function () {
--        arguments;
+         arguments;
 -        function ff() {
+-            arguments;
+-        }
+-    })();
++        await ;
++        super();
++    }
++}
++class CC {
++    constructor() {
++        class C extends B {
++            static {
++                class CC extends B {
++                    constructor() {
++                        super();
++                    }
++                }
++                super();
++            }
++        }
++    }
++}
++async function foo() {
 +    class C extends B {
 +        static {
-             arguments;
++            arguments;
++            await ;
++            async function ff() {
++                arguments;
++                await ;
++            }
++        }
++    }
++}
++function foo1() {
++    class C extends B {
++        static {
++            arguments;
 +            function ff() {
 +                arguments;
 +            }
-         }
--    })();
++        }
 +    }
  }

@@ -2,7 +2,7 @@
 +++ new.unionOfEnumInference.types
 @@= skipped -18, +18 lines =@@
  >x : Interface<T>
- 
+
  function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 ->bar : (x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) => void
 +>bar : (x: Interface<Enum.C> | Interface<Enum.A | Enum.B>) => void

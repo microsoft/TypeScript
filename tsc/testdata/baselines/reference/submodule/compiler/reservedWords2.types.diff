@@ -2,10 +2,9 @@
 +++ new.reservedWords2.types
 @@= skipped -61, +61 lines =@@
  >2 : 2
- 
+
  enum void {}
 -> : (Missing)
 +> : 
  >void {} : undefined
  >{} : {}
- 

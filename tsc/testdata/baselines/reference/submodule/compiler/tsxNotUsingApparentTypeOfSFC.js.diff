@@ -1,7 +1,7 @@
 --- old.tsxNotUsingApparentTypeOfSFC.js
 +++ new.tsxNotUsingApparentTypeOfSFC.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [tsxNotUsingApparentTypeOfSFC.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

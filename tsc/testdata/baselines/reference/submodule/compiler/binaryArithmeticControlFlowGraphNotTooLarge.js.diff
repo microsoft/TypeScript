@@ -2,7 +2,7 @@
 +++ new.binaryArithmeticControlFlowGraphNotTooLarge.js
 @@= skipped -1298, +1298 lines =@@
  };
- 
+
  //// [binaryArithmeticControlFlowGraphNotTooLarge.js]
 -"use strict";
  // Repro from #29926 (expanded 10x for good measure)

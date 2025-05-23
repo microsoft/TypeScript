@@ -1,8 +1,7 @@
 --- old.assignmentToVoidZero1.errors.txt
 +++ new.assignmentToVoidZero1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +assignmentToVoidZero1.js(2,1): error TS2323: Cannot redeclare exported variable 'y'.
 +assignmentToVoidZero1.js(4,1): error TS2322: Type '2' is not assignable to type 'undefined'.
 +assignmentToVoidZero1.js(4,1): error TS2323: Cannot redeclare exported variable 'y'.

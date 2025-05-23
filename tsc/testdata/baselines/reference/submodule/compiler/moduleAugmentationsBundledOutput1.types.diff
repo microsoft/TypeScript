@@ -13,7 +13,7 @@
 +>baz1 : () => C1
  >x : number
  >toExponential : (fractionDigits?: number) => string
- 
+
 @@= skipped -11, +11 lines =@@
  >c.baz2().x.toLowerCase() : string
  >c.baz2().x.toLowerCase : () => string
@@ -27,4 +27,3 @@
 +>baz2 : () => C2
  >x : string
  >toLowerCase : () => string
- 

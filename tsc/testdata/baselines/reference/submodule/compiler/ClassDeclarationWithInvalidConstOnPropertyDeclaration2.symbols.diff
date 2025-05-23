@@ -2,11 +2,11 @@
 +++ new.ClassDeclarationWithInvalidConstOnPropertyDeclaration2.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 0, 0))
- 
+
      const
 ->const : Symbol(C.const, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 0, 9))
 +>const : Symbol(const, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 0, 9))
- 
+
      x = 10;
 ->x : Symbol(C.x, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 1, 9))
 +>x : Symbol(x, Decl(ClassDeclarationWithInvalidConstOnPropertyDeclaration2.ts, 1, 9))

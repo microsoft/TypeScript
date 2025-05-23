@@ -1,21 +1,21 @@
 --- old.destructuringInitializerContextualTypeFromContext.types
 +++ new.destructuringInitializerContextualTypeFromContext.types
 @@= skipped -13, +13 lines =@@
- 
+
  const Parent: SFC<Props> = ({
  >Parent : SFC<Props>
 ->({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : ({ children, name, ...props }: Props & { children?: any; }) => any
 +>({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : (__0: Props & { children?: any; }) => any
- 
+
      children,
  >children : any
 @@= skipped -21, +21 lines =@@
- 
+
  const Child: SFC<Props> = ({
  >Child : SFC<Props>
 ->({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : ({ children, name, ...props }: Props & { children?: any; }) => string
 +>({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : (__0: Props & { children?: any; }) => string
- 
+
      children,
  >children : any
 @@= skipped -16, +16 lines =@@
@@ -28,7 +28,7 @@
 ->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
 +>stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
  >props : {}
- 
+
  // Repro from #29189
 @@= skipped -15, +15 lines =@@
  f(([_1, _2 = undefined]) => undefined)

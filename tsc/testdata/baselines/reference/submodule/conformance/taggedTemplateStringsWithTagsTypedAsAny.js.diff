@@ -2,7 +2,7 @@
 +++ new.taggedTemplateStringsWithTagsTypedAsAny.js
 @@= skipped -27, +27 lines =@@
  f.thisIsNotATag(`abc${1}def${2}ghi`);
- 
+
  //// [taggedTemplateStringsWithTagsTypedAsAny.js]
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
 -    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }

@@ -1,30 +1,30 @@
 --- old.contextualTypedSpecialAssignment.symbols
 +++ new.contextualTypedSpecialAssignment.symbols
 @@= skipped -7, +7 lines =@@
- 
+
  // property assignment
  var ns = {}
 ->ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 +>ns : Symbol(ns, Decl(test.js, 6, 3))
- 
+
  /** @type {DoneStatus} */
  ns.x = {
 ->ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 +>ns : Symbol(ns, Decl(test.js, 6, 3))
- 
+
      status: 'done',
  >status : Symbol(status, Decl(test.js, 8, 8))
 @@= skipped -17, +15 lines =@@
  }
- 
+
  ns.x = {
 ->ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 +>ns : Symbol(ns, Decl(test.js, 6, 3))
- 
+
      status: 'done',
  >status : Symbol(status, Decl(test.js, 13, 8))
 @@= skipped -12, +10 lines =@@
@@ -35,8 +35,8 @@
 ->ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 +>ns : Symbol(ns, Decl(test.js, 6, 3))
- 
- 
+
+
  // this-property assignment
 @@= skipped -12, +10 lines =@@
      constructor() {
@@ -47,23 +47,23 @@
  >this : Symbol(Thing, Decl(test.js, 17, 4))
 ->s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 +>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
- 
+
              status: 'done',
  >status : Symbol(status, Decl(test.js, 24, 18))
 @@= skipped -14, +14 lines =@@
      }
- 
+
      fail() {
 ->fail : Symbol(Thing.fail, Decl(test.js, 28, 5))
 +>fail : Symbol(fail, Decl(test.js, 28, 5))
- 
+
          this.s = {
 ->this.s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 +>this.s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
  >this : Symbol(Thing, Decl(test.js, 17, 4))
 ->s : Symbol(Thing.s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
 +>s : Symbol(s, Decl(test.js, 22, 19), Decl(test.js, 30, 12))
- 
+
              status: 'done',
  >status : Symbol(status, Decl(test.js, 31, 18))
 @@= skipped -22, +22 lines =@@
@@ -73,7 +73,7 @@
 ->exports : Symbol(x, Decl(test.js, 36, 1))
 +>exports : Symbol("test", Decl(test.js, 0, 0))
  >x : Symbol(x, Decl(test.js, 36, 1))
- 
+
      status: "done",
 @@= skipped -18, +18 lines =@@
  /** @type {DoneStatus} */
@@ -86,7 +86,7 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol("test", Decl(test.js, 0, 0))
  >y : Symbol(y, Decl(test.js, 45, 9))
- 
+
      status: "done",
 @@= skipped -14, +14 lines =@@
  }
@@ -99,7 +99,7 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol("test", Decl(test.js, 0, 0))
  >y : Symbol(y, Decl(test.js, 45, 9))
- 
+
  // prototype-property assignment
  /** @type {DoneStatus} */
  Thing.prototype.x = {
@@ -110,7 +110,7 @@
 ->prototype : Symbol(Thing.prototype)
 ->x : Symbol(Thing.x, Decl(test.js, 52, 16))
 +>prototype : Symbol(prototype)
- 
+
      status: 'done',
  >status : Symbol(status, Decl(test.js, 56, 21))
 @@= skipped -22, +20 lines =@@
@@ -124,7 +124,7 @@
 ->prototype : Symbol(Thing.prototype)
 ->x : Symbol(Thing.x, Decl(test.js, 52, 16))
 +>prototype : Symbol(prototype)
- 
+
  // prototype assignment
  function F() {
 ->F : Symbol(F, Decl(test.js, 60, 17), Decl(test.js, 64, 1))
@@ -138,7 +138,7 @@
 +>F.prototype : Symbol(prototype, Decl(test.js, 64, 1))
 +>F : Symbol(F, Decl(test.js, 60, 17))
 +>prototype : Symbol(prototype, Decl(test.js, 64, 1))
- 
+
      status: "done",
  >status : Symbol(status, Decl(test.js, 66, 15))
 @@= skipped -28, +26 lines =@@
@@ -150,5 +150,5 @@
 +>module.exports : Symbol(export=, Decl(mod.js, 0, 0))
 +>module : Symbol(module.exports)
  >exports : Symbol(export=, Decl(mod.js, 0, 0))
- 
+
      status: "done",

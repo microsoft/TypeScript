@@ -10,7 +10,7 @@
 ->String : Symbol(core.String, Decl(core-js.d.ts, 1, 7))
 +>String : Symbol(String, Decl(core-js.d.ts, 1, 7))
  >repeat : Symbol(repeat, Decl(core-js.d.ts, 1, 17))
- 
+
      export default repeat;
 @@= skipped -15, +15 lines =@@
  const _: string = repeat(new Date().toUTCString() + " ", 2);
@@ -21,4 +21,3 @@
  >Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 ->toUTCString : Symbol(Date.toUTCString, Decl(lib.es5.d.ts, --, --))
 +>toUTCString : Symbol(toUTCString, Decl(lib.es5.d.ts, --, --))
- 

@@ -1,8 +1,8 @@
 --- old.inKeywordAndIntersection.js
 +++ new.inKeywordAndIntersection.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [inKeywordAndIntersection.js]
 -"use strict";
 -var A = /** @class */ (function () {

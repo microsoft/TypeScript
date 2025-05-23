@@ -1,21 +1,21 @@
 --- old.inferringClassMembersFromAssignments6.symbols
 +++ new.inferringClassMembersFromAssignments6.symbols
 @@= skipped -5, +5 lines =@@
- 
+
      var self = this
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
 ->this : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
- 
+
      self.x = 1
 ->self.x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
 ->x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
- 
+
      self.m = function() {
 ->self.m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 1, 7))
 ->m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
- 
+
          console.log(self.x)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -34,11 +34,11 @@
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->mreal : Symbol(Foonly.mreal, Decl(inferringClassMembersFromAssignments6.js, 6, 1))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 
+
      var self = this
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 8, 7))
 ->this : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
- 
+
      self.y = 2
 ->self.y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments6.js, 8, 7))
@@ -47,19 +47,18 @@
  const foo = new Foonly()
  >foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
  >Foonly : Symbol(Foonly, Decl(inferringClassMembersFromAssignments6.js, 0, 0))
- 
+
  foo.x
 ->foo.x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
  >foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
 ->x : Symbol(Foonly.x, Decl(inferringClassMembersFromAssignments6.js, 1, 19))
- 
+
  foo.y
 ->foo.y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
  >foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
 ->y : Symbol(Foonly.y, Decl(inferringClassMembersFromAssignments6.js, 8, 19))
- 
+
  foo.m()
 ->foo.m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
  >foo : Symbol(foo, Decl(inferringClassMembersFromAssignments6.js, 11, 5))
 ->m : Symbol(Foonly.m, Decl(inferringClassMembersFromAssignments6.js, 2, 14))
- 

@@ -1,6 +1,6 @@
 --- old.nodeModulesAllowJsSynchronousCallErrors(module=node16).errors.txt
 +++ new.nodeModulesAllowJsSynchronousCallErrors(module=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -index.js(3,1): error TS8002: 'import ... =' can only be used in TypeScript files.
 -index.js(3,22): error TS1471: Module './index.js' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
 -index.js(5,1): error TS8002: 'import ... =' can only be used in TypeScript files.
@@ -58,5 +58,4 @@
 -    {
 -        "type": "commonjs"
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

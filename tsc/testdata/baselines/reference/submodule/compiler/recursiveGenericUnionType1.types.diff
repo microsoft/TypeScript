@@ -2,22 +2,22 @@
 +++ new.recursiveGenericUnionType1.types
 @@= skipped -25, +25 lines =@@
  }
- 
+
  var x: Test1.Container<number>;
 ->x : Test1.Container<number>
 +>x : Container<number>
  >Test1 : any
- 
+
  var s1: Test1.IStringContainer;
 ->s1 : Test1.IStringContainer
 +>s1 : IStringContainer
  >Test1 : any
- 
+
  var s2: Test2.IStringContainer;
 ->s2 : Test2.IStringContainer
 +>s2 : IStringContainer
  >Test2 : any
- 
+
  s1 = s2;
 ->s1 = s2 : Test2.IStringContainer
 ->s1 : Test1.IStringContainer
@@ -25,7 +25,7 @@
 +>s1 = s2 : IStringContainer
 +>s1 : IStringContainer
 +>s2 : IStringContainer
- 
+
  s2 = s1;
 ->s2 = s1 : Test1.IStringContainer
 ->s2 : Test2.IStringContainer
@@ -33,4 +33,3 @@
 +>s2 = s1 : IStringContainer
 +>s2 : IStringContainer
 +>s1 : IStringContainer
- 

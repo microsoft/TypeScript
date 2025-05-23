@@ -2,20 +2,20 @@
 +++ new.declarationEmitSymlinkPaths.types
 @@= skipped -22, +22 lines =@@
  >test : <T>(a: () => T) => () => T
- 
+
  import { getNotification } from "../API/NotificationAPIUtils";
 ->getNotification : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
 +>getNotification : () => NotificationResponse
- 
+
  export const NotificationScenario = test(
 ->NotificationScenario : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
 ->test(  getNotification) : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
 +>NotificationScenario : () => NotificationResponse
 +>test(  getNotification) : () => NotificationResponse
  >test : <T>(a: () => T) => () => T
- 
+
    getNotification
 ->getNotification : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
 +>getNotification : () => NotificationResponse
- 
+
  );

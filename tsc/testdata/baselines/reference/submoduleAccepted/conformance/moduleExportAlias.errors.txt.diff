@@ -1,8 +1,7 @@
 --- old.moduleExportAlias.errors.txt
 +++ new.moduleExportAlias.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.ts(2,3): error TS2339: Property 'func1' does not exist on type '{}'.
 +a.ts(3,3): error TS2339: Property 'func2' does not exist on type '{}'.
 +a.ts(4,3): error TS2339: Property 'func3' does not exist on type '{}'.

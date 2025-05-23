@@ -1,8 +1,8 @@
 --- old.untypedFunctionCallsWithTypeParameters1.js
 +++ new.untypedFunctionCallsWithTypeParameters1.js
 @@= skipped -45, +45 lines =@@
- 
- 
+
+
  //// [untypedFunctionCallsWithTypeParameters1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

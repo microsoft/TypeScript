@@ -1,7 +1,7 @@
 --- old.collisionRestParameterUnderscoreIUsage.js
 +++ new.collisionRestParameterUnderscoreIUsage.js
 @@= skipped -11, +11 lines =@@
- 
+
  //// [collisionRestParameterUnderscoreIUsage.js]
  var _i = "This is what I'd expect to see";
 -var Foo = /** @class */ (function () {

@@ -1,7 +1,7 @@
 --- old.parserSkippedTokens3.errors.txt
 +++ new.parserSkippedTokens3.errors.txt
 @@= skipped -3, +3 lines =@@
- 
+
  ==== parserSkippedTokens3.ts (2 errors) ====
      \ ; \
 -    

@@ -15,10 +15,12 @@
 +main.js(7,28): error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
 +main.js(8,28): error TS2694: Namespace '"mod".export=' has no exported member 'literal'.
  main.js(20,35): error TS2694: Namespace '"mod".export=' has no exported member 'buz'.
-+mod.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
- 
- 
+-
+-
 -==== mod.js (0 errors) ====
++mod.js(6,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
++
++
 +==== mod.js (1 errors) ====
      class Thing  { x = 1 }
      class AnotherThing { y = 2  }

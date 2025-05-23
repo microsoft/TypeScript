@@ -6,11 +6,11 @@
  declare const o: undefined | {
 ->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 +>o : (...args: any[]) => any | undefined
- 
+
      [key: string]: any;
  >key : string
 @@= skipped -18, +18 lines =@@
- 
+
  o?.[a = 1];
  >o?.[a = 1] : any
 ->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
@@ -18,7 +18,7 @@
  >a = 1 : 1
  >a : number
  >1 : 1
- 
+
  a.toString();
  >a.toString() : string
 ->a.toString : (radix?: number) => string
@@ -26,7 +26,7 @@
  >a : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
  let b: number;
  >b : number
 @@= skipped -17, +17 lines =@@
@@ -39,7 +39,7 @@
  >b = 1 : 1
  >b : number
 @@= skipped -8, +8 lines =@@
- 
+
  b.toString();
  >b.toString() : string
 ->b.toString : (radix?: number) => string
@@ -47,10 +47,10 @@
  >b : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
  let c: number;
  >c : number
- 
+
  o?.(c = 1)
  >o?.(c = 1) : any
 ->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
@@ -58,7 +58,7 @@
  >c = 1 : 1
  >c : number
  >1 : 1
- 
+
  c.toString();
  >c.toString() : string
 ->c.toString : (radix?: number) => string
@@ -66,7 +66,7 @@
  >c : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
  let d: number;
  >d : number
 @@= skipped -26, +26 lines =@@
@@ -79,7 +79,7 @@
  >d = 1 : 1
  >d : number
 @@= skipped -8, +8 lines =@@
- 
+
  d.toString();
  >d.toString() : string
 ->d.toString : (radix?: number) => string
@@ -87,18 +87,18 @@
  >d : number
 ->toString : (radix?: number) => string
 +>toString : (radix?: number | undefined) => string
- 
+
  // type predicates
  declare const f: undefined | ((x: any) => x is number);
 @@= skipped -52, +52 lines =@@
  >x : string | number
- 
+
  declare const o2: { f(x: any): x is number; } | undefined;
 ->o2 : { f(x: any): x is number; } | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
  >f : (x: any) => x is number
  >x : any
- 
+
  if (o2?.f(x)) {
  >o2?.f(x) : boolean | undefined
  >o2?.f : ((x: any) => x is number) | undefined
@@ -106,21 +106,21 @@
 +>o2 : { f: (x: any) => x is number; } | undefined
  >f : ((x: any) => x is number) | undefined
  >x : string | number
- 
+
 @@= skipped -16, +16 lines =@@
- 
+
      o2.f; // (x: any) => x is number
  >o2.f : (x: any) => x is number
 ->o2 : { f(x: any): x is number; }
 +>o2 : { f: (x: any) => x is number; }
  >f : (x: any) => x is number
- 
+
      o2?.f;
  >o2?.f : (x: any) => x is number
 ->o2 : { f(x: any): x is number; }
 +>o2 : { f: (x: any) => x is number; }
  >f : (x: any) => x is number
- 
+
      o2?.f(x);
  >o2?.f(x) : boolean
  >o2?.f : (x: any) => x is number
@@ -131,17 +131,17 @@
  }
 @@= skipped -20, +20 lines =@@
  >x : string | number
- 
+
      o2;
 ->o2 : { f(x: any): x is number; } | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
- 
+
      o2?.f;
  >o2?.f : ((x: any) => x is number) | undefined
 ->o2 : { f(x: any): x is number; } | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
  >f : ((x: any) => x is number) | undefined
- 
+
      o2.f;
  >o2.f : (x: any) => x is number
 ->o2 : { f(x: any): x is number; } | undefined
@@ -150,33 +150,33 @@
  }
  x;
  >x : string | number
- 
+
  o2;
 ->o2 : { f(x: any): x is number; } | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
- 
+
  o2?.f;
  >o2?.f : ((x: any) => x is number) | undefined
 ->o2 : { f(x: any): x is number; } | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
  >f : ((x: any) => x is number) | undefined
- 
+
  o2.f;
  >o2.f : (x: any) => x is number
 ->o2 : { f(x: any): x is number; } | undefined
 +>o2 : { f: (x: any) => x is number; } | undefined
  >f : (x: any) => x is number
- 
+
  declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 @@= skipped -83, +83 lines =@@
  >x : 1 | 2
- 
+
  declare const o4: { x?: { y: boolean } };
 ->o4 : { x?: { y: boolean; }; }
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; } | undefined
  >y : boolean
- 
+
  if (o4.x?.y) {
  >o4.x?.y : boolean | undefined
  >o4.x : { y: boolean; } | undefined
@@ -184,13 +184,13 @@
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; } | undefined
  >y : boolean | undefined
- 
+
      o4.x; // { y: boolean }
  >o4.x : { y: boolean; }
 ->o4 : { x?: { y: boolean; }; }
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; }
- 
+
      o4.x.y; // true
  >o4.x.y : true
  >o4.x : { y: boolean; }
@@ -198,7 +198,7 @@
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; }
  >y : true
- 
+
      o4.x?.y; // true
  >o4.x?.y : true
  >o4.x : { y: boolean; }
@@ -213,7 +213,7 @@
 ->o4 : { x?: { y: boolean; }; }
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; } | undefined
- 
+
      o4.x?.y;
  >o4.x?.y : boolean | undefined
  >o4.x : { y: boolean; } | undefined
@@ -221,7 +221,7 @@
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; } | undefined
  >y : boolean | undefined
- 
+
      o4.x.y;
  >o4.x.y : boolean
  >o4.x : { y: boolean; } | undefined
@@ -235,7 +235,7 @@
 ->o4 : { x?: { y: boolean; }; }
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; } | undefined
- 
+
  o4.x?.y;
  >o4.x?.y : boolean | undefined
  >o4.x : { y: boolean; } | undefined
@@ -243,7 +243,7 @@
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; } | undefined
  >y : boolean | undefined
- 
+
  o4.x.y;
  >o4.x.y : boolean
  >o4.x : { y: boolean; } | undefined
@@ -251,7 +251,7 @@
 +>o4 : { x?: { y: boolean; } | undefined; }
  >x : { y: boolean; } | undefined
  >y : boolean
- 
+
  declare const o5: { x?: { y: { z?: { w: boolean } } } };
 ->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
 ->x : { y: { z?: { w: boolean; }; }; } | undefined
@@ -261,7 +261,7 @@
 +>y : { z?: { w: boolean; } | undefined; }
  >z : { w: boolean; } | undefined
  >w : boolean
- 
+
  if (o5.x?.y.z?.w) {
  >o5.x?.y.z?.w : boolean | undefined
  >o5.x?.y.z : { w: boolean; } | undefined
@@ -277,7 +277,7 @@
 +>y : { z?: { w: boolean; } | undefined; } | undefined
  >z : { w: boolean; } | undefined
  >w : boolean | undefined
- 
+
      o5.x;
 ->o5.x : { y: { z?: { w: boolean; }; }; }
 ->o5 : { x?: { y: { z?: { w: boolean; }; }; }; }
@@ -285,7 +285,7 @@
 +>o5.x : { y: { z?: { w: boolean; } | undefined; }; }
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; }
- 
+
      o5.x.y;
 ->o5.x.y : { z?: { w: boolean; }; }
 ->o5.x : { y: { z?: { w: boolean; }; }; }
@@ -297,7 +297,7 @@
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; }
 +>y : { z?: { w: boolean; } | undefined; }
- 
+
      o5.x.y.z;
  >o5.x.y.z : { w: boolean; }
 ->o5.x.y : { z?: { w: boolean; }; }
@@ -311,7 +311,7 @@
 +>x : { y: { z?: { w: boolean; } | undefined; }; }
 +>y : { z?: { w: boolean; } | undefined; }
  >z : { w: boolean; }
- 
+
      o5.x.y.z.w; // true
  >o5.x.y.z.w : true
  >o5.x.y.z : { w: boolean; }
@@ -327,7 +327,7 @@
 +>y : { z?: { w: boolean; } | undefined; }
  >z : { w: boolean; }
  >w : true
- 
+
      o5.x.y.z?.w; // true
  >o5.x.y.z?.w : true
  >o5.x.y.z : { w: boolean; }
@@ -343,7 +343,7 @@
 +>y : { z?: { w: boolean; } | undefined; }
  >z : { w: boolean; }
  >w : true
- 
+
      o5.x?.y.z.w; // true
  >o5.x?.y.z.w : true
  >o5.x?.y.z : { w: boolean; }
@@ -359,7 +359,7 @@
 +>y : { z?: { w: boolean; } | undefined; }
  >z : { w: boolean; }
  >w : true
- 
+
      o5.x?.y.z?.w; // true
  >o5.x?.y.z?.w : true
  >o5.x?.y.z : { w: boolean; }
@@ -384,7 +384,7 @@
 +>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
- 
+
      o5.x?.y;
 ->o5.x?.y : { z?: { w: boolean; }; } | undefined
 ->o5.x : { y: { z?: { w: boolean; }; }; } | undefined
@@ -396,7 +396,7 @@
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>y : { z?: { w: boolean; } | undefined; } | undefined
- 
+
      o5.x?.y.z;
  >o5.x?.y.z : { w: boolean; } | undefined
 ->o5.x?.y : { z?: { w: boolean; }; } | undefined
@@ -410,7 +410,7 @@
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>y : { z?: { w: boolean; } | undefined; } | undefined
  >z : { w: boolean; } | undefined
- 
+
      o5.x?.y.z?.w;
  >o5.x?.y.z?.w : boolean | undefined
  >o5.x?.y.z : { w: boolean; } | undefined
@@ -426,7 +426,7 @@
 +>y : { z?: { w: boolean; } | undefined; } | undefined
  >z : { w: boolean; } | undefined
  >w : boolean | undefined
- 
+
      o5.x.y;
 ->o5.x.y : { z?: { w: boolean; }; }
 ->o5.x : { y: { z?: { w: boolean; }; }; } | undefined
@@ -438,7 +438,7 @@
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>y : { z?: { w: boolean; } | undefined; }
- 
+
      o5.x.y.z.w;
  >o5.x.y.z.w : boolean
  >o5.x.y.z : { w: boolean; } | undefined
@@ -462,7 +462,7 @@
 +>o5.x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
- 
+
  o5.x?.y;
 ->o5.x?.y : { z?: { w: boolean; }; } | undefined
 ->o5.x : { y: { z?: { w: boolean; }; }; } | undefined
@@ -474,7 +474,7 @@
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>y : { z?: { w: boolean; } | undefined; } | undefined
- 
+
  o5.x?.y.z;
  >o5.x?.y.z : { w: boolean; } | undefined
 ->o5.x?.y : { z?: { w: boolean; }; } | undefined
@@ -488,7 +488,7 @@
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>y : { z?: { w: boolean; } | undefined; } | undefined
  >z : { w: boolean; } | undefined
- 
+
  o5.x?.y.z?.w;
  >o5.x?.y.z?.w : boolean | undefined
  >o5.x?.y.z : { w: boolean; } | undefined
@@ -504,7 +504,7 @@
 +>y : { z?: { w: boolean; } | undefined; } | undefined
  >z : { w: boolean; } | undefined
  >w : boolean | undefined
- 
+
  o5.x.y;
 ->o5.x.y : { z?: { w: boolean; }; }
 ->o5.x : { y: { z?: { w: boolean; }; }; } | undefined
@@ -516,7 +516,7 @@
 +>o5 : { x?: { y: { z?: { w: boolean; } | undefined; }; } | undefined; }
 +>x : { y: { z?: { w: boolean; } | undefined; }; } | undefined
 +>y : { z?: { w: boolean; } | undefined; }
- 
+
  o5.x.y.z.w;
  >o5.x.y.z.w : boolean
  >o5.x.y.z : { w: boolean; } | undefined
@@ -532,24 +532,24 @@
 +>y : { z?: { w: boolean; } | undefined; }
  >z : { w: boolean; } | undefined
  >w : boolean
- 
+
 @@= skipped -1623, +1623 lines =@@
  >radius : number
- 
+
  function getArea(shape?: Shape) {
 ->getArea : (shape?: Shape) => number
 +>getArea : (shape?: Shape | undefined) => number
  >shape : Shape | undefined
- 
+
      switch (shape?.type) {
 @@= skipped -156, +156 lines =@@
  >0 : 0
- 
+
  declare const arr: { tag: ("left" | "right") }[];
 ->arr : { tag: ("left" | "right"); }[]
 +>arr : { tag: "left" | "right"; }[]
  >tag : "left" | "right"
- 
+
  while (arr[i]?.tag === "left") {
  >arr[i]?.tag === "left" : boolean
  >arr[i]?.tag : "left" | "right"

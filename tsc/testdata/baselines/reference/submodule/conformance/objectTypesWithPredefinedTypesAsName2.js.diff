@@ -1,7 +1,7 @@
 --- old.objectTypesWithPredefinedTypesAsName2.js
 +++ new.objectTypesWithPredefinedTypesAsName2.js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [objectTypesWithPredefinedTypesAsName2.js]
  // it is an error to use a predefined type as a type name
 -var default_1 = /** @class */ (function () {

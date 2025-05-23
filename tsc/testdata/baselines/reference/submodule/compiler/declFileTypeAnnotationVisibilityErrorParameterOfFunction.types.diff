@@ -2,7 +2,7 @@
 +++ new.declFileTypeAnnotationVisibilityErrorParameterOfFunction.types
 @@= skipped -65, +65 lines =@@
      }
- 
+
      function foo111(param: m2.public2) {
 ->foo111 : (param: m2.public2) => void
 ->param : m2.public2
@@ -23,7 +23,7 @@
 ->public2 : typeof m2.public2
 +>public2 : typeof public2
      }
- 
+
      export function foo113(param: m2.public2) {
 ->foo113 : (param: m2.public2) => void
 ->param : m2.public2
@@ -45,4 +45,3 @@
 +>public2 : typeof public2
      }
  }
- 

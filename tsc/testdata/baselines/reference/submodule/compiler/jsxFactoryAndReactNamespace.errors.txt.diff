@@ -1,6 +1,6 @@
 --- old.jsxFactoryAndReactNamespace.errors.txt
 +++ new.jsxFactoryAndReactNamespace.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactory'.
 -
 -
@@ -53,5 +53,4 @@
 -    		];
 -    	}
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

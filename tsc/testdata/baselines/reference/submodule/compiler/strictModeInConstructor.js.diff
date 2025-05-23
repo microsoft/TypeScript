@@ -2,7 +2,7 @@
 +++ new.strictModeInConstructor.js
 @@= skipped -63, +63 lines =@@
  }
- 
+
  //// [strictModeInConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -27,18 +27,11 @@
 -var B = /** @class */ (function (_super) {
 -    __extends(B, _super);
 -    function B() {
-+class A {
-+}
-+class B extends A {
-+    s = 9;
-+    constructor() {
-         "use strict"; // No error
+-        "use strict"; // No error
 -        var _this = _super.call(this) || this;
 -        _this.s = 9;
 -        return _this;
-+        "use strict"; // No error
-+        super();
-     }
+-    }
 -    return B;
 -}(A));
 -var C = /** @class */ (function (_super) {
@@ -46,6 +39,15 @@
 -    function C() {
 -        var _this = _super.call(this) || this; // No error
 -        _this.s = 9;
++class A {
++}
++class B extends A {
++    s = 9;
++    constructor() {
++        "use strict"; // No error
++        "use strict"; // No error
++        super();
++    }
 +}
 +class C extends A {
 +    s = 9;
@@ -68,25 +70,17 @@
 -        var y = _this.s; // Error
 -        _this = _super.call(this) || this;
 -        _this.s = 9;
-+        var y = this.s; // Error
-+        super();
-         "use strict";
+-        "use strict";
 -        return _this;
-     }
+-    }
 -    return D;
 -}(A));
 -var Bs = /** @class */ (function (_super) {
 -    __extends(Bs, _super);
 -    function Bs() {
-+}
-+class Bs extends A {
-+    static s = 9;
-+    constructor() {
-         "use strict"; // No error
+-        "use strict"; // No error
 -        return _super.call(this) || this;
-+        "use strict"; // No error
-+        super();
-     }
+-    }
 -    Bs.s = 9;
 -    return Bs;
 -}(A));
@@ -94,14 +88,9 @@
 -    __extends(Cs, _super);
 -    function Cs() {
 -        var _this = _super.call(this) || this; // No error
-+}
-+class Cs extends A {
-+    static s = 9;
-+    constructor() {
-+        super(); // No error
-         "use strict";
+-        "use strict";
 -        return _this;
-     }
+-    }
 -    Cs.s = 9;
 -    return Cs;
 -}(A));
@@ -109,6 +98,25 @@
 -    __extends(Ds, _super);
 -    function Ds() {
 -        var _this = this;
++        var y = this.s; // Error
++        super();
++        "use strict";
++    }
++}
++class Bs extends A {
++    static s = 9;
++    constructor() {
++        "use strict"; // No error
++        "use strict"; // No error
++        super();
++    }
++}
++class Cs extends A {
++    static s = 9;
++    constructor() {
++        super(); // No error
++        "use strict";
++    }
 +}
 +class Ds extends A {
 +    static s = 9;

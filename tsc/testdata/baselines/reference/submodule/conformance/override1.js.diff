@@ -2,7 +2,7 @@
 +++ new.override1.js
 @@= skipped -46, +46 lines =@@
  }
- 
+
  //// [override1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -42,7 +42,19 @@
 -    C.prototype.foo = function (v) { };
 -    return C;
 -}());
--function f() {
++class B {
++    foo(v) { }
++    fooo(v) { }
++}
++class D extends B {
++    foo(v) { }
++    fooo(v) { }
++    bar(v) { }
++}
++class C {
++    foo(v) { }
++}
+ function f() {
 -    return /** @class */ (function (_super) {
 -        __extends(class_1, _super);
 -        function class_1() {
@@ -53,10 +65,7 @@
 -        class_1.prototype.bar = function (v) { };
 -        return class_1;
 -    }(B));
-+class B {
-+    foo(v) { }
-+    fooo(v) { }
- }
+-}
 -var E = /** @class */ (function (_super) {
 -    __extends(E, _super);
 -    function E() {
@@ -74,40 +83,12 @@
 -    class_2.prototype.bar = function () { };
 -    return class_2;
 -}()))));
--function ff() {
--    return /** @class */ (function () {
--        function class_3() {
--        }
--        class_3.prototype.foo = function () { };
--        return class_3;
--    }());
-+class D extends B {
-+    foo(v) { }
-+    fooo(v) { }
-+    bar(v) { }
- }
--
--
--//// [override1.d.ts]
--declare class B {
--    foo(v: string): void;
--    fooo(v: string): void;
-+class C {
-+    foo(v) { }
- }
--declare class D extends B {
--    foo(v: string): void;
--    fooo(v: string): void;
--    bar(v: string): void;
-+function f() {
 +    return class extends B {
 +        foo(v) { }
 +        fooo(v) { }
 +        bar(v) { }
 +    };
- }
--declare class C {
--    foo(v: string): void;
++}
 +class E extends (class {
 +    foo() { }
 +    bar() { }
@@ -116,16 +97,36 @@
 +    bar() { }
 +    baz() { }
 +    bazz() { }
- }
++}
+ function ff() {
+-    return /** @class */ (function () {
+-        function class_3() {
+-        }
+-        class_3.prototype.foo = function () { };
+-        return class_3;
+-    }());
+-}
+-
+-
+-//// [override1.d.ts]
+-declare class B {
+-    foo(v: string): void;
+-    fooo(v: string): void;
+-}
+-declare class D extends B {
+-    foo(v: string): void;
+-    fooo(v: string): void;
+-    bar(v: string): void;
+-}
+-declare class C {
+-    foo(v: string): void;
+-}
 -declare function f(): {
 -    new (): {
 -        foo(v: string): void;
 -        fooo(v: string): void;
 -        bar(v: string): void;
-+function ff() {
-+    return class {
-+        foo() { }
-     };
+-    };
 -};
 -declare const E_base: {
 -    new (): {
@@ -138,9 +139,13 @@
 -    bar(): void;
 -    baz(): void;
 -    bazz(): void;
- }
+-}
 -declare function ff(): {
 -    new (): {
 -        foo(): void;
 -    };
 -};
++    return class {
++        foo() { }
++    };
++}

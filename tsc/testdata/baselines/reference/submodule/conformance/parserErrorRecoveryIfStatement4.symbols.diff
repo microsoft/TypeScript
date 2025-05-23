@@ -2,11 +2,11 @@
 +++ new.parserErrorRecoveryIfStatement4.symbols
 @@= skipped -4, +4 lines =@@
  >Foo : Symbol(Foo, Decl(parserErrorRecoveryIfStatement4.ts, 0, 0))
- 
+
    f1() {
 ->f1 : Symbol(Foo.f1, Decl(parserErrorRecoveryIfStatement4.ts, 0, 11))
 +>f1 : Symbol(f1, Decl(parserErrorRecoveryIfStatement4.ts, 0, 11))
- 
+
      if (a.b)
    }
    f2() {

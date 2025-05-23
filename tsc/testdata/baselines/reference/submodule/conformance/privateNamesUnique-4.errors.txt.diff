@@ -4,8 +4,8 @@
 -privateNamesUnique-4.ts(6,7): error TS2741: Property '#something' is missing in type 'A1' but required in type 'C'.
 +privateNamesUnique-4.ts(6,7): error TS2322: Type 'A2' is not assignable to type 'C'.
 +  Property '#something' is missing in type 'A1' but required in type 'C'.
- 
- 
+
+
  ==== privateNamesUnique-4.ts (1 errors) ====
 @@= skipped -8, +9 lines =@@
      class C { #something: number }

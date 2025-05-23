@@ -2,7 +2,7 @@
 +++ new.declarationEmitExpressionInExtends2.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [declarationEmitExpressionInExtends2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -44,9 +44,9 @@
 -declare class C<T, U> {
 -    x: T;
 -    y: U;
-+class MyClass extends getClass(2) {
- }
+-}
 -declare function getClass<T>(c: T): typeof C;
 -declare const MyClass_base: typeof C;
 -declare class MyClass extends MyClass_base<string, number> {
--}
++class MyClass extends getClass(2) {
+ }

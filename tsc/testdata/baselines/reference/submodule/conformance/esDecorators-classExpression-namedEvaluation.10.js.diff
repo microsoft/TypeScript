@@ -1,8 +1,8 @@
 --- old.esDecorators-classExpression-namedEvaluation.10.js
 +++ new.esDecorators-classExpression-namedEvaluation.10.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [esDecorators-classExpression-namedEvaluation.10.js]
 -var _a, _b;
  // 10.2.1.3 RS: EvaluateBody
@@ -27,14 +27,10 @@
 -            };
 -            return class_1 = _classThis;
 -        })();
-+        static x = 
-+        @dec
-+        class {
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static "x" = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -53,14 +49,10 @@
 -            };
 -            return class_2 = _classThis;
 -        })();
-+        static "x" = 
-+        @dec
-+        class {
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static 0 = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -79,14 +71,10 @@
 -            };
 -            return class_3 = _classThis;
 -        })();
-+        static 0 = 
-+        @dec
-+        class {
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static ["x"] = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -105,14 +93,10 @@
 -            };
 -            return class_4 = _classThis;
 -        })();
-+        static ["x"] = 
-+        @dec
-+        class {
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static [0] = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -131,15 +115,11 @@
 -            };
 -            return class_5 = _classThis;
 -        })();
-+        static [0] = 
-+        @dec
-+        class {
-+        };
-     }
- }
- // @ts-ignore
- {
-     class C {
+-    }
+-}
+-// @ts-ignore
+-{
+-    class C {
 -        static [_a = __propKey(f())] = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -158,15 +138,11 @@
 -            };
 -            return class_6 = _classThis;
 -        })();
-+        static [f()] = 
-+        @dec
-+        class {
-+        };
-     }
- }
- // __proto__ is not special in a class field
- {
-     class C {
+-    }
+-}
+-// __proto__ is not special in a class field
+-{
+-    class C {
 -        static __proto__ = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -185,14 +161,10 @@
 -            };
 -            return class_7 = _classThis;
 -        })();
-+        static __proto__ = 
-+        @dec
-+        class {
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static "__proto__" = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -211,14 +183,10 @@
 -            };
 -            return class_8 = _classThis;
 -        })();
-+        static "__proto__" = 
-+        @dec
-+        class {
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static x = (() => {
 -            let _y_decorators;
 -            let _y_initializers = [];
@@ -237,14 +205,10 @@
 -                }
 -            };
 -        })();
-+        static x = class {
-+            @dec
-+            y;
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static "x" = (() => {
 -            let _y_decorators;
 -            let _y_initializers = [];
@@ -263,14 +227,10 @@
 -                }
 -            };
 -        })();
-+        static "x" = class {
-+            @dec
-+            y;
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static 0 = (() => {
 -            let _y_decorators;
 -            let _y_initializers = [];
@@ -289,14 +249,10 @@
 -                }
 -            };
 -        })();
-+        static 0 = class {
-+            @dec
-+            y;
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static ["x"] = (() => {
 -            let _y_decorators;
 -            let _y_initializers = [];
@@ -315,14 +271,10 @@
 -                }
 -            };
 -        })();
-+        static ["x"] = class {
-+            @dec
-+            y;
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static [0] = (() => {
 -            let _y_decorators;
 -            let _y_initializers = [];
@@ -341,15 +293,11 @@
 -                }
 -            };
 -        })();
-+        static [0] = class {
-+            @dec
-+            y;
-+        };
-     }
- }
- // @ts-ignore
- {
-     class C {
+-    }
+-}
+-// @ts-ignore
+-{
+-    class C {
 -        static [_b = __propKey(f())] = (() => {
 -            let _classDecorators = [dec];
 -            let _classDescriptor;
@@ -368,15 +316,11 @@
 -            };
 -            return class_9 = _classThis;
 -        })();
-+        static [f()] = 
-+        @dec
-+        class {
-+        };
-     }
- }
- // __proto__ is not special in a class field
- {
-     class C {
+-    }
+-}
+-// __proto__ is not special in a class field
+-{
+-    class C {
 -        static __proto__ = (() => {
 -            let _y_decorators;
 -            let _y_initializers = [];
@@ -395,14 +339,10 @@
 -                }
 -            };
 -        })();
-+        static __proto__ = class {
-+            @dec
-+            y;
-+        };
-     }
- }
- {
-     class C {
+-    }
+-}
+-{
+-    class C {
 -        static "__proto__" = (() => {
 -            let _y_decorators;
 -            let _y_initializers = [];
@@ -421,6 +361,130 @@
 -                }
 -            };
 -        })();
++        static x = 
++        @dec
++        class {
++        };
++    }
++}
++{
++    class C {
++        static "x" = 
++        @dec
++        class {
++        };
++    }
++}
++{
++    class C {
++        static 0 = 
++        @dec
++        class {
++        };
++    }
++}
++{
++    class C {
++        static ["x"] = 
++        @dec
++        class {
++        };
++    }
++}
++{
++    class C {
++        static [0] = 
++        @dec
++        class {
++        };
++    }
++}
++// @ts-ignore
++{
++    class C {
++        static [f()] = 
++        @dec
++        class {
++        };
++    }
++}
++// __proto__ is not special in a class field
++{
++    class C {
++        static __proto__ = 
++        @dec
++        class {
++        };
++    }
++}
++{
++    class C {
++        static "__proto__" = 
++        @dec
++        class {
++        };
++    }
++}
++{
++    class C {
++        static x = class {
++            @dec
++            y;
++        };
++    }
++}
++{
++    class C {
++        static "x" = class {
++            @dec
++            y;
++        };
++    }
++}
++{
++    class C {
++        static 0 = class {
++            @dec
++            y;
++        };
++    }
++}
++{
++    class C {
++        static ["x"] = class {
++            @dec
++            y;
++        };
++    }
++}
++{
++    class C {
++        static [0] = class {
++            @dec
++            y;
++        };
++    }
++}
++// @ts-ignore
++{
++    class C {
++        static [f()] = 
++        @dec
++        class {
++        };
++    }
++}
++// __proto__ is not special in a class field
++{
++    class C {
++        static __proto__ = class {
++            @dec
++            y;
++        };
++    }
++}
++{
++    class C {
 +        static "__proto__" = class {
 +            @dec
 +            y;

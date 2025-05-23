@@ -1,8 +1,8 @@
 --- old.importHelpersWithLocalCollisions(module=amd).js
 +++ new.importHelpersWithLocalCollisions(module=amd).js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [a.js]
 -define(["require", "exports", "tslib"], function (require, exports, tslib_1) {
 -    "use strict";

@@ -1,6 +1,6 @@
 --- old.asyncAliasReturnType_es5.errors.txt
 +++ new.asyncAliasReturnType_es5.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -asyncAliasReturnType_es5.ts(3,21): error TS1055: Type 'PromiseAlias' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
 -
 -
@@ -11,5 +11,4 @@
 -                        ~~~~~~~~~~~~~~~~~~
 -!!! error TS1055: Type 'PromiseAlias' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,18 +1,18 @@
 --- old.augmentExportEquals1_1.types
 +++ new.augmentExportEquals1_1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file3.ts ===
  import x = require("file1");
 ->x : number
 +>x : any
- 
+
  import "file2";
  let a: x.A; // should not work
 ->a : x.A
 +>a : A
  >x : any
- 
+-
 -=== file1.d.ts ===
 -declare module "file1" {
 ->"file1" : typeof import("file1")
@@ -37,4 +37,3 @@
 -    interface A { a }
 ->a : any
 -}
--

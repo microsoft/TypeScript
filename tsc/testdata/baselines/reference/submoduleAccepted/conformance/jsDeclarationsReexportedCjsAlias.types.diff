@@ -8,7 +8,7 @@
 +>require('./lib') : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
  >require : any
  >'./lib' : "./lib"
- 
+
  module.exports = {
 ->module.exports = {    SomeClass,    Another} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -19,11 +19,11 @@
 +>module : { export=: { SomeClass: typeof SomeClass; Another: typeof SomeClass; }; }
 +>exports : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
  >{    SomeClass,    Another} : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
- 
+
      SomeClass,
 @@= skipped -43, +43 lines =@@
  }
- 
+
  module.exports = {
 ->module.exports = {    bar,    SomeClass} : typeof module.exports
 ->module.exports : typeof module.exports
@@ -34,5 +34,5 @@
 +>module : { export=: { bar: (a: string) => string; SomeClass: typeof SomeClass; }; }
 +>exports : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
  >{    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
- 
+
      bar,

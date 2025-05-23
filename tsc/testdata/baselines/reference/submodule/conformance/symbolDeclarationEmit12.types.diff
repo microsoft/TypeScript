@@ -2,7 +2,7 @@
 +++ new.symbolDeclarationEmit12.types
 @@= skipped -14, +14 lines =@@
  >iterator : unique symbol
- 
+
          [Symbol.toPrimitive](x: I) { }
 ->[Symbol.toPrimitive] : I
 +>[Symbol.toPrimitive] : (x: I) => void

@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -unusedTypeParameters5.ts(6,16): error TS6133: 'K' is declared but its value is never read.
 +unusedTypeParameters5.ts(6,16): error TS6196: 'K' is declared but never used.
- 
- 
+
+
  ==== unusedTypeParameters5.ts (1 errors) ====
 @@= skipped -8, +8 lines =@@
      var x: {

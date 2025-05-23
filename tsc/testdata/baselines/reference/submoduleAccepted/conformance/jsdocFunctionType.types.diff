@@ -8,12 +8,12 @@
 ->c : (this: string, arg1: number) => number
 +>id1 : (c: any) => function
 +>c : any
- 
+
      return c
 ->c : (this: string, arg1: number) => number
 +>c : any
  }
- 
+
  var x = id1(function (n) { return this.length + n });
 ->x : (this: string, arg1: number) => number
 ->id1(function (n) { return this.length + n }) : (this: string, arg1: number) => number
@@ -35,7 +35,7 @@
 +>this : any
 +>length : any
 +>n : any
- 
+
  /**
   * @param {function(new: { length: number }, number): number} c is just passing on through
   * @return {function(new: { length: number }, number): number}
@@ -45,15 +45,15 @@
 ->c : new (arg1: number) => { length: number; }
 +>id2 : (c: any) => function
 +>c : any
- 
+
      return c
 ->c : new (arg1: number) => { length: number; }
 +>c : any
  }
- 
+
  class C {
 @@= skipped -40, +40 lines =@@
- 
+
          this.length = n;
  >this.length = n : number
 ->this.length : any
@@ -64,7 +64,7 @@
  >n : number
      }
  }
- 
+
  var y = id2(C);
 ->y : new (arg1: number) => { length: number; }
 ->id2(C) : new (arg1: number) => { length: number; }
@@ -73,7 +73,7 @@
 +>id2(C) : function
 +>id2 : (c: any) => function
  >C : typeof C
- 
+
  var z = new y(12);
 ->z : { length: number; }
 ->new y(12) : { length: number; }
@@ -82,7 +82,7 @@
 +>new y(12) : any
 +>y : function
  >12 : 12
- 
+
  z.length;
 ->z.length : number
 ->z : { length: number; }
@@ -90,7 +90,7 @@
 +>z.length : any
 +>z : any
 +>length : any
- 
+
  /** @type {function ("a" | "b", 1 | 2): 3 | 4} */
  var f = function (ab, onetwo) { return ab === "a" ? 3 : 4;  }
 ->f : (arg0: "a" | "b", arg1: 1 | 2) => 3 | 4
@@ -115,7 +115,7 @@
 ->D : typeof D
 +>D : (n: number) => void
  >n : number
- 
+
    this.length = n;
  >this.length = n : number
  >this.length : any
@@ -124,7 +124,7 @@
  >length : any
  >n : number
  }
- 
+
  var y2 = id2(D);
 ->y2 : new (arg1: number) => { length: number; }
 ->id2(D) : new (arg1: number) => { length: number; }
@@ -134,7 +134,7 @@
 +>id2(D) : function
 +>id2 : (c: any) => function
 +>D : (n: number) => void
- 
+
  var z2 = new y2(33);
 ->z2 : { length: number; }
 ->new y2(33) : { length: number; }
@@ -143,7 +143,7 @@
 +>new y2(33) : any
 +>y2 : function
  >33 : 33
- 
+
  z2.length;
 ->z2.length : number
 ->z2 : { length: number; }
@@ -151,8 +151,8 @@
 +>z2.length : any
 +>z2 : any
 +>length : any
- 
- 
+
+
  /** 
 @@= skipped -34, +34 lines =@@
   * @return {D}
@@ -169,7 +169,7 @@
 +>new dref(33) : any
 +>dref : any
  >33 : 33
- 
+
  var z3 = construct(D);
  >z3 : D
  >construct(D) : D
@@ -177,15 +177,15 @@
 ->D : typeof D
 +>construct : (dref: any) => D
 +>D : (n: number) => void
- 
+
  z3.length;
 ->z3.length : number
 +>z3.length : any
  >z3 : D
 ->length : number
 +>length : any
- 
- 
+
+
  /** 
 @@= skipped -24, +24 lines =@@
   * @param {number} n
@@ -196,7 +196,7 @@
 +>E : (n: number) => void
 +>function(n) {  this.not_length_on_purpose = n;} : (n: number) => void
  >n : number
- 
+
    this.not_length_on_purpose = n;
  >this.not_length_on_purpose = n : number
  >this.not_length_on_purpose : any
@@ -204,10 +204,10 @@
 +>this : any
  >not_length_on_purpose : any
  >n : number
- 
+
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  var y3 = id2(E);
 ->y3 : new (arg1: number) => { length: number; }
 ->id2(E) : new (arg1: number) => { length: number; }
@@ -217,9 +217,9 @@
 +>id2(E) : function
 +>id2 : (c: any) => function
 +>E : (n: number) => void
- 
+
  // Repro from #39229
- 
+
 @@= skipped -11, +11 lines =@@
   * @type {(...args: [string, string] | [number, string, string]) => void}
   */
@@ -228,19 +228,19 @@
 ->args : [string, string] | [number, string, string]
 +>foo : (...args: any[]) => void
 +>args : any[]
- 
+
    args;
 ->args : [string, string] | [number, string, string]
 +>args : any[]
  }
- 
+
  foo('abc', 'def');
  >foo('abc', 'def') : void
 ->foo : (...args: [string, string] | [number, string, string]) => void
 +>foo : (...args: any[]) => void
  >'abc' : "abc"
  >'def' : "def"
- 
+
  foo(42, 'abc', 'def');
  >foo(42, 'abc', 'def') : void
 ->foo : (...args: [string, string] | [number, string, string]) => void

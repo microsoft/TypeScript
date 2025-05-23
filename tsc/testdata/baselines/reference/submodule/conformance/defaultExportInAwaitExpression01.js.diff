@@ -1,8 +1,8 @@
 --- old.defaultExportInAwaitExpression01.js
 +++ new.defaultExportInAwaitExpression01.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [a.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

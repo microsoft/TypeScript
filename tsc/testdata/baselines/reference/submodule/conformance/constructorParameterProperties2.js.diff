@@ -1,8 +1,8 @@
 --- old.constructorParameterProperties2.js
 +++ new.constructorParameterProperties2.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [constructorParameterProperties2.js]
 -var C = /** @class */ (function () {
 -    function C(y) {

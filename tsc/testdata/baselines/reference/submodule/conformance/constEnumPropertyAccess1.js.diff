@@ -28,8 +28,7 @@
          return true;
      }
 -    set [2 /* G.B */](x) { }
-+    set [G.B](x) { }
- }
+-}
 -
 -
 -//// [constEnumPropertyAccess1.d.ts]
@@ -49,4 +48,5 @@
 -    [G.A](): void;
 -    get [G.B](): number;
 -    set [G.B](x: number);
--}
++    set [G.B](x) { }
+ }

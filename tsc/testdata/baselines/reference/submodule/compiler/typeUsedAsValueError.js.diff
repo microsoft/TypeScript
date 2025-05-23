@@ -2,7 +2,7 @@
 +++ new.typeUsedAsValueError.js
 @@= skipped -25, +25 lines =@@
  acceptsSomeType(someTypeNotFound);
- 
+
  //// [typeUsedAsValueError.js]
 -var SomeClass = /** @class */ (function () {
 -    function SomeClass() {

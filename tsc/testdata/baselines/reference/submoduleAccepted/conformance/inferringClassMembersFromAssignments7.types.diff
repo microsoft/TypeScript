@@ -13,7 +13,7 @@
      }
      mreal() {
 @@= skipped -14, +14 lines =@@
- 
+
          self.y = 2
  >self.y = 2 : 2
 ->self.y : number | undefined
@@ -26,21 +26,21 @@
  }
 @@= skipped -12, +12 lines =@@
  >C : typeof C
- 
+
  c.x
 ->c.x : number
 +>c.x : any
  >c : C
 ->x : number
 +>x : any
- 
+
  c.y
 ->c.y : number | undefined
 +>c.y : any
  >c : C
 ->y : number | undefined
 +>y : any
- 
+
  c.m()
 ->c.m() : void
 ->c.m : () => void
@@ -49,4 +49,3 @@
  >c : C
 ->m : () => void
 +>m : any
- 

@@ -1,13 +1,13 @@
 --- old.defaultPropertyAssignedClassWithPrototype.types
 +++ new.defaultPropertyAssignedClassWithPrototype.types
 @@= skipped -1, +1 lines =@@
- 
+
  === bug39167.js ===
  var test = {};
 ->test : typeof test
 +>test : {}
  >{} : {}
- 
+
  test.K = test.K ||
 ->test.K = test.K ||    function () {} : typeof K
 ->test.K : typeof K
@@ -25,11 +25,11 @@
 +>test.K : any
 +>test : {}
 +>K : any
- 
+
      function () {}
 ->function () {} : typeof K
 +>function () {} : () => void
- 
+
  test.K.prototype = {
 ->test.K.prototype = {    add() {}} : { add(): void; }
 ->test.K.prototype : { add(): void; }
@@ -45,12 +45,12 @@
 +>K : any
 +>prototype : any
 +>{    add() {}} : { add: () => void; }
- 
+
      add() {}
  >add : () => void
 @@= skipped -31, +31 lines =@@
  };
- 
+
  new test.K().add;
 ->new test.K().add : () => void
 ->new test.K() : K
@@ -64,4 +64,3 @@
 +>test : {}
 +>K : any
 +>add : any
- 

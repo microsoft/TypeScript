@@ -1,8 +1,8 @@
 --- old.es6DeclOrdering.js
 +++ new.es6DeclOrdering.js
 @@= skipped -18, +18 lines =@@
- 
- 
+
+
  //// [es6DeclOrdering.js]
 -var Bar = /** @class */ (function () {
 -    function Bar(store) {

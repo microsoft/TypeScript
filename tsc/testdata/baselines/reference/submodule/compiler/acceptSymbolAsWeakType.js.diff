@@ -2,7 +2,7 @@
 +++ new.acceptSymbolAsWeakType.js
 @@= skipped -21, +21 lines =@@
  f.unregister(s);
- 
+
  //// [acceptSymbolAsWeakType.js]
 -"use strict";
  const s = Symbol('s');

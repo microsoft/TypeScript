@@ -8,7 +8,7 @@
 ->opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
 +>foo1 : (opts1: any) => void
 +>opts1 : any
- 
+
      opts1.x;
 ->opts1.x : string
 ->opts1 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
@@ -17,7 +17,7 @@
 +>opts1 : any
 +>x : any
  }
- 
+
  foo1({x: 'abc'});
  >foo1({x: 'abc'}) : void
 ->foo1 : (opts1: {    x: string;    y?: string | undefined;    z?: string | undefined;    w?: string | undefined;}) => void
@@ -33,7 +33,7 @@
 ->opts2 : { anotherX: string; anotherY?: string | undefined; }[]
 +>foo2 : (opts2: any) => void
 +>opts2 : any
- 
+
      opts2[0].anotherX;
 ->opts2[0].anotherX : string
 ->opts2[0] : { anotherX: string; anotherY?: string | undefined; }
@@ -45,7 +45,7 @@
 ->anotherX : string
 +>anotherX : any
  }
- 
+
  foo2([{anotherX: "world"}]);
  >foo2([{anotherX: "world"}]) : void
 ->foo2 : (opts2: {    anotherX: string;    anotherY?: string | undefined;}) => void
@@ -61,7 +61,7 @@
 ->opts3 : { x: string; }
 +>foo3 : (opts3: any) => void
 +>opts3 : any
- 
+
      opts3.x;
 ->opts3.x : string
 ->opts3 : { x: string; }
@@ -85,7 +85,7 @@
 ->opts4 : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }[]
 +>foo4 : (opts4: any) => void
 +>opts4 : any
- 
+
      opts4[0].x;
 ->opts4[0].x : string
 ->opts4[0] : { x: string; y?: string | undefined; z?: string | undefined; w?: string | undefined; }
@@ -97,7 +97,7 @@
 ->x : string
 +>x : any
  }
- 
+
  foo4([{ x: 'hi' }]);
  >foo4([{ x: 'hi' }]) : void
 ->foo4 : (opts4: {    x: string;    y?: string | undefined;    z?: string;    w?: string;}) => void
@@ -113,7 +113,7 @@
 ->opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
 +>foo5 : (opts5: any) => void
 +>opts5 : any
- 
+
      opts5[0].what.bad[0].idea;
 ->opts5[0].what.bad[0].idea : string
 ->opts5[0].what.bad[0] : { idea: string; oh: boolean; }
@@ -121,21 +121,23 @@
 ->opts5[0].what : { a: string; bad: {    idea: string;    oh: boolean;}; }
 ->opts5[0] : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }
 ->opts5 : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }[]
+->0 : 0
+->what : { a: string; bad: {    idea: string;    oh: boolean;}; }
+->bad : { idea: string; oh: boolean; }[]
+->0 : 0
+->idea : string
 +>opts5[0].what.bad[0].idea : any
 +>opts5[0].what.bad[0] : any
 +>opts5[0].what.bad : any
 +>opts5[0].what : any
 +>opts5[0] : any
 +>opts5 : any
- >0 : 0
-->what : { a: string; bad: {    idea: string;    oh: boolean;}; }
-->bad : { idea: string; oh: boolean; }[]
++>0 : 0
 +>what : any
 +>bad : any
- >0 : 0
-->idea : string
++>0 : 0
 +>idea : any
- 
+
      opts5[0].unnest;
 ->opts5[0].unnest : number
 ->opts5[0] : { help: string; what: {    a: string;    bad: {        idea: string;        oh: boolean;    };}; unnest: number; }
@@ -147,7 +149,7 @@
 ->unnest : number
 +>unnest : any
  }
- 
+
  foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]);
  >foo5([{ help: "help", what: { a: 'a', bad: [{ idea: 'idea', oh: false }] }, unnest: 1 }]) : void
 ->foo5 : (opts5: {    help: string;    what: {        a: string;        bad: {            idea: string;            oh: boolean;        };    };    unnest: number;}) => void

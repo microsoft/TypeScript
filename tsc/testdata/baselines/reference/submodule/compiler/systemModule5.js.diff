@@ -1,8 +1,8 @@
 --- old.systemModule5.js
 +++ new.systemModule5.js
 @@= skipped -4, +4 lines =@@
- 
- 
+
+
  //// [systemModule5.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

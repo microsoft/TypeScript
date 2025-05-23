@@ -1,7 +1,7 @@
 --- old.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=commonjs).js
 +++ new.exportNonInitializedVariablesInIfThenStatementNoCrash1(module=commonjs).js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [exportNonInitializedVariablesInIfThenStatementNoCrash1.js]
  "use strict";
 -// https://github.com/microsoft/TypeScript/issues/59373

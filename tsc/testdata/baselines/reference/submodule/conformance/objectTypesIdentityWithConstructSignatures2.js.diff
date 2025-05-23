@@ -1,7 +1,7 @@
 --- old.objectTypesIdentityWithConstructSignatures2.js
 +++ new.objectTypesIdentityWithConstructSignatures2.js
 @@= skipped -79, +79 lines =@@
- 
+
  //// [objectTypesIdentityWithConstructSignatures2.js]
  // object types are identical structurally
 -var B = /** @class */ (function () {

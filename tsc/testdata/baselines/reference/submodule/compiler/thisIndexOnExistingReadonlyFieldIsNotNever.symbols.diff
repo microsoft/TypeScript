@@ -2,7 +2,7 @@
 +++ new.thisIndexOnExistingReadonlyFieldIsNotNever.symbols
 @@= skipped -6, +6 lines =@@
  >S : Symbol(S, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 26))
- 
+
      readonly props: Readonly<{ children?: unknown }> & Readonly<P>;
 ->props : Symbol(Component.props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
 +>props : Symbol(props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
@@ -10,7 +10,7 @@
  >children : Symbol(children, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 1, 30))
  >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
  >P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 24))
- 
+
      state: Readonly<S>;
 ->state : Symbol(Component.state, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 1, 67))
 +>state : Symbol(state, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 1, 67))
@@ -19,7 +19,7 @@
  }
 @@= skipped -16, +16 lines =@@
  >C : Symbol(C, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 31))
- 
+
      anchorRef?: (anchor: C) => void;
 ->anchorRef : Symbol(CoachMarkAnchorProps.anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 35))
 +>anchorRef : Symbol(anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 35))
@@ -28,7 +28,7 @@
  }
 @@= skipped -14, +14 lines =@@
  >CoachMarkAnchorDecorator : Symbol(CoachMarkAnchorDecorator, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 7, 34))
- 
+
      decorateComponent<P>(anchor: P) {
 ->decorateComponent : Symbol(CoachMarkAnchorDecorator.decorateComponent, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 9, 32))
 +>decorateComponent : Symbol(decorateComponent, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 9, 32))
@@ -37,7 +37,7 @@
  >P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
 @@= skipped -14, +14 lines =@@
  >P : Symbol(P, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 10, 22))
- 
+
              private _onAnchorRef = (anchor: AnchorType<P>) => {
 ->_onAnchorRef : Symbol(CoachMarkAnchor._onAnchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 11, 101))
 +>_onAnchorRef : Symbol(_onAnchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 11, 101))
@@ -54,5 +54,5 @@
 ->props : Symbol(Component.props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
 +>props : Symbol(props, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 0, 36))
  >anchorRef : Symbol(anchorRef, Decl(thisIndexOnExistingReadonlyFieldIsNotNever.ts, 4, 35))
- 
+
                  if (anchorRef) {

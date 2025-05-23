@@ -1,8 +1,8 @@
 --- old.excessPropertyCheckWithUnions.js
 +++ new.excessPropertyCheckWithUnions.js
 @@= skipped -154, +154 lines =@@
- 
- 
+
+
  //// [excessPropertyCheckWithUnions.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

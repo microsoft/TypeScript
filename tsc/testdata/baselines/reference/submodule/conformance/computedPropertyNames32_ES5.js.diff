@@ -1,7 +1,7 @@
 --- old.computedPropertyNames32_ES5.js
 +++ new.computedPropertyNames32_ES5.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [computedPropertyNames32_ES5.js]
  function foo() { return ''; }
 -var C = /** @class */ (function () {

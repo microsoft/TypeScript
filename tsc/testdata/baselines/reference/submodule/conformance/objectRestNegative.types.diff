@@ -1,8 +1,8 @@
 --- old.objectRestNegative.types
 +++ new.objectRestNegative.types
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
 ->stillMustBeLast : ({ ...mustBeLast, a }: { a: number; b: string; }) => void
 +>stillMustBeLast : (__0: { a: number; b: string; }) => void

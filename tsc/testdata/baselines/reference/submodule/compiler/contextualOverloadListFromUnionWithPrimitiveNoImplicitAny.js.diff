@@ -2,7 +2,7 @@
 +++ new.contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.js
 @@= skipped -17, +17 lines =@@
  };
- 
+
  //// [contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.js]
 -"use strict";
  const obj = {

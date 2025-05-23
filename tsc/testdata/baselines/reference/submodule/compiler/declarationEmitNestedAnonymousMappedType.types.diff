@@ -1,16 +1,16 @@
 --- old.declarationEmitNestedAnonymousMappedType.types
 +++ new.declarationEmitNestedAnonymousMappedType.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmitNestedAnonymousMappedType.ts ===
  export function enumFromStrings<const Members extends readonly string[]>() {
 ->enumFromStrings : <const Members extends readonly string[]>() => { [Property in keyof { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }]: { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }[Property]; }
 +>enumFromStrings : <Members extends readonly string[]>() => Part2
- 
+
      type Part1 = {
 ->Part1 : { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }
 +>Part1 : Part1
- 
+
          [key in keyof Members as Members[key] extends string
          ? Members[key]
          : never]: Members[key];
@@ -18,7 +18,7 @@
      type Part2 = { [Property in keyof Part1]: Part1[Property] };
 ->Part2 : { [Property in keyof { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }]: { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }[Property]; }
 +>Part2 : Part2
- 
+
      return Object.create(null) as Part2;
 ->Object.create(null) as Part2 : { [Property in keyof { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }]: { [key in keyof Members as Members[key] extends string ? Members[key] : never]: Members[key]; }[Property]; }
 +>Object.create(null) as Part2 : Part2
@@ -29,4 +29,3 @@
 ->create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 +>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
  }
- 

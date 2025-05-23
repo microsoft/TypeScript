@@ -2,7 +2,7 @@
 +++ new.defaultParameterTrailingComments.js
 @@= skipped -7, +7 lines =@@
  function foo(defaultParam = 10 /*emit only once*/) {}
- 
+
  //// [defaultParameterTrailingComments.js]
 -var C = /** @class */ (function () {
 -    function C(defaultParam /* Emit only once*/) {

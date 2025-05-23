@@ -2,7 +2,7 @@
 +++ new.duplicateSymbolsExportMatching.js
 @@= skipped -67, +67 lines =@@
  export interface D { }
- 
+
  //// [duplicateSymbolsExportMatching.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,8 +1,8 @@
 --- old.genericClassPropertyInheritanceSpecialization.js
 +++ new.genericClassPropertyInheritanceSpecialization.js
 @@= skipped -77, +77 lines =@@
- 
- 
+
+
  //// [genericClassPropertyInheritanceSpecialization.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

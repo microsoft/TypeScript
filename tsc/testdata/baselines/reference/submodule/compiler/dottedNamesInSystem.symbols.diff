@@ -2,7 +2,7 @@
 +++ new.dottedNamesInSystem.symbols
 @@= skipped -13, +13 lines =@@
  >bar : Symbol(bar, Decl(dottedNamesInSystem.ts, 2, 1))
- 
+
      return A.B.C.foo();
 ->A.B.C.foo : Symbol(A.B.C.foo, Decl(dottedNamesInSystem.ts, 0, 24))
 ->A.B.C : Symbol(A.B.C, Decl(dottedNamesInSystem.ts, 0, 21))

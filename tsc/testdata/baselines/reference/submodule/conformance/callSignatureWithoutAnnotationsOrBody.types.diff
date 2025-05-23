@@ -2,11 +2,11 @@
 +++ new.callSignatureWithoutAnnotationsOrBody.types
 @@= skipped -33, +33 lines =@@
  >f : () => any
- 
+
  var a: {
 ->a : { (): any; f(): any; }
 +>a : { (): any; f: () => any; }
- 
+
      ();
      f();
 @@= skipped -10, +10 lines =@@
@@ -15,7 +15,7 @@
  >a() : any
 ->a : { (): any; f(): any; }
 +>a : { (): any; f: () => any; }
- 
+
  var r5 = a.f();
  >r5 : any
  >a.f() : any
@@ -23,4 +23,3 @@
 ->a : { (): any; f(): any; }
 +>a : { (): any; f: () => any; }
  >f : () => any
- 

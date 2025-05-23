@@ -1,7 +1,7 @@
 --- old.noCollisionThisExpressionAndLocalVarInMethod.js
 +++ new.noCollisionThisExpressionAndLocalVarInMethod.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [noCollisionThisExpressionAndLocalVarInMethod.js]
  var _this = 2;
 -var a = /** @class */ (function () {

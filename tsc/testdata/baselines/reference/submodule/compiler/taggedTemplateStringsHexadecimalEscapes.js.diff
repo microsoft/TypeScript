@@ -2,7 +2,7 @@
 +++ new.taggedTemplateStringsHexadecimalEscapes.js
 @@= skipped -6, +6 lines =@@
  f `\x0D${ "Interrupted CRLF" }\x0A`;
- 
+
  //// [taggedTemplateStringsHexadecimalEscapes.js]
 -var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
 -    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }

@@ -2,7 +2,7 @@
 +++ new.literalTypes2.types
 @@= skipped -405, +405 lines =@@
  >"foo" : "foo"
- 
+
      const c2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
 ->c2 : { a: 0 | 1; b: "foo" | "bar"; }
 +>c2 : { a: 0 | 1; b: "bar" | "foo"; }
@@ -11,7 +11,7 @@
  >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
 @@= skipped -18, +18 lines =@@
  >"foo" : "foo"
- 
+
      let x2: { a : 0 | 1, b: "foo" | "bar" } = { a: 1, b: "foo" };
 ->x2 : { a: 0 | 1; b: "foo" | "bar"; }
 +>x2 : { a: 0 | 1; b: "bar" | "foo"; }
@@ -20,10 +20,9 @@
  >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
 @@= skipped -167, +167 lines =@@
  >"foo" : "foo"
- 
+
      const f6: () => "foo" | "bar" = () => "bar";
 ->f6 : () => "foo" | "bar"
 +>f6 : () => "bar" | "foo"
  >() => "bar" : () => "bar"
  >"bar" : "bar"
- 

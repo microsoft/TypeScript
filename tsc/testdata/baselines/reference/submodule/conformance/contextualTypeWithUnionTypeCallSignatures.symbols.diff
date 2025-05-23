@@ -2,7 +2,7 @@
 +++ new.contextualTypeWithUnionTypeCallSignatures.symbols
 @@= skipped -11, +11 lines =@@
  >IWithNoCallSignatures : Symbol(IWithNoCallSignatures, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 0, 0))
- 
+
      foo: string;
 ->foo : Symbol(IWithNoCallSignatures.foo, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 7, 33))
 +>foo : Symbol(foo, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 7, 33))
@@ -18,7 +18,7 @@
  >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 25, 52))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
  // With call signatures with different return type
  var x2: IWithCallSignatures | IWithCallSignatures2 = a => a.toString(); // Like iWithCallSignatures
 @@= skipped -10, +10 lines =@@
@@ -30,7 +30,7 @@
  >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 28, 52))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
  var x2: IWithCallSignatures | IWithCallSignatures2 = a => a; // Like iWithCallSignatures2
  >x2 : Symbol(x2, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 28, 3), Decl(contextualTypeWithUnionTypeCallSignatures.ts, 29, 3))
 @@= skipped -25, +25 lines =@@
@@ -42,4 +42,3 @@
  >a : Symbol(a, Decl(contextualTypeWithUnionTypeCallSignatures.ts, 35, 52))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 

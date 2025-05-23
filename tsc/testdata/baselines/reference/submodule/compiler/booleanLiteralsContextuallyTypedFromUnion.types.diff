@@ -2,7 +2,7 @@
 +++ new.booleanLiteralsContextuallyTypedFromUnion.types
 @@= skipped -69, +69 lines =@@
      };
- 
+
  let Funk = (_props: ComponentProps) => <div>Hello</div>;
 ->Funk : (_props: ComponentProps) => JSX.Element
 ->(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => JSX.Element
@@ -13,7 +13,7 @@
 +><div>Hello</div> : Element
  >div : any
  >div : any
- 
+
  let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
 ->Fail1 : () => JSX.Element
 ->() => <Funk mandatoryFn={() => { }} optionalBool={true} /> : () => JSX.Element
@@ -27,7 +27,7 @@
  >() => { } : () => void
  >optionalBool : true
  >true : true
- 
+
  let Fail2 = () => <Funk mandatoryFn={() => { }} optionalBool={true as true} />
 ->Fail2 : () => JSX.Element
 ->() => <Funk mandatoryFn={() => { }} optionalBool={true as true} /> : () => JSX.Element
@@ -42,7 +42,7 @@
  >optionalBool : true
 @@= skipped -36, +36 lines =@@
  >true : true
- 
+
  let Fail3 = () => <Funk mandatoryFn={() => { }} optionalBool={True} />
 ->Fail3 : () => JSX.Element
 ->() => <Funk mandatoryFn={() => { }} optionalBool={True} /> : () => JSX.Element
@@ -57,7 +57,7 @@
  >optionalBool : true
 @@= skipped -20, +20 lines =@@
  >() => { } : () => void
- 
+
  let Success = () => <Funk {...attrs2} />
 ->Success : () => JSX.Element
 ->() => <Funk {...attrs2} /> : () => JSX.Element
@@ -68,4 +68,3 @@
 +><Funk {...attrs2} /> : Element
 +>Funk : (_props: ComponentProps) => Element
  >attrs2 : { optionalBool: true; mandatoryFn: () => void; }
- 

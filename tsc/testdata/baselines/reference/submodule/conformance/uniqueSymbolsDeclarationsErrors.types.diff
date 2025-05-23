@@ -2,13 +2,13 @@
 +++ new.uniqueSymbolsDeclarationsErrors.types
 @@= skipped -9, +9 lines =@@
  // not allowed when emitting declarations
- 
+
  export const obj = {
 ->obj : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
 ->{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
 +>obj : { method1: (p: unique symbol) => unique symbol; method2: (p: unique symbol) => unique symbol; }
 +>{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1: (p: unique symbol) => unique symbol; method2: (p: unique symbol) => unique symbol; }
- 
+
      method1(p: typeof s): typeof s {
 ->method1 : (p: typeof s) => typeof s
 +>method1 : (p: unique symbol) => unique symbol
@@ -16,17 +16,17 @@
  >s : unique symbol
  >s : unique symbol
 @@= skipped -14, +14 lines =@@
- 
+
      },
      method2(p: I["readonlyType"]): I["readonlyType"] {
 ->method2 : (p: I["readonlyType"]) => I["readonlyType"]
 +>method2 : (p: unique symbol) => unique symbol
  >p : unique symbol
- 
+
          return p;
 @@= skipped -13, +13 lines =@@
  >class {    method1(p: typeof s): typeof s {        return p;    }    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : typeof classExpression
- 
+
      method1(p: typeof s): typeof s {
 ->method1 : (p: typeof s) => typeof s
 +>method1 : (p: unique symbol) => unique symbol
@@ -40,11 +40,11 @@
 ->method2 : (p: I["readonlyType"]) => I["readonlyType"]
 +>method2 : (p: unique symbol) => unique symbol
  >p : unique symbol
- 
+
          return p;
 @@= skipped -9, +9 lines =@@
  };
- 
+
  export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 ->funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
 ->obj : { method(p: typeof s): void; }
@@ -54,10 +54,10 @@
 +>method : (p: unique symbol) => void
  >p : unique symbol
  >s : unique symbol
- 
+
      return obj;
 ->obj : { method(p: typeof s): void; }
 +>obj : { method: (p: unique symbol) => void; }
  }
- 
+
  export interface InterfaceWithPrivateNamedProperties {

@@ -1,7 +1,7 @@
 --- old.abstractProperty(target=es2015).js
 +++ new.abstractProperty(target=es2015).js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [abstractProperty.js]
  class A {
 +    x;

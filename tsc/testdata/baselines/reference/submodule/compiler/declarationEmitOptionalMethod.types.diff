@@ -1,7 +1,7 @@
 --- old.declarationEmitOptionalMethod.types
 +++ new.declarationEmitOptionalMethod.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declarationEmitOptionalMethod.ts ===
  export const Foo = (opts: {
 ->Foo : (opts: { a?(): void; b?: () => void; }) => { c?(): void; d?: () => void; }
@@ -10,6 +10,6 @@
 +>Foo : (opts: { a?: (() => void) | undefined; b?: (() => void) | undefined; }) => { c?: (() => void) | undefined; d?: (() => void) | undefined; }
 +>(opts: {    a?(): void,    b?: () => void,}): {    c?(): void,    d?: () => void,} => ({  }) : (opts: { a?: (() => void) | undefined; b?: (() => void) | undefined; }) => { c?: (() => void) | undefined; d?: (() => void) | undefined; }
 +>opts : { a?: (() => void) | undefined; b?: (() => void) | undefined; }
- 
+
      a?(): void,
  >a : (() => void) | undefined

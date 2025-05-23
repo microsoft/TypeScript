@@ -2,7 +2,7 @@
 +++ new.wrappedAndRecursiveConstraints4.js
 @@= skipped -15, +15 lines =@@
  var r2 = r({ length: 3, charAt: (x: number) => { '' } }); // error
- 
+
  //// [wrappedAndRecursiveConstraints4.js]
 -var C = /** @class */ (function () {
 -    function C(x) {
@@ -24,6 +24,6 @@
  var r = c.foo('');
 -var r2 = r({ length: 3, charAt: function (x) {
 +var r2 = r({ length: 3, charAt: (x) => {
-         '';
 +        '';
+         '';
      } }); // error

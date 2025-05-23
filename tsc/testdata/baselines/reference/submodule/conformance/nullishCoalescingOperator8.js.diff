@@ -1,8 +1,8 @@
 --- old.nullishCoalescingOperator8.js
 +++ new.nullishCoalescingOperator8.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [nullishCoalescingOperator8.js]
 -"use strict";
 -var _a, _b, _c, _d, _e;

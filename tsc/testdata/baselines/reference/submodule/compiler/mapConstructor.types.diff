@@ -2,7 +2,7 @@
 +++ new.mapConstructor.types
 @@= skipped -5, +5 lines =@@
  >Map : MapConstructor
- 
+
  const potentiallyUndefinedIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined;
 ->potentiallyUndefinedIterable : Iterable<[string, number]> | undefined
 ->[['1', 1], ['2', 2]] as Iterable<[string, number]> | undefined : Iterable<[string, number]> | undefined
@@ -17,7 +17,7 @@
  >Map : MapConstructor
 ->potentiallyUndefinedIterable : Iterable<[string, number]> | undefined
 +>potentiallyUndefinedIterable : Iterable<[string, number], any, any> | undefined
- 
+
  const potentiallyNullIterable = [['1', 1], ['2', 2]] as Iterable<[string, number]> | null;
 ->potentiallyNullIterable : Iterable<[string, number]> | null
 ->[['1', 1], ['2', 2]] as Iterable<[string, number]> | null : Iterable<[string, number]> | null
@@ -32,4 +32,3 @@
  >Map : MapConstructor
 ->potentiallyNullIterable : Iterable<[string, number]> | null
 +>potentiallyNullIterable : Iterable<[string, number], any, any> | null
- 

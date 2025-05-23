@@ -7,7 +7,7 @@
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
  >numberOxen : Symbol(numberOxen, Decl(first.js, 4, 15))
- 
+
      this.numberOxen = numberOxen
 ->this.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
 ->this : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
@@ -23,7 +23,7 @@
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
 +>circle : Symbol(circle, Decl(first.js, 6, 1))
  >wagons : Symbol(wagons, Decl(first.js, 8, 25))
- 
+
      return wagons ? wagons.length : 3.14;
  >wagons : Symbol(wagons, Decl(first.js, 8, 25))
 ->wagons.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
@@ -47,15 +47,18 @@
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->weight : Symbol(Wagon.weight, Decl(first.js, 13, 1))
+->supplies : Symbol(supplies, Decl(first.js, 15, 24))
+->supplies : Symbol(supplies, Decl(first.js, 15, 24))
+->supplies.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+->supplies : Symbol(supplies, Decl(first.js, 15, 24))
+->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 +>Wagon.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- >supplies : Symbol(supplies, Decl(first.js, 15, 24))
- >supplies : Symbol(supplies, Decl(first.js, 15, 24))
-->supplies.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
- >supplies : Symbol(supplies, Decl(first.js, 15, 24))
-->length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
- 
++>supplies : Symbol(supplies, Decl(first.js, 15, 24))
++>supplies : Symbol(supplies, Decl(first.js, 15, 24))
++>supplies : Symbol(supplies, Decl(first.js, 15, 24))
+
  Wagon.prototype.speed = function () {
 ->Wagon.prototype : Symbol(Wagon.speed, Decl(first.js, 15, 68))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
@@ -64,7 +67,7 @@
 +>Wagon.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
 +>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
- 
+
      return this.numberOxen / this.weight()
 ->this.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
 ->this : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
@@ -78,7 +81,7 @@
  >Sql : Symbol(Sql, Decl(first.js, 18, 1))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
- 
+
      constructor() {
          super(); // error: not enough arguments
 ->super : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
@@ -100,7 +103,7 @@
 +>load : Symbol(load, Decl(first.js, 24, 5))
  >files : Symbol(files, Decl(first.js, 30, 9))
  >format : Symbol(format, Decl(first.js, 30, 15))
- 
+
 @@= skipped -12, +12 lines =@@
          }
          else {
@@ -123,7 +126,7 @@
 ->db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 +>db : Symbol(db, Decl(first.js, 42, 3))
  >Sql : Symbol(Sql, Decl(first.js, 18, 1))
- 
+
  db.numberOxen = db.foonly
 ->db.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
 ->db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
@@ -135,7 +138,7 @@
 +>db.foonly : Symbol(foonly, Decl(first.js, 22, 16))
 +>db : Symbol(db, Decl(first.js, 42, 3))
 +>foonly : Symbol(foonly, Decl(first.js, 22, 16))
- 
+
  // error, can't extend a TS constructor function
  class Drakkhen extends Dragon {
 @@= skipped -56, +46 lines =@@
@@ -144,11 +147,11 @@
  >Conestoga : Symbol(Conestoga, Decl(second.ts, 11, 1))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
- 
+
      constructor(public drunkOO: true) {
 ->drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
 +>drunkOO : Symbol(drunkOO, Decl(second.ts, 14, 16))
- 
+
          // error: wrong type
          super('nope');
 ->super : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
@@ -160,7 +163,7 @@
  >others : Symbol(others, Decl(second.ts, 19, 18))
 ->Wagon : Symbol(Wagon, Decl(first.js, 0, 0), Decl(first.js, 6, 1))
 +>Wagon : Symbol(Wagon, Decl(first.js, 0, 0))
- 
+
          return others.length
 ->others.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 +>others.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
@@ -172,24 +175,24 @@
  var c = new Conestoga(true);
 @@= skipped -26, +25 lines =@@
  >Conestoga : Symbol(Conestoga, Decl(second.ts, 11, 1))
- 
+
  c.drunkOO
 ->c.drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
 +>c.drunkOO : Symbol(drunkOO, Decl(second.ts, 14, 16))
  >c : Symbol(c, Decl(second.ts, 23, 3))
 ->drunkOO : Symbol(Conestoga.drunkOO, Decl(second.ts, 14, 16))
 +>drunkOO : Symbol(drunkOO, Decl(second.ts, 14, 16))
- 
+
  c.numberOxen
 ->c.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
  >c : Symbol(c, Decl(second.ts, 23, 3))
 ->numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
- 
+
  === generic.js ===
  /**
 @@= skipped -19, +17 lines =@@
  >flavour : Symbol(flavour, Decl(generic.js, 4, 14))
- 
+
      this.flavour = flavour
 ->this.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
 ->this : Symbol(Soup, Decl(generic.js, 0, 0))
@@ -199,37 +202,37 @@
  /** @extends {Soup<{ claim: "ignorant" | "malicious" }>} */
 @@= skipped -11, +8 lines =@@
  >Soup : Symbol(Soup, Decl(generic.js, 0, 0))
- 
+
      log() {
 ->log : Symbol(Chowder.log, Decl(generic.js, 8, 28))
 +>log : Symbol(log, Decl(generic.js, 8, 28))
- 
+
          return this.flavour
 ->this.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
  >this : Symbol(Chowder, Decl(generic.js, 6, 1))
 ->flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
      }
  }
- 
+
 @@= skipped -14, +12 lines =@@
  >Soup : Symbol(Soup, Decl(generic.js, 0, 0))
- 
+
  soup.flavour
 ->soup.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
  >soup : Symbol(soup, Decl(generic.js, 14, 3))
 ->flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
- 
+
  var chowder = new Chowder({ claim: "ignorant" });
  >chowder : Symbol(chowder, Decl(generic.js, 16, 3))
 @@= skipped -10, +8 lines =@@
  >claim : Symbol(claim, Decl(generic.js, 16, 27))
- 
+
  chowder.flavour.claim
 ->chowder.flavour.claim : Symbol(claim, Decl(generic.js, 7, 20))
 ->chowder.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
  >chowder : Symbol(chowder, Decl(generic.js, 16, 3))
 ->flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
 ->claim : Symbol(claim, Decl(generic.js, 7, 20))
- 
+
  var errorNoArgs = new Chowder();
  >errorNoArgs : Symbol(errorNoArgs, Decl(generic.js, 18, 3))

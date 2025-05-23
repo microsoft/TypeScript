@@ -2,7 +2,7 @@
 +++ new.classImplementsClass3.js
 @@= skipped -16, +16 lines =@@
  c2 = c;
- 
+
  //// [classImplementsClass3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

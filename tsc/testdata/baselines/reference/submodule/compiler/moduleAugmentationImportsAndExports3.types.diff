@@ -6,24 +6,23 @@
  >N : any
 ->Ifc : I
 +>Ifc : Ifc
- 
+
      import C = N.Cls;
  >C : any
  >N : any
 ->Cls : C
 +>Cls : Cls
- 
+
      interface A {
          foo(): B;
  >foo : () => B
- 
+
          bar(): I;
 ->bar : () => I
 +>bar : () => Ifc
- 
+
          baz(): C;
 ->baz : () => C
 +>baz : () => Cls
      }
  }
- 

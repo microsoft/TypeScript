@@ -1,7 +1,7 @@
 --- old.indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.types
 +++ new.indexedAccessKeyofNestedSimplifiedSubstituteUnwrapped.types
 @@= skipped -9, +9 lines =@@
- 
+
  interface Wrapper<T> {
  	call<K extends keyof T>(event: K, ...args: Params<T[K]>): void;
 ->call : <K extends keyof T>(event: K, ...args: Params<T[K]>) => void

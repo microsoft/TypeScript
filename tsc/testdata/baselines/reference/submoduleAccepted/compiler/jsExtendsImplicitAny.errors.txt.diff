@@ -13,8 +13,8 @@
 +/b.js(9,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 +/b.js(10,5): error TS2351: This expression is not constructable.
 +  Type 'typeof D' has no construct signatures.
- 
- 
+
+
  ==== /a.d.ts (0 errors) ====
      declare class A<T> { x: T; }
      

@@ -1,7 +1,7 @@
 --- old.emptyAssignmentPatterns01_ES5iterable.js
 +++ new.emptyAssignmentPatterns01_ES5iterable.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [emptyAssignmentPatterns01_ES5iterable.js]
  var a;
 -(a);

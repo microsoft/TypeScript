@@ -1,7 +1,7 @@
 --- old.moduleResolutionWithRequire.js
 +++ new.moduleResolutionWithRequire.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [index.js]
  function foo() {
 -    var a = require('../outside-of-rootdir/foo');

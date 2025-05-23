@@ -1,8 +1,7 @@
 --- old.jsdocTypeReferenceExports.errors.txt
 +++ new.jsdocTypeReferenceExports.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +bug27342.js(3,11): error TS2709: Cannot use namespace 'exports' as a type.
 +
 +

@@ -1,7 +1,7 @@
 --- old.optionalChainingInParameterInitializer(target=es5).js
 +++ new.optionalChainingInParameterInitializer(target=es5).js
 @@= skipped -6, +6 lines =@@
- 
+
  //// [optionalChainingInParameterInitializer.js]
  // https://github.com/microsoft/TypeScript/issues/36295
 -var a = function () { return undefined; };

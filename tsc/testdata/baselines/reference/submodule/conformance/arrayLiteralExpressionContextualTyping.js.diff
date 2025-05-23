@@ -1,8 +1,8 @@
 --- old.arrayLiteralExpressionContextualTyping.js
 +++ new.arrayLiteralExpressionContextualTyping.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [arrayLiteralExpressionContextualTyping.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

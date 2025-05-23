@@ -1,20 +1,20 @@
 --- old.generatorReturnTypeInference.types
 +++ new.generatorReturnTypeInference.types
 @@= skipped -1, +1 lines =@@
- 
+
  === generatorReturnTypeInference.ts ===
  declare const iterableIterator: IterableIterator<number>;
 ->iterableIterator : IterableIterator<number>
 +>iterableIterator : IterableIterator<number, any, any>
- 
+
  declare const generator: Generator<number, string, boolean>;
  >generator : Generator<number, string, boolean>
 @@= skipped -41, +41 lines =@@
- 
+
      yield* iterableIterator;
  >yield* iterableIterator : any
 ->iterableIterator : IterableIterator<number>
 +>iterableIterator : IterableIterator<number, any, any>
  }
- 
+
  function* g005() { // Generator<number, void, boolean>

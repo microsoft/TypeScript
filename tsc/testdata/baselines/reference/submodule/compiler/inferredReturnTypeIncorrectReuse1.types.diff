@@ -15,7 +15,7 @@
 ->parseInt : (string: string, radix?: number) => number
 +>parseInt : (string: string, radix?: number | undefined) => number
  >s : string
- 
+
  export type inferPipe2<t, pipe> =
 @@= skipped -37, +37 lines =@@
  export const out2 = t2.pipe(s => parseInt(s))
@@ -32,4 +32,3 @@
 ->parseInt : (string: string, radix?: number) => number
 +>parseInt : (string: string, radix?: number | undefined) => number
  >s : string
- 

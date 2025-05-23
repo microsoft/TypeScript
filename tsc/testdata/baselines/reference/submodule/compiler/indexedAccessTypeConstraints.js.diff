@@ -1,7 +1,7 @@
 --- old.indexedAccessTypeConstraints.js
 +++ new.indexedAccessTypeConstraints.js
 @@= skipped -38, +38 lines =@@
- 
+
  //// [indexedAccessTypeConstraints.js]
  "use strict";
 -// Repro from #14557
@@ -48,15 +48,15 @@
 -    };
 -    return Foo;
 -}(Parent));
--exports.Foo = Foo;
++    }
++}
+ exports.Foo = Foo;
 -var Bar = /** @class */ (function (_super) {
 -    __extends(Bar, _super);
 -    function Bar() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Bar.prototype.getContent = function () {
-+}
-+exports.Foo = Foo;
 +class Bar extends Parent {
 +    getContent() {
          return this.getData().get('content');

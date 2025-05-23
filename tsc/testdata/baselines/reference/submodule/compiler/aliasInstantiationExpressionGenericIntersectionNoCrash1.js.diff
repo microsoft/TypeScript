@@ -1,8 +1,8 @@
 --- old.aliasInstantiationExpressionGenericIntersectionNoCrash1.js
 +++ new.aliasInstantiationExpressionGenericIntersectionNoCrash1.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [aliasInstantiationExpressionGenericIntersectionNoCrash1.js]
 -"use strict";
 -var ErrImpl = /** @class */ (function () {

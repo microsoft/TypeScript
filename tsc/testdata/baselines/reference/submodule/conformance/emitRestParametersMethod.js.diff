@@ -2,7 +2,7 @@
 +++ new.emitRestParametersMethod.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [emitRestParametersMethod.js]
 -var C = /** @class */ (function () {
 -    function C(name) {

@@ -1,7 +1,7 @@
 --- old.controlFlowOptionalChain2.js
 +++ new.controlFlowOptionalChain2.js
 @@= skipped -108, +108 lines =@@
- 
+
  //// [controlFlowOptionalChain2.js]
  function funcTwo(arg) {
 -    if ((arg === null || arg === void 0 ? void 0 : arg.type) === 'B') {

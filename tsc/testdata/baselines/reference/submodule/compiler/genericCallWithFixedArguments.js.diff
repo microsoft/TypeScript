@@ -1,8 +1,8 @@
 --- old.genericCallWithFixedArguments.js
 +++ new.genericCallWithFixedArguments.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [genericCallWithFixedArguments.js]
 -var A = /** @class */ (function () {
 -    function A() {

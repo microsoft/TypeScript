@@ -1,7 +1,7 @@
 --- old.controlFlowWithTemplateLiterals.types
 +++ new.controlFlowWithTemplateLiterals.types
 @@= skipped -11, +11 lines =@@
- 
+
    envVar.slice(0)
  >envVar.slice(0) : string
 ->envVar.slice : (start?: number, end?: number) => string
@@ -11,9 +11,9 @@
 +>slice : (start?: number | undefined, end?: number | undefined) => string
  >0 : 0
  }
- 
+
 @@= skipped -17, +17 lines =@@
- 
+
    obj.test.slice(0)
  >obj.test.slice(0) : string
 ->obj.test.slice : (start?: number, end?: number) => string
@@ -25,4 +25,3 @@
 +>slice : (start?: number | undefined, end?: number | undefined) => string
  >0 : 0
  }
- 

@@ -1,6 +1,6 @@
 --- old.declarationEmitComputedPropertyNameSymbol1.js
 +++ new.declarationEmitComputedPropertyNameSymbol1.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitComputedPropertyNameSymbol1.ts] ////
 -
 -//// [type.ts]
@@ -26,5 +26,4 @@
 -        [Foo.sym]: 0;
 -    };
 -};
-@@= skipped --1, +1 lines =@@
 +<no content>

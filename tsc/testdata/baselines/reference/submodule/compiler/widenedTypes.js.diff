@@ -2,7 +2,7 @@
 +++ new.widenedTypes.js
 @@= skipped -25, +25 lines =@@
  var obj: { [x: string]: string; } = { x: 3, y: null }; // assignable because null is widened, and therefore BCT is any
- 
+
  //// [widenedTypes.js]
 -null instanceof (function () { });
 +null instanceof (() => { });

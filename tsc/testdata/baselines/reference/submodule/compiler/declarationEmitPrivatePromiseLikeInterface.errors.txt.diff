@@ -1,6 +1,6 @@
 --- old.declarationEmitPrivatePromiseLikeInterface.errors.txt
 +++ new.declarationEmitPrivatePromiseLikeInterface.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -Api.ts(6,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 -Api.ts(7,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 -Api.ts(8,5): error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
@@ -43,5 +43,4 @@
 -        ~~~~
 -!!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

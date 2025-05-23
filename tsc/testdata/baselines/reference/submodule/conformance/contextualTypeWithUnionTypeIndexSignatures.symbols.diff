@@ -2,14 +2,14 @@
 +++ new.contextualTypeWithUnionTypeIndexSignatures.symbols
 @@= skipped -19, +19 lines =@@
  >IWithNoStringIndexSignature : Symbol(IWithNoStringIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 7, 1))
- 
+
      foo: string;
 ->foo : Symbol(IWithNoStringIndexSignature.foo, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 9, 39))
 +>foo : Symbol(foo, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 9, 39))
  }
  interface IWithNoNumberIndexSignature {
  >IWithNoNumberIndexSignature : Symbol(IWithNoNumberIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 11, 1))
- 
+
      0: string;
 ->0 : Symbol(IWithNoNumberIndexSignature[0], Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 12, 39))
 +>0 : Symbol(0, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 12, 39))
@@ -25,7 +25,7 @@
  >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 42, 70))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
  var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a }; // a should be number
  >x2 : Symbol(x2, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 42, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 43, 3))
 @@= skipped -44, +44 lines =@@
@@ -37,6 +37,6 @@
  >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 70))
 ->toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
- 
+
  var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a }; // a should be number
  >x4 : Symbol(x4, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 52, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 53, 3))

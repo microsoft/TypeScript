@@ -2,7 +2,7 @@
 +++ new.superWithTypeArgument.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [superWithTypeArgument.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,12 +21,7 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+}
-+class D extends C {
-+    constructor() {
-+        super();
-     }
+-    }
 -    return C;
 -}());
 -var D = /** @class */ (function (_super) {
@@ -36,4 +31,10 @@
 -    }
 -    return D;
 -}(C));
++class C {
++}
++class D extends C {
++    constructor() {
++        super();
++    }
 +}

@@ -1,8 +1,8 @@
 --- old.propertyNamedConstructor.js
 +++ new.propertyNamedConstructor.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [propertyNamedConstructor.js]
 -var X1 = /** @class */ (function () {
 -    function X1() {

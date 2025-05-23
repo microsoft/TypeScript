@@ -1,7 +1,7 @@
 --- old.useDefineForClassFieldsFlagDefault(target=es2020).js
 +++ new.useDefineForClassFieldsFlagDefault(target=es2020).js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [useDefineForClassFieldsFlagDefault.js]
  class Foo {
 +    // For esNext should be emitted 'as is' because useDefineForClassFields defaults to true 

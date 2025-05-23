@@ -2,7 +2,7 @@
 +++ new.implementClausePrecedingExtends.js
 @@= skipped -4, +4 lines =@@
  class D implements C extends C { }
- 
+
  //// [implementClausePrecedingExtends.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

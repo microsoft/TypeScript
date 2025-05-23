@@ -2,7 +2,7 @@
 +++ new.tsxErrorRecovery1.types
 @@= skipped -6, +6 lines =@@
  >foo : () => void
- 
+
  	var x = <div>  { </div>
 ->x : JSX.Element
 -><div>  { </div> : JSX.Element

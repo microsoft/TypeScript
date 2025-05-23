@@ -3,7 +3,7 @@
 @@= skipped -31, +31 lines =@@
  >self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType2_moduleDef.d.ts, 4, 26))
  }
- 
+
 -=== recursiveExportAssignmentAndFindAliasedType2_moduleB.ts ===
 -class ClassB { }
 ->ClassB : Symbol(ClassB, Decl(recursiveExportAssignmentAndFindAliasedType2_moduleB.ts, 0, 0))

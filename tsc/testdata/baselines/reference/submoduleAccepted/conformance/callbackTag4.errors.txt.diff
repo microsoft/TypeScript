@@ -1,8 +1,7 @@
 --- old.callbackTag4.errors.txt
 +++ new.callbackTag4.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(9,12): error TS2304: Cannot find name 'C'.
 +a.js(10,22): error TS7006: Parameter 'a' implicitly has an 'any' type.
 +a.js(10,25): error TS7006: Parameter 'b' implicitly has an 'any' type.

@@ -2,7 +2,7 @@
 +++ new.unreachableSwitchTypeofUnknown.js
 @@= skipped -15, +15 lines =@@
  }
- 
+
  //// [unreachable.js]
 -var unreachable = function (x) {
 +const unreachable = (x) => {

@@ -2,7 +2,7 @@
 +++ new.inferenceShouldFailOnEvolvingArrays.js
 @@= skipped -20, +20 lines =@@
  zz = logFirstLength([42]);  // no error; T is inferred as `any[]`
- 
+
  //// [inferenceShouldFailOnEvolvingArrays.js]
 -"use strict";
  // repro from https://github.com/Microsoft/TypeScript/issues/25675

@@ -1,8 +1,7 @@
 --- old.nodeModulesTripleSlashReferenceModeDeclarationEmit7(module=nodenext).errors.txt
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit7(module=nodenext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/index.ts(4,28): error TS2339: Property 'default' does not exist on type 'RequireInterface'.
 +/sub1/uses.ts(2,16): error TS2552: Cannot find name 'getInterI'. Did you mean 'getInterR'?
 +

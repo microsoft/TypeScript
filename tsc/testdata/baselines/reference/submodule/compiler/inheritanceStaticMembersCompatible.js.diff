@@ -2,7 +2,7 @@
 +++ new.inheritanceStaticMembersCompatible.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [inheritanceStaticMembersCompatible.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

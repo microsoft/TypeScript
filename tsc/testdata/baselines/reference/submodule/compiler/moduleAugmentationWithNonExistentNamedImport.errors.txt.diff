@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -bar.d.ts(1,10): error TS2305: Module '"./foo"' has no exported member 'Bar'.
 +bar.d.ts(1,10): error TS2305: Module '"foo"' has no exported member 'Bar'.
- 
- 
+
+
  ==== foo.d.ts (0 errors) ====
 @@= skipped -15, +15 lines =@@
  ==== bar.d.ts (1 errors) ====

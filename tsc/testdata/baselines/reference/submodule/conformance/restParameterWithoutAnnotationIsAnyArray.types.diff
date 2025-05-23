@@ -2,21 +2,21 @@
 +++ new.restParameterWithoutAnnotationIsAnyArray.types
 @@= skipped -37, +37 lines =@@
  }
- 
+
  var a: {
 ->a : { (...x: any[]): any; foo(...x: any[]): any; }
 +>a : { (...x: any[]): any; foo: (...x: any[]) => any; }
- 
+
      (...x);
  >x : any[]
 @@= skipped -11, +11 lines =@@
  }
- 
+
  var b = {
 ->b : { foo(...x: any[]): void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
 ->{    foo(...x) { },    a: function foo(...x, ...y) { },    b: (...x) => { }} : { foo(...x: any[]): void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
 +>b : { foo: (...x: any[]) => void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
 +>{    foo(...x) { },    a: function foo(...x, ...y) { },    b: (...x) => { }} : { foo: (...x: any[]) => void; a: (...x: any[], ...y: any[]) => void; b: (...x: any[]) => void; }
- 
+
      foo(...x) { },
  >foo : (...x: any[]) => void

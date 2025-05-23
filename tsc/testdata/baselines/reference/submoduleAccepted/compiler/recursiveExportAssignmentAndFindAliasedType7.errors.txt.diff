@@ -1,8 +1,7 @@
 --- old.recursiveExportAssignmentAndFindAliasedType7.errors.txt
 +++ new.recursiveExportAssignmentAndFindAliasedType7.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +recursiveExportAssignmentAndFindAliasedType7_moduleA.ts(1,26): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType7_moduleC' or its corresponding type declarations.
 +recursiveExportAssignmentAndFindAliasedType7_moduleA.ts(2,25): error TS2307: Cannot find module 'recursiveExportAssignmentAndFindAliasedType7_moduleB' or its corresponding type declarations.
 +

@@ -6,6 +6,6 @@
  >x : Symbol(x, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 0, 20))
 ->c : Symbol(a, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 1, 14))
 +>c : Symbol(c, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 1, 14))
- 
+
      export = x;
  >x : Symbol(x, Decl(importDeclWithExportModifierAndExportAssignmentInAmbientContext.ts, 0, 20))

@@ -6,8 +6,8 @@
 +file.tsx(25,9): error TS2322: Type 'Element' is not assignable to type 'Button'.
 +  Type 'ReactElement<any>' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
  file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
- 
- 
+
+
 @@= skipped -32, +33 lines =@@
          <Comp a={10} b="hi">
              <Button />

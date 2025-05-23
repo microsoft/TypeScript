@@ -1,16 +1,16 @@
 --- old.tsxExternalModuleEmit1.types
 +++ new.tsxExternalModuleEmit1.types
 @@= skipped -9, +9 lines =@@
- 
+
  === app.tsx ===
  import * as React from 'react';
 ->React : typeof React
 +>React : typeof import("react")
- 
+
  // Should see var button_1 = require('./button') here
  import { Button } from './button';
 @@= skipped -8, +8 lines =@@
- 
+
  export class App extends React.Component<any, any> {
  >App : App
 ->React.Component : React.Component<any, any>
@@ -19,23 +19,23 @@
 +>React.Component : Component<any, any>
 +>React : typeof import("react")
 +>Component : typeof Component
- 
+
      render() {
  >render : () => any
- 
+
          return <Button />;
 -><Button /> : error
 +><Button /> : any
  >Button : typeof Button
      }
- 
+
 @@= skipped -16, +16 lines =@@
- 
+
  === button.tsx ===
  import * as React from 'react';
 ->React : typeof React
 +>React : typeof import("react")
- 
+
  export class Button extends React.Component<any, any> {
  >Button : Button
 ->React.Component : React.Component<any, any>
@@ -44,10 +44,10 @@
 +>React.Component : Component<any, any>
 +>React : typeof import("react")
 +>Component : typeof Component
- 
+
      render() {
  >render : () => any
- 
+
          return <button>Some button</button>;
 -><button>Some button</button> : error
 +><button>Some button</button> : any

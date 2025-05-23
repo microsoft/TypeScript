@@ -2,7 +2,7 @@
 +++ new.templateStringTermination5.js
 @@= skipped -3, +3 lines =@@
  `\\\\\\`
- 
+
  //// [templateStringTermination5.js]
 -"\\\\\\";
 +`\\\\\\`;

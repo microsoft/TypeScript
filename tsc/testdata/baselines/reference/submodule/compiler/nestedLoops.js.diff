@@ -32,11 +32,12 @@
 -            var outer = outerArray_1[_i];
 -            _loop_1(outer);
 -        }
-     }
+-    }
 -    Test.prototype.aFunction = function (func) {
 -    };
 -    return Test;
 -}());
++    }
 +    aFunction(func) {
 +    }
 +}

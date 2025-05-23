@@ -1,8 +1,8 @@
 --- old.nonNullableReduction.js
 +++ new.nonNullableReduction.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [nonNullableReduction.js]
 -"use strict";
 -// Repros from #43425

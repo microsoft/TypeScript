@@ -1,7 +1,7 @@
 --- old.assignmentCompatWithObjectMembers4.js
 +++ new.assignmentCompatWithObjectMembers4.js
 @@= skipped -94, +94 lines =@@
- 
+
  //// [assignmentCompatWithObjectMembers4.js]
  // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
 -var __extends = (this && this.__extends) || (function () {

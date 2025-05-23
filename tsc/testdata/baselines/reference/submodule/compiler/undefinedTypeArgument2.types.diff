@@ -8,7 +8,7 @@
 +>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
  >selector : (item: T) => U[]
  >item : T
- 
+
      selectMany<U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>;
 ->selectMany : { <U_1>(selector: (item: T) => U_1[]): Query<U_1>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }
 +>selectMany : { <U>(selector: (item: T) => U[]): Query<U>; <U>(arraySelector: (item: T) => U[], resultSelector: (outer: T, inner: U) => R): Query<R>; }

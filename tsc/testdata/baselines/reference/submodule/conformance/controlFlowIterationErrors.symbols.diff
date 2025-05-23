@@ -2,7 +2,7 @@
 +++ new.controlFlowIterationErrors.symbols
 @@= skipped -8, +8 lines =@@
  >s : Symbol(s, Decl(controlFlowIterationErrors.ts, 2, 13))
- 
+
      return s.length;
 ->s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>s.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
@@ -10,5 +10,5 @@
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
  }
- 
+
  function f1() {

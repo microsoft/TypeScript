@@ -1,8 +1,8 @@
 --- old.destructuringObjectBindingPatternAndAssignment6(target=es5).js
 +++ new.destructuringObjectBindingPatternAndAssignment6(target=es5).js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [destructuringObjectBindingPatternAndAssignment6.js]
 -var a = "a";
 -var b = "b";

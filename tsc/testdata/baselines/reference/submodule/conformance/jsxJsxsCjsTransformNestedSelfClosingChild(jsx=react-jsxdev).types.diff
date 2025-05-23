@@ -2,45 +2,51 @@
 +++ new.jsxJsxsCjsTransformNestedSelfClosingChild(jsx=react-jsxdev).types
 @@= skipped -11, +11 lines =@@
  >log : (...data: any[]) => void
- 
+
    <div>
 -><div>    <div />  </div> : JSX.Element
 +><div>    <div />  </div> : Element
  >div : any
- 
+
      <div />
 -><div /> : JSX.Element
 +><div /> : Element
  >div : any
- 
+
    </div>
 @@= skipped -19, +19 lines =@@
  >log : (...data: any[]) => void
- 
+
    <div>
 -><div>    <div />    <div />  </div> : JSX.Element
+->div : any
+-
+-    <div />
+-><div /> : JSX.Element
+->div : any
+-
+-    <div />
+-><div /> : JSX.Element
 +><div>    <div />    <div />  </div> : Element
- >div : any
- 
-     <div />
--><div /> : JSX.Element
++>div : any
++
++    <div />
++><div /> : Element
++>div : any
++
++    <div />
 +><div /> : Element
  >div : any
- 
-     <div />
--><div /> : JSX.Element
-+><div /> : Element
- >div : any
- 
+
    </div>
 @@= skipped -23, +23 lines =@@
  >log : (...data: any[]) => void
- 
+
    <div>
 -><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : JSX.Element
 +><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : Element
  >div : any
- 
+
      {[1, 2].map(i => <div key={i}>{i}</div>)}
 ->[1, 2].map(i => <div key={i}>{i}</div>) : JSX.Element[]
 +>[1, 2].map(i => <div key={i}>{i}</div>) : Element[]

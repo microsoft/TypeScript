@@ -1,8 +1,8 @@
 --- old.incorrectNumberOfTypeArgumentsDuringErrorReporting.js
 +++ new.incorrectNumberOfTypeArgumentsDuringErrorReporting.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [incorrectNumberOfTypeArgumentsDuringErrorReporting.js]
 -var fn = function (opts) { return 'Z'; };
 +const fn = (opts) => 'Z';

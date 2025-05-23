@@ -1,7 +1,7 @@
 --- old.tsxEmitSpreadAttribute(target=esnext).js
 +++ new.tsxEmitSpreadAttribute(target=esnext).js
 @@= skipped -51, +51 lines =@@
- 
+
  //// [test.js]
  export function T1(a) {
 -    return React.createElement("div", { className: "T1", ...a }, "T1");

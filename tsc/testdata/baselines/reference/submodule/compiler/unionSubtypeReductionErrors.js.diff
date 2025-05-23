@@ -1,8 +1,8 @@
 --- old.unionSubtypeReductionErrors.js
 +++ new.unionSubtypeReductionErrors.js
 @@= skipped -6012, +6012 lines =@@
- 
- 
+
+
  //// [unionSubtypeReductionErrors.js]
 -"use strict";
 -var a = [

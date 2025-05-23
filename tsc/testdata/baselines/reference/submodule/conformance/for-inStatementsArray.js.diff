@@ -1,8 +1,8 @@
 --- old.for-inStatementsArray.js
 +++ new.for-inStatementsArray.js
 @@= skipped -41, +41 lines =@@
- 
- 
+
+
  //// [for-inStatementsArray.js]
 -var a;
 -var b;

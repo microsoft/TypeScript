@@ -2,7 +2,7 @@
 +++ new.restParameterWithBindingPattern1.js
 @@= skipped -3, +3 lines =@@
  function a(...{a, b}) { }
- 
+
  //// [restParameterWithBindingPattern1.js]
 -function a() {
 -    var _a = [];

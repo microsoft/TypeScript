@@ -1,7 +1,7 @@
 --- old.decoratedClassExportsCommonJS2.js
 +++ new.decoratedClassExportsCommonJS2.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [a.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

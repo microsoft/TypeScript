@@ -1,8 +1,8 @@
 --- old.typeOfPrototype.js
 +++ new.typeOfPrototype.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [typeOfPrototype.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

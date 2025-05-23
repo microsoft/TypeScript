@@ -2,7 +2,7 @@
 +++ new.templateStringUnterminated2.js
 @@= skipped -3, +3 lines =@@
  `\`
- 
+
  //// [templateStringUnterminated2.js]
 -"`";
 +`\`;

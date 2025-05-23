@@ -1,8 +1,8 @@
 --- old.constEnumToStringNoComments.js
 +++ new.constEnumToStringNoComments.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [constEnumToStringNoComments.js]
 -var x0 = 100..toString();
 -var x1 = 100..toString();

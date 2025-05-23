@@ -1,7 +1,7 @@
 --- old.privacyClass.js
 +++ new.privacyClass.js
 @@= skipped -130, +130 lines =@@
- 
+
  //// [privacyClass.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -187,7 +187,15 @@
 -        }
 -        return m2_C3_public;
 -    }(m2_c_public));
--    m2.m2_C3_public = m2_C3_public;
++    class m2_c_private {
++    }
++    class m2_C1_private extends m2_c_public {
++    }
++    class m2_C2_private extends m2_c_private {
++    }
++    class m2_C3_public extends m2_c_public {
++    }
+     m2.m2_C3_public = m2_C3_public;
 -    var m2_C4_public = /** @class */ (function (_super) {
 -        __extends(m2_C4_public, _super);
 -        function m2_C4_public() {
@@ -195,7 +203,9 @@
 -        }
 -        return m2_C4_public;
 -    }(m2_c_private));
--    m2.m2_C4_public = m2_C4_public;
++    class m2_C4_public extends m2_c_private {
++    }
+     m2.m2_C4_public = m2_C4_public;
 -    var m2_C5_private = /** @class */ (function () {
 -        function m2_C5_private() {
 -        }
@@ -211,13 +221,21 @@
 -        }
 -        return m2_C7_public;
 -    }());
--    m2.m2_C7_public = m2_C7_public;
++    class m2_C5_private {
++    }
++    class m2_C6_private {
++    }
++    class m2_C7_public {
++    }
+     m2.m2_C7_public = m2_C7_public;
 -    var m2_C8_public = /** @class */ (function () {
 -        function m2_C8_public() {
 -        }
 -        return m2_C8_public;
 -    }());
--    m2.m2_C8_public = m2_C8_public;
++    class m2_C8_public {
++    }
+     m2.m2_C8_public = m2_C8_public;
 -    var m2_C9_private = /** @class */ (function (_super) {
 -        __extends(m2_C9_private, _super);
 -        function m2_C9_private() {
@@ -239,7 +257,13 @@
 -        }
 -        return m2_C11_public;
 -    }(m2_c_public));
--    m2.m2_C11_public = m2_C11_public;
++    class m2_C9_private extends m2_c_public {
++    }
++    class m2_C10_private extends m2_c_private {
++    }
++    class m2_C11_public extends m2_c_public {
++    }
+     m2.m2_C11_public = m2_C11_public;
 -    var m2_C12_public = /** @class */ (function (_super) {
 -        __extends(m2_C12_public, _super);
 -        function m2_C12_public() {
@@ -247,126 +271,47 @@
 -        }
 -        return m2_C12_public;
 -    }(m2_c_private));
--    m2.m2_C12_public = m2_C12_public;
--})(m2 || (m2 = {}));
++    class m2_C12_public extends m2_c_private {
++    }
+     m2.m2_C12_public = m2_C12_public;
+ })(m2 || (m2 = {}));
 -var glo_c_public = /** @class */ (function () {
 -    function glo_c_public() {
-+    class m2_c_private {
++class glo_c_public {
++    f1() {
      }
 -    glo_c_public.prototype.f1 = function () {
 -    };
 -    return glo_c_public;
 -}());
--exports.glo_c_public = glo_c_public;
++}
+ exports.glo_c_public = glo_c_public;
 -var glo_c_private = /** @class */ (function () {
 -    function glo_c_private() {
-+    class m2_C1_private extends m2_c_public {
-     }
+-    }
 -    return glo_c_private;
 -}());
 -var glo_C1_private = /** @class */ (function (_super) {
 -    __extends(glo_C1_private, _super);
 -    function glo_C1_private() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    class m2_C2_private extends m2_c_private {
-     }
+-    }
 -    return glo_C1_private;
 -}(glo_c_public));
 -var glo_C2_private = /** @class */ (function (_super) {
 -    __extends(glo_C2_private, _super);
 -    function glo_C2_private() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    class m2_C3_public extends m2_c_public {
-     }
+-    }
 -    return glo_C2_private;
 -}(glo_c_private));
 -var glo_C3_public = /** @class */ (function (_super) {
 -    __extends(glo_C3_public, _super);
 -    function glo_C3_public() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-+    m2.m2_C3_public = m2_C3_public;
-+    class m2_C4_public extends m2_c_private {
-     }
+-    }
 -    return glo_C3_public;
 -}(glo_c_public));
--exports.glo_C3_public = glo_C3_public;
--var glo_C4_public = /** @class */ (function (_super) {
--    __extends(glo_C4_public, _super);
--    function glo_C4_public() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    m2.m2_C4_public = m2_C4_public;
-+    class m2_C5_private {
-     }
--    return glo_C4_public;
--}(glo_c_private));
--exports.glo_C4_public = glo_C4_public;
--var glo_C5_private = /** @class */ (function () {
--    function glo_C5_private() {
-+    class m2_C6_private {
-     }
--    return glo_C5_private;
--}());
--var glo_C6_private = /** @class */ (function () {
--    function glo_C6_private() {
-+    class m2_C7_public {
-     }
--    return glo_C6_private;
--}());
--var glo_C7_public = /** @class */ (function () {
--    function glo_C7_public() {
-+    m2.m2_C7_public = m2_C7_public;
-+    class m2_C8_public {
-     }
--    return glo_C7_public;
--}());
--exports.glo_C7_public = glo_C7_public;
--var glo_C8_public = /** @class */ (function () {
--    function glo_C8_public() {
-+    m2.m2_C8_public = m2_C8_public;
-+    class m2_C9_private extends m2_c_public {
-     }
--    return glo_C8_public;
--}());
--exports.glo_C8_public = glo_C8_public;
--var glo_C9_private = /** @class */ (function (_super) {
--    __extends(glo_C9_private, _super);
--    function glo_C9_private() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    class m2_C10_private extends m2_c_private {
-     }
--    return glo_C9_private;
--}(glo_c_public));
--var glo_C10_private = /** @class */ (function (_super) {
--    __extends(glo_C10_private, _super);
--    function glo_C10_private() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    class m2_C11_public extends m2_c_public {
-     }
--    return glo_C10_private;
--}(glo_c_private));
--var glo_C11_public = /** @class */ (function (_super) {
--    __extends(glo_C11_public, _super);
--    function glo_C11_public() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    m2.m2_C11_public = m2_C11_public;
-+    class m2_C12_public extends m2_c_private {
-     }
--    return glo_C11_public;
--}(glo_c_public));
--exports.glo_C11_public = glo_C11_public;
--var glo_C12_public = /** @class */ (function (_super) {
--    __extends(glo_C12_public, _super);
--    function glo_C12_public() {
--        return _super !== null && _super.apply(this, arguments) || this;
-+    m2.m2_C12_public = m2_C12_public;
-+})(m2 || (m2 = {}));
-+class glo_c_public {
-+    f1() {
-     }
--    return glo_C12_public;
--}(glo_c_private));
-+}
-+exports.glo_c_public = glo_c_public;
 +class glo_c_private {
 +}
 +class glo_C1_private extends glo_c_public {
@@ -375,27 +320,82 @@
 +}
 +class glo_C3_public extends glo_c_public {
 +}
-+exports.glo_C3_public = glo_C3_public;
+ exports.glo_C3_public = glo_C3_public;
+-var glo_C4_public = /** @class */ (function (_super) {
+-    __extends(glo_C4_public, _super);
+-    function glo_C4_public() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return glo_C4_public;
+-}(glo_c_private));
 +class glo_C4_public extends glo_c_private {
 +}
-+exports.glo_C4_public = glo_C4_public;
+ exports.glo_C4_public = glo_C4_public;
+-var glo_C5_private = /** @class */ (function () {
+-    function glo_C5_private() {
+-    }
+-    return glo_C5_private;
+-}());
+-var glo_C6_private = /** @class */ (function () {
+-    function glo_C6_private() {
+-    }
+-    return glo_C6_private;
+-}());
+-var glo_C7_public = /** @class */ (function () {
+-    function glo_C7_public() {
+-    }
+-    return glo_C7_public;
+-}());
 +class glo_C5_private {
 +}
 +class glo_C6_private {
 +}
 +class glo_C7_public {
 +}
-+exports.glo_C7_public = glo_C7_public;
+ exports.glo_C7_public = glo_C7_public;
+-var glo_C8_public = /** @class */ (function () {
+-    function glo_C8_public() {
+-    }
+-    return glo_C8_public;
+-}());
 +class glo_C8_public {
 +}
-+exports.glo_C8_public = glo_C8_public;
+ exports.glo_C8_public = glo_C8_public;
+-var glo_C9_private = /** @class */ (function (_super) {
+-    __extends(glo_C9_private, _super);
+-    function glo_C9_private() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return glo_C9_private;
+-}(glo_c_public));
+-var glo_C10_private = /** @class */ (function (_super) {
+-    __extends(glo_C10_private, _super);
+-    function glo_C10_private() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return glo_C10_private;
+-}(glo_c_private));
+-var glo_C11_public = /** @class */ (function (_super) {
+-    __extends(glo_C11_public, _super);
+-    function glo_C11_public() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return glo_C11_public;
+-}(glo_c_public));
 +class glo_C9_private extends glo_c_public {
 +}
 +class glo_C10_private extends glo_c_private {
 +}
 +class glo_C11_public extends glo_c_public {
 +}
-+exports.glo_C11_public = glo_C11_public;
+ exports.glo_C11_public = glo_C11_public;
+-var glo_C12_public = /** @class */ (function (_super) {
+-    __extends(glo_C12_public, _super);
+-    function glo_C12_public() {
+-        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    return glo_C12_public;
+-}(glo_c_private));
 +class glo_C12_public extends glo_c_private {
 +}
  exports.glo_C12_public = glo_C12_public;

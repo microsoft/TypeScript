@@ -1,8 +1,8 @@
 --- old.lambdaPropSelf.js
 +++ new.lambdaPropSelf.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [lambdaPropSelf.js]
 -var Person = /** @class */ (function () {
 -    function Person(name, children) {

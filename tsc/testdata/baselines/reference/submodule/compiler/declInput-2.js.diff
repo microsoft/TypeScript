@@ -14,7 +14,11 @@
 -        }
 -        return E;
 -    }());
--    M.E = E;
++    class C {
++    }
++    class E {
++    }
+     M.E = E;
 -    var D = /** @class */ (function () {
 -        function D() {
 -        }
@@ -26,19 +30,6 @@
 -        D.prototype.m3 = function () { return new C(); };
 -        return D;
 -    }());
--    M.D = D;
--})(M || (M = {}));
--
--
--//// [declInput-2.d.ts]
--declare namespace M {
-     class C {
-     }
--    export class E {
-+    class E {
-     }
--    export interface I1 {
-+    M.E = E;
 +    class D {
 +        c; // don't generate
 +        m1;
@@ -53,7 +44,19 @@
 +        m26(i) { }
 +        m262(i) { }
 +        m3() { return new C(); }
-     }
++    }
+     M.D = D;
+ })(M || (M = {}));
+-
+-
+-//// [declInput-2.d.ts]
+-declare namespace M {
+-    class C {
+-    }
+-    export class E {
+-    }
+-    export interface I1 {
+-    }
 -    interface I2 {
 -    }
 -    export class D {
@@ -73,5 +76,3 @@
 -    }
 -    export {};
 -}
-+    M.D = D;
-+})(M || (M = {}));

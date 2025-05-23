@@ -1,8 +1,8 @@
 --- old.contextualTypingArrayDestructuringWithDefaults.js
 +++ new.contextualTypingArrayDestructuringWithDefaults.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [contextualTypingArrayDestructuringWithDefaults.js]
 -var _a = [][0], c0 = _a === void 0 ? { a: "a" } : _a;
 -var _b = [1], x1 = _b[0], _c = _b[1], c1 = _c === void 0 ? { a: "a" } : _c;

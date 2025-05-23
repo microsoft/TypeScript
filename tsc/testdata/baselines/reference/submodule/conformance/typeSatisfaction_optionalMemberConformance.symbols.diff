@@ -1,7 +1,7 @@
 --- old.typeSatisfaction_optionalMemberConformance.symbols
 +++ new.typeSatisfaction_optionalMemberConformance.symbols
 @@= skipped -14, +14 lines =@@
- 
+
  // Should OK
  console.log(a.x.toFixed());
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -16,6 +16,6 @@
  >x : Symbol(x, Decl(typeSatisfaction_optionalMemberConformance.ts, 2, 11))
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 +>toFixed : Symbol(toFixed, Decl(lib.es5.d.ts, --, --))
- 
+
  // Should error
  let p = a.y;

@@ -7,5 +7,5 @@
 ->Foo : typeof Foo
 +>Foo : typeof Thing
  >fn : () => number
- 
+
  === foo.d.ts ===

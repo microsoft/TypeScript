@@ -6,8 +6,8 @@
 -genericConstraint2.ts(21,17): error TS2344: Type 'ComparableString' does not satisfy the constraint 'Comparable<ComparableString>'.
 -  Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
 +genericConstraint2.ts(21,17): error TS2741: Property 'comparer' is missing in type 'ComparableString' but required in type 'Comparable<ComparableString>'.
- 
- 
+
+
  ==== genericConstraint2.ts (2 errors) ====
 @@= skipped -30, +29 lines =@@
      var b = new ComparableString("b");

@@ -1,8 +1,8 @@
 --- old.implicitIndexSignatures.js
 +++ new.implicitIndexSignatures.js
 @@= skipped -60, +60 lines =@@
- 
- 
+
+
  //// [implicitIndexSignatures.js]
 -var empty1 = {};
 -var empty2;

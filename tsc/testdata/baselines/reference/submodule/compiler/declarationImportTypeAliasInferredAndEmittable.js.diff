@@ -1,7 +1,7 @@
 --- old.declarationImportTypeAliasInferredAndEmittable.js
 +++ new.declarationImportTypeAliasInferredAndEmittable.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [foo.js]
  "use strict";
 -var Conn = /** @class */ (function () {
@@ -31,7 +31,8 @@
      }
 -    return Wrap;
 -}());
--exports.Wrap = Wrap;
++}
+ exports.Wrap = Wrap;
 -
 -
 -//// [foo.d.ts]
@@ -39,11 +40,10 @@
 -    constructor();
 -    item: number;
 -    method(): void;
- }
+-}
 -export = Conn;
 -//// [usage.d.ts]
 -export declare class Wrap {
 -    connItem: number;
 -    constructor(c?: import("./foo"));
 -}
-+exports.Wrap = Wrap;

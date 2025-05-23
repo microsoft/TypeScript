@@ -1,8 +1,7 @@
 --- old.nodeModulesAllowJsCjsFromJs(module=node16).errors.txt
 +++ new.nodeModulesAllowJsCjsFromJs(module=node16).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +bar.ts(1,8): error TS2613: Module '"foo"' has no default export. Did you mean to use 'import { foo } from "foo"' instead?
 +
 +

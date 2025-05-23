@@ -3,7 +3,7 @@
 @@= skipped -12, +12 lines =@@
  import foo from "./foo.json";
  console.log(foo.ios);
- 
+
 -//// [/bin/foo.ios.json]
 -{
 -    "ios": "platform ios"

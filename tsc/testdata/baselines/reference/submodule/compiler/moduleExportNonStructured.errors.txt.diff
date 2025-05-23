@@ -1,6 +1,6 @@
 --- old.moduleExportNonStructured.errors.txt
 +++ new.moduleExportNonStructured.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 -
 -
@@ -37,5 +37,4 @@
 -    declare const __: symbol;
 -    export = __;
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

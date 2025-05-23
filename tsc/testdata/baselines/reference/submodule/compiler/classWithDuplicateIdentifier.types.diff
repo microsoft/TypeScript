@@ -2,7 +2,7 @@
 +++ new.classWithDuplicateIdentifier.types
 @@= skipped -8, +8 lines =@@
  >0 : 0
- 
+
      a: number;
 ->a : () => number
 +>a : number

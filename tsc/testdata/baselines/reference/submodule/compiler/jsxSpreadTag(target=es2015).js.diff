@@ -1,8 +1,8 @@
 --- old.jsxSpreadTag(target=es2015).js
 +++ new.jsxSpreadTag(target=es2015).js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [a.js]
 -const t1 = React.createElement("div", Object.assign({}, React.createElement("span", null)));
 -const t2 = React.createElement("div", Object.assign({}, React.createElement("span", { className: "foo" })));

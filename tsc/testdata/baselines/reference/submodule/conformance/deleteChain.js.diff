@@ -2,7 +2,7 @@
 +++ new.deleteChain.js
 @@= skipped -26, +26 lines =@@
  delete (o6.b?.['c'].d?.['e']);
- 
+
  //// [deleteChain.js]
 -"use strict";
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;

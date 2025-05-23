@@ -1,6 +1,6 @@
 --- old.regExpWithOpenBracketInCharClass(target=esnext).errors.txt
 +++ new.regExpWithOpenBracketInCharClass(target=esnext).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -regExpWithOpenBracketInCharClass.ts(4,7): error TS1005: ']' expected.
 -
 -
@@ -13,5 +13,4 @@
 -!!! error TS1005: ']' expected.
 -    ];
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,10 +2,12 @@
 +++ new.jsFileClassPropertyType3.errors.txt
 @@= skipped -0, +0 lines =@@
  bar.ts(1,1): error TS2322: Type 'string' is not assignable to type 'number'.
-+foo.js(3,13): error TS2304: Cannot find name 'cond'.
- 
- 
+-
+-
 -==== foo.js (0 errors) ====
++foo.js(3,13): error TS2304: Cannot find name 'cond'.
++
++
 +==== foo.js (1 errors) ====
      class C {
          constructor() {

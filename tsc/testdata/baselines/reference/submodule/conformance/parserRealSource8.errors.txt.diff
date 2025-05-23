@@ -7,8 +7,8 @@
  parserRealSource8.ts(11,43): error TS2304: Cannot find name 'ModuleDeclaration'.
 @@= skipped -129, +128 lines =@@
  parserRealSource8.ts(454,35): error TS2304: Cannot find name 'Catch'.
- 
- 
+
+
 -==== parserRealSource8.ts (130 errors) ====
 +==== parserRealSource8.ts (129 errors) ====
      // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

@@ -2,7 +2,7 @@
 +++ new.override10.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [override10.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

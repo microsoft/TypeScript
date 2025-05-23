@@ -2,7 +2,7 @@
 +++ new.typeOfThisInInstanceMember2.js
 @@= skipped -37, +37 lines =@@
  });
- 
+
  //// [typeOfThisInInstanceMember2.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

@@ -1,7 +1,7 @@
 --- old.generatorTypeCheck24.js
 +++ new.generatorTypeCheck24.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [generatorTypeCheck24.js]
  class Foo {
 +    x;

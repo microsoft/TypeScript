@@ -2,18 +2,18 @@
 +++ new.nodeModulesResolveJsonModule(module=node16).types
 @@= skipped -11, +11 lines =@@
  >name : string
- 
+
  import * as ns from "./package.json" with { type: "json" };
 ->ns : { default: { name: string; version: string; type: string; default: string; }; }
 +>ns : { name: string; version: string; type: string; default: string; }
  >type : any
- 
+
  export const thing = ns;
 ->thing : { default: { name: string; version: string; type: string; default: string; }; }
 ->ns : { default: { name: string; version: string; type: string; default: string; }; }
 +>thing : { name: string; version: string; type: string; default: string; }
 +>ns : { name: string; version: string; type: string; default: string; }
- 
+
  export const name2 = ns.default.name;
 ->name2 : string
 ->ns.default.name : string
@@ -27,22 +27,22 @@
 +>ns : { name: string; version: string; type: string; default: string; }
 +>default : string
 +>name : any
- 
+
  === index.cts ===
  import pkg from "./package.json";
 @@= skipped -26, +26 lines =@@
  >name : string
- 
+
  import * as ns from "./package.json";
 ->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 +>ns : { name: string; version: string; type: string; default: string; }
- 
+
  export const thing = ns;
 ->thing : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 ->ns : { name: string; version: string; type: string; default: { name: string; version: string; type: string; default: string; }; }
 +>thing : { name: string; version: string; type: string; default: string; }
 +>ns : { name: string; version: string; type: string; default: string; }
- 
+
  export const name2 = ns.default.name;
 ->name2 : string
 ->ns.default.name : string
@@ -56,23 +56,23 @@
 +>ns : { name: string; version: string; type: string; default: string; }
 +>default : string
 +>name : any
- 
+
  === index.mts ===
  import pkg from "./package.json" with { type: "json" };
 @@= skipped -26, +26 lines =@@
  >name : string
- 
+
  import * as ns from "./package.json" with { type: "json" };
 ->ns : { default: { name: string; version: string; type: string; default: string; }; }
 +>ns : { name: string; version: string; type: string; default: string; }
  >type : any
- 
+
  export const thing = ns;
 ->thing : { default: { name: string; version: string; type: string; default: string; }; }
 ->ns : { default: { name: string; version: string; type: string; default: string; }; }
 +>thing : { name: string; version: string; type: string; default: string; }
 +>ns : { name: string; version: string; type: string; default: string; }
- 
+
  export const name2 = ns.default.name;
 ->name2 : string
 ->ns.default.name : string
@@ -86,6 +86,6 @@
 +>ns : { name: string; version: string; type: string; default: string; }
 +>default : string
 +>name : any
- 
+
  === package.json ===
  {

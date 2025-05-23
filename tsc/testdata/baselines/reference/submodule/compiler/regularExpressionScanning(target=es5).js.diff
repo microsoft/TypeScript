@@ -1,8 +1,8 @@
 --- old.regularExpressionScanning(target=es5).js
 +++ new.regularExpressionScanning(target=es5).js
 @@= skipped -51, +51 lines =@@
- 
- 
+
+
  //// [regularExpressionScanning.js]
 -var regexes = [
 +const regexes = [

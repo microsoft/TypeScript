@@ -2,14 +2,14 @@
 +++ new.moduleVisibilityTest1.types
 @@= skipped -18, +18 lines =@@
  }
- 
+
  import OuterInnerAlias = OuterMod.OuterInnerMod;
 ->OuterInnerAlias : typeof OuterInnerAlias
 +>OuterInnerAlias : typeof OuterInnerMod
  >OuterMod : typeof OuterMod
 ->OuterInnerMod : typeof OuterInnerAlias
 +>OuterInnerMod : typeof OuterInnerMod
- 
+
  module M {
  >M : typeof M
 @@= skipped -60, +60 lines =@@
@@ -19,11 +19,11 @@
 ->OuterInnerAlias : typeof OuterInnerAlias
 +>OuterInnerAlias : typeof OuterInnerMod
  >someExportedOuterInnerFunc : () => string
- 
+
  		public someMethodThatCallsAnInnerMethod() {return InnerMod.someExportedInnerFunc();}
 @@= skipped -62, +62 lines =@@
  }
- 
+
  var cprime : M.I = <M.I>null;
 ->cprime : M.I
 +>cprime : I
@@ -31,7 +31,7 @@
 -><M.I>null : M.I
 +><M.I>null : I
  >M : any
- 
+
  var c = new M.C();
 ->c : M.C
 ->new M.C() : M.C
@@ -42,12 +42,12 @@
  >M : typeof M
 ->C : typeof M.C
 +>C : typeof C
- 
+
  var z = M.x;
  >z : number
 @@= skipped -19, +19 lines =@@
  >x : number
- 
+
  var alpha = M.E.A;
 ->alpha : M.E
 ->M.E.A : M.E.A
@@ -60,7 +60,7 @@
 ->A : M.E.A
 +>E : typeof E
 +>A : E.A
- 
+
  var omega = M.exported_var;
  >omega : any
 @@= skipped -16, +16 lines =@@
@@ -70,4 +70,3 @@
 ->c : M.C
 +>c : C
  >someMethodThatCallsAnOuterMethod : () => string
- 

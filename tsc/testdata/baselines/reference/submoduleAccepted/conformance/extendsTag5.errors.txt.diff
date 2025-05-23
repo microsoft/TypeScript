@@ -7,13 +7,15 @@
 -/a.js(42,16): error TS2344: Type '{ a: string; b: string; }' does not satisfy the constraint 'Foo'.
 -  Types of property 'b' are incompatible.
 -    Type 'string' is not assignable to type 'boolean | string[]'.
+-
+-
+-==== /a.js (2 errors) ====
 +/a.js(26,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 +/a.js(34,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 +/a.js(39,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 +/a.js(44,17): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
- 
- 
--==== /a.js (2 errors) ====
++
++
 +==== /a.js (4 errors) ====
      /**
       * @typedef {{

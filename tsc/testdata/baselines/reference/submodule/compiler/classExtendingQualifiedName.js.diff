@@ -2,7 +2,7 @@
 +++ new.classExtendingQualifiedName.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [classExtendingQualifiedName.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

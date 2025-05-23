@@ -8,6 +8,6 @@
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(index.d.ts, 1, 33))
 +>div : Symbol((Missing), Decl(index.d.ts, 1, 33))
 +>div : Symbol((Missing), Decl(index.d.ts, 1, 33))
- 
+
  === node_modules/@types/react/index.d.ts ===
  declare namespace JSX {

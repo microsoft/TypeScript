@@ -1,13 +1,13 @@
 --- old.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.types
 +++ new.complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.types
 @@= skipped -54, +54 lines =@@
- 
- 
+
+
  export function makeNewChannel<T extends ChannelType>(type: T): NewChannel<ChannelOfType<T>> {
 ->makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
 +>makeNewChannel : <T extends "email" | "text">(type: T) => NewChannel<ChannelOfType<T, EmailChannel> | ChannelOfType<T, TextChannel>>
  >type : T
- 
+
      const localChannelId = `blahblahblah`;
 @@= skipped -16, +16 lines =@@
  const newTextChannel = makeNewChannel('text');
@@ -16,7 +16,7 @@
 ->makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
 +>makeNewChannel : <T extends "email" | "text">(type: T) => NewChannel<ChannelOfType<T, EmailChannel> | ChannelOfType<T, TextChannel>>
  >'text' : "text"
- 
+
  // This should work
 @@= skipped -14, +14 lines =@@
  const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
@@ -25,5 +25,5 @@
 ->makeNewChannel : <T extends ChannelType>(type: T) => NewChannel<ChannelOfType<T>>
 +>makeNewChannel : <T extends "email" | "text">(type: T) => NewChannel<ChannelOfType<T, EmailChannel> | ChannelOfType<T, TextChannel>>
  >'text' : "text"
- 
+
  // Compare with this, which ofc works.

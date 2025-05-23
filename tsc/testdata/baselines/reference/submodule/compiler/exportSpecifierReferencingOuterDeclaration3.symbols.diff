@@ -6,7 +6,7 @@
  >X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))
 ->foo : Symbol(X.foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 2, 14))
 +>foo : Symbol(foo, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 2, 14))
- 
+
      export function bar(): X.bar; // error
  >bar : Symbol(bar, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 4, 33))
  >X : Symbol(X, Decl(exportSpecifierReferencingOuterDeclaration3.ts, 1, 20))

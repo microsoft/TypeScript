@@ -1,8 +1,8 @@
 --- old.propertyOverridingPrototype.js
 +++ new.propertyOverridingPrototype.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [propertyOverridingPrototype.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var Base = /** @class */ (function () {
 -    function Base() {
-+class Base {
-+    foo() {
-     }
+-    }
 -    Base.prototype.foo = function () {
 -    };
 -    return Base;
@@ -35,6 +33,9 @@
 -    }
 -    return Derived;
 -}(Base));
++class Base {
++    foo() {
++    }
 +}
 +class Derived extends Base {
 +    foo;

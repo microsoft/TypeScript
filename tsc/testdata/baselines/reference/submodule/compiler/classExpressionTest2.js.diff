@@ -1,7 +1,7 @@
 --- old.classExpressionTest2.js
 +++ new.classExpressionTest2.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [classExpressionTest2.js]
  function M() {
 -    var m = /** @class */ (function () {

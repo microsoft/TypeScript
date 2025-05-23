@@ -1,13 +1,13 @@
 --- old.importMetaNarrowing(module=esnext).types
 +++ new.importMetaNarrowing(module=esnext).types
 @@= skipped -1, +1 lines =@@
- 
+
  === importMetaNarrowing.ts ===
  declare global { interface ImportMeta {foo?: () => void} };
 ->global : any
 +>global : typeof global
  >foo : (() => void) | undefined
- 
+
  if (import.meta.foo) {
 ->import.meta.foo : (() => void) | undefined
 +>import.meta.foo : any
@@ -15,7 +15,7 @@
  >meta : ImportMeta
 ->foo : (() => void) | undefined
 +>foo : any
- 
+
    import.meta.foo();
 ->import.meta.foo() : void
 ->import.meta.foo : () => void
@@ -26,4 +26,3 @@
 ->foo : () => void
 +>foo : any
  }
- 

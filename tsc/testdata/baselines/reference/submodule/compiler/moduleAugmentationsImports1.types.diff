@@ -13,7 +13,7 @@
 +>getB : () => B
  >x : number
  >toFixed : (fractionDigits?: number) => string
- 
+
 @@= skipped -12, +12 lines =@@
  >a.getCls().y.toLowerCase() : string
  >a.getCls().y.toLowerCase : () => string
@@ -27,4 +27,3 @@
 +>getCls : () => Cls
  >y : string
  >toLowerCase : () => string
- 

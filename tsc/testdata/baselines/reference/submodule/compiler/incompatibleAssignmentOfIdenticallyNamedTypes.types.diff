@@ -2,7 +2,7 @@
 +++ new.incompatibleAssignmentOfIdenticallyNamedTypes.types
 @@= skipped -14, +14 lines =@@
  >fn : () => void
- 
+
          this.x = a;
 ->this.x = a : globalThis.T
 +>this.x = a : T
@@ -13,4 +13,3 @@
 +>a : T
      }
  }
- 

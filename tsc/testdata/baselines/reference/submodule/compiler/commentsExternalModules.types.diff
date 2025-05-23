@@ -6,7 +6,7 @@
  import extMod = require("commentsExternalModules_0"); // trailing comment1
 ->extMod : typeof extMod
 +>extMod : any
- 
+
  extMod.m1.fooExport();
 ->extMod.m1.fooExport() : number
 ->extMod.m1.fooExport : () => number
@@ -20,7 +20,7 @@
 +>extMod : any
 +>m1 : any
 +>fooExport : any
- 
+
  var newVar = new extMod.m1.m2.c();
 ->newVar : extMod.m1.m2.c
 ->new extMod.m1.m2.c() : extMod.m1.m2.c
@@ -40,7 +40,7 @@
 +>m1 : any
 +>m2 : any
 +>c : any
- 
+
  extMod.m4.fooExport();
 ->extMod.m4.fooExport() : number
 ->extMod.m4.fooExport : () => number
@@ -54,7 +54,7 @@
 +>extMod : any
 +>m4 : any
 +>fooExport : any
- 
+
  var newVar2 = new extMod.m4.m2.c();
 ->newVar2 : extMod.m4.m2.c
 ->new extMod.m4.m2.c() : extMod.m4.m2.c
@@ -65,16 +65,7 @@
 ->m4 : typeof extMod.m4
 ->m2 : typeof extMod.m4.m2
 ->c : typeof extMod.m4.m2.c
-+>newVar2 : any
-+>new extMod.m4.m2.c() : any
-+>extMod.m4.m2.c : any
-+>extMod.m4.m2 : any
-+>extMod.m4 : any
-+>extMod : any
-+>m4 : any
-+>m2 : any
-+>c : any
- 
+-
 -=== commentsExternalModules_0.ts ===
 -/** Module comment*/
 -export module m1 {
@@ -185,4 +176,12 @@
 ->m4 : typeof m4
 ->m2 : typeof m4.m2
 ->c : typeof m4.m2.c
--
++>newVar2 : any
++>new extMod.m4.m2.c() : any
++>extMod.m4.m2.c : any
++>extMod.m4.m2 : any
++>extMod.m4 : any
++>extMod : any
++>m4 : any
++>m2 : any
++>c : any

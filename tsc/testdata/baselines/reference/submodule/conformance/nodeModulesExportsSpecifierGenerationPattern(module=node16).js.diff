@@ -1,7 +1,7 @@
 --- old.nodeModulesExportsSpecifierGenerationPattern(module=node16).js
 +++ new.nodeModulesExportsSpecifierGenerationPattern(module=node16).js
 @@= skipped -29, +29 lines =@@
- 
+
  //// [index.js]
  export const a = (await import("inner/index.js")).x();
 -

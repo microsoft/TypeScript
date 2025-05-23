@@ -2,7 +2,7 @@
 +++ new.superAccessCastedCall.js
 @@= skipped -22, +22 lines =@@
  b.bar()
- 
+
  //// [superAccessCastedCall.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,15 +21,7 @@
 -})();
 -var Foo = /** @class */ (function () {
 -    function Foo() {
-+class Foo {
-+    bar() { }
-+}
-+class Bar extends Foo {
-+    x;
-+    constructor() {
-+        super();
-+        this.x = 2;
-     }
+-    }
 -    Foo.prototype.bar = function () { };
 -    return Foo;
 -}());
@@ -39,10 +31,7 @@
 -        var _this = _super.call(this) || this;
 -        _this.x = 2;
 -        return _this;
-+    bar() {
-+        super.bar();
-+        super.bar();
-     }
+-    }
 -    Bar.prototype.bar = function () {
 -        _super.prototype.bar.call(this);
 -        _super.prototype.bar.call(this);
@@ -50,6 +39,19 @@
 -    return Bar;
 -}(Foo));
 -var b = new Bar();
++class Foo {
++    bar() { }
++}
++class Bar extends Foo {
++    x;
++    constructor() {
++        super();
++        this.x = 2;
++    }
++    bar() {
++        super.bar();
++        super.bar();
++    }
 +}
 +let b = new Bar();
  b.bar();

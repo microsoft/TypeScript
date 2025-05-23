@@ -1,8 +1,8 @@
 --- old.noImplicitAnyDestructuringVarDeclaration2.js
 +++ new.noImplicitAnyDestructuringVarDeclaration2.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [noImplicitAnyDestructuringVarDeclaration2.js]
 -var _a = [1, 2, 3], a = _a[0], b = _a[1], c = _a[2]; // no error
 -var _b = [1, 2, 3], _c = _b[0], a1 = _c === void 0 ? 10 : _c, _d = _b[1], b1 = _d === void 0 ? 10 : _d, _e = _b[2], c1 = _e === void 0 ? 10 : _e; // no error

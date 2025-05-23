@@ -6,8 +6,8 @@
 -    Type 'new (x: number) => B' is not assignable to type 'abstract new () => A'.
 -      Target signature provides too few arguments. Expected 1 or more, but got 0.
 +  Target signature provides too few arguments. Expected 1 or more, but got 0.
- 
- 
+
+
  ==== assignmentCompatability45.ts (1 errors) ====
 @@= skipped -13, +11 lines =@@
      const b: typeof A = B;

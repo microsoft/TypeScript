@@ -10,6 +10,6 @@
 +>R : Symbol(R, Decl(TypeGuardWithEnumUnion.ts, 0, 12))
 +>G : Symbol(G, Decl(TypeGuardWithEnumUnion.ts, 0, 15))
 +>B : Symbol(B, Decl(TypeGuardWithEnumUnion.ts, 0, 18))
- 
+
  function f1(x: Color | string) {
  >f1 : Symbol(f1, Decl(TypeGuardWithEnumUnion.ts, 0, 22))

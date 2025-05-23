@@ -1,7 +1,7 @@
 --- old.declarationEmitExpressionInExtends7.js
 +++ new.declarationEmitExpressionInExtends7.js
 @@= skipped -5, +5 lines =@@
- 
+
  //// [declarationEmitExpressionInExtends7.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

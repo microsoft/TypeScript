@@ -2,7 +2,7 @@
 +++ new.typeParametersInStaticMethods.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(typeParametersInStaticMethods.ts, 0, 10))
- 
+
      static M(x: (x: T) => { x: { y: T } }) {
 ->M : Symbol(foo.M, Decl(typeParametersInStaticMethods.ts, 0, 14))
 +>M : Symbol(M, Decl(typeParametersInStaticMethods.ts, 0, 14))

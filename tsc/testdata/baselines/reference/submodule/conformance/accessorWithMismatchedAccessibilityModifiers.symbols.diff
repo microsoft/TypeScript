@@ -2,11 +2,11 @@
 +++ new.accessorWithMismatchedAccessibilityModifiers.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 0, 0))
- 
+
      get x() {
 ->x : Symbol(C.x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 0, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 3, 5))
 +>x : Symbol(x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 0, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 3, 5))
- 
+
          return 1;
      }
      private set x(v) {
@@ -17,11 +17,11 @@
  }
 @@= skipped -14, +14 lines =@@
  >D : Symbol(D, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 6, 1))
- 
+
      protected get x() {
 ->x : Symbol(D.x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 8, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 11, 5))
 +>x : Symbol(x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 8, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 11, 5))
- 
+
          return 1;
      }
      private set x(v) {
@@ -32,7 +32,7 @@
  }
 @@= skipped -14, +14 lines =@@
  >E : Symbol(E, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 14, 1))
- 
+
      protected set x(v) {
 ->x : Symbol(E.x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 16, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 18, 5))
 +>x : Symbol(x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 16, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 18, 5))
@@ -41,12 +41,12 @@
      get x() {
 ->x : Symbol(E.x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 16, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 18, 5))
 +>x : Symbol(x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 16, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 18, 5))
- 
+
          return 1;
      }
 @@= skipped -14, +14 lines =@@
  >F : Symbol(F, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 22, 1))
- 
+
      protected static set x(v) {
 ->x : Symbol(F.x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 24, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 26, 5))
 +>x : Symbol(x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 24, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 26, 5))
@@ -55,6 +55,6 @@
      static get x() {
 ->x : Symbol(F.x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 24, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 26, 5))
 +>x : Symbol(x, Decl(accessorWithMismatchedAccessibilityModifiers.ts, 24, 9), Decl(accessorWithMismatchedAccessibilityModifiers.ts, 26, 5))
- 
+
          return 1;
      }

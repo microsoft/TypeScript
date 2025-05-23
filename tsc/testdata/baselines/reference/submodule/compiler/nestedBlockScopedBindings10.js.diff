@@ -1,7 +1,7 @@
 --- old.nestedBlockScopedBindings10.js
 +++ new.nestedBlockScopedBindings10.js
 @@= skipped -14, +14 lines =@@
- 
+
  //// [nestedBlockScopedBindings10.js]
  {
 -    var x = void 0;

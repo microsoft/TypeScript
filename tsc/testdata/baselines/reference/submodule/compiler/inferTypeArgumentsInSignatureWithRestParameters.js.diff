@@ -1,8 +1,8 @@
 --- old.inferTypeArgumentsInSignatureWithRestParameters.js
 +++ new.inferTypeArgumentsInSignatureWithRestParameters.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [inferTypeArgumentsInSignatureWithRestParameters.js]
 -function f(array) {
 -    var args = [];

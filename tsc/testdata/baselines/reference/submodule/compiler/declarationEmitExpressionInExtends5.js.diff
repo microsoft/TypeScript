@@ -1,8 +1,8 @@
 --- old.declarationEmitExpressionInExtends5.js
 +++ new.declarationEmitExpressionInExtends5.js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [declarationEmitExpressionInExtends5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

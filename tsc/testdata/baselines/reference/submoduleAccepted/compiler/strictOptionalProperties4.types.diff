@@ -6,24 +6,23 @@
  >({}) : Foo
 +>{} : Foo
  >{} : {}
- 
+
  x.foo; // number | undefined
 ->x.foo : number | undefined
 +>x.foo : any
  >x : Foo
 ->foo : number | undefined
 +>foo : any
- 
+
  const y = /** @type {Required<Foo>} */ ({});
  >y : Required<Foo>
  >({}) : Required<Foo>
 +>{} : Required<Foo>
  >{} : {}
- 
+
  y.foo; // number
 ->y.foo : number
 +>y.foo : any
  >y : Required<Foo>
 ->foo : number
 +>foo : any
- 

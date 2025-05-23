@@ -2,7 +2,7 @@
 +++ new.spreadUnion.js
 @@= skipped -12, +12 lines =@@
  var o5 =  { ...union, ...union };
- 
+
  //// [spreadUnion.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {

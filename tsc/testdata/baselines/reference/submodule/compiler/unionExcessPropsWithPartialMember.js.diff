@@ -1,8 +1,8 @@
 --- old.unionExcessPropsWithPartialMember.js
 +++ new.unionExcessPropsWithPartialMember.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [unionExcessPropsWithPartialMember.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

@@ -1,7 +1,7 @@
 --- old.spreadExpressionContextualTypeWithNamespace.js
 +++ new.spreadExpressionContextualTypeWithNamespace.js
 @@= skipped -35, +35 lines =@@
- 
+
  //// [spreadExpressionContextualTypeWithNamespace_0.js]
  "use strict";
 -// Repro from #44179 with some modification

@@ -2,7 +2,7 @@
 +++ new.jsxChildrenWrongType.js
 @@= skipped -16, +16 lines =@@
  );
- 
+
  //// [other.js]
 -"use strict";
  /// <reference path="react18/react18.d.ts" />

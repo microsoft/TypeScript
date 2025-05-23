@@ -2,41 +2,40 @@
 +++ new.jsdocThisType.symbols
 @@= skipped -4, +4 lines =@@
  >Foo : Symbol(Foo, Decl(types.d.ts, 0, 0))
- 
+
      foo: () => void;
 ->foo : Symbol(Foo.foo, Decl(types.d.ts, 0, 22))
 +>foo : Symbol(foo, Decl(types.d.ts, 0, 22))
  }
- 
+
  export type M = (this: Foo) => void;
 @@= skipped -22, +22 lines =@@
  >f2 : Symbol(f2, Decl(a.js, 3, 1))
- 
+
      this.test();
 ->this : Symbol(Foo, Decl(types.d.ts, 0, 0))
  }
- 
+
  /** @type {(this: import('./types').Foo) => void} */
 @@= skipped -16, +15 lines =@@
  >f4 : Symbol(f4, Decl(a.js, 13, 1))
- 
+
      this.test();
 ->this : Symbol(Foo, Decl(types.d.ts, 0, 0))
  }
- 
+
  /** @type {function(this: import('./types').Foo): void} */
 @@= skipped -8, +7 lines =@@
  >f5 : Symbol(f5, Decl(a.js, 21, 12))
- 
+
      this.test();
 ->this : Symbol(this, Decl(a.js, 20, 20))
  }
- 
+
  /** @type {function(this: import('./types').Foo): void} */
 @@= skipped -8, +7 lines =@@
  >f6 : Symbol(f6, Decl(a.js, 23, 1))
- 
+
      this.test();
 ->this : Symbol(Foo, Decl(types.d.ts, 0, 0))
  }
- 

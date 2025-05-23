@@ -3,7 +3,7 @@
 @@= skipped -10, +10 lines =@@
  export var x: a<a<string>>;
  x.a;
- 
+
 -//// [declFileExportAssignmentOfGenericInterface_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

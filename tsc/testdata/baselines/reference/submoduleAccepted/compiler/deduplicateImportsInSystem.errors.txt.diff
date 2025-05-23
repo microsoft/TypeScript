@@ -13,8 +13,8 @@
 +deduplicateImportsInSystem.ts(4,17): error TS2307: Cannot find module 'f2' or its corresponding type declarations.
 +deduplicateImportsInSystem.ts(5,17): error TS2307: Cannot find module 'f2' or its corresponding type declarations.
 +deduplicateImportsInSystem.ts(6,17): error TS2307: Cannot find module 'f1' or its corresponding type declarations.
- 
- 
+
+
  ==== deduplicateImportsInSystem.ts (6 errors) ====
      import {A} from "f1";
                      ~~~~

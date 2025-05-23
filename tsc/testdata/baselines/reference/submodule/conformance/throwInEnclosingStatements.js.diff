@@ -15,19 +15,20 @@
  }
 -var C = /** @class */ (function () {
 -    function C() {
+-        throw this;
+-    }
+-    C.prototype.biz = function () {
 +class C {
 +    value;
 +    biz() {
-+        throw this.value;
-+    }
-+    constructor() {
-         throw this;
-     }
--    C.prototype.biz = function () {
--        throw this.value;
+         throw this.value;
 -    };
 -    return C;
 -}());
++    }
++    constructor() {
++        throw this;
++    }
 +}
  var aa = {
      id: 12,

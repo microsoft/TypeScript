@@ -1,7 +1,7 @@
 --- old.jsxParsingError3.js
 +++ new.jsxParsingError3.js
 @@= skipped -28, +28 lines =@@
- 
+
  //// [file.jsx]
  //// [Error1.jsx]
 -var x1 = <div>}</div>;

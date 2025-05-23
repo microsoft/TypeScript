@@ -9,7 +9,7 @@
  >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 0, 42))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
- 
+
  var zu = fu = function (s) { return s.toLowerCase() };
  >zu : Symbol(zu, Decl(targetTypingOnFunctions.ts, 2, 3))
  >fu : Symbol(fu, Decl(targetTypingOnFunctions.ts, 0, 3))
@@ -19,4 +19,3 @@
  >s : Symbol(s, Decl(targetTypingOnFunctions.ts, 2, 24))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 +>toLowerCase : Symbol(toLowerCase, Decl(lib.es5.d.ts, --, --))
- 

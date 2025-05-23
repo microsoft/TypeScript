@@ -2,7 +2,7 @@
 +++ new.tripleSlashReferenceAbsoluteWindowsPath.js
 @@= skipped -7, +7 lines =@@
  const y = x + 3;
- 
+
  //// [c.js]
 -var x = 5;
 +const x = 5;

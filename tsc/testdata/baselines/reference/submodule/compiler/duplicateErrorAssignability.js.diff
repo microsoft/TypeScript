@@ -2,7 +2,7 @@
 +++ new.duplicateErrorAssignability.js
 @@= skipped -14, +14 lines =@@
  obj[x];
- 
+
  //// [duplicateErrorAssignability.js]
 -"use strict";
 -var x = a = b;

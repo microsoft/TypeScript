@@ -2,8 +2,8 @@
 +++ new.externalModuleReferenceOfImportDeclarationWithExportModifier.js
 @@= skipped -7, +7 lines =@@
  file1.foo();
- 
- 
+
+
 -//// [externalModuleReferenceOfImportDeclarationWithExportModifier_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

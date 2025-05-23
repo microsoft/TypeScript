@@ -2,7 +2,7 @@
 +++ new.parserCastVersusArrowFunction1.js
 @@= skipped -12, +12 lines =@@
  var v = <T>(a = 1, b = 2);
- 
+
  //// [parserCastVersusArrowFunction1.js]
 -var v = function () { return 1; };
 +var v = () => 1;

@@ -1,7 +1,7 @@
 --- old.extendClassExpressionFromModule.js
 +++ new.extendClassExpressionFromModule.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [foo1.js]
  "use strict";
 -var x = /** @class */ (function () {

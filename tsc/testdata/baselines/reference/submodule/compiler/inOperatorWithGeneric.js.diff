@@ -2,7 +2,7 @@
 +++ new.inOperatorWithGeneric.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [inOperatorWithGeneric.js]
 -var C = /** @class */ (function () {
 -    function C() {

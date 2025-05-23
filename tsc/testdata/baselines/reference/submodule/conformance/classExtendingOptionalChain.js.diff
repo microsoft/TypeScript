@@ -1,8 +1,8 @@
 --- old.classExtendingOptionalChain.js
 +++ new.classExtendingOptionalChain.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [classExtendingOptionalChain.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

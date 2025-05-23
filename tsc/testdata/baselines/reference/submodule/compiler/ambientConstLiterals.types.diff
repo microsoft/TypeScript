@@ -6,12 +6,12 @@
  >C : E.C
 ->"non identifier" : (typeof E)["non identifier"]
 +>"non identifier" : E."non identifier"
- 
+
  const c1 = "abc";
  >c1 : "abc"
 @@= skipped -42, +42 lines =@@
  >A : E.A
- 
+
  const c8b = E["non identifier"];
 ->c8b : (typeof E)["non identifier"]
 ->E["non identifier"] : (typeof E)["non identifier"]
@@ -19,4 +19,3 @@
 +>E["non identifier"] : E."non identifier"
  >E : typeof E
  >"non identifier" : "non identifier"
- 

@@ -1,8 +1,8 @@
 --- old.missingTypeArguments1.js
 +++ new.missingTypeArguments1.js
 @@= skipped -56, +56 lines =@@
- 
- 
+
+
  //// [missingTypeArguments1.js]
 -var Y = /** @class */ (function () {
 -    function Y() {

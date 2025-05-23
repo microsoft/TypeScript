@@ -10,6 +10,6 @@
 +>a : Symbol(a, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 1, 8))
 +>b : Symbol(b, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 1, 11))
 +>c : Symbol(c, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 1, 14))
- 
+
  var x1: boolean;
  >x1 : Symbol(x1, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 3, 3))

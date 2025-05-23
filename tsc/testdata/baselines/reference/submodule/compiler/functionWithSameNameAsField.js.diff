@@ -1,8 +1,8 @@
 --- old.functionWithSameNameAsField.js
 +++ new.functionWithSameNameAsField.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [functionWithSameNameAsField.js]
 -var TestProgressBar = /** @class */ (function () {
 -    function TestProgressBar() {

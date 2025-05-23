@@ -2,7 +2,7 @@
 +++ new.inferTypesWithExtends1.js
 @@= skipped -137, +137 lines =@@
  }
- 
+
  //// [inferTypesWithExtends1.js]
 -"use strict";
  function f1() {

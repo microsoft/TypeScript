@@ -1,9 +1,9 @@
 --- old.parserRealSource2.js
 +++ new.parserRealSource2.js
 @@= skipped -272, +272 lines =@@
- 
+
  }
- 
+
 +//// [typescript.js]
  //// [parserRealSource2.js]
  // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

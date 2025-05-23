@@ -1,8 +1,8 @@
 --- old.generatorReturnTypeIndirectReferenceToGlobalType.js
 +++ new.generatorReturnTypeIndirectReferenceToGlobalType.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [generatorReturnTypeIndirectReferenceToGlobalType.js]
 -"use strict";
  function* f1() {

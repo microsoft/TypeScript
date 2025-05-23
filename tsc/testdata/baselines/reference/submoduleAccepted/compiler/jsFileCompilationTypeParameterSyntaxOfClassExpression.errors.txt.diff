@@ -1,6 +1,6 @@
 --- old.jsFileCompilationTypeParameterSyntaxOfClassExpression.errors.txt
 +++ new.jsFileCompilationTypeParameterSyntaxOfClassExpression.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -a.js(1,19): error TS8004: Type parameter declarations can only be used in TypeScript files.
 -
 -
@@ -9,5 +9,4 @@
 -                      ~
 -!!! error TS8004: Type parameter declarations can only be used in TypeScript files.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -20,8 +20,8 @@
 -  Its instance type 'MemberClassComponent' is not a valid JSX element.
 -    Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
 +  Property 'type' is missing in type 'MemberClassComponent' but required in type 'ElementClass'.
- 
- 
+
+
  ==== jsxComponentTypeErrors.tsx (7 errors) ====
 @@= skipped -68, +60 lines =@@
  !!! error TS2786:       Type 'string' is not assignable to type '"element-class"'.

@@ -2,7 +2,7 @@
 +++ new.quotedAccessorName2.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [quotedAccessorName2.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -1,8 +1,8 @@
 --- old.conflictMarkerTrivia2.js
 +++ new.conflictMarkerTrivia2.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [conflictMarkerTrivia2.js]
 -var C = /** @class */ (function () {
 -    function C() {

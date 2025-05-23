@@ -1,12 +1,12 @@
 --- old.assertionFunctionWildcardImport2.types
 +++ new.assertionFunctionWildcardImport2.types
 @@= skipped -27, +27 lines =@@
- 
+
  === test.ts ===
  import * as asserts from "./asserts";
 ->asserts : typeof asserts
 +>asserts : typeof import("asserts")
- 
+
  function test(obj: string | null): void {
  >test : (obj: string | null) => void
 @@= skipped -9, +9 lines =@@
@@ -17,4 +17,3 @@
 +>asserts : typeof import("asserts")
  >isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
  >obj : string | null
- 

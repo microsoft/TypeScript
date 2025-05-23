@@ -2,10 +2,10 @@
 +++ new.comparabilityTypeParametersRelatedByUnion.types
 @@= skipped -19, +19 lines =@@
    }
- 
+
    bad<U extends T | string>(y: U) {
 ->bad : <U extends T | string>(y: U) => void
 +>bad : <U extends string | T>(y: U) => void
  >y : U
- 
+
        if (y === this.x) {}

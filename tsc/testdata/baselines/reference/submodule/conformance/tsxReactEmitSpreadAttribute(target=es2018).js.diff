@@ -1,8 +1,8 @@
 --- old.tsxReactEmitSpreadAttribute(target=es2018).js
 +++ new.tsxReactEmitSpreadAttribute(target=es2018).js
 @@= skipped -54, +54 lines =@@
- 
- 
+
+
  //// [test.js]
 -import { jsx as _jsx } from "react/jsx-runtime";
  /// <reference path="react16.d.ts" />

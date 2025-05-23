@@ -1,7 +1,7 @@
 --- old.emitClassDeclarationWithTypeArgumentInES6.js
 +++ new.emitClassDeclarationWithTypeArgumentInES6.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [emitClassDeclarationWithTypeArgumentInES6.js]
  class B {
 +    x;

@@ -1,8 +1,8 @@
 --- old.defaultExportsGetExportedUmd.js
 +++ new.defaultExportsGetExportedUmd.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [a.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

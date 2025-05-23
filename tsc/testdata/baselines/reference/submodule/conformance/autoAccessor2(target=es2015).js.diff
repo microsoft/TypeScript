@@ -1,8 +1,8 @@
 --- old.autoAccessor2(target=es2015).js
 +++ new.autoAccessor2(target=es2015).js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [autoAccessor2.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
@@ -29,11 +29,11 @@
 -        __classPrivateFieldSet(this, _C1_instances, 4, "a", _C1_b_set);
 +        this.#a = 3;
 +        this.#b = 4;
-     }
++    }
 +    static {
 +        this.#c = 5;
 +        this.#d = 6;
-+    }
+     }
  }
 -_a = C1, _C1_instances = new WeakSet(), _C1_a_accessor_storage = new WeakMap(), _C1_b_accessor_storage = new WeakMap(), _C1_a_get = function _C1_a_get() { return __classPrivateFieldGet(this, _C1_a_accessor_storage, "f"); }, _C1_a_set = function _C1_a_set(value) { __classPrivateFieldSet(this, _C1_a_accessor_storage, value, "f"); }, _C1_b_get = function _C1_b_get() { return __classPrivateFieldGet(this, _C1_b_accessor_storage, "f"); }, _C1_b_set = function _C1_b_set(value) { __classPrivateFieldSet(this, _C1_b_accessor_storage, value, "f"); }, _C1_c_get = function _C1_c_get() { return __classPrivateFieldGet(_a, _a, "f", _C1_c_accessor_storage); }, _C1_c_set = function _C1_c_set(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1_c_accessor_storage); }, _C1_d_get = function _C1_d_get() { return __classPrivateFieldGet(_a, _a, "f", _C1_d_accessor_storage); }, _C1_d_set = function _C1_d_set(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1_d_accessor_storage); };
 -_C1_c_accessor_storage = { value: void 0 };

@@ -1,8 +1,8 @@
 --- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).js
 +++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=nodenext).js
 @@= skipped -64, +64 lines =@@
- 
- 
+
+
  //// [index.js]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

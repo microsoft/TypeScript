@@ -7,8 +7,8 @@
 -objectTypeWithStringAndNumberIndexSignatureToAny.ts(91,5): error TS2739: Type 'NumberTo<number>' is missing the following properties from type 'Obj': hello, world
 +objectTypeWithStringAndNumberIndexSignatureToAny.ts(91,5): error TS2322: Type 'NumberToNumber' is not assignable to type 'Obj'.
 +  Type 'NumberTo<number>' is missing the following properties from type 'Obj': hello, world
- 
- 
+
+
  ==== objectTypeWithStringAndNumberIndexSignatureToAny.ts (13 errors) ====
 @@= skipped -126, +127 lines =@@
  !!! error TS2739: Type 'StringTo<any>' is missing the following properties from type 'Obj': hello, world

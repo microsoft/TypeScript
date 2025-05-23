@@ -1,8 +1,8 @@
 --- old.interfaceExtendsObjectIntersection.js
 +++ new.interfaceExtendsObjectIntersection.js
 @@= skipped -56, +56 lines =@@
- 
- 
+
+
  //// [interfaceExtendsObjectIntersection.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

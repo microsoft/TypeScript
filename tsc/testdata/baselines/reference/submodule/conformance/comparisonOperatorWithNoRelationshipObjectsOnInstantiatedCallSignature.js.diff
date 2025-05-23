@@ -2,7 +2,7 @@
 +++ new.comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.js
 @@= skipped -151, +151 lines =@@
  var r8b6 = b6 !== a6;
- 
+
  //// [comparisonOperatorWithNoRelationshipObjectsOnInstantiatedCallSignature.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

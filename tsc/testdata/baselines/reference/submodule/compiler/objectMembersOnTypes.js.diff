@@ -1,8 +1,8 @@
 --- old.objectMembersOnTypes.js
 +++ new.objectMembersOnTypes.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [objectMembersOnTypes.js]
 -var AAA = /** @class */ (function () {
 -    function AAA() {

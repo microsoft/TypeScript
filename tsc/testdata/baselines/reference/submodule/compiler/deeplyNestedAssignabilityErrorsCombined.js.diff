@@ -2,7 +2,7 @@
 +++ new.deeplyNestedAssignabilityErrorsCombined.js
 @@= skipped -17, +17 lines =@@
  x2 = y2;
- 
+
  //// [deeplyNestedAssignabilityErrorsCombined.js]
 -var x = { a: { b: { c: { d: { e: { f: function () { return { g: "hello" }; } } } } } } };
 -var y = { a: { b: { c: { d: { e: { f: function () { return { g: 12345 }; } } } } } } };

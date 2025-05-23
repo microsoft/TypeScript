@@ -2,17 +2,17 @@
 +++ new.inferringClassMembersFromAssignments7.symbols
 @@= skipped -9, +9 lines =@@
  >this : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
- 
+
          self.x = 1
 ->self.x : Symbol(C.x, Decl(inferringClassMembersFromAssignments7.js, 2, 23))
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
 ->x : Symbol(C.x, Decl(inferringClassMembersFromAssignments7.js, 2, 23))
- 
+
          self.m = function() {
 ->self.m : Symbol(C.m, Decl(inferringClassMembersFromAssignments7.js, 3, 18))
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 2, 11))
 ->m : Symbol(C.m, Decl(inferringClassMembersFromAssignments7.js, 3, 18))
- 
+
              console.log(self.x)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -27,11 +27,11 @@
      mreal() {
 ->mreal : Symbol(C.mreal, Decl(inferringClassMembersFromAssignments7.js, 7, 5))
 +>mreal : Symbol(mreal, Decl(inferringClassMembersFromAssignments7.js, 7, 5))
- 
+
          var self = this
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 9, 11))
  >this : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
- 
+
          self.y = 2
 ->self.y : Symbol(C.y, Decl(inferringClassMembersFromAssignments7.js, 9, 23))
  >self : Symbol(self, Decl(inferringClassMembersFromAssignments7.js, 9, 11))
@@ -41,19 +41,18 @@
  const c = new C()
 @@= skipped -36, +28 lines =@@
  >C : Symbol(C, Decl(inferringClassMembersFromAssignments7.js, 0, 0))
- 
+
  c.x
 ->c.x : Symbol(C.x, Decl(inferringClassMembersFromAssignments7.js, 2, 23))
  >c : Symbol(c, Decl(inferringClassMembersFromAssignments7.js, 13, 5))
 ->x : Symbol(C.x, Decl(inferringClassMembersFromAssignments7.js, 2, 23))
- 
+
  c.y
 ->c.y : Symbol(C.y, Decl(inferringClassMembersFromAssignments7.js, 9, 23))
  >c : Symbol(c, Decl(inferringClassMembersFromAssignments7.js, 13, 5))
 ->y : Symbol(C.y, Decl(inferringClassMembersFromAssignments7.js, 9, 23))
- 
+
  c.m()
 ->c.m : Symbol(C.m, Decl(inferringClassMembersFromAssignments7.js, 3, 18))
  >c : Symbol(c, Decl(inferringClassMembersFromAssignments7.js, 13, 5))
 ->m : Symbol(C.m, Decl(inferringClassMembersFromAssignments7.js, 3, 18))
- 

@@ -1,6 +1,6 @@
 --- old.declarationEmitComputedPropertyNameEnum2.js
 +++ new.declarationEmitComputedPropertyNameEnum2.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitComputedPropertyNameEnum2.ts] ////
 -
 -//// [type.ts]
@@ -24,5 +24,4 @@
 -        [Enum.A]: 0;
 -    };
 -};
-@@= skipped --1, +1 lines =@@
 +<no content>

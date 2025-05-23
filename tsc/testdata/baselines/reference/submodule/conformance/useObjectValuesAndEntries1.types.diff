@@ -10,7 +10,7 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >o : { a: number; b: number; }
- 
+
      let y = x;
 @@= skipped -13, +13 lines =@@
  var entries = Object.entries(o);                    // [string, number][]
@@ -22,7 +22,7 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >o : { a: number; b: number; }
- 
+
  var values = Object.values(o);                      // number[]
  >values : number[]
  >Object.values(o) : number[]
@@ -32,7 +32,7 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >o : { a: number; b: number; }
- 
+
  var entries1 = Object.entries(1);                   // [string, any][]
  >entries1 : [string, any][]
  >Object.entries(1) : [string, any][]
@@ -42,7 +42,7 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >1 : 1
- 
+
  var values1 = Object.values(1);                     // any[]
  >values1 : any[]
  >Object.values(1) : any[]
@@ -52,7 +52,7 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >1 : 1
- 
+
  var entries2 = Object.entries({ a: true, b: 2 });   // [string, number|boolean][]
  >entries2 : [string, number | boolean][]
  >Object.entries({ a: true, b: 2 }) : [string, number | boolean][]
@@ -86,7 +86,7 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >{} : {}
- 
+
  var values3 = Object.values({});                    // {}[]
  >values3 : unknown[]
  >Object.values({}) : unknown[]
@@ -96,7 +96,7 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >{} : {}
- 
+
  var a = ["a", "b", "c"];
 @@= skipped -23, +23 lines =@@
  var entries4 = Object.entries(a);                   // [string, string][]
@@ -108,7 +108,7 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >a : string[]
- 
+
  var values4 = Object.values(a);                     // string[]
  >values4 : string[]
  >Object.values(a) : string[]
@@ -118,7 +118,7 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >a : string[]
- 
+
  enum E { A, B }
 @@= skipped -21, +21 lines =@@
  var entries5 = Object.entries(E);                   // [string, any][]
@@ -130,7 +130,7 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >E : typeof E
- 
+
  var values5 = Object.values(E);                     // any[]
  >values5 : (string | E)[]
  >Object.values(E) : (string | E)[]
@@ -140,7 +140,7 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >E : typeof E
- 
+
  interface I { }
 @@= skipped -21, +21 lines =@@
  var entries6 = Object.entries(i);                   // [string, any][]
@@ -152,7 +152,7 @@
 ->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >i : I
- 
+
  var values6 = Object.values(i);                     // any[]
  >values6 : any[]
  >Object.values(i) : any[]
@@ -162,4 +162,3 @@
 ->values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
  >i : I
- 

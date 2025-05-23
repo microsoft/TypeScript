@@ -5,6 +5,9 @@
 -mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
 -mod1.js(9,23): error TS2300: Duplicate identifier 'Baz'.
 -mod1.js(11,5): error TS2300: Duplicate identifier 'Baz'.
+-
+-
+-==== use.js (0 errors) ====
 +mod1.js(3,23): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
 +mod1.js(4,7): error TS2395: Individual declarations in merged declaration 'Foo' must be all exported or all local.
 +mod1.js(7,9): error TS2339: Property 'Bar' does not exist on type 'typeof import("mod1")'.
@@ -15,9 +18,8 @@
 +mod1.js(24,5): error TS2353: Object literal may only specify known properties, and 'Quack' does not exist in type '{ Baz: typeof Baz; }'.
 +use.js(2,32): error TS2694: Namespace '"mod1".export=' has no exported member 'Baz'.
 +use.js(4,12): error TS2503: Cannot find namespace 'mod'.
- 
- 
--==== use.js (0 errors) ====
++
++
 +==== use.js (2 errors) ====
      var mod = require('./mod1.js');
      /** @type {import("./mod1.js").Baz} */

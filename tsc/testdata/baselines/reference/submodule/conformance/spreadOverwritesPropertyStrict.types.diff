@@ -2,20 +2,20 @@
 +++ new.spreadOverwritesPropertyStrict.types
 @@= skipped -6, +6 lines =@@
  >b : number
- 
+
  declare var abq: { a: number, b?: number };
 ->abq : { a: number; b?: number; }
 +>abq : { a: number; b?: number | undefined; }
  >a : number
  >b : number | undefined
- 
+
 @@= skipped -22, +22 lines =@@
  >{ b: 1, ...abq } : { a: number; b: number; }
  >b : number
  >1 : 1
 ->abq : { a: number; b?: number; }
 +>abq : { a: number; b?: number | undefined; }
- 
+
  var unused4 = { ...ab, b: 1 } // ok, we don't care that b in ab is overwritten
  >unused4 : { a: number; b: number; }
 @@= skipped -12, +12 lines =@@
@@ -26,4 +26,3 @@
 +>abq : { a: number; b?: number | undefined; }
  >b : number
  >1 : 1
- 

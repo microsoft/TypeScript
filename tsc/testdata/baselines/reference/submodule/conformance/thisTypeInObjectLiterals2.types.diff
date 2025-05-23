@@ -2,33 +2,33 @@
 +++ new.thisTypeInObjectLiterals2.types
 @@= skipped -4, +4 lines =@@
  // of the object literal.
- 
+
  let obj1 = {
 ->obj1 : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 ->{    a: 1,    f() {        return this.a;    },    b: "hello",    c: {        g() {            this.g();        }    },    get d() {        return this.a;    },    get e() {        return this.b;    },    set e(value) {        this.b = value;    }} : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 +>obj1 : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
 +>{    a: 1,    f() {        return this.a;    },    b: "hello",    c: {        g() {            this.g();        }    },    get d() {        return this.a;    },    get e() {        return this.b;    },    set e(value) {        this.b = value;    }} : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
- 
+
      a: 1,
  >a : number
 @@= skipped -12, +12 lines =@@
- 
+
          return this.a;
  >this.a : number
 ->this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 +>this : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
  >a : number
- 
+
      },
 @@= skipped -9, +9 lines =@@
  >"hello" : "hello"
- 
+
      c: {
 ->c : { g(): void; }
 ->{        g() {            this.g();        }    } : { g(): void; }
 +>c : { g: () => void; }
 +>{        g() {            this.g();        }    } : { g: () => void; }
- 
+
          g() {
  >g : () => void
 @@= skipped -9, +9 lines =@@
@@ -41,22 +41,22 @@
          }
      },
 @@= skipped -9, +9 lines =@@
- 
+
          return this.a;
  >this.a : number
 ->this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 +>this : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
  >a : number
- 
+
      },
 @@= skipped -9, +9 lines =@@
- 
+
          return this.b;
  >this.b : string
 ->this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 +>this : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
  >b : string
- 
+
      },
 @@= skipped -11, +11 lines =@@
          this.b = value;
@@ -69,7 +69,7 @@
      }
 @@= skipped -22, +22 lines =@@
  >z : number | undefined
- 
+
      moveBy(dx: number, dy: number, dz?: number): void;
 ->moveBy : (dx: number, dy: number, dz?: number) => void
 +>moveBy : (dx: number, dy: number, dz?: number | undefined) => void
@@ -77,39 +77,39 @@
  >dy : number
  >dz : number | undefined
 @@= skipped -8, +8 lines =@@
- 
+
  let p1: Point = {
  >p1 : Point
 ->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 +>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
- 
+
      x: 10,
  >x : number
 @@= skipped -49, +49 lines =@@
- 
+
  let p2: Point | null = {
  >p2 : Point | null
 ->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 +>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
- 
+
      x: 10,
  >x : number
 @@= skipped -49, +49 lines =@@
- 
+
  let p3: Point | undefined = {
  >p3 : Point | undefined
 ->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 +>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
- 
+
      x: 10,
  >x : number
 @@= skipped -49, +49 lines =@@
- 
+
  let p4: Point | null | undefined = {
  >p4 : Point | null | undefined
 ->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 +>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
- 
+
      x: 10,
  >x : number
 @@= skipped -54, +54 lines =@@
@@ -118,7 +118,7 @@
  >f1 : (p: Point) => void
 ->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 +>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
- 
+
      x: 10,
  >x : number
 @@= skipped -54, +54 lines =@@
@@ -127,21 +127,21 @@
  >f2 : (p: Point | null | undefined) => void
 ->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 +>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
- 
+
      x: 10,
  >x : number
 @@= skipped -57, +57 lines =@@
  >data : D | undefined
- 
+
      methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
 ->methods : (M & ThisType<D & M>) | undefined
 +>methods : M & ThisType<D & M> | undefined
  }
- 
+
  declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 @@= skipped -8, +8 lines =@@
  >desc : ObjectDescriptor<D, M>
- 
+
  let x1 = makeObject({
 ->x1 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 ->makeObject({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
@@ -150,18 +150,18 @@
  >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
 ->{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
 +>{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy: (dx: number, dy: number) => void; }; }
- 
+
      data: { x: 0, y: 0 },
  >data : { x: number; y: number; }
 @@= skipped -14, +14 lines =@@
  >0 : 0
- 
+
      methods: {
 ->methods : { moveBy(dx: number, dy: number): void; }
 ->{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
 +>methods : { moveBy: (dx: number, dy: number) => void; }
 +>{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy: (dx: number, dy: number) => void; }
- 
+
          moveBy(dx: number, dy: number) {
  >moveBy : (dx: number, dy: number) => void
 @@= skipped -11, +11 lines =@@
@@ -172,7 +172,7 @@
 +>this : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
  >x : number
  >dx : number
- 
+
              this.y += dy;  // Strongly typed this
  >this.y += dy : number
  >this.y : number
@@ -183,7 +183,7 @@
          }
 @@= skipped -32, +32 lines =@@
  >desc : ObjectDescriptor<D, M>
- 
+
  let x2 = makeObject2({
 ->x2 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 ->makeObject2({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
@@ -192,18 +192,18 @@
  >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
 ->{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
 +>{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy: (dx: number, dy: number) => void; }; }
- 
+
      data: { x: 0, y: 0 },
  >data : { x: number; y: number; }
 @@= skipped -14, +14 lines =@@
  >0 : 0
- 
+
      methods: {
 ->methods : { moveBy(dx: number, dy: number): void; }
 ->{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
 +>methods : { moveBy: (dx: number, dy: number) => void; }
 +>{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy: (dx: number, dy: number) => void; }
- 
+
          moveBy(dx: number, dy: number) {
  >moveBy : (dx: number, dy: number) => void
 @@= skipped -11, +11 lines =@@
@@ -214,7 +214,7 @@
 +>this : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
  >x : number
  >dx : number
- 
+
              this.y += dy;  // Strongly typed this
  >this.y += dy : number
  >this.y : number
@@ -229,7 +229,7 @@
  >"bar" : "bar"
 ->{    get() {        return this.x;    },    set(value: number) {        this.x = value;    }} : { get(): number; set(value: number): void; }
 +>{    get() {        return this.x;    },    set(value: number) {        this.x = value;    }} : { get: () => number; set: (value: number) => void; }
- 
+
      get() {
  >get : () => number
 @@= skipped -39, +39 lines =@@
@@ -238,23 +238,23 @@
  >p1 : Point
 ->{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get(): number; set(value: number): void; }; }
 +>{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get: () => number; set: (value: number) => void; }; }
- 
+
      foo: {
  >foo : { value: number; }
 @@= skipped -12, +12 lines =@@
- 
+
      },
      bar: {
 ->bar : { get(): number; set(value: number): void; }
 ->{        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    } : { get(): number; set(value: number): void; }
 +>bar : { get: () => number; set: (value: number) => void; }
 +>{        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    } : { get: () => number; set: (value: number) => void; }
- 
+
          get(): number {
  >get : () => number
 @@= skipped -85, +85 lines =@@
  >options : VueOptions<D, M, P>
- 
+
  let vue = new Vue({
 ->vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 ->new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
@@ -263,22 +263,22 @@
  >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
 ->{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f(x: string): number; }; computed: { test(): number; hello: { get(): string; set(value: string): void; }; }; }
 +>{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f: (x: string) => number; }; computed: { test: () => number; hello: { get: () => string; set: (value: string) => void; }; }; }
- 
+
      data: () => ({ x: 1, y: 2 }),
  >data : () => { x: number; y: number; }
 @@= skipped -16, +16 lines =@@
  >2 : 2
- 
+
      methods: {
 ->methods : { f(x: string): number; }
 ->{        f(x: string) {            return this.x;        }    } : { f(x: string): number; }
 +>methods : { f: (x: string) => number; }
 +>{        f(x: string) {            return this.x;        }    } : { f: (x: string) => number; }
- 
+
          f(x: string) {
  >f : (x: string) => number
 @@= skipped -9, +9 lines =@@
- 
+
              return this.x;
  >this.x : number
 ->this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
@@ -291,38 +291,38 @@
 ->{        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    } : { test(): number; hello: { get(): string; set(value: string): void; }; }
 +>computed : { test: () => number; hello: { get: () => string; set: (value: string) => void; }; }
 +>{        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    } : { test: () => number; hello: { get: () => string; set: (value: string) => void; }; }
- 
+
          test(): number {
  >test : () => number
- 
+
              return this.x;
  >this.x : number
 ->this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 +>this : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
  >x : number
- 
+
          },
          hello: {
 ->hello : { get(): string; set(value: string): void; }
 ->{            get() {                return "hi";            },            set(value: string) {            }        } : { get(): string; set(value: string): void; }
 +>hello : { get: () => string; set: (value: string) => void; }
 +>{            get() {                return "hi";            },            set(value: string) {            }        } : { get: () => string; set: (value: string) => void; }
- 
+
              get() {
  >get : () => string
 @@= skipped -37, +37 lines =@@
  });
- 
+
  vue;
 ->vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 +>vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
- 
+
  vue.x;
  >vue.x : number
 ->vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 +>vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
  >x : number
- 
+
  vue.f("abc");
  >vue.f("abc") : number
  >vue.f : (x: string) => number
@@ -330,16 +330,15 @@
 +>vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
  >f : (x: string) => number
  >"abc" : "abc"
- 
+
  vue.test;
  >vue.test : number
 ->vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 +>vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
  >test : number
- 
+
  vue.hello;
  >vue.hello : string
 ->vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 +>vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
  >hello : string
- 

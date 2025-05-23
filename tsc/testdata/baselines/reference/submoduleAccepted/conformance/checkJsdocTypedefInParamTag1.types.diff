@@ -2,7 +2,7 @@
 +++ new.checkJsdocTypedefInParamTag1.types
 @@= skipped -15, +15 lines =@@
  >opts : Opts
- 
+
      opts.x;
 ->opts.x : string
 +>opts.x : any
@@ -10,11 +10,11 @@
 ->x : string
 +>x : any
  }
- 
+
  foo({x: 'abc'});
 @@= skipped -24, +24 lines =@@
  >opts : AnotherOpts
- 
+
      opts.anotherX;
 ->opts.anotherX : string
 +>opts.anotherX : any
@@ -22,11 +22,11 @@
 ->anotherX : string
 +>anotherX : any
  }
- 
+
  foo1({anotherX: "world"});
 @@= skipped -26, +26 lines =@@
  >opts : Opts1
- 
+
      opts.x;
 ->opts.x : string
 +>opts.x : any

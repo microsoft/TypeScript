@@ -2,7 +2,7 @@
 +++ new.cloduleWithDuplicateMember2.js
 @@= skipped -13, +13 lines =@@
  }
- 
+
  //// [cloduleWithDuplicateMember2.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -2,7 +2,7 @@
 +++ new.indirectSelfReferenceGeneric.js
 @@= skipped -4, +4 lines =@@
  class b<T> extends a<T> { }
- 
+
  //// [indirectSelfReferenceGeneric.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.classPropertyErrorOnNameOnly.js
 @@= skipped -40, +40 lines =@@
  }
- 
+
  //// [classPropertyErrorOnNameOnly.js]
 -"use strict";
  // turn on strictNullChecks

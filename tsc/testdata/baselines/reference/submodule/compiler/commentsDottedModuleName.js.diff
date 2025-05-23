@@ -2,7 +2,7 @@
 +++ new.commentsDottedModuleName.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [commentsDottedModuleName.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -2,9 +2,9 @@
 +++ new.ambientInsideNonAmbientExternalModule.types
 @@= skipped -10, +10 lines =@@
  >C : C
- 
+
  export declare enum E { }
 ->E : E
 +>E : import("ambientInsideNonAmbientExternalModule").E
- 
+
  export declare module M { }

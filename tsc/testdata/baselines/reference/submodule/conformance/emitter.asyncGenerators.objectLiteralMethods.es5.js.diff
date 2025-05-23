@@ -1,8 +1,8 @@
 --- old.emitter.asyncGenerators.objectLiteralMethods.es5.js
 +++ new.emitter.asyncGenerators.objectLiteralMethods.es5.js
 @@= skipped -43, +43 lines =@@
- 
- 
+
+
  //// [O1.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
@@ -29,10 +29,8 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+const o1 = {
-+    async *f() {
-     }
- };
+-    }
+-};
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -53,8 +51,10 @@
 -                return [2 /*return*/];
 -            });
 -        });
--    }
--};
++const o1 = {
++    async *f() {
+     }
+ };
  //// [O2.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
@@ -81,11 +81,8 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+const o2 = {
-+    async *f() {
-+        const x = yield;
-     }
- };
+-    }
+-};
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -113,8 +110,11 @@
 -                }
 -            });
 -        });
--    }
--};
++const o2 = {
++    async *f() {
++        const x = yield;
+     }
+ };
  //// [O3.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
@@ -141,11 +141,8 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+const o3 = {
-+    async *f() {
-+        const x = yield 1;
-     }
- };
+-    }
+-};
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -173,8 +170,11 @@
 -                }
 -            });
 -        });
--    }
--};
++const o3 = {
++    async *f() {
++        const x = yield 1;
+     }
+ };
  //// [O4.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
@@ -201,11 +201,8 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+const o4 = {
-+    async *f() {
-+        const x = yield* [1];
-     }
- };
+-    }
+-};
 -var __asyncValues = (this && this.__asyncValues) || function (o) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
 -    var m = o[Symbol.asyncIterator], i;
@@ -256,8 +253,11 @@
 -                }
 -            });
 -        });
--    }
--};
++const o4 = {
++    async *f() {
++        const x = yield* [1];
+     }
+ };
  //// [O5.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
@@ -284,11 +284,8 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+const o5 = {
-+    async *f() {
-+        const x = yield* (async function* () { yield 1; })();
-     }
- };
+-    }
+-};
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -347,8 +344,11 @@
 -                }
 -            });
 -        });
--    }
--};
++const o5 = {
++    async *f() {
++        const x = yield* (async function* () { yield 1; })();
+     }
+ };
  //// [O6.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
@@ -375,11 +375,8 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+const o6 = {
-+    async *f() {
-+        const x = await 1;
-     }
- };
+-    }
+-};
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -406,8 +403,11 @@
 -                }
 -            });
 -        });
--    }
--};
++const o6 = {
++    async *f() {
++        const x = await 1;
+     }
+ };
  //// [O7.js]
 -var __generator = (this && this.__generator) || function (thisArg, body) {
 -    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
@@ -434,11 +434,8 @@
 -            op = body.call(thisArg, _);
 -        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-+const o7 = {
-+    async *f() {
-+        return 1;
-     }
- };
+-    }
+-};
 -var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 -var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
 -    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -462,5 +459,8 @@
 -                }
 -            });
 -        });
--    }
--};
++const o7 = {
++    async *f() {
++        return 1;
+     }
+ };

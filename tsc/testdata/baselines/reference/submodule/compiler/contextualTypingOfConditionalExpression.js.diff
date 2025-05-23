@@ -1,8 +1,8 @@
 --- old.contextualTypingOfConditionalExpression.js
 +++ new.contextualTypingOfConditionalExpression.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [contextualTypingOfConditionalExpression.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

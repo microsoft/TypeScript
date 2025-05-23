@@ -1,7 +1,7 @@
 --- old.complexNarrowingWithAny.js
 +++ new.complexNarrowingWithAny.js
 @@= skipped -562, +562 lines =@@
- 
+
  //// [complexNarrowingWithAny.js]
  "use strict";
 -// Repro from #10869

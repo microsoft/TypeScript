@@ -7,16 +7,16 @@
 ->_R : (_: infer R) => void
 +>_R : (_: R) => void
  >_ : R
- 
+
  type _E<T> = [T] extends [{ _E: () => infer E }] ? E : never;
  >_E : _E<T>
 ->_E : () => infer E
 +>_E : () => E
- 
+
  type _A<T> = [T] extends [{ _A: () => infer A }] ? A : never;
  >_A : _A<T>
 ->_A : () => infer A
 +>_A : () => A
- 
+
  interface Sync<R, E, A> {
    _R: (_: R) => void;

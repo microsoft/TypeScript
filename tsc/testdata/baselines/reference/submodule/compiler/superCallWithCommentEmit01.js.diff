@@ -2,7 +2,7 @@
 +++ new.superCallWithCommentEmit01.js
 @@= skipped -12, +12 lines =@@
  }
- 
+
  //// [superCallWithCommentEmit01.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,8 +1,8 @@
 --- old.tsxStatelessFunctionComponentOverload6.js
 +++ new.tsxStatelessFunctionComponentOverload6.js
 @@= skipped -59, +59 lines =@@
- 
- 
+
+
  //// [file.jsx]
 -define(["require", "exports", "react"], function (require, exports, React) {
 -    "use strict";

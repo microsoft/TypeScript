@@ -9,7 +9,7 @@
  >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
- 
+
  function bar(a = console.log) {
  >bar : Symbol(bar, Decl(functionWithDefaultParameterWithNoStatements9.ts, 0, 33))
  >a : Symbol(a, Decl(functionWithDefaultParameterWithNoStatements9.ts, 2, 13))

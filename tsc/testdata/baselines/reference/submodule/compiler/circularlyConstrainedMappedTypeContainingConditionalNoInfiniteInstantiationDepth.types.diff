@@ -2,7 +2,7 @@
 +++ new.circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.types
 @@= skipped -11, +11 lines =@@
  >context : any
- 
+
      readonly props: Readonly<P> & Readonly<{ children?: {} }>;
 ->props : Readonly<P> & Readonly<{ children?: {}; }>
 +>props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
@@ -17,4 +17,3 @@
 +>props : P & { children?: {} | undefined; }
  >children : {} | undefined
  >context : any
- 

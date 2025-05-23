@@ -1,7 +1,7 @@
 --- old.moduleAugmentationsImports3.symbols
 +++ new.moduleAugmentationsImports3.symbols
 @@= skipped -13, +13 lines =@@
- 
+
  let b = a.getB().x.toFixed();
  >b : Symbol(b, Decl(main.ts, 6, 3))
 ->a.getB().x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
@@ -11,7 +11,7 @@
 ->getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
 ->x : Symbol(B.x, Decl(b.ts, 0, 16))
 ->toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
- 
+
  let c = a.getCls().y.toLowerCase();
  >c : Symbol(c, Decl(main.ts, 7, 3))
 ->a.getCls().y.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
@@ -21,12 +21,11 @@
 ->getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
 ->y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 ->toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
- 
+
  === a.ts ===
  export class A {}
 ->A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
-+>A : Symbol(A, Decl(a.ts, 0, 0))
- 
+-
 -=== b.ts ===
 -export class B {x: number;}
 ->B : Symbol(B, Decl(b.ts, 0, 0))
@@ -40,29 +39,29 @@
 ->Cls : Symbol(Cls, Decl(c.d.ts, 0, 20))
 ->y : Symbol(Cls.y, Decl(c.d.ts, 1, 15))
 -}
--
++>A : Symbol(A, Decl(a.ts, 0, 0))
+
  === d.d.ts ===
  declare module "D" {
- >"D" : Symbol("D", Decl(d.d.ts, 0, 0))
 @@= skipped -47, +21 lines =@@
  >B : Symbol(B, Decl(d.d.ts, 2, 12))
- 
+
      module "a" {
 ->"a" : Symbol("a", Decl(a.ts, 0, 0), Decl(d.d.ts, 2, 24), Decl(e.ts, 4, 54))
 +>"a" : Symbol("a", Decl(d.d.ts, 2, 24))
- 
+
          interface A {
 ->A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
 +>A : Symbol(A, Decl(d.d.ts, 3, 16))
- 
+
              getB(): B;
 ->getB : Symbol(A.getB, Decl(d.d.ts, 4, 21))
 +>getB : Symbol(getB, Decl(d.d.ts, 4, 21))
  >B : Symbol(B, Decl(d.d.ts, 2, 12))
          }
-     }
- }
- 
+-    }
+-}
+-
 -=== e.ts ===
 -/// <reference path="c.d.ts" preserve="true"/>
 -import {A} from "./a";
@@ -88,6 +87,5 @@
 -        getCls(): Cls;
 ->getCls : Symbol(A.getCls, Decl(e.ts, 7, 17))
 ->Cls : Symbol(Cls, Decl(e.ts, 2, 8))
--    }
--}
--
+     }
+ }

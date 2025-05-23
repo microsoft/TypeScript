@@ -2,7 +2,7 @@
 +++ new.interfaceExtendingClass2.js
 @@= skipped -17, +17 lines =@@
      }
- 
+
  //// [interfaceExtendingClass2.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

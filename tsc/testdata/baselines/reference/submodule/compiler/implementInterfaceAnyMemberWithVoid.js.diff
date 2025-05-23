@@ -1,8 +1,8 @@
 --- old.implementInterfaceAnyMemberWithVoid.js
 +++ new.implementInterfaceAnyMemberWithVoid.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [implementInterfaceAnyMemberWithVoid.js]
 -var Bug = /** @class */ (function () {
 -    function Bug() {

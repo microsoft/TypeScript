@@ -1,17 +1,17 @@
 --- old.thisInObjectLiterals.types
 +++ new.thisInObjectLiterals.types
 @@= skipped -32, +32 lines =@@
- 
+
  //type of 'this' in an object literal method is the type of the object literal
  var obj = {
 ->obj : { f(): any; }
 ->{    f() {        return this.spaaace;    }} : { f(): any; }
 +>obj : { f: () => any; }
 +>{    f() {        return this.spaaace;    }} : { f: () => any; }
- 
+
      f() {
  >f : () => any
- 
+
          return this.spaaace;
  >this.spaaace : any
 ->this : { f(): any; }
@@ -23,4 +23,3 @@
 ->obj : { f(): any; }
 +>obj : { f: () => any; }
  >f : () => any
- 

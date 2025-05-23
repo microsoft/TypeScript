@@ -1,8 +1,8 @@
 --- old.esnextmodulekindWithES5Target.js
 +++ new.esnextmodulekindWithES5Target.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [esnextmodulekindWithES5Target.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

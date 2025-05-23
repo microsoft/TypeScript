@@ -1,8 +1,8 @@
 --- old.constructorWithIncompleteTypeAnnotation.js
 +++ new.constructorWithIncompleteTypeAnnotation.js
 @@= skipped -281, +281 lines =@@
- 
- 
+
+
  //// [constructorWithIncompleteTypeAnnotation.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -174,14 +174,14 @@
 -    };
 -    return CLASS;
 -}());
--// todo: use these
++    }
++}
+ // todo: use these
 -var A = /** @class */ (function () {
 -    function A() {
-     }
+-    }
 -    return A;
 -}());
-+}
-+// todo: use these
 +class A {
 +}
  method1(val, number);

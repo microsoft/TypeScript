@@ -1,7 +1,7 @@
 --- old.optionalBindingParametersInOverloads1.types
 +++ new.optionalBindingParametersInOverloads1.types
 @@= skipped -1, +1 lines =@@
- 
+
  === optionalBindingParametersInOverloads1.ts ===
  function foo([x, y, z] ?: [string, number, boolean]);
 ->foo : ([x, y, z]?: [string, number, boolean]) => any
@@ -9,14 +9,14 @@
  >x : string
  >y : number
  >z : boolean
- 
+
  function foo(...rest: any[]) {
 ->foo : ([x, y, z]?: [string, number, boolean]) => any
 +>foo : (__0?: [string, number, boolean]) => any
  >rest : any[]
- 
+
  }
- 
+
  foo(["", 0, false]);
  >foo(["", 0, false]) : any
 ->foo : ([x, y, z]?: [string, number, boolean]) => any
@@ -25,7 +25,7 @@
  >"" : ""
  >0 : 0
 @@= skipped -21, +21 lines =@@
- 
+
  foo([false, 0, ""]);
  >foo([false, 0, ""]) : any
 ->foo : ([x, y, z]?: [string, number, boolean]) => any

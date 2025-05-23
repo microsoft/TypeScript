@@ -1,8 +1,8 @@
 --- old.superCallInNonStaticMethod.js
 +++ new.superCallInNonStaticMethod.js
 @@= skipped -52, +52 lines =@@
- 
- 
+
+
  //// [superCallInNonStaticMethod.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var Doing = /** @class */ (function () {
 -    function Doing() {
-+class Doing {
-+    instanceMethod() {
-     }
+-    }
 -    Doing.prototype.instanceMethod = function () {
 -    };
 -    return Doing;
@@ -37,6 +35,9 @@
 -        _super.prototype.instanceMethod.call(_this);
 -        return _this;
 -    }
++class Doing {
++    instanceMethod() {
++    }
 +}
 +class Other extends Doing {
      // in instance method

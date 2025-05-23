@@ -2,7 +2,7 @@
 +++ new.fatarrowfunctionsErrors.js
 @@= skipped -14, +14 lines =@@
  var x4= (...a: any[]) { };
- 
+
  //// [fatarrowfunctionsErrors.js]
 -foo(function () {
 -    var Far = [];

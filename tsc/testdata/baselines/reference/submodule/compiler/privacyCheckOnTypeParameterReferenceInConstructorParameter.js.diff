@@ -1,8 +1,8 @@
 --- old.privacyCheckOnTypeParameterReferenceInConstructorParameter.js
 +++ new.privacyCheckOnTypeParameterReferenceInConstructorParameter.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [privacyCheckOnTypeParameterReferenceInConstructorParameter.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -27,6 +27,10 @@
 -//// [privacyCheckOnTypeParameterReferenceInConstructorParameter.d.ts]
 -export declare class A<T1> {
 -    constructor(callback: (self: A<T1>) => void);
+-}
+-export declare class B<T2> {
+-    constructor(parent: T2);
+-}
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.B = exports.A = void 0;
@@ -34,11 +38,9 @@
 +    constructor(callback) {
 +        var child = new B(this);
 +    }
- }
--export declare class B<T2> {
--    constructor(parent: T2);
++}
 +exports.A = A;
 +class B {
 +    constructor(parent) { }
- }
++}
 +exports.B = B;

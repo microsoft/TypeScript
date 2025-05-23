@@ -2,7 +2,7 @@
 +++ new.lateBoundDestructuringImplicitAnyError.js
 @@= skipped -30, +30 lines =@@
  void prop9;
- 
+
  //// [lateBoundDestructuringImplicitAnyError.js]
 -var named = "foo";
 -var _a = { prop: "foo" }, _b = named, prop = _a[_b];

@@ -9,7 +9,7 @@
      {
          return 42;
      }
- 
+
      public SetCount(value: number)
 ->SetCount : Symbol(MyClass.SetCount, Decl(out-flag.ts, 9, 5))
 +>SetCount : Symbol(SetCount, Decl(out-flag.ts, 9, 5))

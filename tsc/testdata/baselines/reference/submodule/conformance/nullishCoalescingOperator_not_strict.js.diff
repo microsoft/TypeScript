@@ -2,7 +2,7 @@
 +++ new.nullishCoalescingOperator_not_strict.js
 @@= skipped -22, +22 lines =@@
  const aa9 = a9 ?? 'whatever'
- 
+
  //// [nullishCoalescingOperator_not_strict.js]
 -var aa1 = a1 !== null && a1 !== void 0 ? a1 : 'whatever';
 -var aa2 = a2 !== null && a2 !== void 0 ? a2 : 'whatever';

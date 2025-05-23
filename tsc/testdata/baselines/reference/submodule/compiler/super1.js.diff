@@ -1,8 +1,8 @@
 --- old.super1.js
 +++ new.super1.js
 @@= skipped -68, +68 lines =@@
- 
- 
+
+
  //// [super1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -24,9 +24,7 @@
 -    function Base1() {
 -    }
 -    Base1.prototype.foo = function () {
-+class Base1 {
-+    foo() {
-         return "base";
+-        return "base";
 -    };
 -    return Base1;
 -}());
@@ -34,12 +32,9 @@
 -    __extends(Sub1, _super);
 -    function Sub1() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    Sub1.prototype.bar = function () {
-+}
-+class Sub1 extends Base1 {
-+    bar() {
-         return "base";
+-        return "base";
 -    };
 -    return Sub1;
 -}(Base1));
@@ -47,23 +42,32 @@
 -    __extends(SubSub1, _super);
 -    function SubSub1() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    SubSub1.prototype.bar = function () {
 -        return _super.prototype.super.foo;
 -    };
 -    return SubSub1;
 -}(Sub1));
--// Case 2
--var Base2 = /** @class */ (function () {
--    function Base2() {
++class Base1 {
++    foo() {
++        return "base";
++    }
++}
++class Sub1 extends Base1 {
++    bar() {
++        return "base";
++    }
 +}
 +class SubSub1 extends Sub1 {
 +    bar() {
 +        return super.super.foo;
-     }
--    Base2.prototype.foo = function () {
++    }
 +}
-+// Case 2
+ // Case 2
+-var Base2 = /** @class */ (function () {
+-    function Base2() {
+-    }
+-    Base2.prototype.foo = function () {
 +class Base2 {
 +    foo() {
          return "base";
@@ -74,23 +78,24 @@
 -    __extends(SubE2, _super);
 -    function SubE2() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    SubE2.prototype.bar = function () {
 -        return _super.prototype.prototype.foo = null;
 -    };
 -    return SubE2;
 -}(Base2));
--// Case 3
--var Base3 = /** @class */ (function () {
--    function Base3() {
++    }
 +}
 +class SubE2 extends Base2 {
 +    bar() {
 +        return super.prototype.foo = null;
-     }
--    Base3.prototype.foo = function () {
++    }
 +}
-+// Case 3
+ // Case 3
+-var Base3 = /** @class */ (function () {
+-    function Base3() {
+-    }
+-    Base3.prototype.foo = function () {
 +class Base3 {
 +    foo() {
          return "base";
@@ -101,12 +106,13 @@
 -    __extends(SubE3, _super);
 -    function SubE3() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    SubE3.prototype.bar = function () {
 -        return _super.prototype.bar.call(this);
 -    };
 -    return SubE3;
 -}(Base3));
++    }
 +}
 +class SubE3 extends Base3 {
 +    bar() {
@@ -130,12 +136,13 @@
 -        __extends(SubSub4, _super);
 -        function SubSub4() {
 -            return _super !== null && _super.apply(this, arguments) || this;
-         }
+-        }
 -        SubSub4.prototype.x = function () {
 -            return _super.prototype.x.call(this);
 -        };
 -        return SubSub4;
 -    }(Sub4));
++        }
 +    }
 +    class SubSub4 extends Sub4 {
 +        x() {

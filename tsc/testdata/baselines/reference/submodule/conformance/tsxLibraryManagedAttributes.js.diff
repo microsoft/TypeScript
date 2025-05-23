@@ -1,8 +1,8 @@
 --- old.tsxLibraryManagedAttributes.js
 +++ new.tsxLibraryManagedAttributes.js
 @@= skipped -127, +127 lines =@@
- 
- 
+
+
  //// [tsxLibraryManagedAttributes.jsx]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {

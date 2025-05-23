@@ -2,11 +2,11 @@
 +++ new.systemDefaultImportCallable.types
 @@= skipped -4, +4 lines =@@
  >core : typeof core
- 
+
      var String: {
 ->String : { repeat(text: string, count: number): string; }
 +>String : { repeat: (text: string, count: number) => string; }
- 
+
          repeat(text: string, count: number): string;
  >repeat : (text: string, count: number) => string
 @@= skipped -15, +15 lines =@@
@@ -19,5 +19,5 @@
 ->String : { repeat(text: string, count: number): string; }
 +>String : { repeat: (text: string, count: number) => string; }
  >repeat : (text: string, count: number) => string
- 
+
      export default repeat;

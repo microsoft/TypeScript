@@ -1,6 +1,6 @@
 --- old.regularExpressionScanning(target=es5).errors.txt
 +++ new.regularExpressionScanning(target=es5).errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -regularExpressionScanning.ts(3,7): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 -regularExpressionScanning.ts(3,9): error TS1501: This regular expression flag is only available when targeting 'es2018' or later.
 -regularExpressionScanning.ts(3,10): error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
@@ -731,5 +731,4 @@
 -!!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
 -    ];
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

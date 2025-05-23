@@ -2,7 +2,7 @@
 +++ new.parameterInitializerBeforeDestructuringEmit.types
 @@= skipped -9, +9 lines =@@
  }
- 
+
  function foobar({ bar = {}, ...opts }: Foo = {}) {
 ->foobar : ({ bar, ...opts }?: Foo) => void
 +>foobar : (__0?: Foo) => void

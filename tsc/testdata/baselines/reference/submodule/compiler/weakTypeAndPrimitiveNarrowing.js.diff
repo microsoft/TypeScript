@@ -1,8 +1,8 @@
 --- old.weakTypeAndPrimitiveNarrowing.js
 +++ new.weakTypeAndPrimitiveNarrowing.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [weakTypeAndPrimitiveNarrowing.js]
 -"use strict";
 -var g = function (arg) {

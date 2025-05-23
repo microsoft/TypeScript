@@ -6,7 +6,7 @@
  import foo = require('./importUsedInExtendsList1_require');
 ->foo : typeof foo
 +>foo : typeof import("importUsedInExtendsList1_require")
- 
+
  class Sub extends foo.Super { }
  >Sub : Sub
 ->foo.Super : foo.Super
@@ -15,6 +15,6 @@
 +>foo.Super : Super
 +>foo : typeof import("importUsedInExtendsList1_require")
 +>Super : typeof Super
- 
+
  var s: Sub;
  >s : Sub

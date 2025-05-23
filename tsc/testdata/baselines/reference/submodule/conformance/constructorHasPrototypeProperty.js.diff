@@ -2,7 +2,7 @@
 +++ new.constructorHasPrototypeProperty.js
 @@= skipped -33, +33 lines =@@
  }
- 
+
  //// [constructorHasPrototypeProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

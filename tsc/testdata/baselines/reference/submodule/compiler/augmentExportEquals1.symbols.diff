@@ -6,14 +6,13 @@
  >x : Symbol(x)
 ->A : Symbol(x.A)
 +>A : Symbol(A)
- 
+
  === file1.ts ===
  var x = 1;
 @@= skipped -20, +20 lines =@@
- 
+
      interface A { a }
  >A : Symbol(A, Decl(file2.ts, 4, 26))
 ->a : Symbol(A.a, Decl(file2.ts, 5, 17))
 +>a : Symbol(a, Decl(file2.ts, 5, 17))
  }
- 

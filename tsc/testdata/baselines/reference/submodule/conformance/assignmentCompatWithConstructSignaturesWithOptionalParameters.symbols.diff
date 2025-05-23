@@ -2,33 +2,33 @@
 +++ new.assignmentCompatWithConstructSignaturesWithOptionalParameters.symbols
 @@= skipped -6, +6 lines =@@
  >Base : Symbol(Base, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 0, 0))
- 
+
      a: new () => number;
 ->a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a2: new (x?: number) => number;
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
  >x : Symbol(x, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 13))
- 
+
      a3: new (x: number) => number;
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
  >x : Symbol(x, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 13))
- 
+
      a4: new (x: number, y?: number) => number;
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
  >x : Symbol(x, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 13))
  >y : Symbol(y, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 23))
- 
+
      a5: new (x?: number, y?: number) => number;
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
  >x : Symbol(x, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 13))
  >y : Symbol(y, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 24))
- 
+
      a6: new (x: number, y: number) => number;
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
@@ -36,7 +36,7 @@
  >y : Symbol(y, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 8, 23))
  }
 @@= skipped -34, +34 lines =@@
- 
+
      a = b.a; // ok
  >a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
@@ -44,7 +44,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a = b.a2; // ok
  >a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
@@ -52,7 +52,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
- 
+
      a = b.a3; // error
  >a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
@@ -60,7 +60,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
- 
+
      a = b.a4; // error
  >a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
@@ -68,7 +68,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
- 
+
      a = b.a5; // ok
  >a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
@@ -76,7 +76,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
- 
+
      a = b.a6; // error
  >a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 12, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
@@ -84,11 +84,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
- 
+
  var a2: new (x?: number) => number; 
  >a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 20, 3))
 @@= skipped -40, +40 lines =@@
- 
+
      a2 = b.a; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 20, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
@@ -96,7 +96,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a2 = b.a2; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 20, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
@@ -104,7 +104,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
- 
+
      a2 = b.a3; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 20, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
@@ -112,7 +112,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
- 
+
      a2 = b.a4; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 20, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
@@ -120,7 +120,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
- 
+
      a2 = b.a5; // ok
  >a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 20, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
@@ -128,7 +128,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
- 
+
      a2 = b.a6; // error
  >a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 20, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
@@ -136,11 +136,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
- 
+
  var a3: new (x: number) => number; 
  >a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 28, 3))
 @@= skipped -40, +40 lines =@@
- 
+
      a3 = b.a; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 28, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
@@ -148,7 +148,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a3 = b.a2; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 28, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
@@ -156,7 +156,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
- 
+
      a3 = b.a3; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 28, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
@@ -164,7 +164,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
- 
+
      a3 = b.a4; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 28, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
@@ -172,7 +172,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
- 
+
      a3 = b.a5; // ok
  >a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 28, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
@@ -180,7 +180,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
- 
+
      a3 = b.a6; // error
  >a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 28, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
@@ -188,11 +188,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
- 
+
  var a4: new (x: number, y?: number) => number;
  >a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 36, 3))
 @@= skipped -41, +41 lines =@@
- 
+
      a4 = b.a; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 36, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
@@ -200,7 +200,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a4 = b.a2; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 36, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
@@ -208,7 +208,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
- 
+
      a4 = b.a3; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 36, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
@@ -216,7 +216,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
- 
+
      a4 = b.a4; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 36, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
@@ -224,7 +224,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
- 
+
      a4 = b.a5; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 36, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
@@ -232,7 +232,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
- 
+
      a4 = b.a6; // ok
  >a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 36, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
@@ -240,11 +240,11 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
- 
+
  var a5: new (x?: number, y?: number) => number;
  >a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 44, 3))
 @@= skipped -41, +41 lines =@@
- 
+
      a5 = b.a; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 44, 3))
 ->b.a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
@@ -252,7 +252,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a : Symbol(Base.a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
 +>a : Symbol(a, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 2, 16))
- 
+
      a5 = b.a2; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 44, 3))
 ->b.a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
@@ -260,7 +260,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a2 : Symbol(Base.a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
 +>a2 : Symbol(a2, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 3, 24))
- 
+
      a5 = b.a3; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 44, 3))
 ->b.a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
@@ -268,7 +268,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a3 : Symbol(Base.a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
 +>a3 : Symbol(a3, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 4, 35))
- 
+
      a5 = b.a4; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 44, 3))
 ->b.a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
@@ -276,7 +276,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a4 : Symbol(Base.a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
 +>a4 : Symbol(a4, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 5, 34))
- 
+
      a5 = b.a5; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 44, 3))
 ->b.a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
@@ -284,7 +284,7 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a5 : Symbol(Base.a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
 +>a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 6, 46))
- 
+
      a5 = b.a6; // ok
  >a5 : Symbol(a5, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 44, 3))
 ->b.a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
@@ -292,4 +292,3 @@
  >b : Symbol(b, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 10, 3))
 ->a6 : Symbol(Base.a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
 +>a6 : Symbol(a6, Decl(assignmentCompatWithConstructSignaturesWithOptionalParameters.ts, 7, 47))
- 

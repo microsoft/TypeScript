@@ -2,7 +2,7 @@
 +++ new.funduleUsedAcrossFileBoundary.symbols
 @@= skipped -14, +14 lines =@@
  >T : Symbol(T, Decl(funduleUsedAcrossFileBoundary_file1.ts, 2, 22))
- 
+
          foo: string;
 ->foo : Symbol(Promise.foo, Decl(funduleUsedAcrossFileBoundary_file1.ts, 2, 26))
 +>foo : Symbol(foo, Decl(funduleUsedAcrossFileBoundary_file1.ts, 2, 26))
@@ -16,7 +16,7 @@
 ->Promise : Symbol(Q.Promise, Decl(funduleUsedAcrossFileBoundary_file1.ts, 1, 18))
 +>Promise : Symbol(Promise, Decl(funduleUsedAcrossFileBoundary_file1.ts, 1, 18))
  >T : Symbol(T, Decl(funduleUsedAcrossFileBoundary_file2.ts, 0, 33))
- 
+
      var deferred = Q.defer<T>(); // used to be an error
  >deferred : Symbol(deferred, Decl(funduleUsedAcrossFileBoundary_file2.ts, 1, 7))
 ->Q.defer : Symbol(Q.defer, Decl(funduleUsedAcrossFileBoundary_file1.ts, 4, 5))

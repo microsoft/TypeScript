@@ -2,12 +2,12 @@
 +++ new.tsxInvokeComponentType.types
 @@= skipped -6, +6 lines =@@
  >ComponentType : any
- 
+
  declare const Elem: ComponentType<{ someKey: string }>;
 ->Elem : React.ComponentType<{ someKey: string; }>
 +>Elem : ComponentType<{ someKey: string; }>
  >someKey : string
- 
+
  const bad = <Elem />;
 ->bad : JSX.Element
 -><Elem /> : JSX.Element
@@ -15,7 +15,7 @@
 +>bad : Element
 +><Elem /> : Element
 +>Elem : ComponentType<{ someKey: string; }>
- 
+
  const good = <Elem someKey="ok" />;
 ->good : JSX.Element
 -><Elem someKey="ok" /> : JSX.Element
@@ -24,12 +24,12 @@
 +><Elem someKey="ok" /> : Element
 +>Elem : ComponentType<{ someKey: string; }>
  >someKey : string
- 
+
  declare const Elem2: ComponentType<{ opt?: number }>;
 ->Elem2 : React.ComponentType<{ opt?: number; }>
 +>Elem2 : ComponentType<{ opt?: number | undefined; }>
  >opt : number | undefined
- 
+
  const alsoOk = <Elem2>text</Elem2>;
 ->alsoOk : JSX.Element
 -><Elem2>text</Elem2> : JSX.Element
@@ -39,4 +39,3 @@
 +><Elem2>text</Elem2> : Element
 +>Elem2 : ComponentType<{ opt?: number | undefined; }>
 +>Elem2 : ComponentType<{ opt?: number | undefined; }>
- 

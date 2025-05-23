@@ -2,7 +2,7 @@
 +++ new.callbackTagVariadicType.types
 @@= skipped -13, +13 lines =@@
  >1 : 1
- 
+
  var res = x('a', 'b')
 ->res : number
 ->x('a', 'b') : number

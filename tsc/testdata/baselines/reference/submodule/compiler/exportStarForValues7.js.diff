@@ -2,7 +2,7 @@
 +++ new.exportStarForValues7.js
 @@= skipped -11, +11 lines =@@
  export var x = 1;
- 
+
  //// [file1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

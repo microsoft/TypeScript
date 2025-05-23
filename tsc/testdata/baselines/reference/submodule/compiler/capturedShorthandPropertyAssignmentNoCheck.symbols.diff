@@ -2,7 +2,7 @@
 +++ new.capturedShorthandPropertyAssignmentNoCheck.symbols
 @@= skipped -7, +7 lines =@@
  >value : Symbol(value, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 1, 10))
- 
+
      fns.push(() => ({ value }));
 ->fns.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>fns.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -20,7 +20,7 @@
 +>map : Symbol(map, Decl(lib.es5.d.ts, --, --))
  >fn : Symbol(fn, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 4, 23))
  >fn : Symbol(fn, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 4, 23))
- 
+
  console.log(result)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
@@ -28,4 +28,3 @@
 ->log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 +>log : Symbol(log, Decl(lib.dom.d.ts, --, --))
  >result : Symbol(result, Decl(capturedShorthandPropertyAssignmentNoCheck.ts, 4, 5))
- 

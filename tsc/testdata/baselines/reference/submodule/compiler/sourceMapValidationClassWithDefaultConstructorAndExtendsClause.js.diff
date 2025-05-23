@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [sourceMapValidationClassWithDefaultConstructorAndExtendsClause.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

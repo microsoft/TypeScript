@@ -2,7 +2,7 @@
 +++ new.topLevelLambda2.js
 @@= skipped -5, +5 lines =@@
  foo(()=>this.window);
- 
+
  //// [topLevelLambda2.js]
 -var _this = this;
  function foo(x) { }

@@ -3,7 +3,7 @@
 @@= skipped -2365, +2365 lines =@@
      }
  }
- 
+
 +//// [typescript.js]
  //// [parserRealSource11.js]
  // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 

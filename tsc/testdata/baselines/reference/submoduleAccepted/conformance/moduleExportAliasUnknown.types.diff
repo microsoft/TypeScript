@@ -17,4 +17,3 @@
 +>exports : typeof import("bug27025")
  >foo : any
  >bar : any
- 

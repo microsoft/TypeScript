@@ -11,8 +11,8 @@
 -assignmentCompatability_checking-call-member-off-of-function-interface.ts(25,4): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Callable'.
 -  Property 'call' is missing in type '{}' but required in type 'Callable'.
 +assignmentCompatability_checking-call-member-off-of-function-interface.ts(25,4): error TS2741: Property 'call' is missing in type '{}' but required in type 'Callable'.
- 
- 
+
+
  ==== assignmentCompatability_checking-call-member-off-of-function-interface.ts (8 errors) ====
 @@= skipped -44, +42 lines =@@
  !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'Callable'.

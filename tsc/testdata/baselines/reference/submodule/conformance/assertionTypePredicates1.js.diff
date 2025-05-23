@@ -1,8 +1,8 @@
 --- old.assertionTypePredicates1.js
 +++ new.assertionTypePredicates1.js
 @@= skipped -260, +260 lines =@@
- 
- 
+
+
  //// [assertionTypePredicates1.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -89,7 +89,7 @@
 -        var _this = _super !== null && _super.apply(this, arguments) || this;
 -        _this.z = 0;
 -        return _this;
-     }
+-    }
 -    return Test2;
 -}(Test));
 -var Derived = /** @class */ (function (_super) {
@@ -99,6 +99,7 @@
 -    }
 -    Derived.prototype.foo = function (x) {
 -        _super.prototype.assert.call(this, typeof x === "string");
++    }
 +}
 +class Test2 extends Test {
 +    z = 0;
@@ -167,14 +168,10 @@
 -var TestPropertyDeclaration2 = /** @class */ (function () {
 -    function TestPropertyDeclaration2() {
 -        this.assert = function (value) { };
-     }
+-    }
 -    TestPropertyDeclaration2.prototype.other = function (x) {
-+}
-+class TestPropertyDeclaration2 {
-+    assert = (value) => { };
-+    other(x) {
-         this.assert(x); // ok
-         x;
+-        this.assert(x); // ok
+-        x;
 -    };
 -    return TestPropertyDeclaration2;
 -}());
@@ -182,16 +179,26 @@
 -    __extends(ChildInheritedPropertyDeclaration, _super);
 -    function ChildInheritedPropertyDeclaration() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    ChildInheritedPropertyDeclaration.prototype.other = function (x) {
-+}
-+class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
-+    other(x) {
-         this.assert(x); // ok
-         x;
+-        this.assert(x); // ok
+-        x;
 -    };
 -    return ChildInheritedPropertyDeclaration;
 -}(ParentInheritedPropertyDeclaration));
++    }
++}
++class TestPropertyDeclaration2 {
++    assert = (value) => { };
++    other(x) {
++        this.assert(x); // ok
++        x;
++    }
++}
++class ChildInheritedPropertyDeclaration extends ParentInheritedPropertyDeclaration {
++    other(x) {
++        this.assert(x); // ok
++        x;
 +    }
 +}
  function testPropertySignature(x, y) {

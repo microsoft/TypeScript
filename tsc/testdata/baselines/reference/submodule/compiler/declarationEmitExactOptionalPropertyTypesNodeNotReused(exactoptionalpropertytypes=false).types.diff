@@ -2,7 +2,7 @@
 +++ new.declarationEmitExactOptionalPropertyTypesNodeNotReused(exactoptionalpropertytypes=false).types
 @@= skipped -27, +27 lines =@@
  >Out : Out
- 
+
  const foo = <A = {}>() => (x: Out & A) => null
 ->foo : <A = {}>() => (x: Out & A) => null
 -><A = {}>() => (x: Out & A) => null : <A = {}>() => (x: Out & A) => null
@@ -11,10 +11,9 @@
 +><A = {}>() => (x: Out & A) => null : <A>() => (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
 +>(x: Out & A) => null : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
  >x : { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A
- 
+
  export const baddts = foo()
  >baddts : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
  >foo() : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
 ->foo : <A = {}>() => (x: Out & A) => null
 +>foo : <A>() => (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A) => null
- 

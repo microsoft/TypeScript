@@ -1,7 +1,7 @@
 --- old.declarationEmitMixinPrivateProtected.js
 +++ new.declarationEmitMixinPrivateProtected.js
 @@= skipped -35, +35 lines =@@
- 
+
  //// [first.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -86,11 +86,12 @@
 -    __extends(default_1, _super);
 -    function default_1() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    default_1.prototype._onDispose = function () {
 -    };
 -    return default_1;
 -}(mix(DisposableMixin)));
++    }
 +    _assertIsStripped() {
 +    }
 +};

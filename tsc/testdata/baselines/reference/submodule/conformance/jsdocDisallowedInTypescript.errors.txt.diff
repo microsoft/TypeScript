@@ -42,9 +42,11 @@
 -jsdocDisallowedInTypescript.ts(20,16): error TS17020: '?' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number | null | undefined'?
 -jsdocDisallowedInTypescript.ts(21,16): error TS17020: '!' at the start of a type is not valid TypeScript syntax. Did you mean to write 'number'?
 -jsdocDisallowedInTypescript.ts(22,17): error TS8020: JSDoc types can only be used inside documentation comments.
- 
- 
+-
+-
 -==== jsdocDisallowedInTypescript.ts (16 errors) ====
++
++
 +==== jsdocDisallowedInTypescript.ts (26 errors) ====
      // grammar error from checker
      var ara: Array.<number> = [1,2,3];

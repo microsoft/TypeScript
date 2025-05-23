@@ -3,7 +3,7 @@
 @@= skipped -8, +8 lines =@@
  >foo() : Lib
  >foo : () => Lib
- 
+
 -=== /types/lib/index.d.ts ===
 -interface Lib { x }
 ->x : any

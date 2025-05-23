@@ -80,9 +80,11 @@
  staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 -staticPropertyNameConflicts.ts(340,16): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'.
 -staticPropertyNameConflicts.ts(346,12): error TS2699: Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'ExportedStaticArgumentsFn'.
- 
- 
+-
+-
 -==== staticPropertyNameConflicts.ts (74 errors) ====
++
++
 +==== staticPropertyNameConflicts.ts (26 errors) ====
      const FunctionPropertyNames = {
          name: 'name',

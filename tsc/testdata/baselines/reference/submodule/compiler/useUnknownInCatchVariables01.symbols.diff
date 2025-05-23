@@ -18,7 +18,7 @@
      if (e instanceof Error) {
  >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
  >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- 
+
          e.stack?.toUpperCase();
 ->e.stack?.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 ->e.stack : Symbol(Error.stack, Decl(lib.es5.d.ts, --, --))
@@ -32,13 +32,13 @@
      }
      if (typeof e === "number") {
  >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
- 
+
          e.toExponential();
 ->e.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 +>e.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
  >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))
 ->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 +>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
- 
+
          e++;
  >e : Symbol(e, Decl(useUnknownInCatchVariables01.ts, 3, 7))

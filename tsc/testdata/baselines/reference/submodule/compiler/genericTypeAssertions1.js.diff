@@ -2,7 +2,7 @@
 +++ new.genericTypeAssertions1.js
 @@= skipped -6, +6 lines =@@
  var r2: A<number> = <A<A<number>>>foo; // error
- 
+
  //// [genericTypeAssertions1.js]
 -var A = /** @class */ (function () {
 -    function A() {

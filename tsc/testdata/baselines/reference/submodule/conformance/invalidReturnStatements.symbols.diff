@@ -1,20 +1,20 @@
 --- old.invalidReturnStatements.symbols
 +++ new.invalidReturnStatements.symbols
 @@= skipped -19, +19 lines =@@
- 
+
  interface I { id: number }
  >I : Symbol(I, Decl(invalidReturnStatements.ts, 5, 24))
 ->id : Symbol(I.id, Decl(invalidReturnStatements.ts, 7, 13))
 +>id : Symbol(id, Decl(invalidReturnStatements.ts, 7, 13))
- 
+
  class C implements I {
  >C : Symbol(C, Decl(invalidReturnStatements.ts, 7, 26))
  >I : Symbol(I, Decl(invalidReturnStatements.ts, 5, 24))
- 
+
      id: number;
 ->id : Symbol(C.id, Decl(invalidReturnStatements.ts, 8, 22))
 +>id : Symbol(id, Decl(invalidReturnStatements.ts, 8, 22))
- 
+
      dispose() {}
 ->dispose : Symbol(C.dispose, Decl(invalidReturnStatements.ts, 9, 15))
 +>dispose : Symbol(dispose, Decl(invalidReturnStatements.ts, 9, 15))
@@ -22,7 +22,7 @@
  class D extends C {
  >D : Symbol(D, Decl(invalidReturnStatements.ts, 11, 1))
  >C : Symbol(C, Decl(invalidReturnStatements.ts, 7, 26))
- 
+
      name: string;
 ->name : Symbol(D.name, Decl(invalidReturnStatements.ts, 12, 19))
 +>name : Symbol(name, Decl(invalidReturnStatements.ts, 12, 19))

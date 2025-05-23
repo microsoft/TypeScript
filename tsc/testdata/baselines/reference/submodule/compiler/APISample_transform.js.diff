@@ -1,7 +1,7 @@
 --- old.APISample_transform.js
 +++ new.APISample_transform.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [APISample_transform.js]
  "use strict";
 -/*

@@ -2,7 +2,7 @@
 +++ new.parserES3Accessors1.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [parserES3Accessors1.js]
 -var C = /** @class */ (function () {
 -    function C() {

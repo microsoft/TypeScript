@@ -1,8 +1,7 @@
 --- old.modulePreserve2.errors.txt
 +++ new.modulePreserve2.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +/main.js(1,10): error TS2305: Module '"/node_modules/dep/require"' has no exported member 'esm'.
 +
 +

@@ -2,7 +2,7 @@
 +++ new.privateStaticMemberAccessibility.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [privateStaticMemberAccessibility.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

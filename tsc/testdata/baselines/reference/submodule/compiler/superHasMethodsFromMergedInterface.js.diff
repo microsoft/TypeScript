@@ -1,8 +1,8 @@
 --- old.superHasMethodsFromMergedInterface.js
 +++ new.superHasMethodsFromMergedInterface.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [superHasMethodsFromMergedInterface.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,13 +21,7 @@
 -})();
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    m1() { }
-+}
-+class Sub extends C {
-+    m3() {
-+        super.m2();
-     }
+-    }
 -    C.prototype.m1 = function () { };
 -    return C;
 -}());
@@ -41,4 +35,11 @@
 -    };
 -    return Sub;
 -}(C));
++class C {
++    m1() { }
++}
++class Sub extends C {
++    m3() {
++        super.m2();
++    }
 +}

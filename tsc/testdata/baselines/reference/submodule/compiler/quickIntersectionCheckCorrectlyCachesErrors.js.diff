@@ -1,7 +1,7 @@
 --- old.quickIntersectionCheckCorrectlyCachesErrors.js
 +++ new.quickIntersectionCheckCorrectlyCachesErrors.js
 @@= skipped -17, +17 lines =@@
- 
+
  //// [quickIntersectionCheckCorrectlyCachesErrors.js]
  "use strict";
 -var __assign = (this && this.__assign) || function () {

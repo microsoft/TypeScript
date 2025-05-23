@@ -2,14 +2,14 @@
 +++ new.typeFromPropertyAssignment35.types
 @@= skipped -6, +6 lines =@@
  >x : D
- 
+
      x._model
 ->x._model : number
 +>x._model : any
  >x : D
 ->_model : number
 +>_model : any
- 
+
      const y = new Emu.D()
 ->y : D
 ->new Emu.D() : D
@@ -21,7 +21,7 @@
 +>Emu.D : any
 +>Emu : {}
 +>D : any
- 
+
      const z = Emu.D._wrapperInstance;
 ->z : string
 ->Emu.D._wrapperInstance : string
@@ -45,7 +45,7 @@
 +>Emu : {}
 +>D : any
  >class {    constructor() {        this._model = 1    }} : typeof D
- 
+
      constructor() {
          this._model = 1
  >this._model = 1 : 1
@@ -57,13 +57,13 @@
  >1 : 1
      }
  }
- 
+
  === second.js ===
  var Emu = {}
 ->Emu : typeof Emu
 +>Emu : {}
  >{} : {}
- 
+
  /** @type {string} */
  Emu.D._wrapperInstance;
 ->Emu.D._wrapperInstance : string
@@ -76,5 +76,4 @@
 +>Emu : {}
 +>D : any
 +>_wrapperInstance : any
- 
- 
+

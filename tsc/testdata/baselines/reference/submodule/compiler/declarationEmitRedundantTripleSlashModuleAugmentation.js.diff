@@ -1,6 +1,6 @@
 --- old.declarationEmitRedundantTripleSlashModuleAugmentation.js
 +++ new.declarationEmitRedundantTripleSlashModuleAugmentation.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declarationEmitRedundantTripleSlashModuleAugmentation.ts] ////
 -
 -//// [index.d.ts]
@@ -41,5 +41,4 @@
 -    augmentation: Augmentation;
 -    options: FooOptions;
 -}
-@@= skipped --1, +1 lines =@@
 +<no content>

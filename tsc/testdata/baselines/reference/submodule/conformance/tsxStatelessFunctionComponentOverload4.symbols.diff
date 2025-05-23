@@ -6,7 +6,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
  >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
 @@= skipped -8, +8 lines =@@
@@ -15,7 +15,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  let obj = {
  >obj : Symbol(obj, Decl(file.tsx, 4, 3))
 @@= skipped -66, +66 lines =@@
@@ -24,7 +24,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
  >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
 @@= skipped -8, +8 lines =@@
@@ -33,14 +33,14 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  // Error
  const d1 = <TestingOneThing extra-data />
  >d1 : Symbol(d1, Decl(file.tsx, 24, 5))
  >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 18, 37), Decl(file.tsx, 20, 73))
 ->extra-data : Symbol(extra-data, Decl(file.tsx, 24, 27))
 +>extra-data : Symbol("extra-data", Decl(file.tsx, 24, 27))
- 
+
  const d2 = <TestingOneThing yy="hello" direction="left" />
  >d2 : Symbol(d2, Decl(file.tsx, 25, 5))
 @@= skipped -20, +20 lines =@@
@@ -49,7 +49,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
  >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
 @@= skipped -9, +9 lines =@@
@@ -61,7 +61,7 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
  >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 25, 58), Decl(file.tsx, 27, 77), Decl(file.tsx, 28, 100))
 @@= skipped -11, +11 lines =@@
@@ -70,6 +70,6 @@
  >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 ->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 +>Element : Symbol(Element, Decl(react.d.ts, 2356, 27))
- 
+
  // Error
  const e1 = <TestingOptional y1 y3="hello"/>

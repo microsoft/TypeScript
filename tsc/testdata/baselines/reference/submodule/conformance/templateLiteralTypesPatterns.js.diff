@@ -58,14 +58,15 @@
  function ff1(x) {
 -    var s1 = x && 42; // number
 -    var s2 = x || 42; // `${string}-${string}`
-+    let s1 = x && 42; // number
-+    let s2 = x || 42; // `${string}-${string}`
- }
+-}
 -var AA = /** @class */ (function () {
 -    function AA() {
 -    }
 -    return AA;
 -}());
++    let s1 = x && 42; // number
++    let s2 = x || 42; // `${string}-${string}`
++}
 +class AA {
 +}
  exports.AA = AA;

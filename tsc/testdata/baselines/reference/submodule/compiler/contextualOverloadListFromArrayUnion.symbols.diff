@@ -1,25 +1,27 @@
 --- old.contextualOverloadListFromArrayUnion.symbols
 +++ new.contextualOverloadListFromArrayUnion.symbols
 @@= skipped -5, +5 lines =@@
- 
+
  export const yThen = y.map(item => item.length);
  >yThen : Symbol(yThen, Decl(one.ts, 1, 12))
 ->y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 +>y.map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >y : Symbol(y, Decl(one.ts, 0, 13))
 ->map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-+>map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
- >item : Symbol(item, Decl(one.ts, 1, 27))
+->item : Symbol(item, Decl(one.ts, 1, 27))
 ->item.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
-+>item.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- >item : Symbol(item, Decl(one.ts, 1, 27))
+->item : Symbol(item, Decl(one.ts, 1, 27))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
++>map : Symbol(map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>item : Symbol(item, Decl(one.ts, 1, 27))
++>item.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
++>item : Symbol(item, Decl(one.ts, 1, 27))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 
+
  === two.ts ===
  declare const y: number[][] | string[];
 @@= skipped -14, +14 lines =@@
- 
+
  export const yThen = y.map(item => item.length);
  >yThen : Symbol(yThen, Decl(two.ts, 1, 12))
 ->y.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
@@ -40,11 +42,11 @@
 ->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >result : Symbol(result, Decl(three.ts, 30, 24))
- 
+
                      next()
 @@= skipped -41, +41 lines =@@
  >error : Symbol(error, Decl(three.ts, 49, 4))
- 
+
          console.error(error)
 ->console.error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
 +>console.error : Symbol(error, Decl(lib.dom.d.ts, --, --))
@@ -52,7 +54,7 @@
 ->error : Symbol(Console.error, Decl(lib.dom.d.ts, --, --))
 +>error : Symbol(error, Decl(lib.dom.d.ts, --, --))
  >error : Symbol(error, Decl(three.ts, 49, 4))
- 
+
      } else {
          console.log(results)
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

@@ -2,7 +2,7 @@
 +++ new.methodSignatureDeclarationEmit1.js
 @@= skipped -8, +8 lines =@@
  }
- 
+
  //// [methodSignatureDeclarationEmit1.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -2,7 +2,7 @@
 +++ new.narrowingByDiscriminantInLoop.js
 @@= skipped -87, +87 lines =@@
  }
- 
+
  //// [narrowingByDiscriminantInLoop.js]
 -// Repro from #9977
  function insertInterface(callbackType) {

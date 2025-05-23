@@ -1,8 +1,8 @@
 --- old.tsxPreserveEmit1.js
 +++ new.tsxPreserveEmit1.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [test.jsx]
 -define(["require", "exports", "react", "react-router"], function (require, exports, React, ReactRouter) {
 -    "use strict";

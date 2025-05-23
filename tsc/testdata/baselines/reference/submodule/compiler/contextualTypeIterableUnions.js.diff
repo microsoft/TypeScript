@@ -1,8 +1,8 @@
 --- old.contextualTypeIterableUnions.js
 +++ new.contextualTypeIterableUnions.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [contextualTypeIterableUnions.js]
 -"use strict";
  new DMap([["1", 2]]);

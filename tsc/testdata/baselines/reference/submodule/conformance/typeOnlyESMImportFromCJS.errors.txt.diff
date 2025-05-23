@@ -1,6 +1,6 @@
 --- old.typeOnlyESMImportFromCJS.errors.txt
 +++ new.typeOnlyESMImportFromCJS.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -common.cts(1,21): error TS1541: Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
 -common.cts(4,25): error TS1542: Type import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.
 -
@@ -20,5 +20,4 @@
 -    type _2 = typeof import("./module.mts", { with: { "resolution-mode": "import" } });
 -    type _3 = typeof import("./module.mts", { with: { "resolution-mode": "require" } });
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

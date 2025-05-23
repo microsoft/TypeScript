@@ -2,7 +2,7 @@
 +++ new.es5-asyncFunctionForStatements.js
 @@= skipped -31, +31 lines =@@
  }
- 
+
  //// [es5-asyncFunctionForStatements.js]
 -function forStatement0() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -13,11 +13,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function forStatement0() {
-+    for (x; y; z) {
-+        a;
-+    }
- }
+-}
 -function forStatement1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -37,11 +33,7 @@
 -            }
 -        });
 -    });
-+async function forStatement1() {
-+    for (await x; y; z) {
-+        a;
-+    }
- }
+-}
 -function forStatement2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -61,11 +53,7 @@
 -            }
 -        });
 -    });
-+async function forStatement2() {
-+    for (x; await y; z) {
-+        a;
-+    }
- }
+-}
 -function forStatement3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -85,11 +73,7 @@
 -            }
 -        });
 -    });
-+async function forStatement3() {
-+    for (x; y; await z) {
-+        a;
-+    }
- }
+-}
 -function forStatement4() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        return __generator(this, function (_a) {
@@ -110,11 +94,7 @@
 -            }
 -        });
 -    });
-+async function forStatement4() {
-+    for (x; y; z) {
-+        await a;
-+    }
- }
+-}
 -function forStatement5() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var b;
@@ -125,11 +105,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function forStatement5() {
-+    for (var b; y; z) {
-+        a;
-+    }
- }
+-}
 -function forStatement6() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var c;
@@ -140,6 +116,36 @@
 -            return [2 /*return*/];
 -        });
 -    });
++async function forStatement0() {
++    for (x; y; z) {
++        a;
++    }
++}
++async function forStatement1() {
++    for (await x; y; z) {
++        a;
++    }
++}
++async function forStatement2() {
++    for (x; await y; z) {
++        a;
++    }
++}
++async function forStatement3() {
++    for (x; y; await z) {
++        a;
++    }
++}
++async function forStatement4() {
++    for (x; y; z) {
++        await a;
++    }
++}
++async function forStatement5() {
++    for (var b; y; z) {
++        a;
++    }
++}
 +async function forStatement6() {
 +    for (var c = x; y; z) {
 +        a;

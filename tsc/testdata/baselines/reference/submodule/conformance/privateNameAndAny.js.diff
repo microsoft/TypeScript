@@ -1,8 +1,8 @@
 --- old.privateNameAndAny.js
 +++ new.privateNameAndAny.js
 @@= skipped -29, +29 lines =@@
- 
- 
+
+
  //// [privateNameAndAny.js]
 -"use strict";
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {

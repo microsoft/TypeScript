@@ -15,32 +15,33 @@
 -    A.X = X;
 -    return A;
 -}());
--exports.A = A;
++class X {
++}
++class A {
++    static X = X;
++}
+ exports.A = A;
 -var Y = /** @class */ (function () {
 -    function Y() {
 -    }
 -    return Y;
 -}());
--exports.Y = Y;
++class Y {
++}
+ exports.Y = Y;
 -
 -
 -//// [declarationEmitLocalClassHasRequiredDeclare.d.ts]
 -export declare namespace A {
 -    namespace X { }
-+class X {
- }
+-}
 -declare class X {
-+class A {
-+    static X = X;
- }
+-}
 -export declare class A {
 -    static X: typeof X;
-+exports.A = A;
-+class Y {
- }
+-}
 -export declare namespace Y {
 -}
 -export declare class Y {
 -}
 -export {};
-+exports.Y = Y;

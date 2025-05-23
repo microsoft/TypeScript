@@ -2,7 +2,7 @@
 +++ new.augmentedTypeBracketAccessIndexSignature.types
 @@= skipped -17, +17 lines =@@
  }
- 
+
  var a = {}[0]; // Should be Foo
 ->a : error
 ->{}[0] : error
@@ -10,7 +10,7 @@
 +>{}[0] : any
  >{} : {}
  >0 : 0
- 
+
  var b = (() => { })[0]; // Should be Bar
 ->b : error
 ->(() => { })[0] : error

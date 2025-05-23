@@ -1,8 +1,8 @@
 --- old.classExpressionExtendingAbstractClass.js
 +++ new.classExpressionExtendingAbstractClass.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [classExpressionExtendingAbstractClass.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

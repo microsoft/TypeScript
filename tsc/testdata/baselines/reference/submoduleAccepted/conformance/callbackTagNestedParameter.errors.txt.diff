@@ -1,8 +1,7 @@
 --- old.callbackTagNestedParameter.errors.txt
 +++ new.callbackTagNestedParameter.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +cb_nested.js(11,12): error TS2304: Cannot find name 'WorksWithPeopleCallback'.
 +
 +

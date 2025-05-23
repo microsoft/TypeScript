@@ -2,7 +2,7 @@
 +++ new.genericOfACloduleType2.types
 @@= skipped -40, +40 lines =@@
  >N : typeof N
- 
+
      var g2 = new G<M.C>()
 ->g2 : G<M.C>
 ->new G<M.C>() : G<M.C>

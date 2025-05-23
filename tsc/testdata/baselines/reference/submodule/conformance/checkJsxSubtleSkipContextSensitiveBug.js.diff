@@ -1,7 +1,7 @@
 --- old.checkJsxSubtleSkipContextSensitiveBug.js
 +++ new.checkJsxSubtleSkipContextSensitiveBug.js
 @@= skipped -27, +27 lines =@@
- 
+
  //// [checkJsxSubtleSkipContextSensitiveBug.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -72,11 +72,12 @@
 -            return [2 /*return*/, { success: true }];
 -        });
 -    });
+-}
+-var loader = React.createElement(AsyncLoader, { prop1: load, prop2: function (result) { return result; } });
 +const React = require("react");
 +class AsyncLoader extends React.Component {
 +    render() { return null; }
- }
--var loader = React.createElement(AsyncLoader, { prop1: load, prop2: function (result) { return result; } });
++}
 +async function load() {
 +    return { success: true };
 +}

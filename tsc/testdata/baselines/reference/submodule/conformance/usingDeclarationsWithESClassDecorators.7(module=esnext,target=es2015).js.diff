@@ -1,8 +1,8 @@
 --- old.usingDeclarationsWithESClassDecorators.7(module=esnext,target=es2015).js
 +++ new.usingDeclarationsWithESClassDecorators.7(module=esnext,target=es2015).js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [usingDeclarationsWithESClassDecorators.7.js]
 -let C = (() => {
 -    let _classDecorators = [dec];

@@ -2,7 +2,7 @@
 +++ new.readonlyFloat32ArrayAssignableWithFloat32Array.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [readonlyFloat32ArrayAssignableWithFloat32Array.js]
 -"use strict";
  function update(b) {

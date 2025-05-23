@@ -1,8 +1,8 @@
 --- old.enumExportMergingES6.js
 +++ new.enumExportMergingES6.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [enumExportMergingES6.js]
 -export var Animals;
 +export { Animals };

@@ -1,8 +1,8 @@
 --- old.mixinPrivateAndProtected.js
 +++ new.mixinPrivateAndProtected.js
 @@= skipped -91, +91 lines =@@
- 
- 
+
+
  //// [mixinPrivateAndProtected.js]
 -// Repro from #13830
 -var __extends = (this && this.__extends) || (function () {
@@ -128,19 +128,20 @@
 -        };
 -        return class_4;
 -    }(Base));
-+        }
-+    };
- }
+-}
 -var Customer = /** @class */ (function (_super) {
 -    __extends(Customer, _super);
 -    function Customer() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    Customer.prototype.f = function () {
++        }
+     };
+-    return Customer;
+-}(PersonMixin(Person)));
++}
 +class Customer extends PersonMixin(Person) {
 +    accountBalance;
 +    f() {
-     }
--    Customer.prototype.f = function () {
--    };
--    return Customer;
--}(PersonMixin(Person)));
++    }
 +}

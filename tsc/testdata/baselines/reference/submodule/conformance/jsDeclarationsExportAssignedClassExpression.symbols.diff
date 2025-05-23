@@ -1,7 +1,7 @@
 --- old.jsDeclarationsExportAssignedClassExpression.symbols
 +++ new.jsDeclarationsExportAssignedClassExpression.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === index.js ===
  module.exports = class Thing {
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -11,11 +11,11 @@
 +>module : Symbol(module.exports)
 +>exports : Symbol(Thing, Decl(index.js, 0, 16))
  >Thing : Symbol(Thing, Decl(index.js, 0, 16))
- 
+
      /**
 @@= skipped -12, +12 lines =@@
  >p : Symbol(p, Decl(index.js, 4, 16))
- 
+
          this.t = 12 + p;
 ->this.t : Symbol(Thing.t, Decl(index.js, 4, 20))
 +>this.t : Symbol(t, Decl(index.js, 4, 20))

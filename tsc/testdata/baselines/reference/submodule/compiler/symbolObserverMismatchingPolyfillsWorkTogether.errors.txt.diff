@@ -1,8 +1,7 @@
 --- old.symbolObserverMismatchingPolyfillsWorkTogether.errors.txt
 +++ new.symbolObserverMismatchingPolyfillsWorkTogether.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +symbolObserverMismatchingPolyfillsWorkTogether.ts(5,14): error TS2717: Subsequent property declarations must have the same type.  Property 'observer' must be of type 'symbol', but here has type 'unique symbol'.
 +
 +

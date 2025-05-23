@@ -1,7 +1,7 @@
 --- old.jsxCallbackWithDestructuring.js
 +++ new.jsxCallbackWithDestructuring.js
 @@= skipped -29, +29 lines =@@
- 
+
  //// [jsxCallbackWithDestructuring.jsx]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

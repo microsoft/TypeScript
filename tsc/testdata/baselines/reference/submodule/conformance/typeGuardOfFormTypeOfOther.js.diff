@@ -1,8 +1,8 @@
 --- old.typeGuardOfFormTypeOfOther.js
 +++ new.typeGuardOfFormTypeOfOther.js
 @@= skipped -83, +83 lines =@@
- 
- 
+
+
  //// [typeGuardOfFormTypeOfOther.js]
 -var C = /** @class */ (function () {
 -    function C() {

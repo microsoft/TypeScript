@@ -1,7 +1,7 @@
 --- old.nonObjectUnionNestedExcessPropertyCheck.js
 +++ new.nonObjectUnionNestedExcessPropertyCheck.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [nonObjectUnionNestedExcessPropertyCheck.js]
  // These are the types of errors we want:
 -var propB1 = { INVALID_PROP_NAME: 'share', iconProp: 'test' };

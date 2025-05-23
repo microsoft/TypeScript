@@ -1,7 +1,7 @@
 --- old.restParameterInDownlevelGenerator.js
 +++ new.restParameterInDownlevelGenerator.js
 @@= skipped -7, +7 lines =@@
- 
+
  //// [restParameterInDownlevelGenerator.js]
  // https://github.com/Microsoft/TypeScript/issues/30653
 -function mergeStringLists() {

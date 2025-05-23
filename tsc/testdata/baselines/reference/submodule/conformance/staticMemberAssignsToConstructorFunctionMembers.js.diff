@@ -2,7 +2,7 @@
 +++ new.staticMemberAssignsToConstructorFunctionMembers.js
 @@= skipped -14, +14 lines =@@
  }
- 
+
  //// [staticMemberAssignsToConstructorFunctionMembers.js]
 -var C = /** @class */ (function () {
 -    function C() {

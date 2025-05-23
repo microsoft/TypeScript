@@ -16,20 +16,9 @@
 -1->
 -2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
 -1->
-+>>>class MyClass {
-+1 >
-+2 >^^^^^^
-+3 >      ^^^^^^^
-+4 >             ^^^^^^^^^^^^^^^->
-+1 >
-   >
+-  >
 -1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
-+2 >class 
-+3 >      MyClass
-+1 >Emitted(3, 1) Source(4, 1) + SourceIndex(0)
-+2 >Emitted(3, 7) Source(4, 7) + SourceIndex(0)
-+3 >Emitted(3, 14) Source(4, 14) + SourceIndex(0)
- ---
+----
 ->>>    function MyClass() {
 -1->^^^^
 -2 >    ^^->
@@ -56,7 +45,19 @@
 -2 >    }
 -1->Emitted(5, 5) Source(16, 1) + SourceIndex(0)
 -2 >Emitted(5, 6) Source(16, 2) + SourceIndex(0)
-----
++>>>class MyClass {
++1 >
++2 >^^^^^^
++3 >      ^^^^^^^
++4 >             ^^^^^^^^^^^^^^^->
++1 >
++  >
++2 >class 
++3 >      MyClass
++1 >Emitted(3, 1) Source(4, 1) + SourceIndex(0)
++2 >Emitted(3, 7) Source(4, 7) + SourceIndex(0)
++3 >Emitted(3, 14) Source(4, 14) + SourceIndex(0)
+ ---
  >>>    // my function comments
  1->^^^^
  2 >    ^^^^^^^^^^^^^^^^^^^^^^^
@@ -182,17 +183,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(12, 5) Source(15, 5) + SourceIndex(0)
 -2 >Emitted(12, 6) Source(15, 6) + SourceIndex(0)
-+2 >    
-+  >            //
-+  >        }
-+1 >Emitted(10, 5) Source(13, 6) + SourceIndex(0)
-+2 >Emitted(10, 6) Source(15, 6) + SourceIndex(0)
- ---
+----
 ->>>    return MyClass;
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^
@@ -203,10 +199,7 @@
 -2 >Emitted(13, 19) Source(16, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -231,6 +224,17 @@
 -2 >Emitted(14, 2) Source(16, 2) + SourceIndex(0)
 -3 >Emitted(14, 2) Source(4, 1) + SourceIndex(0)
 -4 >Emitted(14, 6) Source(16, 2) + SourceIndex(0)
++1 >
++2 >    
++  >            //
++  >        }
++1 >Emitted(10, 5) Source(13, 6) + SourceIndex(0)
++2 >Emitted(10, 6) Source(15, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(11, 2) Source(16, 2) + SourceIndex(0)
  ---

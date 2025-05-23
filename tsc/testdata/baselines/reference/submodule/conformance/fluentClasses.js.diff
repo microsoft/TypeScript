@@ -1,8 +1,8 @@
 --- old.fluentClasses.js
 +++ new.fluentClasses.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [fluentClasses.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,9 +23,7 @@
 -    function A() {
 -    }
 -    A.prototype.foo = function () {
-+class A {
-+    foo() {
-         return this;
+-        return this;
 -    };
 -    return A;
 -}());
@@ -33,12 +31,9 @@
 -    __extends(B, _super);
 -    function B() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    B.prototype.bar = function () {
-+}
-+class B extends A {
-+    bar() {
-         return this;
+-        return this;
 -    };
 -    return B;
 -}(A));
@@ -46,15 +41,25 @@
 -    __extends(C, _super);
 -    function C() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    C.prototype.baz = function () {
-+}
-+class C extends B {
-+    baz() {
-         return this;
+-        return this;
 -    };
 -    return C;
 -}(B));
++class A {
++    foo() {
++        return this;
++    }
++}
++class B extends A {
++    bar() {
++        return this;
++    }
++}
++class C extends B {
++    baz() {
++        return this;
 +    }
 +}
  var c;

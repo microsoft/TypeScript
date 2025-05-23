@@ -1,6 +1,6 @@
 --- old.declFileEmitDeclarationOnly.js
 +++ new.declFileEmitDeclarationOnly.js
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -//// [tests/cases/compiler/declFileEmitDeclarationOnly.ts] ////
 -
 -//// [helloworld.ts]
@@ -29,5 +29,4 @@
 -    constructor(name: string);
 -    hello(): void;
 -}
-@@= skipped --1, +1 lines =@@
 +<no content>

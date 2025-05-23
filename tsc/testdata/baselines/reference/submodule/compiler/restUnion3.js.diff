@@ -1,8 +1,8 @@
 --- old.restUnion3.js
 +++ new.restUnion3.js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [restUnion3.js]
 -"use strict";
 -var __rest = (this && this.__rest) || function (s, e) {

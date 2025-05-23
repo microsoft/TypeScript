@@ -1,8 +1,8 @@
 --- old.parseUnaryExpressionNoTypeAssertionInJsx4.js
 +++ new.parseUnaryExpressionNoTypeAssertionInJsx4.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [index.jsx]
 -var x = "oops";
 -var a = +<number> x;

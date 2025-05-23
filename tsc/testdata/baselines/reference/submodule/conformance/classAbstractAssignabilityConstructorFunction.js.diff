@@ -2,7 +2,7 @@
 +++ new.classAbstractAssignabilityConstructorFunction.js
 @@= skipped -10, +10 lines =@@
  AAA = "asdf";
- 
+
  //// [classAbstractAssignabilityConstructorFunction.js]
 -var A = /** @class */ (function () {
 -    function A() {

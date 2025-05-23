@@ -1,8 +1,8 @@
 --- old.useBeforeDeclaration_superClass.js
 +++ new.useBeforeDeclaration_superClass.js
 @@= skipped -30, +30 lines =@@
- 
- 
+
+
  //// [useBeforeDeclaration_superClass.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,7 +2,7 @@
 +++ new.classAbstractMethodWithImplementation.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [classAbstractMethodWithImplementation.js]
 -var A = /** @class */ (function () {
 -    function A() {

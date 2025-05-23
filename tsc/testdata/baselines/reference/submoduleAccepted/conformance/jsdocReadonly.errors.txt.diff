@@ -1,6 +1,6 @@
 --- old.jsdocReadonly.errors.txt
 +++ new.jsdocReadonly.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -jsdocReadonly.js(23,3): error TS2540: Cannot assign to 'y' because it is a read-only property.
 -
 -
@@ -31,5 +31,4 @@
 -      ~
 -!!! error TS2540: Cannot assign to 'y' because it is a read-only property.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

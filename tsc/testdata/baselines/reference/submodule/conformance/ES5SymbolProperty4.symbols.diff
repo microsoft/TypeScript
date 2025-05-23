@@ -2,7 +2,7 @@
 +++ new.ES5SymbolProperty4.symbols
 @@= skipped -8, +8 lines =@@
  >C : Symbol(C, Decl(ES5SymbolProperty4.ts, 0, 33))
- 
+
      [Symbol.iterator]() { }
 ->[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(ES5SymbolProperty4.ts, 2, 9))
 +>[Symbol.iterator] : Symbol([Symbol.iterator], Decl(ES5SymbolProperty4.ts, 2, 9))

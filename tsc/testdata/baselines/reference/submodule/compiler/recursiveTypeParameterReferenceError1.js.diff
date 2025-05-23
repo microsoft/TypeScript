@@ -1,8 +1,8 @@
 --- old.recursiveTypeParameterReferenceError1.js
 +++ new.recursiveTypeParameterReferenceError1.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [recursiveTypeParameterReferenceError1.js]
 -var X = /** @class */ (function () {
 -    function X() {

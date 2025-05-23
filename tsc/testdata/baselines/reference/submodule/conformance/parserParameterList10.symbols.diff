@@ -2,7 +2,7 @@
 +++ new.parserParameterList10.symbols
 @@= skipped -4, +4 lines =@@
  >C : Symbol(C, Decl(parserParameterList10.ts, 0, 0))
- 
+
     foo(...bar = 0) { }
 ->foo : Symbol(C.foo, Decl(parserParameterList10.ts, 0, 9))
 +>foo : Symbol(foo, Decl(parserParameterList10.ts, 0, 9))

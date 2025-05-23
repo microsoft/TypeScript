@@ -2,7 +2,7 @@
 +++ new.stringLiteralTypesInVariableDeclarations01.js
 @@= skipped -19, +19 lines =@@
  g = "bar";
- 
+
  //// [stringLiteralTypesInVariableDeclarations01.js]
 -var a;
 +let a;

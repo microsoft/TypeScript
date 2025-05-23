@@ -11,4 +11,3 @@
 +>match : (regexp: string | RegExp) => RegExpMatchArray
  >'' : ""
  >[] : []
- 

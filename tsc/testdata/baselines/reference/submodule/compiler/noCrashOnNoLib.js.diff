@@ -1,7 +1,7 @@
 --- old.noCrashOnNoLib.js
 +++ new.noCrashOnNoLib.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [noCrashOnNoLib.js]
  "use strict";
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {

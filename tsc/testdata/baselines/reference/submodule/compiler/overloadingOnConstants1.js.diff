@@ -2,7 +2,7 @@
 +++ new.overloadingOnConstants1.js
 @@= skipped -27, +27 lines =@@
  var htmlSpanElement2: Derived1 = d2.createElement("span");
- 
+
  //// [overloadingOnConstants1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

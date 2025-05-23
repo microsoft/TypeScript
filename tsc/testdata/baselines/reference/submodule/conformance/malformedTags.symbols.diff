@@ -9,4 +9,3 @@
  >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 ->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
 +>isArray : Symbol(isArray, Decl(lib.es5.d.ts, --, --))
- 

@@ -2,7 +2,7 @@
 +++ new.classWithMultipleBaseClasses.js
 @@= skipped -26, +26 lines =@@
  }
- 
+
  //// [classWithMultipleBaseClasses.js]
 -var A = /** @class */ (function () {
 -    function A() {

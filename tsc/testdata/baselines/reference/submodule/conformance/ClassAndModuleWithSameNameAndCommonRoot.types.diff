@@ -19,7 +19,7 @@
 +>Point : typeof Point
  >1 : 1
  >1 : 1
- 
+
  var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
 ->cl : X.Y.Point
 ->X.Y.Point.Origin : X.Y.Point
@@ -36,6 +36,6 @@
 +>Y : typeof Y
 +>Point : typeof Point
 +>Origin : Point
- 
- 
+
+
  === simple.ts ===

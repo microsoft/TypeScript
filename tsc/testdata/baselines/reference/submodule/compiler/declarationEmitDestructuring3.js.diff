@@ -1,8 +1,8 @@
 --- old.declarationEmitDestructuring3.js
 +++ new.declarationEmitDestructuring3.js
 @@= skipped -6, +6 lines =@@
- 
- 
+
+
  //// [declarationEmitDestructuring3.js]
 -function bar(_a) {
 -    var x = _a[0], z = _a[1], w = _a.slice(2);

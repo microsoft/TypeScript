@@ -2,7 +2,7 @@
 +++ new.importCallExpressionInExportEqualsUMD.js
 @@= skipped -8, +8 lines =@@
  };
- 
+
  //// [something.js]
 -(function (factory) {
 -    if (typeof module === "object" && typeof module.exports === "object") {

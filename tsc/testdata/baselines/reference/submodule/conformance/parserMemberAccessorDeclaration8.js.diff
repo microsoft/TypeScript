@@ -2,7 +2,7 @@
 +++ new.parserMemberAccessorDeclaration8.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [parserMemberAccessorDeclaration8.js]
 -var C = /** @class */ (function () {
 -    function C() {

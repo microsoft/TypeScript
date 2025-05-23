@@ -2,7 +2,7 @@
 +++ new.forStatements.js
 @@= skipped -48, +48 lines =@@
  for(var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';;){}
- 
+
  //// [forStatements.js]
 -var C = /** @class */ (function () {
 -    function C() {

@@ -2,7 +2,7 @@
 +++ new.unionExcessPropsWithPartialMember.types
 @@= skipped -23, +23 lines =@@
  >a : A
- 
+
  ab = {...a, y: (null as any as string | undefined)}; // Should be allowed, since `y` is missing on `A`
 ->ab = {...a, y: (null as any as string | undefined)} : { unused?: string; x: string; y: string | undefined; }
 +>ab = {...a, y: (null as any as string | undefined)} : { unused?: string | undefined; x: string; y: string | undefined; }

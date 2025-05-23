@@ -6,11 +6,11 @@
      foo: {
 ->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
- 
+
          bar(): {
 ->bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
 +>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
- 
+
              baz: 0 | 1 | 42 | undefined | ''
  >baz : "" | 0 | 1 | 42 | undefined
 @@= skipped -57, +57 lines =@@
@@ -30,7 +30,7 @@
 ->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
  >baz : "" | 0 | 1 | 42 | undefined
- 
+
  b.foo["baz"] ||= result.foo.baz
  >b.foo["baz"] ||= result.foo.baz : "" | 0 | 1 | 42 | undefined
  >b.foo["baz"] : "" | 0 | 1 | 42 | undefined
@@ -47,7 +47,7 @@
 ->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
  >baz : "" | 0 | 1 | 42 | undefined
- 
+
  c.foo["baz"] ??= result.foo.baz
  >c.foo["baz"] ??= result.foo.baz : "" | 0 | 1 | 42 | undefined
  >c.foo["baz"] : "" | 0 | 1 | 42 | undefined
@@ -64,7 +64,7 @@
 ->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
  >baz : "" | 0 | 1 | 42 | undefined
- 
+
  a.foo.bar().baz &&= result.foo.bar().baz
  >a.foo.bar().baz &&= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
  >a.foo.bar().baz : "" | 0 | 1 | 42 | undefined
@@ -93,7 +93,7 @@
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 +>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
  >baz : "" | 0 | 1 | 42 | undefined
- 
+
  b.foo.bar().baz ||= result.foo.bar().baz
  >b.foo.bar().baz ||= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
  >b.foo.bar().baz : "" | 0 | 1 | 42 | undefined
@@ -122,7 +122,7 @@
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 +>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
  >baz : "" | 0 | 1 | 42 | undefined
- 
+
  c.foo.bar().baz ??= result.foo.bar().baz
  >c.foo.bar().baz ??= result.foo.bar().baz : "" | 0 | 1 | 42 | undefined
  >c.foo.bar().baz : "" | 0 | 1 | 42 | undefined
@@ -151,5 +151,4 @@
 +>foo : { bar: () => { baz: "" | 0 | 1 | 42 | undefined; }; baz: "" | 0 | 1 | 42 | undefined; }
 +>bar : () => { baz: "" | 0 | 1 | 42 | undefined; }
  >baz : "" | 0 | 1 | 42 | undefined
- 
- 
+

@@ -2,7 +2,7 @@
 +++ new.typeParameterAssignmentCompat1.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 0, 14))
- 
+
      frobble(value: T): T;
 ->frobble : Symbol(Foo.frobble, Decl(typeParameterAssignmentCompat1.ts, 0, 18))
 +>frobble : Symbol(frobble, Decl(typeParameterAssignmentCompat1.ts, 0, 18))
@@ -11,7 +11,7 @@
  >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 0, 14))
 @@= skipped -36, +36 lines =@@
  >T : Symbol(T, Decl(typeParameterAssignmentCompat1.ts, 11, 8))
- 
+
      f<U>(): Foo<U> {
 ->f : Symbol(C.f, Decl(typeParameterAssignmentCompat1.ts, 11, 12))
 +>f : Symbol(f, Decl(typeParameterAssignmentCompat1.ts, 11, 12))

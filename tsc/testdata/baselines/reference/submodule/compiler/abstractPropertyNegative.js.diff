@@ -1,8 +1,8 @@
 --- old.abstractPropertyNegative.js
 +++ new.abstractPropertyNegative.js
 @@= skipped -45, +45 lines =@@
- 
- 
+
+
  //// [abstractPropertyNegative.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

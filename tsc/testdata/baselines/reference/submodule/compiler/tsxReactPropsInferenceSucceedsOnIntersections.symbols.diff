@@ -7,7 +7,7 @@
 ->ButtonHTMLAttributes : Symbol(React.ButtonHTMLAttributes, Decl(react16.d.ts, 1437, 9))
 +>ButtonHTMLAttributes : Symbol(ButtonHTMLAttributes, Decl(react16.d.ts, 1437, 9))
  >HTMLButtonElement : Symbol(HTMLButtonElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
- 
+
      outline?: boolean;
 @@= skipped -12, +12 lines =@@
  declare class Button<T = {}> extends React.Component<ButtonProps<T>> { }
@@ -20,15 +20,15 @@
 +>Component : Symbol(Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
  >ButtonProps : Symbol(ButtonProps, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 26))
  >T : Symbol(T, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 8, 21))
- 
+
 @@= skipped -11, +11 lines =@@
  >ButtonProps : Symbol(ButtonProps, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 26))
- 
+
      customProp: string;
 ->customProp : Symbol(CustomButtonProps.customProp, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 10, 49))
 +>customProp : Symbol(customProp, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 10, 49))
  }
- 
+
  const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
  >CustomButton : Symbol(CustomButton, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 14, 5))
  >React : Symbol(React, Decl(tsxReactPropsInferenceSucceedsOnIntersections.tsx, 2, 6))

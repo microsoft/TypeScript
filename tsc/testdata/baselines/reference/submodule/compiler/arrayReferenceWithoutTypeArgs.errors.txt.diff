@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -arrayReferenceWithoutTypeArgs.ts(2,17): error TS2314: Generic type 'Array<T>' requires 1 type argument(s).
 +arrayReferenceWithoutTypeArgs.ts(2,17): error TS2314: Generic type 'T[]' requires 1 type argument(s).
- 
- 
+
+
  ==== arrayReferenceWithoutTypeArgs.ts (1 errors) ====
      class X {
          public f(a: Array) { }

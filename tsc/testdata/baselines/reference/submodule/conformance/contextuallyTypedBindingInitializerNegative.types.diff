@@ -11,7 +11,7 @@
  >v => v : (v: number) => number
 @@= skipped -8, +8 lines =@@
  >v : number
- 
+
  function f2({ "show": showRename = v => v }: Show) {}
 ->f2 : ({ "show": showRename }: Show) => void
 +>f2 : (__0: Show) => void
@@ -19,7 +19,7 @@
  >v => v : (v: number) => number
  >v : number
  >v : number
- 
+
  function f3({ ["show"]: showRename = v => v }: Show) {}
 ->f3 : ({ ["show"]: showRename }: Show) => void
 +>f3 : (__0: Show) => void
@@ -52,4 +52,3 @@
 +>h : (__0: StringUnion) => void
  >prop : "bar" | "foo"
  >"baz" : "baz"
- 

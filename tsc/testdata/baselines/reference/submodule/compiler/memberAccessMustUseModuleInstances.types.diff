@@ -6,7 +6,7 @@
  import WinJS = require('memberAccessMustUseModuleInstances_0');
 ->WinJS : typeof WinJS
 +>WinJS : any
- 
+
  WinJS.Promise.timeout(10);
 ->WinJS.Promise.timeout(10) : WinJS.Promise
 ->WinJS.Promise.timeout : (delay: number) => WinJS.Promise
@@ -21,5 +21,5 @@
 +>Promise : any
 +>timeout : any
  >10 : 10
- 
+
  === memberAccessMustUseModuleInstances_0.ts ===

@@ -1,8 +1,8 @@
 --- old.emitHelpersWithLocalCollisions(module=es2020).js
 +++ new.emitHelpersWithLocalCollisions(module=es2020).js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [a.js]
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 -    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

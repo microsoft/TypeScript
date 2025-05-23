@@ -8,14 +8,14 @@
 +>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
  >a : TemplateStringsArray
  }
- 
+
 @@= skipped -12, +12 lines =@@
- 
+
  === index.ts ===
  import styled from "styled-components";
 ->styled : import("node_modules/styled-components/index").StyledInterface
 +>styled : StyledInterface
- 
+
  const A = styled.div``;
 ->A : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 ->styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
@@ -28,7 +28,7 @@
 +>styled : StyledInterface
 +>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
  >`` : ""
- 
+
  const B = styled.div``;
 ->B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 ->styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
@@ -41,7 +41,7 @@
 +>styled : StyledInterface
 +>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
  >`` : ""
- 
+
  export const C = styled.div``;
 ->C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 ->styled.div`` : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
@@ -54,7 +54,7 @@
 +>styled : StyledInterface
 +>div : (a: TemplateStringsArray) => StyledComponent<"div", DefaultTheme, {}, never>
  >`` : ""
- 
+
  export default Object.assign(A, {
 ->Object.assign(A, {    B,    C}) : string & import("node_modules/styled-components/index").StyledComponentBase<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never> & import("node_modules/styled-components/node_modules/hoist-non-react-statics/index").NonReactStatics<"div"> & { B: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; }
 +>Object.assign(A, {    B,    C}) : string & StyledComponentBase<"div", DefaultTheme, {}, never> & NonReactStatics<"div"> & { B: StyledComponent<"div", DefaultTheme, {}, never>; C: StyledComponent<"div", DefaultTheme, {}, never>; }
@@ -65,14 +65,13 @@
 ->{    B,    C} : { B: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; C: import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>; }
 +>A : StyledComponent<"div", DefaultTheme, {}, never>
 +>{    B,    C} : { B: StyledComponent<"div", DefaultTheme, {}, never>; C: StyledComponent<"div", DefaultTheme, {}, never>; }
- 
+
      B,
 ->B : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 +>B : StyledComponent<"div", DefaultTheme, {}, never>
- 
+
      C
 ->C : import("node_modules/styled-components/index").StyledComponent<"div", import("node_modules/styled-components/index").DefaultTheme, {}, never>
 +>C : StyledComponent<"div", DefaultTheme, {}, never>
- 
+
  });
- 

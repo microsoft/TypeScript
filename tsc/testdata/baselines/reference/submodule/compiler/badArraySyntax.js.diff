@@ -1,8 +1,8 @@
 --- old.badArraySyntax.js
 +++ new.badArraySyntax.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [badArraySyntax.js]
 -var Z = /** @class */ (function () {
 -    function Z() {

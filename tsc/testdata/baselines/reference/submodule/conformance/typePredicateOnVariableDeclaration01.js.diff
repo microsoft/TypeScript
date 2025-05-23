@@ -1,7 +1,7 @@
 --- old.typePredicateOnVariableDeclaration01.js
 +++ new.typePredicateOnVariableDeclaration01.js
 @@= skipped -4, +4 lines =@@
- 
+
  //// [typePredicateOnVariableDeclaration01.js]
  var x;
 -

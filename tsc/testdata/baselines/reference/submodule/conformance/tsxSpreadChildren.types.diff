@@ -9,7 +9,7 @@
  >prop : { key: number; todo: string; }
  >key : number
  >todo : string
- 
+
      return <div>{prop.key.toString() + prop.todo}</div>;
 -><div>{prop.key.toString() + prop.todo}</div> : JSX.Element
 +><div>{prop.key.toString() + prop.todo}</div> : Element
@@ -23,12 +23,12 @@
 ->TodoList : ({ todos }: TodoListProps) => JSX.Element
 +>TodoList : (__0: TodoListProps) => Element
  >todos : TodoProp[]
- 
+
      return <div>
 -><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : JSX.Element
 +><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : Element
  >div : any
- 
+
          {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
 ->todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
 +>todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : Element[]
@@ -47,11 +47,10 @@
  >todo : TodoProp
 @@= skipped -32, +32 lines =@@
  >x : TodoListProps
- 
+
      <TodoList {...x}/>
 -><TodoList {...x}/> : JSX.Element
 ->TodoList : ({ todos }: TodoListProps) => JSX.Element
 +><TodoList {...x}/> : Element
 +>TodoList : (__0: TodoListProps) => Element
  >x : TodoListProps
- 

@@ -8,29 +8,29 @@
 +>(x, y) => {    function bar(a: typeof x): void;    function bar(b: typeof y): void;    function bar() { }    return bar;} : (x: string, y: string) => { (a: string): void; (b: string): void; }
  >x : string
  >y : string
- 
+
      function bar(a: typeof x): void;
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
  >a : string
  >x : string
- 
+
      function bar(b: typeof y): void;
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
  >b : string
  >y : string
- 
+
      function bar() { }
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
- 
+
      return bar;
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
- 
+
  });
- 
+
 @@= skipped -38, +38 lines =@@
  >out2 : boolean
  >foo2((x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;}) : boolean
@@ -39,18 +39,18 @@
 +>(x, y) => {    var bar: {        (a: typeof x): void;        (b: typeof y): void;    };    return bar;} : (x: string, y: string) => { (a: string): void; (b: string): void; }
  >x : string
  >y : string
- 
+
      var bar: {
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
- 
+
          (a: typeof x): void;
  >a : string
 @@= skipped -17, +17 lines =@@
- 
+
      };
      return bar;
 ->bar : { (a: typeof x): void; (b: typeof y): void; }
 +>bar : { (a: string): void; (b: string): void; }
- 
+
  });

@@ -1,8 +1,8 @@
 --- old.computedPropertyNameAndTypeParameterConflict.js
 +++ new.computedPropertyNameAndTypeParameterConflict.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [computedPropertyNameAndTypeParameterConflict.js]
 -
 -

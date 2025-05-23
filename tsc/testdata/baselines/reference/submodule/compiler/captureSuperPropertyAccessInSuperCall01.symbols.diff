@@ -7,7 +7,7 @@
 ->blah : Symbol(A.blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
 +>blah : Symbol(blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
  }
- 
+
  class B extends A {
 @@= skipped -10, +10 lines =@@
  	constructor() {

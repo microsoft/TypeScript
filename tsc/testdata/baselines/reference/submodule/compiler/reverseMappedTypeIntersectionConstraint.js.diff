@@ -1,8 +1,8 @@
 --- old.reverseMappedTypeIntersectionConstraint.js
 +++ new.reverseMappedTypeIntersectionConstraint.js
 @@= skipped -175, +175 lines =@@
- 
- 
+
+
  //// [reverseMappedTypeIntersectionConstraint.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

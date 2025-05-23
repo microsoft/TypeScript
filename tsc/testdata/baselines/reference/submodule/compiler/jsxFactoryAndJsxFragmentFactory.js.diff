@@ -2,7 +2,7 @@
 +++ new.jsxFactoryAndJsxFragmentFactory.js
 @@= skipped -7, +7 lines =@@
  <><span>1</span><><span>2.1</span><span>2.2</span></></>;
- 
+
  //// [jsxFactoryAndJsxFragmentFactory.js]
 -h(Frag, null);
 -h(Frag, null,

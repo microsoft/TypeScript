@@ -3,7 +3,7 @@
 @@= skipped -25, +25 lines =@@
      "default": "misedirection"
  }
- 
+
 -//// [package.json]
 -{
 -    "name": "pkg",

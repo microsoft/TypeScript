@@ -1,8 +1,8 @@
 --- old.thisIndexOnExistingReadonlyFieldIsNotNever.js
 +++ new.thisIndexOnExistingReadonlyFieldIsNotNever.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [thisIndexOnExistingReadonlyFieldIsNotNever.js]
 -"use strict";
 -var __extends = (this && this.__extends) || (function () {

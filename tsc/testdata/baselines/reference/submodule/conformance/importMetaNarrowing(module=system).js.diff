@@ -1,8 +1,8 @@
 --- old.importMetaNarrowing(module=system).js
 +++ new.importMetaNarrowing(module=system).js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [importMetaNarrowing.js]
 -System.register([], function (exports_1, context_1) {
 -    "use strict";

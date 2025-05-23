@@ -9,6 +9,6 @@
  >A : typeof A
 ->B : typeof A.B
 +>B : typeof B
- 
+
  // error
  class C2 implements A?.B {}

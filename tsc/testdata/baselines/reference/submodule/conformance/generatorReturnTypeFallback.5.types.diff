@@ -6,6 +6,6 @@
  function* f(): IterableIterator<number> {
 ->f : () => IterableIterator<number>
 +>f : () => IterableIterator<number, any, any>
- 
+
      yield 1;
  >yield 1 : any

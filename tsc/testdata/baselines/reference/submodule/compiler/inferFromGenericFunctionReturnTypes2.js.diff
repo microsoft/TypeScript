@@ -1,8 +1,8 @@
 --- old.inferFromGenericFunctionReturnTypes2.js
 +++ new.inferFromGenericFunctionReturnTypes2.js
 @@= skipped -97, +97 lines =@@
- 
- 
+
+
  //// [inferFromGenericFunctionReturnTypes2.js]
 -var f1 = function (s) { return s.length; };
 -var f2 = wrap(function (s) { return s.length; });
@@ -46,21 +46,21 @@
 -    };
 -    return SetOf;
 -}());
--/* ... etc ... */
++    }
++    forEach(fn) {
++        this._store.forEach((a, i) => fn(a, i));
++    }
++}
+ /* ... etc ... */
 -function compose() {
 -    var fns = [];
 -    for (var _i = 0; _i < arguments.length; _i++) {
 -        fns[_i] = arguments[_i];
-     }
+-    }
 -    return function (x) { return fns.reduce(function (prev, fn) { return fn(prev); }, x); };
-+    forEach(fn) {
-+        this._store.forEach((a, i) => fn(a, i));
-+    }
- }
-+/* ... etc ... */
 +function compose(...fns) {
 +    return (x) => fns.reduce((prev, fn) => fn(prev), x);
-+}
+ }
  function map(fn) {
 -    return function (a) {
 -        var b = new SetOf();

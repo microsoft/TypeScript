@@ -1,8 +1,8 @@
 --- old.typeofProperty.js
 +++ new.typeofProperty.js
 @@= skipped -49, +49 lines =@@
- 
- 
+
+
  //// [typeofProperty.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

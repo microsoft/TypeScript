@@ -2,7 +2,7 @@
 +++ new.controlFlowAliasing.js
 @@= skipped -303, +303 lines =@@
  }
- 
+
  //// [controlFlowAliasing.js]
 -"use strict";
  // Narrowing by aliased conditional expressions
@@ -447,8 +447,7 @@
 -declare class C10 {
 -    readonly x: string | number;
 -    constructor(x: string | number);
-+    }
- }
+-}
 -declare class C11 {
 -    readonly x: string | number;
 -    constructor(x: string | number);
@@ -479,4 +478,5 @@
 -declare class A53267 {
 -    readonly testNumber: number | undefined;
 -    foo(): void;
--}
++    }
+ }

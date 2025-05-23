@@ -1,8 +1,8 @@
 --- old.privateNameStaticFieldNoInitializer(target=es2015).js
 +++ new.privateNameStaticFieldNoInitializer(target=es2015).js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [privateNameStaticFieldNoInitializer.js]
 -var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";

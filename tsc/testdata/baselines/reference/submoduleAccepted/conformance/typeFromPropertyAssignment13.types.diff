@@ -1,13 +1,13 @@
 --- old.typeFromPropertyAssignment13.types
 +++ new.typeFromPropertyAssignment13.types
 @@= skipped -1, +1 lines =@@
- 
+
  === module.js ===
  var Outer = {}
 ->Outer : typeof Outer
 +>Outer : {}
  >{} : {}
- 
+
  Outer.Inner = function() {}
 ->Outer.Inner = function() {} : typeof Inner
 ->Outer.Inner : typeof Inner
@@ -19,7 +19,7 @@
 +>Outer : {}
 +>Inner : any
 +>function() {} : () => void
- 
+
  Outer.Inner.prototype = {
 ->Outer.Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
 ->Outer.Inner.prototype : { m(): void; i: number; }
@@ -35,7 +35,7 @@
 +>Inner : any
 +>prototype : any
 +>{    m() { },    i: 1} : { m: () => void; i: number; }
- 
+
      m() { },
  >m : () => void
 @@= skipped -30, +30 lines =@@
@@ -54,7 +54,7 @@
 +>prototype : any
  >j : any
  >2 : 2
- 
+
  /** @type {string} */
  Outer.Inner.prototype.k;
  >Outer.Inner.prototype.k : any
@@ -69,7 +69,7 @@
 +>Inner : any
 +>prototype : any
  >k : any
- 
+
  var inner = new Outer.Inner()
 ->inner : Inner
 ->new Outer.Inner() : Inner
@@ -81,7 +81,7 @@
 +>Outer.Inner : any
 +>Outer : {}
 +>Inner : any
- 
+
  inner.m()
 ->inner.m() : void
 ->inner.m : () => void
@@ -91,7 +91,7 @@
 +>inner.m : any
 +>inner : any
 +>m : any
- 
+
  inner.i
 ->inner.i : number
 ->inner : Inner
@@ -99,7 +99,7 @@
 +>inner.i : any
 +>inner : any
 +>i : any
- 
+
  inner.j
 ->inner.j : number
 ->inner : Inner
@@ -107,7 +107,7 @@
 +>inner.j : any
 +>inner : any
 +>j : any
- 
+
  inner.k
 ->inner.k : string
 ->inner : Inner
@@ -115,4 +115,3 @@
 +>inner.k : any
 +>inner : any
 +>k : any
- 

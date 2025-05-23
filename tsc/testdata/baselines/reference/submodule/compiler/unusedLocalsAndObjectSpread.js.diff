@@ -1,8 +1,8 @@
 --- old.unusedLocalsAndObjectSpread.js
 +++ new.unusedLocalsAndObjectSpread.js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [unusedLocalsAndObjectSpread.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

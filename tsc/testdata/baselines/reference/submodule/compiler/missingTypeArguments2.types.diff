@@ -2,20 +2,19 @@
 +++ new.missingTypeArguments2.types
 @@= skipped -4, +4 lines =@@
  >A : A<T>
- 
+
  var x: () => A;
 ->x : () => A
 +>x : () => any
- 
+
  (a: A) => { };
 ->(a: A) => { } : (a: A) => void
 +>(a: A) => { } : (a: any) => void
  >a : any
- 
+
  var y: A<A>;
  >y : A<any>
- 
+
  (): A => null;
 ->(): A => null : () => A
 +>(): A => null : () => any
- 

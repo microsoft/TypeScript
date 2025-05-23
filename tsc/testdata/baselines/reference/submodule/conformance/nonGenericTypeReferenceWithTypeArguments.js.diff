@@ -1,7 +1,7 @@
 --- old.nonGenericTypeReferenceWithTypeArguments.js
 +++ new.nonGenericTypeReferenceWithTypeArguments.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [nonGenericTypeReferenceWithTypeArguments.js]
  // Check that errors are reported for non-generic types with type arguments
 -var C = /** @class */ (function () {

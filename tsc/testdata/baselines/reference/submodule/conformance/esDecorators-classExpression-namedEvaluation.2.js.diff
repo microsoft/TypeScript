@@ -2,7 +2,7 @@
 +++ new.esDecorators-classExpression-namedEvaluation.2.js
 @@= skipped -33, +33 lines =@@
  ({ ["__proto__"]: @dec class { } });
- 
+
  //// [esDecorators-classExpression-namedEvaluation.2.js]
 -var _a, _b;
  let x, f;

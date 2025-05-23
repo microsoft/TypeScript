@@ -2,7 +2,7 @@
 +++ new.noCrashOnMixin.js
 @@= skipped -25, +25 lines =@@
  }
- 
+
  //// [noCrashOnMixin.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -21,9 +21,7 @@
 -})();
 -var Abstract = /** @class */ (function () {
 -    function Abstract() {
-+class Abstract {
-+    constructor() {
-     }
+-    }
 -    return Abstract;
 -}());
 -var Concrete = /** @class */ (function (_super) {
@@ -33,6 +31,9 @@
 -    }
 -    return Concrete;
 -}(Abstract));
++class Abstract {
++    constructor() {
++    }
 +}
 +class Concrete extends Abstract {
 +}
@@ -44,9 +45,7 @@
 -        }
 -        return class_1;
 -    }(Base));
-+    return class extends Base {
-+    };
- }
+-}
 -var Empty = /** @class */ (function () {
 -    function Empty() {
 -    }
@@ -58,6 +57,9 @@
 -        return _super !== null && _super.apply(this, arguments) || this;
 -    }
 -    CrashTrigger.prototype.trigger = function () {
++    return class extends Base {
++    };
++}
 +class Empty {
 +}
 +class CrashTrigger extends Mixin(Empty) {

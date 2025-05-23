@@ -2,7 +2,7 @@
 +++ new.varArgWithNoParamName.js
 @@= skipped -3, +3 lines =@@
  function t1(...) {}
- 
+
  //// [varArgWithNoParamName.js]
 -function t1() {
 -    var  = [];

@@ -1,8 +1,8 @@
 --- old.jsdocDisallowedInTypescript.js
 +++ new.jsdocDisallowedInTypescript.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [jsdocDisallowedInTypescript.js]
 -"use strict";
  // grammar error from checker

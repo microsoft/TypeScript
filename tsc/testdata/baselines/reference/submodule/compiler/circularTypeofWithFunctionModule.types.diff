@@ -9,7 +9,7 @@
  >maker : typeof maker
 ->Bar : typeof maker.Bar
 +>Bar : typeof Bar
- 
+
      return maker.Bar;
 ->maker.Bar : typeof maker.Bar
 +>maker.Bar : typeof Bar
@@ -17,5 +17,5 @@
 ->Bar : typeof maker.Bar
 +>Bar : typeof Bar
  }
- 
+
  namespace maker {

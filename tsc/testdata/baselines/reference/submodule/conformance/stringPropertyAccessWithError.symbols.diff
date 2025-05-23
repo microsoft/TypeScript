@@ -6,4 +6,3 @@
  >x : Symbol(x, Decl(stringPropertyAccessWithError.ts, 0, 3))
 ->'charAt' : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 +>'charAt' : Symbol(charAt, Decl(lib.es5.d.ts, --, --))
- 

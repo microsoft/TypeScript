@@ -1,7 +1,7 @@
 --- old.inferTypePredicates.js
 +++ new.inferTypePredicates.js
 @@= skipped -282, +282 lines =@@
- 
+
  //// [inferTypePredicates.js]
  // https://github.com/microsoft/TypeScript/issues/16069
 -var __extends = (this && this.__extends) || (function () {

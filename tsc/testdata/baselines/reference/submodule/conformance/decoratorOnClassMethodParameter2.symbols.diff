@@ -2,7 +2,7 @@
 +++ new.decoratorOnClassMethodParameter2.symbols
 @@= skipped -11, +11 lines =@@
  >C : Symbol(C, Decl(decoratorOnClassMethodParameter2.ts, 0, 97))
- 
+
      method(this: C, @dec p: number) {}
 ->method : Symbol(C.method, Decl(decoratorOnClassMethodParameter2.ts, 2, 9))
 +>method : Symbol(method, Decl(decoratorOnClassMethodParameter2.ts, 2, 9))

@@ -1,7 +1,7 @@
 --- old.checkJsxChildrenCanBeTupleType.js
 +++ new.checkJsxChildrenCanBeTupleType.js
 @@= skipped -24, +24 lines =@@
- 
+
  //// [checkJsxChildrenCanBeTupleType.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

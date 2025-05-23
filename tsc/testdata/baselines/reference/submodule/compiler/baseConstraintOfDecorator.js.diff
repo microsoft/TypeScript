@@ -1,7 +1,7 @@
 --- old.baseConstraintOfDecorator.js
 +++ new.baseConstraintOfDecorator.js
 @@= skipped -22, +22 lines =@@
- 
+
  //// [baseConstraintOfDecorator.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {
@@ -40,13 +40,14 @@
          }
 -        return decoratorFunc;
 -    }(superClass));
-+    };
- }
+-}
 -var MyClass = /** @class */ (function () {
 -    function MyClass() {
 -    }
 -    return MyClass;
 -}());
++    };
++}
 +class MyClass {
 +    x;
 +}

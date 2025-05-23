@@ -6,7 +6,7 @@
  >require : Symbol(require, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 0))
 ->I : Symbol(require.I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 23))
 +>I : Symbol(I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 0, 23))
- 
+
      return null;
  }
 @@= skipped -14, +14 lines =@@
@@ -15,6 +15,6 @@
  >exports : Symbol(exports, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 6, 1))
 ->I : Symbol(exports.I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 7, 23))
 +>I : Symbol(I, Decl(collisionExportsRequireAndUninstantiatedModule.ts, 7, 23))
- 
+
      return null;
  }

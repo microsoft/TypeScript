@@ -14,5 +14,5 @@
 +>NonTopLevelConstEnum : typeof NonTopLevelConstEnum
 +>X : NonTopLevelConstEnum
  }
- 
+
  module M {

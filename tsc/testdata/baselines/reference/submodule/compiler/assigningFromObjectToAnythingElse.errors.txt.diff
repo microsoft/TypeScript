@@ -13,8 +13,8 @@
 +assigningFromObjectToAnythingElse.ts(8,5): error TS2322: Type 'Object' is not assignable to type 'Error'.
 +  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 +    Type 'Object' is missing the following properties from type 'Error': name, message
- 
- 
+
+
  ==== assigningFromObjectToAnythingElse.ts (4 errors) ====
 @@= skipped -10, +12 lines =@@
      var y: RegExp;

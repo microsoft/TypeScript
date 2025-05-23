@@ -7,10 +7,10 @@
 ->S : string
 +>S : String
  >true : true
- 
+
  /** @type {number} */
 @@= skipped -10, +10 lines =@@
- 
+
  /** @type {function (number)} */
  const x1 = (a) => a + 1;
 ->x1 : (arg0: number) => any
@@ -24,13 +24,13 @@
 +>a + 1 : any
 +>a : any
  >1 : 1
- 
+
  x1("string");
  >x1("string") : any
 ->x1 : (arg0: number) => any
 +>x1 : function
  >"string" : "string"
- 
+
  /** @type {function (number): number} */
  const x2 = (a) => a + 1;
 ->x2 : (arg0: number) => number
@@ -44,11 +44,11 @@
 +>a + 1 : any
 +>a : any
  >1 : 1
- 
+
  /** @type {string} */
 @@= skipped -26, +26 lines =@@
  >a : string
- 
+
  a = x2(0);
 ->a = x2(0) : number
 +>a = x2(0) : any
@@ -58,7 +58,7 @@
 +>x2(0) : any
 +>x2 : function
  >0 : 0
- 
+
  /** @type {function (number): number} */
  const x3 = (a) => a.concat("hi");
 ->x3 : (arg0: number) => number
@@ -73,14 +73,14 @@
 +>a : any
  >concat : any
  >"hi" : "hi"
- 
+
  x3(0);
 ->x3(0) : number
 ->x3 : (arg0: number) => number
 +>x3(0) : any
 +>x3 : function
  >0 : 0
- 
+
  /** @type {function (number): string} */
  const x4 = (a) => a + 1;
 ->x4 : (arg0: number) => string
@@ -94,11 +94,10 @@
 +>a + 1 : any
 +>a : any
  >1 : 1
- 
+
  x4(0);
 ->x4(0) : string
 ->x4 : (arg0: number) => string
 +>x4(0) : any
 +>x4 : function
  >0 : 0
- 

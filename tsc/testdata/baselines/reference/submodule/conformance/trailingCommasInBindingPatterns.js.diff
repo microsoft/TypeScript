@@ -1,8 +1,8 @@
 --- old.trailingCommasInBindingPatterns.js
 +++ new.trailingCommasInBindingPatterns.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [trailingCommasInBindingPatterns.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

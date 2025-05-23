@@ -2,7 +2,7 @@
 +++ new.inheritanceStaticPropertyOverridingProperty.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [inheritanceStaticPropertyOverridingProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

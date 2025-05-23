@@ -2,7 +2,7 @@
 +++ new.typesWithDuplicateTypeParameters.js
 @@= skipped -10, +10 lines =@@
  function f2<T, U, T>() { }
- 
+
  //// [typesWithDuplicateTypeParameters.js]
 -var C = /** @class */ (function () {
 -    function C() {

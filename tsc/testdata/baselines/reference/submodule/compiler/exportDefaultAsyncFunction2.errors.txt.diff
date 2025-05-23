@@ -10,8 +10,8 @@
 +d.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
  e.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
 +e.ts(1,30): error TS2307: Cannot find module 'asyncawait' or its corresponding type declarations.
- 
- 
+
+
  ==== asyncawait.ts (1 errors) ====
 @@= skipped -10, +14 lines =@@
                      ~~~~~

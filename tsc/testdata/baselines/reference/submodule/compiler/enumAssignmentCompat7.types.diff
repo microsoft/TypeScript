@@ -2,18 +2,18 @@
 +++ new.enumAssignmentCompat7.types
 @@= skipped -22, +22 lines =@@
  >Base : Base
- 
+
      method(param: first.E) {
 ->method : (param: first.E) => void
 ->param : first.E
 +>method : (param: E) => void
 +>param : E
  >first : any
- 
+
      }
 @@= skipped -12, +12 lines =@@
  >Base : Base
- 
+
      override method(param: second.E) {
 ->method : (param: second.E) => void
 ->param : second.E
@@ -22,17 +22,17 @@
  >second : any
      }
  }
- 
+
  function overloadingFunction(): first.E
 ->overloadingFunction : () => first.E
 +>overloadingFunction : () => E
  >first : any
- 
+
  function overloadingFunction(): second.E {
 ->overloadingFunction : () => first.E
 +>overloadingFunction : () => E
  >second : any
- 
+
      return second.E.B
  >second.E.B : any
 ->second.E : typeof second.E

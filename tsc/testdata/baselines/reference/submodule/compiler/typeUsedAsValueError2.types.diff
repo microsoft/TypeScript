@@ -3,7 +3,7 @@
 @@= skipped -16, +16 lines =@@
  >HelloNamespace : any
  >world : any
- 
+
 -=== helloInterface.ts ===
 -interface HelloInterface {
 -    world: any;

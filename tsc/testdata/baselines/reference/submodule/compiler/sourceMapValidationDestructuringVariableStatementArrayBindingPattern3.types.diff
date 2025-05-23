@@ -1,12 +1,12 @@
 --- old.sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.types
 +++ new.sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.types
 @@= skipped -1, +1 lines =@@
- 
+
  === sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts ===
  declare var console: {
 ->console : { log(msg: any): void; }
 +>console : { log: (msg: any) => void; }
- 
+
      log(msg: any): void;
  >log : (msg: any) => void
 @@= skipped -273, +273 lines =@@

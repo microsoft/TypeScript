@@ -1,8 +1,8 @@
 --- old.objectRestParameter.js
 +++ new.objectRestParameter.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [objectRestParameter.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

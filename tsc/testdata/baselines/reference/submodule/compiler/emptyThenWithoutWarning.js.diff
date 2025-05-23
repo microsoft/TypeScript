@@ -2,7 +2,7 @@
 +++ new.emptyThenWithoutWarning.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [emptyThenWithoutWarning.js]
 -var a = 4;
 +let a = 4;

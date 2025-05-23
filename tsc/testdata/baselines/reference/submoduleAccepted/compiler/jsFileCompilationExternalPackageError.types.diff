@@ -1,27 +1,26 @@
 --- old.jsFileCompilationExternalPackageError.types
 +++ new.jsFileCompilationExternalPackageError.types
 @@= skipped -5, +5 lines =@@
- 
+
  a++;
  >a++ : number
 ->a : error
 +>a : any
- 
+
  import {c} from "c";
  >c : any
- 
+
  c++;
  >c++ : number
 ->c : error
 +>c : any
- 
+
  === node_modules/b.ts ===
  var a = 10;
 @@= skipped -24, +24 lines =@@
- 
+
  c = 10;
  >c = 10 : 10
 ->c : error
 +>c : any
  >10 : 10
- 

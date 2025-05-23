@@ -9,4 +9,3 @@
  >n : Symbol(n, Decl(inferenceFromParameterlessLambda.ts, 8, 4))
 ->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 +>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
- 

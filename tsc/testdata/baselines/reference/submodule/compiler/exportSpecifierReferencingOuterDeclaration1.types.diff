@@ -2,7 +2,7 @@
 +++ new.exportSpecifierReferencingOuterDeclaration1.types
 @@= skipped -8, +8 lines =@@
  >X : any
- 
+
      export function foo(): X.bar;
 ->foo : () => X.bar
 +>foo : () => bar

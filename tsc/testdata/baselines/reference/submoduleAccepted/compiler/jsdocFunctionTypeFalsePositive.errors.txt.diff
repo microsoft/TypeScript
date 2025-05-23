@@ -3,9 +3,11 @@
 @@= skipped -0, +0 lines =@@
  /a.js(1,13): error TS1098: Type parameter list cannot be empty.
 -/a.js(1,14): error TS1139: Type parameter declaration expected.
- 
- 
+-
+-
 -==== /a.js (2 errors) ====
++
++
 +==== /a.js (1 errors) ====
      /** @param {<} x */
                  ~~

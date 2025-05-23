@@ -6,6 +6,6 @@
  >HTMLElement : Symbol(HTMLElement, Decl(file1.ts, 0, 0))
 ->field : Symbol(HTMLElement.field, Decl(file1.ts, 1, 38))
 +>field : Symbol(field, Decl(file1.ts, 1, 38))
- 
+
  export const elem: HTMLElement = { field: 'a' };
  >elem : Symbol(elem, Decl(file1.ts, 2, 12))

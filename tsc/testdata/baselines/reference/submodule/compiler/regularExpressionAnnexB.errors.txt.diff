@@ -1,6 +1,6 @@
 --- old.regularExpressionAnnexB.errors.txt
 +++ new.regularExpressionAnnexB.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -regularExpressionAnnexB.ts(2,8): error TS1125: Hexadecimal digit expected.
 -regularExpressionAnnexB.ts(2,22): error TS1125: Hexadecimal digit expected.
 -regularExpressionAnnexB.ts(2,28): error TS1125: Hexadecimal digit expected.
@@ -270,5 +270,4 @@
 -!!! error TS1507: There is nothing available for repetition.
 -    ];
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -1,7 +1,7 @@
 --- old.concatClassAndString.js
 +++ new.concatClassAndString.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [concatClassAndString.js]
  // Shouldn't compile (the long form f = f + ""; doesn't):
 -var f = /** @class */ (function () {

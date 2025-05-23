@@ -2,11 +2,13 @@
 +++ new.checkJsdocTypeTagOnExportAssignment4.errors.txt
 @@= skipped -0, +0 lines =@@
 -a.js(6,16): error TS2322: Type 'string' is not assignable to type 'number'.
-+a.js(6,16): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
- 
- 
+-
+-
 -==== checkJsdocTypeTagOnExportAssignment4.js (0 errors) ====
 -    
++a.js(6,16): error TS2352: Conversion of type 'string' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
++
++
  ==== a.js (1 errors) ====
      /**
       * @typedef {number} Foo

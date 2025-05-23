@@ -1,8 +1,8 @@
 --- old.voidIsInitialized.js
 +++ new.voidIsInitialized.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [voidIsInitialized.js]
 -"use strict";
 -var x = undefined;

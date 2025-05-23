@@ -1,7 +1,7 @@
 --- old.genericClasses4.js
 +++ new.genericClasses4.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [genericClasses4.js]
  // once caused stack overflow
 -var Vec2_T = /** @class */ (function () {

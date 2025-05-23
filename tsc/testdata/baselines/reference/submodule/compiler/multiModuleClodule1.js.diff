@@ -2,7 +2,7 @@
 +++ new.multiModuleClodule1.js
 @@= skipped -20, +20 lines =@@
  c.foo = C.foo;
- 
+
  //// [multiModuleClodule1.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

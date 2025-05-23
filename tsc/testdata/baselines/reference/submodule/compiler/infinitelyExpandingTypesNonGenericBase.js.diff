@@ -1,8 +1,8 @@
 --- old.infinitelyExpandingTypesNonGenericBase.js
 +++ new.infinitelyExpandingTypesNonGenericBase.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [infinitelyExpandingTypesNonGenericBase.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

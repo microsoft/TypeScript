@@ -2,7 +2,7 @@
 +++ new.importCallExpressionInAMD4.js
 @@= skipped -40, +40 lines =@@
  }
- 
+
  //// [0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";
@@ -54,21 +54,7 @@
 -                console.log(one.backup());
 -            });
 -        }
-+"use strict";
-+Object.defineProperty(exports, "__esModule", { value: true });
-+exports.D = void 0;
-+class C {
-+    myModule = Promise.resolve().then(() => require("./0"));
-+    method() {
-+        const loadAsync = Promise.resolve().then(() => require("./0"));
-+        this.myModule.then(Zero => {
-+            console.log(Zero.foo());
-+        }, async err => {
-+            console.log(err);
-+            let one = await Promise.resolve().then(() => require("./1"));
-+            console.log(one.backup());
-+        });
-     }
+-    }
 -    class D {
 -        constructor() {
 -            this.myModule = new Promise((resolve_4, reject_4) => { require(["./0"], resolve_4, reject_4); });
@@ -83,6 +69,24 @@
 -                console.log(one.backup());
 -            });
 -        }
+-    }
+-    exports.D = D;
+-});
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.D = void 0;
++class C {
++    myModule = Promise.resolve().then(() => require("./0"));
++    method() {
++        const loadAsync = Promise.resolve().then(() => require("./0"));
++        this.myModule.then(Zero => {
++            console.log(Zero.foo());
++        }, async err => {
++            console.log(err);
++            let one = await Promise.resolve().then(() => require("./1"));
++            console.log(one.backup());
++        });
++    }
 +}
 +class D {
 +    myModule = Promise.resolve().then(() => require("./0"));
@@ -95,8 +99,6 @@
 +            let one = await Promise.resolve().then(() => require("./1"));
 +            console.log(one.backup());
 +        });
-     }
--    exports.D = D;
--});
++    }
 +}
 +exports.D = D;

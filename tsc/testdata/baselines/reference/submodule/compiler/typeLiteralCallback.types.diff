@@ -2,7 +2,7 @@
 +++ new.typeLiteralCallback.types
 @@= skipped -15, +15 lines =@@
  >arg : T
- 
+
      fail2(func: { (arg: T): void ; }): void ;
 ->fail2 : (func: { (arg: T): void; }) => void
 +>fail2 : (func: (arg: T) => void) => void

@@ -1,8 +1,8 @@
 --- old.cloduleStaticMembers.js
 +++ new.cloduleStaticMembers.js
 @@= skipped -14, +14 lines =@@
- 
- 
+
+
  //// [cloduleStaticMembers.js]
 -var Clod = /** @class */ (function () {
 -    function Clod() {

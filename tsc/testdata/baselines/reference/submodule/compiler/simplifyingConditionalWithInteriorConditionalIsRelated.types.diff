@@ -7,8 +7,8 @@
 ->ConditionalOrUndefined : <T_1>() => ConditionalType<T_1> | undefined
 +>ConditionalOrUndefined : <T>() => ConditionalType<T> | undefined
  }
- 
- 
+
+
 @@= skipped -19, +19 lines =@@
      return genericOrUndefined<T>()!; // no error
  >genericOrUndefined<T>()! : NonNullable<T>
@@ -16,19 +16,19 @@
 ->genericOrUndefined : <T_1>() => T_1 | undefined
 +>genericOrUndefined : <T>() => T | undefined
  }
- 
+
  // Simplified example:
 @@= skipped -9, +9 lines =@@
  >f : <T>() => void
- 
+
      type One = T extends string ? string : string;
 ->One : T extends string ? string : string
 +>One : One
- 
+
      type A = T extends number ? One : never;
 ->A : T extends number ? T extends string ? string : string : never
 +>A : A
- 
+
      const x: One = null as any as A;
 ->x : T extends string ? string : string
 ->null as any as A : T extends number ? T extends string ? string : string : never
@@ -36,4 +36,3 @@
 +>null as any as A : A
  >null as any : any
  }
- 

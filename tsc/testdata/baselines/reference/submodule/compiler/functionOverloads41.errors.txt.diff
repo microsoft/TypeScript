@@ -7,8 +7,8 @@
 -  Overload 2 of 2, '(bar: { a: boolean; }[]): number', gave the following error.
 +  The last overload gave the following error.
      Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
- 
- 
+
+
 @@= skipped -11, +9 lines =@@
      var x = foo([{}]);
                   ~~

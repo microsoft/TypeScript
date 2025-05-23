@@ -1,8 +1,8 @@
 --- old.destructuringWithGenericParameter.js
 +++ new.destructuringWithGenericParameter.js
 @@= skipped -16, +16 lines =@@
- 
- 
+
+
  //// [destructuringWithGenericParameter.js]
 -var GenericClass = /** @class */ (function () {
 -    function GenericClass() {

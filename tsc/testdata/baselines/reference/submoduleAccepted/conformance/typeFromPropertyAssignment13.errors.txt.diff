@@ -1,8 +1,7 @@
 --- old.typeFromPropertyAssignment13.errors.txt
 +++ new.typeFromPropertyAssignment13.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +module.js(2,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 +module.js(3,7): error TS2339: Property 'Inner' does not exist on type '{}'.
 +module.js(8,7): error TS2339: Property 'Inner' does not exist on type '{}'.

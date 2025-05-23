@@ -2,24 +2,24 @@
 +++ new.weakTypeAndPrimitiveNarrowing.types
 @@= skipped -27, +27 lines =@@
  >'A' : "A"
- 
+
        arg;
 ->arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
- 
+
      } else {
        arg;
 ->arg : "B" | { optional?: true; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : "B" | { optional?: true | undefined; } | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
      }
  }
- 
+
 @@= skipped -35, +35 lines =@@
  >'A' : "A"
- 
+
        arg;
 ->arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
 +>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
- 
+
      } else {
        arg;

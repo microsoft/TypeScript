@@ -6,7 +6,7 @@
  >foo : (bar: X | Y) => void
 ->{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method(): void; }
 +>{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method: () => void; }
- 
+
      type: 'y',
  >type : "y"
 @@= skipped -57, +57 lines =@@
@@ -15,15 +15,15 @@
  >foo2 : (bar: X2 | Y2) => void
 ->{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
 +>{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method: () => void; }
- 
+
      type2: 'y',
  >type2 : "y"
 @@= skipped -97, +97 lines =@@
- 
+
  let xyz: LikeA | LikeB = {
  >xyz : LikeA | LikeB
 ->{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method(): void; }
 +>{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method: () => void; }
- 
+
      x: 'x',
  >x : "x"

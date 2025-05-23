@@ -2,7 +2,7 @@
 +++ new.es6ImportDefaultBindingWithExport.js
 @@= skipped -9, +9 lines =@@
  export import defaultBinding2 from "server"; // non referenced
- 
+
  //// [server.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -1,8 +1,8 @@
 --- old.restParameterTypeInstantiation.js
 +++ new.restParameterTypeInstantiation.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [restParameterTypeInstantiation.js]
 -"use strict";
 -// Repro from #33823

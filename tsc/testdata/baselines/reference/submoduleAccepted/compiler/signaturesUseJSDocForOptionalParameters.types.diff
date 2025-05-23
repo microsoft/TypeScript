@@ -1,12 +1,12 @@
 --- old.signaturesUseJSDocForOptionalParameters.types
 +++ new.signaturesUseJSDocForOptionalParameters.types
 @@= skipped -1, +1 lines =@@
- 
+
  === jsDocOptionality.js ===
  function MyClass() {
 ->MyClass : typeof MyClass
 +>MyClass : () => void
- 
+
    this.prop = null;
  >this.prop = null : null
  >this.prop : any
@@ -33,11 +33,11 @@
 +>function(required, notRequired) {    return this;} : (required: any, notRequired: any) => any
 +>required : any
 +>notRequired : any
- 
+
      return this;
 ->this : this
 +>this : any
- 
+
  };
  let pInst = new MyClass();
 ->pInst : MyClass
@@ -46,7 +46,7 @@
 +>pInst : any
 +>new MyClass() : any
 +>MyClass : () => void
- 
+
  let c1 = pInst.optionalParam('hello')
 ->c1 : MyClass
 ->pInst.optionalParam('hello') : MyClass
@@ -59,7 +59,7 @@
 +>pInst : any
 +>optionalParam : any
  >'hello' : "hello"
- 
+
  let c2 = pInst.optionalParam('hello', null)
 ->c2 : MyClass
 ->pInst.optionalParam('hello', null) : MyClass
@@ -72,4 +72,3 @@
 +>pInst : any
 +>optionalParam : any
  >'hello' : "hello"
- 

@@ -8,7 +8,7 @@
 -
  bar;
  >bar : Symbol(bar, Decl(require.d.ts, 2, 7))
- 
+
  export {};
 -=== /node_modules/pkg/import.d.ts ===
 -export {};

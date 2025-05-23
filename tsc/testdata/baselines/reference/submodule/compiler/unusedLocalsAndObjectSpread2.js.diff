@@ -1,7 +1,7 @@
 --- old.unusedLocalsAndObjectSpread2.js
 +++ new.unusedLocalsAndObjectSpread2.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [unusedLocalsAndObjectSpread2.js]
  "use strict";
 -var __rest = (this && this.__rest) || function (s, e) {

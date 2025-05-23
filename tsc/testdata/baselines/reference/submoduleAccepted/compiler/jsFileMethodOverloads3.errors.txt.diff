@@ -1,6 +1,6 @@
 --- old.jsFileMethodOverloads3.errors.txt
 +++ new.jsFileMethodOverloads3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(2,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
 -/a.js(7,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
 -
@@ -31,5 +31,4 @@
 -    export let a = id(123);
 -    export let b = id("hello");
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

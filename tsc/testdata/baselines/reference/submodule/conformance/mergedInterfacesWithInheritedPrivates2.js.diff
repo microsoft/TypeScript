@@ -2,7 +2,7 @@
 +++ new.mergedInterfacesWithInheritedPrivates2.js
 @@= skipped -33, +33 lines =@@
  var r2 = a.w; // error
- 
+
  //// [mergedInterfacesWithInheritedPrivates2.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

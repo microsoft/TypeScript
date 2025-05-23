@@ -1,7 +1,7 @@
 --- old.labeledStatementWithLabel_strict.js
 +++ new.labeledStatementWithLabel_strict.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [labeledStatementWithLabel_strict.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

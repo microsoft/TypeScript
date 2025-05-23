@@ -1,8 +1,8 @@
 --- old.jsdocInTypeScript.js
 +++ new.jsdocInTypeScript.js
 @@= skipped -59, +59 lines =@@
- 
- 
+
+
  //// [jsdocInTypeScript.js]
 -var T = /** @class */ (function () {
 -    function T() {

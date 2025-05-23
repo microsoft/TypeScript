@@ -1,6 +1,6 @@
 --- old.optionalBindingParameters3.errors.txt
 +++ new.optionalBindingParameters3.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/a.js(9,12): error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 -
 -
@@ -17,5 +17,4 @@
 -               ~~~~~~~~~~~
 -!!! error TS2463: A binding pattern parameter cannot be optional in an implementation signature.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

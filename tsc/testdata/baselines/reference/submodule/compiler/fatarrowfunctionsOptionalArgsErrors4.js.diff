@@ -2,7 +2,7 @@
 +++ new.fatarrowfunctionsOptionalArgsErrors4.js
 @@= skipped -24, +24 lines =@@
      );
- 
+
  //// [fatarrowfunctionsOptionalArgsErrors4.js]
 -false ? function (arg) {
 -    if (arg === void 0) { arg = 0; }

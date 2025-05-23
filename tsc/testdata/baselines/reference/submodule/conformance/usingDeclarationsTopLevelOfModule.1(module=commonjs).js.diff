@@ -1,7 +1,7 @@
 --- old.usingDeclarationsTopLevelOfModule.1(module=commonjs).js
 +++ new.usingDeclarationsTopLevelOfModule.1(module=commonjs).js
 @@= skipped -16, +16 lines =@@
- 
+
  //// [usingDeclarationsTopLevelOfModule.1.js]
  "use strict";
 +var z, y, _default;

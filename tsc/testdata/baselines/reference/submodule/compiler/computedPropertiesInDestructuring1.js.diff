@@ -1,8 +1,8 @@
 --- old.computedPropertiesInDestructuring1.js
 +++ new.computedPropertiesInDestructuring1.js
 @@= skipped -39, +39 lines =@@
- 
- 
+
+
  //// [computedPropertiesInDestructuring1.js]
 -var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
  // destructuring in variable declarations

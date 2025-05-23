@@ -1,8 +1,8 @@
 --- old.genericMemberFunction.js
 +++ new.genericMemberFunction.js
 @@= skipped -24, +24 lines =@@
- 
- 
+
+
  //// [genericMemberFunction.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

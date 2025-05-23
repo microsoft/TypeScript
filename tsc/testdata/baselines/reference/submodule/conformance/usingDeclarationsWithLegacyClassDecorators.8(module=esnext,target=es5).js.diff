@@ -1,8 +1,8 @@
 --- old.usingDeclarationsWithLegacyClassDecorators.8(module=esnext,target=es5).js
 +++ new.usingDeclarationsWithLegacyClassDecorators.8(module=esnext,target=es5).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [usingDeclarationsWithLegacyClassDecorators.8.js]
 -var C = /** @class */ (function () {
 -    function C() {

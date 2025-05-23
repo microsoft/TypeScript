@@ -1,7 +1,7 @@
 --- old.tsxInArrowFunction.js
 +++ new.tsxInArrowFunction.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [tsxInArrowFunction.jsx]
  // didn't work
 -<div>{function () { return <div text="wat"/>; }}</div>;

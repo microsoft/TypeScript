@@ -2,7 +2,7 @@
 +++ new.objectRestParameterES5.symbols
 @@= skipped -47, +47 lines =@@
  >C : Symbol(C, Decl(objectRestParameterES5.ts, 5, 107))
- 
+
      m({ a, ...clone }: { a: number, b: string}): void {
 ->m : Symbol(C.m, Decl(objectRestParameterES5.ts, 7, 9))
 +>m : Symbol(m, Decl(objectRestParameterES5.ts, 7, 9))

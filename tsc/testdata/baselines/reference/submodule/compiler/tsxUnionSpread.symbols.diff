@@ -6,6 +6,6 @@
  >JSX : Symbol(JSX, Decl(index.tsx, 0, 0))
 ->Element : Symbol(JSX.Element, Decl(index.tsx, 0, 15))
 +>Element : Symbol(Element, Decl(index.tsx, 0, 15))
- 
+
      return undefined as any;
  >undefined : Symbol(undefined)

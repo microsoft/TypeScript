@@ -2,17 +2,17 @@
 +++ new.inlineConditionalHasSimilarAssignability.types
 @@= skipped -38, +38 lines =@@
  >d : MyExtract<any[], T>
- 
+
    type CustomType = any[] extends T ? any[] : never;
 ->CustomType : any[] extends T ? any[] : never
 +>CustomType : CustomType
- 
+
    const e: CustomType = 0 as any;
 ->e : any[] extends T ? any[] : never
 +>e : CustomType
  >0 as any : any
  >0 : 0
- 
+
    a = e;
 ->a = e : any[] extends T ? any[] : never
 +>a = e : CustomType

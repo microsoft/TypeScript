@@ -1,6 +1,6 @@
 --- old.declarationEmitMappedTypeTemplateTypeofSymbol.errors.txt
 +++ new.declarationEmitMappedTypeTemplateTypeofSymbol.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -b.ts(2,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
 -c.ts(3,14): error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
 -
@@ -26,5 +26,4 @@
 -    export const timestamp = now();
 -                 ~~~~~~~~~
 -!!! error TS4118: The type of this node cannot be serialized because its property '[timestampSymbol]' cannot be serialized.
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.argumentExpressionContextualTyping.js
 @@= skipped -20, +20 lines =@@
  foo(o);                              // Error because x has an array type namely (string|number)[]
- 
+
  //// [argumentExpressionContextualTyping.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

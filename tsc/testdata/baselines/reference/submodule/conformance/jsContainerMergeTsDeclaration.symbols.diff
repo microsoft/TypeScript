@@ -1,7 +1,7 @@
 --- old.jsContainerMergeTsDeclaration.symbols
 +++ new.jsContainerMergeTsDeclaration.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === a.js ===
  var /*1*/x = function foo() {
 ->x : Symbol(x, Decl(a.js, 0, 3), Decl(a.js, 1, 1), Decl(b.ts, 0, 3))
@@ -19,6 +19,6 @@
  var x = function () {
 ->x : Symbol(x, Decl(a.js, 0, 3), Decl(a.js, 1, 1), Decl(b.ts, 0, 3))
 +>x : Symbol(x, Decl(a.js, 0, 3), Decl(b.ts, 0, 3))
- 
+
      return 1;
  }();

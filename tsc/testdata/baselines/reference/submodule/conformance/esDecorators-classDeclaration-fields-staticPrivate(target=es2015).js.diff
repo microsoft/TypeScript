@@ -1,8 +1,8 @@
 --- old.esDecorators-classDeclaration-fields-staticPrivate(target=es2015).js
 +++ new.esDecorators-classDeclaration-fields-staticPrivate(target=es2015).js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [esDecorators-classDeclaration-fields-staticPrivate.js]
 -let C = (() => {
 -    var _a, _C_field1;

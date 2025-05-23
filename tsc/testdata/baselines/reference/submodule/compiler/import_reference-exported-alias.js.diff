@@ -2,8 +2,8 @@
 +++ new.import_reference-exported-alias.js
 @@= skipped -20, +20 lines =@@
  var x = new UserServices().getUserName();
- 
- 
+
+
 -//// [file1.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

@@ -43,37 +43,20 @@
  1->Emitted(5, 1) Source(1, 1) + SourceIndex(0)
  2 >Emitted(5, 12) Source(1, 15) + SourceIndex(0)
  3 >Emitted(5, 13) Source(1, 16) + SourceIndex(0)
-+4 >Emitted(5, 15) Source(1, 17) + SourceIndex(0)
- ---
+----
 ->>>    var c = /** @class */ (function () {
 -1->^^^^
 -2 >    ^^^^^^^^^^^^^^^^^^^->
 -1-> {
-+>>>    class c {
-+1 >^^^^
-+2 >    ^^^^^^
-+3 >          ^
-+1 >{
-   >    
+-  >    
 -1->Emitted(6, 5) Source(2, 5) + SourceIndex(0)
-+2 >    export class 
-+3 >          c
-+1 >Emitted(6, 5) Source(2, 5) + SourceIndex(0)
-+2 >Emitted(6, 11) Source(2, 18) + SourceIndex(0)
-+3 >Emitted(6, 12) Source(2, 19) + SourceIndex(0)
- ---
+----
 ->>>        function c() {
 -1->^^^^^^^^
 -2 >        ^^->
 -1->
 -1->Emitted(7, 9) Source(2, 5) + SourceIndex(0)
-+>>>    }
-+1 >^^^^^
-+2 >     ^^^^^^^^->
-+1 > {
-+  >    }
-+1 >Emitted(7, 6) Source(3, 6) + SourceIndex(0)
- ---
+----
 ->>>        }
 -1->^^^^^^^^
 -2 >        ^
@@ -93,7 +76,10 @@
 -2 >Emitted(9, 17) Source(3, 6) + SourceIndex(0)
 ----
 ->>>    }());
--1 >^^^^
++4 >Emitted(5, 15) Source(1, 17) + SourceIndex(0)
++---
++>>>    class c {
+ 1 >^^^^
 -2 >    ^
 -3 >     
 -4 >     ^^^^
@@ -107,7 +93,23 @@
 -2 >Emitted(10, 6) Source(3, 6) + SourceIndex(0)
 -3 >Emitted(10, 6) Source(2, 5) + SourceIndex(0)
 -4 >Emitted(10, 10) Source(3, 6) + SourceIndex(0)
-----
++2 >    ^^^^^^
++3 >          ^
++1 >{
++  >    
++2 >    export class 
++3 >          c
++1 >Emitted(6, 5) Source(2, 5) + SourceIndex(0)
++2 >Emitted(6, 11) Source(2, 18) + SourceIndex(0)
++3 >Emitted(6, 12) Source(2, 19) + SourceIndex(0)
++---
++>>>    }
++1 >^^^^^
++2 >     ^^^^^^^^->
++1 > {
++  >    }
++1 >Emitted(7, 6) Source(3, 6) + SourceIndex(0)
+ ---
  >>>    m.c = c;
  1->^^^^
 -2 >    ^^^
@@ -175,22 +177,12 @@
 -5 >Emitted(12, 22) Source(1, 15) + SourceIndex(0)
 -6 >Emitted(12, 23) Source(1, 16) + SourceIndex(0)
 -7 >Emitted(12, 31) Source(4, 2) + SourceIndex(0)
-+1->Emitted(9, 1) Source(3, 6) + SourceIndex(0)
-+2 >Emitted(9, 2) Source(4, 2) + SourceIndex(0)
-+3 >Emitted(9, 4) Source(1, 15) + SourceIndex(0)
-+4 >Emitted(9, 5) Source(1, 16) + SourceIndex(0)
-+5 >Emitted(9, 18) Source(1, 15) + SourceIndex(0)
-+6 >Emitted(9, 19) Source(1, 16) + SourceIndex(0)
-+7 >Emitted(9, 22) Source(1, 15) + SourceIndex(0)
-+8 >Emitted(9, 23) Source(1, 16) + SourceIndex(0)
-+9 >Emitted(9, 31) Source(4, 2) + SourceIndex(0)
- ---
+----
 ->>>var a = m.c;
-+>>>var x = new a();
- 1 >
- 2 >^^^^
- 3 >    ^
- 4 >     ^^^
+-1 >
+-2 >^^^^
+-3 >    ^
+-4 >     ^^^
 -5 >        ^
 -6 >         ^
 -7 >          ^
@@ -241,14 +233,23 @@
 -6 >Emitted(14, 15) Source(6, 21) + SourceIndex(0)
 -7 >Emitted(14, 16) Source(6, 22) + SourceIndex(0)
 -8 >Emitted(14, 17) Source(6, 23) + SourceIndex(0)
-----
-->>>var x = new a();
++1->Emitted(9, 1) Source(3, 6) + SourceIndex(0)
++2 >Emitted(9, 2) Source(4, 2) + SourceIndex(0)
++3 >Emitted(9, 4) Source(1, 15) + SourceIndex(0)
++4 >Emitted(9, 5) Source(1, 16) + SourceIndex(0)
++5 >Emitted(9, 18) Source(1, 15) + SourceIndex(0)
++6 >Emitted(9, 19) Source(1, 16) + SourceIndex(0)
++7 >Emitted(9, 22) Source(1, 15) + SourceIndex(0)
++8 >Emitted(9, 23) Source(1, 16) + SourceIndex(0)
++9 >Emitted(9, 31) Source(4, 2) + SourceIndex(0)
+ ---
+ >>>var x = new a();
 -1->
--2 >^^^^
--3 >    ^
--4 >     ^^^
- 5 >        ^^^^
- 6 >            ^
++1 >
+ 2 >^^^^
+ 3 >    ^
+ 4 >     ^^^
+@@= skipped -187, +111 lines =@@
  7 >             ^^
  8 >               ^
  9 >                ^^^^^^^^^->
@@ -259,7 +260,7 @@
    >
  2 >var 
  3 >    x
-@@= skipped -196, +122 lines =@@
+@@= skipped -9, +11 lines =@@
  6 >            a
  7 >             ()
  8 >               ;

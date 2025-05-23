@@ -7,7 +7,7 @@
 ->Timer : typeof Timer
 +>Timer : (timeout: number) => void
  >timeout : number
- 
+
      this.timeout = timeout;
  >this.timeout = timeout : number
  >this.timeout : any
@@ -27,7 +27,7 @@
 +>module : { Timer: (timeout: number) => void; }
 +>exports : (timeout: number) => void
 +>Timer : (timeout: number) => void
- 
+
  === hook.js ===
  /**
 @@= skipped -25, +25 lines =@@
@@ -37,7 +37,7 @@
 ->Hook : typeof Hook
 +>Hook : (handle: HookHandler) => void
  >handle : HookHandler
- 
+
      this.handle = handle;
  >this.handle = handle : HookHandler
  >this.handle : any
@@ -57,17 +57,17 @@
 +>module : { Hook: (handle: HookHandler) => void; }
 +>exports : (handle: HookHandler) => void
 +>Hook : (handle: HookHandler) => void
- 
+
  === context.js ===
  /**
 @@= skipped -50, +50 lines =@@
   */
- 
+
  function Context(input) {
 ->Context : typeof Context
 +>Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
  >input : Input
- 
+
      if (!(this instanceof Context)) {
  >!(this instanceof Context) : boolean
  >(this instanceof Context) : boolean
@@ -76,7 +76,7 @@
 ->Context : typeof Context
 +>this : any
 +>Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
- 
+
        return new Context(input)
 ->new Context(input) : Context
 ->Context : typeof Context
@@ -112,7 +112,7 @@
 +>Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
 +>prototype : { construct: (input: Input, handle?: any) => State; }
 +>{    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct: (input: Input, handle?: any) => State; }
- 
+
      /**
       * @param {Input} input
 @@= skipped -39, +39 lines =@@
@@ -141,4 +141,3 @@
 +>module : { Context: { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }; }
 +>exports : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
 +>Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
- 

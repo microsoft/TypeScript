@@ -1,8 +1,8 @@
 --- old.contextualTypeShouldBeLiteral.js
 +++ new.contextualTypeShouldBeLiteral.js
 @@= skipped -124, +124 lines =@@
- 
- 
+
+
  //// [contextualTypeShouldBeLiteral.js]
 -"use strict";
  function foo(bar) { }

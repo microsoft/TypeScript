@@ -1,8 +1,8 @@
 --- old.recursiveSpecializationOfSignatures.js
 +++ new.recursiveSpecializationOfSignatures.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [recursiveSpecializationOfSignatures.js]
 -var S0 = /** @class */ (function () {
 -    function S0(S17) {

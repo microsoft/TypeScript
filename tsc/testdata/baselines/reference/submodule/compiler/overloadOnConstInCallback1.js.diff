@@ -2,7 +2,7 @@
 +++ new.overloadOnConstInCallback1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [overloadOnConstInCallback1.js]
 -var C = /** @class */ (function () {
 -    function C() {

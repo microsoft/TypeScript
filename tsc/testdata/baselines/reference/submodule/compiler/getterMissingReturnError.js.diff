@@ -1,8 +1,8 @@
 --- old.getterMissingReturnError.js
 +++ new.getterMissingReturnError.js
 @@= skipped -8, +8 lines =@@
- 
- 
+
+
  //// [getterMissingReturnError.js]
 -var test = /** @class */ (function () {
 -    function test() {

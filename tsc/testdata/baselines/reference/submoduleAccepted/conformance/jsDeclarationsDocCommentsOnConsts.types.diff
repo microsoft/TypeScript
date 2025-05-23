@@ -2,7 +2,7 @@
 +++ new.jsDeclarationsDocCommentsOnConsts.types
 @@= skipped -24, +24 lines =@@
  }
- 
+
  module.exports = {x, b}
 ->module.exports = {x, b} : typeof module.exports
 ->module.exports : typeof module.exports

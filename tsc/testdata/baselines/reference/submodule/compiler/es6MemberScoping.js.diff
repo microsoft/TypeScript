@@ -1,8 +1,8 @@
 --- old.es6MemberScoping.js
 +++ new.es6MemberScoping.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [es6MemberScoping.js]
 -var Foo = /** @class */ (function () {
 -    function Foo(store) {

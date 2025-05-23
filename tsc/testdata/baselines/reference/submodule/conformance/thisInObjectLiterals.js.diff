@@ -1,8 +1,8 @@
 --- old.thisInObjectLiterals.js
 +++ new.thisInObjectLiterals.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [thisInObjectLiterals.js]
 -var MyClass = /** @class */ (function () {
 -    function MyClass() {

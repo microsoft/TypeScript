@@ -2,7 +2,7 @@
 +++ new.recursiveFunctionTypes1.types
 @@= skipped -4, +4 lines =@@
  >C : C
- 
+
       static g(t: typeof C.g){ }
 ->g : (t: typeof C.g) => void
 ->t : (t: typeof C.g) => void

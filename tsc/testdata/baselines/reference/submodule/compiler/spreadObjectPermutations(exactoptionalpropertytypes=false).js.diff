@@ -1,8 +1,8 @@
 --- old.spreadObjectPermutations(exactoptionalpropertytypes=false).js
 +++ new.spreadObjectPermutations(exactoptionalpropertytypes=false).js
 @@= skipped -22, +22 lines =@@
- 
- 
+
+
  //// [spreadObjectPermutations.js]
 -"use strict";
 -var __assign = (this && this.__assign) || function () {

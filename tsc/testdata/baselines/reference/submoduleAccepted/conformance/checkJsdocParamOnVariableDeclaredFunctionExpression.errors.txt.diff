@@ -1,6 +1,6 @@
 --- old.checkJsdocParamOnVariableDeclaredFunctionExpression.errors.txt
 +++ new.checkJsdocParamOnVariableDeclaredFunctionExpression.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -0.js(14,20): error TS8024: JSDoc '@param' tag has name 's', but there is no parameter with that name.
 -
 -
@@ -24,5 +24,4 @@
 -     */
 -    var one = function (s) { }, two = function (untyped) { };
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

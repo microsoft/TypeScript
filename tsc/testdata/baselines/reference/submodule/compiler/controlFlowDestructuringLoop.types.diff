@@ -1,7 +1,7 @@
 --- old.controlFlowDestructuringLoop.types
 +++ new.controlFlowDestructuringLoop.types
 @@= skipped -43, +43 lines =@@
- 
+
              val.toFixed(2);
  >val.toFixed(2) : string
 ->val.toFixed : (fractionDigits?: number) => string

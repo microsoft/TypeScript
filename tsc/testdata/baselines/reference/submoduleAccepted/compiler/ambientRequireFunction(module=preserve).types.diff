@@ -2,7 +2,7 @@
 +++ new.ambientRequireFunction(module=preserve).types
 @@= skipped -3, +3 lines =@@
  /// <reference path="node.d.ts"/>
- 
+
  const fs = require("fs");
 ->fs : typeof fs
 ->require("fs") : typeof fs
@@ -10,7 +10,7 @@
 +>require("fs") : typeof import("fs")
  >require : (moduleName: string) => any
  >"fs" : "fs"
- 
+
 @@= skipped -9, +9 lines =@@
  >text : string
  >fs.readFileSync("/a/b/c") : string
@@ -19,4 +19,3 @@
 +>fs : typeof import("fs")
  >readFileSync : (s: string) => string
  >"/a/b/c" : "/a/b/c"
- 

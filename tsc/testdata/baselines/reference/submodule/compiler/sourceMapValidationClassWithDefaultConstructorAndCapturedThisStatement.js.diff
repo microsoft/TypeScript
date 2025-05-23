@@ -2,7 +2,7 @@
 +++ new.sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js
 @@= skipped -6, +6 lines =@@
  }
- 
+
  //// [sourceMapValidationClassWithDefaultConstructorAndCapturedThisStatement.js]
 -var Greeter = /** @class */ (function () {
 -    function Greeter() {

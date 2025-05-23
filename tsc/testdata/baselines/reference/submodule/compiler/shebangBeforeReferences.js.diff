@@ -2,7 +2,7 @@
 +++ new.shebangBeforeReferences.js
 @@= skipped -14, +14 lines =@@
  use(x);
- 
+
  //// [f.js]
 -#!/usr/bin/env node
  "use strict";

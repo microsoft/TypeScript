@@ -2,11 +2,11 @@
 +++ new.superCallBeforeThisAccessing2.symbols
 @@= skipped -11, +11 lines =@@
  >Base : Symbol(Base, Decl(superCallBeforeThisAccessing2.ts, 0, 0))
- 
+
      private _t;
 ->_t : Symbol(D._t, Decl(superCallBeforeThisAccessing2.ts, 3, 22))
 +>_t : Symbol(_t, Decl(superCallBeforeThisAccessing2.ts, 3, 22))
- 
+
      constructor() {
          super(() => { this._t }); // no error. only check when this is directly accessing in constructor
  >super : Symbol(Base, Decl(superCallBeforeThisAccessing2.ts, 0, 0))
@@ -17,4 +17,3 @@
 +>_t : Symbol(_t, Decl(superCallBeforeThisAccessing2.ts, 3, 22))
      }
  }
- 

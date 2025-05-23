@@ -2,7 +2,7 @@
 +++ new.derivedClassWithoutExplicitConstructor.js
 @@= skipped -27, +27 lines =@@
  var d2 = new D(new Date()); // ok
- 
+
  //// [derivedClassWithoutExplicitConstructor.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,7 +1,7 @@
 --- old.declarationEmitNestedGenerics.js
 +++ new.declarationEmitNestedGenerics.js
 @@= skipped -12, +12 lines =@@
- 
+
  //// [declarationEmitNestedGenerics.js]
  function f(p) {
 -    var g = null;

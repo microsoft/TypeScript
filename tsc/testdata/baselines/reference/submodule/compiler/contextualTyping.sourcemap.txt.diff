@@ -60,6 +60,23 @@
 -3 >Emitted(4, 20) Source(15, 45) + SourceIndex(0)
 -4 >Emitted(4, 30) Source(15, 54) + SourceIndex(0)
 -5 >Emitted(4, 31) Source(15, 55) + SourceIndex(0)
+----
+->>>            return i;
+-1 >^^^^^^^^^^^^
+-2 >            ^^^^^^^
+-3 >                   ^
+-4 >                    ^
+-1 >) {
+-  >        
+-2 >            return 
+-3 >                   i
+-4 >                    ;
+-1 >Emitted(5, 13) Source(16, 9) + SourceIndex(0)
+-2 >Emitted(5, 20) Source(16, 16) + SourceIndex(0)
+-3 >Emitted(5, 21) Source(16, 17) + SourceIndex(0)
+-4 >Emitted(5, 22) Source(16, 18) + SourceIndex(0)
+----
+->>>        };
 +2 >    foo
 +3 >       : (i: number, s: string) => number = 
 +4 >          function(
@@ -71,37 +88,9 @@
 +4 >Emitted(3, 21) Source(15, 54) + SourceIndex(0)
 +5 >Emitted(3, 22) Source(15, 55) + SourceIndex(0)
 +6 >Emitted(3, 24) Source(15, 57) + SourceIndex(0)
- ---
-->>>            return i;
--1 >^^^^^^^^^^^^
--2 >            ^^^^^^^
--3 >                   ^
--4 >                    ^
--1 >) {
++---
 +>>>        return i;
-+1 >^^^^^^^^
-+2 >        ^^^^^^^
-+3 >               ^
-+4 >                ^
-+1 >{
-   >        
--2 >            return 
--3 >                   i
--4 >                    ;
--1 >Emitted(5, 13) Source(16, 9) + SourceIndex(0)
--2 >Emitted(5, 20) Source(16, 16) + SourceIndex(0)
--3 >Emitted(5, 21) Source(16, 17) + SourceIndex(0)
--4 >Emitted(5, 22) Source(16, 18) + SourceIndex(0)
-+2 >        return 
-+3 >               i
-+4 >                ;
-+1 >Emitted(4, 9) Source(16, 9) + SourceIndex(0)
-+2 >Emitted(4, 16) Source(16, 16) + SourceIndex(0)
-+3 >Emitted(4, 17) Source(16, 17) + SourceIndex(0)
-+4 >Emitted(4, 18) Source(16, 18) + SourceIndex(0)
- ---
-->>>        };
--1 >^^^^^^^^
+ 1 >^^^^^^^^
 -2 >        ^
 -3 >         ^
 -1 >
@@ -111,25 +100,30 @@
 -1 >Emitted(6, 9) Source(17, 5) + SourceIndex(0)
 -2 >Emitted(6, 10) Source(17, 6) + SourceIndex(0)
 -3 >Emitted(6, 11) Source(17, 6) + SourceIndex(0)
-----
++2 >        ^^^^^^^
++3 >               ^
++4 >                ^
++1 >{
++  >        
++2 >        return 
++3 >               i
++4 >                ;
++1 >Emitted(4, 9) Source(16, 9) + SourceIndex(0)
++2 >Emitted(4, 16) Source(16, 16) + SourceIndex(0)
++3 >Emitted(4, 17) Source(16, 17) + SourceIndex(0)
++4 >Emitted(4, 18) Source(16, 18) + SourceIndex(0)
+ ---
 ->>>    }
 +>>>    };
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^->
-+3 >     ^
- 1 >
+-1 >
 -  >
 -2 >    }
 -1 >Emitted(7, 5) Source(18, 1) + SourceIndex(0)
 -2 >Emitted(7, 6) Source(18, 2) + SourceIndex(0)
-+2 >    
-+  >        }
-+3 >     
-+1 >Emitted(5, 5) Source(16, 18) + SourceIndex(0)
-+2 >Emitted(5, 6) Source(17, 6) + SourceIndex(0)
-+3 >Emitted(5, 7) Source(17, 6) + SourceIndex(0)
- ---
+----
 ->>>    return C1T5;
 -1->^^^^
 -2 >    ^^^^^^^^^^^
@@ -139,10 +133,7 @@
 -2 >Emitted(8, 16) Source(18, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -159,6 +150,19 @@
 -2 >Emitted(9, 2) Source(18, 2) + SourceIndex(0)
 -3 >Emitted(9, 2) Source(14, 1) + SourceIndex(0)
 -4 >Emitted(9, 6) Source(18, 2) + SourceIndex(0)
++3 >     ^
++1 >
++2 >    
++  >        }
++3 >     
++1 >Emitted(5, 5) Source(16, 18) + SourceIndex(0)
++2 >Emitted(5, 6) Source(17, 6) + SourceIndex(0)
++3 >Emitted(5, 7) Source(17, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(6, 2) Source(18, 2) + SourceIndex(0)
  ---
@@ -1221,13 +1225,14 @@
 +1 >
    >
 -1->Emitted(41, 1) Source(56, 1) + SourceIndex(0)
+----
+->>>    function C4T5() {
 +2 >class 
 +3 >      C4T5
 +1 >Emitted(38, 1) Source(56, 1) + SourceIndex(0)
 +2 >Emitted(38, 7) Source(56, 7) + SourceIndex(0)
 +3 >Emitted(38, 11) Source(56, 11) + SourceIndex(0)
- ---
-->>>    function C4T5() {
++---
 +>>>    foo;
 +1 >^^^^
 +2 >    ^^^
@@ -1333,16 +1338,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(46, 5) Source(62, 5) + SourceIndex(0)
 -2 >Emitted(46, 6) Source(62, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(44, 5) Source(61, 10) + SourceIndex(0)
-+2 >Emitted(44, 6) Source(62, 6) + SourceIndex(0)
- ---
+----
 ->>>    return C4T5;
 -1->^^^^
 -2 >    ^^^^^^^^^^^
@@ -1353,10 +1354,7 @@
 -2 >Emitted(47, 16) Source(63, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -1376,6 +1374,16 @@
 -2 >Emitted(48, 2) Source(63, 2) + SourceIndex(0)
 -3 >Emitted(48, 2) Source(56, 1) + SourceIndex(0)
 -4 >Emitted(48, 6) Source(63, 2) + SourceIndex(0)
++1 >
++2 >    
++  >        }
++1 >Emitted(44, 5) Source(61, 10) + SourceIndex(0)
++2 >Emitted(44, 6) Source(62, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(45, 2) Source(63, 2) + SourceIndex(0)
  ---
@@ -2943,29 +2951,47 @@
 +1 >
    >
 -1->Emitted(94, 1) Source(155, 1) + SourceIndex(0)
+----
+->>>    function C11t5(f) {
+-1->^^^^
+-2 >    ^^^^^^^^^^^^^^^
+-3 >                   ^
+-1->class C11t5 { 
+-2 >    constructor(
+-3 >                   f: (n: number) => IFoo
+-1->Emitted(95, 5) Source(155, 15) + SourceIndex(0)
+-2 >Emitted(95, 20) Source(155, 27) + SourceIndex(0)
+-3 >Emitted(95, 21) Source(155, 49) + SourceIndex(0)
+----
+->>>    }
+-1 >^^^^
+-2 >    ^
+-3 >     ^^^^^^^^^^^^^->
+-1 >) { 
+-2 >    }
+-1 >Emitted(96, 5) Source(155, 53) + SourceIndex(0)
+-2 >Emitted(96, 6) Source(155, 54) + SourceIndex(0)
+----
+->>>    return C11t5;
 +2 >class 
 +3 >      C11t5
 +1 >Emitted(91, 1) Source(155, 1) + SourceIndex(0)
 +2 >Emitted(91, 7) Source(155, 7) + SourceIndex(0)
 +3 >Emitted(91, 12) Source(155, 12) + SourceIndex(0)
- ---
-->>>    function C11t5(f) {
++---
 +>>>    constructor(f) { }
  1->^^^^
--2 >    ^^^^^^^^^^^^^^^
--3 >                   ^
--1->class C11t5 { 
-+2 >    ^^^^^^^^^^^^
+ 2 >    ^^^^^^^^^^^^
+-1-> 
+-2 >    }
+-1->Emitted(97, 5) Source(155, 55) + SourceIndex(0)
+-2 >Emitted(97, 17) Source(155, 56) + SourceIndex(0)
 +3 >                ^
 +4 >                 ^^
 +5 >                   ^^
 +6 >                     ^
 +1-> { 
- 2 >    constructor(
--3 >                   f: (n: number) => IFoo
--1->Emitted(95, 5) Source(155, 15) + SourceIndex(0)
--2 >Emitted(95, 20) Source(155, 27) + SourceIndex(0)
--3 >Emitted(95, 21) Source(155, 49) + SourceIndex(0)
++2 >    constructor(
 +3 >                f: (n: number) => IFoo
 +4 >                 ) 
 +5 >                   {
@@ -2977,28 +3003,6 @@
 +5 >Emitted(92, 22) Source(155, 52) + SourceIndex(0)
 +6 >Emitted(92, 23) Source(155, 54) + SourceIndex(0)
  ---
-->>>    }
--1 >^^^^
--2 >    ^
--3 >     ^^^^^^^^^^^^^->
--1 >) { 
--2 >    }
--1 >Emitted(96, 5) Source(155, 53) + SourceIndex(0)
--2 >Emitted(96, 6) Source(155, 54) + SourceIndex(0)
-+>>>}
-+1 >^
-+2 > ^->
-+1 > }
-+1 >Emitted(93, 2) Source(155, 56) + SourceIndex(0)
- ---
-->>>    return C11t5;
--1->^^^^
--2 >    ^^^^^^^^^^^^
--1-> 
--2 >    }
--1->Emitted(97, 5) Source(155, 55) + SourceIndex(0)
--2 >Emitted(97, 17) Source(155, 56) + SourceIndex(0)
-----
 ->>>}());
 -1 >
 -2 >^
@@ -3012,7 +3016,12 @@
 -2 >Emitted(98, 2) Source(155, 56) + SourceIndex(0)
 -3 >Emitted(98, 2) Source(155, 1) + SourceIndex(0)
 -4 >Emitted(98, 6) Source(155, 56) + SourceIndex(0)
-----
++>>>}
++1 >^
++2 > ^->
++1 > }
++1 >Emitted(93, 2) Source(155, 56) + SourceIndex(0)
+ ---
  >>>;
 -1 >
 +1->

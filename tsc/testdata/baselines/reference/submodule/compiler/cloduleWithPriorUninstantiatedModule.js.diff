@@ -2,7 +2,7 @@
 +++ new.cloduleWithPriorUninstantiatedModule.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [cloduleWithPriorUninstantiatedModule.js]
 -var Moclodule = /** @class */ (function () {
 -    function Moclodule() {

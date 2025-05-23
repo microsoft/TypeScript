@@ -2,7 +2,7 @@
 +++ new.defaultArgsInFunctionExpressions.js
 @@= skipped -33, +33 lines =@@
  f7().x;
- 
+
  //// [defaultArgsInFunctionExpressions.js]
 -var f = function (a) {
 -    if (a === void 0) { a = 3; }

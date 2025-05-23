@@ -2,7 +2,7 @@
 +++ new.classInConvertedLoopES5.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [classInConvertedLoopES5.js]
 -var classesByRow = {};
 -var _loop_1 = function (row) {

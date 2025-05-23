@@ -2,7 +2,7 @@
 +++ new.moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.types
 @@= skipped -7, +7 lines =@@
  >'./eslint-plugin-react.js' : "./eslint-plugin-react.js"
- 
+
  const tseslint = require('./typescript-eslint.js');
 ->tseslint : typeof tseslint
 ->require('./typescript-eslint.js') : typeof tseslint
@@ -10,7 +10,7 @@
 +>require('./typescript-eslint.js') : { config: (...configs: any[]) => void; }
  >require : any
  >'./typescript-eslint.js' : "./typescript-eslint.js"
- 
+
  tseslint.config(eslintReact)
  >tseslint.config(eslintReact) : void
 ->tseslint.config : (...configs: Config[]) => void
@@ -20,7 +20,7 @@
 +>tseslint : { config: (...configs: any[]) => void; }
 +>config : (...configs: any[]) => void
  >eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
- 
+
  === eslint-plugin-react.js ===
 @@= skipped -34, +34 lines =@@
  module.exports = {
@@ -30,7 +30,7 @@
 +>module : { export=: { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }; }
  >exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
  >{  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
- 
+
 @@= skipped -36, +36 lines =@@
   * @type {(...configs: Config[]) => void}
   */
@@ -39,7 +39,7 @@
 ->configs : Config[]
 +>config : (...configs: any[]) => void
 +>configs : any[]
- 
+
  module.exports = { config };
 ->module.exports = { config } : typeof module.exports
 ->module.exports : typeof module.exports
@@ -53,4 +53,3 @@
 +>exports : { config: (...configs: any[]) => void; }
 +>{ config } : { config: (...configs: any[]) => void; }
 +>config : (...configs: any[]) => void
- 

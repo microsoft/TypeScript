@@ -2,7 +2,7 @@
 +++ new.reexportMissingDefault5.js
 @@= skipped -8, +8 lines =@@
  export { default as Foo } from "./b";
- 
+
  //// [a.js]
 -System.register(["./b"], function (exports_1, context_1) {
 -    "use strict";

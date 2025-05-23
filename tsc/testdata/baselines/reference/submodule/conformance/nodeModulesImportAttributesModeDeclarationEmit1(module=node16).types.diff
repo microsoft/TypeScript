@@ -2,23 +2,24 @@
 +++ new.nodeModulesImportAttributesModeDeclarationEmit1(module=node16).types
 @@= skipped -4, +4 lines =@@
  >RequireInterface : RequireInterface
- 
+
  import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 ->ImportInterface : ImportInterface
 +>ImportInterface : any
- 
+
  export interface LocalInterface extends RequireInterface, ImportInterface {}
- 
+
 @@= skipped -18, +18 lines =@@
  >RequireInterface : RequireInterface
- 
+
  export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
 ->ImportInterface : ImportInterface
-+>ImportInterface : any
- 
+-
 -=== /node_modules/pkg/import.d.ts ===
 -
 -export interface ImportInterface {}
++>ImportInterface : any
++
  === /node_modules/pkg/require.d.ts ===
- 
+
  export interface RequireInterface {}

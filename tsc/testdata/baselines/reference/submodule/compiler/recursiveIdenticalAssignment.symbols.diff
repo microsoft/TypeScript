@@ -2,7 +2,7 @@
 +++ new.recursiveIdenticalAssignment.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(recursiveIdenticalAssignment.ts, 0, 12))
- 
+
      x: A<T>
 ->x : Symbol(A.x, Decl(recursiveIdenticalAssignment.ts, 0, 16))
 +>x : Symbol(x, Decl(recursiveIdenticalAssignment.ts, 0, 16))
@@ -11,7 +11,7 @@
  }
 @@= skipped -13, +13 lines =@@
  >T : Symbol(T, Decl(recursiveIdenticalAssignment.ts, 4, 12))
- 
+
      x: B<T>
 ->x : Symbol(B.x, Decl(recursiveIdenticalAssignment.ts, 4, 32))
 +>x : Symbol(x, Decl(recursiveIdenticalAssignment.ts, 4, 32))

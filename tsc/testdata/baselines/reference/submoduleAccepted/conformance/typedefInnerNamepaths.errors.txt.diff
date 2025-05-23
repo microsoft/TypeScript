@@ -1,6 +1,6 @@
 --- old.typedefInnerNamepaths.errors.txt
 +++ new.typedefInnerNamepaths.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -bug25104.js(1,7): error TS2300: Duplicate identifier 'C'.
 -bug25104.js(3,19): error TS1005: '}' expected.
 -bug25104.js(4,26): error TS2300: Duplicate identifier 'C'.
@@ -29,5 +29,4 @@
 -        }
 -    }
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

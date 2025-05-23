@@ -1,16 +1,16 @@
 --- old.tsxTypeArgumentResolution.types
 +++ new.tsxTypeArgumentResolution.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
 +>React : typeof __React
- 
+
  interface Prop {
      a: number,
 @@= skipped -12, +12 lines =@@
- 
+
  declare class MyComp<P> extends React.Component<P, {}> {
  >MyComp : MyComp<P>
 ->React.Component : React.Component<P, {}>
@@ -19,11 +19,11 @@
 +>React.Component : Component<P, {}>
 +>React : typeof __React
 +>Component : typeof Component
- 
+
      internalProp: P;
  >internalProp : P
  }
- 
+
  let x = <MyComp<Prop> a={10} b="hi" />; // OK
 ->x : JSX.Element
 -><MyComp<Prop> a={10} b="hi" /> : JSX.Element
@@ -33,7 +33,7 @@
  >a : number
  >10 : 10
  >b : string
- 
+
  x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
 ->x = <MyComp<Prop> a={10} b="hi"></MyComp> : JSX.Element
 ->x : JSX.Element
@@ -46,7 +46,7 @@
  >10 : 10
 @@= skipped -27, +27 lines =@@
  >MyComp : typeof MyComp
- 
+
  x = <MyComp<Prop> a={10} b={20} />; // error
 ->x = <MyComp<Prop> a={10} b={20} /> : JSX.Element
 ->x : JSX.Element
@@ -59,7 +59,7 @@
  >10 : 10
 @@= skipped -10, +10 lines =@@
  >20 : 20
- 
+
  x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
 ->x = <MyComp<Prop> a={10} b={20}></MyComp> : JSX.Element
 ->x : JSX.Element
@@ -72,7 +72,7 @@
  >10 : 10
 @@= skipped -11, +11 lines =@@
  >MyComp : typeof MyComp
- 
+
  x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
 ->x = <MyComp<Prop, Prop> a={10} b="hi" /> : JSX.Element
 ->x : JSX.Element
@@ -84,7 +84,7 @@
  >a : number
  >10 : 10
  >b : string
- 
+
  x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
 ->x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp> : JSX.Element
 ->x : JSX.Element
@@ -97,7 +97,7 @@
  >10 : 10
 @@= skipped -19, +19 lines =@@
  >MyComp : typeof MyComp
- 
+
  x = <MyComp<> a={10} b="hi" />; // error
 ->x = <MyComp<> a={10} b="hi" /> : JSX.Element
 ->x : JSX.Element
@@ -109,7 +109,7 @@
  >a : number
  >10 : 10
  >b : string
- 
+
  x = <MyComp<> a={10} b="hi"></MyComp>; // error
 ->x = <MyComp<> a={10} b="hi"></MyComp> : JSX.Element
 ->x : JSX.Element
@@ -122,7 +122,7 @@
  >10 : 10
 @@= skipped -19, +19 lines =@@
  >MyComp : typeof MyComp
- 
+
  x= <MyComp<{}> /> // OK
 ->x= <MyComp<{}> /> : JSX.Element
 ->x : JSX.Element
@@ -131,7 +131,7 @@
 +>x : Element
 +><MyComp<{}> /> : Element
  >MyComp : typeof MyComp
- 
+
  x= <MyComp<{}>></MyComp> // OK
 ->x= <MyComp<{}>></MyComp> : JSX.Element
 ->x : JSX.Element
@@ -141,7 +141,7 @@
 +><MyComp<{}>></MyComp> : Element
  >MyComp : typeof MyComp
  >MyComp : typeof MyComp
- 
+
  declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<P & P2, {}> {
  >MyComp2 : MyComp2<P, P2>
  >a : string
@@ -151,7 +151,7 @@
 +>React.Component : Component<P & P2, {}>
 +>React : typeof __React
 +>Component : typeof Component
- 
+
      internalProp: [P, P2];
  >internalProp : [P, P2]
  }
@@ -167,7 +167,7 @@
  >b : string
 @@= skipped -33, +33 lines =@@
  >b : string
- 
+
  x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2>; // OK
 ->x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2> : JSX.Element
 ->x : JSX.Element
@@ -180,7 +180,7 @@
  >b : string
 @@= skipped -11, +11 lines =@@
  >MyComp2 : typeof MyComp2
- 
+
  x = <MyComp2<Prop> a={10} b="hi" />; // error
 ->x = <MyComp2<Prop> a={10} b="hi" /> : JSX.Element
 ->x : JSX.Element
@@ -192,7 +192,7 @@
  >a : number
  >10 : 10
  >b : string
- 
+
  x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
 ->x = <MyComp2<Prop> a={10} b="hi"></MyComp2> : JSX.Element
 ->x : JSX.Element
@@ -205,7 +205,7 @@
  >10 : 10
 @@= skipped -19, +19 lines =@@
  >MyComp2 : typeof MyComp2
- 
+
  x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" />; // OK
 ->x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" /> : JSX.Element
 ->x : JSX.Element
@@ -218,7 +218,7 @@
  >b : string
 @@= skipped -10, +10 lines =@@
  >b : string
- 
+
  x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2>; // OK
 ->x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2> : JSX.Element
 ->x : JSX.Element
@@ -231,7 +231,7 @@
  >b : string
 @@= skipped -11, +11 lines =@@
  >MyComp2 : typeof MyComp2
- 
+
  x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" />; // error
 ->x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" /> : JSX.Element
 ->x : JSX.Element
@@ -244,7 +244,7 @@
  >b : string
 @@= skipped -10, +10 lines =@@
  >b : string
- 
+
  x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
 ->x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2> : JSX.Element
 ->x : JSX.Element
@@ -257,7 +257,7 @@
  >b : string
 @@= skipped -11, +11 lines =@@
  >MyComp2 : typeof MyComp2
- 
+
  x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" />; // error
 ->x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" /> : JSX.Element
 ->x : JSX.Element
@@ -270,7 +270,7 @@
  >b : number
 @@= skipped -10, +10 lines =@@
  >b : string
- 
+
  x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2>; // error
 ->x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2> : JSX.Element
 ->x : JSX.Element

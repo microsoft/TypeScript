@@ -1,89 +1,89 @@
 --- old.conditionalTypes2.types
 +++ new.conditionalTypes2.types
 @@= skipped -81, +81 lines =@@
- 
+
      if (isFunction(item)) {
  >isFunction(item) : boolean
 ->isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 +>isFunction : <T>(value: T) => value is Extract<T, Function>
  >item : T
- 
+
          return item;
 @@= skipped -17, +17 lines =@@
- 
+
      if (isFunction(x)) {
  >isFunction(x) : boolean
 ->isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 +>isFunction : <T>(value: T) => value is Extract<T, Function>
  >x : T
- 
+
          const f: Function = x;
 @@= skipped -150, +150 lines =@@
  >x : T
- 
+
      partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
 ->partition2 : { <U_1 extends T>(predicate: (v: T) => v is U_1): [Vector<U_1>, Vector<Exclude<T, U_1>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
 +>partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
  >predicate : (v: T) => boolean
  >v : T
- 
+
 @@= skipped -28, +28 lines =@@
  // Repro from #22899
- 
+
  declare function toString1(value: object | Function): string ;
 ->toString1 : (value: object | Function) => string
 +>toString1 : (value: Function | object) => string
  >value : Function | object
- 
+
  declare function toString2(value: Function): string ;
 @@= skipped -13, +13 lines =@@
- 
+
      if (isFunction(value)) {
  >isFunction(value) : boolean
 ->isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 +>isFunction : <T>(value: T) => value is Extract<T, Function>
  >value : T
- 
+
          toString1(value);
  >toString1(value) : string
 ->toString1 : (value: object | Function) => string
 +>toString1 : (value: Function | object) => string
  >value : Extract<T, Function>
- 
+
          toString2(value);
 @@= skipped -161, +161 lines =@@
  // Repro from #33568
- 
+
  declare function save(_response: IRootResponse<string>): void;
 ->save : (_response: IRootResponse<string>) => void
 +>save : (_response: IResponse<string>) => void
  >_response : IResponse<string>
- 
+
  exportCommand(save);
  >exportCommand(save) : void
  >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
 ->save : (_response: IRootResponse<string>) => void
 +>save : (_response: IResponse<string>) => void
- 
+
  declare function exportCommand<TResponse>(functionToCall: IExportCallback<TResponse>): void;
  >exportCommand : <TResponse>(functionToCall: IExportCallback<TResponse>) => void
 @@= skipped -39, +39 lines =@@
  >IResponse : IResponse<T>
- 
+
  	sendValue(name: keyof GetAllPropertiesOfType<T, string>): void;
 ->sendValue : (name: keyof GetAllPropertiesOfType<T, string>) => void
 +>sendValue : (name: GetPropertyNamesOfType<Required<T>, string>) => void
  >name : GetPropertyNamesOfType<Required<T>, string>
- 
+
  };
 @@= skipped -21, +21 lines =@@
  // Repro from #33568
- 
+
  declare function ff(x: Foo3<string>): void;
 ->ff : (x: Foo3<string>) => void
 +>ff : (x: { x: string; }) => void
  >x : { x: string; }
- 
+
  declare function gg<T>(f: (x: Foo3<T>) => void): void;
 @@= skipped -16, +16 lines =@@
  gg(ff);
@@ -91,6 +91,5 @@
  >gg : <T>(f: (x: Foo3<T>) => void) => void
 ->ff : (x: Foo3<string>) => void
 +>ff : (x: { x: string; }) => void
- 
+
  // Repro from #41613
- 

@@ -2,22 +2,22 @@
 +++ new.mappedTypeConstraints2.types
 @@= skipped -58, +58 lines =@@
  };
- 
+
  function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
 ->f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) => void
 +>f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: K) => void
  >obj : Mapped4<K>
  >key : K
- 
+
 @@= skipped -18, +18 lines =@@
  };
- 
+
  function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
 ->f5 : <K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) => void
 +>f5 : <K extends string>(obj: Mapped5<K>, key: K extends `_${string}` ? K : never) => void
  >obj : Mapped5<K>
  >key : K extends `_${string}` ? K : never
- 
+
 @@= skipped -74, +74 lines =@@
  >key : string
  >val : any
@@ -28,5 +28,5 @@
 ->entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
 +>entries : { <T>(o: ArrayLike<T> | { [s: string]: T; }): [string, T][]; (o: {}): [string, any][]; }
  >obj : T
- 
+
          const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];

@@ -13,8 +13,8 @@
 +unusedTypeParametersCheckedByNoUnusedParameters.ts(7,9): error TS6196: 'T' is declared but never used.
 +unusedTypeParametersCheckedByNoUnusedParameters.ts(8,14): error TS6196: 'V' is declared but never used.
 +unusedTypeParametersCheckedByNoUnusedParameters.ts(11,10): error TS6196: 'T' is declared but never used.
- 
- 
+
+
  ==== unusedTypeParametersCheckedByNoUnusedParameters.ts (6 errors) ====
      function f<T>() { }
 -              ~~~

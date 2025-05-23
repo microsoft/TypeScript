@@ -1,18 +1,18 @@
 --- old.jsExportMemberMergedWithModuleAugmentation.symbols
 +++ new.jsExportMemberMergedWithModuleAugmentation.symbols
 @@= skipped -1, +1 lines =@@
- 
+
  === /test.js ===
  class Abcde {
 ->Abcde : Symbol(Abcde, Decl(test.js, 0, 0), Decl(index.ts, 2, 25))
 +>Abcde : Symbol(Abcde, Decl(test.js, 0, 0))
- 
+
    /** @type {string} */
    x;
 ->x : Symbol(Abcde.x, Decl(test.js, 0, 13))
 +>x : Symbol(x, Decl(test.js, 0, 13))
  }
- 
+
  module.exports = {
 ->module.exports : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
 ->module : Symbol(module, Decl(test.js, 3, 1))
@@ -20,30 +20,30 @@
 +>module.exports : Symbol(export=, Decl(test.js, 3, 1))
 +>module : Symbol(module.exports)
 +>exports : Symbol(export=, Decl(test.js, 3, 1))
- 
+
    Abcde
  >Abcde : Symbol(Abcde, Decl(test.js, 5, 18))
 @@= skipped -22, +22 lines =@@
  >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
- 
+
  declare module "./test" {
 ->"./test" : Symbol("/test", Decl(test.js, 0, 0), Decl(index.ts, 0, 31))
 +>"./test" : Symbol("./test", Decl(index.ts, 0, 31))
- 
+
    interface Abcde { b: string }
 ->Abcde : Symbol(Abcde, Decl(test.js, 0, 0), Decl(index.ts, 2, 25))
 ->b : Symbol(Abcde.b, Decl(index.ts, 3, 19))
 +>Abcde : Symbol(Abcde, Decl(index.ts, 2, 25))
 +>b : Symbol(b, Decl(index.ts, 3, 19))
  }
- 
+
  new Abcde().x;
 ->new Abcde().x : Symbol(Abcde.x, Decl(test.js, 0, 13))
 +>new Abcde().x : Symbol(x, Decl(test.js, 0, 13))
  >Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
 ->x : Symbol(Abcde.x, Decl(test.js, 0, 13))
 +>x : Symbol(x, Decl(test.js, 0, 13))
- 
+
  // Bug: the type meaning from /test.js does not
  // propagate through the object literal export.
  const x: Abcde = { b: "" };
@@ -51,4 +51,3 @@
 ->Abcde : Symbol(Abcde, Decl(index.ts, 0, 8))
 +>Abcde : Symbol(Abcde)
  >b : Symbol(b, Decl(index.ts, 10, 18))
- 

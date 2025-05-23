@@ -1,7 +1,7 @@
 --- old.jsdocConstructorFunctionTypeReference.types
 +++ new.jsdocConstructorFunctionTypeReference.types
 @@= skipped -1, +1 lines =@@
- 
+
  === jsdocConstructorFunctionTypeReference.js ===
  var Validator = function VFunc() {
 ->Validator : typeof VFunc
@@ -10,7 +10,7 @@
 +>Validator : () => void
 +>function VFunc() {    this.flags = "gim"} : () => void
 +>VFunc : () => void
- 
+
      this.flags = "gim"
  >this.flags = "gim" : "gim"
  >this.flags : any
@@ -18,7 +18,7 @@
 +>this : any
  >flags : any
  >"gim" : "gim"
- 
+
 @@= skipped -17, +17 lines =@@
  >Validator.prototype.num = 12 : 12
  >Validator.prototype.num : any
@@ -38,7 +38,7 @@
 +>validateRegExpFlags : (state: Validator) => any
 +>function(state) {    return state.flags} : (state: Validator) => any
 +>state : Validator
- 
+
      return state.flags
 ->state.flags : string
 ->state : VFunc
@@ -46,6 +46,5 @@
 +>state.flags : any
 +>state : Validator
 +>flags : any
- 
+
  };
- 

@@ -1,8 +1,8 @@
 --- old.contextualTypeOfIndexedAccessParameter.js
 +++ new.contextualTypeOfIndexedAccessParameter.js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [contextualTypeOfIndexedAccessParameter.js]
 -"use strict";
  f("a", {

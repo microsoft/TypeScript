@@ -7,4 +7,3 @@
 ->c : Symbol(g, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
 +>c : Symbol(c, Decl(internalAliasWithDottedNameEmit.ts, 0, 11))
  }
- 

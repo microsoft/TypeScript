@@ -10,10 +10,12 @@
  unusedVariablesWithUnderscoreInForOfLoop.ts(25,19): error TS6133: 'a' is declared but its value is never read.
 -unusedVariablesWithUnderscoreInForOfLoop.ts(27,19): error TS6133: 'a' is declared but its value is never read.
 -unusedVariablesWithUnderscoreInForOfLoop.ts(27,22): error TS6133: 'b' is declared but its value is never read.
-+unusedVariablesWithUnderscoreInForOfLoop.ts(27,18): error TS6198: All destructured elements are unused.
- 
- 
+-
+-
 -==== unusedVariablesWithUnderscoreInForOfLoop.ts (8 errors) ====
++unusedVariablesWithUnderscoreInForOfLoop.ts(27,18): error TS6198: All destructured elements are unused.
++
++
 +==== unusedVariablesWithUnderscoreInForOfLoop.ts (6 errors) ====
      function t1() {
          for (const [_a, b] of [['key', 1]]) {

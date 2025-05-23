@@ -2,42 +2,42 @@
 +++ new.noImplicitReturnsExclusions.types
 @@= skipped -40, +40 lines =@@
  }
- 
+
  function f5(b: boolean): string | void {
 ->f5 : (b: boolean) => string | void
 +>f5 : (b: boolean) => void | string
  >b : boolean
- 
+
      if (b) return undefined;
 @@= skipped -106, +106 lines =@@
- 
+
  interface Thenable<T> {
    then<TResult>(
 ->then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => void): Thenable<TResult_1>; }
 +>then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
- 
+
      onfulfilled?: (value: T) => TResult | Thenable<TResult>,
  >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
 @@= skipped -12, +12 lines =@@
- 
+
    ): Thenable<TResult>;
    then<TResult>(
 ->then : { <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => TResult_1 | Thenable<TResult_1>): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
 +>then : { <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => TResult | Thenable<TResult>) | undefined): Thenable<TResult>; <TResult>(onfulfilled?: ((value: T) => TResult | Thenable<TResult>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult>; }
- 
+
      onfulfilled?: (value: T) => TResult | Thenable<TResult>,
  >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
 @@= skipped -14, +14 lines =@@
  }
- 
+
  export declare function executeCommand<T = unknown>(
 ->executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
 +>executeCommand : <T>(command: string, ...rest: any[]) => Thenable<T>
- 
+
    command: string,
  >command : string
 @@= skipped -39, +39 lines =@@
- 
+
      return executeCommand("vscode.open", item.input.location.uri);
  >executeCommand("vscode.open", item.input.location.uri) : Thenable<unknown>
 ->executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>

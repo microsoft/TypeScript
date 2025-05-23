@@ -7,4 +7,3 @@
 ->bar : Symbol(foo.bar, Decl(contextualTyping15.ts, 0, 11))
 +>bar : Symbol(bar, Decl(contextualTyping15.ts, 0, 11))
  >i : Symbol(i, Decl(contextualTyping15.ts, 0, 39))
- 

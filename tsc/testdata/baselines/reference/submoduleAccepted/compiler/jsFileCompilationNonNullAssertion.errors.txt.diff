@@ -1,6 +1,6 @@
 --- old.jsFileCompilationNonNullAssertion.errors.txt
 +++ new.jsFileCompilationNonNullAssertion.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -/src/a.js(1,1): error TS8013: Non-null assertions can only be used in TypeScript files.
 -
 -
@@ -9,5 +9,4 @@
 -    ~~
 -!!! error TS8013: Non-null assertions can only be used in TypeScript files.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

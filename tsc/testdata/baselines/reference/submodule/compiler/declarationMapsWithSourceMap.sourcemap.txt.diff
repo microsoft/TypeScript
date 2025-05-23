@@ -16,22 +16,21 @@
  sourceFile:a.ts
  -------------------------------------------------------------------
 ->>>var Foo = /** @class */ (function () {
-+>>>class Foo {
- 1 >
+-1 >
 -2 >^^^^^^^^^^^^^^^^^^^^^->
+-1 >
++>>>class Foo {
++1 >
 +2 >^^^^^^
 +3 >      ^^^
 +4 >         ^^^^^^^^->
- 1 >
++1 >
 +2 >class 
 +3 >      Foo
  1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
-+3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
- ---
+----
 ->>>    function Foo() {
-+>>>    doThing(x) {
- 1->^^^^
+-1->^^^^
 -2 >    ^^->
 -1->
 -1->Emitted(2, 5) Source(1, 1) + SourceIndex(0)
@@ -59,6 +58,11 @@
 -4 >                            ^^^^^^^^^^
 -5 >                                      ^
 -1->
++2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
++3 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
++---
++>>>    doThing(x) {
++1->^^^^
 +2 >    ^^^^^^^
 +3 >           ^
 +4 >            ^
@@ -201,16 +205,12 @@
  1 >^^^^
  2 >    ^
 -3 >     ^^^^^^^^^^^->
- 1 >
+-1 >
 -  >    
 -2 >    }
 -1 >Emitted(9, 5) Source(7, 5) + SourceIndex(0)
 -2 >Emitted(9, 6) Source(7, 6) + SourceIndex(0)
-+2 >    
-+  >        }
-+1 >Emitted(7, 5) Source(6, 26) + SourceIndex(0)
-+2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
- ---
+----
 ->>>    return Foo;
 -1->^^^^
 -2 >    ^^^^^^^^^^
@@ -221,10 +221,7 @@
 -2 >Emitted(10, 15) Source(8, 2) + SourceIndex(0)
 ----
 ->>>}());
-+>>>}
-+1 >^
-+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >^
 -3 > 
 -4 > ^^^^
@@ -244,9 +241,20 @@
 -2 >Emitted(11, 2) Source(8, 2) + SourceIndex(0)
 -3 >Emitted(11, 2) Source(1, 1) + SourceIndex(0)
 -4 >Emitted(11, 6) Source(8, 2) + SourceIndex(0)
+----
++1 >
++2 >    
++  >        }
++1 >Emitted(7, 5) Source(6, 26) + SourceIndex(0)
++2 >Emitted(7, 6) Source(7, 6) + SourceIndex(0)
++---
++>>>}
++1 >^
++2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >}
 +1 >Emitted(8, 2) Source(8, 2) + SourceIndex(0)
- ---
++---
 +>>>//# sourceMappingURL=a.js.map===================================================================
 +JsFile: index.js
 +mapUrl: index.js.map
@@ -374,22 +382,7 @@
 -13>Emitted(14, 28) Source(4, 26) + SourceIndex(1)
 -14>Emitted(14, 29) Source(4, 27) + SourceIndex(1)
 -15>Emitted(14, 30) Source(4, 28) + SourceIndex(1)
-+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
-+2 >Emitted(3, 5) Source(4, 5) + SourceIndex(0)
-+3 >Emitted(3, 6) Source(4, 6) + SourceIndex(0)
-+4 >Emitted(3, 9) Source(4, 9) + SourceIndex(0)
-+5 >Emitted(3, 10) Source(4, 10) + SourceIndex(0)
-+6 >Emitted(3, 11) Source(4, 11) + SourceIndex(0)
-+7 >Emitted(3, 18) Source(4, 18) + SourceIndex(0)
-+8 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
-+9 >Emitted(3, 21) Source(4, 20) + SourceIndex(0)
-+10>Emitted(3, 22) Source(4, 21) + SourceIndex(0)
-+11>Emitted(3, 24) Source(4, 23) + SourceIndex(0)
-+12>Emitted(3, 26) Source(4, 25) + SourceIndex(0)
-+13>Emitted(3, 28) Source(4, 26) + SourceIndex(0)
-+14>Emitted(3, 29) Source(4, 27) + SourceIndex(0)
-+15>Emitted(3, 30) Source(4, 28) + SourceIndex(0)
- ---
+----
 ->>>//# sourceMappingURL=bundle.js.map===================================================================
 -JsFile: bundle.d.ts
 -mapUrl: bundle.d.ts.map
@@ -531,4 +524,20 @@
 -2 >Emitted(12, 3) Source(4, 28) + SourceIndex(1)
 ----
 ->>>//# sourceMappingURL=bundle.d.ts.map
++1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
++2 >Emitted(3, 5) Source(4, 5) + SourceIndex(0)
++3 >Emitted(3, 6) Source(4, 6) + SourceIndex(0)
++4 >Emitted(3, 9) Source(4, 9) + SourceIndex(0)
++5 >Emitted(3, 10) Source(4, 10) + SourceIndex(0)
++6 >Emitted(3, 11) Source(4, 11) + SourceIndex(0)
++7 >Emitted(3, 18) Source(4, 18) + SourceIndex(0)
++8 >Emitted(3, 19) Source(4, 19) + SourceIndex(0)
++9 >Emitted(3, 21) Source(4, 20) + SourceIndex(0)
++10>Emitted(3, 22) Source(4, 21) + SourceIndex(0)
++11>Emitted(3, 24) Source(4, 23) + SourceIndex(0)
++12>Emitted(3, 26) Source(4, 25) + SourceIndex(0)
++13>Emitted(3, 28) Source(4, 26) + SourceIndex(0)
++14>Emitted(3, 29) Source(4, 27) + SourceIndex(0)
++15>Emitted(3, 30) Source(4, 28) + SourceIndex(0)
++---
 +>>>//# sourceMappingURL=index.js.map

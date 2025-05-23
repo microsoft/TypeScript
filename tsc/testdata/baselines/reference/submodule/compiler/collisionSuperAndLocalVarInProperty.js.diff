@@ -2,7 +2,7 @@
 +++ new.collisionSuperAndLocalVarInProperty.js
 @@= skipped -19, +19 lines =@@
  }
- 
+
  //// [collisionSuperAndLocalVarInProperty.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -10,29 +10,16 @@
 -            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
 -            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
 -        return extendStatics(d, b);
-+var _super = 10; // No Error
-+class Foo {
-+    prop1 = {
-+        doStuff: () => {
-+            var _super = 10; // No error
-+        }
-     };
+-    };
 -    return function (d, b) {
 -        if (typeof b !== "function" && b !== null)
 -            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
 -        extendStatics(d, b);
 -        function __() { this.constructor = d; }
 -        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-+    _super = 10; // No error
-+}
-+class b extends Foo {
-+    prop2 = {
-+        doStuff: () => {
-+            var _super = 10; // Should be error 
-+        }
-     };
+-    };
 -})();
--var _super = 10; // No Error
+ var _super = 10; // No Error
 -var Foo = /** @class */ (function () {
 -    function Foo() {
 -        this.prop1 = {
@@ -58,5 +45,19 @@
 -    }
 -    return b;
 -}(Foo));
++class Foo {
++    prop1 = {
++        doStuff: () => {
++            var _super = 10; // No error
++        }
++    };
++    _super = 10; // No error
++}
++class b extends Foo {
++    prop2 = {
++        doStuff: () => {
++            var _super = 10; // Should be error 
++        }
++    };
 +    _super = 10; // No error
 +}

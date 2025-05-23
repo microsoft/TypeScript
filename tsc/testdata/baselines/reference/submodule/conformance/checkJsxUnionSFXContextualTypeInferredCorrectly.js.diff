@@ -1,7 +1,7 @@
 --- old.checkJsxUnionSFXContextualTypeInferredCorrectly.js
 +++ new.checkJsxUnionSFXContextualTypeInferredCorrectly.js
 @@= skipped -41, +41 lines =@@
- 
+
  //// [checkJsxUnionSFXContextualTypeInferredCorrectly.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

@@ -6,7 +6,7 @@
  import f = require('./enumFromExternalModule_0');
 ->f : typeof f
 +>f : typeof import("enumFromExternalModule_0")
- 
+
  var x = f.Mode.Open;
 ->x : f.Mode
 ->f.Mode.Open : f.Mode
@@ -20,6 +20,6 @@
 +>f : typeof import("enumFromExternalModule_0")
 +>Mode : typeof Mode
 +>Open : Mode
- 
+
  === enumFromExternalModule_0.ts ===
  export enum Mode { Open }

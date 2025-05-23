@@ -1,8 +1,8 @@
 --- old.typeOfThisInStaticMembers12(target=es2022).js
 +++ new.typeOfThisInStaticMembers12(target=es2022).js
 @@= skipped -10, +10 lines =@@
- 
- 
+
+
  //// [typeOfThisInStaticMembers12.js]
 -var _a, _b, _c;
  class C {

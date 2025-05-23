@@ -1,8 +1,8 @@
 --- old.jsxNamespacePrefixIntrinsics.js
 +++ new.jsxNamespacePrefixIntrinsics.js
 @@= skipped -20, +20 lines =@@
- 
- 
+
+
  //// [jsxNamespacePrefixIntrinsics.jsx]
 -var valid = <ns:element ns:attribute="yep"/>;
 -var validUpcase1 = <ns:NamespacedUpcaseAlsoIntrinsic />;

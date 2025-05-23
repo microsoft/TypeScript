@@ -2,11 +2,11 @@
 +++ new.expandoFunctionContextualTypesNoValue.types
 @@= skipped -5, +5 lines =@@
  >Foo : any
- 
+
  export function Foo() { }
 ->Foo : typeof import("expandoFunctionContextualTypesNoValue").Foo
 +>Foo : { (): void; bar: () => void; }
- 
+
  Foo.bar = () => { };
  >Foo.bar = () => { } : () => void
  >Foo.bar : () => void
@@ -14,4 +14,3 @@
 +>Foo : { (): void; bar: () => void; }
  >bar : () => void
  >() => { } : () => void
- 

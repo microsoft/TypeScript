@@ -9,11 +9,11 @@
  >{x: 12} : { x: 12; }
  >x : 12
  >12 : 12
- 
+
  export {c};
 ->c : import("a/b/c").Foo
 +>c : Foo
- 
+
  === index.ts ===
  const d: typeof import("./a/inner")["c"] = {x: 12};
 ->d : import("a/b/c").Foo
@@ -21,8 +21,7 @@
  >{x: 12} : { x: 12; }
  >x : 12
  >12 : 12
- 
+
  export {d};
 ->d : import("a/b/c").Foo
 +>d : Foo
- 

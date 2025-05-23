@@ -1,8 +1,8 @@
 --- old.exportingContainingVisibleType.js
 +++ new.exportingContainingVisibleType.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [exportingContainingVisibleType.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

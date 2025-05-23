@@ -1,8 +1,8 @@
 --- old.usingDeclarationsWithESClassDecorators.8(module=esnext,target=es5).js
 +++ new.usingDeclarationsWithESClassDecorators.8(module=esnext,target=es5).js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [usingDeclarationsWithESClassDecorators.8.js]
 -var C = function () {
 -    var _classDecorators = [dec];

@@ -1,19 +1,19 @@
 --- old.declFileExportImportChain2.types
 +++ new.declFileExportImportChain2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === declFileExportImportChain2_d.ts ===
  import c = require("declFileExportImportChain2_c");
 ->c : typeof c
 +>c : any
- 
+
  export var x: c.b.m2.c1;
 ->x : c.b.m2.c1
 +>x : c1
  >c : any
  >b : any
  >m2 : any
- 
+-
 -=== declFileExportImportChain2_a.ts ===
 -module m1 {
 ->m1 : typeof m1
@@ -39,4 +39,3 @@
 -=== declFileExportImportChain2_c.ts ===
 -export import b = require("declFileExportImportChain2_b");
 ->b : typeof b
--

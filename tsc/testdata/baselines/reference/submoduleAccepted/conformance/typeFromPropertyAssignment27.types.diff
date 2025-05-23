@@ -12,7 +12,7 @@
 +>this : any
  >p : any
  >1 : 1
- 
+
  C.prototype = { q: 2 };
  >C.prototype = { q: 2 } : { q: number; }
  >C.prototype : { q: number; }
@@ -22,7 +22,7 @@
  >{ q: 2 } : { q: number; }
  >q : number
  >2 : 2
- 
+
  const c = new C()
 ->c : C
 ->new C() : C
@@ -30,7 +30,7 @@
 +>c : any
 +>new C() : any
 +>C : { (): void; prototype: { q: number; }; }
- 
+
  c.p
 ->c.p : number
 ->c : C
@@ -38,7 +38,7 @@
 +>c.p : any
 +>c : any
 +>p : any
- 
+
  c.q
 ->c.q : number
 ->c : C
@@ -46,4 +46,3 @@
 +>c.q : any
 +>c : any
 +>q : any
- 

@@ -9,6 +9,6 @@
  >Foo : Symbol(Foo, Decl(foo.d.ts, 3, 15))
 ->fn : Symbol(Foo.fn, Decl(foo.d.ts, 0, 25))
 +>fn : Symbol(fn, Decl(foo.d.ts, 0, 25))
- 
+
  === foo.d.ts ===
  declare namespace Thing {

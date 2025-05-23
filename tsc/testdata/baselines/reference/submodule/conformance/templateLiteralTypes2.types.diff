@@ -1,7 +1,7 @@
 --- old.templateLiteralTypes2.types
 +++ new.templateLiteralTypes2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === templateLiteralTypes2.ts ===
  function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
 ->ft1 : <T extends string>(s: string, n: number, u: "foo" | "bar" | "baz", t: T) => void
@@ -11,19 +11,19 @@
  >u : "bar" | "baz" | "foo"
 @@= skipped -313, +313 lines =@@
  // Repro from #41631
- 
+
  declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
 ->takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
 +>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R extends string}` ? R : unknown
  >literal : T
- 
+
  const t1 = takesLiteral("foo.bar.baz"); // "baz"
  >t1 : "baz"
  >takesLiteral("foo.bar.baz") : "baz"
 ->takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
 +>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R extends string}` ? R : unknown
  >"foo.bar.baz" : "foo.bar.baz"
- 
+
  const id2 = "foo.bar.baz";
 @@= skipped -16, +16 lines =@@
  const t2 = takesLiteral(id2); // "baz"
@@ -32,7 +32,7 @@
 ->takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
 +>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R extends string}` ? R : unknown
  >id2 : "foo.bar.baz"
- 
+
  declare const someString: string;
 @@= skipped -9, +9 lines =@@
  const t3 = takesLiteral(`foo.bar.${someString}`);  // string
@@ -42,7 +42,7 @@
 +>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R extends string}` ? R : unknown
  >`foo.bar.${someString}` : `foo.bar.${string}`
  >someString : string
- 
+
 @@= skipped -12, +12 lines =@@
  const t4 = takesLiteral(id4);  // unknown
  >t4 : unknown
@@ -50,7 +50,7 @@
 ->takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
 +>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R extends string}` ? R : unknown
  >id4 : string
- 
+
  declare const someUnion: 'abc' | 'def' | 'ghi';
 @@= skipped -9, +9 lines =@@
  const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
@@ -60,17 +60,17 @@
 +>takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R extends string}` ? R : unknown
  >`foo.bar.${someUnion}` : "foo.bar.abc" | "foo.bar.def" | "foo.bar.ghi"
  >someUnion : "abc" | "def" | "ghi"
- 
+
 @@= skipped -42, +42 lines =@@
  >12 : 12
- 
+
  function C2(transform: "-moz-initial" | (string & {})) { return 12; }
 ->C2 : (transform: "-moz-initial" | (string & {})) => number
 ->transform : "-moz-initial" | (string & {})
 +>C2 : (transform: "-moz-initial" | string & {}) => number
 +>transform : "-moz-initial" | string & {}
  >12 : 12
- 
+
  C2(`rotate(${interpolatedStyle.rotate}dig)`);
  >C2(`rotate(${interpolatedStyle.rotate}dig)`) : number
 ->C2 : (transform: "-moz-initial" | (string & {})) => number

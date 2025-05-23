@@ -2,7 +2,7 @@
 +++ new.emitDefaultParametersFunction.js
 @@= skipped -6, +6 lines =@@
  function bar1(y = 10, ...rest) { }
- 
+
  //// [emitDefaultParametersFunction.js]
 -function foo(x, y) {
 -    if (y === void 0) { y = 10; }

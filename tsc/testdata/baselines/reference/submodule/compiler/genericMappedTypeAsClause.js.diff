@@ -1,8 +1,8 @@
 --- old.genericMappedTypeAsClause.js
 +++ new.genericMappedTypeAsClause.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [genericMappedTypeAsClause.js]
 -"use strict";
 -var foo1 = { aFoo: 'test', bFoo: 42 };

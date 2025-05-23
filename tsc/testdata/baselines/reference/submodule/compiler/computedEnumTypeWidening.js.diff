@@ -1,8 +1,8 @@
 --- old.computedEnumTypeWidening.js
 +++ new.computedEnumTypeWidening.js
 @@= skipped -79, +79 lines =@@
- 
- 
+
+
  //// [computedEnumTypeWidening.js]
 -"use strict";
  var E;
@@ -85,9 +85,7 @@
  function f4() {
 -    var c1 = E2.B; // Fresh E2.B
 -    var v1 = E.B; // E2
-+    const c1 = E2.B; // Fresh E2.B
-+    let v1 = E.B; // E2
- }
+-}
 -var c1 = E.B;
 -var c2 = E.B;
 -var v1 = E.B;
@@ -101,6 +99,9 @@
 -    }
 -    return C;
 -}());
++    const c1 = E2.B; // Fresh E2.B
++    let v1 = E.B; // E2
++}
 +const c1 = E.B;
 +const c2 = E.B;
 +let v1 = E.B;

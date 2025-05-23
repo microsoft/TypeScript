@@ -1,7 +1,7 @@
 --- old.accessorsOverrideProperty6.js
 +++ new.accessorsOverrideProperty6.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [accessorsOverrideProperty6.js]
  class A {
 -    constructor() {

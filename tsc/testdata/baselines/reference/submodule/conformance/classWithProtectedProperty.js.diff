@@ -1,7 +1,7 @@
 --- old.classWithProtectedProperty.js
 +++ new.classWithProtectedProperty.js
 @@= skipped -30, +30 lines =@@
- 
+
  //// [classWithProtectedProperty.js]
  // accessing any protected outside the class is an error
 -var __extends = (this && this.__extends) || (function () {

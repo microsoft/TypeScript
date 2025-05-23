@@ -2,7 +2,7 @@
 +++ new.arrayLiteralsWithRecursiveGenerics.js
 @@= skipped -27, +27 lines =@@
  var as = [list, myDerivedList]; // List<number>[]
- 
+
  //// [arrayLiteralsWithRecursiveGenerics.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

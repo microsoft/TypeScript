@@ -1,8 +1,8 @@
 --- old.recursiveTupleTypes2.js
 +++ new.recursiveTupleTypes2.js
 @@= skipped -15, +15 lines =@@
- 
- 
+
+
  //// [recursiveTupleTypes2.js]
 -var tree1;
 -var tree2;

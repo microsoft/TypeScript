@@ -1,7 +1,7 @@
 --- old.declarationsAndAssignments.js
 +++ new.declarationsAndAssignments.js
 @@= skipped -189, +189 lines =@@
- 
+
  //// [declarationsAndAssignments.js]
  function f0() {
 -    var _a = [1, "hello"];

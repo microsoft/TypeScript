@@ -1,21 +1,21 @@
 --- old.declFileTypeAnnotationVisibilityErrorAccessors.types
 +++ new.declFileTypeAnnotationVisibilityErrorAccessors.types
 @@= skipped -116, +116 lines =@@
- 
+
          // getter with annotation
          get foo111(): m2.public2 {
 ->foo111 : m2.public2
 +>foo111 : public2
  >m2 : any
- 
+
              return;
 @@= skipped -8, +8 lines =@@
- 
+
          // getter without annotation
          get foo112() {
 ->foo112 : m2.public2
 +>foo112 : public2
- 
+
              return new m2.public2();
 ->new m2.public2() : m2.public2
 ->m2.public2 : typeof m2.public2
@@ -25,7 +25,7 @@
 ->public2 : typeof m2.public2
 +>public2 : typeof public2
          }
- 
+
          // setter with annotation
          set foo113(param: m2.public2) {
 ->foo113 : m2.public2
@@ -34,12 +34,12 @@
 +>param : public2
  >m2 : any
          }
- 
+
          // Both - getter without annotation, setter with annotation
          get foo114() {
 ->foo114 : m2.public2
 +>foo114 : public2
- 
+
              return new m2.public2();
 ->new m2.public2() : m2.public2
 ->m2.public2 : typeof m2.public2
@@ -56,13 +56,13 @@
 +>param : public2
  >m2 : any
          }
- 
+
          // Both - with annotation
          get foo115(): m2.public2 {
 ->foo115 : m2.public2
 +>foo115 : public2
  >m2 : any
- 
+
              return;
          }
          set foo115(param: m2.public2) {

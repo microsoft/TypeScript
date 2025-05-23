@@ -1,8 +1,8 @@
 --- old.jsxNamespacePrefixInNameReact.js
 +++ new.jsxNamespacePrefixInNameReact.js
 @@= skipped -33, +33 lines =@@
- 
- 
+
+
  //// [jsxNamespacePrefixInNameReact.js]
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {
@@ -22,23 +22,13 @@
 -var justElement5 = React.createElement("a:element", { attr: "value" }, "text");
 -var tooManySeparators1 = React.createElement("a:ele", { ment: true });
 -var tooManySeparators2 = React.createElement("a:ele", { ment: true }), ment;
-+var justElement1 = <a:element />;
-+var justElement2 = <a:element></a:element>;
-+var justElement3 = <a:element attr={"value"}></a:element>;
-+var justElement4 = <a:element>{"text"}</a:element>;
-+var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
-+var tooManySeparators1 = <a:ele ment/>;
-+var tooManySeparators2 = <a:ele ment></a:ele>, ment;
-  > ;
+- > ;
 -var tooManySeparators3 = React.createElement("a:ele", { ment: true, attr: "value" }), ment;
-+var tooManySeparators3 = <a:ele ment attr={"value"}></a:ele>, ment;
-  > ;
+- > ;
 -var tooManySeparators4 = React.createElement("a:ele", { ment: true }, "text"), ment;
-+var tooManySeparators4 = <a:ele ment>{"text"}</a:ele>, ment;
-  > ;
+- > ;
 -var tooManySeparators5 = React.createElement("a:ele", { ment: true, attr: "value" }, "text"), ment;
-+var tooManySeparators5 = <a:ele ment attr={"value"}>{"text"}</a:ele>, ment;
-  > ;
+- > ;
 -var justAttribute1 = React.createElement("element", { "a:attr": "value" });
 -var justAttribute2 = React.createElement("element", { "a:attr": "value" });
 -var justAttribute3 = React.createElement("element", { "a:attr": "value" }, "text");
@@ -47,6 +37,20 @@
 -var both3 = React.createElement("a:element", { "a:attr": "value" }, "text");
 -var endOfIdent1 = React.createElement("a:attr", __assign({}, "value"));
 -var endOfIdent2 = React.createElement("a", { "attr:": "value" });
++var justElement1 = <a:element />;
++var justElement2 = <a:element></a:element>;
++var justElement3 = <a:element attr={"value"}></a:element>;
++var justElement4 = <a:element>{"text"}</a:element>;
++var justElement5 = <a:element attr={"value"}>{"text"}</a:element>;
++var tooManySeparators1 = <a:ele ment/>;
++var tooManySeparators2 = <a:ele ment></a:ele>, ment;
++ > ;
++var tooManySeparators3 = <a:ele ment attr={"value"}></a:ele>, ment;
++ > ;
++var tooManySeparators4 = <a:ele ment>{"text"}</a:ele>, ment;
++ > ;
++var tooManySeparators5 = <a:ele ment attr={"value"}>{"text"}</a:ele>, ment;
++ > ;
 +var justAttribute1 = <element a:attr={"value"}/>;
 +var justAttribute2 = <element a:attr={"value"}></element>;
 +var justAttribute3 = <element a:attr={"value"}>{"text"}</element>;

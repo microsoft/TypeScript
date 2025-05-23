@@ -1,7 +1,7 @@
 --- old.shadowingViaLocalValueOrBindingElement.js
 +++ new.shadowingViaLocalValueOrBindingElement.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [shadowingViaLocalValueOrBindingElement.js]
  if (true) {
 -    var x_1;

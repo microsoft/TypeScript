@@ -1,7 +1,7 @@
 --- old.declFileTypeAnnotationTupleType.types
 +++ new.declFileTypeAnnotationTupleType.types
 @@= skipped -19, +19 lines =@@
- 
+
  // Just the name
  var k: [c, m.c] = [new c(), new m.c()];
 ->k : [c, m.c]
@@ -18,13 +18,13 @@
  >m : typeof m
 ->c : typeof m.c
 +>c : typeof c
- 
+
  var l = k;
 ->l : [c, m.c]
 ->k : [c, m.c]
 +>l : [c, c]
 +>k : [c, c]
- 
+
  var x: [g<string>, m.g<number>, () => c] = [new g<string>(), new m.g<number>(), () => new c()];
 ->x : [g<string>, m.g<number>, () => c]
 +>x : [g<string>, g<number>, () => c]
@@ -43,10 +43,9 @@
  >() => new c() : () => c
  >new c() : c
  >c : typeof c
- 
+
  var y = x;
 ->y : [g<string>, m.g<number>, () => c]
 ->x : [g<string>, m.g<number>, () => c]
 +>y : [g<string>, g<number>, () => c]
 +>x : [g<string>, g<number>, () => c]
- 

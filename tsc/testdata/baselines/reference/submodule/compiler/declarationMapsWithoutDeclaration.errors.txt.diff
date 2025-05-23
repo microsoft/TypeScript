@@ -1,6 +1,6 @@
 --- old.declarationMapsWithoutDeclaration.errors.txt
 +++ new.declarationMapsWithoutDeclaration.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS5069: Option 'declarationMap' cannot be specified without specifying option 'declaration' or option 'composite'.
 -
 -
@@ -24,5 +24,4 @@
 -    };
 -    
 -    export = m2;
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -2,7 +2,7 @@
 +++ new.genericCallbacksAndClassHierarchy.symbols
 @@= skipped -8, +8 lines =@@
  >T : Symbol(T, Decl(genericCallbacksAndClassHierarchy.ts, 1, 23))
- 
+
          subscribe(callback: (newValue: T) => void ): any;
 ->subscribe : Symbol(I.subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
 +>subscribe : Symbol(subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
@@ -11,7 +11,7 @@
  >T : Symbol(T, Decl(genericCallbacksAndClassHierarchy.ts, 1, 23))
 @@= skipped -10, +10 lines =@@
  >T : Symbol(T, Decl(genericCallbacksAndClassHierarchy.ts, 4, 20))
- 
+
          public value: I<T>;
 ->value : Symbol(C1.value, Decl(genericCallbacksAndClassHierarchy.ts, 4, 24))
 +>value : Symbol(value, Decl(genericCallbacksAndClassHierarchy.ts, 4, 24))
@@ -20,7 +20,7 @@
      }
 @@= skipped -9, +9 lines =@@
  >T : Symbol(T, Decl(genericCallbacksAndClassHierarchy.ts, 7, 19))
- 
+
          public dummy: any;
 ->dummy : Symbol(A.dummy, Decl(genericCallbacksAndClassHierarchy.ts, 7, 23))
 +>dummy : Symbol(dummy, Decl(genericCallbacksAndClassHierarchy.ts, 7, 23))
@@ -29,7 +29,7 @@
  >B : Symbol(B, Decl(genericCallbacksAndClassHierarchy.ts, 9, 5))
 @@= skipped -14, +14 lines =@@
  >T : Symbol(T, Decl(genericCallbacksAndClassHierarchy.ts, 11, 19))
- 
+
          _subscribe(viewModel: B<T>): void {
 ->_subscribe : Symbol(D._subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 11, 23))
 +>_subscribe : Symbol(_subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 11, 23))
@@ -45,7 +45,7 @@
  >viewModel : Symbol(viewModel, Decl(genericCallbacksAndClassHierarchy.ts, 12, 19))
 ->value : Symbol(C1.value, Decl(genericCallbacksAndClassHierarchy.ts, 4, 24))
 +>value : Symbol(value, Decl(genericCallbacksAndClassHierarchy.ts, 4, 24))
- 
+
              // both of these should work
              v.subscribe(f);
 ->v.subscribe : Symbol(I.subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
@@ -54,7 +54,7 @@
 ->subscribe : Symbol(I.subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
 +>subscribe : Symbol(subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
  >f : Symbol(f, Decl(genericCallbacksAndClassHierarchy.ts, 13, 15))
- 
+
              v.subscribe((newValue: A<T>) => { });
 ->v.subscribe : Symbol(I.subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))
 +>v.subscribe : Symbol(subscribe, Decl(genericCallbacksAndClassHierarchy.ts, 1, 27))

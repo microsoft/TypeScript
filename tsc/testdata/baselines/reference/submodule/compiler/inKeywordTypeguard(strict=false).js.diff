@@ -1,7 +1,7 @@
 --- old.inKeywordTypeguard(strict=false).js
 +++ new.inKeywordTypeguard(strict=false).js
 @@= skipped -387, +387 lines =@@
- 
+
  //// [inKeywordTypeguard.js]
  class A {
 +    a;

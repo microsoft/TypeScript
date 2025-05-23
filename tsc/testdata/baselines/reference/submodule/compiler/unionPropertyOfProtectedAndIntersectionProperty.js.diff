@@ -1,8 +1,8 @@
 --- old.unionPropertyOfProtectedAndIntersectionProperty.js
 +++ new.unionPropertyOfProtectedAndIntersectionProperty.js
 @@= skipped -38, +38 lines =@@
- 
- 
+
+
  //// [unionPropertyOfProtectedAndIntersectionProperty.js]
 -var Foo = /** @class */ (function () {
 -    function Foo() {

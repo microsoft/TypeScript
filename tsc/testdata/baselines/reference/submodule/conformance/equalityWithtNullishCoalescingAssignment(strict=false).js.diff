@@ -1,7 +1,7 @@
 --- old.equalityWithtNullishCoalescingAssignment(strict=false).js
 +++ new.equalityWithtNullishCoalescingAssignment(strict=false).js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [equalityWithtNullishCoalescingAssignment.js]
  function f1(a) {
 -    a !== null && a !== void 0 ? a : (a = true);

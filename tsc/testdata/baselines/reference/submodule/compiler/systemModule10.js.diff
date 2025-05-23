@@ -2,7 +2,7 @@
 +++ new.systemModule10.js
 @@= skipped -10, +10 lines =@@
  export {n2 as n3}
- 
+
  //// [systemModule10.js]
 -System.register(["file1", "file2"], function (exports_1, context_1) {
 -    "use strict";

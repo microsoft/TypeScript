@@ -2,7 +2,7 @@
 +++ new.computedPropertyNames31_ES5.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [computedPropertyNames31_ES5.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {
@@ -23,9 +23,7 @@
 -    function Base() {
 -    }
 -    Base.prototype.bar = function () {
-+class Base {
-+    bar() {
-         return 0;
+-        return 0;
 -    };
 -    return Base;
 -}());
@@ -33,7 +31,7 @@
 -    __extends(C, _super);
 -    function C() {
 -        return _super !== null && _super.apply(this, arguments) || this;
-     }
+-    }
 -    C.prototype.foo = function () {
 -        var _this = this;
 -        (function () {
@@ -43,6 +41,14 @@
 -            ,
 -                _a);
 -        });
+-        return 0;
+-    };
+-    return C;
+-}(Base));
++class Base {
++    bar() {
++        return 0;
++    }
 +}
 +class C extends Base {
 +    foo() {
@@ -51,9 +57,6 @@
 +                [super.bar()]() { } // needs capture
 +            };
 +        };
-         return 0;
--    };
--    return C;
--}(Base));
++        return 0;
 +    }
 +}

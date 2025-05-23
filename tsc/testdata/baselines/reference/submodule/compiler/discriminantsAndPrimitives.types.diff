@@ -2,42 +2,42 @@
 +++ new.discriminantsAndPrimitives.types
 @@= skipped -19, +19 lines =@@
  }
- 
+
  function f1(x: Foo | Bar | string) {
 ->f1 : (x: Foo | Bar | string) => void
 +>f1 : (x: string | Bar | Foo) => void
  >x : string | Bar | Foo
- 
+
      if (typeof x !== 'string') {
 @@= skipped -26, +26 lines =@@
  }
- 
+
  function f2(x: Foo | Bar | string | undefined) {
 ->f2 : (x: Foo | Bar | string | undefined) => void
 +>f2 : (x: string | Bar | Foo | undefined) => void
  >x : string | Bar | Foo | undefined
- 
+
      if (typeof x === "object") {
 @@= skipped -26, +26 lines =@@
  }
- 
+
  function f3(x: Foo | Bar | string | null) {
 ->f3 : (x: Foo | Bar | string | null) => void
 +>f3 : (x: string | Bar | Foo | null) => void
  >x : string | Bar | Foo | null
- 
+
      if (x && typeof x !== "string") {
 @@= skipped -28, +28 lines =@@
  }
- 
+
  function f4(x: Foo | Bar | string | number | null) {
 ->f4 : (x: Foo | Bar | string | number | null) => void
 +>f4 : (x: string | number | Bar | Foo | null) => void
  >x : string | number | Bar | Foo | null
- 
+
      if (x && typeof x === "object") {
 @@= skipped -79, +79 lines =@@
- 
+
      n.alternatives.slice()
  >n.alternatives.slice() : string[]
 ->n.alternatives.slice : (start?: number, end?: number) => string[]
@@ -59,4 +59,3 @@
 ->slice : (start?: number, end?: number) => string[]
 +>slice : (start?: number | undefined, end?: number | undefined) => string[]
  }
- 

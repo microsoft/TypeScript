@@ -1,7 +1,7 @@
 --- old.tsxSpreadDoesNotReportExcessProps.js
 +++ new.tsxSpreadDoesNotReportExcessProps.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [tsxSpreadDoesNotReportExcessProps.js]
  "use strict";
 -/// <reference path="react16.d.ts" />

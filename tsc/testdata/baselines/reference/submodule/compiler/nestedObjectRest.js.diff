@@ -2,7 +2,7 @@
 +++ new.nestedObjectRest.js
 @@= skipped -7, +7 lines =@@
  for ([{ ...y }] of [[{ abc: 1 }]]) ;
- 
+
  //// [nestedObjectRest.js]
 -var __rest = (this && this.__rest) || function (s, e) {
 -    var t = {};

@@ -2,13 +2,13 @@
 +++ new.dependentDestructuredVariablesFromNestedPatterns.types
 @@= skipped -20, +20 lines =@@
  }
- 
+
  function test2([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
 ->test2 : ([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) => void
 +>test2 : (__0: [[undefined, Error] | [number, undefined]]) => void
  >p1 : number | undefined
  >p1Error : Error | undefined
- 
+
 @@= skipped -22, +22 lines =@@
  >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
  >await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
@@ -20,7 +20,7 @@
 +>allSettled : { <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>; <T>(values: Iterable<T | PromiseLike<T>, any, any>): Promise<PromiseSettledResult<Awaited<T>>[]>; }
  >fn() : T
  >fn : () => T
- 
+
 @@= skipped -65, +65 lines =@@
  >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
  >0 : 0
@@ -31,14 +31,13 @@
 ->reject : <T = never>(reason?: any) => Promise<T>
 +>reject : <T>(reason?: any) => Promise<T>
  >1 : 1
- 
+
    );
 @@= skipped -15, +15 lines =@@
  }
- 
+
  function test4([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) {
 ->test4 : ([[p1, p1Error]]: [[undefined, Error] | [number, undefined]]) => void
 +>test4 : (__0: [[undefined, Error] | [number, undefined]]) => void
  >p1 : number | undefined
  >p1Error : Error | undefined
- 

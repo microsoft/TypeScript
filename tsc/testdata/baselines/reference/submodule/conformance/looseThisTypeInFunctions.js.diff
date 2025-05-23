@@ -1,24 +1,26 @@
 --- old.looseThisTypeInFunctions.js
 +++ new.looseThisTypeInFunctions.js
 @@= skipped -50, +50 lines =@@
- 
- 
+
+
  //// [looseThisTypeInFunctions.js]
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    n;
-+    explicitThis(m) {
-+        return this.n + m;
-     }
+-    }
 -    C.prototype.explicitThis = function (m) {
-+    implicitThis(m) {
-         return this.n + m;
+-        return this.n + m;
 -    };
 -    C.prototype.implicitThis = function (m) {
 -        return this.n + m;
 -    };
 -    C.prototype.explicitVoid = function (m) {
++class C {
++    n;
++    explicitThis(m) {
++        return this.n + m;
++    }
++    implicitThis(m) {
++        return this.n + m;
 +    }
 +    explicitVoid(m) {
          return m + 1;

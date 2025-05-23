@@ -1,6 +1,6 @@
 --- old.declarationEmitUsingTypeAlias1.errors.txt
 +++ new.declarationEmitUsingTypeAlias1.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -src/index.ts(3,14): error TS2742: The inferred type of 'foo' cannot be named without a reference to '../node_modules/some-dep/dist/inner'. This is likely not portable. A type annotation is necessary.
 -src/index.ts(7,14): error TS2742: The inferred type of 'bar' cannot be named without a reference to '../node_modules/some-dep/dist/inner'. This is likely not portable. A type annotation is necessary.
 -
@@ -35,5 +35,4 @@
 -!!! error TS2742: The inferred type of 'bar' cannot be named without a reference to '../node_modules/some-dep/dist/inner'. This is likely not portable. A type annotation is necessary.
 -      return thing.arg;
 -    };
-@@= skipped --1, +1 lines =@@
 +<no content>

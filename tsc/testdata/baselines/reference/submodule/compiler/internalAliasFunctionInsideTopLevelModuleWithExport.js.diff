@@ -1,8 +1,8 @@
 --- old.internalAliasFunctionInsideTopLevelModuleWithExport.js
 +++ new.internalAliasFunctionInsideTopLevelModuleWithExport.js
 @@= skipped -12, +12 lines =@@
- 
- 
+
+
  //// [internalAliasFunctionInsideTopLevelModuleWithExport.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

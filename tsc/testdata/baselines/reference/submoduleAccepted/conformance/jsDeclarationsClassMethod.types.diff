@@ -1,12 +1,12 @@
 --- old.jsDeclarationsClassMethod.types
 +++ new.jsDeclarationsClassMethod.types
 @@= skipped -1, +1 lines =@@
- 
+
  === jsDeclarationsClassMethod.js ===
  function C1() {
 ->C1 : typeof C1
 +>C1 : { (): void; staticProp: (x: any, y: any) => any; }
- 
+
      /**
       * A comment prop
 @@= skipped -9, +9 lines =@@
@@ -25,7 +25,7 @@
 +>function (x, y) {        return x + y;    } : (x: any, y: any) => any
 +>x : any
 +>y : any
- 
+
          return x + y;
 ->x + y : number
 ->x : number
@@ -35,7 +35,7 @@
 +>y : any
      }
  }
- 
+
 @@= skipped -22, +22 lines =@@
   * @returns {number}
   */
@@ -54,7 +54,7 @@
 +>function (x, y) {    return x + y;} : (x: any, y: any) => any
 +>x : any
 +>y : any
- 
+
      return x + y;
 ->x + y : number
 ->x : number
@@ -63,7 +63,7 @@
 +>x : any
 +>y : any
  }
- 
+
  /**
 @@= skipped -23, +23 lines =@@
   * @returns {number}
@@ -83,7 +83,7 @@
 +>function (x, y) {    return x + y;} : (x: any, y: any) => any
 +>x : any
 +>y : any
- 
+
      return x + y;
 ->x + y : number
 ->x : number
@@ -92,7 +92,7 @@
 +>x : any
 +>y : any
  }
- 
+
  class C2 {
 @@= skipped -42, +42 lines =@@
   * @returns {number}
@@ -113,7 +113,7 @@
 +>function (x, y) {    return x + y;} : (x: any, y: any) => any
 +>x : any
 +>y : any
- 
+
      return x + y;
 ->x + y : number
 ->x : number
@@ -122,7 +122,7 @@
 +>x : any
 +>y : any
  }
- 
+
  /**
 @@= skipped -23, +23 lines =@@
   * @returns {number}
@@ -141,7 +141,7 @@
 +>function (x, y) {    return x + y;} : (x: any, y: any) => any
 +>x : any
 +>y : any
- 
+
      return x + y;
 ->x + y : number
 ->x : number
@@ -150,4 +150,3 @@
 +>x : any
 +>y : any
  }
- 

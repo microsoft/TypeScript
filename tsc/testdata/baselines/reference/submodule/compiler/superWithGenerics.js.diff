@@ -1,8 +1,8 @@
 --- old.superWithGenerics.js
 +++ new.superWithGenerics.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [superWithGenerics.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -6,7 +6,7 @@
  >a : E3.a
 ->1 : (typeof E3)["1"]
 +>1 : E3.1
- 
+
  enum E1 { a, b: 1, c, d: 2 = 3 }
  >E1 : E1
  >a : E1.a

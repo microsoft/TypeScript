@@ -1,8 +1,8 @@
 --- old.asyncFunctionDeclaration15_es5.js
 +++ new.asyncFunctionDeclaration15_es5.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [asyncFunctionDeclaration15_es5.js]
 -function fn1() {
 -    return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {

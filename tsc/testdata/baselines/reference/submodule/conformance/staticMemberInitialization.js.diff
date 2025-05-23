@@ -2,7 +2,7 @@
 +++ new.staticMemberInitialization.js
 @@= skipped -8, +8 lines =@@
  var r = C.x;
- 
+
  //// [staticMemberInitialization.js]
 -var C = /** @class */ (function () {
 -    function C() {

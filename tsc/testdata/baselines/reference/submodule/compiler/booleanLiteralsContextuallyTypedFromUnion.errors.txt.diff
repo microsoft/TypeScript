@@ -1,6 +1,6 @@
 --- old.booleanLiteralsContextuallyTypedFromUnion.errors.txt
 +++ new.booleanLiteralsContextuallyTypedFromUnion.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -error TS2318: Cannot find global type 'CallableFunction'.
 -error TS2318: Cannot find global type 'NewableFunction'.
 -
@@ -32,5 +32,4 @@
 -    let Fail3 = () => <Funk mandatoryFn={() => { }} optionalBool={True} />
 -    let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
 -    let Success = () => <Funk {...attrs2} />
-@@= skipped --1, +1 lines =@@
 +<no content>

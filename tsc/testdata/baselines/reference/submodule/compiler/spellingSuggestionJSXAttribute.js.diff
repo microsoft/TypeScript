@@ -1,7 +1,7 @@
 --- old.spellingSuggestionJSXAttribute.js
 +++ new.spellingSuggestionJSXAttribute.js
 @@= skipped -19, +19 lines =@@
- 
+
  //// [spellingSuggestionJSXAttribute.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

@@ -1,7 +1,7 @@
 --- old.unusedImports8.types
 +++ new.unusedImports8.types
 @@= skipped -19, +19 lines =@@
- 
+
  === file2.ts ===
  import {Calculator as calc, test as t1, test2 as t2} from "./file1"
 ->Calculator : typeof calc
@@ -12,7 +12,7 @@
  >t1 : () => void
  >test2 : () => void
  >t2 : () => void
- 
+
  var x = new calc();
 ->x : calc
 ->new calc() : calc
@@ -20,12 +20,12 @@
 +>x : Calculator
 +>new calc() : Calculator
 +>calc : typeof Calculator
- 
+
  x.handleChar();
  >x.handleChar() : void
  >x.handleChar : () => void
 ->x : calc
 +>x : Calculator
  >handleChar : () => void
- 
+
  t1();

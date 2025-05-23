@@ -2,14 +2,14 @@
 +++ new.silentNeverPropagation.types
 @@= skipped -36, +36 lines =@@
  >m : ModuleWithState<TState> & TActions
- 
+
  const breaks = convert(
 ->breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
 ->convert(    createModule({ a: 12 }, { foo() { return true } })) : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
 +>breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo: () => true; }
 +>convert(    createModule({ a: 12 }, { foo() { return true } })) : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo: () => true; }
  >convert : <TState, TActions>(m: ModuleWithState<TState> & TActions) => ModuleWithState<TState & MoreState> & TActions
- 
+
      createModule({ a: 12 }, { foo() { return true } })
 ->createModule({ a: 12 }, { foo() { return true } }) : ModuleWithState<{ a: number; }> & { foo(): true; }
 +>createModule({ a: 12 }, { foo() { return true } }) : ModuleWithState<{ a: number; }> & { foo: () => true; }
@@ -21,7 +21,7 @@
 +>{ foo() { return true } } : { foo: () => true; }
  >foo : () => true
  >true : true
- 
+
 @@= skipped -19, +19 lines =@@
  breaks.state.a
  >breaks.state.a : number
@@ -30,7 +30,7 @@
 +>breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo: () => true; }
  >state : { a: number; } & MoreState
  >a : number
- 
+
  breaks.state.z
  >breaks.state.z : string
  >breaks.state : { a: number; } & MoreState
@@ -38,11 +38,10 @@
 +>breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo: () => true; }
  >state : { a: number; } & MoreState
  >z : string
- 
+
  breaks.foo()
  >breaks.foo() : true
  >breaks.foo : () => true
 ->breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
 +>breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo: () => true; }
  >foo : () => true
- 

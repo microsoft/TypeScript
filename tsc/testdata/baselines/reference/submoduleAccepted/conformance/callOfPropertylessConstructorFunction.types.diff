@@ -7,7 +7,7 @@
 ->Dependency : typeof Dependency
 +>Dependency : (j: any) => any
  >j : any
- 
+
    return j
 @@= skipped -8, +8 lines =@@
  }
@@ -16,4 +16,3 @@
 ->Dependency : typeof Dependency
 +>Dependency : (j: any) => any
  >{} : {}
- 

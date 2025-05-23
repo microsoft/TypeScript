@@ -1,7 +1,7 @@
 --- old.wrappedAndRecursiveConstraints3.js
 +++ new.wrappedAndRecursiveConstraints3.js
 @@= skipped -18, +18 lines =@@
- 
+
  //// [wrappedAndRecursiveConstraints3.js]
  // no errors expected
 -var C = /** @class */ (function () {
@@ -23,7 +23,7 @@
  var c = new C({ length: 2 });
 -var r = c.foo({ length: 3, charAt: function (x) {
 +var r = c.foo({ length: 3, charAt: (x) => {
-         '';
 +        '';
+         '';
      } });
  var r2 = r('');

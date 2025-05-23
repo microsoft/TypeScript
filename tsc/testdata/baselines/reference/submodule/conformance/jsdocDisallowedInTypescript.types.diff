@@ -2,13 +2,13 @@
 +++ new.jsdocDisallowedInTypescript.types
 @@= skipped -9, +9 lines =@@
  >3 : 3
- 
+
  function f(x: ?number, y: Array.<number>) {
 ->f : (x: number | null, y: Array<number>) => number
 +>f : (x: number | null, y: number[]) => number
  >x : number | null
  >y : number[]
- 
+
 @@= skipped -17, +17 lines =@@
  >0 : 0
  }
@@ -24,7 +24,7 @@
 +>number, string : any
 +>number : any
 +>string : any
- 
+
      return new ctor('hi');
 ->new ctor('hi') : number
 ->ctor : new (arg1: string) => number
@@ -41,7 +41,7 @@
  >this : number
 +>string : any
 +> : any
- 
+
      return f(12, 'hullo');
 ->f(12, 'hullo') : string
 ->f : (this: number, arg1: string) => string
@@ -52,7 +52,7 @@
  }
 @@= skipped -29, +37 lines =@@
  >'what' : "what"
- 
+
  var g: function(number, number): number = (n,m) => n + m;
 ->g : (arg0: number, arg1: number) => number
 ->(n,m) => n + m : (n: number, m: number) => number
@@ -74,6 +74,6 @@
 +>n + m : any
 +>n : any
 +>m : any
- 
+
  var most: !string = 'definite';
  >most : string

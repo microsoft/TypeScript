@@ -1,8 +1,8 @@
 --- old.firstMatchRegExpMatchArray.js
 +++ new.firstMatchRegExpMatchArray.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [firstMatchRegExpMatchArray.js]
 -"use strict";
 -var match = ''.match(/ /);

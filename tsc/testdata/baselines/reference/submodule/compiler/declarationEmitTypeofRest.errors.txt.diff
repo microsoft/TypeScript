@@ -1,6 +1,6 @@
 --- old.declarationEmitTypeofRest.errors.txt
 +++ new.declarationEmitTypeofRest.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -v2.ts(2,14): error TS2527: The inferred type of 'v2' references an inaccessible 'unique symbol' type. A type annotation is necessary.
 -
 -
@@ -24,5 +24,4 @@
 -    } => {
 -        return null!
 -    }
-@@= skipped --1, +1 lines =@@
 +<no content>

@@ -8,7 +8,7 @@
 +>foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
  >c : C
  >d : D
- 
+
      var r5 = foo<T, U>(c, d); // error
  >r5 : (x: T) => U
  >foo<T, U>(c, d) : (x: T) => U

@@ -1,12 +1,12 @@
 --- old.declarationEmitPathMappingMonorepo2.types
 +++ new.declarationEmitPathMappingMonorepo2.types
 @@= skipped -1, +1 lines =@@
- 
+
  === packages/lab/src/index.ts ===
  import { createSvgIcon } from "@ts-bug/core/utils";
 ->createSvgIcon : (path: string, displayName: string) => import("packages/core/src/SvgIcon").SomeInterface
 +>createSvgIcon : any
- 
+
  export default createSvgIcon("Hello", "ArrowLeft");
 ->createSvgIcon("Hello", "ArrowLeft") : import("packages/core/src/SvgIcon").SomeInterface
 ->createSvgIcon : (path: string, displayName: string) => import("packages/core/src/SvgIcon").SomeInterface
@@ -14,7 +14,7 @@
 +>createSvgIcon : any
  >"Hello" : "Hello"
  >"ArrowLeft" : "ArrowLeft"
- 
+-
 -=== packages/core/src/SvgIcon.d.ts ===
 -import { StyledComponentProps } from "@ts-bug/styles";
 ->StyledComponentProps : any
@@ -48,4 +48,3 @@
 -    classes?: Record<ClassKey, string>;
 ->classes : Record<ClassKey, string>
 -}
--

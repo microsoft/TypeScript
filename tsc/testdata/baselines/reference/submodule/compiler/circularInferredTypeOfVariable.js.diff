@@ -1,7 +1,7 @@
 --- old.circularInferredTypeOfVariable.js
 +++ new.circularInferredTypeOfVariable.js
 @@= skipped -21, +21 lines =@@
- 
+
  //// [circularInferredTypeOfVariable.js]
  // Repro from #14428
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

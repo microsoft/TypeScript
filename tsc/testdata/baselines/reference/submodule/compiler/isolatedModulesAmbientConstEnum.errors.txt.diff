@@ -1,6 +1,6 @@
 --- old.isolatedModulesAmbientConstEnum.errors.txt
 +++ new.isolatedModulesAmbientConstEnum.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -file1.ts(2,16): error TS2748: Cannot access ambient const enums when 'isolatedModules' is enabled.
 -
 -
@@ -10,5 +10,4 @@
 -                   ~
 -!!! error TS2748: Cannot access ambient const enums when 'isolatedModules' is enabled.
 -    
-@@= skipped --1, +1 lines =@@
 +<no content>

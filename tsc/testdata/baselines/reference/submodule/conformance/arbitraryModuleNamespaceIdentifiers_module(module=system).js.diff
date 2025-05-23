@@ -1,8 +1,8 @@
 --- old.arbitraryModuleNamespaceIdentifiers_module(module=system).js
 +++ new.arbitraryModuleNamespaceIdentifiers_module(module=system).js
 @@= skipped -32, +32 lines =@@
- 
- 
+
+
  //// [arbitraryModuleNamespaceIdentifiers_module.js]
 -System.register(["./arbitraryModuleNamespaceIdentifiers_module"], function (exports_1, context_1) {
 -    "use strict";

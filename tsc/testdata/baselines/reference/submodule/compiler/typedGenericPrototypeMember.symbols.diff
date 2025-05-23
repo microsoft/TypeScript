@@ -2,14 +2,14 @@
 +++ new.typedGenericPrototypeMember.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(typedGenericPrototypeMember.ts, 0, 11))
- 
+
     add(item: T) { }
 ->add : Symbol(List.add, Decl(typedGenericPrototypeMember.ts, 0, 15))
 +>add : Symbol(add, Decl(typedGenericPrototypeMember.ts, 0, 15))
  >item : Symbol(item, Decl(typedGenericPrototypeMember.ts, 1, 7))
  >T : Symbol(T, Decl(typedGenericPrototypeMember.ts, 0, 11))
  }
- 
+
  List.prototype.add("abc"); // Valid because T is instantiated to any
 ->List.prototype.add : Symbol(List.add, Decl(typedGenericPrototypeMember.ts, 0, 15))
 ->List.prototype : Symbol(List.prototype)
@@ -20,4 +20,3 @@
 ->add : Symbol(List.add, Decl(typedGenericPrototypeMember.ts, 0, 15))
 +>prototype : Symbol(prototype)
 +>add : Symbol(add, Decl(typedGenericPrototypeMember.ts, 0, 15))
- 

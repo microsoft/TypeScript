@@ -2,7 +2,7 @@
 +++ new.declarationEmitDestructuring5.js
 @@= skipped -7, +7 lines =@@
  function bar2([,,z, , , ]) { }
- 
+
  //// [declarationEmitDestructuring5.js]
 -function baz(_a) {
 -    var z = _a[1];

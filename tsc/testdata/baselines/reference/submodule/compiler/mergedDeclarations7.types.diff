@@ -2,26 +2,26 @@
 +++ new.mergedDeclarations7.types
 @@= skipped -16, +16 lines =@@
      }
- 
+
      const passport: passport.PassportStatic;
 ->passport : passport.PassportStatic
 +>passport : PassportStatic
  >passport : any
- 
+
      export = passport;
 ->passport : passport.PassportStatic
 +>passport : PassportStatic
  }
- 
+
  === test.ts ===
  import * as passport from "passport";
 ->passport : passport.PassportStatic
 +>passport : PassportStatic
- 
+
  import { Passport } from "passport";
 ->Passport : new () => passport.Passport
 +>Passport : new () => Passport
- 
+
  let p: Passport = passport.use();
  >p : Passport
 ->passport.use() : passport.PassportStatic
@@ -32,4 +32,3 @@
 +>passport.use : () => PassportStatic
 +>passport : PassportStatic
 +>use : () => PassportStatic
- 

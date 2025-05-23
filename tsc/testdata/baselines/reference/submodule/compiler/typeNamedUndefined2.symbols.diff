@@ -8,6 +8,6 @@
 ->undefined : Symbol(ns.undefined.undefined, Decl(typeNamedUndefined2.ts, 2, 34))
 +>undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 0, 21))
 +>undefined : Symbol(undefined, Decl(typeNamedUndefined2.ts, 2, 34))
- 
+
      return p;
  >p : Symbol(p, Decl(typeNamedUndefined2.ts, 10, 18))

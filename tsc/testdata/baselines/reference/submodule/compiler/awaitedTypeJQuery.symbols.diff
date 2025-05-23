@@ -2,7 +2,7 @@
 +++ new.awaitedTypeJQuery.symbols
 @@= skipped -31, +31 lines =@@
  >SN : Symbol(SN, Decl(awaitedTypeJQuery.ts, 8, 11))
- 
+
      then<ARD = never, AJD = never, AND = never,
 ->then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
 +>then : Symbol(then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
@@ -11,7 +11,7 @@
  >AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 9, 34))
 @@= skipped -203, +203 lines =@@
  >RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 20, 33))
- 
+
      then<ARF = never, AJF = never, ANF = never,
 ->then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
 +>then : Symbol(then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
@@ -20,7 +20,7 @@
  >ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 36, 34))
 @@= skipped -141, +141 lines =@@
  >RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 43, 33))
- 
+
      then<ARP = never, AJP = never, ANP = never,
 ->then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
 +>then : Symbol(then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
@@ -29,7 +29,7 @@
  >ANP : Symbol(ANP, Decl(awaitedTypeJQuery.ts, 56, 34))
 @@= skipped -79, +79 lines =@@
  >RNP : Symbol(RNP, Decl(awaitedTypeJQuery.ts, 59, 33))
- 
+
      then<ARD = never, AJD = never, AND = never,
 ->then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
 +>then : Symbol(then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
@@ -38,7 +38,7 @@
  >AND : Symbol(AND, Decl(awaitedTypeJQuery.ts, 69, 34))
 @@= skipped -141, +141 lines =@@
  >RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 76, 33))
- 
+
      then<ARF = never, AJF = never, ANF = never,
 ->then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
 +>then : Symbol(then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
@@ -47,7 +47,7 @@
  >ANF : Symbol(ANF, Decl(awaitedTypeJQuery.ts, 89, 34))
 @@= skipped -79, +79 lines =@@
  >RNF : Symbol(RNF, Decl(awaitedTypeJQuery.ts, 92, 33))
- 
+
      then<ARD = never, AJD = never, AND = never,
 ->then : Symbol(PromiseBase.then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)
 +>then : Symbol(then, Decl(awaitedTypeJQuery.ts, 8, 17), Decl(awaitedTypeJQuery.ts, 35, 59), Decl(awaitedTypeJQuery.ts, 55, 41), Decl(awaitedTypeJQuery.ts, 68, 23), Decl(awaitedTypeJQuery.ts, 88, 41) ... and 1 more)

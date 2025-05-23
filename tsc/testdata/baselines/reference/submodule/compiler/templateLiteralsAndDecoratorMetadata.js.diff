@@ -1,7 +1,7 @@
 --- old.templateLiteralsAndDecoratorMetadata.js
 +++ new.templateLiteralsAndDecoratorMetadata.js
 @@= skipped -8, +8 lines =@@
- 
+
  //// [templateLiteralsAndDecoratorMetadata.js]
  "use strict";
 -var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {

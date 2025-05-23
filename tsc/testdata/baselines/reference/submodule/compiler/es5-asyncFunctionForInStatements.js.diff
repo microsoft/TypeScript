@@ -2,7 +2,7 @@
 +++ new.es5-asyncFunctionForInStatements.js
 @@= skipped -39, +39 lines =@@
  }
- 
+
  //// [es5-asyncFunctionForInStatements.js]
 -function forInStatement0() {
 -    return __awaiter(this, void 0, void 0, function () {
@@ -13,11 +13,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function forInStatement0() {
-+    for (x in y) {
-+        z;
-+    }
- }
+-}
 -function forInStatement1() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _i;
@@ -45,11 +41,7 @@
 -            }
 -        });
 -    });
-+async function forInStatement1() {
-+    for (x in await y) {
-+        z;
-+    }
- }
+-}
 -function forInStatement2() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _i;
@@ -78,11 +70,7 @@
 -            }
 -        });
 -    });
-+async function forInStatement2() {
-+    for (x in y) {
-+        await z;
-+    }
- }
+-}
 -function forInStatement3() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _i;
@@ -111,11 +99,7 @@
 -            }
 -        });
 -    });
-+async function forInStatement3() {
-+    for ((await x).a in y) {
-+        z;
-+    }
- }
+-}
 -function forInStatement4() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _i;
@@ -143,11 +127,7 @@
 -            }
 -        });
 -    });
-+async function forInStatement4() {
-+    for (x.a in await y) {
-+        z;
-+    }
- }
+-}
 -function forInStatement5() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _i;
@@ -176,11 +156,7 @@
 -            }
 -        });
 -    });
-+async function forInStatement5() {
-+    for (x.a in y) {
-+        await z;
-+    }
- }
+-}
 -function forInStatement6() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var a;
@@ -191,11 +167,7 @@
 -            return [2 /*return*/];
 -        });
 -    });
-+async function forInStatement6() {
-+    for (var a in y) {
-+        z;
-+    }
- }
+-}
 -function forInStatement7() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _i, b;
@@ -223,11 +195,7 @@
 -            }
 -        });
 -    });
-+async function forInStatement7() {
-+    for (var b in await y) {
-+        z;
-+    }
- }
+-}
 -function forInStatement8() {
 -    return __awaiter(this, void 0, void 0, function () {
 -        var _a, _b, _c, _i, c;
@@ -256,6 +224,46 @@
 -            }
 -        });
 -    });
++async function forInStatement0() {
++    for (x in y) {
++        z;
++    }
++}
++async function forInStatement1() {
++    for (x in await y) {
++        z;
++    }
++}
++async function forInStatement2() {
++    for (x in y) {
++        await z;
++    }
++}
++async function forInStatement3() {
++    for ((await x).a in y) {
++        z;
++    }
++}
++async function forInStatement4() {
++    for (x.a in await y) {
++        z;
++    }
++}
++async function forInStatement5() {
++    for (x.a in y) {
++        await z;
++    }
++}
++async function forInStatement6() {
++    for (var a in y) {
++        z;
++    }
++}
++async function forInStatement7() {
++    for (var b in await y) {
++        z;
++    }
++}
 +async function forInStatement8() {
 +    for (var c in y) {
 +        await z;

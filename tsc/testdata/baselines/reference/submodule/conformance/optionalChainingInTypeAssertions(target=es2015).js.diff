@@ -2,7 +2,7 @@
 +++ new.optionalChainingInTypeAssertions(target=es2015).js
 @@= skipped -19, +19 lines =@@
  (<any>foo?.["m"]).length;
- 
+
  //// [optionalChainingInTypeAssertions.js]
 -var _a, _b, _c, _d;
  class Foo {

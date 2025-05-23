@@ -6,13 +6,13 @@
  var c;
 ->c : D
 +>c : Chunk
- 
+
  c.chunk;
  >c.chunk : number
 ->c : D
 +>c : Chunk
  >chunk : number
- 
+
  const D = require("./mod1");
 ->D : typeof D
 ->require("./mod1") : typeof D
@@ -20,18 +20,18 @@
 +>require("./mod1") : typeof Chunk
  >require : (name: string) => any
  >"./mod1" : "./mod1"
- 
+
  /** @type {D} */
  var d;
 ->d : D
 +>d : Chunk
- 
+
  d.chunk;
  >d.chunk : number
 ->d : D
 +>d : Chunk
  >chunk : number
- 
+
  === types.d.ts ===
 @@= skipped -42, +42 lines =@@
      constructor() {
@@ -52,4 +52,3 @@
 +>module : { Chunk: typeof Chunk; }
  >exports : typeof Chunk
  >Chunk : typeof Chunk
- 

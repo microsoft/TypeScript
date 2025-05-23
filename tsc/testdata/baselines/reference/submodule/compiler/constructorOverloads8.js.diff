@@ -2,7 +2,7 @@
 +++ new.constructorOverloads8.js
 @@= skipped -17, +17 lines =@@
  }
- 
+
  //// [constructorOverloads8.js]
 -var C = /** @class */ (function () {
 -    function C(x) {

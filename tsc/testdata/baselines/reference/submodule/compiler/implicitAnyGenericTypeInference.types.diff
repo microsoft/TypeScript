@@ -2,57 +2,57 @@
 +++ new.implicitAnyGenericTypeInference.types
 @@= skipped -48, +48 lines =@@
  >async () => null : () => Promise<any>
- 
+
  declare function f3<T>(cb: () => Generator<T>): void;
 ->f3 : <T>(cb: () => Generator<T>) => void
 ->cb : () => Generator<T>
 +>f3 : <T>(cb: () => Generator<T, any, any>) => void
 +>cb : () => Generator<T, any, any>
- 
+
  f3(function* () { yield null; });
  >f3(function* () { yield null; }) : void
 ->f3 : <T>(cb: () => Generator<T>) => void
 +>f3 : <T>(cb: () => Generator<T, any, any>) => void
  >function* () { yield null; } : () => Generator<any, void, any>
  >yield null : any
- 
+
  declare function f4<T>(cb: () => Generator<unknown, T>): void;
 ->f4 : <T>(cb: () => Generator<unknown, T>) => void
 ->cb : () => Generator<unknown, T>
 +>f4 : <T>(cb: () => Generator<unknown, T, any>) => void
 +>cb : () => Generator<unknown, T, any>
- 
+
  f4(function* () { return null; });
  >f4(function* () { return null; }) : void
 ->f4 : <T>(cb: () => Generator<unknown, T>) => void
 +>f4 : <T>(cb: () => Generator<unknown, T, any>) => void
  >function* () { return null; } : () => Generator<never, any, any>
- 
+
  declare function f5<T>(cb: () => AsyncGenerator<T>): void;
 ->f5 : <T>(cb: () => AsyncGenerator<T>) => void
 ->cb : () => AsyncGenerator<T>
 +>f5 : <T>(cb: () => AsyncGenerator<T, any, any>) => void
 +>cb : () => AsyncGenerator<T, any, any>
- 
+
  f5(async function* () { yield null; });
  >f5(async function* () { yield null; }) : void
 ->f5 : <T>(cb: () => AsyncGenerator<T>) => void
 +>f5 : <T>(cb: () => AsyncGenerator<T, any, any>) => void
  >async function* () { yield null; } : () => AsyncGenerator<any, void, any>
  >yield null : any
- 
+
  declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
 ->f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
 ->cb : () => AsyncGenerator<unknown, T>
 +>f6 : <T>(cb: () => AsyncGenerator<unknown, T, any>) => void
 +>cb : () => AsyncGenerator<unknown, T, any>
- 
+
  f6(async function* () { return null; });
  >f6(async function* () { return null; }) : void
 ->f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
 +>f6 : <T>(cb: () => AsyncGenerator<unknown, T, any>) => void
  >async function* () { return null; } : () => AsyncGenerator<never, any, any>
- 
+
  // https://github.com/microsoft/TypeScript/issues/44913
  Promise.resolve().catch(e => null);
  >Promise.resolve().catch(e => null) : Promise<any>
@@ -66,7 +66,7 @@
 +>catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
  >e => null : (e: any) => any
  >e : any
- 
+
  Promise.resolve().then(v => null);
  >Promise.resolve().then(v => null) : Promise<any>
 ->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -79,4 +79,3 @@
 +>then : <TResult1, TResult2>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
  >v => null : (v: void) => any
  >v : void
- 

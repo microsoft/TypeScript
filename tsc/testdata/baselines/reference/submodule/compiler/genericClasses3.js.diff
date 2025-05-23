@@ -1,8 +1,8 @@
 --- old.genericClasses3.js
 +++ new.genericClasses3.js
 @@= skipped -19, +19 lines =@@
- 
- 
+
+
  //// [genericClasses3.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

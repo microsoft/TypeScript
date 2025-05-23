@@ -1,8 +1,8 @@
 --- old.silentNeverPropagation.js
 +++ new.silentNeverPropagation.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [silentNeverPropagation.js]
 -"use strict";
 -// Repro from #45041

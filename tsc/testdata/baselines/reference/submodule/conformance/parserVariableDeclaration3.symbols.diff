@@ -7,5 +7,5 @@
 ->TypeScriptCompiler : Symbol(TypeScript.TypeScriptCompiler)
 +>TypeScriptCompiler : Symbol(TypeScriptCompiler)
  >outerr : Symbol(outerr, Decl(parserVariableDeclaration3.ts, 2, 7))
- 
+
        , code;

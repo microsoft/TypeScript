@@ -1,8 +1,8 @@
 --- old.shadowPrivateMembers.js
 +++ new.shadowPrivateMembers.js
 @@= skipped -5, +5 lines =@@
- 
- 
+
+
  //// [shadowPrivateMembers.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

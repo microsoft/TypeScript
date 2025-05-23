@@ -1,8 +1,8 @@
 --- old.arrayLiteralSpread.js
 +++ new.arrayLiteralSpread.js
 @@= skipped -25, +25 lines =@@
- 
- 
+
+
  //// [arrayLiteralSpread.js]
 -var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 -    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {

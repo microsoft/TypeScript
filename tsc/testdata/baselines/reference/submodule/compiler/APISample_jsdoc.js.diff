@@ -1,7 +1,7 @@
 --- old.APISample_jsdoc.js
 +++ new.APISample_jsdoc.js
 @@= skipped -122, +122 lines =@@
- 
+
  //// [APISample_jsdoc.js]
  "use strict";
 -/*

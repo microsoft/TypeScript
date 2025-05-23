@@ -1,7 +1,7 @@
 --- old.funduleExportedClassIsUsedBeforeDeclaration.symbols
 +++ new.funduleExportedClassIsUsedBeforeDeclaration.symbols
 @@= skipped -5, +5 lines =@@
- 
+
      (): B.C;    // uses defined below class in module
  >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
 ->C : Symbol(B.C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
@@ -12,7 +12,7 @@
  >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
 ->C : Symbol(B.C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
 +>C : Symbol(C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
- 
+
  declare module B {
  >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
 @@= skipped -15, +15 lines =@@
@@ -24,4 +24,3 @@
  >B : Symbol(B, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 2, 1), Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 3, 26))
 ->C : Symbol(B.C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
 +>C : Symbol(C, Decl(funduleExportedClassIsUsedBeforeDeclaration.ts, 4, 18))
- 

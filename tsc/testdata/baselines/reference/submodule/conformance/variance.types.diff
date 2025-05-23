@@ -2,7 +2,7 @@
 +++ new.variance.types
 @@= skipped -41, +41 lines =@@
  >[] : never[]
- 
+
    cast(_name: ([T] extends [string] ? string : string)) { }
 ->cast : (_name: ([T] extends [string] ? string : string)) => void
 +>cast : (_name: [T] extends [string] ? string : string) => void

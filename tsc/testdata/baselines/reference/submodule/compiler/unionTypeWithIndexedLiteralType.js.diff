@@ -2,7 +2,7 @@
 +++ new.unionTypeWithIndexedLiteralType.js
 @@= skipped -6, +6 lines =@@
  const u: U = { x: "lit" };
- 
+
  //// [unionTypeWithIndexedLiteralType.js]
 -var u = { x: "lit" };
 +const u = { x: "lit" };

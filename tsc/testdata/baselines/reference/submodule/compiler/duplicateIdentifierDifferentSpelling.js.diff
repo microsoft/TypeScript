@@ -1,8 +1,8 @@
 --- old.duplicateIdentifierDifferentSpelling.js
 +++ new.duplicateIdentifierDifferentSpelling.js
 @@= skipped -9, +9 lines =@@
- 
- 
+
+
  //// [duplicateIdentifierDifferentSpelling.js]
 -var A = /** @class */ (function () {
 -    function A() {

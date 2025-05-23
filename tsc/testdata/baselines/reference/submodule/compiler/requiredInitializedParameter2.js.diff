@@ -2,7 +2,7 @@
 +++ new.requiredInitializedParameter2.js
 @@= skipped -9, +9 lines =@@
  }
- 
+
  //// [requiredInitializedParameter2.js]
 -var C1 = /** @class */ (function () {
 -    function C1() {

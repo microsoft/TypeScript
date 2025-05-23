@@ -2,7 +2,7 @@
 +++ new.moduleDetectionIsolatedModulesCjsFileScope.js
 @@= skipped -5, +5 lines =@@
  const a = 2;
- 
+
  //// [filename.cjs]
 -"use strict";
 -Object.defineProperty(exports, "__esModule", { value: true });

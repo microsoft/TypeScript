@@ -2,7 +2,7 @@
 +++ new.objectLitPropertyScoping.symbols
 @@= skipped -26, +26 lines =@@
  >dist : Symbol(dist, Decl(objectLitPropertyScoping.ts, 9, 10))
- 
+
              return Math.sqrt(x * x + y * y);
 ->Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 +>Math.sqrt : Symbol(sqrt, Decl(lib.es5.d.ts, --, --))

@@ -1,7 +1,7 @@
 --- old.infiniteConstraints.js
 +++ new.infiniteConstraints.js
 @@= skipped -52, +52 lines =@@
- 
+
  //// [infiniteConstraints.js]
  "use strict";
 -// Both of the following types trigger the recursion limiter in getImmediateBaseConstraint

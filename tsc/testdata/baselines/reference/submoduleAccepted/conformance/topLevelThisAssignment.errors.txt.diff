@@ -1,8 +1,7 @@
 --- old.topLevelThisAssignment.errors.txt
 +++ new.topLevelThisAssignment.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(3,1): error TS2304: Cannot find name 'a'.
 +b.js(2,1): error TS2304: Cannot find name 'a'.
 +

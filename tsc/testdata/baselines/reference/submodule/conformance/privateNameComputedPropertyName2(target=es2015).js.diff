@@ -1,8 +1,8 @@
 --- old.privateNameComputedPropertyName2(target=es2015).js
 +++ new.privateNameComputedPropertyName2(target=es2015).js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [privateNameComputedPropertyName2.js]
 -var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
 -    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

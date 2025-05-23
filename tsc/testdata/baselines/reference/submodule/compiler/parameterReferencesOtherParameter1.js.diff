@@ -2,16 +2,11 @@
 +++ new.parameterReferencesOtherParameter1.js
 @@= skipped -11, +11 lines =@@
  }
- 
+
  //// [parameterReferencesOtherParameter1.js]
 -var Model = /** @class */ (function () {
 -    function Model() {
-+class Model {
-+    name;
-+}
-+class UI {
-+    constructor(model, foo = model.name) {
-     }
+-    }
 -    return Model;
 -}());
 -var UI = /** @class */ (function () {
@@ -20,4 +15,10 @@
 -    }
 -    return UI;
 -}());
++class Model {
++    name;
++}
++class UI {
++    constructor(model, foo = model.name) {
++    }
 +}

@@ -1,7 +1,7 @@
 --- old.templateLiteralTypes6.types
 +++ new.templateLiteralTypes6.types
 @@= skipped -37, +37 lines =@@
- 
+
    f1(`${scope}:${event}`);
  >f1(`${scope}:${event}`) : void
 ->f1 : <Scope_1 extends Keyof<Registry>, Event_1 extends Keyof<Registry[Scope_1]>>(eventPath: `${Scope_1}:${Event_1}`) => void

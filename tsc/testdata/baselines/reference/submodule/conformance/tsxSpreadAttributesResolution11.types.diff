@@ -1,16 +1,16 @@
 --- old.tsxSpreadAttributesResolution11.types
 +++ new.tsxSpreadAttributesResolution11.types
 @@= skipped -1, +1 lines =@@
- 
+
  === file.tsx ===
  import React = require('react');
 ->React : typeof React
 +>React : typeof __React
- 
+
  const obj = {};
  >obj : {}
 @@= skipped -45, +45 lines =@@
- 
+
  class OverWriteAttr extends React.Component<Prop, {}> {
  >OverWriteAttr : OverWriteAttr
 ->React.Component : React.Component<Prop, {}>
@@ -19,11 +19,11 @@
 +>React.Component : Component<Prop, {}>
 +>React : typeof __React
 +>Component : typeof Component
- 
+
      render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
          return <div>Hello</div>;
 -><div>Hello</div> : JSX.Element
 +><div>Hello</div> : Element
@@ -31,7 +31,7 @@
  >div : any
      }
 @@= skipped -19, +19 lines =@@
- 
+
  // OK
  let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
 ->x : JSX.Element
@@ -43,7 +43,7 @@
  >y : true
 @@= skipped -9, +9 lines =@@
  >obj1 : { x: 2; }
- 
+
  let x1 = <OverWriteAttr {...obj1} {...obj3} />
 ->x1 : JSX.Element
 -><OverWriteAttr {...obj1} {...obj3} /> : JSX.Element
@@ -52,7 +52,7 @@
  >OverWriteAttr : typeof OverWriteAttr
  >obj1 : { x: 2; }
  >obj3 : { y: true; overwrite: string; }
- 
+
  let x2 = <OverWriteAttr x={3} overwrite="hi" {...obj1} {...{y: true}} />
 ->x2 : JSX.Element
 -><OverWriteAttr x={3} overwrite="hi" {...obj1} {...{y: true}} /> : JSX.Element
@@ -63,7 +63,7 @@
  >3 : 3
 @@= skipped -19, +19 lines =@@
  >true : true
- 
+
  let x3 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overwrite:"world"}} />
 ->x3 : JSX.Element
 -><OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true, x: 2, overwrite:"world"}} /> : JSX.Element
@@ -74,7 +74,7 @@
  >obj1 : { x: 2; }
 @@= skipped -16, +16 lines =@@
  >"world" : "world"
- 
+
  let x4 = <OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} />
 ->x4 : JSX.Element
 -><OverWriteAttr {...{x: 2}} {...{overwrite: "world"}} {...{y: true}} /> : JSX.Element
@@ -85,7 +85,7 @@
  >x : 2
 @@= skipped -14, +14 lines =@@
  >true : true
- 
+
  let x5 = <OverWriteAttr {...anyobj} />
 ->x5 : JSX.Element
 -><OverWriteAttr {...anyobj} /> : JSX.Element
@@ -93,4 +93,3 @@
 +><OverWriteAttr {...anyobj} /> : Element
  >OverWriteAttr : typeof OverWriteAttr
  >anyobj : any
- 

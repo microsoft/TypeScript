@@ -1,8 +1,8 @@
 --- old.trailingCommaInHeterogenousArrayLiteral1.js
 +++ new.trailingCommaInHeterogenousArrayLiteral1.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [trailingCommaInHeterogenousArrayLiteral1.js]
 -var arrTest = /** @class */ (function () {
 -    function arrTest() {

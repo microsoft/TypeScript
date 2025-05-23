@@ -10,5 +10,5 @@
 ->second : Symbol(Pair.second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 35))
 +>second : Symbol(second, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 35))
  >T2 : Symbol(T2, Decl(genericInstantiationEquivalentToObjectLiteral.ts, 0, 18))
- 
+
  var x: Pair<string, number>

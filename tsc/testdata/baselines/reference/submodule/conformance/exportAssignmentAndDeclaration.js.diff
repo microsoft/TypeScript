@@ -2,7 +2,7 @@
 +++ new.exportAssignmentAndDeclaration.js
 @@= skipped -12, +12 lines =@@
  export = C1;
- 
+
  //// [foo_0.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

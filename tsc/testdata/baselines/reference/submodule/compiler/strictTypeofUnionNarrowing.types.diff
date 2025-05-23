@@ -1,7 +1,7 @@
 --- old.strictTypeofUnionNarrowing.types
 +++ new.strictTypeofUnionNarrowing.types
 @@= skipped -1, +1 lines =@@
- 
+
  === strictTypeofUnionNarrowing.ts ===
  function stringify1(anything: { toString(): string } | undefined): string {
 ->stringify1 : (anything: { toString(): string; } | undefined) => string
@@ -9,7 +9,7 @@
 +>stringify1 : (anything: { toString: () => string; } | undefined) => string
 +>anything : { toString: () => string; } | undefined
  >toString : () => string
- 
+
      return typeof anything === "string" ? anything.toUpperCase() : "";
  >typeof anything === "string" ? anything.toUpperCase() : "" : string
  >typeof anything === "string" : boolean
@@ -21,23 +21,23 @@
  >anything.toUpperCase : () => string
 @@= skipped -35, +35 lines =@@
  }
- 
+
  function stringify3(anything: unknown | undefined): string { // should simplify to just `unknown` which should narrow fine
 ->stringify3 : (anything: unknown | undefined) => string
 +>stringify3 : (anything: unknown) => string
  >anything : unknown
- 
+
      return typeof anything === "string" ? anything.toUpperCase() : "";
 @@= skipped -17, +17 lines =@@
  }
- 
+
  function stringify4(anything: { toString?(): string } | undefined): string {
 ->stringify4 : (anything: { toString?(): string; } | undefined) => string
 ->anything : { toString?(): string; } | undefined
 +>stringify4 : (anything: { toString?: (() => string) | undefined; } | undefined) => string
 +>anything : { toString?: (() => string) | undefined; } | undefined
  >toString : (() => string) | undefined
- 
+
      return typeof anything === "string" ? anything.toUpperCase() : "";
  >typeof anything === "string" ? anything.toUpperCase() : "" : string
  >typeof anything === "string" : boolean

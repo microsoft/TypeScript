@@ -1,7 +1,7 @@
 --- old.tsxUnionTypeComponent1.js
 +++ new.tsxUnionTypeComponent1.js
 @@= skipped -26, +26 lines =@@
- 
+
  //// [file.js]
  "use strict";
 -var __extends = (this && this.__extends) || (function () {

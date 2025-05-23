@@ -1,8 +1,8 @@
 --- old.resolvingClassDeclarationWhenInBaseTypeResolution.js
 +++ new.resolvingClassDeclarationWhenInBaseTypeResolution.js
 @@= skipped -1021, +1021 lines =@@
- 
- 
+
+
  //// [resolvingClassDeclarationWhenInBaseTypeResolution.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

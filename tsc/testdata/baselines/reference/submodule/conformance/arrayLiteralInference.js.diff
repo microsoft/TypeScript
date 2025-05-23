@@ -1,8 +1,8 @@
 --- old.arrayLiteralInference.js
 +++ new.arrayLiteralInference.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [arrayLiteralInference.js]
 +export { AppType };
  // Repro from #31204

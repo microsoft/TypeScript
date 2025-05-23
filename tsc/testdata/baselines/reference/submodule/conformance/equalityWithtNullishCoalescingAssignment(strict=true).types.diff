@@ -1,13 +1,13 @@
 --- old.equalityWithtNullishCoalescingAssignment(strict=true).types
 +++ new.equalityWithtNullishCoalescingAssignment(strict=true).types
 @@= skipped -1, +1 lines =@@
- 
+
  === equalityWithtNullishCoalescingAssignment.ts ===
  function f1(a?: boolean): void {
 ->f1 : (a?: boolean) => void
 +>f1 : (a?: boolean | undefined) => void
  >a : boolean | undefined
- 
+
      a ??= true;
 @@= skipped -23, +23 lines =@@
  }
@@ -16,5 +16,5 @@
 ->f1 : (a?: boolean) => void
 +>f1 : (a?: boolean | undefined) => void
  >false : false
- 
+
  function f2() {

@@ -1,8 +1,8 @@
 --- old.contextualTupleTypeParameterReadonly.js
 +++ new.contextualTupleTypeParameterReadonly.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [contextualTupleTypeParameterReadonly.js]
 -"use strict";
 -var cases = [

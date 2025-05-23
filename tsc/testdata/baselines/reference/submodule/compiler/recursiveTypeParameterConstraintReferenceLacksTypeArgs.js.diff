@@ -2,7 +2,7 @@
 +++ new.recursiveTypeParameterConstraintReferenceLacksTypeArgs.js
 @@= skipped -3, +3 lines =@@
  class A<T extends A> { }
- 
+
  //// [recursiveTypeParameterConstraintReferenceLacksTypeArgs.js]
 -var A = /** @class */ (function () {
 -    function A() {

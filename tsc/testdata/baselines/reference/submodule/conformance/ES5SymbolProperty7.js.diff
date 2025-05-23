@@ -1,7 +1,7 @@
 --- old.ES5SymbolProperty7.js
 +++ new.ES5SymbolProperty7.js
 @@= skipped -10, +10 lines =@@
- 
+
  //// [ES5SymbolProperty7.js]
  var Symbol;
 -var C = /** @class */ (function () {

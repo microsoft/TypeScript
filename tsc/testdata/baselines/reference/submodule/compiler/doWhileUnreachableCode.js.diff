@@ -1,7 +1,7 @@
 --- old.doWhileUnreachableCode.js
 +++ new.doWhileUnreachableCode.js
 @@= skipped -15, +15 lines =@@
- 
+
  //// [doWhileUnreachableCode.js]
  function test() {
 -    var foo = 0;

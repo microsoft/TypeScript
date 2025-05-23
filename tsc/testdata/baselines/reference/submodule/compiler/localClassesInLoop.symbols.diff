@@ -2,7 +2,7 @@
 +++ new.localClassesInLoop.symbols
 @@= skipped -17, +17 lines =@@
  >C : Symbol(C, Decl(localClassesInLoop.ts, 4, 29))
- 
+
      data.push(() => C);
 ->data.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 +>data.push : Symbol(push, Decl(lib.es5.d.ts, --, --))
@@ -11,4 +11,3 @@
 +>push : Symbol(push, Decl(lib.es5.d.ts, --, --))
  >C : Symbol(C, Decl(localClassesInLoop.ts, 4, 29))
  }
- 

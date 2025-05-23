@@ -1,8 +1,8 @@
 --- old.typeIdentityConsidersBrands.js
 +++ new.typeIdentityConsidersBrands.js
 @@= skipped -34, +34 lines =@@
- 
- 
+
+
  //// [typeIdentityConsidersBrands.js]
 -var X = /** @class */ (function () {
 -    function X() {

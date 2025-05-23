@@ -2,7 +2,7 @@
 +++ new.checkJsxChildrenProperty11.js
 @@= skipped -24, +24 lines =@@
  let k4 = <Button> <h2> Hello </h2> </Button>;
- 
+
  //// [file.jsx]
 -var Button = /** @class */ (function () {
 -    function Button() {

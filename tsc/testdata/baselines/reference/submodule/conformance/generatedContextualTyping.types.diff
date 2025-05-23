@@ -2,7 +2,7 @@
 +++ new.generatedContextualTyping.types
 @@= skipped -1053, +1053 lines =@@
  >d2 : Derived2
- 
+
  function x124(parm: { (): Base[]; } = () => [d1, d2]) { }
 ->x124 : (parm?: { (): Base[]; }) => void
 +>x124 : (parm?: () => Base[]) => void
@@ -11,7 +11,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -8, +8 lines =@@
  >d2 : Derived2
- 
+
  function x125(parm: { (): Base[]; } = function() { return [d1, d2] }) { }
 ->x125 : (parm?: { (): Base[]; }) => void
 +>x125 : (parm?: () => Base[]) => void
@@ -20,7 +20,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -8, +8 lines =@@
  >d2 : Derived2
- 
+
  function x126(parm: { (): Base[]; } = function named() { return [d1, d2] }) { }
 ->x126 : (parm?: { (): Base[]; }) => void
 +>x126 : (parm?: () => Base[]) => void
@@ -29,7 +29,7 @@
  >named : () => (Derived1 | Derived2)[]
 @@= skipped -16, +16 lines =@@
  >d2 : Derived2
- 
+
  function x128(parm: Array<Base> = [d1, d2]) { }
 ->x128 : (parm?: Array<Base>) => void
 +>x128 : (parm?: Base[]) => void
@@ -38,7 +38,7 @@
  >d1 : Derived1
 @@= skipped -66, +66 lines =@@
  >d2 : Derived2
- 
+
  function x136(): { (): Base[]; } { return () => [d1, d2]; }
 ->x136 : () => { (): Base[]; }
 +>x136 : () => () => Base[]
@@ -46,7 +46,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  function x137(): { (): Base[]; } { return function() { return [d1, d2] }; }
 ->x137 : () => { (): Base[]; }
 +>x137 : () => () => Base[]
@@ -54,7 +54,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  function x138(): { (): Base[]; } { return function named() { return [d1, d2] }; }
 ->x138 : () => { (): Base[]; }
 +>x138 : () => () => Base[]
@@ -63,7 +63,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -28, +28 lines =@@
  >d2 : Derived2
- 
+
  function x140(): Array<Base> { return [d1, d2]; }
 ->x140 : () => Array<Base>
 +>x140 : () => Base[]
@@ -72,7 +72,7 @@
  >d2 : Derived2
 @@= skipped -74, +74 lines =@@
  >d2 : Derived2
- 
+
  function x148(): { (): Base[]; } { return () => [d1, d2]; return () => [d1, d2]; }
 ->x148 : () => { (): Base[]; }
 +>x148 : () => () => Base[]
@@ -81,7 +81,7 @@
  >d1 : Derived1
 @@= skipped -11, +11 lines =@@
  >d2 : Derived2
- 
+
  function x149(): { (): Base[]; } { return function() { return [d1, d2] }; return function() { return [d1, d2] }; }
 ->x149 : () => { (): Base[]; }
 +>x149 : () => () => Base[]
@@ -90,7 +90,7 @@
  >d1 : Derived1
 @@= skipped -11, +11 lines =@@
  >d2 : Derived2
- 
+
  function x150(): { (): Base[]; } { return function named() { return [d1, d2] }; return function named() { return [d1, d2] }; }
 ->x150 : () => { (): Base[]; }
 +>x150 : () => () => Base[]
@@ -99,7 +99,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -22, +22 lines =@@
  >d2 : Derived2
- 
+
  function x152(): Array<Base> { return [d1, d2]; return [d1, d2]; }
 ->x152 : () => Array<Base>
 +>x152 : () => Base[]
@@ -108,7 +108,7 @@
  >d2 : Derived2
 @@= skipped -85, +85 lines =@@
  >d2 : Derived2
- 
+
  var x160: () => { (): Base[]; } = () => { return () => [d1, d2]; };
 ->x160 : () => { (): Base[]; }
 +>x160 : () => () => Base[]
@@ -117,7 +117,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -8, +8 lines =@@
  >d2 : Derived2
- 
+
  var x161: () => { (): Base[]; } = () => { return function() { return [d1, d2] }; };
 ->x161 : () => { (): Base[]; }
 +>x161 : () => () => Base[]
@@ -126,7 +126,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -8, +8 lines =@@
  >d2 : Derived2
- 
+
  var x162: () => { (): Base[]; } = () => { return function named() { return [d1, d2] }; };
 ->x162 : () => { (): Base[]; }
 +>x162 : () => () => Base[]
@@ -135,7 +135,7 @@
  >named : () => (Derived1 | Derived2)[]
 @@= skipped -16, +16 lines =@@
  >d2 : Derived2
- 
+
  var x164: () => Array<Base> = () => { return [d1, d2]; };
 ->x164 : () => Array<Base>
 +>x164 : () => Base[]
@@ -144,7 +144,7 @@
  >d1 : Derived1
 @@= skipped -69, +69 lines =@@
  >d2 : Derived2
- 
+
  var x172: () => { (): Base[]; } = function() { return () => [d1, d2]; };
 ->x172 : () => { (): Base[]; }
 +>x172 : () => () => Base[]
@@ -153,7 +153,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -8, +8 lines =@@
  >d2 : Derived2
- 
+
  var x173: () => { (): Base[]; } = function() { return function() { return [d1, d2] }; };
 ->x173 : () => { (): Base[]; }
 +>x173 : () => () => Base[]
@@ -162,7 +162,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -8, +8 lines =@@
  >d2 : Derived2
- 
+
  var x174: () => { (): Base[]; } = function() { return function named() { return [d1, d2] }; };
 ->x174 : () => { (): Base[]; }
 +>x174 : () => () => Base[]
@@ -171,7 +171,7 @@
  >named : () => (Derived1 | Derived2)[]
 @@= skipped -16, +16 lines =@@
  >d2 : Derived2
- 
+
  var x176: () => Array<Base> = function() { return [d1, d2]; };
 ->x176 : () => Array<Base>
 +>x176 : () => Base[]
@@ -180,7 +180,7 @@
  >d1 : Derived1
 @@= skipped -557, +557 lines =@@
  >d2 : Derived2
- 
+
  var x240: { n: { (): Base[]; }; } = { n: () => [d1, d2] };
 ->x240 : { n: { (): Base[]; }; }
 +>x240 : { n: () => Base[]; }
@@ -189,7 +189,7 @@
  >n : () => (Derived1 | Derived2)[]
 @@= skipped -10, +10 lines =@@
  >d2 : Derived2
- 
+
  var x241: { n: { (): Base[]; }; } = { n: function() { return [d1, d2] } };
 ->x241 : { n: { (): Base[]; }; }
 +>x241 : { n: () => Base[]; }
@@ -198,7 +198,7 @@
  >n : () => (Derived1 | Derived2)[]
 @@= skipped -10, +10 lines =@@
  >d2 : Derived2
- 
+
  var x242: { n: { (): Base[]; }; } = { n: function named() { return [d1, d2] } };
 ->x242 : { n: { (): Base[]; }; }
 +>x242 : { n: () => Base[]; }
@@ -207,7 +207,7 @@
  >n : () => (Derived1 | Derived2)[]
 @@= skipped -20, +20 lines =@@
  >d2 : Derived2
- 
+
  var x244: { n: Array<Base>; } = { n: [d1, d2] };
 ->x244 : { n: Array<Base>; }
 +>x244 : { n: Base[]; }
@@ -216,7 +216,7 @@
  >n : (Derived1 | Derived2)[]
 @@= skipped -812, +812 lines =@@
  >d2 : Derived2
- 
+
  function x324(n: { (): Base[]; }) { }; x324(() => [d1, d2]);
 ->x324 : (n: { (): Base[]; }) => void
 +>x324 : (n: () => Base[]) => void
@@ -228,7 +228,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  function x325(n: { (): Base[]; }) { }; x325(function() { return [d1, d2] });
 ->x325 : (n: { (): Base[]; }) => void
 +>x325 : (n: () => Base[]) => void
@@ -240,7 +240,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  function x326(n: { (): Base[]; }) { }; x326(function named() { return [d1, d2] });
 ->x326 : (n: { (): Base[]; }) => void
 +>x326 : (n: () => Base[]) => void
@@ -253,7 +253,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -40, +40 lines =@@
  >d2 : Derived2
- 
+
  function x328(n: Array<Base>) { }; x328([d1, d2]);
 ->x328 : (n: Array<Base>) => void
 +>x328 : (n: Base[]) => void
@@ -266,7 +266,7 @@
  >d2 : Derived2
 @@= skipped -91, +91 lines =@@
  >d2 : Derived2
- 
+
  var x336 = (n: { (): Base[]; }) => n; x336(() => [d1, d2]);
 ->x336 : (n: { (): Base[]; }) => () => Base[]
 ->(n: { (): Base[]; }) => n : (n: { (): Base[]; }) => () => Base[]
@@ -281,7 +281,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  var x337 = (n: { (): Base[]; }) => n; x337(function() { return [d1, d2] });
 ->x337 : (n: { (): Base[]; }) => () => Base[]
 ->(n: { (): Base[]; }) => n : (n: { (): Base[]; }) => () => Base[]
@@ -296,7 +296,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  var x338 = (n: { (): Base[]; }) => n; x338(function named() { return [d1, d2] });
 ->x338 : (n: { (): Base[]; }) => () => Base[]
 ->(n: { (): Base[]; }) => n : (n: { (): Base[]; }) => () => Base[]
@@ -312,7 +312,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -48, +48 lines =@@
  >d2 : Derived2
- 
+
  var x340 = (n: Array<Base>) => n; x340([d1, d2]);
 ->x340 : (n: Array<Base>) => Base[]
 ->(n: Array<Base>) => n : (n: Array<Base>) => Base[]
@@ -328,7 +328,7 @@
  >d2 : Derived2
 @@= skipped -98, +98 lines =@@
  >d2 : Derived2
- 
+
  var x348 = function(n: { (): Base[]; }) { }; x348(() => [d1, d2]);
 ->x348 : (n: { (): Base[]; }) => void
 ->function(n: { (): Base[]; }) { } : (n: { (): Base[]; }) => void
@@ -342,7 +342,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  var x349 = function(n: { (): Base[]; }) { }; x349(function() { return [d1, d2] });
 ->x349 : (n: { (): Base[]; }) => void
 ->function(n: { (): Base[]; }) { } : (n: { (): Base[]; }) => void
@@ -356,7 +356,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
  >d1 : Derived1
  >d2 : Derived2
- 
+
  var x350 = function(n: { (): Base[]; }) { }; x350(function named() { return [d1, d2] });
 ->x350 : (n: { (): Base[]; }) => void
 ->function(n: { (): Base[]; }) { } : (n: { (): Base[]; }) => void
@@ -371,7 +371,7 @@
  >[d1, d2] : (Derived1 | Derived2)[]
 @@= skipped -44, +44 lines =@@
  >d2 : Derived2
- 
+
  var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
 ->x352 : (n: Array<Base>) => void
 ->function(n: Array<Base>) { } : (n: Array<Base>) => void

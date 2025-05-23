@@ -13,8 +13,8 @@
 +/a.ts(3,25): error TS2307: Cannot find module 'bar/sub' or its corresponding type declarations.
 +/a.ts(5,30): error TS2307: Cannot find module '@scope/foo/sub' or its corresponding type declarations.
 +/a.ts(6,30): error TS2307: Cannot find module '@scope/bar/sub' or its corresponding type declarations.
- 
- 
+
+
  ==== /a.ts (4 errors) ====
      import * as foo from "foo";
      import * as fooSub from "foo/sub";

@@ -1,8 +1,8 @@
 --- old.parsingClassRecoversWhenHittingUnexpectedSemicolon.js
 +++ new.parsingClassRecoversWhenHittingUnexpectedSemicolon.js
 @@= skipped -7, +7 lines =@@
- 
- 
+
+
  //// [parsingClassRecoversWhenHittingUnexpectedSemicolon.js]
 -var C = /** @class */ (function () {
 -    function C() {

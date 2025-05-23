@@ -1,41 +1,46 @@
 --- old.inferringReturnTypeFromConstructSignatureGeneric.js
 +++ new.inferringReturnTypeFromConstructSignatureGeneric.js
 @@= skipped -36, +36 lines =@@
- 
- 
+
+
  //// [inferringReturnTypeFromConstructSignatureGeneric.js]
 -var GenericObject = /** @class */ (function () {
 -    function GenericObject() {
 -    }
 -    GenericObject.prototype.give = function (value) {
-+class GenericObject {
-+    give(value) {
-         return value;
+-        return value;
 -    };
 -    return GenericObject;
 -}());
 -var GenericNumber = /** @class */ (function () {
 -    function GenericNumber() {
-     }
+-    }
 -    GenericNumber.prototype.give = function (value) {
-+}
-+class GenericNumber {
-+    give(value) {
-         return value;
+-        return value;
 -    };
 -    return GenericNumber;
 -}());
 -var GenericNumberOrString = /** @class */ (function () {
 -    function GenericNumberOrString() {
-     }
+-    }
 -    GenericNumberOrString.prototype.give = function (value) {
-+}
-+class GenericNumberOrString {
-+    give(value) {
-         return value;
+-        return value;
 -    };
 -    return GenericNumberOrString;
 -}());
++class GenericObject {
++    give(value) {
++        return value;
++    }
++}
++class GenericNumber {
++    give(value) {
++        return value;
++    }
++}
++class GenericNumberOrString {
++    give(value) {
++        return value;
 +    }
 +}
  function g(type) {

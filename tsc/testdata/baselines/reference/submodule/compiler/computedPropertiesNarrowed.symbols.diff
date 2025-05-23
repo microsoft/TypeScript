@@ -9,6 +9,6 @@
  >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
- 
+
  declare function assert(n: number): asserts n is 1;
  >assert : Symbol(assert, Decl(computedPropertiesNarrowed.ts, 0, 37))

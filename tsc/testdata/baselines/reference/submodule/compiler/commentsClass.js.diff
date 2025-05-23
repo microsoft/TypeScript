@@ -1,7 +1,7 @@
 --- old.commentsClass.js
 +++ new.commentsClass.js
 @@= skipped -75, +75 lines =@@
- 
+
  //// [commentsClass.js]
  /** This is class c2 without constuctor*/
 -var c2 = /** @class */ (function () {
@@ -107,7 +107,7 @@
 -//// [commentsClass.d.ts]
 -/** This is class c2 without constuctor*/
 -declare class c2 {
- }
+-}
 -declare var i2: c2;
 -declare var i2_c: typeof c2;
 -declare class c3 {
@@ -154,4 +154,4 @@
 -declare var i8_c: typeof c8;
 -declare class c9 {
 -    constructor();
--}
+ }

@@ -6,6 +6,6 @@
  >B : ENUM1.B
 ->"" : (typeof ENUM1)[""]
 +>"" : ENUM1.""
- 
+
  // enum type var
  var ResultIsBoolean1 = delete ENUM;

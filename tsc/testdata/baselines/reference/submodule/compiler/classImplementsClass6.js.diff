@@ -2,7 +2,7 @@
 +++ new.classImplementsClass6.js
 @@= skipped -23, +23 lines =@@
  c2.bar(); // should error
- 
+
  //// [classImplementsClass6.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -2,12 +2,12 @@
 +++ new.declFileTypeAnnotationVisibilityErrorVariableDeclaration.types
 @@= skipped -53, +53 lines =@@
      }
- 
+
      var x3: m2.public2;
 ->x3 : m2.public2
 +>x3 : public2
  >m2 : any
- 
+
      var y3 = new m2.public2();
 ->y3 : m2.public2
 ->new m2.public2() : m2.public2
@@ -18,12 +18,12 @@
  >m2 : typeof m2
 ->public2 : typeof m2.public2
 +>public2 : typeof public2
- 
+
      export var k3: m2.public2;
 ->k3 : m2.public2
 +>k3 : public2
  >m2 : any
- 
+
      export var l3 = new m2.public2();
 ->l3 : m2.public2
 ->new m2.public2() : m2.public2
@@ -35,4 +35,3 @@
 ->public2 : typeof m2.public2
 +>public2 : typeof public2
  }
- 

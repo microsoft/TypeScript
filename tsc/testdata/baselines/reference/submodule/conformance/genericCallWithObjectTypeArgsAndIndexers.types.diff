@@ -7,5 +7,5 @@
 ->foo : <T_1>(x: T_1) => T_1
 +>foo : <T>(x: T) => T
  >b : { [x: string]: Object; [x: number]: T; }
- 
+
      var d = r2[1]; 

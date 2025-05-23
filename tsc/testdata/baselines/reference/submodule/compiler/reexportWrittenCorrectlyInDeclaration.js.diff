@@ -44,14 +44,15 @@
 -    }
 -    return Test;
 -}());
--exports.Test = Test;
++class Test {
++    method = (input) => { };
++}
+ exports.Test = Test;
 -
 -
 -//// [ThingA.d.ts]
 -export declare class ThingA {
-+class Test {
-+    method = (input) => { };
- }
+-}
 -//// [ThingB.d.ts]
 -export declare class ThingB {
 -}
@@ -63,4 +64,3 @@
 -export declare class Test {
 -    method: (input: things.ThingA) => void;
 -}
-+exports.Test = Test;

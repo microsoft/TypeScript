@@ -11,7 +11,7 @@
 +>reason : any
 +>code : any
  }
- 
+
  class Y {
 @@= skipped -18, +18 lines =@@
        * @returns {Promise.<*>} resolves when the event has been sent.
@@ -24,4 +24,3 @@
 +>reason : any
 +>suberr : any
  }
- 

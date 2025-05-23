@@ -1,8 +1,7 @@
 --- old.parsingDeepParenthensizedExpression.errors.txt
 +++ new.parsingDeepParenthensizedExpression.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +a.js(7,29): error TS2304: Cannot find name 'f'.
 +a.js(7,38): error TS2304: Cannot find name 'f'.
 +a.js(7,42): error TS2304: Cannot find name 'f'.

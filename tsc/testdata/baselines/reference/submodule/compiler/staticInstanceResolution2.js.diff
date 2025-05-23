@@ -1,8 +1,8 @@
 --- old.staticInstanceResolution2.js
 +++ new.staticInstanceResolution2.js
 @@= skipped -13, +13 lines =@@
- 
- 
+
+
  //// [staticInstanceResolution2.js]
 -var A = /** @class */ (function () {
 -    function A() {

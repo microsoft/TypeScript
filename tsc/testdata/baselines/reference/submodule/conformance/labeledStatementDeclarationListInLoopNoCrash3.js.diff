@@ -1,7 +1,7 @@
 --- old.labeledStatementDeclarationListInLoopNoCrash3.js
 +++ new.labeledStatementDeclarationListInLoopNoCrash3.js
 @@= skipped -25, +25 lines =@@
- 
+
  //// [labeledStatementDeclarationListInLoopNoCrash3.js]
  "use strict";
 -// https://github.com/microsoft/TypeScript/issues/59345

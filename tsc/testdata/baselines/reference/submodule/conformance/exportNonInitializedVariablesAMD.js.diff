@@ -1,8 +1,8 @@
 --- old.exportNonInitializedVariablesAMD.js
 +++ new.exportNonInitializedVariablesAMD.js
 @@= skipped -35, +35 lines =@@
- 
- 
+
+
  //// [exportNonInitializedVariablesAMD.js]
 -define(["require", "exports"], function (require, exports) {
 -    "use strict";

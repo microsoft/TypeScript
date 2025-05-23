@@ -1,8 +1,8 @@
 --- old.parser.numericSeparators.decimal(target=es2020).js
 +++ new.parser.numericSeparators.decimal(target=es2020).js
 @@= skipped -17, +17 lines =@@
- 
- 
+
+
  //// [parser.numericSeparators.decimal.js]
 -1000000000;
 -1.10001;

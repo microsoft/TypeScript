@@ -2,7 +2,7 @@
 +++ new.reactReadonlyHOCAssignabilityReal.types
 @@= skipped -5, +5 lines =@@
  >React : typeof React
- 
+
  function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
 ->myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & { name: string; }>) => React.ComponentClass<P>
 ->Inner : React.ComponentClass<P & { name: string; }, any>
@@ -20,11 +20,11 @@
  >React : typeof React
 ->Component : typeof React.Component
 +>Component : typeof Component
- 
+
          render() {
 ->render : () => JSX.Element
 +>render : () => Element
- 
+
              return <Inner {...this.props} name="Matt"/>;
 -><Inner {...this.props} name="Matt"/> : JSX.Element
 ->Inner : React.ComponentClass<P & { name: string; }, any>

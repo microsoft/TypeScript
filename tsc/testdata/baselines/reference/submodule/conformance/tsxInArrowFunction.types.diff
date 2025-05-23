@@ -1,7 +1,7 @@
 --- old.tsxInArrowFunction.types
 +++ new.tsxInArrowFunction.types
 @@= skipped -15, +15 lines =@@
- 
+
  // didn't work
  <div>{() => <div text="wat" />}</div>;
 -><div>{() => <div text="wat" />}</div> : JSX.Element
@@ -14,7 +14,7 @@
  >div : any
  >text : string
  >div : any
- 
+
  // didn't work
  <div>{x => <div text="wat" />}</div>;
 -><div>{x => <div text="wat" />}</div> : JSX.Element
@@ -28,7 +28,7 @@
  >div : any
  >text : string
  >div : any
- 
+
  // worked
  <div>{() => (<div text="wat" />)}</div>;
 -><div>{() => (<div text="wat" />)}</div> : JSX.Element
@@ -43,7 +43,7 @@
  >div : any
  >text : string
  >div : any
- 
+
  // worked (!)
  <div>{() => <div text="wat"></div>}</div>;
 -><div>{() => <div text="wat"></div>}</div> : JSX.Element

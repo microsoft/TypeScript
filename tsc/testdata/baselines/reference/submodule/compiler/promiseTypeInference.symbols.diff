@@ -2,7 +2,7 @@
 +++ new.promiseTypeInference.symbols
 @@= skipped -5, +5 lines =@@
  >T : Symbol(T, Decl(promiseTypeInference.ts, 0, 23))
- 
+
      then<U>(success?: (value: T) => CPromise<U>): CPromise<U>;
 ->then : Symbol(CPromise.then, Decl(promiseTypeInference.ts, 0, 27))
 +>then : Symbol(then, Decl(promiseTypeInference.ts, 0, 27))
@@ -11,7 +11,7 @@
  >value : Symbol(value, Decl(promiseTypeInference.ts, 1, 23))
 @@= skipped -15, +15 lines =@@
  >T : Symbol(T, Decl(promiseTypeInference.ts, 3, 19))
- 
+
      then<U>(success?: (value: T) => IPromise<U>): IPromise<U>;
 ->then : Symbol(IPromise.then, Decl(promiseTypeInference.ts, 3, 23))
 +>then : Symbol(then, Decl(promiseTypeInference.ts, 3, 23))
@@ -19,7 +19,7 @@
  >success : Symbol(success, Decl(promiseTypeInference.ts, 4, 12))
  >value : Symbol(value, Decl(promiseTypeInference.ts, 4, 23))
 @@= skipped -22, +22 lines =@@
- 
+
  var $$x = load("something").then(s => convert(s));
  >$$x : Symbol($$x, Decl(promiseTypeInference.ts, 9, 3))
 ->load("something").then : Symbol(CPromise.then, Decl(promiseTypeInference.ts, 0, 27))

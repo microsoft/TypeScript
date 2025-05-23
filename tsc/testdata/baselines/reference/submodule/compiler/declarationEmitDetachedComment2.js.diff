@@ -1,8 +1,8 @@
 --- old.declarationEmitDetachedComment2.js
 +++ new.declarationEmitDetachedComment2.js
 @@= skipped -31, +31 lines =@@
- 
- 
+
+
  //// [test1.js]
 -/*! Copyright 2015 MyCompany Inc. */
 -var Hello = (function () {
@@ -31,11 +31,11 @@
 -//// [test1.d.ts]
 -/*! Copyright 2015 MyCompany Inc. */
 -declare class Hello {
-+class Hola {
- }
+-}
 -//// [test2.d.ts]
 -declare class Hi {
 -}
 -//// [test3.d.ts]
 -declare class Hola {
--}
++class Hola {
+ }

@@ -1,8 +1,8 @@
 --- old.literalTypesWidenInParameterPosition.js
 +++ new.literalTypesWidenInParameterPosition.js
 @@= skipped -11, +11 lines =@@
- 
- 
+
+
  //// [literalTypesWidenInParameterPosition.js]
 -var D = /** @class */ (function () {
 -    function D(widen) {

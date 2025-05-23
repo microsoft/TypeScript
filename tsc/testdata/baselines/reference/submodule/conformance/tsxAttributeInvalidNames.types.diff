@@ -1,7 +1,7 @@
 --- old.tsxAttributeInvalidNames.types
 +++ new.tsxAttributeInvalidNames.types
 @@= skipped -15, +15 lines =@@
- 
+
  // Invalid names
  <test1 32data={32} />;
 -><test1 : JSX.Element
@@ -10,7 +10,7 @@
  >32 : 32
  >data={32} /> : boolean
 @@= skipped -15, +15 lines =@@
- 
+
  <test2 -data={32} />;
  ><test2 -data : number
 -><test2 : JSX.Element

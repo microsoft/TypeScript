@@ -1,12 +1,12 @@
 --- old.jsFileMethodOverloads4.types
 +++ new.jsFileMethodOverloads4.types
 @@= skipped -1, +1 lines =@@
- 
+
  === /a.js ===
  export function Foo() { }
 ->Foo : typeof Foo
 +>Foo : () => void
- 
+
  /**
   * @overload
 @@= skipped -21, +21 lines =@@
@@ -27,4 +27,3 @@
 +>function (a, b) { } : (a: any, b: any) => void
 +>a : any
 +>b : any
- 

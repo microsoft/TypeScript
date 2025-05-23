@@ -2,7 +2,7 @@
 +++ new.emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.js
 @@= skipped -13, +13 lines =@@
  var result2 = foo().prop **= foo().prop ** 2;
- 
+
  //// [emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.js]
 -var _a, _b, _c, _d, _e, _f, _g, _h;
  var globalCounter = 0;

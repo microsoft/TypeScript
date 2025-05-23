@@ -1,13 +1,13 @@
 --- old.logicalAssignment9.types
 +++ new.logicalAssignment9.types
 @@= skipped -1, +1 lines =@@
- 
+
  === logicalAssignment9.ts ===
  declare let x: { a?: boolean };
 ->x : { a?: boolean; }
 +>x : { a?: boolean | undefined; }
  >a : boolean | undefined
- 
+
  x.a ??= true;
  >x.a ??= true : boolean
  >x.a : boolean | undefined
@@ -15,7 +15,7 @@
 +>x : { a?: boolean | undefined; }
  >a : boolean | undefined
  >true : true
- 
+
  x.a &&= false;
  >x.a &&= false : false | undefined
  >x.a : boolean | undefined
@@ -23,4 +23,3 @@
 +>x : { a?: boolean | undefined; }
  >a : boolean | undefined
  >false : false
- 

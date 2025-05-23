@@ -2,7 +2,7 @@
 +++ new.overloadOnConstInBaseWithBadImplementationInDerived.js
 @@= skipped -10, +10 lines =@@
  }
- 
+
  //// [overloadOnConstInBaseWithBadImplementationInDerived.js]
 -var C = /** @class */ (function () {
 -    function C() {

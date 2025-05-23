@@ -2,7 +2,7 @@
 +++ new.typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js
 @@= skipped -33, +33 lines =@@
  }
- 
+
  //// [typeOfThisInstanceMemberNarrowedWithLoopAntecedent.js]
 -var SomeClass = /** @class */ (function () {
 -    function SomeClass() {

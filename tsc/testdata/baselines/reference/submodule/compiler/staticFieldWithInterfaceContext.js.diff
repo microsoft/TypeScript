@@ -1,8 +1,8 @@
 --- old.staticFieldWithInterfaceContext.js
 +++ new.staticFieldWithInterfaceContext.js
 @@= skipped -28, +28 lines =@@
- 
- 
+
+
  //// [staticFieldWithInterfaceContext.js]
 -var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";

@@ -2,7 +2,7 @@
 +++ new.asyncArrowFunction7_es5.js
 @@= skipped -7, +7 lines =@@
  }
- 
+
  //// [asyncArrowFunction7_es5.js]
 -var _this = this;
 -var bar = function () { return __awaiter(_this, void 0, void 0, function () {

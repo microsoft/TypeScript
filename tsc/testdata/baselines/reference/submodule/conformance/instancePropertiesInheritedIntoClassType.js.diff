@@ -2,7 +2,7 @@
 +++ new.instancePropertiesInheritedIntoClassType.js
 @@= skipped -44, +44 lines =@@
  }
- 
+
  //// [instancePropertiesInheritedIntoClassType.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

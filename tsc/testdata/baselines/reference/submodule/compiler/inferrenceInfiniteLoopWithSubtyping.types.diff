@@ -2,15 +2,15 @@
 +++ new.inferrenceInfiniteLoopWithSubtyping.types
 @@= skipped -24, +24 lines =@@
  >ObjectTypeComposer : ObjectTypeComposer<TSource, TContext>
- 
+
    public setFields(fields: ObjMapReadOnly<Resolver>): this;
 ->setFields : (fields: ObjMapReadOnly<Resolver>) => this
 +>setFields : (fields: Readonly<{ [key: string]: Readonly<Resolver>; }>) => this
  >fields : Readonly<{ [key: string]: Readonly<Resolver>; }>
- 
+
    public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
 @@= skipped -38, +38 lines =@@
- 
+
  User.addResolver({
  >User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
 ->User.addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
@@ -19,5 +19,5 @@
 ->addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
 +>addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
  >{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
- 
+
    type: User, // `User as any` fix the problem

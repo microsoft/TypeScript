@@ -2,7 +2,7 @@
 +++ new.typesWithOptionalProperty.js
 @@= skipped -32, +32 lines =@@
  a = i;
- 
+
  //// [typesWithOptionalProperty.js]
 -// basic uses of optional properties without errors
  var a;

@@ -2,7 +2,7 @@
 +++ new.genericCloneReturnTypes2.js
 @@= skipped -17, +17 lines =@@
  var d: MyList<number> = a.clone(); // error
- 
+
  //// [genericCloneReturnTypes2.js]
 -var MyList = /** @class */ (function () {
 -    function MyList(n) {

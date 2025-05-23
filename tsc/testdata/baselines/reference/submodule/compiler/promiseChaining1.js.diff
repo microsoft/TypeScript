@@ -1,7 +1,7 @@
 --- old.promiseChaining1.js
 +++ new.promiseChaining1.js
 @@= skipped -13, +13 lines =@@
- 
+
  //// [promiseChaining1.js]
  // same example but with constraints on each type parameter
 -var Chain2 = /** @class */ (function () {

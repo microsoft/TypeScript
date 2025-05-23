@@ -2,7 +2,7 @@
 +++ new.classWithoutExplicitConstructor.js
 @@= skipped -17, +17 lines =@@
  var d2 = new D(null); // error
- 
+
  //// [classWithoutExplicitConstructor.js]
 -var C = /** @class */ (function () {
 -    function C() {

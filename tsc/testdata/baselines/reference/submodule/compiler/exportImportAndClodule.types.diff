@@ -2,7 +2,7 @@
 +++ new.exportImportAndClodule.types
 @@= skipped -29, +29 lines =@@
  >M : typeof M
- 
+
      export import D = K.L;
 ->D : typeof D
 +>D : typeof L
@@ -13,7 +13,7 @@
  var o: { name: string };
  >o : { name: string; }
 @@= skipped -10, +10 lines =@@
- 
+
  var o = new M.D('Hello');
  >o : { name: string; }
 ->new M.D('Hello') : K.L
@@ -24,5 +24,5 @@
 ->D : typeof K.L
 +>D : typeof L
  >'Hello' : "Hello"
- 
+
  var p: { x: number; y: number; }

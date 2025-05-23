@@ -1,8 +1,8 @@
 --- old.arrayAssignmentTest4.js
 +++ new.arrayAssignmentTest4.js
 @@= skipped -26, +26 lines =@@
- 
- 
+
+
  //// [arrayAssignmentTest4.js]
 -var C3 = /** @class */ (function () {
 -    function C3() {
@@ -14,5 +14,5 @@
 +    CM3M1() { return 3; }
 +}
  /*
- 
+
  This behaves unexpectedly with teh following types:

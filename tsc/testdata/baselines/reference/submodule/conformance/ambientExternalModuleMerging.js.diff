@@ -2,7 +2,7 @@
 +++ new.ambientExternalModuleMerging.js
 @@= skipped -16, +16 lines =@@
  }
- 
+
  //// [ambientExternalModuleMerging_use.js]
 -define(["require", "exports", "M"], function (require, exports, M) {
 -    "use strict";

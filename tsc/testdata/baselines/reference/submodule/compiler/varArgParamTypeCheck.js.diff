@@ -1,8 +1,8 @@
 --- old.varArgParamTypeCheck.js
 +++ new.varArgParamTypeCheck.js
 @@= skipped -23, +23 lines =@@
- 
- 
+
+
  //// [varArgParamTypeCheck.js]
 -function sequence() {
 -    var sequences = [];

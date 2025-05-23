@@ -1,7 +1,7 @@
 --- old.expressionsForbiddenInParameterInitializers.js
 +++ new.expressionsForbiddenInParameterInitializers.js
 @@= skipped -9, +9 lines =@@
- 
+
  //// [bar.js]
  "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

@@ -1,30 +1,30 @@
 --- old.signatureCombiningRestParameters4.types
 +++ new.signatureCombiningRestParameters4.types
 @@= skipped -21, +21 lines =@@
- 
+
  interface NodeConfig<Options = any> {
    extendMarkSchema?:
 ->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Node) => Record<string, any>) | null | undefined
 +>extendMarkSchema : ((this: { name: string; options: Options; }, extension: Node<any>) => Record<string, any>) | null | undefined
- 
+
      | ((
          this: {
 @@= skipped -32, +32 lines =@@
- 
+
  interface MarkConfig<Options = any> {
    extendMarkSchema?:
 ->extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark) => Record<string, any>) | null | undefined
 +>extendMarkSchema : ((this: { name: string; options: Options; }, extension: Mark<any>) => Record<string, any>) | null | undefined
- 
+
      | ((
          this: {
 @@= skipped -39, +39 lines =@@
    : T;
- 
+
  declare function getExtensionField<T = any>(
 ->getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
 +>getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
- 
+
    extension: AnyExtension,
  >extension : AnyExtension
 @@= skipped -13, +13 lines =@@
@@ -33,6 +33,6 @@
  >getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 ->getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
 +>getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
- 
+
    e,
  >e : AnyExtension

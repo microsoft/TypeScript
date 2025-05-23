@@ -1,7 +1,7 @@
 --- old.typeAliasDeclareKeywordNewlines.js
 +++ new.typeAliasDeclareKeywordNewlines.js
 @@= skipped -23, +23 lines =@@
- 
+
  //// [typeAliasDeclareKeywordNewlines.js]
  var declare, type;
 -var t1 = null; // Assert that T1 is the null type.

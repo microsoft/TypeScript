@@ -1,8 +1,7 @@
 --- old.thisTypeOfConstructorFunctions.errors.txt
 +++ new.thisTypeOfConstructorFunctions.errors.txt
-@@= skipped -0, +-1 lines =@@
+@@= skipped -0, +0 lines =@@
 -<no content>
-@@= skipped --1, +1 lines =@@
 +thisTypeOfConstructorFunctions.js(7,16): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 +thisTypeOfConstructorFunctions.js(15,18): error TS2526: A 'this' type is available only in a non-static member of a class or interface.
 +thisTypeOfConstructorFunctions.js(38,12): error TS2749: 'Cpp' refers to a value, but is being used as a type here. Did you mean 'typeof Cpp'?

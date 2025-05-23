@@ -2,7 +2,7 @@
 +++ new.accessorWithoutBody1.js
 @@= skipped -3, +3 lines =@@
  var v = { get foo() }
- 
+
  //// [accessorWithoutBody1.js]
 -var v = { get foo() { } };
 +var v = {};

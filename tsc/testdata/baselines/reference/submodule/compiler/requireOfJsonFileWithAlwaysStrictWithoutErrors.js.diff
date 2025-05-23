@@ -3,7 +3,7 @@
 @@= skipped -14, +14 lines =@@
      "b": "hello"
  }
- 
+
 -//// [b.json]
 -{
 -    "a": true,

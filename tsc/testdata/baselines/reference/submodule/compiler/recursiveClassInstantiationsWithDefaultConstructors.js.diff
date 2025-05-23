@@ -2,7 +2,7 @@
 +++ new.recursiveClassInstantiationsWithDefaultConstructors.js
 @@= skipped -11, +11 lines =@@
  var a = new TypeScript2.MemberNameArray()
- 
+
  //// [recursiveClassInstantiationsWithDefaultConstructors.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

@@ -1,7 +1,7 @@
 --- old.mappedTypeErrors.js
 +++ new.mappedTypeErrors.js
 @@= skipped -157, +157 lines =@@
- 
+
  //// [mappedTypeErrors.js]
  function f1(x) {
 -    var y; // Error
@@ -100,8 +100,7 @@
  }
  function test2(obj) {
 -    var x = obj.foo; // Error
-+    let x = obj.foo; // Error
- }
+-}
 -
 -
 -//// [mappedTypeErrors.d.ts]
@@ -182,3 +181,5 @@
 -declare let f: Foo2<O, 'x'>;
 -declare function test1<T, K extends keyof T>(obj: Pick<T, K>): void;
 -declare function test2<T, K extends keyof T>(obj: Record<K, number>): void;
++    let x = obj.foo; // Error
++}

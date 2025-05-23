@@ -2,7 +2,7 @@
 +++ new.restParamModifier.js
 @@= skipped -5, +5 lines =@@
  }
- 
+
  //// [restParamModifier.js]
 -var C = /** @class */ (function () {
 -    function C(rest) {

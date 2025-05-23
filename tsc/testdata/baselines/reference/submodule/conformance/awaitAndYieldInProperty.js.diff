@@ -1,7 +1,7 @@
 --- old.awaitAndYieldInProperty.js
 +++ new.awaitAndYieldInProperty.js
 @@= skipped -20, +20 lines =@@
- 
+
  //// [awaitAndYieldInProperty.js]
  async function* test(x) {
 -    var _a, _b, _c, _d, _e, _f, _g, _h, _j;

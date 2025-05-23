@@ -2,7 +2,7 @@
 +++ new.recursiveSpecializationOfSignatures.symbols
 @@= skipped -6, +6 lines =@@
  >A : Symbol(A, Decl(recursiveSpecializationOfSignatures.ts, 0, 11))
- 
+
  set S1(S2: S0<any,any>) {
 ->S1 : Symbol(S0.S1, Decl(recursiveSpecializationOfSignatures.ts, 0, 16))
 +>S1 : Symbol(S1, Decl(recursiveSpecializationOfSignatures.ts, 0, 16))

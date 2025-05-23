@@ -2,22 +2,11 @@
 +++ new.twoAccessorsWithSameName2.js
 @@= skipped -18, +18 lines =@@
  }
- 
+
  //// [twoAccessorsWithSameName2.js]
 -var C = /** @class */ (function () {
 -    function C() {
-+class C {
-+    static get x() { return 1; }
-+    static get x() { return 1; } // error
-+}
-+class D {
-+    static set x(v) { }
-+    static set x(v) { } // error
-+}
-+class E {
-+    static get x() {
-+        return 1;
-     }
+-    }
 -    Object.defineProperty(C, "x", {
 -        get: function () { return 1; },
 -        enumerable: false,
@@ -48,5 +37,17 @@
 -    });
 -    return E;
 -}());
++class C {
++    static get x() { return 1; }
++    static get x() { return 1; } // error
++}
++class D {
++    static set x(v) { }
++    static set x(v) { } // error
++}
++class E {
++    static get x() {
++        return 1;
++    }
 +    static set x(v) { }
 +}

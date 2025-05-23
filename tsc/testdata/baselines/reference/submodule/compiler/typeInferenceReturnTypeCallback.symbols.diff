@@ -2,7 +2,7 @@
 +++ new.typeInferenceReturnTypeCallback.symbols
 @@= skipped -5, +5 lines =@@
  >A : Symbol(A, Decl(typeInferenceReturnTypeCallback.ts, 0, 16))
- 
+
      map<B>(f: (t: A) => B): IList<B>;
 ->map : Symbol(IList.map, Decl(typeInferenceReturnTypeCallback.ts, 0, 20))
 +>map : Symbol(map, Decl(typeInferenceReturnTypeCallback.ts, 0, 20))
@@ -11,7 +11,7 @@
  >t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 1, 15))
 @@= skipped -17, +17 lines =@@
  >C : Symbol(C, Decl(typeInferenceReturnTypeCallback.ts, 4, 10))
- 
+
      map<D>(f: (t: C) => D): IList<D> {
 ->map : Symbol(Nil.map, Decl(typeInferenceReturnTypeCallback.ts, 4, 33))
 +>map : Symbol(map, Decl(typeInferenceReturnTypeCallback.ts, 4, 33))
@@ -20,7 +20,7 @@
  >t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 5, 15))
 @@= skipped -20, +20 lines =@@
  >T : Symbol(T, Decl(typeInferenceReturnTypeCallback.ts, 10, 11))
- 
+
      map<U>(f: (t: T) => U): IList<U> {
 ->map : Symbol(Cons.map, Decl(typeInferenceReturnTypeCallback.ts, 10, 34))
 +>map : Symbol(map, Decl(typeInferenceReturnTypeCallback.ts, 10, 34))
@@ -29,7 +29,7 @@
  >t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 11, 15))
 @@= skipped -10, +10 lines =@@
  >U : Symbol(U, Decl(typeInferenceReturnTypeCallback.ts, 11, 8))
- 
+
          return this.foldRight(new Nil<U>(), (t, acc) => {
 ->this.foldRight : Symbol(Cons.foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))
 +>this.foldRight : Symbol(foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))
@@ -41,7 +41,7 @@
  >t : Symbol(t, Decl(typeInferenceReturnTypeCallback.ts, 12, 45))
 @@= skipped -16, +16 lines =@@
      }
- 
+
      foldRight<E>(z: E, f: (t: T, acc: E) => E): E {
 ->foldRight : Symbol(Cons.foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))
 +>foldRight : Symbol(foldRight, Decl(typeInferenceReturnTypeCallback.ts, 15, 5))

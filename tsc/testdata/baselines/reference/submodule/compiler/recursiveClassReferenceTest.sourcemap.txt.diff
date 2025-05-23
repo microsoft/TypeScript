@@ -364,21 +364,11 @@
  1->^^^^^^^^^^^^^^^^
 -2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 -1-> {
-+2 >                ^^^^^^
-+3 >                      ^^^^^^^^^^^^^^^
-+4 >                                     ^^^^^^^^->
-+1->{
-   >	
+-  >	
 -1->Emitted(26, 17) Source(33, 2) + SourceIndex(0)
-+2 >                export class 
-+3 >                      StartFindAction
-+1->Emitted(9, 17) Source(33, 2) + SourceIndex(0)
-+2 >Emitted(9, 23) Source(33, 15) + SourceIndex(0)
-+3 >Emitted(9, 38) Source(33, 30) + SourceIndex(0)
- ---
+----
 ->>>                    function StartFindAction() {
-+>>>                    getId() { return "yo"; }
- 1->^^^^^^^^^^^^^^^^^^^^
+-1->^^^^^^^^^^^^^^^^^^^^
 -2 >                    ^^->
 -1->
 -1->Emitted(27, 21) Source(33, 2) + SourceIndex(0)
@@ -388,16 +378,7 @@
 -2 >                    ^
 -3 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 -1->export class StartFindAction implements Sample.Thing.IAction {
-+2 >                    ^^^^^
-+3 >                         ^^^
-+4 >                            ^^
-+5 >                              ^^^^^^^
-+6 >                                     ^^^^
-+7 >                                         ^
-+8 >                                          ^
-+9 >                                           ^
-+1-> implements Sample.Thing.IAction {
-   >		
+-  >		
 -  >		public getId() { return "yo"; }
 -  >		
 -  >		public run(Thing:Sample.Thing.ICodeThing):boolean {
@@ -420,6 +401,29 @@
 -8 >                                                                                ^
 -9 >                                                                                 ^
 -1->
++2 >                ^^^^^^
++3 >                      ^^^^^^^^^^^^^^^
++4 >                                     ^^^^^^^^->
++1->{
++  >	
++2 >                export class 
++3 >                      StartFindAction
++1->Emitted(9, 17) Source(33, 2) + SourceIndex(0)
++2 >Emitted(9, 23) Source(33, 15) + SourceIndex(0)
++3 >Emitted(9, 38) Source(33, 30) + SourceIndex(0)
++---
++>>>                    getId() { return "yo"; }
++1->^^^^^^^^^^^^^^^^^^^^
++2 >                    ^^^^^
++3 >                         ^^^
++4 >                            ^^
++5 >                              ^^^^^^^
++6 >                                     ^^^^
++7 >                                         ^
++8 >                                          ^
++9 >                                           ^
++1-> implements Sample.Thing.IAction {
++  >		
 +  >		public 
  2 >                    getId
 -3 >                                                   
@@ -515,16 +519,12 @@
  1 >^^^^^^^^^^^^^^^^^^^^
  2 >                    ^
 -3 >                     ^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >		
 -2 >                    }
 -1 >Emitted(32, 21) Source(40, 3) + SourceIndex(0)
 -2 >Emitted(32, 22) Source(40, 4) + SourceIndex(0)
-+2 >                    
-+  >                    		}
-+1 >Emitted(13, 21) Source(39, 16) + SourceIndex(0)
-+2 >Emitted(13, 22) Source(40, 4) + SourceIndex(0)
- ---
+----
 ->>>                    return StartFindAction;
 -1->^^^^^^^^^^^^^^^^^^^^
 -2 >                    ^^^^^^^^^^^^^^^^^^^^^^
@@ -540,10 +540,7 @@
 -3 >                 
 -4 >                 ^^^^
 -5 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+>>>                }
-+1 >^^^^^^^^^^^^^^^^^
-+2 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -2 >                }
 -3 >                 
 -4 >                 export class StartFindAction implements Sample.Thing.IAction {
@@ -559,6 +556,16 @@
 -2 >Emitted(34, 18) Source(41, 3) + SourceIndex(0)
 -3 >Emitted(34, 18) Source(33, 2) + SourceIndex(0)
 -4 >Emitted(34, 22) Source(41, 3) + SourceIndex(0)
++1 >
++2 >                    
++  >                    		}
++1 >Emitted(13, 21) Source(39, 16) + SourceIndex(0)
++2 >Emitted(13, 22) Source(40, 4) + SourceIndex(0)
++---
++>>>                }
++1 >^^^^^^^^^^^^^^^^^
++2 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
 +  >	}
 +1 >Emitted(14, 18) Source(41, 3) + SourceIndex(0)
  ---
@@ -1232,23 +1239,11 @@
    >		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
    >			
    >		private domNode:any = null;
--  >		
--2 >                constructor(private 
--3 >                                    codeThing: Sample.Thing.ICodeThing
--1->Emitted(46, 17) Source(50, 3) + SourceIndex(0)
--2 >Emitted(46, 37) Source(50, 23) + SourceIndex(0)
--3 >Emitted(46, 46) Source(50, 57) + SourceIndex(0)
 +  >		constructor(private 
 +2 >                codeThing
 +1 >Emitted(26, 17) Source(50, 23) + SourceIndex(0)
 +2 >Emitted(26, 26) Source(50, 32) + SourceIndex(0)
- ---
-->>>                    this.codeThing = codeThing;
--1->^^^^^^^^^^^^^^^^^^^^
--2 >                    ^^^^^^^^^^^^^^
--3 >                                  ^^^
--4 >                                     ^^^^^^^^^
--5 >                                              ^
++---
 +>>>                gar(runner) { if (true) {
 +1->^^^^^^^^^^^^^^^^
 +2 >                ^^^
@@ -1260,16 +1255,7 @@
 +8 >                                  ^^^^
 +9 >                                      ^^
 +10>                                        ^
- 1->
--2 >                    codeThing
--3 >                                  
--4 >                                     codeThing
--5 >                                              : Sample.Thing.ICodeThing
--1->Emitted(47, 21) Source(50, 23) + SourceIndex(0)
--2 >Emitted(47, 35) Source(50, 32) + SourceIndex(0)
--3 >Emitted(47, 38) Source(50, 23) + SourceIndex(0)
--4 >Emitted(47, 47) Source(50, 32) + SourceIndex(0)
--5 >Emitted(47, 48) Source(50, 57) + SourceIndex(0)
++1->
 +2 >                gar
 +3 >                   (
 +4 >                    runner:(widget:Sample.Thing.IWidget)=>any
@@ -1289,30 +1275,16 @@
 +8 >Emitted(27, 39) Source(47, 67) + SourceIndex(0)
 +9 >Emitted(27, 41) Source(47, 69) + SourceIndex(0)
 +10>Emitted(27, 42) Source(47, 70) + SourceIndex(0)
- ---
-->>>                    this.domNode = null;
++---
 +>>>                    return runner(this);
- 1 >^^^^^^^^^^^^^^^^^^^^
--2 >                    ^^^^^^^^^^^^
--3 >                                ^^^
--4 >                                   ^^^^
--5 >                                       ^
++1 >^^^^^^^^^^^^^^^^^^^^
 +2 >                    ^^^^^^^
 +3 >                           ^^^^^^
 +4 >                                 ^
 +5 >                                  ^^^^
 +6 >                                      ^
 +7 >                                       ^
- 1 >
--2 >                    domNode
--3 >                                :any = 
--4 >                                   null
--5 >                                       ;
--1 >Emitted(48, 21) Source(49, 11) + SourceIndex(0)
--2 >Emitted(48, 33) Source(49, 18) + SourceIndex(0)
--3 >Emitted(48, 36) Source(49, 25) + SourceIndex(0)
--4 >Emitted(48, 40) Source(49, 29) + SourceIndex(0)
--5 >Emitted(48, 41) Source(49, 30) + SourceIndex(0)
++1 >
 +2 >                    return 
 +3 >                           runner
 +4 >                                 (
@@ -1326,7 +1298,7 @@
 +5 >Emitted(28, 39) Source(47, 88) + SourceIndex(0)
 +6 >Emitted(28, 40) Source(47, 89) + SourceIndex(0)
 +7 >Emitted(28, 41) Source(47, 90) + SourceIndex(0)
- ---
++---
 +>>>                } }
 +1 >^^^^^^^^^^^^^^^^
 +2 >                ^
@@ -1369,23 +1341,58 @@
 +4 >                                     ^^
 +5 >                                       ^^^^^^^^^->
 +1->
-+  >		
-+2 >                constructor(private 
+   >		
+ 2 >                constructor(private 
+-3 >                                    codeThing: Sample.Thing.ICodeThing
+-1->Emitted(46, 17) Source(50, 3) + SourceIndex(0)
+-2 >Emitted(46, 37) Source(50, 23) + SourceIndex(0)
+-3 >Emitted(46, 46) Source(50, 57) + SourceIndex(0)
 +3 >                            codeThing: Sample.Thing.ICodeThing
 +4 >                                     ) 
 +1->Emitted(31, 17) Source(50, 3) + SourceIndex(0)
 +2 >Emitted(31, 29) Source(50, 23) + SourceIndex(0)
 +3 >Emitted(31, 38) Source(50, 57) + SourceIndex(0)
 +4 >Emitted(31, 40) Source(50, 59) + SourceIndex(0)
-+---
-+>>>                    this.codeThing = codeThing;
+ ---
+ >>>                    this.codeThing = codeThing;
+-1->^^^^^^^^^^^^^^^^^^^^
+-2 >                    ^^^^^^^^^^^^^^
+-3 >                                  ^^^
+-4 >                                     ^^^^^^^^^
+-5 >                                              ^
 +1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 +2 >                                     ^^^^^^^^^
-+1->
+ 1->
+-2 >                    codeThing
+-3 >                                  
+-4 >                                     codeThing
+-5 >                                              : Sample.Thing.ICodeThing
+-1->Emitted(47, 21) Source(50, 23) + SourceIndex(0)
+-2 >Emitted(47, 35) Source(50, 32) + SourceIndex(0)
+-3 >Emitted(47, 38) Source(50, 23) + SourceIndex(0)
+-4 >Emitted(47, 47) Source(50, 32) + SourceIndex(0)
+-5 >Emitted(47, 48) Source(50, 57) + SourceIndex(0)
+----
+->>>                    this.domNode = null;
+-1 >^^^^^^^^^^^^^^^^^^^^
+-2 >                    ^^^^^^^^^^^^
+-3 >                                ^^^
+-4 >                                   ^^^^
+-5 >                                       ^
+-1 >
+-2 >                    domNode
+-3 >                                :any = 
+-4 >                                   null
+-5 >                                       ;
+-1 >Emitted(48, 21) Source(49, 11) + SourceIndex(0)
+-2 >Emitted(48, 33) Source(49, 18) + SourceIndex(0)
+-3 >Emitted(48, 36) Source(49, 25) + SourceIndex(0)
+-4 >Emitted(48, 40) Source(49, 29) + SourceIndex(0)
+-5 >Emitted(48, 41) Source(49, 30) + SourceIndex(0)
 +2 >                                     codeThing
 +1->Emitted(32, 38) Source(50, 23) + SourceIndex(0)
 +2 >Emitted(32, 47) Source(50, 32) + SourceIndex(0)
-+---
+ ---
  >>>                    // scenario 1
  1 >^^^^^^^^^^^^^^^^^^^^
  2 >                    ^^^^^^^^^^^^^
@@ -1431,20 +1438,14 @@
  1 >^^^^^^^^^^^^^^^^
  2 >                ^
 -3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+3 >                 ^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >		
 -2 >                }
 -1 >Emitted(51, 17) Source(53, 3) + SourceIndex(0)
 -2 >Emitted(51, 18) Source(53, 4) + SourceIndex(0)
-+2 >                
-+  >                		}
-+1 >Emitted(35, 17) Source(52, 46) + SourceIndex(0)
-+2 >Emitted(35, 18) Source(53, 4) + SourceIndex(0)
- ---
+----
 ->>>                FindWidget.prototype.gar = function (runner) { if (true) {
-+>>>                getDomNode() {
- 1->^^^^^^^^^^^^^^^^
+-1->^^^^^^^^^^^^^^^^
 -2 >                ^^^^^^^^^^^^^^^^^^^^^^^^
 -3 >                                        ^^^
 -4 >                                           ^^^^^^^^^^
@@ -1454,10 +1455,7 @@
 -8 >                                                                   ^^^^
 -9 >                                                                       ^^
 -10>                                                                         ^
-+2 >                ^^^^^^^^^^
-+3 >                          ^^^
-+4 >                             ^^^^^^^->
- 1->
+-1->
 -2 >                gar
 -3 >                                        
 -4 >                                           public gar(
@@ -1527,6 +1525,19 @@
 -  >		    // scenario 1
 -  >		    codeThing.addWidget("addWidget", this);
 -  >		}
++3 >                 ^^^^^^^^^^^^^^->
++1 >
++2 >                
++  >                		}
++1 >Emitted(35, 17) Source(52, 46) + SourceIndex(0)
++2 >Emitted(35, 18) Source(53, 4) + SourceIndex(0)
++---
++>>>                getDomNode() {
++1->^^^^^^^^^^^^^^^^
++2 >                ^^^^^^^^^^
++3 >                          ^^^
++4 >                             ^^^^^^^->
++1->
    >		
    >		public 
  2 >                getDomNode
@@ -1607,36 +1618,34 @@
 -2 >                }
 -1 >Emitted(59, 17) Source(61, 3) + SourceIndex(0)
 -2 >Emitted(59, 18) Source(61, 4) + SourceIndex(0)
-+1 >{
-+2 >                
-+  >                
-+  >                		}
-+1 >Emitted(40, 17) Source(59, 21) + SourceIndex(0)
-+2 >Emitted(40, 18) Source(61, 4) + SourceIndex(0)
- ---
+----
 ->>>                return FindWidget;
 -1->^^^^^^^^^^^^^^^^
 -2 >                ^^^^^^^^^^^^^^^^^
 -1->
-+>>>            }
-+1 >^^^^^^^^^^^^^
-+2 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+1 >
-   >
+-  >
 -  >	
 -2 >                }
 -1->Emitted(60, 17) Source(63, 2) + SourceIndex(0)
 -2 >Emitted(60, 34) Source(63, 3) + SourceIndex(0)
-+  >	}
-+1 >Emitted(41, 14) Source(63, 3) + SourceIndex(0)
- ---
+----
 ->>>            }());
 -1 >^^^^^^^^^^^^
 -2 >            ^
 -3 >             
 -4 >             ^^^^
 -5 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1 >
++1 >{
++2 >                
++  >                
++  >                		}
++1 >Emitted(40, 17) Source(59, 21) + SourceIndex(0)
++2 >Emitted(40, 18) Source(61, 4) + SourceIndex(0)
++---
++>>>            }
++1 >^^^^^^^^^^^^^
++2 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+ 1 >
 -2 >            }
 -3 >             
 -4 >             export class FindWidget implements Sample.Thing.IWidget {
@@ -1662,7 +1671,10 @@
 -2 >Emitted(61, 14) Source(63, 3) + SourceIndex(0)
 -3 >Emitted(61, 14) Source(45, 2) + SourceIndex(0)
 -4 >Emitted(61, 18) Source(63, 3) + SourceIndex(0)
-----
++  >
++  >	}
++1 >Emitted(41, 14) Source(63, 3) + SourceIndex(0)
+ ---
  >>>            Widgets.FindWidget = FindWidget;
  1->^^^^^^^^^^^^
 -2 >            ^^^^^^^^^^^^^^^^^^
@@ -1982,15 +1994,9 @@
    >interface IMode { getInitialState(): IState;} 
    >
 -1->Emitted(66, 1) Source(67, 1) + SourceIndex(0)
-+2 >class 
-+3 >      AbstractMode
-+1 >Emitted(46, 1) Source(67, 1) + SourceIndex(0)
-+2 >Emitted(46, 7) Source(67, 7) + SourceIndex(0)
-+3 >Emitted(46, 19) Source(67, 19) + SourceIndex(0)
- ---
+----
 ->>>    function AbstractMode() {
-+>>>    getInitialState() { return null; }
- 1->^^^^
+-1->^^^^
 -2 >    ^^->
 -1->
 -1->Emitted(67, 5) Source(67, 1) + SourceIndex(0)
@@ -2015,6 +2021,14 @@
 -8 >                                                                       ^
 -9 >                                                                        ^
 -1->
++2 >class 
++3 >      AbstractMode
++1 >Emitted(46, 1) Source(67, 1) + SourceIndex(0)
++2 >Emitted(46, 7) Source(67, 7) + SourceIndex(0)
++3 >Emitted(46, 19) Source(67, 19) + SourceIndex(0)
++---
++>>>    getInitialState() { return null; }
++1->^^^^
 +2 >    ^^^^^^^^^^^^^^^
 +3 >                   ^^^
 +4 >                      ^^
@@ -2041,6 +2055,29 @@
 -7 >Emitted(69, 72) Source(67, 86) + SourceIndex(0)
 -8 >Emitted(69, 73) Source(67, 86) + SourceIndex(0)
 -9 >Emitted(69, 74) Source(67, 87) + SourceIndex(0)
+----
+->>>    return AbstractMode;
+-1 >^^^^
+-2 >    ^^^^^^^^^^^^^^^^^^^
+-1 > 
+-2 >    }
+-1 >Emitted(70, 5) Source(67, 88) + SourceIndex(0)
+-2 >Emitted(70, 24) Source(67, 89) + SourceIndex(0)
+----
+->>>}());
+-1 >
+-2 >^
+-3 > 
+-4 > ^^^^
+-5 >     ^^^^^^^^^^^^^^^^->
+-1 >
+-2 >}
+-3 > 
+-4 > class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
+-1 >Emitted(71, 1) Source(67, 88) + SourceIndex(0)
+-2 >Emitted(71, 2) Source(67, 89) + SourceIndex(0)
+-3 >Emitted(71, 2) Source(67, 1) + SourceIndex(0)
+-4 >Emitted(71, 6) Source(67, 89) + SourceIndex(0)
 +3 >                   (): IState 
 +4 >                      { 
 +5 >                        return 
@@ -2057,35 +2094,13 @@
 +7 >Emitted(47, 37) Source(67, 86) + SourceIndex(0)
 +8 >Emitted(47, 38) Source(67, 86) + SourceIndex(0)
 +9 >Emitted(47, 39) Source(67, 87) + SourceIndex(0)
- ---
-->>>    return AbstractMode;
--1 >^^^^
--2 >    ^^^^^^^^^^^^^^^^^^^
--1 > 
--2 >    }
--1 >Emitted(70, 5) Source(67, 88) + SourceIndex(0)
--2 >Emitted(70, 24) Source(67, 89) + SourceIndex(0)
++---
 +>>>}
 +1 >^
 +2 > ^^^^^^^^^^^^^^^^^^^^->
 +1 > }
 +1 >Emitted(48, 2) Source(67, 89) + SourceIndex(0)
  ---
-->>>}());
--1 >
--2 >^
--3 > 
--4 > ^^^^
--5 >     ^^^^^^^^^^^^^^^^->
--1 >
--2 >}
--3 > 
--4 > class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
--1 >Emitted(71, 1) Source(67, 88) + SourceIndex(0)
--2 >Emitted(71, 2) Source(67, 89) + SourceIndex(0)
--3 >Emitted(71, 2) Source(67, 1) + SourceIndex(0)
--4 >Emitted(71, 6) Source(67, 89) + SourceIndex(0)
-----
  >>>(function (Sample) {
  1->
  2 >^^^^^^^^^^^
@@ -2575,31 +2590,35 @@
 -1->Emitted(78, 13) Source(76, 31) + SourceIndex(0)
 -2 >Emitted(78, 24) Source(76, 31) + SourceIndex(0)
 -3 >Emitted(78, 33) Source(76, 40) + SourceIndex(0)
+----
+->>>                var State = /** @class */ (function () {
+-1->^^^^^^^^^^^^^^^^
+-2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+-1-> {
+-  >	
+-  >	
+-1->Emitted(79, 17) Source(78, 2) + SourceIndex(0)
+----
+->>>                    function State(mode) {
 +4 >                                 
 +1->Emitted(55, 13) Source(76, 31) + SourceIndex(0)
 +2 >Emitted(55, 24) Source(76, 31) + SourceIndex(0)
 +3 >Emitted(55, 33) Source(76, 40) + SourceIndex(0)
 +4 >Emitted(55, 35) Source(76, 41) + SourceIndex(0)
- ---
-->>>                var State = /** @class */ (function () {
--1->^^^^^^^^^^^^^^^^
--2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
--1-> {
++---
 +>>>                class State {
 +1 >^^^^^^^^^^^^^^^^
 +2 >                ^^^^^^
 +3 >                      ^^^^^
 +1 >{
-   >	
-   >	
--1->Emitted(79, 17) Source(78, 2) + SourceIndex(0)
++  >	
++  >	
 +2 >                export class 
 +3 >                      State
 +1 >Emitted(56, 17) Source(78, 2) + SourceIndex(0)
 +2 >Emitted(56, 23) Source(78, 15) + SourceIndex(0)
 +3 >Emitted(56, 28) Source(78, 20) + SourceIndex(0)
- ---
-->>>                    function State(mode) {
++---
 +>>>                    mode;
 +1 >^^^^^^^^^^^^^^^^^^^^
 +2 >                    ^^^^
@@ -2844,37 +2863,16 @@
 -7 >Emitted(89, 73) Source(88, 41) + SourceIndex(0)
 -8 >Emitted(89, 74) Source(88, 42) + SourceIndex(0)
 -9 >Emitted(89, 75) Source(88, 43) + SourceIndex(0)
-+3 >                           (): IMode 
-+4 >                              { 
-+5 >                                return 
-+6 >                                       mode
-+7 >                                           ;
-+8 >                                            
-+9 >                                              }
-+1->Emitted(67, 21) Source(88, 10) + SourceIndex(0)
-+2 >Emitted(67, 28) Source(88, 17) + SourceIndex(0)
-+3 >Emitted(67, 31) Source(88, 27) + SourceIndex(0)
-+4 >Emitted(67, 33) Source(88, 29) + SourceIndex(0)
-+5 >Emitted(67, 40) Source(88, 36) + SourceIndex(0)
-+6 >Emitted(67, 44) Source(88, 40) + SourceIndex(0)
-+7 >Emitted(67, 45) Source(88, 41) + SourceIndex(0)
-+8 >Emitted(67, 46) Source(88, 41) + SourceIndex(0)
-+9 >Emitted(67, 47) Source(88, 43) + SourceIndex(0)
- ---
+----
 ->>>                    return State;
 -1 >^^^^^^^^^^^^^^^^^^^^
 -2 >                    ^^^^^^^^^^^^
-+>>>                }
-+1 >^^^^^^^^^^^^^^^^^
-+2 >                 ^^^^^^^^^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >	
 -2 >                    }
 -1 >Emitted(90, 21) Source(89, 2) + SourceIndex(0)
 -2 >Emitted(90, 33) Source(89, 3) + SourceIndex(0)
-+  >	}
-+1 >Emitted(68, 18) Source(89, 3) + SourceIndex(0)
- ---
+----
 ->>>                }());
 -1 >^^^^^^^^^^^^^^^^
 -2 >                ^
@@ -2900,7 +2898,30 @@
 -2 >Emitted(91, 18) Source(89, 3) + SourceIndex(0)
 -3 >Emitted(91, 18) Source(78, 2) + SourceIndex(0)
 -4 >Emitted(91, 22) Source(89, 3) + SourceIndex(0)
-----
++3 >                           (): IMode 
++4 >                              { 
++5 >                                return 
++6 >                                       mode
++7 >                                           ;
++8 >                                            
++9 >                                              }
++1->Emitted(67, 21) Source(88, 10) + SourceIndex(0)
++2 >Emitted(67, 28) Source(88, 17) + SourceIndex(0)
++3 >Emitted(67, 31) Source(88, 27) + SourceIndex(0)
++4 >Emitted(67, 33) Source(88, 29) + SourceIndex(0)
++5 >Emitted(67, 40) Source(88, 36) + SourceIndex(0)
++6 >Emitted(67, 44) Source(88, 40) + SourceIndex(0)
++7 >Emitted(67, 45) Source(88, 41) + SourceIndex(0)
++8 >Emitted(67, 46) Source(88, 41) + SourceIndex(0)
++9 >Emitted(67, 47) Source(88, 43) + SourceIndex(0)
++---
++>>>                }
++1 >^^^^^^^^^^^^^^^^^
++2 >                 ^^^^^^^^^^^^^^^^^^^^^^^^->
++1 >
++  >	}
++1 >Emitted(68, 18) Source(89, 3) + SourceIndex(0)
+ ---
  >>>                PlainText.State = State;
  1->^^^^^^^^^^^^^^^^
 -2 >                ^^^^^^^^^^^^^^^
@@ -2949,16 +2970,7 @@
    >	
    >	
 -1->Emitted(93, 17) Source(91, 2) + SourceIndex(0)
-+2 >                export class 
-+3 >                      Mode 
-+4 >                          extends 
-+5 >                                   AbstractMode
-+1->Emitted(70, 17) Source(91, 2) + SourceIndex(0)
-+2 >Emitted(70, 23) Source(91, 15) + SourceIndex(0)
-+3 >Emitted(70, 27) Source(91, 20) + SourceIndex(0)
-+4 >Emitted(70, 36) Source(91, 28) + SourceIndex(0)
-+5 >Emitted(70, 48) Source(91, 40) + SourceIndex(0)
- ---
+----
 ->>>                    __extends(Mode, _super);
 -1->^^^^^^^^^^^^^^^^^^^^
 -2 >                    ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2990,7 +3002,16 @@
 -2 >                    }
 -1->Emitted(97, 21) Source(99, 2) + SourceIndex(0)
 -2 >Emitted(97, 22) Source(99, 3) + SourceIndex(0)
-----
++2 >                export class 
++3 >                      Mode 
++4 >                          extends 
++5 >                                   AbstractMode
++1->Emitted(70, 17) Source(91, 2) + SourceIndex(0)
++2 >Emitted(70, 23) Source(91, 15) + SourceIndex(0)
++3 >Emitted(70, 27) Source(91, 20) + SourceIndex(0)
++4 >Emitted(70, 36) Source(91, 28) + SourceIndex(0)
++5 >Emitted(70, 48) Source(91, 40) + SourceIndex(0)
+ ---
  >>>                    // scenario 2
 -1->^^^^^^^^^^^^^^^^^^^^
 +1 >^^^^^^^^^^^^^^^^^^^^
@@ -3068,34 +3089,24 @@
  1 >^^^^^^^^^^^^^^^^^^^^
  2 >                    ^
 -3 >                     ^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >		
 -2 >                    }
 -1 >Emitted(101, 21) Source(96, 3) + SourceIndex(0)
 -2 >Emitted(101, 22) Source(96, 4) + SourceIndex(0)
-+2 >                    
-+  >                    		}
-+1 >Emitted(74, 21) Source(95, 27) + SourceIndex(0)
-+2 >Emitted(74, 22) Source(96, 4) + SourceIndex(0)
- ---
+----
 ->>>                    return Mode;
 -1->^^^^^^^^^^^^^^^^^^^^
 -2 >                    ^^^^^^^^^^^
 -3 >                               ^^^->
 -1->
-+>>>                }
-+1 >^^^^^^^^^^^^^^^^^
-+2 >                 ^^^^^^^^^^^^^^^^^^^^^^->
-+1 >
-   >
-   >
+-  >
+-  >
 -  >	
 -2 >                    }
 -1->Emitted(102, 21) Source(99, 2) + SourceIndex(0)
 -2 >Emitted(102, 32) Source(99, 3) + SourceIndex(0)
-+  >	}
-+1 >Emitted(75, 18) Source(99, 3) + SourceIndex(0)
- ---
+----
 ->>>                }(AbstractMode));
 -1->^^^^^^^^^^^^^^^^
 -2 >                ^
@@ -3124,7 +3135,21 @@
 -4 >Emitted(103, 19) Source(91, 28) + SourceIndex(0)
 -5 >Emitted(103, 31) Source(91, 40) + SourceIndex(0)
 -6 >Emitted(103, 34) Source(99, 3) + SourceIndex(0)
-----
++1 >
++2 >                    
++  >                    		}
++1 >Emitted(74, 21) Source(95, 27) + SourceIndex(0)
++2 >Emitted(74, 22) Source(96, 4) + SourceIndex(0)
++---
++>>>                }
++1 >^^^^^^^^^^^^^^^^^
++2 >                 ^^^^^^^^^^^^^^^^^^^^^^->
++1 >
++  >
++  >
++  >	}
++1 >Emitted(75, 18) Source(99, 3) + SourceIndex(0)
+ ---
  >>>                PlainText.Mode = Mode;
  1->^^^^^^^^^^^^^^^^
 -2 >                ^^^^^^^^^^^^^^

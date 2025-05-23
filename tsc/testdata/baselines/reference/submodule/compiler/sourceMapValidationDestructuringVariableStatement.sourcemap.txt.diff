@@ -5,25 +5,15 @@
  14>Emitted(3, 53) Source(10, 60) + SourceIndex(0)
  ---
 ->>>var nameA = robotA.name;
-+>>>var { name: nameA } = robotA;
- 1 >
- 2 >^^^^
+-1 >
+-2 >^^^^
 -3 >    ^^^^^
 -4 >         ^^^
 -5 >            ^^^^^^
 -6 >                  ^^^^^
 -7 >                       ^
 -8 >                        ^^^^^^^^^^^^^^^^^^^^^^^^->
-+3 >    ^^
-+4 >      ^^^^
-+5 >          ^^
-+6 >            ^^^^^
-+7 >                 ^^
-+8 >                   ^^^
-+9 >                      ^^^^^^
-+10>                            ^
-+11>                             ^^^^^^^^^^^^^^^^->
- 1 >
+-1 >
 -  >var { 
 -2 >name: 
 -3 >    nameA
@@ -38,31 +28,10 @@
 -5 >Emitted(4, 19) Source(11, 29) + SourceIndex(0)
 -6 >Emitted(4, 24) Source(11, 18) + SourceIndex(0)
 -7 >Emitted(4, 25) Source(11, 30) + SourceIndex(0)
-+  >
-+2 >var 
-+3 >    { 
-+4 >      name
-+5 >          : 
-+6 >            nameA
-+7 >                  }
-+8 >                    = 
-+9 >                      robotA
-+10>                            ;
-+1 >Emitted(4, 1) Source(11, 1) + SourceIndex(0)
-+2 >Emitted(4, 5) Source(11, 5) + SourceIndex(0)
-+3 >Emitted(4, 7) Source(11, 7) + SourceIndex(0)
-+4 >Emitted(4, 11) Source(11, 11) + SourceIndex(0)
-+5 >Emitted(4, 13) Source(11, 13) + SourceIndex(0)
-+6 >Emitted(4, 18) Source(11, 18) + SourceIndex(0)
-+7 >Emitted(4, 20) Source(11, 20) + SourceIndex(0)
-+8 >Emitted(4, 23) Source(11, 23) + SourceIndex(0)
-+9 >Emitted(4, 29) Source(11, 29) + SourceIndex(0)
-+10>Emitted(4, 30) Source(11, 30) + SourceIndex(0)
- ---
+----
 ->>>var nameB = robotB.name, skillB = robotB.skill;
-+>>>var { name: nameB, skill: skillB } = robotB;
- 1->
- 2 >^^^^
+-1->
+-2 >^^^^
 -3 >    ^^^^^
 -4 >         ^^^
 -5 >            ^^^^^^
@@ -74,20 +43,7 @@
 -11>                                        ^^^^^^
 -12>                                              ^
 -13>                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-+3 >    ^^
-+4 >      ^^^^
-+5 >          ^^
-+6 >            ^^^^^
-+7 >                 ^^
-+8 >                   ^^^^^
-+9 >                        ^^
-+10>                          ^^^^^^
-+11>                                ^^
-+12>                                  ^^^
-+13>                                     ^^^^^^
-+14>                                           ^
-+15>                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
- 1->
+-1->
 -  >var { 
 -2 >name: 
 -3 >    nameB
@@ -112,6 +68,99 @@
 -10>Emitted(5, 41) Source(12, 44) + SourceIndex(0)
 -11>Emitted(5, 47) Source(12, 33) + SourceIndex(0)
 -12>Emitted(5, 48) Source(12, 45) + SourceIndex(0)
+----
+->>>var _a = { name: "Edger", skill: "cutting edges" }, nameC = _a.name, skillC = _a.skill;
+-1->
+-2 >^^^^
+-3 >    ^^^^^
+-4 >         ^^
+-5 >           ^^^^
+-6 >               ^^
+-7 >                 ^^^^^^^
+-8 >                        ^^
+-9 >                          ^^^^^
+-10>                               ^^
+-11>                                 ^^^^^^^^^^^^^^^
+-12>                                                ^^
+-13>                                                  ^^
+-14>                                                    ^^^^^
+-15>                                                         ^^^^^^^^^^
+-16>                                                                   ^^
+-17>                                                                     ^^^^^^
+-18>                                                                           ^^^^^^^^^^^
+-19>                                                                                      ^
+-1->
+-  >var 
+-2 >
+-3 >    { name: nameC, skill: skillC } = 
+-4 >         { 
+-5 >           name
+-6 >               : 
+-7 >                 "Edger"
+-8 >                        , 
+-9 >                          skill
+-10>                               : 
+-11>                                 "cutting edges"
+-12>                                                 }
+-13>                                                  
+-14>                                                    nameC
+-15>                                                         
+-16>                                                                   , skill: 
+-17>                                                                     skillC
+-18>                                                                            } = { name: "Edger", skill: "cutting edges" }
+-19>                                                                                      ;
+-1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
++>>>var { name: nameA } = robotA;
++1 >
++2 >^^^^
++3 >    ^^
++4 >      ^^^^
++5 >          ^^
++6 >            ^^^^^
++7 >                 ^^
++8 >                   ^^^
++9 >                      ^^^^^^
++10>                            ^
++11>                             ^^^^^^^^^^^^^^^^->
++1 >
++  >
++2 >var 
++3 >    { 
++4 >      name
++5 >          : 
++6 >            nameA
++7 >                  }
++8 >                    = 
++9 >                      robotA
++10>                            ;
++1 >Emitted(4, 1) Source(11, 1) + SourceIndex(0)
++2 >Emitted(4, 5) Source(11, 5) + SourceIndex(0)
++3 >Emitted(4, 7) Source(11, 7) + SourceIndex(0)
++4 >Emitted(4, 11) Source(11, 11) + SourceIndex(0)
++5 >Emitted(4, 13) Source(11, 13) + SourceIndex(0)
++6 >Emitted(4, 18) Source(11, 18) + SourceIndex(0)
++7 >Emitted(4, 20) Source(11, 20) + SourceIndex(0)
++8 >Emitted(4, 23) Source(11, 23) + SourceIndex(0)
++9 >Emitted(4, 29) Source(11, 29) + SourceIndex(0)
++10>Emitted(4, 30) Source(11, 30) + SourceIndex(0)
++---
++>>>var { name: nameB, skill: skillB } = robotB;
++1->
++2 >^^^^
++3 >    ^^
++4 >      ^^^^
++5 >          ^^
++6 >            ^^^^^
++7 >                 ^^
++8 >                   ^^^^^
++9 >                        ^^
++10>                          ^^^^^^
++11>                                ^^
++12>                                  ^^^
++13>                                     ^^^^^^
++14>                                           ^
++15>                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
++1->
 +  >
 +2 >var 
 +3 >    { 
@@ -140,28 +189,10 @@
 +12>Emitted(5, 38) Source(12, 38) + SourceIndex(0)
 +13>Emitted(5, 44) Source(12, 44) + SourceIndex(0)
 +14>Emitted(5, 45) Source(12, 45) + SourceIndex(0)
- ---
-->>>var _a = { name: "Edger", skill: "cutting edges" }, nameC = _a.name, skillC = _a.skill;
++---
 +>>>var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" };
- 1->
- 2 >^^^^
--3 >    ^^^^^
--4 >         ^^
--5 >           ^^^^
--6 >               ^^
--7 >                 ^^^^^^^
--8 >                        ^^
--9 >                          ^^^^^
--10>                               ^^
--11>                                 ^^^^^^^^^^^^^^^
--12>                                                ^^
--13>                                                  ^^
--14>                                                    ^^^^^
--15>                                                         ^^^^^^^^^^
--16>                                                                   ^^
--17>                                                                     ^^^^^^
--18>                                                                           ^^^^^^^^^^^
--19>                                                                                      ^
++1->
++2 >^^^^
 +3 >    ^^
 +4 >      ^^^^
 +5 >          ^^
@@ -182,27 +213,7 @@
 +20>                                                             ^^^^^^^^^^^^^^^
 +21>                                                                            ^^
 +22>                                                                              ^
- 1->
--  >var 
--2 >
--3 >    { name: nameC, skill: skillC } = 
--4 >         { 
--5 >           name
--6 >               : 
--7 >                 "Edger"
--8 >                        , 
--9 >                          skill
--10>                               : 
--11>                                 "cutting edges"
--12>                                                 }
--13>                                                  
--14>                                                    nameC
--15>                                                         
--16>                                                                   , skill: 
--17>                                                                     skillC
--18>                                                                            } = { name: "Edger", skill: "cutting edges" }
--19>                                                                                      ;
--1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
++1->
 +  >
 +2 >var 
 +3 >    { 

@@ -2,7 +2,7 @@
 +++ new.classExtendsItselfIndirectly3.js
 @@= skipped -18, +18 lines =@@
  class E2<T> extends D2<T> { baz: T; }
- 
+
  //// [classExtendsItselfIndirectly_file1.js]
 -var __extends = (this && this.__extends) || (function () {
 -    var extendStatics = function (d, b) {

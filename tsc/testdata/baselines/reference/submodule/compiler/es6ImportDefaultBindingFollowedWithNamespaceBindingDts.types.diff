@@ -6,7 +6,7 @@
  >defaultBinding : any
 ->nameSpaceBinding : typeof nameSpaceBinding
 +>nameSpaceBinding : typeof import("server")
- 
+
  export var x = new nameSpaceBinding.a();
 ->x : nameSpaceBinding.a
 ->new nameSpaceBinding.a() : nameSpaceBinding.a
@@ -18,4 +18,3 @@
 +>nameSpaceBinding.a : typeof a
 +>nameSpaceBinding : typeof import("server")
 +>a : typeof a
- 

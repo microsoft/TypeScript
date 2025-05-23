@@ -1,31 +1,31 @@
 --- old.unionAndIntersectionInference1.types
 +++ new.unionAndIntersectionInference1.types
 @@= skipped -88, +88 lines =@@
- 
+
      if (isVoid(value)) {
  >isVoid(value) : boolean
 ->isVoid : <a_1>(value: void | a_1) => value is void
 +>isVoid : <a>(value: void | a) => value is void
  >value : void | a
- 
+
          value; // value is void
 @@= skipped -18, +18 lines =@@
- 
+
        if (isNonVoid(value)) {
  >isNonVoid(value) : boolean
 ->isNonVoid : <a_1>(value: void | a_1) => value is a_1
 +>isNonVoid : <a>(value: void | a) => value is a
  >value : void | a
- 
+
            value; // value is a
 @@= skipped -18, +18 lines =@@
  >Maybe : Maybe<T>
- 
+
  function get<U>(x: U | void): U {
 ->get : <U>(x: U | void) => U
 +>get : <U>(x: void | U) => U
  >x : void | U
- 
+
     return null; // just an example
 @@= skipped -13, +13 lines =@@
  >get(foo).toUpperCase() : string
@@ -35,7 +35,7 @@
 +>get : <U>(x: void | U) => U
  >foo : Maybe<string>
  >toUpperCase : () => string
- 
+
 @@= skipped -53, +53 lines =@@
  >createTestAsync : () => Promise<ITest>
  >(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
@@ -62,4 +62,3 @@
 +>assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
  >a : T
  >b : U
- 

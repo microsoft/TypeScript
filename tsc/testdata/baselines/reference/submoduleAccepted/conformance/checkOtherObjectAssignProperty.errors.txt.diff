@@ -8,6 +8,9 @@
 -importer.js(13,5): error TS2540: Cannot assign to 'bad1' because it is a read-only property.
 -importer.js(14,5): error TS2540: Cannot assign to 'bad2' because it is a read-only property.
 -importer.js(15,5): error TS2540: Cannot assign to 'bad3' because it is a read-only property.
+-
+-
+-==== importer.js (7 errors) ====
 +importer.js(1,21): error TS2306: File 'mod1.js' is not a module.
 +mod1.js(2,23): error TS2304: Cannot find name 'exports'.
 +mod1.js(8,23): error TS2304: Cannot find name 'exports'.
@@ -15,9 +18,8 @@
 +mod1.js(14,23): error TS2304: Cannot find name 'exports'.
 +mod1.js(15,23): error TS2304: Cannot find name 'exports'.
 +mod1.js(16,23): error TS2304: Cannot find name 'exports'.
- 
- 
--==== importer.js (7 errors) ====
++
++
 +==== importer.js (1 errors) ====
      const mod = require("./mod1");
 +                        ~~~~~~~~

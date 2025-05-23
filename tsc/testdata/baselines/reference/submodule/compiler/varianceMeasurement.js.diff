@@ -1,8 +1,8 @@
 --- old.varianceMeasurement.js
 +++ new.varianceMeasurement.js
 @@= skipped -78, +78 lines =@@
- 
- 
+
+
  //// [varianceMeasurement.js]
 -"use strict";
 -// The type below should be invariant in T but is measured as covariant because

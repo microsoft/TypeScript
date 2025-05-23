@@ -2,7 +2,7 @@
 +++ new.circularConstraintYieldsAppropriateError.types
 @@= skipped -36, +36 lines =@@
  >Foo : typeof Foo
- 
+
  foo.bar.test
 ->foo.bar.test : true
 ->foo.bar : { test: true; }
@@ -13,4 +13,3 @@
 ->test : true
 +>bar : any
 +>test : any
- 

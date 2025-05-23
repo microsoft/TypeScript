@@ -1,8 +1,8 @@
 --- old.newOperatorErrorCases.js
 +++ new.newOperatorErrorCases.js
 @@= skipped -39, +39 lines =@@
- 
- 
+
+
  //// [newOperatorErrorCases.js]
 -var C0 = /** @class */ (function () {
 -    function C0() {

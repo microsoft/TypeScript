@@ -2,14 +2,14 @@
 +++ new.inKeywordTypeguard(strict=true).types
 @@= skipped -441, +441 lines =@@
  >window : Window & typeof globalThis
- 
+
          window.ontouchstart
 ->window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
 +>window.ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any) | null | undefined
  >window : Window & typeof globalThis
 ->ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
 +>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any) | null | undefined
- 
+
      } else {
          window.ontouchstart
 ->window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
@@ -19,23 +19,23 @@
 +>ontouchstart : ((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any) | null | undefined
      }
  }
- 
+
 @@= skipped -505, +505 lines =@@
  }
- 
+
  function f13(x: { a?: string }) {
 ->f13 : (x: { a?: string; }) => void
 ->x : { a?: string; }
 +>f13 : (x: { a?: string | undefined; }) => void
 +>x : { a?: string | undefined; }
  >a : string | undefined
- 
+
      if ("a" in x) {
  >"a" in x : boolean
  >"a" : "a"
 ->x : { a?: string; }
 +>x : { a?: string | undefined; }
- 
+
          x;
 ->x : { a?: string; }
 +>x : { a?: string | undefined; }
@@ -46,7 +46,7 @@
 +>x : { a?: string | undefined; }
      }
  }
- 
+
 @@= skipped -83, +83 lines =@@
  >value : A
  >"object" : "object"
@@ -58,12 +58,12 @@
  >value : A & object
 @@= skipped -46, +46 lines =@@
  // Repro from #51549
- 
+
  const f = <P extends object>(a: P & {}) => {
 ->f : <P extends object>(a: P & {}) => void
 -><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
 +>f : <P extends object>(a: P) => void
 +><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P) => void
  >a : P
- 
+
      "foo" in a;

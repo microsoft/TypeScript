@@ -2,7 +2,7 @@
 +++ new.mergeThreeInterfaces.js
 @@= skipped -80, +80 lines =@@
  }
- 
+
  //// [mergeThreeInterfaces.js]
 -// interfaces with the same root module should merge
  var a;

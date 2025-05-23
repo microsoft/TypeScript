@@ -1,8 +1,8 @@
 --- old.contextualSignatureInstantiation4.js
 +++ new.contextualSignatureInstantiation4.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [contextualSignatureInstantiation4.js]
 -"use strict";
 -// Repros from #32976

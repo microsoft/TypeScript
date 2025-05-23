@@ -6,7 +6,7 @@
  >defaultBinding : any
 ->nameSpaceBinding : typeof nameSpaceBinding
 +>nameSpaceBinding : any
- 
+
  var x: number = nameSpaceBinding.a;
  >x : number
 ->nameSpaceBinding.a : number
@@ -15,4 +15,3 @@
 +>nameSpaceBinding.a : any
 +>nameSpaceBinding : any
 +>a : any
- 

@@ -2,7 +2,7 @@
 +++ new.tsxReactEmit3.js
 @@= skipped -8, +8 lines =@@
  <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
- 
+
  //// [test.js]
 -React.createElement(Foo, null,
 -    " ",

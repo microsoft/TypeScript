@@ -1,7 +1,7 @@
 --- old.correctlyMarkAliasAsReferences4.symbols
 +++ new.correctlyMarkAliasAsReferences4.symbols
 @@= skipped -13, +13 lines =@@
- 
+
  let k = <button {...buttonProps} className={cx('class1', { class2: true })} />;
  >k : Symbol(k, Decl(0.tsx, 5, 3))
 ->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))

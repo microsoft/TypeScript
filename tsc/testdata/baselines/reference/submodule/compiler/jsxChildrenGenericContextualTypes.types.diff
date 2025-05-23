@@ -16,7 +16,7 @@
 +><div></div> : Element
  >div : any
  >div : any
- 
+
  Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 ->Elem({prop: {a: "x"}, children: i => ({a: "z"})}) : JSX.Element
 ->Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
@@ -27,7 +27,7 @@
  >{a: "x"} : { a: string; }
 @@= skipped -27, +27 lines =@@
  >"z" : "z"
- 
+
  const q = <Elem prop={{a: "x"}} children={i => ({a: "z"})} />
 ->q : JSX.Element
 -><Elem prop={{a: "x"}} children={i => ({a: "z"})} /> : JSX.Element
@@ -40,7 +40,7 @@
  >a : string
 @@= skipped -16, +16 lines =@@
  >"z" : "z"
- 
+
  const qq = <Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem>
 ->qq : JSX.Element
 -><Elem prop={{a: "x"}}>{i => ({a: "z"})}</Elem> : JSX.Element
@@ -57,12 +57,12 @@
  >"z" : "z"
 ->Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
 +>Elem : <T, U>(p: { prop: T; children: (t: T) => T; }) => Element
- 
+
  interface LitProps<T> { prop: T, children: (x: this) => T }
  >prop : T
 @@= skipped -8, +8 lines =@@
  >x : this
- 
+
  const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
 ->ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
 -><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => JSX.Element
@@ -73,7 +73,7 @@
 +><div></div> : Element
  >div : any
  >div : any
- 
+
  ElemLit({prop: "x", children: () => "x"});
 ->ElemLit({prop: "x", children: () => "x"}) : JSX.Element
 ->ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
@@ -84,7 +84,7 @@
  >"x" : "x"
 @@= skipped -18, +18 lines =@@
  >"x" : "x"
- 
+
  const j = <ElemLit prop="x" children={() => "x"} />
 ->j : JSX.Element
 -><ElemLit prop="x" children={() => "x"} /> : JSX.Element
@@ -96,7 +96,7 @@
  >children : () => "x"
  >() => "x" : () => "x"
  >"x" : "x"
- 
+
  const jj = <ElemLit prop="x">{() => "x"}</ElemLit>
 ->jj : JSX.Element
 -><ElemLit prop="x">{() => "x"}</ElemLit> : JSX.Element
@@ -109,7 +109,7 @@
  >"x" : "x"
 ->ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
 +>ElemLit : <T extends string>(p: LitProps<T>) => Element
- 
+
  // Should error
  const arg = <ElemLit prop="x" children={p => "y"} />
 ->arg : JSX.Element
@@ -126,7 +126,7 @@
 +>p => "y" : (p: IntrinsicAttributes & LitProps<"x">) => "y"
 +>p : IntrinsicAttributes & LitProps<"x">
  >"y" : "y"
- 
+
  const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
 ->argchild : JSX.Element
 -><ElemLit prop="x">{p => "y"}</ElemLit> : JSX.Element
@@ -142,7 +142,7 @@
  >"y" : "y"
 ->ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
 +>ElemLit : <T extends string>(p: LitProps<T>) => Element
- 
+
  const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
 ->mismatched : JSX.Element
 -><ElemLit prop="x">{() => 12}</ElemLit> : JSX.Element
@@ -155,4 +155,3 @@
  >12 : 12
 ->ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
 +>ElemLit : <T extends string>(p: LitProps<T>) => Element
- 

@@ -1,8 +1,8 @@
 --- old.genericSpecializations2.js
 +++ new.genericSpecializations2.js
 @@= skipped -21, +21 lines =@@
- 
- 
+
+
  //// [genericSpecializations2.js]
 -var IFoo = /** @class */ (function () {
 -    function IFoo() {
@@ -16,7 +16,7 @@
 -}());
 -var IntFooBad = /** @class */ (function () {
 -    function IntFooBad() {
-     }
+-    }
 -    IntFooBad.prototype.foo = function (x) { return null; };
 -    return IntFooBad;
 -}());
@@ -32,6 +32,7 @@
 -    StringFoo3.prototype.foo = function (x) { return null; };
 -    return StringFoo3;
 -}());
++    }
 +}
 +class IntFooBad {
 +    foo(x) { return null; }
