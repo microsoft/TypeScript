@@ -1293,13 +1293,6 @@ export type HasIllegalTypeParameters =
     | SetAccessorDeclaration
     | GetAccessorDeclaration;
 
-export type HasTypeArguments =
-    | CallExpression
-    | NewExpression
-    | TaggedTemplateExpression
-    | JsxOpeningElement
-    | JsxSelfClosingElement;
-
 export type HasInitializer =
     | HasExpressionInitializer
     | ForStatement

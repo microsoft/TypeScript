@@ -222,7 +222,6 @@ import {
     HasModifiers,
     hasProperty,
     HasType,
-    HasTypeArguments,
     HeritageClause,
     Identifier,
     identifierToKeywordKind,
@@ -4749,11 +4748,6 @@ export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { par
     const name = node.name.escapedText;
     const { typeParameters } = node.parent.parent.parent as SignatureDeclaration | InterfaceDeclaration | ClassDeclaration;
     return typeParameters && find(typeParameters, p => p.name.escapedText === name);
-}
-
-/** @internal @knipignore */
-export function hasTypeArguments(node: Node): node is HasTypeArguments {
-    return !!(node as HasTypeArguments).typeArguments;
 }
 
 /** @internal */
