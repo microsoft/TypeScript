@@ -7330,7 +7330,7 @@ namespace Parser {
 
     function nextTokenIsEqualsOrSemicolonToken() {
         nextToken();
-        return token() === SyntaxKind.EqualsToken || token() === SyntaxKind.SemicolonToken;
+        return token() === SyntaxKind.EqualsToken || token() === SyntaxKind.SemicolonToken || token() === SyntaxKind.ColonToken;
     }
 
     function nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(disallowOf?: boolean) {
