@@ -44,6 +44,7 @@ import {
     getTouchingToken,
     getTypeNodeIfAccessible,
     Identifier,
+    isCallExpression,
     isCallOrNewExpression,
     isClassDeclaration,
     isConstructorDeclaration,
@@ -239,8 +240,10 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
                     continue;
                 }
                 const call = entryToFunctionCall(entry);
-                if (call) {
-                    groupedReferences.functionCalls.push(call);
+                if (call !== undefined) {
+                    if (call !== true) {
+                        groupedReferences.functionCalls.push(call);
+                    }
                     continue;
                 }
             }
@@ -248,8 +251,10 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
             const contextualSymbol = getSymbolForContextualType(entry.node, checker);
             if (contextualSymbol && contains(contextualSymbols, contextualSymbol)) {
                 const decl = entryToDeclaration(entry);
-                if (decl) {
-                    groupedReferences.declarations.push(decl);
+                if (decl !== undefined) {
+                    if (decl !== true) {
+                        groupedReferences.declarations.push(decl);
+                    }
                     continue;
                 }
             }
@@ -271,14 +276,18 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
                     continue;
                 }
                 const decl = entryToDeclaration(entry);
-                if (decl) {
-                    groupedReferences.declarations.push(decl);
+                if (decl !== undefined) {
+                    if (decl !== true) {
+                        groupedReferences.declarations.push(decl);
+                    }
                     continue;
                 }
 
                 const call = entryToFunctionCall(entry);
-                if (call) {
-                    groupedReferences.functionCalls.push(call);
+                if (call !== undefined) {
+                    if (call !== true) {
+                        groupedReferences.functionCalls.push(call);
+                    }
                     continue;
                 }
             }
@@ -290,8 +299,10 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
                 }
 
                 const decl = entryToDeclaration(entry);
-                if (decl) {
-                    groupedReferences.declarations.push(decl);
+                if (decl !== undefined) {
+                    if (decl !== true) {
+                        groupedReferences.declarations.push(decl);
+                    }
                     continue;
                 }
 
@@ -355,47 +366,63 @@ function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undef
     return undefined;
 }
 
-function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | undefined {
+function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | true | undefined {
+    // returns a callOrNewExpression if the reference needs to be updated during the refactor
+    // returns 'true' if the reference will not be updated by the refactor, but should not block the refactor
+    // returns 'undefined' if the reference should block the refactor
     if (isDeclaration(entry.node.parent)) {
         return entry.node;
+    }
+    else if (
+        findAncestor(entry.node.parent, n => {
+            if (isDeclaration(n)) return true;
+            if (isPropertyAccessExpression(n) || isElementAccessExpression(n)) return false;
+            return "quit";
+        })
+    ) {
+        return true;
     }
     return undefined;
 }
 
-function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression | NewExpression | undefined {
+function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression | NewExpression | true | undefined {
+    // returns a callOrNewExpression if the reference needs to be updated during the refactor
+    // returns 'true' if the reference will not be updated by the refactor, but should not block the refactor
+    // returns 'undefined' if the reference should block the refactor
     if (entry.node.parent) {
         const functionReference = entry.node;
         const parent = functionReference.parent;
+        let callOrNewExpression: CallExpression | NewExpression | undefined;
+        let matchReference = functionReference;
+
         switch (parent.kind) {
-            // foo(...) or super(...) or new Foo(...)
             case SyntaxKind.CallExpression:
             case SyntaxKind.NewExpression:
-                const callOrNewExpression = tryCast(parent, isCallOrNewExpression);
-                if (callOrNewExpression && callOrNewExpression.expression === functionReference) {
-                    return callOrNewExpression;
-                }
+                callOrNewExpression = tryCast(parent, isCallOrNewExpression);
                 break;
             // x.foo(...)
             case SyntaxKind.PropertyAccessExpression:
                 const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
                 if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionReference) {
-                    const callOrNewExpression = tryCast(propertyAccessExpression.parent, isCallOrNewExpression);
-                    if (callOrNewExpression && callOrNewExpression.expression === propertyAccessExpression) {
-                        return callOrNewExpression;
-                    }
+                    callOrNewExpression = tryCast(propertyAccessExpression.parent, isCallOrNewExpression);
+                    matchReference = propertyAccessExpression;
                 }
                 break;
             // x["foo"](...)
             case SyntaxKind.ElementAccessExpression:
                 const elementAccessExpression = tryCast(parent, isElementAccessExpression);
                 if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionReference) {
-                    const callOrNewExpression = tryCast(elementAccessExpression.parent, isCallOrNewExpression);
-                    if (callOrNewExpression && callOrNewExpression.expression === elementAccessExpression) {
-                        return callOrNewExpression;
-                    }
+                    callOrNewExpression = tryCast(elementAccessExpression.parent, isCallOrNewExpression);
+                    matchReference = elementAccessExpression;
                 }
                 break;
+            default:
+                return undefined;
         }
+
+        if (callOrNewExpression === undefined) return undefined;
+        if (callOrNewExpression.expression === matchReference) return callOrNewExpression;
+        if (isCallExpression(callOrNewExpression) && callOrNewExpression.arguments.some(arg => arg === matchReference)) return true;
     }
     return undefined;
 }
