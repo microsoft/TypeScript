@@ -845,6 +845,18 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "IntegerTypedArray",
+            "kind": "type",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "IntegerTypedArrayTypes",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Intl",
             "kind": "module",
             "kindModifiers": "declare",
