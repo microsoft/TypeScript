@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/enumWithBugint.ts] ////
+//// [tests/cases/compiler/enumWithBigint.ts] ////
 
-=== enumWithBugint.ts ===
+=== enumWithBigint.ts ===
 enum E {
 >E : E
 >  : ^
