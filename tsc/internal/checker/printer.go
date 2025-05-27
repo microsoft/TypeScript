@@ -126,7 +126,7 @@ func (c *Checker) GetQuickInfoAtLocation(node *ast.Node) string {
 		}
 		p.printName(symbol)
 		p.print(": ")
-		p.printType(c.getTypeOfSymbol(symbol))
+		p.printType(c.GetTypeOfSymbolAtLocation(symbol, node))
 	case flags&ast.SymbolFlagsEnumMember != 0:
 		p.print("(enum member) ")
 		t := c.getTypeOfSymbol(symbol)

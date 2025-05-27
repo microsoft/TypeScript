@@ -15170,8 +15170,41 @@ func (c *Checker) getWriteTypeOfSymbol(symbol *ast.Symbol) *Type {
 }
 
 func (c *Checker) GetTypeOfSymbolAtLocation(symbol *ast.Symbol, location *ast.Node) *Type {
-	// !!!
-	return c.getTypeOfSymbol(symbol)
+	symbol = c.getExportSymbolOfValueSymbolIfExported(symbol)
+	if location != nil {
+		// If we have an identifier or a property access at the given location, if the location is
+		// an dotted name expression, and if the location is not an assignment target, obtain the type
+		// of the expression (which will reflect control flow analysis). If the expression indeed
+		// resolved to the given symbol, return the narrowed type.
+		if ast.IsIdentifier(location) || ast.IsPrivateIdentifier(location) {
+			if isRightSideOfQualifiedNameOrPropertyAccess(location) {
+				location = location.Parent
+			}
+			if ast.IsExpressionNode(location) && (!ast.IsAssignmentTarget(location) || isWriteAccess(location)) {
+				var t *Type
+				if isWriteAccess(location) && location.Kind == ast.KindPropertyAccessExpression {
+					t = c.checkPropertyAccessExpression(location, CheckModeNormal, true /*writeOnly*/)
+				} else {
+					t = c.getTypeOfExpression(location)
+				}
+				if c.getExportSymbolOfValueSymbolIfExported(c.symbolNodeLinks.Get(location).resolvedSymbol) == symbol {
+					return c.removeOptionalTypeMarker(t)
+				}
+			}
+		}
+		if ast.IsDeclarationName(location) && ast.IsSetAccessorDeclaration(location.Parent) && c.getAnnotatedAccessorTypeNode(location.Parent) != nil {
+			return c.getWriteTypeOfAccessors(location.Parent.Symbol())
+		}
+		// The location isn't a reference to the given symbol, meaning we're being asked
+		// a hypothetical question of what type the symbol would have if there was a reference
+		// to it at the given location. Since we have no control flow information for the
+		// hypothetical reference (control flow information is created and attached by the
+		// binder), we simply return the declared type of the symbol.
+		if isRightSideOfAccessExpression(location) && isWriteAccess(location.Parent) {
+			return c.getWriteTypeOfSymbol(symbol)
+		}
+	}
+	return c.getNonMissingTypeOfSymbol(symbol)
 }
 
 func (c *Checker) getTypeOfSymbol(symbol *ast.Symbol) *Type {
