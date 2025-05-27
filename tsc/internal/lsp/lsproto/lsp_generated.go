@@ -958,7 +958,7 @@ type UnregistrationParams struct {
 }
 
 type InitializeParams struct {
-	_InitializeParams
+	InitializeParamsBase
 	WorkspaceFoldersInitializeParams
 }
 
@@ -2748,7 +2748,7 @@ type Unregistration struct {
 }
 
 // The initialize parameters
-type _InitializeParams struct {
+type InitializeParamsBase struct {
 	WorkDoneProgressParams
 
 	// The process Id of the parent process that started
