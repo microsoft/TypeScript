@@ -146,6 +146,10 @@ func CompileFilesEx(
 		}
 	}
 
+	if includeLibDir {
+		repo.SkipIfNoTypeScriptSubmodule(t)
+	}
+
 	// !!!
 	// ts.assign(options, ts.convertToOptionsWithAbsolutePaths(options, path => ts.getNormalizedAbsolutePath(path, currentDirectory)));
 	if compilerOptions.OutDir != "" {

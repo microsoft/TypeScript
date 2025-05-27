@@ -27686,7 +27686,10 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 	case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand
 		// unless it's an assignment declaration.
-		if node == binary.Right && !c.isReferenceToModuleExports(binary.Left) && (binary.Symbol == nil || c.canGetContextualTypeForAssignmentDeclaration(node.Parent)) {
+		if node == binary.Right && !c.isReferenceToModuleExports(binary.Left) {
+			if binary.Symbol != nil {
+				return c.getContextualTypeForAssignmentDeclaration(node.Parent)
+			}
 			return c.getTypeOfExpression(binary.Left)
 		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
@@ -27708,14 +27711,15 @@ func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags
 	return nil
 }
 
-func (c *Checker) canGetContextualTypeForAssignmentDeclaration(node *ast.Node) bool {
+func (c *Checker) getContextualTypeForAssignmentDeclaration(node *ast.Node) *Type {
 	// Node is the left operand of an assignment declaration (a binary expression with a symbol assigned by the
 	// binder) of the form 'F.id = expr' or 'F[xxx] = expr'. If 'F' is declared as a variable with a type annotation,
 	// we can obtain a contextual type from the annotated type without triggering a circularity. Otherwise, the
 	// assignment declaration has no contextual type.
 	left := node.AsBinaryExpression().Left
 	expr := left.Expression()
-	if ast.IsAccessExpression(left) && expr.Kind == ast.KindThisKeyword {
+	switch expr.Kind {
+	case ast.KindThisKeyword:
 		var symbol *ast.Symbol
 		if ast.IsPropertyAccessExpression(left) {
 			name := left.Name()
@@ -27734,27 +27738,39 @@ func (c *Checker) canGetContextualTypeForAssignmentDeclaration(node *ast.Node) b
 		if symbol != nil {
 			d := symbol.ValueDeclaration
 			if d != nil && (ast.IsPropertyDeclaration(d) || ast.IsPropertySignatureDeclaration(d)) && d.Type() == nil && d.Initializer() == nil {
-				return false
+				return nil
 			}
 		}
 		symbol = node.Symbol()
 		if symbol != nil && symbol.ValueDeclaration != nil && symbol.ValueDeclaration.Type() == nil {
 			if !ast.IsObjectLiteralMethod(c.getThisContainer(expr, false, false)) {
-				return false
+				return nil
 			}
 			// and now for one single case of object literal methods
 			name := ast.GetElementOrPropertyAccessArgumentExpressionOrName(left)
 			if name == nil {
-				return false
+				return nil
 			} else {
 				// !!! contextual typing for `this` in object literals
-				return false
+				return nil
 			}
 		}
-		return true
+		return c.getTypeOfExpression(left)
+	case ast.KindIdentifier:
+		symbol := c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(expr))
+		if symbol.ValueDeclaration != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration) {
+			if typeNode := symbol.ValueDeclaration.Type(); typeNode != nil {
+				if ast.IsPropertyAccessExpression(left) {
+					return c.getTypeOfPropertyOfContextualType(c.getTypeFromTypeNode(typeNode), left.Name().Text())
+				}
+				nameType := c.checkExpressionCached(left.AsElementAccessExpression().ArgumentExpression)
+				if isTypeUsableAsPropertyName(nameType) {
+					return c.getTypeOfPropertyOfContextualTypeEx(c.getTypeFromTypeNode(typeNode), getPropertyNameFromType(nameType), nameType)
+				}
+			}
+		}
 	}
-	symbol := c.getExportSymbolOfValueSymbolIfExported(c.getResolvedSymbol(expr))
-	return symbol.ValueDeclaration != nil && ast.IsVariableDeclaration(symbol.ValueDeclaration) && symbol.ValueDeclaration.Type() != nil
+	return nil
 }
 
 func (c *Checker) isReferenceToModuleExports(node *ast.Node) bool {
