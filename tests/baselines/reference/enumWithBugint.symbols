@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/enumWithBugint.ts] ////
+
+=== enumWithBugint.ts ===
+enum E {
+>E : Symbol(E, Decl(enumWithBugint.ts, 0, 0))
+
+  0n = 0,
+>0n : Symbol(E[0n], Decl(enumWithBugint.ts, 0, 8))
+}
+

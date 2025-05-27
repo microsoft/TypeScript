@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/enumWithBugint.ts] ////
+
+=== enumWithBugint.ts ===
+enum E {
+>E : E
+>  : ^
+
+  0n = 0,
+>0n : E.__missing
+>   : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+}
+
