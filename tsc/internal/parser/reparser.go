@@ -24,7 +24,7 @@ func (p *Parser) reparseCommonJS(node *ast.Node) {
 		nodes[0].Flags = ast.NodeFlagsReparsed
 		nodes[0].Loc = bin.Loc
 		// TODO: Name can sometimes be a string literal, so downstream code needs to handle this
-		export = p.factory.NewCommonJSExport(p.newModifierList(bin.Loc, nodes), ast.GetElementOrPropertyAccessArgumentExpressionOrName(bin.Left), bin.Right)
+		export = p.factory.NewCommonJSExport(p.newModifierList(bin.Loc, nodes), ast.GetElementOrPropertyAccessName(bin.Left), bin.Right)
 	}
 	if export != nil {
 		export.Flags = ast.NodeFlagsReparsed

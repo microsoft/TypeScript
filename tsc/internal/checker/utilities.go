@@ -1632,10 +1632,6 @@ func minAndMax[T any](slice []T, getValue func(value T) int) (int, int) {
 	return minValue, maxValue
 }
 
-func isModuleExportsAccessExpression(node *ast.Node) bool {
-	return ast.IsAccessExpression(node) && ast.IsModuleIdentifier(node.Expression()) && ast.GetElementOrPropertyAccessName(node) == "exports"
-}
-
 func getNonModifierTokenRangeOfNode(node *ast.Node) core.TextRange {
 	pos := node.Pos()
 	if node.Modifiers() != nil {
