@@ -7328,7 +7328,7 @@ namespace Parser {
         return nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(/*disallowOf*/ true);
     }
 
-    function nextTokenIsEqualsOrSemicolonToken() {
+    function nextTokenIsEqualsOrSemicolonOrColonToken() {
         nextToken();
         return token() === SyntaxKind.EqualsToken || token() === SyntaxKind.SemicolonToken || token() === SyntaxKind.ColonToken;
     }
@@ -7336,7 +7336,7 @@ namespace Parser {
     function nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(disallowOf?: boolean) {
         nextToken();
         if (disallowOf && token() === SyntaxKind.OfKeyword) {
-            return lookAhead(nextTokenIsEqualsOrSemicolonToken);
+            return lookAhead(nextTokenIsEqualsOrSemicolonOrColonToken);
         }
         return (isBindingIdentifier() || token() === SyntaxKind.OpenBraceToken) && !scanner.hasPrecedingLineBreak();
     }
