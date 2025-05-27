@@ -1,10 +1,8 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
@@ -49,7 +47,7 @@ func runLSP(args []string) int {
 		DefaultLibraryPath: defaultLibraryPath,
 	})
 
-	if err := s.Run(); err != nil && !errors.Is(err, io.EOF) {
+	if err := s.Run(); err != nil {
 		return 1
 	}
 	return 0

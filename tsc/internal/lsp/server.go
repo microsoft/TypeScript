@@ -187,16 +187,17 @@ func (s *Server) Run() error {
 	g.Go(func() error { return s.dispatchLoop(ctx) })
 	g.Go(func() error { return s.writeLoop(ctx) })
 	g.Go(func() error { return s.readLoop(ctx) })
-	return g.Wait()
+
+	if err := g.Wait(); err != nil && !errors.Is(err, io.EOF) {
+		return err
+	}
+	return nil
 }
 
 func (s *Server) readLoop(ctx context.Context) error {
 	for {
 		msg, err := s.read()
 		if err != nil {
-			if errors.Is(err, io.EOF) {
-				return nil
-			}
 			if errors.Is(err, lsproto.ErrInvalidRequest) {
 				s.sendError(nil, err)
 				continue
