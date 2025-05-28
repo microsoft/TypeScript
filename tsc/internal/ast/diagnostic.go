@@ -19,6 +19,8 @@ type Diagnostic struct {
 	message            string
 	messageChain       []*Diagnostic
 	relatedInformation []*Diagnostic
+	reportsUnnecessary bool
+	reportsDeprecated  bool
 }
 
 func (d *Diagnostic) File() *SourceFile                 { return d.file }
@@ -31,6 +33,8 @@ func (d *Diagnostic) Category() diagnostics.Category    { return d.category }
 func (d *Diagnostic) Message() string                   { return d.message }
 func (d *Diagnostic) MessageChain() []*Diagnostic       { return d.messageChain }
 func (d *Diagnostic) RelatedInformation() []*Diagnostic { return d.relatedInformation }
+func (d *Diagnostic) ReportsUnnecessary() bool          { return d.reportsUnnecessary }
+func (d *Diagnostic) ReportsDeprecated() bool           { return d.reportsDeprecated }
 
 func (d *Diagnostic) SetFile(file *SourceFile)                  { d.file = file }
 func (d *Diagnostic) SetLocation(loc core.TextRange)            { d.loc = loc }
@@ -67,11 +71,13 @@ func (d *Diagnostic) Clone() *Diagnostic {
 
 func NewDiagnostic(file *SourceFile, loc core.TextRange, message *diagnostics.Message, args ...any) *Diagnostic {
 	return &Diagnostic{
-		file:     file,
-		loc:      loc,
-		code:     message.Code(),
-		category: message.Category(),
-		message:  message.Format(args...),
+		file:               file,
+		loc:                loc,
+		code:               message.Code(),
+		category:           message.Category(),
+		message:            message.Format(args...),
+		reportsUnnecessary: message.ReportsUnnecessary(),
+		reportsDeprecated:  message.ReportsDeprecated(),
 	}
 }
 

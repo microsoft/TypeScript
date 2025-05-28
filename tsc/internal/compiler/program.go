@@ -348,6 +348,10 @@ func (p *Program) GetSemanticDiagnostics(ctx context.Context, sourceFile *ast.So
 	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getSemanticDiagnosticsForFile)
 }
 
+func (p *Program) GetSuggestionDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getSuggestionDiagnosticsForFile)
+}
+
 func (p *Program) GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic {
 	var globalDiagnostics []*ast.Diagnostic
 	checkers, done := p.checkerPool.GetAllCheckers(ctx)
@@ -450,6 +454,39 @@ func (p *Program) getSemanticDiagnosticsForFile(ctx context.Context, sourceFile 
 		}
 	}
 	return filtered
+}
+
+func (p *Program) getSuggestionDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	if checker.SkipTypeChecking(sourceFile, p.compilerOptions) {
+		return nil
+	}
+
+	var fileChecker *checker.Checker
+	var done func()
+	if sourceFile != nil {
+		fileChecker, done = p.checkerPool.GetCheckerForFile(ctx, sourceFile)
+		defer done()
+	}
+
+	diags := slices.Clip(sourceFile.BindSuggestionDiagnostics)
+
+	checkers, closeCheckers := p.checkerPool.GetAllCheckers(ctx)
+	defer closeCheckers()
+
+	// Ask for diags from all checkers; checking one file may add diagnostics to other files.
+	// These are deduplicated later.
+	for _, checker := range checkers {
+		if sourceFile == nil || checker == fileChecker {
+			diags = append(diags, checker.GetSuggestionDiagnostics(ctx, sourceFile)...)
+		} else {
+			// !!! is there any case where suggestion diagnostics are produced in other checkers?
+		}
+	}
+	if ctx.Err() != nil {
+		return nil
+	}
+
+	return diags
 }
 
 func isCommentOrBlankLine(text string, pos int) bool {

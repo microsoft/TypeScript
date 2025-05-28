@@ -13,17 +13,21 @@ func (l *LanguageService) GetDocumentDiagnostics(ctx context.Context, documentUR
 	syntaxDiagnostics := program.GetSyntacticDiagnostics(ctx, file)
 	var lspDiagnostics []*lsproto.Diagnostic
 	if len(syntaxDiagnostics) != 0 {
-		lspDiagnostics = make([]*lsproto.Diagnostic, len(syntaxDiagnostics))
-		for i, diag := range syntaxDiagnostics {
-			lspDiagnostics[i] = toLSPDiagnostic(diag, l.converters)
+		lspDiagnostics = make([]*lsproto.Diagnostic, 0, len(syntaxDiagnostics))
+		for _, diag := range syntaxDiagnostics {
+			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(diag, l.converters))
 		}
 	} else {
-		checker, done := program.GetTypeCheckerForFile(ctx, file)
-		defer done()
-		semanticDiagnostics := checker.GetDiagnostics(ctx, file)
-		lspDiagnostics = make([]*lsproto.Diagnostic, len(semanticDiagnostics))
-		for i, diag := range semanticDiagnostics {
-			lspDiagnostics[i] = toLSPDiagnostic(diag, l.converters)
+		diagnostics := program.GetSemanticDiagnostics(ctx, file)
+		suggestionDiagnostics := program.GetSuggestionDiagnostics(ctx, file)
+
+		lspDiagnostics = make([]*lsproto.Diagnostic, 0, len(diagnostics)+len(suggestionDiagnostics))
+		for _, diag := range diagnostics {
+			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(diag, l.converters))
+		}
+		for _, diag := range suggestionDiagnostics {
+			// !!! user preference for suggestion diagnostics; keep only unnecessary/dprecated?
+			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(diag, l.converters))
 		}
 	}
 	return &lsproto.DocumentDiagnosticReport{
@@ -60,6 +64,17 @@ func toLSPDiagnostic(diagnostic *ast.Diagnostic, converters *Converters) *lsprot
 		})
 	}
 
+	var tags []lsproto.DiagnosticTag
+	if diagnostic.ReportsUnnecessary() || diagnostic.ReportsDeprecated() {
+		tags = make([]lsproto.DiagnosticTag, 0, 2)
+		if diagnostic.ReportsUnnecessary() {
+			tags = append(tags, lsproto.DiagnosticTagUnnecessary)
+		}
+		if diagnostic.ReportsDeprecated() {
+			tags = append(tags, lsproto.DiagnosticTagDeprecated)
+		}
+	}
+
 	return &lsproto.Diagnostic{
 		Range: converters.ToLSPRange(diagnostic.File(), diagnostic.Loc()),
 		Code: &lsproto.IntegerOrString{
@@ -68,6 +83,14 @@ func toLSPDiagnostic(diagnostic *ast.Diagnostic, converters *Converters) *lsprot
 		Severity:           &severity,
 		Message:            diagnostic.Message(),
 		Source:             ptrTo("ts"),
-		RelatedInformation: &relatedInformation,
+		RelatedInformation: ptrToSliceIfNonEmpty(relatedInformation),
+		Tags:               ptrToSliceIfNonEmpty(tags),
 	}
+}
+
+func ptrToSliceIfNonEmpty[T any](s []T) *[]T {
+	if len(s) == 0 {
+		return nil
+	}
+	return &s
 }

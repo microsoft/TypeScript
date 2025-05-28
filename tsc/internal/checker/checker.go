@@ -13153,13 +13153,21 @@ func (c *Checker) getCannotFindNameDiagnosticForName(node *ast.Node) *diagnostic
 }
 
 func (c *Checker) GetDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	return c.getDiagnostics(ctx, sourceFile, &c.diagnostics)
+}
+
+func (c *Checker) GetSuggestionDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	return c.getDiagnostics(ctx, sourceFile, &c.suggestionDiagnostics)
+}
+
+func (c *Checker) getDiagnostics(ctx context.Context, sourceFile *ast.SourceFile, collection *ast.DiagnosticsCollection) []*ast.Diagnostic {
 	c.checkNotCanceled()
 	if sourceFile != nil {
 		c.CheckSourceFile(ctx, sourceFile)
 		if c.wasCanceled {
 			return nil
 		}
-		return c.diagnostics.GetDiagnosticsForFile(sourceFile.FileName())
+		return collection.GetDiagnosticsForFile(sourceFile.FileName())
 	}
 	for _, file := range c.files {
 		c.CheckSourceFile(ctx, file)
@@ -13167,7 +13175,7 @@ func (c *Checker) GetDiagnostics(ctx context.Context, sourceFile *ast.SourceFile
 			return nil
 		}
 	}
-	return c.diagnostics.GetDiagnostics()
+	return collection.GetDiagnostics()
 }
 
 func (c *Checker) GetDiagnosticsWithoutCheck(sourceFile *ast.SourceFile) []*ast.Diagnostic {
