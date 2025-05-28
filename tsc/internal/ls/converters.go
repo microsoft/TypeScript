@@ -10,6 +10,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type Converters struct {
@@ -80,23 +81,14 @@ func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
 }
 
 func DocumentURIToFileName(uri lsproto.DocumentUri) string {
-	uriStr := string(uri)
-	if strings.HasPrefix(uriStr, "file:///") {
-		path := uriStr[7:]
-		if len(path) >= 4 {
-			if nextSlash := strings.IndexByte(path[1:], '/'); nextSlash != -1 {
-				if possibleDrive, _ := url.PathUnescape(path[1 : nextSlash+2]); strings.HasSuffix(possibleDrive, ":/") {
-					return possibleDrive + path[nextSlash+2:]
-				}
-			}
+	parsed := core.Must(url.Parse(string(uri)))
+	if parsed.Scheme == "file" {
+		if parsed.Host != "" {
+			return "//" + parsed.Host + parsed.Path
 		}
-		return path
+		return fixWindowsURIPath(parsed.Path)
 	}
-	if strings.HasPrefix(uriStr, "file://") {
-		// UNC path
-		return uriStr[5:]
-	}
-	parsed := core.Must(url.Parse(uriStr))
+
 	authority := parsed.Host
 	if authority == "" {
 		authority = "ts-nul-authority"
@@ -108,6 +100,10 @@ func DocumentURIToFileName(uri lsproto.DocumentUri) string {
 	if !strings.HasPrefix(path, "/") {
 		path = "/" + path
 	}
+	path = fixWindowsURIPath(path)
+	if !strings.HasPrefix(path, "/") {
+		path = "/" + path
+	}
 	fragment := parsed.Fragment
 	if fragment != "" {
 		fragment = "#" + fragment
@@ -115,14 +111,65 @@ func DocumentURIToFileName(uri lsproto.DocumentUri) string {
 	return fmt.Sprintf("^/%s/%s%s%s", parsed.Scheme, authority, path, fragment)
 }
 
+func fixWindowsURIPath(path string) string {
+	if rest, ok := strings.CutPrefix(path, "/"); ok {
+		if volume, rest, ok := splitVolumePath(rest); ok {
+			return volume + rest
+		}
+	}
+	return path
+}
+
+func splitVolumePath(path string) (volume string, rest string, ok bool) {
+	if len(path) >= 2 && tspath.IsVolumeCharacter(path[0]) && path[1] == ':' {
+		return strings.ToLower(path[0:2]), path[2:], true
+	}
+	return "", path, false
+}
+
+// https://github.com/microsoft/vscode-uri/blob/edfdccd976efaf4bb8fdeca87e97c47257721729/src/uri.ts#L455
+var extraEscapeReplacer = strings.NewReplacer(
+	":", "%3A",
+	"/", "%2F",
+	"?", "%3F",
+	"#", "%23",
+	"[", "%5B",
+	"]", "%5D",
+	"@", "%40",
+
+	"!", "%21",
+	"$", "%24",
+	"&", "%26",
+	"'", "%27",
+	"(", "%28",
+	")", "%29",
+	"*", "%2A",
+	"+", "%2B",
+	",", "%2C",
+	";", "%3B",
+	"=", "%3D",
+
+	" ", "%20",
+)
+
 func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
 	if strings.HasPrefix(fileName, "^/") {
 		return lsproto.DocumentUri(strings.Replace(fileName[2:], "/ts-nul-authority/", ":", 1))
 	}
-	if firstSlash := strings.IndexByte(fileName, '/'); firstSlash > 0 && fileName[firstSlash-1] == ':' {
-		return lsproto.DocumentUri("file:///" + url.PathEscape(fileName[:firstSlash]) + fileName[firstSlash:])
+
+	volume, fileName, _ := splitVolumePath(fileName)
+	if volume != "" {
+		volume = "/" + extraEscapeReplacer.Replace(volume)
 	}
-	return lsproto.DocumentUri("file://" + fileName)
+
+	fileName = strings.TrimPrefix(fileName, "//")
+
+	parts := strings.Split(fileName, "/")
+	for i, part := range parts {
+		parts[i] = extraEscapeReplacer.Replace(url.PathEscape(part))
+	}
+
+	return lsproto.DocumentUri("file://" + volume + strings.Join(parts, "/"))
 }
 
 func (c *Converters) LineAndCharacterToPosition(script Script, lineAndCharacter lsproto.Position) core.TextPos {

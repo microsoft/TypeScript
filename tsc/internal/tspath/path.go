@@ -136,7 +136,7 @@ func pathComponents(path string, rootLength int) []string {
 	return append([]string{root}, rest...)
 }
 
-func isVolumeCharacter(char byte) bool {
+func IsVolumeCharacter(char byte) bool {
 	return char >= 'a' && char <= 'z' || char >= 'A' && char <= 'Z'
 }
 
@@ -180,7 +180,7 @@ func GetEncodedRootLength(path string) int {
 	}
 
 	// DOS
-	if isVolumeCharacter(ch0) && ln > 1 && path[1] == ':' {
+	if IsVolumeCharacter(ch0) && ln > 1 && path[1] == ':' {
 		if ln == 2 {
 			return 2 // DOS: "c:" (but not "c:d")
 		}
@@ -203,7 +203,7 @@ func GetEncodedRootLength(path string) int {
 			// special case interpreted as "the machine from which the URL is being interpreted".
 			scheme := path[:schemeEnd]
 			authority := path[authorityStart:authorityEnd]
-			if scheme == "file" && (authority == "" || authority == "localhost") && (len(path) > authorityEnd+2) && isVolumeCharacter(path[authorityEnd+1]) {
+			if scheme == "file" && (authority == "" || authority == "localhost") && (len(path) > authorityEnd+2) && IsVolumeCharacter(path[authorityEnd+1]) {
 				volumeSeparatorEnd := getFileUrlVolumeSeparatorEnd(path, authorityEnd+2)
 				if volumeSeparatorEnd != -1 {
 					if volumeSeparatorEnd == len(path) {
