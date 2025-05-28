@@ -6,23 +6,23 @@ export class Cls {
 >Cls : Cls
 
     x;
->x : any
+>x : number[]
 
     y;
->y : any
+>y : { seed: number; }
 
     z;
->z : any
+>z : string
     
     0;
->0 : any
+>0 : number[]
 
     constructor(seed: number) {
 >seed : number
 
         this['x'] = [seed];
 >this['x'] = [seed] : number[]
->this['x'] : any
+>this['x'] : number[]
 >this : this
 >'x' : "x"
 >[seed] : number[]
@@ -30,7 +30,7 @@ export class Cls {
 
         this['y'] = { seed };
 >this['y'] = { seed } : { seed: number; }
->this['y'] : any
+>this['y'] : { seed: number; }
 >this : this
 >'y' : "y"
 >{ seed } : { seed: number; }
@@ -38,7 +38,7 @@ export class Cls {
 
         this['z'] = `${seed}`;
 >this['z'] = `${seed}` : string
->this['z'] : any
+>this['z'] : string
 >this : this
 >'z' : "z"
 >`${seed}` : string
@@ -46,7 +46,7 @@ export class Cls {
 
         this[0] = [seed];
 >this[0] = [seed] : number[]
->this[0] : any
+>this[0] : number[]
 >this : this
 >0 : 0
 >[seed] : number[]
