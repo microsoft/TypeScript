@@ -22486,7 +22486,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 message = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
             }
 
-            reportError(message, generalizedSourceType, targetType);
+            // Check if both types are long and format differently for better readability
+            if (message === Diagnostics.Type_0_is_not_assignable_to_type_1 &&
+                generalizedSourceType.length > 30 && targetType.length > 30) {
+                // Remove quotes from type strings and format with newlines  
+                const sourceTypeUnquoted = generalizedSourceType.replace(/^'|'$/g, "");
+                const targetTypeUnquoted = targetType.replace(/^'|'$/g, "");
+                const customMessage = { 
+                    ...message, 
+                    message: `Type: \n${sourceTypeUnquoted}\n\nis not assignable to type:\n${targetTypeUnquoted}` 
+                };
+                reportError(customMessage);
+            } else {
+                reportError(message, generalizedSourceType, targetType);
+            }
+
         }
 
         function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
