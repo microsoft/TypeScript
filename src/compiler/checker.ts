@@ -481,6 +481,7 @@ import {
     isAssignmentTarget,
     isAutoAccessorPropertyDeclaration,
     isAwaitExpression,
+    isBigIntLiteral,
     isBinaryExpression,
     isBinaryLogicalOperator,
     isBindableObjectDefinePropertyCall,
@@ -47540,6 +47541,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function computeEnumMemberValue(member: EnumMember, autoValue: number | undefined, previous: EnumMember | undefined): EvaluatorResult {
         if (isComputedNonLiteralName(member.name)) {
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
+        }
+        else if (isBigIntLiteral(member.name)) {
+            error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
         }
         else {
             const text = getTextOfPropertyName(member.name);
