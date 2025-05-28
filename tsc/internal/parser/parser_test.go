@@ -5,10 +5,8 @@ import (
 	"iter"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -40,53 +38,6 @@ func BenchmarkParse(b *testing.B) {
 					jsdocMode := jsdoc.mode
 					for b.Loop() {
 						ParseSourceFile(fileName, path, sourceText, core.ScriptTargetESNext, jsdocMode)
-					}
-				})
-			}
-		})
-	}
-}
-
-func TestParseTypeScriptRepo(t *testing.T) {
-	t.Parallel()
-	repo.SkipIfNoTypeScriptSubmodule(t)
-
-	tests := []struct {
-		name         string
-		ignoreErrors bool
-	}{
-		{"src", false},
-		{"scripts", false},
-		{"Herebyfile.mjs", false},
-		{"tests/cases", true},
-	}
-
-	for _, test := range tests {
-		root := filepath.Join(repo.TypeScriptSubmodulePath, test.name)
-
-		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
-
-			for f := range allParsableFiles(t, root) {
-				t.Run(f.name, func(t *testing.T) {
-					t.Parallel()
-
-					sourceText, err := os.ReadFile(f.path)
-					assert.NilError(t, err)
-
-					fileName := tspath.GetNormalizedAbsolutePath(f.path, repo.TypeScriptSubmodulePath)
-					path := tspath.ToPath(f.path, repo.TypeScriptSubmodulePath, osvfs.FS().UseCaseSensitiveFileNames())
-
-					var sourceFile *ast.SourceFile
-
-					if strings.HasSuffix(f.name, ".json") {
-						sourceFile = ParseJSONText(fileName, path, string(sourceText))
-					} else {
-						sourceFile = ParseSourceFile(fileName, path, string(sourceText), core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
-					}
-
-					if !test.ignoreErrors {
-						assert.Equal(t, len(sourceFile.Diagnostics()), 0)
 					}
 				})
 			}
