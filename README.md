@@ -1,4 +1,3 @@
-
 # TypeScript
 
 [![CI](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml)
@@ -41,6 +40,7 @@ with any additional questions or comments.
 
 ## Documentation
 
+*  [Quick Migration Guide](QUICK_MIGRATION_GUIDE.md) - **New to TypeScript?** Start here to migrate from JavaScript
 *  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 *  [Programming handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
 *  [Homepage](https://www.typescriptlang.org/)
