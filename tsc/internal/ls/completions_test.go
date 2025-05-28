@@ -1953,7 +1953,7 @@ func runTest(t *testing.T, files map[string]string, expected map[string]*testCas
 	if mainFileName == "" {
 		mainFileName = defaultMainFileName
 	}
-	parsedFiles := make(map[string]string)
+	parsedFiles := make(map[string]any)
 	parsedFiles[defaultTsconfigFileName] = `{}`
 	var markerPositions map[string]*lstestutil.Marker
 	for fileName, content := range files {
@@ -2028,9 +2028,9 @@ func assertIncludesItem(t *testing.T, actual *lsproto.CompletionList, expected *
 	return false
 }
 
-func createLanguageService(ctx context.Context, fileName string, files map[string]string) (*ls.LanguageService, func()) {
+func createLanguageService(ctx context.Context, fileName string, files map[string]any) (*ls.LanguageService, func()) {
 	projectService, _ := projecttestutil.Setup(files)
-	projectService.OpenFile(fileName, files[fileName], core.ScriptKindTS, "")
+	projectService.OpenFile(fileName, files[fileName].(string), core.ScriptKindTS, "")
 	project := projectService.Projects()[0]
 	return project.GetLanguageServiceForRequest(ctx)
 }

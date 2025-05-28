@@ -57,13 +57,13 @@ func (p *ProjectServiceHost) Client() project.Client {
 	return p.ClientMock
 }
 
-func (p *ProjectServiceHost) ReplaceFS(files map[string]string) {
+func (p *ProjectServiceHost) ReplaceFS(files map[string]any) {
 	p.fs = bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
 }
 
 var _ project.ServiceHost = (*ProjectServiceHost)(nil)
 
-func Setup(files map[string]string) (*project.Service, *ProjectServiceHost) {
+func Setup(files map[string]any) (*project.Service, *ProjectServiceHost) {
 	host := newProjectServiceHost(files)
 	service := project.NewService(host, project.ServiceOptions{
 		Logger:       host.logger,
@@ -72,7 +72,7 @@ func Setup(files map[string]string) (*project.Service, *ProjectServiceHost) {
 	return service, host
 }
 
-func newProjectServiceHost(files map[string]string) *ProjectServiceHost {
+func newProjectServiceHost(files map[string]any) *ProjectServiceHost {
 	fs := bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
 	host := &ProjectServiceHost{
 		fs:                 fs,
