@@ -47542,7 +47542,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isComputedNonLiteralName(member.name)) {
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
         }
-        else if (isNumericLiteral(member.name) || isBigIntLiteral(member.name)) {
+        else if (isBigIntLiteral(member.name)) {
             error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
         }
         else {
