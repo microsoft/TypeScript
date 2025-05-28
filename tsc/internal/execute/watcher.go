@@ -38,7 +38,7 @@ func createWatcher(sys System, configParseResult *tsoptions.ParsedCommandLine, r
 func (w *watcher) compileAndEmit() {
 	// !!! output/error reporting is currently the same as non-watch mode
 	// diagnostics, emitResult, exitStatus :=
-	compileAndEmit(w.sys, w.program, w.reportDiagnostic)
+	emitFilesAndReportErrors(w.sys, w.program, w.reportDiagnostic)
 }
 
 func (w *watcher) hasErrorsInTsConfig() bool {
