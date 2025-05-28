@@ -718,8 +718,8 @@ func (c *Checker) narrowTypeByDiscriminant(t *Type, access *ast.Node, narrowType
 	}
 	narrowedPropType := narrowType(propType)
 	return c.filterType(t, func(t *Type) bool {
-		discriminantType := c.getTypeOfPropertyOrIndexSignatureOfType(t, propName)
-		return discriminantType == nil || discriminantType.flags&TypeFlagsNever == 0 && narrowedPropType.flags&TypeFlagsNever == 0 && c.areTypesComparable(narrowedPropType, discriminantType)
+		discriminantType := core.OrElse(c.getTypeOfPropertyOrIndexSignatureOfType(t, propName), c.unknownType)
+		return discriminantType.flags&TypeFlagsNever == 0 && narrowedPropType.flags&TypeFlagsNever == 0 && c.areTypesComparable(narrowedPropType, discriminantType)
 	})
 }
 

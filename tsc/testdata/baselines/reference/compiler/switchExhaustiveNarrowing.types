@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/switchExhaustiveNarrowing.ts] ////
+
+=== switchExhaustiveNarrowing.ts ===
+interface ClientSource {
+  type: "client";
+>type : "client"
+}
+
+interface ServiceSource {
+  type: "service";
+>type : "service"
+}
+
+function isDisplaySource(source: ClientSource | ServiceSource | undefined): boolean {
+>isDisplaySource : (source: ClientSource | ServiceSource | undefined) => boolean
+>source : ClientSource | ServiceSource | undefined
+
+  switch (source?.type) {
+>source?.type : "client" | "service" | undefined
+>source : ClientSource | ServiceSource | undefined
+>type : "client" | "service" | undefined
+
+    case "client":
+>"client" : "client"
+
+      return true;
+>true : true
+
+    case "service":
+>"service" : "service"
+
+      return false;
+>false : false
+
+    case undefined:
+>undefined : undefined
+
+      return false;
+>false : false
+
+    default:
+      neverReached(source);
+>neverReached(source) : void
+>neverReached : (_v: never) => void
+>source : never
+
+      return false;
+>false : false
+  }
+}
+
+function neverReached(_v: never): void {}
+>neverReached : (_v: never) => void
+>_v : never
+
