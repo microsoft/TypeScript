@@ -40,9 +40,26 @@ func (parser *commandLineParser) createUnknownOptionError(
 	unknownOption string,
 	unknownOptionErrorText string,
 	node *ast.Node,
-	sourceFile *ast.SourceFile, // todo: TsConfigSourceFile,
+	sourceFile *ast.SourceFile,
 ) *ast.Diagnostic {
-	alternateMode := parser.AlternateMode()
+	return createUnknownOptionError(
+		unknownOption,
+		parser.UnknownOptionDiagnostic(),
+		unknownOptionErrorText,
+		node,
+		sourceFile,
+		parser.AlternateMode(),
+	)
+}
+
+func createUnknownOptionError(
+	unknownOption string,
+	unknownOptionDiagnostic *diagnostics.Message,
+	unknownOptionErrorText string, // optional
+	node *ast.Node, // optional
+	sourceFile *ast.SourceFile, // optional
+	alternateMode *AlternateModeDiagnostics, // optional
+) *ast.Diagnostic {
 	if alternateMode != nil && alternateMode.optionsNameMap != nil {
 		otherOption := alternateMode.optionsNameMap.Get(strings.ToLower(unknownOption))
 		if otherOption != nil {
@@ -58,7 +75,7 @@ func (parser *commandLineParser) createUnknownOptionError(
 		unknownOptionErrorText = unknownOption
 	}
 	// TODO: possibleOption := spelling suggestion
-	return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, parser.UnknownOptionDiagnostic(), unknownOptionErrorText)
+	return createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile, node, unknownOptionDiagnostic, unknownOptionErrorText)
 }
 
 func createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.SourceFile, node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
@@ -66,4 +83,17 @@ func createDiagnosticForNodeInSourceFileOrCompilerDiagnostic(sourceFile *ast.Sou
 		return ast.NewDiagnostic(sourceFile, core.NewTextRange(scanner.SkipTrivia(sourceFile.Text(), node.Loc.Pos()), node.End()), message, args...)
 	}
 	return ast.NewCompilerDiagnostic(message, args...)
+}
+
+func extraKeyDiagnostics(s string) *diagnostics.Message {
+	switch s {
+	case "compilerOptions":
+		return diagnostics.Unknown_compiler_option_0
+	case "watchOptions":
+		return diagnostics.Unknown_watch_option_0
+	case "typeAcquisition":
+		return diagnostics.Unknown_type_acquisition_option_0
+	default:
+		return nil
+	}
 }
