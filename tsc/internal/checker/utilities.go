@@ -1918,18 +1918,23 @@ func containsNonMissingUndefinedType(c *Checker, t *Type) bool {
 }
 
 func getAnyImportSyntax(node *ast.Node) *ast.Node {
+	var importNode *ast.Node
 	switch node.Kind {
 	case ast.KindImportEqualsDeclaration:
-		return node
+		importNode = node
 	case ast.KindImportClause:
-		return node.Parent
+		importNode = node.Parent
 	case ast.KindNamespaceImport:
-		return node.Parent.Parent
+		importNode = node.Parent.Parent
 	case ast.KindImportSpecifier:
-		return node.Parent.Parent.Parent
+		importNode = node.Parent.Parent.Parent
 	default:
 		return nil
 	}
+	if importNode.Kind == ast.KindJSDocImportTag {
+		return importNode.AsJSDocImportTag().JSImportDeclaration.AsNode()
+	}
+	return importNode
 }
 
 // A reserved member name consists of the byte 0xFE (which is an invalid UTF-8 encoding) followed by one or more

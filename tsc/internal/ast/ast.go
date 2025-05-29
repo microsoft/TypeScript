@@ -9643,9 +9643,10 @@ func (node *JSDocThisTag) Clone(f NodeFactoryCoercible) *Node {
 // JSDocImportTag
 type JSDocImportTag struct {
 	JSDocTagBase
-	ImportClause    *Declaration
-	ModuleSpecifier *Expression
-	Attributes      *Node
+	JSImportDeclaration *ImportDeclaration
+	ImportClause        *Declaration
+	ModuleSpecifier     *Expression
+	Attributes          *Node
 }
 
 func (f *NodeFactory) NewJSDocImportTag(tagName *IdentifierNode, importClause *Declaration, moduleSpecifier *Node, attributes *Node, comment *NodeList) *Node {

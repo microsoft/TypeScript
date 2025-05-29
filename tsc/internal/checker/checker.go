@@ -13848,6 +13848,9 @@ func (c *Checker) getTargetOfImportSpecifier(node *ast.Node, dontResolveAlias bo
 		}
 	}
 	root := node.Parent.Parent.Parent // ImportDeclaration
+	if root.Kind == ast.KindJSDocImportTag {
+		root = root.AsJSDocImportTag().JSImportDeclaration.AsNode()
+	}
 	if ast.IsBindingElement(node) {
 		root = ast.GetRootDeclaration(node)
 	}
@@ -14219,6 +14222,8 @@ func (c *Checker) getModuleSpecifierForImportOrExport(node *ast.Node) *ast.Node 
 
 func getModuleSpecifierFromNode(node *ast.Node) *ast.Node {
 	switch node.Kind {
+	case ast.KindJSDocImportTag:
+		return node.AsJSDocImportTag().JSImportDeclaration.ModuleSpecifier
 	case ast.KindImportDeclaration, ast.KindJSImportDeclaration:
 		return node.AsImportDeclaration().ModuleSpecifier
 	case ast.KindExportDeclaration:

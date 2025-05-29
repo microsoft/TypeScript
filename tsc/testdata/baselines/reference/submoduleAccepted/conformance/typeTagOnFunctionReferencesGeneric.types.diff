@@ -21,3 +21,16 @@
  >1 : 1
 
  /**@type {IFn}*/
+ const inJsArrow = (j) => {
+->inJsArrow : IFn
++>inJsArrow : <T>(m: T) => T
+ >(j) => {    return j;} : <T>(j: T) => T
+ >j : T
+
+@@= skipped -22, +22 lines =@@
+ }
+ inJsArrow(2); // no error gets linted as expected
+ >inJsArrow(2) : 2
+->inJsArrow : IFn
++>inJsArrow : <T>(m: T) => T
+ >2 : 2

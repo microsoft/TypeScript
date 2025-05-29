@@ -1,0 +1,43 @@
+--- old.contravariantOnlyInferenceFromAnnotatedFunctionJs.errors.txt
++++ new.contravariantOnlyInferenceFromAnnotatedFunctionJs.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++index.js(2,28): error TS2304: Cannot find name 'B'.
++index.js(2,42): error TS2304: Cannot find name 'A'.
++index.js(2,48): error TS2304: Cannot find name 'B'.
++index.js(2,67): error TS2304: Cannot find name 'B'.
++
++
++==== index.js (4 errors) ====
++    /**
++     * @typedef {{ [K in keyof B]: { fn: (a: A, b: B) => void; thing: B[K]; } }} Funcs
++                               ~
++!!! error TS2304: Cannot find name 'B'.
++                                             ~
++!!! error TS2304: Cannot find name 'A'.
++                                                   ~
++!!! error TS2304: Cannot find name 'B'.
++                                                                      ~
++!!! error TS2304: Cannot find name 'B'.
++     * @template A
++     * @template {Record<string, unknown>} B
++     */
++    
++    /**
++     * @template A
++     * @template {Record<string, unknown>} B
++     * @param {Funcs<A, B>} fns
++     * @returns {[A, B]}
++     */
++    function foo(fns) {
++      return /** @type {any} */ (null);
++    }
++    
++    const result = foo({
++      bar: {
++        fn:
++          /** @param {string} a */
++          (a) => {},
++        thing: "asd",
++      },
++    });

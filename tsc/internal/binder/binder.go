@@ -581,7 +581,9 @@ func (b *Binder) bind(node *ast.Node) bool {
 	if node == nil {
 		return false
 	}
-	node.Parent = b.parent
+	if node.Parent == nil || node.Parent.Flags&ast.NodeFlagsReparsed != 0 {
+		node.Parent = b.parent
+	}
 	saveInStrictMode := b.inStrictMode
 	// Even though in the AST the jsdoc @typedef node belongs to the current node,
 	// its symbol might be in the same scope with the current node's symbol. Consider:

@@ -38,7 +38,7 @@ export {}; // flag file as module
  * @returns {SomeType}
  */
 function doTheThing(x) {
->doTheThing : (x: number) => SomeType
+>doTheThing : (x: number) => number | ExportedThing | LocalThing | { x: string; }
 >x : number
 
     return {x: ""+x};
@@ -56,14 +56,14 @@ class ExportedThing {
 >"ok" : "ok"
 }
 module.exports = {
->module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
->module.exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
->module : { "export=": { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }; }
->exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
->{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
+>module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => number | ExportedThing | LocalThing | { x: string; }; ExportedThing: typeof ExportedThing; }
+>module.exports : { doTheThing: (x: number) => number | ExportedThing | LocalThing | { x: string; }; ExportedThing: typeof ExportedThing; }
+>module : { "export=": { doTheThing: (x: number) => number | ExportedThing | LocalThing | { x: string; }; ExportedThing: typeof ExportedThing; }; }
+>exports : { doTheThing: (x: number) => number | ExportedThing | LocalThing | { x: string; }; ExportedThing: typeof ExportedThing; }
+>{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => number | ExportedThing | LocalThing | { x: string; }; ExportedThing: typeof ExportedThing; }
 
     doTheThing,
->doTheThing : (x: number) => SomeType
+>doTheThing : (x: number) => number | ExportedThing | LocalThing | { x: string; }
 
     ExportedThing,
 >ExportedThing : typeof ExportedThing

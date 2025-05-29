@@ -2117,7 +2117,7 @@ func (c *Checker) checkGrammarBigIntLiteral(node *ast.BigIntLiteral) bool {
 }
 
 func (c *Checker) checkGrammarImportClause(node *ast.ImportClause) bool {
-	if node.IsTypeOnly && node.Name() != nil && node.NamedBindings != nil {
+	if node.Flags&ast.NodeFlagsJSDoc == 0 && node.IsTypeOnly && node.Name() != nil && node.NamedBindings != nil {
 		return c.grammarErrorOnNode(&node.Node, diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both)
 	}
 	if node.IsTypeOnly && node.NamedBindings != nil && node.NamedBindings.Kind == ast.KindNamedImports {

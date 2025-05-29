@@ -98,6 +98,7 @@ func (p *Parser) reparseTags(parent *ast.Node, jsDoc []*ast.Node) {
 				importDeclaration.Loc = core.NewTextRange(tag.Pos(), tag.End())
 				importDeclaration.Flags = p.contextFlags | ast.NodeFlagsReparsed
 				p.reparseList = append(p.reparseList, importDeclaration)
+				importTag.JSImportDeclaration = importDeclaration.AsImportDeclaration()
 				// !!! @overload and other unattached tags (@callback et al) support goes here
 			}
 			if !isLast {
