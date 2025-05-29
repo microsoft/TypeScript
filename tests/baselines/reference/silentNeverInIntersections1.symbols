@@ -1,0 +1,99 @@
+//// [tests/cases/compiler/silentNeverInIntersections1.ts] ////
+
+=== silentNeverInIntersections1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60864
+
+class Variable<U, S extends string> {
+>Variable : Symbol(Variable, Decl(silentNeverInIntersections1.ts, 0, 0))
+>U : Symbol(U, Decl(silentNeverInIntersections1.ts, 2, 15))
+>S : Symbol(S, Decl(silentNeverInIntersections1.ts, 2, 17))
+
+  constructor(public s: S) {}
+>s : Symbol(Variable.s, Decl(silentNeverInIntersections1.ts, 3, 14))
+>S : Symbol(S, Decl(silentNeverInIntersections1.ts, 2, 17))
+
+  u!: U;
+>u : Symbol(Variable.u, Decl(silentNeverInIntersections1.ts, 3, 29))
+>U : Symbol(U, Decl(silentNeverInIntersections1.ts, 2, 15))
+}
+
+function mkGeneric<U, S extends string>(s: S) {
+>mkGeneric : Symbol(mkGeneric, Decl(silentNeverInIntersections1.ts, 5, 1))
+>U : Symbol(U, Decl(silentNeverInIntersections1.ts, 7, 19))
+>S : Symbol(S, Decl(silentNeverInIntersections1.ts, 7, 21))
+>s : Symbol(s, Decl(silentNeverInIntersections1.ts, 7, 40))
+>S : Symbol(S, Decl(silentNeverInIntersections1.ts, 7, 21))
+
+  return new Variable<U, S>(s);
+>Variable : Symbol(Variable, Decl(silentNeverInIntersections1.ts, 0, 0))
+>U : Symbol(U, Decl(silentNeverInIntersections1.ts, 7, 19))
+>S : Symbol(S, Decl(silentNeverInIntersections1.ts, 7, 21))
+>s : Symbol(s, Decl(silentNeverInIntersections1.ts, 7, 40))
+}
+
+type ExactArgNames<GenericType, Constraint> = GenericType & {
+>ExactArgNames : Symbol(ExactArgNames, Decl(silentNeverInIntersections1.ts, 9, 1))
+>GenericType : Symbol(GenericType, Decl(silentNeverInIntersections1.ts, 11, 19))
+>Constraint : Symbol(Constraint, Decl(silentNeverInIntersections1.ts, 11, 31))
+>GenericType : Symbol(GenericType, Decl(silentNeverInIntersections1.ts, 11, 19))
+
+  [K in keyof GenericType]: K extends keyof Constraint ? GenericType[K] : never;
+>K : Symbol(K, Decl(silentNeverInIntersections1.ts, 12, 3))
+>GenericType : Symbol(GenericType, Decl(silentNeverInIntersections1.ts, 11, 19))
+>K : Symbol(K, Decl(silentNeverInIntersections1.ts, 12, 3))
+>Constraint : Symbol(Constraint, Decl(silentNeverInIntersections1.ts, 11, 31))
+>GenericType : Symbol(GenericType, Decl(silentNeverInIntersections1.ts, 11, 19))
+>K : Symbol(K, Decl(silentNeverInIntersections1.ts, 12, 3))
+
+};
+
+type AllowVariables<T> =
+>AllowVariables : Symbol(AllowVariables, Decl(silentNeverInIntersections1.ts, 13, 2))
+>T : Symbol(T, Decl(silentNeverInIntersections1.ts, 15, 20))
+
+  | Variable<T, any>
+>Variable : Symbol(Variable, Decl(silentNeverInIntersections1.ts, 0, 0))
+>T : Symbol(T, Decl(silentNeverInIntersections1.ts, 15, 20))
+
+  | { [K in keyof T]: Variable<T[K], any> | T[K] };
+>K : Symbol(K, Decl(silentNeverInIntersections1.ts, 17, 7))
+>T : Symbol(T, Decl(silentNeverInIntersections1.ts, 15, 20))
+>Variable : Symbol(Variable, Decl(silentNeverInIntersections1.ts, 0, 0))
+>T : Symbol(T, Decl(silentNeverInIntersections1.ts, 15, 20))
+>K : Symbol(K, Decl(silentNeverInIntersections1.ts, 17, 7))
+>T : Symbol(T, Decl(silentNeverInIntersections1.ts, 15, 20))
+>K : Symbol(K, Decl(silentNeverInIntersections1.ts, 17, 7))
+
+type TestArgs = {
+>TestArgs : Symbol(TestArgs, Decl(silentNeverInIntersections1.ts, 17, 51))
+
+  someArg: number;
+>someArg : Symbol(someArg, Decl(silentNeverInIntersections1.ts, 19, 17))
+
+};
+
+type TestArgsWithVars = AllowVariables<TestArgs>;
+>TestArgsWithVars : Symbol(TestArgsWithVars, Decl(silentNeverInIntersections1.ts, 21, 2))
+>AllowVariables : Symbol(AllowVariables, Decl(silentNeverInIntersections1.ts, 13, 2))
+>TestArgs : Symbol(TestArgs, Decl(silentNeverInIntersections1.ts, 17, 51))
+
+function takesGeneric<V extends AllowVariables<TestArgs>>(
+>takesGeneric : Symbol(takesGeneric, Decl(silentNeverInIntersections1.ts, 23, 49))
+>V : Symbol(V, Decl(silentNeverInIntersections1.ts, 25, 22))
+>AllowVariables : Symbol(AllowVariables, Decl(silentNeverInIntersections1.ts, 13, 2))
+>TestArgs : Symbol(TestArgs, Decl(silentNeverInIntersections1.ts, 17, 51))
+
+  a: ExactArgNames<V, TestArgs>,
+>a : Symbol(a, Decl(silentNeverInIntersections1.ts, 25, 58))
+>ExactArgNames : Symbol(ExactArgNames, Decl(silentNeverInIntersections1.ts, 9, 1))
+>V : Symbol(V, Decl(silentNeverInIntersections1.ts, 25, 22))
+>TestArgs : Symbol(TestArgs, Decl(silentNeverInIntersections1.ts, 17, 51))
+
+): void {}
+
+let v = takesGeneric({ someArg: mkGeneric("x") });
+>v : Symbol(v, Decl(silentNeverInIntersections1.ts, 29, 3))
+>takesGeneric : Symbol(takesGeneric, Decl(silentNeverInIntersections1.ts, 23, 49))
+>someArg : Symbol(someArg, Decl(silentNeverInIntersections1.ts, 29, 22))
+>mkGeneric : Symbol(mkGeneric, Decl(silentNeverInIntersections1.ts, 5, 1))
+
