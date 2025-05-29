@@ -11,7 +11,7 @@ resources:
       ref: refs/tags/release
 
 extends:
-  template: v1/1ES.Unofficial.PipelineTemplate.yml@1esPipelines
+  template: v1/1ES.Official.PipelineTemplate.yml@1esPipelines
   parameters:
     pool:
       name: TypeScript-AzurePipelines-EO
@@ -24,7 +24,6 @@ extends:
         fetchDepth: 1
         fetchTags: false
         retryCount: 3
-      enableProductionSDL: true
       sourceAnalysisPool:
         name: TypeScript-AzurePipelines-EO
         image: 1ESPT-Windows2022
