@@ -46,7 +46,7 @@ func (w *watcher) hasErrorsInTsConfig() bool {
 	if w.configFileName != "" {
 		extendedConfigCache := map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry{}
 		// !!! need to check that this merges compileroptions correctly. This differs from non-watch, since we allow overriding of previous options
-		configParseResult, errors := getParsedCommandLineOfConfigFile(w.configFileName, &core.CompilerOptions{}, w.sys, extendedConfigCache)
+		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(w.configFileName, &core.CompilerOptions{}, w.sys, extendedConfigCache)
 		if len(errors) > 0 {
 			for _, e := range errors {
 				w.reportDiagnostic(e)

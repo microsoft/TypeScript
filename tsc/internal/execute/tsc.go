@@ -115,7 +115,7 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 
 	if configFileName != "" {
 		extendedConfigCache := map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry{}
-		configParseResult, errors := getParsedCommandLineOfConfigFile(configFileName, compilerOptionsFromCommandLine, sys, extendedConfigCache)
+		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, compilerOptionsFromCommandLine, sys, extendedConfigCache)
 		if len(errors) != 0 {
 			// these are unrecoverable errors--exit to report them as diagnostics
 			for _, e := range errors {
@@ -170,31 +170,6 @@ func findConfigFile(searchPath string, fileExists func(string) bool, configName 
 		return ""
 	}
 	return result
-}
-
-// Reads the config file and reports errors. Exits if the config file cannot be found
-func getParsedCommandLineOfConfigFile(configFileName string, options *core.CompilerOptions, sys System, extendedConfigCache map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry) (*tsoptions.ParsedCommandLine, []*ast.Diagnostic) {
-	errors := []*ast.Diagnostic{}
-	configFileText, errors := tsoptions.TryReadFile(configFileName, sys.FS().ReadFile, errors)
-	if len(errors) > 0 {
-		// these are unrecoverable errors--exit to report them as diagnostics
-		return nil, errors
-	}
-
-	cwd := sys.GetCurrentDirectory()
-	tsConfigSourceFile := tsoptions.NewTsconfigSourceFileFromFilePath(configFileName, tspath.ToPath(configFileName, cwd, sys.FS().UseCaseSensitiveFileNames()), configFileText)
-	// tsConfigSourceFile.resolvedPath = tsConfigSourceFile.FileName()
-	// tsConfigSourceFile.originalFileName = tsConfigSourceFile.FileName()
-	return tsoptions.ParseJsonSourceFileConfigFileContent(
-		tsConfigSourceFile,
-		sys,
-		tspath.GetNormalizedAbsolutePath(tspath.GetDirectoryPath(configFileName), cwd),
-		options,
-		tspath.GetNormalizedAbsolutePath(configFileName, cwd),
-		nil,
-		nil,
-		extendedConfigCache,
-	), nil
 }
 
 func performCompilation(sys System, cb cbType, config *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter) ExitStatus {

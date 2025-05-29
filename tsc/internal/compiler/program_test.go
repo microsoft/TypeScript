@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
@@ -237,7 +238,7 @@ func TestProgram(t *testing.T) {
 			})
 
 			actualFiles := []string{}
-			for _, file := range program.files {
+			for _, file := range program.GetSourceFiles() {
 				actualFiles = append(actualFiles, strings.TrimPrefix(file.FileName(), libPrefix))
 			}
 
@@ -278,14 +279,19 @@ func BenchmarkNewProgram(b *testing.B) {
 	b.Run("compiler", func(b *testing.B) {
 		repo.SkipIfNoTypeScriptSubmodule(b)
 
-		compilerDir := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler"))
+		rootPath := tspath.NormalizeSlashes(filepath.Join(repo.TypeScriptSubmodulePath, "src", "compiler"))
 
 		fs := osvfs.FS()
 		fs = bundled.WrapFS(fs)
 
+		host := NewCompilerHost(nil, rootPath, fs, bundled.LibPath())
+
+		parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, host, nil)
+		assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
+
 		opts := ProgramOptions{
-			ConfigFileName: tspath.CombinePaths(compilerDir, "tsconfig.json"),
-			Host:           NewCompilerHost(nil, compilerDir, fs, bundled.LibPath()),
+			Host:    host,
+			Options: parsed.CompilerOptions(),
 		}
 
 		for b.Loop() {

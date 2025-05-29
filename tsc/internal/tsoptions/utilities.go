@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/dlclark/regexp2"
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -467,4 +468,29 @@ func matchFiles(path string, extensions []string, excludes []string, includes []
 
 func readDirectory(host vfs.FS, currentDir string, path string, extensions []string, excludes []string, includes []string, depth *int) []string {
 	return matchFiles(path, extensions, excludes, includes, host.UseCaseSensitiveFileNames(), currentDir, depth, host)
+}
+
+// Reads the config file and reports errors.
+func GetParsedCommandLineOfConfigFile(configFileName string, options *core.CompilerOptions, sys ParseConfigHost, extendedConfigCache map[tspath.Path]*ExtendedConfigCacheEntry) (*ParsedCommandLine, []*ast.Diagnostic) {
+	errors := []*ast.Diagnostic{}
+	configFileText, errors := tryReadFile(configFileName, sys.FS().ReadFile, errors)
+	if len(errors) > 0 {
+		// these are unrecoverable errors--exit to report them as diagnostics
+		return nil, errors
+	}
+
+	cwd := sys.GetCurrentDirectory()
+	tsConfigSourceFile := NewTsconfigSourceFileFromFilePath(configFileName, tspath.ToPath(configFileName, cwd, sys.FS().UseCaseSensitiveFileNames()), configFileText)
+	// tsConfigSourceFile.resolvedPath = tsConfigSourceFile.FileName()
+	// tsConfigSourceFile.originalFileName = tsConfigSourceFile.FileName()
+	return ParseJsonSourceFileConfigFileContent(
+		tsConfigSourceFile,
+		sys,
+		tspath.GetNormalizedAbsolutePath(tspath.GetDirectoryPath(configFileName), cwd),
+		options,
+		tspath.GetNormalizedAbsolutePath(configFileName, cwd),
+		nil,
+		nil,
+		extendedConfigCache,
+	), nil
 }

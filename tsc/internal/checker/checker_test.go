@@ -7,10 +7,13 @@ import (
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
+	"gotest.tools/v3/assert"
 )
 
 func TestGetSymbolAtLocation(t *testing.T) {
@@ -25,7 +28,8 @@ foo.bar;`
 		"/foo.ts": content,
 		"/tsconfig.json": `
 				{
-					"compilerOptions": {}
+					"compilerOptions": {},
+					"files": ["foo.ts"]
 				}
 			`,
 	}, false /*useCaseSensitiveFileNames*/)
@@ -33,11 +37,11 @@ foo.bar;`
 
 	cd := "/"
 	host := compiler.NewCompilerHost(nil, cd, fs, bundled.LibPath())
-	opts := compiler.ProgramOptions{
-		Host:           host,
-		ConfigFileName: "/tsconfig.json",
-	}
-	p := compiler.NewProgram(opts)
+
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, host, nil)
+	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
+
+	p := compiler.NewProgramFromParsedCommandLine(parsed, host)
 	p.BindSourceFiles()
 	c, done := p.GetTypeChecker(t.Context())
 	defer done()
@@ -64,11 +68,9 @@ func TestCheckSrcCompiler(t *testing.T) {
 	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath), "src", "compiler")
 
 	host := compiler.NewCompilerHost(nil, rootPath, fs, bundled.LibPath())
-	opts := compiler.ProgramOptions{
-		Host:           host,
-		ConfigFileName: tspath.CombinePaths(rootPath, "tsconfig.json"),
-	}
-	p := compiler.NewProgram(opts)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, host, nil)
+	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
+	p := compiler.NewProgramFromParsedCommandLine(parsed, host)
 	p.CheckSourceFiles(t.Context())
 }
 
@@ -80,11 +82,9 @@ func BenchmarkNewChecker(b *testing.B) {
 	rootPath := tspath.CombinePaths(tspath.NormalizeSlashes(repo.TypeScriptSubmodulePath), "src", "compiler")
 
 	host := compiler.NewCompilerHost(nil, rootPath, fs, bundled.LibPath())
-	opts := compiler.ProgramOptions{
-		Host:           host,
-		ConfigFileName: tspath.CombinePaths(rootPath, "tsconfig.json"),
-	}
-	p := compiler.NewProgram(opts)
+	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, host, nil)
+	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
+	p := compiler.NewProgramFromParsedCommandLine(parsed, host)
 
 	b.ReportAllocs()
 

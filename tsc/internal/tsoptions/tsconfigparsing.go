@@ -864,7 +864,7 @@ func parseOwnConfigOfJson(
 }
 
 func readJsonConfigFile(fileName string, path tspath.Path, readFile func(fileName string) (string, bool)) (*TsConfigSourceFile, []*ast.Diagnostic) {
-	text, diagnostic := TryReadFile(fileName, readFile, []*ast.Diagnostic{})
+	text, diagnostic := tryReadFile(fileName, readFile, []*ast.Diagnostic{})
 	if text != "" {
 		return &TsConfigSourceFile{
 			SourceFile: parser.ParseJSONText(fileName, path, text),
