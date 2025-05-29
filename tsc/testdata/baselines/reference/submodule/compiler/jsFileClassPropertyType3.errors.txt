@@ -1,13 +1,10 @@
 bar.ts(1,1): error TS2322: Type 'string' is not assignable to type 'number'.
-foo.js(3,13): error TS2304: Cannot find name 'cond'.
 
 
-==== foo.js (1 errors) ====
+==== foo.js (0 errors) ====
     class C {
         constructor() {
             if (cond) {
-                ~~~~
-!!! error TS2304: Cannot find name 'cond'.
                 this.p = null;
             }
             else {

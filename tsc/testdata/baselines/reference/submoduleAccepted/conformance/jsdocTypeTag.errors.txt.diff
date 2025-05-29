@@ -2,13 +2,6 @@
 +++ new.jsdocTypeTag.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+a.js(19,12): error TS2304: Cannot find name 'Void'.
-+a.js(25,12): error TS2304: Cannot find name 'Undefined'.
-+a.js(31,12): error TS2304: Cannot find name 'Null'.
-+a.js(37,12): error TS2314: Generic type 'T[]' requires 1 type argument(s).
-+a.js(40,12): error TS2552: Cannot find name 'array'. Did you mean 'Array'?
-+a.js(43,12): error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
-+a.js(46,12): error TS2552: Cannot find name 'promise'. Did you mean 'Promise'?
 +b.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'S' must be of type 'String', but here has type 'string'.
 +b.ts(3,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'N' must be of type 'Number', but here has type 'number'.
 +b.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'B' must be of type 'Boolean', but here has type 'boolean'.
@@ -16,7 +9,7 @@
 +b.ts(19,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'obj' must be of type 'object', but here has type 'any'.
 +
 +
-+==== a.js (7 errors) ====
++==== a.js (0 errors) ====
 +    /** @type {String} */
 +    var S;
 +    
@@ -36,48 +29,33 @@
 +    var b;
 +    
 +    /** @type {Void} */
-+               ~~~~
-+!!! error TS2304: Cannot find name 'Void'.
 +    var V;
 +    
 +    /** @type {void} */
 +    var v;
 +    
 +    /** @type {Undefined} */
-+               ~~~~~~~~~
-+!!! error TS2304: Cannot find name 'Undefined'.
 +    var U;
 +    
 +    /** @type {undefined} */
 +    var u;
 +    
 +    /** @type {Null} */
-+               ~~~~
-+!!! error TS2304: Cannot find name 'Null'.
 +    var Nl;
 +    
 +    /** @type {null} */
 +    var nl;
 +    
 +    /** @type {Array} */
-+               ~~~~~
-+!!! error TS2314: Generic type 'T[]' requires 1 type argument(s).
 +    var A;
 +    
 +    /** @type {array} */
-+               ~~~~~
-+!!! error TS2552: Cannot find name 'array'. Did you mean 'Array'?
-+!!! related TS2728 lib.es5.d.ts:--:--: 'Array' is declared here.
 +    var a;
 +    
 +    /** @type {Promise} */
-+               ~~~~~~~
-+!!! error TS2314: Generic type 'Promise<T>' requires 1 type argument(s).
 +    var P;
 +    
 +    /** @type {promise} */
-+               ~~~~~~~
-+!!! error TS2552: Cannot find name 'promise'. Did you mean 'Promise'?
 +    var p;
 +    
 +    /** @type {?number} */

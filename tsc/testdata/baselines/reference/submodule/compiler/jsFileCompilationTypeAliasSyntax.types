@@ -2,5 +2,5 @@
 
 === a.js ===
 type a = b;
->a : b
+>a : error
 

@@ -1,0 +1,8 @@
+--- old.jsFileCompilationTypeAliasSyntax.types
++++ new.jsFileCompilationTypeAliasSyntax.types
+@@= skipped -1, +1 lines =@@
+
+ === a.js ===
+ type a = b;
+->a : b
++>a : error
