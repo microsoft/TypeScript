@@ -6,27 +6,27 @@ import React = require("react");
 >React : typeof React
 
 function f<P>(App: React.ComponentClass<P> | React.StatelessComponent<P>): void {
->f : <P>(App: ComponentClass<P, any> | StatelessComponent<P>) => void
->App : ComponentClass<P, any> | StatelessComponent<P>
+>f : <P>(App: React.ComponentClass<P, any> | React.StatelessComponent<P>) => void
+>App : React.ComponentClass<P, any> | React.StatelessComponent<P>
 >React : any
 >React : any
 
     class C extends React.Component<P & { x: number }> {
->C : C<P>
->React.Component : Component<P & { x: number; }, {}, any>
+>C : C
+>React.Component : React.Component<P & { x: number; }, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 >x : number
 
         render() {
->render : () => Element
+>render : () => JSX.Element
 
             return <App {...this.props} />;
-><App {...this.props} /> : Element
->App : ComponentClass<P, any> | StatelessComponent<P>
->this.props : Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>
+><App {...this.props} /> : JSX.Element
+>App : React.ComponentClass<P, any> | React.StatelessComponent<P>
+>this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
 >this : this
->props : Readonly<{ children?: ReactNode; }> & Readonly<P & { x: number; }>
+>props : Readonly<{ children?: React.ReactNode; }> & Readonly<P & { x: number; }>
         }
     }
 }

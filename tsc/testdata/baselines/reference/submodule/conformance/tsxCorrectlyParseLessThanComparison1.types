@@ -24,13 +24,13 @@ declare namespace React {
 
 export class ShortDetails extends React.Component<{ id: number }, {}> {
 >ShortDetails : ShortDetails
->React.Component : Component<{ id: number; }, {}>
+>React.Component : React.Component<{ id: number; }, {}>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 >id : number
 
     public render(): JSX.Element {
->render : () => Element
+>render : () => JSX.Element
 >JSX : any
 
         if (this.props.id < 1) {

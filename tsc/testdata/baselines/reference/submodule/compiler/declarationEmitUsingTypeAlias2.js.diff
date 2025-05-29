@@ -9,10 +9,12 @@
 -exports.bar = void 0;
 -const some_dep_1 = require("some-dep");
 -exports.bar = (some_dep_1.goodDeclaration);
--
--
--//// [index.d.ts]
--import { shouldReuseLocalName } from "some-dep";
++import { goodDeclaration } from "some-dep";
++export const bar = goodDeclaration;
+
+
+ //// [index.d.ts]
+ import { shouldReuseLocalName } from "some-dep";
 -export declare const bar: () => () => {
 -    shouldPrintResult: "N";
 -    shouldPrintResult2: "N";
@@ -20,5 +22,4 @@
 -    shouldReuseLocalName: typeof shouldReuseLocalName;
 -    reuseDepName: typeof import("some-dep").reuseDepName;
 -};
-+import { goodDeclaration } from "some-dep";
-+export const bar = goodDeclaration;
++export declare const bar: any;

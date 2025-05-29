@@ -19,8 +19,8 @@ export module multiM {
     }
 }
 new multiM.d();
->new multiM.d() : d
->multiM.d : typeof d
+>new multiM.d() : multiM.d
+>multiM.d : typeof multiM.d
 >multiM : typeof multiM
->d : typeof d
+>d : typeof multiM.d
 

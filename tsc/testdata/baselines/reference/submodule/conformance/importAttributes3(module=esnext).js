@@ -18,3 +18,13 @@ export {};
 export {};
 //// [2.js]
 export {};
+
+
+//// [0.d.ts]
+export interface I {
+}
+//// [1.d.ts]
+export type {} from './0';
+export type { I } from './0';
+//// [2.d.ts]
+export {};

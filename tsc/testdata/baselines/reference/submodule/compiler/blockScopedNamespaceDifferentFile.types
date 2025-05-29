@@ -11,17 +11,17 @@ namespace C {
 >funcData : number
 >A.AA.func() : number
 >A.AA.func : () => number
->A.AA : typeof AA
+>A.AA : typeof A.AA
 >A : typeof A
->AA : typeof AA
+>AA : typeof A.AA
 >func : () => number
 
         static someConst = A.AA.foo;
 >someConst : string
 >A.AA.foo : ""
->A.AA : typeof AA
+>A.AA : typeof A.AA
 >A : typeof A
->AA : typeof AA
+>AA : typeof A.AA
 >foo : ""
 
         constructor(parameters) {}

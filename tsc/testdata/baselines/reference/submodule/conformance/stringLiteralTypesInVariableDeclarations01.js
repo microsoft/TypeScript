@@ -34,3 +34,14 @@ const h = "baz";
 e = "";
 f = "foo";
 g = "bar";
+
+
+//// [stringLiteralTypesInVariableDeclarations01.d.ts]
+declare let a: "";
+declare var b: "foo";
+declare let c: "bar";
+declare const d: "baz";
+declare let e: "";
+declare var f: "foo";
+declare let g: "bar";
+declare const h: "baz";

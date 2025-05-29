@@ -20,7 +20,7 @@ export { set, get };
 
 === t2.ts ===
 import * as set from "./t1";
->set : typeof import("t1")
+>set : typeof set
 
 === t3.ts ===
 import { set as yield } from "./t1";

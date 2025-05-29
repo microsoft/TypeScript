@@ -1,89 +1,52 @@
 --- old.localTypes3.types
 +++ new.localTypes3.types
-@@= skipped -49, +49 lines =@@
- >x : X
-
-         class C<Y> {
-->C : C<Y>
-+>C : C<X, Y>
-
-             public x = x;
- >x : X
-@@= skipped -13, +13 lines =@@
- >C : typeof C
-     }
-     let C = f(10);
-->C : typeof C
-->f(10) : typeof C
-+>C : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
-+>f(10) : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
- >f : <X>(x: X) => typeof C
+@@= skipped -68, +68 lines =@@
  >10 : 10
 
      let v = new C("hello");
 ->v : f<number>.C<string>
 ->new C("hello") : f<number>.C<string>
-->C : typeof C
-+>v : C<number, string>
-+>new C("hello") : C<number, string>
-+>C : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
++>v : f.C<string>
++>new C("hello") : f.C<string>
+ >C : typeof C
  >"hello" : "hello"
 
      let x = v.x;
  >x : number
  >v.x : number
 ->v : f<number>.C<string>
-+>v : C<number, string>
++>v : f.C<string>
  >x : number
 
      let y = v.y;
  >y : string
  >v.y : string
 ->v : f<number>.C<string>
-+>v : C<number, string>
++>v : f.C<string>
  >y : string
  }
 
-@@= skipped -33, +33 lines =@@
- >y : Y
-
-         class C {
-->C : C
-+>C : C<X, Y>
-
-             public x = x;
- >x : X
-@@= skipped -14, +14 lines =@@
- >C : typeof C
-     }
-     let C = f(10, "hello");
-->C : typeof C
-->f(10, "hello") : typeof C
-+>C : { new (): C<number, string>; prototype: C<any, any>; }
-+>f(10, "hello") : { new (): C<number, string>; prototype: C<any, any>; }
- >f : <X, Y>(x: X, y: Y) => typeof C
- >10 : 10
+@@= skipped -48, +48 lines =@@
  >"hello" : "hello"
 
      let v = new C();
 ->v : f<number, string>.C
 ->new C() : f<number, string>.C
-->C : typeof C
-+>v : C<number, string>
-+>new C() : C<number, string>
-+>C : { new (): C<number, string>; prototype: C<any, any>; }
++>v : f.C
++>new C() : f.C
+ >C : typeof C
 
      let x = v.x;
  >x : number
  >v.x : number
 ->v : f<number, string>.C
-+>v : C<number, string>
++>v : f.C
  >x : number
 
      let y = v.y;
  >y : string
  >v.y : string
 ->v : f<number, string>.C
-+>v : C<number, string>
++>v : f.C
  >y : string
  }

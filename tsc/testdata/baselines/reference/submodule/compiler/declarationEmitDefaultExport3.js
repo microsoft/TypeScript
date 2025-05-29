@@ -9,3 +9,7 @@ export default function foo() {
 export default function foo() {
     return "";
 }
+
+
+//// [declarationEmitDefaultExport3.d.ts]
+export default function foo(): string;

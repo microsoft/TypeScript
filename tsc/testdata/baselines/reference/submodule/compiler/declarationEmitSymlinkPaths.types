@@ -23,14 +23,14 @@ import { test } from "search/lib/index";
 >test : <T>(a: () => T) => () => T
 
 import { getNotification } from "../API/NotificationAPIUtils";
->getNotification : () => NotificationResponse
+>getNotification : () => import("../API/NotificationAPIUtils").NotificationResponse
 
 export const NotificationScenario = test(
->NotificationScenario : () => NotificationResponse
->test(  getNotification) : () => NotificationResponse
+>NotificationScenario : () => import("../API/NotificationAPIUtils").NotificationResponse
+>test(  getNotification) : () => import("../API/NotificationAPIUtils").NotificationResponse
 >test : <T>(a: () => T) => () => T
 
   getNotification
->getNotification : () => NotificationResponse
+>getNotification : () => import("../API/NotificationAPIUtils").NotificationResponse
 
 );

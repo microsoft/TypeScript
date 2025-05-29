@@ -12,7 +12,7 @@ let point = [3, 4] as const;
 >4 : 4
 
 function distanceFromOrigin([x, y]: [number, number]) {
->distanceFromOrigin : (__0: [number, number]) => number
+>distanceFromOrigin : ([x, y]: [number, number]) => number
 >x : number
 >y : number
 
@@ -32,7 +32,7 @@ function distanceFromOrigin([x, y]: [number, number]) {
 
 distanceFromOrigin(point);
 >distanceFromOrigin(point) : number
->distanceFromOrigin : (__0: [number, number]) => number
+>distanceFromOrigin : ([x, y]: [number, number]) => number
 >point : readonly [3, 4]
 
 declare function arryFn(x: number[]): void;

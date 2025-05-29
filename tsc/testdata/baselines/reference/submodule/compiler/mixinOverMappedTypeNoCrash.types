@@ -25,7 +25,7 @@ function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
 >OriginalClass : T
 
     class AnotherOriginalClass extends OriginalClass {
->AnotherOriginalClass : AnotherOriginalClass<T>
+>AnotherOriginalClass : AnotherOriginalClass
 >OriginalClass : {}
 
         constructor(...args: any[]) {
@@ -39,5 +39,5 @@ function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
         }
     }
     return AnotherOriginalClass
->AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass<T>; prototype: AnotherOriginalClass<any>; } & T
+>AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: cloneClass.AnotherOriginalClass; } & T
 }

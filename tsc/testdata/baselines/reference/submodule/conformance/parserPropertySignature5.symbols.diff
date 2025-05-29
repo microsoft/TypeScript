@@ -5,5 +5,5 @@
 
    "E";
 ->"E" : Symbol(I["E"], Decl(parserPropertySignature5.ts, 0, 13))
-+>"E" : Symbol(E, Decl(parserPropertySignature5.ts, 0, 13))
++>"E" : Symbol("E", Decl(parserPropertySignature5.ts, 0, 13))
  }

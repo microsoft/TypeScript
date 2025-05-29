@@ -27,12 +27,12 @@ export const o = (p1: SpecialString, p2: PrivateSpecialString, p3: N.SpecialStri
 
 === b.ts ===
 import * as a from "./a";
->a : typeof import("a")
+>a : typeof a
 
 export const g = a.o
 >g : (p1: string, p2: string, p3: string) => { foo: string; bar: string; baz: string; }
 >a.o : (p1: string, p2: string, p3: string) => { foo: string; bar: string; baz: string; }
->a : typeof import("a")
+>a : typeof a
 >o : (p1: string, p2: string, p3: string) => { foo: string; bar: string; baz: string; }
 
 === c.ts ===

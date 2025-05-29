@@ -14,16 +14,6 @@
 -    })(Foo || (Foo = {}));
 -    return Foo;
 -});
--
--
--//// [privacyCheckExportAssignmentOnExportedGenericInterface2.d.ts]
--export = Foo;
--interface Foo<T> {
--}
--declare function Foo<T>(array: T[]): Foo<T>;
--declare namespace Foo {
--    var x: string;
--}
 +"use strict";
 +function Foo(array) {
 +    return undefined;
@@ -32,3 +22,6 @@
 +    Foo.x = "hello";
 +})(Foo || (Foo = {}));
 +module.exports = Foo;
+
+
+ //// [privacyCheckExportAssignmentOnExportedGenericInterface2.d.ts]

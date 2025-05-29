@@ -16,3 +16,15 @@ const obj = {
 const obj = {
     [Symbol.observer]: 0
 };
+
+
+//// [symbolObserverMismatchingPolyfillsWorkTogether.d.ts]
+interface SymbolConstructor {
+    readonly observer: symbol;
+}
+interface SymbolConstructor {
+    readonly observer: unique symbol;
+}
+declare const obj: {
+    [x: symbol]: number;
+};

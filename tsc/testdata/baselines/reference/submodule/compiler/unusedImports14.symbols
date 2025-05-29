@@ -24,7 +24,7 @@ declare namespace React {
 >spec : Symbol(spec, Decl(index.d.ts, 4, 31))
 }
 declare global {
->global : Symbol((Missing), Decl(index.d.ts, 5, 1))
+>global : Symbol(global, Decl(index.d.ts, 5, 1))
 
     namespace JSX {
 >JSX : Symbol(JSX, Decl(index.d.ts, 6, 16))

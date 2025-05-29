@@ -1,41 +1,6 @@
 --- old.esNextWeakRefs_IterableWeakMap.types
 +++ new.esNextWeakRefs_IterableWeakMap.types
-@@= skipped -2, +2 lines =@@
- === esNextWeakRefs_IterableWeakMap.ts ===
- /** `static #cleanup` */
- const IterableWeakMap_cleanup = ({ ref, set }: {
-->IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
-->({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
-+>IterableWeakMap_cleanup : (__0: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
-+>({ ref, set }: {    readonly ref: WeakRef<object>;    readonly set: Set<WeakRef<object>>;}) => {    set.delete(ref);} : (__0: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
- >ref : WeakRef<object>
- >set : Set<WeakRef<object>>
-
-@@= skipped -47, +47 lines =@@
- >#finalizationGroup : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
- >new FinalizationRegistry(IterableWeakMap_cleanup) : FinalizationRegistry<{ readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }>
- >FinalizationRegistry : FinalizationRegistryConstructor
-->IterableWeakMap_cleanup : ({ ref, set }: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
-+>IterableWeakMap_cleanup : (__0: { readonly ref: WeakRef<object>; readonly set: Set<WeakRef<object>>; }) => void
-
-     constructor(iterable: Iterable<[key: K, value: V]> | null = null) {
-->iterable : Iterable<[key: K, value: V]> | null
-+>iterable : Iterable<[key: K, value: V], any, any> | null
-
-         if (iterable !== null) {
- >iterable !== null : boolean
-->iterable : Iterable<[key: K, value: V]> | null
-+>iterable : Iterable<[key: K, value: V], any, any> | null
-
-             for (const { 0: key, 1: value } of iterable) {
- >key : K
- >value : V
-->iterable : Iterable<[key: K, value: V]>
-+>iterable : Iterable<[key: K, value: V], any, any>
-
-                 this.set(key, value);
- >this.set(key, value) : this
-@@= skipped -79, +79 lines =@@
+@@= skipped -128, +128 lines =@@
 
              this.#finalizationGroup.register(key, {
  >this.#finalizationGroup.register(key, {                set: this.#refSet,                ref,            }, ref) : void

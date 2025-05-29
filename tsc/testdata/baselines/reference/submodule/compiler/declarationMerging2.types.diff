@@ -1,0 +1,11 @@
+--- old.declarationMerging2.types
++++ new.declarationMerging2.types
+@@= skipped -16, +16 lines =@@
+ === b.ts ===
+ export {}
+ declare module "./a" {
+->"./a" : typeof import("a")
++>"./a" : typeof import("./a")
+
+     interface A {
+         run();

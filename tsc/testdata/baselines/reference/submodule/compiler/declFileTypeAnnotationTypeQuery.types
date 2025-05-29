@@ -35,23 +35,23 @@ function foo2() {
 
 // Qualified name
 function foo3(): typeof m.c {
->foo3 : () => typeof c
->m.c : typeof c
+>foo3 : () => typeof m.c
+>m.c : typeof m.c
 >m : typeof m
->c : typeof c
+>c : typeof m.c
 
     return m.c;
->m.c : typeof c
+>m.c : typeof m.c
 >m : typeof m
->c : typeof c
+>c : typeof m.c
 }
 function foo4() {
->foo4 : () => typeof c
+>foo4 : () => typeof m.c
 
     return m.c;
->m.c : typeof c
+>m.c : typeof m.c
 >m : typeof m
->c : typeof c
+>c : typeof m.c
 }
 
 // Just the name with type arguments
@@ -71,21 +71,21 @@ function foo6() {
 
 // Qualified name with type arguments
 function foo7(): typeof m.g {
->foo7 : () => typeof g
->m.g : typeof g
+>foo7 : () => typeof m.g
+>m.g : typeof m.g
 >m : typeof m
->g : typeof g
+>g : typeof m.g
 
     return m.g
->m.g : typeof g
+>m.g : typeof m.g
 >m : typeof m
->g : typeof g
+>g : typeof m.g
 }
 function foo8() {
->foo8 : () => typeof g
+>foo8 : () => typeof m.g
 
     return m.g
->m.g : typeof g
+>m.g : typeof m.g
 >m : typeof m
->g : typeof g
+>g : typeof m.g
 }

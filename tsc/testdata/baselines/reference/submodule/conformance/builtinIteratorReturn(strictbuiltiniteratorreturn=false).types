@@ -113,20 +113,20 @@ for (const x of set);
 >set : Set<number>
 
 declare const i12: IterableIterator<number, undefined>;
->i12 : IterableIterator<number, undefined, any>
+>i12 : IterableIterator<number, undefined>
 
 declare const i13: IterableIterator<number, any>;
->i13 : IterableIterator<number, any, any>
+>i13 : IterableIterator<number>
 
 declare const i14: IterableIterator<number, boolean>;
->i14 : IterableIterator<number, boolean, any>
+>i14 : IterableIterator<number, boolean>
 
 declare const i15: Iterable<number, undefined>;
->i15 : Iterable<number, undefined, any>
+>i15 : Iterable<number, undefined>
 
 declare const i16: Iterable<number, any>;
->i16 : Iterable<number, any, any>
+>i16 : Iterable<number>
 
 declare const i17: Iterable<number, boolean>;
->i17 : Iterable<number, boolean, any>
+>i17 : Iterable<number, boolean>
 

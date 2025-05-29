@@ -12,12 +12,8 @@
 
  === /node_modules/a/index.d.ts ===
  import Foo from "foo/Foo";
-@@= skipped -14, +14 lines =@@
-
- === /node_modules/a/node_modules/foo/Foo.d.ts ===
- export default class Foo {
-->Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
-+>Foo : Symbol(default, Decl(Foo.d.ts, 0, 0))
+@@= skipped -17, +17 lines =@@
+ >Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
 
      protected source: boolean;
 ->source : Symbol(Foo.source, Decl(Foo.d.ts, 0, 26))
@@ -25,9 +21,8 @@
  }
 
  === /node_modules/foo/Foo.d.ts ===
- export default class Foo {
-->Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
-+>Foo : Symbol(default, Decl(Foo.d.ts, 0, 0))
+@@= skipped -8, +8 lines =@@
+ >Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
 
      protected source: boolean;
 ->source : Symbol(Foo.source, Decl(Foo.d.ts, 0, 26))

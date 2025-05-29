@@ -89,8 +89,8 @@ class C<T> {
 }
 
 var aa = {
->aa : { id: number; biz: () => never; }
->{    id:12,    biz() {        throw this;    }} : { id: number; biz: () => never; }
+>aa : { id: number; biz(): never; }
+>{    id:12,    biz() {        throw this;    }} : { id: number; biz(): never; }
 
     id:12,
 >id : number

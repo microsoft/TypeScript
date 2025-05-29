@@ -25,7 +25,7 @@ export async function f() {
         with: { a: "a", "b": "b" },
 >with : Symbol(with, Decl(b.ts, 3, 29))
 >a : Symbol(a, Decl(b.ts, 4, 15))
->"b" : Symbol(b, Decl(b.ts, 4, 23))
+>"b" : Symbol("b", Decl(b.ts, 4, 23))
 
     });
     a;

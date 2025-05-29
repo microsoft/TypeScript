@@ -41,7 +41,7 @@ module M {
 >t : any
     }
     export module inst { // one error
->inst : typeof inst
+>inst : typeof M.inst
 
         var t;
 >t : any
@@ -86,7 +86,7 @@ module M {
 
     module C { }
     export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
->C : typeof C
+>C : typeof M.C
 
         var t;
 >t : any

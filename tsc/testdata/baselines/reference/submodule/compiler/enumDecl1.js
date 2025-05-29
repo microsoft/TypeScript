@@ -11,3 +11,13 @@ declare module mAmbient {
 
 
 //// [enumDecl1.js]
+
+
+//// [enumDecl1.d.ts]
+declare namespace mAmbient {
+    enum e {
+        x,
+        y,
+        z
+    }
+}

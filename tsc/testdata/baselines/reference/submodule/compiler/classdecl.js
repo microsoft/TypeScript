@@ -155,3 +155,64 @@ class e {
         return ns.toString();
     }
 }
+
+
+//// [classdecl.d.ts]
+declare class a {
+    //constructor ();
+    constructor(n: number);
+    constructor(s: string);
+    pgF(): void;
+    pv: any;
+    get d(): number;
+    set d(a: number);
+    static get p2(): {
+        x: number;
+        y: number;
+    };
+    private static d2;
+    private static get p3();
+    private pv3;
+    private foo;
+}
+declare class b extends a {
+}
+declare namespace m1 {
+    class b {
+    }
+    interface ib {
+    }
+}
+declare namespace m2 {
+    namespace m3 {
+        class c extends b {
+        }
+        class ib2 implements m1.ib {
+        }
+    }
+}
+declare class c extends m1.b {
+}
+declare class ib2 implements m1.ib {
+}
+declare class aAmbient {
+    constructor(n: number);
+    constructor(s: string);
+    pgF(): void;
+    pv: any;
+    d: number;
+    static p2: {
+        x: number;
+        y: number;
+    };
+    static d2(): any;
+    static p3: any;
+    private pv3;
+    private foo;
+}
+declare class d {
+    private foo;
+}
+declare class e {
+    private foo;
+}

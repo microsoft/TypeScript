@@ -21,7 +21,7 @@ import c, { default as d } from "./mod.cjs";
 >d : () => void
 
 import * as self from "./b.mjs";
->self : typeof import("b")
+>self : typeof self
 
 export { default } from "./mod.cjs";
 >default : () => void
@@ -49,16 +49,16 @@ d === self.default;
 >d === self.default : boolean
 >d : () => void
 >self.default : () => void
->self : typeof import("b")
+>self : typeof self
 >default : () => void
 
 self.default === self.def;
 >self.default === self.def : boolean
 >self.default : () => void
->self : typeof import("b")
+>self : typeof self
 >default : () => void
 >self.def : () => void
->self : typeof import("b")
+>self : typeof self
 >def : () => void
 
 // should all fail
@@ -81,13 +81,13 @@ d();
 self.default();
 >self.default() : void
 >self.default : () => void
->self : typeof import("b")
+>self : typeof self
 >default : () => void
 
 self.def();
 >self.def() : void
 >self.def : () => void
->self : typeof import("b")
+>self : typeof self
 >def : () => void
 
 // should all work
@@ -119,7 +119,7 @@ self.default.default();
 >self.default.default() : any
 >self.default.default : any
 >self.default : () => void
->self : typeof import("b")
+>self : typeof self
 >default : () => void
 >default : any
 
@@ -127,7 +127,7 @@ self.def.default();
 >self.def.default() : any
 >self.def.default : any
 >self.def : () => void
->self : typeof import("b")
+>self : typeof self
 >def : () => void
 >default : any
 

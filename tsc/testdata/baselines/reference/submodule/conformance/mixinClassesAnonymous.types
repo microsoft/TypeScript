@@ -31,10 +31,10 @@ class Derived extends Base {
 }
 
 const Printable = <T extends Constructor<Base>>(superClass: T) => class extends superClass {
->Printable : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
-><T extends Constructor<Base>>(superClass: T) => class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
+>Printable : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class); message: string; prototype: Printable.(Anonymous class); } & T
+><T extends Constructor<Base>>(superClass: T) => class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class); message: string; prototype: Printable.(Anonymous class); } & T
 >superClass : T
->class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
+>class extends superClass {    static message = "hello";    print() {        const output = this.x + "," + this.y;    }} : { new (...args: any[]): (Anonymous class); message: string; prototype: Printable.(Anonymous class); } & T
 >superClass : Base
 
     static message = "hello";
@@ -59,11 +59,11 @@ const Printable = <T extends Constructor<Base>>(superClass: T) => class extends 
 }
 
 function Tagged<T extends Constructor<{}>>(superClass: T) {
->Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C<T>; prototype: C<any>; } & T
+>Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C; prototype: Tagged.C; } & T
 >superClass : T
 
     class C extends superClass {
->C : C<T>
+>C : C
 >superClass : {}
 
         _tag: string;
@@ -87,47 +87,47 @@ function Tagged<T extends Constructor<{}>>(superClass: T) {
         }
     }
     return C;
->C : { new (...args: any[]): C<T>; prototype: C<any>; } & T
+>C : { new (...args: any[]): C; prototype: Tagged.C; } & T
 }
 
 const Thing1 = Tagged(Derived);
->Thing1 : { new (...args: any[]): C<typeof Derived>; prototype: C<any>; } & typeof Derived
->Tagged(Derived) : { new (...args: any[]): C<typeof Derived>; prototype: C<any>; } & typeof Derived
->Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C<T>; prototype: C<any>; } & T
+>Thing1 : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & typeof Derived
+>Tagged(Derived) : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & typeof Derived
+>Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C; prototype: Tagged.C; } & T
 >Derived : typeof Derived
 
 const Thing2 = Tagged(Printable(Derived));
->Thing2 : { new (...args: any[]): C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived>; prototype: C<any>; } & { new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived
->Tagged(Printable(Derived)) : { new (...args: any[]): C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived>; prototype: C<any>; } & { new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived
->Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C<T>; prototype: C<any>; } & T
->Printable(Derived) : { new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived
->Printable : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
+>Thing2 : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & { new (...args: any[]): Printable.(Anonymous class); message: string; prototype: Printable.(Anonymous class); } & typeof Derived
+>Tagged(Printable(Derived)) : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & { new (...args: any[]): Printable.(Anonymous class); message: string; prototype: Printable.(Anonymous class); } & typeof Derived
+>Tagged : <T extends Constructor<{}>>(superClass: T) => { new (...args: any[]): C; prototype: Tagged.C; } & T
+>Printable(Derived) : { new (...args: any[]): Printable.(Anonymous class); message: string; prototype: Printable.(Anonymous class); } & typeof Derived
+>Printable : <T extends Constructor<Base>>(superClass: T) => { new (...args: any[]): (Anonymous class); message: string; prototype: Printable.(Anonymous class); } & T
 >Derived : typeof Derived
 
 Thing2.message;
 >Thing2.message : string
->Thing2 : { new (...args: any[]): C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived>; prototype: C<any>; } & { new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived
+>Thing2 : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & { new (...args: any[]): Printable.(Anonymous class); message: string; prototype: Printable.(Anonymous class); } & typeof Derived
 >message : string
 
 function f1() {
 >f1 : () => void
 
     const thing = new Thing1(1, 2, 3);
->thing : C<typeof Derived> & Derived
->new Thing1(1, 2, 3) : C<typeof Derived> & Derived
->Thing1 : { new (...args: any[]): C<typeof Derived>; prototype: C<any>; } & typeof Derived
+>thing : Tagged.C & Derived
+>new Thing1(1, 2, 3) : Tagged.C & Derived
+>Thing1 : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & typeof Derived
 >1 : 1
 >2 : 2
 >3 : 3
 
     thing.x;
 >thing.x : number
->thing : C<typeof Derived> & Derived
+>thing : Tagged.C & Derived
 >x : number
 
     thing._tag;
 >thing._tag : string
->thing : C<typeof Derived> & Derived
+>thing : Tagged.C & Derived
 >_tag : string
 }
 
@@ -135,40 +135,40 @@ function f2() {
 >f2 : () => void
 
     const thing = new Thing2(1, 2, 3);
->thing : C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived> & (Anonymous class)<typeof Derived> & Derived
->new Thing2(1, 2, 3) : C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived> & (Anonymous class)<typeof Derived> & Derived
->Thing2 : { new (...args: any[]): C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived>; prototype: C<any>; } & { new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived
+>thing : Tagged.C & Printable.(Anonymous class) & Derived
+>new Thing2(1, 2, 3) : Tagged.C & Printable.(Anonymous class) & Derived
+>Thing2 : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & { new (...args: any[]): Printable.(Anonymous class); message: string; prototype: Printable.(Anonymous class); } & typeof Derived
 >1 : 1
 >2 : 2
 >3 : 3
 
     thing.x;
 >thing.x : number
->thing : C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived> & (Anonymous class)<typeof Derived> & Derived
+>thing : Tagged.C & Printable.(Anonymous class) & Derived
 >x : number
 
     thing._tag;
 >thing._tag : string
->thing : C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived> & (Anonymous class)<typeof Derived> & Derived
+>thing : Tagged.C & Printable.(Anonymous class) & Derived
 >_tag : string
 
     thing.print();
 >thing.print() : void
 >thing.print : () => void
->thing : C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived> & (Anonymous class)<typeof Derived> & Derived
+>thing : Tagged.C & Printable.(Anonymous class) & Derived
 >print : () => void
 }
 
 class Thing3 extends Thing2 {
 >Thing3 : Thing3
->Thing2 : C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived> & (Anonymous class)<typeof Derived> & Derived
+>Thing2 : Tagged.C & Printable.(Anonymous class) & Derived
 
     constructor(tag: string) {
 >tag : string
 
         super(10, 20, 30);
 >super(10, 20, 30) : void
->super : { new (...args: any[]): C<{ new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived>; prototype: C<any>; } & { new (...args: any[]): (Anonymous class)<typeof Derived>; message: string; prototype: (Anonymous class)<any>; } & typeof Derived
+>super : { new (...args: any[]): Tagged.C; prototype: Tagged.C; } & { new (...args: any[]): Printable.(Anonymous class); message: string; prototype: Printable.(Anonymous class); } & typeof Derived
 >10 : 10
 >20 : 20
 >30 : 30
@@ -194,12 +194,12 @@ class Thing3 extends Thing2 {
 // Repro from #13805
 
 const Timestamped = <CT extends Constructor<object>>(Base: CT) => {
->Timestamped : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class)<CT>; prototype: (Anonymous class)<any>; } & CT
-><CT extends Constructor<object>>(Base: CT) => {    return class extends Base {        timestamp = new Date();    };} : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class)<CT>; prototype: (Anonymous class)<any>; } & CT
+>Timestamped : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class); prototype: Timestamped.(Anonymous class); } & CT
+><CT extends Constructor<object>>(Base: CT) => {    return class extends Base {        timestamp = new Date();    };} : <CT extends Constructor<object>>(Base: CT) => { new (...args: any[]): (Anonymous class); prototype: Timestamped.(Anonymous class); } & CT
 >Base : CT
 
     return class extends Base {
->class extends Base {        timestamp = new Date();    } : { new (...args: any[]): (Anonymous class)<CT>; prototype: (Anonymous class)<any>; } & CT
+>class extends Base {        timestamp = new Date();    } : { new (...args: any[]): (Anonymous class); prototype: Timestamped.(Anonymous class); } & CT
 >Base : object
 
         timestamp = new Date();

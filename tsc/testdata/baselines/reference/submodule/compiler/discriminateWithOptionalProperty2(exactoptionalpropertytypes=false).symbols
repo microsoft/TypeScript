@@ -195,7 +195,7 @@ const iterable = {
 >asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 
     return this;
->this : Symbol((Anonymous type), Decl(discriminateWithOptionalProperty2.ts, 55, 16))
+>this : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 16))
 
   },
   next() {

@@ -11,3 +11,13 @@ var anotherVar: new <T>() => number;
 
 //// [constructorTypeWithTypeParameters.js]
 var anotherVar;
+
+
+//// [constructorTypeWithTypeParameters.d.ts]
+declare var X: {
+    new <T>();
+};
+declare var Y: {
+    new ();
+};
+declare var anotherVar: new <T>() => number;

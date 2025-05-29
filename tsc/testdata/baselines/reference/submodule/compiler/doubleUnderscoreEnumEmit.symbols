@@ -5,7 +5,7 @@ enum Foo {
 >Foo : Symbol(Foo, Decl(doubleUnderscoreEnumEmit.ts, 0, 0), Decl(doubleUnderscoreEnumEmit.ts, 5, 1))
 
     "__a" = 1,
->"__a" : Symbol(__a, Decl(doubleUnderscoreEnumEmit.ts, 0, 10))
+>"__a" : Symbol("__a", Decl(doubleUnderscoreEnumEmit.ts, 0, 10))
 
     "(Anonymous function)" = 2,
 >"(Anonymous function)" : Symbol("(Anonymous function)", Decl(doubleUnderscoreEnumEmit.ts, 1, 14))
@@ -14,7 +14,7 @@ enum Foo {
 >"(Anonymous class)" : Symbol("(Anonymous class)", Decl(doubleUnderscoreEnumEmit.ts, 2, 31))
 
     "__call" = 10
->"__call" : Symbol(__call, Decl(doubleUnderscoreEnumEmit.ts, 3, 28))
+>"__call" : Symbol("__call", Decl(doubleUnderscoreEnumEmit.ts, 3, 28))
 }
 namespace Foo {
 >Foo : Symbol(Foo, Decl(doubleUnderscoreEnumEmit.ts, 0, 0), Decl(doubleUnderscoreEnumEmit.ts, 5, 1))

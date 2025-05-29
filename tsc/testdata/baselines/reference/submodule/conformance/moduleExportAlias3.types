@@ -8,7 +8,7 @@ class C {
 module.exports = {
 >module.exports = {    C} : { C: typeof C; }
 >module.exports : { C: typeof C; }
->module : { export=: { C: typeof C; }; }
+>module : { "export=": { C: typeof C; }; }
 >exports : { C: typeof C; }
 >{    C} : { C: typeof C; }
 

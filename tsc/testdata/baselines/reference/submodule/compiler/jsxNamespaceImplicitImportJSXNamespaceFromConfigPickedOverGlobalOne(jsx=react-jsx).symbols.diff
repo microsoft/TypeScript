@@ -1,15 +1,6 @@
 --- old.jsxNamespaceImplicitImportJSXNamespaceFromConfigPickedOverGlobalOne(jsx=react-jsx).symbols
 +++ new.jsxNamespaceImplicitImportJSXNamespaceFromConfigPickedOverGlobalOne(jsx=react-jsx).symbols
-@@= skipped -10, +10 lines =@@
- >React : Symbol(React, Decl(index.d.ts, 1, 26))
-
- declare global {
-->global : Symbol(global, Decl(index.d.ts, 3, 26))
-+>global : Symbol((Missing), Decl(index.d.ts, 3, 26))
-
-   namespace JSX {
- >JSX : Symbol(JSX, Decl(index.d.ts, 5, 16))
-@@= skipped -33, +33 lines =@@
+@@= skipped -43, +43 lines =@@
  >IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 13, 44))
 
        div: {}

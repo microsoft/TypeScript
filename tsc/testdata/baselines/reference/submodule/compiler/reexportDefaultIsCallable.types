@@ -2,17 +2,17 @@
 
 === schema.d.ts ===
 export default class Schema {}
->Schema : default
+>Schema : Schema
 
 === reexporter.d.ts ===
 export { default } from "./schema";
->default : typeof default
+>default : typeof import("./schema.js").default
 
 === usage.ts ===
 import Base from "./reexporter";
->Base : typeof default
+>Base : typeof Base
 
 export default class Mine extends Base {}
->Mine : default
->Base : default
+>Mine : Mine
+>Base : Base
 

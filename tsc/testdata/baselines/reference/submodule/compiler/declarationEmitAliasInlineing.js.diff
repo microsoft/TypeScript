@@ -24,36 +24,31 @@
 +const aExp_1 = require("./aExp");
  exports.f = a_1.fn;
  exports.fExp = aExp_1.fnExp;
--
--
--//// [a.d.ts]
--type O = {
--    prop: string;
--    prop2: string;
--};
+
+@@= skipped -23, +23 lines =@@
+     prop: string;
+     prop2: string;
+ };
 -type I = {
 -    prop: string;
 -};
 -export declare const fn: (v: O["prop"], p: Omit<O, "prop">, key: keyof O, p2: Omit<O, keyof I>) => void;
--export {};
--//// [aExp.d.ts]
--export type O = {
--    prop: string;
--    prop2: string;
--};
--export type I = {
--    prop: string;
--};
++export declare const fn: (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void;
+ export {};
+ //// [aExp.d.ts]
+ export type O = {
+@@= skipped -13, +10 lines =@@
+ export type I = {
+     prop: string;
+ };
 -export declare const fnExp: (v: O["prop"], p: Omit<O, "prop">, key: keyof O, p2: Omit<O, keyof I>) => void;
--//// [b.d.ts]
--export declare const f: (v: string, p: Omit<{
--    prop: string;
--    prop2: string;
--}, "prop">, key: keyof {
--    prop: string;
--    prop2: string;
--}, p2: Omit<{
--    prop: string;
--    prop2: string;
--}, "prop">) => void;
++export declare const fnExp: (v: string, p: Omit<O, "prop">, key: keyof O, p2: Omit<O, "prop">) => void;
+ //// [b.d.ts]
+ export declare const f: (v: string, p: Omit<{
+     prop: string;
+@@= skipped -12, +12 lines =@@
+     prop: string;
+     prop2: string;
+ }, "prop">) => void;
 -export declare const fExp: (v: import("./aExp").O["prop"], p: Omit<import("./aExp").O, "prop">, key: keyof import("./aExp").O, p2: Omit<import("./aExp").O, keyof import("./aExp").I>) => void;
++export declare const fExp: (v: string, p: Omit<import("./aExp").O, "prop">, key: keyof import("./aExp").O, p2: Omit<import("./aExp").O, "prop">) => void;

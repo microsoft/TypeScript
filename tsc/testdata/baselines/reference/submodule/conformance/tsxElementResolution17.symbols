@@ -26,7 +26,7 @@ declare module JSX {
 }
 
 declare module 'elements1' {
->'elements1' : Symbol('elements1', Decl(file.tsx, 3, 1))
+>'elements1' : Symbol("elements1", Decl(file.tsx, 3, 1))
 
 	class MyElement {
 >MyElement : Symbol(MyElement, Decl(file.tsx, 5, 28))
@@ -35,7 +35,7 @@ declare module 'elements1' {
 }
 
 declare module 'elements2' {
->'elements2' : Symbol('elements2', Decl(file.tsx, 9, 1))
+>'elements2' : Symbol("elements2", Decl(file.tsx, 9, 1))
 
 	class MyElement {
 >MyElement : Symbol(MyElement, Decl(file.tsx, 11, 28))

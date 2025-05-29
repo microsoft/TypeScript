@@ -18,7 +18,7 @@ module A {
 >B : typeof B
 
         var Point: C.Point = { x: 0, y: 0 }; // bug 832088: could not find module 'C'
->Point : Point
+>Point : C.Point
 >C : any
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -48,10 +48,10 @@ module M2 {
 }
 
 var m = M2.X;
->m : typeof X
->M2.X : typeof X
+>m : typeof M2.X
+>M2.X : typeof M2.X
 >M2 : typeof M2
->X : typeof X
+>X : typeof M2.X
 
 var point: number;
 >point : number
@@ -59,7 +59,7 @@ var point: number;
 var point = m.Point;
 >point : number
 >m.Point : number
->m : typeof X
+>m : typeof M2.X
 >Point : number
 
 var p: { x: number; y: number; }

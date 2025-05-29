@@ -50,7 +50,8 @@
 -}); }); };
 +const a = async () => (await Promise.resolve().then(() => require("inner"))).x();
  exports.a = a;
--
--
--//// [index.d.ts]
+
+
+ //// [index.d.ts]
 -export declare const a: () => Promise<import("inner/private").Thing>;
++export declare const a: any;

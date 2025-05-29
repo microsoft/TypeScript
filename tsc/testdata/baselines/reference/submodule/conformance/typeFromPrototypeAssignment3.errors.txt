@@ -1,5 +1,5 @@
 bug26885.js(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-bug26885.js(11,21): error TS2339: Property '_map' does not exist on type '{ get: (key: string) => number; }'.
+bug26885.js(11,21): error TS2339: Property '_map' does not exist on type '{ get(key: string): number; }'.
 bug26885.js(15,12): error TS2749: 'Multimap3' refers to a value, but is being used as a type here. Did you mean 'typeof Multimap3'?
 bug26885.js(16,13): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
@@ -19,7 +19,7 @@ bug26885.js(16,13): error TS7009: 'new' expression, whose target lacks a constru
         get(key) {
             return this._map[key + ''];
                         ~~~~
-!!! error TS2339: Property '_map' does not exist on type '{ get: (key: string) => number; }'.
+!!! error TS2339: Property '_map' does not exist on type '{ get(key: string): number; }'.
         }
     }
     

@@ -209,7 +209,7 @@ Object.defineProperty(exports, "rwAccessors", { get() { return 98122 }, set(_) {
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : any
 >"rwAccessors" : "rwAccessors"
->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
 >get : () => number
 >98122 : 98122
 >set : (_: any) => void
@@ -222,7 +222,7 @@ Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : any
 >"readonlyAccessor" : "readonlyAccessor"
->{ get() { return 21.75 } } : { get: () => number; }
+>{ get() { return 21.75 } } : { get(): number; }
 >get : () => number
 >21.75 : 21.75
 
@@ -233,7 +233,7 @@ Object.defineProperty(exports, "setonlyAccessor", {
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >exports : any
 >"setonlyAccessor" : "setonlyAccessor"
->{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set: (str: string) => void; }
+>{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
 
     /** @param {string} str */
     set(str) {
@@ -291,7 +291,7 @@ Object.defineProperty(module.exports, "rwAccessors", { get() { return 98122 }, s
 >module : any
 >exports : any
 >"rwAccessors" : "rwAccessors"
->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
 >get : () => number
 >98122 : 98122
 >set : (_: any) => void
@@ -306,7 +306,7 @@ Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75
 >module : any
 >exports : any
 >"readonlyAccessor" : "readonlyAccessor"
->{ get() { return 21.75 } } : { get: () => number; }
+>{ get() { return 21.75 } } : { get(): number; }
 >get : () => number
 >21.75 : 21.75
 
@@ -319,7 +319,7 @@ Object.defineProperty(module.exports, "setonlyAccessor", {
 >module : any
 >exports : any
 >"setonlyAccessor" : "setonlyAccessor"
->{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set: (str: string) => void; }
+>{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
 
     /** @param {string} str */
     set(str) {

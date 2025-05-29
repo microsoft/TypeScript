@@ -9,7 +9,7 @@ declare function foo(...args: any[]): any;
 >foo : Symbol(foo, Decl(es6modulekindWithES5Target3.ts, 0, 0))
 
 export default class D {
->D : Symbol(default, Decl(es6modulekindWithES5Target3.ts, 0, 42))
+>D : Symbol(D, Decl(es6modulekindWithES5Target3.ts, 0, 42))
 
     static s = 0;
 >s : Symbol(s, Decl(es6modulekindWithES5Target3.ts, 2, 24))

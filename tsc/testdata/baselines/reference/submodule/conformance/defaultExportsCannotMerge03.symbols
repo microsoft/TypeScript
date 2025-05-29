@@ -2,7 +2,7 @@
 
 === m1.ts ===
 export default class Decl {
->Decl : Symbol(default, Decl(m1.ts, 0, 0))
+>Decl : Symbol(Decl, Decl(m1.ts, 0, 0))
 }
 
 interface Decl {

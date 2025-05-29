@@ -5,10 +5,10 @@
 ///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
 // Privacy errors - importing private elements
 import im_private_mi_private = require("m");
->im_private_mi_private : typeof import("m")
+>im_private_mi_private : typeof im_private_mi_private
 
 import im_private_mu_private = require("m2");
->im_private_mu_private : typeof import("m2")
+>im_private_mu_private : typeof im_private_mu_private
 
 import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
 >im_private_mi_public : any
@@ -18,32 +18,32 @@ import im_private_mu_public = require("privacyTopLevelAmbientExternalModuleImpor
 
 // Usage of privacy error imports
 var privateUse_im_private_mi_private = new im_private_mi_private.c_private();
->privateUse_im_private_mi_private : c_private
->new im_private_mi_private.c_private() : c_private
->im_private_mi_private.c_private : typeof c_private
->im_private_mi_private : typeof import("m")
->c_private : typeof c_private
+>privateUse_im_private_mi_private : im_private_mi_private.c_private
+>new im_private_mi_private.c_private() : im_private_mi_private.c_private
+>im_private_mi_private.c_private : typeof im_private_mi_private.c_private
+>im_private_mi_private : typeof im_private_mi_private
+>c_private : typeof im_private_mi_private.c_private
 
 export var publicUse_im_private_mi_private = new im_private_mi_private.c_private();
->publicUse_im_private_mi_private : c_private
->new im_private_mi_private.c_private() : c_private
->im_private_mi_private.c_private : typeof c_private
->im_private_mi_private : typeof import("m")
->c_private : typeof c_private
+>publicUse_im_private_mi_private : im_private_mi_private.c_private
+>new im_private_mi_private.c_private() : im_private_mi_private.c_private
+>im_private_mi_private.c_private : typeof im_private_mi_private.c_private
+>im_private_mi_private : typeof im_private_mi_private
+>c_private : typeof im_private_mi_private.c_private
 
 var privateUse_im_private_mu_private = new im_private_mu_private.c_private();
->privateUse_im_private_mu_private : c_private
->new im_private_mu_private.c_private() : c_private
->im_private_mu_private.c_private : typeof c_private
->im_private_mu_private : typeof import("m2")
->c_private : typeof c_private
+>privateUse_im_private_mu_private : im_private_mu_private.c_private
+>new im_private_mu_private.c_private() : im_private_mu_private.c_private
+>im_private_mu_private.c_private : typeof im_private_mu_private.c_private
+>im_private_mu_private : typeof im_private_mu_private
+>c_private : typeof im_private_mu_private.c_private
 
 export var publicUse_im_private_mu_private = new im_private_mu_private.c_private();
->publicUse_im_private_mu_private : c_private
->new im_private_mu_private.c_private() : c_private
->im_private_mu_private.c_private : typeof c_private
->im_private_mu_private : typeof import("m2")
->c_private : typeof c_private
+>publicUse_im_private_mu_private : im_private_mu_private.c_private
+>new im_private_mu_private.c_private() : im_private_mu_private.c_private
+>im_private_mu_private.c_private : typeof im_private_mu_private.c_private
+>im_private_mu_private : typeof im_private_mu_private
+>c_private : typeof im_private_mu_private.c_private
 
 var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
 >privateUse_im_private_mi_public : any

@@ -16,9 +16,9 @@ f(v => v ? [0] : Promise.reject());
 >[0] : [0]
 >0 : 0
 >Promise.reject() : Promise<[0]>
->Promise.reject : <T>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<T>
 
 f(async v => v ? [0] : Promise.reject());
 >f(async v => v ? [0] : Promise.reject()) : void
@@ -30,9 +30,9 @@ f(async v => v ? [0] : Promise.reject());
 >[0] : [0]
 >0 : 0
 >Promise.reject() : Promise<[0]>
->Promise.reject : <T>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<T>
 
 declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
 >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
@@ -48,9 +48,9 @@ g(v => v ? "contextuallyTypable" : Promise.reject());
 >v : boolean
 >"contextuallyTypable" : "contextuallyTypable"
 >Promise.reject() : Promise<"contextuallyTypable">
->Promise.reject : <T>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<T>
 
 g(async v => v ? "contextuallyTypable" : Promise.reject());
 >g(async v => v ? "contextuallyTypable" : Promise.reject()) : void
@@ -61,9 +61,9 @@ g(async v => v ? "contextuallyTypable" : Promise.reject());
 >v : boolean
 >"contextuallyTypable" : "contextuallyTypable"
 >Promise.reject() : Promise<"contextuallyTypable">
->Promise.reject : <T>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<T>
 
 type MyCallback = (thing: string) => void;
 >MyCallback : MyCallback
@@ -84,9 +84,9 @@ h(v => v ? (abc) => { } : Promise.reject());
 >(abc) => { } : (abc: string) => void
 >abc : string
 >Promise.reject() : Promise<MyCallback>
->Promise.reject : <T>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<T>
 
 h(async v => v ? (def) => { } : Promise.reject());
 >h(async v => v ? (def) => { } : Promise.reject()) : void
@@ -98,9 +98,9 @@ h(async v => v ? (def) => { } : Promise.reject());
 >(def) => { } : (def: string) => void
 >def : string
 >Promise.reject() : Promise<MyCallback>
->Promise.reject : <T>(reason?: any) => Promise<T>
+>Promise.reject : <T = never>(reason?: any) => Promise<T>
 >Promise : PromiseConstructor
->reject : <T>(reason?: any) => Promise<T>
+>reject : <T = never>(reason?: any) => Promise<T>
 
 // repro from #29196
 const increment: (

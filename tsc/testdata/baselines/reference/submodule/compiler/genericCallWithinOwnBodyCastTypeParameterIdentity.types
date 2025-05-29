@@ -29,7 +29,7 @@ const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Resul
 >input : Input
 
         return {
->{            then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {                return toThenable<V, Result>(onFulfilled)(result as Result)            }        } : { then: <V>(onFulfilled: (value: Result) => V | Thenable<V>) => Thenable<V>; }
+>{            then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {                return toThenable<V, Result>(onFulfilled)(result as Result)            }        } : { then<V>(onFulfilled: (value: Result) => V | Thenable<V>): Thenable<V>; }
 
             then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {
 >then : <V>(onFulfilled: (value: Result) => V | Thenable<V>) => Thenable<V>
@@ -64,7 +64,7 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 >input : Input
 
         return {
->{            then(onFulfilled) {                return toThenableInferred(onFulfilled)(result as Result)            }        } : { then: <V>(onFulfilled: (value: Result) => V | Thenable<V>) => Thenable<V>; }
+>{            then(onFulfilled) {                return toThenableInferred(onFulfilled)(result as Result)            }        } : { then<V>(onFulfilled: (value: Result) => V | Thenable<V>): Thenable<V>; }
 
             then(onFulfilled) {
 >then : <V>(onFulfilled: (value: Result) => V | Thenable<V>) => Thenable<V>

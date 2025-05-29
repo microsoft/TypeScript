@@ -13,13 +13,13 @@ module A {
 }
 
 var c: A.B.C = new A.B.C();
->c : C
+>c : A.B.C
 >A : any
 >B : any
->new A.B.C() : C
->A.B.C : typeof C
->A.B : typeof B
+>new A.B.C() : A.B.C
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
->C : typeof C
+>B : typeof A.B
+>C : typeof A.B.C
 

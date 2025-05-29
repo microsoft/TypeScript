@@ -14,13 +14,3 @@
 +>omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }
  >names : readonly K[]
  >obj : T
-
-@@= skipped -19, +19 lines =@@
- >props : T
-
- <GenericComponent {...omit(['bar'], otherProps)} />; // no error
--><GenericComponent {...omit(['bar'], otherProps)} /> : JSX.Element
-+><GenericComponent {...omit(['bar'], otherProps)} /> : Element
- >GenericComponent : <T>(props: T) => null
- >omit(['bar'], otherProps) : Omit<{ bar: string; qwe: boolean; }, "bar">
- >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>; }

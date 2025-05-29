@@ -43,3 +43,13 @@ export let oo = {
     [o['prop.inner']]: "A",
     [o.prop.inner]: "B",
 };
+
+
+//// [isolatedDeclarationLazySymbols.d.ts]
+export declare function foo(): void;
+export declare class Foo {
+}
+export declare let oo: {
+    a: string;
+    b: string;
+};

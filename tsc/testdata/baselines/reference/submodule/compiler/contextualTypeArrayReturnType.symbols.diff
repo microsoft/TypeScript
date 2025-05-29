@@ -18,12 +18,3 @@
  }
 
  var style: IBookStyle = {
-@@= skipped -13, +13 lines =@@
-
-         return [
-             {'ry': null }
-->'ry' : Symbol('ry', Decl(contextualTypeArrayReturnType.ts, 15, 13))
-+>'ry' : Symbol(ry, Decl(contextualTypeArrayReturnType.ts, 15, 13))
-
-         ];
-     }

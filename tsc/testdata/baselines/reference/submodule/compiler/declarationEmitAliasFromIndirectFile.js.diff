@@ -7,13 +7,16 @@
 -var fp = { l10ns: {} };
 +const fp = { l10ns: {} };
  exports.default = fp.l10ns;
--
--
--//// [app.d.ts]
--declare const _default: {
+
+
+ //// [app.d.ts]
+ declare const _default: {
 -    ar?: import("./locale").CustomLocale;
 -    bg?: import("./locale").CustomLocale;
--} & {
++    ar?: import("./locale.js").CustomLocale;
++    bg?: import("./locale.js").CustomLocale;
+ } & {
 -    default: import("./locale").Locale;
--};
--export default _default;
++    default: import("./locale.js").Locale;
+ };
+ export default _default;

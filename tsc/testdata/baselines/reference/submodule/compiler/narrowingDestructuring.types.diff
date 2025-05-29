@@ -1,17 +1,6 @@
 --- old.narrowingDestructuring.types
 +++ new.narrowingDestructuring.types
-@@= skipped -118, +118 lines =@@
-         const r2 = (({ kind, ...rest }) => rest)(t);
- >r2 : { a: string; }
- >(({ kind, ...rest }) => rest)(t) : { a: string; }
-->(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
-->({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
-+>(({ kind, ...rest }) => rest) : (__0: { kind: "a"; a: string; }) => { a: string; }
-+>({ kind, ...rest }) => rest : (__0: { kind: "a"; a: string; }) => { a: string; }
- >kind : "a"
- >rest : { a: string; }
- >rest : { a: string; }
-@@= skipped -10, +10 lines =@@
+@@= skipped -128, +128 lines =@@
  }
 
  function farr<T extends [number, string, string] | [string, number, number]>(x: T) {

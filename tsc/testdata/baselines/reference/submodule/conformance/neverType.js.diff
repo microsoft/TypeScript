@@ -55,25 +55,4 @@
 +test(() => fail());
 +test(() => { throw new Error(); });
  test(errorCallback);
--
--
--//// [neverType.d.ts]
--declare function error(message: string): never;
--declare function errorVoid(message: string): void;
--declare function fail(): never;
--declare function failOrThrow(shouldFail: boolean): never;
--declare function infiniteLoop1(): void;
--declare function infiniteLoop2(): never;
--declare function move1(direction: "up" | "down"): -1 | 1;
--declare function move2(direction: "up" | "down"): -1 | 1;
--declare function check<T>(x: T | undefined): NonNullable<T>;
--declare class C {
--    void1(): void;
--    void2(): void;
--    never1(): never;
--    never2(): never;
--}
--declare function f1(x: string | number): void;
--declare function f2(x: string | number): never;
--declare function test(cb: () => string): string;
--declare let errorCallback: () => never;
+

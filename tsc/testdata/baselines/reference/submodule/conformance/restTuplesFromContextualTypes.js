@@ -160,3 +160,33 @@ const funcUnionTupleRest = (...params) => {
     const [num, strOrErr] = params;
     return num;
 };
+
+
+//// [restTuplesFromContextualTypes.d.ts]
+declare const t1: [number, boolean, string];
+declare function f1(cb: (...args: typeof t1) => void): void;
+declare const t2: [number, boolean, ...string[]];
+declare function f2(cb: (...args: typeof t2) => void): void;
+declare const t3: [boolean, ...string[]];
+declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
+declare function f4<T extends any[]>(t: T): void;
+declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+declare let g0: () => string;
+declare let g1: (x: any, y: any) => number;
+declare let g2: (x: number, y: any) => number;
+declare let g3: (x: number, y: number) => number;
+declare let g4: (...args: any[]) => boolean;
+declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+declare let g5: () => number;
+declare let g6: (x: any) => number;
+declare let g7: (x: any, y: any) => string;
+declare let g8: (x: number, y: string) => string;
+// Repro from #25288
+declare var tuple: [number, string];
+// Repro from #25289
+declare function take(cb: (a: number, b: string) => void): void;
+// Repro from #29833
+type ArgsUnion = [number, string] | [number, Error];
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+declare const funcUnionTupleNoRest: TupleUnionFunc;
+declare const funcUnionTupleRest: TupleUnionFunc;

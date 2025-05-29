@@ -6,7 +6,7 @@ function D () { }
 
 exports["D"] = D;
 >exports : Symbol("moduleExportAliasElementAccessExpression", Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
->"D" : Symbol(D, Decl(moduleExportAliasElementAccessExpression.js, 0, 17))
+>"D" : Symbol("D", Decl(moduleExportAliasElementAccessExpression.js, 0, 17))
 >D : Symbol(D, Decl(moduleExportAliasElementAccessExpression.js, 0, 0))
 
  // (the only package I could find that uses spaces in identifiers is webidl-conversions)

@@ -2,9 +2,9 @@
 
 === multipleDefaultExports03.ts ===
 export default class C {
->C : default
+>C : C
 }
 
 export default class C {
->C : default
+>C : import("./multipleDefaultExports03").default
 }

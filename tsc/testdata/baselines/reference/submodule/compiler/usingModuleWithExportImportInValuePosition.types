@@ -26,8 +26,8 @@ module C {
 >C : typeof C
 
     export import a = A;
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 }
 
 var a: string = C.a.x;
@@ -42,12 +42,12 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >b : { x: number; y: number; }
 >x : number
 >y : number
->new C.a.Point(0, 0) : Point
->C.a.Point : typeof Point
+>new C.a.Point(0, 0) : A.Point
+>C.a.Point : typeof A.Point
 >C.a : typeof A
 >C : typeof C
 >a : typeof A
->Point : typeof Point
+>Point : typeof A.Point
 >0 : 0
 >0 : 0
 

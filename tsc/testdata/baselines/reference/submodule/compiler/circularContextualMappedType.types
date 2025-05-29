@@ -30,7 +30,7 @@ reproduce({
 reproduce({
 >reproduce({  name() { return 123 }}) : { name: number; }
 >reproduce : { (options: number): void; <T>(options: Mapped<T>): T; }
->{  name() { return 123 }} : { name: () => number; }
+>{  name() { return 123 }} : { name(): number; }
 
   name() { return 123 }
 >name : () => number

@@ -215,12 +215,12 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >k4 : keyof T | keyof U
 
     x[k1];
->x[k1] : T | U[keyof T & keyof U]
+>x[k1] : (T | U)[keyof T & keyof U]
 >x : T | U
 >k1 : keyof T & keyof U
 
     x[k2];
->x[k2] : T | U[keyof T & keyof U]
+>x[k2] : (T | U)[keyof T & keyof U]
 >x : T | U
 >k2 : keyof T & keyof U
 
@@ -235,22 +235,22 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >k4 : keyof T | keyof U
 
     y[k1];
->y[k1] : T & U[keyof T & keyof U]
+>y[k1] : (T & U)[keyof T & keyof U]
 >y : T & U
 >k1 : keyof T & keyof U
 
     y[k2];
->y[k2] : T & U[keyof T & keyof U]
+>y[k2] : (T & U)[keyof T & keyof U]
 >y : T & U
 >k2 : keyof T & keyof U
 
     y[k3];
->y[k3] : T & U[keyof T | keyof U]
+>y[k3] : (T & U)[keyof T | keyof U]
 >y : T & U
 >k3 : keyof T | keyof U
 
     y[k4];
->y[k4] : T & U[keyof T | keyof U]
+>y[k4] : (T & U)[keyof T | keyof U]
 >y : T & U
 >k4 : keyof T | keyof U
 

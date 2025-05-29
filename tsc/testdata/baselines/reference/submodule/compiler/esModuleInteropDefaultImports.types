@@ -9,132 +9,132 @@ export default fun;
 
 === a.ts ===
 import mod = require("./mod");
->mod : typeof import("mod")
+>mod : typeof mod
 
 export = mod;
->mod : typeof import("mod")
+>mod : typeof mod
 
 === b.ts ===
 import a from "./a";
->a : typeof import("mod")
+>a : typeof a
 
 import { default as b } from "./a";
->default : typeof import("mod")
->b : typeof import("mod")
+>default : typeof a
+>b : typeof a
 
 import c, { default as d } from "./a";
->c : typeof import("mod")
->default : typeof import("mod")
->d : typeof import("mod")
+>c : typeof a
+>default : typeof a
+>d : typeof a
 
 import * as self from "./b";
->self : typeof import("b")
+>self : typeof self
 
 export { default } from "./a";
->default : typeof import("mod")
+>default : typeof a
 
 export { default as def } from "./a";
->default : typeof import("mod")
->def : typeof import("mod")
+>default : typeof a
+>def : typeof a
 
 a === b;
 >a === b : boolean
->a : typeof import("mod")
->b : typeof import("mod")
+>a : typeof a
+>b : typeof a
 
 b === c;
 >b === c : boolean
->b : typeof import("mod")
->c : typeof import("mod")
+>b : typeof a
+>c : typeof a
 
 c === d;
 >c === d : boolean
->c : typeof import("mod")
->d : typeof import("mod")
+>c : typeof a
+>d : typeof a
 
 d === self.default;
 >d === self.default : boolean
->d : typeof import("mod")
->self.default : typeof import("mod")
->self : typeof import("b")
->default : typeof import("mod")
+>d : typeof a
+>self.default : typeof a
+>self : typeof self
+>default : typeof a
 
 self.default === self.def;
 >self.default === self.def : boolean
->self.default : typeof import("mod")
->self : typeof import("b")
->default : typeof import("mod")
->self.def : typeof import("mod")
->self : typeof import("b")
->def : typeof import("mod")
+>self.default : typeof a
+>self : typeof self
+>default : typeof a
+>self.def : typeof a
+>self : typeof self
+>def : typeof a
 
 // should all fail
 a();
 >a() : any
->a : typeof import("mod")
+>a : typeof a
 
 b();
 >b() : any
->b : typeof import("mod")
+>b : typeof a
 
 c();
 >c() : any
->c : typeof import("mod")
+>c : typeof a
 
 d();
 >d() : any
->d : typeof import("mod")
+>d : typeof a
 
 self.default();
 >self.default() : any
->self.default : typeof import("mod")
->self : typeof import("b")
->default : typeof import("mod")
+>self.default : typeof a
+>self : typeof self
+>default : typeof a
 
 self.def();
 >self.def() : any
->self.def : typeof import("mod")
->self : typeof import("b")
->def : typeof import("mod")
+>self.def : typeof a
+>self : typeof self
+>def : typeof a
 
 // should all work
 a.default();
 >a.default() : void
 >a.default : () => void
->a : typeof import("mod")
+>a : typeof a
 >default : () => void
 
 b.default();
 >b.default() : void
 >b.default : () => void
->b : typeof import("mod")
+>b : typeof a
 >default : () => void
 
 c.default();
 >c.default() : void
 >c.default : () => void
->c : typeof import("mod")
+>c : typeof a
 >default : () => void
 
 d.default();
 >d.default() : void
 >d.default : () => void
->d : typeof import("mod")
+>d : typeof a
 >default : () => void
 
 self.default.default();
 >self.default.default() : void
 >self.default.default : () => void
->self.default : typeof import("mod")
->self : typeof import("b")
->default : typeof import("mod")
+>self.default : typeof a
+>self : typeof self
+>default : typeof a
 >default : () => void
 
 self.def.default();
 >self.def.default() : void
 >self.def.default : () => void
->self.def : typeof import("mod")
->self : typeof import("b")
->def : typeof import("mod")
+>self.def : typeof a
+>self : typeof self
+>def : typeof a
 >default : () => void
 

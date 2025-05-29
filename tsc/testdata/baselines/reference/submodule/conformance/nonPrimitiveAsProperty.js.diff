@@ -1,14 +1,8 @@
 --- old.nonPrimitiveAsProperty.js
 +++ new.nonPrimitiveAsProperty.js
-@@= skipped -12, +12 lines =@@
- //// [nonPrimitiveAsProperty.js]
- var a = { foo: { bar: "bar" } };
- var b = { foo: "bar" }; // expect error
--
--
--//// [nonPrimitiveAsProperty.d.ts]
--interface WithNonPrimitive {
--    foo: object;
--}
--declare var a: WithNonPrimitive;
+@@= skipped -19, +19 lines =@@
+     foo: object;
+ }
+ declare var a: WithNonPrimitive;
 -declare var b: WithNonPrimitive;
++declare var b: WithNonPrimitive; // expect error

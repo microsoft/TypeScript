@@ -31,7 +31,7 @@ export class BuildResult<A, B, C>{
 >BuildResult : BuildResult<A, B, C>
 
   public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
->merge : <A, B extends A, C>(other: BuildResult<A, B, C>) => void
+>merge : <A_1, B_1 extends A_1, C_1>(other: BuildResult<A_1, B_1, C_1>) => void
 >other : BuildResult<A, B, C>
 
     a.b.c.d.e.f.g = 0;
@@ -56,7 +56,7 @@ export class BuildResult<A, B, C>{
 >removedFiles.forEach : any
 >removedFiles : any
 >forEach : any
-><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A, B extends A, C>(each: FileWithErrors<A, B, C>) => void
+><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A_1, B_1 extends A_1, C_1>(each: FileWithErrors<A_1, B_1, C_1>) => void
 >each : FileWithErrors<A, B, C>
 
       this.removeFile(each);

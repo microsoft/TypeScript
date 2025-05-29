@@ -16,3 +16,7 @@ const foo = (x) => {
     return inner;
 };
 exports.foo = foo;
+
+
+//// [declarationEmitTypeParameterNameShadowedInternally.d.ts]
+export declare const foo: <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1];

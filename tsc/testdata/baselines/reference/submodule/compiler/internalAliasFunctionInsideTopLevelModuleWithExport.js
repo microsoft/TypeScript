@@ -25,3 +25,12 @@ var a;
 })(a || (exports.a = a = {}));
 exports.bVal = (0, exports.b)(10);
 exports.bVal2 = exports.b;
+
+
+//// [internalAliasFunctionInsideTopLevelModuleWithExport.d.ts]
+export declare namespace a {
+    function foo(x: number): number;
+}
+export import b = a.foo;
+export declare var bVal: number;
+export declare var bVal2: typeof b;

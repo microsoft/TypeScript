@@ -30,3 +30,12 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 //// [index.js]
 // not exclusively type-only
 import "pkg" assert { "resolution-mode": "require" };
+
+
+//// [index.d.ts]
+// incorrect mode
+import type { RequireInterface } from "pkg";
+// not type-only
+import { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
+export interface LocalInterface extends RequireInterface, ImportInterface {
+}

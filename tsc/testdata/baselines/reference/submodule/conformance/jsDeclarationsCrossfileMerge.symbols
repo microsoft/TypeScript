@@ -10,9 +10,9 @@ module.exports = m.default;
 >module.exports : Symbol(validate, Decl(exporter.js, 0, 0))
 >module : Symbol(module.exports)
 >exports : Symbol(validate, Decl(exporter.js, 0, 0))
->m.default : Symbol(default, Decl(exporter.js, 0, 22))
+>m.default : Symbol(validate, Decl(exporter.js, 0, 22))
 >m : Symbol(m, Decl(index.js, 0, 5))
->default : Symbol(default, Decl(exporter.js, 0, 22))
+>default : Symbol(validate, Decl(exporter.js, 0, 22))
 
 module.exports.memberName = "thing";
 >module.exports : Symbol(validate, Decl(exporter.js, 0, 0))

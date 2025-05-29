@@ -11,9 +11,9 @@ declare module "m" {
     declare export import a = x.c;
 >a : any
 >x : any
->c : c
+>c : a
 
     var b: a;
->b : c
+>b : a
 }
 

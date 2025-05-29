@@ -41,10 +41,10 @@ ja.y
 
 /** @type {Outer.Inner} */
 var da
->da : Inner
+>da : Outer.Inner
 
 da.x
 >da.x : any
->da : Inner
+>da : Outer.Inner
 >x : any
 

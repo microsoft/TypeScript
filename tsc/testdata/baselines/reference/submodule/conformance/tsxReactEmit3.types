@@ -11,16 +11,16 @@ declare var Foo, Bar, baz;
 >baz : any
 
 <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;
-><Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo> : Element
+><Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo> : JSX.Element
 >Foo : any
-><Bar> q </Bar> : Element
+><Bar> q </Bar> : JSX.Element
 >Bar : any
 >Bar : any
-><Bar/> : Element
+><Bar/> : JSX.Element
 >Bar : any
-><Bar/> : Element
+><Bar/> : JSX.Element
 >Bar : any
-><Bar/> : Element
+><Bar/> : JSX.Element
 >Bar : any
 >Foo : any
 

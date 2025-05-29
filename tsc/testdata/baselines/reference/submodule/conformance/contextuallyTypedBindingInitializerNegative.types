@@ -7,7 +7,7 @@ interface Show {
 >x : number
 }
 function f({ show: showRename = v => v }: Show) {}
->f : (__0: Show) => void
+>f : ({ show: showRename = v => v }: Show) => void
 >show : any
 >showRename : (x: number) => string
 >v => v : (v: number) => number
@@ -15,14 +15,14 @@ function f({ show: showRename = v => v }: Show) {}
 >v : number
 
 function f2({ "show": showRename = v => v }: Show) {}
->f2 : (__0: Show) => void
+>f2 : ({ "show": showRename = v => v }: Show) => void
 >showRename : (x: number) => string
 >v => v : (v: number) => number
 >v : number
 >v : number
 
 function f3({ ["show"]: showRename = v => v }: Show) {}
->f3 : (__0: Show) => void
+>f3 : ({ ["show"]: showRename = v => v }: Show) => void
 >"show" : "show"
 >showRename : (x: number) => string
 >v => v : (v: number) => number
@@ -34,7 +34,7 @@ interface Nested {
 >nested : Show
 }
 function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
->ff : (__0: Nested) => void
+>ff : ({ nested: nestedRename = { show: v => v } }: Nested) => void
 >nested : any
 >nestedRename : Show
 >{ show: v => v } : { show: (v: number) => number; }
@@ -67,7 +67,7 @@ interface Tuples {
 >prop : [string, number]
 }
 function g({ prop = [101, 1234] }: Tuples) {}
->g : (__0: Tuples) => void
+>g : ({ prop = [101, 1234] }: Tuples) => void
 >prop : [string, number]
 >[101, 1234] : [number, number]
 >101 : 101
@@ -78,7 +78,7 @@ interface StringUnion {
 >prop : "bar" | "foo"
 }
 function h({ prop = "baz" }: StringUnion) {}
->h : (__0: StringUnion) => void
+>h : ({ prop = "baz" }: StringUnion) => void
 >prop : "bar" | "foo"
 >"baz" : "baz"
 

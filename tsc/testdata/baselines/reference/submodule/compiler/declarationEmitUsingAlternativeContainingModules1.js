@@ -257,3 +257,7 @@ export const useEntries = () => {
         select: (data) => data.slice(0, 10)
     });
 };
+
+
+//// [index.d.mts]
+export declare const useEntries: () => any;

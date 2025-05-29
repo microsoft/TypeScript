@@ -12,7 +12,7 @@ export function f2(...arg) {
 }
 
 export default function f3(d = 0) {
->f3 : Symbol(default, Decl(es6modulekindWithES5Target6.ts, 4, 1))
+>f3 : Symbol(f3, Decl(es6modulekindWithES5Target6.ts, 4, 1))
 >d : Symbol(d, Decl(es6modulekindWithES5Target6.ts, 6, 27))
 }
 

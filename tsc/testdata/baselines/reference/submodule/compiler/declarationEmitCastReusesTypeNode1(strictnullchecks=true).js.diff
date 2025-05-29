@@ -1,47 +1,26 @@
 --- old.declarationEmitCastReusesTypeNode1(strictnullchecks=true).js
 +++ new.declarationEmitCastReusesTypeNode1(strictnullchecks=true).js
-@@= skipped -0, +0 lines =@@
--//// [tests/cases/compiler/declarationEmitCastReusesTypeNode1.ts] ////
--
--//// [declarationEmitCastReusesTypeNode1.ts]
--type P = { } & { name: string }
--
--export let vLet = null! as P
--export const vConst = null! as P
--
--export function fn(p = null! as P) {}
--
--export function fnWithRequiredDefaultParam(p = null! as P, req: number) {}
--
--export class C {
--    field = null! as P;
--    optField? = null! as P;
--    readonly roFiled = null! as P;
--    method(p = null! as P) {}
--    methodWithRequiredDefault(p = null! as P, req: number) {}
--
--    constructor(public ctorField = null! as P) {}
--
--    get x() { return null! as P }
--    set x(v) { }
--}
--
--export default null! as P;
--
--// allows `undefined` on the input side, thanks to the initializer
--export function fnWithPartialAnnotationOnDefaultparam(x: P = null! as P, b: number) {}
--
--
--
--//// [declarationEmitCastReusesTypeNode1.d.ts]
--type P = {} & {
--    name: string;
--};
+@@= skipped -33, +33 lines =@@
+ type P = {} & {
+     name: string;
+ };
 -export declare let vLet: P;
 -export declare const vConst: P;
 -export declare function fn(p?: P): void;
 -export declare function fnWithRequiredDefaultParam(p: P | undefined, req: number): void;
--export declare class C {
++export declare let vLet: {
++    name: string;
++};
++export declare const vConst: {
++    name: string;
++};
++export declare function fn(p?: {
++    name: string;
++}): void;
++export declare function fnWithRequiredDefaultParam(p: {
++    name: string;
++}, req: number): void;
+ export declare class C {
 -    ctorField: P;
 -    field: P;
 -    optField?: P;
@@ -51,8 +30,39 @@
 -    constructor(ctorField?: P);
 -    get x(): P;
 -    set x(v: P);
--}
++    ctorField: {
++        name: string;
++    } | undefined;
++    field: {
++        name: string;
++    };
++    optField?: {
++        name: string;
++    } | undefined;
++    readonly roFiled: {
++        name: string;
++    };
++    method(p?: {
++        name: string;
++    }): void;
++    methodWithRequiredDefault(p: {
++        name: string;
++    }, req: number): void;
++    constructor(ctorField?: {
++        name: string;
++    } | undefined);
++    get x(): {
++        name: string;
++    };
++    set x(v: {
++        name: string;
++    });
+ }
 -declare const _default: P;
--export default _default;
++declare const _default: {
++    name: string;
++};
+ export default _default;
 -export declare function fnWithPartialAnnotationOnDefaultparam(x: P | undefined, b: number): void;
-+<no content>
++// allows `undefined` on the input side, thanks to the initializer
++export declare function fnWithPartialAnnotationOnDefaultparam(x: P, b: number): void;

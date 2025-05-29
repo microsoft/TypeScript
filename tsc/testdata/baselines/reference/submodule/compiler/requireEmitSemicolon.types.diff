@@ -9,14 +9,7 @@
 
  export module Database {
  >Database : typeof Database
-@@= skipped -9, +9 lines =@@
- >DB : DB
-
- 	    public findPerson(id: number): P.Models.Person {
-->findPerson : (id: number) => P.Models.Person
-+>findPerson : (id: number) => Person
- >id : number
- >P : any
+@@= skipped -15, +15 lines =@@
  >Models : any
 
  	        return new P.Models.Person("Rock");

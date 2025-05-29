@@ -6,55 +6,55 @@ export class A {}
 
 === /b.ts ===
 import type * as types from './a';
->types : typeof import("/a")
+>types : typeof types
 
 export = types; // Error
->types : typeof import("/a")
+>types : typeof types
 
 === /c.ts ===
 import * as types from './a';
->types : typeof import("/a")
+>types : typeof types
 
 export = types;
->types : typeof import("/a")
+>types : typeof types
 
 === /d.ts ===
 import types from './b';
->types : typeof import("/a")
+>types : typeof types
 
 new types.A(); // Error
->new types.A() : A
->types.A : typeof A
->types : typeof import("/a")
->A : typeof A
+>new types.A() : types.A
+>types.A : typeof types.A
+>types : typeof types
+>A : typeof types.A
 
 === /e.ts ===
 import types = require('./b');
->types : typeof import("/a")
+>types : typeof types
 
 new types.A(); // Error
->new types.A() : A
->types.A : typeof A
->types : typeof import("/a")
->A : typeof A
+>new types.A() : types.A
+>types.A : typeof types.A
+>types : typeof types
+>A : typeof types.A
 
 === /f.ts ===
 import * as types from './b';
->types : typeof import("/a")
+>types : typeof types
 
 new types.A(); // Error
->new types.A() : A
->types.A : typeof A
->types : typeof import("/a")
->A : typeof A
+>new types.A() : types.A
+>types.A : typeof types.A
+>types : typeof types
+>A : typeof types.A
 
 === /g.ts ===
 import type types from './c'
 >types : any
 
 new types.A(); // Error
->new types.A() : A
->types.A : typeof A
->types : typeof import("/a")
->A : typeof A
+>new types.A() : types.A
+>types.A : typeof types.A
+>types : typeof types
+>A : typeof types.A
 

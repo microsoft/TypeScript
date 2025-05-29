@@ -8,21 +8,19 @@
 ->React.createClass : (spec: any) => import("react").ClassicComponentClass
 ->React : typeof import("react")
 ->createClass : (spec: any) => import("react").ClassicComponentClass
-->{  render() {    return (      null    );  }} : { render(): any; }
-+>React.createClass({  render() {    return (      null    );  }}) : ClassicComponentClass
-+>React.createClass : (spec: any) => ClassicComponentClass
-+>React : typeof React
-+>createClass : (spec: any) => ClassicComponentClass
-+>{  render() {    return (      null    );  }} : { render: () => any; }
++>React.createClass({  render() {    return (      null    );  }}) : import("../../react.js").ClassicComponentClass
++>React.createClass : (spec: any) => import("../../react.js").ClassicComponentClass
++>React : typeof import("../../react.js")
++>createClass : (spec: any) => import("../../react.js").ClassicComponentClass
+ >{  render() {    return (      null    );  }} : { render(): any; }
 
    render() {
- >render : () => any
 @@= skipped -19, +19 lines =@@
 
  === src/modules/navigation/NavigationView.js ===
  import TabBar from '../../components/TabBar';
 ->TabBar : import("react").ClassicComponentClass
-+>TabBar : ClassicComponentClass
++>TabBar : import("../../../react.js").ClassicComponentClass
 
  import {layout} from '../../utils/theme'; // <- DO NOT DROP this import
  >layout : any
@@ -35,7 +33,7 @@
 ->layout.footerHeight : error
 +>x : any
 +><TabBar height={layout.footerHeight} /> : any
-+>TabBar : ClassicComponentClass
++>TabBar : import("../../../react.js").ClassicComponentClass
 +>height : any
 +>layout.footerHeight : any
  >layout : any

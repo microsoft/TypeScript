@@ -9,12 +9,9 @@
 -    constructor() {
 -        this[_a] = "";
 -    }
--}
--_a = Symbol.toPrimitive;
--
--
--//// [symbolDeclarationEmit2.d.ts]
--declare class C {
--    [Symbol.toPrimitive]: string;
 +    [Symbol.toPrimitive] = "";
  }
+-_a = Symbol.toPrimitive;
+
+
+ //// [symbolDeclarationEmit2.d.ts]

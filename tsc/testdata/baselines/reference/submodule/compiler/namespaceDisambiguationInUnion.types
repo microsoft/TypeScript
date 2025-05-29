@@ -20,7 +20,7 @@ const x = { type: "wat.nup" };
 >"wat.nup" : "wat.nup"
 
 const val1: Foo.Yep | Bar.Yep = x;
->val1 : Yep | Yep
+>val1 : Foo.Yep | Bar.Yep
 >Foo : any
 >Bar : any
 >x : { type: string; }
@@ -36,7 +36,7 @@ const y = [{ type: "a" }, { type: "b" }];
 >"b" : "b"
 
 const val2: [Foo.Yep, Bar.Yep] = y;
->val2 : [Yep, Yep]
+>val2 : [Foo.Yep, Bar.Yep]
 >Foo : any
 >Bar : any
 >y : { type: string; }[]

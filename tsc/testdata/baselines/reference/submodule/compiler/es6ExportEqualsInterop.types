@@ -14,10 +14,10 @@ import z3 = require("interface-variable");
 >z3 : { a: number; b: number; }
 
 import z4 = require("module");
->z4 : typeof Foo
+>z4 : typeof z4
 
 import z5 = require("interface-module");
->z5 : typeof Foo
+>z5 : typeof z5
 
 import z6 = require("variable-module");
 >z6 : { a: number; b: number; }
@@ -26,13 +26,13 @@ import z7 = require("function");
 >z7 : () => any
 
 import z8 = require("function-module");
->z8 : typeof foo
+>z8 : typeof z8
 
 import z9 = require("class");
->z9 : typeof Foo
+>z9 : typeof z9
 
 import z0 = require("class-module");
->z0 : typeof Foo
+>z0 : typeof z0
 
 z1.a;
 >z1.a : any
@@ -51,12 +51,12 @@ z3.a;
 
 z4.a;
 >z4.a : number
->z4 : typeof Foo
+>z4 : typeof z4
 >a : number
 
 z5.a;
 >z5.a : number
->z5 : typeof Foo
+>z5 : typeof z5
 >a : number
 
 z6.a;
@@ -71,17 +71,17 @@ z7.a;
 
 z8.a;
 >z8.a : number
->z8 : typeof foo
+>z8 : typeof z8
 >a : number
 
 z9.a;
 >z9.a : any
->z9 : typeof Foo
+>z9 : typeof z9
 >a : any
 
 z0.a;
 >z0.a : number
->z0 : typeof Foo
+>z0 : typeof z0
 >a : number
 
 // default import
@@ -95,10 +95,10 @@ import x3 from "interface-variable";
 >x3 : { a: number; b: number; }
 
 import x4 from "module";
->x4 : typeof Foo
+>x4 : typeof z4
 
 import x5 from "interface-module";
->x5 : typeof Foo
+>x5 : typeof z5
 
 import x6 from "variable-module";
 >x6 : { a: number; b: number; }
@@ -107,13 +107,13 @@ import x7 from "function";
 >x7 : () => any
 
 import x8 from "function-module";
->x8 : typeof foo
+>x8 : typeof z8
 
 import x9 from "class";
->x9 : typeof Foo
+>x9 : typeof z9
 
 import x0 from "class-module";
->x0 : typeof Foo
+>x0 : typeof z0
 
 // namespace import
 import * as y1 from "interface";
@@ -126,10 +126,10 @@ import * as y3 from "interface-variable";
 >y3 : { a: number; b: number; }
 
 import * as y4 from "module";
->y4 : typeof Foo
+>y4 : typeof z4
 
 import * as y5 from "interface-module";
->y5 : typeof Foo
+>y5 : typeof z5
 
 import * as y6 from "variable-module";
 >y6 : { a: number; b: number; }
@@ -138,13 +138,13 @@ import * as y7 from "function";
 >y7 : () => any
 
 import * as y8 from "function-module";
->y8 : typeof foo
+>y8 : typeof z8
 
 import * as y9 from "class";
->y9 : typeof Foo
+>y9 : typeof z9
 
 import * as y0 from "class-module";
->y0 : typeof Foo
+>y0 : typeof z0
 
 y1.a;
 >y1.a : any
@@ -163,12 +163,12 @@ y3.a;
 
 y4.a;
 >y4.a : number
->y4 : typeof Foo
+>y4 : typeof z4
 >a : number
 
 y5.a;
 >y5.a : number
->y5 : typeof Foo
+>y5 : typeof z5
 >a : number
 
 y6.a;
@@ -183,17 +183,17 @@ y7.a;
 
 y8.a;
 >y8.a : number
->y8 : typeof foo
+>y8 : typeof z8
 >a : number
 
 y9.a;
 >y9.a : any
->y9 : typeof Foo
+>y9 : typeof z9
 >a : any
 
 y0.a;
 >y0.a : number
->y0 : typeof Foo
+>y0 : typeof z0
 >a : number
 
 // named import

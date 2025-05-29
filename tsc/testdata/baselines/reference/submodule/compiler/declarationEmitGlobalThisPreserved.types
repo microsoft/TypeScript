@@ -267,8 +267,8 @@ export function c4(isNaN: number) { return globalThis.isNaN; }
 >isNaN : (number: number) => boolean
 
 export const cObj = {
->cObj : { c1: (isNaN: (number: number) => boolean) => (number: number) => boolean; c2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; c3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; c4: (isNaN: number) => (number: number) => boolean; }
->{    c1(isNaN: typeof globalThis.isNaN) { return isNaN },    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN },    c3(isNaN: number, bar: typeof globalThis.isNaN) { return bar },    c4(isNaN: number) { return globalThis.isNaN; },} : { c1: (isNaN: (number: number) => boolean) => (number: number) => boolean; c2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; c3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; c4: (isNaN: number) => (number: number) => boolean; }
+>cObj : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: (number: number) => boolean): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
+>{    c1(isNaN: typeof globalThis.isNaN) { return isNaN },    c2(isNaN: typeof globalThis.isNaN, bar?: typeof globalThis.isNaN) { return bar ?? isNaN },    c3(isNaN: number, bar: typeof globalThis.isNaN) { return bar },    c4(isNaN: number) { return globalThis.isNaN; },} : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: (number: number) => boolean): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
 
     c1(isNaN: typeof globalThis.isNaN) { return isNaN },
 >c1 : (isNaN: (number: number) => boolean) => (number: number) => boolean
@@ -315,7 +315,7 @@ export type c4Return = ReturnType<ReturnType<typeof c4>>;
 
 export type c4oReturn = ReturnType<ReturnType<typeof cObj['c4']>>;
 >c4oReturn : boolean
->cObj : { c1: (isNaN: (number: number) => boolean) => (number: number) => boolean; c2: (isNaN: (number: number) => boolean, bar?: (number: number) => boolean) => (number: number) => boolean; c3: (isNaN: number, bar: (number: number) => boolean) => (number: number) => boolean; c4: (isNaN: number) => (number: number) => boolean; }
+>cObj : { c1(isNaN: (number: number) => boolean): (number: number) => boolean; c2(isNaN: (number: number) => boolean, bar?: (number: number) => boolean): (number: number) => boolean; c3(isNaN: number, bar: (number: number) => boolean): (number: number) => boolean; c4(isNaN: number): (number: number) => boolean; }
 
 export function d1() {
 >d1 : () => () => (isNaN: (number: number) => boolean) => (number: number) => boolean

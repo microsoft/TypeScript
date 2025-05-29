@@ -36,5 +36,5 @@ js1.b;
 
 === /json.json ===
 { "a": 0 }
->"a" : Symbol(a, Decl(json.json, 0, 1))
+>"a" : Symbol("a", Decl(json.json, 0, 1))
 

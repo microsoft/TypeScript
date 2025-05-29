@@ -48,7 +48,7 @@ function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 >args : any[]
 
   abstract class MixedClass extends baseClass implements ApiItemContainerMixin {
->MixedClass : MixedClass<TBaseClass>
+>MixedClass : MixedClass
 >baseClass : ApiItem
 
     public constructor(...args: any[]) {
@@ -70,7 +70,7 @@ function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
   }
 
   return MixedClass;
->MixedClass : { new (...args: any[]): MixedClass<TBaseClass>; prototype: MixedClass<any>; } & TBaseClass
+>MixedClass : ((abstract new (...args: any[]) => MixedClass) & { prototype: ApiItemContainerMixin.MixedClass; }) & TBaseClass
 }
 
 // Subclass inheriting from mixin

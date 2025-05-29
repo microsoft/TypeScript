@@ -4,7 +4,7 @@
 module.exports = {
 >module.exports = {  str: 'x',} : { str: string; }
 >module.exports : { str: string; }
->module : { export=: { str: string; }; }
+>module : { "export=": { str: string; }; }
 >exports : { str: string; }
 >{  str: 'x',} : { str: string; }
 

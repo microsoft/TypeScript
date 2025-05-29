@@ -25,3 +25,16 @@ var Bar;
     }
     Bar.biz = biz;
 })(Bar || (Bar = {}));
+
+
+//// [declarationEmitNamespaceMergedWithInterfaceNestedFunction.d.ts]
+export interface Foo {
+    item: Bar;
+}
+interface Bar {
+    baz(): void;
+}
+declare namespace Bar {
+    function biz(): number;
+}
+export {};

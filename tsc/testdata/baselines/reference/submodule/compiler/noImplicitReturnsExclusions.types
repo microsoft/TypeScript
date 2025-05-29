@@ -173,7 +173,7 @@ interface Thenable<T> {
 }
 
 export declare function executeCommand<T = unknown>(
->executeCommand : <T>(command: string, ...rest: any[]) => Thenable<T>
+>executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
 
   command: string,
 >command : string
@@ -212,7 +212,7 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 
     return executeCommand("vscode.open", item.input.location.uri);
 >executeCommand("vscode.open", item.input.location.uri) : Thenable<unknown>
->executeCommand : <T>(command: string, ...rest: any[]) => Thenable<T>
+>executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
 >"vscode.open" : "vscode.open"
 >item.input.location.uri : string
 >item.input.location : { uri: string; }

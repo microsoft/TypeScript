@@ -30,7 +30,7 @@
  }
  var server: {
 ->server : { (): server.connectExport; foo: Date; }
-+>server : { (): connectExport; foo: Date; }
++>server : { (): import("./exportEqualErrorType_0").connectExport; foo: Date; }
 
      (): server.connectExport;
  >server : any
@@ -39,5 +39,5 @@
  };
  export = server;
 ->server : { (): server.connectExport; foo: Date; }
-+>server : { (): connectExport; foo: Date; }
++>server : { (): import("./exportEqualErrorType_0").connectExport; foo: Date; }
   

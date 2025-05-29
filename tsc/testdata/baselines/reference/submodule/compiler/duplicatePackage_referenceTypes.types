@@ -2,16 +2,16 @@
 
 === /index.ts ===
 import * as a from "a";
->a : typeof import("/node_modules/a/index")
+>a : typeof a
 
 import { Foo } from "foo";
 >Foo : typeof Foo
 
 let foo: Foo = a.foo;
 >foo : Foo
->a.foo : Foo
->a : typeof import("/node_modules/a/index")
->foo : Foo
+>a.foo : import("a/node_modules/foo").Foo
+>a : typeof a
+>foo : import("a/node_modules/foo").Foo
 
 === /node_modules/a/index.d.ts ===
 /// <reference types="foo" />

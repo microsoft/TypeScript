@@ -119,7 +119,7 @@ type TestNums = { 0: number, 1: number }
 
 const n: TestNums = {
 >n : TestNums
->{    [Nums.A]: 1,    [Nums.B]: 2} : { [Nums.A]: number; [Nums.B]: number; }
+>{    [Nums.A]: 1,    [Nums.B]: 2} : { 0: number; 1: number; }
 
     [Nums.A]: 1,
 >[Nums.A] : number
@@ -136,8 +136,8 @@ const n: TestNums = {
 >2 : 2
 }
 const un = {
->un : { [Nums.A]: number; [Nums.B]: number; }
->{    [Nums.A]: 3,    [Nums.B]: 4} : { [Nums.A]: number; [Nums.B]: number; }
+>un : { 0: number; 1: number; }
+>{    [Nums.A]: 3,    [Nums.B]: 4} : { 0: number; 1: number; }
 
     [Nums.A]: 3,
 >[Nums.A] : number
@@ -163,7 +163,7 @@ const bn = 1;
 
 const m: TestNums = {
 >m : TestNums
->{    [an]: 5,    [bn]: 6} : { [an]: number; [bn]: number; }
+>{    [an]: 5,    [bn]: 6} : { 0: number; 1: number; }
 
     [an]: 5,
 >[an] : number
@@ -176,8 +176,8 @@ const m: TestNums = {
 >6 : 6
 }
 const um = {
->um : { [an]: number; [bn]: number; }
->{    [an]: 7,    [bn]: 8} : { [an]: number; [bn]: number; }
+>um : { 0: number; 1: number; }
+>{    [an]: 7,    [bn]: 8} : { 0: number; 1: number; }
 
     [an]: 7,
 >[an] : number

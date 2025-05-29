@@ -1,9 +1,0 @@
---- old.exportSpecifierReferencingOuterDeclaration2.types
-+++ new.exportSpecifierReferencingOuterDeclaration2.types
-@@= skipped -8, +8 lines =@@
- >X : any
-
- export declare function foo(): X.bar;
-->foo : () => X.bar
-+>foo : () => bar
- >X : any

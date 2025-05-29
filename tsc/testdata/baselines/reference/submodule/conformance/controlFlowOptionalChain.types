@@ -3,7 +3,7 @@
 === controlFlowOptionalChain.ts ===
 // assignments in shortcutting chain
 declare const o: undefined | {
->o : (...args: any[]) => any | undefined
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 
     [key: string]: any;
 >key : string
@@ -21,7 +21,7 @@ let a: number;
 
 o?.[a = 1];
 >o?.[a = 1] : any
->o : (...args: any[]) => any | undefined
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 >a = 1 : 1
 >a : number
 >1 : 1
@@ -38,7 +38,7 @@ let b: number;
 o?.x[b = 1];
 >o?.x[b = 1] : any
 >o?.x : any
->o : (...args: any[]) => any | undefined
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 >x : any
 >b = 1 : 1
 >b : number
@@ -55,7 +55,7 @@ let c: number;
 
 o?.(c = 1)
 >o?.(c = 1) : any
->o : (...args: any[]) => any | undefined
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 >c = 1 : 1
 >c : number
 >1 : 1
@@ -72,7 +72,7 @@ let d: number;
 o?.x(d = 1);
 >o?.x(d = 1) : any
 >o?.x : any
->o : (...args: any[]) => any | undefined
+>o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
 >x : any
 >d = 1 : 1
 >d : number
@@ -132,14 +132,14 @@ f(x);
 >x : string | number
 
 declare const o2: { f(x: any): x is number; } | undefined;
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 >f : (x: any) => x is number
 >x : any
 
 if (o2?.f(x)) {
 >o2?.f(x) : boolean | undefined
 >o2?.f : ((x: any) => x is number) | undefined
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 >f : ((x: any) => x is number) | undefined
 >x : string | number
 
@@ -148,18 +148,18 @@ if (o2?.f(x)) {
 
     o2.f; // (x: any) => x is number
 >o2.f : (x: any) => x is number
->o2 : { f: (x: any) => x is number; }
+>o2 : { f(x: any): x is number; }
 >f : (x: any) => x is number
 
     o2?.f;
 >o2?.f : (x: any) => x is number
->o2 : { f: (x: any) => x is number; }
+>o2 : { f(x: any): x is number; }
 >f : (x: any) => x is number
 
     o2?.f(x);
 >o2?.f(x) : boolean
 >o2?.f : (x: any) => x is number
->o2 : { f: (x: any) => x is number; }
+>o2 : { f(x: any): x is number; }
 >f : (x: any) => x is number
 >x : number
 }
@@ -168,32 +168,32 @@ else {
 >x : string | number
 
     o2;
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 
     o2?.f;
 >o2?.f : ((x: any) => x is number) | undefined
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 >f : ((x: any) => x is number) | undefined
 
     o2.f;
 >o2.f : (x: any) => x is number
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 >f : (x: any) => x is number
 }
 x;
 >x : string | number
 
 o2;
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 
 o2?.f;
 >o2?.f : ((x: any) => x is number) | undefined
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 >f : ((x: any) => x is number) | undefined
 
 o2.f;
 >o2.f : (x: any) => x is number
->o2 : { f: (x: any) => x is number; } | undefined
+>o2 : { f(x: any): x is number; } | undefined
 >f : (x: any) => x is number
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;

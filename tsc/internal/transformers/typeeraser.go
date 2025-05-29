@@ -15,7 +15,7 @@ type TypeEraserTransformer struct {
 
 func NewTypeEraserTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions) *Transformer {
 	tx := &TypeEraserTransformer{compilerOptions: compilerOptions}
-	return tx.newTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 // Pushes a new child node onto the ancestor tracking stack, returning the grandparent node to be restored later via `popNode`.

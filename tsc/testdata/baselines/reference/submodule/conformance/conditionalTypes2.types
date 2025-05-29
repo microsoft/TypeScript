@@ -82,7 +82,7 @@ function getFunction<T>(item: T) {
 
     if (isFunction(item)) {
 >isFunction(item) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 >item : T
 
         return item;
@@ -99,7 +99,7 @@ function f10<T>(x: T) {
 
     if (isFunction(x)) {
 >isFunction(x) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 >x : T
 
         const f: Function = x;
@@ -290,7 +290,7 @@ function foo<T>(value: T) {
 
     if (isFunction(value)) {
 >isFunction(value) : boolean
->isFunction : <T>(value: T) => value is Extract<T, Function>
+>isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
 >value : T
 
         toString1(value);

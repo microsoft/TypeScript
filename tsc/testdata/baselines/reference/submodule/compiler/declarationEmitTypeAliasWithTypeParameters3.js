@@ -13,3 +13,10 @@ function bar() {
 function bar() {
     return {};
 }
+
+
+//// [declarationEmitTypeAliasWithTypeParameters3.d.ts]
+type Foo<T> = {
+    foo<U>(): Foo<U>;
+};
+declare function bar(): Foo<number>;

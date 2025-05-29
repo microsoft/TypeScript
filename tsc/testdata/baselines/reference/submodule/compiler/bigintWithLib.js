@@ -119,3 +119,22 @@ let z = 12n; // should emit type bigint in declaration file
 // Test Intl methods with new parameter type
 new Intl.NumberFormat("fr").format(3000n);
 new Intl.NumberFormat("fr").format(bigintVal);
+
+
+//// [bigintWithLib.d.ts]
+// Test BigInt functions
+declare let bigintVal: bigint;
+declare let stringVal: string;
+// Test BigInt64Array
+declare let bigIntArray: BigInt64Array;
+declare let len: number;
+declare let arrayBufferLike: ArrayBufferView;
+// Test BigUint64Array
+declare let bigUintArray: BigUint64Array;
+// Test added DataView methods
+declare const dataView: DataView<ArrayBuffer>;
+// Test emitted declarations files
+declare const w = 12; // should emit as const w = 12n
+declare const x = -12; // should emit as const x = -12n
+declare const y: 12n; // should emit type 12n
+declare let z: bigint; // should emit type bigint in declaration file

@@ -31,14 +31,18 @@
  >12 : 12
      }
  }
-@@= skipped -27, +28 lines =@@
- >local : Inner
+
+ /** @type {Outer.Inner} */
+ var local
+->local : Inner
++>local : Outer.Inner
 
  local.y
 ->local.y : number
-+>local.y : any
- >local : Inner
+->local : Inner
 ->y : number
++>local.y : any
++>local : Outer.Inner
 +>y : any
 
  var inner = new Outer.Inner()
@@ -63,14 +67,16 @@
 
  === b.js ===
  /** @type {Outer.Inner} */
-@@= skipped -22, +22 lines =@@
- >x : Inner
+ var x
+->x : Inner
++>x : Outer.Inner
 
  x.y
 ->x.y : number
-+>x.y : any
- >x : Inner
+->x : Inner
 ->y : number
++>x.y : any
++>x : Outer.Inner
 +>y : any
 
  var z = new Outer.Inner()

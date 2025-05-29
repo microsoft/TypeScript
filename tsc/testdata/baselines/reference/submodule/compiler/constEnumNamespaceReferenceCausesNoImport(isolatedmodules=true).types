@@ -19,22 +19,22 @@ export function fooFunc(): void { /* removed */ }
 
 === index.ts ===
 import * as Foo from "./foo";
->Foo : typeof import("foo")
+>Foo : typeof Foo
 
 function check(x: Foo.ConstFooEnum): void {
->check : (x: ConstFooEnum) => void
->x : ConstFooEnum
+>check : (x: Foo.ConstFooEnum) => void
+>x : Foo.ConstFooEnum
 >Foo : any
 
   switch (x) {
->x : ConstFooEnum
+>x : Foo.ConstFooEnum
 
     case Foo.ConstFooEnum.Some:
->Foo.ConstFooEnum.Some : ConstFooEnum.Some
->Foo.ConstFooEnum : typeof ConstFooEnum
->Foo : typeof import("foo")
->ConstFooEnum : typeof ConstFooEnum
->Some : ConstFooEnum.Some
+>Foo.ConstFooEnum.Some : Foo.ConstFooEnum.Some
+>Foo.ConstFooEnum : typeof Foo.ConstFooEnum
+>Foo : typeof Foo
+>ConstFooEnum : typeof Foo.ConstFooEnum
+>Some : Foo.ConstFooEnum.Some
 
       break;
   }

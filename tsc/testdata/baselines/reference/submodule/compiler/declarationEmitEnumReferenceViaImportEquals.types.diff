@@ -1,15 +1,6 @@
 --- old.declarationEmitEnumReferenceViaImportEquals.types
 +++ new.declarationEmitEnumReferenceViaImportEquals.types
-@@= skipped -2, +2 lines =@@
- === translation.ts ===
- export interface Translation {
-   translationKey: Translation.TranslationKeyEnum;
-->translationKey : Translation.TranslationKeyEnum
-+>translationKey : TranslationKeyEnum
- >Translation : any
- }
-
-@@= skipped -34, +34 lines =@@
+@@= skipped -36, +36 lines =@@
  import TranslationKeyEnum = Translation.TranslationKeyEnum;
  >TranslationKeyEnum : { Translation1: TranslationKeyEnum; Translation2: TranslationKeyEnum; }
  >Translation : Translation

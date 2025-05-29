@@ -89,23 +89,23 @@ f6(async function* () { return null; });
 // https://github.com/microsoft/TypeScript/issues/44913
 Promise.resolve().catch(e => null);
 >Promise.resolve().catch(e => null) : Promise<any>
->Promise.resolve().catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
+>Promise.resolve().catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
 >Promise.resolve() : Promise<void>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->catch : <TResult>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
+>catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
 >e => null : (e: any) => any
 >e : any
 
 Promise.resolve().then(v => null);
 >Promise.resolve().then(v => null) : Promise<any>
->Promise.resolve().then : <TResult1, TResult2>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >Promise.resolve() : Promise<void>
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >Promise : PromiseConstructor
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
->then : <TResult1, TResult2>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >v => null : (v: void) => any
 >v : void
 

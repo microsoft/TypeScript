@@ -73,3 +73,28 @@ var Test;
     file.isFSO = file.isNetworked;
     file.isFile = file.isFSO;
 })(Test || (Test = {}));
+
+
+//// [typeGuardOfFormThisMemberErrors.d.ts]
+// There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
+declare namespace Test {
+    class FileSystemObject {
+        path: string;
+        isFSO: this is FileSystemObject;
+        get isFile(): this is File;
+        set isFile(param: boolean);
+        get isDirectory(): this is Directory;
+        isNetworked: this is (Networked & this);
+        constructor(path: string);
+    }
+    class File extends FileSystemObject {
+        content: string;
+        constructor(path: string, content: string);
+    }
+    class Directory extends FileSystemObject {
+        children: FileSystemObject[];
+    }
+    interface Networked {
+        host: string;
+    }
+}

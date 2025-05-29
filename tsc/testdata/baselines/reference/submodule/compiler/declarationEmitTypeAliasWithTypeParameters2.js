@@ -12,3 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 const y = (x) => 1;
 exports.y = y;
+
+
+//// [declarationEmitTypeAliasWithTypeParameters2.d.ts]
+export type Bar<X, Y, Z> = () => [X, Y, Z];
+export type Baz<M, N> = Bar<M, string, N>;
+export type Baa<Y> = Baz<boolean, Y>;
+export declare const y: (x: Baa<number>) => number;

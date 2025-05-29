@@ -2,7 +2,7 @@
 
 === external.d.ts ===
 export default class C {}
->C : default
+>C : C
 
 === main.ts ===
 declare module "M" {

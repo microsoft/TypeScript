@@ -5,5 +5,5 @@
 
    "H"?:any;
 ->"H" : Symbol(I["H"], Decl(parserPropertySignature8.ts, 0, 13))
-+>"H" : Symbol(H, Decl(parserPropertySignature8.ts, 0, 13))
++>"H" : Symbol("H", Decl(parserPropertySignature8.ts, 0, 13))
  }

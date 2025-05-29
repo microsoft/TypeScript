@@ -7,9 +7,9 @@ import * as React from "react";
 
 class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }> {
 >TestComponent : TestComponent
->React.Component : Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
+>React.Component : React.Component<{ isAny: <T>(obj: any) => obj is T; }, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 >isAny : <T>(obj: any) => obj is T
 >obj : any
 
@@ -35,8 +35,8 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
 }
 
 const TestRender = () => <TestComponent />;
->TestRender : () => Element
->() => <TestComponent /> : () => Element
-><TestComponent /> : Element
+>TestRender : () => JSX.Element
+>() => <TestComponent /> : () => JSX.Element
+><TestComponent /> : JSX.Element
 >TestComponent : typeof TestComponent
 

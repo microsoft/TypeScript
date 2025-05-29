@@ -70,7 +70,7 @@ M = null; // error
 >M : any
 
 var h: { f(): void } = null;
->h : { f: () => void; }
+>h : { f(): void; }
 >f : () => void
 
 function i<T>(a: T) {

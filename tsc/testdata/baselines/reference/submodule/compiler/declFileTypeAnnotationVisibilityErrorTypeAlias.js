@@ -74,3 +74,40 @@ var M2;
         m3.public1 = public1;
     })(m3 || (m3 = {}));
 })(M2 || (M2 = {}));
+
+
+//// [declFileTypeAnnotationVisibilityErrorTypeAlias.d.ts]
+interface Window {
+    someMethod(): any;
+}
+declare namespace M {
+    type W = Window | string;
+    export namespace N {
+        class Window {
+        }
+        var p: W; // Should report error that W is private
+    }
+    export {};
+}
+declare namespace M1 {
+    type W = Window | string;
+    namespace N {
+        class Window {
+        }
+        var p: W; // No error
+    }
+}
+declare namespace M2 {
+    class private1 {
+    }
+    class public1 {
+    }
+    namespace m3 {
+        class public1 {
+        }
+    }
+    export type t2 = private1; // error
+    export type t12 = public1;
+    export type t112 = m3.public1; // error
+    export {};
+}

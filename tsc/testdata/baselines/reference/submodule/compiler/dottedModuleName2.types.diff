@@ -1,52 +1,22 @@
 --- old.dottedModuleName2.types
 +++ new.dottedModuleName2.types
-@@= skipped -27, +27 lines =@@
- var tmpOK = AA.B.x;
- >tmpOK : number
- >AA.B.x : number
-->AA.B : typeof AA.B
-+>AA.B : typeof B
- >AA : typeof AA
-->B : typeof AA.B
-+>B : typeof B
- >x : number
-  
- var tmpError = A.B.x;
- >tmpError : number
- >A.B.x : number
-->A.B : typeof A.B
-+>A.B : typeof B
- >A : typeof A
-->B : typeof A.B
-+>B : typeof B
- >x : number
-
-
-@@= skipped -34, +34 lines =@@
- {
-  
-     import X1 = A;
-->X1 : typeof X1
-->A : typeof X1
-+>X1 : typeof A
-+>A : typeof A
+@@= skipped -65, +65 lines =@@
+ >A : typeof X1
   
      import X2 = A.B;
 ->X2 : typeof X1.B
-->A : typeof X1
++>X2 : typeof X2
+ >A : typeof X1
 ->B : typeof X1.B
-+>X2 : typeof B
-+>A : typeof A
-+>B : typeof B
++>B : typeof X2
   
      import X3 = A.B.C;
 ->X3 : typeof X2.C
-->A : typeof X1
++>X3 : typeof X3
+ >A : typeof X1
 ->B : typeof X1.B
 ->C : typeof X2.C
-+>X3 : typeof C
-+>A : typeof A
-+>B : typeof B
-+>C : typeof C
++>B : typeof X2
++>C : typeof X3
   
  }

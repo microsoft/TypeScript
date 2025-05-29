@@ -101,19 +101,19 @@ class C7 {
 >C7 : C7
 
     method1(@await [x]) {}
->method1 : (__0: [any]) => void
+>method1 : ([x]: [any]) => void
 > : any
 >x : any
 
     method2(@await(1) [x]) {}
->method2 : (__0: [any]) => void
+>method2 : ([x]: [any]) => void
 >await(1) : any
 > : any
 >1 : 1
 >x : any
 
     method3(@(await) [x]) {}
->method3 : (__0: [any]) => void
+>method3 : ([x]: [any]) => void
 >(await) : any
 >await : any
 > : any

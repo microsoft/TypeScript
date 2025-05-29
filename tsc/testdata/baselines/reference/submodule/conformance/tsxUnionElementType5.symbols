@@ -47,7 +47,7 @@ let a = <EmptySFCComp />
 let a1 = <EmptySFCComp data-prop />
 >a1 : Symbol(a1, Decl(file.tsx, 18, 3))
 >EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
->data-prop : Symbol("data-prop", Decl(file.tsx, 18, 22))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 18, 22))
 
 let b = <SFC2AndEmptyComp x />
 >b : Symbol(b, Decl(file.tsx, 19, 3))

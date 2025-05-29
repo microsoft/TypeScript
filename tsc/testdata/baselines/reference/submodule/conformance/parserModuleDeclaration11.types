@@ -17,6 +17,6 @@ string.foo("abc");
 >"abc" : "abc"
 
 var x: string.X;
->x : X
+>x : string.X
 >string : any
 

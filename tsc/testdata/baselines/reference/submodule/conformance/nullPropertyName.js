@@ -167,3 +167,7 @@ foo.from = 1;
 foo.global = 1;
 foo.bigint = 1;
 foo.of = 1;
+
+
+//// [nullPropertyName.d.ts]
+declare function foo(): void;

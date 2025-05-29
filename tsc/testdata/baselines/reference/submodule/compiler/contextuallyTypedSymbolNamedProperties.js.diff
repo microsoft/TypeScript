@@ -8,28 +8,11 @@
  // Repros from #43628
  const A = Symbol("A");
  const B = Symbol("B");
-@@= skipped -9, +8 lines =@@
-     [B]: bp => { bp.description; },
- });
- const x = { [A]: s => s.length };
--
--
--//// [contextuallyTypedSymbolNamedProperties.d.ts]
--declare const A: unique symbol;
--declare const B: unique symbol;
--type Action = {
--    type: typeof A;
--    data: string;
--} | {
--    type: typeof B;
--    data: number;
--};
--declare const ab: Action;
--declare function f<T extends {
--    type: string | symbol;
--}>(action: T, blah: {
--    [K in T['type']]: (p: K) => void;
--}): any;
--declare const x: {
--    [sym: symbol]: (p: string) => void;
--};
+@@= skipped -12, +11 lines =@@
+
+
+ //// [contextuallyTypedSymbolNamedProperties.d.ts]
++// Repros from #43628
+ declare const A: unique symbol;
+ declare const B: unique symbol;
+ type Action = {

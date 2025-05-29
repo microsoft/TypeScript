@@ -28,3 +28,13 @@ var x;
 })(x || (exports.x = x = {}));
 exports.cProp = new xc();
 var cReturnVal = exports.cProp.foo(10);
+
+
+//// [internalAliasClassInsideTopLevelModuleWithoutExport.d.ts]
+export declare namespace x {
+    class c {
+        foo(a: number): number;
+    }
+}
+import xc = x.c;
+export declare var cProp: xc;

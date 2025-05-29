@@ -6,8 +6,8 @@
  const mockCallback = ({ event: { params = {} } = {} }) => {};
 ->mockCallback : ({ event: { params } }: { event?: { params?: {} | undefined; } | undefined; }) => void
 ->({ event: { params = {} } = {} }) => {} : ({ event: { params } }: { event?: { params?: {} | undefined; } | undefined; }) => void
-+>mockCallback : (__0: { event?: { params?: {} | undefined; } | undefined; }) => void
-+>({ event: { params = {} } = {} }) => {} : (__0: { event?: { params?: {} | undefined; } | undefined; }) => void
++>mockCallback : ({ event: { params = {} } = {} }: { event?: { params?: {} | undefined; } | undefined; }) => void
++>({ event: { params = {} } = {} }) => {} : ({ event: { params = {} } = {} }: { event?: { params?: {} | undefined; } | undefined; }) => void
  >event : any
  >params : {}
  >{} : {}

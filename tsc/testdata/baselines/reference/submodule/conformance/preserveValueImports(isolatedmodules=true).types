@@ -23,7 +23,7 @@ import a, { b, c, D } from "./a";
 
 === c.ts ===
 import * as a from "./a";
->a : typeof import("a")
+>a : typeof a
 
 === d.ts ===
 export = {};

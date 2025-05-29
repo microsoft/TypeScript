@@ -2,8 +2,8 @@
 
 === typeAliasesDoNotMerge.ts ===
 export type A = {}
->A : A
+>A : import("./typeAliasesDoNotMerge").A
 
 type A = {}
->A : A
+>A : import("./typeAliasesDoNotMerge").A
 

@@ -25,3 +25,14 @@ export function test() {
     inner[symb] = true;
     return inner;
 }
+
+
+//// [expandoFunctionSymbolProperty.d.ts]
+// repro from https://github.com/microsoft/TypeScript/issues/54220
+declare const symb: unique symbol;
+interface TestSymb {
+    (): void;
+    readonly [symb]: boolean;
+}
+export declare function test(): TestSymb;
+export {};

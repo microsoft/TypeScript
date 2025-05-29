@@ -1,28 +1,6 @@
 --- old.objectSpread.types
 +++ new.objectSpread.types
-@@= skipped -353, +353 lines =@@
-
- // own methods are enumerable
- let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
-->cplus : { p: number; plus(): void; }
-+>cplus : { p: number; plus: () => void; }
- >p : number
- >plus : () => void
-->{ ...c, plus() { return this.p + 1; } } : { p: number; plus(): any; }
-+>{ ...c, plus() { return this.p + 1; } } : { p: number; plus: () => any; }
- >c : C
- >plus : () => any
- >this.p + 1 : any
-@@= skipped -15, +15 lines =@@
- cplus.plus();
- >cplus.plus() : void
- >cplus.plus : () => void
-->cplus : { p: number; plus(): void; }
-+>cplus : { p: number; plus: () => void; }
- >plus : () => void
-
- // new field's type conflicting with existing field is OK
-@@= skipped -27, +27 lines =@@
+@@= skipped -395, +395 lines =@@
 
  // optional
  function container(
@@ -75,25 +53,7 @@
 
      // computed property
      let computedFirst: { a: number, b: string, "before everything": number } =
-@@= skipped -18, +18 lines =@@
- >"before everything" : number
-
-         { ['before everything']: 12, ...o, b: 'yes' }
-->{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; "before everything": number; b: string; }
-+>{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; ['before everything']: number; b: string; }
- >['before everything'] : number
- >'before everything' : "before everything"
- >12 : 12
-@@= skipped -15, +15 lines =@@
- >"at the end" : number
-
-         { ...o, b: 'yeah', ['at the end']: 14 }
-->{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; "at the end": number; }
-+>{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; ['at the end']: number; }
- >o : { a: number; b: string; }
- >b : string
- >'yeah' : "yeah"
-@@= skipped -211, +211 lines =@@
+@@= skipped -244, +244 lines =@@
  >v : T | U
 
      let x12 = { ...v, ...obj };

@@ -2,13 +2,13 @@
 
 === usage.ts ===
 import { parse } from "url";
->parse : () => Url
+>parse : () => import("url").Url
 
 export const thing = () => parse();
->thing : () => Url
->() => parse() : () => Url
->parse() : Url
->parse : () => Url
+>thing : () => import("url").Url
+>() => parse() : () => import("url").Url
+>parse() : import("url").Url
+>parse : () => import("url").Url
 
 === node_modules/@types/node/index.d.ts ===
 declare module "url" {

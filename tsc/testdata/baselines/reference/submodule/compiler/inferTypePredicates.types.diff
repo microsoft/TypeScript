@@ -113,16 +113,7 @@
  >numOrStr : string | number
 
    let t: number = numOrStr;  // should ok
-@@= skipped -51, +51 lines =@@
- }
-
- function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
-->doNotRefineDestructuredParam : ({ x, y }: { x: number | null; y: number; }) => boolean
-+>doNotRefineDestructuredParam : (__0: { x: number | null; y: number; }) => boolean
- >x : number | null
- >y : number
- >x : number | null
-@@= skipped -148, +148 lines =@@
+@@= skipped -199, +199 lines =@@
  }
 
  function isNumberWithThis(this: Date, x: number | string) {

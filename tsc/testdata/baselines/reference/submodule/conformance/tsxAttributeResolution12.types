@@ -40,7 +40,7 @@ declare class Component<P, S>  {
 >callBack : () => any
 
 	render(): JSX.Element;
->render : () => Element
+>render : () => JSX.Element
 >JSX : any
 
 	props: P;
@@ -72,22 +72,22 @@ declare module TestMod {
 
 // Errors correctly
 const T = TestMod.Test;
->T : TestClass
->TestMod.Test : TestClass
+>T : TestMod.TestClass
+>TestMod.Test : TestMod.TestClass
 >TestMod : typeof TestMod
->Test : TestClass
+>Test : TestMod.TestClass
 
 var t1 = <T />;
->t1 : Element
-><T /> : Element
->T : TestClass
+>t1 : JSX.Element
+><T /> : JSX.Element
+>T : TestMod.TestClass
 
 // Should error
 var t2 = <TestMod.Test />;
->t2 : Element
-><TestMod.Test /> : Element
->TestMod.Test : TestClass
+>t2 : JSX.Element
+><TestMod.Test /> : JSX.Element
+>TestMod.Test : TestMod.TestClass
 >TestMod : typeof TestMod
->Test : TestClass
+>Test : TestMod.TestClass
 
 

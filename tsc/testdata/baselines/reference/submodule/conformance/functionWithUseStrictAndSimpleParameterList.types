@@ -61,7 +61,7 @@ function paramDefault(param = 1) {
 }
 
 function objectBindingPattern({foo}: any) {
->objectBindingPattern : (__0: any) => void
+>objectBindingPattern : ({ foo }: any) => void
 >foo : any
 
     'use strict';
@@ -69,7 +69,7 @@ function objectBindingPattern({foo}: any) {
 }
 
 function arrayBindingPattern([foo]: any[]) {
->arrayBindingPattern : (__0: any[]) => void
+>arrayBindingPattern : ([foo]: any[]) => void
 >foo : any
 
     'use strict';

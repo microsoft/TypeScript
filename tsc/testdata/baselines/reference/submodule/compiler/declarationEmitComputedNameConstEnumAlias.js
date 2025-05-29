@@ -29,3 +29,15 @@ const EnumExample_1 = require("./EnumExample");
 exports.default = {
     [EnumExample_1.default.TEST]: {},
 };
+
+
+//// [EnumExample.d.ts]
+declare enum EnumExample {
+    TEST = "TEST"
+}
+export default EnumExample;
+//// [index.d.ts]
+declare const _default: {
+    TEST: {};
+};
+export default _default;

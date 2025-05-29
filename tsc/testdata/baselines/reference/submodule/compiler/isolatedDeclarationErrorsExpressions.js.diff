@@ -1,0 +1,106 @@
+--- old.isolatedDeclarationErrorsExpressions.js
++++ new.isolatedDeclarationErrorsExpressions.js
+@@= skipped -234, +234 lines =@@
+ export const [, , b = 1] = [0, 1, 2];
+ export function foo([, , b] = [0, 1, 2]) {
+ }
++
++
++//// [isolatedDeclarationErrorsExpressions.d.ts]
++export declare const numberConst = 1;
++export declare const numberConstBad1: number;
++export declare const numberConstBad2: number;
++export declare const numberConstBad3 = 1;
++export declare const bigIntConst = 1;
++export declare const bigIntConstBad1: bigint;
++export declare const bigIntConstBad2: bigint;
++export declare const bigIntConstBad3 = 1;
++export declare const stringConst = "s";
++export declare const stringConstBad: string;
++// These are just strings
++export declare const templateConstOk1 = "s";
++export declare const templateConstNotOk2: string;
++export declare const templateConstNotOk3 = "s1 - S";
++export declare const templateConstNotOk4: string;
++export declare const templateConstNotOk5: string;
++export declare let numberLet: number;
++export declare let numberLetBad1: number;
++export declare let numberLetBad2: number;
++export declare let numberLetBad3: number;
++export declare let bigIntLet: bigint;
++export declare let bigIntLetBad1: bigint;
++export declare let bigIntLetBad2: bigint;
++export declare let bigIntLetBad3: bigint;
++export declare let stringLet: string;
++export declare let stringLetBad: string;
++export declare let templateLetOk1: string;
++export declare let templateLetOk2: string;
++export declare let templateLetOk3: string;
++export declare let templateLetOk4: string;
++// As const
++export declare let numberLetAsConst: 1;
++export declare let bigIntLetAsConst: 1n;
++export declare let stringLetAsConst: "s";
++export declare let templateLetOk1AsConst: "s";
++export declare let templateLetOk2AsConst: "s1 - S";
++export declare let templateLetOk3AsConst: "s1 - S - false";
++export declare let templateLetOk4AsConst: `s${number} - S - true`;
++export declare let arr: number[];
++export declare let arrConst: readonly [1, 2, 3];
++export declare let arrWithSpread: readonly [1, 2, 3, ...number[]];
++export declare class Exported {
++    numberLet: number;
++    numberLetBad1: number;
++    numberLetBad2: number;
++    numberLetBad3: number;
++    bigIntLet: bigint;
++    bigIntLetBad1: bigint;
++    bigIntLetBad2: bigint;
++    bigIntLetBad3: bigint;
++    stringLet: string;
++    stringLetBad: string;
++    templateLetOk1: string;
++    templateLetOk2: string;
++    templateLetOk3: string;
++    templateLetOk4: string;
++    readonly numberConst: number;
++    readonly numberConstBad1: number;
++    readonly numberConstBad2: number;
++    readonly numberConstBad3: number;
++    readonly bigIntConst: bigint;
++    readonly bigIntConstBad1: bigint;
++    readonly bigIntConstBad2: bigint;
++    readonly bigIntConstBad3: bigint;
++    readonly stringConst: string;
++    readonly stringConstBad: string;
++    readonly templateConstOk1: string;
++    readonly templateConstNotOk2: string;
++    readonly templateConstNotOk3: string;
++    readonly templateConstNotOk4: string;
++    numberLetAsConst: 1;
++    bigIntLetAsConst: 1n;
++    stringLetAsConst: "s";
++    templateLetOk1AsConst: "s";
++    templateLetOk2AsConst: "s1 - S";
++    templateLetOk3AsConst: "s1 - S - false";
++    templateLetOk4AsConst: `s${number} - S - true`;
++}
++export declare function numberParam(p?: number): void;
++export declare function numberParamBad1(p?: number): void;
++export declare function numberParamBad2(p?: number): void;
++export declare function numberParamBad3(p?: typeof numberParam): void;
++export declare function bigIntParam(p?: bigint): void;
++export declare function bigIntParamBad1(p?: bigint): void;
++export declare function bigIntParamBad2(p?: bigint): void;
++export declare function bigIntParamBad3(p?: typeof bigIntParam): void;
++export declare function stringParam(p?: string): void;
++export declare function stringParamBad(p?: string): void;
++export declare function templateParamOk1(p?: string): void;
++export declare function templateParamOk2(p?: string): void;
++export declare function templateParamOk3(p?: string): void;
++export declare function templateParamOk4(p?: string): void;
++export declare function foo([, , b]?: [
++    number,
++    number,
++    number
++]): void;

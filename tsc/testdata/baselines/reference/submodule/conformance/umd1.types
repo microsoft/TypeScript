@@ -5,17 +5,17 @@
 Foo.fn();
 >Foo.fn() : void
 >Foo.fn : () => void
->Foo : typeof import("foo")
+>Foo : typeof Foo
 >fn : () => void
 
 let x: Foo.Thing;
->x : Thing
+>x : Foo.Thing
 >Foo : any
 
 let y: number = x.n;
 >y : number
 >x.n : number
->x : Thing
+>x : Foo.Thing
 >n : number
 
 === foo.d.ts ===
@@ -30,5 +30,5 @@ export interface Thing { n: typeof x }
 >x : number
 
 export as namespace Foo;
->Foo : typeof import("foo")
+>Foo : typeof import("./foo.js")
 

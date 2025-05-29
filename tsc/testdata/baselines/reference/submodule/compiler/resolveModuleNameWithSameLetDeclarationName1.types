@@ -9,6 +9,6 @@ declare module foo {
 }
 
 let foo: foo.Bar; 
->foo : Bar
+>foo : foo.Bar
 >foo : any
 

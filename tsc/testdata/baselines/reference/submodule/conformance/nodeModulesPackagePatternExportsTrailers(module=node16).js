@@ -114,3 +114,11 @@ const typei = __importStar(require("inner/js/index.js"));
 cjsi;
 mjsi;
 typei;
+
+
+//// [index.d.ts]
+export {};
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};

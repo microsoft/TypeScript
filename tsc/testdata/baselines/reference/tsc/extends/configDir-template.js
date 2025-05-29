@@ -72,6 +72,17 @@ Found 1 error in src/secondary.ts[90m:4[0m
 
 //// [/home/src/projects/configs/first/tsconfig.json] no change
 //// [/home/src/projects/configs/second/tsconfig.json] no change
+//// [/home/src/projects/myproject/decls/main.d.ts] new file
+// some comment
+export declare const y = 10;
+
+//// [/home/src/projects/myproject/decls/src/secondary.d.ts] new file
+// some comment
+export declare const z = 10;
+
+//// [/home/src/projects/myproject/decls/types/sometype.d.ts] new file
+export declare const x = 10;
+
 //// [/home/src/projects/myproject/main.ts] no change
 //// [/home/src/projects/myproject/outDir/main.js] new file
 "use strict";

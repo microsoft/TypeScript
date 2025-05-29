@@ -16,3 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing = void 0;
 const thing_1 = require("./thing");
 exports.thing = (0, thing_1.f)();
+
+
+//// [index.d.ts]
+export declare const thing: import("./thing.js").Bar;

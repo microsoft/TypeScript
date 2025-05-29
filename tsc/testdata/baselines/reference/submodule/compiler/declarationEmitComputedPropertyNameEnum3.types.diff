@@ -1,17 +1,6 @@
 --- old.declarationEmitComputedPropertyNameEnum3.types
 +++ new.declarationEmitComputedPropertyNameEnum3.types
-@@= skipped -19, +19 lines =@@
- >Type : Type
- >x : {} | undefined
- >[Foo.Enum] : 0
-->Foo.Enum : typeof Foo.Enum
-+>Foo.Enum : typeof Enum
- >Foo : typeof Foo
-->Enum : typeof Foo.Enum
-+>Enum : typeof Enum
-
- === index.ts ===
- import { type Type } from "./type";
+@@= skipped -28, +28 lines =@@
  >Type : any
 
  export const foo = { ...({} as Type) };

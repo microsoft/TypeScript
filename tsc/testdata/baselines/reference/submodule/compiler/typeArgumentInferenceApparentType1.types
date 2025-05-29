@@ -2,8 +2,8 @@
 
 === typeArgumentInferenceApparentType1.ts ===
 function method<T>(iterable: Iterable<T>): T {
->method : <T>(iterable: Iterable<T, any, any>) => T
->iterable : Iterable<T, any, any>
+>method : <T>(iterable: Iterable<T>) => T
+>iterable : Iterable<T>
 
     return;
 }
@@ -11,6 +11,6 @@ function method<T>(iterable: Iterable<T>): T {
 var res: string = method("test");
 >res : string
 >method("test") : string
->method : <T>(iterable: Iterable<T, any, any>) => T
+>method : <T>(iterable: Iterable<T>) => T
 >"test" : "test"
 

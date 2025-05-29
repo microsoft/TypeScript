@@ -16,7 +16,7 @@ export class MyClass { }
 === file2.tsx ===
 // Should not elide React import
 import * as React from 'react';
->React : typeof import("react")
+>React : typeof React
 
 import {MyClass} from './file1';
 >MyClass : typeof MyClass

@@ -25,7 +25,7 @@ function getFoo1(): Foo {
 >getFoo1 : () => Foo
 
     return {
->{        method1(arg) {            arg.numProp = 10;        },        method2(arg) {            arg.strProp = "hello";        }    } : { method1: (arg: A) => void; method2: (arg: B) => void; }
+>{        method1(arg) {            arg.numProp = 10;        },        method2(arg) {            arg.strProp = "hello";        }    } : { method1(arg: A): void; method2(arg: B): void; }
 
         method1(arg) {
 >method1 : (arg: A) => void

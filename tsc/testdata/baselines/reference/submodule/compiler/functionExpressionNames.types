@@ -4,7 +4,7 @@
 exports.E = function() {
 >exports.E = function() {    this.e = 'exported'} : () => void
 >exports.E : any
->exports : typeof import("b")
+>exports : typeof import("./b")
 >E : any
 >function() {    this.e = 'exported'} : () => void
 
@@ -19,7 +19,7 @@ var e = new exports.E();
 >e : any
 >new exports.E() : any
 >exports.E : any
->exports : typeof import("b")
+>exports : typeof import("./b")
 >E : any
 
 var o = {

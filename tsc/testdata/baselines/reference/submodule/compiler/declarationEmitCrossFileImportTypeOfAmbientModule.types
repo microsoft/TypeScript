@@ -17,9 +17,9 @@ export declare const item: typeof Foo;
 
 === packages/secondpackage/index.ts ===
 import { item } from "../somepackage";
->item : typeof Foo
+>item : typeof import("@namespace/component").Foo
 
 export const reeexported = item;
->reeexported : typeof Foo
->item : typeof Foo
+>reeexported : typeof import("@namespace/component").Foo
+>item : typeof import("@namespace/component").Foo
 

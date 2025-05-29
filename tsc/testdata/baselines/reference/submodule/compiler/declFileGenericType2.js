@@ -80,3 +80,40 @@ var templa;
         })(mvc = dom.mvc || (dom.mvc = {}));
     })(dom = templa.dom || (templa.dom = {}));
 })(templa || (templa = {}));
+
+
+//// [declFileGenericType2.d.ts]
+declare namespace templa.mvc {
+    interface IModel {
+    }
+}
+declare namespace templa.mvc {
+    interface IController<ModelType extends templa.mvc.IModel> {
+    }
+}
+declare namespace templa.mvc {
+    class AbstractController<ModelType extends templa.mvc.IModel> implements mvc.IController<ModelType> {
+    }
+}
+declare namespace templa.mvc.composite {
+    interface ICompositeControllerModel extends mvc.IModel {
+        getControllers(): mvc.IController<mvc.IModel>[];
+    }
+}
+declare namespace templa.dom.mvc {
+    interface IElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.IController<ModelType> {
+    }
+}
+// Module
+declare namespace templa.dom.mvc {
+    class AbstractElementController<ModelType extends templa.mvc.IModel> extends templa.mvc.AbstractController<ModelType> implements IElementController<ModelType> {
+        constructor();
+    }
+}
+// Module
+declare namespace templa.dom.mvc.composite {
+    class AbstractCompositeElementController<ModelType extends templa.mvc.composite.ICompositeControllerModel> extends templa.dom.mvc.AbstractElementController<ModelType> {
+        _controllers: templa.mvc.IController<templa.mvc.IModel>[];
+        constructor();
+    }
+}

@@ -11,7 +11,7 @@ declare function createInstance<Ctor extends new (...args: any[]) => any, R exte
 
 export interface IMenuWorkbenchToolBarOptions {
     toolbarOptions: {
->toolbarOptions : { foo: (bar: string) => string; }
+>toolbarOptions : { foo(bar: string): string; }
 
         foo(bar: string): string
 >foo : (bar: string) => string
@@ -34,11 +34,11 @@ createInstance(MenuWorkbenchToolBar, {
 >createInstance(MenuWorkbenchToolBar, {    toolbarOptions: {        foo(bar) { return bar; }    }}) : MenuWorkbenchToolBar
 >createInstance : <Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>) => R
 >MenuWorkbenchToolBar : typeof MenuWorkbenchToolBar
->{    toolbarOptions: {        foo(bar) { return bar; }    }} : { toolbarOptions: { foo: (bar: string) => string; }; }
+>{    toolbarOptions: {        foo(bar) { return bar; }    }} : { toolbarOptions: { foo(bar: string): string; }; }
 
     toolbarOptions: {
->toolbarOptions : { foo: (bar: string) => string; }
->{        foo(bar) { return bar; }    } : { foo: (bar: string) => string; }
+>toolbarOptions : { foo(bar: string): string; }
+>{        foo(bar) { return bar; }    } : { foo(bar: string): string; }
 
         foo(bar) { return bar; }
 >foo : (bar: string) => string

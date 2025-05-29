@@ -19,14 +19,14 @@ fn1({ headers: { foo: 1 } });
 >1 : 1
 
 const fn2 = ({ headers = {} }) => { };
->fn2 : (__0: { headers?: {}; }) => void
->({ headers = {} }) => { } : (__0: { headers?: {}; }) => void
+>fn2 : ({ headers = {} }: { headers?: {}; }) => void
+>({ headers = {} }) => { } : ({ headers = {} }: { headers?: {}; }) => void
 >headers : {}
 >{} : {}
 
 fn2({ headers: { foo: 1 } });
 >fn2({ headers: { foo: 1 } }) : void
->fn2 : (__0: { headers?: {}; }) => void
+>fn2 : ({ headers = {} }: { headers?: {}; }) => void
 >{ headers: { foo: 1 } } : { headers: { foo: number; }; }
 >headers : { foo: number; }
 >{ foo: 1 } : { foo: number; }

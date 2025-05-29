@@ -15,3 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 const Foo = (opts) => ({});
 exports.Foo = Foo;
+
+
+//// [declarationEmitOptionalMethod.d.ts]
+export declare const Foo: (opts: {
+    a?(): void;
+    b?: (() => void) | undefined;
+}) => {
+    c?(): void;
+    d?: (() => void) | undefined;
+};

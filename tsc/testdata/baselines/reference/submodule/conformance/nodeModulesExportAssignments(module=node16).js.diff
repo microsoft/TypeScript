@@ -1,14 +1,13 @@
 --- old.nodeModulesExportAssignments(module=node16).js
 +++ new.nodeModulesExportAssignments(module=node16).js
-@@= skipped -27, +27 lines =@@
- // esm format file
- const a = {};
- export {};
--
--
--//// [index.d.ts]
--declare const a: {};
--export = a;
--//// [index.d.ts]
--declare const a: {};
--export = a;
+@@= skipped -30, +30 lines =@@
+
+
+ //// [index.d.ts]
++// cjs format file
+ declare const a: {};
+ export = a;
+ //// [index.d.ts]
++// esm format file
+ declare const a: {};
+ export = a;

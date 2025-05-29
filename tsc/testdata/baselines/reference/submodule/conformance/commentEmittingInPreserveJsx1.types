@@ -2,10 +2,10 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 <div>
-><div>    // Not Comment</div> : Element
+><div>    // Not Comment</div> : JSX.Element
 >div : any
 
     // Not Comment
@@ -13,7 +13,7 @@ import React = require('react');
 >div : any
 
 <div>
-><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : Element
+><div>    // Not Comment    {        //Comment just Fine    }    // Another not Comment</div> : JSX.Element
 >div : any
 
     // Not Comment
@@ -25,7 +25,7 @@ import React = require('react');
 >div : any
 
 <div>
-><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : Element
+><div>    // Not Comment    {        //Comment just Fine        "Hi"    }    // Another not Comment</div> : JSX.Element
 >div : any
 
     // Not Comment
@@ -39,7 +39,7 @@ import React = require('react');
 >div : any
 
 <div>
-><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : Element
+><div>    /* Not Comment */    {        //Comment just Fine        "Hi"    }</div> : JSX.Element
 >div : any
 
     /* Not Comment */

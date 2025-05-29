@@ -12,3 +12,9 @@ export var a = 10;
 //// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.js]
 import * as nameSpaceBinding from "es6ImportDefaultBindingFollowedWithNamespaceBinding_0";
 var x = nameSpaceBinding.a;
+
+
+//// [es6ImportDefaultBindingFollowedWithNamespaceBinding_0.d.ts]
+export declare var a: number;
+//// [es6ImportDefaultBindingFollowedWithNamespaceBinding_1.d.ts]
+export {};

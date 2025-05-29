@@ -5,20 +5,20 @@
  === client.ts ===
  export { c } from "./server";
 ->c : typeof import("server").c
-+>c : typeof c
++>c : typeof import("./server").c
 
  export { c as c2 } from "./server";
 ->c : typeof import("server").c
 ->c2 : typeof import("server").c
-+>c : typeof c
-+>c2 : typeof c
++>c : typeof import("./server").c
++>c2 : typeof import("./server").c
 
  export { i, m as instantiatedModule } from "./server";
  >i : any
 ->m : typeof import("server").m
 ->instantiatedModule : typeof import("server").m
-+>m : typeof m
-+>instantiatedModule : typeof m
++>m : typeof import("./server").m
++>instantiatedModule : typeof import("./server").m
 
  export { uninstantiated } from "./server";
  >uninstantiated : any

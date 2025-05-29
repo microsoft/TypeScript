@@ -33,3 +33,7 @@ var Q;
         foo(null);
     }
 })(Q || (Q = {}));
+
+
+//// [privacyCheckAnonymousFunctionParameter2.d.ts]
+export declare var x: number; // Makes this an external module 

@@ -10,7 +10,7 @@
 function a({while}) { }
 >a : Symbol(a, Decl(destructuringParameterDeclaration6.ts, 3, 12))
 >while : Symbol(while)
-> : Symbol(, Decl(destructuringParameterDeclaration6.ts, 6, 12))
+> : Symbol((Missing), Decl(destructuringParameterDeclaration6.ts, 6, 12))
 
 function a1({public}) { }
 >a1 : Symbol(a1, Decl(destructuringParameterDeclaration6.ts, 6, 23))
@@ -21,7 +21,7 @@ function a4([while, for, public]){ }
 
 function a5(...while) { }
 >a5 : Symbol(a5, Decl(destructuringParameterDeclaration6.ts, 8, 36))
-> : Symbol(, Decl(destructuringParameterDeclaration6.ts, 9, 12))
+> : Symbol((Missing), Decl(destructuringParameterDeclaration6.ts, 9, 12))
 
 function a6(...public) { }
 >a6 : Symbol(a6, Decl(destructuringParameterDeclaration6.ts, 9, 25))

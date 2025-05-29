@@ -23,3 +23,14 @@ function getClass(c) {
 }
 class MyClass extends getClass(2) {
 }
+
+
+//// [declarationEmitExpressionInExtends2.d.ts]
+declare class C<T, U> {
+    x: T;
+    y: U;
+}
+declare function getClass<T>(c: T): typeof C;
+declare const MyClass_base: typeof C;
+declare class MyClass extends MyClass_base<string, number> {
+}

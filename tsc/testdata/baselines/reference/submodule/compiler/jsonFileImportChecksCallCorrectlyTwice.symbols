@@ -13,15 +13,15 @@ interface Foo {
 
 fn(data.foo);
 >fn : Symbol(fn, Decl(index.ts, 7, 13))
->data.foo : Symbol(foo, Decl(data.json, 0, 1))
+>data.foo : Symbol("foo", Decl(data.json, 0, 1))
 >data : Symbol(data, Decl(index.ts, 0, 6))
->foo : Symbol(foo, Decl(data.json, 0, 1))
+>foo : Symbol("foo", Decl(data.json, 0, 1))
 
 fn(data.foo); // <-- shouldn't error!
 >fn : Symbol(fn, Decl(index.ts, 7, 13))
->data.foo : Symbol(foo, Decl(data.json, 0, 1))
+>data.foo : Symbol("foo", Decl(data.json, 0, 1))
 >data : Symbol(data, Decl(index.ts, 0, 6))
->foo : Symbol(foo, Decl(data.json, 0, 1))
+>foo : Symbol("foo", Decl(data.json, 0, 1))
 
 function fn(arg: Foo[]) { }
 >fn : Symbol(fn, Decl(index.ts, 7, 13))
@@ -31,13 +31,13 @@ function fn(arg: Foo[]) { }
 === data.json ===
 {
     "foo": [
->"foo" : Symbol(foo, Decl(data.json, 0, 1))
+>"foo" : Symbol("foo", Decl(data.json, 0, 1))
       {
         "bool": true,
->"bool" : Symbol(bool, Decl(data.json, 2, 7))
+>"bool" : Symbol("bool", Decl(data.json, 2, 7))
 
         "str": "123"
->"str" : Symbol(str, Decl(data.json, 3, 21))
+>"str" : Symbol("str", Decl(data.json, 3, 21))
       }
     ]
 }

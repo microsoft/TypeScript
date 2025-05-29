@@ -2,10 +2,10 @@
 
 === mod.d.ts ===
 export = modObj;
->modObj : A & B
+>modObj : import("./mod.js").A & import("./mod.js").B
 
 declare const modObj: modObj.A & modObj.B;
->modObj : A & B
+>modObj : import("./mod.js").A & import("./mod.js").B
 >modObj : any
 >modObj : any
 
@@ -19,15 +19,15 @@ declare namespace modObj {
 }
 === idx.ts ===
 import * as mod from "./mod";
->mod : A & B
+>mod : mod.A & mod.B
 
 mod.a;
 >mod.a : string
->mod : A & B
+>mod : mod.A & mod.B
 >a : string
 
 mod.b;
 >mod.b : string
->mod : A & B
+>mod : mod.A & mod.B
 >b : string
 

@@ -10,3 +10,12 @@ class C {
     static D = class extends C {
     };
 }
+
+
+//// [classExpressionInClassStaticDeclarations.d.ts]
+declare class C {
+    static D: {
+        new (): {};
+        D: any;
+    };
+}

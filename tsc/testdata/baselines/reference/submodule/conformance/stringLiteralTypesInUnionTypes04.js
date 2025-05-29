@@ -65,3 +65,9 @@ if (!!x) {
 if (!!!x) {
     let h = x;
 }
+
+
+//// [stringLiteralTypesInUnionTypes04.d.ts]
+type T = "" | "foo";
+declare let x: T;
+declare let y: T;

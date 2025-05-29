@@ -1,0 +1,20 @@
+--- old.moduleAugmentationCollidingNamesInAugmentation1.types
++++ new.moduleAugmentationCollidingNamesInAugmentation1.types
+@@= skipped -15, +15 lines =@@
+ >function() { } : () => void
+
+ declare module "./observable" {
+->"./observable" : typeof import("observable")
++>"./observable" : typeof import("./observable")
+
+     interface I {x0}
+ >x0 : any
+@@= skipped -22, +22 lines =@@
+ >function() { } : () => void
+
+ declare module "./observable" {
+->"./observable" : typeof import("observable")
++>"./observable" : typeof import("./observable")
+
+     interface I {x1}
+ >x1 : any

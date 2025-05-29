@@ -2,7 +2,7 @@
 
 === iterableArrayPattern9.ts ===
 function fun([a, b] = new FooIterator) { }
->fun : (__0?: FooIterator) => void
+>fun : ([a, b]?: FooIterator) => void
 >a : Foo
 >b : Foo
 >new FooIterator : FooIterator

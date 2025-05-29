@@ -2,7 +2,7 @@
 
 === example.ts ===
 export default function add(a: number, b: number) {
->add : Symbol(default, Decl(example.ts, 0, 0))
+>add : Symbol(add, Decl(example.ts, 0, 0))
 >a : Symbol(a, Decl(example.ts, 0, 28))
 >b : Symbol(b, Decl(example.ts, 0, 38))
 

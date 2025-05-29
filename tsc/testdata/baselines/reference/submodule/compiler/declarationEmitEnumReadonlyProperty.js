@@ -22,3 +22,14 @@ class C {
     type = E.A;
 }
 let x = new C().type;
+
+
+//// [declarationEmitEnumReadonlyProperty.d.ts]
+declare enum E {
+    A = "a",
+    B = "b"
+}
+declare class C {
+    readonly type: E;
+}
+declare let x: E.A;

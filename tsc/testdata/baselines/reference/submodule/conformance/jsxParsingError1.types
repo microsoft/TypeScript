@@ -19,8 +19,8 @@ const class2 = "bar";
 >"bar" : "bar"
 
 const elem = <div className={class1, class2}/>;
->elem : Element
-><div className={class1, class2}/> : Element
+>elem : JSX.Element
+><div className={class1, class2}/> : JSX.Element
 >div : any
 >className : string
 >class1, class2 : "bar"

@@ -25,3 +25,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = void 0;
 const b_1 = require("./b");
 exports.Value = (0, b_1.createNamed)();
+
+
+//// [b.d.ts]
+export interface Named {
+}
+export declare function createNamed(): Named;
+//// [a.d.ts]
+export declare const Value: import("./b").Named;

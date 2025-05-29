@@ -2,7 +2,7 @@
 
 === thisInModuleFunction1.ts ===
 module bar {
->bar : typeof bar
+>bar : typeof globalThis.bar
 
  export function bar() {
 >bar : () => any

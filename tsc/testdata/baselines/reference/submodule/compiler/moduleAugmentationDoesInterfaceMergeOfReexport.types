@@ -10,10 +10,10 @@ export interface Foo {
 export * from "./file";
 === augment.ts ===
 import * as ns from "./reexport";
->ns : typeof import("reexport")
+>ns : typeof ns
 
 declare module "./reexport" {
->"./reexport" : typeof import("reexport")
+>"./reexport" : typeof ns
 
     export interface Foo {
         self: Foo;
@@ -22,30 +22,30 @@ declare module "./reexport" {
 }
 
 declare const f: ns.Foo;
->f : Foo
+>f : ns.Foo
 >ns : any
 
 f.x;
 >f.x : number
->f : Foo
+>f : ns.Foo
 >x : number
 
 f.self;
->f.self : Foo
->f : Foo
->self : Foo
+>f.self : ns.Foo
+>f : ns.Foo
+>self : ns.Foo
 
 f.self.x;
 >f.self.x : number
->f.self : Foo
->f : Foo
->self : Foo
+>f.self : ns.Foo
+>f : ns.Foo
+>self : ns.Foo
 >x : number
 
 f.self.self;
->f.self.self : Foo
->f.self : Foo
->f : Foo
->self : Foo
->self : Foo
+>f.self.self : ns.Foo
+>f.self : ns.Foo
+>f : ns.Foo
+>self : ns.Foo
+>self : ns.Foo
 

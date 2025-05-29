@@ -58,17 +58,17 @@ Foo.b;
 >b : "template"
 
 Foo.c;
->Foo.c : Bar.a
+>Foo.c : Foo.Bar.a
 >Foo : typeof Foo
->c : Bar.a
+>c : Foo.Bar.a
 
 Foo.d;
->Foo.d : Bar.b
+>Foo.d : Foo.Bar.b
 >Foo : typeof Foo
->d : Bar.b
+>d : Foo.Bar.b
 
 Foo.e;
->Foo.e : Bar.c
+>Foo.e : Foo.Bar.c
 >Foo : typeof Foo
->e : Bar.c
+>e : Foo.Bar.c
 

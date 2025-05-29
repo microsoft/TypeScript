@@ -285,11 +285,9 @@
 ->exports : typeof import("mod1")
 +>exports : any
  >"rwAccessors" : "rwAccessors"
-->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
-+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
+ >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
  >get : () => number
- >98122 : 98122
- >set : (_: any) => void
+@@= skipped -13, +13 lines =@@
  >_ : any
 
  Object.defineProperty(exports, "readonlyAccessor", { get() { return 21.75 } });
@@ -301,8 +299,7 @@
 ->exports : typeof import("mod1")
 +>exports : any
  >"readonlyAccessor" : "readonlyAccessor"
-->{ get() { return 21.75 } } : { get(): number; }
-+>{ get() { return 21.75 } } : { get: () => number; }
+ >{ get() { return 21.75 } } : { get(): number; }
  >get : () => number
  >21.75 : 21.75
 
@@ -315,12 +312,9 @@
 ->exports : typeof import("mod1")
 +>exports : any
  >"setonlyAccessor" : "setonlyAccessor"
-->{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
-+>{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set: (str: string) => void; }
+ >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
 
-     /** @param {string} str */
-     set(str) {
-@@= skipped -50, +50 lines =@@
+@@= skipped -37, +37 lines =@@
 
  === mod2.js ===
  Object.defineProperty(module.exports, "thing", { value: "yes", writable: true });
@@ -372,11 +366,9 @@
 +>module : any
 +>exports : any
  >"rwAccessors" : "rwAccessors"
-->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
-+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
+ >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
  >get : () => number
- >98122 : 98122
- >set : (_: any) => void
+@@= skipped -15, +15 lines =@@
  >_ : any
 
  Object.defineProperty(module.exports, "readonlyAccessor", { get() { return 21.75 } });
@@ -392,8 +384,7 @@
 +>module : any
 +>exports : any
  >"readonlyAccessor" : "readonlyAccessor"
-->{ get() { return 21.75 } } : { get(): number; }
-+>{ get() { return 21.75 } } : { get: () => number; }
+ >{ get() { return 21.75 } } : { get(): number; }
  >get : () => number
  >21.75 : 21.75
 
@@ -410,12 +401,9 @@
 +>module : any
 +>exports : any
  >"setonlyAccessor" : "setonlyAccessor"
-->{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
-+>{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set: (str: string) => void; }
+ >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)     }} : { set(str: string): void; }
 
-     /** @param {string} str */
-     set(str) {
-@@= skipped -60, +60 lines =@@
+@@= skipped -45, +45 lines =@@
   */
  const q = require("./mod1").thing;
  >q : number

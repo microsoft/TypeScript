@@ -29,3 +29,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
 const decl_1 = require("./decl");
 exports.f = { o: (0, decl_1.o)({ v: null }) };
+
+
+//// [utils.d.ts]
+export interface Evt {
+}
+//// [decl.d.ts]
+export declare const o: <T>(o: T) => () => T;
+//// [main.d.ts]
+import { Evt } from './utils';
+export declare const f: {
+    o: () => {
+        v: Evt;
+    };
+};

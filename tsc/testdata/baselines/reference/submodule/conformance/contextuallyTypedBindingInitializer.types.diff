@@ -5,7 +5,7 @@
  }
  function f({ show = v => v.toString() }: Show) {}
 ->f : ({ show }: Show) => void
-+>f : (__0: Show) => void
++>f : ({ show = v => v.toString() }: Show) => void
  >show : (x: number) => string
  >v => v.toString() : (v: number) => string
  >v : number
@@ -14,7 +14,7 @@
 
  function f2({ "show": showRename = v => v.toString() }: Show) {}
 ->f2 : ({ "show": showRename }: Show) => void
-+>f2 : (__0: Show) => void
++>f2 : ({ "show": showRename = v => v.toString() }: Show) => void
  >showRename : (x: number) => string
  >v => v.toString() : (v: number) => string
  >v : number
@@ -23,7 +23,7 @@
 
  function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 ->f3 : ({ ["show"]: showRename }: Show) => void
-+>f3 : (__0: Show) => void
++>f3 : ({ ["show"]: showRename = v => v.toString() }: Show) => void
  >"show" : "show"
  >showRename : (x: number) => string
  >v => v.toString() : (v: number) => string
@@ -32,7 +32,7 @@
  }
  function ff({ nested = { show: v => v.toString() } }: Nested) {}
 ->ff : ({ nested }: Nested) => void
-+>ff : (__0: Nested) => void
++>ff : ({ nested = { show: v => v.toString() } }: Nested) => void
  >nested : Show
  >{ show: v => v.toString() } : { show: (v: number) => string; }
  >show : (v: number) => string
@@ -41,7 +41,7 @@
  }
  function g({ prop = ["hello", 1234] }: Tuples) {}
 ->g : ({ prop }: Tuples) => void
-+>g : (__0: Tuples) => void
++>g : ({ prop = ["hello", 1234] }: Tuples) => void
  >prop : [string, number]
  >["hello", 1234] : [string, number]
  >"hello" : "hello"
@@ -50,6 +50,6 @@
  }
  function h({ prop = "foo" }: StringUnion) {}
 ->h : ({ prop }: StringUnion) => void
-+>h : (__0: StringUnion) => void
++>h : ({ prop = "foo" }: StringUnion) => void
  >prop : "bar" | "foo"
  >"foo" : "foo"

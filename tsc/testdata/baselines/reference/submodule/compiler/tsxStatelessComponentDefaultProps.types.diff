@@ -5,29 +5,22 @@
 
  function BackButton(_props: Props) {
 ->BackButton : typeof BackButton
-+>BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
++>BackButton : { (_props: Props): JSX.Element; defaultProps: { text: string; }; }
  >_props : Props
 
      return <div />
--><div /> : JSX.Element
-+><div /> : Element
- >div : any
- }
+@@= skipped -10, +10 lines =@@
  BackButton.defaultProps = {
  >BackButton.defaultProps = {    text: 'Go Back',} : { text: string; }
  >BackButton.defaultProps : { text: string; }
 ->BackButton : typeof BackButton
-+>BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
++>BackButton : { (_props: Props): JSX.Element; defaultProps: { text: string; }; }
  >defaultProps : { text: string; }
  >{    text: 'Go Back',} : { text: string; }
 
-@@= skipped -20, +20 lines =@@
-
- };
+@@= skipped -12, +12 lines =@@
  let a = <BackButton />
-->a : JSX.Element
--><BackButton /> : JSX.Element
+ >a : JSX.Element
+ ><BackButton /> : JSX.Element
 ->BackButton : typeof BackButton
-+>a : Element
-+><BackButton /> : Element
-+>BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
++>BackButton : { (_props: Props): JSX.Element; defaultProps: { text: string; }; }

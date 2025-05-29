@@ -10,3 +10,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class default_1 extends SomeUndefinedFunction {
 }
 exports.default = default_1;
+
+
+//// [declarationEmitExpressionInExtends7.d.ts]
+export default class extends SomeUndefinedFunction {
+}

@@ -25,46 +25,7 @@
  >ab : (...args: A) => B
  >args : A
  >bc : (b: B) => C
-@@= skipped -430, +430 lines =@@
- >baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
-
- declare const list2: {
-->list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
-+>list2 : { <T>(a: T): T[]; foo: string; bar: () => number; }
-
-     <T>(a: T): T[];
- >a : T
-@@= skipped -16, +16 lines =@@
- >f70 : <T>(a: T) => { value: T[]; }
- >pipe(list2, box) : <T>(a: T) => { value: T[]; }
- >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
-->list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
-+>list2 : { <T>(a: T): T[]; foo: string; bar: () => number; }
- >box : <V>(x: V) => { value: V; }
-
- let f71 = pipe(box, list2);
-@@= skipped -8, +8 lines =@@
- >pipe(box, list2) : <V>(x: V) => { value: V; }[]
- >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
- >box : <V>(x: V) => { value: V; }
-->list2 : { <T>(a: T): T[]; foo: string; bar(): number; }
-+>list2 : { <T>(a: T): T[]; foo: string; bar: () => number; }
-
- declare class Point {
- >Point : Point
-@@= skipped -242, +242 lines =@@
- >(arr: T[]) => arr.map(transform) : (arr: T[]) => U[]
- >arr : T[]
- >arr.map(transform) : U[]
-->arr.map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
-+>arr.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
- >arr : T[]
-->map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
-+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
- >transform : (t: T) => U
-
- const identityStr = (t: string) => t;
-@@= skipped -91, +91 lines =@@
+@@= skipped -787, +787 lines =@@
  >fn20 : (_a?: {} | undefined) => number
  >pipe((_a?: {}) => 1) : (_a?: {} | undefined) => number
  >pipe : { <A extends any[], B>(ab: (...args: A) => B): (...args: A) => B; <A extends any[], B, C>(ab: (...args: A) => B, bc: (b: B) => C): (...args: A) => C; <A extends any[], B, C, D>(ab: (...args: A) => B, bc: (b: B) => C, cd: (c: C) => D): (...args: A) => D; }
@@ -73,24 +34,12 @@
  >_a : {} | undefined
  >1 : 1
 
-@@= skipped -41, +41 lines =@@
-
- promise.then(
- >promise.then(    pipe(        x => x + 1,        x => x * 2,    ),) : Promise<number>
-->promise.then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>promise.then : <TResult1, TResult2>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
- >promise : Promise<number>
-->then : <TResult1 = number, TResult2 = never>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: ((value: number) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-
-     pipe(
- >pipe(        x => x + 1,        x => x * 2,    ) : (x: number) => number
-@@= skipped -126, +126 lines =@@
+@@= skipped -167, +167 lines =@@
  // Repro from #30297
 
  declare function foo2<T, U = T>(fn: T, a?: U, b?: U): [T, U];
 ->foo2 : <T, U = T>(fn: T, a?: U, b?: U) => [T, U]
-+>foo2 : <T, U>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
++>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
  >fn : T
  >a : U | undefined
  >b : U | undefined
@@ -98,18 +47,18 @@
  foo2(() => {});
  >foo2(() => {}) : [() => void, () => void]
 ->foo2 : <T, U = T>(fn: T, a?: U, b?: U) => [T, U]
-+>foo2 : <T, U>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
++>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
  >() => {} : () => void
 
  foo2(identity);
  >foo2(identity) : [<T>(value: T) => T, <T>(value: T) => T]
 ->foo2 : <T, U = T>(fn: T, a?: U, b?: U) => [T, U]
-+>foo2 : <T, U>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
++>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
  >identity : <T>(value: T) => T
 
  foo2(identity, 1);
  >foo2(identity, 1) : [<T>(value: T) => T, number]
 ->foo2 : <T, U = T>(fn: T, a?: U, b?: U) => [T, U]
-+>foo2 : <T, U>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
++>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
  >identity : <T>(value: T) => T
  >1 : 1

@@ -1,16 +1,11 @@
 --- old.nodeNextCjsNamespaceImportDefault2.js
 +++ new.nodeNextCjsNamespaceImportDefault2.js
-@@= skipped -22, +22 lines =@@
- export { d, a, ns };
- d.a;
- ns.default.a;
--
--
--//// [a.d.cts]
--export declare const a: number;
+@@= skipped -26, +26 lines =@@
+
+ //// [a.d.cts]
+ export declare const a: number;
 -declare const _default: "string";
--export default _default;
--//// [foo.d.mts]
--import d, { a } from './a.cjs';
--import * as ns from './a.cjs';
--export { d, a, ns };
++declare const _default: string;
+ export default _default;
+ //// [foo.d.mts]
+ import d, { a } from './a.cjs';

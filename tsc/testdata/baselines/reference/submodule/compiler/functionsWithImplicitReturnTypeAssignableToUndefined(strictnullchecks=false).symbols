@@ -57,7 +57,7 @@ function f6(): Record<string, any> {
 >Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
 >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >random : Symbol(random, Decl(lib.es5.d.ts, --, --))
->"foo" : Symbol(foo, Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 28, 37))
+>"foo" : Symbol("foo", Decl(functionsWithImplicitReturnTypeAssignableToUndefined.ts, 28, 37))
 
     // Implicit return, but undefined is assignable to records (which are just fancy objects)
     // when strictNullChecks is off.

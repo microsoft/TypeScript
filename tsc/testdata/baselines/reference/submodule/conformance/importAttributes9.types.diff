@@ -12,27 +12,3 @@
 +=== b.ts ===
  declare global {
  >global : any
-
-@@= skipped -14, +14 lines =@@
- }
-
- import * as ns from "./a" with { type: "not-json" };
-->ns : typeof ns
-+>ns : typeof import("a")
- >type : any
-
- void ns;
- >void ns : undefined
-->ns : typeof ns
-+>ns : typeof import("a")
-
- async function f() {
- >f : () => Promise<void>
-
-     await import("./a", {
-->await import("./a", {        with: {            type: "not-json",        },    }) : typeof ns
-->import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof ns>
-+>await import("./a", {        with: {            type: "not-json",        },    }) : typeof import("a")
-+>import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof import("a")>
- >"./a" : "./a"
- >{        with: {            type: "not-json",        },    } : { with: { type: "not-json"; }; }

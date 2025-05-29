@@ -5,12 +5,12 @@
 
      function e(): e.Express;
 ->e : typeof import("express.d.ts")
-+>e : typeof e
++>e : typeof import("express")
  >e : any
 
      namespace e {
 ->e : typeof import("express.d.ts")
-+>e : typeof e
++>e : typeof import("express")
 
          interface IRoute {
              all(...handler: RequestHandler[]): IRoute;
@@ -19,7 +19,7 @@
 
      export = e;
 ->e : typeof import("express.d.ts")
-+>e : typeof e
++>e : typeof import("express")
  }
 
  === augmentation.ts ===

@@ -44,3 +44,23 @@ func GetStringComparer(ignoreCase bool) func(a, b string) Comparison {
 	}
 	return CompareStringsCaseSensitive
 }
+
+func HasPrefix(s string, prefix string, caseSensitive bool) bool {
+	if caseSensitive {
+		return strings.HasPrefix(s, prefix)
+	}
+	if len(prefix) > len(s) {
+		return false
+	}
+	return strings.EqualFold(s[0:len(prefix)], prefix)
+}
+
+func HasSuffix(s string, suffix string, caseSensitive bool) bool {
+	if caseSensitive {
+		return strings.HasSuffix(s, suffix)
+	}
+	if len(suffix) > len(s) {
+		return false
+	}
+	return strings.EqualFold(s[len(s)-len(suffix):], suffix)
+}

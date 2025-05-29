@@ -138,3 +138,52 @@ var schema;
     }
     schema.T = T;
 })(schema || (schema = {}));
+
+
+//// [isDeclarationVisibleNodeKinds.d.ts]
+// Function types
+declare namespace schema {
+    function createValidator1(schema: any): <T>(data: T) => T;
+}
+// Constructor types
+declare namespace schema {
+    function createValidator2(schema: any): new <T>(data: T) => T;
+}
+// union types
+declare namespace schema {
+    function createValidator3(schema: any): number | {
+        new <T>(data: T);
+    };
+}
+// Array types
+declare namespace schema {
+    function createValidator4(schema: any): {
+        new <T>(data: T);
+    }[];
+}
+// TypeLiterals
+declare namespace schema {
+    function createValidator5(schema: any): {
+        new <T>(data: T);
+    };
+}
+// Tuple types
+declare namespace schema {
+    function createValidator6(schema: any): [new <T>(data: T) => T, number];
+}
+// Paren Types
+declare namespace schema {
+    function createValidator7(schema: any): (new <T>(data: T) => T)[];
+}
+// Type reference
+declare namespace schema {
+    function createValidator8(schema: any): Array<{
+        <T>(data: T): T;
+    }>;
+}
+declare namespace schema {
+    class T {
+        get createValidator9(): <T>(data: T) => T;
+        set createValidator10(v: <T>(data: T) => T);
+    }
+}

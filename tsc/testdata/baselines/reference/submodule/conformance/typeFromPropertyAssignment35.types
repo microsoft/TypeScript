@@ -3,12 +3,12 @@
 === bug26877.js ===
 /** @param {Emu.D} x */
 function ollKorrect(x) {
->ollKorrect : (x: D) => void
->x : D
+>ollKorrect : (x: Emu.D) => void
+>x : Emu.D
 
     x._model
 >x._model : any
->x : D
+>x : Emu.D
 >_model : any
 
     const y = new Emu.D()

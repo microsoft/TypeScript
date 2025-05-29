@@ -31,7 +31,7 @@ export {x, y as z} from 'a';
 >z : Symbol(z, Decl(file3.ts, 0, 10))
 
 export default function foo() {}
->foo : Symbol(default, Decl(file3.ts, 0, 28))
+>foo : Symbol(foo, Decl(file3.ts, 0, 28))
 
 export * from 'bar';
 

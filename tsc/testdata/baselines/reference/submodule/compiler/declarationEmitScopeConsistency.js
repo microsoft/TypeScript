@@ -22,3 +22,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.g = void 0;
 const a_1 = require("./a");
 exports.g = a_1.f;
+
+
+//// [a.d.ts]
+export interface A {
+    a: number;
+}
+export declare const f: (x: A) => A;
+//// [b.d.ts]
+export interface A {
+    other: number;
+}
+export declare const g: (x: import("./a").A) => import("./a").A;

@@ -28,7 +28,7 @@ declare global {
     export import X = M.M1.x;
 >X : number
 >M : typeof M
->M1 : typeof M1
+>M1 : typeof M.M1
 >x : number
 }
 

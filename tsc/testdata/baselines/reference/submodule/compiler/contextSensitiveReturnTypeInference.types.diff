@@ -9,32 +9,3 @@
  >deps : { foo: number; }
  >DEPS : { foo: number; }
  >data : IData
-@@= skipped -61, +61 lines =@@
- >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
-
-   (deps, data) => {
-->(deps, data) => {    return {      fn1() { return deps.foo },      fn2: data.bar    }  } : (deps: { foo: number; }, data: IData) => { fn1(): number; fn2: boolean; }
-+>(deps, data) => {    return {      fn1() { return deps.foo },      fn2: data.bar    }  } : (deps: { foo: number; }, data: IData) => { fn1: () => number; fn2: boolean; }
- >deps : { foo: number; }
- >data : IData
-
-     return {
-->{      fn1() { return deps.foo },      fn2: data.bar    } : { fn1(): number; fn2: boolean; }
-+>{      fn1() { return deps.foo },      fn2: data.bar    } : { fn1: () => number; fn2: boolean; }
-
-       fn1() { return deps.foo },
- >fn1 : () => number
-@@= skipped -30, +30 lines =@@
- >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
-
-   (deps) => ({
-->(deps) => ({    fn1() { return deps.foo },    fn2: 1  }) : (deps: { foo: number; }) => { fn1(): number; fn2: number; }
-+>(deps) => ({    fn1() { return deps.foo },    fn2: 1  }) : (deps: { foo: number; }) => { fn1: () => number; fn2: number; }
- >deps : { foo: number; }
-->({    fn1() { return deps.foo },    fn2: 1  }) : { fn1(): number; fn2: number; }
-->{    fn1() { return deps.foo },    fn2: 1  } : { fn1(): number; fn2: number; }
-+>({    fn1() { return deps.foo },    fn2: 1  }) : { fn1: () => number; fn2: number; }
-+>{    fn1() { return deps.foo },    fn2: 1  } : { fn1: () => number; fn2: number; }
-
-     fn1() { return deps.foo },
- >fn1 : () => number

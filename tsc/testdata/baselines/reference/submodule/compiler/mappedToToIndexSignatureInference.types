@@ -29,7 +29,7 @@ enum E { A = 'foo', B = 'bar' }
 
 let x: E[] = enumValues(E);
 >x : E[]
->enumValues(E) : (E)[]
+>enumValues(E) : E[]
 >enumValues : <K extends string, V extends string>(e: Record<K, V>) => V[]
 >E : typeof E
 

@@ -8,7 +8,7 @@ export interface IValidationError {
 }
 
 export default class Operation {
->Operation : default
+>Operation : Operation
 
     validateParameters(parameterValues: any) : IValidationError[] | null {
 >validateParameters : (parameterValues: any) => IValidationError[] | null

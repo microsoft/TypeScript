@@ -89,11 +89,11 @@ module M {
 }
 
 var x=new M.C();
->x : C
->new M.C() : C
->M.C : typeof C
+>x : M.C
+>new M.C() : M.C
+>M.C : typeof M.C
 >M : typeof M
->C : typeof C
+>C : typeof M.C
 
 var result="";
 >result : string
@@ -104,9 +104,9 @@ result+=x.f(x,3,3); // bad first param
 >result : string
 >x.f(x,3,3) : string
 >x.f : (x: string, ...rest: number[]) => string
->x : C
+>x : M.C
 >f : (x: string, ...rest: number[]) => string
->x : C
+>x : M.C
 >3 : 3
 >3 : 3
 
@@ -115,7 +115,7 @@ result+=x.f(3,"hello",3); // bad second param
 >result : string
 >x.f(3,"hello",3) : string
 >x.f : (x: string, ...rest: number[]) => string
->x : C
+>x : M.C
 >f : (x: string, ...rest: number[]) => string
 >3 : 3
 >"hello" : "hello"
@@ -126,7 +126,7 @@ result+=x.f("hello",3,3,3,3,3); // ok
 >result : string
 >x.f("hello",3,3,3,3,3) : string
 >x.f : (x: string, ...rest: number[]) => string
->x : C
+>x : M.C
 >f : (x: string, ...rest: number[]) => string
 >"hello" : "hello"
 >3 : 3
@@ -140,7 +140,7 @@ result+=x.f("hello"); // ok varargs length 0
 >result : string
 >x.f("hello") : string
 >x.f : (x: string, ...rest: number[]) => string
->x : C
+>x : M.C
 >f : (x: string, ...rest: number[]) => string
 >"hello" : "hello"
 
@@ -149,7 +149,7 @@ result+=x.fonly(3); // ok conversion
 >result : string
 >x.fonly(3) : any
 >x.fonly : (...rest: string[]) => any
->x : C
+>x : M.C
 >fonly : (...rest: string[]) => any
 >3 : 3
 
@@ -158,16 +158,16 @@ result+=x.fonly(x); // bad param
 >result : string
 >x.fonly(x) : any
 >x.fonly : (...rest: string[]) => any
->x : C
+>x : M.C
 >fonly : (...rest: string[]) => any
->x : C
+>x : M.C
 
 result+=x.fonly("a"); // ok 
 >result+=x.fonly("a") : string
 >result : string
 >x.fonly("a") : any
 >x.fonly : (...rest: string[]) => any
->x : C
+>x : M.C
 >fonly : (...rest: string[]) => any
 >"a" : "a"
 
@@ -176,7 +176,7 @@ result+=x.fonly("a","b","c","d"); //ok
 >result : string
 >x.fonly("a","b","c","d") : any
 >x.fonly : (...rest: string[]) => any
->x : C
+>x : M.C
 >fonly : (...rest: string[]) => any
 >"a" : "a"
 >"b" : "b"

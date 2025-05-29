@@ -77,10 +77,10 @@ declare module Bacon {
 }
 
 var stuck: Bacon.Bus<number> = new Bacon.Bus();
->stuck : Bus<number>
+>stuck : Bacon.Bus<number>
 >Bacon : any
->new Bacon.Bus() : Bus<number>
->Bacon.Bus : new <T>() => Bus<T>
+>new Bacon.Bus() : Bacon.Bus<number>
+>Bacon.Bus : new <T>() => Bacon.Bus<T>
 >Bacon : typeof Bacon
->Bus : new <T>() => Bus<T>
+>Bus : new <T>() => Bacon.Bus<T>
 

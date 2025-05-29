@@ -10,14 +10,14 @@ export type { A };
 
 === /b.ts ===
 import * as types from './a';
->types : typeof import("/a")
+>types : typeof types
 
 types.A;
 >types.A : any
->types : typeof import("/a")
+>types : typeof types
 >A : any
 
 const { A } = types;
 >A : any
->types : typeof import("/a")
+>types : typeof types
 

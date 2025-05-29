@@ -25,7 +25,7 @@
 
      public "Infinity": string = "A gillion"; // Error
 ->"Infinity" : Symbol(C["Infinity"], Decl(propertiesAndIndexersForNumericNames.ts, 9, 53))
-+>"Infinity" : Symbol(Infinity, Decl(propertiesAndIndexersForNumericNames.ts, 9, 53))
++>"Infinity" : Symbol("Infinity", Decl(propertiesAndIndexersForNumericNames.ts, 9, 53))
 
      public "-Infinity": string = "Negative-a-gillion"; // Error
 ->"-Infinity" : Symbol(C["-Infinity"], Decl(propertiesAndIndexersForNumericNames.ts, 10, 44))
@@ -33,7 +33,7 @@
 
      public "NaN": string = "not a number"; // Error
 ->"NaN" : Symbol(C["NaN"], Decl(propertiesAndIndexersForNumericNames.ts, 11, 54))
-+>"NaN" : Symbol(NaN, Decl(propertiesAndIndexersForNumericNames.ts, 11, 54))
++>"NaN" : Symbol("NaN", Decl(propertiesAndIndexersForNumericNames.ts, 11, 54))
      
      // These all have *partially* numeric names,
      // but should really be treated as plain string literals.
@@ -59,7 +59,7 @@
 
      public "hunter2": string = "not a password"; // No error
 ->"hunter2" : Symbol(C["hunter2"], Decl(propertiesAndIndexersForNumericNames.ts, 20, 58))
-+>"hunter2" : Symbol(hunter2, Decl(propertiesAndIndexersForNumericNames.ts, 20, 58))
++>"hunter2" : Symbol("hunter2", Decl(propertiesAndIndexersForNumericNames.ts, 20, 58))
 
      public "+Infinity": string = "A gillion"; // No error
 ->"+Infinity" : Symbol(C["+Infinity"], Decl(propertiesAndIndexersForNumericNames.ts, 21, 48))

@@ -6,3 +6,8 @@ class y<T extends {}>{ }
 //// [objectLiteralDeclarationGeneration1.js]
 class y {
 }
+
+
+//// [objectLiteralDeclarationGeneration1.d.ts]
+declare class y<T extends {}> {
+}

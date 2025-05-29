@@ -549,11 +549,11 @@ func CheckEachDefined[S any](s []*S, msg string) []*S {
 	return s
 }
 
-func StripQuotes(name string) string {
-	firstChar, _ := utf8.DecodeRuneInString(name)
-	lastChar, _ := utf8.DecodeLastRuneInString(name)
-	if firstChar == lastChar && (firstChar == '\'' || firstChar == '"' || firstChar == '`') {
-		return name[1 : len(name)-1]
+func IndexAfter(s string, pattern string, startIndex int) int {
+	matched := strings.Index(s[startIndex:], pattern)
+	if matched == -1 {
+		return -1
+	} else {
+		return matched + startIndex
 	}
-	return name
 }

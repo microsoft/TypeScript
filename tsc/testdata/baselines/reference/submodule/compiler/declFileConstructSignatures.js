@@ -68,3 +68,55 @@ interface IGlobalConstructSignatureWithOwnTypeParametes {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileConstructSignatures_1.js]
+
+
+//// [declFileConstructSignatures_0.d.ts]
+export interface IConstructSignature {
+    /** This comment should appear for foo*/
+    new ();
+}
+export interface IConstructSignatureWithParameters {
+    /** This is comment for function signature*/
+    new (/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number);
+}
+export interface IConstructSignatureWithRestParameters {
+    new (a: string, ...rests: string[]);
+}
+export interface IConstructSignatureWithOverloads {
+    new (a: string);
+    new (a: number);
+}
+export interface IConstructSignatureWithTypeParameters<T> {
+    /** This comment should appear for foo*/
+    new (a: T);
+}
+export interface IConstructSignatureWithOwnTypeParametes {
+    new <T extends IConstructSignature>(a: T);
+}
+//// [declFileConstructSignatures_1.d.ts]
+interface IGlobalConstructSignature {
+    /** This comment should appear for foo*/
+    new ();
+}
+interface IGlobalConstructSignatureWithParameters {
+    /** This is comment for function signature*/
+    new (/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number);
+}
+interface IGlobalConstructSignatureWithRestParameters {
+    new (a: string, ...rests: string[]);
+}
+interface IGlobalConstructSignatureWithOverloads {
+    new (a: string);
+    new (a: number);
+}
+interface IGlobalConstructSignatureWithTypeParameters<T> {
+    /** This comment should appear for foo*/
+    new (a: T);
+}
+interface IGlobalConstructSignatureWithOwnTypeParametes {
+    new <T extends IGlobalConstructSignature>(a: T);
+}

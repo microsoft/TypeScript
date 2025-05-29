@@ -24,3 +24,17 @@ const FooComponent = (props) => <span>{props.foo}</span>;
 <FooComponent foo="A"/>;
 <FooComponent foo={"f"}/>;
 <FooComponent foo="f"/>;
+
+
+//// [contextuallyTypedStringLiteralsInJsxAttributes01.d.ts]
+declare namespace JSX {
+    interface IntrinsicElements {
+        span: {};
+    }
+    interface Element {
+        something?: any;
+    }
+}
+declare const FooComponent: (props: {
+    foo: "A" | "B" | "C";
+}) => JSX.Element;

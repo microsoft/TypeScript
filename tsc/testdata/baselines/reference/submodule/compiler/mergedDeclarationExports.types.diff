@@ -5,7 +5,7 @@
  interface d {}
  export class d {}
 ->d : import("mergedDeclarationExports").d
-+>d : d
++>d : import("./mergedDeclarationExports").d
 
  // both namespaces
  namespace N { }

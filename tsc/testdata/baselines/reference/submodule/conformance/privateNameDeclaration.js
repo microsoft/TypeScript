@@ -21,3 +21,12 @@ class A {
     quux() {
     }
 }
+
+
+//// [privateNameDeclaration.d.ts]
+declare class A {
+    #private;
+    baz: string;
+    qux: number;
+    quux(): void;
+}

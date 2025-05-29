@@ -14,7 +14,7 @@
 >map : <U>(callbackfn: (value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg?: any) => U[]
 
   ({ x }) => x
->({ x }) => x : (__0: { x: number; }) => number
+>({ x }) => x : ({ x }: { x: number; }) => number
 >x : number
 >x : number
 

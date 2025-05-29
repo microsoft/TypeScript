@@ -5,7 +5,7 @@
  >module.exports = function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
  >module.exports : () => { c: number; }
 ->module : { exports: () => { c: number; }; }
-+>module : { export=: () => { c: number; }; }
++>module : { "export=": () => { c: number; }; }
  >exports : () => { c: number; }
  >function () {  class A { }  return {    c: A.b = 1,  }} : () => { c: number; }
 

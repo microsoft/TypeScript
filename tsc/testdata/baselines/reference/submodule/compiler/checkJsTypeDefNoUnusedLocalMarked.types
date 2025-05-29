@@ -24,12 +24,12 @@ export = Foo;
 /** @typedef {(foo: Foo) => string} FooFun */
 
 module.exports = /** @type {FooFun} */(void 0);
->module.exports = /** @type {FooFun} */(void 0) : (foo: typeof Foo) => string
->module.exports : (foo: typeof Foo) => string
->module : { export=: (foo: typeof Foo) => string; }
->exports : (foo: typeof Foo) => string
->(void 0) : (foo: typeof Foo) => string
->void 0 : (foo: typeof Foo) => string
+>module.exports = /** @type {FooFun} */(void 0) : (foo: typeof import("./file")) => string
+>module.exports : (foo: typeof import("./file")) => string
+>module : { "export=": (foo: typeof import("./file")) => string; }
+>exports : (foo: typeof import("./file")) => string
+>(void 0) : (foo: typeof import("./file")) => string
+>void 0 : (foo: typeof import("./file")) => string
 >void 0 : undefined
 >0 : 0
 

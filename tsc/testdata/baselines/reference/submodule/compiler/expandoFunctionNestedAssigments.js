@@ -93,3 +93,9 @@ for (let f in (Foo.forIn = [])) {
         Foo.fromForInBodyNested = 1;
     }
 }
+
+
+//// [expandoFunctionNestedAssigments.d.ts]
+declare function Foo(): void;
+declare let d: number;
+declare function bar(p?: number): void;

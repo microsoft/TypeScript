@@ -18,3 +18,10 @@ class Foo {
     }
 }
 exports.Foo = Foo;
+
+
+//// [declarationEmitParameterProperty.d.ts]
+export declare class Foo {
+    bar?: string;
+    constructor(bar?: string);
+}

@@ -31,3 +31,18 @@ var m2;
     m2.x = m.c;
     m2.d = new m2.x(); // emit the type as x
 })(m2 || (m2 = {}));
+
+
+//// [declFileInternalAliases.d.ts]
+declare namespace m {
+    class c {
+    }
+}
+declare namespace m1 {
+    import x = m.c;
+    var d: x; // emit the type as m.c
+}
+declare namespace m2 {
+    export import x = m.c;
+    var d: x; // emit the type as x
+}

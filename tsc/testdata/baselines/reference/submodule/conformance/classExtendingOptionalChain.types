@@ -11,9 +11,9 @@ namespace A {
 // ok
 class C1 extends A?.B {}
 >C1 : C1
->A?.B : B
+>A?.B : A.B
 >A : typeof A
->B : typeof B
+>B : typeof A.B
 
 // error
 class C2 implements A?.B {}

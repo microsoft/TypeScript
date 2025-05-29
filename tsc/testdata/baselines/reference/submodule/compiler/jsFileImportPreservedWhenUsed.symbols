@@ -75,7 +75,7 @@ export class Test {
             object => ({ ...object, [INDEX_FIELD]: index++ }),
 >object : Symbol(object, Decl(index.js, 11, 16))
 >object : Symbol(object, Decl(index.js, 11, 16))
->[INDEX_FIELD] : Symbol(__INDEX, Decl(index.js, 12, 35))
+>[INDEX_FIELD] : Symbol([INDEX_FIELD], Decl(index.js, 12, 35))
 >INDEX_FIELD : Symbol(INDEX_FIELD, Decl(index.js, 1, 8))
 >index : Symbol(index, Decl(index.js, 9, 11))
 

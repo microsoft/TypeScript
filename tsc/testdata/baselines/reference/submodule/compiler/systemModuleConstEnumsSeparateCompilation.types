@@ -22,11 +22,11 @@ export function foo() {
     use(M.NonTopLevelConstEnum.X);
 >use(M.NonTopLevelConstEnum.X) : any
 >use : (a: any) => any
->M.NonTopLevelConstEnum.X : NonTopLevelConstEnum
->M.NonTopLevelConstEnum : typeof NonTopLevelConstEnum
+>M.NonTopLevelConstEnum.X : M.NonTopLevelConstEnum
+>M.NonTopLevelConstEnum : typeof M.NonTopLevelConstEnum
 >M : typeof M
->NonTopLevelConstEnum : typeof NonTopLevelConstEnum
->X : NonTopLevelConstEnum
+>NonTopLevelConstEnum : typeof M.NonTopLevelConstEnum
+>X : M.NonTopLevelConstEnum
 }
 
 module M {

@@ -9,3 +9,7 @@ import "test"
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("test");
+
+
+//// [main.d.ts]
+import "test";

@@ -5,16 +5,16 @@
 // Shouldn't compile b.B is not defined in C
 module A {
     import b = B;
->b : typeof B
->B : typeof B
+>b : typeof b
+>B : typeof b
 
     import c = C;
->c : typeof C
->C : typeof C
+>c : typeof c
+>C : typeof c
 }
 
 module B {
->B : typeof B
+>B : typeof globalThis.B
 
     import a = A;
 >a : any
@@ -32,6 +32,6 @@ module C {
 >A : any
 
     function hello(): b.B { return null; }
->hello : () => B
+>hello : () => b.B
 >b : any
 }

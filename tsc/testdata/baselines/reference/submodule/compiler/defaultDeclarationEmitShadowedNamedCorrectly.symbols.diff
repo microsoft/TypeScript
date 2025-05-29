@@ -39,7 +39,7 @@
 
  export default class MyComponent {
 ->MyComponent : Symbol(me.default, Decl(this.ts, 10, 1))
-+>MyComponent : Symbol(default, Decl(this.ts, 10, 1))
++>MyComponent : Symbol(MyComponent, Decl(this.ts, 10, 1))
 
      props: Props;
 ->props : Symbol(me.default.props, Decl(this.ts, 12, 34))
@@ -58,8 +58,8 @@
  >create : Symbol(create, Decl(this.ts, 17, 16))
  >make : Symbol(make, Decl(this.ts, 4, 1))
 ->me.default : Symbol(me.default, Decl(this.ts, 10, 1))
-+>me.default : Symbol(default, Decl(this.ts, 10, 1))
++>me.default : Symbol(MyComponent, Decl(this.ts, 10, 1))
  >me : Symbol(me, Decl(this.ts, 0, 6))
 ->default : Symbol(me.default, Decl(this.ts, 10, 1))
-+>default : Symbol(default, Decl(this.ts, 10, 1))
++>default : Symbol(MyComponent, Decl(this.ts, 10, 1))
  }

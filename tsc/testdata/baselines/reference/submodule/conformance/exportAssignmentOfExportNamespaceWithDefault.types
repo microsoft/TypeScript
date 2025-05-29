@@ -3,11 +3,11 @@
 === main.ts ===
 // https://github.com/microsoft/TypeScript/issues/39149
 import a from "a";
->a : typeof a
+>a : typeof import("b").a
 
 a();
 >a() : void
->a : typeof a
+>a : typeof import("b").a
 
 === external.d.ts ===
 declare module "b" {

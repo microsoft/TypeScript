@@ -20,15 +20,4 @@
 -var a = m.c;
 -var b = a;
  module.exports = b;
--
--
--//// [declFileImportChainInExportAssignment.d.ts]
--declare namespace m {
--    namespace c {
--        class c {
--        }
--    }
--}
--import a = m.c;
--import b = a;
--export = b;
+

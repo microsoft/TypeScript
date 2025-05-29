@@ -505,3 +505,142 @@ const distantRes = distant({
     },
     consumer: (val) => { },
 });
+
+
+//// [intraExpressionInferences.d.ts]
+// Repros from #47599
+declare function callIt<T>(obj: {
+    produce: (n: number) => T;
+    consume: (x: T) => void;
+}): void;
+declare function callItT<T>(obj: [(n: number) => T, (x: T) => void]): void;
+// Repro from #25092
+interface MyInterface<T> {
+    retrieveGeneric: (parameter: string) => T;
+    operateWithGeneric: (generic: T) => string;
+}
+declare const inferTypeFn: <T>(generic: MyInterface<T>) => MyInterface<T>;
+declare const myGeneric: MyInterface<number>;
+// Repro #38623
+declare function make<M>(o: {
+    mutations: M;
+    action: (m: M) => void;
+}): void;
+// Repro from #38845
+declare function foo<A>(options: {
+    a: A;
+    b: (a: A) => void;
+}): void;
+// Repro from #38872
+type Chain<R1, R2> = {
+    a(): R1;
+    b(a: R1): R2;
+    c(b: R2): void;
+};
+declare function test<R1, R2>(foo: Chain<R1, R2>): void;
+// Repro from #41712
+declare class Wrapper<T = any> {
+    value?: T;
+}
+type WrappedMap = Record<string, Wrapper>;
+type Unwrap<D extends WrappedMap> = {
+    [K in keyof D]: D[K] extends Wrapper<infer T> ? T : never;
+};
+type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
+    setup(): {
+        inputs: I;
+        outputs: O;
+    };
+    map?: (inputs: Unwrap<I>) => Unwrap<O>;
+};
+declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
+// Repro from #48279
+declare function simplified<T>(props: {
+    generator: () => T;
+    receiver: (t: T) => any;
+}): void;
+declare function whatIWant<T>(props: {
+    generator: (bob: any) => T;
+    receiver: (t: T) => any;
+}): void;
+declare function nonObject<T>(generator: (bob: any) => T, receiver: (t: T) => any): void;
+// Repro from #48466
+interface Opts<TParams, TDone, TMapped> {
+    fetch: (params: TParams, foo: number) => TDone;
+    map: (data: TDone) => TMapped;
+}
+declare function example<TParams, TDone, TMapped>(options: Opts<TParams, TDone, TMapped>): (params: TParams) => TMapped;
+interface Params {
+    one: number;
+    two: string;
+}
+// Repro from #45255
+declare const branch: <T, U extends T>(_: {
+    test: T;
+    if: (t: T) => t is U;
+    then: (u: U) => void;
+}) => void;
+declare const x: "a" | "b";
+interface Props<T> {
+    a: (x: string) => T;
+    b: (arg: T) => void;
+}
+declare function Foo<T>(props: Props<T>): null;
+declare function nested<T>(arg: {
+    prop: {
+        produce: (arg1: number) => T;
+        consume: (arg2: T) => void;
+    };
+}): T;
+declare const resNested: number[];
+declare function twoConsumers<T>(arg: {
+    a: (arg: string) => T;
+    consume1: (arg1: T) => void;
+    consume2: (arg2: T) => void;
+}): T;
+declare const resTwoConsumers: string[];
+declare function multipleProducersBeforeConsumers<T, T2>(arg: {
+    a: (arg: string) => T;
+    b: (arg: string) => T2;
+    consume1: (arg1: T) => void;
+    consume2: (arg2: T2) => void;
+}): [T, T2];
+declare const resMultipleProducersBeforeConsumers: [string[], number];
+declare function withConditionalExpression<T, T2, T3>(arg: {
+    a: (arg1: string) => T;
+    b: (arg2: T) => T2;
+    c: (arg2: T2) => T3;
+}): [T, T2, T3];
+declare const resWithConditionalExpression: [string[], "first" | "two", boolean];
+declare function onion<T, T2, T3>(arg: {
+    a: (arg1: string) => T;
+    nested: {
+        b: (arg2: T) => T2;
+        nested2: {
+            c: (arg2: T2) => T3;
+        };
+    };
+}): [T, T2, T3];
+declare const resOnion: [string[], string, boolean];
+declare function onion2<T, T2, T3, T4>(arg: {
+    a: (arg1: string) => T;
+    nested: {
+        b: (arg2: T) => T2;
+        c: (arg3: T) => T3;
+        nested2: {
+            d: (arg4: T3) => T4;
+        };
+    };
+}): [T, T2, T3, T4];
+declare const resOnion2: [string[], string, number, boolean];
+declare function distant<T>(args: {
+    foo: {
+        bar: {
+            baz: {
+                producer: (arg: string) => T;
+            };
+        };
+    };
+    consumer: (val: T) => unknown;
+}): T;
+declare const distantRes: number;

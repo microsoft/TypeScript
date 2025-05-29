@@ -2,8 +2,8 @@
 
 === example.js ===
 const obj = {
->obj : { Foo: () => void; }
->{  /** @constructor */  Foo() { this.bar = "bar" }} : { Foo: () => void; }
+>obj : { Foo(): void; }
+>{  /** @constructor */  Foo() { this.bar = "bar" }} : { Foo(): void; }
 
   /** @constructor */
   Foo() { this.bar = "bar" }
@@ -20,7 +20,7 @@ const obj = {
 >(new obj.Foo()) : any
 >new obj.Foo() : any
 >obj.Foo : () => void
->obj : { Foo: () => void; }
+>obj : { Foo(): void; }
 >Foo : () => void
 >bar : any
 

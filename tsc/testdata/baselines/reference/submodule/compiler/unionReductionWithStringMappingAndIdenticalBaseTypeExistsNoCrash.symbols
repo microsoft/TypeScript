@@ -150,7 +150,7 @@ type ReactManagedAttributes<C, P> = C extends { defaultProps: infer D }
 >P : Symbol(P, Decl(index.d.ts, 51, 30))
 
 declare global {
->global : Symbol((Missing), Decl(index.d.ts, 53, 6))
+>global : Symbol(global, Decl(index.d.ts, 53, 6))
 
   namespace JSX {
 >JSX : Symbol(JSX, Decl(index.d.ts, 55, 16))

@@ -21,3 +21,13 @@ var Foo;
     Foo.A = A;
 })(Foo || (Foo = {}));
 var a = new Foo.B();
+
+
+//// [genericClassesInModule.d.ts]
+declare namespace Foo {
+    class B<T> {
+    }
+    class A {
+    }
+}
+declare var a: Foo.B<Foo.A>;

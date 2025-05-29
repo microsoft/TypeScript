@@ -140,17 +140,6 @@
 -    };
 -    return C = _classThis;
 -})();
--//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
--
--//// [esDecorators-classDeclaration-sourceMap.d.ts]
--declare var dec: any;
--declare class C {
--    #private;
--    method(): void;
--    get x(): number;
--    set x(value: number);
--    y: number;
--    accessor z: number;
 +@dec
 +@dec
 +class C {
@@ -184,6 +173,7 @@
 +    @dec
 +    @dec
 +    static accessor #z = 1;
- }
--//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.d.ts.map
-+//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
++}
+ //# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
+
+ //// [esDecorators-classDeclaration-sourceMap.d.ts]

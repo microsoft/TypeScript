@@ -10,3 +10,8 @@ var M;
 (function (M) {
     [M.a, M.b] = [1, 2];
 })(M || (M = {}));
+
+
+//// [declarationEmitDestructuringArrayPattern3.d.ts]
+declare namespace M {
+}

@@ -106,3 +106,33 @@ class Derived extends Base {
     a = 1;
     f() { return 1; }
 }
+
+
+//// [optionalMethods.d.ts]
+interface Foo {
+    a: number;
+    b?: number;
+    f(): number;
+    g?(): number;
+}
+declare function test1(x: Foo): void;
+declare class Bar {
+    d?: number;
+    e: number | undefined;
+    a: number;
+    b?: number;
+    c?: number | undefined;
+    constructor(d?: number, e?: number | undefined);
+    f(): number;
+    g?(): number; // Body of optional method can be omitted
+    h?(): number;
+}
+declare function test2(x: Bar): void;
+declare class Base {
+    a?: number;
+    f?(): number;
+}
+declare class Derived extends Base {
+    a: number;
+    f(): number;
+}

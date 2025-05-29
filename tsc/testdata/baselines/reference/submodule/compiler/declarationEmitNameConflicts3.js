@@ -66,3 +66,33 @@ var M;
         P.x = M.E.f; // error, should be typeof M.E.f
     })(P = M.P || (M.P = {}));
 })(M || (M = {}));
+
+
+//// [declarationEmitNameConflicts3.d.ts]
+declare namespace M {
+    interface D {
+    }
+    namespace D {
+        function f(): void;
+    }
+    namespace C {
+        function f(): void;
+    }
+    namespace E {
+        function f(): void;
+    }
+}
+declare namespace M.P {
+    class C {
+        static f(): void;
+    }
+    class E extends C {
+    }
+    enum D {
+        f = 0
+    }
+    var v: M.D; // ok
+    var w: typeof M.D.f; // error, should be typeof M.D.f
+    var x: typeof M.C.f; // error, should be typeof M.C.f
+    var x: typeof M.C.f; // error, should be typeof M.E.f
+}

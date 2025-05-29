@@ -36,7 +36,7 @@ module Formatting {
 
         constructor(
             public logger: TypeScript.ILogger,
->logger : ILogger
+>logger : TypeScript.ILogger
 >TypeScript : any
 
             public tree: ParseTree,
@@ -49,7 +49,7 @@ module Formatting {
 >languageHostIndentation : string
 
             public editorOptions: Services.EditorOptions,
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >Services : any
 
             public firstToken: TokenSpan,
@@ -130,17 +130,17 @@ module Formatting {
             if (this.logger.information()) {
 >this.logger.information() : any
 >this.logger.information : any
->this.logger : ILogger
+>this.logger : TypeScript.ILogger
 >this : this
->logger : ILogger
+>logger : TypeScript.ILogger
 >information : any
 
                 this.logger.log("GetIndentationEdits(" +
 >this.logger.log("GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")") : any
 >this.logger.log : any
->this.logger : ILogger
+>this.logger : TypeScript.ILogger
 >this : this
->logger : ILogger
+>logger : TypeScript.ILogger
 >log : any
 >"GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" +                    ")" : string
 >"GetIndentationEdits(" +                    "t1=[" + token.Span.startPosition() + "," + token.Span.endPosition()+ "], " +                    "t2=[" + (nextToken == null ? "null" : (nextToken.Span.startPosition() + "," + nextToken.Span.endPosition())) + "]" : string
@@ -213,9 +213,9 @@ module Formatting {
             if (this.logger.information()) {
 >this.logger.information() : any
 >this.logger.information : any
->this.logger : ILogger
+>this.logger : TypeScript.ILogger
 >this : this
->logger : ILogger
+>logger : TypeScript.ILogger
 >information : any
 
                 for (var i = 0; i < result.count() ; i++) {
@@ -241,9 +241,9 @@ module Formatting {
                     this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"");
 >this.logger.log("edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"") : any
 >this.logger.log : any
->this.logger : ILogger
+>this.logger : TypeScript.ILogger
 >this : this
->logger : ILogger
+>logger : TypeScript.ILogger
 >log : any
 >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) + "\"" : string
 >"edit: minChar=" + edit.position + ", limChar=" + (edit.position + edit.length) + ", text=\"" + TypeScript.stringToLiteral(edit.replaceWith, 30) : string
@@ -724,23 +724,23 @@ module Formatting {
         }
 
         static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >indentText : string
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >Services : any
 
             return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
 >GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false) : any
 >GetIndentSizeFromText : any
 >indentText : string
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >false : false
         }
 
         static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
->GetIndentSizeFromText : (text: string, editorOptions: EditorOptions, includeNonIndentChars: boolean) => number
+>GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
 >text : string
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >Services : any
 >includeNonIndentChars : boolean
 
@@ -780,13 +780,13 @@ module Formatting {
 >indentSize + editorOptions.TabSize : any
 >indentSize : number
 >editorOptions.TabSize : any
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >TabSize : any
 >(indentSize % editorOptions.TabSize) : number
 >indentSize % editorOptions.TabSize : number
 >indentSize : number
 >editorOptions.TabSize : any
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >TabSize : any
 
                 else if (c == ' ')
@@ -1547,9 +1547,9 @@ module Formatting {
                     if (this.logger.debug()) {
 >this.logger.debug() : any
 >this.logger.debug : any
->this.logger : ILogger
+>this.logger : TypeScript.ILogger
 >this : this
->logger : ILogger
+>logger : TypeScript.ILogger
 >debug : any
 
                         // Verify that currentIndentText is all whitespaces
@@ -1624,25 +1624,25 @@ module Formatting {
             var indentSize = this.editorOptions.IndentSize;
 >indentSize : any
 >this.editorOptions.IndentSize : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >IndentSize : any
 
             var tabSize = this.editorOptions.TabSize;
 >tabSize : any
 >this.editorOptions.TabSize : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >TabSize : any
 
             var convertTabsToSpaces = this.editorOptions.ConvertTabsToSpaces;
 >convertTabsToSpaces : any
 >this.editorOptions.ConvertTabsToSpaces : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >ConvertTabsToSpaces : any
 
             if (level < 0) {
@@ -1969,13 +1969,13 @@ module Formatting {
             var currentIndentSize = Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions);
 >currentIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >currentIndent : string
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 
             var newIndentSize = currentIndentSize + delta;
 >newIndentSize : number
@@ -2002,14 +2002,14 @@ module Formatting {
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
 >newIndentSize : number
 >this.editorOptions.TabSize : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >TabSize : any
 >this.editorOptions.ConvertTabsToSpaces : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >ConvertTabsToSpaces : any
 
             if (newIndent != null) {
@@ -2100,25 +2100,25 @@ module Formatting {
                 var origIndentSize = Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true);
 >origIndentSize : number
 >Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true) : number
->Indenter.GetIndentSizeFromText : (text: string, editorOptions: EditorOptions, includeNonIndentChars: boolean) => number
+>Indenter.GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromText : (text: string, editorOptions: EditorOptions, includeNonIndentChars: boolean) => number
+>GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
 >origIndentText : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 >true : true
 
                 var newIndentSize = Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions);
 >newIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >newIndentText : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 
                 // Check the child's position whether it's before the parent position
                 // if so indent the child based on the first token on the line as opposed to the parent position
@@ -2169,13 +2169,13 @@ module Formatting {
                     var childIndentSize = Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions);
 >childIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >childIndentText : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
 
                     if (childIndentSize < origIndentSize)
 >childIndentSize < origIndentSize : boolean
@@ -2186,13 +2186,13 @@ module Formatting {
 >origIndentSize = Indenter.GetIndentSizeFromIndentText(origIndentText, this.editorOptions) : number
 >origIndentSize : number
 >Indenter.GetIndentSizeFromIndentText(origIndentText, this.editorOptions) : number
->Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >Indenter : typeof Indenter
->GetIndentSizeFromIndentText : (indentText: string, editorOptions: EditorOptions) => number
+>GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
 >origIndentText : any
->this.editorOptions : EditorOptions
+>this.editorOptions : Services.EditorOptions
 >this : this
->editorOptions : EditorOptions
+>editorOptions : Services.EditorOptions
                 }
 
                 indentationDeltaSize = newIndentSize - origIndentSize;

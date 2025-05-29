@@ -1,17 +1,6 @@
 --- old.objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.types
 +++ new.objectTypesIdentityWithGenericConstructSignaturesDifferingByReturnType2.types
-@@= skipped -33, +33 lines =@@
- >x : T
-
- var b = { new<T extends Date>(x: T) { return null; } }; // not a construct signature, function called new
-->b : { "new"<T extends Date>(x: T): any; }
-->{ new<T extends Date>(x: T) { return null; } } : { "new"<T extends Date>(x: T): any; }
-+>b : { new: <T extends Date>(x: T) => any; }
-+>{ new<T extends Date>(x: T) { return null; } } : { new: <T extends Date>(x: T) => any; }
- >new : <T extends Date>(x: T) => any
- >x : T
-
-@@= skipped -42, +42 lines =@@
+@@= skipped -75, +75 lines =@@
  >x : any
 
  function foo3(x: typeof a);
@@ -33,23 +22,19 @@
 
  function foo4(x: typeof b);
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { "new"<T extends Date>(x: T): any; }
-->b : { "new"<T extends Date>(x: T): any; }
-+>foo4 : { (x: { new: <T extends Date>(x: T) => any; }): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
-+>x : { new: <T extends Date>(x: T) => any; }
-+>b : { new: <T extends Date>(x: T) => any; }
++>foo4 : { (x: { "new"<T extends Date>(x: T): any; }): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
+ >x : { "new"<T extends Date>(x: T): any; }
+ >b : { "new"<T extends Date>(x: T): any; }
 
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { "new"<T extends Date>(x: T): any; }
-->b : { "new"<T extends Date>(x: T): any; }
-+>foo4 : { (x: { new: <T extends Date>(x: T) => any; }): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
-+>x : { new: <T extends Date>(x: T) => any; }
-+>b : { new: <T extends Date>(x: T) => any; }
++>foo4 : { (x: { "new"<T extends Date>(x: T): any; }): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
+ >x : { "new"<T extends Date>(x: T): any; }
+ >b : { "new"<T extends Date>(x: T): any; }
 
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-+>foo4 : { (x: { new: <T extends Date>(x: T) => any; }): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
++>foo4 : { (x: { "new"<T extends Date>(x: T): any; }): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
  >x : any
 
  function foo8(x: B<Date>);
@@ -74,20 +59,18 @@
 
  function foo11(x: B<Date>);
 ->foo11 : { (x: B<Date>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
++>foo11 : { (x: B<Date>): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
  >x : B<Date>
 
  function foo11(x: typeof b); // ok
 ->foo11 : { (x: B<Date>): any; (x: typeof b): any; }
-->x : { "new"<T extends Date>(x: T): any; }
-->b : { "new"<T extends Date>(x: T): any; }
-+>foo11 : { (x: B<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
-+>x : { new: <T extends Date>(x: T) => any; }
-+>b : { new: <T extends Date>(x: T) => any; }
++>foo11 : { (x: B<Date>): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
+ >x : { "new"<T extends Date>(x: T): any; }
+ >b : { "new"<T extends Date>(x: T): any; }
 
  function foo11(x: any) { }
 ->foo11 : { (x: B<Date>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
++>foo11 : { (x: B<Date>): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
  >x : any
 
  function foo12(x: I<Date>);
@@ -112,20 +95,18 @@
 
  function foo14(x: I<Date>);
 ->foo14 : { (x: I<Date>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
++>foo14 : { (x: I<Date>): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
  >x : I<Date>
 
  function foo14(x: typeof b); // ok
 ->foo14 : { (x: I<Date>): any; (x: typeof b): any; }
-->x : { "new"<T extends Date>(x: T): any; }
-->b : { "new"<T extends Date>(x: T): any; }
-+>foo14 : { (x: I<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
-+>x : { new: <T extends Date>(x: T) => any; }
-+>b : { new: <T extends Date>(x: T) => any; }
++>foo14 : { (x: I<Date>): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
+ >x : { "new"<T extends Date>(x: T): any; }
+ >b : { "new"<T extends Date>(x: T): any; }
 
  function foo14(x: any) { }
 ->foo14 : { (x: I<Date>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<Date>): any; (x: { new: <T extends Date>(x: T) => any; }): any; }
++>foo14 : { (x: I<Date>): any; (x: { "new"<T extends Date>(x: T): any; }): any; }
  >x : any
 
  function foo15(x: I2);

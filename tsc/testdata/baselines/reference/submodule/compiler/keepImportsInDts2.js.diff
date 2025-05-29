@@ -15,12 +15,9 @@
 -    "use strict";
 -    Object.defineProperty(exports, "__esModule", { value: true });
 -});
--
--
--//// [test.d.ts]
--export {};
--//// [main.d.ts]
--import "./folder/test";
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +require("./folder/test");
+
+
+ //// [test.d.ts]

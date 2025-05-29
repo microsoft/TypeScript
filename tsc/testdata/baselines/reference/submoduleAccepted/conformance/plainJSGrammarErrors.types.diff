@@ -9,38 +9,7 @@
 
      export { staticParam }
  >staticParam : any
-@@= skipped -15, +15 lines =@@
- >staticFunction : () => void
- }
- const noStaticLiteralMethods = {
-->noStaticLiteralMethods : { m(): void; }
-->{    static m() {    }} : { m(): void; }
-+>noStaticLiteralMethods : { m: () => void; }
-+>{    static m() {    }} : { m: () => void; }
-
-     static m() {
- >m : () => void
-@@= skipped -15, +15 lines =@@
- >y : any
- }
- function restCantHaveInitialiser(...x = [1,2,3]) {
-->restCantHaveInitialiser : (...x?: number[]) => void
-+>restCantHaveInitialiser : (...x: number[]) => void
- >x : number[]
- >[1,2,3] : number[]
- >1 : 1
-@@= skipped -94, +94 lines =@@
- >`length` : "length"
-
- const o = {
-->o : { 2: string; cantExportProperties: number; cantHaveQuestionMark: number; m?(): number; definitely: any; definiteMethod(): number; }
-->{    [console.log('oh no'),2]: 'hi',    #noPrivate: 3,    export cantExportProperties: 4,    // TODO: See what the existing JS error is like for these    cantHaveQuestionMark?: 1,    m?() { return 12 },    definitely!,    definiteMethod!() { return 13 },} : { 2: string; cantExportProperties: number; cantHaveQuestionMark: number; m?(): number; definitely: any; definiteMethod(): number; }
-+>o : { [console.log('oh no'),2]: string; cantExportProperties: number; cantHaveQuestionMark: number; m?: () => number; definitely: any; definiteMethod: () => number; }
-+>{    [console.log('oh no'),2]: 'hi',    #noPrivate: 3,    export cantExportProperties: 4,    // TODO: See what the existing JS error is like for these    cantHaveQuestionMark?: 1,    m?() { return 12 },    definitely!,    definiteMethod!() { return 13 },} : { [console.log('oh no'),2]: string; cantExportProperties: number; cantHaveQuestionMark: number; m?: () => number; definitely: any; definiteMethod: () => number; }
-
-     [console.log('oh no'),2]: 'hi',
- >[console.log('oh no'),2] : string
-@@= skipped -167, +167 lines =@@
+@@= skipped -291, +291 lines =@@
  >b : any
 
  switch (b) {

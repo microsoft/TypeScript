@@ -37,20 +37,20 @@ function a5(...a: stringOrNumArray) { }
 >a : stringOrNumArray
 
 function a9([a, b, [[c]]]) { }
->a9 : (__0: [any, any, [[any]]]) => void
+>a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >a : any
 >b : any
 >c : any
 
 function a10([a, b, [[c]], ...x]) { }
->a10 : (__0: [any, any, [[any]], ...any[]]) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >a : any
 >b : any
 >c : any
 >x : any[]
 
 function a11([a, b, c, ...x]: number[]) { }
->a11 : (__0: number[]) => void
+>a11 : ([a, b, c, ...x]: number[]) => void
 >a : number
 >b : number
 >c : number
@@ -86,7 +86,7 @@ a1(...array);
 
 a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]]
 >a9([1, 2, [["string"]], false, true]) : void
->a9 : (__0: [any, any, [[any]]]) => void
+>a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
 >1 : 1
 >2 : 2
@@ -98,7 +98,7 @@ a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]
 
 a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 >a10([1, 2, [["string"]], false, true]) : void
->a10 : (__0: [any, any, [[any]], ...any[]]) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
 >1 : 1
 >2 : 2
@@ -110,7 +110,7 @@ a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 
 a10([1, 2, 3, false, true]);              // Parameter type is any[]
 >a10([1, 2, 3, false, true]) : void
->a10 : (__0: [any, any, [[any]], ...any[]]) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >[1, 2, 3, false, true] : [number, number, number, boolean, boolean]
 >1 : 1
 >2 : 2
@@ -120,14 +120,14 @@ a10([1, 2, 3, false, true]);              // Parameter type is any[]
 
 a10([1, 2]);                              // Parameter type is any[]
 >a10([1, 2]) : void
->a10 : (__0: [any, any, [[any]], ...any[]]) => void
+>a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
 >[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 
 a11([1, 2]);                              // Parameter type is number[]
 >a11([1, 2]) : void
->a11 : (__0: number[]) => void
+>a11 : ([a, b, c, ...x]: number[]) => void
 >[1, 2] : number[]
 >1 : 1
 >2 : 2

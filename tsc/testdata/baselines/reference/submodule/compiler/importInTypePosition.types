@@ -23,27 +23,27 @@ module A {
 module B {
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 }
 // no code gen expected
 module C {
 >C : typeof C
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 
     var m: typeof a;
->m : typeof A
->a : typeof A
+>m : typeof a
+>a : typeof a
 
     var p: a.Point;
->p : Point
+>p : a.Point
 >a : any
 
     var p = { x: 0, y: 0 };
->p : Point
+>p : a.Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0

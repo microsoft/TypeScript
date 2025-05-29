@@ -5,6 +5,6 @@ interface OhNo {
 }
 
 declare let y: OhNo.hello;
->y : hello
+>y : OhNo.hello
 >OhNo : any
 

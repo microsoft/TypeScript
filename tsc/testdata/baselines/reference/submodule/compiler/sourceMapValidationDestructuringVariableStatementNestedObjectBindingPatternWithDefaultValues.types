@@ -2,7 +2,7 @@
 
 === sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.ts ===
 declare var console: {
->console : { log: (msg: string) => void; }
+>console : { log(msg: string): void; }
 
     log(msg: string): void;
 >log : (msg: string) => void
@@ -146,7 +146,7 @@ if (nameB == nameB) {
     console.log(nameC);
 >console.log(nameC) : void
 >console.log : (msg: string) => void
->console : { log: (msg: string) => void; }
+>console : { log(msg: string): void; }
 >log : (msg: string) => void
 >nameC : string
 }
@@ -154,7 +154,7 @@ else {
     console.log(nameC);
 >console.log(nameC) : void
 >console.log : (msg: string) => void
->console : { log: (msg: string) => void; }
+>console : { log(msg: string): void; }
 >log : (msg: string) => void
 >nameC : string
 }

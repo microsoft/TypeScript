@@ -19,9 +19,9 @@ namespace
 
 a.b.c
 >a.b.c : number
->a.b : typeof b
+>a.b : typeof a.b
 >a : typeof a
->b : typeof b
+>b : typeof a.b
 >c : number
 {
 }

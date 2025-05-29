@@ -35,15 +35,15 @@ export module publicModule {
 
     class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
 >privateClassExtendingFromPrivateModuleClass : privateClassExtendingFromPrivateModuleClass
->privateModule.publicClassInPrivateModule : publicClassInPrivateModule
+>privateModule.publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 >privateModule : typeof privateModule
->publicClassInPrivateModule : typeof publicClassInPrivateModule
+>publicClassInPrivateModule : typeof privateModule.publicClassInPrivateModule
     }
     export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
 >publicClassExtendingFromPrivateModuleClass : publicClassExtendingFromPrivateModuleClass
->privateModule.publicClassInPrivateModule : publicClassInPrivateModule
+>privateModule.publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 >privateModule : typeof privateModule
->publicClassInPrivateModule : typeof publicClassInPrivateModule
+>publicClassInPrivateModule : typeof privateModule.publicClassInPrivateModule
     }
 }
 
@@ -124,15 +124,15 @@ export class publicClassExtendingPrivateClass extends privateClass { // Should e
 
 class privateClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule {
 >privateClassExtendingFromPrivateModuleClass : privateClassExtendingFromPrivateModuleClass
->privateModule.publicClassInPrivateModule : publicClassInPrivateModule
+>privateModule.publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 >privateModule : typeof privateModule
->publicClassInPrivateModule : typeof publicClassInPrivateModule
+>publicClassInPrivateModule : typeof privateModule.publicClassInPrivateModule
 }
 export class publicClassExtendingFromPrivateModuleClass extends privateModule.publicClassInPrivateModule { // Should error
 >publicClassExtendingFromPrivateModuleClass : publicClassExtendingFromPrivateModuleClass
->privateModule.publicClassInPrivateModule : publicClassInPrivateModule
+>privateModule.publicClassInPrivateModule : privateModule.publicClassInPrivateModule
 >privateModule : typeof privateModule
->publicClassInPrivateModule : typeof publicClassInPrivateModule
+>publicClassInPrivateModule : typeof privateModule.publicClassInPrivateModule
 }
 
 === privacyClassExtendsClauseDeclFile_GlobalFile.ts ===

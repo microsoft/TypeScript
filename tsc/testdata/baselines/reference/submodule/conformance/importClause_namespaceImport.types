@@ -18,27 +18,27 @@ export const Value = {};
 
 === /b.ts ===
 import type * as types from './a';
->types : typeof import("/a")
+>types : typeof types
 
 types;
->types : typeof import("/a")
+>types : typeof types
 
 types.Value;
 >types.Value : {}
->types : typeof import("/a")
+>types : typeof types
 >Value : {}
 
 let v: types.Value;
->v : Value
+>v : types.Value
 >types : any
 
 const a: types.A = {};
->a : A
+>a : types.A
 >types : any
 >{} : {}
 
 const b: types.B = {};
->b : B
+>b : types.B
 >types : any
 >{} : {}
 
@@ -48,7 +48,7 @@ const c: types.C<string> = "";
 >"" : ""
 
 const d = { types };
->d : { types: typeof import("/a"); }
->{ types } : { types: typeof import("/a"); }
->types : typeof import("/a")
+>d : { types: typeof types; }
+>{ types } : { types: typeof types; }
+>types : typeof types
 

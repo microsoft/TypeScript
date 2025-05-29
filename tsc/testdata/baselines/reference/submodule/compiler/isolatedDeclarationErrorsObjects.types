@@ -60,8 +60,8 @@ export let oBad2 = {
 }
 
 export let oWithMethods = {
->oWithMethods : { method: () => void; okMethod: () => void; a: number; bad: () => void; e: number; }
->{    method() { },    okMethod(): void { },    a: 1,    bad() { },    e: V,} : { method: () => void; okMethod: () => void; a: number; bad: () => void; e: number; }
+>oWithMethods : { method(): void; okMethod(): void; a: number; bad(): void; e: number; }
+>{    method() { },    okMethod(): void { },    a: 1,    bad() { },    e: V,} : { method(): void; okMethod(): void; a: number; bad(): void; e: number; }
 
     method() { },
 >method : () => void
@@ -81,12 +81,12 @@ export let oWithMethods = {
 >V : 1
 }
 export let oWithMethodsNested = {
->oWithMethodsNested : { foo: { method: () => void; a: number; okMethod: () => void; bad: () => void; }; }
->{    foo: {        method() { },        a: 1,        okMethod(): void { },        bad() { }    }} : { foo: { method: () => void; a: number; okMethod: () => void; bad: () => void; }; }
+>oWithMethodsNested : { foo: { method(): void; a: number; okMethod(): void; bad(): void; }; }
+>{    foo: {        method() { },        a: 1,        okMethod(): void { },        bad() { }    }} : { foo: { method(): void; a: number; okMethod(): void; bad(): void; }; }
 
     foo: {
->foo : { method: () => void; a: number; okMethod: () => void; bad: () => void; }
->{        method() { },        a: 1,        okMethod(): void { },        bad() { }    } : { method: () => void; a: number; okMethod: () => void; bad: () => void; }
+>foo : { method(): void; a: number; okMethod(): void; bad(): void; }
+>{        method() { },        a: 1,        okMethod(): void { },        bad() { }    } : { method(): void; a: number; okMethod(): void; bad(): void; }
 
         method() { },
 >method : () => void
@@ -172,8 +172,8 @@ enum E {
 >10 : 10
 }
 export const oWithComputedProperties = {
->oWithComputedProperties : { [x: string]: number; [x: number]: number; [1]: number; [prop(2)]: number; [s]: number; [E.V]: number; }
->{    [1]: 1,    [1 + 3]: 1,    [prop(2)]: 2,    [s]: 1,    [E.V]: 1,    [str]: 0,} : { [x: string]: number; [x: number]: number; [1]: number; [prop(2)]: number; [s]: number; [E.V]: number; }
+>oWithComputedProperties : { [x: string]: number; [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
+>{    [1]: 1,    [1 + 3]: 1,    [prop(2)]: 2,    [s]: 1,    [E.V]: 1,    [str]: 0,} : { [x: string]: number; [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
 
     [1]: 1,
 >[1] : number

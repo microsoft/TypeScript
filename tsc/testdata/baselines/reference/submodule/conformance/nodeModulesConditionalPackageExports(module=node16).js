@@ -195,3 +195,11 @@ cjsi.mjsSource;
 mjsi.mjsSource;
 typei.mjsSource;
 ts.mjsSource;
+
+
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};
+//// [index.d.ts]
+export {};

@@ -44,3 +44,26 @@ class D4 extends AB {
     bar(v) { }
     baz() { }
 }
+
+
+//// [override2.d.ts]
+declare abstract class AB {
+    abstract foo(v: string): void;
+    abstract bar(v: string): void;
+    abstract baz(v: string): void;
+}
+declare abstract class AD1 extends AB {
+}
+declare abstract class AD2 extends AB {
+    abstract foo(v: ''): void; // need override?
+}
+declare abstract class AD3 extends AB {
+    foo(v: ''): void; // need override?
+    abstract bar(): void;
+    baz(): void;
+}
+declare class D4 extends AB {
+    foo(v: ''): void;
+    bar(v: ''): void;
+    baz(): void;
+}

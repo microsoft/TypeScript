@@ -25,23 +25,23 @@ export class A {
 
 === exportStarFromEmptyModule_module4.ts ===
 import * as X from "./exportStarFromEmptyModule_module3";
->X : typeof import("exportStarFromEmptyModule_module3")
+>X : typeof X
 
 var s: X.A;
->s : A
+>s : X.A
 >X : any
 
 X.A.q;
 >X.A.q : any
->X.A : typeof A
->X : typeof import("exportStarFromEmptyModule_module3")
->A : typeof A
+>X.A : typeof X.A
+>X : typeof X
+>A : typeof X.A
 >q : any
 
 X.A.r; // Error
 >X.A.r : any
->X.A : typeof A
->X : typeof import("exportStarFromEmptyModule_module3")
->A : typeof A
+>X.A : typeof X.A
+>X : typeof X
+>A : typeof X.A
 >r : any
 

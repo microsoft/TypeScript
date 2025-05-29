@@ -77,9 +77,9 @@ export class Foo<T> extends Base<T> {
 >v : Assign<T, { x: number; }>
 >x : number
 >Object.assign(this.t, { x: 1 }) : T & { x: number; }
->Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object.assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
 >Object : ObjectConstructor
->assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
 >this.t : T
 >this : this
 >t : T

@@ -38,7 +38,7 @@ func NewCommonJSModuleTransformer(emitContext *printer.EmitContext, compilerOpti
 	tx.assignmentPatternVisitor = emitContext.NewNodeVisitor(tx.visitAssignmentPattern)
 	tx.languageVersion = compilerOptions.GetEmitScriptTarget()
 	tx.moduleKind = compilerOptions.GetEmitModuleKind()
-	return tx.newTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 // Pushes a new child node onto the ancestor tracking stack, returning the grandparent node to be restored later via `popNode`.

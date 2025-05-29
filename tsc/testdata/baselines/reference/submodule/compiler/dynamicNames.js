@@ -213,3 +213,42 @@ exports.o1_s2 = exports.o1[exports.s2];
 exports.o2 = exports.o1;
 rI.x;
 rC.x;
+
+
+//// [module.d.ts]
+export declare const c0 = "a";
+export declare const c1 = 1;
+export declare const s0: unique symbol;
+export interface T0 {
+    [c0]: number;
+    [c1]: string;
+    [s0]: boolean;
+}
+export declare class T1 implements T2 {
+    [c0]: number;
+    [c1]: string;
+    [s0]: boolean;
+}
+export declare class T2 extends T1 {
+}
+export declare type T3 = {
+    [c0]: number;
+    [c1]: string;
+    [s0]: boolean;
+};
+//// [main.d.ts]
+import { s0, T0 } from "./module";
+export declare const c4 = "a";
+export declare const c5 = 1;
+export declare const s2: typeof s0;
+// object literals
+export declare const o1: {
+    a: number;
+    1: string;
+    [s0]: boolean;
+};
+// check element access types
+export declare const o1_c4: number;
+export declare const o1_c5: string;
+export declare const o1_s2: boolean;
+export declare const o2: T0;

@@ -12,21 +12,21 @@ interface PropsType {
 }
 declare class Foo extends React.Component<PropsType, {}> {}
 >Foo : Foo
->React.Component : Component<PropsType, {}, any>
+>React.Component : React.Component<PropsType, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 
 const b = (
->b : Element
->(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : Element
+>b : JSX.Element
+>(    <Foo>        {<div/> as unknown}        {"aa"}    </Foo>) : JSX.Element
 
     <Foo>
-><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : Element
+><Foo>        {<div/> as unknown}        {"aa"}    </Foo> : JSX.Element
 >Foo : typeof Foo
 
         {<div/> as unknown}
 ><div/> as unknown : unknown
-><div/> : Element
+><div/> : JSX.Element
 >div : any
 
         {"aa"}

@@ -61,8 +61,8 @@
  ({
 ->({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters(): void; }
 ->{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters(): void; }
-+>({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters: (more: any) => void; }
-+>{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters: (more: any) => void; }
++>({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters(more: any): void; }
++>{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters(more: any): void; }
 
    /** @type {() => void} */
    methodWithMoreParameters(more) {}, // error

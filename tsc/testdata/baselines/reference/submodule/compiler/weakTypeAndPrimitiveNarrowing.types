@@ -28,11 +28,11 @@ const g = (arg: LiteralsAndWeakTypes) => {
 >'A' : "A"
 
       arg;
->arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
+>arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
 
     } else {
       arg;
->arg : "B" | { optional?: true | undefined; } | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
+>arg : "B" | { optional?: true | undefined; } | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
     }
 }
 
@@ -63,7 +63,7 @@ const h = (arg: PrimitivesAndWeakTypes) => {
 >'A' : "A"
 
       arg;
->arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
+>arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
 
     } else {
       arg;

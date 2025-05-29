@@ -27,7 +27,7 @@ declare global {
     }
 }
 export function dom(): JSX.Element;
->dom : () => Element
+>dom : () => JSX.Element
 >JSX : any
 
 === renderer2.d.ts ===
@@ -55,36 +55,36 @@ export namespace predom {
     }
 }
 export function predom(): predom.JSX.Element;
->predom : () => Element
+>predom : () => predom.JSX.Element
 >predom : any
 >JSX : any
 
 === component.tsx ===
 /** @jsx predom */
 import { predom } from "./renderer2"
->predom : () => Element
+>predom : () => predom.JSX.Element
 
 export default <h></h>
-><h></h> : Element
+><h></h> : predom.JSX.Element
 >h : any
 >h : any
 
 === index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
->dom : () => Element
+>dom : () => JSX.Element
 
 import prerendered from "./component";
->prerendered : Element
+>prerendered : import("./renderer2.js").predom.JSX.Element
 
 let elem = prerendered;
->elem : Element
->prerendered : Element
+>elem : import("./renderer2.js").predom.JSX.Element
+>prerendered : import("./renderer2.js").predom.JSX.Element
 
 elem = <h></h>; // Expect assignability error here
->elem = <h></h> : Element
->elem : Element
-><h></h> : Element
+>elem = <h></h> : JSX.Element
+>elem : import("./renderer2.js").predom.JSX.Element
+><h></h> : JSX.Element
 >h : any
 >h : any
 

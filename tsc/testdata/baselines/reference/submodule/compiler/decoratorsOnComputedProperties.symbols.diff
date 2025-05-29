@@ -6,8 +6,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(A["property"], Decl(decoratorsOnComputedProperties.ts, 8, 9))
 ->"property" : Symbol(A["property"], Decl(decoratorsOnComputedProperties.ts, 8, 9))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 8, 9))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 8, 9))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 8, 9))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 8, 9))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -23,8 +23,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(A["property2"], Decl(decoratorsOnComputedProperties.ts, 10, 33))
 ->"property2" : Symbol(A["property2"], Decl(decoratorsOnComputedProperties.ts, 10, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 10, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 10, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 10, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 10, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -39,8 +39,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(A["property3"], Decl(decoratorsOnComputedProperties.ts, 12, 37))
 ->"property3" : Symbol(A["property3"], Decl(decoratorsOnComputedProperties.ts, 12, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 12, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 12, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 12, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 12, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(A[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 13, 23))
@@ -54,8 +54,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(A["property4"], Decl(decoratorsOnComputedProperties.ts, 14, 37))
 ->"property4" : Symbol(A["property4"], Decl(decoratorsOnComputedProperties.ts, 14, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 14, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 14, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 14, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 14, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(A[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 15, 27))
@@ -107,8 +107,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(B["property"], Decl(decoratorsOnComputedProperties.ts, 25, 14))
 ->"property" : Symbol(B["property"], Decl(decoratorsOnComputedProperties.ts, 25, 14))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 25, 14))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 25, 14))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 25, 14))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 25, 14))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -124,8 +124,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(B["property2"], Decl(decoratorsOnComputedProperties.ts, 27, 33))
 ->"property2" : Symbol(B["property2"], Decl(decoratorsOnComputedProperties.ts, 27, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 27, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 27, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 27, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 27, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -140,8 +140,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(B["property3"], Decl(decoratorsOnComputedProperties.ts, 29, 37))
 ->"property3" : Symbol(B["property3"], Decl(decoratorsOnComputedProperties.ts, 29, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 29, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 29, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 29, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 29, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(B[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 30, 23))
@@ -155,8 +155,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(B["property4"], Decl(decoratorsOnComputedProperties.ts, 31, 37))
 ->"property4" : Symbol(B["property4"], Decl(decoratorsOnComputedProperties.ts, 31, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 31, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 31, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 31, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 31, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(B[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 32, 27))
@@ -208,8 +208,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(C["property"], Decl(decoratorsOnComputedProperties.ts, 42, 9))
 ->"property" : Symbol(C["property"], Decl(decoratorsOnComputedProperties.ts, 42, 9))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 42, 9))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 42, 9))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 42, 9))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 42, 9))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -225,8 +225,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(C["property2"], Decl(decoratorsOnComputedProperties.ts, 44, 33))
 ->"property2" : Symbol(C["property2"], Decl(decoratorsOnComputedProperties.ts, 44, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 44, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 44, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 44, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 44, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -241,8 +241,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(C["property3"], Decl(decoratorsOnComputedProperties.ts, 46, 37))
 ->"property3" : Symbol(C["property3"], Decl(decoratorsOnComputedProperties.ts, 46, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 46, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 46, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 46, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 46, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(C[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 47, 23))
@@ -256,8 +256,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(C["property4"], Decl(decoratorsOnComputedProperties.ts, 48, 37))
 ->"property4" : Symbol(C["property4"], Decl(decoratorsOnComputedProperties.ts, 48, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 48, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 48, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 48, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 48, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(C[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 49, 27))
@@ -314,8 +314,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(D["property"], Decl(decoratorsOnComputedProperties.ts, 60, 14))
 ->"property" : Symbol(D["property"], Decl(decoratorsOnComputedProperties.ts, 60, 14))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 60, 14))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 60, 14))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 60, 14))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 60, 14))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -331,8 +331,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(D["property2"], Decl(decoratorsOnComputedProperties.ts, 62, 33))
 ->"property2" : Symbol(D["property2"], Decl(decoratorsOnComputedProperties.ts, 62, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 62, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 62, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 62, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 62, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -347,8 +347,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(D["property3"], Decl(decoratorsOnComputedProperties.ts, 64, 37))
 ->"property3" : Symbol(D["property3"], Decl(decoratorsOnComputedProperties.ts, 64, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 64, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 64, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 64, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 64, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(D[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 65, 23))
@@ -362,8 +362,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(D["property4"], Decl(decoratorsOnComputedProperties.ts, 66, 37))
 ->"property4" : Symbol(D["property4"], Decl(decoratorsOnComputedProperties.ts, 66, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 66, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 66, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 66, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 66, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(D[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 67, 27))
@@ -420,8 +420,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(E["property"], Decl(decoratorsOnComputedProperties.ts, 78, 9))
 ->"property" : Symbol(E["property"], Decl(decoratorsOnComputedProperties.ts, 78, 9))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 78, 9))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 78, 9))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 78, 9))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 78, 9))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -437,8 +437,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(E["property2"], Decl(decoratorsOnComputedProperties.ts, 80, 33))
 ->"property2" : Symbol(E["property2"], Decl(decoratorsOnComputedProperties.ts, 80, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 80, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 80, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 80, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 80, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -453,8 +453,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(E["property3"], Decl(decoratorsOnComputedProperties.ts, 82, 37))
 ->"property3" : Symbol(E["property3"], Decl(decoratorsOnComputedProperties.ts, 82, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 82, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 82, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 82, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 82, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(E[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 83, 23))
@@ -468,8 +468,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(E["property4"], Decl(decoratorsOnComputedProperties.ts, 84, 37))
 ->"property4" : Symbol(E["property4"], Decl(decoratorsOnComputedProperties.ts, 84, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 84, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 84, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 84, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 84, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(E[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 85, 27))
@@ -525,8 +525,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(F["property"], Decl(decoratorsOnComputedProperties.ts, 96, 14))
 ->"property" : Symbol(F["property"], Decl(decoratorsOnComputedProperties.ts, 96, 14))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 96, 14))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 96, 14))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 96, 14))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 96, 14))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -542,8 +542,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(F["property2"], Decl(decoratorsOnComputedProperties.ts, 98, 33))
 ->"property2" : Symbol(F["property2"], Decl(decoratorsOnComputedProperties.ts, 98, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 98, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 98, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 98, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 98, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -558,8 +558,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(F["property3"], Decl(decoratorsOnComputedProperties.ts, 100, 37))
 ->"property3" : Symbol(F["property3"], Decl(decoratorsOnComputedProperties.ts, 100, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 100, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 100, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 100, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 100, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(F[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 101, 23))
@@ -573,8 +573,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(F["property4"], Decl(decoratorsOnComputedProperties.ts, 102, 37))
 ->"property4" : Symbol(F["property4"], Decl(decoratorsOnComputedProperties.ts, 102, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 102, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 102, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 102, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 102, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(F[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 103, 27))
@@ -630,8 +630,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(G["property"], Decl(decoratorsOnComputedProperties.ts, 114, 9))
 ->"property" : Symbol(G["property"], Decl(decoratorsOnComputedProperties.ts, 114, 9))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 114, 9))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 114, 9))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 114, 9))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 114, 9))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -647,8 +647,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(G["property2"], Decl(decoratorsOnComputedProperties.ts, 116, 33))
 ->"property2" : Symbol(G["property2"], Decl(decoratorsOnComputedProperties.ts, 116, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 116, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 116, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 116, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 116, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -663,8 +663,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(G["property3"], Decl(decoratorsOnComputedProperties.ts, 118, 37))
 ->"property3" : Symbol(G["property3"], Decl(decoratorsOnComputedProperties.ts, 118, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 118, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 118, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 118, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 118, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(G[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 119, 23))
@@ -678,8 +678,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(G["property4"], Decl(decoratorsOnComputedProperties.ts, 120, 37))
 ->"property4" : Symbol(G["property4"], Decl(decoratorsOnComputedProperties.ts, 120, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 120, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 120, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 120, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 120, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(G[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 121, 27))
@@ -739,8 +739,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(H["property"], Decl(decoratorsOnComputedProperties.ts, 133, 14))
 ->"property" : Symbol(H["property"], Decl(decoratorsOnComputedProperties.ts, 133, 14))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 133, 14))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 133, 14))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 133, 14))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 133, 14))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -756,8 +756,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(H["property2"], Decl(decoratorsOnComputedProperties.ts, 135, 33))
 ->"property2" : Symbol(H["property2"], Decl(decoratorsOnComputedProperties.ts, 135, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 135, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 135, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 135, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 135, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -772,8 +772,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(H["property3"], Decl(decoratorsOnComputedProperties.ts, 137, 37))
 ->"property3" : Symbol(H["property3"], Decl(decoratorsOnComputedProperties.ts, 137, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 137, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 137, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 137, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 137, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(H[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 138, 23))
@@ -787,8 +787,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(H["property4"], Decl(decoratorsOnComputedProperties.ts, 139, 37))
 ->"property4" : Symbol(H["property4"], Decl(decoratorsOnComputedProperties.ts, 139, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 139, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 139, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 139, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 139, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(H[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 140, 27))
@@ -848,8 +848,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(I["property"], Decl(decoratorsOnComputedProperties.ts, 152, 9))
 ->"property" : Symbol(I["property"], Decl(decoratorsOnComputedProperties.ts, 152, 9))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 152, 9))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 152, 9))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 152, 9))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 152, 9))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -865,8 +865,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(I["property2"], Decl(decoratorsOnComputedProperties.ts, 154, 33))
 ->"property2" : Symbol(I["property2"], Decl(decoratorsOnComputedProperties.ts, 154, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 154, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 154, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 154, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 154, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -881,8 +881,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(I["property3"], Decl(decoratorsOnComputedProperties.ts, 156, 37))
 ->"property3" : Symbol(I["property3"], Decl(decoratorsOnComputedProperties.ts, 156, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 156, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 156, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 156, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 156, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(I[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 157, 23))
@@ -896,8 +896,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(I["property4"], Decl(decoratorsOnComputedProperties.ts, 158, 37))
 ->"property4" : Symbol(I["property4"], Decl(decoratorsOnComputedProperties.ts, 158, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 158, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 158, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 158, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 158, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(I[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 159, 27))
@@ -958,8 +958,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property"] : Symbol(J["property"], Decl(decoratorsOnComputedProperties.ts, 171, 14))
 ->"property" : Symbol(J["property"], Decl(decoratorsOnComputedProperties.ts, 171, 14))
-+>["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 171, 14))
-+>"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 171, 14))
++>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 171, 14))
++>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 171, 14))
 
      @x [Symbol.toStringTag]: any;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -975,8 +975,8 @@
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
 ->["property2"] : Symbol(J["property2"], Decl(decoratorsOnComputedProperties.ts, 173, 33))
 ->"property2" : Symbol(J["property2"], Decl(decoratorsOnComputedProperties.ts, 173, 33))
-+>["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 173, 33))
-+>"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 173, 33))
++>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 173, 33))
++>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 173, 33))
 
      @x [Symbol.iterator]: any = null;
  >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -991,8 +991,8 @@
      ["property3"]: any;
 ->["property3"] : Symbol(J["property3"], Decl(decoratorsOnComputedProperties.ts, 175, 37))
 ->"property3" : Symbol(J["property3"], Decl(decoratorsOnComputedProperties.ts, 175, 37))
-+>["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 175, 37))
-+>"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 175, 37))
++>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 175, 37))
++>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 175, 37))
 
      [Symbol.isConcatSpreadable]: any;
 ->[Symbol.isConcatSpreadable] : Symbol(J[Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 176, 23))
@@ -1006,8 +1006,8 @@
      ["property4"]: any = 2;
 ->["property4"] : Symbol(J["property4"], Decl(decoratorsOnComputedProperties.ts, 177, 37))
 ->"property4" : Symbol(J["property4"], Decl(decoratorsOnComputedProperties.ts, 177, 37))
-+>["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 177, 37))
-+>"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 177, 37))
++>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 177, 37))
++>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 177, 37))
 
      [Symbol.match]: any = null;
 ->[Symbol.match] : Symbol(J[Symbol.match], Decl(decoratorsOnComputedProperties.ts, 178, 27))

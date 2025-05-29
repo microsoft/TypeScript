@@ -51,9 +51,9 @@ declare module "foobar" {
 >"foobar" : typeof import("foobar")
 
     export = foo.bar;
->foo.bar : typeof bar
+>foo.bar : typeof foo.bar
 >foo : typeof foo
->bar : typeof bar
+>bar : typeof foo.bar
 }
 
 declare module "foobarx" {
@@ -61,9 +61,9 @@ declare module "foobarx" {
 
     export = foo.bar.X;
 >foo.bar.X : number
->foo.bar : typeof bar
+>foo.bar : typeof foo.bar
 >foo : typeof foo
->bar : typeof bar
+>bar : typeof foo.bar
 >X : number
 }
 
@@ -81,9 +81,9 @@ namespace A {
 >0 : 0
 }
 export = A.B;
->A.B : typeof B
+>A.B : typeof import("./a")
 >A : typeof A
->B : typeof B
+>B : typeof import("./a")
 
 === b.ts ===
 export = "foo".length;

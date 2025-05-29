@@ -2,7 +2,7 @@
 
 === /a.ts ===
 import * as _ from "./a";
->_ : typeof import("/a")
+>_ : typeof _
 
 for (const _ of []) { }
 >_ : any

@@ -2,34 +2,34 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 const Foo = (props: any) => <div/>;
->Foo : (props: any) => Element
->(props: any) => <div/> : (props: any) => Element
+>Foo : (props: any) => JSX.Element
+>(props: any) => <div/> : (props: any) => JSX.Element
 >props : any
-><div/> : Element
+><div/> : JSX.Element
 >div : any
 
 // Should be OK
 const foo = <Foo />;
->foo : Element
-><Foo /> : Element
->Foo : (props: any) => Element
+>foo : JSX.Element
+><Foo /> : JSX.Element
+>Foo : (props: any) => JSX.Element
 
 
 // Should be OK
 var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
->MainMenu : StatelessComponent<{}>
+>MainMenu : React.StatelessComponent<{}>
 >React : any
->(props) => (<div>    <h3>Main Menu</h3></div>) : (props: { children?: ReactNode; }) => Element
->props : { children?: ReactNode; }
->(<div>    <h3>Main Menu</h3></div>) : Element
-><div>    <h3>Main Menu</h3></div> : Element
+>(props) => (<div>    <h3>Main Menu</h3></div>) : (props: { children?: React.ReactNode; }) => JSX.Element
+>props : { children?: React.ReactNode; }
+>(<div>    <h3>Main Menu</h3></div>) : JSX.Element
+><div>    <h3>Main Menu</h3></div> : JSX.Element
 >div : any
 
     <h3>Main Menu</h3>
-><h3>Main Menu</h3> : Element
+><h3>Main Menu</h3> : JSX.Element
 >h3 : any
 >h3 : any
 
@@ -37,20 +37,20 @@ var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
 >div : any
 
 var App: React.StatelessComponent<{ children }> = ({children}) => (
->App : StatelessComponent<{ children: any; }>
+>App : React.StatelessComponent<{ children: any; }>
 >React : any
 >children : any
->({children}) => (    <div >        <MainMenu/>	</div>) : (__0: { children: any; } & { children?: ReactNode; }) => Element
+>({children}) => (    <div >        <MainMenu/>	</div>) : ({ children }: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
 >children : any
->(    <div >        <MainMenu/>	</div>) : Element
+>(    <div >        <MainMenu/>	</div>) : JSX.Element
 
     <div >
-><div >        <MainMenu/>	</div> : Element
+><div >        <MainMenu/>	</div> : JSX.Element
 >div : any
 
         <MainMenu/>
-><MainMenu/> : Element
->MainMenu : StatelessComponent<{}>
+><MainMenu/> : JSX.Element
+>MainMenu : React.StatelessComponent<{}>
 
 	</div>
 >div : any

@@ -39,3 +39,22 @@ var Something;
     let MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
     Something.create = make(me.default);
 })(Something || (exports.Something = Something = {}));
+
+
+//// [this.d.ts]
+import * as me from "./this";
+export interface Things<P, T> {
+    p: P;
+    t: T;
+}
+export declare function make<P, CTor>(x: {
+    new ();
+}): Things<P, CTor>;
+export interface Props {
+}
+export default class MyComponent {
+    props: Props;
+}
+export declare namespace Something {
+    const create: Things<Props, me.default>;
+}

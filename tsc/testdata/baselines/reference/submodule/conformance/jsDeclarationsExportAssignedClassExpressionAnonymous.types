@@ -2,11 +2,11 @@
 
 === index.js ===
 module.exports = class {
->module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
->module.exports : typeof exports
->module : { exports: typeof exports; }
->exports : typeof exports
->class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
+>module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
+>module.exports : typeof import(".")
+>module : { "\uFFFDclass": typeof import("."); }
+>exports : typeof import(".")
+>class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
 
     /**
      * @param {number} p

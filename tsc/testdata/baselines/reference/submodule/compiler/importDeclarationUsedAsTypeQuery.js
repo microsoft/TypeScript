@@ -23,3 +23,12 @@ exports.B = B;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+
+
+//// [importDeclarationUsedAsTypeQuery_require.d.ts]
+export declare class B {
+    id: number;
+}
+//// [importDeclarationUsedAsTypeQuery_1.d.ts]
+import a = require('./importDeclarationUsedAsTypeQuery_require');
+export declare var x: typeof a;

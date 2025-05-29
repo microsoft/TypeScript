@@ -56,3 +56,14 @@ class D {
         }
     }
 }
+
+
+//// [classConstructorAccessibility4.d.ts]
+declare class A {
+    private constructor();
+    method(): void;
+}
+declare class D {
+    protected constructor();
+    method(): void;
+}

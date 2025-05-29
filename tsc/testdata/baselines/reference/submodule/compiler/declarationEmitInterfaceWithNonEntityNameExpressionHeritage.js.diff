@@ -9,11 +9,8 @@
 -    }
 -    return A;
 -}());
--
--
--//// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.d.ts]
--declare class A {
--}
--interface Class {
 +class A {
- }
++}
+
+
+ //// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.d.ts]

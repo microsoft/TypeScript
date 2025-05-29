@@ -13,11 +13,6 @@
  }
 
  export default function Component(props: ComponentProps) {
-->Component : Symbol(Component, Decl(file.tsx, 5, 1))
-+>Component : Symbol(default, Decl(file.tsx, 5, 1))
- >props : Symbol(props, Decl(file.tsx, 7, 34))
- >ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 0, 32))
-
 @@= skipped -36, +36 lines =@@
  >AnotherComponentProps : Symbol(AnotherComponentProps, Decl(file.tsx, 17, 1))
 

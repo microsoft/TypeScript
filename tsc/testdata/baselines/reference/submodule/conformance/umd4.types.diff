@@ -1,29 +1,8 @@
 --- old.umd4.types
 +++ new.umd4.types
-@@= skipped -1, +1 lines =@@
+@@= skipped -31, +31 lines =@@
+ >x : number
 
- === a.ts ===
- import * as Bar from './foo';
-->Bar : typeof Bar
-+>Bar : typeof import("foo")
-
- Bar.fn();
- >Bar.fn() : void
- >Bar.fn : () => void
-->Bar : typeof Bar
-+>Bar : typeof import("foo")
- >fn : () => void
-
- let x: Bar.Thing;
-->x : Bar.Thing
-+>x : Thing
- >Bar : any
-
- let y: number = x.n;
- >y : number
- >x.n : number
-->x : Bar.Thing
-+>x : Thing
- >n : number
-
- === foo.d.ts ===
+ export as namespace Foo;
+->Foo : typeof import("foo")
++>Foo : typeof import("./foo.js")

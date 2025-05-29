@@ -55,7 +55,7 @@ g = x;
 >x : any
 
 var h: { f(): void } = x;
->h : { f: () => void; }
+>h : { f(): void; }
 >f : () => void
 >x : any
 

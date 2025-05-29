@@ -18,8 +18,8 @@ module _modes {
 
 module editor {
  import modes = _modes;
->modes : typeof _modes
->_modes : typeof _modes
+>modes : typeof modes
+>_modes : typeof modes
 
 }
 

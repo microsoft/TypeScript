@@ -54,18 +54,18 @@ export var xxxx = new a();
 >a : typeof a
 
 import { a11 as b } from "./server";
->a11 : typeof a11
->b : typeof a11
+>a11 : typeof b
+>b : typeof b
 
 export var xxxx1 = new b();
->xxxx1 : a11
->new b() : a11
->b : typeof a11
+>xxxx1 : b
+>new b() : b
+>b : typeof b
 
 import { x, a12 as y } from "./server";
 >x : typeof x
->a12 : typeof a12
->y : typeof a12
+>a12 : typeof y
+>y : typeof y
 
 export var xxxx2 = new x();
 >xxxx2 : x
@@ -73,18 +73,18 @@ export var xxxx2 = new x();
 >x : typeof x
 
 export var xxxx3 = new y();
->xxxx3 : a12
->new y() : a12
->y : typeof a12
+>xxxx3 : y
+>new y() : y
+>y : typeof y
 
 import { x11 as z,  } from "./server";
->x11 : typeof x11
->z : typeof x11
+>x11 : typeof z
+>z : typeof z
 
 export var xxxx4 = new z();
->xxxx4 : x11
->new z() : x11
->z : typeof x11
+>xxxx4 : z
+>new z() : z
+>z : typeof z
 
 import { m,  } from "./server";
 >m : typeof m
@@ -109,20 +109,20 @@ export var xxxx7 = new x1();
 >x1 : typeof x1
 
 import { a111 as a11, x111 as x11 } from "./server";
->a111 : typeof a111
->a11 : typeof a111
->x111 : typeof x111
->x11 : typeof x111
+>a111 : typeof a11
+>a11 : typeof a11
+>x111 : typeof x11
+>x11 : typeof x11
 
 export var xxxx8 = new a11();
->xxxx8 : a111
->new a11() : a111
->a11 : typeof a111
+>xxxx8 : a11
+>new a11() : a11
+>a11 : typeof a11
 
 export var xxxx9 = new x11();
->xxxx9 : x111
->new x11() : x111
->x11 : typeof x111
+>xxxx9 : x11
+>new x11() : x11
+>x11 : typeof x11
 
 import { z1 } from "./server";
 >z1 : typeof z1
@@ -133,19 +133,19 @@ export var z111 = new z1();
 >z1 : typeof z1
 
 import { z2 as z3 } from "./server";
->z2 : typeof z2
->z3 : typeof z2
+>z2 : typeof z3
+>z3 : typeof z3
 
 export var z2 = new z3(); // z2 shouldn't give redeclare error
->z2 : z2
->new z3() : z2
->z3 : typeof z2
+>z2 : z3
+>new z3() : z3
+>z3 : typeof z3
 
 // not referenced
 import { aaaa } from "./server";
 >aaaa : typeof aaaa
 
 import { aaaa1 as bbbb } from "./server";
->aaaa1 : typeof aaaa1
->bbbb : typeof aaaa1
+>aaaa1 : typeof bbbb
+>bbbb : typeof bbbb
 

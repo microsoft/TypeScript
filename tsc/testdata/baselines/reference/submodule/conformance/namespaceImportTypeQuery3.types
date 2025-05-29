@@ -16,11 +16,11 @@ export class B {};
 
 === /b.ts ===
 import * as types from './a';
->types : typeof import("/a")
+>types : typeof types
 
 let t: typeof types = {
->t : typeof import("/a")
->types : typeof import("/a")
+>t : typeof types
+>types : typeof types
 >{  A: undefined as any, // ok  B: undefined as any,} : { A: any; B: any; }
 
   A: undefined as any, // ok

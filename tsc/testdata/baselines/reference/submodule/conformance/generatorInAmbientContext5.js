@@ -9,3 +9,9 @@ class C {
 class C {
     *generator() { }
 }
+
+
+//// [generatorInAmbientContext5.d.ts]
+declare class C {
+    generator(): any;
+}

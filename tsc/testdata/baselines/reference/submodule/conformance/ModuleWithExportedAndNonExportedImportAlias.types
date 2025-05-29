@@ -23,9 +23,9 @@ module B {
 >Line : Line
 
         constructor(public start: A.Point, public end: A.Point) { }
->start : Point
+>start : A.Point
 >A : any
->end : Point
+>end : A.Point
 >A : any
     }
 }
@@ -38,11 +38,11 @@ module Geometry {
 >A : any
 
     import Lines = B;
->Lines : typeof B
->B : typeof B
+>Lines : typeof Lines
+>B : typeof Lines
 
     export var Origin: Points.Point = { x: 0, y: 0 };
->Origin : Point
+>Origin : Points.Point
 >Points : any
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
@@ -52,13 +52,13 @@ module Geometry {
 
     // this is valid since B.Line _is_ visible outside Geometry
     export var Unit: Lines.Line = new Lines.Line(Origin, { x: 1, y: 0 });
->Unit : Line
+>Unit : Lines.Line
 >Lines : any
->new Lines.Line(Origin, { x: 1, y: 0 }) : Line
->Lines.Line : typeof Line
->Lines : typeof B
->Line : typeof Line
->Origin : Point
+>new Lines.Line(Origin, { x: 1, y: 0 }) : Lines.Line
+>Lines.Line : typeof Lines.Line
+>Lines : typeof Lines
+>Line : typeof Lines.Line
+>Origin : Points.Point
 >{ x: 1, y: 0 } : { x: number; y: number; }
 >x : number
 >1 : 1
@@ -79,9 +79,9 @@ var p: Geometry.Points.Point;
 
 var p = Geometry.Origin;
 >p : { x: number; y: number; }
->Geometry.Origin : Point
+>Geometry.Origin : A.Point
 >Geometry : typeof Geometry
->Origin : Point
+>Origin : A.Point
 
 var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
 >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
@@ -94,9 +94,9 @@ var line: { start: { x: number; y: number }; end: { x: number; y: number; } };
 
 var line = Geometry.Unit;
 >line : { start: { x: number; y: number; }; end: { x: number; y: number; }; }
->Geometry.Unit : Line
+>Geometry.Unit : B.Line
 >Geometry : typeof Geometry
->Unit : Line
+>Unit : B.Line
 
 // not expected to work since non are exported
 var line = Geometry.Lines.Line;

@@ -4,7 +4,7 @@
 module M.buz.plop {
 >M : typeof M
 >buz : typeof buz
->plop : typeof plop
+>plop : typeof buz.plop
 
     export function doom() { }
 >doom : () => void
@@ -15,7 +15,7 @@ module M.buz.plop {
 module M.buz.plop {
 >M : typeof M
 >buz : typeof buz
->plop : typeof plop
+>plop : typeof globalThis.M.buz.plop
 
     function gunk() { }
 >gunk : () => void
@@ -27,7 +27,7 @@ module M.buz.plop {
 >fudge : fudge
 
     export enum plop { }
->plop : plop.plop
+>plop : plop
 
     // Emit these references as follows
     var v1 = gunk; // gunk

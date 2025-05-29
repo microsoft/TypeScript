@@ -21,7 +21,7 @@ func NewImpliedModuleTransformer(emitContext *printer.EmitContext, compilerOptio
 		resolver = binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 	}
 	tx := &ImpliedModuleTransformer{compilerOptions: compilerOptions, resolver: resolver, sourceFileMetaDataProvider: sourceFileMetaDataProvider}
-	return tx.newTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 func (tx *ImpliedModuleTransformer) visit(node *ast.Node) *ast.Node {

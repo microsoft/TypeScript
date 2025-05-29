@@ -32,3 +32,20 @@ function f() {
     }
     return C3;
 }
+
+
+//// [autoAccessor8.d.ts]
+declare class C1 {
+    accessor a: any;
+    static accessor b: any;
+}
+declare class C2 {
+    accessor a: any;
+    static accessor b: any;
+}
+declare function f(): {
+    new (): {
+        a: any;
+    };
+    b: any;
+};

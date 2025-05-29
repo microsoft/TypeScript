@@ -10,20 +10,20 @@ declare namespace React {
 >Component : Component<A, B>
 }
 declare function createComponentClass<P>(factory: () => React.ComponentClass<P>): React.ComponentClass<P>;
->createComponentClass : <P>(factory: () => ComponentClass<P>) => ComponentClass<P>
->factory : () => ComponentClass<P>
+>createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
+>factory : () => React.ComponentClass<P>
 >React : any
 >React : any
 
 class Foo extends createComponentClass(() => class extends React.Component<{}, {}> {
 >Foo : Foo
->createComponentClass(() => class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }}) : Component<unknown, {}>
->createComponentClass : <P>(factory: () => ComponentClass<P>) => ComponentClass<P>
+>createComponentClass(() => class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }}) : React.Component<unknown, {}>
+>createComponentClass : <P>(factory: () => React.ComponentClass<P>) => React.ComponentClass<P>
 >() => class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : () => typeof (Anonymous class)
 >class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : typeof (Anonymous class)
->React.Component : Component<{}, {}>
+>React.Component : React.Component<{}, {}>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 
   render() {
 >render : () => any

@@ -1,16 +1,10 @@
 --- old.expandoFunctionSymbolProperty.js
 +++ new.expandoFunctionSymbolProperty.js
-@@= skipped -24, +24 lines =@@
-     inner[symb] = true;
-     return inner;
- }
--
--
--//// [expandoFunctionSymbolProperty.d.ts]
--declare const symb: unique symbol;
--interface TestSymb {
--    (): void;
--    readonly [symb]: boolean;
--}
--export declare function test(): TestSymb;
--export {};
+@@= skipped -27, +27 lines =@@
+
+
+ //// [expandoFunctionSymbolProperty.d.ts]
++// repro from https://github.com/microsoft/TypeScript/issues/54220
+ declare const symb: unique symbol;
+ interface TestSymb {
+     (): void;

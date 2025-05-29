@@ -2,7 +2,7 @@
 
 === esnextmodulekindWithES5Target2.ts ===
 export default class C {
->C : default
+>C : C
 
     static s = 0;
 >s : number

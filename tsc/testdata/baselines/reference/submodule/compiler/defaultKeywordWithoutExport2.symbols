@@ -2,6 +2,6 @@
 
 === defaultKeywordWithoutExport2.ts ===
 default function () {
-> : Symbol(, Decl(defaultKeywordWithoutExport2.ts, 0, 7))
+> : Symbol((Missing), Decl(defaultKeywordWithoutExport2.ts, 0, 7))
 
 }

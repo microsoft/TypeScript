@@ -15,3 +15,11 @@ class C {
 }
 var v1 = new C();
 var y = v1.x; // should be 'string'
+
+
+//// [genericClasses1.d.ts]
+declare class C<T> {
+    x: T;
+}
+declare var v1: C<string>;
+declare var y: string; // should be 'string'

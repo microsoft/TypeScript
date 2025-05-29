@@ -137,11 +137,7 @@
 +>asyncIterator : Symbol(asyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
 
      return this;
-->this : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 16))
-+>this : Symbol((Anonymous type), Decl(discriminateWithOptionalProperty2.ts, 55, 16))
-
-   },
-   next() {
+ >this : Symbol(iterable, Decl(discriminateWithOptionalProperty2.ts, 55, 16))
 @@= skipped -16, +16 lines =@@
  >items : Symbol(items, Decl(discriminateWithOptionalProperty2.ts, 53, 5))
 

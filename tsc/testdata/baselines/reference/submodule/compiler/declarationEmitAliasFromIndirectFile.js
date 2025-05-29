@@ -32,3 +32,13 @@ export default fp.l10ns;
 Object.defineProperty(exports, "__esModule", { value: true });
 const fp = { l10ns: {} };
 exports.default = fp.l10ns;
+
+
+//// [app.d.ts]
+declare const _default: {
+    ar?: import("./locale.js").CustomLocale;
+    bg?: import("./locale.js").CustomLocale;
+} & {
+    default: import("./locale.js").Locale;
+};
+export default _default;

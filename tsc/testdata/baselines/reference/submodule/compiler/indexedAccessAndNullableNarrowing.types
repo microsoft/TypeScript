@@ -114,9 +114,9 @@ export function syncStoreProp<
 
     store.setState(key, value);
 >store.setState(key, value) : void
->store.setState : <K extends keyof S>(key: K, value: S[K]) => void
+>store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
 >store : Store<S>
->setState : <K extends keyof S>(key: K, value: S[K]) => void
+>setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
 >key : K
 >value : P[K] & ({} | null)
 
@@ -127,9 +127,9 @@ export function syncStoreProp<
 
     store.setState(key, value);
 >store.setState(key, value) : void
->store.setState : <K extends keyof S>(key: K, value: S[K]) => void
+>store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
 >store : Store<S>
->setState : <K extends keyof S>(key: K, value: S[K]) => void
+>setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
 >key : K
 >value : P[K] & ({} | null)
 }

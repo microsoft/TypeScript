@@ -68,3 +68,16 @@ function f3(obj, k) {
         let x2 = obj[k2];
     }
 }
+
+
+//// [keyofAndForIn.d.ts]
+// Repro from #12513
+declare function f1<K extends string, T>(obj: {
+    [P in K]: T;
+}, k: K): void;
+declare function f2<T>(obj: {
+    [P in keyof T]: T[P];
+}, k: keyof T): void;
+declare function f3<T, K extends keyof T>(obj: {
+    [P in K]: T[P];
+}, k: K): void;

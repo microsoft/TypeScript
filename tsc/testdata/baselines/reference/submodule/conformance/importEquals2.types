@@ -2,12 +2,12 @@
 
 === /c.ts ===
 import a = require('./b');
->a : typeof import("/a")
+>a : typeof a
 
 new a.A(); // Error
 >new a.A() : any
 >a.A : any
->a : typeof import("/a")
+>a : typeof a
 >A : any
 
 === /a.ts ===
@@ -19,8 +19,8 @@ export type { A }
 
 === /b.ts ===
 import * as a from './a';
->a : typeof import("/a")
+>a : typeof a
 
 export = a;
->a : typeof import("/a")
+>a : typeof a
 

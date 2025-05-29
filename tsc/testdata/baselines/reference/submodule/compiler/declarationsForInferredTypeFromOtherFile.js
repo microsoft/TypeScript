@@ -35,3 +35,12 @@ const file2_1 = require("./file2");
 function bar() {
     return (0, file2_1.foo)();
 }
+
+
+//// [file1.d.ts]
+export declare class Foo {
+}
+//// [file2.d.ts]
+export declare function foo(): import("./file1").Foo;
+//// [file3.d.ts]
+export declare function bar(): import("./file1").Foo;

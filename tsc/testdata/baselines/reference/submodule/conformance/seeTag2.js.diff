@@ -5,45 +5,25 @@
  //// [seeTag2.js]
  /** @see {} empty*/
 -var a = "";
--/** @see {aaaaaa} unknown name*/
--var b = "";
--/** @see {?????} invalid */
--var c = "";
--/** @see c without brace */
--var d = "";
--/** @see ?????? wowwwwww*/
--var e = "";
--/** @see {}*/
--var f = "";
--/** @see */
--var g = "";
--
--
--//// [seeTag2.d.ts]
--/** @see {} empty*/
--declare const a = "";
--/** @see {aaaaaa} unknown name*/
--declare const b = "";
--/** @see {?????} invalid */
--declare const c = "";
--/** @see c without brace */
--declare const d = "";
--/** @see ?????? wowwwwww*/
--declare const e = "";
--/** @see {}*/
--declare const f = "";
--/** @see */
--declare const g = "";
 +const a = "";
-+/** @see {aaaaaa} unknown name*/
+ /** @see {aaaaaa} unknown name*/
+-var b = "";
 +const b = "";
-+/** @see {?????} invalid */
+ /** @see {?????} invalid */
+-var c = "";
 +const c = "";
-+/** @see c without brace */
+ /** @see c without brace */
+-var d = "";
 +const d = "";
-+/** @see ?????? wowwwwww*/
+ /** @see ?????? wowwwwww*/
+-var e = "";
 +const e = "";
-+/** @see {}*/
+ /** @see {}*/
+-var f = "";
 +const f = "";
-+/** @see */
+ /** @see */
+-var g = "";
 +const g = "";
+
+
+ //// [seeTag2.d.ts]

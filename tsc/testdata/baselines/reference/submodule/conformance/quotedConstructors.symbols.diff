@@ -30,8 +30,8 @@
      ['constructor']() {
 ->['constructor'] : Symbol(E['constructor'], Decl(quotedConstructors.ts, 12, 9))
 ->'constructor' : Symbol(E['constructor'], Decl(quotedConstructors.ts, 12, 9))
-+>['constructor'] : Symbol(constructor, Decl(quotedConstructors.ts, 12, 9))
-+>'constructor' : Symbol(constructor, Decl(quotedConstructors.ts, 12, 9))
++>['constructor'] : Symbol(['constructor'], Decl(quotedConstructors.ts, 12, 9))
++>'constructor' : Symbol(['constructor'], Decl(quotedConstructors.ts, 12, 9))
 
          console.log(this);
 ->console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -54,14 +54,7 @@
  >this : Symbol((Anonymous class), Decl(quotedConstructors.ts, 18, 3))
      }
  };
-
- var o = { "constructor"() {} };
- >o : Symbol(o, Decl(quotedConstructors.ts, 24, 3))
-->"constructor" : Symbol("constructor", Decl(quotedConstructors.ts, 24, 9))
-+>"constructor" : Symbol(constructor, Decl(quotedConstructors.ts, 24, 9))
-
- class F {
- >F : Symbol(F, Decl(quotedConstructors.ts, 24, 31))
+@@= skipped -16, +16 lines =@@
 
      "\x63onstructor"() {
          console.log(this);

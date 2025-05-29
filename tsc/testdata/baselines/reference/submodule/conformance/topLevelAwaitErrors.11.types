@@ -6,7 +6,7 @@ declare var require: any;
 >require : any
 
 import await = require("./other");
->await : typeof import("other")
+>await : typeof await
 
 === other.ts ===
 declare const _await: any;

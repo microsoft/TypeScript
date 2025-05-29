@@ -80,7 +80,7 @@
 ->this._map : Symbol(Multimap3._map, Decl(a.js, 45, 27))
 ->this : Symbol(Multimap3, Decl(a.js, 45, 14))
 ->_map : Symbol(Multimap3._map, Decl(a.js, 45, 27))
-+>this : Symbol((Anonymous type), Decl(a.js, 38, 8))
++>this : Symbol(Ns, Decl(a.js, 38, 8))
 
  };
 

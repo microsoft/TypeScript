@@ -17,7 +17,7 @@ export class A {
 === b.ts ===
 export {}
 declare module "./a" {
->"./a" : typeof import("a")
+>"./a" : typeof import("./a")
 
     interface A {
         run();

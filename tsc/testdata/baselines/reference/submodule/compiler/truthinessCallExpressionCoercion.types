@@ -110,12 +110,12 @@ function checksPropertyAccess() {
 >checksPropertyAccess : () => void
 
     const x = {
->x : { foo: { bar: () => boolean; }; }
->{        foo: {            bar() { return true; }        }    } : { foo: { bar: () => boolean; }; }
+>x : { foo: { bar(): boolean; }; }
+>{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
 
         foo: {
->foo : { bar: () => boolean; }
->{            bar() { return true; }        } : { bar: () => boolean; }
+>foo : { bar(): boolean; }
+>{            bar() { return true; }        } : { bar(): boolean; }
 
             bar() { return true; }
 >bar : () => boolean
@@ -125,24 +125,24 @@ function checksPropertyAccess() {
 
     if (x.foo.bar) { // error
 >x.foo.bar : () => boolean
->x.foo : { bar: () => boolean; }
->x : { foo: { bar: () => boolean; }; }
->foo : { bar: () => boolean; }
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
 >bar : () => boolean
     }
 
     if (x.foo.bar) { // ok
 >x.foo.bar : () => boolean
->x.foo : { bar: () => boolean; }
->x : { foo: { bar: () => boolean; }; }
->foo : { bar: () => boolean; }
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
 >bar : () => boolean
 
         x.foo.bar;
 >x.foo.bar : () => boolean
->x.foo : { bar: () => boolean; }
->x : { foo: { bar: () => boolean; }; }
->foo : { bar: () => boolean; }
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
 >bar : () => boolean
     }
 }

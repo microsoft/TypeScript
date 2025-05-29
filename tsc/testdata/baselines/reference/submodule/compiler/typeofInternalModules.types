@@ -16,9 +16,9 @@ module Outer {
 }
 
 import importInst = Outer.instantiated;
->importInst : typeof instantiated
+>importInst : typeof importInst
 >Outer : typeof Outer
->instantiated : typeof instantiated
+>instantiated : typeof importInst
 
 import importUninst = Outer.uninstantiated;
 >importUninst : any
@@ -26,19 +26,19 @@ import importUninst = Outer.uninstantiated;
 >uninstantiated : any
 
 var x1: typeof importInst.C = importInst.C;
->x1 : typeof C
->importInst.C : typeof C
->importInst : typeof instantiated
->C : typeof C
->importInst.C : typeof C
->importInst : typeof instantiated
->C : typeof C
+>x1 : typeof importInst.C
+>importInst.C : typeof importInst.C
+>importInst : typeof importInst
+>C : typeof importInst.C
+>importInst.C : typeof importInst.C
+>importInst : typeof importInst
+>C : typeof importInst.C
 
 var x2: importInst.C = new x1();
->x2 : C
+>x2 : importInst.C
 >importInst : any
->new x1() : C
->x1 : typeof C
+>new x1() : importInst.C
+>x1 : typeof importInst.C
 
 var x3: typeof importUninst.P; // Error again
 >x3 : any
@@ -51,20 +51,20 @@ var x4: Outer = Outer;
 >Outer : typeof Outer
 
 var x5: typeof importInst;
->x5 : typeof instantiated
->importInst : typeof instantiated
+>x5 : typeof importInst
+>importInst : typeof importInst
 
 x5 = Outer;
 >x5 = Outer : typeof Outer
->x5 : typeof instantiated
+>x5 : typeof importInst
 >Outer : typeof Outer
 
 x5 = Outer.instantiated;
->x5 = Outer.instantiated : typeof instantiated
->x5 : typeof instantiated
->Outer.instantiated : typeof instantiated
+>x5 = Outer.instantiated : typeof importInst
+>x5 : typeof importInst
+>Outer.instantiated : typeof importInst
 >Outer : typeof Outer
->instantiated : typeof instantiated
+>instantiated : typeof importInst
 
 var x6: typeof importUninst;
 >x6 : any
@@ -76,7 +76,7 @@ var x7: typeof Outer = Outer;
 >Outer : typeof Outer
 
 x7 = importInst;
->x7 = importInst : typeof instantiated
+>x7 = importInst : typeof importInst
 >x7 : typeof Outer
->importInst : typeof instantiated
+>importInst : typeof importInst
 

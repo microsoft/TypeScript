@@ -3,8 +3,8 @@
 === foo.js ===
 // Repro for #16585
 const x = {
->x : { bar: () => void; }
->{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar: () => void; }
+>x : { bar(): void; }
+>{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar(): void; }
 
     bar() {
 >bar : () => void

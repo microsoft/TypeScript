@@ -9,16 +9,16 @@ const other = require('./other');
 
 /** @type {Puppeteer.Keyboard} */
 var ppk;
->ppk : Keyboard
+>ppk : Puppeteer.Keyboard
 
 Puppeteer.connect;
 >Puppeteer.connect : (name: string) => void
->Puppeteer : typeof import("puppet")
+>Puppeteer : typeof Puppeteer
 >connect : (name: string) => void
 
 === puppet.d.ts ===
 export as namespace Puppeteer;
->Puppeteer : typeof import("puppet")
+>Puppeteer : typeof import("./puppet.js")
 
 export interface Keyboard {
     key: string

@@ -8,11 +8,11 @@ module X {
     export interface Y<T> { }
 }
 var z: X.Y.Z = null;
->z : Z
+>z : X.Y.Z
 >X : any
 >Y : any
 
 var z2: X.Y<string>;
->z2 : Y<string>
+>z2 : X.Y<string>
 >X : any
 

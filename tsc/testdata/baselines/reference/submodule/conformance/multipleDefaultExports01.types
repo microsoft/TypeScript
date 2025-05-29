@@ -2,12 +2,12 @@
 
 === m1.ts ===
 export default class foo {
->foo : default
+>foo : bar
 
 }
 
 export default function bar() {
->bar : typeof default
+>bar : typeof bar
 
 }
 
@@ -20,9 +20,9 @@ export default x;
 
 === m2.ts ===
 import Entity from "./m1"
->Entity : typeof default
+>Entity : typeof Entity
 
 Entity();
 >Entity() : void
->Entity : typeof default
+>Entity : typeof Entity
 

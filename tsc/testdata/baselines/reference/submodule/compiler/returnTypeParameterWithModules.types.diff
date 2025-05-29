@@ -9,25 +9,14 @@
  >ar : any
  >f : any
  >e : any
-@@= skipped -29, +29 lines =@@
- >M2 : typeof M2
-
-   import A = M1
-->A : typeof A
-->M1 : typeof A
-+>A : typeof M1
-+>M1 : typeof M1
-
-   export function compose() {
- >compose : () => void
+@@= skipped -37, +37 lines =@@
 
          A.reduce(arguments, compose2);
  >A.reduce(arguments, compose2) : unknown[]
 ->A.reduce : <A>(ar: any, f: any, e?: any) => Array<A>
-->A : typeof A
-->reduce : <A>(ar: any, f: any, e?: any) => Array<A>
 +>A.reduce : <A>(ar: any, f: any, e?: any) => A[]
-+>A : typeof M1
+ >A : typeof A
+->reduce : <A>(ar: any, f: any, e?: any) => Array<A>
 +>reduce : <A>(ar: any, f: any, e?: any) => A[]
  >arguments : IArguments
  >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C

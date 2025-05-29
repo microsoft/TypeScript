@@ -1,0 +1,27 @@
+--- old.exportAssignmentMembersVisibleInAugmentation.errors.txt
++++ new.exportAssignmentMembersVisibleInAugmentation.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++/a.ts(3,26): error TS4060: Return type of exported function has or is using private name 'T'.
++
++
++==== /node_modules/foo/index.d.ts (0 errors) ====
++    export = foo;
++    declare namespace foo {
++        export type T = number;
++    }
++    
++==== /a.ts (1 errors) ====
++    import * as foo from "foo";
++    declare module "foo" {
++        export function f(): T; // OK
++                             ~
++!!! error TS4060: Return type of exported function has or is using private name 'T'.
++    }
++    
++==== /b.ts (0 errors) ====
++    import * as foo from "foo";
++    declare module "foo" {
++        export function g(): foo.T; // OK
++    }
++    

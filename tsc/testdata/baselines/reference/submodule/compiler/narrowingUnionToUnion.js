@@ -450,3 +450,97 @@ function example3(value) {
     }
     return value;
 }
+
+
+//// [narrowingUnionToUnion.d.ts]
+type Falsy = false | 0 | 0n | '' | null | undefined;
+declare function isFalsy(value: unknown): value is Falsy;
+declare function fx1(x: string | number | undefined): void;
+declare function fx2<T>(x: T | undefined): void;
+declare function fx3<T extends string | number>(x: T): void;
+declare function isA(obj: unknown): obj is {
+    a: false;
+} | {
+    b: 0;
+};
+declare function fx4(obj: {
+    b: number;
+}): void;
+declare class X {
+    x: string;
+}
+declare class XS extends X {
+    xs: string;
+}
+declare class Y {
+    y: string;
+}
+declare class YS extends Y {
+    ys: string;
+}
+declare function isXSorY(obj: unknown): obj is XS | Y;
+declare function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y): void;
+// Repro from #31156
+declare function isEmptyStrOrUndefined(mixed: any): mixed is "" | undefined;
+declare function fx10(s: string | undefined): void;
+// Repro from #37807
+declare function f1(x: any): asserts x is number | undefined;
+declare let v1: number | string | undefined;
+declare function f2(x: any): asserts x is 6 | undefined;
+declare let v2: number | string | undefined;
+// #39105
+declare function isEmptyString(value: string): value is '';
+declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
+declare function isZero(value: number): value is 0;
+declare function isMaybeZero(value: number | null | undefined): value is 0 | null | undefined;
+declare function isEmptyArray<T>(value: T[]): value is [];
+declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
+declare const TEST_CASES: (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[];
+// Repro from #42101
+type EmptyString = '' | null | undefined;
+declare function isEmpty(value: string | EmptyString): value is EmptyString;
+declare let test: string | null | undefined;
+// Repro from #43825
+declare function assert<T>(value: any): asserts value is T;
+declare function test1(foo: number | string | boolean): void;
+// Repro from #46909
+declare function check1(x: unknown): x is (string | 0);
+declare function check2(x: unknown): x is ("hello" | 0);
+declare function test3(x: unknown): void;
+// Repro from #49588
+declare function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null;
+declare function f1x(obj: (string | number)[] | null): void;
+// Repro from #55425
+type MyDiscriminatedUnion = {
+    type: 'A';
+    aProp: number;
+} | {
+    type: 'B';
+    bProp: string;
+};
+declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
+declare const working: unknown;
+declare const broken: Record<string, any> | undefined;
+declare const workingAgain: Record<string, any> | undefined | unknown;
+// Repro from #56144
+type Union = {
+    type: 'a';
+    variant: 1;
+} | {
+    type: 'a';
+    variant: 2;
+} | {
+    type: 'b';
+};
+declare function example1(value: Union): {
+    type: 'a';
+    variant: 2;
+} | null;
+declare function example2(value: Union): {
+    type: 'a';
+    variant: 2;
+} | null;
+declare function example3(value: Union): {
+    type: 'a';
+    variant: 2;
+} | null;

@@ -19,13 +19,13 @@ test.K = test.K ||
 >function () {} : () => void
 
 test.K.prototype = {
->test.K.prototype = {    add() {}} : { add: () => void; }
+>test.K.prototype = {    add() {}} : { add(): void; }
 >test.K.prototype : any
 >test.K : any
 >test : {}
 >K : any
 >prototype : any
->{    add() {}} : { add: () => void; }
+>{    add() {}} : { add(): void; }
 
     add() {}
 >add : () => void

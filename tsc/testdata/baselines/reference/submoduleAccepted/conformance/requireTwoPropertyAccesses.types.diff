@@ -32,6 +32,6 @@
  >module.exports = {    x: {        y: "value"    }} : { x: { y: string; }; }
  >module.exports : { x: { y: string; }; }
 ->module : { exports: { x: { y: string; }; }; }
-+>module : { export=: { x: { y: string; }; }; }
++>module : { "export=": { x: { y: string; }; }; }
  >exports : { x: { y: string; }; }
  >{    x: {        y: "value"    }} : { x: { y: string; }; }

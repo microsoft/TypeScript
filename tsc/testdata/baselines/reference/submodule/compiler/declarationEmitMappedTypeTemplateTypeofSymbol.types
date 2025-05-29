@@ -5,7 +5,7 @@ export declare const timestampSymbol: unique symbol;
 >timestampSymbol : unique symbol
 
 export declare const Timestamp: {
->Timestamp : { (Unique symbol): true; }
+>Timestamp : { [timestampSymbol]: true; }
 
     [TKey in typeof timestampSymbol]: true;
 >timestampSymbol : unique symbol
@@ -14,26 +14,26 @@ export declare const Timestamp: {
 };
 
 export declare function now(): typeof Timestamp;
->now : () => { (Unique symbol): true; }
->Timestamp : { (Unique symbol): true; }
+>now : () => { [timestampSymbol]: true; }
+>Timestamp : { [timestampSymbol]: true; }
 
 === b.ts ===
 import * as x from "./a";
->x : typeof import("a")
+>x : typeof x
 
 export const timestamp = x.now();
->timestamp : { (Unique symbol): true; }
->x.now() : { (Unique symbol): true; }
->x.now : () => { (Unique symbol): true; }
->x : typeof import("a")
->now : () => { (Unique symbol): true; }
+>timestamp : { [x.timestampSymbol]: true; }
+>x.now() : { [x.timestampSymbol]: true; }
+>x.now : () => { [x.timestampSymbol]: true; }
+>x : typeof x
+>now : () => { [x.timestampSymbol]: true; }
 
 === c.ts ===
 import { now } from "./a";
->now : () => { (Unique symbol): true; }
+>now : () => { [timestampSymbol]: true; }
 
 export const timestamp = now();
->timestamp : { (Unique symbol): true; }
->now() : { (Unique symbol): true; }
->now : () => { (Unique symbol): true; }
+>timestamp : { [timestampSymbol]: true; }
+>now() : { [timestampSymbol]: true; }
+>now : () => { [timestampSymbol]: true; }
 

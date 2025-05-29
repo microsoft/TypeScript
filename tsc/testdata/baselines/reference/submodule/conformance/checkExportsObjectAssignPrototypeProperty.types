@@ -168,7 +168,7 @@ Object.defineProperty(Person.prototype, "rwAccessors", { get() { return 98122 },
 >Person : (name: string) => void
 >prototype : any
 >"rwAccessors" : "rwAccessors"
->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
 >get : () => number
 >98122 : 98122
 >set : (_: any) => void
@@ -183,7 +183,7 @@ Object.defineProperty(Person.prototype, "readonlyAccessor", { get() { return 21.
 >Person : (name: string) => void
 >prototype : any
 >"readonlyAccessor" : "readonlyAccessor"
->{ get() { return 21.75 } } : { get: () => number; }
+>{ get() { return 21.75 } } : { get(): number; }
 >get : () => number
 >21.75 : 21.75
 
@@ -196,7 +196,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 >Person : (name: string) => void
 >prototype : any
 >"setonlyAccessor" : "setonlyAccessor"
->{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }} : { set: (str: string) => void; }
+>{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }} : { set(str: string): void; }
 
     /** @param {string} str */
     set(str) {
@@ -216,7 +216,7 @@ Object.defineProperty(Person.prototype, "setonlyAccessor", {
 module.exports = Person;
 >module.exports = Person : (name: string) => void
 >module.exports : (name: string) => void
->module : { Person: (name: string) => void; }
+>module : { Person(name: string): void; }
 >exports : (name: string) => void
 >Person : (name: string) => void
 

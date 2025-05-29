@@ -50,7 +50,7 @@ function f2() {
 >x : X
 
         class C<Y> {
->C : C<X, Y>
+>C : C<Y>
 
             public x = x;
 >x : X
@@ -63,27 +63,27 @@ function f2() {
 >C : typeof C
     }
     let C = f(10);
->C : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
->f(10) : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
+>C : typeof C
+>f(10) : typeof C
 >f : <X>(x: X) => typeof C
 >10 : 10
 
     let v = new C("hello");
->v : C<number, string>
->new C("hello") : C<number, string>
->C : { new <Y>(y: Y): C<number, Y>; prototype: C<any, any>; }
+>v : f.C<string>
+>new C("hello") : f.C<string>
+>C : typeof C
 >"hello" : "hello"
 
     let x = v.x;
 >x : number
 >v.x : number
->v : C<number, string>
+>v : f.C<string>
 >x : number
 
     let y = v.y;
 >y : string
 >v.y : string
->v : C<number, string>
+>v : f.C<string>
 >y : string
 }
 
@@ -96,7 +96,7 @@ function f3() {
 >y : Y
 
         class C {
->C : C<X, Y>
+>C : C
 
             public x = x;
 >x : X
@@ -110,27 +110,27 @@ function f3() {
 >C : typeof C
     }
     let C = f(10, "hello");
->C : { new (): C<number, string>; prototype: C<any, any>; }
->f(10, "hello") : { new (): C<number, string>; prototype: C<any, any>; }
+>C : typeof C
+>f(10, "hello") : typeof C
 >f : <X, Y>(x: X, y: Y) => typeof C
 >10 : 10
 >"hello" : "hello"
 
     let v = new C();
->v : C<number, string>
->new C() : C<number, string>
->C : { new (): C<number, string>; prototype: C<any, any>; }
+>v : f.C
+>new C() : f.C
+>C : typeof C
 
     let x = v.x;
 >x : number
 >v.x : number
->v : C<number, string>
+>v : f.C
 >x : number
 
     let y = v.y;
 >y : string
 >v.y : string
->v : C<number, string>
+>v : f.C
 >y : string
 }
 

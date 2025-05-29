@@ -8,7 +8,11 @@
 +=== a.d.ts ===
  import '.'
  declare module '.' {
- >'.' : typeof import("index")
+->'.' : typeof import("index")
++>'.' : typeof import("./index.js")
+
+   type Row2 = { a: string }
+ >Row2 : Row2
 @@= skipped -14, +14 lines =@@
  >s : string
  }
@@ -17,7 +21,7 @@
 +=== index.d.ts ===
  export type {Row2} from './common';
 ->Row2 : import("common").Row2
-+>Row2 : Row2
++>Row2 : import("./common.js").Row2
   
 -=== ./common.d.ts ===
 +=== common.d.ts ===

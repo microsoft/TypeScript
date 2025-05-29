@@ -246,13 +246,13 @@ function f3() {
 }
 
 function f4() {
->f4 : () => { foo: () => string; }
+>f4 : () => { foo(): string; }
 
     let x: number;  // should error
 >x : number
 
     return {
->{        foo() {            return x.toString();        }    } : { foo: () => string; }
+>{        foo() {            return x.toString();        }    } : { foo(): string; }
 
         foo() {
 >foo : () => string

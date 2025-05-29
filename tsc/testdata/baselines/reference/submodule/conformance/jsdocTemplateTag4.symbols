@@ -69,7 +69,7 @@ Ns.Multimap3 = function() {
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
->this : Symbol((Anonymous type), Decl(a.js, 38, 8))
+>this : Symbol(Ns, Decl(a.js, 38, 8))
 
 };
 

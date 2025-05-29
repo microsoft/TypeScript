@@ -159,3 +159,47 @@ import * as typei from "inner";
 export const d = cjsi;
 export const e = mjsi;
 export const f = typei;
+
+
+//// [index.d.mts]
+// esm format file
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export declare const a: typeof cjs;
+export declare const b: typeof mjs;
+export declare const c: typeof type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export declare const d: typeof cjsi;
+export declare const e: typeof mjsi;
+export declare const f: typeof typei;
+//// [index.d.cts]
+// cjs format file
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export declare const a: typeof cjs;
+export declare const b: typeof mjs;
+export declare const c: typeof type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export declare const d: typeof cjsi;
+export declare const e: typeof mjsi;
+export declare const f: typeof typei;
+//// [index.d.ts]
+// esm format file
+import * as cjs from "package/cjs";
+import * as mjs from "package/mjs";
+import * as type from "package";
+export declare const a: typeof cjs;
+export declare const b: typeof mjs;
+export declare const c: typeof type;
+import * as cjsi from "inner/cjs";
+import * as mjsi from "inner/mjs";
+import * as typei from "inner";
+export declare const d: typeof cjsi;
+export declare const e: typeof mjsi;
+export declare const f: typeof typei;

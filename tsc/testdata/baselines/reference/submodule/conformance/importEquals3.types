@@ -6,44 +6,44 @@ export class A {}
 
 === b.ts ===
 import type * as a from './a';
->a : typeof import("a")
+>a : typeof a
 
 import A = a.A; // Error
 >A : typeof A
->a : typeof import("a")
+>a : typeof a
 >A : A
 
 import aa = a;  // Error
->aa : typeof import("a")
->a : typeof import("a")
+>aa : typeof a
+>a : typeof a
 
 const x = 0;
 >x : 0
 >0 : 0
 
 export { a, A, x };
->a : typeof import("a")
+>a : typeof a
 >A : typeof A
 >x : 0
 
 === c.ts ===
 import * as b from './b';
->b : typeof import("b")
+>b : typeof b
 
 import A = b.a.A; // Error
 >A : typeof A
->b : typeof import("b")
->a : typeof import("a")
+>b : typeof b
+>a : typeof b.a
 >A : A
 
 import AA = b.A; // Error
 >AA : typeof A
->b : typeof import("b")
+>b : typeof b
 >A : A
 
 import x = b.x;
 >x : 0
->b : typeof import("b")
+>b : typeof b
 >x : 0
 
 console.log(x);

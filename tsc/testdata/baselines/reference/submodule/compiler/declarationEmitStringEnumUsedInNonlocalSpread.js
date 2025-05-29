@@ -63,3 +63,26 @@ class B extends class_1.A {
     }
 }
 exports.B = B;
+
+
+//// [class.d.ts]
+export declare const enum TestEnum {
+    Test1 = "123123",
+    Test2 = "12312312312"
+}
+export interface ITest {
+    [TestEnum.Test1]: string;
+    [TestEnum.Test2]: string;
+}
+export declare class A {
+    getA(): ITest;
+}
+//// [index.d.ts]
+import { A } from './class';
+export declare class B extends A {
+    getA(): {
+        "123123": string;
+        "12312312312": string;
+        a: string;
+    };
+}

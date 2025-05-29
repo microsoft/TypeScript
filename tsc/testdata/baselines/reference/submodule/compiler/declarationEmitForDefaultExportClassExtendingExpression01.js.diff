@@ -43,16 +43,15 @@
 +class default_1 extends getGreeterBase() {
 +}
  exports.default = default_1;
--
--
--//// [declarationEmitForDefaultExportClassExtendingExpression01.d.ts]
+
+
+ //// [declarationEmitForDefaultExportClassExtendingExpression01.d.ts]
 -interface Greeter {
 -    getGreeting(): string;
 -}
--interface GreeterConstructor {
+ interface GreeterConstructor {
 -    new (): Greeter;
--}
--declare const default_base: GreeterConstructor;
--export default class extends default_base {
--}
--export {};
++    new ();
+ }
+ declare const default_base: GreeterConstructor;
+ export default class extends default_base {

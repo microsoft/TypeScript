@@ -77,12 +77,12 @@ duplicateIdentifierChecks.ts(140,9): error TS2300: Duplicate identifier 'x'.
 duplicateIdentifierChecks.ts(146,9): error TS2300: Duplicate identifier 'foo'.
 duplicateIdentifierChecks.ts(147,5): error TS2300: Duplicate identifier 'foo'.
 duplicateIdentifierChecks.ts(148,9): error TS2300: Duplicate identifier 'foo'.
-duplicateIdentifierChecks.ts(152,9): error TS2300: Duplicate identifier 'foo'.
-duplicateIdentifierChecks.ts(153,5): error TS2300: Duplicate identifier 'foo'.
-duplicateIdentifierChecks.ts(154,9): error TS2300: Duplicate identifier 'foo'.
-duplicateIdentifierChecks.ts(158,9): error TS2300: Duplicate identifier 'foo'.
-duplicateIdentifierChecks.ts(159,9): error TS2300: Duplicate identifier 'foo'.
-duplicateIdentifierChecks.ts(160,9): error TS2300: Duplicate identifier 'foo'.
+duplicateIdentifierChecks.ts(152,9): error TS2300: Duplicate identifier '[foo]'.
+duplicateIdentifierChecks.ts(153,5): error TS2300: Duplicate identifier '[foo]'.
+duplicateIdentifierChecks.ts(154,9): error TS2300: Duplicate identifier '[foo]'.
+duplicateIdentifierChecks.ts(158,9): error TS2300: Duplicate identifier '[foo]'.
+duplicateIdentifierChecks.ts(159,9): error TS2300: Duplicate identifier '[foo]'.
+duplicateIdentifierChecks.ts(160,9): error TS2300: Duplicate identifier '[foo]'.
 duplicateIdentifierChecks.ts(164,5): error TS2300: Duplicate identifier 'foo'.
 duplicateIdentifierChecks.ts(165,5): error TS2300: Duplicate identifier 'foo'.
 duplicateIdentifierChecks.ts(169,5): error TS2300: Duplicate identifier 'foo'.
@@ -420,33 +420,33 @@ duplicateIdentifierChecks.ts(209,9): error TS2300: Duplicate identifier '[sym]'.
     interface I11 {
         get [foo](): number;
             ~~~~~
-!!! error TS2300: Duplicate identifier 'foo'.
-!!! related TS6203 duplicateIdentifierChecks.ts:153:5: 'foo' was also declared here.
+!!! error TS2300: Duplicate identifier '[foo]'.
+!!! related TS6203 duplicateIdentifierChecks.ts:153:5: '[foo]' was also declared here.
         foo: number;
         ~~~
-!!! error TS2300: Duplicate identifier 'foo'.
-!!! related TS6203 duplicateIdentifierChecks.ts:152:9: 'foo' was also declared here.
+!!! error TS2300: Duplicate identifier '[foo]'.
+!!! related TS6203 duplicateIdentifierChecks.ts:152:9: '[foo]' was also declared here.
 !!! related TS6204 duplicateIdentifierChecks.ts:154:9: and here.
         set [foo](value: number);
             ~~~~~
-!!! error TS2300: Duplicate identifier 'foo'.
-!!! related TS6203 duplicateIdentifierChecks.ts:153:5: 'foo' was also declared here.
+!!! error TS2300: Duplicate identifier '[foo]'.
+!!! related TS6203 duplicateIdentifierChecks.ts:153:5: '[foo]' was also declared here.
     }
     
     interface I12 {
         get foo(): number;
             ~~~
-!!! error TS2300: Duplicate identifier 'foo'.
-!!! related TS6203 duplicateIdentifierChecks.ts:159:9: 'foo' was also declared here.
+!!! error TS2300: Duplicate identifier '[foo]'.
+!!! related TS6203 duplicateIdentifierChecks.ts:159:9: '[foo]' was also declared here.
         set [foo](value: number);
             ~~~~~
-!!! error TS2300: Duplicate identifier 'foo'.
-!!! related TS6203 duplicateIdentifierChecks.ts:158:9: 'foo' was also declared here.
+!!! error TS2300: Duplicate identifier '[foo]'.
+!!! related TS6203 duplicateIdentifierChecks.ts:158:9: '[foo]' was also declared here.
 !!! related TS6204 duplicateIdentifierChecks.ts:160:9: and here.
         set foo(value: number);
             ~~~
-!!! error TS2300: Duplicate identifier 'foo'.
-!!! related TS6203 duplicateIdentifierChecks.ts:159:9: 'foo' was also declared here.
+!!! error TS2300: Duplicate identifier '[foo]'.
+!!! related TS6203 duplicateIdentifierChecks.ts:159:9: '[foo]' was also declared here.
     }
     
     interface I13 {

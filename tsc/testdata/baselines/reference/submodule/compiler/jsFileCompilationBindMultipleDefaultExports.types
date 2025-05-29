@@ -2,7 +2,7 @@
 
 === a.js ===
 export default class a {
->a : default
+>a : a
 }
 export default var a = 10;
 > : any

@@ -5,7 +5,7 @@
 
          return arg;
 ->arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
-+>arg : "A" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
++>arg : "A" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
      }
      else {
          return arg;
@@ -14,7 +14,7 @@
 
          return arg;
 ->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
-+>arg : { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
++>arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
      }
      else {
          return arg;
@@ -23,7 +23,7 @@
 
          return arg;
 ->arg : "A" | "B" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
-+>arg : "A" | "B" | { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
++>arg : "A" | "B" | { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
      }
      else {
          return arg;
@@ -32,7 +32,7 @@
 
          return arg;
 ->arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number; }
-+>arg : { toLowerCase?: (() => string) | undefined; } | { toUpperCase?: (() => string) | undefined; otherOptionalProp?: number | undefined; }
++>arg : { toLowerCase?(): string; } | { toUpperCase?(): string; otherOptionalProp?: number | undefined; }
      }
      else {
          return arg;

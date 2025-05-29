@@ -48,3 +48,37 @@ var d = {
     me: { en: m1.e },
     mh: m1.e.holiday
 };
+
+
+//// [declFileTypeofInAnonymousType.d.ts]
+declare namespace m1 {
+    class c {
+    }
+    enum e {
+        weekday = 0,
+        weekend = 1,
+        holiday = 2
+    }
+}
+declare var a: {
+    c: m1.c;
+};
+declare var b: {
+    c: typeof m1.c;
+    m1: typeof m1;
+};
+declare var c: {
+    m1: typeof m1;
+};
+declare var d: {
+    m: {
+        mod: typeof m1;
+    };
+    mc: {
+        cl: typeof m1.c;
+    };
+    me: {
+        en: typeof m1.e;
+    };
+    mh: m1.e;
+};

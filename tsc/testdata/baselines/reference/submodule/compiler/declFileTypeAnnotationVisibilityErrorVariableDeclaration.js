@@ -59,3 +59,23 @@ var m;
     var y3 = new m2.public2();
     m.l3 = new m2.public2();
 })(m || (m = {}));
+
+
+//// [declFileTypeAnnotationVisibilityErrorVariableDeclaration.d.ts]
+declare namespace m {
+    class private1 {
+    }
+    export class public1 {
+    }
+    export var k: private1;
+    export var l: private1;
+    export var k2: public1;
+    export var l2: public1;
+    namespace m2 {
+        class public2 {
+        }
+    }
+    export var k3: m2.public2;
+    export var l3: m2.public2;
+    export {};
+}

@@ -96,31 +96,7 @@
 
  // Repro from #32572
 
- declare function foo1<T>(obj: string[] & Iterable<T>): T;
-->foo1 : <T>(obj: string[] & Iterable<T>) => T
-->obj : string[] & Iterable<T>
-+>foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
-+>obj : string[] & Iterable<T, any, any>
-
- declare function foo2<T>(obj: string[] & T): T;
- >foo2 : <T>(obj: string[] & T) => T
-@@= skipped -37, +37 lines =@@
- let x1 = foo1(sa);  // string
- >x1 : string
- >foo1(sa) : string
-->foo1 : <T>(obj: string[] & Iterable<T>) => T
-+>foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
- >sa : string[]
-
- let y1 = foo1(sx);  // string
- >y1 : string
- >foo1(sx) : string
-->foo1 : <T>(obj: string[] & Iterable<T>) => T
-+>foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
- >sx : string[] & { extra: number; }
-
- let x2 = foo2(sa);  // unknown
-@@= skipped -42, +42 lines =@@
+@@= skipped -79, +79 lines =@@
  >route : string
 
  declare function withRouter<

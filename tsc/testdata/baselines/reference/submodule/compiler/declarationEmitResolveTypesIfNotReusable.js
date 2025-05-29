@@ -28,3 +28,17 @@ export const o4 = (o) => { };
 //// [main.js]
 import * as d from './decl';
 export const f = { ...d };
+
+
+//// [decl.d.ts]
+export declare const o1: (o: "value of b") => void;
+export declare const o2: (o: "value of a") => void;
+export declare const o3: (o: "value of a") => void;
+export declare const o4: (o: "b" | "notNecessary") => void;
+//// [main.d.ts]
+export declare const f: {
+    o1: (o: "value of b") => void;
+    o2: (o: "value of a") => void;
+    o3: (o: "value of a") => void;
+    o4: (o: "b" | "notNecessary") => void;
+};

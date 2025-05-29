@@ -1,25 +1,11 @@
 --- old.importTypeLocal.types
 +++ new.importTypeLocal.types
-@@= skipped -35, +35 lines =@@
- >Bar : Bar
-
-     item: Bar.I;
-->item : Bar.I
-+>item : I
- >Bar : any
-
-     constructor(input: Baz.J) {}
-->input : Baz.J
-+>input : J
- >Baz : any
- }
- export { Bar }
-@@= skipped -12, +12 lines =@@
+@@= skipped -47, +47 lines =@@
 
  === usage.ts ===
  export const x: import("./foo") = { x: 0, y: 0 };
 ->x : import("foo")
-+>x : Point
++>x : import("./foo")
  >{ x: 0, y: 0 } : { x: number; y: number; }
  >x : number
  >0 : 0
@@ -28,7 +14,16 @@
 
  export let y: import("./foo2").Bar.I = { a: "", b: 0 };
 ->y : import("foo2").Bar.I
-+>y : I
++>y : import("./foo2").Bar.I
  >Bar : any
  >{ a: "", b: 0 } : { a: string; b: number; }
  >a : string
+@@= skipped -22, +22 lines =@@
+ }
+
+ export let shim: typeof import("./foo2") = {
+->shim : typeof import("foo2")
++>shim : typeof import("./foo2")
+ >{    Bar: Bar2} : { Bar: typeof Bar2; }
+
+     Bar: Bar2

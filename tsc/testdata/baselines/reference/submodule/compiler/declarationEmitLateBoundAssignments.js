@@ -32,3 +32,7 @@ const x = foo[_private];
 const y = foo[strMem];
 const z = foo[numMem];
 const a = foo[dashStrMem];
+
+
+//// [declarationEmitLateBoundAssignments.d.ts]
+export declare function foo(): void;

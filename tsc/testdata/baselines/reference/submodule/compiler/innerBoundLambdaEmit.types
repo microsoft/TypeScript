@@ -13,7 +13,7 @@ module M {
 }
 interface Array<T> {
     toFoo(): M.Foo
->toFoo : () => Foo
+>toFoo : () => M.Foo
 >M : any
 }
 

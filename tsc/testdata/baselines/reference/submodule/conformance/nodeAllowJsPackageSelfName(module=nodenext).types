@@ -3,24 +3,24 @@
 === index.js ===
 // esm format file
 import * as self from "package";
->self : typeof import("index")
+>self : typeof self
 
 self;
->self : typeof import("index")
+>self : typeof self
 
 === index.mjs ===
 // esm format file
 import * as self from "package";
->self : typeof import("index")
+>self : typeof self
 
 self;
->self : typeof import("index")
+>self : typeof self
 
 === index.cjs ===
 // esm format file
 import * as self from "package";
->self : typeof import("index")
+>self : typeof self
 
 self;
->self : typeof import("index")
+>self : typeof self
 

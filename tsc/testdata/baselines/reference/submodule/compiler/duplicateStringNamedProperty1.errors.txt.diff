@@ -1,0 +1,20 @@
+--- old.duplicateStringNamedProperty1.errors.txt
++++ new.duplicateStringNamedProperty1.errors.txt
+@@= skipped -0, +0 lines =@@
+-duplicateStringNamedProperty1.ts(2,5): error TS2300: Duplicate identifier 'artist'.
+-duplicateStringNamedProperty1.ts(3,5): error TS2300: Duplicate identifier 'artist'.
++duplicateStringNamedProperty1.ts(2,5): error TS2300: Duplicate identifier '"artist"'.
++duplicateStringNamedProperty1.ts(3,5): error TS2300: Duplicate identifier '"artist"'.
+
+
+ ==== duplicateStringNamedProperty1.ts (2 errors) ====
+     export interface Album {
+         "artist": string;
+         ~~~~~~~~
+-!!! error TS2300: Duplicate identifier 'artist'.
++!!! error TS2300: Duplicate identifier '"artist"'.
+         artist: string;
+         ~~~~~~
+-!!! error TS2300: Duplicate identifier 'artist'.
++!!! error TS2300: Duplicate identifier '"artist"'.
+     }

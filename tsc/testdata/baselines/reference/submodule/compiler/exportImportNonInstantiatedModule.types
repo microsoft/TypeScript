@@ -16,7 +16,7 @@ module B {
 }
 
 var x: B.A1.I = { x: 1 };
->x : I
+>x : A.I
 >B : any
 >A1 : any
 >{ x: 1 } : { x: number; }

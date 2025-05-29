@@ -14,7 +14,7 @@ export default function add(a: number, b: number) {
 
 === test.ts ===
 import * as example from './example';
->example : typeof import("example")
+>example : typeof example
 
 declare function test<T>(object: T, method: keyof T): void;
 >test : <T>(object: T, method: keyof T) => void
@@ -24,6 +24,6 @@ declare function test<T>(object: T, method: keyof T): void;
 test(example, "default");
 >test(example, "default") : void
 >test : <T>(object: T, method: keyof T) => void
->example : typeof import("example")
+>example : typeof example
 >"default" : "default"
 

@@ -53,3 +53,30 @@ var M;
         N.Window = Window;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
+
+
+//// [declFileTypeAnnotationTypeAlias.d.ts]
+declare namespace M {
+    type Value = string | number | boolean;
+    var x: Value;
+    class c {
+    }
+    type C = c;
+    namespace m {
+        class c {
+        }
+    }
+    type MC = m.c;
+    type fc = () => c;
+}
+interface Window {
+    someMethod(): any;
+}
+declare namespace M {
+    type W = Window | string;
+    namespace N {
+        class Window {
+        }
+        var p: W;
+    }
+}

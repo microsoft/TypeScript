@@ -4,7 +4,7 @@
  === b.js ===
  /** @type {import("./a").Foo} */
  export default { c: false };
-+>{ c: false } : Foo
++>{ c: false } : import("./a").Foo
  >{ c: false } : { c: boolean; }
  >c : boolean
  >false : false
@@ -12,8 +12,8 @@
  === c.js ===
  import b from "./b";
 ->b : import("a").Foo
-+>b : Foo
++>b : import("./a").Foo
 
  b;
 ->b : import("a").Foo
-+>b : Foo
++>b : import("./a").Foo

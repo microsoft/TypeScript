@@ -20,7 +20,7 @@ export function createElement(): void;
 === reacty.tsx ===
 /** @jsx React.createElement */
 import * as React from "./renderer";
->React : typeof import("renderer")
+>React : typeof React
 
 <><h></h></>
 ><><h></h></> : any

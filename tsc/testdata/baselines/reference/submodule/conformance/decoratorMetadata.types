@@ -2,11 +2,11 @@
 
 === service.ts ===
 export default class Service {
->Service : default
+>Service : Service
 }
 === component.ts ===
 import Service from "./service";
->Service : typeof default
+>Service : typeof Service
 
 declare var decorator: any;
 >decorator : any
@@ -18,7 +18,7 @@ class MyComponent {
 >MyComponent : MyComponent
 
     constructor(public Service: Service) {
->Service : default
+>Service : Service
     }
 
     @decorator

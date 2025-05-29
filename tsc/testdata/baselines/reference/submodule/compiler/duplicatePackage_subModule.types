@@ -2,27 +2,27 @@
 
 === /index.ts ===
 import Foo from "foo/Foo";
->Foo : typeof default
+>Foo : typeof Foo
 
 import * as a from "a";
->a : typeof import("/node_modules/a/index")
+>a : typeof a
 
 const o: Foo = a.o;
->o : default
->a.o : default
->a : typeof import("/node_modules/a/index")
->o : default
+>o : Foo
+>a.o : import("a/node_modules/foo/Foo.js").default
+>a : typeof a
+>o : import("a/node_modules/foo/Foo.js").default
 
 === /node_modules/a/index.d.ts ===
 import Foo from "foo/Foo";
->Foo : typeof default
+>Foo : typeof Foo
 
 export const o: Foo;
->o : default
+>o : Foo
 
 === /node_modules/a/node_modules/foo/Foo.d.ts ===
 export default class Foo {
->Foo : default
+>Foo : Foo
 
     protected source: boolean;
 >source : boolean
@@ -30,7 +30,7 @@ export default class Foo {
 
 === /node_modules/foo/Foo.d.ts ===
 export default class Foo {
->Foo : default
+>Foo : Foo
 
     protected source: boolean;
 >source : boolean

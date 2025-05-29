@@ -39,3 +39,27 @@ function Mixin2(baseClass) {
 class DerivedFromAbstract2 extends Mixin2(AbstractBase) {
     abstractBaseMethod() { }
 }
+
+
+//// [mixinAbstractClassesReturnTypeInference.d.ts]
+interface Mixin1 {
+    mixinMethod(): void;
+}
+declare abstract class AbstractBase {
+    abstract abstractBaseMethod(): void;
+}
+declare function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase): ((abstract new (...args: any[]) => {
+    [x: string]: any;
+    mixinMethod(): void;
+}) & {
+    staticMixinMethod(): void;
+}) & TBase;
+declare const DerivedFromAbstract2_base: ((abstract new (...args: any[]) => {
+    [x: string]: any;
+    mixinMethod(): void;
+}) & {
+    staticMixinMethod(): void;
+}) & typeof AbstractBase;
+declare class DerivedFromAbstract2 extends DerivedFromAbstract2_base {
+    abstractBaseMethod(): void;
+}

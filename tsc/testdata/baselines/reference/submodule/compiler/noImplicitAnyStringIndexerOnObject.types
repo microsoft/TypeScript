@@ -10,7 +10,7 @@ var a = {}["hello"];
 var b: string = { '': 'foo' }[''];
 >b : string
 >{ '': 'foo' }[''] : string
->{ '': 'foo' } : { '': string; }
+>{ '': 'foo' } : { "": string; }
 >'' : string
 >'foo' : "foo"
 >'' : ""
@@ -407,7 +407,7 @@ interface Dog { bark(): void; }
 
 let rover: Dog = { bark() {} };
 >rover : Dog
->{ bark() {} } : { bark: () => void; }
+>{ bark() {} } : { bark(): void; }
 >bark : () => void
 
 declare let map: MyMap<Dog, string>;

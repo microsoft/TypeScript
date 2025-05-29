@@ -74,7 +74,7 @@ import { c0, c1, s0, T0, T1, T2, T3 } from "./module";
 >T3 : any
 
 import * as M from "./module";
->M : typeof import("module")
+>M : typeof M
 
 namespace N {
 >N : typeof N
@@ -308,19 +308,19 @@ let t3_1: M.T3;
 >M : any
 
 let t4: N.T4;
->t4 : T4
+>t4 : N.T4
 >N : any
 
 let t5: N.T5;
->t5 : T5
+>t5 : N.T5
 >N : any
 
 let t6: N.T6;
->t6 : T6
+>t6 : N.T6
 >N : any
 
 let t7: N.T7;
->t7 : T7
+>t7 : N.T7
 >N : any
 
 let t8: T8;
@@ -398,53 +398,53 @@ t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3,
 >t2 : T2
 
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : T6
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : T5
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : T7
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : T5
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : T7
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : T6
->t4 = t5, t4 = t6, t4 = t7, t5 = t4 : T4
->t4 = t5, t4 = t6, t4 = t7 : T7
->t4 = t5, t4 = t6 : T6
->t4 = t5 : T5
->t4 : T4
->t5 : T5
->t4 = t6 : T6
->t4 : T4
->t6 : T6
->t4 = t7 : T7
->t4 : T4
->t7 : T7
->t5 = t4 : T4
->t5 : T5
->t4 : T4
->t5 = t6 : T6
->t5 : T5
->t6 : T6
->t5 = t7 : T7
->t5 : T5
->t7 : T7
->t6 = t4 : T4
->t6 : T6
->t4 : T4
->t6 = t5 : T5
->t6 : T6
->t5 : T5
->t6 = t7 : T7
->t6 : T6
->t7 : T7
->t7 = t4 : T4
->t7 : T7
->t4 : T4
->t7 = t5 : T5
->t7 : T7
->t5 : T5
->t7 = t6 : T6
->t7 : T7
->t6 : T6
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : N.T6
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : N.T5
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : N.T4
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : N.T7
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : N.T5
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : N.T4
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : N.T7
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : N.T6
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4 : N.T4
+>t4 = t5, t4 = t6, t4 = t7 : N.T7
+>t4 = t5, t4 = t6 : N.T6
+>t4 = t5 : N.T5
+>t4 : N.T4
+>t5 : N.T5
+>t4 = t6 : N.T6
+>t4 : N.T4
+>t6 : N.T6
+>t4 = t7 : N.T7
+>t4 : N.T4
+>t7 : N.T7
+>t5 = t4 : N.T4
+>t5 : N.T5
+>t4 : N.T4
+>t5 = t6 : N.T6
+>t5 : N.T5
+>t6 : N.T6
+>t5 = t7 : N.T7
+>t5 : N.T5
+>t7 : N.T7
+>t6 = t4 : N.T4
+>t6 : N.T6
+>t4 : N.T4
+>t6 = t5 : N.T5
+>t6 : N.T6
+>t5 : N.T5
+>t6 = t7 : N.T7
+>t6 : N.T6
+>t7 : N.T7
+>t7 = t4 : N.T4
+>t7 : N.T7
+>t4 : N.T4
+>t7 = t5 : N.T5
+>t7 : N.T7
+>t5 : N.T5
+>t7 = t6 : N.T6
+>t7 : N.T7
+>t6 : N.T6
 
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 >t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0 : T0
@@ -486,8 +486,8 @@ t0 = C; // static side
 
 // object literals
 export const o1 = {
->o1 : { a: number; [c5]: string; [s2]: boolean; }
->{    [c4]: 1,    [c5]: "a",    [s2]: true} : { a: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
+>{    [c4]: 1,    [c5]: "a",    [s2]: true} : { a: number; 1: string; [s0]: boolean; }
 
     [c4]: 1,
 >[c4] : number
@@ -510,24 +510,24 @@ export const o1 = {
 export const o1_c4 = o1[c4];
 >o1_c4 : number
 >o1[c4] : number
->o1 : { a: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 >c4 : "a"
 
 export const o1_c5 = o1[c5];
 >o1_c5 : string
 >o1[c5] : string
->o1 : { a: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 >c5 : 1
 
 export const o1_s2 = o1[s2];
 >o1_s2 : boolean
 >o1[s2] : boolean
->o1 : { a: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 >s2 : unique symbol
 
 export const o2: T0 = o1;
 >o2 : T0
->o1 : { a: number; [c5]: string; [s2]: boolean; }
+>o1 : { a: number; 1: string; [s0]: boolean; }
 
 // recursive declarations
 // (type parameter indirection courtesy of #20400)

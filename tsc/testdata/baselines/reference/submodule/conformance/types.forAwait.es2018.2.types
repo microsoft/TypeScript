@@ -2,10 +2,10 @@
 
 === types.forAwait.es2018.2.ts ===
 declare const asyncIterable: AsyncIterable<number>;
->asyncIterable : AsyncIterable<number, any, any>
+>asyncIterable : AsyncIterable<number>
 
 declare const iterable: Iterable<number>;
->iterable : Iterable<number, any, any>
+>iterable : Iterable<number>
 
 async function f() {
 >f : () => Promise<void>
@@ -26,19 +26,19 @@ async function f() {
     }
     for await (z of asyncIterable) {
 >z : string
->asyncIterable : AsyncIterable<number, any, any>
+>asyncIterable : AsyncIterable<number>
     }
     for await (z of iterable) {
 >z : string
->iterable : Iterable<number, any, any>
+>iterable : Iterable<number>
     }
     for (const x of asyncIterable) {
 >x : any
->asyncIterable : AsyncIterable<number, any, any>
+>asyncIterable : AsyncIterable<number>
     }
     for (y of asyncIterable) {
 >y : number
->asyncIterable : AsyncIterable<number, any, any>
+>asyncIterable : AsyncIterable<number>
     }
 }
 

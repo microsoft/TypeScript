@@ -5,7 +5,7 @@
 
      "hello" = 10;
 ->"hello" : Symbol(B["hello"], Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 0, 9))
-+>"hello" : Symbol(hello, Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 0, 9))
++>"hello" : Symbol("hello", Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 0, 9))
 
      0b110 = "world";
 ->0b110 : Symbol(B[0b110], Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 1, 17))
@@ -21,7 +21,7 @@
 
      "foo"() { }
 ->"foo" : Symbol(B["foo"], Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 4, 18))
-+>"foo" : Symbol(foo, Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 4, 18))
++>"foo" : Symbol("foo", Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 4, 18))
 
      0b1110() {}
 ->0b1110 : Symbol(B[0b1110], Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 5, 15))
@@ -37,7 +37,7 @@
 
      static "hi" = 10000;
 ->"hi" : Symbol(B["hi"], Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 8, 19))
-+>"hi" : Symbol(hi, Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 8, 19))
++>"hi" : Symbol("hi", Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 8, 19))
 
      static 22 = "twenty-two";
 ->22 : Symbol(B[22], Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 9, 24))

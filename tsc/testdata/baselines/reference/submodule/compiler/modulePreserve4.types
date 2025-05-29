@@ -8,9 +8,9 @@ export const x = 0;
 module.exports.y = 0; // Error
 >module.exports.y = 0 : 0
 >module.exports.y : 0
->module.exports : typeof import("/a")
->module : { "/a": typeof import("/a"); }
->exports : typeof import("/a")
+>module.exports : typeof import("./a")
+>module : { "\"/a\"": typeof import("./a"); }
+>exports : typeof import("./a")
 >y : 0
 >0 : 0
 
@@ -44,7 +44,7 @@ export default 0;
 exports.default = 0;
 >exports.default = 0 : 0
 >exports.default : 0
->exports : typeof import("/g")
+>exports : typeof import("./g")
 >default : 0
 >0 : 0
 
@@ -54,7 +54,7 @@ import { x, y } from "./a"; // No y
 >y : 0
 
 import a1 = require("./a"); // { x: 0 }
->a1 : typeof import("/a")
+>a1 : typeof a1
 
 const a2 = require("./a"); // Error in TS
 >a2 : any
@@ -63,36 +63,36 @@ const a2 = require("./a"); // Error in TS
 >"./a" : "./a"
 
 const a3 = await import("./a"); // { x: 0 }
->a3 : typeof import("/a")
->await import("./a") : typeof import("/a")
->import("./a") : Promise<typeof import("/a")>
+>a3 : typeof a1
+>await import("./a") : typeof a1
+>import("./a") : Promise<typeof a1>
 >"./a" : "./a"
 
 a3.x;
 >a3.x : 0
->a3 : typeof import("/a")
+>a3 : typeof a1
 >x : 0
 
 import b1 from "./b"; // 0
 >b1 : 0
 
 import b2 = require("./b"); // { default: 0 }
->b2 : typeof import("/b")
+>b2 : typeof b2
 
 b2.default;
 >b2.default : 0
->b2 : typeof import("/b")
+>b2 : typeof b2
 >default : 0
 
 const b3 = await import("./b"); // { default: 0 }
->b3 : typeof import("/b")
->await import("./b") : typeof import("/b")
->import("./b") : Promise<typeof import("/b")>
+>b3 : typeof b2
+>await import("./b") : typeof b2
+>import("./b") : Promise<typeof b2>
 >"./b" : "./b"
 
 b3.default;
 >b3.default : 0
->b3 : typeof import("/b")
+>b3 : typeof b2
 >default : 0
 
 import c1 from "./c"; // { default: [Function: default] }
@@ -144,11 +144,11 @@ import f1 from "./f.cjs"; // 0
 >f1 : 0
 
 import f2 = require("./f.cjs"); // { default: 0 }
->f2 : typeof import("/f")
+>f2 : typeof f2
 
 f2.default;
 >f2.default : 0
->f2 : typeof import("/f")
+>f2 : typeof f2
 >default : 0
 
 import g1 from "./g"; // { default: 0 }
@@ -160,11 +160,11 @@ g1.default;
 >default : any
 
 import g2 = require("./g"); // { default: 0 }
->g2 : typeof import("/g")
+>g2 : typeof g2
 
 g2.default;
 >g2.default : 0
->g2 : typeof import("/g")
+>g2 : typeof g2
 >default : 0
 
 === /main2.mts ===
@@ -173,17 +173,17 @@ import { x, y } from "./a"; // No y
 >y : 0
 
 import a1 = require("./a"); // { x: 0 }
->a1 : typeof import("/a")
+>a1 : typeof a1
 
 a1.x;
 >a1.x : 0
->a1 : typeof import("/a")
+>a1 : typeof a1
 >x : 0
 
 a1.default.x; // Arguably should exist but doesn't
 >a1.default.x : any
 >a1.default : any
->a1 : typeof import("/a")
+>a1 : typeof a1
 >default : any
 >x : any
 
@@ -197,7 +197,7 @@ import b1 from "./b"; // 0
 >b1 : 0
 
 import b2 = require("./b"); // { default: 0 }
->b2 : typeof import("/b")
+>b2 : typeof b2
 
 import c1 from "./c"; // { default: [Function: default] }
 >c1 : { default: () => void; }
@@ -221,13 +221,13 @@ import f1 from "./f.cjs"; // 0
 >f1 : 0
 
 import f2 = require("./f.cjs"); // { default: 0 }
->f2 : typeof import("/f")
+>f2 : typeof f2
 
 import g1 from "./g"; // { default: 0 }
 >g1 : 0
 
 import g2 = require("./g"); // { default: 0 }
->g2 : typeof import("/g")
+>g2 : typeof g2
 
 === /main3.cjs ===
 import { x, y } from "./a"; // No y
@@ -235,11 +235,11 @@ import { x, y } from "./a"; // No y
 >y : 0
 
 import a1 = require("./a"); // Error in JS
->a1 : typeof import("/a")
+>a1 : typeof a1
 
 const a2 = require("./a"); // { x: 0 }
->a2 : typeof import("/a")
->require("./a") : typeof import("/a")
+>a2 : typeof a1
+>require("./a") : typeof a1
 >require : any
 >"./a" : "./a"
 
@@ -247,8 +247,8 @@ import b1 from "./b"; // 0
 >b1 : 0
 
 const b2 = require("./b"); // { default: 0 }
->b2 : typeof import("/b")
->require("./b") : typeof import("/b")
+>b2 : typeof b2
+>require("./b") : typeof b2
 >require : any
 >"./b" : "./b"
 
@@ -283,8 +283,8 @@ import f1 from "./f.cjs"; // 0
 >f1 : 0
 
 const f2 = require("./f.cjs"); // { default: 0 }
->f2 : typeof import("/f")
->require("./f.cjs") : typeof import("/f")
+>f2 : typeof f2
+>require("./f.cjs") : typeof f2
 >require : any
 >"./f.cjs" : "./f.cjs"
 
@@ -292,8 +292,8 @@ import g1 from "./g"; // { default: 0 }
 >g1 : 0
 
 const g2 = require("./g"); // { default: 0 }
->g2 : typeof import("/g")
->require("./g") : typeof import("/g")
+>g2 : typeof g2
+>require("./g") : typeof g2
 >require : any
 >"./g" : "./g"
 
@@ -301,7 +301,7 @@ const g2 = require("./g"); // { default: 0 }
 exports.x = require("./g");
 >exports.x = require("./g") : any
 >exports.x : any
->exports : typeof import("/main4")
+>exports : typeof import("./main4.cjs")
 >x : any
 >require("./g") : any
 >require : any

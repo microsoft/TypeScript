@@ -2,7 +2,7 @@
 
 === sourceMapValidationDestructuringForArrayBindingPattern2.ts ===
 declare var console: {
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 
     log(msg: any): void;
 >log : (msg: any) => void
@@ -92,7 +92,7 @@ for ([, nameA] = robotA, i = 0; i < 1; i++) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -115,7 +115,7 @@ for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -140,7 +140,7 @@ for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -164,7 +164,7 @@ for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -189,7 +189,7 @@ for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) 
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -217,7 +217,7 @@ for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]],
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -240,7 +240,7 @@ for ([numberB] = robotA, i = 0; i < 1; i++) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -263,7 +263,7 @@ for ([numberB] = getRobot(), i = 0; i < 1; i++) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -288,7 +288,7 @@ for ([numberB] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -310,7 +310,7 @@ for ([nameB] = multiRobotA, i = 0; i < 1; i++) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -333,7 +333,7 @@ for ([nameB] = getMultiRobot(), i = 0; i < 1; i++) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -359,7 +359,7 @@ for ([nameB] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -384,7 +384,7 @@ for ([numberA2, nameA2, skillA2] = robotA, i = 0; i < 1; i++) {
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -409,7 +409,7 @@ for ([numberA2, nameA2, skillA2] = getRobot(), i = 0; i < 1; i++) {
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -436,7 +436,7 @@ for ([numberA2, nameA2, skillA2] = [2, "trimmer", "trimming"], i = 0; i < 1; i++
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -461,7 +461,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -487,7 +487,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1;
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -516,7 +516,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edgi
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -541,7 +541,7 @@ for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -566,7 +566,7 @@ for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -594,7 +594,7 @@ for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -617,7 +617,7 @@ for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
     console.log(multiRobotAInfo);
 >console.log(multiRobotAInfo) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >multiRobotAInfo : (string | [string, string])[]
 }
@@ -641,7 +641,7 @@ for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
     console.log(multiRobotAInfo);
 >console.log(multiRobotAInfo) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >multiRobotAInfo : (string | [string, string])[]
 }
@@ -669,7 +669,7 @@ for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"
     console.log(multiRobotAInfo);
 >console.log(multiRobotAInfo) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >multiRobotAInfo : (string | [string, string])[]
 }

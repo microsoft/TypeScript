@@ -131,9 +131,9 @@ let o1 = { x: 10, y: 20 } as const;
 let o2 = { a: 1, 'b': 2, ['c']: 3, d() {}, ['e' + '']: 4 } as const;
 >o2 : Symbol(o2, Decl(constAssertions.ts, 36, 3))
 >a : Symbol(a, Decl(constAssertions.ts, 36, 10))
->'b' : Symbol(b, Decl(constAssertions.ts, 36, 16))
->['c'] : Symbol(c, Decl(constAssertions.ts, 36, 24))
->'c' : Symbol(c, Decl(constAssertions.ts, 36, 24))
+>'b' : Symbol('b', Decl(constAssertions.ts, 36, 16))
+>['c'] : Symbol(['c'], Decl(constAssertions.ts, 36, 24))
+>'c' : Symbol(['c'], Decl(constAssertions.ts, 36, 24))
 >d : Symbol(d, Decl(constAssertions.ts, 36, 34))
 >['e' + ''] : Symbol(['e' + ''], Decl(constAssertions.ts, 36, 42))
 >const : Symbol(const)
@@ -172,7 +172,7 @@ let o9 = { x: 10, foo() { this.x = 20 } } as const;  // Error
 >x : Symbol(x, Decl(constAssertions.ts, 43, 10))
 >foo : Symbol(foo, Decl(constAssertions.ts, 43, 17))
 >this.x : Symbol(x, Decl(constAssertions.ts, 43, 10))
->this : Symbol((Anonymous type), Decl(constAssertions.ts, 43, 8))
+>this : Symbol(þobject, Decl(constAssertions.ts, 43, 8))
 >x : Symbol(x, Decl(constAssertions.ts, 43, 10))
 >const : Symbol(const)
 

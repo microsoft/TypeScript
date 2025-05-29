@@ -2,7 +2,7 @@
 
 === controlFlowInstanceofExtendsFunction.ts ===
 declare global {
->global : Symbol((Missing), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 0))
+>global : Symbol(global, Decl(controlFlowInstanceofExtendsFunction.ts, 0, 0))
 
     interface Function {
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))

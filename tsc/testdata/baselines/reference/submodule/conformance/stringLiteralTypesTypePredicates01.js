@@ -42,3 +42,10 @@ if (!kindIs(x, "B")) {
 else {
     let d = x;
 }
+
+
+//// [stringLiteralTypesTypePredicates01.d.ts]
+type Kind = "A" | "B";
+declare function kindIs(kind: Kind, is: "A"): kind is "A";
+declare function kindIs(kind: Kind, is: "B"): kind is "B";
+declare var x: Kind;

@@ -63,3 +63,29 @@ class Foo {
 class Bar {
     prop = false;
 }
+
+
+//// [initializerWithThisPropertyAccess.d.ts]
+declare class A {
+    a: number;
+    b: number; // Error
+    c: () => number;
+    d: number;
+    constructor();
+}
+declare class B extends A {
+    x: number;
+}
+declare class C {
+    a!: number;
+    b: number;
+}
+// Repro from #37979
+declare class Foo {
+    private bar;
+    readonly barProp: boolean;
+    constructor();
+}
+declare class Bar {
+    readonly prop: boolean;
+}

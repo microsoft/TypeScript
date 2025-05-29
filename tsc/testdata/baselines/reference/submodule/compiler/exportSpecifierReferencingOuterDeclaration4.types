@@ -10,10 +10,10 @@ export { X };
 >X : any
 
 export declare function foo(): X.foo;
->foo : () => foo
+>foo : () => X.foo
 >X : any
 
 export declare function bar(): X.bar; // error
->bar : () => bar
+>bar : () => X.bar
 >X : any
 

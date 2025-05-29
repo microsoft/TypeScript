@@ -12,7 +12,7 @@ interface Y extends X {
 
 var x: Y = {
 >x : Y
->{    a(p) {        return p;    }} : { a: (p: Y) => Y; }
+>{    a(p) {        return p;    }} : { a(p: Y): Y; }
 
     a(p) {
 >a : (p: Y) => Y

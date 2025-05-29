@@ -64,3 +64,34 @@ function f3(x) {
 class Form {
     values = {};
 }
+
+
+//// [mappedTypesAndObjects.d.ts]
+declare function f1<T>(x: Partial<T>, y: Readonly<T>): void;
+declare function f2<T>(x: Partial<T>, y: Readonly<T>): void;
+declare function f3<T>(x: Partial<T>): void;
+// Repro from #12900
+interface Base {
+    foo: {
+        [key: string]: any;
+    };
+    bar: any;
+    baz: any;
+}
+interface E1<T> extends Base {
+    foo: T;
+}
+interface Something {
+    name: string;
+    value: string;
+}
+interface E2 extends Base {
+    foo: Partial<Something>; // or other mapped type
+}
+interface E3<T> extends Base {
+    foo: Partial<T>; // or other mapped type
+}
+// Repro from #13747
+declare class Form<T> {
+    private values;
+}

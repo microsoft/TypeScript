@@ -13,8 +13,8 @@ declare namespace abc {
 
 class C extends abc.XYZ {
 >C : C
->abc.XYZ : XYZ
+>abc.XYZ : abc.XYZ
 >abc : typeof abc
->XYZ : typeof XYZ
+>XYZ : typeof abc.XYZ
 }
 

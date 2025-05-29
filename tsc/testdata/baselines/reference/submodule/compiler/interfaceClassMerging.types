@@ -94,7 +94,7 @@ bar.additionalMethod(2);
 >2 : 2
 
 var obj: {
->obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
+>obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 
     method(a: number): string;
 >method : (a: number) => string
@@ -113,12 +113,12 @@ var obj: {
 };
 
 bar = obj;
->bar = obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
+>bar = obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 >bar : Bar
->obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
+>obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 
 obj = bar;
 >obj = bar : Bar
->obj : { method: (a: number) => string; property: string; additionalProperty: string; additionalMethod: (a: number) => string; }
+>obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }
 >bar : Bar
 

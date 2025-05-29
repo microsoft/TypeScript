@@ -73,86 +73,29 @@
 
  // Additional repro from #57487
 
-@@= skipped -46, +46 lines =@@
- >PartMappings : PartMappings
-
- const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K] } = {
-->mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
-+>mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
- >o : MapperArgs<K>
-->{    foo: ({ v, i }) => v.length + i > 4,    "12": ({ v, i }) => Number(v) + i,    42: ({ v, i }) => `${v}${i}`,} : { foo: ({ v, i }: MapperArgs<"foo">) => boolean; "12": ({ v, i }: MapperArgs<"12">) => number; 42: ({ v, i }: MapperArgs<42>) => string; }
-+>{    foo: ({ v, i }) => v.length + i > 4,    "12": ({ v, i }) => Number(v) + i,    42: ({ v, i }) => `${v}${i}`,} : { foo: (__0: MapperArgs<"foo">) => boolean; "12": (__0: MapperArgs<"12">) => number; 42: (__0: MapperArgs<42>) => string; }
-
-     foo: ({ v, i }) => v.length + i > 4,
-->foo : ({ v, i }: MapperArgs<"foo">) => boolean
-->({ v, i }) => v.length + i > 4 : ({ v, i }: MapperArgs<"foo">) => boolean
-+>foo : (__0: MapperArgs<"foo">) => boolean
-+>({ v, i }) => v.length + i > 4 : (__0: MapperArgs<"foo">) => boolean
- >v : "foo"
- >i : number
- >v.length + i > 4 : boolean
-@@= skipped -18, +18 lines =@@
- >4 : 4
-
-     "12": ({ v, i }) => Number(v) + i,
-->"12" : ({ v, i }: MapperArgs<"12">) => number
-->({ v, i }) => Number(v) + i : ({ v, i }: MapperArgs<"12">) => number
-+>"12" : (__0: MapperArgs<"12">) => number
-+>({ v, i }) => Number(v) + i : (__0: MapperArgs<"12">) => number
- >v : "12"
- >i : number
- >Number(v) + i : number
-@@= skipped -11, +11 lines =@@
- >i : number
-
-     42: ({ v, i }) => `${v}${i}`,
-->42 : ({ v, i }: MapperArgs<42>) => string
-->({ v, i }) => `${v}${i}` : ({ v, i }: MapperArgs<42>) => string
-+>42 : (__0: MapperArgs<42>) => string
-+>({ v, i }) => `${v}${i}` : (__0: MapperArgs<42>) => string
- >v : 42
- >i : number
- >`${v}${i}` : string
-@@= skipped -10, +10 lines =@@
+@@= skipped -85, +85 lines =@@
  }
 
  const resolveMapper1 = <K extends keyof typeof mapper>(
 ->resolveMapper1 : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K]
 -><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K]
-->mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
 +>resolveMapper1 : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
 +><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
-+>mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
+ >mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
 
      key: K, o: MapperArgs<K>) => mapper[key](o);  // Error
- >key : K
- >o : MapperArgs<K>
- >mapper[key](o) : PartMappings[K]
- >mapper[key] : ((o: MapperArgs<K>) => PartMappings[K]) | undefined
-->mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
-+>mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
- >key : K
+@@= skipped -14, +14 lines =@@
  >o : MapperArgs<K>
 
  const resolveMapper2 = <K extends keyof typeof mapper>(
 ->resolveMapper2 : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
 -><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
-->mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
 +>resolveMapper2 : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
 +><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends "12" | "foo" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
-+>mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
+ >mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
 
      key: K, o: MapperArgs<K>) => mapper[key]?.(o)
- >key : K
- >o : MapperArgs<K>
- >mapper[key]?.(o) : PartMappings[K] | undefined
- >mapper[key] : ((o: MapperArgs<K>) => PartMappings[K]) | undefined
-->mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
-+>mapper : { foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; 12: (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; }
- >key : K
- >o : MapperArgs<K>
-
-@@= skipped -62, +62 lines =@@
+@@= skipped -48, +48 lines =@@
  ><K extends keyof Obj2>(key: K) => mapIntersection[key].toString() : <K extends keyof Obj2>(key: K) => string
  >key : K
  >mapIntersection[key].toString() : string

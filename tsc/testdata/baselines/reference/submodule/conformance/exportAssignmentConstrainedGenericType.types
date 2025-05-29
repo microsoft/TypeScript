@@ -2,18 +2,18 @@
 
 === foo_1.ts ===
 import foo = require("./foo_0");
->foo : typeof Foo
+>foo : typeof foo
 
 var x = new foo(true); // Should error
->x : Foo<{ a: string; b: number; }>
->new foo(true) : Foo<{ a: string; b: number; }>
->foo : typeof Foo
+>x : foo<{ a: string; b: number; }>
+>new foo(true) : foo<{ a: string; b: number; }>
+>foo : typeof foo
 >true : true
 
 var y = new foo({a: "test", b: 42}); // Should be OK
->y : Foo<{ a: string; b: number; }>
->new foo({a: "test", b: 42}) : Foo<{ a: string; b: number; }>
->foo : typeof Foo
+>y : foo<{ a: string; b: number; }>
+>new foo({a: "test", b: 42}) : foo<{ a: string; b: number; }>
+>foo : typeof foo
 >{a: "test", b: 42} : { a: string; b: number; }
 >a : string
 >"test" : "test"
@@ -24,7 +24,7 @@ var z: number = y.test.b;
 >z : number
 >y.test.b : number
 >y.test : { a: string; b: number; }
->y : Foo<{ a: string; b: number; }>
+>y : foo<{ a: string; b: number; }>
 >test : { a: string; b: number; }
 >b : number
 

@@ -137,7 +137,7 @@ type RemoveThis<T> = T extends (...args: any) => any
   : T;
 
 declare function getExtensionField<T = any>(
->getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
+>getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
 
   extension: AnyExtension,
 >extension : AnyExtension
@@ -150,7 +150,7 @@ declare function getExtensionField<T = any>(
 const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
 >extendMarkSchema : ((extension: Mark<any>) => Record<string, any>) | ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 >getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((extension: Mark<any>) => Record<string, any>) | ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
->getExtensionField : <T>(extension: AnyExtension, field: string) => RemoveThis<T>
+>getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
 
   e,
 >e : AnyExtension

@@ -2,10 +2,10 @@
 
 === consumer.ts ===
 import e = require('./exporter');
->e : typeof import("exporter")
+>e : typeof e
 
 export function w(): e.w { // Should be OK
->w : () => Widget1
+>w : () => e.w
 >e : any
 
     return {name: 'value' };

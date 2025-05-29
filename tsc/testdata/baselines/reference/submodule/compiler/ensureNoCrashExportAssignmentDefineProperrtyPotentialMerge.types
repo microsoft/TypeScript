@@ -10,7 +10,7 @@ const _item = require("./namespacer");
 module.exports = 12;
 >module.exports = 12 : 12
 >module.exports : 12
->module : { export=: 12; }
+>module : { "export=": 12; }
 >exports : 12
 >12 : 12
 

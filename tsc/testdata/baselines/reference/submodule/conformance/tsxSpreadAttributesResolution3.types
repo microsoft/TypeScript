@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface PoisonedProp {
     x: string;
@@ -14,15 +14,15 @@ interface PoisonedProp {
 
 class Poisoned extends React.Component<PoisonedProp, {}> {
 >Poisoned : Poisoned
->React.Component : Component<PoisonedProp, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<PoisonedProp, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Hello</div>;
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -44,14 +44,14 @@ const obj = {
 
 // OK
 let p = <Poisoned {...obj} />;
->p : Element
-><Poisoned {...obj} /> : Element
+>p : JSX.Element
+><Poisoned {...obj} /> : JSX.Element
 >Poisoned : typeof Poisoned
 >obj : { x: string; y: number; }
 
 let y = <Poisoned x="hi" y={2} />;
->y : Element
-><Poisoned x="hi" y={2} /> : Element
+>y : JSX.Element
+><Poisoned x="hi" y={2} /> : JSX.Element
 >Poisoned : typeof Poisoned
 >x : string
 >y : number

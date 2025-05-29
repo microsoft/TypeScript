@@ -11,16 +11,16 @@ declare module "shortid" {
 === /index.ts ===
 /// <reference path="/typings/index.d.ts" />
 import * as foo from "shortid";
->foo : typeof import("shortid")
+>foo : typeof foo
 
 foo.x // found in index.d.ts
 >foo.x : number
->foo : typeof import("shortid")
+>foo : typeof foo
 >x : number
 
 foo.y // ignored from shortid/index.js
 >foo.y : any
->foo : typeof import("shortid")
+>foo : typeof foo
 >y : any
 
 
@@ -29,7 +29,7 @@ foo.y // ignored from shortid/index.js
 module.exports = { z: 'no' };
 >module.exports = { z: 'no' } : { z: string; }
 >module.exports : { z: string; }
->module : { export=: { z: string; }; }
+>module : { "export=": { z: string; }; }
 >exports : { z: string; }
 >{ z: 'no' } : { z: string; }
 >z : string

@@ -2,24 +2,24 @@
 
 === aliasUsageInVarAssignment_main.ts ===
 import Backbone = require("./aliasUsageInVarAssignment_backbone");
->Backbone : typeof import("aliasUsageInVarAssignment_backbone")
+>Backbone : typeof Backbone
 
 import moduleA = require("./aliasUsageInVarAssignment_moduleA");
->moduleA : typeof import("aliasUsageInVarAssignment_moduleA")
+>moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Model
->Backbone.Model : typeof Model
->Backbone : typeof import("aliasUsageInVarAssignment_backbone")
->Model : typeof Model
+>VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 var i: IHasVisualizationModel;
 >i : IHasVisualizationModel
 
 var m: typeof moduleA = i;
->m : typeof import("aliasUsageInVarAssignment_moduleA")
->moduleA : typeof import("aliasUsageInVarAssignment_moduleA")
+>m : typeof moduleA
+>moduleA : typeof moduleA
 >i : IHasVisualizationModel
 
 === aliasUsageInVarAssignment_backbone.ts ===
@@ -32,13 +32,13 @@ export class Model {
 
 === aliasUsageInVarAssignment_moduleA.ts ===
 import Backbone = require("./aliasUsageInVarAssignment_backbone");
->Backbone : typeof import("aliasUsageInVarAssignment_backbone")
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : Model
->Backbone : typeof import("aliasUsageInVarAssignment_backbone")
->Model : typeof Model
+>Backbone.Model : Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }

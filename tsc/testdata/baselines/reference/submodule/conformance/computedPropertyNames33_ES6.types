@@ -18,7 +18,7 @@ class C<T> {
             [foo<T>()]() { }
 >[foo<T>()] : () => void
 >foo<T>() : string
->foo : <T>() => string
+>foo : <T_1>() => string
 
         };
         return 0;

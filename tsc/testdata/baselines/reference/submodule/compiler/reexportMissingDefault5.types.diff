@@ -1,0 +1,10 @@
+--- old.reexportMissingDefault5.types
++++ new.reexportMissingDefault5.types
+@@= skipped -11, +11 lines =@@
+ >b : number
+
+ export { default as Foo } from "./b";
+->default : typeof import("b")
+->Foo : typeof import("b")
++>default : typeof import("./b.js")
++>Foo : typeof import("./b.js")

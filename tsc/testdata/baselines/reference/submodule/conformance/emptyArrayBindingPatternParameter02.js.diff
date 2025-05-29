@@ -8,7 +8,3 @@
 +function f(a, []) {
      var x, y, z;
  }
--
--
--//// [emptyArrayBindingPatternParameter02.d.ts]
--declare function f(a: any, []: any[]): void;

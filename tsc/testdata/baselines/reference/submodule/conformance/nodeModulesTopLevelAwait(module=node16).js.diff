@@ -1,14 +1,13 @@
 --- old.nodeModulesTopLevelAwait(module=node16).js
 +++ new.nodeModulesTopLevelAwait(module=node16).js
-@@= skipped -33, +33 lines =@@
- const x = await 1;
+@@= skipped -36, +36 lines =@@
+
+
+ //// [index.d.ts]
++// cjs format file
+ declare const x = 1;
  export { x };
- for await (const y of []) { }
--
--
--//// [index.d.ts]
--declare const x = 1;
--export { x };
--//// [index.d.ts]
--declare const x = 1;
--export { x };
+ //// [index.d.ts]
++// esm format file
+ declare const x = 1;
+ export { x };

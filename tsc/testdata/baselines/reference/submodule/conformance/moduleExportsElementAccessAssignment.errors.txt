@@ -1,8 +1,8 @@
 mod1.js(1,1): error TS7022: 'a' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-mod1.js(2,1): error TS7022: 'b' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-mod1.js(3,1): error TS7022: 'default' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-mod1.js(4,1): error TS7022: 'c' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-mod1.js(5,1): error TS7022: 'd' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+mod1.js(2,1): error TS7022: '"b"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+mod1.js(3,1): error TS7022: '"default"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+mod1.js(4,1): error TS7022: '"c"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+mod1.js(5,1): error TS7022: '"d"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 
 
 ==== mod2.js (0 errors) ====
@@ -19,15 +19,15 @@ mod1.js(5,1): error TS7022: 'd' implicitly has type 'any' because it does not ha
 !!! error TS7022: 'a' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     exports["b"] = { x: "x" };
     ~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7022: 'b' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+!!! error TS7022: '"b"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     exports["default"] = { x: "x" };
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7022: 'default' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+!!! error TS7022: '"default"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     module.exports["c"] = { x: "x" };
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7022: 'c' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+!!! error TS7022: '"c"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     module["exports"]["d"] = {};
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS7022: 'd' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+!!! error TS7022: '"d"' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
     module["exports"]["d"].e = 0;
     

@@ -16,7 +16,7 @@ var x = exports + 2;
 
 === b.ts ===
 export default function require(s: string): void {
->require : Symbol(default, Decl(b.ts, 0, 0))
+>require : Symbol(require, Decl(b.ts, 0, 0))
 >s : Symbol(s, Decl(b.ts, 0, 32))
 }
 

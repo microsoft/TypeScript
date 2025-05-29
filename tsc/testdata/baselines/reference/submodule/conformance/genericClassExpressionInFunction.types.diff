@@ -5,7 +5,7 @@
  class K extends B1<number>() {
  >K : K
 ->B1<number>() : B1<number>.(Anonymous class)
-+>B1<number>() : (Anonymous class)<number>
++>B1<number>() : B1.(Anonymous class)
  >B1 : <U>() => typeof (Anonymous class)
 
      namae: string;
@@ -14,28 +14,16 @@
  class C extends (new B2<number>().anon) {
  >C : C
 ->(new B2<number>().anon) : B2<number>.(Anonymous class)
-->new B2<number>().anon : typeof (Anonymous class)
-+>(new B2<number>().anon) : (Anonymous class)<number>
-+>new B2<number>().anon : { new (): (Anonymous class)<number>; prototype: (Anonymous class)<any>; }
++>(new B2<number>().anon) : B2.(Anonymous class)
+ >new B2<number>().anon : typeof (Anonymous class)
  >new B2<number>() : B2<number>
  >B2 : typeof B2
-->anon : typeof (Anonymous class)
-+>anon : { new (): (Anonymous class)<number>; prototype: (Anonymous class)<any>; }
-
-     name: string;
- >name : string
- }
- let b3Number = B3<number>();
-->b3Number : typeof Inner
-->B3<number>() : typeof Inner
-+>b3Number : { new <TInner>(): Inner<number, TInner>; prototype: Inner<any, any>; }
-+>B3<number>() : { new <TInner>(): Inner<number, TInner>; prototype: Inner<any, any>; }
- >B3 : <W>() => typeof Inner
+@@= skipped -16, +16 lines =@@
 
  class S extends b3Number<string> {
  >S : S
 ->b3Number : B3<number>.Inner<string>
-+>b3Number : Inner<number, string>
++>b3Number : B3.Inner<string>
 
      nom: string;
  >nom : string

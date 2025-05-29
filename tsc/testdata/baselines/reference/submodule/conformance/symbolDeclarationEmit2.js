@@ -9,3 +9,9 @@ class C {
 class C {
     [Symbol.toPrimitive] = "";
 }
+
+
+//// [symbolDeclarationEmit2.d.ts]
+declare class C {
+    [Symbol.toPrimitive]: string;
+}

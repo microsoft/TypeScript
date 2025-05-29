@@ -103,7 +103,7 @@ type TypeHandlers = {
 
 const typeHandlers: TypeHandlers = {
 >typeHandlers : TypeHandlers
->{    [0]: (p) => console.log(p.foo),    [1]: (p) => console.log(p.a),} : { [0]: (p: P<0>) => void; [1]: (p: P<1>) => void; }
+>{    [0]: (p) => console.log(p.foo),    [1]: (p) => console.log(p.a),} : { 0: (p: P<0>) => void; 1: (p: P<1>) => void; }
 
     [0]: (p) => console.log(p.foo),
 >[0] : (p: P<0>) => void

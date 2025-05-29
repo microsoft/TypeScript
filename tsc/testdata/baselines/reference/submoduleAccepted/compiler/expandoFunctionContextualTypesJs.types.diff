@@ -109,7 +109,7 @@
 ->exports : MyComponentProps
 +>module.exports = {    color: "red"} : { color: "blue" | "red"; }
 +>module.exports : { color: "blue" | "red"; }
-+>module : { export=: { color: "blue" | "red"; }; }
++>module : { "export=": { color: "blue" | "red"; }; }
 +>exports : { color: "blue" | "red"; }
 +>{    color: "red"} : { color: "blue" | "red"; }
  >{    color: "red"} : { color: "red"; }
@@ -129,5 +129,5 @@
 +>{ props: module.exports } : { props: { color: "blue" | "red"; }; }
 +>props : { color: "blue" | "red"; }
 +>module.exports : { color: "blue" | "red"; }
-+>module : { export=: { color: "blue" | "red"; }; }
++>module : { "export=": { color: "blue" | "red"; }; }
 +>exports : { color: "blue" | "red"; }

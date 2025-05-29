@@ -375,10 +375,10 @@ bigintVal = dataView.getBigUint64(2, true);
 new Intl.NumberFormat("fr").format(3000n);
 >new Intl.NumberFormat("fr").format(3000n) : string
 >new Intl.NumberFormat("fr").format : (value: number) => string
->new Intl.NumberFormat("fr") : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >"fr" : "fr"
 >format : (value: number) => string
 >3000n : 3000n
@@ -386,10 +386,10 @@ new Intl.NumberFormat("fr").format(3000n);
 new Intl.NumberFormat("fr").format(bigintVal);
 >new Intl.NumberFormat("fr").format(bigintVal) : string
 >new Intl.NumberFormat("fr").format : (value: number) => string
->new Intl.NumberFormat("fr") : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >"fr" : "fr"
 >format : (value: number) => string
 >bigintVal : bigint

@@ -11,3 +11,8 @@
 -}());
 +class d {
 +}
++
++
++//// [a.d.ts]
++declare class d {
++}

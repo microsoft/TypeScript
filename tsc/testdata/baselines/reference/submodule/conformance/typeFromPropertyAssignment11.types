@@ -6,11 +6,11 @@ var Inner = function() {}
 >function() {} : () => void
 
 Inner.prototype = {
->Inner.prototype = {    m() { },    i: 1} : { m: () => void; i: number; }
+>Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
 >Inner.prototype : any
 >Inner : () => void
 >prototype : any
->{    m() { },    i: 1} : { m: () => void; i: number; }
+>{    m() { },    i: 1} : { m(): void; i: number; }
 
     m() { },
 >m : () => void

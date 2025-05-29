@@ -17,11 +17,7 @@
 +>flatMap : <T, U>(array: unknown[], iterable?: (x: unknown) => unknown) => unknown[]
  >array : unknown[]
  >iterable : (x: unknown) => unknown
-->identity : <T_1>(x: T_1) => T_1
-+>identity : <T>(x: T) => T
-
-   /** @type {unknown[]} */
-   const result = [];
+ >identity : <T_1>(x: T_1) => T_1
 @@= skipped -29, +29 lines =@@
  >push : (...items: unknown[]) => number
  >.../** @type {unknown[]} */(iterable(array[i])) : unknown

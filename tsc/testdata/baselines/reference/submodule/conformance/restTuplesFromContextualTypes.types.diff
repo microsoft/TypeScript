@@ -1,28 +1,6 @@
 --- old.restTuplesFromContextualTypes.types
 +++ new.restTuplesFromContextualTypes.types
-@@= skipped -5, +5 lines =@@
-
- (function (a, b, c){})(...t1);
- >(function (a, b, c){})(...t1) : void
-->(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
-->function (a, b, c){} : (a: number, b: boolean, c: string) => void
-+>(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
-+>function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
- >a : number
- >b : boolean
- >c : string
-@@= skipped -37, +37 lines =@@
-
- (function (a, b, c, ...x){})(...t1);
- >(function (a, b, c, ...x){})(...t1) : void
-->(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string) => void
-->function (a, b, c, ...x){} : (a: number, b: boolean, c: string) => void
-+>(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string) => void
-+>function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string) => void
- >a : number
- >b : boolean
- >c : string
-@@= skipped -10, +10 lines =@@
+@@= skipped -52, +52 lines =@@
  >t1 : [number, boolean, string]
 
  declare function f1(cb: (...args: typeof t1) => void): void;
@@ -72,40 +50,7 @@
  >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string) => void
  >a : number
  >b : boolean
-@@= skipped -12, +12 lines =@@
-
- (function (a, b, c){})(...t2);
- >(function (a, b, c){})(...t2) : void
-->(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
-->function (a, b, c){} : (a: number, b: boolean, c: string) => void
-+>(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
-+>function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
- >a : number
- >b : boolean
- >c : string
-@@= skipped -27, +27 lines =@@
-
- (function (a, b, ...x){})(...t2);
- >(function (a, b, ...x){})(...t2) : void
-->(function (a, b, ...x){}) : (a: number, b: boolean, ...x: string[]) => void
-->function (a, b, ...x){} : (a: number, b: boolean, ...x: string[]) => void
-+>(function (a, b, ...x){}) : (a: number, b?: boolean, ...x: string[]) => void
-+>function (a, b, ...x){} : (a: number, b?: boolean, ...x: string[]) => void
- >a : number
- >b : boolean
- >x : string[]
-@@= skipped -10, +10 lines =@@
-
- (function (a, b, c, ...x){})(...t2);
- >(function (a, b, c, ...x){})(...t2) : void
-->(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string, ...x: string[]) => void
-->function (a, b, c, ...x){} : (a: number, b: boolean, c: string, ...x: string[]) => void
-+>(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string, ...x: string[]) => void
-+>function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string, ...x: string[]) => void
- >a : number
- >b : boolean
- >c : string
-@@= skipped -10, +10 lines =@@
+@@= skipped -59, +59 lines =@@
  >t2 : [number, boolean, ...string[]]
 
  declare function f2(cb: (...args: typeof t2) => void): void;
@@ -155,29 +100,7 @@
  >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
  >a : number
  >b : boolean
-@@= skipped -12, +12 lines =@@
-
- (function (a, b, c){})(1, ...t3);
- >(function (a, b, c){})(1, ...t3) : void
-->(function (a, b, c){}) : (a: number, b: boolean, c: string) => void
-->function (a, b, c){} : (a: number, b: boolean, c: string) => void
-+>(function (a, b, c){}) : (a: number, b: boolean, c?: string) => void
-+>function (a, b, c){} : (a: number, b: boolean, c?: string) => void
- >a : number
- >b : boolean
- >c : string
-@@= skipped -41, +41 lines =@@
-
- (function (a, b, c, ...x){})(1, ...t3);
- >(function (a, b, c, ...x){})(1, ...t3) : void
-->(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string, ...x: string[]) => void
-->function (a, b, c, ...x){} : (a: number, b: boolean, c: string, ...x: string[]) => void
-+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c?: string, ...x: string[]) => void
-+>function (a, b, c, ...x){} : (a: number, b: boolean, c?: string, ...x: string[]) => void
- >a : number
- >b : boolean
- >c : string
-@@= skipped -11, +11 lines =@@
+@@= skipped -64, +64 lines =@@
  >t3 : [boolean, ...string[]]
 
  declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
@@ -200,9 +123,8 @@
  f3((...x) => {})
  >f3((...x) => {}) : void
 ->f3 : (cb: (x: number, ...args: typeof t3) => void) => void
-->(...x) => {} : (x: number, x_1: boolean, ...x_2: string[]) => void
 +>f3 : (cb: (x: number, args_0: boolean, ...args: string[]) => void) => void
-+>(...x) => {} : (x_2: number, x_1: boolean, ...x_3: string[]) => void
+ >(...x) => {} : (x: number, x_1: boolean, ...x_2: string[]) => void
  >x : [x: number, boolean, ...string[]]
 
  f3((a, ...x) => {})
@@ -229,14 +151,3 @@
  >(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
  >a : number
  >b : boolean
-@@= skipped -185, +185 lines =@@
- (function foo(a, b){}(...tuple));
- >(function foo(a, b){}(...tuple)) : void
- >function foo(a, b){}(...tuple) : void
-->function foo(a, b){} : (a: number, b: string) => void
-->foo : (a: number, b: string) => void
-+>function foo(a, b){} : (a: number, b?: string) => void
-+>foo : (a: number, b?: string) => void
- >a : number
- >b : string
- >...tuple : string | number

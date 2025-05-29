@@ -9,11 +9,11 @@ declare const Named: 0;
 
 === two.d.ts ===
 export * as default from "./three";
->default : typeof import("three")
+>default : typeof import("./three.js")
 
 === one.ts ===
 import ns from "./two";
->ns : typeof import("three")
+>ns : typeof ns
 
 type Alias = ns.Named;
 >Alias : 0
@@ -21,6 +21,6 @@ type Alias = ns.Named;
 
 ns.Named;
 >ns.Named : 0
->ns : typeof import("three")
+>ns : typeof ns
 >Named : 0
 

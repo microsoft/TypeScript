@@ -17,3 +17,7 @@ function f() {
         bar() { }
     }
 }
+
+
+//// [modifierOnClassDeclarationMemberInFunction.d.ts]
+declare function f(): void;

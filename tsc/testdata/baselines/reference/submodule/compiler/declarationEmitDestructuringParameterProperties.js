@@ -31,3 +31,21 @@ class C3 {
     constructor({ x, y, z }) {
     }
 }
+
+
+//// [declarationEmitDestructuringParameterProperties.d.ts]
+declare class C1 {
+    constructor([x, y, z]: string[]);
+}
+type TupleType1 = [string, number, boolean];
+declare class C2 {
+    constructor([x, y, z]: TupleType1);
+}
+type ObjType1 = {
+    x: number;
+    y: string;
+    z: boolean;
+};
+declare class C3 {
+    constructor({ x, y, z }: ObjType1);
+}

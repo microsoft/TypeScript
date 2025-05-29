@@ -50,7 +50,7 @@ const t4 = <Comp
 >div : any
 
     {...{ wrong() { return <div>x</div>; }}}
->{ wrong() { return <div>x</div>; }} : { wrong: () => any; }
+>{ wrong() { return <div>x</div>; }} : { wrong(): any; }
 >wrong : () => any
 ><div>x</div> : any
 >div : any

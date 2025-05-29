@@ -15,11 +15,8 @@
 -    };
 -    return A;
 -}());
--
--
--//// [es5-declaration-amd.d.ts]
--declare class A {
--    constructor();
--    B(): number;
 +    }
- }
++}
+
+
+ //// [es5-declaration-amd.d.ts]

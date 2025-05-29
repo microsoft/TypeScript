@@ -2,8 +2,8 @@
 
 === functionExpressionReturningItself.ts ===
 var x = function somefn() { return somefn; };
->x : () => ???
->function somefn() { return somefn; } : () => ???
->somefn : () => ???
->somefn : () => ???
+>x : () => any
+>function somefn() { return somefn; } : () => any
+>somefn : () => any
+>somefn : () => any
 

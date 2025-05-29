@@ -16,3 +16,11 @@ var M;
     }
     M.C = C;
 })(M || (M = {}));
+
+
+//// [classDoesNotDependOnPrivateMember.d.ts]
+declare namespace M {
+    class C {
+        private x;
+    }
+}

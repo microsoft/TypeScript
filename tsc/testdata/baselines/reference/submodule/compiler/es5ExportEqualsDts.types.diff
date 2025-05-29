@@ -5,15 +5,15 @@
 
      foo() {
 ->foo : () => A.B
-+>foo : () => B
++>foo : () => import("./es5ExportEqualsDts").B
 
          var aVal: A.B;
 ->aVal : A.B
-+>aVal : B
++>aVal : import("./es5ExportEqualsDts").B
  >A : any
 
          return aVal;
 ->aVal : A.B
-+>aVal : B
++>aVal : import("./es5ExportEqualsDts").B
      }
  }

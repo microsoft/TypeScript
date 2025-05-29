@@ -9,15 +9,10 @@
  >OriginalClass : T
 
      class AnotherOriginalClass extends OriginalClass {
-->AnotherOriginalClass : AnotherOriginalClass
-+>AnotherOriginalClass : AnotherOriginalClass<T>
- >OriginalClass : {}
-
-         constructor(...args: any[]) {
 @@= skipped -18, +18 lines =@@
          }
      }
      return AnotherOriginalClass
 ->AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: cloneClass<any>.AnotherOriginalClass; } & T
-+>AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass<T>; prototype: AnotherOriginalClass<any>; } & T
++>AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: cloneClass.AnotherOriginalClass; } & T
  }

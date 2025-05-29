@@ -15,7 +15,7 @@ export type TestType = typeof Test;
 >Test : typeof Test
 
 export const bar = (null as TestType[Extract<keyof TestType, string>][]);
->bar : (Test)[]
->(null as TestType[Extract<keyof TestType, string>][]) : (Test)[]
->null as TestType[Extract<keyof TestType, string>][] : (Test)[]
+>bar : Test[]
+>(null as TestType[Extract<keyof TestType, string>][]) : Test[]
+>null as TestType[Extract<keyof TestType, string>][] : Test[]
 

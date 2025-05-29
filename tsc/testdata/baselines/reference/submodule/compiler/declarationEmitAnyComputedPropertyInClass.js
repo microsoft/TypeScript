@@ -21,3 +21,9 @@ class C {
     ;
 }
 exports.C = C;
+
+
+//// [main.d.ts]
+export declare class C {
+    [x: number]: () => void;
+}

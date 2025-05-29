@@ -5,7 +5,7 @@
  }
  function f({ show: showRename = v => v }: Show) {}
 ->f : ({ show: showRename }: Show) => void
-+>f : (__0: Show) => void
++>f : ({ show: showRename = v => v }: Show) => void
  >show : any
  >showRename : (x: number) => string
  >v => v : (v: number) => number
@@ -14,7 +14,7 @@
 
  function f2({ "show": showRename = v => v }: Show) {}
 ->f2 : ({ "show": showRename }: Show) => void
-+>f2 : (__0: Show) => void
++>f2 : ({ "show": showRename = v => v }: Show) => void
  >showRename : (x: number) => string
  >v => v : (v: number) => number
  >v : number
@@ -22,7 +22,7 @@
 
  function f3({ ["show"]: showRename = v => v }: Show) {}
 ->f3 : ({ ["show"]: showRename }: Show) => void
-+>f3 : (__0: Show) => void
++>f3 : ({ ["show"]: showRename = v => v }: Show) => void
  >"show" : "show"
  >showRename : (x: number) => string
  >v => v : (v: number) => number
@@ -31,7 +31,7 @@
  }
  function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
 ->ff : ({ nested: nestedRename }: Nested) => void
-+>ff : (__0: Nested) => void
++>ff : ({ nested: nestedRename = { show: v => v } }: Nested) => void
  >nested : any
  >nestedRename : Show
  >{ show: v => v } : { show: (v: number) => number; }
@@ -40,7 +40,7 @@
  }
  function g({ prop = [101, 1234] }: Tuples) {}
 ->g : ({ prop }: Tuples) => void
-+>g : (__0: Tuples) => void
++>g : ({ prop = [101, 1234] }: Tuples) => void
  >prop : [string, number]
  >[101, 1234] : [number, number]
  >101 : 101
@@ -49,6 +49,6 @@
  }
  function h({ prop = "baz" }: StringUnion) {}
 ->h : ({ prop }: StringUnion) => void
-+>h : (__0: StringUnion) => void
++>h : ({ prop = "baz" }: StringUnion) => void
  >prop : "bar" | "foo"
  >"baz" : "baz"

@@ -57,11 +57,6 @@
 -    };
 -    return Foo;
 -}());
--exports.Foo = Foo;
--
--
--//// [declarationEmitPrivateAsync.d.ts]
--export declare class Foo {
--    private baz;
- }
-+exports.Foo = Foo;
++}
+ exports.Foo = Foo;
+

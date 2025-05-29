@@ -1,15 +1,6 @@
 --- old.destructuringObjectBindingPatternAndAssignment6(target=es5).symbols
 +++ new.destructuringObjectBindingPatternAndAssignment6(target=es5).symbols
-@@= skipped -13, +13 lines =@@
- >bVal : Symbol(bVal, Decl(destructuringObjectBindingPatternAndAssignment6.ts, 3, 18))
-
- 	return { [a]: 1, [b]: 1 };
-->[a] : Symbol([a], Decl(destructuringObjectBindingPatternAndAssignment6.ts, 4, 9))
-+>[a] : Symbol(a, Decl(destructuringObjectBindingPatternAndAssignment6.ts, 4, 9))
- >a : Symbol(a, Decl(destructuringObjectBindingPatternAndAssignment6.ts, 0, 5))
-->[b] : Symbol([b], Decl(destructuringObjectBindingPatternAndAssignment6.ts, 4, 17))
-+>[b] : Symbol(b, Decl(destructuringObjectBindingPatternAndAssignment6.ts, 4, 17))
- >b : Symbol(b, Decl(destructuringObjectBindingPatternAndAssignment6.ts, 1, 5))
+@@= skipped -20, +20 lines =@@
 
  })();
  console.log(aVal, bVal);

@@ -2,7 +2,7 @@
 
 === jsxSpreadFirstUnionNoErrors.tsx ===
 import React from "react";
->React : typeof __React
+>React : typeof React
 
 type InfoProps =
 >InfoProps : InfoProps
@@ -15,12 +15,12 @@ type InfoProps =
 >content : string
 
 const Info = (props: InfoProps) =>
->Info : (props: InfoProps) => Element
->(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => Element
+>Info : (props: InfoProps) => JSX.Element
+>(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => JSX.Element
 >props : InfoProps
 
 props.status === "hidden"
->props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : Element
+>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : JSX.Element
 >props.status === "hidden" : boolean
 >props.status : "hidden" | "visible"
 >props : InfoProps
@@ -28,11 +28,11 @@ props.status === "hidden"
 >"hidden" : "hidden"
 
   ? <noscript />
-><noscript /> : Element
+><noscript /> : JSX.Element
 >noscript : any
 
   : <div>{props.content}</div>;
-><div>{props.content}</div> : Element
+><div>{props.content}</div> : JSX.Element
 >div : any
 >props.content : string
 >props : { status: "visible"; content: string; }
@@ -40,15 +40,15 @@ props.status === "hidden"
 >div : any
 
 const a = <Info status="hidden" />;
->a : Element
-><Info status="hidden" /> : Element
->Info : (props: InfoProps) => Element
+>a : JSX.Element
+><Info status="hidden" /> : JSX.Element
+>Info : (props: InfoProps) => JSX.Element
 >status : "hidden"
 
 const b = <Info status="visible" content="hello world" />;
->b : Element
-><Info status="visible" content="hello world" /> : Element
->Info : (props: InfoProps) => Element
+>b : JSX.Element
+><Info status="visible" content="hello world" /> : JSX.Element
+>Info : (props: InfoProps) => JSX.Element
 >status : "visible"
 >content : string
 
@@ -56,8 +56,8 @@ declare const infoProps: InfoProps;
 >infoProps : InfoProps
 
 const c = <Info {...infoProps} />;
->c : Element
-><Info {...infoProps} /> : Element
->Info : (props: InfoProps) => Element
+>c : JSX.Element
+><Info {...infoProps} /> : JSX.Element
+>Info : (props: InfoProps) => JSX.Element
 >infoProps : InfoProps
 

@@ -1,11 +1,7 @@
 --- old.jsxNamespaceReexports.types
 +++ new.jsxNamespaceReexports.types
-@@= skipped -19, +19 lines =@@
-
- === index.tsx ===
- import * as MyLib from "./library";
-->MyLib : typeof MyLib
-+>MyLib : typeof import("library")
+@@= skipped -22, +22 lines =@@
+ >MyLib : typeof MyLib
 
  const content = <my-element/>;
 ->content : error

@@ -20,3 +20,10 @@ export class Test {
         return null;
     }
 }
+
+
+//// [declarationEmitTypeParamMergedWithPrivate.d.ts]
+export declare class Test<T> {
+    private get T();
+    test(): T;
+}

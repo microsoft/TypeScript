@@ -5,29 +5,13 @@
  //// [seeTag1.js]
  /** @see {Foo} foooo*/
 -var a = "";
--/** @see {NS.Bar} ns.bar*/
--var b = "";
--/** @see {b} b */
--var c = "";
--
--
--//// [seeTag1.d.ts]
--interface Foo {
--    foo: string;
--}
--declare namespace NS {
--    interface Bar {
--        baz: Foo;
--    }
--}
--/** @see {Foo} foooo*/
--declare const a = "";
--/** @see {NS.Bar} ns.bar*/
--declare const b = "";
--/** @see {b} b */
--declare const c = "";
 +const a = "";
-+/** @see {NS.Bar} ns.bar*/
+ /** @see {NS.Bar} ns.bar*/
+-var b = "";
 +const b = "";
-+/** @see {b} b */
+ /** @see {b} b */
+-var c = "";
 +const c = "";
+
+
+ //// [seeTag1.d.ts]

@@ -5,5 +5,5 @@
 
      static get "foo"() { return 0; }
 ->"foo" : Symbol(C["foo"], Decl(quotedAccessorName2.ts, 0, 9))
-+>"foo" : Symbol(foo, Decl(quotedAccessorName2.ts, 0, 9))
++>"foo" : Symbol("foo", Decl(quotedAccessorName2.ts, 0, 9))
  }

@@ -159,11 +159,11 @@ inner.y;
 
 /** @type {Outer.app.Inner} */
 var x;
->x : Inner
+>x : Outer.app.Inner
 
 x.y;
 >x.y : any
->x : Inner
+>x : Outer.app.Inner
 >y : any
 
 Outer.app.statische(101); // Infinity, duh

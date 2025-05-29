@@ -7,9 +7,9 @@ declare module E {
 
     class foobar extends D.bar {
 >foobar : foobar
->D.bar : bar
+>D.bar : D.bar
 >D : typeof D
->bar : typeof bar
+>bar : typeof D.bar
 
         foo();
 >foo : () => any

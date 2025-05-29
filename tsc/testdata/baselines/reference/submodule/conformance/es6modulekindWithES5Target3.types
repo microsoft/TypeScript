@@ -9,7 +9,7 @@ declare function foo(...args: any[]): any;
 >foo : (...args: any[]) => any
 
 export default class D {
->D : default
+>D : D
 
     static s = 0;
 >s : number

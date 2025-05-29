@@ -2,12 +2,12 @@
 
 === file.js ===
 export function foo() {}
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 
 foo.bar = 12;
 >foo.bar = 12 : 12
 >foo.bar : number
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >bar : number
 >12 : 12
 
@@ -19,7 +19,7 @@ const _private = Symbol();
 foo[_private] = "ok";
 >foo[_private] = "ok" : "ok"
 >foo[_private] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >_private : unique symbol
 >"ok" : "ok"
 
@@ -30,7 +30,7 @@ const strMem = "strMemName";
 foo[strMem] = "ok";
 >foo[strMem] = "ok" : "ok"
 >foo[strMem] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >strMem : "strMemName"
 >"ok" : "ok"
 
@@ -41,7 +41,7 @@ const dashStrMem = "dashed-str-mem";
 foo[dashStrMem] = "ok";
 >foo[dashStrMem] = "ok" : "ok"
 >foo[dashStrMem] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >dashStrMem : "dashed-str-mem"
 >"ok" : "ok"
 
@@ -52,7 +52,7 @@ const numMem = 42;
 foo[numMem] = "ok";
 >foo[numMem] = "ok" : "ok"
 >foo[numMem] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >numMem : 42
 >"ok" : "ok"
 
@@ -60,27 +60,27 @@ foo[numMem] = "ok";
 const x = foo[_private];
 >x : string
 >foo[_private] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >_private : unique symbol
 
 /** @type {string} */
 const y = foo[strMem];
 >y : string
 >foo[strMem] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >strMem : "strMemName"
 
 /** @type {string} */
 const z = foo[numMem];
 >z : string
 >foo[numMem] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >numMem : 42
 
 /** @type {string} */
 const a = foo[dashStrMem];
 >a : string
 >foo[dashStrMem] : string
->foo : { (): void; bar: number; foo[_private]: string; strMemName: string; foo[dashStrMem]: string; foo[numMem]: string; }
+>foo : { (): void; bar: number; [_private]: string; strMemName: string; "dashed-str-mem": string; 42: string; }
 >dashStrMem : "dashed-str-mem"
 

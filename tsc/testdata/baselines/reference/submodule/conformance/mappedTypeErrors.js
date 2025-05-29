@@ -239,3 +239,89 @@ function test1(obj) {
 function test2(obj) {
     let x = obj.foo; // Error
 }
+
+
+//// [mappedTypeErrors.d.ts]
+interface Shape {
+    name: string;
+    width: number;
+    height: number;
+    visible: boolean;
+}
+interface Named {
+    name: string;
+}
+interface Point {
+    x: number;
+    y: number;
+}
+// Constraint checking
+type T00 = {
+    [P in P]: string;
+}; // Error
+type T01 = {
+    [P in number]: string;
+}; // Error
+type T02 = {
+    [P in Date]: number;
+}; // Error
+type T03 = Record<Date, number>; // Error
+type T10 = Pick<Shape, "name">;
+type T11 = Pick<Shape, "foo">; // Error
+type T12 = Pick<Shape, "name" | "foo">; // Error
+type T13 = Pick<Shape, keyof Named>;
+type T14 = Pick<Shape, keyof Point>; // Error
+type T15 = Pick<Shape, never>;
+type T16 = Pick<Shape, undefined>; // Error
+declare function f1<T>(x: T): void;
+declare function f2<T extends string | number>(x: T): void;
+declare function f3<T extends keyof Shape>(x: T): void;
+declare function f4<T extends keyof Named>(x: T): void;
+// Type identity checking
+declare function f10<T>(): void;
+declare function f11<T>(): void;
+declare function f12<T>(): void;
+// Check that inferences to mapped types are secondary
+declare function objAndReadonly<T>(primary: T, secondary: Readonly<T>): T;
+declare function objAndPartial<T>(primary: T, secondary: Partial<T>): T;
+declare function f20(): void;
+declare function f21(): void;
+// Verify use of Pick<T, K> for setState functions (#12793)
+interface Foo {
+    a: string;
+    b?: number;
+}
+declare function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>): void;
+declare let foo: Foo;
+declare class C<T> {
+    state: T;
+    setState<K extends keyof T>(props: Pick<T, K>): void;
+}
+declare let c: C<Foo>;
+type T2 = {
+    a?: number;
+    [key: string]: any;
+};
+declare let x1: T2; // Error
+declare let x2: Partial<T2>; // Error
+declare let x3: {
+    [P in keyof T2]: T2[P];
+}; // Error
+// Repro from #13044
+type Foo2<T, F extends keyof T> = {
+    pf: {
+        [P in F]?: T[P];
+    };
+    pt: {
+        [P in T]?: T[P];
+    }; // note: should be in keyof T
+};
+type O = {
+    x: number;
+    y: boolean;
+};
+declare let o: O;
+declare let f: Foo2<O, 'x'>;
+// Repro from #28170
+declare function test1<T, K extends keyof T>(obj: Pick<T, K>): void;
+declare function test2<T, K extends keyof T>(obj: Record<K, number>): void;

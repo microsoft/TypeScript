@@ -2,7 +2,7 @@
 
 === parserEnum4.ts ===
     export enum SignatureFlags {
->SignatureFlags : import("parserEnum4").SignatureFlags
+>SignatureFlags : SignatureFlags
 
         ,
     }

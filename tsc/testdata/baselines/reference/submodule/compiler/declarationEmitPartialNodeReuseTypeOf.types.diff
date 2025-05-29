@@ -35,19 +35,14 @@
 
  console.log(nImported);
  >console.log(nImported) : void
-@@= skipped -16, +16 lines =@@
-
- === c.ts ===
- import * as a from "./a";
-->a : typeof a
-+>a : typeof import("a")
+@@= skipped -19, +19 lines =@@
+ >a : typeof a
 
  export const g = a.o
 ->g : (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => { foo: typeof a.nImported; bar: "private"; baz: typeof a.nNotImported; }
 ->a.o : (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => { foo: typeof a.nImported; bar: "private"; baz: typeof a.nNotImported; }
-->a : typeof a
-->o : (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => { foo: typeof a.nImported; bar: "private"; baz: typeof a.nNotImported; }
 +>g : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
 +>a.o : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
-+>a : typeof import("a")
+ >a : typeof a
+->o : (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => { foo: typeof a.nImported; bar: "private"; baz: typeof a.nNotImported; }
 +>o : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }

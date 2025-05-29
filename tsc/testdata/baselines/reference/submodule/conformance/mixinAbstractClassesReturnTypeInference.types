@@ -14,14 +14,14 @@ abstract class AbstractBase {
 }
 
 function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
->Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
+>Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { staticMixinMethod(): void; prototype: Mixin2.MixinClass; }) & TBase
 >args : any[]
 >baseClass : TBase
 
     // must be `abstract` because we cannot know *all* of the possible abstract members that need to be
     // implemented for this to be concrete.
     abstract class MixinClass extends baseClass implements Mixin1 {
->MixinClass : MixinClass<TBase>
+>MixinClass : MixinClass
 >baseClass : TBase
 
         mixinMethod(): void {}
@@ -31,13 +31,13 @@ function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: T
 >staticMixinMethod : () => void
     }
     return MixinClass;
->MixinClass : { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
+>MixinClass : ((abstract new (...args: any[]) => MixinClass) & { staticMixinMethod(): void; prototype: Mixin2.MixinClass; }) & TBase
 }
 
 class DerivedFromAbstract2 extends Mixin2(AbstractBase) {
 >DerivedFromAbstract2 : DerivedFromAbstract2
->Mixin2(AbstractBase) : MixinClass<typeof AbstractBase> & AbstractBase
->Mixin2 : <TBase extends new (...args: any[]) => any>(baseClass: TBase) => { new (...args: any[]): MixinClass<TBase>; staticMixinMethod: () => void; prototype: MixinClass<any>; } & TBase
+>Mixin2(AbstractBase) : Mixin2.MixinClass & AbstractBase
+>Mixin2 : <TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) => ((abstract new (...args: any[]) => MixinClass) & { staticMixinMethod(): void; prototype: Mixin2.MixinClass; }) & TBase
 >AbstractBase : typeof AbstractBase
 
     abstractBaseMethod() {}

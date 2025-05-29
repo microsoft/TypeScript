@@ -6,18 +6,11 @@
  var a: { foo<T extends Array<string>>(x: T): string }
 ->a : { foo<T extends Array<string>>(x: T): string; }
 ->foo : <T extends Array<string>>(x: T) => string
-+>a : { foo: <T extends string[]>(x: T) => string; }
++>a : { foo<T extends string[]>(x: T): string; }
 +>foo : <T extends string[]>(x: T) => string
  >x : T
 
  var b = { foo<T extends RegExp>(x: T) { return ''; } };
-->b : { foo<T extends RegExp>(x: T): string; }
-->{ foo<T extends RegExp>(x: T) { return ''; } } : { foo<T extends RegExp>(x: T): string; }
-+>b : { foo: <T extends RegExp>(x: T) => string; }
-+>{ foo<T extends RegExp>(x: T) { return ''; } } : { foo: <T extends RegExp>(x: T) => string; }
- >foo : <T extends RegExp>(x: T) => string
- >x : T
- >'' : ""
 @@= skipped -24, +24 lines =@@
  >x : any
 
@@ -44,42 +37,38 @@
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 ->x : { foo<T extends Array<string>>(x: T): string; }
 ->a : { foo<T extends Array<string>>(x: T): string; }
-+>foo3 : { (x: { foo: <T extends string[]>(x: T) => string; }): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
-+>x : { foo: <T extends string[]>(x: T) => string; }
-+>a : { foo: <T extends string[]>(x: T) => string; }
++>foo3 : { (x: { foo<T extends string[]>(x: T): string; }): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
++>x : { foo<T extends string[]>(x: T): string; }
++>a : { foo<T extends string[]>(x: T): string; }
 
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
 ->x : { foo<T extends Array<string>>(x: T): string; }
 ->a : { foo<T extends Array<string>>(x: T): string; }
-+>foo3 : { (x: { foo: <T extends string[]>(x: T) => string; }): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
-+>x : { foo: <T extends string[]>(x: T) => string; }
-+>a : { foo: <T extends string[]>(x: T) => string; }
++>foo3 : { (x: { foo<T extends string[]>(x: T): string; }): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
++>x : { foo<T extends string[]>(x: T): string; }
++>a : { foo<T extends string[]>(x: T): string; }
 
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
-+>foo3 : { (x: { foo: <T extends string[]>(x: T) => string; }): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
++>foo3 : { (x: { foo<T extends string[]>(x: T): string; }): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
  >x : any
 
  function foo4(x: typeof b);
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { foo<T extends RegExp>(x: T): string; }
-->b : { foo<T extends RegExp>(x: T): string; }
-+>foo4 : { (x: { foo: <T extends RegExp>(x: T) => string; }): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
-+>x : { foo: <T extends RegExp>(x: T) => string; }
-+>b : { foo: <T extends RegExp>(x: T) => string; }
++>foo4 : { (x: { foo<T extends RegExp>(x: T): string; }): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
+ >x : { foo<T extends RegExp>(x: T): string; }
+ >b : { foo<T extends RegExp>(x: T): string; }
 
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { foo<T extends RegExp>(x: T): string; }
-->b : { foo<T extends RegExp>(x: T): string; }
-+>foo4 : { (x: { foo: <T extends RegExp>(x: T) => string; }): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
-+>x : { foo: <T extends RegExp>(x: T) => string; }
-+>b : { foo: <T extends RegExp>(x: T) => string; }
++>foo4 : { (x: { foo<T extends RegExp>(x: T): string; }): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
+ >x : { foo<T extends RegExp>(x: T): string; }
+ >b : { foo<T extends RegExp>(x: T): string; }
 
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-+>foo4 : { (x: { foo: <T extends RegExp>(x: T) => string; }): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
++>foo4 : { (x: { foo<T extends RegExp>(x: T): string; }): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
  >x : any
 
  function foo5(x: A);
@@ -103,20 +92,20 @@
 
  function foo7(x: A);
 ->foo7 : { (x: A): any; (x: typeof a): any; }
-+>foo7 : { (x: A): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
++>foo7 : { (x: A): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
  >x : A
 
  function foo7(x: typeof a); // ok
 ->foo7 : { (x: A): any; (x: typeof a): any; }
 ->x : { foo<T extends Array<string>>(x: T): string; }
 ->a : { foo<T extends Array<string>>(x: T): string; }
-+>foo7 : { (x: A): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
-+>x : { foo: <T extends string[]>(x: T) => string; }
-+>a : { foo: <T extends string[]>(x: T) => string; }
++>foo7 : { (x: A): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
++>x : { foo<T extends string[]>(x: T): string; }
++>a : { foo<T extends string[]>(x: T): string; }
 
  function foo7(x: any) { }
 ->foo7 : { (x: A): any; (x: typeof a): any; }
-+>foo7 : { (x: A): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
++>foo7 : { (x: A): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
  >x : any
 
  function foo8(x: B<Array<number>>);
@@ -151,38 +140,36 @@
 
  function foo10(x: B<Array<number>>);
 ->foo10 : { (x: B<Array<number>>): any; (x: typeof a): any; }
-+>foo10 : { (x: B<number[]>): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
++>foo10 : { (x: B<number[]>): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
  >x : B<number[]>
 
  function foo10(x: typeof a); // ok
 ->foo10 : { (x: B<Array<number>>): any; (x: typeof a): any; }
 ->x : { foo<T extends Array<string>>(x: T): string; }
 ->a : { foo<T extends Array<string>>(x: T): string; }
-+>foo10 : { (x: B<number[]>): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
-+>x : { foo: <T extends string[]>(x: T) => string; }
-+>a : { foo: <T extends string[]>(x: T) => string; }
++>foo10 : { (x: B<number[]>): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
++>x : { foo<T extends string[]>(x: T): string; }
++>a : { foo<T extends string[]>(x: T): string; }
 
  function foo10(x: any) { }
 ->foo10 : { (x: B<Array<number>>): any; (x: typeof a): any; }
-+>foo10 : { (x: B<number[]>): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
++>foo10 : { (x: B<number[]>): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
  >x : any
 
  function foo11(x: B<Array<number>>);
 ->foo11 : { (x: B<Array<number>>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<number[]>): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
++>foo11 : { (x: B<number[]>): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
  >x : B<number[]>
 
  function foo11(x: typeof b); // ok
 ->foo11 : { (x: B<Array<number>>): any; (x: typeof b): any; }
-->x : { foo<T extends RegExp>(x: T): string; }
-->b : { foo<T extends RegExp>(x: T): string; }
-+>foo11 : { (x: B<number[]>): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
-+>x : { foo: <T extends RegExp>(x: T) => string; }
-+>b : { foo: <T extends RegExp>(x: T) => string; }
++>foo11 : { (x: B<number[]>): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
+ >x : { foo<T extends RegExp>(x: T): string; }
+ >b : { foo<T extends RegExp>(x: T): string; }
 
  function foo11(x: any) { }
 ->foo11 : { (x: B<Array<number>>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<number[]>): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
++>foo11 : { (x: B<number[]>): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
  >x : any
 
  function foo12(x: I<Number>);
@@ -191,38 +178,36 @@
 
  function foo13(x: I<Number>);
 ->foo13 : { (x: I<Number>): any; (x: typeof a): any; }
-+>foo13 : { (x: I<Number>): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
++>foo13 : { (x: I<Number>): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
  >x : I<Number>
 
  function foo13(x: typeof a); // ok
 ->foo13 : { (x: I<Number>): any; (x: typeof a): any; }
 ->x : { foo<T extends Array<string>>(x: T): string; }
 ->a : { foo<T extends Array<string>>(x: T): string; }
-+>foo13 : { (x: I<Number>): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
-+>x : { foo: <T extends string[]>(x: T) => string; }
-+>a : { foo: <T extends string[]>(x: T) => string; }
++>foo13 : { (x: I<Number>): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
++>x : { foo<T extends string[]>(x: T): string; }
++>a : { foo<T extends string[]>(x: T): string; }
 
  function foo13(x: any) { }
 ->foo13 : { (x: I<Number>): any; (x: typeof a): any; }
-+>foo13 : { (x: I<Number>): any; (x: { foo: <T extends string[]>(x: T) => string; }): any; }
++>foo13 : { (x: I<Number>): any; (x: { foo<T extends string[]>(x: T): string; }): any; }
  >x : any
 
  function foo14(x: I<Number>);
 ->foo14 : { (x: I<Number>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<Number>): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
++>foo14 : { (x: I<Number>): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
  >x : I<Number>
 
  function foo14(x: typeof b); // ok
 ->foo14 : { (x: I<Number>): any; (x: typeof b): any; }
-->x : { foo<T extends RegExp>(x: T): string; }
-->b : { foo<T extends RegExp>(x: T): string; }
-+>foo14 : { (x: I<Number>): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
-+>x : { foo: <T extends RegExp>(x: T) => string; }
-+>b : { foo: <T extends RegExp>(x: T) => string; }
++>foo14 : { (x: I<Number>): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
+ >x : { foo<T extends RegExp>(x: T): string; }
+ >b : { foo<T extends RegExp>(x: T): string; }
 
  function foo14(x: any) { }
 ->foo14 : { (x: I<Number>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<Number>): any; (x: { foo: <T extends RegExp>(x: T) => string; }): any; }
++>foo14 : { (x: I<Number>): any; (x: { foo<T extends RegExp>(x: T): string; }): any; }
  >x : any
 
  function foo15(x: I2);

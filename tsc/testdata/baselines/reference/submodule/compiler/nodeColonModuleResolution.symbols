@@ -2,7 +2,7 @@
 
 === /a/b/node_modules/@types/node/ph.d.ts ===
 declare module 'ph' {
->'ph' : Symbol('ph', Decl(ph.d.ts, 0, 0))
+>'ph' : Symbol("ph", Decl(ph.d.ts, 0, 0))
 
     namespace constants {
 >constants : Symbol(constants, Decl(ph.d.ts, 0, 21))
@@ -42,7 +42,7 @@ declare module 'ph' {
     }
 }
 declare module 'node:ph' {
->'node:ph' : Symbol('node:ph', Decl(ph.d.ts, 14, 1))
+>'node:ph' : Symbol("node:ph", Decl(ph.d.ts, 14, 1))
 
     export * from 'ph';
 }

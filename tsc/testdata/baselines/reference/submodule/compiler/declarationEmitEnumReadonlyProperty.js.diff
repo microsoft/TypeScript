@@ -11,18 +11,18 @@
 -    return C;
 -}());
 -var x = new C().type;
--
--
--//// [declarationEmitEnumReadonlyProperty.d.ts]
--declare enum E {
--    A = "a",
--    B = "b"
--}
--declare class C {
--    readonly type = E.A;
--}
--declare let x: E.A;
 +class C {
 +    type = E.A;
 +}
 +let x = new C().type;
+
+
+ //// [declarationEmitEnumReadonlyProperty.d.ts]
+@@= skipped -15, +12 lines =@@
+     B = "b"
+ }
+ declare class C {
+-    readonly type = E.A;
++    readonly type: E;
+ }
+ declare let x: E.A;

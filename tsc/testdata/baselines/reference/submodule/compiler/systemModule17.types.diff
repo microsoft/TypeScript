@@ -1,11 +1,7 @@
 --- old.systemModule17.types
 +++ new.systemModule17.types
-@@= skipped -30, +30 lines =@@
- import II = N.I;
- >II : any
- >N : typeof N
-->I : II
-+>I : I
+@@= skipped -33, +33 lines =@@
+ >I : II
 
  import { A, A as EA, I as EI } from "f1";
 ->A : typeof A
@@ -17,7 +13,7 @@
  >I : any
  >EI : any
 
-@@= skipped -24, +24 lines =@@
+@@= skipped -21, +21 lines =@@
  >I1 : any
 
  export {A};

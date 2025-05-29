@@ -202,11 +202,11 @@ type T23<out in T> = T;  // Error
 >T23 : T
 
 declare function f1<in T>(x: T): void;  // Error
->f1 : <T>(x: T) => void
+>f1 : <in T>(x: T) => void
 >x : T
 
 declare function f2<out T>(): T;  // Error
->f2 : <T>() => T
+>f2 : <out T>() => T
 
 class C {
 >C : C

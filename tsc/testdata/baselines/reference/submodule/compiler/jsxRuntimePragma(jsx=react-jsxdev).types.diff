@@ -1,125 +1,20 @@
 --- old.jsxRuntimePragma(jsx=react-jsxdev).types
 +++ new.jsxRuntimePragma(jsx=react-jsxdev).types
-@@= skipped -6, +6 lines =@@
- >React : typeof React
+@@= skipped -101, +101 lines =@@
 
- export const HelloWorld = () => <h1>Hello world</h1>;
-->HelloWorld : () => JSX.Element
-->() => <h1>Hello world</h1> : () => JSX.Element
--><h1>Hello world</h1> : JSX.Element
-+>HelloWorld : () => Element
-+>() => <h1>Hello world</h1> : () => Element
-+><h1>Hello world</h1> : Element
- >h1 : any
- >h1 : any
+ === index.ts ===
+ export * as one from "./one.js";
+->one : typeof import("one")
++>one : typeof import("./one.js")
 
- export const frag = <><div></div></>;
-->frag : JSX.Element
--><><div></div></> : JSX.Element
--><div></div> : JSX.Element
-+>frag : Element
-+><><div></div></> : Element
-+><div></div> : Element
- >div : any
- >div : any
+ export * as two from "./two.js";
+->two : typeof import("two")
++>two : typeof import("./two.js")
 
- export const selfClosing = <img src="./image.png" />;
-->selfClosing : JSX.Element
--><img src="./image.png" /> : JSX.Element
-+>selfClosing : Element
-+><img src="./image.png" /> : Element
- >img : any
- >src : string
+ export * as three from "./three.js";
+->three : typeof import("three")
++>three : typeof import("./three.js")
 
-@@= skipped -23, +23 lines =@@
- /// <reference path="react16.d.ts" />
- /* @jsxRuntime automatic */
- export const HelloWorld = () => <h1>Hello world</h1>;
-->HelloWorld : () => JSX.Element
-->() => <h1>Hello world</h1> : () => JSX.Element
--><h1>Hello world</h1> : JSX.Element
-+>HelloWorld : () => Element
-+>() => <h1>Hello world</h1> : () => Element
-+><h1>Hello world</h1> : Element
- >h1 : any
- >h1 : any
-
- export const frag = <><div></div></>;
-->frag : JSX.Element
--><><div></div></> : JSX.Element
--><div></div> : JSX.Element
-+>frag : Element
-+><><div></div></> : Element
-+><div></div> : Element
- >div : any
- >div : any
-
- export const selfClosing = <img src="./image.png" />;
-->selfClosing : JSX.Element
--><img src="./image.png" /> : JSX.Element
-+>selfClosing : Element
-+><img src="./image.png" /> : Element
- >img : any
- >src : string
-
-@@= skipped -24, +24 lines =@@
- /* @jsxRuntime classic */
- /* @jsxRuntime automatic */
- export const HelloWorld = () => <h1>Hello world</h1>;
-->HelloWorld : () => JSX.Element
-->() => <h1>Hello world</h1> : () => JSX.Element
--><h1>Hello world</h1> : JSX.Element
-+>HelloWorld : () => Element
-+>() => <h1>Hello world</h1> : () => Element
-+><h1>Hello world</h1> : Element
- >h1 : any
- >h1 : any
-
- export const frag = <><div></div></>;
-->frag : JSX.Element
--><><div></div></> : JSX.Element
--><div></div> : JSX.Element
-+>frag : Element
-+><><div></div></> : Element
-+><div></div> : Element
- >div : any
- >div : any
-
- export const selfClosing = <img src="./image.png" />;
-->selfClosing : JSX.Element
--><img src="./image.png" /> : JSX.Element
-+>selfClosing : Element
-+><img src="./image.png" /> : Element
- >img : any
- >src : string
-
-@@= skipped -27, +27 lines =@@
- >React : typeof React
-
- export const HelloWorld = () => <h1>Hello world</h1>;
-->HelloWorld : () => JSX.Element
-->() => <h1>Hello world</h1> : () => JSX.Element
--><h1>Hello world</h1> : JSX.Element
-+>HelloWorld : () => Element
-+>() => <h1>Hello world</h1> : () => Element
-+><h1>Hello world</h1> : Element
- >h1 : any
- >h1 : any
-
- export const frag = <><div></div></>;
-->frag : JSX.Element
--><><div></div></> : JSX.Element
--><div></div> : JSX.Element
-+>frag : Element
-+><><div></div></> : Element
-+><div></div> : Element
- >div : any
- >div : any
-
- export const selfClosing = <img src="./image.png" />;
-->selfClosing : JSX.Element
--><img src="./image.png" /> : JSX.Element
-+>selfClosing : Element
-+><img src="./image.png" /> : Element
- >img : any
- >src : string
+ export * as four from "./four.js";
+->four : typeof import("four")
++>four : typeof import("./four.js")

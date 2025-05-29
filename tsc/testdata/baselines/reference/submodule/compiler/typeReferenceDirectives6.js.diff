@@ -6,10 +6,8 @@
  /// <reference types="lib"/>
 -var x;
 -var y = function () { return x; };
--
--
--//// [app.d.ts]
--declare let x: $;
--declare let y: () => $;
 +let x;
 +let y = () => x;
+
+
+ //// [app.d.ts]

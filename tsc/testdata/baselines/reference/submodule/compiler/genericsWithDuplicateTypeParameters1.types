@@ -16,7 +16,7 @@ class C<X, X> {
 >f : <x>() => void
 
     public f2<X, X>(a: X, b: X): X { return null; }
->f2 : <X>(a: X, b: X) => X
+>f2 : <X_1>(a: X_1, b: X_1) => X_1
 >a : X
 >b : X
 }
@@ -26,7 +26,7 @@ interface I<X, X> {
 >f : <X>() => any
 
     f2<X, X>(a: X, b: X): X;
->f2 : <X>(a: X, b: X) => X
+>f2 : <X_1>(a: X_1, b: X_1) => X_1
 >a : X
 >b : X
 }

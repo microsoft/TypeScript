@@ -42,3 +42,22 @@ const c = new a_1.Foo();
 exports.c = c;
 c.doThing({ a: 42 });
 exports.x = c.doThing({ a: 12 });
+
+
+//// [a.d.ts]
+export declare class Foo {
+    doThing(x: {
+        a: number;
+    }): {
+        b: number;
+    };
+    static make(): Foo;
+}
+//# sourceMappingURL=a.d.ts.map//// [index.d.ts]
+import { Foo } from "./a";
+declare const c: Foo;
+export declare let x: {
+    b: number;
+};
+export { c, Foo };
+//# sourceMappingURL=index.d.ts.map

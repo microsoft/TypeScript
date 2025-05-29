@@ -10,7 +10,7 @@ export type * from './a';
 
 === c.ts ===
 export type * as ns from './a';
->ns : typeof import("a")
+>ns : typeof import("./a")
 
 === d.ts ===
 import { A } from './b';
@@ -21,10 +21,10 @@ A;
 
 === e.ts ===
 import { ns } from './c';
->ns : typeof import("a")
+>ns : typeof ns
 
 ns.A;
->ns.A : typeof A
->ns : typeof import("a")
->A : typeof A
+>ns.A : typeof ns.A
+>ns : typeof ns
+>A : typeof ns.A
 

@@ -2,7 +2,7 @@
 
 === m1.ts ===
 export default class Decl {
->Decl : default
+>Decl : Decl
 }
 
 export interface Decl {
@@ -30,7 +30,7 @@ var x: Entity;
 >x : Entity
 
 var y: Entity.I;
->y : I
+>y : Entity.I
 >Entity : any
 
 var z = new Entity();

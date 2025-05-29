@@ -447,72 +447,72 @@ declare module mAmbient {
 }
 
 function foo() {
->foo : () => C
+>foo : () => mAmbient.C
 
     return mAmbient.foo();
->mAmbient.foo() : C
->mAmbient.foo : () => C
+>mAmbient.foo() : mAmbient.C
+>mAmbient.foo : () => mAmbient.C
 >mAmbient : typeof mAmbient
->foo : () => C
+>foo : () => mAmbient.C
 }
 
 var cVar = new mAmbient.C();
->cVar : C
->new mAmbient.C() : C
->mAmbient.C : typeof C
+>cVar : mAmbient.C
+>new mAmbient.C() : mAmbient.C
+>mAmbient.C : typeof mAmbient.C
 >mAmbient : typeof mAmbient
->C : typeof C
+>C : typeof mAmbient.C
 
 var aVar = mAmbient.aVar;
->aVar : C
->mAmbient.aVar : C
+>aVar : mAmbient.C
+>mAmbient.aVar : mAmbient.C
 >mAmbient : typeof mAmbient
->aVar : C
+>aVar : mAmbient.C
 
 var bB: mAmbient.B;
->bB : B
+>bB : mAmbient.B
 >mAmbient : any
 
 var eVar: mAmbient.e;
->eVar : e
+>eVar : mAmbient.e
 >mAmbient : any
 
 function m3foo() {
->m3foo : () => C
+>m3foo : () => mAmbient.m3.C
 
     return mAmbient.m3.foo();
->mAmbient.m3.foo() : C
->mAmbient.m3.foo : () => C
->mAmbient.m3 : typeof m3
+>mAmbient.m3.foo() : mAmbient.m3.C
+>mAmbient.m3.foo : () => mAmbient.m3.C
+>mAmbient.m3 : typeof mAmbient.m3
 >mAmbient : typeof mAmbient
->m3 : typeof m3
->foo : () => C
+>m3 : typeof mAmbient.m3
+>foo : () => mAmbient.m3.C
 }
 
 var m3cVar = new mAmbient.m3.C();
->m3cVar : C
->new mAmbient.m3.C() : C
->mAmbient.m3.C : typeof C
->mAmbient.m3 : typeof m3
+>m3cVar : mAmbient.m3.C
+>new mAmbient.m3.C() : mAmbient.m3.C
+>mAmbient.m3.C : typeof mAmbient.m3.C
+>mAmbient.m3 : typeof mAmbient.m3
 >mAmbient : typeof mAmbient
->m3 : typeof m3
->C : typeof C
+>m3 : typeof mAmbient.m3
+>C : typeof mAmbient.m3.C
 
 var m3aVar = mAmbient.m3.aVar;
->m3aVar : C
->mAmbient.m3.aVar : C
->mAmbient.m3 : typeof m3
+>m3aVar : mAmbient.m3.C
+>mAmbient.m3.aVar : mAmbient.m3.C
+>mAmbient.m3 : typeof mAmbient.m3
 >mAmbient : typeof mAmbient
->m3 : typeof m3
->aVar : C
+>m3 : typeof mAmbient.m3
+>aVar : mAmbient.m3.C
 
 var m3bB: mAmbient.m3.B;
->m3bB : B
+>m3bB : mAmbient.m3.B
 >mAmbient : any
 >m3 : any
 
 var m3eVar: mAmbient.m3.e;
->m3eVar : e
+>m3eVar : mAmbient.m3.e
 >mAmbient : any
 >m3 : any
 

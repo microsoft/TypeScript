@@ -22,7 +22,7 @@ type ParsedCommandLine struct {
 	comparePathsOptions     tspath.ComparePathsOptions
 	wildcardDirectoriesOnce sync.Once
 	wildcardDirectories     map[string]bool
-	extraFileExtensions     []fileExtensionInfo
+	extraFileExtensions     []FileExtensionInfo
 }
 
 // WildcardDirectories returns the cached wildcard directories, initializing them if needed

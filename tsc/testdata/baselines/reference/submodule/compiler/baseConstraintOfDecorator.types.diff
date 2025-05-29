@@ -6,8 +6,8 @@
      return class decoratorFunc extends superClass {
 ->class decoratorFunc extends superClass {        constructor(...args: any[]) {            super(...args);            _instanceModifier(this, args);        }    } : { new (...args: any[]): decoratorFunc; prototype: classExtender2<any>.decoratorFunc; } & TFunction
 ->decoratorFunc : { new (...args: any[]): decoratorFunc; prototype: classExtender2<any>.decoratorFunc; } & TFunction
-+>class decoratorFunc extends superClass {        constructor(...args: any[]) {            super(...args);            _instanceModifier(this, args);        }    } : { new (...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; } & TFunction
-+>decoratorFunc : { new (...args: any[]): decoratorFunc<TFunction>; prototype: decoratorFunc<any>; } & TFunction
++>class decoratorFunc extends superClass {        constructor(...args: any[]) {            super(...args);            _instanceModifier(this, args);        }    } : { new (...args: any[]): decoratorFunc; prototype: classExtender2.decoratorFunc; } & TFunction
++>decoratorFunc : { new (...args: any[]): decoratorFunc; prototype: classExtender2.decoratorFunc; } & TFunction
  >superClass : MyClass
 
          constructor(...args: any[]) {

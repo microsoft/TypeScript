@@ -22,3 +22,10 @@ class A {
         return 42;
     }
 }
+
+
+//// [es6-declaration-amd.d.ts]
+declare class A {
+    constructor();
+    B(): number;
+}

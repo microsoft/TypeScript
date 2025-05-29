@@ -56,12 +56,7 @@
 
          sub: {
  >sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 15, 10))
-@@= skipped -22, +22 lines =@@
-
-     switch(s['dash-ok']) {
- >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 23, 14))
-->'dash-ok' : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
-+>'dash-ok' : Symbol(dash-ok, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
+@@= skipped -26, +26 lines =@@
 
          case "square": return s['square-size'] * s['square-size'];
  >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 23, 14))
@@ -102,7 +97,7 @@
      }
  }
  function subarea(s: Subshape): number {
-@@= skipped -34, +34 lines =@@
+@@= skipped -30, +30 lines =@@
      switch(s[0]["sub"].under["shape"]["dash-ok"]) {
  >s[0]["sub"].under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 16, 14))
  >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 30, 17))
@@ -111,11 +106,7 @@
  >"sub" : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 15, 10))
  >under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 16, 14))
  >"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 17, 20))
-->"dash-ok" : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
-+>"dash-ok" : Symbol(dash-ok, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 9, 19), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 0, 18))
-
-         case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];
- >s[0].sub.under.shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 17, 20))
+@@= skipped -11, +11 lines =@@
  >s[0].sub.under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 16, 14))
  >s[0].sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 15, 10))
  >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 30, 17))
@@ -189,7 +180,7 @@
      }
  }
 
-@@= skipped -69, +69 lines =@@
+@@= skipped -58, +58 lines =@@
  >X : Symbol(X, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty1.ts, 36, 1))
 
      0: "xx",

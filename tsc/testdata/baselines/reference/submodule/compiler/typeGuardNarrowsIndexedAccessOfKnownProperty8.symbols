@@ -12,7 +12,7 @@ export class C {
 >C : Symbol(C, Decl(b.ts, 0, 25))
 
     [a.key]: string;
->[a.key] : Symbol(a, Decl(b.ts, 1, 16))
+>[a.key] : Symbol([a.key], Decl(b.ts, 1, 16))
 >a.key : Symbol(key, Decl(a.ts, 0, 12))
 >a : Symbol(a, Decl(b.ts, 0, 6))
 >key : Symbol(key, Decl(a.ts, 0, 12))

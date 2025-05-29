@@ -16,50 +16,50 @@ function MyComp2(props: { className?: string, htmlFor?: string }) {
 }
 class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
 >MyComp : MyComp
->React.Component : Component<{ className?: string; htmlFor?: string; }, {}, any>
+>React.Component : React.Component<{ className?: string; htmlFor?: string; }, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 >className : string
 >htmlFor : string
 
 <a class="" />;
-><a class="" /> : Element
+><a class="" /> : JSX.Element
 >a : any
 >class : string
 
 <a for="" />; // should have no fix
-><a for="" /> : Element
+><a for="" /> : JSX.Element
 >a : any
 >for : string
 
 <label for="" />;
-><label for="" /> : Element
+><label for="" /> : JSX.Element
 >label : any
 >for : string
 
 <label for="" class="" />;
-><label for="" class="" /> : Element
+><label for="" class="" /> : JSX.Element
 >label : any
 >for : string
 >class : string
 
 <MyComp class="" />;
-><MyComp class="" /> : Element
+><MyComp class="" /> : JSX.Element
 >MyComp : typeof MyComp
 >class : string
 
 <MyComp2 class="" />;
-><MyComp2 class="" /> : Element
+><MyComp2 class="" /> : JSX.Element
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
 >class : string
 
 <MyComp for="" />;
-><MyComp for="" /> : Element
+><MyComp for="" /> : JSX.Element
 >MyComp : typeof MyComp
 >for : string
 
 <MyComp2 for="" />;
-><MyComp2 for="" /> : Element
+><MyComp2 for="" /> : JSX.Element
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
 >for : string
 

@@ -2,7 +2,7 @@
 
 === sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts ===
 declare var console: {
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 
     log(msg: any): void;
 >log : (msg: any) => void
@@ -108,7 +108,7 @@ for ({name: nameA = "noName" } of robots) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -124,7 +124,7 @@ for ({name: nameA = "noName" } of getRobots()) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -149,7 +149,7 @@ for ({name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -178,7 +178,7 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
     console.log(primaryA);
 >console.log(primaryA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primaryA : string
 }
@@ -208,7 +208,7 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
     console.log(primaryA);
 >console.log(primaryA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primaryA : string
 }
@@ -260,7 +260,7 @@ for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "seconda
     console.log(primaryA);
 >console.log(primaryA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primaryA : string
 }
@@ -274,7 +274,7 @@ for ({ name = "noName" } of robots) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -288,7 +288,7 @@ for ({ name = "noName" } of getRobots()) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -311,7 +311,7 @@ for ({ name = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimme
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -344,7 +344,7 @@ for ({
     console.log(primaryA);
 >console.log(primaryA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primaryA : string
 }
@@ -378,7 +378,7 @@ for ({
     console.log(primaryA);
 >console.log(primaryA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primaryA : string
 }
@@ -431,7 +431,7 @@ for ({
     console.log(primaryA);
 >console.log(primaryA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primaryA : string
 }
@@ -452,7 +452,7 @@ for ({name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -472,7 +472,7 @@ for ({name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -501,7 +501,7 @@ for ({name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", 
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -544,7 +544,7 @@ for ({
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -588,7 +588,7 @@ for ({
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -652,7 +652,7 @@ for ({
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -668,7 +668,7 @@ for ({ name = "noName", skill  = "noSkill" } of robots) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -684,7 +684,7 @@ for ({ name = "noName", skill = "noSkill"  } of getRobots()) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -709,7 +709,7 @@ for ({ name = "noName", skill  = "noSkill" } of [{ name: "mower", skill: "mowing
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -746,7 +746,7 @@ for ({
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -784,7 +784,7 @@ for ({
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -841,7 +841,7 @@ for ({
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }

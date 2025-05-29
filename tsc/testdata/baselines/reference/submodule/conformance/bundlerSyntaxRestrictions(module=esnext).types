@@ -18,7 +18,7 @@ declare module "path" {
 >"path" : typeof import("path")
 
     import fs = require("fs"); // ok
->fs : typeof import("fs")
+>fs : typeof fs
 
     namespace path {
 >path : typeof path
@@ -33,24 +33,24 @@ declare module "path" {
 === /mainJs.js ===
 import {} from "./a";
 import("./a");
->import("./a") : Promise<typeof import("/a")>
+>import("./a") : Promise<typeof _>
 >"./a" : "./a"
 
 const _ = require("./a");
->_ : typeof import("/a")
->require("./a") : typeof import("/a")
+>_ : typeof _
+>require("./a") : typeof _
 >require : (...args: any[]) => any
 >"./a" : "./a"
 
 _.a; // any
 >_.a : "a"
->_ : typeof import("/a")
+>_ : typeof _
 >a : "a"
 
 === /main.ts ===
 import {} from "./a";
 import _ = require("./a"); // Error in esnext
->_ : typeof import("/a")
+>_ : typeof _
 
 export = {}; // Error
 >{} : {}

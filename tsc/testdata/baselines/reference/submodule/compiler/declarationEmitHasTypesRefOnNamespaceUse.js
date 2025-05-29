@@ -16,3 +16,8 @@ class Src implements NS.Dep { }
 //// [index.js]
 class Src {
 }
+
+
+//// [index.d.ts]
+declare class Src implements NS.Dep {
+}

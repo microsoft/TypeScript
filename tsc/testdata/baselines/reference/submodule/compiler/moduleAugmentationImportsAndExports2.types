@@ -35,7 +35,7 @@ namespace N {
 }
 
 declare module "./f1" {
->"./f1" : typeof import("f1")
+>"./f1" : typeof import("./f1")
 
     import {B} from "./f2";
 >B : any
@@ -46,12 +46,12 @@ declare module "./f1" {
     import I = N.Ifc;
 >I : any
 >N : any
->Ifc : Ifc
+>Ifc : I
 
     import C = N.Cls;
 >C : any
 >N : any
->Cls : Cls
+>Cls : C
 
     // should have explicit export
     interface A {
@@ -59,10 +59,10 @@ declare module "./f1" {
 >foo : () => B
 
         bar(): I;
->bar : () => Ifc
+>bar : () => I
 
         baz(): C;
->baz : () => Cls
+>baz : () => C
     }
 }
 

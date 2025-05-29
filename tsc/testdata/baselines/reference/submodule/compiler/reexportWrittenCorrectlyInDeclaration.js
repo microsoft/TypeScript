@@ -47,3 +47,19 @@ class Test {
     method = (input) => { };
 }
 exports.Test = Test;
+
+
+//// [ThingA.d.ts]
+export declare class ThingA {
+}
+//// [ThingB.d.ts]
+export declare class ThingB {
+}
+//// [Things.d.ts]
+export { ThingA } from "./ThingA";
+export { ThingB } from "./ThingB";
+//// [Test.d.ts]
+import * as things from "./Things";
+export declare class Test {
+    method: (input: things.ThingA) => void;
+}

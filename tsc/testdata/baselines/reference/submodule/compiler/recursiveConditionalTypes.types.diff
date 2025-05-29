@@ -24,11 +24,11 @@
 ->value : { value: typeof b4; }
 ->value : { value: { value: { value: typeof b4; }; }; }
 ->b4 : { value: { value: { value: typeof b4; }; }; }
-+>b4 : { value: { value: { value: ???; }; }; }
-+>value : { value: { value: { value: ???; }; }; }
-+>value : { value: { value: { value: ???; }; }; }
-+>value : { value: { value: { value: ???; }; }; }
-+>b4 : { value: { value: { value: ???; }; }; }
++>b4 : { value: { value: { value: any; }; }; }
++>value : { value: { value: { value: any; }; }; }
++>value : { value: { value: { value: any; }; }; }
++>value : { value: { value: { value: any; }; }; }
++>b4 : { value: { value: { value: any; }; }; }
 
  unbox(b1);  // string
  >unbox(b1) : string
@@ -37,28 +37,10 @@
 
  unbox(b4);  // { value: { value: typeof b4 }}
 ->unbox(b4) : { value: { value: typeof b4; }; }
-+>unbox(b4) : { value: { value: { value: ???; }; }; }
++>unbox(b4) : { value: { value: { value: any; }; }; }
  >unbox : <T>(box: RecBox<T>) => T
 ->b4 : { value: { value: { value: typeof b4; }; }; }
-+>b4 : { value: { value: { value: ???; }; }; }
++>b4 : { value: { value: { value: any; }; }; }
 
  unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
-->unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
-+>unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: ???; }; }
- >unbox : <T>(box: RecBox<T>) => T
-->{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: any; }; }; }; }
-->value : { value: { readonly value: { readonly value: any; }; }; }
-->{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: any; }; }; }
-->value : { readonly value: { readonly value: any; }; }
-->{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
-->value : { readonly value: any; }
-->this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>
-+>{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: ???; }; }; }; }
-+>value : { value: { readonly value: { readonly value: ???; }; }; }
-+>{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: ???; }; }; }
-+>value : { readonly value: { readonly value: ???; }; }
-+>{ get value() { return this; } } : { readonly value: { readonly value: ???; }; }
-+>value : { readonly value: ???; }
-+>this : { readonly value: ???; } | RecBox<{ readonly value: { readonly value: ???; }; }>
-
- // Inference from nested instantiations of same generic types
+ >unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }

@@ -273,9 +273,9 @@ func emitFilesAndReportErrors(sys System, program *compiler.Program, reportDiagn
 				result.checkTime = time.Since(checkStart)
 			}
 
-			// !!! GetDeclarationDiagnostics
-			// if options.NoEmit.IsTrue() && options.GetEmitDeclarations() && len(allDiagnostics) == configFileParsingDiagnosticsLength {
-			// }
+			if options.NoEmit.IsTrue() && options.GetEmitDeclarations() && len(allDiagnostics) == configFileParsingDiagnosticsLength {
+				allDiagnostics = append(allDiagnostics, program.GetDeclarationDiagnostics(ctx, nil)...)
+			}
 		}
 	}
 

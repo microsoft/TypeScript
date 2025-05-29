@@ -11,14 +11,11 @@
  rawr(dinosaur);
  function rawr(dino) {
      if (dino === "t-rex") {
-@@= skipped -12, +12 lines =@@
-     }
-     throw "Unexpected " + dino;
- }
--
--
--//// [stringLiteralTypesAndTuples01.d.ts]
+@@= skipped -15, +15 lines =@@
+
+
+ //// [stringLiteralTypesAndTuples01.d.ts]
 -declare let hello: string, brave: string, newish: string, world: string;
--type RexOrRaptor = "t-rex" | "raptor";
+ type RexOrRaptor = "t-rex" | "raptor";
 -declare let im: "I'm", a: "a", dinosaur: RexOrRaptor;
--declare function rawr(dino: RexOrRaptor): "ROAAAAR!" | "yip yip!";
+ declare function rawr(dino: RexOrRaptor): "ROAAAAR!" | "yip yip!";

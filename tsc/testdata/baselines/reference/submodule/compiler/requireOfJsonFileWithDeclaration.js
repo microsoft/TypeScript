@@ -25,3 +25,7 @@ if (x) {
     let b = b2.b;
     x = (b1.b === b);
 }
+
+
+//// [out/file1.d.ts]
+export {};

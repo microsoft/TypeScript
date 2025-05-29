@@ -15,3 +15,16 @@ interface D extends B {
 
 
 //// [override9.js]
+
+
+//// [override9.d.ts]
+interface B {
+    foo(): void;
+    bar(): void;
+}
+interface D extends B {
+    foo(): void;
+    bar(): void;
+    baz(): void;
+    bazz(): void;
+}

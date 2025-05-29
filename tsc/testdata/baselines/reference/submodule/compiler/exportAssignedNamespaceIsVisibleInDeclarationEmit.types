@@ -13,10 +13,10 @@ export = Foo;
 
 === index.ts ===
 import { f } from "./thing";
->f : () => Bar
+>f : () => import("./thing.js").Bar
 
 export const thing = f();
->thing : Bar
->f() : Bar
->f : () => Bar
+>thing : import("./thing.js").Bar
+>f() : import("./thing.js").Bar
+>f : () => import("./thing.js").Bar
 

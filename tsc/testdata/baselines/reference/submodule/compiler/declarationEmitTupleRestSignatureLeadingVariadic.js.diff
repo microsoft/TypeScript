@@ -10,8 +10,7 @@
 -        args[_i] = arguments[_i];
 -    }
 -};
--
--
--//// [declarationEmitTupleRestSignatureLeadingVariadic.d.ts]
--declare const f: <TFirstArgs extends any[], TLastArg>(...args: [...TFirstArgs, TLastArg]) => void;
 +const f = (...args) => { };
+
+
+ //// [declarationEmitTupleRestSignatureLeadingVariadic.d.ts]

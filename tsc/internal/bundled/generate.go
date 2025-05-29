@@ -133,7 +133,7 @@ func readLibs() []lib {
 		paths map[string]string
 	}
 
-	libsFile := filepath.Join(libInputDir, "libs.json")
+	libsFile := tspath.NormalizeSlashes(filepath.Join(libInputDir, "libs.json"))
 
 	b, err := os.ReadFile(libsFile)
 	if err != nil {

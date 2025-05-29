@@ -1,14 +1,6 @@
 --- old.conflictingDeclarationsImportFromNamespace2.types
 +++ new.conflictingDeclarationsImportFromNamespace2.types
-@@= skipped -1, +1 lines =@@
-
- === node_modules/@types/lodash/object.d.ts ===
- import _ = require("./index");
-->_ : _.LoDashStatic
-+>_ : LoDashStatic
-
- declare module "./index" {
- >"./index" : LoDashStatic
+@@= skipped -8, +8 lines =@@
 
      interface LoDashStatic {
        pick: <T extends object, U extends keyof T>(
@@ -17,7 +9,7 @@
 
          object: T,
  >object : T
-@@= skipped -21, +21 lines =@@
+@@= skipped -14, +14 lines =@@
 
  === node_modules/@types/lodash/pick.d.ts ===
  import { pick } from "./index";
@@ -32,15 +24,15 @@
  /// <reference path="./object.d.ts" />
  export = _;
 ->_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
-+>_ : LoDashStatic
++>_ : import("lodash").LoDashStatic
 
  export as namespace _;
 ->_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
-+>_ : LoDashStatic
++>_ : import("lodash").LoDashStatic
 
  declare const _: _.LoDashStatic;
 ->_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
-+>_ : LoDashStatic
++>_ : import("lodash").LoDashStatic
  >_ : any
 
  declare namespace _ {

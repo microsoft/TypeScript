@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 const Foo = (props: any) => null;
 >Foo : (props: any) => any
@@ -18,12 +18,12 @@ function Greet(x: {name?: string}) {
 }
 
 const foo = <Foo />;
->foo : Element
-><Foo /> : Element
+>foo : JSX.Element
+><Foo /> : JSX.Element
 >Foo : (props: any) => any
 
 const G = <Greet />;
->G : Element
-><Greet /> : Element
+>G : JSX.Element
+><Greet /> : JSX.Element
 >Greet : (x: { name?: string; }) => any
 

@@ -1,15 +1,6 @@
 --- old.classReferencedInContextualParameterWithinItsOwnBaseExpression.types
 +++ new.classReferencedInContextualParameterWithinItsOwnBaseExpression.types
-@@= skipped -7, +7 lines =@@
-
- interface Schema<A> {
-   readonly pretty?: Pretty<A>;
-->pretty : Pretty<A> | undefined
-+>pretty : (Pretty<A>) | undefined
- }
-
- interface Class<A> {
-@@= skipped -8, +8 lines =@@
+@@= skipped -15, +15 lines =@@
  }
 
  declare const Class: <Self>(

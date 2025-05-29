@@ -2,24 +2,24 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
->decorator4 : <T extends { x: number; }>(Component: StatelessComponent<T>) => StatelessComponent<T>
->function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} y={"blah"} ></Component>} : <T extends { x: number; }>(Component: StatelessComponent<T>) => StatelessComponent<T>
+>decorator4 : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
+>function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} y={"blah"} ></Component>} : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
 >x : number
->Component : StatelessComponent<T>
+>Component : React.StatelessComponent<T>
 >React : any
 >React : any
 
     return (props) => <Component {...props} y={"blah"} ></Component>
->(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: ReactNode; }) => Element
->props : T & { children?: ReactNode; }
-><Component {...props} y={"blah"} ></Component> : Element
->Component : StatelessComponent<T>
->props : T & { children?: ReactNode; }
+>(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element
+>props : T & { children?: React.ReactNode; }
+><Component {...props} y={"blah"} ></Component> : JSX.Element
+>Component : React.StatelessComponent<T>
+>props : T & { children?: React.ReactNode; }
 >y : string
 >"blah" : "blah"
->Component : StatelessComponent<T>
+>Component : React.StatelessComponent<T>
 
 };

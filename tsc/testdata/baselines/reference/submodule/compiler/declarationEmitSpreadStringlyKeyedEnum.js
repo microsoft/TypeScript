@@ -19,3 +19,26 @@ var AgeGroups;
     AgeGroups[AgeGroups["60-150"] = 6] = "60-150";
 })(AgeGroups || (AgeGroups = {}));
 exports.SpotifyAgeGroupEnum = { ...AgeGroups };
+
+
+//// [declarationEmitSpreadStringlyKeyedEnum.d.ts]
+declare enum AgeGroups {
+    "0-17" = 0,
+    "18-22" = 1,
+    "23-27" = 2,
+    "28-34" = 3,
+    "35-44" = 4,
+    "45-59" = 5,
+    "60-150" = 6
+}
+export declare const SpotifyAgeGroupEnum: {
+    [x: number]: string;
+    "0-17": typeof AgeGroups["0-17"];
+    "18-22": typeof AgeGroups["18-22"];
+    "23-27": typeof AgeGroups["23-27"];
+    "28-34": typeof AgeGroups["28-34"];
+    "35-44": typeof AgeGroups["35-44"];
+    "45-59": typeof AgeGroups["45-59"];
+    "60-150": typeof AgeGroups["60-150"];
+};
+export {};

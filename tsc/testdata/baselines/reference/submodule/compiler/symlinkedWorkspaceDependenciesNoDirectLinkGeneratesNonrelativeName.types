@@ -16,12 +16,12 @@ export declare function invoke(): Foo;
 
 === workspace/packageC/index.ts ===
 import * as pkg from "package-b";
->pkg : typeof import("workspace/packageB/index")
+>pkg : typeof pkg
 
 export const a = pkg.invoke();
->a : Foo
->pkg.invoke() : Foo
->pkg.invoke : () => Foo
->pkg : typeof import("workspace/packageB/index")
->invoke : () => Foo
+>a : import("../packageA/index.js").Foo
+>pkg.invoke() : import("../packageA/index.js").Foo
+>pkg.invoke : () => import("../packageA/index.js").Foo
+>pkg : typeof pkg
+>invoke : () => import("../packageA/index.js").Foo
 

@@ -4,7 +4,7 @@
 /// <reference path="react16.d.ts" />
 
 declare module "react" {
->"react" : typeof React
+>"react" : typeof import("react")
 
     interface Attributes {
         [key: `do-${string}`]: Function;
@@ -16,8 +16,8 @@ declare module "react" {
 }
 
 export const tag = <div ns:thing="a"/>
->tag : Element
-><div ns:thing="a"/> : Element
+>tag : JSX.Element
+><div ns:thing="a"/> : JSX.Element
 >div : any
 >ns:thing : string
 >ns : any

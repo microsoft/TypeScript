@@ -57,3 +57,36 @@ var x;
 var y;
 // constructor type
 var z;
+
+
+//// [declFileTypeAnnotationTypeLiteral.d.ts]
+declare class c {
+}
+declare class g<T> {
+}
+declare namespace m {
+    class c {
+    }
+}
+// Object literal with everything
+declare var x: {
+    // Call signatures
+    (a: number): c;
+    (a: string): g<string>;
+    // Construct signatures
+    new (a: number);
+    new (a: string);
+    // Indexers
+    [n: number]: c;
+    [n: string]: c;
+    // Properties
+    a: c;
+    b: g<string>;
+    // methods
+    m1(): g<number>;
+    m2(a: string, b?: number, ...c: c[]): string;
+};
+// Function type
+declare var y: (a: string) => string;
+// constructor type
+declare var z: new (a: string) => m.c;

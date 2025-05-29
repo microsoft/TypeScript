@@ -4,9 +4,9 @@
 /** @typedef {{ move(distance: number): void }} Movable */
 
 const car = /** @satisfies {Movable & Record<string, unknown>} */ ({
->car : { start: () => void; move: (d: any) => void; stop: () => void; }
->({    start() { },    move(d) {        // d should be number    },    stop() { }}) : { start: () => void; move: (d: any) => void; stop: () => void; }
->{    start() { },    move(d) {        // d should be number    },    stop() { }} : { start: () => void; move: (d: any) => void; stop: () => void; }
+>car : { start(): void; move(d: any): void; stop(): void; }
+>({    start() { },    move(d) {        // d should be number    },    stop() { }}) : { start(): void; move(d: any): void; stop(): void; }
+>{    start() { },    move(d) {        // d should be number    },    stop() { }} : { start(): void; move(d: any): void; stop(): void; }
 
     start() { },
 >start : () => void

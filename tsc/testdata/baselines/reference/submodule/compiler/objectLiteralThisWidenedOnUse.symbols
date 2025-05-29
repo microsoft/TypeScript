@@ -22,9 +22,9 @@ var GlobalIns = {
 
     this.accept_foo(this);
 >this.accept_foo : Symbol(accept_foo, Decl(objectLiteralThisWidenedOnUse.ts, 8, 4))
->this : Symbol((Anonymous type), Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
+>this : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
 >accept_foo : Symbol(accept_foo, Decl(objectLiteralThisWidenedOnUse.ts, 8, 4))
->this : Symbol((Anonymous type), Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
+>this : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
 
   },
   accept_foo (foo: Foo): boolean {

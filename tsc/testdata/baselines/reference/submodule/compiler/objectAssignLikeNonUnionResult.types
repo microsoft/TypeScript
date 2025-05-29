@@ -40,7 +40,7 @@ type ExtractRawComponent<T> = T extends { __raw: infer C } ? [L1: T, L2: C] : [R
 >__raw : C
 
 type t1 = ExtractRawComponent<typeof data1>;
->t1 : [R1: Interface & ({ field: number; } | { field?: undefined; })]
+>t1 : [R1: Interface & { field: number; }]
 >data1 : Interface & { field: number; }
 
 // ???

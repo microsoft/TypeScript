@@ -5,7 +5,7 @@
  // both inside and outside `test`.
  function test({
 ->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
-+>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : ({ method = "z", nested: { p = "c" } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
 
      method = 'z',
  >method : "x" | "y"
@@ -14,13 +14,13 @@
  test({});
  >test({}) : void
 ->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
-+>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : ({ method = "z", nested: { p = "c" } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
  >{} : {}
 
  test({ method: 'x', nested: { p: 'a' } })
  >test({ method: 'x', nested: { p: 'a' } }) : void
 ->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
-+>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : ({ method = "z", nested: { p = "c" } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
  >{ method: 'x', nested: { p: 'a' } } : { method: "x"; nested: { p: "a"; }; }
  >method : "x"
  >'x' : "x"
@@ -29,7 +29,7 @@
  test({ method: 'z', nested: { p: 'b' } })
  >test({ method: 'z', nested: { p: 'b' } }) : void
 ->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
-+>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : ({ method = "z", nested: { p = "c" } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
  >{ method: 'z', nested: { p: 'b' } } : { method: "z"; nested: { p: "b"; }; }
  >method : "z"
  >'z' : "z"
@@ -38,7 +38,7 @@
  test({ method: 'one', nested: { p: 'a' } })
  >test({ method: 'one', nested: { p: 'a' } }) : void
 ->test : ({ method, nested: { p } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
-+>test : (__0: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
++>test : ({ method = "z", nested: { p = "c" } }: { method?: "x" | "y"; nested?: { p: "a" | "b"; }; }) => void
  >{ method: 'one', nested: { p: 'a' } } : { method: "one"; nested: { p: "a"; }; }
  >method : "one"
  >'one' : "one"

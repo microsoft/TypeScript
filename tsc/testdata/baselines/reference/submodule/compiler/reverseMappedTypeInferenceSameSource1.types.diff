@@ -5,7 +5,7 @@
 
  declare function configureStore<S = any, A extends Action = UnknownAction>(
 ->configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
-+>configureStore : <S, A extends Action<string>>(options: ConfigureStoreOptions<S, A>) => void
++>configureStore : <S = any, A extends Action<string> = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
 
    options: ConfigureStoreOptions<S, A>,
  >options : ConfigureStoreOptions<S, A>
@@ -14,7 +14,7 @@
  >store1 : void
  >configureStore({ reducer }) : void
 ->configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
-+>configureStore : <S, A extends Action<string>>(options: ConfigureStoreOptions<S, A>) => void
++>configureStore : <S = any, A extends Action<string> = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
  >{ reducer } : { reducer: Reducer<number, UnknownAction>; }
  >reducer : Reducer<number, UnknownAction>
  }
@@ -23,7 +23,7 @@
  >store2 : void
  >configureStore({  reducer: {    counter1: counterReducer1,  },}) : void
 ->configureStore : <S = any, A extends Action = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
-+>configureStore : <S, A extends Action<string>>(options: ConfigureStoreOptions<S, A>) => void
++>configureStore : <S = any, A extends Action<string> = UnknownAction>(options: ConfigureStoreOptions<S, A>) => void
  >{  reducer: {    counter1: counterReducer1,  },} : { reducer: { counter1: Reducer<number, UnknownAction>; }; }
 
    reducer: {

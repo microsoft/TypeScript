@@ -11,7 +11,7 @@ module Tools {
 var logger = Tools.NullLogger();
 >logger : any
 >Tools.NullLogger() : any
->Tools.NullLogger : typeof NullLogger
+>Tools.NullLogger : typeof Tools.NullLogger
 >Tools : typeof Tools
->NullLogger : typeof NullLogger
+>NullLogger : typeof Tools.NullLogger
 

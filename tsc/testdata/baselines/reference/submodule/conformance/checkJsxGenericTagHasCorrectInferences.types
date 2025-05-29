@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import * as React from "react";
->React : typeof __React
+>React : typeof React
 
 interface BaseProps<T> {
   initialValues: T;
@@ -14,17 +14,17 @@ interface BaseProps<T> {
 }
 declare class GenericComponent<Props = {}, Values = object> extends React.Component<Props & BaseProps<Values>, {}> {
 >GenericComponent : GenericComponent<Props, Values>
->React.Component : Component<Props & BaseProps<Values>, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<Props & BaseProps<Values>, {}>
+>React : typeof React
+>Component : typeof React.Component
 
   iv: Values;
 >iv : Values
 }
 
 let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // No error
->a : Element
-><GenericComponent initialValues={{ x: "y" }} nextValues={a => a} /> : Element
+>a : JSX.Element
+><GenericComponent initialValues={{ x: "y" }} nextValues={a => a} /> : JSX.Element
 >GenericComponent : typeof GenericComponent
 >initialValues : { x: string; }
 >{ x: "y" } : { x: string; }
@@ -36,8 +36,8 @@ let a = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a} />; // 
 >a : { x: string; }
 
 let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error - Values should be reinstantiated with `number` (since `object` is a default, not a constraint)
->b : Element
-><GenericComponent initialValues={12} nextValues={a => a} /> : Element
+>b : JSX.Element
+><GenericComponent initialValues={12} nextValues={a => a} /> : JSX.Element
 >GenericComponent : typeof GenericComponent
 >initialValues : number
 >12 : 12
@@ -47,8 +47,8 @@ let b = <GenericComponent initialValues={12} nextValues={a => a} />; // No error
 >a : number
 
 let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} />; // No Error
->c : Element
-><GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} /> : Element
+>c : JSX.Element
+><GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x })} /> : JSX.Element
 >GenericComponent : typeof GenericComponent
 >initialValues : { x: string; }
 >{ x: "y" } : { x: string; }
@@ -65,8 +65,8 @@ let c = <GenericComponent initialValues={{ x: "y" }} nextValues={a => ({ x: a.x 
 >x : string
 
 let d = <GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} />; // Error - `string` is not assignable to `{x: string}`
->d : Element
-><GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} /> : Element
+>d : JSX.Element
+><GenericComponent initialValues={{ x: "y" }} nextValues={a => a.x} /> : JSX.Element
 >GenericComponent : typeof GenericComponent
 >initialValues : { x: string; }
 >{ x: "y" } : { x: string; }

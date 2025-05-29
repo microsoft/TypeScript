@@ -50,3 +50,21 @@ var X;
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
+
+
+//// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.d.ts]
+declare namespace A.B.Base {
+    class W {
+        id: number;
+    }
+}
+declare namespace X.Y.base {
+    class W extends A.B.Base.W {
+        name: string;
+    }
+}
+declare namespace X.Y.base.Z {
+    class W<TValue> extends X.Y.base.W {
+        value: boolean;
+    }
+}

@@ -3,8 +3,8 @@
 === index.js ===
 /// <reference path='node.d.ts' />
 const C = require("./semver")
->C : typeof import("semver")
->require("./semver") : typeof import("semver")
+>C : typeof C
+>require("./semver") : typeof C
 >require : (name: string) => any
 >"./semver" : "./semver"
 
@@ -12,14 +12,14 @@ var two = C.f(1)
 >two : any
 >C.f(1) : any
 >C.f : any
->C : typeof import("semver")
+>C : typeof C
 >f : any
 >1 : 1
 
 var c = new C
 >c : any
 >new C : any
->C : typeof import("semver")
+>C : typeof C
 
 === node.d.ts ===
 declare function require(name: string): any;
@@ -39,15 +39,15 @@ exports = module.exports = C
 >exports = module.exports = C : () => void
 >exports : any
 >module.exports = C : () => void
->module.exports : typeof import("semver")
->module : { "semver": typeof import("semver"); }
->exports : typeof import("semver")
+>module.exports : typeof import("./semver")
+>module : { "\"semver\"": typeof import("./semver"); }
+>exports : typeof import("./semver")
 >C : () => void
 
 exports.f = n => n + 1
 >exports.f = n => n + 1 : (n: any) => any
 >exports.f : any
->exports : typeof import("semver")
+>exports : typeof import("./semver")
 >f : any
 >n => n + 1 : (n: any) => any
 >n : any

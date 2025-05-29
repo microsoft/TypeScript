@@ -9,14 +9,7 @@
  >node : CaseClause | FunctionDeclaration
 
      assertNode(node, canHaveLocals);  // assertNode<Node, HasLocals>
-@@= skipped -18, +18 lines =@@
- >node : Node
-
- declare function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut;
-->tryCast : <TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
-+>tryCast : <TOut extends TIn, TIn>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
- >value : TIn | undefined
- >test : (value: TIn) => value is TOut
+@@= skipped -24, +24 lines =@@
  >value : TIn
 
  function bar(node: Identifier | FunctionDeclaration) {
@@ -25,27 +18,3 @@
  >node : FunctionDeclaration | Identifier
 
      const a = tryCast(node, isExpression);  // tryCast<Expression, Node>
- >a : Expression
- >tryCast(node, isExpression) : Expression
-->tryCast : <TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
-+>tryCast : <TOut extends TIn, TIn>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
- >node : FunctionDeclaration | Identifier
- >isExpression : (node: Node) => node is Expression
- }
-@@= skipped -64, +64 lines =@@
- const maybeClassStatement = tryCast(statement, isClassLike);  // ClassLike1
- >maybeClassStatement : ClassLike1
- >tryCast(statement, isClassLike) : ClassLike1
-->tryCast : <TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
-+>tryCast : <TOut extends TIn, TIn>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
- >statement : Statement1 | undefined
- >isClassLike : (node: Node1) => node is ClassLike1
-
-@@= skipped -26, +26 lines =@@
- const x = tryCast(types, isNodeArray);  // NodeAray<TypeNode>
- >x : NodeArray<TypeNode>
- >tryCast(types, isNodeArray) : NodeArray<TypeNode>
-->tryCast : <TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
-+>tryCast : <TOut extends TIn, TIn>(value: TIn | undefined, test: (value: TIn) => value is TOut) => TOut
- >types : readonly TypeNode[]
- >isNodeArray : <T extends Node>(array: readonly T[]) => array is NodeArray<T>

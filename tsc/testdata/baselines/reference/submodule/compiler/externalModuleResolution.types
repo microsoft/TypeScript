@@ -2,11 +2,11 @@
 
 === consumer.ts ===
 import x = require('./foo');
->x : typeof M2
+>x : typeof x
 
 x.Y // .ts should be picked
 >x.Y : number
->x : typeof M2
+>x : typeof x
 >Y : number
 
 === foo.ts ===

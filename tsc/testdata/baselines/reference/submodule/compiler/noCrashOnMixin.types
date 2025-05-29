@@ -18,11 +18,11 @@ type Constructor<T = {}> = new (...args: any[]) => T;
 >args : any[]
 
 function Mixin<TBase extends Constructor>(Base: TBase) {
->Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
 >Base : TBase
 
     return class extends Base {
->class extends Base {    } : { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>class extends Base {    } : { new (...args: any[]): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
 >Base : {}
 
     };
@@ -34,8 +34,8 @@ class Empty {
 
 class CrashTrigger extends Mixin(Empty) {
 >CrashTrigger : CrashTrigger
->Mixin(Empty) : (Anonymous class)<typeof Empty> & Empty
->Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class)<TBase>; prototype: (Anonymous class)<any>; } & TBase
+>Mixin(Empty) : Mixin.(Anonymous class) & Empty
+>Mixin : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Mixin.(Anonymous class); } & TBase
 >Empty : typeof Empty
 
     public trigger() {

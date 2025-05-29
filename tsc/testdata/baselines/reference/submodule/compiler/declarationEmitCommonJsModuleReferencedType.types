@@ -32,18 +32,18 @@ export function bar(): RootProps;
 
 === r/entry.ts ===
 import { foo } from "foo";
->foo : () => [SomeProps, OtherProps, OtherIndexProps, NestedProps]
+>foo : () => [import("foo").SomeProps, import("foo").OtherProps, import("foo").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
 
 import { bar } from "root";
->bar : () => RootProps
+>bar : () => import("root").RootProps
 
 export const x = foo();
->x : [SomeProps, OtherProps, OtherIndexProps, NestedProps]
->foo() : [SomeProps, OtherProps, OtherIndexProps, NestedProps]
->foo : () => [SomeProps, OtherProps, OtherIndexProps, NestedProps]
+>x : [import("foo").SomeProps, import("foo").OtherProps, import("foo").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
+>foo() : [import("foo").SomeProps, import("foo").OtherProps, import("foo").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
+>foo : () => [import("foo").SomeProps, import("foo").OtherProps, import("foo").OtherIndexProps, import("foo/node_modules/nested").NestedProps]
 
 export const y = bar();
->y : RootProps
->bar() : RootProps
->bar : () => RootProps
+>y : import("root").RootProps
+>bar() : import("root").RootProps
+>bar : () => import("root").RootProps
 

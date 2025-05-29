@@ -128,3 +128,42 @@ extMod.m1.fooExport();
 exports.newVar = new extMod.m1.m2.c();
 extMod.m4.fooExport();
 exports.newVar2 = new extMod.m4.m2.c();
+
+
+//// [commentsExternalModules2_0.d.ts]
+/** Module comment*/
+export declare namespace m1 {
+    /** b's comment*/
+    var b: number;
+    /** m2 comments*/
+    namespace m2 {
+        /** class comment;*/
+        class c {
+        }
+        /** i*/
+        var i: c;
+    }
+    /** exported function*/
+    function fooExport(): number;
+}
+/** Module comment */
+export declare namespace m4 {
+    /** b's comment */
+    var b: number;
+    /** m2 comments
+    */
+    namespace m2 {
+        /** class comment; */
+        class c {
+        }
+        /** i */
+        var i: c;
+    }
+    /** exported function */
+    function fooExport(): number;
+}
+//// [commentsExternalModules_1.d.ts]
+/**This is on import declaration*/
+import extMod = require("./commentsExternalModules2_0"); // trailing comment 1
+export declare var newVar: extMod.m1.m2.c;
+export declare var newVar2: extMod.m4.m2.c;

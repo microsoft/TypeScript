@@ -5,7 +5,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 3, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 3, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 3, 10))
 
          },
          func2() {
@@ -13,7 +13,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 3, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 3, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 3, 10))
 
          },
          func3() {
@@ -21,7 +21,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 3, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 3, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 3, 10))
          }
      };
  }
@@ -30,7 +30,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func2() {
@@ -38,7 +38,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func3() {
@@ -46,7 +46,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func4() {
@@ -54,7 +54,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func5() {
@@ -62,7 +62,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func6() {
@@ -70,7 +70,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func7() {
@@ -78,7 +78,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func8() {
@@ -86,7 +86,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
 
          },
          func9() {
@@ -94,7 +94,7 @@
 
              return this;
 ->this : Symbol(__object, Decl(noImplicitThisBigThis.ts, 17, 10))
-+>this : Symbol((Anonymous type), Decl(noImplicitThisBigThis.ts, 17, 10))
++>this : Symbol(þobject, Decl(noImplicitThisBigThis.ts, 17, 10))
          }
      };
  }

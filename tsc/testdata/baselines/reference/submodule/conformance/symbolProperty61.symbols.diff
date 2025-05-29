@@ -1,13 +1,6 @@
 --- old.symbolProperty61.symbols
 +++ new.symbolProperty61.symbols
-@@= skipped -1, +1 lines =@@
-
- === symbolProperty61.ts ===
- declare global {
-->global : Symbol(global, Decl(symbolProperty61.ts, 0, 0))
-+>global : Symbol((Missing), Decl(symbolProperty61.ts, 0, 0))
-
-   interface SymbolConstructor {
+@@= skipped -7, +7 lines =@@
  >SymbolConstructor : Symbol(SymbolConstructor, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(symbolProperty61.ts, 0, 16))
 
      readonly obs: symbol
@@ -62,7 +55,7 @@
  >observable : Symbol(observable, Decl(symbolProperty61.ts, 6, 5))
 
          return this
-@@= skipped -55, +55 lines =@@
+@@= skipped -49, +49 lines =@@
 
      [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
  >[Symbol.obs] : Symbol([Symbol.obs], Decl(symbolProperty61.ts, 20, 29))

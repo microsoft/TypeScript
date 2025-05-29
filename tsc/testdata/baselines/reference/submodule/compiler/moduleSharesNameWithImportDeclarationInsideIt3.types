@@ -18,7 +18,7 @@ module Z {
 }
 module A.M {
 >A : typeof A
->M : typeof M
+>M : typeof A.M
 
     import M = Z.M;
 >M : typeof M
@@ -28,7 +28,7 @@ module A.M {
     import M = Z.I;
 >M : any
 >Z : typeof Z
->I : I
+>I : Z.I
 
     export function bar() {
 >bar : () => void

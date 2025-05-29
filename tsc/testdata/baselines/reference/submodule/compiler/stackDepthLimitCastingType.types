@@ -38,14 +38,14 @@ export {
 
 };
 export as namespace Backbone;
->Backbone : typeof import("node_modules/backbone/index")
+>Backbone : typeof import("backbone")
 
 === node_modules/backbone-fetch-cache/index.d.ts ===
 import * as Backbone from "backbone";
->Backbone : typeof import("node_modules/backbone/index")
+>Backbone : typeof Backbone
 
 declare module "backbone" {
->"backbone" : typeof import("node_modules/backbone/index")
+>"backbone" : typeof Backbone
 
     interface ModelWithCache extends Model {
         fetch(options?: any): JQueryXHR;
@@ -55,29 +55,29 @@ declare module "backbone" {
 }
 export {};
 export as namespace BackboneFetchCache;
->BackboneFetchCache : typeof import("node_modules/backbone-fetch-cache/index")
+>BackboneFetchCache : typeof import("backbone-fetch-cache")
 
 === index.ts ===
 import * as Backbone from "backbone";
->Backbone : typeof import("node_modules/backbone/index")
+>Backbone : typeof Backbone
 
 import * as BackboneFetchCache from "backbone-fetch-cache";
->BackboneFetchCache : typeof import("node_modules/backbone-fetch-cache/index")
+>BackboneFetchCache : typeof BackboneFetchCache
 
 
 const hoge = new Backbone.Model() as Backbone.ModelWithCache;
->hoge : ModelWithCache
->new Backbone.Model() as Backbone.ModelWithCache : ModelWithCache
->new Backbone.Model() : Model<any, ModelConstructorOptions<ModelWithCache>>
->Backbone.Model : typeof Model
->Backbone : typeof import("node_modules/backbone/index")
->Model : typeof Model
+>hoge : Backbone.ModelWithCache
+>new Backbone.Model() as Backbone.ModelWithCache : Backbone.ModelWithCache
+>new Backbone.Model() : Backbone.Model<any, ModelConstructorOptions<Backbone.ModelWithCache>>
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 >Backbone : any
 
 hoge.fetch(null as any);
 >hoge.fetch(null as any) : JQueryXHR
 >hoge.fetch : (options?: any) => JQueryXHR
->hoge : ModelWithCache
+>hoge : Backbone.ModelWithCache
 >fetch : (options?: any) => JQueryXHR
 >null as any : any
 

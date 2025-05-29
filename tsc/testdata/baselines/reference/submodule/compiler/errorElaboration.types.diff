@@ -9,14 +9,3 @@
 
    return {foo: "bar"};
  >{foo: "bar"} : { foo: "bar"; }
-@@= skipped -17, +17 lines =@@
- >'a' : "a"
-
- const x = ({ [foo.bar]: c }) => undefined;
-->x : ({ [foo.bar]: c }: {}) => any
-->({ [foo.bar]: c }) => undefined : ({ [foo.bar]: c }: {}) => any
-+>x : (__0: {}) => any
-+>({ [foo.bar]: c }) => undefined : (__0: {}) => any
- >foo.bar : any
- >foo : (x: () => Container<Ref<number>>) => void
- >bar : any

@@ -25,3 +25,8 @@ export function getFooFrom(v) {
 export function getFooValueFrom(v) {
     return undefined;
 }
+
+
+//// [usage.d.ts]
+export declare function getFooFrom<T extends "./a" | "./b">(v: T): import(T).Foo;
+export declare function getFooValueFrom<T extends "./a" | "./b">(v: T): import(T).Foo["a"];

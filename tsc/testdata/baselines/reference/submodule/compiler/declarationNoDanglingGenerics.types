@@ -70,7 +70,7 @@ class Kinds {
 
 export class AKind extends ClassFactory(Kinds.A) {
 >AKind : AKind
->ClassFactory(Kinds.A) : (Anonymous class)<"A">
+>ClassFactory(Kinds.A) : ClassFactory.(Anonymous class)
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
 >Kinds.A : "A"
 >Kinds : typeof Kinds
@@ -79,7 +79,7 @@ export class AKind extends ClassFactory(Kinds.A) {
 
 export class BKind extends ClassFactory(Kinds.B) {
 >BKind : BKind
->ClassFactory(Kinds.B) : (Anonymous class)<"B">
+>ClassFactory(Kinds.B) : ClassFactory.(Anonymous class)
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
 >Kinds.B : "B"
 >Kinds : typeof Kinds
@@ -88,7 +88,7 @@ export class BKind extends ClassFactory(Kinds.B) {
 
 export class CKind extends ClassFactory(Kinds.C) {
 >CKind : CKind
->ClassFactory(Kinds.C) : (Anonymous class)<"C">
+>ClassFactory(Kinds.C) : ClassFactory.(Anonymous class)
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
 >Kinds.C : "C"
 >Kinds : typeof Kinds

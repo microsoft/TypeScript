@@ -6,13 +6,13 @@ declare module "bar" {
 
     var before: typeof func;
 >before : Symbol(before, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 7))
->func : Symbol(default, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
 
     export default function func(): typeof func;
->func : Symbol(default, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
->func : Symbol(default, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
 
     var after: typeof func;
 >after : Symbol(after, Decl(es5ExportDefaultFunctionDeclaration4.ts, 5, 7))
->func : Symbol(default, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
+>func : Symbol(func, Decl(es5ExportDefaultFunctionDeclaration4.ts, 1, 28))
 }

@@ -6,26 +6,26 @@
      accessor ["w"]: any;
 ->["w"] : Symbol(C1["w"], Decl(autoAccessor5.ts, 0, 10))
 ->"w" : Symbol(C1["w"], Decl(autoAccessor5.ts, 0, 10))
-+>["w"] : Symbol(w, Decl(autoAccessor5.ts, 0, 10))
-+>"w" : Symbol(w, Decl(autoAccessor5.ts, 0, 10))
++>["w"] : Symbol(["w"], Decl(autoAccessor5.ts, 0, 10))
++>"w" : Symbol(["w"], Decl(autoAccessor5.ts, 0, 10))
 
      accessor ["x"] = 1;
 ->["x"] : Symbol(C1["x"], Decl(autoAccessor5.ts, 1, 24))
 ->"x" : Symbol(C1["x"], Decl(autoAccessor5.ts, 1, 24))
-+>["x"] : Symbol(x, Decl(autoAccessor5.ts, 1, 24))
-+>"x" : Symbol(x, Decl(autoAccessor5.ts, 1, 24))
++>["x"] : Symbol(["x"], Decl(autoAccessor5.ts, 1, 24))
++>"x" : Symbol(["x"], Decl(autoAccessor5.ts, 1, 24))
 
      static accessor ["y"]: any;
 ->["y"] : Symbol(C1["y"], Decl(autoAccessor5.ts, 2, 23))
 ->"y" : Symbol(C1["y"], Decl(autoAccessor5.ts, 2, 23))
-+>["y"] : Symbol(y, Decl(autoAccessor5.ts, 2, 23))
-+>"y" : Symbol(y, Decl(autoAccessor5.ts, 2, 23))
++>["y"] : Symbol(["y"], Decl(autoAccessor5.ts, 2, 23))
++>"y" : Symbol(["y"], Decl(autoAccessor5.ts, 2, 23))
 
      static accessor ["z"] = 2;
 ->["z"] : Symbol(C1["z"], Decl(autoAccessor5.ts, 3, 31))
 ->"z" : Symbol(C1["z"], Decl(autoAccessor5.ts, 3, 31))
-+>["z"] : Symbol(z, Decl(autoAccessor5.ts, 3, 31))
-+>"z" : Symbol(z, Decl(autoAccessor5.ts, 3, 31))
++>["z"] : Symbol(["z"], Decl(autoAccessor5.ts, 3, 31))
++>"z" : Symbol(["z"], Decl(autoAccessor5.ts, 3, 31))
  }
 
  declare var f: any;

@@ -28,3 +28,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.baddts = void 0;
 const foo = () => (x) => null;
 exports.baddts = foo();
+
+
+//// [declarationEmitExactOptionalPropertyTypesNodeNotReused.d.ts]
+export declare const baddts: (x: {
+    foo?: string | undefined;
+    baz?: undefined;
+} & {
+    bar: number;
+}) => null;

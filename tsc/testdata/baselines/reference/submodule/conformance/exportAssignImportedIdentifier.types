@@ -19,12 +19,12 @@ export function x(){
 
 === foo2.ts ===
 import foo1 = require('./foo1');
->foo1 : typeof import("foo1")
+>foo1 : typeof foo1
 
 var x = foo1.x;
 >x : () => boolean
 >foo1.x : () => boolean
->foo1 : typeof import("foo1")
+>foo1 : typeof foo1
 >x : () => boolean
 
 export = x;

@@ -2,19 +2,19 @@
 
 === foo_1.ts ===
 import foo = require("./vs/foo_0");
->foo : typeof import("vs/foo_0")
+>foo : typeof foo
 
 import fum = require("./vs/fum");
->fum : typeof import("vs/fum")
+>fum : typeof fum
 
 var z = foo.x + fum.y;
 >z : number
 >foo.x + fum.y : number
 >foo.x : number
->foo : typeof import("vs/foo_0")
+>foo : typeof foo
 >x : number
 >fum.y : number
->fum : typeof import("vs/fum")
+>fum : typeof fum
 >y : number
 
 === vs/foo_0.ts ===

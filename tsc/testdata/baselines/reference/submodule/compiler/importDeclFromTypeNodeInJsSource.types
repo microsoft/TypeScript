@@ -8,7 +8,7 @@ declare module "events" {
 >"events" : typeof import("events")
 
     namespace EventEmitter {
->EventEmitter : typeof EventEmitter
+>EventEmitter : typeof import("events")
 
         class EventEmitter {
 >EventEmitter : EventEmitter
@@ -39,9 +39,9 @@ declare module "nestNamespaceModule" {
 >c : c
     }
     export = a1.a2;
->a1.a2 : typeof a2
+>a1.a2 : typeof a1.a2
 >a1 : typeof a1
->a2 : typeof a2
+>a2 : typeof a1.a2
 }
 declare module "renameModule" {
 >"renameModule" : typeof import("renameModule")
@@ -54,12 +54,12 @@ declare module "renameModule" {
 >c : c
     }
     import d = a.b;
->d : typeof b
+>d : typeof d
 >a : typeof a
->b : typeof b
+>b : typeof d
 
     export = d;
->d : typeof b
+>d : typeof d
 }
 
 === /src/b.js ===
@@ -80,9 +80,9 @@ export class Foo extends EventEmitter {
 
 export class Foo2 extends n3.c {
 >Foo2 : Foo2
->n3.c : c
+>n3.c : n3.c
 >n3 : typeof n3
->c : typeof c
+>c : typeof n3.c
 }
 
 export class Foo3 extends d {

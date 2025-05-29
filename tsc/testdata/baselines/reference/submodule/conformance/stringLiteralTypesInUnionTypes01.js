@@ -37,3 +37,9 @@ else {
 }
 x = y;
 y = x;
+
+
+//// [stringLiteralTypesInUnionTypes01.d.ts]
+type T = "foo" | "bar" | "baz";
+declare var x: "foo" | "bar" | "baz";
+declare var y: T;

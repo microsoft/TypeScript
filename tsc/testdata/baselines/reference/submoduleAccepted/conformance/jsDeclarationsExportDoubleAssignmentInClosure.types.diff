@@ -10,7 +10,7 @@
 ->exports : { (o: any): any; methods: () => void; }
 +>module.exports = exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
 +>module.exports : (o: any) => any
-+>module : { export=: (o: any) => any; }
++>module : { "export=": (o: any) => any; }
 +>exports : (o: any) => any
  >exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
  >exports : any
@@ -46,7 +46,7 @@
  >exports.methods = m : () => void
  >exports.methods : any
 ->exports : any
-+>exports : typeof import("index")
++>exports : typeof import(".")
  >methods : any
  >m : () => void
  }

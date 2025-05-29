@@ -138,12 +138,12 @@ function checksPropertyAccess() {
 >checksPropertyAccess : () => void
 
     const x = {
->x : { foo: { bar: () => boolean; }; }
->{        foo: {            bar() { return true; }        }    } : { foo: { bar: () => boolean; }; }
+>x : { foo: { bar(): boolean; }; }
+>{        foo: {            bar() { return true; }        }    } : { foo: { bar(): boolean; }; }
 
         foo: {
->foo : { bar: () => boolean; }
->{            bar() { return true; }        } : { bar: () => boolean; }
+>foo : { bar(): boolean; }
+>{            bar() { return true; }        } : { bar(): boolean; }
 
             bar() { return true; }
 >bar : () => boolean
@@ -155,9 +155,9 @@ function checksPropertyAccess() {
     x.foo.bar ? console.log('x.foo.bar') : undefined;
 >x.foo.bar ? console.log('x.foo.bar') : undefined : void
 >x.foo.bar : () => boolean
->x.foo : { bar: () => boolean; }
->x : { foo: { bar: () => boolean; }; }
->foo : { bar: () => boolean; }
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
 >bar : () => boolean
 >console.log('x.foo.bar') : void
 >console.log : (...data: any[]) => void
@@ -170,30 +170,30 @@ function checksPropertyAccess() {
     x.foo.bar ? x.foo.bar : undefined;
 >x.foo.bar ? x.foo.bar : undefined : (() => boolean) | undefined
 >x.foo.bar : () => boolean
->x.foo : { bar: () => boolean; }
->x : { foo: { bar: () => boolean; }; }
->foo : { bar: () => boolean; }
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
 >bar : () => boolean
 >x.foo.bar : () => boolean
->x.foo : { bar: () => boolean; }
->x : { foo: { bar: () => boolean; }; }
->foo : { bar: () => boolean; }
+>x.foo : { bar(): boolean; }
+>x : { foo: { bar(): boolean; }; }
+>foo : { bar(): boolean; }
 >bar : () => boolean
 >undefined : undefined
 
     var chrome = {
->chrome : { platformKeys: { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }; }
->{        platformKeys: {            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        }    } : { platformKeys: { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }; }
+>chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
+>{        platformKeys: {            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        }    } : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
 
         platformKeys: {
->platformKeys : { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }
->{            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        } : { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }
+>platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>{            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        } : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
 
             subtleCrypto() {
->subtleCrypto : () => { sign: () => void; exportKey: () => boolean; }
+>subtleCrypto : () => { sign(): void; exportKey(): boolean; }
 
                 return {
->{                    sign() {},                    exportKey() { return true }                } : { sign: () => void; exportKey: () => boolean; }
+>{                    sign() {},                    exportKey() { return true }                } : { sign(): void; exportKey(): boolean; }
 
                     sign() {},
 >sign : () => void
@@ -208,22 +208,22 @@ function checksPropertyAccess() {
     // ok
     if (chrome.platformKeys.subtleCrypto().exportKey) {
 >chrome.platformKeys.subtleCrypto().exportKey : () => boolean
->chrome.platformKeys.subtleCrypto() : { sign: () => void; exportKey: () => boolean; }
->chrome.platformKeys.subtleCrypto : () => { sign: () => void; exportKey: () => boolean; }
->chrome.platformKeys : { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }
->chrome : { platformKeys: { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }; }
->platformKeys : { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }
->subtleCrypto : () => { sign: () => void; exportKey: () => boolean; }
+>chrome.platformKeys.subtleCrypto() : { sign(): void; exportKey(): boolean; }
+>chrome.platformKeys.subtleCrypto : () => { sign(): void; exportKey(): boolean; }
+>chrome.platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
+>platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>subtleCrypto : () => { sign(): void; exportKey(): boolean; }
 >exportKey : () => boolean
 
         chrome.platformKeys.subtleCrypto().exportKey
 >chrome.platformKeys.subtleCrypto().exportKey : () => boolean
->chrome.platformKeys.subtleCrypto() : { sign: () => void; exportKey: () => boolean; }
->chrome.platformKeys.subtleCrypto : () => { sign: () => void; exportKey: () => boolean; }
->chrome.platformKeys : { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }
->chrome : { platformKeys: { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }; }
->platformKeys : { subtleCrypto: () => { sign: () => void; exportKey: () => boolean; }; }
->subtleCrypto : () => { sign: () => void; exportKey: () => boolean; }
+>chrome.platformKeys.subtleCrypto() : { sign(): void; exportKey(): boolean; }
+>chrome.platformKeys.subtleCrypto : () => { sign(): void; exportKey(): boolean; }
+>chrome.platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
+>platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
+>subtleCrypto : () => { sign(): void; exportKey(): boolean; }
 >exportKey : () => boolean
     }
 }

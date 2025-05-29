@@ -8,22 +8,22 @@ import React from "react";
 
 class MyComponent extends React.Component<{dataSource: number[], onClick?: any}, {}> {
 >MyComponent : MyComponent
->React.Component : Component<{ dataSource: number[]; onClick?: any; }, {}, any>
+>React.Component : React.Component<{ dataSource: number[]; onClick?: any; }, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 >dataSource : number[]
 >onClick : any
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return (<div {...this.props} className="ok"></div>);
->(<div {...this.props} className="ok"></div>) : Element
-><div {...this.props} className="ok"></div> : Element
+>(<div {...this.props} className="ok"></div>) : JSX.Element
+><div {...this.props} className="ok"></div> : JSX.Element
 >div : any
->this.props : Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
+>this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
 >this : this
->props : Readonly<{ children?: ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
+>props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ dataSource: number[]; onClick?: any; }>
 >className : string
 >div : any
     }

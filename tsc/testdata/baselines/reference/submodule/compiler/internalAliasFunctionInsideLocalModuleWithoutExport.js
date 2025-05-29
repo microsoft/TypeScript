@@ -31,3 +31,13 @@ var c;
     var bVal = b(10);
     c.bVal2 = b;
 })(c || (exports.c = c = {}));
+
+
+//// [internalAliasFunctionInsideLocalModuleWithoutExport.d.ts]
+export declare namespace a {
+    function foo(x: number): number;
+}
+export declare namespace c {
+    import b = a.foo;
+    var bVal2: typeof b;
+}

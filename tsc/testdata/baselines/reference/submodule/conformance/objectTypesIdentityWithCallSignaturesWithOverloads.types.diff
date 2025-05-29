@@ -1,68 +1,40 @@
 --- old.objectTypesIdentityWithCallSignaturesWithOverloads.types
 +++ new.objectTypesIdentityWithCallSignaturesWithOverloads.types
-@@= skipped -79, +79 lines =@@
- }
-
- var a: {
-->a : { foo(x: number): number; foo(x: string): string; }
-+>a : { foo: { (x: number): number; (x: string): string; }; }
-
-     foo(x: number): number
- >foo : { (x: number): number; (x: string): string; }
-@@= skipped -12, +12 lines =@@
- }
-
- var b = {
-->b : { foo(x: any): any; }
-->{    foo(x: any) { return <any>''; }} : { foo(x: any): any; }
-+>b : { foo: (x: any) => any; }
-+>{    foo(x: any) { return <any>''; }} : { foo: (x: any) => any; }
-
-     foo(x: any) { return <any>''; }
- >foo : (x: any) => any
-@@= skipped -60, +60 lines =@@
+@@= skipped -151, +151 lines =@@
  >x : any
 
  function foo3(x: typeof a);
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
-->x : { foo(x: number): number; foo(x: string): string; }
-->a : { foo(x: number): number; foo(x: string): string; }
-+>foo3 : { (x: { foo: { (x: number): number; (x: string): string; }; }): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
-+>x : { foo: { (x: number): number; (x: string): string; }; }
-+>a : { foo: { (x: number): number; (x: string): string; }; }
++>foo3 : { (x: { foo(x: number): number; foo(x: string): string; }): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+ >x : { foo(x: number): number; foo(x: string): string; }
+ >a : { foo(x: number): number; foo(x: string): string; }
 
  function foo3(x: typeof a); // error
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
-->x : { foo(x: number): number; foo(x: string): string; }
-->a : { foo(x: number): number; foo(x: string): string; }
-+>foo3 : { (x: { foo: { (x: number): number; (x: string): string; }; }): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
-+>x : { foo: { (x: number): number; (x: string): string; }; }
-+>a : { foo: { (x: number): number; (x: string): string; }; }
++>foo3 : { (x: { foo(x: number): number; foo(x: string): string; }): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+ >x : { foo(x: number): number; foo(x: string): string; }
+ >a : { foo(x: number): number; foo(x: string): string; }
 
  function foo3(x: any) { }
 ->foo3 : { (x: typeof a): any; (x: typeof a): any; }
-+>foo3 : { (x: { foo: { (x: number): number; (x: string): string; }; }): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
++>foo3 : { (x: { foo(x: number): number; foo(x: string): string; }): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
  >x : any
 
  function foo4(x: typeof b);
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { foo(x: any): any; }
-->b : { foo(x: any): any; }
-+>foo4 : { (x: { foo: (x: any) => any; }): any; (x: { foo: (x: any) => any; }): any; }
-+>x : { foo: (x: any) => any; }
-+>b : { foo: (x: any) => any; }
++>foo4 : { (x: { foo(x: any): any; }): any; (x: { foo(x: any): any; }): any; }
+ >x : { foo(x: any): any; }
+ >b : { foo(x: any): any; }
 
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { foo(x: any): any; }
-->b : { foo(x: any): any; }
-+>foo4 : { (x: { foo: (x: any) => any; }): any; (x: { foo: (x: any) => any; }): any; }
-+>x : { foo: (x: any) => any; }
-+>b : { foo: (x: any) => any; }
++>foo4 : { (x: { foo(x: any): any; }): any; (x: { foo(x: any): any; }): any; }
+ >x : { foo(x: any): any; }
+ >b : { foo(x: any): any; }
 
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-+>foo4 : { (x: { foo: (x: any) => any; }): any; (x: { foo: (x: any) => any; }): any; }
++>foo4 : { (x: { foo(x: any): any; }): any; (x: { foo(x: any): any; }): any; }
  >x : any
 
  function foo5(x: A);
@@ -71,20 +43,18 @@
 
  function foo7(x: A);
 ->foo7 : { (x: A): any; (x: typeof a): any; }
-+>foo7 : { (x: A): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
++>foo7 : { (x: A): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
  >x : A
 
  function foo7(x: typeof a); // BUG 831930
 ->foo7 : { (x: A): any; (x: typeof a): any; }
-->x : { foo(x: number): number; foo(x: string): string; }
-->a : { foo(x: number): number; foo(x: string): string; }
-+>foo7 : { (x: A): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
-+>x : { foo: { (x: number): number; (x: string): string; }; }
-+>a : { foo: { (x: number): number; (x: string): string; }; }
++>foo7 : { (x: A): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+ >x : { foo(x: number): number; foo(x: string): string; }
+ >a : { foo(x: number): number; foo(x: string): string; }
 
  function foo7(x: any) { }
 ->foo7 : { (x: A): any; (x: typeof a): any; }
-+>foo7 : { (x: A): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
++>foo7 : { (x: A): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
  >x : any
 
  function foo8(x: B);
@@ -93,38 +63,34 @@
 
  function foo10(x: B);
 ->foo10 : { (x: B): any; (x: typeof a): any; }
-+>foo10 : { (x: B): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
++>foo10 : { (x: B): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
  >x : B
 
  function foo10(x: typeof a); // BUG 831930
 ->foo10 : { (x: B): any; (x: typeof a): any; }
-->x : { foo(x: number): number; foo(x: string): string; }
-->a : { foo(x: number): number; foo(x: string): string; }
-+>foo10 : { (x: B): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
-+>x : { foo: { (x: number): number; (x: string): string; }; }
-+>a : { foo: { (x: number): number; (x: string): string; }; }
++>foo10 : { (x: B): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+ >x : { foo(x: number): number; foo(x: string): string; }
+ >a : { foo(x: number): number; foo(x: string): string; }
 
  function foo10(x: any) { }
 ->foo10 : { (x: B): any; (x: typeof a): any; }
-+>foo10 : { (x: B): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
++>foo10 : { (x: B): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
  >x : any
 
  function foo11(x: B);
 ->foo11 : { (x: B): any; (x: typeof b): any; }
-+>foo11 : { (x: B): any; (x: { foo: (x: any) => any; }): any; }
++>foo11 : { (x: B): any; (x: { foo(x: any): any; }): any; }
  >x : B
 
  function foo11(x: typeof b); // ok
 ->foo11 : { (x: B): any; (x: typeof b): any; }
-->x : { foo(x: any): any; }
-->b : { foo(x: any): any; }
-+>foo11 : { (x: B): any; (x: { foo: (x: any) => any; }): any; }
-+>x : { foo: (x: any) => any; }
-+>b : { foo: (x: any) => any; }
++>foo11 : { (x: B): any; (x: { foo(x: any): any; }): any; }
+ >x : { foo(x: any): any; }
+ >b : { foo(x: any): any; }
 
  function foo11(x: any) { }
 ->foo11 : { (x: B): any; (x: typeof b): any; }
-+>foo11 : { (x: B): any; (x: { foo: (x: any) => any; }): any; }
++>foo11 : { (x: B): any; (x: { foo(x: any): any; }): any; }
  >x : any
 
  function foo12(x: I);
@@ -133,38 +99,34 @@
 
  function foo13(x: I);
 ->foo13 : { (x: I): any; (x: typeof a): any; }
-+>foo13 : { (x: I): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
++>foo13 : { (x: I): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
  >x : I
 
  function foo13(x: typeof a);  // error
 ->foo13 : { (x: I): any; (x: typeof a): any; }
-->x : { foo(x: number): number; foo(x: string): string; }
-->a : { foo(x: number): number; foo(x: string): string; }
-+>foo13 : { (x: I): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
-+>x : { foo: { (x: number): number; (x: string): string; }; }
-+>a : { foo: { (x: number): number; (x: string): string; }; }
++>foo13 : { (x: I): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
+ >x : { foo(x: number): number; foo(x: string): string; }
+ >a : { foo(x: number): number; foo(x: string): string; }
 
  function foo13(x: any) { }
 ->foo13 : { (x: I): any; (x: typeof a): any; }
-+>foo13 : { (x: I): any; (x: { foo: { (x: number): number; (x: string): string; }; }): any; }
++>foo13 : { (x: I): any; (x: { foo(x: number): number; foo(x: string): string; }): any; }
  >x : any
 
  function foo14(x: I);
 ->foo14 : { (x: I): any; (x: typeof b): any; }
-+>foo14 : { (x: I): any; (x: { foo: (x: any) => any; }): any; }
++>foo14 : { (x: I): any; (x: { foo(x: any): any; }): any; }
  >x : I
 
  function foo14(x: typeof b); // ok
 ->foo14 : { (x: I): any; (x: typeof b): any; }
-->x : { foo(x: any): any; }
-->b : { foo(x: any): any; }
-+>foo14 : { (x: I): any; (x: { foo: (x: any) => any; }): any; }
-+>x : { foo: (x: any) => any; }
-+>b : { foo: (x: any) => any; }
++>foo14 : { (x: I): any; (x: { foo(x: any): any; }): any; }
+ >x : { foo(x: any): any; }
+ >b : { foo(x: any): any; }
 
  function foo14(x: any) { }
 ->foo14 : { (x: I): any; (x: typeof b): any; }
-+>foo14 : { (x: I): any; (x: { foo: (x: any) => any; }): any; }
++>foo14 : { (x: I): any; (x: { foo(x: any): any; }): any; }
  >x : any
 
  function foo15(x: I2<string>);

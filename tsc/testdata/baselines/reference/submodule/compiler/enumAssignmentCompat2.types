@@ -108,11 +108,11 @@ i = W.a;
 >a : W.a
 
 W.D;
->W.D : typeof D
+>W.D : typeof W.D
 >W : typeof W
->D : typeof D
+>D : typeof W.D
 
 var p: W.D;
->p : D
+>p : W.D
 >W : any
 

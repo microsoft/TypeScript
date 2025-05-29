@@ -2,15 +2,15 @@
 
 === exportDefaultTypeAndFunctionOverloads.ts ===
 export default function foo(value: number): number
->foo : Symbol(default, Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultTypeAndFunctionOverloads.ts, 1, 50))
+>foo : Symbol(foo, Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultTypeAndFunctionOverloads.ts, 1, 50))
 >value : Symbol(value, Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 28))
 
 export default function foo(value: string): string
->foo : Symbol(default, Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultTypeAndFunctionOverloads.ts, 1, 50))
+>foo : Symbol(foo, Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultTypeAndFunctionOverloads.ts, 1, 50))
 >value : Symbol(value, Decl(exportDefaultTypeAndFunctionOverloads.ts, 1, 28))
 
 export default function foo(value: string | number): string | number {
->foo : Symbol(default, Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultTypeAndFunctionOverloads.ts, 1, 50))
+>foo : Symbol(foo, Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 0), Decl(exportDefaultTypeAndFunctionOverloads.ts, 0, 50), Decl(exportDefaultTypeAndFunctionOverloads.ts, 1, 50))
 >value : Symbol(value, Decl(exportDefaultTypeAndFunctionOverloads.ts, 2, 28))
 
     return 1

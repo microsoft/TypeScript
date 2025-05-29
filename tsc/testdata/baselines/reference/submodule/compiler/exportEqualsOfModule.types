@@ -22,10 +22,10 @@ declare module 'popsicle' {
 >'popsicle' : typeof import("popsicle")
 
     import alias = require('~popsicle/dist/common');
->alias : typeof import("~popsicle/dist/common")
+>alias : typeof alias
 
     export = alias;
->alias : typeof import("~popsicle/dist/common")
+>alias : typeof alias
 }
 
 declare module 'popsicle-proxy-agent' {

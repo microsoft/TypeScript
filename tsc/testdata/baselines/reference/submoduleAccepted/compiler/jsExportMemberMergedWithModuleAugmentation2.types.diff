@@ -10,7 +10,7 @@
 ->exports : { a: string | number; }
 +>module.exports = {  a: "ok"} : { a: string; }
 +>module.exports : { a: string; }
-+>module : { export=: { a: string; }; }
++>module : { "export=": { a: string; }; }
 +>exports : { a: string; }
  >{  a: "ok"} : { a: string; }
 

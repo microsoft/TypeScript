@@ -22,14 +22,14 @@ declare namespace ns {
 }
 
 var foge: N.S;
->foge : S
+>foge : N.S
 >N : any
 
 var foo: M.F;
->foo : F
+>foo : M.F
 >M : any
 
 let x: ns.A;
->x : A
+>x : ns.A
 >ns : any
 

@@ -2,7 +2,7 @@
 
 === esnextmodulekindWithES5Target2.ts ===
 export default class C {
->C : Symbol(default, Decl(esnextmodulekindWithES5Target2.ts, 0, 0))
+>C : Symbol(C, Decl(esnextmodulekindWithES5Target2.ts, 0, 0))
 
     static s = 0;
 >s : Symbol(s, Decl(esnextmodulekindWithES5Target2.ts, 0, 24))

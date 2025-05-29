@@ -2,7 +2,7 @@
 
 === deepElaborationsIntoArrowExpressions.ts ===
 const a: {
->a : { y: () => "a"; }
+>a : { y(): "a"; }
 
     y(): "a"
 >y : () => "a"

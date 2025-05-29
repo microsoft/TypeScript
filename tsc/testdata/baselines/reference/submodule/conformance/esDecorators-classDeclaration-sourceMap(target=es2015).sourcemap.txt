@@ -546,4 +546,184 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >}
 1 >Emitted(34, 2) Source(45, 2) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
+>>>//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map===================================================================
+JsFile: esDecorators-classDeclaration-sourceMap.d.ts
+mapUrl: esDecorators-classDeclaration-sourceMap.d.ts.map
+sourceRoot: 
+sources: esDecorators-classDeclaration-sourceMap.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:esDecorators-classDeclaration-sourceMap.d.ts
+sourceFile:esDecorators-classDeclaration-sourceMap.ts
+-------------------------------------------------------------------
+>>>declare var dec: any;
+1 >
+2 >^^^^^^^
+3 >       ^
+4 >        ^^^^
+5 >            ^^^
+6 >               ^^
+7 >                 ^^^
+8 >                    ^
+1 >
+2 >declare
+3 >        
+4 >        var 
+5 >            dec
+6 >               : 
+7 >                 any
+8 >                    ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+3 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
+4 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+5 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+6 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+7 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+---
+>>>declare class C {
+1 >
+2 >^^^^^^^^^^^^^^
+3 >              ^
+1 >
+  >
+  >
+2 >@dec
+  >@dec
+  >class 
+3 >              C
+1 >Emitted(2, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(2, 15) Source(5, 7) + SourceIndex(0)
+3 >Emitted(2, 16) Source(5, 8) + SourceIndex(0)
+---
+>>>    #private;
+>>>    method(): void;
+1 >^^^^
+2 >    ^^^^^^
+3 >          ^^^^^^^^^
+4 >                   ^^->
+1 > {
+  >    @dec
+  >    @dec
+  >    
+2 >    method
+3 >          () {}
+1 >Emitted(4, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(4, 11) Source(8, 11) + SourceIndex(0)
+3 >Emitted(4, 20) Source(8, 16) + SourceIndex(0)
+---
+>>>    get x(): number;
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^^^^^^^^^
+5 >                    ^^^^^^->
+1->
+  >
+  >    
+2 >    @dec
+  >        @dec
+  >        get 
+3 >        x
+4 >         () { return 1; }
+1->Emitted(5, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(5, 9) Source(12, 9) + SourceIndex(0)
+3 >Emitted(5, 10) Source(12, 10) + SourceIndex(0)
+4 >Emitted(5, 21) Source(12, 26) + SourceIndex(0)
+---
+>>>    set x(value: number);
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^
+5 >          ^^^^^
+6 >               ^^
+7 >                 ^^^^^^
+8 >                       ^^
+1->
+  >
+  >    
+2 >    @dec
+  >        @dec
+  >        set 
+3 >        x
+4 >         (
+5 >          value
+6 >               : 
+7 >                 number
+8 >                       ) { }
+1->Emitted(6, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(6, 9) Source(16, 9) + SourceIndex(0)
+3 >Emitted(6, 10) Source(16, 10) + SourceIndex(0)
+4 >Emitted(6, 11) Source(16, 11) + SourceIndex(0)
+5 >Emitted(6, 16) Source(16, 16) + SourceIndex(0)
+6 >Emitted(6, 18) Source(16, 18) + SourceIndex(0)
+7 >Emitted(6, 24) Source(16, 24) + SourceIndex(0)
+8 >Emitted(6, 26) Source(16, 29) + SourceIndex(0)
+---
+>>>    y: number;
+1 >^^^^
+2 >    ^
+3 >     ^^^^^^^^^
+4 >              ^^^^^^^^^^->
+1 >
+  >
+  >    @dec
+  >    @dec
+  >    
+2 >    y
+3 >      = 1;
+1 >Emitted(7, 5) Source(20, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(20, 6) + SourceIndex(0)
+3 >Emitted(7, 15) Source(20, 11) + SourceIndex(0)
+---
+>>>    accessor z: number;
+1->^^^^
+2 >    ^^^^^^^^
+3 >            ^
+4 >             ^
+5 >              ^^^^^^^^^
+1->
+  >
+  >    @dec
+  >    @dec
+  >    
+2 >    accessor
+3 >             
+4 >             z
+5 >               = 1;
+1->Emitted(8, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(8, 13) Source(24, 13) + SourceIndex(0)
+3 >Emitted(8, 14) Source(24, 14) + SourceIndex(0)
+4 >Emitted(8, 15) Source(24, 15) + SourceIndex(0)
+5 >Emitted(8, 24) Source(24, 20) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >    @dec
+  >    @dec
+  >    static #method() {}
+  >
+  >    @dec
+  >    @dec
+  >    static get #x() { return 1; }
+  >
+  >    @dec
+  >    @dec
+  >    static set #x(value: number) { }
+  >
+  >    @dec
+  >    @dec
+  >    static #y = 1;
+  >
+  >    @dec
+  >    @dec
+  >    static accessor #z = 1;
+  >}
+1 >Emitted(9, 2) Source(45, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.d.ts.map

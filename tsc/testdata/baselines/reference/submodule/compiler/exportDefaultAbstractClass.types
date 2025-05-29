@@ -2,12 +2,12 @@
 
 === a.ts ===
 export default abstract class A { a: number; }
->A : default
+>A : A
 >a : number
 
 class B extends A {}
 >B : B
->A : default
+>A : A
 
 new B().a.toExponential();
 >new B().a.toExponential() : string
@@ -20,11 +20,11 @@ new B().a.toExponential();
 
 === b.ts ===
 import A from './a';
->A : typeof default
+>A : typeof A
 
 class C extends A {}
 >C : C
->A : default
+>A : A
 
 new C().a.toExponential();
 >new C().a.toExponential() : string

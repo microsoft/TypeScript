@@ -20,13 +20,13 @@ Ns.Two = function() {};
 >function() {} : () => void
 
 Ns.One.prototype = {
->Ns.One.prototype = {  ok() {},} : { ok: () => void; }
+>Ns.One.prototype = {  ok() {},} : { ok(): void; }
 >Ns.One.prototype : any
 >Ns.One : any
 >Ns : {}
 >One : any
 >prototype : any
->{  ok() {},} : { ok: () => void; }
+>{  ok() {},} : { ok(): void; }
 
   ok() {},
 >ok : () => void
@@ -47,21 +47,21 @@ Ns.Two.prototype = {
  * @type {Ns.One}
  */
 var one;
->one : One
+>one : Ns.One
 
 one.wat;
 >one.wat : any
->one : One
+>one : Ns.One
 >wat : any
 
 /**
  * @type {Ns.Two}
  */
 var two;
->two : Two
+>two : Ns.Two
 
 two.wat;
 >two.wat : any
->two : Two
+>two : Ns.Two
 >wat : any
 

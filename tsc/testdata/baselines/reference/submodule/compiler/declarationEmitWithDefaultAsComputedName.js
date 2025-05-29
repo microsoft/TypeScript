@@ -31,3 +31,15 @@ const other_1 = require("./other");
 exports.obj = {
     [other_1.default.name]: 1,
 };
+
+
+//// [other.d.ts]
+type Experiment<Name> = {
+    name: Name;
+};
+declare const _default: Experiment<"foo">;
+export default _default;
+//// [main.d.ts]
+export declare const obj: {
+    foo: number;
+};

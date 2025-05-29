@@ -7,7 +7,7 @@ type PromiseOrValue<T> = Promise<T> | T;
 >PromiseOrValue : PromiseOrValue<T>
 
 function mapAsyncIterable<T, U, R = undefined>(
->mapAsyncIterable : <T, U, R>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
+>mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
 
   iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
 >iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>
@@ -83,7 +83,7 @@ function mapAsyncIterable<T, U, R = undefined>(
   }
 
   return {
->{    async next() {      return mapResult(await iterator.next());    },    async return(value: R): Promise<IteratorResult<U, R>> {      return typeof iterator.return === "function"        ? mapResult(await iterator.return(value))        : { value: undefined as any, done: true };    },    async throw(error?: unknown) {      if (typeof iterator.throw === "function") {        return mapResult(await iterator.throw(error));      }      throw error;    },    [Symbol.asyncIterator]() {      return this;    },    async [Symbol.asyncDispose]() {      await this.return(undefined!);    }  } : { next: () => Promise<IteratorResult<U, R>>; return: (value: R) => Promise<IteratorResult<U, R>>; throw: (error?: unknown) => Promise<IteratorResult<U, R>>; [Symbol.asyncIterator]: () => AsyncGenerator<U, R, void>; [Symbol.asyncDispose]: () => Promise<void>; }
+>{    async next() {      return mapResult(await iterator.next());    },    async return(value: R): Promise<IteratorResult<U, R>> {      return typeof iterator.return === "function"        ? mapResult(await iterator.return(value))        : { value: undefined as any, done: true };    },    async throw(error?: unknown) {      if (typeof iterator.throw === "function") {        return mapResult(await iterator.throw(error));      }      throw error;    },    [Symbol.asyncIterator]() {      return this;    },    async [Symbol.asyncDispose]() {      await this.return(undefined!);    }  } : { next(): Promise<IteratorResult<U, R>>; return(value: R): Promise<IteratorResult<U, R>>; throw(error?: unknown): Promise<IteratorResult<U, R>>; [Symbol.asyncIterator](): AsyncGenerator<U, R, void>; [Symbol.asyncDispose](): Promise<void>; }
 
     async next() {
 >next : () => Promise<IteratorResult<U, R>>
@@ -93,9 +93,9 @@ function mapAsyncIterable<T, U, R = undefined>(
 >mapResult : (result: IteratorResult<T, R>) => Promise<IteratorResult<U, R>>
 >await iterator.next() : IteratorResult<T, R>
 >iterator.next() : Promise<IteratorResult<T, R>>
->iterator.next : (...__0: [] | [undefined]) => Promise<IteratorResult<T, R>>
+>iterator.next : (...[value]: [] | [undefined]) => Promise<IteratorResult<T, R>>
 >iterator : AsyncIterator<T, R, undefined>
->next : (...__0: [] | [undefined]) => Promise<IteratorResult<T, R>>
+>next : (...[value]: [] | [undefined]) => Promise<IteratorResult<T, R>>
 
     },
     async return(value: R): Promise<IteratorResult<U, R>> {
@@ -192,17 +192,17 @@ const items = [1, 2, 3];
 >3 : 3
 
 const iterable = {
->iterable : { [Symbol.asyncIterator]: () => ???; next: () => Promise<{ done: boolean; value: number; }>; }
->{  [Symbol.asyncIterator]() {    return this;  },  next() {    const value = items[0];    items.shift();    return Promise.resolve({      done: items.length === 0,      value,    });  },} : { [Symbol.asyncIterator]: () => { [Symbol.asyncIterator]: ???; next: () => Promise<{ done: boolean; value: number; }>; }; next: () => Promise<{ done: boolean; value: number; }>; }
+>iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
+>{  [Symbol.asyncIterator]() {    return this;  },  next() {    const value = items[0];    items.shift();    return Promise.resolve({      done: items.length === 0,      value,    });  },} : { [Symbol.asyncIterator](): { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }; next(): Promise<{ done: boolean; value: number; }>; }
 
   [Symbol.asyncIterator]() {
->[Symbol.asyncIterator] : () => { [Symbol.asyncIterator]: ???; next: () => Promise<{ done: boolean; value: number; }>; }
+>[Symbol.asyncIterator] : () => { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
 >Symbol.asyncIterator : unique symbol
 >Symbol : SymbolConstructor
 >asyncIterator : unique symbol
 
     return this;
->this : { [Symbol.asyncIterator]: () => ???; next: () => Promise<{ done: boolean; value: number; }>; }
+>this : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
 
   },
   next() {
@@ -245,8 +245,8 @@ const iterable = {
 const doubles = mapAsyncIterable(iterable, (x) => x + x);
 >doubles : AsyncGenerator<number, number, void>
 >mapAsyncIterable(iterable, (x) => x + x) : AsyncGenerator<number, number, void>
->mapAsyncIterable : <T, U, R>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
->iterable : { [Symbol.asyncIterator]: () => ???; next: () => Promise<{ done: boolean; value: number; }>; }
+>mapAsyncIterable : <T, U, R = undefined>(iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>, callback: (value: T) => PromiseOrValue<U>) => AsyncGenerator<U, R, void>
+>iterable : { [Symbol.asyncIterator](): any; next(): Promise<{ done: boolean; value: number; }>; }
 >(x) => x + x : (x: number) => number
 >x : number
 >x + x : number

@@ -2,8 +2,8 @@
 
 === O1.ts ===
 const o1 = {
->o1 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o1 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -11,8 +11,8 @@ const o1 = {
 }
 === O2.ts ===
 const o2 = {
->o2 : { f: () => AsyncGenerator<any, void, unknown>; }
->{    async * f() {        const x = yield;    }} : { f: () => AsyncGenerator<any, void, unknown>; }
+>o2 : { f(): AsyncGenerator<any, void, unknown>; }
+>{    async * f() {        const x = yield;    }} : { f(): AsyncGenerator<any, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<any, void, unknown>
@@ -24,8 +24,8 @@ const o2 = {
 }
 === O3.ts ===
 const o3 = {
->o3 : { f: () => AsyncGenerator<number, void, unknown>; }
->{    async * f() {        const x = yield 1;    }} : { f: () => AsyncGenerator<number, void, unknown>; }
+>o3 : { f(): AsyncGenerator<number, void, unknown>; }
+>{    async * f() {        const x = yield 1;    }} : { f(): AsyncGenerator<number, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<number, void, unknown>
@@ -38,8 +38,8 @@ const o3 = {
 }
 === O4.ts ===
 const o4 = {
->o4 : { f: () => AsyncGenerator<number, void, unknown>; }
->{    async * f() {        const x = yield* [1];    }} : { f: () => AsyncGenerator<number, void, unknown>; }
+>o4 : { f(): AsyncGenerator<number, void, unknown>; }
+>{    async * f() {        const x = yield* [1];    }} : { f(): AsyncGenerator<number, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<number, void, unknown>
@@ -53,8 +53,8 @@ const o4 = {
 }
 === O5.ts ===
 const o5 = {
->o5 : { f: () => AsyncGenerator<number, void, unknown>; }
->{    async * f() {        const x = yield* (async function*() { yield 1; })();    }} : { f: () => AsyncGenerator<number, void, unknown>; }
+>o5 : { f(): AsyncGenerator<number, void, unknown>; }
+>{    async * f() {        const x = yield* (async function*() { yield 1; })();    }} : { f(): AsyncGenerator<number, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<number, void, unknown>
@@ -71,8 +71,8 @@ const o5 = {
 }
 === O6.ts ===
 const o6 = {
->o6 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        const x = await 1;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o6 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        const x = await 1;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -85,8 +85,8 @@ const o6 = {
 }
 === O7.ts ===
 const o7 = {
->o7 : { f: () => AsyncGenerator<never, number, unknown>; }
->{    async * f() {        return 1;    }} : { f: () => AsyncGenerator<never, number, unknown>; }
+>o7 : { f(): AsyncGenerator<never, number, unknown>; }
+>{    async * f() {        return 1;    }} : { f(): AsyncGenerator<never, number, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, number, unknown>

@@ -1,16 +1,6 @@
 --- old.constructorTagOnObjectLiteralMethod.types
 +++ new.constructorTagOnObjectLiteralMethod.types
-@@= skipped -1, +1 lines =@@
-
- === example.js ===
- const obj = {
-->obj : { Foo(): void; }
-->{  /** @constructor */  Foo() { this.bar = "bar" }} : { Foo(): void; }
-+>obj : { Foo: () => void; }
-+>{  /** @constructor */  Foo() { this.bar = "bar" }} : { Foo: () => void; }
-
-   /** @constructor */
-   Foo() { this.bar = "bar" }
+@@= skipped -9, +9 lines =@@
  >Foo : () => void
  >this.bar = "bar" : "bar"
  >this.bar : any
@@ -18,12 +8,3 @@
 +>this : any
  >bar : any
  >"bar" : "bar"
-
-@@= skipped -18, +18 lines =@@
- >(new obj.Foo()) : any
- >new obj.Foo() : any
- >obj.Foo : () => void
-->obj : { Foo(): void; }
-+>obj : { Foo: () => void; }
- >Foo : () => void
- >bar : any

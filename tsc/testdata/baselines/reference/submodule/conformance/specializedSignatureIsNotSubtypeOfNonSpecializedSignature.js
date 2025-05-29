@@ -79,3 +79,55 @@ class C3 {
 var a;
 var a2;
 var a3;
+
+
+//// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.d.ts]
+declare function foo(x: 'a'): any;
+declare class C {
+    foo(x: 'a'): any;
+    foo(x: number): any;
+}
+declare class C2<T> {
+    foo(x: 'a'): any;
+    foo(x: T): any;
+}
+declare class C3<T extends String> {
+    foo(x: 'a'): any;
+    foo(x: T): any;
+}
+interface I {
+    (x: 'a'): any;
+    (x: number): any;
+    foo(x: 'a'): any;
+    foo(x: number): any;
+}
+interface I2<T> {
+    (x: 'a'): any;
+    (x: T): any;
+    foo(x: 'a'): any;
+    foo(x: T): any;
+}
+interface I3<T extends String> {
+    (x: 'a'): any;
+    (x: T): any;
+    foo(x: 'a'): any;
+    foo(x: T): any;
+}
+declare var a: {
+    (x: 'a'): any;
+    (x: number): any;
+    foo(x: 'a'): any;
+    foo(x: number): any;
+};
+declare var a2: {
+    (x: 'a'): any;
+    <T>(x: T): any;
+    foo(x: 'a'): any;
+    foo<T>(x: T): any;
+};
+declare var a3: {
+    (x: 'a'): any;
+    <T>(x: T): any;
+    foo(x: 'a'): any;
+    foo<T extends String>(x: T): any;
+};

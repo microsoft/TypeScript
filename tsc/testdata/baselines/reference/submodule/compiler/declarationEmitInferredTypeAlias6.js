@@ -23,3 +23,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.v = void 0;
 let v = "str" || true;
 exports.v = v;
+
+
+//// [0.d.ts]
+export {};
+//// [1.d.ts]
+declare let v: string | boolean;
+export { v };

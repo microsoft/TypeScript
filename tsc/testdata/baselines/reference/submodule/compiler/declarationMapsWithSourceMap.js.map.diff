@@ -8,7 +8,11 @@
 -//// [bundle.d.ts.map]
 -{"version":3,"file":"bundle.d.ts","sourceRoot":"","sources":["a.ts","index.ts"],"names":[],"mappings":"AAAA,cAAM,GAAG;IACL,OAAO,CAAC,GAAG;QAAC,CAAC,EAAE,MAAM,CAAA;KAAC;;;IAGtB,MAAM,CAAC,IAAI;CAGd;ACPD,QAAA,MAAM,CAAC,KAAY,CAAC;AAGpB,QAAA,IAAI,CAAC;;CAAqB,CAAC"}
 -//// https://sokra.github.io/source-map-visualization#base64,ZGVjbGFyZSBjbGFzcyBGb28gew0KICAgIGRvVGhpbmcoeDogew0KICAgICAgICBhOiBudW1iZXI7DQogICAgfSk6IHsNCiAgICAgICAgYjogbnVtYmVyOw0KICAgIH07DQogICAgc3RhdGljIG1ha2UoKTogRm9vOw0KfQ0KZGVjbGFyZSBjb25zdCBjOiBGb287DQpkZWNsYXJlIGxldCB4OiB7DQogICAgYjogbnVtYmVyOw0KfTsNCi8vIyBzb3VyY2VNYXBwaW5nVVJMPWJ1bmRsZS5kLnRzLm1hcA==,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYnVuZGxlLmQudHMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJhLnRzIiwiaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsY0FBTSxHQUFHO0lBQ0wsT0FBTyxDQUFDLEdBQUc7UUFBQyxDQUFDLEVBQUUsTUFBTSxDQUFBO0tBQUM7OztJQUd0QixNQUFNLENBQUMsSUFBSTtDQUdkO0FDUEQsUUFBQSxNQUFNLENBQUMsS0FBWSxDQUFDO0FBR3BCLFFBQUEsSUFBSSxDQUFDOztDQUFxQixDQUFDIn0=,Y2xhc3MgRm9vIHsKICAgIGRvVGhpbmcoeDoge2E6IG51bWJlcn0pIHsKICAgICAgICByZXR1cm4ge2I6IHguYX07CiAgICB9CiAgICBzdGF0aWMgbWFrZSgpIHsKICAgICAgICByZXR1cm4gbmV3IEZvbygpOwogICAgfQp9,Y29uc3QgYyA9IG5ldyBGb28oKTsKYy5kb1RoaW5nKHthOiA0Mn0pOwoKbGV0IHggPSBjLmRvVGhpbmcoe2E6IDEyfSk7Cg==
++//// [a.d.ts.map]
++{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,cAAM,GAAG;IACL,OAAO,CAAC,CAAC,EAAE;QAAC,CAAC,EAAE,MAAM,CAAA;KAAC;;MAErB;IACD,MAAM,CAAC,IAAI,QAEV;CACJ"}
 +//// [a.js.map]
 +{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":"AAAA,MAAM,GAAG;IACL,OAAO,CAAC,CAAc,EAAE;QACpB,OAAO,EAAC,CAAC,EAAE,CAAC,CAAC,CAAC,EAAC,CAAC;IAAA,CACnB;IACD,MAAM,CAAC,IAAI,GAAG;QACV,OAAO,IAAI,GAAG,EAAE,CAAC;IAAA,CACpB;CACJ"}
++//// [index.d.ts.map]
++{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,CAAC,KAAY,CAAC;AAGpB,QAAA,IAAI,CAAC;;CAAqB,CAAC"}
 +//// [index.js.map]
 +{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,GAAG,IAAI,GAAG,EAAE,CAAC;AACpB,CAAC,CAAC,OAAO,CAAC,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC,CAAC;AAEnB,IAAI,CAAC,GAAG,CAAC,CAAC,OAAO,CAAC,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC,CAAC"}

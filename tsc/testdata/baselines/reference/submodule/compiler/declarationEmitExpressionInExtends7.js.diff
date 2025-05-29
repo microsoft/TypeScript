@@ -27,11 +27,7 @@
 -    }
 -    return default_1;
 -}(SomeUndefinedFunction));
--exports.default = default_1;
--
--
--//// [declarationEmitExpressionInExtends7.d.ts]
--export default class extends SomeUndefinedFunction {
 +class default_1 extends SomeUndefinedFunction {
- }
-+exports.default = default_1;
++}
+ exports.default = default_1;
+

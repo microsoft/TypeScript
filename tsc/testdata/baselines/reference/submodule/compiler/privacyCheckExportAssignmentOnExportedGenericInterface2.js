@@ -24,3 +24,13 @@ function Foo(array) {
     Foo.x = "hello";
 })(Foo || (Foo = {}));
 module.exports = Foo;
+
+
+//// [privacyCheckExportAssignmentOnExportedGenericInterface2.d.ts]
+export = Foo;
+interface Foo<T> {
+}
+declare function Foo<T>(array: T[]): Foo<T>;
+declare namespace Foo {
+    var x: string;
+}

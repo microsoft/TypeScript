@@ -33,3 +33,17 @@ class c1 {
         // Function here
     }
 }
+
+
+//// [declFilePrivateMethodOverloads.d.ts]
+interface IContext {
+    someMethod(): any;
+}
+declare class c1 {
+    private _forEachBindingContext;
+    private overloadWithArityDifference;
+}
+declare class c2 {
+    private overload1;
+    private overload2;
+}

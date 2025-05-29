@@ -26,7 +26,7 @@
  >dict : <P>(p: { [k in keyof P]: Result<F, P[k]>; }) => Result<F, P>
  >ok(at) : { lr: Result<F, LR<F, string, number>>; }
 ->ok : <F_1 extends Target>(at: Ops<F_1>) => { lr: Result<F_1, LR<F_1, string, number>>; }
-+>ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
++>ok : <F_1 extends keyof Targets<any>>(at: Ops<F_1>) => { lr: Result<F_1, LR<F_1, string, number>>; }
  >at : Ops<F>
 
  const leftOk = ok(left)

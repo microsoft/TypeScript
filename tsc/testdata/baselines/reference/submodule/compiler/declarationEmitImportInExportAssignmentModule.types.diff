@@ -5,7 +5,7 @@
 
      export module c {
 ->c : typeof m.c
-+>c : typeof c
++>c : typeof import("./declarationEmitImportInExportAssignmentModule").c
 
          export class c {
  >c : c

@@ -1,0 +1,11 @@
+--- old.genericSpecializations2.types
++++ new.genericSpecializations2.types
+@@= skipped -4, +4 lines =@@
+ >IFoo : IFoo<T>
+
+     foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
+->foo : <T>(x: T) => T
++>foo : <T_1>(x: T_1) => T_1
+ >x : T
+
+         return null;

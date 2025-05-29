@@ -13,16 +13,7 @@
  >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
  >children : Symbol(children, Decl(jsxCallbackWithDestructuring.tsx, 5, 21))
  >Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
-@@= skipped -11, +11 lines =@@
- }
-
- declare global {
-->global : Symbol(global, Decl(jsxCallbackWithDestructuring.tsx, 6, 1))
-+>global : Symbol((Missing), Decl(jsxCallbackWithDestructuring.tsx, 6, 1))
-
-     namespace JSX {
- >JSX : Symbol(JSX, Decl(jsxCallbackWithDestructuring.tsx, 8, 16))
-@@= skipped -12, +12 lines =@@
+@@= skipped -23, +23 lines =@@
  >ElementClass : Symbol(ElementClass, Decl(jsxCallbackWithDestructuring.tsx, 10, 30))
 
              render(): {};

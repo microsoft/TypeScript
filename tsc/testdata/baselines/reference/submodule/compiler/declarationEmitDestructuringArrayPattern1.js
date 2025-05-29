@@ -18,3 +18,7 @@ var [, , z1] = [0, 1, 2]; // emit z1: number
 var a = [1, "hello"];
 var [x2] = a; // emit x2: number | string
 var [x3, y3, z3] = a; // emit x3, y3, z3 
+
+
+//// [declarationEmitDestructuringArrayPattern1.d.ts]
+declare var a: (string | number)[];

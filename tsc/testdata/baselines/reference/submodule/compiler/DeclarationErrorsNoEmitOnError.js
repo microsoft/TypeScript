@@ -9,3 +9,13 @@ export interface I {
 //// [DeclarationErrorsNoEmitOnError.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [DeclarationErrorsNoEmitOnError.d.ts]
+type T = {
+    x: number;
+};
+export interface I {
+    f: T;
+}
+export {};

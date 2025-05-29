@@ -25,12 +25,3 @@
 
          var t: { x: ContainingThis; y: number };
  >t : Symbol(t, Decl(thisInObjectLiterals.ts, 6, 11), Decl(thisInObjectLiterals.ts, 7, 11))
-@@= skipped -20, +20 lines =@@
- >f : Symbol(f, Decl(thisInObjectLiterals.ts, 12, 11))
-
-         return this.spaaace;
-->this : Symbol(obj, Decl(thisInObjectLiterals.ts, 12, 9))
-+>this : Symbol((Anonymous type), Decl(thisInObjectLiterals.ts, 12, 9))
-     }
- };
- var obj: { f: () => any; };

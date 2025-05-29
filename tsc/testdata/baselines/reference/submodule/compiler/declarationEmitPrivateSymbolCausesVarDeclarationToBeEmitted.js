@@ -18,3 +18,11 @@ class User {
 }
 exports.User = User;
 ;
+
+
+//// [declarationEmitPrivateSymbolCausesVarDeclarationToBeEmitted.d.ts]
+declare const _data: unique symbol;
+export declare class User {
+    private [_data];
+}
+export {};

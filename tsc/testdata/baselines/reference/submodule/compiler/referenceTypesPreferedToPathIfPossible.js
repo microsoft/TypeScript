@@ -17,3 +17,7 @@ exports.thing = void 0;
 const url_1 = require("url");
 const thing = () => (0, url_1.parse)();
 exports.thing = thing;
+
+
+//// [usage.d.ts]
+export declare const thing: () => import("url").Url;

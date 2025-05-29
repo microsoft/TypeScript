@@ -2,8 +2,8 @@
 
 === helloworld.ts ===
 const Log = {
->Log : { info: (msg: string) => void; }
->{  info(msg: string) {}} : { info: (msg: string) => void; }
+>Log : { info(msg: string): void; }
+>{  info(msg: string) {}} : { info(msg: string): void; }
 
   info(msg: string) {}
 >info : (msg: string) => void
@@ -23,7 +23,7 @@ class HelloWorld {
     Log.info(`Hello ${this.name}`);
 >Log.info(`Hello ${this.name}`) : void
 >Log.info : (msg: string) => void
->Log : { info: (msg: string) => void; }
+>Log : { info(msg: string): void; }
 >info : (msg: string) => void
 >`Hello ${this.name}` : string
 >this.name : string

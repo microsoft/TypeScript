@@ -24,14 +24,6 @@
 
  });
 
- callIt({
- >callIt({    produce() {        return 0;    },    consume: n => n.toFixed()}) : void
- >callIt : <T>(obj: { produce: (n: number) => T; consume: (x: T) => void; }) => void
-->{    produce() {        return 0;    },    consume: n => n.toFixed()} : { produce(): number; consume: (n: number) => string; }
-+>{    produce() {        return 0;    },    consume: n => n.toFixed()} : { produce: () => number; consume: (n: number) => string; }
-
-     produce() {
- >produce : () => number
 @@= skipped -23, +23 lines =@@
  >n => n.toFixed() : (n: number) => string
  >n : number
@@ -80,74 +72,7 @@
 
  });
 
-@@= skipped -18, +18 lines =@@
- make({
- >make({   mutations: {       foo() { }   },   action: (a) => { a.foo() }}) : void
- >make : <M>(o: { mutations: M; action: (m: M) => void; }) => void
-->{   mutations: {       foo() { }   },   action: (a) => { a.foo() }} : { mutations: { foo(): void; }; action: (a: { foo(): void; }) => void; }
-+>{   mutations: {       foo() { }   },   action: (a) => { a.foo() }} : { mutations: { foo: () => void; }; action: (a: { foo: () => void; }) => void; }
-
-    mutations: {
-->mutations : { foo(): void; }
-->{       foo() { }   } : { foo(): void; }
-+>mutations : { foo: () => void; }
-+>{       foo() { }   } : { foo: () => void; }
-
-        foo() { }
- >foo : () => void
-
-    },
-    action: (a) => { a.foo() }
-->action : (a: { foo(): void; }) => void
-->(a) => { a.foo() } : (a: { foo(): void; }) => void
-->a : { foo(): void; }
-+>action : (a: { foo: () => void; }) => void
-+>(a) => { a.foo() } : (a: { foo: () => void; }) => void
-+>a : { foo: () => void; }
- >a.foo() : void
- >a.foo : () => void
-->a : { foo(): void; }
-+>a : { foo: () => void; }
- >foo : () => void
-
- });
-@@= skipped -33, +33 lines =@@
- foo({
- >foo({    a: () => { return 42 },    b(a) {},}) : void
- >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
-->{    a: () => { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
-+>{    a: () => { return 42 },    b(a) {},} : { a: () => 42; b: (a: () => 42) => void; }
-
-     a: () => { return 42 },
- >a : () => 42
-@@= skipped -16, +16 lines =@@
- foo({
- >foo({    a: function () { return 42 },    b(a) {},}) : void
- >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
-->{    a: function () { return 42 },    b(a) {},} : { a: () => 42; b(a: () => 42): void; }
-+>{    a: function () { return 42 },    b(a) {},} : { a: () => 42; b: (a: () => 42) => void; }
-
-     a: function () { return 42 },
- >a : () => 42
-@@= skipped -16, +16 lines =@@
- foo({
- >foo({    a() { return 42 },    b(a) {},}) : void
- >foo : <A>(options: { a: A; b: (a: A) => void; }) => void
-->{    a() { return 42 },    b(a) {},} : { a(): 42; b(a: () => 42): void; }
-+>{    a() { return 42 },    b(a) {},} : { a: () => 42; b: (a: () => 42) => void; }
-
-     a() { return 42 },
- >a : () => 42
-@@= skipped -127, +127 lines =@@
- createMappingComponent({
- >createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
- >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
-->{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup(): { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>): { bool: any; str: number; }; }
-+>{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup: () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map: (inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>) => { bool: any; str: number; }; }
-
-     setup() {
- >setup : () => { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }
-@@= skipped -335, +335 lines =@@
+@@= skipped -545, +545 lines =@@
 
        arg.toString();
  >arg.toString() : string

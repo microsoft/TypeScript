@@ -2,7 +2,7 @@
 
 === es5-commonjs.ts ===
 export default class A
->A : default
+>A : A
 {
     constructor ()
     {

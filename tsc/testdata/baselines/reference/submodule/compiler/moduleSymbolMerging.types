@@ -9,7 +9,7 @@ module B {
 >B : typeof B
 
 	export function f(): A.I { return null; }
->f : () => I
+>f : () => A.I
 >A : any
 }
 

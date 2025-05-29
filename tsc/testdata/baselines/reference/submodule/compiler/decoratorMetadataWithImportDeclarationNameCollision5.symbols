@@ -2,7 +2,7 @@
 
 === db.ts ===
 export default class db {
->db : Symbol(default, Decl(db.ts, 0, 0))
+>db : Symbol(db, Decl(db.ts, 0, 0))
 
     public doSomething() {
 >doSomething : Symbol(doSomething, Decl(db.ts, 0, 25))

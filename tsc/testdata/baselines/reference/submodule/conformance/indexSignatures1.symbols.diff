@@ -5,10 +5,10 @@
  const y2 = dom.data123;
  >y2 : Symbol(y2, Decl(indexSignatures1.ts, 47, 5))
 ->dom.data123 : Symbol(__index, Decl(indexSignatures1.ts, 45, 18))
-+>dom.data123 : Symbol((Missing), Decl(indexSignatures1.ts, 45, 18))
++>dom.data123 : Symbol(þindex, Decl(indexSignatures1.ts, 45, 18))
  >dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
 ->data123 : Symbol(__index, Decl(indexSignatures1.ts, 45, 18))
-+>data123 : Symbol((Missing), Decl(indexSignatures1.ts, 45, 18))
++>data123 : Symbol(þindex, Decl(indexSignatures1.ts, 45, 18))
 
  // Excess property checking for template pattern index signature
 
@@ -24,38 +24,7 @@
 
      nfoo: x => x * 2,     // n: number
  >nfoo : Symbol(nfoo, Decl(indexSignatures1.ts, 62, 24))
-@@= skipped -426, +426 lines =@@
- >obj10 : Symbol(obj10, Decl(indexSignatures1.ts, 203, 5))
-
-     ['x']: 0 as const,
-->['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
-->'x' : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
-+>['x'] : Symbol(x, Decl(indexSignatures1.ts, 203, 15))
-+>'x' : Symbol(x, Decl(indexSignatures1.ts, 203, 15))
- >const : Symbol(const)
-
-     ['a' + 'b']: 1 as const,
-@@= skipped -43, +43 lines =@@
- >obj13 : Symbol(obj13, Decl(indexSignatures1.ts, 218, 5))
-
-     ['x']: 0 as const,
-->['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
-->'x' : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
-+>['x'] : Symbol(x, Decl(indexSignatures1.ts, 218, 15))
-+>'x' : Symbol(x, Decl(indexSignatures1.ts, 218, 15))
- >const : Symbol(const)
-
-     ['a' + 'b']: 1 as const,
-@@= skipped -51, +51 lines =@@
- >plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
-
-     "user": {} as Plugs,
-->"user" : Symbol("user", Decl(indexSignatures1.ts, 236, 17))
-+>"user" : Symbol(user, Decl(indexSignatures1.ts, 236, 17))
- >Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 230, 48))
-
-     [system]: {} as Plugs
-@@= skipped -14, +14 lines =@@
+@@= skipped -534, +534 lines =@@
  >plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
  >system : Symbol(system, Decl(indexSignatures1.ts, 229, 5))
  >SomeSytePlugin : Symbol(SomeSytePlugin, Decl(indexSignatures1.ts, 230, 5))
@@ -67,16 +36,7 @@
 
  plugins[system][SomeSytePlugin]();
  >plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
-@@= skipped -127, +127 lines =@@
- const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
- >test : Symbol(test, Decl(indexSignatures1.ts, 280, 5))
- >PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 276, 30))
-->'someKey' : Symbol('someKey', Decl(indexSignatures1.ts, 280, 33))
-+>'someKey' : Symbol(someKey, Decl(indexSignatures1.ts, 280, 33))
-
- type FieldPattern = `/${string}`;
- >FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 280, 60))
-@@= skipped -51, +51 lines =@@
+@@= skipped -178, +178 lines =@@
  >AA : Symbol(AA, Decl(indexSignatures1.ts, 297, 16))
 
      a?: string;

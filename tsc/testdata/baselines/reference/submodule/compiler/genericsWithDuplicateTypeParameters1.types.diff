@@ -1,0 +1,20 @@
+--- old.genericsWithDuplicateTypeParameters1.types
++++ new.genericsWithDuplicateTypeParameters1.types
+@@= skipped -15, +15 lines =@@
+ >f : <x>() => void
+
+     public f2<X, X>(a: X, b: X): X { return null; }
+->f2 : <X>(a: X, b: X) => X
++>f2 : <X_1>(a: X_1, b: X_1) => X_1
+ >a : X
+ >b : X
+ }
+@@= skipped -10, +10 lines =@@
+ >f : <X>() => any
+
+     f2<X, X>(a: X, b: X): X;
+->f2 : <X>(a: X, b: X) => X
++>f2 : <X_1>(a: X_1, b: X_1) => X_1
+ >a : X
+ >b : X
+ }

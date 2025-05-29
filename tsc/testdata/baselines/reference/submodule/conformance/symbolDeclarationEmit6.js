@@ -6,3 +6,9 @@ interface I {
 }
 
 //// [symbolDeclarationEmit6.js]
+
+
+//// [symbolDeclarationEmit6.d.ts]
+interface I {
+    [Symbol.isConcatSpreadable]: string;
+}

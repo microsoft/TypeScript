@@ -2,14 +2,14 @@
 
 === /a.ts ===
 export default class C {};
->C : default
+>C : C
 
 === /b.ts ===
 import * as a from "./a";
->a : typeof import("/a")
+>a : typeof a
 
 export default a.default;
->a.default : typeof default
->a : typeof import("/a")
->default : typeof default
+>a.default : typeof a.default
+>a : typeof a
+>default : typeof a.default
 

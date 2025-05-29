@@ -6,7 +6,7 @@ assignmentCompatWithConstructSignatures2.ts(34,1): error TS2322: Type 'S2' is no
   Types of property 'f' are incompatible.
     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
-assignmentCompatWithConstructSignatures2.ts(35,1): error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type 'T'.
+assignmentCompatWithConstructSignatures2.ts(35,1): error TS2322: Type '{ f(x: string): void; }' is not assignable to type 'T'.
   Types of property 'f' are incompatible.
     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
@@ -16,7 +16,7 @@ assignmentCompatWithConstructSignatures2.ts(38,1): error TS2322: Type 'S2' is no
   Types of property 'f' are incompatible.
     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
-assignmentCompatWithConstructSignatures2.ts(39,1): error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type '{ f: new (x: number) => void; }'.
+assignmentCompatWithConstructSignatures2.ts(39,1): error TS2322: Type '{ f(x: string): void; }' is not assignable to type '{ f: new (x: number) => void; }'.
   Types of property 'f' are incompatible.
     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
@@ -74,7 +74,7 @@ assignmentCompatWithConstructSignatures2.ts(41,1): error TS2322: Type '(x: strin
 !!! error TS2322:       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
     t = a3;
     ~
-!!! error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type 'T'.
+!!! error TS2322: Type '{ f(x: string): void; }' is not assignable to type 'T'.
 !!! error TS2322:   Types of property 'f' are incompatible.
 !!! error TS2322:     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
 !!! error TS2322:       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
@@ -92,7 +92,7 @@ assignmentCompatWithConstructSignatures2.ts(41,1): error TS2322: Type '(x: strin
 !!! error TS2322:       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
     a = a3;
     ~
-!!! error TS2322: Type '{ f: (x: string) => void; }' is not assignable to type '{ f: new (x: number) => void; }'.
+!!! error TS2322: Type '{ f(x: string): void; }' is not assignable to type '{ f: new (x: number) => void; }'.
 !!! error TS2322:   Types of property 'f' are incompatible.
 !!! error TS2322:     Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.
 !!! error TS2322:       Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.

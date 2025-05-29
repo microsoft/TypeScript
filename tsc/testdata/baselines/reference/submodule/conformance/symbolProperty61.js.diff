@@ -8,23 +8,22 @@
      constructor(_val) {
          this._val = _val;
      }
-@@= skipped -14, +15 lines =@@
-     return obs[Symbol.obs]();
- }
- from(new MyObservable(42));
--
--
--//// [symbolProperty61.d.ts]
+@@= skipped -17, +18 lines =@@
+
+
+ //// [symbolProperty61.d.ts]
 -declare global {
--    interface SymbolConstructor {
--        readonly obs: symbol;
--    }
--}
++declare namespace global {
+     interface SymbolConstructor {
+         readonly obs: symbol;
+     }
+ }
 -declare const observable: typeof Symbol.obs;
--export declare class MyObservable<T> {
--    private _val;
--    constructor(_val: T);
--    subscribe(next: (val: T) => void): void;
+ export declare class MyObservable<T> {
++    [x: symbol]: () => this;
+     private _val;
+     constructor(_val: T);
+     subscribe(next: (val: T) => void): void;
 -    [observable](): this;
--}
--export {};
+ }
+ export {};

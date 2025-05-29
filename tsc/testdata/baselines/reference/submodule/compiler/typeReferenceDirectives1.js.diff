@@ -1,13 +1,10 @@
 --- old.typeReferenceDirectives1.js
 +++ new.typeReferenceDirectives1.js
-@@= skipped -10, +10 lines =@@
+@@= skipped -13, +13 lines =@@
 
- //// [app.js]
- /// <reference types="lib" preserve="true" />
--
--
--//// [app.d.ts]
+
+ //// [app.d.ts]
 -/// <reference types="lib" preserve="true" />
--interface A {
--    x: $;
--}
+ interface A {
+     x: $;
+ }

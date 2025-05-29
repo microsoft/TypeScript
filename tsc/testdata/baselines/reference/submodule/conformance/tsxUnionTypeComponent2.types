@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 type Invalid1 = React.ComponentClass<any> | number;
 >Invalid1 : Invalid1
@@ -13,7 +13,7 @@ const X: Invalid1 = 1;
 >1 : 1
 
 <X />;
-><X /> : Element
+><X /> : JSX.Element
 >X : number
 
 

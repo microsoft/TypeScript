@@ -10,3 +10,10 @@ interface Foo {
 
 //// [optionalProperties02.js]
 (({ a: undefined }));
+
+
+//// [optionalProperties02.d.ts]
+interface Foo {
+    a?: string;
+    b: string;
+}

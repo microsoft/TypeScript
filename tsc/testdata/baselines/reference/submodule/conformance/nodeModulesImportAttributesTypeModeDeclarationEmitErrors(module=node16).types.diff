@@ -14,9 +14,9 @@
 ->a : import("/node_modules/pkg/require").RequireInterface
 ->(null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
 ->null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
-+>a : RequireInterface
-+>(null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface) : RequireInterface
-+>null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface : RequireInterface
++>a : import("./node_modules/pkg/require.js").RequireInterface
++>(null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface) : import("./node_modules/pkg/require.js").RequireInterface
++>null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface : import("./node_modules/pkg/require.js").RequireInterface
  >null as any : any
 
  export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
@@ -34,7 +34,7 @@
      & import("pkg", {"resolution-mode": "import"}).ImportInterface;
  >import("pkg", {"resolution-mode": "import"}).ImportInterface : any
 ->import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
-+>import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
++>import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("./node_modules/pkg/require.js"); }>
  >"pkg" : "pkg"
  >{"resolution-mode": "import"} : { "resolution-mode": string; }
  >"resolution-mode" : string
@@ -45,9 +45,9 @@
 ->a : import("/node_modules/pkg/require").RequireInterface
 ->(null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
 ->null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
-+>a : RequireInterface
-+>(null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface) : RequireInterface
-+>null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface : RequireInterface
++>a : import("./node_modules/pkg/require.js").RequireInterface
++>(null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface) : import("./node_modules/pkg/require.js").RequireInterface
++>null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface : import("./node_modules/pkg/require.js").RequireInterface
  >null as any : any
 
  export const b = (null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface);
@@ -56,7 +56,7 @@
      & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
  >import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
 ->import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
-+>import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
++>import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("./node_modules/pkg/require.js"); }>
  >"pkg" : "pkg"
  >[ {"resolution-mode": "import"} ] : { "resolution-mode": string; }[]
  >{"resolution-mode": "import"} : { "resolution-mode": string; }
@@ -65,7 +65,7 @@
      & import("pkg", Attribute2).ImportInterface;
  >import("pkg", Attribute2).ImportInterface : any
 ->import("pkg", Attribute2) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
-+>import("pkg", Attribute2) : Promise<{ default: typeof import("/node_modules/pkg/require"); }>
++>import("pkg", Attribute2) : Promise<{ default: typeof import("./node_modules/pkg/require.js"); }>
  >"pkg" : "pkg"
  >Attribute2 : any
  >ImportInterface : any
@@ -76,9 +76,9 @@
 ->a : import("/node_modules/pkg/require").RequireInterface
 ->(null as any as import("pkg", { with: {} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
 ->null as any as import("pkg", { with: {} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
-+>a : RequireInterface
-+>(null as any as import("pkg", { with: {} }).RequireInterface) : RequireInterface
-+>null as any as import("pkg", { with: {} }).RequireInterface : RequireInterface
++>a : import("./node_modules/pkg/require.js").RequireInterface
++>(null as any as import("pkg", { with: {} }).RequireInterface) : import("./node_modules/pkg/require.js").RequireInterface
++>null as any as import("pkg", { with: {} }).RequireInterface : import("./node_modules/pkg/require.js").RequireInterface
  >null as any : any
 
  export const b = (null as any as import("pkg", { with: {} }).ImportInterface);

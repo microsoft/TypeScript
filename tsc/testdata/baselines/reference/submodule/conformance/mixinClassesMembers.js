@@ -165,3 +165,41 @@ class C3 extends Mixed3 {
     }
     f() { return super.f(); }
 }
+
+
+//// [mixinClassesMembers.d.ts]
+declare class C1 {
+    a: number;
+    protected b: number;
+    private c;
+    constructor(s: string);
+    constructor(n: number);
+}
+declare class M1 {
+    constructor(...args: any[]);
+    p: number;
+    static p: number;
+}
+declare class M2 {
+    constructor(...args: any[]);
+    f(): number;
+    static f(): number;
+}
+declare const Mixed1: typeof M1 & typeof C1;
+declare const Mixed2: typeof C1 & typeof M1;
+declare const Mixed3: typeof M2 & typeof M1 & typeof C1;
+declare const Mixed4: typeof C1 & typeof M1 & typeof M2;
+declare const Mixed5: typeof M1 & typeof M2;
+declare function f1(): void;
+declare function f2(): void;
+declare function f3(): void;
+declare function f4(): void;
+declare function f5(): void;
+declare function f6(): void;
+declare class C2 extends Mixed1 {
+    constructor();
+}
+declare class C3 extends Mixed3 {
+    constructor();
+    f(): number;
+}

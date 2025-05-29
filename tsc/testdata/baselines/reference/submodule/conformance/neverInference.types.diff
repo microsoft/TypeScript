@@ -5,10 +5,10 @@
  >f2 : <a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number) => void
  >Array.from([0]) : number[]
 ->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
-+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
  >Array : ArrayConstructor
 ->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
-+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
  >[0] : number[]
  >0 : 0
  >[] : never[]
@@ -17,10 +17,10 @@
  >f2 : <a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number) => void
  >Array.from([]) : never[]
 ->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
-+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
  >Array : ArrayConstructor
 ->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
-+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
++>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
  >[] : never[]
  >[0] : number[]
  >0 : 0

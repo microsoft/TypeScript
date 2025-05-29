@@ -80,7 +80,7 @@
 
  declare function doesValueAtDeepPathSatisfy<
 ->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
-+>doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
++>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
 
      ObjT extends object,
      const DeepPathT extends ReadonlyArray<number | string>,
@@ -98,7 +98,7 @@
  >assert : (condition: boolean) => asserts condition
  >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA) : boolean
 ->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
-+>doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
++>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
  >foo : Foo
  >['value', 'type'] : ["value", "type"]
  >'value' : "value"
@@ -121,7 +121,7 @@
  >!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
  >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
 ->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
-+>doesValueAtDeepPathSatisfy : <ObjT extends object, DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
++>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
  >foo : Foo
  >['value', 'type'] : ["value", "type"]
  >'value' : "value"
@@ -134,3 +134,21 @@
  }
 
  // Repro from #53063
+@@= skipped -25, +25 lines =@@
+ >true : true
+
+ declare const checkIsPremium: (a: Union) => a is Union & Premium;
+->checkIsPremium : (a: Union) => a is Union & Premium
++>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+ >a : Union
+
+ const f = (value: Union) => {
+@@= skipped -11, +11 lines =@@
+     if (!checkIsPremium(value)) {
+ >!checkIsPremium(value) : boolean
+ >checkIsPremium(value) : boolean
+->checkIsPremium : (a: Union) => a is Union & Premium
++>checkIsPremium : (a: Union) => a is { premium: true; } & Premium
+ >value : Union
+
+         value.premium;

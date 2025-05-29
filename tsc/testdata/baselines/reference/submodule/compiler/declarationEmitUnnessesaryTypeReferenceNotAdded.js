@@ -39,3 +39,8 @@ const process = require("process");
 function parseArgs() {
     return minimist(process.argv.slice(2));
 }
+
+
+//// [index.d.ts]
+import minimist = require('minimist');
+export default function parseArgs(): minimist.ParsedArgs;

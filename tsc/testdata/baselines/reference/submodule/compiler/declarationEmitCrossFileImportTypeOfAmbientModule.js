@@ -18,3 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.reeexported = void 0;
 const somepackage_1 = require("../somepackage");
 exports.reeexported = somepackage_1.item;
+
+
+//// [index.d.ts]
+export declare const reeexported: typeof import("@namespace/component").Foo;

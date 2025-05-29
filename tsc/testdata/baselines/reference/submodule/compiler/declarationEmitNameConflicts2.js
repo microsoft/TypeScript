@@ -53,3 +53,22 @@ var X;
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
+
+
+//// [declarationEmitNameConflicts2.d.ts]
+declare namespace X.Y.base {
+    function f(): void;
+    class C {
+    }
+    namespace M {
+        var v: any;
+    }
+    enum E {
+    }
+}
+declare namespace X.Y.base.Z {
+    var f: typeof base.f; // Should be base.f
+    var C: typeof base.C; // Should be base.C
+    var M: typeof base.M; // Should be base.M
+    var E: typeof base.E; // Should be base.E
+}

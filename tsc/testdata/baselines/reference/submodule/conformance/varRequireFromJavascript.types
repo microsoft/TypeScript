@@ -2,23 +2,23 @@
 
 === use.js ===
 var ex = require('./ex')
->ex : typeof import("ex")
->require('./ex') : typeof import("ex")
+>ex : typeof ex
+>require('./ex') : typeof ex
 >require : any
 >'./ex' : "./ex"
 
 // values work
 var crunch = new ex.Crunch(1);
->crunch : Crunch
->new ex.Crunch(1) : Crunch
->ex.Crunch : typeof Crunch
->ex : typeof import("ex")
->Crunch : typeof Crunch
+>crunch : ex.Crunch
+>new ex.Crunch(1) : ex.Crunch
+>ex.Crunch : typeof ex.Crunch
+>ex : typeof ex
+>Crunch : typeof ex.Crunch
 >1 : 1
 
 crunch.n
 >crunch.n : number
->crunch : Crunch
+>crunch : ex.Crunch
 >n : number
 
 
@@ -27,12 +27,12 @@ crunch.n
  * @param {ex.Crunch} wrap
  */
 function f(wrap) {
->f : (wrap: Crunch) => void
->wrap : Crunch
+>f : (wrap: ex.Crunch) => void
+>wrap : ex.Crunch
 
     wrap.n
 >wrap.n : number
->wrap : Crunch
+>wrap : ex.Crunch
 >n : number
 }
 

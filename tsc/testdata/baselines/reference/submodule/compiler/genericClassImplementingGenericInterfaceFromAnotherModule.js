@@ -16,3 +16,14 @@ var bar;
     }
     bar.Foo = Foo;
 })(bar || (bar = {}));
+
+
+//// [genericClassImplementingGenericInterfaceFromAnotherModule.d.ts]
+declare namespace foo {
+    interface IFoo<T> {
+    }
+}
+declare namespace bar {
+    class Foo<T> implements foo.IFoo<T> {
+    }
+}

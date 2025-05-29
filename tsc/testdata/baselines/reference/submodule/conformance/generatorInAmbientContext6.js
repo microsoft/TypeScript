@@ -11,3 +11,9 @@ var M;
     function* generator() { }
     M.generator = generator;
 })(M || (M = {}));
+
+
+//// [generatorInAmbientContext6.d.ts]
+declare namespace M {
+    function generator(): any;
+}

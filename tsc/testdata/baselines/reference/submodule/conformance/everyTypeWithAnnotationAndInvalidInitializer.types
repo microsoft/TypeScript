@@ -142,12 +142,12 @@ var aModule: typeof M = N;
 >N : typeof N
 
 var aClassInModule: M.A = new N.A();
->aClassInModule : A
+>aClassInModule : M.A
 >M : any
->new N.A() : A
->N.A : typeof A
+>new N.A() : N.A
+>N.A : typeof N.A
 >N : typeof N
->A : typeof A
+>A : typeof N.A
 
 var aFunctionInModule: typeof M.F2 = F2;
 >aFunctionInModule : (x: number) => string

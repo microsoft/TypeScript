@@ -8,7 +8,7 @@ interface Pretty<To> {
 
 interface Schema<A> {
   readonly pretty?: Pretty<A>;
->pretty : (Pretty<A>) | undefined
+>pretty : Pretty<A> | undefined
 }
 
 interface Class<A> {

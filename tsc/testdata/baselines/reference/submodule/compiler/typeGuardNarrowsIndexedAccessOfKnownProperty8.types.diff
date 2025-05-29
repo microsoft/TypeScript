@@ -12,26 +12,4 @@
 -=== ./b.ts ===
 +=== b.ts ===
  import * as a from "./a";
-->a : typeof a
-+>a : typeof import("a")
-
- export class C {
- >C : C
-@@= skipped -14, +14 lines =@@
-     [a.key]: string;
- >[a.key] : string
- >a.key : "a"
-->a : typeof a
-+>a : typeof import("a")
- >key : "a"
-
-     constructor() {
-@@= skipped -9, +9 lines =@@
- >this[a.key] : string
- >this : this
- >a.key : "a"
-->a : typeof a
-+>a : typeof import("a")
- >key : "a"
- >"foo" : "foo"
-     }
+ >a : typeof a

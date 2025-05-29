@@ -22,12 +22,12 @@ export module c {
 >b : typeof b
 
     export var x: b.c = new b.c();
->x : c
+>x : b.c
 >b : any
->new b.c() : c
->b.c : typeof c
+>new b.c() : b.c
+>b.c : typeof b.c
 >b : typeof b
->c : typeof c
+>c : typeof b.c
 }
 
 export var d = new c.b.c();

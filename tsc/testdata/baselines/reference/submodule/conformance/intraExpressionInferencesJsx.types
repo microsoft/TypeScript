@@ -67,8 +67,8 @@ type AnimatedViewProps<T extends Animations> = {
 };
 
 const Component = <T extends Animations>({
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
-><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
+>Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
+><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
 
   animations,
 >animations : T
@@ -77,11 +77,11 @@ const Component = <T extends Animations>({
 >style : (animationsValues: StyleParam<T>) => string
 
 }: AnimatedViewProps<T>) => <></>;
-><></> : Element
+><></> : JSX.Element
 
 <Component
-><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : Element
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
+>Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; }; }
@@ -116,16 +116,16 @@ const Component = <T extends Animations>({
   }}
 />;
 <Component
-><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : Element
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
+>Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
 
   animations={{
->animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
->{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  } : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
+>animations : { test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }
+>{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  } : { test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }
 
     test: {
->test : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
->{      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
+>test : { kind: "a"; value: number; a: true; func(): { a: true; }; }
+>{      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func(): { a: true; }; }
 
       kind: "a",
 >kind : "a"
@@ -154,9 +154,9 @@ const Component = <T extends Animations>({
     },
   }}
   style={(anim) => {
->style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
->(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>) => string
->anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }>
+>style : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>) => string
+>(anim) => {    return "";  } : (anim: StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>) => string
+>anim : StyleParam<{ test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }>
 
     return "";
 >"" : ""
@@ -164,8 +164,8 @@ const Component = <T extends Animations>({
   }}
 />;
 <Component
-><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : Element
->Component : <T extends Animations>(__0: AnimatedViewProps<T>) => Element
+><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
+>Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
@@ -226,17 +226,17 @@ interface Props<T> {
 }
 
 function Foo<T>(props: Props<T>) {
->Foo : <T>(props: Props<T>) => Element
+>Foo : <T>(props: Props<T>) => JSX.Element
 >props : Props<T>
 
   return <div />;
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 }
 
 <Foo
-><Foo  a={() => 10}  b={(arg) => { arg.toString(); }}/> : Element
->Foo : <T>(props: Props<T>) => Element
+><Foo  a={() => 10}  b={(arg) => { arg.toString(); }}/> : JSX.Element
+>Foo : <T>(props: Props<T>) => JSX.Element
 
   a={() => 10}
 >a : () => number
@@ -255,8 +255,8 @@ function Foo<T>(props: Props<T>) {
 />;
 
 <Foo
-><Foo  a={(x) => 10}  b={(arg) => { arg.toString(); }}/> : Element
->Foo : <T>(props: Props<T>) => Element
+><Foo  a={(x) => 10}  b={(arg) => { arg.toString(); }}/> : JSX.Element
+>Foo : <T>(props: Props<T>) => JSX.Element
 
   a={(x) => 10}
 >a : (x: string) => number
@@ -276,8 +276,8 @@ function Foo<T>(props: Props<T>) {
 />;
 
 <Foo {...{
-><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : Element
->Foo : <T>(props: Props<T>) => Element
+><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : JSX.Element
+>Foo : <T>(props: Props<T>) => JSX.Element
 >{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: string) => number; b: (arg: number) => void; }
 
   a: (x) => 10,

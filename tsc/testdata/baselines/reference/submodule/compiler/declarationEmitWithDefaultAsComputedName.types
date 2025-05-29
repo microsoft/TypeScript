@@ -28,7 +28,7 @@ export default createExperiment({
 
 === main.ts ===
 import other from "./other";
->other : Experiment<"foo">
+>other : { name: "foo"; }
 
 export const obj = {
 >obj : { foo: number; }
@@ -37,7 +37,7 @@ export const obj = {
     [other.name]: 1,
 >[other.name] : number
 >other.name : "foo"
->other : Experiment<"foo">
+>other : { name: "foo"; }
 >name : "foo"
 >1 : 1
 

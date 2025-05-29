@@ -13,7 +13,7 @@ export class A {
     }
 }
 export default class Base extends A {
->Base : default
+>Base : Base
 >A : A
 
     // This method is required to reproduce #35932

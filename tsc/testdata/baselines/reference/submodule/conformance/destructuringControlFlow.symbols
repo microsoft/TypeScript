@@ -115,8 +115,8 @@ function f4() {
 >x : Symbol(x, Decl(destructuringControlFlow.ts, 30, 6))
 
     ({ ["x"]: x } = 0);  // Error
->["x"] : Symbol(x, Decl(destructuringControlFlow.ts, 31, 6))
->"x" : Symbol(x, Decl(destructuringControlFlow.ts, 31, 6))
+>["x"] : Symbol(["x"], Decl(destructuringControlFlow.ts, 31, 6))
+>"x" : Symbol(["x"], Decl(destructuringControlFlow.ts, 31, 6))
 >x : Symbol(x, Decl(destructuringControlFlow.ts, 29, 7))
 
     ({ ["x" + ""]: x } = 0);  // Errpr

@@ -20,3 +20,10 @@ exports.default = a;
 Object.defineProperty(exports, "__esModule", { value: true });
 const es6ImportDefaultBindingAmd_0_1 = require("es6ImportDefaultBindingAmd_0");
 var x = es6ImportDefaultBindingAmd_0_1.default;
+
+
+//// [es6ImportDefaultBindingAmd_0.d.ts]
+declare var a: number;
+export default a;
+//// [es6ImportDefaultBindingAmd_1.d.ts]
+export {};

@@ -42,7 +42,7 @@ interface I {
 }
 
 var a: {
->a : { (x: "hi"): any; (x: "a"): any; foo: { (x: "hi"): any; (x: "a"): any; }; }
+>a : { (x: "hi"): any; (x: "a"): any; foo(x: "hi"): any; foo(x: "a"): any; }
 
     (x: 'hi');
 >x : "hi"
@@ -60,8 +60,8 @@ var a: {
 }
 
 var b = {
->b : { foo: (x: "a") => void; }
->{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo: (x: "a") => void; }
+>b : { foo(x: "a"): void; }
+>{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo(x: "a"): void; }
 
     foo(x: 'hi') { },
 >foo : (x: "hi") => void

@@ -57,20 +57,12 @@
 +    export * from Aaa; // this line causes the nullref
  })(Bbb || (Bbb = {}));
  var a;
--
--
--//// [exportDeclarationInInternalModule.d.ts]
--declare class Bbb {
--}
--declare class Aaa extends Bbb {
--}
--declare namespace Aaa {
--    class SomeType {
--    }
--}
--declare namespace Bbb {
--    export class SomeType {
--    }
+
+@@= skipped -58, +30 lines =@@
+ declare namespace Bbb {
+     export class SomeType {
+     }
 -    export * from Aaa;
--}
--declare var a: Bbb.SomeType;
++    export * from Aaa; // this line causes the nullref
+ }
+ declare var a: Bbb.SomeType;

@@ -48,3 +48,20 @@ exports.Math = require("./Math/Math");
 Object.defineProperty(exports, "__esModule", { value: true });
 const Drawing = require("./Drawing");
 var addr = new Drawing.Math.Adder();
+
+
+//// [Adder.d.ts]
+declare class Adder {
+    add(a: number, b: number): void;
+}
+export = Adder;
+//// [Math.d.ts]
+import Adder = require('./Adder');
+declare var Math: {
+    Adder: typeof Adder;
+};
+export = Math;
+//// [Drawing.d.ts]
+export import Math = require('./Math/Math');
+//// [consumer.d.ts]
+export {};

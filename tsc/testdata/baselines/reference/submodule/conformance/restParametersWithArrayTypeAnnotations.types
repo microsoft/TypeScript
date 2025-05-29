@@ -38,7 +38,7 @@ interface I {
 }
 
 var a: {
->a : { (...x: number[]): any; foo: (...x: number[]) => any; }
+>a : { (...x: number[]): any; foo(...x: number[]): any; }
 
     (...x: number[]);
 >x : number[]
@@ -49,8 +49,8 @@ var a: {
 }
 
 var b = {
->b : { foo: (...x: number[]) => void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
->{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo: (...x: number[]) => void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
+>b : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
+>{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
 
     foo(...x: number[]) { },
 >foo : (...x: number[]) => void
@@ -107,7 +107,7 @@ interface I2 {
 }
 
 var a2: {
->a2 : { (...x: string[]): any; foo: (...x: string[]) => any; }
+>a2 : { (...x: string[]): any; foo(...x: string[]): any; }
 
     (...x: Array<string>);
 >x : string[]
@@ -118,8 +118,8 @@ var a2: {
 }
 
 var b2 = {
->b2 : { foo: (...x: string[]) => void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
->{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo: (...x: string[]) => void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
+>b2 : { foo(...x: string[]): void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
+>{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo(...x: string[]): void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
 
     foo(...x: Array<string>) { },
 >foo : (...x: string[]) => void

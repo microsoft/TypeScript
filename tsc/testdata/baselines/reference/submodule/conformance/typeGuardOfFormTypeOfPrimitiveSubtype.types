@@ -5,7 +5,7 @@ let a: {};
 >a : {}
 
 let b: {toString(): string};
->b : { toString: () => string; }
+>b : { toString(): string; }
 >toString : () => string
 
 if (typeof a === "number") {
@@ -42,7 +42,7 @@ if (typeof a === "boolean") {
 if (typeof b === "number") {
 >typeof b === "number" : boolean
 >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->b : { toString: () => string; }
+>b : { toString(): string; }
 >"number" : "number"
 
     let c: number = b;
@@ -52,7 +52,7 @@ if (typeof b === "number") {
 if (typeof b === "string") {
 >typeof b === "string" : boolean
 >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->b : { toString: () => string; }
+>b : { toString(): string; }
 >"string" : "string"
 
     let c: string = b;
@@ -62,7 +62,7 @@ if (typeof b === "string") {
 if (typeof b === "boolean") {
 >typeof b === "boolean" : boolean
 >typeof b : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
->b : { toString: () => string; }
+>b : { toString(): string; }
 >"boolean" : "boolean"
 
     let c: boolean = b;

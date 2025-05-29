@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 type TextProps = { editable: false }
 >TextProps : TextProps
@@ -17,15 +17,15 @@ type TextProps = { editable: false }
 
 class TextComponent extends React.Component<TextProps, {}> {
 >TextComponent : TextComponent
->React.Component : Component<TextProps, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<TextProps, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <span>Some Text..</span>;
-><span>Some Text..</span> : Element
+><span>Some Text..</span> : JSX.Element
 >span : any
 >span : any
     }
@@ -33,8 +33,8 @@ class TextComponent extends React.Component<TextProps, {}> {
 
 // Error
 let x = <TextComponent editable={true} />
->x : Element
-><TextComponent editable={true} /> : Element
+>x : JSX.Element
+><TextComponent editable={true} /> : JSX.Element
 >TextComponent : typeof TextComponent
 >editable : true
 >true : true

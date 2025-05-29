@@ -95,7 +95,7 @@ var s2: S2;
 >s2 : S2
 
 var a3: { f(x: string): void };
->a3 : { f: (x: string) => void; }
+>a3 : { f(x: string): void; }
 >f : (x: string) => void
 >x : string
 
@@ -106,9 +106,9 @@ t = s2;
 >s2 : S2
 
 t = a3;
->t = a3 : { f: (x: string) => void; }
+>t = a3 : { f(x: string): void; }
 >t : T
->a3 : { f: (x: string) => void; }
+>a3 : { f(x: string): void; }
 
 t = (x: string) => 1;
 >t = (x: string) => 1 : (x: string) => number
@@ -130,9 +130,9 @@ a = s2;
 >s2 : S2
 
 a = a3;
->a = a3 : { f: (x: string) => void; }
+>a = a3 : { f(x: string): void; }
 >a : { f: new (x: number) => void; }
->a3 : { f: (x: string) => void; }
+>a3 : { f(x: string): void; }
 
 a = (x: string) => 1;
 >a = (x: string) => 1 : (x: string) => number

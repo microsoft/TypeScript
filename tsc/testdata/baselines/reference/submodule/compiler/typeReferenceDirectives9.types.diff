@@ -11,3 +11,12 @@
  === /main.ts ===
  export class Cls {
  >Cls : Cls
+@@= skipped -29, +25 lines =@@
+ >undefined : undefined
+
+ declare module "./main" {
+->"./main" : typeof import("/main")
++>"./main" : typeof import("./main")
+
+     interface Cls {
+         foo(): Lib;

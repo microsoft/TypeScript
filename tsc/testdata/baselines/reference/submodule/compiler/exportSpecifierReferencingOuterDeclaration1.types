@@ -9,6 +9,6 @@ declare module "m" {
 >X : any
 
     export function foo(): X.bar;
->foo : () => bar
+>foo : () => X.bar
 >X : any
 }

@@ -2,7 +2,7 @@
 
 === jsxInferenceProducesLiteralAsExpected.tsx ===
 import React = require("react");
->React : typeof __React
+>React : typeof React
 
 type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
 >FunctionPropertyNames : FunctionPropertyNames<T>
@@ -30,9 +30,9 @@ interface TestProps<T> {
 >foo : FunctionPropertyNames<T>
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
->Test : <T>(props: TestProps<T>) => Element
+>Test : <T>(props: TestProps<T>) => JSX.Element
 >props : TestProps<T>
-><></> : Element
+><></> : JSX.Element
 
 const model = new TestObject();
 >model : TestObject
@@ -40,17 +40,17 @@ const model = new TestObject();
 >TestObject : typeof TestObject
 
 const el1 = <Test model={model} foo="c" />;
->el1 : Element
-><Test model={model} foo="c" /> : Element
->Test : <T>(props: TestProps<T>) => Element
+>el1 : JSX.Element
+><Test model={model} foo="c" /> : JSX.Element
+>Test : <T>(props: TestProps<T>) => JSX.Element
 >model : TestObject
 >model : TestObject
 >foo : "c"
 
 const el2 = <Test<TestObject> model={model} foo="c" />;
->el2 : Element
-><Test<TestObject> model={model} foo="c" /> : Element
->Test : <T>(props: TestProps<T>) => Element
+>el2 : JSX.Element
+><Test<TestObject> model={model} foo="c" /> : JSX.Element
+>Test : <T>(props: TestProps<T>) => JSX.Element
 >model : TestObject
 >model : TestObject
 >foo : "c"

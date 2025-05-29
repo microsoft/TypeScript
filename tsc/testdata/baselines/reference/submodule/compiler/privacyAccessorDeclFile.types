@@ -309,34 +309,34 @@ export class publicClassWithPrivateModuleGetAccessorTypes {
 >publicClassWithPrivateModuleGetAccessorTypes : publicClassWithPrivateModuleGetAccessorTypes
 
     static get myPublicStaticMethod(): privateModule.publicClass { // Error
->myPublicStaticMethod : publicClass
+>myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     get myPublicMethod(): privateModule.publicClass { // Error
->myPublicMethod : publicClass
+>myPublicMethod : privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     static get myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : publicClass
+>myPublicStaticMethod1 : privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     get myPublicMethod1() { // Error
->myPublicMethod1 : publicClass
+>myPublicMethod1 : privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
 }
 
@@ -344,13 +344,13 @@ export class publicClassWithPrivateModuleSetAccessorTypes {
 >publicClassWithPrivateModuleSetAccessorTypes : publicClassWithPrivateModuleSetAccessorTypes
 
     static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
->myPublicStaticMethod : publicClass
->param : publicClass
+>myPublicStaticMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
     }
     set myPublicMethod(param: privateModule.publicClass) { // Error
->myPublicMethod : publicClass
->param : publicClass
+>myPublicMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
     }
 }
@@ -359,34 +359,34 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 >privateClassWithPrivateModuleGetAccessorTypes : privateClassWithPrivateModuleGetAccessorTypes
 
     static get myPublicStaticMethod(): privateModule.publicClass {
->myPublicStaticMethod : publicClass
+>myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     get myPublicMethod(): privateModule.publicClass {
->myPublicMethod : publicClass
+>myPublicMethod : privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     static get myPublicStaticMethod1() {
->myPublicStaticMethod1 : publicClass
+>myPublicStaticMethod1 : privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     get myPublicMethod1() {
->myPublicMethod1 : publicClass
+>myPublicMethod1 : privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
 }
 
@@ -394,13 +394,13 @@ class privateClassWithPrivateModuleSetAccessorTypes {
 >privateClassWithPrivateModuleSetAccessorTypes : privateClassWithPrivateModuleSetAccessorTypes
 
     static set myPublicStaticMethod(param: privateModule.publicClass) {
->myPublicStaticMethod : publicClass
->param : publicClass
+>myPublicStaticMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
     }
     set myPublicMethod(param: privateModule.publicClass) {
->myPublicMethod : publicClass
->param : publicClass
+>myPublicMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
     }
 }
@@ -715,34 +715,34 @@ export module publicModule {
 >publicClassWithPrivateModuleGetAccessorTypes : publicClassWithPrivateModuleGetAccessorTypes
 
         static get myPublicStaticMethod(): privateModule.publicClass { // Error
->myPublicStaticMethod : publicClass
+>myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         get myPublicMethod(): privateModule.publicClass { // Error
->myPublicMethod : publicClass
+>myPublicMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static get myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : publicClass
+>myPublicStaticMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         get myPublicMethod1() { // Error
->myPublicMethod1 : publicClass
+>myPublicMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
 
@@ -750,13 +750,13 @@ export module publicModule {
 >publicClassWithPrivateModuleSetAccessorTypes : publicClassWithPrivateModuleSetAccessorTypes
 
         static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
->myPublicStaticMethod : publicClass
->param : publicClass
+>myPublicStaticMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
         set myPublicMethod(param: privateModule.publicClass) { // Error
->myPublicMethod : publicClass
->param : publicClass
+>myPublicMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
     }
@@ -765,34 +765,34 @@ export module publicModule {
 >privateClassWithPrivateModuleGetAccessorTypes : privateClassWithPrivateModuleGetAccessorTypes
 
         static get myPublicStaticMethod(): privateModule.publicClass {
->myPublicStaticMethod : publicClass
+>myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         get myPublicMethod(): privateModule.publicClass {
->myPublicMethod : publicClass
+>myPublicMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static get myPublicStaticMethod1() {
->myPublicStaticMethod1 : publicClass
+>myPublicStaticMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         get myPublicMethod1() {
->myPublicMethod1 : publicClass
+>myPublicMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
 
@@ -800,13 +800,13 @@ export module publicModule {
 >privateClassWithPrivateModuleSetAccessorTypes : privateClassWithPrivateModuleSetAccessorTypes
 
         static set myPublicStaticMethod(param: privateModule.publicClass) {
->myPublicStaticMethod : publicClass
->param : publicClass
+>myPublicStaticMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
         set myPublicMethod(param: privateModule.publicClass) {
->myPublicMethod : publicClass
->param : publicClass
+>myPublicMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
     }
@@ -2016,34 +2016,34 @@ module publicModuleInGlobal {
 >publicClassWithPrivateModuleGetAccessorTypes : publicClassWithPrivateModuleGetAccessorTypes
 
         static get myPublicStaticMethod(): privateModule.publicClass { // Error
->myPublicStaticMethod : publicClass
+>myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         get myPublicMethod(): privateModule.publicClass { // Error
->myPublicMethod : publicClass
+>myPublicMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static get myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : publicClass
+>myPublicStaticMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         get myPublicMethod1() { // Error
->myPublicMethod1 : publicClass
+>myPublicMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
 
@@ -2051,13 +2051,13 @@ module publicModuleInGlobal {
 >publicClassWithPrivateModuleSetAccessorTypes : publicClassWithPrivateModuleSetAccessorTypes
 
         static set myPublicStaticMethod(param: privateModule.publicClass) { // Error
->myPublicStaticMethod : publicClass
->param : publicClass
+>myPublicStaticMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
         set myPublicMethod(param: privateModule.publicClass) { // Error
->myPublicMethod : publicClass
->param : publicClass
+>myPublicMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
     }
@@ -2066,34 +2066,34 @@ module publicModuleInGlobal {
 >privateClassWithPrivateModuleGetAccessorTypes : privateClassWithPrivateModuleGetAccessorTypes
 
         static get myPublicStaticMethod(): privateModule.publicClass {
->myPublicStaticMethod : publicClass
+>myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         get myPublicMethod(): privateModule.publicClass {
->myPublicMethod : publicClass
+>myPublicMethod : privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static get myPublicStaticMethod1() {
->myPublicStaticMethod1 : publicClass
+>myPublicStaticMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         get myPublicMethod1() {
->myPublicMethod1 : publicClass
+>myPublicMethod1 : privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
 
@@ -2101,13 +2101,13 @@ module publicModuleInGlobal {
 >privateClassWithPrivateModuleSetAccessorTypes : privateClassWithPrivateModuleSetAccessorTypes
 
         static set myPublicStaticMethod(param: privateModule.publicClass) {
->myPublicStaticMethod : publicClass
->param : publicClass
+>myPublicStaticMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
         set myPublicMethod(param: privateModule.publicClass) {
->myPublicMethod : publicClass
->param : publicClass
+>myPublicMethod : privateModule.publicClass
+>param : privateModule.publicClass
 >privateModule : any
         }
     }

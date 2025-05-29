@@ -30,3 +30,11 @@ exports.v = v;
 function bar() {
     return v;
 }
+
+
+//// [0.d.ts]
+export {};
+//// [1.d.ts]
+declare let v: string | boolean;
+declare function bar(): string | boolean;
+export { v, bar };

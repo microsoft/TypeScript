@@ -8,15 +8,17 @@
 +const boxedBox_1 = require("./boxedBox");
  exports._ = boxedBox_1.boxedBox;
  // At index 83
--/**
-- * wat
-- */
--
--
--//// [a.d.ts]
+ /**
+@@= skipped -9, +9 lines =@@
+
+
+ //// [a.d.ts]
 -export declare const _: import("./box").Box<{
 -    boxed: import("./box").Box<number>;
--}>;
++export declare const _: import("./box.js").Box<{
++    boxed: import("./box.js").Box<number>;
+ }>;
++// At index 83
  /**
   * wat
   */

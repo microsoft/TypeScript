@@ -9,7 +9,7 @@
  >module.exports = {   message: ""} : { message: string; }
  >module.exports : { message: string; }
 ->module : { exports: { message: string; }; }
-+>module : { export=: { message: string; }; }
++>module : { "export=": { message: string; }; }
  >exports : { message: string; }
  >{   message: ""} : { message: string; }
 

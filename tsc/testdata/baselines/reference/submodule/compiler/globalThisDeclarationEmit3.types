@@ -2,18 +2,18 @@
 
 === index.ts ===
 import { variable } from "./variable";
->variable : typeof globalThis
+>variable : typeof variable
 
 export { variable as globalThis };
->variable : typeof globalThis
->globalThis : typeof globalThis
+>variable : typeof variable
+>globalThis : typeof variable
 
 === variable.ts ===
 import mod = globalThis;
->mod : typeof globalThis
->globalThis : typeof globalThis
+>mod : typeof mod
+>globalThis : typeof mod
 
 export { mod as variable };
->mod : typeof globalThis
->variable : typeof globalThis
+>mod : typeof mod
+>variable : typeof mod
 

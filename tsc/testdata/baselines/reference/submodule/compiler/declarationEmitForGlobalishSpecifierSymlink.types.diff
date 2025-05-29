@@ -1,26 +1,22 @@
 --- old.declarationEmitForGlobalishSpecifierSymlink.types
 +++ new.declarationEmitForGlobalishSpecifierSymlink.types
-@@= skipped -27, +27 lines =@@
- export * from "./src/impl";
- === /p1/index.ts ===
- import * as _whatever from "p2";
-->_whatever : typeof _whatever
-+>_whatever : typeof import("/p2/index")
+@@= skipped -30, +30 lines =@@
+ >_whatever : typeof _whatever
 
  import { getA } from "typescript-fsa";
 ->getA : () => import("/p1/node_modules/typescript-fsa/index").A
-+>getA : () => A
++>getA : () => import("typescript-fsa").A
 
  export const a = getA();
 ->a : import("/p1/node_modules/typescript-fsa/index").A
 ->getA() : import("/p1/node_modules/typescript-fsa/index").A
 ->getA : () => import("/p1/node_modules/typescript-fsa/index").A
-+>a : A
-+>getA() : A
-+>getA : () => A
++>a : import("typescript-fsa").A
++>getA() : import("typescript-fsa").A
++>getA : () => import("typescript-fsa").A
 
  === /p2/index.d.ts ===
  export const a: import("typescript-fsa").A;
 ->a : import("/p2/node_modules/typescript-fsa/index").A
-+>a : A
++>a : import("typescript-fsa").A
 

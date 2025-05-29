@@ -5,21 +5,21 @@ declare module "foo" {
 >"foo" : typeof import("foo")
 
     export var before: C;
->before : default
+>before : C
 
     export default class C {
->C : default
+>C : C
 
         method(): C;
->method : () => default
+>method : () => C
     }
 
     export var after: C;
->after : default
+>after : C
 
     export var t: typeof C;
->t : typeof default
->C : typeof default
+>t : typeof C
+>C : typeof C
 }
 
 

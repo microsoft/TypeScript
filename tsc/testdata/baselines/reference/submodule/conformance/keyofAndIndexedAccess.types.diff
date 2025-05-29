@@ -9,24 +9,7 @@
  >key : K
 
      const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
-@@= skipped -29, +29 lines =@@
-     let name = getProperty(shape, "name");
- >name : S["name"]
- >getProperty(shape, "name") : S["name"]
-->getProperty : <T, K_1 extends keyof T>(obj: T, key: K_1) => T[K_1]
-+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
- >shape : S
- >"name" : "name"
-
-     let prop = getProperty(shape, key);
- >prop : S[K]
- >getProperty(shape, key) : S[K]
-->getProperty : <T, K_1 extends keyof T>(obj: T, key: K_1) => T[K_1]
-+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
- >shape : S
- >key : K
-
-@@= skipped -228, +228 lines =@@
+@@= skipped -257, +257 lines =@@
  }
 
  function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
@@ -62,52 +45,14 @@
  >a : any
  >b : any
  >a : any
-@@= skipped -45, +45 lines =@@
- }
-
- function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
-->f72 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
-->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
-+>f72 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]) => void
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
- >x : T
- >y : U
- >k : K
-@@= skipped -9, +9 lines =@@
-     let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
- >a : number
- >func({ a: 1, b: "hello" }, { c: true }, 'a') : number
-->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
- >{ a: 1, b: "hello" } : { a: number; b: string; }
- >a : number
- >1 : 1
-@@= skipped -14, +14 lines =@@
-     let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
- >b : string
- >func({ a: 1, b: "hello" }, { c: true }, 'b') : string
-->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
- >{ a: 1, b: "hello" } : { a: number; b: string; }
- >a : number
- >1 : 1
-@@= skipped -14, +14 lines =@@
-     let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
- >c : boolean
- >func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
-->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
- >{ a: 1, b: "hello" } : { a: number; b: string; }
- >a : number
- >1 : 1
-@@= skipped -13, +13 lines =@@
+@@= skipped -95, +95 lines =@@
  }
 
  function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
 ->f73 : (func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) => void
 ->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
-+>f73 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]) => void
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
++>f73 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
++>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
  >x : T
  >y : U
  >k : K
@@ -116,7 +61,7 @@
  >a : number
  >func({ a: 1, b: "hello" }, { c: true }, 'a') : number
 ->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
++>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
  >{ a: 1, b: "hello" } : { a: number; b: string; }
  >a : number
  >1 : 1
@@ -125,7 +70,7 @@
  >b : string
  >func({ a: 1, b: "hello" }, { c: true }, 'b') : string
 ->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
++>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
  >{ a: 1, b: "hello" } : { a: number; b: string; }
  >a : number
  >1 : 1
@@ -134,7 +79,7 @@
  >c : boolean
  >func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
 ->func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
-+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => T & U[K]
++>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
  >{ a: 1, b: "hello" } : { a: number; b: string; }
  >a : number
  >1 : 1
@@ -144,8 +89,8 @@
  function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
 ->f74 : (func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) => void
 ->func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
-+>f74 : (func: <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => T | U[K]) => void
-+>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => T | U[K]
++>f74 : (func: <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]) => void
++>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
  >x : T
  >y : U
  >k : K
@@ -154,7 +99,7 @@
  >a : number
  >func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a') : number
 ->func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
-+>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => T | U[K]
++>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
  >{ a: 1, b: "hello" } : { a: number; b: string; }
  >a : number
  >1 : 1
@@ -163,7 +108,7 @@
  >b : string | boolean
  >func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : string | boolean
 ->func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
-+>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => T | U[K]
++>func : <T, U, K extends keyof T & keyof U>(x: T, y: U, k: K) => (T | U)[K]
  >{ a: 1, b: "hello" } : { a: number; b: string; }
  >a : number
  >1 : 1
@@ -203,7 +148,7 @@
 
      get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
 ->get : <K extends keyof (Data & Computed)>(key: K) => (Data & Computed)[K]
-+>get : <K extends keyof Computed | keyof Data>(key: K) => Data & Computed[K]
++>get : <K extends keyof Computed | keyof Data>(key: K) => (Data & Computed)[K]
  >key : K
  }
 
@@ -212,7 +157,7 @@
 
      get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
 ->get : <K extends keyof Data | keyof Computed>(key: K) => (Data & Computed)[K]
-+>get : <K extends keyof Computed | keyof Data>(key: K) => Data & Computed[K]
++>get : <K extends keyof Computed | keyof Data>(key: K) => (Data & Computed)[K]
  >key : K
  }
 
@@ -234,21 +179,7 @@
  >list : T
 
  // Repro from #13604
-@@= skipped -45, +45 lines =@@
-
-         this.childFormFactories[prop](value)
- >this.childFormFactories[prop](value) : Form<T[K]>
-->this.childFormFactories[prop] : { [K_1 in keyof T]: (v: T[K_1]) => Form<T[K_1]>; }[K]
-->this.childFormFactories : { [K_1 in keyof T]: (v: T[K_1]) => Form<T[K_1]>; }
-+>this.childFormFactories[prop] : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }[K]
-+>this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
- >this : this
-->childFormFactories : { [K_1 in keyof T]: (v: T[K_1]) => Form<T[K_1]>; }
-+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
- >prop : K
- >value : T[K]
-     }
-@@= skipped -26, +26 lines =@@
+@@= skipped -71, +71 lines =@@
  >this : this
  >props : Readonly<P>
  >Object.freeze(props) : Readonly<P>
@@ -260,47 +191,7 @@
  >props : P
      }
  }
-@@= skipped -34, +34 lines =@@
- >super(merge(props, foo)) : void
- >super : typeof SampleClass
- >merge(props, foo) : T & Foo
-->merge : <T_1, U>(obj1: T_1, obj2: U) => T_1 & U
-+>merge : <T, U>(obj1: T, obj2: U) => T & U
- >props : T
- >foo : Foo
-     }
-@@= skipped -10, +10 lines =@@
-
-         this.props.foo.concat;
- >this.props.foo.concat : (...strings: string[]) => string
-->this.props.foo : (T & Foo)["foo"]
-+>this.props.foo : T & Foo["foo"]
- >this.props : Readonly<T & Foo>
- >this : this
- >props : Readonly<T & Foo>
-->foo : (T & Foo)["foo"]
-+>foo : T & Foo["foo"]
- >concat : (...strings: string[]) => string
-     }
- }
-@@= skipped -143, +143 lines =@@
-
-     take<{} | null | undefined>(o[k]);
- >take<{} | null | undefined>(o[k]) : void
-->take : <T_1>(p: T_1) => void
-+>take : <T>(p: T) => void
- >o[k] : T[K]
- >o : T
- >k : K
-
-     take<any>(o[k]);
- >take<any>(o[k]) : void
-->take : <T_1>(p: T_1) => void
-+>take : <T>(p: T) => void
- >o[k] : T[K]
- >o : T
- >k : K
-@@= skipped -38, +38 lines =@@
+@@= skipped -225, +225 lines =@@
  >Foo7 : T
 
  declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;

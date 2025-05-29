@@ -48,3 +48,17 @@ const MAP2 = {
 };
 function doSome(arg1, arg2 = MAP, arg3 = MAP2) {
 }
+
+
+//// [b.d.ts]
+export { Hash, StringHash, StringHash2 };
+interface Hash<T> {
+    [key: string]: T;
+}
+type StringHash = Hash<string>;
+interface StringHash2 extends Hash<string> {
+}
+//// [a.d.ts]
+import { StringHash, StringHash2 } from "./b";
+export { doSome };
+declare function doSome(arg1: string, arg2?: StringHash, arg3?: StringHash2): void;

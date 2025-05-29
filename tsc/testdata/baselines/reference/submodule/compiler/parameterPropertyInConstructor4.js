@@ -18,3 +18,10 @@ class C {
     }
 }
 exports.C = C;
+
+
+//// [parameterPropertyInConstructor4.d.ts]
+export declare class C {
+    a: number[];
+    constructor(a: number[], b: number);
+}

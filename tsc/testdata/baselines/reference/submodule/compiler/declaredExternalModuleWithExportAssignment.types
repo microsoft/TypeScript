@@ -22,7 +22,7 @@ declare module 'connect' {
     }
 
     var server: {
->server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+>server : { (): connectExport; test1: connectModule; test2(): connectModule; }
 
         (): connectExport;
         test1: connectModule;
@@ -33,6 +33,6 @@ declare module 'connect' {
 
     };
     export = server;
->server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+>server : { (): connectExport; test1: connectModule; test2(): connectModule; }
 }
 

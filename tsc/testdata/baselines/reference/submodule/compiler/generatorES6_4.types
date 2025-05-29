@@ -2,8 +2,8 @@
 
 === generatorES6_4.ts ===
 var v = { 
->v : { foo: () => Generator<number, void, unknown>; }
->{    *foo() {       yield 0   }} : { foo: () => Generator<number, void, unknown>; }
+>v : { foo(): Generator<number, void, unknown>; }
+>{    *foo() {       yield 0   }} : { foo(): Generator<number, void, unknown>; }
 
    *foo() {
 >foo : () => Generator<number, void, unknown>

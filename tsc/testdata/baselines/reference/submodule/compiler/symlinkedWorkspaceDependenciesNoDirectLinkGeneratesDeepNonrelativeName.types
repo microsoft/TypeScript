@@ -16,20 +16,20 @@ export function create(): Foo;
 
 === workspace/packageB/index.d.ts ===
 import { create } from "package-a";
->create : () => Foo
+>create : () => import("../packageA/foo.js").Foo
 
 export declare function invoke(): ReturnType<typeof create>;
->invoke : () => Foo
->create : () => Foo
+>invoke : () => import("../packageA/foo.js").Foo
+>create : () => import("../packageA/foo.js").Foo
 
 === workspace/packageC/index.ts ===
 import * as pkg from "package-b";
->pkg : typeof import("workspace/packageB/index")
+>pkg : typeof pkg
 
 export const a = pkg.invoke();
->a : Foo
->pkg.invoke() : Foo
->pkg.invoke : () => Foo
->pkg : typeof import("workspace/packageB/index")
->invoke : () => Foo
+>a : import("../packageA/foo.js").Foo
+>pkg.invoke() : import("../packageA/foo.js").Foo
+>pkg.invoke : () => import("../packageA/foo.js").Foo
+>pkg : typeof pkg
+>invoke : () => import("../packageA/foo.js").Foo
 

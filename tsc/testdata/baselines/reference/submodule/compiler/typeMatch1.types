@@ -8,7 +8,7 @@ interface I2 { z; }
 >z : any
 
 var x1: { z: number; f(n: number): string; f(s: string): number; }
->x1 : { z: number; f: { (n: number): string; (s: string): number; }; }
+>x1 : { z: number; f(n: number): string; f(s: string): number; }
 >z : number
 >f : { (n: number): string; (s: string): number; }
 >n : number
@@ -21,7 +21,7 @@ var x2: { z:number;f:{(n:number):string;(s:string):number;}; } = x1;
 >f : { (n: number): string; (s: string): number; }
 >n : number
 >s : string
->x1 : { z: number; f: { (n: number): string; (s: string): number; }; }
+>x1 : { z: number; f(n: number): string; f(s: string): number; }
 
 var i:I;
 >i : I

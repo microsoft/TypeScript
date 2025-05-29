@@ -9,9 +9,9 @@ function map<T, U>(items: T[], f: (x: T) => U): U[]{
 
     return items.map(f);
 >items.map(f) : U[]
->items.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>items.map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
 >items : T[]
->map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
 >f : (x: T) => U
 }
 

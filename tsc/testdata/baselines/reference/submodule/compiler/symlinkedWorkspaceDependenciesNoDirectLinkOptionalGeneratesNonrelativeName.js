@@ -35,3 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 const pkg = require("package-b");
 exports.a = pkg.invoke();
+
+
+//// [index.d.ts]
+export declare const a: import("../packageA/index.js").Foo;

@@ -12,10 +12,10 @@ let x = [1];
 let y = x.getA().x;
 >y : number
 >x.getA().x : number
->x.getA() : A
->x.getA : () => A
+>x.getA() : import("A").A
+>x.getA : () => import("A").A
 >x : number[]
->getA : () => A
+>getA : () => import("A").A
 >x : number
 
 === array.d.ts ===

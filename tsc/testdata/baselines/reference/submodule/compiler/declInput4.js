@@ -36,3 +36,21 @@ var M;
     }
     M.D = D;
 })(M || (M = {}));
+
+
+//// [declInput4.d.ts]
+declare namespace M {
+    class E {
+    }
+    interface I1 {
+    }
+    class D {
+        m1: number;
+        m2: string;
+        m23: E;
+        m24: I1;
+        m232(): E;
+        m242(): I1;
+        m26(i: I1): void;
+    }
+}

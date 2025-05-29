@@ -1,14 +1,6 @@
 --- old.uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.symbols
 +++ new.uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.symbols
-@@= skipped -5, +5 lines =@@
- >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
-
- declare global {
-->global : Symbol(global, Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 0, 33))
-+>global : Symbol((Missing), Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 0, 33))
-
-     interface Promise<T> {
- >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 2, 16))
+@@= skipped -12, +12 lines =@@
  >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(uniqueSymbolAssignmentOnGlobalAugmentationSuceeds.ts, 3, 22))
 
          [FOO_SYMBOL]?: number;

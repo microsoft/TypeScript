@@ -16,7 +16,7 @@
 
          [QK in keyof QR]: ReturnType<typeof createCacheReducer<QR>>;
 ->createCacheReducer : <N_1 extends string, QR_1>(queries: Cache<N_1, QR_1>["queries"]) => (state?: { queries: QR_1; }) => { queries: QR_1; }
-+>createCacheReducer : <N extends string, QR>(queries: { [QK in keyof QR]: any; }) => (state?: { queries: QR; }) => { queries: QR; }
++>createCacheReducer : <N_1 extends string, QR_1>(queries: { [QK in keyof QR_1]: any; }) => (state?: { queries: QR_1; }) => { queries: QR_1; }
 
      };
  };

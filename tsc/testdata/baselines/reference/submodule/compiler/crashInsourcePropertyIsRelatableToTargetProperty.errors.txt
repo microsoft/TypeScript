@@ -1,4 +1,4 @@
-crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => ???' is not assignable to type 'D'.
+crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
 
 
 ==== crashInsourcePropertyIsRelatableToTargetProperty.ts (1 errors) ====
@@ -12,5 +12,5 @@ crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): error TS2322: Type '(x
     }
     var a: D = foo("hi", []);
         ~
-!!! error TS2322: Type '(x: "hi", items: string[]) => ???' is not assignable to type 'D'.
+!!! error TS2322: Type '(x: "hi", items: string[]) => typeof foo' is not assignable to type 'D'.
     

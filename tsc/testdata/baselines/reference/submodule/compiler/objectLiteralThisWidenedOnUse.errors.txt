@@ -1,4 +1,4 @@
-objectLiteralThisWidenedOnUse.ts(8,21): error TS2741: Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test: () => void; accept_foo: (foo: Foo) => boolean; }' but required in type 'Foo'.
+objectLiteralThisWidenedOnUse.ts(8,21): error TS2741: Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' but required in type 'Foo'.
 
 
 ==== objectLiteralThisWidenedOnUse.ts (1 errors) ====
@@ -11,7 +11,7 @@ objectLiteralThisWidenedOnUse.ts(8,21): error TS2741: Property 'bar' is missing 
       test () {
         this.accept_foo(this);
                         ~~~~
-!!! error TS2741: Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test: () => void; accept_foo: (foo: Foo) => boolean; }' but required in type 'Foo'.
+!!! error TS2741: Property 'bar' is missing in type '{ prop1: number; prop2: number; prop3: number; test(): void; accept_foo(foo: Foo): boolean; }' but required in type 'Foo'.
 !!! related TS2728 objectLiteralThisWidenedOnUse.ts:1:17: 'bar' is declared here.
       },
       accept_foo (foo: Foo): boolean {

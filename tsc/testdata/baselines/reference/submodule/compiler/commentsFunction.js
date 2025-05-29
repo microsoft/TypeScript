@@ -99,3 +99,27 @@ function foo2() {
     /// This is some detached comment
     // should emit this leading comment of } too
 }
+
+
+//// [commentsFunction.d.ts]
+/** This comment should appear for foo*/
+declare function foo(): void; /* trailing comment of function */
+/** This is comment for function signature*/
+declare function fooWithParameters(/** this is comment about a*/ a: string, 
+/** this is comment for b*/
+b: number): void; // trailing comment of function
+/** fooFunc
+ * comment
+ */
+declare var fooFunc: (b: string) => string;
+/// lamdaFoo var comment
+declare var lambdaFoo: (a: number, b: number) => number;
+declare var lambddaNoVarComment: (a: number, b: number) => number;
+declare function blah(a: string /* multiline trailing comment
+multiline */): void;
+declare function blah2(a: string /* single line multiple trailing comments */ /* second */): void;
+declare function blah3(a: string // trailing commen single line
+): void;
+declare function blah4(/*1*/ a: string /*2*/, /*3*/ b: string /*4*/): void;
+declare function foo1(): void;
+declare function foo2(): void;

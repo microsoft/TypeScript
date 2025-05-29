@@ -6,8 +6,8 @@ const obj = {};
 >{} : {}
 
 const a = {
->a : { prop: () => { metadata: number; }; }
->{    ...obj,    prop() {        return {            ...obj,            metadata: 213        };    }} : { prop: () => { metadata: number; }; }
+>a : { prop(): { metadata: number; }; }
+>{    ...obj,    prop() {        return {            ...obj,            metadata: 213        };    }} : { prop(): { metadata: number; }; }
 
     ...obj,
 >obj : {}

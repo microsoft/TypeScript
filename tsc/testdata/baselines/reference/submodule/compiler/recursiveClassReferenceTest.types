@@ -58,17 +58,17 @@ module Sample.Actions.Thing.Find {
 
 	export class StartFindAction implements Sample.Thing.IAction {
 >StartFindAction : StartFindAction
->Sample.Thing : typeof Thing
+>Sample.Thing : typeof Sample.Thing
 >Sample : typeof Sample
->Thing : typeof Thing
+>Thing : typeof Sample.Thing
 		
 		public getId() { return "yo"; }
 >getId : () => string
 >"yo" : "yo"
 		
 		public run(Thing:Sample.Thing.ICodeThing):boolean {
->run : (Thing: ICodeThing) => boolean
->Thing : ICodeThing
+>run : (Thing: Sample.Thing.ICodeThing) => boolean
+>Thing : Sample.Thing.ICodeThing
 >Sample : any
 >Thing : any
 

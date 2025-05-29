@@ -2,11 +2,11 @@
 
 === db.d.ts ===
 declare namespace Db {
->Db : typeof Db
+>Db : typeof Types
 
     export import Types = Db;
->Types : typeof Db
->Db : typeof Db
+>Types : typeof Types
+>Db : typeof Types
 }
 
 export = Db;

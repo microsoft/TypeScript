@@ -17,10 +17,10 @@
  >"foo".match(/(?<bar>foo)/)! : RegExpMatchArray
  >"foo".match(/(?<bar>foo)/) : RegExpMatchArray
 ->"foo".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
-+>"foo".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
++>"foo".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
  >"foo" : "foo"
 ->match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
-+>match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
++>match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
  >/(?<bar>foo)/ : RegExp
  >groups : { [key: string]: string; }
  >foo : string

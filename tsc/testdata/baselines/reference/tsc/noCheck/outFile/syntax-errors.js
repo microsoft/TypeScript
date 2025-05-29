@@ -28,6 +28,9 @@ Output::
 
 Found 1 error in a.ts[90m:1[0m
 
+//// [/home/src/workspaces/project/a.d.ts] new file
+export declare const a = "hello";
+
 //// [/home/src/workspaces/project/a.js] new file
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -35,6 +38,9 @@ exports.a = void 0;
 exports.a = "hello;
 
 //// [/home/src/workspaces/project/a.ts] no change
+//// [/home/src/workspaces/project/b.d.ts] new file
+export declare const b = 10;
+
 //// [/home/src/workspaces/project/b.js] new file
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

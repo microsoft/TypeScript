@@ -18,7 +18,7 @@
  >isBuilderProgram(program) ? program.getProgram() : program : Program
  >isBuilderProgram(program) : boolean
 ->isBuilderProgram : <T_1 extends BuilderProgram>(program: Program | T_1) => program is T_1
-+>isBuilderProgram : <T extends BuilderProgram>(program: T | Program) => program is T
++>isBuilderProgram : <T_1 extends BuilderProgram>(program: T_1 | Program) => program is T_1
  >program : T | Program
  >program.getProgram() : Program
  >program.getProgram : () => Program

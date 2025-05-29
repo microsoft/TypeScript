@@ -16,3 +16,11 @@ var m;
     m.c = c;
     m.a = m;
 })(m || (m = {}));
+
+
+//// [declFileModuleWithPropertyOfTypeModule.d.ts]
+declare namespace m {
+    class c {
+    }
+    var a: typeof m;
+}

@@ -5,5 +5,5 @@
 
      #x
 ->#x : E.__missing
-+>#x : E.#x
++>#x : typeof E["\uFFFDmissing"]
  }

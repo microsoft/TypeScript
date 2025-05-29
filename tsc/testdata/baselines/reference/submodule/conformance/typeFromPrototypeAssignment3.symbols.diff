@@ -31,7 +31,7 @@
 ->this._map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
 ->this : Symbol(Multimap3, Decl(bug26885.js, 0, 0), Decl(bug26885.js, 2, 2))
 ->_map : Symbol(Multimap3._map, Decl(bug26885.js, 0, 22))
-+>this : Symbol((Anonymous type), Decl(bug26885.js, 4, 21))
++>this : Symbol(þobject, Decl(bug26885.js, 4, 21))
  >key : Symbol(key, Decl(bug26885.js, 9, 8))
      }
  }

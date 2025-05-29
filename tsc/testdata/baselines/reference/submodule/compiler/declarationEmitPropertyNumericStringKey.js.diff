@@ -12,20 +12,6 @@
 -var obj = (_b = {}, _b[hundredStr] = "foo", _b);
 -var hundredNum = 100;
 -var obj2 = (_c = {}, _c[hundredNum] = "bar", _c);
--
--
--//// [declarationEmitPropertyNumericStringKey.d.ts]
--declare const STATUS: {
--    readonly "404": "not found";
--};
--declare const hundredStr = "100";
--declare const obj: {
--    "100": string;
--};
--declare const hundredNum = 100;
--declare const obj2: {
--    100: string;
--};
 +const STATUS = {
 +    ["404"]: "not found",
 +};
@@ -33,3 +19,10 @@
 +const obj = { [hundredStr]: "foo" };
 +const hundredNum = 100;
 +const obj2 = { [hundredNum]: "bar" };
+
+
+ //// [declarationEmitPropertyNumericStringKey.d.ts]
++// https://github.com/microsoft/TypeScript/issues/55292
+ declare const STATUS: {
+     readonly "404": "not found";
+ };

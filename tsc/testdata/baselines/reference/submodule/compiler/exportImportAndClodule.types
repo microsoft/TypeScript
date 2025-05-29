@@ -30,9 +30,9 @@ module M {
 >M : typeof M
 
     export import D = K.L;
->D : typeof L
+>D : typeof D
 >K : typeof K
->L : L
+>L : D
 }
 var o: { name: string };
 >o : { name: string; }
@@ -40,10 +40,10 @@ var o: { name: string };
 
 var o = new M.D('Hello');
 >o : { name: string; }
->new M.D('Hello') : L
->M.D : typeof L
+>new M.D('Hello') : K.L
+>M.D : typeof K.L
 >M : typeof M
->D : typeof L
+>D : typeof K.L
 >'Hello' : "Hello"
 
 var p: { x: number; y: number; }

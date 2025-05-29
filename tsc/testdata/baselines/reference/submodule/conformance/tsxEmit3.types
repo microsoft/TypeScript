@@ -28,9 +28,9 @@ module M {
 
 	// Emit M.Foo
 	Foo, <Foo />;
->Foo, <Foo /> : Element
+>Foo, <Foo /> : JSX.Element
 >Foo : typeof Foo
-><Foo /> : Element
+><Foo /> : JSX.Element
 >Foo : typeof Foo
 
 	export module S {
@@ -38,16 +38,16 @@ module M {
 
 		// Emit M.Foo
 		Foo, <Foo />;
->Foo, <Foo /> : Element
+>Foo, <Foo /> : JSX.Element
 >Foo : typeof Foo
-><Foo /> : Element
+><Foo /> : JSX.Element
 >Foo : typeof Foo
 
 		// Emit S.Bar
 		Bar, <Bar />;
->Bar, <Bar /> : Element
+>Bar, <Bar /> : JSX.Element
 >Bar : typeof Bar
-><Bar /> : Element
+><Bar /> : JSX.Element
 >Bar : typeof Bar
 	}
 
@@ -58,18 +58,18 @@ module M {
 
 	// Emit M.S.Bar
 	S.Bar, <S.Bar />;
->S.Bar, <S.Bar /> : Element
->S.Bar : typeof Bar
+>S.Bar, <S.Bar /> : JSX.Element
+>S.Bar : typeof S.Bar
 >S : typeof S
->Bar : typeof Bar
-><S.Bar /> : Element
->S.Bar : typeof Bar
+>Bar : typeof S.Bar
+><S.Bar /> : JSX.Element
+>S.Bar : typeof S.Bar
 >S : typeof S
->Bar : typeof Bar
+>Bar : typeof S.Bar
 }
 
 module M {
->M : typeof M
+>M : typeof globalThis.M
 
 	var M = 100;
 >M : number
@@ -77,9 +77,9 @@ module M {
 
 	// Emit M_1.Foo
 	Foo, <Foo />;
->Foo, <Foo /> : Element
+>Foo, <Foo /> : JSX.Element
 >Foo : typeof Foo
-><Foo /> : Element
+><Foo /> : JSX.Element
 >Foo : typeof Foo
 }
 

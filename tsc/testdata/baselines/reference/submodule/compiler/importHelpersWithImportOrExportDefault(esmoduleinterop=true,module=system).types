@@ -6,19 +6,19 @@ export default class { }
 
 === b.ts ===
 export { default } from "./a";
->default : typeof default
+>default : typeof b
 
 export { default as a } from "./a";
->default : typeof default
->a : typeof default
+>default : typeof b
+>a : typeof b
 
 import { default as b } from "./a";
->default : typeof default
->b : typeof default
+>default : typeof b
+>b : typeof b
 
 void b;
 >void b : undefined
->b : typeof default
+>b : typeof b
 
 === tslib.d.ts ===
 declare module "tslib" {

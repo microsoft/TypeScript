@@ -18,7 +18,7 @@ declare global {
 }
 
 export default class FullCalendar {
->FullCalendar : Symbol(default, Decl(index.d.ts, 5, 1))
+>FullCalendar : Symbol(FullCalendar, Decl(index.d.ts, 5, 1))
 }
 
 === /node_modules/@fullcalendar/core/index.d.ts ===
@@ -26,7 +26,7 @@ import * as preact from 'preact';
 >preact : Symbol(preact, Decl(index.d.ts, 0, 6))
 
 declare global {
->global : Symbol((Missing), Decl(index.d.ts, 0, 33))
+>global : Symbol(global, Decl(index.d.ts, 0, 33))
 
   namespace FullCalendarVDom {
 >FullCalendarVDom : Symbol(FullCalendarVDom, Decl(index.d.ts, 1, 16), Decl(index.d.ts, 1, 16))

@@ -8,3 +8,9 @@ class BlockIntrinsics {
 //// [declFileClassWithIndexSignature.js]
 class BlockIntrinsics {
 }
+
+
+//// [declFileClassWithIndexSignature.d.ts]
+declare class BlockIntrinsics {
+    [s: string]: string;
+}

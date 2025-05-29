@@ -21,7 +21,7 @@ module Shapes {
         public con:C "hello";
 >con : Symbol(con, Decl(parserErrorRecovery_IncompleteMemberVariable2.ts, 9, 42))
 >C : Symbol(C)
->"hello" : Symbol(hello, Decl(parserErrorRecovery_IncompleteMemberVariable2.ts, 11, 20))
+>"hello" : Symbol("hello", Decl(parserErrorRecovery_IncompleteMemberVariable2.ts, 11, 20))
 
         // Constructor
         constructor (public x: number, public y: number) { }

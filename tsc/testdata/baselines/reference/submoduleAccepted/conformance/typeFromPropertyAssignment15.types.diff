@@ -29,23 +29,29 @@
  >1 : 1
      }
      m() { }
-@@= skipped -27, +27 lines =@@
- >inner : Inner
+@@= skipped -24, +24 lines =@@
+
+ /** @type {Outer.Inner} */
+ var inner
+->inner : Inner
++>inner : Outer.Inner
 
  inner.x
 ->inner.x : number
-+>inner.x : any
- >inner : Inner
+->inner : Inner
 ->x : number
++>inner.x : any
++>inner : Outer.Inner
 +>x : any
 
  inner.m()
 ->inner.m() : void
 ->inner.m : () => void
+->inner : Inner
+->m : () => void
 +>inner.m() : any
 +>inner.m : any
- >inner : Inner
-->m : () => void
++>inner : Outer.Inner
 +>m : any
 
  var inno = new Outer.Inner()

@@ -2,11 +2,11 @@
 
 === t3.ts ===
 import a = require("./t1");
->a : typeof import("t1")
+>a : typeof a
 
 a.default;
 >a.default : "hello"
->a : typeof import("t1")
+>a : typeof a
 >default : "hello"
 
 import b from "./t1";
@@ -16,11 +16,11 @@ b;
 >b : "hello"
 
 import * as c from "./t1";
->c : typeof import("t1")
+>c : typeof a
 
 c.default;
 >c.default : "hello"
->c : typeof import("t1")
+>c : typeof a
 >default : "hello"
 
 import { default as d } from "./t1";
@@ -32,14 +32,14 @@ d;
 
 import e1, * as e2 from "./t1";
 >e1 : "hello"
->e2 : typeof import("t1")
+>e2 : typeof a
 
 e1;
 >e1 : "hello"
 
 e2.default;
 >e2.default : "hello"
->e2 : typeof import("t1")
+>e2 : typeof a
 >default : "hello"
 
 import f1, { default as f2 } from "./t1";
@@ -54,12 +54,12 @@ f2;
 >f2 : "hello"
 
 export { a, b, c, d, e1, e2, f1, f2 };
->a : typeof import("t1")
+>a : typeof a
 >b : "hello"
->c : typeof import("t1")
+>c : typeof a
 >d : "hello"
 >e1 : "hello"
->e2 : typeof import("t1")
+>e2 : typeof a
 >f1 : "hello"
 >f2 : "hello"
 

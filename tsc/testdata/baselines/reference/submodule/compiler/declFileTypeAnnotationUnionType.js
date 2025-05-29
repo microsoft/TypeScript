@@ -46,3 +46,25 @@ var k = new c() || new m.c();
 var l = new c() || new m.c();
 var x = new g() || new m.g() || (() => new c());
 var y = new g() || new m.g() || (() => new c());
+
+
+//// [declFileTypeAnnotationUnionType.d.ts]
+declare class c {
+    private p;
+}
+declare namespace m {
+    class c {
+        private q;
+    }
+    class g<T> {
+        private r;
+    }
+}
+declare class g<T> {
+    private s;
+}
+// Just the name
+declare var k: c | m.c;
+declare var l: c | m.c;
+declare var x: g<string> | m.g<number> | (() => c);
+declare var y: m.g<number> | g<string> | (() => c);

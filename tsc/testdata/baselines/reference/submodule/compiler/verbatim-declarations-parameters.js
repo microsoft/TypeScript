@@ -50,3 +50,26 @@ reuseTypeNode = {}, reuseTypeNode2 = {},
 // Resolve type node, requires adding | undefined
 resolveType = {}, requiredParam) {
 }
+
+
+//// [verbatim-declarations-parameters.d.ts]
+type Map = {} & {
+    [P in string]: any;
+};
+type MapOrUndefined = Map | undefined | "dummy";
+export declare class Foo {
+    reuseTypeNode?: Map | undefined;
+    reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;
+    resolveType?: Map;
+    constructor(
+    // Type node is accurate, preserve
+    reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, 
+    // Resolve type node, requires adding | undefined
+    resolveType?: Map);
+}
+export declare function foo1(
+// Type node is accurate, preserve
+reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, 
+// Resolve type node, requires adding | undefined
+resolveType: Map, requiredParam: number): void;
+export {};

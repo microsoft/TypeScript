@@ -30,3 +30,17 @@ var c;
     var b = a.weekend;
     c.bVal = b.Sunday;
 })(c || (c = {}));
+
+
+//// [internalAliasEnum.d.ts]
+declare namespace a {
+    enum weekend {
+        Friday = 0,
+        Saturday = 1,
+        Sunday = 2
+    }
+}
+declare namespace c {
+    import b = a.weekend;
+    var bVal: b;
+}

@@ -30,3 +30,18 @@ exports.A = A;
 Object.defineProperty(exports, "__esModule", { value: true });
 let x = [1];
 let y = x.getA().x;
+
+
+//// [f1.d.ts]
+export declare class A {
+    x: number;
+}
+//// [f2.d.ts]
+import { A } from "./f1";
+// change the shape of Array<T>
+declare namespace global {
+    interface Array<T> {
+        getA(): A;
+    }
+}
+export {};

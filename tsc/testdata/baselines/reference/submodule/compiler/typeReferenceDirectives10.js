@@ -17,3 +17,10 @@ export interface A {
 //// [app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [app.d.ts]
+import { $ } from "./ref";
+export interface A {
+    x: $;
+}

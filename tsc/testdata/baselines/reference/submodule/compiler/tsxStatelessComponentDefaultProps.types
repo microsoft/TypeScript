@@ -12,17 +12,17 @@ interface Props {
 }
 
 function BackButton(_props: Props) {
->BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
+>BackButton : { (_props: Props): JSX.Element; defaultProps: { text: string; }; }
 >_props : Props
 
     return <div />
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 }
 BackButton.defaultProps = {
 >BackButton.defaultProps = {    text: 'Go Back',} : { text: string; }
 >BackButton.defaultProps : { text: string; }
->BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
+>BackButton : { (_props: Props): JSX.Element; defaultProps: { text: string; }; }
 >defaultProps : { text: string; }
 >{    text: 'Go Back',} : { text: string; }
 
@@ -32,7 +32,7 @@ BackButton.defaultProps = {
 
 };
 let a = <BackButton />
->a : Element
-><BackButton /> : Element
->BackButton : { (_props: Props): Element; defaultProps: { text: string; }; }
+>a : JSX.Element
+><BackButton /> : JSX.Element
+>BackButton : { (_props: Props): JSX.Element; defaultProps: { text: string; }; }
 

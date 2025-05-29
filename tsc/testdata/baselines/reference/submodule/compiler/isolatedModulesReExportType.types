@@ -10,14 +10,14 @@ export import T2 = require("./exportEqualsT");
 
 // OK, has a value side
 export { C } from "./exportValue";
->C : typeof C
+>C : typeof CC
 
 // OK, even though the namespace it exports is only types.
 import * as NS from "./exportT";
->NS : typeof import("/exportT")
+>NS : typeof NS
 
 export { NS };
->NS : typeof import("/exportT")
+>NS : typeof NS
 
 // OK, syntactically clear that a type is being re-exported.
 export type T3 = T;
@@ -41,11 +41,11 @@ export { TT };
 
 // Error, type-only declaration is in a different file.
 import { C as CC } from "./reExportValueAsTypeOnly";
->C : typeof C
->CC : typeof C
+>C : typeof CC
+>CC : typeof CC
 
 export { CC };
->CC : typeof C
+>CC : typeof CC
 
 === /exportT.ts ===
 export type T = number;
@@ -64,5 +64,5 @@ export = T;
 
 === /reExportValueAsTypeOnly.ts ===
 export type { C } from "./exportValue";
->C : C
+>C : import("./exportValue").C
 

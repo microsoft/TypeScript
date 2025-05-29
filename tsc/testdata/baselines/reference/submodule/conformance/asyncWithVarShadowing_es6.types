@@ -165,7 +165,7 @@ async function fn17(x) {
 }
 
 async function fn18({ x }) {
->fn18 : (__0: { x: any; }) => Promise<void>
+>fn18 : ({ x }: { x: any; }) => Promise<void>
 >x : any
 
     var x;
@@ -173,7 +173,7 @@ async function fn18({ x }) {
 }
 
 async function fn19([x]) {
->fn19 : (__0: [any]) => Promise<void>
+>fn19 : ([x]: [any]) => Promise<void>
 >x : any
 
     var x;

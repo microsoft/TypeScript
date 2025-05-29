@@ -3,24 +3,24 @@
 === a.ts ===
 /// <reference path="foo.d.ts" />
 import * as ff from './foo';
->ff : typeof Thing
+>ff : typeof ff
 
 let y: Foo; // OK in type position
->y : Thing
+>y : ff
 
 y.foo();
 >y.foo() : number
 >y.foo : () => number
->y : Thing
+>y : ff
 >foo : () => number
 
 let z: Foo.SubThing; // OK in ns position
->z : SubThing
+>z : ff.SubThing
 >Foo : any
 
 let x: any = Foo; // Not OK in value position
 >x : any
->Foo : typeof Thing
+>Foo : typeof ff
 
 === foo.d.ts ===
 declare class Thing {

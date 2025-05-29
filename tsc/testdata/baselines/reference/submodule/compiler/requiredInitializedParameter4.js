@@ -9,3 +9,9 @@ class C1 {
 class C1 {
     method(a = 0, b) { }
 }
+
+
+//// [requiredInitializedParameter4.d.ts]
+declare class C1 {
+    method(a: number, b: any): void;
+}

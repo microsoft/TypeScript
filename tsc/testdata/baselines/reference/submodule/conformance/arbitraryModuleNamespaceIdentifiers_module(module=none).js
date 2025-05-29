@@ -54,3 +54,15 @@ if (valueZ["<Z>"] !== valueZ)
 const importTest = "expect error about someType";
 const reimportTest = "expect error about someType";
 const importStarTestA = "expect error about otherType";
+
+
+//// [arbitraryModuleNamespaceIdentifiers_module.d.ts]
+declare const someValue = "someValue";
+type someType = "someType";
+export { someValue as "<X>" };
+export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_module";
+export { type someType as "<A>" };
+export { type "<A>" as "<B>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_module";
+export type otherType = "otherType";

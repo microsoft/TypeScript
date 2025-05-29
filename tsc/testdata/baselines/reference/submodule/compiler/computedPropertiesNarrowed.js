@@ -88,3 +88,42 @@ function ns() { return { v: 0 }; }
 export const o9 = {
     [ns().v]: 1
 };
+
+
+//// [computedPropertiesNarrowed.d.ts]
+export declare let o: {
+    1: number; // error narrow type !== declared type
+};
+export declare let o2: {
+    0: number; // ok literal computed type 
+};
+// literals are ok
+export declare let o3: {
+    1: number;
+};
+export declare let o31: {
+    [-1]: number;
+};
+export declare let o32: {
+    [x: number]: number;
+}; // error number 
+export declare let o4: {
+    [x: symbol]: number;
+};
+export declare let o5: {
+    [x: symbol]: number;
+};
+declare const uu: unique symbol;
+export declare let o6: {
+    [uu]: number; // Should be ok
+};
+export declare let o7: {
+    1: number; // Should error
+};
+export declare const o8: {
+    1: number; // Fresh 
+};
+export declare const o9: {
+    0: number;
+};
+export {};

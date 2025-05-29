@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface PoisonedProp {
     x: string;
@@ -14,15 +14,15 @@ interface PoisonedProp {
 
 class Poisoned extends React.Component<PoisonedProp, {}> {
 >Poisoned : Poisoned
->React.Component : Component<PoisonedProp, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<PoisonedProp, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Hello</div>;
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -44,22 +44,22 @@ const obj: PoisonedProp = {
 
 // OK
 let p = <Poisoned {...obj} />;
->p : Element
-><Poisoned {...obj} /> : Element
+>p : JSX.Element
+><Poisoned {...obj} /> : JSX.Element
 >Poisoned : typeof Poisoned
 >obj : PoisonedProp
 
 class EmptyProp extends React.Component<{}, {}> {
 >EmptyProp : EmptyProp
->React.Component : Component<{}, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Default hi</div>;
-><div>Default hi</div> : Element
+><div>Default hi</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -70,20 +70,20 @@ let j: any;
 >j : any
 
 let e1 = <EmptyProp {...{}} />;
->e1 : Element
-><EmptyProp {...{}} /> : Element
+>e1 : JSX.Element
+><EmptyProp {...{}} /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >{} : {}
 
 let e2 = <EmptyProp {...j} />
->e2 : Element
-><EmptyProp {...j} /> : Element
+>e2 : JSX.Element
+><EmptyProp {...j} /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >j : any
 
 let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
->e3 : Element
-><EmptyProp {...{ ref: (input) => { this.textInput = input; } }} /> : Element
+>e3 : JSX.Element
+><EmptyProp {...{ ref: (input) => { this.textInput = input; } }} /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >{ ref: (input) => { this.textInput = input; } } : { ref: (input: EmptyProp) => void; }
 >ref : (input: EmptyProp) => void
@@ -96,14 +96,14 @@ let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
 >input : EmptyProp
 
 let e4 = <EmptyProp data-prop />
->e4 : Element
-><EmptyProp data-prop /> : Element
+>e4 : JSX.Element
+><EmptyProp data-prop /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >data-prop : true
 
 let e5 = <EmptyProp {...{ "data-prop": true}} />
->e5 : Element
-><EmptyProp {...{ "data-prop": true}} /> : Element
+>e5 : JSX.Element
+><EmptyProp {...{ "data-prop": true}} /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >{ "data-prop": true} : { "data-prop": boolean; }
 >"data-prop" : boolean

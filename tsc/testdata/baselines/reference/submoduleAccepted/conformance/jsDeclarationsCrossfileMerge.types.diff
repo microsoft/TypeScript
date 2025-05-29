@@ -1,14 +1,6 @@
 --- old.jsDeclarationsCrossfileMerge.types
 +++ new.jsDeclarationsCrossfileMerge.types
-@@= skipped -1, +1 lines =@@
-
- === index.js ===
- const m = require("./exporter");
-->m : typeof m
-->require("./exporter") : typeof m
-+>m : typeof import("exporter")
-+>require("./exporter") : typeof import("exporter")
- >require : any
+@@= skipped -7, +7 lines =@@
  >"./exporter" : "./exporter"
 
  module.exports = m.default;
@@ -17,14 +9,13 @@
 ->module : { exports: typeof m.default; }
 ->exports : typeof m.default
 ->m.default : { (): void; memberName: "thing"; }
-->m : typeof m
-->default : { (): void; memberName: "thing"; }
 +>module.exports = m.default : () => void
 +>module.exports : () => void
-+>module : { validate: () => void; }
++>module : { validate(): void; }
 +>exports : () => void
 +>m.default : () => void
-+>m : typeof import("exporter")
+ >m : typeof m
+->default : { (): void; memberName: "thing"; }
 +>default : () => void
 
  module.exports.memberName = "thing";
@@ -36,7 +27,7 @@
 ->memberName : "thing"
 +>module.exports.memberName : any
 +>module.exports : () => void
-+>module : { validate: () => void; }
++>module : { validate(): void; }
 +>exports : () => void
 +>memberName : any
  >"thing" : "thing"

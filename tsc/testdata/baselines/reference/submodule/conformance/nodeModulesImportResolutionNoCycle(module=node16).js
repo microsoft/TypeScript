@@ -60,3 +60,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // esm format file
 const type = __importStar(require("#type"));
 type;
+
+
+//// [index.d.ts]
+export {};
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};

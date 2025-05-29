@@ -297,3 +297,112 @@ function getProps(obj, list) {
 const myAny = {};
 const o1 = getProps(myAny, ['foo', 'bar']);
 const o2 = getProps(myAny, ['foo', 'bar']);
+
+
+//// [isomorphicMappedTypeInference.d.ts]
+type Box<T> = {
+    value: T;
+};
+type Boxified<T> = {
+    [P in keyof T]: Box<T[P]>;
+};
+declare function box<T>(x: T): Box<T>;
+declare function unbox<T>(x: Box<T>): T;
+declare function boxify<T>(obj: T): Boxified<T>;
+declare function unboxify<T extends object>(obj: Boxified<T>): T;
+declare function assignBoxified<T>(obj: Boxified<T>, values: T): void;
+declare function f1(): void;
+declare function f2(): void;
+declare function f3(): void;
+declare function f4(): void;
+declare function makeRecord<T, K extends string>(obj: {
+    [P in K]: T;
+}): { [P in K]: T; };
+declare function f5(s: string): void;
+declare function makeDictionary<T>(obj: {
+    [x: string]: T;
+}): {
+    [x: string]: T;
+};
+declare function f6(s: string): void;
+declare function validate<T>(obj: {
+    [P in keyof T]?: T[P];
+}): T;
+declare function clone<T>(obj: {
+    readonly [P in keyof T]: T[P];
+}): T;
+declare function validateAndClone<T>(obj: {
+    readonly [P in keyof T]?: T[P];
+}): T;
+type Foo = {
+    a?: number;
+    readonly b: string;
+};
+declare function f10(foo: Foo): void;
+// Repro from #12606
+type Func<T> = (...args: any[]) => T;
+type Spec<T> = {
+    [P in keyof T]: Func<T[P]> | Spec<T[P]>;
+};
+/**
+ * Given a spec object recursively mapping properties to functions, creates a function
+ * producing an object of the same structure, by mapping each property to the result
+ * of calling its associated function with the supplied arguments.
+ */
+declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
+// Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
+declare var g1: (...args: any[]) => {
+    sum: number;
+    nested: {
+        mul: string;
+    };
+};
+// Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
+declare var g2: (...args: any[]) => {
+    foo: {
+        bar: {
+            baz: boolean;
+        };
+    };
+};
+// Repro from #12633
+declare const foo: <T>(object: T, partial: Partial<T>) => T;
+declare let o: {
+    a: number;
+    b: number;
+};
+// Inferring to { [P in K]: X }, where K extends keyof T, produces same inferences as
+// inferring to { [P in keyof T]: X }.
+declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
+declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
+declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
+declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
+declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
+declare let x0: {
+    foo: number;
+    bar: string;
+};
+declare let x1: "bar" | "foo";
+declare let x2: {
+    foo: number;
+    bar: string;
+};
+declare let x3: {
+    foo: number;
+    bar: string;
+};
+declare let x4: {
+    foo: number;
+    bar: string;
+} & {
+    foo: number;
+    bar: string;
+};
+// Repro from #29765
+declare function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K>;
+declare const myAny: any;
+declare const o1: Pick<any, "bar" | "foo">;
+declare const o2: {
+    foo: any;
+    bar: any;
+};

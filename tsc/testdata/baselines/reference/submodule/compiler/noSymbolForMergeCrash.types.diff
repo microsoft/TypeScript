@@ -1,8 +1,0 @@
---- old.noSymbolForMergeCrash.types
-+++ new.noSymbolForMergeCrash.types
-@@= skipped -6, +6 lines =@@
-
- === final.ts ===
- type A = {}
-->A : {}
-+>A : A

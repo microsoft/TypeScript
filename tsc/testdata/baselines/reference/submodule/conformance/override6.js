@@ -36,3 +36,18 @@ class D extends B {
         this.baz = baz;
     }
 }
+
+
+//// [override6.d.ts]
+declare class B {
+    foo: string;
+    bar: number;
+    baz: number;
+    constructor(foo: string, bar: number);
+}
+declare class D extends B {
+    foo: string;
+    baz: number;
+    bar: number;
+    constructor(foo: string, baz: number);
+}

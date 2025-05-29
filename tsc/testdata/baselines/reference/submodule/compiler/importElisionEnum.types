@@ -20,15 +20,15 @@ export enum MyEnum {
 
 === index.ts ===
 import { MyEnum as MyEnumFromModule } from "./enum";
->MyEnum : typeof MyEnum
->MyEnumFromModule : typeof MyEnum
+>MyEnum : typeof MyEnumFromModule
+>MyEnumFromModule : typeof MyEnumFromModule
 
 enum MyEnum {
 >MyEnum : MyEnum
 
   a = MyEnumFromModule.a
 >a : MyEnum.a
->MyEnumFromModule.a : MyEnum.a
->MyEnumFromModule : typeof MyEnum
->a : MyEnum.a
+>MyEnumFromModule.a : MyEnumFromModule.a
+>MyEnumFromModule : typeof MyEnumFromModule
+>a : MyEnumFromModule.a
 }

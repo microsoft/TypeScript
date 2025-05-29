@@ -10,12 +10,12 @@ export class Foo {}
 
 === /b.ts ===
 import * as A from "./a";
->A : typeof import("/a")
+>A : typeof A
 
 const { Foo } = A;
->Foo : typeof Foo
->A : typeof import("/a")
+>Foo : typeof A.Foo
+>A : typeof A
 
 export default class extends Foo {}
->Foo : Foo
+>Foo : A.Foo
 

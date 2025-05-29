@@ -10,9 +10,9 @@ function f(x: number, y: number, z: number) {
 
     return Array.from(arguments);
 >Array.from(arguments) : any[]
->Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >Array : ArrayConstructor
->from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T, any, any>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T, any, any>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
+>from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: ArrayLike<T> | Iterable<T>): T[]; <T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >arguments : IArguments
 }
 
@@ -61,8 +61,8 @@ Math.sign(1);
 
 // Using ES6 object
 var o = {
->o : { a: number; [Symbol.hasInstance]: (value: any) => boolean; }
->{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance]: (value: any) => boolean; }
+>o : { a: number; [Symbol.hasInstance](value: any): boolean; }
+>{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { a: number; [Symbol.hasInstance](value: any): boolean; }
 
     a: 2,
 >a : number
@@ -82,7 +82,7 @@ var o = {
 o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
 >o.hasOwnProperty : (v: PropertyKey) => boolean
->o : { a: number; [Symbol.hasInstance]: (value: any) => boolean; }
+>o : { a: number; [Symbol.hasInstance](value: any): boolean; }
 >hasOwnProperty : (v: PropertyKey) => boolean
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
@@ -141,8 +141,8 @@ var s = Symbol();
 
 // Using ES6 wellknown-symbol
 const o1 = {
->o1 : { [Symbol.hasInstance]: (value: any) => boolean; }
->{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance]: (value: any) => boolean; }
+>o1 : { [Symbol.hasInstance](value: any): boolean; }
+>{    [Symbol.hasInstance](value: any) {        return false;    }} : { [Symbol.hasInstance](value: any): boolean; }
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean

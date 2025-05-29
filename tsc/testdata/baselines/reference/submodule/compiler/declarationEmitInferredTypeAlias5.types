@@ -10,7 +10,7 @@ let obj: Data = true;
 
 === 1.ts ===
 import * as Z from "./0"
->Z : typeof import("0")
+>Z : typeof Z
 
 //let v2: Z.Data;
 let v = "str" || true;

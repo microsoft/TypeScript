@@ -18,7 +18,7 @@ func NewImportElisionTransformer(emitContext *printer.EmitContext, compilerOptio
 		panic("ImportElisionTransformer should not be used with VerbatimModuleSyntax")
 	}
 	tx := &ImportElisionTransformer{compilerOptions: compilerOptions, emitResolver: resolver}
-	return tx.newTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 func (tx *ImportElisionTransformer) visit(node *ast.Node) *ast.Node {

@@ -6,8 +6,8 @@
  const k = ({x: z = 'y'}) => { }
 ->k : ({ x: z }: { x?: string; }) => void
 ->({x: z = 'y'}) => { } : ({ x: z }: { x?: string; }) => void
-+>k : (__0: { x?: string; }) => void
-+>({x: z = 'y'}) => { } : (__0: { x?: string; }) => void
++>k : ({ x: z = "y" }: { x?: string; }) => void
++>({x: z = 'y'}) => { } : ({ x: z = "y" }: { x?: string; }) => void
  >x : any
  >z : string
  >'y' : "y"
@@ -16,7 +16,7 @@
 
  function f({} = a, [] = a, { p: {} = a} = a) {
 ->f : ({}?: any, []?: any, { p: {} }?: any) => void
-+>f : (__0?: any, __1?: any, __2?: any) => void
++>f : ({}?: any, []?: any, { p: {} = a }?: any) => void
  >a : any
  >a : any
  >p : any

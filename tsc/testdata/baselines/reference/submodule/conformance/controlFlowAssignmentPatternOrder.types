@@ -16,7 +16,7 @@ declare function f(): void;
 >[{ [(a = 1)]: b } = [9, a] as const] = [] : []
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
 >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
->{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 9; }
+>{ [(a = 1)]: b } : { 1: 0 | 1 | 9; }
 >[(a = 1)] : 0 | 1 | 9
 >(a = 1) : 1
 >a = 1 : 1
@@ -45,7 +45,7 @@ declare function f(): void;
 >[{ [a]: b } = [9, a = 0] as const] = [] : []
 >[{ [a]: b } = [9, a = 0] as const] : [readonly [9, 0]]
 >{ [a]: b } = [9, a = 0] as const : readonly [9, 0]
->{ [a]: b } : { [a]: 0 | 1 | 9; }
+>{ [a]: b } : { 0: 0 | 1 | 9; }
 >[a] : 0 | 1 | 9
 >a : 0
 >b : 0 | 1 | 9
@@ -73,7 +73,7 @@ declare function f(): void;
 >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
 >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
->{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 8 | 9; }
+>{ [(a = 1)]: b } : { 1: 0 | 1 | 8 | 9; }
 >[(a = 1)] : 0 | 1 | 8 | 9
 >(a = 1) : 1
 >a = 1 : 1
@@ -106,7 +106,7 @@ declare function f(): void;
 >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
 >[{ [a]: b } = [a = 0, 9] as const] : [readonly [0, 9]]
 >{ [a]: b } = [a = 0, 9] as const : readonly [0, 9]
->{ [a]: b } : { [a]: 0 | 1 | 8 | 9; }
+>{ [a]: b } : { 0: 0 | 1 | 8 | 9; }
 >[a] : 0 | 1 | 8 | 9
 >a : 0
 >b : 0 | 1 | 8 | 9
@@ -140,7 +140,7 @@ declare function f(): void;
 >[{ [(a = 1)]: b } = [9, a] as const] = [] : []
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
 >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
->{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 9; }
+>{ [(a = 1)]: b } : { 1: 0 | 1 | 9; }
 >[(a = 1)] : 0 | 1 | 9
 >(a = 1) : 1
 >a = 1 : 1
@@ -172,7 +172,7 @@ declare function f(): void;
 >[{ [a]: b } = [9, a = 0] as const] = [] : []
 >[{ [a]: b } = [9, a = 0] as const] : [readonly [9, 0]]
 >{ [a]: b } = [9, a = 0] as const : readonly [9, 0]
->{ [a]: b } : { [a]: 0 | 1 | 9; }
+>{ [a]: b } : { 0: 0 | 1 | 9; }
 >[a] : 0 | 1 | 9
 >a : 0
 >b : 0 | 1 | 9
@@ -203,7 +203,7 @@ declare function f(): void;
 >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
 >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
->{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 8 | 9; }
+>{ [(a = 1)]: b } : { 1: 0 | 1 | 8 | 9; }
 >[(a = 1)] : 0 | 1 | 8 | 9
 >(a = 1) : 1
 >a = 1 : 1
@@ -239,7 +239,7 @@ declare function f(): void;
 >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
 >[{ [a]: b } = [a = 0, 9] as const] : [readonly [0, 9]]
 >{ [a]: b } = [a = 0, 9] as const : readonly [0, 9]
->{ [a]: b } : { [a]: 0 | 1 | 8 | 9; }
+>{ [a]: b } : { 0: 0 | 1 | 8 | 9; }
 >[a] : 0 | 1 | 8 | 9
 >a : 0
 >b : 0 | 1 | 8 | 9
@@ -277,7 +277,7 @@ declare function f(): void;
 >[{ [(a = 1)]: b } = [9, a] as const] = [] : []
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
 >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
->{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 9; }
+>{ [(a = 1)]: b } : { 1: 0 | 1 | 9; }
 >[(a = 1)] : 0 | 1 | 9
 >(a = 1) : 1
 >a = 1 : 1
@@ -309,7 +309,7 @@ declare function f(): void;
 >[{ [a]: b } = [9, a = 0] as const] = [] : []
 >[{ [a]: b } = [9, a = 0] as const] : [readonly [9, 0]]
 >{ [a]: b } = [9, a = 0] as const : readonly [9, 0]
->{ [a]: b } : { [a]: 0 | 1 | 9; }
+>{ [a]: b } : { 0: 0 | 1 | 9; }
 >[a] : 0 | 1 | 9
 >a : 0
 >b : 0 | 1 | 9
@@ -340,7 +340,7 @@ declare function f(): void;
 >[{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const] : [readonly [9, 8]]
 >[{ [(a = 1)]: b } = [9, a] as const] : [readonly [9, 0]]
 >{ [(a = 1)]: b } = [9, a] as const : readonly [9, 0]
->{ [(a = 1)]: b } : { [(a = 1)]: 0 | 1 | 8 | 9; }
+>{ [(a = 1)]: b } : { 1: 0 | 1 | 8 | 9; }
 >[(a = 1)] : 0 | 1 | 8 | 9
 >(a = 1) : 1
 >a = 1 : 1
@@ -376,7 +376,7 @@ declare function f(): void;
 >[{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const] : [readonly [8, 9]]
 >[{ [a]: b } = [a = 0, 9] as const] : [readonly [0, 9]]
 >{ [a]: b } = [a = 0, 9] as const : readonly [0, 9]
->{ [a]: b } : { [a]: 0 | 1 | 8 | 9; }
+>{ [a]: b } : { 0: 0 | 1 | 8 | 9; }
 >[a] : 0 | 1 | 8 | 9
 >a : 0
 >b : 0 | 1 | 8 | 9

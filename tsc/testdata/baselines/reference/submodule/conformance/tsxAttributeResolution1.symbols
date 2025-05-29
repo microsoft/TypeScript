@@ -43,7 +43,7 @@ interface Attribs1 {
 
 <test1 data-x={true} />; // OK
 >test1 : Symbol(test1, Decl(file.tsx, 2, 30))
->data-x : Symbol("data-x", Decl(file.tsx, 16, 6))
+>data-x : Symbol(data-x, Decl(file.tsx, 16, 6))
 
 <test2 reqd='true' />; // OK
 >test2 : Symbol(test2, Decl(file.tsx, 3, 18))

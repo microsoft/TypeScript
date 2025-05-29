@@ -50,3 +50,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("./map");
 let x;
 let y = x.map(x => x + 1);
+
+
+//// [observable.d.ts]
+export declare class Observable<T> {
+    filter(pred: (e: T) => boolean): Observable<T>;
+}
+export declare namespace Observable {
+}
+//// [map.d.ts]
+declare module "./observable" {
+    interface Observable<T> {
+        map<U>(proj: (e: T) => U): Observable<U>;
+    }
+    namespace Observable {
+        let someAnotherValue: number;
+    }
+}
+export {};
+//// [main.d.ts]
+import "./map";

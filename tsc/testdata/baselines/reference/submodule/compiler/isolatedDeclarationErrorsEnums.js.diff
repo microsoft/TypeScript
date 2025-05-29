@@ -58,3 +58,42 @@
 +    StrExt["AD"] = Str["A"] + StrExt.D;
 +    if (typeof StrExt.AD !== "string") StrExt[StrExt.AD] = "AD";
  })(StrExt || (StrExt = {}));
++
++
++//// [isolatedDeclarationErrorsEnums.d.ts]
++declare function computed(x: number): number;
++declare enum E {
++    A,
++    B,
++    C,
++    D
++}
++declare enum F {
++    A,
++    B
++}
++declare enum Flag {
++    A = 0,
++    B = 0,
++    C = 0,
++    AB = 0,
++    ABC = 0,
++    AC = 0
++}
++declare const EV = 1;
++declare enum ExtFlags {
++    D = 2,
++    E = 1,
++    ABCD = 2,
++    AC = 2
++}
++declare enum Str {
++    A = "A",
++    B = "B",
++    AB = "AB"
++}
++declare enum StrExt {
++    D = "D",
++    ABD = "ABD",
++    AD = "AD"
++}

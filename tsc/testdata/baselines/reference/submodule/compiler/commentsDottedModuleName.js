@@ -23,3 +23,12 @@ var outerModule;
         InnerModule.b = b;
     })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
 })(outerModule || (exports.outerModule = outerModule = {}));
+
+
+//// [commentsDottedModuleName.d.ts]
+/** this is multi declare module*/
+export declare namespace outerModule.InnerModule {
+    /// class b comment
+    class b {
+    }
+}

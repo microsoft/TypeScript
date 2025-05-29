@@ -39,7 +39,7 @@ var obj = {
 >f : Symbol(f, Decl(thisInObjectLiterals.ts, 12, 11))
 
         return this.spaaace;
->this : Symbol((Anonymous type), Decl(thisInObjectLiterals.ts, 12, 9))
+>this : Symbol(obj, Decl(thisInObjectLiterals.ts, 12, 9))
     }
 };
 var obj: { f: () => any; };

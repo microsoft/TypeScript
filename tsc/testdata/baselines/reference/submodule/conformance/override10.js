@@ -17,3 +17,14 @@ class Base {
 class Sub extends Base {
     bar() { }
 }
+
+
+//// [override10.d.ts]
+declare abstract class Base {
+    abstract foo(): unknown;
+    abstract bar(): void;
+}
+declare abstract class Sub extends Base {
+    abstract foo(): number;
+    bar(): void;
+}

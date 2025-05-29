@@ -39,15 +39,12 @@
 +}
  var q;
  q.s;
--
--
--//// [declarationEmitExpressionInExtends.d.ts]
--declare var x: {
+
+
+ //// [declarationEmitExpressionInExtends.d.ts]
+ declare var x: {
 -    new <T>(s: any): Q;
--};
--declare class Q {
--    s: string;
--}
--declare class B extends x<string> {
--}
--declare var q: B;
++    new <T>(s: any);
+ };
+ declare class Q {
+     s: string;

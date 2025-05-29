@@ -94,3 +94,49 @@ function g() {
     var x;
     return x;
 }
+
+
+//// [readonlyInDeclarationFile.d.ts]
+interface Foo {
+    readonly x: number;
+    readonly [x: string]: Object;
+}
+declare class C {
+    readonly [x: string]: Object;
+    private readonly a1;
+    protected readonly a2: number;
+    readonly a3: number;
+    private get b1();
+    protected get b2(): number;
+    get b3(): number;
+    private get c1();
+    private set c1(value);
+    protected get c2(): number;
+    protected set c2(value: number);
+    get c3(): number;
+    set c3(value: number);
+    private static readonly s1;
+    protected static readonly s2: number;
+    static readonly s3: number;
+    private static get t1();
+    protected static get t2(): number;
+    static get t3(): number;
+    private static get u1();
+    private static set u1(value);
+    protected static get u2(): number;
+    protected static set u2(value: number);
+    static get u3(): number;
+    static set u3(value: number);
+}
+declare var z: {
+    readonly a: string;
+    readonly [x: string]: Object;
+};
+declare function f(): {
+    readonly x: number;
+    y: number;
+};
+declare function g(): {
+    readonly [x: string]: Object;
+    readonly a: string;
+};

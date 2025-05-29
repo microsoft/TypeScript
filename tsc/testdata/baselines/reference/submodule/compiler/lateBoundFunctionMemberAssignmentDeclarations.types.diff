@@ -5,13 +5,13 @@
  === index.ts ===
  export function foo() {}
 ->foo : typeof foo
-+>foo : { (): void; bar: number; foo[_private]: string; }
++>foo : { (): void; bar: number; [_private]: string; }
 
  foo.bar = 12;
  >foo.bar = 12 : 12
  >foo.bar : number
 ->foo : typeof foo
-+>foo : { (): void; bar: number; foo[_private]: string; }
++>foo : { (): void; bar: number; [_private]: string; }
  >bar : number
  >12 : 12
 
@@ -20,7 +20,7 @@
  >foo[_private] = "ok" : "ok"
  >foo[_private] : string
 ->foo : typeof foo
-+>foo : { (): void; bar: number; foo[_private]: string; }
++>foo : { (): void; bar: number; [_private]: string; }
  >_private : unique symbol
  >"ok" : "ok"
 
@@ -28,5 +28,5 @@
  >x : string
  >foo[_private] : string
 ->foo : typeof foo
-+>foo : { (): void; bar: number; foo[_private]: string; }
++>foo : { (): void; bar: number; [_private]: string; }
  >_private : unique symbol

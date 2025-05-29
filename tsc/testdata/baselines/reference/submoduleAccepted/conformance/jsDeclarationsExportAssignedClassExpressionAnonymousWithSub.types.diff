@@ -9,11 +9,11 @@
 ->module : { exports: typeof import("index"); }
 ->exports : typeof import("index")
 ->class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import("index")
-+>module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
-+>module.exports : typeof exports
-+>module : { exports: typeof exports; }
-+>exports : typeof exports
-+>class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof exports
++>module.exports = class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
++>module.exports : typeof import(".")
++>module : { "\uFFFDclass": typeof import("."); }
++>exports : typeof import(".")
++>class {    /**     * @param {number} p     */    constructor(p) {        this.t = 12 + p;    }} : typeof import(".")
 
      /**
       * @param {number} p
@@ -39,9 +39,9 @@
 ->exports : typeof import("index")
 ->Sub : typeof Sub
 +>module.exports.Sub : any
-+>module.exports : typeof exports
-+>module : { exports: typeof exports; }
-+>exports : typeof exports
++>module.exports : typeof import(".")
++>module : { "\uFFFDclass": typeof import("."); }
++>exports : typeof import(".")
 +>Sub : any
  >class {    constructor() {        this.instance = new module.exports(10);    }} : typeof Sub
 
@@ -49,19 +49,19 @@
          this.instance = new module.exports(10);
 ->this.instance = new module.exports(10) : import("index")
 ->this.instance : any
-+>this.instance = new module.exports(10) : exports
-+>this.instance : exports
++>this.instance = new module.exports(10) : import(".")
++>this.instance : import(".")
  >this : this
 ->instance : any
 ->new module.exports(10) : import("index")
 ->module.exports : typeof import("index")
 ->module : { exports: typeof import("index"); }
 ->exports : typeof import("index")
-+>instance : exports
-+>new module.exports(10) : exports
-+>module.exports : typeof exports
-+>module : { exports: typeof exports; }
-+>exports : typeof exports
++>instance : import(".")
++>new module.exports(10) : import(".")
++>module.exports : typeof import(".")
++>module : { "\uFFFDclass": typeof import("."); }
++>exports : typeof import(".")
  >10 : 10
      }
  }

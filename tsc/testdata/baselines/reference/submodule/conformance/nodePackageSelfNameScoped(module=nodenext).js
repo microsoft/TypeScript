@@ -57,3 +57,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
 const self = __importStar(require("@scope/package"));
 self;
+
+
+//// [index.d.ts]
+export {};
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};

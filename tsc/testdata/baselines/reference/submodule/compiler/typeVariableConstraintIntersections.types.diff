@@ -1,31 +1,6 @@
 --- old.typeVariableConstraintIntersections.types
 +++ new.typeVariableConstraintIntersections.types
-@@= skipped -205, +205 lines =@@
-
- const optionHandlers: OptionHandlers = {
- >optionHandlers : OptionHandlers
-->{  "one": option => option.s,  "two": option => option.x + "," + option.y,} : { one: (option: OptionOne & { kind: "one"; }) => string; two: (option: OptionTwo & { kind: "two"; }) => string; }
-+>{  "one": option => option.s,  "two": option => option.x + "," + option.y,} : { one: (option: Options & { kind: "one"; }) => string; two: (option: Options & { kind: "two"; }) => string; }
-
-   "one": option => option.s,
-->"one" : (option: OptionOne & { kind: "one"; }) => string
-->option => option.s : (option: OptionOne & { kind: "one"; }) => string
-+>"one" : (option: Options & { kind: "one"; }) => string
-+>option => option.s : (option: Options & { kind: "one"; }) => string
- >option : OptionOne & { kind: "one"; }
- >option.s : string
- >option : OptionOne & { kind: "one"; }
- >s : string
-
-   "two": option => option.x + "," + option.y,
-->"two" : (option: OptionTwo & { kind: "two"; }) => string
-->option => option.x + "," + option.y : (option: OptionTwo & { kind: "two"; }) => string
-+>"two" : (option: Options & { kind: "two"; }) => string
-+>option => option.x + "," + option.y : (option: Options & { kind: "two"; }) => string
- >option : OptionTwo & { kind: "two"; }
- >option.x + "," + option.y : string
- >option.x + "," : string
-@@= skipped -27, +27 lines =@@
+@@= skipped -232, +232 lines =@@
  };
 
  function handleOption<K extends Options['kind']>(option: Options & { kind: K }): string {

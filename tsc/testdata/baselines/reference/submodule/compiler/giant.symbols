@@ -138,7 +138,7 @@ interface I {
 
     //Index Signature
     [p];
->[p] : Symbol(propName, Decl(giant.ts, 57, 35))
+>[p] : Symbol([p], Decl(giant.ts, 57, 35))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
     [p1: string];
@@ -306,7 +306,7 @@ module M {
 
         //Index Signature
         [p];
->[p] : Symbol(propName, Decl(giant.ts, 121, 39))
+>[p] : Symbol([p], Decl(giant.ts, 121, 39))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
         [p1: string];
@@ -516,7 +516,7 @@ module M {
 
         //Index Signature
         [p];
->[p] : Symbol(propName, Decl(giant.ts, 200, 39))
+>[p] : Symbol([p], Decl(giant.ts, 200, 39))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
         [p1: string];
@@ -830,7 +830,7 @@ export interface eI {
 
     //Index Signature
     [p];
->[p] : Symbol(propName, Decl(giant.ts, 315, 35))
+>[p] : Symbol([p], Decl(giant.ts, 315, 35))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
     [p1: string];
@@ -998,7 +998,7 @@ export module eM {
 
         //Index Signature
         [p];
->[p] : Symbol(propName, Decl(giant.ts, 379, 39))
+>[p] : Symbol([p], Decl(giant.ts, 379, 39))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
         [p1: string];
@@ -1208,7 +1208,7 @@ export module eM {
 
         //Index Signature
         [p];
->[p] : Symbol(propName, Decl(giant.ts, 458, 39))
+>[p] : Symbol([p], Decl(giant.ts, 458, 39))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
         [p1: string];
@@ -1547,7 +1547,7 @@ export declare module eaM {
 
         //Index Signature
         [p];
->[p] : Symbol(propName, Decl(giant.ts, 583, 39))
+>[p] : Symbol([p], Decl(giant.ts, 583, 39))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
         [p1: string];
@@ -1712,7 +1712,7 @@ export declare module eaM {
 
         //Index Signature
         [p];
->[p] : Symbol(propName, Decl(giant.ts, 649, 39))
+>[p] : Symbol([p], Decl(giant.ts, 649, 39))
 >p : Symbol(p, Decl(giant.ts, 13, 5))
 
         [p1: string];

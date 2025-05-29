@@ -13,7 +13,7 @@ module M
 >1 : 1
 }
 var p: M.P;             // Used as ModuleName
->p : P
+>p : M.P
 >M : any
 
 var m: M = M;           // Used as TypeName and PrimaryExpression (error on TypeName)
@@ -38,6 +38,6 @@ var x2 = m.a;           // Same as M.a
 >a : any
 
 var q: m.P;             // Error
->q : P
+>q : m.P
 >m : any
 

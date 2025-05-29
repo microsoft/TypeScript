@@ -24,3 +24,17 @@ var c;
     var b = a.b;
     c.x.foo();
 })(c || (exports.c = c = {}));
+
+
+//// [internalAliasUninitializedModuleInsideLocalModuleWithoutExport.d.ts]
+export declare namespace a {
+    namespace b {
+        interface I {
+            foo(): any;
+        }
+    }
+}
+export declare namespace c {
+    import b = a.b;
+    var x: b.I;
+}

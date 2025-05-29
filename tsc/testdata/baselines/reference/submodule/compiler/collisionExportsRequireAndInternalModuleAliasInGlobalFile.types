@@ -9,63 +9,63 @@ module mOfGloalFile {
     }
 }
 import exports = mOfGloalFile.c;
->exports : typeof c
+>exports : typeof exports
 >mOfGloalFile : typeof mOfGloalFile
->c : c
+>c : exports
 
 import require = mOfGloalFile.c;
->require : typeof c
+>require : typeof exports
 >mOfGloalFile : typeof mOfGloalFile
->c : c
+>c : exports
 
 new exports();
->new exports() : c
->exports : typeof c
+>new exports() : exports
+>exports : typeof exports
 
 new require();
->new require() : c
->require : typeof c
+>new require() : exports
+>require : typeof exports
 
 module m1 {
 >m1 : typeof m1
 
     import exports = mOfGloalFile.c;
->exports : typeof c
+>exports : typeof exports
 >mOfGloalFile : typeof mOfGloalFile
->c : c
+>c : exports
 
     import require = mOfGloalFile.c;
->require : typeof c
+>require : typeof exports
 >mOfGloalFile : typeof mOfGloalFile
->c : c
+>c : exports
 
     new exports();
->new exports() : c
->exports : typeof c
+>new exports() : exports
+>exports : typeof exports
 
     new require();
->new require() : c
->require : typeof c
+>new require() : exports
+>require : typeof exports
 }
 
 module m2 {
 >m2 : typeof m2
 
     export import exports = mOfGloalFile.c;
->exports : typeof c
+>exports : typeof exports
 >mOfGloalFile : typeof mOfGloalFile
->c : c
+>c : exports
 
     export import require = mOfGloalFile.c;
->require : typeof c
+>require : typeof exports
 >mOfGloalFile : typeof mOfGloalFile
->c : c
+>c : exports
 
     new exports();
->new exports() : c
->exports : typeof c
+>new exports() : exports
+>exports : typeof exports
 
     new require();
->new require() : c
->require : typeof c
+>new require() : exports
+>require : typeof exports
 }

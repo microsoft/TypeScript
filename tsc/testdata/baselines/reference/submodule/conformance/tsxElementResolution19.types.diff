@@ -1,13 +1,6 @@
 --- old.tsxElementResolution19.types
 +++ new.tsxElementResolution19.types
-@@= skipped -15, +15 lines =@@
- === file2.tsx ===
- // Should not elide React import
- import * as React from 'react';
-->React : typeof React
-+>React : typeof import("react")
-
- import {MyClass} from './file1';
+@@= skipped -21, +21 lines =@@
  >MyClass : typeof MyClass
 
  <MyClass />;

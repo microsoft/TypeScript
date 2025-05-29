@@ -9,16 +9,7 @@
  >s : Symbol(s, Decl(declarationEmitRetainsJsdocyComments.ts, 24, 8))
      }
  }
-@@= skipped -15, +15 lines =@@
- } = null as any;
-
- declare global {
-->global : Symbol(global, Decl(declarationEmitRetainsJsdocyComments.ts, 33, 16))
-+>global : Symbol((Missing), Decl(declarationEmitRetainsJsdocyComments.ts, 33, 16))
-
-     interface ExtFunc {
- >ExtFunc : Symbol(ExtFunc, Decl(declarationEmitRetainsJsdocyComments.ts, 35, 16))
-@@= skipped -9, +9 lines =@@
+@@= skipped -24, +24 lines =@@
          * comment6
          */
          someMethod(collection: any[]): boolean;

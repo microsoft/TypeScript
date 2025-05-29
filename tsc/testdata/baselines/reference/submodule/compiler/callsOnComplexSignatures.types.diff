@@ -1,46 +1,6 @@
 --- old.callsOnComplexSignatures.types
 +++ new.callsOnComplexSignatures.types
-@@= skipped -9, +9 lines =@@
- >test1 : () => void
-
-     type stringType1 = "foo" | "bar";
-->stringType1 : "bar" | "foo"
-+>stringType1 : stringType1
-
-     type stringType2 = "baz" | "bar";
-->stringType2 : "bar" | "baz"
-+>stringType2 : stringType2
-
-     interface Temp1 {
-         getValue(name: stringType1): number;
-->getValue : (name: "bar" | "foo") => number
-->name : "bar" | "foo"
-+>getValue : (name: stringType1) => number
-+>name : stringType1
-     }
-
-     interface Temp2 {
-         getValue(name: stringType2): string;
-->getValue : (name: "bar" | "baz") => string
-->name : "bar" | "baz"
-+>getValue : (name: stringType2) => string
-+>name : stringType2
-     }
-
-     function test(t: Temp1 | Temp2) {
-@@= skipped -24, +24 lines =@@
-         const z = t.getValue("bar"); // Should be fine
- >z : string | number
- >t.getValue("bar") : string | number
-->t.getValue : ((name: "bar" | "foo") => number) | ((name: "bar" | "baz") => string)
-+>t.getValue : ((name: stringType1) => number) | ((name: stringType2) => string)
- >t : Temp1 | Temp2
-->getValue : ((name: "bar" | "foo") => number) | ((name: "bar" | "baz") => string)
-+>getValue : ((name: stringType1) => number) | ((name: stringType2) => string)
- >"bar" : "bar"
-     }
- }
-@@= skipped -43, +43 lines =@@
+@@= skipped -76, +76 lines =@@
      };
 
      const test1 = (type: "foo" | "bar") =>
@@ -170,68 +130,27 @@
      // Pair of non-like intrinsics
      function render(url?: string): React.ReactNode {
 ->render : (url?: string) => React.ReactNode
-+>render : (url?: string | undefined) => ReactNode
++>render : (url?: string | undefined) => React.ReactNode
  >url : string | undefined
  >React : any
 
-@@= skipped -12, +12 lines =@@
- >'button' : "button"
-
-         return <Tag>test</Tag>;
--><Tag>test</Tag> : JSX.Element
-+><Tag>test</Tag> : Element
- >Tag : "a" | "button"
- >Tag : "a" | "button"
-     }
+@@= skipped -19, +19 lines =@@
 
      // Union of all intrinsics and components of `any`
      function App(props: { component:React.ReactType }) {
 ->App : (props: { component: React.ReactType; }) => JSX.Element
 ->props : { component: React.ReactType; }
-->component : React.ReactType<any>
-+>App : (props: { component: ReactType<any>; }) => Element
-+>props : { component: ReactType<any>; }
-+>component : ReactType<any>
++>App : (props: { component: React.ReactType<any>; }) => JSX.Element
++>props : { component: React.ReactType<any>; }
+ >component : React.ReactType<any>
  >React : any
 
-         const Comp: React.ReactType = props.component;
-->Comp : React.ReactType<any>
-+>Comp : ReactType<any>
+@@= skipped -9, +9 lines =@@
+ >Comp : React.ReactType<any>
  >React : any
-->props.component : React.ReactType<any>
+ >props.component : React.ReactType<any>
 ->props : { component: React.ReactType; }
-->component : React.ReactType<any>
-+>props.component : ReactType<any>
-+>props : { component: ReactType<any>; }
-+>component : ReactType<any>
++>props : { component: React.ReactType<any>; }
+ >component : React.ReactType<any>
 
          return (<Comp />);
-->(<Comp />) : JSX.Element
--><Comp /> : JSX.Element
-->Comp : React.ReactType<any>
-+>(<Comp />) : Element
-+><Comp /> : Element
-+>Comp : ReactType<any>
-     }
-
-     // custom components with non-subset props
-@@= skipped -48, +48 lines =@@
-         }
-
-         var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
-->C : React.ComponentType<P1> | React.ComponentType<P2>
-+>C : ComponentType<P1> | ComponentType<P2>
- >React : any
- >React : any
- >null as any : any
-
-         const a = <C p={true} />;
-->a : JSX.Element
--><C p={true} /> : JSX.Element
-->C : React.ComponentType<P1> | React.ComponentType<P2>
-+>a : Element
-+><C p={true} /> : Element
-+>C : ComponentType<P1> | ComponentType<P2>
- >p : true
- >true : true
-     }

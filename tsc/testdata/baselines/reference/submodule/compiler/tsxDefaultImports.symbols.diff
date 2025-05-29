@@ -8,8 +8,7 @@
 +>one : Symbol(one, Decl(a.ts, 0, 15))
  }
  export default class SomeClass {
-->SomeClass : Symbol(SomeClass, Decl(a.ts, 2, 1))
-+>SomeClass : Symbol(default, Decl(a.ts, 2, 1))
+ >SomeClass : Symbol(SomeClass, Decl(a.ts, 2, 1))
 
    public static E = SomeEnum;
 ->E : Symbol(SomeClass.E, Decl(a.ts, 3, 32))
@@ -20,7 +19,7 @@
  === b.ts ===
  import {default as Def} from "./a"
 ->default : Symbol(Def, Decl(a.ts, 2, 1))
-+>default : Symbol(default, Decl(a.ts, 2, 1))
++>default : Symbol(SomeClass, Decl(a.ts, 2, 1))
  >Def : Symbol(Def, Decl(b.ts, 0, 8))
 
  let a = Def.E.one;

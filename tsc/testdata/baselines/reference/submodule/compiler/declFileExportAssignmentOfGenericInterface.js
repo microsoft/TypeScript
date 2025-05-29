@@ -16,3 +16,8 @@ x.a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x.a;
+
+
+//// [declFileExportAssignmentOfGenericInterface_1.d.ts]
+import a = require('declFileExportAssignmentOfGenericInterface_0');
+export declare var x: a<a<string>>;

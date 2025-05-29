@@ -28,3 +28,13 @@ module.exports = a;
 // esm format file
 const a = {};
 export {};
+
+
+//// [index.d.ts]
+// cjs format file
+declare const a: {};
+export = a;
+//// [index.d.ts]
+// esm format file
+declare const a: {};
+export = a;

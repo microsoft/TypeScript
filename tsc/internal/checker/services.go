@@ -112,10 +112,6 @@ func (c *Checker) getSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags)
 	return symbolsToArray(symbols)
 }
 
-func (c *Checker) GetAliasedSymbol(symbol *ast.Symbol) *ast.Symbol {
-	return c.resolveAlias(symbol)
-}
-
 func (c *Checker) GetExportsOfModule(symbol *ast.Symbol) []*ast.Symbol {
 	return symbolsToArray(c.getExportsOfModule(symbol))
 }

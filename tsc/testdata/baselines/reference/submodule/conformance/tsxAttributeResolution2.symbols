@@ -34,7 +34,7 @@ interface Attribs1 {
 
 <test1 data-c1={(x) => x.leng} />; // OK
 >test1 : Symbol(test1, Decl(file.tsx, 2, 30))
->data-c1 : Symbol("data-c1", Decl(file.tsx, 12, 6))
+>data-c1 : Symbol(data-c1, Decl(file.tsx, 12, 6))
 >x : Symbol(x, Decl(file.tsx, 12, 17))
 >x : Symbol(x, Decl(file.tsx, 12, 17))
 

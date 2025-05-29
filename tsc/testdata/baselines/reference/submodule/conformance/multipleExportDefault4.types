@@ -2,7 +2,7 @@
 
 === multipleExportDefault4.ts ===
 export default class C { }
->C : default
+>C : C
 
 export default {
 >{    uhoh: "another default",} : { uhoh: string; }

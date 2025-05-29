@@ -2,26 +2,26 @@
 
 === index.js ===
 function foo() {}
->foo : { (): void; foo: ???; default: ???; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
 
 foo.foo = foo;
->foo.foo = foo : { (): void; foo: ???; default: ???; }
->foo.foo : { (): void; foo: ???; default: ???; }
->foo : { (): void; foo: ???; default: ???; }
->foo : { (): void; foo: ???; default: ???; }
->foo : { (): void; foo: ???; default: ???; }
+>foo.foo = foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo.foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
 
 foo.default = foo;
->foo.default = foo : { (): void; foo: ???; default: ???; }
->foo.default : { (): void; foo: ???; default: ???; }
->foo : { (): void; foo: ???; default: ???; }
->default : { (): void; foo: ???; default: ???; }
->foo : { (): void; foo: ???; default: ???; }
+>foo.default = foo : { (): void; foo: typeof foo; default: typeof foo; }
+>foo.default : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
+>default : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
 
 module.exports = foo;
->module.exports = foo : { (): void; foo: ???; default: ???; }
->module.exports : { (): void; foo: ???; default: ???; }
->module : { foo: { (): void; foo: ???; default: ???; }; }
->exports : { (): void; foo: ???; default: ???; }
->foo : { (): void; foo: ???; default: ???; }
+>module.exports = foo : { (): void; foo: typeof foo; default: typeof foo; }
+>module.exports : { (): void; foo: typeof foo; default: typeof foo; }
+>module : { foo: { (): void; foo: typeof foo; default: typeof foo; }; }
+>exports : { (): void; foo: typeof foo; default: typeof foo; }
+>foo : { (): void; foo: typeof foo; default: typeof foo; }
 

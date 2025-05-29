@@ -15,7 +15,7 @@ namespace SomeOther.Thing {
 >Foo : Foo
 
         private _which: Internal.WhichThing;
->_which : WhichThing
+>_which : Internal.WhichThing
 >Internal : any
 
         constructor() {
@@ -27,11 +27,11 @@ namespace SomeOther.Thing {
 
             Internal.WhichThing.A ? "foo" : "bar";
 >Internal.WhichThing.A ? "foo" : "bar" : "bar" | "foo"
->Internal.WhichThing.A : WhichThing.A
->Internal.WhichThing : typeof WhichThing
+>Internal.WhichThing.A : Internal.WhichThing.A
+>Internal.WhichThing : typeof Internal.WhichThing
 >Internal : typeof Internal
->WhichThing : typeof WhichThing
->A : WhichThing.A
+>WhichThing : typeof Internal.WhichThing
+>A : Internal.WhichThing.A
 >"foo" : "foo"
 >"bar" : "bar"
         }

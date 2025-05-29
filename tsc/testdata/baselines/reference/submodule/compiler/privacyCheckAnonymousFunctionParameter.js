@@ -35,3 +35,7 @@ var Query;
         });
     }
 })(Query || (Query = {}));
+
+
+//// [privacyCheckAnonymousFunctionParameter.d.ts]
+export declare var x: number; // Makes this an external module

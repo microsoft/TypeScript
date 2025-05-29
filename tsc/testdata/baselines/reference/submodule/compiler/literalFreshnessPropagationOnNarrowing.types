@@ -29,76 +29,76 @@ function f2() {
 >f2 : () => void
 
     type Element = (string | false);
->Element : Element
+>Element : string | false
 >false : false
 
     type ElementOrArray = Element | Element[]; 
->ElementOrArray : ElementOrArray
+>ElementOrArray : (string | false)[] | (string | false)
 
     let el: Element = null as any;
->el : Element
+>el : string | false
 >null as any : any
 
     let arr: Element[] = null as any;
->arr : Element[]
+>arr : (string | false)[]
 >null as any : any
 
     let elOrA: ElementOrArray = null as any;
->elOrA : ElementOrArray
+>elOrA : (string | false)[] | (string | false)
 >null as any : any
 
     // Desired/actual: All OK
     let a1: ElementOrArray = el;
->a1 : ElementOrArray
->el : Element
+>a1 : (string | false)[] | (string | false)
+>el : string | false
 
     let a2: ElementOrArray = arr;
->a2 : ElementOrArray
->arr : Element[]
+>a2 : (string | false)[] | (string | false)
+>arr : (string | false)[]
 
     let a3: ElementOrArray = [el];
->a3 : ElementOrArray
->[el] : Element[]
->el : Element
+>a3 : (string | false)[] | (string | false)
+>[el] : (string | false)[]
+>el : string | false
 
     let a4: ElementOrArray = Array.isArray(elOrA) ? elOrA : [elOrA];
->a4 : ElementOrArray
->Array.isArray(elOrA) ? elOrA : [elOrA] : Element[]
+>a4 : (string | false)[] | (string | false)
+>Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 >Array.isArray(elOrA) : boolean
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
->elOrA : ElementOrArray
->elOrA : Element[]
->[elOrA] : Element[]
->elOrA : Element
+>elOrA : (string | false)[] | (string | false)
+>elOrA : (string | false)[]
+>[elOrA] : (string | false)[]
+>elOrA : string | false
 
     // Desired: OK
     // 3.0: Error
     // 3.1: OK
     let a5: ElementOrArray = [...Array.isArray(elOrA) ? elOrA : [elOrA]];
->a5 : ElementOrArray
->[...Array.isArray(elOrA) ? elOrA : [elOrA]] : Element[]
->...Array.isArray(elOrA) ? elOrA : [elOrA] : Element
->Array.isArray(elOrA) ? elOrA : [elOrA] : Element[]
+>a5 : (string | false)[] | (string | false)
+>[...Array.isArray(elOrA) ? elOrA : [elOrA]] : (string | false)[]
+>...Array.isArray(elOrA) ? elOrA : [elOrA] : string | false
+>Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
 >Array.isArray(elOrA) : boolean
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]
->elOrA : ElementOrArray
->elOrA : Element[]
->[elOrA] : Element[]
->elOrA : Element
+>elOrA : (string | false)[] | (string | false)
+>elOrA : (string | false)[]
+>[elOrA] : (string | false)[]
+>elOrA : string | false
 }
 
 function f3() {
 >f3 : () => void
 
     type XY = 'x' | 'y';
->XY : XY
+>XY : "x" | "y"
 
     const x: XY = 'x';
->x : XY
+>x : "x" | "y"
 >'x' : "x"
 
     let x2 = x;
@@ -115,12 +115,12 @@ function f3() {
 
     // Desired/actual: All OK
     let x3: XY = x;
->x3 : XY
+>x3 : "x" | "y"
 >x : "x"
 
     x3 = 'y';
 >x3 = 'y' : "y"
->x3 : XY
+>x3 : "x" | "y"
 >'y' : "y"
 }
 
@@ -149,16 +149,16 @@ function f5() {
 >f5 : () => void
 
     type XY = 'x' | 'y';
->XY : XY
+>XY : "x" | "y"
 
     let arr: XY[] = ['x'];
->arr : XY[]
+>arr : ("x" | "y")[]
 >['x'] : "x"[]
 >'x' : "x"
 
     arr = ['y'];
 >arr = ['y'] : "y"[]
->arr : XY[]
+>arr : ("x" | "y")[]
 >['y'] : "y"[]
 >'y' : "y"
 
@@ -166,7 +166,7 @@ function f5() {
     // Error in all extant branches
     arr = [...['y']];
 >arr = [...['y']] : string[]
->arr : XY[]
+>arr : ("x" | "y")[]
 >[...['y']] : string[]
 >...['y'] : string
 >['y'] : string[]

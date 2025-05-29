@@ -5,7 +5,7 @@
 >dec : <T>(target: T) => T
 
 import lib = require('./decoratorOnImportEquals2_0');
->lib : typeof import("decoratorOnImportEquals2_0")
+>lib : typeof lib
 
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T

@@ -1,13 +1,6 @@
 --- old.controlFlowInstanceofExtendsFunction.symbols
 +++ new.controlFlowInstanceofExtendsFunction.symbols
-@@= skipped -1, +1 lines =@@
-
- === controlFlowInstanceofExtendsFunction.ts ===
- declare global {
-->global : Symbol(global, Decl(controlFlowInstanceofExtendsFunction.ts, 0, 0))
-+>global : Symbol((Missing), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 0))
-
-     interface Function {
+@@= skipped -7, +7 lines =@@
  >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(controlFlowInstanceofExtendsFunction.ts, 0, 16))
 
          now(): string;
@@ -29,7 +22,7 @@
 
      return "now"
  }
-@@= skipped -24, +24 lines =@@
+@@= skipped -18, +18 lines =@@
  >X : Symbol(X, Decl(controlFlowInstanceofExtendsFunction.ts, 8, 1))
 
      static now() {

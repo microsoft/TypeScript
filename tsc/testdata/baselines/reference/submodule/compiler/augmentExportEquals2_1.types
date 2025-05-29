@@ -6,6 +6,6 @@ import x = require("file1");
 
 import "file2";
 let a: x.A; // should not work
->a : A
+>a : x.A
 >x : any
 

@@ -112,6 +112,20 @@ func (p *InfoCacheEntry) Exists() bool {
 	return p != nil && p.Contents != nil
 }
 
+func (p *InfoCacheEntry) GetContents() *PackageJson {
+	if p == nil || p.Contents == nil {
+		return nil
+	}
+	return p.Contents
+}
+
+func (p *InfoCacheEntry) GetDirectory() string {
+	if p == nil {
+		return ""
+	}
+	return p.PackageDirectory
+}
+
 type InfoCache struct {
 	mu                        sync.RWMutex
 	IsReadonly                bool

@@ -7,3 +7,8 @@ export default 3.14159;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = 3.14159;
+
+
+//// [pi.d.ts]
+declare const _default: number;
+export default _default;

@@ -57,7 +57,7 @@
 +                status: 'done',
 +                ~~~~~~
 +!!! error TS2322: Type 'string' is not assignable to type '"done"'.
-+!!! related TS6500 test.js:2:5: The expected type comes from property 'status' which is declared here on type '{ status: "done"; m: (n: number) => void; }'
++!!! related TS6500 test.js:2:5: The expected type comes from property 'status' which is declared here on type '{ status: "done"; m(n: number): void; }'
 +                m(n) { }
 +                  ~
 +!!! error TS7006: Parameter 'n' implicitly has an 'any' type.

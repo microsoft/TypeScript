@@ -9,12 +9,8 @@
 -    }
 -    return Foo;
 -}());
--
--
--//// [index.d.ts]
--export interface Bar {
--    x: string;
 +class Foo {
- }
--//// [module.d.ts]
--export {};
++}
+
+
+ //// [index.d.ts]

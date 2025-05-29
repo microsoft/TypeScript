@@ -20,3 +20,14 @@ var c;
 (function (c) {
     c.b = a.I;
 })(c || (exports.c = c = {}));
+
+
+//// [internalAliasInterfaceInsideLocalModuleWithExport.d.ts]
+export declare namespace a {
+    interface I {
+    }
+}
+export declare namespace c {
+    export import b = a.I;
+    var x: b;
+}

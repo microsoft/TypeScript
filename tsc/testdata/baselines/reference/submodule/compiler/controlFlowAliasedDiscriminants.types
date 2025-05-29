@@ -377,7 +377,7 @@ type Nested = {
 }
 
 function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
->bindingPatternInParameter : (__0: UseQueryResult<number>) => void
+>bindingPatternInParameter : ({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) => void
 >data : any
 >data1 : number | undefined
 >isSuccess : any

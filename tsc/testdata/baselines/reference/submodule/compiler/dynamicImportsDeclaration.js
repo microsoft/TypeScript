@@ -40,3 +40,16 @@ export const mod = await (async () => {
             return await import("./caseFallback.js");
     }
 })();
+
+
+//// [case0.d.ts]
+declare const _default: number;
+export default _default;
+//// [case1.d.ts]
+declare const _default: number;
+export default _default;
+//// [caseFallback.d.ts]
+declare const _default: string;
+export default _default;
+//// [index.d.ts]
+export declare const mod: typeof import("./case0.js") | typeof import("./case1.js") | typeof import("./caseFallback.js");

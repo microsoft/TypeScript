@@ -1,42 +1,10 @@
 --- old.checkerInitializationCrash.types
 +++ new.checkerInitializationCrash.types
-@@= skipped -1, +1 lines =@@
+@@= skipped -58, +58 lines =@@
 
- === /node_modules/@fullcalendar/react/index.d.ts ===
- import * as react from 'react';
-->react : typeof react
-+>react : typeof React
+ === /node_modules/preact/index.d.ts ===
+ export as namespace preact;
+->preact : typeof import("/node_modules/preact/index")
++>preact : typeof import("preact")
 
- declare global {
- >global : typeof global
-@@= skipped -10, +10 lines =@@
-
-     export import VNode = react.ReactNode;
- >VNode : any
-->react : typeof react
-+>react : typeof React
- >ReactNode : any
-   }
- }
-
- export default class FullCalendar {
-->FullCalendar : FullCalendar
-+>FullCalendar : default
- }
-
- === /node_modules/@fullcalendar/core/index.d.ts ===
- import * as preact from 'preact';
-->preact : typeof preact
-+>preact : typeof import("/node_modules/preact/index")
-
- declare global {
- >global : any
-@@= skipped -53, +53 lines =@@
-
- === /index.tsx ===
- import FullCalendar from "@fullcalendar/react";
-->FullCalendar : typeof FullCalendar
-+>FullCalendar : typeof default
-
- import { EventInput } from "@fullcalendar/core";
- >EventInput : any
+ export interface VNode<P = {}> {}

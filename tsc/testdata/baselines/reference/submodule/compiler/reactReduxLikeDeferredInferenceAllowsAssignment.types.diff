@@ -18,27 +18,18 @@
  >children : {} | undefined
  >context : any
 
-@@= skipped -106, +106 lines =@@
- >;
-
- declare const connect: {
-->connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
-+>connect : <no_state, TDispatchProps, TOwnProps>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
-
-   <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(
-     mapStateToProps: null | undefined,
-@@= skipped -81, +81 lines =@@
+@@= skipped -187, +187 lines =@@
 
  });
  const thunkAction = (param1: number, param2: string) => async (
 ->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
 ->(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
-+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
-+>(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
++>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
++>(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
  >param1 : number
  >param2 : string
 ->async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
-+>async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
++>async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
 
    dispatch: Dispatch,
  >dispatch : Dispatch<AnyAction>
@@ -48,25 +39,20 @@
  const mapDispatchToProps = { simpleAction, thunkAction };
 ->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
 ->{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
-+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
-+>{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
++>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
++>{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
  >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
 ->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
-+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
++>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
 
  type Q = HandleThunkActionCreator<typeof simpleAction>;
  >Q : (payload: boolean) => { type: string; payload: boolean; }
-@@= skipped -13, +13 lines =@@
- >Test1 : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
- >connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
- >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
-->connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
-+>connect : <no_state, TDispatchProps, TOwnProps>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
+@@= skipped -17, +17 lines =@@
 
    null,
    mapDispatchToProps
 ->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
-+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
++>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
 
  )(TestComponent);
  >TestComponent : typeof TestComponent

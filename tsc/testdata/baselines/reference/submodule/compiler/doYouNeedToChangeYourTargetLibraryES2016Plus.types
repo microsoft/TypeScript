@@ -56,10 +56,10 @@ const testIntlFormatToParts = new Intl.DateTimeFormat("en-US").formatToParts();
 >testIntlFormatToParts : any
 >new Intl.DateTimeFormat("en-US").formatToParts() : any
 >new Intl.DateTimeFormat("en-US").formatToParts : any
->new Intl.DateTimeFormat("en-US") : DateTimeFormat
->Intl.DateTimeFormat : DateTimeFormatConstructor
+>new Intl.DateTimeFormat("en-US") : Intl.DateTimeFormat
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >Intl : typeof Intl
->DateTimeFormat : DateTimeFormatConstructor
+>DateTimeFormat : Intl.DateTimeFormatConstructor
 >"en-US" : "en-US"
 >formatToParts : any
 
@@ -95,9 +95,9 @@ const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<mont
 >testRegExpMatchArrayGroups : any
 >"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups : any
 >"2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g) : RegExpMatchArray
->"2019-04-30".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
+>"2019-04-30".match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
 >"2019-04-30" : "2019-04-30"
->match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match]: (string: string) => RegExpMatchArray; }): RegExpMatchArray; }
+>match : { (regexp: string | RegExp): RegExpMatchArray; (matcher: { [Symbol.match](string: string): RegExpMatchArray; }): RegExpMatchArray; }
 >/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g : RegExp
 >groups : any
 
@@ -149,10 +149,10 @@ const testNumberFormatFormatToParts = new Intl.NumberFormat("en-US").formatToPar
 >testNumberFormatFormatToParts : any
 >new Intl.NumberFormat("en-US").formatToParts() : any
 >new Intl.NumberFormat("en-US").formatToParts : any
->new Intl.NumberFormat("en-US") : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat("en-US") : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >"en-US" : "en-US"
 >formatToParts : any
 

@@ -297,3 +297,9 @@ const obj2 = {
 let make = getProp2(obj2, 'cars.1.make'); // 'Trabant'
 const spacing = "s12";
 const test1 = "0 0 0";
+
+
+//// [templateLiteralTypes1.d.ts]
+// Repro from #46480
+export type Spacing = `0` | `${number}px` | `${number}rem` | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+export type SpacingShorthand = `${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;

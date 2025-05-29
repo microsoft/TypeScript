@@ -8,11 +8,11 @@ export var a = 10;
 === client.ts ===
 export import defaultBinding, * as nameSpaceBinding  from "./server";
 >defaultBinding : any
->nameSpaceBinding : typeof import("server")
+>nameSpaceBinding : typeof nameSpaceBinding
 
 export var x: number = nameSpaceBinding.a;
 >x : number
 >nameSpaceBinding.a : number
->nameSpaceBinding : typeof import("server")
+>nameSpaceBinding : typeof nameSpaceBinding
 >a : number
 

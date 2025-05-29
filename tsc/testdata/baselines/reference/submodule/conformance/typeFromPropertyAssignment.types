@@ -36,11 +36,11 @@ si.m
 
 /** @type {Outer.Inner} */
 var oi
->oi : Inner
+>oi : Outer.Inner
 
 oi.n
 >oi.n : any
->oi : Inner
+>oi : Outer.Inner
 >n : any
 
 

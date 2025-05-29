@@ -127,7 +127,7 @@ enum E14 { a, b: any "hello" += 1, c, d}
 >a : Symbol(a, Decl(enumErrors.ts, 52, 10))
 >b : Symbol(b, Decl(enumErrors.ts, 52, 13))
 >any : Symbol(any, Decl(enumErrors.ts, 52, 16))
->"hello" : Symbol(hello, Decl(enumErrors.ts, 52, 20))
+>"hello" : Symbol("hello", Decl(enumErrors.ts, 52, 20))
 >1 : Symbol(1, Decl(enumErrors.ts, 52, 31))
 >c : Symbol(c, Decl(enumErrors.ts, 52, 34))
 >d : Symbol(d, Decl(enumErrors.ts, 52, 37))

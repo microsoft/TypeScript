@@ -9,3 +9,7 @@ export default function f() { }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
 function f() { }
+
+
+//// [es5ExportDefaultFunctionDeclaration.d.ts]
+export default function f(): void;

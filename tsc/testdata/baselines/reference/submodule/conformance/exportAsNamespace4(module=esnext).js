@@ -36,3 +36,15 @@ foo.a;
 foo1.a;
 foo.b;
 foo1.b;
+
+
+//// [0.d.ts]
+export declare const a = 1;
+export declare const b = 2;
+//// [1.d.ts]
+export * as default from './0';
+//// [11.d.ts]
+import * as ns from './0';
+export default ns;
+//// [2.d.ts]
+export {};

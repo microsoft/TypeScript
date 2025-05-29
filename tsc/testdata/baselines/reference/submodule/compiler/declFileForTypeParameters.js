@@ -15,3 +15,10 @@ class C {
         return this.x;
     }
 }
+
+
+//// [declFileForTypeParameters.d.ts]
+declare class C<T> {
+    x: T;
+    foo(a: T): T;
+}

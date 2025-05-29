@@ -82,16 +82,7 @@
  >param : T
  >cb : (element: T[number]) => void
  >element : T[number]
-@@= skipped -21, +21 lines =@@
- >'abc' : "abc"
-
-     let y: ReadonlyArray<string>[K] = 'abc';
-->y : (readonly string[])[K]
-+>y : readonly string[][K]
- >'abc' : "abc"
- }
-
-@@= skipped -69, +69 lines =@@
+@@= skipped -90, +90 lines =@@
 
  		window[action](x, y);
  >window[action](x, y) : void

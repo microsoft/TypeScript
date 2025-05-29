@@ -1,15 +1,6 @@
 --- old.esnextmodulekind.symbols
 +++ new.esnextmodulekind.symbols
-@@= skipped -1, +1 lines =@@
-
- === esnextmodulekind.ts ===
- export default class A
-->A : Symbol(A, Decl(esnextmodulekind.ts, 0, 0))
-+>A : Symbol(default, Decl(esnextmodulekind.ts, 0, 0))
- {
-     constructor ()
-     {
-@@= skipped -8, +8 lines =@@
+@@= skipped -9, +9 lines =@@
      }
 
      public B()

@@ -2,13 +2,13 @@
 
 === foo_1.ts ===
 import foo = require("./foo_0");
->foo : typeof import("foo_0")
+>foo : typeof foo
 
 if(foo.C1.s1){
 >foo.C1.s1 : boolean
->foo.C1 : typeof C1
->foo : typeof import("foo_0")
->C1 : typeof C1
+>foo.C1 : typeof foo.C1
+>foo : typeof foo
+>C1 : typeof foo.C1
 >s1 : boolean
 
 	// Should cause runtime import

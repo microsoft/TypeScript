@@ -13,13 +13,13 @@ Outer.Inner = function() {}
 >function() {} : () => void
 
 Outer.Inner.prototype = {
->Outer.Inner.prototype = {    m() { },    i: 1} : { m: () => void; i: number; }
+>Outer.Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
 >Outer.Inner.prototype : any
 >Outer.Inner : any
 >Outer : {}
 >Inner : any
 >prototype : any
->{    m() { },    i: 1} : { m: () => void; i: number; }
+>{    m() { },    i: 1} : { m(): void; i: number; }
 
     m() { },
 >m : () => void

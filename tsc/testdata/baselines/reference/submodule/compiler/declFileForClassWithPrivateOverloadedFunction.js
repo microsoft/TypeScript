@@ -11,3 +11,9 @@ class C {
 class C {
     foo(x) { }
 }
+
+
+//// [declFileForClassWithPrivateOverloadedFunction.d.ts]
+declare class C {
+    private foo;
+}

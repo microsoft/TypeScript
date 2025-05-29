@@ -144,9 +144,9 @@ const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
 >(a: T[]) => a.map(f) : (a: T[]) => U[]
 >a : T[]
 >a.map(f) : U[]
->a.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>a.map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
 >a : T[]
->map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
 >f : (x: T) => U
 
 const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);

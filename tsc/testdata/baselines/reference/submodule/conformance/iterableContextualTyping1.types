@@ -2,7 +2,7 @@
 
 === iterableContextualTyping1.ts ===
 var iter: Iterable<(x: string) => number> = [s => s.length];
->iter : Iterable<(x: string) => number, any, any>
+>iter : Iterable<(x: string) => number>
 >x : string
 >[s => s.length] : ((s: string) => number)[]
 >s => s.length : (s: string) => number

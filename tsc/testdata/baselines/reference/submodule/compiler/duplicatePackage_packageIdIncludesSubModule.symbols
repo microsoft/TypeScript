@@ -9,7 +9,7 @@ import { x } from "foo/Bar";
 
 === /node_modules/foo/Foo.d.ts ===
 export default class Foo {
->Foo : Symbol(default, Decl(Foo.d.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(Foo.d.ts, 0, 0))
 
     protected source: boolean;
 >source : Symbol(source, Decl(Foo.d.ts, 0, 26))

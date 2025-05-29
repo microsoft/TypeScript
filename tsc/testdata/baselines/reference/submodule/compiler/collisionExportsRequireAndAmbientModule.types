@@ -11,7 +11,7 @@ export declare module require {
     }
 }
 export function foo(): require.I {
->foo : () => I
+>foo : () => require.I
 >require : any
 
     return null;
@@ -26,7 +26,7 @@ export declare module exports {
     }
 }
 export function foo2(): exports.I {
->foo2 : () => I
+>foo2 : () => exports.I
 >exports : any
 
     return null;

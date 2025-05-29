@@ -17,15 +17,7 @@
  >v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]> | [0]
  >v : boolean
  >v ? [0] : Promise.reject() : Promise<[0]> | [0]
-@@= skipped -14, +14 lines =@@
- >[0] : [0]
- >0 : 0
- >Promise.reject() : Promise<[0]>
-->Promise.reject : <T = never>(reason?: any) => Promise<T>
-+>Promise.reject : <T>(reason?: any) => Promise<T>
- >Promise : PromiseConstructor
-->reject : <T = never>(reason?: any) => Promise<T>
-+>reject : <T>(reason?: any) => Promise<T>
+@@= skipped -20, +20 lines =@@
 
  f(async v => v ? [0] : Promise.reject());
  >f(async v => v ? [0] : Promise.reject()) : void
@@ -34,63 +26,7 @@
  >async v => v ? [0] : Promise.reject() : (v: boolean) => Promise<[0]>
  >v : boolean
  >v ? [0] : Promise.reject() : Promise<[0]> | [0]
-@@= skipped -14, +14 lines =@@
- >[0] : [0]
- >0 : 0
- >Promise.reject() : Promise<[0]>
-->Promise.reject : <T = never>(reason?: any) => Promise<T>
-+>Promise.reject : <T>(reason?: any) => Promise<T>
- >Promise : PromiseConstructor
-->reject : <T = never>(reason?: any) => Promise<T>
-+>reject : <T>(reason?: any) => Promise<T>
-
- declare function g(cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">): void;
- >g : (cb: (v: boolean) => "contextuallyTypable" | PromiseLike<"contextuallyTypable">) => void
-@@= skipped -18, +18 lines =@@
- >v : boolean
- >"contextuallyTypable" : "contextuallyTypable"
- >Promise.reject() : Promise<"contextuallyTypable">
-->Promise.reject : <T = never>(reason?: any) => Promise<T>
-+>Promise.reject : <T>(reason?: any) => Promise<T>
- >Promise : PromiseConstructor
-->reject : <T = never>(reason?: any) => Promise<T>
-+>reject : <T>(reason?: any) => Promise<T>
-
- g(async v => v ? "contextuallyTypable" : Promise.reject());
- >g(async v => v ? "contextuallyTypable" : Promise.reject()) : void
-@@= skipped -13, +13 lines =@@
- >v : boolean
- >"contextuallyTypable" : "contextuallyTypable"
- >Promise.reject() : Promise<"contextuallyTypable">
-->Promise.reject : <T = never>(reason?: any) => Promise<T>
-+>Promise.reject : <T>(reason?: any) => Promise<T>
- >Promise : PromiseConstructor
-->reject : <T = never>(reason?: any) => Promise<T>
-+>reject : <T>(reason?: any) => Promise<T>
-
- type MyCallback = (thing: string) => void;
- >MyCallback : MyCallback
-@@= skipped -23, +23 lines =@@
- >(abc) => { } : (abc: string) => void
- >abc : string
- >Promise.reject() : Promise<MyCallback>
-->Promise.reject : <T = never>(reason?: any) => Promise<T>
-+>Promise.reject : <T>(reason?: any) => Promise<T>
- >Promise : PromiseConstructor
-->reject : <T = never>(reason?: any) => Promise<T>
-+>reject : <T>(reason?: any) => Promise<T>
-
- h(async v => v ? (def) => { } : Promise.reject());
- >h(async v => v ? (def) => { } : Promise.reject()) : void
-@@= skipped -14, +14 lines =@@
- >(def) => { } : (def: string) => void
- >def : string
- >Promise.reject() : Promise<MyCallback>
-->Promise.reject : <T = never>(reason?: any) => Promise<T>
-+>Promise.reject : <T>(reason?: any) => Promise<T>
- >Promise : PromiseConstructor
-->reject : <T = never>(reason?: any) => Promise<T>
-+>reject : <T>(reason?: any) => Promise<T>
+@@= skipped -82, +82 lines =@@
 
  // repro from #29196
  const increment: (
@@ -99,7 +35,7 @@
 
    num: number,
  >num : number
-@@= skipped -32, +32 lines =@@
+@@= skipped -26, +26 lines =@@
  }
 
  const increment2: (

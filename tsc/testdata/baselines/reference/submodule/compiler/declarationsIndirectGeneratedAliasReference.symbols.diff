@@ -23,10 +23,10 @@
  const Ctor = ns.default;
  >Ctor : Symbol(Ctor, Decl(index.ts, 1, 5))
 ->ns.default : Symbol(ns.default, Decl(index.d.ts, 0, 30))
-+>ns.default : Symbol(default, Decl(index.d.ts, 0, 30))
++>ns.default : Symbol(Ctor, Decl(index.d.ts, 0, 30))
  >ns : Symbol(ns, Decl(index.ts, 0, 6))
 ->default : Symbol(ns.default, Decl(index.d.ts, 0, 30))
-+>default : Symbol(default, Decl(index.d.ts, 0, 30))
++>default : Symbol(Ctor, Decl(index.d.ts, 0, 30))
 
  export const MyComp = Ctor.extends({foo: "bar"});
  >MyComp : Symbol(MyComp, Decl(index.ts, 2, 12))

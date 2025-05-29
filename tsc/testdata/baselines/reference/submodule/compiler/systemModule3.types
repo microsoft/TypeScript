@@ -10,7 +10,7 @@ export default function f() {}
 
 === file3.ts ===
 export default class C {}
->C : default
+>C : C
 
 === file4.ts ===
 

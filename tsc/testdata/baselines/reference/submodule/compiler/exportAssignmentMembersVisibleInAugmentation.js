@@ -25,3 +25,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [a.d.ts]
+declare module "foo" {
+    function f(): T; // OK
+}
+export {};
+//// [b.d.ts]
+import * as foo from "foo";
+declare module "foo" {
+    function g(): foo.T; // OK
+}

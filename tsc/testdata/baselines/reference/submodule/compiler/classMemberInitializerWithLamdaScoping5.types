@@ -2,7 +2,7 @@
 
 === classMemberInitializerWithLamdaScoping5.ts ===
 declare var console: {
->console : { log: (message?: any, ...optionalParams: any[]) => void; }
+>console : { log(message?: any, ...optionalParams: any[]): void; }
 
     log(message?: any, ...optionalParams: any[]): void;
 >log : (message?: any, ...optionalParams: any[]) => void
@@ -25,7 +25,7 @@ class Greeter {
         console.log(message); // This shouldnt be error
 >console.log(message) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
->console : { log: (message?: any, ...optionalParams: any[]) => void; }
+>console : { log(message?: any, ...optionalParams: any[]): void; }
 >log : (message?: any, ...optionalParams: any[]) => void
 >message : string
     }

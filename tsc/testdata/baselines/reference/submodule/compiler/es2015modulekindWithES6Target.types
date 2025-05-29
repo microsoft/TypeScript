@@ -2,7 +2,7 @@
 
 === es2015modulekindWithES6Target.ts ===
 export default class A
->A : default
+>A : A
 {
     constructor ()
     {

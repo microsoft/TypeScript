@@ -74,35 +74,3 @@
 +}
  exports.h = h;
  exports.j = C.F6;
--
--
--//// [declFileGenericType.d.ts]
--export declare namespace C {
--    class A<T> {
--    }
--    class B {
--    }
--    function F<T>(x: T): A<B>;
--    function F2<T>(x: T): C.A<C.B>;
--    function F3<T>(x: T): C.A<C.B>[];
--    function F4<T extends A<B>>(x: T): Array<C.A<C.B>>;
--    function F5<T>(): T;
--    function F6<T extends A<B>>(x: T): T;
--    class D<T> {
--        val: T;
--        constructor(val: T);
--    }
--}
--export declare var a: C.A<C.B>;
--export declare var b: typeof C.F;
--export declare var c: typeof C.F2;
--export declare var d: typeof C.F3;
--export declare var e: typeof C.F4;
--export declare var x: C.A<C.B>;
--export declare function f<T extends C.A<C.B>>(): void;
--export declare var g: C.A<C.B>;
--export declare class h extends C.A<C.B> {
--}
--export interface i extends C.A<C.B> {
--}
--export declare var j: typeof C.F6;

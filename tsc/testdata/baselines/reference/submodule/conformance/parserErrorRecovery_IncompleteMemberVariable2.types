@@ -61,10 +61,10 @@ module Shapes {
 // Local variables
 var p: IPoint = new Shapes.Point(3, 4);
 >p : IPoint
->new Shapes.Point(3, 4) : Point
->Shapes.Point : typeof Point
+>new Shapes.Point(3, 4) : Shapes.Point
+>Shapes.Point : typeof Shapes.Point
 >Shapes : typeof Shapes
->Point : typeof Point
+>Point : typeof Shapes.Point
 >3 : 3
 >4 : 4
 

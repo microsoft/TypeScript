@@ -170,7 +170,7 @@ var rc1 = '' instanceof {};
 
 // @@hasInstance restricts LHS
 var o4: {[Symbol.hasInstance](value: { x: number }): boolean;};
->o4 : { [Symbol.hasInstance]: (value: { x: number; }) => boolean; }
+>o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
 >[Symbol.hasInstance] : (value: { x: number; }) => boolean
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
@@ -186,11 +186,11 @@ var ra10 = o5 instanceof o4;
 >ra10 : boolean
 >o5 instanceof o4 : boolean
 >o5 : { y: string; }
->o4 : { [Symbol.hasInstance]: (value: { x: number; }) => boolean; }
+>o4 : { [Symbol.hasInstance](value: { x: number; }): boolean; }
 
 // invalid @@hasInstance method return type on RHS
 var o6: {[Symbol.hasInstance](value: unknown): number;};
->o6 : { [Symbol.hasInstance]: (value: unknown) => number; }
+>o6 : { [Symbol.hasInstance](value: unknown): number; }
 >[Symbol.hasInstance] : (value: unknown) => number
 >Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
@@ -201,5 +201,5 @@ var rb11 = x instanceof o6;
 >rb11 : boolean
 >x instanceof o6 : boolean
 >x : any
->o6 : { [Symbol.hasInstance]: (value: unknown) => number; }
+>o6 : { [Symbol.hasInstance](value: unknown): number; }
 

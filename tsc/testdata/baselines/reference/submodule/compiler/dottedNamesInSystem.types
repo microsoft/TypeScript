@@ -16,10 +16,10 @@ export function bar() {
     return A.B.C.foo();
 >A.B.C.foo() : void
 >A.B.C.foo : () => void
->A.B.C : typeof C
->A.B : typeof B
+>A.B.C : typeof A.B.C
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
->C : typeof C
+>B : typeof A.B
+>C : typeof A.B.C
 >foo : () => void
 }

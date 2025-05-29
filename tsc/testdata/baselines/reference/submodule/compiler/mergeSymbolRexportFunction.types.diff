@@ -8,8 +8,10 @@
 +=== a.d.ts ===
  import '.'
  declare module '.' {
- >'.' : typeof import("index")
-@@= skipped -9, +9 lines =@@
+->'.' : typeof import("index")
++>'.' : typeof import("./index.js")
+
+   const Row: () => void;
  >Row : () => void
  }
 

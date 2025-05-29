@@ -2,7 +2,7 @@
 
 === collisionThisExpressionAndNameResolution.ts ===
 var console : {
->console : { log: (message: any) => any; }
+>console : { log(message: any): any; }
 
     log(message: any);
 >log : (message: any) => any
@@ -24,7 +24,7 @@ class Foo {
             console.log(_this); // Error as this doesnt not resolve to user defined _this
 >console.log(_this) : any
 >console.log : (message: any) => any
->console : { log: (message: any) => any; }
+>console : { log(message: any): any; }
 >log : (message: any) => any
 >_this : number
 

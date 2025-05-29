@@ -2,30 +2,30 @@
 
 === intlNumberFormatES5UseGrouping.ts ===
 new Intl.NumberFormat('en-GB', { useGrouping: true });
->new Intl.NumberFormat('en-GB', { useGrouping: true }) : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat('en-GB', { useGrouping: true }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >'en-GB' : "en-GB"
 >{ useGrouping: true } : { useGrouping: true; }
 >useGrouping : true
 >true : true
 
 new Intl.NumberFormat('en-GB', { useGrouping: 'true' }); // expect error
->new Intl.NumberFormat('en-GB', { useGrouping: 'true' }) : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat('en-GB', { useGrouping: 'true' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >'en-GB' : "en-GB"
 >{ useGrouping: 'true' } : { useGrouping: string; }
 >useGrouping : string
 >'true' : "true"
 
 new Intl.NumberFormat('en-GB', { useGrouping: 'always' }); // expect error
->new Intl.NumberFormat('en-GB', { useGrouping: 'always' }) : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat('en-GB', { useGrouping: 'always' }) : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >'en-GB' : "en-GB"
 >{ useGrouping: 'always' } : { useGrouping: string; }
 >useGrouping : string
@@ -33,12 +33,12 @@ new Intl.NumberFormat('en-GB', { useGrouping: 'always' }); // expect error
 
 const { useGrouping } = new Intl.NumberFormat('en-GB').resolvedOptions();
 >useGrouping : boolean
->new Intl.NumberFormat('en-GB').resolvedOptions() : ResolvedNumberFormatOptions
->new Intl.NumberFormat('en-GB').resolvedOptions : () => ResolvedNumberFormatOptions
->new Intl.NumberFormat('en-GB') : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat('en-GB').resolvedOptions() : Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-GB').resolvedOptions : () => Intl.ResolvedNumberFormatOptions
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >'en-GB' : "en-GB"
->resolvedOptions : () => ResolvedNumberFormatOptions
+>resolvedOptions : () => Intl.ResolvedNumberFormatOptions
 

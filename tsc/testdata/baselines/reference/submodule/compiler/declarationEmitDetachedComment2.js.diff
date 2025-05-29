@@ -26,16 +26,12 @@
 -    }
 -    return Hola;
 -}());
--
--
--//// [test1.d.ts]
--/*! Copyright 2015 MyCompany Inc. */
--declare class Hello {
--}
--//// [test2.d.ts]
--declare class Hi {
--}
--//// [test3.d.ts]
--declare class Hola {
 +class Hola {
++}
+
+
+ //// [test1.d.ts]
+-/*! Copyright 2015 MyCompany Inc. */
+ declare class Hello {
  }
+ //// [test2.d.ts]

@@ -31,3 +31,16 @@ var c;
     c.b = a.b;
     c.x = new c.b.c();
 })(c || (exports.c = c = {}));
+
+
+//// [internalAliasInitializedModuleInsideLocalModuleWithExport.d.ts]
+export declare namespace a {
+    namespace b {
+        class c {
+        }
+    }
+}
+export declare namespace c {
+    export import b = a.b;
+    var x: b.c;
+}

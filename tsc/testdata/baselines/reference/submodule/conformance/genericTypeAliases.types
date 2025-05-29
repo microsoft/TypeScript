@@ -177,46 +177,46 @@ p.tag = "test";
 >"test" : "test"
 
 function f<A>() {
->f : <A>() => Foo<A[]>
+>f : <A>() => A[] | { x: A[] | any; }
 
     type Foo<T> = T | { x: Foo<T> };
->Foo : Foo<T>
->x : Foo<T>
+>Foo : T | { x: T | any; }
+>x : T | { x: T | any; }
 
     var x: Foo<A[]>;
->x : Foo<A[]>
+>x : A[] | { x: A[] | any; }
 
     return x;
->x : Foo<A[]>
+>x : A[] | { x: A[] | any; }
 }
 
 function g<B>() {
->g : <B>() => Bar<B[]>
+>g : <B>() => B[] | { x: B[] | any; }
 
     type Bar<U> = U | { x: Bar<U> };
->Bar : Bar<U>
->x : Bar<U>
+>Bar : U | { x: U | any; }
+>x : U | { x: U | any; }
 
     var x: Bar<B[]>;
->x : Bar<B[]>
+>x : B[] | { x: B[] | any; }
 
     return x;
->x : Bar<B[]>
+>x : B[] | { x: B[] | any; }
 }
 
 // Deeply instantiated generics
 var a = f<string>();
->a : Foo<string[]>
->f<string>() : Foo<string[]>
->f : <A>() => Foo<A[]>
+>a : string[] | { x: string[] | any; }
+>f<string>() : string[] | { x: string[] | any; }
+>f : <A>() => A[] | { x: A[] | any; }
 
 var b = g<string>();
->b : Bar<string[]>
->g<string>() : Bar<string[]>
->g : <B>() => Bar<B[]>
+>b : string[] | { x: string[] | any; }
+>g<string>() : string[] | { x: string[] | any; }
+>g : <B>() => B[] | { x: B[] | any; }
 
 a = b;
->a = b : Bar<string[]>
->a : Foo<string[]>
->b : Bar<string[]>
+>a = b : string[] | { x: string[] | any; }
+>a : string[] | { x: string[] | any; }
+>b : string[] | { x: string[] | any; }
 

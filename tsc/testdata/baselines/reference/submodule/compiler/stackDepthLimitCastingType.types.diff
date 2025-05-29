@@ -9,50 +9,21 @@
  >attributes : T | undefined
  >options : CombinedModelConstructorOptions<E, this> | undefined
 
-@@= skipped -33, +33 lines =@@
+@@= skipped -29, +29 lines =@@
+
+ };
+ export as namespace Backbone;
+->Backbone : typeof import("node_modules/backbone/index")
++>Backbone : typeof import("backbone")
 
  === node_modules/backbone-fetch-cache/index.d.ts ===
  import * as Backbone from "backbone";
-->Backbone : typeof Backbone
-+>Backbone : typeof import("node_modules/backbone/index")
-
- declare module "backbone" {
-->"backbone" : typeof Backbone
-+>"backbone" : typeof import("node_modules/backbone/index")
-
-     interface ModelWithCache extends Model {
-         fetch(options?: any): JQueryXHR;
 @@= skipped -17, +17 lines =@@
+ }
+ export {};
+ export as namespace BackboneFetchCache;
+->BackboneFetchCache : typeof import("node_modules/backbone-fetch-cache/index")
++>BackboneFetchCache : typeof import("backbone-fetch-cache")
 
  === index.ts ===
  import * as Backbone from "backbone";
-->Backbone : typeof Backbone
-+>Backbone : typeof import("node_modules/backbone/index")
-
- import * as BackboneFetchCache from "backbone-fetch-cache";
-->BackboneFetchCache : typeof BackboneFetchCache
-+>BackboneFetchCache : typeof import("node_modules/backbone-fetch-cache/index")
-
-
- const hoge = new Backbone.Model() as Backbone.ModelWithCache;
-->hoge : Backbone.ModelWithCache
-->new Backbone.Model() as Backbone.ModelWithCache : Backbone.ModelWithCache
-->new Backbone.Model() : Backbone.Model<any, ModelConstructorOptions<Backbone.ModelWithCache>>
-->Backbone.Model : typeof Backbone.Model
-->Backbone : typeof Backbone
-->Model : typeof Backbone.Model
-+>hoge : ModelWithCache
-+>new Backbone.Model() as Backbone.ModelWithCache : ModelWithCache
-+>new Backbone.Model() : Model<any, ModelConstructorOptions<ModelWithCache>>
-+>Backbone.Model : typeof Model
-+>Backbone : typeof import("node_modules/backbone/index")
-+>Model : typeof Model
- >Backbone : any
-
- hoge.fetch(null as any);
- >hoge.fetch(null as any) : JQueryXHR
- >hoge.fetch : (options?: any) => JQueryXHR
-->hoge : Backbone.ModelWithCache
-+>hoge : ModelWithCache
- >fetch : (options?: any) => JQueryXHR
- >null as any : any

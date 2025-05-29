@@ -5,6 +5,6 @@
  === exportInFunction.ts ===
  function f() {
 ->f : () => void
-+>f : { (): void; export=: 0; }
++>f : { (): void; "export=": 0; }
 
      export = 0;

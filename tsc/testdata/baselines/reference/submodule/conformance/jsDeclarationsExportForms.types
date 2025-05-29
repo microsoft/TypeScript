@@ -26,86 +26,86 @@ export {Foo};
 
 === bat.js ===
 import * as ns from "./cls";
->ns : typeof import("cls")
+>ns : typeof ns
 
 export default ns;
->ns : typeof import("cls")
+>ns : typeof ns
 
 === ban.js ===
 import * as ns from "./cls";
->ns : typeof import("cls")
+>ns : typeof ns
 
 export {ns};
->ns : typeof import("cls")
+>ns : typeof ns
 
 === bol.js ===
 import * as ns from "./cls";
->ns : typeof import("cls")
+>ns : typeof ns
 
 export { ns as classContainer };
->ns : typeof import("cls")
->classContainer : typeof import("cls")
+>ns : typeof ns
+>classContainer : typeof ns
 
 === cjs.js ===
 const ns = require("./cls");
->ns : typeof import("cls")
->require("./cls") : typeof import("cls")
+>ns : typeof ns
+>require("./cls") : typeof ns
 >require : any
 >"./cls" : "./cls"
 
 module.exports = { ns };
->module.exports = { ns } : { ns: typeof import("cls"); }
->module.exports : { ns: typeof import("cls"); }
->module : { export=: { ns: typeof import("cls"); }; }
->exports : { ns: typeof import("cls"); }
->{ ns } : { ns: typeof import("cls"); }
->ns : typeof import("cls")
+>module.exports = { ns } : { ns: typeof ns; }
+>module.exports : { ns: typeof ns; }
+>module : { "export=": { ns: typeof ns; }; }
+>exports : { ns: typeof ns; }
+>{ ns } : { ns: typeof ns; }
+>ns : typeof ns
 
 === cjs2.js ===
 const ns = require("./cls");
->ns : typeof import("cls")
->require("./cls") : typeof import("cls")
+>ns : typeof ns
+>require("./cls") : typeof ns
 >require : any
 >"./cls" : "./cls"
 
 module.exports = ns;
->module.exports = ns : typeof import("cls")
->module.exports : typeof import("cls")
->module : { "cls": typeof import("cls"); }
->exports : typeof import("cls")
->ns : typeof import("cls")
+>module.exports = ns : typeof ns
+>module.exports : typeof ns
+>module : { "\"cls\"": typeof ns; }
+>exports : typeof ns
+>ns : typeof ns
 
 === cjs3.js ===
 const ns = require("./cls");
->ns : typeof import("cls")
->require("./cls") : typeof import("cls")
+>ns : typeof ns
+>require("./cls") : typeof ns
 >require : any
 >"./cls" : "./cls"
 
 module.exports.ns = ns;
->module.exports.ns = ns : typeof import("cls")
->module.exports.ns : typeof import("cls")
->module.exports : typeof import("cjs3")
->module : { "cjs3": typeof import("cjs3"); }
->exports : typeof import("cjs3")
->ns : typeof import("cls")
->ns : typeof import("cls")
+>module.exports.ns = ns : typeof ns
+>module.exports.ns : typeof ns
+>module.exports : typeof import("./cjs3")
+>module : { "\"cjs3\"": typeof import("./cjs3"); }
+>exports : typeof import("./cjs3")
+>ns : typeof ns
+>ns : typeof ns
 
 === cjs4.js ===
 const ns = require("./cls");
->ns : typeof import("cls")
->require("./cls") : typeof import("cls")
+>ns : typeof ns
+>require("./cls") : typeof ns
 >require : any
 >"./cls" : "./cls"
 
 module.exports.names = ns;
->module.exports.names = ns : typeof import("cls")
->module.exports.names : typeof import("cls")
->module.exports : typeof import("cjs4")
->module : { "cjs4": typeof import("cjs4"); }
->exports : typeof import("cjs4")
->names : typeof import("cls")
->ns : typeof import("cls")
+>module.exports.names = ns : typeof ns
+>module.exports.names : typeof ns
+>module.exports : typeof import("./cjs4")
+>module : { "\"cjs4\"": typeof import("./cjs4"); }
+>exports : typeof import("./cjs4")
+>names : typeof ns
+>ns : typeof ns
 
 === includeAll.js ===
 

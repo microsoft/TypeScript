@@ -47,3 +47,26 @@ class DD extends B {
     foo;
     fooo;
 }
+
+
+//// [override4.d.ts]
+declare class B {
+    p1: number;
+    p2: number;
+    p3: () => void;
+    p4: () => void;
+    foo(v: string): void;
+    fooo(v: string): void;
+}
+declare class D extends B {
+    p1: number;
+    p2: number;
+    p3: () => void;
+    p4: () => void;
+    foo(v: string): void;
+    fooo(v: string): void;
+}
+declare class DD extends B {
+    foo: () => void;
+    fooo: () => void;
+}

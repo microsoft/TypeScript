@@ -5,20 +5,20 @@
 
  if (value.foo !== null) {
 ->value.foo : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
-+>value.foo : Symbol((Missing), Decl(controlFlowStringIndex.ts, 1, 25))
++>value.foo : Symbol(þindex, Decl(controlFlowStringIndex.ts, 1, 25))
  >value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
 ->foo : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
-+>foo : Symbol((Missing), Decl(controlFlowStringIndex.ts, 1, 25))
++>foo : Symbol(þindex, Decl(controlFlowStringIndex.ts, 1, 25))
 
      value.foo.toExponential()
 ->value.foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 ->value.foo : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
 +>value.foo.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
-+>value.foo : Symbol((Missing), Decl(controlFlowStringIndex.ts, 1, 25))
++>value.foo : Symbol(þindex, Decl(controlFlowStringIndex.ts, 1, 25))
  >value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
 ->foo : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
 ->toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
-+>foo : Symbol((Missing), Decl(controlFlowStringIndex.ts, 1, 25))
++>foo : Symbol(þindex, Decl(controlFlowStringIndex.ts, 1, 25))
 +>toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))
 
      value.other // should still be number | null
@@ -28,8 +28,8 @@
 
      value.bar // should still be number | null
 ->value.bar : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
-+>value.bar : Symbol((Missing), Decl(controlFlowStringIndex.ts, 1, 25))
++>value.bar : Symbol(þindex, Decl(controlFlowStringIndex.ts, 1, 25))
  >value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
 ->bar : Symbol(A.__index, Decl(controlFlowStringIndex.ts, 1, 25))
-+>bar : Symbol((Missing), Decl(controlFlowStringIndex.ts, 1, 25))
++>bar : Symbol(þindex, Decl(controlFlowStringIndex.ts, 1, 25))
  }

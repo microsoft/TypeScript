@@ -1,28 +1,11 @@
 --- old.moduleAugmentationImportsAndExports3.types
 +++ new.moduleAugmentationImportsAndExports3.types
-@@= skipped -42, +42 lines =@@
-     import I = N.Ifc;
- >I : any
- >N : any
-->Ifc : I
-+>Ifc : Ifc
-
-     import C = N.Cls;
- >C : any
- >N : any
-->Cls : C
-+>Cls : Cls
-
-     interface A {
-         foo(): B;
- >foo : () => B
-
-         bar(): I;
-->bar : () => I
-+>bar : () => Ifc
-
-         baz(): C;
-->baz : () => C
-+>baz : () => Cls
-     }
+@@= skipped -34, +34 lines =@@
  }
+
+ declare module "./f1" {
+->"./f1" : typeof import("f1")
++>"./f1" : typeof import("./f1")
+
+     import {B} from "./f2";
+ >B : any

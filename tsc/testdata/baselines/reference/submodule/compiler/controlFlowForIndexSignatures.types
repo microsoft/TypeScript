@@ -65,18 +65,18 @@ if (typeof c === 'string') {
 >'string' : "string"
 
     type C = { [key: string]: typeof c };
->C : C
+>C : { [key: string]: string; }
 >key : string
 >c : string
 
     const boo1: C = { bar: 'works' };
->boo1 : C
+>boo1 : { [key: string]: string; }
 >{ bar: 'works' } : { bar: string; }
 >bar : string
 >'works' : "works"
 
     const boo2: C = { bar: 1 }; // should error
->boo2 : C
+>boo2 : { [key: string]: string; }
 >{ bar: 1 } : { bar: number; }
 >bar : number
 >1 : 1

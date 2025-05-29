@@ -31,3 +31,16 @@ function getBarC(bar) {
 function getBazB(baz) {
     return baz.b;
 }
+
+
+//// [omitTypeTestErrors01.d.ts]
+interface Foo {
+    a: string;
+    b: number;
+    c: boolean;
+}
+export type Bar = Omit<Foo, "c">;
+export type Baz = Omit<Foo, "b" | "c">;
+export declare function getBarC(bar: Bar): any;
+export declare function getBazB(baz: Baz): any;
+export {};

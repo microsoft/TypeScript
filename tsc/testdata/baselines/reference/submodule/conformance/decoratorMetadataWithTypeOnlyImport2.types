@@ -23,7 +23,7 @@ export class Main {
 >decorator : any
 
   field: Services.Service;
->field : Service
+>field : Services.Service
 >Services : any
 }
 

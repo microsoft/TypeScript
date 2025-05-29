@@ -5,7 +5,7 @@
  === for-of29.ts ===
  var iterableWithOptionalIterator: {
 ->iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
-+>iterableWithOptionalIterator : { [Symbol.iterator]?: () => Iterator<string, any, any>; }
++>iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string, any, any>; }
 
      [Symbol.iterator]?(): Iterator<string>
 ->[Symbol.iterator] : () => Iterator<string>
@@ -18,4 +18,4 @@
  for (var v of iterableWithOptionalIterator) { }
  >v : any
 ->iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
-+>iterableWithOptionalIterator : { [Symbol.iterator]?: () => Iterator<string, any, any>; }
++>iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string, any, any>; }

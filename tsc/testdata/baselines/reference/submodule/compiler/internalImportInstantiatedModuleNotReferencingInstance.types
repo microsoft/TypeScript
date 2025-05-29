@@ -20,7 +20,7 @@ module B {
 >1 : 1
 
     import Y = A;
->Y : typeof A
->A : typeof A
+>Y : typeof Y
+>A : typeof Y
 }
 

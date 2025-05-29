@@ -192,16 +192,7 @@
      }
  }
 
-@@= skipped -117, +117 lines =@@
- }
-
- function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
-->bindingPatternInParameter : ({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) => void
-+>bindingPatternInParameter : (__0: UseQueryResult<number>) => void
- >data : any
- >data1 : number | undefined
- >isSuccess : any
-@@= skipped -25, +25 lines =@@
+@@= skipped -142, +142 lines =@@
 
      data1.toExponential();
  >data1.toExponential() : string

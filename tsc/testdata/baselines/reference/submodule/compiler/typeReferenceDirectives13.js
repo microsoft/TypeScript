@@ -17,3 +17,9 @@ export interface A {
 //// [app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [app.d.ts]
+export interface A {
+    x: () => typeof $;
+}

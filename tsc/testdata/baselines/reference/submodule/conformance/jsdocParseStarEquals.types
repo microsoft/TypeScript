@@ -4,7 +4,7 @@
 /** @param {...*=} args
     @return {*=} */
 function f(...args) {
->f : (...args: any[] | undefined) => any
+>f : (...args?: any[] | undefined) => any
 >args : any[] | undefined
 
     return null

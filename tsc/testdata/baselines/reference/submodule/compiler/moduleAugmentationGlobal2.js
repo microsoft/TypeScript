@@ -29,3 +29,15 @@ exports.A = A;
 Object.defineProperty(exports, "__esModule", { value: true });
 let x = [1];
 let y = x.getCountAsString().toLowerCase();
+
+
+//// [f1.d.ts]
+export declare class A {
+}
+//// [f2.d.ts]
+declare namespace global {
+    interface Array<T> {
+        getCountAsString(): string;
+    }
+}
+export {};

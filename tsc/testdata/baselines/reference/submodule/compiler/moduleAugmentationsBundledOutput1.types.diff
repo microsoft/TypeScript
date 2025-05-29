@@ -1,16 +1,52 @@
 --- old.moduleAugmentationsBundledOutput1.types
 +++ new.moduleAugmentationsBundledOutput1.types
-@@= skipped -140, +140 lines =@@
+@@= skipped -33, +33 lines =@@
+ >"1" : "1"
+
+ declare module "./m1" {
+->"./m1" : typeof import("m1")
++>"./m1" : typeof import("./m1")
+
+     interface Cls {
+         foo(): number;
+@@= skipped -9, +9 lines =@@
+ }
+
+ declare module "./m1" {
+->"./m1" : typeof import("m1")
++>"./m1" : typeof import("./m1")
+
+     interface Cls {
+         bar(): string;
+@@= skipped -50, +50 lines =@@
+ >undefined : undefined
+
+ declare module "./m1" {
+->"./m1" : typeof import("m1")
++>"./m1" : typeof import("./m1")
+
+     interface Cls {
+         baz1(): C1;
+@@= skipped -9, +9 lines =@@
+ }
+
+ declare module "./m1" {
+->"./m1" : typeof import("m1")
++>"./m1" : typeof import("./m1")
+
+     interface Cls {
+         baz2(): C2;
+@@= skipped -39, +39 lines =@@
  >c.baz1().x.toExponential() : string
  >c.baz1().x.toExponential : (fractionDigits?: number) => string
  >c.baz1().x : number
 ->c.baz1() : import("m3").C1
 ->c.baz1 : () => import("m3").C1
-+>c.baz1() : C1
-+>c.baz1 : () => C1
++>c.baz1() : import("./m3").C1
++>c.baz1 : () => import("./m3").C1
  >c : Cls
 ->baz1 : () => import("m3").C1
-+>baz1 : () => C1
++>baz1 : () => import("./m3").C1
  >x : number
  >toExponential : (fractionDigits?: number) => string
 
@@ -20,10 +56,10 @@
  >c.baz2().x : string
 ->c.baz2() : import("m3").C2
 ->c.baz2 : () => import("m3").C2
-+>c.baz2() : C2
-+>c.baz2 : () => C2
++>c.baz2() : import("./m3").C2
++>c.baz2 : () => import("./m3").C2
  >c : Cls
 ->baz2 : () => import("m3").C2
-+>baz2 : () => C2
++>baz2 : () => import("./m3").C2
  >x : string
  >toLowerCase : () => string

@@ -65,8 +65,8 @@ const arrowWithMoreParameters = (more) => {}; // error
 >more : any
 
 ({
->({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters: (more: any) => void; }
->{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters: (more: any) => void; }
+>({  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error}) : { methodWithMoreParameters(more: any): void; }
+>{  /** @type {() => void} */  methodWithMoreParameters(more) {}, // error} : { methodWithMoreParameters(more: any): void; }
 
   /** @type {() => void} */
   methodWithMoreParameters(more) {}, // error

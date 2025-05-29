@@ -163,7 +163,7 @@ interface I {
 >arg : number
 
   method2({ a: string }): any; // Error
->method2 : (__0: { a: any; }) => any
+>method2 : ({ a: string }: { a: any; }) => any
 >a : any
 >string : any
 
@@ -184,35 +184,35 @@ interface I {
 
 // Below are OK but renaming should be removed from declaration emit
 function f1({ a: string }: O) { }
->f1 : (__0: O) => void
+>f1 : ({ a: string }: O) => void
 >a : any
 >string : string
 
 const f2 = function({ a: string }: O) { };
->f2 : (__0: O) => void
->function({ a: string }: O) { } : (__0: O) => void
+>f2 : ({ a: string }: O) => void
+>function({ a: string }: O) { } : ({ a: string }: O) => void
 >a : any
 >string : string
 
 const f3 = ({ a: string, b, c }: O) => { };
->f3 : (__0: O) => void
->({ a: string, b, c }: O) => { } : (__0: O) => void
+>f3 : ({ a: string, b, c }: O) => void
+>({ a: string, b, c }: O) => { } : ({ a: string, b, c }: O) => void
 >a : any
 >string : string
 >b : number
 >c : number
 
 const f4 = function({ a: string }: O): typeof string { return string; };
->f4 : (__0: O) => string
->function({ a: string }: O): typeof string { return string; } : (__0: O) => string
+>f4 : ({ a: string }: O) => string
+>function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => string
 >a : any
 >string : string
 >string : string
 >string : string
 
 const f5 = ({ a: string, b, c }: O): typeof string => '';
->f5 : (__0: O) => string
->({ a: string, b, c }: O): typeof string => '' : (__0: O) => string
+>f5 : ({ a: string, b, c }: O) => string
+>({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => string
 >a : any
 >string : string
 >b : number
@@ -221,21 +221,21 @@ const f5 = ({ a: string, b, c }: O): typeof string => '';
 >'' : ""
 
 const obj1 = {
->obj1 : { method: (__0: O) => void; }
->{  method({ a: string }: O) { }} : { method: (__0: O) => void; }
+>obj1 : { method({ a: string }: O): void; }
+>{  method({ a: string }: O) { }} : { method({ a: string }: O): void; }
 
   method({ a: string }: O) { }
->method : (__0: O) => void
+>method : ({ a: string }: O) => void
 >a : any
 >string : string
 
 };
 const obj2 = {
->obj2 : { method: (__0: O) => string; }
->{  method({ a: string }: O): typeof string { return string; }} : { method: (__0: O) => string; }
+>obj2 : { method({ a: string }: O): string; }
+>{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): string; }
 
   method({ a: string }: O): typeof string { return string; }
->method : (__0: O) => string
+>method : ({ a: string }: O) => string
 >a : any
 >string : string
 >string : string
@@ -243,14 +243,14 @@ const obj2 = {
 
 };
 function f6({ a: string = "" }: O) { }
->f6 : (__0: O) => void
+>f6 : ({ a: string = "" }: O) => void
 >a : any
 >string : string
 >"" : ""
 
 const f7 = ({ a: string = "", b, c }: O) => { };
->f7 : (__0: O) => void
->({ a: string = "", b, c }: O) => { } : (__0: O) => void
+>f7 : ({ a: string = "", b, c }: O) => void
+>({ a: string = "", b, c }: O) => { } : ({ a: string = "", b, c }: O) => void
 >a : any
 >string : string
 >"" : ""
@@ -258,28 +258,28 @@ const f7 = ({ a: string = "", b, c }: O) => { };
 >c : number
 
 const f8 = ({ "a": string }: O) => { };
->f8 : (__0: O) => void
->({ "a": string }: O) => { } : (__0: O) => void
+>f8 : ({ "a": string }: O) => void
+>({ "a": string }: O) => { } : ({ "a": string }: O) => void
 >string : string
 
 function f9 ({ 2: string }) { };
->f9 : (__0: { 2: any; }) => void
+>f9 : ({ 2: string }: { 2: any; }) => void
 >string : any
 
 function f10 ({ ["a"]: string }: O) { };
->f10 : (__0: O) => void
+>f10 : ({ ["a"]: string }: O) => void
 >"a" : "a"
 >string : string
 
 const f11 =  ({ [2]: string }) => { };
->f11 : (__0: { 2: any; }) => void
->({ [2]: string }) => { } : (__0: { 2: any; }) => void
+>f11 : ({ [2]: string }: { 2: any; }) => void
+>({ [2]: string }) => { } : ({ [2]: string }: { 2: any; }) => void
 >2 : 2
 >string : any
 
 // In below case `string` should be kept because it is used
 function f12({ a: string = "" }: O): typeof string { return "a"; }
->f12 : (__0: O) => string
+>f12 : ({ a: string = "" }: O) => string
 >a : any
 >string : string
 >"" : ""

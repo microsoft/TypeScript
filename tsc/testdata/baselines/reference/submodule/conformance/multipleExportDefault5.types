@@ -2,8 +2,8 @@
 
 === multipleExportDefault5.ts ===
 export default function bar() { }
->bar : typeof default
+>bar : typeof bar
 
 export default class C {}
->C : default
+>C : bar
 

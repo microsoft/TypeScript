@@ -313,3 +313,27 @@ class ClassWithConvert {
 function fn(arg, f) { }
 fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
 baz(makeFoo(Enum.A), makeFoo(Enum.A));
+
+
+//// [inferFromGenericFunctionReturnTypes3.d.ts]
+// Repro from #13594
+export declare namespace DiagnosticSeverity {
+    const Error = 1;
+    const Warning = 2;
+    const Information = 3;
+    const Hint = 4;
+}
+export type DiagnosticSeverity = 1 | 2 | 3 | 4;
+export interface Diagnostic {
+    severity?: DiagnosticSeverity;
+    code?: number | string;
+    source?: string;
+    message: string;
+}
+// Repro from #27074
+interface OK<T> {
+    kind: "OK";
+    value: T;
+}
+export declare function ok<T>(value: T): OK<T>;
+export {};

@@ -2,39 +2,39 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 class B1<T extends { x: string }> extends React.Component<T, {}> {
 >B1 : B1<T>
 >x : string
->React.Component : Component<T, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<T, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>hi</div>; 
-><div>hi</div> : Element
+><div>hi</div> : JSX.Element
 >div : any
 >div : any
     }
 }
 class B<U> extends React.Component<U, {}> {
 >B : B<U>
->React.Component : Component<U, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<U, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <B1 {...this.props} x="hi" />;
-><B1 {...this.props} x="hi" /> : Element
+><B1 {...this.props} x="hi" /> : JSX.Element
 >B1 : typeof B1
->this.props : U & { children?: ReactNode; }
+>this.props : U & { children?: React.ReactNode; }
 >this : this
->props : U & { children?: ReactNode; }
+>props : U & { children?: React.ReactNode; }
 >x : string
     }
 }

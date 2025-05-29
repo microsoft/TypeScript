@@ -5,13 +5,13 @@ export default interface A { value: number; }
 >value : number
 
 var a: A;
->a : default
+>a : A
 
 a.value.toExponential();
 >a.value.toExponential() : string
 >a.value.toExponential : (fractionDigits?: number) => string
 >a.value : number
->a : default
+>a : A
 >value : number
 >toExponential : (fractionDigits?: number) => string
 
@@ -20,13 +20,13 @@ import A from './a';
 >A : any
 
 var a: A;
->a : default
+>a : A
 
 a.value.toExponential();
 >a.value.toExponential() : string
 >a.value.toExponential : (fractionDigits?: number) => string
 >a.value : number
->a : default
+>a : A
 >value : number
 >toExponential : (fractionDigits?: number) => string
 

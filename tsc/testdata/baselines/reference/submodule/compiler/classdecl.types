@@ -115,9 +115,9 @@ module m2 {
 
 class c extends m1.b {
 >c : c
->m1.b : b
+>m1.b : m1.b
 >m1 : typeof m1
->b : typeof b
+>b : typeof m1.b
 }
 
 class ib2 implements m1.ib {

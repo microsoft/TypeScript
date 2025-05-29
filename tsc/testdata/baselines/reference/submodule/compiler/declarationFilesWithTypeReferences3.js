@@ -16,3 +16,7 @@ function foo(): Error2 {
 function foo() {
     return undefined;
 }
+
+
+//// [app.d.ts]
+declare function foo(): Error2;

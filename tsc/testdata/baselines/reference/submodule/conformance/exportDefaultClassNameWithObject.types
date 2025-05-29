@@ -2,5 +2,5 @@
 
 === exportDefaultClassNameWithObject.ts ===
 export default class Object {}
->Object : default
+>Object : Object
 

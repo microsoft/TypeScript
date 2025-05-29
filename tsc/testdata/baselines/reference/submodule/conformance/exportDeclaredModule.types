@@ -2,13 +2,13 @@
 
 === foo2.ts ===
 import foo1 = require('./foo1');
->foo1 : typeof M1
+>foo1 : typeof foo1
 
 var x: number = foo1.b();
 >x : number
 >foo1.b() : number
 >foo1.b : () => number
->foo1 : typeof M1
+>foo1 : typeof foo1
 >b : () => number
 
 === foo1.ts ===

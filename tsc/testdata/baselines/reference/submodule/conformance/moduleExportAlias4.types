@@ -3,25 +3,25 @@
 === bug24024.js ===
 // #24024
 var wat = require('./bug24024')
->wat : typeof C
->require('./bug24024') : typeof C
+>wat : typeof wat
+>require('./bug24024') : typeof wat
 >require : any
 >'./bug24024' : "./bug24024"
 
 module.exports = class C {}
->module.exports = class C {} : typeof C
->module.exports : typeof C
->module : { C: typeof C; }
->exports : typeof C
->class C {} : typeof C
->C : typeof C
+>module.exports = class C {} : typeof wat
+>module.exports : typeof wat
+>module : { C: typeof wat; }
+>exports : typeof wat
+>class C {} : typeof wat
+>C : typeof wat
 
 module.exports.D = class D { }
 >module.exports.D = class D { } : typeof D
 >module.exports.D : any
->module.exports : typeof C
->module : { C: typeof C; }
->exports : typeof C
+>module.exports : typeof wat
+>module : { C: typeof wat; }
+>exports : typeof wat
 >D : any
 >class D { } : typeof D
 >D : typeof D

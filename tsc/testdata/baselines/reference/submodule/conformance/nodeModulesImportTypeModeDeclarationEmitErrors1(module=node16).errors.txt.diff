@@ -3,12 +3,13 @@
 @@= skipped -0, +0 lines =@@
  /index.ts(2,51): error TS1453: `resolution-mode` should be either `require` or `import`.
 +/index.ts(3,64): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
++/index.ts(5,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
  /index.ts(5,78): error TS1453: `resolution-mode` should be either `require` or `import`.
 +/index.ts(6,91): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
  /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
  /other.ts(3,22): error TS1005: 'with' expected.
  /other.ts(3,39): error TS1005: ';' expected.
-@@= skipped -7, +9 lines =@@
+@@= skipped -7, +10 lines =@@
  /other.ts(3,52): error TS1128: Declaration or statement expected.
  /other.ts(3,53): error TS2304: Cannot find name 'RequireInterface'.
  /other.ts(4,22): error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
@@ -17,7 +18,15 @@
  /other.ts(6,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
  /other.ts(6,49): error TS1005: 'with' expected.
  /other.ts(6,66): error TS1005: ';' expected.
-@@= skipped -32, +32 lines =@@
+@@= skipped -22, +22 lines =@@
+ /other2.ts(3,32): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+ /other2.ts(4,32): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+ /other2.ts(4,52): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
++/other2.ts(6,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
+ /other2.ts(6,59): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+ /other2.ts(7,59): error TS1455: `resolution-mode` is the only valid key for type import assertions.
+ /other2.ts(7,79): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+@@= skipped -10, +11 lines =@@
  /other3.ts(3,56): error TS1128: Declaration or statement expected.
  /other3.ts(3,57): error TS2304: Cannot find name 'RequireInterface'.
  /other3.ts(4,21): error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
@@ -35,12 +44,20 @@
  /other4.ts(9,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
  /other4.ts(9,48): error TS1005: '{' expected.
  /other4.ts(9,56): error TS1005: ',' expected.
-@@= skipped -32, +32 lines =@@
+@@= skipped -14, +14 lines =@@
+ /other5.ts(2,31): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+ /other5.ts(3,31): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+ /other5.ts(3,37): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
++/other5.ts(5,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
+ /other5.ts(5,58): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+ /other5.ts(6,58): error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+ /other5.ts(6,64): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+@@= skipped -18, +19 lines =@@
      export interface ImportInterface {}
  ==== /node_modules/pkg/require.d.ts (0 errors) ====
      export interface RequireInterface {}
 -==== /index.ts (2 errors) ====
-+==== /index.ts (4 errors) ====
++==== /index.ts (5 errors) ====
      export type LocalInterface =
          & import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface
                                                        ~~~~~~~~
@@ -50,6 +67,8 @@
 +!!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
      
      export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
++                 ~
++!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
                                                                                   ~~~~~~~~
  !!! error TS1453: `resolution-mode` should be either `require` or `import`.
      export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
@@ -58,7 +77,7 @@
  ==== /other.ts (27 errors) ====
      // missing assert:
      export type LocalInterface =
-@@= skipped -34, +38 lines =@@
+@@= skipped -34, +40 lines =@@
                           ~~~~~~~~~~~~~~~~~
  !!! error TS2353: Object literal may only specify known properties, and '"resolution-mode"' does not exist in type 'ImportCallOptions'.
                                                         ~~~~~~~~~~~~~~~
@@ -67,7 +86,25 @@
      
      export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
                                       ~~~~~~~~~~~~~~~
-@@= skipped -83, +83 lines =@@
+@@= skipped -42, +42 lines =@@
+ !!! error TS2304: Cannot find name 'ImportInterface'.
+                                                                                                  ~
+ !!! error TS1128: Declaration or statement expected.
+-==== /other2.ts (6 errors) ====
++==== /other2.ts (7 errors) ====
+     // wrong assertion key
+     export type LocalInterface =
+         & import("pkg", { assert: {"bad": "require"} }).RequireInterface
+@@= skipped -13, +13 lines =@@
+ !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+     
+     export const a = (null as any as import("pkg", { assert: {"bad": "require"} }).RequireInterface);
++                 ~
++!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
+                                                               ~~~~~
+ !!! error TS1455: `resolution-mode` is the only valid key for type import assertions.
+     export const b = (null as any as import("pkg", { assert: {"bad": "import"} }).ImportInterface);
+@@= skipped -28, +30 lines =@@
                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS2559: Type '{ "resolution-mode": string; }[]' has no properties in common with type 'ImportCallOptions'.
                                                             ~~~~~~~~~~~~~~~
@@ -85,3 +122,21 @@
      
      export const a = (null as any as import("pkg", Asserts1).RequireInterface);
                                       ~~~~~~~~~~~~~
+@@= skipped -26, +26 lines =@@
+ !!! error TS1134: Variable declaration expected.
+                                                                             ~
+ !!! error TS1005: ',' expected.
+-==== /other5.ts (6 errors) ====
++==== /other5.ts (7 errors) ====
+     export type LocalInterface =
+         & import("pkg", { assert: {} }).RequireInterface
+                                   ~~
+@@= skipped -12, +12 lines =@@
+ !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+     
+     export const a = (null as any as import("pkg", { assert: {} }).RequireInterface);
++                 ~
++!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
+                                                              ~~
+ !!! error TS1456: Type import assertions should have exactly one key - `resolution-mode` - with value `import` or `require`.
+     export const b = (null as any as import("pkg", { assert: {} }).ImportInterface);

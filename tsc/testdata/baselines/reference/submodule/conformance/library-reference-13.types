@@ -2,7 +2,7 @@
 
 === /a/types/jquery/index.d.ts ===
 declare var $: { foo(): void };
->$ : { foo: () => void; }
+>$ : { foo(): void; }
 >foo : () => void
 
 
@@ -10,6 +10,6 @@ declare var $: { foo(): void };
 $.foo();
 >$.foo() : void
 >$.foo : () => void
->$ : { foo: () => void; }
+>$ : { foo(): void; }
 >foo : () => void
 

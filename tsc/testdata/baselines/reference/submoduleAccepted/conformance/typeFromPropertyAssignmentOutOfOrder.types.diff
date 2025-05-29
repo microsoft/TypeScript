@@ -47,7 +47,8 @@
 
  /** @type {Workspace.Object} */
  var am;
-@@= skipped -32, +32 lines =@@
+->am : Object
++>am : Workspace.Object
 
  === roots.js ===
  var First = {};

@@ -1,40 +1,6 @@
 --- old.isomorphicMappedTypeInference.types
 +++ new.isomorphicMappedTypeInference.types
-@@= skipped -52, +52 lines =@@
- >result : Boxified<T>
- >k : Extract<keyof T, string>
- >box(obj[k]) : Box<T[Extract<keyof T, string>]>
-->box : <T_1>(x: T_1) => Box<T_1>
-+>box : <T>(x: T) => Box<T>
- >obj[k] : T[Extract<keyof T, string>]
- >obj : T
- >k : Extract<keyof T, string>
-@@= skipped -28, +28 lines =@@
- >result : T
- >k : Extract<keyof T, string>
- >unbox(obj[k]) : T[Extract<keyof T, string>]
-->unbox : <T_1>(x: Box<T_1>) => T_1
-+>unbox : <T>(x: Box<T>) => T
- >obj[k] : Boxified<T>[Extract<keyof T, string>]
- >obj : Boxified<T>
- >k : Extract<keyof T, string>
-@@= skipped -274, +274 lines =@@
-
-     });
-     let v = unboxify(b);
-->v : { [x: string]: any; }
-->unboxify(b) : { [x: string]: any; }
-+>v : { [x: string]: string | number | boolean; }
-+>unboxify(b) : { [x: string]: string | number | boolean; }
- >unboxify : <T extends object>(obj: Boxified<T>) => T
- >b : { [x: string]: Box<string> | Box<number> | Box<boolean>; }
-
-     let x: string | number | boolean = v[s];
- >x : string | number | boolean
- >v[s] : string | number | boolean
-->v : { [x: string]: any; }
-+>v : { [x: string]: string | number | boolean; }
- >s : string
+@@= skipped -367, +367 lines =@@
  }
 
  declare function validate<T>(obj: { [P in keyof T]?: T[P] }): T;
@@ -43,7 +9,7 @@
  >obj : { [P in keyof T]?: T[P] | undefined; }
 
  declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
-@@= skipped -21, +21 lines =@@
+@@= skipped -8, +8 lines =@@
  >obj : { readonly [P in keyof T]: T[P]; }
 
  declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;

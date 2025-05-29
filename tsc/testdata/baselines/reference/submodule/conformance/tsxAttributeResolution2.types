@@ -16,7 +16,7 @@ interface Attribs1 {
 
 // OK
 <test1 c1={(x) => x.length} />; // OK
-><test1 c1={(x) => x.length} /> : Element
+><test1 c1={(x) => x.length} /> : JSX.Element
 >test1 : any
 >c1 : (x: string) => number
 >(x) => x.length : (x: string) => number
@@ -26,7 +26,7 @@ interface Attribs1 {
 >length : number
 
 <test1 data-c1={(x) => x.leng} />; // OK
-><test1 data-c1={(x) => x.leng} /> : Element
+><test1 data-c1={(x) => x.leng} /> : JSX.Element
 >test1 : any
 >data-c1 : (x: any) => any
 >(x) => x.leng : (x: any) => any
@@ -38,7 +38,7 @@ interface Attribs1 {
 
 // Errors
 <test1 c1={(x) => x.leng} />; // Error, no leng on 'string'
-><test1 c1={(x) => x.leng} /> : Element
+><test1 c1={(x) => x.leng} /> : JSX.Element
 >test1 : any
 >c1 : (x: string) => any
 >(x) => x.leng : (x: string) => any

@@ -1,22 +1,13 @@
 --- old.inlineJsxFactoryDeclarations.symbols
 +++ new.inlineJsxFactoryDeclarations.symbols
-@@= skipped -1, +1 lines =@@
-
- === renderer.d.ts ===
- declare global {
-->global : Symbol(global, Decl(renderer.d.ts, 0, 0))
-+>global : Symbol((Missing), Decl(renderer.d.ts, 0, 0))
-
-     namespace JSX {
- >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 16))
-@@= skipped -32, +32 lines =@@
+@@= skipped -33, +33 lines =@@
  >React : Symbol(React, Decl(otherreacty.tsx, 1, 6))
 
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
 
  === other.tsx ===
  /** @jsx h */
@@ -29,8 +20,8 @@
  >prerendered : Symbol(prerendered, Decl(other.tsx, 2, 12))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
 
  === othernoalias.tsx ===
  /** @jsx otherdom */
@@ -40,8 +31,8 @@
  >prerendered2 : Symbol(prerendered2, Decl(othernoalias.tsx, 2, 12))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
 
  === reacty.tsx ===
  import React from "./renderer"
@@ -51,8 +42,8 @@
  >prerendered3 : Symbol(prerendered3, Decl(reacty.tsx, 1, 12))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
 
  === index.tsx ===
  /** @jsx dom */
@@ -62,8 +53,8 @@
  <h></h>
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
 
  export * from "./other";
  export * from "./othernoalias";

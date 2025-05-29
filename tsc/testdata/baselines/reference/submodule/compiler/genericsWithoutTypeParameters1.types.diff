@@ -28,15 +28,8 @@
 ->x2 : { a: I; }
 +>x2 : { a: any; }
  >a : any
-->{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
-->a : { bar(): number; }
-->{ bar() { return 1 } } : { bar(): number; }
-+>{ a: { bar() { return 1 } } } : { a: { bar: () => number; }; }
-+>a : { bar: () => number; }
-+>{ bar() { return 1 } } : { bar: () => number; }
- >bar : () => number
- >1 : 1
-
+ >{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
+ >a : { bar(): number; }
 @@= skipped -30, +30 lines =@@
  >A : A<T>
 

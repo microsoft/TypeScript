@@ -3,60 +3,60 @@
 === index.js ===
 // esm format file
 import * as cjs from "#cjs";
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 import * as mjs from "#mjs";
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 import * as type from "#type";
->type : typeof import("index")
+>type : typeof type
 
 cjs;
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 mjs;
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 type;
->type : typeof import("index")
+>type : typeof type
 
 === index.mjs ===
 // esm format file
 import * as cjs from "#cjs";
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 import * as mjs from "#mjs";
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 import * as type from "#type";
->type : typeof import("index")
+>type : typeof type
 
 cjs;
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 mjs;
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 type;
->type : typeof import("index")
+>type : typeof type
 
 === index.cjs ===
 // esm format file
 import * as cjs from "#cjs";
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 import * as mjs from "#mjs";
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 import * as type from "#type";
->type : typeof import("index")
+>type : typeof type
 
 cjs;
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 mjs;
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 type;
->type : typeof import("index")
+>type : typeof type
 

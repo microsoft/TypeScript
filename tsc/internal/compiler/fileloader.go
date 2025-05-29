@@ -259,7 +259,7 @@ func (t *parseTask) start(loader *fileLoader) {
 		})
 
 		// !!! if noResolve, skip all of this
-		t.subTasks = make([]*parseTask, 0, len(file.ReferencedFiles)+len(file.Imports)+len(file.ModuleAugmentations))
+		t.subTasks = make([]*parseTask, 0, len(file.ReferencedFiles)+len(file.Imports())+len(file.ModuleAugmentations))
 
 		for _, ref := range file.ReferencedFiles {
 			resolvedPath := loader.resolveTripleslashPathReference(ref.FileName, file.FileName())
@@ -334,8 +334,8 @@ func (p *fileLoader) resolveImportsAndModuleAugmentations(file *ast.SourceFile) 
 	importHelpersImportSpecifier *ast.Node,
 	jsxRuntimeImportSpecifier_ *jsxRuntimeImportSpecifier,
 ) {
-	moduleNames := make([]*ast.Node, 0, len(file.Imports)+len(file.ModuleAugmentations)+2)
-	moduleNames = append(moduleNames, file.Imports...)
+	moduleNames := make([]*ast.Node, 0, len(file.Imports())+len(file.ModuleAugmentations)+2)
+	moduleNames = append(moduleNames, file.Imports()...)
 	for _, imp := range file.ModuleAugmentations {
 		if imp.Kind == ast.KindStringLiteral {
 			moduleNames = append(moduleNames, imp)

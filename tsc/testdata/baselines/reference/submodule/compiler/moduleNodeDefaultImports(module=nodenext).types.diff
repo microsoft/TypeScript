@@ -22,8 +22,7 @@
 +>d : () => void
 
  import * as self from "./b.mjs";
-->self : typeof self
-+>self : typeof import("b")
+ >self : typeof self
 
  export { default } from "./mod.cjs";
 ->default : typeof a
@@ -60,11 +59,10 @@
  >d === self.default : boolean
 ->d : typeof a
 ->self.default : typeof a
-->self : typeof self
-->default : typeof a
 +>d : () => void
 +>self.default : () => void
-+>self : typeof import("b")
+ >self : typeof self
+->default : typeof a
 +>default : () => void
 
  self.default === self.def;
@@ -76,10 +74,10 @@
 ->self : typeof self
 ->def : typeof a
 +>self.default : () => void
-+>self : typeof import("b")
++>self : typeof self
 +>default : () => void
 +>self.def : () => void
-+>self : typeof import("b")
++>self : typeof self
 +>def : () => void
 
  // should all fail
@@ -110,21 +108,19 @@
  self.default();
 ->self.default() : any
 ->self.default : typeof a
-->self : typeof self
-->default : typeof a
 +>self.default() : void
 +>self.default : () => void
-+>self : typeof import("b")
+ >self : typeof self
+->default : typeof a
 +>default : () => void
 
  self.def();
 ->self.def() : any
 ->self.def : typeof a
-->self : typeof self
-->def : typeof a
 +>self.def() : void
 +>self.def : () => void
-+>self : typeof import("b")
+ >self : typeof self
+->def : typeof a
 +>def : () => void
 
  // should all work
@@ -172,12 +168,11 @@
 ->self.default.default() : void
 ->self.default.default : () => void
 ->self.default : typeof a
-->self : typeof self
-->default : typeof a
 +>self.default.default() : any
 +>self.default.default : any
 +>self.default : () => void
-+>self : typeof import("b")
+ >self : typeof self
+->default : typeof a
  >default : () => void
 +>default : any
 
@@ -185,12 +180,11 @@
 ->self.def.default() : void
 ->self.def.default : () => void
 ->self.def : typeof a
-->self : typeof self
-->def : typeof a
-->default : () => void
 +>self.def.default() : any
 +>self.def.default : any
 +>self.def : () => void
-+>self : typeof import("b")
+ >self : typeof self
+->def : typeof a
+->default : () => void
 +>def : () => void
 +>default : any

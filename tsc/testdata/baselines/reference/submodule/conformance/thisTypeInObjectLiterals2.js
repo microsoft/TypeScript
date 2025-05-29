@@ -403,3 +403,101 @@ vue.x;
 vue.f("abc");
 vue.test;
 vue.hello;
+
+
+//// [thisTypeInObjectLiterals2.d.ts]
+// In methods of an object literal with no contextual type, 'this' has the type
+// of the object literal.
+declare let obj1: {
+    a: number;
+    f(): number;
+    b: string;
+    c: {
+        g(): void;
+    };
+    readonly d: number;
+    e: string;
+};
+// In methods of an object literal with a contextual type, 'this' has the
+// contextual type.
+type Point = {
+    x: number;
+    y: number;
+    z?: number;
+    moveBy(dx: number, dy: number, dz?: number): void;
+};
+declare let p1: Point;
+declare let p2: Point | null;
+declare let p3: Point | undefined;
+declare let p4: Point | null | undefined;
+declare function f1(p: Point): void;
+declare function f2(p: Point | null | undefined): void;
+// In methods of an object literal with a contextual type that includes some
+// ThisType<T>, 'this' is of type T.
+type ObjectDescriptor<D, M> = {
+    data?: D;
+    methods?: M & ThisType<D & M>; // Type of 'this' in methods is D & M
+};
+declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
+declare let x1: {
+    x: number;
+    y: number;
+} & {
+    moveBy(dx: number, dy: number): void;
+};
+// In methods contained in an object literal with a contextual type that includes
+// some ThisType<T>, 'this' is of type T.
+type ObjectDescriptor2<D, M> = ThisType<D & M> & {
+    data?: D;
+    methods?: M;
+};
+declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
+declare let x2: {
+    x: number;
+    y: number;
+} & {
+    moveBy(dx: number, dy: number): void;
+};
+// Check pattern similar to Object.defineProperty and Object.defineProperties
+type PropDesc<T> = {
+    value?: T;
+    get?(): T;
+    set?(value: T): void;
+};
+type PropDescMap<T> = {
+    [K in keyof T]: PropDesc<T[K]>;
+};
+declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
+declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
+declare let p10: Point & Record<"foo", number>;
+declare let p11: Point & Record<"bar", number>;
+declare let p12: Point & {
+    foo: number;
+    bar: number;
+};
+// Proof of concept for typing of Vue.js
+type Accessors<T> = {
+    [K in keyof T]: (() => T[K]) | Computed<T[K]>;
+};
+type Dictionary<T> = {
+    [x: string]: T;
+};
+type Computed<T> = {
+    get?(): T;
+    set?(value: T): void;
+};
+type VueOptions<D, M, P> = ThisType<D & M & P> & {
+    data?: D | (() => D);
+    methods?: M;
+    computed?: Accessors<P>;
+};
+declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
+declare let vue: {
+    x: number;
+    y: number;
+} & {
+    f(x: string): number;
+} & {
+    test: number;
+    hello: string;
+};

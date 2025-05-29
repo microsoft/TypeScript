@@ -82,3 +82,23 @@ var Generic;
     var d = new D(1); // error
     var e = new E(1); // error
 })(Generic || (Generic = {}));
+
+
+//// [classConstructorAccessibility.d.ts]
+declare class C {
+    x: number;
+    constructor(x: number);
+}
+declare class D {
+    x: number;
+    private constructor();
+}
+declare class E {
+    x: number;
+    protected constructor(x: number);
+}
+declare var c: C;
+declare var d: any; // error
+declare var e: any; // error
+declare namespace Generic {
+}

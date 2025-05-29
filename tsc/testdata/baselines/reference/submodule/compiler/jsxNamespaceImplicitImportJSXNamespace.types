@@ -92,13 +92,13 @@ import { JSXInternal } from '..';
 >JSXInternal : any
 
 export function jsx(
->jsx : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; }
+>jsx : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: string,
 >type : string
 
     props: JSXInternal.HTMLAttributes &
->props : HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }
 >JSXInternal : any
 
         JSXInternal.SVGAttributes &
@@ -112,7 +112,7 @@ export function jsx(
 
 ): VNode<any>;
 export function jsx<P>(
->jsx : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; }
+>jsx : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: ComponentType<P>,
 >type : ComponentType<P>
@@ -128,13 +128,13 @@ export function jsx<P>(
 
 
 export function jsxs(
->jsxs : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; }
+>jsxs : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: string,
 >type : string
 
     props: JSXInternal.HTMLAttributes &
->props : HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }
 >JSXInternal : any
 
         JSXInternal.SVGAttributes &
@@ -148,7 +148,7 @@ export function jsxs(
 
 ): VNode<any>;
 export function jsxs<P>(
->jsxs : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; }
+>jsxs : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChild[] | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: ComponentType<P>,
 >type : ComponentType<P>
@@ -164,13 +164,13 @@ export function jsxs<P>(
 
 
 export function jsxDEV(
->jsxDEV : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; }
+>jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: string,
 >type : string
 
     props: JSXInternal.HTMLAttributes &
->props : HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }
+>props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }
 >JSXInternal : any
 
         JSXInternal.SVGAttributes &
@@ -184,7 +184,7 @@ export function jsxDEV(
 
 ): VNode<any>;
 export function jsxDEV<P>(
->jsxDEV : { (type: string, props: HTMLAttributes<{}> & SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; }
+>jsxDEV : { (type: string, props: JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; <P>(type: ComponentType<P>, props: P & { children?: ComponentChildren | undefined; }, key?: string | undefined): VNode<any>; }
 
     type: ComponentType<P>,
 >type : ComponentType<P>
@@ -204,9 +204,9 @@ export import JSX = JSXInternal;
 
 === /index.tsx ===
 export const Comp = () => <div></div>;
->Comp : () => Element
->() => <div></div> : () => Element
-><div></div> : Element
+>Comp : () => import("preact").JSXInternal.Element
+>() => <div></div> : () => import("preact").JSXInternal.Element
+><div></div> : import("preact").JSXInternal.Element
 >div : any
 >div : any
 

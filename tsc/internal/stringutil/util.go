@@ -3,6 +3,7 @@ package stringutil
 
 import (
 	"net/url"
+	"regexp"
 	"strings"
 	"unicode/utf8"
 )
@@ -204,4 +205,27 @@ func AddUTF8ByteOrderMark(text string) string {
 		return "\xEF\xBB\xBF" + text
 	}
 	return text
+}
+
+func StripQuotes(name string) string {
+	firstChar, _ := utf8.DecodeRuneInString(name)
+	lastChar, _ := utf8.DecodeLastRuneInString(name)
+	if firstChar == lastChar && (firstChar == '\'' || firstChar == '"' || firstChar == '`') {
+		return name[1 : len(name)-1]
+	}
+	return name
+}
+
+var matchSlashSomething = regexp.MustCompile(`\.`)
+
+func matchSlashReplacer(in string) string {
+	return in[1:]
+}
+
+func UnquoteString(str string) string {
+	// strconv.Unquote is insufficient as that only handles a single character inside single quotes, as those are character literals in go
+	inner := StripQuotes(str)
+	// In strada we do str.replace(/\\./g, s => s.substring(1)) - which is to say, replace all backslash-something with just something
+	// That's replicated here faithfully, but it seems wrong! This should probably be an actual unquote operation?
+	return matchSlashSomething.ReplaceAllStringFunc(inner, matchSlashReplacer)
 }

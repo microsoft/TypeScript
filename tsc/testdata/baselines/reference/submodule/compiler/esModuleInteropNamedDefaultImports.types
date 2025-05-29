@@ -2,37 +2,37 @@
 
 === mod.ts ===
 export default class Foo {}
->Foo : default
+>Foo : Foo
 
 export class Bar {}
 >Bar : Bar
 
 === idx.ts ===
 import Foo from "./mod";
->Foo : typeof default
+>Foo : typeof Foo
 
 import { default as Foo2 } from "./mod";
->default : typeof default
->Foo2 : typeof default
+>default : typeof Foo
+>Foo2 : typeof Foo
 
 import { Bar, default as Foo3 } from "./mod";
 >Bar : typeof Bar
->default : typeof default
->Foo3 : typeof default
+>default : typeof Foo
+>Foo3 : typeof Foo
 
 new Foo();
->new Foo() : default
->Foo : typeof default
+>new Foo() : Foo
+>Foo : typeof Foo
 
 new Foo2();
->new Foo2() : default
->Foo2 : typeof default
+>new Foo2() : Foo
+>Foo2 : typeof Foo
 
 new Bar();
 >new Bar() : Bar
 >Bar : typeof Bar
 
 new Foo3();
->new Foo3() : default
->Foo3 : typeof default
+>new Foo3() : Foo
+>Foo3 : typeof Foo
 

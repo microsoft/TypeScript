@@ -7,12 +7,12 @@ declare function hasOwnProperty<P extends PropertyKey>(target: {}, property: P):
 >property : P
 
 declare const arrayLikeOrIterable: ArrayLike<any> | Iterable<any>;
->arrayLikeOrIterable : ArrayLike<any> | Iterable<any, any, any>
+>arrayLikeOrIterable : ArrayLike<any> | Iterable<any>
 
 if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 >hasOwnProperty(arrayLikeOrIterable, 'length') : boolean
 >hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { readonly [K in P]: unknown; }
->arrayLikeOrIterable : ArrayLike<any> | Iterable<any, any, any>
+>arrayLikeOrIterable : ArrayLike<any> | Iterable<any>
 >'length' : "length"
 
     let x: number = arrayLikeOrIterable.length;

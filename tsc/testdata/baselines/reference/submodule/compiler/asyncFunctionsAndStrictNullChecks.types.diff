@@ -45,33 +45,7 @@
  >success : ((value: TResult) => any) | undefined
  >value : TResult
  >error : ((error: any) => any) | undefined
-@@= skipped -14, +14 lines =@@
- }
-
- async function sample(promise: Windows.Foundation.IPromise<number>) {
-->sample : (promise: Windows.Foundation.IPromise<number>) => Promise<void>
-->promise : Windows.Foundation.IPromise<number>
-+>sample : (promise: IPromise<number>) => Promise<void>
-+>promise : IPromise<number>
- >Windows : any
- >Foundation : any
-
-     var number = await promise;
- >number : number
- >await promise : number
-->promise : Windows.Foundation.IPromise<number>
-+>promise : IPromise<number>
- }
-
-
-@@= skipped -17, +17 lines =@@
- >value : T
-
- declare function resolve2<T>(value: T): Windows.Foundation.IPromise<T>;
-->resolve2 : <T>(value: T) => Windows.Foundation.IPromise<T>
-+>resolve2 : <T>(value: T) => IPromise<T>
- >value : T
- >Windows : any
+@@= skipped -37, +37 lines =@@
  >Foundation : any
 
  async function sample2(x?: number) {
@@ -80,13 +54,3 @@
  >x : number | undefined
 
      let x1 = await resolve1(x);
-@@= skipped -19, +19 lines =@@
-     let x2 = await resolve2(x);
- >x2 : number | undefined
- >await resolve2(x) : number | undefined
-->resolve2(x) : Windows.Foundation.IPromise<number | undefined>
-->resolve2 : <T>(value: T) => Windows.Foundation.IPromise<T>
-+>resolve2(x) : IPromise<number | undefined>
-+>resolve2 : <T>(value: T) => IPromise<T>
- >x : number | undefined
- }

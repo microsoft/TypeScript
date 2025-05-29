@@ -29,11 +29,11 @@ function a2(...a: someArray) { }  // Error, rest parameter must be array type
 >a : someArray
 
 function a3(...b?) { }            // Error, can't be optional
->a3 : (...b: any[]) => void
+>a3 : (...b?: any[]) => void
 >b : any[]
 
 function a4(...b = [1,2,3]) { }   // Error, can't have initializer
->a4 : (...b: number[]) => void
+>a4 : (...b?: number[]) => void
 >b : number[]
 >[1,2,3] : number[]
 >1 : 1
@@ -41,13 +41,13 @@ function a4(...b = [1,2,3]) { }   // Error, can't have initializer
 >3 : 3
 
 function a5([a, b, [[c]]]) { }
->a5 : (__0: [any, any, [[any]]]) => void
+>a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >a : any
 >b : any
 >c : any
 
 function a6([a, b, c, ...x]: number[]) { }
->a6 : (__0: number[]) => void
+>a6 : ([a, b, c, ...x]: number[]) => void
 >a : number
 >b : number
 >c : number
@@ -70,7 +70,7 @@ a1(...array2);            // Error parameter type is (number|string)[]
 
 a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, [[any]]]
 >a5([1, 2, "string", false, true]) : void
->a5 : (__0: [any, any, [[any]]]) => void
+>a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >[1, 2, "string", false, true] : [number, number, string, boolean, boolean]
 >1 : 1
 >2 : 2
@@ -80,14 +80,14 @@ a5([1, 2, "string", false, true]);       // Error, parameter type is [any, any, 
 
 a5([1, 2]);                              // Error, parameter type is [any, any, [[any]]]
 >a5([1, 2]) : void
->a5 : (__0: [any, any, [[any]]]) => void
+>a5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 
 a6([1, 2, "string"]);                   // Error, parameter type is number[]
 >a6([1, 2, "string"]) : void
->a6 : (__0: number[]) => void
+>a6 : ([a, b, c, ...x]: number[]) => void
 >[1, 2, "string"] : (string | number)[]
 >1 : 1
 >2 : 2

@@ -2,7 +2,7 @@
 
 === node_modules/@types/lodash/object.d.ts ===
 import _ = require("./index");
->_ : LoDashStatic
+>_ : _.LoDashStatic
 
 declare module "./index" {
 >"./index" : LoDashStatic
@@ -31,13 +31,13 @@ export = pick;
 === node_modules/@types/lodash/index.d.ts ===
 /// <reference path="./object.d.ts" />
 export = _;
->_ : LoDashStatic
+>_ : import("lodash").LoDashStatic
 
 export as namespace _;
->_ : LoDashStatic
+>_ : import("lodash").LoDashStatic
 
 declare const _: _.LoDashStatic;
->_ : LoDashStatic
+>_ : import("lodash").LoDashStatic
 >_ : any
 
 declare namespace _ {

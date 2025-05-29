@@ -23,3 +23,14 @@ class A {
     }
 }
 module.exports = A;
+
+
+//// [es5ExportEqualsDts.d.ts]
+declare class A {
+    foo(): import("./es5ExportEqualsDts").B;
+}
+declare namespace A {
+    interface B {
+    }
+}
+export = A;

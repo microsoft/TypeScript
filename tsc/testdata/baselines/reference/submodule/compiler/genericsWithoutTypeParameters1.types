@@ -46,9 +46,9 @@ var x: { a: C } = { a: new C<number>() };
 var x2: { a: I } = { a: { bar() { return 1 } } };
 >x2 : { a: any; }
 >a : any
->{ a: { bar() { return 1 } } } : { a: { bar: () => number; }; }
->a : { bar: () => number; }
->{ bar() { return 1 } } : { bar: () => number; }
+>{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
+>a : { bar(): number; }
+>{ bar() { return 1 } } : { bar(): number; }
 >bar : () => number
 >1 : 1
 

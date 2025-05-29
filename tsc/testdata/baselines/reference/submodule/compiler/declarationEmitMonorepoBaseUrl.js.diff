@@ -18,9 +18,10 @@
 +export function resolveParserPlugins() {
 +    return [createPlugin()];
  }
--
--
--//// [index.d.ts]
--export {};
--//// [index.d.ts]
+
+
+ //// [index.d.ts]
+ export {};
+ //// [index.d.ts]
 -export declare function resolveParserPlugins(): import("@babel/parser").PluginConfig[];
++export declare function resolveParserPlugins(): any;

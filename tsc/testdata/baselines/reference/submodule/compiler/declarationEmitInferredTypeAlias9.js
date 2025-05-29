@@ -16,3 +16,11 @@ var x;
 function returnSomeGlobalValue() {
     return x;
 }
+
+
+//// [declarationEmitInferredTypeAlias9.d.ts]
+type Foo<T> = T | {
+    x: Foo<T>;
+};
+export declare function returnSomeGlobalValue(): Foo<number[]>;
+export {};

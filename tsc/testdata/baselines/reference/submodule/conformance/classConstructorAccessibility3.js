@@ -75,3 +75,28 @@ let c = Qux;
 c = Foo;
 c = Bar;
 c = Baz;
+
+
+//// [classConstructorAccessibility3.d.ts]
+declare class Foo {
+    x: number;
+    constructor(x: number);
+}
+declare class Bar {
+    x: number;
+    constructor(x: number);
+}
+declare class Baz {
+    x: number;
+    protected constructor(x: number);
+}
+declare class Qux {
+    x: number;
+    private constructor();
+}
+// b is public
+declare let a: typeof Foo;
+// b is protected
+declare let b: typeof Baz;
+// c is private
+declare let c: typeof Qux;

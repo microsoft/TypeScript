@@ -12,3 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = f;
 function f() { }
 exports.default = f;
+
+
+//// [es5ExportDefaultIdentifier.d.ts]
+export declare function f(): void;
+export default f;

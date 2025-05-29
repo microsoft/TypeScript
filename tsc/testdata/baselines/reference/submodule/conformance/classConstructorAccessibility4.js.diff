@@ -57,7 +57,13 @@
 -            function E() {
 -            }
 -            E.prototype.method = function () {
--                new D(); // OK
++}
++class D {
++    constructor() { }
++    method() {
++        class E {
++            method() {
+                 new D(); // OK
 -            };
 -            return E;
 -        }());
@@ -65,31 +71,17 @@
 -            __extends(F, _super);
 -            function F() {
 -                return _super !== null && _super.apply(this, arguments) || this;
--            }
+             }
 -            return F;
 -        }(D));
 -    };
 -    return D;
 -}());
--
--
--//// [classConstructorAccessibility4.d.ts]
--declare class A {
--    private constructor();
--    method(): void;
- }
--declare class D {
--    protected constructor();
--    method(): void;
-+class D {
-+    constructor() { }
-+    method() {
-+        class E {
-+            method() {
-+                new D(); // OK
-+            }
 +        }
 +        class F extends D {
 +        }
 +    }
- }
++}
+
+
+ //// [classConstructorAccessibility4.d.ts]

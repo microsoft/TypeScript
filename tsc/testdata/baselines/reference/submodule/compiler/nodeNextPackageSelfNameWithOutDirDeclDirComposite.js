@@ -23,3 +23,7 @@ export function thing(): void {}
 import * as me from "@this/package";
 me.thing();
 export function thing() { }
+
+
+//// [index.d.ts]
+export declare function thing(): void;

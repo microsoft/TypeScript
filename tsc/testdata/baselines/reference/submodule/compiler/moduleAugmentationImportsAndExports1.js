@@ -52,3 +52,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("./f3");
 let a;
 let b = a.foo().n;
+
+
+//// [f1.d.ts]
+export declare class A {
+}
+//// [f2.d.ts]
+export declare class B {
+    n: number;
+}
+//// [f3.d.ts]
+import { B } from "./f2";
+declare module "./f1" {
+    interface A {
+        foo(): B;
+    }
+}
+//// [f4.d.ts]
+import "./f3";

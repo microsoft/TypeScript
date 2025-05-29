@@ -34,7 +34,7 @@ import CJSy3 from "./decl"; // ok in esModuleInterop
 >CJSy3 : typeof CJSy
 
 import * as types from "./types"; // ok
->types : typeof import("/types")
+>types : typeof types
 
 CJSy;
 >CJSy : typeof CJSy
@@ -44,6 +44,6 @@ export namespace ns {
 >ns : typeof ns
 
     export enum A {}
->A : ns.A
+>A : A
 }
 

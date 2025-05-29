@@ -36,3 +36,17 @@ exports.child1 = child1;
 function child1(prototype) {
     prototype.add = (a, b) => a + b;
 }
+
+
+//// [parent.d.ts]
+import './child1'; // this import should still exist in some form in the output, since it augments this module
+export declare class ParentThing implements ParentThing {
+}
+//// [child1.d.ts]
+import { ParentThing } from './parent';
+declare module './parent' {
+    interface ParentThing {
+        add: (a: number, b: number) => number;
+    }
+}
+export declare function child1(prototype: ParentThing): void;

@@ -19,8 +19,8 @@ enum E2 { B }
 >B : E2.B
 
 const t1 = {
->t1 : { [n]: number; }
->{    [n]: 1,    [n]: 1, // duplicate} : { [n]: number; }
+>t1 : { 1: number; }
+>{    [n]: 1,    [n]: 1, // duplicate} : { 1: number; }
 
     [n]: 1,
 >[n] : number
@@ -68,8 +68,8 @@ const t3 = {
 }
 
 const t4 = {
->t4 : { [E2.B]: number; }
->{    [E2.B]: 1,    [E2.B]: 1, // duplicate} : { [E2.B]: number; }
+>t4 : { 0: number; }
+>{    [E2.B]: 1,    [E2.B]: 1, // duplicate} : { 0: number; }
 
     [E2.B]: 1,
 >[E2.B] : number

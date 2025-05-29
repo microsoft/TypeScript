@@ -1,12 +1,11 @@
 --- old.nodeModulesDynamicImport(module=nodenext).js
 +++ new.nodeModulesDynamicImport(module=nodenext).js
-@@= skipped -35, +35 lines =@@
- export async function main() {
-     const { readFile } = await import("fs");
- }
--
--
--//// [index.d.ts]
--export declare function main(): Promise<void>;
--//// [index.d.ts]
--export declare function main(): Promise<void>;
+@@= skipped -38, +38 lines =@@
+
+
+ //// [index.d.ts]
++// cjs format file
+ export declare function main(): Promise<void>;
+ //// [index.d.ts]
++// esm format file
+ export declare function main(): Promise<void>;

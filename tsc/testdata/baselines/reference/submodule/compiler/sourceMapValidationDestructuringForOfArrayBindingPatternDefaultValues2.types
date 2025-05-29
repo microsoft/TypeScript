@@ -2,7 +2,7 @@
 
 === sourceMapValidationDestructuringForOfArrayBindingPatternDefaultValues2.ts ===
 declare var console: {
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 
     log(msg: any): void;
 >log : (msg: any) => void
@@ -100,7 +100,7 @@ for ([, nameA = "noName"] of robots) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -115,7 +115,7 @@ for ([, nameA = "noName"] of getRobots()) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -131,7 +131,7 @@ for ([, nameA = "noName"] of [robotA, robotB]) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -159,7 +159,7 @@ for ([, [
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -188,7 +188,7 @@ for ([, [
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -218,7 +218,7 @@ for ([, [
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -234,7 +234,7 @@ for ([numberB = -1] of robots) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -250,7 +250,7 @@ for ([numberB = -1] of getRobots()) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -267,7 +267,7 @@ for ([numberB = -1] of [robotA, robotB]) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -281,7 +281,7 @@ for ([nameB = "noName"] of multiRobots) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -296,7 +296,7 @@ for ([nameB = "noName"] of getMultiRobots()) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -312,7 +312,7 @@ for ([nameB = "noName"] of [multiRobotA, multiRobotB]) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -334,7 +334,7 @@ for ([numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of robots) {
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -356,7 +356,7 @@ for ([numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of getRobots()) {
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -379,7 +379,7 @@ for ([numberA2 = -1, nameA2 = "noName", skillA2 = "skill"] of [robotA, robotB]) 
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -410,7 +410,7 @@ for ([nameMA = "noName", [
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -442,7 +442,7 @@ for ([nameMA = "noName", [
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -475,7 +475,7 @@ for ([nameMA = "noName", [
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -493,7 +493,7 @@ for ([numberA3 = -1, ...robotAInfo] of robots) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -511,7 +511,7 @@ for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -530,7 +530,7 @@ for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }

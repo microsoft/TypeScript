@@ -5,7 +5,7 @@
 
      'a': number; //error
 ->'a' : Symbol(A2['a'], Decl(mergedInterfacesWithIndexers2.ts, 12, 24))
-+>'a' : Symbol(a, Decl(mergedInterfacesWithIndexers2.ts, 12, 24))
++>'a' : Symbol('a', Decl(mergedInterfacesWithIndexers2.ts, 12, 24))
  }
 
 

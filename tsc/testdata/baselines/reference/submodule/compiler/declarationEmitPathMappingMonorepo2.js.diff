@@ -7,8 +7,9 @@
 -var utils_1 = require("@ts-bug/core/utils");
 +const utils_1 = require("@ts-bug/core/utils");
  exports.default = (0, utils_1.createSvgIcon)("Hello", "ArrowLeft");
--
--
--//// [index.d.ts]
+
+
+ //// [index.d.ts]
 -declare const _default: import("@ts-bug/core/SvgIcon").SomeInterface;
--export default _default;
++declare const _default: any;
+ export default _default;

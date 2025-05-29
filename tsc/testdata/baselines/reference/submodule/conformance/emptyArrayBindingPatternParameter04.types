@@ -2,7 +2,7 @@
 
 === emptyArrayBindingPatternParameter04.ts ===
 function f([] = [1,2,3,4]) {
->f : (__0?: number[]) => void
+>f : ([]?: number[]) => void
 >[1,2,3,4] : number[]
 >1 : 1
 >2 : 2

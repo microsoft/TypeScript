@@ -26,7 +26,7 @@ module Consumer {
 >EventEmitterConsummer : EventEmitterConsummer
 
         constructor (private emitter: Events.EventEmitter) { }
->emitter : EventEmitter
+>emitter : Events.EventEmitter
 >Events : any
 
         private register() {
@@ -34,11 +34,11 @@ module Consumer {
 
             this.emitter.addListener('change', (e) => {
 >this.emitter.addListener('change', (e) => {                this.changed();            }) : void
->this.emitter.addListener : (type: string, listener: ListenerCallback) => void
->this.emitter : EventEmitter
+>this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void
+>this.emitter : Events.EventEmitter
 >this : this
->emitter : EventEmitter
->addListener : (type: string, listener: ListenerCallback) => void
+>emitter : Events.EventEmitter
+>addListener : (type: string, listener: Events.ListenerCallback) => void
 >'change' : "change"
 >(e) => {                this.changed();            } : (e: any) => void
 >e : any

@@ -24,3 +24,8 @@ export var x: c.b.m2.c1;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
+
+
+//// [declFileExportImportChain2_d.d.ts]
+import c = require("declFileExportImportChain2_c");
+export declare var x: c.b.m2.c1;

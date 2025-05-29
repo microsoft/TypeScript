@@ -36,3 +36,20 @@ class Aaa extends Bbb {
     export * from Aaa; // this line causes the nullref
 })(Bbb || (Bbb = {}));
 var a;
+
+
+//// [exportDeclarationInInternalModule.d.ts]
+declare class Bbb {
+}
+declare class Aaa extends Bbb {
+}
+declare namespace Aaa {
+    class SomeType {
+    }
+}
+declare namespace Bbb {
+    export class SomeType {
+    }
+    export * from Aaa; // this line causes the nullref
+}
+declare var a: Bbb.SomeType;

@@ -54,3 +54,25 @@ require("./mod1");
 exports.cls = main_1.Cls;
 exports.foo = new main_1.Cls().foo();
 exports.bar = main_1.Cls.bar();
+
+
+//// [main.d.ts]
+export declare class Cls {
+    x: any;
+}
+//// [mod1.d.ts]
+declare module "./main" {
+    interface Cls {
+        foo(): Lib;
+    }
+    namespace Cls {
+        function bar(): Lib;
+    }
+}
+export {};
+//// [mod2.d.ts]
+import { Cls } from "./main";
+import "./mod1";
+export declare const cls: typeof Cls;
+export declare const foo: Lib;
+export declare const bar: Lib;

@@ -2,7 +2,7 @@
 
 === emptyObjectBindingPatternParameter03.ts ===
 function f({}, a) {
->f : (__0: {}, a: any) => void
+>f : ({}: {}, a: any) => void
 >a : any
 
     var x, y, z;

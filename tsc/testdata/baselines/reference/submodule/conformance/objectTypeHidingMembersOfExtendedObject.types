@@ -144,7 +144,7 @@ var r3d = i['hm'];
 >'hm' : "hm"
 
 var b: {
->b : { [x: string]: any; valueOf: () => void; data: B; }
+>b : { [x: string]: any; valueOf(): void; data: B; }
 
     valueOf(): void;
 >valueOf : () => void
@@ -160,6 +160,6 @@ var r4: void = b.valueOf();
 >r4 : void
 >b.valueOf() : void
 >b.valueOf : () => void
->b : { [x: string]: any; valueOf: () => void; data: B; }
+>b : { [x: string]: any; valueOf(): void; data: B; }
 >valueOf : () => void
 

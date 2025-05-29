@@ -40,3 +40,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 const typescript_fsa_1 = require("typescript-fsa");
 exports.a = (0, typescript_fsa_1.getA)();
+
+
+//// [index.d.ts]
+export declare const a: import("typescript-fsa").A;

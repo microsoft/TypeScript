@@ -36,3 +36,11 @@ async function main() {
 export async function main() {
     const { readFile } = await import("fs");
 }
+
+
+//// [index.d.ts]
+// cjs format file
+export declare function main(): Promise<void>;
+//// [index.d.ts]
+// esm format file
+export declare function main(): Promise<void>;

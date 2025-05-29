@@ -173,7 +173,7 @@ const j = (
 >length : number
 
 function k ({
->k : (__0: { [x: string]: any; first: any; }) => { [x: string]: any; }
+>k : ({ first, ...rest }: { [x: string]: any; first: any; }) => { [x: string]: any; }
 
   first,
 >first : any

@@ -5,7 +5,7 @@
 
      return class extends base {
 ->class extends base {        mixinProperty: string;    } : { new (...args: any[]): (Anonymous class); prototype: MyMixin<any>.(Anonymous class); } & T
-+>class extends base {        mixinProperty: string;    } : { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
++>class extends base {        mixinProperty: string;    } : { new (...args: any[]): (Anonymous class); prototype: MyMixin.(Anonymous class); } & T
  >base : MyBaseClass<any>
 
          mixinProperty: string;
@@ -14,13 +14,13 @@
 
  import { MyMixin } from './MixinClass';
 ->MyMixin : <T extends import("BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
++>MyMixin : <T extends import("./BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
 
  export class MyExtendedClass extends MyMixin(MyBaseClass)<string> {
  >MyExtendedClass : MyExtendedClass
  >MyMixin(MyBaseClass) : MyBaseClass<string> & MyMixin
 ->MyMixin : <T extends import("BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
++>MyMixin : <T extends import("./BaseClass").Constructor<MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
  >MyBaseClass : typeof MyBaseClass
 
      extendedClassProperty: number;
@@ -29,7 +29,7 @@
 
  import { MyMixin } from './MixinClass';
 ->MyMixin : <T extends import("BaseClass").Constructor<import("BaseClass").MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
++>MyMixin : <T extends import("./BaseClass").Constructor<import("./BaseClass").MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
 
  const myExtendedClass = new MyExtendedClass('string');
  >myExtendedClass : MyExtendedClass
@@ -40,7 +40,7 @@
 ->AnotherMixedClass : typeof MyExtendedClass & import("BaseClass").Constructor<MyMixin>
 ->MyMixin(MyExtendedClass) : typeof MyExtendedClass & import("BaseClass").Constructor<MyMixin>
 ->MyMixin : <T extends import("BaseClass").Constructor<import("BaseClass").MyBaseClass<any>>>(base: T) => T & import("BaseClass").Constructor<MyMixin>
-+>AnotherMixedClass : typeof MyExtendedClass & Constructor<MyMixin>
-+>MyMixin(MyExtendedClass) : typeof MyExtendedClass & Constructor<MyMixin>
-+>MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
++>AnotherMixedClass : typeof MyExtendedClass & import("./BaseClass").Constructor<MyMixin>
++>MyMixin(MyExtendedClass) : typeof MyExtendedClass & import("./BaseClass").Constructor<MyMixin>
++>MyMixin : <T extends import("./BaseClass").Constructor<import("./BaseClass").MyBaseClass<any>>>(base: T) => T & import("./BaseClass").Constructor<MyMixin>
  >MyExtendedClass : typeof MyExtendedClass

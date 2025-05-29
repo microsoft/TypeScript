@@ -16,3 +16,8 @@ exports.run = void 0;
 const E = require("whatever");
 const run = (i) => E.something(i);
 exports.run = run;
+
+
+//// [index.d.ts]
+import * as E from 'whatever';
+export declare const run: <E>(i: () => E.Whatever<E>) => E.Whatever<E>;

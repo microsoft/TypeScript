@@ -12,3 +12,7 @@ exports.f = f;
 function f(x) {
     return typeof x === "number";
 }
+
+
+//// [declarationEmitIdentifierPredicates01.d.ts]
+export declare function f(x: any): x is number;

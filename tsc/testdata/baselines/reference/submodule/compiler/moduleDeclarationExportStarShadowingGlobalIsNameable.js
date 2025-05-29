@@ -52,3 +52,27 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.func = void 0;
 const func = (account, acc2) => { };
 exports.func = func;
+
+
+//// [account.d.ts]
+export interface Account {
+    myAccNum: number;
+}
+interface Account2 {
+    myAccNum: number;
+}
+export { Account2 as Acc };
+//// [index.d.ts]
+export * from "./account";
+//// [index.d.ts]
+declare namespace global {
+    interface Account {
+        someProp: number;
+    }
+    interface Acc {
+        someProp: number;
+    }
+}
+import * as model from "./model";
+export declare const func: (account: model.Account, acc2: model.Acc) => void;
+export {};

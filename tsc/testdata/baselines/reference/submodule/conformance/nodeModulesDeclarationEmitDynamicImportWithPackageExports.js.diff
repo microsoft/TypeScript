@@ -1,18 +1,18 @@
 --- old.nodeModulesDeclarationEmitDynamicImportWithPackageExports.js
 +++ new.nodeModulesDeclarationEmitDynamicImportWithPackageExports.js
-@@= skipped -112, +112 lines =@@
- // cjs format file, no TLA
- exports.d = import("inner/cjs");
- exports.e = import("inner/mjs");
--
--
--//// [index.d.ts]
--export {};
--//// [index.d.mts]
--export {};
--//// [index.d.cts]
--export {};
--//// [other.d.ts]
+@@= skipped -115, +115 lines =@@
+
+
+ //// [index.d.ts]
++// esm format file
+ export {};
+ //// [index.d.mts]
++// esm format file
+ export {};
+ //// [index.d.cts]
++// cjs format file
+ export {};
+ //// [other.d.ts]
 -export declare const a: {
 -    default: typeof import("package/cjs");
 -};
@@ -22,13 +22,21 @@
 -    cjsMain: true;
 -    default: typeof import("inner");
 -};
--//// [other2.d.ts]
++// esm format file
++export declare const a: typeof import("./index.cts");
++export declare const b: typeof import("./index.mts");
++export declare const c: typeof import(".");
++export declare const f: any;
+ //// [other2.d.ts]
 -export declare const d: {
 -    cjsNonmain: true;
 -    default: typeof import("inner/cjs");
 -};
 -export declare const e: typeof import("inner/mjs");
--//// [other.d.mts]
++// esm format file
++export declare const d: any;
++export declare const e: any;
+ //// [other.d.mts]
 -export declare const a: {
 -    default: typeof import("package/cjs");
 -};
@@ -38,13 +46,21 @@
 -    cjsMain: true;
 -    default: typeof import("inner");
 -};
--//// [other2.d.mts]
++// esm format file
++export declare const a: typeof import("./index.cts");
++export declare const b: typeof import("./index.mts");
++export declare const c: typeof import(".");
++export declare const f: any;
+ //// [other2.d.mts]
 -export declare const d: {
 -    cjsNonmain: true;
 -    default: typeof import("inner/cjs");
 -};
 -export declare const e: typeof import("inner/mjs");
--//// [other.d.cts]
++// esm format file
++export declare const d: any;
++export declare const e: any;
+ //// [other.d.cts]
 -export declare const a: Promise<{
 -    default: typeof import("./index.cjs");
 -}>;
@@ -54,9 +70,19 @@
 -    cjsMain: true;
 -    default: typeof import("inner");
 -}>;
--//// [other2.d.cts]
++// cjs format file, no TLA
++export declare const a: Promise<typeof import("./index.cts")>;
++export declare const b: Promise<typeof import("./index.mts", { with: { "resolution-mode": "import" } })>;
++export declare const c: Promise<typeof import("./index.js", { with: { "resolution-mode": "import" } })>;
++export declare const f: any;
+ //// [other2.d.cts]
 -export declare const d: Promise<{
 -    cjsNonmain: true;
 -    default: typeof import("inner/cjs");
--}>;
++// cjs format file, no TLA
++export declare const d: any;
++export declare const e: Promise<{
++    esm: true;
++    default: typeof import("./node_modules/inner/index.d.mts", { with: { "resolution-mode": "import" } });
+ }>;
 -export declare const e: Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })>;

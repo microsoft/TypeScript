@@ -9,10 +9,3 @@
 
  export module M {
  >M : typeof M
-
-     export module C { export interface I { } }
-     export var w: v.I; // Gets emitted as C.I, which is the wrong interface
-->w : v.I
-+>w : I
- >v : any
- }

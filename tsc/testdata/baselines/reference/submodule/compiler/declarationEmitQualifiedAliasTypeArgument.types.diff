@@ -5,20 +5,20 @@
 
  import { create } from "./bbb";
 ->create : <T>() => () => import("bbb").INode<T>
-+>create : <T>() => () => INode<T>
++>create : <T>() => () => import("./bbb.js").INode<T>
 
  export const fun = create<T>();
 ->fun : () => import("bbb").INode<T>
 ->create<T>() : () => import("bbb").INode<T>
 ->create : <T>() => () => import("bbb").INode<T>
-+>fun : () => INode<T>
-+>create<T>() : () => INode<T>
-+>create : <T>() => () => INode<T>
++>fun : () => import("./bbb.js").INode<T>
++>create<T>() : () => import("./bbb.js").INode<T>
++>create : <T>() => () => import("./bbb.js").INode<T>
 
  export const fun2 = create<Q>();
 ->fun2 : () => import("bbb").INode<Q>
 ->create<Q>() : () => import("bbb").INode<Q>
 ->create : <T>() => () => import("bbb").INode<T>
-+>fun2 : () => INode<Q>
-+>create<Q>() : () => INode<Q>
-+>create : <T>() => () => INode<T>
++>fun2 : () => import("./bbb.js").INode<Q>
++>create<Q>() : () => import("./bbb.js").INode<Q>
++>create : <T>() => () => import("./bbb.js").INode<T>

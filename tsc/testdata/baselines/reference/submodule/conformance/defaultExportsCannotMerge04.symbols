@@ -2,7 +2,7 @@
 
 === defaultExportsCannotMerge04.ts ===
 export default function Foo() {
->Foo : Symbol(default, Decl(defaultExportsCannotMerge04.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(defaultExportsCannotMerge04.ts, 0, 0))
 }
 
 namespace Foo {

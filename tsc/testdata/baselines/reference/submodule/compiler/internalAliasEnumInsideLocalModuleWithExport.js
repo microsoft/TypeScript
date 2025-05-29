@@ -33,3 +33,17 @@ var c;
     c.b = a.weekend;
     c.bVal = c.b.Sunday;
 })(c || (exports.c = c = {}));
+
+
+//// [internalAliasEnumInsideLocalModuleWithExport.d.ts]
+export declare namespace a {
+    enum weekend {
+        Friday = 0,
+        Saturday = 1,
+        Sunday = 2
+    }
+}
+export declare namespace c {
+    export import b = a.weekend;
+    var bVal: b;
+}

@@ -11,10 +11,9 @@
 -=== ./b.ts ===
 +=== b.ts ===
  declare global {
-->global : Symbol(global, Decl(b.ts, 0, 0))
-+>global : Symbol((Missing), Decl(b.ts, 0, 0))
+ >global : Symbol(global, Decl(b.ts, 0, 0))
 
-     interface  ImportAttributes {
+@@= skipped -11, +11 lines =@@
  >ImportAttributes : Symbol(ImportAttributes, Decl(lib.es5.d.ts, --, --), Decl(b.ts, 0, 16))
 
          type: "json"
@@ -23,7 +22,7 @@
      }
  }
 
-@@= skipped -25, +25 lines =@@
+@@= skipped -14, +14 lines =@@
  >f : Symbol(f, Decl(b.ts, 7, 8))
 
      await import("./a", {

@@ -1,25 +1,11 @@
 --- old.importTypeGenericTypes.types
 +++ new.importTypeGenericTypes.types
-@@= skipped -44, +44 lines =@@
- >Bar : Bar<T>
-
-     item: Bar.I<T>;
-->item : Bar.I<T>
-+>item : I<T>
- >Bar : any
-
-     constructor(input: Baz.J<T>) {}
-->input : Baz.J<T>
-+>input : J<T>
- >Baz : any
- }
- export { Bar }
-@@= skipped -12, +12 lines =@@
+@@= skipped -56, +56 lines =@@
 
  === usage.ts ===
  export const x: import("./foo")<{x: number}> = { x: 0, y: 0, data: {x: 12} };
 ->x : import("foo")<{ x: number; }>
-+>x : Point<{ x: number; }>
++>x : import("./foo")<{ x: number; }>
  >x : number
  >{ x: 0, y: 0, data: {x: 12} } : { x: number; y: number; data: { x: number; }; }
  >x : number
@@ -28,7 +14,16 @@
 
  export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12} };
 ->y : import("foo2").Bar.I<{ x: number; }>
-+>y : I<{ x: number; }>
++>y : import("./foo2").Bar.I<{ x: number; }>
  >Bar : any
  >x : number
  >{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
+@@= skipped -28, +28 lines =@@
+ }
+
+ export let shim: typeof import("./foo2") = {
+->shim : typeof import("foo2")
++>shim : typeof import("./foo2")
+ >{    Bar: Bar2} : { Bar: typeof Bar2; }
+
+     Bar: Bar2

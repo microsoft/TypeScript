@@ -73,7 +73,7 @@ function A() { this.id = 1; }
 module.exports = A;
 >module.exports = A : () => void
 >module.exports : () => void
->module : { A: () => void; }
+>module : { A(): void; }
 >exports : () => void
 >A : () => void
 

@@ -13,13 +13,13 @@ export class X {}
 === /b.ts ===
 export type * from "./a";
 export { X } from "./a";
->X : typeof X
+>X : typeof import("./a").X
 
 === /c.ts ===
 import { A, B as C, X } from "./b";
 >A : typeof A
->B : typeof B
->C : typeof B
+>B : typeof C
+>C : typeof C
 >X : typeof X
 
 let _: A = new A();   // Error
@@ -28,9 +28,9 @@ let _: A = new A();   // Error
 >A : typeof A
 
 let __: C = new C();  // Error
->__ : B
->new C() : B
->C : typeof B
+>__ : C
+>new C() : C
+>C : typeof C
 
 let ___: X = new X(); // Ok
 >___ : X

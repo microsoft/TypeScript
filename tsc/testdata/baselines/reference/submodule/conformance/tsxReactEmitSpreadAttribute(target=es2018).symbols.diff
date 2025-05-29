@@ -119,9 +119,8 @@
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 +>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 35, 15))
-->"__proto__" : Symbol("__proto__", Decl(test.tsx, 35, 39))
+ >"__proto__" : Symbol("__proto__", Decl(test.tsx, 35, 39))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
-+>"__proto__" : Symbol(__proto__, Decl(test.tsx, 35, 39))
 +>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
 
@@ -147,11 +146,9 @@
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 +>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  >className : Symbol(className, Decl(test.tsx, 45, 15))
-->["__proto__"] : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
-->"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
+ >["__proto__"] : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
+ >"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
 ->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
-+>["__proto__"] : Symbol(__proto__, Decl(test.tsx, 45, 40))
-+>"__proto__" : Symbol(__proto__, Decl(test.tsx, 45, 40))
 +>div : Symbol(div, Decl(react16.d.ts, 2546, 114))
  }
 

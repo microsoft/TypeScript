@@ -1043,3 +1043,367 @@ const cf2 = (t, k) => {
     const s = t[k];
     t.cool;
 };
+
+
+//// [keyofAndIndexedAccess.d.ts]
+declare class Shape {
+    name: string;
+    width: number;
+    height: number;
+    visible: boolean;
+}
+declare class TaggedShape extends Shape {
+    tag: string;
+}
+declare class Item {
+    name: string;
+    price: number;
+}
+declare class Options {
+    visible: "yes" | "no";
+}
+type Dictionary<T> = {
+    [x: string]: T;
+};
+type NumericallyIndexed<T> = {
+    [x: number]: T;
+};
+declare const enum E {
+    A = 0,
+    B = 1,
+    C = 2
+}
+type K00 = keyof any; // string
+type K01 = keyof string; // "toString" | "charAt" | ...
+type K02 = keyof number; // "toString" | "toFixed" | "toExponential" | ...
+type K03 = keyof boolean; // "valueOf"
+type K04 = keyof void; // never
+type K05 = keyof undefined; // never
+type K06 = keyof null; // never
+type K07 = keyof never; // string | number | symbol
+type K08 = keyof unknown; // never
+type K10 = keyof Shape; // "name" | "width" | "height" | "visible"
+type K11 = keyof Shape[]; // "length" | "toString" | ...
+type K12 = keyof Dictionary<Shape>; // string
+type K13 = keyof {}; // never
+type K14 = keyof Object; // "constructor" | "toString" | ...
+type K15 = keyof E; // "toString" | "toFixed" | "toExponential" | ...
+type K16 = keyof [string, number]; // "0" | "1" | "length" | "toString" | ...
+type K17 = keyof (Shape | Item); // "name"
+type K18 = keyof (Shape & Item); // "name" | "width" | "height" | "visible" | "price"
+type K19 = keyof NumericallyIndexed<Shape>; // never
+type KeyOf<T> = keyof T;
+type K20 = KeyOf<Shape>; // "name" | "width" | "height" | "visible"
+type K21 = KeyOf<Dictionary<Shape>>; // string
+type NAME = "name";
+type WIDTH_OR_HEIGHT = "width" | "height";
+type Q10 = Shape["name"]; // string
+type Q11 = Shape["width" | "height"]; // number
+type Q12 = Shape["name" | "visible"]; // string | boolean
+type Q20 = Shape[NAME]; // string
+type Q21 = Shape[WIDTH_OR_HEIGHT]; // number
+type Q30 = [string, number][0]; // string
+type Q31 = [string, number][1]; // number
+type Q32 = [string, number][number]; // string | number
+type Q33 = [string, number][E.A]; // string
+type Q34 = [string, number][E.B]; // number
+type Q35 = [string, number]["0"]; // string
+type Q36 = [string, number]["1"]; // string
+type Q40 = (Shape | Options)["visible"]; // boolean | "yes" | "no"
+type Q41 = (Shape & Options)["visible"]; // true & "yes" | true & "no" | false & "yes" | false & "no"
+type Q50 = Dictionary<Shape>["howdy"]; // Shape
+type Q51 = Dictionary<Shape>[123]; // Shape
+type Q52 = Dictionary<Shape>[E.B]; // Shape
+declare let cond: boolean;
+declare function getProperty<T, K extends keyof T>(obj: T, key: K): T[K];
+declare function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]): void;
+declare function f10(shape: Shape): void;
+declare function f11(a: Shape[]): void;
+declare function f12(t: [Shape, boolean]): void;
+declare function f13(foo: any, bar: any): void;
+declare class Component<PropType> {
+    props: PropType;
+    getProperty<K extends keyof PropType>(key: K): PropType[K];
+    setProperty<K extends keyof PropType>(key: K, value: PropType[K]): void;
+}
+declare function f20(component: Component<Shape>): void;
+declare function pluck<T, K extends keyof T>(array: T[], key: K): T[K][];
+declare function f30(shapes: Shape[]): void;
+declare function f31<K extends keyof Shape>(key: K): Shape[K];
+declare function f32<K extends "width" | "height">(key: K): Shape[K];
+declare function f33<S extends Shape, K extends keyof S>(shape: S, key: K): S[K];
+declare function f34(ts: TaggedShape): void;
+declare class C {
+    x: string;
+    protected y: string;
+    private z;
+}
+// Indexed access expressions have always permitted access to private and protected members.
+// For consistency we also permit such access in indexed access types.
+declare function f40(c: C): void;
+declare function f50<T>(k: keyof T, s: string): void;
+declare function f51<T, K extends keyof T>(k: K, s: string): void;
+declare function f52<T>(obj: {
+    [x: string]: boolean;
+}, k: Exclude<keyof T, symbol>, s: string, n: number): void;
+declare function f53<T, K extends Exclude<keyof T, symbol>>(obj: {
+    [x: string]: boolean;
+}, k: K, s: string, n: number): void;
+declare function f54<T>(obj: T, key: keyof T): void;
+declare function f55<T, K extends keyof T>(obj: T, key: K): void;
+declare function f60<T>(source: T, target: T): void;
+declare function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void): void;
+declare function f71(func: <T, U>(x: T, y: U) => Partial<T & U>): void;
+declare function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]): void;
+declare function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]): void;
+declare function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]): void;
+declare function f80<T extends {
+    a: {
+        x: any;
+    };
+}>(obj: T): void;
+declare function f81<T extends {
+    a: {
+        x: any;
+    };
+}>(obj: T): T["a"]["x"];
+declare function f82(): void;
+declare function f83<T extends {
+    [x: string]: {
+        x: any;
+    };
+}, K extends keyof T>(obj: T, key: K): T[K]["x"];
+declare function f84(): void;
+declare class C1 {
+    x: number;
+    get<K extends keyof this>(key: K): this[K];
+    set<K extends keyof this>(key: K, value: this[K]): void;
+    foo(): void;
+}
+type S2 = {
+    a: string;
+    b: string;
+};
+declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]): void;
+declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
+declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
+// Repros from #12011
+declare class Base {
+    get<K extends keyof this>(prop: K): this[K];
+    set<K extends keyof this>(prop: K, value: this[K]): void;
+}
+declare class Person extends Base {
+    parts: number;
+    constructor(parts: number);
+    getParts(): this["parts"];
+}
+declare class OtherPerson {
+    parts: number;
+    constructor(parts: number);
+    getParts(): this["parts"];
+}
+// Modified repro from #12544
+declare function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
+declare function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
+declare function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
+declare function path(obj: any, ...keys: (string | number)[]): any;
+type Thing = {
+    a: {
+        x: number;
+        y: string;
+    };
+    b: boolean;
+};
+declare function f1(thing: Thing): void;
+// Repro from comment in #12114
+declare const assignTo2: <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2];
+// Modified repro from #12573
+declare function one<T>(handler: (t: T) => void): T;
+declare var empty: unknown; // inferred as {}, expected
+type Handlers<T> = {
+    [K in keyof T]: (t: T[K]) => void;
+};
+declare function on<T>(handlerHash: Handlers<T>): T;
+declare var hashOfEmpty1: {
+    test: unknown;
+}; // {}
+declare var hashOfEmpty2: {
+    test: boolean;
+}; // { test: boolean }
+// Repro from #12624
+interface Options1<Data, Computed> {
+    data?: Data;
+    computed?: Computed;
+}
+declare class Component1<Data, Computed> {
+    constructor(options: Options1<Data, Computed>);
+    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+}
+declare let c1: Component1<{
+    hello: string;
+}, unknown>;
+// Repro from #12625
+interface Options2<Data, Computed> {
+    data?: Data;
+    computed?: Computed;
+}
+declare class Component2<Data, Computed> {
+    constructor(options: Options2<Data, Computed>);
+    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+}
+// Repro from #12641
+interface R {
+    p: number;
+}
+declare function f<K extends keyof R>(p: K): void;
+// Repro from #12651
+type MethodDescriptor = {
+    name: string;
+    args: any[];
+    returnValue: any;
+};
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+type SomeMethodDescriptor = {
+    name: "someMethod";
+    args: [string, number];
+    returnValue: string[];
+};
+declare let result: string[];
+// Repro from #13073
+type KeyTypes = "a" | "b";
+declare let MyThingy: {
+    [key in KeyTypes]: string[];
+};
+declare function addToMyThingy<S extends KeyTypes>(key: S): void;
+// Repro from #13102
+type Handler<T> = {
+    onChange: (name: keyof T) => void;
+};
+declare function onChangeGenericFunction<T>(handler: Handler<T & {
+    preset: number;
+}>): void;
+// Repro from #13285
+declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: Partial<Record<T[K], T[K]>>): Record<K, string>;
+// Repro from #13285
+declare function updateIds2<T extends {
+    [x: string]: string;
+}, K extends keyof T>(obj: T, key: K, stringMap: {
+    [oldId: string]: string;
+}): void;
+// Repro from #13514
+declare function head<T extends Array<any>>(list: T): T[0];
+// Repro from #13604
+declare class A<T> {
+    props: T & {
+        foo: string;
+    };
+}
+declare class B extends A<{
+    x: number;
+}> {
+    f(p: this["props"]): void;
+}
+// Repro from #13749
+declare class Form<T> {
+    private childFormFactories;
+    set<K extends keyof T>(prop: K, value: T[K]): void;
+}
+// Repro from #13787
+declare class SampleClass<P> {
+    props: Readonly<P>;
+    constructor(props: P);
+}
+interface Foo {
+    foo: string;
+}
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+declare class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+    constructor(props: T);
+    brokenMethod(): void;
+}
+// Positive repro from #17166
+declare function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void;
+// # 21185
+type Predicates<TaggedRecord> = {
+    [T in keyof TaggedRecord]: (variant: TaggedRecord[keyof TaggedRecord]) => variant is TaggedRecord[T];
+};
+// Repros from #23592
+type Example<T extends {
+    [K in keyof T]: {
+        prop: any;
+    };
+}> = {
+    [K in keyof T]: T[K]["prop"];
+};
+type Result = Example<{
+    a: {
+        prop: string;
+    };
+    b: {
+        prop: number;
+    };
+}>;
+type Helper2<T> = {
+    [K in keyof T]: Extract<T[K], {
+        prop: any;
+    }>;
+};
+type Example2<T> = {
+    [K in keyof Helper2<T>]: Helper2<T>[K]["prop"];
+};
+type Result2 = Example2<{
+    1: {
+        prop: string;
+    };
+    2: {
+        prop: number;
+    };
+}>;
+// Repro from #23618
+type DBBoolTable<K extends string> = {
+    [k in K]: 0 | 1;
+};
+declare enum Flag {
+    FLAG_1 = "flag_1",
+    FLAG_2 = "flag_2"
+}
+type SimpleDBRecord<Flag extends string> = {
+    staticField: number;
+} & DBBoolTable<Flag>;
+declare function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]): SimpleDBRecord<Flag>[Flag];
+type DynamicDBRecord<Flag extends string> = ({
+    dynamicField: number;
+} | {
+    dynamicField: string;
+}) & DBBoolTable<Flag>;
+declare function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]): DynamicDBRecord<Flag>[Flag];
+// Repro from #21368
+interface I {
+    foo: string;
+}
+declare function take<T>(p: T): void;
+declare function fn<T extends I, K extends keyof T>(o: T, k: K): void;
+// Repro from #23133
+declare class Unbounded<T> {
+    foo(x: T[keyof T]): void;
+}
+// Repro from #23940
+interface I7 {
+    x: any;
+}
+type Foo7<T extends number> = T;
+declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
+// Repro from #21770
+type Dict<T extends string> = {
+    [key in T]: number;
+};
+type DictDict<V extends string, T extends string> = {
+    [key in V]: Dict<T>;
+};
+declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+// Repro from #26409
+declare const cf1: <T extends { [P in K]: string; } & {
+    cool: string;
+}, K extends keyof T>(t: T, k: K) => void;
+declare const cf2: <T extends { [P in "cool" | K]: string; }, K extends keyof T>(t: T, k: K) => void;

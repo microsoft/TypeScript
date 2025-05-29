@@ -8,3 +8,8 @@ export {Foo}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
+
+
+//// [declarationEmitUnknownImport.d.ts]
+import Foo = SomeNonExistingName;
+export { Foo };

@@ -21,3 +21,7 @@ foo.caller = () => { };
 foo.toString = () => { };
 foo.length = 10;
 foo.length = 10;
+
+
+//// [isolatedDeclarationErrorsExpandoFunctions.d.ts]
+export declare function foo(): void;

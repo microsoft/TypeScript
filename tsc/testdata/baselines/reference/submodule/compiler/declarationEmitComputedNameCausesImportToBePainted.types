@@ -27,8 +27,8 @@ export const context: Context = {
 }
 
 export const withContext = ({ [Key]: value }: Context) => value;
->withContext : (__0: Context) => string
->({ [Key]: value }: Context) => value : (__0: Context) => string
+>withContext : ({ [Key]: value }: Context) => string
+>({ [Key]: value }: Context) => value : ({ [Key]: value }: Context) => string
 >Key : unique symbol
 >value : string
 >value : string

@@ -15,13 +15,13 @@ f(t => {
 >t : T
 
     type isArray = (typeof t)[] extends string[] ? true : false;
->isArray : isArray
+>isArray : T[] extends string[] ? true : false
 >t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
->IsObject : IsObject
+>IsObject : { x: T; } extends { x: string; } ? true : false
 >x : T
 >t : T
 >x : string
@@ -37,13 +37,13 @@ const fn1: <T>(x: T) => void = t => {
 >t : T
 
     type isArray = (typeof t)[] extends string[] ? true : false;
->isArray : isArray
+>isArray : T[] extends string[] ? true : false
 >t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
->IsObject : IsObject
+>IsObject : { x: T; } extends { x: string; } ? true : false
 >x : T
 >t : T
 >x : string
@@ -60,13 +60,13 @@ const fn2: <T>(x: T) => void = function test(t) {
 >t : T
 
     type isArray = (typeof t)[] extends string[] ? true : false;
->isArray : isArray
+>isArray : T[] extends string[] ? true : false
 >t : T
 >true : true
 >false : false
 
     type IsObject = { x: typeof t } extends { x: string } ? true : false;
->IsObject : IsObject
+>IsObject : { x: T; } extends { x: string; } ? true : false
 >x : T
 >t : T
 >x : string
@@ -79,20 +79,20 @@ const obj: { f: <T>(x: T) => void } = {
 >obj : { f: <T>(x: T) => void; }
 >f : <T>(x: T) => void
 >x : T
->{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f: <T>(t: T) => void; }
+>{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f<T>(t: T): void; }
 
     f(t) {
 >f : <T>(t: T) => void
 >t : T
 
         type isArray = (typeof t)[] extends string[] ? true : false;
->isArray : isArray
+>isArray : T[] extends string[] ? true : false
 >t : T
 >true : true
 >false : false
 
         type IsObject = { x: typeof t } extends { x: string } ? true : false;
->IsObject : IsObject
+>IsObject : { x: T; } extends { x: string; } ? true : false
 >x : T
 >t : T
 >x : string

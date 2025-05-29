@@ -9,7 +9,7 @@ export interface LocalInterface extends RequireInterface {}
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
->global : Symbol((Missing), Decl(require.d.ts, 0, 10))
+>global : Symbol(global, Decl(require.d.ts, 0, 10))
 
     interface RequireInterface {}
 >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 1, 16))

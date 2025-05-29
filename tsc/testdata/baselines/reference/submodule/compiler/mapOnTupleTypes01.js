@@ -70,3 +70,15 @@ exports.g = numNumNumNumNum.map(n => n * n);
 // Length 6
 let numNumNumNumNumNum = [1, 2, 3, 4, 5, 6];
 exports.h = numNumNumNumNum.map(n => n * n);
+
+
+//// [mapOnTupleTypes01.d.ts]
+export declare let mapOnLooseArrayLiteral: number[];
+export declare let a: number[];
+export declare let b: number[];
+export declare let c: number[];
+export declare let d: (string | number)[];
+export declare let e: number[];
+export declare let f: number[];
+export declare let g: number[];
+export declare let h: number[];

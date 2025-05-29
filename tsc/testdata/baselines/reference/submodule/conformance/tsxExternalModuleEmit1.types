@@ -10,7 +10,7 @@ declare module 'react' {
 
 === app.tsx ===
 import * as React from 'react';
->React : typeof import("react")
+>React : typeof React
 
 // Should see var button_1 = require('./button') here
 import { Button } from './button';
@@ -18,9 +18,9 @@ import { Button } from './button';
 
 export class App extends React.Component<any, any> {
 >App : App
->React.Component : Component<any, any>
->React : typeof import("react")
->Component : typeof Component
+>React.Component : React.Component<any, any>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
 >render : () => any
@@ -34,13 +34,13 @@ export class App extends React.Component<any, any> {
 
 === button.tsx ===
 import * as React from 'react';
->React : typeof import("react")
+>React : typeof React
 
 export class Button extends React.Component<any, any> {
 >Button : Button
->React.Component : Component<any, any>
->React : typeof import("react")
->Component : typeof Component
+>React.Component : React.Component<any, any>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
 >render : () => any

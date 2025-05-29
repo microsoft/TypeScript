@@ -24,3 +24,13 @@ var c;
     c.b = a.x;
     c.bVal = c.b;
 })(c || (exports.c = c = {}));
+
+
+//// [internalAliasVarInsideLocalModuleWithExport.d.ts]
+export declare namespace a {
+    var x: number;
+}
+export declare namespace c {
+    export import b = a.x;
+    var bVal: number;
+}

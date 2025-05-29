@@ -334,60 +334,60 @@ export interface publicInterfaceWithPrivateModuleParameterTypes {
 >privateModule : any
 
     myMethod(): privateModule.publicClass; // Error
->myMethod : () => publicClass
+>myMethod : () => privateModule.publicClass
 >privateModule : any
 }
 export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
 
     static myPublicStaticMethod(): privateModule.publicClass { // Error
->myPublicStaticMethod : () => publicClass
+>myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     myPublicMethod(): privateModule.publicClass { // Error
->myPublicMethod : () => publicClass
+>myPublicMethod : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     static myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : () => publicClass
+>myPublicStaticMethod1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     myPublicMethod1() { // Error
->myPublicMethod1 : () => publicClass
+>myPublicMethod1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
 }
 export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
->publicFunctionWithPrivateModuleParameterTypes : () => publicClass
+>publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
     return null;
 }
 export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
->publicFunctionWithPrivateModuleParameterTypes1 : () => publicClass
+>publicFunctionWithPrivateModuleParameterTypes1 : () => privateModule.publicClass
 
     return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
 }
 export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
->publicAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
+>publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
 interface privateInterfaceWithPrivateModuleParameterTypes {
@@ -402,60 +402,60 @@ interface privateInterfaceWithPrivateModuleParameterTypes {
 >privateModule : any
 
     myMethod(): privateModule.publicClass;
->myMethod : () => publicClass
+>myMethod : () => privateModule.publicClass
 >privateModule : any
 }
 class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
 
     static myPublicStaticMethod(): privateModule.publicClass { 
->myPublicStaticMethod : () => publicClass
+>myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     myPublicMethod(): privateModule.publicClass { 
->myPublicMethod : () => publicClass
+>myPublicMethod : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     static myPublicStaticMethod1() { 
->myPublicStaticMethod1 : () => publicClass
+>myPublicStaticMethod1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     myPublicMethod1() { 
->myPublicMethod1 : () => publicClass
+>myPublicMethod1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
 }
 function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
->privateFunctionWithPrivateModuleParameterTypes : () => publicClass
+>privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
     return null;
 }
 function privateFunctionWithPrivateModuleParameterTypes1() { 
->privateFunctionWithPrivateModuleParameterTypes1 : () => publicClass
+>privateFunctionWithPrivateModuleParameterTypes1 : () => privateModule.publicClass
 
     return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
 }
 declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
->privateAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
+>privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
 export module publicModule {
@@ -794,60 +794,60 @@ export module publicModule {
 >privateModule : any
 
         myMethod(): privateModule.publicClass; // Error
->myMethod : () => publicClass
+>myMethod : () => privateModule.publicClass
 >privateModule : any
     }
     export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
 
         static myPublicStaticMethod(): privateModule.publicClass { // Error
->myPublicStaticMethod : () => publicClass
+>myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         myPublicMethod(): privateModule.publicClass { // Error
->myPublicMethod : () => publicClass
+>myPublicMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : () => publicClass
+>myPublicStaticMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         myPublicMethod1() { // Error
->myPublicMethod1 : () => publicClass
+>myPublicMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
->publicFunctionWithPrivateModuleParameterTypes : () => publicClass
+>publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
->publicFunctionWithPrivateModuleParameterTypes1 : () => publicClass
+>publicFunctionWithPrivateModuleParameterTypes1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
->publicAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
+>publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
@@ -862,60 +862,60 @@ export module publicModule {
 >privateModule : any
 
         myMethod(): privateModule.publicClass;
->myMethod : () => publicClass
+>myMethod : () => privateModule.publicClass
 >privateModule : any
     }
     class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
 
         static myPublicStaticMethod(): privateModule.publicClass {
->myPublicStaticMethod : () => publicClass
+>myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         myPublicMethod(): privateModule.publicClass {
->myPublicMethod : () => publicClass
+>myPublicMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static myPublicStaticMethod1() {
->myPublicStaticMethod1 : () => publicClass
+>myPublicStaticMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         myPublicMethod1() {
->myPublicMethod1 : () => publicClass
+>myPublicMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
->privateFunctionWithPrivateModuleParameterTypes : () => publicClass
+>privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     function privateFunctionWithPrivateModuleParameterTypes1() {
->privateFunctionWithPrivateModuleParameterTypes1 : () => publicClass
+>privateFunctionWithPrivateModuleParameterTypes1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
->privateAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
+>privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 }
 
@@ -2257,60 +2257,60 @@ module publicModuleInGlobal {
 >privateModule : any
 
         myMethod(): privateModule.publicClass; // Error
->myMethod : () => publicClass
+>myMethod : () => privateModule.publicClass
 >privateModule : any
     }
     export class publicClassWithPrivateModuleParameterTypes {
 >publicClassWithPrivateModuleParameterTypes : publicClassWithPrivateModuleParameterTypes
 
         static myPublicStaticMethod(): privateModule.publicClass { // Error
->myPublicStaticMethod : () => publicClass
+>myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         myPublicMethod(): privateModule.publicClass { // Error
->myPublicMethod : () => publicClass
+>myPublicMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : () => publicClass
+>myPublicStaticMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         myPublicMethod1() { // Error
->myPublicMethod1 : () => publicClass
+>myPublicMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
->publicFunctionWithPrivateModuleParameterTypes : () => publicClass
+>publicFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
->publicFunctionWithPrivateModuleParameterTypes1 : () => publicClass
+>publicFunctionWithPrivateModuleParameterTypes1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
->publicAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
+>publicAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
     interface privateInterfaceWithPrivateModuleParameterTypes {
@@ -2325,59 +2325,59 @@ module publicModuleInGlobal {
 >privateModule : any
 
         myMethod(): privateModule.publicClass;
->myMethod : () => publicClass
+>myMethod : () => privateModule.publicClass
 >privateModule : any
     }
     class privateClassWithPrivateModuleParameterTypes {
 >privateClassWithPrivateModuleParameterTypes : privateClassWithPrivateModuleParameterTypes
 
         static myPublicStaticMethod(): privateModule.publicClass {
->myPublicStaticMethod : () => publicClass
+>myPublicStaticMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         myPublicMethod(): privateModule.publicClass {
->myPublicMethod : () => publicClass
+>myPublicMethod : () => privateModule.publicClass
 >privateModule : any
 
             return null;
         }
         static myPublicStaticMethod1() {
->myPublicStaticMethod1 : () => publicClass
+>myPublicStaticMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
         myPublicMethod1() {
->myPublicMethod1 : () => publicClass
+>myPublicMethod1 : () => privateModule.publicClass
 
             return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
         }
     }
     function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
->privateFunctionWithPrivateModuleParameterTypes : () => publicClass
+>privateFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 
         return null;
     }
     function privateFunctionWithPrivateModuleParameterTypes1() {
->privateFunctionWithPrivateModuleParameterTypes1 : () => publicClass
+>privateFunctionWithPrivateModuleParameterTypes1 : () => privateModule.publicClass
 
         return new privateModule.publicClass();
->new privateModule.publicClass() : publicClass
->privateModule.publicClass : typeof publicClass
+>new privateModule.publicClass() : privateModule.publicClass
+>privateModule.publicClass : typeof privateModule.publicClass
 >privateModule : typeof privateModule
->publicClass : typeof publicClass
+>publicClass : typeof privateModule.publicClass
     }
     declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
->privateAmbientFunctionWithPrivateModuleParameterTypes : () => publicClass
+>privateAmbientFunctionWithPrivateModuleParameterTypes : () => privateModule.publicClass
 >privateModule : any
 }

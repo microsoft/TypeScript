@@ -24,3 +24,15 @@ class B extends x {
 }
 var q;
 q.s;
+
+
+//// [declarationEmitExpressionInExtends.d.ts]
+declare var x: {
+    new <T>(s: any);
+};
+declare class Q {
+    s: string;
+}
+declare class B extends x<string> {
+}
+declare var q: B;

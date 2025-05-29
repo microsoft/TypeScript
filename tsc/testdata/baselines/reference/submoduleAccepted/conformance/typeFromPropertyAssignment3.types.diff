@@ -57,12 +57,12 @@
  /** @type {Outer.Inner} */
  var da
 ->da : I
-+>da : Inner
++>da : Outer.Inner
 
  da.x
 ->da.x : number
 ->da : I
 ->x : number
 +>da.x : any
-+>da : Inner
++>da : Outer.Inner
 +>x : any

@@ -9,3 +9,9 @@ const a = 2;
 const a = 2;
 //// [filename.mjs]
 const a = 2;
+
+
+//// [filename.d.cts]
+declare const a = 2;
+//// [filename.d.mts]
+declare const a = 2;

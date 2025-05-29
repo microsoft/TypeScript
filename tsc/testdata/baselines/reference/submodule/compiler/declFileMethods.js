@@ -319,3 +319,93 @@ class c2 {
         return a;
     }
 }
+
+
+//// [declFileMethods_0.d.ts]
+export declare class c1 {
+    /** This comment should appear for foo*/
+    foo(): void;
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
+    /** This comment should appear for privateFoo*/
+    private privateFoo;
+    /** This is comment for function signature*/
+    private privateFooWithParameters;
+    private privateFooWithRestParameters;
+    private privateFooWithOverloads;
+    /** This comment should appear for static foo*/
+    static staticFoo(): void;
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
+    static staticFooWithRestParameters(a: string, ...rests: string[]): string;
+    static staticFooWithOverloads(a: string): string;
+    static staticFooWithOverloads(a: number): number;
+    /** This comment should appear for privateStaticFoo*/
+    private static privateStaticFoo;
+    /** This is comment for function signature*/
+    private static privateStaticFooWithParameters;
+    private static privateStaticFooWithRestParameters;
+    private static privateStaticFooWithOverloads;
+}
+export interface I1 {
+    /** This comment should appear for foo*/
+    foo(): string;
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
+}
+//// [declFileMethods_1.d.ts]
+declare class c2 {
+    /** This comment should appear for foo*/
+    foo(): void;
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
+    /** This comment should appear for privateFoo*/
+    private privateFoo;
+    /** This is comment for function signature*/
+    private privateFooWithParameters;
+    private privateFooWithRestParameters;
+    private privateFooWithOverloads;
+    /** This comment should appear for static foo*/
+    static staticFoo(): void;
+    /** This is comment for function signature*/
+    static staticFooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
+    static staticFooWithRestParameters(a: string, ...rests: string[]): string;
+    static staticFooWithOverloads(a: string): string;
+    static staticFooWithOverloads(a: number): number;
+    /** This comment should appear for privateStaticFoo*/
+    private static privateStaticFoo;
+    /** This is comment for function signature*/
+    private static privateStaticFooWithParameters;
+    private static privateStaticFooWithRestParameters;
+    private static privateStaticFooWithOverloads;
+}
+interface I2 {
+    /** This comment should appear for foo*/
+    foo(): string;
+    /** This is comment for function signature*/
+    fooWithParameters(/** this is comment about a*/ a: string, 
+    /** this is comment for b*/
+    b: number): void;
+    fooWithRestParameters(a: string, ...rests: string[]): string;
+    fooWithOverloads(a: string): string;
+    fooWithOverloads(a: number): number;
+}

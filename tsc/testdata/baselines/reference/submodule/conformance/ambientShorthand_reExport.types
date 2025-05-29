@@ -17,11 +17,11 @@ import {x} from "./reExportX";
 >x : any
 
 import * as $ from "./reExportAll";
->$ : typeof import("reExportAll")
+>$ : typeof $
 
 // '$' is not callable, it is an object.
 x($);
 >x($) : any
 >x : any
->$ : typeof import("reExportAll")
+>$ : typeof $
 

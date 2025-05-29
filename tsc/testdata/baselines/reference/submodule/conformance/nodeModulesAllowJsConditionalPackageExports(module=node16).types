@@ -3,22 +3,22 @@
 === index.js ===
 // esm format file
 import * as cjs from "package/cjs";
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 import * as mjs from "package/mjs";
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 import * as type from "package";
->type : typeof import("index")
+>type : typeof type
 
 cjs;
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 mjs;
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 type;
->type : typeof import("index")
+>type : typeof type
 
 import * as cjsi from "inner/a";
 >cjsi : any
@@ -27,7 +27,7 @@ import * as mjsi from "inner/b";
 >mjsi : any
 
 import * as typei from "inner";
->typei : typeof import("node_modules/inner/index")
+>typei : typeof typei
 
 import * as ts from "inner/types";
 >ts : any
@@ -44,7 +44,7 @@ mjsi.mjsSource;
 
 typei.mjsSource;
 >typei.mjsSource : any
->typei : typeof import("node_modules/inner/index")
+>typei : typeof typei
 >mjsSource : any
 
 ts.mjsSource;
@@ -55,22 +55,22 @@ ts.mjsSource;
 === index.mjs ===
 // esm format file
 import * as cjs from "package/cjs";
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 import * as mjs from "package/mjs";
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 import * as type from "package";
->type : typeof import("index")
+>type : typeof type
 
 cjs;
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 mjs;
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 type;
->type : typeof import("index")
+>type : typeof type
 
 import * as cjsi from "inner/a";
 >cjsi : any
@@ -79,7 +79,7 @@ import * as mjsi from "inner/b";
 >mjsi : any
 
 import * as typei from "inner";
->typei : typeof import("node_modules/inner/index")
+>typei : typeof typei
 
 import * as ts from "inner/types";
 >ts : any
@@ -96,7 +96,7 @@ mjsi.mjsSource;
 
 typei.mjsSource;
 >typei.mjsSource : any
->typei : typeof import("node_modules/inner/index")
+>typei : typeof typei
 >mjsSource : any
 
 ts.mjsSource;
@@ -107,22 +107,22 @@ ts.mjsSource;
 === index.cjs ===
 // cjs format file
 import * as cjs from "package/cjs";
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 import * as mjs from "package/mjs";
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 import * as type from "package";
->type : typeof import("index")
+>type : typeof type
 
 cjs;
->cjs : typeof import("index")
+>cjs : typeof cjs
 
 mjs;
->mjs : typeof import("index")
+>mjs : typeof mjs
 
 type;
->type : typeof import("index")
+>type : typeof type
 
 import * as cjsi from "inner/a";
 >cjsi : any
@@ -131,7 +131,7 @@ import * as mjsi from "inner/b";
 >mjsi : any
 
 import * as typei from "inner";
->typei : typeof import("node_modules/inner/index")
+>typei : typeof typei
 
 import * as ts from "inner/types";
 >ts : any
@@ -148,7 +148,7 @@ mjsi.cjsSource;
 
 typei.implicitCjsSource;
 >typei.implicitCjsSource : true
->typei : typeof import("node_modules/inner/index")
+>typei : typeof typei
 >implicitCjsSource : true
 
 ts.cjsSource;
@@ -165,7 +165,7 @@ import * as mjs from "inner/b";
 >mjs : any
 
 import * as type from "inner";
->type : typeof import("node_modules/inner/index")
+>type : typeof type
 
 import * as ts from "inner/types";
 >ts : any
@@ -177,7 +177,7 @@ export { mjs };
 >mjs : any
 
 export { type };
->type : typeof import("node_modules/inner/index")
+>type : typeof type
 
 export { ts };
 >ts : any
@@ -195,7 +195,7 @@ import * as mjs from "inner/b";
 >mjs : any
 
 import * as type from "inner";
->type : typeof import("node_modules/inner/index")
+>type : typeof type
 
 import * as ts from "inner/types";
 >ts : any
@@ -207,7 +207,7 @@ export { mjs };
 >mjs : any
 
 export { type };
->type : typeof import("node_modules/inner/index")
+>type : typeof type
 
 export { ts };
 >ts : any
@@ -225,7 +225,7 @@ import * as mjs from "inner/b";
 >mjs : any
 
 import * as type from "inner";
->type : typeof import("node_modules/inner/index")
+>type : typeof type
 
 import * as ts from "inner/types";
 >ts : any
@@ -237,7 +237,7 @@ export { mjs };
 >mjs : any
 
 export { type };
->type : typeof import("node_modules/inner/index")
+>type : typeof type
 
 export { ts };
 >ts : any

@@ -77,15 +77,3 @@
  }
 
  function f(x: KeysExtendedBy<M, number>) {
-@@= skipped -21, +21 lines =@@
-
- type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
- >NameMap : Symbol(NameMap, Decl(mappedTypeAsClauses.ts, 130, 7))
-->'a' : Symbol('a', Decl(mappedTypeAsClauses.ts, 132, 16))
-->'b' : Symbol('b', Decl(mappedTypeAsClauses.ts, 132, 26))
-->'c' : Symbol('c', Decl(mappedTypeAsClauses.ts, 132, 36))
-+>'a' : Symbol(a, Decl(mappedTypeAsClauses.ts, 132, 16))
-+>'b' : Symbol(b, Decl(mappedTypeAsClauses.ts, 132, 26))
-+>'c' : Symbol(c, Decl(mappedTypeAsClauses.ts, 132, 36))
-
- // Distributive, will be simplified

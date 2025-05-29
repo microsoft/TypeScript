@@ -3,5 +3,5 @@
 === varArgWithNoParamName.ts ===
 function t1(...) {}
 >t1 : Symbol(t1, Decl(varArgWithNoParamName.ts, 0, 0))
-> : Symbol(, Decl(varArgWithNoParamName.ts, 0, 12))
+> : Symbol((Missing), Decl(varArgWithNoParamName.ts, 0, 12))
 

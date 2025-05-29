@@ -7,14 +7,14 @@ export class C {}
 
 === ns.ts ===
 import type * as types from './types';
->types : typeof import("types")
+>types : typeof types
 
 export { types };
->types : typeof import("types")
+>types : typeof types
 
 === index.ts ===
 import { types } from './ns';
->types : typeof import("types")
+>types : typeof types
 
 import type { C, I } from './types';
 >C : C
@@ -23,10 +23,10 @@ import type { C, I } from './types';
 interface Q extends C {}
 interface R extends I {}
 interface S extends types.C {}
->types : typeof import("types")
+>types : typeof types
 
 interface T extends types.I {}
->types : typeof import("types")
+>types : typeof types
 
 class U extends C {} // Error
 >U : U
@@ -35,6 +35,6 @@ class U extends C {} // Error
 class V extends types.C {} // Error
 >V : V
 >types.C : C
->types : typeof import("types")
+>types : typeof types
 >C : typeof C
 

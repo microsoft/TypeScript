@@ -5,6 +5,6 @@
 
      "-Infinity" = 1
 ->"-Infinity" : (typeof A)["-Infinity"]
-+>"-Infinity" : A."-Infinity"
++>"-Infinity" : typeof A["-Infinity"]
  >1 : 1
  }

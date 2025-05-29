@@ -2,30 +2,30 @@
 
 === es5ExportDefaultClassDeclaration3.ts ===
 var before: C = new C();
->before : default
->new C() : default
->C : typeof default
+>before : C
+>new C() : C
+>C : typeof C
 
 export default class C {
->C : default
+>C : C
 
     method(): C {
->method : () => default
+>method : () => C
 
         return new C();
->new C() : default
->C : typeof default
+>new C() : C
+>C : typeof C
     }
 }
 
 var after: C = new C();
->after : default
->new C() : default
->C : typeof default
+>after : C
+>new C() : C
+>C : typeof C
 
 var t: typeof C = C;
->t : typeof default
->C : typeof default
->C : typeof default
+>t : typeof C
+>C : typeof C
+>C : typeof C
 
 

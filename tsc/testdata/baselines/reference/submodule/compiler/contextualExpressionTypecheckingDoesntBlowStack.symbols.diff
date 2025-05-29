@@ -9,8 +9,7 @@
  }
 
  export default class Operation {
-->Operation : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
-+>Operation : Symbol(default, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
+ >Operation : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
 
      validateParameters(parameterValues: any) : IValidationError[] | null {
 ->validateParameters : Symbol(Operation.validateParameters, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 5, 32))
@@ -30,17 +29,6 @@
  >parameterValues : Symbol(parameterValues, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 6, 23))
 
              const parameter: any = (this as any).getParameter();;
- >parameter : Symbol(parameter, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 9, 17))
-->this : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
-+>this : Symbol(default, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
-
-             const values = (this as any).getValues();
- >values : Symbol(values, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 10, 17))
-->this : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
-+>this : Symbol(default, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
-
-             const innerResult = parameter.validate(values[parameter.oaParameter.name]);
- >innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
 @@= skipped -26, +26 lines =@@
                  // Commenting out this line will fix the problem.
                  result = (result || []).concat(innerResult);

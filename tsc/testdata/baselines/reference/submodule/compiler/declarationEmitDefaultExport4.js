@@ -9,3 +9,7 @@ export default function () {
 export default function () {
     return 1;
 }
+
+
+//// [declarationEmitDefaultExport4.d.ts]
+export default function (): number;

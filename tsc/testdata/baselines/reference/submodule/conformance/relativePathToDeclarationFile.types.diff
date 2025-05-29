@@ -8,12 +8,9 @@
 +>foo : any
 
  import other = require('./other');
-->other : typeof other
-+>other : typeof import("test/other")
-
- import relMod = require('./sub/relMod');
-->relMod : typeof relMod
-+>relMod : typeof Test
+ >other : typeof other
+@@= skipped -9, +9 lines =@@
+ >relMod : typeof relMod
 
  if(foo.M2.x){
 ->foo.M2.x : boolean
@@ -28,21 +25,8 @@
 +>x : any
 
  	var x = new relMod(other.M2.x.charCodeAt(0));
-->x : relMod
-->new relMod(other.M2.x.charCodeAt(0)) : relMod
-->relMod : typeof relMod
-+>x : Test
-+>new relMod(other.M2.x.charCodeAt(0)) : Test
-+>relMod : typeof Test
- >other.M2.x.charCodeAt(0) : number
- >other.M2.x.charCodeAt : (index: number) => number
- >other.M2.x : string
-->other.M2 : typeof other.M2
-->other : typeof other
-->M2 : typeof other.M2
-+>other.M2 : typeof M2
-+>other : typeof import("test/other")
-+>M2 : typeof M2
+ >x : relMod
+@@= skipped -19, +19 lines =@@
  >x : string
  >charCodeAt : (index: number) => number
  >0 : 0

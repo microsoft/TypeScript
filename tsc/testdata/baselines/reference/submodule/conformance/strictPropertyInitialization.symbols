@@ -202,7 +202,7 @@ class C8 {
 >a : Symbol(a, Decl(strictPropertyInitialization.ts, 88, 10))
 
     "b": number;
->"b" : Symbol(b, Decl(strictPropertyInitialization.ts, 89, 14))
+>"b" : Symbol("b", Decl(strictPropertyInitialization.ts, 89, 14))
 
     0: number;
 >0 : Symbol(0, Decl(strictPropertyInitialization.ts, 90, 16))
@@ -324,7 +324,7 @@ class C12 {
 >C12 : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
 
     [a]: number;
->[a] : Symbol(a, Decl(strictPropertyInitialization.ts, 137, 11))
+>[a] : Symbol([a], Decl(strictPropertyInitialization.ts, 137, 11))
 >a : Symbol(a, Decl(strictPropertyInitialization.ts, 134, 5))
 
     [b]: number;
@@ -332,8 +332,8 @@ class C12 {
 >b : Symbol(b, Decl(strictPropertyInitialization.ts, 135, 5))
 
     ['c']: number;
->['c'] : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
->'c' : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
+>['c'] : Symbol(['c'], Decl(strictPropertyInitialization.ts, 139, 16))
+>'c' : Symbol(['c'], Decl(strictPropertyInitialization.ts, 139, 16))
 
     constructor() {
         this[a] = 1;
@@ -346,7 +346,7 @@ class C12 {
 
         this['c'] = 1;
 >this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
->'c' : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
+>'c' : Symbol(['c'], Decl(strictPropertyInitialization.ts, 139, 16))
     }
 }
 
@@ -363,7 +363,7 @@ class C13 {
 >C13 : Symbol(C13, Decl(strictPropertyInitialization.ts, 152, 1))
 
     [E.A]: number;
->[E.A] : Symbol(A, Decl(strictPropertyInitialization.ts, 153, 11))
+>[E.A] : Symbol([E.A], Decl(strictPropertyInitialization.ts, 153, 11))
 >E.A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))
 >E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
 >A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))

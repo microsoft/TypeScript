@@ -17,8 +17,8 @@ declare module B {
     }
 }
 new B.C(); 
->new B.C() : C
->B.C : typeof C
+>new B.C() : B.C
+>B.C : typeof B.C
 >B : typeof B
->C : typeof C
+>C : typeof B.C
 

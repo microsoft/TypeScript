@@ -26,9 +26,9 @@ module M {
 var p = M.Color.Blue; // ok
 >p : number
 >M.Color.Blue : number
->M.Color : typeof Color
+>M.Color : typeof M.Color
 >M : typeof M
->Color : typeof Color
+>Color : typeof M.Color
 >Blue : number
 
 module M {
@@ -77,28 +77,28 @@ module M {
 
 M.foo() // ok
 >M.foo() : void
->M.foo : typeof foo
+>M.foo : typeof M.foo
 >M : typeof M
->foo : typeof foo
+>foo : typeof M.foo
 
 M.foo.x // error
 >M.foo.x : any
->M.foo : typeof foo
+>M.foo : typeof M.foo
 >M : typeof M
->foo : typeof foo
+>foo : typeof M.foo
 >x : any
 
 M.foo.y // ok
 >M.foo.y : number
->M.foo : typeof foo
+>M.foo : typeof M.foo
 >M : typeof M
->foo : typeof foo
+>foo : typeof M.foo
 >y : number
 
 M.foo.z // error
 >M.foo.z : any
->M.foo : typeof foo
+>M.foo : typeof M.foo
 >M : typeof M
->foo : typeof foo
+>foo : typeof M.foo
 >z : any
 

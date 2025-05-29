@@ -10,14 +10,14 @@ const dynPropName = "data-dyn";
 >"data-dyn" : "data-dyn"
 
 export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (
->ExampleFunctionalComponent : (__0: { data-dyn: any; data-testid: any; }) => Element
->({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : (__0: { data-dyn: any; data-testid: any; }) => Element
+>ExampleFunctionalComponent : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-dyn": any; "data-testid": any; }) => JSX.Element
+>({ "data-testid": dataTestId, [dynPropName]: dynProp }) => (    <>Hello</>) : ({ "data-testid": dataTestId, [dynPropName]: dynProp }: { "data-dyn": any; "data-testid": any; }) => JSX.Element
 >dataTestId : any
 >dynPropName : "data-dyn"
 >dynProp : any
->(    <>Hello</>) : Element
+>(    <>Hello</>) : JSX.Element
 
     <>Hello</>
-><>Hello</> : Element
+><>Hello</> : JSX.Element
 
 );

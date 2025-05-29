@@ -31,3 +31,17 @@ var D;
     D["g"] = CONST;
     if (typeof D.g !== "string") D[D.g] = "g";
 })(D || (D = {}));
+
+
+//// [constEnum2.d.ts]
+// An enum declaration that specifies a const modifier is a constant enum declaration.
+// In a constant enum declaration, all members must have constant values and
+// it is an error for a member declaration to specify an expression that isn't classified as a constant enum expression.
+// Error : not a constant enum expression
+declare const CONST: number;
+declare const enum D {
+    d = 10,
+    e,
+    f,
+    g = 0
+}

@@ -2,7 +2,7 @@
 
 === decoratorMetadataWithConstructorType.ts ===
 declare var console: {
->console : { log: (msg: string) => void; }
+>console : { log(msg: string): void; }
 
     log(msg: string): void;
 >log : (msg: string) => void
@@ -16,7 +16,7 @@ class A {
     constructor() { console.log('new A'); }
 >console.log('new A') : void
 >console.log : (msg: string) => void
->console : { log: (msg: string) => void; }
+>console : { log(msg: string): void; }
 >log : (msg: string) => void
 >'new A' : "new A"
 }

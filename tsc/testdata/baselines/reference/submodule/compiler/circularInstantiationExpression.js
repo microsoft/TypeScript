@@ -7,3 +7,7 @@ foo("");
 
 //// [circularInstantiationExpression.js]
 foo("");
+
+
+//// [circularInstantiationExpression.d.ts]
+declare function foo<T>(t: T): typeof foo<T>;

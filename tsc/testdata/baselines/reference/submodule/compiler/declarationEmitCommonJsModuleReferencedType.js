@@ -32,3 +32,8 @@ const foo_1 = require("foo");
 const root_1 = require("root");
 exports.x = (0, foo_1.foo)();
 exports.y = (0, root_1.bar)();
+
+
+//// [entry.d.ts]
+export declare const x: any;
+export declare const y: import("root").RootProps;

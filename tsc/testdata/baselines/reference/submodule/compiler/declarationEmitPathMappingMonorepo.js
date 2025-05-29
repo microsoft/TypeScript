@@ -23,3 +23,7 @@ const a_1 = require("@ts-bug/a");
 function b(text) {
     return (0, a_1.a)(text);
 }
+
+
+//// [index.d.ts]
+export declare function b(text: string): import("@ts-bug/a").AText;

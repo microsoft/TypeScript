@@ -2,8 +2,8 @@
 
 === usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport6.js");
->x : typeof import("lateBoundAssignmentDeclarationSupport6")
->require("./lateBoundAssignmentDeclarationSupport6.js") : typeof import("lateBoundAssignmentDeclarationSupport6")
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport6.js") : typeof x
 >require : any
 >"./lateBoundAssignmentDeclarationSupport6.js" : "./lateBoundAssignmentDeclarationSupport6.js"
 
@@ -11,7 +11,7 @@ const inst =  new x.F();
 >inst : any
 >new x.F() : any
 >x.F : () => void
->x : typeof import("lateBoundAssignmentDeclarationSupport6")
+>x : typeof x
 >F : () => void
 
 const y = inst["my-fake-sym"];
@@ -25,7 +25,7 @@ const z = inst[x.S];
 >inst[x.S] : any
 >inst : any
 >x.S : unique symbol
->x : typeof import("lateBoundAssignmentDeclarationSupport6")
+>x : typeof x
 >S : unique symbol
 
 === lateBoundAssignmentDeclarationSupport6.js ===
@@ -97,18 +97,18 @@ const _z = inst[_sym];
 module.exports.F = F;
 >module.exports.F = F : () => void
 >module.exports.F : () => void
->module.exports : typeof import("lateBoundAssignmentDeclarationSupport6")
->module : { "lateBoundAssignmentDeclarationSupport6": typeof import("lateBoundAssignmentDeclarationSupport6"); }
->exports : typeof import("lateBoundAssignmentDeclarationSupport6")
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
+>module : { "\"lateBoundAssignmentDeclarationSupport6\"": typeof import("./lateBoundAssignmentDeclarationSupport6"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
 >F : () => void
 >F : () => void
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("lateBoundAssignmentDeclarationSupport6")
->module : { "lateBoundAssignmentDeclarationSupport6": typeof import("lateBoundAssignmentDeclarationSupport6"); }
->exports : typeof import("lateBoundAssignmentDeclarationSupport6")
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
+>module : { "\"lateBoundAssignmentDeclarationSupport6\"": typeof import("./lateBoundAssignmentDeclarationSupport6"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport6")
 >S : unique symbol
 >_sym : unique symbol
 

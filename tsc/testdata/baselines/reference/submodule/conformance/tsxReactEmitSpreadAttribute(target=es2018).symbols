@@ -124,7 +124,7 @@ export function T9(a: any, b: any, c: any, d: any) {
     return <div className={"T9"} { ...{ "__proto__": null } }>T9</div>;
 >div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 >className : Symbol(className, Decl(test.tsx, 35, 15))
->"__proto__" : Symbol(__proto__, Decl(test.tsx, 35, 39))
+>"__proto__" : Symbol("__proto__", Decl(test.tsx, 35, 39))
 >div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 
@@ -156,8 +156,8 @@ export function T11(a: any, b: any, c: any, d: any) {
     return <div className={"T11"} { ...{ ["__proto__"]: null } }>T11</div>;
 >div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 >className : Symbol(className, Decl(test.tsx, 45, 15))
->["__proto__"] : Symbol(__proto__, Decl(test.tsx, 45, 40))
->"__proto__" : Symbol(__proto__, Decl(test.tsx, 45, 40))
+>["__proto__"] : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
+>"__proto__" : Symbol(["__proto__"], Decl(test.tsx, 45, 40))
 >div : Symbol(div, Decl(react16.d.ts, 2546, 114))
 }
 

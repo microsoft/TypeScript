@@ -8,7 +8,7 @@
 module.exports = C
 >module.exports = C : () => void
 >module.exports : () => void
->module : { C: () => void; }
+>module : { C(): void; }
 >exports : () => void
 >C : () => void
 

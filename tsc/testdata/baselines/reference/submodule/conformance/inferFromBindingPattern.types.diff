@@ -1,49 +1,31 @@
 --- old.inferFromBindingPattern.types
 +++ new.inferFromBindingPattern.types
-@@= skipped -29, +29 lines =@@
- // Repro from #30379
-
- function foo<T = number>(): [T] {
-->foo : <T = number>() => [T]
-+>foo : <T>() => [T]
-
- 	return [42 as any]
- >[42 as any] : [any]
-@@= skipped -10, +10 lines =@@
- const [x] = foo();  // [number]
- >x : number
- >foo() : [number]
-->foo : <T = number>() => [T]
-+>foo : <T>() => [T]
-
- // Repro from #35291
-
-@@= skipped -22, +22 lines =@@
+@@= skipped -61, +61 lines =@@
  }
 
  declare function selectJohn<K = Person>(props?: SelectProps<Person, K>): SelectResult<Person, K>;
 ->selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
-+>selectJohn : <K>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
++>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
  >props : SelectProps<Person, K> | undefined
 
  const [person] = selectJohn();
  >person : Person
  >selectJohn() : SelectResult<Person, Person>
 ->selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
-+>selectJohn : <K>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
++>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
 
  const [any, whatever] = selectJohn();
  >any : Person
  >whatever : Person
  >selectJohn() : SelectResult<Person, Person>
 ->selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
-+>selectJohn : <K>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
++>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
 
  const john = selectJohn();
  >john : SelectResult<Person, Person>
  >selectJohn() : SelectResult<Person, Person>
 ->selectJohn : <K = Person>(props?: SelectProps<Person, K>) => SelectResult<Person, K>
-+>selectJohn : <K>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
++>selectJohn : <K = Person>(props?: SelectProps<Person, K> | undefined) => SelectResult<Person, K>
 
  const [personAgain, nufinspecial] = john;
  >personAgain : Person
@@ -52,7 +34,7 @@
 
  declare function stringy<T = string>(arg?: T): T;
 ->stringy : <T = string>(arg?: T) => T
-+>stringy : <T>(arg?: T | undefined) => T
++>stringy : <T = string>(arg?: T | undefined) => T
  >arg : T | undefined
 
  const isStringTuple = makeTuple(stringy());  // [string]
@@ -61,7 +43,7 @@
  >makeTuple : <T1>(arg: T1) => [T1]
  >stringy() : string
 ->stringy : <T = string>(arg?: T) => T
-+>stringy : <T>(arg?: T | undefined) => T
++>stringy : <T = string>(arg?: T | undefined) => T
 
  const [isAny] = makeTuple(stringy());  // [string]
  >isAny : string
@@ -69,4 +51,4 @@
  >makeTuple : <T1>(arg: T1) => [T1]
  >stringy() : string
 ->stringy : <T = string>(arg?: T) => T
-+>stringy : <T>(arg?: T | undefined) => T
++>stringy : <T = string>(arg?: T | undefined) => T

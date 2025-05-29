@@ -60,3 +60,11 @@ type;
 // esm format file
 import * as type from "#type";
 type;
+
+
+//// [index.d.cts]
+export {};
+//// [index.d.ts]
+export {};
+//// [index.d.mts]
+export {};

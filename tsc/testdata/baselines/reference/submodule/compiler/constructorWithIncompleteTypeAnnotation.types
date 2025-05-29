@@ -202,14 +202,14 @@ module TypeScriptAllInOne {
 >local : number
 
             var local5 = <fs.File>null;
->local5 : File
-><fs.File>null : File
+>local5 : fs.File
+><fs.File>null : fs.File
 >fs : any
 
             var local6 = local5 instanceof fs.File;
 >local6 : boolean
 >local5 instanceof fs.File : boolean
->local5 : File
+>local5 : fs.File
 >fs.File : any
 >fs : any
 >File : any
@@ -967,8 +967,8 @@ interface IDisposable {
 TypeScriptAllInOne.Program.Main();
 >TypeScriptAllInOne.Program.Main() : void
 >TypeScriptAllInOne.Program.Main : (...args: string[]) => void
->TypeScriptAllInOne.Program : typeof Program
+>TypeScriptAllInOne.Program : typeof TypeScriptAllInOne.Program
 >TypeScriptAllInOne : typeof TypeScriptAllInOne
->Program : typeof Program
+>Program : typeof TypeScriptAllInOne.Program
 >Main : (...args: string[]) => void
 

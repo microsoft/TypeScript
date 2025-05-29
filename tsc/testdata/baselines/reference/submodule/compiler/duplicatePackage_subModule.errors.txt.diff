@@ -3,7 +3,7 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +/index.ts(4,7): error TS2322: Type 'import("/node_modules/a/node_modules/foo/Foo").default' is not assignable to type 'import("/node_modules/foo/Foo").default'.
-+  Property 'source' is protected but type 'default' is not a class derived from 'default'.
++  Property 'source' is protected but type 'Foo' is not a class derived from 'Foo'.
 +
 +
 +==== /index.ts (1 errors) ====
@@ -13,7 +13,7 @@
 +    const o: Foo = a.o;
 +          ~
 +!!! error TS2322: Type 'import("/node_modules/a/node_modules/foo/Foo").default' is not assignable to type 'import("/node_modules/foo/Foo").default'.
-+!!! error TS2322:   Property 'source' is protected but type 'default' is not a class derived from 'default'.
++!!! error TS2322:   Property 'source' is protected but type 'Foo' is not a class derived from 'Foo'.
 +    
 +==== /node_modules/a/index.d.ts (0 errors) ====
 +    import Foo from "foo/Foo";

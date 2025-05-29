@@ -96,7 +96,7 @@
      // other
      "constructor" = 16
 ->"constructor" : Symbol(C["constructor"], Decl(plainJSGrammarErrors.js, 37, 26))
-+>"constructor" : Symbol(constructor, Decl(plainJSGrammarErrors.js, 37, 26))
++>"constructor" : Symbol("constructor", Decl(plainJSGrammarErrors.js, 37, 26))
  }
  class {
      missingName = true

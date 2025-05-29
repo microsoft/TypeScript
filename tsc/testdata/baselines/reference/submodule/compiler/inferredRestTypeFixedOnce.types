@@ -9,7 +9,7 @@ function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
 wrap(({ cancelable } = {}) => {});
 >wrap(({ cancelable } = {}) => {}) : void
 >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void
->({ cancelable } = {}) => {} : (__0?: { cancelable: any; }) => void
+>({ cancelable } = {}) => {} : ({ cancelable }?: { cancelable: any; }) => void
 >cancelable : any
 >{} : {}
 

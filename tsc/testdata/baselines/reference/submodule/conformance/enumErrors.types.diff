@@ -5,12 +5,12 @@
      postColonValueComma: 2,
  >postColonValueComma : E13.postColonValueComma
 ->2 : (typeof E13)["2"]
-+>2 : E13.2
++>2 : typeof E13["2"]
 
      postColonValueSemicolon: 3;
  >postColonValueSemicolon : E13.postColonValueSemicolon
 ->3 : (typeof E13)["3"]
-+>3 : E13.3
++>3 : typeof E13["3"]
 
  };
 
@@ -19,6 +19,6 @@
  >any : E14.any
  >"hello" : E14.hello
 ->1 : (typeof E14)["1"]
-+>1 : E14.1
++>1 : typeof E14["1"]
  >c : E14.c
  >d : E14.d

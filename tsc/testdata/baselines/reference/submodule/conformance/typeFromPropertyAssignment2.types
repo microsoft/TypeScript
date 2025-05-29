@@ -39,10 +39,10 @@ ok.y
 
 /** @type {Outer.Inner} */
 var oc
->oc : Inner
+>oc : Outer.Inner
 
 oc.x
 >oc.x : any
->oc : Inner
+>oc : Outer.Inner
 >x : any
 

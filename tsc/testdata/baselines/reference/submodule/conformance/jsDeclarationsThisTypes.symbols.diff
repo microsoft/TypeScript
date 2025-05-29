@@ -9,12 +9,7 @@
 
          return this;
  >this : Symbol(A, Decl(index.js, 0, 0))
-     }
- }
- export default class Base extends A {
-->Base : Symbol(Base, Decl(index.js, 5, 1))
-+>Base : Symbol(default, Decl(index.js, 5, 1))
- >A : Symbol(A, Decl(index.js, 0, 0))
+@@= skipped -12, +12 lines =@@
 
      // This method is required to reproduce #35932
      verify() { }

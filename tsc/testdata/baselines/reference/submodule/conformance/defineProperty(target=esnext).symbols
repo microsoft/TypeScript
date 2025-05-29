@@ -20,11 +20,11 @@ class A {
 >c : Symbol(c, Decl(defineProperty.ts, 3, 5))
 
     ["computed"] = 13
->["computed"] : Symbol(computed, Decl(defineProperty.ts, 4, 13))
->"computed" : Symbol(computed, Decl(defineProperty.ts, 4, 13))
+>["computed"] : Symbol(["computed"], Decl(defineProperty.ts, 4, 13))
+>"computed" : Symbol(["computed"], Decl(defineProperty.ts, 4, 13))
 
     ;[x] = 14
->[x] : Symbol(p, Decl(defineProperty.ts, 6, 5))
+>[x] : Symbol([x], Decl(defineProperty.ts, 6, 5))
 >x : Symbol(x, Decl(defineProperty.ts, 0, 3))
 
     m() { }

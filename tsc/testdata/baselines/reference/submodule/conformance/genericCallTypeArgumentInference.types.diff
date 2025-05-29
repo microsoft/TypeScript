@@ -1,0 +1,68 @@
+--- old.genericCallTypeArgumentInference.types
++++ new.genericCallTypeArgumentInference.types
+@@= skipped -76, +76 lines =@@
+     }
+
+     foo3<T>(t: T, u: U) {
+->foo3 : <T>(t: T, u: U) => T
++>foo3 : <T_1>(t: T_1, u: U) => T_1
+ >t : T
+ >u : U
+
+@@= skipped -9, +9 lines =@@
+     }
+
+     foo4<U>(t: T, u: U) {
+->foo4 : <U>(t: T, u: U) => T
++>foo4 : <U_1>(t: T, u: U_1) => T
+ >t : T
+ >u : U
+
+@@= skipped -9, +9 lines =@@
+     }
+
+     foo5<T,U>(t: T, u: U) {
+->foo5 : <T, U>(t: T, u: U) => T
++>foo5 : <T_1, U_1>(t: T_1, u: U_1) => T_1
+ >t : T
+ >u : U
+
+@@= skipped -19, +19 lines =@@
+     }
+
+     foo7<T, U>(u: U) {
+->foo7 : <T, U>(u: U) => T
++>foo7 : <T_1, U_1>(u: U_1) => T_1
+ >u : U
+
+         var x: T;
+@@= skipped -111, +111 lines =@@
+ >u : U
+
+     foo3<T>(t: T, u: U): T;
+->foo3 : <T>(t: T, u: U) => T
++>foo3 : <T_1>(t: T_1, u: U) => T_1
+ >t : T
+ >u : U
+
+     foo4<U>(t: T, u: U): T;
+->foo4 : <U>(t: T, u: U) => T
++>foo4 : <U_1>(t: T, u: U_1) => T
+ >t : T
+ >u : U
+
+     foo5<T, U>(t: T, u: U): T;
+->foo5 : <T, U>(t: T, u: U) => T
++>foo5 : <T_1, U_1>(t: T_1, u: U_1) => T_1
+ >t : T
+ >u : U
+
+@@= skipped -18, +18 lines =@@
+ >foo6 : <T, U>() => T
+
+     foo7<T, U>(u: U): T;
+->foo7 : <T, U>(u: U) => T
++>foo7 : <T_1, U_1>(u: U_1) => T_1
+ >u : U
+
+     foo8<T, U>(): T;    

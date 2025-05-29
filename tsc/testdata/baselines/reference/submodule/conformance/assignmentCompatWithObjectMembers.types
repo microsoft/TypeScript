@@ -179,14 +179,14 @@ module ObjectTypes {
 >t2 : T2
 
     var a: { foo: typeof a; }
->a : { foo: ???; }
->foo : { foo: ???; }
->a : { foo: ???; }
+>a : { foo: any; }
+>foo : { foo: any; }
+>a : { foo: any; }
 
     var b: { foo: typeof b; }
->b : { foo: ???; }
->foo : { foo: ???; }
->b : { foo: ???; }
+>b : { foo: any; }
+>foo : { foo: any; }
+>b : { foo: any; }
 
     var a2 = { foo: a2 };
 >a2 : any
@@ -236,9 +236,9 @@ module ObjectTypes {
 >t : T
 
     s2 = b;
->s2 = b : { foo: ???; }
+>s2 = b : { foo: any; }
 >s2 : S2
->b : { foo: ???; }
+>b : { foo: any; }
 
     s2 = a2;
 >s2 = a2 : any
@@ -246,28 +246,28 @@ module ObjectTypes {
 >a2 : any
 
     a = b;
->a = b : { foo: ???; }
->a : { foo: ???; }
->b : { foo: ???; }
+>a = b : { foo: any; }
+>a : { foo: any; }
+>b : { foo: any; }
 
     b = a;
->b = a : { foo: ???; }
->b : { foo: ???; }
->a : { foo: ???; }
+>b = a : { foo: any; }
+>b : { foo: any; }
+>a : { foo: any; }
 
     a = s;
 >a = s : S
->a : { foo: ???; }
+>a : { foo: any; }
 >s : S
 
     a = s2;
 >a = s2 : S2
->a : { foo: ???; }
+>a : { foo: any; }
 >s2 : S2
 
     a = a2;
 >a = a2 : any
->a : { foo: ???; }
+>a : { foo: any; }
 >a2 : any
 
     a2 = b2;
@@ -281,9 +281,9 @@ module ObjectTypes {
 >a2 : any
 
     a2 = b;
->a2 = b : { foo: ???; }
+>a2 = b : { foo: any; }
 >a2 : any
->b : { foo: ???; }
+>b : { foo: any; }
 
     a2 = t2;
 >a2 = t2 : T2

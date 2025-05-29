@@ -5,10 +5,12 @@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.f = void 0;
 -exports.f = (function (arg) { return arg; })({ '0': 0 }); // Original prop uses string syntax
--
--
--//// [declarationEmitMappedTypePropertyFromNumericStringKey.d.ts]
--export declare const f: {
++exports.f = ((arg) => arg)({ '0': 0 }); // Original prop uses string syntax
+
+
+ //// [declarationEmitMappedTypePropertyFromNumericStringKey.d.ts]
+ export declare const f: {
 -    '0': string | number;
 -};
-+exports.f = ((arg) => arg)({ '0': 0 }); // Original prop uses string syntax
++    "0": string | number;
++}; // Original prop uses string syntax

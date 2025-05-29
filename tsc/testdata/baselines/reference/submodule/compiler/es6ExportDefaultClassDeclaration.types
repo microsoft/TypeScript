@@ -2,7 +2,7 @@
 
 === es6ExportDefaultClassDeclaration.ts ===
 export default class C {
->C : default
+>C : C
 
     method() { }
 >method : () => void

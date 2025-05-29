@@ -7,10 +7,10 @@ export import Component = CompletelyMissing;
 
 === first.d.ts ===
 import * as Second from './second';
->Second : typeof import("second")
+>Second : typeof Second
 
 export = Second;
->Second : typeof import("second")
+>Second : typeof Second
 
 === crash.ts ===
 import { Component } from './first';

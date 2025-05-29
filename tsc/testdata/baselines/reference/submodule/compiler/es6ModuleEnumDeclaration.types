@@ -140,10 +140,10 @@ module m2 {
 >x : e6.x
 
     var x3 = m1.e3.a;
->x3 : e3
->m1.e3.a : e3.a
->m1.e3 : typeof e3
+>x3 : m1.e3
+>m1.e3.a : m1.e3.a
+>m1.e3 : typeof m1.e3
 >m1 : typeof m1
->e3 : typeof e3
->a : e3.a
+>e3 : typeof m1.e3
+>a : m1.e3.a
 }

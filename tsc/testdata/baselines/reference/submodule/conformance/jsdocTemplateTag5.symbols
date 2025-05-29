@@ -28,7 +28,7 @@ Multimap.prototype = {
 >key : Symbol(key, Decl(a.js, 16, 8))
 
         return this._map[key + ''];
->this : Symbol((Anonymous type), Decl(a.js, 11, 20))
+>this : Symbol(þobject, Decl(a.js, 11, 20))
 >key : Symbol(key, Decl(a.js, 16, 8))
     }
 }
@@ -78,7 +78,7 @@ Ns.Multimap3 = function() {
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
->this : Symbol((Anonymous type), Decl(a.js, 42, 8))
+>this : Symbol(Ns, Decl(a.js, 42, 8))
 
 };
 

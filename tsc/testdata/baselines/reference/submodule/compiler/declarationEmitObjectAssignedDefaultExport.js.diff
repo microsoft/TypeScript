@@ -1,0 +1,12 @@
+--- old.declarationEmitObjectAssignedDefaultExport.js
++++ new.declarationEmitObjectAssignedDefaultExport.js
+@@= skipped -51, +51 lines =@@
+     B,
+     C: exports.C
+ });
++
++
++//// [index.d.ts]
++export declare const C: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>;
++declare const _default: any;
++export default _default;

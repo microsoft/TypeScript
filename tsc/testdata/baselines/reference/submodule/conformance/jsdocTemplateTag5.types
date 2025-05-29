@@ -8,7 +8,7 @@
  * @template V
  */
 function Multimap() {
->Multimap : { <K extends string, V>(): void; prototype: { get: (key: K) => V; }; }
+>Multimap : { <K extends string, V>(): void; prototype: { get(key: K): V; }; }
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
@@ -22,11 +22,11 @@ function Multimap() {
 };
 
 Multimap.prototype = {
->Multimap.prototype = {    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
->Multimap.prototype : { get: (key: K) => V; }
->Multimap : { <K extends string, V>(): void; prototype: { get: (key: K) => V; }; }
->prototype : { get: (key: K) => V; }
->{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
+>Multimap.prototype = {    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
+>Multimap.prototype : { get(key: K): V; }
+>Multimap : { <K extends string, V>(): void; prototype: { get(key: K): V; }; }
+>prototype : { get(key: K): V; }
+>{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
 
     /**
      * @param {K} key the key ok
@@ -39,7 +39,7 @@ Multimap.prototype = {
         return this._map[key + ''];
 >this._map[key + ''] : any
 >this._map : any
->this : { get: (key: K) => V; }
+>this : { get(key: K): V; }
 >_map : any
 >key + '' : string
 >key : K
@@ -124,13 +124,13 @@ Ns.Multimap3 = function() {
 };
 
 Ns.Multimap3.prototype = {
->Ns.Multimap3.prototype = {    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
+>Ns.Multimap3.prototype = {    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
 >Ns.Multimap3.prototype : any
 >Ns.Multimap3 : any
 >Ns : {}
 >Multimap3 : any
 >prototype : any
->{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
+>{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
 
     /**
      * @param {K} key the key ok

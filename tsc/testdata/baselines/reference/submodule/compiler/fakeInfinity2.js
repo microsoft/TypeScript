@@ -35,3 +35,28 @@ var X;
     X.f = f;
 })(X || (X = {}));
 exports.m = X.f();
+
+
+//// [fakeInfinity2.d.ts]
+export declare enum Foo {
+    A = Infinity,
+    B = -Infinity
+}
+export declare const m: Infinity;
+
+
+//// [DtsFileErrors]
+
+
+fakeInfinity2.d.ts(5,25): error TS2749: 'Infinity' refers to a value, but is being used as a type here. Did you mean 'typeof Infinity'?
+
+
+==== fakeInfinity2.d.ts (1 errors) ====
+    export declare enum Foo {
+        A = Infinity,
+        B = -Infinity
+    }
+    export declare const m: Infinity;
+                            ~~~~~~~~
+!!! error TS2749: 'Infinity' refers to a value, but is being used as a type here. Did you mean 'typeof Infinity'?
+    

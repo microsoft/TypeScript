@@ -1,0 +1,74 @@
+--- old.isolatedDeclarationErrorsObjects.js
++++ new.isolatedDeclarationErrorsObjects.js
+@@= skipped -163, +163 lines =@@
+     },
+     c: 1,
+ };
++
++
++//// [isolatedDeclarationErrorsObjects.d.ts]
++export declare let o: {
++    a: number;
++    b: string;
++};
++export declare let oBad: {
++    a: number;
++};
++export declare const V = 1;
++export declare let oBad2: {
++    a: {
++        b: number;
++    };
++    c: {
++        d: number;
++        e: number;
++    };
++};
++export declare let oWithMethods: {
++    method(): void;
++    okMethod(): void;
++    a: number;
++    bad(): void;
++    e: number;
++};
++export declare let oWithMethodsNested: {
++    foo: {
++        method(): void;
++        a: number;
++        okMethod(): void;
++        bad(): void;
++    };
++};
++export declare let oWithAccessor: {
++    readonly singleGetterBad: number;
++    singleSetterBad: any;
++    getSetBad: number;
++    getSetOk: number;
++    getSetOk2: number;
++    getSetOk3: number;
++};
++declare const s: unique symbol;
++export declare const oWithComputedProperties: {
++    [x: string]: number;
++    [x: number]: number;
++    1: number;
++    2: number;
++    [s]: number;
++    10: number;
++};
++export declare const oWithSpread: {
++    a: number;
++    b: number;
++    c: number;
++    part: {
++        a: number;
++    };
++};
++export declare const oWithSpread2: {
++    b: number;
++    nested: {
++        a: number;
++    };
++    c: number;
++};
++export {};

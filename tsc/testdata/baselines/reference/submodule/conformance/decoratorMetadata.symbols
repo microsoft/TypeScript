@@ -2,7 +2,7 @@
 
 === service.ts ===
 export default class Service {
->Service : Symbol(default, Decl(service.ts, 0, 0))
+>Service : Symbol(Service, Decl(service.ts, 0, 0))
 }
 === component.ts ===
 import Service from "./service";

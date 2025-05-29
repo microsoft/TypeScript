@@ -26,6 +26,18 @@
 -        obj; // NonNullable<T>
 -    }
 -    if (typeof (obj === null || obj === void 0 ? void 0 : obj.x) === "string") {
+-        obj; // NonNullable<T>
+-    }
+-}
+-var A = /** @class */ (function () {
+-    function A() {
+-        this.x = "hello";
+-    }
+-    A.prototype.foo = function () {
+-        var zz = this === null || this === void 0 ? void 0 : this.x; // string
+-    };
+-    return A;
+-}());
 +    if (obj?.x === "hello") {
 +        obj; // NonNullable<T>
 +    }
@@ -33,33 +45,15 @@
 +        obj; // NonNullable<T>
 +    }
 +    if (typeof obj?.x === "string") {
-         obj; // NonNullable<T>
-     }
- }
--var A = /** @class */ (function () {
--    function A() {
--        this.x = "hello";
++        obj; // NonNullable<T>
++    }
++}
 +class A {
 +    x = "hello";
 +    foo() {
 +        let zz = this?.x; // string
-     }
--    A.prototype.foo = function () {
--        var zz = this === null || this === void 0 ? void 0 : this.x; // string
--    };
--    return A;
--}());
--
--
--//// [nonNullableTypes1.d.ts]
--declare function f1<T>(x: T): void;
--declare function error(): never;
--declare function f2<T>(x: T): NonNullable<T>;
--declare function f3(x: unknown): void;
--declare function f4<T extends {
--    x: string;
--} | undefined>(obj: T): void;
--declare class A {
--    x: string;
--    foo(): void;
- }
++    }
++}
+
+
+ //// [nonNullableTypes1.d.ts]

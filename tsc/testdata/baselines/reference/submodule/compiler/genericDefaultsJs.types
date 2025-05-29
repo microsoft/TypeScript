@@ -6,7 +6,7 @@ declare function f0<T>(x?: T): T;
 >x : T
 
 declare function f1<T, U = number>(x?: T): [T, U];
->f1 : <T, U>(x?: T) => [T, U]
+>f1 : <T, U = number>(x?: T) => [T, U]
 >x : T
 
 declare class C0<T> {
@@ -42,12 +42,12 @@ const f0_v1 = f0(1);
 const f1_c0 = f1();
 >f1_c0 : [unknown, number]
 >f1() : [unknown, number]
->f1 : <T, U>(x?: T) => [T, U]
+>f1 : <T, U = number>(x?: T) => [T, U]
 
 const f1_c1 = f1(1);
 >f1_c1 : [number, number]
 >f1(1) : [number, number]
->f1 : <T, U>(x?: T) => [T, U]
+>f1 : <T, U = number>(x?: T) => [T, U]
 >1 : 1
 
 const C0_v0 = new C0();

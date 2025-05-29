@@ -40,7 +40,7 @@ var r1c = i.arguments;
 >arguments : any
 
 var x: {
->x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 
     new(): number;
     apply(a: any, b?: any): void;
@@ -59,7 +59,7 @@ var r2: (a: any, b?: any) => void = x.apply;
 >a : any
 >b : any
 >x.apply : (a: any, b?: any) => void
->x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 >apply : (a: any, b?: any) => void
 
 var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
@@ -67,12 +67,12 @@ var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
 >thisArg : number
 >argArray : number[]
 >x.call : (thisArg: number, ...argArray: number[]) => any
->x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 >call : (thisArg: number, ...argArray: number[]) => any
 
 var r2c = x.arguments;
 >r2c : any
 >x.arguments : any
->x : { new (): number; apply: (a: any, b?: any) => void; call: (thisArg: number, ...argArray: number[]) => any; }
+>x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 >arguments : any
 

@@ -29,3 +29,19 @@ class MyComponent {
     static create = make(MyComponent);
 }
 exports.default = MyComponent;
+
+
+//// [defaultDeclarationEmitNamedCorrectly.d.ts]
+export interface Things<P, T> {
+    p: P;
+    t: T;
+}
+export declare function make<P, CTor>(x: {
+    new ();
+}): Things<P, CTor>;
+export interface Props {
+}
+export default class MyComponent {
+    props: Props;
+    static create: Things<Props, MyComponent>;
+}

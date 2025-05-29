@@ -43,7 +43,7 @@ var x: Entity;
 >x : Entity
 
 var y: Entity.I;
->y : I
+>y : Entity.I
 >Entity : any
 
 Entity.x;

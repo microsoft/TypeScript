@@ -1,14 +1,11 @@
 --- old.mappedTypeNoTypeNoCrash.js
 +++ new.mappedTypeNoTypeNoCrash.js
-@@= skipped -3, +3 lines =@@
- type T0<T> = ({[K in keyof T]}) extends ({[key in K]: T[K]}) ? number : never;
+@@= skipped -7, +7 lines =@@
 
- //// [mappedTypeNoTypeNoCrash.js]
--
--
--//// [mappedTypeNoTypeNoCrash.d.ts]
--type T0<T> = ({
+ //// [mappedTypeNoTypeNoCrash.d.ts]
+ type T0<T> = ({
 -    [K in keyof T]: ;
--}) extends ({
--    [key in K]: T[K];
--}) ? number : never;
++    [K in keyof T]: any;
+ }) extends ({
+     [key in K]: T[K];
+ }) ? number : never;

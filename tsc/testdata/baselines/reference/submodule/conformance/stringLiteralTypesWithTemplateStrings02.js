@@ -9,3 +9,8 @@ let de_NEWLINE_f: "DE\nF" = `DE${"\n"}F`;
 let abc = `AB
 C`;
 let de_NEWLINE_f = `DE${"\n"}F`;
+
+
+//// [stringLiteralTypesWithTemplateStrings02.d.ts]
+declare let abc: "AB\r\nC";
+declare let de_NEWLINE_f: "DE\nF";

@@ -7,7 +7,8 @@
 -var pkg = require("package-b");
 +const pkg = require("package-b");
  exports.a = pkg.invoke();
--
--
--//// [index.d.ts]
+
+
+ //// [index.d.ts]
 -export declare const a: import("package-a").Foo;
++export declare const a: import("../packageA/index.js").Foo;

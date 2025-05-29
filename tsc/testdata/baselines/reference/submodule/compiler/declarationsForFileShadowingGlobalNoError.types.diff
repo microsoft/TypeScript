@@ -5,8 +5,7 @@
 
      get(domNode: DOMNode) {}
 ->get : (domNode: DOMNode) => void
-->domNode : globalThis.Node
-+>get : (domNode: Node) => void
-+>domNode : Node
++>get : (domNode: globalThis.Node) => void
+ >domNode : globalThis.Node
    }
  }

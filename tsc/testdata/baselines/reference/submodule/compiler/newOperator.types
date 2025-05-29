@@ -133,15 +133,15 @@ class S {
 >S : S
 
     public get xs(): M.T[] {
->xs : T[]
+>xs : M.T[]
 >M : any
 
         return new M.T[];
 >new M.T[] : any
 >M.T[] : any
->M.T : typeof T
+>M.T : typeof M.T
 >M : typeof M
->T : typeof T
+>T : typeof M.T
 > : any
     }
 }

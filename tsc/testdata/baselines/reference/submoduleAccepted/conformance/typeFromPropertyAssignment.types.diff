@@ -30,13 +30,13 @@
  /** @type {Outer.Inner} */
  var oi
 ->oi : I
-+>oi : Inner
++>oi : Outer.Inner
 
  oi.n
 ->oi.n : (a: any, b: any) => void
 ->oi : I
 ->n : (a: any, b: any) => void
 +>oi.n : any
-+>oi : Inner
++>oi : Outer.Inner
 +>n : any
 

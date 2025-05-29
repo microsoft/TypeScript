@@ -167,3 +167,61 @@ var publicModuleInGlobal;
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));
 class publicClassImplementingPublicInterfaceInGlobal {
 }
+
+
+//// [privacyClassImplementsClauseDeclFile_externalModule.d.ts]
+export declare namespace publicModule {
+    export interface publicInterfaceInPublicModule {
+    }
+    interface privateInterfaceInPublicModule {
+    }
+    export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+    }
+    export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+    }
+    export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+    }
+    export class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule {
+    }
+    export {};
+}
+declare namespace privateModule {
+    export interface publicInterfaceInPrivateModule {
+    }
+    interface privateInterfaceInPrivateModule {
+    }
+    export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
+    }
+    export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule {
+    }
+    export class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+    }
+    export {};
+}
+export interface publicInterface {
+}
+interface privateInterface {
+}
+export declare class publicClassImplementingPublicInterface implements publicInterface {
+}
+export declare class publicClassImplementingPrivateInterface implements privateInterface {
+}
+export declare class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+}
+export {};
+//// [privacyClassImplementsClauseDeclFile_GlobalFile.d.ts]
+declare namespace publicModuleInGlobal {
+    export interface publicInterfaceInPublicModule {
+    }
+    interface privateInterfaceInPublicModule {
+    }
+    export class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+    }
+    export class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+    }
+    export {};
+}
+interface publicInterfaceInGlobal {
+}
+declare class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceInGlobal {
+}

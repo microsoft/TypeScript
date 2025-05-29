@@ -2,12 +2,12 @@
 
 === a.ts ===
 export default abstract class A { a: number; }
->A : Symbol(default, Decl(a.ts, 0, 0))
+>A : Symbol(A, Decl(a.ts, 0, 0))
 >a : Symbol(a, Decl(a.ts, 0, 33))
 
 class B extends A {}
 >B : Symbol(B, Decl(a.ts, 0, 46))
->A : Symbol(default, Decl(a.ts, 0, 0))
+>A : Symbol(A, Decl(a.ts, 0, 0))
 
 new B().a.toExponential();
 >new B().a.toExponential : Symbol(toExponential, Decl(lib.es5.d.ts, --, --))

@@ -21,3 +21,16 @@ function ignoreExtraVariables(ctor) {
         [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used
     };
 }
+
+
+//// [file.d.ts]
+declare const IGNORE_EXTRA_VARIABLES: unique symbol; //Notice how this is unexported
+//This is exported
+export declare function ignoreExtraVariables<CtorT extends {
+    new (...args: any[]);
+}>(ctor: CtorT): {
+    new (...args: any[]): {
+        [IGNORE_EXTRA_VARIABLES]: boolean; //An unexported constant is used
+    };
+} & CtorT;
+export {};

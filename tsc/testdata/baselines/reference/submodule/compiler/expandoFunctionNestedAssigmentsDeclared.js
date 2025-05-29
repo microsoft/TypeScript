@@ -110,3 +110,33 @@ for (let f in (Foo.forIn = [])) {
         Foo.fromForInBodyNested = 1;
     }
 }
+
+
+//// [expandoFunctionNestedAssigmentsDeclared.d.ts]
+declare function Foo(): void;
+declare namespace Foo {
+    var bla: {
+        foo: number;
+    };
+    var baz: number;
+    var bar: number;
+    var fromIf: number;
+    var inIf: number;
+    var fromWhileCondition: number;
+    var fromWhileBody: number;
+    var fromWhileBodyNested: number;
+    var fromDoBody: number;
+    var fromDoBodyNested: number;
+    var fromDoCondition: number;
+    var forInit: number;
+    var forCond: number;
+    var fromForBody: number;
+    var fromForBodyNested: number;
+    var forIncr: number;
+    var forOf: any[];
+    var fromForOfBody: number;
+    var fromForOfBodyNested: number;
+    var forIn: any[];
+    var fromForInBody: number;
+    var fromForInBodyNested: number;
+}

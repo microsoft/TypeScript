@@ -1,24 +1,6 @@
 --- old.nodeColonModuleResolution.symbols
 +++ new.nodeColonModuleResolution.symbols
-@@= skipped -1, +1 lines =@@
-
- === /a/b/node_modules/@types/node/ph.d.ts ===
- declare module 'ph' {
-->'ph' : Symbol("ph", Decl(ph.d.ts, 0, 0))
-+>'ph' : Symbol('ph', Decl(ph.d.ts, 0, 0))
-
-     namespace constants {
- >constants : Symbol(constants, Decl(ph.d.ts, 0, 21))
-@@= skipped -40, +40 lines =@@
-     }
- }
- declare module 'node:ph' {
-->'node:ph' : Symbol("node:ph", Decl(ph.d.ts, 14, 1))
-+>'node:ph' : Symbol('node:ph', Decl(ph.d.ts, 14, 1))
-
-     export * from 'ph';
- }
-@@= skipped -9, +9 lines =@@
+@@= skipped -50, +50 lines =@@
  >ph : Symbol(ph, Decl(main.ts, 0, 6))
 
  console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)

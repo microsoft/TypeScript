@@ -20,3 +20,13 @@ var Test;
     Test[Test["C"] = 2] = "C";
 })(Test || (exports.Test = Test = {}));
 exports.bar = null;
+
+
+//// [declarationEmitNoNonRequiredParens.d.ts]
+export declare enum Test {
+    A = 0,
+    B = 1,
+    C = 2
+}
+export type TestType = typeof Test;
+export declare const bar: Test[];

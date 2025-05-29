@@ -637,14 +637,14 @@ function modifiers(async this: C): number { return this.n; }
 
 function restParam(...this: C): number { return this.n; }
 >restParam : Symbol(restParam, Decl(thisTypeInFunctionsNegative.ts, 167, 60))
-> : Symbol(, Decl(thisTypeInFunctionsNegative.ts, 168, 19))
+> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 168, 19))
 >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 168, 22))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 
 function optional(this?: C): number { return this.n; }
 >optional : Symbol(optional, Decl(thisTypeInFunctionsNegative.ts, 168, 57))
 >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 169, 18))
-> : Symbol(, Decl(thisTypeInFunctionsNegative.ts, 169, 22))
+> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 169, 22))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
 >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 169, 18))
 
@@ -660,7 +660,7 @@ function initializer(this: C = new C()): number { return this.n; }
 >initializer : Symbol(initializer, Decl(thisTypeInFunctionsNegative.ts, 170, 62))
 >this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 171, 21))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 0, 0))
-> : Symbol(, Decl(thisTypeInFunctionsNegative.ts, 171, 30))
+> : Symbol((Missing), Decl(thisTypeInFunctionsNegative.ts, 171, 30))
 >C : Symbol(C, Decl(thisTypeInFunctionsNegative.ts, 171, 34))
 >this : Symbol(globalThis)
 

@@ -5,6 +5,6 @@
 
      public {[name:string]:VariableDeclaration};
 -> : Symbol(C[(Missing)], Decl(classMemberWithMissingIdentifier2.ts, 0, 9))
-+> : Symbol(, Decl(classMemberWithMissingIdentifier2.ts, 0, 9))
++> : Symbol((Missing), Decl(classMemberWithMissingIdentifier2.ts, 0, 9))
  >name : Symbol(name, Decl(lib.dom.d.ts, --, --))
  }

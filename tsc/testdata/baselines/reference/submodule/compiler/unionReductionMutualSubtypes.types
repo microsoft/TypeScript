@@ -10,15 +10,15 @@ interface ReturnVal {
 
 const k: ReturnVal = { something() { } }
 >k : ReturnVal
->{ something() { } } : { something: () => void; }
+>{ something() { } } : { something(): void; }
 >something : () => void
 
 declare const val: ReturnVal;
 >val : ReturnVal
 
 function run(options: { something?(b?: string): void }) {
->run : (options: { something?: ((b?: string | undefined) => void) | undefined; }) => void
->options : { something?: ((b?: string | undefined) => void) | undefined; }
+>run : (options: { something?(b?: string | undefined): void; }) => void
+>options : { something?(b?: string | undefined): void; }
 >something : ((b?: string | undefined) => void) | undefined
 >b : string | undefined
 
@@ -26,7 +26,7 @@ function run(options: { something?(b?: string): void }) {
 >something : (b?: string | undefined) => void
 >options.something ?? val.something : (b?: string | undefined) => void
 >options.something : ((b?: string | undefined) => void) | undefined
->options : { something?: ((b?: string | undefined) => void) | undefined; }
+>options : { something?(b?: string | undefined): void; }
 >something : ((b?: string | undefined) => void) | undefined
 >val.something : () => void
 >val : ReturnVal

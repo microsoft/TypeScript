@@ -77,11 +77,11 @@ export class C {
 >[missing] : Symbol([missing], Decl(isolatedDeclarationErrorsClasses.ts, 32, 16))
     
     [noAnnotationLiteralName](): void { }
->[noAnnotationLiteralName] : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 35, 18))
+>[noAnnotationLiteralName] : Symbol([noAnnotationLiteralName], Decl(isolatedDeclarationErrorsClasses.ts, 35, 18))
 >noAnnotationLiteralName : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 29, 5))
 
     [noParamAnnotationLiteralName](v: string): void { }
->[noParamAnnotationLiteralName] : Symbol(noParamAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 37, 41))
+>[noParamAnnotationLiteralName] : Symbol([noParamAnnotationLiteralName], Decl(isolatedDeclarationErrorsClasses.ts, 37, 41))
 >noParamAnnotationLiteralName : Symbol(noParamAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 30, 5))
 >v : Symbol(v, Decl(isolatedDeclarationErrorsClasses.ts, 39, 35))
 
@@ -116,6 +116,6 @@ export interface I {
 >noAnnotationStringName : Symbol(noAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 26, 3))
 
     [noAnnotationLiteralName]();
->[noAnnotationLiteralName] : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 54, 33))
+>[noAnnotationLiteralName] : Symbol([noAnnotationLiteralName], Decl(isolatedDeclarationErrorsClasses.ts, 54, 33))
 >noAnnotationLiteralName : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 29, 5))
 }

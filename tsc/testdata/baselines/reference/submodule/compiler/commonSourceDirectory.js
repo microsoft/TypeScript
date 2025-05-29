@@ -23,3 +23,6 @@ const foo_1 = require("foo");
 const bar_1 = require("bar");
 foo_1.x + bar_1.y;
 //# sourceMappingURL=../myMapRoot/index.js.map
+
+//// [/app/bin/index.d.ts]
+export {};

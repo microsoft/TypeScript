@@ -23,8 +23,8 @@ module A {
 // no code gen expected
 module B {
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 }
 
 // no code gen expected
@@ -32,19 +32,19 @@ module C {
 >C : typeof C
 
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 
     var m: typeof a;
->m : typeof A
->a : typeof A
+>m : typeof a
+>a : typeof a
 
     var p: a.Point;
->p : Point
+>p : a.Point
 >a : any
 
     var p = {x:0, y:0 };
->p : Point
+>p : a.Point
 >{x:0, y:0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -57,15 +57,15 @@ module D {
 >D : typeof D
 
     import a = A;
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 
     var p = new a.Point(1, 1);
->p : Point
->new a.Point(1, 1) : Point
->a.Point : typeof Point
->a : typeof A
->Point : typeof Point
+>p : a.Point
+>new a.Point(1, 1) : a.Point
+>a.Point : typeof a.Point
+>a : typeof a
+>Point : typeof a.Point
 >1 : 1
 >1 : 1
 }
@@ -74,24 +74,24 @@ module E {
 >E : typeof E
 
     import a = A;
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 
     export function xDist(x: a.Point) {
->xDist : (x: Point) => number
->x : Point
+>xDist : (x: a.Point) => number
+>x : a.Point
 >a : any
 
         return (a.Origin.x - x.x);
 >(a.Origin.x - x.x) : number
 >a.Origin.x - x.x : number
 >a.Origin.x : number
->a.Origin : Point
->a : typeof A
->Origin : Point
+>a.Origin : a.Point
+>a : typeof a
+>Origin : a.Point
 >x : number
 >x.x : number
->x : Point
+>x : a.Point
 >x : number
     }
 }

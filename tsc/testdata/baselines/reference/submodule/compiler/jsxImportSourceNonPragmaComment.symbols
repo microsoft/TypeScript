@@ -7,7 +7,7 @@ import { css } from "@emotion/react";
 >css : Symbol(css, Decl(jsxImportSourceNonPragmaComment.tsx, 2, 8))
 
 export default function Component() {
->Component : Symbol(default, Decl(jsxImportSourceNonPragmaComment.tsx, 2, 37))
+>Component : Symbol(Component, Decl(jsxImportSourceNonPragmaComment.tsx, 2, 37))
 
   return (
     <input

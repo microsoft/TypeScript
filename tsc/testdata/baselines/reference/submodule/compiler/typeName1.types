@@ -16,7 +16,7 @@ class C {
 }
 
 var x1:{ f(s:string):number;f(n:number):string; }=3;
->x1 : { f: { (s: string): number; (n: number): string; }; }
+>x1 : { f(s: string): number; f(n: number): string; }
 >f : { (s: string): number; (n: number): string; }
 >s : string
 >f : { (s: string): number; (n: number): string; }
@@ -24,7 +24,7 @@ var x1:{ f(s:string):number;f(n:number):string; }=3;
 >3 : 3
 
 var x2:{ f(s:string):number; } =3;
->x2 : { f: (s: string) => number; }
+>x2 : { f(s: string): number; }
 >f : (s: string) => number
 >s : string
 >3 : 3
@@ -36,7 +36,7 @@ var x3:{ (s:string):number;(n:number):string; }=3;
 >3 : 3
 
 var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
->x4 : { x: any; y: any; z: number; f: { (n: number): string; (s: string): number; }; }
+>x4 : { x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
 >x : any
 >y : any
 >z : number
@@ -47,7 +47,7 @@ var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 >3 : 3
 
 var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
->x5 : { (s: string): number; (n: number): string; x: any; y: any; z: number; f: { (n: number): string; (s: string): number; }; }
+>x5 : { (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
 >s : string
 >n : number
 >x : any
@@ -122,7 +122,7 @@ var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {
 >3 : 3
 
 var x14:{ f(x:number):boolean; p; q; ():string; }=3;
->x14 : { (): string; f: (x: number) => boolean; p: any; q: any; }
+>x14 : { (): string; f(x: number): boolean; p: any; q: any; }
 >f : (x: number) => boolean
 >x : number
 >p : any

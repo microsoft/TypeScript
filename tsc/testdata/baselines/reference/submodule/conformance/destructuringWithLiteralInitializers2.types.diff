@@ -1,48 +1,18 @@
 --- old.destructuringWithLiteralInitializers2.types
 +++ new.destructuringWithLiteralInitializers2.types
-@@= skipped -1, +1 lines =@@
-
- === destructuringWithLiteralInitializers2.ts ===
- function f00([x, y]) {}
-->f00 : ([x, y]: [any, any]) => void
-+>f00 : (__0: [any, any]) => void
- >x : any
- >y : any
-
- function f01([x, y] = []) {}
-->f01 : ([x, y]?: [any?, any?]) => void
-+>f01 : (__0?: [any?, any?]) => void
- >x : any
- >y : any
- >[] : []
-
- function f02([x, y] = [1]) {}
-->f02 : ([x, y]?: [number, any?]) => void
-+>f02 : (__0?: [number, any?]) => void
- >x : number
- >y : any
- >[1] : [number]
- >1 : 1
-
- function f03([x, y] = [1, 'foo']) {}
-->f03 : ([x, y]?: [number, string]) => void
-+>f03 : (__0?: [number, string]) => void
- >x : number
- >y : string
- >[1, 'foo'] : [number, string]
-@@= skipped -26, +26 lines =@@
+@@= skipped -27, +27 lines =@@
  >'foo' : "foo"
 
  function f10([x = 0, y]) {}
 ->f10 : ([x, y]: [number | undefined, any]) => void
-+>f10 : (__0: [number | undefined, any]) => void
++>f10 : ([x = 0, y]: [number | undefined, any]) => void
  >x : number
  >0 : 0
  >y : any
 
  function f11([x = 0, y] = []) {}
 ->f11 : ([x, y]?: [(number | undefined)?, any?]) => void
-+>f11 : (__0?: [(number | undefined)?, any?]) => void
++>f11 : ([x = 0, y]?: [(number | undefined)?, any?]) => void
  >x : number
  >0 : 0
  >y : any
@@ -50,7 +20,7 @@
 
  function f12([x = 0, y] = [1]) {}
 ->f12 : ([x, y]?: [number, any?]) => void
-+>f12 : (__0?: [number, any?]) => void
++>f12 : ([x = 0, y]?: [number, any?]) => void
  >x : number
  >0 : 0
  >y : any
@@ -59,7 +29,7 @@
 
  function f13([x = 0, y] = [1, 'foo']) {}
 ->f13 : ([x, y]?: [number, string]) => void
-+>f13 : (__0?: [number, string]) => void
++>f13 : ([x = 0, y]?: [number, string]) => void
  >x : number
  >0 : 0
  >y : string
@@ -68,7 +38,7 @@
 
  function f20([x = 0, y = 'bar']) {}
 ->f20 : ([x, y]: [(number | undefined)?, (string | undefined)?]) => void
-+>f20 : (__0: [(number | undefined)?, (string | undefined)?]) => void
++>f20 : ([x = 0, y = "bar"]: [(number | undefined)?, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -76,7 +46,7 @@
 
  function f21([x = 0, y = 'bar'] = []) {}
 ->f21 : ([x, y]?: [(number | undefined)?, (string | undefined)?]) => void
-+>f21 : (__0?: [(number | undefined)?, (string | undefined)?]) => void
++>f21 : ([x = 0, y = "bar"]?: [(number | undefined)?, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -85,7 +55,7 @@
 
  function f22([x = 0, y = 'bar'] = [1]) {}
 ->f22 : ([x, y]?: [number, (string | undefined)?]) => void
-+>f22 : (__0?: [number, (string | undefined)?]) => void
++>f22 : ([x = 0, y = "bar"]?: [number, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -94,7 +64,7 @@
 
  function f23([x = 0, y = 'bar'] = [1, 'foo']) {}
 ->f23 : ([x, y]?: [number, string]) => void
-+>f23 : (__0?: [number, string]) => void
++>f23 : ([x = 0, y = "bar"]?: [number, string]) => void
  >x : number
  >0 : 0
  >y : string
@@ -103,7 +73,7 @@
 
  function f30([x = 0, y = 'bar']) {}
 ->f30 : ([x, y]: [(number | undefined)?, (string | undefined)?]) => void
-+>f30 : (__0: [(number | undefined)?, (string | undefined)?]) => void
++>f30 : ([x = 0, y = "bar"]: [(number | undefined)?, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -111,7 +81,7 @@
 
  function f31([x = 0, y = 'bar'] = []) {}
 ->f31 : ([x, y]?: [(number | undefined)?, (string | undefined)?]) => void
-+>f31 : (__0?: [(number | undefined)?, (string | undefined)?]) => void
++>f31 : ([x = 0, y = "bar"]?: [(number | undefined)?, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -120,7 +90,7 @@
 
  function f32([x = 0, y = 'bar'] = [nx]) {}
 ->f32 : ([x, y]?: [number | undefined, (string | undefined)?]) => void
-+>f32 : (__0?: [number | undefined, (string | undefined)?]) => void
++>f32 : ([x = 0, y = "bar"]?: [number | undefined, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -129,7 +99,7 @@
 
  function f33([x = 0, y = 'bar'] = [nx, sx]) {}
 ->f33 : ([x, y]?: [number | undefined, string | undefined]) => void
-+>f33 : (__0?: [number | undefined, string | undefined]) => void
++>f33 : ([x = 0, y = "bar"]?: [number | undefined, string | undefined]) => void
  >x : number
  >0 : 0
  >y : string
@@ -138,7 +108,7 @@
 
  function f40([x = 0, y = 'bar']) {}
 ->f40 : ([x, y]: [(number | undefined)?, (string | undefined)?]) => void
-+>f40 : (__0: [(number | undefined)?, (string | undefined)?]) => void
++>f40 : ([x = 0, y = "bar"]: [(number | undefined)?, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -146,7 +116,7 @@
 
  function f41([x = 0, y = 'bar'] = []) {}
 ->f41 : ([x, y]?: [(number | undefined)?, (string | undefined)?]) => void
-+>f41 : (__0?: [(number | undefined)?, (string | undefined)?]) => void
++>f41 : ([x = 0, y = "bar"]?: [(number | undefined)?, (string | undefined)?]) => void
  >x : number
  >0 : 0
  >y : string
@@ -155,7 +125,7 @@
 
  function f42([x = 0, y = 'bar'] = [sx]) {}
 ->f42 : ([x, y]?: [string | undefined, (string | undefined)?]) => void
-+>f42 : (__0?: [string | undefined, (string | undefined)?]) => void
++>f42 : ([x = 0, y = "bar"]?: [string | undefined, (string | undefined)?]) => void
  >x : string | number
  >0 : 0
  >y : string
@@ -164,7 +134,7 @@
 
  function f43([x = 0, y = 'bar'] = [sx, nx]) {}
 ->f43 : ([x, y]?: [string | undefined, number | undefined]) => void
-+>f43 : (__0?: [string | undefined, number | undefined]) => void
++>f43 : ([x = 0, y = "bar"]?: [string | undefined, number | undefined]) => void
  >x : string | number
  >0 : 0
  >y : string | number

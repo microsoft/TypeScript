@@ -18,7 +18,7 @@ function Timer(timeout) {
 module.exports = Timer;
 >module.exports = Timer : (timeout: number) => void
 >module.exports : (timeout: number) => void
->module : { Timer: (timeout: number) => void; }
+>module : { Timer(timeout: number): void; }
 >exports : (timeout: number) => void
 >Timer : (timeout: number) => void
 
@@ -43,7 +43,7 @@ function Hook(handle) {
 module.exports = Hook;
 >module.exports = Hook : (handle: HookHandler) => void
 >module.exports : (handle: HookHandler) => void
->module : { Hook: (handle: HookHandler) => void; }
+>module : { Hook(handle: HookHandler): void; }
 >exports : (handle: HookHandler) => void
 >Hook : (handle: HookHandler) => void
 
@@ -80,7 +80,7 @@ module.exports = Hook;
  */
 
 function Context(input) {
->Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
 >input : Input
 
     if (!(this instanceof Context)) {
@@ -88,11 +88,11 @@ function Context(input) {
 >(this instanceof Context) : boolean
 >this instanceof Context : boolean
 >this : any
->Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
 
       return new Context(input)
 >new Context(input) : any
->Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
 >input : Input
     }
     this.state = this.construct(input);
@@ -107,11 +107,11 @@ function Context(input) {
 >input : Input
 }
 Context.prototype = {
->Context.prototype = {    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct: (input: Input, handle?: any) => State; }
->Context.prototype : { construct: (input: Input, handle?: any) => State; }
->Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
->prototype : { construct: (input: Input, handle?: any) => State; }
->{    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct: (input: Input, handle?: any) => State; }
+>Context.prototype = {    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: any): State; }
+>Context.prototype : { construct(input: Input, handle?: any): State; }
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
+>prototype : { construct(input: Input, handle?: any): State; }
+>{    /**     * @param {Input} input     * @param {HookHandler=} handle     * @returns {State}     */    construct(input, handle = () => void 0) {        return input;    }} : { construct(input: Input, handle?: any): State; }
 
     /**
      * @param {Input} input
@@ -131,9 +131,9 @@ Context.prototype = {
     }
 }
 module.exports = Context;
->module.exports = Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
->module.exports : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
->module : { Context: { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }; }
->exports : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
->Context : { (input: Input): any; prototype: { construct: (input: Input, handle?: any) => State; }; }
+>module.exports = Context : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
+>module.exports : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
+>module : { Context: { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }; }
+>exports : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
+>Context : { (input: Input): any; prototype: { construct(input: Input, handle?: any): State; }; }
 

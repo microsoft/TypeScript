@@ -13,7 +13,7 @@
 
  declare function test2({foo}: {foo: string}, bar: typeof foo): typeof foo;
 ->test2 : ({ foo }: { foo: string; }, bar: typeof foo) => typeof foo
-+>test2 : (__0: { foo: string; }, bar: string) => string
++>test2 : ({ foo }: { foo: string; }, bar: string) => string
  >foo : string
  >foo : string
  >bar : string

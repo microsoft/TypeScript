@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
 var quoteReplacer = strings.NewReplacer("'", `\'`, `\"`, `"`)
@@ -298,7 +299,7 @@ func quote(file *ast.SourceFile, preferences *UserPreferences, text string) stri
 	quotePreference := getQuotePreference(file, preferences)
 	quoted, _ := core.StringifyJson(text, "" /*prefix*/, "" /*indent*/)
 	if quotePreference == quotePreferenceSingle {
-		quoted = quoteReplacer.Replace(core.StripQuotes(quoted))
+		quoted = quoteReplacer.Replace(stringutil.StripQuotes(quoted))
 	}
 	return quoted
 }

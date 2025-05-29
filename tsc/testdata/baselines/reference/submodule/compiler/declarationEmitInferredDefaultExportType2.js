@@ -15,3 +15,12 @@ module.exports = {
     bar: undefined,
     baz: null
 };
+
+
+//// [declarationEmitInferredDefaultExportType2.d.ts]
+declare const _default: {
+    foo: any[];
+    bar: any;
+    baz: any;
+};
+export = _default;

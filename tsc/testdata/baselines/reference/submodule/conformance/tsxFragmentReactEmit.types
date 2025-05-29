@@ -12,42 +12,42 @@ declare var React: any;
 >React : any
 
 <></>; // no whitespace
-><></> : Element
+><></> : JSX.Element
 
 <    ></   >; // lots of whitespace
-><    ></   > : Element
+><    ></   > : JSX.Element
 
 < /*starting wrap*/ ></ /*ending wrap*/>; // comments in the tags
->< /*starting wrap*/ ></ /*ending wrap*/> : Element
+>< /*starting wrap*/ ></ /*ending wrap*/> : JSX.Element
 
 <>hi</>; // text inside
-><>hi</> : Element
+><>hi</> : JSX.Element
 
 <><span>hi</span><div>bye</div></>; // children
-><><span>hi</span><div>bye</div></> : Element
-><span>hi</span> : Element
+><><span>hi</span><div>bye</div></> : JSX.Element
+><span>hi</span> : JSX.Element
 >span : any
 >span : any
-><div>bye</div> : Element
+><div>bye</div> : JSX.Element
 >div : any
 >div : any
 
 <><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></>; // nested fragments
-><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : Element
-><span>1</span> : Element
+><><span>1</span><><span>2.1</span><span>2.2</span></><span>3</span></> : JSX.Element
+><span>1</span> : JSX.Element
 >span : any
 >span : any
-><><span>2.1</span><span>2.2</span></> : Element
-><span>2.1</span> : Element
+><><span>2.1</span><span>2.2</span></> : JSX.Element
+><span>2.1</span> : JSX.Element
 >span : any
 >span : any
-><span>2.2</span> : Element
+><span>2.2</span> : JSX.Element
 >span : any
 >span : any
-><span>3</span> : Element
+><span>3</span> : JSX.Element
 >span : any
 >span : any
 
 <>#</>; // # would cause scanning error if not in jsxtext
-><>#</> : Element
+><>#</> : JSX.Element
 

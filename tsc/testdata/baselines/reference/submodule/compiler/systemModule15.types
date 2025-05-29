@@ -2,7 +2,7 @@
 
 === file1.ts ===
 import * as moduleB from "./file2"
->moduleB : typeof import("file2")
+>moduleB : typeof moduleB
 
 declare function use(v: any): void;
 >use : (v: any) => void
@@ -12,26 +12,26 @@ use(moduleB.value);
 >use(moduleB.value) : void
 >use : (v: any) => void
 >moduleB.value : string
->moduleB : typeof import("file2")
+>moduleB : typeof moduleB
 >value : string
 
 use(moduleB.moduleC);
 >use(moduleB.moduleC) : void
 >use : (v: any) => void
 >moduleB.moduleC : string
->moduleB : typeof import("file2")
+>moduleB : typeof moduleB
 >moduleC : string
 
 use(moduleB.moduleCStar);
 >use(moduleB.moduleCStar) : void
 >use : (v: any) => void
->moduleB.moduleCStar : typeof import("file3")
->moduleB : typeof import("file2")
->moduleCStar : typeof import("file3")
+>moduleB.moduleCStar : typeof moduleB.moduleCStar
+>moduleB : typeof moduleB
+>moduleCStar : typeof moduleB.moduleCStar
 
 === file2.ts ===
 import * as moduleCStar from "./file3"
->moduleCStar : typeof import("file3")
+>moduleCStar : typeof moduleCStar
 
 import {value2} from "./file4"
 >value2 : string
@@ -44,7 +44,7 @@ import {value} from "./file3"
 
 export {
     moduleCStar,
->moduleCStar : typeof import("file3")
+>moduleCStar : typeof moduleCStar
 
     moduleC,
 >moduleC : string

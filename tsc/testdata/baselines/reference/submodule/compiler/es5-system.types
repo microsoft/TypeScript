@@ -2,7 +2,7 @@
 
 === es5-system.ts ===
 export default class A
->A : default
+>A : A
 {
     constructor ()
     {

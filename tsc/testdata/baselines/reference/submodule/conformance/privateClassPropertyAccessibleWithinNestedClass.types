@@ -27,10 +27,10 @@ class C {
 >x : string
 
     private foo() { return this.foo; }
->foo : () => ???
->this.foo : () => ???
+>foo : () => any
+>this.foo : () => any
 >this : this
->foo : () => ???
+>foo : () => any
 
     private static x: string;
 >x : string
@@ -53,17 +53,17 @@ class C {
 >x : string
 
     private static foo() { return this.foo; }
->foo : () => ???
->this.foo : () => ???
+>foo : () => typeof C.foo
+>this.foo : () => typeof C.foo
 >this : typeof C
->foo : () => ???
+>foo : () => typeof C.foo
 
     private static bar() { this.foo(); }
 >bar : () => void
->this.foo() : () => ???
->this.foo : () => ???
+>this.foo() : () => typeof C.foo
+>this.foo : () => typeof C.foo
 >this : typeof C
->foo : () => ???
+>foo : () => typeof C.foo
 
     private bar() {
 >bar : () => void
@@ -78,10 +78,10 @@ class C {
 >x : C
 
                 var x1 = x.foo;
->x1 : () => ???
->x.foo : () => ???
+>x1 : () => any
+>x.foo : () => any
 >x : C
->foo : () => ???
+>foo : () => any
 
                 var x2 = x.bar;
 >x2 : () => void
@@ -120,10 +120,10 @@ class C {
 >bar : () => void
 
                 var sx4 = C.foo;
->sx4 : () => ???
->C.foo : () => ???
+>sx4 : () => typeof C.foo
+>C.foo : () => typeof C.foo
 >C : typeof C
->foo : () => ???
+>foo : () => typeof C.foo
 
                 let y = new C();
 >y : C
@@ -131,10 +131,10 @@ class C {
 >C : typeof C
 
                 var y1 = y.foo;
->y1 : () => ???
->y.foo : () => ???
+>y1 : () => any
+>y.foo : () => any
 >y : C
->foo : () => ???
+>foo : () => any
 
                 var y2 = y.bar;
 >y2 : () => void

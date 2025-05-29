@@ -9,10 +9,8 @@
 -    }
 -    return BlockIntrinsics;
 -}());
--
--
--//// [declFileClassWithIndexSignature.d.ts]
--declare class BlockIntrinsics {
--    [s: string]: string;
 +class BlockIntrinsics {
- }
++}
+
+
+ //// [declFileClassWithIndexSignature.d.ts]

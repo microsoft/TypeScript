@@ -1,17 +1,6 @@
 --- old.objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.types
 +++ new.objectTypesIdentityWithGenericConstructSignaturesDifferingTypeParameterCounts.types
-@@= skipped -31, +31 lines =@@
- >x : Z
-
- var b = { new<A, B, C, D, E, F>(x: A) { return x; } };
-->b : { "new"<A, B, C, D, E, F>(x: A): A; }
-->{ new<A, B, C, D, E, F>(x: A) { return x; } } : { "new"<A, B, C, D, E, F>(x: A): A; }
-+>b : { new: <A, B, C, D, E, F>(x: A) => A; }
-+>{ new<A, B, C, D, E, F>(x: A) { return x; } } : { new: <A, B, C, D, E, F>(x: A) => A; }
- >new : <A, B, C, D, E, F>(x: A) => A
- >x : A
- >x : A
-@@= skipped -43, +43 lines =@@
+@@= skipped -74, +74 lines =@@
  >x : any
 
  function foo3(x: typeof a);
@@ -33,23 +22,19 @@
 
  function foo4(x: typeof b);
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { "new"<A, B, C, D, E, F>(x: A): A; }
-->b : { "new"<A, B, C, D, E, F>(x: A): A; }
-+>foo4 : { (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
-+>x : { new: <A, B, C, D, E, F>(x: A) => A; }
-+>b : { new: <A, B, C, D, E, F>(x: A) => A; }
++>foo4 : { (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
+ >x : { "new"<A, B, C, D, E, F>(x: A): A; }
+ >b : { "new"<A, B, C, D, E, F>(x: A): A; }
 
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { "new"<A, B, C, D, E, F>(x: A): A; }
-->b : { "new"<A, B, C, D, E, F>(x: A): A; }
-+>foo4 : { (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
-+>x : { new: <A, B, C, D, E, F>(x: A) => A; }
-+>b : { new: <A, B, C, D, E, F>(x: A) => A; }
++>foo4 : { (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
+ >x : { "new"<A, B, C, D, E, F>(x: A): A; }
+ >b : { "new"<A, B, C, D, E, F>(x: A): A; }
 
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-+>foo4 : { (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
++>foo4 : { (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
  >x : any
 
  function foo8(x: B<string, string>);
@@ -74,20 +59,18 @@
 
  function foo11(x: B<string, boolean>);
 ->foo11 : { (x: B<string, boolean>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<string, boolean>): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
++>foo11 : { (x: B<string, boolean>): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
  >x : B<string, boolean>
 
  function foo11(x: typeof b); // ok
 ->foo11 : { (x: B<string, boolean>): any; (x: typeof b): any; }
-->x : { "new"<A, B, C, D, E, F>(x: A): A; }
-->b : { "new"<A, B, C, D, E, F>(x: A): A; }
-+>foo11 : { (x: B<string, boolean>): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
-+>x : { new: <A, B, C, D, E, F>(x: A) => A; }
-+>b : { new: <A, B, C, D, E, F>(x: A) => A; }
++>foo11 : { (x: B<string, boolean>): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
+ >x : { "new"<A, B, C, D, E, F>(x: A): A; }
+ >b : { "new"<A, B, C, D, E, F>(x: A): A; }
 
  function foo11(x: any) { }
 ->foo11 : { (x: B<string, boolean>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<string, boolean>): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
++>foo11 : { (x: B<string, boolean>): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
  >x : any
 
  function foo12(x: I<B<string, number>, number, Date, string>);
@@ -112,18 +95,16 @@
 
  function foo14(x: I<string, Date, RegExp, boolean>);
 ->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
++>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
  >x : I<string, Date, RegExp, boolean>
 
  function foo14(x: typeof b); // ok
 ->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: typeof b): any; }
-->x : { "new"<A, B, C, D, E, F>(x: A): A; }
-->b : { "new"<A, B, C, D, E, F>(x: A): A; }
-+>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
-+>x : { new: <A, B, C, D, E, F>(x: A) => A; }
-+>b : { new: <A, B, C, D, E, F>(x: A) => A; }
++>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
+ >x : { "new"<A, B, C, D, E, F>(x: A): A; }
+ >b : { "new"<A, B, C, D, E, F>(x: A): A; }
 
  function foo14(x: any) { }
 ->foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { new: <A, B, C, D, E, F>(x: A) => A; }): any; }
++>foo14 : { (x: I<string, Date, RegExp, boolean>): any; (x: { "new"<A, B, C, D, E, F>(x: A): A; }): any; }
  >x : any

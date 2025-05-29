@@ -70,3 +70,8 @@ extMod.m1.fooExport();
 exports.newVar = new extMod.m1.m2.c();
 extMod.m4.fooExport();
 exports.newVar2 = new extMod.m4.m2.c();
+
+
+//// [commentsExternalModules_1.d.ts]
+export declare var newVar: any;
+export declare var newVar2: any;

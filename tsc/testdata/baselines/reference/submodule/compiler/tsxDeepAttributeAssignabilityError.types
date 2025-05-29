@@ -2,7 +2,7 @@
 
 === my-component.tsx ===
 import * as React from 'react'
->React : typeof __React
+>React : typeof React
 
 interface MyProps {
     x: string;
@@ -18,26 +18,26 @@ interface MyInnerProps {
 }
 
 export function MyComponent(_props: MyProps) {
->MyComponent : (_props: MyProps) => Element
+>MyComponent : (_props: MyProps) => JSX.Element
 >_props : MyProps
 
     return <span>my component</span>;
-><span>my component</span> : Element
+><span>my component</span> : JSX.Element
 >span : any
 >span : any
 }
 
 === file1.tsx ===
 import * as React from 'react'
->React : typeof __React
+>React : typeof React
 
 import { MyComponent } from './my-component'
->MyComponent : (_props: MyProps) => Element
+>MyComponent : (_props: MyProps) => JSX.Element
 
 export const result = <MyComponent x="yes" y={{
->result : Element
-><MyComponent x="yes" y={{    value: 42}} /> : Element
->MyComponent : (_props: MyProps) => Element
+>result : JSX.Element
+><MyComponent x="yes" y={{    value: 42}} /> : JSX.Element
+>MyComponent : (_props: MyProps) => JSX.Element
 >x : string
 >y : { value: number; }
 >{    value: 42} : { value: number; }

@@ -5,7 +5,7 @@
 
      "__is_argument__"?: true;
 ->"__is_argument__" : Symbol(Arg["__is_argument__"], Decl(input.ts, 0, 82))
-+>"__is_argument__" : Symbol(__is_argument__, Decl(input.ts, 0, 82))
++>"__is_argument__" : Symbol("__is_argument__", Decl(input.ts, 0, 82))
 
      meta?: T;
 ->meta : Symbol(Arg.meta, Decl(input.ts, 1, 29))

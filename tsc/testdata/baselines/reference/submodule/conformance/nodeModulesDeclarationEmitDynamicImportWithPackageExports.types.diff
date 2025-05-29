@@ -7,22 +7,56 @@
 ->a : { default: typeof import("index"); }
 ->await import("package/cjs") : { default: typeof import("index"); }
 ->import("package/cjs") : Promise<{ default: typeof import("index"); }>
-+>a : typeof import("index")
-+>await import("package/cjs") : typeof import("index")
-+>import("package/cjs") : Promise<typeof import("index")>
++>a : typeof import("./index.cts")
++>await import("package/cjs") : typeof import("./index.cts")
++>import("package/cjs") : Promise<typeof import("./index.cts")>
  >"package/cjs" : "package/cjs"
 
  export const b = await import("package/mjs");
-@@= skipped -32, +32 lines =@@
+->b : typeof import("index")
+->await import("package/mjs") : typeof import("index")
+->import("package/mjs") : Promise<typeof import("index")>
++>b : typeof import("./index.mts")
++>await import("package/mjs") : typeof import("./index.mts")
++>import("package/mjs") : Promise<typeof import("./index.mts")>
+ >"package/mjs" : "package/mjs"
+
+ export const c = await import("package");
+->c : typeof import("index")
+->await import("package") : typeof import("index")
+->import("package") : Promise<typeof import("index")>
++>c : typeof import(".")
++>await import("package") : typeof import(".")
++>import("package") : Promise<typeof import(".")>
+ >"package" : "package"
+
+ export const f = await import("inner");
+->f : { cjsMain: true; default: typeof import("node_modules/inner/index"); }
+->await import("inner") : { cjsMain: true; default: typeof import("node_modules/inner/index"); }
+->import("inner") : Promise<{ cjsMain: true; default: typeof import("node_modules/inner/index"); }>
++>f : { cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }
++>await import("inner") : { cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }
++>import("inner") : Promise<{ cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }>
+ >"inner" : "inner"
+
+ === other2.ts ===
+ // esm format file
+ export const d = await import("inner/cjs");
+->d : { cjsNonmain: true; default: typeof import("node_modules/inner/index"); }
+->await import("inner/cjs") : { cjsNonmain: true; default: typeof import("node_modules/inner/index"); }
+->import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("node_modules/inner/index"); }>
++>d : { cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }
++>await import("inner/cjs") : { cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }
++>import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }>
  >"inner/cjs" : "inner/cjs"
 
  export const e = await import("inner/mjs");
 ->e : typeof import("node_modules/inner/index")
 ->await import("inner/mjs") : typeof import("node_modules/inner/index")
 ->import("inner/mjs") : Promise<typeof import("node_modules/inner/index")>
-+>e : { esm: true; default: typeof import("node_modules/inner/index"); }
-+>await import("inner/mjs") : { esm: true; default: typeof import("node_modules/inner/index"); }
-+>import("inner/mjs") : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
++>e : { esm: true; default: typeof import("./node_modules/inner/index.d.mts"); }
++>await import("inner/mjs") : { esm: true; default: typeof import("./node_modules/inner/index.d.mts"); }
++>import("inner/mjs") : Promise<{ esm: true; default: typeof import("./node_modules/inner/index.d.mts"); }>
  >"inner/mjs" : "inner/mjs"
 
  === other.mts ===
@@ -31,22 +65,56 @@
 ->a : { default: typeof import("index"); }
 ->await import("package/cjs") : { default: typeof import("index"); }
 ->import("package/cjs") : Promise<{ default: typeof import("index"); }>
-+>a : typeof import("index")
-+>await import("package/cjs") : typeof import("index")
-+>import("package/cjs") : Promise<typeof import("index")>
++>a : typeof import("./index.cts")
++>await import("package/cjs") : typeof import("./index.cts")
++>import("package/cjs") : Promise<typeof import("./index.cts")>
  >"package/cjs" : "package/cjs"
 
  export const b = await import("package/mjs");
-@@= skipped -40, +40 lines =@@
+->b : typeof import("index")
+->await import("package/mjs") : typeof import("index")
+->import("package/mjs") : Promise<typeof import("index")>
++>b : typeof import("./index.mts")
++>await import("package/mjs") : typeof import("./index.mts")
++>import("package/mjs") : Promise<typeof import("./index.mts")>
+ >"package/mjs" : "package/mjs"
+
+ export const c = await import("package");
+->c : typeof import("index")
+->await import("package") : typeof import("index")
+->import("package") : Promise<typeof import("index")>
++>c : typeof import(".")
++>await import("package") : typeof import(".")
++>import("package") : Promise<typeof import(".")>
+ >"package" : "package"
+
+ export const f = await import("inner");
+->f : { cjsMain: true; default: typeof import("node_modules/inner/index"); }
+->await import("inner") : { cjsMain: true; default: typeof import("node_modules/inner/index"); }
+->import("inner") : Promise<{ cjsMain: true; default: typeof import("node_modules/inner/index"); }>
++>f : { cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }
++>await import("inner") : { cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }
++>import("inner") : Promise<{ cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }>
+ >"inner" : "inner"
+
+ === other2.mts ===
+ // esm format file
+ export const d = await import("inner/cjs");
+->d : { cjsNonmain: true; default: typeof import("node_modules/inner/index"); }
+->await import("inner/cjs") : { cjsNonmain: true; default: typeof import("node_modules/inner/index"); }
+->import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("node_modules/inner/index"); }>
++>d : { cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }
++>await import("inner/cjs") : { cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }
++>import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }>
  >"inner/cjs" : "inner/cjs"
 
  export const e = await import("inner/mjs");
 ->e : typeof import("node_modules/inner/index")
 ->await import("inner/mjs") : typeof import("node_modules/inner/index")
 ->import("inner/mjs") : Promise<typeof import("node_modules/inner/index")>
-+>e : { esm: true; default: typeof import("node_modules/inner/index"); }
-+>await import("inner/mjs") : { esm: true; default: typeof import("node_modules/inner/index"); }
-+>import("inner/mjs") : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
++>e : { esm: true; default: typeof import("./node_modules/inner/index.d.mts"); }
++>await import("inner/mjs") : { esm: true; default: typeof import("./node_modules/inner/index.d.mts"); }
++>import("inner/mjs") : Promise<{ esm: true; default: typeof import("./node_modules/inner/index.d.mts"); }>
  >"inner/mjs" : "inner/mjs"
 
  === other.cts ===
@@ -54,33 +122,45 @@
  export const a = import("package/cjs");
 ->a : Promise<{ default: typeof import("index"); }>
 ->import("package/cjs") : Promise<{ default: typeof import("index"); }>
-+>a : Promise<typeof import("index")>
-+>import("package/cjs") : Promise<typeof import("index")>
++>a : Promise<typeof import("./index.cts")>
++>import("package/cjs") : Promise<typeof import("./index.cts")>
  >"package/cjs" : "package/cjs"
 
  export const b = import("package/mjs");
 ->b : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 ->import("package/mjs") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
-+>b : Promise<typeof import("index")>
-+>import("package/mjs") : Promise<typeof import("index")>
++>b : Promise<typeof import("./index.mts", { with: { "resolution-mode": "import" } })>
++>import("package/mjs") : Promise<typeof import("./index.mts", { with: { "resolution-mode": "import" } })>
  >"package/mjs" : "package/mjs"
 
  export const c = import("package");
 ->c : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
 ->import("package") : Promise<typeof import("index", { with: { "resolution-mode": "import" } })>
-+>c : Promise<typeof import("index")>
-+>import("package") : Promise<typeof import("index")>
++>c : Promise<typeof import("./index.js", { with: { "resolution-mode": "import" } })>
++>import("package") : Promise<typeof import("./index.js", { with: { "resolution-mode": "import" } })>
  >"package" : "package"
 
  export const f = import("inner");
-@@= skipped -35, +35 lines =@@
+->f : Promise<{ cjsMain: true; default: typeof import("node_modules/inner/index"); }>
+->import("inner") : Promise<{ cjsMain: true; default: typeof import("node_modules/inner/index"); }>
++>f : Promise<{ cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }>
++>import("inner") : Promise<{ cjsMain: true; default: typeof import("./node_modules/inner/index.js"); }>
+ >"inner" : "inner"
+
+ === other2.cts ===
+ // cjs format file, no TLA
+ export const d = import("inner/cjs");
+->d : Promise<{ cjsNonmain: true; default: typeof import("node_modules/inner/index"); }>
+->import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("node_modules/inner/index"); }>
++>d : Promise<{ cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }>
++>import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }>
  >"inner/cjs" : "inner/cjs"
 
  export const e = import("inner/mjs");
 ->e : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
 ->import("inner/mjs") : Promise<typeof import("node_modules/inner/index", { with: { "resolution-mode": "import" } })>
-+>e : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
-+>import("inner/mjs") : Promise<{ esm: true; default: typeof import("node_modules/inner/index"); }>
++>e : Promise<{ esm: true; default: typeof import("./node_modules/inner/index.d.mts", { with: { "resolution-mode": "import" } }); }>
++>import("inner/mjs") : Promise<{ esm: true; default: typeof import("./node_modules/inner/index.d.mts", { with: { "resolution-mode": "import" } }); }>
  >"inner/mjs" : "inner/mjs"
 
  === node_modules/inner/index.d.ts ===

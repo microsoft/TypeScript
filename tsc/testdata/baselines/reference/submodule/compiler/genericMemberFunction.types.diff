@@ -1,11 +1,11 @@
 --- old.genericMemberFunction.types
 +++ new.genericMemberFunction.types
-@@= skipped -55, +55 lines =@@
- >removedFiles.forEach : any
- >removedFiles : any
- >forEach : any
--><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A_1, B_1 extends A_1, C_1>(each: FileWithErrors<A_1, B_1, C_1>) => void
-+><A, B extends A, C>(each: FileWithErrors<A, B, C>) => {      this.removeFile(each);    } : <A, B extends A, C>(each: FileWithErrors<A, B, C>) => void
- >each : FileWithErrors<A, B, C>
+@@= skipped -30, +30 lines =@@
+ >BuildResult : BuildResult<A, B, C>
 
-       this.removeFile(each);
+   public merge<A, B extends A, C>(other: BuildResult<A, B, C>): void {
+->merge : <A, B extends A, C>(other: BuildResult<A, B, C>) => void
++>merge : <A_1, B_1 extends A_1, C_1>(other: BuildResult<A_1, B_1, C_1>) => void
+ >other : BuildResult<A, B, C>
+
+     a.b.c.d.e.f.g = 0;

@@ -1,9 +1,0 @@
---- old.invalidUseOfTypeAsNamespace.types
-+++ new.invalidUseOfTypeAsNamespace.types
-@@= skipped -4, +4 lines =@@
- }
-
- declare let y: OhNo.hello;
-->y : OhNo.hello
-+>y : hello
- >OhNo : any

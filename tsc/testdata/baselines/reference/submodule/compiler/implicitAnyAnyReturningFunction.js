@@ -39,3 +39,12 @@ class C {
         return someLocal;
     }
 }
+
+
+//// [implicitAnyAnyReturningFunction.d.ts]
+declare function A(): any;
+declare function B(): any;
+declare class C {
+    A(): any;
+    B(): any;
+}

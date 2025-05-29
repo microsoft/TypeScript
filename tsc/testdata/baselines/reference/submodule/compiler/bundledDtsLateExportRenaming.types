@@ -18,14 +18,14 @@ export function f() {
 
 === nested/derived.ts ===
 import { f } from "./base";
->f : () => B
+>f : () => import("./shared").B
 
 export function g() {
->g : () => B
+>g : () => import("./shared").B
 
     return f();
->f() : B
->f : () => B
+>f() : import("./shared").B
+>f : () => import("./shared").B
 }
 
 === nested/index.ts ===

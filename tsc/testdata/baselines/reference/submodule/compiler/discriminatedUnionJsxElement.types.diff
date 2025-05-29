@@ -1,15 +1,6 @@
 --- old.discriminatedUnionJsxElement.types
 +++ new.discriminatedUnionJsxElement.types
-@@= skipped -10, +10 lines =@@
- }
-
- function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) {
-->Menu : <MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>) => any
-+>Menu : <MenuItemVariant extends ListItemVariant>(data: IData<MenuItemVariant>) => any
- >ListItemVariant : any
- >data : IData<MenuItemVariant>
-
-@@= skipped -15, +15 lines =@@
+@@= skipped -25, +25 lines =@@
  >OneLine : ListItemVariant.OneLine
 
      return <ListItem variant={listItemVariant} />;

@@ -1,6 +1,33 @@
 --- old.mixinAccessModifiers.types
 +++ new.mixinAccessModifiers.types
-@@= skipped -329, +329 lines =@@
+@@= skipped -77, +77 lines =@@
+ }
+
+ function f1(x: Private & Private2) {
+->f1 : (x: Private & Private2) => void
++>f1 : (x: never) => void
+ >x : never
+
+ 	x.p;  // Error, private constituent makes property inaccessible
+@@= skipped -10, +10 lines =@@
+ }
+
+ function f2(x: Private & Protected) {
+->f2 : (x: Private & Protected) => void
++>f2 : (x: never) => void
+ >x : never
+
+ 	x.p;  // Error, private constituent makes property inaccessible
+@@= skipped -10, +10 lines =@@
+ }
+
+ function f3(x: Private & Public) {
+->f3 : (x: Private & Public) => void
++>f3 : (x: never) => void
+ >x : never
+
+ 	x.p;  // Error, private constituent makes property inaccessible
+@@= skipped -232, +232 lines =@@
  }
 
  function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
@@ -9,3 +36,12 @@
  >x : ProtectedGeneric<{}>
 
  	x.privateMethod(); // Error, private constituent makes method inaccessible
+@@= skipped -17, +17 lines =@@
+ }
+
+ function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
+->f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
++>f8 : (x: never) => void
+ >x : never
+ >a : void
+ >a : void

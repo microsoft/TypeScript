@@ -14,3 +14,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * JSDoc Comments
  */
 exports.default = null;
+
+
+//// [exportDefaultExpressionComments.d.ts]
+declare const _default: any;
+export default _default;

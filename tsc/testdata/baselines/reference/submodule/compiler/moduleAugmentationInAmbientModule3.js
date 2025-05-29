@@ -44,3 +44,7 @@ require("Map");
 let x;
 x.foo().x;
 x.foo2().x2;
+
+
+//// [main.d.ts]
+import "Map";

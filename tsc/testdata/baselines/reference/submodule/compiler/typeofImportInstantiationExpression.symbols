@@ -9,7 +9,7 @@ interface Arg<T = any, Params extends Record<string, any> = Record<string, any>>
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 
     "__is_argument__"?: true;
->"__is_argument__" : Symbol(__is_argument__, Decl(input.ts, 0, 82))
+>"__is_argument__" : Symbol("__is_argument__", Decl(input.ts, 0, 82))
 
     meta?: T;
 >meta : Symbol(meta, Decl(input.ts, 1, 29))

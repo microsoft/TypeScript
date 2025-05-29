@@ -20,3 +20,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 const server_1 = require("server");
 exports.x = new server_1.default();
+
+
+//// [server.d.ts]
+declare class a {
+}
+export default a;
+//// [client.d.ts]
+export declare var x: any;

@@ -208,3 +208,41 @@ var n3;
     n3.d = takeReturnHelloWorld(n3.d);
     n3.e = takeReturnHelloWorld(n3.e);
 })(n3 || (n3 = {}));
+
+
+//// [typeArgumentsWithStringLiteralTypes01.d.ts]
+declare function randBool(): boolean;
+declare function takeReturnString(str: string): string;
+declare function takeReturnHello(str: "Hello"): "Hello";
+declare function takeReturnHelloWorld(str: "Hello" | "World"): "Hello" | "World";
+declare function fun1<T>(x: T, y: T): T;
+declare function fun2<T, U>(x: T, y: U): T | U;
+declare function fun3<T>(...args: T[]): T;
+declare namespace n1 {
+    // The following should all come back as strings.
+    // They should be assignable to/from something of a type 'string'.
+    // They should not be assignable to either "Hello" or "World".
+    let a: string;
+    let b: string;
+    let c: string;
+    let d: string;
+    let e: string;
+}
+declare namespace n2 {
+    // The following (regardless of errors) should come back typed
+    // as "Hello" (or "Hello" | "Hello").
+    let a: "Hello";
+    let b: "Hello";
+    let c: "Hello";
+    let d: "Hello";
+    let e: "Hello";
+}
+declare namespace n3 {
+    // The following (regardless of errors) should come back typed
+    // as "Hello" | "World" (or "World" | "Hello").
+    let a: "Hello" | "World";
+    let b: "Hello" | "World";
+    let c: "Hello" | "World";
+    let d: "Hello" | "World";
+    let e: "Hello" | "World";
+}

@@ -8,7 +8,7 @@ var decorator: ClassDecorator;
 >decorator : ClassDecorator
 
 export default class Foo {}
->Foo : default
+>Foo : Foo
 
 === b.ts ===
 var decorator: ClassDecorator;

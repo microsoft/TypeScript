@@ -44,3 +44,19 @@ class Bar2 {
     f = 2;
 }
 exports.Bar2 = Bar2;
+
+
+//// [file1.d.ts]
+export declare class Bar {
+    c?: readonly [1] | undefined;
+    c3?: 1 | undefined;
+    readonly r: number;
+    f: number;
+}
+//// [file2.d.ts]
+export declare function foo(p?: (ip: number, v: number) => void): void;
+export declare function foo2(p?: (ip: number, v: number) => void): void;
+export declare class Bar2 {
+    readonly r: number;
+    f: number;
+}

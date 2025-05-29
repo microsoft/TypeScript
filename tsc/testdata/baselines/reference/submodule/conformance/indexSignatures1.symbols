@@ -135,9 +135,9 @@ const y1 = dom['data123'];
 
 const y2 = dom.data123;
 >y2 : Symbol(y2, Decl(indexSignatures1.ts, 47, 5))
->dom.data123 : Symbol((Missing), Decl(indexSignatures1.ts, 45, 18))
+>dom.data123 : Symbol(þindex, Decl(indexSignatures1.ts, 45, 18))
 >dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
->data123 : Symbol((Missing), Decl(indexSignatures1.ts, 45, 18))
+>data123 : Symbol(þindex, Decl(indexSignatures1.ts, 45, 18))
 
 // Excess property checking for template pattern index signature
 
@@ -596,8 +596,8 @@ const obj10 = {
 >obj10 : Symbol(obj10, Decl(indexSignatures1.ts, 203, 5))
 
     ['x']: 0 as const,
->['x'] : Symbol(x, Decl(indexSignatures1.ts, 203, 15))
->'x' : Symbol(x, Decl(indexSignatures1.ts, 203, 15))
+>['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
+>'x' : Symbol(['x'], Decl(indexSignatures1.ts, 203, 15))
 >const : Symbol(const)
 
     ['a' + 'b']: 1 as const,
@@ -639,8 +639,8 @@ const obj13 = {
 >obj13 : Symbol(obj13, Decl(indexSignatures1.ts, 218, 5))
 
     ['x']: 0 as const,
->['x'] : Symbol(x, Decl(indexSignatures1.ts, 218, 15))
->'x' : Symbol(x, Decl(indexSignatures1.ts, 218, 15))
+>['x'] : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
+>'x' : Symbol(['x'], Decl(indexSignatures1.ts, 218, 15))
 >const : Symbol(const)
 
     ['a' + 'b']: 1 as const,
@@ -690,7 +690,7 @@ const plugins = {
 >plugins : Symbol(plugins, Decl(indexSignatures1.ts, 236, 5))
 
     "user": {} as Plugs,
->"user" : Symbol(user, Decl(indexSignatures1.ts, 236, 17))
+>"user" : Symbol("user", Decl(indexSignatures1.ts, 236, 17))
 >Plugs : Symbol(Plugs, Decl(indexSignatures1.ts, 230, 48))
 
     [system]: {} as Plugs
@@ -831,7 +831,7 @@ type PseudoDeclaration = { [key in Pseudo]: string };
 const test: PseudoDeclaration = { 'someKey' : 'someValue' };  // Error
 >test : Symbol(test, Decl(indexSignatures1.ts, 280, 5))
 >PseudoDeclaration : Symbol(PseudoDeclaration, Decl(indexSignatures1.ts, 276, 30))
->'someKey' : Symbol(someKey, Decl(indexSignatures1.ts, 280, 33))
+>'someKey' : Symbol('someKey', Decl(indexSignatures1.ts, 280, 33))
 
 type FieldPattern = `/${string}`;
 >FieldPattern : Symbol(FieldPattern, Decl(indexSignatures1.ts, 280, 60))

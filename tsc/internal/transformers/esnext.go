@@ -28,7 +28,7 @@ const (
 
 func NewESNextTransformer(emitContext *printer.EmitContext) *Transformer {
 	tx := &ESNextTransformer{}
-	return tx.newTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 func (tx *ESNextTransformer) visit(node *ast.Node) *ast.Node {

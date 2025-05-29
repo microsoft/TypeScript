@@ -2,7 +2,7 @@
 
 === a.ts ===
 import y = require("b");
->y : typeof import("node_modules/b/index")
+>y : typeof y
 
 === node_modules/b/index.d.ts ===
 export var x: number;

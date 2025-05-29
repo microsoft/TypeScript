@@ -9,19 +9,7 @@
 
  var GlobalIns = {
  >GlobalIns : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 3))
-@@= skipped -19, +19 lines =@@
-
-     this.accept_foo(this);
- >this.accept_foo : Symbol(accept_foo, Decl(objectLiteralThisWidenedOnUse.ts, 8, 4))
-->this : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
-+>this : Symbol((Anonymous type), Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
- >accept_foo : Symbol(accept_foo, Decl(objectLiteralThisWidenedOnUse.ts, 8, 4))
-->this : Symbol(GlobalIns, Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
-+>this : Symbol((Anonymous type), Decl(objectLiteralThisWidenedOnUse.ts, 2, 15))
-
-   },
-   accept_foo (foo: Foo): boolean {
-@@= skipped -12, +12 lines =@@
+@@= skipped -31, +31 lines =@@
 
      return !!foo && !!foo.bar;
  >foo : Symbol(foo, Decl(objectLiteralThisWidenedOnUse.ts, 9, 14))

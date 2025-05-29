@@ -5,7 +5,7 @@ declare module core {
 >core : typeof core
 
     var String: {
->String : { repeat: (text: string, count: number) => string; }
+>String : { repeat(text: string, count: number): string; }
 
         repeat(text: string, count: number): string;
 >repeat : (text: string, count: number) => string
@@ -20,9 +20,9 @@ declare module "core-js/fn/string/repeat" {
     var repeat: typeof core.String.repeat;
 >repeat : (text: string, count: number) => string
 >core.String.repeat : (text: string, count: number) => string
->core.String : { repeat: (text: string, count: number) => string; }
+>core.String : { repeat(text: string, count: number): string; }
 >core : typeof core
->String : { repeat: (text: string, count: number) => string; }
+>String : { repeat(text: string, count: number): string; }
 >repeat : (text: string, count: number) => string
 
     export default repeat;

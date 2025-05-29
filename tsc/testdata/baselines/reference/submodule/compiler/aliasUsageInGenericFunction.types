@@ -2,17 +2,17 @@
 
 === aliasUsageInGenericFunction_main.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
->Backbone : typeof import("aliasUsageInGenericFunction_backbone")
+>Backbone : typeof Backbone
 
 import moduleA = require("./aliasUsageInGenericFunction_moduleA");
->moduleA : typeof import("aliasUsageInGenericFunction_moduleA")
+>moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Model
->Backbone.Model : typeof Model
->Backbone : typeof import("aliasUsageInGenericFunction_backbone")
->Model : typeof Model
+>VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
@@ -23,12 +23,12 @@ function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 >x : T
 }
 var r = foo({ a: moduleA });
->r : { a: typeof import("aliasUsageInGenericFunction_moduleA"); }
->foo({ a: moduleA }) : { a: typeof import("aliasUsageInGenericFunction_moduleA"); }
+>r : { a: typeof moduleA; }
+>foo({ a: moduleA }) : { a: typeof moduleA; }
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
->{ a: moduleA } : { a: typeof import("aliasUsageInGenericFunction_moduleA"); }
->a : typeof import("aliasUsageInGenericFunction_moduleA")
->moduleA : typeof import("aliasUsageInGenericFunction_moduleA")
+>{ a: moduleA } : { a: typeof moduleA; }
+>a : typeof moduleA
+>moduleA : typeof moduleA
 
 var r2 = foo({ a: <IHasVisualizationModel>null });
 >r2 : { a: IHasVisualizationModel; }
@@ -48,13 +48,13 @@ export class Model {
 
 === aliasUsageInGenericFunction_moduleA.ts ===
 import Backbone = require("./aliasUsageInGenericFunction_backbone");
->Backbone : typeof import("aliasUsageInGenericFunction_backbone")
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : Model
->Backbone : typeof import("aliasUsageInGenericFunction_backbone")
->Model : typeof Model
+>Backbone.Model : Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }

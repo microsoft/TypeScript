@@ -34,3 +34,11 @@ Object.defineProperty(exports, "default", { enumerable: true, get: function () {
 //// [index.js]
 // esm format file
 export { default } from "fs";
+
+
+//// [index.d.ts]
+// cjs format file
+export { default } from "fs";
+//// [index.d.ts]
+// esm format file
+export { default } from "fs";

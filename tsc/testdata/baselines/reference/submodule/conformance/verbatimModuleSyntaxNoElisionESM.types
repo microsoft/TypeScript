@@ -56,7 +56,7 @@ export default 1; // ok
 
 === /main5.ts ===
 export default class C {} // ok
->C : default
+>C : C
 
 === /main6.ts ===
 interface I {}
@@ -65,8 +65,8 @@ export default I; // error
 
 === /main7.ts ===
 import type C from "./main5";
->C : default
+>C : C
 
 export default C; // error
->C : default
+>C : C
 

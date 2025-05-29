@@ -27,3 +27,9 @@ class C {
 exports.default = C;
 var after = new C();
 var t = C;
+
+
+//// [es5ExportDefaultClassDeclaration3.d.ts]
+export default class C {
+    method(): C;
+}

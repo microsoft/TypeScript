@@ -9,11 +9,12 @@
  exports.ADMIN = pkg2_1.MetadataAccessor.create('1');
  //// [index.js]
  "use strict";
-@@= skipped -20, +20 lines =@@
- };
- Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -22, +22 lines =@@
  __exportStar(require("./keys"), exports);
--
--
--//// [index.d.ts]
--export * from './keys';
+
+
++//// [keys.d.ts]
++import { MetadataAccessor } from "@raymondfeng/pkg2";
++export declare const ADMIN: MetadataAccessor<boolean, import("../../pkg1/dist/types.js").IdType>;
+ //// [index.d.ts]
+ export * from './keys';

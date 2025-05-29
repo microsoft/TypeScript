@@ -9,34 +9,7 @@
  >is : any
  >A : typeof A
 
-@@= skipped -58, +58 lines =@@
-
- // Reference to binding pattern
- function b5({a, b, p1}, p2, p3): p1 is A {
-->b5 : ({ a, b, p1 }: { a: any; b: any; p1: any; }, p2: any, p3: any) => p1 is A
-+>b5 : (__0: { a: any; b: any; p1: any; }, p2: any, p3: any) => p1 is A
- >a : any
- >b : any
- >p1 : any
-@@= skipped -12, +12 lines =@@
- }
-
- function b6([a, b, p1], p2, p3): p1 is A {
-->b6 : ([a, b, p1]: [any, any, any], p2: any, p3: any) => p1 is A
-+>b6 : (__0: [any, any, any], p2: any, p3: any) => p1 is A
- >a : any
- >b : any
- >p1 : any
-@@= skipped -12, +12 lines =@@
- }
-
- function b7({a, b, c: {p1}}, p2, p3): p1 is A {
-->b7 : ({ a, b, c: { p1 } }: { a: any; b: any; c: { p1: any; }; }, p2: any, p3: any) => p1 is A
-+>b7 : (__0: { a: any; b: any; c: { p1: any; }; }, p2: any, p3: any) => p1 is A
- >a : any
- >b : any
- >c : any
-@@= skipped -37, +37 lines =@@
+@@= skipped -119, +119 lines =@@
 
  // expected an error, since Keys doesn't have a 'd'
  declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;

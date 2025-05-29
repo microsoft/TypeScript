@@ -6,10 +6,10 @@ export class A { }
 
 === b.ts ===
 import * as a from "./a";
->a : typeof import("a")
+>a : typeof a
 
 export { a };
->a : typeof import("a")
+>a : typeof a
 
 === tslib.d.ts ===
 declare module "tslib" {

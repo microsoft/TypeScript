@@ -20,3 +20,13 @@ function bar() { }
 "use strict";
 const utils_1 = require("./utils");
 module.exports = foo;
+
+
+//// [utils.d.ts]
+export declare function foo(): void;
+export declare function bar(): void;
+export interface Buzz {
+}
+//// [index.d.ts]
+import { foo } from "./utils";
+export = foo;

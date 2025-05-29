@@ -5,9 +5,9 @@
 
      "foo"();
 ->"foo" : Symbol(C["foo"], Decl(parserClassDeclaration22.ts, 0, 9))
-+>"foo" : Symbol(foo, Decl(parserClassDeclaration22.ts, 0, 9))
++>"foo" : Symbol("foo", Decl(parserClassDeclaration22.ts, 0, 9))
 
      "bar"() { }
 ->"bar" : Symbol(C["bar"], Decl(parserClassDeclaration22.ts, 1, 12))
-+>"bar" : Symbol(bar, Decl(parserClassDeclaration22.ts, 1, 12))
++>"bar" : Symbol("bar", Decl(parserClassDeclaration22.ts, 1, 12))
  }

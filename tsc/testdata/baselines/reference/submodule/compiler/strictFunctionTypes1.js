@@ -66,3 +66,45 @@ const t3 = coAndContra(never, acceptA);
 const t4 = coAndContraArray([a], acceptUnion);
 const t5 = coAndContraArray([b], acceptA);
 const t6 = coAndContraArray([], acceptA);
+
+
+//// [strictFunctionTypes1.d.ts]
+declare function f1<T>(f1: (x: T) => void, f2: (x: T) => void): (x: T) => void;
+declare function f2<T>(obj: T, f1: (x: T) => void, f2: (x: T) => void): T;
+declare function f3<T>(obj: T, f1: (x: T) => void, f2: (f: (x: T) => void) => void): T;
+interface Func<T> {
+    (x: T): void;
+}
+declare function f4<T>(f1: Func<T>, f2: Func<T>): Func<T>;
+declare function fo(x: Object): void;
+declare function fs(x: string): void;
+declare function fx(f: (x: "def") => void): void;
+declare const x1: (x: string) => void; // (x: string) => void
+declare const x2 = "abc"; // "abc"
+declare const x3: string; // "abc" | "def"
+declare const x4: Func<string>; // Func<string>
+declare const never: never;
+declare const x10: string; // string
+declare const x11: "def"; // "def"
+// Repro from #21112
+declare function foo<T>(a: ReadonlyArray<T>): T;
+declare let x: never; // never
+// Modified repros from #26127
+interface A {
+    a: string;
+}
+interface B extends A {
+    b: string;
+}
+declare function acceptUnion(x: A | number): void;
+declare function acceptA(x: A): void;
+declare let a: A;
+declare let b: B;
+declare function coAndContra<T>(value: T, func: (t: T) => void): T;
+declare const t1: A;
+declare const t2: B;
+declare const t3: A;
+declare function coAndContraArray<T>(value: T[], func: (t: T) => void): T[];
+declare const t4: A[];
+declare const t5: B[];
+declare const t6: A[];

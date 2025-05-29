@@ -5,7 +5,7 @@
 
  function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
 ->fun : (...[[a], b]: Bar[][]) => void
-+>fun : (...__0: Bar[][]) => void
++>fun : (...[[a = new Foo], b = [new Foo]]: Bar[][]) => void
  >a : Bar
  >new Foo : Foo
  >Foo : typeof Foo
@@ -14,7 +14,7 @@
  fun(...new FooArrayIterator);
  >fun(...new FooArrayIterator) : void
 ->fun : (...[[a], b]: Bar[][]) => void
-+>fun : (...__0: Bar[][]) => void
++>fun : (...[[a = new Foo], b = [new Foo]]: Bar[][]) => void
  >...new FooArrayIterator : Foo[]
  >new FooArrayIterator : FooArrayIterator
  >FooArrayIterator : typeof FooArrayIterator

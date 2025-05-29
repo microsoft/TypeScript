@@ -17,14 +17,14 @@
 
      static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.name] : Symbol(StaticName2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 14, 19))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 14, 19))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 14, 19))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
 
      [FunctionPropertyNames.name]: number; // ok
 ->[FunctionPropertyNames.name] : Symbol(StaticName2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 15, 48))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 15, 48))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 15, 48))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
@@ -45,14 +45,14 @@
 
      static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.name] : Symbol(StaticNameFn2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 24, 21))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 24, 21))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 24, 21))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
 
      [FunctionPropertyNames.name]() {} // ok
 ->[FunctionPropertyNames.name] : Symbol(StaticNameFn2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 25, 44))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 25, 44))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 25, 44))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
@@ -73,14 +73,14 @@
 
      static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.length] : Symbol(StaticLength2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 35, 21))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 35, 21))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 35, 21))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
 
      [FunctionPropertyNames.length]: number; // ok
 ->[FunctionPropertyNames.length] : Symbol(StaticLength2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 36, 50))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 36, 50))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 36, 50))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
@@ -101,14 +101,14 @@
 
      static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.length] : Symbol(StaticLengthFn2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 45, 23))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 45, 23))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 45, 23))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
 
      [FunctionPropertyNames.length]() {} // ok
 ->[FunctionPropertyNames.length] : Symbol(StaticLengthFn2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 46, 46))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 46, 46))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 46, 46))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
@@ -129,14 +129,14 @@
 
      static [FunctionPropertyNames.prototype]: number; // always an error
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototype2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 56, 24))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 56, 24))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 56, 24))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
 
      [FunctionPropertyNames.prototype]: string; // ok
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototype2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 57, 53))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 57, 53))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 57, 53))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
@@ -157,14 +157,14 @@
 
      static [FunctionPropertyNames.prototype]() {} // always an error
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototypeFn2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 66, 26))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 66, 26))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 66, 26))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
 
      [FunctionPropertyNames.prototype]() {} // ok
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototypeFn2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 67, 49))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 67, 49))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 67, 49))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
@@ -185,14 +185,14 @@
 
      static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.caller] : Symbol(StaticCaller2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 77, 21))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 77, 21))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 77, 21))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
 
      [FunctionPropertyNames.caller]: string; // ok
 ->[FunctionPropertyNames.caller] : Symbol(StaticCaller2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 78, 50))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 78, 50))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 78, 50))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
@@ -213,14 +213,14 @@
 
      static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.caller] : Symbol(StaticCallerFn2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 87, 23))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 87, 23))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 87, 23))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
 
      [FunctionPropertyNames.caller]() {} // ok
 ->[FunctionPropertyNames.caller] : Symbol(StaticCallerFn2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 88, 46))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 88, 46))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 88, 46))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
@@ -241,14 +241,14 @@
 
      static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArguments2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 98, 24))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 98, 24))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 98, 24))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
 
      [FunctionPropertyNames.arguments]: string; // ok
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArguments2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 99, 53))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 99, 53))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 99, 53))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
@@ -269,14 +269,14 @@
 
      static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArgumentsFn2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 108, 26))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 108, 26))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 108, 26))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
 
      [FunctionPropertyNames.arguments]() {} // ok
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArgumentsFn2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 109, 49))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 109, 49))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 109, 49))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
@@ -297,14 +297,14 @@
 
      static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.name] : Symbol(StaticName_Anonymous2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 122, 35))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 122, 35))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 122, 35))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
 
      [FunctionPropertyNames.name]: string; // ok
 ->[FunctionPropertyNames.name] : Symbol(StaticName_Anonymous2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 123, 48))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 123, 48))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 123, 48))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
@@ -325,14 +325,14 @@
 
      static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.name] : Symbol(StaticNameFn_Anonymous2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 132, 37))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 132, 37))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 132, 37))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
 
      [FunctionPropertyNames.name]() {} // ok
 ->[FunctionPropertyNames.name] : Symbol(StaticNameFn_Anonymous2[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 133, 44))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 133, 44))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 133, 44))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
@@ -353,14 +353,14 @@
 
      static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.length] : Symbol(StaticLength_Anonymous2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 143, 37))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 143, 37))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 143, 37))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
 
      [FunctionPropertyNames.length]: string; // ok
 ->[FunctionPropertyNames.length] : Symbol(StaticLength_Anonymous2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 144, 50))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 144, 50))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 144, 50))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
@@ -381,14 +381,14 @@
 
      static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.length] : Symbol(StaticLengthFn_Anonymous2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 153, 39))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 153, 39))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 153, 39))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
 
      [FunctionPropertyNames.length]() {} // ok
 ->[FunctionPropertyNames.length] : Symbol(StaticLengthFn_Anonymous2[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 154, 46))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 154, 46))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 154, 46))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
@@ -409,14 +409,14 @@
 
      static [FunctionPropertyNames.prototype]: number; // always an error
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototype_Anonymous2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 164, 40))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 164, 40))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 164, 40))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
 
      [FunctionPropertyNames.prototype]: string; // ok
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototype_Anonymous2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 165, 53))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 165, 53))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 165, 53))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
@@ -437,14 +437,14 @@
 
      static [FunctionPropertyNames.prototype]() {} // always an error
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototypeFn_Anonymous2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 174, 42))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 174, 42))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 174, 42))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
 
      [FunctionPropertyNames.prototype]() {} // ok
 ->[FunctionPropertyNames.prototype] : Symbol(StaticPrototypeFn_Anonymous2[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 175, 49))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 175, 49))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 175, 49))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
@@ -465,14 +465,14 @@
 
      static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.caller] : Symbol(StaticCaller_Anonymous2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 185, 37))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 185, 37))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 185, 37))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
 
      [FunctionPropertyNames.caller]: string; // ok
 ->[FunctionPropertyNames.caller] : Symbol(StaticCaller_Anonymous2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 186, 50))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 186, 50))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 186, 50))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
@@ -493,14 +493,14 @@
 
      static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.caller] : Symbol(StaticCallerFn_Anonymous2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 195, 39))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 195, 39))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 195, 39))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
 
      [FunctionPropertyNames.caller]() {} // ok
 ->[FunctionPropertyNames.caller] : Symbol(StaticCallerFn_Anonymous2[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 196, 46))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 196, 46))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 196, 46))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
@@ -521,14 +521,14 @@
 
      static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArguments_Anonymous2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 206, 40))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 206, 40))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 206, 40))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
 
      [FunctionPropertyNames.arguments]: string; // ok
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArguments_Anonymous2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 207, 53))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 207, 53))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 207, 53))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
@@ -549,14 +549,14 @@
 
      static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArgumentsFn_Anonymous2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 216, 42))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 216, 42))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 216, 42))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
 
      [FunctionPropertyNames.arguments]() {} // ok
 ->[FunctionPropertyNames.arguments] : Symbol(StaticArgumentsFn_Anonymous2[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 217, 49))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 217, 49))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 217, 49))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
@@ -578,14 +578,14 @@
 
      static [FunctionPropertyNames.name]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.name] : Symbol(ExportedStaticName[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 232, 33))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 232, 33))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 232, 33))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
 
      [FunctionPropertyNames.name]: string; // ok
 ->[FunctionPropertyNames.name] : Symbol(ExportedStaticName[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 233, 48))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 233, 48))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 233, 48))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
@@ -607,23 +607,19 @@
 
      static [FunctionPropertyNames.name]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.name] : Symbol(ExportedStaticNameFn[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 244, 35))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 244, 35))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 244, 35))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
 
      [FunctionPropertyNames.name]() {} // ok
 ->[FunctionPropertyNames.name] : Symbol(ExportedStaticNameFn[FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 245, 44))
-+>[FunctionPropertyNames.name] : Symbol(name, Decl(staticPropertyNameConflicts.ts, 245, 44))
++>[FunctionPropertyNames.name] : Symbol([FunctionPropertyNames.name], Decl(staticPropertyNameConflicts.ts, 245, 44))
  >FunctionPropertyNames.name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >name : Symbol(name, Decl(staticPropertyNameConflicts.ts, 0, 31))
-@@= skipped -17, +17 lines =@@
- >TestOnDefaultExportedClass_3 : Symbol(TestOnDefaultExportedClass_3, Decl(staticPropertyNameConflicts.ts, 247, 1))
-
-     export default class StaticLength {
-->StaticLength : Symbol(StaticLength, Decl(staticPropertyNameConflicts.ts, 250, 37))
-+>StaticLength : Symbol(default, Decl(staticPropertyNameConflicts.ts, 250, 37))
+@@= skipped -20, +20 lines =@@
+ >StaticLength : Symbol(StaticLength, Decl(staticPropertyNameConflicts.ts, 250, 37))
 
          static length: number; // error without useDefineForClassFields
 ->length : Symbol(StaticLength.length, Decl(staticPropertyNameConflicts.ts, 251, 39))
@@ -635,28 +631,24 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticLength : Symbol(ExportedStaticLength, Decl(staticPropertyNameConflicts.ts, 255, 1))
 
      static [FunctionPropertyNames.length]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.length] : Symbol(ExportedStaticLength[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 257, 35))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 257, 35))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 257, 35))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
 
      [FunctionPropertyNames.length]: string; // ok
 ->[FunctionPropertyNames.length] : Symbol(ExportedStaticLength[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 258, 50))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 258, 50))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 258, 50))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
-@@= skipped -16, +16 lines =@@
- >TestOnDefaultExportedClass_4 : Symbol(TestOnDefaultExportedClass_4, Decl(staticPropertyNameConflicts.ts, 260, 1))
-
-     export default class StaticLengthFn {
-->StaticLengthFn : Symbol(StaticLengthFn, Decl(staticPropertyNameConflicts.ts, 262, 37))
-+>StaticLengthFn : Symbol(default, Decl(staticPropertyNameConflicts.ts, 262, 37))
+@@= skipped -19, +19 lines =@@
+ >StaticLengthFn : Symbol(StaticLengthFn, Decl(staticPropertyNameConflicts.ts, 262, 37))
 
          static length() {} // error without useDefineForClassFields
 ->length : Symbol(StaticLengthFn.length, Decl(staticPropertyNameConflicts.ts, 263, 41))
@@ -668,28 +660,24 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticLengthFn : Symbol(ExportedStaticLengthFn, Decl(staticPropertyNameConflicts.ts, 267, 1))
 
      static [FunctionPropertyNames.length]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.length] : Symbol(ExportedStaticLengthFn[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 269, 37))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 269, 37))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 269, 37))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
 
      [FunctionPropertyNames.length]() {} // ok
 ->[FunctionPropertyNames.length] : Symbol(ExportedStaticLengthFn[FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 270, 46))
-+>[FunctionPropertyNames.length] : Symbol(length, Decl(staticPropertyNameConflicts.ts, 270, 46))
++>[FunctionPropertyNames.length] : Symbol([FunctionPropertyNames.length], Decl(staticPropertyNameConflicts.ts, 270, 46))
  >FunctionPropertyNames.length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >length : Symbol(length, Decl(staticPropertyNameConflicts.ts, 1, 17))
-@@= skipped -17, +17 lines =@@
- >TestOnDefaultExportedClass_5 : Symbol(TestOnDefaultExportedClass_5, Decl(staticPropertyNameConflicts.ts, 272, 1))
-
-     export default class StaticPrototype {
-->StaticPrototype : Symbol(StaticPrototype, Decl(staticPropertyNameConflicts.ts, 275, 37))
-+>StaticPrototype : Symbol(default, Decl(staticPropertyNameConflicts.ts, 275, 37))
+@@= skipped -20, +20 lines =@@
+ >StaticPrototype : Symbol(StaticPrototype, Decl(staticPropertyNameConflicts.ts, 275, 37))
 
          static prototype: number; // always an error
 ->prototype : Symbol(StaticPrototype.prototype, Decl(staticPropertyNameConflicts.ts, 276, 42))
@@ -701,28 +689,24 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticPrototype : Symbol(ExportedStaticPrototype, Decl(staticPropertyNameConflicts.ts, 280, 1))
 
      static [FunctionPropertyNames.prototype]: number; // always an error
 ->[FunctionPropertyNames.prototype] : Symbol(ExportedStaticPrototype[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 282, 38))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 282, 38))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 282, 38))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
 
      [FunctionPropertyNames.prototype]: string; // ok
 ->[FunctionPropertyNames.prototype] : Symbol(ExportedStaticPrototype[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 283, 53))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 283, 53))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 283, 53))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
-@@= skipped -16, +16 lines =@@
- >TestOnDefaultExportedClass_6 : Symbol(TestOnDefaultExportedClass_6, Decl(staticPropertyNameConflicts.ts, 285, 1))
-
-     export default class StaticPrototypeFn {
-->StaticPrototypeFn : Symbol(StaticPrototypeFn, Decl(staticPropertyNameConflicts.ts, 287, 37))
-+>StaticPrototypeFn : Symbol(default, Decl(staticPropertyNameConflicts.ts, 287, 37))
+@@= skipped -19, +19 lines =@@
+ >StaticPrototypeFn : Symbol(StaticPrototypeFn, Decl(staticPropertyNameConflicts.ts, 287, 37))
 
          static prototype() {} // always an error
 ->prototype : Symbol(StaticPrototypeFn.prototype, Decl(staticPropertyNameConflicts.ts, 288, 44))
@@ -734,28 +718,24 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticPrototypeFn : Symbol(ExportedStaticPrototypeFn, Decl(staticPropertyNameConflicts.ts, 292, 1))
 
      static [FunctionPropertyNames.prototype]() {} // always an error
 ->[FunctionPropertyNames.prototype] : Symbol(ExportedStaticPrototypeFn[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 294, 40))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 294, 40))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 294, 40))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
 
      [FunctionPropertyNames.prototype]() {} // ok
 ->[FunctionPropertyNames.prototype] : Symbol(ExportedStaticPrototypeFn[FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 295, 49))
-+>[FunctionPropertyNames.prototype] : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 295, 49))
++>[FunctionPropertyNames.prototype] : Symbol([FunctionPropertyNames.prototype], Decl(staticPropertyNameConflicts.ts, 295, 49))
  >FunctionPropertyNames.prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >prototype : Symbol(prototype, Decl(staticPropertyNameConflicts.ts, 2, 21))
-@@= skipped -17, +17 lines =@@
- >TestOnDefaultExportedClass_7 : Symbol(TestOnDefaultExportedClass_7, Decl(staticPropertyNameConflicts.ts, 297, 1))
-
-     export default class StaticCaller {
-->StaticCaller : Symbol(StaticCaller, Decl(staticPropertyNameConflicts.ts, 300, 37))
-+>StaticCaller : Symbol(default, Decl(staticPropertyNameConflicts.ts, 300, 37))
+@@= skipped -20, +20 lines =@@
+ >StaticCaller : Symbol(StaticCaller, Decl(staticPropertyNameConflicts.ts, 300, 37))
 
          static caller: number; // error without useDefineForClassFields
 ->caller : Symbol(StaticCaller.caller, Decl(staticPropertyNameConflicts.ts, 301, 39))
@@ -767,28 +747,24 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticCaller : Symbol(ExportedStaticCaller, Decl(staticPropertyNameConflicts.ts, 305, 1))
 
      static [FunctionPropertyNames.caller]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.caller] : Symbol(ExportedStaticCaller[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 307, 35))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 307, 35))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 307, 35))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
 
      [FunctionPropertyNames.caller]: string; // ok
 ->[FunctionPropertyNames.caller] : Symbol(ExportedStaticCaller[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 308, 50))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 308, 50))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 308, 50))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
-@@= skipped -16, +16 lines =@@
- >TestOnDefaultExportedClass_8 : Symbol(TestOnDefaultExportedClass_8, Decl(staticPropertyNameConflicts.ts, 310, 1))
-
-     export default class StaticCallerFn {
-->StaticCallerFn : Symbol(StaticCallerFn, Decl(staticPropertyNameConflicts.ts, 312, 37))
-+>StaticCallerFn : Symbol(default, Decl(staticPropertyNameConflicts.ts, 312, 37))
+@@= skipped -19, +19 lines =@@
+ >StaticCallerFn : Symbol(StaticCallerFn, Decl(staticPropertyNameConflicts.ts, 312, 37))
 
          static caller() {} // error without useDefineForClassFields
 ->caller : Symbol(StaticCallerFn.caller, Decl(staticPropertyNameConflicts.ts, 313, 41))
@@ -800,28 +776,24 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticCallerFn : Symbol(ExportedStaticCallerFn, Decl(staticPropertyNameConflicts.ts, 317, 1))
 
      static [FunctionPropertyNames.caller]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.caller] : Symbol(ExportedStaticCallerFn[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 319, 37))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 319, 37))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 319, 37))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
 
      [FunctionPropertyNames.caller]() {} // ok
 ->[FunctionPropertyNames.caller] : Symbol(ExportedStaticCallerFn[FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 320, 46))
-+>[FunctionPropertyNames.caller] : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 320, 46))
++>[FunctionPropertyNames.caller] : Symbol([FunctionPropertyNames.caller], Decl(staticPropertyNameConflicts.ts, 320, 46))
  >FunctionPropertyNames.caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >caller : Symbol(caller, Decl(staticPropertyNameConflicts.ts, 3, 27))
-@@= skipped -17, +17 lines =@@
- >TestOnDefaultExportedClass_9 : Symbol(TestOnDefaultExportedClass_9, Decl(staticPropertyNameConflicts.ts, 322, 1))
-
-     export default class StaticArguments {
-->StaticArguments : Symbol(StaticArguments, Decl(staticPropertyNameConflicts.ts, 325, 37))
-+>StaticArguments : Symbol(default, Decl(staticPropertyNameConflicts.ts, 325, 37))
+@@= skipped -20, +20 lines =@@
+ >StaticArguments : Symbol(StaticArguments, Decl(staticPropertyNameConflicts.ts, 325, 37))
 
          static arguments: number; // error without useDefineForClassFields
 ->arguments : Symbol(StaticArguments.arguments, Decl(staticPropertyNameConflicts.ts, 326, 42))
@@ -833,28 +805,24 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticArguments : Symbol(ExportedStaticArguments, Decl(staticPropertyNameConflicts.ts, 330, 1))
 
      static [FunctionPropertyNames.arguments]: number; // error without useDefineForClassFields
 ->[FunctionPropertyNames.arguments] : Symbol(ExportedStaticArguments[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 332, 38))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 332, 38))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 332, 38))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
 
      [FunctionPropertyNames.arguments]: string; // ok
 ->[FunctionPropertyNames.arguments] : Symbol(ExportedStaticArguments[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 333, 53))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 333, 53))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 333, 53))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
-@@= skipped -16, +16 lines =@@
- >TestOnDefaultExportedClass_10 : Symbol(TestOnDefaultExportedClass_10, Decl(staticPropertyNameConflicts.ts, 335, 1))
-
-     export default class StaticArgumentsFn {
-->StaticArgumentsFn : Symbol(StaticArgumentsFn, Decl(staticPropertyNameConflicts.ts, 337, 38))
-+>StaticArgumentsFn : Symbol(default, Decl(staticPropertyNameConflicts.ts, 337, 38))
+@@= skipped -19, +19 lines =@@
+ >StaticArgumentsFn : Symbol(StaticArgumentsFn, Decl(staticPropertyNameConflicts.ts, 337, 38))
 
          static arguments() {} // error without useDefineForClassFields
 ->arguments : Symbol(StaticArgumentsFn.arguments, Decl(staticPropertyNameConflicts.ts, 338, 44))
@@ -866,19 +834,19 @@
      }
  }
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >ExportedStaticArgumentsFn : Symbol(ExportedStaticArgumentsFn, Decl(staticPropertyNameConflicts.ts, 342, 1))
 
      static [FunctionPropertyNames.arguments]() {} // error without useDefineForClassFields
 ->[FunctionPropertyNames.arguments] : Symbol(ExportedStaticArgumentsFn[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 344, 40))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 344, 40))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 344, 40))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
 
      [FunctionPropertyNames.arguments]() {} // ok
 ->[FunctionPropertyNames.arguments] : Symbol(ExportedStaticArgumentsFn[FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 345, 49))
-+>[FunctionPropertyNames.arguments] : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 345, 49))
++>[FunctionPropertyNames.arguments] : Symbol([FunctionPropertyNames.arguments], Decl(staticPropertyNameConflicts.ts, 345, 49))
  >FunctionPropertyNames.arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))
  >FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(staticPropertyNameConflicts.ts, 0, 5))
  >arguments : Symbol(arguments, Decl(staticPropertyNameConflicts.ts, 4, 21))

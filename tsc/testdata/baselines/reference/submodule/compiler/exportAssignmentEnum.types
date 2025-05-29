@@ -2,25 +2,25 @@
 
 === exportAssignmentEnum_B.ts ===
 import EnumE = require("./exportAssignmentEnum_A");
->EnumE : typeof E
+>EnumE : typeof EnumE
 
 var a = EnumE.A;
->a : E
->EnumE.A : E.A
->EnumE : typeof E
->A : E.A
+>a : EnumE
+>EnumE.A : EnumE.A
+>EnumE : typeof EnumE
+>A : EnumE.A
 
 var b = EnumE.B;
->b : E
->EnumE.B : E.B
->EnumE : typeof E
->B : E.B
+>b : EnumE
+>EnumE.B : EnumE.B
+>EnumE : typeof EnumE
+>B : EnumE.B
 
 var c = EnumE.C;
->c : E
->EnumE.C : E.C
->EnumE : typeof E
->C : E.C
+>c : EnumE
+>EnumE.C : EnumE.C
+>EnumE : typeof EnumE
+>C : EnumE.C
 
 === exportAssignmentEnum_A.ts ===
 enum E {

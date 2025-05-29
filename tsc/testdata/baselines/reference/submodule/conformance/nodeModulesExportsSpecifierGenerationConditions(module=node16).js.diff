@@ -1,10 +1,8 @@
 --- old.nodeModulesExportsSpecifierGenerationConditions(module=node16).js
 +++ new.nodeModulesExportsSpecifierGenerationConditions(module=node16).js
-@@= skipped -34, +34 lines =@@
+@@= skipped -37, +37 lines =@@
 
- //// [index.js]
- export const a = (await import("inner")).x();
--
--
--//// [index.d.ts]
+
+ //// [index.d.ts]
 -export declare const a: import("inner/other").Thing;
++export declare const a: any;

@@ -1,0 +1,10 @@
+--- old.nodeModulesExportsBlocksSpecifierResolution(module=node16).js
++++ new.nodeModulesExportsBlocksSpecifierResolution(module=node16).js
+@@= skipped -27, +27 lines =@@
+
+ //// [index.js]
+ export const a = (await import("inner")).x();
++
++
++//// [index.d.ts]
++export declare const a: any;

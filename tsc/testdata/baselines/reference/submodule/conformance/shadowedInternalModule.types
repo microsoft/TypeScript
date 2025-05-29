@@ -35,8 +35,8 @@ module B {
 >0 : 0
 
     import Point = A;
->Point : typeof A
->A : typeof A
+>Point : typeof Point
+>A : typeof Point
 }
 
 module X {

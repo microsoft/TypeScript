@@ -28,3 +28,10 @@ let a = f;
 let b = g;
 a = b;
 b = a;
+
+
+//// [stringLiteralTypesOverloadAssignability04.d.ts]
+declare function f(x: "foo"): number;
+declare function g(x: "foo"): number;
+declare let a: typeof f;
+declare let b: typeof g;

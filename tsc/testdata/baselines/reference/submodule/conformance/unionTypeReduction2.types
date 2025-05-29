@@ -2,64 +2,64 @@
 
 === unionTypeReduction2.ts ===
 function f1(x: { f(): void }, y: { f(x?: string): void }) {
->f1 : (x: { f: () => void; }, y: { f: (x?: string | undefined) => void; }) => void
->x : { f: () => void; }
+>f1 : (x: { f(): void; }, y: { f(x?: string | undefined): void; }) => void
+>x : { f(): void; }
 >f : () => void
->y : { f: (x?: string | undefined) => void; }
+>y : { f(x?: string | undefined): void; }
 >f : (x?: string | undefined) => void
 >x : string | undefined
 
     let z = !!true ? x : y;  // { f(x?: string): void }
->z : { f: (x?: string | undefined) => void; }
->!!true ? x : y : { f: (x?: string | undefined) => void; }
+>z : { f(x?: string | undefined): void; }
+>!!true ? x : y : { f(x?: string | undefined): void; }
 >!!true : true
 >!true : false
 >true : true
->x : { f: () => void; }
->y : { f: (x?: string | undefined) => void; }
+>x : { f(): void; }
+>y : { f(x?: string | undefined): void; }
 
     z.f();
 >z.f() : void
 >z.f : (x?: string | undefined) => void
->z : { f: (x?: string | undefined) => void; }
+>z : { f(x?: string | undefined): void; }
 >f : (x?: string | undefined) => void
 
     z.f('hello');
 >z.f('hello') : void
 >z.f : (x?: string | undefined) => void
->z : { f: (x?: string | undefined) => void; }
+>z : { f(x?: string | undefined): void; }
 >f : (x?: string | undefined) => void
 >'hello' : "hello"
 }
 
 function f2(x: { f(x: string | undefined): void }, y: { f(x?: string): void }) {
->f2 : (x: { f: (x: string | undefined) => void; }, y: { f: (x?: string | undefined) => void; }) => void
->x : { f: (x: string | undefined) => void; }
+>f2 : (x: { f(x: string | undefined): void; }, y: { f(x?: string | undefined): void; }) => void
+>x : { f(x: string | undefined): void; }
 >f : (x: string | undefined) => void
 >x : string | undefined
->y : { f: (x?: string | undefined) => void; }
+>y : { f(x?: string | undefined): void; }
 >f : (x?: string | undefined) => void
 >x : string | undefined
 
     let z = !!true ? x : y;  // { f(x?: string): void }
->z : { f: (x?: string | undefined) => void; }
->!!true ? x : y : { f: (x?: string | undefined) => void; }
+>z : { f(x?: string | undefined): void; }
+>!!true ? x : y : { f(x?: string | undefined): void; }
 >!!true : true
 >!true : false
 >true : true
->x : { f: (x: string | undefined) => void; }
->y : { f: (x?: string | undefined) => void; }
+>x : { f(x: string | undefined): void; }
+>y : { f(x?: string | undefined): void; }
 
     z.f();
 >z.f() : void
 >z.f : (x?: string | undefined) => void
->z : { f: (x?: string | undefined) => void; }
+>z : { f(x?: string | undefined): void; }
 >f : (x?: string | undefined) => void
 
     z.f('hello');
 >z.f('hello') : void
 >z.f : (x?: string | undefined) => void
->z : { f: (x?: string | undefined) => void; }
+>z : { f(x?: string | undefined): void; }
 >f : (x?: string | undefined) => void
 >'hello' : "hello"
 }
@@ -222,15 +222,15 @@ interface ReturnVal {
 
 const k: ReturnVal = { something() { } }
 >k : ReturnVal
->{ something() { } } : { something: () => void; }
+>{ something() { } } : { something(): void; }
 >something : () => void
 
 declare const val: ReturnVal;
 >val : ReturnVal
 
 function run(options: { something?(b?: string): void }) {
->run : (options: { something?: ((b?: string | undefined) => void) | undefined; }) => void
->options : { something?: ((b?: string | undefined) => void) | undefined; }
+>run : (options: { something?(b?: string | undefined): void; }) => void
+>options : { something?(b?: string | undefined): void; }
 >something : ((b?: string | undefined) => void) | undefined
 >b : string | undefined
 
@@ -238,7 +238,7 @@ function run(options: { something?(b?: string): void }) {
 >something : (b?: string | undefined) => void
 >options.something ?? val.something : (b?: string | undefined) => void
 >options.something : ((b?: string | undefined) => void) | undefined
->options : { something?: ((b?: string | undefined) => void) | undefined; }
+>options : { something?(b?: string | undefined): void; }
 >something : ((b?: string | undefined) => void) | undefined
 >val.something : () => void
 >val : ReturnVal

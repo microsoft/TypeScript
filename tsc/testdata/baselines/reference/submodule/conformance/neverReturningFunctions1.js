@@ -467,3 +467,37 @@ function foo(services, s) {
         return s;
     }
 }
+
+
+//// [neverReturningFunctions1.d.ts]
+// Repro from #33582
+export interface Component<T extends object = any> {
+    attrName?: string;
+    data: T;
+    dependencies?: string[];
+    el: any;
+    id: string;
+    multiple?: boolean;
+    name: string;
+    schema: unknown;
+    system: any;
+    init(data?: T): void;
+    pause(): void;
+    play(): void;
+    remove(): void;
+    tick?(time: number, timeDelta: number): void;
+    update(oldData: T): void;
+    updateSchema?(): void;
+    extendSchema(update: unknown): void;
+    flushToDOM(): void;
+}
+export interface ComponentConstructor<T extends object> {
+    new (el: unknown, attrValue: string, id: string);
+    prototype: T & {
+        name: string;
+        system: unknown;
+        play(): void;
+        pause(): void;
+    };
+}
+export type ComponentDefinition<T extends object = object> = T & Partial<Component> & ThisType<T & Component>;

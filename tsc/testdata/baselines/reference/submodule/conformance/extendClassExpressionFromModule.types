@@ -2,15 +2,15 @@
 
 === foo2.ts ===
 import foo1 = require('./foo1');
->foo1 : typeof x
+>foo1 : typeof foo1
 
 var x = foo1;
->x : typeof x
->foo1 : typeof x
+>x : typeof foo1
+>foo1 : typeof foo1
 
 class y extends x {}
 >y : y
->x : x
+>x : foo1
 
 === foo1.ts ===
 class x{}

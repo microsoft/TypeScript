@@ -230,7 +230,7 @@
 
      "b": number;
 ->"b" : Symbol(C8["b"], Decl(strictPropertyInitialization.ts, 89, 14))
-+>"b" : Symbol(b, Decl(strictPropertyInitialization.ts, 89, 14))
++>"b" : Symbol("b", Decl(strictPropertyInitialization.ts, 89, 14))
 
      0: number;
 ->0 : Symbol(C8[0], Decl(strictPropertyInitialization.ts, 90, 16))
@@ -366,7 +366,7 @@
 
      [a]: number;
 ->[a] : Symbol(C12[a], Decl(strictPropertyInitialization.ts, 137, 11))
-+>[a] : Symbol(a, Decl(strictPropertyInitialization.ts, 137, 11))
++>[a] : Symbol([a], Decl(strictPropertyInitialization.ts, 137, 11))
  >a : Symbol(a, Decl(strictPropertyInitialization.ts, 134, 5))
 
      [b]: number;
@@ -377,8 +377,8 @@
      ['c']: number;
 ->['c'] : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
 ->'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
-+>['c'] : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
-+>'c' : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
++>['c'] : Symbol(['c'], Decl(strictPropertyInitialization.ts, 139, 16))
++>'c' : Symbol(['c'], Decl(strictPropertyInitialization.ts, 139, 16))
 
      constructor() {
          this[a] = 1;
@@ -387,7 +387,7 @@
          this['c'] = 1;
  >this : Symbol(C12, Decl(strictPropertyInitialization.ts, 135, 19))
 ->'c' : Symbol(C12['c'], Decl(strictPropertyInitialization.ts, 139, 16))
-+>'c' : Symbol(c, Decl(strictPropertyInitialization.ts, 139, 16))
++>'c' : Symbol(['c'], Decl(strictPropertyInitialization.ts, 139, 16))
      }
  }
 
@@ -408,7 +408,7 @@
      [E.A]: number;
 ->[E.A] : Symbol(C13[E.A], Decl(strictPropertyInitialization.ts, 153, 11))
 ->E.A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))
-+>[E.A] : Symbol(A, Decl(strictPropertyInitialization.ts, 153, 11))
++>[E.A] : Symbol([E.A], Decl(strictPropertyInitialization.ts, 153, 11))
 +>E.A : Symbol(A, Decl(strictPropertyInitialization.ts, 149, 8))
  >E : Symbol(E, Decl(strictPropertyInitialization.ts, 147, 1))
 ->A : Symbol(E.A, Decl(strictPropertyInitialization.ts, 149, 8))

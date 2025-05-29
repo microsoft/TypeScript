@@ -1,15 +1,6 @@
 --- old.dependentDestructuredVariables.types
 +++ new.dependentDestructuredVariables.types
-@@= skipped -12, +12 lines =@@
- >payload : string
-
- function f10({ kind, payload }: Action) {
-->f10 : ({ kind, payload }: Action) => void
-+>f10 : (__0: Action) => void
- >kind : "A" | "B"
- >payload : string | number
-
-@@= skipped -11, +11 lines =@@
+@@= skipped -23, +23 lines =@@
 
          payload.toFixed();
  >payload.toFixed() : string
@@ -33,16 +24,7 @@
      }
      if (kind === 'B') {
  >kind === 'B' : boolean
-@@= skipped -18, +18 lines =@@
- }
-
- function f12({ kind, payload }: Action) {
-->f12 : ({ kind, payload }: Action) => void
-+>f12 : (__0: Action) => void
- >kind : "A" | "B"
- >payload : string | number
-
-@@= skipped -12, +12 lines =@@
+@@= skipped -30, +30 lines =@@
 
              payload.toFixed();
  >payload.toFixed() : string
@@ -54,16 +36,7 @@
 
              break;
          case 'B':
-@@= skipped -23, +23 lines =@@
-
- // repro #50206
- function f13<T extends Action>({ kind, payload }: T) {
-->f13 : <T extends Action>({ kind, payload }: T) => void
-+>f13 : <T extends Action>(__0: T) => void
- >kind : "A" | "B"
- >payload : string | number
-
-@@= skipped -11, +11 lines =@@
+@@= skipped -34, +34 lines =@@
 
          payload.toFixed();
  >payload.toFixed() : string
@@ -87,16 +60,7 @@
      }
      if (kind === 'B') {
  >kind === 'B' : boolean
-@@= skipped -29, +29 lines =@@
- >payload : string | undefined
-
- function f20({ kind, payload }: Action2) {
-->f20 : ({ kind, payload }: Action2) => void
-+>f20 : (__0: Action2) => void
- >kind : "A" | "B"
- >payload : string | number | undefined
-
-@@= skipped -14, +14 lines =@@
+@@= skipped -43, +43 lines =@@
 
              payload.toFixed();
  >payload.toFixed() : string
@@ -132,16 +96,7 @@
          }
          if (kind === 'B') {
  >kind === 'B' : boolean
-@@= skipped -19, +19 lines =@@
- }
-
- function f23({ kind, payload }: Action2) {
-->f23 : ({ kind, payload }: Action2) => void
-+>f23 : (__0: Action2) => void
- >kind : "A" | "B"
- >payload : string | number | undefined
-
-@@= skipped -15, +15 lines =@@
+@@= skipped -34, +34 lines =@@
 
                  payload.toFixed();
  >payload.toFixed() : string
@@ -153,25 +108,7 @@
 
                  break;
              case 'B':
-@@= skipped -41, +41 lines =@@
- >false : false
-
- function f30({ kind, isA }: Foo) {
-->f30 : ({ kind, isA }: Foo) => void
-+>f30 : (__0: Foo) => void
- >kind : "A" | "B" | "C"
- >isA : boolean
-
-@@= skipped -44, +44 lines =@@
- >Args : Args
-
- function f40(...[kind, data]: Args) {
-->f40 : (...[kind, data]: Args) => void
-+>f40 : (...__0: Args) => void
- >kind : "A" | "B"
- >data : string | number
-
-@@= skipped -11, +11 lines =@@
+@@= skipped -96, +96 lines =@@
 
          data.toFixed();
  >data.toFixed() : string
@@ -192,46 +129,16 @@
  >t : T[]
 
  function unrefined1<T>(ab: AB<T>): void {
-@@= skipped -19, +19 lines =@@
-
-         printValue<T>(value);
- >printValue<T>(value) : void
-->printValue : <T_1>(t: T_1) => void
-+>printValue : <T>(t: T) => void
- >value : T
-     }
+@@= skipped -25, +25 lines =@@
      else {
          printValueList<T>(value);
  >printValueList<T>(value) : void
 ->printValueList : <T_1>(t: Array<T_1>) => void
-+>printValueList : <T>(t: T[]) => void
++>printValueList : <T_1>(t: T_1[]) => void
  >value : T[]
      }
  }
-@@= skipped -27, +27 lines =@@
- >toRemove : number
-
- const reducerBroken = (state: number, { type, payload }: Action3) => {
-->reducerBroken : (state: number, { type, payload }: Action3) => number
-->(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, { type, payload }: Action3) => number
-+>reducerBroken : (state: number, __1: Action3) => number
-+>(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, __1: Action3) => number
- >state : number
- >type : "add" | "remove"
- >payload : { toAdd: number; } | { toRemove: number; }
-@@= skipped -40, +40 lines =@@
- >value : any
- >done : boolean | undefined
- >it.next() : IteratorResult<number, any>
-->it.next : (...[value]: [] | [any]) => IteratorResult<number, any>
-+>it.next : (...__0: [] | [any]) => IteratorResult<number, any>
- >it : Iterator<number, any, any>
-->next : (...[value]: [] | [any]) => IteratorResult<number, any>
-+>next : (...__0: [] | [any]) => IteratorResult<number, any>
-
- if (!done) {
- >!done : boolean
-@@= skipped -33, +33 lines =@@
+@@= skipped -94, +94 lines =@@
 
          data.toFixed();
  >data.toFixed() : string
@@ -289,16 +196,7 @@
 
      [type: "str", cb: (e: string) => void] |
  >e : string
-@@= skipped -14, +14 lines =@@
-
- let fooM: FooMethod = {
- >fooM : FooMethod
-->{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): void; }
-+>{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => void; }
-
-   method(type, cb) {
- >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => void
-@@= skipped -30, +30 lines =@@
+@@= skipped -44, +44 lines =@@
  >FooAsyncMethod : FooAsyncMethod
 
    method(...args:
@@ -309,16 +207,7 @@
 
      [type: "str", cb: (e: string) => void] |
  >e : string
-@@= skipped -14, +14 lines =@@
-
- let fooAsyncM: FooAsyncMethod = {
- >fooAsyncM : FooAsyncMethod
-->{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
-+>{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>; }
-
-   async method(type, cb) {
- >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
-@@= skipped -30, +30 lines =@@
+@@= skipped -44, +44 lines =@@
  >FooGenMethod : FooGenMethod
 
    method(...args:
@@ -329,16 +218,7 @@
 
      [type: "str", cb: (e: string) => void] |
  >e : string
-@@= skipped -14, +14 lines =@@
-
- let fooGenM: FooGenMethod = {
- >fooGenM : FooGenMethod
-->{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
-+>{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>; }
-
-   *method(type, cb) {
- >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
-@@= skipped -30, +30 lines =@@
+@@= skipped -44, +44 lines =@@
  >FooAsyncGenMethod : FooAsyncGenMethod
 
    method(...args:
@@ -349,16 +229,7 @@
 
      [type: "str", cb: (e: string) => void] |
  >e : string
-@@= skipped -14, +14 lines =@@
-
- let fooAsyncGenM: FooAsyncGenMethod = {
- >fooAsyncGenM : FooAsyncGenMethod
-->{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
-+>{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method: (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>; }
-
-   async *method(type, cb) {
- >method : (type: "num" | "str", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
-@@= skipped -45, +45 lines =@@
+@@= skipped -59, +59 lines =@@
 
          payload.toFixed();  // error
  >payload.toFixed() : string
@@ -375,7 +246,7 @@
 
  function foo({
 ->foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
-+>foo : (__0: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
++>foo : ({ value1, test1 = value1.test1, test2 = value1.test2, test3 = value1.test3, test4 = value1.test4, test5 = value1.test5, test6 = value1.test6, test7 = value1.test7, test8 = value1.test8, test9 = value1.test9 }: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
 
      value1,
  >value1 : any
@@ -402,7 +273,7 @@
 
  function fz1([x, y]: [1, 2] | [3, 4] | [5]) {
 ->fz1 : ([x, y]: [1, 2] | [3, 4] | [5]) => void
-+>fz1 : (__0: [5] | [1, 2] | [3, 4]) => void
++>fz1 : ([x, y]: [5] | [1, 2] | [3, 4]) => void
  >x : 1 | 3 | 5
  >y : 2 | 4 | undefined
 
@@ -411,24 +282,6 @@
 
  function tooNarrow([x, y]: [1, 1] | [1, 2] | [1]) {
 ->tooNarrow : ([x, y]: [1, 1] | [1, 2] | [1]) => void
-+>tooNarrow : (__0: [1] | [1, 1] | [1, 2]) => void
++>tooNarrow : ([x, y]: [1] | [1, 1] | [1, 2]) => void
  >x : 1
  >y : 1 | 2 | undefined
-
-@@= skipped -18, +18 lines =@@
- // https://github.com/microsoft/TypeScript/issues/56312
-
- function parameterReassigned1([x, y]: [1, 2] | [3, 4]) {
-->parameterReassigned1 : ([x, y]: [1, 2] | [3, 4]) => void
-+>parameterReassigned1 : (__0: [1, 2] | [3, 4]) => void
- >x : 1 | 3
- >y : 2 | 4
-
-@@= skipped -26, +26 lines =@@
- }
-
- function parameterReassigned2([x, y]: [1, 2] | [3, 4]) {
-->parameterReassigned2 : ([x, y]: [1, 2] | [3, 4]) => void
-+>parameterReassigned2 : (__0: [1, 2] | [3, 4]) => void
- >x : 1 | 3
- >y : 2 | 4

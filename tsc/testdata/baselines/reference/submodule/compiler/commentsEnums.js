@@ -24,3 +24,15 @@ var Colors;
 })(Colors || (Colors = {})); // trailing comment
 var x = Colors.Cornflower;
 x = Colors.FancyPink;
+
+
+//// [commentsEnums.d.ts]
+/** Enum of colors*/
+declare enum Colors {
+    /** Fancy name for 'blue'*/
+    Cornflower = 0 /* blue */,
+    /** Fancy name for 'pink'*/
+    FancyPink = // trailing comment
+     1
+} // trailing comment
+declare var x: Colors;

@@ -33,7 +33,7 @@ function testTscCompile(input: TestTscCompile) {}
 >input : TestTscCompile
 
 function verifyTscEditDiscrepancies({
->verifyTscEditDiscrepancies : (__0: VerifyTscEditDiscrepanciesInput) => void
+>verifyTscEditDiscrepancies : ({ index, edits, commandLineArgs, }: VerifyTscEditDiscrepanciesInput) => void
 
   index,
 >index : number

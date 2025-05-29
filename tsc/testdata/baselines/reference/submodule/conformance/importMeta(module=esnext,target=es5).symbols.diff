@@ -114,11 +114,7 @@
  >foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
 
  // @Filename augmentations.ts
- declare global {
-->global : Symbol(global, Decl(assignmentTargets.ts, 1, 18))
-+>global : Symbol((Missing), Decl(assignmentTargets.ts, 1, 18))
-
-   interface ImportMeta {
+@@= skipped -19, +19 lines =@@
  >ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
 
      wellKnownProperty: { a: number, b: string, c: boolean };
@@ -127,7 +123,7 @@
  >a : Symbol(a, Decl(assignmentTargets.ts, 6, 24))
  >b : Symbol(b, Decl(assignmentTargets.ts, 6, 35))
  >c : Symbol(c, Decl(assignmentTargets.ts, 6, 46))
-@@= skipped -30, +30 lines =@@
+@@= skipped -11, +11 lines =@@
  >a : Symbol(a, Decl(assignmentTargets.ts, 10, 7))
  >b : Symbol(b, Decl(assignmentTargets.ts, 10, 10))
  >c : Symbol(c, Decl(assignmentTargets.ts, 10, 13))

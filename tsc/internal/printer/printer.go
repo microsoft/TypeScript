@@ -1762,6 +1762,8 @@ func (p *Printer) emitTypeElement(node *ast.TypeElement) {
 		p.emitSetAccessorDeclaration(node.AsSetAccessorDeclaration())
 	case ast.KindIndexSignature:
 		p.emitIndexSignature(node.AsIndexSignatureDeclaration())
+	case ast.KindNotEmittedTypeElement:
+		p.emitNotEmittedTypeElement(node.AsNotEmittedTypeElement())
 	default:
 		panic(fmt.Sprintf("unexpected TypeElement: %v", node.Kind))
 	}
@@ -3420,6 +3422,10 @@ func (p *Printer) emitNotEmittedStatement(node *ast.NotEmittedStatement) {
 	p.exitNode(node.AsNode(), p.enterNode(node.AsNode()))
 }
 
+func (p *Printer) emitNotEmittedTypeElement(node *ast.NotEmittedTypeElement) {
+	p.exitNode(node.AsNode(), p.enterNode(node.AsNode()))
+}
+
 //
 // Declarations
 //
@@ -3577,12 +3583,10 @@ func (p *Printer) emitModuleBlock(node *ast.ModuleBlock) {
 	state := p.enterNode(node.AsNode())
 	p.generateNames(node.AsNode())
 	p.emitToken(ast.KindOpenBraceToken, node.Pos(), WriteKindPunctuation, node.AsNode())
-	p.increaseIndent()
 	format := core.IfElse(p.isEmptyBlock(node.AsNode(), node.Statements) || p.shouldEmitOnSingleLine(node.AsNode()),
 		LFSingleLineBlockStatements,
 		LFMultiLineBlockStatements)
 	p.emitList((*Printer).emitStatement, node.AsNode(), node.Statements, format)
-	p.decreaseIndent()
 	p.emitTokenEx(ast.KindCloseBraceToken, node.Statements.End(), WriteKindPunctuation, node.AsNode(), core.IfElse(format&LFMultiLine != 0, tefIndentLeadingComments, tefNone))
 	p.exitNode(node.AsNode(), state)
 }
@@ -4924,7 +4928,8 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 		panic("not implemented")
 
 	// Transformation nodes
-	// case ast.KindNotEmittedTypeElement:
+	case ast.KindNotEmittedTypeElement:
+		p.emitNotEmittedTypeElement(node.AsNotEmittedTypeElement())
 
 	default:
 		switch {

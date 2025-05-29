@@ -4,12 +4,12 @@
 /// <reference path="react16.d.ts" />
 
 <div>1</div>;
-><div>1</div> : Element
+><div>1</div> : JSX.Element
 >div : any
 >div : any
 
 <div key={"key-attr"}>2</div>;
-><div key={"key-attr"}>2</div> : Element
+><div key={"key-attr"}>2</div> : JSX.Element
 >div : any
 >key : string
 >"key-attr" : "key-attr"

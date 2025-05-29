@@ -26,8 +26,8 @@ namespace M {
 >foo : any
 
 	var spread1 = <div x='' {...foo} y='' />;
->spread1 : Element
-><div x='' {...foo} y='' /> : Element
+>spread1 : JSX.Element
+><div x='' {...foo} y='' /> : JSX.Element
 >div : any
 >x : string
 >foo : any
@@ -35,8 +35,8 @@ namespace M {
 
 	// Quotes
 	var x = <div>This "quote" thing</div>;
->x : Element
-><div>This "quote" thing</div> : Element
+>x : JSX.Element
+><div>This "quote" thing</div> : JSX.Element
 >div : any
 >div : any
 }

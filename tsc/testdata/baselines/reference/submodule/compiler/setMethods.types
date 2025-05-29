@@ -31,8 +31,8 @@ let numberMap = new Map([[4, {}], [5, {}]]);
 >{} : {}
 
 let numberSetLike = {
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
->{  size: 1,  *keys() { yield 3 },  has(x) { return x === 3 },} : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
+>{  size: 1,  *keys() { yield 3 },  has(x) { return x === 3 },} : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 
   size: 1,
 >size : number
@@ -86,7 +86,7 @@ numberSet.union(numberSetLike);
 >numberSet.union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
 >numberSet : Set<number>
 >union : <U>(other: ReadonlySetLike<U>) => Set<number | U>
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 
 numberSet.intersection([]);
 >numberSet.intersection([]) : Set<number>
@@ -122,7 +122,7 @@ numberSet.intersection(numberSetLike);
 >numberSet.intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
 >numberSet : Set<number>
 >intersection : <U>(other: ReadonlySetLike<U>) => Set<number & U>
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 
 numberSet.difference([]);
 >numberSet.difference([]) : Set<number>
@@ -158,7 +158,7 @@ numberSet.difference(numberSetLike);
 >numberSet.difference : <U>(other: ReadonlySetLike<U>) => Set<number>
 >numberSet : Set<number>
 >difference : <U>(other: ReadonlySetLike<U>) => Set<number>
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 
 numberSet.symmetricDifference([]);
 >numberSet.symmetricDifference([]) : Set<unknown>
@@ -194,7 +194,7 @@ numberSet.symmetricDifference(numberSetLike);
 >numberSet.symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
 >numberSet : Set<number>
 >symmetricDifference : <U>(other: ReadonlySetLike<U>) => Set<number | U>
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 
 numberSet.isSubsetOf([]);
 >numberSet.isSubsetOf([]) : boolean
@@ -230,7 +230,7 @@ numberSet.isSubsetOf(numberSetLike);
 >numberSet.isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
 >numberSet : Set<number>
 >isSubsetOf : (other: ReadonlySetLike<unknown>) => boolean
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 
 numberSet.isSupersetOf([]);
 >numberSet.isSupersetOf([]) : boolean
@@ -266,7 +266,7 @@ numberSet.isSupersetOf(numberSetLike);
 >numberSet.isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
 >numberSet : Set<number>
 >isSupersetOf : (other: ReadonlySetLike<unknown>) => boolean
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 
 numberSet.isDisjointFrom([]);
 >numberSet.isDisjointFrom([]) : boolean
@@ -302,5 +302,5 @@ numberSet.isDisjointFrom(numberSetLike);
 >numberSet.isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
 >numberSet : Set<number>
 >isDisjointFrom : (other: ReadonlySetLike<unknown>) => boolean
->numberSetLike : { size: number; keys: () => Generator<number, void, unknown>; has: (x: any) => boolean; }
+>numberSetLike : { size: number; keys(): Generator<number, void, unknown>; has(x: any): boolean; }
 

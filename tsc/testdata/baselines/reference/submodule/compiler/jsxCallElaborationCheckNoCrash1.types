@@ -10,8 +10,8 @@ type Tags = "span" | "div";
 >Tags : Tags
 
 export const Hoc = <Tag extends Tags>(
->Hoc : <Tag extends Tags>(TagElement: Tag) => SFC<{}>
-><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => SFC<{}>
+>Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC<{}>
+><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => React.SFC<{}>
 
    TagElement: Tag,
 >TagElement : Tag
@@ -20,13 +20,13 @@ export const Hoc = <Tag extends Tags>(
 >React : any
 
    const Component = () => <TagElement />;
->Component : () => Element
->() => <TagElement /> : () => Element
-><TagElement /> : Element
+>Component : () => JSX.Element
+>() => <TagElement /> : () => JSX.Element
+><TagElement /> : JSX.Element
 >TagElement : Tag
 
    return Component;
->Component : () => Element
+>Component : () => JSX.Element
 
 };
 

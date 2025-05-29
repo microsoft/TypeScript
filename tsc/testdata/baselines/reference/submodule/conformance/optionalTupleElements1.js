@@ -78,3 +78,19 @@ t4 = [42, , true];
 t4 = [, "hello", true];
 t4 = [, , true];
 t4 = [];
+
+
+//// [optionalTupleElements1.d.ts]
+type T1 = [number, string, boolean];
+type T2 = [number, string, boolean?];
+type T3 = [number, string?, boolean?];
+type T4 = [number?, string?, boolean?];
+type L1 = T1["length"];
+type L2 = T2["length"];
+type L3 = T3["length"];
+type L4 = T4["length"];
+type T5 = [number, string?, boolean]; // Error
+declare function f1(t1: T1, t2: T2, t3: T3, t4: T4): void;
+declare let t2: T2;
+declare let t3: T3;
+declare let t4: T4;

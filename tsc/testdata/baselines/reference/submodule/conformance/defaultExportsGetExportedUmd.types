@@ -2,7 +2,7 @@
 
 === a.ts ===
 export default class Foo {}
->Foo : default
+>Foo : Foo
 
 === b.ts ===
 export default function foo() {}

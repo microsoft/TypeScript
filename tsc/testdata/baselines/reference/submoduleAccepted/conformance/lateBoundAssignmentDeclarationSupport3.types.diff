@@ -1,49 +1,20 @@
 --- old.lateBoundAssignmentDeclarationSupport3.types
 +++ new.lateBoundAssignmentDeclarationSupport3.types
-@@= skipped -1, +1 lines =@@
-
- === usage.js ===
- const x = require("./lateBoundAssignmentDeclarationSupport3.js");
-->x : typeof x
-->require("./lateBoundAssignmentDeclarationSupport3.js") : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport3")
-+>require("./lateBoundAssignmentDeclarationSupport3.js") : typeof import("lateBoundAssignmentDeclarationSupport3")
- >require : any
- >"./lateBoundAssignmentDeclarationSupport3.js" : "./lateBoundAssignmentDeclarationSupport3.js"
-
- const y = x["my-fake-sym"];
- >y : any
- >x["my-fake-sym"] : any
-->x : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport3")
- >"my-fake-sym" : "my-fake-sym"
-
- const z = x[x.S];
- >z : any
- >x[x.S] : any
-->x : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport3")
- >x.S : unique symbol
-->x : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport3")
- >S : unique symbol
-
- === lateBoundAssignmentDeclarationSupport3.js ===
-@@= skipped -31, +31 lines =@@
+@@= skipped -32, +32 lines =@@
  >"my-fake-sym" : "my-fake-sym"
 
  Object.defineProperty(module.exports, _sym, { value: "ok" });
 ->Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof module.exports
-+>Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof import("lateBoundAssignmentDeclarationSupport3")
++>Object.defineProperty(module.exports, _sym, { value: "ok" }) : typeof import("./lateBoundAssignmentDeclarationSupport3")
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport3")
-+>module : { "lateBoundAssignmentDeclarationSupport3": typeof import("lateBoundAssignmentDeclarationSupport3"); }
-+>exports : typeof import("lateBoundAssignmentDeclarationSupport3")
++>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
++>module : { "\"lateBoundAssignmentDeclarationSupport3\"": typeof import("./lateBoundAssignmentDeclarationSupport3"); }
++>exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
  >_sym : unique symbol
  >{ value: "ok" } : { value: string; }
  >value : string
@@ -51,16 +22,16 @@
 
  Object.defineProperty(module.exports, _str, { value: "ok" });
 ->Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof module.exports
-+>Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof import("lateBoundAssignmentDeclarationSupport3")
++>Object.defineProperty(module.exports, _str, { value: "ok" }) : typeof import("./lateBoundAssignmentDeclarationSupport3")
  >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport3")
-+>module : { "lateBoundAssignmentDeclarationSupport3": typeof import("lateBoundAssignmentDeclarationSupport3"); }
-+>exports : typeof import("lateBoundAssignmentDeclarationSupport3")
++>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
++>module : { "\"lateBoundAssignmentDeclarationSupport3\"": typeof import("./lateBoundAssignmentDeclarationSupport3"); }
++>exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
  >_str : "my-fake-sym"
  >{ value: "ok" } : { value: string; }
  >value : string
@@ -71,8 +42,8 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport3")
-+>module : { "lateBoundAssignmentDeclarationSupport3": typeof import("lateBoundAssignmentDeclarationSupport3"); }
-+>exports : typeof import("lateBoundAssignmentDeclarationSupport3")
++>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
++>module : { "\"lateBoundAssignmentDeclarationSupport3\"": typeof import("./lateBoundAssignmentDeclarationSupport3"); }
++>exports : typeof import("./lateBoundAssignmentDeclarationSupport3")
  >S : unique symbol
  >_sym : unique symbol

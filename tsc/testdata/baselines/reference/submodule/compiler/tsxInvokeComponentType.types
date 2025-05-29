@@ -11,13 +11,13 @@ declare const Elem: ComponentType<{ someKey: string }>;
 >someKey : string
 
 const bad = <Elem />;
->bad : Element
-><Elem /> : Element
+>bad : JSX.Element
+><Elem /> : JSX.Element
 >Elem : ComponentType<{ someKey: string; }>
 
 const good = <Elem someKey="ok" />;
->good : Element
-><Elem someKey="ok" /> : Element
+>good : JSX.Element
+><Elem someKey="ok" /> : JSX.Element
 >Elem : ComponentType<{ someKey: string; }>
 >someKey : string
 
@@ -26,8 +26,8 @@ declare const Elem2: ComponentType<{ opt?: number }>;
 >opt : number | undefined
 
 const alsoOk = <Elem2>text</Elem2>;
->alsoOk : Element
-><Elem2>text</Elem2> : Element
+>alsoOk : JSX.Element
+><Elem2>text</Elem2> : JSX.Element
 >Elem2 : ComponentType<{ opt?: number | undefined; }>
 >Elem2 : ComponentType<{ opt?: number | undefined; }>
 

@@ -6,17 +6,17 @@ import foo = require("foo")
 >foo : any
 
 var z: foo;
->z : B
+>z : foo
 
 z.bar("hello"); // This should be ok
->z.bar("hello") : A
->z.bar : (name: string) => A
->z : B
->bar : (name: string) => A
+>z.bar("hello") : foo.A
+>z.bar : (name: string) => foo.A
+>z : foo
+>bar : (name: string) => foo.A
 >"hello" : "hello"
 
 var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be error
->x : A
+>x : foo.A
 >foo : any
 >foo.bar("hello") : any
 >foo.bar : any
@@ -34,7 +34,7 @@ declare module "foo"
     }
     interface B {
         bar(name: string): B.A;
->bar : (name: string) => A
+>bar : (name: string) => import("foo").A
 >name : string
 >B : any
     }

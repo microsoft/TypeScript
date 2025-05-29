@@ -33,3 +33,26 @@ exports.m = {
     prop: 1
 };
 exports.x = { p: a_1.fn };
+
+
+//// [a.d.ts]
+export type X = string;
+export declare const fn: {
+    o: (a?: string[]) => void;
+};
+//// [b.d.ts]
+export declare const m: {
+    /**
+    * leading doc for prop
+    */
+    prop: number;
+};
+export declare const x: {
+    p: {
+        o: (
+        /**
+        * leading doc for prop
+        */
+        a?: string[]) => void;
+    };
+};

@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react')
->React : typeof __React
+>React : typeof React
 
 interface MyComponentProp {
     values: string;
@@ -10,25 +10,25 @@ interface MyComponentProp {
 }
 
 function MyComponent<T = MyComponentProp>(attr: T) {
->MyComponent : <T>(attr: T) => Element
+>MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
 >attr : T
 
     return <div>attr.values</div>
-><div>attr.values</div> : Element
+><div>attr.values</div> : JSX.Element
 >div : any
 >div : any
 }
 
 // OK
 let i = <MyComponent values />;  // We infer type arguments here
->i : Element
-><MyComponent values /> : Element
->MyComponent : <T>(attr: T) => Element
+>i : JSX.Element
+><MyComponent values /> : JSX.Element
+>MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
 >values : true
 
 let i1 = <MyComponent values="Hello"/>;
->i1 : Element
-><MyComponent values="Hello"/> : Element
->MyComponent : <T>(attr: T) => Element
+>i1 : JSX.Element
+><MyComponent values="Hello"/> : JSX.Element
+>MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
 >values : string
 

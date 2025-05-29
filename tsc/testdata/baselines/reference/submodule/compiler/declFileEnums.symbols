@@ -68,13 +68,13 @@ enum e5 {
 >e5 : Symbol(e5, Decl(declFileEnums.ts, 24, 1))
 
     "Friday",
->"Friday" : Symbol(Friday, Decl(declFileEnums.ts, 26, 9))
+>"Friday" : Symbol("Friday", Decl(declFileEnums.ts, 26, 9))
 
     "Saturday",
->"Saturday" : Symbol(Saturday, Decl(declFileEnums.ts, 27, 13))
+>"Saturday" : Symbol("Saturday", Decl(declFileEnums.ts, 27, 13))
 
     "Sunday",
->"Sunday" : Symbol(Sunday, Decl(declFileEnums.ts, 28, 15))
+>"Sunday" : Symbol("Sunday", Decl(declFileEnums.ts, 28, 15))
 
     "Weekend days"
 >"Weekend days" : Symbol("Weekend days", Decl(declFileEnums.ts, 29, 13))

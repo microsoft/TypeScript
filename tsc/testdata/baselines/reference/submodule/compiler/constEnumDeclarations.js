@@ -26,3 +26,16 @@ var E2;
     E2[E2["B"] = 2] = "B";
     E2[E2["C"] = 3] = "C";
 })(E2 || (E2 = {}));
+
+
+//// [constEnumDeclarations.d.ts]
+declare const enum E {
+    A = 1,
+    B = 2,
+    C = 3
+}
+declare const enum E2 {
+    A = 1,
+    B = 2,
+    C = 3
+}

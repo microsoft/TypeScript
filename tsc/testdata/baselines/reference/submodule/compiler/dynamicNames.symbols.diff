@@ -5,7 +5,7 @@
 
      [c0]: number;
 ->[c0] : Symbol(T0[c0], Decl(module.ts, 3, 21))
-+>[c0] : Symbol(a, Decl(module.ts, 3, 21))
++>[c0] : Symbol([c0], Decl(module.ts, 3, 21))
  >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
      [c1]: string;
@@ -24,7 +24,7 @@
 
      [c0]: number;
 ->[c0] : Symbol(T1[c0], Decl(module.ts, 8, 39))
-+>[c0] : Symbol(a, Decl(module.ts, 8, 39))
++>[c0] : Symbol([c0], Decl(module.ts, 8, 39))
  >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
      [c1]: string;
@@ -38,21 +38,12 @@
  >s0 : Symbol(s0, Decl(module.ts, 2, 12))
  }
  export declare class T2 extends T1 {
-@@= skipped -19, +19 lines =@@
- >T3 : Symbol(T3, Decl(module.ts, 14, 1))
-
-     [c0]: number;
-->[c0] : Symbol([c0], Decl(module.ts, 15, 26))
-+>[c0] : Symbol(a, Decl(module.ts, 15, 26))
- >c0 : Symbol(c0, Decl(module.ts, 0, 12))
-
-     [c1]: string;
-@@= skipped -44, +44 lines =@@
+@@= skipped -63, +63 lines =@@
  >T4 : Symbol(T4, Decl(main.ts, 6, 36))
 
          [N.c2]: number;
 ->[N.c2] : Symbol(T4[N.c2], Decl(main.ts, 8, 25))
-+>[N.c2] : Symbol(a, Decl(main.ts, 8, 25))
++>[N.c2] : Symbol([N.c2], Decl(main.ts, 8, 25))
  >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
  >N : Symbol(N, Decl(main.ts, 1, 30))
  >c2 : Symbol(c2, Decl(main.ts, 4, 16))
@@ -75,7 +66,7 @@
 
          [N.c2]: number;
 ->[N.c2] : Symbol(T5[N.c2], Decl(main.ts, 13, 43))
-+>[N.c2] : Symbol(a, Decl(main.ts, 13, 43))
++>[N.c2] : Symbol([N.c2], Decl(main.ts, 13, 43))
  >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
  >N : Symbol(N, Decl(main.ts, 1, 30))
  >c2 : Symbol(c2, Decl(main.ts, 4, 16))
@@ -93,21 +84,12 @@
  >N.s1 : Symbol(s1, Decl(main.ts, 6, 16))
  >N : Symbol(N, Decl(main.ts, 1, 30))
  >s1 : Symbol(s1, Decl(main.ts, 6, 16))
-@@= skipped -25, +25 lines =@@
- >T7 : Symbol(T7, Decl(main.ts, 19, 5))
-
-         [N.c2]: number;
-->[N.c2] : Symbol([N.c2], Decl(main.ts, 20, 30))
-+>[N.c2] : Symbol(a, Decl(main.ts, 20, 30))
- >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
- >N : Symbol(N, Decl(main.ts, 1, 30))
- >c2 : Symbol(c2, Decl(main.ts, 4, 16))
-@@= skipped -35, +35 lines =@@
+@@= skipped -60, +60 lines =@@
  >T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
      [c4]: number;
 ->[c4] : Symbol(T8[c4], Decl(main.ts, 31, 14))
-+>[c4] : Symbol(a, Decl(main.ts, 31, 14))
++>[c4] : Symbol([c4], Decl(main.ts, 31, 14))
  >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
      [c5]: string;
@@ -126,7 +108,7 @@
 
      [c4]: number;
 ->[c4] : Symbol(T9[c4], Decl(main.ts, 36, 32))
-+>[c4] : Symbol(a, Decl(main.ts, 36, 32))
++>[c4] : Symbol([c4], Decl(main.ts, 36, 32))
  >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
      [c5]: string;
@@ -140,16 +122,7 @@
  >s2 : Symbol(s2, Decl(main.ts, 29, 12))
  }
  declare class T10 extends T9 {
-@@= skipped -19, +19 lines =@@
- >T11 : Symbol(T11, Decl(main.ts, 42, 1))
-
-     [c4]: number;
-->[c4] : Symbol([c4], Decl(main.ts, 43, 20))
-+>[c4] : Symbol(a, Decl(main.ts, 43, 20))
- >c4 : Symbol(c4, Decl(main.ts, 27, 12))
-
-     [c5]: string;
-@@= skipped -17, +17 lines =@@
+@@= skipped -36, +36 lines =@@
  >T12 : Symbol(T12, Decl(main.ts, 47, 2))
 
      a: number;
@@ -227,16 +200,7 @@
 
  let t8: T8;
  >t8 : Symbol(t8, Decl(main.ts, 85, 3))
-@@= skipped -129, +129 lines =@@
- >o1 : Symbol(o1, Decl(main.ts, 101, 12))
-
-     [c4]: 1,
-->[c4] : Symbol([c4], Decl(main.ts, 101, 19))
-+>[c4] : Symbol(a, Decl(main.ts, 101, 19))
- >c4 : Symbol(c4, Decl(main.ts, 27, 12))
-
-     [c5]: "a",
-@@= skipped -41, +41 lines =@@
+@@= skipped -170, +170 lines =@@
  >RI : Symbol(RI, Decl(main.ts, 117, 4))
 
  rI.x
@@ -258,7 +222,7 @@
      [rI.x]: "b";
 ->[rI.x] : Symbol(RI[rI.x], Decl(main.ts, 119, 9))
 ->rI.x : Symbol(RI.x, Decl(main.ts, 118, 35))
-+>[rI.x] : Symbol(a, Decl(main.ts, 119, 9))
++>[rI.x] : Symbol([rI.x], Decl(main.ts, 119, 9))
 +>rI.x : Symbol(x, Decl(main.ts, 118, 35))
  >rI : Symbol(rI, Decl(main.ts, 116, 13))
 ->x : Symbol(RI.x, Decl(main.ts, 118, 35))
@@ -288,7 +252,7 @@
      [rC.x]: "b";
 ->[rC.x] : Symbol(RC[rC.x], Decl(main.ts, 126, 9))
 ->rC.x : Symbol(RC.x, Decl(main.ts, 125, 39))
-+>[rC.x] : Symbol(a, Decl(main.ts, 126, 9))
++>[rC.x] : Symbol([rC.x], Decl(main.ts, 126, 9))
 +>rC.x : Symbol(x, Decl(main.ts, 125, 39))
  >rC : Symbol(rC, Decl(main.ts, 123, 13))
 ->x : Symbol(RC.x, Decl(main.ts, 125, 39))

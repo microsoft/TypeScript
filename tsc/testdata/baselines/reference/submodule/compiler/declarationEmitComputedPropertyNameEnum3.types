@@ -20,9 +20,9 @@ export type Type = { x?: { [Foo.Enum]: 0 } };
 >Type : Type
 >x : {} | undefined
 >[Foo.Enum] : 0
->Foo.Enum : typeof Enum
+>Foo.Enum : typeof Foo.Enum
 >Foo : typeof Foo
->Enum : typeof Enum
+>Enum : typeof Foo.Enum
 
 === index.ts ===
 import { type Type } from "./type";

@@ -2,17 +2,17 @@
 
 === aliasUsageInIndexerOfClass_main.ts ===
 import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
->Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
+>Backbone : typeof Backbone
 
 import moduleA = require("./aliasUsageInIndexerOfClass_moduleA");
->moduleA : typeof import("aliasUsageInIndexerOfClass_moduleA")
+>moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Model
->Backbone.Model : typeof Model
->Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
->Model : typeof Model
+>VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 class N {
 >N : N
@@ -21,15 +21,15 @@ class N {
 >idx : string
 
     x = moduleA;
->x : typeof import("aliasUsageInIndexerOfClass_moduleA")
->moduleA : typeof import("aliasUsageInIndexerOfClass_moduleA")
+>x : typeof moduleA
+>moduleA : typeof moduleA
 }
 class N2 {
 >N2 : N2
 
     [idx: string]: typeof moduleA
 >idx : string
->moduleA : typeof import("aliasUsageInIndexerOfClass_moduleA")
+>moduleA : typeof moduleA
 
     x: IHasVisualizationModel;
 >x : IHasVisualizationModel
@@ -44,13 +44,13 @@ export class Model {
 
 === aliasUsageInIndexerOfClass_moduleA.ts ===
 import Backbone = require("./aliasUsageInIndexerOfClass_backbone");
->Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : Model
->Backbone : typeof import("aliasUsageInIndexerOfClass_backbone")
->Model : typeof Model
+>Backbone.Model : Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }

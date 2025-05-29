@@ -61,3 +61,14 @@ exports.default = getInterR();
 import obj1 from "./sub1/uses.js";
 import obj2 from "./sub2/uses.js";
 export default [obj1, obj2.default];
+
+
+//// [uses.d.ts]
+declare const _default: any;
+export default _default;
+//// [uses.d.ts]
+declare const _default: RequireInterface;
+export default _default;
+//// [index.d.ts]
+declare const _default: readonly [any, any];
+export default _default;

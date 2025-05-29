@@ -3,9 +3,9 @@
 === classExtendsItselfIndirectly2.ts ===
 class C extends N.E { foo: string; } // error
 >C : C
->N.E : typeof E
+>N.E : typeof N.E
 >N : typeof N
->E : typeof E
+>E : typeof N.E
 >foo : string
 
 module M {
@@ -23,9 +23,9 @@ module N {
 
     export class E extends M.D { baz: number; }
 >E : E
->M.D : typeof D
+>M.D : typeof M.D
 >M : typeof M
->D : typeof D
+>D : typeof M.D
 >baz : number
 }
 
@@ -34,9 +34,9 @@ module O {
 
     class C2<T> extends Q.E2<T> { foo: T; } // error
 >C2 : C2<T>
->Q.E2 : typeof E2
+>Q.E2 : typeof Q.E2
 >Q : typeof Q
->E2 : typeof E2
+>E2 : typeof Q.E2
 >foo : T
 
     module P {
@@ -53,9 +53,9 @@ module O {
 
         export class E2<T> extends P.D2<T> { baz: T; }
 >E2 : E2<T>
->P.D2 : typeof D2
+>P.D2 : typeof P.D2
 >P : typeof P
->D2 : typeof D2
+>D2 : typeof P.D2
 >baz : T
     }
 }

@@ -53,3 +53,21 @@ var SomeOther;
         Thing.Foo = Foo;
     })(Thing = SomeOther.Thing || (SomeOther.Thing = {}));
 })(SomeOther || (SomeOther = {}));
+
+
+//// [internal.d.ts]
+declare namespace My.Internal {
+    function getThing(): void;
+    const enum WhichThing {
+        A = 0,
+        B = 1,
+        C = 2
+    }
+}
+//// [usage.d.ts]
+declare namespace SomeOther.Thing {
+    class Foo {
+        private _which;
+        constructor();
+    }
+}

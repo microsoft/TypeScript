@@ -31,7 +31,7 @@ Workspace.Object = class extends Common.Object {}
 
 /** @type {Workspace.Object} */
 var am;
->am : Object
+>am : Workspace.Object
 
 === roots.js ===
 var First = {};

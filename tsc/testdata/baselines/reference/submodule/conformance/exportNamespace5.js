@@ -76,3 +76,22 @@ const d_1 = require("./d");
 let _ = new d_1.A(); // Ok
 let __ = new d_1.B(); // Ok
 let ___ = new d_1.X(); // Ok
+
+
+//// [a.d.ts]
+export declare class A {
+}
+export declare class B {
+}
+export declare class X {
+}
+//// [b.d.ts]
+export type * from "./a";
+export { X } from "./a";
+//// [c.d.ts]
+export {};
+//// [d.d.ts]
+export type * from "./a";
+export * from "./a";
+//// [e.d.ts]
+export {};

@@ -650,7 +650,7 @@ module TestOnDefaultExportedClass_3 {
 >TestOnDefaultExportedClass_3 : typeof TestOnDefaultExportedClass_3
 
     export default class StaticLength {
->StaticLength : default
+>StaticLength : StaticLength
 
         static length: number; // error without useDefineForClassFields
 >length : number
@@ -680,7 +680,7 @@ module TestOnDefaultExportedClass_4 {
 >TestOnDefaultExportedClass_4 : typeof TestOnDefaultExportedClass_4
 
     export default class StaticLengthFn {
->StaticLengthFn : default
+>StaticLengthFn : StaticLengthFn
 
         static length() {} // error without useDefineForClassFields
 >length : () => void
@@ -711,10 +711,10 @@ module TestOnDefaultExportedClass_5 {
 >TestOnDefaultExportedClass_5 : typeof TestOnDefaultExportedClass_5
 
     export default class StaticPrototype {
->StaticPrototype : default
+>StaticPrototype : StaticPrototype
 
         static prototype: number; // always an error
->prototype : default
+>prototype : StaticPrototype
 
         prototype: string; // ok
 >prototype : string
@@ -741,7 +741,7 @@ module TestOnDefaultExportedClass_6 {
 >TestOnDefaultExportedClass_6 : typeof TestOnDefaultExportedClass_6
 
     export default class StaticPrototypeFn {
->StaticPrototypeFn : default
+>StaticPrototypeFn : StaticPrototypeFn
 
         static prototype() {} // always an error
 >prototype : () => void
@@ -772,7 +772,7 @@ module TestOnDefaultExportedClass_7 {
 >TestOnDefaultExportedClass_7 : typeof TestOnDefaultExportedClass_7
 
     export default class StaticCaller {
->StaticCaller : default
+>StaticCaller : StaticCaller
 
         static caller: number; // error without useDefineForClassFields
 >caller : number
@@ -802,7 +802,7 @@ module TestOnDefaultExportedClass_8 {
 >TestOnDefaultExportedClass_8 : typeof TestOnDefaultExportedClass_8
 
     export default class StaticCallerFn {
->StaticCallerFn : default
+>StaticCallerFn : StaticCallerFn
 
         static caller() {} // error without useDefineForClassFields
 >caller : () => void
@@ -833,7 +833,7 @@ module TestOnDefaultExportedClass_9 {
 >TestOnDefaultExportedClass_9 : typeof TestOnDefaultExportedClass_9
 
     export default class StaticArguments {
->StaticArguments : default
+>StaticArguments : StaticArguments
 
         static arguments: number; // error without useDefineForClassFields
 >arguments : number
@@ -863,7 +863,7 @@ module TestOnDefaultExportedClass_10 {
 >TestOnDefaultExportedClass_10 : typeof TestOnDefaultExportedClass_10
 
     export default class StaticArgumentsFn {
->StaticArgumentsFn : default
+>StaticArgumentsFn : StaticArgumentsFn
 
         static arguments() {} // error without useDefineForClassFields
 >arguments : () => void

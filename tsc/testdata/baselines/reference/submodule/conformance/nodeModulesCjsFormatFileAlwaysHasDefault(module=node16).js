@@ -28,3 +28,10 @@ exports.a = 1;
 // esm format file
 import mod from "./subfolder/index.js";
 mod;
+
+
+//// [index.d.ts]
+// cjs format file
+export declare const a = 1;
+//// [index.d.ts]
+export {};

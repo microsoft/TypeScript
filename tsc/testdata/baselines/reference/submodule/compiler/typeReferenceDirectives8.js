@@ -21,3 +21,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 const mod1_1 = require("./mod1");
 exports.bar = (0, mod1_1.foo)();
+
+
+//// [mod1.d.ts]
+export declare function foo(): Lib;
+//// [mod2.d.ts]
+export declare const bar: Lib;

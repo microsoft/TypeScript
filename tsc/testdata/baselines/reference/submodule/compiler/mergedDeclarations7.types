@@ -17,24 +17,24 @@ declare module 'passport' {
     }
 
     const passport: passport.PassportStatic;
->passport : PassportStatic
+>passport : import("passport").PassportStatic
 >passport : any
 
     export = passport;
->passport : PassportStatic
+>passport : import("passport").PassportStatic
 }
 
 === test.ts ===
 import * as passport from "passport";
->passport : PassportStatic
+>passport : passport.PassportStatic
 
 import { Passport } from "passport";
->Passport : new () => Passport
+>Passport : new () => passport.Passport
 
 let p: Passport = passport.use();
 >p : Passport
->passport.use() : PassportStatic
->passport.use : () => PassportStatic
->passport : PassportStatic
->use : () => PassportStatic
+>passport.use() : passport.PassportStatic
+>passport.use : () => passport.PassportStatic
+>passport : passport.PassportStatic
+>use : () => passport.PassportStatic
 

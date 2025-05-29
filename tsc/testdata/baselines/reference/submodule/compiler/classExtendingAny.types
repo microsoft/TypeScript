@@ -45,8 +45,8 @@ class A extends Err {
 }
 
 var o = {
->o : { m: () => void; }
->{    m() {        super.unknown    }} : { m: () => void; }
+>o : { m(): void; }
+>{    m() {        super.unknown    }} : { m(): void; }
 
     m() {
 >m : () => void

@@ -5,5 +5,5 @@
    interface NumArray<T extends number> extends Array<T> {}
    type X = NumArray<X extends {} ? number : number>;
 ->X : NumArray<any>
-+>X : X
++>X : f.NumArray<any>
  }

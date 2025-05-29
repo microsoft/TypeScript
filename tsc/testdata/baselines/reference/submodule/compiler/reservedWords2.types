@@ -62,7 +62,7 @@ var [debugger, if] = [1, 2];
 >2 : 2
 
 enum void {}
-> : 
+> : (Missing)
 >void {} : undefined
 >{} : {}
 

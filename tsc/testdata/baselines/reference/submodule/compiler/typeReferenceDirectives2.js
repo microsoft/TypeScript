@@ -9,3 +9,9 @@ interface A {
 }
 
 //// [app.js]
+
+
+//// [app.d.ts]
+interface A {
+    x: $;
+}

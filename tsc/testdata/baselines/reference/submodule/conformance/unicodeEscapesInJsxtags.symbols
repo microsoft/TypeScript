@@ -5,7 +5,7 @@ import * as React from "react";
 >React : Symbol(React, Decl(file.tsx, 0, 6))
 
 declare global {
->global : Symbol((Missing), Decl(file.tsx, 0, 31))
+>global : Symbol(global, Decl(file.tsx, 0, 31))
 
     namespace JSX {
 >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1), Decl(file.tsx, 1, 16))
@@ -75,9 +75,9 @@ const x = { video: () => null }
 // attribute name
 ;<video data-\u0076ideo />
 >video : Symbol(video, Decl(react.d.ts, 2481, 44))
->data-\u0076ideo : Symbol("data-video", Decl(file.tsx, 25, 7))
+>data-\u0076ideo : Symbol(data-\u0076ideo, Decl(file.tsx, 25, 7))
 
 ;<video \u0073rc="" />
 >video : Symbol(video, Decl(react.d.ts, 2481, 44))
->\u0073rc : Symbol(src, Decl(file.tsx, 26, 7))
+>\u0073rc : Symbol(\u0073rc, Decl(file.tsx, 26, 7))
 

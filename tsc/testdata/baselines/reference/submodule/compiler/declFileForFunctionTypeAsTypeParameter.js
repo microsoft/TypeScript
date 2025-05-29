@@ -15,3 +15,12 @@ class X {
 }
 class C extends X {
 }
+
+
+//// [declFileForFunctionTypeAsTypeParameter.d.ts]
+declare class X<T> {
+}
+declare class C extends X<() => number> {
+}
+interface I extends X<() => number> {
+}

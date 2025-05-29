@@ -14,7 +14,7 @@ export enum Enum {
 export type Type = { x?: { [Enum.A]: 0 } };
 >Type : Symbol(Type, Decl(type.ts, 3, 1))
 >x : Symbol(x, Decl(type.ts, 5, 20))
->[Enum.A] : Symbol(a, Decl(type.ts, 5, 26))
+>[Enum.A] : Symbol([Enum.A], Decl(type.ts, 5, 26))
 >Enum.A : Symbol(A, Decl(type.ts, 0, 18))
 >Enum : Symbol(Enum, Decl(type.ts, 0, 0))
 >A : Symbol(A, Decl(type.ts, 0, 18))

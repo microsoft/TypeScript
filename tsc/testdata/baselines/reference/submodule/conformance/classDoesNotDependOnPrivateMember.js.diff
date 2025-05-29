@@ -9,16 +9,8 @@
 -        }
 -        return C;
 -    }());
--    M.C = C;
--})(M || (M = {}));
--
--
--//// [classDoesNotDependOnPrivateMember.d.ts]
--declare namespace M {
-     class C {
--        private x;
++    class C {
 +        x;
-     }
--}
-+    M.C = C;
-+})(M || (M = {}));
++    }
+     M.C = C;
+ })(M || (M = {}));

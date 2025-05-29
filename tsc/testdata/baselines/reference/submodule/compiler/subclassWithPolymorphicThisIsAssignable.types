@@ -17,9 +17,9 @@ export class Example<Z extends CustomDocument> {
         // types of increment not compatible??
         this.test<Z>();
 >this.test<Z>() : void
->this.test : <Z extends Document>() => void
+>this.test : <Z_1 extends Document>() => void
 >this : this
->test : <Z extends Document>() => void
+>test : <Z_1 extends Document>() => void
     }
 
     public test<Z extends Document>() { }

@@ -26,3 +26,16 @@ class C {
     static set e(v) { }
     static set f(v) { }
 }
+
+
+//// [declFilePrivateStatic.d.ts]
+declare class C {
+    private static x;
+    static y: number;
+    private static a;
+    static b(): void;
+    private static get c();
+    static get d(): number;
+    private static set e(value);
+    static set f(v: any);
+}

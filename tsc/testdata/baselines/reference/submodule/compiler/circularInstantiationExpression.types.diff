@@ -5,14 +5,13 @@
  === circularInstantiationExpression.ts ===
  declare function foo<T>(t: T): typeof foo<T>;
 ->foo : <T>(t: T) => typeof foo<T>
-+>foo : <T>(t: T) => (t: T) => ???
++>foo : <T>(t: T) => (t: T) => any
  >t : T
 ->foo : <T>(t: T) => typeof foo<T>
-+>foo : <T>(t: T) => (t: T) => ???
++>foo : <T>(t: T) => (t: T) => any
 
  foo("");
-->foo("") : (t: string) => any
+ >foo("") : (t: string) => any
 ->foo : <T>(t: T) => typeof foo<T>
-+>foo("") : (t: string) => ???
-+>foo : <T>(t: T) => (t: T) => ???
++>foo : <T>(t: T) => (t: T) => any
  >"" : ""

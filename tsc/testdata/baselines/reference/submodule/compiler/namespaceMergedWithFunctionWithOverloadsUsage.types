@@ -2,11 +2,11 @@
 
 === index.ts ===
 import X = require("./file");
->X : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+>X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
 
 X(0); // shouldn't cause a crash
 >X(0) : void
->X : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+>X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
 >0 : 0
 
 === file.d.ts ===
@@ -18,16 +18,16 @@ declare namespace Foo {
 }
 
 declare function Foo(opts?: Foo.Whatever): void;
->Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
->opts : Whatever
+>Foo : { (opts?: import("./file.js").Whatever): void; (cb: Function, opts?: import("./file.js").Whatever): void; }
+>opts : import("./file.js").Whatever
 >Foo : any
 
 declare function Foo(cb: Function, opts?: Foo.Whatever): void;
->Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+>Foo : { (opts?: import("./file.js").Whatever): void; (cb: Function, opts?: import("./file.js").Whatever): void; }
 >cb : Function
->opts : Whatever
+>opts : import("./file.js").Whatever
 >Foo : any
 
 export = Foo;
->Foo : { (opts?: Whatever): void; (cb: Function, opts?: Whatever): void; }
+>Foo : { (opts?: import("./file.js").Whatever): void; (cb: Function, opts?: import("./file.js").Whatever): void; }
 

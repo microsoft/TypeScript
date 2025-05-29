@@ -877,7 +877,7 @@ function gg2(obj: Data) {
 }
 
 function foo({ kind, payload }: Data) {
->foo : (__0: Data) => void
+>foo : ({ kind, payload }: Data) => void
 >kind : "num" | "str"
 >payload : string | number
 

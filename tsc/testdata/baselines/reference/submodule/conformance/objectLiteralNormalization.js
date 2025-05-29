@@ -89,3 +89,147 @@ let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
 let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
 let e3 = f(data, { a: 2 });
 let e4 = f({ a: 2 }, data);
+
+
+//// [objectLiteralNormalization.d.ts]
+// Object literals in unions are normalized upon widening
+declare let a1: {
+    a: number;
+    b?: undefined;
+    c?: undefined;
+} | {
+    a: number;
+    b: string;
+    c?: undefined;
+} | {
+    a: number;
+    b: string;
+    c: boolean;
+};
+declare let a2: {
+    a: number;
+    b: number;
+} | {
+    b?: undefined;
+    a: string;
+} | {
+    b?: undefined;
+    a?: undefined;
+};
+// Object literals containing spreads are not normalized
+declare let b1: {
+    a: string;
+    b: string;
+} | {
+    b: string;
+    c: string;
+};
+declare let b2: {
+    a: string;
+    b: string;
+    z: number;
+} | {
+    b: string;
+    c: string;
+    z: number;
+};
+declare let b3: {
+    a: string;
+    b: string;
+    z: number;
+} | {
+    b: string;
+    c: string;
+    z: number;
+};
+// Before widening {} acts like { [x: string]: undefined }, which is a
+// subtype of types with all optional properties
+declare let opts: {
+    foo?: string;
+    bar?: string;
+    baz?: boolean;
+};
+declare let c1: {
+    foo?: string | undefined;
+    bar?: string | undefined;
+    baz?: boolean | undefined;
+};
+declare let c2: {
+    foo?: string | undefined;
+    bar?: string | undefined;
+    baz?: boolean | undefined;
+};
+declare let c3: {
+    a: number;
+    b: number;
+} | {
+    b?: undefined;
+    a?: undefined;
+};
+declare let c4: {
+    b?: undefined;
+    a?: undefined;
+} | {
+    a: number;
+    b: number;
+};
+// Normalization applies to nested properties
+declare let d1: {
+    kind: string;
+    pos: {
+        b?: undefined;
+        a?: undefined;
+        x: number;
+        y: number;
+    };
+} | {
+    kind: string;
+    pos: {
+        b?: undefined;
+        x?: undefined;
+        y?: undefined;
+        a: string;
+    } | {
+        a?: undefined;
+        x?: undefined;
+        y?: undefined;
+        b: number;
+    };
+};
+declare function f<T>(...items: T[]): T;
+declare let data: {
+    a: 1;
+    b: "abc";
+    c: true;
+};
+// Object literals are inferred as a single normalized union type
+declare let e1: {
+    a: number;
+    b: number;
+} | {
+    b?: undefined;
+    a: string;
+} | {
+    b?: undefined;
+    a?: undefined;
+};
+declare let e2: {
+    b?: undefined;
+    a?: undefined;
+} | {
+    b?: undefined;
+    a: string;
+} | {
+    a: number;
+    b: number;
+};
+declare let e3: {
+    a: 1;
+    b: "abc";
+    c: true;
+};
+declare let e4: {
+    a: 1;
+    b: "abc";
+    c: true;
+};

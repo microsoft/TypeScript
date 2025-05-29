@@ -137,7 +137,7 @@ type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
 >;
 
 declare const connect: {
->connect : <no_state, TDispatchProps, TOwnProps>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
+>connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
 
   <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(
     mapStateToProps: null | undefined,
@@ -218,11 +218,11 @@ const simpleAction = (payload: boolean) => ({
 
 });
 const thunkAction = (param1: number, param2: string) => async (
->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
->(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
+>(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
 >param1 : number
 >param2 : string
->async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
+>async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
 
   dispatch: Dispatch,
 >dispatch : Dispatch<AnyAction>
@@ -254,10 +254,10 @@ class TestComponent extends Component<TestComponentProps> {}
 >Component : Component<TestComponentProps>
 
 const mapDispatchToProps = { simpleAction, thunkAction };
->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
->{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
+>{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>
+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
 
 type Q = HandleThunkActionCreator<typeof simpleAction>;
 >Q : (payload: boolean) => { type: string; payload: boolean; }
@@ -267,11 +267,11 @@ const Test1 = connect(
 >Test1 : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
 >connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
 >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
->connect : <no_state, TDispatchProps, TOwnProps>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
+>connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
 
   null,
   mapDispatchToProps
->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, __1: OwnProps) => Promise<string>; }
+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
 
 )(TestComponent);
 >TestComponent : typeof TestComponent

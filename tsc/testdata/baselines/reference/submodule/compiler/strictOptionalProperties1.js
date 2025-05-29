@@ -363,3 +363,130 @@ a = b;
 a = c;
 a = d; // Error
 a = e; // Error
+
+
+//// [strictOptionalProperties1.d.ts]
+declare function f1(obj: {
+    a?: string;
+    b?: string | undefined;
+}): void;
+declare function f2(obj: {
+    a?: string;
+    b?: string | undefined;
+}): void;
+declare function f3(obj: Partial<{
+    a: string;
+    b: string | undefined;
+}>): void;
+declare function f4(t: [string?]): void;
+declare function f4a(t1: [number, string?], t2: [number, string?, string?]): void;
+declare function f5(t: [number, string?, boolean?]): void;
+declare function f6(): void;
+// Example from #13195
+type Props = {
+    foo: string;
+    bar: string;
+};
+type InputProps = {
+    foo?: string;
+    bar: string;
+};
+declare const defaultProps: Pick<Props, 'foo'>;
+declare const inputProps: InputProps;
+declare const completeProps: Props;
+// Example from #13195
+declare const t1: [number, string?, boolean?];
+declare const t2: [number, string?, boolean?];
+declare const t3: [number, string?, boolean?];
+declare const t4: [number, string?, boolean?];
+// Example from #13195
+declare const x: {
+    foo?: number;
+};
+declare const y: {
+    foo: number;
+};
+// Index signatures and strict optional properties
+interface Test {
+    [key: string]: string;
+    foo?: string; // Should be ok
+    bar?: string | undefined; // Error
+}
+// Strict optional properties and inference
+declare let ox1: {
+    p: string;
+};
+declare let ox2: {
+    p: string | undefined;
+};
+declare let ox3: {
+    p?: string;
+};
+declare let ox4: {
+    p?: string | undefined;
+};
+declare let tx1: [string];
+declare let tx2: [string | undefined];
+declare let tx3: [string?];
+declare let tx4: [(string | undefined)?];
+declare function f11<T>(x: {
+    p?: T;
+}): T;
+declare function f12<T>(x: [T?]): T;
+declare function f13<T>(x: Partial<T>): T;
+// Repro from #44388
+type Undefinable<T> = T | undefined;
+declare function expectNotUndefined<T>(value: Undefinable<T>): T;
+interface Bar {
+    bar?: number;
+}
+declare function aa(input: Bar): void;
+declare function bb(input: number): void;
+interface U1 {
+    name: string;
+    email?: string | number | undefined;
+}
+interface U2 {
+    name: string;
+    email?: string | number;
+}
+declare const e: string | boolean | undefined;
+declare const u1: U1;
+declare let u2: U2;
+// Repro from #44437
+declare var a: {
+    [x: string]: number | string;
+};
+declare var b: {
+    a: number;
+    b: string;
+};
+declare var c: {
+    a: number;
+    b?: string;
+};
+declare var d: {
+    a: number;
+    b: string | undefined;
+};
+declare var e: {
+    a: number;
+    b?: string | undefined;
+};
+// Repro from #46004
+interface PropsFromReact {
+    onClick?: () => void;
+}
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+// Repro from #46004
+type UA = undefined; // Explicit undefined type
+type UB = {
+    x?: never;
+}['x']; // undefined from missing property
+type UC = UA & UB; // undefined

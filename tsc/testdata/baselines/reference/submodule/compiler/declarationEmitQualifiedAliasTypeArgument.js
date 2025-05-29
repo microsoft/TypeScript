@@ -34,3 +34,9 @@ exports.fun2 = exports.fun = void 0;
 const bbb_1 = require("./bbb");
 exports.fun = (0, bbb_1.create)();
 exports.fun2 = (0, bbb_1.create)();
+
+
+//// [index.d.ts]
+import { T, Q } from "./lib";
+export declare const fun: () => import("./bbb.js").INode<T>;
+export declare const fun2: () => import("./bbb.js").INode<Q>;

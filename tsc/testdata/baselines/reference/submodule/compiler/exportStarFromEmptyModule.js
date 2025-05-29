@@ -63,3 +63,19 @@ const X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;
 X.A.r; // Error
+
+
+//// [exportStarFromEmptyModule_module1.d.ts]
+export declare class A {
+    static r: any;
+}
+//// [exportStarFromEmptyModule_module2.d.ts]
+// empty
+//// [exportStarFromEmptyModule_module3.d.ts]
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
+export declare class A {
+    static q: any;
+}
+//// [exportStarFromEmptyModule_module4.d.ts]
+export {};

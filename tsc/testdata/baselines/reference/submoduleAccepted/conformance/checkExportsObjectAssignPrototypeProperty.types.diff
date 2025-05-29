@@ -199,11 +199,7 @@
 +>Person : (name: string) => void
  >prototype : any
  >"rwAccessors" : "rwAccessors"
-->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
-+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
- >get : () => number
- >98122 : 98122
- >set : (_: any) => void
+ >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
 @@= skipped -15, +15 lines =@@
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
@@ -212,11 +208,7 @@
 +>Person : (name: string) => void
  >prototype : any
  >"readonlyAccessor" : "readonlyAccessor"
-->{ get() { return 21.75 } } : { get(): number; }
-+>{ get() { return 21.75 } } : { get: () => number; }
- >get : () => number
- >21.75 : 21.75
-
+ >{ get() { return 21.75 } } : { get(): number; }
 @@= skipped -13, +13 lines =@@
  >Object : ObjectConstructor
  >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
@@ -225,11 +217,7 @@
 +>Person : (name: string) => void
  >prototype : any
  >"setonlyAccessor" : "setonlyAccessor"
-->{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }} : { set(str: string): void; }
-+>{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }} : { set: (str: string) => void; }
-
-     /** @param {string} str */
-     set(str) {
+ >{    /** @param {string} str */    set(str) {        this.rwAccessors = Number(str)    }} : { set(str: string): void; }
 @@= skipped -12, +12 lines =@@
 
          this.rwAccessors = Number(str)
@@ -253,6 +241,6 @@
 ->Person : typeof Person
 +>module.exports = Person : (name: string) => void
 +>module.exports : (name: string) => void
-+>module : { Person: (name: string) => void; }
++>module : { Person(name: string): void; }
 +>exports : (name: string) => void
 +>Person : (name: string) => void

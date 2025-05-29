@@ -28,3 +28,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 const reexporter_1 = require("./reexporter");
 exports.c = (0, reexporter_1.func)();
+
+
+//// [reexporter.d.ts]
+import { CustomHtmlRepresentationThing } from "./foo.html";
+export declare function func(): CustomHtmlRepresentationThing;
+//// [index.d.ts]
+export declare const c: import("./foo.html").CustomHtmlRepresentationThing;

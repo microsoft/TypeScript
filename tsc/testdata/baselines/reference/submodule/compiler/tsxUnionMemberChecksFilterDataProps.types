@@ -19,18 +19,18 @@ declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement
 >value : number
 
 const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
->RootNotHappy : () => Element
->() => (<NotHappy data-testid="my-test-id" />) : () => Element
->(<NotHappy data-testid="my-test-id" />) : Element
-><NotHappy data-testid="my-test-id" /> : Element
+>RootNotHappy : () => JSX.Element
+>() => (<NotHappy data-testid="my-test-id" />) : () => JSX.Element
+>(<NotHappy data-testid="my-test-id" />) : JSX.Element
+><NotHappy data-testid="my-test-id" /> : JSX.Element
 >NotHappy : (props: { fixed?: boolean; } | { value?: number; }) => ReactElement<any>
 >data-testid : string
 
 const RootHappy = () => (<Happy data-testid="my-test-id" />);
->RootHappy : () => Element
->() => (<Happy data-testid="my-test-id" />) : () => Element
->(<Happy data-testid="my-test-id" />) : Element
-><Happy data-testid="my-test-id" /> : Element
+>RootHappy : () => JSX.Element
+>() => (<Happy data-testid="my-test-id" />) : () => JSX.Element
+>(<Happy data-testid="my-test-id" />) : JSX.Element
+><Happy data-testid="my-test-id" /> : JSX.Element
 >Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
 >data-testid : string
 

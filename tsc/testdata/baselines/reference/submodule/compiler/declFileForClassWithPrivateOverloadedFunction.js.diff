@@ -10,11 +10,9 @@
 -    C.prototype.foo = function (x) { };
 -    return C;
 -}());
--
--
--//// [declFileForClassWithPrivateOverloadedFunction.d.ts]
--declare class C {
--    private foo;
 +class C {
 +    foo(x) { }
- }
++}
+
+
+ //// [declFileForClassWithPrivateOverloadedFunction.d.ts]

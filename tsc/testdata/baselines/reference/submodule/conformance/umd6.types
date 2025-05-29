@@ -6,7 +6,7 @@ let y: number = Foo.fn();
 >y : number
 >Foo.fn() : number
 >Foo.fn : () => number
->Foo : typeof Thing
+>Foo : typeof Foo
 >fn : () => number
 
 === foo.d.ts ===

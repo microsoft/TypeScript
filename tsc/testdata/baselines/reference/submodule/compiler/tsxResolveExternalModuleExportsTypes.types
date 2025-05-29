@@ -2,18 +2,18 @@
 
 === /node_modules/@types/a/index.d.ts ===
 declare var a: a.Foo;
->a : Foo
+>a : import("a").Foo
 >a : any
 
 declare namespace a {
     interface Foo {}
 }
 export = a;
->a : Foo
+>a : import("a").Foo
 
 === /node_modules/@types/b/index.d.ts ===
 import * as a from 'a';
->a : Foo
+>a : a.Foo
 
 declare module 'a' {
 >'a' : Foo
@@ -31,9 +31,9 @@ import { Test } from 'a';
 >Test : null
 
 const Foo = (<h1></h1>);
->Foo : Element
->(<h1></h1>) : Element
-><h1></h1> : Element
+>Foo : JSX.Element
+>(<h1></h1>) : JSX.Element
+><h1></h1> : JSX.Element
 >h1 : any
 >h1 : any
 

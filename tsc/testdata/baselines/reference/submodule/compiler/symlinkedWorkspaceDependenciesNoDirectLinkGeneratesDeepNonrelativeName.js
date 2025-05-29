@@ -42,3 +42,7 @@ export const a = pkg.invoke();
 //// [index.js]
 import * as pkg from "package-b";
 export const a = pkg.invoke();
+
+
+//// [index.d.ts]
+export declare const a: import("../packageA/foo.js").Foo;

@@ -7,12 +7,4 @@
 -var foo = function () { return function (x) { return null; }; };
 +const foo = () => (x) => null;
  exports.baddts = foo();
--
--
--//// [declarationEmitExactOptionalPropertyTypesNodeNotReused.d.ts]
--export declare const baddts: (x: {
--    foo?: string | undefined;
--    baz?: undefined;
--} & {
--    bar: number;
--}) => null;
+

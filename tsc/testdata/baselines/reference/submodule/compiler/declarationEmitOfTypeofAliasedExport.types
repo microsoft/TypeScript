@@ -10,10 +10,10 @@ export { C as D }
 
 === /b.ts ===
 import * as a from "./a";
->a : typeof import("/a")
+>a : typeof a
 
 export default a.D;
->a.D : typeof C
->a : typeof import("/a")
->D : typeof C
+>a.D : typeof a.D
+>a : typeof a
+>D : typeof a.D
 

@@ -5,19 +5,19 @@ declare module "bar" {
 >"bar" : typeof import("bar")
 
     var before: typeof func;
->before : () => ???
->func : () => ???
+>before : () => typeof func
+>func : () => typeof func
 
     export function normal(): void;
 >normal : () => void
 
     export default function func(): typeof func;
->func : () => ???
->func : () => ???
+>func : () => typeof func
+>func : () => typeof func
 
     var after: typeof func;
->after : () => ???
->func : () => ???
+>after : () => typeof func
+>func : () => typeof func
 
     export {}
 }

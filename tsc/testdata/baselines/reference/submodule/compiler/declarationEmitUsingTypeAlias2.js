@@ -45,3 +45,8 @@ export const bar = goodDeclaration<{}>;
 //// [index.js]
 import { goodDeclaration } from "some-dep";
 export const bar = goodDeclaration;
+
+
+//// [index.d.ts]
+import { shouldReuseLocalName } from "some-dep";
+export declare const bar: any;

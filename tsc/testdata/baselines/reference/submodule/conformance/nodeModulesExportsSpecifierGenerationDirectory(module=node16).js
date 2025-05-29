@@ -30,3 +30,7 @@ export const x: () => Thing;
 
 //// [index.js]
 export const a = (await import("inner/index.js")).x();
+
+
+//// [index.d.ts]
+export declare const a: any;

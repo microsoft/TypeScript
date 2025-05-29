@@ -9,8 +9,7 @@
 
  import "file2";
  let a: x.A; // should not work
-->a : x.A
-+>a : A
+ >a : x.A
  >x : any
 -
 -=== file1.d.ts ===

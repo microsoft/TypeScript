@@ -16,3 +16,11 @@ var v = {
     [~1]: {},
     [!1]: {}
 };
+
+
+//// [computedPropertyNamesDeclarationEmit6_ES5.d.ts]
+declare var v: {
+    [x: number]: {};
+    [-1]: {};
+    1: {};
+};

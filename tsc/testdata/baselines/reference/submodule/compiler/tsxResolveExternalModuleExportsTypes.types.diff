@@ -5,7 +5,7 @@
  === /node_modules/@types/a/index.d.ts ===
  declare var a: a.Foo;
 ->a : import("/node_modules/@types/a/index.d.ts").Foo
-+>a : Foo
++>a : import("a").Foo
  >a : any
 
  declare namespace a {
@@ -13,24 +13,7 @@
  }
  export = a;
 ->a : import("/node_modules/@types/a/index.d.ts").Foo
-+>a : Foo
++>a : import("a").Foo
 
  === /node_modules/@types/b/index.d.ts ===
  import * as a from 'a';
-->a : a.Foo
-+>a : Foo
-
- declare module 'a' {
- >'a' : Foo
-@@= skipped -29, +29 lines =@@
- >Test : null
-
- const Foo = (<h1></h1>);
-->Foo : JSX.Element
-->(<h1></h1>) : JSX.Element
--><h1></h1> : JSX.Element
-+>Foo : Element
-+>(<h1></h1>) : Element
-+><h1></h1> : Element
- >h1 : any
- >h1 : any

@@ -20,19 +20,16 @@
  require("./f2");
 -var x = [1];
 -var y = x.getCountAsString().toLowerCase();
--
--
--//// [f1.d.ts]
--export declare class A {
--}
--//// [f2.d.ts]
--declare global {
--    interface Array<T> {
--        getCountAsString(): string;
--    }
--}
--export {};
--//// [f3.d.ts]
--import "./f2";
 +let x = [1];
 +let y = x.getCountAsString().toLowerCase();
+
+
+ //// [f1.d.ts]
+ export declare class A {
+ }
+ //// [f2.d.ts]
+-declare global {
++declare namespace global {
+     interface Array<T> {
+         getCountAsString(): string;
+     }

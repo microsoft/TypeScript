@@ -1,0 +1,11 @@
+--- old.mismatchedGenericArguments1.types
++++ new.mismatchedGenericArguments1.types
+@@= skipped -2, +2 lines =@@
+ === mismatchedGenericArguments1.ts ===
+ interface IFoo<T> {
+    foo<T>(x: T): T;
+->foo : <T>(x: T) => T
++>foo : <T_1>(x: T_1) => T_1
+ >x : T
+ }
+ class C<T> implements IFoo<T> {

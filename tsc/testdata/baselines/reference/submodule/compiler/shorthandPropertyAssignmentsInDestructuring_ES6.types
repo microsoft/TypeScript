@@ -427,7 +427,7 @@
 });
 
 function foo({a = 4, b = { x: 5 }}) {
->foo : (__0: { a?: number; b?: { x: number; }; }) => void
+>foo : ({ a = 4, b = { x: 5 } }: { a?: number; b?: { x: number; }; }) => void
 >a : number
 >4 : 4
 >b : { x: number; }

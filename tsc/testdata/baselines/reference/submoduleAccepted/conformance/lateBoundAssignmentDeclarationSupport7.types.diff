@@ -1,54 +1,39 @@
 --- old.lateBoundAssignmentDeclarationSupport7.types
 +++ new.lateBoundAssignmentDeclarationSupport7.types
-@@= skipped -1, +1 lines =@@
-
- === usage.js ===
- const x = require("./lateBoundAssignmentDeclarationSupport7.js");
-->x : typeof x
-->require("./lateBoundAssignmentDeclarationSupport7.js") : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport7")
-+>require("./lateBoundAssignmentDeclarationSupport7.js") : typeof import("lateBoundAssignmentDeclarationSupport7")
- >require : any
- >"./lateBoundAssignmentDeclarationSupport7.js" : "./lateBoundAssignmentDeclarationSupport7.js"
-
+@@= skipped -9, +9 lines =@@
  const y = x.F["my-fake-sym"];
  >y : string
  >x.F["my-fake-sym"] : string
 ->x.F : typeof x.F
-->x : typeof x
++>x.F : { (): void; [_sym]: string; "my-fake-sym": string; }
+ >x : typeof x
 ->F : typeof x.F
-+>x.F : { (): void; F[_sym]: string; F[_str]: string; }
-+>x : typeof import("lateBoundAssignmentDeclarationSupport7")
-+>F : { (): void; F[_sym]: string; F[_str]: string; }
++>F : { (): void; [_sym]: string; "my-fake-sym": string; }
  >"my-fake-sym" : "my-fake-sym"
 
  const z = x.F[x.S];
  >z : string
  >x.F[x.S] : string
 ->x.F : typeof x.F
-->x : typeof x
++>x.F : { (): void; [_sym]: string; "my-fake-sym": string; }
+ >x : typeof x
 ->F : typeof x.F
-+>x.F : { (): void; F[_sym]: string; F[_str]: string; }
-+>x : typeof import("lateBoundAssignmentDeclarationSupport7")
-+>F : { (): void; F[_sym]: string; F[_str]: string; }
++>F : { (): void; [_sym]: string; "my-fake-sym": string; }
  >x.S : unique symbol
-->x : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport7")
+ >x : typeof x
  >S : unique symbol
-
- === lateBoundAssignmentDeclarationSupport7.js ===
-@@= skipped -34, +34 lines =@@
+@@= skipped -26, +26 lines =@@
  >"my-fake-sym" : "my-fake-sym"
 
  function F() {
 ->F : typeof F
-+>F : { (): void; F[_sym]: string; F[_str]: string; }
++>F : { (): void; [_sym]: string; "my-fake-sym": string; }
  }
  F[_sym] = "ok";
  >F[_sym] = "ok" : "ok"
  >F[_sym] : string
 ->F : typeof F
-+>F : { (): void; F[_sym]: string; F[_str]: string; }
++>F : { (): void; [_sym]: string; "my-fake-sym": string; }
  >_sym : unique symbol
  >"ok" : "ok"
 
@@ -56,7 +41,7 @@
  >F[_str] = "ok" : "ok"
  >F[_str] : string
 ->F : typeof F
-+>F : { (): void; F[_sym]: string; F[_str]: string; }
++>F : { (): void; [_sym]: string; "my-fake-sym": string; }
  >_str : "my-fake-sym"
  >"ok" : "ok"
 
@@ -68,13 +53,13 @@
 ->exports : typeof module.exports
 ->F : typeof F
 ->F : typeof F
-+>module.exports.F = F : { (): void; F[_sym]: string; F[_str]: string; }
-+>module.exports.F : { (): void; F[_sym]: string; F[_str]: string; }
-+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport7")
-+>module : { "lateBoundAssignmentDeclarationSupport7": typeof import("lateBoundAssignmentDeclarationSupport7"); }
-+>exports : typeof import("lateBoundAssignmentDeclarationSupport7")
-+>F : { (): void; F[_sym]: string; F[_str]: string; }
-+>F : { (): void; F[_sym]: string; F[_str]: string; }
++>module.exports.F = F : { (): void; [_sym]: string; "my-fake-sym": string; }
++>module.exports.F : { (): void; [_sym]: string; "my-fake-sym": string; }
++>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
++>module : { "\"lateBoundAssignmentDeclarationSupport7\"": typeof import("./lateBoundAssignmentDeclarationSupport7"); }
++>exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
++>F : { (): void; [_sym]: string; "my-fake-sym": string; }
++>F : { (): void; [_sym]: string; "my-fake-sym": string; }
 
  module.exports.S = _sym;
  >module.exports.S = _sym : unique symbol
@@ -82,8 +67,8 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport7")
-+>module : { "lateBoundAssignmentDeclarationSupport7": typeof import("lateBoundAssignmentDeclarationSupport7"); }
-+>exports : typeof import("lateBoundAssignmentDeclarationSupport7")
++>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
++>module : { "\"lateBoundAssignmentDeclarationSupport7\"": typeof import("./lateBoundAssignmentDeclarationSupport7"); }
++>exports : typeof import("./lateBoundAssignmentDeclarationSupport7")
  >S : unique symbol
  >_sym : unique symbol

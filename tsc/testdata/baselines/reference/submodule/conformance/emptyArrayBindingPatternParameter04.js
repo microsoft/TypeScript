@@ -9,3 +9,7 @@ function f([] = [1,2,3,4]) {
 function f([] = [1, 2, 3, 4]) {
     var x, y, z;
 }
+
+
+//// [emptyArrayBindingPatternParameter04.d.ts]
+declare function f([]?: number[]): void;

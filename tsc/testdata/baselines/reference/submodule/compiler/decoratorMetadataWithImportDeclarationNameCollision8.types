@@ -2,7 +2,7 @@
 
 === service.ts ===
 import database = require('./db');
->database : typeof import("db")
+>database : typeof database
 
 function someDecorator(target) {
 >someDecorator : (target: any) => any
@@ -18,26 +18,26 @@ class MyClass {
 >MyClass : MyClass
 
     db: database.db;
->db : db
+>db : database.db
 >database : any
 
     constructor(db: database.db) { // no collision
->db : db
+>db : database.db
 >database : any
 
         this.db = db;
->this.db = db : db
->this.db : db
+>this.db = db : database.db
+>this.db : database.db
 >this : this
->db : db
->db : db
+>db : database.db
+>db : database.db
 
         this.db.doSomething();
 >this.db.doSomething() : void
 >this.db.doSomething : () => void
->this.db : db
+>this.db : database.db
 >this : this
->db : db
+>db : database.db
 >doSomething : () => void
     }
 }

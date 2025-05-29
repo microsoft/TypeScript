@@ -1,11 +1,9 @@
 --- old.declFileWithErrorsInInputDeclarationFile.js
 +++ new.declFileWithErrorsInInputDeclarationFile.js
-@@= skipped -17, +17 lines =@@
- //// [client.js]
- ///<reference path="declFile.d.ts" preserve="true"/>
- var x = new M.C(); // Declaration file wont get emitted because there are errors in declaration file
--
--
--//// [client.d.ts]
+@@= skipped -20, +20 lines =@@
+
+
+ //// [client.d.ts]
 -/// <reference path="declFile.d.ts" preserve="true" />
 -declare var x: M.C;
++declare var x: M.C; // Declaration file wont get emitted because there are errors in declaration file

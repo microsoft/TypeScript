@@ -8,7 +8,9 @@
 -var f = function (hdr, val) { return "".concat(hdr, ":\t").concat(val, "\r\n"); };
 +const f = (hdr, val) => `${hdr}:\t${val}\r\n`;
  f("x").foo;
--
--
--//// [templateLiteralsInTypes.d.ts]
+
+
+ //// [templateLiteralsInTypes.d.ts]
 -declare const f: (hdr: string, val: number) => `${string}:\t${number}\r\n`;
++declare const f: (hdr: string, val: number) => `${string}:	${number}
++`;

@@ -19,12 +19,12 @@ export module c {
 >b : any
 
     export var x: b.I;
->x : I
+>x : b.I
 >b : any
 
     x.foo();
 >x.foo() : any
 >x.foo : () => any
->x : I
+>x : b.I
 >foo : () => any
 }

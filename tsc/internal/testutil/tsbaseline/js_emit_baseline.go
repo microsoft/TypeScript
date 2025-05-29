@@ -1,6 +1,7 @@
 package tsbaseline
 
 import (
+	"slices"
 	"strings"
 	"testing"
 
@@ -74,34 +75,33 @@ func DoJSEmitBaseline(
 		jsCode.WriteString(fileOutput(file, harnessSettings))
 	}
 
-	// !!! Enable the following once .d.ts emit is implemented
-	////if result.Dts.Size() > 0 {
-	////	jsCode += "\r\n\r\n"
-	////	for declFile := range result.Dts.Values() {
-	////		jsCode += fileOutput(declFile, harnessSettings)
-	////	}
-	////}
-	////
-	////declFileContext := prepareDeclarationCompilationContext(
-	////	toBeCompiled,
-	////	otherFiles,
-	////	result,
-	////	harnessSettings,
-	////	options,
-	////	"", /*currentDirectory*/
-	////)
-	////declFileCompilationResult := compileDeclarationFiles(t, declFileContext, result.Symlinks)
-	////
-	////if declFileCompilationResult != nil && len(declFileCompilationResult.declResult.Diagnostics) > 0 {
-	////	jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n"
-	////	jsCode += "\r\n\r\n"
-	////	jsCode += getErrorBaseline(
-	////		t,
-	////		slices.Concat(tsConfigFiles, declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles),
-	////		declFileCompilationResult.declResult.Diagnostics,
-	////		false, /*pretty*/
-	////	)
-	////} else
+	if result.DTS.Size() > 0 {
+		jsCode.WriteString("\r\n\r\n")
+		for declFile := range result.DTS.Values() {
+			jsCode.WriteString(fileOutput(declFile, harnessSettings))
+		}
+	}
+
+	declFileContext := prepareDeclarationCompilationContext(
+		toBeCompiled,
+		otherFiles,
+		result,
+		harnessSettings,
+		options,
+		"", /*currentDirectory*/
+	)
+	declFileCompilationResult := compileDeclarationFiles(t, declFileContext, result.Symlinks)
+
+	if declFileCompilationResult != nil && len(declFileCompilationResult.declResult.Diagnostics) > 0 {
+		jsCode.WriteString("\r\n\r\n//// [DtsFileErrors]\r\n")
+		jsCode.WriteString("\r\n\r\n")
+		jsCode.WriteString(getErrorBaseline(
+			t,
+			slices.Concat(tsConfigFiles, declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles),
+			declFileCompilationResult.declResult.Diagnostics,
+			false, /*pretty*/
+		))
+	}
 
 	// !!! Enable the following once noCheck is more comprehensive
 	////if !options.NoCheck.IsTrue() && !options.NoEmit.IsTrue() {

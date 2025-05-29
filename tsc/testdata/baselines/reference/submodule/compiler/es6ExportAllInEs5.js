@@ -45,3 +45,18 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./server"), exports);
+
+
+//// [server.d.ts]
+export declare class c {
+}
+export interface i {
+}
+export declare namespace m {
+    var x: number;
+}
+export declare var x: number;
+export declare namespace uninstantiated {
+}
+//// [client.d.ts]
+export * from "./server";

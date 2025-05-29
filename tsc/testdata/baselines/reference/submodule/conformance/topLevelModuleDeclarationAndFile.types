@@ -3,13 +3,13 @@
 === foo_2.ts ===
 /// <reference path="foo_1.ts"/>
 import foo = require("vs/foo_0");
->foo : typeof import("vs/foo_0")
+>foo : typeof foo
 
 var z1 = foo.x + 10;   // Should error, as declaration should win
 >z1 : any
 >foo.x + 10 : any
 >foo.x : any
->foo : typeof import("vs/foo_0")
+>foo : typeof foo
 >x : any
 >10 : 10
 
@@ -18,7 +18,7 @@ var z2 = foo.y() + 10; // Should resolve
 >foo.y() + 10 : number
 >foo.y() : number
 >foo.y : () => number
->foo : typeof import("vs/foo_0")
+>foo : typeof foo
 >y : () => number
 >10 : 10
 

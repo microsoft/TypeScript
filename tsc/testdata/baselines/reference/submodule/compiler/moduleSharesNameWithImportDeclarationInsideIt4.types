@@ -14,7 +14,7 @@ module Z.M {
 }
 module A.M {
 >A : typeof A
->M : typeof M
+>M : typeof A.M
 
     interface M { }
     import M = Z.M;

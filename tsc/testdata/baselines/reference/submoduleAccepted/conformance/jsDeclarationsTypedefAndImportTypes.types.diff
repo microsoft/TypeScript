@@ -14,7 +14,7 @@
       */
      constructor(c) {
 ->c : import("conn")
-+>c : Conn
++>c : import("./conn")
 
          this.connItem = c.item;
  >this.connItem = c.item : number
@@ -25,7 +25,7 @@
 +>connItem : number
  >c.item : number
 ->c : import("conn")
-+>c : Conn
++>c : import("./conn")
  >item : number
 
          /** @type {import("./conn").Whatever} */
@@ -49,7 +49,7 @@
 ->exports : typeof module.exports
 +>module.exports = {    Wrap} : { Wrap: typeof Wrap; }
 +>module.exports : { Wrap: typeof Wrap; }
-+>module : { export=: { Wrap: typeof Wrap; }; }
++>module : { "export=": { Wrap: typeof Wrap; }; }
 +>exports : { Wrap: typeof Wrap; }
  >{    Wrap} : { Wrap: typeof Wrap; }
 

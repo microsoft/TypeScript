@@ -1,8 +1,9 @@
 /index.ts(3,62): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
+/index.ts(5,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
 /index.ts(6,89): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
 
 
-==== /index.ts (2 errors) ====
+==== /index.ts (3 errors) ====
     export type LocalInterface =
         & import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface
         & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
@@ -10,6 +11,8 @@
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
     export const a = (null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface);
+                 ~
+!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require.js'. This is likely not portable. A type annotation is necessary.
     export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
                                                                                             ~~~~~~~~~~~~~~~
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.

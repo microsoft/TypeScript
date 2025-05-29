@@ -12,9 +12,9 @@
 ->n : typeof n
 +>module.exports.n = {} : {}
 +>module.exports.n : any
-+>module.exports : typeof import("mod")
-+>module : { "mod": typeof import("mod"); }
-+>exports : typeof import("mod")
++>module.exports : typeof import("./mod")
++>module : { "\"mod\"": typeof import("./mod"); }
++>exports : typeof import("./mod")
 +>n : any
  >{} : {}
 
@@ -32,9 +32,9 @@
 +>module.exports.n.K = function C() {    this.x = 10;} : () => void
 +>module.exports.n.K : any
 +>module.exports.n : any
-+>module.exports : typeof import("mod")
-+>module : { "mod": typeof import("mod"); }
-+>exports : typeof import("mod")
++>module.exports : typeof import("./mod")
++>module : { "\"mod\"": typeof import("./mod"); }
++>exports : typeof import("./mod")
 +>n : any
 +>K : any
 +>function C() {    this.x = 10;} : () => void
@@ -54,9 +54,9 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("mod")
-+>module : { "mod": typeof import("mod"); }
-+>exports : typeof import("mod")
++>module.exports : typeof import("./mod")
++>module : { "\"mod\"": typeof import("./mod"); }
++>exports : typeof import("./mod")
  >Classic : typeof Classic
  >class {    constructor() {        this.p = 1    }} : typeof Classic
 
@@ -71,25 +71,21 @@
  >1 : 1
      }
  }
-
- === use.js ===
- import * as s from './mod'
-->s : typeof s
-+>s : typeof import("mod")
+@@= skipped -51, +51 lines =@@
+ >s : typeof s
 
  var k = new s.n.K()
 ->k : C
 ->new s.n.K() : C
 ->s.n.K : typeof C
 ->s.n : typeof s.n
-->s : typeof s
-->n : typeof s.n
-->K : typeof C
 +>k : any
 +>new s.n.K() : any
 +>s.n.K : any
 +>s.n : any
-+>s : typeof import("mod")
+ >s : typeof s
+->n : typeof s.n
+->K : typeof C
 +>n : any
 +>K : any
 
@@ -105,12 +101,11 @@
 ->classic : s.Classic
 ->new s.Classic() : s.Classic
 ->s.Classic : typeof s.Classic
-->s : typeof s
-->Classic : typeof s.Classic
 +>classic : Classic
 +>new s.Classic() : Classic
 +>s.Classic : typeof Classic
-+>s : typeof import("mod")
+ >s : typeof s
+->Classic : typeof s.Classic
 +>Classic : typeof Classic
 
 
@@ -119,24 +114,22 @@
  function f(c, classic) {
 ->f : (c: C, classic: s.Classic) => void
 ->c : C
-->classic : s.Classic
-+>f : (c: K, classic: Classic) => void
-+>c : K
-+>classic : Classic
++>f : (c: s.n.K, classic: s.Classic) => void
++>c : s.n.K
+ >classic : s.Classic
 
      c.x
 ->c.x : number
 ->c : C
 ->x : number
 +>c.x : any
-+>c : K
++>c : s.n.K
 +>x : any
 
      classic.p
 ->classic.p : number
-->classic : s.Classic
-->p : number
 +>classic.p : any
-+>classic : Classic
+ >classic : s.Classic
+->p : number
 +>p : any
  }

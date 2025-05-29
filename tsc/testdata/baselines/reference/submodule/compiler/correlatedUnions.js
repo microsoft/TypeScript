@@ -421,3 +421,196 @@ function getConfigOrDefault(userConfig, key, defaultValue) {
 function getValueConcrete(o, k) {
     return o[k];
 }
+
+
+//// [correlatedUnions.d.ts]
+// Various repros from #30581
+type RecordMap = {
+    n: number;
+    s: string;
+    b: boolean;
+};
+type UnionRecord<K extends keyof RecordMap = keyof RecordMap> = {
+    [P in K]: {
+        kind: P;
+        v: RecordMap[P];
+        f: (v: RecordMap[P]) => void;
+    };
+}[K];
+declare function processRecord<K extends keyof RecordMap>(rec: UnionRecord<K>): void;
+declare const r1: UnionRecord<'n'>; // { kind: 'n', v: number, f: (v: number) => void }
+declare const r2: UnionRecord; // { kind: 'n', ... } | { kind: 's', ... } | { kind: 'b', ... }
+// --------
+type TextFieldData = {
+    value: string;
+};
+type SelectFieldData = {
+    options: string[];
+    selectedValue: string;
+};
+type FieldMap = {
+    text: TextFieldData;
+    select: SelectFieldData;
+};
+type FormField<K extends keyof FieldMap> = {
+    type: K;
+    data: FieldMap[K];
+};
+type RenderFunc<K extends keyof FieldMap> = (props: FieldMap[K]) => void;
+type RenderFuncMap = {
+    [K in keyof FieldMap]: RenderFunc<K>;
+};
+declare function renderTextField(props: TextFieldData): void;
+declare function renderSelectField(props: SelectFieldData): void;
+declare const renderFuncs: RenderFuncMap;
+declare function renderField<K extends keyof FieldMap>(field: FormField<K>): void;
+// --------
+type TypeMap = {
+    foo: string;
+    bar: number;
+};
+type Keys = keyof TypeMap;
+type HandlerMap = {
+    [P in Keys]: (x: TypeMap[P]) => void;
+};
+declare const handlers: HandlerMap;
+type DataEntry<K extends Keys = Keys> = {
+    [P in K]: {
+        type: P;
+        data: TypeMap[P];
+    };
+}[K];
+declare const data: DataEntry[];
+declare function process<K extends Keys>(data: DataEntry<K>[]): void;
+// --------
+type LetterMap = {
+    A: string;
+    B: number;
+};
+type LetterCaller<K extends keyof LetterMap> = {
+    [P in K]: {
+        letter: Record<P, LetterMap[P]>;
+        caller: (x: Record<P, LetterMap[P]>) => void;
+    };
+}[K];
+declare function call<K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>): void;
+type A = {
+    A: string;
+};
+type B = {
+    B: number;
+};
+type ACaller = (a: A) => void;
+type BCaller = (b: B) => void;
+declare const xx: {
+    letter: A;
+    caller: ACaller;
+} | {
+    letter: B;
+    caller: BCaller;
+};
+// --------
+type Ev<K extends keyof DocumentEventMap> = {
+    [P in K]: {
+        readonly name: P;
+        readonly once?: boolean;
+        readonly callback: (ev: DocumentEventMap[P]) => void;
+    };
+}[K];
+declare function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]): void;
+declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
+declare const clickEvent: {
+    readonly name: "click";
+    readonly once?: boolean | undefined;
+    readonly callback: (ev: MouseEvent) => void;
+};
+declare const scrollEvent: {
+    readonly name: "scroll";
+    readonly once?: boolean | undefined;
+    readonly callback: (ev: Event) => void;
+};
+// --------
+declare function ff1(): void;
+// Repro from #47368
+type ArgMap = {
+    a: number;
+    b: string;
+};
+type Func<K extends keyof ArgMap> = (x: ArgMap[K]) => void;
+type Funcs = {
+    [K in keyof ArgMap]: Func<K>;
+};
+declare function f1<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
+declare function f2<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
+declare function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]): void;
+declare function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]): void;
+// Repro from #47890
+interface MyObj {
+    someKey: {
+        name: string;
+    };
+    someOtherKey: {
+        name: number;
+    };
+}
+declare const ref: MyObj;
+declare function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined;
+// Repro from #48157
+interface Foo {
+    bar?: string;
+}
+declare function foo<T extends keyof Foo>(prop: T, f: Required<Foo>): void;
+declare function bar(t: string): void;
+// Repro from #48246
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(ops: T, attr: Attr): {
+    [Item in T[number] as Item[Attr]]: Item;
+};
+declare const ALL_BARS: readonly [{
+    readonly name: "a";
+}, {
+    readonly name: "b";
+}];
+declare const BAR_LOOKUP: {
+    a: {
+        readonly name: "a";
+    };
+    b: {
+        readonly name: "b";
+    };
+};
+type BarLookup = typeof BAR_LOOKUP;
+type Baz = {
+    [K in keyof BarLookup]: BarLookup[K]['name'];
+};
+// repro from #43982
+interface Original {
+    prop1: {
+        subProp1: string;
+        subProp2: string;
+    };
+    prop2: {
+        subProp3: string;
+        subProp4: string;
+    };
+}
+type KeyOfOriginal = keyof Original;
+type NestedKeyOfOriginalFor<T extends KeyOfOriginal> = keyof Original[T];
+type SameKeys<T> = {
+    [K in keyof T]: {
+        [K2 in keyof T[K]]: number;
+    };
+};
+type MappedFromOriginal = SameKeys<Original>;
+declare const getStringAndNumberFromOriginalAndMapped: <K extends keyof Original, N extends keyof Original[K]>(original: Original, mappedFromOriginal: SameKeys<Original>, key: K, nestedKey: N) => [Original[K][N], SameKeys<Original>[K][N]];
+// repro from #31675
+interface Config {
+    string: string;
+    number: number;
+}
+declare function getConfigOrDefault<T extends keyof Config>(userConfig: Partial<Config>, key: T, defaultValue: Config[T]): Config[T];
+// repro from #47523
+type Foo1 = {
+    x: number;
+    y: string;
+};
+declare function getValueConcrete<K extends keyof Foo1>(o: Partial<Foo1>, k: K): Foo1[K] | undefined;

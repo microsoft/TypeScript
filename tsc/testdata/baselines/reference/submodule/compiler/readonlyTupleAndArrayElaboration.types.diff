@@ -1,24 +1,6 @@
 --- old.readonlyTupleAndArrayElaboration.types
 +++ new.readonlyTupleAndArrayElaboration.types
-@@= skipped -11, +11 lines =@@
- >4 : 4
-
- function distanceFromOrigin([x, y]: [number, number]) {
-->distanceFromOrigin : ([x, y]: [number, number]) => number
-+>distanceFromOrigin : (__0: [number, number]) => number
- >x : number
- >y : number
-
-@@= skipped -20, +20 lines =@@
-
- distanceFromOrigin(point);
- >distanceFromOrigin(point) : number
-->distanceFromOrigin : ([x, y]: [number, number]) => number
-+>distanceFromOrigin : (__0: [number, number]) => number
- >point : readonly [3, 4]
-
- declare function arryFn(x: number[]): void;
-@@= skipped -13, +13 lines =@@
+@@= skipped -44, +44 lines =@@
  >point : readonly [3, 4]
 
  declare function arryFn2(x: Array<number>): void;

@@ -89,3 +89,24 @@ var Consts2;
     const c = getFalsyPrimitive(booleanOrNumber);
     const d = getFalsyPrimitive(stringOrBooleanOrNumber);
 })(Consts2 || (Consts2 = {}));
+
+
+//// [stringLiteralTypesOverloads02.d.ts]
+declare function getFalsyPrimitive(x: "string"): string;
+declare function getFalsyPrimitive(x: "number"): number;
+declare function getFalsyPrimitive(x: "boolean"): boolean;
+declare function getFalsyPrimitive(x: "boolean" | "string"): boolean | string;
+declare function getFalsyPrimitive(x: "boolean" | "number"): boolean | number;
+declare function getFalsyPrimitive(x: "number" | "string"): number | string;
+declare function getFalsyPrimitive(x: "number" | "string" | "boolean"): number | string | boolean;
+declare namespace Consts1 {
+}
+declare const string = "string";
+declare const number = "number";
+declare const boolean = "boolean";
+declare const stringOrNumber: string;
+declare const stringOrBoolean: string;
+declare const booleanOrNumber: string;
+declare const stringOrBooleanOrNumber: string;
+declare namespace Consts2 {
+}

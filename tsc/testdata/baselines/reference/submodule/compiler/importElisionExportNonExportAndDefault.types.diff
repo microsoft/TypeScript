@@ -11,14 +11,3 @@
  >{msg: "Hello World"} : { msg: string; }
  >msg : string
  >"Hello World" : "Hello World"
-@@= skipped -12, +12 lines =@@
- >msg : string
-
- export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${msg}"`);
-->MyFunction : ({ msg }: MyFunction) => void
-->({ msg }: MyFunction) => console.log(`Got message "${msg}"`) : ({ msg }: MyFunction) => void
-+>MyFunction : (__0: MyFunction) => void
-+>({ msg }: MyFunction) => console.log(`Got message "${msg}"`) : (__0: MyFunction) => void
- >msg : string
- >console.log(`Got message "${msg}"`) : void
- >console.log : (...data: any[]) => void

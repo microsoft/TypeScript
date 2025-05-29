@@ -52,3 +52,26 @@ class Hi {
  */
 class Hola {
 }
+
+
+//// [test1.d.ts]
+/*! Copyright 2015 MyCompany Inc. */
+/**
+ * Hello class
+ */
+declare class Hello {
+}
+//// [test2.d.ts]
+/* A comment at the top of the file. */
+/**
+ * Hi class
+ */
+declare class Hi {
+}
+//// [test3.d.ts]
+// A one-line comment at the top of the file.
+/**
+ * Hola class
+ */
+declare class Hola {
+}

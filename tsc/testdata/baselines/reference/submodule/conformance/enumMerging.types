@@ -202,20 +202,20 @@ module M6 {
 >1 : 1
     }
     var t = A.Color.Yellow;
->t : Color
->A.Color.Yellow : Color.Green
->A.Color : typeof Color
+>t : A.Color
+>A.Color.Yellow : A.Color.Green
+>A.Color : typeof A.Color
 >A : typeof A
->Color : typeof Color
->Yellow : Color.Green
+>Color : typeof A.Color
+>Yellow : A.Color.Green
 
     t = A.Color.Red;
->t = A.Color.Red : Color.Red
->t : Color
->A.Color.Red : Color.Red
->A.Color : typeof Color
+>t = A.Color.Red : A.Color.Red
+>t : A.Color
+>A.Color.Red : A.Color.Red
+>A.Color : typeof A.Color
 >A : typeof A
->Color : typeof Color
->Red : Color.Red
+>Color : typeof A.Color
+>Red : A.Color.Red
 }
 

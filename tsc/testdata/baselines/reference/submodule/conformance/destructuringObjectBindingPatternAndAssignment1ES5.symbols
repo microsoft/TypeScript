@@ -97,7 +97,7 @@ function foo1(): F1 {
 
     return {
         "prop1": 2
->"prop1" : Symbol(prop1, Decl(destructuringObjectBindingPatternAndAssignment1ES5.ts, 47, 12))
+>"prop1" : Symbol("prop1", Decl(destructuringObjectBindingPatternAndAssignment1ES5.ts, 47, 12))
     }
 }
 

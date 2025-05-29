@@ -1,27 +1,14 @@
 --- old.generics1NoError.js
 +++ new.generics1NoError.js
-@@= skipped -15, +15 lines =@@
- var v1; // Ok
- var v2; // Ok, equivalent to G<A, C>
- var v4; // Ok
--
--
--//// [generics1NoError.d.ts]
--interface A {
--    a: string;
--}
--interface B extends A {
--    b: string;
--}
--interface C extends B {
--    c: string;
--}
--interface G<T, U extends B> {
--    x: T;
--    y: U;
--}
+@@= skipped -31, +31 lines =@@
+     x: T;
+     y: U;
+ }
 -declare var v1: G<A, C>;
--declare var v2: G<{
--    a: string;
++declare var v1: G<A, C>; // Ok
+ declare var v2: G<{
+     a: string;
 -}, C>;
 -declare var v4: G<G<A, B>, C>;
++}, C>; // Ok, equivalent to G<A, C>
++declare var v4: G<G<A, B>, C>; // Ok

@@ -9,11 +9,11 @@ module X {
 }
 
 var x: X.Y.Z;
->x : Z
+>x : X.Y.Z
 >X : any
 >Y : any
 
 var x2: X.Y;
->x2 : Y
+>x2 : X.Y
 >X : any
 

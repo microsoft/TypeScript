@@ -10,3 +10,9 @@ abstract class C {
 class C {
     prop = 1;
 }
+
+
+//// [abstractPropertyInitializer.d.ts]
+declare abstract class C {
+    abstract prop: number;
+}

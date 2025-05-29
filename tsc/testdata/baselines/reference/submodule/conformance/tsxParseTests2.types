@@ -9,8 +9,8 @@ declare module JSX {
 }
 
 var x = </**/div></div>;
->x : Element
-></**/div></div> : Element
+>x : JSX.Element
+></**/div></div> : JSX.Element
 >div : any
 >div : any
 

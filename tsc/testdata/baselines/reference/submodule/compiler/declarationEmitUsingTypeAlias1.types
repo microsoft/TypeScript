@@ -11,33 +11,33 @@ export declare type SomeType = { arg: Other };
 
 === node_modules/some-dep/dist/index.d.ts ===
 export type OtherType = import('./inner').Other;
->OtherType : Other
+>OtherType : import("./inner.js").Other
 
 export type SomeType = import('./inner').SomeType;
->SomeType : SomeType
+>SomeType : import("./inner.js").SomeType
 
 === src/index.ts ===
 import { SomeType } from "some-dep";
 >SomeType : any
 
 export const foo = (thing: SomeType) => {
->foo : (thing: SomeType) => SomeType
->(thing: SomeType) => {  return thing;} : (thing: SomeType) => SomeType
->thing : SomeType
+>foo : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").SomeType
+>(thing: SomeType) => {  return thing;} : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").SomeType
+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
 
   return thing;
->thing : SomeType
+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
 
 };
 
 export const bar = (thing: SomeType) => {
->bar : (thing: SomeType) => Other
->(thing: SomeType) => {  return thing.arg;} : (thing: SomeType) => Other
->thing : SomeType
+>bar : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").Other
+>(thing: SomeType) => {  return thing.arg;} : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").Other
+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
 
   return thing.arg;
->thing.arg : Other
->thing : SomeType
->arg : Other
+>thing.arg : import("../node_modules/some-dep/dist/inner.js").Other
+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
+>arg : import("../node_modules/some-dep/dist/inner.js").Other
 
 };

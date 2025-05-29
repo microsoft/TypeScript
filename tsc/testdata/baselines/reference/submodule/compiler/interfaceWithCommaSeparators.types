@@ -2,7 +2,7 @@
 
 === interfaceWithCommaSeparators.ts ===
 var v: { bar(): void, baz }
->v : { bar: () => void; baz: any; }
+>v : { bar(): void; baz: any; }
 >bar : () => void
 >baz : any
 

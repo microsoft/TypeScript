@@ -2,10 +2,10 @@
 
 === unusedImportDeclaration_testerA.ts ===
 import B = require("./unusedImportDeclaration_testerB");
->B : typeof TesterB
+>B : typeof B
 
 var thingy: B = {
->thingy : TesterB
+>thingy : B
 >{    me: "A"} : { me: string; }
 
     me: "A"
@@ -24,7 +24,7 @@ foo("IN " + thingy.me + "!");
 >"IN " + thingy.me : string
 >"IN " : "IN "
 >thingy.me : string
->thingy : TesterB
+>thingy : B
 >me : string
 >"!" : "!"
 

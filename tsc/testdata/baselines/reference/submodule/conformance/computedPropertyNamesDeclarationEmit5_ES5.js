@@ -15,3 +15,9 @@ var v = {
     get ["" + ""]() { return 0; },
     set ["" + ""](x) { }
 };
+
+
+//// [computedPropertyNamesDeclarationEmit5_ES5.d.ts]
+declare var v: {
+    [x: string]: any;
+};

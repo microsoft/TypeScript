@@ -78,7 +78,7 @@ class Public2 {
 }
 
 function f1(x: Private & Private2) {
->f1 : (x: Private & Private2) => void
+>f1 : (x: never) => void
 >x : never
 
 	x.p;  // Error, private constituent makes property inaccessible
@@ -88,7 +88,7 @@ function f1(x: Private & Private2) {
 }
 
 function f2(x: Private & Protected) {
->f2 : (x: Private & Protected) => void
+>f2 : (x: never) => void
 >x : never
 
 	x.p;  // Error, private constituent makes property inaccessible
@@ -98,7 +98,7 @@ function f2(x: Private & Protected) {
 }
 
 function f3(x: Private & Public) {
->f3 : (x: Private & Public) => void
+>f3 : (x: never) => void
 >x : never
 
 	x.p;  // Error, private constituent makes property inaccessible
@@ -347,7 +347,7 @@ function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 }
 
 function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
->f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
+>f8 : (x: never) => void
 >x : never
 >a : void
 >a : void

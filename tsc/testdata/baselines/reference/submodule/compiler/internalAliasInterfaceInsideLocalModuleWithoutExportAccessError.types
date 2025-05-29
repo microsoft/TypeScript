@@ -12,13 +12,13 @@ export module c {
     import b = a.I;
 >b : any
 >a : any
->I : I
+>I : b
 
     export var x: b;
->x : I
+>x : b
 }
 
 var x: c.b;
->x : b
+>x : c.b
 >c : any
 

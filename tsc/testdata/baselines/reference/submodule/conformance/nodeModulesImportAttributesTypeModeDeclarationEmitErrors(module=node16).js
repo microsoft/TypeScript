@@ -105,3 +105,34 @@ export const b = null, Attribute2, ImportInterface;
 //// [other5.js]
 export const a = null;
 export const b = null;
+
+
+//// [index.d.ts]
+export type LocalInterface = import("pkg", { with: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
+export declare const a: any;
+export declare const b: any;
+//// [other.d.ts]
+// missing with:
+export type LocalInterface = import("pkg", { with: {} });
+export declare const a: any;
+export declare const b: any;
+//// [other2.d.ts]
+// wrong attribute key
+export type LocalInterface = import("pkg", { with: { "bad": "require" } }).RequireInterface & import("pkg", { with: { "bad": "import" } }).ImportInterface;
+export declare const a: any;
+export declare const b: any;
+//// [other3.d.ts]
+// Array instead of object-y thing
+export type LocalInterface = import("pkg", { with: {} })[{
+    "resolution-mode": "require";
+}];
+export declare const a: any;
+export declare const b: any;
+//// [other4.d.ts]
+export type LocalInterface = import("pkg", { with: {} });
+export declare const a: any, Attribute1: any, RequireInterface: any;
+export declare const b: any, Attribute2: any, ImportInterface: any;
+//// [other5.d.ts]
+export type LocalInterface = import("pkg", { with: {} }).RequireInterface & import("pkg", { with: {} }).ImportInterface;
+export declare const a: any;
+export declare const b: any;

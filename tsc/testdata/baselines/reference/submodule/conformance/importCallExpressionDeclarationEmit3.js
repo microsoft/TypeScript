@@ -20,3 +20,12 @@ import("./0");
 export var p0 = import(getPath());
 export var p1 = import("./0");
 export var p2 = import("./0");
+
+
+//// [0.d.ts]
+export declare function foo(): string;
+//// [1.d.ts]
+import * as Zero from "./0";
+export declare var p0: Promise<typeof Zero>;
+export declare var p1: Promise<typeof Zero>;
+export declare var p2: Promise<any>;

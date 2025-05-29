@@ -1,38 +1,14 @@
 --- old.exportEqualsProperty.types
 +++ new.exportEqualsProperty.types
-@@= skipped -50, +50 lines =@@
- >"foobar" : typeof import("foobar")
-
-     export = foo.bar;
-->foo.bar : typeof foo.bar
-+>foo.bar : typeof bar
- >foo : typeof foo
-->bar : typeof foo.bar
-+>bar : typeof bar
- }
-
- declare module "foobarx" {
-@@= skipped -10, +10 lines =@@
-
-     export = foo.bar.X;
- >foo.bar.X : number
-->foo.bar : typeof foo.bar
-+>foo.bar : typeof bar
- >foo : typeof foo
-->bar : typeof foo.bar
-+>bar : typeof bar
- >X : number
- }
-
-@@= skipped -20, +20 lines =@@
+@@= skipped -80, +80 lines =@@
  >0 : 0
  }
  export = A.B;
 ->A.B : typeof A.B
-+>A.B : typeof B
++>A.B : typeof import("./a")
  >A : typeof A
 ->B : typeof A.B
-+>B : typeof B
++>B : typeof import("./a")
 
  === b.ts ===
  export = "foo".length;

@@ -2,8 +2,8 @@
 
 === functionReturningItself.ts ===
 function somefn() {
->somefn : () => ???
+>somefn : () => typeof somefn
 
     return somefn;
->somefn : () => ???
+>somefn : () => typeof somefn
 }

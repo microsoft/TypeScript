@@ -17,3 +17,12 @@ exports.default = {
     bar: undefined,
     baz: null
 };
+
+
+//// [declarationEmitInferredDefaultExportType.d.ts]
+declare const _default: {
+    foo: any[];
+    bar: any;
+    baz: any;
+};
+export default _default;

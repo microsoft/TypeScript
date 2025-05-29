@@ -23,3 +23,10 @@ for (const c4 = 0; c4 < 9;) {
 for (const c5 = 0, c6 = 0; c5 < c6;) {
     break;
 }
+
+
+//// [constDeclarations.d.ts]
+// No error
+declare const c1 = false;
+declare const c2: number;
+declare const c3 = 0, c4: string, c5: any;

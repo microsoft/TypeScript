@@ -156,8 +156,8 @@ if (typeof x === "string") {
 >"string" : "string"
 
   let obj = {
->obj : { prop: any; method: () => string; }
->{    set prop(_: any) { x.toUpperCase(); },    get prop() { return x.toUpperCase() },    method() { return x.toUpperCase() }  } : { prop: any; method: () => string; }
+>obj : { prop: any; method(): string; }
+>{    set prop(_: any) { x.toUpperCase(); },    get prop() { return x.toUpperCase() },    method() { return x.toUpperCase() }  } : { prop: any; method(): string; }
 
     set prop(_: any) { x.toUpperCase(); },
 >prop : any

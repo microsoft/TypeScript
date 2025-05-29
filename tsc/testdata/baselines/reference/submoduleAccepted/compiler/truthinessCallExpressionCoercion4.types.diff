@@ -9,14 +9,14 @@
  >'object' : "object"
  >module.exports : () => void
 ->module : { exports: () => void; }
-+>module : { fn: () => void; }
++>module : { fn(): void; }
  >exports : () => void
 
      module.exports = fn;
  >module.exports = fn : () => void
  >module.exports : () => void
 ->module : { exports: () => void; }
-+>module : { fn: () => void; }
++>module : { fn(): void; }
  >exports : () => void
  >fn : () => void
  }

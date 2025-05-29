@@ -1,22 +1,13 @@
 --- old.inlineJsxAndJsxFragPragmaOverridesCompilerOptions.symbols
 +++ new.inlineJsxAndJsxFragPragmaOverridesCompilerOptions.symbols
-@@= skipped -1, +1 lines =@@
-
- === react.d.ts ===
- declare global {
-->global : Symbol(global, Decl(react.d.ts, 0, 0))
-+>global : Symbol((Missing), Decl(react.d.ts, 0, 0))
-
-     namespace JSX {
- >JSX : Symbol(JSX, Decl(react.d.ts, 0, 16))
-@@= skipped -36, +36 lines =@@
+@@= skipped -37, +37 lines =@@
  >Fragment : Symbol(Fragment, Decl(reacty.tsx, 0, 22))
 
  <><span></span></>
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
-+>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>span : Symbol(þindex, Decl(react.d.ts, 2, 37))
++>span : Symbol(þindex, Decl(react.d.ts, 2, 37))
 
  === preacty.tsx ===
  /**
@@ -26,8 +17,8 @@
  <><div></div></>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
-+>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>div : Symbol(þindex, Decl(react.d.ts, 2, 37))
++>div : Symbol(þindex, Decl(react.d.ts, 2, 37))
 
  === snabbdomy.tsx ===
  /**
@@ -37,8 +28,8 @@
  <><div></div></>
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->div : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
-+>div : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>div : Symbol(þindex, Decl(react.d.ts, 2, 37))
++>div : Symbol(þindex, Decl(react.d.ts, 2, 37))
 
  === mix-n-match.tsx ===
  /* @jsx h */
@@ -48,5 +39,5 @@
  <><span></span></>
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
 ->span : Symbol(JSX.IntrinsicElements.__index, Decl(react.d.ts, 2, 37))
-+>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
-+>span : Symbol((Missing), Decl(react.d.ts, 2, 37))
++>span : Symbol(þindex, Decl(react.d.ts, 2, 37))
++>span : Symbol(þindex, Decl(react.d.ts, 2, 37))

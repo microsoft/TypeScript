@@ -18,3 +18,7 @@ function func() {
     return func;
 }
 var after = func();
+
+
+//// [es5ExportDefaultFunctionDeclaration3.d.ts]
+export default function func(): typeof func;

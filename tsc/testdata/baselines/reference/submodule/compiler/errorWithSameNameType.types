@@ -14,28 +14,28 @@ export interface F {
 
 === c.ts ===
 import * as A from './a'
->A : typeof import("a")
+>A : typeof A
 
 import * as B from './b'
->B : typeof import("b")
+>B : typeof B
 
 let a: A.F
->a : F
+>a : A.F
 >A : any
 
 let b: B.F
->b : F
+>b : B.F
 >B : any
 
 if (a === b) {
 >a === b : boolean
->a : F
->b : F
+>a : A.F
+>b : B.F
 
 }
 
 a = b
->a = b : F
->a : F
->b : F
+>a = b : B.F
+>a : A.F
+>b : B.F
 

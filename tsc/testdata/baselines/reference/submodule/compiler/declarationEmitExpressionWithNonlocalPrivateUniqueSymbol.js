@@ -18,3 +18,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A1 = void 0;
 const a_1 = require("./a");
 exports.A1 = a_1.A;
+
+
+//// [a.d.ts]
+type AX = {
+    readonly A: unique symbol;
+};
+export declare const A: AX;
+export {};
+//// [b.d.ts]
+export declare const A1: {
+    readonly A: unique symbol;
+};

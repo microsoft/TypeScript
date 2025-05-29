@@ -23,3 +23,7 @@ declare;
 module;
 debugger;
 { } // still an error
+
+
+//// [ambientModuleDeclarationWithReservedIdentifierInDottedPath.d.ts]
+export declare const tabId: number;

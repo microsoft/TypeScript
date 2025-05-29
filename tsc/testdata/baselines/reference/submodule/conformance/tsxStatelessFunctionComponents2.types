@@ -2,15 +2,15 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 function Greet(x: {name?: string}) {
->Greet : (x: { name?: string; }) => Element
+>Greet : (x: { name?: string; }) => JSX.Element
 >x : { name?: string; }
 >name : string
 
 	return <div>Hello, {x}</div>;
-><div>Hello, {x}</div> : Element
+><div>Hello, {x}</div> : JSX.Element
 >div : any
 >x : { name?: string; }
 >div : any
@@ -18,16 +18,16 @@ function Greet(x: {name?: string}) {
 
 class BigGreeter extends React.Component<{ name?: string }, {}> {
 >BigGreeter : BigGreeter
->React.Component : Component<{ name?: string; }, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<{ name?: string; }, {}>
+>React : typeof React
+>Component : typeof React.Component
 >name : string
 
 	render() {
->render : () => Element
+>render : () => JSX.Element
 
 		return <div></div>;
-><div></div> : Element
+><div></div> : JSX.Element
 >div : any
 >div : any
 	}
@@ -37,29 +37,29 @@ class BigGreeter extends React.Component<{ name?: string }, {}> {
 
 // OK
 let a = <Greet />;
->a : Element
-><Greet /> : Element
->Greet : (x: { name?: string; }) => Element
+>a : JSX.Element
+><Greet /> : JSX.Element
+>Greet : (x: { name?: string; }) => JSX.Element
 
 // OK - always valid to specify 'key'
 let b = <Greet key="k" />;
->b : Element
-><Greet key="k" /> : Element
->Greet : (x: { name?: string; }) => Element
+>b : JSX.Element
+><Greet key="k" /> : JSX.Element
+>Greet : (x: { name?: string; }) => JSX.Element
 >key : string
 
 // Error - not allowed to specify 'ref' on SFCs
 let c = <Greet ref="myRef" />;
->c : Element
-><Greet ref="myRef" /> : Element
->Greet : (x: { name?: string; }) => Element
+>c : JSX.Element
+><Greet ref="myRef" /> : JSX.Element
+>Greet : (x: { name?: string; }) => JSX.Element
 >ref : string
 
 
 // OK - ref is valid for classes
 let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
->d : Element
-><BigGreeter ref={x => x.greeting.substr(10)} /> : Element
+>d : JSX.Element
+><BigGreeter ref={x => x.greeting.substr(10)} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
 >ref : (x: BigGreeter) => string
 >x => x.greeting.substr(10) : (x: BigGreeter) => string
@@ -74,8 +74,8 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 
 // Error ('subtr' not on string)
 let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
->e : Element
-><BigGreeter ref={x => x.greeting.subtr(10)} /> : Element
+>e : JSX.Element
+><BigGreeter ref={x => x.greeting.subtr(10)} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
 >ref : (x: BigGreeter) => any
 >x => x.greeting.subtr(10) : (x: BigGreeter) => any
@@ -90,8 +90,8 @@ let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
 
 // Error (ref callback is contextually typed)
 let f = <BigGreeter ref={x => x.notARealProperty} />;
->f : Element
-><BigGreeter ref={x => x.notARealProperty} /> : Element
+>f : JSX.Element
+><BigGreeter ref={x => x.notARealProperty} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
 >ref : (x: BigGreeter) => any
 >x => x.notARealProperty : (x: BigGreeter) => any
@@ -102,16 +102,16 @@ let f = <BigGreeter ref={x => x.notARealProperty} />;
 
 // OK - key is always valid
 let g = <BigGreeter key={100} />;
->g : Element
-><BigGreeter key={100} /> : Element
+>g : JSX.Element
+><BigGreeter key={100} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
 >key : number
 >100 : 100
 
 // OK - contextually typed intrinsic ref callback parameter
 let h = <div ref={x => x.innerText} />;
->h : Element
-><div ref={x => x.innerText} /> : Element
+>h : JSX.Element
+><div ref={x => x.innerText} /> : JSX.Element
 >div : any
 >ref : (x: HTMLDivElement) => string
 >x => x.innerText : (x: HTMLDivElement) => string
@@ -122,8 +122,8 @@ let h = <div ref={x => x.innerText} />;
 
 // Error - property not on ontextually typed intrinsic ref callback parameter
 let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
->i : Element
-><div ref={x => x.propertyNotOnHtmlDivElement} /> : Element
+>i : JSX.Element
+><div ref={x => x.propertyNotOnHtmlDivElement} /> : JSX.Element
 >div : any
 >ref : (x: HTMLDivElement) => any
 >x => x.propertyNotOnHtmlDivElement : (x: HTMLDivElement) => any

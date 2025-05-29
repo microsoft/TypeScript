@@ -9,7 +9,7 @@ export type {} from './0' with { type: "json" }
 >type : any
 
 export type { I } from './0' with { type: "json" }
->I : I
+>I : import("./0").I
 >type : any
 
 === 2.ts ===
@@ -18,6 +18,6 @@ import type { I } from './0'  with { type: "json" }
 >type : any
 
 import type * as foo from './0' with { type: "json" }
->foo : typeof import("0")
+>foo : typeof foo
 >type : any
 

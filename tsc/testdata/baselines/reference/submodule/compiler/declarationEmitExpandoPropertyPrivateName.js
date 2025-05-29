@@ -22,3 +22,12 @@ exports.q = q;
 const a_1 = require("./a");
 function q() { }
 q.val = (0, a_1.f)();
+
+
+//// [a.d.ts]
+interface I {
+}
+export declare function f(): I;
+export {};
+//// [b.d.ts]
+export declare function q(): void;

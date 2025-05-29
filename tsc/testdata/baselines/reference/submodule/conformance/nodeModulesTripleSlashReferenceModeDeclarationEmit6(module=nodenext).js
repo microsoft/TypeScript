@@ -34,3 +34,50 @@ export default getInterR();
 //// [index.js]
 import obj from "./uses.js";
 export default obj;
+
+
+//// [uses.d.ts]
+declare const _default: RequireInterface;
+export default _default;
+//// [index.d.ts]
+declare const _default: RequireInterface;
+export default _default;
+
+
+//// [DtsFileErrors]
+
+
+out/index.d.ts(1,25): error TS2304: Cannot find name 'RequireInterface'.
+
+
+==== out/index.d.ts (1 errors) ====
+    declare const _default: RequireInterface;
+                            ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RequireInterface'.
+    export default _default;
+    
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface ImportInterface {}
+        function getInterI(): ImportInterface;
+    }
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export {};
+    declare global {
+        interface RequireInterface {}
+        function getInterR(): RequireInterface;
+    }
+==== out/uses.d.ts (0 errors) ====
+    declare const _default: RequireInterface;
+    export default _default;
+    

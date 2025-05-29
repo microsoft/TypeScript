@@ -2,7 +2,7 @@
 
 === es5andes6module.ts ===
 export default class A
->A : Symbol(default, Decl(es5andes6module.ts, 0, 0))
+>A : Symbol(A, Decl(es5andes6module.ts, 0, 0))
 {
     constructor ()
     {

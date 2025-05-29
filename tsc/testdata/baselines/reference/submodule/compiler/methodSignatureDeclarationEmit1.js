@@ -13,3 +13,10 @@ class C {
     foo(a) {
     }
 }
+
+
+//// [methodSignatureDeclarationEmit1.d.ts]
+declare class C {
+    foo(n: number): void;
+    foo(s: string): void;
+}

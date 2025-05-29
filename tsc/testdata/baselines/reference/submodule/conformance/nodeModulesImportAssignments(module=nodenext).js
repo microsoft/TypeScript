@@ -55,3 +55,11 @@ const fs = __require_1("fs");
 fs.readFile;
 const fs2 = __require_1("fs");
 export { fs2 };
+
+
+//// [index.d.ts]
+export import fs2 = require("fs");
+//// [index.d.ts]
+export import fs2 = require("fs");
+//// [file.d.ts]
+export import fs2 = require("fs");

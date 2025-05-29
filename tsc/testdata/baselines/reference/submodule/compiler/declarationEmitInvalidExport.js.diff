@@ -7,3 +7,7 @@
 -    exports.myClass = 0;
 +    export var myClass = 0;
  }
++
++
++//// [declarationEmitInvalidExport.d.ts]
++export type MyClass = typeof myClass;

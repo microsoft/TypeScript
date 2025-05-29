@@ -23,13 +23,3 @@
 +>optionalNumber : { sn?: number | undefined; }
 
  // error, 'sn' is optional in source, required in target
-
-@@= skipped -168, +168 lines =@@
- >"in the middle" : number
-
-     { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
-->{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { a: number; b: string; c: boolean; "in the middle": number; }
-+>{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { a: number; b: string; c: boolean; ['in the middle']: number; }
- >o3 : { a: number; b: string; }
- >['in the middle'] : number
- >'in the middle' : "in the middle"

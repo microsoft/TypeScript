@@ -10,7 +10,7 @@
     namespace Q.K { }
 
     declare module "ambient" {
->"ambient" : typeof import("ambient")
+>"ambient" : typeof Foo
 
     }
 
@@ -48,10 +48,10 @@
 >I2 : any
 
     import * as Foo from "ambient";
->Foo : typeof import("ambient")
+>Foo : typeof Foo
 
     import bar from "ambient";
->bar : typeof import("ambient")
+>bar : typeof Foo
 
     import { baz } from "ambient";
 >baz : any

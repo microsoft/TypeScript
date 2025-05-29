@@ -5,12 +5,12 @@
 
  export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 ->WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags<any>.(Anonymous class); } & T
-+>WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; getTags: () => void; prototype: (Anonymous class)<any>; } & T
++>WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags.(Anonymous class); } & T
  >Base : T
 
      return class extends Base {
 ->class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags<any>.(Anonymous class); } & T
-+>class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class)<T>; getTags: () => void; prototype: (Anonymous class)<any>; } & T
++>class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags.(Anonymous class); } & T
  >Base : FooItem
 
          static getTags(): void { }
@@ -20,8 +20,8 @@
  >Test : Test
 ->WithTags(FooItem) : WithTags<typeof FooItem>.(Anonymous class) & FooItem
 ->WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags<any>.(Anonymous class); } & T
-+>WithTags(FooItem) : (Anonymous class)<typeof FooItem> & FooItem
-+>WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class)<T>; getTags: () => void; prototype: (Anonymous class)<any>; } & T
++>WithTags(FooItem) : WithTags.(Anonymous class) & FooItem
++>WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); getTags(): void; prototype: WithTags.(Anonymous class); } & T
  >FooItem : typeof FooItem
 
  const test = new Test();

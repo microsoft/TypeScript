@@ -6,44 +6,44 @@ export default 12;
 
 === index2.js ===
 export default function foo() {
->foo : () => ???
+>foo : () => typeof foo
 
     return foo;
->foo : () => ???
+>foo : () => typeof foo
 }
 export const x = foo;
->x : () => ???
->foo : () => ???
+>x : () => typeof foo
+>foo : () => typeof foo
 
 export { foo as bar };
->foo : () => ???
->bar : () => ???
+>foo : () => typeof foo
+>bar : () => typeof foo
 
 === index3.js ===
 export default class Foo {
->Foo : default
+>Foo : Foo
 
     a = /** @type {Foo} */(null);
->a : default
->(null) : default
->null : default
+>a : Foo
+>(null) : Foo
+>null : Foo
 
 };
 export const X = Foo;
->X : typeof default
->Foo : typeof default
+>X : typeof Foo
+>Foo : typeof Foo
 
 export { Foo as Bar };
->Foo : typeof default
->Bar : typeof default
+>Foo : typeof Foo
+>Bar : typeof Foo
 
 === index4.js ===
 import Fab from "./index3";
->Fab : typeof default
+>Fab : typeof Fab
 
 class Bar extends Fab {
 >Bar : Bar
->Fab : default
+>Fab : Fab
 
     x = /** @type {Bar} */(null);
 >x : Bar

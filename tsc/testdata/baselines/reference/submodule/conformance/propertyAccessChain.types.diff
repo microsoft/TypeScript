@@ -47,7 +47,7 @@
 ->o5 : { b?(): { c: { d?: { e: string; }; }; }; }
 ->b : (() => { c: { d?: { e: string; }; }; }) | undefined
 ->c : { d?: { e: string; }; }
-+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
++>o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
 +>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 +>c : { d?: { e: string; } | undefined; }
  >d : { e: string; } | undefined
@@ -65,7 +65,7 @@
 +>o5.b?.().c : { d?: { e: string; } | undefined; } | undefined
 +>o5.b?.() : { c: { d?: { e: string; } | undefined; }; } | undefined
 +>o5.b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
-+>o5 : { b?: (() => { c: { d?: { e: string; } | undefined; }; }) | undefined; }
++>o5 : { b?(): { c: { d?: { e: string; } | undefined; }; }; }
 +>b : (() => { c: { d?: { e: string; } | undefined; }; }) | undefined
 +>c : { d?: { e: string; } | undefined; } | undefined
  >d : { e: string; } | undefined

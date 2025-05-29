@@ -68,26 +68,26 @@ stringVal = bigintVal.toLocaleString();
 >stringVal = bigintVal.toLocaleString() : string
 >stringVal : string
 >bigintVal.toLocaleString() : string
->bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 
 stringVal = bigintVal.toLocaleString('de-DE');
 >stringVal = bigintVal.toLocaleString('de-DE') : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE') : string
->bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >'de-DE' : "de-DE"
 
 stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' });
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency' }) : string
->bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >'de-DE' : "de-DE"
 >{ style: 'currency' } : { style: string; }
 >style : string
@@ -97,9 +97,9 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EU
 >stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
 >stringVal : string
 >bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EUR' }) : string
->bigintVal.toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>bigintVal.toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >bigintVal : bigint
->toLocaleString : (locales?: LocalesArgument, options?: BigIntToLocaleStringOptions) => string
+>toLocaleString : (locales?: Intl.LocalesArgument, options?: BigIntToLocaleStringOptions) => string
 >'de-DE' : "de-DE"
 >{ style: 'currency', currency: 'EUR' } : { style: string; currency: string; }
 >style : string
@@ -391,10 +391,10 @@ let z = 12n; // should emit type bigint in declaration file
 new Intl.NumberFormat("fr").format(3000n);
 >new Intl.NumberFormat("fr").format(3000n) : string
 >new Intl.NumberFormat("fr").format : { (value: number): string; (value: number | bigint): string; }
->new Intl.NumberFormat("fr") : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >"fr" : "fr"
 >format : { (value: number): string; (value: number | bigint): string; }
 >3000n : 3000n
@@ -402,10 +402,10 @@ new Intl.NumberFormat("fr").format(3000n);
 new Intl.NumberFormat("fr").format(bigintVal);
 >new Intl.NumberFormat("fr").format(bigintVal) : string
 >new Intl.NumberFormat("fr").format : { (value: number): string; (value: number | bigint): string; }
->new Intl.NumberFormat("fr") : NumberFormat
->Intl.NumberFormat : NumberFormatConstructor
+>new Intl.NumberFormat("fr") : Intl.NumberFormat
+>Intl.NumberFormat : Intl.NumberFormatConstructor
 >Intl : typeof Intl
->NumberFormat : NumberFormatConstructor
+>NumberFormat : Intl.NumberFormatConstructor
 >"fr" : "fr"
 >format : { (value: number): string; (value: number | bigint): string; }
 >bigintVal : bigint

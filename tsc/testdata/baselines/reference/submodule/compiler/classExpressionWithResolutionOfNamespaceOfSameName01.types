@@ -12,6 +12,6 @@ var x = class C {
 >C : typeof C
 
     prop: C.type;
->prop : type
+>prop : C.type
 >C : any
 }

@@ -39,3 +39,16 @@ A;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 ns.A;
+
+
+//// [a.d.ts]
+export declare class A {
+}
+//// [b.d.ts]
+export type * from './a';
+//// [c.d.ts]
+export type * as ns from './a';
+//// [d.d.ts]
+export {};
+//// [e.d.ts]
+export {};

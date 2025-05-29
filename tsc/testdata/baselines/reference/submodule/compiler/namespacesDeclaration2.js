@@ -28,3 +28,16 @@ var M;
 var foge;
 var foo;
 let x;
+
+
+//// [namespacesDeclaration2.d.ts]
+declare namespace N {
+}
+declare namespace M {
+}
+declare namespace ns {
+    let f: number;
+}
+declare var foge: N.S;
+declare var foo: M.F;
+declare let x: ns.A;

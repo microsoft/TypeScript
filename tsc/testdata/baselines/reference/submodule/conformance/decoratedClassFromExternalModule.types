@@ -9,7 +9,7 @@ function decorate(target: any) { }
 >decorate : (target: any) => void
 
 export default class Decorated { }
->Decorated : default
+>Decorated : Decorated
 
 === undecorated.ts ===
 import Decorated from 'decorated';

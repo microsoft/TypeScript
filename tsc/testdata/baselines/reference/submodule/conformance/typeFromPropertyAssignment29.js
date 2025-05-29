@@ -166,3 +166,57 @@ ExpandoExpr3.m = function (n) {
     return n + 1;
 };
 var n = ExpandoExpr3.prop + ExpandoExpr3.m(13) + new ExpandoExpr3().n;
+
+
+//// [typeFromPropertyAssignment29.d.ts]
+declare function ExpandoDecl(n: number): string;
+declare var n: number;
+declare const ExpandoExpr: {
+    (n: number): string;
+    prop: {
+        x: number;
+        y?: undefined;
+    } | {
+        x?: undefined;
+        y: string;
+    };
+    m: (n: number) => number;
+};
+declare var n: number;
+declare const ExpandoArrow: {
+    (n: number): string;
+    prop: number;
+    m: (n: number) => number;
+};
+declare function ExpandoNested(n: number): {
+    (m: number): number;
+    total: number;
+};
+declare function ExpandoMerge(n: number): number;
+declare namespace ExpandoMerge {
+    var p2: number;
+}
+declare namespace ExpandoMerge {
+    var p3: number;
+}
+declare var n: number;
+declare namespace Ns {
+    function ExpandoNamespace(): void;
+    export function foo(): typeof ExpandoNamespace;
+    export {};
+}
+// Should not work in Typescript -- must be const
+declare var ExpandoExpr2: (n: number) => string;
+declare var n: number;
+// Should not work in typescript -- classes already have statics
+declare class ExpandoClass {
+    n: number;
+}
+declare var n: number;
+// Class expressions shouldn't work in typescript either
+declare var ExpandoExpr3: {
+    new (): {
+        n: number;
+    };
+};
+declare var n: number;

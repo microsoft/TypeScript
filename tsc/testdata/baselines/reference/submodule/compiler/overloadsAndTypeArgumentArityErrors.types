@@ -24,10 +24,10 @@ new Callbacks<number, string, boolean>('s'); // wrong number of type arguments
 >'s' : "s"
 
 declare function f<A, B = {}>(arg: number): void;
->f : <A, B>(arg: number) => void
+>f : <A, B = {}>(arg: number) => void
 >arg : number
 
 f<number>(); // wrong number of arguments (#25683)
 >f<number>() : void
->f : <A, B>(arg: number) => void
+>f : <A, B = {}>(arg: number) => void
 

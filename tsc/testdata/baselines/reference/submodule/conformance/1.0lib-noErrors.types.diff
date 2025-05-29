@@ -242,7 +242,7 @@
        */
      localeCompare(that: string): number;
 ->localeCompare : (that: string) => number
-+>localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: CollatorOptions): number; (that: string): number; }
++>localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string): number; }
  >that : string
 
      /** 
@@ -630,17 +630,17 @@
      /** Returns a value as a string value appropriate to the host environment's current locale. */
      toLocaleString(): string;
 ->toLocaleString : () => string
-+>toLocaleString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; (): string; }
++>toLocaleString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (): string; }
 
      /** Returns a date as a string value appropriate to the host environment's current locale. */
      toLocaleDateString(): string;
 ->toLocaleDateString : () => string
-+>toLocaleDateString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; (): string; }
++>toLocaleDateString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (): string; }
 
      /** Returns a time as a string value appropriate to the host environment's current locale. */
      toLocaleTimeString(): string;
 ->toLocaleTimeString : () => string
-+>toLocaleTimeString : { (): string; (locales?: string | string[], options?: DateTimeFormatOptions): string; (): string; }
++>toLocaleTimeString : { (): string; (locales?: string | string[], options?: Intl.DateTimeFormatOptions): string; (): string; }
 
      /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
      valueOf(): number;

@@ -2,7 +2,7 @@
 
 === localTypes1.ts ===
 function f1() {
->f1 : () => A
+>f1 : () => I[]
 
     enum E {
 >E : E
@@ -23,10 +23,10 @@ function f1() {
 >x : E
     }
     type A = I[];
->A : A
+>A : I[]
 
     let a: A = [new C()];
->a : A
+>a : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -35,7 +35,7 @@ function f1() {
 >a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
->a : A
+>a : I[]
 >0 : 0
 >x : E
 >E.B : E.B
@@ -43,14 +43,14 @@ function f1() {
 >B : E.B
 
     return a;
->a : A
+>a : I[]
 }
 
 function f2() {
->f2 : () => A
+>f2 : () => I[]
 
     function g() {
->g : () => A
+>g : () => I[]
 
         enum E {
 >E : E
@@ -71,10 +71,10 @@ function f2() {
 >x : E
         }
         type A = I[];
->A : A
+>A : I[]
 
         let a: A = [new C()];
->a : A
+>a : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -83,7 +83,7 @@ function f2() {
 >a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
->a : A
+>a : I[]
 >0 : 0
 >x : E
 >E.B : E.B
@@ -91,15 +91,15 @@ function f2() {
 >B : E.B
 
         return a;
->a : A
+>a : I[]
     }
     return g();
->g() : A
->g : () => A
+>g() : I[]
+>g : () => I[]
 }
 
 function f3(b: boolean) {
->f3 : (b: boolean) => A
+>f3 : (b: boolean) => I[]
 >b : boolean
 
     if (true) {
@@ -127,10 +127,10 @@ function f3(b: boolean) {
 >x : E
             }
             type A = I[];
->A : A
+>A : I[]
 
             let a: A = [new C()];
->a : A
+>a : I[]
 >[new C()] : C[]
 >new C() : C
 >C : typeof C
@@ -139,7 +139,7 @@ function f3(b: boolean) {
 >a[0].x = E.B : E.B
 >a[0].x : E
 >a[0] : I
->a : A
+>a : I[]
 >0 : 0
 >x : E
 >E.B : E.B
@@ -147,7 +147,7 @@ function f3(b: boolean) {
 >B : E.B
 
             return a;
->a : A
+>a : I[]
         }
         else {
             class A {
@@ -161,10 +161,10 @@ function f3(b: boolean) {
 >x : E
             }
             type C = J[];
->C : C
+>C : J[]
 
             let c: C = [new A()];
->c : C
+>c : J[]
 >[new A()] : A[]
 >new A() : A
 >A : typeof A
@@ -173,7 +173,7 @@ function f3(b: boolean) {
 >c[0].x = E.B : E.B
 >c[0].x : E
 >c[0] : J
->c : C
+>c : J[]
 >0 : 0
 >x : E
 >E.B : E.B
@@ -181,7 +181,7 @@ function f3(b: boolean) {
 >B : E.B
 
             return c;
->c : C
+>c : J[]
         }
     }
 }

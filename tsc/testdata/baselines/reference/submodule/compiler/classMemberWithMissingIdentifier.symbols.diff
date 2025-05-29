@@ -5,5 +5,5 @@
 
      public {};
 -> : Symbol(C[(Missing)], Decl(classMemberWithMissingIdentifier.ts, 0, 9))
-+> : Symbol(, Decl(classMemberWithMissingIdentifier.ts, 0, 9))
++> : Symbol((Missing), Decl(classMemberWithMissingIdentifier.ts, 0, 9))
  }

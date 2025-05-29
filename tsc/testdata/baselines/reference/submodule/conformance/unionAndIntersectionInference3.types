@@ -99,8 +99,8 @@ g2 = g1;
 // Repro from #32572
 
 declare function foo1<T>(obj: string[] & Iterable<T>): T;
->foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
->obj : string[] & Iterable<T, any, any>
+>foo1 : <T>(obj: string[] & Iterable<T>) => T
+>obj : string[] & Iterable<T>
 
 declare function foo2<T>(obj: string[] & T): T;
 >foo2 : <T>(obj: string[] & T) => T
@@ -116,13 +116,13 @@ declare let sx: string[] & { extra: number };
 let x1 = foo1(sa);  // string
 >x1 : string
 >foo1(sa) : string
->foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
+>foo1 : <T>(obj: string[] & Iterable<T>) => T
 >sa : string[]
 
 let y1 = foo1(sx);  // string
 >y1 : string
 >foo1(sx) : string
->foo1 : <T>(obj: string[] & Iterable<T, any, any>) => T
+>foo1 : <T>(obj: string[] & Iterable<T>) => T
 >sx : string[] & { extra: number; }
 
 let x2 = foo2(sa);  // unknown

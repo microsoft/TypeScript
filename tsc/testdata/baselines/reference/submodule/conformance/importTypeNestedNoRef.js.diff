@@ -1,10 +1,8 @@
 --- old.importTypeNestedNoRef.js
 +++ new.importTypeNestedNoRef.js
-@@= skipped -9, +9 lines =@@
+@@= skipped -12, +12 lines =@@
 
- //// [chainer.js]
- export const x = "yes"; // expect outter import to fail, since b.d.ts isn't in the build
--
--
--//// [chainer.d.ts]
+
+ //// [chainer.d.ts]
 -export declare const x: import(import("./a").LookAt).Value;
++export declare const x: import(import("./a").LookAt).Value; // expect outter import to fail, since b.d.ts isn't in the build

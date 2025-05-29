@@ -32,10 +32,10 @@ declare module "dojox/charting/axis2d/common.createText" {
     import exp = dojox.charting.axis2d.common
 >exp : any
 >dojox : typeof dojox
->charting : typeof charting
->axis2d : typeof axis2d
->common : common
+>charting : typeof dojox.charting
+>axis2d : typeof dojox.charting.axis2d
+>common : exp
 
     export = exp;
->exp : common
+>exp : exp
 }

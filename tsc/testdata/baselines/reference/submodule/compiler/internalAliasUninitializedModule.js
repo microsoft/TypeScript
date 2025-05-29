@@ -21,3 +21,17 @@ var c;
     var b = a.b;
     c.x.foo();
 })(c || (c = {}));
+
+
+//// [internalAliasUninitializedModule.d.ts]
+declare namespace a {
+    namespace b {
+        interface I {
+            foo(): any;
+        }
+    }
+}
+declare namespace c {
+    import b = a.b;
+    var x: b.I;
+}

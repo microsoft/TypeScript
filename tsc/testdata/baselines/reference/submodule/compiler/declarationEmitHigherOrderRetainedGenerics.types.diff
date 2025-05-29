@@ -1,45 +1,14 @@
 --- old.declarationEmitHigherOrderRetainedGenerics.types
 +++ new.declarationEmitHigherOrderRetainedGenerics.types
-@@= skipped -110, +110 lines =@@
- >F : F
-
-         readonly In: Types.Contravariant<In>
-->In : Types.Contravariant<In>
-+>In : Contravariant<In>
- >Types : any
-
-         readonly Out2: Types.Covariant<Out2>
-->Out2 : Types.Covariant<Out2>
-+>Out2 : Covariant<Out2>
- >Types : any
-
-         readonly Out1: Types.Covariant<Out1>
-->Out1 : Types.Covariant<Out1>
-+>Out1 : Covariant<Out1>
- >Types : any
-
-         readonly Target: Types.Invariant<Target>
-->Target : Types.Invariant<Target>
-+>Target : Invariant<Target>
- >Types : any
-     }
-
-@@= skipped -29, +29 lines =@@
+@@= skipped -139, +139 lines =@@
      ) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
 
      readonly productMany: <R, O, E, A>(
 ->productMany : <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, [A, ...Array<A>]>
-+>productMany : <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>, any, any>) => Kind<F, R, O, E, [A, ...A[]]>
++>productMany : <R, O, E, A>(self: Kind<F, R, O, E, A>, collection: Iterable<Kind<F, R, O, E, A>>) => Kind<F, R, O, E, [A, ...A[]]>
 
          self: Kind<F, R, O, E, A>,
  >self : Kind<F, R, O, E, A>
-
-         collection: Iterable<Kind<F, R, O, E, A>>
-->collection : Iterable<Kind<F, R, O, E, A>>
-+>collection : Iterable<Kind<F, R, O, E, A>, any, any>
-
-     ) => Kind<F, R, O, E, [A, ...Array<A>]>
- }
 @@= skipped -21, +21 lines =@@
  >b : B
 
@@ -71,29 +40,7 @@
 
          3,
  >3 : 3
-@@= skipped -22, +22 lines =@@
-
-         ): Kind<F, R1 & R2, O1 | O2, E1 | E2, C> => F.map(F.product(self, that), ([a, b]) => f(a, b))
- >F.map(F.product(self, that), ([a, b]) => f(a, b)) : Kind<F, R1 & R2, O1 | O2, E1 | E2, C>
-->F.map : { <A_1, B_1>(f: (a: A_1) => B_1): <R, O, E>(self: Kind<F, R, O, E, A_1>) => Kind<F, R, O, E, B_1>; <R, O, E, A_1, B_1>(self: Kind<F, R, O, E, A_1>, f: (a: A_1) => B_1): Kind<F, R, O, E, B_1>; }
-+>F.map : { <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>; <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>; }
- >F : SemiApplicative<F>
-->map : { <A_1, B_1>(f: (a: A_1) => B_1): <R, O, E>(self: Kind<F, R, O, E, A_1>) => Kind<F, R, O, E, B_1>; <R, O, E, A_1, B_1>(self: Kind<F, R, O, E, A_1>, f: (a: A_1) => B_1): Kind<F, R, O, E, B_1>; }
-+>map : { <A, B>(f: (a: A) => B): <R, O, E>(self: Kind<F, R, O, E, A>) => Kind<F, R, O, E, B>; <R, O, E, A, B>(self: Kind<F, R, O, E, A>, f: (a: A) => B): Kind<F, R, O, E, B>; }
- >F.product(self, that) : Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
-->F.product : <R1_1, O1_1, E1_1, A_1, R2_1, O2_1, E2_1, B_1>(self: Kind<F, R1_1, O1_1, E1_1, A_1>, that: Kind<F, R2_1, O2_1, E2_1, B_1>) => Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, [A_1, B_1]>
-+>F.product : <R1, O1, E1, A, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
- >F : SemiApplicative<F>
-->product : <R1_1, O1_1, E1_1, A_1, R2_1, O2_1, E2_1, B_1>(self: Kind<F, R1_1, O1_1, E1_1, A_1>, that: Kind<F, R2_1, O2_1, E2_1, B_1>) => Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, [A_1, B_1]>
-+>product : <R1, O1, E1, A, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, [A, B]>
- >self : Kind<F, R1, O1, E1, A>
- >that : Kind<F, R2, O2, E2, B>
-->([a, b]) => f(a, b) : ([a, b]: [A, B]) => C
-+>([a, b]) => f(a, b) : (__0: [A, B]) => C
- >a : A
- >b : B
- >f(a, b) : C
-@@= skipped -21, +21 lines =@@
+@@= skipped -43, +43 lines =@@
 
 
  export const zipRight = <F extends TypeLambda>(F: SemiApplicative<F>): {
@@ -115,16 +62,12 @@
  >2 : 2
  ><R1, O1, E1, _, R2, O2, E2, B>(        self: Kind<F, R1, O1, E1, _>,        that: Kind<F, R2, O2, E2, B>    ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK) : <R1, O1, E1, _, R2, O2, E2, B>(self: Kind<F, R1, O1, E1, _>, that: Kind<F, R2, O2, E2, B>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
 
-@@= skipped -13, +13 lines =@@
-
+@@= skipped -14, +14 lines =@@
      ): Kind<F, R1 & R2, O1 | O2, E1 | E2, B> => zipWith(F)(self, that, SK));
  >zipWith(F)(self, that, SK) : Kind<F, R1 & R2, O1 | O2, E1 | E2, B>
-->zipWith(F) : { <R2_1, O2_1, E2_1, B_1, A, C>(that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): <R1_1, O1_1, E1_1>(self: Kind<F, R1_1, O1_1, E1_1, A>) => Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, C>; <R1_1, O1_1, E1_1, A, R2_1, O2_1, E2_1, B_1, C>(self: Kind<F, R1_1, O1_1, E1_1, A>, that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, C>; }
+ >zipWith(F) : { <R2_1, O2_1, E2_1, B_1, A, C>(that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): <R1_1, O1_1, E1_1>(self: Kind<F, R1_1, O1_1, E1_1, A>) => Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, C>; <R1_1, O1_1, E1_1, A, R2_1, O2_1, E2_1, B_1, C>(self: Kind<F, R1_1, O1_1, E1_1, A>, that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, C>; }
 ->zipWith : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2_1, O2_1, E2_1, B_1, A, C>(that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): <R1_1, O1_1, E1_1>(self: Kind<F, R1_1, O1_1, E1_1, A>) => Kind<F, R1_1 & R2_1, O2_1 | O1_1, E2_1 | E1_1, C>; <R1_1, O1_2, E1_2, A_1, R2_1, O2_2, E2_2, B_2, C_1>(self: Kind<F, R1_1, O1_2, E1_2, A_1>, that: Kind<F, R2_1, O2_2, E2_2, B_2>, f: (a: A_1, b: B_2) => C_1): Kind<F, R1_1 & R2_1, O1_2 | O2_2, E1_2 | E2_2, C_1>; }
-+>zipWith(F) : { <R2, O2, E2, B, A, C>(that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>; <R1, O1, E1, A, R2, O2, E2, B, C>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C): Kind<F, R1 & R2, O1 | O2, E1 | E2, C>; }
-+>zipWith : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2, O2, E2, B, A, C>(that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C): <R1, O1, E1>(self: Kind<F, R1, O1, E1, A>) => Kind<F, R1 & R2, O1 | O2, E1 | E2, C>; <R1, O1, E1, A, R2, O2, E2, B, C>(self: Kind<F, R1, O1, E1, A>, that: Kind<F, R2, O2, E2, B>, f: (a: A, b: B) => C): Kind<F, R1 & R2, O1 | O2, E1 | E2, C>; }
++>zipWith : <F extends TypeLambda>(F: SemiApplicative<F>) => { <R2_1, O2_1, E2_1, B_1, A, C>(that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): <R1_1, O1_1, E1_1>(self: Kind<F, R1_1, O1_1, E1_1, A>) => Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, C>; <R1_1, O1_1, E1_1, A, R2_1, O2_1, E2_1, B_1, C>(self: Kind<F, R1_1, O1_1, E1_1, A>, that: Kind<F, R2_1, O2_1, E2_1, B_1>, f: (a: A, b: B_1) => C): Kind<F, R1_1 & R2_1, O1_1 | O2_1, E1_1 | E2_1, C>; }
  >F : SemiApplicative<F>
  >self : Kind<F, R1, O1, E1, _>
  >that : Kind<F, R2, O2, E2, B>
-->SK : <A, B_1>(_: A, b: B_1) => B_1
-+>SK : <A, B>(_: A, b: B) => B

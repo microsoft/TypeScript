@@ -7,7 +7,9 @@
 -var variable_1 = require("./variable");
 +const variable_1 = require("./variable");
  exports.globalThis = variable_1.variable;
--
--
--//// [variable.d.ts]
--export declare const variable: typeof globalThis;
+
+
+ //// [variable.d.ts]
+ export declare const variable: typeof globalThis;
++//// [index.d.ts]
++export declare const globalThis: typeof globalThis;

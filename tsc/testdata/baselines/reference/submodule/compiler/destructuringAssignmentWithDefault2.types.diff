@@ -109,24 +109,3 @@
 
 
  declare const r: Iterator<number>;
-@@= skipped -91, +91 lines =@@
- >false : false
- >value : any
- >r.next() : IteratorResult<number, any>
-->r.next : (...[value]: [] | [any]) => IteratorResult<number, any>
-+>r.next : (...__0: [] | [any]) => IteratorResult<number, any>
- >r : Iterator<number, any, any>
-->next : (...[value]: [] | [any]) => IteratorResult<number, any>
-+>next : (...__0: [] | [any]) => IteratorResult<number, any>
-
- ({ done: done = false, value } = r.next());
- >({ done: done = false, value } = r.next()) : IteratorResult<number, any>
-@@= skipped -14, +14 lines =@@
- >false : false
- >value : any
- >r.next() : IteratorResult<number, any>
-->r.next : (...[value]: [] | [any]) => IteratorResult<number, any>
-+>r.next : (...__0: [] | [any]) => IteratorResult<number, any>
- >r : Iterator<number, any, any>
-->next : (...[value]: [] | [any]) => IteratorResult<number, any>
-+>next : (...__0: [] | [any]) => IteratorResult<number, any>

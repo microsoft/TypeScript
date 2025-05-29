@@ -9,6 +9,6 @@ export { X };
 >X : any
 
 export declare function foo(): X.bar;
->foo : () => bar
+>foo : () => X.bar
 >X : any
 

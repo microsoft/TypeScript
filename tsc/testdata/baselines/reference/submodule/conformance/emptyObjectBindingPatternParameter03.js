@@ -9,3 +9,7 @@ function f({}, a) {
 function f({}, a) {
     var x, y, z;
 }
+
+
+//// [emptyObjectBindingPatternParameter03.d.ts]
+declare function f({}: {}, a: any): void;

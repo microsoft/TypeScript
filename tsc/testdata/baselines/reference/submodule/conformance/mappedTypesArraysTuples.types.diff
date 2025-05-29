@@ -18,11 +18,3 @@
 
  type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
  >__Awaited : __Awaited<T>
-@@= skipped -105, +105 lines =@@
- >acceptArray(mapArray(arr)) : void
- >acceptArray : (arr: any[]) => void
- >mapArray(arr) : Mapped<T>
-->mapArray : <T_1 extends any[]>(arr: T_1) => Mapped<T_1>
-+>mapArray : <T extends any[]>(arr: T) => Mapped<T>
- >arr : T
- }

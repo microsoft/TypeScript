@@ -5,32 +5,7 @@
  === enums.js ===
  lf.Order = {}
 ->lf.Order = {} : typeof lf.Order
-->lf.Order : typeof lf.Order
 +>lf.Order = {} : {}
-+>lf.Order : typeof Order
+ >lf.Order : typeof lf.Order
  >lf : typeof lf
-->Order : typeof lf.Order
-+>Order : typeof Order
- >{} : {}
-
- lf.Order.DESC = 0;
- >lf.Order.DESC = 0 : 0
- >lf.Order.DESC : any
-->lf.Order : typeof lf.Order
-+>lf.Order : typeof Order
- >lf : typeof lf
-->Order : typeof lf.Order
-+>Order : typeof Order
- >DESC : any
- >0 : 0
-
- lf.Order.ASC = 1;
- >lf.Order.ASC = 1 : 1
- >lf.Order.ASC : any
-->lf.Order : typeof lf.Order
-+>lf.Order : typeof Order
- >lf : typeof lf
-->Order : typeof lf.Order
-+>Order : typeof Order
- >ASC : any
- >1 : 1
+ >Order : typeof lf.Order

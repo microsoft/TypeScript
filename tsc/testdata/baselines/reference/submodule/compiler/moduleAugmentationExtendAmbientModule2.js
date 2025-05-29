@@ -49,3 +49,17 @@ let x;
 let y = x.map(x => x + 1);
 let z1 = observable_1.Observable.someValue.toFixed();
 let z2 = observable_1.Observable.someAnotherValue.toLowerCase();
+
+
+//// [map.d.ts]
+declare module "observable" {
+    interface Observable<T> {
+        map<U>(proj: (e: T) => U): Observable<U>;
+    }
+    namespace Observable {
+        let someAnotherValue: string;
+    }
+}
+export {};
+//// [main.d.ts]
+import "./map";

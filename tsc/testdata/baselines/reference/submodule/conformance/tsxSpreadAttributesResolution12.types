@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 const obj = {};
 >obj : {}
@@ -47,15 +47,15 @@ interface Prop {
 
 class OverWriteAttr extends React.Component<Prop, {}> {
 >OverWriteAttr : OverWriteAttr
->React.Component : Component<Prop, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<Prop, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Hello</div>;
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -66,8 +66,8 @@ let anyobj: any;
 
 // Error
 let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
->x : Element
-><OverWriteAttr {...obj} y overwrite="hi" {...obj1} /> : Element
+>x : JSX.Element
+><OverWriteAttr {...obj} y overwrite="hi" {...obj1} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
 >obj : {}
 >y : true
@@ -75,8 +75,8 @@ let x = <OverWriteAttr {...obj} y overwrite="hi" {...obj1} />
 >obj1 : { x: 2; }
 
 let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
->x1 : Element
-><OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} /> : Element
+>x1 : JSX.Element
+><OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
 >overwrite : string
 >obj1 : { x: 2; }
@@ -87,16 +87,16 @@ let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
 >true : true
 
 let x2 = <OverWriteAttr {...anyobj} x={3} />
->x2 : Element
-><OverWriteAttr {...anyobj} x={3} /> : Element
+>x2 : JSX.Element
+><OverWriteAttr {...anyobj} x={3} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
 >anyobj : any
 >x : 3
 >3 : 3
 
 let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
->x3 : Element
-><OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} /> : Element
+>x3 : JSX.Element
+><OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
 >overwrite : string
 >obj1 : { x: 2; }

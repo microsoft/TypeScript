@@ -50,7 +50,7 @@ var h: { (): string } = x;
 >x : true
 
 var h2: { toString(): string } = x; // no error
->h2 : { toString: () => string; }
+>h2 : { toString(): string; }
 >toString : () => string
 >x : true
 

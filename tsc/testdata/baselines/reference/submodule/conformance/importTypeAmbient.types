@@ -15,7 +15,7 @@ declare module "foo" {
 >Point : Point
 }
 const x: import("foo") = { x: 0, y: 0 };
->x : Point
+>x : import("foo")
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -49,17 +49,17 @@ declare module "foo2" {
 >Bar : Bar
 
         item: Bar.I;
->item : I
+>item : Bar.I
 >Bar : any
 
         constructor(input: Baz.J);
->input : J
+>input : Baz.J
 >Baz : any
     }
 }
 
 let y: import("foo2").Bar.I = { a: "", b: 0 };
->y : I
+>y : import("foo2").Bar.I
 >Bar : any
 >{ a: "", b: 0 } : { a: string; b: number; }
 >a : string

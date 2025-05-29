@@ -89,8 +89,8 @@ class C3 {
 >1 : 1
 }
 ({
->({    await() {}}) : { await: () => void; }
->{    await() {}} : { await: () => void; }
+>({    await() {}}) : { await(): void; }
+>{    await() {}} : { await(): void; }
 
     await() {}
 >await : () => void

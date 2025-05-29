@@ -17,3 +17,7 @@ function g() {
         static prop2 = 43;
     };
 }
+
+
+//// [modifierOnClassExpressionMemberInFunction.d.ts]
+declare function g(): void;

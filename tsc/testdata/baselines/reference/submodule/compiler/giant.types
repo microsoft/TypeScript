@@ -843,7 +843,7 @@ export interface eI {
 >pa2 : any
 }
 export module eM {
->eM : typeof eM
+>eM : typeof import("./giant").eM
 
     var V;
 >V : any

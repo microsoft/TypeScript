@@ -14,10 +14,13 @@
 -    C.prototype.bar = function () { };
 -    return C;
 -}());
--
--
--//// [stripInternal1.d.ts]
--declare class C {
--    foo(): void;
 +    bar() { }
++}
+
+
+ //// [stripInternal1.d.ts]
+ declare class C {
+     foo(): void;
++    // @internal
++    bar(): void;
  }

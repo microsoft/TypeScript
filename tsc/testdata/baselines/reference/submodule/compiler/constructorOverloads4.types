@@ -22,17 +22,17 @@ declare module M {
 
 (new M.Function("return 5"))();
 >(new M.Function("return 5"))() : any
->(new M.Function("return 5")) : Function
->new M.Function("return 5") : Function
->M.Function : typeof Function
+>(new M.Function("return 5")) : M.Function
+>new M.Function("return 5") : M.Function
+>M.Function : typeof M.Function
 >M : typeof M
->Function : typeof Function
+>Function : typeof M.Function
 >"return 5" : "return 5"
 
 M.Function("yo");
 >M.Function("yo") : any
->M.Function : typeof Function
+>M.Function : typeof M.Function
 >M : typeof M
->Function : typeof Function
+>Function : typeof M.Function
 >"yo" : "yo"
 

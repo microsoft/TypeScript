@@ -15,15 +15,15 @@ module Foo {
 
 class Bar extends Foo.Object { // should work
 >Bar : Bar
->Foo.Object : Object
+>Foo.Object : Foo.Object
 >Foo : typeof Foo
->Object : typeof Object
+>Object : typeof Foo.Object
 
     constructor () {
 
         super();
 >super() : void
->super : typeof Object
+>super : typeof Foo.Object
 
     }
 

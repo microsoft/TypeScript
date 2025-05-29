@@ -133,3 +133,13 @@ function f6(x) {
         obj(x); // Error
     }
 }
+
+
+//// [controlFlowTypeofObject.d.ts]
+declare function obj(x: object): void;
+declare function f1(x: unknown): void;
+declare function f2(x: unknown): void;
+declare function f3(x: unknown): void;
+declare function f4(x: unknown): void;
+declare function f5(x: unknown): void;
+declare function f6(x: unknown): void;

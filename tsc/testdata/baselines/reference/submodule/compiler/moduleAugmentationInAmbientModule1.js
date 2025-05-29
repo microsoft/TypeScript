@@ -31,3 +31,7 @@ x.foo().x;
 Object.defineProperty(exports, "__esModule", { value: true });
 let x;
 x.foo().x;
+
+
+//// [main.d.ts]
+export {};

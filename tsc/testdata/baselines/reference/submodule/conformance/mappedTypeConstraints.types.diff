@@ -9,15 +9,7 @@
  >a : string
  >b : string
  >b : string
-@@= skipped -8, +8 lines =@@
- >obj : Pick<T | U, keyof T & keyof U>
-
-     obj.b;
-->obj.b : (T | U)["b"]
-+>obj.b : T | U["b"]
- >obj : Pick<T | U, keyof T & keyof U>
-->b : (T | U)["b"]
-+>b : T | U["b"]
+@@= skipped -14, +14 lines =@@
  }
 
  function f3<T extends { a: string, b: string }, U extends { b: string, c: string }>(obj: Pick<T & U, keyof (T & U)>) {
@@ -26,29 +18,7 @@
  >a : string
  >b : string
  >b : string
-@@= skipped -14, +14 lines =@@
- >obj : Pick<T & U, keyof T | keyof U>
-
-     obj.a;
-->obj.a : (T & U)["a"]
-+>obj.a : T & U["a"]
- >obj : Pick<T & U, keyof T | keyof U>
-->a : (T & U)["a"]
-+>a : T & U["a"]
-
-     obj.b;
-->obj.b : (T & U)["b"]
-+>obj.b : T & U["b"]
- >obj : Pick<T & U, keyof T | keyof U>
-->b : (T & U)["b"]
-+>b : T & U["b"]
-
-     obj.c;
-->obj.c : (T & U)["c"]
-+>obj.c : T & U["c"]
- >obj : Pick<T & U, keyof T | keyof U>
-->c : (T & U)["c"]
-+>c : T & U["c"]
+@@= skipped -24, +24 lines =@@
  }
 
  function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'> | 'c', string>) {

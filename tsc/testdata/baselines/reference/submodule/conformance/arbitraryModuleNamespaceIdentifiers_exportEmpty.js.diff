@@ -1,11 +1,10 @@
 --- old.arbitraryModuleNamespaceIdentifiers_exportEmpty.js
 +++ new.arbitraryModuleNamespaceIdentifiers_exportEmpty.js
-@@= skipped -15, +15 lines =@@
+@@= skipped -18, +18 lines =@@
+
+
+ //// [arbitraryModuleNamespaceIdentifiers_exportEmpty.d.ts]
++// This should result in a type error. In particular, the empty string is a now
++// a valid module export name, and should be treated as such here.
+ declare const empty = "empty";
  export { empty as "" };
- import { "" as foo } from "./arbitraryModuleNamespaceIdentifiers_exportEmpty";
- const bar = foo;
--
--
--//// [arbitraryModuleNamespaceIdentifiers_exportEmpty.d.ts]
--declare const empty = "empty";
--export { empty as "" };

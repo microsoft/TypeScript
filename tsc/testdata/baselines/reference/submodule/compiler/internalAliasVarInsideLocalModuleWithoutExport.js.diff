@@ -18,15 +18,6 @@
 -        c.bVal = b;
 -    })(c || (exports.c = c = {}));
 -});
--
--
--//// [internalAliasVarInsideLocalModuleWithoutExport.d.ts]
--export declare namespace a {
--    var x: number;
--}
--export declare namespace c {
--    var bVal: number;
--}
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.c = exports.a = void 0;
@@ -39,3 +30,6 @@
 +    var b = a.x;
 +    c.bVal = b;
 +})(c || (exports.c = c = {}));
+
+
+ //// [internalAliasVarInsideLocalModuleWithoutExport.d.ts]

@@ -23,3 +23,10 @@ const a_1 = require("./a");
 function fn({ [a_1.a]: value }) {
     return value;
 }
+
+
+//// [a.d.ts]
+export declare const a: unique symbol;
+//// [b.d.ts]
+import { a } from "./a";
+export declare function fn({ [a]: value }: any): string;

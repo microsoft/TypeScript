@@ -56,21 +56,7 @@
  }
 
  // repro #17297
-@@= skipped -31, +31 lines =@@
-
- type Foo = { 'a': string; }
- >Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
-->'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 153, 12))
-+>'a' : Symbol(a, Decl(typeGuardFunctionErrors.ts, 153, 12))
-
- type Bar = { 'a': number; }
- >Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
-->'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 154, 12))
-+>'a' : Symbol(a, Decl(typeGuardFunctionErrors.ts, 154, 12))
-
- interface NeedsFoo<T extends Foo> {
- >NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
-@@= skipped -12, +12 lines =@@
+@@= skipped -43, +43 lines =@@
  >Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
 
      foo: T;

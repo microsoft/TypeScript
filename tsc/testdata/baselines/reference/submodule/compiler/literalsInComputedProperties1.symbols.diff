@@ -188,25 +188,25 @@
 
      "foo" = 5,
 ->"foo" : Symbol(X["foo"], Decl(literalsInComputedProperties1.ts, 41, 14))
-+>"foo" : Symbol(foo, Decl(literalsInComputedProperties1.ts, 41, 14))
++>"foo" : Symbol("foo", Decl(literalsInComputedProperties1.ts, 41, 14))
 
      ["bar"] = 6
 ->["bar"] : Symbol(X["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
 ->"bar" : Symbol(X["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
-+>["bar"] : Symbol(bar, Decl(literalsInComputedProperties1.ts, 42, 14))
-+>"bar" : Symbol(bar, Decl(literalsInComputedProperties1.ts, 42, 14))
++>["bar"] : Symbol(["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
++>"bar" : Symbol(["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
  }
 
  let a = X["foo"];
  >a : Symbol(a, Decl(literalsInComputedProperties1.ts, 46, 3))
  >X : Symbol(X, Decl(literalsInComputedProperties1.ts, 35, 21))
 ->"foo" : Symbol(X["foo"], Decl(literalsInComputedProperties1.ts, 41, 14))
-+>"foo" : Symbol(foo, Decl(literalsInComputedProperties1.ts, 41, 14))
++>"foo" : Symbol("foo", Decl(literalsInComputedProperties1.ts, 41, 14))
 
  let a0 = X["bar"];
  >a0 : Symbol(a0, Decl(literalsInComputedProperties1.ts, 47, 3))
  >X : Symbol(X, Decl(literalsInComputedProperties1.ts, 35, 21))
 ->"bar" : Symbol(X["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
-+>"bar" : Symbol(bar, Decl(literalsInComputedProperties1.ts, 42, 14))
++>"bar" : Symbol(["bar"], Decl(literalsInComputedProperties1.ts, 42, 14))
 
  // TODO: make sure that enum still disallow template literals as member names

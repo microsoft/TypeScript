@@ -1,24 +1,6 @@
 --- old.unionAndIntersectionInference1.types
 +++ new.unionAndIntersectionInference1.types
-@@= skipped -88, +88 lines =@@
-
-     if (isVoid(value)) {
- >isVoid(value) : boolean
-->isVoid : <a_1>(value: void | a_1) => value is void
-+>isVoid : <a>(value: void | a) => value is void
- >value : void | a
-
-         value; // value is void
-@@= skipped -18, +18 lines =@@
-
-       if (isNonVoid(value)) {
- >isNonVoid(value) : boolean
-->isNonVoid : <a_1>(value: void | a_1) => value is a_1
-+>isNonVoid : <a>(value: void | a) => value is a
- >value : void | a
-
-           value; // value is a
-@@= skipped -18, +18 lines =@@
+@@= skipped -124, +124 lines =@@
  >Maybe : Maybe<T>
 
  function get<U>(x: U | void): U {
@@ -35,30 +17,3 @@
 +>get : <U>(x: void | U) => U
  >foo : Maybe<string>
  >toUpperCase : () => string
-
-@@= skipped -53, +53 lines =@@
- >createTestAsync : () => Promise<ITest>
- >(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
- >Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
-->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>Promise.resolve().then : <TResult1, TResult2>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
- >Promise.resolve() : Promise<void>
- >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
- >Promise : PromiseConstructor
- >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
-->then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
- >() => ({ name: 'test' }) : () => { name: "test"; }
- >({ name: 'test' }) : { name: "test"; }
- >{ name: 'test' } : { name: "test"; }
-@@= skipped -56, +56 lines =@@
- >a : T
- >b : U
- >Object.assign(a, b) : T & U
-->Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
-+>Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
- >Object : ObjectConstructor
-->assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
-+>assign : { <T extends {}, U>(target: T, source: U): T & U; <T extends {}, U, V>(target: T, source1: U, source2: V): T & U & V; <T extends {}, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
- >a : T
- >b : U

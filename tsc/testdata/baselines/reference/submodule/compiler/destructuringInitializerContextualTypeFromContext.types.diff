@@ -5,7 +5,7 @@
  const Parent: SFC<Props> = ({
  >Parent : SFC<Props>
 ->({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : ({ children, name, ...props }: Props & { children?: any; }) => any
-+>({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : (__0: Props & { children?: any; }) => any
++>({    children,    name = "Artemis",    ...props}) => Child({name, ...props}) : ({ children, name = "Artemis", ...props }: Props & { children?: any; }) => any
 
      children,
  >children : any
@@ -14,7 +14,7 @@
  const Child: SFC<Props> = ({
  >Child : SFC<Props>
 ->({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : ({ children, name, ...props }: Props & { children?: any; }) => string
-+>({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : (__0: Props & { children?: any; }) => string
++>({    children,    name = "Artemis",    ...props}) => `name: ${name} props: ${JSON.stringify(props)}` : ({ children, name = "Artemis", ...props }: Props & { children?: any; }) => string
 
      children,
  >children : any
@@ -35,7 +35,7 @@
  >f(([_1, _2 = undefined]) => undefined) : void
  >f : (g: (as: string[]) => void) => void
 ->([_1, _2 = undefined]) => undefined : ([_1, _2]: string[]) => undefined
-+>([_1, _2 = undefined]) => undefined : (__0: string[]) => undefined
++>([_1, _2 = undefined]) => undefined : ([_1, _2 = undefined]: string[]) => undefined
  >_1 : string
  >_2 : string | undefined
  >undefined : undefined

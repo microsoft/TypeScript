@@ -5,10 +5,10 @@ import foo = require('foo');
 >foo : any
 
 import other = require('./other');
->other : typeof import("test/other")
+>other : typeof other
 
 import relMod = require('./sub/relMod');
->relMod : typeof Test
+>relMod : typeof relMod
 
 if(foo.M2.x){
 >foo.M2.x : any
@@ -18,15 +18,15 @@ if(foo.M2.x){
 >x : any
 
 	var x = new relMod(other.M2.x.charCodeAt(0));
->x : Test
->new relMod(other.M2.x.charCodeAt(0)) : Test
->relMod : typeof Test
+>x : relMod
+>new relMod(other.M2.x.charCodeAt(0)) : relMod
+>relMod : typeof relMod
 >other.M2.x.charCodeAt(0) : number
 >other.M2.x.charCodeAt : (index: number) => number
 >other.M2.x : string
->other.M2 : typeof M2
->other : typeof import("test/other")
->M2 : typeof M2
+>other.M2 : typeof other.M2
+>other : typeof other
+>M2 : typeof other.M2
 >x : string
 >charCodeAt : (index: number) => number
 >0 : 0

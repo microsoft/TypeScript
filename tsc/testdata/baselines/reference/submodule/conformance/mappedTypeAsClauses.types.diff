@@ -1,15 +1,6 @@
 --- old.mappedTypeAsClauses.types
 +++ new.mappedTypeAsClauses.types
-@@= skipped -45, +45 lines =@@
- >Methods : Methods<T>
-
- type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | number }>;
-->TM1 : Methods<{ foo(): number; bar(x: string): boolean; baz: string | number; }>
-+>TM1 : Methods<{ foo: () => number; bar: (x: string) => boolean; baz: string | number; }>
- >foo : () => number
- >bar : (x: string) => boolean
- >x : string
-@@= skipped -200, +200 lines =@@
+@@= skipped -245, +245 lines =@@
  }
 
  function f(x: KeysExtendedBy<M, number>) {
@@ -27,25 +18,3 @@
  >"a" : "a"
 
  type NameMap = { 'a': 'x', 'b': 'y', 'c': 'z' };
-@@= skipped -24, +24 lines =@@
- >TS3 : keyof { [P in keyof T as Exclude<P, "a" | "b" | "c">]: string; }
-
- type TS4<T> = keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string };
-->TS4 : keyof { [P in keyof T as NameMap[P & keyof NameMap]]: string; }
-+>TS4 : keyof { [P in keyof T as NameMap[P & (keyof NameMap)]]: string; }
-
- type TS5<T> = keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string };
-->TS5 : keyof { [P in keyof T & keyof NameMap as NameMap[P]]: string; }
-+>TS5 : keyof { [P in keyof T & (keyof NameMap) as NameMap[P]]: string; }
-
- type TS6<T, U, V> = keyof { [ K in keyof T as V & (K extends U ? K : never)]: string };
- >TS6 : keyof { [K in keyof T as V & (K extends U ? K : never)]: string; }
-@@= skipped -23, +23 lines =@@
- >TN3 : keyof { [P in keyof T as Exclude<Exclude<Exclude<P, "c">, "b">, "a">]: string; }
-
- type TN4<T, U> = keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string };
-->TN4 : keyof { [K in keyof T as (K extends U ? T[K] : never) extends T[K] ? K : never]: string; }
-+>TN4 : keyof { [K in keyof T as K extends U ? T[K] : never extends T[K] ? K : never]: string; }
-
- type TN5<T, U> = keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true }]: string };
- >TN5 : keyof { [K in keyof T as keyof { [P in K as T[P] extends U ? K : never]: true; }]: string; }

@@ -2,7 +2,7 @@
 
 === declaredExternalModuleWithExportAssignment.ts ===
 declare module 'connect' {
->'connect' : Symbol('connect', Decl(declaredExternalModuleWithExportAssignment.ts, 0, 0))
+>'connect' : Symbol("connect", Decl(declaredExternalModuleWithExportAssignment.ts, 0, 0))
 
     interface connectModule {
 >connectModule : Symbol(connectModule, Decl(declaredExternalModuleWithExportAssignment.ts, 0, 26))

@@ -1,17 +1,6 @@
 --- old.objectPropertyAsClass.types
 +++ new.objectPropertyAsClass.types
-@@= skipped -1, +1 lines =@@
-
- === index.js ===
- const a1 = {
-->a1 : { foo(): void; }
-->{    foo() {        this.x = 0;    }} : { foo(): void; }
-+>a1 : { foo: () => void; }
-+>{    foo() {        this.x = 0;    }} : { foo: () => void; }
-
-     foo() {
- >foo : () => void
-@@= skipped -9, +9 lines =@@
+@@= skipped -10, +10 lines =@@
          this.x = 0;
  >this.x = 0 : 0
  >this.x : any
@@ -42,16 +31,6 @@
  >x : any
  >0 : 0
      }
- }
-
- const b1 = {
-->b1 : { foo(): void; }
-->{    /** @class */    foo() {        this.x = 0;    }} : { foo(): void; }
-+>b1 : { foo: () => void; }
-+>{    /** @class */    foo() {        this.x = 0;    }} : { foo: () => void; }
-
-     /** @class */
-     foo() {
 @@= skipped -34, +34 lines =@@
          this.x = 0;
  >this.x = 0 : 0

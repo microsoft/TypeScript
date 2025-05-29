@@ -65,3 +65,26 @@ class DDD extends BB {
         this.a = a;
     }
 }
+
+
+//// [override8.d.ts]
+declare class B {
+    a: string;
+}
+declare class D extends B {
+    a: string;
+    b: string;
+    constructor(a: string, b: string);
+}
+declare class BB {
+    a: string;
+    constructor(a: string);
+}
+declare class DD extends BB {
+    a: string;
+    constructor(a: string);
+}
+declare class DDD extends BB {
+    a: string;
+    constructor(a: string);
+}

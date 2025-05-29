@@ -33,7 +33,7 @@ type RuntimeSyntaxTransformer struct {
 
 func NewRuntimeSyntaxTransformer(emitContext *printer.EmitContext, compilerOptions *core.CompilerOptions, resolver binder.ReferenceResolver) *Transformer {
 	tx := &RuntimeSyntaxTransformer{compilerOptions: compilerOptions, resolver: resolver}
-	return tx.newTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 // Pushes a new child node onto the ancestor tracking stack, returning the grandparent node to be restored later via `popNode`.

@@ -32,9 +32,10 @@
 -exports.a = void 0;
 -const pkg = __importStar(require("package-b"));
 -exports.a = pkg.invoke();
--
--
--//// [index.d.ts]
--export declare const a: import("package-a/cls").Foo;
 +import * as pkg from "package-b";
 +export const a = pkg.invoke();
+
+
+ //// [index.d.ts]
+-export declare const a: import("package-a/cls").Foo;
++export declare const a: import("../packageA/foo.js").Foo;

@@ -43,3 +43,13 @@ var m;
 (function (m) {
     ({ a4: m.a4, b4: m.b4, c4: m.c4 } = f15());
 })(m || (m = {}));
+
+
+//// [declarationEmitDestructuringObjectLiteralPattern.d.ts]
+declare function f15(): {
+    a4: string;
+    b4: number;
+    c4: boolean;
+};
+declare namespace m {
+}

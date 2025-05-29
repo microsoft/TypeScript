@@ -30,36 +30,25 @@
  }
 
  var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
- >numIndex : Symbol(numIndex, Decl(propertyAccess.ts, 10, 3))
- >n : Symbol(n, Decl(propertyAccess.ts, 10, 17))
- >3 : Symbol(3, Decl(propertyAccess.ts, 10, 41))
-->'three' : Symbol('three', Decl(propertyAccess.ts, 10, 53))
-+>'three' : Symbol(three, Decl(propertyAccess.ts, 10, 53))
-
- var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
- >strIndex : Symbol(strIndex, Decl(propertyAccess.ts, 11, 3))
+@@= skipped -30, +30 lines =@@
  >n : Symbol(n, Decl(propertyAccess.ts, 11, 17))
  >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
-->'N' : Symbol('N', Decl(propertyAccess.ts, 11, 42))
+ >'N' : Symbol('N', Decl(propertyAccess.ts, 11, 42))
 ->Compass.North : Symbol(Compass.North, Decl(propertyAccess.ts, 6, 14))
-->Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
-->North : Symbol(Compass.North, Decl(propertyAccess.ts, 6, 14))
-->'E' : Symbol('E', Decl(propertyAccess.ts, 11, 62))
-->Compass.East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
-->Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
-->East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
-+>'N' : Symbol(N, Decl(propertyAccess.ts, 11, 42))
 +>Compass.North : Symbol(North, Decl(propertyAccess.ts, 6, 14))
-+>Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->North : Symbol(Compass.North, Decl(propertyAccess.ts, 6, 14))
 +>North : Symbol(North, Decl(propertyAccess.ts, 6, 14))
-+>'E' : Symbol(E, Decl(propertyAccess.ts, 11, 62))
+ >'E' : Symbol('E', Decl(propertyAccess.ts, 11, 62))
+->Compass.East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
 +>Compass.East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
-+>Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+ >Compass : Symbol(Compass, Decl(propertyAccess.ts, 5, 1))
+->East : Symbol(Compass.East, Decl(propertyAccess.ts, 7, 17))
 +>East : Symbol(East, Decl(propertyAccess.ts, 7, 17))
 
  var bothIndex:
  >bothIndex : Symbol(bothIndex, Decl(propertyAccess.ts, 12, 3))
-@@= skipped -111, +111 lines =@@
+@@= skipped -81, +81 lines =@@
  // Dotted property access of property that exists on value's apparent type
  var bb = obj.hasOwnProperty;
  >bb : Symbol(bb, Decl(propertyAccess.ts, 41, 3))

@@ -23,3 +23,15 @@ var m;
     })(c = m.c || (m.c = {}));
 })(m || (m = {}));
 module.exports = b;
+
+
+//// [declFileImportChainInExportAssignment.d.ts]
+declare namespace m {
+    namespace c {
+        class c {
+        }
+    }
+}
+import a = m.c;
+import b = a;
+export = b;

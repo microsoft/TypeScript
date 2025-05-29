@@ -1,0 +1,11 @@
+--- old.mergedDeclarations6.types
++++ new.mergedDeclarations6.types
+@@= skipped -24, +24 lines =@@
+ >A : typeof A
+
+ declare module "./a" {
+->"./a" : typeof import("a")
++>"./a" : typeof import("./a")
+
+     interface A { }
+ }

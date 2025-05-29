@@ -27,9 +27,9 @@ var x: number;
 var x = A.B.x;
 >x : number
 >A.B.x : number
->A.B : typeof B
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
+>B : typeof A.B
 >x : number
 
 module X.Y.Z {

@@ -15,7 +15,7 @@ export interface T0 {
 >T0 : Symbol(T0, Decl(module.ts, 2, 27))
 
     [c0]: number;
->[c0] : Symbol(a, Decl(module.ts, 3, 21))
+>[c0] : Symbol([c0], Decl(module.ts, 3, 21))
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
     [c1]: string;
@@ -31,7 +31,7 @@ export declare class T1 implements T2 {
 >T2 : Symbol(T2, Decl(module.ts, 12, 1))
 
     [c0]: number;
->[c0] : Symbol(a, Decl(module.ts, 8, 39))
+>[c0] : Symbol([c0], Decl(module.ts, 8, 39))
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
     [c1]: string;
@@ -50,7 +50,7 @@ export declare type T3 = {
 >T3 : Symbol(T3, Decl(module.ts, 14, 1))
 
     [c0]: number;
->[c0] : Symbol(a, Decl(module.ts, 15, 26))
+>[c0] : Symbol([c0], Decl(module.ts, 15, 26))
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
 
     [c1]: string;
@@ -94,7 +94,7 @@ namespace N {
 >T4 : Symbol(T4, Decl(main.ts, 6, 36))
 
         [N.c2]: number;
->[N.c2] : Symbol(a, Decl(main.ts, 8, 25))
+>[N.c2] : Symbol([N.c2], Decl(main.ts, 8, 25))
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c2 : Symbol(c2, Decl(main.ts, 4, 16))
@@ -116,7 +116,7 @@ namespace N {
 >T4 : Symbol(T4, Decl(main.ts, 6, 36))
 
         [N.c2]: number;
->[N.c2] : Symbol(a, Decl(main.ts, 13, 43))
+>[N.c2] : Symbol([N.c2], Decl(main.ts, 13, 43))
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c2 : Symbol(c2, Decl(main.ts, 4, 16))
@@ -141,7 +141,7 @@ namespace N {
 >T7 : Symbol(T7, Decl(main.ts, 19, 5))
 
         [N.c2]: number;
->[N.c2] : Symbol(a, Decl(main.ts, 20, 30))
+>[N.c2] : Symbol([N.c2], Decl(main.ts, 20, 30))
 >N.c2 : Symbol(c2, Decl(main.ts, 4, 16))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >c2 : Symbol(c2, Decl(main.ts, 4, 16))
@@ -176,7 +176,7 @@ interface T8 {
 >T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
     [c4]: number;
->[c4] : Symbol(a, Decl(main.ts, 31, 14))
+>[c4] : Symbol([c4], Decl(main.ts, 31, 14))
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
     [c5]: string;
@@ -192,7 +192,7 @@ declare class T9 implements T8 {
 >T8 : Symbol(T8, Decl(main.ts, 29, 32))
 
     [c4]: number;
->[c4] : Symbol(a, Decl(main.ts, 36, 32))
+>[c4] : Symbol([c4], Decl(main.ts, 36, 32))
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
     [c5]: string;
@@ -211,7 +211,7 @@ declare type T11 = {
 >T11 : Symbol(T11, Decl(main.ts, 42, 1))
 
     [c4]: number;
->[c4] : Symbol(a, Decl(main.ts, 43, 20))
+>[c4] : Symbol([c4], Decl(main.ts, 43, 20))
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
     [c5]: string;
@@ -452,7 +452,7 @@ export const o1 = {
 >o1 : Symbol(o1, Decl(main.ts, 101, 12))
 
     [c4]: 1,
->[c4] : Symbol(a, Decl(main.ts, 101, 19))
+>[c4] : Symbol([c4], Decl(main.ts, 101, 19))
 >c4 : Symbol(c4, Decl(main.ts, 27, 12))
 
     [c5]: "a",
@@ -506,7 +506,7 @@ interface RI<T extends "a" | "b"> {
 >T : Symbol(T, Decl(main.ts, 118, 13))
 
     [rI.x]: "b";
->[rI.x] : Symbol(a, Decl(main.ts, 119, 9))
+>[rI.x] : Symbol([rI.x], Decl(main.ts, 119, 9))
 >rI.x : Symbol(x, Decl(main.ts, 118, 35))
 >rI : Symbol(rI, Decl(main.ts, 116, 13))
 >x : Symbol(x, Decl(main.ts, 118, 35))
@@ -530,7 +530,7 @@ declare class RC<T extends "a" | "b"> {
 >T : Symbol(T, Decl(main.ts, 125, 17))
 
     [rC.x]: "b";
->[rC.x] : Symbol(a, Decl(main.ts, 126, 9))
+>[rC.x] : Symbol([rC.x], Decl(main.ts, 126, 9))
 >rC.x : Symbol(x, Decl(main.ts, 125, 39))
 >rC : Symbol(rC, Decl(main.ts, 123, 13))
 >x : Symbol(x, Decl(main.ts, 125, 39))

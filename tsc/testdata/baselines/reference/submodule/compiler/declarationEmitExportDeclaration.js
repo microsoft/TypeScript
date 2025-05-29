@@ -27,3 +27,13 @@ const utils_1 = require("./utils");
 Object.defineProperty(exports, "bar", { enumerable: true, get: function () { return utils_1.bar; } });
 (0, utils_1.foo)();
 let obj;
+
+
+//// [utils.d.ts]
+export declare function foo(): void;
+export declare function bar(): void;
+export interface Buzz {
+}
+//// [index.d.ts]
+import { bar } from "./utils";
+export { bar };

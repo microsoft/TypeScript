@@ -1,31 +1,15 @@
 --- old.maxNodeModuleJsDepthDefaultsToZero.types
 +++ new.maxNodeModuleJsDepthDefaultsToZero.types
-@@= skipped -10, +10 lines =@@
- === /index.ts ===
- /// <reference path="/typings/index.d.ts" />
- import * as foo from "shortid";
-->foo : typeof foo
-+>foo : typeof import("shortid")
-
- foo.x // found in index.d.ts
- >foo.x : number
-->foo : typeof foo
-+>foo : typeof import("shortid")
- >x : number
-
- foo.y // ignored from shortid/index.js
- >foo.y : any
-->foo : typeof foo
-+>foo : typeof import("shortid")
+@@= skipped -23, +23 lines =@@
  >y : any
 
-+
+
 +=== /node_modules/shortid/node_modules/z/index.js ===
 +// z will not be found because maxNodeModulesJsDepth: 0
 +module.exports = { z: 'no' };
 +>module.exports = { z: 'no' } : { z: string; }
 +>module.exports : { z: string; }
-+>module : { export=: { z: string; }; }
++>module : { "export=": { z: string; }; }
 +>exports : { z: string; }
 +>{ z: 'no' } : { z: string; }
 +>z : string
@@ -50,3 +34,4 @@
 +>module : { y: { y: string; }; }
 +>exports : { y: string; }
 +>y : { y: string; }
++

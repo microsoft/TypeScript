@@ -1,44 +1,25 @@
 --- old.moduleAugmentationImportsAndExports6.types
 +++ new.moduleAugmentationImportsAndExports6.types
-@@= skipped -38, +38 lines =@@
- import I = N.Ifc;
- >I : any
- >N : any
-->Ifc : I
-+>Ifc : Ifc
-
- import C = N.Cls;
- >C : any
- >N : any
-->Cls : C
-+>Cls : Cls
+@@= skipped -46, +46 lines =@@
+ >Cls : C
 
  declare module "./f1" {
- >"./f1" : typeof import("f1")
-@@= skipped -15, +15 lines =@@
- >foo : () => B
+->"./f1" : typeof import("f1")
++>"./f1" : typeof import("./f1")
 
-         bar(): I;
-->bar : () => I
-+>bar : () => Ifc
-
-         baz(): C;
-->baz : () => C
-+>baz : () => Cls
-     }
- }
-
-@@= skipped -19, +19 lines =@@
+     interface A {
+         foo(): B;
+@@= skipped -26, +26 lines =@@
  let b = a.foo().n;
  >b : number
  >a.foo().n : number
 ->a.foo() : import("f2").B
 ->a.foo : () => import("f2").B
-+>a.foo() : B
-+>a.foo : () => B
++>a.foo() : import("./f2").B
++>a.foo : () => import("./f2").B
  >a : A
 ->foo : () => import("f2").B
-+>foo : () => B
++>foo : () => import("./f2").B
  >n : number
 
  let c = a.bar().a;
@@ -46,11 +27,11 @@
  >a.bar().a : number
 ->a.bar() : import("f3").N.Ifc
 ->a.bar : () => import("f3").N.Ifc
-+>a.bar() : Ifc
-+>a.bar : () => Ifc
++>a.bar() : import("./f3").N.Ifc
++>a.bar : () => import("./f3").N.Ifc
  >a : A
 ->bar : () => import("f3").N.Ifc
-+>bar : () => Ifc
++>bar : () => import("./f3").N.Ifc
  >a : number
 
  let d = a.baz().b;
@@ -58,9 +39,9 @@
  >a.baz().b : number
 ->a.baz() : import("f3").N.Cls
 ->a.baz : () => import("f3").N.Cls
-+>a.baz() : Cls
-+>a.baz : () => Cls
++>a.baz() : import("./f3").N.Cls
++>a.baz : () => import("./f3").N.Cls
  >a : A
 ->baz : () => import("f3").N.Cls
-+>baz : () => Cls
++>baz : () => import("./f3").N.Cls
  >b : number

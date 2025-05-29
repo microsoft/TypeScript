@@ -2,7 +2,7 @@
 
 === classAbstractManyKeywords.ts ===
 export default abstract class A {}
->A : default
+>A : A
 
 export abstract class B {}
 >B : B

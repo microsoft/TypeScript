@@ -11,3 +11,8 @@ class d {
 //// [a.js]
 class d {
 }
+
+
+//// [a.d.ts]
+declare class d {
+}

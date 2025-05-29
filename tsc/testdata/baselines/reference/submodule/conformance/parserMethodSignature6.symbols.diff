@@ -5,5 +5,5 @@
 
    "F"?();
 ->"F" : Symbol(I["F"], Decl(parserMethodSignature6.ts, 0, 13))
-+>"F" : Symbol(F, Decl(parserMethodSignature6.ts, 0, 13))
++>"F" : Symbol("F", Decl(parserMethodSignature6.ts, 0, 13))
  }

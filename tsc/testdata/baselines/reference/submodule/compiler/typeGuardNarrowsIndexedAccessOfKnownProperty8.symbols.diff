@@ -19,7 +19,7 @@
      [a.key]: string;
 ->[a.key] : Symbol(C[a.key], Decl(b.ts, 1, 16))
 ->a.key : Symbol(a.key, Decl(a.ts, 0, 12))
-+>[a.key] : Symbol(a, Decl(b.ts, 1, 16))
++>[a.key] : Symbol([a.key], Decl(b.ts, 1, 16))
 +>a.key : Symbol(key, Decl(a.ts, 0, 12))
  >a : Symbol(a, Decl(b.ts, 0, 6))
 ->key : Symbol(a.key, Decl(a.ts, 0, 12))

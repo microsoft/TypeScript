@@ -2,57 +2,57 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface ComponentProps {
     AnyComponent: React.StatelessComponent<any> | React.ComponentClass<any>;
->AnyComponent : ComponentClass<any> | StatelessComponent<any>
+>AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
 >React : any
 >React : any
 }
 
 class MyComponent extends React.Component<ComponentProps, {}> {
 >MyComponent : MyComponent
->React.Component : Component<ComponentProps, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<ComponentProps, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         const { AnyComponent } = this.props;
->AnyComponent : ComponentClass<any> | StatelessComponent<any>
->this.props : ComponentProps & { children?: ReactNode; }
+>AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
+>this.props : ComponentProps & { children?: React.ReactNode; }
 >this : this
->props : ComponentProps & { children?: ReactNode; }
+>props : ComponentProps & { children?: React.ReactNode; }
 
         return (<AnyComponent />);
->(<AnyComponent />) : Element
-><AnyComponent /> : Element
->AnyComponent : ComponentClass<any> | StatelessComponent<any>
+>(<AnyComponent />) : JSX.Element
+><AnyComponent /> : JSX.Element
+>AnyComponent : React.ComponentClass<any> | React.StatelessComponent<any>
     }
 }
 
 // Stateless Component As Props
 <MyComponent AnyComponent={() => <button>test</button>}/>
-><MyComponent AnyComponent={() => <button>test</button>}/> : Element
+><MyComponent AnyComponent={() => <button>test</button>}/> : JSX.Element
 >MyComponent : typeof MyComponent
->AnyComponent : () => Element
->() => <button>test</button> : () => Element
-><button>test</button> : Element
+>AnyComponent : () => JSX.Element
+>() => <button>test</button> : () => JSX.Element
+><button>test</button> : JSX.Element
 >button : any
 >button : any
 
 // Component Class as Props
 class MyButtonComponent extends React.Component<{},{}> {
 >MyButtonComponent : MyButtonComponent
->React.Component : Component<{}, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
 }
 
 <MyComponent AnyComponent={MyButtonComponent} />
-><MyComponent AnyComponent={MyButtonComponent} /> : Element
+><MyComponent AnyComponent={MyButtonComponent} /> : JSX.Element
 >MyComponent : typeof MyComponent
 >AnyComponent : typeof MyButtonComponent
 >MyButtonComponent : typeof MyButtonComponent

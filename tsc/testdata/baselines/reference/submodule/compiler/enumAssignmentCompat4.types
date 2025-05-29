@@ -47,18 +47,18 @@ namespace N {
 }
 
 let broken = [
->broken : ({ foo: MyEnum; } | { foo: MyEnum; })[]
->[    N.object1,    M.object2] : ({ foo: MyEnum; } | { foo: MyEnum; })[]
+>broken : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
+>[    N.object1,    M.object2] : ({ foo: M.MyEnum; } | { foo: N.MyEnum; })[]
 
     N.object1,
->N.object1 : { foo: MyEnum; }
+>N.object1 : { foo: N.MyEnum; }
 >N : typeof N
->object1 : { foo: MyEnum; }
+>object1 : { foo: N.MyEnum; }
 
     M.object2
->M.object2 : { foo: MyEnum; }
+>M.object2 : { foo: M.MyEnum; }
 >M : typeof M
->object2 : { foo: MyEnum; }
+>object2 : { foo: M.MyEnum; }
 
 ];
 

@@ -40,3 +40,14 @@ class Hi {
 //// [test3.js]
 class Hola {
 }
+
+
+//// [test1.d.ts]
+declare class Hello {
+}
+//// [test2.d.ts]
+declare class Hi {
+}
+//// [test3.d.ts]
+declare class Hola {
+}

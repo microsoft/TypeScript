@@ -19,38 +19,38 @@ import provide = foo;
 >foo : typeof foo
 
 import booz = foo.bar.baz;
->booz : typeof baz
+>booz : typeof booz
 >foo : typeof foo
->bar : typeof bar
->baz : typeof baz
+>bar : typeof provide.bar
+>baz : typeof booz
 
 var p = new provide.Provide();
->p : Provide
->new provide.Provide() : Provide
->provide.Provide : typeof Provide
+>p : provide.Provide
+>new provide.Provide() : provide.Provide
+>provide.Provide : typeof provide.Provide
 >provide : typeof foo
->Provide : typeof Provide
+>Provide : typeof provide.Provide
 
 function use() {
 >use : () => void
 
   var p1: provide.Provide; // error here, but should be okay
->p1 : Provide
+>p1 : provide.Provide
 >provide : any
 
   var p2: foo.Provide;
->p2 : Provide
+>p2 : provide.Provide
 >foo : any
 
   var p3:booz.bar;
->p3 : bar
+>p3 : booz.bar
 >booz : any
 
   var p22 = new provide.Provide();
->p22 : Provide
->new provide.Provide() : Provide
->provide.Provide : typeof Provide
+>p22 : provide.Provide
+>new provide.Provide() : provide.Provide
+>provide.Provide : typeof provide.Provide
 >provide : typeof foo
->Provide : typeof Provide
+>Provide : typeof provide.Provide
 }
 

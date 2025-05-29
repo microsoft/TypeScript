@@ -252,8 +252,8 @@ module m2 {
 >c4 : typeof c4
 
     new m1.c3();
->new m1.c3() : c3
->m1.c3 : typeof c3
+>new m1.c3() : m1.c3
+>m1.c3 : typeof m1.c3
 >m1 : typeof m1
->c3 : typeof c3
+>c3 : typeof m1.c3
 }

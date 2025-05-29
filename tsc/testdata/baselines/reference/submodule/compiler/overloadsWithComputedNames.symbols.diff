@@ -6,15 +6,15 @@
      ["B"](a: number): string;
 ->["B"] : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
 ->"B" : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
-+>["B"] : Symbol(B, Decl(overloadsWithComputedNames.ts, 1, 14))
-+>"B" : Symbol(B, Decl(overloadsWithComputedNames.ts, 1, 14))
++>["B"] : Symbol(["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
++>"B" : Symbol(["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
  >a : Symbol(a, Decl(overloadsWithComputedNames.ts, 2, 10))
 
      ["A"](a: string|number): number | string {
 ->["A"] : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
 ->"A" : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
-+>["A"] : Symbol(A, Decl(overloadsWithComputedNames.ts, 2, 29))
-+>"A" : Symbol(A, Decl(overloadsWithComputedNames.ts, 2, 29))
++>["A"] : Symbol(["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
++>"A" : Symbol(["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
  >a : Symbol(a, Decl(overloadsWithComputedNames.ts, 3, 10))
 
        return 0;
@@ -23,17 +23,17 @@
 
  p.A(0)
 ->p.A : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
-+>p.A : Symbol(A, Decl(overloadsWithComputedNames.ts, 2, 29))
++>p.A : Symbol(["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
  >p : Symbol(p, Decl(overloadsWithComputedNames.ts, 7, 3))
 ->A : Symbol(Person["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
-+>A : Symbol(A, Decl(overloadsWithComputedNames.ts, 2, 29))
++>A : Symbol(["A"], Decl(overloadsWithComputedNames.ts, 2, 29))
 
  p.B(0)
 ->p.B : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
-+>p.B : Symbol(B, Decl(overloadsWithComputedNames.ts, 1, 14))
++>p.B : Symbol(["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
  >p : Symbol(p, Decl(overloadsWithComputedNames.ts, 7, 3))
 ->B : Symbol(Person["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
-+>B : Symbol(B, Decl(overloadsWithComputedNames.ts, 1, 14))
++>B : Symbol(["B"], Decl(overloadsWithComputedNames.ts, 1, 14))
 
  // https://github.com/microsoft/TypeScript/issues/17345
  class C {
@@ -42,20 +42,20 @@
      ["foo"](): void
 ->["foo"] : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
 ->"foo" : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
-+>["foo"] : Symbol(foo, Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
-+>"foo" : Symbol(foo, Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
++>["foo"] : Symbol(["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
++>"foo" : Symbol(["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
 
      ["bar"](): void;
 ->["bar"] : Symbol(C["bar"], Decl(overloadsWithComputedNames.ts, 13, 19))
 ->"bar" : Symbol(C["bar"], Decl(overloadsWithComputedNames.ts, 13, 19))
-+>["bar"] : Symbol(bar, Decl(overloadsWithComputedNames.ts, 13, 19))
-+>"bar" : Symbol(bar, Decl(overloadsWithComputedNames.ts, 13, 19))
++>["bar"] : Symbol(["bar"], Decl(overloadsWithComputedNames.ts, 13, 19))
++>"bar" : Symbol(["bar"], Decl(overloadsWithComputedNames.ts, 13, 19))
 
      ["foo"]() {
 ->["foo"] : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
 ->"foo" : Symbol(C["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
-+>["foo"] : Symbol(foo, Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
-+>"foo" : Symbol(foo, Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
++>["foo"] : Symbol(["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
++>"foo" : Symbol(["foo"], Decl(overloadsWithComputedNames.ts, 12, 9), Decl(overloadsWithComputedNames.ts, 14, 20))
 
          return 0;
      }

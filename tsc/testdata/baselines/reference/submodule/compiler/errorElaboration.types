@@ -46,8 +46,8 @@ const foo = { bar: 'a' };
 >'a' : "a"
 
 const x = ({ [foo.bar]: c }) => undefined;
->x : (__0: {}) => any
->({ [foo.bar]: c }) => undefined : (__0: {}) => any
+>x : ({ [foo.bar]: c }: {}) => any
+>({ [foo.bar]: c }) => undefined : ({ [foo.bar]: c }: {}) => any
 >foo.bar : any
 >foo : (x: () => Container<Ref<number>>) => void
 >bar : any

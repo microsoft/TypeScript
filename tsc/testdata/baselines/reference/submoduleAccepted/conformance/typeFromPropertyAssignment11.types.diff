@@ -10,19 +10,16 @@
 +>function() {} : () => void
 
  Inner.prototype = {
-->Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
+ >Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
 ->Inner.prototype : { m(): void; i: number; }
 ->Inner : typeof Inner
 ->prototype : { m(): void; i: number; }
-->{    m() { },    i: 1} : { m(): void; i: number; }
-+>Inner.prototype = {    m() { },    i: 1} : { m: () => void; i: number; }
 +>Inner.prototype : any
 +>Inner : () => void
 +>prototype : any
-+>{    m() { },    i: 1} : { m: () => void; i: number; }
+ >{    m() { },    i: 1} : { m(): void; i: number; }
 
      m() { },
- >m : () => void
 @@= skipped -21, +21 lines =@@
  Inner.prototype.j = 2
  >Inner.prototype.j = 2 : 2

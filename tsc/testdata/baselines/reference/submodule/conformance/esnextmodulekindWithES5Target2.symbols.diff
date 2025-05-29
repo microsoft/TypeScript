@@ -1,11 +1,7 @@
 --- old.esnextmodulekindWithES5Target2.symbols
 +++ new.esnextmodulekindWithES5Target2.symbols
-@@= skipped -1, +1 lines =@@
-
- === esnextmodulekindWithES5Target2.ts ===
- export default class C {
-->C : Symbol(C, Decl(esnextmodulekindWithES5Target2.ts, 0, 0))
-+>C : Symbol(default, Decl(esnextmodulekindWithES5Target2.ts, 0, 0))
+@@= skipped -4, +4 lines =@@
+ >C : Symbol(C, Decl(esnextmodulekindWithES5Target2.ts, 0, 0))
 
      static s = 0;
 ->s : Symbol(C.s, Decl(esnextmodulekindWithES5Target2.ts, 0, 24))

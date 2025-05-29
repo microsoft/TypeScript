@@ -12,7 +12,7 @@ class Abcde {
 module.exports = {
 >module.exports = {  Abcde} : { Abcde: typeof Abcde; }
 >module.exports : { Abcde: typeof Abcde; }
->module : { export=: { Abcde: typeof Abcde; }; }
+>module : { "export=": { Abcde: typeof Abcde; }; }
 >exports : { Abcde: typeof Abcde; }
 >{  Abcde} : { Abcde: typeof Abcde; }
 

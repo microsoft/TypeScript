@@ -19,3 +19,9 @@ exports.basePrototype = {
         return _this.collection.schema.primaryPath;
     },
 };
+
+
+//// [accessorInferredReturnTypeErrorInReturnStatement.d.ts]
+export declare var basePrototype: {
+    readonly primaryPath: any;
+};

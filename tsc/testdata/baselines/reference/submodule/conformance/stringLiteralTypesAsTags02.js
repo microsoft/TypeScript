@@ -62,3 +62,21 @@ if (!hasKind(x, "B")) {
 else {
     let d = x;
 }
+
+
+//// [stringLiteralTypesAsTags02.d.ts]
+type Kind = "A" | "B";
+interface Entity {
+    kind: Kind;
+}
+interface A extends Entity {
+    kind: "A";
+    a: number;
+}
+interface B extends Entity {
+    kind: "B";
+    b: string;
+}
+declare function hasKind(entity: Entity, kind: "A"): entity is A;
+declare function hasKind(entity: Entity, kind: "B"): entity is B;
+declare let x: A;

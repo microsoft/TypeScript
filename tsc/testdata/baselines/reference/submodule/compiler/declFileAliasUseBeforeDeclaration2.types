@@ -13,10 +13,10 @@ declare module "test" {
     }
     class B extends E {
 >B : B
->E : C
+>E : E
     }
     import E = A.C;
->E : typeof C
+>E : typeof E
 >A : typeof A
->C : C
+>C : E
 }

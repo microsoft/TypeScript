@@ -8,5 +8,5 @@ export default foo
 >foo : Symbol(foo, Decl(exportDefaultClassAndValue.ts, 0, 5))
 
 export default class Foo {}
->Foo : Symbol(default, Decl(exportDefaultClassAndValue.ts, 0, 13), Decl(exportDefaultClassAndValue.ts, 1, 18))
+>Foo : Symbol(foo, Decl(exportDefaultClassAndValue.ts, 0, 13), Decl(exportDefaultClassAndValue.ts, 1, 18))
 

@@ -113,3 +113,47 @@ exports.e = exports.d = void 0;
 // cjs format file, no TLA
 exports.d = import("inner/cjs");
 exports.e = import("inner/mjs");
+
+
+//// [index.d.ts]
+// esm format file
+export {};
+//// [index.d.mts]
+// esm format file
+export {};
+//// [index.d.cts]
+// cjs format file
+export {};
+//// [other.d.ts]
+// esm format file
+export declare const a: typeof import("./index.cts");
+export declare const b: typeof import("./index.mts");
+export declare const c: typeof import(".");
+export declare const f: any;
+//// [other2.d.ts]
+// esm format file
+export declare const d: any;
+export declare const e: any;
+//// [other.d.mts]
+// esm format file
+export declare const a: typeof import("./index.cts");
+export declare const b: typeof import("./index.mts");
+export declare const c: typeof import(".");
+export declare const f: any;
+//// [other2.d.mts]
+// esm format file
+export declare const d: any;
+export declare const e: any;
+//// [other.d.cts]
+// cjs format file, no TLA
+export declare const a: Promise<typeof import("./index.cts")>;
+export declare const b: Promise<typeof import("./index.mts", { with: { "resolution-mode": "import" } })>;
+export declare const c: Promise<typeof import("./index.js", { with: { "resolution-mode": "import" } })>;
+export declare const f: any;
+//// [other2.d.cts]
+// cjs format file, no TLA
+export declare const d: any;
+export declare const e: Promise<{
+    esm: true;
+    default: typeof import("./node_modules/inner/index.d.mts", { with: { "resolution-mode": "import" } });
+}>;

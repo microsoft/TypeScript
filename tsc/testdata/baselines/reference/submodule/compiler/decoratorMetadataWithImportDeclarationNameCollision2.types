@@ -11,8 +11,8 @@ export class db {
 
 === service.ts ===
 import {db as Database} from './db';
->db : typeof db
->Database : typeof db
+>db : typeof Database
+>Database : typeof Database
 
 function someDecorator(target) {
 >someDecorator : (target: any) => any
@@ -28,24 +28,24 @@ class MyClass {
 >MyClass : MyClass
 
     db: Database;
->db : db
+>db : Database
 
     constructor(db: Database) { // no collision
->db : db
+>db : Database
 
         this.db = db;
->this.db = db : db
->this.db : db
+>this.db = db : Database
+>this.db : Database
 >this : this
->db : db
->db : db
+>db : Database
+>db : Database
 
         this.db.doSomething();
 >this.db.doSomething() : void
 >this.db.doSomething : () => void
->this.db : db
+>this.db : Database
 >this : this
->db : db
+>db : Database
 >doSomething : () => void
     }
 }

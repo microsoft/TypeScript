@@ -20,7 +20,7 @@ declare global {
     export import x = A.y;
 >x : 34
 >A : typeof A
->y : y
+>y : x
 
     // Should still error
     import f = require("fs");
@@ -32,7 +32,7 @@ const m: number = x;
 >x : 34
 
 let s: x = { s: "" };
->s : y
+>s : x
 >{ s: "" } : { s: string; }
 >s : string
 >"" : ""
@@ -40,6 +40,6 @@ let s: x = { s: "" };
 void s.s;
 >void s.s : undefined
 >s.s : string
->s : y
+>s : x
 >s : string
 

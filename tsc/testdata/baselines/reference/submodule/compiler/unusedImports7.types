@@ -20,6 +20,6 @@ export default function test2() {
 
 === file2.ts ===
 import * as n from "./file1"
->n : typeof import("file1")
+>n : typeof n
 
 

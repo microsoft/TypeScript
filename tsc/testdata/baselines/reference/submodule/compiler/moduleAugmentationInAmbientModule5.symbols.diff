@@ -25,15 +25,7 @@
  }
 
  declare module "array" {
-@@= skipped -10, +10 lines =@@
- >A : Symbol(A, Decl(array.d.ts, 5, 12))
-
-     global {
-->global : Symbol(global, Decl(array.d.ts, 5, 24))
-+>global : Symbol((Missing), Decl(array.d.ts, 5, 24))
-
-         interface Array<T> {
- >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(array.d.ts, 6, 12))
+@@= skipped -17, +17 lines =@@
  >T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(array.d.ts, 7, 24))
 
              getA(): A;

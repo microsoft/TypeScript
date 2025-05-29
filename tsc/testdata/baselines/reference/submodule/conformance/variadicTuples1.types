@@ -1293,7 +1293,7 @@ call(...sa, (...x) => 42);
 // No inference to ending optional elements (except with identical structure)
 
 declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
->f20 : <T extends unknown[]>(args: [...T, (number | undefined)?]) => T
+>f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >args : [...T, (number | undefined)?]
 
 function f21<U extends string[]>(args: [...U, number?]) {
@@ -1303,13 +1303,13 @@ function f21<U extends string[]>(args: [...U, number?]) {
     let v1 = f20(args);  // U
 >v1 : U
 >f20(args) : U
->f20 : <T extends unknown[]>(args: [...T, (number | undefined)?]) => T
+>f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >args : [...U, (number | undefined)?]
 
     let v2 = f20(["foo", "bar"]);  // [string]
 >v2 : [string]
 >f20(["foo", "bar"]) : [string]
->f20 : <T extends unknown[]>(args: [...T, (number | undefined)?]) => T
+>f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >["foo", "bar"] : [string, string]
 >"foo" : "foo"
 >"bar" : "bar"
@@ -1317,18 +1317,18 @@ function f21<U extends string[]>(args: [...U, number?]) {
     let v3 = f20(["foo", 42]);  // [string]
 >v3 : [string]
 >f20(["foo", 42]) : [string]
->f20 : <T extends unknown[]>(args: [...T, (number | undefined)?]) => T
+>f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
 >["foo", 42] : [string, number]
 >"foo" : "foo"
 >42 : 42
 }
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
->f22 : { <T extends unknown[]>(args: [...T, number]): T; <T extends unknown[]>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
 >args : [...T, number]
 
 declare function f22<T extends unknown[] = []>(args: [...T]): T;
->f22 : { <T extends unknown[]>(args: [...T, number]): T; <T extends unknown[]>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
 >args : [...T]
 
 function f23<U extends string[]>(args: [...U, number]) {
@@ -1338,13 +1338,13 @@ function f23<U extends string[]>(args: [...U, number]) {
     let v1 = f22(args);  // U
 >v1 : U
 >f22(args) : U
->f22 : { <T extends unknown[]>(args: [...T, number]): T; <T extends unknown[]>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
 >args : [...U, number]
 
     let v2 = f22(["foo", "bar"]);  // [string, string]
 >v2 : [string, string]
 >f22(["foo", "bar"]) : [string, string]
->f22 : { <T extends unknown[]>(args: [...T, number]): T; <T extends unknown[]>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
 >["foo", "bar"] : [string, string]
 >"foo" : "foo"
 >"bar" : "bar"
@@ -1352,7 +1352,7 @@ function f23<U extends string[]>(args: [...U, number]) {
     let v3 = f22(["foo", 42]);  // [string]
 >v3 : [string]
 >f22(["foo", 42]) : [string]
->f22 : { <T extends unknown[]>(args: [...T, number]): T; <T extends unknown[]>(args: [...T]): T; }
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
 >["foo", 42] : [string, number]
 >"foo" : "foo"
 >42 : 42
@@ -1366,7 +1366,7 @@ interface Desc<A extends unknown[], T> {
 >args : A
 
     bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
->bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
+>bind : <T_1 extends unknown[], U extends unknown[], R>(this: Desc<[...T_1, ...U], R>, ...args: T_1) => Desc<[...U], R>
 >this : Desc<[...T, ...U], R>
 >args : T
 }
@@ -1400,7 +1400,7 @@ declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z
 >z : boolean | undefined
 
 function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
->callApi : <T extends unknown[], U>(method: (...args: [...T, object]) => U) => (...args: T) => U
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args: T) => U
 >method : (...args: [...T, object]) => U
 >args : [...T, object]
 
@@ -1416,12 +1416,12 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 
 callApi(getUser);
 >callApi(getUser) : (id: string) => string
->callApi : <T extends unknown[], U>(method: (...args: [...T, object]) => U) => (...args: T) => U
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args: T) => U
 >getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
 
 callApi(getOrgUser);
 >callApi(getOrgUser) : (id: string, orgId: number) => void
->callApi : <T extends unknown[], U>(method: (...args: [...T, object]) => U) => (...args: T) => U
+>callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args: T) => U
 >getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
 
 // Repro from #40235

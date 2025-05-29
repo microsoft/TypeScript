@@ -25,3 +25,9 @@ export const b = (null as any as import("pkg", { assert: {"resolution-mode": "im
 //// [index.js]
 export const a = null;
 export const b = null;
+
+
+//// [index.d.ts]
+export type LocalInterface = import("pkg", { assert: { "resolution-mode": "require" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
+export declare const a: any;
+export declare const b: any;

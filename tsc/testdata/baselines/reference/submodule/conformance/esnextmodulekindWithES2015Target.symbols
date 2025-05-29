@@ -2,7 +2,7 @@
 
 === esnextmodulekindWithES2015Target.ts ===
 export default class A
->A : Symbol(default, Decl(esnextmodulekindWithES2015Target.ts, 0, 0))
+>A : Symbol(A, Decl(esnextmodulekindWithES2015Target.ts, 0, 0))
 {
     constructor ()
     {

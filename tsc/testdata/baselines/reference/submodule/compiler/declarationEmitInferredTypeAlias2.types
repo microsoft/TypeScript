@@ -3,10 +3,10 @@
 === 0.ts ===
 {
     type Data = string | boolean;
->Data : Data
+>Data : string | boolean
 
     let obj: Data = true;
->obj : Data
+>obj : string | boolean
 >true : true
 }
 export { }

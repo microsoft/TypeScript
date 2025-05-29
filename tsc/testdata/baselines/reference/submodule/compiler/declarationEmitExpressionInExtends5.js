@@ -36,3 +36,17 @@ var Test;
     }
     Test.getClass = getClass;
 })(Test || (Test = {}));
+
+
+//// [declarationEmitExpressionInExtends5.d.ts]
+declare namespace Test {
+    export interface IFace {
+    }
+    export class SomeClass implements IFace {
+    }
+    const Derived_base: new () => IFace;
+    export class Derived extends Derived_base {
+    }
+    export function getClass<T>(): new () => T;
+    export {};
+}

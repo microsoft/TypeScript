@@ -1,11 +1,6 @@
 --- old.aliasDoesNotDuplicateSignatures.symbols
 +++ new.aliasDoesNotDuplicateSignatures.symbols
-@@= skipped -7, +7 lines =@@
- >f : Symbol(f, Decl(demo.d.ts, 0, 26))
- }
- declare module 'demoModule' {
-->'demoModule' : Symbol("demoModule", Decl(demo.d.ts, 2, 1))
-+>'demoModule' : Symbol('demoModule', Decl(demo.d.ts, 2, 1))
+@@= skipped -11, +11 lines =@@
 
      import alias = demoNS;
  >alias : Symbol(alias, Decl(demo.d.ts, 3, 29))

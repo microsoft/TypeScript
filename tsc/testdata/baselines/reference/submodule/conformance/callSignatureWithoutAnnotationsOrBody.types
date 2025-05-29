@@ -34,7 +34,7 @@ var r3 = i.f();
 >f : () => any
 
 var a: {
->a : { (): any; f: () => any; }
+>a : { (): any; f(): any; }
 
     ();
     f();
@@ -44,12 +44,12 @@ var a: {
 var r4 = a();
 >r4 : any
 >a() : any
->a : { (): any; f: () => any; }
+>a : { (): any; f(): any; }
 
 var r5 = a.f();
 >r5 : any
 >a.f() : any
 >a.f : () => any
->a : { (): any; f: () => any; }
+>a : { (): any; f(): any; }
 >f : () => any
 

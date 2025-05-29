@@ -2,17 +2,17 @@
 
 === usage.js ===
 const x = require("./lateBoundAssignmentDeclarationSupport5.js");
->x : typeof import("lateBoundAssignmentDeclarationSupport5")
->require("./lateBoundAssignmentDeclarationSupport5.js") : typeof import("lateBoundAssignmentDeclarationSupport5")
+>x : typeof x
+>require("./lateBoundAssignmentDeclarationSupport5.js") : typeof x
 >require : any
 >"./lateBoundAssignmentDeclarationSupport5.js" : "./lateBoundAssignmentDeclarationSupport5.js"
 
 const inst =  new x.F();
 >inst : any
 >new x.F() : any
->x.F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
->x : typeof import("lateBoundAssignmentDeclarationSupport5")
->F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
+>x.F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>x : typeof x
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 
 const y = inst["my-fake-sym"];
 >y : any
@@ -25,7 +25,7 @@ const z = inst[x.S];
 >inst[x.S] : any
 >inst : any
 >x.S : unique symbol
->x : typeof import("lateBoundAssignmentDeclarationSupport5")
+>x : typeof x
 >S : unique symbol
 
 === lateBoundAssignmentDeclarationSupport5.js ===
@@ -40,14 +40,14 @@ const _str = "my-fake-sym";
 >"my-fake-sym" : "my-fake-sym"
 
 function F() {
->F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 }
 F.prototype = {
->F.prototype = {    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; [_str]: string; }
->F.prototype : { [_sym]: string; [_str]: string; }
->F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
->prototype : { [_sym]: string; [_str]: string; }
->{    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; [_str]: string; }
+>F.prototype = {    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; "my-fake-sym": string; }
+>F.prototype : { [_sym]: string; "my-fake-sym": string; }
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>prototype : { [_sym]: string; "my-fake-sym": string; }
+>{    [_sym]: "ok",    [_str]: "ok"} : { [_sym]: string; "my-fake-sym": string; }
 
     [_sym]: "ok",
 >[_sym] : string
@@ -62,7 +62,7 @@ F.prototype = {
 const inst =  new F();
 >inst : any
 >new F() : any
->F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 
 const _y = inst[_str];
 >_y : any
@@ -77,20 +77,20 @@ const _z = inst[_sym];
 >_sym : unique symbol
 
 module.exports.F = F;
->module.exports.F = F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
->module.exports.F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
->module.exports : typeof import("lateBoundAssignmentDeclarationSupport5")
->module : { "lateBoundAssignmentDeclarationSupport5": typeof import("lateBoundAssignmentDeclarationSupport5"); }
->exports : typeof import("lateBoundAssignmentDeclarationSupport5")
->F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
->F : { (): void; prototype: { [_sym]: string; [_str]: string; }; }
+>module.exports.F = F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>module.exports.F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("./lateBoundAssignmentDeclarationSupport5"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
+>F : { (): void; prototype: { [_sym]: string; "my-fake-sym": string; }; }
 
 module.exports.S = _sym;
 >module.exports.S = _sym : unique symbol
 >module.exports.S : unique symbol
->module.exports : typeof import("lateBoundAssignmentDeclarationSupport5")
->module : { "lateBoundAssignmentDeclarationSupport5": typeof import("lateBoundAssignmentDeclarationSupport5"); }
->exports : typeof import("lateBoundAssignmentDeclarationSupport5")
+>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
+>module : { "\"lateBoundAssignmentDeclarationSupport5\"": typeof import("./lateBoundAssignmentDeclarationSupport5"); }
+>exports : typeof import("./lateBoundAssignmentDeclarationSupport5")
 >S : unique symbol
 >_sym : unique symbol
 

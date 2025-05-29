@@ -1,23 +1,6 @@
 --- old.controlFlowOptionalChain.types
 +++ new.controlFlowOptionalChain.types
-@@= skipped -2, +2 lines =@@
- === controlFlowOptionalChain.ts ===
- // assignments in shortcutting chain
- declare const o: undefined | {
-->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
-+>o : (...args: any[]) => any | undefined
-
-     [key: string]: any;
- >key : string
-@@= skipped -18, +18 lines =@@
-
- o?.[a = 1];
- >o?.[a = 1] : any
-->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
-+>o : (...args: any[]) => any | undefined
- >a = 1 : 1
- >a : number
- >1 : 1
+@@= skipped -27, +27 lines =@@
 
  a.toString();
  >a.toString() : string
@@ -29,16 +12,7 @@
 
  let b: number;
  >b : number
-@@= skipped -17, +17 lines =@@
- o?.x[b = 1];
- >o?.x[b = 1] : any
- >o?.x : any
-->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
-+>o : (...args: any[]) => any | undefined
- >x : any
- >b = 1 : 1
- >b : number
-@@= skipped -8, +8 lines =@@
+@@= skipped -18, +18 lines =@@
 
  b.toString();
  >b.toString() : string
@@ -50,14 +24,7 @@
 
  let c: number;
  >c : number
-
- o?.(c = 1)
- >o?.(c = 1) : any
-->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
-+>o : (...args: any[]) => any | undefined
- >c = 1 : 1
- >c : number
- >1 : 1
+@@= skipped -16, +16 lines =@@
 
  c.toString();
  >c.toString() : string
@@ -69,16 +36,7 @@
 
  let d: number;
  >d : number
-@@= skipped -26, +26 lines =@@
- o?.x(d = 1);
- >o?.x(d = 1) : any
- >o?.x : any
-->o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
-+>o : (...args: any[]) => any | undefined
- >x : any
- >d = 1 : 1
- >d : number
-@@= skipped -8, +8 lines =@@
+@@= skipped -18, +18 lines =@@
 
  d.toString();
  >d.toString() : string
@@ -90,85 +48,7 @@
 
  // type predicates
  declare const f: undefined | ((x: any) => x is number);
-@@= skipped -52, +52 lines =@@
- >x : string | number
-
- declare const o2: { f(x: any): x is number; } | undefined;
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
- >f : (x: any) => x is number
- >x : any
-
- if (o2?.f(x)) {
- >o2?.f(x) : boolean | undefined
- >o2?.f : ((x: any) => x is number) | undefined
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
- >f : ((x: any) => x is number) | undefined
- >x : string | number
-
-@@= skipped -16, +16 lines =@@
-
-     o2.f; // (x: any) => x is number
- >o2.f : (x: any) => x is number
-->o2 : { f(x: any): x is number; }
-+>o2 : { f: (x: any) => x is number; }
- >f : (x: any) => x is number
-
-     o2?.f;
- >o2?.f : (x: any) => x is number
-->o2 : { f(x: any): x is number; }
-+>o2 : { f: (x: any) => x is number; }
- >f : (x: any) => x is number
-
-     o2?.f(x);
- >o2?.f(x) : boolean
- >o2?.f : (x: any) => x is number
-->o2 : { f(x: any): x is number; }
-+>o2 : { f: (x: any) => x is number; }
- >f : (x: any) => x is number
- >x : number
- }
-@@= skipped -20, +20 lines =@@
- >x : string | number
-
-     o2;
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
-
-     o2?.f;
- >o2?.f : ((x: any) => x is number) | undefined
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
- >f : ((x: any) => x is number) | undefined
-
-     o2.f;
- >o2.f : (x: any) => x is number
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
- >f : (x: any) => x is number
- }
- x;
- >x : string | number
-
- o2;
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
-
- o2?.f;
- >o2?.f : ((x: any) => x is number) | undefined
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
- >f : ((x: any) => x is number) | undefined
-
- o2.f;
- >o2.f : (x: any) => x is number
-->o2 : { f(x: any): x is number; } | undefined
-+>o2 : { f: (x: any) => x is number; } | undefined
- >f : (x: any) => x is number
-
- declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
-@@= skipped -83, +83 lines =@@
+@@= skipped -171, +171 lines =@@
  >x : 1 | 2
 
  declare const o4: { x?: { y: boolean } };

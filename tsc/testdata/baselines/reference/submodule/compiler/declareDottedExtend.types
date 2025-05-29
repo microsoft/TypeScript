@@ -10,21 +10,21 @@ declare module A.B
 }
 
 import ab = A.B;
->ab : typeof B
+>ab : typeof ab
 >A : typeof A
->B : typeof B
+>B : typeof ab
 
 class D extends ab.C{ }
 >D : D
->ab.C : C
->ab : typeof B
->C : typeof C
+>ab.C : ab.C
+>ab : typeof ab
+>C : typeof ab.C
 
 class E extends A.B.C{ }
 >E : E
->A.B.C : C
->A.B : typeof B
+>A.B.C : ab.C
+>A.B : typeof ab
 >A : typeof A
->B : typeof B
->C : typeof C
+>B : typeof ab
+>C : typeof ab.C
 

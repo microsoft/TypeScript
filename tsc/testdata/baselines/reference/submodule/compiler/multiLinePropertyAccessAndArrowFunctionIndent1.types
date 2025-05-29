@@ -28,10 +28,10 @@ return this.edit(role)
 
             .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
 >then : any
->(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: IHttpPromiseCallbackArg<Role>) => any
->data : IHttpPromiseCallbackArg<Role>
+>(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: ng.IHttpPromiseCallbackArg<Role>) => any
+>data : ng.IHttpPromiseCallbackArg<Role>
 >ng : any
 >data.data : any
->data : IHttpPromiseCallbackArg<Role>
+>data : ng.IHttpPromiseCallbackArg<Role>
 >data : any
 

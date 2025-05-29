@@ -115,7 +115,7 @@ export type Iter = Func<[step: number, iterations: number]>;
 >Iter : Iter
 
 export function readSegment([length, count]: [number, number]) {}
->readSegment : (__0: [number, number]) => void
+>readSegment : ([length, count]: [number, number]) => void
 >length : number
 >count : number
 
@@ -124,7 +124,7 @@ export const val = null as any as Parameters<typeof readSegment>[0];
 >val : [number, number]
 >null as any as Parameters<typeof readSegment>[0] : [number, number]
 >null as any : any
->readSegment : (__0: [number, number]) => void
+>readSegment : ([length, count]: [number, number]) => void
 
 export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
 >RecursiveTupleA : RecursiveTupleA

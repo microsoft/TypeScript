@@ -1,15 +1,6 @@
 --- old.defaultDeclarationEmitShadowedNamedCorrectly.types
 +++ new.defaultDeclarationEmitShadowedNamedCorrectly.types
-@@= skipped -1, +1 lines =@@
-
- === this.ts ===
- import * as me from "./this";
-->me : typeof me
-+>me : typeof import("this")
-
- export interface Things<P, T> {
-     p: P;
-@@= skipped -10, +10 lines =@@
+@@= skipped -11, +11 lines =@@
  >t : T
  }
  export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
@@ -18,12 +9,8 @@
  >x : new () => CTor & { props: P; }
  >props : P
 
-@@= skipped -12, +12 lines =@@
- }
-
- export default class MyComponent {
-->MyComponent : me.default
-+>MyComponent : default
+@@= skipped -15, +15 lines =@@
+ >MyComponent : me.default
 
      props: Props;
 ->props : me.Props
@@ -41,13 +28,9 @@
 ->create : me.Things<me.Props, me.default>
 ->make(me.default) : me.Things<me.Props, me.default>
 ->make : <P, CTor>(x: { new (): CTor & { props: P; }; }) => Things<P, CTor>
-->me.default : typeof me.default
-->me : typeof me
-->default : typeof me.default
-+>create : Things<Props, default>
-+>make(me.default) : Things<Props, default>
++>create : Things<Props, me.default>
++>make(me.default) : Things<Props, me.default>
 +>make : <P, CTor>(x: new () => CTor & { props: P; }) => Things<P, CTor>
-+>me.default : typeof default
-+>me : typeof import("this")
-+>default : typeof default
- }
+ >me.default : typeof me.default
+ >me : typeof me
+ >default : typeof me.default

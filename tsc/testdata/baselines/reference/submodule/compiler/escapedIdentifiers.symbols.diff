@@ -1,31 +1,6 @@
 --- old.escapedIdentifiers.symbols
 +++ new.escapedIdentifiers.symbols
-@@= skipped -13, +13 lines =@@
-
- // var decl
- var \u0061 = 1;
-->\u0061 : Symbol(\u0061, Decl(escapedIdentifiers.ts, 12, 3))
-+>\u0061 : Symbol(a, Decl(escapedIdentifiers.ts, 12, 3))
-
- a ++;
-->a : Symbol(\u0061, Decl(escapedIdentifiers.ts, 12, 3))
-+>a : Symbol(a, Decl(escapedIdentifiers.ts, 12, 3))
-
- \u0061 ++;
-->\u0061 : Symbol(\u0061, Decl(escapedIdentifiers.ts, 12, 3))
-+>\u0061 : Symbol(a, Decl(escapedIdentifiers.ts, 12, 3))
-
- var b = 1;
- >b : Symbol(b, Decl(escapedIdentifiers.ts, 16, 3))
-@@= skipped -25, +25 lines =@@
- >baz1 : Symbol(baz1, Decl(escapedIdentifiers.ts, 22, 14))
- }
- module moduleType\u0032 { 
-->moduleType\u0032 : Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
-+>moduleType\u0032 : Symbol(moduleType2, Decl(escapedIdentifiers.ts, 23, 1))
-
-     export var baz2: number;
- >baz2 : Symbol(baz2, Decl(escapedIdentifiers.ts, 25, 14))
+@@= skipped -45, +45 lines =@@
  }
 
  moduleType1.baz1 = 3;
@@ -44,23 +19,21 @@
 
  moduleType2.baz2 = 3;
 ->moduleType2.baz2 : Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
-->moduleType2 : Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
-->baz2 : Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
 +>moduleType2.baz2 : Symbol(baz2, Decl(escapedIdentifiers.ts, 25, 14))
-+>moduleType2 : Symbol(moduleType2, Decl(escapedIdentifiers.ts, 23, 1))
+ >moduleType2 : Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
+->baz2 : Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
 +>baz2 : Symbol(baz2, Decl(escapedIdentifiers.ts, 25, 14))
 
  moduleType\u0032.baz2 = 3;
 ->moduleType\u0032.baz2 : Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
-->moduleType\u0032 : Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
-->baz2 : Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
 +>moduleType\u0032.baz2 : Symbol(baz2, Decl(escapedIdentifiers.ts, 25, 14))
-+>moduleType\u0032 : Symbol(moduleType2, Decl(escapedIdentifiers.ts, 23, 1))
+ >moduleType\u0032 : Symbol(moduleType\u0032, Decl(escapedIdentifiers.ts, 23, 1))
+->baz2 : Symbol(moduleType\u0032.baz2, Decl(escapedIdentifiers.ts, 25, 14))
 +>baz2 : Symbol(baz2, Decl(escapedIdentifiers.ts, 25, 14))
 
  // classes
 
-@@= skipped -32, +32 lines =@@
+@@= skipped -25, +25 lines =@@
  >classType1 : Symbol(classType1, Decl(escapedIdentifiers.ts, 31, 26))
 
      public foo1: number;
@@ -68,8 +41,7 @@
 +>foo1 : Symbol(foo1, Decl(escapedIdentifiers.ts, 35, 18))
  }
  class classType\u0032 { 
-->classType\u0032 : Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
-+>classType\u0032 : Symbol(classType2, Decl(escapedIdentifiers.ts, 37, 1))
+ >classType\u0032 : Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
 
      public foo2: number;
 ->foo2 : Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
@@ -100,8 +72,7 @@
 
  var classType2Object1 = new classType2();
  >classType2Object1 : Symbol(classType2Object1, Decl(escapedIdentifiers.ts, 46, 3))
-->classType2 : Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
-+>classType2 : Symbol(classType2, Decl(escapedIdentifiers.ts, 37, 1))
+ >classType2 : Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
 
  classType2Object1.foo2 = 2;
 ->classType2Object1.foo2 : Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
@@ -112,8 +83,7 @@
 
  var classType2Object2 = new classType\u0032();
  >classType2Object2 : Symbol(classType2Object2, Decl(escapedIdentifiers.ts, 48, 3))
-->classType\u0032 : Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
-+>classType\u0032 : Symbol(classType2, Decl(escapedIdentifiers.ts, 37, 1))
+ >classType\u0032 : Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
 
  classType2Object2.foo2 = 2;
 ->classType2Object2.foo2 : Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
@@ -131,8 +101,7 @@
 +>bar1 : Symbol(bar1, Decl(escapedIdentifiers.ts, 52, 26))
  }
  interface interfaceType\u0032 { 
-->interfaceType\u0032 : Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
-+>interfaceType\u0032 : Symbol(interfaceType2, Decl(escapedIdentifiers.ts, 54, 1))
+ >interfaceType\u0032 : Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
 
      bar2: number;
 ->bar2 : Symbol(interfaceType\u0032.bar2, Decl(escapedIdentifiers.ts, 55, 31))
@@ -164,8 +133,7 @@
 
  var interfaceType2Object1 = <interfaceType2>{ bar2: 0 };
  >interfaceType2Object1 : Symbol(interfaceType2Object1, Decl(escapedIdentifiers.ts, 63, 3))
-->interfaceType2 : Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
-+>interfaceType2 : Symbol(interfaceType2, Decl(escapedIdentifiers.ts, 54, 1))
+@@= skipped -10, +10 lines =@@
  >bar2 : Symbol(bar2, Decl(escapedIdentifiers.ts, 63, 45))
 
  interfaceType2Object1.bar2 = 2;
@@ -177,8 +145,7 @@
 
  var interfaceType2Object2 = <interfaceType\u0032>{ bar2: 0 };
  >interfaceType2Object2 : Symbol(interfaceType2Object2, Decl(escapedIdentifiers.ts, 65, 3))
-->interfaceType\u0032 : Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
-+>interfaceType\u0032 : Symbol(interfaceType2, Decl(escapedIdentifiers.ts, 54, 1))
+@@= skipped -10, +10 lines =@@
  >bar2 : Symbol(bar2, Decl(escapedIdentifiers.ts, 65, 50))
 
  interfaceType2Object2.bar2 = 2;
@@ -190,32 +157,15 @@
 
 
  // arguments
-@@= skipped -30, +30 lines =@@
+@@= skipped -10, +10 lines =@@
  >testClass : Symbol(testClass, Decl(escapedIdentifiers.ts, 66, 31))
 
      public func(arg1: number, arg\u0032: string, arg\u0033: boolean, arg4: number) { 
 ->func : Symbol(testClass.func, Decl(escapedIdentifiers.ts, 70, 17))
 +>func : Symbol(func, Decl(escapedIdentifiers.ts, 70, 17))
  >arg1 : Symbol(arg1, Decl(escapedIdentifiers.ts, 71, 16))
-->arg\u0032 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 71, 29))
-->arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 71, 48))
-+>arg\u0032 : Symbol(arg2, Decl(escapedIdentifiers.ts, 71, 29))
-+>arg\u0033 : Symbol(arg3, Decl(escapedIdentifiers.ts, 71, 48))
- >arg4 : Symbol(arg4, Decl(escapedIdentifiers.ts, 71, 68))
-
-         arg\u0031 = 1;
- >arg\u0031 : Symbol(arg1, Decl(escapedIdentifiers.ts, 71, 16))
-
-         arg2 = 'string';
-->arg2 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 71, 29))
-+>arg2 : Symbol(arg2, Decl(escapedIdentifiers.ts, 71, 29))
-
-         arg\u0033 = true;
-->arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 71, 48))
-+>arg\u0033 : Symbol(arg3, Decl(escapedIdentifiers.ts, 71, 48))
-
-         arg4 = 2;
- >arg4 : Symbol(arg4, Decl(escapedIdentifiers.ts, 71, 68))
+ >arg\u0032 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 71, 29))
+ >arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 71, 48))
 @@= skipped -25, +25 lines =@@
  >constructorTestClass : Symbol(constructorTestClass, Decl(escapedIdentifiers.ts, 77, 1))
 
@@ -225,8 +175,8 @@
 ->arg\u0033 : Symbol(constructorTestClass.arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
 ->arg4 : Symbol(constructorTestClass.arg4, Decl(escapedIdentifiers.ts, 81, 88))
 +>arg1 : Symbol(arg1, Decl(escapedIdentifiers.ts, 81, 17))
-+>arg\u0032 : Symbol(arg2, Decl(escapedIdentifiers.ts, 81, 37))
-+>arg\u0033 : Symbol(arg3, Decl(escapedIdentifiers.ts, 81, 62))
++>arg\u0032 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
++>arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
 +>arg4 : Symbol(arg4, Decl(escapedIdentifiers.ts, 81, 88))
      }
  }
@@ -243,17 +193,17 @@
 
  constructorTestObject.arg2 = 'string';
 ->constructorTestObject.arg2 : Symbol(constructorTestClass.arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
-+>constructorTestObject.arg2 : Symbol(arg2, Decl(escapedIdentifiers.ts, 81, 37))
++>constructorTestObject.arg2 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
  >constructorTestObject : Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
 ->arg2 : Symbol(constructorTestClass.arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
-+>arg2 : Symbol(arg2, Decl(escapedIdentifiers.ts, 81, 37))
++>arg2 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
 
  constructorTestObject.arg\u0033 = true;
 ->constructorTestObject.arg\u0033 : Symbol(constructorTestClass.arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
-+>constructorTestObject.arg\u0033 : Symbol(arg3, Decl(escapedIdentifiers.ts, 81, 62))
++>constructorTestObject.arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
  >constructorTestObject : Symbol(constructorTestObject, Decl(escapedIdentifiers.ts, 84, 3))
 ->arg\u0033 : Symbol(constructorTestClass.arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
-+>arg\u0033 : Symbol(arg3, Decl(escapedIdentifiers.ts, 81, 62))
++>arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
 
  constructorTestObject.arg4 = 2;
 ->constructorTestObject.arg4 : Symbol(constructorTestClass.arg4, Decl(escapedIdentifiers.ts, 81, 88))

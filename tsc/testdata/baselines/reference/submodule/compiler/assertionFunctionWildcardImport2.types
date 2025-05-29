@@ -28,7 +28,7 @@ export {
 
 === test.ts ===
 import * as asserts from "./asserts";
->asserts : typeof import("asserts")
+>asserts : typeof asserts
 
 function test(obj: string | null): void {
 >test : (obj: string | null) => void
@@ -37,7 +37,7 @@ function test(obj: string | null): void {
     asserts.isNonNullable(obj);
 >asserts.isNonNullable(obj) : void
 >asserts.isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
->asserts : typeof import("asserts")
+>asserts : typeof asserts
 >isNonNullable : <T>(obj: T) => asserts obj is NonNullable<T>
 >obj : string | null
 

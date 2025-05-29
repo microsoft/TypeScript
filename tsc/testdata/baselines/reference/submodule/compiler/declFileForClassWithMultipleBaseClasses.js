@@ -41,3 +41,26 @@ class D {
     foo() { }
     bar() { }
 }
+
+
+//// [declFileForClassWithMultipleBaseClasses.d.ts]
+declare class A {
+    foo(): void;
+}
+declare class B {
+    bar(): void;
+}
+interface I {
+    baz(): any;
+}
+interface J {
+    bat(): any;
+}
+declare class D implements I, J {
+    baz(): void;
+    bat(): void;
+    foo(): void;
+    bar(): void;
+}
+interface I extends A, B {
+}

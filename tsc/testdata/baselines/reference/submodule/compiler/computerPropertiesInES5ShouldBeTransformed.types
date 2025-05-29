@@ -2,8 +2,8 @@
 
 === computerPropertiesInES5ShouldBeTransformed.ts ===
 const b = ({ [`key`]: renamed }) => renamed;
->b : (__0: { key: any; }) => any
->({ [`key`]: renamed }) => renamed : (__0: { key: any; }) => any
+>b : ({ [`key`]: renamed }: { key: any; }) => any
+>({ [`key`]: renamed }) => renamed : ({ [`key`]: renamed }: { key: any; }) => any
 >`key` : "key"
 >renamed : any
 >renamed : any

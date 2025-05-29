@@ -5,5 +5,5 @@
 
     *() { }
 -> : Symbol(C[(Missing)], Decl(MemberFunctionDeclaration4_es6.ts, 0, 9))
-+> : Symbol(, Decl(MemberFunctionDeclaration4_es6.ts, 0, 9))
++> : Symbol((Missing), Decl(MemberFunctionDeclaration4_es6.ts, 0, 9))
  }

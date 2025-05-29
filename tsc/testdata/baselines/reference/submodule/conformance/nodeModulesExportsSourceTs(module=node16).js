@@ -29,3 +29,7 @@ export const x: () => Thing = null as any;
 
 //// [index.js]
 export const a = (await import("inner")).x();
+
+
+//// [index.d.ts]
+export declare const a: any;

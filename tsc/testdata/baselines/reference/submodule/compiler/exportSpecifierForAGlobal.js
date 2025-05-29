@@ -20,3 +20,8 @@ function f() {
     var x;
     return x;
 }
+
+
+//// [b.d.ts]
+export { X };
+export declare function f(): X;

@@ -25,3 +25,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.value = void 0;
 const provider = require("./provider");
 exports.value = provider.Enum.Value1;
+
+
+//// [provider.d.ts]
+export declare enum Enum {
+    Value1 = 0,
+    Value2 = 1
+}
+//// [consumer.d.ts]
+import provider = require('./provider');
+export declare const value = provider.Enum.Value1;

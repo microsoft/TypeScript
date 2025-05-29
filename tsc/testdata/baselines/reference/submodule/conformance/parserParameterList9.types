@@ -5,6 +5,6 @@ class C {
 >C : C
 
    foo(...bar?) { }
->foo : (...bar: any[]) => void
+>foo : (...bar?: any[]) => void
 >bar : any[]
 }

@@ -5,6 +5,6 @@ declare module M {
 >M : typeof M
 
   declare enum E {
->E : M.E
+>E : E
   }
 }

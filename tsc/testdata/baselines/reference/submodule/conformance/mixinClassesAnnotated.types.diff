@@ -5,25 +5,16 @@
 
      class extends superClass {
 ->class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); message: string; prototype: Printable<any>.(Anonymous class); } & T
-+>class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class)<T>; message: string; prototype: (Anonymous class)<any>; } & T
++>class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); message: string; prototype: Printable.(Anonymous class); } & T
  >superClass : Base
 
          static message = "hello";
-@@= skipped -34, +34 lines =@@
- >superClass : T
-
-     class C extends superClass {
-->C : C
-+>C : C<T>
- >superClass : {}
-
-         _tag: string;
-@@= skipped -24, +24 lines =@@
+@@= skipped -58, +58 lines =@@
          }
      }
      return C;
 ->C : { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
-+>C : { new (...args: any[]): C<T>; prototype: C<any>; } & T
++>C : { new (...args: any[]): C; prototype: Tagged.C; } & T
  }
 
  const Thing1 = Tagged(Derived);

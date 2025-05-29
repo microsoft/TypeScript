@@ -2,7 +2,7 @@
 
 === parserSymbolProperty8.ts ===
 var x: {
->x : { [Symbol.toPrimitive]: () => string; }
+>x : { [Symbol.toPrimitive](): string; }
 
     [Symbol.toPrimitive](): string
 >[Symbol.toPrimitive] : () => string

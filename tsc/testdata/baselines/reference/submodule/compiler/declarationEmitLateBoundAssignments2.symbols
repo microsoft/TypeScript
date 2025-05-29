@@ -23,7 +23,7 @@ export function decl() {}
 
 decl["B"] = 'foo'
 >decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 20))
->"B" : Symbol(B, Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
+>"B" : Symbol("B", Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
 
 export function decl2() {}
 >decl2 : Symbol(decl2, Decl(declarationEmitLateBoundAssignments2.ts, 9, 17))
@@ -93,7 +93,7 @@ export const arrow = () => {}
 
 arrow["B"] = 'bar'
 >arrow : Symbol(arrow, Decl(declarationEmitLateBoundAssignments2.ts, 38, 12))
->"B" : Symbol(B, Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
+>"B" : Symbol("B", Decl(declarationEmitLateBoundAssignments2.ts, 38, 29))
 
 export const arrow2 = () => {}
 >arrow2 : Symbol(arrow2, Decl(declarationEmitLateBoundAssignments2.ts, 41, 12))

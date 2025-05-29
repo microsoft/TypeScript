@@ -2,7 +2,7 @@
 
 === file2.ts ===
 import c = require('./file1')
->c : typeof import("file1")
+>c : typeof c
 
 === file1.ts ===
 export class Calculator {

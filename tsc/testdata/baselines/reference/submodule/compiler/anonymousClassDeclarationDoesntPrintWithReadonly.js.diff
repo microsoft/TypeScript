@@ -41,18 +41,7 @@
 -        }
 -        return class_1;
 -    }(X));
--}
--
--
--//// [anonymousClassDeclarationDoesntPrintWithReadonly.d.ts]
--export declare class X {
--    readonly a: number;
--    constructor(a: number);
--}
--export declare function y(): {
--    new (a: number): {
--        readonly a: number;
 +    return class extends X {
-     };
--};
-+}
++    };
+ }
+

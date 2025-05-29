@@ -15,3 +15,6 @@ exports.x = void 0;
 /// <reference path="../lib/bar.d.ts" preserve="true" />
 exports.x = y;
 //# sourceMappingURL=../src/myMapRoot/index.js.map
+
+//// [/app/bin/index.d.ts]
+export declare const x: number;

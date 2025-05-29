@@ -14,9 +14,9 @@ declare module chrome.debugger {
 export const tabId = chrome.debugger.tabId;
 >tabId : number
 >chrome.debugger.tabId : number
->chrome.debugger : typeof debugger
+>chrome.debugger : typeof chrome.debugger
 >chrome : typeof chrome
->debugger : typeof debugger
+>debugger : typeof chrome.debugger
 >tabId : number
 
 declare module test.class {}

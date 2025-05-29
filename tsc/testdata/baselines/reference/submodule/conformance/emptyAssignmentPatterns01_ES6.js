@@ -10,3 +10,7 @@ var a: any;
 var a;
 ({} = a);
 ([] = a);
+
+
+//// [emptyAssignmentPatterns01_ES6.d.ts]
+declare var a: any;

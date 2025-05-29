@@ -1267,13 +1267,13 @@ func isNonPrimitiveType(t *Type) bool {
 func (c *Checker) getTypeNamesForErrorDisplay(left *Type, right *Type) (string, string) {
 	var leftStr string
 	if c.symbolValueDeclarationIsContextSensitive(left.symbol) {
-		leftStr = c.typeToStringEx(left, left.symbol.ValueDeclaration, TypeFormatFlagsNone)
+		leftStr = c.typeToStringEx(left, left.symbol.ValueDeclaration, TypeFormatFlagsNone, nil)
 	} else {
 		leftStr = c.TypeToString(left)
 	}
 	var rightStr string
 	if c.symbolValueDeclarationIsContextSensitive(right.symbol) {
-		rightStr = c.typeToStringEx(right, right.symbol.ValueDeclaration, TypeFormatFlagsNone)
+		rightStr = c.typeToStringEx(right, right.symbol.ValueDeclaration, TypeFormatFlagsNone, nil)
 	} else {
 		rightStr = c.TypeToString(right)
 	}
@@ -1285,7 +1285,7 @@ func (c *Checker) getTypeNamesForErrorDisplay(left *Type, right *Type) (string, 
 }
 
 func (c *Checker) getTypeNameForErrorDisplay(t *Type) string {
-	return c.typeToStringEx(t, nil /*enclosingDeclaration*/, TypeFormatFlagsUseFullyQualifiedType)
+	return c.typeToStringEx(t, nil /*enclosingDeclaration*/, TypeFormatFlagsUseFullyQualifiedType, nil)
 }
 
 func (c *Checker) symbolValueDeclarationIsContextSensitive(symbol *ast.Symbol) bool {
@@ -4645,7 +4645,7 @@ func (r *Relater) reportErrorResults(originalSource *Type, originalTarget *Type,
 			prop = core.Find(r.c.getPropertiesOfUnionOrIntersectionType(originalTarget), isConflictingPrivateProperty)
 		}
 		if prop != nil {
-			r.reportError(message, r.c.typeToStringEx(originalTarget, nil /*enclosingDeclaration*/, TypeFormatFlagsNoTypeReduction), r.c.symbolToString(prop))
+			r.reportError(message, r.c.typeToStringEx(originalTarget, nil /*enclosingDeclaration*/, TypeFormatFlagsNoTypeReduction, nil), r.c.symbolToString(prop))
 		}
 	}
 	r.reportRelationError(headMessage, source, target)

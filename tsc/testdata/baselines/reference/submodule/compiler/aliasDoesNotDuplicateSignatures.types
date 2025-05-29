@@ -11,11 +11,11 @@ declare module 'demoModule' {
 >'demoModule' : typeof import("demoModule")
 
     import alias = demoNS;
->alias : typeof demoNS
->demoNS : typeof demoNS
+>alias : typeof alias
+>demoNS : typeof alias
 
     export = alias;
->alias : typeof demoNS
+>alias : typeof alias
 }
 === user.ts ===
 import { f } from 'demoModule';

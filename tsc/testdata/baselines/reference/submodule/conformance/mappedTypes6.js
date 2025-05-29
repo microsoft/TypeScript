@@ -196,3 +196,79 @@ x4.a = 1; // Error
 x4.b = 1; // Error
 x5.a = 1;
 x5.b = 1;
+
+
+//// [mappedTypes6.d.ts]
+type T00<T> = {
+    [P in keyof T]: T[P];
+};
+type T01<T> = {
+    [P in keyof T]?: T[P];
+};
+type T02<T> = {
+    [P in keyof T]+?: T[P];
+};
+type T03<T> = {
+    [P in keyof T]-?: T[P];
+};
+type T04<T> = {
+    readonly [P in keyof T]: T[P];
+};
+type T05<T> = {
+    readonly [P in keyof T]?: T[P];
+};
+type T06<T> = {
+    readonly [P in keyof T]+?: T[P];
+};
+type T07<T> = {
+    readonly [P in keyof T]-?: T[P];
+};
+type T08<T> = {
+    +readonly [P in keyof T]: T[P];
+};
+type T09<T> = {
+    +readonly [P in keyof T]?: T[P];
+};
+type T10<T> = {
+    +readonly [P in keyof T]+?: T[P];
+};
+type T11<T> = {
+    +readonly [P in keyof T]-?: T[P];
+};
+type T12<T> = {
+    -readonly [P in keyof T]: T[P];
+};
+type T13<T> = {
+    -readonly [P in keyof T]?: T[P];
+};
+type T14<T> = {
+    -readonly [P in keyof T]+?: T[P];
+};
+type T15<T> = {
+    -readonly [P in keyof T]-?: T[P];
+};
+declare function f1<T>(x: Required<T>, y: T, z: Partial<T>): void;
+type Denullified<T> = {
+    [P in keyof T]-?: NonNullable<T[P]>;
+};
+declare function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>): void;
+declare function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>): void;
+type Readwrite<T> = {
+    -readonly [P in keyof T]: T[P];
+};
+declare function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>): void;
+type Foo = {
+    a: number;
+    b: number | undefined;
+    c?: number;
+    d?: number | undefined;
+};
+declare let x1: Foo;
+declare let x2: Required<Foo>;
+type Bar = {
+    a: number;
+    readonly b: number;
+};
+declare let x3: Bar;
+declare let x4: Readonly<Bar>;
+declare let x5: Readwrite<Bar>;

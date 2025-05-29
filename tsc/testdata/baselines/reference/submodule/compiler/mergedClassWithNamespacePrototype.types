@@ -9,7 +9,7 @@ declare namespace Foo {
 >Foo : typeof Foo
 
     namespace prototype {
->prototype : typeof prototype
+>prototype : typeof Foo.prototype
 
         function f(): void;
 >f : () => void

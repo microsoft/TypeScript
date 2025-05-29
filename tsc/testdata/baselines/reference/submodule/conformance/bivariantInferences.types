@@ -5,7 +5,7 @@
 
 interface Array<T> {
     equalsShallow<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>): boolean;
->equalsShallow : <T>(this: readonly T[], other: readonly T[]) => boolean
+>equalsShallow : <T_1>(this: readonly T_1[], other: readonly T_1[]) => boolean
 >this : readonly T[]
 >other : readonly T[]
 }

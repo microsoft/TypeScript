@@ -12,6 +12,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/module"
+	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -69,6 +70,105 @@ type Program struct {
 
 	// List of present unsupported extensions
 	unsupportedExtensions []string
+}
+
+// FileExists implements checker.Program.
+func (p *Program) FileExists(path string) bool {
+	return p.host.FS().FileExists(path)
+}
+
+// GetCurrentDirectory implements checker.Program.
+func (p *Program) GetCurrentDirectory() string {
+	return p.host.GetCurrentDirectory()
+}
+
+// GetGlobalTypingsCacheLocation implements checker.Program.
+func (p *Program) GetGlobalTypingsCacheLocation() string {
+	return "" // !!! see src/tsserver/nodeServer.ts for strada's node-specific implementation
+}
+
+// GetNearestAncestorDirectoryWithPackageJson implements checker.Program.
+func (p *Program) GetNearestAncestorDirectoryWithPackageJson(dirname string) string {
+	scoped := p.resolver.GetPackageScopeForPath(dirname)
+	if scoped != nil && scoped.Exists() {
+		return scoped.PackageDirectory
+	}
+	return ""
+}
+
+// GetPackageJsonInfo implements checker.Program.
+func (p *Program) GetPackageJsonInfo(pkgJsonPath string) modulespecifiers.PackageJsonInfo {
+	scoped := p.resolver.GetPackageScopeForPath(pkgJsonPath)
+	if scoped != nil && scoped.Exists() && scoped.PackageDirectory == tspath.GetDirectoryPath(pkgJsonPath) {
+		return scoped
+	}
+	return nil
+}
+
+// GetProjectReferenceRedirect implements checker.Program.
+func (p *Program) GetProjectReferenceRedirect(path string) string {
+	return "" // !!! TODO: project references support
+}
+
+// GetRedirectTargets implements checker.Program.
+func (p *Program) GetRedirectTargets(path tspath.Path) []string {
+	return nil // !!! TODO: project references support
+}
+
+// IsSourceOfProjectReferenceRedirect implements checker.Program.
+func (p *Program) IsSourceOfProjectReferenceRedirect(path string) bool {
+	return false // !!! TODO: project references support
+}
+
+// UseCaseSensitiveFileNames implements checker.Program.
+func (p *Program) UseCaseSensitiveFileNames() bool {
+	return p.host.FS().UseCaseSensitiveFileNames()
+}
+
+var _ checker.Program = (*Program)(nil)
+
+/** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
+func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.FileReference) *ast.SourceFile {
+	// TODO: The module loader in corsa is fairly different than strada, it should probably be able to expose this functionality at some point,
+	// rather than redoing the logic approximately here, since most of the related logic now lives in module.Resolver
+	// Still, without the failed lookup reporting that only the loader does, this isn't terribly complicated
+
+	fileName := tspath.ResolvePath(tspath.GetDirectoryPath(origin.FileName()), ref.FileName)
+	supportedExtensionsBase := tsoptions.GetSupportedExtensions(p.Options(), nil /*extraFileExtensions*/)
+	supportedExtensions := tsoptions.GetSupportedExtensionsWithJsonIfResolveJsonModule(p.Options(), supportedExtensionsBase)
+	allowNonTsExtensions := p.Options().AllowNonTsExtensions.IsTrue()
+	if tspath.HasExtension(fileName) {
+		if !allowNonTsExtensions {
+			canonicalFileName := tspath.GetCanonicalFileName(fileName, p.host.FS().UseCaseSensitiveFileNames())
+			supported := false
+			for _, group := range supportedExtensions {
+				if tspath.FileExtensionIsOneOf(canonicalFileName, group) {
+					supported = true
+					break
+				}
+			}
+			if !supported {
+				return nil // unsupported extensions are forced to fail
+			}
+		}
+
+		return p.GetSourceFile(fileName)
+	}
+	if allowNonTsExtensions {
+		extensionless := p.GetSourceFile(fileName)
+		if extensionless != nil {
+			return extensionless
+		}
+	}
+
+	// Only try adding extensions from the first supported group (which should be .ts/.tsx/.d.ts)
+	for _, ext := range supportedExtensions[0] {
+		result := p.GetSourceFile(fileName + ext)
+		if result != nil {
+			return result
+		}
+	}
+	return nil
 }
 
 func NewProgram(options ProgramOptions) *Program {
@@ -221,7 +321,7 @@ func canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.SourceFile) bool 
 		file1.IsDeclarationFile == file2.IsDeclarationFile &&
 		file1.HasNoDefaultLib == file2.HasNoDefaultLib &&
 		file1.UsesUriStyleNodeCoreModules == file2.UsesUriStyleNodeCoreModules &&
-		slices.EqualFunc(file1.Imports, file2.Imports, equalModuleSpecifiers) &&
+		slices.EqualFunc(file1.Imports(), file2.Imports(), equalModuleSpecifiers) &&
 		slices.EqualFunc(file1.ModuleAugmentations, file2.ModuleAugmentations, equalModuleAugmentationNames) &&
 		slices.Equal(file1.AmbientModuleNames, file2.AmbientModuleNames) &&
 		slices.EqualFunc(file1.ReferencedFiles, file2.ReferencedFiles, equalFileReferences) &&
@@ -363,6 +463,10 @@ func (p *Program) GetGlobalDiagnostics(ctx context.Context) []*ast.Diagnostic {
 	return SortAndDeduplicateDiagnostics(globalDiagnostics)
 }
 
+func (p *Program) GetDeclarationDiagnostics(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	return p.getDiagnosticsHelper(ctx, sourceFile, true /*ensureBound*/, true /*ensureChecked*/, p.getDeclarationDiagnosticsForFile)
+}
+
 func (p *Program) GetOptionsDiagnostics(ctx context.Context) []*ast.Diagnostic {
 	return SortAndDeduplicateDiagnostics(append(p.GetGlobalDiagnostics(ctx), p.getOptionsDiagnosticsOfConfigFile()...))
 }
@@ -462,6 +566,14 @@ func (p *Program) getSemanticDiagnosticsForFile(ctx context.Context, sourceFile 
 		}
 	}
 	return filtered
+}
+
+func (p *Program) getDeclarationDiagnosticsForFile(_ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
+	if sourceFile.IsDeclarationFile {
+		return []*ast.Diagnostic{}
+	}
+	host := &emitHost{program: p}
+	return getDeclarationDiagnostics(host, host.GetEmitResolver(sourceFile, true), sourceFile)
 }
 
 func (p *Program) getSuggestionDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {

@@ -60,3 +60,23 @@ class FilteredThing extends Filter(Unmixed) {
     }
 }
 exports.FilteredThing = FilteredThing;
+
+
+//// [declarationEmitLocalClassDeclarationMixin.d.ts]
+export declare class Unmixed {
+    foo: number;
+}
+export declare const Mixed: {
+    new (...args: any[]): {
+        bar: number;
+    };
+} & typeof Unmixed;
+declare const FilteredThing_base: (abstract new (...args: any[]) => {
+    match(path: string): boolean;
+    // other concrete methods, fields, constructor
+    thing: number;
+}) & typeof Unmixed;
+export declare class FilteredThing extends FilteredThing_base {
+    match(path: string): boolean;
+}
+export {};

@@ -14,7 +14,7 @@ class C {
 >"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol("~!@#$%^&*()_+{}|:'<>?\/.,`", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 2, 20))
 
     "a\a": number;
->"a\a" : Symbol(aa, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 3, 41))
+>"a\a" : Symbol("a\a", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 3, 41))
 
     static "a ": number
 >"a " : Symbol("a ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 4, 18))

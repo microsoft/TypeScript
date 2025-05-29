@@ -51,3 +51,9 @@ async function f() {
     const mod4 = await import("./index.js");
     (0, index_js_1.h)();
 }
+
+
+//// [index.d.ts]
+export declare function h(): Promise<void>;
+//// [index.d.ts]
+export declare function f(): Promise<void>;

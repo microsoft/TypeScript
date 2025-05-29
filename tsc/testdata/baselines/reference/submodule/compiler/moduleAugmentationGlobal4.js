@@ -27,3 +27,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./f1");
 require("./f2");
+
+
+//// [f1.d.ts]
+declare namespace global {
+    interface Something {
+        x: any;
+    }
+}
+export {};
+//// [f2.d.ts]
+declare namespace global {
+    interface Something {
+        y: any;
+    }
+}
+export {};
+//// [f3.d.ts]
+import "./f1";
+import "./f2";

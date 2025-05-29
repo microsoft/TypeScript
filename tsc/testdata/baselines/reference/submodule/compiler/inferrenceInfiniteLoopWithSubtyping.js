@@ -43,3 +43,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 User.addResolver({
     type: User, // `User as any` fix the problem
 });
+
+
+//// [app.d.ts]
+export {};

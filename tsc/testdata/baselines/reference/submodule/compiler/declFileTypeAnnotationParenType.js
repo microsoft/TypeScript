@@ -19,3 +19,13 @@ var x = [() => new c()];
 var y = [() => new c()];
 var k = (() => new c()) || "";
 var l = (() => new c()) || "";
+
+
+//// [declFileTypeAnnotationParenType.d.ts]
+declare class c {
+    private p;
+}
+declare var x: (() => c)[];
+declare var y: (() => c)[];
+declare var k: (() => c) | string;
+declare var l: string | (() => c);

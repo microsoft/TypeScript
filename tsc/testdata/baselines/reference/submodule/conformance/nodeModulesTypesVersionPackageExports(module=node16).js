@@ -88,3 +88,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
 const mod = __importStar(require("inner"));
 mod.correctVersionApplied;
+
+
+//// [index.d.ts]
+export {};
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};

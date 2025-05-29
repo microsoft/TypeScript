@@ -14,6 +14,6 @@ export default class {}
 
 === file4.ts ===
 export default class C {}
->C : default
+>C : C
 
 

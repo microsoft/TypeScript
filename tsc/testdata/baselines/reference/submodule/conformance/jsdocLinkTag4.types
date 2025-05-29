@@ -6,7 +6,7 @@ export interface A {}
 
 === /b.ts ===
 import * as a from "./a";
->a : typeof import("/a")
+>a : typeof a
 
 /**
  * @param {number} a - see {@link a.A}

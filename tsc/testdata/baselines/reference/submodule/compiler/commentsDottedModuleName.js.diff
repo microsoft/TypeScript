@@ -23,17 +23,10 @@
 -        })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
 -    })(outerModule || (exports.outerModule = outerModule = {}));
 -});
--
--
--//// [commentsDottedModuleName.d.ts]
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.outerModule = void 0;
- /** this is multi declare module*/
--export declare namespace outerModule.InnerModule {
--    class b {
--    }
--}
++/** this is multi declare module*/
 +var outerModule;
 +(function (outerModule) {
 +    let InnerModule;
@@ -44,3 +37,12 @@
 +        InnerModule.b = b;
 +    })(InnerModule = outerModule.InnerModule || (outerModule.InnerModule = {}));
 +})(outerModule || (exports.outerModule = outerModule = {}));
+
+
+ //// [commentsDottedModuleName.d.ts]
+ /** this is multi declare module*/
+ export declare namespace outerModule.InnerModule {
++    /// class b comment
+     class b {
+     }
+ }

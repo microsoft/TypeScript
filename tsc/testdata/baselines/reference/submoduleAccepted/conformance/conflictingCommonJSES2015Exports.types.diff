@@ -10,7 +10,7 @@
 ->exports : any
 +>module.exports = { abc } : { abc: (a: any, b: any, c: any) => number; }
 +>module.exports : { abc: (a: any, b: any, c: any) => number; }
-+>module : { export=: { abc: (a: any, b: any, c: any) => number; }; }
++>module : { "export=": { abc: (a: any, b: any, c: any) => number; }; }
 +>exports : { abc: (a: any, b: any, c: any) => number; }
  >{ abc } : { abc: (a: any, b: any, c: any) => number; }
  >abc : (a: any, b: any, c: any) => number

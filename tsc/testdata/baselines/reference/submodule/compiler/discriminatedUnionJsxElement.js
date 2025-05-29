@@ -37,3 +37,21 @@ var ListItemVariant;
 function ListItem(_data) {
     return null;
 }
+
+
+//// [discriminatedUnionJsxElement.d.ts]
+// Repro from #46021
+interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
+    menuItemsVariant?: MenuItemVariant;
+}
+declare function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>): any;
+type IListItemData = {
+    variant: ListItemVariant.Avatar;
+} | {
+    variant: ListItemVariant.OneLine;
+};
+declare enum ListItemVariant {
+    OneLine = 0,
+    Avatar = 1
+}
+declare function ListItem(_data: IListItemData): null;

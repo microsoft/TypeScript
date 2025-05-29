@@ -2,19 +2,19 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 class BigGreeter extends React.Component<{ }, {}> {
 >BigGreeter : BigGreeter
->React.Component : Component<{}, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Default hi</div>;
-><div>Default hi</div> : Element
+><div>Default hi</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -24,15 +24,15 @@ class BigGreeter extends React.Component<{ }, {}> {
 
 // Error
 let a = <BigGreeter prop1="hello" />
->a : Element
-><BigGreeter prop1="hello" /> : Element
+>a : JSX.Element
+><BigGreeter prop1="hello" /> : JSX.Element
 >BigGreeter : typeof BigGreeter
 >prop1 : string
 
 // OK
 let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
->b : Element
-><BigGreeter ref={(input) => { this.textInput = input; }} /> : Element
+>b : JSX.Element
+><BigGreeter ref={(input) => { this.textInput = input; }} /> : JSX.Element
 >BigGreeter : typeof BigGreeter
 >ref : (input: BigGreeter) => void
 >(input) => { this.textInput = input; } : (input: BigGreeter) => void
@@ -44,8 +44,8 @@ let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
 >input : BigGreeter
 
 let c = <BigGreeter data-extra="hi" />
->c : Element
-><BigGreeter data-extra="hi" /> : Element
+>c : JSX.Element
+><BigGreeter data-extra="hi" /> : JSX.Element
 >BigGreeter : typeof BigGreeter
 >data-extra : string
 

@@ -26,3 +26,8 @@ exports.f = f;
 function f() {
     return {};
 }
+
+
+//// [main.d.ts]
+import { FSWatcher } from "fs";
+export declare function f(): FSWatcher;

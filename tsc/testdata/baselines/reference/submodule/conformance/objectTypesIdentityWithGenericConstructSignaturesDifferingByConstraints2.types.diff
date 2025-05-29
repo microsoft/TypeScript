@@ -9,14 +9,7 @@
  >x : T
  >y : U
 
- var b = { new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } }; // not a construct signature, function called new
-->b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-->{ new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } } : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-+>b : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
-+>{ new<T extends U, U extends RegExp>(x: T, y: U) { return ''; } } : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
- >new : <T extends U, U extends RegExp>(x: T, y: U) => string
- >x : T
- >y : U
+@@= skipped -13, +13 lines =@@
  >'' : ""
 
  function foo1b(x: B<Array<number>, Array<number>>);
@@ -35,7 +28,7 @@
  >x : any
 
  function foo1c(x: C<String, String>);
-@@= skipped -49, +49 lines =@@
+@@= skipped -36, +36 lines =@@
  >x : any
 
  function foo3(x: typeof a);
@@ -61,23 +54,19 @@
 
  function foo4(x: typeof b);
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-->b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-+>foo4 : { (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
-+>x : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
-+>b : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
++>foo4 : { (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
+ >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
+ >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 
  function foo4(x: typeof b); // error
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-->x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-->b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-+>foo4 : { (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
-+>x : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
-+>b : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
++>foo4 : { (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
+ >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
+ >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 
  function foo4(x: any) { }
 ->foo4 : { (x: typeof b): any; (x: typeof b): any; }
-+>foo4 : { (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
++>foo4 : { (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
  >x : any
 
  function foo5c(x: C<String, String>);
@@ -134,20 +123,18 @@
 
  function foo11(x: B<Array<number>, Array<number>>);
 ->foo11 : { (x: B<Array<number>, Array<number>>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<number[], number[]>): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
++>foo11 : { (x: B<number[], number[]>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
  >x : B<number[], number[]>
 
  function foo11(x: typeof b); // ok
 ->foo11 : { (x: B<Array<number>, Array<number>>): any; (x: typeof b): any; }
-->x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-->b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-+>foo11 : { (x: B<number[], number[]>): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
-+>x : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
-+>b : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
++>foo11 : { (x: B<number[], number[]>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
+ >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
+ >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 
  function foo11(x: any) { }
 ->foo11 : { (x: B<Array<number>, Array<number>>): any; (x: typeof b): any; }
-+>foo11 : { (x: B<number[], number[]>): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
++>foo11 : { (x: B<number[], number[]>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
  >x : any
 
  function foo12(x: I<Number, Number>);
@@ -174,18 +161,16 @@
 
  function foo14(x: I<Number, Number>);
 ->foo14 : { (x: I<Number, Number>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<Number, Number>): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
++>foo14 : { (x: I<Number, Number>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
  >x : I<Number, Number>
 
  function foo14(x: typeof b); // ok
 ->foo14 : { (x: I<Number, Number>): any; (x: typeof b): any; }
-->x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-->b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
-+>foo14 : { (x: I<Number, Number>): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
-+>x : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
-+>b : { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }
++>foo14 : { (x: I<Number, Number>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
+ >x : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
+ >b : { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }
 
  function foo14(x: any) { }
 ->foo14 : { (x: I<Number, Number>): any; (x: typeof b): any; }
-+>foo14 : { (x: I<Number, Number>): any; (x: { new: <T extends U, U extends RegExp>(x: T, y: U) => string; }): any; }
++>foo14 : { (x: I<Number, Number>): any; (x: { "new"<T extends U, U extends RegExp>(x: T, y: U): string; }): any; }
  >x : any

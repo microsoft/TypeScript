@@ -19,7 +19,7 @@ export default _default;
 === /config.json ===
 {
   "version": 1
->"version" : Symbol(version, Decl(config.json, 0, 1))
+>"version" : Symbol("version", Decl(config.json, 0, 1))
 }
 
 === /main.mts ===
@@ -49,9 +49,9 @@ import * as config3 from "./config.json" with { type: "json" };
 >config3 : Symbol(config3, Decl(main.mts, 8, 6))
 
 config3.version; // Error
->config3.version : Symbol(version, Decl(config.json, 0, 1))
+>config3.version : Symbol("version", Decl(config.json, 0, 1))
 >config3 : Symbol(config3, Decl(main.mts, 8, 6))
->version : Symbol(version, Decl(config.json, 0, 1))
+>version : Symbol("version", Decl(config.json, 0, 1))
 
 config3.default; // Ok
 >config3 : Symbol(config3, Decl(main.mts, 8, 6))
@@ -70,9 +70,9 @@ import * as config3 from "./config.json";
 >config3 : Symbol(config3, Decl(loosey.cts, 3, 6))
 
 config3.version; // Ok
->config3.version : Symbol(version, Decl(config.json, 0, 1))
+>config3.version : Symbol("version", Decl(config.json, 0, 1))
 >config3 : Symbol(config3, Decl(loosey.cts, 3, 6))
->version : Symbol(version, Decl(config.json, 0, 1))
+>version : Symbol("version", Decl(config.json, 0, 1))
 
 config3.default; // Error
 >config3 : Symbol(config3, Decl(loosey.cts, 3, 6))

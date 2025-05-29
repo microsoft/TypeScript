@@ -16,3 +16,11 @@ class Foo {
     [key] = value;
 }
 exports.Foo = Foo;
+
+
+//// [variableDeclarationDeclarationEmitUniqueSymbolPartialStatement.d.ts]
+declare const key: unique symbol;
+export declare class Foo {
+    [key]: number;
+}
+export {};

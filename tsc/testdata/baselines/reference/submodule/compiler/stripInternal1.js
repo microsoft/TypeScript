@@ -13,3 +13,11 @@ class C {
     // @internal
     bar() { }
 }
+
+
+//// [stripInternal1.d.ts]
+declare class C {
+    foo(): void;
+    // @internal
+    bar(): void;
+}

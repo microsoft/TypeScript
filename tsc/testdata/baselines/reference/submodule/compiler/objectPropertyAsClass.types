@@ -2,8 +2,8 @@
 
 === index.js ===
 const a1 = {
->a1 : { foo: () => void; }
->{    foo() {        this.x = 0;    }} : { foo: () => void; }
+>a1 : { foo(): void; }
+>{    foo() {        this.x = 0;    }} : { foo(): void; }
 
     foo() {
 >foo : () => void
@@ -35,8 +35,8 @@ const a2 = {
 }
 
 const b1 = {
->b1 : { foo: () => void; }
->{    /** @class */    foo() {        this.x = 0;    }} : { foo: () => void; }
+>b1 : { foo(): void; }
+>{    /** @class */    foo() {        this.x = 0;    }} : { foo(): void; }
 
     /** @class */
     foo() {

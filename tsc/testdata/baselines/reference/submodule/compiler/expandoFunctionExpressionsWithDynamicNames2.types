@@ -15,7 +15,7 @@ interface Foo {
 }
 const foo: Foo = () => {};
 >foo : Foo
->() => {} : { (): void; foo[mySymbol]: true; }
+>() => {} : { (): void; [mySymbol]: true; }
 
 foo[mySymbol] = true;
 >foo[mySymbol] = true : true

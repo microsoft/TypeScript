@@ -111,3 +111,26 @@ if (detached()) {
 else {
     a.lead();
 }
+
+
+//// [typeGuardFunctionOfFormThisErrors.d.ts]
+declare class RoyalGuard {
+    isLeader(): this is LeadGuard;
+    isFollower(): this is FollowerGuard;
+}
+declare class LeadGuard extends RoyalGuard {
+    lead(): void;
+}
+declare class FollowerGuard extends RoyalGuard {
+    follow(): void;
+}
+interface GuardInterface extends RoyalGuard {
+}
+declare let a: RoyalGuard;
+declare let b: GuardInterface;
+declare function invalidGuard(c: any): this is number;
+declare let c: number | number[];
+declare let holder: {
+    invalidGuard: typeof invalidGuard;
+};
+declare let detached: () => this is FollowerGuard;

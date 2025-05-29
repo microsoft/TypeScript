@@ -50,135 +50,69 @@
 
          x;  // T & object
  >x : T & object
-@@= skipped -58, +58 lines =@@
-
-     return possiblyUndefined(possiblyNull(x));  // T | null | undefined
- >possiblyUndefined(possiblyNull(x)) : T | null | undefined
-->possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
-+>possiblyUndefined : <T>(x: T) => T | undefined
- >possiblyNull(x) : T | null
-->possiblyNull : <T_1>(x: T_1) => T_1 | null
-+>possiblyNull : <T>(x: T) => T | null
- >x : T
- }
-
-@@= skipped -41, +41 lines =@@
-
-     return ensureNotUndefined(ensureNotNull(x));  // T & {}
- >ensureNotUndefined(ensureNotNull(x)) : T & {}
-->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
-+>ensureNotUndefined : <T>(x: T) => T & ({} | null)
- >ensureNotNull(x) : T & ({} | undefined)
-->ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
-+>ensureNotNull : <T>(x: T) => T & ({} | undefined)
- >x : T
- }
-
-@@= skipped -34, +34 lines =@@
-     let a1 = ensureNotUndefined(ensureNotNull(a));  // T & {}
- >a1 : T & {}
- >ensureNotUndefined(ensureNotNull(a)) : T & {}
-->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
-+>ensureNotUndefined : <T>(x: T) => T & ({} | null)
- >ensureNotNull(a) : T & ({} | undefined)
-->ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
-+>ensureNotNull : <T>(x: T) => T & ({} | undefined)
- >a : T
-
-     let a2 = ensureNotNull(ensureNotUndefined(a));  // T & {}
- >a2 : T & {}
- >ensureNotNull(ensureNotUndefined(a)) : T & {}
-->ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
-+>ensureNotNull : <T>(x: T) => T & ({} | undefined)
- >ensureNotUndefined(a) : T & ({} | null)
-->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
-+>ensureNotUndefined : <T>(x: T) => T & ({} | null)
+@@= skipped -147, +147 lines =@@
  >a : T
 
      let a3 = ensureNotNull(ensureNotNull(a));  // T & {} | T & undefined
 ->a3 : (T & undefined) | (T & {})
 ->ensureNotNull(ensureNotNull(a)) : (T & undefined) | (T & {})
-->ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 +>a3 : T & undefined | T & {}
 +>ensureNotNull(ensureNotNull(a)) : T & undefined | T & {}
-+>ensureNotNull : <T>(x: T) => T & ({} | undefined)
+ >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
  >ensureNotNull(a) : T & ({} | undefined)
-->ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
-+>ensureNotNull : <T>(x: T) => T & ({} | undefined)
+ >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
  >a : T
 
      let a4 = ensureNotUndefined(ensureNotUndefined(a));  // T & {} | T & null
 ->a4 : (T & null) | (T & {})
 ->ensureNotUndefined(ensureNotUndefined(a)) : (T & null) | (T & {})
-->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 +>a4 : T & null | T & {}
 +>ensureNotUndefined(ensureNotUndefined(a)) : T & null | T & {}
-+>ensureNotUndefined : <T>(x: T) => T & ({} | null)
+ >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
  >ensureNotUndefined(a) : T & ({} | null)
-->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
-+>ensureNotUndefined : <T>(x: T) => T & ({} | null)
- >a : T
-
-     let a5 = ensureNotNullOrUndefined(ensureNotNullOrUndefined(a));  // T & {}
- >a5 : T & {}
- >ensureNotNullOrUndefined(ensureNotNullOrUndefined(a)) : T & {}
-->ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
-+>ensureNotNullOrUndefined : <T>(x: T) => T & {}
- >ensureNotNullOrUndefined(a) : T & {}
-->ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
-+>ensureNotNullOrUndefined : <T>(x: T) => T & {}
+ >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
+@@= skipped -24, +24 lines =@@
  >a : T
 
      let a6 = ensureNotNull(possiblyNullOrUndefined(a));  // T & {} | undefined
 ->a6 : (T & {}) | undefined
 ->ensureNotNull(possiblyNullOrUndefined(a)) : (T & {}) | undefined
-->ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 +>a6 : T & {} | undefined
 +>ensureNotNull(possiblyNullOrUndefined(a)) : T & {} | undefined
-+>ensureNotNull : <T>(x: T) => T & ({} | undefined)
+ >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
  >possiblyNullOrUndefined(a) : T | null | undefined
-->possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
-+>possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
+ >possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
  >a : T
 
      let a7 = ensureNotUndefined(possiblyNullOrUndefined(a));  // T & {} | null
 ->a7 : (T & {}) | null
 ->ensureNotUndefined(possiblyNullOrUndefined(a)) : (T & {}) | null
-->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 +>a7 : T & {} | null
 +>ensureNotUndefined(possiblyNullOrUndefined(a)) : T & {} | null
-+>ensureNotUndefined : <T>(x: T) => T & ({} | null)
+ >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
  >possiblyNullOrUndefined(a) : T | null | undefined
-->possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
-+>possiblyNullOrUndefined : <T>(x: T) => T | null | undefined
+ >possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
  >a : T
 
      let a8 = ensureNotNull(possiblyUndefined(a));  // T & {} | undefined
 ->a8 : (T & {}) | undefined
 ->ensureNotNull(possiblyUndefined(a)) : (T & {}) | undefined
-->ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
 +>a8 : T & {} | undefined
 +>ensureNotNull(possiblyUndefined(a)) : T & {} | undefined
-+>ensureNotNull : <T>(x: T) => T & ({} | undefined)
+ >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
  >possiblyUndefined(a) : T | undefined
-->possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
-+>possiblyUndefined : <T>(x: T) => T | undefined
+ >possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
  >a : T
 
      let a9 = ensureNotUndefined(possiblyNull(a));  // T & {} | null
 ->a9 : (T & {}) | null
 ->ensureNotUndefined(possiblyNull(a)) : (T & {}) | null
-->ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
 +>a9 : T & {} | null
 +>ensureNotUndefined(possiblyNull(a)) : T & {} | null
-+>ensureNotUndefined : <T>(x: T) => T & ({} | null)
+ >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
  >possiblyNull(a) : T | null
-->possiblyNull : <T_1>(x: T_1) => T_1 | null
-+>possiblyNull : <T>(x: T) => T | null
- >a : T
- }
-
-@@= skipped -90, +90 lines =@@
+ >possiblyNull : <T_1>(x: T_1) => T_1 | null
+@@= skipped -52, +52 lines =@@
  >b : T
  >'object' : "object"
  >!a : boolean
@@ -190,25 +124,7 @@
 
          return false;
  >false : false
-@@= skipped -87, +87 lines =@@
- >k : keyof T
-
-     t[k];
-->t[k] : (T & {})[keyof T]
-+>t[k] : T & {}[keyof T]
- >t : T & {}
- >k : keyof T
- }
-@@= skipped -22, +22 lines =@@
- >k : keyof (T & {})
-
-     t[k];
-->t[k] : (T & {})[keyof (T & {})]
-+>t[k] : T & {}[keyof (T & {})]
- >t : T & {}
- >k : keyof (T & {})
- }
-@@= skipped -76, +76 lines =@@
+@@= skipped -185, +185 lines =@@
  }
 
  function fx2<T extends {}>(value: T & ({} | null)) {

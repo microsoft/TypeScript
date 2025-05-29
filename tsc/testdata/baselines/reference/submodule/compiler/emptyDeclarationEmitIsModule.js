@@ -17,3 +17,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 class Foo {
 }
+
+
+//// [index.d.ts]
+export interface Bar {
+    x: string;
+}
+//// [module.d.ts]
+export {};

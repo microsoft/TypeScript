@@ -25,25 +25,25 @@ declare module "foo" {
 
 === index.ts ===
 import * as foo from "foo";
->foo : typeof import("foo")
+>foo : typeof foo
 
 class Test {
 >Test : Test
 
     bar: foo.Foo;
->bar : Foo
+>bar : foo.Foo
 >foo : any
 
     constructor() {
         this.bar = new foo.Foo();
->this.bar = new foo.Foo() : Foo
->this.bar : Foo
+>this.bar = new foo.Foo() : foo.Foo
+>this.bar : foo.Foo
 >this : this
->bar : Foo
->new foo.Foo() : Foo
->foo.Foo : typeof Foo
->foo : typeof import("foo")
->Foo : typeof Foo
+>bar : foo.Foo
+>new foo.Foo() : foo.Foo
+>foo.Foo : typeof foo.Foo
+>foo : typeof foo
+>Foo : typeof foo.Foo
     }
 }
 

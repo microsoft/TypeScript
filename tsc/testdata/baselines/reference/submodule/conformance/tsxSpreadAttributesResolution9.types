@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface OptionProp {
     x?: 2
@@ -14,15 +14,15 @@ interface OptionProp {
 
 class Opt extends React.Component<OptionProp, {}> {
 >Opt : Opt
->React.Component : Component<OptionProp, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<OptionProp, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Hello</div>;
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -43,32 +43,32 @@ const obj1: OptionProp = {
 
 // OK
 let p = <Opt />;
->p : Element
-><Opt /> : Element
+>p : JSX.Element
+><Opt /> : JSX.Element
 >Opt : typeof Opt
 
 let y = <Opt {...obj} />;
->y : Element
-><Opt {...obj} /> : Element
+>y : JSX.Element
+><Opt {...obj} /> : JSX.Element
 >Opt : typeof Opt
 >obj : OptionProp
 
 let y1 = <Opt {...obj1} />;
->y1 : Element
-><Opt {...obj1} /> : Element
+>y1 : JSX.Element
+><Opt {...obj1} /> : JSX.Element
 >Opt : typeof Opt
 >obj1 : OptionProp
 
 let y2 = <Opt {...obj1} y/>;
->y2 : Element
-><Opt {...obj1} y/> : Element
+>y2 : JSX.Element
+><Opt {...obj1} y/> : JSX.Element
 >Opt : typeof Opt
 >obj1 : OptionProp
 >y : true
 
 let y3 = <Opt x={2} />;
->y3 : Element
-><Opt x={2} /> : Element
+>y3 : JSX.Element
+><Opt x={2} /> : JSX.Element
 >Opt : typeof Opt
 >x : 2
 >2 : 2

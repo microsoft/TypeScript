@@ -22,7 +22,7 @@ f(1, n => { })
 module.exports = function (x, k) { return k(x) }
 >module.exports = function (x, k) { return k(x) } : (x: any, k: any) => any
 >module.exports : (x: any, k: any) => any
->module : { export=: (x: any, k: any) => any; }
+>module : { "export=": (x: any, k: any) => any; }
 >exports : (x: any, k: any) => any
 >function (x, k) { return k(x) } : (x: any, k: any) => any
 >x : any

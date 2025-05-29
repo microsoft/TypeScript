@@ -15,19 +15,6 @@
 -    };
 -    return c1;
 -}());
--
--
--//// [declFilePrivateMethodOverloads.d.ts]
--interface IContext {
--    someMethod(): any;
--}
--declare class c1 {
--    private _forEachBindingContext;
--    private overloadWithArityDifference;
--}
--declare class c2 {
--    private overload1;
--    private overload2;
 +class c1 {
 +    _forEachBindingContext(context, fn) {
 +        // Function here
@@ -35,4 +22,7 @@
 +    overloadWithArityDifference(context) {
 +        // Function here
 +    }
- }
++}
+
+
+ //// [declFilePrivateMethodOverloads.d.ts]

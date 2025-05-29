@@ -2,8 +2,8 @@
 
 === methodIsOk.ts ===
 const o1 = {
->o1 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o1 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -11,8 +11,8 @@ const o1 = {
 };
 === awaitMethodNameIsOk.ts ===
 const o2 = {
->o2 : { await: () => AsyncGenerator<never, void, unknown>; }
->{    async * await() {    }} : { await: () => AsyncGenerator<never, void, unknown>; }
+>o2 : { await(): AsyncGenerator<never, void, unknown>; }
+>{    async * await() {    }} : { await(): AsyncGenerator<never, void, unknown>; }
 
     async * await() {
 >await : () => AsyncGenerator<never, void, unknown>
@@ -20,8 +20,8 @@ const o2 = {
 };
 === yieldMethodNameIsOk.ts ===
 const o3 = {
->o3 : { yield: () => AsyncGenerator<never, void, unknown>; }
->{    async * yield() {    }} : { yield: () => AsyncGenerator<never, void, unknown>; }
+>o3 : { yield(): AsyncGenerator<never, void, unknown>; }
+>{    async * yield() {    }} : { yield(): AsyncGenerator<never, void, unknown>; }
 
     async * yield() {
 >yield : () => AsyncGenerator<never, void, unknown>
@@ -29,8 +29,8 @@ const o3 = {
 };
 === awaitParameterIsError.ts ===
 const o4 = {
->o4 : { f: (await: any) => AsyncGenerator<never, void, unknown>; }
->{    async * f(await) {    }} : { f: (await: any) => AsyncGenerator<never, void, unknown>; }
+>o4 : { f(await: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(await) {    }} : { f(await: any): AsyncGenerator<never, void, unknown>; }
 
     async * f(await) {
 >f : (await: any) => AsyncGenerator<never, void, unknown>
@@ -39,8 +39,8 @@ const o4 = {
 };
 === yieldParameterIsError.ts ===
 const o5 = {
->o5 : { f: (yield: any) => AsyncGenerator<never, void, unknown>; }
->{    async * f(yield) {    }} : { f: (yield: any) => AsyncGenerator<never, void, unknown>; }
+>o5 : { f(yield: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(yield) {    }} : { f(yield: any): AsyncGenerator<never, void, unknown>; }
 
     async * f(yield) {
 >f : (yield: any) => AsyncGenerator<never, void, unknown>
@@ -49,8 +49,8 @@ const o5 = {
 };
 === awaitInParameterInitializerIsError.ts ===
 const o6 = {
->o6 : { f: (a?: number) => AsyncGenerator<never, void, unknown>; }
->{    async * f(a = await 1) {    }} : { f: (a?: number) => AsyncGenerator<never, void, unknown>; }
+>o6 : { f(a?: number): AsyncGenerator<never, void, unknown>; }
+>{    async * f(a = await 1) {    }} : { f(a?: number): AsyncGenerator<never, void, unknown>; }
 
     async * f(a = await 1) {
 >f : (a?: number) => AsyncGenerator<never, void, unknown>
@@ -61,8 +61,8 @@ const o6 = {
 };
 === yieldInParameterInitializerIsError.ts ===
 const o7 = {
->o7 : { f: (a?: any) => AsyncGenerator<never, void, unknown>; }
->{    async * f(a = yield) {    }} : { f: (a?: any) => AsyncGenerator<never, void, unknown>; }
+>o7 : { f(a?: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(a = yield) {    }} : { f(a?: any): AsyncGenerator<never, void, unknown>; }
 
     async * f(a = yield) {
 >f : (a?: any) => AsyncGenerator<never, void, unknown>
@@ -72,8 +72,8 @@ const o7 = {
 };
 === nestedAsyncGeneratorIsOk.ts ===
 const o8 = {
->o8 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        async function * g() {        }    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o8 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        async function * g() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -85,8 +85,8 @@ const o8 = {
 };
 === nestedFunctionDeclarationNamedYieldIsError.ts ===
 const o9 = {
->o9 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        function yield() {        }    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o9 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        function yield() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -98,8 +98,8 @@ const o9 = {
 };
 === nestedFunctionExpressionNamedYieldIsError.ts ===
 const o10 = {
->o10 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        const x = function yield() {        };    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o10 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        const x = function yield() {        };    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -114,8 +114,8 @@ const o10 = {
 };
 === nestedFunctionDeclarationNamedAwaitIsError.ts ===
 const o11 = {
->o11 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        function await() {        }    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o11 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        function await() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -127,8 +127,8 @@ const o11 = {
 };
 === nestedFunctionExpressionNamedAwaitIsError.ts ===
 const o12 = {
->o12 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        const x = function await() {        };    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o12 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        const x = function await() {        };    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -143,8 +143,8 @@ const o12 = {
 };
 === yieldIsOk.ts ===
 const o13 = {
->o13 : { f: () => AsyncGenerator<any, void, unknown>; }
->{    async * f() {        yield;    }} : { f: () => AsyncGenerator<any, void, unknown>; }
+>o13 : { f(): AsyncGenerator<any, void, unknown>; }
+>{    async * f() {        yield;    }} : { f(): AsyncGenerator<any, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<any, void, unknown>
@@ -155,8 +155,8 @@ const o13 = {
 };
 === yieldWithValueIsOk.ts ===
 const o14 = {
->o14 : { f: () => AsyncGenerator<number, void, unknown>; }
->{    async * f() {        yield 1;    }} : { f: () => AsyncGenerator<number, void, unknown>; }
+>o14 : { f(): AsyncGenerator<number, void, unknown>; }
+>{    async * f() {        yield 1;    }} : { f(): AsyncGenerator<number, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<number, void, unknown>
@@ -168,8 +168,8 @@ const o14 = {
 };
 === yieldStarMissingValueIsError.ts ===
 const o15 = {
->o15 : { f: () => AsyncGenerator<any, void, any>; }
->{    async * f() {        yield *;    }} : { f: () => AsyncGenerator<any, void, any>; }
+>o15 : { f(): AsyncGenerator<any, void, any>; }
+>{    async * f() {        yield *;    }} : { f(): AsyncGenerator<any, void, any>; }
 
     async * f() {
 >f : () => AsyncGenerator<any, void, any>
@@ -181,8 +181,8 @@ const o15 = {
 };
 === yieldStarWithValueIsOk.ts ===
 const o16 = {
->o16 : { f: () => AsyncGenerator<any, void, unknown>; }
->{    async * f() {        yield * [];    }} : { f: () => AsyncGenerator<any, void, unknown>; }
+>o16 : { f(): AsyncGenerator<any, void, unknown>; }
+>{    async * f() {        yield * [];    }} : { f(): AsyncGenerator<any, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<any, void, unknown>
@@ -194,8 +194,8 @@ const o16 = {
 };
 === awaitWithValueIsOk.ts ===
 const o17 = {
->o17 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        await 1;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o17 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        await 1;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -207,8 +207,8 @@ const o17 = {
 };
 === awaitMissingValueIsError.ts ===
 const o18 = {
->o18 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        await;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o18 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        await;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -221,8 +221,8 @@ const o18 = {
 === awaitAsTypeIsOk.ts ===
 interface await {}
 const o19 = {
->o19 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        let x: await;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o19 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        let x: await;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -234,8 +234,8 @@ const o19 = {
 === yieldAsTypeIsOk.ts ===
 interface yield {}
 const o20 = {
->o20 : { f: () => AsyncGenerator<never, void, unknown>; }
->{    async * f() {        let x: yield;    }} : { f: () => AsyncGenerator<never, void, unknown>; }
+>o20 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        let x: yield;    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<never, void, unknown>
@@ -246,8 +246,8 @@ const o20 = {
 };
 === yieldInNestedComputedPropertyIsOk.ts ===
 const o21 = {
->o21 : { f: () => AsyncGenerator<any, void, unknown>; }
->{    async * f() {        const x = { [yield]: 1 };    }} : { f: () => AsyncGenerator<any, void, unknown>; }
+>o21 : { f(): AsyncGenerator<any, void, unknown>; }
+>{    async * f() {        const x = { [yield]: 1 };    }} : { f(): AsyncGenerator<any, void, unknown>; }
 
     async * f() {
 >f : () => AsyncGenerator<any, void, unknown>
@@ -262,8 +262,8 @@ const o21 = {
 };
 === asyncGeneratorGetAccessorIsError.ts ===
 const o22 = {
->o22 : { get: () => any; x: () => number; }
->{    async * get x() {        return 1;    }} : { get: () => any; x: () => number; }
+>o22 : { get(): any; x(): number; }
+>{    async * get x() {        return 1;    }} : { get(): any; x(): number; }
 
     async * get x() {
 >get : () => any
@@ -275,8 +275,8 @@ const o22 = {
 };
 === asyncGeneratorSetAccessorIsError.ts ===
 const o23 = {
->o23 : { set: () => any; x: (value: number) => void; }
->{    async * set x(value: number) {    }} : { set: () => any; x: (value: number) => void; }
+>o23 : { set(): any; x(value: number): void; }
+>{    async * set x(value: number) {    }} : { set(): any; x(value: number): void; }
 
     async * set x(value: number) {
 >set : () => any
@@ -286,8 +286,8 @@ const o23 = {
 };
 === asyncGeneratorPropertyIsError.ts ===
 const o24 = {
->o24 : { x: () => 1; }
->{    async * x: 1;} : { x: () => 1; }
+>o24 : { x(): 1; }
+>{    async * x: 1;} : { x(): 1; }
 
     async * x: 1;
 >x : () => 1

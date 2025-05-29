@@ -50,3 +50,9 @@ import { createPlugin } from "@babel/parser";
 export function resolveParserPlugins() {
     return [createPlugin()];
 }
+
+
+//// [index.d.ts]
+export {};
+//// [index.d.ts]
+export declare function resolveParserPlugins(): any;

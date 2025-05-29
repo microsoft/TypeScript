@@ -14,7 +14,7 @@ export async function noop(): Promise<void> {}
 >noop : () => Promise<void>
 
 export function spread({ a, ...rest }: { a: number, b: number}) {
->spread : (__0: { a: number; b: number; }) => { b: number; c: string; }
+>spread : ({ a, ...rest }: { a: number; b: number; }) => { b: number; c: string; }
 >a : number
 >rest : { b: number; }
 >a : number

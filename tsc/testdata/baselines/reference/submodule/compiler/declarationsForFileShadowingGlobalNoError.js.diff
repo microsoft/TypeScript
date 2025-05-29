@@ -36,19 +36,18 @@
 +    };
  };
  exports.mixin = mixin;
--
--
--//// [dom.d.ts]
--export type DOMNode = Node;
--//// [custom.d.ts]
--export type Node = {};
--//// [index.d.ts]
+
+@@= skipped -35, +15 lines =@@
+ //// [custom.d.ts]
+ export type Node = {};
+ //// [index.d.ts]
 -import { DOMNode } from './dom';
--type Constructor = new (...args: any[]) => any;
--export declare const mixin: (Base: Constructor) => {
--    new (...args: any[]): {
--        [x: string]: any;
+ type Constructor = new (...args: any[]) => any;
+ export declare const mixin: (Base: Constructor) => {
+     new (...args: any[]): {
+         [x: string]: any;
 -        get(domNode: DOMNode): void;
--    };
--};
--export {};
++        get(domNode: globalThis.Node): void;
+     };
+ };
+ export {};

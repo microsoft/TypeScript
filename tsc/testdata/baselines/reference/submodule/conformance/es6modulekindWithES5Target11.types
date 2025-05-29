@@ -9,12 +9,12 @@ declare function foo(...args: any[]): any;
 >foo : (...args: any[]) => any
 
 export default class C {
->C : default
+>C : C
 
     static x() { return C.y; }
 >x : () => number
 >C.y : number
->C : typeof default
+>C : typeof C
 >y : number
 
     static y = 1

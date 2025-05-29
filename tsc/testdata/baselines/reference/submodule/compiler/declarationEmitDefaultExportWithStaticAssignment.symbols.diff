@@ -5,14 +5,14 @@
 
  export default function Example() {}
 ->Example : Symbol(Example, Decl(index1.ts, 0, 26), Decl(index1.ts, 1, 36))
-+>Example : Symbol(default, Decl(index1.ts, 0, 26))
++>Example : Symbol(Example, Decl(index1.ts, 0, 26))
 
  Example.Foo = Foo
 ->Example.Foo : Symbol(Example.Foo, Decl(index1.ts, 1, 36))
 ->Example : Symbol(Example, Decl(index1.ts, 0, 26), Decl(index1.ts, 1, 36))
 ->Foo : Symbol(Example.Foo, Decl(index1.ts, 1, 36))
 +>Example.Foo : Symbol(Foo, Decl(index1.ts, 1, 36))
-+>Example : Symbol(default, Decl(index1.ts, 0, 26))
++>Example : Symbol(Example, Decl(index1.ts, 0, 26))
 +>Foo : Symbol(Foo, Decl(index1.ts, 1, 36))
  >Foo : Symbol(Foo, Decl(index1.ts, 0, 8))
 
@@ -22,14 +22,14 @@
 
  export default function Example() {}
 ->Example : Symbol(Example, Decl(index2.ts, 1, 13), Decl(index2.ts, 2, 36))
-+>Example : Symbol(default, Decl(index2.ts, 1, 13))
++>Example : Symbol(Example, Decl(index2.ts, 1, 13))
 
  Example.Foo = Foo
 ->Example.Foo : Symbol(Example.Foo, Decl(index2.ts, 2, 36))
 ->Example : Symbol(Example, Decl(index2.ts, 1, 13), Decl(index2.ts, 2, 36))
 ->Foo : Symbol(Example.Foo, Decl(index2.ts, 2, 36))
 +>Example.Foo : Symbol(Foo, Decl(index2.ts, 2, 36))
-+>Example : Symbol(default, Decl(index2.ts, 1, 13))
++>Example : Symbol(Example, Decl(index2.ts, 1, 13))
 +>Foo : Symbol(Foo, Decl(index2.ts, 2, 36))
  >Foo : Symbol(Foo, Decl(index2.ts, 0, 8))
 
@@ -39,14 +39,14 @@
 
  export default function Example() {}
 ->Example : Symbol(Example, Decl(index3.ts, 0, 19), Decl(index3.ts, 1, 36))
-+>Example : Symbol(default, Decl(index3.ts, 0, 19))
++>Example : Symbol(Example, Decl(index3.ts, 0, 19))
 
  Example.Bar = Bar
 ->Example.Bar : Symbol(Example.Bar, Decl(index3.ts, 1, 36))
 ->Example : Symbol(Example, Decl(index3.ts, 0, 19), Decl(index3.ts, 1, 36))
 ->Bar : Symbol(Example.Bar, Decl(index3.ts, 1, 36))
 +>Example.Bar : Symbol(Bar, Decl(index3.ts, 1, 36))
-+>Example : Symbol(default, Decl(index3.ts, 0, 19))
++>Example : Symbol(Example, Decl(index3.ts, 0, 19))
 +>Bar : Symbol(Bar, Decl(index3.ts, 1, 36))
  >Bar : Symbol(Bar, Decl(index3.ts, 0, 0))
 

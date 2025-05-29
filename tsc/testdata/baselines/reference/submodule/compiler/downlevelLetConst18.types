@@ -45,8 +45,8 @@ for (let x; ;) {
 >x : any
 
     ({ foo() { x }})
->({ foo() { x }}) : { foo: () => void; }
->{ foo() { x }} : { foo: () => void; }
+>({ foo() { x }}) : { foo(): void; }
+>{ foo() { x }} : { foo(): void; }
 >foo : () => void
 >x : any
 }

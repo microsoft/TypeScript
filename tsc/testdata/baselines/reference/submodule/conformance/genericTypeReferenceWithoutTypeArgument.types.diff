@@ -43,19 +43,7 @@
  >x : any
  >y : any
  >y : any
-@@= skipped -37, +37 lines =@@
-
- class D2 extends M.E { }
- >D2 : D2
-->M.E : typeof M.E
-+>M.E : typeof E
- >M : typeof M
-->E : typeof M.E
-+>E : typeof E
-
- class D3<T extends M.E> { }
- >D3 : D3<T>
-@@= skipped -12, +12 lines =@@
+@@= skipped -49, +49 lines =@@
  >M : typeof M
 
  function h<T extends C>(x: T) { }

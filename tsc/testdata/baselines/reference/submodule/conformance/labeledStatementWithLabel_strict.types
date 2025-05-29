@@ -50,5 +50,5 @@ label: namespace N {}
 
 label: type T = {}
 >label : any
->T : T
+>T : {}
 

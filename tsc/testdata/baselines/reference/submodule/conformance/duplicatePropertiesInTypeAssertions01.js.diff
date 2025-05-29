@@ -5,11 +5,11 @@
 
  //// [duplicatePropertiesInTypeAssertions01.js]
 -var x = {};
--
--
--//// [duplicatePropertiesInTypeAssertions01.d.ts]
--declare let x: {
--    a: number;
--    a: number;
--};
 +let x = {};
+
+
+ //// [duplicatePropertiesInTypeAssertions01.d.ts]
+ declare let x: {
+-    a: number;
+     a: number;
+ };

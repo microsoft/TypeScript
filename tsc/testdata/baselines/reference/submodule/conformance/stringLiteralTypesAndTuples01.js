@@ -34,3 +34,8 @@ function rawr(dino) {
     }
     throw "Unexpected " + dino;
 }
+
+
+//// [stringLiteralTypesAndTuples01.d.ts]
+type RexOrRaptor = "t-rex" | "raptor";
+declare function rawr(dino: RexOrRaptor): "ROAAAAR!" | "yip yip!";

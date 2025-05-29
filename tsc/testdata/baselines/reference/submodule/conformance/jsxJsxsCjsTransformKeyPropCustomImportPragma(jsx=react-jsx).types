@@ -11,16 +11,16 @@ const props2 = { answer: 42 }
 >42 : 42
 
 const a2 = <div key="foo" {...props2}>text</div>;
->a2 : Element
-><div key="foo" {...props2}>text</div> : Element
+>a2 : JSX.Element
+><div key="foo" {...props2}>text</div> : JSX.Element
 >div : any
 >key : string
 >props2 : { answer: number; }
 >div : any
 
 const b2 = <div {...props2} key="bar">text</div>;
->b2 : Element
-><div {...props2} key="bar">text</div> : Element
+>b2 : JSX.Element
+><div {...props2} key="bar">text</div> : JSX.Element
 >div : any
 >props2 : { answer: number; }
 >key : string
@@ -38,16 +38,16 @@ const props = { answer: 42 }
 >42 : 42
 
 const a = <div key="foo" {...props}>text</div>;
->a : Element
-><div key="foo" {...props}>text</div> : Element
+>a : JSX.Element
+><div key="foo" {...props}>text</div> : JSX.Element
 >div : any
 >key : string
 >props : { answer: number; }
 >div : any
 
 const b = <div {...props} key="bar">text</div>;
->b : Element
-><div {...props} key="bar">text</div> : Element
+>b : JSX.Element
+><div {...props} key="bar">text</div> : JSX.Element
 >div : any
 >props : { answer: number; }
 >key : string

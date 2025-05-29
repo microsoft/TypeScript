@@ -39,3 +39,10 @@ const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5 = require("./es6I
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_5.default;
 const es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6 = require("./es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0");
 var x = es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0_6.default;
+
+
+//// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0.d.ts]
+declare var a: number;
+export default a;
+//// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_1.d.ts]
+export {};

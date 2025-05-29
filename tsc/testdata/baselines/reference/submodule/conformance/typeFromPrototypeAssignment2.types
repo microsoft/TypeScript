@@ -43,11 +43,11 @@
     };
 
     Multimap.prototype = {
->Multimap.prototype = {        set: function() {            this._map            this.set            this.get            this.addon        },        get() {            this._map            this.set            this.get            this.addon        }    } : { set: () => void; get: () => void; }
+>Multimap.prototype = {        set: function() {            this._map            this.set            this.get            this.addon        },        get() {            this._map            this.set            this.get            this.addon        }    } : { set: () => void; get(): void; }
 >Multimap.prototype : any
 >Multimap : () => void
 >prototype : any
->{        set: function() {            this._map            this.set            this.get            this.addon        },        get() {            this._map            this.set            this.get            this.addon        }    } : { set: () => void; get: () => void; }
+>{        set: function() {            this._map            this.set            this.get            this.addon        },        get() {            this._map            this.set            this.get            this.addon        }    } : { set: () => void; get(): void; }
 
         set: function() {
 >set : () => void

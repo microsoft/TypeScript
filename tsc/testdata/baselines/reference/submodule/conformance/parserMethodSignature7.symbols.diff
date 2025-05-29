@@ -5,6 +5,6 @@
 
    "G"<T>();
 ->"G" : Symbol(I["G"], Decl(parserMethodSignature7.ts, 0, 13))
-+>"G" : Symbol(G, Decl(parserMethodSignature7.ts, 0, 13))
++>"G" : Symbol("G", Decl(parserMethodSignature7.ts, 0, 13))
  >T : Symbol(T, Decl(parserMethodSignature7.ts, 1, 6))
  }

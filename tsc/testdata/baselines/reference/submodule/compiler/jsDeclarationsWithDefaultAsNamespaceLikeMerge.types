@@ -20,23 +20,23 @@ export declare function createNamespacedHelpers(): NamespacedMappers;
 
 === /index.js ===
 import { createNamespacedHelpers } from './helper'
->createNamespacedHelpers : () => NamespacedMappers
+>createNamespacedHelpers : () => import("./helper.js").NamespacedMappers
 
 const { mapState } = createNamespacedHelpers()
->mapState : Mapper<Computed>
->createNamespacedHelpers() : NamespacedMappers
->createNamespacedHelpers : () => NamespacedMappers
+>mapState : import("./helper.js").Mapper<import("./helper.js").Computed>
+>createNamespacedHelpers() : import("./helper.js").NamespacedMappers
+>createNamespacedHelpers : () => import("./helper.js").NamespacedMappers
 
 export default {
->{    computed: {        ...mapState(['panels'])    }} : { computed: { panels: Computed; }; }
+>{    computed: {        ...mapState(['panels'])    }} : { computed: { panels: import("./helper.js").Computed; }; }
 
     computed: {
->computed : { panels: Computed; }
->{        ...mapState(['panels'])    } : { panels: Computed; }
+>computed : { panels: import("./helper.js").Computed; }
+>{        ...mapState(['panels'])    } : { panels: import("./helper.js").Computed; }
 
         ...mapState(['panels'])
->mapState(['panels']) : { panels: Computed; }
->mapState : Mapper<Computed>
+>mapState(['panels']) : { panels: import("./helper.js").Computed; }
+>mapState : import("./helper.js").Mapper<import("./helper.js").Computed>
 >['panels'] : "panels"[]
 >'panels' : "panels"
     }

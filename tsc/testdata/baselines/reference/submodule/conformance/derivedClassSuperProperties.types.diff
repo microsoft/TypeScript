@@ -1,17 +1,6 @@
 --- old.derivedClassSuperProperties.types
 +++ new.derivedClassSuperProperties.types
-@@= skipped -858, +858 lines =@@
-
-     constructor() {
-         const obj = {
-->obj : { getProp(): any; }
-->{            getProp() {                return this;            },        } : { getProp(): any; }
-+>obj : { getProp: () => any; }
-+>{            getProp() {                return this;            },        } : { getProp: () => any; }
-
-             getProp() {
- >getProp : () => any
-@@= skipped -22, +22 lines =@@
+@@= skipped -880, +880 lines =@@
  >b : any
 
  const DerivedWithLoops = [

@@ -6,7 +6,7 @@ interface I { m(): number; }
 
 const o: I = { m() { throw new Error("not implemented"); } };
 >o : I
->{ m() { throw new Error("not implemented"); } } : { m: () => never; }
+>{ m() { throw new Error("not implemented"); } } : { m(): never; }
 >m : () => never
 >new Error("not implemented") : Error
 >Error : ErrorConstructor

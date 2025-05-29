@@ -1,12 +1,12 @@
 --- old.implicitAnyDeclareFunctionWithoutFormalType2.js
 +++ new.implicitAnyDeclareFunctionWithoutFormalType2.js
-@@= skipped -33, +33 lines =@@
-     var x;
-     return x;
- }
--
--
--//// [implicitAnyDeclareFunctionWithoutFormalType2.d.ts]
--declare function fn1(): number;
--declare function fn2(): any;
--declare function fn3(): any;
+@@= skipped -36, +36 lines =@@
+
+
+ //// [implicitAnyDeclareFunctionWithoutFormalType2.d.ts]
++// generates function fn1(): number;
+ declare function fn1(): number;
++// generates function fn2(): any;
+ declare function fn2(): any;
++// generates function fn3();
+ declare function fn3(): any;

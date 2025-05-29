@@ -64,9 +64,9 @@ module M {
 
 class D2 extends M.E { }
 >D2 : D2
->M.E : typeof E
+>M.E : typeof M.E
 >M : typeof M
->E : typeof E
+>E : typeof M.E
 
 class D3<T extends M.E> { }
 >D3 : D3<T>

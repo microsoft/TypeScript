@@ -2,7 +2,7 @@
 
 === b.ts ===
 import y = require("./a");
->y : typeof import("a")
+>y : typeof y
 
 === ref.ts ===
 var x = 1;

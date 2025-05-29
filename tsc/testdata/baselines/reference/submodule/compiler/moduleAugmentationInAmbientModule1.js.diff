@@ -9,7 +9,4 @@
 -var x;
 +let x;
  x.foo().x;
--
--
--//// [main.d.ts]
--export {};
+

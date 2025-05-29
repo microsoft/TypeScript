@@ -5,5 +5,5 @@
 
    'gold \u2730'
 ->'gold \u2730' : (typeof E)["gold \u2730"]
-+>'gold \u2730' : E.'gold \u2730'
++>'gold \u2730' : typeof E["gold \u2730"]
  }

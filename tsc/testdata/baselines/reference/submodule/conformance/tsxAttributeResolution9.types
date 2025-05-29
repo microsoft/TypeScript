@@ -30,12 +30,12 @@ export class MyComponent {
 }
 
 <MyComponent foo="bar" />; // ok  
-><MyComponent foo="bar" /> : Element
+><MyComponent foo="bar" /> : JSX.Element
 >MyComponent : typeof MyComponent
 >foo : string
 
 <MyComponent foo={0} />; // should be an error
-><MyComponent foo={0} /> : Element
+><MyComponent foo={0} /> : JSX.Element
 >MyComponent : typeof MyComponent
 >foo : number
 >0 : 0

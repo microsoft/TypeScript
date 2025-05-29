@@ -58,10 +58,3 @@
  >"" : ""
 
  super_invariant = sub_invariant;  // Error
-@@= skipped -31, +31 lines =@@
-  * @param {T} x
-  */
- function f(x) {}
-->f : <in T>(x: T) => void
-+>f : <T>(x: T) => void
- >x : T

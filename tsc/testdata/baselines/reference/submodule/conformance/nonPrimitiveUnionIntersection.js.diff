@@ -6,15 +6,20 @@
  b = a; // ok
 -var foo = { bar: 'bar' }; // ok
 -var bar = { bar: 'bar' }; // error
--
--
--//// [nonPrimitiveUnionIntersection.d.ts]
++const foo = { bar: 'bar' }; // ok
++const bar = { bar: 'bar' }; // error
+
+
+ //// [nonPrimitiveUnionIntersection.d.ts]
 -declare var a: object & string;
 -declare var b: object | string;
 -declare var c: object & {};
 -declare const foo: object & {};
--declare const bar: object & {
--    err: string;
++declare var a: object & string; // error
++declare var b: object | string; // ok
++declare var c: object & {}; // error
++declare const foo: object & {}; // ok
+ declare const bar: object & {
+     err: string;
 -};
-+const foo = { bar: 'bar' }; // ok
-+const bar = { bar: 'bar' }; // error
++}; // error

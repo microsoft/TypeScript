@@ -2,7 +2,7 @@
 
 === index.ts ===
 import * as ip from 'ip';
->ip : typeof import("node_modules/@types/ip/index")
+>ip : typeof ip
 
 import nullthrows from 'nullthrows'; // shouldn't be callable, `nullthrows` is a cjs package, so the `default` is the module itself
 >nullthrows : typeof nullthrows
@@ -15,7 +15,7 @@ export function getAddress(): string {
 >nullthrows : typeof nullthrows
 >ip.address() : string
 >ip.address : () => string
->ip : typeof import("node_modules/@types/ip/index")
+>ip : typeof ip
 >address : () => string
 }
 === node_modules/@types/ip/index.d.ts ===

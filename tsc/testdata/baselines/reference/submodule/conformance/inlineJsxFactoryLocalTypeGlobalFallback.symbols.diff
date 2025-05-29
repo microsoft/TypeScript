@@ -1,15 +1,6 @@
 --- old.inlineJsxFactoryLocalTypeGlobalFallback.symbols
 +++ new.inlineJsxFactoryLocalTypeGlobalFallback.symbols
-@@= skipped -1, +1 lines =@@
-
- === renderer.d.ts ===
- declare global {
-->global : Symbol(global, Decl(renderer.d.ts, 0, 0))
-+>global : Symbol((Missing), Decl(renderer.d.ts, 0, 0))
-
-     namespace JSX {
- >JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 16))
-@@= skipped -15, +15 lines =@@
+@@= skipped -16, +16 lines =@@
  >Element : Symbol(Element, Decl(renderer.d.ts, 4, 9))
 
              __domBrand: void;
@@ -87,8 +78,8 @@
  export default <h></h>
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer2.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer2.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer2.d.ts, 2, 37))
 
  === index.tsx ===
  /** @jsx dom */
@@ -98,5 +89,5 @@
  >elem : Symbol(elem, Decl(index.tsx, 3, 3))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
-+>h : Symbol((Missing), Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))

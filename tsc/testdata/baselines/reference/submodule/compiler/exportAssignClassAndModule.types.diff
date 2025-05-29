@@ -1,30 +1,11 @@
 --- old.exportAssignClassAndModule.types
 +++ new.exportAssignClassAndModule.types
-@@= skipped -5, +5 lines =@@
- >Foo : typeof Foo
-
- var z: Foo.Bar;
-->z : Foo.Bar
-+>z : Bar
- >Foo : any
-
- var zz: Foo;
- >zz : Foo
-
- zz.x;
-->zz.x : Foo.Bar
-+>zz.x : Bar
- >zz : Foo
-->x : Foo.Bar
-+>x : Bar
-
- === exportAssignClassAndModule_0.ts ===
- class Foo {
+@@= skipped -21, +21 lines =@@
  >Foo : Foo
 
      x: Foo.Bar;
 ->x : Foo.Bar
-+>x : Bar
++>x : import("./exportAssignClassAndModule_0").Bar
  >Foo : any
  }
  module Foo {

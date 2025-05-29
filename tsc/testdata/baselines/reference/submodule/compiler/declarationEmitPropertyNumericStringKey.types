@@ -4,9 +4,9 @@
 // https://github.com/microsoft/TypeScript/issues/55292
 
 const STATUS = {
->STATUS : { readonly ["404"]: "not found"; }
->{    ["404"]: "not found",} as const : { readonly ["404"]: "not found"; }
->{    ["404"]: "not found",} : { readonly ["404"]: "not found"; }
+>STATUS : { readonly "404": "not found"; }
+>{    ["404"]: "not found",} as const : { readonly "404": "not found"; }
+>{    ["404"]: "not found",} : { readonly "404": "not found"; }
 
     ["404"]: "not found",
 >["404"] : "not found"
@@ -20,8 +20,8 @@ const hundredStr = "100";
 >"100" : "100"
 
 const obj = { [hundredStr]: "foo" };
->obj : { [hundredStr]: string; }
->{ [hundredStr]: "foo" } : { [hundredStr]: string; }
+>obj : { "100": string; }
+>{ [hundredStr]: "foo" } : { "100": string; }
 >[hundredStr] : string
 >hundredStr : "100"
 >"foo" : "foo"
@@ -31,8 +31,8 @@ const hundredNum = 100;
 >100 : 100
 
 const obj2 = { [hundredNum]: "bar" };
->obj2 : { [hundredNum]: string; }
->{ [hundredNum]: "bar" } : { [hundredNum]: string; }
+>obj2 : { 100: string; }
+>{ [hundredNum]: "bar" } : { 100: string; }
 >[hundredNum] : string
 >hundredNum : 100
 >"bar" : "bar"

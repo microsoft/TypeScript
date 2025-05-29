@@ -2,15 +2,15 @@
 
 === declarationEmitInferredTypeAlias4.ts ===
 function f<A>() {
->f : <A>() => Foo<A[]>
+>f : <A>() => A[] | { x: A[] | any; }
 
     type Foo<T> = T | { x: Foo<T> };
->Foo : Foo<T>
->x : Foo<T>
+>Foo : T | { x: T | any; }
+>x : T | { x: T | any; }
 
     var x: Foo<A[]>;
->x : Foo<A[]>
+>x : A[] | { x: A[] | any; }
 
     return x;
->x : Foo<A[]>
+>x : A[] | { x: A[] | any; }
 }

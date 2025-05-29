@@ -45,11 +45,3 @@
  >foo : string
      }
  }
-@@= skipped -47, +47 lines =@@
- }
-
- function foo({ kind, payload }: Data) {
-->foo : ({ kind, payload }: Data) => void
-+>foo : (__0: Data) => void
- >kind : "num" | "str"
- >payload : string | number

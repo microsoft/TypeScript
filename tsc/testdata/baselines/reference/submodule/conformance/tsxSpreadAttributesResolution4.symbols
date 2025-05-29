@@ -86,7 +86,7 @@ let e3 = <EmptyProp {...{ ref: (input) => { this.textInput = input; } }} />
 let e4 = <EmptyProp data-prop />
 >e4 : Symbol(e4, Decl(file.tsx, 32, 3))
 >EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
->data-prop : Symbol("data-prop", Decl(file.tsx, 32, 19))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 32, 19))
 
 let e5 = <EmptyProp {...{ "data-prop": true}} />
 >e5 : Symbol(e5, Decl(file.tsx, 33, 3))

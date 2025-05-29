@@ -31,13 +31,13 @@ declare global {
     }
 }
 import * as model from "./model";
->model : typeof import("model/index")
+>model : typeof model
 
 export const func = (account: model.Account, acc2: model.Acc) => {};
->func : (account: Account, acc2: Account2) => void
->(account: model.Account, acc2: model.Acc) => {} : (account: Account, acc2: Account2) => void
->account : Account
+>func : (account: model.Account, acc2: model.Acc) => void
+>(account: model.Account, acc2: model.Acc) => {} : (account: model.Account, acc2: model.Acc) => void
+>account : model.Account
 >model : any
->acc2 : Account2
+>acc2 : model.Acc
 >model : any
 

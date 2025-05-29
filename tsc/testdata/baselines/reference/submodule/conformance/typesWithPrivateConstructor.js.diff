@@ -24,16 +24,17 @@
 +}
  var c2 = new C2(); // error C2 is private
  var r2 = c2.constructor;
--
--
--//// [typesWithPrivateConstructor.d.ts]
--declare class C {
--    private constructor();
--}
+
+@@= skipped -20, +16 lines =@@
+ declare class C {
+     private constructor();
+ }
 -declare var c: any;
--declare var r: () => void;
--declare class C2 {
--    private constructor();
--}
++declare var c: any; // error C is private
+ declare var r: () => void;
+ declare class C2 {
+     private constructor();
+ }
 -declare var c2: any;
--declare var r2: (x: number) => void;
++declare var c2: any; // error C2 is private
+ declare var r2: (x: number) => void;

@@ -2,7 +2,7 @@
 
 === tupleElementTypes4.ts ===
 function f([a, b] = [0, undefined]) { }
->f : (__0?: [number, any]) => void
+>f : ([a, b]?: [number, any]) => void
 >a : number
 >b : any
 >[0, undefined] : [number, undefined]

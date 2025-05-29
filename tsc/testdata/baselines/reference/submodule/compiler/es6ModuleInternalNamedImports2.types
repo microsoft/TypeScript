@@ -28,7 +28,7 @@ export module M {
 
     // enum
     export enum M_E { }
->M_E : M.M_E
+>M_E : M_E
 
     // type
     export type M_T = number;

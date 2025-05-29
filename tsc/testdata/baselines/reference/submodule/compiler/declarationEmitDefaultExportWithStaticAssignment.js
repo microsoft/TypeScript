@@ -76,3 +76,20 @@ function C() {
 }
 C.A = A;
 C.B = B;
+
+
+//// [foo.d.ts]
+export declare class Foo {
+}
+//// [index1.d.ts]
+export default function Example(): void;
+//// [index2.d.ts]
+import { Foo } from './foo';
+export { Foo };
+export default function Example(): void;
+//// [index3.d.ts]
+export declare class Bar {
+}
+export default function Example(): void;
+//// [index4.d.ts]
+export declare function C(): any;

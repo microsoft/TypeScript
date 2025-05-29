@@ -8,21 +8,17 @@
 +>ext : any
 
  var y1: { C: new() => ext.C; } = ext;
-->y1 : { C: new () => ext.C; }
-->C : new () => ext.C
-->ext : any
+ >y1 : { C: new () => ext.C; }
+ >C : new () => ext.C
+ >ext : any
 ->ext : typeof ext
-+>y1 : { C: new () => C; }
-+>C : new () => C
-+>ext : any
 +>ext : any
 
  y1 = ext; // ok
 ->y1 = ext : typeof ext
-->y1 : { C: new () => ext.C; }
-->ext : typeof ext
 +>y1 = ext : any
-+>y1 : { C: new () => C; }
+ >y1 : { C: new () => ext.C; }
+->ext : typeof ext
 +>ext : any
 
  import ext2 = require('externalModuleAssignToVar_core_require2');

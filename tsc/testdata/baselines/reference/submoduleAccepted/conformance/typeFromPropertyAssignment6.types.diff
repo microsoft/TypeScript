@@ -42,6 +42,6 @@
  function x(inner) {
 ->x : (inner: I) => void
 ->inner : I
-+>x : (inner: Inner) => void
-+>inner : Inner
++>x : (inner: Outer.Inner) => void
++>inner : Outer.Inner
  }

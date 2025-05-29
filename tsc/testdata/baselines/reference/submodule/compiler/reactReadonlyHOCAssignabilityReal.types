@@ -6,8 +6,8 @@ import * as React from "react";
 >React : typeof React
 
 function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
->myHigherOrderComponent : <P>(Inner: ComponentClass<P & { name: string; }, any>) => ComponentClass<P, any>
->Inner : ComponentClass<P & { name: string; }, any>
+>myHigherOrderComponent : <P>(Inner: React.ComponentClass<P & { name: string; }, any>) => React.ComponentClass<P, any>
+>Inner : React.ComponentClass<P & { name: string; }, any>
 >React : any
 >name : string
 >React : any
@@ -15,19 +15,19 @@ function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string
     return class OuterComponent extends React.Component<P> {
 >class OuterComponent extends React.Component<P> {        render() {            return <Inner {...this.props} name="Matt"/>;        }    } : typeof OuterComponent
 >OuterComponent : typeof OuterComponent
->React.Component : Component<P, {}, any>
+>React.Component : React.Component<P, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 
         render() {
->render : () => Element
+>render : () => JSX.Element
 
             return <Inner {...this.props} name="Matt"/>;
-><Inner {...this.props} name="Matt"/> : Element
->Inner : ComponentClass<P & { name: string; }, any>
->this.props : Readonly<{ children?: ReactNode; }> & Readonly<P>
+><Inner {...this.props} name="Matt"/> : JSX.Element
+>Inner : React.ComponentClass<P & { name: string; }, any>
+>this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
 >this : this
->props : Readonly<{ children?: ReactNode; }> & Readonly<P>
+>props : Readonly<{ children?: React.ReactNode; }> & Readonly<P>
 >name : "Matt"
         }
     };

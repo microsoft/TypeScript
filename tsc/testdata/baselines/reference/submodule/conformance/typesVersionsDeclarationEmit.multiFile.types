@@ -2,20 +2,20 @@
 
 === main.ts ===
 import { fa } from "ext";
->fa : () => A
+>fa : () => import("ext").A
 
 import { fb } from "ext/other";
->fb : () => B
+>fb : () => import("ext/other").B
 
 export const va = fa();
->va : A
->fa() : A
->fa : () => A
+>va : import("ext").A
+>fa() : import("ext").A
+>fa : () => import("ext").A
 
 export const vb = fb();
->vb : B
->fb() : B
->fb : () => B
+>vb : import("ext/other").B
+>fb() : import("ext/other").B
+>fb : () => import("ext/other").B
 
 === node_modules/ext/ts3.1/index.d.ts ===
 export interface A {}

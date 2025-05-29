@@ -7,9 +7,9 @@ export function foo() {
 }
 
 const o = {
->o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
->{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} as const : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
->{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} as const : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 
     ["prop.inner"]: "a",
 >["prop.inner"] : "a"
@@ -31,7 +31,7 @@ foo[o["prop.inner"]] ="A";
 >foo[o["prop.inner"]] : any
 >foo : { (): void; b: string; }
 >o["prop.inner"] : "a"
->o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 >"prop.inner" : "prop.inner"
 >"A" : "A"
 
@@ -41,7 +41,7 @@ foo[o.prop.inner] = "B";
 >foo : { (): void; b: string; }
 >o.prop.inner : "b"
 >o.prop : { readonly inner: "b"; }
->o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 >prop : { readonly inner: "b"; }
 >inner : "b"
 >"B" : "B"
@@ -52,7 +52,7 @@ export class Foo {
     [o["prop.inner"]] ="A"
 >[o["prop.inner"]] : string
 >o["prop.inner"] : "a"
->o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 >"prop.inner" : "prop.inner"
 >"A"    [o.prop.inner] = "B" : "B"
 >"A"    [o.prop.inner] : any
@@ -61,7 +61,7 @@ export class Foo {
     [o.prop.inner] = "B"
 >o.prop.inner : "b"
 >o.prop : { readonly inner: "b"; }
->o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 >prop : { readonly inner: "b"; }
 >inner : "b"
 >"B" : "B"
@@ -74,7 +74,7 @@ export let oo = {
     [o['prop.inner']]:"A",
 >[o['prop.inner']] : string
 >o['prop.inner'] : "a"
->o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 >'prop.inner' : "prop.inner"
 >"A" : "A"
 
@@ -82,7 +82,7 @@ export let oo = {
 >[o.prop.inner] : string
 >o.prop.inner : "b"
 >o.prop : { readonly inner: "b"; }
->o : { readonly ["prop.inner"]: "a"; readonly prop: { readonly inner: "b"; }; }
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
 >prop : { readonly inner: "b"; }
 >inner : "b"
 >"B" : "B"

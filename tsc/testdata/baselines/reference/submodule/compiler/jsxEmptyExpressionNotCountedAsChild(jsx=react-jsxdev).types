@@ -7,38 +7,38 @@ import * as React from 'react'
 
 interface Props {
     children: React.ReactElement<any>
->children : ReactElement<any>
+>children : React.ReactElement<any>
 >React : any
 }
 
 function Wrapper(props: Props) {
->Wrapper : (props: Props) => Element
+>Wrapper : (props: Props) => JSX.Element
 >props : Props
 
     return <div>{props.children}</div>
-><div>{props.children}</div> : Element
+><div>{props.children}</div> : JSX.Element
 >div : any
->props.children : ReactElement<any>
+>props.children : React.ReactElement<any>
 >props : Props
->children : ReactElement<any>
+>children : React.ReactElement<any>
 >div : any
 }
 
 const element = (
->element : Element
->(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : Element
+>element : JSX.Element
+>(    <Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper>) : JSX.Element
 
     <Wrapper>
-><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : Element
->Wrapper : (props: Props) => Element
+><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : JSX.Element
+>Wrapper : (props: Props) => JSX.Element
 
     {/* comment */}
      <div>Hello</div>
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
 
     </Wrapper>
->Wrapper : (props: Props) => Element
+>Wrapper : (props: Props) => JSX.Element
 
 )

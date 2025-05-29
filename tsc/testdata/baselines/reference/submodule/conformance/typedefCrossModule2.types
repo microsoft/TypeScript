@@ -13,7 +13,7 @@ var b;
 
 /** @type {mod.Baz} */
 var bb;
->bb : Baz
+>bb : mod.Baz
 
 var bbb = new mod.Baz();
 >bbb : Baz
@@ -33,7 +33,7 @@ class Foo { } // should error
 exports.Bar = class { }
 >exports.Bar = class { } : typeof Bar
 >exports.Bar : any
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >Bar : any
 >class { } : typeof Bar
 
@@ -41,7 +41,7 @@ exports.Bar = class { }
 module.exports = {
 >module.exports = {    Baz: class { }} : { Baz: typeof Baz; }
 >module.exports : { Baz: typeof Baz; }
->module : { export=: { Baz: typeof Baz; }; }
+>module : { "export=": { Baz: typeof Baz; }; }
 >exports : { Baz: typeof Baz; }
 >{    Baz: class { }} : { Baz: typeof Baz; }
 
@@ -61,7 +61,7 @@ var Qux = 2;
 exports.Quid = 2;
 >exports.Quid = 2 : 2
 >exports.Quid : any
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >Quid : any
 >2 : 2
 
@@ -69,7 +69,7 @@ exports.Quid = 2;
 module.exports = {
 >module.exports = {    Quack: 2} : { Quack: number; }
 >module.exports : { Baz: typeof Baz; }
->module : { export=: { Baz: typeof Baz; }; }
+>module : { "export=": { Baz: typeof Baz; }; }
 >exports : { Baz: typeof Baz; }
 >{    Quack: 2} : { Quack: number; }
 

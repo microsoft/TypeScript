@@ -9,8 +9,7 @@
  }
 
  export default interface Bar {
-->Bar : Symbol(Bar, Decl(other.d.ts, 2, 1))
-+>Bar : Symbol(default, Decl(other.d.ts, 2, 1))
+ >Bar : Symbol(Bar, Decl(other.d.ts, 2, 1))
 
      foo: number;
 ->foo : Symbol(Bar.foo, Decl(other.d.ts, 4, 30))
@@ -27,8 +26,7 @@
  }
 
  export default class Bar {
-->Bar : Symbol(Bar, Decl(other.js, 2, 1))
-+>Bar : Symbol(default, Decl(other.js, 2, 1))
+ >Bar : Symbol(Bar, Decl(other.js, 2, 1))
 
      foo = 1.2;
 ->foo : Symbol(Bar.foo, Decl(other.js, 4, 26))

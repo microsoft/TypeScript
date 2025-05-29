@@ -2,7 +2,7 @@
 
 === foo.tsx ===
 import Element = require("react");
->Element : typeof React
+>Element : typeof Element
 
 export const FooComponent = <div></div>
 >FooComponent : any

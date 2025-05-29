@@ -225,7 +225,7 @@
 
      public "constructor" = 0;
 ->"constructor" : Symbol(bigClass["constructor"], Decl(convertKeywordsYes.ts, 173, 16))
-+>"constructor" : Symbol(constructor, Decl(convertKeywordsYes.ts, 173, 16))
++>"constructor" : Symbol("constructor", Decl(convertKeywordsYes.ts, 173, 16))
 
      public any = 0;
 ->any : Symbol(bigClass.any, Decl(convertKeywordsYes.ts, 174, 29))

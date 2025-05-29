@@ -43,11 +43,11 @@ module C {
 >a : any
 
     var p: b.Point3D;
->p : Point3D
+>p : b.Point3D
 >b : any
 
     var p = {x:0, y:0, z: 0 };
->p : Point3D
+>p : b.Point3D
 >{x:0, y:0, z: 0 } : { x: number; y: number; z: number; }
 >x : number
 >0 : 0
@@ -66,7 +66,7 @@ module D {
 >A : any
 
     var p : a.Point;
->p : Point
+>p : a.Point
 >a : any
 }
 
@@ -80,15 +80,15 @@ module E {
 >inA : any
 
     export function xDist(x: a.Point3D) {
->xDist : (x: Point3D) => number
->x : Point3D
+>xDist : (x: a.Point3D) => number
+>x : a.Point3D
 >a : any
 
         return 0 - x.x;
 >0 - x.x : number
 >0 : 0
 >x.x : number
->x : Point3D
+>x : a.Point3D
 >x : number
     }
 }

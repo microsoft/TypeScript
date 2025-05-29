@@ -15,13 +15,13 @@ var dec;
 // ok
 @dec export default class C2 {}
 >dec : any
->C2 : default
+>C2 : C2
 
 === file3.js ===
 // error
 export @dec default class C3 {}
 >dec : any
->C3 : default
+>C3 : C3
 
 === file4.js ===
 // ok
@@ -33,7 +33,7 @@ export @dec class C4 {}
 // ok
 export default @dec class C5 {}
 >dec : any
->C5 : default
+>C5 : C5
 
 === file6.js ===
 // error
@@ -47,5 +47,5 @@ export default @dec class C5 {}
 @dec export default @dec class C7 {}
 >dec : any
 >dec : any
->C7 : default
+>C7 : C7
 

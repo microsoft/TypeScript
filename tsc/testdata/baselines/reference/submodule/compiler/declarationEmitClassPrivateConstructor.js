@@ -53,3 +53,23 @@ class ExportedClass4 {
     }
 }
 exports.ExportedClass4 = ExportedClass4;
+
+
+//// [declarationEmitClassPrivateConstructor.d.ts]
+export declare class ExportedClass1 {
+    private constructor();
+}
+export declare class ExportedClass2 {
+    private data;
+    private constructor();
+}
+export declare class ExportedClass3 {
+    private data;
+    private n;
+    private constructor();
+}
+export declare class ExportedClass4 {
+    private data;
+    n: number;
+    private constructor();
+}

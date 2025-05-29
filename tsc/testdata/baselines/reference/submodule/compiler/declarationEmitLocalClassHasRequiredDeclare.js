@@ -30,3 +30,19 @@ exports.A = A;
 class Y {
 }
 exports.Y = Y;
+
+
+//// [declarationEmitLocalClassHasRequiredDeclare.d.ts]
+export declare namespace A {
+    namespace X { }
+}
+declare class X {
+}
+export declare class A {
+    static X: typeof X;
+}
+export declare namespace Y {
+}
+export declare class Y {
+}
+export {};

@@ -24,12 +24,12 @@ module A {
 }
 
 var x: A.B = A.B.createB();
->x : B
+>x : A.B
 >A : any
->A.B.createB() : B
->A.B.createB : () => B
->A.B : typeof B
+>A.B.createB() : A.B
+>A.B.createB : () => A.B
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
->createB : () => B
+>B : typeof A.B
+>createB : () => A.B
 

@@ -31,21 +31,27 @@
 -    if (reuseTypeNode === void 0) { reuseTypeNode = {}; }
 -    if (reuseTypeNode2 === void 0) { reuseTypeNode2 = {}; }
 -    if (resolveType === void 0) { resolveType = {}; }
--}
--
--
--//// [verbatim-declarations-parameters.d.ts]
--type Map = {} & {
--    [P in string]: any;
--};
--type MapOrUndefined = Map | undefined | "dummy";
--export declare class Foo {
--    reuseTypeNode?: Map | undefined;
--    reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;
++resolveType = {}, requiredParam) {
+ }
+
+
+@@= skipped -22, +18 lines =@@
+ export declare class Foo {
+     reuseTypeNode?: Map | undefined;
+     reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">;
 -    resolveType?: Map | undefined;
 -    constructor(reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, resolveType?: Map | undefined);
--}
++    resolveType?: Map;
++    constructor(
++    // Type node is accurate, preserve
++    reuseTypeNode?: Map | undefined, reuseTypeNode2?: Exclude<MapOrUndefined, "dummy">, 
++    // Resolve type node, requires adding | undefined
++    resolveType?: Map);
+ }
 -export declare function foo1(reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, resolveType: Map | undefined, requiredParam: number): void;
--export {};
-+resolveType = {}, requiredParam) {
-+}
++export declare function foo1(
++// Type node is accurate, preserve
++reuseTypeNode: Map | undefined, reuseTypeNode2: Exclude<MapOrUndefined, "dummy">, 
++// Resolve type node, requires adding | undefined
++resolveType: Map, requiredParam: number): void;
+ export {};

@@ -65,7 +65,7 @@ const aNumber = [0];
  * @param {U} b
  */
 function f1(a, b) {}
->f1 : <T, U>(a: T, b: U) => void
+>f1 : <T, U = T>(a: T, b: U) => void
 >a : T
 >b : U
 
@@ -76,7 +76,7 @@ function f1(a, b) {}
  * @param {U} b
  */
 function f2(a, b) {}
->f2 : <T extends string | number, U>(a: T, b: U) => void
+>f2 : <T extends string | number = string, U>(a: T, b: U) => void
 >a : T
 >b : U
 
@@ -87,7 +87,7 @@ function f2(a, b) {}
  * @param {U} b
  */
 function f3(a, b) {}
->f3 : <T, U>(a: T, b: U) => void
+>f3 : <T = U, U = T>(a: T, b: U) => void
 >a : T
 >b : U
 

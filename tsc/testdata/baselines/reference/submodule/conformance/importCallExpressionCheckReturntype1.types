@@ -10,26 +10,26 @@ export class C {}
 
 === 1.ts ===
 import * as defaultModule from "./defaultPath";
->defaultModule : typeof import("defaultPath")
+>defaultModule : typeof defaultModule
 
 import * as anotherModule from "./anotherModule";
->anotherModule : typeof import("anotherModule")
+>anotherModule : typeof anotherModule
 
 let p1: Promise<typeof anotherModule> = import("./defaultPath");
->p1 : Promise<typeof import("anotherModule")>
->anotherModule : typeof import("anotherModule")
->import("./defaultPath") : Promise<typeof import("defaultPath")>
+>p1 : Promise<typeof anotherModule>
+>anotherModule : typeof anotherModule
+>import("./defaultPath") : Promise<typeof defaultModule>
 >"./defaultPath" : "./defaultPath"
 
 let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
->p2 : Promise<typeof import("anotherModule")>
->import("./defaultPath") as Promise<typeof anotherModule> : Promise<typeof import("anotherModule")>
->import("./defaultPath") : Promise<typeof import("defaultPath")>
+>p2 : Promise<typeof anotherModule>
+>import("./defaultPath") as Promise<typeof anotherModule> : Promise<typeof anotherModule>
+>import("./defaultPath") : Promise<typeof defaultModule>
 >"./defaultPath" : "./defaultPath"
->anotherModule : typeof import("anotherModule")
+>anotherModule : typeof anotherModule
 
 let p3: Promise<any> = import("./defaultPath");
 >p3 : Promise<any>
->import("./defaultPath") : Promise<typeof import("defaultPath")>
+>import("./defaultPath") : Promise<typeof defaultModule>
 >"./defaultPath" : "./defaultPath"
 

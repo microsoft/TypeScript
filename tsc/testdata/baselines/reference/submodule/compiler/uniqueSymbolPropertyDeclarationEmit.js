@@ -43,3 +43,17 @@ function foo() {
         [po_1.Po.ro]: {}
     };
 }
+
+
+//// [op.d.ts]
+declare const Op: {
+    readonly or: unique symbol;
+};
+export default Op;
+//// [test.d.ts]
+import Op from './op';
+import { Po } from './po';
+export default function foo(): {
+    [Op.or]: any[];
+    [Po.ro]: {};
+};

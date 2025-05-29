@@ -81,16 +81,7 @@
 
  let o = {
  >o : Symbol(o, Decl(looseThisTypeInFunctions.ts, 21, 3))
-@@= skipped -20, +20 lines =@@
-         return m + this.n.length; // error, 'length' does not exist on 'number'
- >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 23, 28))
- >this.n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 21, 9))
-->this : Symbol(o, Decl(looseThisTypeInFunctions.ts, 21, 7))
-+>this : Symbol((Anonymous type), Decl(looseThisTypeInFunctions.ts, 21, 7))
- >n : Symbol(n, Decl(looseThisTypeInFunctions.ts, 21, 9))
-
-     },
-@@= skipped -28, +28 lines =@@
+@@= skipped -48, +48 lines =@@
 
           return m + this.n.length;  // error, this.n: number, no member 'length'
  >m : Symbol(m, Decl(looseThisTypeInFunctions.ts, 31, 28))

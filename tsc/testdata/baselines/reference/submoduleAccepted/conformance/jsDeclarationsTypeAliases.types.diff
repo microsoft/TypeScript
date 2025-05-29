@@ -10,7 +10,7 @@
 ->exports : typeof module.exports
 +>module.exports = {    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
 +>module.exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
-+>module : { export=: { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }; }
++>module : { "export=": { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }; }
 +>exports : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
  >{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
 

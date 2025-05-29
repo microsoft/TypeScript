@@ -15,22 +15,13 @@
 +class Wrapper {
 +    proxy(fn) {
          return null;
--    };
--    return Wrapper;
--}());
--exports.Wrapper = Wrapper;
--
--
--//// [declarationEmitOverloadedPrivateInference.d.ts]
--export declare class Wrapper {
--    private proxy;
--    Proxies: {
--        Failure: (options?: unknown) => string;
--        Success: (options: string) => string;
 +    }
 +    Proxies = {
 +        Failure: this.proxy(noArgs, true),
 +        Success: this.proxy(oneArg),
      };
- }
-+exports.Wrapper = Wrapper;
+-    return Wrapper;
+-}());
++}
+ exports.Wrapper = Wrapper;
+

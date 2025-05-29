@@ -19,3 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing = void 0;
 const umd_1 = require("umd");
 exports.thing = (0, umd_1.makeThing)();
+
+
+//// [index.d.ts]
+export declare const thing: import("umd.d.ts").Thing;

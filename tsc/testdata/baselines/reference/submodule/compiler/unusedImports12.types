@@ -10,10 +10,10 @@ import d, { Member as M } from './b';
 >M : typeof Member
 
 import * as ns from './b';
->ns : typeof import("b")
+>ns : typeof ns
 
 import r = require("./b");
->r : typeof import("b")
+>r : typeof ns
 
 === b.ts ===
 export class Member {}

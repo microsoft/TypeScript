@@ -15,3 +15,12 @@ function foo(...rest) {
 }
 function foo2(...rest) {
 }
+
+
+//// [declarationEmitDestructuringOptionalBindingParametersInOverloads.d.ts]
+declare function foo([x, y, z]?: [string, number, boolean]): any;
+declare function foo2({ x, y, z }?: {
+    x: string;
+    y: number;
+    z: boolean;
+}): any;

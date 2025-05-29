@@ -18,26 +18,26 @@ import { Z as Y } from './a';
 >Y : any
 
 export { B as C } from './a';
->B : typeof A
->C : typeof A
+>B : typeof import("./a").B
+>C : typeof import("./a").B
 
 === /c.ts ===
 import type { C } from './b';
->C : A
+>C : C
 
 export { C as D };
->C : typeof A
->D : typeof A
+>C : typeof C
+>D : typeof C
 
 === /d.ts ===
 import { D } from './c';
->D : typeof A
+>D : typeof D
 
 new D();
->new D() : A
->D : typeof A
+>new D() : D
+>D : typeof D
 
 const d: D = {};
->d : A
+>d : D
 >{} : {}
 

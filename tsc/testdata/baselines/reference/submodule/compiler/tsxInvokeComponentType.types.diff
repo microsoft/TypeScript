@@ -9,19 +9,15 @@
  >someKey : string
 
  const bad = <Elem />;
-->bad : JSX.Element
--><Elem /> : JSX.Element
+ >bad : JSX.Element
+ ><Elem /> : JSX.Element
 ->Elem : React.ComponentType<{ someKey: string; }>
-+>bad : Element
-+><Elem /> : Element
 +>Elem : ComponentType<{ someKey: string; }>
 
  const good = <Elem someKey="ok" />;
-->good : JSX.Element
--><Elem someKey="ok" /> : JSX.Element
+ >good : JSX.Element
+ ><Elem someKey="ok" /> : JSX.Element
 ->Elem : React.ComponentType<{ someKey: string; }>
-+>good : Element
-+><Elem someKey="ok" /> : Element
 +>Elem : ComponentType<{ someKey: string; }>
  >someKey : string
 
@@ -31,11 +27,9 @@
  >opt : number | undefined
 
  const alsoOk = <Elem2>text</Elem2>;
-->alsoOk : JSX.Element
--><Elem2>text</Elem2> : JSX.Element
+ >alsoOk : JSX.Element
+ ><Elem2>text</Elem2> : JSX.Element
 ->Elem2 : React.ComponentType<{ opt?: number; }>
 ->Elem2 : React.ComponentType<{ opt?: number; }>
-+>alsoOk : Element
-+><Elem2>text</Elem2> : Element
 +>Elem2 : ComponentType<{ opt?: number | undefined; }>
 +>Elem2 : ComponentType<{ opt?: number | undefined; }>

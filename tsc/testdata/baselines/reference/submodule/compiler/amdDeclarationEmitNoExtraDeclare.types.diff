@@ -5,7 +5,7 @@
  === Class.ts ===
  import { Configurable } from "./Configurable"
 ->Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
-+>Configurable : <T extends Constructor<{}>>(base: T) => T
++>Configurable : <T extends import("./Configurable").Constructor<{}>>(base: T) => T
 
  export class HiddenClass {}
  >HiddenClass : HiddenClass
@@ -14,7 +14,7 @@
  >ActualClass : ActualClass
  >Configurable(HiddenClass) : HiddenClass
 ->Configurable : <T extends import("Configurable").Constructor<{}>>(base: T) => T
-+>Configurable : <T extends Constructor<{}>>(base: T) => T
++>Configurable : <T extends import("./Configurable").Constructor<{}>>(base: T) => T
  >HiddenClass : typeof HiddenClass
 
  === Configurable.ts ===
@@ -23,7 +23,7 @@
 
      return class extends base {
 ->class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: Configurable<any>.(Anonymous class); } & T
-+>class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class)<T>; prototype: (Anonymous class)<any>; } & T
++>class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: Configurable.(Anonymous class); } & T
  >base : {}
 
          constructor(...args: any[]) {

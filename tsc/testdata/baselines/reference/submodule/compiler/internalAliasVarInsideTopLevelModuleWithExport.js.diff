@@ -15,14 +15,6 @@
 -    exports.b = a.x;
 -    exports.bVal = exports.b;
 -});
--
--
--//// [internalAliasVarInsideTopLevelModuleWithExport.d.ts]
--export declare namespace a {
--    var x: number;
--}
--export import b = a.x;
--export declare var bVal: number;
 +"use strict";
 +Object.defineProperty(exports, "__esModule", { value: true });
 +exports.bVal = exports.a = void 0;
@@ -31,3 +23,6 @@
 +    a.x = 10;
 +})(a || (exports.a = a = {}));
 +exports.bVal = exports.b;
+
+
+ //// [internalAliasVarInsideTopLevelModuleWithExport.d.ts]

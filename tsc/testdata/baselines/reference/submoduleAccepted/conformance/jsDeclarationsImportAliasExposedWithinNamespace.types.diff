@@ -38,14 +38,14 @@
  function testFn(input) {
 ->testFn : (input: testFnTypes.input) => number | null
 ->input : import("file2").testFnTypes.input
-+>testFn : (input: input) => number
-+>input : input
++>testFn : (input: testFnTypes.input) => number
++>input : testFnTypes.input
 
      if (typeof input === 'number') {
  >typeof input === 'number' : boolean
  >typeof input : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 ->input : import("file2").testFnTypes.input
-+>input : input
++>input : testFnTypes.input
  >'number' : "number"
 
          return 2 * input;
@@ -62,5 +62,5 @@
  export {testFn, testFnTypes};
 ->testFn : (input: testFnTypes.input) => number | null
 ->testFnTypes : { [x: string]: any; }
-+>testFn : (input: input) => number
++>testFn : (input: testFnTypes.input) => number
 +>testFnTypes : any

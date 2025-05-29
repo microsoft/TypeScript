@@ -43,8 +43,8 @@ export const createService = <T>(
 >key : string
 
         const method = (ServiceCtr)[key as keyof T];
->method : ExtendedService<T> & Service<T>[keyof T]
->(ServiceCtr)[key as keyof T] : ExtendedService<T> & Service<T>[keyof T]
+>method : (ExtendedService<T> & Service<T>)[keyof T]
+>(ServiceCtr)[key as keyof T] : (ExtendedService<T> & Service<T>)[keyof T]
 >(ServiceCtr) : ExtendedService<T> & Service<T>
 >ServiceCtr : ExtendedService<T> & Service<T>
 >key as keyof T : keyof T
@@ -54,7 +54,7 @@ export const createService = <T>(
 >__$daemonMode : string | undefined
 >__$action : string | undefined
 >id : string | undefined
->method : ExtendedService<T> & Service<T>[keyof T]
+>method : (ExtendedService<T> & Service<T>)[keyof T]
 
     })
 }

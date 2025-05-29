@@ -93,14 +93,14 @@ func newResolutionState(
 	case core.ModuleResolutionKindNode16:
 		state.features = NodeResolutionFeaturesNode16Default
 		state.esmMode = resolutionMode == core.ModuleKindESNext
-		state.conditions = getConditions(compilerOptions, resolutionMode)
+		state.conditions = GetConditions(compilerOptions, resolutionMode)
 	case core.ModuleResolutionKindNodeNext:
 		state.features = NodeResolutionFeaturesNodeNextDefault
 		state.esmMode = resolutionMode == core.ModuleKindESNext
-		state.conditions = getConditions(compilerOptions, resolutionMode)
+		state.conditions = GetConditions(compilerOptions, resolutionMode)
 	case core.ModuleResolutionKindBundler:
 		state.features = getNodeResolutionFeatures(compilerOptions)
-		state.conditions = getConditions(compilerOptions, resolutionMode)
+		state.conditions = GetConditions(compilerOptions, resolutionMode)
 	}
 	return state
 }
@@ -865,7 +865,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 					r.resolver.host.Trace(diagnostics.X_package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2.Format(versionPaths.Version, core.Version(), rest))
 				}
 				packageDirectoryExists := nodeModulesDirectoryExists && r.resolver.host.FS().DirectoryExists(packageDirectory)
-				pathPatterns := tryParsePatterns(versionPaths.GetPaths())
+				pathPatterns := TryParsePatterns(versionPaths.GetPaths())
 				if fromPaths := r.tryLoadModuleUsingPaths(ext, rest, packageDirectory, versionPaths.GetPaths(), pathPatterns, loader, !packageDirectoryExists); !fromPaths.shouldContinueSearching() {
 					return fromPaths
 				}
@@ -963,7 +963,7 @@ func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
 	} else {
 		return continueSearching()
 	}
-	baseDirectory := getPathsBasePath(r.compilerOptions, r.resolver.host.GetCurrentDirectory())
+	baseDirectory := r.compilerOptions.GetPathsBasePath(r.resolver.host.GetCurrentDirectory())
 	pathPatterns := r.resolver.getParsedPatternsForPaths()
 	return r.tryLoadModuleUsingPaths(
 		r.extensions,
@@ -978,8 +978,8 @@ func (r *resolutionState) tryLoadModuleUsingPathsIfEligible() *resolved {
 	)
 }
 
-func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleName string, containingDirectory string, paths *collections.OrderedMap[string, []string], pathPatterns *parsedPatterns, loader resolutionKindSpecificLoader, onlyRecordFailures bool) *resolved {
-	if matchedPattern := matchPatternOrExact(pathPatterns, moduleName); matchedPattern.IsValid() {
+func (r *resolutionState) tryLoadModuleUsingPaths(extensions extensions, moduleName string, containingDirectory string, paths *collections.OrderedMap[string, []string], pathPatterns *ParsedPatterns, loader resolutionKindSpecificLoader, onlyRecordFailures bool) *resolved {
+	if matchedPattern := MatchPatternOrExact(pathPatterns, moduleName); matchedPattern.IsValid() {
 		matchedStar := matchedPattern.MatchedText(moduleName)
 		if r.resolver.traceEnabled() {
 			r.resolver.host.Trace(diagnostics.Module_name_0_matched_pattern_1.Format(moduleName, matchedPattern.Text))
@@ -1309,7 +1309,7 @@ func (r *resolutionState) loadNodeModuleFromDirectoryWorker(ext extensions, cand
 		if r.resolver.traceEnabled() {
 			r.resolver.host.Trace(diagnostics.X_package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2.Format(versionPaths.Version, core.Version(), moduleName))
 		}
-		pathPatterns := tryParsePatterns(versionPaths.GetPaths())
+		pathPatterns := TryParsePatterns(versionPaths.GetPaths())
 		if result := r.tryLoadModuleUsingPaths(ext, moduleName, candidate, versionPaths.GetPaths(), pathPatterns, loader, onlyRecordFailuresForPackageFile); !result.shouldContinueSearching() {
 			if result.packageId.Name != "" {
 				// !!! are these asserts really necessary?
@@ -1565,7 +1565,7 @@ func (r *resolutionState) getTraceFunc() func(string) {
 	return nil
 }
 
-func getConditions(options *core.CompilerOptions, resolutionMode core.ResolutionMode) []string {
+func GetConditions(options *core.CompilerOptions, resolutionMode core.ResolutionMode) []string {
 	moduleResolution := options.GetModuleResolutionKind()
 	if resolutionMode == core.ModuleKindNone && moduleResolution == core.ModuleResolutionKindBundler {
 		resolutionMode = core.ModuleKindESNext
@@ -1623,29 +1623,19 @@ func moveToNextDirectorySeparatorIfAvailable(path string, prevSeparatorIndex int
 	return nextSeparatorIndex + offset
 }
 
-func getPathsBasePath(options *core.CompilerOptions, currentDirectory string) string {
-	if options.Paths.Size() == 0 {
-		return ""
-	}
-	if options.PathsBasePath != "" {
-		return options.PathsBasePath
-	}
-	return currentDirectory
-}
-
-type parsedPatterns struct {
+type ParsedPatterns struct {
 	matchableStringSet core.Set[string]
 	patterns           []core.Pattern
 }
 
-func (r *Resolver) getParsedPatternsForPaths() *parsedPatterns {
+func (r *Resolver) getParsedPatternsForPaths() *ParsedPatterns {
 	r.parsedPatternsForPathsOnce.Do(func() {
-		r.parsedPatternsForPaths = tryParsePatterns(r.compilerOptions.Paths)
+		r.parsedPatternsForPaths = TryParsePatterns(r.compilerOptions.Paths)
 	})
 	return r.parsedPatternsForPaths
 }
 
-func tryParsePatterns(pathMappings *collections.OrderedMap[string, []string]) *parsedPatterns {
+func TryParsePatterns(pathMappings *collections.OrderedMap[string, []string]) *ParsedPatterns {
 	paths := pathMappings.Keys()
 
 	numPatterns := 0
@@ -1674,13 +1664,13 @@ func tryParsePatterns(pathMappings *collections.OrderedMap[string, []string]) *p
 			}
 		}
 	}
-	return &parsedPatterns{
+	return &ParsedPatterns{
 		matchableStringSet: matchableStringSet,
 		patterns:           patterns,
 	}
 }
 
-func matchPatternOrExact(patterns *parsedPatterns, candidate string) core.Pattern {
+func MatchPatternOrExact(patterns *ParsedPatterns, candidate string) core.Pattern {
 	if patterns.matchableStringSet.Has(candidate) {
 		return core.Pattern{
 			Text:      candidate,

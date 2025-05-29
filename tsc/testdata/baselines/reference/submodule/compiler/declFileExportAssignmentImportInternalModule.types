@@ -24,17 +24,17 @@ module m3 {
     }
 
     export var server: {
->server : { (): connectExport; test1: connectModule; test2: () => connectModule; }
+>server : { (): m2.connectExport; test1: m2.connectModule; test2(): m2.connectModule; }
 
         (): m2.connectExport;
 >m2 : any
 
         test1: m2.connectModule;
->test1 : connectModule
+>test1 : m2.connectModule
 >m2 : any
 
         test2(): m2.connectModule;
->test2 : () => connectModule
+>test2 : () => m2.connectModule
 >m2 : any
 
     };

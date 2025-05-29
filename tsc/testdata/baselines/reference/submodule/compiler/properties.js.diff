@@ -19,12 +19,6 @@
 -    });
 -    return MyClass;
 -}());
--//# sourceMappingURL=properties.js.map
--
--//// [properties.d.ts]
--declare class MyClass {
--    get Count(): number;
--    set Count(value: number);
 +class MyClass {
 +    get Count() {
 +        return 42;
@@ -32,5 +26,7 @@
 +    set Count(value) {
 +        //
 +    }
- }
-+//# sourceMappingURL=properties.js.map
++}
+ //# sourceMappingURL=properties.js.map
+
+ //// [properties.d.ts]

@@ -111,3 +111,31 @@ x = y;
 y = x;
 exports.argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
 exports.argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
+
+
+//// [namedTupleMembers.d.ts]
+export type Segment = [length: number, count: number];
+export type SegmentAnnotated = [
+    /**
+     * Size of message buffer segment handles
+     */
+    length: number,
+    /**
+     * Number of segments handled at once
+     */
+    count: number
+];
+export type WithOptAndRest = [first: number, second?: number, ...rest: string[]];
+export type Func<T extends any[]> = (...x: T) => void;
+export declare const func: Func<SegmentAnnotated>;
+export declare function useState<T>(initial: T): [value: T, setter: (T: any) => void];
+export type Iter = Func<[step: number, iterations: number]>;
+export declare function readSegment([length, count]: [number, number]): void;
+// documenting binding pattern behavior (currently does _not_ generate tuple names)
+export declare const val: [number, number];
+export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
+export type RecursiveTupleB = [first: string, ptr: RecursiveTupleB];
+export type RecusiveRest = [first: string, ...rest: RecusiveRest[]];
+export type RecusiveRest2 = [string, ...RecusiveRest2[]];
+export declare const argumentsOfGAsFirstArgument: [[elem: object, index: number]]; // one tuple with captures arguments as first member
+export declare const argumentsOfG: [elem: object, index: number]; // captured arguments list re-spread

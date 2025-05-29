@@ -8,50 +8,50 @@ import React from 'react'
 
 interface ResizablePanelProps {
   children: [React.ReactNode, React.ReactNode]
->children : [ReactNode, ReactNode]
+>children : [React.ReactNode, React.ReactNode]
 >React : any
 >React : any
 }
 
 class ResizablePanel extends React.Component<
 >ResizablePanel : ResizablePanel
->React.Component : Component<ResizablePanelProps, any, any>
+>React.Component : React.Component<ResizablePanelProps, any, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 
   ResizablePanelProps, any> {}
 
 const test = <ResizablePanel>
->test : Element
-><ResizablePanel>  <div />  <div /></ResizablePanel> : Element
+>test : JSX.Element
+><ResizablePanel>  <div />  <div /></ResizablePanel> : JSX.Element
 >ResizablePanel : typeof ResizablePanel
 
   <div />
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 
   <div />
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 
 </ResizablePanel>
 >ResizablePanel : typeof ResizablePanel
 
 const testErr = <ResizablePanel>
->testErr : Element
-><ResizablePanel>  <div />  <div />  <div /></ResizablePanel> : Element
+>testErr : JSX.Element
+><ResizablePanel>  <div />  <div />  <div /></ResizablePanel> : JSX.Element
 >ResizablePanel : typeof ResizablePanel
 
   <div />
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 
   <div />
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 
   <div />
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 
 </ResizablePanel>

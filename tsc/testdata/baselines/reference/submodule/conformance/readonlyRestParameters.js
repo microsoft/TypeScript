@@ -53,3 +53,10 @@ function f2(...args) {
 function f4(...args) {
     args[0] = 'abc'; // Error
 }
+
+
+//// [readonlyRestParameters.d.ts]
+declare function f0(a: string, b: string): void;
+declare function f1(...args: readonly string[]): void;
+declare function f2(...args: readonly [string, string]): void;
+declare function f4(...args: readonly string[]): void;

@@ -6,7 +6,7 @@ import * as React from "react";
 >React : Symbol(React, Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 6))
 
 declare global {
->global : Symbol((Missing), Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 31))
+>global : Symbol(global, Decl(jsxElementTypeLiteralWithGeneric.tsx, 1, 31))
 
   namespace JSX {
 >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteralWithGeneric.tsx, 3, 16))

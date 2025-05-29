@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface Address {
   street: string;
@@ -27,9 +27,9 @@ type Properties = CanadianAddress | AmericanAddress;
 
 export class AddressComp extends React.Component<Properties, void> {
 >AddressComp : AddressComp
->React.Component : Component<Properties, void>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<Properties, void>
+>React : typeof React
+>Component : typeof React.Component
 
   public render() {
 >render : () => any
@@ -39,8 +39,8 @@ export class AddressComp extends React.Component<Properties, void> {
 }
 
 let a = <AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" />
->a : Element
-><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : Element
+>a : JSX.Element
+><AddressComp postalCode='T1B 0L3' street="vancouver" country="CA" /> : JSX.Element
 >AddressComp : typeof AddressComp
 >postalCode : string
 >street : string

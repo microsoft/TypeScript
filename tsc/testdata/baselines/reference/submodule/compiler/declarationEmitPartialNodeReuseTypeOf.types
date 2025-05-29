@@ -49,11 +49,11 @@ console.log(nImported);
 
 === c.ts ===
 import * as a from "./a";
->a : typeof import("a")
+>a : typeof a
 
 export const g = a.o
 >g : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
 >a.o : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
->a : typeof import("a")
+>a : typeof a
 >o : (p1: "nImported", p2: "nNotImported", p3: "private") => { foo: "nImported"; bar: "private"; baz: "nNotImported"; }
 

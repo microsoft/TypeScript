@@ -38,7 +38,7 @@ interface I {
 }
 
 var a: {
->a : { (...x: string): any; foo: (...x: string) => any; }
+>a : { (...x: string): any; foo(...x: string): any; }
 
     (...x: string);
 >x : string
@@ -49,8 +49,8 @@ var a: {
 }
 
 var b = {
->b : { foo: (...x: string) => void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
->{    foo(...x: string) { },    a: function foo(...x: number, ...y: Date) { },    b: (...x: string) => { }} : { foo: (...x: string) => void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
+>b : { foo(...x: string): void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
+>{    foo(...x: string) { },    a: function foo(...x: number, ...y: Date) { },    b: (...x: string) => { }} : { foo(...x: string): void; a: (...x: number, ...y: Date) => void; b: (...x: string) => void; }
 
     foo(...x: string) { },
 >foo : (...x: string) => void

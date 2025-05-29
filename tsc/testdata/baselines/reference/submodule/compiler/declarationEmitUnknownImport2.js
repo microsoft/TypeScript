@@ -9,3 +9,8 @@ export default Foo
 './Foo'; // Syntax error
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Foo;
+
+
+//// [declarationEmitUnknownImport2.d.ts]
+import Foo = From;
+export default Foo;

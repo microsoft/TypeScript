@@ -33,8 +33,8 @@ class MyComponent {
 
 // Should be an OK
 var x = <MyComponent bar='world' />;
->x : Element
-><MyComponent bar='world' /> : Element
+>x : JSX.Element
+><MyComponent bar='world' /> : JSX.Element
 >MyComponent : typeof MyComponent
 >bar : string
 

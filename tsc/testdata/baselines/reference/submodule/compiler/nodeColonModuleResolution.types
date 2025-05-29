@@ -48,7 +48,7 @@ declare module 'node:ph' {
 }
 === /a/b/main.ts ===
 import * as ph from 'node:ph'
->ph : typeof import("node:ph")
+>ph : typeof ph
 
 console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
 >console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE) : void
@@ -56,8 +56,8 @@ console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
 >console : Console
 >log : (...data: any[]) => void
 >ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
->ph.constants : typeof constants
->ph : typeof import("node:ph")
->constants : typeof constants
+>ph.constants : typeof ph.constants
+>ph : typeof ph
+>constants : typeof ph.constants
 >NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE : number
 

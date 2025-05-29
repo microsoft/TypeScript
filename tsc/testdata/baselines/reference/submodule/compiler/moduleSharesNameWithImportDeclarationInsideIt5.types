@@ -23,12 +23,12 @@ module A.M {
     import M = Z.I;
 >M : any
 >Z : typeof Z
->I : I
+>I : M
 
     import M = Z.M;
->M : typeof M
+>M : typeof Z.M
 >Z : typeof Z
->M : typeof M
+>M : typeof Z.M
 
     export function bar() {
 >bar : () => void

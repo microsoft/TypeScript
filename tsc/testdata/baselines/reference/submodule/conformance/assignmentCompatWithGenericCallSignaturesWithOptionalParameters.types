@@ -248,225 +248,225 @@ module GenericSignaturesInvalid {
         // all errors
         b.a = t.a;
 >b.a = t.a : () => T
->b.a : <T>() => T
+>b.a : <T_1>() => T_1
 >b : Base2
->a : <T>() => T
+>a : <T_1>() => T_1
 >t.a : () => T
 >t : Target<T>
 >a : () => T
 
         b.a = t.a2;
 >b.a = t.a2 : (x?: T) => T
->b.a : <T>() => T
+>b.a : <T_1>() => T_1
 >b : Base2
->a : <T>() => T
+>a : <T_1>() => T_1
 >t.a2 : (x?: T) => T
 >t : Target<T>
 >a2 : (x?: T) => T
 
         b.a = t.a3;
 >b.a = t.a3 : (x: T) => T
->b.a : <T>() => T
+>b.a : <T_1>() => T_1
 >b : Base2
->a : <T>() => T
+>a : <T_1>() => T_1
 >t.a3 : (x: T) => T
 >t : Target<T>
 >a3 : (x: T) => T
 
         b.a = t.a4;
 >b.a = t.a4 : (x: T, y?: T) => T
->b.a : <T>() => T
+>b.a : <T_1>() => T_1
 >b : Base2
->a : <T>() => T
+>a : <T_1>() => T_1
 >t.a4 : (x: T, y?: T) => T
 >t : Target<T>
 >a4 : (x: T, y?: T) => T
 
         b.a = t.a5;
 >b.a = t.a5 : (x?: T, y?: T) => T
->b.a : <T>() => T
+>b.a : <T_1>() => T_1
 >b : Base2
->a : <T>() => T
+>a : <T_1>() => T_1
 >t.a5 : (x?: T, y?: T) => T
 >t : Target<T>
 >a5 : (x?: T, y?: T) => T
 
         b.a2 = t.a;
 >b.a2 = t.a : () => T
->b.a2 : <T>(x?: T) => T
+>b.a2 : <T_1>(x?: T_1) => T_1
 >b : Base2
->a2 : <T>(x?: T) => T
+>a2 : <T_1>(x?: T_1) => T_1
 >t.a : () => T
 >t : Target<T>
 >a : () => T
 
         b.a2 = t.a2;
 >b.a2 = t.a2 : (x?: T) => T
->b.a2 : <T>(x?: T) => T
+>b.a2 : <T_1>(x?: T_1) => T_1
 >b : Base2
->a2 : <T>(x?: T) => T
+>a2 : <T_1>(x?: T_1) => T_1
 >t.a2 : (x?: T) => T
 >t : Target<T>
 >a2 : (x?: T) => T
 
         b.a2 = t.a3;
 >b.a2 = t.a3 : (x: T) => T
->b.a2 : <T>(x?: T) => T
+>b.a2 : <T_1>(x?: T_1) => T_1
 >b : Base2
->a2 : <T>(x?: T) => T
+>a2 : <T_1>(x?: T_1) => T_1
 >t.a3 : (x: T) => T
 >t : Target<T>
 >a3 : (x: T) => T
 
         b.a2 = t.a4;
 >b.a2 = t.a4 : (x: T, y?: T) => T
->b.a2 : <T>(x?: T) => T
+>b.a2 : <T_1>(x?: T_1) => T_1
 >b : Base2
->a2 : <T>(x?: T) => T
+>a2 : <T_1>(x?: T_1) => T_1
 >t.a4 : (x: T, y?: T) => T
 >t : Target<T>
 >a4 : (x: T, y?: T) => T
 
         b.a2 = t.a5;
 >b.a2 = t.a5 : (x?: T, y?: T) => T
->b.a2 : <T>(x?: T) => T
+>b.a2 : <T_1>(x?: T_1) => T_1
 >b : Base2
->a2 : <T>(x?: T) => T
+>a2 : <T_1>(x?: T_1) => T_1
 >t.a5 : (x?: T, y?: T) => T
 >t : Target<T>
 >a5 : (x?: T, y?: T) => T
 
         b.a3 = t.a;
 >b.a3 = t.a : () => T
->b.a3 : <T>(x: T) => T
+>b.a3 : <T_1>(x: T_1) => T_1
 >b : Base2
->a3 : <T>(x: T) => T
+>a3 : <T_1>(x: T_1) => T_1
 >t.a : () => T
 >t : Target<T>
 >a : () => T
 
         b.a3 = t.a2;
 >b.a3 = t.a2 : (x?: T) => T
->b.a3 : <T>(x: T) => T
+>b.a3 : <T_1>(x: T_1) => T_1
 >b : Base2
->a3 : <T>(x: T) => T
+>a3 : <T_1>(x: T_1) => T_1
 >t.a2 : (x?: T) => T
 >t : Target<T>
 >a2 : (x?: T) => T
 
         b.a3 = t.a3;
 >b.a3 = t.a3 : (x: T) => T
->b.a3 : <T>(x: T) => T
+>b.a3 : <T_1>(x: T_1) => T_1
 >b : Base2
->a3 : <T>(x: T) => T
+>a3 : <T_1>(x: T_1) => T_1
 >t.a3 : (x: T) => T
 >t : Target<T>
 >a3 : (x: T) => T
 
         b.a3 = t.a4;
 >b.a3 = t.a4 : (x: T, y?: T) => T
->b.a3 : <T>(x: T) => T
+>b.a3 : <T_1>(x: T_1) => T_1
 >b : Base2
->a3 : <T>(x: T) => T
+>a3 : <T_1>(x: T_1) => T_1
 >t.a4 : (x: T, y?: T) => T
 >t : Target<T>
 >a4 : (x: T, y?: T) => T
 
         b.a3 = t.a5;
 >b.a3 = t.a5 : (x?: T, y?: T) => T
->b.a3 : <T>(x: T) => T
+>b.a3 : <T_1>(x: T_1) => T_1
 >b : Base2
->a3 : <T>(x: T) => T
+>a3 : <T_1>(x: T_1) => T_1
 >t.a5 : (x?: T, y?: T) => T
 >t : Target<T>
 >a5 : (x?: T, y?: T) => T
 
         b.a4 = t.a;
 >b.a4 = t.a : () => T
->b.a4 : <T>(x: T, y?: T) => T
+>b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >b : Base2
->a4 : <T>(x: T, y?: T) => T
+>a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >t.a : () => T
 >t : Target<T>
 >a : () => T
 
         b.a4 = t.a2;
 >b.a4 = t.a2 : (x?: T) => T
->b.a4 : <T>(x: T, y?: T) => T
+>b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >b : Base2
->a4 : <T>(x: T, y?: T) => T
+>a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >t.a2 : (x?: T) => T
 >t : Target<T>
 >a2 : (x?: T) => T
 
         b.a4 = t.a3;
 >b.a4 = t.a3 : (x: T) => T
->b.a4 : <T>(x: T, y?: T) => T
+>b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >b : Base2
->a4 : <T>(x: T, y?: T) => T
+>a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >t.a3 : (x: T) => T
 >t : Target<T>
 >a3 : (x: T) => T
 
         b.a4 = t.a4;
 >b.a4 = t.a4 : (x: T, y?: T) => T
->b.a4 : <T>(x: T, y?: T) => T
+>b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >b : Base2
->a4 : <T>(x: T, y?: T) => T
+>a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >t.a4 : (x: T, y?: T) => T
 >t : Target<T>
 >a4 : (x: T, y?: T) => T
 
         b.a4 = t.a5;
 >b.a4 = t.a5 : (x?: T, y?: T) => T
->b.a4 : <T>(x: T, y?: T) => T
+>b.a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >b : Base2
->a4 : <T>(x: T, y?: T) => T
+>a4 : <T_1>(x: T_1, y?: T_1) => T_1
 >t.a5 : (x?: T, y?: T) => T
 >t : Target<T>
 >a5 : (x?: T, y?: T) => T
 
         b.a5 = t.a;
 >b.a5 = t.a : () => T
->b.a5 : <T>(x?: T, y?: T) => T
+>b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >b : Base2
->a5 : <T>(x?: T, y?: T) => T
+>a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >t.a : () => T
 >t : Target<T>
 >a : () => T
 
         b.a5 = t.a2;
 >b.a5 = t.a2 : (x?: T) => T
->b.a5 : <T>(x?: T, y?: T) => T
+>b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >b : Base2
->a5 : <T>(x?: T, y?: T) => T
+>a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >t.a2 : (x?: T) => T
 >t : Target<T>
 >a2 : (x?: T) => T
 
         b.a5 = t.a3;
 >b.a5 = t.a3 : (x: T) => T
->b.a5 : <T>(x?: T, y?: T) => T
+>b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >b : Base2
->a5 : <T>(x?: T, y?: T) => T
+>a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >t.a3 : (x: T) => T
 >t : Target<T>
 >a3 : (x: T) => T
 
         b.a5 = t.a4;
 >b.a5 = t.a4 : (x: T, y?: T) => T
->b.a5 : <T>(x?: T, y?: T) => T
+>b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >b : Base2
->a5 : <T>(x?: T, y?: T) => T
+>a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >t.a4 : (x: T, y?: T) => T
 >t : Target<T>
 >a4 : (x: T, y?: T) => T
 
         b.a5 = t.a5;
 >b.a5 = t.a5 : (x?: T, y?: T) => T
->b.a5 : <T>(x?: T, y?: T) => T
+>b.a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >b : Base2
->a5 : <T>(x?: T, y?: T) => T
+>a5 : <T_1>(x?: T_1, y?: T_1) => T_1
 >t.a5 : (x?: T, y?: T) => T
 >t : Target<T>
 >a5 : (x?: T, y?: T) => T

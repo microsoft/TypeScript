@@ -36,13 +36,11 @@
 
          return this
  >this : this
-@@= skipped -11, +11 lines =@@
- >InteropObservable : InteropObservable<T>
+@@= skipped -12, +12 lines =@@
 
      [Symbol.obs]: () => { subscribe(next: (val: T) => void): void }
-->[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
+ >[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
 ->Symbol.obs : unique symbol
-+>[Symbol.obs] : () => { subscribe: (next: (val: T) => void) => void; }
 +>Symbol.obs : symbol
  >Symbol : SymbolConstructor
 ->obs : unique symbol
@@ -50,18 +48,9 @@
  >subscribe : (next: (val: T) => void) => void
  >next : (val: T) => void
  >val : T
- }
-
- function from<T>(obs: InteropObservable<T>) {
-->from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
-+>from : <T>(obs: InteropObservable<T>) => { subscribe: (next: (val: T) => void) => void; }
- >obs : InteropObservable<T>
-
-     return obs[Symbol.obs]()
-->obs[Symbol.obs]() : { subscribe(next: (val: T) => void): void; }
-->obs[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
-+>obs[Symbol.obs]() : { subscribe: (next: (val: T) => void) => void; }
-+>obs[Symbol.obs] : () => { subscribe: (next: (val: T) => void) => void; }
+@@= skipped -16, +16 lines =@@
+ >obs[Symbol.obs]() : { subscribe(next: (val: T) => void): void; }
+ >obs[Symbol.obs] : () => { subscribe(next: (val: T) => void): void; }
  >obs : InteropObservable<T>
 ->Symbol.obs : unique symbol
 +>Symbol.obs : symbol
@@ -71,10 +60,3 @@
  }
 
  from(new MyObservable(42))
-->from(new MyObservable(42)) : { subscribe(next: (val: number) => void): void; }
-->from : <T>(obs: InteropObservable<T>) => { subscribe(next: (val: T) => void): void; }
-+>from(new MyObservable(42)) : { subscribe: (next: (val: number) => void) => void; }
-+>from : <T>(obs: InteropObservable<T>) => { subscribe: (next: (val: T) => void) => void; }
- >new MyObservable(42) : MyObservable<number>
- >MyObservable : typeof MyObservable
- >42 : 42

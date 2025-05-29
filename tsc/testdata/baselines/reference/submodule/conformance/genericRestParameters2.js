@@ -122,3 +122,35 @@ f20(...t1);
 f20(42, ...t2);
 f20(42, "hello", ...t3);
 f20(42, "hello", ...t2, true);
+
+
+//// [genericRestParameters2.d.ts]
+declare const t1: [number, string, ...boolean[]];
+declare const t2: [string, ...boolean[]];
+declare const t3: [...boolean[]];
+declare const t4: [];
+declare let f00: (...x: [number, string, boolean]) => void;
+declare let f01: (a: number, ...x: [string, boolean]) => void;
+declare let f02: (a: number, b: string, ...x: [boolean]) => void;
+declare let f03: (a: number, b: string, c: boolean) => void;
+declare let f04: (a: number, b: string, c: boolean, ...x: []) => void;
+declare let f10: (...x: [number, string, ...boolean[]]) => void;
+declare let f11: (a: number, ...x: [string, ...boolean[]]) => void;
+declare let f12: (a: number, b: string, ...x: [...boolean[]]) => void;
+declare let f13: (a: number, b: string, ...c: boolean[]) => void;
+declare const ns: [number, string];
+declare const sn: [string, number];
+declare const f20: <T extends unknown[]>(...args: T) => T;
+type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
+type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
+type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
+type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
+type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
+type T06 = T05<[number, ...boolean[]]>;
+type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? {
+    head: A;
+    tail: B;
+} : any[];
+type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;
+type T11 = P1<(...z: number[]) => void>;
+type T12 = P1<(x: number, y: number) => void>;

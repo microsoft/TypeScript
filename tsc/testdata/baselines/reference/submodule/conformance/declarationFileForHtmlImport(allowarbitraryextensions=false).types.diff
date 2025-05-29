@@ -5,7 +5,7 @@
  === file.ts ===
  import * as mod from "./component.html";
 ->mod : any
-+>mod : typeof import("component.d.html")
++>mod : typeof mod
 
  window.customElements.define("my-html5-element", mod.HTML5Element);
  >window.customElements.define("my-html5-element", mod.HTML5Element) : void
@@ -16,9 +16,9 @@
 ->mod.HTML5Element : any
 ->mod : any
 ->HTML5Element : any
-+>mod.HTML5Element : typeof HTML5Element
-+>mod : typeof import("component.d.html")
-+>HTML5Element : typeof HTML5Element
++>mod.HTML5Element : typeof mod.HTML5Element
++>mod : typeof mod
++>HTML5Element : typeof mod.HTML5Element
 
  if (document !== mod.default) {
  >document !== mod.default : boolean
@@ -27,7 +27,7 @@
 ->mod : any
 ->default : any
 +>mod.default : Document
-+>mod : typeof import("component.d.html")
++>mod : typeof mod
 +>default : Document
 
      document.body.appendChild(mod.blogPost);
@@ -42,6 +42,6 @@
 ->mod : any
 ->blogPost : any
 +>mod.blogPost : Element
-+>mod : typeof import("component.d.html")
++>mod : typeof mod
 +>blogPost : Element
  }

@@ -20,3 +20,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 const nameSpaceBinding = require("server");
 exports.x = nameSpaceBinding.a;
+
+
+//// [server.d.ts]
+export declare var a: number;
+//// [client.d.ts]
+export declare var x: any;

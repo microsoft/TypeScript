@@ -99,7 +99,7 @@ import.meta = foo;
 
 // @Filename augmentations.ts
 declare global {
->global : Symbol((Missing), Decl(assignmentTargets.ts, 1, 18))
+>global : Symbol(global, Decl(assignmentTargets.ts, 1, 18))
 
   interface ImportMeta {
 >ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))

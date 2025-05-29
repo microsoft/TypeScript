@@ -16,16 +16,16 @@ function a2<A,>(x: A) { return x }
 >x : A
 
 var a3 = <A,>(x: A) => new A();
->a3 : <A>(x: A) => A
-><A,>(x: A) => new A() : <A>(x: A) => A
+>a3 : <A>(x: A) => globalThis.A
+><A,>(x: A) => new A() : <A>(x: A) => globalThis.A
 >x : A
->new A() : A
+>new A() : globalThis.A
 >A : typeof A
 
 function a4<A,>(x: A) { return new A() }
->a4 : <A>(x: A) => A
+>a4 : <A>(x: A) => globalThis.A
 >x : A
->new A() : A
+>new A() : globalThis.A
 >A : typeof A
 
 

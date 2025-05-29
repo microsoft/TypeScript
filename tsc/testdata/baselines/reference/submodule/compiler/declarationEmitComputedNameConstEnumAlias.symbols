@@ -17,7 +17,7 @@ import EnumExample from './EnumExample';
 
 export default {
     [EnumExample.TEST]: {},
->[EnumExample.TEST] : Symbol(TEST, Decl(index.ts, 2, 16))
+>[EnumExample.TEST] : Symbol([EnumExample.TEST], Decl(index.ts, 2, 16))
 >EnumExample.TEST : Symbol(TEST, Decl(EnumExample.ts, 0, 18))
 >EnumExample : Symbol(EnumExample, Decl(index.ts, 0, 6))
 >TEST : Symbol(TEST, Decl(EnumExample.ts, 0, 18))

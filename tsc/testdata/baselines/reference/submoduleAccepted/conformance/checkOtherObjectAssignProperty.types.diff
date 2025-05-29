@@ -171,11 +171,9 @@
 ->exports : typeof import("mod1")
 +>exports : any
  >"bad2" : "bad2"
-->{ get() { return 12 }, value: "no" } : { get(): number; value: string; }
-+>{ get() { return 12 }, value: "no" } : { get: () => number; value: string; }
+ >{ get() { return 12 }, value: "no" } : { get(): number; value: string; }
  >get : () => number
- >12 : 12
- >value : string
+@@= skipped -22, +22 lines =@@
  >"no" : "no"
 
  Object.defineProperty(exports, "bad3", { writable: true });

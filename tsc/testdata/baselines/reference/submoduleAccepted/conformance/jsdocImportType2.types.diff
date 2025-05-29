@@ -1,39 +1,6 @@
 --- old.jsdocImportType2.types
 +++ new.jsdocImportType2.types
-@@= skipped -4, +4 lines =@@
- /** @typedef {import("./mod1")} C
-  * @type {C} */
- var c;
-->c : D
-+>c : Chunk
-
- c.chunk;
- >c.chunk : number
-->c : D
-+>c : Chunk
- >chunk : number
-
- const D = require("./mod1");
-->D : typeof D
-->require("./mod1") : typeof D
-+>D : typeof Chunk
-+>require("./mod1") : typeof Chunk
- >require : (name: string) => any
- >"./mod1" : "./mod1"
-
- /** @type {D} */
- var d;
-->d : D
-+>d : Chunk
-
- d.chunk;
- >d.chunk : number
-->d : D
-+>d : Chunk
- >chunk : number
-
- === types.d.ts ===
-@@= skipped -37, +37 lines =@@
+@@= skipped -41, +41 lines =@@
  === mod1.js ===
  /// <reference path='./types.d.ts'/>
  module.exports = class Chunk {
@@ -43,12 +10,12 @@
 ->exports : typeof import("mod1")
 ->class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("mod1")
 ->Chunk : typeof import("mod1")
-+>module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
-+>module.exports : typeof Chunk
-+>module : { Chunk: typeof Chunk; }
-+>exports : typeof Chunk
-+>class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
-+>Chunk : typeof Chunk
++>module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("./mod1")
++>module.exports : typeof import("./mod1")
++>module : { Chunk: typeof import("./mod1"); }
++>exports : typeof import("./mod1")
++>class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("./mod1")
++>Chunk : typeof import("./mod1")
 
      constructor() {
          this.chunk = 1;

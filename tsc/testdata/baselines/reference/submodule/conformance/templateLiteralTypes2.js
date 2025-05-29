@@ -205,3 +205,42 @@ function getCardTitle(title) {
 const interpolatedStyle = { rotate: 12 };
 function C2(transform) { return 12; }
 C2(`rotate(${interpolatedStyle.rotate}dig)`);
+
+
+//// [templateLiteralTypes2.d.ts]
+declare function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T): void;
+declare function ft2(s: string): string;
+declare function ft10(s: string): void;
+declare function ft11(s: string, cond: boolean): void;
+declare function ft12(s: string): void;
+declare function widening<T>(x: T): T;
+declare function nonWidening<T extends string | number | symbol>(x: T): T;
+declare function ft13(s: string, cond: boolean): void;
+type T0 = string | `${number}px`;
+declare function ft14(t: `foo${number}`): void;
+declare function g1<T>(x: T): T;
+declare function g2<T extends string>(x: T): T;
+declare function ft20(s: string): void;
+// Repro from #41631
+declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
+declare const t1: "baz"; // "baz"
+declare const id2 = "foo.bar.baz";
+declare const t2: "baz"; // "baz"
+declare const someString: string;
+declare const t3: string; // string
+declare const id4: string;
+declare const t4: unknown; // unknown
+declare const someUnion: 'abc' | 'def' | 'ghi';
+declare const t5: "abc" | "def" | "ghi"; // "abc" | "def" | "ghi"
+// Repro from #41732
+declare const pixelValue: number;
+type PixelValueType = `${number}px`;
+declare const pixelString: PixelValueType;
+declare const pixelStringWithTemplate: PixelValueType;
+// Repro from #43143
+declare function getCardTitle(title: string): `test-${string}`;
+// Repro from #43424
+declare const interpolatedStyle: {
+    rotate: number;
+};
+declare function C2(transform: "-moz-initial" | (string & {})): number;

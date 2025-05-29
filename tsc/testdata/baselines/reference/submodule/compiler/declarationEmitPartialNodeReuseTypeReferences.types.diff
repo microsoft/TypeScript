@@ -17,21 +17,16 @@
  >null! : never
  >foo : string
  >bar : string
-@@= skipped -15, +15 lines =@@
-
- === b.ts ===
- import * as a from "./a";
-->a : typeof a
-+>a : typeof import("a")
+@@= skipped -18, +18 lines =@@
+ >a : typeof a
 
  export const g = a.o
 ->g : (p1: a.SpecialString, p2: string, p3: a.N.SpecialString) => { foo: a.SpecialString; bar: string; baz: a.N.SpecialString; }
 ->a.o : (p1: a.SpecialString, p2: string, p3: a.N.SpecialString) => { foo: a.SpecialString; bar: string; baz: a.N.SpecialString; }
-->a : typeof a
-->o : (p1: a.SpecialString, p2: string, p3: a.N.SpecialString) => { foo: a.SpecialString; bar: string; baz: a.N.SpecialString; }
 +>g : (p1: string, p2: string, p3: string) => { foo: string; bar: string; baz: string; }
 +>a.o : (p1: string, p2: string, p3: string) => { foo: string; bar: string; baz: string; }
-+>a : typeof import("a")
+ >a : typeof a
+->o : (p1: a.SpecialString, p2: string, p3: a.N.SpecialString) => { foo: a.SpecialString; bar: string; baz: a.N.SpecialString; }
 +>o : (p1: string, p2: string, p3: string) => { foo: string; bar: string; baz: string; }
 
  === c.ts ===

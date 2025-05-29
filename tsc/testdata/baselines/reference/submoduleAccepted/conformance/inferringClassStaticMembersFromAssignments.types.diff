@@ -102,24 +102,16 @@
  >0 : 0
 
  === b.ts ===
- import * as a from "./a";
-->a : typeof a
-+>a : typeof import("a")
-
- var n: number;
- >n : number
+@@= skipped -25, +25 lines =@@
 
  var n = a.C1.staticProp;
  >n : number
 ->a.C1.staticProp : number
-->a.C1 : typeof a.C1
-->a : typeof a
-->C1 : typeof a.C1
-->staticProp : number
 +>a.C1.staticProp : any
-+>a.C1 : typeof C1
-+>a : typeof import("a")
-+>C1 : typeof C1
+ >a.C1 : typeof a.C1
+ >a : typeof a
+ >C1 : typeof a.C1
+->staticProp : number
 +>staticProp : any
 
  var n = a.C2.staticProp;
@@ -127,8 +119,7 @@
 ->a.C2.staticProp : number
 +>a.C2.staticProp : any
  >a.C2 : typeof C2
-->a : typeof a
-+>a : typeof import("a")
+ >a : typeof a
  >C2 : typeof C2
 ->staticProp : number
 +>staticProp : any
@@ -137,10 +128,9 @@
  >n : number
  >a.F1.staticProp : number
 ->a.F1 : typeof a.F1
-->a : typeof a
-->F1 : typeof a.F1
 +>a.F1 : { (): void; staticProp: number; }
-+>a : typeof import("a")
+ >a : typeof a
+->F1 : typeof a.F1
 +>F1 : { (): void; staticProp: number; }
  >staticProp : number
 
@@ -148,12 +138,11 @@
  >n : number
 ->a.F2.staticProp : number
 ->a.F2 : { (): void; staticProp: number; }
-->a : typeof a
-->F2 : { (): void; staticProp: number; }
-->staticProp : number
 +>a.F2.staticProp : any
 +>a.F2 : () => void
-+>a : typeof import("a")
+ >a : typeof a
+->F2 : { (): void; staticProp: number; }
+->staticProp : number
 +>F2 : () => void
 +>staticProp : any
 

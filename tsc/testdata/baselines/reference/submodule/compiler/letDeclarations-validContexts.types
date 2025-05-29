@@ -231,8 +231,8 @@ class C {
 
 // object literals
 var o = {
->o : { f: () => void; f2: () => void; }
->{    f() {        let l28 = 0;    },    f2: () => {        let l29 = 0;    }} : { f: () => void; f2: () => void; }
+>o : { f(): void; f2: () => void; }
+>{    f() {        let l28 = 0;    },    f2: () => {        let l29 = 0;    }} : { f(): void; f2: () => void; }
 
     f() {
 >f : () => void

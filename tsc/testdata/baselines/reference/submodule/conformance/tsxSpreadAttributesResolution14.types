@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface ComponentProps {
     property1: string;
@@ -13,16 +13,16 @@ interface ComponentProps {
 }
 
 export default function Component(props: ComponentProps) {
->Component : (props: ComponentProps) => Element
+>Component : (props: ComponentProps) => JSX.Element
 >props : ComponentProps
 
     return (
->(        // Error extra property        <AnotherComponent {...props} Property1/>    ) : Element
+>(        // Error extra property        <AnotherComponent {...props} Property1/>    ) : JSX.Element
 
         // Error extra property
         <AnotherComponent {...props} Property1/>
-><AnotherComponent {...props} Property1/> : Element
->AnotherComponent : (__0: AnotherComponentProps) => Element
+><AnotherComponent {...props} Property1/> : JSX.Element
+>AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >props : ComponentProps
 >Property1 : true
 
@@ -35,14 +35,14 @@ interface AnotherComponentProps {
 }
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
->AnotherComponent : (__0: AnotherComponentProps) => Element
+>AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >property1 : string
 
     return (
->(        <span>{property1}</span>    ) : Element
+>(        <span>{property1}</span>    ) : JSX.Element
 
         <span>{property1}</span>
-><span>{property1}</span> : Element
+><span>{property1}</span> : JSX.Element
 >span : any
 >property1 : string
 >span : any

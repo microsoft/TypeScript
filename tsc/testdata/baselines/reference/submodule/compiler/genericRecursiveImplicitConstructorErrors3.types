@@ -33,7 +33,7 @@ module TypeScript {
 >_elementType : any
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
->toString : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean) => any
+>toString : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean) => any
 >scopeSymbol : any
 >useConstraintInName : boolean
 
@@ -42,9 +42,9 @@ module TypeScript {
 >this.getScopedNameEx(scopeSymbol, useConstraintInName).toString() : any
 >this.getScopedNameEx(scopeSymbol, useConstraintInName).toString : any
 >this.getScopedNameEx(scopeSymbol, useConstraintInName) : any
->this.getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
+>this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
 >this : this
->getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
+>getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
 >scopeSymbol : any
 >useConstraintInName : boolean
 >toString : any
@@ -53,7 +53,7 @@ module TypeScript {
 >s : any
         }
         public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
->getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
+>getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
 >scopeSymbol : any
 >useConstraintInName : boolean
 >getPrettyTypeName : boolean
@@ -115,9 +115,9 @@ module TypeScript {
 
                 return MemberName.create(elementMemberName, "", "[]");
 >MemberName.create(elementMemberName, "", "[]") : any
->MemberName.create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>MemberName.create : <A_1, B_1, C_1>(arg1: any, arg2?: any, arg3?: any) => any
 >MemberName : typeof MemberName
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
+>create : <A_1, B_1, C_1>(arg1: any, arg2?: any, arg3?: any) => any
 >elementMemberName : any
 >"" : ""
 >"[]" : "[]"

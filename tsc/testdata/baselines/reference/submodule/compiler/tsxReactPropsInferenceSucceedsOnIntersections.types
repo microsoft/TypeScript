@@ -17,9 +17,9 @@ export type ButtonProps<T = {}> = React.ButtonHTMLAttributes<HTMLButtonElement> 
 
 declare class Button<T = {}> extends React.Component<ButtonProps<T>> { }
 >Button : Button<T>
->React.Component : Component<ButtonProps<T>, {}, any>
+>React.Component : React.Component<ButtonProps<T>, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 
 interface CustomButtonProps extends ButtonProps {
     customProp: string;
@@ -27,11 +27,11 @@ interface CustomButtonProps extends ButtonProps {
 }
 
 const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
->CustomButton : SFC<CustomButtonProps>
+>CustomButton : React.SFC<CustomButtonProps>
 >React : any
->props => <Button {...props} /> : (props: CustomButtonProps & { children?: ReactNode; }) => Element
->props : CustomButtonProps & { children?: ReactNode; }
-><Button {...props} /> : Element
+>props => <Button {...props} /> : (props: CustomButtonProps & { children?: React.ReactNode; }) => JSX.Element
+>props : CustomButtonProps & { children?: React.ReactNode; }
+><Button {...props} /> : JSX.Element
 >Button : typeof Button
->props : CustomButtonProps & { children?: ReactNode; }
+>props : CustomButtonProps & { children?: React.ReactNode; }
 

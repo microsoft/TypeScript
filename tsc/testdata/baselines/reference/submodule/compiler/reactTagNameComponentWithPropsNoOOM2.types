@@ -7,7 +7,7 @@ import * as React from "react";
 >React : typeof React
 
 declare const Tag: keyof React.ReactHTML;
->Tag : keyof ReactHTML
+>Tag : keyof React.ReactHTML
 >React : any
 
 const classes = "";
@@ -15,7 +15,7 @@ const classes = "";
 >"" : ""
 
 const rest: React.HTMLAttributes<HTMLElement> = {};
->rest : HTMLAttributes<HTMLElement>
+>rest : React.HTMLAttributes<HTMLElement>
 >React : any
 >{} : {}
 
@@ -24,15 +24,15 @@ const children: any[] = [];
 >[] : never[]
 
 <Tag className={classes} {...rest}>
-><Tag className={classes} {...rest}>{children}</Tag> : Element
->Tag : keyof ReactHTML
+><Tag className={classes} {...rest}>{children}</Tag> : JSX.Element
+>Tag : keyof React.ReactHTML
 >className : string
 >classes : ""
->rest : HTMLAttributes<HTMLElement>
+>rest : React.HTMLAttributes<HTMLElement>
 
 {children}
 >children : any[]
 
 </Tag>
->Tag : keyof ReactHTML
+>Tag : keyof React.ReactHTML
 

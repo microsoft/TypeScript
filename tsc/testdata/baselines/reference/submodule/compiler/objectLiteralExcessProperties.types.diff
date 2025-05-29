@@ -1,6 +1,15 @@
 --- old.objectLiteralExcessProperties.types
 +++ new.objectLiteralExcessProperties.types
-@@= skipped -133, +133 lines =@@
+@@= skipped -85, +85 lines =@@
+
+ var b10: Indexed = { 0: { }, '1': { } }; // ok
+ >b10 : Indexed
+->{ 0: { }, '1': { } } : { 0: {}; '1': {}; }
++>{ 0: { }, '1': { } } : { 0: {}; "1": {}; }
+ >0 : {}
+ >{ } : {}
+ >'1' : {}
+@@= skipped -48, +48 lines =@@
 
      // Excess property checks only on non-generic parts of unions
      const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };

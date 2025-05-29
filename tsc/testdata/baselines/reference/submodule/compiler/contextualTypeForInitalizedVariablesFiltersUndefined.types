@@ -2,8 +2,8 @@
 
 === contextualTypeForInitalizedVariablesFiltersUndefined.ts ===
 const fInferred = ({ a = 0 } = {}) => a;
->fInferred : (__0?: { a?: number | undefined; }) => number
->({ a = 0 } = {}) => a : (__0?: { a?: number | undefined; }) => number
+>fInferred : ({ a = 0 }?: { a?: number | undefined; }) => number
+>({ a = 0 } = {}) => a : ({ a = 0 }?: { a?: number | undefined; }) => number
 >a : number
 >0 : 0
 >{} : {}
@@ -12,9 +12,9 @@ const fInferred = ({ a = 0 } = {}) => a;
 // const fInferred: ({ a }?: { a?: number; }) => number
 
 const fAnnotated: typeof fInferred = ({ a = 0 } = {}) => a;
->fAnnotated : (__0?: { a?: number | undefined; }) => number
->fInferred : (__0?: { a?: number | undefined; }) => number
->({ a = 0 } = {}) => a : (__0?: { a?: number | undefined; } | undefined) => number
+>fAnnotated : ({ a = 0 }?: { a?: number | undefined; }) => number
+>fInferred : ({ a = 0 }?: { a?: number | undefined; }) => number
+>({ a = 0 } = {}) => a : ({ a = 0 }?: { a?: number | undefined; } | undefined) => number
 >a : number
 >0 : 0
 >{} : {}
@@ -29,7 +29,7 @@ const { s } = t;
 >t : { s: string; } | undefined
 
 function fst({ s } = t) { }
->fst : (__0?: { s: string; } | undefined) => void
+>fst : ({ s }?: { s: string; } | undefined) => void
 >s : any
 >t : { s: string; } | undefined
 

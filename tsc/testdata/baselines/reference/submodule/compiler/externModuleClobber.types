@@ -17,22 +17,22 @@ declare module EM {
 }
 
 var x:EM.Position;
->x : Position
+>x : EM.Position
 >EM : any
 
 var ec:EM.EC = new EM.EC();
->ec : EC
+>ec : EM.EC
 >EM : any
->new EM.EC() : EC
->EM.EC : typeof EC
+>new EM.EC() : EM.EC
+>EM.EC : typeof EM.EC
 >EM : typeof EM
->EC : typeof EC
+>EC : typeof EM.EC
 
 x = ec.getPosition();
->x = ec.getPosition() : Position
->x : Position
->ec.getPosition() : Position
->ec.getPosition : () => Position
->ec : EC
->getPosition : () => Position
+>x = ec.getPosition() : EM.Position
+>x : EM.Position
+>ec.getPosition() : EM.Position
+>ec.getPosition : () => EM.Position
+>ec : EM.EC
+>getPosition : () => EM.Position
 

@@ -41,7 +41,7 @@
 +module.exports = { Thing }
 +>module.exports = { Thing } : { Thing: any; }
 +>module.exports : { Thing: any; }
-+>module : { export=: { Thing: any; }; }
++>module : { "export=": { Thing: any; }; }
 +>exports : { Thing: any; }
 +>{ Thing } : { Thing: any; }
 +>Thing : any

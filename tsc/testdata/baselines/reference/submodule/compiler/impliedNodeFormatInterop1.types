@@ -18,19 +18,19 @@ declare module "highlight.js" {
 
 === /node_modules/highlight.js/lib/core.d.ts ===
 import hljs from "highlight.js";
->hljs : HighlightAPI
+>hljs : import("highlight.js").HighlightAPI
 
 export default hljs;
->hljs : HighlightAPI
+>hljs : import("highlight.js").HighlightAPI
 
 === /index.ts ===
 import hljs from "highlight.js/lib/core";
->hljs : HighlightAPI
+>hljs : import("highlight.js").HighlightAPI
 
 hljs.highlight("code");
 >hljs.highlight("code") : string
 >hljs.highlight : (code: string) => string
->hljs : HighlightAPI
+>hljs : import("highlight.js").HighlightAPI
 >highlight : (code: string) => string
 >"code" : "code"
 

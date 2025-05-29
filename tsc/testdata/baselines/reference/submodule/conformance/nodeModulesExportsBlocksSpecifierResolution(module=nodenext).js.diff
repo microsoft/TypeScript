@@ -1,0 +1,10 @@
+--- old.nodeModulesExportsBlocksSpecifierResolution(module=nodenext).js
++++ new.nodeModulesExportsBlocksSpecifierResolution(module=nodenext).js
+@@= skipped -27, +27 lines =@@
+
+ //// [index.js]
+ export const a = (await import("inner")).x();
++
++
++//// [index.d.ts]
++export declare const a: any;

@@ -66,3 +66,31 @@ exports.BKind = BKind;
 class CKind extends ClassFactory(Kinds.C) {
 }
 exports.CKind = CKind;
+
+
+//// [declarationNoDanglingGenerics.d.ts]
+declare const AKind_base: {
+    new (): {
+        readonly kind: "A";
+    };
+    readonly THE_KIND: "A";
+};
+export declare class AKind extends AKind_base {
+}
+declare const BKind_base: {
+    new (): {
+        readonly kind: "B";
+    };
+    readonly THE_KIND: "B";
+};
+export declare class BKind extends BKind_base {
+}
+declare const CKind_base: {
+    new (): {
+        readonly kind: "C";
+    };
+    readonly THE_KIND: "C";
+};
+export declare class CKind extends CKind_base {
+}
+export {};

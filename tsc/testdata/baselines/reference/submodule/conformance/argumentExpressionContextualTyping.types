@@ -3,7 +3,7 @@
 === argumentExpressionContextualTyping.ts ===
 // In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
 function foo({x: [a, b], y: {c, d, e}}) { }
->foo : (__0: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
 >x : any
 >a : any
 >b : any
@@ -13,7 +13,7 @@ function foo({x: [a, b], y: {c, d, e}}) { }
 >e : any
 
 function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
->bar : (__0: { x: [any, number?]; y: { c: any; d: any; e?: { f: number; }; }; }) => void
+>bar : ({ x: [a, b = 10], y: { c, d, e = { f: 1 } } }: { x: [any, number?]; y: { c: any; d: any; e?: { f: number; }; }; }) => void
 >x : any
 >a : any
 >b : number
@@ -69,12 +69,12 @@ var o1: { x: [string, number], y: { c: boolean, d: string, e: number } } = { x: 
 
 foo(o1); // Not error since x has contextual type of tuple namely [string, number]
 >foo(o1) : void
->foo : (__0: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
 >o1 : { x: [string, number]; y: { c: boolean; d: string; e: number; }; }
 
 foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }); // Not error
 >foo({ x: ["string", 1], y: { c: true, d: "world", e: 3 } }) : void
->foo : (__0: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
 >{ x: ["string", 1], y: { c: true, d: "world", e: 3 } } : { x: [string, number]; y: { c: boolean; d: string; e: number; }; }
 >x : [string, number]
 >["string", 1] : [string, number]
@@ -133,6 +133,6 @@ baz(["string", 1, true, ...array]);  // Error
 
 foo(o);                              // Error because x has an array type namely (string|number)[]
 >foo(o) : void
->foo : (__0: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
+>foo : ({ x: [a, b], y: { c, d, e } }: { x: [any, any]; y: { c: any; d: any; e: any; }; }) => void
 >o : { x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }
 

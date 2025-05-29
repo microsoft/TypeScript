@@ -20,9 +20,9 @@ interface AsyncLoaderProps<TResult> {
 
 class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
 >AsyncLoader : AsyncLoader<TResult>
->React.Component : Component<AsyncLoaderProps<TResult>, {}, any>
+>React.Component : React.Component<AsyncLoaderProps<TResult>, {}, any>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 
     render() { return null; }
 >render : () => null
@@ -40,8 +40,8 @@ async function load(): Promise<{ success: true } | ErrorResult> {
 }
 
 const loader = <AsyncLoader
->loader : Element
-><AsyncLoader    prop1={load}    prop2={result => result}/> : Element
+>loader : JSX.Element
+><AsyncLoader    prop1={load}    prop2={result => result}/> : JSX.Element
 >AsyncLoader : typeof AsyncLoader
 
     prop1={load}

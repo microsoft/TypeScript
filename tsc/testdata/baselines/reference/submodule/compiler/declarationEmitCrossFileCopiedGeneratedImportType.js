@@ -22,3 +22,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
 const projC_1 = require("../projC");
 exports.d = { e: projC_1.e };
+
+
+//// [index.d.ts]
+export declare const d: {
+    e: {
+        f: (foo: import("../projA/index.js").Foo) => boolean;
+    };
+};

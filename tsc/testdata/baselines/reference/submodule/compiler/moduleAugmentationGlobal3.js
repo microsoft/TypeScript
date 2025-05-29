@@ -36,3 +36,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("./f2");
 let x = [1];
 let y = x.getCountAsString().toLowerCase();
+
+
+//// [f1.d.ts]
+export declare class A {
+}
+//// [f2.d.ts]
+declare namespace global {
+    interface Array<T> {
+        getCountAsString(): string;
+    }
+}
+export {};
+//// [f3.d.ts]
+import "./f2";

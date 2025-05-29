@@ -15,6 +15,6 @@ module A {
 
 module B {
     import a = A;
->a : typeof A
->A : typeof A
+>a : typeof a
+>A : typeof a
 }

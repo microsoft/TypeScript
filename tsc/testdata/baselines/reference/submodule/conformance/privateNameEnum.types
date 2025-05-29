@@ -5,6 +5,6 @@ enum E {
 >E : E
 
     #x
->#x : E.#x
+>#x : typeof E["\uFFFDmissing"]
 }
 

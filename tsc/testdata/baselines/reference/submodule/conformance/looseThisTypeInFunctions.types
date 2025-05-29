@@ -70,8 +70,8 @@ c.explicitVoid = c.explicitThis; // error, 'void' is missing everything
 >explicitThis : (this: C, m: number) => number
 
 let o = {
->o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
->{    n: 101,    explicitThis: function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    },    implicitThis(m: number): number { return m; }} : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
+>o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
+>{    n: 101,    explicitThis: function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    },    implicitThis(m: number): number { return m; }} : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 
     n: 101,
 >n : number
@@ -87,7 +87,7 @@ let o = {
 >m : number
 >this.n.length : any
 >this.n : number
->this : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
+>this : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 >n : number
 >length : any
 
@@ -100,7 +100,7 @@ let o = {
 };
 let i: I = o;
 >i : I
->o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
+>o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 
 let o2: I = {
 >o2 : I
@@ -166,7 +166,7 @@ c.explicitVoid = c.implicitThis // ok, implicitThis(this:any)
 o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 >o.implicitThis = c.implicitThis : (m: number) => number
 >o.implicitThis : (m: number) => number
->o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
+>o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 >implicitThis : (m: number) => number
 >c.implicitThis : (m: number) => number
 >c : C
@@ -175,7 +175,7 @@ o.implicitThis = c.implicitThis; // ok, implicitThis(this:any)
 o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to explicitThis(this: this)
 >o.implicitThis = c.explicitThis : (this: C, m: number) => number
 >o.implicitThis : (m: number) => number
->o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
+>o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 >implicitThis : (m: number) => number
 >c.explicitThis : (this: C, m: number) => number
 >c : C
@@ -184,7 +184,7 @@ o.implicitThis = c.explicitThis; // ok, implicitThis(this:any) is assignable to 
 o.implicitThis = i.explicitThis;
 >o.implicitThis = i.explicitThis : (this: I, m: number) => number
 >o.implicitThis : (m: number) => number
->o : { n: number; explicitThis: (m: number) => any; implicitThis: (m: number) => number; }
+>o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 >implicitThis : (m: number) => number
 >i.explicitThis : (this: I, m: number) => number
 >i : I

@@ -1,24 +1,11 @@
 --- old.moduleElementsInWrongContext.types
 +++ new.moduleElementsInWrongContext.types
-@@= skipped -9, +9 lines =@@
-     namespace Q.K { }
-
-     declare module "ambient" {
-->"ambient" : typeof Foo
-+>"ambient" : typeof import("ambient")
-
-     }
-
-@@= skipped -38, +38 lines =@@
- >I2 : any
-
-     import * as Foo from "ambient";
-->Foo : typeof Foo
-+>Foo : typeof import("ambient")
+@@= skipped -50, +50 lines =@@
+ >Foo : typeof Foo
 
      import bar from "ambient";
 ->bar : any
-+>bar : typeof import("ambient")
++>bar : typeof Foo
 
      import { baz } from "ambient";
  >baz : any

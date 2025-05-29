@@ -6,15 +6,15 @@ export class c { };
 
 === client.ts ===
 import * as nameSpaceBinding from "./server";
->nameSpaceBinding : typeof import("server")
+>nameSpaceBinding : typeof nameSpaceBinding
 
 export var x = new nameSpaceBinding.c();
->x : c
->new nameSpaceBinding.c() : c
->nameSpaceBinding.c : typeof c
->nameSpaceBinding : typeof import("server")
->c : typeof c
+>x : nameSpaceBinding.c
+>new nameSpaceBinding.c() : nameSpaceBinding.c
+>nameSpaceBinding.c : typeof nameSpaceBinding.c
+>nameSpaceBinding : typeof nameSpaceBinding
+>c : typeof nameSpaceBinding.c
 
 import * as nameSpaceBinding2 from "./server"; // unreferenced
->nameSpaceBinding2 : typeof import("server")
+>nameSpaceBinding2 : typeof nameSpaceBinding
 

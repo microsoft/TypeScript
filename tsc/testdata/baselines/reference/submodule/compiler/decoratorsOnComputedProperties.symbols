@@ -28,8 +28,8 @@ class A {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 8, 9))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 8, 9))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 8, 9))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 8, 9))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -40,8 +40,8 @@ class A {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 10, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 10, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 10, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 10, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -51,8 +51,8 @@ class A {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 12, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 12, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 12, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 12, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 13, 23))
@@ -61,8 +61,8 @@ class A {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 14, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 14, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 14, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 14, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 15, 27))
@@ -104,8 +104,8 @@ void class B {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 25, 14))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 25, 14))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 25, 14))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 25, 14))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -116,8 +116,8 @@ void class B {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 27, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 27, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 27, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 27, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -127,8 +127,8 @@ void class B {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 29, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 29, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 29, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 29, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 30, 23))
@@ -137,8 +137,8 @@ void class B {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 31, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 31, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 31, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 31, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 32, 27))
@@ -181,8 +181,8 @@ class C {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 42, 9))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 42, 9))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 42, 9))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 42, 9))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -193,8 +193,8 @@ class C {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 44, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 44, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 44, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 44, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -204,8 +204,8 @@ class C {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 46, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 46, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 46, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 46, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 47, 23))
@@ -214,8 +214,8 @@ class C {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 48, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 48, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 48, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 48, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 49, 27))
@@ -260,8 +260,8 @@ void class D {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 60, 14))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 60, 14))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 60, 14))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 60, 14))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -272,8 +272,8 @@ void class D {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 62, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 62, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 62, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 62, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -283,8 +283,8 @@ void class D {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 64, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 64, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 64, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 64, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 65, 23))
@@ -293,8 +293,8 @@ void class D {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 66, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 66, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 66, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 66, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 67, 27))
@@ -340,8 +340,8 @@ class E {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 78, 9))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 78, 9))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 78, 9))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 78, 9))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -352,8 +352,8 @@ class E {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 80, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 80, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 80, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 80, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -363,8 +363,8 @@ class E {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 82, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 82, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 82, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 82, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 83, 23))
@@ -373,8 +373,8 @@ class E {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 84, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 84, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 84, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 84, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 85, 27))
@@ -419,8 +419,8 @@ void class F {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 96, 14))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 96, 14))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 96, 14))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 96, 14))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -431,8 +431,8 @@ void class F {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 98, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 98, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 98, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 98, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -442,8 +442,8 @@ void class F {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 100, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 100, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 100, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 100, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 101, 23))
@@ -452,8 +452,8 @@ void class F {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 102, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 102, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 102, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 102, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 103, 27))
@@ -499,8 +499,8 @@ class G {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 114, 9))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 114, 9))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 114, 9))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 114, 9))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -511,8 +511,8 @@ class G {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 116, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 116, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 116, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 116, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -522,8 +522,8 @@ class G {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 118, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 118, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 118, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 118, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 119, 23))
@@ -532,8 +532,8 @@ class G {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 120, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 120, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 120, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 120, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 121, 27))
@@ -581,8 +581,8 @@ void class H {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 133, 14))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 133, 14))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 133, 14))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 133, 14))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -593,8 +593,8 @@ void class H {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 135, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 135, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 135, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 135, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -604,8 +604,8 @@ void class H {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 137, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 137, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 137, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 137, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 138, 23))
@@ -614,8 +614,8 @@ void class H {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 139, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 139, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 139, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 139, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 140, 27))
@@ -664,8 +664,8 @@ class I {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 152, 9))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 152, 9))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 152, 9))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 152, 9))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -676,8 +676,8 @@ class I {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 154, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 154, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 154, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 154, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -687,8 +687,8 @@ class I {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 156, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 156, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 156, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 156, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 157, 23))
@@ -697,8 +697,8 @@ class I {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 158, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 158, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 158, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 158, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 159, 27))
@@ -747,8 +747,8 @@ void class J {
 
     @x ["property"]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property"] : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 171, 14))
->"property" : Symbol(property, Decl(decoratorsOnComputedProperties.ts, 171, 14))
+>["property"] : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 171, 14))
+>"property" : Symbol(["property"], Decl(decoratorsOnComputedProperties.ts, 171, 14))
 
     @x [Symbol.toStringTag]: any;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -759,8 +759,8 @@ void class J {
 
     @x ["property2"]: any = 2;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
->["property2"] : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 173, 33))
->"property2" : Symbol(property2, Decl(decoratorsOnComputedProperties.ts, 173, 33))
+>["property2"] : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 173, 33))
+>"property2" : Symbol(["property2"], Decl(decoratorsOnComputedProperties.ts, 173, 33))
 
     @x [Symbol.iterator]: any = null;
 >x : Symbol(x, Decl(decoratorsOnComputedProperties.ts, 0, 0))
@@ -770,8 +770,8 @@ void class J {
 >iterator : Symbol(iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
     ["property3"]: any;
->["property3"] : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 175, 37))
->"property3" : Symbol(property3, Decl(decoratorsOnComputedProperties.ts, 175, 37))
+>["property3"] : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 175, 37))
+>"property3" : Symbol(["property3"], Decl(decoratorsOnComputedProperties.ts, 175, 37))
 
     [Symbol.isConcatSpreadable]: any;
 >[Symbol.isConcatSpreadable] : Symbol([Symbol.isConcatSpreadable], Decl(decoratorsOnComputedProperties.ts, 176, 23))
@@ -780,8 +780,8 @@ void class J {
 >isConcatSpreadable : Symbol(isConcatSpreadable, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     ["property4"]: any = 2;
->["property4"] : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 177, 37))
->"property4" : Symbol(property4, Decl(decoratorsOnComputedProperties.ts, 177, 37))
+>["property4"] : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 177, 37))
+>"property4" : Symbol(["property4"], Decl(decoratorsOnComputedProperties.ts, 177, 37))
 
     [Symbol.match]: any = null;
 >[Symbol.match] : Symbol([Symbol.match], Decl(decoratorsOnComputedProperties.ts, 178, 27))

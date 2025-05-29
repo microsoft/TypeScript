@@ -15,18 +15,18 @@ export enum A {
 export * from "./src/impl";
 === /p1/index.ts ===
 import * as _whatever from "p2";
->_whatever : typeof import("/p2/index")
+>_whatever : typeof _whatever
 
 import { getA } from "typescript-fsa";
->getA : () => A
+>getA : () => import("../cache/typescript-fsa/index.js").A
 
 export const a = getA();
->a : A
->getA() : A
->getA : () => A
+>a : import("../cache/typescript-fsa/index.js").A
+>getA() : import("../cache/typescript-fsa/index.js").A
+>getA : () => import("../cache/typescript-fsa/index.js").A
 
 === /p2/index.d.ts ===
 export const a: import("typescript-fsa").A;
->a : A
+>a : import("../cache/typescript-fsa/index.js").A
 
 

@@ -14,8 +14,8 @@ var sameName1a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string
 >p : string
 
 var sameName2a = { get 0.0() { return ''; }, set 0(n) { var p = n; var p: string; } };
->sameName2a : { 0.0: string; }
->{ get 0.0() { return ''; }, set 0(n) { var p = n; var p: string; } } : { 0.0: string; }
+>sameName2a : { 0: string; }
+>{ get 0.0() { return ''; }, set 0(n) { var p = n; var p: string; } } : { 0: string; }
 >0.0 : string
 >'' : ""
 >0 : string
@@ -25,8 +25,8 @@ var sameName2a = { get 0.0() { return ''; }, set 0(n) { var p = n; var p: string
 >p : string
 
 var sameName3a = { get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p: string; } };
->sameName3a : { 0x20: string; }
->{ get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p: string; } } : { 0x20: string; }
+>sameName3a : { 32: string; }
+>{ get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p: string; } } : { 32: string; }
 >0x20 : string
 >'' : ""
 >3.2e1 : string
@@ -36,8 +36,8 @@ var sameName3a = { get 0x20() { return ''; }, set 3.2e1(n) { var p = n; var p: s
 >p : string
 
 var sameName4a = { get ''() { return ''; }, set ""(n) { var p = n; var p: string; } };
->sameName4a : { '': string; }
->{ get ''() { return ''; }, set ""(n) { var p = n; var p: string; } } : { '': string; }
+>sameName4a : { "": string; }
+>{ get ''() { return ''; }, set ""(n) { var p = n; var p: string; } } : { "": string; }
 >'' : string
 >'' : ""
 >"" : string
@@ -47,8 +47,8 @@ var sameName4a = { get ''() { return ''; }, set ""(n) { var p = n; var p: string
 >p : string
 
 var sameName5a = { get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } };
->sameName5a : { '\t': string; }
->{ get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } } : { '\t': string; }
+>sameName5a : { "\t": string; }
+>{ get '\t'() { return ''; }, set '\t'(n) { var p = n; var p: string; } } : { "\t": string; }
 >'\t' : string
 >'' : ""
 >'\t' : string
@@ -70,14 +70,14 @@ var sameName6a = { get 'a'() { return ''; }, set a(n) { var p = n; var p: string
 
 // PropertyName CallSignature{FunctionBody} is equivalent to PropertyName:function CallSignature{FunctionBody}
 var callSig1 = { num(n: number) { return '' } };
->callSig1 : { num: (n: number) => string; }
->{ num(n: number) { return '' } } : { num: (n: number) => string; }
+>callSig1 : { num(n: number): string; }
+>{ num(n: number) { return '' } } : { num(n: number): string; }
 >num : (n: number) => string
 >n : number
 >'' : ""
 
 var callSig1: { num: (n: number) => string; };
->callSig1 : { num: (n: number) => string; }
+>callSig1 : { num(n: number): string; }
 >num : (n: number) => string
 >n : number
 

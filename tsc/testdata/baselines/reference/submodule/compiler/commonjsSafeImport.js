@@ -19,3 +19,9 @@ function Foo() { }
 Object.defineProperty(exports, "__esModule", { value: true });
 const _10_lib_1 = require("./10_lib");
 (0, _10_lib_1.Foo)();
+
+
+//// [10_lib.d.ts]
+export declare function Foo(): void;
+//// [main.d.ts]
+export {};

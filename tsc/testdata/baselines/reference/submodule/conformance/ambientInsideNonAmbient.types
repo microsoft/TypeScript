@@ -14,7 +14,7 @@ module M {
 >C : C
 
     export declare enum E { }
->E : M.E
+>E : E
 
     export declare module M { }
 }

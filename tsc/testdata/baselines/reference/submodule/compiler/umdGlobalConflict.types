@@ -2,30 +2,30 @@
 
 === v1/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof import("v1/index")
+>Alpha : typeof import("./index.js")
 
 export var x: string;
 >x : string
 
 === v2/index.d.ts ===
 export as namespace Alpha;
->Alpha : typeof import("v2/index")
+>Alpha : typeof import("./index.js")
 
 export var y: number;
 >y : number
 
 === consumer.ts ===
 import * as v1 from './v1';
->v1 : typeof import("v1/index")
+>v1 : typeof v1
 
 import * as v2 from './v2';
->v2 : typeof import("v2/index")
+>v2 : typeof v2
 
 === global.ts ===
 // Should be OK, first in wins
 const p: string = Alpha.x;
 >p : string
 >Alpha.x : string
->Alpha : typeof import("v1/index")
+>Alpha : typeof Alpha
 >x : string
 

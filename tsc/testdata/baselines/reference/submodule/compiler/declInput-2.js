@@ -48,3 +48,32 @@ var M;
     }
     M.D = D;
 })(M || (M = {}));
+
+
+//// [declInput-2.d.ts]
+declare namespace M {
+    class C {
+    }
+    export class E {
+    }
+    export interface I1 {
+    }
+    interface I2 {
+    }
+    export class D {
+        private c; // don't generate
+        m1: number;
+        m2: string;
+        m22: C; // don't generate
+        m23: E;
+        m24: I1;
+        m25: I2; // don't generate
+        m232(): E;
+        m242(): I1;
+        m252(): I2; // don't generate
+        m26(i: I1): void;
+        m262(i: I2): void;
+        m3(): C;
+    }
+    export {};
+}

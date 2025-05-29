@@ -9,27 +9,3 @@
 
      S extends State,
      P extends Partial<S>,
-@@= skipped -29, +29 lines =@@
-
-     store.setState(key, value);
- >store.setState(key, value) : void
-->store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
-+>store.setState : <K extends keyof S>(key: K, value: S[K]) => void
- >store : Store<S>
-->setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
-+>setState : <K extends keyof S>(key: K, value: S[K]) => void
- >key : K
- >value : P[K] & ({} | null)
-
-@@= skipped -13, +13 lines =@@
-
-     store.setState(key, value);
- >store.setState(key, value) : void
-->store.setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
-+>store.setState : <K extends keyof S>(key: K, value: S[K]) => void
- >store : Store<S>
-->setState : <K_1 extends keyof S>(key: K_1, value: S[K_1]) => void
-+>setState : <K extends keyof S>(key: K, value: S[K]) => void
- >key : K
- >value : P[K] & ({} | null)
- }

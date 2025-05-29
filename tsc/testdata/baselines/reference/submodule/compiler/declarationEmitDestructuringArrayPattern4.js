@@ -20,3 +20,6 @@ var [...a9] = [1, "hello", true];
 var [x17, ...a10] = [1, "hello", true];
 var [x18, y18, ...a12] = [1, "hello", true];
 var [x19, y19, z19, ...a13] = [1, "hello", true];
+
+
+//// [declarationEmitDestructuringArrayPattern4.d.ts]

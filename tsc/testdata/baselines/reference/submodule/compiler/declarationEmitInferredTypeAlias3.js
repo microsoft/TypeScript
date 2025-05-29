@@ -22,3 +22,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 var x = "hi" || 5;
 exports.default = x;
+
+
+//// [0.d.ts]
+export {};
+//// [1.d.ts]
+declare var x: string | number;
+export default x;

@@ -2,7 +2,7 @@
 
 === unusedLocalsAndObjectSpread.ts ===
 declare var console: { log(a: any): void };
->console : { log: (a: any) => void; }
+>console : { log(a: any): void; }
 >log : (a: any) => void
 >a : any
 
@@ -26,7 +26,7 @@ function one() {
     console.log(bar);
 >console.log(bar) : void
 >console.log : (a: any) => void
->console : { log: (a: any) => void; }
+>console : { log(a: any): void; }
 >log : (a: any) => void
 >bar : { b: number; }
 }
@@ -52,7 +52,7 @@ function two() {
     console.log(bar);
 >console.log(bar) : void
 >console.log : (a: any) => void
->console : { log: (a: any) => void; }
+>console : { log(a: any): void; }
 >log : (a: any) => void
 >bar : { b: number; }
 }

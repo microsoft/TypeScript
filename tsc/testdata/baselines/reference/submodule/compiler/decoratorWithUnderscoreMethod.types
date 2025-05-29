@@ -2,7 +2,7 @@
 
 === decoratorWithUnderscoreMethod.ts ===
 declare var console : { log(arg: string): void };
->console : { log: (arg: string) => void; }
+>console : { log(arg: string): void; }
 >log : (arg: string) => void
 >arg : string
 
@@ -18,7 +18,7 @@ function dec(): Function {
         console.log(target[propKey]);
 >console.log(target[propKey]) : void
 >console.log : (arg: string) => void
->console : { log: (arg: string) => void; }
+>console : { log(arg: string): void; }
 >log : (arg: string) => void
 >target[propKey] : any
 >target : any

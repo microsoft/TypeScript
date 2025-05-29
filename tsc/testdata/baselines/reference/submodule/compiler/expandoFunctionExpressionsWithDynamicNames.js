@@ -24,3 +24,14 @@ exports.expr[s] = 0;
 const expr2 = function () { };
 exports.expr2 = expr2;
 exports.expr2[s] = 0;
+
+
+//// [expandoFunctionExpressionsWithDynamicNames.d.ts]
+export declare const expr: {
+    (): void;
+    X: number;
+};
+export declare const expr2: {
+    (): void;
+    X: number;
+};

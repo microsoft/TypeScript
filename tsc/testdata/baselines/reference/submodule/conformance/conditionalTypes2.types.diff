@@ -1,24 +1,6 @@
 --- old.conditionalTypes2.types
 +++ new.conditionalTypes2.types
-@@= skipped -81, +81 lines =@@
-
-     if (isFunction(item)) {
- >isFunction(item) : boolean
-->isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
-+>isFunction : <T>(value: T) => value is Extract<T, Function>
- >item : T
-
-         return item;
-@@= skipped -17, +17 lines =@@
-
-     if (isFunction(x)) {
- >isFunction(x) : boolean
-->isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
-+>isFunction : <T>(value: T) => value is Extract<T, Function>
- >x : T
-
-         const f: Function = x;
-@@= skipped -150, +150 lines =@@
+@@= skipped -248, +248 lines =@@
  >x : T
 
      partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
@@ -36,13 +18,7 @@
  >value : Function | object
 
  declare function toString2(value: Function): string ;
-@@= skipped -13, +13 lines =@@
-
-     if (isFunction(value)) {
- >isFunction(value) : boolean
-->isFunction : <T_1>(value: T_1) => value is Extract<T_1, Function>
-+>isFunction : <T>(value: T) => value is Extract<T, Function>
- >value : T
+@@= skipped -18, +18 lines =@@
 
          toString1(value);
  >toString1(value) : string
@@ -51,7 +27,7 @@
  >value : Extract<T, Function>
 
          toString2(value);
-@@= skipped -161, +161 lines =@@
+@@= skipped -156, +156 lines =@@
  // Repro from #33568
 
  declare function save(_response: IRootResponse<string>): void;

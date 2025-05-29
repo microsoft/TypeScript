@@ -5,9 +5,10 @@
  exports.formatters = {}
  >exports.formatters = {} : {}
 ->exports.formatters : {}
-+>exports.formatters : any
- >exports : typeof import("mod")
+->exports : typeof import("mod")
 ->formatters : {}
++>exports.formatters : any
++>exports : typeof import("./mod")
 +>formatters : any
  >{} : {}
 
@@ -53,20 +54,14 @@
  >formatters : any
  >o : any
  >function (v) {    return v} : (v: any) => any
-@@= skipped -12, +12 lines =@@
-
- === use.js ===
- import * as debug from './mod'
-->debug : typeof debug
-+>debug : typeof import("mod")
+@@= skipped -16, +16 lines =@@
 
  debug.formatters.j
  >debug.formatters.j : any
 ->debug.formatters : {}
-->debug : typeof debug
-->formatters : {}
 +>debug.formatters : any
-+>debug : typeof import("mod")
+ >debug : typeof debug
+->formatters : {}
 +>formatters : any
  >j : any
 
@@ -75,10 +70,9 @@
  >debug.formatters.o(1) : any
  >debug.formatters.o : any
 ->debug.formatters : {}
-->debug : typeof debug
-->formatters : {}
 +>debug.formatters : any
-+>debug : typeof import("mod")
+ >debug : typeof debug
+->formatters : {}
 +>formatters : any
  >o : any
  >1 : 1

@@ -8,9 +8,8 @@
 +>c : any
 
  export var x: c.b1.a.m2.c1;
-->x : c.b1.a.m2.c1
-+>x : c1
- >c : any
+ >x : c.b1.a.m2.c1
+@@= skipped -8, +8 lines =@@
  >b1 : any
  >a : any
  >m2 : any

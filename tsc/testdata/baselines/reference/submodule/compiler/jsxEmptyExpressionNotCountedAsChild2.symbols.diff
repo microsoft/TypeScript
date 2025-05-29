@@ -1,15 +1,6 @@
 --- old.jsxEmptyExpressionNotCountedAsChild2.symbols
 +++ new.jsxEmptyExpressionNotCountedAsChild2.symbols
-@@= skipped -5, +5 lines =@@
- export {}
-
- declare global {
-->global : Symbol(global, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 2, 9))
-+>global : Symbol((Missing), Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 2, 9))
-
-     namespace JSX {
- >JSX : Symbol(JSX, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 4, 16))
-@@= skipped -12, +12 lines =@@
+@@= skipped -17, +17 lines =@@
  >ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 6, 27))
 
              __properties__: {};

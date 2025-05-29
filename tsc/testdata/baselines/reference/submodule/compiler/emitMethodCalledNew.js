@@ -28,3 +28,16 @@ exports.b = {
 exports.c = {
     ["new"](x) { return x + 1; }
 };
+
+
+//// [emitMethodCalledNew.d.ts]
+// https://github.com/microsoft/TypeScript/issues/55075
+export declare const a: {
+    "new"(x: number): number;
+};
+export declare const b: {
+    "new"(x: number): number;
+};
+export declare const c: {
+    "new"(x: number): number;
+};

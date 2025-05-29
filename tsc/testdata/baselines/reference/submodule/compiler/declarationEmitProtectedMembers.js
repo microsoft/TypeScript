@@ -97,3 +97,36 @@ class C4 {
         this.b = b;
     }
 }
+
+
+//// [declarationEmitProtectedMembers.d.ts]
+// Class with protected members
+declare class C1 {
+    protected x: number;
+    protected f(): number;
+    protected set accessor(a: number);
+    protected get accessor(): number;
+    protected static sx: number;
+    protected static sf(): number;
+    protected static set staticSetter(a: number);
+    protected static get staticGetter(): number;
+}
+// Derived class overriding protected members
+declare class C2 extends C1 {
+    protected f(): number;
+    protected static sf(): number;
+}
+// Derived class making protected members public
+declare class C3 extends C2 {
+    x: number;
+    static sx: number;
+    f(): number;
+    static sf(): number;
+    static get staticGetter(): number;
+}
+// Protected properties in constructors
+declare class C4 {
+    protected a: number;
+    protected b: any;
+    constructor(a: number, b: any);
+}

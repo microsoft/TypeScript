@@ -56,3 +56,29 @@ var T5;
 (function (T5) {
     T5["a"] = "12";
 })(T5 || (T5 = {}));
+
+
+//// [enumConstantMemberWithStringEmitDeclaration.d.ts]
+declare enum T1 {
+    a = "1",
+    b = "12",
+    c = "123"
+}
+declare enum T2 {
+    a = "1",
+    b = "12"
+}
+declare enum T3 {
+    a = "1",
+    b = "12"
+}
+declare enum T4 {
+    a = "1"
+}
+declare enum T5 {
+    a = "12"
+}
+declare enum T6 {
+    a = "1",
+    b = "12"
+}

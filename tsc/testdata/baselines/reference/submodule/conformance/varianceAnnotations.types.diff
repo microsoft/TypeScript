@@ -1,20 +1,6 @@
 --- old.varianceAnnotations.types
 +++ new.varianceAnnotations.types
-@@= skipped -201, +201 lines =@@
- >T23 : T
-
- declare function f1<in T>(x: T): void;  // Error
-->f1 : <in T>(x: T) => void
-+>f1 : <T>(x: T) => void
- >x : T
-
- declare function f2<out T>(): T;  // Error
-->f2 : <out T>() => T
-+>f2 : <T>() => T
-
- class C {
- >C : C
-@@= skipped -58, +58 lines =@@
+@@= skipped -259, +259 lines =@@
  }
 
  function fn<A>(inp: Child<A>) {

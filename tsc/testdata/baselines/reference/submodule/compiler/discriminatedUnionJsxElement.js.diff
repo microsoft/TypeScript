@@ -13,24 +13,11 @@
      return <ListItem variant={listItemVariant}/>;
  }
  var ListItemVariant;
-@@= skipped -15, +12 lines =@@
- function ListItem(_data) {
-     return null;
+@@= skipped -18, +15 lines =@@
+
+
+ //// [discriminatedUnionJsxElement.d.ts]
++// Repro from #46021
+ interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
+     menuItemsVariant?: MenuItemVariant;
  }
--
--
--//// [discriminatedUnionJsxElement.d.ts]
--interface IData<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine> {
--    menuItemsVariant?: MenuItemVariant;
--}
--declare function Menu<MenuItemVariant extends ListItemVariant = ListItemVariant.OneLine>(data: IData<MenuItemVariant>): any;
--type IListItemData = {
--    variant: ListItemVariant.Avatar;
--} | {
--    variant: ListItemVariant.OneLine;
--};
--declare enum ListItemVariant {
--    OneLine = 0,
--    Avatar = 1
--}
--declare function ListItem(_data: IListItemData): null;

@@ -78,7 +78,7 @@ type F<T> = {} & (
 );
 
 declare function f<T = any>(): F<T>;
->f : <T>() => F<T>
+>f : <T = any>() => F<T>
 
 function g() {
 >g : () => F<any>
@@ -86,6 +86,6 @@ function g() {
     return f() as F<any>;
 >f() as F<any> : F<any>
 >f() : F<any>
->f : <T>() => F<T>
+>f : <T = any>() => F<T>
 }
 

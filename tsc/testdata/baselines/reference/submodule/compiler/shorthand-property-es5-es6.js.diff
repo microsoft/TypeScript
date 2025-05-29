@@ -6,9 +6,8 @@
  import { foo } from './foo';
 -var baz = 42;
 -var bar = { foo: foo, baz: baz };
--
--
--//// [test.d.ts]
--export {};
 +const baz = 42;
 +const bar = { foo, baz };
+
+
+ //// [test.d.ts]

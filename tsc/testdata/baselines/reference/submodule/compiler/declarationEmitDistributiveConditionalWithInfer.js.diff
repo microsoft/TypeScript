@@ -7,7 +7,9 @@
 -var fun = function (subFun) { };
 +const fun = (subFun) => { };
  exports.fun = fun;
--
--
--//// [declarationEmitDistributiveConditionalWithInfer.d.ts]
+
+
+ //// [declarationEmitDistributiveConditionalWithInfer.d.ts]
 -export declare const fun: (subFun: <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]) => void;
++// This function's type is changed on declaration
++export declare const fun: (subFun: <Collection, Field extends keyof Collection>() => (Collection[Field] extends infer T ? T extends Collection[Field] ? T extends readonly (infer InnerArr)[] ? InnerArr : T : never : never)[]) => void;

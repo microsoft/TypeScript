@@ -113,6 +113,6 @@ sub_invariant = super_invariant;  // Error
  * @param {T} x
  */
 function f(x) {}
->f : <T>(x: T) => void
+>f : <in T>(x: T) => void
 >x : T
 

@@ -5,6 +5,6 @@
 
    set "a"(i) { }
 ->"a" : Symbol(C["a"], Decl(parserMemberAccessorDeclaration5.ts, 0, 9))
-+>"a" : Symbol(a, Decl(parserMemberAccessorDeclaration5.ts, 0, 9))
++>"a" : Symbol("a", Decl(parserMemberAccessorDeclaration5.ts, 0, 9))
  >i : Symbol(i, Decl(parserMemberAccessorDeclaration5.ts, 1, 10))
  }

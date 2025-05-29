@@ -21,8 +21,8 @@ assert(x);
 >x : 0 | 1
 
 export let o = {
->o : { [x]: number; }
->{    [x]: 1 // error narrow type !== declared type} : { [x]: number; }
+>o : { 1: number; }
+>{    [x]: 1 // error narrow type !== declared type} : { 1: number; }
 
     [x]: 1 // error narrow type !== declared type
 >[x] : number
@@ -36,8 +36,8 @@ const y: 0 = 0
 >0 : 0
 
 export let o2 = {
->o2 : { [y]: number; }
->{    [y]: 1 // ok literal computed type } : { [y]: number; }
+>o2 : { 0: number; }
+>{    [y]: 1 // ok literal computed type } : { 0: number; }
 
     [y]: 1 // ok literal computed type 
 >[y] : number
@@ -47,8 +47,8 @@ export let o2 = {
 
 // literals are ok
 export let o3 = { [1]: 1 }
->o3 : { [1]: number; }
->{ [1]: 1 } : { [1]: number; }
+>o3 : { 1: number; }
+>{ [1]: 1 } : { 1: number; }
 >[1] : number
 >1 : 1
 >1 : 1
@@ -117,8 +117,8 @@ function foo (): 1 { return 1; }
 >1 : 1
 
 export let o7 = {
->o7 : { [foo()]: number; }
->{    [foo()]: 1 // Should error} : { [foo()]: number; }
+>o7 : { 1: number; }
+>{    [foo()]: 1 // Should error} : { 1: number; }
 
     [foo()]: 1 // Should error
 >[foo()] : number
@@ -136,8 +136,8 @@ let E = { A: 1 } as const
 >1 : 1
 
 export const o8 = {
->o8 : { [E.A]: number; }
->{    [E.A]: 1 // Fresh } : { [E.A]: number; }
+>o8 : { 1: number; }
+>{    [E.A]: 1 // Fresh } : { 1: number; }
 
     [E.A]: 1 // Fresh 
 >[E.A] : number
@@ -155,8 +155,8 @@ function ns() { return { v: 0 } as const }
 >0 : 0
 
 export const o9 = {
->o9 : { [ns().v]: number; }
->{    [ns().v]: 1} : { [ns().v]: number; }
+>o9 : { 0: number; }
+>{    [ns().v]: 1} : { 0: number; }
 
     [ns().v]: 1
 >[ns().v] : number

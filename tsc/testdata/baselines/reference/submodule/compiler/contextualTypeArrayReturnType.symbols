@@ -35,7 +35,7 @@ var style: IBookStyle = {
 
         return [
             {'ry': null }
->'ry' : Symbol(ry, Decl(contextualTypeArrayReturnType.ts, 15, 13))
+>'ry' : Symbol('ry', Decl(contextualTypeArrayReturnType.ts, 15, 13))
 
         ];
     }

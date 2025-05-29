@@ -33,3 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("Map");
 let x;
 x.foo().x;
+
+
+//// [main.d.ts]
+import "Map";

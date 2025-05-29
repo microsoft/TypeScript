@@ -37,3 +37,18 @@ function bar2(obj) {
 }
 const a = null;
 const b = a;
+
+
+//// [inferTypes2.d.ts]
+// Repros from #22755
+export declare function foo<T>(obj: T): T extends () => infer P ? P : never;
+export declare function bar<T>(obj: T): T extends () => infer P ? P : never;
+export type BadNested<T> = {
+    x: T extends number ? T : string;
+};
+export declare function foo2<T>(obj: T): T extends {
+    [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
+} ? P : never;
+export declare function bar2<T>(obj: T): T extends {
+    x: infer P extends number ? infer P : string;
+} ? P : never;

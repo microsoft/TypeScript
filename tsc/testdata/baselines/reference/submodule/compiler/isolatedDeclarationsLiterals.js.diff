@@ -1,62 +1,13 @@
 --- old.isolatedDeclarationsLiterals.js
 +++ new.isolatedDeclarationsLiterals.js
-@@= skipped -120, +120 lines =@@
-     method() {
-     },
- };
--
--
--//// [file1.d.ts]
--export declare const constObject: {
--    /** Value Of 1 */
--    readonly one: 1;
--    /** Value Of 0o1 */
--    readonly oneOctal: 1;
--    /** Value Of 0x1 */
--    readonly oneHex: 1;
--    /** Value Of +1 */
--    readonly pOne: 1;
--    /** Value Of -1 */
--    readonly mOne: -1;
--    readonly array: readonly [1, -1, 1n, -1n];
--    /** Value Of 1n */
--    readonly onen: 1n;
--    /** Value Of -1n */
--    readonly mOnen: -1n;
--    /** Value Of "1" */
--    readonly oneStrDoubleQuote: "1";
--    /** Value Of '1' */
--    readonly oneStrSingleQuote: "1";
--    /** Value Of `1` */
--    readonly oneStrTemplate: "1";
--    /** A method */
--    readonly method: () => void;
--};
--export declare const one = 1;
--export declare const oneOctal = 1;
--export declare const oneHex = 1;
--export declare const pOne = 1;
--export declare const mOne = -1;
+@@= skipped -153, +153 lines =@@
+ export declare const oneHex = 1;
+ export declare const pOne = 1;
+ export declare const mOne = -1;
 -export declare const onen = 1n;
 -export declare const mOnen = -1n;
--export declare const oneStrDoubleQuote = "1";
--export declare const oneStrSingleQuote = "1";
--export declare const oneStrTemplate = "1";
--export declare const mutableObject: {
--    /** Value Of 1 */
--    one: number;
--    /** Value Of 0o1 */
--    oneOctal: number;
--    /** Value Of 0x1 */
--    oneHex: number;
--    /** Value Of +1 */
--    pOne: number;
--    /** Value Of -1 */
--    mOne: number;
--    /** Value Of 1n */
--    onen: bigint;
--    /** Value Of -1n */
--    mOnen: bigint;
--    /** A method */
--    method(): void;
--};
++export declare const onen = 1;
++export declare const mOnen = -1;
+ export declare const oneStrDoubleQuote = "1";
+ export declare const oneStrSingleQuote = "1";
+ export declare const oneStrTemplate = "1";

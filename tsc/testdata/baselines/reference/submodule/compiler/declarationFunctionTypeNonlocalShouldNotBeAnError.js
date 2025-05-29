@@ -18,3 +18,13 @@ var foo;
         bar
     };
 })(foo || (foo = {}));
+
+
+//// [declarationFunctionTypeNonlocalShouldNotBeAnError.d.ts]
+declare namespace foo {
+    function bar(): void;
+    export const obj: {
+        bar: typeof bar;
+    };
+    export {};
+}

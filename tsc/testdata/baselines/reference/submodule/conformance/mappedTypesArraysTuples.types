@@ -257,7 +257,7 @@ function acceptMappedArray<T extends any[]>(arr: T) {
 >acceptArray(mapArray(arr)) : void
 >acceptArray : (arr: any[]) => void
 >mapArray(arr) : Mapped<T>
->mapArray : <T extends any[]>(arr: T) => Mapped<T>
+>mapArray : <T_1 extends any[]>(arr: T_1) => Mapped<T_1>
 >arr : T
 }
 

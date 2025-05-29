@@ -82,7 +82,7 @@
 ->{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }; taskNameToGroup: { [x: string]: TaskGroup; }; }
 +>module.exports = {    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
 +>module.exports : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
-+>module : { export=: { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }; }
++>module : { "export=": { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }; }
 +>exports : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
 +>{    taskGroups,    taskNameToGroup,} : { taskGroups: { parseHTML: { id: P; label: string; }; styleLayout: { id: P; label: string; }; }; taskNameToGroup: any; }
 

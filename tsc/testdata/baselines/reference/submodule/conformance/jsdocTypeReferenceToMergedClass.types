@@ -7,12 +7,12 @@ var Workspace = {}
 
 /** @type {Workspace.Project} */
 var p;
->p : Project
+>p : Workspace.Project
 
 p.isServiceProject()
 >p.isServiceProject() : any
 >p.isServiceProject : any
->p : Project
+>p : Workspace.Project
 >isServiceProject : any
 
 Workspace.Project = function wp() { }
@@ -24,13 +24,13 @@ Workspace.Project = function wp() { }
 >wp : () => void
 
 Workspace.Project.prototype = {
->Workspace.Project.prototype = {  isServiceProject() {}} : { isServiceProject: () => void; }
+>Workspace.Project.prototype = {  isServiceProject() {}} : { isServiceProject(): void; }
 >Workspace.Project.prototype : any
 >Workspace.Project : any
 >Workspace : {}
 >Project : any
 >prototype : any
->{  isServiceProject() {}} : { isServiceProject: () => void; }
+>{  isServiceProject() {}} : { isServiceProject(): void; }
 
   isServiceProject() {}
 >isServiceProject : () => void

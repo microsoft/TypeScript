@@ -9,63 +9,63 @@ export module m {
     }
 }
 import exports = m.c;
->exports : typeof c
+>exports : typeof exports
 >m : typeof m
->c : c
+>c : exports
 
 import require = m.c;
->require : typeof c
+>require : typeof exports
 >m : typeof m
->c : c
+>c : exports
 
 new exports();
->new exports() : c
->exports : typeof c
+>new exports() : exports
+>exports : typeof exports
 
 new require();
->new require() : c
->require : typeof c
+>new require() : exports
+>require : typeof exports
 
 module m1 {
 >m1 : typeof m1
 
     import exports = m.c;
->exports : typeof c
+>exports : typeof exports
 >m : typeof m
->c : c
+>c : exports
 
     import require = m.c;
->require : typeof c
+>require : typeof exports
 >m : typeof m
->c : c
+>c : exports
 
     new exports();
->new exports() : c
->exports : typeof c
+>new exports() : exports
+>exports : typeof exports
 
     new require();
->new require() : c
->require : typeof c
+>new require() : exports
+>require : typeof exports
 }
 
 module m2 {
 >m2 : typeof m2
 
     export import exports = m.c;
->exports : typeof c
+>exports : typeof exports
 >m : typeof m
->c : c
+>c : exports
 
     export import require = m.c;
->require : typeof c
+>require : typeof exports
 >m : typeof m
->c : c
+>c : exports
 
     new exports();
->new exports() : c
->exports : typeof c
+>new exports() : exports
+>exports : typeof exports
 
     new require();
->new require() : c
->require : typeof c
+>new require() : exports
+>require : typeof exports
 }

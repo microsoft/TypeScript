@@ -81,8 +81,8 @@ const t0 = {
 };
 
 const t1 = {
->t1 : { [Op.equal]: string; }
->{  [Op.equal]: "first",  [Op.equal]: "last",} : { [Op.equal]: string; }
+>t1 : { [OpTypes.equal]: string; }
+>{  [Op.equal]: "first",  [Op.equal]: "last",} : { [OpTypes.equal]: string; }
 
   [Op.equal]: "first",
 >[Op.equal] : string
@@ -121,8 +121,8 @@ const t2 = {
 };
 
 const t3 = {
->t3 : { [getUniqueSymbol0()]: string; [getUniqueSymbol1()]: string; }
->{  [getUniqueSymbol0()]: "first",  [getUniqueSymbol0()]: "last",  [getUniqueSymbol1()]: "first",  [getUniqueSymbol1()]: "last",} : { [getUniqueSymbol0()]: string; [getUniqueSymbol1()]: string; }
+>t3 : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
+>{  [getUniqueSymbol0()]: "first",  [getUniqueSymbol0()]: "last",  [getUniqueSymbol1()]: "first",  [getUniqueSymbol1()]: "last",} : { [uniqueSymbol0]: string; [uniqueSymbol1]: string; }
 
   [getUniqueSymbol0()]: "first",
 >[getUniqueSymbol0()] : string

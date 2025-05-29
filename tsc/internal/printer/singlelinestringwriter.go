@@ -2,13 +2,20 @@ package printer
 
 import (
 	"strings"
+	"sync"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
-var SingleLineStringWriter EmitTextWriter = &singleLineStringWriter{}
+var SingleLineStringWriterPool sync.Pool = sync.Pool{
+	New: func() any {
+		return &singleLineStringWriter{}
+	},
+}
+
+var _ EmitTextWriter = &singleLineStringWriter{}
 
 type singleLineStringWriter struct {
 	builder     strings.Builder

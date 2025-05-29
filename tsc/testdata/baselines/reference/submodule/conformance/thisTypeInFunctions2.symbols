@@ -95,9 +95,9 @@ extend2({
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
->this.mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+>this.mine : Symbol(þindex, Decl(thisTypeInFunctions2.ts, 9, 29))
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
->mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+>mine : Symbol(þindex, Decl(thisTypeInFunctions2.ts, 9, 29))
 
     },
     mine: 13,
@@ -110,9 +110,9 @@ extend2({
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
 
         this.mine
->this.mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+>this.mine : Symbol(þindex, Decl(thisTypeInFunctions2.ts, 9, 29))
 >this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
->mine : Symbol((Missing), Decl(thisTypeInFunctions2.ts, 9, 29))
+>mine : Symbol(þindex, Decl(thisTypeInFunctions2.ts, 9, 29))
     }
 });
 

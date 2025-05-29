@@ -4,7 +4,7 @@
 // Illegal attempts to define optional methods
 
 var a: {
->a : { x: () => any; number: any; }
+>a : { x(): any; number: any; }
 
     x()?: number; // error
 >x : () => any
@@ -41,8 +41,8 @@ class C2<T> {
 
 
 var b = {
->b : { x: () => any; 1: any; }
->{    x()?: 1 // error} : { x: () => any; 1: any; }
+>b : { x(): any; 1: any; }
+>{    x()?: 1 // error} : { x(): any; 1: any; }
 
     x()?: 1 // error
 >x : () => any

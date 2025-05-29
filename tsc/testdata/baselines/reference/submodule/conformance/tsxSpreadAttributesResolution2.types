@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface PoisonedProp {
     x: string;
@@ -14,15 +14,15 @@ interface PoisonedProp {
 
 class Poisoned extends React.Component<PoisonedProp, {}> {
 >Poisoned : Poisoned
->React.Component : Component<PoisonedProp, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<PoisonedProp, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Hello</div>;
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -34,7 +34,7 @@ const obj = {};
 
 // OK
 <Poisoned {...{x: "ok", y: "2"}} />;
-><Poisoned {...{x: "ok", y: "2"}} /> : Element
+><Poisoned {...{x: "ok", y: "2"}} /> : JSX.Element
 >Poisoned : typeof Poisoned
 >{x: "ok", y: "2"} : { x: string; y: "2"; }
 >x : string
@@ -44,26 +44,26 @@ const obj = {};
 
 // Error
 let p = <Poisoned {...obj} />;
->p : Element
-><Poisoned {...obj} /> : Element
+>p : JSX.Element
+><Poisoned {...obj} /> : JSX.Element
 >Poisoned : typeof Poisoned
 >obj : {}
 
 let y = <Poisoned />;
->y : Element
-><Poisoned /> : Element
+>y : JSX.Element
+><Poisoned /> : JSX.Element
 >Poisoned : typeof Poisoned
 
 let z = <Poisoned x y/>;
->z : Element
-><Poisoned x y/> : Element
+>z : JSX.Element
+><Poisoned x y/> : JSX.Element
 >Poisoned : typeof Poisoned
 >x : true
 >y : true
 
 let w = <Poisoned {...{x: 5, y: "2"}}/>;
->w : Element
-><Poisoned {...{x: 5, y: "2"}}/> : Element
+>w : JSX.Element
+><Poisoned {...{x: 5, y: "2"}}/> : JSX.Element
 >Poisoned : typeof Poisoned
 >{x: 5, y: "2"} : { x: number; y: "2"; }
 >x : number
@@ -72,8 +72,8 @@ let w = <Poisoned {...{x: 5, y: "2"}}/>;
 >"2" : "2"
 
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
->w1 : Element
-><Poisoned {...{x: 5, y: "2"}} X="hi" /> : Element
+>w1 : JSX.Element
+><Poisoned {...{x: 5, y: "2"}} X="hi" /> : JSX.Element
 >Poisoned : typeof Poisoned
 >{x: 5, y: "2"} : { x: number; y: "2"; }
 >x : number

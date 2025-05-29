@@ -12,3 +12,15 @@ export type R2 = typeof r2;
 using r1 = { [Symbol.dispose]() { } };
 await using r2 = { async [Symbol.asyncDispose]() { } };
 export {};
+
+
+//// [usingDeclarationsDeclarationEmit.2.d.ts]
+declare const r1: {
+    [Symbol.dispose](): void;
+};
+export type R1 = typeof r1;
+declare const r2: {
+    [Symbol.asyncDispose](): Promise<void>;
+};
+export type R2 = typeof r2;
+export {};

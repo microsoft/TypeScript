@@ -42,3 +42,20 @@ var A;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
+
+
+//// [declFileWithExtendsClauseThatHasItsContainerNameConflict.d.ts]
+declare namespace A.B.C {
+    class B {
+    }
+}
+declare namespace A.B {
+    class EventManager {
+        id: number;
+    }
+}
+declare namespace A.B.C {
+    class ContextMenu extends EventManager {
+        name: string;
+    }
+}

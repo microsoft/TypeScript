@@ -2,7 +2,7 @@
 
 === foo2.ts ===
 import foo1 = require('./foo1');
->foo1 : typeof import("foo1")
+>foo1 : typeof foo1
 
 export module M1 {
 >M1 : typeof M1
@@ -11,7 +11,7 @@ export module M1 {
 >C1 : C1
 
 		m1: foo1.M1.C1;
->m1 : C1
+>m1 : foo1.M1.C1
 >foo1 : any
 >M1 : any
 
@@ -20,32 +20,32 @@ export module M1 {
 
 		constructor(){
 			this.m1 = new foo1.M1.C1();
->this.m1 = new foo1.M1.C1() : C1
->this.m1 : C1
+>this.m1 = new foo1.M1.C1() : foo1.M1.C1
+>this.m1 : foo1.M1.C1
 >this : this
->m1 : C1
->new foo1.M1.C1() : C1
->foo1.M1.C1 : typeof C1
->foo1.M1 : typeof M1
->foo1 : typeof import("foo1")
->M1 : typeof M1
->C1 : typeof C1
+>m1 : foo1.M1.C1
+>new foo1.M1.C1() : foo1.M1.C1
+>foo1.M1.C1 : typeof foo1.M1.C1
+>foo1.M1 : typeof foo1.M1
+>foo1 : typeof foo1
+>M1 : typeof foo1.M1
+>C1 : typeof foo1.M1.C1
 
 			this.m1.y = 10; // Error
 >this.m1.y = 10 : 10
 >this.m1.y : any
->this.m1 : C1
+>this.m1 : foo1.M1.C1
 >this : this
->m1 : C1
+>m1 : foo1.M1.C1
 >y : any
 >10 : 10
 
 			this.m1.x = 20; // OK
 >this.m1.x = 20 : 20
 >this.m1.x : number
->this.m1 : C1
+>this.m1 : foo1.M1.C1
 >this : this
->m1 : C1
+>m1 : foo1.M1.C1
 >x : number
 >20 : 20
 
@@ -75,7 +75,7 @@ export module M1 {
 
 === foo1.ts ===
 import foo2 = require('./foo2');
->foo2 : typeof import("foo2")
+>foo2 : typeof foo2
 
 export module M1 {
 >M1 : typeof M1
@@ -84,7 +84,7 @@ export module M1 {
 >C1 : C1
 
 		m1: foo2.M1.C1;
->m1 : C1
+>m1 : foo2.M1.C1
 >foo2 : any
 >M1 : any
 
@@ -93,32 +93,32 @@ export module M1 {
 
 		constructor(){
 			this.m1 = new foo2.M1.C1();
->this.m1 = new foo2.M1.C1() : C1
->this.m1 : C1
+>this.m1 = new foo2.M1.C1() : foo2.M1.C1
+>this.m1 : foo2.M1.C1
 >this : this
->m1 : C1
->new foo2.M1.C1() : C1
->foo2.M1.C1 : typeof C1
->foo2.M1 : typeof M1
->foo2 : typeof import("foo2")
->M1 : typeof M1
->C1 : typeof C1
+>m1 : foo2.M1.C1
+>new foo2.M1.C1() : foo2.M1.C1
+>foo2.M1.C1 : typeof foo2.M1.C1
+>foo2.M1 : typeof foo2.M1
+>foo2 : typeof foo2
+>M1 : typeof foo2.M1
+>C1 : typeof foo2.M1.C1
 
 			this.m1.y = 10; // OK
 >this.m1.y = 10 : 10
 >this.m1.y : number
->this.m1 : C1
+>this.m1 : foo2.M1.C1
 >this : this
->m1 : C1
+>m1 : foo2.M1.C1
 >y : number
 >10 : 10
 
 			this.m1.x = 20; // Error
 >this.m1.x = 20 : 20
 >this.m1.x : any
->this.m1 : C1
+>this.m1 : foo2.M1.C1
 >this : this
->m1 : C1
+>m1 : foo2.M1.C1
 >x : any
 >20 : 20
 		}

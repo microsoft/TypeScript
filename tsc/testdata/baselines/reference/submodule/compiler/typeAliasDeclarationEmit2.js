@@ -6,3 +6,9 @@ export type A<a> = { value: a };
 //// [typeAliasDeclarationEmit2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+
+
+//// [typeAliasDeclarationEmit2.d.ts]
+export type A<a> = {
+    value: a;
+};

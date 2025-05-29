@@ -16,7 +16,7 @@ func collectExternalModuleReferences(file *ast.SourceFile) {
 	if file.Flags&ast.NodeFlagsPossiblyContainsDynamicImport != 0 || ast.IsInJSFile(file.AsNode()) {
 		ast.ForEachDynamicImportOrRequireCall(file /*includeTypeSpaceImports*/, true /*requireStringLiteralLikeArgument*/, true, func(node *ast.Node, moduleSpecifier *ast.Expression) bool {
 			ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
-			file.Imports = append(file.Imports, moduleSpecifier)
+			ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleSpecifier))
 			return false
 		})
 	}
@@ -32,7 +32,7 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 			moduleName := moduleNameExpr.AsStringLiteral().Text
 			if moduleName != "" && (!inAmbientModule || !tspath.IsExternalModuleNameRelative(moduleName)) {
 				ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
-				file.Imports = append(file.Imports, moduleNameExpr)
+				ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleNameExpr))
 				// !!! removed `&& p.currentNodeModulesDepth == 0`
 				if file.UsesUriStyleNodeCoreModules != core.TSTrue && !file.IsDeclarationFile {
 					if strings.HasPrefix(moduleName, "node:") && !exclusivelyPrefixedNodeCoreModules[moduleName] {

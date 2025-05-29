@@ -11,7 +11,7 @@
 ->C : typeof C
 +>module.exports = C : () => void
 +>module.exports : () => void
-+>module : { C: () => void; }
++>module : { C(): void; }
 +>exports : () => void
 +>C : () => void
 
@@ -48,11 +48,12 @@
  exports.C = function() {
 ->exports.C = function() {    this.p = 1} : typeof C
 ->exports.C : typeof C
-+>exports.C = function() {    this.p = 1} : () => void
-+>exports.C : any
- >exports : typeof import("mod3")
+->exports : typeof import("mod3")
 ->C : typeof C
 ->function() {    this.p = 1} : typeof C
++>exports.C = function() {    this.p = 1} : () => void
++>exports.C : any
++>exports : typeof import("./mod3")
 +>C : any
 +>function() {    this.p = 1} : () => void
 
@@ -83,7 +84,7 @@
  var both2 = both1;
 ->both2 : import("mod2").Both
 ->both1 : import("mod1").A
-+>both2 : Both
++>both2 : import("./mod2").Both
 +>both1 : any
 
  /** @type {import('./mod3').Both} */
@@ -91,6 +92,6 @@
 ->both3 : import("mod3").Both
 ->both2 : import("mod2").A
 +>both3 : { type: "a"; x: 1; } | { type: "b"; y: 1; }
-+>both2 : Both
++>both2 : import("./mod2").Both
 
 

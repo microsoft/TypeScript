@@ -43,3 +43,22 @@ const server_3 = require("./server");
 Object.defineProperty(exports, "instantiatedModule", { enumerable: true, get: function () { return server_3.m; } });
 const server_4 = require("./server");
 Object.defineProperty(exports, "x", { enumerable: true, get: function () { return server_4.x; } });
+
+
+//// [server.d.ts]
+export declare class c {
+}
+export interface i {
+}
+export declare namespace m {
+    var x: number;
+}
+export declare var x: number;
+export declare namespace uninstantiated {
+}
+//// [client.d.ts]
+export { c } from "./server";
+export { c as c2 } from "./server";
+export { i, m as instantiatedModule } from "./server";
+export { uninstantiated } from "./server";
+export { x } from "./server";

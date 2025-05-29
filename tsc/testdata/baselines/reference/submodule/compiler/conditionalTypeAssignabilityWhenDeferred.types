@@ -90,12 +90,12 @@ function f<T>(t: T) {
 
   onlyNullablePlease(x); // should work
 >onlyNullablePlease(x) : void
->onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
+>onlyNullablePlease : <T_1 extends null extends T_1 ? any : never>(value: T_1) => void
 >x : T | null
 
   onlyNullablePlease2(x); // should work
 >onlyNullablePlease2(x) : void
->onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
+>onlyNullablePlease2 : <T_1 extends [null] extends [T_1] ? any : never>(value: T_1) => void
 >x : T | null
 }
 

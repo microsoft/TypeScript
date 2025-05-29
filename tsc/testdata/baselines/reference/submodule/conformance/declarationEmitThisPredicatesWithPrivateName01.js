@@ -22,3 +22,12 @@ class C {
 exports.C = C;
 class D extends C {
 }
+
+
+//// [declarationEmitThisPredicatesWithPrivateName01.d.ts]
+export declare class C {
+    m(): this is D;
+}
+declare class D extends C {
+}
+export {};

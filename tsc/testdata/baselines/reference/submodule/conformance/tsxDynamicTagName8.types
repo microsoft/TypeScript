@@ -10,13 +10,13 @@ declare module 'react' {
 
 === app.tsx ===
 import * as React from 'react';
->React : typeof import("react")
+>React : typeof React
 
 export class Text extends React.Component<{}, {}> {
 >Text : Text
->React.Component : Component<{}, {}>
->React : typeof import("react")
->Component : typeof Component
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
 
   _tagName: string = 'div';
 >_tagName : string

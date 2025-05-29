@@ -2,7 +2,7 @@
 
 === module.ts ===
 import * as i from "./index";
->i : typeof import("index")
+>i : typeof i
 
 class Foo {}
 >Foo : Foo

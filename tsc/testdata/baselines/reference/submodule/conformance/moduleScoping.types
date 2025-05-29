@@ -29,7 +29,7 @@ var v2 = [1,2,3]; // Module scope. Should not appear in global scope
 
 === file4.ts ===
 import file3 = require('./file3');
->file3 : typeof import("file3")
+>file3 : typeof file3
 
 var t1 = v1;
 >t1 : string
@@ -42,7 +42,7 @@ var t2 = v2;
 var t3 = file3.v3;
 >t3 : boolean
 >file3.v3 : boolean
->file3 : typeof import("file3")
+>file3 : typeof file3
 >v3 : boolean
 
 var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module

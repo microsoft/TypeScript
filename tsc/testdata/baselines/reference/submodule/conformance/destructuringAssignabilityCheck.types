@@ -9,26 +9,26 @@ const {} = undefined; // error correctly
 
 (([]) => 0)({}); // should be error
 >(([]) => 0)({}) : number
->(([]) => 0) : (__0: {}) => number
->([]) => 0 : (__0: {}) => number
+>(([]) => 0) : ([]: {}) => number
+>([]) => 0 : ([]: {}) => number
 >0 : 0
 >{} : {}
 
 (({}) => 0)(undefined); // should be error
 >(({}) => 0)(undefined) : number
->(({}) => 0) : (__0: undefined) => number
->({}) => 0 : (__0: undefined) => number
+>(({}) => 0) : ({}: undefined) => number
+>({}) => 0 : ({}: undefined) => number
 >0 : 0
 >undefined : undefined
 
 function foo({}: undefined) {
->foo : (__0: undefined) => number
+>foo : ({}: undefined) => number
 
     return 0
 >0 : 0
 }
 function bar([]: {}) {
->bar : (__0: {}) => number
+>bar : ([]: {}) => number
 
     return 0
 >0 : 0

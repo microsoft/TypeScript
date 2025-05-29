@@ -35,3 +35,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 const lit_js_1 = require("./lit.js");
 exports.c = (0, lit_js_1.classMap)();
+
+
+//// [lit.d.ts]
+declare class ClassMapDirective {
+}
+export type { ClassMapDirective };
+export declare const directive: <C>(class_: C) => () => {
+    directive: C;
+};
+export declare const classMap: () => {
+    directive: typeof ClassMapDirective;
+};
+//// [button.d.ts]
+export declare const c: {
+    directive: typeof import("./lit.js").ClassMapDirective;
+};

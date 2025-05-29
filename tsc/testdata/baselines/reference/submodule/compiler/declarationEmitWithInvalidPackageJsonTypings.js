@@ -38,3 +38,11 @@ const useCsvParser = () => {
     return parserRef;
 };
 exports.useCsvParser = useCsvParser;
+
+
+//// [index.d.ts]
+export interface MutableRefObject<T> {
+    current: T;
+}
+export declare function useRef<T>(current: T): MutableRefObject<T>;
+export declare const useCsvParser: () => MutableRefObject<typeof import("csv-parse")>;

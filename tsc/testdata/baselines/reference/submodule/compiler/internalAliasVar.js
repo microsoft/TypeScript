@@ -21,3 +21,12 @@ var c;
     var b = a.x;
     c.bVal = b;
 })(c || (c = {}));
+
+
+//// [internalAliasVar.d.ts]
+declare namespace a {
+    var x: number;
+}
+declare namespace c {
+    var bVal: number;
+}

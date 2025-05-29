@@ -5,7 +5,7 @@ import { Foo } from "./other.js";
 >Foo : any
 
 import * as other from "./other.js";
->other : typeof import("other")
+>other : typeof other
 
 import defaultFoo from "./other.js";
 >defaultFoo : any
@@ -19,7 +19,7 @@ const y = other.Foo();
 >y : any
 >other.Foo() : any
 >other.Foo : any
->other : typeof import("other")
+>other : typeof other
 >Foo : any
 
 const z = new defaultFoo();
@@ -48,7 +48,7 @@ export class Foo {
 }
 
 export default class Bar {
->Bar : default
+>Bar : Bar
 
     foo = 1.2;
 >foo : number

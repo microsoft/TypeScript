@@ -28,3 +28,25 @@ console.log(nImported);
 //// [c.js]
 import * as a from "./a";
 export const g = a.o;
+
+
+//// [a.d.ts]
+export declare const nImported = "nImported";
+export declare const nNotImported = "nNotImported";
+export declare const o: (p1: "nImported", p2: "nNotImported", p3: "private") => {
+    foo: "nImported";
+    bar: "private";
+    baz: "nNotImported";
+};
+//// [b.d.ts]
+export declare const g: (p1: "nImported", p2: "nNotImported", p3: "private") => {
+    foo: "nImported";
+    bar: "private";
+    baz: "nNotImported";
+};
+//// [c.d.ts]
+export declare const g: (p1: "nImported", p2: "nNotImported", p3: "private") => {
+    foo: "nImported";
+    bar: "private";
+    baz: "nNotImported";
+};

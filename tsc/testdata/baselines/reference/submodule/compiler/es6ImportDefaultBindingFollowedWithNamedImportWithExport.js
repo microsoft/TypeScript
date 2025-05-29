@@ -44,3 +44,18 @@ const server_4 = require("server");
 exports.x1 = server_4.x;
 const server_5 = require("server");
 exports.x1 = server_5.m;
+
+
+//// [server.d.ts]
+export declare var a: number;
+export declare var x: number;
+export declare var m: number;
+declare const _default: {};
+export default _default;
+//// [client.d.ts]
+export declare var x1: number;
+export declare var x1: number;
+export declare var x1: number;
+export declare var x1: number;
+export declare var x1: number;
+export declare var x1: number;

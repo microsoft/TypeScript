@@ -5,5 +5,5 @@
 
    get "b"() { }
 ->"b" : Symbol(C["b"], Decl(parserMemberAccessorDeclaration2.ts, 0, 9))
-+>"b" : Symbol(b, Decl(parserMemberAccessorDeclaration2.ts, 0, 9))
++>"b" : Symbol("b", Decl(parserMemberAccessorDeclaration2.ts, 0, 9))
  }

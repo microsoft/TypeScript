@@ -28,6 +28,6 @@ module A {
 }
 
 var b: A.B; // ok
->b : B
+>b : A.B
 >A : any
 

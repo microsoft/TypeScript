@@ -155,3 +155,11 @@ import * as typei from "inner";
 cjsi;
 mjsi;
 typei;
+
+
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};
+//// [index.d.ts]
+export {};

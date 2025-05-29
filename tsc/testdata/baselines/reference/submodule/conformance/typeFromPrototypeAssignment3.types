@@ -2,7 +2,7 @@
 
 === bug26885.js ===
 function Multimap3() {
->Multimap3 : { (): void; prototype: { get: (key: string) => number; }; }
+>Multimap3 : { (): void; prototype: { get(key: string): number; }; }
 
     this._map = {};
 >this._map = {} : {}
@@ -14,11 +14,11 @@ function Multimap3() {
 };
 
 Multimap3.prototype = {
->Multimap3.prototype = {    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: string) => number; }
->Multimap3.prototype : { get: (key: string) => number; }
->Multimap3 : { (): void; prototype: { get: (key: string) => number; }; }
->prototype : { get: (key: string) => number; }
->{    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get: (key: string) => number; }
+>Multimap3.prototype = {    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: string): number; }
+>Multimap3.prototype : { get(key: string): number; }
+>Multimap3 : { (): void; prototype: { get(key: string): number; }; }
+>prototype : { get(key: string): number; }
+>{    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: string): number; }
 
     /**
      * @param {string} key
@@ -31,7 +31,7 @@ Multimap3.prototype = {
         return this._map[key + ''];
 >this._map[key + ''] : any
 >this._map : any
->this : { get: (key: string) => number; }
+>this : { get(key: string): number; }
 >_map : any
 >key + '' : string
 >key : string
@@ -43,7 +43,7 @@ Multimap3.prototype = {
 const map = new Multimap3();
 >map : Multimap3
 >new Multimap3() : any
->Multimap3 : { (): void; prototype: { get: (key: string) => number; }; }
+>Multimap3 : { (): void; prototype: { get(key: string): number; }; }
 
 const n = map.get('hi')
 >n : any

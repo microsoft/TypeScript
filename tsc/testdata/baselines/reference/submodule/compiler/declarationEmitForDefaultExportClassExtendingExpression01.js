@@ -34,3 +34,13 @@ const getGreeterBase = () => A;
 class default_1 extends getGreeterBase() {
 }
 exports.default = default_1;
+
+
+//// [declarationEmitForDefaultExportClassExtendingExpression01.d.ts]
+interface GreeterConstructor {
+    new ();
+}
+declare const default_base: GreeterConstructor;
+export default class extends default_base {
+}
+export {};

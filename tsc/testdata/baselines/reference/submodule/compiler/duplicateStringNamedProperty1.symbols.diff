@@ -5,9 +5,9 @@
 
      "artist": string;
 ->"artist" : Symbol(Album["artist"], Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
-+>"artist" : Symbol(artist, Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
++>"artist" : Symbol("artist", Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
 
      artist: string;
 ->artist : Symbol(Album["artist"], Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
-+>artist : Symbol(artist, Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
++>artist : Symbol("artist", Decl(duplicateStringNamedProperty1.ts, 0, 24), Decl(duplicateStringNamedProperty1.ts, 1, 21))
  }

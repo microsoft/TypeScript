@@ -5,7 +5,7 @@
  * @param {number} len
  */
 export function Vec(len) {
->Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
+>Vec : { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }
 >len : number
 
     /**
@@ -23,11 +23,11 @@ export function Vec(len) {
 }
 
 Vec.prototype = {
->Vec.prototype = {    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot: (other: Vec) => number; magnitude: () => number; }
->Vec.prototype : { dot: (other: Vec) => number; magnitude: () => number; }
->Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
->prototype : { dot: (other: Vec) => number; magnitude: () => number; }
->{    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot: (other: Vec) => number; magnitude: () => number; }
+>Vec.prototype = {    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot(other: Vec): number; magnitude(): number; }
+>Vec.prototype : { dot(other: Vec): number; magnitude(): number; }
+>Vec : { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }
+>prototype : { dot(other: Vec): number; magnitude(): number; }
+>{    /**     * @param {Vec} other     */    dot(other) {        if (other.storage.length !== this.storage.length) {            throw new Error(`Dot product only applicable for vectors of equal length`);        }        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] * other.storage[i]);        }        return sum;    },    magnitude() {        let sum = 0;        for (let i = 0; i < this.storage.length; i++) {            sum += (this.storage[i] ** 2);        }        return Math.sqrt(sum);    }} : { dot(other: Vec): number; magnitude(): number; }
 
     /**
      * @param {Vec} other
@@ -137,7 +137,7 @@ Vec.prototype = {
  * @param {number} y
  */
 export function Point2D(x, y) {
->Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
+>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }; }
 >x : number
 >y : number
 
@@ -146,18 +146,18 @@ export function Point2D(x, y) {
 >(this instanceof Point2D) : boolean
 >this instanceof Point2D : boolean
 >this : any
->Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
+>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }; }
 
         return new Point2D(x, y);
 >new Point2D(x, y) : any
->Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
+>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }; }
 >x : number
 >y : number
     }
     Vec.call(this, 2);
 >Vec.call(this, 2) : any
 >Vec.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
+>Vec : { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >this : any
 >2 : 2
@@ -178,15 +178,15 @@ export function Point2D(x, y) {
 }
 
 Point2D.prototype = {
->Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
->Point2D.prototype : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
->Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
->prototype : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
->{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }
+>Point2D.prototype = {    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
+>Point2D.prototype : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
+>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }; }
+>prototype : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
+>{    __proto__: Vec,    get x() {        return this.storage[0];    },    /**     * @param {number} x     */    set x(x) {        this.storage[0] = x;    },    get y() {        return this.storage[1];    },    /**     * @param {number} y     */    set y(y) {        this.storage[1] = y;    }} : { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }
 
     __proto__: Vec,
->__proto__ : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
->Vec : { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }
+>__proto__ : { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }
+>Vec : { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }
 
     get x() {
 >x : number
@@ -247,12 +247,12 @@ Point2D.prototype = {
 
 === referencer.js ===
 import {Point2D} from "./source";
->Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
+>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }; }
 
 export const origin = new Point2D(0, 0);
 >origin : any
 >new Point2D(0, 0) : any
->Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot: (other: Vec) => number; magnitude: () => number; }; }; x: number; y: number; }; }
+>Point2D : { (x: number, y: number): any; prototype: { __proto__: { (len: number): void; prototype: { dot(other: Vec): number; magnitude(): number; }; }; x: number; y: number; }; }
 >0 : 0
 >0 : 0
 

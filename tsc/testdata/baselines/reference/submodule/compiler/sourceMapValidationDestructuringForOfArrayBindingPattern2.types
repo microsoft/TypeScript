@@ -2,7 +2,7 @@
 
 === sourceMapValidationDestructuringForOfArrayBindingPattern2.ts ===
 declare var console: {
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 
     log(msg: any): void;
 >log : (msg: any) => void
@@ -98,7 +98,7 @@ for ([, nameA] of robots) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -111,7 +111,7 @@ for ([, nameA] of getRobots()) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -125,7 +125,7 @@ for ([, nameA] of [robotA, robotB]) {
     console.log(nameA);
 >console.log(nameA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA : string
 }
@@ -139,7 +139,7 @@ for ([, [primarySkillA, secondarySkillA]] of multiRobots) {
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -154,7 +154,7 @@ for ([, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -170,7 +170,7 @@ for ([, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
     console.log(primarySkillA);
 >console.log(primarySkillA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >primarySkillA : string
 }
@@ -183,7 +183,7 @@ for ([numberB] of robots) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -196,7 +196,7 @@ for ([numberB] of getRobots()) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -210,7 +210,7 @@ for ([numberB] of [robotA, robotB]) {
     console.log(numberB);
 >console.log(numberB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberB : number
 }
@@ -222,7 +222,7 @@ for ([nameB] of multiRobots) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -235,7 +235,7 @@ for ([nameB] of getMultiRobots()) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -249,7 +249,7 @@ for ([nameB] of [multiRobotA, multiRobotB]) {
     console.log(nameB);
 >console.log(nameB) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameB : string
 }
@@ -264,7 +264,7 @@ for ([numberA2, nameA2, skillA2] of robots) {
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -279,7 +279,7 @@ for ([numberA2, nameA2, skillA2] of getRobots()) {
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -295,7 +295,7 @@ for ([numberA2, nameA2, skillA2] of [robotA, robotB]) {
     console.log(nameA2);
 >console.log(nameA2) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameA2 : string
 }
@@ -310,7 +310,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -326,7 +326,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -343,7 +343,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
     console.log(nameMA);
 >console.log(nameMA) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >nameMA : string
 }
@@ -358,7 +358,7 @@ for ([numberA3, ...robotAInfo] of robots) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -373,7 +373,7 @@ for ([numberA3, ...robotAInfo] of getRobots()) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -389,7 +389,7 @@ for ([numberA3, ...robotAInfo] of [robotA, robotB]) {
     console.log(numberA3);
 >console.log(numberA3) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >numberA3 : number
 }
@@ -402,7 +402,7 @@ for ([...multiRobotAInfo] of multiRobots) {
     console.log(multiRobotAInfo);
 >console.log(multiRobotAInfo) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >multiRobotAInfo : (string | [string, string])[]
 }
@@ -416,7 +416,7 @@ for ([...multiRobotAInfo] of getMultiRobots()) {
     console.log(multiRobotAInfo);
 >console.log(multiRobotAInfo) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >multiRobotAInfo : (string | [string, string])[]
 }
@@ -431,7 +431,7 @@ for ([...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
     console.log(multiRobotAInfo);
 >console.log(multiRobotAInfo) : void
 >console.log : (msg: any) => void
->console : { log: (msg: any) => void; }
+>console : { log(msg: any): void; }
 >log : (msg: any) => void
 >multiRobotAInfo : (string | [string, string])[]
 }

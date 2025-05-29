@@ -26,10 +26,6 @@
 -    }()),
 -    P in 'a' | 'b',
 -    _b);
--
--
--//// [mappedTypeProperties.d.ts]
--export type PlaceType = 'openSky' | 'roofed' | 'garage';
 +class C {
 +    [P in PlaceType];
 +}
@@ -39,3 +35,6 @@
 +const E = class {
 +    [P in 'a' | 'b'];
 +};
+
+
+ //// [mappedTypeProperties.d.ts]

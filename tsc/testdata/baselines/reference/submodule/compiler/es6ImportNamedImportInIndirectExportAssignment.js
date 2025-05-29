@@ -25,3 +25,14 @@ var a;
 "use strict";
 const es6ImportNamedImportInIndirectExportAssignment_0_1 = require("./es6ImportNamedImportInIndirectExportAssignment_0");
 module.exports = x;
+
+
+//// [es6ImportNamedImportInIndirectExportAssignment_0.d.ts]
+export declare namespace a {
+    class c {
+    }
+}
+//// [es6ImportNamedImportInIndirectExportAssignment_1.d.ts]
+import { a } from "./es6ImportNamedImportInIndirectExportAssignment_0";
+import x = a;
+export = x;

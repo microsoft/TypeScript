@@ -2,7 +2,7 @@
 
 === external.d.ts ===
 export default class C {}
->C : Symbol(default, Decl(external.d.ts, 0, 0))
+>C : Symbol(C, Decl(external.d.ts, 0, 0))
 
 === main.ts ===
 declare module "M" {

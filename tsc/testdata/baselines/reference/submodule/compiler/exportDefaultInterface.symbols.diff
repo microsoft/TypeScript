@@ -1,18 +1,15 @@
 --- old.exportDefaultInterface.symbols
 +++ new.exportDefaultInterface.symbols
-@@= skipped -1, +1 lines =@@
-
+@@= skipped -2, +2 lines =@@
  === a.ts ===
  export default interface A { value: number; }
-->A : Symbol(A, Decl(a.ts, 0, 0))
+ >A : Symbol(A, Decl(a.ts, 0, 0))
 ->value : Symbol(A.value, Decl(a.ts, 0, 28))
-+>A : Symbol(default, Decl(a.ts, 0, 0))
 +>value : Symbol(value, Decl(a.ts, 0, 28))
 
  var a: A;
  >a : Symbol(a, Decl(a.ts, 2, 3))
-->A : Symbol(A, Decl(a.ts, 0, 0))
-+>A : Symbol(default, Decl(a.ts, 0, 0))
+ >A : Symbol(A, Decl(a.ts, 0, 0))
 
  a.value.toExponential();
 ->a.value.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
@@ -27,7 +24,7 @@
 
  === b.ts ===
  import A from './a';
-@@= skipped -23, +23 lines =@@
+@@= skipped -22, +22 lines =@@
  >A : Symbol(A, Decl(b.ts, 0, 6))
 
  a.value.toExponential();

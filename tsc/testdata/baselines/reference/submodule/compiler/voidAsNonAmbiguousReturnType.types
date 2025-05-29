@@ -3,7 +3,7 @@
 === voidAsNonAmbiguousReturnType_1.ts ===
 ///<reference path='voidAsNonAmbiguousReturnType_0.ts'/>
 import fs = require("./voidAsNonAmbiguousReturnType_0");
->fs : typeof import("voidAsNonAmbiguousReturnType_0")
+>fs : typeof fs
 
 function main() {
 >main : () => void
@@ -11,7 +11,7 @@ function main() {
  fs.mkdirSync('test'); // should not error - return types are the same
 >fs.mkdirSync('test') : void
 >fs.mkdirSync : (path: string, mode?: number) => void
->fs : typeof import("voidAsNonAmbiguousReturnType_0")
+>fs : typeof fs
 >mkdirSync : (path: string, mode?: number) => void
 >'test' : "test"
 }

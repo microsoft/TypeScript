@@ -2,7 +2,7 @@ jsxNamespacePrefixIntrinsics.tsx(15,18): error TS2339: Property 'element' does n
 jsxNamespacePrefixIntrinsics.tsx(16,30): error TS2322: Type '{ attribute: string; }' is not assignable to type '{ "ns:attribute": string; }'.
   Property 'attribute' does not exist on type '{ "ns:attribute": string; }'. Did you mean '"ns:attribute"'?
 jsxNamespacePrefixIntrinsics.tsx(17,30): error TS2322: Type '{ "ns:invalid": string; }' is not assignable to type '{ "ns:attribute": string; }'.
-  Property '"ns:invalid"' does not exist on type '{ "ns:attribute": string; }'.
+  Property 'ns:invalid' does not exist on type '{ "ns:attribute": string; }'.
 
 
 ==== jsxNamespacePrefixIntrinsics.tsx (3 errors) ====
@@ -30,5 +30,5 @@ jsxNamespacePrefixIntrinsics.tsx(17,30): error TS2322: Type '{ "ns:invalid": str
     const invalid3 = <ns:element ns:invalid="nope" />;
                                  ~~~~~~~~~~
 !!! error TS2322: Type '{ "ns:invalid": string; }' is not assignable to type '{ "ns:attribute": string; }'.
-!!! error TS2322:   Property '"ns:invalid"' does not exist on type '{ "ns:attribute": string; }'.
+!!! error TS2322:   Property 'ns:invalid' does not exist on type '{ "ns:attribute": string; }'.
     

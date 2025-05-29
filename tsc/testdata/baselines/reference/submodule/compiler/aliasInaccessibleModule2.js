@@ -22,3 +22,13 @@ var M;
     var R = N;
     M.X = R;
 })(M || (M = {}));
+
+
+//// [aliasInaccessibleModule2.d.ts]
+declare namespace M {
+    namespace N {
+    }
+    import R = N;
+    export import X = R;
+    export {};
+}

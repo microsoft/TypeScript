@@ -23,3 +23,14 @@ var c;
     var b = a.c;
     c.x = new b();
 })(c || (c = {}));
+
+
+//// [internalAliasClass.d.ts]
+declare namespace a {
+    class c {
+    }
+}
+declare namespace c {
+    import b = a.c;
+    var x: b;
+}

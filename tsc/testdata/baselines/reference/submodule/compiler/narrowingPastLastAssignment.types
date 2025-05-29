@@ -67,8 +67,8 @@ function f2() {
 
     };
     let o = {
->o : { foo: () => void; }
->{        foo() { x /* number */ }    } : { foo: () => void; }
+>o : { foo(): void; }
+>{        foo() { x /* number */ }    } : { foo(): void; }
 
         foo() { x /* number */ }
 >foo : () => void
@@ -491,8 +491,8 @@ function f13() {
 
         foo.toLocaleLowerCase();
 >foo.toLocaleLowerCase() : string
->foo.toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: LocalesArgument): string; }
+>foo.toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: Intl.LocalesArgument): string; }
 >foo : string | undefined
->toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: LocalesArgument): string; }
+>toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: Intl.LocalesArgument): string; }
     }
 }

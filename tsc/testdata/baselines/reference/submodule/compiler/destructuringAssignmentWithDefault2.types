@@ -103,9 +103,9 @@ let value;
 >false : false
 >value : any
 >r.next() : IteratorResult<number, any>
->r.next : (...__0: [] | [any]) => IteratorResult<number, any>
+>r.next : (...[value]: [] | [any]) => IteratorResult<number, any>
 >r : Iterator<number, any, any>
->next : (...__0: [] | [any]) => IteratorResult<number, any>
+>next : (...[value]: [] | [any]) => IteratorResult<number, any>
 
 ({ done: done = false, value } = r.next());
 >({ done: done = false, value } = r.next()) : IteratorResult<number, any>
@@ -117,7 +117,7 @@ let value;
 >false : false
 >value : any
 >r.next() : IteratorResult<number, any>
->r.next : (...__0: [] | [any]) => IteratorResult<number, any>
+>r.next : (...[value]: [] | [any]) => IteratorResult<number, any>
 >r : Iterator<number, any, any>
->next : (...__0: [] | [any]) => IteratorResult<number, any>
+>next : (...[value]: [] | [any]) => IteratorResult<number, any>
 

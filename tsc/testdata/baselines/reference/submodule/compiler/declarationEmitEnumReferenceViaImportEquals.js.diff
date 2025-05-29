@@ -28,28 +28,4 @@
 -var test_1 = require("./test");
 +const test_1 = require("./test");
  new test_1.Test().print();
--
--
--//// [translation.d.ts]
--export interface Translation {
--    translationKey: Translation.TranslationKeyEnum;
--}
--export declare namespace Translation {
--    type TranslationKeyEnum = 'translation1' | 'translation2';
--    const TranslationKeyEnum: {
--        Translation1: TranslationKeyEnum;
--        Translation2: TranslationKeyEnum;
--    };
--}
--//// [test.d.ts]
--import { Translation } from "./translation";
--import TranslationKeyEnum = Translation.TranslationKeyEnum;
--export declare class Test {
--    TranslationKeyEnum: {
--        Translation1: TranslationKeyEnum;
--        Translation2: TranslationKeyEnum;
--    };
--    print(): void;
--}
--//// [index.d.ts]
--export {};
+

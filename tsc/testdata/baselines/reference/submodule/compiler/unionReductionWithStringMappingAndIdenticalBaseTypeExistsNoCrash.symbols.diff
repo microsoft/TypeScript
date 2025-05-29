@@ -28,15 +28,7 @@
    }
 
    type LazyExoticComponent<T extends JSXElementConstructor<any>> =
-@@= skipped -70, +70 lines =@@
- >P : Symbol(P, Decl(index.d.ts, 51, 30))
-
- declare global {
-->global : Symbol(global, Decl(index.d.ts, 53, 6))
-+>global : Symbol((Missing), Decl(index.d.ts, 53, 6))
-
-   namespace JSX {
- >JSX : Symbol(JSX, Decl(index.d.ts, 55, 16))
+@@= skipped -77, +77 lines =@@
 
      interface Element extends React.ReactElement<any, any> {}
  >Element : Symbol(Element, Decl(index.d.ts, 56, 17))
@@ -55,7 +47,7 @@
      }
      type LibraryManagedAttributes<C, P> = C extends React.LazyExoticComponent<
  >LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(index.d.ts, 60, 5))
-@@= skipped -23, +23 lines =@@
+@@= skipped -16, +16 lines =@@
  >P : Symbol(P, Decl(index.d.ts, 61, 36))
  >C : Symbol(C, Decl(index.d.ts, 61, 34))
  >React : Symbol(React, Decl(index.d.ts, 1, 26))

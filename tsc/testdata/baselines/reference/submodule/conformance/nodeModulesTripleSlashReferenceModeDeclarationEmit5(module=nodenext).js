@@ -28,3 +28,8 @@ export interface LocalInterface extends ImportInterface, RequireInterface {}
 /// <reference types="pkg" resolution-mode="import" preserve="true" />
 /// <reference types="pkg" resolution-mode="require" preserve="true" />
 export {};
+
+
+//// [index.d.ts]
+export interface LocalInterface extends ImportInterface, RequireInterface {
+}

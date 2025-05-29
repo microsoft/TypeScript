@@ -10,3 +10,7 @@ export const x: import(import("./a").LookAt).Value = "yes";
 
 //// [chainer.js]
 export const x = "yes";
+
+
+//// [chainer.d.ts]
+export declare const x: import(import("./a").LookAt).Value;

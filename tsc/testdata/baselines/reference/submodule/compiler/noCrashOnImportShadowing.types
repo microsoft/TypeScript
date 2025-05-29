@@ -7,7 +7,7 @@ export const zzz = 123;
 
 === a.ts ===
 import * as B from "./b";
->B : typeof import("b")
+>B : typeof B
 
 interface B {
     x: string;
@@ -22,15 +22,15 @@ const x: B = { x: "" };
 
 B.zzz;
 >B.zzz : 123
->B : typeof import("b")
+>B : typeof B
 >zzz : 123
 
 export { B };
->B : typeof import("b")
+>B : typeof B
 
 === index.ts ===
 import { B } from "./a";
->B : typeof import("b")
+>B : typeof OriginalB
 
 const x: B = { x: "" };
 >x : B
@@ -40,15 +40,15 @@ const x: B = { x: "" };
 
 B.zzz;
 >B.zzz : 123
->B : typeof import("b")
+>B : typeof OriginalB
 >zzz : 123
 
 import * as OriginalB from "./b";
->OriginalB : typeof import("b")
+>OriginalB : typeof OriginalB
 
 OriginalB.zzz;
 >OriginalB.zzz : 123
->OriginalB : typeof import("b")
+>OriginalB : typeof OriginalB
 >zzz : 123
 
 const y: OriginalB = x;

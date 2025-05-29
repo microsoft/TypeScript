@@ -18,7 +18,7 @@ import zzz from "./b";
 >zzz : 123
 
 const x: zzz = { x: "" };
->x : default
+>x : zzz
 >{ x: "" } : { x: string; }
 >x : string
 >"" : ""
@@ -35,7 +35,7 @@ import zzz from "./a";
 >zzz : 123
 
 const x: zzz = { x: "" };
->x : default
+>x : zzz
 >{ x: "" } : { x: string; }
 >x : string
 >"" : ""
@@ -51,5 +51,5 @@ originalZZZ;
 
 const y: originalZZZ = x;
 >y : originalZZZ
->x : default
+>x : zzz
 

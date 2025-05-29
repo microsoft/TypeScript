@@ -14,25 +14,7 @@
 -    };
 -    return Broken;
 -}());
--exports.Broken = Broken;
--
--
--//// [types.d.ts]
--export type Merge<T, U> = T & U;
--//// [type-a.d.ts]
--export type TypeA = {
--    a: string;
--};
--//// [type-b.d.ts]
--import { Merge } from './types';
--import { TypeA } from './type-a';
--export type TypeB = Merge<TypeA, {
--    b: string;
--}>;
--//// [index.d.ts]
--import { TypeB } from './type-b';
--export declare class Broken {
--    method(): TypeB;
 +    }
- }
-+exports.Broken = Broken;
++}
+ exports.Broken = Broken;
+

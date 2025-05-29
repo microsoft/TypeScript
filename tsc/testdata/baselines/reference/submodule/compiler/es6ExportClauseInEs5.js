@@ -31,3 +31,21 @@ var m;
 })(m || (exports.instantiatedModule = m = {}));
 var x = 10;
 exports.x = x;
+
+
+//// [server.d.ts]
+declare class c {
+}
+interface i {
+}
+declare namespace m {
+    var x: number;
+}
+declare var x: number;
+declare namespace uninstantiated {
+}
+export { c };
+export { c as c2 };
+export { i, m as instantiatedModule };
+export { uninstantiated };
+export { x };

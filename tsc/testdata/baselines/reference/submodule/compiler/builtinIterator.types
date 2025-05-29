@@ -55,7 +55,7 @@ const iteratorFromBare = Iterator.from({
 >Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
 >Iterator : IteratorConstructor
 >from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
->{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next: () => { done: boolean; value: string; }; }
+>{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next(): { done: boolean; value: string; }; }
 
   next() {
 >next : () => { done: boolean; value: string; }

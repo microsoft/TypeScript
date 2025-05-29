@@ -1,0 +1,10 @@
+--- old.requireAssertsFromTypescript.types
++++ new.requireAssertsFromTypescript.types
+@@= skipped -2, +2 lines =@@
+ === 38379.js ===
+ const { art } = require('./ex')
+ >art : (value: any, message?: string | Error) => asserts value
+->require('./ex') : typeof import("ex")
++>require('./ex') : typeof import("./ex.js")
+ >require : any
+ >'./ex' : "./ex"

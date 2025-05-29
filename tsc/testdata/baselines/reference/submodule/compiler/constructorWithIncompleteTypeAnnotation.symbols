@@ -135,7 +135,7 @@ module TypeScriptAllInOne {
 >undefined : Symbol(undefined)
 
             var  _\uD4A5\u7204\uC316\uE59F  = local;
->_\uD4A5\u7204\uC316 : Symbol(_풥爄쌖, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 15))
+>_\uD4A5\u7204\uC316 : Symbol(_\uD4A5\u7204\uC316, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 15))
 >uE59F : Symbol(uE59F, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 37))
 >local : Symbol(local, Decl(constructorWithIncompleteTypeAnnotation.ts, 65, 15))
 
@@ -163,7 +163,7 @@ module TypeScriptAllInOne {
 
             var char = 'c', \u0066 = '\u0066', hexchar = '\x42' != 
 >char : Symbol(char, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 15))
->\u0066 : Symbol(f, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
+>\u0066 : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
 >hexchar : Symbol(hexchar, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 46))
 
             var quoted = '"', quoted2 = "'";
@@ -175,7 +175,7 @@ module TypeScriptAllInOne {
 
             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
 >objLit : Symbol(objLit, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 15))
->"var" : Symbol(var, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 26))
+>"var" : Symbol("var", Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 26))
 >number : Symbol(number, Decl(constructorWithIncompleteTypeAnnotation.ts, 97, 15))
 >equals : Symbol(equals, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 46))
 >x : Symbol(x, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 65))
@@ -191,7 +191,7 @@ module TypeScriptAllInOne {
             var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
 >con : Symbol(con, Decl(constructorWithIncompleteTypeAnnotation.ts, 85, 15))
 >char : Symbol(char, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 15))
->f : Symbol(f, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
+>f : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
 >hexchar : Symbol(hexchar, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 46))
 >float.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))
 >float : Symbol(float, Decl(constructorWithIncompleteTypeAnnotation.ts, 78, 15))

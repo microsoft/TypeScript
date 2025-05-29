@@ -12,7 +12,7 @@ declare module "server" {
 >"server" : typeof import("server")
 
     import events = require("other"); // Ambient declaration, no error expected.
->events : typeof import("other")
+>events : typeof events
 
     module S {
 >S : typeof S

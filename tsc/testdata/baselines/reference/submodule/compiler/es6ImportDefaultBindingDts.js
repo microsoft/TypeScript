@@ -22,3 +22,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 const server_1 = require("./server");
 exports.x = new server_1.default();
+
+
+//// [server.d.ts]
+declare class c {
+}
+export default c;
+//// [client.d.ts]
+import defaultBinding from "./server";
+export declare var x: defaultBinding;

@@ -17,3 +17,9 @@ class Foo {
     }
 }
 exports.Foo = Foo;
+
+
+//// [declarationEmitPrivateAsync.d.ts]
+export declare class Foo {
+    private baz;
+}

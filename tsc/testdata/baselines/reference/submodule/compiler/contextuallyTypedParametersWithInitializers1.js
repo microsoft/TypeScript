@@ -140,3 +140,7 @@ function executeSomething() {
 }
 const fz1 = (debug = true) => false;
 const fz2 = (debug = true) => false;
+
+
+//// [contextuallyTypedParametersWithInitializers1.d.ts]
+export declare function executeSomething(): Promise<string>;

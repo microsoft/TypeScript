@@ -71,23 +71,19 @@
  >class {    /**     * @param {!Host.UserMetrics.Action} p     */    method(p) {}    usage() {        this.method(Host.UserMetrics.Action.WindowDocked);    }} : typeof Cls
 
      /**
-      * @param {!Host.UserMetrics.Action} p
+@@= skipped -15, +15 lines =@@
       */
      method(p) {}
-->method : (p: Host.UserMetrics.Action) => void
+ >method : (p: Host.UserMetrics.Action) => void
 ->p : number
-+>method : (p: Action) => void
-+>p : Action
++>p : Host.UserMetrics.Action
 
      usage() {
  >usage : () => void
-
-         this.method(Host.UserMetrics.Action.WindowDocked);
- >this.method(Host.UserMetrics.Action.WindowDocked) : void
-->this.method : (p: Host.UserMetrics.Action) => void
-+>this.method : (p: Action) => void
+@@= skipped -10, +10 lines =@@
+ >this.method : (p: Host.UserMetrics.Action) => void
  >this : this
-->method : (p: Host.UserMetrics.Action) => void
+ >method : (p: Host.UserMetrics.Action) => void
 ->Host.UserMetrics.Action.WindowDocked : number
 ->Host.UserMetrics.Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
 ->Host.UserMetrics : typeof Host.UserMetrics
@@ -95,7 +91,6 @@
 ->UserMetrics : typeof Host.UserMetrics
 ->Action : { WindowDocked: number; WindowUndocked: number; ScriptsBreakpointSet: number; TimelineStarted: number; }
 ->WindowDocked : number
-+>method : (p: Action) => void
 +>Host.UserMetrics.Action.WindowDocked : any
 +>Host.UserMetrics.Action : any
 +>Host.UserMetrics : any
@@ -106,12 +101,12 @@
      }
  }
 
-@@= skipped -39, +39 lines =@@
+@@= skipped -14, +14 lines =@@
   * @type {Host.UserMetrics.Bargh}
   */
  var x = "ok";
 ->x : string
-+>x : Bargh
++>x : Host.UserMetrics.Bargh
  >"ok" : "ok"
 
  /**
@@ -119,5 +114,5 @@
   */
  var y = "ok";
 ->y : string
-+>y : Blah
++>y : Host.UserMetrics.Blah
  >"ok" : "ok"

@@ -20,3 +20,9 @@ exports.y = exports.x = exports.$ = void 0;
 exports.$ = 1;
 let y = () => exports.x;
 exports.y = y;
+
+
+//// [app.d.ts]
+export declare let $: number;
+export declare let x: typeof $;
+export declare let y: () => number;

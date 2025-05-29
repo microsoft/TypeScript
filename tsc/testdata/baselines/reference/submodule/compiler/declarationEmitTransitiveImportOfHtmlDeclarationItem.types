@@ -18,10 +18,10 @@ export function func() {
 
 === index.ts ===
 import { func } from "./reexporter";
->func : () => CustomHtmlRepresentationThing
+>func : () => import("./foo.html").CustomHtmlRepresentationThing
 
 export const c = func();
->c : CustomHtmlRepresentationThing
->func() : CustomHtmlRepresentationThing
->func : () => CustomHtmlRepresentationThing
+>c : import("./foo.html").CustomHtmlRepresentationThing
+>func() : import("./foo.html").CustomHtmlRepresentationThing
+>func : () => import("./foo.html").CustomHtmlRepresentationThing
 

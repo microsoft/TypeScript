@@ -84,14 +84,6 @@
 
              var undef = undefined;
  >undef : Symbol(undef, Decl(constructorWithIncompleteTypeAnnotation.ts, 69, 15))
- >undefined : Symbol(undefined)
-
-             var  _\uD4A5\u7204\uC316\uE59F  = local;
-->_\uD4A5\u7204\uC316 : Symbol(_\uD4A5\u7204\uC316, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 15))
-+>_\uD4A5\u7204\uC316 : Symbol(_풥爄쌖, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 15))
- >uE59F : Symbol(uE59F, Decl(constructorWithIncompleteTypeAnnotation.ts, 71, 37))
- >local : Symbol(local, Decl(constructorWithIncompleteTypeAnnotation.ts, 65, 15))
-
 @@= skipped -42, +42 lines =@@
              var local5 = <fs.File>null;
  >local5 : Symbol(local5, Decl(constructorWithIncompleteTypeAnnotation.ts, 74, 15))
@@ -101,25 +93,7 @@
 
              var local6 = local5 instanceof fs.File;
  >local6 : Symbol(local6, Decl(constructorWithIncompleteTypeAnnotation.ts, 75, 15))
-@@= skipped -17, +17 lines =@@
-
-             var char = 'c', \u0066 = '\u0066', hexchar = '\x42' != 
- >char : Symbol(char, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 15))
-->\u0066 : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
-+>\u0066 : Symbol(f, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
- >hexchar : Symbol(hexchar, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 46))
-
-             var quoted = '"', quoted2 = "'";
-@@= skipped -12, +12 lines =@@
-
-             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
- >objLit : Symbol(objLit, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 15))
-->"var" : Symbol("var", Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 26))
-+>"var" : Symbol(var, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 26))
- >number : Symbol(number, Decl(constructorWithIncompleteTypeAnnotation.ts, 97, 15))
- >equals : Symbol(equals, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 46))
- >x : Symbol(x, Decl(constructorWithIncompleteTypeAnnotation.ts, 82, 65))
-@@= skipped -9, +9 lines =@@
+@@= skipped -38, +38 lines =@@
 
              var weekday = Weekdays.Monday;
  >weekday : Symbol(weekday, Decl(constructorWithIncompleteTypeAnnotation.ts, 83, 15))
@@ -132,8 +106,7 @@
              var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
  >con : Symbol(con, Decl(constructorWithIncompleteTypeAnnotation.ts, 85, 15))
  >char : Symbol(char, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 15))
-->f : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
-+>f : Symbol(f, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
+ >f : Symbol(\u0066, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 27))
  >hexchar : Symbol(hexchar, Decl(constructorWithIncompleteTypeAnnotation.ts, 79, 46))
 ->float.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 +>float.toString : Symbol(toString, Decl(lib.es5.d.ts, --, --))

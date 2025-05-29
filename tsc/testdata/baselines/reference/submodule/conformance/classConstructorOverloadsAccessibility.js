@@ -51,3 +51,23 @@ class D {
     constructor() {
     }
 }
+
+
+//// [classConstructorOverloadsAccessibility.d.ts]
+declare class A {
+    constructor(a: boolean); // error
+    protected constructor(a: number); // error
+    private constructor();
+}
+declare class B {
+    protected constructor(a: number); // error
+    constructor(a: string);
+}
+declare class C {
+    protected constructor(a: number);
+    protected constructor(a: string);
+}
+declare class D {
+    constructor(a: number);
+    constructor(a: string);
+}

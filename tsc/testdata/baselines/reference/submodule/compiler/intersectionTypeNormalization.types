@@ -207,7 +207,7 @@ type Foo = {
 >Foo : Foo
 
     genreId: enums.Genre;
->genreId : Genre
+>genreId : enums.Genre
 >enums : any
 
 };
@@ -216,7 +216,7 @@ type Bar = {
 >Bar : Bar
 
     genreId: enums.Genre;
->genreId : Genre
+>genreId : enums.Genre
 >enums : any
 
 };
@@ -225,7 +225,7 @@ type FooBar = Foo & Bar;
 >FooBar : FooBar
 
 function foo(so: any) {
->foo : (so: any) => Genre
+>foo : (so: any) => enums.Genre
 >so : any
 
     const val = so as FooBar;
@@ -234,11 +234,11 @@ function foo(so: any) {
 >so : any
 
     const isGenre = val.genreId;
->isGenre : Genre
->val.genreId : Genre
+>isGenre : enums.Genre
+>val.genreId : enums.Genre
 >val : FooBar
->genreId : Genre
+>genreId : enums.Genre
 
     return isGenre;
->isGenre : Genre
+>isGenre : enums.Genre
 }

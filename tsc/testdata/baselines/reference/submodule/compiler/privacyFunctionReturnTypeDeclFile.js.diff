@@ -1672,330 +1672,201 @@
      function privateFunctionWithPrivateModuleParameterTypes() {
          return null;
      }
-@@= skipped -24, +21 lines =@@
-         return new privateModule.publicClass();
-     }
- })(publicModuleInGlobal || (publicModuleInGlobal = {}));
--
--
--//// [privacyFunctionReturnTypeDeclFile_externalModule.d.ts]
--declare class privateClass {
--}
--export declare class publicClass {
--}
--export interface publicInterfaceWithPrivateParmeterTypes {
+@@= skipped -32, +29 lines =@@
+ export declare class publicClass {
+ }
+ export interface publicInterfaceWithPrivateParmeterTypes {
 -    new (): privateClass;
 -    (): privateClass;
 -    [x: number]: privateClass;
 -    myMethod(): privateClass;
--}
--export interface publicInterfaceWithPublicParmeterTypes {
++    new (); // Error
++    (): privateClass; // Error
++    [x: number]: privateClass; // Error
++    myMethod(): privateClass; // Error
+ }
+ export interface publicInterfaceWithPublicParmeterTypes {
 -    new (): publicClass;
--    (): publicClass;
--    [x: number]: publicClass;
--    myMethod(): publicClass;
--}
--export declare class publicClassWithWithPrivateParmeterTypes {
--    static myPublicStaticMethod(): privateClass;
--    private static myPrivateStaticMethod;
--    myPublicMethod(): privateClass;
--    private myPrivateMethod;
--    static myPublicStaticMethod1(): privateClass;
--    private static myPrivateStaticMethod1;
--    myPublicMethod1(): privateClass;
--    private myPrivateMethod1;
--}
--export declare class publicClassWithWithPublicParmeterTypes {
--    static myPublicStaticMethod(): publicClass;
--    private static myPrivateStaticMethod;
--    myPublicMethod(): publicClass;
--    private myPrivateMethod;
--    static myPublicStaticMethod1(): publicClass;
--    private static myPrivateStaticMethod1;
--    myPublicMethod1(): publicClass;
--    private myPrivateMethod1;
--}
--export declare function publicFunctionWithPrivateParmeterTypes(): privateClass;
--export declare function publicFunctionWithPublicParmeterTypes(): publicClass;
--export declare function publicFunctionWithPrivateParmeterTypes1(): privateClass;
--export declare function publicFunctionWithPublicParmeterTypes1(): publicClass;
++    new ();
+     (): publicClass;
+     [x: number]: publicClass;
+     myMethod(): publicClass;
+@@= skipped -35, +35 lines =@@
+ export declare function publicFunctionWithPublicParmeterTypes(): publicClass;
+ export declare function publicFunctionWithPrivateParmeterTypes1(): privateClass;
+ export declare function publicFunctionWithPublicParmeterTypes1(): publicClass;
 -export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
--export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
--export interface publicInterfaceWithPrivateModuleParameterTypes {
++export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
+ export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+ export interface publicInterfaceWithPrivateModuleParameterTypes {
 -    new (): privateModule.publicClass;
 -    (): privateModule.publicClass;
 -    [x: number]: privateModule.publicClass;
 -    myMethod(): privateModule.publicClass;
--}
--export declare class publicClassWithPrivateModuleParameterTypes {
--    static myPublicStaticMethod(): privateModule.publicClass;
--    myPublicMethod(): privateModule.publicClass;
--    static myPublicStaticMethod1(): privateModule.publicClass;
--    myPublicMethod1(): privateModule.publicClass;
--}
--export declare function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--export declare function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
++    new (); // Error
++    (): privateModule.publicClass; // Error
++    [x: number]: privateModule.publicClass; // Error
++    myMethod(): privateModule.publicClass; // Error
+ }
+ export declare class publicClassWithPrivateModuleParameterTypes {
+     static myPublicStaticMethod(): privateModule.publicClass;
+@@= skipped -16, +16 lines =@@
+ }
+ export declare function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+ export declare function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
 -export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--export declare namespace publicModule {
--    class privateClass {
--    }
--    export class publicClass {
--    }
--    export interface publicInterfaceWithPrivateParmeterTypes {
++export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
+ export declare namespace publicModule {
+     class privateClass {
+     }
+     export class publicClass {
+     }
+     export interface publicInterfaceWithPrivateParmeterTypes {
 -        new (): privateClass;
 -        (): privateClass;
 -        [x: number]: privateClass;
 -        myMethod(): privateClass;
--    }
--    export interface publicInterfaceWithPublicParmeterTypes {
++        new (); // Error
++        (): privateClass; // Error
++        [x: number]: privateClass; // Error
++        myMethod(): privateClass; // Error
+     }
+     export interface publicInterfaceWithPublicParmeterTypes {
 -        new (): publicClass;
--        (): publicClass;
--        [x: number]: publicClass;
--        myMethod(): publicClass;
--    }
--    export class publicClassWithWithPrivateParmeterTypes {
--        static myPublicStaticMethod(): privateClass;
--        private static myPrivateStaticMethod;
--        myPublicMethod(): privateClass;
--        private myPrivateMethod;
--        static myPublicStaticMethod1(): privateClass;
--        private static myPrivateStaticMethod1;
--        myPublicMethod1(): privateClass;
--        private myPrivateMethod1;
--    }
--    export class publicClassWithWithPublicParmeterTypes {
--        static myPublicStaticMethod(): publicClass;
--        private static myPrivateStaticMethod;
--        myPublicMethod(): publicClass;
--        private myPrivateMethod;
--        static myPublicStaticMethod1(): publicClass;
--        private static myPrivateStaticMethod1;
--        myPublicMethod1(): publicClass;
--        private myPrivateMethod1;
--    }
--    export function publicFunctionWithPrivateParmeterTypes(): privateClass;
--    export function publicFunctionWithPublicParmeterTypes(): publicClass;
--    export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
--    export function publicFunctionWithPublicParmeterTypes1(): publicClass;
++        new ();
+         (): publicClass;
+         [x: number]: publicClass;
+         myMethod(): publicClass;
+@@= skipped -42, +42 lines =@@
+     export function publicFunctionWithPublicParmeterTypes(): publicClass;
+     export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
+     export function publicFunctionWithPublicParmeterTypes1(): publicClass;
 -    export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
--    export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
--    export interface publicInterfaceWithPrivateModuleParameterTypes {
++    export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
+     export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+     export interface publicInterfaceWithPrivateModuleParameterTypes {
 -        new (): privateModule.publicClass;
 -        (): privateModule.publicClass;
 -        [x: number]: privateModule.publicClass;
 -        myMethod(): privateModule.publicClass;
--    }
--    export class publicClassWithPrivateModuleParameterTypes {
--        static myPublicStaticMethod(): privateModule.publicClass;
--        myPublicMethod(): privateModule.publicClass;
--        static myPublicStaticMethod1(): privateModule.publicClass;
--        myPublicMethod1(): privateModule.publicClass;
--    }
--    export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--    export function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
++        new (); // Error
++        (): privateModule.publicClass; // Error
++        [x: number]: privateModule.publicClass; // Error
++        myMethod(): privateModule.publicClass; // Error
+     }
+     export class publicClassWithPrivateModuleParameterTypes {
+         static myPublicStaticMethod(): privateModule.publicClass;
+@@= skipped -16, +16 lines =@@
+     }
+     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+     export function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
 -    export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--    export {};
--}
--declare namespace privateModule {
--    class privateClass {
--    }
--    export class publicClass {
--    }
--    export interface publicInterfaceWithPrivateParmeterTypes {
++    export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
+     export {};
+ }
+ declare namespace privateModule {
+@@= skipped -9, +9 lines =@@
+     export class publicClass {
+     }
+     export interface publicInterfaceWithPrivateParmeterTypes {
 -        new (): privateClass;
--        (): privateClass;
--        [x: number]: privateClass;
--        myMethod(): privateClass;
--    }
--    export interface publicInterfaceWithPublicParmeterTypes {
++        new ();
+         (): privateClass;
+         [x: number]: privateClass;
+         myMethod(): privateClass;
+     }
+     export interface publicInterfaceWithPublicParmeterTypes {
 -        new (): publicClass;
--        (): publicClass;
--        [x: number]: publicClass;
--        myMethod(): publicClass;
--    }
--    export class publicClassWithWithPrivateParmeterTypes {
--        static myPublicStaticMethod(): privateClass;
--        private static myPrivateStaticMethod;
--        myPublicMethod(): privateClass;
--        private myPrivateMethod;
--        static myPublicStaticMethod1(): privateClass;
--        private static myPrivateStaticMethod1;
--        myPublicMethod1(): privateClass;
--        private myPrivateMethod1;
--    }
--    export class publicClassWithWithPublicParmeterTypes {
--        static myPublicStaticMethod(): publicClass;
--        private static myPrivateStaticMethod;
--        myPublicMethod(): publicClass;
--        private myPrivateMethod;
--        static myPublicStaticMethod1(): publicClass;
--        private static myPrivateStaticMethod1;
--        myPublicMethod1(): publicClass;
--        private myPrivateMethod1;
--    }
--    export function publicFunctionWithPrivateParmeterTypes(): privateClass;
--    export function publicFunctionWithPublicParmeterTypes(): publicClass;
--    export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
--    export function publicFunctionWithPublicParmeterTypes1(): publicClass;
--    export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
--    export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
--    export interface publicInterfaceWithPrivateModuleParameterTypes {
++        new ();
+         (): publicClass;
+         [x: number]: publicClass;
+         myMethod(): publicClass;
+@@= skipped -38, +38 lines =@@
+     export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+     export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+     export interface publicInterfaceWithPrivateModuleParameterTypes {
 -        new (): privateModule.publicClass;
--        (): privateModule.publicClass;
--        [x: number]: privateModule.publicClass;
--        myMethod(): privateModule.publicClass;
--    }
--    export class publicClassWithPrivateModuleParameterTypes {
--        static myPublicStaticMethod(): privateModule.publicClass;
--        myPublicMethod(): privateModule.publicClass;
--        static myPublicStaticMethod1(): publicClass;
--        myPublicMethod1(): publicClass;
--    }
--    export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--    export function publicFunctionWithPrivateModuleParameterTypes1(): publicClass;
--    export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--    export {};
--}
--export {};
--//// [privacyFunctionReturnTypeDeclFile_GlobalFile.d.ts]
--declare class publicClassInGlobal {
--}
--interface publicInterfaceWithPublicParmeterTypesInGlobal {
++        new ();
+         (): privateModule.publicClass;
+         [x: number]: privateModule.publicClass;
+         myMethod(): privateModule.publicClass;
+@@= skipped -21, +21 lines =@@
+ declare class publicClassInGlobal {
+ }
+ interface publicInterfaceWithPublicParmeterTypesInGlobal {
 -    new (): publicClassInGlobal;
--    (): publicClassInGlobal;
--    [x: number]: publicClassInGlobal;
--    myMethod(): publicClassInGlobal;
--}
--declare class publicClassWithWithPublicParmeterTypesInGlobal {
--    static myPublicStaticMethod(): publicClassInGlobal;
--    private static myPrivateStaticMethod;
--    myPublicMethod(): publicClassInGlobal;
--    private myPrivateMethod;
--    static myPublicStaticMethod1(): publicClassInGlobal;
--    private static myPrivateStaticMethod1;
--    myPublicMethod1(): publicClassInGlobal;
--    private myPrivateMethod1;
--}
--declare function publicFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
--declare function publicFunctionWithPublicParmeterTypesInGlobal1(): publicClassInGlobal;
--declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
--declare namespace publicModuleInGlobal {
--    class privateClass {
--    }
--    export class publicClass {
--    }
--    namespace privateModule {
--        class privateClass {
--        }
--        export class publicClass {
--        }
--        export interface publicInterfaceWithPrivateParmeterTypes {
++    new ();
+     (): publicClassInGlobal;
+     [x: number]: publicClassInGlobal;
+     myMethod(): publicClassInGlobal;
+@@= skipped -29, +29 lines =@@
+         export class publicClass {
+         }
+         export interface publicInterfaceWithPrivateParmeterTypes {
 -            new (): privateClass;
--            (): privateClass;
--            [x: number]: privateClass;
--            myMethod(): privateClass;
--        }
--        export interface publicInterfaceWithPublicParmeterTypes {
++            new ();
+             (): privateClass;
+             [x: number]: privateClass;
+             myMethod(): privateClass;
+         }
+         export interface publicInterfaceWithPublicParmeterTypes {
 -            new (): publicClass;
--            (): publicClass;
--            [x: number]: publicClass;
--            myMethod(): publicClass;
--        }
--        export class publicClassWithWithPrivateParmeterTypes {
--            static myPublicStaticMethod(): privateClass;
--            private static myPrivateStaticMethod;
--            myPublicMethod(): privateClass;
--            private myPrivateMethod;
--            static myPublicStaticMethod1(): privateClass;
--            private static myPrivateStaticMethod1;
--            myPublicMethod1(): privateClass;
--            private myPrivateMethod1;
--        }
--        export class publicClassWithWithPublicParmeterTypes {
--            static myPublicStaticMethod(): publicClass;
--            private static myPrivateStaticMethod;
--            myPublicMethod(): publicClass;
--            private myPrivateMethod;
--            static myPublicStaticMethod1(): publicClass;
--            private static myPrivateStaticMethod1;
--            myPublicMethod1(): publicClass;
--            private myPrivateMethod1;
--        }
--        export function publicFunctionWithPrivateParmeterTypes(): privateClass;
--        export function publicFunctionWithPublicParmeterTypes(): publicClass;
--        export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
--        export function publicFunctionWithPublicParmeterTypes1(): publicClass;
--        export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
--        export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
--        export interface publicInterfaceWithPrivateModuleParameterTypes {
++            new ();
+             (): publicClass;
+             [x: number]: publicClass;
+             myMethod(): publicClass;
+@@= skipped -38, +38 lines =@@
+         export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+         export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+         export interface publicInterfaceWithPrivateModuleParameterTypes {
 -            new (): privateModule.publicClass;
--            (): privateModule.publicClass;
--            [x: number]: privateModule.publicClass;
--            myMethod(): privateModule.publicClass;
--        }
--        export class publicClassWithPrivateModuleParameterTypes {
--            static myPublicStaticMethod(): privateModule.publicClass;
--            myPublicMethod(): privateModule.publicClass;
--            static myPublicStaticMethod1(): publicClass;
--            myPublicMethod1(): publicClass;
--        }
--        export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--        export function publicFunctionWithPrivateModuleParameterTypes1(): publicClass;
--        export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--        export {};
--    }
--    export interface publicInterfaceWithPrivateParmeterTypes {
++            new ();
+             (): privateModule.publicClass;
+             [x: number]: privateModule.publicClass;
+             myMethod(): privateModule.publicClass;
+@@= skipped -17, +17 lines =@@
+         export {};
+     }
+     export interface publicInterfaceWithPrivateParmeterTypes {
 -        new (): privateClass;
 -        (): privateClass;
 -        [x: number]: privateClass;
 -        myMethod(): privateClass;
--    }
--    export interface publicInterfaceWithPublicParmeterTypes {
++        new (); // Error
++        (): privateClass; // Error
++        [x: number]: privateClass; // Error
++        myMethod(): privateClass; // Error
+     }
+     export interface publicInterfaceWithPublicParmeterTypes {
 -        new (): publicClass;
--        (): publicClass;
--        [x: number]: publicClass;
--        myMethod(): publicClass;
--    }
--    export class publicClassWithWithPrivateParmeterTypes {
--        static myPublicStaticMethod(): privateClass;
--        private static myPrivateStaticMethod;
--        myPublicMethod(): privateClass;
--        private myPrivateMethod;
--        static myPublicStaticMethod1(): privateClass;
--        private static myPrivateStaticMethod1;
--        myPublicMethod1(): privateClass;
--        private myPrivateMethod1;
--    }
--    export class publicClassWithWithPublicParmeterTypes {
--        static myPublicStaticMethod(): publicClass;
--        private static myPrivateStaticMethod;
--        myPublicMethod(): publicClass;
--        private myPrivateMethod;
--        static myPublicStaticMethod1(): publicClass;
--        private static myPrivateStaticMethod1;
--        myPublicMethod1(): publicClass;
--        private myPrivateMethod1;
--    }
--    export function publicFunctionWithPrivateParmeterTypes(): privateClass;
--    export function publicFunctionWithPublicParmeterTypes(): publicClass;
--    export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
--    export function publicFunctionWithPublicParmeterTypes1(): publicClass;
++        new ();
+         (): publicClass;
+         [x: number]: publicClass;
+         myMethod(): publicClass;
+@@= skipped -35, +35 lines =@@
+     export function publicFunctionWithPublicParmeterTypes(): publicClass;
+     export function publicFunctionWithPrivateParmeterTypes1(): privateClass;
+     export function publicFunctionWithPublicParmeterTypes1(): publicClass;
 -    export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
--    export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
--    export interface publicInterfaceWithPrivateModuleParameterTypes {
++    export function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
+     export function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+     export interface publicInterfaceWithPrivateModuleParameterTypes {
 -        new (): privateModule.publicClass;
 -        (): privateModule.publicClass;
 -        [x: number]: privateModule.publicClass;
 -        myMethod(): privateModule.publicClass;
--    }
--    export class publicClassWithPrivateModuleParameterTypes {
--        static myPublicStaticMethod(): privateModule.publicClass;
--        myPublicMethod(): privateModule.publicClass;
--        static myPublicStaticMethod1(): privateModule.publicClass;
--        myPublicMethod1(): privateModule.publicClass;
--    }
--    export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--    export function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
++        new (); // Error
++        (): privateModule.publicClass; // Error
++        [x: number]: privateModule.publicClass; // Error
++        myMethod(): privateModule.publicClass; // Error
+     }
+     export class publicClassWithPrivateModuleParameterTypes {
+         static myPublicStaticMethod(): privateModule.publicClass;
+@@= skipped -16, +16 lines =@@
+     }
+     export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+     export function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
 -    export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
--    export {};
--}
++    export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
+     export {};
+ }

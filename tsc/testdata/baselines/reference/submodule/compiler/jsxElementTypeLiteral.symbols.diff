@@ -1,15 +1,6 @@
 --- old.jsxElementTypeLiteral.symbols
 +++ new.jsxElementTypeLiteral.symbols
-@@= skipped -5, +5 lines =@@
- >React : Symbol(React, Decl(jsxElementTypeLiteral.tsx, 1, 6))
-
- declare global {
-->global : Symbol(global, Decl(jsxElementTypeLiteral.tsx, 1, 31))
-+>global : Symbol((Missing), Decl(jsxElementTypeLiteral.tsx, 1, 31))
-
-   namespace JSX {
- >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementTypeLiteral.tsx, 3, 16))
-@@= skipped -15, +15 lines =@@
+@@= skipped -20, +20 lines =@@
  // should be fine - `ElementType` accepts `div`
  let a = <div />;
  >a : Symbol(a, Decl(jsxElementTypeLiteral.tsx, 12, 3))

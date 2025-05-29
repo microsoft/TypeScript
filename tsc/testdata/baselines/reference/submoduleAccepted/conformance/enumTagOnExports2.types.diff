@@ -10,6 +10,6 @@
 ->exports : typeof module.exports
 +>module.exports = {} : {}
 +>module.exports : {}
-+>module : { export=: {}; }
++>module : { "export=": {}; }
 +>exports : {}
  >{} : {}

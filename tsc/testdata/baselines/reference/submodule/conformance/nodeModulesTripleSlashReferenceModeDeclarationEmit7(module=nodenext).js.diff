@@ -1,22 +1,21 @@
 --- old.nodeModulesTripleSlashReferenceModeDeclarationEmit7(module=nodenext).js
 +++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit7(module=nodenext).js
-@@= skipped -60, +60 lines =@@
- import obj1 from "./sub1/uses.js";
- import obj2 from "./sub2/uses.js";
- export default [obj1, obj2.default];
--
--
--//// [uses.d.ts]
+@@= skipped -63, +63 lines =@@
+
+
+ //// [uses.d.ts]
 -/// <reference types="pkg" preserve="true" />
 -declare const _default: ImportInterface;
--export default _default;
--//// [uses.d.ts]
++declare const _default: any;
+ export default _default;
+ //// [uses.d.ts]
 -/// <reference types="pkg" preserve="true" />
--declare const _default: RequireInterface;
--export default _default;
--//// [index.d.ts]
+ declare const _default: RequireInterface;
+ export default _default;
+ //// [index.d.ts]
 -declare const _default: readonly [ImportInterface, RequireInterface];
--export default _default;
++declare const _default: readonly [any, any];
+ export default _default;
 -
 -
 -//// [DtsFileErrors]

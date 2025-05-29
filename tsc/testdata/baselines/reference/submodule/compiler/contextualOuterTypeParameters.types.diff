@@ -1,74 +1,38 @@
 --- old.contextualOuterTypeParameters.types
 +++ new.contextualOuterTypeParameters.types
-@@= skipped -14, +14 lines =@@
- >t : T
-
-     type isArray = (typeof t)[] extends string[] ? true : false;
-->isArray : T[] extends string[] ? true : false
-+>isArray : isArray
- >t : T
- >true : true
+@@= skipped -20, +20 lines =@@
  >false : false
 
      type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
-+>IsObject : IsObject
++>IsObject : { x: T; } extends { x: string; } ? true : false
  >x : T
  >t : T
  >x : string
 @@= skipped -22, +22 lines =@@
- >t : T
-
-     type isArray = (typeof t)[] extends string[] ? true : false;
-->isArray : T[] extends string[] ? true : false
-+>isArray : isArray
- >t : T
- >true : true
  >false : false
 
      type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
-+>IsObject : IsObject
++>IsObject : { x: T; } extends { x: string; } ? true : false
  >x : T
  >t : T
  >x : string
 @@= skipped -23, +23 lines =@@
- >t : T
-
-     type isArray = (typeof t)[] extends string[] ? true : false;
-->isArray : T[] extends string[] ? true : false
-+>isArray : isArray
- >t : T
- >true : true
  >false : false
 
      type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
-+>IsObject : IsObject
++>IsObject : { x: T; } extends { x: string; } ? true : false
  >x : T
  >t : T
  >x : string
-@@= skipped -19, +19 lines =@@
- >obj : { f: <T>(x: T) => void; }
- >f : <T>(x: T) => void
- >x : T
-->{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f<T>(t: T): void; }
-+>{    f(t) {        type isArray = (typeof t)[] extends string[] ? true : false;        type IsObject = { x: typeof t } extends { x: string } ? true : false;    }} : { f: <T>(t: T) => void; }
-
-     f(t) {
- >f : <T>(t: T) => void
- >t : T
-
-         type isArray = (typeof t)[] extends string[] ? true : false;
-->isArray : T[] extends string[] ? true : false
-+>isArray : isArray
- >t : T
- >true : true
+@@= skipped -26, +26 lines =@@
  >false : false
 
          type IsObject = { x: typeof t } extends { x: string } ? true : false;
 ->IsObject : { x: typeof t; } extends { x: string; } ? true : false
-+>IsObject : IsObject
++>IsObject : { x: T; } extends { x: string; } ? true : false
  >x : T
  >t : T
  >x : string

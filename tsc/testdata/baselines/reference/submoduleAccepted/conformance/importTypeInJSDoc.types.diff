@@ -5,7 +5,7 @@
 
      constructor(x: MyClass.Bar);
 ->x : MyClass.Bar
-+>x : Bar
++>x : import("./externs.js").Bar
  >MyClass : any
  }
  declare global {
@@ -15,9 +15,9 @@
  let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
 ->a : import("externs")
 ->(/** @type {*} */(undefined)) : import("externs")
-+>a : MyClass
-+>(/** @type {*} */(undefined)) : MyClass
-+>(undefined) : MyClass
++>a : import("./externs.js")
++>(/** @type {*} */(undefined)) : import("./externs.js")
++>(undefined) : import("./externs.js")
  >(undefined) : any
 +>undefined : any
  >undefined : undefined
@@ -27,23 +27,23 @@
 ->a : import("externs")
 ->new Foo({doer: Foo.Bar}) : import("externs")
 ->Foo : typeof import("externs")
-+>a = new Foo({doer: Foo.Bar}) : MyClass
-+>a : MyClass
-+>new Foo({doer: Foo.Bar}) : MyClass
-+>Foo : typeof MyClass
++>a = new Foo({doer: Foo.Bar}) : import("./externs.js")
++>a : import("./externs.js")
++>new Foo({doer: Foo.Bar}) : import("./externs.js")
++>Foo : typeof import("./externs.js")
  >{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
  >doer : (x: string, y?: number) => void
  >Foo.Bar : (x: string, y?: number) => void
 ->Foo : typeof import("externs")
-+>Foo : typeof MyClass
++>Foo : typeof import("./externs.js")
  >Bar : (x: string, y?: number) => void
 
  const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 ->q : import("externs").Bar
 ->({ doer: q => q }) : import("externs").Bar
-+>q : Bar
-+>({ doer: q => q }) : Bar
-+>{ doer: q => q } : Bar
++>q : import("./externs.js").Bar
++>({ doer: q => q }) : import("./externs.js").Bar
++>{ doer: q => q } : import("./externs.js").Bar
  >{ doer: q => q } : { doer: (q: string) => string; }
  >doer : (q: string) => string
  >q => q : (q: string) => string

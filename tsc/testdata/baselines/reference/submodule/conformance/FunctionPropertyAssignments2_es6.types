@@ -2,7 +2,7 @@
 
 === FunctionPropertyAssignments2_es6.ts ===
 var v = { *() { } }
->v : { : () => Generator<never, void, unknown>; }
->{ *() { } } : { : () => Generator<never, void, unknown>; }
+>v : { ""(): Generator<never, void, unknown>; }
+>{ *() { } } : { ""(): Generator<never, void, unknown>; }
 > : () => Generator<never, void, unknown>
 

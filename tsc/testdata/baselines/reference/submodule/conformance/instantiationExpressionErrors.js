@@ -178,3 +178,122 @@ var MyVer;
 })(MyVer || (MyVer = {}));
 let ver = 21;
 const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2);
+
+
+//// [instantiationExpressionErrors.d.ts]
+declare let f: {
+    <T>(): T;
+    g<U>(): U;
+};
+// Type arguments in member expressions
+declare const a1: {
+    (): number;
+    g<U>(): U;
+}; // { (): number; g<U>(): U; }
+declare const a2: () => number; // () => number
+declare const a3: <U>() => U; // <U>() => U
+declare const a4: () => number; // () => number
+declare const a5: () => number; // () => number
+// `[` is an expression starter and cannot immediately follow a type argument list
+declare const a6: boolean; // Error
+declare const a7: <U>() => U;
+// An `<` cannot immediately follow a type argument list
+declare const a8: boolean; // Relational operator error
+declare const a9: {
+    g<U>(): U;
+}; // Error, no applicable signatures
+// Type arguments with `?.` token
+declare const b1: number; // Error, `(` expected
+declare const b2: number;
+declare const b3: number;
+declare const b4: number; // Error, expected no type arguments
+// Instantiation expression and binary operators
+declare let g: (<T>(x: T) => T) | undefined;
+declare const c1: (x: string) => string;
+declare const c2: (x: string) => string;
+declare const c3: ((x: string) => string) | undefined;
+// Parsed as function call, even though this differs from JavaScript
+declare const x1: true;
+// Parsed as relational expressions
+declare const r1: boolean;
+declare const r2: boolean;
+declare const r3: boolean;
+// All of the following are parsed as instantiation expressions
+declare const x2: {
+    (): true;
+    g<U>(): U;
+};
+declare const x3: {
+    (): true;
+    g<U>(): U;
+};
+declare const x4: {
+    (): true;
+    g<U>(): U;
+};
+declare const x5: {
+    (): true;
+    g<U>(): U;
+};
+declare let yy: number;
+declare const x6: {
+    (): true;
+    g<U>(): U;
+};
+interface I {
+}
+declare let x10: {
+    (): true;
+    g<U>(): U;
+};
+declare let x11: {
+    (): true;
+    g<U>(): U;
+};
+declare function bar(): void;
+declare let x12: {
+    (): true;
+    g<U>(): U;
+};
+declare class C {
+}
+declare let x13: {
+    (): true;
+    g<U>(): U;
+};
+declare let x14: {
+    (): true;
+    g<U>(): U;
+};
+declare class C1 {
+    static specialFoo: {
+        (): string;
+        g<U>(): U;
+    };
+    static bar: number;
+}
+declare class C2 {
+    specialFoo: {
+        (): string;
+        g<U>(): U;
+    };
+    bar: number;
+}
+declare class C3 {
+    private specialFoo;
+    private bar;
+}
+declare class C4 {
+    protected specialFoo: {
+        (): string;
+        g<U>(): U;
+    };
+    protected bar: number;
+}
+// Repro from #49551
+declare const enum MyVer {
+    v1 = 1,
+    v2 = 2
+}
+declare let ver: number;
+declare const a: boolean;

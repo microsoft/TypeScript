@@ -5,12 +5,12 @@
  === file2.ts ===
  import { styled }  from "./file1";
 ->styled : () => import("color").default
-+>styled : () => Color
++>styled : () => import("./color").default
 
  export const A = styled();
 ->A : import("color").default
 ->styled() : import("color").default
 ->styled : () => import("color").default
-+>A : Color
-+>styled() : Color
-+>styled : () => Color
++>A : import("./color").default
++>styled() : import("./color").default
++>styled : () => import("./color").default

@@ -12,3 +12,10 @@ class C {
         this.x = x;
     }
 }
+
+
+//// [declarationEmitReadonly.d.ts]
+declare class C {
+    readonly x: number;
+    constructor(x: number);
+}

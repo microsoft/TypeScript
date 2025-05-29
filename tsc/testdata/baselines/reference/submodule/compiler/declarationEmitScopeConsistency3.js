@@ -17,3 +17,7 @@ const g = (v) => {
     return r;
 };
 exports.g = g;
+
+
+//// [a.d.ts]
+export declare const g: (v: "outer") => () => "inner";

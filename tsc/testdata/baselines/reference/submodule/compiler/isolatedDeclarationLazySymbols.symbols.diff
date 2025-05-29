@@ -32,13 +32,3 @@
 +>[o["prop.inner"]] : Symbol([o["prop.inner"]], Decl(isolatedDeclarationLazySymbols.ts, 14, 18))
  >o : Symbol(o, Decl(isolatedDeclarationLazySymbols.ts, 4, 5))
  >"prop.inner" : Symbol(["prop.inner"], Decl(isolatedDeclarationLazySymbols.ts, 4, 11))
-
-@@= skipped -21, +21 lines =@@
- >'prop.inner' : Symbol(["prop.inner"], Decl(isolatedDeclarationLazySymbols.ts, 4, 11))
-
-     [o.prop.inner]: "B",
-->[o.prop.inner] : Symbol([o.prop.inner], Decl(isolatedDeclarationLazySymbols.ts, 20, 26))
-+>[o.prop.inner] : Symbol(b, Decl(isolatedDeclarationLazySymbols.ts, 20, 26))
- >o.prop.inner : Symbol(inner, Decl(isolatedDeclarationLazySymbols.ts, 6, 11))
- >o.prop : Symbol(prop, Decl(isolatedDeclarationLazySymbols.ts, 5, 24))
- >o : Symbol(o, Decl(isolatedDeclarationLazySymbols.ts, 4, 5))

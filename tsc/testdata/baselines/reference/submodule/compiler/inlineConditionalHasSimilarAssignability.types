@@ -39,15 +39,15 @@ function foo<T>(a: T) {
 >d : MyExtract<any[], T>
 
   type CustomType = any[] extends T ? any[] : never;
->CustomType : CustomType
+>CustomType : any[] extends T ? any[] : never
 
   const e: CustomType = 0 as any;
->e : CustomType
+>e : any[] extends T ? any[] : never
 >0 as any : any
 >0 : 0
 
   a = e;
->a = e : CustomType
+>a = e : any[] extends T ? any[] : never
 >a : T
->e : CustomType
+>e : any[] extends T ? any[] : never
 }

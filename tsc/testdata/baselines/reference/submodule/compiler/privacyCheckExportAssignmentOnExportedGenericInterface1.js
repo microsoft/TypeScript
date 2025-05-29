@@ -14,3 +14,14 @@ export = Foo;
 "use strict";
 var Foo;
 module.exports = Foo;
+
+
+//// [privacyCheckExportAssignmentOnExportedGenericInterface1.d.ts]
+declare namespace Foo {
+    interface A<T> {
+    }
+}
+interface Foo<T> {
+}
+declare var Foo: new () => Foo.A<Foo<string>>;
+export = Foo;

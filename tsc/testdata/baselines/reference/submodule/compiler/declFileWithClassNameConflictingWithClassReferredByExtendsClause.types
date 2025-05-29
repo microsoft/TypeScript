@@ -20,13 +20,13 @@ module X.Y.base {
 
     export class W extends A.B.Base.W {
 >W : W
->A.B.Base.W : W
->A.B.Base : typeof Base
->A.B : typeof B
+>A.B.Base.W : A.B.Base.W
+>A.B.Base : typeof A.B.Base
+>A.B : typeof A.B
 >A : typeof A
->B : typeof B
->Base : typeof Base
->W : typeof W
+>B : typeof A.B
+>Base : typeof A.B.Base
+>W : typeof A.B.Base.W
 
         name: string;
 >name : string
@@ -47,7 +47,7 @@ module X.Y.base.Z {
 >X : typeof X
 >Y : typeof Y
 >base : typeof base
->W : typeof W
+>W : typeof base.W
 
         value: boolean;
 >value : boolean

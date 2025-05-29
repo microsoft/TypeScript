@@ -6,8 +6,8 @@
  export { MyConstEnum as default } from './ConstEnum';
 ->MyConstEnum : typeof import("ConstEnum").MyConstEnum
 ->default : typeof import("ConstEnum").MyConstEnum
-+>MyConstEnum : typeof MyConstEnum
-+>default : typeof MyConstEnum
++>MyConstEnum : typeof import("./ConstEnum.js").MyConstEnum
++>default : typeof import("./ConstEnum.js").MyConstEnum
 
  === usages.ts ===
  import {MyConstEnum} from "./ConstEnum";

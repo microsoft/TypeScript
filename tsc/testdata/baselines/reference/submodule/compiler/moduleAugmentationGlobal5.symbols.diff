@@ -1,11 +1,6 @@
 --- old.moduleAugmentationGlobal5.symbols
 +++ new.moduleAugmentationGlobal5.symbols
-@@= skipped -12, +12 lines =@@
- >"A" : Symbol("A", Decl(f1.d.ts, 0, 0))
-
-     global {
-->global : Symbol(global, Decl(f1.d.ts, 0, 20))
-+>global : Symbol((Missing), Decl(f1.d.ts, 0, 20))
+@@= skipped -16, +16 lines =@@
 
          interface Something {x}
  >Something : Symbol(Something, Decl(f1.d.ts, 1, 12), Decl(f2.d.ts, 1, 12))
@@ -15,11 +10,6 @@
  }
  === f2.d.ts ===
 @@= skipped -12, +12 lines =@@
- >"B" : Symbol("B", Decl(f2.d.ts, 0, 0))
-
-     global {
-->global : Symbol(global, Decl(f2.d.ts, 0, 20))
-+>global : Symbol((Missing), Decl(f2.d.ts, 0, 20))
 
          interface Something {y}
  >Something : Symbol(Something, Decl(f1.d.ts, 1, 12), Decl(f2.d.ts, 1, 12))

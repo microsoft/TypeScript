@@ -186,7 +186,7 @@ var i: I = removable;
 
 var { removed, ...removableRest2 } = i;
 >removed : string
->removableRest2 : { m: () => void; remainder: string; }
+>removableRest2 : { m(): void; remainder: string; }
 >i : I
 
 let computed = 'b';
@@ -219,8 +219,8 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 >o : { a: number; b: string; }
 
 var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
->noContextualType : (__0: { [x: string]: any; aNumber?: number; }) => any
->({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : (__0: { [x: string]: any; aNumber?: number; }) => any
+>noContextualType : ({ aNumber = 12, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
+>({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({ aNumber = 12, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
 >aNumber : number
 >12 : 12
 >notEmptyObject : { [x: string]: any; }

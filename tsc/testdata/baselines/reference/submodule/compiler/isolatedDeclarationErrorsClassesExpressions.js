@@ -35,3 +35,22 @@ export class Mix extends id(Base) {
 export const classes = [class {
     }, class {
     }];
+
+
+//// [isolatedDeclarationErrorsClassesExpressions.d.ts]
+export declare const cls: {
+    new (): {
+        foo: string;
+    };
+};
+export declare class Base {
+}
+declare const Mix_base: typeof Base;
+export declare class Mix extends Mix_base {
+}
+export declare const classes: readonly [{
+    new (): {};
+}, {
+    new (): {};
+}];
+export {};

@@ -7,7 +7,4 @@
 -var myModule = require("myModule");
 +const myModule = require("myModule");
  new myModule.c();
--
--
--//// [test.d.ts]
--export {};
+

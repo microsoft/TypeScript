@@ -131,7 +131,7 @@ function* genFuncYieldVarCall() { yield varCall; }
 
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
->genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol, any, any>
+>genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol>
 >constCall : unique symbol
 >yield constCall : any
 >constCall : unique symbol
@@ -486,8 +486,8 @@ f(N["s"]);
 
 // property assignments/methods
 const o2 = {
->o2 : { a: symbol; b: symbol; c: symbol; method1: () => symbol; method2: () => Promise<symbol>; method3: () => AsyncGenerator<symbol, void, unknown>; method4: () => Generator<symbol, void, unknown>; method5: (p?: symbol) => symbol; }
->{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1: () => symbol; method2: () => Promise<symbol>; method3: () => AsyncGenerator<symbol, void, unknown>; method4: () => Generator<symbol, void, unknown>; method5: (p?: symbol) => symbol; }
+>o2 : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
+>{    a: s,    b: N.s,    c: N["s"],    method1() { return s; },    async method2() { return s; },    async * method3() { yield s; },    * method4() { yield s; },    method5(p = s) { return p; },} : { a: symbol; b: symbol; c: symbol; method1(): symbol; method2(): Promise<symbol>; method3(): AsyncGenerator<symbol, void, unknown>; method4(): Generator<symbol, void, unknown>; method5(p?: symbol): symbol; }
 
     a: s,
 >a : symbol
@@ -805,11 +805,11 @@ interface Context {
 >s : unique symbol
 
     method3(): AsyncIterableIterator<typeof s>;
->method3 : () => AsyncIterableIterator<unique symbol, any, any>
+>method3 : () => AsyncIterableIterator<unique symbol>
 >s : unique symbol
 
     method4(): IterableIterator<typeof s>;
->method4 : () => IterableIterator<unique symbol, any, any>
+>method4 : () => IterableIterator<unique symbol>
 >s : unique symbol
 
     method5(p?: typeof s): typeof s;
@@ -821,7 +821,7 @@ interface Context {
 
 const o3: Context = {
 >o3 : Context
->{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1: () => unique symbol; method2: () => Promise<unique symbol>; method3: () => AsyncGenerator<unique symbol, void, any>; method4: () => Generator<unique symbol, void, any>; method5: (p?: unique symbol) => unique symbol; }
+>{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncGenerator<unique symbol, void, any>; method4(): Generator<unique symbol, void, any>; method5(p?: unique symbol): unique symbol; }
 
     method1() {
 >method1 : () => unique symbol
@@ -867,8 +867,8 @@ const o3: Context = {
 // allowed when not emitting declarations
 
 const o4 = {
->o4 : { method1: (p: unique symbol) => unique symbol; method2: (p: unique symbol) => unique symbol; }
->{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1: (p: unique symbol) => unique symbol; method2: (p: unique symbol) => unique symbol; }
+>o4 : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
+>{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: unique symbol): unique symbol; method2(p: unique symbol): unique symbol; }
 
     method1(p: typeof s): typeof s {
 >method1 : (p: unique symbol) => unique symbol
@@ -912,13 +912,13 @@ const ce0 = class {
 };
 
 function funcInferredReturnType(obj: { method(p: typeof s): void }) {
->funcInferredReturnType : (obj: { method: (p: unique symbol) => void; }) => { method: (p: unique symbol) => void; }
->obj : { method: (p: unique symbol) => void; }
+>funcInferredReturnType : (obj: { method(p: unique symbol): void; }) => { method(p: unique symbol): void; }
+>obj : { method(p: unique symbol): void; }
 >method : (p: unique symbol) => void
 >p : unique symbol
 >s : unique symbol
 
     return obj;
->obj : { method: (p: unique symbol) => void; }
+>obj : { method(p: unique symbol): void; }
 }
 

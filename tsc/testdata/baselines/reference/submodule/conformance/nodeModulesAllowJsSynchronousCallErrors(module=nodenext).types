@@ -6,28 +6,28 @@ import {h} from "../index.js";
 >h : () => Promise<void>
 
 import mod = require("../index.js");
->mod : typeof import("index")
+>mod : typeof mod
 
 import {f as _f} from "./index.js";
 >f : () => Promise<void>
 >_f : () => Promise<void>
 
 import mod2 = require("./index.js");
->mod2 : typeof import("subfolder/index")
+>mod2 : typeof mod2
 
 export async function f() {
 >f : () => Promise<void>
 
     const mod3 = await import ("../index.js");
->mod3 : typeof import("index")
->await import ("../index.js") : typeof import("index")
->import ("../index.js") : Promise<typeof import("index")>
+>mod3 : typeof mod
+>await import ("../index.js") : typeof mod
+>import ("../index.js") : Promise<typeof mod>
 >"../index.js" : "../index.js"
 
     const mod4 = await import ("./index.js");
->mod4 : typeof import("subfolder/index")
->await import ("./index.js") : typeof import("subfolder/index")
->import ("./index.js") : Promise<typeof import("subfolder/index")>
+>mod4 : typeof mod2
+>await import ("./index.js") : typeof mod2
+>import ("./index.js") : Promise<typeof mod2>
 >"./index.js" : "./index.js"
 
     h();
@@ -41,27 +41,27 @@ import {h as _h} from "./index.js";
 >_h : () => Promise<void>
 
 import mod = require("./index.js");
->mod : typeof import("index")
+>mod : typeof mod
 
 import {f} from "./subfolder/index.js";
 >f : () => Promise<void>
 
 import mod2 = require("./subfolder/index.js");
->mod2 : typeof import("subfolder/index")
+>mod2 : typeof mod2
 
 export async function h() {
 >h : () => Promise<void>
 
     const mod3 = await import ("./index.js");
->mod3 : typeof import("index")
->await import ("./index.js") : typeof import("index")
->import ("./index.js") : Promise<typeof import("index")>
+>mod3 : typeof mod
+>await import ("./index.js") : typeof mod
+>import ("./index.js") : Promise<typeof mod>
 >"./index.js" : "./index.js"
 
     const mod4 = await import ("./subfolder/index.js");
->mod4 : typeof import("subfolder/index")
->await import ("./subfolder/index.js") : typeof import("subfolder/index")
->import ("./subfolder/index.js") : Promise<typeof import("subfolder/index")>
+>mod4 : typeof mod2
+>await import ("./subfolder/index.js") : typeof mod2
+>import ("./subfolder/index.js") : Promise<typeof mod2>
 >"./subfolder/index.js" : "./subfolder/index.js"
 
     f();

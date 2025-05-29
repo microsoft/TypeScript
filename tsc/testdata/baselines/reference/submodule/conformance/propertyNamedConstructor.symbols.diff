@@ -5,7 +5,7 @@
 
    "constructor" = 3; // Error
 ->"constructor" : Symbol(X1["constructor"], Decl(propertyNamedConstructor.ts, 0, 10))
-+>"constructor" : Symbol(constructor, Decl(propertyNamedConstructor.ts, 0, 10))
++>"constructor" : Symbol("constructor", Decl(propertyNamedConstructor.ts, 0, 10))
  }
 
  class X2 {
@@ -14,6 +14,6 @@
    ["constructor"] = 3;
 ->["constructor"] : Symbol(X2["constructor"], Decl(propertyNamedConstructor.ts, 4, 10))
 ->"constructor" : Symbol(X2["constructor"], Decl(propertyNamedConstructor.ts, 4, 10))
-+>["constructor"] : Symbol(constructor, Decl(propertyNamedConstructor.ts, 4, 10))
-+>"constructor" : Symbol(constructor, Decl(propertyNamedConstructor.ts, 4, 10))
++>["constructor"] : Symbol(["constructor"], Decl(propertyNamedConstructor.ts, 4, 10))
++>"constructor" : Symbol(["constructor"], Decl(propertyNamedConstructor.ts, 4, 10))
  }

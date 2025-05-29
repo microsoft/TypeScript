@@ -1,14 +1,10 @@
 --- old.declarationEmitOfFuncspace.js
 +++ new.declarationEmitOfFuncspace.js
-@@= skipped -14, +14 lines =@@
- function ExpandoMerge(n) {
-     return n;
- }
--
--
--//// [expando.d.ts]
--declare function ExpandoMerge(n: number): number;
--declare namespace ExpandoMerge {
--    interface I {
--    }
--}
+@@= skipped -17, +17 lines =@@
+
+
+ //// [expando.d.ts]
++// #27032
+ declare function ExpandoMerge(n: number): number;
+ declare namespace ExpandoMerge {
+     interface I {

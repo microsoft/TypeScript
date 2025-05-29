@@ -28,3 +28,14 @@ var c;
     c.bVal = b(10);
     c.bVal2 = b;
 })(c || (c = {}));
+
+
+//// [internalAliasFunction.d.ts]
+declare namespace a {
+    function foo(x: number): number;
+}
+declare namespace c {
+    import b = a.foo;
+    var bVal: number;
+    var bVal2: typeof b;
+}

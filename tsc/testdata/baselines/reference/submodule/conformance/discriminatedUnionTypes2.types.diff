@@ -1,10 +1,30 @@
 --- old.discriminatedUnionTypes2.types
 +++ new.discriminatedUnionTypes2.types
-@@= skipped -382, +382 lines =@@
+@@= skipped -317, +317 lines =@@
+ >abc : abc
+
+ function f(problem: abc & (b | c)) {
+->f : (problem: abc & (b | c)) => void
++>f : (problem: b | c) => void
+ >problem : b | c
+
+     if (problem.type === 'b') {
+@@= skipped -39, +39 lines =@@
+ >value : boolean
+
+ function foo1(x: RuntimeValue & { type: 'number' }) {
+->foo1 : (x: RuntimeValue & { type: "number"; }) => void
++>foo1 : (x: { type: "number"; value: number; } & { type: "number"; }) => void
+ >x : { type: "number"; value: number; } & { type: "number"; }
+ >type : "number"
+
+@@= skipped -25, +25 lines =@@
+ }
 
  function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
- >foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
+->foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
 ->x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
++>foo2 : (x: { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }) => void
 +>x : { type: "number"; value: number; } & { type: "number"; } | { type: "string"; value: string; } & { type: "string"; }
  >type : "number"
  >type : "string"

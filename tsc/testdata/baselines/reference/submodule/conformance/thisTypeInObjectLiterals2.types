@@ -5,8 +5,8 @@
 // of the object literal.
 
 let obj1 = {
->obj1 : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
->{    a: 1,    f() {        return this.a;    },    b: "hello",    c: {        g() {            this.g();        }    },    get d() {        return this.a;    },    get e() {        return this.b;    },    set e(value) {        this.b = value;    }} : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
+>obj1 : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
+>{    a: 1,    f() {        return this.a;    },    b: "hello",    c: {        g() {            this.g();        }    },    get d() {        return this.a;    },    get e() {        return this.b;    },    set e(value) {        this.b = value;    }} : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 
     a: 1,
 >a : number
@@ -17,7 +17,7 @@ let obj1 = {
 
         return this.a;
 >this.a : number
->this : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 >a : number
 
     },
@@ -26,8 +26,8 @@ let obj1 = {
 >"hello" : "hello"
 
     c: {
->c : { g: () => void; }
->{        g() {            this.g();        }    } : { g: () => void; }
+>c : { g(): void; }
+>{        g() {            this.g();        }    } : { g(): void; }
 
         g() {
 >g : () => void
@@ -35,7 +35,7 @@ let obj1 = {
             this.g();
 >this.g() : void
 >this.g : () => void
->this : { g: () => void; }
+>this : { g(): void; }
 >g : () => void
         }
     },
@@ -44,7 +44,7 @@ let obj1 = {
 
         return this.a;
 >this.a : number
->this : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 >a : number
 
     },
@@ -53,7 +53,7 @@ let obj1 = {
 
         return this.b;
 >this.b : string
->this : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 >b : string
 
     },
@@ -64,7 +64,7 @@ let obj1 = {
         this.b = value;
 >this.b = value : string
 >this.b : string
->this : { a: number; f: () => number; b: string; c: { g: () => void; }; readonly d: number; e: string; }
+>this : { a: number; f(): number; b: string; c: { g(): void; }; readonly d: number; e: string; }
 >b : string
 >value : string
     }
@@ -94,7 +94,7 @@ type Point = {
 
 let p1: Point = {
 >p1 : Point
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -143,7 +143,7 @@ let p1: Point = {
 
 let p2: Point | null = {
 >p2 : Point | null
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -192,7 +192,7 @@ let p2: Point | null = {
 
 let p3: Point | undefined = {
 >p3 : Point | undefined
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -241,7 +241,7 @@ let p3: Point | undefined = {
 
 let p4: Point | null | undefined = {
 >p4 : Point | null | undefined
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -295,7 +295,7 @@ declare function f1(p: Point): void;
 f1({
 >f1({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
 >f1 : (p: Point) => void
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -349,7 +349,7 @@ declare function f2(p: Point | null | undefined): void;
 f2({
 >f2({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
 >f2 : (p: Point | null | undefined) => void
->{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy: (dx: number, dy: number, dz: number | undefined) => void; }
+>{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
 >x : number
@@ -414,10 +414,10 @@ declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >desc : ObjectDescriptor<D, M>
 
 let x1 = makeObject({
->x1 : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
->makeObject({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
+>x1 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>makeObject({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy: (dx: number, dy: number) => void; }; }
+>{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
 
     data: { x: 0, y: 0 },
 >data : { x: number; y: number; }
@@ -428,8 +428,8 @@ let x1 = makeObject({
 >0 : 0
 
     methods: {
->methods : { moveBy: (dx: number, dy: number) => void; }
->{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy: (dx: number, dy: number) => void; }
+>methods : { moveBy(dx: number, dy: number): void; }
+>{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
 
         moveBy(dx: number, dy: number) {
 >moveBy : (dx: number, dy: number) => void
@@ -439,14 +439,14 @@ let x1 = makeObject({
             this.x += dx;  // Strongly typed this
 >this.x += dx : number
 >this.x : number
->this : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
+>this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >x : number
 >dx : number
 
             this.y += dy;  // Strongly typed this
 >this.y += dy : number
 >this.y : number
->this : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
+>this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >y : number
 >dy : number
         }
@@ -471,10 +471,10 @@ declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >desc : ObjectDescriptor<D, M>
 
 let x2 = makeObject2({
->x2 : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
->makeObject2({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
+>x2 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
+>makeObject2({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy: (dx: number, dy: number) => void; }; }
+>{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
 
     data: { x: 0, y: 0 },
 >data : { x: number; y: number; }
@@ -485,8 +485,8 @@ let x2 = makeObject2({
 >0 : 0
 
     methods: {
->methods : { moveBy: (dx: number, dy: number) => void; }
->{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy: (dx: number, dy: number) => void; }
+>methods : { moveBy(dx: number, dy: number): void; }
+>{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
 
         moveBy(dx: number, dy: number) {
 >moveBy : (dx: number, dy: number) => void
@@ -496,14 +496,14 @@ let x2 = makeObject2({
             this.x += dx;  // Strongly typed this
 >this.x += dx : number
 >this.x : number
->this : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
+>this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >x : number
 >dx : number
 
             this.y += dy;  // Strongly typed this
 >this.y += dy : number
 >this.y : number
->this : { x: number; y: number; } & { moveBy: (dx: number, dy: number) => void; }
+>this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >y : number
 >dy : number
         }
@@ -570,7 +570,7 @@ let p11 = defineProp(p1, "bar", {
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
 >p1 : Point
 >"bar" : "bar"
->{    get() {        return this.x;    },    set(value: number) {        this.x = value;    }} : { get: () => number; set: (value: number) => void; }
+>{    get() {        return this.x;    },    set(value: number) {        this.x = value;    }} : { get(): number; set(value: number): void; }
 
     get() {
 >get : () => number
@@ -609,7 +609,7 @@ let p12 = defineProps(p1, {
 >defineProps(p1, {    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }}) : Point & { foo: number; bar: number; }
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
 >p1 : Point
->{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get: () => number; set: (value: number) => void; }; }
+>{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get(): number; set(value: number): void; }; }
 
     foo: {
 >foo : { value: number; }
@@ -621,8 +621,8 @@ let p12 = defineProps(p1, {
 
     },
     bar: {
->bar : { get: () => number; set: (value: number) => void; }
->{        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    } : { get: () => number; set: (value: number) => void; }
+>bar : { get(): number; set(value: number): void; }
+>{        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    } : { get(): number; set(value: number): void; }
 
         get(): number {
 >get : () => number
@@ -706,10 +706,10 @@ declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 >options : VueOptions<D, M, P>
 
 let vue = new Vue({
->vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
->new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
+>new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
->{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f: (x: string) => number; }; computed: { test: () => number; hello: { get: () => string; set: (value: string) => void; }; }; }
+>{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f(x: string): number; }; computed: { test(): number; hello: { get(): string; set(value: string): void; }; }; }
 
     data: () => ({ x: 1, y: 2 }),
 >data : () => { x: number; y: number; }
@@ -722,8 +722,8 @@ let vue = new Vue({
 >2 : 2
 
     methods: {
->methods : { f: (x: string) => number; }
->{        f(x: string) {            return this.x;        }    } : { f: (x: string) => number; }
+>methods : { f(x: string): number; }
+>{        f(x: string) {            return this.x;        }    } : { f(x: string): number; }
 
         f(x: string) {
 >f : (x: string) => number
@@ -731,26 +731,26 @@ let vue = new Vue({
 
             return this.x;
 >this.x : number
->this : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >x : number
         }
     },
     computed: {
->computed : { test: () => number; hello: { get: () => string; set: (value: string) => void; }; }
->{        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    } : { test: () => number; hello: { get: () => string; set: (value: string) => void; }; }
+>computed : { test(): number; hello: { get(): string; set(value: string): void; }; }
+>{        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    } : { test(): number; hello: { get(): string; set(value: string): void; }; }
 
         test(): number {
 >test : () => number
 
             return this.x;
 >this.x : number
->this : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >x : number
 
         },
         hello: {
->hello : { get: () => string; set: (value: string) => void; }
->{            get() {                return "hi";            },            set(value: string) {            }        } : { get: () => string; set: (value: string) => void; }
+>hello : { get(): string; set(value: string): void; }
+>{            get() {                return "hi";            },            set(value: string) {            }        } : { get(): string; set(value: string): void; }
 
             get() {
 >get : () => string
@@ -768,27 +768,27 @@ let vue = new Vue({
 });
 
 vue;
->vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 
 vue.x;
 >vue.x : number
->vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >x : number
 
 vue.f("abc");
 >vue.f("abc") : number
 >vue.f : (x: string) => number
->vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >f : (x: string) => number
 >"abc" : "abc"
 
 vue.test;
 >vue.test : number
->vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >test : number
 
 vue.hello;
 >vue.hello : string
->vue : { x: number; y: number; } & { f: (x: string) => number; } & { test: number; hello: string; }
+>vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >hello : string
 

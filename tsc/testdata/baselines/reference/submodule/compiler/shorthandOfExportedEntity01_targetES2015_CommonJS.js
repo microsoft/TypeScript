@@ -17,3 +17,8 @@ exports.test = "test";
 function foo() {
     const x = { test: exports.test };
 }
+
+
+//// [shorthandOfExportedEntity01_targetES2015_CommonJS.d.ts]
+export declare const test = "test";
+export declare function foo(): void;

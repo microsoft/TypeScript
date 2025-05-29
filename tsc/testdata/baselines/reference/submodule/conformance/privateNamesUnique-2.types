@@ -8,12 +8,12 @@ export class Foo {
 >#x : any
 
     copy(other: import("./b").Foo) {
->copy : (other: Foo) => void
->other : Foo
+>copy : (other: import("./b").Foo) => void
+>other : import("./b").Foo
 
         other.#x; // error
 >other.#x : any
->other : Foo
+>other : import("./b").Foo
     }
 }
     
@@ -27,27 +27,27 @@ export class Foo {
 
 === main.ts ===
 import { Foo as A } from "./a";
->Foo : typeof Foo
->A : typeof Foo
+>Foo : typeof A
+>A : typeof A
 
 import { Foo as B } from "./b";
->Foo : typeof Foo
->B : typeof Foo
+>Foo : typeof B
+>B : typeof B
 
 const a = new A();
->a : Foo
->new A() : Foo
->A : typeof Foo
+>a : A
+>new A() : A
+>A : typeof A
 
 const b = new B();
->b : Foo
->new B() : Foo
->B : typeof Foo
+>b : B
+>new B() : B
+>B : typeof B
 
 a.copy(b); // error
 >a.copy(b) : void
->a.copy : (other: Foo) => void
->a : Foo
->copy : (other: Foo) => void
->b : Foo
+>a.copy : (other: B) => void
+>a : A
+>copy : (other: B) => void
+>b : B
 

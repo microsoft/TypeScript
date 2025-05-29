@@ -16,6 +16,6 @@ module Bar {
 >1 : 1
 
     import F = Foo;
->F : typeof Foo
->Foo : typeof Foo
+>F : typeof F
+>Foo : typeof F
 }

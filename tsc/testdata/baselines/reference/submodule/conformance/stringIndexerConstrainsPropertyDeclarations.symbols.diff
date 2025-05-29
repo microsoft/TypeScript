@@ -26,11 +26,11 @@
 
      "d": string; // ok
 ->"d" : Symbol(C["d"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 13, 15))
-+>"d" : Symbol(d, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 13, 15))
++>"d" : Symbol("d", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 13, 15))
 
      "e": number; // error
 ->"e" : Symbol(C["e"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 14, 16))
-+>"e" : Symbol(e, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 14, 16))
++>"e" : Symbol("e", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 14, 16))
 
      1.0: string; // ok
 ->1.0 : Symbol(C[1.0], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 15, 16))
@@ -106,11 +106,11 @@
 
      "d": string; // ok
 ->"d" : Symbol(I["d"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 45, 15))
-+>"d" : Symbol(d, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 45, 15))
++>"d" : Symbol("d", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 45, 15))
 
      "e": number; // error
 ->"e" : Symbol(I["e"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 46, 16))
-+>"e" : Symbol(e, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 46, 16))
++>"e" : Symbol("e", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 46, 16))
 
      1.0: string; // ok
 ->1.0 : Symbol(I[1.0], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 47, 16))
@@ -141,30 +141,3 @@
 +>f : Symbol(f, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 54, 18))
  >MyString : Symbol(MyString, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 0, 0))
  }
-
-@@= skipped -54, +54 lines =@@
- >c : Symbol(c, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 62, 14))
-
-     "d": string; // ok
-->"d" : Symbol("d", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 63, 15))
-+>"d" : Symbol(d, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 63, 15))
-
-     "e": number; // error
-->"e" : Symbol("e", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 64, 16))
-+>"e" : Symbol(e, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 64, 16))
-
-     1.0: string; // ok
- >1.0 : Symbol(1.0, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 65, 16))
-@@= skipped -44, +44 lines =@@
- >c : Symbol(c, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 79, 9))
-
-     "d": '', 
-->"d" : Symbol("d", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 80, 17))
-+>"d" : Symbol(d, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 80, 17))
-
-     "e": 1, 
-->"e" : Symbol("e", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 81, 12))
-+>"e" : Symbol(e, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 81, 12))
-
-     1.0: '',
- >1.0 : Symbol(1.0, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 82, 11))

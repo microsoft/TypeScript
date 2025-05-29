@@ -12,25 +12,25 @@ export type Page<P = NonNullable<unknown>> = ComponentType<P> & {
 >Page : Page<P>
 
     getLayout?: (component: JSX.Element) => JSX.Element;
->getLayout : ((component: Element) => Element) | undefined
->component : Element
+>getLayout : ((component: JSX.Element) => JSX.Element) | undefined
+>component : JSX.Element
 >JSX : any
 >JSX : any
 }
 
 export const FooPage: Page = () => {
 >FooPage : Page<{}>
->() => {    return (        <div>            <p>Foo</p>        </div>    )} : { (): Element; getLayout: () => Element; }
+>() => {    return (        <div>            <p>Foo</p>        </div>    )} : { (): JSX.Element; getLayout: () => JSX.Element; }
 
     return (
->(        <div>            <p>Foo</p>        </div>    ) : Element
+>(        <div>            <p>Foo</p>        </div>    ) : JSX.Element
 
         <div>
-><div>            <p>Foo</p>        </div> : Element
+><div>            <p>Foo</p>        </div> : JSX.Element
 >div : any
 
             <p>Foo</p>
-><p>Foo</p> : Element
+><p>Foo</p> : JSX.Element
 >p : any
 >p : any
 
@@ -41,14 +41,14 @@ export const FooPage: Page = () => {
 };
 
 FooPage.getLayout = () => {
->FooPage.getLayout = () => {    return <></>} : () => Element
->FooPage.getLayout : ((component: Element) => Element) | undefined
->FooPage : StatelessComponent<{}> & { getLayout?: ((component: Element) => Element) | undefined; }
->getLayout : ((component: Element) => Element) | undefined
->() => {    return <></>} : () => Element
+>FooPage.getLayout = () => {    return <></>} : () => JSX.Element
+>FooPage.getLayout : ((component: JSX.Element) => JSX.Element) | undefined
+>FooPage : import("react").StatelessComponent<{}> & { getLayout?: ((component: JSX.Element) => JSX.Element) | undefined; }
+>getLayout : ((component: JSX.Element) => JSX.Element) | undefined
+>() => {    return <></>} : () => JSX.Element
 
     return <></>
-><></> : Element
+><></> : JSX.Element
 
 };
 

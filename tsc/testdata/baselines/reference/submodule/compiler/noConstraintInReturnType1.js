@@ -10,3 +10,9 @@ class List<T extends {}> {
 class List {
     static empty() { return null; }
 }
+
+
+//// [noConstraintInReturnType1.d.ts]
+declare class List<T extends {}> {
+    static empty<T extends {}>(): List<T>;
+}

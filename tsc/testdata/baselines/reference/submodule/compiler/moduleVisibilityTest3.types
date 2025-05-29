@@ -20,11 +20,11 @@ module editor {
 >editor : typeof editor
 
  import modes = _modes;
->modes : typeof _modes
->_modes : typeof _modes
+>modes : typeof modes
+>_modes : typeof modes
  
  var i : modes.IMode;
->i : IMode
+>i : modes.IMode
 >modes : any
   
  // If you just use p1:modes, the compiler accepts it - should be an error
@@ -33,11 +33,11 @@ module editor {
 
      constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
 >p1 : modes
->p2 : Mode
+>p2 : modes.Mode
 >modes : any
 
          var x:modes.Mode;
->x : Mode
+>x : modes.Mode
 >modes : any
      }
     

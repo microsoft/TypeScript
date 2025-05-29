@@ -5,6 +5,6 @@
   */
  function f({ a = "a" }) {}
 ->f : ({ a }?: Foo) => void
-+>f : (__0: { a?: string; }) => void
++>f : ({ a = "a" }: { a?: string; }) => void
  >a : string
  >"a" : "a"

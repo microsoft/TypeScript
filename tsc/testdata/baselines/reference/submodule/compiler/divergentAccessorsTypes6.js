@@ -54,3 +54,7 @@ const o2 = {
     get p2() { return 0; }, // ok - explicit annotation
     set p2(value) { },
 };
+
+
+//// [divergentAccessorsTypes6.d.ts]
+export {};

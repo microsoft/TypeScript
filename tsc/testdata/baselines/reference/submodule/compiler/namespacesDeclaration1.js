@@ -10,3 +10,14 @@ module M {
 }
 
 //// [namespacesDeclaration1.js]
+
+
+//// [namespacesDeclaration1.d.ts]
+declare namespace M {
+    namespace N {
+        namespace M2 {
+            interface I {
+            }
+        }
+    }
+}

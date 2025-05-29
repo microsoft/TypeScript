@@ -27,3 +27,16 @@ class C2 {
 }
 var c2 = new C2(); // error C2 is private
 var r2 = c2.constructor;
+
+
+//// [typesWithPrivateConstructor.d.ts]
+declare class C {
+    private constructor();
+}
+declare var c: any; // error C is private
+declare var r: () => void;
+declare class C2 {
+    private constructor();
+}
+declare var c2: any; // error C2 is private
+declare var r2: (x: number) => void;

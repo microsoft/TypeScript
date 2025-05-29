@@ -2,19 +2,19 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 class Poisoned extends React.Component<{}, {}> {
 >Poisoned : Poisoned
->React.Component : Component<{}, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Hello</div>;
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -26,13 +26,13 @@ const obj = {};
 
 // OK
 let p = <Poisoned {...obj} />;
->p : Element
-><Poisoned {...obj} /> : Element
+>p : JSX.Element
+><Poisoned {...obj} /> : JSX.Element
 >Poisoned : typeof Poisoned
 >obj : {}
 
 let y = <Poisoned />;
->y : Element
-><Poisoned /> : Element
+>y : JSX.Element
+><Poisoned /> : JSX.Element
 >Poisoned : typeof Poisoned
 

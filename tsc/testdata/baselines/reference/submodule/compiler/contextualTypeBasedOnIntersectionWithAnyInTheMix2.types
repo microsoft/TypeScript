@@ -47,11 +47,11 @@ declare function MyMDXComponent(props: MDXProps): null;
 MyMDXComponent({
 >MyMDXComponent({  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },}) : null
 >MyMDXComponent : (props: MDXProps) => null
->{  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },} : { components: { a: (props: { href?: string | undefined; }) => null; div: (props: { dir?: string | undefined; }) => null; }; }
+>{  components: {    a(props) {      return null;    },    div(props) {      return null;    },  },} : { components: { a(props: { href?: string | undefined; }): null; div(props: { dir?: string | undefined; }): null; }; }
 
   components: {
->components : { a: (props: { href?: string | undefined; }) => null; div: (props: { dir?: string | undefined; }) => null; }
->{    a(props) {      return null;    },    div(props) {      return null;    },  } : { a: (props: { href?: string | undefined; }) => null; div: (props: { dir?: string | undefined; }) => null; }
+>components : { a(props: { href?: string | undefined; }): null; div(props: { dir?: string | undefined; }): null; }
+>{    a(props) {      return null;    },    div(props) {      return null;    },  } : { a(props: { href?: string | undefined; }): null; div(props: { dir?: string | undefined; }): null; }
 
     a(props) {
 >a : (props: { href?: string | undefined; }) => null

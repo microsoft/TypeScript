@@ -29,7 +29,7 @@ declare class Component<P, S> {
 }
 
 declare global {
->global : Symbol((Missing), Decl(jsxCallbackWithDestructuring.tsx, 6, 1))
+>global : Symbol(global, Decl(jsxCallbackWithDestructuring.tsx, 6, 1))
 
     namespace JSX {
 >JSX : Symbol(JSX, Decl(jsxCallbackWithDestructuring.tsx, 8, 16))

@@ -32,52 +32,52 @@ class g<T> {
 
 // Just the name
 var k: c | m.c = new c() || new m.c();
->k : c | c
+>k : c | m.c
 >m : any
->new c() || new m.c() : c | c
+>new c() || new m.c() : c | m.c
 >new c() : c
 >c : typeof c
->new m.c() : c
->m.c : typeof c
+>new m.c() : m.c
+>m.c : typeof m.c
 >m : typeof m
->c : typeof c
+>c : typeof m.c
 
 var l = new c() || new m.c();
->l : c | c
->new c() || new m.c() : c | c
+>l : c | m.c
+>new c() || new m.c() : c | m.c
 >new c() : c
 >c : typeof c
->new m.c() : c
->m.c : typeof c
+>new m.c() : m.c
+>m.c : typeof m.c
 >m : typeof m
->c : typeof c
+>c : typeof m.c
 
 var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
->x : g<number> | g<string> | (() => c)
+>x : m.g<number> | g<string> | (() => c)
 >m : any
->new g<string>() ||  new m.g<number>() || (() => new c()) : g<number> | g<string> | (() => c)
->new g<string>() ||  new m.g<number>() : g<number> | g<string>
+>new g<string>() ||  new m.g<number>() || (() => new c()) : m.g<number> | g<string> | (() => c)
+>new g<string>() ||  new m.g<number>() : m.g<number> | g<string>
 >new g<string>() : g<string>
 >g : typeof g
->new m.g<number>() : g<number>
->m.g : typeof g
+>new m.g<number>() : m.g<number>
+>m.g : typeof m.g
 >m : typeof m
->g : typeof g
+>g : typeof m.g
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c
 >c : typeof c
 
 var y = new g<string>() || new m.g<number>() || (() => new c());
->y : g<number> | g<string> | (() => c)
->new g<string>() || new m.g<number>() || (() => new c()) : g<number> | g<string> | (() => c)
->new g<string>() || new m.g<number>() : g<number> | g<string>
+>y : m.g<number> | g<string> | (() => c)
+>new g<string>() || new m.g<number>() || (() => new c()) : m.g<number> | g<string> | (() => c)
+>new g<string>() || new m.g<number>() : m.g<number> | g<string>
 >new g<string>() : g<string>
 >g : typeof g
->new m.g<number>() : g<number>
->m.g : typeof g
+>new m.g<number>() : m.g<number>
+>m.g : typeof m.g
 >m : typeof m
->g : typeof g
+>g : typeof m.g
 >(() => new c()) : () => c
 >() => new c() : () => c
 >new c() : c

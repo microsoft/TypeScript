@@ -58,6 +58,6 @@ let c = <SFC2AndEmptyComp />;
 let d = <SFC2AndEmptyComp data-prop />;
 >d : Symbol(d, Decl(file.tsx, 20, 3))
 >SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 15, 3))
->data-prop : Symbol("data-prop", Decl(file.tsx, 20, 25))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 20, 25))
 
 

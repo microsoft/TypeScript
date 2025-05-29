@@ -21,16 +21,16 @@ declare function f<T extends Props>(i: Component<T>): void;
 f({
 >f({    props: {        children: (({ x }) => { })    }}) : void
 >f : <T extends Props>(i: Component<T>) => void
->{    props: {        children: (({ x }) => { })    }} : { props: { children: (__0: { x: number; }) => void; }; }
+>{    props: {        children: (({ x }) => { })    }} : { props: { children: ({ x }: { x: number; }) => void; }; }
 
     props: {
->props : { children: (__0: { x: number; }) => void; }
->{        children: (({ x }) => { })    } : { children: (__0: { x: number; }) => void; }
+>props : { children: ({ x }: { x: number; }) => void; }
+>{        children: (({ x }) => { })    } : { children: ({ x }: { x: number; }) => void; }
 
         children: (({ x }) => { })
->children : (__0: { x: number; }) => void
->(({ x }) => { }) : (__0: { x: number; }) => void
->({ x }) => { } : (__0: { x: number; }) => void
+>children : ({ x }: { x: number; }) => void
+>(({ x }) => { }) : ({ x }: { x: number; }) => void
+>({ x }) => { } : ({ x }: { x: number; }) => void
 >x : number
     }
 });

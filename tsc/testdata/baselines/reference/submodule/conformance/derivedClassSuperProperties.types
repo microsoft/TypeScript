@@ -859,8 +859,8 @@ class DerivedWithObjectMethod extends Base {
 
     constructor() {
         const obj = {
->obj : { getProp: () => any; }
->{            getProp() {                return this;            },        } : { getProp: () => any; }
+>obj : { getProp(): any; }
+>{            getProp() {                return this;            },        } : { getProp(): any; }
 
             getProp() {
 >getProp : () => any

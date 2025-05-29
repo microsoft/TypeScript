@@ -1,7 +1,7 @@
 index.js(38,21): error TS2349: This expression is not callable.
-  Type '{ y: ???; }' has no call signatures.
+  Type '{ y: any; }' has no call signatures.
 index.js(48,21): error TS2349: This expression is not callable.
-  Type '{ y: ???; }' has no call signatures.
+  Type '{ y: any; }' has no call signatures.
 
 
 ==== index.js (2 errors) ====
@@ -45,7 +45,7 @@ index.js(48,21): error TS2349: This expression is not callable.
         return a.x && b.y();
                         ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type '{ y: ???; }' has no call signatures.
+!!! error TS2349:   Type '{ y: any; }' has no call signatures.
     }
     
     export { g };
@@ -58,7 +58,7 @@ index.js(48,21): error TS2349: This expression is not callable.
         return a.x && b.y();
                         ~
 !!! error TS2349: This expression is not callable.
-!!! error TS2349:   Type '{ y: ???; }' has no call signatures.
+!!! error TS2349:   Type '{ y: any; }' has no call signatures.
     }
     
     export { hh as h };

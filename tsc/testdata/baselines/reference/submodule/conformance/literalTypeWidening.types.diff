@@ -5,7 +5,7 @@
  >!isFailure(result) : boolean
  >isFailure(result) : boolean
 ->isFailure : <T_1>(result: Result<T_1>) => result is FAILURE
-+>isFailure : <T>(result: Result<T>) => result is "FAILURE"
++>isFailure : <T_1>(result: Result<T_1>) => result is "FAILURE"
  >result : Result<T>
  }
 

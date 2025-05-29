@@ -5,7 +5,7 @@
  }
  export module eM {
 ->eM : typeof import("giant").eM
-+>eM : typeof eM
++>eM : typeof import("./giant").eM
 
      var V;
  >V : any

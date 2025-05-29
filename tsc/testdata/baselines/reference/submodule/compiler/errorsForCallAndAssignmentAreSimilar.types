@@ -5,7 +5,7 @@ function minimalExample1() {
 >minimalExample1 : () => void
 
     type Disc =
->Disc : Disc
+>Disc : { kind: "hddvd"; } | { kind: "bluray"; }
 
         | { kind: "hddvd" }
 >kind : "hddvd"
@@ -14,13 +14,13 @@ function minimalExample1() {
 >kind : "bluray"
 
     function foo(x: Disc[]) {
->foo : (x: Disc[]) => void
->x : Disc[]
+>foo : (x: ({ kind: "hddvd"; } | { kind: "bluray"; })[]) => void
+>x : ({ kind: "hddvd"; } | { kind: "bluray"; })[]
     }
 
     foo([
 >foo([        { kind: "bluray", },        { kind: "hdpvd", }    ]) : void
->foo : (x: Disc[]) => void
+>foo : (x: ({ kind: "hddvd"; } | { kind: "bluray"; })[]) => void
 >[        { kind: "bluray", },        { kind: "hdpvd", }    ] : ({ kind: "bluray"; } | { kind: "hdpvd"; })[]
 
         { kind: "bluray", },
@@ -36,7 +36,7 @@ function minimalExample1() {
     ]);
 
     const ds: Disc[] = [
->ds : Disc[]
+>ds : ({ kind: "hddvd"; } | { kind: "bluray"; })[]
 >[        { kind: "bluray", },        { kind: "hdpvd", }    ] : ({ kind: "bluray"; } | { kind: "hdpvd"; })[]
 
         { kind: "bluray", },

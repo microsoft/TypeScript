@@ -5,5 +5,5 @@
 
  export default new EnhancedPrisma();
 ->new EnhancedPrisma() : PrismaClient<import("/node_modules/.prisma/client/index").PrismaClientOptions>
-+>new EnhancedPrisma() : PrismaClient<PrismaClientOptions>
++>new EnhancedPrisma() : PrismaClient<import(".prisma").PrismaClientOptions>
  >EnhancedPrisma : typeof PrismaClient & { enhanced: unknown; }

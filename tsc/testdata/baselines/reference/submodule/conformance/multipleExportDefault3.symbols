@@ -8,6 +8,6 @@ export default {
 };
 
 export default class C { }
->C : Symbol(default, Decl(multipleExportDefault3.ts, 2, 2))
+>C : Symbol(C, Decl(multipleExportDefault3.ts, 2, 2))
 
 

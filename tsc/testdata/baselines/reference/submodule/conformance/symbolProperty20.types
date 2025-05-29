@@ -19,7 +19,7 @@ interface I {
 
 var i: I = {
 >i : I
->{    [Symbol.iterator]: s => s,    [Symbol.toStringTag](n) { return n; }} : { [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag]: (n: number) => number; }
+>{    [Symbol.iterator]: s => s,    [Symbol.toStringTag](n) { return n; }} : { [Symbol.iterator]: (s: string) => string; [Symbol.toStringTag](n: number): number; }
 
     [Symbol.iterator]: s => s,
 >[Symbol.iterator] : (s: string) => string

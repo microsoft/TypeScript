@@ -6,7 +6,7 @@
 export {}
 
 declare global {
->global : Symbol((Missing), Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 2, 9))
+>global : Symbol(global, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 2, 9))
 
     namespace JSX {
 >JSX : Symbol(JSX, Decl(jsxEmptyExpressionNotCountedAsChild2.tsx, 4, 16))

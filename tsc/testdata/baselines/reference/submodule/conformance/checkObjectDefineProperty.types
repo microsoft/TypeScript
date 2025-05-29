@@ -133,7 +133,7 @@ Object.defineProperty(x, "zip", { get() { return 98122 }, set(_) { /*ignore*/ } 
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : {}
 >"zip" : "zip"
->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
 >get : () => number
 >98122 : 98122
 >set : (_: any) => void
@@ -146,7 +146,7 @@ Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : {}
 >"houseNumber" : "houseNumber"
->{ get() { return 21.75 } } : { get: () => number; }
+>{ get() { return 21.75 } } : { get(): number; }
 >get : () => number
 >21.75 : 21.75
 
@@ -157,7 +157,7 @@ Object.defineProperty(x, "zipStr", {
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >x : {}
 >"zipStr" : "zipStr"
->{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set: (str: string) => void; }
+>{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
 
     /** @param {string} str */
     set(str) {

@@ -15,26 +15,24 @@
  exports.m = {
      /**
      * leading doc for prop
-@@= skipped -13, +13 lines =@@
-     prop: 1
- };
- exports.x = { p: a_1.fn };
--
--
--//// [a.d.ts]
--export type X = string;
--export declare const fn: {
+@@= skipped -18, +18 lines =@@
+ //// [a.d.ts]
+ export type X = string;
+ export declare const fn: {
 -    o: (a?: (X | undefined)[]) => void;
--};
--//// [b.d.ts]
--export declare const m: {
--    /**
--    * leading doc for prop
--    */
--    prop: number;
--};
--export declare const x: {
--    p: {
++    o: (a?: string[]) => void;
+ };
+ //// [b.d.ts]
+ export declare const m: {
+@@= skipped -11, +11 lines =@@
+ };
+ export declare const x: {
+     p: {
 -        o: (a?: (import("./a").X | undefined)[]) => void;
--    };
--};
++        o: (
++        /**
++        * leading doc for prop
++        */
++        a?: string[]) => void;
+     };
+ };

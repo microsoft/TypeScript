@@ -26,9 +26,3 @@
  }
 
  // Error
-@@= skipped -32, +32 lines =@@
- let c = <BigGreeter data-extra="hi" />
- >c : Symbol(c, Decl(file.tsx, 14, 3))
- >BigGreeter : Symbol(BigGreeter, Decl(file.tsx, 0, 32))
-->data-extra : Symbol(data-extra, Decl(file.tsx, 14, 19))
-+>data-extra : Symbol("data-extra", Decl(file.tsx, 14, 19))

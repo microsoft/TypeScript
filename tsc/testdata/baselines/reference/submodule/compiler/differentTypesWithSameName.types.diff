@@ -9,13 +9,3 @@
  >v : variable
  >m : any
      
-@@= skipped -22, +22 lines =@@
-
- m.doSomething(v);
- >m.doSomething(v) : void
-->m.doSomething : (v: m.variable) => void
-+>m.doSomething : (v: variable) => void
- >m : typeof m
-->doSomething : (v: m.variable) => void
-+>doSomething : (v: variable) => void
- >v : variable

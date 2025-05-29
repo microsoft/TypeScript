@@ -5,26 +5,7 @@
 
      export module c {
 ->c : typeof m.c
-+>c : typeof c
++>c : typeof import("./declFileImportChainInExportAssignment")
 
          export class c {
  >c : c
-@@= skipped -8, +8 lines =@@
-     }
- }
- import a = m.c;
-->a : typeof a
-+>a : typeof c
- >m : typeof m
-->c : typeof a
-+>c : typeof c
-
- import b = a;
-->b : typeof a
-->a : typeof a
-+>b : typeof c
-+>a : typeof c
-
- export = b;
-->b : typeof a
-+>b : typeof c

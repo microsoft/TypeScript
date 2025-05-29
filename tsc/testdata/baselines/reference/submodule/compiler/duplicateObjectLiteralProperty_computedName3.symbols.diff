@@ -34,21 +34,19 @@
  }
 
  const t2 = {
- >t2 : Symbol(t2, Decl(b.ts, 7, 5))
+@@= skipped -16, +16 lines =@@
 
      [keys.s]: 1,
-->[keys.s] : Symbol([keys.s], Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
+ >[keys.s] : Symbol([keys.s], Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
 ->keys.s : Symbol(keys.s, Decl(a.ts, 1, 12))
-+>[keys.s] : Symbol(s, Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
 +>keys.s : Symbol(s, Decl(a.ts, 1, 12))
  >keys : Symbol(keys, Decl(b.ts, 0, 6))
 ->s : Symbol(keys.s, Decl(a.ts, 1, 12))
 +>s : Symbol(s, Decl(a.ts, 1, 12))
 
      [keys.s]: 1, // duplicate
-->[keys.s] : Symbol([keys.s], Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
+ >[keys.s] : Symbol([keys.s], Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
 ->keys.s : Symbol(keys.s, Decl(a.ts, 1, 12))
-+>[keys.s] : Symbol(s, Decl(b.ts, 7, 12), Decl(b.ts, 8, 16))
 +>keys.s : Symbol(s, Decl(a.ts, 1, 12))
  >keys : Symbol(keys, Decl(b.ts, 0, 6))
 ->s : Symbol(keys.s, Decl(a.ts, 1, 12))
@@ -56,13 +54,12 @@
  }
 
  const t3 = {
- >t3 : Symbol(t3, Decl(b.ts, 12, 5))
+@@= skipped -16, +16 lines =@@
 
      [keys.E1.A]: 1,
-->[keys.E1.A] : Symbol([keys.E1.A], Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
+ >[keys.E1.A] : Symbol([keys.E1.A], Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
 ->keys.E1.A : Symbol(keys.E1.A, Decl(a.ts, 2, 16))
 ->keys.E1 : Symbol(keys.E1, Decl(a.ts, 1, 21))
-+>[keys.E1.A] : Symbol(ENUM_KEY, Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
 +>keys.E1.A : Symbol(A, Decl(a.ts, 2, 16))
 +>keys.E1 : Symbol(E1, Decl(a.ts, 1, 21))
  >keys : Symbol(keys, Decl(b.ts, 0, 6))
@@ -72,10 +69,9 @@
 +>A : Symbol(A, Decl(a.ts, 2, 16))
 
      [keys.E1.A]: 1, // duplicate
-->[keys.E1.A] : Symbol([keys.E1.A], Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
+ >[keys.E1.A] : Symbol([keys.E1.A], Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
 ->keys.E1.A : Symbol(keys.E1.A, Decl(a.ts, 2, 16))
 ->keys.E1 : Symbol(keys.E1, Decl(a.ts, 1, 21))
-+>[keys.E1.A] : Symbol(ENUM_KEY, Decl(b.ts, 12, 12), Decl(b.ts, 13, 19))
 +>keys.E1.A : Symbol(A, Decl(a.ts, 2, 16))
 +>keys.E1 : Symbol(E1, Decl(a.ts, 1, 21))
  >keys : Symbol(keys, Decl(b.ts, 0, 6))
@@ -86,7 +82,7 @@
  }
 
  const t4 = {
-@@= skipped -52, +52 lines =@@
+@@= skipped -20, +20 lines =@@
 
      [keys.E2.B]: 1,
  >[keys.E2.B] : Symbol([keys.E2.B], Decl(b.ts, 17, 12), Decl(b.ts, 18, 19))

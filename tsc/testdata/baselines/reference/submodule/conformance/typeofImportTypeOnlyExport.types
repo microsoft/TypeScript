@@ -2,12 +2,12 @@
 
 === button.ts ===
 import {classMap} from './lit.js';
->classMap : () => { directive: typeof ClassMapDirective; }
+>classMap : () => { directive: typeof import("./lit.js").ClassMapDirective; }
 
 export const c = classMap();
->c : { directive: typeof ClassMapDirective; }
->classMap() : { directive: typeof ClassMapDirective; }
->classMap : () => { directive: typeof ClassMapDirective; }
+>c : { directive: typeof import("./lit.js").ClassMapDirective; }
+>classMap() : { directive: typeof import("./lit.js").ClassMapDirective; }
+>classMap : () => { directive: typeof import("./lit.js").ClassMapDirective; }
 
 === lit.ts ===
 class ClassMapDirective {}

@@ -39,3 +39,17 @@ var m2;
         var cReturnVal = m3.cProp.foo(10);
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 || (exports.m2 = m2 = {}));
+
+
+//// [internalAliasClassInsideLocalModuleWithoutExport.d.ts]
+export declare namespace x {
+    class c {
+        foo(a: number): number;
+    }
+}
+export declare namespace m2 {
+    namespace m3 {
+        import c = x.c;
+        var cProp: c;
+    }
+}

@@ -89,8 +89,8 @@ type KeepLiteralStrings<T extends string[]> = {
   [K in keyof T]: T[K];
 };
 declare function test4<T extends Record<string, string[]>>(obj: {
->test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
->obj : { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; }; }
+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
+>obj : { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }
 
   [K in keyof T & keyof CompilerOptions]: {
     dependencies: KeepLiteralStrings<T[K]>;
@@ -101,7 +101,7 @@ declare function test4<T extends Record<string, string[]>>(obj: {
 const result4 = test4({
 >result4 : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
 >test4({  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },}) : { alwaysStrict: ["foo", "bar"]; allowUnusedLabels: ["baz", "qwe"]; }
->test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & (keyof CompilerOptions)]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
+>test4 : <T extends Record<string, string[]>>(obj: { [K in keyof T & keyof CompilerOptions]: { dependencies: KeepLiteralStrings<T[K]>; }; }) => T
 >{  alwaysStrict: {    dependencies: ["foo", "bar"],  },  allowUnusedLabels: {    dependencies: ["baz", "qwe"],  },} : { alwaysStrict: { dependencies: ["foo", "bar"]; }; allowUnusedLabels: { dependencies: ["baz", "qwe"]; }; }
 
   alwaysStrict: {

@@ -3,13 +3,13 @@
 === foo_1.ts ===
 /// <reference path="foo_0.ts"/>
 import foo = require("foo");
->foo : typeof import("foo")
+>foo : typeof foo
 
 var z = foo.x + 10;
 >z : number
 >foo.x + 10 : number
 >foo.x : number
->foo : typeof import("foo")
+>foo : typeof foo
 >x : number
 >10 : 10
 

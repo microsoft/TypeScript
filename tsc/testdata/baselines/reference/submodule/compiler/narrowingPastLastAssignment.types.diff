@@ -1,17 +1,6 @@
 --- old.narrowingPastLastAssignment.types
 +++ new.narrowingPastLastAssignment.types
-@@= skipped -66, +66 lines =@@
-
-     };
-     let o = {
-->o : { foo(): void; }
-->{        foo() { x /* number */ }    } : { foo(): void; }
-+>o : { foo: () => void; }
-+>{        foo() { x /* number */ }    } : { foo: () => void; }
-
-         foo() { x /* number */ }
- >foo : () => void
-@@= skipped -325, +325 lines =@@
+@@= skipped -391, +391 lines =@@
  }
 
  function makeAdder(n?: number) {
@@ -25,9 +14,9 @@
          foo.toLocaleLowerCase();
  >foo.toLocaleLowerCase() : string
 ->foo.toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
-+>foo.toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: LocalesArgument): string; }
++>foo.toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: Intl.LocalesArgument): string; }
  >foo : string | undefined
 ->toLocaleLowerCase : { (locales?: string | string[]): string; (locales?: Intl.LocalesArgument): string; }
-+>toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: LocalesArgument): string; }
++>toLocaleLowerCase : { (locales?: string | string[] | undefined): string; (locales?: Intl.LocalesArgument): string; }
      }
  }

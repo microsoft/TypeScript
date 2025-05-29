@@ -56,3 +56,26 @@ class C {
     }
     set [G.B](x) { }
 }
+
+
+//// [constEnumPropertyAccess1.d.ts]
+// constant enum declarations are completely erased in the emitted JavaScript code.
+// it is an error to reference a constant enum object in any other context
+// than a property access that selects one of the enum's members
+declare const enum G {
+    A = 1,
+    B = 2,
+    C = 3,
+    D = 2
+}
+declare var o: {
+    [idx: number]: boolean;
+};
+declare var a: G;
+declare var a1: G;
+declare var g: boolean;
+declare class C {
+    [G.A](): void;
+    get [G.B](): number;
+    set [G.B](x: number);
+}

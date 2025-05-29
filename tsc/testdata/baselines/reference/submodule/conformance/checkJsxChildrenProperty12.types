@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface ButtonProp {
     a: number,
@@ -17,12 +17,12 @@ interface ButtonProp {
 
 class Button extends React.Component<ButtonProp, any> {
 >Button : Button
->React.Component : Component<ButtonProp, any>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<ButtonProp, any>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
 		let condition: boolean;
 >condition : boolean
@@ -31,23 +31,23 @@ class Button extends React.Component<ButtonProp, any> {
 >condition : boolean
 
         	return <InnerButton {...this.props} />
-><InnerButton {...this.props} /> : Element
+><InnerButton {...this.props} /> : JSX.Element
 >InnerButton : typeof InnerButton
->this.props : ButtonProp & { children?: ReactNode; }
+>this.props : ButtonProp & { children?: React.ReactNode; }
 >this : this
->props : ButtonProp & { children?: ReactNode; }
+>props : ButtonProp & { children?: React.ReactNode; }
 		}
 		else {
 			return (<InnerButton {...this.props} >
->(<InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton>) : Element
-><InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton> : Element
+>(<InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton>) : JSX.Element
+><InnerButton {...this.props} >				<div>Hello World</div>				</InnerButton> : JSX.Element
 >InnerButton : typeof InnerButton
->this.props : ButtonProp & { children?: ReactNode; }
+>this.props : ButtonProp & { children?: React.ReactNode; }
 >this : this
->props : ButtonProp & { children?: ReactNode; }
+>props : ButtonProp & { children?: React.ReactNode; }
 
 				<div>Hello World</div>
-><div>Hello World</div> : Element
+><div>Hello World</div> : JSX.Element
 >div : any
 >div : any
 
@@ -64,16 +64,16 @@ interface InnerButtonProp {
 
 class InnerButton extends React.Component<InnerButtonProp, any> {
 >InnerButton : InnerButton
->React.Component : Component<InnerButtonProp, any>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<InnerButtonProp, any>
+>React : typeof React
+>Component : typeof React.Component
 
 	render() {
->render : () => Element
+>render : () => JSX.Element
 
 		return (<button>Hello</button>);
->(<button>Hello</button>) : Element
-><button>Hello</button> : Element
+>(<button>Hello</button>) : JSX.Element
+><button>Hello</button> : JSX.Element
 >button : any
 >button : any
 	}

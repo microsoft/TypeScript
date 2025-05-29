@@ -12,18 +12,39 @@
      return { a: { b: { c: 'd' } } };
  }
 -var c = getNested().a.b.c;
--
--
--//// [test.d.ts]
++const { a: { b: { c } } } = getNested();
+
+
+ //// [test.d.ts]
 -declare const foo: {
 -    test: number;
 -};
--export type AliasType = typeof foo;
+ export type AliasType = typeof foo;
 -declare const renamed: {
 -    test: number;
 -};
--export type AliasType2 = typeof renamed;
+ export type AliasType2 = typeof renamed;
 -declare const c: string;
--export type AliasType3 = typeof c;
+ export type AliasType3 = typeof c;
 -export {};
-+const { a: { b: { c } } } = getNested();
++
++
++//// [DtsFileErrors]
++
++
++test.d.ts(1,32): error TS2304: Cannot find name 'foo'.
++test.d.ts(2,33): error TS2304: Cannot find name 'renamed'.
++test.d.ts(3,33): error TS2304: Cannot find name 'c'.
++
++
++==== test.d.ts (3 errors) ====
++    export type AliasType = typeof foo;
++                                   ~~~
++!!! error TS2304: Cannot find name 'foo'.
++    export type AliasType2 = typeof renamed;
++                                    ~~~~~~~
++!!! error TS2304: Cannot find name 'renamed'.
++    export type AliasType3 = typeof c;
++                                    ~
++!!! error TS2304: Cannot find name 'c'.
++    

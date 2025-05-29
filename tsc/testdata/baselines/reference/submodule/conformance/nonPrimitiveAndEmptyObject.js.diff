@@ -9,12 +9,10 @@
 -var _a = foo.fooProps, fooProps = _a === void 0 ? {} : _a;
 +const { fooProps = {} } = foo;
  fooProps.barProp;
--
--
--//// [nonPrimitiveAndEmptyObject.d.ts]
--export interface BarProps {
--    barProp?: string;
--}
--export interface FooProps {
--    fooProps?: BarProps & object;
--}
+
+
+ //// [nonPrimitiveAndEmptyObject.d.ts]
++// Repro from #49480
+ export interface BarProps {
+     barProp?: string;
+ }

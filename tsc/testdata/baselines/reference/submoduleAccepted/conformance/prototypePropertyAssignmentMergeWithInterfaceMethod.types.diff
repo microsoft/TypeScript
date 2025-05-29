@@ -5,30 +5,26 @@
    export interface Transaction {
      attach(query: query.Builder): Promise<Array<Object>>
 ->attach : (query: query.Builder) => Promise<Array<Object>>
-->query : query.Builder
-+>attach : (query: Builder) => Promise<Object[]>
-+>query : Builder
++>attach : (query: query.Builder) => Promise<Object[]>
+ >query : query.Builder
  >query : any
 
      begin(scope: Array<schema.Table>): Promise<void>
 ->begin : (scope: Array<schema.Table>) => Promise<void>
-->scope : schema.Table[]
-+>begin : (scope: Table[]) => Promise<void>
-+>scope : Table[]
++>begin : (scope: schema.Table[]) => Promise<void>
+ >scope : schema.Table[]
  >schema : any
 
-     commit(): Promise<void>
+@@= skipped -13, +13 lines =@@
  >commit : () => Promise<void>
 
      exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
 ->exec : (queries: Array<query.Builder>) => Promise<Array<Array<Object>>>
-->queries : query.Builder[]
-+>exec : (queries: Builder[]) => Promise<Object[][]>
-+>queries : Builder[]
++>exec : (queries: query.Builder[]) => Promise<Object[][]>
+ >queries : query.Builder[]
  >query : any
 
-     rollback(): Promise<void>
-@@= skipped -26, +26 lines =@@
+@@= skipped -13, +13 lines =@@
  }
  === lovefield.js ===
  lf.Transaction = function() {};

@@ -50,7 +50,7 @@ declare function simple(arg: SimpleInterface): void;
 extend1({
 >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
 >extend1 : (args: IndexedWithThis) => void
->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init: (this: IndexedWithThis) => void; mine: number; foo: (this: any) => void; }
+>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
 
     init() {
 >init : (this: IndexedWithThis) => void
@@ -86,7 +86,7 @@ extend1({
 extend2({
 >extend2({    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }}) : void
 >extend2 : (args: IndexedWithoutThis) => void
->{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init: () => void; mine: number; foo: () => void; }
+>{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init(): void; mine: number; foo(): void; }
 
     init() {
 >init : () => void
@@ -120,7 +120,7 @@ extend2({
 simple({
 >simple({    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }}) : void
 >simple : (arg: SimpleInterface) => void
->{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo: (n: string) => number; bar: () => number; }
+>{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): number; bar(): number; }
 
     foo(n) {
 >foo : (n: string) => number

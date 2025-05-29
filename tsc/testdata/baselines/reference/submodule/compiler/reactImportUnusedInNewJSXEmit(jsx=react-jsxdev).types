@@ -7,17 +7,17 @@ import React from "react";
 >React : typeof React
 
 function Bar() {
->Bar : () => Element
+>Bar : () => JSX.Element
 
   return <div />;
-><div /> : Element
+><div /> : JSX.Element
 >div : any
 }
 
 export function Foo() {
->Foo : () => Element
+>Foo : () => JSX.Element
 
   return <Bar />;
-><Bar /> : Element
->Bar : () => Element
+><Bar /> : JSX.Element
+>Bar : () => JSX.Element
 }

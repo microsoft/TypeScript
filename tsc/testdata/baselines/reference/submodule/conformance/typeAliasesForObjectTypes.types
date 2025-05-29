@@ -22,7 +22,7 @@ type T2 = { x: string }
 >x : string
 
 type T2 = { y: number }
->T2 : T2
+>T2 : { y: number; }
 >y : number
 
 // An interface can have type parameters, but a type alias for an object type literal cannot.

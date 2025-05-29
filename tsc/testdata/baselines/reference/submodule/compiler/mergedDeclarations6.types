@@ -25,7 +25,7 @@ import {A} from './a';
 >A : typeof A
 
 declare module "./a" {
->"./a" : typeof import("a")
+>"./a" : typeof import("./a")
 
     interface A { }
 }

@@ -20,3 +20,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <amd-dependency name="name_of_foo" path="./foo" />
 const foo_1 = require("./foo");
 void foo_1.foo;
+
+
+//// [foo.d.ts]
+export declare const foo = 1;
+//// [bar.d.ts]
+export {};

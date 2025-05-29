@@ -36,3 +36,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing2 = void 0;
 const thing2 = (param) => null;
 exports.thing2 = thing2;
+
+
+//// [thingB.d.ts]
+export interface ThingB {
+}
+//// [things.d.ts]
+export * from "./thingB";
+//// [index.d.ts]
+import * as things from "./things";
+export declare const thing2: (param: things.ThingB) => any;

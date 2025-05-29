@@ -25,3 +25,15 @@ function y() {
     return class extends X {
     };
 }
+
+
+//// [anonymousClassDeclarationDoesntPrintWithReadonly.d.ts]
+export declare class X {
+    readonly a: number;
+    constructor(a: number);
+}
+export declare function y(): {
+    new (a: number): {
+        readonly a: number;
+    };
+};

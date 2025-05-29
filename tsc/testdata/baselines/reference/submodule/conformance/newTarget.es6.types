@@ -17,16 +17,16 @@ class A {
 >target : typeof A
     }
     static c = function () { return new.target; }
->c : () => ???
->function () { return new.target; } : () => ???
->new.target : () => ???
->target : () => ???
+>c : () => any
+>function () { return new.target; } : () => any
+>new.target : () => any
+>target : () => any
 
     d = function () { return new.target; }
->d : () => ???
->function () { return new.target; } : () => ???
->new.target : () => ???
->target : () => ???
+>d : () => any
+>function () { return new.target; } : () => any
+>new.target : () => any
+>target : () => any
 }
 
 class B extends A {
@@ -83,14 +83,14 @@ const f2 = function () {
 }
 
 const O = {
->O : { k: () => ???; }
->{    k: function () { return new.target; }} : { k: () => ???; }
+>O : { k: () => any; }
+>{    k: function () { return new.target; }} : { k: () => any; }
 
     k: function () { return new.target; }
->k : () => ???
->function () { return new.target; } : () => ???
->new.target : () => ???
->target : () => ???
+>k : () => any
+>function () { return new.target; } : () => any
+>new.target : () => any
+>target : () => any
 
 };
 

@@ -30,23 +30,23 @@
 
      "type": "list",
 ->"type" : Symbol(ListWidget["type"], Decl(recursiveMappedTypes.ts, 67, 29))
-+>"type" : Symbol(type, Decl(recursiveMappedTypes.ts, 67, 29))
++>"type" : Symbol("type", Decl(recursiveMappedTypes.ts, 67, 29))
 
      "minimum_count": number,
 ->"minimum_count" : Symbol(ListWidget["minimum_count"], Decl(recursiveMappedTypes.ts, 68, 19))
-+>"minimum_count" : Symbol(minimum_count, Decl(recursiveMappedTypes.ts, 68, 19))
++>"minimum_count" : Symbol("minimum_count", Decl(recursiveMappedTypes.ts, 68, 19))
 
      "maximum_count": number,
 ->"maximum_count" : Symbol(ListWidget["maximum_count"], Decl(recursiveMappedTypes.ts, 69, 28))
-+>"maximum_count" : Symbol(maximum_count, Decl(recursiveMappedTypes.ts, 69, 28))
++>"maximum_count" : Symbol("maximum_count", Decl(recursiveMappedTypes.ts, 69, 28))
 
      "collapsable"?: boolean, //default to false, means all expanded
 ->"collapsable" : Symbol(ListWidget["collapsable"], Decl(recursiveMappedTypes.ts, 70, 28))
-+>"collapsable" : Symbol(collapsable, Decl(recursiveMappedTypes.ts, 70, 28))
++>"collapsable" : Symbol("collapsable", Decl(recursiveMappedTypes.ts, 70, 28))
 
      "each": Child<ListWidget>;
 ->"each" : Symbol(ListWidget["each"], Decl(recursiveMappedTypes.ts, 71, 28))
-+>"each" : Symbol(each, Decl(recursiveMappedTypes.ts, 71, 28))
++>"each" : Symbol("each", Decl(recursiveMappedTypes.ts, 71, 28))
  >Child : Symbol(Child, Decl(recursiveMappedTypes.ts, 64, 90))
  >ListWidget : Symbol(ListWidget, Decl(recursiveMappedTypes.ts, 65, 51))
  }

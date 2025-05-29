@@ -25,8 +25,8 @@ let f = (n: number) => string => n.toString();
 >toString : (radix?: number) => string
 
 let o = {
->o : { m: (n: number) => any; }
->{    m(n: number) : { m: (n: number) => any; }
+>o : { m(n: number): any; }
+>{    m(n: number) : { m(n: number): any; }
 
     m(n: number) => string {
 >m : (n: number) => any

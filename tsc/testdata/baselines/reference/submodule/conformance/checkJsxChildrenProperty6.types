@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface Prop {
     a: number,
@@ -12,44 +12,44 @@ interface Prop {
 >b : string
 
     children: JSX.Element | JSX.Element[];
->children : Element[] | Element
+>children : JSX.Element[] | JSX.Element
 >JSX : any
 >JSX : any
 }
 
 class Button extends React.Component<any, any> {
 >Button : Button
->React.Component : Component<any, any>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<any, any>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return (<div>My Button</div>)
->(<div>My Button</div>) : Element
-><div>My Button</div> : Element
+>(<div>My Button</div>) : JSX.Element
+><div>My Button</div> : JSX.Element
 >div : any
 >div : any
     }
 }
 
 function AnotherButton(p: any) {
->AnotherButton : (p: any) => Element
+>AnotherButton : (p: any) => JSX.Element
 >p : any
 
     return <h1>Just Another Button</h1>;
-><h1>Just Another Button</h1> : Element
+><h1>Just Another Button</h1> : JSX.Element
 >h1 : any
 >h1 : any
 }
 
 function Comp(p: Prop) {
->Comp : (p: Prop) => Element
+>Comp : (p: Prop) => JSX.Element
 >p : Prop
 
     return <div>{p.b}</div>;
-><div>{p.b}</div> : Element
+><div>{p.b}</div> : JSX.Element
 >div : any
 >p.b : string
 >p : Prop
@@ -59,32 +59,32 @@ function Comp(p: Prop) {
 
 // Ok
 let k1 =
->k1 : Element
+>k1 : JSX.Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">        <Button />        <AnotherButton />    </Comp> : Element
->Comp : (p: Prop) => Element
+><Comp a={10} b="hi">        <Button />        <AnotherButton />    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
 >a : number
 >10 : 10
 >b : string
 
         <Button />
-><Button /> : Element
+><Button /> : JSX.Element
 >Button : typeof Button
 
         <AnotherButton />
-><AnotherButton /> : Element
->AnotherButton : (p: any) => Element
+><AnotherButton /> : JSX.Element
+>AnotherButton : (p: any) => JSX.Element
 
     </Comp>;
->Comp : (p: Prop) => Element
+>Comp : (p: Prop) => JSX.Element
 
 let k2 =
->k2 : Element
+>k2 : JSX.Element
 
     <Comp a={10} b="hi">
-><Comp a={10} b="hi">                     <Button />        <AnotherButton />    </Comp> : Element
->Comp : (p: Prop) => Element
+><Comp a={10} b="hi">                     <Button />        <AnotherButton />    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
 >a : number
 >10 : 10
 >b : string
@@ -92,41 +92,41 @@ let k2 =
     
     
         <Button />
-><Button /> : Element
+><Button /> : JSX.Element
 >Button : typeof Button
 
         <AnotherButton />
-><AnotherButton /> : Element
->AnotherButton : (p: any) => Element
+><AnotherButton /> : JSX.Element
+>AnotherButton : (p: any) => JSX.Element
 
     </Comp>;
->Comp : (p: Prop) => Element
+>Comp : (p: Prop) => JSX.Element
 
 let k3 = <Comp a={10} b="hi"><Button />  
->k3 : Element
-><Comp a={10} b="hi"><Button />  <AnotherButton /></Comp> : Element
->Comp : (p: Prop) => Element
+>k3 : JSX.Element
+><Comp a={10} b="hi"><Button />  <AnotherButton /></Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
 >a : number
 >10 : 10
 >b : string
-><Button /> : Element
+><Button /> : JSX.Element
 >Button : typeof Button
 
 <AnotherButton />
-><AnotherButton /> : Element
->AnotherButton : (p: any) => Element
+><AnotherButton /> : JSX.Element
+>AnotherButton : (p: any) => JSX.Element
 
 </Comp>;
->Comp : (p: Prop) => Element
+>Comp : (p: Prop) => JSX.Element
 
 let k4 = <Comp a={10} b="hi"><Button /></Comp>;
->k4 : Element
-><Comp a={10} b="hi"><Button /></Comp> : Element
->Comp : (p: Prop) => Element
+>k4 : JSX.Element
+><Comp a={10} b="hi"><Button /></Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
 >a : number
 >10 : 10
 >b : string
-><Button /> : Element
+><Button /> : JSX.Element
 >Button : typeof Button
->Comp : (p: Prop) => Element
+>Comp : (p: Prop) => JSX.Element
 

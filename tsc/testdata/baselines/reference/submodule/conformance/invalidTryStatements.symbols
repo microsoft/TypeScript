@@ -27,5 +27,5 @@ function fn2() {
 >x : Symbol(x, Decl(invalidTryStatements.ts, 16, 11))
 
     try { } catch () { } // error missing catch binding
-> : Symbol(, Decl(invalidTryStatements.ts, 18, 19))
+> : Symbol((Missing), Decl(invalidTryStatements.ts, 18, 19))
 }

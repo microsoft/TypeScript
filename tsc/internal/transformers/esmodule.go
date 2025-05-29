@@ -29,7 +29,7 @@ func NewESModuleTransformer(emitContext *printer.EmitContext, compilerOptions *c
 		resolver = binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 	}
 	tx := &ESModuleTransformer{compilerOptions: compilerOptions, resolver: resolver, sourceFileMetaDataProvider: sourceFileMetaDataProvider}
-	return tx.newTransformer(tx.visit, emitContext)
+	return tx.NewTransformer(tx.visit, emitContext)
 }
 
 // Visits source elements that are not top-level or top-level nested statements.

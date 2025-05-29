@@ -24,3 +24,14 @@ const p2 = Promise.resolve(`${whatToLoad ? getSpecifier() : "defaulPath"}`).then
 function returnDynamicLoad(path) {
     return Promise.resolve(`${path}`).then(s => require(s));
 }
+
+
+//// [importCallExpressionDeclarationEmit1.d.ts]
+declare function getSpecifier(): string;
+declare var whatToLoad: boolean;
+declare const directory: string;
+declare const moduleFile: number;
+declare var p0: Promise<any>;
+declare var p1: Promise<any>;
+declare const p2: Promise<any>;
+declare function returnDynamicLoad(path: string): Promise<any>;

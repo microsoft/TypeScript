@@ -18,15 +18,15 @@ import alias = moduleA;
 >moduleA : typeof moduleA
 
 var p: alias.Point;
->p : Point
+>p : alias.Point
 >alias : any
 
 var p: moduleA.Point;
->p : Point
+>p : alias.Point
 >moduleA : any
 
 var p: { x: number; y: number; };
->p : Point
+>p : alias.Point
 >x : number
 >y : number
 
@@ -59,15 +59,15 @@ import clolias = clodule;
 >clodule : clodule
 
 var p: clolias.Point;
->p : Point
+>p : alias.Point
 >clolias : any
 
 var p: clodule.Point;
->p : Point
+>p : alias.Point
 >clodule : any
 
 var p: { x: number; y: number; };
->p : Point
+>p : alias.Point
 >x : number
 >y : number
 
@@ -105,15 +105,15 @@ import funlias = fundule;
 >fundule : typeof fundule
 
 var p: funlias.Point;
->p : Point
+>p : alias.Point
 >funlias : any
 
 var p: fundule.Point;
->p : Point
+>p : alias.Point
 >fundule : any
 
 var p: { x: number; y: number; };
->p : Point
+>p : alias.Point
 >x : number
 >y : number
 

@@ -33,25 +33,25 @@ interface PM {
 }
 
 export function ComponentWithUnion(props: PM | PS) {
->ComponentWithUnion : (props: PM | PS) => Element
+>ComponentWithUnion : (props: PM | PS) => JSX.Element
 >props : PM | PS
 
     return <h1></h1>;
-><h1></h1> : Element
+><h1></h1> : JSX.Element
 >h1 : any
 >h1 : any
 }
 
 // Usage with React tsx
 export function HereIsTheError() {
->HereIsTheError : () => Element
+>HereIsTheError : () => JSX.Element
 
     return (
->(        <ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        />    ) : Element
+>(        <ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        />    ) : JSX.Element
 
         <ComponentWithUnion
-><ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        /> : Element
->ComponentWithUnion : (props: PM | PS) => Element
+><ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        /> : JSX.Element
+>ComponentWithUnion : (props: PM | PS) => JSX.Element
 
             multi={false}
 >multi : false
@@ -77,8 +77,8 @@ export function HereIsTheError() {
 
 // Usage with pure TypeScript
 ComponentWithUnion({
->ComponentWithUnion({    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine}) : Element
->ComponentWithUnion : (props: PM | PS) => Element
+>ComponentWithUnion({    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine}) : JSX.Element
+>ComponentWithUnion : (props: PM | PS) => JSX.Element
 >{    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine} : { multi: false; value: string; onChange: (val: string | undefined) => void; }
 
     multi: false,

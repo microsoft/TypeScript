@@ -29,12 +29,10 @@
      Foo.fromForInBody = 1;
      {
          Foo.fromForInBodyNested = 1;
-     }
- }
--
--
--//// [expandoFunctionNestedAssigments.d.ts]
--declare function Foo(): void;
+@@= skipped -17, +16 lines =@@
+
+ //// [expandoFunctionNestedAssigments.d.ts]
+ declare function Foo(): void;
 -declare namespace Foo {
 -    var inVariableInit: number;
 -    var bla: {
@@ -62,5 +60,5 @@
 -    var fromForInBody: number;
 -    var fromForInBodyNested: number;
 -}
--declare let d: number;
--declare function bar(p?: number): void;
+ declare let d: number;
+ declare function bar(p?: number): void;

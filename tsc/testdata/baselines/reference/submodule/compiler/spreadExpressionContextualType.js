@@ -29,3 +29,15 @@ function test2(item) {
     const x = { ...item };
     return x;
 }
+
+
+//// [spreadExpressionContextualType.d.ts]
+// Repro from #43966
+interface Orange {
+    name: string;
+}
+interface Apple {
+    name: string;
+}
+declare function test<T extends Apple | Orange>(item: T): T;
+declare function test2<T extends Apple | Orange>(item: T): T;

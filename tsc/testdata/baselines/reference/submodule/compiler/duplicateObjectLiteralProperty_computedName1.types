@@ -16,8 +16,8 @@ const t1 = {
 }
 
 const t2 = {
->t2 : { [+1]: number; }
->{    1: 1,    [+1]: 0 // duplicate} : { [+1]: number; }
+>t2 : { 1: number; }
+>{    1: 1,    [+1]: 0 // duplicate} : { 1: number; }
 
     1: 1,
 >1 : number
@@ -31,8 +31,8 @@ const t2 = {
 }
 
 const t3 = {
->t3 : { [+1]: number; }
->{    "1": 1,    [+1]: 0 // duplicate} : { [+1]: number; }
+>t3 : { 1: number; }
+>{    "1": 1,    [+1]: 0 // duplicate} : { 1: number; }
 
     "1": 1,
 >"1" : number
@@ -46,8 +46,8 @@ const t3 = {
 }
 
 const t4 = {
->t4 : { "+1": number; "+1": number; }
->{    "+1": 1,    [+1]: 0 // two different keys, "+1", "1"} : { "+1": number; "+1": number; }
+>t4 : { "+1": number; 1: number; }
+>{    "+1": 1,    [+1]: 0 // two different keys, "+1", "1"} : { "+1": number; 1: number; }
 
     "+1": 1,
 >"+1" : number
@@ -75,8 +75,8 @@ const t5 = {
 }
 
 const t6 = {
->t6 : { "-1": number; }
->{    "-1": 1,    [-1]: 0 // duplicate} : { "-1": number; }
+>t6 : { [-1]: number; }
+>{    "-1": 1,    [-1]: 0 // duplicate} : { [-1]: number; }
 
     "-1": 1,
 >"-1" : number

@@ -1,26 +1,17 @@
 --- old.lateBoundAssignmentDeclarationSupport4.types
 +++ new.lateBoundAssignmentDeclarationSupport4.types
-@@= skipped -1, +1 lines =@@
-
- === usage.js ===
- const x = require("./lateBoundAssignmentDeclarationSupport4.js");
-->x : typeof x
-->require("./lateBoundAssignmentDeclarationSupport4.js") : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport4")
-+>require("./lateBoundAssignmentDeclarationSupport4.js") : typeof import("lateBoundAssignmentDeclarationSupport4")
- >require : any
+@@= skipped -7, +7 lines =@@
  >"./lateBoundAssignmentDeclarationSupport4.js" : "./lateBoundAssignmentDeclarationSupport4.js"
 
  const inst =  new x.F();
 ->inst : x.F
 ->new x.F() : x.F
 ->x.F : typeof x.F
-->x : typeof x
-->F : typeof x.F
 +>inst : any
 +>new x.F() : any
 +>x.F : () => void
-+>x : typeof import("lateBoundAssignmentDeclarationSupport4")
+ >x : typeof x
+->F : typeof x.F
 +>F : () => void
 
  const y = inst["my-fake-sym"];
@@ -36,12 +27,9 @@
 ->inst : x.F
 +>inst : any
  >x.S : unique symbol
-->x : typeof x
-+>x : typeof import("lateBoundAssignmentDeclarationSupport4")
+ >x : typeof x
  >S : unique symbol
-
- === lateBoundAssignmentDeclarationSupport4.js ===
-@@= skipped -38, +38 lines =@@
+@@= skipped -32, +32 lines =@@
  >"my-fake-sym" : "my-fake-sym"
 
  function F() {
@@ -99,9 +87,9 @@
 ->F : typeof F
 +>module.exports.F = F : () => void
 +>module.exports.F : () => void
-+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport4")
-+>module : { "lateBoundAssignmentDeclarationSupport4": typeof import("lateBoundAssignmentDeclarationSupport4"); }
-+>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
++>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
++>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("./lateBoundAssignmentDeclarationSupport4"); }
++>exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
 +>F : () => void
 +>F : () => void
 
@@ -111,8 +99,8 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("lateBoundAssignmentDeclarationSupport4")
-+>module : { "lateBoundAssignmentDeclarationSupport4": typeof import("lateBoundAssignmentDeclarationSupport4"); }
-+>exports : typeof import("lateBoundAssignmentDeclarationSupport4")
++>module.exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
++>module : { "\"lateBoundAssignmentDeclarationSupport4\"": typeof import("./lateBoundAssignmentDeclarationSupport4"); }
++>exports : typeof import("./lateBoundAssignmentDeclarationSupport4")
  >S : unique symbol
  >_sym : unique symbol

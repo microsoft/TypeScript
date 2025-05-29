@@ -26,18 +26,10 @@
 +>app.mixin : (mixin: ComponentOptions<any, any>) => App
  >app : App
 ->mixin : (mixin: ComponentOptions) => App
-->{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify(): Ref<{ theme: any; }>; }; }
 +>mixin : (mixin: ComponentOptions<any, any>) => App
-+>{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify: () => Ref<{ theme: any; }>; }; }
+ >{  computed: {    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  },} : { computed: { $vuetify(): Ref<{ theme: any; }>; }; }
 
    computed: {
-->computed : { $vuetify(): Ref<{ theme: any; }>; }
-->{    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  } : { $vuetify(): Ref<{ theme: any; }>; }
-+>computed : { $vuetify: () => Ref<{ theme: any; }>; }
-+>{    $vuetify() {      // this is meant to be `any` here      return reactive({        theme: inject.call(this, ThemeSymbol),      });    },  } : { $vuetify: () => Ref<{ theme: any; }>; }
-
-     $vuetify() {
- >$vuetify : () => Ref<{ theme: any; }>
 @@= skipped -22, +22 lines =@@
  >theme : any
  >inject.call(this, ThemeSymbol) : any

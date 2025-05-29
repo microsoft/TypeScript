@@ -8,7 +8,8 @@
  //// [declarationEmitInvalidReference.js]
  /// <reference path="invalid.ts" />
  var x = 0;
--
--
--//// [declarationEmitInvalidReference.d.ts]
--declare var x: number;
+
+
++//// [invalid.d.ts]
+ //// [declarationEmitInvalidReference.d.ts]
+ declare var x: number;

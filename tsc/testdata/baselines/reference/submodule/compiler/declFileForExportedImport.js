@@ -22,3 +22,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = require("./declFileForExportedImport_0");
 var y = exports.a.x;
 var z = exports.b.x;
+
+
+//// [declFileForExportedImport_0.d.ts]
+export declare var x: number;
+//// [declFileForExportedImport_1.d.ts]
+export import a = require('./declFileForExportedImport_0');
+export import b = a;

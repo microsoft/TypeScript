@@ -5,5 +5,5 @@
 
     'fo"o',
 ->'fo"o' : (typeof E)["fo\"o"]
-+>'fo"o' : E.'fo"o'
++>'fo"o' : typeof E["fo\"o"]
  }

@@ -6,5 +6,5 @@ class C {
 
    *
 }
-> : Symbol(, Decl(MemberFunctionDeclaration5_es6.ts, 0, 9))
+> : Symbol((Missing), Decl(MemberFunctionDeclaration5_es6.ts, 0, 9))
 

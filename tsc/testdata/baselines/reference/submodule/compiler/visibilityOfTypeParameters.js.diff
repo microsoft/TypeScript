@@ -14,12 +14,7 @@
 -    };
 -    return MyClass;
 -}());
--exports.MyClass = MyClass;
--
--
--//// [visibilityOfTypeParameters.d.ts]
--export declare class MyClass {
--    protected myMethod<T>(val: T): T;
 +    }
- }
-+exports.MyClass = MyClass;
++}
+ exports.MyClass = MyClass;
+

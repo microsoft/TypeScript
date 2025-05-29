@@ -7,13 +7,13 @@ interface Mixin {
 }
 
 function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
->Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
+>Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
 >args : any
 >baseClass : TBaseClass
 >args : any
 
     abstract class MixinClass extends baseClass implements Mixin {
->MixinClass : MixinClass<TBaseClass>
+>MixinClass : MixinClass
 >baseClass : TBaseClass
 
         mixinMethod() {
@@ -21,7 +21,7 @@ function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass:
         }
     }
     return MixinClass;
->MixinClass : { new (...args: any): MixinClass<TBaseClass>; prototype: MixinClass<any>; } & TBaseClass
+>MixinClass : ((abstract new (...args: any) => MixinClass) & { prototype: Mixin.MixinClass; }) & TBaseClass
 }
 
 class ConcreteBase {
@@ -41,7 +41,7 @@ abstract class AbstractBase {
 class DerivedFromConcrete extends Mixin(ConcreteBase) {
 >DerivedFromConcrete : DerivedFromConcrete
 >Mixin(ConcreteBase) : ConcreteBase & Mixin
->Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
+>Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
 >ConcreteBase : typeof ConcreteBase
 }
 
@@ -65,7 +65,7 @@ wasConcrete.mixinMethod();
 class DerivedFromAbstract extends Mixin(AbstractBase) {
 >DerivedFromAbstract : DerivedFromAbstract
 >Mixin(AbstractBase) : AbstractBase & Mixin
->Mixin : <TBaseClass extends new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (new (...args: any) => Mixin)
+>Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
 >AbstractBase : typeof AbstractBase
 
     abstractBaseMethod() {}

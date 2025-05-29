@@ -87,39 +87,54 @@
 -    var a;
 -    var b = 1;
 -    var c = 1;
--}
--
--
--//// [definiteAssignmentAssertions.d.ts]
--declare class C1 {
--    a: number;
--    b: string;
--}
--declare class C2 {
--    a: number;
--    constructor();
--}
--declare class C3 {
--    a: number;
--    b: number;
--    static c: number;
--    d: any;
--}
--declare class C4 {
--    a: number;
--}
--declare abstract class C5 {
--    abstract a: number;
--}
--declare function f1(): void;
--declare function f2(): void;
--declare function f3(): void;
--declare function f4(): void;
--declare let v1: number;
--declare var v2: number;
--declare namespace foo {
--    var v: number;
 +    let a;
 +    let b = 1;
 +    let c = 1;
  }
+
+
+ //// [definiteAssignmentAssertions.d.ts]
++// Suppress strict property initialization check
+ declare class C1 {
+-    a: number;
+-    b: string;
++    a!: number;
++    b: string; // Error
+ }
++// Suppress definite assignment check in constructor
+ declare class C2 {
+-    a: number;
++    a!: number;
+     constructor();
+ }
++// Definite assignment assertion requires type annotation, no initializer, no static modifier
+ declare class C3 {
+-    a: number;
+-    b: number;
+-    static c: number;
+-    d: any;
++    a!: number;
++    b!: number;
++    static c!: number;
++    d!: any;
+ }
++// Definite assignment assertion not permitted in ambient context
+ declare class C4 {
+-    a: number;
++    a!: number;
+ }
++// Definite assignment assertion not permitted on abstract property
+ declare abstract class C5 {
+-    abstract a: number;
++    abstract a!: number;
+ }
++// Suppress definite assignment check for variable
+ declare function f1(): void;
+ declare function f2(): void;
+ declare function f3(): void;
++// Definite assignment assertion requires type annotation and no initializer
+ declare function f4(): void;
++// Definite assignment assertion not permitted in ambient context
+ declare let v1: number;
+ declare var v2: number;
+ declare namespace foo {

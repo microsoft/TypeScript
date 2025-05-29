@@ -7,69 +7,69 @@ import * as React from "react";
 
 // opening + closing
 const a = <div<>></div>; // empty type args
->a : Element
-><div<>></div> : Element
+>a : JSX.Element
+><div<>></div> : JSX.Element
 >div : any
 >div : any
 
 const b = <div<number,>></div>; // trailing comma type args
->b : Element
-><div<number,>></div> : Element
+>b : JSX.Element
+><div<number,>></div> : JSX.Element
 >div : any
 >div : any
 
 const c = <div<Missing>></div>; // nonexistant type args
->c : Element
-><div<Missing>></div> : Element
+>c : JSX.Element
+><div<Missing>></div> : JSX.Element
 >div : any
 >div : any
 
 const d = <div<Missing<AlsoMissing>>></div>; // nested missing type args
->d : Element
-><div<Missing<AlsoMissing>>></div> : Element
+>d : JSX.Element
+><div<Missing<AlsoMissing>>></div> : JSX.Element
 >div : any
 >div : any
 
 const e = <div<Record<object, object>>></div>; // existing but incorrect nested type args
->e : Element
-><div<Record<object, object>>></div> : Element
+>e : JSX.Element
+><div<Record<object, object>>></div> : JSX.Element
 >div : any
 >div : any
 
 const f = <div<number>></div>; // existing type argument with no internal issues
->f : Element
-><div<number>></div> : Element
+>f : JSX.Element
+><div<number>></div> : JSX.Element
 >div : any
 >div : any
 
 // self-closing
 const g = <div<>/>; // empty type args
->g : Element
-><div<>/> : Element
+>g : JSX.Element
+><div<>/> : JSX.Element
 >div : any
 
 const h = <div<number,>/>; // trailing comma type args
->h : Element
-><div<number,>/> : Element
+>h : JSX.Element
+><div<number,>/> : JSX.Element
 >div : any
 
 const i = <div<Missing>/>; // nonexistant type args
->i : Element
-><div<Missing>/> : Element
+>i : JSX.Element
+><div<Missing>/> : JSX.Element
 >div : any
 
 const j = <div<Missing<AlsoMissing>>/>; // nested missing type args
->j : Element
-><div<Missing<AlsoMissing>>/> : Element
+>j : JSX.Element
+><div<Missing<AlsoMissing>>/> : JSX.Element
 >div : any
 
 const k = <div<Record<object, object>>/>; // existing but incorrect nested type args
->k : Element
-><div<Record<object, object>>/> : Element
+>k : JSX.Element
+><div<Record<object, object>>/> : JSX.Element
 >div : any
 
 const l = <div<number>/>; // existing type argument with no internal issues
->l : Element
-><div<number>/> : Element
+>l : JSX.Element
+><div<number>/> : JSX.Element
 >div : any
 

@@ -10,13 +10,8 @@
 -    C.prototype.method = function () { };
 -    return C;
 -}());
--exports.default = C;
--
--
--//// [es5ExportDefaultClassDeclaration.d.ts]
--export default class C {
--    method(): void;
 +class C {
 +    method() { }
- }
-+exports.default = C;
++}
+ exports.default = C;
+

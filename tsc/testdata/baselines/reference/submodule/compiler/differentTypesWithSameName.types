@@ -33,8 +33,8 @@ var v: variable = new variable();
 
 m.doSomething(v);
 >m.doSomething(v) : void
->m.doSomething : (v: variable) => void
+>m.doSomething : (v: m.variable) => void
 >m : typeof m
->doSomething : (v: variable) => void
+>doSomething : (v: m.variable) => void
 >v : variable
 

@@ -20,3 +20,25 @@ interface String {}
 class Foo {
     public;
 }
+
+
+//// [declarationEmitPreservesHasNoDefaultLibDirective.d.ts]
+declare class Foo {
+    public: string;
+}
+interface Array<T> {
+}
+interface Boolean {
+}
+interface Function {
+}
+interface IArguments {
+}
+interface Number {
+}
+interface Object {
+}
+interface RegExp {
+}
+interface String {
+}

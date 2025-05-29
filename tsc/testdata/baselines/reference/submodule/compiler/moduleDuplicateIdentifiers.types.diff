@@ -5,7 +5,7 @@
 
  export class Kettle { // Should error
 ->Kettle : import("moduleDuplicateIdentifiers").Kettle
-+>Kettle : Kettle
++>Kettle : import("./moduleDuplicateIdentifiers").Kettle
 
  	member2 = 42;
  >member2 : number

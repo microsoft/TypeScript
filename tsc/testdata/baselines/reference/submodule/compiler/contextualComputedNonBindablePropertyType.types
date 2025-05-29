@@ -27,8 +27,8 @@ forceMatch({
 });
 
 declare function forceMatch2<T>(matched: {
->forceMatch2 : <T>(matched: { [key in keyof T]: (__0: { key: key; }) => void; }) => void
->matched : { [key in keyof T]: (__0: { key: key; }) => void; }
+>forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
+>matched : { [key in keyof T]: ({ key }: { key: key; }) => void; }
 
   [key in keyof T]: ({ key }: { key: key }) => void;
 >key : key
@@ -38,14 +38,14 @@ declare function forceMatch2<T>(matched: {
 
 forceMatch2({
 >forceMatch2({  [testD()]: ({ key }) => {},}) : void
->forceMatch2 : <T>(matched: { [key in keyof T]: (__0: { key: key; }) => void; }) => void
->{  [testD()]: ({ key }) => {},} : { d: (__0: { key: "d"; }) => void; }
+>forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
+>{  [testD()]: ({ key }) => {},} : { d: ({ key }: { key: "d"; }) => void; }
 
   [testD()]: ({ key }) => {},
->[testD()] : (__0: { key: "d"; }) => void
+>[testD()] : ({ key }: { key: "d"; }) => void
 >testD() : "d"
 >testD : () => "d"
->({ key }) => {} : (__0: { key: "d"; }) => void
+>({ key }) => {} : ({ key }: { key: "d"; }) => void
 >key : "d"
 
 });

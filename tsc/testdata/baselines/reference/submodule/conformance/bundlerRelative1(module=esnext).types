@@ -41,7 +41,7 @@ import a from "./types/esm";
 >a : string
 
 import * as esm from "./types/esm";
->esm : typeof import("/types/esm")
+>esm : typeof esm
 
 import b from "./types/cjs";
 >b : string

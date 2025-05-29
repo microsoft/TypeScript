@@ -42,3 +42,9 @@ me.thing();
 export function srcthing() { }
 //// [index.js]
 export { srcthing as thing } from "./src/thing.js";
+
+
+//// [index.d.ts]
+export { srcthing as thing } from "./src/thing.js";
+//// [thing.d.ts]
+export declare function srcthing(): void;

@@ -42,3 +42,8 @@ const ext_1 = require("ext");
 const other_1 = require("ext/other");
 exports.va = (0, ext_1.fa)();
 exports.vb = (0, other_1.fb)();
+
+
+//// [main.d.ts]
+export declare const va: import("ext").A;
+export declare const vb: import("ext/other").B;

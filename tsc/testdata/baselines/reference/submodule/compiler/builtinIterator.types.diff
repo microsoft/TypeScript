@@ -20,12 +20,10 @@
 +>Iterator.from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
  >Iterator : IteratorConstructor
 ->from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
-->{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next(): { done: boolean; value: string; }; }
 +>from : <T>(value: Iterable<T, unknown, undefined> | Iterator<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
-+>{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next: () => { done: boolean; value: string; }; }
+ >{  next() {    return {      done: Math.random() < .5,      value: "a string",    };  },} : { next(): { done: boolean; value: string; }; }
 
    next() {
- >next : () => { done: boolean; value: string; }
 @@= skipped -192, +192 lines =@@
  const iter1 = Iterator.from(g1);
  >iter1 : IteratorObject<string, undefined, unknown>

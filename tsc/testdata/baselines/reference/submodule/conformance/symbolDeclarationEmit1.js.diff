@@ -4,12 +4,9 @@
 
  //// [symbolDeclarationEmit1.js]
  class C {
--}
--Symbol.toPrimitive;
--
--
--//// [symbolDeclarationEmit1.d.ts]
--declare class C {
--    [Symbol.toPrimitive]: number;
 +    [Symbol.toPrimitive];
  }
+-Symbol.toPrimitive;
+
+
+ //// [symbolDeclarationEmit1.d.ts]

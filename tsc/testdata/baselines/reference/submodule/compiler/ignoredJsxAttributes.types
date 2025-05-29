@@ -17,7 +17,7 @@ interface Props {
 }
 
 declare function Yadda(props: Props): JSX.Element;
->Yadda : (props: Props) => Element
+>Yadda : (props: Props) => JSX.Element
 >props : Props
 >JSX : any
 
@@ -36,17 +36,17 @@ let props: Props = {
 };
 
 let x1 = <Yadda foo="hello" data-yadda={42}/>;
->x1 : Element
-><Yadda foo="hello" data-yadda={42}/> : Element
->Yadda : (props: Props) => Element
+>x1 : JSX.Element
+><Yadda foo="hello" data-yadda={42}/> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
 >foo : string
 >data-yadda : number
 >42 : 42
 
 let x2 = <Yadda bar="hello" data-yadda={42}/>;  // Error
->x2 : Element
-><Yadda bar="hello" data-yadda={42}/> : Element
->Yadda : (props: Props) => Element
+>x2 : JSX.Element
+><Yadda bar="hello" data-yadda={42}/> : JSX.Element
+>Yadda : (props: Props) => JSX.Element
 >bar : string
 >data-yadda : number
 >42 : 42

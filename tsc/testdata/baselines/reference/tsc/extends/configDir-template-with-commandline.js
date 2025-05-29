@@ -93,6 +93,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
+//// [/home/src/projects/myproject/decls/main.d.ts] new file
+// some comment
+export declare const y = 10;
+
+//// [/home/src/projects/myproject/decls/src/secondary.d.ts] new file
+// some comment
+export declare const z = 10;
+
+//// [/home/src/projects/myproject/decls/types/sometype.d.ts] new file
+export declare const x = 10;
+
 //// [/home/src/projects/myproject/main.ts] no change
 //// [/home/src/projects/myproject/root2/other/sometype2/index.d.ts] no change
 //// [/home/src/projects/myproject/src/secondary.ts] no change

@@ -16,8 +16,8 @@
 +bug39372.js(18,15): error TS2304: Cannot find name 'T'.
 +bug39372.js(19,5): error TS2304: Cannot find name 'T'.
 +bug39372.js(20,19): error TS2304: Cannot find name 'T'.
-+bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (??? & ???)[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & (??? | ??? & ???); }; $$?: Record<string, string>; } & ???; }'.
-+  Type '{}' is missing the following properties from type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; }': $A, $O
++bug39372.js(25,7): error TS2322: Type '{}' is not assignable to type '{ $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; } & any; }'.
++  Type '{}' is missing the following properties from type '{ $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; }': $A, $O
 +
 +
 +==== bug39372.js (11 errors) ====
@@ -69,6 +69,6 @@
            ~
 -!!! error TS2322: Type '{}' is not assignable to type 'XMLObject<{ foo: string; }>'.
 -!!! error TS2322:   Type '{}' is missing the following properties from type '{ $A: { foo?: XMLObject<string>[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; }': $A, $O
-+!!! error TS2322: Type '{}' is not assignable to type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (??? & ???)[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & (??? | ??? & ???); }; $$?: Record<string, string>; } & ???; }'.
-+!!! error TS2322:   Type '{}' is missing the following properties from type '{ $A: { [x: string]: (??? & { [x: string]: string | ??? & ???; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | ??? & { [x: string]: string | ??? & ???; }); }; $$?: Record<string, string>; }': $A, $O
++!!! error TS2322: Type '{}' is not assignable to type '{ $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; } & any; }'.
++!!! error TS2322:   Type '{}' is missing the following properties from type '{ $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; }': $A, $O
      

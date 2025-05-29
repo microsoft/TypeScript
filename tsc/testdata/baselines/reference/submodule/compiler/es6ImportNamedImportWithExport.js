@@ -76,3 +76,27 @@ const server_8 = require("./server");
 exports.z111 = server_8.z1;
 const server_9 = require("./server");
 exports.z2 = server_9.z2; // z2 shouldn't give redeclare error
+
+
+//// [server.d.ts]
+export declare var a: number;
+export declare var x: number;
+export declare var m: number;
+export declare var a1: number;
+export declare var x1: number;
+export declare var z1: number;
+export declare var z2: number;
+export declare var aaaa: number;
+//// [client.d.ts]
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var xxxx: number;
+export declare var z111: number;
+export declare var z2: number; // z2 shouldn't give redeclare error

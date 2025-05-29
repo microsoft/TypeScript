@@ -16,15 +16,15 @@ import { Result } from "lib/result";
 >Result : any
 
 export type T<T> = Result<Error, T>;
->T : T<T>
+>T : import("./datastore_result").T<T>
 
 === src/conditional_directive_field.ts ===
 import * as DatastoreResult from "src/datastore_result";
 >DatastoreResult : any
 
 export const build = (): DatastoreResult.T<string> => {
->build : () => T<string>
->(): DatastoreResult.T<string> => {	return null;} : () => T<string>
+>build : () => DatastoreResult.T<string>
+>(): DatastoreResult.T<string> => {	return null;} : () => DatastoreResult.T<string>
 >DatastoreResult : any
 
 	return null;

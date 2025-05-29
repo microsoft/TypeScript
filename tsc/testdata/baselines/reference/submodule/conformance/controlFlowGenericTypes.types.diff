@@ -1,42 +1,6 @@
 --- old.controlFlowGenericTypes.types
 +++ new.controlFlowGenericTypes.types
-@@= skipped -109, +109 lines =@@
-
-         unbox(x);
- >unbox(x) : T
-->unbox : <T_1>(x: Box<T_1>) => T_1
-+>unbox : <T>(x: Box<T>) => T
- >x : Box<T>
-     }
- }
-@@= skipped -17, +17 lines =@@
-
-         unbox(x);
- >unbox(x) : T
-->unbox : <T_1>(x: Box<T_1>) => T_1
-+>unbox : <T>(x: Box<T>) => T
- >x : Box<T>
-     }
- }
-@@= skipped -17, +17 lines =@@
-
-         unbox(x);  // Error
- >unbox(x) : T
-->unbox : <T_1>(x: Box<T_1>) => T_1
-+>unbox : <T>(x: Box<T>) => T
- >x : undefined
-     }
- }
-@@= skipped -16, +16 lines =@@
-
-         unbox(x);  // Error
- >unbox(x) : unknown
-->unbox : <T_1>(x: Box<T_1>) => T_1
-+>unbox : <T>(x: Box<T>) => T
- >x : undefined
-     }
- }
-@@= skipped -172, +172 lines =@@
+@@= skipped -331, +331 lines =@@
  };
 
  function get<K extends keyof A>(key: K, obj: A): number {

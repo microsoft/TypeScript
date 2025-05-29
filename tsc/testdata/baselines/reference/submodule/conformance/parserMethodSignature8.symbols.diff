@@ -5,6 +5,6 @@
 
    "H"?<T>();
 ->"H" : Symbol(I["H"], Decl(parserMethodSignature8.ts, 0, 13))
-+>"H" : Symbol(H, Decl(parserMethodSignature8.ts, 0, 13))
++>"H" : Symbol("H", Decl(parserMethodSignature8.ts, 0, 13))
  >T : Symbol(T, Decl(parserMethodSignature8.ts, 1, 7))
  }

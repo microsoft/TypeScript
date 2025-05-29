@@ -25,3 +25,14 @@ var a;
     })(b = a.b || (a.b = {}));
 })(a || (exports.a = a = {}));
 exports.x = new exports.b.c();
+
+
+//// [internalAliasInitializedModuleInsideTopLevelModuleWithExport.d.ts]
+export declare namespace a {
+    namespace b {
+        class c {
+        }
+    }
+}
+export import b = a.b;
+export declare var x: b.c;

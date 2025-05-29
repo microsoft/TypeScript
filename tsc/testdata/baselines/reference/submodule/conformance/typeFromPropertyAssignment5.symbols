@@ -2,17 +2,17 @@
 
 === a.js ===
 export default function MyClass() {
->MyClass : Symbol(default, Decl(a.js, 0, 0))
+>MyClass : Symbol(MyClass, Decl(a.js, 0, 0))
 }
 MyClass.bar = class C {
 >MyClass.bar : Symbol(bar, Decl(a.js, 1, 1))
->MyClass : Symbol(default, Decl(a.js, 0, 0))
+>MyClass : Symbol(MyClass, Decl(a.js, 0, 0))
 >bar : Symbol(bar, Decl(a.js, 1, 1))
 >C : Symbol(C, Decl(a.js, 2, 13))
 }
 MyClass.bar
 >MyClass.bar : Symbol(bar, Decl(a.js, 1, 1))
->MyClass : Symbol(default, Decl(a.js, 0, 0))
+>MyClass : Symbol(MyClass, Decl(a.js, 0, 0))
 >bar : Symbol(bar, Decl(a.js, 1, 1))
 
 === b.js ===

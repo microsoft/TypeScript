@@ -39,3 +39,17 @@ class Wrap {
     }
 }
 exports.Wrap = Wrap;
+
+
+//// [foo.d.ts]
+declare class Conn {
+    constructor();
+    item: number;
+    method(): void;
+}
+export = Conn;
+//// [usage.d.ts]
+export declare class Wrap {
+    connItem: number;
+    constructor(c?: import("./foo"));
+}

@@ -48,15 +48,15 @@ function bar<T extends string[], K extends number>() {
 >T01 : any
 
     type T02 = string[][K | "0"];
->T02 : T02
+>T02 : string[]["0" | K]
 
     type T10 = T["0"];
->T10 : T10
+>T10 : T["0"]
 
     type T11 = T["0.0"];  // Error
->T11 : T11
+>T11 : T["0.0"]
 
     type T12 = T[K | "0"];
->T12 : T12
+>T12 : T["0" | K]
 }
 

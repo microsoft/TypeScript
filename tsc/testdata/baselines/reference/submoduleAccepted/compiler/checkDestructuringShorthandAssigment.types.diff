@@ -5,7 +5,7 @@
  // should not crash while checking
  function Test({ b = '' } = {}) {}
 ->Test : ({ b }?: { b?: string; }) => void
-+>Test : (__0?: { b?: string; }) => void
++>Test : ({ b = "" }?: { b?: string; }) => void
  >b : string
  >'' : ""
  >{} : {}
@@ -13,7 +13,7 @@
  Test(({ b = '5' } = {}));
  >Test(({ b = '5' } = {})) : void
 ->Test : ({ b }?: { b?: string; }) => void
-+>Test : (__0?: { b?: string; }) => void
++>Test : ({ b = "" }?: { b?: string; }) => void
  >({ b = '5' } = {}) : {}
  >{ b = '5' } = {} : {}
  >{ b = '5' } : { b?: any; }

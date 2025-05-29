@@ -1,29 +1,33 @@
 --- old.moduleAugmentationsImports2.types
 +++ new.moduleAugmentationsImports2.types
-@@= skipped -86, +86 lines =@@
+@@= skipped -37, +37 lines =@@
+ >undefined : undefined
+
+ declare module "./a" {
+->"./a" : typeof import("a")
++>"./a" : typeof import("./a")
+
+     interface A {
+         getB(): B;
+@@= skipped -26, +26 lines =@@
+ >undefined : undefined
+
+ declare module "./a" {
+->"./a" : typeof import("a")
++>"./a" : typeof import("./a")
+
+     interface A {
+         getCls(): Cls;
+@@= skipped -23, +23 lines =@@
  >a.getB().x.toFixed() : string
  >a.getB().x.toFixed : (fractionDigits?: number) => string
  >a.getB().x : number
 ->a.getB() : import("b").B
 ->a.getB : () => import("b").B
-+>a.getB() : B
-+>a.getB : () => B
++>a.getB() : import("./b").B
++>a.getB : () => import("./b").B
  >a : A
 ->getB : () => import("b").B
-+>getB : () => B
++>getB : () => import("./b").B
  >x : number
  >toFixed : (fractionDigits?: number) => string
-
-@@= skipped -12, +12 lines =@@
- >a.getCls().y.toLowerCase() : string
- >a.getCls().y.toLowerCase : () => string
- >a.getCls().y : string
-->a.getCls() : import("C").Cls
-->a.getCls : () => import("C").Cls
-+>a.getCls() : Cls
-+>a.getCls : () => Cls
- >a : A
-->getCls : () => import("C").Cls
-+>getCls : () => Cls
- >y : string
- >toLowerCase : () => string

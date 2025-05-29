@@ -37,29 +37,3 @@
 
  //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
  interface List<T> {
-@@= skipped -15, +15 lines =@@
- >parents : List<List<T>>
- }
- function fn12<T extends List<List<any>>>();
-->fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
-+>fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
-
- function fn12<T extends List<any>>();
-->fn12 : { <T_1 extends List<List<any>>>(): any; <T extends List<any>>(): any; }
-+>fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
-
- function fn12() { }
- >fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
-@@= skipped -111, +111 lines =@@
-
- //Function overloads where return types are different infinitely recursive type reference
- function fn15<T extends List<List<any>>>(): T;
-->fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
-+>fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
-
- function fn15<T extends List<any>>(): T;
-->fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
-+>fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
-
- function fn15() {
- >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }

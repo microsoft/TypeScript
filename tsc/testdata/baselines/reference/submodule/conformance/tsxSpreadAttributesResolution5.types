@@ -2,7 +2,7 @@
 
 === file.tsx ===
 import React = require('react');
->React : typeof __React
+>React : typeof React
 
 interface PoisonedProp {
     x: string;
@@ -14,15 +14,15 @@ interface PoisonedProp {
 
 class Poisoned extends React.Component<PoisonedProp, {}> {
 >Poisoned : Poisoned
->React.Component : Component<PoisonedProp, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<PoisonedProp, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Hello</div>;
-><div>Hello</div> : Element
+><div>Hello</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -44,22 +44,22 @@ let obj = {
 
 // Error as "obj" has type { x: string; y: number }
 let p = <Poisoned {...obj} />;
->p : Element
-><Poisoned {...obj} /> : Element
+>p : JSX.Element
+><Poisoned {...obj} /> : JSX.Element
 >Poisoned : typeof Poisoned
 >obj : { x: string; y: number; }
 
 class EmptyProp extends React.Component<{}, {}> {
 >EmptyProp : EmptyProp
->React.Component : Component<{}, {}>
->React : typeof __React
->Component : typeof Component
+>React.Component : React.Component<{}, {}>
+>React : typeof React
+>Component : typeof React.Component
 
     render() {
->render : () => Element
+>render : () => JSX.Element
 
         return <div>Default hi</div>;
-><div>Default hi</div> : Element
+><div>Default hi</div> : JSX.Element
 >div : any
 >div : any
     }
@@ -77,8 +77,8 @@ let o = {
 }
 // Ok
 let e = <EmptyProp {...o} />;
->e : Element
-><EmptyProp {...o} /> : Element
+>e : JSX.Element
+><EmptyProp {...o} /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >o : { prop1: boolean; }
 

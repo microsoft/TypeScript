@@ -9,12 +9,3 @@
  >false : false
      }
  }
-@@= skipped -14, +14 lines =@@
- }
-
- <SFC<string> prop={1}></SFC>; // should error
--><SFC<string> prop={1}></SFC> : JSX.Element
-+><SFC<string> prop={1}></SFC> : Element
- >SFC : <T>(props: Record<string, T>) => string
- >prop : number
- >1 : 1

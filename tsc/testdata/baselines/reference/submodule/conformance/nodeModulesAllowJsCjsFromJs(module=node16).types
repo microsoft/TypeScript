@@ -4,7 +4,7 @@
 exports.foo = "foo"
 >exports.foo = "foo" : "foo"
 >exports.foo : "foo"
->exports : typeof import("foo")
+>exports : typeof import("./foo.cjs")
 >foo : "foo"
 >"foo" : "foo"
 

@@ -23,3 +23,13 @@ import * as ns from './a.cjs';
 export { d, a, ns };
 d.a;
 ns.default.a;
+
+
+//// [a.d.cts]
+export declare const a: number;
+declare const _default: string;
+export default _default;
+//// [foo.d.mts]
+import d, { a } from './a.cjs';
+import * as ns from './a.cjs';
+export { d, a, ns };

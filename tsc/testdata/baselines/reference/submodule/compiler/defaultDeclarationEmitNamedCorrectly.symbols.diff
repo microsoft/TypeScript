@@ -14,12 +14,8 @@
  >T : Symbol(T, Decl(defaultDeclarationEmitNamedCorrectly.ts, 0, 26))
  }
  export function make<P, CTor>(x: { new (): CTor & {props: P} }): Things<P, CTor> {
-@@= skipped -27, +27 lines =@@
- }
-
- export default class MyComponent {
-->MyComponent : Symbol(MyComponent, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
-+>MyComponent : Symbol(default, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
+@@= skipped -30, +30 lines =@@
+ >MyComponent : Symbol(MyComponent, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
 
      props: Props;
 ->props : Symbol(MyComponent.props, Decl(defaultDeclarationEmitNamedCorrectly.ts, 11, 34))
@@ -30,6 +26,5 @@
 ->create : Symbol(MyComponent.create, Decl(defaultDeclarationEmitNamedCorrectly.ts, 12, 17))
 +>create : Symbol(create, Decl(defaultDeclarationEmitNamedCorrectly.ts, 12, 17))
  >make : Symbol(make, Decl(defaultDeclarationEmitNamedCorrectly.ts, 3, 1))
-->MyComponent : Symbol(MyComponent, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
-+>MyComponent : Symbol(default, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
+ >MyComponent : Symbol(MyComponent, Decl(defaultDeclarationEmitNamedCorrectly.ts, 9, 1))
  }

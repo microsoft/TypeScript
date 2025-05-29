@@ -1,11 +1,7 @@
 --- old.unusedImports16.types
 +++ new.unusedImports16.types
-@@= skipped -1, +1 lines =@@
-
- === foo.tsx ===
- import Element = require("react");
-->Element : typeof Element
-+>Element : typeof React
+@@= skipped -4, +4 lines =@@
+ >Element : typeof Element
 
  export const FooComponent = <div></div>
 ->FooComponent : error

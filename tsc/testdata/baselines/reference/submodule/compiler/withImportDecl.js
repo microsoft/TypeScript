@@ -79,3 +79,11 @@ var m1;
 const m3 = require("withImportDecl_0");
 var b = new m3.A();
 b.foo;
+
+
+//// [withImportDecl_0.d.ts]
+export declare class A {
+    foo: string;
+}
+//// [withImportDecl_1.d.ts]
+export {};

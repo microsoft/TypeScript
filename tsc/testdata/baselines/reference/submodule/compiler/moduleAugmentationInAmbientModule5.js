@@ -29,3 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("array");
 let x = [1];
 let y = x.getA().x;
+
+
+//// [f.d.ts]
+import "array";

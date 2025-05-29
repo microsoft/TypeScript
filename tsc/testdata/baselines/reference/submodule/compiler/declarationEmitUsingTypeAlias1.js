@@ -34,3 +34,8 @@ export const foo = (thing) => {
 export const bar = (thing) => {
     return thing.arg;
 };
+
+
+//// [index.d.ts]
+export declare const foo: any;
+export declare const bar: any;

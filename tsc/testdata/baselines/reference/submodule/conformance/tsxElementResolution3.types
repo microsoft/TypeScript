@@ -12,13 +12,13 @@ declare module JSX {
 
 // OK
 <div n='x' />;
-><div n='x' /> : Element
+><div n='x' /> : JSX.Element
 >div : any
 >n : string
 
 // Error
 <span w='err' />;
-><span w='err' /> : Element
+><span w='err' /> : JSX.Element
 >span : any
 >w : string
 

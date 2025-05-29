@@ -58,31 +58,31 @@ function f2() {
 >f2 : () => void
 
     const A0 = Array<>;  // Error
->A0 : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
->Array<> : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+>A0 : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>Array<> : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
     const A1 = Array<string>;  // new (...) => string[]
->A1 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
->Array<string> : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+>A1 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>Array<string> : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
     const A2 = Array<string, number>;  // Error
->A2 : { isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
->Array<string, number> : { isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+>A2 : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
+>Array<string, number> : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 }
 
 type T20 = typeof Array<>;  // Error
->T20 : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+>T20 : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
 type T21 = typeof Array<string>;  // new (...) => string[]
->T21 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+>T21 : { (arrayLength: number): string[]; (...items: string[]): string[]; new (arrayLength: number): string[]; new (...items: string[]): string[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
 type T22 = typeof Array<string, number>;  // Error
->T22 : { isArray: (arg: any) => arg is any[]; readonly prototype: any[]; }
+>T22 : { isArray(arg: any): arg is any[]; readonly prototype: any[]; }
 >Array : ArrayConstructor
 
 declare class C<T> {
@@ -100,8 +100,8 @@ function f3() {
 >f3 : () => void
 
     let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
->c1 : { new (x: string): C<string>; f: <U>(x: U) => U[]; prototype: C<any>; }
->C<string> : { new (x: string): C<string>; f: <U>(x: U) => U[]; prototype: C<any>; }
+>c1 : { new (x: string): C<string>; f<U>(x: U): U[]; prototype: C<any>; }
+>C<string> : { new (x: string): C<string>; f<U>(x: U): U[]; prototype: C<any>; }
 >C : typeof C
 
     let f1 = C.f<string>;  // (x: string) => string[]
@@ -442,14 +442,14 @@ function makeBox<T>(value: T) {
 
 type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
 >BoxFunc : (value: T) => { value: T; }
->makeBox : <T>(value: T) => { value: T; }
+>makeBox : <T_1>(value: T_1) => { value: T_1; }
 
 type StringBoxFunc = BoxFunc<string>;  // (value: string) => { value: string }
 >StringBoxFunc : StringBoxFunc
 
 type Box<T> = ReturnType<typeof makeBox<T>>;  // { value: T }
 >Box : { value: T; }
->makeBox : <T>(value: T) => { value: T; }
+>makeBox : <T_1>(value: T_1) => { value: T_1; }
 
 type StringBox = Box<string>;  // { value: string }
 >StringBox : StringBox

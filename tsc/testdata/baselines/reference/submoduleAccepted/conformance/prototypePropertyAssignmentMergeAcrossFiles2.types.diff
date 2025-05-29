@@ -33,23 +33,20 @@
 +>function() {} : () => void
 
  Ns.One.prototype = {
-->Ns.One.prototype = {  ok() {},} : { ok(): void; }
+ >Ns.One.prototype = {  ok() {},} : { ok(): void; }
 ->Ns.One.prototype : { ok(): void; }
 ->Ns.One : typeof One
 ->Ns : typeof Ns
 ->One : typeof One
 ->prototype : { ok(): void; }
-->{  ok() {},} : { ok(): void; }
-+>Ns.One.prototype = {  ok() {},} : { ok: () => void; }
 +>Ns.One.prototype : any
 +>Ns.One : any
 +>Ns : {}
 +>One : any
 +>prototype : any
-+>{  ok() {},} : { ok: () => void; }
+ >{  ok() {},} : { ok(): void; }
 
    ok() {},
- >ok : () => void
 @@= skipped -32, +32 lines =@@
  };
  Ns.Two.prototype = {
@@ -66,3 +63,29 @@
 +>prototype : any
  >{} : {}
  }
+
+@@= skipped -13, +13 lines =@@
+  * @type {Ns.One}
+  */
+ var one;
+->one : One
++>one : Ns.One
+
+ one.wat;
+ >one.wat : any
+->one : One
++>one : Ns.One
+ >wat : any
+
+ /**
+  * @type {Ns.Two}
+  */
+ var two;
+->two : Two
++>two : Ns.Two
+
+ two.wat;
+ >two.wat : any
+->two : Two
++>two : Ns.Two
+ >wat : any

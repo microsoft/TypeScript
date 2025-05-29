@@ -3,8 +3,8 @@
 === a.ts ===
 /// <reference path="foo.d.ts" />
 export const x = Foo; // OK in value position because allowUmdGlobalAccess: true
->x : typeof Thing
->Foo : typeof Thing
+>x : typeof import("./foo.js")
+>Foo : typeof import("./foo.js")
 
 === foo.d.ts ===
 declare class Thing {

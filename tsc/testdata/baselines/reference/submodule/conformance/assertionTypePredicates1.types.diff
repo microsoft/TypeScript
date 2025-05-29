@@ -5,10 +5,10 @@
 
          x.toLocaleString;
 ->x.toLocaleString : (() => string) | ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string)
-+>x.toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
++>x.toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string)
  >x : number | boolean
 ->toLocaleString : (() => string) | ((locales?: string | string[], options?: Intl.NumberFormatOptions) => string)
-+>toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: NumberFormatOptions | undefined) => string)
++>toLocaleString : (() => string) | ((locales?: string | string[] | undefined, options?: Intl.NumberFormatOptions | undefined) => string)
      }
      if (!!true) {
  >!!true : true

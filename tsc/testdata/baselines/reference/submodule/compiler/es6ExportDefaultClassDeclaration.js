@@ -10,3 +10,9 @@ export default class C {
 export default class C {
     method() { }
 }
+
+
+//// [es6ExportDefaultClassDeclaration.d.ts]
+export default class C {
+    method(): void;
+}

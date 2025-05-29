@@ -19,3 +19,11 @@ var a;
         })(c = b.c || (b.c = {}));
     })(b = a.b || (a.b = {}));
 })(a || (a = {}));
+
+
+//// [internalAliasWithDottedNameEmit.d.ts]
+declare namespace a.b.c {
+    var d: any;
+}
+declare namespace a.e.f {
+}

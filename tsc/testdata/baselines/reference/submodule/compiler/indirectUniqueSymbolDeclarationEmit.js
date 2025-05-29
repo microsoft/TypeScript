@@ -18,3 +18,9 @@ exports.y = Symbol();
 function f() {
     return rand() ? exports.x : exports.y;
 }
+
+
+//// [indirectUniqueSymbolDeclarationEmit.d.ts]
+export declare const x: unique symbol;
+export declare const y: unique symbol;
+export declare function f(): typeof x | typeof y;

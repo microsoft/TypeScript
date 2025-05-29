@@ -31,7 +31,7 @@ import IX = N.x;
 import II = N.I;
 >II : any
 >N : typeof N
->I : I
+>I : II
 
 import { A, A as EA, I as EI } from "f1";
 >A : any

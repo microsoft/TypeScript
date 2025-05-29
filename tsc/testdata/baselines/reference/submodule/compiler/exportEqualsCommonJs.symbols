@@ -2,6 +2,6 @@
 
 === exportEqualsCommonJs.ts ===
 export = { ["hi"]: "there" };
->["hi"] : Symbol(hi, Decl(exportEqualsCommonJs.ts, 0, 10))
->"hi" : Symbol(hi, Decl(exportEqualsCommonJs.ts, 0, 10))
+>["hi"] : Symbol(["hi"], Decl(exportEqualsCommonJs.ts, 0, 10))
+>"hi" : Symbol(["hi"], Decl(exportEqualsCommonJs.ts, 0, 10))
 

@@ -25,3 +25,19 @@ exports.Point = Point;
 const Rect = (a, b) => ({ a, b });
 exports.Rect = Rect;
 exports.Point.zero = () => (0, exports.Point)(0, 0);
+
+
+//// [declarationEmitExpandoWithGenericConstraint.d.ts]
+export interface Point {
+    readonly x: number;
+    readonly y: number;
+}
+export interface Rect<p extends Point> {
+    readonly a: p;
+    readonly b: p;
+}
+export declare const Point: {
+    (x: number, y: number): Point;
+    zero: () => Point;
+};
+export declare const Rect: <p extends Point>(a: p, b: p) => Rect<p>;

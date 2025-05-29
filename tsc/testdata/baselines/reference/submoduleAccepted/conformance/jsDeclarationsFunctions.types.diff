@@ -47,7 +47,7 @@
   */
  export function f(a) {
 ->f : typeof f
-+>f : { <T>(a: T): T; self: ???; }
++>f : { <T>(a: T): T; self: typeof f; }
  >a : T
 
      return a;
@@ -59,11 +59,11 @@
 ->f : typeof f
 ->self : typeof f
 ->f : typeof f
-+>f.self = f : { <T>(a: T): T; self: ???; }
-+>f.self : { <T>(a: T): T; self: ???; }
-+>f : { <T>(a: T): T; self: ???; }
-+>self : { <T>(a: T): T; self: ???; }
-+>f : { <T>(a: T): T; self: ???; }
++>f.self = f : { <T>(a: T): T; self: typeof f; }
++>f.self : { <T>(a: T): T; self: typeof f; }
++>f : { <T>(a: T): T; self: typeof f; }
++>self : { <T>(a: T): T; self: typeof f; }
++>f : { <T>(a: T): T; self: typeof f; }
 
  /**
   * @param {{x: string}} a
@@ -71,10 +71,10 @@
   */
  function g(a, b) {
 ->g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-+>g : (a: { x: string; }, b: { y: ???; }) => any
++>g : (a: { x: string; }, b: { y: any; }) => any
  >a : { x: string; }
 ->b : { y: typeof import("index").b; }
-+>b : { y: ???; }
++>b : { y: any; }
 
      return a.x && b.y();
 ->a.x && b.y() : void
@@ -87,14 +87,14 @@
 ->b : { y: typeof import("index").b; }
 ->y : typeof import("index").b
 +>b.y() : any
-+>b.y : { y: ???; }
-+>b : { y: ???; }
-+>y : { y: ???; }
++>b.y : { y: any; }
++>b : { y: any; }
++>y : { y: any; }
  }
 
  export { g };
 ->g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-+>g : (a: { x: string; }, b: { y: ???; }) => any
++>g : (a: { x: string; }, b: { y: any; }) => any
 
  /**
   * @param {{x: string}} a
@@ -102,10 +102,10 @@
   */
  function hh(a, b) {
 ->hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-+>hh : (a: { x: string; }, b: { y: ???; }) => any
++>hh : (a: { x: string; }, b: { y: any; }) => any
  >a : { x: string; }
 ->b : { y: typeof import("index").b; }
-+>b : { y: ???; }
++>b : { y: any; }
 
      return a.x && b.y();
 ->a.x && b.y() : void
@@ -118,16 +118,16 @@
 ->b : { y: typeof import("index").b; }
 ->y : typeof import("index").b
 +>b.y() : any
-+>b.y : { y: ???; }
-+>b : { y: ???; }
-+>y : { y: ???; }
++>b.y : { y: any; }
++>b : { y: any; }
++>y : { y: any; }
  }
 
  export { hh as h };
 ->hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
 ->h : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
-+>hh : (a: { x: string; }, b: { y: ???; }) => any
-+>h : (a: { x: string; }, b: { y: ???; }) => any
++>hh : (a: { x: string; }, b: { y: any; }) => any
++>h : (a: { x: string; }, b: { y: any; }) => any
 
  export function i() {}
  >i : () => void

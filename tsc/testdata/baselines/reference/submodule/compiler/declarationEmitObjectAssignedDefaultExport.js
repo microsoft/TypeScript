@@ -52,3 +52,9 @@ exports.default = Object.assign(A, {
     B,
     C: exports.C
 });
+
+
+//// [index.d.ts]
+export declare const C: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>;
+declare const _default: any;
+export default _default;

@@ -7,3 +7,9 @@ var obj: {
 
 //// [symbolDeclarationEmit7.js]
 var obj;
+
+
+//// [symbolDeclarationEmit7.d.ts]
+declare var obj: {
+    [Symbol.isConcatSpreadable]: string;
+};

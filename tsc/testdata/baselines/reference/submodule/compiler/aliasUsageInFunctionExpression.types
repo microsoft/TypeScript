@@ -2,17 +2,17 @@
 
 === aliasUsageInFunctionExpression_main.ts ===
 import Backbone = require("./aliasUsageInFunctionExpression_backbone");
->Backbone : typeof import("aliasUsageInFunctionExpression_backbone")
+>Backbone : typeof Backbone
 
 import moduleA = require("./aliasUsageInFunctionExpression_moduleA");
->moduleA : typeof import("aliasUsageInFunctionExpression_moduleA")
+>moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
->VisualizationModel : typeof Model
->Backbone.Model : typeof Model
->Backbone : typeof import("aliasUsageInFunctionExpression_backbone")
->Model : typeof Model
+>VisualizationModel : typeof Backbone.Model
+>Backbone.Model : typeof Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 }
 var f = (x: IHasVisualizationModel) => x;
 >f : (x: IHasVisualizationModel) => IHasVisualizationModel
@@ -21,11 +21,11 @@ var f = (x: IHasVisualizationModel) => x;
 >x : IHasVisualizationModel
 
 f = (x) => moduleA;
->f = (x) => moduleA : (x: IHasVisualizationModel) => typeof import("aliasUsageInFunctionExpression_moduleA")
+>f = (x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
 >f : (x: IHasVisualizationModel) => IHasVisualizationModel
->(x) => moduleA : (x: IHasVisualizationModel) => typeof import("aliasUsageInFunctionExpression_moduleA")
+>(x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
 >x : IHasVisualizationModel
->moduleA : typeof import("aliasUsageInFunctionExpression_moduleA")
+>moduleA : typeof moduleA
 
 === aliasUsageInFunctionExpression_backbone.ts ===
 export class Model {
@@ -37,13 +37,13 @@ export class Model {
 
 === aliasUsageInFunctionExpression_moduleA.ts ===
 import Backbone = require("./aliasUsageInFunctionExpression_backbone");
->Backbone : typeof import("aliasUsageInFunctionExpression_backbone")
+>Backbone : typeof Backbone
 
 export class VisualizationModel extends Backbone.Model {
 >VisualizationModel : VisualizationModel
->Backbone.Model : Model
->Backbone : typeof import("aliasUsageInFunctionExpression_backbone")
->Model : typeof Model
+>Backbone.Model : Backbone.Model
+>Backbone : typeof Backbone
+>Model : typeof Backbone.Model
 
     // interesting stuff here
 }

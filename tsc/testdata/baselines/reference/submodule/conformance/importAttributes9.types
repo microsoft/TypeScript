@@ -15,19 +15,19 @@ declare global {
 }
 
 import * as ns from "./a" with { type: "not-json" };
->ns : typeof import("a")
+>ns : typeof ns
 >type : any
 
 void ns;
 >void ns : undefined
->ns : typeof import("a")
+>ns : typeof ns
 
 async function f() {
 >f : () => Promise<void>
 
     await import("./a", {
->await import("./a", {        with: {            type: "not-json",        },    }) : typeof import("a")
->import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof import("a")>
+>await import("./a", {        with: {            type: "not-json",        },    }) : typeof ns
+>import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof ns>
 >"./a" : "./a"
 >{        with: {            type: "not-json",        },    } : { with: { type: "not-json"; }; }
 

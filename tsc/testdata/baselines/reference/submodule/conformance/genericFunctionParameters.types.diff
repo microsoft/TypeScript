@@ -24,29 +24,3 @@
  >x => x : <S extends S[]>(x: S) => S
  >x : S
  >x : S
-@@= skipped -10, +10 lines =@@
- // Repro from #19345
-
- declare const s: <R>(go: <S>(ops: { init(): S; }) => R) => R;
-->s : <R>(go: <S>(ops: { init(): S; }) => R) => R
-->go : <S>(ops: { init(): S; }) => R
-->ops : { init(): S; }
-+>s : <R>(go: <S>(ops: { init: () => S; }) => R) => R
-+>go : <S>(ops: { init: () => S; }) => R
-+>ops : { init: () => S; }
- >init : () => S
-
- const x = s(a => a.init());  // x is any, should have been {}
- >x : unknown
- >s(a => a.init()) : unknown
-->s : <R>(go: <S>(ops: { init(): S; }) => R) => R
-->a => a.init() : <S>(a: { init(): S; }) => S
-->a : { init(): S; }
-+>s : <R>(go: <S>(ops: { init: () => S; }) => R) => R
-+>a => a.init() : <S>(a: { init: () => S; }) => S
-+>a : { init: () => S; }
- >a.init() : S
- >a.init : () => S
-->a : { init(): S; }
-+>a : { init: () => S; }
- >init : () => S

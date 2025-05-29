@@ -25,7 +25,7 @@
 
  function foo({ x = "", y = "" }: { x?: string; y?: string }) {
 ->foo : ({ x, y }: { x?: string; y?: string; }) => { [x: string]: number; }
-+>foo : (__0: { x?: string | undefined; y?: string | undefined; }) => { [x: string]: number; }
++>foo : ({ x = "", y = "" }: { x?: string | undefined; y?: string | undefined; }) => { [x: string]: number; }
  >x : string
  >"" : ""
  >y : string

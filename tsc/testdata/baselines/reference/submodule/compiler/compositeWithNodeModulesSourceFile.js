@@ -14,3 +14,7 @@ new myModule.c();
 Object.defineProperty(exports, "__esModule", { value: true });
 const myModule = require("myModule");
 new myModule.c();
+
+
+//// [test.d.ts]
+export {};

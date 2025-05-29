@@ -9,9 +9,8 @@
 -    }
 -    return y;
 -}());
--
--
--//// [objectLiteralDeclarationGeneration1.d.ts]
--declare class y<T extends {}> {
 +class y {
- }
++}
+
+
+ //// [objectLiteralDeclarationGeneration1.d.ts]

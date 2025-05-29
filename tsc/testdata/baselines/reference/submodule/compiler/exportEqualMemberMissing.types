@@ -3,17 +3,17 @@
 === exportEqualMemberMissing_1.ts ===
 ///<reference path='exportEqualMemberMissing_0.ts'/>
 import connect = require('./exportEqualMemberMissing_0');
->connect : { (): connectExport; foo: Date; }
+>connect : { (): connect.connectExport; foo: Date; }
 
 connect().use(connect.static('foo')); // Error	1	The property 'static' does not exist on value of type ''.
->connect().use(connect.static('foo')) : connectExport
->connect().use : (mod: connectModule) => connectExport
->connect() : connectExport
->connect : { (): connectExport; foo: Date; }
->use : (mod: connectModule) => connectExport
+>connect().use(connect.static('foo')) : connect.connectExport
+>connect().use : (mod: connect.connectModule) => connect.connectExport
+>connect() : connect.connectExport
+>connect : { (): connect.connectExport; foo: Date; }
+>use : (mod: connect.connectModule) => connect.connectExport
 >connect.static('foo') : any
 >connect.static : any
->connect : { (): connectExport; foo: Date; }
+>connect : { (): connect.connectExport; foo: Date; }
 >static : any
 >'foo' : "foo"
 
@@ -32,7 +32,7 @@ module server {
     }
 }
 var server: {
->server : { (): connectExport; foo: Date; }
+>server : { (): import("./exportEqualMemberMissing_0").connectExport; foo: Date; }
 
     (): server.connectExport;
 >server : any
@@ -42,5 +42,5 @@ var server: {
 
 };
 export = server;
->server : { (): connectExport; foo: Date; }
+>server : { (): import("./exportEqualMemberMissing_0").connectExport; foo: Date; }
 

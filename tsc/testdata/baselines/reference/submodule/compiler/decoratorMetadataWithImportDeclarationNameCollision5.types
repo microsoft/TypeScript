@@ -2,7 +2,7 @@
 
 === db.ts ===
 export default class db {
->db : default
+>db : db
 
     public doSomething() {
 >doSomething : () => void
@@ -11,7 +11,7 @@ export default class db {
 
 === service.ts ===
 import db from './db';
->db : typeof default
+>db : typeof db
 
 function someDecorator(target) {
 >someDecorator : (target: any) => any
@@ -27,24 +27,24 @@ class MyClass {
 >MyClass : MyClass
 
     db: db;
->db : default
+>db : db
 
     constructor(db: db) { // collision
->db : default
+>db : db
 
         this.db = db;
->this.db = db : default
->this.db : default
+>this.db = db : db
+>this.db : db
 >this : this
->db : default
->db : default
+>db : db
+>db : db
 
         this.db.doSomething();
 >this.db.doSomething() : void
 >this.db.doSomething : () => void
->this.db : default
+>this.db : db
 >this : this
->db : default
+>db : db
 >doSomething : () => void
     }
 }

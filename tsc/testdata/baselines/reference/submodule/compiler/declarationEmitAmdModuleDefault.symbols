@@ -2,5 +2,5 @@
 
 === declarationEmitAmdModuleDefault.ts ===
 export default class DefaultClass { }
->DefaultClass : Symbol(default, Decl(declarationEmitAmdModuleDefault.ts, 0, 0))
+>DefaultClass : Symbol(DefaultClass, Decl(declarationEmitAmdModuleDefault.ts, 0, 0))
 

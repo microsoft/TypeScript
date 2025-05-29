@@ -86,3 +86,11 @@ import * as type from "#type";
 cjs;
 mjs;
 type;
+
+
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};
+//// [index.d.ts]
+export {};

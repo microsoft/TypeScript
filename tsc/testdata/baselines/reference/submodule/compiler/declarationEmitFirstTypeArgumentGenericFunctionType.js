@@ -48,3 +48,20 @@ var prop2; // No space after second type argument
 var prop2; // space after second type argument
 var prop3; // space before first type argument
 var prop4; // parenthesized first type argument
+
+
+//// [declarationEmitFirstTypeArgumentGenericFunctionType.d.ts]
+declare class X<A> {
+}
+declare var prop11: X<<Tany>() => Tany>; // spaces before the first type argument
+declare var prop12: X<(<Tany>() => Tany)>; // spaces before the first type argument
+declare function f1(): X<<Tany>() => Tany>;
+declare function f2(): X<<Tany>() => Tany>;
+declare function f3(): X<<Tany>() => Tany>;
+declare function f4(): X<(<Tany>() => Tany)>;
+declare class Y<A, B> {
+}
+declare var prop2: Y<string[], <Tany>() => Tany>; // No space after second type argument
+declare var prop2: Y<string[], <Tany>() => Tany>; // space after second type argument
+declare var prop3: Y<<Tany>() => Tany, <Tany>() => Tany>; // space before first type argument
+declare var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>; // parenthesized first type argument

@@ -18,7 +18,7 @@ export type AnimalInfo = CatInfo | DogInfo;
 >AnimalInfo : AnimalInfo
 
 function AnimalComponent(info: AnimalInfo): JSX.Element {
->AnimalComponent : (info: AnimalInfo) => Element
+>AnimalComponent : (info: AnimalInfo) => JSX.Element
 >info : AnimalInfo
 >JSX : any
 
@@ -47,7 +47,7 @@ var props:AnimalInfo = getProps();
 var component = <AnimalComponent {...props} />
 >component : any
 ><AnimalComponent {...props} /> : any
->AnimalComponent : (info: AnimalInfo) => Element
+>AnimalComponent : (info: AnimalInfo) => JSX.Element
 >props : AnimalInfo
 
 var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
@@ -61,6 +61,6 @@ var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
 var component2 = <AnimalComponent {...props2} />
 >component2 : any
 ><AnimalComponent {...props2} /> : any
->AnimalComponent : (info: AnimalInfo) => Element
+>AnimalComponent : (info: AnimalInfo) => JSX.Element
 >props2 : CatInfo
 

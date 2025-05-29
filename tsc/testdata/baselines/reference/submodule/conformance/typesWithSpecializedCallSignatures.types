@@ -62,7 +62,7 @@ var i: I;
 >i : I
 
 var a: {
->a : { foo: { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }; }
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
 
     foo(x: 'hi'): Derived1;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
@@ -84,9 +84,9 @@ c = i;
 >i : I
 
 c = a;
->c = a : { foo: { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }; }
+>c = a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
 >c : C
->a : { foo: { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }; }
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
 
 i = c;
 >i = c : C
@@ -94,18 +94,18 @@ i = c;
 >c : C
 
 i = a;
->i = a : { foo: { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }; }
+>i = a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
 >i : I
->a : { foo: { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }; }
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
 
 a = c;
 >a = c : C
->a : { foo: { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }; }
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
 >c : C
 
 a = i;
 >a = i : I
->a : { foo: { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }; }
+>a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
 >i : I
 
 var r1: Derived1 = c.foo('hi');

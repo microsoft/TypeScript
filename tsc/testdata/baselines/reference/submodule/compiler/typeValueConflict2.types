@@ -33,9 +33,9 @@ module M3 {
     // Shouldn't error
     class B extends M1.A<string> {
 >B : B
->M1.A : A<string>
+>M1.A : M1.A<string>
 >M1 : typeof M1
->A : typeof A
+>A : typeof M1.A
     }
 }
 

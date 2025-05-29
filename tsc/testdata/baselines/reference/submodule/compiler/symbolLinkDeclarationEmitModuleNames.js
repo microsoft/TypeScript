@@ -66,3 +66,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONTROLLER_CLASS = void 0;
 const context_1 = require("@loopback/context");
 exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
+
+
+//// [value-promise.d.ts]
+export type Constructor<T> = (...args: any[]) => T;
+//// [bindingkey.d.ts]
+import { Constructor } from "@loopback/context";
+export declare class BindingKey<T> {
+    readonly __type: T;
+    static create<T extends Constructor<any>>(ctor: T): BindingKey<T>;
+}
+//// [index.d.ts]
+export * from "./src/value-promise";
+export * from "./src/bindingkey";
+//// [application.d.ts]
+import { Constructor } from "@loopback/context";
+export type ControllerClass = Constructor<any>;
+//// [usage.d.ts]
+import { ControllerClass } from './application';
+import { BindingKey } from '@loopback/context';
+export declare const CONTROLLER_CLASS: BindingKey<ControllerClass>; // line in question

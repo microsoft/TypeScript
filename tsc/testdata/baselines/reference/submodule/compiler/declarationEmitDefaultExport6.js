@@ -9,3 +9,10 @@ export default new A();
 export class A {
 }
 export default new A();
+
+
+//// [declarationEmitDefaultExport6.d.ts]
+export declare class A {
+}
+declare const _default: A;
+export default _default;

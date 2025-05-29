@@ -25,23 +25,23 @@ import { A } from "./a";
 >A : any
 
 import DefaultB from "./b";
->DefaultB : typeof B
+>DefaultB : typeof DefaultB
 
 import { B } from "./b";
->B : typeof B
+>B : typeof DefaultB
 
 === c.fixed.ts ===
 import type DefaultA from "./a";
->DefaultA : A
+>DefaultA : DefaultA
 
 import type { A } from "./a";
->A : A
+>A : DefaultA
 
 import type DefaultB from "./b";
->DefaultB : B
+>DefaultB : DefaultB
 
 import type { B } from "./b";
->B : B
+>B : DefaultB
 
 === d.ts ===
 export { A as AA } from "./a";
@@ -49,27 +49,27 @@ export { A as AA } from "./a";
 >AA : any
 
 export { B as BB } from "./b";
->B : typeof B
->BB : typeof B
+>B : typeof import("./b").B
+>BB : typeof import("./b").B
 
 === d.fixed.ts ===
 export type { A as AA } from "./a";
 >A : any
->AA : A
+>AA : import("./a").A
 
 export type { B as BB } from "./b";
->B : typeof B
->BB : B
+>B : typeof import("./b").B
+>BB : import("./b").B
 
 === e.ts ===
 import { AA, BB } from "./d";
 >AA : any
->BB : typeof B
+>BB : typeof BB
 
 === e.fixed.ts ===
 import type { AA, BB } from "./d";
->AA : A
->BB : B
+>AA : AA
+>BB : BB
 
 === f.ts ===
 import type { A } from "./a";

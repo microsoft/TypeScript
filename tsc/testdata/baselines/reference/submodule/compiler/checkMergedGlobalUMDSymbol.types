@@ -10,21 +10,21 @@ export namespace THREE {
 
 === global.d.ts ===
 import * as _three from './three';
->_three : typeof import("three")
+>_three : typeof _three
 
 export as namespace THREE;
->THREE : typeof import("global")
+>THREE : typeof import("./global.js")
 
 declare global {
 >global : typeof global
 
   export const THREE: typeof _three;
->THREE : typeof import("three")
->_three : typeof import("three")
+>THREE : typeof _three
+>_three : typeof _three
 }
 
 === test.ts ===
 const m = THREE
->m : typeof import("three")
->THREE : typeof import("three")
+>m : typeof import("./three.js")
+>THREE : typeof import("./three.js")
 

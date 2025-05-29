@@ -20,7 +20,7 @@ export { createElement, JSX };
 
 === index.tsx ===
 import * as MyLib from "./library";
->MyLib : typeof import("library")
+>MyLib : typeof MyLib
 
 const content = <my-element/>;
 >content : any

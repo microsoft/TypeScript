@@ -1,9 +1,11 @@
 --- old.interMixingModulesInterfaces2.types
 +++ new.interMixingModulesInterfaces2.types
-@@= skipped -23, +23 lines =@@
- }
+@@= skipped -15, +15 lines =@@
+ >B : typeof B
 
- var x: A.B = null;
-->x : A.B
-+>x : B
- >A : any
+         export function createB(): B {
+->createB : () => B
++>createB : () => A.B
+
+             return null;
+         }

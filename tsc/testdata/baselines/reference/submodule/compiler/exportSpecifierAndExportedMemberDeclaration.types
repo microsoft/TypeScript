@@ -15,7 +15,7 @@ declare module "m2" {
 >X : () => any
 
     function Z(): X.I;
->Z : () => I
+>Z : () => X.I
 >X : any
 }
 
@@ -23,6 +23,6 @@ declare module "m2" {
 >"m2" : typeof import("m2")
 
     function Z2(): X.I;
->Z2 : () => I
+>Z2 : () => X.I
 >X : any
 }

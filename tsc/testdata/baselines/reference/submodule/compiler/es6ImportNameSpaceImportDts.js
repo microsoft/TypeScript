@@ -22,3 +22,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 const nameSpaceBinding = require("./server");
 exports.x = new nameSpaceBinding.c();
+
+
+//// [server.d.ts]
+export declare class c {
+}
+//// [client.d.ts]
+import * as nameSpaceBinding from "./server";
+export declare var x: nameSpaceBinding.c;

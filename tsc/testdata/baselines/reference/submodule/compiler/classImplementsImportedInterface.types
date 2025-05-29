@@ -14,7 +14,7 @@ module M2 {
     import T = M1.I;
 >T : any
 >M1 : any
->I : I
+>I : T
 
     class C implements T {
 >C : C

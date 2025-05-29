@@ -30,3 +30,12 @@ exports.fail2 = (0, module_1.fn)(function (x) {
 });
 exports.works1 = (0, module_1.fn)((x) => x);
 exports.works2 = (0, module_1.fn)(x => x);
+
+
+//// [index.d.ts]
+export declare const fail1: import("module").Modifier<<T>(x: T) => T>;
+export declare const fail2: import("module").Modifier<<T>(x: T) => T>;
+export declare const works1: import("module").Modifier<(x: number) => number>;
+type MakeItWork = <T>(x: T) => T;
+export declare const works2: import("module").Modifier<MakeItWork>;
+export {};

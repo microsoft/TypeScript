@@ -28,44 +28,44 @@ declare function id5<T extends (x?: number) => any>(input: T): T;
 >input : T
 
 const f10 = function ({ foo = 42 }) { return foo };
->f10 : (__0: { foo?: number | undefined; }) => number
->function ({ foo = 42 }) { return foo } : (__0: { foo?: number | undefined; }) => number
+>f10 : ({ foo = 42 }: { foo?: number | undefined; }) => number
+>function ({ foo = 42 }) { return foo } : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >foo : number
 >42 : 42
 >foo : number
 
 const f11 = id1(function ({ foo = 42 }) { return foo });
->f11 : (__0: { foo?: number | undefined; }) => number
->id1(function ({ foo = 42 }) { return foo }) : (__0: { foo?: number | undefined; }) => number
+>f11 : ({ foo = 42 }: { foo?: number | undefined; }) => number
+>id1(function ({ foo = 42 }) { return foo }) : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >id1 : <T>(input: T) => T
->function ({ foo = 42 }) { return foo } : (__0: { foo?: number | undefined; }) => number
+>function ({ foo = 42 }) { return foo } : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >foo : number
 >42 : 42
 >foo : number
 
 const f12 = id2(function ({ foo = 42 }) { return foo });
->f12 : (__0: any) => any
->id2(function ({ foo = 42 }) { return foo }) : (__0: any) => any
+>f12 : ({ foo = 42 }: any) => any
+>id2(function ({ foo = 42 }) { return foo }) : ({ foo = 42 }: any) => any
 >id2 : <T extends (x: any) => any>(input: T) => T
->function ({ foo = 42 }) { return foo } : (__0: any) => any
+>function ({ foo = 42 }) { return foo } : ({ foo = 42 }: any) => any
 >foo : any
 >42 : 42
 >foo : any
 
 const f13 = id3(function ({ foo = 42 }) { return foo });
->f13 : (__0: { foo: any; }) => any
->id3(function ({ foo = 42 }) { return foo }) : (__0: { foo: any; }) => any
+>f13 : ({ foo = 42 }: { foo: any; }) => any
+>id3(function ({ foo = 42 }) { return foo }) : ({ foo = 42 }: { foo: any; }) => any
 >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
->function ({ foo = 42 }) { return foo } : (__0: { foo: any; }) => any
+>function ({ foo = 42 }) { return foo } : ({ foo = 42 }: { foo: any; }) => any
 >foo : any
 >42 : 42
 >foo : any
 
 const f14 = id4(function ({ foo = 42 }) { return foo });
->f14 : (__0: { foo?: number | undefined; }) => number
->id4(function ({ foo = 42 }) { return foo }) : (__0: { foo?: number | undefined; }) => number
+>f14 : ({ foo = 42 }: { foo?: number | undefined; }) => number
+>id4(function ({ foo = 42 }) { return foo }) : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >id4 : <T extends (x: { foo?: number | undefined; }) => any>(input: T) => T
->function ({ foo = 42 }) { return foo } : (__0: { foo?: number | undefined; }) => number
+>function ({ foo = 42 }) { return foo } : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >foo : number
 >42 : 42
 >foo : number
@@ -254,7 +254,7 @@ function id<T>(input: T): T { return input }
 >input : T
 
 function getFoo ({ foo = 42 }) {
->getFoo : (__0: { foo?: number | undefined; }) => number
+>getFoo : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >foo : number
 >42 : 42
 
@@ -263,17 +263,17 @@ function getFoo ({ foo = 42 }) {
 }
 
 const newGetFoo = id(getFoo);
->newGetFoo : (__0: { foo?: number | undefined; }) => number
->id(getFoo) : (__0: { foo?: number | undefined; }) => number
+>newGetFoo : ({ foo = 42 }: { foo?: number | undefined; }) => number
+>id(getFoo) : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >id : <T>(input: T) => T
->getFoo : (__0: { foo?: number | undefined; }) => number
+>getFoo : ({ foo = 42 }: { foo?: number | undefined; }) => number
 
 const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
->newGetFoo2 : (__0: { foo?: number | undefined; }) => number
->id(function getFoo ({ foo = 42 }) {  return foo;}) : (__0: { foo?: number | undefined; }) => number
+>newGetFoo2 : ({ foo = 42 }: { foo?: number | undefined; }) => number
+>id(function getFoo ({ foo = 42 }) {  return foo;}) : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >id : <T>(input: T) => T
->function getFoo ({ foo = 42 }) {  return foo;} : (__0: { foo?: number | undefined; }) => number
->getFoo : (__0: { foo?: number | undefined; }) => number
+>function getFoo ({ foo = 42 }) {  return foo;} : ({ foo = 42 }: { foo?: number | undefined; }) => number
+>getFoo : ({ foo = 42 }: { foo?: number | undefined; }) => number
 >foo : number
 >42 : 42
 

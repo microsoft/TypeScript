@@ -52,3 +52,15 @@ var multiM;
     multiM.f = f;
 })(multiM || (exports.multiM = multiM = {}));
 new multiM.d();
+
+
+//// [commentsMultiModuleMultiFile_1.d.ts]
+/** this is multi module 3 comment*/
+export declare namespace multiM {
+    /** class d comment*/
+    class d {
+    }
+    /// class f comment
+    class f {
+    }
+}

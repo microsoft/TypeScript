@@ -12,3 +12,9 @@ var M;
     let l1 = "s";
     M.l2 = 0;
 })(M || (M = {}));
+
+
+//// [letDeclarations2.d.ts]
+declare namespace M {
+    let l2: number;
+}

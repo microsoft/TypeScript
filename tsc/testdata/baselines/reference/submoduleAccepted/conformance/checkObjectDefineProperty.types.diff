@@ -175,11 +175,9 @@
 ->x : typeof x
 +>x : {}
  >"zip" : "zip"
-->{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
-+>{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get: () => number; set: (_: any) => void; }
+ >{ get() { return 98122 }, set(_) { /*ignore*/ } } : { get(): number; set(_: any): void; }
  >get : () => number
- >98122 : 98122
- >set : (_: any) => void
+@@= skipped -13, +13 lines =@@
  >_ : any
 
  Object.defineProperty(x, "houseNumber", { get() { return 21.75 } });
@@ -191,8 +189,7 @@
 ->x : typeof x
 +>x : {}
  >"houseNumber" : "houseNumber"
-->{ get() { return 21.75 } } : { get(): number; }
-+>{ get() { return 21.75 } } : { get: () => number; }
+ >{ get() { return 21.75 } } : { get(): number; }
  >get : () => number
  >21.75 : 21.75
 
@@ -205,12 +202,9 @@
 ->x : typeof x
 +>x : {}
  >"zipStr" : "zipStr"
-->{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
-+>{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set: (str: string) => void; }
+ >{    /** @param {string} str */    set(str) {        this.zip = Number(str)     }} : { set(str: string): void; }
 
-     /** @param {string} str */
-     set(str) {
-@@= skipped -61, +61 lines =@@
+@@= skipped -48, +48 lines =@@
  takeName(x);
  >takeName(x) : string
  >takeName : (named: { name: string; }) => string

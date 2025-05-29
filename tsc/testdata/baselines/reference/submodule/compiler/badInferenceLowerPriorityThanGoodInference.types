@@ -52,10 +52,10 @@ function goofus <ARGS extends any[]> (f: (...args: ARGS) => any ) {}
 goofus((a: string) => ({ dog() { return a; } }));
 >goofus((a: string) => ({ dog() { return a; } })) : void
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->(a: string) => ({ dog() { return a; } }) : (a: string) => { dog: () => string; }
+>(a: string) => ({ dog() { return a; } }) : (a: string) => { dog(): string; }
 >a : string
->({ dog() { return a; } }) : { dog: () => string; }
->{ dog() { return a; } } : { dog: () => string; }
+>({ dog() { return a; } }) : { dog(): string; }
+>{ dog() { return a; } } : { dog(): string; }
 >dog : () => string
 >a : string
 

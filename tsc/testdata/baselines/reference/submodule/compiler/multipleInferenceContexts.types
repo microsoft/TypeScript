@@ -33,7 +33,7 @@ const r2 = Moon({
 >r2 : Instance<{ msg: string; }>
 >Moon({    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },}) : Instance<{ msg: string; }>
 >Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
->{    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },} : { data: { msg: string; }; render: () => unknown; }
+>{    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },} : { data: { msg: string; }; render(): unknown; }
 
     data: { msg: "" },
 >data : { msg: string; }

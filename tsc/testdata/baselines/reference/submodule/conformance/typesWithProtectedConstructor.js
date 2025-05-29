@@ -27,3 +27,16 @@ class C2 {
 }
 var c2 = new C2(); // error C2 is protected
 var r2 = c2.constructor;
+
+
+//// [typesWithProtectedConstructor.d.ts]
+declare class C {
+    protected constructor();
+}
+declare var c: any; // error C is protected
+declare var r: () => void;
+declare class C2 {
+    protected constructor(x: number);
+}
+declare var c2: any; // error C2 is protected
+declare var r2: (x: number) => void;

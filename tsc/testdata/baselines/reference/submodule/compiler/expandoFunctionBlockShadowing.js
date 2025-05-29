@@ -40,3 +40,9 @@ if (Math.random()) {
     const topYcheck = aliasTopY;
     const blockYcheck = Y;
 }
+
+
+//// [expandoFunctionBlockShadowing.d.ts]
+// https://github.com/microsoft/TypeScript/issues/56538
+export declare function X(): void;
+export declare function Y(): void;

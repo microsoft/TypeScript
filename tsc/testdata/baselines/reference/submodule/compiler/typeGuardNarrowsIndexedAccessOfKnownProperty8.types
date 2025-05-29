@@ -7,7 +7,7 @@ export const key = "a";
 
 === b.ts ===
 import * as a from "./a";
->a : typeof import("a")
+>a : typeof a
 
 export class C {
 >C : C
@@ -15,7 +15,7 @@ export class C {
     [a.key]: string;
 >[a.key] : string
 >a.key : "a"
->a : typeof import("a")
+>a : typeof a
 >key : "a"
 
     constructor() {
@@ -24,7 +24,7 @@ export class C {
 >this[a.key] : string
 >this : this
 >a.key : "a"
->a : typeof import("a")
+>a : typeof a
 >key : "a"
 >"foo" : "foo"
     }

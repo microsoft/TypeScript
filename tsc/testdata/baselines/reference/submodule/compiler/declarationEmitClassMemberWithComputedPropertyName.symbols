@@ -34,13 +34,13 @@ class Foo {
     }
 
     static [k2]() {
->[k2] : Symbol(foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 12, 5))
+>[k2] : Symbol([k2], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 12, 5))
 >k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
 
         return 1;
     }
     [k2]() {
->[k2] : Symbol(foo, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 16, 5))
+>[k2] : Symbol([k2], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 16, 5))
 >k2 : Symbol(k2, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 1, 5))
 
         return "";
@@ -61,11 +61,11 @@ class Foo {
 >k3 : Symbol(k3, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 3, 5))
 
     static [k4] = 1;
->[k4] : Symbol(prop, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 25, 13))
+>[k4] : Symbol([k4], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 25, 13))
 >k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))
 
     [k4] = 2;
->[k4] : Symbol(prop, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 27, 20))
+>[k4] : Symbol([k4], Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 27, 20))
 >k4 : Symbol(k4, Decl(declarationEmitClassMemberWithComputedPropertyName.ts, 4, 5))
 
     static p1 = 3;

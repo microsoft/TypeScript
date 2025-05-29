@@ -5,11 +5,11 @@
  === mod.d.ts ===
  export = modObj;
 ->modObj : modObj.A & modObj.B
-+>modObj : A & B
++>modObj : import("./mod.js").A & import("./mod.js").B
 
  declare const modObj: modObj.A & modObj.B;
 ->modObj : modObj.A & modObj.B
-+>modObj : A & B
++>modObj : import("./mod.js").A & import("./mod.js").B
  >modObj : any
  >modObj : any
 
@@ -18,16 +18,16 @@
  === idx.ts ===
  import * as mod from "./mod";
 ->mod : { a: string; b: string; default: mod.A & mod.B; }
-+>mod : A & B
++>mod : mod.A & mod.B
 
  mod.a;
  >mod.a : string
 ->mod : { a: string; b: string; default: mod.A & mod.B; }
-+>mod : A & B
++>mod : mod.A & mod.B
  >a : string
 
  mod.b;
  >mod.b : string
 ->mod : { a: string; b: string; default: mod.A & mod.B; }
-+>mod : A & B
++>mod : mod.A & mod.B
  >b : string

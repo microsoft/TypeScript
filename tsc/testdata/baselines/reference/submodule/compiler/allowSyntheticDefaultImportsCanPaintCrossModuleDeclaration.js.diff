@@ -7,15 +7,4 @@
 -var file1_1 = require("./file1");
 +const file1_1 = require("./file1");
  exports.A = (0, file1_1.styled)();
--
--
--//// [color.d.ts]
--interface Color {
--    c: string;
--}
--export default Color;
--//// [file1.d.ts]
--import Color from "./color";
--export declare function styled(): Color;
--//// [file2.d.ts]
--export declare const A: import("./color").default;
+

@@ -2,5 +2,5 @@
 
 === generatorTypeCheck3.ts ===
 function* g1(): IterableIterator<string> { }
->g1 : () => IterableIterator<string, any, any>
+>g1 : () => IterableIterator<string>
 

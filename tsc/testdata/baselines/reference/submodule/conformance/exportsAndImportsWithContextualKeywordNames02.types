@@ -12,18 +12,18 @@ export { as as return, as };
 
 === t2.ts ===
 import * as as from "./t1";
->as : typeof import("t1")
+>as : typeof as
 
 var x = as.as;
 >x : number
 >as.as : number
->as : typeof import("t1")
+>as : typeof as
 >as : number
 
 var y = as.return;
 >y : number
 >as.return : number
->as : typeof import("t1")
+>as : typeof as
 >return : number
 
 === t3.ts ===

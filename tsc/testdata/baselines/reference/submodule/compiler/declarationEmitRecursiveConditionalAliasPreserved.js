@@ -109,3 +109,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.power = void 0;
 const power = (num, powerOf) => (num ** powerOf);
 exports.power = power;
+
+
+//// [a.d.ts]
+import { Power } from "./input";
+export declare const power: <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>;

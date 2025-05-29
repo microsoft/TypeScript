@@ -105,7 +105,7 @@ function other<T>(x: T) {
     var r6 = foo((a: T) => a, (b: T) => b); // T => T
 >r6 : (x: T) => T
 >foo((a: T) => a, (b: T) => b) : (x: T) => T
->foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a: T) => a : (a: T) => T
 >a : T
 >a : T
@@ -116,7 +116,7 @@ function other<T>(x: T) {
     var r6b = foo((a) => a, (b) => b); // {} => {}
 >r6b : (x: unknown) => unknown
 >foo((a) => a, (b) => b) : (x: unknown) => unknown
->foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a) => a : (a: unknown) => unknown
 >a : unknown
 >a : unknown
@@ -132,7 +132,7 @@ function other2<T extends Date>(x: T) {
     var r7 = foo((a: T) => a, (b: T) => b); // T => T
 >r7 : (x: T) => T
 >foo((a: T) => a, (b: T) => b) : (x: T) => T
->foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a: T) => a : (a: T) => T
 >a : T
 >a : T
@@ -143,7 +143,7 @@ function other2<T extends Date>(x: T) {
     var r7b = foo((a) => a, (b) => b); // {} => {}
 >r7b : (x: unknown) => unknown
 >foo((a) => a, (b) => b) : (x: unknown) => unknown
->foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo : <T_1>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a) => a : (a: unknown) => unknown
 >a : unknown
 >a : unknown
@@ -183,7 +183,7 @@ function other3<T extends RegExp>(x: T) {
     var r8 = foo2((a: Date) => a, (b: Date) => b); // Date => Date
 >r8 : (x: Date) => Date
 >foo2((a: Date) => a, (b: Date) => b) : (x: Date) => Date
->foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
+>foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
 >(a: Date) => a : (a: Date) => Date
 >a : Date
 >a : Date

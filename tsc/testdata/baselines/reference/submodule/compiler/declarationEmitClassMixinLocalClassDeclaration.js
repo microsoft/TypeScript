@@ -42,3 +42,20 @@ class XmlElement2 extends (0, exports.Mixin)([Base], (base) => {
 }) {
 }
 exports.XmlElement2 = XmlElement2;
+
+
+//// [declarationEmitClassMixinLocalClassDeclaration.d.ts]
+export type AnyFunction<Result = any> = (...input: any[]) => Result;
+export type AnyConstructor<Instance extends object = object, Static extends object = object> = (new (...input: any[]) => Instance) & Static;
+type MixinHelperFunc = <A extends AnyConstructor, T>(required: [A], arg: T) => T extends AnyFunction<infer M> ? M : never;
+export declare const Mixin: MixinHelperFunc;
+export declare class Base {
+}
+declare const XmlElement2_base: {
+    new (): {
+        num: number;
+    };
+};
+export declare class XmlElement2 extends XmlElement2_base {
+}
+export {};

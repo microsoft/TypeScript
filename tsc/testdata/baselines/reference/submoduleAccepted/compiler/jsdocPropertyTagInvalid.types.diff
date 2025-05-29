@@ -1,0 +1,16 @@
+--- old.jsdocPropertyTagInvalid.types
++++ new.jsdocPropertyTagInvalid.types
+@@= skipped -12, +12 lines =@@
+
+ === /b.js ===
+ import { f } from "./a.js"
+->f : (p: MyType) => void
++>f : (p: import("./a.js").MyType) => void
+
+ f({ x: 42 })
+ >f({ x: 42 }) : void
+->f : (p: MyType) => void
++>f : (p: import("./a.js").MyType) => void
+ >{ x: 42 } : { x: number; }
+ >x : number
+ >42 : 42

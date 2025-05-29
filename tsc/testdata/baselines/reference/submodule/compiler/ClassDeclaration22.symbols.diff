@@ -5,9 +5,9 @@
 
      "foo"();
 ->"foo" : Symbol(C["foo"], Decl(ClassDeclaration22.ts, 0, 9))
-+>"foo" : Symbol(foo, Decl(ClassDeclaration22.ts, 0, 9))
++>"foo" : Symbol("foo", Decl(ClassDeclaration22.ts, 0, 9))
 
      "bar"() { }
 ->"bar" : Symbol(C["bar"], Decl(ClassDeclaration22.ts, 1, 12))
-+>"bar" : Symbol(bar, Decl(ClassDeclaration22.ts, 1, 12))
++>"bar" : Symbol("bar", Decl(ClassDeclaration22.ts, 1, 12))
  }

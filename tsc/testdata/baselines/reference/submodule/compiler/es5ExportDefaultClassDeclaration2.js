@@ -13,3 +13,9 @@ class default_1 {
     method() { }
 }
 exports.default = default_1;
+
+
+//// [es5ExportDefaultClassDeclaration2.d.ts]
+export default class {
+    method(): void;
+}

@@ -8,7 +8,7 @@ module X {
     export interface Y { }
 }
 var z: X.Y.Z = null;
->z : Z
+>z : X.Y.Z
 >X : any
 >Y : any
 

@@ -6,11 +6,11 @@ interface Context {
 >color : any
 }
 declare function ZeroThingOrTwoThing(): JSX.Element;
->ZeroThingOrTwoThing : { (): Element; (l: { yy: number; yy1: string; }, context: Context): Element; }
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >JSX : any
 
 declare function ZeroThingOrTwoThing(l: {yy: number, yy1: string}, context: Context): JSX.Element;
->ZeroThingOrTwoThing : { (): Element; (l: { yy: number; yy1: string; }, context: Context): Element; }
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >l : { yy: number; yy1: string; }
 >yy : number
 >yy1 : string
@@ -22,54 +22,54 @@ let obj2: any;
 
 // OK
 const two1 = <ZeroThingOrTwoThing />;
->two1 : Element
-><ZeroThingOrTwoThing /> : Element
->ZeroThingOrTwoThing : { (): Element; (l: { yy: number; yy1: string; }, context: Context): Element; }
+>two1 : JSX.Element
+><ZeroThingOrTwoThing /> : JSX.Element
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 
 const two2 = <ZeroThingOrTwoThing yy={100}  yy1="hello"/>;
->two2 : Element
-><ZeroThingOrTwoThing yy={100}  yy1="hello"/> : Element
->ZeroThingOrTwoThing : { (): Element; (l: { yy: number; yy1: string; }, context: Context): Element; }
+>two2 : JSX.Element
+><ZeroThingOrTwoThing yy={100}  yy1="hello"/> : JSX.Element
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >yy : number
 >100 : 100
 >yy1 : string
 
 const two3 = <ZeroThingOrTwoThing {...obj2} />;  // it is just any so we allow it to pass through
->two3 : Element
-><ZeroThingOrTwoThing {...obj2} /> : Element
->ZeroThingOrTwoThing : { (): Element; (l: { yy: number; yy1: string; }, context: Context): Element; }
+>two3 : JSX.Element
+><ZeroThingOrTwoThing {...obj2} /> : JSX.Element
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >obj2 : any
 
 const two4 = <ZeroThingOrTwoThing  yy={1000} {...obj2} />;  // it is just any so we allow it to pass through
->two4 : Element
-><ZeroThingOrTwoThing  yy={1000} {...obj2} /> : Element
->ZeroThingOrTwoThing : { (): Element; (l: { yy: number; yy1: string; }, context: Context): Element; }
+>two4 : JSX.Element
+><ZeroThingOrTwoThing  yy={1000} {...obj2} /> : JSX.Element
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >yy : number
 >1000 : 1000
 >obj2 : any
 
 const two5 = <ZeroThingOrTwoThing  {...obj2} yy={1000} />;  // it is just any so we allow it to pass through
->two5 : Element
-><ZeroThingOrTwoThing  {...obj2} yy={1000} /> : Element
->ZeroThingOrTwoThing : { (): Element; (l: { yy: number; yy1: string; }, context: Context): Element; }
+>two5 : JSX.Element
+><ZeroThingOrTwoThing  {...obj2} yy={1000} /> : JSX.Element
+>ZeroThingOrTwoThing : { (): JSX.Element; (l: { yy: number; yy1: string; }, context: Context): JSX.Element; }
 >obj2 : any
 >yy : number
 >1000 : 1000
 
 declare function ThreeThing(l: {y1: string}): JSX.Element;
->ThreeThing : { (l: { y1: string; }): Element; (l: { y2: string; }): Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): Element; }
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >l : { y1: string; }
 >y1 : string
 >JSX : any
 
 declare function ThreeThing(l: {y2: string}): JSX.Element;
->ThreeThing : { (l: { y1: string; }): Element; (l: { y2: string; }): Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): Element; }
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >l : { y2: string; }
 >y2 : string
 >JSX : any
 
 declare function ThreeThing(l: {yy: number, yy1: string}, context: Context, updater: any): JSX.Element;
->ThreeThing : { (l: { y1: string; }): Element; (l: { y2: string; }): Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): Element; }
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >l : { yy: number; yy1: string; }
 >yy : number
 >yy1 : string
@@ -79,23 +79,23 @@ declare function ThreeThing(l: {yy: number, yy1: string}, context: Context, upda
 
 // OK
 const three1 = <ThreeThing yy={99} yy1="hello world" />;
->three1 : Element
-><ThreeThing yy={99} yy1="hello world" /> : Element
->ThreeThing : { (l: { y1: string; }): Element; (l: { y2: string; }): Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): Element; }
+>three1 : JSX.Element
+><ThreeThing yy={99} yy1="hello world" /> : JSX.Element
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >yy : number
 >99 : 99
 >yy1 : string
 
 const three2 = <ThreeThing y2="Bye" />;
->three2 : Element
-><ThreeThing y2="Bye" /> : Element
->ThreeThing : { (l: { y1: string; }): Element; (l: { y2: string; }): Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): Element; }
+>three2 : JSX.Element
+><ThreeThing y2="Bye" /> : JSX.Element
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >y2 : string
 
 const three3 = <ThreeThing {...obj2} y2={10} />;  // it is just any so we allow it to pass through
->three3 : Element
-><ThreeThing {...obj2} y2={10} /> : Element
->ThreeThing : { (l: { y1: string; }): Element; (l: { y2: string; }): Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): Element; }
+>three3 : JSX.Element
+><ThreeThing {...obj2} y2={10} /> : JSX.Element
+>ThreeThing : { (l: { y1: string; }): JSX.Element; (l: { y2: string; }): JSX.Element; (l: { yy: number; yy1: string; }, context: Context, updater: any): JSX.Element; }
 >obj2 : any
 >y2 : number
 >10 : 10

@@ -14,3 +14,8 @@ var m;
     }
     [m.x, m.y, m.z] = [10, new c(), 30];
 })(m || (m = {}));
+
+
+//// [declarationEmitDestructuringPrivacyError.d.ts]
+declare namespace m {
+}

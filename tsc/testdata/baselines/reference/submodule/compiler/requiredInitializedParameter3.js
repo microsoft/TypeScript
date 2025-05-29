@@ -13,3 +13,12 @@ class C1 implements I1 {
 class C1 {
     method(a = 0, b) { }
 }
+
+
+//// [requiredInitializedParameter3.d.ts]
+interface I1 {
+    method(): any;
+}
+declare class C1 implements I1 {
+    method(a?: number, b?: any): void;
+}

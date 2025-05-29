@@ -17,3 +17,17 @@ declare class C {
 }
 
 //// [ambientAccessors.js]
+
+
+//// [ambientAccessors.d.ts]
+// ok to use accessors in ambient class in ES3
+declare class C {
+    static get a(): string;
+    static set a(value: string);
+    private static get b();
+    private static set b(value);
+    get x(): string;
+    set x(value: string);
+    private get y();
+    private set y(value);
+}

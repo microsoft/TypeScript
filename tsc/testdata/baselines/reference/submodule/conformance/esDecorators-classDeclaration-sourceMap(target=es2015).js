@@ -84,3 +84,15 @@ class C {
     static accessor #z = 1;
 }
 //# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
+
+//// [esDecorators-classDeclaration-sourceMap.d.ts]
+declare var dec: any;
+declare class C {
+    #private;
+    method(): void;
+    get x(): number;
+    set x(value: number);
+    y: number;
+    accessor z: number;
+}
+//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.d.ts.map

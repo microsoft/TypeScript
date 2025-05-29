@@ -1,15 +1,13 @@
 --- old.checkJsdocSatisfiesTag3.types
 +++ new.checkJsdocSatisfiesTag3.types
-@@= skipped -2, +2 lines =@@
- === /a.js ===
+@@= skipped -3, +3 lines =@@
  /** @type {{ f(s: string): void } & Record<string, unknown> }} */
  let obj = /** @satisfies {{ g(s: string): void } & Record<string, unknown>} */ ({
-->obj : { f(s: string): void; } & Record<string, unknown>
+ >obj : { f(s: string): void; } & Record<string, unknown>
 ->({    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }}) : { f(s: string): void; } & Record<string, unknown>
 ->{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
-+>obj : { f: (s: string) => void; } & Record<string, unknown>
-+>({    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }}) : { f: (s: string) => void; g: (s: any) => void; }
-+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f: (s: string) => void; g: (s: any) => void; }
++>({    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }}) : { f(s: string): void; g(s: any): void; }
++>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: string): void; g(s: any): void; }
 
      f(s) { }, // "incorrect" implicit any on 's'
 ->f : (s: any) => void
@@ -32,7 +30,7 @@
 ->{ f(x) { } } : { f(x: string): void; }
 ->f : (x: string) => void
 ->x : string
-+>({ f(x) { } }) : { f: (x: any) => void; }
-+>{ f(x) { } } : { f: (x: any) => void; }
++>({ f(x) { } }) : { f(x: any): void; }
++>{ f(x) { } } : { f(x: any): void; }
 +>f : (x: any) => void
 +>x : any

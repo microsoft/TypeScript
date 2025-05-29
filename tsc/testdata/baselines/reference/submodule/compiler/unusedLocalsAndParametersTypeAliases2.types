@@ -10,7 +10,7 @@ function foo() {
 >foo : () => void
 
     type handler2 = () => void;
->handler2 : handler2
+>handler2 : () => void
 
     foo();
 >foo() : void

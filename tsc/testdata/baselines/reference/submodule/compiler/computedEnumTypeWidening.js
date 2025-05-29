@@ -150,3 +150,46 @@ let val1 = MyEnum.A;
 val1 = MyEnum.B;
 let val2 = MyDeclaredEnum.A;
 val2 = MyDeclaredEnum.B;
+
+
+//// [computedEnumTypeWidening.d.ts]
+declare function computed(x: number): number;
+declare enum E {
+    A,
+    B,
+    C,
+    D
+}
+declare function f1(): void;
+declare function f2(cond: boolean): void;
+declare function f3(): void;
+declare enum E2 {
+    A,
+    B,
+    C,
+    D
+}
+declare function f4(): void;
+declare const c1 = E.B;
+declare const c2: E.B;
+declare let v1: E;
+declare let v2: E.B;
+declare class C {
+    p1: E;
+    p2: E.B;
+    readonly p3: E;
+    readonly p4: E.B;
+}
+// Repro from #52531
+declare enum MyEnum {
+    A = 0,
+    B = 1,
+    C = 2
+}
+declare let val1: MyEnum;
+declare enum MyDeclaredEnum {
+    A,
+    B,
+    C
+}
+declare let val2: MyDeclaredEnum;

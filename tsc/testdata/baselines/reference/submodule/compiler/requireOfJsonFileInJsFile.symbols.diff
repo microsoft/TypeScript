@@ -26,11 +26,10 @@
 
  js1.b;
  >js1.b : Symbol(b, Decl(user.js, 10, 12))
-@@= skipped -10, +8 lines =@@
-
+@@= skipped -11, +9 lines =@@
  === /json.json ===
  { "a": 0 }
-->"a" : Symbol("a", Decl(json.json, 0, 1))
+ >"a" : Symbol("a", Decl(json.json, 0, 1))
 -
 -=== /js.js ===
 -module.exports = { a: 0 };
@@ -38,4 +37,3 @@
 ->module : Symbol(export=, Decl(js.js, 0, 0))
 ->exports : Symbol(export=, Decl(js.js, 0, 0))
 ->a : Symbol(a, Decl(js.js, 0, 18))
-+>"a" : Symbol(a, Decl(json.json, 0, 1))

@@ -9,3 +9,9 @@ var obj = {
 var obj = {
     [Symbol.isConcatSpreadable]: 0
 };
+
+
+//// [symbolDeclarationEmit8.d.ts]
+declare var obj: {
+    [Symbol.isConcatSpreadable]: number;
+};

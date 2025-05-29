@@ -27,11 +27,6 @@
  >P : Symbol(P, Decl(jsxElementType.tsx, 16, 35))
 
  declare global {
-->global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
-+>global : Symbol((Missing), Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
-
-   namespace JSX {
- >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
 @@= skipped -17, +17 lines =@@
  >IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
 
@@ -126,16 +121,7 @@
  >Component : Symbol(Component, Decl(jsxElementType.tsx, 93, 62))
  >T : Symbol(T, Decl(jsxElementType.tsx, 93, 12))
 
-@@= skipped -13, +13 lines =@@
- >foo : Symbol(foo, Decl(jsxElementType.tsx, 98, 11))
-
- declare global {
-->global : Symbol(global, Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
-+>global : Symbol((Missing), Decl(jsxElementType.tsx, 18, 48), Decl(jsxElementType.tsx, 98, 25))
-
-     namespace JSX {
- >JSX : Symbol(JSX, Decl(react16.d.ts, 2493, 12), Decl(jsxElementType.tsx, 20, 16), Decl(jsxElementType.tsx, 100, 16))
-@@= skipped -9, +9 lines =@@
+@@= skipped -22, +22 lines =@@
  >IntrinsicElements : Symbol(IntrinsicElements, Decl(react16.d.ts, 2514, 86), Decl(jsxElementType.tsx, 22, 67), Decl(jsxElementType.tsx, 101, 19))
 
            ['a:b']: { a: string };

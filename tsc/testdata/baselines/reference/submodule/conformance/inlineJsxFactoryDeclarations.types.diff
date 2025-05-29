@@ -1,11 +1,7 @@
 --- old.inlineJsxFactoryDeclarations.types
 +++ new.inlineJsxFactoryDeclarations.types
-@@= skipped -26, +26 lines =@@
- === otherreacty.tsx ===
- /** @jsx React.createElement */
- import * as React from "./renderer";
-->React : typeof React
-+>React : typeof import("renderer")
+@@= skipped -29, +29 lines =@@
+ >React : typeof React
 
  <h></h>
 -><h></h> : error
@@ -13,7 +9,7 @@
  >h : any
  >h : any
 
-@@= skipped -14, +14 lines =@@
+@@= skipped -11, +11 lines =@@
  >h : () => void
 
  export const prerendered = <h></h>;

@@ -14,9 +14,9 @@ const Something = require("fs").Something;
 module.exports.A = {}
 >module.exports.A = {} : {}
 >module.exports.A : any
->module.exports : typeof import("index")
->module : { "index": typeof import("index"); }
->exports : typeof import("index")
+>module.exports : typeof import(".")
+>module : { "\"index\"": typeof import("."); }
+>exports : typeof import(".")
 >A : any
 >{} : {}
 
@@ -24,9 +24,9 @@ module.exports.A.B = {
 >module.exports.A.B = {    thing: new Something()} : { thing: any; }
 >module.exports.A.B : any
 >module.exports.A : any
->module.exports : typeof import("index")
->module : { "index": typeof import("index"); }
->exports : typeof import("index")
+>module.exports : typeof import(".")
+>module : { "\"index\"": typeof import("."); }
+>exports : typeof import(".")
 >A : any
 >B : any
 >{    thing: new Something()} : { thing: any; }

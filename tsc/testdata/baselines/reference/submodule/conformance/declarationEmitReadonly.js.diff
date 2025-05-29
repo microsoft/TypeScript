@@ -13,10 +13,7 @@
      }
 -    return C;
 -}());
--
--
--//// [declarationEmitReadonly.d.ts]
--declare class C {
--    readonly x: number;
--    constructor(x: number);
- }
++}
+
+
+ //// [declarationEmitReadonly.d.ts]

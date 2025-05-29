@@ -119,3 +119,61 @@ var M;
         })(N = Q.N || (Q.N = {}));
     })(Q = M.Q || (M.Q = {}));
 })(M || (exports.M = M = {}));
+
+
+//// [declarationEmit_nameConflicts_1.d.ts]
+declare namespace f {
+    class c {
+    }
+}
+export = f;
+//// [declarationEmit_nameConflicts_0.d.ts]
+import im = require('./declarationEmit_nameConflicts_1');
+export declare namespace M {
+    function f(): void;
+    class C {
+    }
+    namespace N {
+        function g(): void;
+        interface I {
+        }
+    }
+    export import a = M.f;
+    export import b = M.C;
+    export import c = N;
+    export import d = im;
+}
+export declare namespace M.P {
+    function f(): void;
+    class C {
+    }
+    namespace N {
+        function g(): void;
+        interface I {
+        }
+    }
+    export import im = M.P.f;
+    var a: typeof M.f; // emitted incorrectly as typeof f
+    var b: typeof M.C; // ok
+    var c: typeof M.N; // ok
+    var g: typeof M.c.g; // ok
+    var d: typeof import("./declarationEmit_nameConflicts_1"); // emitted incorrectly as typeof im
+}
+export declare namespace M.Q {
+    function f(): void;
+    class C {
+    }
+    namespace N {
+        function g(): void;
+        interface I {
+        }
+    }
+    interface b extends M.b {
+    } // ok
+    interface I extends M.c.I {
+    } // ok
+    namespace c {
+        interface I extends M.c.I {
+        } // ok
+    }
+}

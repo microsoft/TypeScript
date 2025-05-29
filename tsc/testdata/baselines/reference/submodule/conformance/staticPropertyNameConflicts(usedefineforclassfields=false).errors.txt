@@ -2,23 +2,23 @@ staticPropertyNameConflicts.ts(53,12): error TS2699: Static property 'prototype'
 staticPropertyNameConflicts.ts(58,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype2'.
 staticPropertyNameConflicts.ts(63,12): error TS2300: Duplicate identifier 'prototype'.
 staticPropertyNameConflicts.ts(63,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
-staticPropertyNameConflicts.ts(68,12): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(68,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
 staticPropertyNameConflicts.ts(68,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn2'.
 staticPropertyNameConflicts.ts(161,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'.
 staticPropertyNameConflicts.ts(166,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous2'.
 staticPropertyNameConflicts.ts(171,12): error TS2300: Duplicate identifier 'prototype'.
 staticPropertyNameConflicts.ts(171,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'.
-staticPropertyNameConflicts.ts(176,12): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(176,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
 staticPropertyNameConflicts.ts(176,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous2'.
 staticPropertyNameConflicts.ts(252,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(264,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(277,12): error TS1319: A default export can only be used in an ECMAScript-style module.
-staticPropertyNameConflicts.ts(278,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'default'.
+staticPropertyNameConflicts.ts(278,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
 staticPropertyNameConflicts.ts(284,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototype'.
 staticPropertyNameConflicts.ts(289,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(290,16): error TS2300: Duplicate identifier 'prototype'.
-staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'default'.
-staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier 'prototype'.
+staticPropertyNameConflicts.ts(290,16): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
+staticPropertyNameConflicts.ts(296,12): error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
 staticPropertyNameConflicts.ts(296,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototypeFn'.
 staticPropertyNameConflicts.ts(302,12): error TS1319: A default export can only be used in an ECMAScript-style module.
 staticPropertyNameConflicts.ts(314,12): error TS1319: A default export can only be used in an ECMAScript-style module.
@@ -104,7 +104,7 @@ staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only 
     class StaticPrototypeFn2 {
         static [FunctionPropertyNames.prototype]() {} // always an error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'prototype'.
+!!! error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn2'.
         [FunctionPropertyNames.prototype]() {} // ok
@@ -224,7 +224,7 @@ staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only 
     var StaticPrototypeFn_Anonymous2 = class {
         static [FunctionPropertyNames.prototype]() {} // always an error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'prototype'.
+!!! error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous2'.
         [FunctionPropertyNames.prototype]() {} // ok
@@ -336,7 +336,7 @@ staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only 
 !!! error TS1319: A default export can only be used in an ECMAScript-style module.
             static prototype: number; // always an error
                    ~~~~~~~~~
-!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'default'.
+!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'.
             prototype: string; // ok
         }
     }
@@ -356,7 +356,7 @@ staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only 
                    ~~~~~~~~~
 !!! error TS2300: Duplicate identifier 'prototype'.
                    ~~~~~~~~~
-!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'default'.
+!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'.
             prototype() {} // ok
         }
     }
@@ -364,7 +364,7 @@ staticPropertyNameConflicts.ts(339,12): error TS1319: A default export can only 
     export class ExportedStaticPrototypeFn {
         static [FunctionPropertyNames.prototype]() {} // always an error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'prototype'.
+!!! error TS2300: Duplicate identifier '[FunctionPropertyNames.prototype]'.
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'ExportedStaticPrototypeFn'.
         [FunctionPropertyNames.prototype]() {} // ok

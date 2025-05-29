@@ -2,7 +2,7 @@
 
 === sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues.ts ===
 declare var console: {
->console : { log: (msg: string) => void; }
+>console : { log(msg: string): void; }
 
     log(msg: string): void;
 >log : (msg: string) => void
@@ -83,7 +83,7 @@ if (nameA == nameA2) {
     console.log(skillA2);
 >console.log(skillA2) : void
 >console.log : (msg: string) => void
->console : { log: (msg: string) => void; }
+>console : { log(msg: string): void; }
 >log : (msg: string) => void
 >skillA2 : string
 }

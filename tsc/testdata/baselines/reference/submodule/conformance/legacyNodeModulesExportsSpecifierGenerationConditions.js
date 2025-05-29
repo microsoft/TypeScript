@@ -37,3 +37,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 const a = async () => (await Promise.resolve().then(() => require("inner"))).x();
 exports.a = a;
+
+
+//// [index.d.ts]
+export declare const a: any;

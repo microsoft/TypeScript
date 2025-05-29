@@ -7,3 +7,7 @@ const x: string = undefined;
 //// [settingsSimpleTest.js]
 const x = undefined;
 export {};
+
+
+//// [settingsSimpleTest.d.ts]
+export {};

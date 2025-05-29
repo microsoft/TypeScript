@@ -18,3 +18,16 @@ declare module 'moo' {
 //// [declFileImportedTypeUseInTypeArgPosition.js]
 class List {
 }
+
+
+//// [declFileImportedTypeUseInTypeArgPosition.d.ts]
+declare class List<T> {
+}
+declare module 'mod1' {
+    class Foo {
+    }
+}
+declare module 'moo' {
+    import x = require('mod1');
+    var p: List<x.Foo>;
+}

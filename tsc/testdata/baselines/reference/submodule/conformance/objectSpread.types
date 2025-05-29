@@ -354,10 +354,10 @@ let spreadC: { p: number } = { ...c }
 
 // own methods are enumerable
 let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } };
->cplus : { p: number; plus: () => void; }
+>cplus : { p: number; plus(): void; }
 >p : number
 >plus : () => void
->{ ...c, plus() { return this.p + 1; } } : { p: number; plus: () => any; }
+>{ ...c, plus() { return this.p + 1; } } : { p: number; plus(): any; }
 >c : C
 >plus : () => any
 >this.p + 1 : any
@@ -369,7 +369,7 @@ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } }
 cplus.plus();
 >cplus.plus() : void
 >cplus.plus : () => void
->cplus : { p: number; plus: () => void; }
+>cplus : { p: number; plus(): void; }
 >plus : () => void
 
 // new field's type conflicting with existing field is OK
@@ -446,7 +446,7 @@ function container(
 >"before everything" : number
 
         { ['before everything']: 12, ...o, b: 'yes' }
->{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; ['before everything']: number; b: string; }
+>{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; "before everything": number; b: string; }
 >['before everything'] : number
 >'before everything' : "before everything"
 >12 : 12
@@ -461,7 +461,7 @@ function container(
 >"at the end" : number
 
         { ...o, b: 'yeah', ['at the end']: 14 }
->{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; ['at the end']: number; }
+>{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; "at the end": number; }
 >o : { a: number; b: string; }
 >b : string
 >'yeah' : "yeah"

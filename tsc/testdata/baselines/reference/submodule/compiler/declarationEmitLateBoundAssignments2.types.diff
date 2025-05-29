@@ -41,13 +41,13 @@
 
  export function decl4() {}
 ->decl4 : typeof decl4
-+>decl4 : { (): void; decl4[num]: number; }
++>decl4 : { (): void; 1: number; }
 
  decl4[num] = 0
  >decl4[num] = 0 : 0
  >decl4[num] : number
 ->decl4 : typeof decl4
-+>decl4 : { (): void; decl4[num]: number; }
++>decl4 : { (): void; 1: number; }
  >num : 1
  >0 : 0
 
@@ -65,13 +65,13 @@
 
  export function decl6() {}
 ->decl6 : typeof decl6
-+>decl6 : { (): void; decl6[numStr]: number; }
++>decl6 : { (): void; "10": number; }
 
  decl6[numStr] = 0
  >decl6[numStr] = 0 : 0
  >decl6[numStr] : number
 ->decl6 : typeof decl6
-+>decl6 : { (): void; decl6[numStr]: number; }
++>decl6 : { (): void; "10": number; }
  >numStr : "10"
  >0 : 0
 
@@ -89,115 +89,36 @@
 
  export function decl8() {}
 ->decl8 : typeof decl8
-+>decl8 : { (): void; decl8[withWhitespace]: number; }
++>decl8 : { (): void; "foo bar": number; }
 
  decl8[withWhitespace] = 0
  >decl8[withWhitespace] = 0 : 0
  >decl8[withWhitespace] : number
 ->decl8 : typeof decl8
-+>decl8 : { (): void; decl8[withWhitespace]: number; }
++>decl8 : { (): void; "foo bar": number; }
  >withWhitespace : "foo bar"
  >0 : 0
 
  export function decl9() {}
 ->decl9 : typeof decl9
-+>decl9 : { (): void; "🤪": number; }
++>decl9 : { (): void; "\uD83E\uDD2A": number; }
 
  decl9["🤪"] = 0
  >decl9["🤪"] = 0 : 0
  >decl9["🤪"] : number
 ->decl9 : typeof decl9
-+>decl9 : { (): void; "🤪": number; }
++>decl9 : { (): void; "\uD83E\uDD2A": number; }
  >"🤪" : "🤪"
  >0 : 0
 
  export function decl10() {}
 ->decl10 : typeof decl10
-+>decl10 : { (): void; decl10[emoji]: number; }
++>decl10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
 
  decl10[emoji] = 0
  >decl10[emoji] = 0 : 0
  >decl10[emoji] : number
 ->decl10 : typeof decl10
-+>decl10 : { (): void; decl10[emoji]: number; }
- >emoji : "🤷‍♂️"
- >0 : 0
-
-@@= skipped -133, +133 lines =@@
- >0 : 0
-
- export const arrow4 = () => {}
-->arrow4 : { (): void; 1: number; }
-->() => {} : { (): void; 1: number; }
-+>arrow4 : { (): void; arrow4[num]: number; }
-+>() => {} : { (): void; arrow4[num]: number; }
-
- arrow4[num] = 0
- >arrow4[num] = 0 : 0
- >arrow4[num] : number
-->arrow4 : { (): void; 1: number; }
-+>arrow4 : { (): void; arrow4[num]: number; }
- >num : 1
- >0 : 0
-
-@@= skipped -22, +22 lines =@@
- >0 : 0
-
- export const arrow6 = () => {}
-->arrow6 : { (): void; "10": number; }
-->() => {} : { (): void; "10": number; }
-+>arrow6 : { (): void; arrow6[numStr]: number; }
-+>() => {} : { (): void; arrow6[numStr]: number; }
-
- arrow6[numStr] = 0
- >arrow6[numStr] = 0 : 0
- >arrow6[numStr] : number
-->arrow6 : { (): void; "10": number; }
-+>arrow6 : { (): void; arrow6[numStr]: number; }
- >numStr : "10"
- >0 : 0
-
-@@= skipped -22, +22 lines =@@
- >0 : 0
-
- export const arrow8 = () => {}
-->arrow8 : { (): void; "foo bar": number; }
-->() => {} : { (): void; "foo bar": number; }
-+>arrow8 : { (): void; arrow8[withWhitespace]: number; }
-+>() => {} : { (): void; arrow8[withWhitespace]: number; }
-
- arrow8[withWhitespace] = 0
- >arrow8[withWhitespace] = 0 : 0
- >arrow8[withWhitespace] : number
-->arrow8 : { (): void; "foo bar": number; }
-+>arrow8 : { (): void; arrow8[withWhitespace]: number; }
- >withWhitespace : "foo bar"
- >0 : 0
-
- export const arrow9 = () => {}
-->arrow9 : { (): void; "\uD83E\uDD2A": number; }
-->() => {} : { (): void; "\uD83E\uDD2A": number; }
-+>arrow9 : { (): void; "🤪": number; }
-+>() => {} : { (): void; "🤪": number; }
-
- arrow9["🤪"] = 0
- >arrow9["🤪"] = 0 : 0
- >arrow9["🤪"] : number
-->arrow9 : { (): void; "\uD83E\uDD2A": number; }
-+>arrow9 : { (): void; "🤪": number; }
- >"🤪" : "🤪"
- >0 : 0
-
- export const arrow10 = () => {}
-->arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
-->() => {} : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
-+>arrow10 : { (): void; arrow10[emoji]: number; }
-+>() => {} : { (): void; arrow10[emoji]: number; }
-
- arrow10[emoji] = 0
- >arrow10[emoji] = 0 : 0
- >arrow10[emoji] : number
-->arrow10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
-+>arrow10 : { (): void; arrow10[emoji]: number; }
++>decl10 : { (): void; "\uD83E\uDD37\u200D\u2642\uFE0F": number; }
  >emoji : "🤷‍♂️"
  >0 : 0

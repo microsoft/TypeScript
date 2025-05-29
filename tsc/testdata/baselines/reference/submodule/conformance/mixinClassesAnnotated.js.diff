@@ -122,37 +122,8 @@
 -    };
 -    return Thing3;
 -}(Thing2));
--
--
--//// [mixinClassesAnnotated.d.ts]
--type Constructor<T> = new (...args: any[]) => T;
--declare class Base {
--    x: number;
--    y: number;
--    constructor(x: number, y: number);
--}
--declare class Derived extends Base {
--    z: number;
--    constructor(x: number, y: number, z: number);
--}
--interface Printable {
--    print(): void;
--}
--declare const Printable: <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & {
--    message: string;
--} & T;
--interface Tagged {
--    _tag: string;
--}
--declare function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T;
--declare const Thing1: Constructor<Tagged> & typeof Derived;
--declare const Thing2: Constructor<Tagged> & Constructor<Printable> & {
--    message: string;
--} & typeof Derived;
--declare function f1(): void;
--declare function f2(): void;
--declare class Thing3 extends Thing2 {
--    constructor(tag: string);
--    test(): void;
 +    }
- }
++}
+
+
+ //// [mixinClassesAnnotated.d.ts]

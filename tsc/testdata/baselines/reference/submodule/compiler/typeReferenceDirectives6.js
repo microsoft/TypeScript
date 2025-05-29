@@ -21,3 +21,8 @@ let y = () => x
 /// <reference types="lib"/>
 let x;
 let y = () => x;
+
+
+//// [app.d.ts]
+declare let x: $;
+declare let y: () => $;

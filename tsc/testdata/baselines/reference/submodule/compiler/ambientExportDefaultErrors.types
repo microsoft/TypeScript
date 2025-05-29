@@ -15,7 +15,7 @@ export default 2 + 2;
 >2 : 2
 
 export as namespace Foo;
->Foo : typeof import("foo")
+>Foo : typeof import("./foo.js")
 
 === foo2.d.ts ===
 export = 2 + 2;
@@ -34,7 +34,7 @@ declare module "indirect" {
     export default typeof Foo.default;
 >typeof Foo.default : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >Foo.default : number
->Foo : typeof import("foo")
+>Foo : typeof Foo
 >default : number
 }
 

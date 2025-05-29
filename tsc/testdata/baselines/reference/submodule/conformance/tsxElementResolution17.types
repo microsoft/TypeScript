@@ -4,16 +4,16 @@
 ///<reference path="file.tsx" />
 // Should keep s1 and elide s2
 import s1 = require('elements1');
->s1 : typeof import("elements1")
+>s1 : typeof s1
 
 import s2 = require('elements2');
->s2 : typeof import("elements2")
+>s2 : typeof s2
 
 <s1.MyElement />;
-><s1.MyElement /> : Element
->s1.MyElement : typeof MyElement
->s1 : typeof import("elements1")
->MyElement : typeof MyElement
+><s1.MyElement /> : JSX.Element
+>s1.MyElement : typeof s1.MyElement
+>s1 : typeof s1
+>MyElement : typeof s1.MyElement
 
 === file.tsx ===
 declare module JSX {

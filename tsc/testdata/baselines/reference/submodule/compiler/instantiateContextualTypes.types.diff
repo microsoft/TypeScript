@@ -23,7 +23,7 @@
 
  type CreateElementChildren<P> =
 ->CreateElementChildren : P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown
-+>CreateElementChildren : CreateElementChildren<P>
++>CreateElementChildren : P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown
 
    P extends { children?: infer C }
  >children : C | undefined
@@ -32,27 +32,27 @@
 
  declare function createElement<P extends {}>(
 ->createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
-+>createElement : <P extends {}>(type: ComponentClass<P>, ...children: CreateElementChildren<P>) => any
++>createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
 
    type: ComponentClass<P>,
  >type : ComponentClass<P>
 
    ...children: CreateElementChildren<P>
 ->children : P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown
-+>children : CreateElementChildren<P>
++>children : P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown
 
  ): any;
 
  declare function createElement2<P extends {}>(
 ->createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
-+>createElement2 : <P extends {}>(type: ComponentClass<P>, child: CreateElementChildren<P>) => any
++>createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
 
    type: ComponentClass<P>,
  >type : ComponentClass<P>
 
    child: CreateElementChildren<P>
 ->child : P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown
-+>child : CreateElementChildren<P>
++>child : P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown
 
  ): any;
 
@@ -61,7 +61,7 @@
  createElement(InferFunctionTypes, (foo) => "" + foo);
  >createElement(InferFunctionTypes, (foo) => "" + foo) : any
 ->createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
-+>createElement : <P extends {}>(type: ComponentClass<P>, ...children: CreateElementChildren<P>) => any
++>createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
  >InferFunctionTypes : typeof InferFunctionTypes
  >(foo) => "" + foo : (foo: number) => string
  >foo : number
@@ -70,76 +70,7 @@
  createElement2(InferFunctionTypes, [(foo) => "" + foo]);
  >createElement2(InferFunctionTypes, [(foo) => "" + foo]) : any
 ->createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C; } ? C extends any[] ? C : C[] : unknown) => any
-+>createElement2 : <P extends {}>(type: ComponentClass<P>, child: CreateElementChildren<P>) => any
++>createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
  >InferFunctionTypes : typeof InferFunctionTypes
  >[(foo) => "" + foo] : ((foo: number) => string)[]
  >(foo) => "" + foo : (foo: number) => string
-@@= skipped -69, +69 lines =@@
-
- 		return Promise.resolve().then(() => {
- >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<"ELSE" | "SOMETHING">
-->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>Promise.resolve().then : <TResult1, TResult2>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
- >Promise.resolve() : Promise<void>
- >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
- >Promise : PromiseConstructor
- >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
-->then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
- >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "ELSE" | "SOMETHING"
-
- 			if (1 < 2) {
-@@= skipped -27, +27 lines =@@
-
- 		return Promise.resolve().then(() => {
- >Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<"ELSE" | "SOMETHING">
-->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>Promise.resolve().then : <TResult1, TResult2>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
- >Promise.resolve() : Promise<void>
- >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
- >Promise : PromiseConstructor
- >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
-->then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
- >() => {			return 'ELSE';		} : () => "ELSE"
-
- 			return 'ELSE';
-@@= skipped -19, +19 lines =@@
-
- 		return Promise.resolve().then(() => {
- >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<"ELSE" | "SOMETHING">
-->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>Promise.resolve().then : <TResult1, TResult2>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
- >Promise.resolve() : Promise<void>
- >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
- >Promise : PromiseConstructor
- >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
-->then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
-+>then : <TResult1, TResult2>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
- >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => "SOMETHING"
-
- 			if (1 < 2) {
-@@= skipped -44, +44 lines =@@
- >partial : Partial<T>
-
- let obj = {
-->obj : { foo(bar: string): void; }
-->{  foo(bar: string) {}} : { foo(bar: string): void; }
-+>obj : { foo: (bar: string) => void; }
-+>{  foo(bar: string) {}} : { foo: (bar: string) => void; }
-
-   foo(bar: string) {}
- >foo : (bar: string) => void
-@@= skipped -9, +9 lines =@@
- }
-
- assignPartial(obj, { foo(...args) {} });  // args has type [string]
-->assignPartial(obj, { foo(...args) {} }) : { foo(bar: string): void; }
-+>assignPartial(obj, { foo(...args) {} }) : { foo: (bar: string) => void; }
- >assignPartial : <T>(target: T, partial: Partial<T>) => T
-->obj : { foo(bar: string): void; }
-->{ foo(...args) {} } : { foo(bar: string): void; }
-+>obj : { foo: (bar: string) => void; }
-+>{ foo(...args) {} } : { foo: (bar: string) => void; }
- >foo : (bar: string) => void
- >args : [bar: string]

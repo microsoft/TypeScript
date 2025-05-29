@@ -5,9 +5,8 @@
      export import a = x.c;
  >a : any
 ->x : typeof x
-->c : a
 +>x : any
-+>c : c
+ >c : a
 
      export = x;
 ->x : typeof x

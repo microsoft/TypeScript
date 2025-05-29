@@ -16,12 +16,12 @@ const json2 = import("./package.json", { with: { type: "json" } }); // should be
 === package.json ===
 {
     "name": "pkg",
->"name" : Symbol(name, Decl(package.json, 0, 1))
+>"name" : Symbol("name", Decl(package.json, 0, 1))
 
     "private": true,
->"private" : Symbol(private, Decl(package.json, 1, 18))
+>"private" : Symbol("private", Decl(package.json, 1, 18))
 
     "type": "module"
->"type" : Symbol(type, Decl(package.json, 2, 20))
+>"type" : Symbol("type", Decl(package.json, 2, 20))
 }
 

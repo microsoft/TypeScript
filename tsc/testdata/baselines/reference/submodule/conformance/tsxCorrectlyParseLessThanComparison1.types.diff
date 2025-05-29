@@ -1,23 +1,6 @@
 --- old.tsxCorrectlyParseLessThanComparison1.types
 +++ new.tsxCorrectlyParseLessThanComparison1.types
-@@= skipped -23, +23 lines =@@
-
- export class ShortDetails extends React.Component<{ id: number }, {}> {
- >ShortDetails : ShortDetails
-->React.Component : React.Component<{ id: number; }, {}>
-+>React.Component : Component<{ id: number; }, {}>
- >React : typeof React
-->Component : typeof React.Component
-+>Component : typeof Component
- >id : number
-
-     public render(): JSX.Element {
-->render : () => JSX.Element
-+>render : () => Element
- >JSX : any
-
-         if (this.props.id < 1) {
-@@= skipped -19, +19 lines =@@
+@@= skipped -42, +42 lines =@@
  >1 : 1
 
              return (<div></div>);

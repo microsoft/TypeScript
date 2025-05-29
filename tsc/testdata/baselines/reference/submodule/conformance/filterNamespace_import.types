@@ -34,9 +34,9 @@ import type ns from './ns';
 >ns : any
 
 ns.Class; // Error
->ns.Class : typeof Class
+>ns.Class : typeof ns.Class
 >ns : typeof ns
->Class : typeof Class
+>Class : typeof ns.Class
 
 ns.Value; // Error
 >ns.Value : ""
@@ -44,7 +44,7 @@ ns.Value; // Error
 >Value : ""
 
 let c: ns.Class;
->c : Class
+>c : ns.Class
 >ns : any
 
 let t: ns.Type = "";
@@ -53,7 +53,7 @@ let t: ns.Type = "";
 >"" : ""
 
 let n: ns.nested.NestedClass = { a: '' };
->n : NestedClass
+>n : ns.nested.NestedClass
 >ns : any
 >nested : any
 >{ a: '' } : { a: string; }

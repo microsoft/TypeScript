@@ -6,10 +6,10 @@ export const x: number;
 
 === mjts.ts ===
 import * as fs from "./fs";
->fs : typeof import("fs")
+>fs : typeof fs
 
 fs;
->fs : typeof import("fs")
+>fs : typeof fs
 
 export * from "./fs";
 export {x} from "./fs";

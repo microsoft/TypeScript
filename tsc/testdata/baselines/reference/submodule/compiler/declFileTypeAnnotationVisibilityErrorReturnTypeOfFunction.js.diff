@@ -38,27 +38,3 @@
          m2.public2 = public2;
      })(m2 || (m2 = {}));
      function foo111() {
-@@= skipped -24, +21 lines =@@
-     }
-     m.foo114 = foo114;
- })(m || (m = {}));
--
--
--//// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.d.ts]
--declare namespace m {
--    class private1 {
--    }
--    export class public1 {
--    }
--    export function foo3(): private1;
--    export function foo4(): private1;
--    export function foo13(): public1;
--    export function foo14(): public1;
--    namespace m2 {
--        class public2 {
--        }
--    }
--    export function foo113(): m2.public2;
--    export function foo114(): m2.public2;
--    export {};
--}

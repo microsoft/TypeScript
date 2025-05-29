@@ -1,10 +1,11 @@
 --- old.ambientExportDefaultErrors.types
 +++ new.ambientExportDefaultErrors.types
-@@= skipped -33, +33 lines =@@
-     export default typeof Foo.default;
- >typeof Foo.default : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
- >Foo.default : number
-->Foo : typeof Foo
-+>Foo : typeof import("foo")
- >default : number
- }
+@@= skipped -14, +14 lines =@@
+ >2 : 2
+
+ export as namespace Foo;
+->Foo : typeof import("foo")
++>Foo : typeof import("./foo.js")
+
+ === foo2.d.ts ===
+ export = 2 + 2;

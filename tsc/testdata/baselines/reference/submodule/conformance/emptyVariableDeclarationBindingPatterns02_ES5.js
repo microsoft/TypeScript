@@ -20,3 +20,6 @@
     let [];
     const [];
 })();
+
+
+//// [emptyVariableDeclarationBindingPatterns02_ES5.d.ts]

@@ -16,3 +16,9 @@ export const f = (x, y) => x;
 //// [b.js]
 import { f } from "./a";
 export const g = f;
+
+
+//// [a.d.ts]
+export declare const f: <T>(x: T, y: NoInfer<T>) => T;
+//// [b.d.ts]
+export declare const g: <T>(x: T, y: globalThis.NoInfer<T>) => T;

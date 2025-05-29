@@ -36,4 +36,4 @@
  /** @type {MC.bar} */
  var x
 ->x : C
-+>x : bar
++>x : MC.bar

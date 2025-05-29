@@ -137,3 +137,42 @@ var color;
     color[color["blue"] = 2] = "blue";
 })(color || (color = {}));
 var shade = color.green;
+
+
+//// [commentsdoNotEmitComments.d.ts]
+declare var myVariable: number;
+declare function foo(/** parameter comment*/ p: number): void;
+declare var fooVar: () => void;
+declare class c {
+    constructor();
+    b: number;
+    myFoo(): number;
+    get prop1(): number;
+    set prop1(val: number);
+    foo1(a: number): string;
+    foo1(b: string): string;
+}
+declare var i: c;
+interface i1 {
+    (a: number): number;
+    new (b: string);
+    [a: number]: string;
+    myFoo(/*param prop*/ a: number): string;
+    prop: string;
+}
+declare var i1_i: i1;
+declare namespace m1 {
+    class b {
+        x: number;
+        constructor(x: number);
+    }
+    namespace m2 {
+    }
+}
+declare var x: any;
+declare const enum color {
+    red = 0,
+    green = 1,
+    blue = 2
+}
+declare var shade: color;

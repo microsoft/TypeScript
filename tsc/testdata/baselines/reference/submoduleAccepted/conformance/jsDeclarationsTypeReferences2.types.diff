@@ -35,7 +35,7 @@
 ->{    thing} : { thing: number; }
 +>module.exports = {    thing} : { thing: any; }
 +>module.exports : { thing: any; }
-+>module : { export=: { thing: any; }; }
++>module : { "export=": { thing: any; }; }
 +>exports : { thing: any; }
 +>{    thing} : { thing: any; }
 

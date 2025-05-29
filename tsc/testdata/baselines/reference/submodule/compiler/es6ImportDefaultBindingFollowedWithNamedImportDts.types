@@ -34,19 +34,19 @@ export var x1 = new a();
 
 import defaultBinding3, { a11 as b } from "./server";
 >defaultBinding3 : any
->a11 : typeof a11
->b : typeof a11
+>a11 : typeof b
+>b : typeof b
 
 export var x2 = new b();
->x2 : a11
->new b() : a11
->b : typeof a11
+>x2 : b
+>new b() : b
+>b : typeof b
 
 import defaultBinding4, { x, a12 as y } from "./server";
 >defaultBinding4 : any
 >x : typeof x
->a12 : typeof a12
->y : typeof a12
+>a12 : typeof y
+>y : typeof y
 
 export var x4 = new x();
 >x4 : x
@@ -54,19 +54,19 @@ export var x4 = new x();
 >x : typeof x
 
 export var x5 = new y();
->x5 : a12
->new y() : a12
->y : typeof a12
+>x5 : y
+>new y() : y
+>y : typeof y
 
 import defaultBinding5, { x11 as z,  } from "./server";
 >defaultBinding5 : any
->x11 : typeof x11
->z : typeof x11
+>x11 : typeof z
+>z : typeof z
 
 export var x3 = new z();
->x3 : x11
->new z() : x11
->z : typeof x11
+>x3 : z
+>new z() : z
+>z : typeof z
 
 import defaultBinding6, { m,  } from "./server";
 >defaultBinding6 : any

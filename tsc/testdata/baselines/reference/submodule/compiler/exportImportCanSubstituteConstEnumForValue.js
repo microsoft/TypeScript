@@ -113,3 +113,42 @@ var MsPortalFx;
         ViewModels.SomeUsagesOfTheseConsts = SomeUsagesOfTheseConsts;
     })(ViewModels = MsPortalFx.ViewModels || (MsPortalFx.ViewModels = {}));
 })(MsPortalFx || (MsPortalFx = {}));
+
+
+//// [exportImportCanSubstituteConstEnumForValue.d.ts]
+declare namespace MsPortalFx.ViewModels.Dialogs {
+    const enum DialogResult {
+        Abort = 0,
+        Cancel = 1,
+        Ignore = 2,
+        No = 3,
+        Ok = 4,
+        Retry = 5,
+        Yes = 6
+    }
+    interface DialogResultCallback {
+        (result: MsPortalFx.ViewModels.Dialogs.DialogResult): void;
+    }
+    function someExportedFunction(): void;
+    const enum MessageBoxButtons {
+        AbortRetryIgnore = 0,
+        OK = 1,
+        OKCancel = 2,
+        RetryCancel = 3,
+        YesNo = 4,
+        YesNoCancel = 5
+    }
+}
+declare namespace MsPortalFx.ViewModels {
+    /**
+     * For some reason javascript code is emitted for this re-exported const enum.
+     */
+    export import ReExportedEnum = Dialogs.DialogResult;
+    /**
+     * Re-exporting a function type to show difference. No javascript is emmitted (as expected)
+     */
+    export import Callback = Dialogs.DialogResultCallback;
+    class SomeUsagesOfTheseConsts {
+        constructor();
+    }
+}

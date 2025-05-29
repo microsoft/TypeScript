@@ -27,22 +27,22 @@
      const x = 0;
      switch (x) {
          case 0:
-@@= skipped -26, +17 lines =@@
-             return await import("./caseFallback.js");
-     }
- })();
--
--
--//// [case0.d.ts]
+@@= skipped -29, +20 lines =@@
+
+
+ //// [case0.d.ts]
 -declare const _default: 0;
--export default _default;
--//// [case1.d.ts]
++declare const _default: number;
+ export default _default;
+ //// [case1.d.ts]
 -declare const _default: 1;
--export default _default;
--//// [caseFallback.d.ts]
++declare const _default: number;
+ export default _default;
+ //// [caseFallback.d.ts]
 -declare const _default: "fallback";
--export default _default;
--//// [index.d.ts]
++declare const _default: string;
+ export default _default;
+ //// [index.d.ts]
 -export declare const mod: {
 -    default: typeof import("./case0.js");
 -} | {
@@ -50,3 +50,4 @@
 -} | {
 -    default: typeof import("./caseFallback.js");
 -};
++export declare const mod: typeof import("./case0.js") | typeof import("./case1.js") | typeof import("./caseFallback.js");

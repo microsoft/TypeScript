@@ -1,39 +1,6 @@
 --- old.jsdocImportType.types
 +++ new.jsdocImportType.types
-@@= skipped -4, +4 lines =@@
- /** @typedef {import("./mod1")} C
-  * @type {C} */
- var c;
-->c : D
-+>c : Chunk
-
- c.chunk;
- >c.chunk : number
-->c : D
-+>c : Chunk
- >chunk : number
-
- const D = require("./mod1");
-->D : typeof D
-->require("./mod1") : typeof D
-+>D : typeof Chunk
-+>require("./mod1") : typeof Chunk
- >require : (name: string) => any
- >"./mod1" : "./mod1"
-
- /** @type {D} */
- var d;
-->d : D
-+>d : Chunk
-
- d.chunk;
- >d.chunk : number
-->d : D
-+>d : Chunk
- >chunk : number
-
- === types.d.ts ===
-@@= skipped -42, +42 lines =@@
+@@= skipped -46, +46 lines =@@
      constructor() {
          this.chunk = 1;
  >this.chunk = 1 : 1

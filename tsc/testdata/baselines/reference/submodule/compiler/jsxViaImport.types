@@ -3,20 +3,20 @@
 === consumer.tsx ===
 /// <reference path="component.d.ts" />
 import BaseComponent = require('BaseComponent');
->BaseComponent : Component<any, {}>
+>BaseComponent : React.Component<any, {}>
 
 class TestComponent extends React.Component<any, {}> {
 >TestComponent : TestComponent
->React.Component : Component<any, {}>
+>React.Component : React.Component<any, {}>
 >React : typeof React
->Component : typeof Component
+>Component : typeof React.Component
 
     render() {
 >render : () => any
 
         return <BaseComponent />;
 ><BaseComponent /> : any
->BaseComponent : Component<any, {}>
+>BaseComponent : React.Component<any, {}>
     }
 }
 
@@ -35,10 +35,10 @@ declare module "BaseComponent" {
 >"BaseComponent" : typeof import("BaseComponent")
 
     var base: React.Component<any, {}>;
->base : Component<any, {}>
+>base : React.Component<any, {}>
 >React : any
 
     export = base;
->base : Component<any, {}>
+>base : React.Component<any, {}>
 }
 

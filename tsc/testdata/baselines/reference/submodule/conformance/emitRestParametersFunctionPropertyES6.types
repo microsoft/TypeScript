@@ -10,8 +10,8 @@ var obj: {
 }
 
 var obj2 = {
->obj2 : { func: (...rest: any[]) => void; }
->{    func(...rest) { }} : { func: (...rest: any[]) => void; }
+>obj2 : { func(...rest: any[]): void; }
+>{    func(...rest) { }} : { func(...rest: any[]): void; }
 
     func(...rest) { }
 >func : (...rest: any[]) => void

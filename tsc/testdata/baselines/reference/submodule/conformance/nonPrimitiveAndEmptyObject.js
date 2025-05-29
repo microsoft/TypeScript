@@ -22,3 +22,13 @@ fooProps.barProp;
 Object.defineProperty(exports, "__esModule", { value: true });
 const { fooProps = {} } = foo;
 fooProps.barProp;
+
+
+//// [nonPrimitiveAndEmptyObject.d.ts]
+// Repro from #49480
+export interface BarProps {
+    barProp?: string;
+}
+export interface FooProps {
+    fooProps?: BarProps & object;
+}

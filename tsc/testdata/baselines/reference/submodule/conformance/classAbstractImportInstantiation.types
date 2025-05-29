@@ -13,11 +13,11 @@ module M {
 }
 
 import myA = M.A;
->myA : typeof A
+>myA : typeof myA
 >M : typeof M
->A : A
+>A : myA
 
 new myA;
 >new myA : any
->myA : typeof A
+>myA : typeof myA
 

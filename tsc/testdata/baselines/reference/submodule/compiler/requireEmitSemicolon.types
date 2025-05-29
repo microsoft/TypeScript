@@ -12,7 +12,7 @@ export module Database {
 >DB : DB
 
 	    public findPerson(id: number): P.Models.Person {
->findPerson : (id: number) => Person
+>findPerson : (id: number) => P.Models.Person
 >id : number
 >P : any
 >Models : any

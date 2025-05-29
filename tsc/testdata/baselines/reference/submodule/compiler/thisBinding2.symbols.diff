@@ -35,12 +35,3 @@
 
     var x = 1;
  >x : Symbol(x, Decl(thisBinding2.ts, 8, 6))
-@@= skipped -48, +48 lines =@@
- >setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --), Decl(thisBinding2.ts, 12, 1))
- >x : Symbol(x, Decl(thisBinding2.ts, 17, 37))
- >this.message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
-->this : Symbol(messenger, Decl(thisBinding2.ts, 14, 15))
-+>this : Symbol((Anonymous type), Decl(thisBinding2.ts, 14, 15))
- >message : Symbol(message, Decl(thisBinding2.ts, 14, 17))
-     }
- };

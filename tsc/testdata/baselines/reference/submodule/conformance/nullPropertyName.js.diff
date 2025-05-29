@@ -1,13 +1,9 @@
 --- old.nullPropertyName.js
 +++ new.nullPropertyName.js
-@@= skipped -166, +166 lines =@@
- foo.global = 1;
- foo.bigint = 1;
- foo.of = 1;
--
--
--//// [nullPropertyName.d.ts]
--declare function foo(): void;
+@@= skipped -170, +170 lines =@@
+
+ //// [nullPropertyName.d.ts]
+ declare function foo(): void;
 -declare namespace foo {
 -    export var x: number;
 -    export var y: number;

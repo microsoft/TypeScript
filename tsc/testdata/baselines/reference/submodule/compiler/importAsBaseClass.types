@@ -2,11 +2,11 @@
 
 === importAsBaseClass_1.ts ===
 import Greeter = require("./importAsBaseClass_0");
->Greeter : typeof import("importAsBaseClass_0")
+>Greeter : typeof Greeter
 
 class Hello extends Greeter { }
 >Hello : Hello
->Greeter : typeof import("importAsBaseClass_0")
+>Greeter : typeof Greeter
 
 === importAsBaseClass_0.ts ===
 export class Greeter {

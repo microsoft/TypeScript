@@ -24,3 +24,14 @@ exports.obj = {
         return dis.a != null && dis.b != null && dis.c != null;
     }
 };
+
+
+//// [declarationEmitThisPredicates02.d.ts]
+export interface Foo {
+    a: string;
+    b: number;
+    c: boolean;
+}
+export declare const obj: {
+    m(): this is Foo;
+};

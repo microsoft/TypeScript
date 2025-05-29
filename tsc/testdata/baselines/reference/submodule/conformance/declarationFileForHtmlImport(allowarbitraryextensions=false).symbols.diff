@@ -26,9 +26,9 @@
 
  if (document !== mod.default) {
  >document : Symbol(document, Decl(lib.dom.d.ts, --, --))
-+>mod.default : Symbol(default, Decl(component.d.html.ts, 3, 26))
++>mod.default : Symbol(doc, Decl(component.d.html.ts, 3, 26))
  >mod : Symbol(mod, Decl(file.ts, 0, 6))
-+>default : Symbol(default, Decl(component.d.html.ts, 3, 26))
++>default : Symbol(doc, Decl(component.d.html.ts, 3, 26))
 
      document.body.appendChild(mod.blogPost);
 ->document.body.appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))

@@ -13,21 +13,11 @@
  export { type };
  //// [imports.js]
  import { type } from "./exports.js";
-@@= skipped -11, +11 lines =@@
- something; // Error (used in emitting position)
- foo; // Error (used in emitting position)
- bar; // Error (used in emitting position)
--
--
--//// [exports.d.ts]
--declare const type = 0;
--declare const as = 0;
--declare const something = 0;
--export { type };
--export { type as };
--export { type something };
--export { type type as foo };
--export { type as as bar };
+@@= skipped -22, +22 lines =@@
+ export { type something };
+ export { type type as foo };
+ export { type as as bar };
 -export type { type something as whatever };
--//// [imports.d.ts]
--export {};
++export type { type something as whatever }; // Error
+ //// [imports.d.ts]
+ export {};

@@ -18,3 +18,21 @@ function doThing(x: string, y?: string): Moose {
 function doThing(x, y) {
     return undefined;
 }
+
+
+//// [stringLiteralTypesOverloads05.d.ts]
+interface Animal {
+    animal: {};
+}
+interface Dog extends Animal {
+    dog: {};
+}
+interface Cat extends Animal {
+    cat: {};
+}
+interface Moose extends Animal {
+    moose: {};
+}
+declare function doThing(x: "dog"): Dog;
+declare function doThing(x: "cat"): Cat;
+declare function doThing(x: string): Animal;

@@ -16,3 +16,7 @@ function someFunc() {
     return 'hello!';
 }
 someFunc.someProp = 'yo';
+
+
+//// [exportDefaultNamespace.d.ts]
+export default function someFunc(): string;

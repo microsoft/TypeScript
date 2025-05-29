@@ -13,3 +13,8 @@ class C {
     get ["" + ""]() { return 0; }
     set ["" + ""](x) { }
 }
+
+
+//// [computedPropertyNamesDeclarationEmit1_ES5.d.ts]
+declare class C {
+}

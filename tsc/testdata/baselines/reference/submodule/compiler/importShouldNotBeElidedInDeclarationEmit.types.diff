@@ -1,16 +1,25 @@
 --- old.importShouldNotBeElidedInDeclarationEmit.types
 +++ new.importShouldNotBeElidedInDeclarationEmit.types
-@@= skipped -15, +15 lines =@@
+@@= skipped -1, +1 lines =@@
+
+ === node_modules/umd.d.ts ===
+ export as namespace UMD;
+->UMD : typeof import("node_modules/umd")
++>UMD : typeof import("umd.d.ts")
+
+ export type Thing = {
+ >Thing : Thing
+@@= skipped -14, +14 lines =@@
 
  === index.ts ===
  import { makeThing } from "umd";
 ->makeThing : () => import("node_modules/umd").Thing
-+>makeThing : () => Thing
++>makeThing : () => import("umd.d.ts").Thing
 
  export const thing = makeThing();
 ->thing : import("node_modules/umd").Thing
 ->makeThing() : import("node_modules/umd").Thing
 ->makeThing : () => import("node_modules/umd").Thing
-+>thing : Thing
-+>makeThing() : Thing
-+>makeThing : () => Thing
++>thing : import("umd.d.ts").Thing
++>makeThing() : import("umd.d.ts").Thing
++>makeThing : () => import("umd.d.ts").Thing

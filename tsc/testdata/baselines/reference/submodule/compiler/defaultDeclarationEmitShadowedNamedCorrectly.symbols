@@ -37,7 +37,7 @@ export interface Props {
 }
 
 export default class MyComponent {
->MyComponent : Symbol(default, Decl(this.ts, 10, 1))
+>MyComponent : Symbol(MyComponent, Decl(this.ts, 10, 1))
 
     props: Props;
 >props : Symbol(props, Decl(this.ts, 12, 34))
@@ -52,7 +52,7 @@ export namespace Something {
     export const create = make(me.default);
 >create : Symbol(create, Decl(this.ts, 17, 16))
 >make : Symbol(make, Decl(this.ts, 4, 1))
->me.default : Symbol(default, Decl(this.ts, 10, 1))
+>me.default : Symbol(MyComponent, Decl(this.ts, 10, 1))
 >me : Symbol(me, Decl(this.ts, 0, 6))
->default : Symbol(default, Decl(this.ts, 10, 1))
+>default : Symbol(MyComponent, Decl(this.ts, 10, 1))
 }

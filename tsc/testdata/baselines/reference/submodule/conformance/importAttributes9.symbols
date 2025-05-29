@@ -6,7 +6,7 @@ export default {};
 
 === b.ts ===
 declare global {
->global : Symbol((Missing), Decl(b.ts, 0, 0))
+>global : Symbol(global, Decl(b.ts, 0, 0))
 
     interface  ImportAttributes {
 >ImportAttributes : Symbol(ImportAttributes, Decl(lib.es5.d.ts, --, --), Decl(b.ts, 0, 16))

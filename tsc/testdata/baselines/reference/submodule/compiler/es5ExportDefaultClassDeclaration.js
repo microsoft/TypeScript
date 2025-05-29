@@ -13,3 +13,9 @@ class C {
     method() { }
 }
 exports.default = C;
+
+
+//// [es5ExportDefaultClassDeclaration.d.ts]
+export default class C {
+    method(): void;
+}

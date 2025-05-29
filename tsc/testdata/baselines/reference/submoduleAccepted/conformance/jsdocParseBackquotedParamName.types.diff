@@ -5,7 +5,7 @@
   */
  function f(args, bwarg) {
 ->f : (args?: string | undefined, bwarg: (number | null) | null) => void
-+>f : (args: string | undefined, bwarg: number | null) => void
++>f : (args?: string | undefined, bwarg: number | null) => void
  >args : string | undefined
  >bwarg : number | null
  }

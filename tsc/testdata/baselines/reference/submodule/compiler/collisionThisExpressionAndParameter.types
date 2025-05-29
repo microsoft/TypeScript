@@ -106,7 +106,7 @@ class Foo1 {
     }
 }
 declare var console: {
->console : { log: (msg: any) => any; }
+>console : { log(msg: any): any; }
 
     log(msg: any);
 >log : (msg: any) => any
@@ -122,7 +122,7 @@ function f1(_this: number) {
 >x : any
 >console.log(this.x) : any
 >console.log : (msg: any) => any
->console : { log: (msg: any) => any; }
+>console : { log(msg: any): any; }
 >log : (msg: any) => any
 >this.x : any
 >this : any
@@ -197,7 +197,7 @@ class Foo3 {
     }
 }
 declare var console: {
->console : { log: (msg: any) => any; }
+>console : { log(msg: any): any; }
 
     log(msg: any);
 >log : (msg: any) => any
@@ -221,7 +221,7 @@ function f3(_this: any) {
 >x : any
 >console.log(this.x) : any
 >console.log : (msg: any) => any
->console : { log: (msg: any) => any; }
+>console : { log(msg: any): any; }
 >log : (msg: any) => any
 >this.x : any
 >this : any

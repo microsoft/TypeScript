@@ -12,3 +12,15 @@ declare module "test" {
 }
 
 //// [declFileAliasUseBeforeDeclaration2.js]
+
+
+//// [declFileAliasUseBeforeDeclaration2.d.ts]
+declare module "test" {
+    namespace A {
+        class C {
+        }
+    }
+    class B extends E {
+    }
+    import E = A.C;
+}

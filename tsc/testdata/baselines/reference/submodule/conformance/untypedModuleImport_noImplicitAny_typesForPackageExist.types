@@ -2,7 +2,7 @@
 
 === /a.ts ===
 import * as foo from "foo";
->foo : typeof import("/node_modules/@types/foo/index")
+>foo : typeof foo
 
 import * as fooSub from "foo/sub";
 >fooSub : any
@@ -11,7 +11,7 @@ import * as barSub from "bar/sub";
 >barSub : any
 
 import * as scopeFoo from "@scope/foo";
->scopeFoo : typeof import("/node_modules/@types/scope__foo/index")
+>scopeFoo : typeof scopeFoo
 
 import * as scopeFooSub from "@scope/foo/sub";
 >scopeFooSub : any

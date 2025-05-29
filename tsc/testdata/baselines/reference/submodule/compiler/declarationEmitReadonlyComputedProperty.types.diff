@@ -5,17 +5,15 @@
  === index.ts ===
  import { createInstance } from './bug'
 ->createInstance : () => import("bug").Interface
-+>createInstance : () => Interface
++>createInstance : () => import("./bug").Interface
 
  export const spread = {
-->spread : { [SYMBOL]: string; }
-->{  ...createInstance(),} : { [SYMBOL]: string; }
-+>spread : { (Unique symbol): string; }
-+>{  ...createInstance(),} : { (Unique symbol): string; }
+ >spread : { [SYMBOL]: string; }
+ >{  ...createInstance(),} : { [SYMBOL]: string; }
 
    ...createInstance(),
 ->createInstance() : import("bug").Interface
 ->createInstance : () => import("bug").Interface
-+>createInstance() : Interface
-+>createInstance : () => Interface
++>createInstance() : import("./bug").Interface
++>createInstance : () => import("./bug").Interface
  }

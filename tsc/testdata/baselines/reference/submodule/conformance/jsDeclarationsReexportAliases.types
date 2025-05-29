@@ -2,19 +2,19 @@
 
 === cls.js ===
 export default class Foo {}
->Foo : default
+>Foo : Foo
 
 === usage.js ===
 import {default as Fooa} from "./cls";
->default : typeof default
->Fooa : typeof default
+>default : typeof Fooa
+>Fooa : typeof Fooa
 
 export const x = new Fooa();
->x : default
->new Fooa() : default
->Fooa : typeof default
+>x : Fooa
+>new Fooa() : Fooa
+>Fooa : typeof Fooa
 
 export {default as Foob} from "./cls";
->default : typeof default
->Foob : typeof default
+>default : typeof Fooa
+>Foob : typeof Fooa
 

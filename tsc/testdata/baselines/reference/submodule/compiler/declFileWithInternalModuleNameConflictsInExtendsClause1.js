@@ -28,3 +28,14 @@ var X;
         })(B = A.B || (A.B = {}));
     })(A = X.A || (X.A = {}));
 })(X || (X = {}));
+
+
+//// [declFileWithInternalModuleNameConflictsInExtendsClause1.d.ts]
+declare namespace X.A.C {
+    interface Z {
+    }
+}
+declare namespace X.A.B.C {
+    class W implements X.A.C.Z {
+    }
+}

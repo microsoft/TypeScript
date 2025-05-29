@@ -5,7 +5,7 @@
 
  function UnwrappedLink<T extends ElementType = ElementType>(
 ->UnwrappedLink : <T extends ElementType = React.ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => JSX.Element
-+>UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => Element
++>UnwrappedLink : <T extends ElementType = ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => JSX.Element
 
    props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">,
 ->props : Omit<React.ComponentPropsWithRef<React.ElementType extends T ? "a" : T>, "as">
@@ -13,27 +13,19 @@
 
  ) {
    return <a></a>;
--><a></a> : JSX.Element
-+><a></a> : Element
- >a : any
- >a : any
- }
+@@= skipped -14, +14 lines =@@
 
  <UnwrappedLink onClick={(e) => {}} />;
--><UnwrappedLink onClick={(e) => {}} /> : JSX.Element
+ ><UnwrappedLink onClick={(e) => {}} /> : JSX.Element
 ->UnwrappedLink : <T extends ElementType = React.ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => JSX.Element
-->onClick : (e: React.MouseEvent<HTMLAnchorElement>) => void
-->(e) => {} : (e: React.MouseEvent<HTMLAnchorElement>) => void
-->e : React.MouseEvent<HTMLAnchorElement>
-+><UnwrappedLink onClick={(e) => {}} /> : Element
-+>UnwrappedLink : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => Element
-+>onClick : (e: MouseEvent<HTMLAnchorElement>) => void
-+>(e) => {} : (e: MouseEvent<HTMLAnchorElement>) => void
-+>e : MouseEvent<HTMLAnchorElement>
++>UnwrappedLink : <T extends ElementType = ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as">) => JSX.Element
+ >onClick : (e: React.MouseEvent<HTMLAnchorElement>) => void
+ >(e) => {} : (e: React.MouseEvent<HTMLAnchorElement>) => void
+ >e : React.MouseEvent<HTMLAnchorElement>
 
  function UnwrappedLink2<T extends ElementType = ElementType>(
 ->UnwrappedLink2 : <T extends ElementType = React.ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T; }) => JSX.Element
-+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => Element
++>UnwrappedLink2 : <T extends ElementType = ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => JSX.Element
 
    props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & {
 ->props : Omit<React.ComponentPropsWithRef<React.ElementType extends T ? "a" : T>, "as"> & { as?: T; }
@@ -41,37 +33,20 @@
 
      as?: T;
  >as : T | undefined
-@@= skipped -31, +31 lines =@@
-   },
- ) {
-   return <a></a>;
--><a></a> : JSX.Element
-+><a></a> : Element
- >a : any
- >a : any
- }
+@@= skipped -24, +24 lines =@@
 
  <UnwrappedLink2 onClick={(e) => {}} />;
--><UnwrappedLink2 onClick={(e) => {}} /> : JSX.Element
+ ><UnwrappedLink2 onClick={(e) => {}} /> : JSX.Element
 ->UnwrappedLink2 : <T extends ElementType = React.ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T; }) => JSX.Element
-->onClick : (e: React.MouseEvent<HTMLAnchorElement>) => void
-->(e) => {} : (e: React.MouseEvent<HTMLAnchorElement>) => void
-->e : React.MouseEvent<HTMLAnchorElement>
-+><UnwrappedLink2 onClick={(e) => {}} /> : Element
-+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => Element
-+>onClick : (e: MouseEvent<HTMLAnchorElement>) => void
-+>(e) => {} : (e: MouseEvent<HTMLAnchorElement>) => void
-+>e : MouseEvent<HTMLAnchorElement>
++>UnwrappedLink2 : <T extends ElementType = ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => JSX.Element
+ >onClick : (e: React.MouseEvent<HTMLAnchorElement>) => void
+ >(e) => {} : (e: React.MouseEvent<HTMLAnchorElement>) => void
+ >e : React.MouseEvent<HTMLAnchorElement>
 
  <UnwrappedLink2 as="button" onClick={(e) => {}} />;
--><UnwrappedLink2 as="button" onClick={(e) => {}} /> : JSX.Element
+ ><UnwrappedLink2 as="button" onClick={(e) => {}} /> : JSX.Element
 ->UnwrappedLink2 : <T extends ElementType = React.ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T; }) => JSX.Element
-+><UnwrappedLink2 as="button" onClick={(e) => {}} /> : Element
-+>UnwrappedLink2 : <T extends ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => Element
++>UnwrappedLink2 : <T extends ElementType = ElementType>(props: Omit<ComponentPropsWithRef<ElementType extends T ? "a" : T>, "as"> & { as?: T | undefined; }) => JSX.Element
  >as : "button"
-->onClick : (e: React.MouseEvent<HTMLButtonElement>) => void
-->(e) => {} : (e: React.MouseEvent<HTMLButtonElement>) => void
-->e : React.MouseEvent<HTMLButtonElement>
-+>onClick : (e: MouseEvent<HTMLButtonElement>) => void
-+>(e) => {} : (e: MouseEvent<HTMLButtonElement>) => void
-+>e : MouseEvent<HTMLButtonElement>
+ >onClick : (e: React.MouseEvent<HTMLButtonElement>) => void
+ >(e) => {} : (e: React.MouseEvent<HTMLButtonElement>) => void

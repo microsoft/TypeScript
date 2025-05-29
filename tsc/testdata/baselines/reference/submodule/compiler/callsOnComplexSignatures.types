@@ -10,21 +10,21 @@ function test1() {
 >test1 : () => void
 
     type stringType1 = "foo" | "bar";
->stringType1 : stringType1
+>stringType1 : "bar" | "foo"
 
     type stringType2 = "baz" | "bar";
->stringType2 : stringType2
+>stringType2 : "bar" | "baz"
 
     interface Temp1 {
         getValue(name: stringType1): number;
->getValue : (name: stringType1) => number
->name : stringType1
+>getValue : (name: "bar" | "foo") => number
+>name : "bar" | "foo"
     }
 
     interface Temp2 {
         getValue(name: stringType2): string;
->getValue : (name: stringType2) => string
->name : stringType2
+>getValue : (name: "bar" | "baz") => string
+>name : "bar" | "baz"
     }
 
     function test(t: Temp1 | Temp2) {
@@ -34,9 +34,9 @@ function test1() {
         const z = t.getValue("bar"); // Should be fine
 >z : string | number
 >t.getValue("bar") : string | number
->t.getValue : ((name: stringType1) => number) | ((name: stringType2) => string)
+>t.getValue : ((name: "bar" | "foo") => number) | ((name: "bar" | "baz") => string)
 >t : Temp1 | Temp2
->getValue : ((name: stringType1) => number) | ((name: stringType2) => string)
+>getValue : ((name: "bar" | "foo") => number) | ((name: "bar" | "baz") => string)
 >"bar" : "bar"
     }
 }
@@ -341,7 +341,7 @@ function test5() {
 
     // Pair of non-like intrinsics
     function render(url?: string): React.ReactNode {
->render : (url?: string | undefined) => ReactNode
+>render : (url?: string | undefined) => React.ReactNode
 >url : string | undefined
 >React : any
 
@@ -353,29 +353,29 @@ function test5() {
 >'button' : "button"
 
         return <Tag>test</Tag>;
-><Tag>test</Tag> : Element
+><Tag>test</Tag> : JSX.Element
 >Tag : "a" | "button"
 >Tag : "a" | "button"
     }
 
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
->App : (props: { component: ReactType<any>; }) => Element
->props : { component: ReactType<any>; }
->component : ReactType<any>
+>App : (props: { component: React.ReactType<any>; }) => JSX.Element
+>props : { component: React.ReactType<any>; }
+>component : React.ReactType<any>
 >React : any
 
         const Comp: React.ReactType = props.component;
->Comp : ReactType<any>
+>Comp : React.ReactType<any>
 >React : any
->props.component : ReactType<any>
->props : { component: ReactType<any>; }
->component : ReactType<any>
+>props.component : React.ReactType<any>
+>props : { component: React.ReactType<any>; }
+>component : React.ReactType<any>
 
         return (<Comp />);
->(<Comp />) : Element
-><Comp /> : Element
->Comp : ReactType<any>
+>(<Comp />) : JSX.Element
+><Comp /> : JSX.Element
+>Comp : React.ReactType<any>
     }
 
     // custom components with non-subset props
@@ -401,15 +401,15 @@ function test5() {
         }
 
         var C: React.ComponentType<P1> | React.ComponentType<P2> = null as any;
->C : ComponentType<P1> | ComponentType<P2>
+>C : React.ComponentType<P1> | React.ComponentType<P2>
 >React : any
 >React : any
 >null as any : any
 
         const a = <C p={true} />;
->a : Element
-><C p={true} /> : Element
->C : ComponentType<P1> | ComponentType<P2>
+>a : JSX.Element
+><C p={true} /> : JSX.Element
+>C : React.ComponentType<P1> | React.ComponentType<P2>
 >p : true
 >true : true
     }

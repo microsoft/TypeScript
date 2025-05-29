@@ -444,13 +444,13 @@ declare module "Object/Merge" {
 >Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 121, 12))
 
         'flat': MergeFlat<O, O1>;
->'flat' : Symbol(flat, Decl(ramdaToolsNoInfinite2.ts, 130, 92))
+>'flat' : Symbol('flat', Decl(ramdaToolsNoInfinite2.ts, 130, 92))
 >MergeFlat : Symbol(MergeFlat, Decl(ramdaToolsNoInfinite2.ts, 122, 36))
 >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 130, 22))
 >O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 130, 39))
 
         'deep': MergeDeep<O, O1>;
->'deep' : Symbol(deep, Decl(ramdaToolsNoInfinite2.ts, 131, 33))
+>'deep' : Symbol('deep', Decl(ramdaToolsNoInfinite2.ts, 131, 33))
 >MergeDeep : Symbol(MergeDeep, Decl(ramdaToolsNoInfinite2.ts, 124, 97))
 >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 130, 22))
 >O1 : Symbol(O1, Decl(ramdaToolsNoInfinite2.ts, 130, 39))
@@ -633,12 +633,12 @@ declare module "Object/NonNullable" {
 >Depth : Symbol(Depth, Decl(ramdaToolsNoInfinite2.ts, 166, 12))
 
         'flat': NonNullableFlat<O>;
->'flat' : Symbol(flat, Decl(ramdaToolsNoInfinite2.ts, 180, 67))
+>'flat' : Symbol('flat', Decl(ramdaToolsNoInfinite2.ts, 180, 67))
 >NonNullableFlat : Symbol(NonNullableFlat, Decl(ramdaToolsNoInfinite2.ts, 170, 39))
 >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 180, 25))
 
         'deep': NonNullableDeep<O>;
->'deep' : Symbol(deep, Decl(ramdaToolsNoInfinite2.ts, 181, 35))
+>'deep' : Symbol('deep', Decl(ramdaToolsNoInfinite2.ts, 181, 35))
 >NonNullableDeep : Symbol(NonNullableDeep, Decl(ramdaToolsNoInfinite2.ts, 174, 11))
 >O : Symbol(O, Decl(ramdaToolsNoInfinite2.ts, 180, 25))
 
@@ -721,10 +721,10 @@ declare module "Number/_Internal" {
 >Numbers : Symbol(Numbers, Decl(ramdaToolsNoInfinite2.ts, 205, 342))
 
         'string': {
->'string' : Symbol(string, Decl(ramdaToolsNoInfinite2.ts, 207, 27))
+>'string' : Symbol('string', Decl(ramdaToolsNoInfinite2.ts, 207, 27))
 
             'all': Format<IterationMap[KnownIterationMapKeys], 's'>;
->'all' : Symbol(all, Decl(ramdaToolsNoInfinite2.ts, 208, 19))
+>'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 208, 19))
 >Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
 >IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
 >KnownIterationMapKeys : Symbol(KnownIterationMapKeys, Decl(ramdaToolsNoInfinite2.ts, 199, 42))
@@ -748,10 +748,10 @@ declare module "Number/_Internal" {
 
         };
         'number': {
->'number' : Symbol(number, Decl(ramdaToolsNoInfinite2.ts, 213, 10))
+>'number' : Symbol('number', Decl(ramdaToolsNoInfinite2.ts, 213, 10))
 
             'all': Format<IterationMap[KnownIterationMapKeys], 'n'>;
->'all' : Symbol(all, Decl(ramdaToolsNoInfinite2.ts, 214, 19))
+>'all' : Symbol('all', Decl(ramdaToolsNoInfinite2.ts, 214, 19))
 >Format : Symbol(Format, Decl(ramdaToolsNoInfinite2.ts, 197, 12))
 >IterationMap : Symbol(IterationMap, Decl(ramdaToolsNoInfinite2.ts, 196, 12))
 >KnownIterationMapKeys : Symbol(KnownIterationMapKeys, Decl(ramdaToolsNoInfinite2.ts, 199, 42))
@@ -863,11 +863,11 @@ declare module "Iteration/Format" {
 >Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 247, 12))
 
         's': I[2];
->'s' : Symbol(s, Decl(ramdaToolsNoInfinite2.ts, 249, 68))
+>'s' : Symbol('s', Decl(ramdaToolsNoInfinite2.ts, 249, 68))
 >I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 249, 23))
 
         'n': I[3];
->'n' : Symbol(n, Decl(ramdaToolsNoInfinite2.ts, 250, 18))
+>'n' : Symbol('n', Decl(ramdaToolsNoInfinite2.ts, 250, 18))
 >I : Symbol(I, Decl(ramdaToolsNoInfinite2.ts, 249, 23))
 
     }[fmt];
@@ -1220,12 +1220,12 @@ declare module "List/Length" {
 >Formats : Symbol(Formats, Decl(ramdaToolsNoInfinite2.ts, 332, 12))
 
         's': NumberOf<L['length']>;
->'s' : Symbol(s, Decl(ramdaToolsNoInfinite2.ts, 335, 69))
+>'s' : Symbol('s', Decl(ramdaToolsNoInfinite2.ts, 335, 69))
 >NumberOf : Symbol(NumberOf, Decl(ramdaToolsNoInfinite2.ts, 331, 12))
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 335, 23))
 
         'n': L['length'];
->'n' : Symbol(n, Decl(ramdaToolsNoInfinite2.ts, 336, 35))
+>'n' : Symbol('n', Decl(ramdaToolsNoInfinite2.ts, 336, 35))
 >L : Symbol(L, Decl(ramdaToolsNoInfinite2.ts, 335, 23))
 
     }[fmt];
@@ -1618,7 +1618,7 @@ declare module "Iteration/IterationOf" {
 >'40' : Symbol('40', Decl(ramdaToolsNoInfinite2.ts, 469, 42))
 
         '__': ['__', '__', string, number, '-' | '0' | '+'];
->'__' : Symbol(__, Decl(ramdaToolsNoInfinite2.ts, 470, 42))
+>'__' : Symbol('__', Decl(ramdaToolsNoInfinite2.ts, 470, 42))
 
     };
 

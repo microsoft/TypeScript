@@ -21,3 +21,7 @@ exports.foo = foo;
 function foo() {
     return new Object();
 }
+
+
+//// [app.d.ts]
+export declare function foo(): Object;

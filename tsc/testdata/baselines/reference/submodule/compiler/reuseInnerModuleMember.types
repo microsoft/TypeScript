@@ -7,7 +7,7 @@ declare module bar {
 }
 
 import f = require('./reuseInnerModuleMember_0');
->f : typeof import("reuseInnerModuleMember_0")
+>f : typeof f
 
 module bar {
 >bar : typeof bar

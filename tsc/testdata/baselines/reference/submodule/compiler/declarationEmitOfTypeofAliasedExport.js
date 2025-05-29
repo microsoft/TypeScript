@@ -21,3 +21,13 @@ exports.D = C;
 Object.defineProperty(exports, "__esModule", { value: true });
 const a = require("./a");
 exports.default = a.D;
+
+
+//// [a.d.ts]
+declare class C {
+}
+export { C as D };
+//// [b.d.ts]
+import * as a from "./a";
+declare const _default: typeof a.D;
+export default _default;

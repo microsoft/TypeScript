@@ -239,9 +239,9 @@ for (var x in M) { }
 
 for (var x in M.X) { }
 >x : string
->M.X : typeof X
+>M.X : typeof M.X
 >M : typeof M
->X : typeof X
+>X : typeof M.X
 
 enum Color { Red, Blue }
 >Color : Color

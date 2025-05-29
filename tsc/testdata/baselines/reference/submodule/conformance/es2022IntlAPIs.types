@@ -18,11 +18,11 @@ for (const zoneName of timezoneNames) {
 >timezoneNames : readonly ["short", "long", "shortOffset", "longOffset", "shortGeneric", "longGeneric"]
 
   var formatter = new Intl.DateTimeFormat('en-US', {
->formatter : DateTimeFormat
->new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : DateTimeFormat
->Intl.DateTimeFormat : DateTimeFormatConstructor
+>formatter : Intl.DateTimeFormat
+>new Intl.DateTimeFormat('en-US', {    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  }) : Intl.DateTimeFormat
+>Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
 >Intl : typeof Intl
->DateTimeFormat : DateTimeFormatConstructor
+>DateTimeFormat : Intl.DateTimeFormatConstructor
 >'en-US' : "en-US"
 >{    timeZone: 'America/Los_Angeles',    timeZoneName: zoneName,  } : { timeZone: string; timeZoneName: "long" | "longGeneric" | "longOffset" | "short" | "shortGeneric" | "shortOffset"; }
 

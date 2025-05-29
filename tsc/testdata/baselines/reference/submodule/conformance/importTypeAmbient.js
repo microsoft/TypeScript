@@ -53,3 +53,42 @@ class Bar2 {
 let shim = {
     Bar: Bar2
 };
+
+
+//// [importTypeAmbient.d.ts]
+declare module "foo" {
+    interface Point {
+        x: number;
+        y: number;
+    }
+    export = Point;
+}
+declare const x: import("foo");
+declare module "foo2" {
+    namespace Bar {
+        interface I {
+            a: string;
+            b: number;
+        }
+    }
+    namespace Baz {
+        interface J {
+            a: number;
+            b: string;
+        }
+    }
+    class Bar {
+        item: Bar.I;
+        constructor(input: Baz.J);
+    }
+}
+declare let y: import("foo2").Bar.I;
+declare class Bar2 {
+    item: {
+        a: string;
+        b: number;
+        c: object;
+    };
+    constructor(input?: any);
+}
+declare let shim: typeof import("foo2");

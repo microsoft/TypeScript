@@ -5,7 +5,7 @@ import { c } from './types'
 >c : 10
 
 import * as types from './types'
->types : typeof import("types")
+>types : typeof types
 
 console.log(c) // Fails as expected, import is still allowed though.
 >console.log(c) : void
@@ -20,7 +20,7 @@ console.log(types.c) // Expected an error here.
 >console : Console
 >log : (...data: any[]) => void
 >types.c : any
->types : typeof import("types")
+>types : typeof types
 >c : any
 
 === types.ts ===

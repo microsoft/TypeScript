@@ -14,17 +14,17 @@
 
  C.a;
 ->C.a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
-+>C.a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
++>C.a : Symbol(þindex, Decl(staticIndexSignature6.ts, 1, 21))
  >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
 ->a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
-+>a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
++>a : Symbol(þindex, Decl(staticIndexSignature6.ts, 1, 21))
 
  C.a = 1;
 ->C.a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
-+>C.a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
++>C.a : Symbol(þindex, Decl(staticIndexSignature6.ts, 1, 21))
  >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))
 ->a : Symbol((Anonymous class).__index, Decl(staticIndexSignature6.ts, 1, 21))
-+>a : Symbol((Missing), Decl(staticIndexSignature6.ts, 1, 21))
++>a : Symbol(þindex, Decl(staticIndexSignature6.ts, 1, 21))
 
  C[2];
  >C : Symbol(C, Decl(staticIndexSignature6.ts, 9, 5))

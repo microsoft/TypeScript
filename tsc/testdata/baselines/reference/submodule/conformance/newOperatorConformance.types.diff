@@ -1,15 +1,6 @@
 --- old.newOperatorConformance.types
 +++ new.newOperatorConformance.types
-@@= skipped -13, +13 lines =@@
- }
-
- class T<T> {
-->T : globalThis.T<T>
-+>T : T<T>
-
-     constructor(n?: T) { }
- >n : T
-@@= skipped -63, +63 lines =@@
+@@= skipped -76, +76 lines =@@
 
  // Construct expression of type where apparent type has a construct signature with 0 arguments
  function newFn1<T extends { new (): number }>(s: T) {

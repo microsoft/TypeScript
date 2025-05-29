@@ -35,3 +35,10 @@ import defaultBinding5 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding5;
 import defaultBinding6 from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 var x1 = defaultBinding6;
+
+
+//// [es6ImportDefaultBindingFollowedWithNamedImport1_0.d.ts]
+declare var a: number;
+export default a;
+//// [es6ImportDefaultBindingFollowedWithNamedImport1_1.d.ts]
+export {};

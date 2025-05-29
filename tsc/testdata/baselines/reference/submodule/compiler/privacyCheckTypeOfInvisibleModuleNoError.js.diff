@@ -9,13 +9,11 @@
      (function (Inner) {
      })(Inner || (Inner = {}));
  })(Outer || (Outer = {}));
--
--
--//// [privacyCheckTypeOfInvisibleModuleNoError.d.ts]
--declare namespace Outer {
--    namespace Inner {
--        var m: number;
--    }
+@@= skipped -11, +11 lines =@@
+     namespace Inner {
+         var m: number;
+     }
 -    export var f: typeof Inner;
--    export {};
--}
++    export var f: typeof Inner; // Since we dont unwind inner any more, it is error here
+     export {};
+ }

@@ -2,7 +2,7 @@
 
 === /types.ts ===
 export default interface Foo {
->Foo : Symbol(default, Decl(types.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(types.ts, 0, 0))
 
     a: number;
 >a : Symbol(a, Decl(types.ts, 0, 30))

@@ -28,3 +28,20 @@ const a = "";
 const b = "";
 /** @see {b} b */
 const c = "";
+
+
+//// [seeTag1.d.ts]
+interface Foo {
+    foo: string;
+}
+declare namespace NS {
+    interface Bar {
+        baz: Foo;
+    }
+}
+/** @see {Foo} foooo*/
+declare const a = "";
+/** @see {NS.Bar} ns.bar*/
+declare const b = "";
+/** @see {b} b */
+declare const c = "";

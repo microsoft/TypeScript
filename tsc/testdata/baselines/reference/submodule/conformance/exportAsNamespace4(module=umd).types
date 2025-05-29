@@ -11,39 +11,39 @@ export const b = 2;
 
 === 1.ts ===
 export * as default from './0';
->default : typeof import("0")
+>default : typeof import("./0")
 
 === 11.ts ===
 import * as ns from './0';
->ns : typeof import("0")
+>ns : typeof ns
 
 export default ns;
->ns : typeof import("0")
+>ns : typeof ns
 
 === 2.ts ===
 import foo from './1'
->foo : typeof import("0")
+>foo : typeof foo
 
 import foo1 from './11'
->foo1 : typeof import("0")
+>foo1 : typeof foo
 
 foo.a;
 >foo.a : 1
->foo : typeof import("0")
+>foo : typeof foo
 >a : 1
 
 foo1.a;
 >foo1.a : 1
->foo1 : typeof import("0")
+>foo1 : typeof foo
 >a : 1
 
 foo.b;
 >foo.b : 2
->foo : typeof import("0")
+>foo : typeof foo
 >b : 2
 
 foo1.b;
 >foo1.b : 2
->foo1 : typeof import("0")
+>foo1 : typeof foo
 >b : 2
 

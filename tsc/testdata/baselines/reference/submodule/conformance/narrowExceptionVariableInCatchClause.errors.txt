@@ -1,4 +1,4 @@
-narrowExceptionVariableInCatchClause.ts(11,17): error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic: () => any; }'. Did you mean 'dontPanic'?
+narrowExceptionVariableInCatchClause.ts(11,17): error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'. Did you mean 'dontPanic'?
 narrowExceptionVariableInCatchClause.ts(16,17): error TS2551: Property 'massage' does not exist on type 'Error'. Did you mean 'message'?
 
 
@@ -15,7 +15,7 @@ narrowExceptionVariableInCatchClause.ts(16,17): error TS2551: Property 'massage'
                 err.dontPanic(); // OK
                 err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
                     ~~~~~~~
-!!! error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic: () => any; }'. Did you mean 'dontPanic'?
+!!! error TS2551: Property 'doPanic' does not exist on type '{ type: "foo"; dontPanic(): any; }'. Did you mean 'dontPanic'?
 !!! related TS2728 narrowExceptionVariableInCatchClause.ts:1:58: 'dontPanic' is declared here.
             }
     

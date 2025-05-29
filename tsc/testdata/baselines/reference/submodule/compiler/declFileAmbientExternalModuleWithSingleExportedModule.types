@@ -3,10 +3,10 @@
 === declFileAmbientExternalModuleWithSingleExportedModule_1.ts ===
 ///<reference path='declFileAmbientExternalModuleWithSingleExportedModule_0.ts' preserve="true" />
 import SubModule = require('SubModule');
->SubModule : typeof import("SubModule")
+>SubModule : typeof SubModule
 
 export var x: SubModule.m.m3.c;
->x : c
+>x : SubModule.m.m3.c
 >SubModule : any
 >m : any
 >m3 : any

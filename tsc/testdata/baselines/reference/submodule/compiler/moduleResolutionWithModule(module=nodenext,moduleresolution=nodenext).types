@@ -6,11 +6,11 @@ export declare function thing(): void;
 
 === index.ts ===
 import * as p from "pkg";
->p : typeof import("node_modules/pkg/entrypoint")
+>p : typeof p
 
 p.thing();
 >p.thing() : void
 >p.thing : () => void
->p : typeof import("node_modules/pkg/entrypoint")
+>p : typeof p
 >thing : () => void
 

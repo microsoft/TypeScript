@@ -5,7 +5,7 @@ declare class DMap<K, V>  {
 >DMap : DMap<K, V>
 
   constructor(iterable: Iterable<[K, V]> | undefined);
->iterable : Iterable<[K, V], any, any> | undefined
+>iterable : Iterable<[K, V]> | undefined
 }
 new DMap([["1", 2]]);
 >new DMap([["1", 2]]) : DMap<string, number>
@@ -16,7 +16,7 @@ new DMap([["1", 2]]);
 >2 : 2
 
 const i1: Iterable<{ a: true }> | undefined = [{ a: true }];
->i1 : Iterable<{ a: true; }, any, any> | undefined
+>i1 : Iterable<{ a: true; }> | undefined
 >a : true
 >true : true
 >[{ a: true }] : { a: true; }[]
@@ -25,7 +25,7 @@ const i1: Iterable<{ a: true }> | undefined = [{ a: true }];
 >true : true
 
 const i2: Iterable<{ a: true }> | Iterable<{ b: false }> = [{ b: false }];
->i2 : Iterable<{ a: true; }, any, any> | Iterable<{ b: false; }, any, any>
+>i2 : Iterable<{ a: true; }> | Iterable<{ b: false; }>
 >a : true
 >true : true
 >b : false
@@ -36,7 +36,7 @@ const i2: Iterable<{ a: true }> | Iterable<{ b: false }> = [{ b: false }];
 >false : false
 
 const i3: Iterable<number> | 1[] = [2];
->i3 : 1[] | Iterable<number, any, any>
+>i3 : 1[] | Iterable<number>
 >[2] : 2[]
 >2 : 2
 

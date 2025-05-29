@@ -13,3 +13,13 @@ module T.U { // This needs to be emitted
 }
 
 //// [declareDottedModuleName.js]
+
+
+//// [declareDottedModuleName.d.ts]
+declare namespace M {
+}
+declare namespace M {
+    namespace R.S { } //This should be emitted
+}
+declare namespace T.U { // This needs to be emitted
+}

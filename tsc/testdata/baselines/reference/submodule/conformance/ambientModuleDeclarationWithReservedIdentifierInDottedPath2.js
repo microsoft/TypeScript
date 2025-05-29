@@ -21,3 +21,7 @@ declare;
 namespace;
 debugger;
 { } // still an error
+
+
+//// [ambientModuleDeclarationWithReservedIdentifierInDottedPath2.d.ts]
+export declare const tabId: number;

@@ -6,15 +6,15 @@ import * as cx from 'classnames';
 >cx : any
 
 import * as React from "react";
->React : typeof __React
+>React : typeof React
 
 let buttonProps : {[attributeName: string]: ''}
 >buttonProps : { [attributeName: string]: ""; }
 >attributeName : string
 
 let k = <button {...buttonProps} className={cx('class1', { class2: true })} />;
->k : Element
-><button {...buttonProps} className={cx('class1', { class2: true })} /> : Element
+>k : JSX.Element
+><button {...buttonProps} className={cx('class1', { class2: true })} /> : JSX.Element
 >button : any
 >buttonProps : { [attributeName: string]: ""; }
 >className : any

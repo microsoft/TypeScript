@@ -177,3 +177,11 @@ const typei2 = __importStar(require("inner/js/index"));
 cjsi2;
 mjsi2;
 typei2;
+
+
+//// [index.d.ts]
+export {};
+//// [index.d.mts]
+export {};
+//// [index.d.cts]
+export {};

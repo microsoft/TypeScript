@@ -9,9 +9,8 @@
 -    }
 -    return Src;
 -}());
--
--
--//// [index.d.ts]
--declare class Src implements NS.Dep {
 +class Src {
- }
++}
+
+
+ //// [index.d.ts]

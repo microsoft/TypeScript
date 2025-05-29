@@ -7,14 +7,14 @@
 
 // If the declaration includes a type annotation, the parameter is of that type
 function a0([a, b, [[c]]]: [number, number, string[][]]) { }
->a0 : (__0: [number, number, string[][]]) => void
+>a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
 >a : number
 >b : number
 >c : string
 
 a0([1, "string", [["world"]]);      // Error
 >a0([1, "string", [["world"]]) : void
->a0 : (__0: [number, number, string[][]]) => void
+>a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
 >[1, "string", [["world"]] : [number, string, string[][]]
 >1 : 1
 >"string" : "string"
@@ -24,7 +24,7 @@ a0([1, "string", [["world"]]);      // Error
 
 a0([1, 2, [["world"]], "string"]);  // Error
 >a0([1, 2, [["world"]], "string"]) : void
->a0 : (__0: [number, number, string[][]]) => void
+>a0 : ([a, b, [[c]]]: [number, number, string[][]]) => void
 >[1, 2, [["world"]], "string"] : [number, number, string[][], string]
 >1 : 1
 >2 : 2
@@ -40,7 +40,7 @@ a0([1, 2, [["world"]], "string"]);  // Error
 
 interface F1 {
     b0(z = 10, [[a, b], d, {u}] = [[1, 2], "string", { u: false }]);  // Error, no function body
->b0 : (z?: number, __1?: [[number, number], string, { u: boolean; }]) => any
+>b0 : (z?: number, [[a, b], d, { u }]?: [[number, number], string, { u: boolean; }]) => any
 >z : number
 >10 : 10
 >a : number
@@ -68,7 +68,7 @@ function b1(z = null, o = { x: 0, y: undefined }) { }
 >undefined : undefined
 
 function b2([a, z, y] = [undefined, null, undefined]) { }
->b2 : (__0?: [any, any, any]) => void
+>b2 : ([a, z, y]?: [any, any, any]) => void
 >a : any
 >z : any
 >y : any
@@ -77,7 +77,7 @@ function b2([a, z, y] = [undefined, null, undefined]) { }
 >undefined : undefined
 
 function b3([[a], b, [[c, d]]] = [[undefined], undefined, [[undefined, undefined]]]) { }
->b3 : (__0?: [[any], any, [[any, any]]]) => void
+>b3 : ([[a], b, [[c, d]]]?: [[any], any, [[any, any]]]) => void
 >a : any
 >b : any
 >c : any
@@ -103,26 +103,26 @@ b1("string", { x: "string", y: true });  // Error
 
 // If the declaration specifies a binding pattern, the parameter type is the implied type of that binding pattern (section 5.1.3)
 function c0({z: {x, y: {j}}}) { }
->c0 : (__0: { z: { x: any; y: { j: any; }; }; }) => void
+>c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
 >z : any
 >x : any
 >y : any
 >j : any
 
 function c1({z} = { z: 10 }) { }
->c1 : (__0?: { z: number; }) => void
+>c1 : ({ z }?: { z: number; }) => void
 >z : number
 >{ z: 10 } : { z: number; }
 >z : number
 >10 : 10
 
 function c2({z = 10}) { }
->c2 : (__0: { z?: number; }) => void
+>c2 : ({ z = 10 }: { z?: number; }) => void
 >z : number
 >10 : 10
 
 function c3({b}: { b: number|string } = { b: "hello" }) { }
->c3 : (__0?: { b: string | number; }) => void
+>c3 : ({ b }?: { b: string | number; }) => void
 >b : string | number
 >b : string | number
 >{ b: "hello" } : { b: string; }
@@ -130,18 +130,18 @@ function c3({b}: { b: number|string } = { b: "hello" }) { }
 >"hello" : "hello"
 
 function c4([z], z: number) { }  // Error Duplicate identifier
->c4 : (__0: [any], z: number) => void
+>c4 : ([z]: [any], z: number) => void
 >z : any
 >z : number
 
 function c5([a, b, [[c]]]) { }
->c5 : (__0: [any, any, [[any]]]) => void
+>c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >a : any
 >b : any
 >c : any
 
 function c6([a, b, [[c = 1]]]) { }
->c6 : (__0: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c = 1]]]: [any, any, [[number?]]]) => void
 >a : any
 >b : any
 >c : number
@@ -149,40 +149,40 @@ function c6([a, b, [[c = 1]]]) { }
 
 c0({ z: 1 });      // Error, implied type is { z: {x: any, y: {j: any}} }
 >c0({ z: 1 }) : void
->c0 : (__0: { z: { x: any; y: { j: any; }; }; }) => void
+>c0 : ({ z: { x, y: { j } } }: { z: { x: any; y: { j: any; }; }; }) => void
 >{ z: 1 } : { z: number; }
 >z : number
 >1 : 1
 
 c1({});            // Error, implied type is {z:number}?
 >c1({}) : void
->c1 : (__0?: { z: number; }) => void
+>c1 : ({ z }?: { z: number; }) => void
 >{} : {}
 
 c1({ z: true });   // Error, implied type is {z:number}?
 >c1({ z: true }) : void
->c1 : (__0?: { z: number; }) => void
+>c1 : ({ z }?: { z: number; }) => void
 >{ z: true } : { z: boolean; }
 >z : boolean
 >true : true
 
 c2({ z: false });  // Error, implied type is {z?: number}
 >c2({ z: false }) : void
->c2 : (__0: { z?: number; }) => void
+>c2 : ({ z = 10 }: { z?: number; }) => void
 >{ z: false } : { z: boolean; }
 >z : boolean
 >false : false
 
 c3({ b: true });   // Error, implied type is { b: number|string }. 
 >c3({ b: true }) : void
->c3 : (__0?: { b: string | number; }) => void
+>c3 : ({ b }?: { b: string | number; }) => void
 >{ b: true } : { b: boolean; }
 >b : boolean
 >true : true
 
 c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
 >c5([1, 2, false, true]) : void
->c5 : (__0: [any, any, [[any]]]) => void
+>c5 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
 >[1, 2, false, true] : [number, number, boolean, boolean]
 >1 : 1
 >2 : 2
@@ -191,7 +191,7 @@ c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
 
 c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
 >c6([1, 2, [["string"]]]) : void
->c6 : (__0: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c = 1]]]: [any, any, [[number?]]]) => void
 >[1, 2, [["string"]]] : [number, number, [[string]]]
 >1 : 1
 >2 : 2
@@ -204,32 +204,32 @@ c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // 
 // permitted only when the parameter list occurs in conjunction with a function body
 
 function d1([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
->d1 : (__0?: [any, any, any]) => void
+>d1 : ([a, b, c]?: [any, any, any]) => void
 >a : any
 >b : any
 >c : any
 
 function d2({x, y, z}?) { }  // Error, binding pattern can't be optional in implementation signature
->d2 : (__0?: { x: any; y: any; z: any; }) => void
+>d2 : ({ x, y, z }?: { x: any; y: any; z: any; }) => void
 >x : any
 >y : any
 >z : any
 
 interface F2 {
     d3([a, b, c]?);
->d3 : (__0?: [any, any, any]) => any
+>d3 : ([a, b, c]?: [any, any, any]) => any
 >a : any
 >b : any
 >c : any
 
     d4({x, y, z}?);
->d4 : (__0?: { x: any; y: any; z: any; }) => any
+>d4 : ({ x, y, z }?: { x: any; y: any; z: any; }) => any
 >x : any
 >y : any
 >z : any
 
     e0([a, b, c]);
->e0 : (__0: [any, any, any]) => any
+>e0 : ([a, b, c]: [any, any, any]) => any
 >a : any
 >b : any
 >c : any
@@ -239,19 +239,19 @@ class C4 implements F2 {
 >C4 : C4
 
     d3([a, b, c]?) { }  // Error, binding pattern can't be optional in implementation signature
->d3 : (__0?: [any, any, any]) => void
+>d3 : ([a, b, c]?: [any, any, any]) => void
 >a : any
 >b : any
 >c : any
 
     d4({x, y, c}) { }
->d4 : (__0: { c: any; x: any; y: any; }) => void
+>d4 : ({ x, y, c }: { c: any; x: any; y: any; }) => void
 >x : any
 >y : any
 >c : any
 
     e0([a, b, q]) { }
->e0 : (__0: [any, any, any]) => void
+>e0 : ([a, b, q]: [any, any, any]) => void
 >a : any
 >b : any
 >q : any
@@ -262,7 +262,7 @@ class C4 implements F2 {
 // Type annotations must instead be written on the top- level parameter declaration
 
 function e0({x: [number, number, number]}) { }  // error, duplicate identifier;
->e0 : (__0: { x: [any, any, any]; }) => void
+>e0 : ({ x: [number, number, number] }: { x: [any, any, any]; }) => void
 >x : any
 >number : any
 >number : any

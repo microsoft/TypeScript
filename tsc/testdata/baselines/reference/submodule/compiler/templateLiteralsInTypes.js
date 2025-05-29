@@ -9,3 +9,8 @@ f("x").foo;
 //// [templateLiteralsInTypes.js]
 const f = (hdr, val) => `${hdr}:\t${val}\r\n`;
 f("x").foo;
+
+
+//// [templateLiteralsInTypes.d.ts]
+declare const f: (hdr: string, val: number) => `${string}:	${number}
+`;

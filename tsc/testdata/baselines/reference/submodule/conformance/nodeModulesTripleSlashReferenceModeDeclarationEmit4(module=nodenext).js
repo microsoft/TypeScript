@@ -26,3 +26,8 @@ export interface LocalInterface extends ImportInterface {}
 //// [index.js]
 /// <reference types="pkg" resolution-mode="import" preserve="true" />
 export {};
+
+
+//// [index.d.ts]
+export interface LocalInterface extends ImportInterface {
+}

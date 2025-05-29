@@ -6,28 +6,28 @@ function f<X>(arg: X) {
 >arg : X
 
     type Cond1 = X extends [infer A] ? A : never;
->Cond1 : Cond1
+>Cond1 : X extends [infer A] ? A : never
 
     type Cond2 = X extends [infer A] ? A : never;
->Cond2 : Cond2
+>Cond2 : X extends [infer A] ? A : never
 
     let x: Cond1 = null as any;
->x : Cond1
+>x : X extends [infer A] ? A : never
 >null as any : any
 
     let y: Cond2 = null as any;
->y : Cond2
+>y : X extends [infer A] ? A : never
 >null as any : any
 
     x = y; // is err, should be ok
->x = y : Cond2
->x : Cond1
->y : Cond2
+>x = y : X extends [infer A] ? A : never
+>x : X extends [infer A] ? A : never
+>y : X extends [infer A] ? A : never
 
     y = x; // is err, should be ok
->y = x : Cond1
->y : Cond2
->x : Cond1
+>y = x : X extends [infer A] ? A : never
+>y : X extends [infer A] ? A : never
+>x : X extends [infer A] ? A : never
 }
 
 // repro from https://github.com/microsoft/TypeScript/issues/26627

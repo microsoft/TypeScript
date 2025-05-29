@@ -6,8 +6,8 @@
  const post = <PATH extends PostPath>(
 ->post : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 -><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends PostPath>(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
-+>post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
-+><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
++>post : <PATH extends "/login" | "/user">(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
++><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends "/login" | "/user">(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 
      path: PATH,
  >path : PATH
@@ -34,7 +34,7 @@
    post<PATH>(path, { body })
  >post<PATH>(path, { body }) : void
 ->post : <PATH_1 extends PostPath>(path: PATH_1, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH_1>; }) => void
-+>post : <PATH extends "/login" | "/user">(path: PATH, __1: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
++>post : <PATH_1 extends "/login" | "/user">(path: PATH_1, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH_1>; }) => void
  >path : PATH
  >{ body } : { body: PostBody<PATH>; }
  >body : PostBody<PATH>

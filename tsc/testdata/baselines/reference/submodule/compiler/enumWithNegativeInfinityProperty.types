@@ -5,7 +5,7 @@ enum A {
 >A : A
 
     "-Infinity" = 1
->"-Infinity" : A."-Infinity"
+>"-Infinity" : typeof A["-Infinity"]
 >1 : 1
 }
 

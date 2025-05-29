@@ -62,7 +62,7 @@ export namespace Values { // error
 >x : Symbol(x, Decl(main.ts, 14, 16))
 }
 export default interface Default {} // sketchy, but ok
->Default : Symbol(default, Decl(main.ts, 15, 1))
+>Default : Symbol(Default, Decl(main.ts, 15, 1))
 
 === /main2.ts ===
 export interface I {}
@@ -90,7 +90,7 @@ export default 1; // error
 
 === /main5.ts ===
 export default class C {} // error
->C : Symbol(default, Decl(main5.ts, 0, 0))
+>C : Symbol(C, Decl(main5.ts, 0, 0))
 
 === /main6.ts ===
 interface I {}

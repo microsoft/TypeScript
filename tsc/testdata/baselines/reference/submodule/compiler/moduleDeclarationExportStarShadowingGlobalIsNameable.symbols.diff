@@ -16,14 +16,7 @@
  }
  export { Account2 as Acc };
  >Account2 : Symbol(Account2, Decl(account.ts, 2, 1))
-@@= skipped -14, +14 lines =@@
-
- === index.ts ===
- declare global {
-->global : Symbol(global, Decl(index.ts, 0, 0))
-+>global : Symbol((Missing), Decl(index.ts, 0, 0))
-
-     interface Account {
+@@= skipped -20, +20 lines =@@
  >Account : Symbol(Account, Decl(index.ts, 0, 16))
 
          someProp: number;
@@ -39,7 +32,7 @@
      }
  }
  import * as model from "./model";
-@@= skipped -22, +22 lines =@@
+@@= skipped -16, +16 lines =@@
  >func : Symbol(func, Decl(index.ts, 9, 12))
  >account : Symbol(account, Decl(index.ts, 9, 21))
  >model : Symbol(model, Decl(index.ts, 8, 6))

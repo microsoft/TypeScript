@@ -7,7 +7,7 @@
 ->good1 : ({ a, b }: { a: string; b: string; }, x: string) => void
 ->a : string
 ->b : string
-+>good1 : (__0: { a: any; b: any; }, x: string) => void
++>good1 : ({ a, b }: { a: any; b: any; }, x: string) => void
 +>a : any
 +>b : any
  >x : string
@@ -22,7 +22,7 @@
 ->b : string
 ->c : number
 ->d : number
-+>good2 : (__0: { a: any; b: any; }, __1: { c: any; d: any; }) => void
++>good2 : ({ a, b }: { a: any; b: any; }, { c, d }: { c: any; d: any; }) => void
 +>a : any
 +>b : any
 +>c : any
@@ -35,7 +35,7 @@
   */
  function good3(x, {a, b}, y) {}
 ->good3 : (x: number, { a, b }: { a: string; b: string; }, y: string) => void
-+>good3 : (x: number, __1: { a: any; b: any; }, y: string) => void
++>good3 : (x: number, { a, b }: { a: any; b: any; }, y: string) => void
  >x : number
 ->a : string
 ->b : string
@@ -50,7 +50,7 @@
 ->good4 : ({ a, b }: { a: string; b: string; }) => void
 ->a : string
 ->b : string
-+>good4 : (__0: { a: any; b: any; }) => void
++>good4 : ({ a, b }: { a: any; b: any; }) => void
 +>a : any
 +>b : any
 
@@ -63,7 +63,7 @@
 ->good5 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
 ->a : string
 ->b : string
-+>good5 : (__0: { a: any; b: any; }, x: string) => void
++>good5 : ({ a, b }: { a: any; b: any; }, x: string) => void
 +>a : any
 +>b : any
  >x : string
@@ -78,7 +78,7 @@
 ->b : string
 ->c : string
 ->d : string
-+>good6 : (__0: { a: any; b: any; }, __1: { c: any; d: any; }) => void
++>good6 : ({ a, b }: { a: any; b: any; }, { c, d }: { c: any; d: any; }) => void
 +>a : any
 +>b : any
 +>c : any
@@ -91,7 +91,7 @@
   */
  function good7(x, {a, b}, y) {}
 ->good7 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
-+>good7 : (x: number, __1: { a: any; b: any; }, y: string) => void
++>good7 : (x: number, { a, b }: { a: any; b: any; }, y: string) => void
  >x : number
 ->a : string
 ->b : string
@@ -107,7 +107,7 @@
 ->good8 : ({ a, b }: {    a: string;    b: string;}) => void
 ->a : string
 ->b : string
-+>good8 : (__0: { a: any; b: any; }) => void
++>good8 : ({ a, b }: { a: any; b: any; }) => void
 +>a : any
 +>b : any
 
@@ -117,7 +117,7 @@
  function good9({ a }) {
 ->good9 : ({ a }: { a: string; }, ...args: any[]) => void
 ->a : string
-+>good9 : (__0: { a: any; }) => void
++>good9 : ({ a }: { a: any; }) => void
 +>a : any
 
      console.log(arguments, a);
@@ -136,7 +136,7 @@
   */
  function bad1(x, {a, b}) {}
 ->bad1 : (x: string, { a, b }: string) => void
-+>bad1 : (x: string, __1: { a: any; b: any; }) => void
++>bad1 : (x: string, { a, b }: { a: any; b: any; }) => void
  >x : string
  >a : any
  >b : any
@@ -145,7 +145,7 @@
   */
  function bad2(x, {a, b}) {}
 ->bad2 : (x: any, { a, b }: { a: string; b: string; }) => void
-+>bad2 : (x: any, __1: { a: any; b: any; }) => void
++>bad2 : (x: any, { a, b }: { a: any; b: any; }) => void
  >x : any
 ->a : string
 ->b : string
