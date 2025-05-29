@@ -1837,6 +1837,14 @@
         "category": "Error",
         "code": 1544
     },
+    "'using' declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1545
+    },
+    "'await using' declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1546
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

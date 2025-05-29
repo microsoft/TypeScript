@@ -52790,17 +52790,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const blockScopeFlags = declarationList.flags & NodeFlags.BlockScoped;
-        if ((blockScopeFlags === NodeFlags.Using || blockScopeFlags === NodeFlags.AwaitUsing) && isForInStatement(declarationList.parent)) {
-            return grammarErrorOnNode(
-                declarationList,
-                blockScopeFlags === NodeFlags.Using ?
-                    Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
-                    Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
-            );
-        }
+        if (blockScopeFlags === NodeFlags.Using || blockScopeFlags === NodeFlags.AwaitUsing) {
+            if (isForInStatement(declarationList.parent)) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
+                        Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
+                );
+            }
 
-        if (blockScopeFlags === NodeFlags.AwaitUsing) {
-            return checkAwaitGrammar(declarationList);
+            if (declarationList.flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.using_declarations_are_not_allowed_in_ambient_contexts :
+                        Diagnostics.await_using_declarations_are_not_allowed_in_ambient_contexts,
+                );
+            }
+
+            if (blockScopeFlags === NodeFlags.AwaitUsing) {
+                return checkAwaitGrammar(declarationList);
+            }
         }
 
         return false;
