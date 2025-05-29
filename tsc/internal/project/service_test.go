@@ -598,7 +598,7 @@ func TestService(t *testing.T) {
 
 			// Missing location should be watched
 			assert.Check(t, slices.ContainsFunc(host.ClientMock.WatchFilesCalls()[1].Watchers, func(w *lsproto.FileSystemWatcher) bool {
-				return *w.GlobPattern.Pattern == "/home/projects/TS/p1/src/z.ts" && *w.Kind == lsproto.WatchKindCreate
+				return *w.GlobPattern.Pattern == "/home/projects/TS/p1/src/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json}" && *w.Kind == lsproto.WatchKindCreate
 			}))
 
 			// Add a new file through failed lookup watch

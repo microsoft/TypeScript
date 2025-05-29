@@ -3,7 +3,6 @@ package project
 import (
 	"context"
 	"fmt"
-	"maps"
 	"slices"
 	"strings"
 	"sync"
@@ -156,12 +155,9 @@ func NewProject(name string, kind Kind, currentDirectory string, host ProjectHos
 	}
 	client := host.Client()
 	if host.IsWatchEnabled() && client != nil {
-		project.failedLookupsWatch = newWatchedFiles(client, lsproto.WatchKindCreate, func(data map[tspath.Path]string) []string {
-			return slices.Sorted(maps.Values(data))
-		})
-		project.affectingLocationsWatch = newWatchedFiles(client, lsproto.WatchKindChange|lsproto.WatchKindCreate|lsproto.WatchKindDelete, func(data map[tspath.Path]string) []string {
-			return slices.Sorted(maps.Values(data))
-		})
+		globMapper := createGlobMapper(host)
+		project.failedLookupsWatch = newWatchedFiles(client, lsproto.WatchKindCreate, globMapper)
+		project.affectingLocationsWatch = newWatchedFiles(client, lsproto.WatchKindChange|lsproto.WatchKindCreate|lsproto.WatchKindDelete, globMapper)
 	}
 	project.markAsDirty()
 	return project
@@ -270,7 +266,7 @@ func (p *Project) getRootFileWatchGlobs() []string {
 		result := make([]string, 0, len(globs)+1)
 		result = append(result, p.configFileName)
 		for dir, recursive := range globs {
-			result = append(result, fmt.Sprintf("%s/%s", dir, core.IfElse(recursive, recursiveFileGlobPattern, fileGlobPattern)))
+			result = append(result, fmt.Sprintf("%s/%s", tspath.NormalizePath(dir), core.IfElse(recursive, recursiveFileGlobPattern, fileGlobPattern)))
 		}
 		for _, fileName := range p.parsedCommandLine.LiteralFileNames() {
 			result = append(result, fileName)
