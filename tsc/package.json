@@ -22,6 +22,7 @@
         "postinstall": "hereby postinstall",
         "build": "hereby build",
         "build:watch": "hereby build:watch",
+        "build:watch:debug": "hereby build:watch --debug",
         "test": "hereby test",
         "api:build": "npm run -w @typescript/api build",
         "extension:build": "npm run -w _extension build",

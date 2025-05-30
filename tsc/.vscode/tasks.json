@@ -17,7 +17,7 @@
         {
             "label": "Watch",
             "type": "npm",
-            "script": "build:watch",
+            "script": "build:watch:debug",
             "group": "build",
             "presentation": {
                 "panel": "dedicated",
