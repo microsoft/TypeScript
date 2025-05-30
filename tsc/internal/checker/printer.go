@@ -164,17 +164,19 @@ func getTrailingSemicolonDeferringWriter(writer printer.EmitTextWriter) printer.
 }
 
 func (c *Checker) TypeToString(t *Type) string {
-	return c.typeToStringEx(t, nil, TypeFormatFlagsAllowUniqueESSymbolType|TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil)
+	return c.typeToStringEx(t, nil, TypeFormatFlagsAllowUniqueESSymbolType|TypeFormatFlagsUseAliasDefinedOutsideCurrentScope)
 }
 
 func toNodeBuilderFlags(flags TypeFormatFlags) nodebuilder.Flags {
 	return nodebuilder.Flags(flags & TypeFormatFlagsNodeBuilderFlagsMask)
 }
 
-func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags TypeFormatFlags, writer printer.EmitTextWriter) string {
-	if writer == nil {
-		writer = printer.NewTextWriter("")
-	}
+func (c *Checker) TypeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
+	return c.typeToStringEx(t, enclosingDeclaration, flags)
+}
+
+func (c *Checker) typeToStringEx(t *Type, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
+	writer := printer.NewTextWriter("")
 	noTruncation := (c.compilerOptions.NoErrorTruncation == core.TSTrue) || (flags&TypeFormatFlagsNoTruncation != 0)
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors
 	if noTruncation {
@@ -214,13 +216,16 @@ func (c *Checker) SymbolToString(s *ast.Symbol) string {
 }
 
 func (c *Checker) symbolToString(symbol *ast.Symbol) string {
-	return c.symbolToStringEx(symbol, nil, ast.SymbolFlagsAll, SymbolFormatFlagsAllowAnyNodeKind, nil)
+	return c.symbolToStringEx(symbol, nil, ast.SymbolFlagsAll, SymbolFormatFlagsAllowAnyNodeKind)
 }
 
-func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, flags SymbolFormatFlags, writer printer.EmitTextWriter) string {
-	if writer == nil {
-		writer = printer.SingleLineStringWriterPool.Get().(printer.EmitTextWriter)
-	}
+func (c *Checker) SymbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, flags SymbolFormatFlags) string {
+	return c.symbolToStringEx(symbol, enclosingDeclaration, meaning, flags)
+}
+
+func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, flags SymbolFormatFlags) string {
+	writer, putWriter := printer.GetSingleLineStringWriter()
+	defer putWriter()
 
 	nodeFlags := nodebuilder.FlagsIgnoreErrors
 	internalNodeFlags := nodebuilder.InternalFlagsNone
@@ -244,14 +249,6 @@ func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)
 	}
-	if writer == printer.SingleLineStringWriterPool.Get().(printer.EmitTextWriter) {
-		// handle uses of the single-line writer during an ongoing write
-		existing := writer.String()
-		defer writer.Clear()
-		if existing != "" {
-			defer writer.WriteKeyword(existing)
-		}
-	}
 	var printer_ *printer.Printer
 	if enclosingDeclaration != nil && enclosingDeclaration.Kind == ast.KindSourceFile {
 		printer_ = createPrinterWithRemoveCommentsNeverAsciiEscape(c.diagnosticConstructionContext)
@@ -271,10 +268,14 @@ func (c *Checker) symbolToStringEx(symbol *ast.Symbol, enclosingDeclaration *ast
 }
 
 func (c *Checker) signatureToString(signature *Signature) string {
-	return c.signatureToStringEx(signature, nil, TypeFormatFlagsNone, nil)
+	return c.signatureToStringEx(signature, nil, TypeFormatFlagsNone)
 }
 
-func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration *ast.Node, flags TypeFormatFlags, writer printer.EmitTextWriter) string {
+func (c *Checker) SignatureToStringEx(signature *Signature, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
+	return c.signatureToStringEx(signature, enclosingDeclaration, flags)
+}
+
+func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
 	isConstructor := signature.flags&SignatureFlagsConstruct != 0
 	var sigOutput ast.Kind
 	if flags&TypeFormatFlagsWriteArrowStyleSignature != 0 {
@@ -290,9 +291,9 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 			sigOutput = ast.KindCallSignature
 		}
 	}
-	if writer == nil {
-		writer = printer.SingleLineStringWriterPool.Get().(printer.EmitTextWriter)
-	}
+	writer, putWriter := printer.GetSingleLineStringWriter()
+	defer putWriter()
+
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsWriteTypeParametersInQualifiedName
 	sig := c.nodeBuilder.SignatureToSignatureDeclaration(signature, sigOutput, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil)
 	printer_ := createPrinterWithRemoveCommentsOmitTrailingSemicolon(c.diagnosticConstructionContext)
@@ -300,26 +301,17 @@ func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)
 	}
-	if writer == printer.SingleLineStringWriterPool.Get().(printer.EmitTextWriter) {
-		// handle uses of the single-line writer during an ongoing write
-		existing := writer.String()
-		defer writer.Clear()
-		if existing != "" {
-			defer writer.WriteKeyword(existing)
-		}
-	}
 	printer_.Write(sig /*sourceFile*/, sourceFile, getTrailingSemicolonDeferringWriter(writer), nil) // TODO: GH#18217
 	return writer.String()
 }
 
 func (c *Checker) typePredicateToString(typePredicate *TypePredicate) string {
-	return c.typePredicateToStringEx(typePredicate, nil, TypeFormatFlagsUseAliasDefinedOutsideCurrentScope, nil)
+	return c.typePredicateToStringEx(typePredicate, nil, TypeFormatFlagsUseAliasDefinedOutsideCurrentScope)
 }
 
-func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags, writer printer.EmitTextWriter) string {
-	if writer == nil {
-		writer = printer.SingleLineStringWriterPool.Get().(printer.EmitTextWriter)
-	}
+func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
+	writer, putWriter := printer.GetSingleLineStringWriter()
+	defer putWriter()
 	combinedFlags := toNodeBuilderFlags(flags) | nodebuilder.FlagsIgnoreErrors | nodebuilder.FlagsWriteTypeParametersInQualifiedName
 	predicate := c.nodeBuilder.TypePredicateToTypePredicateNode(typePredicate, enclosingDeclaration, combinedFlags, nodebuilder.InternalFlagsNone, nil) // TODO: GH#18217
 	printer_ := createPrinterWithRemoveComments(c.diagnosticConstructionContext)
@@ -327,36 +319,12 @@ func (c *Checker) typePredicateToStringEx(typePredicate *TypePredicate, enclosin
 	if enclosingDeclaration != nil {
 		sourceFile = ast.GetSourceFileOfNode(enclosingDeclaration)
 	}
-	if writer == printer.SingleLineStringWriterPool.Get().(printer.EmitTextWriter) {
-		// handle uses of the single-line writer during an ongoing write
-		existing := writer.String()
-		defer writer.Clear()
-		if existing != "" {
-			defer writer.WriteKeyword(existing)
-		}
-	}
 	printer_.Write(predicate /*sourceFile*/, sourceFile, writer, nil)
 	return writer.String()
 }
 
 func (c *Checker) valueToString(value any) string {
 	return ValueToString(value)
-}
-
-func (c *Checker) WriteSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags, flags SymbolFormatFlags, writer printer.EmitTextWriter) string {
-	return c.symbolToStringEx(symbol, enclosingDeclaration, meaning, flags, writer)
-}
-
-func (c *Checker) WriteType(t *Type, enclosingDeclaration *ast.Node, flags TypeFormatFlags, writer printer.EmitTextWriter) string {
-	return c.typeToStringEx(t, enclosingDeclaration, flags, writer)
-}
-
-func (c *Checker) WriteSignature(s *Signature, enclosingDeclaration *ast.Node, flags TypeFormatFlags, writer printer.EmitTextWriter) string {
-	return c.signatureToStringEx(s, enclosingDeclaration, flags, writer)
-}
-
-func (c *Checker) WriteTypePredicate(p *TypePredicate, enclosingDeclaration *ast.Node, flags TypeFormatFlags, writer printer.EmitTextWriter) string {
-	return c.typePredicateToStringEx(p, enclosingDeclaration, flags, writer)
 }
 
 func (c *Checker) formatUnionTypes(types []*Type) []*Type {

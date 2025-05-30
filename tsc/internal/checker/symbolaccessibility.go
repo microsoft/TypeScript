@@ -93,11 +93,11 @@ func (ch *Checker) IsAnySymbolAccessible(symbols []*ast.Symbol, enclosingDeclara
 	if hadAccessibleChain != nil {
 		var moduleName string
 		if hadAccessibleChain != initialSymbol {
-			moduleName = ch.symbolToStringEx(hadAccessibleChain, enclosingDeclaration, ast.SymbolFlagsNamespace, SymbolFormatFlagsAllowAnyNodeKind, nil)
+			moduleName = ch.symbolToStringEx(hadAccessibleChain, enclosingDeclaration, ast.SymbolFlagsNamespace, SymbolFormatFlagsAllowAnyNodeKind)
 		}
 		return &printer.SymbolAccessibilityResult{
 			Accessibility:   printer.SymbolAccessibilityNotAccessible,
-			ErrorSymbolName: ch.symbolToStringEx(initialSymbol, enclosingDeclaration, meaning, SymbolFormatFlagsAllowAnyNodeKind, nil),
+			ErrorSymbolName: ch.symbolToStringEx(initialSymbol, enclosingDeclaration, meaning, SymbolFormatFlagsAllowAnyNodeKind),
 			ErrorModuleName: moduleName,
 		}
 	}
@@ -743,7 +743,7 @@ func (c *Checker) isSymbolAccessibleWorker(symbol *ast.Symbol, enclosingDeclarat
 				// name from different external module that is not visible
 				return printer.SymbolAccessibilityResult{
 					Accessibility:   printer.SymbolAccessibilityCannotBeNamed,
-					ErrorSymbolName: c.symbolToStringEx(symbol, enclosingDeclaration, meaning, SymbolFormatFlagsAllowAnyNodeKind, nil),
+					ErrorSymbolName: c.symbolToStringEx(symbol, enclosingDeclaration, meaning, SymbolFormatFlagsAllowAnyNodeKind),
 					ErrorModuleName: c.symbolToString(symbolExternalModule),
 					ErrorNode:       core.IfElse(ast.IsInJSFile(enclosingDeclaration), enclosingDeclaration, nil),
 				}
@@ -753,7 +753,7 @@ func (c *Checker) isSymbolAccessibleWorker(symbol *ast.Symbol, enclosingDeclarat
 		// Just a local name that is not accessible
 		return printer.SymbolAccessibilityResult{
 			Accessibility:   printer.SymbolAccessibilityNotAccessible,
-			ErrorSymbolName: c.symbolToStringEx(symbol, enclosingDeclaration, meaning, SymbolFormatFlagsAllowAnyNodeKind, nil),
+			ErrorSymbolName: c.symbolToStringEx(symbol, enclosingDeclaration, meaning, SymbolFormatFlagsAllowAnyNodeKind),
 		}
 	}
 
