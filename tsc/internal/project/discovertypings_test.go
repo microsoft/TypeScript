@@ -36,10 +36,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js", "/home/src/projects/project/jquery.js", "/home/src/projects/project/chroma.min.js"},
 			"/home/src/projects/project",
-			map[string]string{
-				"jquery": "jquery",
-				"chroma": "chroma-js",
-			},
 			&collections.SyncMap[string, *project.CachedTyping]{},
 			map[string]map[string]string{},
 		)
@@ -73,7 +69,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&collections.SyncMap[string, *project.CachedTyping]{},
 			map[string]map[string]string{},
 		)
@@ -113,7 +108,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&cache,
 			map[string]map[string]string{
 				"node": projecttestutil.TypesRegistryConfig(),
@@ -156,7 +150,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&cache,
 			map[string]map[string]string{},
 		)
@@ -192,7 +185,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&collections.SyncMap[string, *project.CachedTyping]{},
 			map[string]map[string]string{},
 		)
@@ -226,7 +218,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&collections.SyncMap[string, *project.CachedTyping]{},
 			map[string]map[string]string{},
 		)
@@ -268,7 +259,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&cache,
 			map[string]map[string]string{
 				"node":      projecttestutil.TypesRegistryConfig(),
@@ -314,7 +304,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&cache,
 			map[string]map[string]string{
 				"node": config,
@@ -360,7 +349,6 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 			[]string{"/home/src/projects/project/app.js"},
 			"/home/src/projects/project",
-			map[string]string{},
 			&cache,
 			map[string]map[string]string{
 				"node":      config,

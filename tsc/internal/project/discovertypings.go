@@ -35,7 +35,6 @@ func DiscoverTypings(
 	typingsInfo *TypingsInfo,
 	fileNames []string,
 	projectRootPath string,
-	safeList map[string]string,
 	packageNameToTypingLocation *collections.SyncMap[string, *CachedTyping],
 	typesRegistry map[string]map[string]string,
 ) (cachedTypingPaths []string, newTypingNames []string, filesToWatch []string) {
@@ -66,7 +65,7 @@ func DiscoverTypings(
 	}
 
 	if !typingsInfo.TypeAcquisition.DisableFilenameBasedTypeAcquisition.IsTrue() {
-		getTypingNamesFromSourceFileNames(fs, log, inferredTypings, safeList, fileNames)
+		getTypingNamesFromSourceFileNames(fs, log, inferredTypings, fileNames)
 	}
 
 	// add typings for unresolved imports
@@ -76,7 +75,7 @@ func DiscoverTypings(
 	// Remove typings that the user has added to the exclude list
 	for _, excludeTypingName := range exclude {
 		delete(inferredTypings, excludeTypingName)
-		log(fmt.Sprintf("TI:: Typing for %s is in exclude list, will be ignored.", excludeTypingName))
+		log(fmt.Sprintf("ATA:: Typing for %s is in exclude list, will be ignored.", excludeTypingName))
 	}
 
 	// Add the cached typing locations for inferred typings that are already installed
@@ -95,7 +94,7 @@ func DiscoverTypings(
 			newTypingNames = append(newTypingNames, typing)
 		}
 	}
-	log(fmt.Sprintf("TI:: Finished typings discovery: cachedTypingsPaths: %v newTypingNames: %v, filesToWatch %v", cachedTypingPaths, newTypingNames, filesToWatch))
+	log(fmt.Sprintf("ATA:: Finished typings discovery: cachedTypingsPaths: %v newTypingNames: %v, filesToWatch %v", cachedTypingPaths, newTypingNames, filesToWatch))
 	return cachedTypingPaths, newTypingNames, filesToWatch
 }
 
@@ -111,7 +110,7 @@ func addInferredTypings(
 	inferredTypings map[string]string,
 	typingNames []string, message string,
 ) {
-	log(fmt.Sprintf("TI:: %s: %v", message, typingNames))
+	log(fmt.Sprintf("ATA:: %s: %v", message, typingNames))
 	for _, typingName := range typingNames {
 		addInferredTyping(inferredTypings, typingName)
 	}
@@ -127,7 +126,6 @@ func getTypingNamesFromSourceFileNames(
 	fs vfs.FS,
 	log func(s string),
 	inferredTypings map[string]string,
-	safeList map[string]string,
 	fileNames []string,
 ) {
 	hasJsxFile := false
@@ -136,15 +134,15 @@ func getTypingNamesFromSourceFileNames(
 		hasJsxFile = hasJsxFile || tspath.FileExtensionIs(fileName, tspath.ExtensionJsx)
 		inferredTypingName := tspath.RemoveFileExtension(tspath.ToFileNameLowerCase(tspath.GetBaseFileName(fileName)))
 		cleanedTypingName := removeMinAndVersionNumbers(inferredTypingName)
-		if safeName, ok := safeList[cleanedTypingName]; ok {
-			fromFileNames = append(fromFileNames, safeName)
+		if typeName, ok := safeFileNameToTypeName[cleanedTypingName]; ok {
+			fromFileNames = append(fromFileNames, typeName)
 		}
 	}
 	if len(fromFileNames) > 0 {
 		addInferredTypings(fs, log, inferredTypings, fromFileNames, "Inferred typings from file names")
 	}
 	if hasJsxFile {
-		log("TI:: Inferred 'react' typings due to presence of '.jsx' extension")
+		log("ATA:: Inferred 'react' typings due to presence of '.jsx' extension")
 		addInferredTyping(inferredTypings, "react")
 	}
 }
@@ -244,7 +242,7 @@ func addTypingNamesAndGetFilesToWatch(
 
 	}
 
-	log(fmt.Sprintf("TI:: Searching for typing names in %s; all files: %v", packagesFolderPath, dependencyManifestNames))
+	log(fmt.Sprintf("ATA:: Searching for typing names in %s; all files: %v", packagesFolderPath, dependencyManifestNames))
 
 	// Once we have the names of things to look up, we iterate over
 	// and either collect their included typings, or add them to the
@@ -267,10 +265,10 @@ func addTypingNamesAndGetFilesToWatch(
 		if len(ownTypes) != 0 {
 			absolutePath := tspath.GetNormalizedAbsolutePath(ownTypes, tspath.GetDirectoryPath(manifestPath))
 			if fs.FileExists(absolutePath) {
-				log(fmt.Sprintf("TI::     Package '%s' provides its own types.", manifest.Name.Value))
+				log(fmt.Sprintf("ATA::     Package '%s' provides its own types.", manifest.Name.Value))
 				inferredTypings[manifest.Name.Value] = absolutePath
 			} else {
-				log(fmt.Sprintf("TI::     Package '%s' provides its own types but they are missing.", manifest.Name.Value))
+				log(fmt.Sprintf("ATA::     Package '%s' provides its own types but they are missing.", manifest.Name.Value))
 			}
 		} else {
 			packageNames = append(packageNames, manifest.Name.Value)

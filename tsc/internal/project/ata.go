@@ -14,17 +14,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-type TypesMapFile struct {
-	TypesMap  map[string]SafeListEntry `json:"typesMap"`
-	SimpleMap map[string]string        `json:"simpleMap,omitzero"`
-}
-
-type SafeListEntry struct {
-	Match   string   `json:"match"`
-	Exclude [][]any  `json:"exclude"`
-	Types   []string `json:"types"`
-}
-
 type PendingRequest struct {
 	requestId              int32
 	packageNames           []string
@@ -65,8 +54,6 @@ type TypingsInstaller struct {
 	missingTypingsSet           collections.SyncMap[string, bool]
 
 	typesRegistry map[string]map[string]string
-	typesMap      *TypesMapFile
-	safeList      map[string]string
 
 	installRunCount      atomic.Int32
 	inFlightRequestCount int
@@ -142,7 +129,7 @@ func (ti *TypingsInstaller) InstallPackage(p *Project, fileName string, packageN
 
 func (ti *TypingsInstaller) EnqueueInstallTypingsRequest(p *Project, typingsInfo *TypingsInfo) {
 	// because we arent using buffers, no need to throttle for requests here
-	p.Log("TI:: Got install request for: " + p.Name())
+	p.Log("ATA:: Got install request for: " + p.Name())
 	go ti.discoverAndInstallTypings(
 		p,
 		typingsInfo,
@@ -154,15 +141,12 @@ func (ti *TypingsInstaller) EnqueueInstallTypingsRequest(p *Project, typingsInfo
 func (ti *TypingsInstaller) discoverAndInstallTypings(p *Project, typingsInfo *TypingsInfo, fileNames []string, projectRootPath string) {
 	ti.init((p))
 
-	ti.initializeSafeList(p)
-
 	cachedTypingPaths, newTypingNames, filesToWatch := DiscoverTypings(
 		p.FS(),
 		p.Log,
 		typingsInfo,
 		fileNames,
 		projectRootPath,
-		ti.safeList,
 		&ti.packageNameToTypingLocation,
 		ti.typesRegistry,
 	)
@@ -178,9 +162,9 @@ func (ti *TypingsInstaller) discoverAndInstallTypings(p *Project, typingsInfo *T
 			ti.installTypings(p, typingsInfo, requestId, cachedTypingPaths, filteredTypings)
 			return
 		}
-		p.Log("TI:: All typings are known to be missing or invalid - no need to install more typings")
+		p.Log("ATA:: All typings are known to be missing or invalid - no need to install more typings")
 	} else {
-		p.Log("TI:: No new typings were requested as a result of typings discovery")
+		p.Log("ATA:: No new typings were requested as a result of typings discovery")
 	}
 	p.UpdateTypingFiles(typingsInfo, cachedTypingPaths)
 	// !!! sheetal events to send
@@ -275,7 +259,7 @@ func (ti *TypingsInstaller) invokeRoutineToInstallTypings(
 			}
 
 			if success {
-				p.Logf("TI:: Installed typings %v", packageNames)
+				p.Logf("ATA:: Installed typings %v", packageNames)
 				var installedTypingFiles []string
 				resolver := module.NewResolver(p, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "")
 				for _, packageName := range request.filteredTypings {
@@ -296,12 +280,12 @@ func (ti *TypingsInstaller) invokeRoutineToInstallTypings(
 					ti.packageNameToTypingLocation.Store(packageName, newTyping)
 					installedTypingFiles = append(installedTypingFiles, typingFile)
 				}
-				p.Logf("TI:: Installed typing files %v", installedTypingFiles)
+				p.Logf("ATA:: Installed typing files %v", installedTypingFiles)
 				p.UpdateTypingFiles(request.typingsInfo, append(request.currentlyCachedTypings, installedTypingFiles...))
 				// DO we really need these events
 				// this.event(response, "setTypings");
 			} else {
-				p.Logf("TI:: install request failed, marking packages as missing to prevent repeated requests: %v", request.filteredTypings)
+				p.Logf("ATA:: install request failed, marking packages as missing to prevent repeated requests: %v", request.filteredTypings)
 				for _, typing := range request.filteredTypings {
 					ti.missingTypingsSet.Store(typing, true)
 				}
@@ -362,7 +346,7 @@ func (ti *TypingsInstaller) installWorker(
 		success bool,
 	),
 ) {
-	p.Logf("TI:: #%d with cwd: %s arguments: %v", requestId, cwd, packageNames)
+	p.Logf("ATA:: #%d with cwd: %s arguments: %v", requestId, cwd, packageNames)
 	hasError := InstallNpmPackages(packageNames, func(packageNames []string, hasError *atomic.Bool) {
 		var npmArgs []string
 		npmArgs = append(npmArgs, "install", "--ignore-scripts")
@@ -370,7 +354,7 @@ func (ti *TypingsInstaller) installWorker(
 		npmArgs = append(npmArgs, "--save-dev", "--user-agent=\"typesInstaller/"+core.Version()+"\"")
 		output, err := ti.options.NpmInstall(cwd, npmArgs)
 		if err != nil {
-			p.Logf("TI:: Output is: %s", output)
+			p.Logf("ATA:: Output is: %s", output)
 			hasError.Store(true)
 		}
 	})
@@ -418,23 +402,23 @@ func (ti *TypingsInstaller) filterTypings(
 	for _, typing := range typingsToInstall {
 		typingKey := module.MangleScopedPackageName(typing)
 		if _, ok := ti.missingTypingsSet.Load(typingKey); ok {
-			p.Logf("TI:: '%s':: '%s' is in missingTypingsSet - skipping...", typing, typingKey)
+			p.Logf("ATA:: '%s':: '%s' is in missingTypingsSet - skipping...", typing, typingKey)
 			continue
 		}
 		validationResult, name, isScopeName := ValidatePackageName(typing)
 		if validationResult != NameOk {
 			// add typing name to missing set so we won't process it again
 			ti.missingTypingsSet.Store(typingKey, true)
-			p.Log("TI:: " + RenderPackageNameValidationFailure(typing, validationResult, name, isScopeName))
+			p.Log("ATA:: " + RenderPackageNameValidationFailure(typing, validationResult, name, isScopeName))
 			continue
 		}
 		typesRegistryEntry, ok := ti.typesRegistry[typingKey]
 		if !ok {
-			p.Logf("TI:: '%s':: Entry for package '%s' does not exist in local types registry - skipping...", typing, typingKey)
+			p.Logf("ATA:: '%s':: Entry for package '%s' does not exist in local types registry - skipping...", typing, typingKey)
 			continue
 		}
 		if typingLocation, ok := ti.packageNameToTypingLocation.Load(typingKey); ok && IsTypingUpToDate(typingLocation, typesRegistryEntry) {
-			p.Logf("TI:: '%s':: '%s' already has an up-to-date typing - skipping...", typing, typingKey)
+			p.Logf("ATA:: '%s':: '%s' already has an up-to-date typing - skipping...", typing, typingKey)
 			continue
 		}
 		result = append(result, typingKey)
@@ -444,7 +428,7 @@ func (ti *TypingsInstaller) filterTypings(
 
 func (ti *TypingsInstaller) init(p *Project) {
 	ti.initOnce.Do(func() {
-		p.Log("TI:: Global cache location '" + ti.TypingsLocation + "'") //, safe file path '" + safeListPath + "', types map path '" + typesMapLocation + "`")
+		p.Log("ATA:: Global cache location '" + ti.TypingsLocation + "'") //, safe file path '" + safeListPath + "', types map path '" + typesMapLocation + "`")
 		ti.processCacheLocation(p)
 
 		// !!! sheetal handle npm path here if we would support it
@@ -459,11 +443,11 @@ func (ti *TypingsInstaller) init(p *Project) {
 		//     }
 
 		ti.ensureTypingsLocationExists(p)
-		p.Log("TI:: Updating types-registry@latest npm package...")
+		p.Log("ATA:: Updating types-registry@latest npm package...")
 		if _, err := ti.options.NpmInstall(ti.TypingsLocation, []string{"install", "--ignore-scripts", "types-registry@latest"}); err == nil {
-			p.Log("TI:: Updated types-registry npm package")
+			p.Log("ATA:: Updated types-registry npm package")
 		} else {
-			p.Logf("TI:: Error updating types-registry package: %v", err)
+			p.Logf("ATA:: Error updating types-registry package: %v", err)
 			// !!! sheetal events to send
 			//         // store error info to report it later when it is known that server is already listening to events from typings installer
 			//         this.delayedInitializationError = {
@@ -496,18 +480,18 @@ type NpmLock struct {
 }
 
 func (ti *TypingsInstaller) processCacheLocation(p *Project) {
-	p.Log("TI:: Processing cache location " + ti.TypingsLocation)
+	p.Log("ATA:: Processing cache location " + ti.TypingsLocation)
 	packageJson := tspath.CombinePaths(ti.TypingsLocation, "package.json")
 	packageLockJson := tspath.CombinePaths(ti.TypingsLocation, "package-lock.json")
-	p.Log("TI:: Trying to find '" + packageJson + "'...")
+	p.Log("ATA:: Trying to find '" + packageJson + "'...")
 	if p.FS().FileExists(packageJson) && p.FS().FileExists((packageLockJson)) {
 		var npmConfig NpmConfig
 		npmConfigContents := parseNpmConfigOrLock(p, packageJson, &npmConfig)
 		var npmLock NpmLock
 		npmLockContents := parseNpmConfigOrLock(p, packageLockJson, &npmLock)
 
-		p.Log("TI:: Loaded content of " + packageJson + ": " + npmConfigContents)
-		p.Log("TI:: Loaded content of " + packageLockJson + ": " + npmLockContents)
+		p.Log("ATA:: Loaded content of " + packageJson + ": " + npmConfigContents)
+		p.Log("ATA:: Loaded content of " + packageLockJson + ": " + npmLockContents)
 
 		// !!! sheetal strada uses Node10
 		resolver := module.NewResolver(p, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "")
@@ -535,9 +519,9 @@ func (ti *TypingsInstaller) processCacheLocation(p *Project) {
 					if existingTypingFile.TypingsLocation == typingFile {
 						continue
 					}
-					p.Log("TI:: New typing for package " + packageName + " from " + typingFile + " conflicts with existing typing file " + existingTypingFile.TypingsLocation)
+					p.Log("ATA:: New typing for package " + packageName + " from " + typingFile + " conflicts with existing typing file " + existingTypingFile.TypingsLocation)
 				}
-				p.Log("TI:: Adding entry into typings cache: " + packageName + " => " + typingFile)
+				p.Log("ATA:: Adding entry into typings cache: " + packageName + " => " + typingFile)
 				version := npmLockValue.Version
 				if version == "" {
 					continue
@@ -551,7 +535,7 @@ func (ti *TypingsInstaller) processCacheLocation(p *Project) {
 			}
 		}
 	}
-	p.Log("TI:: Finished processing cache location " + ti.TypingsLocation)
+	p.Log("ATA:: Finished processing cache location " + ti.TypingsLocation)
 }
 
 func parseNpmConfigOrLock[T NpmConfig | NpmLock](p *Project, location string, config *T) string {
@@ -562,13 +546,13 @@ func parseNpmConfigOrLock[T NpmConfig | NpmLock](p *Project, location string, co
 
 func (ti *TypingsInstaller) ensureTypingsLocationExists(p *Project) {
 	npmConfigPath := tspath.CombinePaths(ti.TypingsLocation, "package.json")
-	p.Log("TI:: Npm config file: " + npmConfigPath)
+	p.Log("ATA:: Npm config file: " + npmConfigPath)
 
 	if !p.FS().FileExists(npmConfigPath) {
-		p.Logf("TI:: Npm config file: '%s' is missing, creating new one...", npmConfigPath)
+		p.Logf("ATA:: Npm config file: '%s' is missing, creating new one...", npmConfigPath)
 		err := p.FS().WriteFile(npmConfigPath, "{ \"private\": true }", false)
 		if err != nil {
-			p.Logf("TI:: Npm config file write failed: %v", err)
+			p.Logf("ATA:: Npm config file write failed: %v", err)
 		}
 	}
 }
@@ -589,59 +573,11 @@ func (ti *TypingsInstaller) loadTypesRegistryFile(p *Project) map[string]map[str
 				return typesRegistry
 			}
 		}
-		p.Logf("TI:: Error when loading types registry file '%s': %v", typesRegistryFile, err)
+		p.Logf("ATA:: Error when loading types registry file '%s': %v", typesRegistryFile, err)
 	} else {
-		p.Logf("TI:: Error reading types registry file '%s'", typesRegistryFile)
+		p.Logf("ATA:: Error reading types registry file '%s'", typesRegistryFile)
 	}
 	return map[string]map[string]string{}
-}
-
-func (ti *TypingsInstaller) initializeSafeList(p *Project) {
-	if ti.safeList != nil {
-		return
-	}
-	ti.loadTypesMap(p)
-	if ti.typesMap.SimpleMap != nil {
-		p.Logf("TI:: Loaded safelist from types map file '%s'", tspath.CombinePaths(p.DefaultLibraryPath(), "typesMap.json"))
-		ti.safeList = ti.typesMap.SimpleMap
-		return
-	}
-
-	p.Logf("TI:: Failed to load safelist from types map file '$%s'", tspath.CombinePaths(p.DefaultLibraryPath(), "typesMap.json"))
-	ti.loadSafeList(p)
-}
-
-func (ti *TypingsInstaller) loadTypesMap(p *Project) {
-	if ti.typesMap != nil {
-		return
-	}
-	typesMapLocation := tspath.CombinePaths(p.DefaultLibraryPath(), "typesMap.json")
-	typesMapContents, ok := p.FS().ReadFile(typesMapLocation)
-	if ok {
-		err := json.Unmarshal([]byte(typesMapContents), &ti.typesMap)
-		if err != nil {
-			return
-		}
-		p.Logf("TI:: Error when parsing typesMapLocation '%s': %v", typesMapLocation, err)
-	} else {
-		p.Logf("TI:: Error reading typesMapLocation '%s'", typesMapLocation)
-	}
-	ti.typesMap = &TypesMapFile{}
-}
-
-func (ti *TypingsInstaller) loadSafeList(p *Project) {
-	safeListLocation := tspath.CombinePaths(p.DefaultLibraryPath(), "typingSafeList.json")
-	safeListContents, ok := p.FS().ReadFile(safeListLocation)
-	if ok {
-		err := json.Unmarshal([]byte(safeListContents), &ti.safeList)
-		if err != nil {
-			return
-		}
-		p.Logf("TI:: Error when parsing safeListLocation '%s': %v", safeListLocation, err)
-	} else {
-		p.Logf("TI:: Error reading safeListLocation '%s'", safeListLocation)
-	}
-	ti.safeList = map[string]string{}
 }
 
 func NpmInstall(cwd string, npmInstallArgs []string) ([]byte, error) {
