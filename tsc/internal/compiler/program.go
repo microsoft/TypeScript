@@ -28,6 +28,9 @@ type ProgramOptions struct {
 	ProjectReference             []core.ProjectReference
 	ConfigFileParsingDiagnostics []*ast.Diagnostic
 	CreateCheckerPool            func(*Program) CheckerPool
+
+	TypingsLocation string
+	ProjectName     string
 }
 
 type Program struct {
@@ -189,7 +192,7 @@ func NewProgram(options ProgramOptions) *Program {
 	// tracing?.push(tracing.Phase.Program, "createProgram", { configFilePath: options.configFilePath, rootDir: options.rootDir }, /*separateBeginAndEnd*/ true);
 	// performance.mark("beforeProgram");
 
-	p.resolver = module.NewResolver(p.host, p.compilerOptions)
+	p.resolver = module.NewResolver(p.host, p.compilerOptions, p.programOptions.TypingsLocation, p.programOptions.ProjectName)
 
 	var libs []string
 

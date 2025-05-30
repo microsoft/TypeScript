@@ -37,7 +37,7 @@ func TestService(t *testing.T) {
 		t.Parallel()
 		t.Run("create configured project", func(t *testing.T) {
 			t.Parallel()
-			service, _ := projecttestutil.Setup(defaultFiles)
+			service, _ := projecttestutil.Setup(defaultFiles, nil)
 			assert.Equal(t, len(service.Projects()), 0)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", defaultFiles["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			assert.Equal(t, len(service.Projects()), 1)
@@ -50,7 +50,7 @@ func TestService(t *testing.T) {
 
 		t.Run("create inferred project", func(t *testing.T) {
 			t.Parallel()
-			service, _ := projecttestutil.Setup(defaultFiles)
+			service, _ := projecttestutil.Setup(defaultFiles, nil)
 			service.OpenFile("/home/projects/TS/p1/config.ts", defaultFiles["/home/projects/TS/p1/config.ts"].(string), core.ScriptKindTS, "")
 			// Find tsconfig, load, notice config.ts is not included, create inferred project
 			assert.Equal(t, len(service.Projects()), 2)
@@ -60,7 +60,7 @@ func TestService(t *testing.T) {
 
 		t.Run("inferred project for in-memory files", func(t *testing.T) {
 			t.Parallel()
-			service, _ := projecttestutil.Setup(defaultFiles)
+			service, _ := projecttestutil.Setup(defaultFiles, nil)
 			service.OpenFile("/home/projects/TS/p1/config.ts", defaultFiles["/home/projects/TS/p1/config.ts"].(string), core.ScriptKindTS, "")
 			service.OpenFile("^/untitled/ts-nul-authority/Untitled-1", "x", core.ScriptKindTS, "")
 			service.OpenFile("^/untitled/ts-nul-authority/Untitled-2", "y", core.ScriptKindTS, "")
@@ -77,7 +77,7 @@ func TestService(t *testing.T) {
 			jsFiles := map[string]any{
 				"/home/projects/TS/p1/index.js": `import { x } from "./x";`,
 			}
-			service, _ := projecttestutil.Setup(jsFiles)
+			service, _ := projecttestutil.Setup(jsFiles, nil)
 			service.OpenFile("/home/projects/TS/p1/index.js", jsFiles["/home/projects/TS/p1/index.js"].(string), core.ScriptKindJS, "")
 			assert.Equal(t, len(service.Projects()), 1)
 			project := service.Projects()[0]
@@ -89,7 +89,7 @@ func TestService(t *testing.T) {
 		t.Parallel()
 		t.Run("update script info eagerly and program lazily", func(t *testing.T) {
 			t.Parallel()
-			service, _ := projecttestutil.Setup(defaultFiles)
+			service, _ := projecttestutil.Setup(defaultFiles, nil)
 			service.OpenFile("/home/projects/TS/p1/src/x.ts", defaultFiles["/home/projects/TS/p1/src/x.ts"].(string), core.ScriptKindTS, "")
 			info, proj := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/x.ts")
 			programBefore := proj.GetProgram()
@@ -127,7 +127,7 @@ func TestService(t *testing.T) {
 
 		t.Run("unchanged source files are reused", func(t *testing.T) {
 			t.Parallel()
-			service, _ := projecttestutil.Setup(defaultFiles)
+			service, _ := projecttestutil.Setup(defaultFiles, nil)
 			service.OpenFile("/home/projects/TS/p1/src/x.ts", defaultFiles["/home/projects/TS/p1/src/x.ts"].(string), core.ScriptKindTS, "")
 			_, proj := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/x.ts")
 			programBefore := proj.GetProgram()
@@ -165,7 +165,7 @@ func TestService(t *testing.T) {
 			t.Parallel()
 			files := maps.Clone(defaultFiles)
 			files["/home/projects/TS/p1/y.ts"] = `export const y = 2;`
-			service, _ := projecttestutil.Setup(files)
+			service, _ := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			assert.Check(t, service.GetScriptInfo("/home/projects/TS/p1/y.ts") == nil)
 
@@ -209,7 +209,7 @@ func TestService(t *testing.T) {
 				},
 				"include": ["src/index.ts"]
 			}`
-			service, host := projecttestutil.Setup(files)
+			service, host := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
 			programBefore := project.GetProgram()
@@ -270,7 +270,7 @@ func TestService(t *testing.T) {
 			t.Parallel()
 			t.Run("delete a file, close it, recreate it", func(t *testing.T) {
 				t.Parallel()
-				service, host := projecttestutil.Setup(defaultFiles)
+				service, host := projecttestutil.Setup(defaultFiles, nil)
 				service.OpenFile("/home/projects/TS/p1/src/x.ts", defaultFiles["/home/projects/TS/p1/src/x.ts"].(string), core.ScriptKindTS, "")
 				service.OpenFile("/home/projects/TS/p1/src/index.ts", defaultFiles["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 				assert.Equal(t, service.SourceFileCount(), 2)
@@ -299,7 +299,7 @@ func TestService(t *testing.T) {
 				t.Parallel()
 				files := maps.Clone(defaultFiles)
 				delete(files, "/home/projects/TS/p1/tsconfig.json")
-				service, host := projecttestutil.Setup(files)
+				service, host := projecttestutil.Setup(files, nil)
 				service.OpenFile("/home/projects/TS/p1/src/x.ts", defaultFiles["/home/projects/TS/p1/src/x.ts"].(string), core.ScriptKindTS, "")
 				service.OpenFile("/home/projects/TS/p1/src/index.ts", defaultFiles["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 
@@ -334,7 +334,7 @@ func TestService(t *testing.T) {
 				},
 			}`
 			files["/home/projects/TS/p2/src/index.ts"] = `import { x } from "../../p1/src/x";`
-			service, _ := projecttestutil.Setup(files)
+			service, _ := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			service.OpenFile("/home/projects/TS/p2/src/index.ts", files["/home/projects/TS/p2/src/index.ts"].(string), core.ScriptKindTS, "")
 			assert.Equal(t, len(service.Projects()), 2)
@@ -357,7 +357,7 @@ func TestService(t *testing.T) {
 				}
 			}`
 			files["/home/projects/TS/p2/src/index.ts"] = `import { x } from "../../p1/src/x";`
-			service, _ := projecttestutil.Setup(files)
+			service, _ := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			service.OpenFile("/home/projects/TS/p2/src/index.ts", files["/home/projects/TS/p2/src/index.ts"].(string), core.ScriptKindTS, "")
 			assert.Equal(t, len(service.Projects()), 2)
@@ -375,7 +375,7 @@ func TestService(t *testing.T) {
 
 		t.Run("change open file", func(t *testing.T) {
 			t.Parallel()
-			service, host := projecttestutil.Setup(defaultFiles)
+			service, host := projecttestutil.Setup(defaultFiles, nil)
 			service.OpenFile("/home/projects/TS/p1/src/x.ts", defaultFiles["/home/projects/TS/p1/src/x.ts"].(string), core.ScriptKindTS, "")
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", defaultFiles["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
@@ -396,7 +396,7 @@ func TestService(t *testing.T) {
 
 		t.Run("change closed program file", func(t *testing.T) {
 			t.Parallel()
-			service, host := projecttestutil.Setup(defaultFiles)
+			service, host := projecttestutil.Setup(defaultFiles, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", defaultFiles["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
 			programBefore := project.GetProgram()
@@ -429,7 +429,7 @@ func TestService(t *testing.T) {
 					let y: number = x;`,
 			}
 
-			service, host := projecttestutil.Setup(files)
+			service, host := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
 			program := project.GetProgram()
@@ -466,7 +466,7 @@ func TestService(t *testing.T) {
 				"/home/projects/TS/p1/src/x.ts":     `export declare const x: number | undefined;`,
 				"/home/projects/TS/p1/src/index.ts": `import { x } from "./x";`,
 			}
-			service, host := projecttestutil.Setup(files)
+			service, host := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
 			program := project.GetProgram()
@@ -499,7 +499,7 @@ func TestService(t *testing.T) {
 				"/home/projects/TS/p1/src/index.ts": `let x = 2;`,
 				"/home/projects/TS/p1/src/x.ts":     `let y = x;`,
 			}
-			service, host := projecttestutil.Setup(files)
+			service, host := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/x.ts", files["/home/projects/TS/p1/src/x.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/x.ts")
 			program := project.GetProgram()
@@ -530,7 +530,7 @@ func TestService(t *testing.T) {
 				}`,
 				"/home/projects/TS/p1/src/index.ts": `import { y } from "./y";`,
 			}
-			service, host := projecttestutil.Setup(files)
+			service, host := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
 			program := project.GetProgram()
@@ -588,7 +588,7 @@ func TestService(t *testing.T) {
 				}`,
 				"/home/projects/TS/p1/src/index.ts": `import { z } from "./z";`,
 			}
-			service, host := projecttestutil.Setup(files)
+			service, host := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
 			program := project.GetProgram()
@@ -629,7 +629,7 @@ func TestService(t *testing.T) {
 				}`,
 				"/home/projects/TS/p1/src/index.ts": `a;`,
 			}
-			service, host := projecttestutil.Setup(files)
+			service, host := projecttestutil.Setup(files, nil)
 			service.OpenFile("/home/projects/TS/p1/src/index.ts", files["/home/projects/TS/p1/src/index.ts"].(string), core.ScriptKindTS, "")
 			_, project := service.EnsureDefaultProjectForFile("/home/projects/TS/p1/src/index.ts")
 			program := project.GetProgram()

@@ -35,10 +35,10 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 				ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleNameExpr))
 				// !!! removed `&& p.currentNodeModulesDepth == 0`
 				if file.UsesUriStyleNodeCoreModules != core.TSTrue && !file.IsDeclarationFile {
-					if strings.HasPrefix(moduleName, "node:") && !exclusivelyPrefixedNodeCoreModules[moduleName] {
+					if strings.HasPrefix(moduleName, "node:") && !core.ExclusivelyPrefixedNodeCoreModules[moduleName] {
 						// Presence of `node:` prefix takes precedence over unprefixed node core modules
 						file.UsesUriStyleNodeCoreModules = core.TSTrue
-					} else if file.UsesUriStyleNodeCoreModules == core.TSUnknown && unprefixedNodeCoreModules[moduleName] {
+					} else if file.UsesUriStyleNodeCoreModules == core.TSUnknown && core.UnprefixedNodeCoreModules[moduleName] {
 						// Avoid `unprefixedNodeCoreModules.has` for every import
 						file.UsesUriStyleNodeCoreModules = core.TSFalse
 					}
@@ -74,69 +74,4 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 			}
 		}
 	}
-}
-
-var unprefixedNodeCoreModules = map[string]bool{
-	"assert":              true,
-	"assert/strict":       true,
-	"async_hooks":         true,
-	"buffer":              true,
-	"child_process":       true,
-	"cluster":             true,
-	"console":             true,
-	"constants":           true,
-	"crypto":              true,
-	"dgram":               true,
-	"diagnostics_channel": true,
-	"dns":                 true,
-	"dns/promises":        true,
-	"domain":              true,
-	"events":              true,
-	"fs":                  true,
-	"fs/promises":         true,
-	"http":                true,
-	"http2":               true,
-	"https":               true,
-	"inspector":           true,
-	"inspector/promises":  true,
-	"module":              true,
-	"net":                 true,
-	"os":                  true,
-	"path":                true,
-	"path/posix":          true,
-	"path/win32":          true,
-	"perf_hooks":          true,
-	"process":             true,
-	"punycode":            true,
-	"querystring":         true,
-	"readline":            true,
-	"readline/promises":   true,
-	"repl":                true,
-	"stream":              true,
-	"stream/consumers":    true,
-	"stream/promises":     true,
-	"stream/web":          true,
-	"string_decoder":      true,
-	"sys":                 true,
-	"test/mock_loader":    true,
-	"timers":              true,
-	"timers/promises":     true,
-	"tls":                 true,
-	"trace_events":        true,
-	"tty":                 true,
-	"url":                 true,
-	"util":                true,
-	"util/types":          true,
-	"v8":                  true,
-	"vm":                  true,
-	"wasi":                true,
-	"worker_threads":      true,
-	"zlib":                true,
-}
-
-var exclusivelyPrefixedNodeCoreModules = map[string]bool{
-	"node:sea":            true,
-	"node:sqlite":         true,
-	"node:test":           true,
-	"node:test/reporters": true,
 }

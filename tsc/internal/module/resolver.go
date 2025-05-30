@@ -109,17 +109,23 @@ type Resolver struct {
 	caches
 	host            ResolutionHost
 	compilerOptions *core.CompilerOptions
+	typingsLocation string
+	projectName     string
 	// reportDiagnostic: DiagnosticReporter
 }
 
 func NewResolver(
 	host ResolutionHost,
 	options *core.CompilerOptions,
+	typingsLocation string,
+	projectName string,
 ) *Resolver {
 	return &Resolver{
 		host:            host,
 		caches:          newCaches(host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames(), options),
 		compilerOptions: options,
+		typingsLocation: typingsLocation,
+		projectName:     projectName,
 	}
 }
 
@@ -229,6 +235,36 @@ func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, r
 		}
 	}
 
+	return r.tryResolveFromTypingsLocation(moduleName, containingDirectory, result)
+}
+
+func (r *Resolver) tryResolveFromTypingsLocation(moduleName string, containingDirectory string, originalResult *ResolvedModule) *ResolvedModule {
+	if r.typingsLocation == "" ||
+		tspath.IsExternalModuleNameRelative(moduleName) ||
+		(originalResult.ResolvedFileName != "" && tspath.ExtensionIsOneOf(originalResult.Extension, tspath.SupportedTSExtensionsWithJsonFlat)) {
+		return originalResult
+	}
+
+	state := newResolutionState(
+		moduleName,
+		containingDirectory,
+		false,               /*isTypeReferenceDirective*/
+		core.ModuleKindNone, // resolutionMode,
+		r.compilerOptions,
+		nil, // redirectedReference,
+		r,
+	)
+	if r.traceEnabled() {
+		r.host.Trace(diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2.Format(r.projectName, moduleName, r.typingsLocation))
+	}
+	globalResolved := state.loadModuleFromImmediateNodeModulesDirectory(extensionsDeclaration, r.typingsLocation, false)
+	if globalResolved == nil {
+		return originalResult
+	}
+	result := state.createResolvedModule(globalResolved, true)
+	result.FailedLookupLocations = append(originalResult.FailedLookupLocations, result.FailedLookupLocations...)
+	result.AffectingLocations = append(originalResult.AffectingLocations, result.AffectingLocations...)
+	result.ResolutionDiagnostics = append(originalResult.ResolutionDiagnostics, result.ResolutionDiagnostics...)
 	return result
 }
 
@@ -1718,7 +1754,7 @@ func extensionIsOk(extensions extensions, extension string) bool {
 }
 
 func ResolveConfig(moduleName string, containingFile string, host ResolutionHost) *ResolvedModule {
-	resolver := NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext})
+	resolver := NewResolver(host, &core.CompilerOptions{ModuleResolution: core.ModuleResolutionKindNodeNext}, "", "")
 	return resolver.resolveConfig(moduleName, containingFile)
 }
 

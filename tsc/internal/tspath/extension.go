@@ -105,6 +105,10 @@ func IsDeclarationFileName(fileName string) bool {
 	return GetDeclarationFileExtension(fileName) != ""
 }
 
+func ExtensionIsOneOf(ext string, extensions []string) bool {
+	return slices.Contains(extensions, ext)
+}
+
 func GetDeclarationFileExtension(fileName string) string {
 	base := GetBaseFileName(fileName)
 	for _, ext := range supportedDeclarationExtensions {

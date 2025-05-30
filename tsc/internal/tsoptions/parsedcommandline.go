@@ -62,6 +62,14 @@ func (p *ParsedCommandLine) CompilerOptions() *core.CompilerOptions {
 	return p.ParsedConfig.CompilerOptions
 }
 
+func (p *ParsedCommandLine) SetTypeAcquisition(o *core.TypeAcquisition) {
+	p.ParsedConfig.TypeAcquisition = o
+}
+
+func (p *ParsedCommandLine) TypeAcquisition() *core.TypeAcquisition {
+	return p.ParsedConfig.TypeAcquisition
+}
+
 // All file names matched by files, include, and exclude patterns
 func (p *ParsedCommandLine) FileNames() []string {
 	return p.ParsedConfig.FileNames

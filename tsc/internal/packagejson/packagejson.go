@@ -22,6 +22,7 @@ type PathFields struct {
 
 type DependencyFields struct {
 	Dependencies         Expected[map[string]string] `json:"dependencies"`
+	DevDependencies      Expected[map[string]string] `json:"devDependencies"`
 	PeerDependencies     Expected[map[string]string] `json:"peerDependencies"`
 	OptionalDependencies Expected[map[string]string] `json:"optionalDependencies"`
 }

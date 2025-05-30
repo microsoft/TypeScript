@@ -73,6 +73,11 @@ func (api *API) DefaultLibraryPath() string {
 	return api.host.DefaultLibraryPath()
 }
 
+// TypingsInstaller implements ProjectHost
+func (api *API) TypingsInstaller() *project.TypingsInstaller {
+	return nil
+}
+
 // DocumentRegistry implements ProjectHost.
 func (api *API) DocumentRegistry() *project.DocumentRegistry {
 	return api.documentRegistry

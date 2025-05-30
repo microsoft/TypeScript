@@ -122,6 +122,7 @@ func (s *ScriptInfo) attachToProject(project *Project) bool {
 		if project.compilerOptions.PreserveSymlinks != core.TSTrue {
 			s.ensureRealpath(project.FS())
 		}
+		project.onFileAddedOrRemoved()
 		return true
 	}
 	return false

@@ -2029,7 +2029,7 @@ func assertIncludesItem(t *testing.T, actual *lsproto.CompletionList, expected *
 }
 
 func createLanguageService(ctx context.Context, fileName string, files map[string]any) (*ls.LanguageService, func()) {
-	projectService, _ := projecttestutil.Setup(files)
+	projectService, _ := projecttestutil.Setup(files, nil)
 	projectService.OpenFile(fileName, files[fileName].(string), core.ScriptKindTS, "")
 	project := projectService.Projects()[0]
 	return project.GetLanguageServiceForRequest(ctx)

@@ -3,6 +3,7 @@ package project
 import (
 	"context"
 	"fmt"
+	"maps"
 	"slices"
 	"strings"
 	"time"
@@ -17,24 +18,39 @@ const (
 )
 
 type watchedFiles[T any] struct {
-	client    Client
+	p         *Project
 	getGlobs  func(data T) []string
 	watchKind lsproto.WatchKind
 
 	data      T
 	globs     []string
 	watcherID WatcherHandle
+	watchType string
 }
 
-func newWatchedFiles[T any](client Client, watchKind lsproto.WatchKind, getGlobs func(data T) []string) *watchedFiles[T] {
+func newWatchedFiles[T any](
+	p *Project,
+	watchKind lsproto.WatchKind,
+	getGlobs func(data T) []string,
+	watchType string,
+) *watchedFiles[T] {
 	return &watchedFiles[T]{
-		client:    client,
+		p:         p,
 		watchKind: watchKind,
 		getGlobs:  getGlobs,
+		watchType: watchType,
 	}
 }
 
-func (w *watchedFiles[T]) update(ctx context.Context, newData T) (updated bool, err error) {
+func (w *watchedFiles[T]) update(ctx context.Context, newData T) {
+	if updated, err := w.updateWorker(ctx, newData); err != nil {
+		w.p.Log(fmt.Sprintf("Failed to update %s watch: %v\n%s", w.watchType, err, formatFileList(w.globs, "\t", hr)))
+	} else if updated {
+		w.p.Logf("%s watches updated %s:\n%s", w.watchType, w.watcherID, formatFileList(w.globs, "\t", hr))
+	}
+}
+
+func (w *watchedFiles[T]) updateWorker(ctx context.Context, newData T) (updated bool, err error) {
 	newGlobs := w.getGlobs(newData)
 	w.data = newData
 	if slices.Equal(w.globs, newGlobs) {
@@ -43,9 +59,14 @@ func (w *watchedFiles[T]) update(ctx context.Context, newData T) (updated bool, 
 
 	w.globs = newGlobs
 	if w.watcherID != "" {
-		if err = w.client.UnwatchFiles(ctx, w.watcherID); err != nil {
+		if err = w.p.host.Client().UnwatchFiles(ctx, w.watcherID); err != nil {
 			return false, err
 		}
+	}
+
+	w.watcherID = ""
+	if len(newGlobs) == 0 {
+		return true, nil
 	}
 
 	watchers := make([]*lsproto.FileSystemWatcher, 0, len(newGlobs))
@@ -57,7 +78,7 @@ func (w *watchedFiles[T]) update(ctx context.Context, newData T) (updated bool, 
 			Kind: &w.watchKind,
 		})
 	}
-	watcherID, err := w.client.WatchFiles(ctx, watchers)
+	watcherID, err := w.p.host.Client().WatchFiles(ctx, watchers)
 	if err != nil {
 		return false, err
 	}
@@ -65,7 +86,11 @@ func (w *watchedFiles[T]) update(ctx context.Context, newData T) (updated bool, 
 	return true, nil
 }
 
-func createGlobMapper(host ProjectHost) func(data map[tspath.Path]string) []string {
+func globMapperForTypingsInstaller(data map[tspath.Path]string) []string {
+	return slices.Sorted(maps.Values(data))
+}
+
+func createResolutionLookupGlobMapper(host ProjectHost) func(data map[tspath.Path]string) []string {
 	rootDir := host.GetCurrentDirectory()
 	rootPath := tspath.ToPath(rootDir, "", host.FS().UseCaseSensitiveFileNames())
 	rootPathComponents := tspath.GetPathComponents(string(rootPath), "")

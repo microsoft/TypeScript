@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -19,10 +20,10 @@ const (
 )
 
 type Logger struct {
+	mu         sync.Mutex
 	outputs    []*bufio.Writer
 	fileHandle *os.File
 	level      LogLevel
-	inGroup    bool
 	seq        int
 }
 
@@ -37,6 +38,8 @@ func NewLogger(outputs []io.Writer, file string, level LogLevel) *Logger {
 }
 
 func (l *Logger) SetFile(file string) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if l.fileHandle != nil {
 		oldWriter := l.outputs[len(l.outputs)-1]
 		l.outputs = l.outputs[:len(l.outputs)-1]
@@ -65,20 +68,6 @@ func (l *Logger) Error(s string) {
 	l.msg(s, "Err")
 }
 
-func (l *Logger) StartGroup() {
-	if l == nil {
-		return
-	}
-	l.inGroup = true
-}
-
-func (l *Logger) EndGroup() {
-	if l == nil {
-		return
-	}
-	l.inGroup = false
-}
-
 func (l *Logger) LoggingEnabled() bool {
 	return l != nil && len(l.outputs) > 0
 }
@@ -91,6 +80,8 @@ func (l *Logger) Close() {
 	if l == nil {
 		return
 	}
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	for _, output := range l.outputs {
 		_ = output.Flush()
 	}
@@ -103,6 +94,8 @@ func (l *Logger) msg(s string, messageType string) {
 	if l == nil {
 		return
 	}
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	for _, output := range l.outputs {
 		header := fmt.Sprintf("%s %d", messageType, l.seq)
 		output.WriteString(header)                                      //nolint: errcheck
@@ -114,7 +107,5 @@ func (l *Logger) msg(s string, messageType string) {
 		output.WriteRune('\n')                                          //nolint: errcheck
 		output.Flush()
 	}
-	if !l.inGroup {
-		l.seq++
-	}
+	l.seq++
 }
