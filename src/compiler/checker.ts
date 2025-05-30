@@ -36385,7 +36385,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (result) {
             return result;
         }
-        result = getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
+        checkNodeDeferred(node);
+        result = candidates.length === 1 && candidatesForArgumentError?.length === 1 ? candidatesForArgumentError[0] : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
         // Preemptively cache the result; getResolvedSignature will do this after we return, but
         // we need to ensure that the result is present for the error checks below so that if
         // this signature is encountered again, we handle the circularity (rather than producing a
@@ -36621,7 +36622,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkMode: CheckMode,
     ): Signature {
         Debug.assert(candidates.length > 0); // Else should not have called this.
-        checkNodeDeferred(node);
         // Normally we will combine overloads. Skip this if they have type parameters since that's hard to combine.
         // Don't do this if there is a `candidatesOutArray`,
         // because then we want the chosen best candidate to be one of the overloads, not a combination.
