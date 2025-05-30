@@ -6,6 +6,8 @@ import { setupStatusBar } from "./statusBar";
 import { setupVersionStatusItem } from "./versionStatusItem";
 
 export async function activate(context: vscode.ExtensionContext) {
+    await vscode.commands.executeCommand("setContext", "typescript.native-preview.serverRunning", false);
+
     const output = vscode.window.createOutputChannel("typescript-native-preview", "log");
     const traceOutput = vscode.window.createOutputChannel("typescript-native-preview (LSP)");
     const client = new Client(output, traceOutput);
