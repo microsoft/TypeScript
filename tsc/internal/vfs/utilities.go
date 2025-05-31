@@ -248,7 +248,7 @@ func getIncludeBasePath(absolute string) string {
 			return tspath.RemoveTrailingDirectorySeparator(tspath.GetDirectoryPath(absolute))
 		}
 	}
-	return absolute[:strings.LastIndex(absolute, string(tspath.DirectorySeparator))]
+	return absolute[:max(strings.LastIndex(absolute[:wildcardOffset], string(tspath.DirectorySeparator)), 0)]
 }
 
 // getBasePaths computes the unique non-wildcard base paths amongst the provided include patterns.
