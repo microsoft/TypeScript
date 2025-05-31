@@ -1471,7 +1471,7 @@ func hasFileWithHigherPriorityExtension(file string, extensions [][]string, hasF
 
 // Removes files included via wildcard expansion with a lower extension priority that have already been included.
 // file is the path to the file.
-func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles collections.OrderedMap[string, string], extensions [][]string, keyMapper func(value string) string) {
+func removeWildcardFilesWithLowerPriorityExtension(file string, wildcardFiles *collections.OrderedMap[string, string], extensions [][]string, keyMapper func(value string) string) {
 	var extensionGroup []string
 	for _, group := range extensions {
 		if tspath.FileExtensionIsOneOf(file, group) {
@@ -1575,7 +1575,7 @@ func getFileNamesFromConfigSpecs(
 			// extension due to the user-defined order of entries in the
 			// "include" array. If there is a lower priority extension in the
 			// same directory, we should remove it.
-			removeWildcardFilesWithLowerPriorityExtension(file, wildcardFileMap, supportedExtensions, keyMappper)
+			removeWildcardFilesWithLowerPriorityExtension(file, &wildcardFileMap, supportedExtensions, keyMappper)
 			key := keyMappper(file)
 			if !literalFileMap.Has(key) && !wildcardFileMap.Has(key) {
 				wildcardFileMap.Set(key, file)

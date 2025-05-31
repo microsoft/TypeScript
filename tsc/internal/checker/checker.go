@@ -20072,7 +20072,7 @@ func (c *Checker) createUnionOrIntersectionProperty(containingType *Type, name s
 	if singleProp == nil || isUnion &&
 		(propSet.Size() != 0 || checkFlags&ast.CheckFlagsPartial != 0) &&
 		checkFlags&(ast.CheckFlagsContainsPrivate|ast.CheckFlagsContainsProtected) != 0 &&
-		!(propSet.Size() != 0 && c.hasCommonDeclaration(propSet)) {
+		!(propSet.Size() != 0 && c.hasCommonDeclaration(&propSet)) {
 		// No property was found, or, in a union, a property has a private or protected declaration in one
 		// constituent, but is missing or has a different declaration in another constituent.
 		return nil
@@ -20194,7 +20194,7 @@ func isPrototypeProperty(symbol *ast.Symbol) bool {
 	return symbol.Flags&ast.SymbolFlagsMethod != 0 || symbol.CheckFlags&ast.CheckFlagsSyntheticMethod != 0
 }
 
-func (c *Checker) hasCommonDeclaration(symbols collections.OrderedSet[*ast.Symbol]) bool {
+func (c *Checker) hasCommonDeclaration(symbols *collections.OrderedSet[*ast.Symbol]) bool {
 	var commonDeclarations core.Set[*ast.Node]
 	for symbol := range symbols.Values() {
 		if len(symbol.Declarations) == 0 {

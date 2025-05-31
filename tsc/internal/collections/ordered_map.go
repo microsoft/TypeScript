@@ -18,9 +18,21 @@ import (
 
 // OrderedMap is an insertion ordered map.
 type OrderedMap[K comparable, V any] struct {
+	_    noCopy
 	keys []K
 	mp   map[K]V
 }
+
+// noCopy may be embedded into structs which must not be copied
+// after the first use.
+//
+// See https://golang.org/issues/8005#issuecomment-190753527
+// for details.
+type noCopy struct{}
+
+// Lock is a no-op used by -copylocks checker from `go vet`.
+func (*noCopy) Lock()   {}
+func (*noCopy) Unlock() {}
 
 // NewOrderedMapWithSizeHint creates a new OrderedMap with a hint for the number of elements it will contain.
 func NewOrderedMapWithSizeHint[K comparable, V any](hint int) *OrderedMap[K, V] {
@@ -191,7 +203,7 @@ func (m *OrderedMap[K, V]) clone() OrderedMap[K, V] {
 	}
 }
 
-func (m OrderedMap[K, V]) MarshalJSON() ([]byte, error) {
+func (m *OrderedMap[K, V]) MarshalJSON() ([]byte, error) {
 	if len(m.mp) == 0 {
 		return []byte("{}"), nil
 	}
