@@ -21025,7 +21025,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasContextSensitiveReturnExpression(node: FunctionLikeDeclaration) {
-        if (node.typeParameters || getEffectiveReturnTypeNode(node) || !node.body) {
+        if (getEffectiveReturnTypeNode(node) || !node.body) {
             return false;
         }
         if (node.body.kind !== SyntaxKind.Block) {

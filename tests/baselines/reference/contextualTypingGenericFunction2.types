@@ -1,0 +1,296 @@
+//// [tests/cases/compiler/contextualTypingGenericFunction2.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== contextualTypingGenericFunction2.ts ===
+// https://github.com/microsoft/TypeScript/issues/61791
+
+declare const fn1: <T, Args extends Array<any>, Ret>(
+>fn1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Ret) => (...args: Args) => Ret
+>    : ^ ^^    ^^^^^^^^^          ^^   ^^    ^^ ^^    ^^                               ^^^^^                      
+
+  self: T,
+>self : T
+>     : ^
+
+  body: (this: T, ...args: Args) => Ret,
+>body : (this: T, ...args: Args) => Ret
+>     : ^    ^^ ^^^^^    ^^    ^^^^^   
+>this : T
+>     : ^
+>args : Args
+>     : ^^^^
+
+) => (...args: Args) => Ret;
+>args : Args
+>     : ^^^^
+
+export const ok1 = fn1({ message: "foo" }, function (n: number) {
+>ok1 : (n: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^
+>fn1({ message: "foo" }, function (n: number) {  this.message;}) : (n: number) => void
+>                                                                : ^^^^^^^^^^^^^^^^^^^
+>fn1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Ret) => (...args: Args) => Ret
+>    : ^ ^^    ^^^^^^^^^          ^^   ^^    ^^ ^^    ^^                               ^^^^^                      
+>{ message: "foo" } : { message: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>function (n: number) {  this.message;} : (this: { message: string; }, n: number) => void
+>                                       : ^    ^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+  this.message;
+>this.message : string
+>             : ^^^^^^
+>this : { message: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+
+});
+
+export const ok2 = fn1({ message: "foo" }, function <N>(n: N) {
+>ok2 : (n: any) => void
+>    : ^^^^^^^^^^^^^^^^
+>fn1({ message: "foo" }, function <N>(n: N) {  this.message;}) : (n: any) => void
+>                                                              : ^^^^^^^^^^^^^^^^
+>fn1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Ret) => (...args: Args) => Ret
+>    : ^ ^^    ^^^^^^^^^          ^^   ^^    ^^ ^^    ^^                               ^^^^^                      
+>{ message: "foo" } : { message: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>function <N>(n: N) {  this.message;} : <N>(this: { message: string; }, n: N) => void
+>                                     : ^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>n : N
+>  : ^
+
+  this.message;
+>this.message : string
+>             : ^^^^^^
+>this : { message: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+
+});
+
+declare const fn2: <Args extends Array<any>, Ret>(
+>fn2 : <Args extends Array<any>, Ret>(body: (first: string, ...args: Args) => Ret) => (...args: Args) => Ret
+>    : ^    ^^^^^^^^^          ^^   ^^    ^^                                     ^^^^^                      
+
+  body: (first: string, ...args: Args) => Ret,
+>body : (first: string, ...args: Args) => Ret
+>     : ^     ^^      ^^^^^    ^^    ^^^^^   
+>first : string
+>      : ^^^^^^
+>args : Args
+>     : ^^^^
+
+) => (...args: Args) => Ret;
+>args : Args
+>     : ^^^^
+
+export const ok3 = fn2(function <N>(first, n: N) {});
+>ok3 : <N>(n: N) => void
+>    : ^ ^^^^^^^^^^^^^^^
+>fn2(function <N>(first, n: N) {}) : <N>(n: N) => void
+>                                  : ^ ^^^^^^^^^^^^^^^
+>fn2 : <Args extends Array<any>, Ret>(body: (first: string, ...args: Args) => Ret) => (...args: Args) => Ret
+>    : ^    ^^^^^^^^^          ^^   ^^    ^^                                     ^^^^^                      
+>function <N>(first, n: N) {} : <N>(first: string, n: N) => void
+>                             : ^ ^^     ^^^^^^^^^^ ^^ ^^^^^^^^^
+>first : string
+>      : ^^^^^^
+>n : N
+>  : ^
+
+declare const fn3: <Args extends Array<any>, Ret>(
+>fn3 : <Args extends Array<any>, Ret>(body: (...args: Args) => (arg: string) => Ret) => (...args: Args) => Ret
+>    : ^    ^^^^^^^^^          ^^   ^^    ^^                                       ^^^^^                      
+
+  body: (...args: Args) => (arg: string) => Ret,
+>body : (...args: Args) => (arg: string) => Ret
+>     : ^^^^    ^^    ^^^^^                    
+>args : Args
+>     : ^^^^
+>arg : string
+>    : ^^^^^^
+
+) => (...args: Args) => Ret;
+>args : Args
+>     : ^^^^
+
+export const ok4 = fn3(function <N>(n: N) {
+>ok4 : <N>(n: N) => number
+>    : ^ ^^^^^^^^^^^^^^^^^
+>fn3(function <N>(n: N) {    return (arg) => {        return 10    }}) : <N>(n: N) => number
+>                                                                      : ^ ^^^^^^^^^^^^^^^^^
+>fn3 : <Args extends Array<any>, Ret>(body: (...args: Args) => (arg: string) => Ret) => (...args: Args) => Ret
+>    : ^    ^^^^^^^^^          ^^   ^^    ^^                                       ^^^^^                      
+>function <N>(n: N) {    return (arg) => {        return 10    }} : <N>(n: N) => (arg: string) => number
+>                                                                 : ^ ^^ ^^ ^^^^^^   ^^^^^^^^^^^^^^^^^^^
+>n : N
+>  : ^
+
+    return (arg) => {
+>(arg) => {        return 10    } : (arg: string) => number
+>                                 : ^   ^^^^^^^^^^^^^^^^^^^
+>arg : string
+>    : ^^^^^^
+
+        return 10
+>10 : 10
+>   : ^^
+    }
+});
+
+declare function fn4<T, P>(config: {
+>fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; }) => (params: P) => number
+>    : ^ ^^ ^^      ^^                                                                           ^^^^^                     
+>config : { context: T; callback: (params: P) => (context: T, params: P) => number; }
+>       : ^^^^^^^^^^^ ^^^^^^^^^^^^                                                ^^^
+
+  context: T;
+>context : T
+>        : ^
+
+  callback: (params: P) => (context: T, params: P) => number;
+>callback : (params: P) => (context: T, params: P) => number
+>         : ^      ^^ ^^^^^                                 
+>params : P
+>       : ^
+>context : T
+>        : ^
+>params : P
+>       : ^
+
+}): (params: P) => number;
+>params : P
+>       : ^
+
+export const ok5 = fn4({
+>ok5 : (params: T) => number
+>    : ^      ^^^^^^^^      
+>fn4({  context: 1,  callback: <T,>(params: T) => {    return (a, b) => a + 1;  },}) : (params: T) => number
+>                                                                                    : ^      ^^^^^^^^      
+>fn4 : <T, P>(config: { context: T; callback: (params: P) => (context: T, params: P) => number; }) => (params: P) => number
+>    : ^ ^^ ^^      ^^                                                                           ^^^^^                     
+>{  context: 1,  callback: <T,>(params: T) => {    return (a, b) => a + 1;  },} : { context: number; callback: <T>(params: T) => (a: number, b: T) => number; }
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+
+  context: 1,
+>context : number
+>        : ^^^^^^
+>1 : 1
+>  : ^
+
+  callback: <T,>(params: T) => {
+>callback : <T>(params: T) => (a: number, b: T) => number
+>         : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
+><T,>(params: T) => {    return (a, b) => a + 1;  } : <T>(params: T) => (a: number, b: T) => number
+>                                                   : ^ ^^      ^^ ^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
+>params : T
+>       : ^
+
+    return (a, b) => a + 1;
+>(a, b) => a + 1 : (a: number, b: T) => number
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>b : T
+>  : ^
+>a + 1 : number
+>      : ^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+  },
+});
+
+declare const fnGen1: <T, Args extends Array<any>, Ret>(
+>fnGen1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Generator<any, Ret, never>) => (...args: Args) => Ret
+>       : ^ ^^    ^^^^^^^^^          ^^   ^^    ^^ ^^    ^^                                                      ^^^^^                      
+
+  self: T,
+>self : T
+>     : ^
+
+  body: (this: T, ...args: Args) => Generator<any, Ret, never>,
+>body : (this: T, ...args: Args) => Generator<any, Ret, never>
+>     : ^    ^^ ^^^^^    ^^    ^^^^^                          
+>this : T
+>     : ^
+>args : Args
+>     : ^^^^
+
+) => (...args: Args) => Ret;
+>args : Args
+>     : ^^^^
+
+export const ok6 = fnGen1({ message: "foo" }, function* (n: number) {
+>ok6 : (n: number) => void
+>    : ^^^^^^^^^^^^^^^^^^^
+>fnGen1({ message: "foo" }, function* (n: number) {  this.message;}) : (n: number) => void
+>                                                                    : ^^^^^^^^^^^^^^^^^^^
+>fnGen1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Generator<any, Ret, never>) => (...args: Args) => Ret
+>       : ^ ^^    ^^^^^^^^^          ^^   ^^    ^^ ^^    ^^                                                      ^^^^^                      
+>{ message: "foo" } : { message: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>function* (n: number) {  this.message;} : (this: { message: string; }, n: number) => Generator<never, void, never>
+>                                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+  this.message;
+>this.message : string
+>             : ^^^^^^
+>this : { message: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+
+});
+
+export const ok7 = fnGen1({ message: "foo" }, function* <N>(n: N) {
+>ok7 : (n: any) => void
+>    : ^^^^^^^^^^^^^^^^
+>fnGen1({ message: "foo" }, function* <N>(n: N) {  this.message;}) : (n: any) => void
+>                                                                  : ^^^^^^^^^^^^^^^^
+>fnGen1 : <T, Args extends Array<any>, Ret>(self: T, body: (this: T, ...args: Args) => Generator<any, Ret, never>) => (...args: Args) => Ret
+>       : ^ ^^    ^^^^^^^^^          ^^   ^^    ^^ ^^    ^^                                                      ^^^^^                      
+>{ message: "foo" } : { message: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+>function* <N>(n: N) {  this.message;} : <N>(this: { message: string; }, n: N) => Generator<never, void, never>
+>                                      : ^ ^^    ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : N
+>  : ^
+
+  this.message;
+>this.message : string
+>             : ^^^^^^
+>this : { message: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^
+>message : string
+>        : ^^^^^^
+
+});
+
