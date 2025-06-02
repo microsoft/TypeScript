@@ -5794,6 +5794,8 @@ export function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChe
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:
             return t;
+        case SyntaxKind.OpenBracketToken:
+            return checker.getElementTypeOfArrayType(t);
     }
 }
 
