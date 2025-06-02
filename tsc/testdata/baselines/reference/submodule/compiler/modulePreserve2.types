@@ -2,13 +2,17 @@
 
 === /main.js ===
 import { esm } from "dep";
->esm : any
+>esm : "esm"
 
 const cjs = require("dep");
 >cjs : "cjs"
 >require("dep") : "cjs"
 >require : any
 >"dep" : "dep"
+
+=== /node_modules/dep/import.d.mts ===
+export const esm: "esm";
+>esm : "esm"
 
 === /node_modules/dep/require.d.ts ===
 declare const cjs: "cjs";

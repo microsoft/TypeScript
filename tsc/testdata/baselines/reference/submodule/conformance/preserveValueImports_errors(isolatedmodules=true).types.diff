@@ -6,20 +6,20 @@
  export { B as BB } from "./b";
 ->B : typeof import("b").B
 ->BB : typeof import("b").B
-+>B : typeof import("./b").B
-+>BB : typeof import("./b").B
++>B : typeof import("./b.js").B
++>BB : typeof import("./b.js").B
 
  === d.fixed.ts ===
  export type { A as AA } from "./a";
  >A : any
 ->AA : import("a").A
-+>AA : import("./a").A
++>AA : import("./a.js").A
 
  export type { B as BB } from "./b";
 ->B : typeof import("b").B
 ->BB : import("b").B
-+>B : typeof import("./b").B
-+>BB : import("./b").B
++>B : typeof import("./b.js").B
++>BB : import("./b.js").B
 
  === e.ts ===
  import { AA, BB } from "./d";

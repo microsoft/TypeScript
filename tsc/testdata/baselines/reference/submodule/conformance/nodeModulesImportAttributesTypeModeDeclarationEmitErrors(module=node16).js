@@ -71,40 +71,58 @@ export const a = (null as any as import("pkg", { with: {} }).RequireInterface);
 export const b = (null as any as import("pkg", { with: {} }).ImportInterface);
 
 //// [index.js]
-export const a = null;
-export const b = null;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = null;
+exports.b = null;
 //// [other.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
 "resolution-mode";
 "require";
 RequireInterface
     & import("pkg", { "resolution-mode": "import" }).ImportInterface;
-export const a = null;
+exports.a = null;
 "resolution-mode";
 "require";
 RequireInterface;
 ;
-export const b = null;
+exports.b = null;
 "resolution-mode";
 "import";
 ImportInterface;
 ;
 //// [other2.js]
-export const a = null;
-export const b = null;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = null;
+exports.b = null;
 //// [other3.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
 RequireInterface
     & import("pkg", [{ "resolution-mode": "import" }]).ImportInterface;
-export const a = null.RequireInterface;
-export const b = null.ImportInterface;
+exports.a = null.RequireInterface;
+exports.b = null.ImportInterface;
 //// [other4.js]
-Attribute1;
-RequireInterface
-    & import("pkg", Attribute2).ImportInterface;
-export const a = null, Attribute1, RequireInterface;
-export const b = null, Attribute2, ImportInterface;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ImportInterface = exports.Attribute2 = exports.b = exports.RequireInterface = exports.Attribute1 = exports.a = void 0;
+exports.Attribute1;
+exports.RequireInterface
+    & import("pkg", exports.Attribute2).ImportInterface;
+exports.a = null;
+exports.b = null;
 //// [other5.js]
-export const a = null;
-export const b = null;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.b = exports.a = void 0;
+exports.a = null;
+exports.b = null;
 
 
 //// [index.d.ts]

@@ -648,7 +648,9 @@ export const useEntries = () => {
     select: (data) => data.slice(0, 10)
 >select : Symbol(select, Decl(index.mts, 31, 32))
 >data : Symbol(data, Decl(index.mts, 32, 13))
+>data.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(index.mts, 32, 13))
+>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
 
   })
 }

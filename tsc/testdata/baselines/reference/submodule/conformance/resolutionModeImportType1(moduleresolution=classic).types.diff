@@ -5,12 +5,12 @@
  === /app.ts ===
  type Default = typeof import("foo").x;
 ->Default : any
-+>Default : "script"
++>Default : "module"
  >x : any
 
  type Import = typeof import("foo", { assert: { "resolution-mode": "import" } }).x;
 ->Import : any
-+>Import : "script"
++>Import : "module"
  >x : any
 
  type Require = typeof import("foo", { assert: { "resolution-mode": "require" } }).x;

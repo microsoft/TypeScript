@@ -26,7 +26,8 @@ bar;
 export {};
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" resolution-mode="esm"/>
 foo; // bad resolution mode, which resolves is arbitrary
 bar;
-export {};

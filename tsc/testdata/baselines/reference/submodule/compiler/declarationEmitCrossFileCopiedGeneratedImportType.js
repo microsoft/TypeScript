@@ -27,6 +27,6 @@ exports.d = { e: projC_1.e };
 //// [index.d.ts]
 export declare const d: {
     e: {
-        f: (foo: import("../projA/index.js").Foo) => boolean;
+        f: (foo: import("../projA").Foo) => boolean;
     };
 };

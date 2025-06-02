@@ -180,6 +180,22 @@ func (options *CompilerOptions) GetModuleResolutionKind() ModuleResolutionKind {
 	}
 }
 
+func (options *CompilerOptions) GetResolvePackageJsonExports() bool {
+	return options.ResolvePackageJsonExports.IsTrueOrUnknown()
+}
+
+func (options *CompilerOptions) GetResolvePackageJsonImports() bool {
+	return options.ResolvePackageJsonImports.IsTrueOrUnknown()
+}
+
+func (options *CompilerOptions) GetAllowImportingTsExtensions() bool {
+	return options.AllowImportingTsExtensions.IsTrue() || options.RewriteRelativeImportExtensions.IsTrue()
+}
+
+func (options *CompilerOptions) AllowImportingTsExtensionsFrom(fileName string) bool {
+	return options.GetAllowImportingTsExtensions() || tspath.IsDeclarationFileName(fileName)
+}
+
 func (options *CompilerOptions) GetESModuleInterop() bool {
 	if options.ESModuleInterop != TSUnknown {
 		return options.ESModuleInterop == TSTrue
@@ -263,50 +279,12 @@ func (options *CompilerOptions) GetAreDeclarationMapsEnabled() bool {
 	return options.DeclarationMap == TSTrue && options.GetEmitDeclarations()
 }
 
-func (options *CompilerOptions) GetAllowImportingTsExtensions() bool {
-	return options.AllowImportingTsExtensions == TSTrue || options.RewriteRelativeImportExtensions == TSTrue
-}
-
 func (options *CompilerOptions) HasJsonModuleEmitEnabled() bool {
 	switch options.GetEmitModuleKind() {
 	case ModuleKindNone, ModuleKindSystem, ModuleKindUMD:
 		return false
 	}
 	return true
-}
-
-func moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution ModuleResolutionKind) bool {
-	return moduleResolution >= ModuleResolutionKindNode16 && moduleResolution <= ModuleResolutionKindNodeNext || moduleResolution == ModuleResolutionKindBundler
-}
-
-func (options *CompilerOptions) GetResolvePackageJsonImports() bool {
-	moduleResolution := options.GetModuleResolutionKind()
-	if !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution) {
-		return false
-	}
-	if options.ResolvePackageJsonImports != TSUnknown {
-		return options.ResolvePackageJsonImports == TSTrue
-	}
-	switch moduleResolution {
-	case ModuleResolutionKindNode16, ModuleResolutionKindNodeNext, ModuleResolutionKindBundler:
-		return true
-	}
-	return false
-}
-
-func (options *CompilerOptions) GetResolvePackageJsonExports() bool {
-	moduleResolution := options.GetModuleResolutionKind()
-	if !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution) {
-		return false
-	}
-	if options.ResolvePackageJsonExports != TSUnknown {
-		return options.ResolvePackageJsonExports == TSTrue
-	}
-	switch moduleResolution {
-	case ModuleResolutionKindNode16, ModuleResolutionKindNodeNext, ModuleResolutionKindBundler:
-		return true
-	}
-	return false
 }
 
 func (options *CompilerOptions) GetPathsBasePath(currentDirectory string) string {
@@ -371,6 +349,10 @@ const (
 	// Emit as written
 	ModuleKindPreserve ModuleKind = 200
 )
+
+func (moduleKind ModuleKind) IsNonNodeESM() bool {
+	return moduleKind >= ModuleKindES2015 && moduleKind <= ModuleKindESNext
+}
 
 type ResolutionMode = ModuleKind // ModuleKindNone | ModuleKindCommonJS | ModuleKindESNext
 

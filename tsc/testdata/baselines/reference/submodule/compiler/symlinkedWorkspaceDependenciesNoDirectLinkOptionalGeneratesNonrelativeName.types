@@ -19,9 +19,9 @@ import * as pkg from "package-b";
 >pkg : typeof pkg
 
 export const a = pkg.invoke();
->a : import("../packageA/index.js").Foo
->pkg.invoke() : import("../packageA/index.js").Foo
->pkg.invoke : () => import("../packageA/index.js").Foo
+>a : import("../packageA").Foo
+>pkg.invoke() : import("../packageA").Foo
+>pkg.invoke : () => import("../packageA").Foo
 >pkg : typeof pkg
->invoke : () => import("../packageA/index.js").Foo
+>invoke : () => import("../packageA").Foo
 

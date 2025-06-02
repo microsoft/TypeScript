@@ -26,7 +26,8 @@ bar; // bar should resolve while foo should not, since index.js is cjs
 export {};
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" />
 foo;
 bar; // bar should resolve while foo should not, since index.js is cjs
-export {};

@@ -10,8 +10,12 @@ const y = { ...o };
 
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.A = void 0;
 @dec
-export class A {
+class A {
 }
+exports.A = A;
 const o = { a: 1 };
 const y = { ...o };

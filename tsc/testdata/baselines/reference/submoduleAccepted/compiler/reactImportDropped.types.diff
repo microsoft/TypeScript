@@ -8,10 +8,10 @@
 ->React.createClass : (spec: any) => import("react").ClassicComponentClass
 ->React : typeof import("react")
 ->createClass : (spec: any) => import("react").ClassicComponentClass
-+>React.createClass({  render() {    return (      null    );  }}) : import("../../react.js").ClassicComponentClass
-+>React.createClass : (spec: any) => import("../../react.js").ClassicComponentClass
-+>React : typeof import("../../react.js")
-+>createClass : (spec: any) => import("../../react.js").ClassicComponentClass
++>React.createClass({  render() {    return (      null    );  }}) : import("../../react").ClassicComponentClass
++>React.createClass : (spec: any) => import("../../react").ClassicComponentClass
++>React : typeof import("../../react")
++>createClass : (spec: any) => import("../../react").ClassicComponentClass
  >{  render() {    return (      null    );  }} : { render(): any; }
 
    render() {
@@ -33,7 +33,7 @@
 ->layout.footerHeight : error
 +>x : any
 +><TabBar height={layout.footerHeight} /> : any
-+>TabBar : import("../../../react.js").ClassicComponentClass
++>TabBar : import("../../../react").ClassicComponentClass
 +>height : any
 +>layout.footerHeight : any
  >layout : any

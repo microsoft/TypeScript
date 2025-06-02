@@ -44,11 +44,15 @@ export function resolveParserPlugins() {
 
 
 //// [index.js]
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
-import { createPlugin } from "@babel/parser";
-export function resolveParserPlugins() {
-    return [createPlugin()];
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.resolveParserPlugins = resolveParserPlugins;
+const parser_1 = require("@babel/parser");
+function resolveParserPlugins() {
+    return [(0, parser_1.createPlugin)()];
 }
 
 

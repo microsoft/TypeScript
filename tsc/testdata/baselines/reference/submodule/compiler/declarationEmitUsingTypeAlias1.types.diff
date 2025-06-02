@@ -5,11 +5,11 @@
  === node_modules/some-dep/dist/index.d.ts ===
  export type OtherType = import('./inner').Other;
 ->OtherType : import("node_modules/some-dep/dist/inner").Other
-+>OtherType : import("./inner.js").Other
++>OtherType : import("./inner").Other
 
  export type SomeType = import('./inner').SomeType;
 ->SomeType : import("node_modules/some-dep/dist/inner").SomeType
-+>SomeType : import("./inner.js").SomeType
++>SomeType : import("./inner").SomeType
 
  === src/index.ts ===
  import { SomeType } from "some-dep";
@@ -19,13 +19,13 @@
 ->foo : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
 ->(thing: SomeType) => {  return thing;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
 ->thing : import("node_modules/some-dep/dist/inner").SomeType
-+>foo : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").SomeType
-+>(thing: SomeType) => {  return thing;} : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").SomeType
-+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
++>foo : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").SomeType
++>(thing: SomeType) => {  return thing;} : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").SomeType
++>thing : import("../node_modules/some-dep/dist/inner").SomeType
 
    return thing;
 ->thing : import("node_modules/some-dep/dist/inner").SomeType
-+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
++>thing : import("../node_modules/some-dep/dist/inner").SomeType
 
  };
 
@@ -33,16 +33,16 @@
 ->bar : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
 ->(thing: SomeType) => {  return thing.arg;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
 ->thing : import("node_modules/some-dep/dist/inner").SomeType
-+>bar : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").Other
-+>(thing: SomeType) => {  return thing.arg;} : (thing: import("../node_modules/some-dep/dist/inner.js").SomeType) => import("../node_modules/some-dep/dist/inner.js").Other
-+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
++>bar : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").Other
++>(thing: SomeType) => {  return thing.arg;} : (thing: import("../node_modules/some-dep/dist/inner").SomeType) => import("../node_modules/some-dep/dist/inner").Other
++>thing : import("../node_modules/some-dep/dist/inner").SomeType
 
    return thing.arg;
 ->thing.arg : import("node_modules/some-dep/dist/inner").Other
 ->thing : import("node_modules/some-dep/dist/inner").SomeType
 ->arg : import("node_modules/some-dep/dist/inner").Other
-+>thing.arg : import("../node_modules/some-dep/dist/inner.js").Other
-+>thing : import("../node_modules/some-dep/dist/inner.js").SomeType
-+>arg : import("../node_modules/some-dep/dist/inner.js").Other
++>thing.arg : import("../node_modules/some-dep/dist/inner").Other
++>thing : import("../node_modules/some-dep/dist/inner").SomeType
++>arg : import("../node_modules/some-dep/dist/inner").Other
 
  };

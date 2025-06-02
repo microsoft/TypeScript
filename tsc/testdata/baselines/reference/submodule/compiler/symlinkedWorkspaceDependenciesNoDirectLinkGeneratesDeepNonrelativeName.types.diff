@@ -5,13 +5,13 @@
  === workspace/packageB/index.d.ts ===
  import { create } from "package-a";
 ->create : () => import("workspace/packageA/foo").Foo
-+>create : () => import("../packageA/foo.js").Foo
++>create : () => import("../packageA/foo").Foo
 
  export declare function invoke(): ReturnType<typeof create>;
 ->invoke : () => ReturnType<typeof create>
 ->create : () => import("workspace/packageA/foo").Foo
-+>invoke : () => import("../packageA/foo.js").Foo
-+>create : () => import("../packageA/foo.js").Foo
++>invoke : () => import("../packageA/foo").Foo
++>create : () => import("../packageA/foo").Foo
 
  === workspace/packageC/index.ts ===
  import * as pkg from "package-b";
@@ -21,9 +21,9 @@
 ->a : import("workspace/packageA/foo").Foo
 ->pkg.invoke() : import("workspace/packageA/foo").Foo
 ->pkg.invoke : () => ReturnType<typeof import("workspace/packageA/index").create>
-+>a : import("../packageA/foo.js").Foo
-+>pkg.invoke() : import("../packageA/foo.js").Foo
-+>pkg.invoke : () => import("../packageA/foo.js").Foo
++>a : import("../packageA/foo").Foo
++>pkg.invoke() : import("../packageA/foo").Foo
++>pkg.invoke : () => import("../packageA/foo").Foo
  >pkg : typeof pkg
 ->invoke : () => ReturnType<typeof import("workspace/packageA/index").create>
-+>invoke : () => import("../packageA/foo.js").Foo
++>invoke : () => import("../packageA/foo").Foo

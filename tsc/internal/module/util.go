@@ -61,6 +61,10 @@ func UnmangleScopedPackageName(packageName string) string {
 	return packageName
 }
 
+func GetTypesPackageName(packageName string) string {
+	return "@types/" + MangleScopedPackageName(packageName)
+}
+
 func ComparePatternKeys(a, b string) int {
 	aPatternIndex := strings.Index(a, "*")
 	bPatternIndex := strings.Index(b, "*")

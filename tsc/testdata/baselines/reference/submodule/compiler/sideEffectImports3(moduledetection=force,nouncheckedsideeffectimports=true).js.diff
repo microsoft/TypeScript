@@ -8,7 +8,4 @@
 -Object.defineProperty(exports, "__esModule", { value: true });
  console.log("Hello, world!");
  //// [index.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--require("./not-a-module");
-+import "./not-a-module";
+ "use strict";

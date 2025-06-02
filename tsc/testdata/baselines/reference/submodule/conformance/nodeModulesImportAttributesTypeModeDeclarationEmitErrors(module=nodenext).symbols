@@ -16,6 +16,7 @@ export type LocalInterface =
 >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
 
     & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
 
 export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
 >a : Symbol(a, Decl(index.ts, 4, 12))
@@ -23,6 +24,7 @@ export const a = (null as any as import("pkg", { with: {"resolution-mode": "foob
 
 export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
 >b : Symbol(b, Decl(index.ts, 5, 12))
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
 
 === /other.ts ===
 // missing with:

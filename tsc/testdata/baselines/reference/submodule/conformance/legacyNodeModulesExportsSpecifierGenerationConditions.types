@@ -2,15 +2,15 @@
 
 === index.ts ===
 export const a = async () => (await import("inner")).x();
->a : () => Promise<import("./node_modules/inner/private.js").Thing>
->async () => (await import("inner")).x() : () => Promise<import("./node_modules/inner/private.js").Thing>
->(await import("inner")).x() : import("./node_modules/inner/private.js").Thing
->(await import("inner")).x : () => import("./node_modules/inner/private.js").Thing
->(await import("inner")) : { x: () => import("./node_modules/inner/private.js").Thing; default: typeof import("./node_modules/inner/index.js"); }
->await import("inner") : { x: () => import("./node_modules/inner/private.js").Thing; default: typeof import("./node_modules/inner/index.js"); }
->import("inner") : Promise<{ x: () => import("./node_modules/inner/private.js").Thing; default: typeof import("./node_modules/inner/index.js"); }>
+>a : () => Promise<import("./node_modules/inner/private").Thing>
+>async () => (await import("inner")).x() : () => Promise<import("./node_modules/inner/private").Thing>
+>(await import("inner")).x() : import("./node_modules/inner/private").Thing
+>(await import("inner")).x : () => import("./node_modules/inner/private").Thing
+>(await import("inner")) : { x: () => import("./node_modules/inner/private").Thing; default: typeof import("./node_modules/inner"); }
+>await import("inner") : { x: () => import("./node_modules/inner/private").Thing; default: typeof import("./node_modules/inner"); }
+>import("inner") : Promise<{ x: () => import("./node_modules/inner/private").Thing; default: typeof import("./node_modules/inner"); }>
 >"inner" : "inner"
->x : () => import("./node_modules/inner/private.js").Thing
+>x : () => import("./node_modules/inner/private").Thing
 
 === node_modules/inner/index.d.ts ===
 export { x } from "./other.js";

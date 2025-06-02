@@ -563,7 +563,7 @@ func processEnding(
 	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionMts, tspath.ExtensionCts}) && tsPriority < jsPriority {
 		return fileName
 	}
-	if tspath.IsDeclarationFileName(fileName) {
+	if tspath.FileExtensionIsOneOf(fileName, []string{tspath.ExtensionDmts, tspath.ExtensionMts, tspath.ExtensionDcts, tspath.ExtensionCts}) {
 		inputExt := tspath.GetDeclarationFileExtension(fileName)
 		ext := getJsExtensionForDeclarationFileExtension(inputExt)
 		return tspath.RemoveExtension(fileName, inputExt) + ext
@@ -660,6 +660,7 @@ func tryGetModuleNameAsNodeModule(
 			pkgJsonResults := tryDirectoryWithPackageJson(
 				*parts,
 				pathObj,
+				importingSourceFile,
 				host,
 				overrideMode,
 				options,
@@ -669,8 +670,6 @@ func tryGetModuleNameAsNodeModule(
 			packageRootPath := pkgJsonResults.packageRootPath
 			blockedByExports := pkgJsonResults.blockedByExports
 			verbatimFromExports := pkgJsonResults.verbatimFromExports
-			// !!! classic resolution is dead?
-			// if options.GetModuleResolutionKind() != core.ModuleResolutionKindClassic {
 			if blockedByExports {
 				return "" // File is under this package.json, but is not publicly exported - there's no way to name it via `node_modules` resolution
 			}
@@ -729,6 +728,7 @@ type pkgJsonDirAttemptResult struct {
 func tryDirectoryWithPackageJson(
 	parts NodeModulePathParts,
 	pathObj ModulePath,
+	importingSourceFile SourceFileForSpecifierGeneration,
 	host ModuleSpecifierGenerationHost,
 	overrideMode core.ResolutionMode,
 	options *core.CompilerOptions,
@@ -752,10 +752,9 @@ func tryDirectoryWithPackageJson(
 	}
 
 	importMode := overrideMode
-	// !!! TODO: real resolutionMode support
-	// if importMode == core.ResolutionModeNone {
-	// 	importMode =  getDefaultResolutionModeForFile(importingSourceFile, host, options);
-	// }
+	if importMode == core.ResolutionModeNone {
+		importMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+	}
 
 	var packageJsonContent *packagejson.PackageJson
 	if packageJson != nil {
@@ -868,7 +867,7 @@ func tryGetModuleNameFromExports(
 	exports packagejson.ExportsOrImports,
 	conditions []string,
 ) string {
-	if exports.Type == packagejson.JSONValueTypeObject && allKeysStartWithDot(exports.AsObject()) {
+	if exports.IsSubpaths() {
 		// sub-mappings
 		// 3 cases:
 		// * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))

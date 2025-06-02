@@ -8,7 +8,7 @@
 /index.ts(2,68): error TS1128: Declaration or statement expected.
 /index.ts(2,69): error TS2304: Cannot find name 'RequireInterface'.
 /index.ts(3,34): error TS1005: ':' expected.
-/index.ts(3,68): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/require"); }>'.
+/index.ts(3,68): error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
 /index.ts(5,34): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
 /index.ts(5,57): error TS1478: Identifier or string literal expected.
 /index.ts(5,57): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -58,7 +58,7 @@
                                      ~
 !!! error TS1005: ':' expected.
                                                                        ~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/require"); }>'.
+!!! error TS2339: Property 'ImportInterface' does not exist on type 'Promise<{ default: typeof import("/node_modules/pkg/import"); }>'.
     
     export const a = (null as any as import("pkg", { with: {1234, "resolution-mode": "require"} }).RequireInterface);
                                      ~~~~~~~~~~~~~~~~~~~~~~~

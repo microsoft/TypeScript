@@ -20,4 +20,7 @@ import './';
 
 
 //// [file.js]
-export const a = <div></div>;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a = void 0;
+exports.a = <div></div>;

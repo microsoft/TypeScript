@@ -43,8 +43,11 @@ export const bar = goodDeclaration<{}>;
 
 
 //// [index.js]
-import { goodDeclaration } from "some-dep";
-export const bar = goodDeclaration;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = void 0;
+const some_dep_1 = require("some-dep");
+exports.bar = some_dep_1.goodDeclaration;
 
 
 //// [index.d.ts]

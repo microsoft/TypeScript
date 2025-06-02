@@ -12,6 +12,6 @@ export { b } from "./b";
 >b : number
 
 export { default as Foo } from "./b";
->default : typeof import("./b.js")
->Foo : typeof import("./b.js")
+>default : typeof import("./b")
+>Foo : typeof import("./b")
 

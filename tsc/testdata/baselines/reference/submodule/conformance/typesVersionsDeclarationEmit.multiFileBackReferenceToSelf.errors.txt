@@ -1,4 +1,4 @@
-main.ts(1,10): error TS2305: Module '"node_modules/ext/ts3.1/index"' has no exported member 'fa'.
+main.ts(1,10): error TS2305: Module '"ext"' has no exported member 'fa'.
 
 
 ==== tsconfig.json (0 errors) ====
@@ -6,7 +6,7 @@ main.ts(1,10): error TS2305: Module '"node_modules/ext/ts3.1/index"' has no expo
 ==== main.ts (1 errors) ====
     import { fa } from "ext";
              ~~
-!!! error TS2305: Module '"node_modules/ext/ts3.1/index"' has no exported member 'fa'.
+!!! error TS2305: Module '"ext"' has no exported member 'fa'.
     import { fb } from "ext/other";
     
     export const va = fa();

@@ -10,4 +10,6 @@ console.log("Hello, world!");
 //// [not-a-module.js]
 console.log("Hello, world!");
 //// [index.js]
-import "./not-a-module";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("./not-a-module");

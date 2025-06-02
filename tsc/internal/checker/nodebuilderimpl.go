@@ -1074,11 +1074,9 @@ func (b *nodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	contextFile := b.ctx.enclosingFile
 	resolutionMode := overrideImportMode
 	if resolutionMode == core.ResolutionModeNone && originalModuleSpecifier != nil {
-		// !!! import resolution mode support
-		// resolutionMode = b.ch.host.GetModeForUsageLocation(contextFile, originalModuleSpecifier)
+		resolutionMode = b.ch.program.GetModeForUsageLocation(contextFile, originalModuleSpecifier)
 	} else if resolutionMode == core.ResolutionModeNone && contextFile != nil {
-		// !!! import resolution mode support
-		// resolutionMode = b.ch.host.GetDefaultResolutionModeForFile(contextFile)
+		resolutionMode = b.ch.program.GetDefaultResolutionModeForFile(contextFile)
 	}
 	cacheKey := module.ModeAwareCacheKey{Name: string(contextFile.Path()), Mode: resolutionMode}
 	links := b.symbolLinks.Get(symbol)

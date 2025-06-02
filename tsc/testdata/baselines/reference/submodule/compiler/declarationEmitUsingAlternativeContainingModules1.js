@@ -260,4 +260,14 @@ export const useEntries = () => {
 
 
 //// [index.d.mts]
-export declare const useEntries: () => any;
+interface IEntry {
+    API: string;
+    Description: string;
+    Auth: string;
+    HTTPS: boolean;
+    Cors: string;
+    Link: string;
+    Category: string;
+}
+export declare const useEntries: any;
+export {};

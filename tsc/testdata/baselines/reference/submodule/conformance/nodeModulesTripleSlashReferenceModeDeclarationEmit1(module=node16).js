@@ -24,8 +24,9 @@ declare global {
 export interface LocalInterface extends RequireInterface {}
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" preserve="true" />
-export {};
 
 
 //// [index.d.ts]

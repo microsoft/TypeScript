@@ -3,7 +3,6 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +/index.ts(4,28): error TS2339: Property 'default' does not exist on type 'RequireInterface'.
-+/sub1/uses.ts(2,16): error TS2552: Cannot find name 'getInterI'. Did you mean 'getInterR'?
 +
 +
 +==== /index.ts (1 errors) ====
@@ -34,12 +33,9 @@
 +        interface RequireInterface { _r: any; }
 +        function getInterR(): RequireInterface;
 +    }
-+==== /sub1/uses.ts (1 errors) ====
++==== /sub1/uses.ts (0 errors) ====
 +    /// <reference types="pkg" preserve="true" />
 +    export default getInterI();
-+                   ~~~~~~~~~
-+!!! error TS2552: Cannot find name 'getInterI'. Did you mean 'getInterR'?
-+!!! related TS2728 /node_modules/pkg/require.d.ts:4:14: 'getInterR' is declared here.
 +==== /sub1/package.json (0 errors) ====
 +    {
 +        "private": true,

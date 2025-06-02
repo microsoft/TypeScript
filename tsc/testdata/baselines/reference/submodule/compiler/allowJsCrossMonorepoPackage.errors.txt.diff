@@ -2,7 +2,8 @@
 +++ new.allowJsCrossMonorepoPackage.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+/packages/main/index.ts(1,19): error TS2307: Cannot find module 'shared' or its corresponding type declarations.
++/packages/main/index.ts(1,19): error TS7016: Could not find a declaration file for module 'shared'. '/packages/shared/index.js' implicitly has an 'any' type.
++  Try `npm i --save-dev @types/shared` if it exists or add a new declaration (.d.ts) file containing `declare module 'shared';`
 +
 +
 +==== /packages/main/tsconfig.json (0 errors) ====
@@ -21,7 +22,8 @@
 +==== /packages/main/index.ts (1 errors) ====
 +    import { x } from "shared";
 +                      ~~~~~~~~
-+!!! error TS2307: Cannot find module 'shared' or its corresponding type declarations.
++!!! error TS7016: Could not find a declaration file for module 'shared'. '/packages/shared/index.js' implicitly has an 'any' type.
++!!! error TS7016:   Try `npm i --save-dev @types/shared` if it exists or add a new declaration (.d.ts) file containing `declare module 'shared';`
 +    
 +==== /node_modules/pkg/index.d.ts (0 errors) ====
 +    export declare function pkg(): "pkg";

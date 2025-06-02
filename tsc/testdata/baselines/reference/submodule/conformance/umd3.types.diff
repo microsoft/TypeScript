@@ -5,4 +5,4 @@
 
  export as namespace Foo;
 ->Foo : typeof import("foo")
-+>Foo : typeof import("./foo.js")
++>Foo : typeof import("./foo")

@@ -2,8 +2,7 @@
 +++ new.declarationEmitUsingAlternativeContainingModules2.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+src/index.mts(1,26): error TS2307: Cannot find module '@tanstack/vue-query' or its corresponding type declarations.
-+src/index.mts(33,14): error TS7006: Parameter 'data' implicitly has an 'any' type.
++src/index.mts(29,14): error TS2742: The inferred type of 'useEntries' cannot be named without a reference to '../node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh.js'. This is likely not portable. A type annotation is necessary.
 +
 +
 +==== node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh.d.ts (0 errors) ====
@@ -203,10 +202,8 @@
 +      }
 +    }
 +    
-+==== src/index.mts (2 errors) ====
++==== src/index.mts (1 errors) ====
 +    import { useQuery } from '@tanstack/vue-query'
-+                             ~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS2307: Cannot find module '@tanstack/vue-query' or its corresponding type declarations.
 +    
 +    const baseUrl = 'https://api.publicapis.org/'
 +    
@@ -235,12 +232,12 @@
 +    }
 +    
 +    export const useEntries = () => {
++                 ~~~~~~~~~~
++!!! error TS2742: The inferred type of 'useEntries' cannot be named without a reference to '../node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh.js'. This is likely not portable. A type annotation is necessary.
 +      return useQuery({
 +        queryKey: entryKeys.list(),
 +        queryFn: testApi.getEntries,
 +        select: (data) => data.slice(0, 10)
-+                 ~~~~
-+!!! error TS7006: Parameter 'data' implicitly has an 'any' type.
 +      })
 +    }
 +    

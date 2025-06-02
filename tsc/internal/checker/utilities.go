@@ -12,8 +12,10 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
+	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 func NewDiagnosticForNode(node *ast.Node, message *diagnostics.Message, args ...any) *ast.Diagnostic {
@@ -1992,6 +1994,33 @@ func (c *Checker) checkNotCanceled() {
 	if c.wasCanceled {
 		panic("Checker was previously cancelled")
 	}
+}
+
+func (c *Checker) getPackagesMap() map[string]bool {
+	if c.packagesMap == nil {
+		c.packagesMap = make(map[string]bool)
+		resolvedModules := c.program.GetResolvedModules()
+		for _, resolvedModulesInFile := range resolvedModules {
+			for _, module := range resolvedModulesInFile {
+				if module.PackageId.Name != "" {
+					c.packagesMap[module.PackageId.Name] = c.packagesMap[module.PackageId.Name] || module.Extension == tspath.ExtensionDts
+				}
+			}
+		}
+	}
+	return c.packagesMap
+}
+
+func (c *Checker) typesPackageExists(packageName string) bool {
+	packagesMap := c.getPackagesMap()
+	_, ok := packagesMap[module.GetTypesPackageName(packageName)]
+	return ok
+}
+
+func (c *Checker) packageBundlesTypes(packageName string) bool {
+	packagesMap := c.getPackagesMap()
+	hasTypes, _ := packagesMap[packageName]
+	return hasTypes
 }
 
 func ValueToString(value any) string {

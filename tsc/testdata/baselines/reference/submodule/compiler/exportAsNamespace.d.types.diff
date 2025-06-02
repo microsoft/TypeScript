@@ -5,4 +5,4 @@
 
  export as namespace N
 ->N : typeof import("exportAsNamespace")
-+>N : typeof import("./exportAsNamespace.js")
++>N : typeof import("./exportAsNamespace")

@@ -5,7 +5,7 @@
  === /other.d.ts ===
  export as namespace SomeInterface;
 ->SomeInterface : typeof import("/other")
-+>SomeInterface : typeof import("./other.js")
++>SomeInterface : typeof import("./other")
 
  export type Action = "PUSH" | "POP" | "REPLACE";
  >Action : Action
@@ -14,4 +14,4 @@
  }
  declare const value: SomeInterface;
 ->value : import("/other")
-+>value : import("./other.js")
++>value : import("./other")

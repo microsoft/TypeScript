@@ -58,6 +58,7 @@ type ModuleSpecifierGenerationHost interface {
 
 	GetNearestAncestorDirectoryWithPackageJson(dirname string) string
 	GetPackageJsonInfo(pkgJsonPath string) PackageJsonInfo
+	GetDefaultResolutionModeForFile(file SourceFileForSpecifierGeneration) core.ResolutionMode
 }
 
 type ImportModuleSpecifierPreference string

@@ -1,19 +1,6 @@
 --- old.declarationEmitReusesLambdaParameterNodes.js
 +++ new.declarationEmitReusesLambdaParameterNodes.js
-@@= skipped -11, +11 lines =@@
-
-
- //// [index.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--exports.CustomSelect1 = void 0;
--exports.CustomSelect2 = CustomSelect2;
--const CustomSelect1 = (x) => { };
--exports.CustomSelect1 = CustomSelect1;
--function CustomSelect2(x) { }
-+export const CustomSelect1 = (x) => { };
-+export function CustomSelect2(x) { }
-
+@@= skipped -22, +22 lines =@@
 
  //// [index.d.ts]
  import { Props } from "react-select";

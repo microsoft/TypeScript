@@ -1,10 +1,10 @@
-index.ts(1,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/inner/private.js'. This is likely not portable. A type annotation is necessary.
+index.ts(1,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/inner/private'. This is likely not portable. A type annotation is necessary.
 
 
 ==== index.ts (1 errors) ====
     export const a = async () => (await import("inner")).x();
                  ~
-!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/inner/private.js'. This is likely not portable. A type annotation is necessary.
+!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/inner/private'. This is likely not portable. A type annotation is necessary.
 ==== node_modules/inner/index.d.ts (0 errors) ====
     export { x } from "./other.js";
 ==== node_modules/inner/other.d.ts (0 errors) ====

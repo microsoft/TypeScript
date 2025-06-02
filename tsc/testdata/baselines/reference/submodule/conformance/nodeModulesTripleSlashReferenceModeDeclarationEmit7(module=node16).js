@@ -64,11 +64,11 @@ export default [obj1, obj2.default];
 
 
 //// [uses.d.ts]
-declare const _default: any;
+declare const _default: ImportInterface;
 export default _default;
 //// [uses.d.ts]
 declare const _default: RequireInterface;
 export default _default;
 //// [index.d.ts]
-declare const _default: readonly [any, any];
+declare const _default: readonly [ImportInterface, any];
 export default _default;

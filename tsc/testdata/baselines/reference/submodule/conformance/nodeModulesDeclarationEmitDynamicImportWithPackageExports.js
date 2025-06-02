@@ -128,7 +128,7 @@ export {};
 // esm format file
 export declare const a: typeof import("./index.cts");
 export declare const b: typeof import("./index.mts");
-export declare const c: typeof import(".");
+export declare const c: typeof import("./index.js");
 export declare const f: any;
 //// [other2.d.ts]
 // esm format file
@@ -138,7 +138,7 @@ export declare const e: any;
 // esm format file
 export declare const a: typeof import("./index.cts");
 export declare const b: typeof import("./index.mts");
-export declare const c: typeof import(".");
+export declare const c: typeof import("./index.js");
 export declare const f: any;
 //// [other2.d.mts]
 // esm format file

@@ -8,14 +8,3 @@
  >assert : Symbol(assert, Decl(index.ts, 2, 21))
  >1234 : Symbol(1234, Decl(index.ts, 2, 31))
  >"resolution-mode" : Symbol("resolution-mode", Decl(index.ts, 2, 36))
-@@= skipped -10, +9 lines =@@
-
- export const b = (null as any as import("pkg", { assert: {1234, "resolution-mode": "import"} }).ImportInterface);
- >b : Symbol(b, Decl(index.ts, 5, 12))
--
--=== /node_modules/pkg/import.d.ts ===
--export interface ImportInterface {}
-->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
-
- === /node_modules/pkg/require.d.ts ===
- export interface RequireInterface {}

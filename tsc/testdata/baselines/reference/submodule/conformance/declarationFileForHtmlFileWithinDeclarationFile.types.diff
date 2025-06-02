@@ -5,7 +5,7 @@
  === file.d.ts ===
  export * as mod from "./component.html";
 ->mod : typeof import("component.d.html")
-+>mod : typeof import("./component.html")
++>mod : typeof import("./component.d.html.js")
 
  === main.ts ===
  import { mod } from "./file.js";

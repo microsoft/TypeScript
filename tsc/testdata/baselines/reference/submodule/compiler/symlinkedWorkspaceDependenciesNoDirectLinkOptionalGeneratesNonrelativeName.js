@@ -38,4 +38,4 @@ exports.a = pkg.invoke();
 
 
 //// [index.d.ts]
-export declare const a: import("../packageA/index.js").Foo;
+export declare const a: import("../packageA").Foo;

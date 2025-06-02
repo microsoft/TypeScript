@@ -10,13 +10,13 @@ export const cjs: number;
 
 === /main.ts ===
 import { esm, cjs } from "dual";
->esm : any
->cjs : number
+>esm : number
+>cjs : any
 
 === /main.mts ===
 import { esm, cjs } from "dual";
->esm : any
->cjs : number
+>esm : number
+>cjs : any
 
 === /main.cts ===
 import { esm, cjs } from "dual";

@@ -2,8 +2,8 @@
 +++ new.nodeModulesConditionalPackageExports(module=node16).errors.txt
 @@= skipped -0, +0 lines =@@
 -error TS2209: The project root is ambiguous, but is required to resolve export map entry '.' in file 'package.json'. Supply the `rootDir` compiler option to disambiguate.
--index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
--index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
+ index.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
+ index.cts(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
 -node_modules/inner/index.d.mts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 -node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
 -
@@ -112,16 +112,11 @@
 +          ~~~~~~~~~
 +!!! error TS2339: Property 'mjsSource' does not exist on type 'typeof import("node_modules/inner/index")'.
 +    ts.mjsSource;
-+==== index.cts (3 errors) ====
++==== index.cts (5 errors) ====
      // cjs format file
      import * as cjs from "package/cjs";
      import * as mjs from "package/mjs";
--                         ~~~~~~~~~~~~~
--!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
-     import * as type from "package";
--                          ~~~~~~~~~
--!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
-     cjs;
+@@= skipped -50, +82 lines =@@
      mjs;
      type;
      import * as cjsi from "inner/a";

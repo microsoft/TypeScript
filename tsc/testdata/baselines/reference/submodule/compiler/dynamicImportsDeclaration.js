@@ -23,13 +23,22 @@ export const mod = await (async () => {
 })();
 
 //// [case0.js]
-export default 0;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 0;
 //// [case1.js]
-export default 1;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 1;
 //// [caseFallback.js]
-export default 'fallback';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 'fallback';
 //// [index.js]
-export const mod = await (async () => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mod = void 0;
+exports.mod = await (async () => {
     const x = 0;
     switch (x) {
         case 0:

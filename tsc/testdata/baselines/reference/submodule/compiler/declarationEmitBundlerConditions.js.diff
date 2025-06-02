@@ -1,12 +1,8 @@
 --- old.declarationEmitBundlerConditions.js
 +++ new.declarationEmitBundlerConditions.js
-@@= skipped -33, +33 lines =@@
-
-
- //// [makeC.d.ts]
--import { C } from "pkg";
--export declare function makeC(): C;
-+export declare function makeC(): any;
+@@= skipped -36, +36 lines =@@
+ import { C } from "pkg";
+ export declare function makeC(): C;
  //// [index.d.ts]
 -export declare const c: import("pkg").C;
 +export declare const c: any;

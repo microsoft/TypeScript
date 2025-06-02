@@ -6,6 +6,6 @@ export declare let x: number
 
 === /a/b/c/d/e/app.ts ===
 import {x} from "foo";
->x : number
+>x : any
 
 

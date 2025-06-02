@@ -5,7 +5,7 @@
 
  export as namespace THREE;
 ->THREE : typeof import("global")
-+>THREE : typeof import("./global.js")
++>THREE : typeof import("./global")
 
  declare global {
  >global : typeof global
@@ -15,5 +15,5 @@
  const m = THREE
 ->m : typeof import("three")
 ->THREE : typeof import("three")
-+>m : typeof import("./three.js")
-+>THREE : typeof import("./three.js")
++>m : typeof import("./three")
++>THREE : typeof import("./three")

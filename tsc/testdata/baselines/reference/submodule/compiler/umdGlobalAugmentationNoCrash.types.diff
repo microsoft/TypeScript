@@ -5,14 +5,14 @@
 
      const React: typeof import("./module");
 ->React : typeof import("module")
-+>React : typeof import("./module.js")
++>React : typeof import("./module")
  }
  export {};
 
  === module.d.ts ===
  export as namespace React;
 ->React : typeof import("module")
-+>React : typeof import("./module.js")
++>React : typeof import("./module")
 
  export function foo(): string;
  >foo : () => string
@@ -21,7 +21,7 @@
  React.foo;
  >React.foo : () => string
 ->React : typeof import("module")
-+>React : typeof import("./module.js")
++>React : typeof import("./module")
  >foo : () => string
 
  === emits.ts ===
@@ -30,5 +30,5 @@
  React.foo;
  >React.foo : () => string
 ->React : typeof import("module")
-+>React : typeof import("./module.js")
++>React : typeof import("./module")
  >foo : () => string

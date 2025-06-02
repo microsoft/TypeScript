@@ -5,7 +5,7 @@
  === 1.ts ===
  export * as default from './0';
 ->default : typeof import("0")
-+>default : typeof import("./0")
++>default : typeof import("./0.js")
 
  === 11.ts ===
  import * as ns from './0';

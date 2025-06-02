@@ -5,7 +5,7 @@ import type { RequireInterface } from "pkg" with { "resolution-mode": "require" 
 >RequireInterface : RequireInterface
 
 import type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
->ImportInterface : any
+>ImportInterface : ImportInterface
 
 export interface LocalInterface extends RequireInterface, ImportInterface {}
 
@@ -23,8 +23,11 @@ export type { RequireInterface } from "pkg" with { "resolution-mode": "require" 
 >RequireInterface : RequireInterface
 
 export type { ImportInterface } from "pkg" with { "resolution-mode": "import" };
->ImportInterface : any
+>ImportInterface : ImportInterface
 
+=== /node_modules/pkg/import.d.ts ===
+
+export interface ImportInterface {}
 === /node_modules/pkg/require.d.ts ===
 
 export interface RequireInterface {}

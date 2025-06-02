@@ -1,12 +1,12 @@
-/index.ts(2,1): error TS2304: Cannot find name 'foo'.
+/index.ts(3,1): error TS2304: Cannot find name 'bar'.
 
 
 ==== /index.ts (1 errors) ====
     /// <reference types="pkg" />
     foo; // foo should resolve while bar should not, since index.js is esm
-    ~~~
-!!! error TS2304: Cannot find name 'foo'.
     bar;
+    ~~~
+!!! error TS2304: Cannot find name 'bar'.
     export {};
 ==== /node_modules/pkg/package.json (0 errors) ====
     {

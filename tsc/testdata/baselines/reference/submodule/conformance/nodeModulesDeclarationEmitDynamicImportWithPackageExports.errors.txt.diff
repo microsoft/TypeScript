@@ -2,7 +2,7 @@
 +++ new.nodeModulesDeclarationEmitDynamicImportWithPackageExports.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+other.cts(5,14): error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner/index.js'. This is likely not portable. A type annotation is necessary.
++other.cts(5,14): error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner'. This is likely not portable. A type annotation is necessary.
 +other.mts(5,14): error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner/index.js'. This is likely not portable. A type annotation is necessary.
 +other.ts(5,14): error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner/index.js'. This is likely not portable. A type annotation is necessary.
 +other2.cts(2,14): error TS2742: The inferred type of 'd' cannot be named without a reference to './node_modules/inner/index.d.cts'. This is likely not portable. A type annotation is necessary.
@@ -60,7 +60,7 @@
 +    export const c = import("package");
 +    export const f = import("inner");
 +                 ~
-+!!! error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner/index.js'. This is likely not portable. A type annotation is necessary.
++!!! error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner'. This is likely not portable. A type annotation is necessary.
 +==== other2.cts (1 errors) ====
 +    // cjs format file, no TLA
 +    export const d = import("inner/cjs");

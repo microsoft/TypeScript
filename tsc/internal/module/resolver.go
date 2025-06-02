@@ -137,26 +137,17 @@ func (r *Resolver) GetPackageScopeForPath(directory string) *packagejson.InfoCac
 	return (&resolutionState{compilerOptions: r.compilerOptions, resolver: r}).getPackageScopeForPath(directory)
 }
 
-func (r *Resolver) GetPackageJsonTypeIfApplicable(path string) string {
+func (r *Resolver) GetPackageJsonScopeIfApplicable(path string) *packagejson.InfoCacheEntry {
 	if tspath.FileExtensionIsOneOf(path, []string{tspath.ExtensionMts, tspath.ExtensionCts, tspath.ExtensionMjs, tspath.ExtensionCjs}) {
-		return ""
+		return nil
 	}
 
-	var moduleResolutionKind core.ModuleResolutionKind
-	if r.compilerOptions != nil {
-		moduleResolutionKind = r.compilerOptions.GetModuleResolutionKind()
+	moduleResolutionKind := r.compilerOptions.GetModuleResolutionKind()
+	if core.ModuleResolutionKindNode16 <= moduleResolutionKind && moduleResolutionKind <= core.ModuleResolutionKindNodeNext || strings.Contains(path, "/node_modules/") {
+		return r.GetPackageScopeForPath(tspath.GetDirectoryPath(path))
 	}
 
-	var packageJsonType string
-	shouldLookupFromPackageJson := core.ModuleResolutionKindNode16 <= moduleResolutionKind && moduleResolutionKind <= core.ModuleResolutionKindNodeNext || strings.Contains(path, "/node_modules/")
-	if shouldLookupFromPackageJson {
-		packageJsonScope := r.GetPackageScopeForPath(tspath.GetDirectoryPath(path))
-		if packageJsonScope.Exists() {
-			packageJsonType, _ = packageJsonScope.Contents.Type.GetValue()
-		}
-	}
-
-	return packageJsonType
+	return nil
 }
 
 func (r *Resolver) ResolveTypeReferenceDirective(typeReferenceDirectiveName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference *ResolvedProjectReference) *ResolvedTypeReferenceDirective {
@@ -871,7 +862,7 @@ func (r *resolutionState) loadModuleFromSpecificNodeModulesDirectory(ext extensi
 			r.esmMode {
 			// EsmMode disables index lookup in `loadNodeModuleFromDirectoryWorker` generally, however non-relative package resolutions still assume
 			// a default `index.js` entrypoint if no `main` or `exports` are present
-			if indexResult := r.loadModuleFromFile(extensions, tspath.CombinePaths(candidate, "index"), onlyRecordFailures); !indexResult.shouldContinueSearching() {
+			if indexResult := r.loadModuleFromFile(extensions, tspath.CombinePaths(candidate, "index.js"), onlyRecordFailures); !indexResult.shouldContinueSearching() {
 				indexResult.packageId = r.getPackageId(packageDirectory, packageInfo)
 				return indexResult
 			}

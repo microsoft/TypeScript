@@ -6,12 +6,20 @@
 // Both `foo` and `bar` should resolve, as _both_ entrypoints are included by the two
 // references above.
 foo;
->foo : any
+>foo : number
 
 bar;
 >bar : number
 
 export {};
+=== /node_modules/pkg/import.d.ts ===
+export {};
+declare global {
+>global : typeof global
+
+    var foo: number;
+>foo : number
+}
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {

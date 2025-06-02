@@ -7,9 +7,9 @@
 ->a : import("workspace/packageA/index").Foo
 ->pkg.invoke() : import("workspace/packageA/index").Foo
 ->pkg.invoke : () => import("workspace/packageA/index").Foo
-+>a : import("../packageA/index.js").Foo
-+>pkg.invoke() : import("../packageA/index.js").Foo
-+>pkg.invoke : () => import("../packageA/index.js").Foo
++>a : import("../packageA").Foo
++>pkg.invoke() : import("../packageA").Foo
++>pkg.invoke : () => import("../packageA").Foo
  >pkg : typeof pkg
 ->invoke : () => import("workspace/packageA/index").Foo
-+>invoke : () => import("../packageA/index.js").Foo
++>invoke : () => import("../packageA").Foo

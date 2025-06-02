@@ -1,0 +1,564 @@
+index.cts(2,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
+index.cts(3,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
+index.cts(6,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
+index.cts(9,21): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/index.mjs")' call instead.
+index.cts(11,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.js")' call instead.
+index.cts(12,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.mjs")' call instead.
+index.cts(15,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./")' call instead.
+index.cts(16,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index")' call instead.
+index.cts(23,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another")' call instead.
+index.cts(24,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/")' call instead.
+index.cts(25,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index")' call instead.
+index.cts(51,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.cts(52,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.cts(59,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.cts(60,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.cts(61,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.cts(75,21): error TS2307: Cannot find module './' or its corresponding type declarations.
+index.cts(76,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+index.cts(77,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.cts(78,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.cts(79,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+index.cts(80,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.cts(81,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.cts(82,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+index.cts(83,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.cts(84,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.cts(85,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+index.mts(14,22): error TS2307: Cannot find module './' or its corresponding type declarations.
+index.mts(15,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+index.mts(16,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(17,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(18,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+index.mts(19,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(20,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(21,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+index.mts(22,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(23,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(24,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+index.mts(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.mts(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.mts(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.mts(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.mts(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.mts(74,21): error TS2307: Cannot find module './' or its corresponding type declarations.
+index.mts(75,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+index.mts(76,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(77,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(78,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+index.mts(79,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(80,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(81,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+index.mts(82,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(83,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.mts(84,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+index.ts(14,22): error TS2307: Cannot find module './' or its corresponding type declarations.
+index.ts(15,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+index.ts(16,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(17,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(18,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+index.ts(19,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(20,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(21,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+index.ts(22,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(23,22): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(24,22): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+index.ts(50,22): error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.ts(51,22): error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.ts(58,22): error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.ts(59,22): error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.ts(60,22): error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+index.ts(74,21): error TS2307: Cannot find module './' or its corresponding type declarations.
+index.ts(75,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+index.ts(76,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(77,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(78,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+index.ts(79,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(80,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(81,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+index.ts(82,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(83,21): error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+index.ts(84,21): error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+
+
+==== subfolder/index.ts (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== subfolder/index.cts (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== subfolder/index.mts (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== subfolder2/index.ts (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== subfolder2/index.cts (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== subfolder2/index.mts (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== subfolder2/another/index.ts (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== subfolder2/another/index.mts (0 errors) ====
+    // esm format file
+    const x = 1;
+    export {x};
+==== subfolder2/another/index.cts (0 errors) ====
+    // cjs format file
+    const x = 1;
+    export {x};
+==== index.mts (27 errors) ====
+    import * as m1 from "./index.js";
+    import * as m2 from "./index.mjs";
+    import * as m3 from "./index.cjs";
+    import * as m4 from "./subfolder/index.js";
+    import * as m5 from "./subfolder/index.mjs";
+    import * as m6 from "./subfolder/index.cjs";
+    import * as m7 from "./subfolder2/index.js";
+    import * as m8 from "./subfolder2/index.mjs";
+    import * as m9 from "./subfolder2/index.cjs";
+    import * as m10 from "./subfolder2/another/index.js";
+    import * as m11 from "./subfolder2/another/index.mjs";
+    import * as m12 from "./subfolder2/another/index.cjs";
+    // The next ones should all fail - esm format files have no index resolution or extension resolution
+    import * as m13 from "./";
+                         ~~~~
+!!! error TS2307: Cannot find module './' or its corresponding type declarations.
+    import * as m14 from "./index";
+                         ~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+    import * as m15 from "./subfolder";
+                         ~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m16 from "./subfolder/";
+                         ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m17 from "./subfolder/index";
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+    import * as m18 from "./subfolder2";
+                         ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m19 from "./subfolder2/";
+                         ~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m20 from "./subfolder2/index";
+                         ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+    import * as m21 from "./subfolder2/another";
+                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m22 from "./subfolder2/another/";
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m23 from "./subfolder2/another/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+    void m1;
+    void m2;
+    void m3;
+    void m4;
+    void m5;
+    void m6;
+    void m7;
+    void m8;
+    void m9;
+    void m10;
+    void m11;
+    void m12;
+    void m13;
+    void m14;
+    void m15;
+    void m16;
+    void m17;
+    void m18;
+    void m19;
+    void m20;
+    void m21;
+    void m22;
+    void m23;
+    
+    // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+    import m24 = require("./");
+                         ~~~~
+!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m25 = require("./index");
+                         ~~~~~~~~~
+!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m26 = require("./subfolder");
+    import m27 = require("./subfolder/");
+    import m28 = require("./subfolder/index");
+    import m29 = require("./subfolder2");
+    import m30 = require("./subfolder2/");
+    import m31 = require("./subfolder2/index");
+    import m32 = require("./subfolder2/another");
+                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m33 = require("./subfolder2/another/");
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m34 = require("./subfolder2/another/index");
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    void m24;
+    void m25;
+    void m26;
+    void m27;
+    void m28;
+    void m29;
+    void m30;
+    void m31;
+    void m32;
+    void m33;
+    void m34;
+    
+    // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+    const _m35 = import("./");
+                        ~~~~
+!!! error TS2307: Cannot find module './' or its corresponding type declarations.
+    const _m36 = import("./index");
+                        ~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+    const _m37 = import("./subfolder");
+                        ~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m38 = import("./subfolder/");
+                        ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m39 = import("./subfolder/index");
+                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+    const _m40 = import("./subfolder2");
+                        ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m41 = import("./subfolder2/");
+                        ~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m42 = import("./subfolder2/index");
+                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+    const _m43 = import("./subfolder2/another");
+                        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m44 = import("./subfolder2/another/");
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m45 = import("./subfolder2/another/index");
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+    
+    // esm format file
+    const x = 1;
+    export {x};
+==== index.cts (27 errors) ====
+    // ESM-format imports below should issue errors
+    import * as m1 from "./index.js";
+                        ~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.js")' call instead.
+    import * as m2 from "./index.mjs";
+                        ~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index.mjs")' call instead.
+    import * as m3 from "./index.cjs";
+    import * as m4 from "./subfolder/index.js";
+    import * as m5 from "./subfolder/index.mjs";
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder/index.mjs")' call instead.
+    import * as m6 from "./subfolder/index.cjs";
+    import * as m7 from "./subfolder2/index.js";
+    import * as m8 from "./subfolder2/index.mjs";
+                        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/index.mjs")' call instead.
+    import * as m9 from "./subfolder2/index.cjs";
+    import * as m10 from "./subfolder2/another/index.js";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.js")' call instead.
+    import * as m11 from "./subfolder2/another/index.mjs";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index.mjs")' call instead.
+    import * as m12 from "./subfolder2/another/index.cjs";
+    // The next ones should _mostly_ work - cjs format files have index resolution and extension resolution (except for those which resolve to an esm format file)
+    import * as m13 from "./";
+                         ~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./")' call instead.
+    import * as m14 from "./index";
+                         ~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./index")' call instead.
+    import * as m15 from "./subfolder";
+    import * as m16 from "./subfolder/";
+    import * as m17 from "./subfolder/index";
+    import * as m18 from "./subfolder2";
+    import * as m19 from "./subfolder2/";
+    import * as m20 from "./subfolder2/index";
+    import * as m21 from "./subfolder2/another";
+                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another")' call instead.
+    import * as m22 from "./subfolder2/another/";
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/")' call instead.
+    import * as m23 from "./subfolder2/another/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./subfolder2/another/index")' call instead.
+    void m1;
+    void m2;
+    void m3;
+    void m4;
+    void m5;
+    void m6;
+    void m7;
+    void m8;
+    void m9;
+    void m10;
+    void m11;
+    void m12;
+    void m13;
+    void m14;
+    void m15;
+    void m16;
+    void m17;
+    void m18;
+    void m19;
+    void m20;
+    void m21;
+    void m22;
+    void m23;
+    
+    // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+    import m24 = require("./");
+                         ~~~~
+!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m25 = require("./index");
+                         ~~~~~~~~~
+!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m26 = require("./subfolder");
+    import m27 = require("./subfolder/");
+    import m28 = require("./subfolder/index");
+    import m29 = require("./subfolder2");
+    import m30 = require("./subfolder2/");
+    import m31 = require("./subfolder2/index");
+    import m32 = require("./subfolder2/another");
+                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m33 = require("./subfolder2/another/");
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m34 = require("./subfolder2/another/index");
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    void m24;
+    void m25;
+    void m26;
+    void m27;
+    void m28;
+    void m29;
+    void m30;
+    void m31;
+    void m32;
+    void m33;
+    void m34;
+    
+    // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+    const _m35 = import("./");
+                        ~~~~
+!!! error TS2307: Cannot find module './' or its corresponding type declarations.
+    const _m36 = import("./index");
+                        ~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+    const _m37 = import("./subfolder");
+                        ~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m38 = import("./subfolder/");
+                        ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m39 = import("./subfolder/index");
+                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+    const _m40 = import("./subfolder2");
+                        ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m41 = import("./subfolder2/");
+                        ~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m42 = import("./subfolder2/index");
+                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+    const _m43 = import("./subfolder2/another");
+                        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m44 = import("./subfolder2/another/");
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m45 = import("./subfolder2/another/index");
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+    // cjs format file
+    const x = 1;
+    export {x};
+==== index.ts (27 errors) ====
+    import * as m1 from "./index.js";
+    import * as m2 from "./index.mjs";
+    import * as m3 from "./index.cjs";
+    import * as m4 from "./subfolder/index.js";
+    import * as m5 from "./subfolder/index.mjs";
+    import * as m6 from "./subfolder/index.cjs";
+    import * as m7 from "./subfolder2/index.js";
+    import * as m8 from "./subfolder2/index.mjs";
+    import * as m9 from "./subfolder2/index.cjs";
+    import * as m10 from "./subfolder2/another/index.js";
+    import * as m11 from "./subfolder2/another/index.mjs";
+    import * as m12 from "./subfolder2/another/index.cjs";
+    // The next ones shouldn't all work - esm format files have no index resolution or extension resolution
+    import * as m13 from "./";
+                         ~~~~
+!!! error TS2307: Cannot find module './' or its corresponding type declarations.
+    import * as m14 from "./index";
+                         ~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+    import * as m15 from "./subfolder";
+                         ~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m16 from "./subfolder/";
+                         ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m17 from "./subfolder/index";
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+    import * as m18 from "./subfolder2";
+                         ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m19 from "./subfolder2/";
+                         ~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m20 from "./subfolder2/index";
+                         ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+    import * as m21 from "./subfolder2/another";
+                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m22 from "./subfolder2/another/";
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    import * as m23 from "./subfolder2/another/index";
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+    void m1;
+    void m2;
+    void m3;
+    void m4;
+    void m5;
+    void m6;
+    void m7;
+    void m8;
+    void m9;
+    void m10;
+    void m11;
+    void m12;
+    void m13;
+    void m14;
+    void m15;
+    void m16;
+    void m17;
+    void m18;
+    void m19;
+    void m20;
+    void m21;
+    void m22;
+    void m23;
+    
+    // These should _mostly_ work - `import = require` always desugars to require calls, which do have extension and index resolution (but can't load anything that resolves to esm!)
+    import m24 = require("./");
+                         ~~~~
+!!! error TS1471: Module './' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m25 = require("./index");
+                         ~~~~~~~~~
+!!! error TS1471: Module './index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m26 = require("./subfolder");
+    import m27 = require("./subfolder/");
+    import m28 = require("./subfolder/index");
+    import m29 = require("./subfolder2");
+    import m30 = require("./subfolder2/");
+    import m31 = require("./subfolder2/index");
+    import m32 = require("./subfolder2/another");
+                         ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m33 = require("./subfolder2/another/");
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another/' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    import m34 = require("./subfolder2/another/index");
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1471: Module './subfolder2/another/index' cannot be imported using this construct. The specifier only resolves to an ES module, which cannot be imported with 'require'. Use an ECMAScript import instead.
+    void m24;
+    void m25;
+    void m26;
+    void m27;
+    void m28;
+    void m29;
+    void m30;
+    void m31;
+    void m32;
+    void m33;
+    void m34;
+    
+    // These shouldn't work - dynamic `import()` always uses the esm resolver, which does not have extension resolution
+    const _m35 = import("./");
+                        ~~~~
+!!! error TS2307: Cannot find module './' or its corresponding type declarations.
+    const _m36 = import("./index");
+                        ~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './index.mjs'?
+    const _m37 = import("./subfolder");
+                        ~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m38 = import("./subfolder/");
+                        ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m39 = import("./subfolder/index");
+                        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder/index.mjs'?
+    const _m40 = import("./subfolder2");
+                        ~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m41 = import("./subfolder2/");
+                        ~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m42 = import("./subfolder2/index");
+                        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/index.mjs'?
+    const _m43 = import("./subfolder2/another");
+                        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m44 = import("./subfolder2/another/");
+                        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2834: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Consider adding an extension to the import path.
+    const _m45 = import("./subfolder2/another/index");
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2835: Relative import paths need explicit file extensions in ECMAScript imports when '--moduleResolution' is 'node16' or 'nodenext'. Did you mean './subfolder2/another/index.mjs'?
+    // esm format file
+    const x = 1;
+    export {x};
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module"
+    }
+==== subfolder/package.json (0 errors) ====
+    {
+        "type": "commonjs"
+    }
+==== subfolder2/package.json (0 errors) ====
+    {
+    }
+==== subfolder2/another/package.json (0 errors) ====
+    {
+        "type": "module"
+    }

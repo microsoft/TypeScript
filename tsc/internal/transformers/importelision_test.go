@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
@@ -18,9 +19,10 @@ type fakeProgram struct {
 	singleThreaded              bool
 	compilerOptions             *core.CompilerOptions
 	files                       []*ast.SourceFile
-	getEmitModuleFormatOfFile   func(sourceFile *ast.SourceFile) core.ModuleKind
+	getEmitModuleFormatOfFile   func(sourceFile modulespecifiers.SourceFileForSpecifierGeneration) core.ModuleKind
 	getImpliedNodeFormatForEmit func(sourceFile *ast.SourceFile) core.ModuleKind
-	getResolvedModule           func(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile
+	getResolvedModule           func(currentSourceFile *ast.SourceFile, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
+	getSourceFile               func(FileName string) *ast.SourceFile
 }
 
 func (p *fakeProgram) FileExists(path string) bool {
@@ -87,8 +89,20 @@ func (p *fakeProgram) GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) co
 	return p.getImpliedNodeFormatForEmit(sourceFile)
 }
 
-func (p *fakeProgram) GetResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
-	return p.getResolvedModule(currentSourceFile, moduleReference)
+func (p *fakeProgram) GetDefaultResolutionModeForFile(sourceFile modulespecifiers.SourceFileForSpecifierGeneration) core.ResolutionMode {
+	return p.getEmitModuleFormatOfFile(sourceFile)
+}
+
+func (p *fakeProgram) GetModeForUsageLocation(sourceFile *ast.SourceFile, location *ast.Node) core.ResolutionMode {
+	return p.getEmitModuleFormatOfFile(sourceFile)
+}
+
+func (p *fakeProgram) GetResolvedModule(currentSourceFile *ast.SourceFile, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
+	return p.getResolvedModule(currentSourceFile, moduleReference, mode)
+}
+
+func (p *fakeProgram) GetSourceFile(FileName string) *ast.SourceFile {
+	return p.getSourceFile(FileName)
 }
 
 func (p *fakeProgram) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
@@ -101,6 +115,10 @@ func (p *fakeProgram) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Nod
 
 func (p *fakeProgram) GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node) {
 	return "", nil
+}
+
+func (p *fakeProgram) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule] {
+	panic("unimplemented")
 }
 
 func TestImportElision(t *testing.T) {
@@ -155,15 +173,24 @@ func TestImportElision(t *testing.T) {
 				singleThreaded:  true,
 				compilerOptions: compilerOptions,
 				files:           files,
-				getEmitModuleFormatOfFile: func(sourceFile *ast.SourceFile) core.ModuleKind {
+				getEmitModuleFormatOfFile: func(sourceFile modulespecifiers.SourceFileForSpecifierGeneration) core.ModuleKind {
 					return core.ModuleKindESNext
 				},
 				getImpliedNodeFormatForEmit: func(sourceFile *ast.SourceFile) core.ModuleKind {
 					return core.ModuleKindESNext
 				},
-				getResolvedModule: func(currentSourceFile *ast.SourceFile, moduleReference string) *ast.SourceFile {
-					if currentSourceFile == file && moduleReference == "other" {
+				getSourceFile: func(fileName string) *ast.SourceFile {
+					if fileName == "other.ts" {
 						return other
+					}
+					return nil
+				},
+				getResolvedModule: func(currentSourceFile *ast.SourceFile, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
+					if currentSourceFile == file && moduleReference == "other" {
+						return &module.ResolvedModule{
+							ResolvedFileName: "other.ts",
+							Extension:        tspath.ExtensionTs,
+						}
 					}
 					return nil
 				},

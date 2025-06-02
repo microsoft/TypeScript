@@ -1,16 +1,11 @@
 --- old.declarationEmitUsingTypeAlias2.js
 +++ new.declarationEmitUsingTypeAlias2.js
-@@= skipped -42, +42 lines =@@
-
-
- //// [index.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
--exports.bar = void 0;
--const some_dep_1 = require("some-dep");
+@@= skipped -46, +46 lines =@@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.bar = void 0;
+ const some_dep_1 = require("some-dep");
 -exports.bar = (some_dep_1.goodDeclaration);
-+import { goodDeclaration } from "some-dep";
-+export const bar = goodDeclaration;
++exports.bar = some_dep_1.goodDeclaration;
 
 
  //// [index.d.ts]

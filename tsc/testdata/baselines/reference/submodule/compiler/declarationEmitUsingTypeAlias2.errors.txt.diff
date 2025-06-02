@@ -2,7 +2,7 @@
 +++ new.declarationEmitUsingTypeAlias2.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+src/index.ts(2,14): error TS2742: The inferred type of 'bar' cannot be named without a reference to '../node_modules/some-dep/dist/other.js'. This is likely not portable. A type annotation is necessary.
++src/index.ts(2,14): error TS2742: The inferred type of 'bar' cannot be named without a reference to '../node_modules/some-dep/dist'. This is likely not portable. A type annotation is necessary.
 +
 +
 +==== node_modules/some-dep/dist/inner.d.ts (0 errors) ====
@@ -45,6 +45,6 @@
 +    import { goodDeclaration, shouldReuseLocalName, shouldBeElided } from "some-dep";
 +    export const bar = goodDeclaration<{}>;
 +                 ~~~
-+!!! error TS2742: The inferred type of 'bar' cannot be named without a reference to '../node_modules/some-dep/dist/other.js'. This is likely not portable. A type annotation is necessary.
++!!! error TS2742: The inferred type of 'bar' cannot be named without a reference to '../node_modules/some-dep/dist'. This is likely not portable. A type annotation is necessary.
 +    
 +    

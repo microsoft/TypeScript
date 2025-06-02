@@ -1,22 +1,6 @@
 --- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node16).symbols
 +++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node16).symbols
-@@= skipped -15, +15 lines =@@
- >RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
-
-     & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
-->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
-
- export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
- >a : Symbol(a, Decl(index.ts, 4, 12))
-@@= skipped -8, +7 lines =@@
-
- export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
- >b : Symbol(b, Decl(index.ts, 5, 12))
-->ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
-
- === /other.ts ===
- // missing assert:
-@@= skipped -9, +8 lines =@@
+@@= skipped -32, +32 lines =@@
 
      & import("pkg", {"resolution-mode": "require"}).RequireInterface
      & import("pkg", {"resolution-mode": "import"}).ImportInterface;

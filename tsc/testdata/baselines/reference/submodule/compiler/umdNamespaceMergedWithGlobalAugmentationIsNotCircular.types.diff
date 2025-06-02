@@ -5,7 +5,7 @@
 
      const React: typeof import("./module");
 ->React : typeof import("module")
-+>React : typeof import("./module.js")
++>React : typeof import("./module")
  }
 
  export { };
@@ -14,7 +14,7 @@
  React.createRef;
  >React.createRef : () => any
 ->React : typeof import("module")
-+>React : typeof import("./module.js")
++>React : typeof import("./module")
  >createRef : () => any
 
  === emits.ts ===
@@ -23,5 +23,5 @@
  React.createRef;
  >React.createRef : () => any
 ->React : typeof import("module")
-+>React : typeof import("./module.js")
++>React : typeof import("./module")
  >createRef : () => any

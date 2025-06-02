@@ -28,8 +28,10 @@ export interface LocalInterface extends RequireInterface, ImportInterface {}
 
 
 //// [index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // not exclusively type-only
-import "pkg" assert { "resolution-mode": "require" };
+require("pkg");
 
 
 //// [index.d.ts]

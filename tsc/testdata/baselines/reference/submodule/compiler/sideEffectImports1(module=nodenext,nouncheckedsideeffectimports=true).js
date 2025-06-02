@@ -7,6 +7,8 @@ import "./does-not-exist-either.js";
 
 
 //// [sideEffectImports1.js]
-import "does-not-exist";
-import "./does-not-exist-either";
-import "./does-not-exist-either.js";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("does-not-exist");
+require("./does-not-exist-either");
+require("./does-not-exist-either.js");

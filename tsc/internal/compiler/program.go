@@ -374,10 +374,10 @@ func (p *Program) GetTypeCheckerForFile(ctx context.Context, file *ast.SourceFil
 	return p.checkerPool.GetCheckerForFile(ctx, file)
 }
 
-func (p *Program) GetResolvedModule(file *ast.SourceFile, moduleReference string) *ast.SourceFile {
+func (p *Program) GetResolvedModule(file *ast.SourceFile, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
 	if resolutions, ok := p.resolvedModules[file.Path()]; ok {
-		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: moduleReference, Mode: core.ModuleKindCommonJS}]; ok {
-			return p.findSourceFile(resolved.ResolvedFileName, FileIncludeReason{FileIncludeKindImport, 0})
+		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: moduleReference, Mode: mode}]; ok {
+			return resolved
 		}
 	}
 	return nil
@@ -699,6 +699,14 @@ func (p *Program) GetEmitModuleFormatOfFileWorker(sourceFile *ast.SourceFile, op
 
 func (p *Program) GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) core.ResolutionMode {
 	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.compilerOptions, p.GetSourceFileMetaData(sourceFile.Path()))
+}
+
+func (p *Program) GetModeForUsageLocation(sourceFile *ast.SourceFile, location *ast.Node) core.ResolutionMode {
+	return getModeForUsageLocation(sourceFile, p.sourceFileMetaDatas[sourceFile.Path()], location, p.compilerOptions)
+}
+
+func (p *Program) GetDefaultResolutionModeForFile(sourceFile modulespecifiers.SourceFileForSpecifierGeneration) core.ResolutionMode {
+	return getDefaultResolutionModeForFile(sourceFile, p.sourceFileMetaDatas[sourceFile.Path()], p.compilerOptions)
 }
 
 func (p *Program) CommonSourceDirectory() string {

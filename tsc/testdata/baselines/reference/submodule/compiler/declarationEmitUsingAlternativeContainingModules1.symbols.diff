@@ -261,8 +261,10 @@
  >select : Symbol(select, Decl(index.mts, 31, 32))
  >data : Symbol(data, Decl(index.mts, 32, 13))
 ->data.slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>data.slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
  >data : Symbol(data, Decl(index.mts, 32, 13))
 ->slice : Symbol(Array.slice, Decl(lib.es5.d.ts, --, --))
++>slice : Symbol(slice, Decl(lib.es5.d.ts, --, --))
 
    })
  }

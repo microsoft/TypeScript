@@ -5,12 +5,12 @@
  === index.ts ===
  import { f } from "./thing";
 ->f : () => import("thing").Bar
-+>f : () => import("./thing.js").Bar
++>f : () => import("./thing").Bar
 
  export const thing = f();
 ->thing : import("thing").Bar
 ->f() : import("thing").Bar
 ->f : () => import("thing").Bar
-+>thing : import("./thing.js").Bar
-+>f() : import("./thing.js").Bar
-+>f : () => import("./thing.js").Bar
++>thing : import("./thing").Bar
++>f() : import("./thing").Bar
++>f : () => import("./thing").Bar

@@ -6,8 +6,8 @@
  export const x = Foo; // OK in value position because allowUmdGlobalAccess: true
 ->x : typeof import("foo")
 ->Foo : typeof import("foo")
-+>x : typeof import("./foo.js")
-+>Foo : typeof import("./foo.js")
++>x : typeof import("./foo")
++>Foo : typeof import("./foo")
 
  === foo.d.ts ===
  declare class Thing {
