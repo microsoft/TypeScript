@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -101,8 +102,16 @@ func createResolutionLookupGlobMapper(host ProjectHost) func(data map[tspath.Pat
 
 		// dir -> recursive
 		globSet := make(map[string]bool)
+		var seenDirs core.Set[string]
 
 		for path, fileName := range data {
+			// Assuming all of the input paths are filenames, we can avoid
+			// duplicate work by only taking one file per dir, since their outputs
+			// will always be the same.
+			if !seenDirs.AddIfAbsent(tspath.GetDirectoryPath(string(path))) {
+				continue
+			}
+
 			w := getDirectoryToWatchFailedLookupLocation(
 				fileName,
 				path,
