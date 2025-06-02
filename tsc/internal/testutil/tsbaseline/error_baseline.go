@@ -152,8 +152,7 @@ func iterateErrorBaseline(t *testing.T, inputFiles []*harnessutil.TestFile, inpu
 
 	// 'merge' the lines of each input file with any errors associated with it
 	dupeCase := map[string]int{}
-	nonEmptyFiles := core.Filter(inputFiles, func(f *harnessutil.TestFile) bool { return len(f.Content) > 0 })
-	for _, inputFile := range nonEmptyFiles {
+	for _, inputFile := range inputFiles {
 		// Filter down to the errors in the file
 		fileErrors := core.Filter(diagnostics, func(e *ast.Diagnostic) bool {
 			return e.File() != nil &&

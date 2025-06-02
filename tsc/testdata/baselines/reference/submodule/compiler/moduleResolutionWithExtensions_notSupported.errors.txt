@@ -14,3 +14,9 @@
                    ~~~~~~
 !!! error TS2307: Cannot find module './js' or its corresponding type declarations.
     
+==== /tsx.tsx (0 errors) ====
+    
+==== /jsx.jsx (0 errors) ====
+    
+==== /js.js (0 errors) ====
+    

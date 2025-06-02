@@ -1,8 +1,0 @@
---- old.requireOfJsonFileWithNoContent.errors.txt
-+++ new.requireOfJsonFileWithNoContent.errors.txt
-@@= skipped -17, +17 lines =@@
- !!! error TS2339: Property 'b' does not exist on type '{}'.
-     }
-     
--==== b.json (0 errors) ====
--    

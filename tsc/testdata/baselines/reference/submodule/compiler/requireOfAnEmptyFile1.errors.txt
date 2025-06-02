@@ -6,3 +6,5 @@ requireOfAnEmptyFile1_a.ts(1,21): error TS2306: File 'requireOfAnEmptyFile1_b.ts
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2306: File 'requireOfAnEmptyFile1_b.ts' is not a module.
     
+==== requireOfAnEmptyFile1_b.ts (0 errors) ====
+    

@@ -20,6 +20,8 @@
     
 ==== /tests/node_modules/@types/react/package.json (0 errors) ====
     { "name": "@types/react", "version": "16.4.6" }
+==== /tests/node_modules/@types/react/index.d.ts (0 errors) ====
+    
 ==== /node_modules/@types/react/package.json (0 errors) ====
     { "name": "@types/react", "version": "16.4.6" }
 ==== /node_modules/@types/react/index.d.ts (1 errors) ====

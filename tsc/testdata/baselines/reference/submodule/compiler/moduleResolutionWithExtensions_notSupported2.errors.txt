@@ -6,3 +6,5 @@
                     ~~~~~~~
 !!! error TS2306: File '/jsx.jsx' is not a module.
     
+==== /jsx.jsx (0 errors) ====
+    

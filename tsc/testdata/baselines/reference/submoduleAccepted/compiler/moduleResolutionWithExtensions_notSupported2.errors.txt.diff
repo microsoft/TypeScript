@@ -9,7 +9,7 @@
      import jsx from "./jsx";
                      ~~~~~~~
 -!!! error TS6142: Module './jsx' was resolved to '/jsx.jsx', but '--jsx' is not set.
--    
--==== /jsx.jsx (0 errors) ====
 +!!! error TS2306: File '/jsx.jsx' is not a module.
+     
+ ==== /jsx.jsx (0 errors) ====
      

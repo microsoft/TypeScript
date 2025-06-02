@@ -1,6 +1,8 @@
 b.js(2,16): error TS2739: Type '{ c: boolean; }' is missing the following properties from type 'Foo': a, b
 
 
+==== checkJsdocTypeTagOnExportAssignment2.js (0 errors) ====
+    
 ==== a.ts (0 errors) ====
     export interface Foo {
         a: number;
