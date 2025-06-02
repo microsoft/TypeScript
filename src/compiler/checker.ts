@@ -3683,6 +3683,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 getExternalModuleRequireArgument(node) || getExternalModuleImportEqualsDeclarationExpression(node),
             );
             const resolved = resolveExternalModuleSymbol(immediate);
+            if (resolved && ModuleKind.Node20 <= moduleKind && moduleKind <= ModuleKind.NodeNext) {
+                const moduleExports = getExportOfModule(resolved, "module.exports" as __String, node, dontResolveAlias);
+                if (moduleExports) {
+                    return moduleExports;
+                }
+            }
             markSymbolOfAliasDeclarationIfTypeOnly(node, immediate, resolved, /*overwriteEmpty*/ false);
             return resolved;
         }
@@ -3798,16 +3804,44 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTargetofModuleDefault(moduleSymbol: Symbol, node: ImportClause | ImportOrExportSpecifier, dontResolveAlias: boolean) {
+        const file = moduleSymbol.declarations?.find(isSourceFile);
+        const specifier = getModuleSpecifierForImportOrExport(node);
         let exportDefaultSymbol: Symbol | undefined;
+        let exportModuleDotExportsSymbol: Symbol | undefined;
         if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
             exportDefaultSymbol = moduleSymbol;
+        }
+        else if (
+            file && specifier &&
+            ModuleKind.Node20 <= moduleKind && moduleKind <= ModuleKind.NodeNext &&
+            getEmitSyntaxForModuleSpecifierExpression(specifier) === ModuleKind.CommonJS &&
+            host.getImpliedNodeFormatForEmit(file) === ModuleKind.ESNext &&
+            (exportModuleDotExportsSymbol = resolveExportByName(moduleSymbol, "module.exports" as __String, node, dontResolveAlias))
+        ) {
+            // We have a transpiled default import where the `require` resolves to an ES module with a `module.exports` named
+            // export. If `esModuleInterop` is enabled, this will work:
+            //
+            // const dep_1 = __importDefault(require("./dep.mjs")); // wraps like { default: require("./dep.mjs") }
+            // dep_1.default; // require("./dep.mjs") -> the `module.exports` export value
+            //
+            // But without `esModuleInterop`, it will be broken:
+            //
+            // const dep_1 = require("./dep.mjs"); // the `module.exports` export value (could be primitive)
+            // dep_1.default; // `default` property access on the `module.exports` export value
+            //
+            // We could try to resolve the 'default' property in the latter case, but it's a mistake to run in this
+            // environment without `esModuleInterop`, so just error.
+            if (!getESModuleInterop(compilerOptions)) {
+                error(node.name, Diagnostics.Module_0_can_only_be_default_imported_using_the_1_flag, symbolToString(moduleSymbol), "esModuleInterop");
+                return undefined;
+            }
+            markSymbolOfAliasDeclarationIfTypeOnly(node, exportModuleDotExportsSymbol, /*finalTarget*/ undefined, /*overwriteEmpty*/ false);
+            return exportModuleDotExportsSymbol;
         }
         else {
             exportDefaultSymbol = resolveExportByName(moduleSymbol, InternalSymbolName.Default, node, dontResolveAlias);
         }
 
-        const file = moduleSymbol.declarations?.find(isSourceFile);
-        const specifier = getModuleSpecifierForImportOrExport(node);
         if (!specifier) {
             return exportDefaultSymbol;
         }
@@ -4953,10 +4987,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const referenceParent = referencingLocation.parent;
-            if (
-                (isImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent)) ||
-                isImportCall(referenceParent)
-            ) {
+            const namespaceImport = isImportDeclaration(referenceParent) && getNamespaceDeclarationNode(referenceParent);
+            if (namespaceImport || isImportCall(referenceParent)) {
                 const reference = isImportCall(referenceParent) ? referenceParent.arguments[0] : referenceParent.moduleSpecifier;
                 const type = getTypeOfSymbol(symbol);
                 const defaultOnlyType = getTypeWithSyntheticDefaultOnly(type, symbol, moduleSymbol!, reference);
@@ -4965,14 +4997,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const targetFile = moduleSymbol?.declarations?.find(isSourceFile);
-                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(getEmitSyntaxForModuleSpecifierExpression(reference), host.getImpliedNodeFormatForEmit(targetFile));
-                if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
-                    let sigs = getSignaturesOfStructuredType(type, SignatureKind.Call);
-                    if (!sigs || !sigs.length) {
-                        sigs = getSignaturesOfStructuredType(type, SignatureKind.Construct);
+                const usageMode = getEmitSyntaxForModuleSpecifierExpression(reference);
+                let exportModuleDotExportsSymbol: Symbol | undefined;
+                if (
+                    namespaceImport && targetFile &&
+                    ModuleKind.Node20 <= moduleKind && moduleKind <= ModuleKind.NodeNext &&
+                    usageMode === ModuleKind.CommonJS && host.getImpliedNodeFormatForEmit(targetFile) === ModuleKind.ESNext &&
+                    (exportModuleDotExportsSymbol = resolveExportByName(symbol, "module.exports" as __String, namespaceImport, dontResolveAlias))
+                ) {
+                    if (!suppressInteropError && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
+                        error(referencingLocation, Diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export, "esModuleInterop");
                     }
+                    if (getESModuleInterop(compilerOptions) && hasSignatures(type)) {
+                        return cloneTypeAsModuleType(exportModuleDotExportsSymbol, type, referenceParent);
+                    }
+                    return exportModuleDotExportsSymbol;
+                }
+
+                const isEsmCjsRef = targetFile && isESMFormatImportImportingCommonjsFormatFile(usageMode, host.getImpliedNodeFormatForEmit(targetFile));
+                if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
                     if (
-                        (sigs && sigs.length) ||
+                        hasSignatures(type) ||
                         getPropertyOfType(type, InternalSymbolName.Default, /*skipObjectFunctionPropertyAugment*/ true) ||
                         isEsmCjsRef
                     ) {
@@ -4985,6 +5030,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return symbol;
+    }
+
+    function hasSignatures(type: Type): boolean {
+        return some(getSignaturesOfStructuredType(type, SignatureKind.Call)) || some(getSignaturesOfStructuredType(type, SignatureKind.Construct));
     }
 
     /**
