@@ -15,4 +15,5 @@
 -    window.localStorage
 -    ~~~~~~
 -!!! error TS2304: Cannot find name 'window'.
+-    
 +<no content>

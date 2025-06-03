@@ -187,12 +187,16 @@ var (
 	libs_lib_esnext_decorators_d_ts string
 	//go:embed libs/lib.esnext.disposable.d.ts
 	libs_lib_esnext_disposable_d_ts string
+	//go:embed libs/lib.esnext.float16.d.ts
+	libs_lib_esnext_float16_d_ts string
 	//go:embed libs/lib.esnext.full.d.ts
 	libs_lib_esnext_full_d_ts string
 	//go:embed libs/lib.esnext.intl.d.ts
 	libs_lib_esnext_intl_d_ts string
 	//go:embed libs/lib.esnext.iterator.d.ts
 	libs_lib_esnext_iterator_d_ts string
+	//go:embed libs/lib.esnext.promise.d.ts
+	libs_lib_esnext_promise_d_ts string
 	//go:embed libs/lib.scripthost.d.ts
 	libs_lib_scripthost_d_ts string
 	//go:embed libs/lib.webworker.asynciterable.d.ts
@@ -294,9 +298,11 @@ var embeddedContents = map[string]string{
 	"libs/lib.esnext.d.ts":                  libs_lib_esnext_d_ts,
 	"libs/lib.esnext.decorators.d.ts":       libs_lib_esnext_decorators_d_ts,
 	"libs/lib.esnext.disposable.d.ts":       libs_lib_esnext_disposable_d_ts,
+	"libs/lib.esnext.float16.d.ts":          libs_lib_esnext_float16_d_ts,
 	"libs/lib.esnext.full.d.ts":             libs_lib_esnext_full_d_ts,
 	"libs/lib.esnext.intl.d.ts":             libs_lib_esnext_intl_d_ts,
 	"libs/lib.esnext.iterator.d.ts":         libs_lib_esnext_iterator_d_ts,
+	"libs/lib.esnext.promise.d.ts":          libs_lib_esnext_promise_d_ts,
 	"libs/lib.scripthost.d.ts":              libs_lib_scripthost_d_ts,
 	"libs/lib.webworker.asynciterable.d.ts": libs_lib_webworker_asynciterable_d_ts,
 	"libs/lib.webworker.d.ts":               libs_lib_webworker_d_ts,
@@ -393,9 +399,11 @@ var libsEntries = []fs.DirEntry{
 	&fileInfo{name: "lib.esnext.d.ts", size: int64(len(libs_lib_esnext_d_ts))},
 	&fileInfo{name: "lib.esnext.decorators.d.ts", size: int64(len(libs_lib_esnext_decorators_d_ts))},
 	&fileInfo{name: "lib.esnext.disposable.d.ts", size: int64(len(libs_lib_esnext_disposable_d_ts))},
+	&fileInfo{name: "lib.esnext.float16.d.ts", size: int64(len(libs_lib_esnext_float16_d_ts))},
 	&fileInfo{name: "lib.esnext.full.d.ts", size: int64(len(libs_lib_esnext_full_d_ts))},
 	&fileInfo{name: "lib.esnext.intl.d.ts", size: int64(len(libs_lib_esnext_intl_d_ts))},
 	&fileInfo{name: "lib.esnext.iterator.d.ts", size: int64(len(libs_lib_esnext_iterator_d_ts))},
+	&fileInfo{name: "lib.esnext.promise.d.ts", size: int64(len(libs_lib_esnext_promise_d_ts))},
 	&fileInfo{name: "lib.scripthost.d.ts", size: int64(len(libs_lib_scripthost_d_ts))},
 	&fileInfo{name: "lib.webworker.asynciterable.d.ts", size: int64(len(libs_lib_webworker_asynciterable_d_ts))},
 	&fileInfo{name: "lib.webworker.d.ts", size: int64(len(libs_lib_webworker_d_ts))},

@@ -1,0 +1,28 @@
+--- old.arrowExpressionBodyJSDoc.errors.txt
++++ new.arrowExpressionBodyJSDoc.errors.txt
+@@= skipped -0, +0 lines =@@
+-mytest.js(6,44): error TS2322: Type 'string' is not assignable to type 'T'.
++mytest.js(6,45): error TS2322: Type 'string' is not assignable to type 'T'.
+   'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+-mytest.js(13,44): error TS2322: Type 'string' is not assignable to type 'T'.
++mytest.js(13,61): error TS2322: Type 'string' is not assignable to type 'T'.
+   'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+
+
+@@= skipped -10, +10 lines =@@
+      * @returns {T} result value
+      */
+     const foo1 = value => /** @type {string} */({ ...value });
+-                                               ~~~~~~~~~~~~~~
++                                                ~~~~~~~~~~~~
+ !!! error TS2322: Type 'string' is not assignable to type 'T'.
+ !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.
+     
+@@= skipped -10, +10 lines =@@
+      * @returns {T} result value
+      */
+     const foo2 = value => /** @type {string} */(/** @type {T} */({ ...value }));
+-                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++                                                                ~~~~~~~~~~~~~~
+ !!! error TS2322: Type 'string' is not assignable to type 'T'.
+ !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'string'.

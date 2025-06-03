@@ -1,0 +1,13 @@
+--- old.symbolProperty58.types
++++ new.symbolProperty58.types
+@@= skipped -6, +6 lines =@@
+ }
+
+ var obj = {
+->obj : { [Symbol.foo]: number; }
+->{    [Symbol.foo]: 0} : { [Symbol.foo]: number; }
++>obj : { [x: string]: number; }
++>{    [Symbol.foo]: 0} : { [x: string]: number; }
+
+     [Symbol.foo]: 0
+ >[Symbol.foo] : number

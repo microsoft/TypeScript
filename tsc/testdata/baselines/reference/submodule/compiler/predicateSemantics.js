@@ -46,6 +46,34 @@ function foo(this: Object | undefined) {
     return this ?? 0;
 }
 
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+  const maybe = null as true | null;
+  let i = 0;
+  const d = (i++, maybe) ?? true; // ok
+  const e = (i++, i++) ?? true; // error
+  const f = (maybe, i++) ?? true; // error
+}
+
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+  constructor() {
+    const p = new.target ?? 32;
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/60614
+declare function tag<T>(
+  strings: TemplateStringsArray,
+  ...values: number[]
+): T | null;
+
+tag`foo${1}` ?? 32; // ok
+
+`foo${1}` ?? 32; // error
+`foo` ?? 32; // error
+
+
 //// [predicateSemantics.js]
 // OK: One or other operand is possibly nullish
 const test1 = (cond ? undefined : 32) ?? "possibly reached";
@@ -81,3 +109,20 @@ function foo() {
     // Should be OK
     return this ?? 0;
 }
+// https://github.com/microsoft/TypeScript/issues/60401
+{
+    const maybe = null;
+    let i = 0;
+    const d = (i++, maybe) ?? true; // ok
+    const e = (i++, i++) ?? true; // error
+    const f = (maybe, i++) ?? true; // error
+}
+// https://github.com/microsoft/TypeScript/issues/60439
+class X {
+    constructor() {
+        const p = new.target ?? 32;
+    }
+}
+tag `foo${1}` ?? 32; // ok
+`foo${1}` ?? 32; // error
+`foo` ?? 32; // error

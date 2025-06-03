@@ -101,7 +101,7 @@ declare global {
 
         /**
          * Performs the specified action for each element in the iterator.
-         * @param callbackfn  A function that accepts up to two arguments. forEach calls the callbackfn function one time for each element in the iterator.
+         * @param callbackfn A function that accepts up to two arguments. forEach calls the callbackfn function one time for each element in the iterator.
          */
         forEach(callbackfn: (value: T, index: number) => void): void;
 

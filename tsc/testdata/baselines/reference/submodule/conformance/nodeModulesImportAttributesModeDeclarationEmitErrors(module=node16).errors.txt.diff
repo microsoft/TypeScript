@@ -1,12 +1,12 @@
 --- old.nodeModulesImportAttributesModeDeclarationEmitErrors(module=node16).errors.txt
 +++ new.nodeModulesImportAttributesModeDeclarationEmitErrors(module=node16).errors.txt
 @@= skipped -0, +0 lines =@@
- /index.ts(2,45): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+ /index.ts(2,45): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
  /index.ts(2,71): error TS1453: `resolution-mode` should be either `require` or `import`.
 -/index.ts(4,10): error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
 +/index.ts(4,10): error TS2305: Module '"./node_modules/pkg/require"' has no exported member 'ImportInterface'.
- /index.ts(4,39): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
- /index.ts(6,76): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+ /index.ts(4,39): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+ /index.ts(6,76): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 
 @@= skipped -14, +14 lines =@@
      // not type-only
@@ -15,5 +15,5 @@
 -!!! error TS2305: Module '"pkg"' has no exported member 'ImportInterface'.
 +!!! error TS2305: Module '"./node_modules/pkg/require"' has no exported member 'ImportInterface'.
                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+ !!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
      // not exclusively type-only

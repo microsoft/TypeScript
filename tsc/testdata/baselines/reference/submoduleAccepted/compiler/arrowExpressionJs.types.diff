@@ -1,0 +1,9 @@
+--- old.arrowExpressionJs.types
++++ new.arrowExpressionJs.types
+@@= skipped -10, +10 lines =@@
+ >value => /** @type {T} */({ ...value }) : <T>(value: T | undefined) => T
+ >value : T | undefined
+ >({ ...value }) : T
++>{ ...value } : T
+ >{ ...value } : {}
+ >value : T | undefined

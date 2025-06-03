@@ -1,0 +1,13 @@
+--- old.declarationEmitNoInvalidCommentReuse2.js
++++ new.declarationEmitNoInvalidCommentReuse2.js
+@@= skipped -21, +21 lines =@@
+
+ //// [a.d.ts]
+ export declare const _: {
+-    foo: import("./id").Id<{}>;
++    foo: {};
+ };
++///////////
+ /**
+  * huh
+  */ 

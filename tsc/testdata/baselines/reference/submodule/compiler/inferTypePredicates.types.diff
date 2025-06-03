@@ -142,3 +142,30 @@
  >foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
 
    foobar.foo;
+@@= skipped -12, +12 lines =@@
+ // https://github.com/microsoft/TypeScript/issues/60778
+ const arrTest: Array<number> = [1, 2, null, 3].filter(
+ >arrTest : number[]
+->[1, 2, null, 3].filter(  (x) => (x != null) satisfies boolean,) : number[]
++>[1, 2, null, 3].filter(  (x) => (x != null) satisfies boolean,) : (number | null)[]
+ >[1, 2, null, 3].filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+ >[1, 2, null, 3] : (number | null)[]
+ >1 : 1
+@@= skipped -9, +9 lines =@@
+ >filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+
+   (x) => (x != null) satisfies boolean,
+->(x) => (x != null) satisfies boolean : (x: number | null) => x is number
++>(x) => (x != null) satisfies boolean : (x: number | null) => boolean
+ >x : number | null
+ >(x != null) satisfies boolean : boolean
+ >(x != null) : boolean
+@@= skipped -10, +10 lines =@@
+ );
+
+ function isEmptyString(x: unknown) {
+->isEmptyString : (x: unknown) => x is ""
++>isEmptyString : (x: unknown) => boolean
+ >x : unknown
+
+   const rv = x === "";

@@ -1,0 +1,26 @@
+--- old.controlFlowForStatementContinueIntoIncrementor1.types
++++ new.controlFlowForStatementContinueIntoIncrementor1.types
+@@= skipped -17, +17 lines =@@
+ >10 : 10
+
+     i = iNext // error
+->i = iNext : string | number
++>i = iNext : number
+ >i : number
+->iNext : string | number
++>iNext : number
+
+   ) {
+     if (i == 5) {
+@@= skipped -42, +42 lines =@@
+ >10 : 10
+
+     i = iNext // error
+->i = iNext : string | number
++>i = iNext : number
+ >i : number
+->iNext : string | number
++>iNext : number
+
+   ) {
+     if (i == 5) {

@@ -1,0 +1,26 @@
+--- old.checkingObjectWithThisInNamePositionNoCrash.types
++++ new.checkingObjectWithThisInNamePositionNoCrash.types
+@@= skipped -1, +1 lines =@@
+
+ === checkingObjectWithThisInNamePositionNoCrash.ts ===
+ export const thing = {
+->thing : { doit(): { [x: number]: string; }; }
+->{    doit() {        return {            [this.a]: "", // should refer to the outer object with the doit method, notably not present        }    }} : { doit(): { [x: number]: string; }; }
++>thing : { doit(): any; }
++>{    doit() {        return {            [this.a]: "", // should refer to the outer object with the doit method, notably not present        }    }} : { doit(): any; }
+
+     doit() {
+->doit : () => { [x: number]: string; }
++>doit : () => any
+
+         return {
+ >{            [this.a]: "", // should refer to the outer object with the doit method, notably not present        } : { [x: number]: string; }
+@@= skipped -12, +12 lines =@@
+             [this.a]: "", // should refer to the outer object with the doit method, notably not present
+ >[this.a] : string
+ >this.a : any
+->this : { doit(): { [x: number]: string; }; }
++>this : { doit(): any; }
+ >a : any
+ >"" : ""
+         }

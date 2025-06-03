@@ -1,6 +1,6 @@
 --- old.readonlyMembers.js
 +++ new.readonlyMembers.js
-@@= skipped -70, +70 lines =@@
+@@= skipped -75, +75 lines =@@
  var x = { a: 0 };
  x.a = 1; // Error
  x.b = 1; // Error
@@ -25,6 +25,15 @@
 +            this.b = 1; // Error
 +            this.c = 1; // Error
          };
+-        (function () {
+-            _this.a = 1; // Ok
+-            _this.b = 1; // Ok
+-            _this.c = 1; // Error
++        (() => {
++            this.a = 1; // Ok
++            this.b = 1; // Ok
++            this.c = 1; // Error
+         })();
      }
 -    Object.defineProperty(C.prototype, "c", {
 -        get: function () { return 1; },
@@ -44,7 +53,7 @@
  var o = {
      get a() { return 1; },
      get b() { return 1; },
-@@= skipped -54, +49 lines =@@
+@@= skipped -59, +54 lines =@@
  N.a = 1; // Error
  N.b = 1;
  N.c = 1;

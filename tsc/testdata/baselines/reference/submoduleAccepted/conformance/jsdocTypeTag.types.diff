@@ -20,6 +20,15 @@
  var n;
 @@= skipped -8, +8 lines =@@
 
+ /** @type {BigInt} */
+ var BI;
+->BI : bigint
++>BI : BigInt
+
+ /** @type {bigint} */
+ var bi;
+@@= skipped -8, +8 lines =@@
+
  /** @type {Boolean} */
  var B;
 ->B : boolean
@@ -115,6 +124,13 @@
 
  var b: boolean;
  >b : boolean
+
+ var BI: bigint;
+->BI : bigint
++>BI : BigInt
+
+ var bi: bigint;
+ >bi : bigint
 
  var V :void;
 ->V : void

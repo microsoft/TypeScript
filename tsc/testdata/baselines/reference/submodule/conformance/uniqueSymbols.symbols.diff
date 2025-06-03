@@ -524,7 +524,7 @@
  Math.random() * 2 ? s : "a";
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
- >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >s : Symbol(s, Decl(uniqueSymbols.ts, 119, 13))
@@ -532,7 +532,7 @@
  Math.random() * 2 ? N.s : "a";
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
- >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 ->N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 120, 27))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
@@ -544,7 +544,7 @@
  Math.random() * 2 ? N["s"] : "a";
 ->Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>Math.random : Symbol(random, Decl(lib.es5.d.ts, --, --))
- >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+ >Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
 ->random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 +>random : Symbol(random, Decl(lib.es5.d.ts, --, --))
  >N : Symbol(N, Decl(uniqueSymbols.ts, 119, 31))

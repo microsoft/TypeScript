@@ -1,0 +1,21 @@
+--- old.jsxFragmentFactoryReference(jsx=react).errors.txt
++++ new.jsxFragmentFactoryReference(jsx=react).errors.txt
+@@= skipped -0, +0 lines =@@
+ jsxFragmentFactoryReference.tsx(3,9): error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+-jsxFragmentFactoryReference.tsx(3,9): error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
+-
+-
+-==== jsxFragmentFactoryReference.tsx (2 errors) ====
++
++
++==== jsxFragmentFactoryReference.tsx (1 errors) ====
+     export class LoggedOut {
+         content = () => (
+             <></>
+             ~~
+ !!! error TS2874: This JSX tag requires 'React' to be in scope, but it could not be found.
+-            ~~
+-!!! error TS2879: Using JSX fragments requires fragment factory 'React' to be in scope, but it could not be found.
+         )
+     }
+     

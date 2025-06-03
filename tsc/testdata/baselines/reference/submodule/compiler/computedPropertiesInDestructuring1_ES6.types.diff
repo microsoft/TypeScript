@@ -1,0 +1,22 @@
+--- old.computedPropertiesInDestructuring1_ES6.types
++++ new.computedPropertiesInDestructuring1_ES6.types
+@@= skipped -113, +113 lines =@@
+ ({[foo]: bar} = {bar: "bar"});
+ >({[foo]: bar} = {bar: "bar"}) : { bar: string; }
+ >{[foo]: bar} = {bar: "bar"} : { bar: string; }
+->{[foo]: bar} : { [foo]: any; }
++>{[foo]: bar} : { [x: string]: any; }
+ >[foo] : any
+ >foo : string
+ >bar : any
+@@= skipped -33, +33 lines =@@
+
+ [{[foo]: bar4}] = [{bar: "bar"}];
+ >[{[foo]: bar4}] = [{bar: "bar"}] : [{ bar: string; }]
+->[{[foo]: bar4}] : [{ [foo]: any; }]
+->{[foo]: bar4} : { [foo]: any; }
++>[{[foo]: bar4}] : [{ [x: string]: any; }]
++>{[foo]: bar4} : { [x: string]: any; }
+ >[foo] : any
+ >foo : string
+ >bar4 : any

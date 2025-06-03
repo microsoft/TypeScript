@@ -1,0 +1,18 @@
+--- old.destructuringParameterDeclaration9(strict=true).symbols
++++ new.destructuringParameterDeclaration9(strict=true).symbols
+@@= skipped -8, +8 lines =@@
+ >prepareConfig : Symbol(prepareConfig, Decl(index.js, 0, 0))
+
+     additionalFiles: {
++>additionalFiles : Symbol(additionalFiles)
++
+         json = []
+ >json : Symbol(json, Decl(index.js, 5, 22))
+
+@@= skipped -49, +51 lines =@@
+  */
+ function f1({ a: { json = [] } = {} } = {}) { return json }
+ >f1 : Symbol(f1, Decl(index.js, 29, 1))
++>a : Symbol(a)
+ >json : Symbol(json, Decl(index.js, 36, 18))
+ >json : Symbol(json, Decl(index.js, 36, 18))

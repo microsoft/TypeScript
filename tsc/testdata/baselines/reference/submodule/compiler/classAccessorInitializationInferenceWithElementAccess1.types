@@ -1,0 +1,55 @@
+//// [tests/cases/compiler/classAccessorInitializationInferenceWithElementAccess1.ts] ////
+
+=== classAccessorInitializationInferenceWithElementAccess1.ts ===
+export class Cls {
+>Cls : Cls
+
+    accessor x;
+>x : any
+
+    accessor y;
+>y : any
+
+    accessor z;
+>z : any
+
+    accessor 0;
+>0 : any
+
+    constructor(seed: number) {
+>seed : number
+
+        this['x'] = [seed];
+>this['x'] = [seed] : number[]
+>this['x'] : any
+>this : this
+>'x' : "x"
+>[seed] : number[]
+>seed : number
+
+        this['y'] = { seed };
+>this['y'] = { seed } : { seed: number; }
+>this['y'] : any
+>this : this
+>'y' : "y"
+>{ seed } : { seed: number; }
+>seed : number
+
+        this['z'] = `${seed}`;
+>this['z'] = `${seed}` : string
+>this['z'] : any
+>this : this
+>'z' : "z"
+>`${seed}` : string
+>seed : number
+
+        this[0] = [seed];
+>this[0] = [seed] : number[]
+>this[0] : any
+>this : this
+>0 : 0
+>[seed] : number[]
+>seed : number
+    }
+}
+

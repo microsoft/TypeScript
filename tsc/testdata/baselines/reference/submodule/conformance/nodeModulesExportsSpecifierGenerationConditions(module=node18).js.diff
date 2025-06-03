@@ -1,0 +1,16 @@
+--- old.nodeModulesExportsSpecifierGenerationConditions(module=node18).js
++++ new.nodeModulesExportsSpecifierGenerationConditions(module=node18).js
+@@= skipped -33, +33 lines =@@
+ }
+
+ //// [index.js]
+-export const a = (await import("inner")).x();
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
++exports.a = void 0;
++exports.a = (await import("inner")).x();
+
+
+ //// [index.d.ts]
+-export declare const a: import("inner/other").Thing;
++export declare const a: any;

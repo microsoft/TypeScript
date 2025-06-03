@@ -12,6 +12,7 @@ const a: DOMIterable = { abc: "Hello" }
 // by the module above ^
 window.localStorage
 
+
 //// [index.js]
 /// <reference lib="dom.iterable" />
 const a = { abc: "Hello" };

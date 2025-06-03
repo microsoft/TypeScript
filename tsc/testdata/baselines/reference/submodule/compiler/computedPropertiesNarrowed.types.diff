@@ -1,0 +1,13 @@
+--- old.computedPropertiesNarrowed.types
++++ new.computedPropertiesNarrowed.types
+@@= skipped -75, +75 lines =@@
+ >Symbol : SymbolConstructor
+
+ export let o4 = {
+->o4 : { [u]: number; }
+->{    [u]: 1 // Should error, nut a unique symbol} : { [u]: number; }
++>o4 : { [x: symbol]: number; }
++>{    [u]: 1 // Should error, nut a unique symbol} : { [x: symbol]: number; }
+
+     [u]: 1 // Should error, nut a unique symbol
+ >[u] : number

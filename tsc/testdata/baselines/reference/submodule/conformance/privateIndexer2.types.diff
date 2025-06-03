@@ -1,0 +1,11 @@
+--- old.privateIndexer2.types
++++ new.privateIndexer2.types
+@@= skipped -4, +4 lines =@@
+
+ var x = {
+ >x : any
+->{    private [x: string]: string;} : { [x]: any; string: any; }
++>{    private [x: string]: string;} : { [x: number]: any; string: any; }
+
+     private [x: string]: string;
+ >[x : any

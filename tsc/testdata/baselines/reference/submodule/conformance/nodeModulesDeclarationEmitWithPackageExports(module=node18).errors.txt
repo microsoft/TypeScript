@@ -1,0 +1,101 @@
+node_modules/inner/index.d.cts(5,1): error TS1036: Statements are not allowed in ambient contexts.
+node_modules/inner/index.d.mts(5,1): error TS1036: Statements are not allowed in ambient contexts.
+node_modules/inner/index.d.ts(5,1): error TS1036: Statements are not allowed in ambient contexts.
+
+
+==== index.ts (0 errors) ====
+    // esm format file
+    import * as cjs from "package/cjs";
+    import * as mjs from "package/mjs";
+    import * as type from "package";
+    export const a = cjs;
+    export const b = mjs;
+    export const c = type;
+    import * as cjsi from "inner/cjs";
+    import * as mjsi from "inner/mjs";
+    import * as typei from "inner";
+    export const d = cjsi;
+    export const e = mjsi;
+    export const f = typei;
+==== index.mts (0 errors) ====
+    // esm format file
+    import * as cjs from "package/cjs";
+    import * as mjs from "package/mjs";
+    import * as type from "package";
+    export const a = cjs;
+    export const b = mjs;
+    export const c = type;
+    import * as cjsi from "inner/cjs";
+    import * as mjsi from "inner/mjs";
+    import * as typei from "inner";
+    export const d = cjsi;
+    export const e = mjsi;
+    export const f = typei;
+==== index.cts (0 errors) ====
+    // cjs format file
+    import * as cjs from "package/cjs";
+    import * as mjs from "package/mjs";
+    import * as type from "package";
+    export const a = cjs;
+    export const b = mjs;
+    export const c = type;
+    import * as cjsi from "inner/cjs";
+    import * as mjsi from "inner/mjs";
+    import * as typei from "inner";
+    export const d = cjsi;
+    export const e = mjsi;
+    export const f = typei;
+==== node_modules/inner/index.d.ts (1 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs";
+    import * as mjs from "inner/mjs";
+    import * as type from "inner";
+    cjs;
+    ~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+    mjs;
+    type;
+    export const cjsMain = true;
+==== node_modules/inner/index.d.mts (1 errors) ====
+    // esm format file
+    import * as cjs from "inner/cjs";
+    import * as mjs from "inner/mjs";
+    import * as type from "inner";
+    cjs;
+    ~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+    mjs;
+    type;
+    export const esm = true;
+==== node_modules/inner/index.d.cts (1 errors) ====
+    // cjs format file
+    import * as cjs from "inner/cjs";
+    import * as mjs from "inner/mjs";
+    import * as type from "inner";
+    cjs;
+    ~~~
+!!! error TS1036: Statements are not allowed in ambient contexts.
+    mjs;
+    type;
+    export const cjsNonmain = true;
+==== package.json (0 errors) ====
+    {
+        "name": "package",
+        "private": true,
+        "type": "module",
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }
+==== node_modules/inner/package.json (0 errors) ====
+    {
+        "name": "inner",
+        "private": true,
+        "exports": {
+            "./cjs": "./index.cjs",
+            "./mjs": "./index.mjs",
+            ".": "./index.js"
+        }
+    }

@@ -1,0 +1,31 @@
+--- old.transformParenthesizesConditionalSubexpression.types
++++ new.transformParenthesizesConditionalSubexpression.types
+@@= skipped -5, +5 lines =@@
+ >'k' : "k"
+
+ var a = { p  : (true ? { [K] : 'v'}        : null) }
+->a : { p: { [K]: string; }; }
+->{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [K]: string; }; }
+->p : { [K]: string; }
+->(true ? { [K] : 'v'}        : null) : { [K]: string; }
+->true ? { [K] : 'v'}        : null : { [K]: string; }
++>a : { p: { [x: string]: string; }; }
++>{ p  : (true ? { [K] : 'v'}        : null) } : { p: { [x: string]: string; }; }
++>p : { [x: string]: string; }
++>(true ? { [K] : 'v'}        : null) : { [x: string]: string; }
++>true ? { [K] : 'v'}        : null : { [x: string]: string; }
+ >true : true
+->{ [K] : 'v'} : { [K]: string; }
++>{ [K] : 'v'} : { [x: string]: string; }
+ >[K] : string
+ >K : string
+ >'v' : "v"
+@@= skipped -19, +19 lines =@@
+ >true ? { [K] : 'v'} as any : null : any
+ >true : true
+ >{ [K] : 'v'} as any : any
+->{ [K] : 'v'} : { [K]: string; }
++>{ [K] : 'v'} : { [x: string]: string; }
+ >[K] : string
+ >K : string
+ >'v' : "v"

@@ -1,0 +1,12 @@
+jsxFragmentFactoryReference.tsx(3,9): error TS2875: This JSX tag requires the module path 'react/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+
+
+==== jsxFragmentFactoryReference.tsx (1 errors) ====
+    export class LoggedOut {
+        content = () => (
+            <></>
+            ~~
+!!! error TS2875: This JSX tag requires the module path 'react/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
+        )
+    }
+    

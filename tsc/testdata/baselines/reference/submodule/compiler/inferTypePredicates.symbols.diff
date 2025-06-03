@@ -417,3 +417,14 @@
 
  } else {
    let t: never = str;  // should OK
+@@= skipped -133, +133 lines =@@
+ const arrTest: Array<number> = [1, 2, null, 3].filter(
+ >arrTest : Symbol(arrTest, Decl(inferTypePredicates.ts, 280, 5))
+ >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->[1, 2, null, 3].filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>[1, 2, null, 3].filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
++>filter : Symbol(filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+   (x) => (x != null) satisfies boolean,
+ >x : Symbol(x, Decl(inferTypePredicates.ts, 281, 3))

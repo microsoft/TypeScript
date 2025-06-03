@@ -1,0 +1,38 @@
+--- old.nodeModulesTypesVersionPackageExports(module=node18).types
++++ new.nodeModulesTypesVersionPackageExports(module=node18).types
+@@= skipped -5, +5 lines =@@
+ >mod : typeof mod
+
+ mod.correctVersionApplied;
+->mod.correctVersionApplied : true
++>mod.correctVersionApplied : any
+ >mod : typeof mod
+->correctVersionApplied : true
++>correctVersionApplied : any
+
+ === index.mts ===
+ // esm format file
+@@= skipped -10, +10 lines =@@
+ >mod : typeof mod
+
+ mod.correctVersionApplied;
+->mod.correctVersionApplied : true
++>mod.correctVersionApplied : any
+ >mod : typeof mod
+->correctVersionApplied : true
++>correctVersionApplied : any
+
+ === index.cts ===
+ // cjs format file
+@@= skipped -10, +10 lines =@@
+ >mod : typeof mod
+
+ mod.correctVersionApplied;
+->mod.correctVersionApplied : true
++>mod.correctVersionApplied : any
+ >mod : typeof mod
+->correctVersionApplied : true
++>correctVersionApplied : any
+
+ === node_modules/inner/index.d.ts ===
+ // cjs format file

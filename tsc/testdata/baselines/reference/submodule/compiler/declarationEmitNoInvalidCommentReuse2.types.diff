@@ -1,0 +1,26 @@
+--- old.declarationEmitNoInvalidCommentReuse2.types
++++ new.declarationEmitNoInvalidCommentReuse2.types
+@@= skipped -1, +1 lines =@@
+
+ === a.ts ===
+ import { object } from "./obj.ts";
+->object : { foo: import("id").Id<{}>; }
++>object : { foo: {}; }
+
+ export const _ = object;
+->_ : { foo: import("id").Id<{}>; }
+->object : { foo: import("id").Id<{}>; }
++>_ : { foo: {}; }
++>object : { foo: {}; }
+
+ ///////////
+ /**
+@@= skipped -12, +12 lines =@@
+  */
+ === obj.d.ts ===
+ export declare const object: import("./id.ts").Id<{
+->object : { foo: import("./id.ts").Id<{}>; }
++>object : { foo: {}; }
+
+     foo: import("./id.ts" ).Id<{}>;
+ >foo : {}

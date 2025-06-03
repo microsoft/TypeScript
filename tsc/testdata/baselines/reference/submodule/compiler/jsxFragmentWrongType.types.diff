@@ -1,0 +1,17 @@
+--- old.jsxFragmentWrongType.types
++++ new.jsxFragmentWrongType.types
+@@= skipped -16, +16 lines =@@
+ const jsxWithReactFragment = <React.Fragment>{test}</React.Fragment>;
+ >jsxWithReactFragment : JSX.Element
+ ><React.Fragment>{test}</React.Fragment> : JSX.Element
+->React.Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
++>React.Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>
+ >React : typeof React
+->Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
++>Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>
+ >test : () => string
+->React.Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
++>React.Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>
+ >React : typeof React
+->Fragment : React.ExoticComponent<{ children?: React.ReactNode | undefined; }>
++>Fragment : React.ExoticComponent<{ children?: React.ReactNode; }>

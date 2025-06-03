@@ -1,0 +1,33 @@
+error TS2318: Cannot find global type 'IterableIterator'.
+canFollowGetSetKeyword.ts(3,5): error TS1003: Identifier expected.
+canFollowGetSetKeyword.ts(7,5): error TS1003: Identifier expected.
+canFollowGetSetKeyword.ts(11,5): error TS1003: Identifier expected.
+canFollowGetSetKeyword.ts(15,5): error TS1003: Identifier expected.
+
+
+!!! error TS2318: Cannot find global type 'IterableIterator'.
+==== canFollowGetSetKeyword.ts (4 errors) ====
+    class A {
+        get
+        *x() {}
+        ~
+!!! error TS1003: Identifier expected.
+    }
+    class B {
+        set
+        *x() {}
+        ~
+!!! error TS1003: Identifier expected.
+    }
+    const c = {
+        get
+        *x() {}
+        ~
+!!! error TS1003: Identifier expected.
+    };
+    const d = {
+        set
+        *x() {}
+        ~
+!!! error TS1003: Identifier expected.
+    };

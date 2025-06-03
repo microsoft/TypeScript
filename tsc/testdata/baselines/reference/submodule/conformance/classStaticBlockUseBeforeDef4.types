@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/classes/classStaticBlock/classStaticBlockUseBeforeDef4.ts] ////
+
+=== classStaticBlockUseBeforeDef4.ts ===
+class C {
+>C : C
+
+    static accessor x;
+>x : any
+
+    static {
+        this.x = 1;
+>this.x = 1 : 1
+>this.x : any
+>this : typeof C
+>x : any
+>1 : 1
+    }
+    static accessor y = this.x;
+>y : any
+>this.x : any
+>this : typeof C
+>x : any
+
+    static accessor z;
+>z : any
+
+    static {
+        this.z = this.y;
+>this.z = this.y : any
+>this.z : any
+>this : typeof C
+>z : any
+>this.y : any
+>this : typeof C
+>y : any
+    }
+}
+

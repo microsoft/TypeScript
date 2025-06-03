@@ -5106,12 +5106,12 @@ func (c *Checker) checkImportAttributes(declaration *ast.Node) {
 			if c.moduleKind == core.ModuleKindNodeNext {
 				message = diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
 			} else {
-				message = diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve
+				message = diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
 			}
 		case c.moduleKind == core.ModuleKindNodeNext:
 			message = diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
 		default:
-			message = diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve
+			message = diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
 		}
 		c.grammarErrorOnNode(node, message)
 		return
@@ -10184,7 +10184,7 @@ func (c *Checker) checkImportMetaProperty(node *ast.Node) *Type {
 			c.error(node, diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output)
 		}
 	} else if c.moduleKind < core.ModuleKindES2020 && c.moduleKind != core.ModuleKindSystem {
-		c.error(node, diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_or_nodenext)
+		c.error(node, diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_or_nodenext)
 	}
 	// file := ast.GetSourceFileOfNode(node)
 	// Debug.assert(file.Flags&ast.NodeFlagsPossiblyContainsImportMeta != 0, "Containing file is missing import meta node flag.")

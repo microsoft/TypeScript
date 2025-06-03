@@ -10,7 +10,8 @@ function f1() {
     type C = [...A, ...A];
 >C : [s: string, s: string]
 
-    return function fn(...args: C) { }
+    return function fn(...args: C) { } satisfies any
+>function fn(...args: C) { } satisfies any : (s: string, s_1: string) => void
 >function fn(...args: C) { } : (s: string, s_1: string) => void
 >fn : (s: string, s_1: string) => void
 >args : [s: string, s: string]
@@ -31,7 +32,8 @@ function f2() {
     type D = [...A, ...A, ...B, ...A, ...B, ...B, ...A, ...C];
 >D : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]
 
-    return function fn(...args: D) { }
+    return function fn(...args: D) { } satisfies any;
+>function fn(...args: D) { } satisfies any : (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void
 >function fn(...args: D) { } : (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void
 >fn : (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void
 >args : [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]

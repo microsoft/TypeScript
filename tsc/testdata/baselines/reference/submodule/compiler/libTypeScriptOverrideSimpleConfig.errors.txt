@@ -12,5 +12,6 @@
     // This should fail because libdom has been replaced
     // by the module above ^
     window.localStorage
+    
 ==== /somepath/node_modules/@typescript/lib-dom/index.d.ts (0 errors) ====
     interface ABC { abc: string }

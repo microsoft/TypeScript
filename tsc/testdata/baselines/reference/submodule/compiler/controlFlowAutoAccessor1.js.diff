@@ -1,0 +1,43 @@
+--- old.controlFlowAutoAccessor1.js
++++ new.controlFlowAutoAccessor1.js
+@@= skipped -60, +60 lines =@@
+
+
+ //// [controlFlowAutoAccessor1.js]
+-"use strict";
+ class Example {
+     accessor test;
+     constructor(test) {
+@@= skipped -50, +49 lines =@@
+
+ //// [controlFlowAutoAccessor1.d.ts]
+ declare class Example {
+-    accessor test: number;
++    accessor test: any;
+     constructor(test: number);
+-    getTest(): number;
++    getTest(): any;
+ }
+ declare class Example2 {
+-    accessor test: number | undefined;
++    accessor test: any;
+     constructor(test: number | undefined);
+-    getTest(): number;
++    getTest(): any;
+ }
++// https://github.com/microsoft/TypeScript/issues/59728
+ declare class Example3 {
+-    accessor value: number | null;
++    accessor value: any;
+     constructor(n: number);
+ }
+ declare var n: number;
+ declare class Example4 {
+-    static accessor value: number | null;
+-}
+-declare class Example5 {
+     static accessor value: any;
++}
++declare class Example5 {
++    static accessor value: any; // error
+ }

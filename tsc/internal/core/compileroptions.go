@@ -36,6 +36,7 @@ type CompilerOptions struct {
 	DisableSourceOfProjectReferenceRedirect   Tristate                                  `json:"disableSourceOfProjectReferenceRedirect,omitzero"`
 	DisableSolutionSearching                  Tristate                                  `json:"disableSolutionSearching,omitzero"`
 	DisableReferencedProjectLoad              Tristate                                  `json:"disableReferencedProjectLoad,omitzero"`
+	ErasableSyntaxOnly                        Tristate                                  `json:"erasableSyntaxOnly,omitzero"`
 	ESModuleInterop                           Tristate                                  `json:"esModuleInterop,omitzero"`
 	ExactOptionalPropertyTypes                Tristate                                  `json:"exactOptionalPropertyTypes,omitzero"`
 	ExperimentalDecorators                    Tristate                                  `json:"experimentalDecorators,omitzero"`
@@ -54,6 +55,7 @@ type CompilerOptions struct {
 	JsxImportSource                           string                                    `json:"jsxImportSource,omitzero"`
 	KeyofStringsOnly                          Tristate                                  `json:"keyofStringsOnly,omitzero"`
 	Lib                                       []string                                  `json:"lib,omitzero"`
+	LibReplacement                            Tristate                                  `json:"libReplacement,omitzero"`
 	Locale                                    string                                    `json:"locale,omitzero"`
 	MapRoot                                   string                                    `json:"mapRoot,omitzero"`
 	Module                                    ModuleKind                                `json:"module,omitzero"`
@@ -345,6 +347,7 @@ const (
 	ModuleKindESNext ModuleKind = 99
 	// Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
 	ModuleKindNode16   ModuleKind = 100
+	ModuleKindNode18   ModuleKind = 101
 	ModuleKindNodeNext ModuleKind = 199
 	// Emit as written
 	ModuleKindPreserve ModuleKind = 200

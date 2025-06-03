@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/declarationEmitGenericTypeParamerSerialization2.ts] ////
+
+=== declarationEmitGenericTypeParamerSerialization2.ts ===
+type ExpandRecursively<T> = {} & {
+>ExpandRecursively : Symbol(ExpandRecursively, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 0, 23))
+
+  [P in keyof T]: T[P]
+>P : Symbol(P, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 1, 3))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 0, 23))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 0, 23))
+>P : Symbol(P, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 1, 3))
+}
+
+type G<T = string> = {
+>G : Symbol(G, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 2, 1))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  get readonlyProperty(): T;
+>readonlyProperty : Symbol(readonlyProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 22))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  field: T;
+>field : Symbol(field, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 5, 28))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  method(p: T): T;
+>method : Symbol(method, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 6, 11))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 7, 9))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  fnField: (p: T) => T;
+>fnField : Symbol(fnField, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 7, 18))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 8, 12))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  set writeOnlyProperty(p: T);
+>writeOnlyProperty : Symbol(writeOnlyProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 8, 23))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 9, 24))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  get property(): T;
+>property : Symbol(property, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 9, 30), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 10, 20))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  set property(p: T);
+>property : Symbol(property, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 9, 30), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 10, 20))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 11, 15))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  get divergentProperty(): string | T;
+>divergentProperty : Symbol(divergentProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 11, 21), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 12, 38))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+  set divergentProperty(p: number | T);
+>divergentProperty : Symbol(divergentProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 11, 21), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 12, 38))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 13, 24))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 4, 7))
+
+};
+
+export const x = (() => null! as ExpandRecursively<G>)();
+>x : Symbol(x, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 16, 12))
+>ExpandRecursively : Symbol(ExpandRecursively, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 0, 0))
+>G : Symbol(G, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 2, 1))
+
+
+function makeV() {
+>makeV : Symbol(makeV, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 16, 57))
+
+  type X<T> = {
+>X : Symbol(X, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 19, 18))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    get readonlyProperty(): T;
+>readonlyProperty : Symbol(readonlyProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 15))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    field: T;
+>field : Symbol(field, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 21, 30))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    method(p: T): T;
+>method : Symbol(method, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 22, 13))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 23, 11))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    fnField: (p: T) => T;
+>fnField : Symbol(fnField, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 23, 20))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 24, 14))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    set writeOnlyProperty(p: T);
+>writeOnlyProperty : Symbol(writeOnlyProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 24, 25))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 25, 26))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    get property(): T;
+>property : Symbol(property, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 25, 32), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 26, 22))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    set property(p: T);
+>property : Symbol(property, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 25, 32), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 26, 22))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 27, 17))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    get divergentProperty(): string | T;
+>divergentProperty : Symbol(divergentProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 27, 23), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 28, 40))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+
+    set divergentProperty(p: number | T);
+>divergentProperty : Symbol(divergentProperty, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 27, 23), Decl(declarationEmitGenericTypeParamerSerialization2.ts, 28, 40))
+>p : Symbol(p, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 29, 26))
+>T : Symbol(T, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 20, 9))
+   }
+  return null! as X<number>
+>X : Symbol(X, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 19, 18))
+}
+
+export const v = makeV();
+>v : Symbol(v, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 34, 12))
+>makeV : Symbol(makeV, Decl(declarationEmitGenericTypeParamerSerialization2.ts, 16, 57))
+

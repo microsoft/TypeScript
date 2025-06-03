@@ -1,0 +1,40 @@
+typeInterfaceDeclarationsInBlockStatements1.ts(12,21): error TS2304: Cannot find name 's'.
+typeInterfaceDeclarationsInBlockStatements1.ts(29,21): error TS2304: Cannot find name 's'.
+
+
+==== typeInterfaceDeclarationsInBlockStatements1.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/60175
+    
+    function f1() {
+      if (true) type s = string;
+      console.log("" as s);
+    }
+    
+    function f2() {
+      if (true) {
+        type s = string;
+      }
+      console.log("" as s);
+                        ~
+!!! error TS2304: Cannot find name 's'.
+    }
+    
+    function f3() {
+      if (true)
+        interface s {
+          length: number;
+        }
+      console.log("" as s);
+    }
+    
+    function f4() {
+      if (true) {
+        interface s {
+          length: number;
+        }
+      }
+      console.log("" as s);
+                        ~
+!!! error TS2304: Cannot find name 's'.
+    }
+    

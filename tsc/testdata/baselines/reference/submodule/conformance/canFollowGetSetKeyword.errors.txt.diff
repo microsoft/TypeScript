@@ -1,0 +1,46 @@
+--- old.canFollowGetSetKeyword.errors.txt
++++ new.canFollowGetSetKeyword.errors.txt
+@@= skipped -0, +0 lines =@@
+ error TS2318: Cannot find global type 'IterableIterator'.
+-canFollowGetSetKeyword.ts(10,5): error TS18004: No value exists in scope for the shorthand property 'get'. Either declare one or provide an initializer.
+-canFollowGetSetKeyword.ts(11,5): error TS1005: ',' expected.
+-canFollowGetSetKeyword.ts(14,5): error TS18004: No value exists in scope for the shorthand property 'set'. Either declare one or provide an initializer.
+-canFollowGetSetKeyword.ts(15,5): error TS1005: ',' expected.
++canFollowGetSetKeyword.ts(3,5): error TS1003: Identifier expected.
++canFollowGetSetKeyword.ts(7,5): error TS1003: Identifier expected.
++canFollowGetSetKeyword.ts(11,5): error TS1003: Identifier expected.
++canFollowGetSetKeyword.ts(15,5): error TS1003: Identifier expected.
+
+
+ !!! error TS2318: Cannot find global type 'IterableIterator'.
+@@= skipped -9, +9 lines =@@
+     class A {
+         get
+         *x() {}
++        ~
++!!! error TS1003: Identifier expected.
+     }
+     class B {
+         set
+         *x() {}
++        ~
++!!! error TS1003: Identifier expected.
+     }
+     const c = {
+         get
+-        ~~~
+-!!! error TS18004: No value exists in scope for the shorthand property 'get'. Either declare one or provide an initializer.
+         *x() {}
+         ~
+-!!! error TS1005: ',' expected.
++!!! error TS1003: Identifier expected.
+     };
+     const d = {
+         set
+-        ~~~
+-!!! error TS18004: No value exists in scope for the shorthand property 'set'. Either declare one or provide an initializer.
+         *x() {}
+         ~
+-!!! error TS1005: ',' expected.
++!!! error TS1003: Identifier expected.
+     };

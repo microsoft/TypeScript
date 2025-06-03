@@ -1,0 +1,19 @@
+--- old.isolatedDeclarationsAddUndefined2.types
++++ new.isolatedDeclarationsAddUndefined2.types
+@@= skipped -31, +31 lines =@@
+ }
+
+ export function test1(x?: Array | undefined): void {}
+->test1 : (x?: Array | undefined) => void
++>test1 : (x?: any) => void
+ >x : any
+
+ export function test2(x?: Unresolved | undefined): void {}
+->test2 : (x?: Unresolved | undefined) => void
++>test2 : (x?: any) => void
+ >x : any
+
+ export function test3(x?: Unresolved): void {}
+->test3 : (x?: Unresolved) => void
++>test3 : (x?: any) => void
+ >x : any

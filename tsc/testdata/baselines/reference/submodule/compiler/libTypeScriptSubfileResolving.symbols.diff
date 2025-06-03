@@ -16,4 +16,3 @@
 +>window.localStorage : Symbol(localStorage, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 +>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 +>localStorage : Symbol(localStorage, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
-+

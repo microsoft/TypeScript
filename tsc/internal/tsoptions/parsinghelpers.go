@@ -219,6 +219,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.Declaration = parseTristate(value)
 	case "downlevelIteration":
 		allOptions.DownlevelIteration = parseTristate(value)
+	case "erasableSyntaxOnly":
+		allOptions.ErasableSyntaxOnly = parseTristate(value)
 	case "emitDeclarationOnly":
 		allOptions.EmitDeclarationOnly = parseTristate(value)
 	case "extendedDiagnostics":
@@ -273,6 +275,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		} else {
 			allOptions.Lib = parseStringArray(value)
 		}
+	case "libReplacement":
+		allOptions.LibReplacement = parseTristate(value)
 	case "listEmittedFiles":
 		allOptions.ListEmittedFiles = parseTristate(value)
 	case "listFiles":

@@ -482,6 +482,23 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		AffectsBuildInfo:           true,
 		AffectsSemanticDiagnostics: true,
 	},
+	{
+		Name:                       "erasableSyntaxOnly",
+		Kind:                       CommandLineOptionTypeBoolean,
+		Category:                   diagnostics.Interop_Constraints,
+		Description:                diagnostics.Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript,
+		DefaultValueDescription:    false,
+		AffectsBuildInfo:           true,
+		AffectsSemanticDiagnostics: true,
+	},
+	{
+		Name:                    "libReplacement",
+		Kind:                    CommandLineOptionTypeBoolean,
+		AffectsProgramStructure: true,
+		Category:                diagnostics.Language_and_Environment,
+		Description:             diagnostics.Enable_lib_replacement,
+		DefaultValueDescription: true,
+	},
 
 	// Strict Type Checks
 	{

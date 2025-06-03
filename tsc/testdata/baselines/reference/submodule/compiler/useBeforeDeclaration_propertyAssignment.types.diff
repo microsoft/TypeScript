@@ -1,0 +1,11 @@
+--- old.useBeforeDeclaration_propertyAssignment.types
++++ new.useBeforeDeclaration_propertyAssignment.types
+@@= skipped -67, +67 lines =@@
+ >1 : 1
+
+         ...{get [D.D]() {return 0;}} // should be an error
+->{get [D.D]() {return 0;}} : { [D.D]: number; }
++>{get [D.D]() {return 0;}} : { [x: string]: number; }
+ >[D.D] : number
+ >D.D : string
+ >D : typeof D

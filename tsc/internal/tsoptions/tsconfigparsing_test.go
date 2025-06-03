@@ -899,6 +899,7 @@ func TestParseSrcCompiler(t *testing.T) {
 		"performance.ts",
 		"performanceCore.ts",
 		"program.ts",
+		"programDiagnostics.ts",
 		"resolutionCache.ts",
 		"scanner.ts",
 		"semver.ts",

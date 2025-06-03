@@ -1,0 +1,23 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorTypes1.ts] ////
+
+=== isolatedDeclarationErrorTypes1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60192
+
+import { Unresolved } from "foo";
+>Unresolved : Symbol(Unresolved, Decl(isolatedDeclarationErrorTypes1.ts, 2, 8))
+
+export const foo1 = (type?: Unresolved): void => {};
+>foo1 : Symbol(foo1, Decl(isolatedDeclarationErrorTypes1.ts, 4, 12))
+>type : Symbol(type, Decl(isolatedDeclarationErrorTypes1.ts, 4, 21))
+>Unresolved : Symbol(Unresolved, Decl(isolatedDeclarationErrorTypes1.ts, 2, 8))
+
+export const foo2 = (type?: Unresolved | undefined): void => {};
+>foo2 : Symbol(foo2, Decl(isolatedDeclarationErrorTypes1.ts, 5, 12))
+>type : Symbol(type, Decl(isolatedDeclarationErrorTypes1.ts, 5, 21))
+>Unresolved : Symbol(Unresolved, Decl(isolatedDeclarationErrorTypes1.ts, 2, 8))
+
+export const foo3 = (type: Unresolved): void => {};
+>foo3 : Symbol(foo3, Decl(isolatedDeclarationErrorTypes1.ts, 6, 12))
+>type : Symbol(type, Decl(isolatedDeclarationErrorTypes1.ts, 6, 21))
+>Unresolved : Symbol(Unresolved, Decl(isolatedDeclarationErrorTypes1.ts, 2, 8))
+

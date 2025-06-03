@@ -1,0 +1,52 @@
+b.mts(23,3): error TS2339: Property 'default' does not exist on type '() => void'.
+b.mts(24,3): error TS2339: Property 'default' does not exist on type '() => void'.
+b.mts(25,3): error TS2339: Property 'default' does not exist on type '() => void'.
+b.mts(26,3): error TS2339: Property 'default' does not exist on type '() => void'.
+b.mts(27,14): error TS2339: Property 'default' does not exist on type '() => void'.
+b.mts(28,10): error TS2339: Property 'default' does not exist on type '() => void'.
+
+
+==== mod.cts (0 errors) ====
+    declare function fun(): void;
+    export default fun;
+==== b.mts (6 errors) ====
+    import a from "./mod.cjs";
+    import { default as b } from "./mod.cjs";
+    import c, { default as d } from "./mod.cjs";
+    import * as self from "./b.mjs";
+    export { default } from "./mod.cjs";
+    export { default as def } from "./mod.cjs";
+    
+    a === b;
+    b === c;
+    c === d;
+    d === self.default;
+    self.default === self.def;
+    
+    // should all fail
+    a();
+    b();
+    c();
+    d();
+    self.default();
+    self.def();
+    
+    // should all work
+    a.default();
+      ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '() => void'.
+    b.default();
+      ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '() => void'.
+    c.default();
+      ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '() => void'.
+    d.default();
+      ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '() => void'.
+    self.default.default();
+                 ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '() => void'.
+    self.def.default();
+             ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type '() => void'.

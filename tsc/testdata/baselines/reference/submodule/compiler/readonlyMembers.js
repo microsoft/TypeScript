@@ -21,7 +21,12 @@ class C {
             this.a = 1;  // Error
             this.b = 1;  // Error
             this.c = 1;  // Error
-        }
+        };
+        (() => {
+            this.a = 1;  // Ok
+            this.b = 1;  // Ok
+            this.c = 1;  // Error
+        })();
     }
     foo() {
         this.a = 1;  // Error
@@ -84,6 +89,11 @@ class C {
             this.b = 1; // Error
             this.c = 1; // Error
         };
+        (() => {
+            this.a = 1; // Ok
+            this.b = 1; // Ok
+            this.c = 1; // Error
+        })();
     }
     foo() {
         this.a = 1; // Error

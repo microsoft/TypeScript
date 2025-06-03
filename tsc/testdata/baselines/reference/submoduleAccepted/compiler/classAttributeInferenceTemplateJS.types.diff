@@ -1,0 +1,35 @@
+--- old.classAttributeInferenceTemplateJS.types
++++ new.classAttributeInferenceTemplateJS.types
+@@= skipped -40, +40 lines =@@
+ >MyClass2 : MyClass2
+
+     accessor property;
+->property : string
++>property : any
+
+     accessor property2;
+->property2 : string
++>property2 : any
+
+     constructor() {
+         const variable = 'something'
+@@= skipped -12, +12 lines =@@
+
+         this.property = `foo`; // Correctly inferred as `string`
+ >this.property = `foo` : "foo"
+->this.property : string
++>this.property : any
+ >this : this
+->property : string
++>property : any
+ >`foo` : "foo"
+
+         this.property2 = `foo-${variable}`; // Causes an error
+ >this.property2 = `foo-${variable}` : "foo-something"
+->this.property2 : string
++>this.property2 : any
+ >this : this
+->property2 : string
++>property2 : any
+ >`foo-${variable}` : "foo-something"
+ >variable : "something"

@@ -1,22 +1,50 @@
 --- old.nodeModulesPackagePatternExports(module=nodenext).errors.txt
 +++ new.nodeModulesPackagePatternExports(module=nodenext).errors.txt
 @@= skipped -0, +0 lines =@@
- index.cts(3,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
- node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 -node_modules/inner/index.d.ts(2,13): error TS2303: Circular definition of import alias 'cjs'.
- node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
++index.cts(3,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
++node_modules/inner/index.d.cts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
++node_modules/inner/index.d.ts(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
 
 
-@@= skipped -29, +28 lines =@@
+ ==== index.ts (0 errors) ====
+@@= skipped -16, +18 lines =@@
      cjsi;
      mjsi;
      typei;
--==== node_modules/inner/index.d.ts (2 errors) ====
-+==== node_modules/inner/index.d.ts (1 errors) ====
+-==== index.cts (0 errors) ====
++==== index.cts (1 errors) ====
+     // cjs format file
+     import * as cjsi from "inner/cjs/index";
+     import * as mjsi from "inner/mjs/index";
++                          ~~~~~~~~~~~~~~~~~
++!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+     import * as typei from "inner/js/index";
+     cjsi;
+     mjsi;
+@@= skipped -11, +13 lines =@@
+ ==== node_modules/inner/index.d.ts (1 errors) ====
      // cjs format file
      import * as cjs from "inner/cjs/index";
 -                ~~~
 -!!! error TS2303: Circular definition of import alias 'cjs'.
      import * as mjs from "inner/mjs/index";
-                          ~~~~~~~~~~~~~~~~~
- !!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
++                         ~~~~~~~~~~~~~~~~~
++!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+     import * as type from "inner/js/index";
+     export { cjs };
+     export { mjs };
+@@= skipped -15, +15 lines =@@
+     export { cjs };
+     export { mjs };
+     export { type };
+-==== node_modules/inner/index.d.cts (0 errors) ====
++==== node_modules/inner/index.d.cts (1 errors) ====
+     // cjs format file
+     import * as cjs from "inner/cjs/index";
+     import * as mjs from "inner/mjs/index";
++                         ~~~~~~~~~~~~~~~~~
++!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("inner/mjs/index")' call instead.
+     import * as type from "inner/js/index";
+     export { cjs };
+     export { mjs };

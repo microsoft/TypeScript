@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/declarationEmitOptionalMappedTypePropertyNoStrictNullChecks3.ts] ////
+
+=== createApi.ts ===
+type Id<T> = {
+>Id : Symbol(Id, Decl(createApi.ts, 0, 0))
+>T : Symbol(T, Decl(createApi.ts, 0, 8))
+
+  [K in keyof T]: T[K];
+>K : Symbol(K, Decl(createApi.ts, 1, 3))
+>T : Symbol(T, Decl(createApi.ts, 0, 8))
+>T : Symbol(T, Decl(createApi.ts, 0, 8))
+>K : Symbol(K, Decl(createApi.ts, 1, 3))
+
+} & {};
+
+export declare function createApi<Definitions>(_: { endpoints: Definitions }): {
+>createApi : Symbol(createApi, Decl(createApi.ts, 2, 7))
+>Definitions : Symbol(Definitions, Decl(createApi.ts, 4, 34))
+>_ : Symbol(_, Decl(createApi.ts, 4, 47))
+>endpoints : Symbol(endpoints, Decl(createApi.ts, 4, 51))
+>Definitions : Symbol(Definitions, Decl(createApi.ts, 4, 34))
+
+  [K in keyof Definitions as `use${Capitalize<K & string>}Query`]: () => Id<{
+>K : Symbol(K, Decl(createApi.ts, 5, 3))
+>Definitions : Symbol(Definitions, Decl(createApi.ts, 4, 34))
+>Capitalize : Symbol(Capitalize, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(createApi.ts, 5, 3))
+>Id : Symbol(Id, Decl(createApi.ts, 0, 0))
+
+    status: "uninitialized";
+>status : Symbol(status, Decl(createApi.ts, 5, 77))
+
+    originalArgs?: never;
+>originalArgs : Symbol(originalArgs, Decl(createApi.ts, 6, 28))
+
+  }>;
+};
+
+=== index.ts ===
+import { createApi } from "./createApi";
+>createApi : Symbol(createApi, Decl(index.ts, 0, 8))
+
+const slice = createApi({
+>slice : Symbol(slice, Decl(index.ts, 2, 5))
+>createApi : Symbol(createApi, Decl(index.ts, 0, 8))
+
+  endpoints: {
+>endpoints : Symbol(endpoints, Decl(index.ts, 2, 25))
+
+    test: {
+>test : Symbol(test, Decl(index.ts, 3, 14))
+
+      url: `/user`,
+>url : Symbol(url, Decl(index.ts, 4, 11))
+
+    },
+  },
+});
+
+export const { useTestQuery } = slice;
+>useTestQuery : Symbol(useTestQuery, Decl(index.ts, 10, 14))
+>slice : Symbol(slice, Decl(index.ts, 2, 5))
+

@@ -1,0 +1,86 @@
+--- old.destructuringParameterDeclaration9(strict=true).types
++++ new.destructuringParameterDeclaration9(strict=true).types
+@@= skipped -5, +5 lines =@@
+  * @param {Partial<Record<'json' | 'jsonc' | 'json5', string[]>>} [config.additionalFiles]
+  */
+ export function prepareConfig({
+->prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined;}) => void
++>prepareConfig : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: { json?: never[] | undefined; } | undefined; }) => void
+
+     additionalFiles: {
+ >additionalFiles : any
+
+         json = []
+->json : string[]
++>json : never[]
+ >[] : never[]
+
+     } = {}
+@@= skipped -16, +16 lines =@@
+ >{} : {}
+
+     json // string[]
+->json : string[]
++>json : never[]
+ }
+
+ export function prepareConfigWithoutAnnotation({
+->prepareConfigWithoutAnnotation : ({ additionalFiles: { json } }?: { additionalFiles?: { json?: never[] | undefined; } | undefined; }) => void
++>prepareConfigWithoutAnnotation : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: { json?: never[] | undefined; } | undefined; }) => void
+
+     additionalFiles: {
+ >additionalFiles : any
+
+         json = []
+->json : any[]
++>json : never[]
+ >[] : never[]
+
+     } = {}
+@@= skipped -20, +20 lines =@@
+ >{} : {}
+
+     json
+->json : any[]
++>json : never[]
+ }
+
+ /** @type {(param: {
+   additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+ }) => void} */
+ export const prepareConfigWithContextualSignature = ({
+->prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
+->({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
++>prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined; }) => void
++>({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined; }) => void
+
+     additionalFiles: {
+ >additionalFiles : any
+@@= skipped -33, +33 lines =@@
+  * @param {{ a?: { json?: string[] }}} [config]
+  */
+ function f1({ a: { json = [] } = {} } = {}) { return json }
+->f1 : ({ a: { json } }?: { a?: { json?: string[]; }; }) => string[]
++>f1 : ({ a: { json = [] } = {} }?: { a?: { json?: never[] | undefined; } | undefined; }) => never[]
+ >a : any
+->json : string[]
++>json : never[]
+ >[] : never[]
+ >{} : {}
+ >{} : {}
+->json : string[]
++>json : never[]
+
+ /**
+  * @param {[[string[]?]?]} [x]
+  */
+ function f2([[json = []] = []] = []) { return json }
+->f2 : ([[json]]?: [[string[]?]?]) => string[]
+->json : string[]
++>f2 : ([[json = []] = []]?: [([(never[] | undefined)?] | undefined)?]) => never[]
++>json : never[]
+ >[] : never[]
+ >[] : []
+ >[] : []
+->json : string[]
++>json : never[]

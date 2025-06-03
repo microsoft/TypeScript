@@ -196,10 +196,12 @@ interface SetIterator<T> extends IteratorObject<T, BuiltinIteratorReturn, unknow
 interface Set<T> {
     /** Iterates over values in the set. */
     [Symbol.iterator](): SetIterator<T>;
+
     /**
      * Returns an iterable of [v,v] pairs for every value `v` in the set.
      */
     entries(): SetIterator<[T, T]>;
+
     /**
      * Despite its name, returns an iterable of the values in the set.
      */
@@ -272,14 +274,17 @@ interface String {
 
 interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -291,30 +296,32 @@ interface Int8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Int8Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Int8Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int8Array<ArrayBuffer>;
 }
 
 interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -326,22 +333,22 @@ interface Uint8ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Uint8Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Uint8Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8Array<ArrayBuffer>;
 }
 
 interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
@@ -363,18 +370,17 @@ interface Uint8ClampedArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Uint8ClampedArray<ArrayBuffer>;
+    from(elements: Iterable<number>): Uint8ClampedArray<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray<ArrayBuffer>;
 }
 
 interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
@@ -400,30 +406,32 @@ interface Int16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Int16Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Int16Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int16Array<ArrayBuffer>;
 }
 
 interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -435,30 +443,32 @@ interface Uint16ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Uint16Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Uint16Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint16Array<ArrayBuffer>;
 }
 
 interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -470,30 +480,32 @@ interface Int32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Int32Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Int32Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Int32Array<ArrayBuffer>;
 }
 
 interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -505,30 +517,32 @@ interface Uint32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Uint32Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Uint32Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Uint32Array<ArrayBuffer>;
 }
 
 interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -540,30 +554,32 @@ interface Float32ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Float32Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Float32Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float32Array<ArrayBuffer>;
 }
 
 interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
     [Symbol.iterator](): ArrayIterator<number>;
+
     /**
      * Returns an array of key, value pairs for every entry in the array
      */
     entries(): ArrayIterator<[number, number]>;
+
     /**
      * Returns an list of keys in the array
      */
     keys(): ArrayIterator<number>;
+
     /**
      * Returns an list of values in the array
      */
@@ -575,16 +591,15 @@ interface Float64ArrayConstructor {
 
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
-     * @param mapfn A mapping function to call on every element of the array.
-     * @param thisArg Value of 'this' used to invoke the mapfn.
+     * @param elements An iterable object to convert to an array.
      */
-    from(arrayLike: Iterable<number>): Float64Array<ArrayBuffer>;
+    from(elements: Iterable<number>): Float64Array<ArrayBuffer>;
+
     /**
      * Creates an array from an array-like or iterable object.
-     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param elements An iterable object to convert to an array.
      * @param mapfn A mapping function to call on every element of the array.
      * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    from<T>(arrayLike: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>;
+    from<T>(elements: Iterable<T>, mapfn?: (v: T, k: number) => number, thisArg?: any): Float64Array<ArrayBuffer>;
 }

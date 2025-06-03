@@ -1,0 +1,41 @@
+--- old.circularTypeofWithVarOrFunc.types
++++ new.circularTypeofWithVarOrFunc.types
+@@= skipped -15, +15 lines =@@
+ >varOfAliasedType2 : any
+
+ function func(): typeAlias3 { return null; }
+->func : () => typeAlias3
++>func : () => any
+
+ var varOfAliasedType3 = func();
+ >varOfAliasedType3 : any
+ >func() : any
+->func : () => typeAlias3
++>func : () => any
+
+ type typeAlias3 = typeof varOfAliasedType3;
+ >typeAlias3 : any
+@@= skipped -23, +23 lines =@@
+
+ type R = ReturnType<typeof mul>;
+ >R : any
+->mul : (input: Input) => R
++>mul : (input: Input) => any
+
+ function mul(input: Input): R {
+->mul : (input: Input) => R
++>mul : (input: Input) => any
+ >input : Input
+
+   return input.a * input.b;
+@@= skipped -20, +20 lines =@@
+
+ type R2 = ReturnType<typeof f>;
+ >R2 : any
+->f : () => R2
++>f : () => any
+
+ function f(): R2 { return 0; }
+->f : () => R2
++>f : () => any
+ >0 : 0

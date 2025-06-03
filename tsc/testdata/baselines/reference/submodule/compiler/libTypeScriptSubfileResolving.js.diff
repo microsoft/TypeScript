@@ -1,6 +1,6 @@
 --- old.libTypeScriptSubfileResolving.js
 +++ new.libTypeScriptSubfileResolving.js
-@@= skipped -13, +13 lines =@@
+@@= skipped -14, +14 lines =@@
 
  //// [index.js]
  /// <reference lib="dom.iterable" />

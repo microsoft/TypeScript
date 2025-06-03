@@ -1,0 +1,137 @@
+--- old.controlFlowAutoAccessor1.types
++++ new.controlFlowAutoAccessor1.types
+@@= skipped -4, +4 lines =@@
+ >Example : Example
+
+   accessor test;
+->test : number
++>test : any
+
+   constructor(test: number) {
+ >test : number
+
+     this.test = test;
+ >this.test = test : number
+->this.test : number
++>this.test : any
+ >this : this
+->test : number
++>test : any
+ >test : number
+   }
+
+   getTest() {
+->getTest : () => number
++>getTest : () => any
+
+     return this.test;
+->this.test : number
++>this.test : any
+ >this : this
+->test : number
++>test : any
+   }
+ }
+
+@@= skipped -27, +27 lines =@@
+ >Example2 : Example2
+
+   accessor test;
+->test : number | undefined
++>test : any
+
+   constructor(test: number | undefined) {
+ >test : number | undefined
+
+     this.test = test;
+ >this.test = test : number | undefined
+->this.test : number | undefined
++>this.test : any
+ >this : this
+->test : number | undefined
++>test : any
+ >test : number | undefined
+   }
+
+   getTest() {
+->getTest : () => number
++>getTest : () => any
+
+     if (this.test) {
+->this.test : number | undefined
++>this.test : any
+ >this : this
+->test : number | undefined
++>test : any
+
+       return this.test;
+->this.test : number
++>this.test : any
+ >this : this
+->test : number
++>test : any
+     }
+     return 0;
+ >0 : 0
+@@= skipped -37, +37 lines =@@
+ >Example3 : Example3
+
+   accessor value;
+->value : number | null
++>value : any
+
+   constructor(n: number) {
+ >n : number
+
+     this.value = n;
+ >this.value = n : number
+->this.value : number | null
++>this.value : any
+ >this : this
+->value : number | null
++>value : any
+ >n : number
+
+     if (n < 0) {
+@@= skipped -19, +19 lines =@@
+
+       this.value = null;
+ >this.value = null : null
+->this.value : number | null
++>this.value : any
+ >this : this
+->value : number | null
++>value : any
+     }
+   }
+ }
+@@= skipped -14, +14 lines =@@
+ >Example4 : Example4
+
+   static accessor value;
+->value : number | null
++>value : any
+
+   static {
+     this.value = n;
+ >this.value = n : number
+->this.value : number | null
++>this.value : any
+ >this : typeof Example4
+->value : number | null
++>value : any
+ >n : number
+
+     if (n < 0) {
+@@= skipped -17, +17 lines =@@
+
+       this.value = null;
+ >this.value = null : null
+->this.value : number | null
++>this.value : any
+ >this : typeof Example4
+->value : number | null
++>value : any
+     }
+   }
+ }

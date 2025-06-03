@@ -46,7 +46,7 @@ interface SharedArrayBuffer {
      *
      * [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/growable)
      */
-    get growable(): number;
+    get growable(): boolean;
 
     /**
      * If this SharedArrayBuffer is growable, returns the maximum byte length given during construction; returns the byte length if not.

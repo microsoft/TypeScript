@@ -1,0 +1,11 @@
+--- old.declarationEmitOptionalMappedTypePropertyNoStrictNullChecks3.js
++++ new.declarationEmitOptionalMappedTypePropertyNoStrictNullChecks3.js
+@@= skipped -41, +41 lines =@@
+ };
+ export {};
+ //// [index.d.ts]
+-export declare const useTestQuery: () => {
+-    status: "uninitialized";
+-    originalArgs?: never;
+-};
++export {};

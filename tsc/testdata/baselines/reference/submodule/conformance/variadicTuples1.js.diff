@@ -389,10 +389,12 @@
  declare function getUser(id: string, options?: {
      x?: string;
  }): string;
-@@= skipped -39, +46 lines =@@
+@@= skipped -38, +45 lines =@@
+     y?: number;
      z?: boolean;
  }): void;
- declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args: T) => U;
+-declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args: [...T]) => U;
++declare function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U): (...args: T) => U;
 +// Repro from #40235
  type Numbers = number[];
  type Unbounded = [...Numbers, boolean];

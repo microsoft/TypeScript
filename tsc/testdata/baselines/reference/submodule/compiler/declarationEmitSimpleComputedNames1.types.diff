@@ -1,0 +1,13 @@
+--- old.declarationEmitSimpleComputedNames1.types
++++ new.declarationEmitSimpleComputedNames1.types
+@@= skipped -13, +13 lines =@@
+ >"f2" : "f2"
+
+ export const conatainer = {
+->conatainer : { [fieldName]: () => string; }
+->{    [fieldName]() {        return "result";    }} : { [fieldName]: () => string; }
++>conatainer : { [x: string]: () => string; }
++>{    [fieldName]() {        return "result";    }} : { [x: string]: () => string; }
+
+     [fieldName]() {
+ >[fieldName] : () => string

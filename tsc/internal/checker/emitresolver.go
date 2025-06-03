@@ -952,8 +952,12 @@ func (r *emitResolver) CreateLateBoundIndexSignatures(emitContext *printer.EmitC
 			// }
 			node := requestNodeBuilder.IndexInfoToIndexSignatureDeclaration(info, enclosingDeclaration, flags, internalFlags, tracker)
 			if node != nil && isStatic {
+				modNodes := []*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}
 				mods := node.Modifiers()
-				mods = emitContext.Factory.NewModifierList(append([]*ast.Node{emitContext.Factory.NewModifier(ast.KindStaticKeyword)}, mods.Nodes...))
+				if mods != nil {
+					modNodes = append(modNodes, mods.Nodes...)
+				}
+				mods = emitContext.Factory.NewModifierList(modNodes)
 				node = emitContext.Factory.UpdateIndexSignatureDeclaration(
 					node.AsIndexSignatureDeclaration(),
 					mods,

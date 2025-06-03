@@ -1,0 +1,19 @@
+--- old.returnConditionalExpressionJSDocCast.types
++++ new.returnConditionalExpressionJSDocCast.types
+@@= skipped -13, +13 lines =@@
+  * @returns {String}
+  */
+ function source(type = "javascript") {
+->source : (type?: string | undefined) => string
++>source : (type?: string | undefined) => String
+ >type : string | undefined
+ >"javascript" : "javascript"
+
+     return /** @type {String} */ (
+->(        type            ? sources.get(type)            : sources.get("some other thing")    ) : string
++>(        type            ? sources.get(type)            : sources.get("some other thing")    ) : String
+
+         type
++>type            ? sources.get(type)            : sources.get("some other thing") : String
+ >type            ? sources.get(type)            : sources.get("some other thing") : string | undefined
+ >type : string

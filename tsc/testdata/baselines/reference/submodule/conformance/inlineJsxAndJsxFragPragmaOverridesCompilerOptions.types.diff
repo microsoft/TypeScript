@@ -1,45 +1,37 @@
 --- old.inlineJsxAndJsxFragPragmaOverridesCompilerOptions.types
 +++ new.inlineJsxAndJsxFragPragmaOverridesCompilerOptions.types
-@@= skipped -33, +33 lines =@@
- >Fragment : () => void
+@@= skipped -34, +34 lines =@@
 
  <><span></span></>
--><><span></span></> : error
+ ><><span></span></> : any
 -><span></span> : error
-+><><span></span></> : any
 +><span></span> : any
  >span : any
  >span : any
 
 @@= skipped -15, +15 lines =@@
- >Frag : () => void
 
  <><div></div></>
--><><div></div></> : error
+ ><><div></div></> : any
 -><div></div> : error
-+><><div></div></> : any
 +><div></div> : any
  >div : any
  >div : any
 
 @@= skipped -14, +14 lines =@@
- >h : () => void
 
  <><div></div></>
--><><div></div></> : error
+ ><><div></div></> : any
 -><div></div> : error
-+><><div></div></> : any
 +><div></div> : any
  >div : any
  >div : any
 
 @@= skipped -15, +15 lines =@@
- >Fragment : () => void
 
  <><span></span></>
--><><span></span></> : error
+ ><><span></span></> : any
 -><span></span> : error
-+><><span></span></> : any
 +><span></span> : any
  >span : any
  >span : any

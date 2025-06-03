@@ -1,0 +1,25 @@
+--- old.classStaticBlockUseBeforeDef4.errors.txt
++++ new.classStaticBlockUseBeforeDef4.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++classStaticBlockUseBeforeDef4.ts(2,21): error TS7008: Member 'x' implicitly has an 'any' type.
++classStaticBlockUseBeforeDef4.ts(7,21): error TS7008: Member 'z' implicitly has an 'any' type.
++
++
++==== classStaticBlockUseBeforeDef4.ts (2 errors) ====
++    class C {
++        static accessor x;
++                        ~
++!!! error TS7008: Member 'x' implicitly has an 'any' type.
++        static {
++            this.x = 1;
++        }
++        static accessor y = this.x;
++        static accessor z;
++                        ~
++!!! error TS7008: Member 'z' implicitly has an 'any' type.
++        static {
++            this.z = this.y;
++        }
++    }
++    

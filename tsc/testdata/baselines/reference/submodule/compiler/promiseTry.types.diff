@@ -1,0 +1,20 @@
+--- old.promiseTry.types
++++ new.promiseTry.types
+@@= skipped -78, +78 lines =@@
+ >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+ >Promise : PromiseConstructor
+ >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+->(foo: string | undefined) => "Async result" : (foo: string | undefined) => string
++>(foo: string | undefined) => "Async result" : (foo: string) => string
+ >foo : string
+ >"Async result" : "Async result"
+ >undefined : undefined
+@@= skipped -10, +10 lines =@@
+ >Promise.try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+ >Promise : PromiseConstructor
+ >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
+->(foo: string | undefined) => "Async result" : (foo: string | undefined) => string
++>(foo: string | undefined) => "Async result" : (foo: string) => string
+ >foo : string
+ >"Async result" : "Async result"
+ >"foo" : "foo"

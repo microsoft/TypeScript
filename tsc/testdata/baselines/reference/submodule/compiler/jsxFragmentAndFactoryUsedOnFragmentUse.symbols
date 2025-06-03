@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/jsxFragmentAndFactoryUsedOnFragmentUse.tsx] ////
+
+=== index.tsx ===
+import {element, fragment} from "./jsx";
+>element : Symbol(element, Decl(index.tsx, 0, 8))
+>fragment : Symbol(fragment, Decl(index.tsx, 0, 16))
+
+export const a = <>fragment text</>
+>a : Symbol(a, Decl(index.tsx, 2, 12))
+
+=== jsx.ts ===
+export function element() {}
+>element : Symbol(element, Decl(jsx.ts, 0, 0))
+
+export function fragment() {}
+>fragment : Symbol(fragment, Decl(jsx.ts, 0, 28))
+

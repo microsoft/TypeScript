@@ -1,0 +1,17 @@
+--- old.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.errors.txt
++++ new.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.errors.txt
+@@= skipped -0, +0 lines =@@
+-index.js(5,21): error TS2339: Property 'fn' does not exist on type '{ (...args: any[]): void; readonly name: string; }'.
++index.js(5,21): error TS2339: Property 'fn' does not exist on type '(...args: any[]) => void'.
+
+
+ ==== index.js (1 errors) ====
+@@= skipped -7, +7 lines =@@
+       Object.defineProperty(composed, 'name', {
+         value: composed.fn + '_test'
+                         ~~
+-!!! error TS2339: Property 'fn' does not exist on type '{ (...args: any[]): void; readonly name: string; }'.
++!!! error TS2339: Property 'fn' does not exist on type '(...args: any[]) => void'.
+       })
+     
+       return composed

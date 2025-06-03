@@ -1,0 +1,13 @@
+--- old.declarationEmitNoInvalidCommentReuse3.js
++++ new.declarationEmitNoInvalidCommentReuse3.js
+@@= skipped -20, +20 lines =@@
+
+
+ //// [a.d.ts]
+-import { id } from "./id";
+ export declare const _: {
+-    foo: id.A<1>;
++    foo: 1;
+ };
+ /**
+ */ 

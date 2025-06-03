@@ -1,0 +1,16 @@
+--- old.nodeModulesTripleSlashReferenceModeDeclarationEmit2(module=node18).js
++++ new.nodeModulesTripleSlashReferenceModeDeclarationEmit2(module=node18).js
+@@= skipped -28, +28 lines =@@
+ export interface LocalInterface extends ImportInterface {}
+
+ //// [index.js]
++"use strict";
++Object.defineProperty(exports, "__esModule", { value: true });
+ /// <reference types="pkg" preserve="true" />
+-export {};
+
+
+ //// [index.d.ts]
+-/// <reference types="pkg" preserve="true" />
+ export interface LocalInterface extends ImportInterface {
+ }

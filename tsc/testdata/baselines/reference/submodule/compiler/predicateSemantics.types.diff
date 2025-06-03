@@ -9,3 +9,21 @@
  >this : Object
 
      // Should be OK
+@@= skipped -69, +69 lines =@@
+
+ // https://github.com/microsoft/TypeScript/issues/60614
+ declare function tag<T>(
+->tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
++>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T
+
+   strings: TemplateStringsArray,
+ >strings : TemplateStringsArray
+@@= skipped -13, +13 lines =@@
+ tag`foo${1}` ?? 32; // ok
+ >tag`foo${1}` ?? 32 : unknown
+ >tag`foo${1}` : unknown
+->tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T | null
++>tag : <T>(strings: TemplateStringsArray, ...values: number[]) => T
+ >`foo${1}` : string
+ >1 : 1
+ >32 : 32

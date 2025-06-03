@@ -38,14 +38,17 @@
  /** fooFunc
   * comment
   */
- declare var fooFunc: (b: string) => string;
-+/// lamdaFoo var comment
- declare var lambdaFoo: (a: number, b: number) => number;
- declare var lambddaNoVarComment: (a: number, b: number) => number;
+-declare var fooFunc: (/** fooFunctionValue param */ b: string) => string;
+-declare var lambdaFoo: (/**param a*/ a: number, /**param b*/ b: number) => number;
+-declare var lambddaNoVarComment: (/**param a*/ a: number, /**param b*/ b: number) => number;
 -declare function blah(a: string): void;
 -declare function blah2(a: string): void;
 -declare function blah3(a: string): void;
 -declare function blah4(/*1*/ a: string, /*3*/ b: string): void;
++declare var fooFunc: (b: string) => string;
++/// lamdaFoo var comment
++declare var lambdaFoo: (a: number, b: number) => number;
++declare var lambddaNoVarComment: (a: number, b: number) => number;
 +declare function blah(a: string /* multiline trailing comment
 +multiline */): void;
 +declare function blah2(a: string /* single line multiple trailing comments */ /* second */): void;

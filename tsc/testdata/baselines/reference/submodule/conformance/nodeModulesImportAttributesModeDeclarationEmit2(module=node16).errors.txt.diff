@@ -3,8 +3,8 @@
 @@= skipped -0, +0 lines =@@
 -/index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 +/index.ts(6,14): error TS2305: Module '"./node_modules/pkg/import.js"' has no exported member 'RequireInterface'.
- /index.ts(6,50): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
- /index.ts(7,49): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+ /index.ts(6,50): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
+ /index.ts(7,49): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
 
 @@= skipped -10, +10 lines =@@
      
@@ -13,5 +13,5 @@
 -!!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 +!!! error TS2305: Module '"./node_modules/pkg/import.js"' has no exported member 'RequireInterface'.
                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- !!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.
+ !!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
      import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };

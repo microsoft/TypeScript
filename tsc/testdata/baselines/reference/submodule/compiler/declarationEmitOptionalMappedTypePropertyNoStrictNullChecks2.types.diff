@@ -1,0 +1,10 @@
+--- old.declarationEmitOptionalMappedTypePropertyNoStrictNullChecks2.types
++++ new.declarationEmitOptionalMappedTypePropertyNoStrictNullChecks2.types
+@@= skipped -7, +7 lines =@@
+ } & {};
+
+ export declare function createApi<Definitions>(_: { endpoints: Definitions }): {
+->createApi : <Definitions>(_: { endpoints: Definitions; }) => { [K in keyof Definitions as `use${Capitalize<K & string>}Query`]: () => Id<{ status: "uninitialized"; originalArgs?: any[]; }>; }
++>createApi : <Definitions>(_: { endpoints: Definitions; }) => { [K in keyof Definitions as `use${Capitalize<K & string>}Query`]: () => { status: "uninitialized"; originalArgs?: any[]; }; }
+ >_ : { endpoints: Definitions; }
+ >endpoints : Definitions

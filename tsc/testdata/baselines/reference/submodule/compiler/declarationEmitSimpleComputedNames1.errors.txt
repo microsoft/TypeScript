@@ -1,0 +1,40 @@
+declarationEmitSimpleComputedNames1.ts(12,5): error TS2411: Property '[classFieldName]' of type '() => string' is not assignable to 'string' index type 'Holder | (() => { static: boolean; }) | (() => { static: string; })'.
+declarationEmitSimpleComputedNames1.ts(15,5): error TS2411: Property '[otherField]' of type '() => number' is not assignable to 'string' index type 'Holder | (() => { static: boolean; }) | (() => { static: string; })'.
+
+
+==== declarationEmitSimpleComputedNames1.ts (2 errors) ====
+    export const fieldName = Math.random() > 0.5 ? "f1" : "f2";
+    export const conatainer = {
+        [fieldName]() {
+            return "result";
+        }
+    };
+    
+    const classFieldName = Math.random() > 0.5 ? "g1" : "g2";
+    const otherField = classFieldName === "g1" ? "g2" : "g1";
+    const staticField = Math.random() > 0.5 ? "s1" : "s2";
+    export class Holder {
+        [classFieldName]() {
+        ~~~~~~~~~~~~~~~~
+!!! error TS2411: Property '[classFieldName]' of type '() => string' is not assignable to 'string' index type 'Holder | (() => { static: boolean; }) | (() => { static: string; })'.
+            return "value";
+        }
+        [otherField]() {
+        ~~~~~~~~~~~~
+!!! error TS2411: Property '[otherField]' of type '() => number' is not assignable to 'string' index type 'Holder | (() => { static: boolean; }) | (() => { static: string; })'.
+            return 42;
+        }
+        static [staticField]() {
+            return { static: true };
+        }
+        static [staticField]() {
+            return { static: "sometimes" };
+        }
+    }
+    
+    /**
+     * Could be `"prototype"`, so all static string indexers include the instance type
+     */
+    export const staticLookup = Holder["some" + "thing"];
+    export const instanceLookup = (new Holder())["some" + "thing"];
+    

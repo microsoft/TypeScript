@@ -88,7 +88,35 @@ class C {
 >this : this
 >c : any
 >1 : 1
-        }
+
+        };
+        (() => {
+>(() => {            this.a = 1;  // Ok            this.b = 1;  // Ok            this.c = 1;  // Error        })() : void
+>(() => {            this.a = 1;  // Ok            this.b = 1;  // Ok            this.c = 1;  // Error        }) : () => void
+>() => {            this.a = 1;  // Ok            this.b = 1;  // Ok            this.c = 1;  // Error        } : () => void
+
+            this.a = 1;  // Ok
+>this.a = 1 : 1
+>this.a : any
+>this : this
+>a : any
+>1 : 1
+
+            this.b = 1;  // Ok
+>this.b = 1 : 1
+>this.b : any
+>this : this
+>b : any
+>1 : 1
+
+            this.c = 1;  // Error
+>this.c = 1 : 1
+>this.c : any
+>this : this
+>c : any
+>1 : 1
+
+        })();
     }
     foo() {
 >foo : () => void

@@ -1,0 +1,17 @@
+--- old.checkJsdocTypeTag8.types
++++ new.checkJsdocTypeTag8.types
+@@= skipped -6, +6 lines =@@
+   * @param {Number|BigInt} n
+   */
+ function isLessThanFive(n) {
+->isLessThanFive : (n: number | bigint) => boolean
+->n : number | bigint
++>isLessThanFive : (n: any) => boolean
++>n : any
+
+   return n < 5;
+ >n < 5 : boolean
+->n : number | bigint
++>n : any
+ >5 : 5
+ }

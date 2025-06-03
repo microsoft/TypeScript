@@ -1,0 +1,11 @@
+--- old.declarationEmitShadowing.types
++++ new.declarationEmitShadowing.types
+@@= skipped -20, +20 lines =@@
+
+   return function O<T>(t: A, t2: T) {
+ >function O<T>(t: A, t2: T) {  } : <T_1>(t: T, t2: T_1) => void
+->O : <T>(t: T_1, t2: T) => void
++>O : <T_1>(t: T, t2: T_1) => void
+ >t : T_1
+ >t2 : T
+   }

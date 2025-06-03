@@ -1,0 +1,147 @@
+//// [tests/cases/compiler/controlFlowAutoAccessor1.ts] ////
+
+=== controlFlowAutoAccessor1.ts ===
+class Example {
+>Example : Example
+
+  accessor test;
+>test : any
+
+  constructor(test: number) {
+>test : number
+
+    this.test = test;
+>this.test = test : number
+>this.test : any
+>this : this
+>test : any
+>test : number
+  }
+
+  getTest() {
+>getTest : () => any
+
+    return this.test;
+>this.test : any
+>this : this
+>test : any
+  }
+}
+
+class Example2 {
+>Example2 : Example2
+
+  accessor test;
+>test : any
+
+  constructor(test: number | undefined) {
+>test : number | undefined
+
+    this.test = test;
+>this.test = test : number | undefined
+>this.test : any
+>this : this
+>test : any
+>test : number | undefined
+  }
+
+  getTest() {
+>getTest : () => any
+
+    if (this.test) {
+>this.test : any
+>this : this
+>test : any
+
+      return this.test;
+>this.test : any
+>this : this
+>test : any
+    }
+    return 0;
+>0 : 0
+  }
+}
+
+// https://github.com/microsoft/TypeScript/issues/59728
+
+class Example3 {
+>Example3 : Example3
+
+  accessor value;
+>value : any
+
+  constructor(n: number) {
+>n : number
+
+    this.value = n;
+>this.value = n : number
+>this.value : any
+>this : this
+>value : any
+>n : number
+
+    if (n < 0) {
+>n < 0 : boolean
+>n : number
+>0 : 0
+
+      this.value = null;
+>this.value = null : null
+>this.value : any
+>this : this
+>value : any
+    }
+  }
+}
+
+declare var n: number;
+>n : number
+
+class Example4 {
+>Example4 : Example4
+
+  static accessor value;
+>value : any
+
+  static {
+    this.value = n;
+>this.value = n : number
+>this.value : any
+>this : typeof Example4
+>value : any
+>n : number
+
+    if (n < 0) {
+>n < 0 : boolean
+>n : number
+>0 : 0
+
+      this.value = null;
+>this.value = null : null
+>this.value : any
+>this : typeof Example4
+>value : any
+    }
+  }
+}
+
+class Example5 {
+>Example5 : Example5
+
+  static accessor value; // error
+>value : any
+}
+Example5.value = 123;
+>Example5.value = 123 : 123
+>Example5.value : any
+>Example5 : typeof Example5
+>value : any
+>123 : 123
+
+Example5.value++;
+>Example5.value++ : number
+>Example5.value : any
+>Example5 : typeof Example5
+>value : any
+

@@ -17,6 +17,14 @@ var N;
 var n;
 >n : number
 
+/** @type {BigInt} */
+var BI;
+>BI : BigInt
+
+/** @type {bigint} */
+var bi;
+>bi : bigint
+
 /** @type {Boolean} */
 var B;
 >B : Boolean
@@ -107,6 +115,12 @@ var B: boolean;
 
 var b: boolean;
 >b : boolean
+
+var BI: bigint;
+>BI : BigInt
+
+var bi: bigint;
+>bi : bigint
 
 var V :void;
 >V : Void

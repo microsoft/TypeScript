@@ -1,0 +1,19 @@
+--- old.destructuringObjectBindingPatternAndAssignment8(target=esnext).types
++++ new.destructuringObjectBindingPatternAndAssignment8(target=esnext).types
+@@= skipped -21, +21 lines =@@
+ >K : { a: string; b: string; }
+ >b : string
+ >bVal : number
+->(() => {	return { [K.a]: 1, [K.b]: 1 };})() : { [K.a]: number; [K.b]: number; }
+->(() => {	return { [K.a]: 1, [K.b]: 1 };}) : () => { [K.a]: number; [K.b]: number; }
+->() => {	return { [K.a]: 1, [K.b]: 1 };} : () => { [K.a]: number; [K.b]: number; }
++>(() => {	return { [K.a]: 1, [K.b]: 1 };})() : { [x: string]: number; }
++>(() => {	return { [K.a]: 1, [K.b]: 1 };}) : () => { [x: string]: number; }
++>() => {	return { [K.a]: 1, [K.b]: 1 };} : () => { [x: string]: number; }
+
+ 	return { [K.a]: 1, [K.b]: 1 };
+->{ [K.a]: 1, [K.b]: 1 } : { [K.a]: number; [K.b]: number; }
++>{ [K.a]: 1, [K.b]: 1 } : { [x: string]: number; }
+ >[K.a] : number
+ >K.a : string
+ >K : { a: string; b: string; }

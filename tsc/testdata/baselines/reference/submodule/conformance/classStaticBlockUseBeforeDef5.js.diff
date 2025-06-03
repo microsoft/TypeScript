@@ -1,0 +1,17 @@
+--- old.classStaticBlockUseBeforeDef5.js
++++ new.classStaticBlockUseBeforeDef5.js
+@@= skipped -9, +9 lines =@@
+
+
+ //// [classStaticBlockUseBeforeDef5.js]
+-"use strict";
+ class C {
+     static {
+         this.x = 1;
+@@= skipped -11, +10 lines =@@
+
+ //// [classStaticBlockUseBeforeDef5.d.ts]
+ declare class C {
+-    static accessor x: number;
++    static accessor x: any;
+ }

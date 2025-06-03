@@ -1,0 +1,32 @@
+--- old.declarationEmitComputedNamesInaccessible.errors.txt
++++ new.declarationEmitComputedNamesInaccessible.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++declarationEmitComputedNamesInaccessible.ts(6,9): error TS2411: Property '[localClassFieldName]' of type '() => string' is not assignable to 'string' index type 'ParameterizedHolder | (() => { static: boolean; }) | (() => { static: string; })'.
++declarationEmitComputedNamesInaccessible.ts(9,9): error TS2411: Property '[localOtherField]' of type '() => number' is not assignable to 'string' index type 'ParameterizedHolder | (() => { static: boolean; }) | (() => { static: string; })'.
++
++
++==== declarationEmitComputedNamesInaccessible.ts (2 errors) ====
++    export function f1() {
++        const localClassFieldName = Math.random() > 0.5 ? "g1" : "g2";
++        const localOtherField = localClassFieldName === "g1" ? "g2" : "g1";
++        const localStaticField = Math.random() > 0.5 ? "s1" : "s2";
++        return class ParameterizedHolder {
++            [localClassFieldName]() {
++            ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2411: Property '[localClassFieldName]' of type '() => string' is not assignable to 'string' index type 'ParameterizedHolder | (() => { static: boolean; }) | (() => { static: string; })'.
++                return "value";
++            }
++            [localOtherField]() {
++            ~~~~~~~~~~~~~~~~~
++!!! error TS2411: Property '[localOtherField]' of type '() => number' is not assignable to 'string' index type 'ParameterizedHolder | (() => { static: boolean; }) | (() => { static: string; })'.
++                return 42;
++            }
++            static [localStaticField]() {
++                return { static: true };
++            }
++            static [localStaticField]() {
++                return { static: "sometimes" };
++            }
++        }
++    }

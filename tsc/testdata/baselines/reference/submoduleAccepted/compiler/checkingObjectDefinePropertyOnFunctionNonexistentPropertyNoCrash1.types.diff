@@ -1,0 +1,43 @@
+--- old.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.types
++++ new.checkingObjectDefinePropertyOnFunctionNonexistentPropertyNoCrash1.types
+@@= skipped -1, +1 lines =@@
+
+ === index.js ===
+ export function test(fn) {
+->test : (fn: any) => { (...args: any[]): void; readonly name: string; }
++>test : (fn: any) => (...args: any[]) => void
+ >fn : any
+
+   const composed = function (...args) { }
+->composed : { (...args: any[]): void; readonly name: string; }
+->function (...args) { } : { (...args: any[]): void; readonly name: string; }
++>composed : (...args: any[]) => void
++>function (...args) { } : (...args: any[]) => void
+ >args : any[]
+
+   Object.defineProperty(composed, 'name', {
+->Object.defineProperty(composed, 'name', {    value: composed.fn + '_test'  }) : { (...args: any[]): void; readonly name: string; }
++>Object.defineProperty(composed, 'name', {    value: composed.fn + '_test'  }) : (...args: any[]) => void
+ >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+ >Object : ObjectConstructor
+ >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->composed : { (...args: any[]): void; readonly name: string; }
++>composed : (...args: any[]) => void
+ >'name' : "name"
+ >{    value: composed.fn + '_test'  } : { value: string; }
+
+@@= skipped -21, +21 lines =@@
+ >value : string
+ >composed.fn + '_test' : string
+ >composed.fn : any
+->composed : { (...args: any[]): void; readonly name: string; }
++>composed : (...args: any[]) => void
+ >fn : any
+ >'_test' : "_test"
+
+   })
+
+   return composed
+->composed : { (...args: any[]): void; readonly name: string; }
++>composed : (...args: any[]) => void
+ }

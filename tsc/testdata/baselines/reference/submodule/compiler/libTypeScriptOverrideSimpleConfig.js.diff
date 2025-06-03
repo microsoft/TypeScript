@@ -1,6 +1,6 @@
 --- old.libTypeScriptOverrideSimpleConfig.js
 +++ new.libTypeScriptOverrideSimpleConfig.js
-@@= skipped -11, +11 lines =@@
+@@= skipped -12, +12 lines =@@
 
  //// [index.js]
  /// <reference lib="dom" />

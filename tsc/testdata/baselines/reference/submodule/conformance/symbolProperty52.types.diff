@@ -1,0 +1,28 @@
+--- old.symbolProperty52.types
++++ new.symbolProperty52.types
+@@= skipped -1, +1 lines =@@
+
+ === symbolProperty52.ts ===
+ var obj = {
+->obj : { [Symbol.nonsense]: number; }
+->{    [Symbol.nonsense]: 0} : { [Symbol.nonsense]: number; }
++>obj : { [x: number]: number; }
++>{    [Symbol.nonsense]: 0} : { [x: number]: number; }
+
+     [Symbol.nonsense]: 0
+ >[Symbol.nonsense] : number
+@@= skipped -14, +14 lines =@@
+
+ obj = {};
+ >obj = {} : {}
+->obj : { [Symbol.nonsense]: number; }
++>obj : { [x: number]: number; }
+ >{} : {}
+
+ obj[Symbol.nonsense];
+ >obj[Symbol.nonsense] : number
+->obj : { [Symbol.nonsense]: number; }
++>obj : { [x: number]: number; }
+ >Symbol.nonsense : any
+ >Symbol : SymbolConstructor
+ >nonsense : any

@@ -1,6 +1,6 @@
 --- old.inferTypePredicates.js
 +++ new.inferTypePredicates.js
-@@= skipped -282, +282 lines =@@
+@@= skipped -292, +292 lines =@@
 
  //// [inferTypePredicates.js]
  // https://github.com/microsoft/TypeScript/issues/16069
@@ -294,6 +294,14 @@
  if (foobarPred(foobar)) {
      foobar.foo;
  }
+ // https://github.com/microsoft/TypeScript/issues/60778
+-var arrTest = [1, 2, null, 3].filter(function (x) { return (x != null); });
++const arrTest = [1, 2, null, 3].filter((x) => (x != null));
+ function isEmptyString(x) {
+-    var rv = x === "";
++    const rv = x === "";
+     return rv;
+ }
 
 
  //// [inferTypePredicates.d.ts]
@@ -321,7 +329,7 @@
  type MyObj = {
      data?: string;
  };
-@@= skipped -49, +39 lines =@@
+@@= skipped -55, +45 lines =@@
  declare const myArray: MyArray;
  declare const result: any[][];
  declare const result2: any[][];
@@ -391,15 +399,17 @@
  declare function assertAndPredicate(x: string | number | Date): x is string;
  declare let snd: string | number | Date;
  declare function isNumberWithThis(this: Date, x: number | string): x is number;
-@@= skipped -12, +15 lines =@@
- declare const noInferenceFromRest: (f_0: "a" | "b") => boolean;
- declare const noInferenceFromImpossibleRest: () => boolean;
+ declare function narrowFromAny(x: any): x is number;
+-declare const noInferenceFromRest: (...f: ["a" | "b"]) => boolean;
+-declare const noInferenceFromImpossibleRest: (...f: []) => boolean;
++declare const noInferenceFromRest: (f_0: "a" | "b") => boolean;
++declare const noInferenceFromImpossibleRest: () => boolean;
  declare function inferWithRest(x: string | null, ...f: ["a", "b"]): x is string;
 +// https://github.com/microsoft/TypeScript/issues/57947
  declare const foobar: {
      type: "foo";
      foo: number;
-@@= skipped -7, +8 lines =@@
+@@= skipped -19, +23 lines =@@
      type: "bar";
      bar: string;
  };
@@ -414,3 +424,7 @@
      type: "foo";
      foo: number;
  };
++// https://github.com/microsoft/TypeScript/issues/60778
+ declare const arrTest: Array<number>;
+-declare function isEmptyString(x: unknown): x is "";
++declare function isEmptyString(x: unknown): boolean;

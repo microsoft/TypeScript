@@ -1,0 +1,18 @@
+//// [tests/cases/conformance/types/conditional/inferTypesWithExtendsDependingOnTypeVariables.ts] ////
+
+=== inferTypesWithExtendsDependingOnTypeVariables.ts ===
+// repro from https://github.com/microsoft/TypeScript/issues/54197
+
+type Bar<K, T extends readonly unknown[]> = T extends readonly [any, ...infer X extends readonly K[]] ? X : never;
+>Bar : Symbol(Bar, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 0, 0))
+>K : Symbol(K, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 2, 9))
+>T : Symbol(T, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 2, 11))
+>T : Symbol(T, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 2, 11))
+>X : Symbol(X, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 2, 77))
+>K : Symbol(K, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 2, 9))
+>X : Symbol(X, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 2, 77))
+
+type Res1 = Bar<"a" | "b", ["a", "b", "b"]>
+>Res1 : Symbol(Res1, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 2, 114))
+>Bar : Symbol(Bar, Decl(inferTypesWithExtendsDependingOnTypeVariables.ts, 0, 0))
+

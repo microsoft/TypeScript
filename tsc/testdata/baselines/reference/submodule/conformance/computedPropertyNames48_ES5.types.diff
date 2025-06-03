@@ -1,0 +1,11 @@
+--- old.computedPropertyNames48_ES5.types
++++ new.computedPropertyNames48_ES5.types
+@@= skipped -15, +15 lines =@@
+ extractIndexer({
+ >extractIndexer({    [a]: ""}) : string
+ >extractIndexer : <T>(p: { [n: number]: T; }) => T
+->{    [a]: ""} : { [a]: string; }
++>{    [a]: ""} : { [x: number]: string; }
+
+     [a]: ""
+ >[a] : string

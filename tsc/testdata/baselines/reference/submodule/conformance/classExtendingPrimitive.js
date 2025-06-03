@@ -16,6 +16,15 @@ class C7 extends Undefined { }
 enum E { A }
 class C8 extends E { }
 
+const C9 = class extends number { }
+const C10 = class extends string { }
+const C11 = class extends boolean { }
+
+const C12 = class A extends number { }
+const C13 = class B extends string { }
+const C14 = class C extends boolean { }
+
+
 //// [classExtendingPrimitive.js]
 // classes cannot extend primitives
 class C extends number {
@@ -43,3 +52,15 @@ var E;
 })(E || (E = {}));
 class C8 extends E {
 }
+const C9 = class extends number {
+};
+const C10 = class extends string {
+};
+const C11 = class extends boolean {
+};
+const C12 = class A extends number {
+};
+const C13 = class B extends string {
+};
+const C14 = class C extends boolean {
+};

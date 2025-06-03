@@ -1,0 +1,17 @@
+--- old.declarationEmitMultipleComputedNamesSameDomain.errors.txt
++++ new.declarationEmitMultipleComputedNamesSameDomain.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++declarationEmitMultipleComputedNamesSameDomain.ts(5,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
++
++
++==== declarationEmitMultipleComputedNamesSameDomain.ts (1 errors) ====
++    declare const x: string;
++    declare const y: "y";
++    
++    export class Test {
++        [x] = 10;
++        ~~~
++!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
++        [y] = 10;
++    }

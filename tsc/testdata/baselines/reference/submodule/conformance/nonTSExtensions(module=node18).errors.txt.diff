@@ -1,0 +1,18 @@
+--- old.nonTSExtensions(module=node18).errors.txt
++++ new.nonTSExtensions(module=node18).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++index.mts(1,33): error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
++
++
++==== example.json (0 errors) ====
++    {}
++    
++==== styles.d.css.ts (0 errors) ====
++    export {};
++    
++==== index.mts (1 errors) ====
++    import {} from "./example.json" with { type: "json" }; // Ok
++                                    ~~~~~~~~~~~~~~~~~~~~~
++!!! error TS2823: Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.
++    import {} from "./styles.css"; // Ok

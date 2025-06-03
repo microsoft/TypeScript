@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/moduleResolution/resolutionModeCache.ts] ////
+
+=== /node_modules/pkg/index.d.mts ===
+declare const _default: "esm";
+>_default : Symbol(_default, Decl(index.d.mts, 0, 13))
+
+export default _default;
+>_default : Symbol(_default, Decl(index.d.mts, 0, 13))
+
+=== /node_modules/pkg/index.d.ts ===
+declare const _exports: "cjs";
+>_exports : Symbol(_exports, Decl(index.d.ts, 0, 13))
+
+export = _exports;
+>_exports : Symbol(_exports, Decl(index.d.ts, 0, 13))
+
+=== /index.ts ===
+import type pkgRequire from "pkg" with { "resolution-mode": "require" };
+>pkgRequire : Symbol(pkgRequire, Decl(index.ts, 0, 6))
+
+import type pkgImport from "pkg" with { "resolution-mode": "import" };
+>pkgImport : Symbol(pkgImport, Decl(index.ts, 1, 6))
+
+pkgRequire;
+>pkgRequire : Symbol(pkgRequire, Decl(index.ts, 0, 6))
+
+pkgImport;
+>pkgImport : Symbol(pkgImport, Decl(index.ts, 1, 6))
+

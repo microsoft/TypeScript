@@ -9,7 +9,7 @@
 
  /** @type {function(new: object, string, number)} */
  export const g = null;
-->g : new (arg1: string, arg2: number) => any
+->g : new (arg1: string, arg2: number) => object
 +>g : function
 
  /** @type {Object.<string, number>} */

@@ -38,3 +38,12 @@
  >{    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: string; addOne: (x: number) => number; double: (x: number) => number; }
 
      [directive]: 'str',
+@@= skipped -78, +78 lines =@@
+
+ const a: A = { [id]: 'test' }
+ >a : A
+->{ [id]: 'test' } : { [id]: string; }
++>{ [id]: 'test' } : { [x: string]: string; }
+ >[id] : string
+ >id : `${number}-${number}-${number}-${number}`
+ >'test' : "test"
