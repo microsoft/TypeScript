@@ -102,8 +102,8 @@ func setIsEqualTo(arr1 []string, arr2 []string) bool {
 	if slices.Equal(arr1, arr2) {
 		return true
 	}
-	compact1 := slices.Compact(arr1)
-	compact2 := slices.Compact(arr2)
+	compact1 := slices.Clone(arr1)
+	compact2 := slices.Clone(arr2)
 	slices.Sort(compact1)
 	slices.Sort(compact2)
 	return slices.Equal(compact1, compact2)

@@ -69,7 +69,9 @@ func DiscoverTypings(
 	}
 
 	// add typings for unresolved imports
-	modules := slices.Compact(core.Map(typingsInfo.UnresolvedImports, core.NonRelativeModuleNameForTypingCache))
+	modules := core.Map(typingsInfo.UnresolvedImports, core.NonRelativeModuleNameForTypingCache)
+	slices.Sort(modules)
+	modules = slices.Compact(modules)
 	addInferredTypings(fs, log, inferredTypings, modules, "Inferred typings from unresolved imports")
 
 	// Remove typings that the user has added to the exclude list

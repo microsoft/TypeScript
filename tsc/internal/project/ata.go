@@ -323,6 +323,7 @@ func (ti *TypingsInstaller) invokeRoutineToInstallTypings(
 				if pendingRequestsCount == 1 {
 					ti.pendingRunRequests = nil
 				} else {
+					ti.pendingRunRequests[0] = nil // ensure the request is GC'd
 					ti.pendingRunRequests = ti.pendingRunRequests[1:]
 				}
 			}
