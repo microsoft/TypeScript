@@ -53,6 +53,9 @@ func (w *watchedFiles[T]) update(ctx context.Context, newData T) {
 
 func (w *watchedFiles[T]) updateWorker(ctx context.Context, newData T) (updated bool, err error) {
 	newGlobs := w.getGlobs(newData)
+	newGlobs = slices.Clone(newGlobs)
+	slices.Sort(newGlobs)
+
 	w.data = newData
 	if slices.Equal(w.globs, newGlobs) {
 		return false, nil
@@ -88,7 +91,7 @@ func (w *watchedFiles[T]) updateWorker(ctx context.Context, newData T) (updated 
 }
 
 func globMapperForTypingsInstaller(data map[tspath.Path]string) []string {
-	return slices.Sorted(maps.Values(data))
+	return slices.AppendSeq(make([]string, 0, len(data)), maps.Values(data))
 }
 
 func createResolutionLookupGlobMapper(host ProjectHost) func(data map[tspath.Path]string) []string {
@@ -136,7 +139,6 @@ func createResolutionLookupGlobMapper(host ProjectHost) func(data map[tspath.Pat
 				globs = append(globs, dir+"/"+fileGlobPattern)
 			}
 		}
-		slices.Sort(globs)
 
 		timeTaken := time.Since(start)
 		host.Log(fmt.Sprintf("createGlobMapper took %s to create %d globs for %d failed lookups", timeTaken, len(globs), len(data)))
