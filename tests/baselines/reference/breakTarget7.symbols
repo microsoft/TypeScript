@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/breakTarget7.ts] ////
+
+=== breakTarget7.ts ===
+function functionContainingBreak() {
+>functionContainingBreak : Symbol(functionContainingBreak, Decl(breakTarget7.ts, 0, 0))
+
+    break target;
+    target:;
+}
+

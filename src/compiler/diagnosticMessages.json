@@ -8451,5 +8451,13 @@
     "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
         "category": "Error",
         "code": 18057
+    },
+    "Label '{0}' used before declaration.": {
+        "category": "Error",
+        "code": 18058
+    },
+    "Label defined here": {
+        "category": "Error",
+        "code": 18059
     }
 }
