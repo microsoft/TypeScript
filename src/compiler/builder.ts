@@ -623,7 +623,7 @@ function releaseCache(state: BuilderProgramState) {
  * Verifies that source file is ok to be used in calls that arent handled by next
  */
 function assertSourceFileOkWithoutNextAffectedCall(state: BuilderProgramState, sourceFile: SourceFile | undefined) {
-    Debug.assert(!sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex! - 1] !== sourceFile || !state.semanticDiagnosticsPerFile.has(sourceFile.resolvedPath));
+    Debug.assert(!sourceFile || !state.affectedFiles || state.affectedFiles[(state.affectedFilesIndex ?? 0) - 1] !== sourceFile || !state.semanticDiagnosticsPerFile.has(sourceFile.resolvedPath));
 }
 
 /**
@@ -641,7 +641,7 @@ function getNextAffectedFile(
         const { affectedFiles } = state;
         if (affectedFiles) {
             const seenAffectedFiles = state.seenAffectedFiles!;
-            let affectedFilesIndex = state.affectedFilesIndex!; // TODO: GH#18217
+            let affectedFilesIndex = state.affectedFilesIndex ?? 0; // Fixed: properly handle undefined case
             while (affectedFilesIndex < affectedFiles.length) {
                 const affectedFile = affectedFiles[affectedFilesIndex];
                 if (!seenAffectedFiles.has(affectedFile.resolvedPath)) {
@@ -1845,8 +1845,8 @@ export function createBuilderProgram(
             // update affected files
             const affectedSourceFile = affected as SourceFile;
             state.seenAffectedFiles!.add(affectedSourceFile.resolvedPath);
-            if (state.affectedFilesIndex !== undefined) state.affectedFilesIndex++;
-            // Change in changeSet/affectedFilesPendingEmit, buildInfo needs to be emitted
+            state.affectedFilesIndex = (state.affectedFilesIndex ?? 0) + 1;
+            // Change in changeSet, buildInfo needs to be emitted
             state.buildInfoEmitPending = true;
             // Update the pendingEmit for the file
             const existing = state.seenEmittedFiles?.get(affectedSourceFile.resolvedPath) || BuilderFileEmit.None;
@@ -2145,7 +2145,7 @@ export function createBuilderProgram(
                     result = getSemanticDiagnosticsOfFile(state, affectedSourceFile, cancellationToken);
                 }
                 state.seenAffectedFiles!.add(affectedSourceFile.resolvedPath);
-                state.affectedFilesIndex!++;
+                state.affectedFilesIndex = (state.affectedFilesIndex ?? 0) + 1;
                 // Change in changeSet, buildInfo needs to be emitted
                 state.buildInfoEmitPending = true;
                 if (!result) continue;
