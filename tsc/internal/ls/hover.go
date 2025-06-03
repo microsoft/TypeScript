@@ -17,32 +17,6 @@ const (
 	typeFormatFlags   = checker.TypeFormatFlagsNone
 )
 
-func writeTypeParam(c *checker.Checker, tp *checker.Type, file *ast.SourceFile, b *strings.Builder) {
-	symbol := tp.Symbol()
-	b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-	cons := c.GetConstraintOfTypeParameter(tp)
-	if cons != nil {
-		b.WriteString(" extends ")
-		b.WriteString(c.TypeToStringEx(cons, file.AsNode(), typeFormatFlags))
-	}
-}
-
-func writeTypeParams(params []*checker.Type, c *checker.Checker, file *ast.SourceFile, b *strings.Builder) {
-	if len(params) > 0 {
-		b.WriteString("<")
-		var tail bool
-		for _, param := range params {
-			if tail {
-				b.WriteString(",")
-				b.WriteString(" ")
-			}
-			writeTypeParam(c, param, file, b)
-			tail = true
-		}
-		b.WriteString(">")
-	}
-}
-
 func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.DocumentUri, position lsproto.Position) (*lsproto.Hover, error) {
 	program, file := l.getProgramAndFile(documentURI)
 	node := astnav.GetTouchingPropertyName(file, int(l.converters.LineAndCharacterToPosition(file, position)))
@@ -52,117 +26,13 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	}
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
-
-	var result string
-	symbol := c.GetSymbolAtLocation(node)
-	isAlias := symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0
-	if isAlias {
-		symbol = c.GetAliasedSymbol(symbol)
-	}
-	if symbol != nil && symbol != c.GetUnknownSymbol() {
-		flags := symbol.Flags
-		if flags&ast.SymbolFlagsType != 0 && (ast.IsPartOfTypeNode(node) || ast.IsTypeDeclarationName(node)) {
-			// If the symbol has a type meaning and we're in a type context, remove value-only meanings
-			flags &^= ast.SymbolFlagsVariable | ast.SymbolFlagsFunction
-		}
-		var b strings.Builder
-		if isAlias {
-			b.WriteString("(alias) ")
-		}
-		switch {
-		case flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsAccessor) != 0:
-			switch {
-			case flags&ast.SymbolFlagsProperty != 0:
-				b.WriteString("(property) ")
-			case flags&ast.SymbolFlagsAccessor != 0:
-				b.WriteString("(accessor) ")
-			default:
-				decl := symbol.ValueDeclaration
-				if decl != nil {
-					switch {
-					case ast.IsParameter(decl):
-						b.WriteString("(parameter) ")
-					case ast.IsVarLet(decl):
-						b.WriteString("let ")
-					case ast.IsVarConst(decl):
-						b.WriteString("const ")
-					case ast.IsVarUsing(decl):
-						b.WriteString("using ")
-					case ast.IsVarAwaitUsing(decl):
-						b.WriteString("await using ")
-					default:
-						b.WriteString("var ")
-					}
-				}
-			}
-			b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-			b.WriteString(": ")
-			b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbolAtLocation(symbol, node), file.AsNode(), typeFormatFlags))
-		case flags&ast.SymbolFlagsEnumMember != 0:
-			b.WriteString("(enum member) ")
-			t := c.GetTypeOfSymbol(symbol)
-			b.WriteString(c.TypeToStringEx(t, file.AsNode(), typeFormatFlags))
-			if t.Flags()&checker.TypeFlagsLiteral != 0 {
-				b.WriteString(" = ")
-				b.WriteString(t.AsLiteralType().String())
-			}
-		case flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0:
-			t := c.GetTypeOfSymbol(symbol)
-			signatures := c.GetSignaturesOfType(t, checker.SignatureKindCall)
-			prefix := core.IfElse(symbol.Flags&ast.SymbolFlagsMethod != 0, "(method) ", "function ")
-			for i, sig := range signatures {
-				if i != 0 {
-					b.WriteString("\n")
-				}
-				if i == 3 && len(signatures) >= 5 {
-					b.WriteString(fmt.Sprintf("// +%v more overloads", len(signatures)-3))
-					break
-				}
-				b.WriteString(prefix)
-				b.WriteString(c.SignatureToStringEx(sig, file.AsNode(), typeFormatFlags))
-			}
-		case flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0:
-			b.WriteString(core.IfElse(symbol.Flags&ast.SymbolFlagsClass != 0, "class ", "interface "))
-			b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-			params := c.GetDeclaredTypeOfSymbol(symbol).AsInterfaceType().LocalTypeParameters()
-			writeTypeParams(params, c, file, &b)
-		case flags&ast.SymbolFlagsEnum != 0:
-			b.WriteString("enum ")
-			b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-		case flags&ast.SymbolFlagsModule != 0:
-			b.WriteString(core.IfElse(symbol.ValueDeclaration != nil && ast.IsSourceFile(symbol.ValueDeclaration), "module ", "namespace "))
-			b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-		case flags&ast.SymbolFlagsTypeParameter != 0:
-			b.WriteString("(type parameter) ")
-			tp := c.GetDeclaredTypeOfSymbol(symbol)
-			b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-			cons := c.GetConstraintOfTypeParameter(tp)
-			if cons != nil {
-				b.WriteString(" extends ")
-				b.WriteString(c.TypeToStringEx(cons, file.AsNode(), typeFormatFlags))
-			}
-		case flags&ast.SymbolFlagsTypeAlias != 0:
-			b.WriteString("type ")
-			b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-			writeTypeParams(c.GetTypeAliasTypeParameters(symbol), c, file, &b)
-			if len(symbol.Declarations) != 0 {
-				b.WriteString(" = ")
-				b.WriteString(c.TypeToStringEx(c.GetDeclaredTypeOfSymbol(symbol), file.AsNode(), typeFormatFlags|checker.TypeFormatFlagsInTypeAlias))
-			}
-		case flags&ast.SymbolFlagsAlias != 0:
-			b.WriteString("import ")
-			b.WriteString(c.SymbolToStringEx(symbol, file.AsNode(), ast.SymbolFlagsNone, symbolFormatFlags))
-		default:
-			b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbol(symbol), file.AsNode(), typeFormatFlags))
-		}
-		result = b.String()
-	}
-	if result != "" {
+	quickInfo, declaration := getQuickInfoAndDeclarationAtLocation(c, node)
+	if quickInfo != "" {
 		return &lsproto.Hover{
 			Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
 				MarkupContent: &lsproto.MarkupContent{
 					Kind:  lsproto.MarkupKindMarkdown,
-					Value: codeFence("typescript", result),
+					Value: formatQuickInfoAndJSDoc(quickInfo, declaration),
 				},
 			},
 		}, nil
@@ -170,25 +40,353 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	return nil, nil
 }
 
-func codeFence(lang string, code string) string {
+func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, node *ast.Node) (string, *ast.Node) {
+	symbol := c.GetSymbolAtLocation(node)
+	isAlias := symbol != nil && symbol.Flags&ast.SymbolFlagsAlias != 0
+	if isAlias {
+		symbol = c.GetAliasedSymbol(symbol)
+	}
+	if symbol == nil || symbol == c.GetUnknownSymbol() {
+		return "", nil
+	}
+	declaration := symbol.ValueDeclaration
+	if symbol.Flags&ast.SymbolFlagsClass != 0 && inConstructorContext(node) {
+		if s := symbol.Members[ast.InternalSymbolNameConstructor]; s != nil {
+			symbol = s
+			declaration = core.Find(symbol.Declarations, func(d *ast.Node) bool {
+				return ast.IsConstructorDeclaration(d) || ast.IsConstructSignatureDeclaration(d)
+			})
+		}
+	}
+	flags := symbol.Flags
+	if flags&ast.SymbolFlagsType != 0 && (ast.IsPartOfTypeNode(node) || ast.IsTypeDeclarationName(node)) {
+		// If the symbol has a type meaning and we're in a type context, remove value-only meanings
+		flags &^= ast.SymbolFlagsVariable | ast.SymbolFlagsFunction
+	}
+	var b strings.Builder
+	if isAlias {
+		b.WriteString("(alias) ")
+	}
+	switch {
+	case flags&(ast.SymbolFlagsVariable|ast.SymbolFlagsProperty|ast.SymbolFlagsAccessor) != 0:
+		switch {
+		case flags&ast.SymbolFlagsProperty != 0:
+			b.WriteString("(property) ")
+		case flags&ast.SymbolFlagsAccessor != 0:
+			b.WriteString("(accessor) ")
+		default:
+			decl := symbol.ValueDeclaration
+			if decl != nil {
+				switch {
+				case ast.IsParameter(decl):
+					b.WriteString("(parameter) ")
+				case ast.IsVarLet(decl):
+					b.WriteString("let ")
+				case ast.IsVarConst(decl):
+					b.WriteString("const ")
+				case ast.IsVarUsing(decl):
+					b.WriteString("using ")
+				case ast.IsVarAwaitUsing(decl):
+					b.WriteString("await using ")
+				default:
+					b.WriteString("var ")
+				}
+			}
+		}
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(": ")
+		b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbolAtLocation(symbol, node), nil, typeFormatFlags))
+	case flags&ast.SymbolFlagsEnumMember != 0:
+		b.WriteString("(enum member) ")
+		t := c.GetTypeOfSymbol(symbol)
+		b.WriteString(c.TypeToStringEx(t, nil, typeFormatFlags))
+		if t.Flags()&checker.TypeFlagsLiteral != 0 {
+			b.WriteString(" = ")
+			b.WriteString(t.AsLiteralType().String())
+		}
+	case flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0:
+		signatures := c.GetSignaturesOfType(c.GetTypeOfSymbol(symbol), checker.SignatureKindCall)
+		prefix := core.IfElse(symbol.Flags&ast.SymbolFlagsMethod != 0, "(method) ", "function ")
+		writeSignatures(&b, c, signatures, prefix, symbol)
+	case flags&ast.SymbolFlagsConstructor != 0:
+		signatures := c.GetSignaturesOfType(c.GetTypeOfSymbol(symbol.Parent), checker.SignatureKindConstruct)
+		writeSignatures(&b, c, signatures, "constructor ", symbol.Parent)
+	case flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0:
+		b.WriteString(core.IfElse(symbol.Flags&ast.SymbolFlagsClass != 0, "class ", "interface "))
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		params := c.GetDeclaredTypeOfSymbol(symbol).AsInterfaceType().LocalTypeParameters()
+		writeTypeParams(&b, c, params)
+		if flags&ast.SymbolFlagsInterface != 0 {
+			declaration = core.Find(symbol.Declarations, ast.IsInterfaceDeclaration)
+		}
+	case flags&ast.SymbolFlagsEnum != 0:
+		b.WriteString("enum ")
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+	case flags&ast.SymbolFlagsModule != 0:
+		b.WriteString(core.IfElse(symbol.ValueDeclaration != nil && ast.IsSourceFile(symbol.ValueDeclaration), "module ", "namespace "))
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+	case flags&ast.SymbolFlagsTypeParameter != 0:
+		b.WriteString("(type parameter) ")
+		tp := c.GetDeclaredTypeOfSymbol(symbol)
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		cons := c.GetConstraintOfTypeParameter(tp)
+		if cons != nil {
+			b.WriteString(" extends ")
+			b.WriteString(c.TypeToStringEx(cons, nil, typeFormatFlags))
+		}
+		declaration = core.Find(symbol.Declarations, ast.IsTypeParameterDeclaration)
+	case flags&ast.SymbolFlagsTypeAlias != 0:
+		b.WriteString("type ")
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		writeTypeParams(&b, c, c.GetTypeAliasTypeParameters(symbol))
+		if len(symbol.Declarations) != 0 {
+			b.WriteString(" = ")
+			b.WriteString(c.TypeToStringEx(c.GetDeclaredTypeOfSymbol(symbol), nil, typeFormatFlags|checker.TypeFormatFlagsInTypeAlias))
+		}
+		declaration = core.Find(symbol.Declarations, ast.IsTypeAliasDeclaration)
+	case flags&ast.SymbolFlagsAlias != 0:
+		b.WriteString("import ")
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+	default:
+		b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbol(symbol), nil, typeFormatFlags))
+	}
+	return b.String(), declaration
+}
+
+func inConstructorContext(node *ast.Node) bool {
+	if node.Kind == ast.KindConstructorKeyword {
+		return true
+	}
+	if ast.IsIdentifier(node) {
+		for ast.IsRightSideOfQualifiedNameOrPropertyAccess(node) {
+			node = node.Parent
+		}
+		if ast.IsNewExpression(node.Parent) {
+			return true
+		}
+	}
+	return false
+}
+
+func writeTypeParams(b *strings.Builder, c *checker.Checker, params []*checker.Type) {
+	if len(params) > 0 {
+		b.WriteString("<")
+		for i, tp := range params {
+			if i != 0 {
+				b.WriteString(", ")
+			}
+			symbol := tp.Symbol()
+			b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+			cons := c.GetConstraintOfTypeParameter(tp)
+			if cons != nil {
+				b.WriteString(" extends ")
+				b.WriteString(c.TypeToStringEx(cons, nil, typeFormatFlags))
+			}
+		}
+		b.WriteString(">")
+	}
+}
+
+func writeSignatures(b *strings.Builder, c *checker.Checker, signatures []*checker.Signature, prefix string, symbol *ast.Symbol) {
+	for i, sig := range signatures {
+		if i != 0 {
+			b.WriteString("\n")
+		}
+		if i == 3 && len(signatures) >= 5 {
+			b.WriteString(fmt.Sprintf("// +%v more overloads", len(signatures)-3))
+			break
+		}
+		b.WriteString(prefix)
+		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SignatureToStringEx(sig, nil, typeFormatFlags|checker.TypeFormatFlagsWriteCallStyleSignature))
+	}
+}
+
+func formatQuickInfoAndJSDoc(quickInfo string, declaration *ast.Node) string {
+	var b strings.Builder
+	b.Grow(32)
+	writeCode(&b, "tsx", quickInfo)
+	if declaration != nil {
+		if jsdoc := getJSDocOrTag(declaration); jsdoc != nil && !containsTypedefTag(jsdoc) {
+			writeComments(&b, jsdoc.Comments())
+			if jsdoc.Kind == ast.KindJSDoc {
+				if tags := jsdoc.AsJSDoc().Tags; tags != nil {
+					for _, tag := range tags.Nodes {
+						if tag.Kind == ast.KindJSDocTypeTag {
+							continue
+						}
+						b.WriteString("\n\n*@")
+						b.WriteString(tag.TagName().Text())
+						b.WriteString("*")
+						switch tag.Kind {
+						case ast.KindJSDocParameterTag, ast.KindJSDocPropertyTag:
+							writeOptionalEntityName(&b, tag.Name())
+						case ast.KindJSDocAugmentsTag:
+							writeOptionalEntityName(&b, tag.AsJSDocAugmentsTag().ClassName)
+						case ast.KindJSDocSeeTag:
+							writeOptionalEntityName(&b, tag.AsJSDocSeeTag().NameExpression)
+						case ast.KindJSDocTemplateTag:
+							for i, tp := range tag.TypeParameters() {
+								if i != 0 {
+									b.WriteString(",")
+								}
+								writeOptionalEntityName(&b, tp.Name())
+							}
+						}
+						comments := tag.Comments()
+						if len(comments) != 0 {
+							if commentHasPrefix(comments, "```") {
+								b.WriteString("\n")
+							} else {
+								b.WriteString(" ")
+								if !commentHasPrefix(comments, "-") {
+									b.WriteString("— ")
+								}
+							}
+							writeComments(&b, comments)
+						}
+					}
+				}
+			}
+		}
+	}
+	return b.String()
+}
+
+func containsTypedefTag(jsdoc *ast.Node) bool {
+	if jsdoc.Kind == ast.KindJSDoc {
+		if tags := jsdoc.AsJSDoc().Tags; tags != nil {
+			for _, tag := range tags.Nodes {
+				if tag.Kind == ast.KindJSDocTypedefTag {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+func commentHasPrefix(comments []*ast.Node, prefix string) bool {
+	return comments[0].Kind == ast.KindJSDocText && strings.HasPrefix(comments[0].Text(), prefix)
+}
+
+func getJSDoc(node *ast.Node) *ast.Node {
+	return core.LastOrNil(node.JSDoc(nil))
+}
+
+func getJSDocOrTag(node *ast.Node) *ast.Node {
+	if jsdoc := getJSDoc(node); jsdoc != nil {
+		return jsdoc
+	}
+	switch {
+	case ast.IsParameter(node):
+		return getMatchingJSDocTag(node.Parent, node.Name().Text(), isMatchingParameterTag)
+	case ast.IsTypeParameterDeclaration(node):
+		return getMatchingJSDocTag(node.Parent, node.Name().Text(), isMatchingTemplateTag)
+	case ast.IsVariableDeclaration(node) && core.FirstOrNil(node.Parent.AsVariableDeclarationList().Declarations.Nodes) == node:
+		return getJSDocOrTag(node.Parent.Parent)
+	case (ast.IsFunctionExpressionOrArrowFunction(node) || ast.IsClassExpression(node)) &&
+		(ast.IsVariableDeclaration(node.Parent) || ast.IsPropertyDeclaration(node.Parent) || ast.IsPropertyAssignment(node.Parent)) && node.Parent.Initializer() == node:
+		return getJSDocOrTag(node.Parent)
+	}
+	return nil
+}
+
+func getMatchingJSDocTag(node *ast.Node, name string, match func(*ast.Node, string) bool) *ast.Node {
+	if jsdoc := getJSDocOrTag(node); jsdoc != nil && jsdoc.Kind == ast.KindJSDoc {
+		if tags := jsdoc.AsJSDoc().Tags; tags != nil {
+			for _, tag := range tags.Nodes {
+				if match(tag, name) {
+					return tag
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func isMatchingParameterTag(tag *ast.Node, name string) bool {
+	return tag.Kind == ast.KindJSDocParameterTag && isNodeWithName(tag, name)
+}
+
+func isMatchingTemplateTag(tag *ast.Node, name string) bool {
+	return tag.Kind == ast.KindJSDocTemplateTag && core.Some(tag.TypeParameters(), func(tp *ast.Node) bool { return isNodeWithName(tp, name) })
+}
+
+func isNodeWithName(node *ast.Node, name string) bool {
+	nodeName := node.Name()
+	return ast.IsIdentifier(nodeName) && nodeName.Text() == name
+}
+
+func writeCode(b *strings.Builder, lang string, code string) {
 	if code == "" {
-		return ""
+		return
 	}
 	ticks := 3
 	for strings.Contains(code, strings.Repeat("`", ticks)) {
 		ticks++
 	}
-	var result strings.Builder
-	result.Grow(len(code) + len(lang) + 2*ticks + 2)
 	for range ticks {
-		result.WriteByte('`')
+		b.WriteByte('`')
 	}
-	result.WriteString(lang)
-	result.WriteByte('\n')
-	result.WriteString(code)
-	result.WriteByte('\n')
+	b.WriteString(lang)
+	b.WriteByte('\n')
+	b.WriteString(code)
+	b.WriteByte('\n')
 	for range ticks {
-		result.WriteByte('`')
+		b.WriteByte('`')
 	}
-	return result.String()
+	b.WriteByte('\n')
+}
+
+func writeComments(b *strings.Builder, comments []*ast.Node) {
+	for _, comment := range comments {
+		switch comment.Kind {
+		case ast.KindJSDocText:
+			b.WriteString(comment.AsJSDocText().Text)
+		case ast.KindJSDocLink:
+			name := comment.Name()
+			text := comment.AsJSDocLink().Text
+			if name != nil {
+				if text == "" {
+					writeEntityName(b, name)
+				} else {
+					writeEntityNameParts(b, name)
+				}
+			}
+			b.WriteString(text)
+		}
+	}
+}
+
+func writeOptionalEntityName(b *strings.Builder, name *ast.Node) {
+	if name != nil {
+		b.WriteString(" ")
+		writeEntityName(b, name)
+	}
+}
+
+func writeEntityName(b *strings.Builder, name *ast.Node) {
+	b.WriteString("`")
+	writeEntityNameParts(b, name)
+	b.WriteString("`")
+}
+
+func writeEntityNameParts(b *strings.Builder, node *ast.Node) {
+	switch node.Kind {
+	case ast.KindIdentifier:
+		b.WriteString(node.Text())
+	case ast.KindQualifiedName:
+		writeEntityNameParts(b, node.AsQualifiedName().Left)
+		b.WriteByte('.')
+		writeEntityNameParts(b, node.AsQualifiedName().Right)
+	case ast.KindPropertyAccessExpression:
+		writeEntityNameParts(b, node.Expression())
+		b.WriteByte('.')
+		writeEntityNameParts(b, node.Name())
+	case ast.KindParenthesizedExpression, ast.KindExpressionWithTypeArguments:
+		writeEntityNameParts(b, node.Expression())
+	case ast.KindJSDocNameReference:
+		writeEntityNameParts(b, node.Name())
+	}
 }

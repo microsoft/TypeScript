@@ -50,6 +50,7 @@ const (
 	FlagsUseSingleQuotesForStringLiteralType Flags = 1 << 28
 	FlagsNoTypeReduction                     Flags = 1 << 29
 	FlagsOmitThisParameter                   Flags = 1 << 25
+	FlagsWriteCallStyleSignature             Flags = 1 << 27
 	// Error handling
 	FlagsAllowThisInObjectLiteral              Flags = 1 << 15
 	FlagsAllowQualifiedNameInPlaceOfIdentifier Flags = 1 << 16

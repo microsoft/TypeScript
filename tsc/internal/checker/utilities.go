@@ -347,19 +347,6 @@ func getExternalModuleRequireArgument(node *ast.Node) *ast.Node {
 	return nil
 }
 
-func isRightSideOfQualifiedNameOrPropertyAccess(node *ast.Node) bool {
-	parent := node.Parent
-	switch parent.Kind {
-	case ast.KindQualifiedName:
-		return parent.AsQualifiedName().Right == node
-	case ast.KindPropertyAccessExpression:
-		return parent.AsPropertyAccessExpression().Name() == node
-	case ast.KindMetaProperty:
-		return parent.AsMetaProperty().Name() == node
-	}
-	return false
-}
-
 func isRightSideOfAccessExpression(node *ast.Node) bool {
 	return node.Parent != nil && (ast.IsPropertyAccessExpression(node.Parent) && node.Parent.Name() == node ||
 		ast.IsElementAccessExpression(node.Parent) && node.Parent.AsElementAccessExpression().ArgumentExpression == node)

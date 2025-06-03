@@ -208,7 +208,7 @@ func (p *Parser) gatherTypeParameters(j *ast.Node) *ast.NodeList {
 			end = tag.End()
 
 			constraint := tag.AsJSDocTemplateTag().Constraint
-			for _, tp := range tag.AsJSDocTemplateTag().TypeParameters().Nodes {
+			for _, tp := range tag.TypeParameters() {
 				typeParameter := tp.AsTypeParameter()
 				var reparse *ast.Node
 				if constraint == nil {

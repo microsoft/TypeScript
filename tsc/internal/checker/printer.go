@@ -276,7 +276,7 @@ func (c *Checker) SignatureToStringEx(signature *Signature, enclosingDeclaration
 }
 
 func (c *Checker) signatureToStringEx(signature *Signature, enclosingDeclaration *ast.Node, flags TypeFormatFlags) string {
-	isConstructor := signature.flags&SignatureFlagsConstruct != 0
+	isConstructor := signature.flags&SignatureFlagsConstruct != 0 && flags&TypeFormatFlagsWriteCallStyleSignature == 0
 	var sigOutput ast.Kind
 	if flags&TypeFormatFlagsWriteArrowStyleSignature != 0 {
 		if isConstructor {
