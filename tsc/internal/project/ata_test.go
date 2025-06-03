@@ -3,6 +3,7 @@ package project_test
 import (
 	"slices"
 	"testing"
+	"time"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
@@ -215,16 +216,12 @@ func TestAta(t *testing.T) {
 		_, p2 := service.EnsureDefaultProjectForFile("/user/username/projects/project2/app.js")
 		var installStatuses []project.TypingsInstallerStatus
 		installStatuses = append(installStatuses, <-host.ServiceOptions.InstallStatus, <-host.ServiceOptions.InstallStatus)
-		// Order can be non deterministic since they both will run in parallel
-		assert.Assert(t, slices.Contains(installStatuses, project.TypingsInstallerStatus{
-			RequestId: 1,
-			Project:   p1,
-			Status:    "Success",
+		// Order can be non deterministic since they both will run in parallel - not looking into request ID
+		assert.Assert(t, slices.ContainsFunc(installStatuses, func(s project.TypingsInstallerStatus) bool {
+			return s.Project == p1 && s.Status == "Success"
 		}))
-		assert.Assert(t, slices.Contains(installStatuses, project.TypingsInstallerStatus{
-			RequestId: 2,
-			Project:   p2,
-			Status:    "Success",
+		assert.Assert(t, slices.ContainsFunc(installStatuses, func(s project.TypingsInstallerStatus) bool {
+			return s.Project == p2 && s.Status == "Success"
 		}))
 	})
 
@@ -242,6 +239,7 @@ func TestAta(t *testing.T) {
 				"typeAcquisition": { "include": ["grunt", "gulp", "commander"] },
 			}`,
 		}
+		expectedP1First := true
 		service, host := projecttestutil.Setup(files, &projecttestutil.TestTypingsInstaller{
 			TestTypingsInstallerOptions: projecttestutil.TestTypingsInstallerOptions{
 				PackageToFile: map[string]string{
@@ -250,7 +248,7 @@ func TestAta(t *testing.T) {
 					"lodash":    "declare const lodash: { x: number }",
 					"cordova":   "declare const cordova: { x: number }",
 					"grunt":     "declare const grunt: { x: number }",
-					"gulp":      "declare const grunt: { x: number }",
+					"gulp":      "declare const gulp: { x: number }",
 				},
 			},
 			TypingsInstallerOptions: project.TypingsInstallerOptions{
@@ -258,23 +256,32 @@ func TestAta(t *testing.T) {
 			},
 		})
 
+		host.TestOptions.CheckBeforeNpmInstall = func(cwd string, npmInstallArgs []string) {
+			for {
+				pendingCount := service.TypingsInstaller().PendingRunRequestsCount()
+				if pendingCount == 1 {
+					if slices.Contains(npmInstallArgs, "@types/gulp@latest") {
+						expectedP1First = false
+					}
+					host.TestOptions.CheckBeforeNpmInstall = nil // Stop checking after first run
+					break
+				}
+				assert.NilError(t, t.Context().Err())
+				time.Sleep(10 * time.Millisecond)
+			}
+		}
+
 		service.OpenFile("/user/username/projects/project1/app.js", files["/user/username/projects/project1/app.js"].(string), core.ScriptKindJS, "")
 		service.OpenFile("/user/username/projects/project2/app.js", files["/user/username/projects/project2/app.js"].(string), core.ScriptKindJS, "")
 		_, p1 := service.EnsureDefaultProjectForFile("/user/username/projects/project1/app.js")
 		_, p2 := service.EnsureDefaultProjectForFile("/user/username/projects/project2/app.js")
 		// Order is determinate since second install will run only after completing first one
 		status := <-host.ServiceOptions.InstallStatus
-		assert.Equal(t, status, project.TypingsInstallerStatus{
-			RequestId: 1,
-			Project:   p1,
-			Status:    "Success",
-		})
+		assert.Equal(t, status.Project, core.IfElse(expectedP1First, p1, p2))
+		assert.Equal(t, status.Status, "Success")
 		status = <-host.ServiceOptions.InstallStatus
-		assert.Equal(t, status, project.TypingsInstallerStatus{
-			RequestId: 2,
-			Project:   p2,
-			Status:    "Success",
-		})
+		assert.Equal(t, status.Project, core.IfElse(expectedP1First, p2, p1))
+		assert.Equal(t, status.Status, "Success")
 	})
 
 	t.Run("discover from node_modules", func(t *testing.T) {

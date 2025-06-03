@@ -19,8 +19,9 @@ import (
 //go:generate go tool github.com/matryer/moq -stub -fmt goimports -pkg projecttestutil -out clientmock_generated.go ../../project Client
 
 type TestTypingsInstallerOptions struct {
-	TypesRegistry []string
-	PackageToFile map[string]string
+	TypesRegistry         []string
+	PackageToFile         map[string]string
+	CheckBeforeNpmInstall func(cwd string, npmInstallArgs []string)
 }
 
 type TestTypingsInstaller struct {
@@ -35,7 +36,7 @@ type ProjectServiceHost struct {
 	output             strings.Builder
 	logger             *project.Logger
 	ClientMock         *ClientMock
-	testOptions        *TestTypingsInstallerOptions
+	TestOptions        *TestTypingsInstallerOptions
 	ServiceOptions     *project.ServiceOptions
 }
 
@@ -89,7 +90,7 @@ var _ project.ServiceHost = (*ProjectServiceHost)(nil)
 func Setup(files map[string]any, testOptions *TestTypingsInstaller) (*project.Service, *ProjectServiceHost) {
 	host := newProjectServiceHost(files)
 	if testOptions != nil {
-		host.testOptions = &testOptions.TestTypingsInstallerOptions
+		host.TestOptions = &testOptions.TestTypingsInstallerOptions
 	}
 	var throttleLimit int
 	if testOptions != nil && testOptions.ThrottleLimit != 0 {
@@ -112,7 +113,7 @@ func Setup(files map[string]any, testOptions *TestTypingsInstaller) (*project.Se
 }
 
 func (p *ProjectServiceHost) NpmInstall(cwd string, npmInstallArgs []string) ([]byte, error) {
-	if p.testOptions == nil {
+	if p.TestOptions == nil {
 		return nil, nil
 	}
 
@@ -127,10 +128,14 @@ func (p *ProjectServiceHost) NpmInstall(cwd string, npmInstallArgs []string) ([]
 		return nil, err
 	}
 
+	if p.TestOptions.CheckBeforeNpmInstall != nil {
+		p.TestOptions.CheckBeforeNpmInstall(cwd, npmInstallArgs)
+	}
+
 	for _, atTypesPackageTs := range npmInstallArgs[2 : lenNpmInstallArgs-2] {
 		// @types/packageName@TsVersionToUse
 		packageName := atTypesPackageTs[7 : len(atTypesPackageTs)-len(project.TsVersionToUse)-1]
-		content, ok := p.testOptions.PackageToFile[packageName]
+		content, ok := p.TestOptions.PackageToFile[packageName]
 		if !ok {
 			return nil, fmt.Errorf("content not provided for %s", packageName)
 		}
@@ -187,12 +192,12 @@ func TypesRegistryConfig() map[string]string {
 func (p *ProjectServiceHost) createTypesRegistryFileContent() string {
 	var builder strings.Builder
 	builder.WriteString("{\n  \"entries\": {")
-	for index, entry := range p.testOptions.TypesRegistry {
+	for index, entry := range p.TestOptions.TypesRegistry {
 		appendTypesRegistryConfig(&builder, index, entry)
 	}
-	index := len(p.testOptions.TypesRegistry)
-	for key := range p.testOptions.PackageToFile {
-		if !slices.Contains(p.testOptions.TypesRegistry, key) {
+	index := len(p.TestOptions.TypesRegistry)
+	for key := range p.TestOptions.PackageToFile {
+		if !slices.Contains(p.TestOptions.TypesRegistry, key) {
 			appendTypesRegistryConfig(&builder, index, key)
 			index++
 		}
