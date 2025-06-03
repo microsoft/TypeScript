@@ -240,24 +240,6 @@ func (ti *TypingsInstaller) invokeRoutineToInstallTypings(
 			packageNames []string,
 			success bool,
 		) {
-			ti.pendingRunRequestsMu.Lock()
-			pendingRequestsCount := len(ti.pendingRunRequests)
-			var nextRequest *PendingRequest
-			if pendingRequestsCount == 0 {
-				ti.inFlightRequestCount--
-			} else {
-				nextRequest = ti.pendingRunRequests[0]
-				if pendingRequestsCount == 1 {
-					ti.pendingRunRequests = nil
-				} else {
-					ti.pendingRunRequests = ti.pendingRunRequests[1:]
-				}
-			}
-			ti.pendingRunRequestsMu.Unlock()
-			if nextRequest != nil {
-				ti.invokeRoutineToInstallTypings(nextRequest)
-			}
-
 			if success {
 				p.Logf("ATA:: Installed typings %v", packageNames)
 				var installedTypingFiles []string
@@ -329,6 +311,24 @@ func (ti *TypingsInstaller) invokeRoutineToInstallTypings(
 					Project:   p,
 					Status:    core.IfElse(success, "Success", "Fail"),
 				}
+			}
+
+			ti.pendingRunRequestsMu.Lock()
+			pendingRequestsCount := len(ti.pendingRunRequests)
+			var nextRequest *PendingRequest
+			if pendingRequestsCount == 0 {
+				ti.inFlightRequestCount--
+			} else {
+				nextRequest = ti.pendingRunRequests[0]
+				if pendingRequestsCount == 1 {
+					ti.pendingRunRequests = nil
+				} else {
+					ti.pendingRunRequests = ti.pendingRunRequests[1:]
+				}
+			}
+			ti.pendingRunRequestsMu.Unlock()
+			if nextRequest != nil {
+				ti.invokeRoutineToInstallTypings(nextRequest)
 			}
 		},
 	)
