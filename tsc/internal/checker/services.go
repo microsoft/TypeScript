@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/printer"
 )
 
 func (c *Checker) GetSymbolsInScope(location *ast.Node, meaning ast.SymbolFlags) []*ast.Symbol {
@@ -299,10 +300,20 @@ func runWithInferenceBlockedFromSourceNode[T any](c *Checker, node *ast.Node, fn
 	return result
 }
 
-func runWithoutResolvedSignatureCaching[T any](c *Checker, node *ast.Node, fn func() T) T {
-	ancestorNode := ast.FindAncestor(node, func(n *ast.Node) bool {
-		return ast.IsCallLikeOrFunctionLikeExpression(n)
+func GetResolvedSignatureForSignatureHelp(node *ast.Node, argumentCount int, c *Checker) (*Signature, []*Signature) {
+	type result struct {
+		signature  *Signature
+		candidates []*Signature
+	}
+	res := runWithoutResolvedSignatureCaching(c, node, func() result {
+		signature, candidates := c.getResolvedSignatureWorker(node, CheckModeIsForSignatureHelp, argumentCount)
+		return result{signature, candidates}
 	})
+	return res.signature, res.candidates
+}
+
+func runWithoutResolvedSignatureCaching[T any](c *Checker, node *ast.Node, fn func() T) T {
+	ancestorNode := ast.FindAncestor(node, ast.IsCallLikeOrFunctionLikeExpression)
 	if ancestorNode != nil {
 		cachedResolvedSignatures := make(map[*SignatureLinks]*Signature)
 		cachedTypes := make(map[*ValueSymbolLinks]*Type)
@@ -505,4 +516,16 @@ func (c *Checker) GetConstantValue(node *ast.Node) any {
 	}
 
 	return nil
+}
+
+func (c *Checker) getResolvedSignatureWorker(node *ast.Node, checkMode CheckMode, argumentCount int) (*Signature, []*Signature) {
+	parsedNode := printer.NewEmitContext().ParseNode(node)
+	c.apparentArgumentCount = &argumentCount
+	candidatesOutArray := &[]*Signature{}
+	var res *Signature
+	if parsedNode != nil {
+		res = c.getResolvedSignature(parsedNode, candidatesOutArray, checkMode)
+	}
+	c.apparentArgumentCount = nil
+	return res, *candidatesOutArray
 }

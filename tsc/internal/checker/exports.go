@@ -85,3 +85,35 @@ func (c *Checker) GetEffectiveDeclarationFlags(n *ast.Node, flagsToCheck ast.Mod
 func (c *Checker) GetBaseConstraintOfType(t *Type) *Type {
 	return c.getBaseConstraintOfType(t)
 }
+
+func (c *Checker) GetTypePredicateOfSignature(sig *Signature) *TypePredicate {
+	return c.getTypePredicateOfSignature(sig)
+}
+
+func IsTupleType(t *Type) bool {
+	return isTupleType(t)
+}
+
+func (c *Checker) GetReturnTypeOfSignature(sig *Signature) *Type {
+	return c.getReturnTypeOfSignature(sig)
+}
+
+func (c *Checker) HasEffectiveRestParameter(signature *Signature) bool {
+	return c.hasEffectiveRestParameter(signature)
+}
+
+func (c *Checker) GetLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol *ast.Symbol) []*Type {
+	return c.getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol)
+}
+
+func (c *Checker) GetContextualTypeForObjectLiteralElement(element *ast.Node, contextFlags ContextFlags) *Type {
+	return c.getContextualTypeForObjectLiteralElement(element, contextFlags)
+}
+
+func (c *Checker) TypePredicateToString(t *TypePredicate) string {
+	return c.typePredicateToString(t)
+}
+
+func (c *Checker) GetExpandedParameters(signature *Signature, skipUnionExpanding bool) [][]*ast.Symbol {
+	return c.getExpandedParameters(signature, skipUnionExpanding)
+}

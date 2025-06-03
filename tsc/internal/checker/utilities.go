@@ -256,25 +256,6 @@ func nodeCanBeDecorated(useLegacyDecorators bool, node *ast.Node, parent *ast.No
 	return false
 }
 
-func canHaveSymbol(node *ast.Node) bool {
-	switch node.Kind {
-	case ast.KindArrowFunction, ast.KindBinaryExpression, ast.KindBindingElement, ast.KindCallExpression, ast.KindCallSignature,
-		ast.KindClassDeclaration, ast.KindClassExpression, ast.KindClassStaticBlockDeclaration, ast.KindConstructor, ast.KindConstructorType,
-		ast.KindConstructSignature, ast.KindElementAccessExpression, ast.KindEnumDeclaration, ast.KindEnumMember, ast.KindExportAssignment, ast.KindJSExportAssignment,
-		ast.KindExportDeclaration, ast.KindExportSpecifier, ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindFunctionType,
-		ast.KindGetAccessor, ast.KindIdentifier, ast.KindImportClause, ast.KindImportEqualsDeclaration, ast.KindImportSpecifier,
-		ast.KindIndexSignature, ast.KindInterfaceDeclaration, ast.KindJSDocSignature, ast.KindJSDocTypeLiteral,
-		ast.KindJsxAttribute, ast.KindJsxAttributes, ast.KindJsxSpreadAttribute, ast.KindMappedType, ast.KindMethodDeclaration,
-		ast.KindMethodSignature, ast.KindModuleDeclaration, ast.KindNamedTupleMember, ast.KindNamespaceExport, ast.KindNamespaceExportDeclaration,
-		ast.KindNamespaceImport, ast.KindNewExpression, ast.KindNoSubstitutionTemplateLiteral, ast.KindNumericLiteral, ast.KindObjectLiteralExpression,
-		ast.KindParameter, ast.KindPropertyAccessExpression, ast.KindPropertyAssignment, ast.KindPropertyDeclaration, ast.KindPropertySignature,
-		ast.KindSetAccessor, ast.KindShorthandPropertyAssignment, ast.KindSourceFile, ast.KindSpreadAssignment, ast.KindStringLiteral,
-		ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindTypeLiteral, ast.KindTypeParameter, ast.KindVariableDeclaration:
-		return true
-	}
-	return false
-}
-
 func canHaveLocals(node *ast.Node) bool {
 	switch node.Kind {
 	case ast.KindArrowFunction, ast.KindBlock, ast.KindCallSignature, ast.KindCaseBlock, ast.KindCatchClause,
@@ -1094,10 +1075,6 @@ func isThisTypeParameter(t *Type) bool {
 	return t.flags&TypeFlagsTypeParameter != 0 && t.AsTypeParameter().isThisType
 }
 
-func isCallOrNewExpression(node *ast.Node) bool {
-	return ast.IsCallExpression(node) || ast.IsNewExpression(node)
-}
-
 func isClassInstanceProperty(node *ast.Node) bool {
 	return node.Parent != nil && ast.IsClassLike(node.Parent) && ast.IsPropertyDeclaration(node) && !ast.HasAccessorModifier(node)
 }
@@ -1197,10 +1174,6 @@ func reverseAccessKind(a AccessKind) AccessKind {
 	panic("Unhandled case in reverseAccessKind")
 }
 
-func isJsxOpeningLikeElement(node *ast.Node) bool {
-	return ast.IsJsxOpeningElement(node) || ast.IsJsxSelfClosingElement(node)
-}
-
 // Deprecated in favor of `ast.IsObjectLiteralElement`
 func isObjectLiteralElementLike(node *ast.Node) bool {
 	return ast.IsObjectLiteralElement(node)
@@ -1278,18 +1251,6 @@ func getBindingElementPropertyName(node *ast.Node) *ast.Node {
 	return node.Name()
 }
 
-func indexOfNode(nodes []*ast.Node, node *ast.Node) int {
-	index, ok := slices.BinarySearchFunc(nodes, node, compareNodePositions)
-	if ok {
-		return index
-	}
-	return -1
-}
-
-func compareNodePositions(n1, n2 *ast.Node) int {
-	return n1.Pos() - n2.Pos()
-}
-
 func hasContextSensitiveParameters(node *ast.Node) bool {
 	// Functions with type parameters are not context sensitive.
 	if node.TypeParameters() == nil {
@@ -1314,7 +1275,7 @@ func isCallChain(node *ast.Node) bool {
 }
 
 func (c *Checker) callLikeExpressionMayHaveTypeArguments(node *ast.Node) bool {
-	return isCallOrNewExpression(node) || ast.IsTaggedTemplateExpression(node) || isJsxOpeningLikeElement(node)
+	return ast.IsCallOrNewExpression(node) || ast.IsTaggedTemplateExpression(node) || ast.IsJsxOpeningLikeElement(node)
 }
 
 func isSuperCall(n *ast.Node) bool {
@@ -1849,19 +1810,6 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 		return entityNameToString(expr)
 	}
 	return ""
-}
-
-func getInvokedExpression(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindTaggedTemplateExpression:
-		return node.AsTaggedTemplateExpression().Tag
-	case ast.KindJsxOpeningElement, ast.KindJsxSelfClosingElement:
-		return node.TagName()
-	case ast.KindBinaryExpression:
-		return node.AsBinaryExpression().Right
-	default:
-		return node.Expression()
-	}
 }
 
 func getFirstJSDocTag(node *ast.Node, f func(*ast.Node) bool) *ast.Node {

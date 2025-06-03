@@ -119,7 +119,7 @@ func (c *Checker) checkJsxAttributes(node *ast.Node, checkMode CheckMode) *Type 
 }
 
 func (c *Checker) checkJsxOpeningLikeElementOrOpeningFragment(node *ast.Node) {
-	isNodeOpeningLikeElement := isJsxOpeningLikeElement(node)
+	isNodeOpeningLikeElement := ast.IsJsxOpeningLikeElement(node)
 	if isNodeOpeningLikeElement {
 		c.checkGrammarJsxElement(node)
 	}

@@ -263,13 +263,96 @@ type PossibleTypeArgumentInfo struct {
 	nTypeArguments int
 }
 
-// !!! signature help
+// Get info for an expression like `f <` that may be the start of type arguments.
 func getPossibleTypeArgumentsInfo(tokenIn *ast.Node, sourceFile *ast.SourceFile) *PossibleTypeArgumentInfo {
-	return nil
-}
+	// This is a rare case, but one that saves on a _lot_ of work if true - if the source file has _no_ `<` character,
+	// then there obviously can't be any type arguments - no expensive brace-matching backwards scanning required
+	if strings.LastIndexByte(sourceFile.Text(), '<') == -1 {
+		return nil
+	}
 
-// !!! signature help
-func getPossibleGenericSignatures(called *ast.Expression, typeArgumentCount int, checker *checker.Checker) []*checker.Signature {
+	token := tokenIn
+	// This function determines if the node could be a type argument position
+	// When editing, it is common to have an incomplete type argument list (e.g. missing ">"),
+	// so the tree can have any shape depending on the tokens before the current node.
+	// Instead, scanning for an identifier followed by a "<" before current node
+	// will typically give us better results than inspecting the tree.
+	// Note that we also balance out the already provided type arguments, arrays, object literals while doing so.
+	remainingLessThanTokens := 0
+	nTypeArguments := 0
+	for token != nil {
+		switch token.Kind {
+		case ast.KindLessThanToken:
+			// Found the beginning of the generic argument expression
+			token = astnav.FindPrecedingToken(sourceFile, token.Pos())
+			if token != nil && token.Kind == ast.KindQuestionDotToken {
+				token = astnav.FindPrecedingToken(sourceFile, token.Pos())
+			}
+			if token == nil || !ast.IsIdentifier(token) {
+				return nil
+			}
+			if remainingLessThanTokens == 0 {
+				if ast.IsDeclarationName(token) {
+					return nil
+				}
+				return &PossibleTypeArgumentInfo{
+					called:         token,
+					nTypeArguments: nTypeArguments,
+				}
+			}
+			remainingLessThanTokens--
+			break
+		case ast.KindGreaterThanGreaterThanGreaterThanToken:
+			remainingLessThanTokens = +3
+			break
+		case ast.KindGreaterThanGreaterThanToken:
+			remainingLessThanTokens = +2
+			break
+		case ast.KindGreaterThanToken:
+			remainingLessThanTokens++
+			break
+		case ast.KindCloseBraceToken:
+			// This can be object type, skip until we find the matching open brace token
+			// Skip until the matching open brace token
+			token = findPrecedingMatchingToken(token, ast.KindOpenBraceToken, sourceFile)
+			if token == nil {
+				return nil
+			}
+			break
+		case ast.KindCloseParenToken:
+			// This can be object type, skip until we find the matching open brace token
+			// Skip until the matching open brace token
+			token = findPrecedingMatchingToken(token, ast.KindOpenParenToken, sourceFile)
+			if token == nil {
+				return nil
+			}
+			break
+		case ast.KindCloseBracketToken:
+			// This can be object type, skip until we find the matching open brace token
+			// Skip until the matching open brace token
+			token = findPrecedingMatchingToken(token, ast.KindOpenBracketToken, sourceFile)
+			if token == nil {
+				return nil
+			}
+			break
+
+			// Valid tokens in a type name. Skip.
+		case ast.KindCommaToken:
+			nTypeArguments++
+			break
+		case ast.KindEqualsGreaterThanToken, ast.KindIdentifier, ast.KindStringLiteral, ast.KindNumericLiteral,
+			ast.KindBigIntLiteral, ast.KindTrueKeyword, ast.KindFalseKeyword, ast.KindTypeOfKeyword, ast.KindExtendsKeyword,
+			ast.KindKeyOfKeyword, ast.KindDotToken, ast.KindBarToken, ast.KindQuestionToken, ast.KindColonToken:
+			break
+		default:
+			if ast.IsTypeNode(token) {
+				break
+			}
+			// Invalid token in type
+			return nil
+		}
+		token = astnav.FindPrecedingToken(sourceFile, token.Pos())
+	}
 	return nil
 }
 
@@ -828,4 +911,94 @@ func newCaseClauseTracker(typeChecker *checker.Checker, clauses []*ast.CaseOrDef
 		}
 	}
 	return c
+}
+
+func RangeContainsRange(r1 core.TextRange, r2 core.TextRange) bool {
+	return startEndContainsRange(r1.Pos(), r1.End(), r2)
+}
+
+func startEndContainsRange(start int, end int, textRange core.TextRange) bool {
+	return start <= textRange.Pos() && end >= textRange.End()
+}
+
+func getPossibleGenericSignatures(called *ast.Expression, typeArgumentCount int, c *checker.Checker) []*checker.Signature {
+	typeAtLocation := c.GetTypeAtLocation(called)
+	if ast.IsOptionalChain(called.Parent) {
+		typeAtLocation = removeOptionality(typeAtLocation, ast.IsOptionalChainRoot(called.Parent), true /*isOptionalChain*/, c)
+	}
+	var signatures []*checker.Signature
+	if ast.IsNewExpression(called.Parent) {
+		signatures = c.GetSignaturesOfType(typeAtLocation, checker.SignatureKindConstruct)
+	} else {
+		signatures = c.GetSignaturesOfType(typeAtLocation, checker.SignatureKindCall)
+	}
+	return core.Filter(signatures, func(s *checker.Signature) bool {
+		return s.TypeParameters() != nil && len(s.TypeParameters()) >= typeArgumentCount
+	})
+}
+
+func removeOptionality(t *checker.Type, isOptionalExpression bool, isOptionalChain bool, c *checker.Checker) *checker.Type {
+	if isOptionalExpression {
+		return c.GetNonNullableType(t)
+	} else if isOptionalChain {
+		return c.GetNonOptionalType(t)
+	}
+	return t
+}
+
+func isNoSubstitutionTemplateLiteral(node *ast.Node) bool {
+	return node.Kind == ast.KindNoSubstitutionTemplateLiteral
+}
+
+func isTaggedTemplateExpression(node *ast.Node) bool {
+	return node.Kind == ast.KindTaggedTemplateExpression
+}
+
+func isInsideTemplateLiteral(node *ast.Node, position int, sourceFile *ast.SourceFile) bool {
+	return ast.IsTemplateLiteralKind(node.Kind) && (scanner.GetTokenPosOfNode(node, sourceFile, false) < position && position < node.End() || (ast.IsUnterminatedLiteral(node) && position == node.End()))
+}
+
+// Pseudo-literals
+func isTemplateHead(node *ast.Node) bool {
+	return node.Kind == ast.KindTemplateHead
+}
+
+func isTemplateTail(node *ast.Node) bool {
+	return node.Kind == ast.KindTemplateTail
+}
+
+func findPrecedingMatchingToken(token *ast.Node, matchingTokenKind ast.Kind, sourceFile *ast.SourceFile) *ast.Node {
+	closeTokenText := scanner.TokenToString(token.Kind)
+	matchingTokenText := scanner.TokenToString(matchingTokenKind)
+	tokenFullStart := token.Loc.Pos()
+	// Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
+	// a good, fast approximation without too much extra work in the cases where it fails.
+	bestGuessIndex := strings.LastIndex(sourceFile.Text(), matchingTokenText)
+	if bestGuessIndex == -1 {
+		return nil // if the token text doesn't appear in the file, there can't be a match - super fast bail
+	}
+	// we can only use the textual result directly if we didn't have to count any close tokens within the range
+	if strings.LastIndex(sourceFile.Text(), closeTokenText) < bestGuessIndex {
+		nodeAtGuess := astnav.FindPrecedingToken(sourceFile, bestGuessIndex+1)
+		if nodeAtGuess != nil && nodeAtGuess.Kind == matchingTokenKind {
+			return nodeAtGuess
+		}
+	}
+	tokenKind := token.Kind
+	remainingMatchingTokens := 0
+	for {
+		preceding := astnav.FindPrecedingToken(sourceFile, tokenFullStart)
+		if preceding == nil {
+			return nil
+		}
+		token = preceding
+		if token.Kind == matchingTokenKind {
+			if remainingMatchingTokens == 0 {
+				return token
+			}
+			remainingMatchingTokens--
+		} else if token.Kind == tokenKind {
+			remainingMatchingTokens++
+		}
+	}
 }

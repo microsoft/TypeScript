@@ -410,6 +410,8 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		return s.handleDefinition(ctx, req)
 	case *lsproto.CompletionParams:
 		return s.handleCompletion(ctx, req)
+	case *lsproto.SignatureHelpParams:
+		return s.handleSignatureHelp(ctx, req)
 	default:
 		switch req.Method {
 		case lsproto.MethodShutdown:
@@ -470,6 +472,9 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 			CompletionProvider: &lsproto.CompletionOptions{
 				TriggerCharacters: &ls.TriggerCharacters,
 				// !!! other options
+			},
+			SignatureHelpProvider: &lsproto.SignatureHelpOptions{
+				TriggerCharacters: &[]string{"(", ","},
 			},
 		},
 	})
@@ -545,6 +550,23 @@ func (s *Server) handleHover(ctx context.Context, req *lsproto.RequestMessage) e
 		return err
 	}
 	s.sendResult(req.ID, hover)
+	return nil
+}
+
+func (s *Server) handleSignatureHelp(ctx context.Context, req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.SignatureHelpParams)
+	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	signatureHelp := languageService.ProvideSignatureHelp(
+		ctx,
+		params.TextDocument.Uri,
+		params.Position,
+		params.Context,
+		s.initializeParams.Capabilities.TextDocument.SignatureHelp,
+		&ls.UserPreferences{},
+	)
+	s.sendResult(req.ID, signatureHelp)
 	return nil
 }
 
