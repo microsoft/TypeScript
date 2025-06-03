@@ -1,0 +1,153 @@
+//// [tests/cases/compiler/excessPropertyCheckSpreadReturn.ts] ////
+
+=== excessPropertyCheckSpreadReturn.ts ===
+type FReturnType = {
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    a?: any;
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 0, 20))
+
+    b?: any;
+>b : Symbol(b, Decl(excessPropertyCheckSpreadReturn.ts, 1, 12))
+}
+const objWithAllowedKeys = { a: 2 }
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadReturn.ts, 4, 5))
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 4, 28))
+
+const objWithForbiddenKeys = { c: 2 }
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadReturn.ts, 5, 5))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 5, 30))
+
+const objWithNoKeys = {}
+>objWithNoKeys : Symbol(objWithNoKeys, Decl(excessPropertyCheckSpreadReturn.ts, 6, 5))
+
+const a = 2;
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 7, 5))
+
+const c = 2;
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 8, 5))
+
+function f1(): FReturnType {
+>f1 : Symbol(f1, Decl(excessPropertyCheckSpreadReturn.ts, 8, 12))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...objWithAllowedKeys };
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadReturn.ts, 4, 5))
+}
+
+function f2(): FReturnType {
+>f2 : Symbol(f2, Decl(excessPropertyCheckSpreadReturn.ts, 12, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...objWithForbiddenKeys };
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadReturn.ts, 5, 5))
+}
+
+function f3(): FReturnType {
+>f3 : Symbol(f3, Decl(excessPropertyCheckSpreadReturn.ts, 16, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...objWithAllowedKeys, ...objWithForbiddenKeys };
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadReturn.ts, 4, 5))
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadReturn.ts, 5, 5))
+}
+
+function f4(): FReturnType {
+>f4 : Symbol(f4, Decl(excessPropertyCheckSpreadReturn.ts, 20, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ a: 2 }, ...{ c: 2 } };
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 23, 17))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 23, 30))
+}
+
+function f5(): FReturnType {
+>f5 : Symbol(f5, Decl(excessPropertyCheckSpreadReturn.ts, 24, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ a: 2, c: 2 } };
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 27, 17))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 27, 23))
+}
+
+function f6(): FReturnType {
+>f6 : Symbol(f6, Decl(excessPropertyCheckSpreadReturn.ts, 28, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ c: 2 }, ...{ b: 2 } };
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 31, 17))
+>b : Symbol(b, Decl(excessPropertyCheckSpreadReturn.ts, 31, 30))
+}
+
+function f7(): FReturnType {
+>f7 : Symbol(f7, Decl(excessPropertyCheckSpreadReturn.ts, 32, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ a: 2 }, ...objWithForbiddenKeys };
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 35, 17))
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadReturn.ts, 5, 5))
+}
+
+function f8(): FReturnType {
+>f8 : Symbol(f8, Decl(excessPropertyCheckSpreadReturn.ts, 36, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ c: 2 }, ...objWithAllowedKeys };
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 39, 17))
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadReturn.ts, 4, 5))
+}
+
+function f9(): FReturnType {
+>f9 : Symbol(f9, Decl(excessPropertyCheckSpreadReturn.ts, 40, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ c: 2 }, ...objWithForbiddenKeys };
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 43, 17))
+>objWithForbiddenKeys : Symbol(objWithForbiddenKeys, Decl(excessPropertyCheckSpreadReturn.ts, 5, 5))
+}
+
+function f10(): FReturnType {
+>f10 : Symbol(f10, Decl(excessPropertyCheckSpreadReturn.ts, 44, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ c: 2 }, ...objWithNoKeys };
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 47, 17))
+>objWithNoKeys : Symbol(objWithNoKeys, Decl(excessPropertyCheckSpreadReturn.ts, 6, 5))
+}
+
+function f11(): FReturnType {
+>f11 : Symbol(f11, Decl(excessPropertyCheckSpreadReturn.ts, 48, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{...{ c: 2 }, ...objWithNoKeys } };
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 51, 21))
+>objWithNoKeys : Symbol(objWithNoKeys, Decl(excessPropertyCheckSpreadReturn.ts, 6, 5))
+}
+
+function f12(): FReturnType {
+>f12 : Symbol(f12, Decl(excessPropertyCheckSpreadReturn.ts, 52, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { a, ...{ c: 2 } };
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 55, 12))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 55, 20))
+}
+
+function f13(): FReturnType {
+>f13 : Symbol(f13, Decl(excessPropertyCheckSpreadReturn.ts, 56, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { a, ...{ c } };
+>a : Symbol(a, Decl(excessPropertyCheckSpreadReturn.ts, 59, 12))
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 59, 20))
+}
+
+function f14(): FReturnType {
+>f14 : Symbol(f14, Decl(excessPropertyCheckSpreadReturn.ts, 60, 1))
+>FReturnType : Symbol(FReturnType, Decl(excessPropertyCheckSpreadReturn.ts, 0, 0))
+
+    return { ...{ c }, ...objWithAllowedKeys };
+>c : Symbol(c, Decl(excessPropertyCheckSpreadReturn.ts, 63, 17))
+>objWithAllowedKeys : Symbol(objWithAllowedKeys, Decl(excessPropertyCheckSpreadReturn.ts, 4, 5))
+}
+
