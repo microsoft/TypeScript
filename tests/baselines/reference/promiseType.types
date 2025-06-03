@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/promiseType.ts] ////
 
 === Performance Stats ===
-Instantiation count: 2,500 -> 5,000
+Instantiation count: 2,500
 
 === promiseType.ts ===
 declare var p: Promise<boolean>;

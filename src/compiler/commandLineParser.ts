@@ -1,4 +1,5 @@
 import {
+    addToSeen,
     AlternateModeDiagnostics,
     append,
     arrayFrom,
@@ -146,8 +147,8 @@ export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxO
 //       augmented in another lib.
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-//       lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -246,6 +247,8 @@ const libEntries: [string, string][] = [
     ["esnext.regexp", "lib.es2024.regexp.d.ts"],
     ["esnext.string", "lib.es2024.string.d.ts"],
     ["esnext.iterator", "lib.esnext.iterator.d.ts"],
+    ["esnext.promise", "lib.esnext.promise.d.ts"],
+    ["esnext.float16", "lib.esnext.float16.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -598,6 +601,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         es2022: ModuleKind.ES2022,
         esnext: ModuleKind.ESNext,
         node16: ModuleKind.Node16,
+        node18: ModuleKind.Node18,
         nodenext: ModuleKind.NodeNext,
         preserve: ModuleKind.Preserve,
     })),
@@ -851,6 +855,23 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
         affectsBuildInfo: true,
         affectsSemanticDiagnostics: true,
+    },
+    {
+        name: "erasableSyntaxOnly",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript,
+        defaultValueDescription: false,
+        affectsBuildInfo: true,
+        affectsSemanticDiagnostics: true,
+    },
+    {
+        name: "libReplacement",
+        type: "boolean",
+        affectsProgramStructure: true,
+        category: Diagnostics.Language_and_Environment,
+        description: Diagnostics.Enable_lib_replacement,
+        defaultValueDescription: true,
     },
 
     // Strict Type Checks
@@ -1176,6 +1197,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_bundler_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
         defaultValueDescription: false,
         transpileOptionValue: undefined,
+    },
+    {
+        name: "rewriteRelativeImportExtensions",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files,
+        defaultValueDescription: false,
     },
     {
         name: "resolvePackageJsonExports",
@@ -2620,7 +2650,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
     const providedKeys = new Set(optionMap.keys());
     const impliedCompilerOptions: Record<string, CompilerOptionsValue> = {};
     for (const option in computedOptions) {
-        if (!providedKeys.has(option) && some(computedOptions[option].dependencies, dep => providedKeys.has(dep))) {
+        if (!providedKeys.has(option) && optionDependsOn(option, providedKeys)) {
             const implied = computedOptions[option].computeValue(configParseResult.options);
             const defaultValue = computedOptions[option].computeValue({});
             if (implied !== defaultValue) {
@@ -2630,6 +2660,18 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
     }
     assign(config.compilerOptions, optionMapToObject(serializeCompilerOptions(impliedCompilerOptions, pathOptions)));
     return config;
+}
+
+function optionDependsOn(option: string, dependsOn: Set<string>): boolean {
+    const seen = new Set<string>();
+    return optionDependsOnRecursive(option);
+
+    function optionDependsOnRecursive(option: string): boolean {
+        if (addToSeen(seen, option)) {
+            return some(computedOptions[option]?.dependencies, dep => dependsOn.has(dep) || optionDependsOnRecursive(dep));
+        }
+        return false;
+    }
 }
 
 /** @internal */

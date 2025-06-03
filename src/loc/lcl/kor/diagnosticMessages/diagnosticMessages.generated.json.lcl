@@ -2784,11 +2784,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";At_least_one_accessor_must_have_an_explicit_return_type_annotation_with_isolatedDeclarations_9009" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";At_least_one_accessor_must_have_an_explicit_type_annotation_with_isolatedDeclarations_9009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[At least one accessor must have an explicit return type annotation with --isolatedDeclarations.]]></Val>
+          <Val><![CDATA[At least one accessor must have an explicit type annotation with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[하나 이상의 접근자에는 --isolatedDeclarations가 있는 명시적 반환 형식 주석이 있어야 합니다.]]></Val>
+            <Val><![CDATA[하나 이상의 접근자에 --isolatedDeclarations를 사용하는 명시적 형식 주석이 있어야 합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5040,9 +5040,9 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_it_s_type_This_is_not_su_9025" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Declaration_emit_for_this_parameter_requires_implicitly_adding_undefined_to_its_type_This_is_not_sup_9025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.]]></Val>
+          <Val><![CDATA[Declaration emit for this parameter requires implicitly adding undefined to its type. This is not supported with --isolatedDeclarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[이 매개 변수에 대한 선언 내보내기를 사용하려면 정의되지 않은 형식을 암시적으로 추가해야 합니다. 이는 --isolatedDeclarations에서는 지원되지 않습니다.]]></Val>
           </Tgt>
@@ -5739,6 +5739,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Do_not_allow_runtime_constructs_that_are_not_part_of_ECMAScript_6721" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Do not allow runtime constructs that are not part of ECMAScript.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[ECMAScript의 일부가 아닌 런타임 구문을 허용하지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Do_not_emit_comments_to_output_6009" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Do not emit comments to output.]]></Val>
@@ -5996,12 +6005,12 @@
       </Item>
       <Item ItemId=";Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd__1323" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
+          <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[동적 가져오기는 '--module' 플래그가 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16' 또는 'nodenext'로 설정된 경우에만 지원됩니다.]]></Val>
+            <Val><![CDATA[동적 가져오기는 '--module' 플래그가 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', 'node18' 또는 'nodenext'로 설정된 경우에만 지원됩니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node12', or 'nodenext'.]]></Val>
+            <Val><![CDATA[Dynamic imports are only supported when the '--module' flag is set to 'es2020', 'es2022', 'esnext', 'commonjs', 'amd', 'system', 'umd', 'node16', or 'nodenext'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -6015,11 +6024,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_nodene_1324" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_1324" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Dynamic imports only support a second argument when the '--module' option is set to 'esnext', 'node16', 'node18', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[동적 가져오기는 '--module' 옵션이 'esnext', 'node16', 'nodenext' 또는 'preserve'로 설정된 경우에만 두 번째 인수를 지원합니다.]]></Val>
+            <Val><![CDATA[동적 가져오기는 '--module' 옵션이 'esnext', 'node16', 'node18', 'nodenext' 또는 'preserve'로 설정된 경우에만 두 번째 인수를 지원합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6324,6 +6333,15 @@
           <Prev Cat="Text">
             <Val><![CDATA[Enable importing .json files]]></Val>
           </Prev>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Enable_lib_replacement_6808" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Enable lib replacement.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[라이브러리 바꾸기를 사용하도록 설정합니다.]]></Val>
+          </Tgt>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -7884,11 +7902,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Generator_implicitly_has_yield_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_retu_7025" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Generator_implicitly_has_yield_type_0_Consider_supplying_a_return_type_annotation_7025" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Generator implicitly has yield type '{0}' because it does not yield any values. Consider supplying a return type annotation.]]></Val>
+          <Val><![CDATA[Generator implicitly has yield type '{0}'. Consider supplying a return type annotation.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[생성기는 값을 생성하지 않으므로 암시적으로 yield 형식 '{0}'입니다. 반환 형식 주석을 제공하는 것이 좋습니다.]]></Val>
+            <Val><![CDATA[생성기에 암시적으로 '{0}' yield 형식이 있습니다. 반환 형식 주석을 제공하는 것이 좋습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8229,11 +8247,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_2821" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2821" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Import assertions are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[가져오기 어설션은 '--module' 옵션이 'esnext', 'nodenext' 또는 'preserve'로 설정된 경우에만 지원됩니다.]]></Val>
+            <Val><![CDATA[가져오기 어설션은 '--module' 옵션이 'esnext', 'node18', 'nodenext' 또는 'preserve'로 설정된 경우에만 지원됩니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8243,6 +8261,15 @@
           <Val><![CDATA[Import assertions cannot be used with type-only imports or exports.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[가져오기 어설션은 형식 전용 가져오기 또는 내보내기에서 사용할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert_2880" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[가져오기 어설션이 가져오기 특성으로 바뀌었습니다. 'assert' 대신 'with'를 사용합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8274,11 +8301,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_nodenext_or_preserve_2823" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_pres_2823" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.]]></Val>
+          <Val><![CDATA[Import attributes are only supported when the '--module' option is set to 'esnext', 'node18', 'nodenext', or 'preserve'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[가져오기 특성은 '--module' 옵션이 'esnext', 'nodenext' 또는 'preserve'로 설정된 경우에만 지원됩니다.]]></Val>
+            <Val><![CDATA[가져오기 특성은 '--module' 옵션이 'esnext', 'node18', 'nodenext' 또는 'preserve'로 설정된 경우에만 지원됩니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -8420,6 +8447,15 @@
           <Val><![CDATA[Imported via {0} from file '{1}' with packageId '{2}' to import 'jsx' and 'jsxs' factory functions]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['jsx' 및 'jsxs' 팩터리 함수를 가져오기 위해 packageId가 '{2}'인 '{1}' 파일에서 {0}을(를) 통해 가져왔습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_mod_1543" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['module'이 '{0}'(으)로 설정된 경우 JSON 파일을 ECMAScript 모듈로 가져오려면 'type: "json"' 가져오기 특성이 필요합니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9840,6 +9876,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0_1544" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['module'이 '{0}'(으)로 설정된 경우 JSON 파일에서 ECMAScript 모듈로 명명된 가져오기를 사용할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Named_property_0_of_types_1_and_2_are_not_identical_2319" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Named property '{0}' of types '{1}' and '{2}' are not identical.]]></Val>
@@ -10598,15 +10643,6 @@
           <Val><![CDATA[Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['module'이 'none', 'system' 또는 'umd'로 설정된 경우 '--resolveJsonModule' 옵션을 지정할 수 없습니다.]]></Val>
-          </Tgt>
-        </Str>
-        <Disp Icon="Str" />
-      </Item>
-      <Item ItemId=";Option_tsBuildInfoFile_cannot_be_specified_without_specifying_option_incremental_or_composite_or_if__5111" ItemType="0" PsrId="306" Leaf="true">
-        <Str Cat="Text">
-          <Val><![CDATA[Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.]]></Val>
-          <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['incremental' 또는 'composite' 옵션을 지정하지 않거나 'tsc -b'를 실행하지 않는 경우 'tsBuildInfoFile' 옵션을 지정할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -13059,6 +13095,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_i_6421" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Rewrite '.ts', '.tsx', '.mts', and '.cts' file extensions in relative import paths to their JavaScript equivalent in output files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[출력 파일의 해당 JavaScript에 해당하는 상대 가져오기 경로에서 '.ts', '.tsx', '.mts' 및 '.cts' 파일 확장자를 다시 작성합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Right_operand_of_is_unreachable_because_the_left_operand_is_never_nullish_2869" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Right operand of ?? is unreachable because the left operand is never nullish.]]></Val>
@@ -14375,12 +14420,12 @@
       </Item>
       <Item ItemId=";The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system__1343" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
+          <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18', or 'nodenext'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['import.meta' 메타 속성은 '--module' 옵션이 'es2020', 'es2022', 'esnext', 'system', 'node16' 또는 'nodenext'인 경우에만 허용됩니다.]]></Val>
+            <Val><![CDATA['import.meta' 메타 속성은 '--module' 옵션이 'es2020', 'es2022', 'esnext', 'system', 'node16', 'node18' 또는 'nodenext'인 경우에만 허용됩니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node12', or 'nodenext'.]]></Val>
+            <Val><![CDATA[The 'import.meta' meta-property is only allowed when the '--module' option is 'es2020', 'es2022', 'esnext', 'system', 'node16', or 'nodenext'.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -15090,6 +15135,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_JSX_tag_requires_0_to_be_in_scope_but_it_could_not_be_found_2874" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This JSX tag requires '{0}' to be in scope, but it could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 JSX 태그를 사용하려면 '{0}'이(가) 범위에 있어야 하지만 찾을 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_fo_2875" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This JSX tag requires the module path '{0}' to exist, but none could be found. Make sure you have types for the appropriate package installed.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 JSX 태그를 사용하려면 모듈 경로 '{0}'이(가) 있어야 하지만 찾을 수 없습니다. 적절한 패키지에 대해 형식이 설치되어 있는지 확인합니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided_2746" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.]]></Val>
@@ -15243,6 +15306,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_b_2878" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This import path is unsafe to rewrite because it resolves to another project, and the relative path between the projects' output files is not the same as the relative path between its input files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 가져오기 경로는 다른 프로젝트로 확인되고 프로젝트의 출력 파일 간의 상대 경로가 입력 파일 간의 상대 경로와 동일하지 않으므로 다시 쓰기에는 안전하지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_duri_2877" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This import uses a '{0}' extension to resolve to an input TypeScript file, but will not be rewritten during emit because it is not a relative path.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 가져오기는 '{0}' 확장을 사용하여 입력 TypeScript 파일로 확인하지만 상대 경로가 아니므로 내보내는 동안 다시 작성되지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_is_the_declaration_being_augmented_Consider_moving_the_augmenting_declaration_into_the_same_fil_6233" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This is the declaration being augmented. Consider moving the augmenting declaration into the same file.]]></Val>
@@ -15306,6 +15387,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_member_cannot_have_a_JSDoc_comment_with_an_override_tag_because_its_name_is_dynamic_4128" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member cannot have a JSDoc comment with an '@override' tag because its name is dynamic.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 멤버는 이름이 동적이기 때문에 '@override' 태그가 포함된 JSDoc 주석을 가질 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_member_cannot_have_an_override_modifier_because_it_is_not_declared_in_the_base_class_0_4113" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This member cannot have an 'override' modifier because it is not declared in the base class '{0}'.]]></Val>
@@ -15329,6 +15419,15 @@
           <Val><![CDATA[This member cannot have an 'override' modifier because its containing class '{0}' does not extend another class.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[이 멤버는 포함하는 클래스 '{0}'이(가) 다른 클래스를 확장하지 않으므로 'override' 한정자를 포함할 수 없습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_member_cannot_have_an_override_modifier_because_its_name_is_dynamic_4127" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This member cannot have an 'override' modifier because its name is dynamic.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이름이 동적이므로 이 멤버에는 'override' 한정자를 사용할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15450,11 +15549,29 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolv_2876" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This relative import path is unsafe to rewrite because it looks like a file name, but actually resolves to "{0}".]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[이 상대 가져오기 경로는 파일 이름처럼 보이지만 실제로는 "{0}"(으)로 확인되므로 다시 작성하는 것이 안전하지 않습니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";This_spread_always_overwrites_this_property_2785" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[This spread always overwrites this property.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[이 스프레드는 항상 이 속성을 덮어씁니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled_1294" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[This syntax is not allowed when 'erasableSyntaxOnly' is enabled.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['erasableSyntaxOnly'를 사용하도록 설정한 경우에는 이 구문을 사용할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15560,22 +15677,25 @@
       </Item>
       <Item ItemId=";Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_n_1378" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[최상위 'await' 식은 'module' 옵션이 'es2022', 'esnext', 'system', 'node16', 'nodenext' 또는 'preserve'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
+            <Val><![CDATA[최상위 'await' 식은 'module' 옵션이 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext' 또는 'preserve'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+            <Val><![CDATA[Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
       <Item ItemId=";Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_sys_2854" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[최상위 'await using' 문은 'module' 옵션이 'es2022', 'esnext', 'system', 'node16', 'nodenext' 또는 'preserve'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
+            <Val><![CDATA[최상위 'await using' 문은 'module' 옵션이 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext' 또는 'preserve'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
           </Tgt>
+          <Prev Cat="Text">
+            <Val><![CDATA[Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          </Prev>
         </Str>
         <Disp Icon="Str" />
       </Item>
@@ -15590,12 +15710,12 @@
       </Item>
       <Item ItemId=";Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_nod_1432" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
+          <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[최상위 'for await' 루프는 'module' 옵션이 'es2022', 'esnext', 'system', 'node16', 'nodenext' 또는 'preserve'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
+            <Val><![CDATA[최상위 'for await' 루프는 'module' 옵션이 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext' 또는 'preserve'로 설정되고 'target' 옵션이 'es2017' 이상으로 설정된 경우에만 허용됩니다.]]></Val>
           </Tgt>
           <Prev Cat="Text">
-            <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.]]></Val>
+            <Val><![CDATA[Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.]]></Val>
           </Prev>
         </Str>
         <Disp Icon="Str" />
@@ -17021,6 +17141,15 @@
           <Val><![CDATA[Using '{0}' subpath '{1}' with target '{2}'.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['{0}' 하위 경로 '{1}'과(와) 대상 '{2}'을(를) 사용하는 중입니다.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Using_JSX_fragments_requires_fragment_factory_0_to_be_in_scope_but_it_could_not_be_found_2879" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Using JSX fragments requires fragment factory '{0}' to be in scope, but it could not be found.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[JSX 조각을 사용하려면 조각 팩터리 '{0}'이(가) 범위에 있어야 하지만 찾을 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

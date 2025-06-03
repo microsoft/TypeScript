@@ -32,7 +32,8 @@ export const x = "type1";
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -53,7 +54,8 @@ export const y = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -71,7 +73,8 @@ export const z = 10
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -90,7 +93,8 @@ export const z = 10
       "dom",
       "webworker"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -192,6 +196,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }
@@ -410,7 +415,8 @@ Info seq  [hh:mm:ss:mss] event:
               "es5",
               "dom"
             ],
-            "traceResolution": true
+            "traceResolution": true,
+            "libReplacement": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -1625,7 +1631,8 @@ Before running Timeout callback:: count: 2
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1670,6 +1677,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }
@@ -1869,7 +1877,8 @@ Before running Timeout callback:: count: 3
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1964,6 +1973,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }

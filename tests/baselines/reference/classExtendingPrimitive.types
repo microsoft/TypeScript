@@ -69,3 +69,57 @@ class C8 extends E { }
 >E : typeof E
 >  : ^^^^^^^^
 
+const C9 = class extends number { }
+>C9 : typeof C9
+>   : ^^^^^^^^^
+>class extends number { } : typeof C9
+>                         : ^^^^^^^^^
+>number : any
+>       : ^^^
+
+const C10 = class extends string { }
+>C10 : typeof C10
+>    : ^^^^^^^^^^
+>class extends string { } : typeof C10
+>                         : ^^^^^^^^^^
+>string : any
+>       : ^^^
+
+const C11 = class extends boolean { }
+>C11 : typeof C11
+>    : ^^^^^^^^^^
+>class extends boolean { } : typeof C11
+>                          : ^^^^^^^^^^
+>boolean : any
+>        : ^^^
+
+const C12 = class A extends number { }
+>C12 : typeof A
+>    : ^^^^^^^^
+>class A extends number { } : typeof A
+>                           : ^^^^^^^^
+>A : typeof A
+>  : ^^^^^^^^
+>number : any
+>       : ^^^
+
+const C13 = class B extends string { }
+>C13 : typeof B
+>    : ^^^^^^^^
+>class B extends string { } : typeof B
+>                           : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+>string : any
+>       : ^^^
+
+const C14 = class C extends boolean { }
+>C14 : typeof C
+>    : ^^^^^^^^
+>class C extends boolean { } : typeof C
+>                            : ^^^^^^^^
+>C : typeof C
+>  : ^^^^^^^^
+>boolean : any
+>        : ^^^
+

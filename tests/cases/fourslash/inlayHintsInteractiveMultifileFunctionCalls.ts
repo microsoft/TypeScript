@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @Target: esnext
-// @module: nodenext
+// @module: node18
 
 // @Filename: aaa.mts
 ////import { helperB } from "./bbb.mjs";

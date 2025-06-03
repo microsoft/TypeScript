@@ -1757,7 +1757,8 @@ Input::
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1783,7 +1784,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/workspace/projects/project1/file.ts","/home/src/workspace/projects/project1/file2.ts","/home/src/workspace/projects/project1/index.ts","/home/src/workspace/projects/project1/utils.d.ts","/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts"]
-  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1","/home/src/workspace/projects/project1/typeroot2"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
+  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1","/home/src/workspace/projects/project1/typeroot2"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"libReplacement":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
@@ -1883,6 +1884,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "project": "/home/src/workspace/projects/project1",
   "explainFiles": true,
@@ -1921,7 +1923,8 @@ Input::
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1954,7 +1957,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/workspace/projects/project1/file.ts","/home/src/workspace/projects/project1/file2.ts","/home/src/workspace/projects/project1/index.ts","/home/src/workspace/projects/project1/utils.d.ts","/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts"]
-  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
+  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"libReplacement":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
 Reusing resolution of module '@typescript/lib-webworker' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.
@@ -2215,6 +2218,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "project": "/home/src/workspace/projects/project1",
   "explainFiles": true,
@@ -2299,7 +2303,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/workspace/projects/project1/file.ts","/home/src/workspace/projects/project1/file2.ts","/home/src/workspace/projects/project1/index.ts","/home/src/workspace/projects/project1/utils.d.ts","/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts"]
-  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
+  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"libReplacement":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
 File '/home/src/workspace/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -2557,6 +2561,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "project": "/home/src/workspace/projects/project1",
   "explainFiles": true,
@@ -2627,7 +2632,7 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/workspace/projects/project1/file.ts","/home/src/workspace/projects/project1/file2.ts","/home/src/workspace/projects/project1/index.ts","/home/src/workspace/projects/project1/utils.d.ts","/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts"]
-  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
+  options: {"composite":true,"typeRoots":["/home/src/workspace/projects/project1/typeroot1"],"lib":["lib.es5.d.ts","lib.dom.d.ts"],"traceResolution":true,"libReplacement":true,"watch":true,"project":"/home/src/workspace/projects/project1","explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/home/src/workspace/projects/project1/tsconfig.json"}
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
 File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -2901,6 +2906,7 @@ Program options: {
     "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "watch": true,
   "project": "/home/src/workspace/projects/project1",
   "explainFiles": true,

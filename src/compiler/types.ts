@@ -13,6 +13,7 @@ import {
     PackageJsonInfo,
     PackageJsonInfoCache,
     Pattern,
+    ProgramDiagnostics,
     SymlinkCache,
     ThisContainer,
 } from "./_namespaces/ts.js";
@@ -2735,6 +2736,10 @@ export interface ConditionalExpression extends Expression {
     readonly whenTrue: Expression;
     readonly colonToken: ColonToken;
     readonly whenFalse: Expression;
+    /** @internal*/
+    flowNodeWhenTrue: FlowNode | undefined;
+    /** @internal */
+    flowNodeWhenFalse: FlowNode | undefined;
 }
 
 export type FunctionBody = Block;
@@ -3126,7 +3131,7 @@ export type CallLikeExpression =
     | NewExpression
     | TaggedTemplateExpression
     | Decorator
-    | JsxOpeningLikeElement
+    | JsxCallLike
     | InstanceofExpression;
 
 export interface AsExpression extends Expression {
@@ -3186,6 +3191,10 @@ export interface JsxElement extends PrimaryExpression {
 export type JsxOpeningLikeElement =
     | JsxSelfClosingElement
     | JsxOpeningElement;
+
+export type JsxCallLike =
+    | JsxOpeningLikeElement
+    | JsxOpeningFragment;
 
 export type JsxAttributeLike =
     | JsxAttribute
@@ -4884,6 +4893,7 @@ export interface Program extends ScriptReferenceHost {
      * @internal
      */
     resolvedLibReferences: Map<string, LibResolution> | undefined;
+    /** @internal */ getProgramDiagnosticsContainer: () => ProgramDiagnostics;
     /** @internal */ getCurrentPackagesMap(): Map<string, boolean> | undefined;
     /**
      * Is the file emitted file
@@ -5016,7 +5026,7 @@ export interface EmitResult {
 }
 
 /** @internal */
-export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
+export interface TypeCheckerHost extends ModuleSpecifierResolutionHost, SourceFileMayBeEmittedHost {
     getCompilerOptions(): CompilerOptions;
 
     getSourceFiles(): readonly SourceFile[];
@@ -5247,6 +5257,7 @@ export interface TypeChecker {
     getBigIntType(): Type;
     getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType;
     getBooleanType(): Type;
+    getUnknownType(): Type;
     /* eslint-disable @typescript-eslint/unified-signatures */
     /** @internal */
     getFalseType(fresh?: boolean): Type;
@@ -5422,6 +5433,8 @@ export interface TypeChecker {
     /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
     /** @internal */ getSymbolFlags(symbol: Symbol): SymbolFlags;
     /** @internal */ fillMissingTypeArguments(typeArguments: readonly Type[], typeParameters: readonly TypeParameter[] | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
+
+    getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
 }
 
 /** @internal */
@@ -5845,7 +5858,7 @@ export interface EmitResolver {
     requiresAddingImplicitUndefined(node: ParameterDeclaration, enclosingDeclaration: Node | undefined): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: HasInferredType, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -5867,7 +5880,7 @@ export interface EmitResolver {
     getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
-    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): IndexSignatureDeclaration[] | undefined;
+    createLateBoundIndexSignatures(cls: ClassLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, internalFlags: InternalNodeBuilderFlags, tracker: SymbolTracker): (IndexSignatureDeclaration | PropertyDeclaration)[] | undefined;
 }
 
 // dprint-ignore
@@ -6012,7 +6025,6 @@ export interface SymbolLinks {
     exportsChecked?: boolean;                   // True if exports of external module have been checked
     typeParametersChecked?: boolean;            // True if type parameters of merged class and interface declarations have been checked.
     isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
-    bindingElement?: BindingElement;            // Binding element associated with property symbol
     originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
     lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
     specifierCache?: Map<ModeAwareCacheKey, string>; // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
@@ -6208,7 +6220,6 @@ export interface NodeLinks {
     resolvedType?: Type;                // Cached type of type node
     resolvedSignature?: Signature;      // Cached signature of signature node or call expression
     resolvedSymbol?: Symbol;            // Cached name resolution result
-    resolvedIndexInfo?: IndexInfo;      // Cached indexing info resolution result
     effectsSignature?: Signature;       // Signature with possible control flow effects
     enumMemberValue?: EvaluatorResult;  // Constant value of enum member
     isVisible?: boolean;                // Is this node visible
@@ -6216,11 +6227,11 @@ export interface NodeLinks {
     hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
     jsxFlags: JsxFlags;                 // flags for knowing what kind of element/attributes we're dealing with
     resolvedJsxElementAttributesType?: Type; // resolved element attributes type of a JSX openinglike element
-    resolvedJsxElementAllAttributesType?: Type; // resolved all element attributes type of a JSX openinglike element
     resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
     switchTypes?: Type[];               // Cached array of switch case expression types
     jsxNamespace?: Symbol | false;      // Resolved jsx namespace symbol for this node
     jsxImplicitImportContainer?: Symbol | false; // Resolved module symbol the implicit jsx import of this file should refer to
+    jsxFragmentType?: Type;             // Type of the JSX fragment element, set per SourceFile if a jsxFragment is checked in the file
     contextFreeType?: Type;             // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
     deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
     capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
@@ -6241,6 +6252,7 @@ export interface NodeLinks {
     potentialUnusedRenamedBindingElementsInTypes?: BindingElement[];
     externalHelpersModule?: Symbol;     // Resolved symbol for the external helpers module
     instantiationExpressionTypes?: Map<number, Type>; // Cache of instantiation expression types for the node
+    nonExistentPropCheckCache?: Set<string>;
 }
 
 /** @internal */
@@ -6997,11 +7009,14 @@ export const enum IndexKind {
     Number,
 }
 
+export type ElementWithComputedPropertyName = (ClassElement | ObjectLiteralElement) & { name: ComputedPropertyName; };
+
 export interface IndexInfo {
     keyType: Type;
     type: Type;
     isReadonly: boolean;
     declaration?: IndexSignatureDeclaration;
+    components?: ElementWithComputedPropertyName[];
 }
 
 /** @internal */
@@ -7388,6 +7403,7 @@ export interface CompilerOptions {
     /** @deprecated */
     keyofStringsOnly?: boolean;
     lib?: string[];
+    libReplacement?: boolean;
     /** @internal */ listEmittedFiles?: boolean;
     /** @internal */ listFiles?: boolean;
     /** @internal */ explainFiles?: boolean;
@@ -7453,6 +7469,7 @@ export interface CompilerOptions {
     removeComments?: boolean;
     resolvePackageJsonExports?: boolean;
     resolvePackageJsonImports?: boolean;
+    rewriteRelativeImportExtensions?: boolean;
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;
@@ -7480,6 +7497,7 @@ export interface CompilerOptions {
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
     verbatimModuleSyntax?: boolean;
+    erasableSyntaxOnly?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
@@ -7526,6 +7544,7 @@ export enum ModuleKind {
 
     // Node16+ is an amalgam of commonjs (albeit updated) and es2022+, and represents a distinct module system from es2020/esnext
     Node16 = 100,
+    Node18 = 101,
     NodeNext = 199,
 
     // Emit as written
@@ -7579,8 +7598,8 @@ export const enum ScriptKind {
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-//       lib/esnext.*.d.ts file.
+//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
@@ -8388,8 +8407,8 @@ export type LanugageFeatures =
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts and the contents of each
-    //       lib/esnext.*.d.ts file.
+    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+    //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
     | "UsingAndAwaitUsing" // `using x = y`, `await using x = y`
     | "ClassAndClassElementDecorators" // `@dec class C {}`, `class C { @dec m() {} }`
 ;
@@ -8470,6 +8489,7 @@ export const enum ExternalEmitHelpers {
     SetFunctionName = 1 << 22,      // __setFunctionName (used by class fields and ECMAScript decorators)
     PropKey = 1 << 23,              // __propKey (used by class fields and ECMAScript decorators)
     AddDisposableResourceAndDisposeResources = 1 << 24, // __addDisposableResource and __disposeResources (used by ESNext transformations)
+    RewriteRelativeImportExtension = 1 << 25, // __rewriteRelativeImportExtension (used by --rewriteRelativeImportExtensions)
 
     FirstEmitHelper = Extends,
     LastEmitHelper = AddDisposableResourceAndDisposeResources,
@@ -8549,8 +8569,9 @@ export const enum OuterExpressionKinds {
     NonNullAssertions = 1 << 2,
     PartiallyEmittedExpressions = 1 << 3,
     ExpressionsWithTypeArguments = 1 << 4,
+    Satisfies = 1 << 5,
 
-    Assertions = TypeAssertions | NonNullAssertions,
+    Assertions = TypeAssertions | NonNullAssertions | Satisfies,
     All = Parentheses | Assertions | PartiallyEmittedExpressions | ExpressionsWithTypeArguments,
 
     ExcludeJSDocTypeAssertion = 1 << 31,
@@ -9892,7 +9913,7 @@ export interface HasCurrentDirectory {
 
 /** @internal */
 export interface ModuleSpecifierResolutionHost {
-    useCaseSensitiveFileNames?(): boolean;
+    useCaseSensitiveFileNames(): boolean;
     fileExists(path: string): boolean;
     getCurrentDirectory(): string;
     directoryExists?(path: string): boolean;
@@ -9976,6 +9997,12 @@ export interface TextSpan {
 export interface TextChangeRange {
     span: TextSpan;
     newLength: number;
+}
+
+/** @internal */
+export interface ErrorOutputContainer {
+    errors?: Diagnostic[];
+    skipLogging?: boolean;
 }
 
 /** @internal */
@@ -10501,37 +10528,66 @@ export interface EvaluationResolver {
 
 /** @internal */
 export type HasInferredType =
-    | PropertyAssignment
+    | Exclude<VariableLikeDeclaration, JsxAttribute | EnumMember>
     | PropertyAccessExpression
-    | BinaryExpression
     | ElementAccessExpression
-    | VariableDeclaration
-    | ParameterDeclaration
-    | BindingElement
-    | PropertyDeclaration
-    | PropertySignature
+    | BinaryExpression
     | ExportAssignment;
 
 /** @internal */
 export interface SyntacticTypeNodeBuilderContext {
+    flags: NodeBuilderFlags;
     tracker: Required<Pick<SymbolTracker, "reportInferenceFallback">>;
+    enclosingFile: SourceFile | undefined;
     enclosingDeclaration: Node | undefined;
+    approximateLength: number;
+    noInferenceFallback?: boolean;
+    suppressReportInferenceFallback: boolean;
 }
 
 /** @internal */
 export interface SyntacticTypeNodeBuilderResolver {
+    isOptionalParameter(p: ParameterDeclaration): boolean;
     isUndefinedIdentifierExpression(name: Identifier): boolean;
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
-    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag, enclosingDeclaration: Node | undefined): boolean;
+    requiresAddingImplicitUndefined(declaration: ParameterDeclaration | PropertySignature | JSDocParameterTag | JSDocPropertyTag | PropertyDeclaration, symbol: Symbol | undefined, enclosingDeclaration: Node | undefined): boolean;
     isDefinitelyReferenceToGlobalSymbolObject(node: Node): boolean;
+    isEntityNameVisible(context: SyntacticTypeNodeBuilderContext, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
+    serializeExistingTypeNode(context: SyntacticTypeNodeBuilderContext, node: TypeNode, addUndefined?: boolean): TypeNode | undefined;
+    serializeReturnTypeForSignature(context: SyntacticTypeNodeBuilderContext, signatureDeclaration: SignatureDeclaration | JSDocSignature, symbol: Symbol | undefined): TypeNode | undefined;
+    serializeTypeOfExpression(context: SyntacticTypeNodeBuilderContext, expr: Expression): TypeNode;
+    serializeTypeOfDeclaration(context: SyntacticTypeNodeBuilderContext, node: HasInferredType | GetAccessorDeclaration | SetAccessorDeclaration, symbol: Symbol | undefined): TypeNode | undefined;
+    serializeNameOfParameter(context: SyntacticTypeNodeBuilderContext, parameter: ParameterDeclaration): BindingName | string;
+    serializeTypeName(context: SyntacticTypeNodeBuilderContext, node: EntityName, isTypeOf?: boolean, typeArguments?: readonly TypeNode[]): TypeNode | undefined;
+    serializeEntityName(context: SyntacticTypeNodeBuilderContext, node: EntityNameExpression): Expression | undefined;
+    getJsDocPropertyOverride(context: SyntacticTypeNodeBuilderContext, jsDocTypeLiteral: JSDocTypeLiteral, jsDocProperty: JSDocPropertyLikeTag): TypeNode | undefined;
+    enterNewScope(context: SyntacticTypeNodeBuilderContext, node: IntroducesNewScopeNode | ConditionalTypeNode): () => void;
+    markNodeReuse<T extends Node>(context: SyntacticTypeNodeBuilderContext, range: T, location: Node | undefined): T;
+    trackExistingEntityName<T extends EntityNameOrEntityNameExpression>(context: SyntacticTypeNodeBuilderContext, node: T): { introducesError: boolean; node: T; };
+    trackComputedName(context: SyntacticTypeNodeBuilderContext, accessExpression: EntityNameOrEntityNameExpression): void;
+    evaluateEntityNameExpression(expression: EntityNameExpression): EvaluatorResult;
+    getModuleSpecifierOverride(context: SyntacticTypeNodeBuilderContext, parent: ImportTypeNode, lit: StringLiteral): string | undefined;
+    canReuseTypeNode(context: SyntacticTypeNodeBuilderContext, existing: TypeNode): boolean;
+    canReuseTypeNodeAnnotation(context: SyntacticTypeNodeBuilderContext, node: Declaration, existing: TypeNode, symbol: Symbol | undefined, requiresAddingUndefined?: boolean): boolean;
+    shouldRemoveDeclaration(context: SyntacticTypeNodeBuilderContext, node: DynamicNamedDeclaration): boolean;
+    hasLateBindableName(node: Declaration): node is LateBoundDeclaration | LateBoundBinaryExpressionDeclaration;
+    createRecoveryBoundary(context: SyntacticTypeNodeBuilderContext): {
+        startRecoveryScope(): () => void;
+        finalizeBoundary(): boolean;
+        markError(): void;
+        hadError(): boolean;
+    };
 }
 
 /** @internal */
 export interface SyntacticNodeBuilder {
-    typeFromExpression: (node: Expression, context: SyntacticTypeNodeBuilderContext, isConstContext?: boolean, requiresAddingUndefined?: boolean, preserveLiterals?: boolean) => boolean | undefined;
-    serializeTypeOfDeclaration: (node: HasInferredType, context: SyntacticTypeNodeBuilderContext) => boolean | undefined;
-    serializeReturnTypeForSignature: (node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) => boolean | undefined;
-    serializeTypeOfExpression: (expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => boolean;
+    serializeTypeOfDeclaration: (node: HasInferredType, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeReturnTypeForSignature: (signature: SignatureDeclaration | JSDocSignature, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
+    serializeTypeOfExpression: (expr: Expression | JsxAttributeValue, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) => TypeNode;
+    tryReuseExistingTypeNode: (context: SyntacticTypeNodeBuilderContext, existing: TypeNode) => TypeNode | undefined;
+    serializeTypeOfAccessor: (accessor: AccessorDeclaration, symbol: Symbol, context: SyntacticTypeNodeBuilderContext) => TypeNode | undefined;
 }
+
+/** @internal */
+export type IntroducesNewScopeNode = SignatureDeclaration | JSDocSignature | MappedTypeNode;

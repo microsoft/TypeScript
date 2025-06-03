@@ -468,7 +468,7 @@ let setterOnly = { ...{ set b (bad: number) { } } };
 >{ ...{ set b (bad: number) { } } } : { b: undefined; }
 >                                   : ^^^^^^^^^^^^^^^^^
 >{ set b (bad: number) { } } : { b: number; }
->                            : ^^^^^^^^^^^^^^
+>                            : ^^^^^      ^^^
 >b : number
 >  : ^^^^^^
 >bad : number

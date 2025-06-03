@@ -1,0 +1,59 @@
+//// [tests/cases/compiler/isolatedDeclarationsAddUndefined2.ts] ////
+
+=== isolatedDeclarationsAddUndefined2.ts ===
+// https://github.com/microsoft/TypeScript/issues/60123
+
+export class Bar {
+>Bar : Bar
+>    : ^^^
+
+    constructor(private x?: Array | undefined) {}
+>x : any
+>  : ^^^
+}
+
+export class Bar2 {
+>Bar2 : Bar2
+>     : ^^^^
+
+    constructor(private x?: Array) {}
+>x : any
+>  : ^^^
+}
+
+export class Bar3 {
+>Bar3 : Bar3
+>     : ^^^^
+
+    constructor(private x: Array | undefined) {}
+>x : any
+>  : ^^^
+}
+
+export class Bar4 {
+>Bar4 : Bar4
+>     : ^^^^
+
+    constructor(private x: Array) {}
+>x : any
+>  : ^^^
+}
+
+export function test1(x?: Array | undefined): void {}
+>test1 : (x?: Array | undefined) => void
+>      : ^ ^^^                 ^^^^^    
+>x : any
+>  : ^^^
+
+export function test2(x?: Unresolved | undefined): void {}
+>test2 : (x?: Unresolved | undefined) => void
+>      : ^ ^^^                      ^^^^^    
+>x : any
+>  : ^^^
+
+export function test3(x?: Unresolved): void {}
+>test3 : (x?: Unresolved) => void
+>      : ^ ^^^          ^^^^^    
+>x : any
+>  : ^^^
+

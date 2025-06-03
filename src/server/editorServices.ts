@@ -1297,7 +1297,7 @@ export class ProjectService {
      */
     private readonly filenameToScriptInfoVersion = new Map<Path, number>();
     // Set of all '.js' files ever opened.
-    private readonly allJsFilesForOpenFileTelemetry = new Map<string, true>();
+    private readonly allJsFilesForOpenFileTelemetry = new Set<string>();
 
     /**
      * Map to the real path of the infos

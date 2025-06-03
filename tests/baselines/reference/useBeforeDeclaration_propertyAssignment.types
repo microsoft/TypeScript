@@ -113,8 +113,8 @@ class D {
 >  : ^
 
         ...{get [D.D]() {return 0;}} // should be an error
->{get [D.D]() {return 0;}} : { [x: string]: number; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{get [D.D]() {return 0;}} : { [D.D]: number; }
+>                          : ^^       ^^^^^^ ^^
 >[D.D] : number
 >      : ^^^^^^
 >D.D : string

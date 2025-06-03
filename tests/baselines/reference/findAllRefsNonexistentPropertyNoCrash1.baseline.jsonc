@@ -1,0 +1,50 @@
+// === findAllReferences ===
+// === /tests/cases/fourslash/src/parser.js ===
+// --- (line: 10) skipped ---
+//       variable: function () {
+//         let name;
+// 
+//         if (parserInput.currentChar() === "[|{| isInString: true |}@|]") {
+//           return name[1];
+//         }
+//       },
+// --- (line: 18) skipped ---
+
+// === /tests/cases/fourslash/./src/parser.js ===
+// --- (line: 10) skipped ---
+//       variable: function () {
+//         let name;
+// 
+//         if (parserInput.currentChar() === "/*FIND ALL REFS*/@") {
+//           return name[1];
+//         }
+//       },
+// --- (line: 18) skipped ---
+
+  // === Definitions ===
+  // === /tests/cases/fourslash/src/parser.js ===
+  // --- (line: 10) skipped ---
+  //       variable: function () {
+  //         let name;
+  // 
+  //         if (parserInput.currentChar() === "[|@|]") {
+  //           return name[1];
+  //         }
+  //       },
+  // --- (line: 18) skipped ---
+
+  // === Details ===
+  [
+   {
+    "containerKind": "",
+    "containerName": "",
+    "kind": "var",
+    "name": "@",
+    "displayParts": [
+     {
+      "text": "\"@\"",
+      "kind": "stringLiteral"
+     }
+    ]
+   }
+  ]

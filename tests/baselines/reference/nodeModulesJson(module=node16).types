@@ -1,0 +1,139 @@
+//// [tests/cases/conformance/node/nodeModulesJson.ts] ////
+
+=== /node_modules/not.json/index.d.ts ===
+export function oops(json: string): any;
+>oops : (json: string) => any
+>     : ^    ^^      ^^^^^   
+>json : string
+>     : ^^^^^^
+
+=== /node_modules/actually-json/index.json ===
+{}
+>{} : {}
+>   : ^^
+
+=== /node_modules/actually-json/typed.d.json.ts ===
+declare const _default: {};
+>_default : {}
+>         : ^^
+
+export default _default;
+>_default : {}
+>         : ^^
+
+=== /config.json ===
+{
+>{  "version": 1} : { version: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^
+
+  "version": 1
+>"version" : number
+>          : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+=== /main.mts ===
+import { oops } from "not.json"; // Ok
+>oops : (json: string) => any
+>     : ^    ^^      ^^^^^   
+
+import moreOops from "actually-json"; // Error in nodenext
+>moreOops : {}
+>         : ^^
+
+import typed from "actually-json/typed"; // Error in nodenext
+>typed : typeof typed
+>      : ^^^^^^^^^^^^
+
+import config from "./config.json" with { type: "json" }; // Ok
+>config : { version: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+import { default as config1 } from "./config.json" with { type: "json" }; // Ok
+>default : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>config1 : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+import config2 from "./config.json"; // Error in nodenext, no attribute
+>config2 : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+import type config2Type from "./config.json"; // Ok, type-only
+>config2Type : any
+>            : ^^^
+
+import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
+>config2Type2 : any
+>             : ^^^
+>type : any
+>     : ^^^
+
+import { version } from "./config.json" with { type: "json" }; // Error, named import
+>version : number
+>        : ^^^^^^
+>type : any
+>     : ^^^
+
+import * as config3 from "./config.json" with { type: "json" };
+>config3 : { default: { version: number; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+config3.version; // Error
+>config3.version : any
+>                : ^^^
+>config3 : { default: { version: number; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>version : any
+>        : ^^^
+
+config3.default; // Ok
+>config3.default : { version: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^
+>config3 : { default: { version: number; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>default : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+=== /loosey.cts ===
+import config from "./config.json" with { type: "json" }; // Error
+>config : { version: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^
+>type : any
+>     : ^^^
+
+import config2 from "./config.json"; // Ok
+>config2 : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+import { version } from "./config.json"; // Ok
+>version : number
+>        : ^^^^^^
+
+import * as config3 from "./config.json";
+>config3 : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+
+config3.version; // Ok
+>config3.version : number
+>                : ^^^^^^
+>config3 : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>version : number
+>        : ^^^^^^
+
+config3.default; // Error
+>config3.default : any
+>                : ^^^
+>config3 : { version: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^
+>default : any
+>        : ^^^
+
