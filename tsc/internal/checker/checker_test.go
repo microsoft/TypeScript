@@ -41,7 +41,10 @@ foo.bar;`
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile("/tsconfig.json", &core.CompilerOptions{}, host, nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
 
-	p := compiler.NewProgramFromParsedCommandLine(parsed, host)
+	p := compiler.NewProgram(compiler.ProgramOptions{
+		Config: parsed,
+		Host:   host,
+	})
 	p.BindSourceFiles()
 	c, done := p.GetTypeChecker(t.Context())
 	defer done()
@@ -70,7 +73,10 @@ func TestCheckSrcCompiler(t *testing.T) {
 	host := compiler.NewCompilerHost(nil, rootPath, fs, bundled.LibPath())
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, host, nil)
 	assert.Equal(t, len(errors), 0, "Expected no errors in parsed command line")
-	p := compiler.NewProgramFromParsedCommandLine(parsed, host)
+	p := compiler.NewProgram(compiler.ProgramOptions{
+		Config: parsed,
+		Host:   host,
+	})
 	p.CheckSourceFiles(t.Context())
 }
 
@@ -84,7 +90,10 @@ func BenchmarkNewChecker(b *testing.B) {
 	host := compiler.NewCompilerHost(nil, rootPath, fs, bundled.LibPath())
 	parsed, errors := tsoptions.GetParsedCommandLineOfConfigFile(tspath.CombinePaths(rootPath, "tsconfig.json"), &core.CompilerOptions{}, host, nil)
 	assert.Equal(b, len(errors), 0, "Expected no errors in parsed command line")
-	p := compiler.NewProgramFromParsedCommandLine(parsed, host)
+	p := compiler.NewProgram(compiler.ProgramOptions{
+		Config: parsed,
+		Host:   host,
+	})
 
 	b.ReportAllocs()
 

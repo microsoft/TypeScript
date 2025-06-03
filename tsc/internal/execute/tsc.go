@@ -176,7 +176,10 @@ func performCompilation(sys System, cb cbType, config *tsoptions.ParsedCommandLi
 	host := compiler.NewCachedFSCompilerHost(config.CompilerOptions(), sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath())
 	// todo: cache, statistics, tracing
 	parseStart := time.Now()
-	program := compiler.NewProgramFromParsedCommandLine(config, host)
+	program := compiler.NewProgram(compiler.ProgramOptions{
+		Config: config,
+		Host:   host,
+	})
 	parseTime := time.Since(parseStart)
 
 	result := emitFilesAndReportErrors(sys, program, reportDiagnostic)

@@ -255,19 +255,19 @@ func newCompilerTest(
 	units := testCaseContentWithConfig.testUnitData
 	var toBeCompiled []*harnessutil.TestFile
 	var otherFiles []*harnessutil.TestFile
-	var tsConfigOptions core.CompilerOptions
+	var tsConfig *tsoptions.ParsedCommandLine
 	hasNonDtsFiles := core.Some(
 		units,
 		func(unit *testUnit) bool { return !tspath.FileExtensionIs(unit.name, tspath.ExtensionDts) })
 	var tsConfigFiles []*harnessutil.TestFile
 	if testCaseContentWithConfig.tsConfig != nil {
-		tsConfigOptions = *testCaseContentWithConfig.tsConfig.ParsedConfig.CompilerOptions
+		tsConfig = testCaseContentWithConfig.tsConfig
 		tsConfigFiles = []*harnessutil.TestFile{
 			createHarnessTestFile(testCaseContentWithConfig.tsConfigFileUnitData, currentDirectory),
 		}
 		for _, unit := range units {
 			if slices.Contains(
-				testCaseContentWithConfig.tsConfig.ParsedConfig.FileNames,
+				tsConfig.ParsedConfig.FileNames,
 				tspath.GetNormalizedAbsolutePath(unit.name, currentDirectory),
 			) {
 				toBeCompiled = append(toBeCompiled, createHarnessTestFile(unit, currentDirectory))
@@ -303,7 +303,7 @@ func newCompilerTest(
 		toBeCompiled,
 		otherFiles,
 		harnessConfig,
-		&tsConfigOptions,
+		tsConfig,
 		currentDirectory,
 		testCaseContentWithConfig.symlinks,
 	)

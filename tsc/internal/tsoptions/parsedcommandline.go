@@ -17,7 +17,6 @@ type ParsedCommandLine struct {
 	Errors        []*ast.Diagnostic   `json:"errors"`
 	Raw           any                 `json:"raw"`
 	CompileOnSave *bool               `json:"compileOnSave"`
-	// TypeAquisition *core.TypeAcquisition
 
 	comparePathsOptions     tspath.ComparePathsOptions
 	wildcardDirectoriesOnce sync.Once

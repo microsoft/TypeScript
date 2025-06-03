@@ -35,7 +35,10 @@ func (w *watcher) doCycle() {
 		return
 	}
 	// updateProgram()
-	w.program = compiler.NewProgramFromParsedCommandLine(w.options, w.host)
+	w.program = compiler.NewProgram(compiler.ProgramOptions{
+		Config: w.options,
+		Host:   w.host,
+	})
 	if w.hasBeenModified(w.program) {
 		fmt.Fprint(w.sys.Writer(), "build starting at ", w.sys.Now(), w.sys.NewLine())
 		timeStart := w.sys.Now()

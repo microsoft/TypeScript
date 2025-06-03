@@ -21,27 +21,21 @@ import (
 )
 
 type ProgramOptions struct {
-	RootFiles                    []string
-	Host                         CompilerHost
-	Options                      *core.CompilerOptions
-	SingleThreaded               core.Tristate
-	ProjectReference             []core.ProjectReference
-	ConfigFileParsingDiagnostics []*ast.Diagnostic
-	CreateCheckerPool            func(*Program) CheckerPool
-
-	TypingsLocation string
-	ProjectName     string
+	Host              CompilerHost
+	Config            *tsoptions.ParsedCommandLine
+	SingleThreaded    core.Tristate
+	CreateCheckerPool func(*Program) CheckerPool
+	TypingsLocation   string
+	ProjectName       string
 }
 
 type Program struct {
-	host                         CompilerHost
-	programOptions               ProgramOptions
-	compilerOptions              *core.CompilerOptions
-	configFileName               string
-	nodeModules                  map[string]*ast.SourceFile
-	checkerPool                  CheckerPool
-	currentDirectory             string
-	configFileParsingDiagnostics []*ast.Diagnostic
+	host             CompilerHost
+	programOptions   ProgramOptions
+	compilerOptions  *core.CompilerOptions
+	nodeModules      map[string]*ast.SourceFile
+	checkerPool      CheckerPool
+	currentDirectory string
 
 	sourceAffectingCompilerOptionsOnce sync.Once
 	sourceAffectingCompilerOptions     *core.SourceFileAffectingCompilerOptions
@@ -175,8 +169,7 @@ func (p *Program) GetSourceFileFromReference(origin *ast.SourceFile, ref *ast.Fi
 func NewProgram(options ProgramOptions) *Program {
 	p := &Program{}
 	p.programOptions = options
-	p.compilerOptions = options.Options
-	p.configFileParsingDiagnostics = slices.Clip(options.ConfigFileParsingDiagnostics)
+	p.compilerOptions = options.Config.CompilerOptions()
 	if p.compilerOptions == nil {
 		panic("compiler options required")
 	}
@@ -211,7 +204,7 @@ func NewProgram(options ProgramOptions) *Program {
 		}
 	}
 
-	p.processedFiles = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, options.RootFiles, libs, p.singleThreaded())
+	p.processedFiles = processAllProgramFiles(p.host, p.programOptions, p.compilerOptions, p.resolver, options.Config.FileNames(), libs, p.singleThreaded())
 	p.filesByPath = make(map[tspath.Path]*ast.SourceFile, len(p.files))
 	for _, file := range p.files {
 		p.filesByPath[file.Path()] = file
@@ -236,20 +229,18 @@ func (p *Program) UpdateProgram(changedFilePath tspath.Path) (*Program, bool) {
 		return NewProgram(p.programOptions), false
 	}
 	result := &Program{
-		host:                         p.host,
-		programOptions:               p.programOptions,
-		compilerOptions:              p.compilerOptions,
-		configFileName:               p.configFileName,
-		nodeModules:                  p.nodeModules,
-		currentDirectory:             p.currentDirectory,
-		configFileParsingDiagnostics: p.configFileParsingDiagnostics,
-		resolver:                     p.resolver,
-		comparePathsOptions:          p.comparePathsOptions,
-		processedFiles:               p.processedFiles,
-		filesByPath:                  p.filesByPath,
-		currentNodeModulesDepth:      p.currentNodeModulesDepth,
-		usesUriStyleNodeCoreModules:  p.usesUriStyleNodeCoreModules,
-		unsupportedExtensions:        p.unsupportedExtensions,
+		host:                        p.host,
+		programOptions:              p.programOptions,
+		compilerOptions:             p.compilerOptions,
+		nodeModules:                 p.nodeModules,
+		currentDirectory:            p.currentDirectory,
+		resolver:                    p.resolver,
+		comparePathsOptions:         p.comparePathsOptions,
+		processedFiles:              p.processedFiles,
+		filesByPath:                 p.filesByPath,
+		currentNodeModulesDepth:     p.currentNodeModulesDepth,
+		usesUriStyleNodeCoreModules: p.usesUriStyleNodeCoreModules,
+		unsupportedExtensions:       p.unsupportedExtensions,
 	}
 	result.initCheckerPool()
 	index := core.FindIndex(result.files, func(file *ast.SourceFile) bool { return file.Path() == newFile.Path() })
@@ -302,22 +293,11 @@ func equalCheckJSDirectives(d1 *ast.CheckJsDirective, d2 *ast.CheckJsDirective) 
 	return d1 == nil && d2 == nil || d1 != nil && d2 != nil && d1.Enabled == d2.Enabled
 }
 
-func NewProgramFromParsedCommandLine(config *tsoptions.ParsedCommandLine, host CompilerHost) *Program {
-	programOptions := ProgramOptions{
-		RootFiles: config.FileNames(),
-		Options:   config.CompilerOptions(),
-		Host:      host,
-		// todo: ProjectReferences
-		ConfigFileParsingDiagnostics: config.GetConfigFileParsingDiagnostics(),
-	}
-	return NewProgram(programOptions)
-}
-
 func (p *Program) SourceFiles() []*ast.SourceFile { return p.files }
 func (p *Program) Options() *core.CompilerOptions { return p.compilerOptions }
 func (p *Program) Host() CompilerHost             { return p.host }
 func (p *Program) GetConfigFileParsingDiagnostics() []*ast.Diagnostic {
-	return slices.Clip(p.configFileParsingDiagnostics)
+	return slices.Clip(p.programOptions.Config.GetConfigFileParsingDiagnostics())
 }
 
 func (p *Program) singleThreaded() bool {
@@ -432,7 +412,7 @@ func (p *Program) getOptionsDiagnosticsOfConfigFile() []*ast.Diagnostic {
 	if p.Options() == nil || p.Options().ConfigFilePath == "" {
 		return nil
 	}
-	return p.configFileParsingDiagnostics // TODO: actually call getDiagnosticsHelper on config path
+	return p.GetConfigFileParsingDiagnostics() // TODO: actually call getDiagnosticsHelper on config path
 }
 
 func (p *Program) getSyntacticDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {

@@ -281,7 +281,8 @@ func compileDeclarationFiles(t *testing.T, context *declarationCompilationContex
 		context.harnessSettings,
 		context.options,
 		context.currentDirectory,
-		symlinks)
+		symlinks,
+		nil)
 	return &declarationCompilationResult{
 		context.declInputFiles,
 		context.declOtherFiles,
