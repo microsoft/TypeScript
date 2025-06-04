@@ -1892,13 +1892,16 @@ func (b *Binder) bindForStatement(node *ast.Node) {
 	stmt := node.AsForStatement()
 	preLoopLabel := b.setContinueTarget(node, b.createLoopLabel())
 	preBodyLabel := b.createBranchLabel()
+	preIncrementorLabel := b.createBranchLabel()
 	postLoopLabel := b.createBranchLabel()
 	b.bind(stmt.Initializer)
 	topFlow := b.currentFlow
 	b.currentFlow = preLoopLabel
 	b.bindCondition(stmt.Condition, preBodyLabel, postLoopLabel)
 	b.currentFlow = b.finishFlowLabel(preBodyLabel)
-	b.bindIterativeStatement(stmt.Statement, postLoopLabel, preLoopLabel)
+	b.bindIterativeStatement(stmt.Statement, postLoopLabel, preIncrementorLabel)
+	b.addAntecedent(preIncrementorLabel, b.currentFlow)
+	b.currentFlow = b.finishFlowLabel(preIncrementorLabel)
 	b.bind(stmt.Incrementor)
 	b.addAntecedent(preLoopLabel, b.currentFlow)
 	b.addAntecedent(preLoopLabel, topFlow)

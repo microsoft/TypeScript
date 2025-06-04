@@ -18,9 +18,9 @@
 >10 : 10
 
     i = iNext // error
->i = iNext : number
+>i = iNext : string | number
 >i : number
->iNext : number
+>iNext : string | number
 
   ) {
     if (i == 5) {
@@ -60,9 +60,9 @@
 >10 : 10
 
     i = iNext // error
->i = iNext : number
+>i = iNext : string | number
 >i : number
->iNext : number
+>iNext : string | number
 
   ) {
     if (i == 5) {
