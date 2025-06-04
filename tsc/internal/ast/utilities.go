@@ -2774,8 +2774,18 @@ func GetLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {
 
 func IsCallLikeExpression(node *Node) bool {
 	switch node.Kind {
-	case KindJsxOpeningElement, KindJsxSelfClosingElement, KindCallExpression, KindNewExpression,
+	case KindJsxOpeningElement, KindJsxSelfClosingElement, KindJsxOpeningFragment, KindCallExpression, KindNewExpression,
 		KindTaggedTemplateExpression, KindDecorator:
+		return true
+	case KindBinaryExpression:
+		return node.AsBinaryExpression().OperatorToken.Kind == KindInstanceOfKeyword
+	}
+	return false
+}
+
+func IsJsxCallLike(node *Node) bool {
+	switch node.Kind {
+	case KindJsxOpeningElement, KindJsxSelfClosingElement, KindJsxOpeningFragment:
 		return true
 	}
 	return false
@@ -3422,6 +3432,8 @@ func GetInvokedExpression(node *Node) *Node {
 		return node.TagName()
 	case KindBinaryExpression:
 		return node.AsBinaryExpression().Right
+	case KindJsxOpeningFragment:
+		return node
 	default:
 		return node.Expression()
 	}

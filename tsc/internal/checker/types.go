@@ -394,6 +394,7 @@ type SourceFileLinks struct {
 	localJsxFragmentNamespace string
 	localJsxFactory           *ast.EntityName
 	localJsxFragmentFactory   *ast.EntityName
+	jsxFragmentType           *Type
 }
 
 // Signature specific links
