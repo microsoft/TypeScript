@@ -20,14 +20,18 @@ const d = {
 
 //// [canFollowGetSetKeyword.js]
 class A {
+    get;
     *x() { }
 }
 class B {
+    set;
     *x() { }
 }
 const c = {
+    get,
     *x() { }
 };
 const d = {
+    set,
     *x() { }
 };
