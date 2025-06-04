@@ -123,7 +123,6 @@ import {
     WatchFileKind,
     WatchOptions,
 } from "./_namespaces/ts.js";
-import { isMap } from "util/types";
 
 const compileOnSaveCommandLineOption: CommandLineOption = {
     name: "compileOnSave",
@@ -2944,10 +2943,10 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     function formatValueOrArray(settingName: string, value: PresetValue): string {
         const option = optionDeclarations.filter(c => c.name === settingName)[0];
         if (!option) Debug.fail(`No option named ${settingName}?`);
-        const map = isMap(option.type) ? option.type : undefined;
+        const map = (option.type instanceof Map) ? option.type : undefined;
         if (isArray(value)) {
             // eslint-disable-next-line local/no-in-operator
-            const map = ("element" in option && isMap(option.element.type)) ? option.element.type : undefined;
+            const map = ("element" in option && (option.element.type instanceof Map)) ? option.element.type : undefined;
             return `[${value.map(v => formatSingleValue(v, map)).join(", ")}]`
         } else {
             return formatSingleValue(value, map);
