@@ -59,7 +59,7 @@ func tryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node {
 	return nil
 }
 
-// !!!
+// !!! formatting function
 func isInComment(file *ast.SourceFile, position int, tokenAtPosition *ast.Node) *ast.CommentRange {
 	return nil
 }

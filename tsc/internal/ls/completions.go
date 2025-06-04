@@ -385,6 +385,15 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 
 	if contextToken != nil {
 		// !!! import completions
+		// Bail out if this is a known invalid completion location.
+		// !!! if (!importStatementCompletionInfo.replacementSpan && ...)
+		if isCompletionListBlocker(contextToken, previousToken, location, file, position, typeChecker) {
+			if keywordFilters != KeywordCompletionFiltersNone {
+				isNewIdentifierLocation, _ := computeCommitCharactersAndIsNewIdentifier(contextToken, file, position)
+				return keywordCompletionData(keywordFilters, isJSOnlyLocation, isNewIdentifierLocation)
+			}
+			return nil
+		}
 
 		parent := contextToken.Parent
 		if contextToken.Kind == ast.KindDotToken || contextToken.Kind == ast.KindQuestionDotToken {
@@ -4199,4 +4208,229 @@ func (l *LanguageService) getLabelStatementCompletions(
 		current = current.Parent
 	}
 	return items
+}
+
+func isCompletionListBlocker(
+	contextToken *ast.Node,
+	previousToken *ast.Node,
+	location *ast.Node,
+	file *ast.SourceFile,
+	position int,
+	typeChecker *checker.Checker,
+) bool {
+	return isInStringOrRegularExpressionOrTemplateLiteral(contextToken, position) ||
+		isSolelyIdentifierDefinitionLocation(contextToken, previousToken, file, position, typeChecker) ||
+		isDotOfNumericLiteral(contextToken, file) ||
+		isInJsxText(contextToken, location) ||
+		ast.IsBigIntLiteral(contextToken)
+}
+
+func isInStringOrRegularExpressionOrTemplateLiteral(contextToken *ast.Node, position int) bool {
+	// To be "in" one of these literals, the position has to be:
+	//   1. entirely within the token text.
+	//   2. at the end position of an unterminated token.
+	//   3. at the end of a regular expression (due to trailing flags like '/foo/g').
+	return (ast.IsRegularExpressionLiteral(contextToken) || ast.IsStringTextContainingNode(contextToken)) &&
+		(contextToken.Loc.ContainsExclusive(position)) ||
+		position == contextToken.End() &&
+			(ast.IsUnterminatedNode(contextToken) || ast.IsRegularExpressionLiteral(contextToken))
+}
+
+// true if we are certain that the currently edited location must define a new location; false otherwise.
+func isSolelyIdentifierDefinitionLocation(
+	contextToken *ast.Node,
+	previousToken *ast.Node,
+	file *ast.SourceFile,
+	position int,
+	typeChecker *checker.Checker,
+) bool {
+	parent := contextToken.Parent
+	containingNodeKind := parent.Kind
+	switch contextToken.Kind {
+	case ast.KindCommaToken:
+		return containingNodeKind == ast.KindVariableDeclaration ||
+			isVariableDeclarationListButNotTypeArgument(contextToken, file, typeChecker) ||
+			containingNodeKind == ast.KindVariableStatement ||
+			containingNodeKind == ast.KindEnumDeclaration || // enum a { foo, |
+			isFunctionLikeButNotConstructor(containingNodeKind) ||
+			containingNodeKind == ast.KindInterfaceDeclaration || // interface A<T, |
+			containingNodeKind == ast.KindArrayBindingPattern || // var [x, y|
+			containingNodeKind == ast.KindTypeAliasDeclaration || // type Map, K, |
+			// class A<T, |
+			// var C = class D<T, |
+			(ast.IsClassLike(parent) && parent.TypeParameterList() != nil && parent.TypeParameterList().End() >= contextToken.Pos())
+	case ast.KindDotToken:
+		return containingNodeKind == ast.KindArrayBindingPattern // var [.|
+	case ast.KindColonToken:
+		return containingNodeKind == ast.KindBindingElement // var {x :html|
+	case ast.KindOpenBracketToken:
+		return containingNodeKind == ast.KindArrayBindingPattern // var [x|
+	case ast.KindOpenParenToken:
+		return containingNodeKind == ast.KindCatchClause || isFunctionLikeButNotConstructor(containingNodeKind)
+	case ast.KindOpenBraceToken:
+		return containingNodeKind == ast.KindEnumDeclaration // enum a { |
+	case ast.KindLessThanToken:
+		return containingNodeKind == ast.KindClassDeclaration || // class A< |
+			containingNodeKind == ast.KindClassExpression || // var C = class D< |
+			containingNodeKind == ast.KindInterfaceDeclaration || // interface A< |
+			containingNodeKind == ast.KindTypeAliasDeclaration || // type List< |
+			ast.IsFunctionLikeKind(containingNodeKind)
+	case ast.KindStaticKeyword:
+		return containingNodeKind == ast.KindPropertyDeclaration &&
+			!ast.IsClassLike(parent.Parent)
+	case ast.KindDotDotDotToken:
+		return containingNodeKind == ast.KindParameter ||
+			(parent.Parent != nil && parent.Parent.Kind == ast.KindArrayBindingPattern) // var [...z|
+	case ast.KindPublicKeyword, ast.KindPrivateKeyword, ast.KindProtectedKeyword:
+		return containingNodeKind == ast.KindParameter && !ast.IsConstructorDeclaration(parent.Parent)
+	case ast.KindAsKeyword:
+		return containingNodeKind == ast.KindImportSpecifier ||
+			containingNodeKind == ast.KindExportSpecifier ||
+			containingNodeKind == ast.KindNamespaceImport
+	case ast.KindGetKeyword, ast.KindSetKeyword:
+		return !isFromObjectTypeDeclaration(contextToken)
+	case ast.KindIdentifier:
+		if (containingNodeKind == ast.KindImportSpecifier || containingNodeKind == ast.KindExportSpecifier) &&
+			contextToken == parent.Name() &&
+			contextToken.Text() == "type" {
+			// import { type | }
+			return false
+		}
+		ancestorVariableDeclaration := ast.FindAncestor(parent, ast.IsVariableDeclaration)
+		if ancestorVariableDeclaration != nil && getLineOfPosition(file, contextToken.End()) < position {
+			// let a
+			// |
+			return false
+		}
+	case ast.KindClassKeyword, ast.KindEnumKeyword, ast.KindInterfaceKeyword, ast.KindFunctionKeyword,
+		ast.KindVarKeyword, ast.KindImportKeyword, ast.KindLetKeyword, ast.KindConstKeyword, ast.KindInferKeyword:
+		return true
+	case ast.KindTypeKeyword:
+		// import { type foo| }
+		return containingNodeKind != ast.KindImportSpecifier
+	case ast.KindAsteriskToken:
+		return ast.IsFunctionLike(parent) && !ast.IsMethodDeclaration(parent)
+	}
+
+	// If the previous token is keyword corresponding to class member completion keyword
+	// there will be completion available here
+	if isClassMemberCompletionKeyword(keywordForNode(contextToken)) && isFromObjectTypeDeclaration(contextToken) {
+		return false
+	}
+
+	if isConstructorParameterCompletion(contextToken) {
+		// constructor parameter completion is available only if
+		// - its modifier of the constructor parameter or
+		// - its name of the parameter and not being edited
+		// eg. constructor(a |<- this shouldnt show completion
+		if !ast.IsIdentifier(contextToken) ||
+			ast.IsParameterPropertyModifier(keywordForNode(contextToken)) ||
+			isCurrentlyEditingNode(contextToken, file, position) {
+			return false
+		}
+	}
+
+	// Previous token may have been a keyword that was converted to an identifier.
+	switch keywordForNode(contextToken) {
+	case ast.KindAbstractKeyword, ast.KindClassKeyword, ast.KindConstKeyword, ast.KindDeclareKeyword,
+		ast.KindEnumKeyword, ast.KindFunctionKeyword, ast.KindInterfaceKeyword, ast.KindLetKeyword,
+		ast.KindPrivateKeyword, ast.KindProtectedKeyword, ast.KindPublicKeyword,
+		ast.KindStaticKeyword, ast.KindVarKeyword:
+		return true
+	case ast.KindAsyncKeyword:
+		return ast.IsPropertyDeclaration(contextToken.Parent)
+	}
+
+	// If we are inside a class declaration, and `constructor` is totally not present,
+	// but we request a completion manually at a whitespace...
+	ancestorClassLike := ast.FindAncestor(parent, ast.IsClassLike)
+	if ancestorClassLike != nil && contextToken == previousToken &&
+		isPreviousPropertyDeclarationTerminated(contextToken, file, position) {
+		// Don't block completions.
+		return false
+	}
+
+	ancestorPropertyDeclaration := ast.FindAncestor(parent, ast.IsPropertyDeclaration)
+	// If we are inside a class declaration and typing `constructor` after property declaration...
+	if ancestorPropertyDeclaration != nil && contextToken != previousToken &&
+		ast.IsClassLike(previousToken.Parent.Parent) &&
+		// And the cursor is at the token...
+		position <= previousToken.End() {
+		// If we are sure that the previous property declaration is terminated according to newline or semicolon...
+		if isPreviousPropertyDeclarationTerminated(contextToken, file, previousToken.End()) {
+			// Don't block completions.
+			return false
+		} else if contextToken.Kind != ast.KindEqualsToken &&
+			// Should not block: `class C { blah = c/**/ }`
+			// But should block: `class C { blah = somewhat c/**/ }` and `class C { blah: SomeType c/**/ }`
+			(ast.IsInitializedProperty(ancestorPropertyDeclaration) || ancestorPropertyDeclaration.Type() != nil) {
+			return true
+		}
+	}
+
+	return ast.IsDeclarationName(contextToken) &&
+		!ast.IsShorthandPropertyAssignment(parent) &&
+		!ast.IsJsxAttribute(parent) &&
+		// Don't block completions if we're in `class C /**/`, `interface I /**/` or `<T /**/>` ,
+		// because we're *past* the end of the identifier and might want to complete `extends`.
+		// If `contextToken !== previousToken`, this is `class C ex/**/`, `interface I ex/**/` or `<T ex/**/>`.
+		!((ast.IsClassLike(parent) || ast.IsInterfaceDeclaration(parent) || ast.IsTypeParameterDeclaration(parent)) &&
+			(contextToken != previousToken || position > previousToken.End()))
+}
+
+func isVariableDeclarationListButNotTypeArgument(node *ast.Node, file *ast.SourceFile, typeChecker *checker.Checker) bool {
+	return node.Parent.Kind == ast.KindVariableDeclarationList &&
+		!isPossiblyTypeArgumentPosition(node, file, typeChecker)
+}
+
+func isFunctionLikeButNotConstructor(kind ast.Kind) bool {
+	return ast.IsFunctionLikeKind(kind) && kind != ast.KindConstructor
+}
+
+func isPreviousPropertyDeclarationTerminated(contextToken *ast.Node, file *ast.SourceFile, position int) bool {
+	return contextToken.Kind != ast.KindEqualsToken &&
+		(contextToken.Kind == ast.KindSemicolonToken ||
+			getLineOfPosition(file, contextToken.End()) != getLineOfPosition(file, position))
+}
+
+func isDotOfNumericLiteral(contextToken *ast.Node, file *ast.SourceFile) bool {
+	if contextToken.Kind == ast.KindNumericLiteral {
+		text := file.Text()[contextToken.Pos():contextToken.End()]
+		r, _ := utf8.DecodeLastRuneInString(text)
+		return r == '.'
+	}
+
+	return false
+}
+
+func isInJsxText(contextToken *ast.Node, location *ast.Node) bool {
+	if contextToken.Kind == ast.KindJsxText {
+		return true
+	}
+
+	if contextToken.Kind == ast.KindGreaterThanToken && contextToken.Parent != nil {
+		// <Component<string> /**/ />
+		// <Component<string> /**/ ><Component>
+		// - contextToken: GreaterThanToken (before cursor)
+		// - location: JsxSelfClosingElement or JsxOpeningElement
+		// - contextToken.parent === location
+		if location == contextToken.Parent && ast.IsJsxOpeningLikeElement(location) {
+			return false
+		}
+
+		if contextToken.Parent.Kind == ast.KindJsxOpeningElement {
+			// <div>/**/
+			// - contextToken: GreaterThanToken (before cursor)
+			// - location: JSXElement
+			// - different parents (JSXOpeningElement, JSXElement)
+			return location.Parent.Kind != ast.KindJsxOpeningElement
+		}
+
+		if contextToken.Parent.Kind == ast.KindJsxClosingElement ||
+			contextToken.Parent.Kind == ast.KindJsxSelfClosingElement {
+			return contextToken.Parent.Parent != nil && contextToken.Parent.Parent.Kind == ast.KindJsxElement
+		}
+	}
+
+	return false
 }

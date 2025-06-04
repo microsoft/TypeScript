@@ -1174,11 +1174,6 @@ func reverseAccessKind(a AccessKind) AccessKind {
 	panic("Unhandled case in reverseAccessKind")
 }
 
-// Deprecated in favor of `ast.IsObjectLiteralElement`
-func isObjectLiteralElementLike(node *ast.Node) bool {
-	return ast.IsObjectLiteralElement(node)
-}
-
 func isInfinityOrNaNString(name string) bool {
 	return name == "Infinity" || name == "-Infinity" || name == "NaN"
 }

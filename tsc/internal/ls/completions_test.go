@@ -1940,6 +1940,148 @@ files = {
 				},
 			},
 		},
+		{
+			name: "completionListAtInvalidLocation",
+			files: map[string]string{
+				defaultMainFileName: `var v1 = '';
+" /*openString1*/
+var v2 = '';
+"/*openString2*/
+var v3 = '';
+" bar./*openString3*/
+var v4 = '';
+// bar./*inComment1*/
+var v6 = '';
+// /*inComment2*/
+var v7 = '';
+/* /*inComment3*/
+var v11 = '';
+  // /*inComment4*/
+var v12 = '';
+type htm/*inTypeAlias*/
+
+//  /*inComment5*/
+foo;
+var v10 = /reg/*inRegExp1*/ex/;`,
+			},
+			expectedResult: map[string]*testCaseResult{
+				"openString1": {
+					list: nil,
+				},
+				"openString2": {
+					list: nil,
+				},
+				"openString3": {
+					list: nil,
+				},
+				// !!! isInComment
+				// "inComment1": {
+				// 	list: nil,
+				// },
+				// "inComment2": {
+				// 	list: nil,
+				// },
+				// "inComment3": {
+				// 	list: nil,
+				// },
+				// "inComment4": {
+				// 	list: nil,
+				// },
+				// "inComment5": {
+				// 	list: nil,
+				// },
+				// "inTypeAlias": {
+				// 	list: nil,
+				// },
+				// "inRegExp1": {
+				// 	list: nil,
+				// },
+			},
+		},
+		{
+			name: "completionListAtIdentifierDefinitionLocations_destructuring_a",
+			files: map[string]string{
+				defaultMainFileName: `var [x/*variable1*/`,
+			},
+			expectedResult: map[string]*testCaseResult{
+				"variable1": {
+					list: nil,
+				},
+			},
+		},
+		{
+			name: "completionListAtIdentifierDefinitionLocations_destructuring_f",
+			files: map[string]string{
+				defaultMainFileName: `var {x, y/*variable6*/`,
+			},
+			expectedResult: map[string]*testCaseResult{
+				"variable6": {
+					list: nil,
+				},
+			},
+		},
+		{
+			name: "completionListAfterNumericLiteral_f1",
+			files: map[string]string{
+				defaultMainFileName: `0./*dotOnNumberExpressions1*/`,
+			},
+			expectedResult: map[string]*testCaseResult{
+				"dotOnNumberExpressions1": {
+					list: nil,
+				},
+			},
+		},
+		{
+			name: "tsxCompletion9",
+			files: map[string]string{
+				"/file.tsx": `declare module JSX {
+    interface Element { }
+    interface IntrinsicElements {
+        div: { ONE: string; TWO: number; }
+    }
+}
+var x1 = <div> /*1*/ hello /*2*/ world /*3*/</div>;
+var x2 = <div> /*4*/ <div></div> /*5*/ world /*6*/</div>;
+var x3 = <div>/*7*/<div/>/*8*/world/*9*/</div>;
+var x4 = <div>/*10*/</div>;
+<div/>
+/*end*/
+`,
+			},
+			mainFileName: "/file.tsx",
+			expectedResult: map[string]*testCaseResult{
+				"1": {
+					list: nil,
+				},
+				"2": {
+					list: nil,
+				},
+				"3": {
+					list: nil,
+				},
+				"4": {
+					list: nil,
+				},
+				"5": {
+					list: nil,
+				},
+				"6": {
+					list: nil,
+				},
+				"7": {
+					list: nil,
+				},
+				"8": {
+					list: nil,
+				},
+				"9": {
+					list: nil,
+				},
+				"10": {
+					list: nil,
+				},
+			},
+		},
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.name, func(t *testing.T) {
