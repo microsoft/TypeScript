@@ -91,10 +91,10 @@ func (host *emitHost) GetSourceFileFromReference(origin *ast.SourceFile, ref *as
 
 func (host *emitHost) Options() *core.CompilerOptions { return host.program.Options() }
 func (host *emitHost) SourceFiles() []*ast.SourceFile { return host.program.SourceFiles() }
-func (host *emitHost) GetCurrentDirectory() string    { return host.program.host.GetCurrentDirectory() }
+func (host *emitHost) GetCurrentDirectory() string    { return host.program.GetCurrentDirectory() }
 func (host *emitHost) CommonSourceDirectory() string  { return host.program.CommonSourceDirectory() }
 func (host *emitHost) UseCaseSensitiveFileNames() bool {
-	return host.program.host.FS().UseCaseSensitiveFileNames()
+	return host.program.UseCaseSensitiveFileNames()
 }
 
 func (host *emitHost) IsEmitBlocked(file string) bool {
@@ -103,7 +103,7 @@ func (host *emitHost) IsEmitBlocked(file string) bool {
 }
 
 func (host *emitHost) WriteFile(fileName string, text string, writeByteOrderMark bool, _ []*ast.SourceFile, _ *printer.WriteFileData) error {
-	return host.program.host.FS().WriteFile(fileName, text, writeByteOrderMark)
+	return host.program.Host().FS().WriteFile(fileName, text, writeByteOrderMark)
 }
 
 func (host *emitHost) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) printer.EmitResolver {

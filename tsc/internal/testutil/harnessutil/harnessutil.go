@@ -687,7 +687,7 @@ func (c *CompilationResult) getOutputPath(path string, ext string) string {
 	if c.Options.OutFile != "" {
 		/// !!! options.OutFile not yet supported
 	} else {
-		path = tspath.ResolvePath(c.Program.Host().GetCurrentDirectory(), path)
+		path = tspath.ResolvePath(c.Program.GetCurrentDirectory(), path)
 		var outDir string
 		if ext == ".d.ts" || ext == ".d.mts" || ext == ".d.cts" || (strings.HasSuffix(ext, ".ts") && strings.Contains(ext, ".d.")) {
 			outDir = c.Options.DeclarationDir
@@ -701,10 +701,10 @@ func (c *CompilationResult) getOutputPath(path string, ext string) string {
 			common := c.Program.CommonSourceDirectory()
 			if common != "" {
 				path = tspath.GetRelativePathFromDirectory(common, path, tspath.ComparePathsOptions{
-					UseCaseSensitiveFileNames: c.Program.Host().FS().UseCaseSensitiveFileNames(),
-					CurrentDirectory:          c.Program.Host().GetCurrentDirectory(),
+					UseCaseSensitiveFileNames: c.Program.UseCaseSensitiveFileNames(),
+					CurrentDirectory:          c.Program.GetCurrentDirectory(),
 				})
-				path = tspath.CombinePaths(tspath.ResolvePath(c.Program.Host().GetCurrentDirectory(), c.Options.OutDir), path)
+				path = tspath.CombinePaths(tspath.ResolvePath(c.Program.GetCurrentDirectory(), c.Options.OutDir), path)
 			}
 		}
 	}
@@ -737,7 +737,7 @@ func (c *CompilationResult) Outputs() []*TestFile {
 }
 
 func (c *CompilationResult) GetInputsAndOutputsForFile(path string) *CompilationOutput {
-	return c.inputsAndOutputs.GetOrZero(tspath.ResolvePath(c.Program.Host().GetCurrentDirectory(), path))
+	return c.inputsAndOutputs.GetOrZero(tspath.ResolvePath(c.Program.GetCurrentDirectory(), path))
 }
 
 func (c *CompilationResult) GetInputsForFile(path string) []*TestFile {

@@ -291,7 +291,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 		return nil
 	}
 
-	compilerOptions := program.GetCompilerOptions()
+	compilerOptions := program.Options()
 
 	// !!! see if incomplete completion list and continue or clean
 
@@ -346,7 +346,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 }
 
 func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, file *ast.SourceFile, position int, preferences *UserPreferences) completionData {
-	inCheckedFile := isCheckedFile(file, program.GetCompilerOptions())
+	inCheckedFile := isCheckedFile(file, program.Options())
 
 	currentToken := astnav.GetTokenAtPosition(file, position)
 
