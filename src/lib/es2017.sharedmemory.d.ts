@@ -92,13 +92,17 @@ interface Atomics {
      * agent is put to sleep causing execution to suspend until the timeout expires (returning
      * `"timed-out"`) or until the agent is awoken (returning `"ok"`); otherwise, returns
      * `"not-equal"`.
+     * @param typedArray An Int32Array that views a SharedArrayBuffer.
+     * @param index The position in the typedArray on which to wait.
+     * @param value The expected value to test.
+     * @param timeout Time to wait in milliseconds. Defaults to +Infinity.
      */
-    wait(typedArray: Int32Array<ArrayBufferLike>, index: number, value: number, timeout?: number): "ok" | "not-equal" | "timed-out";
+    wait(typedArray: Int32Array<SharedArrayBuffer>, index: number, value: number, timeout?: number): "ok" | "not-equal" | "timed-out";
 
     /**
      * Wakes up sleeping agents that are waiting on the given index of the array, returning the
      * number of agents that were awoken.
-     * @param typedArray A shared Int32Array<ArrayBufferLike>.
+     * @param typedArray An Int32Array that views a SharedArrayBuffer.
      * @param index The position in the typedArray to wake up on.
      * @param count The number of sleeping agents to notify. Defaults to +Infinity.
      */
