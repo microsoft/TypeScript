@@ -21669,7 +21669,7 @@ func (c *Checker) getTypeFromTypeLiteralOrFunctionOrConstructorTypeNode(node *as
 	if links.resolvedType == nil {
 		// Deferred resolution of members is handled by resolveObjectTypeMembers
 		alias := c.getAliasForTypeNode(node)
-		if len(c.getMembersOfSymbol(node.Symbol())) == 0 && alias == nil {
+		if sym := node.Symbol(); sym == nil || len(c.getMembersOfSymbol(sym)) == 0 && alias == nil {
 			links.resolvedType = c.emptyTypeLiteralType
 		} else {
 			t := c.newObjectType(ObjectFlagsAnonymous, node.Symbol())
