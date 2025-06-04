@@ -5,7 +5,7 @@
 
  export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
 ->Repro : ({ SelectProps }: { SelectProps?: Partial<Parameters<typeof Select>[0]>; }) => JSX.Element
-+>Repro : ({ SelectProps = {} }: { SelectProps?: Partial<{ value?: unknown; }> | undefined; }) => JSX.Element
++>Repro : ({ SelectProps }: { SelectProps?: Partial<{ value?: unknown; }> | undefined; }) => JSX.Element
  >SelectProps : Partial<{ value?: unknown; }>
  >{} : {}
  >SelectProps : Partial<{ value?: unknown; }> | undefined

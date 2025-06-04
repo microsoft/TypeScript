@@ -243,14 +243,14 @@ const obj2 = {
 
 };
 function f6({ a: string = "" }: O) { }
->f6 : ({ a: string = "" }: O) => void
+>f6 : ({ a: string }: O) => void
 >a : any
 >string : string
 >"" : ""
 
 const f7 = ({ a: string = "", b, c }: O) => { };
->f7 : ({ a: string = "", b, c }: O) => void
->({ a: string = "", b, c }: O) => { } : ({ a: string = "", b, c }: O) => void
+>f7 : ({ a: string, b, c }: O) => void
+>({ a: string = "", b, c }: O) => { } : ({ a: string, b, c }: O) => void
 >a : any
 >string : string
 >"" : ""
@@ -279,7 +279,7 @@ const f11 =  ({ [2]: string }) => { };
 
 // In below case `string` should be kept because it is used
 function f12({ a: string = "" }: O): typeof string { return "a"; }
->f12 : ({ a: string = "" }: O) => string
+>f12 : ({ a: string }: O) => string
 >a : any
 >string : string
 >"" : ""

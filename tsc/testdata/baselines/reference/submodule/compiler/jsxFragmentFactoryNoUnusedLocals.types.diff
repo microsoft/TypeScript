@@ -9,11 +9,3 @@
 
  type CounterProps = {
  >CounterProps : CounterProps
-@@= skipped -10, +10 lines =@@
- }
-
- export function Counter({ count = 0 }: CounterProps) {
-->Counter : ({ count }: CounterProps) => JSX.Element
-+>Counter : ({ count = 0 }: CounterProps) => JSX.Element
- >count : number
- >0 : 0

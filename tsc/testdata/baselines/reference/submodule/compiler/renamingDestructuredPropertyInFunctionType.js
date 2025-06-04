@@ -183,7 +183,7 @@ declare const obj2: {
     method({ a: string }: O): string;
 };
 declare function f6({ a: string }: O): void;
-declare const f7: ({ a: string = "", b, c }: O) => void;
+declare const f7: ({ a: string, b, c }: O) => void;
 declare const f8: ({ "a": string }: O) => void;
 declare function f9({ 2: string }: {
     2: any;

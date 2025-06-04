@@ -21,12 +21,3 @@
 +const withContext = ({ [context_1.Key]: value }) => value;
  exports.withContext = withContext;
 
-
-@@= skipped -20, +16 lines =@@
-     [Key]: string;
- }
- //// [index.d.ts]
--import { Key, Context } from "./context";
-+import { Context } from "./context";
- export declare const context: Context;
- export declare const withContext: ({ [Key]: value }: Context) => string;

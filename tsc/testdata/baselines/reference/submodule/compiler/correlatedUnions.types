@@ -376,7 +376,7 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 }
 
 function createEventListener<K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>): Ev<K> {
->createEventListener : <K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>) => Ev<K>
+>createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
 >name : K
 >once : boolean
 >false : false
@@ -392,7 +392,7 @@ function createEventListener<K extends keyof DocumentEventMap>({ name, once = fa
 const clickEvent = createEventListener({
 >clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
 >createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
->createEventListener : <K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>) => Ev<K>
+>createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
 >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent) => void; }
 
     name: "click",
@@ -414,7 +414,7 @@ const clickEvent = createEventListener({
 const scrollEvent = createEventListener({
 >scrollEvent : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
 >createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
->createEventListener : <K extends keyof DocumentEventMap>({ name, once = false, callback }: Ev<K>) => Ev<K>
+>createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
 >{    name: "scroll",    callback: ev => console.log(ev),} : { name: "scroll"; callback: (ev: Event) => void; }
 
     name: "scroll",

@@ -417,7 +417,7 @@ function f13() {
 }
 
 function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
->f14 : ([a = 1, [b = "hello", { x, y: c = false }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
 >a : number
 >1 : 1
 >b : string
@@ -438,7 +438,7 @@ function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
 }
 f14([2, ["abc", { x: 0, y: true }]]);
 >f14([2, ["abc", { x: 0, y: true }]]) : void
->f14 : ([a = 1, [b = "hello", { x, y: c = false }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
 >[2, ["abc", { x: 0, y: true }]] : [number, [string, { x: number; y: true; }]]
 >2 : 2
 >["abc", { x: 0, y: true }] : [string, { x: number; y: true; }]
@@ -451,7 +451,7 @@ f14([2, ["abc", { x: 0, y: true }]]);
 
 f14([2, ["abc", { x: 0 }]]);
 >f14([2, ["abc", { x: 0 }]]) : void
->f14 : ([a = 1, [b = "hello", { x, y: c = false }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
 >[2, ["abc", { x: 0 }]] : [number, [string, { x: number; }]]
 >2 : 2
 >["abc", { x: 0 }] : [string, { x: number; }]
@@ -462,7 +462,7 @@ f14([2, ["abc", { x: 0 }]]);
 
 f14([2, ["abc", { y: false }]]);  // Error, no x
 >f14([2, ["abc", { y: false }]]) : void
->f14 : ([a = 1, [b = "hello", { x, y: c = false }]]: [number, [string, { x: any; y?: boolean; }]]) => void
+>f14 : ([a, [b, { x, y: c }]]: [number, [string, { x: any; y?: boolean; }]]) => void
 >[2, ["abc", { y: false }]] : [number, [string, { y: false; }]]
 >2 : 2
 >["abc", { y: false }] : [string, { y: false; }]
@@ -516,7 +516,7 @@ function f16() {
 }
 
 function f17({ a = "", b = 0, c = false }) {
->f17 : ({ a = "", b = 0, c = false }: { a?: string; b?: number; c?: boolean; }) => void
+>f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 >a : string
 >"" : ""
 >b : number
@@ -527,26 +527,26 @@ function f17({ a = "", b = 0, c = false }) {
 
 f17({});
 >f17({}) : void
->f17 : ({ a = "", b = 0, c = false }: { a?: string; b?: number; c?: boolean; }) => void
+>f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 >{} : {}
 
 f17({ a: "hello" });
 >f17({ a: "hello" }) : void
->f17 : ({ a = "", b = 0, c = false }: { a?: string; b?: number; c?: boolean; }) => void
+>f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 >{ a: "hello" } : { a: string; }
 >a : string
 >"hello" : "hello"
 
 f17({ c: true });
 >f17({ c: true }) : void
->f17 : ({ a = "", b = 0, c = false }: { a?: string; b?: number; c?: boolean; }) => void
+>f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 >{ c: true } : { c: true; }
 >c : true
 >true : true
 
 f17(f15());
 >f17(f15()) : void
->f17 : ({ a = "", b = 0, c = false }: { a?: string; b?: number; c?: boolean; }) => void
+>f17 : ({ a, b, c }: { a?: string; b?: number; c?: boolean; }) => void
 >f15() : { a: string; b: number; c: boolean; }
 >f15 : () => { a: string; b: number; c: boolean; }
 

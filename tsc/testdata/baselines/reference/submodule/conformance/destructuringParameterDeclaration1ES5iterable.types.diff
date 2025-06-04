@@ -9,13 +9,7 @@
  >j : number
  >k : string
  >l : any
-@@= skipped -187, +187 lines =@@
- >10 : 10
-
- function c2({z = 10}) { }
-->c2 : ({ z }: { z?: number; }) => void
-+>c2 : ({ z = 10 }: { z?: number; }) => void
- >z : number
+@@= skipped -192, +192 lines =@@
  >10 : 10
 
  function c3({b}: { b: number|string} = { b: "hello" }) { }
@@ -24,30 +18,7 @@
  >b : string | number
  >b : string | number
  >{ b: "hello" } : { b: string; }
-@@= skipped -19, +19 lines =@@
- >c : any
-
- function c6([a, b, [[c=1]]]) { }
-->c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
-+>c6 : ([a, b, [[c = 1]]]: [any, any, [[number?]]]) => void
- >a : any
- >b : any
- >c : number
-@@= skipped -45, +45 lines =@@
-
- c2({});         // Implied type is {z?: number}
- >c2({}) : void
-->c2 : ({ z }: { z?: number; }) => void
-+>c2 : ({ z = 10 }: { z?: number; }) => void
- >{} : {}
-
- c2({z:1});      // Implied type is {z?: number}
- >c2({z:1}) : void
-->c2 : ({ z }: { z?: number; }) => void
-+>c2 : ({ z = 10 }: { z?: number; }) => void
- >{z:1} : { z: number; }
- >z : number
- >1 : 1
+@@= skipped -71, +71 lines =@@
 
  c3({ b: 1 });     // Implied type is { b: number|string }.
  >c3({ b: 1 }) : void

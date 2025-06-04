@@ -2086,13 +2086,14 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 		options = &SkipTriviaOptions{}
 	}
 
+	textLen := len(text)
 	canConsumeStar := false
 	// Keep in sync with couldStartTrivia
 	for {
 		ch, size := utf8.DecodeRuneInString(text[pos:])
 		switch ch {
 		case '\r':
-			if text[pos+1] == '\n' {
+			if pos+1 < textLen && text[pos+1] == '\n' {
 				pos++
 			}
 			fallthrough
@@ -2110,10 +2111,10 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 			if options.StopAtComments {
 				break
 			}
-			if pos+1 < len(text) {
+			if pos+1 < textLen {
 				if text[pos+1] == '/' {
 					pos += 2
-					for pos < len(text) {
+					for pos < textLen {
 						ch, size := utf8.DecodeRuneInString(text[pos:])
 						if stringutil.IsLineBreak(ch) {
 							break
@@ -2125,8 +2126,8 @@ func SkipTriviaEx(text string, pos int, options *SkipTriviaOptions) int {
 				}
 				if text[pos+1] == '*' {
 					pos += 2
-					for pos < len(text) {
-						if text[pos] == '*' && text[pos+1] == '/' {
+					for pos < textLen {
+						if text[pos] == '*' && (pos+1 < textLen) && text[pos+1] == '/' {
 							pos += 2
 							break
 						}

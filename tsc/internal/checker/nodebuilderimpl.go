@@ -93,6 +93,9 @@ type nodeBuilderImpl struct {
 
 	// state
 	ctx *NodeBuilderContext
+
+	// reusable visitor
+	cloneBindingNameVisitor *ast.NodeVisitor
 }
 
 const (
@@ -102,9 +105,10 @@ const (
 
 // Node builder utility functions
 
-func newNodeBuilderImpl(ch *Checker, e *printer.EmitContext) nodeBuilderImpl {
-	result := nodeBuilderImpl{f: e.Factory.AsNodeFactory(), ch: ch, e: e}
-	return result
+func newNodeBuilderImpl(ch *Checker, e *printer.EmitContext) *nodeBuilderImpl {
+	b := &nodeBuilderImpl{f: e.Factory.AsNodeFactory(), ch: ch, e: e}
+	b.cloneBindingNameVisitor = ast.NewNodeVisitor(b.cloneBindingName, b.f, ast.NodeVisitorHooks{})
+	return b
 }
 
 func (b *nodeBuilderImpl) saveRestoreFlags() func() {
@@ -1468,8 +1472,46 @@ func (b *nodeBuilderImpl) parameterToParameterDeclarationName(parameterSymbol *a
 	if parameterDeclaration == nil || parameterDeclaration.Name() == nil {
 		return b.f.NewIdentifier(parameterSymbol.Name)
 	}
-	// !!! TODO - symbol tracking of computed names in cloned binding patterns, set singleline emit flags
-	return b.f.DeepCloneNode(parameterDeclaration.Name())
+
+	name := parameterDeclaration.Name()
+	switch name.Kind {
+	case ast.KindIdentifier:
+		cloned := b.f.DeepCloneNode(name)
+		b.e.SetEmitFlags(cloned, printer.EFNoAsciiEscaping)
+		return cloned
+	case ast.KindQualifiedName:
+		cloned := b.f.DeepCloneNode(name.AsQualifiedName().Right)
+		b.e.SetEmitFlags(cloned, printer.EFNoAsciiEscaping)
+		return cloned
+	default:
+		return b.cloneBindingName(name)
+	}
+}
+
+func (b *nodeBuilderImpl) cloneBindingName(node *ast.Node) *ast.Node {
+	if ast.IsComputedPropertyName(node) && b.ch.isLateBindableName(node) {
+		b.trackComputedName(node.Expression(), b.ctx.enclosingDeclaration)
+	}
+
+	visited := b.cloneBindingNameVisitor.VisitEachChild(node)
+
+	if ast.IsBindingElement(visited) {
+		bindingElement := visited.AsBindingElement()
+		visited = b.f.UpdateBindingElement(
+			bindingElement,
+			bindingElement.DotDotDotToken,
+			bindingElement.PropertyName,
+			bindingElement.Name(),
+			nil, // remove initializer
+		)
+	}
+
+	if !ast.NodeIsSynthesized(visited) {
+		visited = b.f.DeepCloneNode(visited)
+	}
+
+	b.e.SetEmitFlags(visited, printer.EFSingleLine|printer.EFNoAsciiEscaping)
+	return visited
 }
 
 func (b *nodeBuilderImpl) symbolTableToDeclarationStatements(symbolTable *ast.SymbolTable) []*ast.Node {

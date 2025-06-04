@@ -189,7 +189,7 @@ function c1({z} = { z: 10 }) { }
 >10 : 10
 
 function c2({z = 10}) { }
->c2 : ({ z = 10 }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number; }) => void
 >z : number
 >10 : 10
 
@@ -208,7 +208,7 @@ function c5([a, b, [[c]]]) { }
 >c : any
 
 function c6([a, b, [[c=1]]]) { }
->c6 : ([a, b, [[c = 1]]]: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
 >a : any
 >b : any
 >c : number
@@ -253,12 +253,12 @@ c1({ z: 1 })      // Implied type is {z:number}?
 
 c2({});         // Implied type is {z?: number}
 >c2({}) : void
->c2 : ({ z = 10 }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number; }) => void
 >{} : {}
 
 c2({z:1});      // Implied type is {z?: number}
 >c2({z:1}) : void
->c2 : ({ z = 10 }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number; }) => void
 >{z:1} : { z: number; }
 >z : number
 >1 : 1

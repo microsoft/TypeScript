@@ -18,7 +18,7 @@ b;
 >b : string | number
 
 function test({c, d = c}: Record<string, number>) {}
->test : ({ c, d = c }: Record<string, number>) => void
+>test : ({ c, d }: Record<string, number>) => void
 >c : number
 >d : number
 >c : number

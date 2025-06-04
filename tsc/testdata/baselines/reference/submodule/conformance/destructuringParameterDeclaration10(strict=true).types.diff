@@ -5,20 +5,11 @@
  === destructuringParameterDeclaration10.ts ===
  export function prepareConfig({
 ->prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
-+>prepareConfig : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined; }) => void
++>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined; }) => void
 
      additionalFiles: {
  >additionalFiles : any
-@@= skipped -24, +24 lines =@@
- }
-
- export function prepareConfigWithoutAnnotation({
-->prepareConfigWithoutAnnotation : ({ additionalFiles: { json } }?: { additionalFiles?: { json?: never[] | undefined; } | undefined; }) => void
-+>prepareConfigWithoutAnnotation : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: { json?: never[] | undefined; } | undefined; }) => void
-
-     additionalFiles: {
- >additionalFiles : any
-@@= skipped -20, +20 lines =@@
+@@= skipped -44, +44 lines =@@
  }
 
  export const prepareConfigWithContextualSignature: (param:{
@@ -32,7 +23,7 @@
 
  }) => void = ({
 ->({    additionalFiles: {        json = []    } = {}} = {}) => {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
-+>({    additionalFiles: {        json = []    } = {}} = {}) => {    json // string[]} : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined; }) => void
++>({    additionalFiles: {        json = []    } = {}} = {}) => {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>> | undefined; }) => void
 
      additionalFiles: {
  >additionalFiles : any

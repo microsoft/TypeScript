@@ -45,5 +45,5 @@ export interface GetLocalesOptions<T extends LocaleData> {
     config?: LocaleConfig<T> | undefined;
     name?: string;
 }
-export declare const getLocales: <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig = {}, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>;
+export declare const getLocales: <T extends LocaleData>({ app, name, default: defaultLocalesConfig, config: userLocalesConfig, }: GetLocalesOptions<T>) => ConvertLocaleConfig<T>;
 export {};

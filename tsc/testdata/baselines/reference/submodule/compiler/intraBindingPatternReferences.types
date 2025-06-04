@@ -52,8 +52,8 @@ const { f1, f2 = f1, f3 = f2 } = { f1: 1 };
 
 // Example that requires padding of object literal types at depth
 const mockCallback = ({ event: { params = {} } = {} }) => {};
->mockCallback : ({ event: { params = {} } = {} }: { event?: { params?: {} | undefined; } | undefined; }) => void
->({ event: { params = {} } = {} }) => {} : ({ event: { params = {} } = {} }: { event?: { params?: {} | undefined; } | undefined; }) => void
+>mockCallback : ({ event: { params } }: { event?: { params?: {} | undefined; } | undefined; }) => void
+>({ event: { params = {} } = {} }) => {} : ({ event: { params } }: { event?: { params?: {} | undefined; } | undefined; }) => void
 >event : any
 >params : {}
 >{} : {}

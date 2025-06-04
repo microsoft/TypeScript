@@ -40,11 +40,13 @@ func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebui
 }
 
 func (b *NodeBuilder) popContext() {
-	b.impl.ctx = nil
-	if len(b.ctxStack) > 1 {
-		b.impl.ctx = b.ctxStack[len(b.ctxStack)-1]
+	stackSize := len(b.ctxStack)
+	if stackSize == 0 {
+		b.impl.ctx = nil
+	} else {
+		b.impl.ctx = b.ctxStack[stackSize-1]
+		b.ctxStack = b.ctxStack[:stackSize-1]
 	}
-	b.ctxStack = b.ctxStack[:len(b.ctxStack)-1]
 }
 
 func (b *NodeBuilder) exitContext(result *ast.Node) *ast.Node {
@@ -165,7 +167,7 @@ func (b *NodeBuilder) TypeToTypeNode(typ *Type, enclosingDeclaration *ast.Node, 
 
 func NewNodeBuilder(ch *Checker, e *printer.EmitContext) *NodeBuilder {
 	impl := newNodeBuilderImpl(ch, e)
-	return &NodeBuilder{impl: &impl, ctxStack: make([]*NodeBuilderContext, 0, 1), host: ch.program}
+	return &NodeBuilder{impl: impl, ctxStack: make([]*NodeBuilderContext, 0, 1), host: ch.program}
 }
 
 func (c *Checker) GetDiagnosticNodeBuilder() *NodeBuilder {

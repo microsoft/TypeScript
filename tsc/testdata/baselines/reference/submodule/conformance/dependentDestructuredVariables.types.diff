@@ -241,16 +241,7 @@
      }
      if (kind === "b") {
  >kind === "b" : boolean
-@@= skipped -20, +20 lines =@@
- // Repro from #48902
-
- function foo({
-->foo : ({ value1, test1, test2, test3, test4, test5, test6, test7, test8, test9 }: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
-+>foo : ({ value1, test1 = value1.test1, test2 = value1.test2, test3 = value1.test3, test4 = value1.test4, test5 = value1.test5, test6 = value1.test6, test7 = value1.test7, test8 = value1.test8, test9 = value1.test9 }: { test1?: any; test2?: any; test3?: any; test4?: any; test5?: any; test6?: any; test7?: any; test8?: any; test9?: any; value1: any; }) => void
-
-     value1,
- >value1 : any
-@@= skipped -64, +64 lines =@@
+@@= skipped -84, +84 lines =@@
  // Repro from #49772
 
  function fa1(x: [true, number] | [false, string]) {

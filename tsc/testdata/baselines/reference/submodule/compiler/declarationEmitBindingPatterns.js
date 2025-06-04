@@ -15,7 +15,7 @@ function f({} = a, [] = a, { p: {} = a } = a) {
 
 
 //// [declarationEmitBindingPatterns.d.ts]
-declare const k: ({ x: z = "y" }: {
+declare const k: ({ x: z }: {
     x?: string;
 }) => void;
 declare var a: any;

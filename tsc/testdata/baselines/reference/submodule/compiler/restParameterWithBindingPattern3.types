@@ -2,14 +2,14 @@
 
 === restParameterWithBindingPattern3.ts ===
 function a(...[a = 1, b = true]: string[]) { }
->a : (...[a = 1, b = true]: string[]) => void
+>a : (...[a, b]: string[]) => void
 >a : string
 >1 : 1
 >b : string
 >true : true
 
 function b(...[...foo = []]: string[]) { }
->b : (...[...foo = []]: string[]) => void
+>b : (...[...foo]: string[]) => void
 >foo : string[]
 >[] : undefined[]
 

@@ -5,7 +5,7 @@
   */
  export function prepareConfig({
 ->prepareConfig : ({ additionalFiles: { json } }?: {    additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;}) => void
-+>prepareConfig : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: { json?: any[]; }; }) => void
++>prepareConfig : ({ additionalFiles: { json } }?: { additionalFiles?: { json?: any[]; }; }) => void
 
      additionalFiles: {
  >additionalFiles : any
@@ -25,11 +25,6 @@
  }
 
  export function prepareConfigWithoutAnnotation({
-->prepareConfigWithoutAnnotation : ({ additionalFiles: { json } }?: { additionalFiles?: { json?: any[]; }; }) => void
-+>prepareConfigWithoutAnnotation : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: { json?: any[]; }; }) => void
-
-     additionalFiles: {
- >additionalFiles : any
 @@= skipped -27, +27 lines =@@
    additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
  }) => void} */
@@ -37,7 +32,7 @@
 ->prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
 ->({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>; }) => void
 +>prepareConfigWithContextualSignature : (param: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>>; }) => void
-+>({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json = [] } = {} }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>>; }) => void
++>({    additionalFiles: {        json = []    } = {}} = {})=>  {    json // string[]} : ({ additionalFiles: { json } }?: { additionalFiles?: Partial<Record<"json" | "json5" | "jsonc", string[]>>; }) => void
 
      additionalFiles: {
  >additionalFiles : any
@@ -46,7 +41,7 @@
   */
  function f1({ a: { json = [] } = {} } = {}) { return json }
 ->f1 : ({ a: { json } }?: { a?: { json?: string[]; }; }) => string[]
-+>f1 : ({ a: { json = [] } = {} }?: { a?: { json?: any[]; }; }) => any[]
++>f1 : ({ a: { json } }?: { a?: { json?: any[]; }; }) => any[]
  >a : any
 ->json : string[]
 +>json : any[]
@@ -62,7 +57,7 @@
  function f2([[json = []] = []] = []) { return json }
 ->f2 : ([[json]]?: [[string[]?]?]) => string[]
 ->json : string[]
-+>f2 : ([[json = []] = []]?: [[any[]?]?]) => any[]
++>f2 : ([[json]]?: [[any[]?]?]) => any[]
 +>json : any[]
  >[] : undefined[]
  >[] : []

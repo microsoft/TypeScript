@@ -117,7 +117,7 @@ function c1({z} = { z: 10 }) { }
 >10 : 10
 
 function c2({z = 10}) { }
->c2 : ({ z = 10 }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number; }) => void
 >z : number
 >10 : 10
 
@@ -141,7 +141,7 @@ function c5([a, b, [[c]]]) { }
 >c : any
 
 function c6([a, b, [[c = 1]]]) { }
->c6 : ([a, b, [[c = 1]]]: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
 >a : any
 >b : any
 >c : number
@@ -168,7 +168,7 @@ c1({ z: true });   // Error, implied type is {z:number}?
 
 c2({ z: false });  // Error, implied type is {z?: number}
 >c2({ z: false }) : void
->c2 : ({ z = 10 }: { z?: number; }) => void
+>c2 : ({ z }: { z?: number; }) => void
 >{ z: false } : { z: boolean; }
 >z : boolean
 >false : false
@@ -191,7 +191,7 @@ c5([1, 2, false, true]);   // Error, implied type is [any, any, [[any]]]
 
 c6([1, 2, [["string"]]]);  // Error, implied type is [any, any, [[number]]]  // Use initializer
 >c6([1, 2, [["string"]]]) : void
->c6 : ([a, b, [[c = 1]]]: [any, any, [[number?]]]) => void
+>c6 : ([a, b, [[c]]]: [any, any, [[number?]]]) => void
 >[1, 2, [["string"]]] : [number, number, [[string]]]
 >1 : 1
 >2 : 2
