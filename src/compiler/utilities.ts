@@ -9084,6 +9084,14 @@ const _computedOptions = createComputedCompilerOptions({
             if (compilerOptions.resolveJsonModule !== undefined) {
                 return compilerOptions.resolveJsonModule;
             }
+            switch (_computedOptions.module.computeValue(compilerOptions)) {
+                // TODO in 6.0: uncomment
+                // case ModuleKind.Node16:
+                // case ModuleKind.Node18:
+                case ModuleKind.Node20:
+                case ModuleKind.NodeNext:
+                    return true;
+            }
             return _computedOptions.moduleResolution.computeValue(compilerOptions) === ModuleResolutionKind.Bundler;
         },
     },
