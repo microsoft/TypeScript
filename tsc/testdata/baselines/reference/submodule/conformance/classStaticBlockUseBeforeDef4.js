@@ -30,7 +30,7 @@ class C {
 
 //// [classStaticBlockUseBeforeDef4.d.ts]
 declare class C {
-    static accessor x: any;
-    static accessor y: any;
-    static accessor z: any;
+    static accessor x: number;
+    static accessor y: number;
+    static accessor z: number;
 }

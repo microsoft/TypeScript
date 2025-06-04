@@ -17379,7 +17379,7 @@ func (c *Checker) getTypeOfAccessors(symbol *ast.Symbol) *Type {
 				t = c.getReturnTypeFromBody(getter, CheckModeNormal)
 			}
 		}
-		if t == nil && accessor != nil && accessor.Initializer() != nil {
+		if t == nil && accessor != nil {
 			t = c.getWidenedTypeForVariableLikeDeclaration(accessor, true /*reportErrors*/)
 		}
 		if t == nil {

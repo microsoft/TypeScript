@@ -20,5 +20,5 @@ class C {
 
 //// [classStaticBlockUseBeforeDef5.d.ts]
 declare class C {
-    static accessor x: any;
+    static accessor x: number;
 }

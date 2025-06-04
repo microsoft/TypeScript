@@ -8,10 +8,3 @@
  class C {
      static {
          this.x = 1;
-@@= skipped -11, +10 lines =@@
-
- //// [classStaticBlockUseBeforeDef5.d.ts]
- declare class C {
--    static accessor x: number;
-+    static accessor x: any;
- }

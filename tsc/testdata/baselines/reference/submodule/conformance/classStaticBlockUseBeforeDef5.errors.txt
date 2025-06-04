@@ -1,8 +1,7 @@
 classStaticBlockUseBeforeDef5.ts(3,14): error TS2729: Property 'x' is used before its initialization.
-classStaticBlockUseBeforeDef5.ts(5,21): error TS7008: Member 'x' implicitly has an 'any' type.
 
 
-==== classStaticBlockUseBeforeDef5.ts (2 errors) ====
+==== classStaticBlockUseBeforeDef5.ts (1 errors) ====
     class C {
         static {
             this.x = 1;
@@ -11,7 +10,5 @@ classStaticBlockUseBeforeDef5.ts(5,21): error TS7008: Member 'x' implicitly has 
 !!! related TS2728 classStaticBlockUseBeforeDef5.ts:5:21: 'x' is declared here.
         }
         static accessor x;
-                        ~
-!!! error TS7008: Member 'x' implicitly has an 'any' type.
     }
     

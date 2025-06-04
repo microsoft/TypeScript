@@ -5,34 +5,34 @@ class C {
 >C : C
 
     static accessor x;
->x : any
+>x : number
 
     static {
         this.x = 1;
 >this.x = 1 : 1
->this.x : any
+>this.x : number
 >this : typeof C
->x : any
+>x : number
 >1 : 1
     }
     static accessor y = this.x;
->y : any
->this.x : any
+>y : number
+>this.x : number
 >this : typeof C
->x : any
+>x : number
 
     static accessor z;
->z : any
+>z : number
 
     static {
         this.z = this.y;
->this.z = this.y : any
->this.z : any
+>this.z = this.y : number
+>this.z : number
 >this : typeof C
->z : any
->this.y : any
+>z : number
+>this.y : number
 >this : typeof C
->y : any
+>y : number
     }
 }
 

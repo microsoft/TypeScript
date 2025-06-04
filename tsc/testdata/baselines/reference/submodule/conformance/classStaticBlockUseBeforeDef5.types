@@ -7,12 +7,12 @@ class C {
     static {
         this.x = 1;
 >this.x = 1 : 1
->this.x : any
+>this.x : number
 >this : typeof C
->x : any
+>x : number
 >1 : 1
     }
     static accessor x;
->x : any
+>x : number
 }
 

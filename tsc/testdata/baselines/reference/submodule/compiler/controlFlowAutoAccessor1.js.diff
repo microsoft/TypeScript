@@ -8,36 +8,18 @@
  class Example {
      accessor test;
      constructor(test) {
-@@= skipped -50, +49 lines =@@
-
- //// [controlFlowAutoAccessor1.d.ts]
- declare class Example {
--    accessor test: number;
-+    accessor test: any;
-     constructor(test: number);
--    getTest(): number;
-+    getTest(): any;
- }
- declare class Example2 {
--    accessor test: number | undefined;
-+    accessor test: any;
+@@= skipped -59, +58 lines =@@
      constructor(test: number | undefined);
--    getTest(): number;
-+    getTest(): any;
+     getTest(): number;
  }
 +// https://github.com/microsoft/TypeScript/issues/59728
  declare class Example3 {
--    accessor value: number | null;
-+    accessor value: any;
+     accessor value: number | null;
      constructor(n: number);
+@@= skipped -9, +10 lines =@@
+     static accessor value: number | null;
  }
- declare var n: number;
- declare class Example4 {
--    static accessor value: number | null;
--}
--declare class Example5 {
-     static accessor value: any;
-+}
-+declare class Example5 {
+ declare class Example5 {
+-    static accessor value: any;
 +    static accessor value: any; // error
  }

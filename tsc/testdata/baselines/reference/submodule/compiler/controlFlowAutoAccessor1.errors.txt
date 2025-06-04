@@ -1,15 +1,9 @@
-controlFlowAutoAccessor1.ts(2,12): error TS7008: Member 'test' implicitly has an 'any' type.
-controlFlowAutoAccessor1.ts(14,12): error TS7008: Member 'test' implicitly has an 'any' type.
-controlFlowAutoAccessor1.ts(31,12): error TS7008: Member 'value' implicitly has an 'any' type.
-controlFlowAutoAccessor1.ts(44,19): error TS7008: Member 'value' implicitly has an 'any' type.
 controlFlowAutoAccessor1.ts(54,19): error TS7008: Member 'value' implicitly has an 'any' type.
 
 
-==== controlFlowAutoAccessor1.ts (5 errors) ====
+==== controlFlowAutoAccessor1.ts (1 errors) ====
     class Example {
       accessor test;
-               ~~~~
-!!! error TS7008: Member 'test' implicitly has an 'any' type.
     
       constructor(test: number) {
         this.test = test;
@@ -22,8 +16,6 @@ controlFlowAutoAccessor1.ts(54,19): error TS7008: Member 'value' implicitly has 
     
     class Example2 {
       accessor test;
-               ~~~~
-!!! error TS7008: Member 'test' implicitly has an 'any' type.
     
       constructor(test: number | undefined) {
         this.test = test;
@@ -41,8 +33,6 @@ controlFlowAutoAccessor1.ts(54,19): error TS7008: Member 'value' implicitly has 
     
     class Example3 {
       accessor value;
-               ~~~~~
-!!! error TS7008: Member 'value' implicitly has an 'any' type.
     
       constructor(n: number) {
         this.value = n;
@@ -56,8 +46,6 @@ controlFlowAutoAccessor1.ts(54,19): error TS7008: Member 'value' implicitly has 
     declare var n: number;
     class Example4 {
       static accessor value;
-                      ~~~~~
-!!! error TS7008: Member 'value' implicitly has an 'any' type.
       static {
         this.value = n;
         if (n < 0) {

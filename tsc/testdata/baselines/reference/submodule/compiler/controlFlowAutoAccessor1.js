@@ -110,23 +110,23 @@ Example5.value++;
 
 //// [controlFlowAutoAccessor1.d.ts]
 declare class Example {
-    accessor test: any;
+    accessor test: number;
     constructor(test: number);
-    getTest(): any;
+    getTest(): number;
 }
 declare class Example2 {
-    accessor test: any;
+    accessor test: number | undefined;
     constructor(test: number | undefined);
-    getTest(): any;
+    getTest(): number;
 }
 // https://github.com/microsoft/TypeScript/issues/59728
 declare class Example3 {
-    accessor value: any;
+    accessor value: number | null;
     constructor(n: number);
 }
 declare var n: number;
 declare class Example4 {
-    static accessor value: any;
+    static accessor value: number | null;
 }
 declare class Example5 {
     static accessor value: any; // error

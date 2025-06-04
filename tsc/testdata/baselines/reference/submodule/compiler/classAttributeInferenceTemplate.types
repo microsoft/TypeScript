@@ -41,10 +41,10 @@ class MyClass2 {
 >MyClass2 : MyClass2
 
     accessor property;
->property : any
+>property : string
 
     accessor property2;
->property2 : any
+>property2 : string
 
     constructor() {
         const variable = 'something'
@@ -53,16 +53,16 @@ class MyClass2 {
 
         this.property = `foo`; // Correctly inferred as `string`
 >this.property = `foo` : "foo"
->this.property : any
+>this.property : string
 >this : this
->property : any
+>property : string
 >`foo` : "foo"
 
         this.property2 = `foo-${variable}`; // Causes an error
 >this.property2 = `foo-${variable}` : "foo-something"
->this.property2 : any
+>this.property2 : string
 >this : this
->property2 : any
+>property2 : string
 >`foo-${variable}` : "foo-something"
 >variable : "something"
 
