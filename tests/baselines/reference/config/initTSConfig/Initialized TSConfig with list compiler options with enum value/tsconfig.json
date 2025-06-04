@@ -11,7 +11,7 @@
     "types": [],
     "lib": ["es5", "es2015.core"],
     // For nodejs:
-    // "lib": ["es5", "es2015.core"],
+    // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -d @types/node
 

@@ -2841,6 +2841,8 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
 
     const tab = "  ";
     const result: string[] = [];
+    const allSetOptions = Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch");
+
     result.push(`{`);
     result.push(`${tab}// ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)}`);
     result.push(`${tab}"compilerOptions": {`);
@@ -2859,43 +2861,51 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
         emitOption("lib", options.lib);
     }
     emitHeader(Diagnostics.For_nodejs_Colon);
-    emitOption("lib", ["lib.esnext.d.ts"], "always");
-    emitOption("types", ["node"], "always");
+    result.push(`${tab}${tab}// "lib": ["esnext"],`)
+    result.push(`${tab}${tab}// "types": ["node"],`)
     emitHeader(Diagnostics.and_npm_install_d_types_Slashnode);
 
     newline();
 
     emitHeader(Diagnostics.Other_Outputs);
-    emitOption("sourceMap", /*value*/ true);
-    emitOption("declaration", /*value*/ true);
-    emitOption("declarationMap", /*value*/ true);
+    emitOption("sourceMap", /*defaultValue*/ true);
+    emitOption("declaration", /*defaultValue*/ true);
+    emitOption("declarationMap", /*defaultValue*/ true);
 
     newline();
 
     emitHeader(Diagnostics.Stricter_Typechecking_Options);
-    emitOption("noUncheckedIndexedAccess", /*value*/ true);
-    emitOption("exactOptionalPropertyTypes", /*value*/ true);
+    emitOption("noUncheckedIndexedAccess", /*defaultValue*/ true);
+    emitOption("exactOptionalPropertyTypes", /*defaultValue*/ true);
 
     newline();
 
     emitHeader(Diagnostics.Style_Options);
-    emitOption("noImplicitReturns", /*value*/ true, "optional");
-    emitOption("noImplicitOverride", /*value*/ true, "optional");
-    emitOption("noUnusedLocals", /*value*/ true, "optional");
-    emitOption("noUnusedParameters", /*value*/ true, "optional");
-    emitOption("noFallthroughCasesInSwitch", /*value*/ true, "optional");
-    emitOption("noPropertyAccessFromIndexSignature", /*value*/ true, "optional");
+    emitOption("noImplicitReturns", /*defaultValue*/ true, "optional");
+    emitOption("noImplicitOverride", /*defaultValue*/ true, "optional");
+    emitOption("noUnusedLocals", /*defaultValue*/ true, "optional");
+    emitOption("noUnusedParameters", /*defaultValue*/ true, "optional");
+    emitOption("noFallthroughCasesInSwitch", /*defaultValue*/ true, "optional");
+    emitOption("noPropertyAccessFromIndexSignature", /*defaultValue*/ true, "optional");
 
     newline();
 
     emitHeader(Diagnostics.Recommended_Options);
-    emitOption("strict", /*value*/ true);
+    emitOption("strict", /*defaultValue*/ true);
     emitOption("jsx", JsxEmit.ReactJSX);
-    emitOption("verbatimModuleSyntax", /*value*/ true);
-    emitOption("isolatedModules", /*value*/ true);
-    emitOption("noUncheckedSideEffectImports", /*value*/ true);
+    emitOption("verbatimModuleSyntax", /*defaultValue*/ true);
+    emitOption("isolatedModules", /*defaultValue*/ true);
+    emitOption("noUncheckedSideEffectImports", /*defaultValue*/ true);
     emitOption("moduleDetection", ModuleDetectionKind.Force);
-    emitOption("skipLibCheck", /*value*/ true);
+    emitOption("skipLibCheck", /*defaultValue*/ true);
+
+    // Write any user-provided options we haven't already
+    if (allSetOptions.length > 0) {
+        newline();
+        while (allSetOptions.length > 0) {
+            emitOption(allSetOptions[0], options[allSetOptions[0]] as PresetValue);
+        }
+    }
 
     function newline() {
         result.push("");
@@ -2909,6 +2919,11 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     // commented = 'optional': Comment out unless it's on commandline
     // commented = 'never': Never comment this out
     function emitOption(setting: string, defaultValue: PresetValue, commented: "always" | "optional" | "never" = "never") {
+        const existingOptionIndex = allSetOptions.indexOf(setting);
+        if (existingOptionIndex >= 0) {
+            allSetOptions.splice(existingOptionIndex, 1);
+        }
+
         let comment: boolean;
         if (commented === "always") {
             comment = true;

@@ -39,5 +39,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+
+    "declarationDir": "lib",
+    "noErrorTruncation": true,
   }
 }

@@ -11,7 +11,7 @@
     "types": ["jquery", "mocha"],
     // For nodejs:
     // "lib": ["esnext"],
-    // "types": ["jquery", "mocha"],
+    // "types": ["node"],
     // and npm install -d @types/node
 
     // Other Outputs
