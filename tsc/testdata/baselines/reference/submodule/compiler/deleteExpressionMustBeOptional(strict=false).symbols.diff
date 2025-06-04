@@ -112,17 +112,17 @@
 
  delete a.a
 ->a.a : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
-+>a.a : Symbol(þindex, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
++>a.a : Symbol(__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
  >a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 21, 13))
 ->a : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
-+>a : Symbol(þindex, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
++>a : Symbol(__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
 
  delete a.b
 ->a.b : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
-+>a.b : Symbol(þindex, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
++>a.b : Symbol(__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
  >a : Symbol(a, Decl(deleteExpressionMustBeOptional.ts, 21, 13))
 ->b : Symbol(AA.__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
-+>b : Symbol(þindex, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
++>b : Symbol(__index, Decl(deleteExpressionMustBeOptional.ts, 12, 14))
 
  delete b.a
  >b : Symbol(b, Decl(deleteExpressionMustBeOptional.ts, 22, 13))

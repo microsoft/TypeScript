@@ -34,6 +34,6 @@ function A() {
 >A : Symbol(A, Decl(index.tsx, 12, 1))
 
     return (<p>Hello</p>);
->p : Symbol(þindex, Decl(index.tsx, 8, 41))
->p : Symbol(þindex, Decl(index.tsx, 8, 41))
+>p : Symbol(__index, Decl(index.tsx, 8, 41))
+>p : Symbol(__index, Decl(index.tsx, 8, 41))
 }

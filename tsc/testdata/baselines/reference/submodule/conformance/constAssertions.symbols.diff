@@ -1,15 +1,6 @@
 --- old.constAssertions.symbols
 +++ new.constAssertions.symbols
-@@= skipped -171, +171 lines =@@
- >x : Symbol(x, Decl(constAssertions.ts, 43, 10))
- >foo : Symbol(foo, Decl(constAssertions.ts, 43, 17))
- >this.x : Symbol(x, Decl(constAssertions.ts, 43, 10))
-->this : Symbol(__object, Decl(constAssertions.ts, 43, 8))
-+>this : Symbol(þobject, Decl(constAssertions.ts, 43, 8))
- >x : Symbol(x, Decl(constAssertions.ts, 43, 10))
- >const : Symbol(const)
-
-@@= skipped -222, +222 lines =@@
+@@= skipped -393, +393 lines =@@
  >Foo54374 : Symbol(Foo54374, Decl(constAssertions.ts, 107, 33))
 
    a: 1;

@@ -172,7 +172,7 @@ let o9 = { x: 10, foo() { this.x = 20 } } as const;  // Error
 >x : Symbol(x, Decl(constAssertions.ts, 43, 10))
 >foo : Symbol(foo, Decl(constAssertions.ts, 43, 17))
 >this.x : Symbol(x, Decl(constAssertions.ts, 43, 10))
->this : Symbol(þobject, Decl(constAssertions.ts, 43, 8))
+>this : Symbol(__object, Decl(constAssertions.ts, 43, 8))
 >x : Symbol(x, Decl(constAssertions.ts, 43, 10))
 >const : Symbol(const)
 

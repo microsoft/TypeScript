@@ -21,7 +21,7 @@ Multimap3.prototype = {
 >key : Symbol(key, Decl(bug26885.js, 9, 8))
 
         return this._map[key + ''];
->this : Symbol(þobject, Decl(bug26885.js, 4, 21))
+>this : Symbol(__object, Decl(bug26885.js, 4, 21))
 >key : Symbol(key, Decl(bug26885.js, 9, 8))
     }
 }

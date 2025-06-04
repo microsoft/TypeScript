@@ -29,19 +29,7 @@
 
  declare const strMap: { [s: string]: boolean };
  >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
-@@= skipped -26, +26 lines =@@
-
- const e2: boolean = strMap.bar;
- >e2 : Symbol(e2, Decl(noUncheckedIndexedAccess.ts, 12, 5))
-->strMap.bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-+>strMap.bar : Symbol(þindex, Decl(noUncheckedIndexedAccess.ts, 8, 23))
- >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
-->bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-+>bar : Symbol(þindex, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-
- const e3: boolean = strMap[0];
- >e3 : Symbol(e3, Decl(noUncheckedIndexedAccess.ts, 13, 5))
-@@= skipped -27, +27 lines =@@
+@@= skipped -53, +53 lines =@@
  const e8: boolean = strMap[NumericEnum1.A];
  >e8 : Symbol(e8, Decl(noUncheckedIndexedAccess.ts, 18, 5))
  >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
@@ -100,31 +88,7 @@
  >NumericEnum2 : Symbol(NumericEnum2, Decl(noUncheckedIndexedAccess.ts, 4, 29))
 
  const e14: boolean = strMap[null as any];
-@@= skipped -53, +53 lines =@@
-
- const ok2: boolean | undefined = strMap.bar;
- >ok2 : Symbol(ok2, Decl(noUncheckedIndexedAccess.ts, 28, 5))
-->strMap.bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-+>strMap.bar : Symbol(þindex, Decl(noUncheckedIndexedAccess.ts, 8, 23))
- >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
-->bar : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-+>bar : Symbol(þindex, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-
- type T_OK1 = CheckBooleanOnly<(typeof strMap)[string]>;
- >T_OK1 : Symbol(T_OK1, Decl(noUncheckedIndexedAccess.ts, 28, 44))
-@@= skipped -35, +35 lines =@@
- >undefined : Symbol(undefined)
-
- strMap.qua = undefined;
-->strMap.qua : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-+>strMap.qua : Symbol(þindex, Decl(noUncheckedIndexedAccess.ts, 8, 23))
- >strMap : Symbol(strMap, Decl(noUncheckedIndexedAccess.ts, 8, 13))
-->qua : Symbol(__index, Decl(noUncheckedIndexedAccess.ts, 8, 23))
-+>qua : Symbol(þindex, Decl(noUncheckedIndexedAccess.ts, 8, 23))
- >undefined : Symbol(undefined)
-
- strMap[0] = undefined;
-@@= skipped -34, +34 lines =@@
+@@= skipped -122, +122 lines =@@
  const num_ok4: boolean = numMap[NumericEnum1.A];
  >num_ok4 : Symbol(num_ok4, Decl(noUncheckedIndexedAccess.ts, 48, 5))
  >numMap : Symbol(numMap, Decl(noUncheckedIndexedAccess.ts, 43, 13))

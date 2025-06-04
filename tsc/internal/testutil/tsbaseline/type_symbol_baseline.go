@@ -406,7 +406,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	var symbolString strings.Builder
 	symbolString.Grow(256)
 	symbolString.WriteString("Symbol(")
-	symbolString.WriteString(fileChecker.SymbolToString(symbol))
+	symbolString.WriteString(strings.ReplaceAll(fileChecker.SymbolToString(symbol), ast.InternalSymbolNamePrefix, "__"))
 	count := 0
 	for _, declaration := range symbol.Declarations {
 		if count >= 5 {

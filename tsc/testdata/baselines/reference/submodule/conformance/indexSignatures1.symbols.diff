@@ -1,18 +1,6 @@
 --- old.indexSignatures1.symbols
 +++ new.indexSignatures1.symbols
-@@= skipped -134, +134 lines =@@
-
- const y2 = dom.data123;
- >y2 : Symbol(y2, Decl(indexSignatures1.ts, 47, 5))
-->dom.data123 : Symbol(__index, Decl(indexSignatures1.ts, 45, 18))
-+>dom.data123 : Symbol(þindex, Decl(indexSignatures1.ts, 45, 18))
- >dom : Symbol(dom, Decl(indexSignatures1.ts, 45, 11))
-->data123 : Symbol(__index, Decl(indexSignatures1.ts, 45, 18))
-+>data123 : Symbol(þindex, Decl(indexSignatures1.ts, 45, 18))
-
- // Excess property checking for template pattern index signature
-
-@@= skipped -35, +35 lines =@@
+@@= skipped -169, +169 lines =@@
      sfoo: x => x.length,  // x: string
  >sfoo : Symbol(sfoo, Decl(indexSignatures1.ts, 61, 22))
  >x : Symbol(x, Decl(indexSignatures1.ts, 62, 9))

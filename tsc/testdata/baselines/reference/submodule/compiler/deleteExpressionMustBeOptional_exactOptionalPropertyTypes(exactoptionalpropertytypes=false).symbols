@@ -160,14 +160,14 @@ delete g.j
 >g : Symbol(g, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 21, 13))
 
 delete a.a
->a.a : Symbol(þindex, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
+>a.a : Symbol(__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 >a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 22, 13))
->a : Symbol(þindex, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
+>a : Symbol(__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 
 delete a.b
->a.b : Symbol(þindex, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
+>a.b : Symbol(__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 >a : Symbol(a, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 22, 13))
->b : Symbol(þindex, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
+>b : Symbol(__index, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 12, 14))
 
 delete b.a
 >b : Symbol(b, Decl(deleteExpressionMustBeOptional_exactOptionalPropertyTypes.ts, 23, 13))

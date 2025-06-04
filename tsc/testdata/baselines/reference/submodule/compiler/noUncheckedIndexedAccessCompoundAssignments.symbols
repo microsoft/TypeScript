@@ -4,24 +4,24 @@
 // Each line should have one error
 // for a total of 12 errors
 stringMap.foo++;
->stringMap.foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
->foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 
 --stringMap.foo;
->stringMap.foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
->foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 
 stringMap.foo += 1;
->stringMap.foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
->foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 
 stringMap.foo *= 1;
->stringMap.foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>stringMap.foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))
->foo : Symbol(þindex, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
+>foo : Symbol(__index, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 26))
 
 ++stringMap['foo'];
 >stringMap : Symbol(stringMap, Decl(noUncheckedIndexedAccessCompoundAssignments.ts, 15, 13))

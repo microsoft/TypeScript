@@ -78,8 +78,8 @@
  export default <h></h>
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
 ->h : Symbol(predom.JSX.IntrinsicElements.__index, Decl(renderer2.d.ts, 2, 37))
-+>h : Symbol(þindex, Decl(renderer2.d.ts, 2, 37))
-+>h : Symbol(þindex, Decl(renderer2.d.ts, 2, 37))
++>h : Symbol(__index, Decl(renderer2.d.ts, 2, 37))
++>h : Symbol(__index, Decl(renderer2.d.ts, 2, 37))
 
  === index.tsx ===
  /** @jsx dom */
@@ -89,5 +89,5 @@
  >elem : Symbol(elem, Decl(index.tsx, 3, 3))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
 ->h : Symbol(JSX.IntrinsicElements.__index, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
-+>h : Symbol(þindex, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(__index, Decl(renderer.d.ts, 2, 37))
++>h : Symbol(__index, Decl(renderer.d.ts, 2, 37))

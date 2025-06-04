@@ -17,9 +17,9 @@ declare module JSX {
 
 // OK
 <div />;
->div : Symbol(þindex, Decl(file.tsx, 2, 30))
+>div : Symbol(__index, Decl(file.tsx, 2, 30))
 
 // OK
 <span />;
->span : Symbol(þindex, Decl(file.tsx, 2, 30))
+>span : Symbol(__index, Decl(file.tsx, 2, 30))
 
