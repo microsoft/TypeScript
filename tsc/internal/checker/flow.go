@@ -388,7 +388,7 @@ func (c *Checker) narrowType(f *FlowState, t *Type, expr *ast.Node, assumeTrue b
 		return c.narrowTypeByTruthiness(f, t, expr, assumeTrue)
 	case ast.KindCallExpression:
 		return c.narrowTypeByCallExpression(f, t, expr, assumeTrue)
-	case ast.KindParenthesizedExpression, ast.KindNonNullExpression:
+	case ast.KindParenthesizedExpression, ast.KindNonNullExpression, ast.KindSatisfiesExpression:
 		return c.narrowType(f, t, expr.Expression(), assumeTrue)
 	case ast.KindBinaryExpression:
 		return c.narrowTypeByBinaryExpression(f, t, expr.AsBinaryExpression(), assumeTrue)
@@ -1575,7 +1575,7 @@ func (c *Checker) isMatchingReference(source *ast.Node, target *ast.Node) bool {
 		return target.Kind == ast.KindThisKeyword
 	case ast.KindSuperKeyword:
 		return target.Kind == ast.KindSuperKeyword
-	case ast.KindNonNullExpression, ast.KindParenthesizedExpression:
+	case ast.KindNonNullExpression, ast.KindParenthesizedExpression, ast.KindSatisfiesExpression:
 		return c.isMatchingReference(source.Expression(), target)
 	case ast.KindPropertyAccessExpression, ast.KindElementAccessExpression:
 		if sourcePropertyName, ok := c.getAccessedPropertyName(source); ok {

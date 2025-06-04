@@ -631,4 +631,4 @@ declare const foobarPred: (fb: {
 };
 // https://github.com/microsoft/TypeScript/issues/60778
 declare const arrTest: Array<number>;
-declare function isEmptyString(x: unknown): boolean;
+declare function isEmptyString(x: unknown): x is "";
