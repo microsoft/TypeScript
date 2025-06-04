@@ -1,0 +1,30 @@
+typeAliasDeclarationEmit3.ts(3,14): error TS1156: 'type' declarations can only be declared inside a block.
+typeAliasDeclarationEmit3.ts(9,14): error TS1156: 'type' declarations can only be declared inside a block.
+typeAliasDeclarationEmit3.ts(15,14): error TS1156: 'type' declarations can only be declared inside a block.
+
+
+==== typeAliasDeclarationEmit3.ts (3 errors) ====
+    function f1(): void {
+        for (let i = 0; i < 1; i++)
+            type foo = [];
+                 ~~~
+!!! error TS1156: 'type' declarations can only be declared inside a block.
+            console.log('f1');
+    }
+    
+    function f2(): void {
+        while (true)
+            type foo = [];
+                 ~~~
+!!! error TS1156: 'type' declarations can only be declared inside a block.
+            console.log('f2');
+    }
+    
+    function f3(): void {
+        if (true)
+            type foo = [];
+                 ~~~
+!!! error TS1156: 'type' declarations can only be declared inside a block.
+            console.log('f3');
+    }
+    
