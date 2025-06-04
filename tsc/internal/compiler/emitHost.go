@@ -5,7 +5,9 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/transformers/declarations"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -29,7 +31,6 @@ type EmitHost interface {
 	GetCurrentDirectory() string
 	CommonSourceDirectory() string
 	IsEmitBlocked(file string) bool
-	GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData
 	GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool) printer.EmitResolver
 }
 
@@ -40,8 +41,20 @@ type emitHost struct {
 	program *Program
 }
 
-func (host *emitHost) GetDefaultResolutionModeForFile(file modulespecifiers.SourceFileForSpecifierGeneration) core.ResolutionMode {
+func (host *emitHost) GetModeForUsageLocation(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) core.ResolutionMode {
+	return host.program.GetModeForUsageLocation(file, moduleSpecifier)
+}
+
+func (host *emitHost) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
+	return host.program.GetResolvedModuleFromModuleSpecifier(file, moduleSpecifier)
+}
+
+func (host *emitHost) GetDefaultResolutionModeForFile(file ast.HasFileName) core.ResolutionMode {
 	return host.program.GetDefaultResolutionModeForFile(file)
+}
+
+func (host *emitHost) GetEmitModuleFormatOfFile(file ast.HasFileName) core.ModuleKind {
+	return host.program.GetEmitModuleFormatOfFile(file)
 }
 
 func (host *emitHost) FileExists(path string) bool {
@@ -78,7 +91,7 @@ func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.Mod
 
 func (host *emitHost) GetOutputPathsFor(file *ast.SourceFile, forceDtsPaths bool) declarations.OutputPaths {
 	// TODO: cache
-	return getOutputPathsFor(file, host, forceDtsPaths)
+	return outputpaths.GetOutputPathsFor(file, host.Options(), host, forceDtsPaths)
 }
 
 func (host *emitHost) GetResolutionModeOverride(node *ast.Node) core.ResolutionMode {
@@ -113,8 +126,4 @@ func (host *emitHost) GetEmitResolver(file *ast.SourceFile, skipDiagnostics bool
 	checker, done := host.program.GetTypeCheckerForFile(context.TODO(), file)
 	defer done()
 	return checker.GetEmitResolver(file, skipDiagnostics)
-}
-
-func (host *emitHost) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
-	return host.program.GetSourceFileMetaData(path)
 }

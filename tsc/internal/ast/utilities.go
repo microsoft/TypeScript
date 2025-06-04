@@ -2414,15 +2414,15 @@ func GetImpliedNodeFormatForFile(path string, packageJsonType string) core.Modul
 	return impliedNodeFormat
 }
 
-func GetEmitModuleFormatOfFileWorker(sourceFile *SourceFile, options *core.CompilerOptions, sourceFileMetaData *SourceFileMetaData) core.ModuleKind {
-	result := GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), options, sourceFileMetaData)
+func GetEmitModuleFormatOfFileWorker(fileName string, options *core.CompilerOptions, sourceFileMetaData *SourceFileMetaData) core.ModuleKind {
+	result := GetImpliedNodeFormatForEmitWorker(fileName, options, sourceFileMetaData)
 	if result != core.ModuleKindNone {
 		return result
 	}
 	return options.GetEmitModuleKind()
 }
 
-func GetImpliedNodeFormatForEmitWorker(fileName string, options *core.CompilerOptions, sourceFileMetaData *SourceFileMetaData) core.ModuleKind {
+func GetImpliedNodeFormatForEmitWorker(fileName string, options *core.CompilerOptions, sourceFileMetaData *SourceFileMetaData) core.ResolutionMode {
 	moduleKind := options.GetEmitModuleKind()
 	if core.ModuleKindNode16 <= moduleKind && moduleKind <= core.ModuleKindNodeNext {
 		if sourceFileMetaData == nil {
@@ -3398,6 +3398,14 @@ func IsRightSideOfQualifiedNameOrPropertyAccess(node *Node) bool {
 		return parent.AsMetaProperty().Name() == node
 	}
 	return false
+}
+
+func ShouldTransformImportCall(fileName string, options *core.CompilerOptions, impliedNodeFormatForEmit core.ModuleKind) bool {
+	moduleKind := options.GetEmitModuleKind()
+	if core.ModuleKindNode16 <= moduleKind && moduleKind <= core.ModuleKindNodeNext || moduleKind == core.ModuleKindPreserve {
+		return false
+	}
+	return impliedNodeFormatForEmit < core.ModuleKindES2015
 }
 
 func HasQuestionToken(node *Node) bool {

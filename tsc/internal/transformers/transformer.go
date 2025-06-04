@@ -42,11 +42,11 @@ func (tx *Transformer) TransformSourceFile(file *ast.SourceFile) *ast.SourceFile
 	return tx.visitor.VisitSourceFile(file)
 }
 
-func getModuleTransformer(emitContext *printer.EmitContext, options *core.CompilerOptions, resolver binder.ReferenceResolver, sourceFileMetaDataProvider printer.SourceFileMetaDataProvider) *Transformer {
+func getModuleTransformer(emitContext *printer.EmitContext, options *core.CompilerOptions, resolver binder.ReferenceResolver, getEmitModuleFormatOfFile func(file ast.HasFileName) core.ModuleKind) *Transformer {
 	switch options.GetEmitModuleKind() {
 	case core.ModuleKindPreserve:
 		// `ESModuleTransformer` contains logic for preserving CJS input syntax in `--module preserve`
-		return NewESModuleTransformer(emitContext, options, resolver, sourceFileMetaDataProvider)
+		return NewESModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
 
 	case core.ModuleKindESNext,
 		core.ModuleKindES2022,
@@ -55,10 +55,10 @@ func getModuleTransformer(emitContext *printer.EmitContext, options *core.Compil
 		core.ModuleKindNode16,
 		core.ModuleKindNodeNext,
 		core.ModuleKindCommonJS:
-		return NewImpliedModuleTransformer(emitContext, options, resolver, sourceFileMetaDataProvider)
+		return NewImpliedModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
 
 	default:
-		return NewCommonJSModuleTransformer(emitContext, options, resolver, sourceFileMetaDataProvider)
+		return NewCommonJSModuleTransformer(emitContext, options, resolver, getEmitModuleFormatOfFile)
 	}
 }
 
@@ -106,6 +106,6 @@ func GetScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 	// !!! transform other language targets
 
 	// transform module syntax
-	tx = append(tx, getModuleTransformer(emitContext, options, referenceResolver, host))
+	tx = append(tx, getModuleTransformer(emitContext, options, referenceResolver, host.GetEmitModuleFormatOfFile))
 	return tx
 }

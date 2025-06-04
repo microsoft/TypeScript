@@ -121,7 +121,7 @@ exports.b = null;
 
 //// [index.d.ts]
 export type LocalInterface = import("pkg", { assert: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
-export declare const a: any;
+export declare const a: import("pkg").RequireInterface;
 export declare const b: any;
 //// [other.d.ts]
 // missing assert:
@@ -131,7 +131,7 @@ export declare const b: any;
 //// [other2.d.ts]
 // wrong assertion key
 export type LocalInterface = import("pkg", { assert: { "bad": "require" } }).RequireInterface & import("pkg", { assert: { "bad": "import" } }).ImportInterface;
-export declare const a: any;
+export declare const a: import("pkg").RequireInterface;
 export declare const b: any;
 //// [other3.d.ts]
 // Array instead of object-y thing
@@ -146,5 +146,5 @@ export declare const a: any, Asserts1: any, RequireInterface: any;
 export declare const b: any, Asserts2: any, ImportInterface: any;
 //// [other5.d.ts]
 export type LocalInterface = import("pkg", { assert: {} }).RequireInterface & import("pkg", { assert: {} }).ImportInterface;
-export declare const a: any;
+export declare const a: import("pkg").RequireInterface;
 export declare const b: any;

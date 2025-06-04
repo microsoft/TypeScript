@@ -127,8 +127,7 @@ func getPreferredEnding(
 		}
 	}
 	if resolutionMode == core.ResolutionModeNone {
-		// !!! TODO: proper import resolution mode support
-		// resolutionMode = host.GetDefaultResolutionModeForFile(importingSourceFile, compilerOptions)
+		resolutionMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
 	}
 	return getModuleSpecifierEndingPreference(
 		prefs.ImportModuleSpecifierEndingPreference,
@@ -181,18 +180,17 @@ func getModuleSpecifierPreferences(
 
 	getAllowedEndingsInPreferredOrder := func(syntaxImpliedNodeFormat core.ResolutionMode) []ModuleSpecifierEnding {
 		preferredEnding := filePreferredEnding
-		// !!! TODO: resolution mode support
-		// impliedNodeFormat := getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions);
-		// if impliedNodeFormat != syntaxImpliedNodeFormat {
-		// 	preferredEnding = getPreferredEnding(
-		// 		prefs,
-		// 		host,
-		// 		compilerOptions,
-		// 		importingSourceFile,
-		// 		oldImportSpecifier,
-		// 		syntaxImpliedNodeFormat,
-		// 	)
-		// }
+		resolutionMode := host.GetDefaultResolutionModeForFile(importingSourceFile)
+		if resolutionMode != syntaxImpliedNodeFormat {
+			preferredEnding = getPreferredEnding(
+				prefs,
+				host,
+				compilerOptions,
+				importingSourceFile,
+				oldImportSpecifier,
+				syntaxImpliedNodeFormat,
+			)
+		}
 		moduleResolution := compilerOptions.GetModuleResolutionKind()
 		moduleResolutionIsNodeNext := core.ModuleResolutionKindNode16 <= moduleResolution && moduleResolution <= core.ModuleResolutionKindNodeNext
 		allowImportingTsExtension := shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.FileName())
@@ -202,12 +200,6 @@ func getModuleSpecifierPreferences(
 			}
 			return []ModuleSpecifierEnding{ModuleSpecifierEndingJsExtension}
 		}
-		// !!! Classic module resolution is dead?
-		// if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic) {
-		// 	return preferredEnding === ModuleSpecifierEnding.JsExtension
-		// 		? [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index]
-		// 		: [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
-		// }
 		switch preferredEnding {
 		case ModuleSpecifierEndingJsExtension:
 			if allowImportingTsExtension {

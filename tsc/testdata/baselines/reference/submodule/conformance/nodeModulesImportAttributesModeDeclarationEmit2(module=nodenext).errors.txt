@@ -1,4 +1,4 @@
-/index.ts(6,14): error TS2305: Module '"./node_modules/pkg/import.js"' has no exported member 'RequireInterface'.
+/index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 /index.ts(6,50): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 /index.ts(7,49): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 
@@ -11,7 +11,7 @@
     
     import {type RequireInterface as Req} from "pkg" with { "resolution-mode": "require" };
                  ~~~~~~~~~~~~~~~~
-!!! error TS2305: Module '"./node_modules/pkg/import.js"' has no exported member 'RequireInterface'.
+!!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     import {type ImportInterface as Imp} from "pkg" with { "resolution-mode": "import" };

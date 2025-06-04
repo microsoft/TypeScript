@@ -9935,6 +9935,11 @@ type CheckJsDirective struct {
 	Range   CommentRange
 }
 
+type HasFileName interface {
+	FileName() string
+	Path() tspath.Path
+}
+
 type SourceFile struct {
 	NodeBase
 	DeclarationBase

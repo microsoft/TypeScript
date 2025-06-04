@@ -30,7 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 const tslib_1 = require("tslib");
 const a_1 = require("./a");
-tslib_1.__exportStar(require("./a"), exports);
+__exportStar(require("./a"), exports);
 class B extends a_1.A {
 }
 exports.B = B;

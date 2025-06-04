@@ -13,9 +13,9 @@
 +>a : import("./node_modules/inner/other.js").Thing
 +>(await import("inner")).x() : import("./node_modules/inner/other.js").Thing
 +>(await import("inner")).x : () => import("./node_modules/inner/other.js").Thing
-+>(await import("inner")) : typeof import("./node_modules/inner/index.js")
-+>await import("inner") : typeof import("./node_modules/inner/index.js")
-+>import("inner") : Promise<typeof import("./node_modules/inner/index.js")>
++>(await import("inner")) : typeof import("inner")
++>await import("inner") : typeof import("inner")
++>import("inner") : Promise<typeof import("inner")>
  >"inner" : "inner"
 ->x : () => import("node_modules/inner/other").Thing
 +>x : () => import("./node_modules/inner/other.js").Thing

@@ -1,8 +1,0 @@
---- old.declarationEmitMonorepoBaseUrl.js
-+++ new.declarationEmitMonorepoBaseUrl.js
-@@= skipped -58, +58 lines =@@
- //// [index.d.ts]
- export {};
- //// [index.d.ts]
--export declare function resolveParserPlugins(): import("@babel/parser").PluginConfig[];
-+export declare function resolveParserPlugins(): any;

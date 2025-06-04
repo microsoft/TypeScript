@@ -5,7 +5,7 @@ const { Thing, useThing, cbThing } = require("./index");
 >Thing : Readonly<{ a: "thing"; b: "chill"; }>
 >useThing : (x: Thing) => void
 >cbThing : (x: (x: Thing) => void) => void
->require("./index") : typeof import(".")
+>require("./index") : typeof import("./index")
 >require : any
 >"./index" : "./index"
 

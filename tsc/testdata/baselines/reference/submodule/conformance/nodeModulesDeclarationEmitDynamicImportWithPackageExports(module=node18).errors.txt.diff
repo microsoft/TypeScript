@@ -14,7 +14,6 @@
 +other.mts(3,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +other.mts(4,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +other.mts(4,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+other.mts(5,14): error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner/index.js'. This is likely not portable. A type annotation is necessary.
 +other.mts(5,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +other.mts(5,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +other.ts(2,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
@@ -30,10 +29,8 @@
 +other2.cts(2,18): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +other2.cts(3,14): error TS2742: The inferred type of 'e' cannot be named without a reference to './node_modules/inner/index.d.mts'. This is likely not portable. A type annotation is necessary.
 +other2.cts(3,18): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+other2.mts(2,14): error TS2742: The inferred type of 'd' cannot be named without a reference to './node_modules/inner/index.d.cts'. This is likely not portable. A type annotation is necessary.
 +other2.mts(2,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +other2.mts(2,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+other2.mts(3,14): error TS2742: The inferred type of 'e' cannot be named without a reference to './node_modules/inner/index.d.mts'. This is likely not portable. A type annotation is necessary.
 +other2.mts(3,18): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +other2.mts(3,24): error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +other2.ts(2,14): error TS2742: The inferred type of 'd' cannot be named without a reference to './node_modules/inner/index.d.cts'. This is likely not portable. A type annotation is necessary.
@@ -94,7 +91,7 @@
 +!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +                           ~~~~~~~~~~~~~~~~~~~
 +!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+==== other.mts (9 errors) ====
++==== other.mts (8 errors) ====
 +    // esm format file
 +    export const a = await import("package/cjs");
 +                     ~~~~~
@@ -112,24 +109,18 @@
 +                           ~~~~~~~~~~~~~~~~~
 +!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +    export const f = await import("inner");
-+                 ~
-+!!! error TS2742: The inferred type of 'f' cannot be named without a reference to './node_modules/inner/index.js'. This is likely not portable. A type annotation is necessary.
 +                     ~~~~~
 +!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +                           ~~~~~~~~~~~~~~~
 +!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
-+==== other2.mts (6 errors) ====
++==== other2.mts (4 errors) ====
 +    // esm format file
 +    export const d = await import("inner/cjs");
-+                 ~
-+!!! error TS2742: The inferred type of 'd' cannot be named without a reference to './node_modules/inner/index.d.cts'. This is likely not portable. A type annotation is necessary.
 +                     ~~~~~
 +!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +                           ~~~~~~~~~~~~~~~~~~~
 +!!! error TS2712: A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.
 +    export const e = await import("inner/mjs");
-+                 ~
-+!!! error TS2742: The inferred type of 'e' cannot be named without a reference to './node_modules/inner/index.d.mts'. This is likely not portable. A type annotation is necessary.
 +                     ~~~~~
 +!!! error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
 +                           ~~~~~~~~~~~~~~~~~~~

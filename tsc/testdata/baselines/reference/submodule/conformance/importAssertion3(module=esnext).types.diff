@@ -5,7 +5,7 @@
 
  export type { I } from './0' assert { type: "json" }
 ->I : import("0").I
-+>I : import("./0.js").I
++>I : import("./0").I
  >type : any
 
  === 2.ts ===

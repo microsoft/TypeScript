@@ -14,12 +14,12 @@
  === index.ts ===
  import { makeThing } from "umd";
 ->makeThing : () => import("node_modules/umd").Thing
-+>makeThing : () => import("umd.d.ts").Thing
++>makeThing : () => import("umd").Thing
 
  export const thing = makeThing();
 ->thing : import("node_modules/umd").Thing
 ->makeThing() : import("node_modules/umd").Thing
 ->makeThing : () => import("node_modules/umd").Thing
-+>thing : import("umd.d.ts").Thing
-+>makeThing() : import("umd.d.ts").Thing
-+>makeThing : () => import("umd.d.ts").Thing
++>thing : import("umd").Thing
++>makeThing() : import("umd").Thing
++>makeThing : () => import("umd").Thing

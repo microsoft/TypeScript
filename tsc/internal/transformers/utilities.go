@@ -6,6 +6,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -335,7 +336,7 @@ func rewriteModuleSpecifier(emitContext *printer.EmitContext, node *ast.Expressi
 	if node == nil || !ast.IsStringLiteral(node) || !shouldRewriteModuleSpecifier(node.Text(), compilerOptions) {
 		return node
 	}
-	updatedText := tspath.ChangeExtension(node.Text(), core.GetOutputExtension(node.Text(), compilerOptions.Jsx))
+	updatedText := tspath.ChangeExtension(node.Text(), outputpaths.GetOutputExtension(node.Text(), compilerOptions.Jsx))
 	if updatedText != node.Text() {
 		updated := emitContext.Factory.NewStringLiteral(updatedText)
 		// !!! set quote style

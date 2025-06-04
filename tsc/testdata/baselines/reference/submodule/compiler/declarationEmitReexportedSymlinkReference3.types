@@ -55,5 +55,5 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
 export * from './types';
 === monorepo/pkg2/dist/types.d.ts ===
 export {MetadataAccessor} from '@raymondfeng/pkg1';
->MetadataAccessor : typeof import("../../pkg1/dist").MetadataAccessor
+>MetadataAccessor : typeof import("@raymondfeng/pkg1").MetadataAccessor
 

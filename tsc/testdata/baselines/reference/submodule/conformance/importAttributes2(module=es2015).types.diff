@@ -5,7 +5,7 @@
 
  export * as ns from './0' with { type: "json" }
 ->ns : typeof import("0")
-+>ns : typeof import("./0.js")
++>ns : typeof import("./0")
  >type : any
 
  === 2.ts ===

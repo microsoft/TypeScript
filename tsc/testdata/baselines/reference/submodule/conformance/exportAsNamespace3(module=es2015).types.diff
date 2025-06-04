@@ -5,7 +5,7 @@
  === 1.ts ===
  export * as ns from './0';
 ->ns : typeof import("0")
-+>ns : typeof import("./0.js")
++>ns : typeof import("./0")
 
  ns.a;
  >ns.a : number

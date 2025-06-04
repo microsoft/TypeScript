@@ -6,9 +6,9 @@ export const a = async () => (await import("inner")).x();
 >async () => (await import("inner")).x() : () => Promise<import("./node_modules/inner/private").Thing>
 >(await import("inner")).x() : import("./node_modules/inner/private").Thing
 >(await import("inner")).x : () => import("./node_modules/inner/private").Thing
->(await import("inner")) : { x: () => import("./node_modules/inner/private").Thing; default: typeof import("./node_modules/inner"); }
->await import("inner") : { x: () => import("./node_modules/inner/private").Thing; default: typeof import("./node_modules/inner"); }
->import("inner") : Promise<{ x: () => import("./node_modules/inner/private").Thing; default: typeof import("./node_modules/inner"); }>
+>(await import("inner")) : { x: () => import("./node_modules/inner/private").Thing; default: typeof import("inner"); }
+>await import("inner") : { x: () => import("./node_modules/inner/private").Thing; default: typeof import("inner"); }
+>import("inner") : Promise<{ x: () => import("./node_modules/inner/private").Thing; default: typeof import("inner"); }>
 >"inner" : "inner"
 >x : () => import("./node_modules/inner/private").Thing
 

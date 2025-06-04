@@ -13,6 +13,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/modulespecifiers"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
@@ -350,13 +351,21 @@ func (p *Program) GetTypeCheckerForFile(ctx context.Context, file *ast.SourceFil
 	return p.checkerPool.GetCheckerForFile(ctx, file)
 }
 
-func (p *Program) GetResolvedModule(file *ast.SourceFile, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
+func (p *Program) GetResolvedModule(file ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule {
 	if resolutions, ok := p.resolvedModules[file.Path()]; ok {
 		if resolved, ok := resolutions[module.ModeAwareCacheKey{Name: moduleReference, Mode: mode}]; ok {
 			return resolved
 		}
 	}
 	return nil
+}
+
+func (p *Program) GetResolvedModuleFromModuleSpecifier(file ast.HasFileName, moduleSpecifier *ast.StringLiteralLike) *module.ResolvedModule {
+	if !ast.IsStringLiteralLike(moduleSpecifier) {
+		panic("moduleSpecifier must be a StringLiteralLike")
+	}
+	mode := p.GetModeForUsageLocation(file, moduleSpecifier)
+	return p.GetResolvedModule(file, moduleSpecifier.Text(), mode)
 }
 
 func (p *Program) GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule] {
@@ -666,24 +675,20 @@ func (p *Program) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaDat
 	return p.sourceFileMetaDatas[path]
 }
 
-func (p *Program) GetEmitModuleFormatOfFile(sourceFile *ast.SourceFile) core.ModuleKind {
-	return p.GetEmitModuleFormatOfFileWorker(sourceFile, p.Options())
+func (p *Program) GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) core.ModuleKind {
+	return ast.GetEmitModuleFormatOfFileWorker(sourceFile.FileName(), p.Options(), p.GetSourceFileMetaData(sourceFile.Path()))
 }
 
-func (p *Program) GetEmitModuleFormatOfFileWorker(sourceFile *ast.SourceFile, options *core.CompilerOptions) core.ModuleKind {
-	return ast.GetEmitModuleFormatOfFileWorker(sourceFile, options, p.GetSourceFileMetaData(sourceFile.Path()))
-}
-
-func (p *Program) GetImpliedNodeFormatForEmit(sourceFile *ast.SourceFile) core.ResolutionMode {
+func (p *Program) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ResolutionMode {
 	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.Options(), p.GetSourceFileMetaData(sourceFile.Path()))
 }
 
-func (p *Program) GetModeForUsageLocation(sourceFile *ast.SourceFile, location *ast.Node) core.ResolutionMode {
-	return getModeForUsageLocation(sourceFile, p.sourceFileMetaDatas[sourceFile.Path()], location, p.Options())
+func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
+	return getModeForUsageLocation(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.Path()], location, p.Options())
 }
 
-func (p *Program) GetDefaultResolutionModeForFile(sourceFile modulespecifiers.SourceFileForSpecifierGeneration) core.ResolutionMode {
-	return getDefaultResolutionModeForFile(sourceFile, p.sourceFileMetaDatas[sourceFile.Path()], p.Options())
+func (p *Program) GetDefaultResolutionModeForFile(sourceFile ast.HasFileName) core.ResolutionMode {
+	return getDefaultResolutionModeForFile(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.Path()], p.Options())
 }
 
 func (p *Program) CommonSourceDirectory() string {
@@ -750,10 +755,16 @@ func computeCommonSourceDirectoryOfFilenames(fileNames []string, currentDirector
 
 func getCommonSourceDirectory(options *core.CompilerOptions, files []string, currentDirectory string, useCaseSensitiveFileNames bool) string {
 	var commonSourceDirectory string
-	// !!! If a rootDir is specified use it as the commonSourceDirectory
-	// !!! Project compilations never infer their root from the input source paths
-
-	commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(files, currentDirectory, useCaseSensitiveFileNames)
+	if options.RootDir != "" {
+		// If a rootDir is specified use it as the commonSourceDirectory
+		commonSourceDirectory = options.RootDir
+	} else if options.Composite.IsTrue() && options.ConfigFilePath != "" {
+		// If the rootDir is not specified, but the project is composite, then the common source directory
+		// is the directory of the config file.
+		commonSourceDirectory = tspath.GetDirectoryPath(options.ConfigFilePath)
+	} else {
+		commonSourceDirectory = computeCommonSourceDirectoryOfFilenames(files, currentDirectory, useCaseSensitiveFileNames)
+	}
 
 	if len(commonSourceDirectory) > 0 {
 		// Make sure directory path ends with directory separator so this string can directly
@@ -814,7 +825,7 @@ func (p *Program) Emit(options EmitOptions) *EmitResult {
 
 			// attach writer and perform emit
 			emitter.writer = writer
-			emitter.paths = getOutputPathsFor(sourceFile, host, options.forceDtsEmit)
+			emitter.paths = outputpaths.GetOutputPathsFor(sourceFile, host.Options(), host, options.forceDtsEmit)
 			emitter.emit()
 			emitter.writer = nil
 

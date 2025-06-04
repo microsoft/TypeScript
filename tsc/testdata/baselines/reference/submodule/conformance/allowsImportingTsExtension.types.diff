@@ -6,8 +6,8 @@
  const aPromise = import("./a.ts"); // error
 ->aPromise : Promise<typeof import("a")>
 ->import("./a.ts") : Promise<typeof import("a")>
-+>aPromise : Promise<typeof import("./a.js")>
-+>import("./a.ts") : Promise<typeof import("./a.js")>
++>aPromise : Promise<typeof import("./a.ts")>
++>import("./a.ts") : Promise<typeof import("./a.ts")>
  >"./a.ts" : "./a.ts"
 
  === c.ts ===
@@ -17,6 +17,6 @@
  const aPromise = import("./a.d.ts"); // error
 ->aPromise : Promise<typeof import("a")>
 ->import("./a.d.ts") : Promise<typeof import("a")>
-+>aPromise : Promise<typeof import("./a.js")>
-+>import("./a.d.ts") : Promise<typeof import("./a.js")>
++>aPromise : Promise<typeof import("./a.d.ts")>
++>import("./a.d.ts") : Promise<typeof import("./a.d.ts")>
  >"./a.d.ts" : "./a.d.ts"

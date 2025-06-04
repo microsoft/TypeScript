@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/module"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/packagejson"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -150,7 +151,7 @@ func getAllModulePathsWorker(
 	allFileNames := make(map[string]ModulePath)
 	paths := getEachFileNameOfModule(info.ImportingSourceFileName, importedFileName, host, true)
 	for _, p := range paths {
-		allFileNames[p.Path] = p
+		allFileNames[p.FileName] = p
 	}
 
 	// Sort by paths closest to importing file Name directory
@@ -222,7 +223,7 @@ func getEachFileNameOfModule(
 		for _, p := range targets {
 			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
 				results = append(results, ModulePath{
-					Path:            p,
+					FileName:        p,
 					IsInNodeModules: containsNodeModules(p),
 					IsRedirect:      referenceRedirect == p,
 				})
@@ -265,7 +266,7 @@ func getEachFileNameOfModule(
 		for _, p := range targets {
 			if !(shouldFilterIgnoredPaths && containsIgnoredPath(p)) {
 				results = append(results, ModulePath{
-					Path:            p,
+					FileName:        p,
 					IsInNodeModules: containsNodeModules(p),
 					IsRedirect:      referenceRedirect == p,
 				})
@@ -288,29 +289,39 @@ func computeModuleSpecifiers(
 	info := getInfo(importingSourceFile.FileName(), host)
 	preferences := getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile, "")
 
-	// !!! TODO: getFileIncludeReasons lookup based calculation
-	// const existingSpecifier = isFullSourceFile(importingSourceFile) && forEach(modulePaths, modulePath =>
-	//     forEach(
-	//         host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
-	//         reason => {
-	//             if (reason.kind !== FileIncludeKind.Import || reason.file !== importingSourceFile.path) return undefined;
-	//             // If the candidate import mode doesn't match the mode we're generating for, don't consider it
-	//             // TODO: maybe useful to keep around as an alternative option for certain contexts where the mode is overridable
-	//             const existingMode = host.getModeForResolutionAtIndex(importingSourceFile, reason.index);
-	//             const targetMode = options.overrideImportMode ?? host.getDefaultResolutionModeForFile(importingSourceFile);
-	//             if (existingMode !== targetMode && existingMode !== undefined && targetMode !== undefined) {
-	//                 return undefined;
-	//             }
-	//             const specifier = getModuleNameStringLiteralAt(importingSourceFile, reason.index).text;
-	//             // If the preference is for non relative and the module specifier is relative, ignore it
-	//             return preferences.relativePreference !== RelativePreference.NonRelative || !pathIsRelative(specifier) ?
-	//                 specifier :
-	//                 undefined;
-	//         },
-	//     ));
-	// if (existingSpecifier) {
-	//     return { kind: undefined, moduleSpecifiers: [existingSpecifier], computedWithoutCache: true };
-	// }
+	var existingSpecifier string
+	for _, modulePath := range modulePaths {
+		targetPath := tspath.ToPath(modulePath.FileName, host.GetCurrentDirectory(), info.UseCaseSensitiveFileNames)
+		var existingImport *ast.StringLiteralLike
+		for _, importSpecifier := range importingSourceFile.Imports() {
+			resolvedModule := host.GetResolvedModuleFromModuleSpecifier(importingSourceFile, importSpecifier)
+			if resolvedModule.IsResolved() && tspath.ToPath(resolvedModule.ResolvedFileName, host.GetCurrentDirectory(), info.UseCaseSensitiveFileNames) == targetPath {
+				existingImport = importSpecifier
+				break
+			}
+		}
+		if existingImport != nil {
+			if preferences.relativePreference == RelativePreferenceNonRelative && tspath.PathIsRelative(existingImport.Text()) {
+				// If the preference is for non-relative and the module specifier is relative, ignore it
+				continue
+			}
+			existingMode := host.GetModeForUsageLocation(importingSourceFile, existingImport)
+			targetMode := options.OverrideImportMode
+			if targetMode == core.ResolutionModeNone {
+				targetMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+			}
+			if existingMode != targetMode && existingMode != core.ResolutionModeNone && targetMode != core.ResolutionModeNone {
+				// If the candidate import mode doesn't match the mode we're generating for, don't consider it
+				continue
+			}
+			existingSpecifier = existingImport.Text()
+			break
+		}
+	}
+
+	if existingSpecifier != "" {
+		return []string{existingSpecifier}
+	}
 
 	importedFileIsInNodeModules := core.Some(modulePaths, func(p ModulePath) bool { return p.IsInNodeModules })
 
@@ -338,13 +349,16 @@ func computeModuleSpecifiers(
 			}
 		}
 
-		// !!! TODO: proper resolutionMode support
+		importMode := options.OverrideImportMode
+		if importMode == core.ResolutionModeNone {
+			importMode = host.GetDefaultResolutionModeForFile(importingSourceFile)
+		}
 		local := getLocalModuleSpecifier(
-			modulePath.Path,
+			modulePath.FileName,
 			info,
 			compilerOptions,
 			host,
-			options.OverrideImportMode, /*|| importingSourceFile.impliedNodeFormat*/
+			importMode,
 			preferences,
 			/*pathsOnly*/ modulePath.IsRedirect || len(specifier) > 0,
 		)
@@ -368,7 +382,7 @@ func computeModuleSpecifiers(
 			// 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
 			// that means we had to go through a *sibling's* node_modules, not one we can access directly.
 			// If some path to the file was in node_modules but another was not, this likely indicates that
-			// we have a monorepo structure with symlinks. In this case, the non-node_modules path is
+			// we have a monorepo structure with symlinks. In this case, the non-nodeModules path is
 			// probably the realpath, e.g. "../bar/path/to/file", but a relative path to another package
 			// in a monorepo is probably not portable. So, the module specifier we actually go with will be
 			// the relative path through node_modules, so that the declaration emitter can produce a
@@ -640,7 +654,7 @@ func tryGetModuleNameAsNodeModule(
 	packageNameOnly bool,
 	overrideMode core.ResolutionMode,
 ) string {
-	parts := getNodeModulePathParts(pathObj.Path)
+	parts := getNodeModulePathParts(pathObj.FileName)
 	if parts == nil {
 		return ""
 	}
@@ -650,7 +664,7 @@ func tryGetModuleNameAsNodeModule(
 	allowedEndings := preferences.getAllowedEndingsInPreferredOrder(core.ResolutionModeNone)
 
 	caseSensitive := host.UseCaseSensitiveFileNames()
-	moduleSpecifier := pathObj.Path
+	moduleSpecifier := pathObj.FileName
 	isPackageRootPath := false
 	if !packageNameOnly {
 		packageRootIndex := parts.PackageRootIndex
@@ -686,7 +700,7 @@ func tryGetModuleNameAsNodeModule(
 				moduleFileName = moduleFileToTry
 			}
 			// try with next level of directory
-			packageRootIndex = core.IndexAfter(pathObj.Path, "/", packageRootIndex+1)
+			packageRootIndex = core.IndexAfter(pathObj.FileName, "/", packageRootIndex+1)
 			if packageRootIndex == -1 {
 				moduleSpecifier = processEnding(moduleFileName, allowedEndings, options, host)
 				break
@@ -709,13 +723,7 @@ func tryGetModuleNameAsNodeModule(
 
 	// If the module was found in @types, get the actual Node package name
 	nodeModulesDirectoryName := moduleSpecifier[parts.TopLevelPackageNameIndex+1:]
-	packageName := getPackageNameFromTypesPackageName(nodeModulesDirectoryName)
-	// For classic resolution, only allow importing from node_modules/@types, not other node_modules
-	// !!! classic resolution is dead?
-	// if options.GetModuleResolutionKind() == core.ModuleResolutionKindClassic && packageName == nodeModulesDirectoryName {
-	// 	return ""
-	// }
-	return packageName
+	return getPackageNameFromTypesPackageName(nodeModulesDirectoryName)
 }
 
 type pkgJsonDirAttemptResult struct {
@@ -736,11 +744,11 @@ func tryDirectoryWithPackageJson(
 ) pkgJsonDirAttemptResult {
 	rootIdx := parts.PackageRootIndex
 	if rootIdx == -1 {
-		rootIdx = len(pathObj.Path) // TODO: possible strada bug? -1 in js slice removes characters from the end, in go it panics - js behavior seems unwanted here?
+		rootIdx = len(pathObj.FileName) // TODO: possible strada bug? -1 in js slice removes characters from the end, in go it panics - js behavior seems unwanted here?
 	}
-	packageRootPath := pathObj.Path[0:rootIdx]
+	packageRootPath := pathObj.FileName[0:rootIdx]
 	packageJsonPath := tspath.CombinePaths(packageRootPath, "package.json")
-	moduleFileToTry := pathObj.Path
+	moduleFileToTry := pathObj.FileName
 	maybeBlockedByTypesVersions := false
 	packageJson := host.GetPackageJsonInfo(packageJsonPath)
 	if packageJson == nil {
@@ -774,7 +782,7 @@ func tryDirectoryWithPackageJson(
 			fromExports = tryGetModuleNameFromExports(
 				options,
 				host,
-				pathObj.Path,
+				pathObj.FileName,
 				packageRootPath,
 				packageName,
 				packageJsonContent.Fields.Exports,
@@ -789,7 +797,7 @@ func tryDirectoryWithPackageJson(
 		}
 		if packageJsonContent != nil && packageJsonContent.Fields.Exports.Type != packagejson.JSONValueTypeNotPresent {
 			return pkgJsonDirAttemptResult{
-				moduleFileToTry:  pathObj.Path,
+				moduleFileToTry:  pathObj.FileName,
 				blockedByExports: true,
 			}
 		}
@@ -800,7 +808,7 @@ func tryDirectoryWithPackageJson(
 		versionPaths = packageJsonContent.GetVersionPaths(nil)
 	}
 	if versionPaths.GetPaths() != nil {
-		subModuleName := pathObj.Path[len(packageRootPath)+1:]
+		subModuleName := pathObj.FileName[len(packageRootPath)+1:]
 		fromPaths := tryGetModuleNameFromPaths(
 			subModuleName,
 			versionPaths.GetPaths(),
@@ -1098,14 +1106,13 @@ func tryGetModuleNameFromExportsOrImports(
 	case packagejson.JSONValueTypeString:
 		strValue := exports.Value.(string)
 
-		// !!! TODO: remapping to output locations
 		// possible strada bug? Always uses compilerOptions of the host project, not those applicable to the targeted package.json!
-		// var outputFile string
-		// var declarationFile string
-		// if isImports {
-		// 	outputFile = getOutputJSFileNameWorker(targetFilePath, options)
-		// 	declarationFile = getOutputDeclarationFileNameWorker(targetFilePath, options)
-		// }
+		var outputFile string
+		var declarationFile string
+		if isImports {
+			outputFile = outputpaths.GetOutputJSFileNameWorker(targetFilePath, options, host)
+			declarationFile = outputpaths.GetOutputDeclarationFileNameWorker(targetFilePath, options, host)
+		}
 
 		pathOrPattern := tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(packageDirectory, strValue), "")
 		var extensionSwappedTarget string
@@ -1122,10 +1129,9 @@ func tryGetModuleNameFromExportsOrImports(
 		switch mode {
 		case MatchingModeExact:
 			if len(extensionSwappedTarget) > 0 && tspath.ComparePaths(extensionSwappedTarget, pathOrPattern, compareOpts) == 0 ||
-				tspath.ComparePaths(targetFilePath, pathOrPattern, compareOpts) == 0 {
-				// !!! TODO: import remapping to output locations
-				// outputFile && tspath.ComparePaths(outputFile, pathOrPattern, ignoreCase) === Comparison.EqualTo ||
-				// declarationFile && tspath.ComparePaths((declarationFile, pathOrPattern, ignoreCase) === Comparison.EqualTo
+				tspath.ComparePaths(targetFilePath, pathOrPattern, compareOpts) == 0 ||
+				len(outputFile) > 0 && tspath.ComparePaths(outputFile, pathOrPattern, compareOpts) == 0 ||
+				len(declarationFile) > 0 && tspath.ComparePaths(declarationFile, pathOrPattern, compareOpts) == 0 {
 				return packageName
 			}
 		case MatchingModeDirectory:
@@ -1141,44 +1147,45 @@ func tryGetModuleNameFromExportsOrImports(
 				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, targetFilePath, compareOpts)
 				return tspath.GetNormalizedAbsolutePath(tspath.CombinePaths(tspath.CombinePaths(packageName, strValue), fragment), "")
 			}
-			// !!! TODO: import remapping to output locations
-			// if (outputFile && containsPath(pathOrPattern, outputFile, compareOpts)) {
-			// 	const fragment = getRelativePathFromDirectory(pathOrPattern, outputFile, /*ignoreCase*/ false);
-			// 	return  combinePaths(packageName, fragment)
-			// }
-			// if (declarationFile && containsPath(pathOrPattern, declarationFile, compareOpts)) {
-			// 	const fragment = changeFullExtension(getRelativePathFromDirectory(pathOrPattern, declarationFile, /*ignoreCase*/ false), getJSExtensionForFile(declarationFile, options));
-			// 	return combinePaths(packageName, fragment)
-			// }
+			if len(outputFile) > 0 && tspath.ContainsPath(pathOrPattern, outputFile, compareOpts) {
+				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, outputFile, compareOpts)
+				return tspath.CombinePaths(packageName, fragment)
+			}
+			if len(declarationFile) > 0 && tspath.ContainsPath(pathOrPattern, declarationFile, compareOpts) {
+				fragment := tspath.GetRelativePathFromDirectory(pathOrPattern, declarationFile, compareOpts)
+				jsExtension := getJSExtensionForFile(declarationFile, options)
+				fragmentWithJsExtension := tspath.ChangeExtension(fragment, jsExtension)
+				return tspath.CombinePaths(packageName, fragmentWithJsExtension)
+			}
 		case MatchingModePattern:
 			starPos := strings.Index(pathOrPattern, "*")
 			leadingSlice := pathOrPattern[0:starPos]
 			trailingSlice := pathOrPattern[starPos+1:]
 			caseSensitive := host.UseCaseSensitiveFileNames()
-			var starReplacement string
 			if canTryTsExtension && stringutil.HasPrefix(targetFilePath, leadingSlice, caseSensitive) && stringutil.HasSuffix(targetFilePath, trailingSlice, caseSensitive) {
-				starReplacement = targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
+				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
 			}
 			if len(extensionSwappedTarget) > 0 && stringutil.HasPrefix(extensionSwappedTarget, leadingSlice, caseSensitive) && stringutil.HasSuffix(extensionSwappedTarget, trailingSlice, caseSensitive) {
-				starReplacement = extensionSwappedTarget[len(leadingSlice) : len(extensionSwappedTarget)-len(trailingSlice)]
+				starReplacement := extensionSwappedTarget[len(leadingSlice) : len(extensionSwappedTarget)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
 			}
 			if !canTryTsExtension && stringutil.HasPrefix(targetFilePath, leadingSlice, caseSensitive) && stringutil.HasSuffix(targetFilePath, trailingSlice, caseSensitive) {
-				starReplacement = targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
+				starReplacement := targetFilePath[len(leadingSlice) : len(targetFilePath)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
 			}
-			if len(starReplacement) == 0 {
-				return ""
+			if len(outputFile) > 0 && stringutil.HasPrefix(outputFile, leadingSlice, caseSensitive) && stringutil.HasSuffix(outputFile, trailingSlice, caseSensitive) {
+				starReplacement := outputFile[len(leadingSlice) : len(outputFile)-len(trailingSlice)]
+				return replaceFirstStar(packageName, starReplacement)
 			}
-			return replaceFirstStar(packageName, starReplacement)
-			// !!! TODO: import remapping to output locations
-			// if (outputFile && startsWith(outputFile, leadingSlice, ignoreCase) && endsWith(outputFile, trailingSlice, ignoreCase)) {
-			// 	const starReplacement = outputFile.slice(leadingSlice.length, outputFile.length - trailingSlice.length);
-			// }
-			// if (declarationFile && startsWith(declarationFile, leadingSlice, ignoreCase) && endsWith(declarationFile, trailingSlice, ignoreCase)) {
-			// 	const starReplacement = declarationFile.slice(leadingSlice.length, declarationFile.length - trailingSlice.length);
-			// 	const substituted = replaceFirstStar(packageName, starReplacement);
-			// 	const jsExtension = tryGetJSExtensionForFile(declarationFile, options);
-			// 	return jsExtension ? { moduleFileToTry: changeFullExtension(substituted, jsExtension) } : undefined;
-			// }
+			if len(declarationFile) > 0 && stringutil.HasPrefix(declarationFile, leadingSlice, caseSensitive) && stringutil.HasSuffix(declarationFile, trailingSlice, caseSensitive) {
+				starReplacement := declarationFile[len(leadingSlice) : len(declarationFile)-len(trailingSlice)]
+				substituted := replaceFirstStar(packageName, starReplacement)
+				jsExtension := tryGetJSExtensionForFile(declarationFile, options)
+				if len(jsExtension) > 0 {
+					return tspath.ChangeFullExtension(substituted, jsExtension)
+				}
+			}
 		}
 		return ""
 	case packagejson.JSONValueTypeArray:

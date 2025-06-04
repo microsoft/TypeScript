@@ -15,7 +15,7 @@
 
  export * as Q from "./sub";
 ->Q : typeof import("sub")
-+>Q : typeof import("./sub.js")
++>Q : typeof import("./sub")
 
  declare function add<T>(x: Promise<T>): T;
  >add : <T>(x: Promise<T>) => T

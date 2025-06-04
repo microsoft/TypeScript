@@ -79,7 +79,7 @@ type ResolvedModule struct {
 }
 
 func (r *ResolvedModule) IsResolved() bool {
-	return r.ResolvedFileName != ""
+	return r != nil && r.ResolvedFileName != ""
 }
 
 type ResolvedTypeReferenceDirective struct {

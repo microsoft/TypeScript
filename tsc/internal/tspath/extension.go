@@ -159,3 +159,20 @@ func changeAnyExtension(path string, ext string, extensions []string, ignoreCase
 func ChangeExtension(path string, newExtension string) string {
 	return changeAnyExtension(path, newExtension, extensionsToRemove /*ignoreCase*/, false)
 }
+
+// Like `changeAnyExtension`, but declaration file extensions are recognized
+// and replaced starting from the `.d`.
+//
+//	changeAnyExtension("file.d.ts", ".js") === "file.d.js"
+//	changeFullExtension("file.d.ts", ".js") === "file.js"
+func ChangeFullExtension(path string, newExtension string) string {
+	declarationExtension := GetDeclarationFileExtension(path)
+	if declarationExtension != "" {
+		ext := newExtension
+		if !strings.HasPrefix(ext, ".") {
+			ext = "." + ext
+		}
+		return path[:len(path)-len(declarationExtension)] + ext
+	}
+	return ChangeExtension(path, newExtension)
+}

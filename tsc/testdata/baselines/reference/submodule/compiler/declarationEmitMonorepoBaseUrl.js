@@ -59,4 +59,4 @@ function resolveParserPlugins() {
 //// [index.d.ts]
 export {};
 //// [index.d.ts]
-export declare function resolveParserPlugins(): any;
+export declare function resolveParserPlugins(): import("@babel/parser").PluginConfig[];

@@ -1,23 +1,20 @@
 --- old.nodeModulesImportModeDeclarationEmit2(module=nodenext).errors.txt
 +++ new.nodeModulesImportModeDeclarationEmit2(module=nodenext).errors.txt
 @@= skipped -0, +0 lines =@@
--/index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
+ /index.ts(6,14): error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 -/index.ts(6,50): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
 -/index.ts(7,49): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
-+/index.ts(6,14): error TS2305: Module '"./node_modules/pkg/import.js"' has no exported member 'RequireInterface'.
 +/index.ts(6,50): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
 +/index.ts(7,49): error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
 
 
  ==== /index.ts (3 errors) ====
-@@= skipped -10, +10 lines =@@
-     
+@@= skipped -11, +11 lines =@@
      import {type RequireInterface as Req} from "pkg" assert { "resolution-mode": "require" };
                   ~~~~~~~~~~~~~~~~
--!!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
+ !!! error TS2305: Module '"pkg"' has no exported member 'RequireInterface'.
 -                                                     ~~~~~~
 -!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
-+!!! error TS2305: Module '"./node_modules/pkg/import.js"' has no exported member 'RequireInterface'.
 +                                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS2836: Import assertions are not allowed on statements that compile to CommonJS 'require' calls.
      import {type ImportInterface as Imp} from "pkg" assert { "resolution-mode": "import" };

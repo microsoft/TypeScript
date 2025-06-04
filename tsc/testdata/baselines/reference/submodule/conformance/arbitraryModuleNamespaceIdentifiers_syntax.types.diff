@@ -5,7 +5,7 @@
 
  export * as "valid 4" from "./values-valid";
 ->"valid 4" : typeof import("values-valid")
-+>"valid 4" : typeof import("./values-valid.js")
++>"valid 4" : typeof import("./values-valid")
 
  === values-bad-import.ts ===
  import { foo as "invalid 2" } from "./values-valid";
@@ -35,7 +35,7 @@
 
  export type * as "valid 4" from "./type-decls-valid";
 ->"valid 4" : typeof import("type-decls-valid")
-+>"valid 4" : typeof import("./type-decls-valid.js")
++>"valid 4" : typeof import("./type-decls-valid")
 
  === type-decls-bad-import.ts ===
  import type { foo as "invalid 2" } from "./type-decls-valid";

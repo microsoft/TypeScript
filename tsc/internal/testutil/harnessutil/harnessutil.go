@@ -20,6 +20,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -634,7 +635,7 @@ func newCompilationResult(
 				input := &TestFile{UnitName: sourceFile.FileName(), Content: sourceFile.Text()}
 				c.inputs = append(c.inputs, input)
 				if !tspath.IsDeclarationFileName(sourceFile.FileName()) {
-					extname := core.GetOutputExtension(sourceFile.FileName(), options.Jsx)
+					extname := outputpaths.GetOutputExtension(sourceFile.FileName(), options.Jsx)
 					outputs := &CompilationOutput{
 						Inputs: []*TestFile{input},
 						JS:     js.GetOrZero(c.getOutputPath(sourceFile.FileName(), extname)),

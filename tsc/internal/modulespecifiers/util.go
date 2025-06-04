@@ -22,7 +22,7 @@ func isNonGlobalAmbientModule(node *ast.Node) bool {
 
 func comparePathsByRedirectAndNumberOfDirectorySeparators(a ModulePath, b ModulePath) int {
 	if a.IsRedirect == b.IsRedirect {
-		return strings.Count(a.Path, "/") - strings.Count(b.Path, "/")
+		return strings.Count(a.FileName, "/") - strings.Count(b.FileName, "/")
 	}
 	if a.IsRedirect {
 		return 1

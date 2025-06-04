@@ -7,6 +7,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -32,15 +33,15 @@ type emitter struct {
 	emitSkipped        bool
 	sourceMapDataList  []*SourceMapEmitResult
 	writer             printer.EmitTextWriter
-	paths              *outputPaths
+	paths              *outputpaths.OutputPaths
 	sourceFile         *ast.SourceFile
 }
 
 func (e *emitter) emit() {
 	// !!! tracing
-	e.emitJSFile(e.sourceFile, e.paths.jsFilePath, e.paths.sourceMapFilePath)
-	e.emitDeclarationFile(e.sourceFile, e.paths.declarationFilePath, e.paths.declarationMapPath)
-	e.emitBuildInfo(e.paths.buildInfoPath)
+	e.emitJSFile(e.sourceFile, e.paths.JsFilePath(), e.paths.SourceMapFilePath())
+	e.emitDeclarationFile(e.sourceFile, e.paths.DeclarationFilePath(), e.paths.DeclarationMapPath())
+	e.emitBuildInfo(e.paths.BuildInfoPath())
 }
 
 func (e *emitter) getDeclarationTransformers(emitContext *printer.EmitContext, sourceFile *ast.SourceFile, declarationFilePath string, declarationMapPath string) []*declarations.DeclarationTransformer {
@@ -207,44 +208,6 @@ func (e *emitter) printSourceFile(jsFilePath string, sourceMapFilePath string, s
 	return !data.SkippedDtsWrite
 }
 
-func getSourceFilePathInNewDir(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
-	sourceFilePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
-	commonSourceDirectory = tspath.EnsureTrailingDirectorySeparator(commonSourceDirectory)
-	isSourceFileInCommonSourceDirectory := tspath.ContainsPath(commonSourceDirectory, sourceFilePath, tspath.ComparePathsOptions{
-		UseCaseSensitiveFileNames: useCaseSensitiveFileNames,
-		CurrentDirectory:          currentDirectory,
-	})
-	if isSourceFileInCommonSourceDirectory {
-		sourceFilePath = sourceFilePath[len(commonSourceDirectory):]
-	}
-	return tspath.CombinePaths(newDirPath, sourceFilePath)
-}
-
-func getOwnEmitOutputFilePath(fileName string, host printer.EmitHost, extension string) string {
-	compilerOptions := host.Options()
-	var emitOutputFilePathWithoutExtension string
-	if len(compilerOptions.OutDir) > 0 {
-		currentDirectory := host.GetCurrentDirectory()
-		emitOutputFilePathWithoutExtension = tspath.RemoveFileExtension(getSourceFilePathInNewDir(
-			fileName,
-			compilerOptions.OutDir,
-			currentDirectory,
-			host.CommonSourceDirectory(),
-			host.UseCaseSensitiveFileNames(),
-		))
-	} else {
-		emitOutputFilePathWithoutExtension = tspath.RemoveFileExtension(fileName)
-	}
-	return emitOutputFilePathWithoutExtension + extension
-}
-
-func getSourceMapFilePath(jsFilePath string, options *core.CompilerOptions) string {
-	if options.SourceMap.IsTrue() && !options.InlineSourceMap.IsTrue() {
-		return jsFilePath + ".map"
-	}
-	return ""
-}
-
 func shouldEmitSourceMaps(mapOptions *core.CompilerOptions, sourceFile *ast.SourceFile) bool {
 	return (mapOptions.SourceMap.IsTrue() || mapOptions.InlineSourceMap.IsTrue()) &&
 		!tspath.FileExtensionIs(sourceFile.FileName(), tspath.ExtensionJson)
@@ -274,7 +237,7 @@ func (e *emitter) getSourceMapDirectory(mapOptions *core.CompilerOptions, filePa
 		if sourceFile != nil {
 			// For modules or multiple emit files the mapRoot will have directory structure like the sources
 			// So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-			sourceMapDir = tspath.GetDirectoryPath(getSourceFilePathInNewDir(
+			sourceMapDir = tspath.GetDirectoryPath(outputpaths.GetSourceFilePathInNewDir(
 				sourceFile.FileName(),
 				sourceMapDir,
 				e.host.GetCurrentDirectory(),
@@ -305,7 +268,7 @@ func (e *emitter) getSourceMappingURL(mapOptions *core.CompilerOptions, sourceMa
 		if sourceFile != nil {
 			// For modules or multiple emit files the mapRoot will have directory structure like the sources
 			// So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-			sourceMapDir = tspath.GetDirectoryPath(getSourceFilePathInNewDir(
+			sourceMapDir = tspath.GetDirectoryPath(outputpaths.GetSourceFilePathInNewDir(
 				sourceFile.FileName(),
 				sourceMapDir,
 				e.host.GetCurrentDirectory(),
@@ -332,91 +295,6 @@ func (e *emitter) getSourceMappingURL(mapOptions *core.CompilerOptions, sourceMa
 		}
 	}
 	return stringutil.EncodeURI(sourceMapFile)
-}
-
-func getDeclarationEmitOutputFilePath(file string, host EmitHost) string {
-	options := host.Options()
-	var outputDir *string
-	if len(options.DeclarationDir) > 0 {
-		outputDir = &options.DeclarationDir
-	} else if len(options.OutDir) > 0 {
-		outputDir = &options.OutDir
-	}
-
-	var path string
-	if outputDir != nil {
-		path = getSourceFilePathInNewDirWorker(file, *outputDir, host.GetCurrentDirectory(), host.CommonSourceDirectory(), host.UseCaseSensitiveFileNames())
-	} else {
-		path = file
-	}
-	declarationExtension := tspath.GetDeclarationEmitExtensionForPath(path)
-	return tspath.RemoveFileExtension(path) + declarationExtension
-}
-
-func getSourceFilePathInNewDirWorker(fileName string, newDirPath string, currentDirectory string, commonSourceDirectory string, useCaseSensitiveFileNames bool) string {
-	sourceFilePath := tspath.GetNormalizedAbsolutePath(fileName, currentDirectory)
-	commonDir := tspath.GetCanonicalFileName(commonSourceDirectory, useCaseSensitiveFileNames)
-	canonFile := tspath.GetCanonicalFileName(sourceFilePath, useCaseSensitiveFileNames)
-	isSourceFileInCommonSourceDirectory := strings.HasPrefix(canonFile, commonDir)
-	if isSourceFileInCommonSourceDirectory {
-		sourceFilePath = sourceFilePath[len(commonSourceDirectory):]
-	}
-	return tspath.CombinePaths(newDirPath, sourceFilePath)
-}
-
-type outputPaths struct {
-	jsFilePath          string
-	sourceMapFilePath   string
-	declarationFilePath string
-	declarationMapPath  string
-	buildInfoPath       string
-}
-
-// DeclarationFilePath implements declarations.OutputPaths.
-func (o *outputPaths) DeclarationFilePath() string {
-	return o.declarationFilePath
-}
-
-// JsFilePath implements declarations.OutputPaths.
-func (o *outputPaths) JsFilePath() string {
-	return o.jsFilePath
-}
-
-func getOutputPathsFor(sourceFile *ast.SourceFile, host EmitHost, forceDtsEmit bool) *outputPaths {
-	options := host.Options()
-	// !!! bundle not implemented, may be deprecated
-	ownOutputFilePath := getOwnEmitOutputFilePath(sourceFile.FileName(), host, core.GetOutputExtension(sourceFile.FileName(), options.Jsx))
-	isJsonFile := ast.IsJsonSourceFile(sourceFile)
-	// If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
-	isJsonEmittedToSameLocation := isJsonFile &&
-		tspath.ComparePaths(sourceFile.FileName(), ownOutputFilePath, tspath.ComparePathsOptions{
-			CurrentDirectory:          host.GetCurrentDirectory(),
-			UseCaseSensitiveFileNames: host.UseCaseSensitiveFileNames(),
-		}) == 0
-	paths := &outputPaths{}
-	if options.EmitDeclarationOnly != core.TSTrue && !isJsonEmittedToSameLocation {
-		paths.jsFilePath = ownOutputFilePath
-		if !ast.IsJsonSourceFile(sourceFile) {
-			paths.sourceMapFilePath = getSourceMapFilePath(paths.jsFilePath, options)
-		}
-	}
-	if forceDtsEmit || options.GetEmitDeclarations() && !isJsonFile {
-		paths.declarationFilePath = getDeclarationEmitOutputFilePath(sourceFile.FileName(), host)
-		if options.GetAreDeclarationMapsEnabled() {
-			paths.declarationMapPath = paths.declarationFilePath + ".map"
-		}
-	}
-	return paths
-}
-
-func forEachEmittedFile(host EmitHost, action func(emitFileNames *outputPaths, sourceFile *ast.SourceFile) bool, sourceFiles []*ast.SourceFile, options *EmitOptions) bool {
-	// !!! outFile not yet implemented, may be deprecated
-	for _, sourceFile := range sourceFiles {
-		if action(getOutputPathsFor(sourceFile, host, options.forceDtsEmit), sourceFile) {
-			return true
-		}
-	}
-	return false
 }
 
 func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host printer.EmitHost, forceDtsEmit bool) bool {

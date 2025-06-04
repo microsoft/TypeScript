@@ -1,6 +1,5 @@
 error TS2468: Cannot find global value 'Promise'.
 /index.ts(2,49): error TS1453: `resolution-mode` should be either `require` or `import`.
-/index.ts(5,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require'. This is likely not portable. A type annotation is necessary.
 /index.ts(5,76): error TS1453: `resolution-mode` should be either `require` or `import`.
 /index.ts(6,14): error TS2742: The inferred type of 'b' cannot be named without a reference to './node_modules/pkg/import'. This is likely not portable. A type annotation is necessary.
 /other.ts(3,7): error TS1340: Module 'pkg' does not refer to a type, but is used as a type here. Did you mean 'typeof import('pkg')'?
@@ -34,7 +33,6 @@ error TS2468: Cannot find global value 'Promise'.
 /other2.ts(3,30): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
 /other2.ts(4,30): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
 /other2.ts(4,50): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
-/other2.ts(6,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require'. This is likely not portable. A type annotation is necessary.
 /other2.ts(6,57): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
 /other2.ts(7,57): error TS1463: 'resolution-mode' is the only valid key for type import attributes.
 /other2.ts(7,77): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
@@ -77,7 +75,6 @@ error TS2468: Cannot find global value 'Promise'.
 /other5.ts(2,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
 /other5.ts(3,29): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
 /other5.ts(3,35): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
-/other5.ts(5,14): error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require'. This is likely not portable. A type annotation is necessary.
 /other5.ts(5,56): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
 /other5.ts(6,56): error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
 /other5.ts(6,62): error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
@@ -99,7 +96,7 @@ error TS2468: Cannot find global value 'Promise'.
 ==== /node_modules/pkg/require.d.ts (0 errors) ====
     export interface RequireInterface {}
     
-==== /index.ts (4 errors) ====
+==== /index.ts (3 errors) ====
     export type LocalInterface =
         & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
                                                     ~~~~~~~~
@@ -107,8 +104,6 @@ error TS2468: Cannot find global value 'Promise'.
         & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
     
     export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
-                 ~
-!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require'. This is likely not portable. A type annotation is necessary.
                                                                                ~~~~~~~~
 !!! error TS1453: `resolution-mode` should be either `require` or `import`.
     export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
@@ -183,7 +178,7 @@ error TS2468: Cannot find global value 'Promise'.
                                                                                                  ~
 !!! error TS1128: Declaration or statement expected.
     
-==== /other2.ts (7 errors) ====
+==== /other2.ts (6 errors) ====
     // wrong attribute key
     export type LocalInterface =
         & import("pkg", { with: {"bad": "require"} }).RequireInterface
@@ -196,8 +191,6 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
     export const a = (null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface);
-                 ~
-!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require'. This is likely not portable. A type annotation is necessary.
                                                             ~~~~~
 !!! error TS1463: 'resolution-mode' is the only valid key for type import attributes.
     export const b = (null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface);
@@ -308,7 +301,7 @@ error TS2468: Cannot find global value 'Promise'.
                                                                               ~
 !!! error TS1005: ',' expected.
     
-==== /other5.ts (7 errors) ====
+==== /other5.ts (6 errors) ====
     export type LocalInterface =
         & import("pkg", { with: {} }).RequireInterface
                                 ~~
@@ -320,8 +313,6 @@ error TS2468: Cannot find global value 'Promise'.
 !!! error TS2694: Namespace '"/node_modules/pkg/require"' has no exported member 'ImportInterface'.
     
     export const a = (null as any as import("pkg", { with: {} }).RequireInterface);
-                 ~
-!!! error TS2742: The inferred type of 'a' cannot be named without a reference to './node_modules/pkg/require'. This is likely not portable. A type annotation is necessary.
                                                            ~~
 !!! error TS1464: Type import attributes should have exactly one key - 'resolution-mode' - with value 'import' or 'require'.
     export const b = (null as any as import("pkg", { with: {} }).ImportInterface);

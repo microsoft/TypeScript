@@ -20,7 +20,7 @@ export const Ctor: CtorConstructor;
 
 === node_modules/mod/index.d.ts ===
 import { Ctor } from "./ctor";
->Ctor : import("mod").CtorConstructor
+>Ctor : import("./ctor").CtorConstructor
 
 export default Ctor;
 >Ctor : Ctor
