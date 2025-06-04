@@ -6,6 +6,7 @@
     // "outDir": "./dist",
 
     // Environment Settings
+    // See also https://aka.ms/tsconfig/module
     "module": "esnext",
     "target": "es5",
     "types": [],

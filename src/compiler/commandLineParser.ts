@@ -2811,6 +2811,7 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     newline();
 
     emitHeader(Diagnostics.Environment_Settings);
+    emitHeader(Diagnostics.See_also_https_Colon_Slash_Slashaka_ms_Slashtsconfig_Slashmodule);
     emitOption("module", ModuleResolutionKind.NodeNext);
     emitOption("target", ScriptTarget.ESNext);
     emitOption("types", []);

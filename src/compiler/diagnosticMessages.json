@@ -5710,7 +5710,7 @@
         "category": "Message",
         "code": 6285
     },
-    "See also https://aka.ms/tsconfig_modules": {
+    "See also https://aka.ms/tsconfig/module": {
         "category": "Message",
         "code": 6286
     },
