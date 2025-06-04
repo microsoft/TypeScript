@@ -125,7 +125,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -247,8 +246,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/app/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/app/test2.csproj WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/app/test2.csproj projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/app/test2.csproj' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -283,7 +280,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project/app",
       "kind": "discover"
     }
@@ -439,7 +435,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Scheduling throttled operation:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project/app",
       "kind": "discover"
     }
@@ -497,7 +492,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
@@ -612,14 +606,12 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Loaded safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: ["jquery","cordova","commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["commander"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -775,7 +767,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
@@ -801,7 +792,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Skipping defunct request for: /user/username/projects/project/app/test2.csproj
@@ -834,7 +824,6 @@ Info seq  [hh:mm:ss:mss] event:
           "/home/src/Library/Caches/typescript/node_modules/@types/cordova/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/commander/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -922,7 +911,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Sending request:
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project/app",
       "kind": "discover"
     }
@@ -949,13 +937,11 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/project/app",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: ["grunt","gulp","lodash"]
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["lodash"]
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -1115,7 +1101,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
@@ -1141,7 +1126,6 @@ Info seq  [hh:mm:ss:mss] TIAdapter:: Received response:
         "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts",
         "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
       ],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/project/app/test2.csproj
@@ -1172,7 +1156,6 @@ Info seq  [hh:mm:ss:mss] event:
           "/home/src/Library/Caches/typescript/node_modules/@types/gulp/index.d.ts",
           "/home/src/Library/Caches/typescript/node_modules/@types/lodash/index.d.ts"
         ],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }

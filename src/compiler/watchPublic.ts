@@ -523,25 +523,27 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         configFileName ?
             getDirectoryPath(getNormalizedAbsolutePath(configFileName, currentDirectory)) :
             currentDirectory,
-        /*logChangesWhenResolvingModule*/ false,
     );
+    compilerHost.onSourceFileNotCreated = resolutionCache.onSourceFileNotCreated.bind(resolutionCache);
     // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
     compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
         compilerHost.resolveModuleNameLiterals = resolutionCache.resolveModuleNameLiterals.bind(resolutionCache);
+        compilerHost.onReusedModuleResolutions = resolutionCache.onReusedModuleResolutions.bind(resolutionCache);
     }
     compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
         compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
+        compilerHost.onReusedTypeReferenceDirectiveResolutions = resolutionCache.onReusedTypeReferenceDirectiveResolutions.bind(resolutionCache);
     }
     compilerHost.resolveLibrary = !host.resolveLibrary ?
         resolutionCache.resolveLibrary.bind(resolutionCache) :
         host.resolveLibrary.bind(host);
     compilerHost.getModuleResolutionCache = host.resolveModuleNameLiterals || host.resolveModuleNames ?
         maybeBind(host, host.getModuleResolutionCache) :
-        (() => resolutionCache.getModuleResolutionCache());
+        (() => resolutionCache.moduleResolutionCache);
     const userProvidedResolution = !!host.resolveModuleNameLiterals || !!host.resolveTypeReferenceDirectiveReferences ||
         !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
     // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions
