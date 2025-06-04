@@ -1,5 +1,5 @@
-0.js(23,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
-0.js(27,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+0.js(23,5): error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
+0.js(27,5): error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
 
 
 ==== 0.js (2 errors) ====
@@ -27,13 +27,13 @@
          */
         foo (a) {
         ~~~
-!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+!!! error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
             return super.foo(a)
         }
     
         bar () {
         ~~~
-!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+!!! error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
     
         }
     
