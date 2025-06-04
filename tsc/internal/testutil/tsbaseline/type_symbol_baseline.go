@@ -346,6 +346,8 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 	fileChecker, done := walker.getTypeCheckerForCurrentFile()
 	defer done()
 
+	ctx := printer.NewEmitContext()
+
 	if !isSymbolWalk {
 		// Don't try to get the type of something that's already a type.
 		// Exception for `T` in `type T = something` because that may evaluate to some interesting type.
@@ -382,7 +384,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 			!isIntrinsicJsxTag(node, walker.currentSourceFile) {
 			typeString = t.AsIntrinsicType().IntrinsicName()
 		} else {
-			ctx := printer.NewEmitContext()
+			ctx.Reset()
 			builder := checker.NewNodeBuilder(fileChecker, ctx)
 			typeFormatFlags := checker.TypeFormatFlagsNoTruncation | checker.TypeFormatFlagsAllowUniqueESSymbolType | checker.TypeFormatFlagsGenerateNamesForShadowedTypeParams
 			typeNode := builder.TypeToTypeNode(t, node.Parent, nodebuilder.Flags(typeFormatFlags&checker.TypeFormatFlagsNodeBuilderFlagsMask)|nodebuilder.FlagsIgnoreErrors, nodebuilder.InternalFlagsAllowUnresolvedNames, nil)

@@ -24,10 +24,6 @@ type EmitContext struct {
 	varScopeStack core.Stack[*varScope]
 	letScopeStack core.Stack[*varScope]
 	emitHelpers   collections.OrderedSet[*EmitHelper]
-
-	isCustomPrologue           func(node *ast.Statement) bool
-	isHoistedFunction          func(node *ast.Statement) bool
-	isHoistedVariableStatement func(node *ast.Statement) bool
 }
 
 type varScope struct {
@@ -38,10 +34,13 @@ type varScope struct {
 func NewEmitContext() *EmitContext {
 	c := &EmitContext{}
 	c.Factory = NewNodeFactory(c)
-	c.isCustomPrologue = c.isCustomPrologueWorker
-	c.isHoistedFunction = c.isHoistedFunctionWorker
-	c.isHoistedVariableStatement = c.isHoistedVariableStatementWorker
 	return c
+}
+
+func (c *EmitContext) Reset() {
+	*c = EmitContext{
+		Factory: c.Factory,
+	}
 }
 
 func (c *EmitContext) onCreate(node *ast.Node) {
@@ -260,14 +259,14 @@ func (c *EmitContext) mergeEnvironment(statements []*ast.Statement, declarations
 
 	// find standard prologues on left in the following order: standard directives, hoisted functions, hoisted variables, other custom
 	leftStandardPrologueEnd := findSpanEnd(statements, ast.IsPrologueDirective, 0)
-	leftHoistedFunctionsEnd := findSpanEnd(statements, c.isHoistedFunction, leftStandardPrologueEnd)
-	leftHoistedVariablesEnd := findSpanEnd(statements, c.isHoistedVariableStatement, leftHoistedFunctionsEnd)
+	leftHoistedFunctionsEnd := findSpanEndWithEmitContext(c, statements, (*EmitContext).isHoistedFunction, leftStandardPrologueEnd)
+	leftHoistedVariablesEnd := findSpanEndWithEmitContext(c, statements, (*EmitContext).isHoistedVariableStatement, leftHoistedFunctionsEnd)
 
 	// find standard prologues on right in the following order: standard directives, hoisted functions, hoisted variables, other custom
 	rightStandardPrologueEnd := findSpanEnd(declarations, ast.IsPrologueDirective, 0)
-	rightHoistedFunctionsEnd := findSpanEnd(declarations, c.isHoistedFunction, rightStandardPrologueEnd)
-	rightHoistedVariablesEnd := findSpanEnd(declarations, c.isHoistedVariableStatement, rightHoistedFunctionsEnd)
-	rightCustomPrologueEnd := findSpanEnd(declarations, c.isCustomPrologue, rightHoistedVariablesEnd)
+	rightHoistedFunctionsEnd := findSpanEndWithEmitContext(c, declarations, (*EmitContext).isHoistedFunction, rightStandardPrologueEnd)
+	rightHoistedVariablesEnd := findSpanEndWithEmitContext(c, declarations, (*EmitContext).isHoistedVariableStatement, rightHoistedFunctionsEnd)
+	rightCustomPrologueEnd := findSpanEndWithEmitContext(c, declarations, (*EmitContext).isCustomPrologue, rightHoistedVariablesEnd)
 	if rightCustomPrologueEnd != len(declarations) {
 		panic("Expected declarations to be valid standard or custom prologues")
 	}
@@ -316,20 +315,20 @@ func (c *EmitContext) mergeEnvironment(statements []*ast.Statement, declarations
 	return left, changed
 }
 
-func (c *EmitContext) isCustomPrologueWorker(node *ast.Statement) bool {
+func (c *EmitContext) isCustomPrologue(node *ast.Statement) bool {
 	return c.EmitFlags(node)&EFCustomPrologue != 0
 }
 
-func (c *EmitContext) isHoistedFunctionWorker(node *ast.Statement) bool {
-	return c.isCustomPrologueWorker(node) && ast.IsFunctionDeclaration(node)
+func (c *EmitContext) isHoistedFunction(node *ast.Statement) bool {
+	return c.isCustomPrologue(node) && ast.IsFunctionDeclaration(node)
 }
 
 func isHoistedVariable(node *ast.VariableDeclarationNode) bool {
 	return ast.IsIdentifier(node.Name()) && node.Initializer() == nil
 }
 
-func (c *EmitContext) isHoistedVariableStatementWorker(node *ast.Statement) bool {
-	return c.isCustomPrologueWorker(node) &&
+func (c *EmitContext) isHoistedVariableStatement(node *ast.Statement) bool {
+	return c.isCustomPrologue(node) &&
 		ast.IsVariableStatement(node) &&
 		core.Every(node.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes, isHoistedVariable)
 }

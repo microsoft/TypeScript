@@ -728,6 +728,14 @@ func makeIdentifierFromModuleName(moduleName string) string {
 	return builder.String()
 }
 
+func findSpanEndWithEmitContext[T any](c *EmitContext, array []T, test func(c *EmitContext, value T) bool, start int) int {
+	i := start
+	for i < len(array) && test(c, array[i]) {
+		i++
+	}
+	return i
+}
+
 func findSpanEnd[T any](array []T, test func(value T) bool, start int) int {
 	i := start
 	for i < len(array) && test(array[i]) {

@@ -36,7 +36,6 @@ func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebui
 		tracker = NewSymbolTrackerImpl(b.impl.ctx, nil, b.host)
 		b.impl.ctx.tracker = tracker
 	}
-	b.impl.initializeClosures() // recapture ctx
 	b.ctxStack = append(b.ctxStack, b.impl.ctx)
 }
 
@@ -159,7 +158,7 @@ func (b *NodeBuilder) TypePredicateToTypePredicateNode(predicate *TypePredicate,
 // TypeToTypeNode implements NodeBuilderInterface.
 func (b *NodeBuilder) TypeToTypeNode(typ *Type, enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) *ast.Node {
 	b.enterContext(enclosingDeclaration, flags, internalFlags, tracker)
-	return b.exitContext(b.impl.typeToTypeNodeWorker(typ))
+	return b.exitContext(b.impl.typeToTypeNode(typ))
 }
 
 // var _ NodeBuilderInterface = NewNodeBuilderAPI(nil, nil)
