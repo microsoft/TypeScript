@@ -1,0 +1,16 @@
+mergedModuleDeclarationWithSharedExportedVar.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+mergedModuleDeclarationWithSharedExportedVar.ts(5,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== mergedModuleDeclarationWithSharedExportedVar.ts (2 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var v = 10;
+        v;
+    }
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        v;
+    }

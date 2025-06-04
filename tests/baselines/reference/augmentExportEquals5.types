@@ -49,6 +49,7 @@ declare module "express" {
 >Router : (options?: any) => Router
 >       : ^       ^^^   ^^^^^      
 >options : any
+>        : ^^^
 
         export interface Router extends IRouter<Router> {}
 
@@ -79,6 +80,7 @@ declare module "express" {
         interface ErrorRequestHandler {
             (err: any, req: Request, res: Response, next: Function): any;
 >err : any
+>    : ^^^
 >req : Request
 >    : ^^^^^^^
 >res : Response
@@ -108,6 +110,7 @@ declare module "express" {
 >next : Function
 >     : ^^^^^^^^
 >param : any
+>      : ^^^
         }
 
         interface Application extends IRouter<Application>, Express.Application {
@@ -116,6 +119,7 @@ declare module "express" {
 
             routes: any;
 >routes : any
+>       : ^^^
         }
 
         interface Express extends Application {
@@ -126,6 +130,7 @@ declare module "express" {
 
         var static: any;
 >static : any
+>       : ^^^
     }
 
     export = e;

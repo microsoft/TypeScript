@@ -1,3 +1,5 @@
+classAbstractMergedDeclaration.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+classAbstractMergedDeclaration.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
 classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
 classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
@@ -16,11 +18,15 @@ classAbstractMergedDeclaration.ts(38,1): error TS2511: Cannot create an instance
 classAbstractMergedDeclaration.ts(39,1): error TS2511: Cannot create an instance of an abstract class.
 
 
-==== classAbstractMergedDeclaration.ts (16 errors) ====
+==== classAbstractMergedDeclaration.ts (18 errors) ====
     abstract class CM {}
     module CM {}
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     module MC {}
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     abstract class MC {}
     
     abstract class CI {}

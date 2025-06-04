@@ -1,0 +1,19 @@
+internalAliasInterfaceInsideLocalModuleWithoutExport.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasInterfaceInsideLocalModuleWithoutExport.ts(6,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internalAliasInterfaceInsideLocalModuleWithoutExport.ts (2 errors) ====
+    export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface I {
+        }
+    }
+    
+    export module c {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import b = a.I;
+        export var x: b;
+    }
+    

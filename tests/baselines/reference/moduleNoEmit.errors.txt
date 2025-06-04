@@ -1,0 +1,9 @@
+moduleNoEmit.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== moduleNoEmit.ts (1 errors) ====
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	1+1;
+    }

@@ -1,0 +1,17 @@
+internalAliasClassInsideTopLevelModuleWithExport.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== internalAliasClassInsideTopLevelModuleWithExport.ts (1 errors) ====
+    export module x {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class c {
+            foo(a: number) {
+                return a;
+            }
+        }
+    }
+    
+    export import xc = x.c;
+    export var cProp = new xc();
+    var cReturnVal = cProp.foo(10);

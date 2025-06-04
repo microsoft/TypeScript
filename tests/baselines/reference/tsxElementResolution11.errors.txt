@@ -1,9 +1,12 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(17,7): error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number; }'.
   Property 'x' does not exist on type '{ q?: number; }'.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (2 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface ElementAttributesProperty { }
     	interface IntrinsicElements { }

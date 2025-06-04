@@ -1,8 +1,12 @@
+internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(1,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(9,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS2339: Property 'b' does not exist on type 'typeof c'.
 
 
-==== internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts (1 errors) ====
+==== internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts (3 errors) ====
     export module a {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export enum weekend {
             Friday,
             Saturday,
@@ -11,6 +15,8 @@ internalAliasEnumInsideLocalModuleWithoutExportAccessError.ts(14,21): error TS23
     }
     
     export module c {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         import b = a.weekend;
         export var bVal: b = b.Sunday;
     }

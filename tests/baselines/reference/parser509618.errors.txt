@@ -1,8 +1,11 @@
+parser509618.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parser509618.ts(2,20): error TS1036: Statements are not allowed in ambient contexts.
 
 
-==== parser509618.ts (1 errors) ====
+==== parser509618.ts (2 errors) ====
     declare module ambiModule {
+                   ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
        interface i1 { };
                        ~
 !!! error TS1036: Statements are not allowed in ambient contexts.

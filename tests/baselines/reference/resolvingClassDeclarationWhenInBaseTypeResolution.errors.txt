@@ -1,31 +1,99 @@
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(2,45): error TS2449: Class 'nitidus' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(9,56): error TS2449: Class 'mixtus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(17,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(45,48): error TS2449: Class 'psilurus' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(60,44): error TS2449: Class 'jugularis' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(96,44): error TS2449: Class 'aurata' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(102,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(108,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(114,48): error TS2449: Class 'gilbertii' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(126,43): error TS2449: Class 'johorensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(153,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(182,54): error TS2449: Class 'falconeri' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(188,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(199,47): error TS2449: Class 'pygmaea' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(238,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(246,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(247,46): error TS2449: Class 'ciliolabrum' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(254,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(272,35): error TS2449: Class 'coludo' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(301,41): error TS2449: Class 'oreas' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(316,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(357,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(375,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(390,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(402,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(403,53): error TS2449: Class 'johorensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(424,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(435,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(436,55): error TS2449: Class 'punicus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(451,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(463,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(468,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(469,52): error TS2449: Class 'stolzmanni' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(473,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(477,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(489,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(490,42): error TS2449: Class 'portoricensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(494,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(495,50): error TS2449: Class 'pelurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(499,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(500,49): error TS2449: Class 'lasiurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(503,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(516,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(533,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(534,50): error TS2449: Class 'stolzmanni' used before its declaration.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(549,53): error TS2449: Class 'daphaenodon' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(579,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(580,54): error TS2449: Class 'johorensis' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(588,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(589,52): error TS2449: Class 'stolzmanni' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(593,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(597,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(604,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(605,55): error TS2449: Class 'psilurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(615,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(626,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(638,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(654,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(671,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(677,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(683,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(701,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(717,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(721,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(738,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(748,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(764,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(768,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Class 'lasiurus' used before its declaration.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(787,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(815,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(823,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(825,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(838,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(850,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(857,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(874,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(888,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(894,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(900,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(915,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(932,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(944,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(961,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(978,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(983,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(988,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(1000,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+resolvingClassDeclarationWhenInBaseTypeResolution.ts(1009,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== resolvingClassDeclarationWhenInBaseTypeResolution.ts (24 errors) ====
+==== resolvingClassDeclarationWhenInBaseTypeResolution.ts (90 errors) ====
     module rionegrensis {
+           ~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
                                                 ~~~~~~~
 !!! error TS2449: Class 'nitidus' used before its declaration.
@@ -48,6 +116,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module julianae {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class steerii {
       }
       export class nudicaudus {
@@ -142,12 +212,16 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module ruatanica {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class hector<T0, T1> {
         humulis() : julianae.steerii { var x : julianae.steerii; () => { var y = this; }; return x; }
         eurycerus() : panamensis.linulus<ruatanica.Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni> { var x : panamensis.linulus<ruatanica.Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni>; () => { var y = this; }; return x; }
       }
     }
     module Lanthanum {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class suillus<T0, T1> {
         spilosoma() : quasiater.carolinensis { var x : quasiater.carolinensis; () => { var y = this; }; return x; }
         tumbalensis() : caurinus.megaphyllus { var x : caurinus.megaphyllus; () => { var y = this; }; return x; }
@@ -199,6 +273,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module rendalli {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class zuluensis extends julianae.steerii {
         telfairi() : argurus.wetmorei<Lanthanum.megalonyx, provocax.melanoleuca> { var x : argurus.wetmorei<Lanthanum.megalonyx, provocax.melanoleuca>; () => { var y = this; }; return x; }
         keyensis() : quasiater.wattsi<quasiater.carolinensis, lavali.lepturus> { var x : quasiater.wattsi<quasiater.carolinensis, lavali.lepturus>; () => { var y = this; }; return x; }
@@ -237,6 +313,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module trivirgatus {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class tumidifrons<T0, T1> {
         nivalis() : dogramacii.kaiseri { var x : dogramacii.kaiseri; () => { var y = this; }; return x; }
         vestitus() : lavali.xanthognathus { var x : lavali.xanthognathus; () => { var y = this; }; return x; }
@@ -290,6 +368,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module quasiater {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class bobrinskoi {
         crassicaudatus() : samarensis.cahirinus<macrorhinos.daphaenodon, argurus.luctuosa> { var x : samarensis.cahirinus<macrorhinos.daphaenodon, argurus.luctuosa>; () => { var y = this; }; return x; }
         mulatta() : argurus.oreas { var x : argurus.oreas; () => { var y = this; }; return x; }
@@ -298,6 +378,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module ruatanica {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class americanus extends imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> {
                                                  ~~~~~~~~~~~
 !!! error TS2449: Class 'ciliolabrum' used before its declaration.
@@ -309,6 +391,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module lavali {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class wilsoni extends Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis> {
         setiger() : nigra.thalia<patas.uralensis, wilsoni> { var x : nigra.thalia<patas.uralensis, wilsoni>; () => { var y = this; }; return x; }
         lorentzii() : imperfecta.subspinosus { var x : imperfecta.subspinosus; () => { var y = this; }; return x; }
@@ -377,6 +461,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module dogramacii {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class robustulus extends lavali.wilsoni {
         fossor() : minutus.inez<argurus.peninsulae, julianae.nudicaudus> { var x : minutus.inez<argurus.peninsulae, julianae.nudicaudus>; () => { var y = this; }; return x; }
         humboldti() : sagitta.cinereus<lavali.xanthognathus, argurus.oreas> { var x : sagitta.cinereus<lavali.xanthognathus, argurus.oreas>; () => { var y = this; }; return x; }
@@ -418,6 +504,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module lutreolus {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class schlegeli extends lavali.beisa {
         mittendorfi() : rionegrensis.caniventer { var x : rionegrensis.caniventer; () => { var y = this; }; return x; }
         blicki() : dogramacii.robustulus { var x : dogramacii.robustulus; () => { var y = this; }; return x; }
@@ -436,6 +524,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class dauricus<T0, T1> {
         chinensis() : Lanthanum.jugularis { var x : Lanthanum.jugularis; () => { var y = this; }; return x; }
         duodecimcostatus() : lavali.xanthognathus { var x : lavali.xanthognathus; () => { var y = this; }; return x; }
@@ -451,6 +541,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module nigra {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export class dolichurus<T0, T1> {
         solomonis() : panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>> { var x : panglima.abidi<quasiater.carolinensis, rendalli.crenulata<gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>, argurus.netscheri<minutus.inez<argurus.peninsulae, julianae.nudicaudus>, julianae.oralis<lavali.xanthognathus, argurus.oreas>>>>; () => { var y = this; }; return x; }
         alfredi() : caurinus.psilurus { var x : caurinus.psilurus; () => { var y = this; }; return x; }
@@ -463,6 +555,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
       }
     }
     module panglima {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class amphibius<T0, T1> extends caurinus.johorensis<Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana>, Lanthanum.jugularis> {
                                                         ~~~~~~~~~~
 !!! error TS2449: Class 'johorensis' used before its declaration.
@@ -488,6 +582,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module quasiater {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class carolinensis {
             concinna(): rendalli.zuluensis { var x: rendalli.zuluensis; () => { var y = this; }; return x; }
             aeneus(): howi.marcanoi { var x: howi.marcanoi; () => { var y = this; }; return x; }
@@ -499,6 +595,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module minutus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class himalayana<T0, T1> extends lutreolus.punicus {
                                                           ~~~~~~~
 !!! error TS2449: Class 'punicus' used before its declaration.
@@ -518,6 +616,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module caurinus {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class mahaganus<T0, T1> extends panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon> {
             martiniquensis(): ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>> { var x: ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>>; () => { var y = this; }; return x; }
             devius(): samarensis.pelurus<dogramacii.aurata, minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri>> { var x: samarensis.pelurus<dogramacii.aurata, minutus.inez<minutus.inez<sagitta.stolzmanni, dammermani.melanops>, trivirgatus.falconeri>>; () => { var y = this; }; return x; }
@@ -530,11 +630,15 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module macrorhinos {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class marmosurus<T0, T1> {
             tansaniana(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
         }
     }
     module howi {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class angulatus<T0, T1> extends sagitta.stolzmanni {
                                                        ~~~~~~~~~~
 !!! error TS2449: Class 'stolzmanni' used before its declaration.
@@ -543,10 +647,14 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module daubentonii {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class nesiotes<T0, T1> {
         }
     }
     module nigra {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class thalia<T0, T1> {
             dichotomus(): quasiater.carolinensis { var x: quasiater.carolinensis; () => { var y = this; }; return x; }
             arnuxii(): panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa> { var x: panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>; () => { var y = this; }; return x; }
@@ -559,6 +667,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module sagitta {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class walkeri extends minutus.portoricensis {
                                              ~~~~~~~~~~~~~
 !!! error TS2449: Class 'portoricensis' used before its declaration.
@@ -567,6 +677,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module minutus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class inez<T0, T1> extends samarensis.pelurus<argurus.germaini, julianae.durangae> {
                                                      ~~~~~~~
 !!! error TS2449: Class 'pelurus' used before its declaration.
@@ -575,6 +687,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module macrorhinos {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class konganensis extends imperfecta.lasiurus<caurinus.psilurus, caurinus.psilurus> {
                                                     ~~~~~~~~
 !!! error TS2449: Class 'lasiurus' used before its declaration.
@@ -582,6 +696,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module panamensis {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class linulus<T0, T1> extends ruatanica.hector<julianae.sumatrana, samarensis.pelurus<Lanthanum.jugularis, sagitta.walkeri>> {
             goslingi(): daubentonii.arboreus<gabriellae.amicus, dogramacii.kaiseri> { var x: daubentonii.arboreus<gabriellae.amicus, dogramacii.kaiseri>; () => { var y = this; }; return x; }
             taki(): patas.uralensis { var x: patas.uralensis; () => { var y = this; }; return x; }
@@ -595,6 +711,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module nigra {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class gracilis<T0, T1> {
             weddellii(): nigra.dolichurus<dogramacii.aurata, julianae.steerii> { var x: nigra.dolichurus<dogramacii.aurata, julianae.steerii>; () => { var y = this; }; return x; }
             echinothrix(): Lanthanum.nitidus<panglima.amphibius<caurinus.megaphyllus, lavali.lepturus>, argurus.oreas> { var x: Lanthanum.nitidus<panglima.amphibius<caurinus.megaphyllus, lavali.lepturus>, argurus.oreas>; () => { var y = this; }; return x; }
@@ -612,6 +730,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module samarensis {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class pelurus<T0, T1> extends sagitta.stolzmanni {
                                                      ~~~~~~~~~~
 !!! error TS2449: Class 'stolzmanni' used before its declaration.
@@ -664,6 +784,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module sagitta {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class leptoceros<T0, T1> extends caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>> {
                                                          ~~~~~~~~~~
 !!! error TS2449: Class 'johorensis' used before its declaration.
@@ -676,6 +798,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module daubentonii {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class nigricans<T0, T1> extends sagitta.stolzmanni {
                                                        ~~~~~~~~~~
 !!! error TS2449: Class 'stolzmanni' used before its declaration.
@@ -684,10 +808,14 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module dammermani {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class siberu<T0, T1> {
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class pygmaea<T0, T1> extends rendalli.moojeni<macrorhinos.konganensis, gabriellae.echinatus> {
             pajeros(): gabriellae.echinatus { var x: gabriellae.echinatus; () => { var y = this; }; return x; }
             capucinus(): rendalli.zuluensis { var x: rendalli.zuluensis; () => { var y = this; }; return x; }
@@ -695,6 +823,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module chrysaeolus {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class sarasinorum<T0, T1> extends caurinus.psilurus {
                                                           ~~~~~~~~
 !!! error TS2449: Class 'psilurus' used before its declaration.
@@ -709,6 +839,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class wetmorei<T0, T1> {
             leucoptera(): petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina> { var x: petrophilus.rosalia<dogramacii.koepckeae, lutreolus.foina>; () => { var y = this; }; return x; }
             ochraventer(): sagitta.walkeri { var x: sagitta.walkeri; () => { var y = this; }; return x; }
@@ -720,6 +852,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class oreas extends lavali.wilsoni {
             salamonis(): lavali.xanthognathus { var x: lavali.xanthognathus; () => { var y = this; }; return x; }
             paniscus(): ruatanica.Praseodymium<caurinus.psilurus, lavali.xanthognathus> { var x: ruatanica.Praseodymium<caurinus.psilurus, lavali.xanthognathus>; () => { var y = this; }; return x; }
@@ -732,6 +866,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module daubentonii {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class arboreus<T0, T1> {
             capreolus(): rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni> { var x: rendalli.crenulata<samarensis.pelurus<Lanthanum.jugularis, ruatanica.americanus>, lavali.wilsoni>; () => { var y = this; }; return x; }
             moreni(): panglima.abidi<julianae.galapagoensis, dogramacii.koepckeae> { var x: panglima.abidi<julianae.galapagoensis, dogramacii.koepckeae>; () => { var y = this; }; return x; }
@@ -748,6 +884,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module patas {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class uralensis {
             cartilagonodus(): Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis> { var x: Lanthanum.nitidus<rionegrensis.caniventer, Lanthanum.jugularis>; () => { var y = this; }; return x; }
             pyrrhinus(): lavali.beisa { var x: lavali.beisa; () => { var y = this; }; return x; }
@@ -765,18 +903,24 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module provocax {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class melanoleuca extends lavali.wilsoni {
             Neodymium(): macrorhinos.marmosurus<petrophilus.sodyi<trivirgatus.falconeri, quasiater.bobrinskoi>, lutreolus.foina> { var x: macrorhinos.marmosurus<petrophilus.sodyi<trivirgatus.falconeri, quasiater.bobrinskoi>, lutreolus.foina>; () => { var y = this; }; return x; }
             baeri(): imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus> { var x: imperfecta.lasiurus<lavali.lepturus, ruatanica.americanus>; () => { var y = this; }; return x; }
         }
     }
     module sagitta {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class sicarius<T0, T1> {
             Chlorine(): samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus> { var x: samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus>; () => { var y = this; }; return x; }
             simulator(): macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>> { var x: macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>>; () => { var y = this; }; return x; }
         }
     }
     module howi {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class marcanoi extends Lanthanum.megalonyx {
             formosae(): Lanthanum.megalonyx { var x: Lanthanum.megalonyx; () => { var y = this; }; return x; }
             dudui(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
@@ -795,6 +939,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class gilbertii<T0, T1> {
             nasutus(): lavali.lepturus { var x: lavali.lepturus; () => { var y = this; }; return x; }
             poecilops(): julianae.steerii { var x: julianae.steerii; () => { var y = this; }; return x; }
@@ -811,10 +957,14 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module petrophilus {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class minutilla {
         }
     }
     module lutreolus {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class punicus {
             strandi(): gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis> { var x: gabriellae.klossii<Lanthanum.jugularis, Lanthanum.jugularis>; () => { var y = this; }; return x; }
             lar(): caurinus.mahaganus<julianae.nudicaudus, lavali.otion> { var x: caurinus.mahaganus<julianae.nudicaudus, lavali.otion>; () => { var y = this; }; return x; }
@@ -832,6 +982,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module macrorhinos {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class daphaenodon {
             bredanensis(): julianae.sumatrana { var x: julianae.sumatrana; () => { var y = this; }; return x; }
             othus(): howi.coludo<argurus.oreas, howi.marcanoi> { var x: howi.coludo<argurus.oreas, howi.marcanoi>; () => { var y = this; }; return x; }
@@ -842,6 +994,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module sagitta {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class cinereus<T0, T1> {
             zunigae(): rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>> { var x: rendalli.crenulata<macrorhinos.konganensis, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>; () => { var y = this; }; return x; }
             microps(): daubentonii.nigricans<caurinus.megaphyllus, quasiater.wattsi<Lanthanum.jugularis, julianae.sumatrana>> { var x: daubentonii.nigricans<caurinus.megaphyllus, quasiater.wattsi<Lanthanum.jugularis, julianae.sumatrana>>; () => { var y = this; }; return x; }
@@ -858,10 +1012,14 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module nigra {
+           ~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class caucasica<T0, T1> {
         }
     }
     module gabriellae {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class klossii<T0, T1> extends imperfecta.lasiurus<dogramacii.robustulus, caurinus.psilurus> {
                                                         ~~~~~~~~
 !!! error TS2449: Class 'lasiurus' used before its declaration.
@@ -884,6 +1042,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module imperfecta {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class lasiurus<T0, T1> {
             marisae(): lavali.thaeleri { var x: lavali.thaeleri; () => { var y = this; }; return x; }
             fulvus(): argurus.germaini { var x: argurus.germaini; () => { var y = this; }; return x; }
@@ -912,6 +1072,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module quasiater {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class wattsi<T0, T1> {
             lagotis(): lavali.xanthognathus { var x: lavali.xanthognathus; () => { var y = this; }; return x; }
             hussoni(): lavali.wilsoni { var x: lavali.wilsoni; () => { var y = this; }; return x; }
@@ -920,8 +1082,12 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module butleri {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     }
     module petrophilus {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class sodyi<T0, T1> extends quasiater.bobrinskoi {
             saundersiae(): samarensis.pallidus { var x: samarensis.pallidus; () => { var y = this; }; return x; }
             imberbis(): quasiater.carolinensis { var x: quasiater.carolinensis; () => { var y = this; }; return x; }
@@ -935,6 +1101,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module caurinus {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class megaphyllus extends imperfecta.lasiurus<julianae.acariensis, howi.coludo<argurus.oreas, howi.marcanoi>> {
             montana(): argurus.oreas { var x: argurus.oreas; () => { var y = this; }; return x; }
             amatus(): lutreolus.schlegeli { var x: lutreolus.schlegeli; () => { var y = this; }; return x; }
@@ -947,6 +1115,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module minutus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class portoricensis {
             relictus(): quasiater.carolinensis { var x: quasiater.carolinensis; () => { var y = this; }; return x; }
             aequatorianus(): gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata> { var x: gabriellae.klossii<julianae.nudicaudus, dogramacii.aurata>; () => { var y = this; }; return x; }
@@ -954,6 +1124,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module lutreolus {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class foina {
             tarfayensis(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
             Promethium(): samarensis.pelurus<argurus.germaini, julianae.durangae> { var x: samarensis.pelurus<argurus.germaini, julianae.durangae>; () => { var y = this; }; return x; }
@@ -971,6 +1143,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module lutreolus {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class cor<T0, T1> extends panglima.fundatus<panamensis.linulus<trivirgatus.lotor<argurus.luctuosa, lavali.wilsoni>, lavali.beisa>, dammermani.melanops> {
             antinorii(): petrophilus.sodyi<quasiater.carolinensis, argurus.germaini> { var x: petrophilus.sodyi<quasiater.carolinensis, argurus.germaini>; () => { var y = this; }; return x; }
             voi(): caurinus.johorensis<dammermani.melanops, macrorhinos.konganensis> { var x: caurinus.johorensis<dammermani.melanops, macrorhinos.konganensis>; () => { var y = this; }; return x; }
@@ -985,18 +1159,24 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module howi {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class coludo<T0, T1> {
             bernhardi(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
             isseli(): argurus.germaini { var x: argurus.germaini; () => { var y = this; }; return x; }
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class germaini extends gabriellae.amicus {
             sharpei(): lavali.wilsoni { var x: lavali.wilsoni; () => { var y = this; }; return x; }
             palmarum(): macrorhinos.marmosurus<Lanthanum.megalonyx, lavali.thaeleri> { var x: macrorhinos.marmosurus<Lanthanum.megalonyx, lavali.thaeleri>; () => { var y = this; }; return x; }
         }
     }
     module sagitta {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class stolzmanni {
             riparius(): nigra.dolichurus<dogramacii.koepckeae, caurinus.psilurus> { var x: nigra.dolichurus<dogramacii.koepckeae, caurinus.psilurus>; () => { var y = this; }; return x; }
             dhofarensis(): lutreolus.foina { var x: lutreolus.foina; () => { var y = this; }; return x; }
@@ -1012,6 +1192,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module dammermani {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class melanops extends minutus.inez<sagitta.stolzmanni, dammermani.melanops> {
             blarina(): dammermani.melanops { var x: dammermani.melanops; () => { var y = this; }; return x; }
             harwoodi(): rionegrensis.veraecrucis<nigra.dolichurus<lavali.lepturus, samarensis.pallidus>, lavali.wilsoni> { var x: rionegrensis.veraecrucis<nigra.dolichurus<lavali.lepturus, samarensis.pallidus>, lavali.wilsoni>; () => { var y = this; }; return x; }
@@ -1029,6 +1211,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class peninsulae extends patas.uralensis {
             aitkeni(): trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>> { var x: trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>; () => { var y = this; }; return x; }
             novaeangliae(): lavali.xanthognathus { var x: lavali.xanthognathus; () => { var y = this; }; return x; }
@@ -1041,6 +1225,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class netscheri<T0, T1> {
             gravis(): nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri> { var x: nigra.caucasica<rendalli.crenulata<trivirgatus.falconeri, howi.marcanoi>, dogramacii.kaiseri>; () => { var y = this; }; return x; }
             ruschii(): imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>> { var x: imperfecta.lasiurus<howi.marcanoi, imperfecta.ciliolabrum<Lanthanum.megalonyx, petrophilus.minutilla>>; () => { var y = this; }; return x; }
@@ -1058,6 +1244,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module ruatanica {
+           ~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Praseodymium<T0, T1> extends ruatanica.hector<lutreolus.punicus, gabriellae.amicus> {
             clara(): panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>> { var x: panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>>; () => { var y = this; }; return x; }
             spectabilis(): petrophilus.sodyi<rionegrensis.caniventer, quasiater.carolinensis> { var x: petrophilus.sodyi<rionegrensis.caniventer, quasiater.carolinensis>; () => { var y = this; }; return x; }
@@ -1075,16 +1263,22 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module caurinus {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class johorensis<T0, T1> extends lutreolus.punicus {
             maini(): ruatanica.Praseodymium<lavali.thaeleri, julianae.acariensis> { var x: ruatanica.Praseodymium<lavali.thaeleri, julianae.acariensis>; () => { var y = this; }; return x; }
         }
     }
     module argurus {
+           ~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class luctuosa {
             loriae(): rendalli.moojeni<macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>, lutreolus.punicus> { var x: rendalli.moojeni<macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>, lutreolus.punicus>; () => { var y = this; }; return x; }
         }
     }
     module panamensis {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class setulosus<T0, T1> {
             duthieae(): caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata> { var x: caurinus.mahaganus<howi.coludo<argurus.oreas, howi.marcanoi>, dogramacii.aurata>; () => { var y = this; }; return x; }
             guereza(): howi.coludo<sagitta.stolzmanni, quasiater.carolinensis> { var x: howi.coludo<sagitta.stolzmanni, quasiater.carolinensis>; () => { var y = this; }; return x; }
@@ -1097,6 +1291,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module petrophilus {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class rosalia<T0, T1> {
             palmeri(): panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>> { var x: panglima.amphibius<howi.coludo<macrorhinos.daphaenodon, panglima.amphibius<macrorhinos.daphaenodon, patas.uralensis>>, trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>>; () => { var y = this; }; return x; }
             baeops(): Lanthanum.nitidus<lavali.thaeleri, lavali.lepturus> { var x: Lanthanum.nitidus<lavali.thaeleri, lavali.lepturus>; () => { var y = this; }; return x; }
@@ -1106,6 +1302,8 @@ resolvingClassDeclarationWhenInBaseTypeResolution.ts(769,53): error TS2449: Clas
         }
     }
     module caurinus {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class psilurus extends lutreolus.punicus {
             socialis(): panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus> { var x: panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>; () => { var y = this; }; return x; }
             lundi(): petrophilus.sodyi<trivirgatus.falconeri, quasiater.bobrinskoi> { var x: petrophilus.sodyi<trivirgatus.falconeri, quasiater.bobrinskoi>; () => { var y = this; }; return x; }

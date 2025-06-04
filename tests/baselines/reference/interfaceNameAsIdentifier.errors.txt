@@ -1,8 +1,9 @@
 interfaceNameAsIdentifier.ts(4,1): error TS2693: 'C' only refers to a type, but is being used as a value here.
+interfaceNameAsIdentifier.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot use namespace 'm2' as a value.
 
 
-==== interfaceNameAsIdentifier.ts (2 errors) ====
+==== interfaceNameAsIdentifier.ts (3 errors) ====
     interface C {
         (): void;
     }
@@ -11,6 +12,8 @@ interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot use namespace 'm2' as a
 !!! error TS2693: 'C' only refers to a type, but is being used as a value here.
     
     module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface C {
             (): void;
         }

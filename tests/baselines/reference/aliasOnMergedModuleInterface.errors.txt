@@ -1,3 +1,4 @@
+aliasOnMergedModuleInterface_0.ts(3,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 aliasOnMergedModuleInterface_1.ts(5,16): error TS2708: Cannot use namespace 'foo' as a value.
 
 
@@ -10,10 +11,12 @@ aliasOnMergedModuleInterface_1.ts(5,16): error TS2708: Cannot use namespace 'foo
                    ~~~
 !!! error TS2708: Cannot use namespace 'foo' as a value.
     
-==== aliasOnMergedModuleInterface_0.ts (0 errors) ====
+==== aliasOnMergedModuleInterface_0.ts (1 errors) ====
     declare module "foo"
     {
         module B {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export interface A {
             }
         }

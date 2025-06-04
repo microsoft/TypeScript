@@ -1,0 +1,31 @@
+usingModuleWithExportImportInValuePosition.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+usingModuleWithExportImportInValuePosition.ts(6,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+usingModuleWithExportImportInValuePosition.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== usingModuleWithExportImportInValuePosition.ts (3 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    export var x = 'hello world'
+    export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+        export module B {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface Id {
+                name: string;
+            }
+        }
+    }
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export import a = A;
+    }
+    
+    var a: string = C.a.x;
+    var b: { x: number; y: number; } = new C.a.Point(0, 0);
+    var c: { name: string };
+    var c: C.a.B.Id;

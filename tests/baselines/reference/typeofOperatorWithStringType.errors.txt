@@ -1,7 +1,8 @@
+typeofOperatorWithStringType.ts(11,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== typeofOperatorWithStringType.ts (1 errors) ====
+==== typeofOperatorWithStringType.ts (2 errors) ====
     // typeof  operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];
@@ -13,6 +14,8 @@ typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator
         static foo() { return ""; }
     }
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var n: string;
     }
     

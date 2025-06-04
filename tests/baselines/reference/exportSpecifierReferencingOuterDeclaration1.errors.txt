@@ -1,8 +1,11 @@
+exportSpecifierReferencingOuterDeclaration1.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 exportSpecifierReferencingOuterDeclaration1.ts(3,14): error TS2661: Cannot export 'X'. Only local declarations can be exported from a module.
 
 
-==== exportSpecifierReferencingOuterDeclaration1.ts (1 errors) ====
+==== exportSpecifierReferencingOuterDeclaration1.ts (2 errors) ====
     declare module X { export interface bar { } }
+                   ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     declare module "m" {
         export { X };
                  ~

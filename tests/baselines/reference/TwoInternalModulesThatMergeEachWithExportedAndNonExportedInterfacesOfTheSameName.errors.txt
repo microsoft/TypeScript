@@ -1,0 +1,64 @@
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(19,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(19,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(19,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(25,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(26,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts(26,21): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== TwoInternalModulesThatMergeEachWithExportedAndNonExportedInterfacesOfTheSameName.ts (8 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Point {
+            x: number;
+            y: number;
+            toCarth(): Point;
+        }
+    }
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface Point {
+            fromCarth(): Point;
+        }
+    }
+    
+    // ensure merges as expected
+    var p: { x: number; y: number; toCarth(): A.Point; };
+    var p: A.Point;
+    
+    module X.Y.Z {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Line {
+            new (start: A.Point, end: A.Point);
+        }
+    }
+    
+    module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module Y.Z {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                        ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            interface Line {
+                start: A.Point;
+                end: A.Point;
+            }
+        }
+    }
+    
+    // ensure merges as expected
+    var l: { new (s: A.Point, e: A.Point); }
+    var l: X.Y.Z.Line;
+    

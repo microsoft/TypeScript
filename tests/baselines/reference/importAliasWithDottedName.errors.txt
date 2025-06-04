@@ -1,0 +1,24 @@
+importAliasWithDottedName.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importAliasWithDottedName.ts(3,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importAliasWithDottedName.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== importAliasWithDottedName.ts (3 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export var x = 1;
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export var y = 2;
+        }
+    }
+    
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import N = M.N;
+        var r = N.y;
+        var r2 = M.N.y;
+    }

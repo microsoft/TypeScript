@@ -1,0 +1,14 @@
+lib.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== lib.ts (1 errors) ====
+    module Lib {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class LibType {}
+    }
+    
+==== test.ts (0 errors) ====
+    /// <reference path="lib.ts" static='true' />
+    
+    var libType: Lib.LibType;

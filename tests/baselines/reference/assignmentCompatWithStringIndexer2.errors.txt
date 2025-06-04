@@ -4,6 +4,7 @@ assignmentCompatWithStringIndexer2.ts(15,1): error TS2322: Type 'A' is not assig
 assignmentCompatWithStringIndexer2.ts(19,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived2; }'.
   'string' index signatures are incompatible.
     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
+assignmentCompatWithStringIndexer2.ts(21,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithStringIndexer2.ts(33,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived; }'.
   'string' index signatures are incompatible.
     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
@@ -28,7 +29,7 @@ assignmentCompatWithStringIndexer2.ts(51,9): error TS2322: Type 'A<T>' is not as
       Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 
 
-==== assignmentCompatWithStringIndexer2.ts (8 errors) ====
+==== assignmentCompatWithStringIndexer2.ts (9 errors) ====
     // index signatures must be compatible in assignments
     
     interface Base { foo: string; }
@@ -59,6 +60,8 @@ assignmentCompatWithStringIndexer2.ts(51,9): error TS2322: Type 'A<T>' is not as
 !!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     
     module Generics {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         interface A<T extends Base> {
             [x: string]: T;
         }

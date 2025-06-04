@@ -1,0 +1,18 @@
+declFileImportChainInExportAssignment.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declFileImportChainInExportAssignment.ts(2,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileImportChainInExportAssignment.ts (2 errors) ====
+    module m {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export module c {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export class c {
+            }
+        }
+    }
+    import a = m.c;
+    import b = a;
+    export = b;

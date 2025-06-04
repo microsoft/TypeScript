@@ -1,0 +1,22 @@
+exportAssignClassAndModule_0.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== exportAssignClassAndModule_1.ts (0 errors) ====
+    ///<reference path='exportAssignClassAndModule_0.ts'/>
+    import Foo = require('./exportAssignClassAndModule_0');
+    
+    var z: Foo.Bar;
+    var zz: Foo;
+    zz.x;
+==== exportAssignClassAndModule_0.ts (1 errors) ====
+    class Foo {
+        x: Foo.Bar;
+    }
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface Bar {
+        }
+    }
+    export = Foo;
+    

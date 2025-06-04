@@ -1,3 +1,5 @@
+subtypesOfUnion.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+subtypesOfUnion.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 subtypesOfUnion.ts(16,5): error TS2411: Property 'foo4' of type 'boolean' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(18,5): error TS2411: Property 'foo6' of type 'Date' is not assignable to 'string' index type 'string | number'.
 subtypesOfUnion.ts(19,5): error TS2411: Property 'foo7' of type 'RegExp' is not assignable to 'string' index type 'string | number'.
@@ -29,15 +31,19 @@ subtypesOfUnion.ts(50,5): error TS2411: Property 'foo17' of type 'Object' is not
 subtypesOfUnion.ts(51,5): error TS2411: Property 'foo18' of type '{}' is not assignable to 'string' index type 'number'.
 
 
-==== subtypesOfUnion.ts (29 errors) ====
+==== subtypesOfUnion.ts (31 errors) ====
     enum E { e1, e2 }
     interface I8 { [x: string]: number[]; }
     class A { foo: number; }
     class A2<T> { foo: T; }
     function f() { }
     module f { export var bar = 1; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     class c { baz: string }
     module c { export var bar = 1; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     // A type T is a subtype of a union type U if T is a subtype of any type in U.
     interface I1<T> {

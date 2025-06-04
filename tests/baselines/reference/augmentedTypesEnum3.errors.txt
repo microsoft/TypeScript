@@ -1,16 +1,26 @@
+augmentedTypesEnum3.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+augmentedTypesEnum3.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+augmentedTypesEnum3.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 augmentedTypesEnum3.ts(16,5): error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
+augmentedTypesEnum3.ts(18,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== augmentedTypesEnum3.ts (1 errors) ====
+==== augmentedTypesEnum3.ts (5 errors) ====
     module E {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var t;
     }
     enum E { }
     
     enum F { }
     module F { var t; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var o;
     }
     enum A {
@@ -22,5 +32,7 @@ augmentedTypesEnum3.ts(16,5): error TS2432: In an enum with multiple declaration
 !!! error TS2432: In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element.
     }
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var p;
     }

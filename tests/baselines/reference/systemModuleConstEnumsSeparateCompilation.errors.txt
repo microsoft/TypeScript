@@ -1,0 +1,17 @@
+systemModuleConstEnumsSeparateCompilation.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== systemModuleConstEnumsSeparateCompilation.ts (1 errors) ====
+    declare function use(a: any);
+    const enum TopLevelConstEnum { X }
+    
+    export function foo() {
+        use(TopLevelConstEnum.X);
+        use(M.NonTopLevelConstEnum.X);
+    }
+    
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export const enum NonTopLevelConstEnum { X }
+    }
