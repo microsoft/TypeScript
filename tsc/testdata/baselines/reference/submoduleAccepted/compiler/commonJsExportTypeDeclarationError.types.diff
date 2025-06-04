@@ -1,10 +1,6 @@
 --- old.commonJsExportTypeDeclarationError.types
 +++ new.commonJsExportTypeDeclarationError.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/compiler/commonJsExportTypeDeclarationError.ts] ////
-
--=== ./test.js ===
-+=== test.js ===
+@@= skipped -3, +3 lines =@@
  module.exports = {
  >module.exports = {   message: ""} : { message: string; }
  >module.exports : { message: string; }
@@ -12,28 +8,3 @@
 +>module : { "export=": { message: string; }; }
  >exports : { message: string; }
  >{   message: ""} : { message: string; }
-
-@@= skipped -12, +12 lines =@@
- >"" : ""
- }
-
--=== ./types1.ts ===
-+=== types1.ts ===
- import test from "./test";
- >test : { message: string; }
-
- export type test
- >test : any
-
--=== ./types2.ts ===
-+=== types2.ts ===
- import test from "./test";
- >test : { message: string; }
-
- export type test = 
- >test : any
-
--=== ./types3.ts ===
-+=== types3.ts ===
- import test from "./test";
- >test : { message: string; }

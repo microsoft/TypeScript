@@ -344,6 +344,25 @@ func (c *compilerTest) verifyDiagnostics(t *testing.T, suiteName string, isSubmo
 			Subfolder:           suiteName,
 			IsSubmodule:         isSubmodule,
 			IsSubmoduleAccepted: c.containsUnsupportedOptions(),
+			DiffFixupOld: func(old string) string {
+				var sb strings.Builder
+				sb.Grow(len(old))
+
+				for line := range strings.SplitSeq(old, "\n") {
+					const (
+						relativePrefixNew = "==== "
+						relativePrefixOld = relativePrefixNew + "./"
+					)
+					if rest, ok := strings.CutPrefix(line, relativePrefixOld); ok {
+						line = relativePrefixNew + rest
+					}
+
+					sb.WriteString(line)
+					sb.WriteString("\n")
+				}
+
+				return sb.String()[:sb.Len()-1]
+			},
 		})
 	})
 }

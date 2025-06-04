@@ -1,11 +1,7 @@
 --- old.mergeSymbolReexportInterface.types
 +++ new.mergeSymbolReexportInterface.types
-@@= skipped -15, +15 lines =@@
- >'' : ""
-
-  
--=== ./a.d.ts ===
-+=== a.d.ts ===
+@@= skipped -18, +18 lines =@@
+ === a.d.ts ===
  import '.'
  declare module '.' {
 ->'.' : typeof import("index")
@@ -13,17 +9,12 @@
 
    type Row2 = { a: string }
  >Row2 : Row2
-@@= skipped -14, +14 lines =@@
- >s : string
- }
+@@= skipped -13, +13 lines =@@
   
--=== ./index.d.ts ===
-+=== index.d.ts ===
+ === index.d.ts ===
  export type {Row2} from './common';
 ->Row2 : import("common").Row2
 +>Row2 : import("./common").Row2
   
--=== ./common.d.ts ===
-+=== common.d.ts ===
+ === common.d.ts ===
  export interface Row2 { b: string }
- >b : string

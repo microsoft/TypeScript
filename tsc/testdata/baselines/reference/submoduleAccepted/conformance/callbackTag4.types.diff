@@ -1,13 +1,5 @@
 --- old.callbackTag4.types
 +++ new.callbackTag4.types
-@@= skipped -0, +0 lines =@@
- //// [tests/cases/conformance/jsdoc/callbackTag4.ts] ////
-
--=== ./a.js ===
-+=== a.js ===
- /**
-  * @callback C
-  * @this {{ a: string, b: number }}
 @@= skipped -11, +11 lines =@@
  /** @type {C} */
  const cb = function (a, b) {

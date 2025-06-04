@@ -81,6 +81,14 @@ func DoTypeAndSymbolBaseline(
 					}
 				}
 
+				const (
+					relativePrefixNew = "=== "
+					relativePrefixOld = relativePrefixNew + "./"
+				)
+				if rest, ok := strings.CutPrefix(line, relativePrefixOld); ok {
+					line = relativePrefixNew + rest
+				}
+
 				sb.WriteString(line)
 				sb.WriteString("\n")
 			}

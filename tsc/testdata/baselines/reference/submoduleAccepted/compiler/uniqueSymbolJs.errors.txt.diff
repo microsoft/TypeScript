@@ -5,7 +5,7 @@
 -a.js(5,28): error TS1005: ';' expected.
 -
 -
--==== ./a.js (2 errors) ====
+-==== a.js (2 errors) ====
 -    /** @type {unique symbol} */
 -    const foo = Symbol();
 -    
