@@ -12264,7 +12264,9 @@ func (c *Checker) getSyntacticNullishnessSemantics(node *ast.Node) PredicateSema
 	switch node.Kind {
 	case ast.KindAwaitExpression,
 		ast.KindCallExpression,
+		ast.KindTaggedTemplateExpression,
 		ast.KindElementAccessExpression,
+		ast.KindMetaProperty,
 		ast.KindNewExpression,
 		ast.KindPropertyAccessExpression,
 		ast.KindYieldExpression,
@@ -12282,6 +12284,8 @@ func (c *Checker) getSyntacticNullishnessSemantics(node *ast.Node) PredicateSema
 			ast.KindAmpersandAmpersandToken,
 			ast.KindAmpersandAmpersandEqualsToken:
 			return PredicateSemanticsSometimes
+		case ast.KindCommaToken:
+			return c.getSyntacticNullishnessSemantics(node.AsBinaryExpression().Right)
 		}
 		return PredicateSemanticsNever
 	case ast.KindConditionalExpression:
