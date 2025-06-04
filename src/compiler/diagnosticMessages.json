@@ -5718,7 +5718,7 @@
         "category": "Message",
         "code": 6287
     },
-    "and npm install -d @types/node": {
+    "and npm install -D @types/node": {
         "category": "Message",
         "code": 6290
     },

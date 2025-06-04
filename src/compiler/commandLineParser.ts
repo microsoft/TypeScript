@@ -2863,7 +2863,7 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     emitHeader(Diagnostics.For_nodejs_Colon);
     result.push(`${tab}${tab}// "lib": ["esnext"],`)
     result.push(`${tab}${tab}// "types": ["node"],`)
-    emitHeader(Diagnostics.and_npm_install_d_types_Slashnode);
+    emitHeader(Diagnostics.and_npm_install_D_types_Slashnode);
 
     newline();
 
