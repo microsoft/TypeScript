@@ -725,7 +725,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'NodeNext'.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
@@ -944,14 +944,14 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'NodeNext'.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/transitiveReferences/refs/package.json' does not exist.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -1150,7 +1150,7 @@ File '/package.json' does not exist according to earlier cached lookups.
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
 Module resolution kind is not specified, using 'NodeNext'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
-File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/transitiveReferences/nrefs/package.json' does not exist.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
 File '/user/username/package.json' does not exist according to earlier cached lookups.
@@ -1349,7 +1349,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
-Module resolution kind is not specified, using 'NodeNext'.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.
@@ -1512,16 +1512,7 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
-Module resolution kind is not specified, using 'NodeNext'.
-Resolving in CJS mode with conditions 'require', 'types', 'node'.
-'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
-'paths' option is specified, looking for a pattern to match module name '@ref/a'.
-Module name '@ref/a', matched pattern '@ref/*'.
-Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, JavaScript, Declaration.
-File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
-File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
-File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it as a name resolution result.
+Resolution for module '@ref/a' was found in cache from location '/user/username/projects/transitiveReferences'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 File '/user/username/projects/transitiveReferences/refs/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/transitiveReferences/package.json' does not exist according to earlier cached lookups.

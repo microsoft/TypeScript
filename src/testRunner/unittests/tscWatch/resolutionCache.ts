@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { createBaseline } from "../helpers/baseline.js";
+import { forEachResolutionCacheLifeTimeScenario } from "../helpers/resolutionCache.js";
 import {
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     runWatchBaseline,
@@ -757,4 +758,18 @@ declare namespace NodeJS {
             },
         ],
     });
+});
+
+describe("unittests:: tsc-watch:: resolutionCache:: resolution lifetime", () => {
+    forEachResolutionCacheLifeTimeScenario(
+        /*forTsserver*/ false,
+        (subScenario, sys, edits, project) =>
+            verifyTscWatch({
+                scenario: "resolutionCache",
+                subScenario,
+                commandLineArgs: ["-w", "-p", project, "--explainFiles", "--extendedDiagnostics"],
+                sys,
+                edits: edits(),
+            }),
+    );
 });

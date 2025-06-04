@@ -268,6 +268,10 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/jsconfig.json :
   "configFilePath": "/user/username/projects/project/jsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/jsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -295,6 +299,12 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+
+PolledWatches::
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
@@ -493,9 +503,13 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
 /user/username/projects/project/bower_components: *new*
   {"pollingInterval":500}
 /user/username/projects/project/node_modules: *new*
+  {"pollingInterval":500}
+/user/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::

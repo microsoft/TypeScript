@@ -27,6 +27,7 @@ import {
     createProgramHost,
     createTypeReferenceDirectiveResolutionCache,
     createTypeReferenceResolutionLoader,
+    createTypeRootsCacheKey,
     createWatchFactory,
     createWatchHost,
     CustomTransformers,
@@ -57,6 +58,7 @@ import {
     getBuildInfoFileVersionMap,
     getConfigFileParsingDiagnostics,
     getDirectoryPath,
+    getEffectiveTypeRoots as ts_getEffectiveTypeRoots,
     getEmitDeclarations,
     getErrorCountForSummary,
     getFileNamesFromConfigSpecs,
@@ -101,6 +103,7 @@ import {
     ReadBuildProgramHost,
     resolveConfigFileProjectName,
     ResolvedConfigFileName,
+    ResolvedProjectReference,
     resolveLibrary,
     resolvePath,
     resolveProjectReferencePath,
@@ -114,6 +117,7 @@ import {
     System,
     toPath as ts_toPath,
     TypeReferenceDirectiveResolutionCache,
+    TypeRootsCacheKeyOrSpecifiedTypeRoots,
     unorderedRemoveItem,
     updateErrorForNoInputFiles,
     updateSharedExtendedConfigFileWatcher,
@@ -399,6 +403,8 @@ interface SolutionBuilderState<T extends BuilderProgram> extends WatchFactory<Wa
     readonly moduleResolutionCache: ModuleResolutionCache | undefined;
     readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
     readonly libraryResolutionCache: ModuleResolutionCache | undefined;
+    readonly typeRootsCacheKeyMap: Map<Path, TypeRootsCacheKeyOrSpecifiedTypeRoots>;
+    readonly effectiveTypeRoots: Map<Path, readonly string[] | false>;
 
     // Mutable state
     buildOrder: AnyBuildOrder | undefined;
@@ -434,6 +440,8 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     const baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
     const compilerHost = createCompilerHostFromProgramHost(host, () => state.projectCompilerOptions) as CompilerHost & ReadBuildProgramHost;
     setGetSourceFileAsHashVersioned(compilerHost);
+    compilerHost.getTypeRootsCacheKey = (options, redirect) => getTypeRootsCacheKey(state, options, redirect);
+    compilerHost.getEffectiveTypeRoots = (options, redirect) => getEffectiveTypeRoots(state, options, redirect);
     compilerHost.getParsedCommandLine = fileName => parseConfigFile(state, fileName as ResolvedConfigFileName, toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName));
     compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
     compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
@@ -521,6 +529,8 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         moduleResolutionCache,
         typeReferenceDirectiveResolutionCache,
         libraryResolutionCache,
+        typeRootsCacheKeyMap: new Map(),
+        effectiveTypeRoots: new Map(),
 
         // Mutable state
         buildOrder: undefined,
@@ -564,6 +574,38 @@ function toResolvedConfigFilePath<T extends BuilderProgram>(state: SolutionBuild
     const resolvedPath = toPath(state, fileName) as ResolvedConfigFilePath;
     resolvedConfigFilePaths.set(fileName, resolvedPath);
     return resolvedPath;
+}
+
+function getEffectiveTypeRoots<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    options: CompilerOptions,
+    redirects: ResolvedProjectReference | undefined,
+) {
+    const path = !redirects ? options.configFile!.path : redirects.sourceFile.path;
+    let result = state.effectiveTypeRoots.get(path);
+    if (result === undefined) {
+        state.effectiveTypeRoots.set(
+            path,
+            result = ts_getEffectiveTypeRoots(options, state.compilerHost) ?? false,
+        );
+    }
+    return result || undefined;
+}
+
+function getTypeRootsCacheKey<T extends BuilderProgram>(
+    state: SolutionBuilderState<T>,
+    options: CompilerOptions,
+    redirects: ResolvedProjectReference | undefined,
+): TypeRootsCacheKeyOrSpecifiedTypeRoots {
+    const path = !redirects ? options.configFile!.path : redirects.sourceFile.path;
+    let result = state.typeRootsCacheKeyMap.get(path);
+    if (result === undefined) {
+        state.typeRootsCacheKeyMap.set(
+            path,
+            result = createTypeRootsCacheKey(options, redirects, state.compilerHost) ?? false,
+        );
+    }
+    return result;
 }
 
 function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedCommandLine {
@@ -777,20 +819,19 @@ function enableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
 
 function disableCache<T extends BuilderProgram>(state: SolutionBuilderState<T>) {
     if (!state.cache) return;
-
-    const { cache, host, compilerHost, extendedConfigCache, moduleResolutionCache, typeReferenceDirectiveResolutionCache, libraryResolutionCache } = state;
-
-    host.readFile = cache.originalReadFile;
-    host.fileExists = cache.originalFileExists;
-    host.directoryExists = cache.originalDirectoryExists;
-    host.createDirectory = cache.originalCreateDirectory;
-    host.writeFile = cache.originalWriteFile;
-    compilerHost.getSourceFile = cache.originalGetSourceFile;
-    state.readFileWithCache = cache.originalReadFileWithCache;
-    extendedConfigCache.clear();
-    moduleResolutionCache?.clear();
-    typeReferenceDirectiveResolutionCache?.clear();
-    libraryResolutionCache?.clear();
+    state.host.readFile = state.cache.originalReadFile;
+    state.host.fileExists = state.cache.originalFileExists;
+    state.host.directoryExists = state.cache.originalDirectoryExists;
+    state.host.createDirectory = state.cache.originalCreateDirectory;
+    state.host.writeFile = state.cache.originalWriteFile;
+    state.compilerHost.getSourceFile = state.cache.originalGetSourceFile;
+    state.readFileWithCache = state.cache.originalReadFileWithCache;
+    state.extendedConfigCache.clear();
+    state.moduleResolutionCache?.clear();
+    state.typeReferenceDirectiveResolutionCache?.clear();
+    state.libraryResolutionCache?.clear();
+    state.typeRootsCacheKeyMap.clear();
+    state.effectiveTypeRoots.clear();
     state.cache = undefined;
 }
 

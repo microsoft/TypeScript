@@ -69,10 +69,10 @@ File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 File '/home/src/tslibs/TS/Lib/package.json' does not exist.
 File '/home/src/tslibs/TS/package.json' does not exist.
 File '/home/src/tslibs/package.json' does not exist.
@@ -711,9 +711,9 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
-FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
@@ -847,9 +847,9 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist.
-File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
-File '/user/username/package.json' does not exist according to earlier cached lookups.
-File '/user/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist.
+File '/user/username/package.json' does not exist.
+File '/user/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.

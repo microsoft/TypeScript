@@ -144,13 +144,11 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/home/src/Vscode/Projects/bin",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -194,7 +192,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -214,7 +211,6 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }
@@ -330,12 +326,6 @@ Info seq  [hh:mm:ss:mss] event:
         "maxFileSize": 4194304
       }
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/bin/node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/Projects/node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/Vscode/node_modules/@types 1 undefined Project: proj2 WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: proj2 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'proj2' (External)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -365,12 +355,10 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": [],
         "enable": true
       },
-      "unresolvedImports": [],
       "projectRootPath": "/home/src/Vscode/Projects/bin",
       "kind": "discover"
     }
 TI:: [hh:mm:ss:mss] Explicitly included types: []
-TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
     {
       "cachedTypingPaths": [],
@@ -414,7 +402,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "noEmitForJsFiles": true
       },
       "typings": [],
-      "unresolvedImports": [],
       "kind": "action::set"
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -434,7 +421,6 @@ Info seq  [hh:mm:ss:mss] event:
           "noEmitForJsFiles": true
         },
         "typings": [],
-        "unresolvedImports": [],
         "kind": "action::set"
       }
     }

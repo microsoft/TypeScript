@@ -69,6 +69,12 @@ File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/package.json' does not exist.
 File '/home/user/projects/myproject/package.json' does not exist.
@@ -78,12 +84,6 @@ File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"synchronousWatchDirectory":true} Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution

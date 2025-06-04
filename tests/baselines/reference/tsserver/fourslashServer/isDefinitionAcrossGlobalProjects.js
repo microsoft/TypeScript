@@ -374,10 +374,6 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
  ]
 }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (0)
@@ -521,7 +517,6 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/node_modules/@types:
   {}
-  {} *new*
 /home/src/workspaces/project/a/node_modules:
   {}
 /home/src/workspaces/project/a/node_modules/@types:
@@ -530,7 +525,6 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules/@types:
   {}
-  {} *new*
 
 Projects::
 /home/src/workspaces/project/a/tsconfig.json (Configured) *changed*
@@ -572,16 +566,8 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/b/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -638,16 +624,8 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/c/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /home/src/workspaces/project/c/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspaces/project/c/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspaces/project/c/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -830,13 +808,8 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {} *new*
-  {} *new*
 /home/src/workspaces/node_modules/@types:
   {}
-  {}
-  {} *new*
-  {} *new*
 /home/src/workspaces/project/a/node_modules:
   {}
 /home/src/workspaces/project/a/node_modules/@types:
@@ -851,13 +824,8 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {} *new*
-  {} *new*
 /home/src/workspaces/project/node_modules/@types:
   {}
-  {}
-  {} *new*
-  {} *new*
 
 Projects::
 /home/src/workspaces/project/a/tsconfig.json (Configured) *changed*
@@ -1101,12 +1069,7 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 /home/src/workspaces/project/a/node_modules:
   {}
@@ -1122,12 +1085,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 
 ScriptInfos::
@@ -1300,12 +1258,7 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 /home/src/workspaces/project/a/node_modules:
   {}
@@ -1321,12 +1274,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 
 Projects::
@@ -1680,12 +1628,7 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 /home/src/workspaces/project/a/node_modules:
   {}
@@ -1701,12 +1644,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 
 ScriptInfos::
@@ -1870,12 +1808,7 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 /home/src/workspaces/project/a/node_modules:
   {}
@@ -1891,12 +1824,7 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
-  {}
-  {}
   {}
 
 Projects::

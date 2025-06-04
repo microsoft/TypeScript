@@ -1108,13 +1108,13 @@ File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.
 Resolving real path for '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
 File '/home/src/workspace/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/node_modules/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/projects/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspace/package.json' does not exist according to earlier cached lookups.
-File '/home/src/package.json' does not exist according to earlier cached lookups.
-File '/home/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspace/projects/node_modules/@typescript/package.json' does not exist.
+File '/home/src/workspace/projects/node_modules/package.json' does not exist.
+File '/home/src/workspace/projects/package.json' does not exist.
+File '/home/src/workspace/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/node_modules/@typescript/lib-webworker/index.d.ts 250 undefined Source file
 Reusing resolution of module '@typescript/lib-scripthost' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.scripthost.d.ts__.ts' of old program, it was not resolved.
 Reusing resolution of module '@typescript/lib-es5' from '/home/src/workspace/projects/__lib_node_modules_lookup_lib.es5.d.ts__.ts' of old program, it was not resolved.

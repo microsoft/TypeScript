@@ -85,6 +85,8 @@ File '/home/src/workspaces/project/witha/node_modules/mymodule/index.tsx' does n
 File '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts', result '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts'.
 ======== Module name 'mymodule' was successfully resolved to '/home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/witha/a.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -108,6 +110,10 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'mymoduleutils' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
 File '/home/src/workspaces/project/witha/node_modules/mymodule/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/project/witha/node_modules/package.json' does not exist.
 File '/home/src/workspaces/project/witha/package.json' does not exist.
@@ -131,6 +137,8 @@ File '/home/src/workspaces/project/withb/node_modules/mymodule/index.tsx' does n
 File '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts', result '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts'.
 ======== Module name 'mymodule' was successfully resolved to '/home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts'. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
 ======== Resolving module 'mymoduleutils' from '/home/src/workspaces/project/withb/b.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'mymoduleutils' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -151,14 +159,6 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha/package.json 2000 undefined File location affecting resolution

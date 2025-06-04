@@ -207,22 +207,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/p
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/app/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -295,31 +279,23 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/node_modules/@types: *new*
-  {}
   {}
 /home/src/workspaces/project/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types: *new*
-  {}
   {}
 /home/src/workspaces/project/packages/app: *new*
   {}
 /home/src/workspaces/project/packages/app/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/project/packages/app/node_modules/@types: *new*
-  {}
   {}
 /home/src/workspaces/project/packages/dep: *new*
   {}
 /home/src/workspaces/project/packages/node_modules: *new*
   {}
-  {}
 /home/src/workspaces/project/packages/node_modules/@types: *new*
-  {}
   {}
 
 Projects::
@@ -421,31 +397,23 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project/packages/app:
   {}
 /home/src/workspaces/project/packages/app/node_modules:
   {}
-  {}
 /home/src/workspaces/project/packages/app/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project/packages/dep:
   {}
 /home/src/workspaces/project/packages/node_modules:
   {}
-  {}
 /home/src/workspaces/project/packages/node_modules/@types:
-  {}
   {}
 
 Projects::
@@ -594,8 +562,8 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 depe
 Info seq  [hh:mm:ss:mss] Creating AutoImportProviderProject: /dev/null/autoImportProviderProject1*, currentDirectory: /home/src/workspaces/project/packages/app
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/dep/src/sub/folder/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
@@ -681,33 +649,26 @@ watchedFiles::
 watchedDirectoriesRecursive::
 /home/src/workspaces/node_modules:
   {}
-  {}
 /home/src/workspaces/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project/node_modules:
   {}
-  {}
 /home/src/workspaces/project/node_modules/@types:
-  {}
   {}
 /home/src/workspaces/project/packages/app:
   {}
 /home/src/workspaces/project/packages/app/node_modules:
   {}
-  {}
   {} *new*
 /home/src/workspaces/project/packages/app/node_modules/@types:
   {}
-  {}
 /home/src/workspaces/project/packages/dep:
   {}
-  {} *new*
+/home/src/workspaces/project/packages/dep/src: *new*
+  {}
 /home/src/workspaces/project/packages/node_modules:
   {}
-  {}
 /home/src/workspaces/project/packages/node_modules/@types:
-  {}
   {}
 
 Projects::
