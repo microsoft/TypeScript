@@ -762,7 +762,10 @@ func (b *Binder) bind(node *ast.Node) bool {
 func (b *Binder) setJSDocParents(node *ast.Node) {
 	for _, jsdoc := range node.JSDoc(b.file) {
 		setParent(jsdoc, node)
-		ast.SetParentInChildren(jsdoc)
+		if jsdoc.Kind != ast.KindJSDocImportTag {
+			// JSDocImportTag children have parents set during parsing for module resolution purposes.
+			ast.SetParentInChildren(jsdoc)
+		}
 	}
 }
 

@@ -885,7 +885,8 @@ func newParentInChildrenSetter() func(node *Node) bool {
 	}
 
 	state.visit = func(node *Node) bool {
-		if state.parent != nil {
+		if state.parent != nil && node.Parent != state.parent {
+			// Avoid data races on no-ops
 			node.Parent = state.parent
 		}
 		saveParent := state.parent

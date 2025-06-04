@@ -31,7 +31,9 @@ func collectModuleReferences(file *ast.SourceFile, node *ast.Statement, inAmbien
 		if moduleNameExpr != nil && ast.IsStringLiteral(moduleNameExpr) {
 			moduleName := moduleNameExpr.AsStringLiteral().Text
 			if moduleName != "" && (!inAmbientModule || !tspath.IsExternalModuleNameRelative(moduleName)) {
-				ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
+				if node.Kind != ast.KindJSImportDeclaration {
+					ast.SetParentInChildren(node) // we need parent data on imports before the program is fully bound, so we ensure it's set here
+				}
 				ast.SetImportsOfSourceFile(file, append(file.Imports(), moduleNameExpr))
 				// !!! removed `&& p.currentNodeModulesDepth == 0`
 				if file.UsesUriStyleNodeCoreModules != core.TSTrue && !file.IsDeclarationFile {
