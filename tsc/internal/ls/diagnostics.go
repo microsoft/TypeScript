@@ -10,37 +10,44 @@ import (
 
 func (l *LanguageService) GetDocumentDiagnostics(ctx context.Context, documentURI lsproto.DocumentUri) (*lsproto.DocumentDiagnosticReport, error) {
 	program, file := l.getProgramAndFile(documentURI)
-	syntaxDiagnostics := program.GetSyntacticDiagnostics(ctx, file)
-	var lspDiagnostics []*lsproto.Diagnostic
-	if len(syntaxDiagnostics) != 0 {
-		lspDiagnostics = make([]*lsproto.Diagnostic, 0, len(syntaxDiagnostics))
-		for _, diag := range syntaxDiagnostics {
-			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(diag, l.converters))
-		}
-	} else {
-		diagnostics := program.GetSemanticDiagnostics(ctx, file)
-		suggestionDiagnostics := program.GetSuggestionDiagnostics(ctx, file)
 
-		lspDiagnostics = make([]*lsproto.Diagnostic, 0, len(diagnostics)+len(suggestionDiagnostics))
-		for _, diag := range diagnostics {
-			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(diag, l.converters))
-		}
-		for _, diag := range suggestionDiagnostics {
-			// !!! user preference for suggestion diagnostics; keep only unnecessary/dprecated?
-			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(diag, l.converters))
+	diagnostics := make([][]*ast.Diagnostic, 0, 3)
+	if syntaxDiagnostics := program.GetSyntacticDiagnostics(ctx, file); len(syntaxDiagnostics) != 0 {
+		diagnostics = append(diagnostics, syntaxDiagnostics)
+	} else {
+		diagnostics = append(diagnostics, program.GetSemanticDiagnostics(ctx, file))
+		// !!! user preference for suggestion diagnostics; keep only unnecessary/deprecated?
+		// See: https://github.com/microsoft/vscode/blob/3dbc74129aaae102e5cb485b958fa5360e8d3e7a/extensions/typescript-language-features/src/languageFeatures/diagnostics.ts#L114
+		diagnostics = append(diagnostics, program.GetSuggestionDiagnostics(ctx, file))
+		if program.Options().GetEmitDeclarations() {
+			diagnostics = append(diagnostics, program.GetDeclarationDiagnostics(ctx, file))
 		}
 	}
+
 	return &lsproto.DocumentDiagnosticReport{
 		RelatedFullDocumentDiagnosticReport: &lsproto.RelatedFullDocumentDiagnosticReport{
 			FullDocumentDiagnosticReport: lsproto.FullDocumentDiagnosticReport{
-				Kind:  lsproto.StringLiteralFull{},
-				Items: lspDiagnostics,
+				Items: toLSPDiagnostics(l.converters, diagnostics...),
 			},
 		},
 	}, nil
 }
 
-func toLSPDiagnostic(diagnostic *ast.Diagnostic, converters *Converters) *lsproto.Diagnostic {
+func toLSPDiagnostics(converters *Converters, diagnostics ...[]*ast.Diagnostic) []*lsproto.Diagnostic {
+	size := 0
+	for _, diagSlice := range diagnostics {
+		size += len(diagSlice)
+	}
+	lspDiagnostics := make([]*lsproto.Diagnostic, 0, size)
+	for _, diagSlice := range diagnostics {
+		for _, diag := range diagSlice {
+			lspDiagnostics = append(lspDiagnostics, toLSPDiagnostic(converters, diag))
+		}
+	}
+	return lspDiagnostics
+}
+
+func toLSPDiagnostic(converters *Converters, diagnostic *ast.Diagnostic) *lsproto.Diagnostic {
 	var severity lsproto.DiagnosticSeverity
 	switch diagnostic.Category() {
 	case diagnostics.CategorySuggestion:
