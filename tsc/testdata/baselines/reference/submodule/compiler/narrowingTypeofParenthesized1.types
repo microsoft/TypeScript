@@ -18,7 +18,7 @@ if ((typeof foo) === "string") {
 
 } else {
   foo;
->foo : string
+>foo : never
 }
 
 if (typeof foo === ("string")) {
@@ -33,6 +33,6 @@ if (typeof foo === ("string")) {
 
 } else {
   foo;
->foo : string
+>foo : never
 }
 

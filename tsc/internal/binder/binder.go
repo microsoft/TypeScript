@@ -2686,9 +2686,11 @@ func isNarrowingBinaryExpression(expr *ast.BinaryExpression) bool {
 	case ast.KindEqualsToken, ast.KindBarBarEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		return containsNarrowableReference(expr.Left)
 	case ast.KindEqualsEqualsToken, ast.KindExclamationEqualsToken, ast.KindEqualsEqualsEqualsToken, ast.KindExclamationEqualsEqualsToken:
-		return isNarrowableOperand(expr.Left) || isNarrowableOperand(expr.Right) ||
-			isNarrowingTypeOfOperands(expr.Right, expr.Left) || isNarrowingTypeOfOperands(expr.Left, expr.Right) ||
-			(ast.IsBooleanLiteral(expr.Right) && isNarrowingExpression(expr.Left) || ast.IsBooleanLiteral(expr.Left) && isNarrowingExpression(expr.Right))
+		left := ast.SkipParentheses(expr.Left)
+		right := ast.SkipParentheses(expr.Right)
+		return isNarrowableOperand(left) || isNarrowableOperand(right) ||
+			isNarrowingTypeOfOperands(right, left) || isNarrowingTypeOfOperands(left, right) ||
+			(ast.IsBooleanLiteral(right) && isNarrowingExpression(left) || ast.IsBooleanLiteral(left) && isNarrowingExpression(right))
 	case ast.KindInstanceOfKeyword:
 		return isNarrowableOperand(expr.Left)
 	case ast.KindInKeyword:
