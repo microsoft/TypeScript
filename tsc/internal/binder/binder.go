@@ -2884,9 +2884,15 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		}
 		return scanner.GetRangeOfTokenAtPosition(sourceFile, pos)
 	// This list is a work in progress. Add missing node kinds to improve their error spans
+	case ast.KindFunctionDeclaration, ast.KindMethodDeclaration:
+		if node.Flags&ast.NodeFlagsReparsed != 0 {
+			errorNode = node
+			break
+		}
+		fallthrough
 	case ast.KindVariableDeclaration, ast.KindBindingElement, ast.KindClassDeclaration, ast.KindClassExpression, ast.KindInterfaceDeclaration,
-		ast.KindModuleDeclaration, ast.KindEnumDeclaration, ast.KindEnumMember, ast.KindFunctionDeclaration, ast.KindFunctionExpression,
-		ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindPropertyDeclaration,
+		ast.KindModuleDeclaration, ast.KindEnumDeclaration, ast.KindEnumMember, ast.KindFunctionExpression,
+		ast.KindGetAccessor, ast.KindSetAccessor, ast.KindTypeAliasDeclaration, ast.KindJSTypeAliasDeclaration, ast.KindPropertyDeclaration,
 		ast.KindPropertySignature, ast.KindNamespaceImport:
 		errorNode = ast.GetNameOfDeclaration(node)
 	case ast.KindArrowFunction:
@@ -2906,6 +2912,10 @@ func GetErrorRangeForNode(sourceFile *ast.SourceFile, node *ast.Node) core.TextR
 		pos := scanner.SkipTrivia(sourceFile.Text(), node.AsSatisfiesExpression().Expression.End())
 		return scanner.GetRangeOfTokenAtPosition(sourceFile, pos)
 	case ast.KindConstructor:
+		if node.Flags&ast.NodeFlagsReparsed != 0 {
+			errorNode = node
+			break
+		}
 		scanner := scanner.GetScannerForSourceFile(sourceFile, node.Pos())
 		start := scanner.TokenStart()
 		for scanner.Token() != ast.KindConstructorKeyword && scanner.Token() != ast.KindStringLiteral && scanner.Token() != ast.KindEndOfFile {

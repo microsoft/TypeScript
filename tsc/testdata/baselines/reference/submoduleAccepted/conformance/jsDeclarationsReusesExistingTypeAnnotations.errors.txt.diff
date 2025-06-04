@@ -2,8 +2,8 @@
 +++ new.jsDeclarationsReusesExistingTypeAnnotations.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+index.js(45,17): error TS1051: A 'set' accessor cannot have an optional parameter.
-+index.js(83,17): error TS1051: A 'set' accessor cannot have an optional parameter.
++index.js(44,9): error TS1051: A 'set' accessor cannot have an optional parameter.
++index.js(82,9): error TS1051: A 'set' accessor cannot have an optional parameter.
 +
 +
 +==== index.js (2 errors) ====
@@ -51,9 +51,9 @@
 +        }
 +    
 +        /** @param {string=} value */
-+        set p1(value) {
-+                    
++            ~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS1051: A 'set' accessor cannot have an optional parameter.
++        set p1(value) {
 +            this.p1 = value;
 +        }
 +    
@@ -91,9 +91,9 @@
 +    
 +    class С4 {
 +        /** @param {string=} value */
-+        set p1(value) {
-+                    
++            ~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS1051: A 'set' accessor cannot have an optional parameter.
++        set p1(value) {
 +            this.p1 = value;
 +        }
 +    

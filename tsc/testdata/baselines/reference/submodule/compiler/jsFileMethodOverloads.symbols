@@ -34,7 +34,7 @@
    * @returns {string}
    */
   getTypeName() {
->getTypeName : Symbol(getTypeName, Decl(jsFileMethodOverloads.js, 9, 3))
+>getTypeName : Symbol(getTypeName, Decl(jsFileMethodOverloads.js, 12, 6), Decl(jsFileMethodOverloads.js, 17, 6), Decl(jsFileMethodOverloads.js, 9, 3))
 
     return typeof this.value;
 >this.value : Symbol(value, Decl(jsFileMethodOverloads.js, 7, 22))
@@ -57,7 +57,7 @@
    * @returns {unknown}
    */
   transform(fn) {
->transform : Symbol(transform, Decl(jsFileMethodOverloads.js, 26, 3))
+>transform : Symbol(transform, Decl(jsFileMethodOverloads.js, 30, 6), Decl(jsFileMethodOverloads.js, 35, 6), Decl(jsFileMethodOverloads.js, 26, 3))
 >fn : Symbol(fn, Decl(jsFileMethodOverloads.js, 42, 12))
 
     return fn ? fn(this.value) : this.value;

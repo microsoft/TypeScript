@@ -16,7 +16,7 @@
  * @returns {string | number}
  */
 function id(x) {
->id : (x: string | number) => string | number
+>id : { (x: number): any; (x: string): any; }
 >x : string | number
 
     return x;
@@ -24,14 +24,14 @@ function id(x) {
 }
 
 export let a = id(123);
->a : string | number
->id(123) : string | number
->id : (x: string | number) => string | number
+>a : any
+>id(123) : any
+>id : { (x: number): any; (x: string): any; }
 >123 : 123
 
 export let b = id("hello");
->b : string | number
->id("hello") : string | number
->id : (x: string | number) => string | number
+>b : any
+>id("hello") : any
+>id : { (x: number): any; (x: string): any; }
 >"hello" : "hello"
 

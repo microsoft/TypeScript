@@ -9,12 +9,8 @@
  >x => x : <T>(x: any) => any
  >x : any
  >x : any
-@@= skipped -34, +34 lines =@@
-  * @returns {unknown[]}
-  */
- function flatMap(array, iterable = identity) {
-->flatMap : { <U>(): any; (): any; }
-+>flatMap : (array: unknown[], iterable?: (x: unknown) => unknown) => unknown[]
+@@= skipped -37, +37 lines =@@
+ >flatMap : { <U>(): any; (): any; }
  >array : unknown[]
  >iterable : (x: unknown) => unknown
 ->identity : any
@@ -22,7 +18,7 @@
 
    /** @type {unknown[]} */
    const result = [];
-@@= skipped -29, +29 lines =@@
+@@= skipped -26, +26 lines =@@
  >push : (...items: unknown[]) => number
  >.../** @type {unknown[]} */(iterable(array[i])) : unknown
  >(iterable(array[i])) : unknown[]

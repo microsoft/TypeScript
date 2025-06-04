@@ -42,15 +42,15 @@ export function overloaded(a,b) {
 }
 var o1 = overloaded(1,2)
 >o1 : Symbol(o1, Decl(overloadTag1.js, 23, 3))
->overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 1, 4), Decl(overloadTag1.js, 6, 4), Decl(overloadTag1.js, 0, 0))
 
 var o2 = overloaded("zero", "one")
 >o2 : Symbol(o2, Decl(overloadTag1.js, 24, 3))
->overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 1, 4), Decl(overloadTag1.js, 6, 4), Decl(overloadTag1.js, 0, 0))
 
 var o3 = overloaded("a",false)
 >o3 : Symbol(o3, Decl(overloadTag1.js, 25, 3))
->overloaded : Symbol(overloaded, Decl(overloadTag1.js, 0, 0))
+>overloaded : Symbol(overloaded, Decl(overloadTag1.js, 1, 4), Decl(overloadTag1.js, 6, 4), Decl(overloadTag1.js, 0, 0))
 
 /**
  * @overload
@@ -73,8 +73,8 @@ export function uncheckedInternally(a, b) {
 >b : Symbol(b, Decl(overloadTag1.js, 38, 38))
 }
 uncheckedInternally(1,2)
->uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 25, 30))
+>uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 28, 4), Decl(overloadTag1.js, 33, 4), Decl(overloadTag1.js, 25, 30))
 
 uncheckedInternally("zero", "one")
->uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 25, 30))
+>uncheckedInternally : Symbol(uncheckedInternally, Decl(overloadTag1.js, 28, 4), Decl(overloadTag1.js, 33, 4), Decl(overloadTag1.js, 25, 30))
 

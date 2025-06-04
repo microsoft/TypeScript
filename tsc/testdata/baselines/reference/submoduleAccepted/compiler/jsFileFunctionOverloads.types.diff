@@ -1,20 +1,7 @@
 --- old.jsFileFunctionOverloads.types
 +++ new.jsFileFunctionOverloads.types
-@@= skipped -20, +20 lines =@@
-  * @returns {string}
-  */
-  function getTypeName(x) {
-->getTypeName : { (x: number): "number"; (x: string): "string"; (x: boolean): "boolean"; }
-+>getTypeName : (x: unknown) => string
- >x : unknown
-
-   return typeof x;
-@@= skipped -39, +39 lines =@@
-  * @returns {unknown[]}
-  */
- function flatMap(array, iterable = identity) {
-->flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T>(array: T[][]): T[]; }
-+>flatMap : (array: unknown[], iterable?: (x: unknown) => unknown) => unknown[]
+@@= skipped -62, +62 lines =@@
+ >flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T>(array: T[][]): T[]; }
  >array : unknown[]
  >iterable : (x: unknown) => unknown
 ->identity : <T_1>(x: T_1) => T_1
@@ -22,7 +9,7 @@
 
    /** @type {unknown[]} */
    const result = [];
-@@= skipped -29, +29 lines =@@
+@@= skipped -26, +26 lines =@@
  >push : (...items: unknown[]) => number
  >.../** @type {unknown[]} */(iterable(array[i])) : unknown
  >(iterable(array[i])) : unknown[]

@@ -19,7 +19,7 @@
  * @returns {string}
  */
  function getTypeName(x) {
->getTypeName : Symbol(getTypeName, Decl(jsFileFunctionOverloads2.js, 0, 0))
+>getTypeName : Symbol(getTypeName, Decl(jsFileFunctionOverloads2.js, 2, 4), Decl(jsFileFunctionOverloads2.js, 6, 4), Decl(jsFileFunctionOverloads2.js, 10, 4), Decl(jsFileFunctionOverloads2.js, 0, 0))
 >x : Symbol(x, Decl(jsFileFunctionOverloads2.js, 17, 22))
 
   return typeof x;
@@ -53,7 +53,7 @@ const identity = x => x;
  * @returns {unknown[]}
  */
 function flatMap(array, iterable = identity) {
->flatMap : Symbol(flatMap, Decl(jsFileFunctionOverloads2.js, 26, 24))
+>flatMap : Symbol(flatMap, Decl(jsFileFunctionOverloads2.js, 31, 4), Decl(jsFileFunctionOverloads2.js, 36, 4), Decl(jsFileFunctionOverloads2.js, 26, 24))
 >array : Symbol(array, Decl(jsFileFunctionOverloads2.js, 44, 17))
 >iterable : Symbol(iterable, Decl(jsFileFunctionOverloads2.js, 44, 23))
 >identity : Symbol(identity, Decl(jsFileFunctionOverloads2.js, 26, 5))

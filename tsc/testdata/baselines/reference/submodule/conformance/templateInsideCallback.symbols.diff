@@ -1,6 +1,15 @@
 --- old.templateInsideCallback.symbols
 +++ new.templateInsideCallback.symbols
-@@= skipped -62, +62 lines =@@
+@@= skipped -50, +50 lines =@@
+  * @returns {unknown[]}
+  */
+ function flatMap(array, iterable = identity) {
+->flatMap : Symbol(flatMap, Decl(templateInsideCallback.js, 16, 24))
++>flatMap : Symbol(flatMap, Decl(templateInsideCallback.js, 28, 4), Decl(templateInsideCallback.js, 36, 4), Decl(templateInsideCallback.js, 16, 24))
+ >array : Symbol(array, Decl(templateInsideCallback.js, 46, 17))
+ >iterable : Symbol(iterable, Decl(templateInsideCallback.js, 46, 23))
+ >identity : Symbol(identity, Decl(templateInsideCallback.js, 16, 5))
+@@= skipped -12, +12 lines =@@
    for (let i = 0; i < array.length; i += 1) {
  >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))
  >i : Symbol(i, Decl(templateInsideCallback.js, 49, 10))

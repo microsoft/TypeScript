@@ -478,7 +478,7 @@ func (tx *DeclarationTransformer) visitDeclarationSubtree(input *ast.Node) *ast.
 	case ast.KindJSDocTypeLiteral:
 		result = tx.transformJSDocTypeLiteral(input.AsJSDocTypeLiteral())
 	case ast.KindJSDocPropertyTag:
-		result = tx.transformJSDocPropertyTag(input.AsJSDocPropertyTag())
+		result = tx.transformJSDocPropertyTag(input.AsJSDocParameterOrPropertyTag())
 	case ast.KindJSDocAllType:
 		result = tx.transformJSDocAllType(input.AsJSDocAllType())
 	case ast.KindJSDocNullableType:

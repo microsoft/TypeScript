@@ -35,7 +35,7 @@
    * @returns {string}
    */
   getTypeName() {
->getTypeName : () => string
+>getTypeName : { (this: Example<number>): "number"; (this: Example<string>): "string"; }
 
     return typeof this.value;
 >typeof this.value : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
@@ -59,7 +59,7 @@
    * @returns {unknown}
    */
   transform(fn) {
->transform : (fn?: (y: T) => unknown) => unknown
+>transform : { <U>(fn: (y: T) => U): U; (): T; }
 >fn : (y: T) => unknown
 
     return fn ? fn(this.value) : this.value;

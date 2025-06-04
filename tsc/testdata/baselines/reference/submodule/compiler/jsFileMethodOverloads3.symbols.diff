@@ -1,0 +1,22 @@
+--- old.jsFileMethodOverloads3.symbols
++++ new.jsFileMethodOverloads3.symbols
+@@= skipped -15, +15 lines =@@
+  * @returns {string | number}
+  */
+ function id(x) {
+->id : Symbol(id, Decl(a.js, 0, 0))
++>id : Symbol(id, Decl(a.js, 1, 4), Decl(a.js, 6, 4), Decl(a.js, 0, 0))
+ >x : Symbol(x, Decl(a.js, 14, 12))
+
+     return x;
+@@= skipped -9, +9 lines =@@
+
+ export let a = id(123);
+ >a : Symbol(a, Decl(a.js, 18, 10))
+->id : Symbol(id, Decl(a.js, 0, 0))
++>id : Symbol(id, Decl(a.js, 1, 4), Decl(a.js, 6, 4), Decl(a.js, 0, 0))
+
+ export let b = id("hello");
+ >b : Symbol(b, Decl(a.js, 19, 10))
+->id : Symbol(id, Decl(a.js, 0, 0))
++>id : Symbol(id, Decl(a.js, 1, 4), Decl(a.js, 6, 4), Decl(a.js, 0, 0))

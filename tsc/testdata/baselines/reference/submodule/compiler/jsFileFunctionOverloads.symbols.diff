@@ -1,6 +1,24 @@
 --- old.jsFileFunctionOverloads.symbols
 +++ new.jsFileFunctionOverloads.symbols
-@@= skipped -69, +69 lines =@@
+@@= skipped -20, +20 lines =@@
+  * @returns {string}
+  */
+  function getTypeName(x) {
+->getTypeName : Symbol(getTypeName, Decl(jsFileFunctionOverloads.js, 0, 0))
++>getTypeName : Symbol(getTypeName, Decl(jsFileFunctionOverloads.js, 1, 4), Decl(jsFileFunctionOverloads.js, 6, 4), Decl(jsFileFunctionOverloads.js, 11, 4), Decl(jsFileFunctionOverloads.js, 0, 0))
+ >x : Symbol(x, Decl(jsFileFunctionOverloads.js, 19, 22))
+
+   return typeof x;
+@@= skipped -37, +37 lines =@@
+  * @returns {unknown[]}
+  */
+ function flatMap(array, iterable = identity) {
+->flatMap : Symbol(flatMap, Decl(jsFileFunctionOverloads.js, 28, 24))
++>flatMap : Symbol(flatMap, Decl(jsFileFunctionOverloads.js, 33, 4), Decl(jsFileFunctionOverloads.js, 40, 4), Decl(jsFileFunctionOverloads.js, 28, 24))
+ >array : Symbol(array, Decl(jsFileFunctionOverloads.js, 49, 17))
+ >iterable : Symbol(iterable, Decl(jsFileFunctionOverloads.js, 49, 23))
+ >identity : Symbol(identity, Decl(jsFileFunctionOverloads.js, 28, 5))
+@@= skipped -12, +12 lines =@@
    for (let i = 0; i < array.length; i += 1) {
  >i : Symbol(i, Decl(jsFileFunctionOverloads.js, 52, 10))
  >i : Symbol(i, Decl(jsFileFunctionOverloads.js, 52, 10))
