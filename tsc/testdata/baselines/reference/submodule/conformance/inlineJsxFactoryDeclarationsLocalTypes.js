@@ -109,7 +109,7 @@ class MyClass {
     }
 }
 exports.MyClass = MyClass;
-exports.tree = <exports.MySFC x={1} y={2}><MyClass x={3} y={4}/><MyClass x={5} y={6}/></MySFC>;
+exports.tree = <exports.MySFC x={1} y={2}><MyClass x={3} y={4}/><MyClass x={5} y={6}/></exports.MySFC>;
 exports.default = <h></h>;
 //// [index.js]
 "use strict";
@@ -133,6 +133,6 @@ class DOMClass {
 // Should work, everything is a DOM element
 const _tree = <DOMSFC x={1} y={2}><DOMClass x={3} y={4}/><DOMClass x={5} y={6}/></DOMSFC>;
 // Should fail, no dom elements
-const _brokenTree = <component_1.MySFC x={1} y={2}><component_1.MyClass x={3} y={4}/><component_1.MyClass x={5} y={6}/></MySFC>;
+const _brokenTree = <component_1.MySFC x={1} y={2}><component_1.MyClass x={3} y={4}/><component_1.MyClass x={5} y={6}/></component_1.MySFC>;
 // Should fail, nondom isn't allowed as children of dom
 const _brokenTree2 = <DOMSFC x={1} y={2}>{component_1.tree}{component_1.tree}</DOMSFC>;

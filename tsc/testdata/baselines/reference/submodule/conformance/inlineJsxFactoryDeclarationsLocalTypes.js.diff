@@ -55,7 +55,7 @@
 -    (0, renderer2_1.predom)(MyClass, { x: 3, y: 4 }),
 -    (0, renderer2_1.predom)(MyClass, { x: 5, y: 6 }));
 -exports.default = (0, renderer2_1.predom)("h", null);
-+exports.tree = <exports.MySFC x={1} y={2}><MyClass x={3} y={4}/><MyClass x={5} y={6}/></MySFC>;
++exports.tree = <exports.MySFC x={1} y={2}><MyClass x={3} y={4}/><MyClass x={5} y={6}/></exports.MySFC>;
 +exports.default = <h></h>;
  //// [index.js]
  "use strict";
@@ -116,7 +116,7 @@
 -var _brokenTree = (0, renderer_1.dom)(component_1.MySFC, { x: 1, y: 2 },
 -    (0, renderer_1.dom)(component_1.MyClass, { x: 3, y: 4 }),
 -    (0, renderer_1.dom)(component_1.MyClass, { x: 5, y: 6 }));
-+const _brokenTree = <component_1.MySFC x={1} y={2}><component_1.MyClass x={3} y={4}/><component_1.MyClass x={5} y={6}/></MySFC>;
++const _brokenTree = <component_1.MySFC x={1} y={2}><component_1.MyClass x={3} y={4}/><component_1.MyClass x={5} y={6}/></component_1.MySFC>;
  // Should fail, nondom isn't allowed as children of dom
 -var _brokenTree2 = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 },
 -    component_1.tree,

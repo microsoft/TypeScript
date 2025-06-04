@@ -49,7 +49,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.prerendered = void 0;
 /** @jsx h */
 const renderer_1 = require("./renderer");
-exports.prerendered = <renderer_1.dom></h>;
+exports.prerendered = <renderer_1.dom></renderer_1.dom>;
 //// [othernoalias.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

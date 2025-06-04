@@ -16,7 +16,7 @@
 -var renderer_1 = require("./renderer");
 -exports.prerendered = (0, renderer_1.dom)("h", null);
 +const renderer_1 = require("./renderer");
-+exports.prerendered = <renderer_1.dom></h>;
++exports.prerendered = <renderer_1.dom></renderer_1.dom>;
  //// [othernoalias.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
