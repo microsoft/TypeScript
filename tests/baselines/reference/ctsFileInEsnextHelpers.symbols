@@ -1,0 +1,8 @@
+//// [tests/cases/compiler/ctsFileInEsnextHelpers.ts] ////
+
+=== notmodule.cts ===
+export async function foo() {
+>foo : Symbol(foo, Decl(notmodule.cts, 0, 0))
+
+  await 0;
+}

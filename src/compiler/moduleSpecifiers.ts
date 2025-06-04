@@ -513,7 +513,7 @@ function computeModuleSpecifiers(
             info,
             compilerOptions,
             host,
-            options.overrideImportMode || importingSourceFile.impliedNodeFormat,
+            options.overrideImportMode,
             preferences,
             /*pathsOnly*/ modulePath.isRedirect || !!specifier,
         );
