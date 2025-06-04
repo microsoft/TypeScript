@@ -2798,7 +2798,7 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
 
     const tab = "  ";
     const result: string[] = [];
-    const allSetOptions = Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch");
+    const allSetOptions = Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch") as (string & keyof CompilerOptions)[];
 
     result.push(`{`);
     result.push(`${tab}// ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)}`);
@@ -2861,7 +2861,7 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     if (allSetOptions.length > 0) {
         newline();
         while (allSetOptions.length > 0) {
-            emitOption(allSetOptions[0], options[allSetOptions[0]] as PresetValue);
+            emitOption(allSetOptions[0], options[allSetOptions[0]]);
         }
     }
 
@@ -2876,7 +2876,7 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
     // commented = 'always': Always comment this out, even if it's on commandline
     // commented = 'optional': Comment out unless it's on commandline
     // commented = 'never': Never comment this out
-    function emitOption(setting: string, defaultValue: PresetValue, commented: "always" | "optional" | "never" = "never") {
+    function emitOption<K extends string & keyof CompilerOptions>(setting: K, defaultValue: CompilerOptions[K], commented: "always" | "optional" | "never" = "never") {
         const existingOptionIndex = allSetOptions.indexOf(setting);
         if (existingOptionIndex >= 0) {
             allSetOptions.splice(existingOptionIndex, 1);
