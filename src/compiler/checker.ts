@@ -12975,7 +12975,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const s = signatures[0];
             if (!s.typeParameters && s.parameters.length === 1 && signatureHasRestParameter(s)) {
                 const paramType = getTypeOfParameter(s.parameters[0]);
-                return isTypeAny(paramType) || getElementTypeOfArrayType(paramType) === anyType;
+                return isTypeAny(paramType) || getElementTypeOfArrayType(paramType) === anyType || getElementTypeOfArrayType(paramType) === unknownType;
             }
         }
         return false;
