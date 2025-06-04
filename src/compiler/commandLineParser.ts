@@ -2563,8 +2563,8 @@ function getCompilerOptionValueTypeString(option: CommandLineOption): string {
     return (option.type === "listOrElement") ?
         `${getCompilerOptionValueTypeString(option.element)} or Array` :
         option.type === "list" ?
-            "Array" :
-            isString(option.type) ? option.type : "string";
+        "Array" :
+        isString(option.type) ? option.type : "string";
 }
 
 function isCompilerOptionsValue(option: CommandLineOption | undefined, value: any): value is CompilerOptionsValue {
@@ -2860,8 +2860,8 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
         emitOption("lib", options.lib);
     }
     emitHeader(Diagnostics.For_nodejs_Colon);
-    result.push(`${tab}${tab}// "lib": ["esnext"],`)
-    result.push(`${tab}${tab}// "types": ["node"],`)
+    result.push(`${tab}${tab}// "lib": ["esnext"],`);
+    result.push(`${tab}${tab}// "types": ["node"],`);
     emitHeader(Diagnostics.and_npm_install_D_types_Slashnode);
 
     newline();
@@ -2926,16 +2926,19 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
         let comment: boolean;
         if (commented === "always") {
             comment = true;
-        } else if (commented === "never") {
+        }
+        else if (commented === "never") {
             comment = false;
-        } else {
+        }
+        else {
             comment = !hasProperty(options, setting);
         }
 
         const value = (options[setting] ?? defaultValue) as PresetValue;
         if (comment) {
             result.push(`${tab}${tab}// "${setting}": ${formatValueOrArray(setting, value)},`);
-        } else {
+        }
+        else {
             result.push(`${tab}${tab}"${setting}": ${formatValueOrArray(setting, value)},`);
         }
     }
@@ -2947,8 +2950,9 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
         if (isArray(value)) {
             // eslint-disable-next-line local/no-in-operator
             const map = ("element" in option && (option.element.type instanceof Map)) ? option.element.type : undefined;
-            return `[${value.map(v => formatSingleValue(v, map)).join(", ")}]`
-        } else {
+            return `[${value.map(v => formatSingleValue(v, map)).join(", ")}]`;
+        }
+        else {
             return formatSingleValue(value, map);
         }
     }
