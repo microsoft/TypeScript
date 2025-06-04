@@ -2798,7 +2798,7 @@ export function generateTSConfig(options: CompilerOptions, newLine: string): str
 
     const tab = "  ";
     const result: string[] = [];
-    const allSetOptions = Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch") as (string & keyof CompilerOptions)[];
+    const allSetOptions = Object.keys(options).filter(k => k !== "init" && k !== "help" && k !== "watch");
 
     result.push(`{`);
     result.push(`${tab}// ${getLocaleSpecificMessage(Diagnostics.Visit_https_Colon_Slash_Slashaka_ms_Slashtsconfig_to_read_more_about_this_file)}`);
