@@ -841,10 +841,13 @@ func (c *Checker) getNarrowedTypeWorker(t *Type, candidate *Type, assumeTrue boo
 				return !c.isTypeDerivedFrom(t, candidate)
 			})
 		}
+		if t.flags&TypeFlagsUnknown != 0 {
+			t = c.unknownUnionType
+		}
 		trueType := c.getNarrowedType(t, candidate, true /*assumeTrue*/, false /*checkDerived*/)
-		return c.filterType(t, func(t *Type) bool {
+		return c.recombineUnknownType(c.filterType(t, func(t *Type) bool {
 			return !c.isTypeSubsetOf(t, trueType)
-		})
+		}))
 	}
 	if t.flags&TypeFlagsAnyOrUnknown != 0 {
 		return candidate

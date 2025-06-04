@@ -31,7 +31,7 @@ if (!isNotNullish(value2)) {
 >value2 : unknown
 
   value2;
->value2 : unknown
+>value2 : null | undefined
 }
 
 declare const value3: unknown;
@@ -56,7 +56,7 @@ if (!isNullish(value4)) {
 >value4 : unknown
 
   value4;
->value4 : unknown
+>value4 : {}
 }
 
 declare class A { foo: string; }
