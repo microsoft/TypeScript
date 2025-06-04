@@ -2790,47 +2790,6 @@ function serializeOptionBaseObject(
 }
 
 /**
- * Generate a list of the compiler options whose value is not the default.
- * @param options compilerOptions to be evaluated.
-/** @internal */
-export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: string): string {
-    const compilerOptionsMap = getSerializedCompilerOption(options);
-    return getOverwrittenDefaultOptions();
-
-    function makePadding(paddingLength: number): string {
-        return Array(paddingLength + 1).join(" ");
-    }
-
-    function getOverwrittenDefaultOptions() {
-        const result: string[] = [];
-        const tab = makePadding(2);
-        commandOptionsWithoutBuild.forEach(cmd => {
-            if (!compilerOptionsMap.has(cmd.name)) {
-                return;
-            }
-
-            const newValue = compilerOptionsMap.get(cmd.name);
-            const defaultValue = getDefaultValueForOption(cmd);
-            if (newValue !== defaultValue) {
-                result.push(`${tab}${cmd.name}: ${newValue}`);
-            }
-            else if (hasProperty(defaultInitCompilerOptions, cmd.name)) {
-                result.push(`${tab}${cmd.name}: ${defaultValue}`);
-            }
-        });
-        return result.join(newLine) + newLine;
-    }
-}
-
-/**
- * Get the compiler options to be written into the tsconfig.json.
- * @param options commandlineOptions to be included in the compileOptions.
- */
-function getSerializedCompilerOption(options: CompilerOptions): Map<string, CompilerOptionsValue> {
-    const compilerOptions = extend(options, defaultInitCompilerOptions);
-    return serializeCompilerOptions(compilerOptions);
-}
-/**
  * Generate tsconfig configuration when running command line "--init"
  * @param options commandlineOptions to be generated into tsconfig.json
  * @internal
