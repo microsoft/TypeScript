@@ -44,7 +44,6 @@ import {
     filterMutate,
     find,
     findIndex,
-    firstOrUndefinedIterator,
     flatten,
     forEach,
     forEachEntry,
@@ -4259,27 +4258,5 @@ function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): 
                     return optionStringValue;
                 }
             });
-    }
-}
-
-function getDefaultValueForOption(option: CommandLineOption): {} {
-    switch (option.type) {
-        case "number":
-            return 1;
-        case "boolean":
-            return true;
-        case "string":
-            const defaultValue = option.defaultValueDescription;
-            return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
-        case "list":
-            return [];
-        case "listOrElement":
-            return getDefaultValueForOption(option.element);
-        case "object":
-            return {};
-        default:
-            const value = firstOrUndefinedIterator(option.type.keys());
-            if (value !== undefined) return value;
-            return Debug.fail("Expected 'option.type' to have entries.");
     }
 }
