@@ -194,9 +194,20 @@ func (s *Server) Run() error {
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(func() error { return s.dispatchLoop(ctx) })
 	g.Go(func() error { return s.writeLoop(ctx) })
-	g.Go(func() error { return s.readLoop(ctx) })
 
-	if err := g.Wait(); err != nil && !errors.Is(err, io.EOF) {
+	// Don't run readLoop in the group, as it blocks on stdin read and cannot be cancelled.
+	readLoopErr := make(chan error, 1)
+	g.Go(func() error {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case err := <-readLoopErr:
+			return err
+		}
+	})
+	go func() { readLoopErr <- s.readLoop(ctx) }()
+
+	if err := g.Wait(); err != nil && !errors.Is(err, io.EOF) && ctx.Err() != nil {
 		return err
 	}
 	return nil
