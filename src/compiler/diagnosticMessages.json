@@ -8460,7 +8460,7 @@
         "category": "Error",
         "code": 18059
     },
-    "Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'nodenext'.": {
+    "Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.": {
         "category": "Error",
         "code": 18060
     },

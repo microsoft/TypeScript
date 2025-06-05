@@ -1,4 +1,4 @@
-// @module: esnext,nodenext,es2020,es2015,commonjs
+// @module: preserve,esnext,nodenext,es2020,es2015,commonjs
 // @target: es2020
 
 // @filename: a.ts

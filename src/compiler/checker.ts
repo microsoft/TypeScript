@@ -53148,8 +53148,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
                 return grammarErrorOnNode(node, Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import);
             }
-            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
-                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_nodenext);
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve);
             }
         }
         return false;
@@ -53174,8 +53174,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.expression.kind === SyntaxKind.MetaProperty) {
-            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.NodeNext) {
-                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_nodenext);
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve);
             }
         }
         else if (moduleKind === ModuleKind.ES2015) {
