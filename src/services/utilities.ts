@@ -2458,7 +2458,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
         getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         redirectTargetsMap: program.redirectTargetsMap,
-        getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
+        getRedirectFromSourceFile: fileName => program.getRedirectFromSourceFile(fileName),
         isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),

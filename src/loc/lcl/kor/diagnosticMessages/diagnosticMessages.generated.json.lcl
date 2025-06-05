@@ -18402,11 +18402,11 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
-      <Item ItemId=";arguments_cannot_be_referenced_in_property_initializers_2815" ItemType="0" PsrId="306" Leaf="true">
+      <Item ItemId=";arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_blocks_2815" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
-          <Val><![CDATA['arguments' cannot be referenced in property initializers.]]></Val>
+          <Val><![CDATA['arguments' cannot be referenced in property initializers or class static initialization blocks.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['arguments'는 속성 이니셜라이저에서 참조할 수 없습니다.]]></Val>
+            <Val><![CDATA['arguments'는 속성 초기화기나 클래스 정적 초기화 블록에서 참조할 수 없습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

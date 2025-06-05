@@ -6591,7 +6591,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
     // Any non json file should be emitted
     if (!isJsonSourceFile(sourceFile)) return true;
-    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    if (host.getRedirectFromSourceFile(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
     if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
@@ -12141,12 +12141,12 @@ export function getLibFileNameFromLibReference(libReference: FileReference): str
 /** @internal */
 export function forEachResolvedProjectReference<T>(
     resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
-    cb: (resolvedProjectReference: ResolvedProjectReference, parent: ResolvedProjectReference | undefined) => T | undefined,
+    cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
 ): T | undefined {
     return forEachProjectReference(
         /*projectReferences*/ undefined,
         resolvedProjectReferences,
-        (resolvedRef, parent) => resolvedRef && cb(resolvedRef, parent),
+        resolvedRef => resolvedRef && cb(resolvedRef),
     );
 }
 
