@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/module"
@@ -64,6 +65,8 @@ type Program struct {
 
 	// List of present unsupported extensions
 	unsupportedExtensions []string
+
+	declarationDiagnosticCache collections.SyncMap[*ast.SourceFile, []*ast.Diagnostic]
 }
 
 // FileExists implements checker.Program.
@@ -514,8 +517,15 @@ func (p *Program) getDeclarationDiagnosticsForFile(_ctx context.Context, sourceF
 	if sourceFile.IsDeclarationFile {
 		return []*ast.Diagnostic{}
 	}
+
+	if cached, ok := p.declarationDiagnosticCache.Load(sourceFile); ok {
+		return cached
+	}
+
 	host := &emitHost{program: p}
-	return getDeclarationDiagnostics(host, host.GetEmitResolver(sourceFile, true), sourceFile)
+	diagnostics := getDeclarationDiagnostics(host, host.GetEmitResolver(sourceFile, true), sourceFile)
+	diagnostics, _ = p.declarationDiagnosticCache.LoadOrStore(sourceFile, diagnostics)
+	return diagnostics
 }
 
 func (p *Program) getSuggestionDiagnosticsForFile(ctx context.Context, sourceFile *ast.SourceFile) []*ast.Diagnostic {
