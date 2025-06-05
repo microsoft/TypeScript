@@ -2,6 +2,7 @@ package project
 
 import (
 	"slices"
+	"sync"
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls"
@@ -21,12 +22,12 @@ type ScriptInfo struct {
 	version    int
 	lineMap    *ls.LineMap
 
-	isOpen                bool
 	pendingReloadFromDisk bool
 	matchesDiskText       bool
 	deferredDelete        bool
 
-	containingProjects []*Project
+	containingProjectsMu sync.RWMutex
+	containingProjects   []*Project
 
 	fs vfs.FS
 }
@@ -69,6 +70,12 @@ func (s *ScriptInfo) Version() int {
 	return s.version
 }
 
+func (s *ScriptInfo) ContainingProjects() []*Project {
+	s.containingProjectsMu.RLock()
+	defer s.containingProjectsMu.RUnlock()
+	return slices.Clone(s.containingProjects)
+}
+
 func (s *ScriptInfo) reloadIfNeeded() {
 	if s.pendingReloadFromDisk {
 		if newText, ok := s.fs.ReadFile(s.fileName); ok {
@@ -78,7 +85,6 @@ func (s *ScriptInfo) reloadIfNeeded() {
 }
 
 func (s *ScriptInfo) open(newText string) {
-	s.isOpen = true
 	s.pendingReloadFromDisk = false
 	if newText != s.text {
 		s.setText(newText)
@@ -95,10 +101,18 @@ func (s *ScriptInfo) SetTextFromDisk(newText string) {
 }
 
 func (s *ScriptInfo) close(fileExists bool) {
-	s.isOpen = false
 	if fileExists && !s.pendingReloadFromDisk && !s.matchesDiskText {
 		s.pendingReloadFromDisk = true
 		s.markContainingProjectsAsDirty()
+	}
+
+	s.containingProjectsMu.Lock()
+	defer s.containingProjectsMu.Unlock()
+	for _, project := range slices.Clone(s.containingProjects) {
+		if project.kind == KindInferred && project.isRoot(s) {
+			project.RemoveFile(s, fileExists)
+			s.detachFromProjectLocked(project)
+		}
 	}
 }
 
@@ -109,6 +123,8 @@ func (s *ScriptInfo) setText(newText string) {
 }
 
 func (s *ScriptInfo) markContainingProjectsAsDirty() {
+	s.containingProjectsMu.RLock()
+	defer s.containingProjectsMu.RUnlock()
 	for _, project := range s.containingProjects {
 		project.MarkFileAsDirty(s.path)
 	}
@@ -117,18 +133,30 @@ func (s *ScriptInfo) markContainingProjectsAsDirty() {
 // attachToProject attaches the script info to the project if it's not already attached
 // and returns true if the script info was newly attached.
 func (s *ScriptInfo) attachToProject(project *Project) bool {
-	if !s.isAttached(project) {
-		s.containingProjects = append(s.containingProjects, project)
-		if project.compilerOptions.PreserveSymlinks != core.TSTrue {
-			s.ensureRealpath(project.FS())
-		}
-		project.onFileAddedOrRemoved()
-		return true
+	if s.isAttached(project) {
+		return false
 	}
-	return false
+	s.containingProjectsMu.Lock()
+	if s.isAttachedLocked(project) {
+		s.containingProjectsMu.Unlock()
+		return false
+	}
+	s.containingProjects = append(s.containingProjects, project)
+	s.containingProjectsMu.Unlock()
+	if project.compilerOptions.PreserveSymlinks != core.TSTrue {
+		s.ensureRealpath(project)
+	}
+	project.onFileAddedOrRemoved()
+	return true
 }
 
 func (s *ScriptInfo) isAttached(project *Project) bool {
+	s.containingProjectsMu.RLock()
+	defer s.containingProjectsMu.RUnlock()
+	return s.isAttachedLocked(project)
+}
+
+func (s *ScriptInfo) isAttachedLocked(project *Project) bool {
 	return slices.Contains(s.containingProjects, project)
 }
 
@@ -136,6 +164,8 @@ func (s *ScriptInfo) isOrphan() bool {
 	if s.deferredDelete {
 		return true
 	}
+	s.containingProjectsMu.RLock()
+	defer s.containingProjectsMu.RUnlock()
 	for _, project := range s.containingProjects {
 		if !project.isOrphan() {
 			return false
@@ -149,13 +179,9 @@ func (s *ScriptInfo) editContent(change ls.TextChange) {
 	s.markContainingProjectsAsDirty()
 }
 
-func (s *ScriptInfo) ensureRealpath(fs vfs.FS) {
+func (s *ScriptInfo) ensureRealpath(project *Project) {
 	if s.realpath == "" {
-		if len(s.containingProjects) == 0 {
-			panic("scriptInfo must be attached to a project before calling ensureRealpath")
-		}
-		realpath := fs.Realpath(string(s.path))
-		project := s.containingProjects[0]
+		realpath := project.FS().Realpath(string(s.path))
 		s.realpath = project.toPath(realpath)
 		if s.realpath != s.path {
 			project.host.OnDiscoveredSymlink(s)
@@ -171,17 +197,25 @@ func (s *ScriptInfo) getRealpathIfDifferent() (tspath.Path, bool) {
 }
 
 func (s *ScriptInfo) detachAllProjects() {
+	s.containingProjectsMu.Lock()
+	defer s.containingProjectsMu.Unlock()
 	for _, project := range s.containingProjects {
 		// !!!
 		// if (isConfiguredProject(p)) {
 		// 	p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
 		// }
-		project.RemoveFile(s, false /*fileExists*/, false /*detachFromProject*/)
+		project.RemoveFile(s, false /*fileExists*/)
 	}
 	s.containingProjects = nil
 }
 
 func (s *ScriptInfo) detachFromProject(project *Project) {
+	s.containingProjectsMu.Lock()
+	defer s.containingProjectsMu.Unlock()
+	s.detachFromProjectLocked(project)
+}
+
+func (s *ScriptInfo) detachFromProjectLocked(project *Project) {
 	if index := slices.Index(s.containingProjects, project); index != -1 {
 		s.containingProjects = slices.Delete(s.containingProjects, index, index+1)
 	}
@@ -193,4 +227,12 @@ func (s *ScriptInfo) delayReloadNonMixedContentFile() {
 	}
 	s.pendingReloadFromDisk = true
 	s.markContainingProjectsAsDirty()
+}
+
+func (s *ScriptInfo) containedByDeferredClosedProject() bool {
+	s.containingProjectsMu.RLock()
+	defer s.containingProjectsMu.RUnlock()
+	return slices.ContainsFunc(s.containingProjects, func(project *Project) bool {
+		return project.deferredClose
+	})
 }

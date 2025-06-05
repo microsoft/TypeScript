@@ -145,7 +145,7 @@ func (ti *TypingsInstaller) EnqueueInstallTypingsRequest(p *Project, typingsInfo
 }
 
 func (ti *TypingsInstaller) discoverAndInstallTypings(p *Project, typingsInfo *TypingsInfo, fileNames []string, projectRootPath string) {
-	ti.init((p))
+	ti.init(p)
 
 	cachedTypingPaths, newTypingNames, filesToWatch := DiscoverTypings(
 		p.FS(),

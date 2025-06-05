@@ -7,9 +7,11 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"sync/atomic"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -219,6 +221,10 @@ func newProjectServiceHost(files map[string]any) *ProjectServiceHost {
 		fs:                 fs,
 		defaultLibraryPath: bundled.LibPath(),
 		ClientMock:         &ClientMock{},
+	}
+	var watchCount atomic.Uint32
+	host.ClientMock.WatchFilesFunc = func(_ context.Context, _ []*lsproto.FileSystemWatcher) (project.WatcherHandle, error) {
+		return project.WatcherHandle(fmt.Sprintf("#%d", watchCount.Add(1))), nil
 	}
 	host.logger = project.NewLogger([]io.Writer{&host.output}, "", project.LogLevelVerbose)
 	return host
