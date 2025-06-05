@@ -884,6 +884,7 @@ func (p *Parser) parseExpressionWithTypeArgumentsForAugments() *ast.Node {
 	res := node
 	p.finishNode(node, pos)
 	if usedBrace {
+		p.skipWhitespace()
 		p.parseExpected(ast.KindCloseBraceToken)
 	}
 	return res
