@@ -11,7 +11,6 @@
  isolatedDeclarationErrorsClasses.ts(12,17): error TS7006: Parameter 'value' implicitly has an 'any' type.
 -isolatedDeclarationErrorsClasses.ts(12,17): error TS9009: At least one accessor must have an explicit type annotation with --isolatedDeclarations.
 -isolatedDeclarationErrorsClasses.ts(36,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-+isolatedDeclarationErrorsClasses.ts(36,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
  isolatedDeclarationErrorsClasses.ts(36,6): error TS2304: Cannot find name 'missing'.
 -isolatedDeclarationErrorsClasses.ts(38,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
 -isolatedDeclarationErrorsClasses.ts(40,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
@@ -26,7 +25,6 @@
  isolatedDeclarationErrorsClasses.ts(48,39): error TS7006: Parameter 'value' implicitly has an 'any' type.
  isolatedDeclarationErrorsClasses.ts(50,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 -isolatedDeclarationErrorsClasses.ts(50,5): error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-+isolatedDeclarationErrorsClasses.ts(55,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
  isolatedDeclarationErrorsClasses.ts(56,5): error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.
 -isolatedDeclarationErrorsClasses.ts(56,5): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 -
@@ -34,7 +32,7 @@
 -==== isolatedDeclarationErrorsClasses.ts (26 errors) ====
 +
 +
-+==== isolatedDeclarationErrorsClasses.ts (11 errors) ====
++==== isolatedDeclarationErrorsClasses.ts (9 errors) ====
      export class Cls {
      
          field = 1 + 1;
@@ -74,12 +72,12 @@
      
          get getSetBad() { return 0 }
          set getSetBad(value) { }
-@@= skipped -87, +54 lines =@@
+@@= skipped -86, +51 lines =@@
+     
          // Should not be reported as an isolated declaration error
          [missing] = 1;
-         ~~~~~~~~~
+-        ~~~~~~~~~
 -!!! error TS9038: Computed property names on class or object literals cannot be inferred with --isolatedDeclarations.
-+!!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
           ~~~~~~~
  !!! error TS2304: Cannot find name 'missing'.
          
@@ -127,10 +125,7 @@
      
      }
      
-     export interface I {
-         [noAnnotationStringName]: 10;
-+        ~~~~~~~~~~~~~~~~~~~~~~~~
-+!!! error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
+@@= skipped -54, +32 lines =@@
          [noAnnotationLiteralName]();
          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  !!! error TS7010: '[noAnnotationLiteralName]', which lacks return-type annotation, implicitly has an 'any' return type.

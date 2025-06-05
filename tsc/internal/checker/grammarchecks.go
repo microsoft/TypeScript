@@ -1419,7 +1419,17 @@ func (c *Checker) checkGrammarTypeOperatorNode(node *ast.TypeOperatorNode) bool 
 }
 
 func (c *Checker) checkGrammarForInvalidDynamicName(node *ast.DeclarationName, message *diagnostics.Message) bool {
-	if c.isNonBindableDynamicName(node) {
+	if !c.isNonBindableDynamicName(node) {
+		return false
+	}
+	var expression *ast.Node
+	if ast.IsElementAccessExpression(node) {
+		expression = ast.SkipParentheses(node.AsElementAccessExpression().ArgumentExpression)
+	} else {
+		expression = node.Expression()
+	}
+
+	if !ast.IsEntityNameExpression(expression) {
 		return c.grammarErrorOnNode(node, message)
 	}
 
