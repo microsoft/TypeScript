@@ -1929,7 +1929,7 @@ func (c *Checker) computeExhaustiveSwitchStatement(node *ast.Node) bool {
 			return c.getTypeFacts(t, notEqualFacts) == notEqualFacts
 		})
 	}
-	t := c.checkExpressionCached(node.Expression())
+	t := c.getBaseConstraintOrType(c.checkExpressionCached(node.Expression()))
 	if !isLiteralType(t) {
 		return false
 	}
