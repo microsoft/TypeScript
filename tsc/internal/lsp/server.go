@@ -412,6 +412,12 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		return s.handleCompletion(ctx, req)
 	case *lsproto.SignatureHelpParams:
 		return s.handleSignatureHelp(ctx, req)
+	case *lsproto.DocumentFormattingParams:
+		return s.handleDocumentFormat(ctx, req)
+	case *lsproto.DocumentRangeFormattingParams:
+		return s.handleDocumentRangeFormat(ctx, req)
+	case *lsproto.DocumentOnTypeFormattingParams:
+		return s.handleDocumentOnTypeFormat(ctx, req)
 	default:
 		switch req.Method {
 		case lsproto.MethodShutdown:
@@ -475,6 +481,16 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 			},
 			SignatureHelpProvider: &lsproto.SignatureHelpOptions{
 				TriggerCharacters: &[]string{"(", ","},
+			},
+			DocumentFormattingProvider: &lsproto.BooleanOrDocumentFormattingOptions{
+				Boolean: ptrTo(true),
+			},
+			DocumentRangeFormattingProvider: &lsproto.BooleanOrDocumentRangeFormattingOptions{
+				Boolean: ptrTo(true),
+			},
+			DocumentOnTypeFormattingProvider: &lsproto.DocumentOnTypeFormattingOptions{
+				FirstTriggerCharacter: "{",
+				MoreTriggerCharacter:  &[]string{"}", ";", "\n"},
 			},
 		},
 	})
@@ -608,6 +624,87 @@ func (s *Server) handleCompletion(ctx context.Context, req *lsproto.RequestMessa
 		return err
 	}
 	s.sendResult(req.ID, list)
+	return nil
+}
+
+func (s *Server) handleDocumentFormat(ctx context.Context, req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DocumentFormattingParams)
+	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	// !!! remove this after formatting is fully ported/tested
+	defer func() {
+		if r := recover(); r != nil {
+			stack := debug.Stack()
+			s.Log("panic on document format:", r, string(stack))
+			s.sendResult(req.ID, []*lsproto.TextEdit{})
+		}
+	}()
+
+	res, err := languageService.ProvideFormatDocument(
+		ctx,
+		params.TextDocument.Uri,
+		params.Options,
+	)
+	if err != nil {
+		return err
+	}
+	s.sendResult(req.ID, res)
+	return nil
+}
+
+func (s *Server) handleDocumentRangeFormat(ctx context.Context, req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DocumentRangeFormattingParams)
+	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	// !!! remove this after formatting is fully ported/tested
+	defer func() {
+		if r := recover(); r != nil {
+			stack := debug.Stack()
+			s.Log("panic on document range format:", r, string(stack))
+			s.sendResult(req.ID, []*lsproto.TextEdit{})
+		}
+	}()
+
+	res, err := languageService.ProvideFormatDocumentRange(
+		ctx,
+		params.TextDocument.Uri,
+		params.Options,
+		params.Range,
+	)
+	if err != nil {
+		return err
+	}
+	s.sendResult(req.ID, res)
+	return nil
+}
+
+func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, req *lsproto.RequestMessage) error {
+	params := req.Params.(*lsproto.DocumentOnTypeFormattingParams)
+	project := s.projectService.EnsureDefaultProjectForURI(params.TextDocument.Uri)
+	languageService, done := project.GetLanguageServiceForRequest(ctx)
+	defer done()
+	// !!! remove this after formatting is fully ported/tested
+	defer func() {
+		if r := recover(); r != nil {
+			stack := debug.Stack()
+			s.Log("panic on type format:", r, string(stack))
+			s.sendResult(req.ID, []*lsproto.TextEdit{})
+		}
+	}()
+
+	res, err := languageService.ProvideFormatDocumentOnType(
+		ctx,
+		params.TextDocument.Uri,
+		params.Options,
+		params.Position,
+		params.Ch,
+	)
+	if err != nil {
+		return err
+	}
+	s.sendResult(req.ID, res)
 	return nil
 }
 

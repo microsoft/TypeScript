@@ -83,10 +83,6 @@ func hasAsyncModifier(node *ast.Node) bool {
 	return ast.HasSyntacticModifier(node, ast.ModifierFlagsAsync)
 }
 
-func hasDecorators(node *ast.Node) bool {
-	return ast.HasSyntacticModifier(node, ast.ModifierFlagsDecorator)
-}
-
 func getSelectedModifierFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {
 	return node.ModifierFlags() & flags
 }

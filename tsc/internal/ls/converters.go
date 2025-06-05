@@ -44,8 +44,8 @@ func (c *Converters) FromLSPRange(script Script, textRange lsproto.Range) core.T
 	)
 }
 
-func (c *Converters) FromLSPTextChange(script Script, change *lsproto.TextDocumentContentChangePartial) TextChange {
-	return TextChange{
+func (c *Converters) FromLSPTextChange(script Script, change *lsproto.TextDocumentContentChangePartial) core.TextChange {
+	return core.TextChange{
 		TextRange: c.FromLSPRange(script, change.Range),
 		NewText:   change.Text,
 	}

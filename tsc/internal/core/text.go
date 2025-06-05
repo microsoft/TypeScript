@@ -54,3 +54,13 @@ func (t TextRange) WithPos(pos int) TextRange {
 func (t TextRange) WithEnd(end int) TextRange {
 	return TextRange{pos: t.pos, end: TextPos(end)}
 }
+
+func (t TextRange) ContainedBy(t2 TextRange) bool {
+	return t2.pos <= t.pos && t2.end >= t.end
+}
+
+func (t TextRange) Overlaps(t2 TextRange) bool {
+	start := max(t.pos, t2.pos)
+	end := min(t.end, t2.end)
+	return start < end
+}

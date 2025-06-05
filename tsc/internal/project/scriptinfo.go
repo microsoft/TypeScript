@@ -174,7 +174,7 @@ func (s *ScriptInfo) isOrphan() bool {
 	return true
 }
 
-func (s *ScriptInfo) editContent(change ls.TextChange) {
+func (s *ScriptInfo) editContent(change core.TextChange) {
 	s.setText(change.ApplyTo(s.Text()))
 	s.markContainingProjectsAsDirty()
 }

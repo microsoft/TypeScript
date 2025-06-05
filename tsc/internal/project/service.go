@@ -240,12 +240,12 @@ func (s *Service) ChangeFile(document lsproto.VersionedTextDocumentIdentifier, c
 		return fmt.Errorf("file %s not found", fileName)
 	}
 
-	textChanges := make([]ls.TextChange, len(changes))
+	textChanges := make([]core.TextChange, len(changes))
 	for i, change := range changes {
 		if partialChange := change.TextDocumentContentChangePartial; partialChange != nil {
 			textChanges[i] = s.converters.FromLSPTextChange(scriptInfo, partialChange)
 		} else if wholeChange := change.TextDocumentContentChangeWholeDocument; wholeChange != nil {
-			textChanges[i] = ls.TextChange{
+			textChanges[i] = core.TextChange{
 				TextRange: core.NewTextRange(0, len(scriptInfo.Text())),
 				NewText:   wholeChange.Text,
 			}
@@ -407,7 +407,7 @@ func (s *Service) ensureProjectForOpenFiles() {
 	s.printProjects()
 }
 
-func (s *Service) applyChangesToFile(info *ScriptInfo, changes []ls.TextChange) {
+func (s *Service) applyChangesToFile(info *ScriptInfo, changes []core.TextChange) {
 	for _, change := range changes {
 		info.editContent(change)
 	}

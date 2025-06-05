@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
@@ -62,140 +63,6 @@ func tryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node {
 // !!! formatting function
 func isInComment(file *ast.SourceFile, position int, tokenAtPosition *ast.Node) *ast.CommentRange {
 	return nil
-}
-
-// Replaces last(node.getChildren(sourceFile))
-func getLastChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	lastChildNode := getLastVisitedChild(node, sourceFile)
-	if ast.IsJSDocSingleCommentNode(node) {
-		return nil
-	}
-	var tokenStartPos int
-	if lastChildNode != nil {
-		tokenStartPos = lastChildNode.End()
-	} else {
-		tokenStartPos = node.Pos()
-	}
-	var lastToken *ast.Node
-	scanner := scanner.GetScannerForSourceFile(sourceFile, tokenStartPos)
-	for startPos := tokenStartPos; startPos < node.End(); {
-		tokenKind := scanner.Token()
-		tokenFullStart := scanner.TokenFullStart()
-		tokenEnd := scanner.TokenEnd()
-		lastToken = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, node)
-		startPos = tokenEnd
-		scanner.Scan()
-	}
-	return core.IfElse(lastToken != nil, lastToken, lastChildNode)
-}
-
-func getLastToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	if node == nil {
-		return nil
-	}
-
-	if ast.IsTokenKind(node.Kind) || ast.IsIdentifier(node) {
-		return nil
-	}
-
-	assertHasRealPosition(node)
-
-	lastChild := getLastChild(node, sourceFile)
-	if lastChild == nil {
-		return nil
-	}
-
-	if lastChild.Kind < ast.KindFirstNode {
-		return lastChild
-	} else {
-		return getLastToken(lastChild, sourceFile)
-	}
-}
-
-// Gets the last visited child of the given node.
-// NOTE: This doesn't include unvisited tokens; for this, use `getLastChild` or `getLastToken`.
-func getLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	var lastChild *ast.Node
-
-	visitNode := func(n *ast.Node, _ *ast.NodeVisitor) *ast.Node {
-		if !(n == nil || node.Flags&ast.NodeFlagsReparsed != 0) {
-			lastChild = n
-		}
-		return n
-	}
-	visitNodeList := func(nodeList *ast.NodeList, _ *ast.NodeVisitor) *ast.NodeList {
-		if nodeList != nil && len(nodeList.Nodes) > 0 && !ast.IsJSDocSingleCommentNodeList(node, nodeList) {
-			for i := len(nodeList.Nodes) - 1; i >= 0; i-- {
-				if nodeList.Nodes[i].Flags&ast.NodeFlagsReparsed == 0 {
-					lastChild = nodeList.Nodes[i]
-					break
-				}
-			}
-		}
-		return nodeList
-	}
-
-	nodeVisitor := ast.NewNodeVisitor(core.Identity, nil, ast.NodeVisitorHooks{
-		VisitNode:  visitNode,
-		VisitToken: visitNode,
-		VisitNodes: visitNodeList,
-		VisitModifiers: func(modifiers *ast.ModifierList, visitor *ast.NodeVisitor) *ast.ModifierList {
-			if modifiers != nil {
-				visitNodeList(&modifiers.NodeList, visitor)
-			}
-			return modifiers
-		},
-	})
-
-	astnav.VisitEachChildAndJSDoc(node, sourceFile, nodeVisitor)
-	return lastChild
-}
-
-func getFirstToken(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
-	if ast.IsIdentifier(node) || ast.IsTokenKind(node.Kind) {
-		return nil
-	}
-	assertHasRealPosition(node)
-	var firstChild *ast.Node
-	node.ForEachChild(func(n *ast.Node) bool {
-		if n == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
-			return false
-		}
-		firstChild = n
-		return true
-	})
-
-	var tokenEndPosition int
-	if firstChild != nil {
-		tokenEndPosition = firstChild.Pos()
-	} else {
-		tokenEndPosition = node.End()
-	}
-	scanner := scanner.GetScannerForSourceFile(sourceFile, node.Pos())
-	var firstToken *ast.Node
-	if node.Pos() < tokenEndPosition {
-		tokenKind := scanner.Token()
-		tokenFullStart := scanner.TokenFullStart()
-		tokenEnd := scanner.TokenEnd()
-		firstToken = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, node)
-	}
-
-	if firstToken != nil {
-		return firstToken
-	}
-	if firstChild == nil {
-		return nil
-	}
-	if firstChild.Kind < ast.KindFirstNode {
-		return firstChild
-	}
-	return getFirstToken(firstChild, sourceFile)
-}
-
-func assertHasRealPosition(node *ast.Node) {
-	if ast.PositionIsSynthesized(node.Pos()) || ast.PositionIsSynthesized(node.End()) {
-		panic("Node must have a real position for this operation.")
-	}
 }
 
 func hasChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.SourceFile) bool {
@@ -399,103 +266,6 @@ func getQuotePreference(file *ast.SourceFile, preferences *UserPreferences) quot
 	return quotePreferenceDouble
 }
 
-func positionIsASICandidate(pos int, context *ast.Node, file *ast.SourceFile) bool {
-	contextAncestor := ast.FindAncestorOrQuit(context, func(ancestor *ast.Node) ast.FindAncestorResult {
-		if ancestor.End() != pos {
-			return ast.FindAncestorQuit
-		}
-
-		return ast.ToFindAncestorResult(syntaxMayBeASICandidate(ancestor.Kind))
-	})
-
-	return contextAncestor != nil && nodeIsASICandidate(contextAncestor, file)
-}
-
-func syntaxMayBeASICandidate(kind ast.Kind) bool {
-	return syntaxRequiresTrailingCommaOrSemicolonOrASI(kind) ||
-		syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind) ||
-		syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind) ||
-		syntaxRequiresTrailingSemicolonOrASI(kind)
-}
-
-func syntaxRequiresTrailingCommaOrSemicolonOrASI(kind ast.Kind) bool {
-	return kind == ast.KindCallSignature ||
-		kind == ast.KindConstructSignature ||
-		kind == ast.KindIndexSignature ||
-		kind == ast.KindPropertySignature ||
-		kind == ast.KindMethodSignature
-}
-
-func syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(kind ast.Kind) bool {
-	return kind == ast.KindFunctionDeclaration ||
-		kind == ast.KindConstructor ||
-		kind == ast.KindMethodDeclaration ||
-		kind == ast.KindGetAccessor ||
-		kind == ast.KindSetAccessor
-}
-
-func syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(kind ast.Kind) bool {
-	return kind == ast.KindModuleDeclaration
-}
-
-func syntaxRequiresTrailingSemicolonOrASI(kind ast.Kind) bool {
-	return kind == ast.KindVariableStatement ||
-		kind == ast.KindExpressionStatement ||
-		kind == ast.KindDoStatement ||
-		kind == ast.KindContinueStatement ||
-		kind == ast.KindBreakStatement ||
-		kind == ast.KindReturnStatement ||
-		kind == ast.KindThrowStatement ||
-		kind == ast.KindDebuggerStatement ||
-		kind == ast.KindPropertyDeclaration ||
-		kind == ast.KindTypeAliasDeclaration ||
-		kind == ast.KindImportDeclaration ||
-		kind == ast.KindImportEqualsDeclaration ||
-		kind == ast.KindExportDeclaration ||
-		kind == ast.KindNamespaceExportDeclaration ||
-		kind == ast.KindExportAssignment
-}
-
-func nodeIsASICandidate(node *ast.Node, file *ast.SourceFile) bool {
-	lastToken := getLastToken(node, file)
-	if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
-		return false
-	}
-
-	if syntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind) {
-		if lastToken != nil && lastToken.Kind == ast.KindCommaToken {
-			return false
-		}
-	} else if syntaxRequiresTrailingModuleBlockOrSemicolonOrASI(node.Kind) {
-		lastChild := getLastChild(node, file)
-		if lastChild != nil && ast.IsModuleBlock(lastChild) {
-			return false
-		}
-	} else if syntaxRequiresTrailingFunctionBlockOrSemicolonOrASI(node.Kind) {
-		lastChild := getLastChild(node, file)
-		if lastChild != nil && ast.IsFunctionBlock(lastChild) {
-			return false
-		}
-	} else if !syntaxRequiresTrailingSemicolonOrASI(node.Kind) {
-		return false
-	}
-
-	// See comment in parser's `parseDoStatement`
-	if node.Kind == ast.KindDoStatement {
-		return true
-	}
-
-	topNode := ast.FindAncestor(node, func(ancestor *ast.Node) bool { return ancestor.Parent == nil })
-	nextToken := astnav.FindNextToken(node, topNode, file)
-	if nextToken == nil || nextToken.Kind == ast.KindCloseBraceToken {
-		return true
-	}
-
-	startLine, _ := scanner.GetLineAndCharacterOfPosition(file, node.End())
-	endLine, _ := scanner.GetLineAndCharacterOfPosition(file, astnav.GetStartOfNode(nextToken, file, false /*includeJSDoc*/))
-	return startLine != endLine
-}
-
 func isNonContextualKeyword(token ast.Kind) bool {
 	return ast.IsKeywordKind(token) && !ast.IsContextualKeyword(token)
 }
@@ -507,15 +277,15 @@ func probablyUsesSemicolons(file *ast.SourceFile) bool {
 
 	var visit func(node *ast.Node) bool
 	visit = func(node *ast.Node) bool {
-		if syntaxRequiresTrailingSemicolonOrASI(node.Kind) {
-			lastToken := getLastToken(node, file)
+		if lsutil.SyntaxRequiresTrailingSemicolonOrASI(node.Kind) {
+			lastToken := lsutil.GetLastToken(node, file)
 			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
 				withSemicolon++
 			} else {
 				withoutSemicolon++
 			}
-		} else if syntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind) {
-			lastToken := getLastToken(node, file)
+		} else if lsutil.SyntaxRequiresTrailingCommaOrSemicolonOrASI(node.Kind) {
+			lastToken := lsutil.GetLastToken(node, file)
 			if lastToken != nil && lastToken.Kind == ast.KindSemicolonToken {
 				withSemicolon++
 			} else if lastToken != nil && lastToken.Kind != ast.KindCommaToken {
@@ -785,7 +555,7 @@ func isCompletedNode(n *ast.Node, sourceFile *ast.SourceFile) bool {
 // Checks if node ends with 'expectedLastToken'.
 // If child at position 'length - 1' is 'SemicolonToken' it is skipped and 'expectedLastToken' is compared with child at position 'length - 2'.
 func nodeEndsWith(n *ast.Node, expectedLastToken ast.Kind, sourceFile *ast.SourceFile) bool {
-	lastChildNode := getLastVisitedChild(n, sourceFile)
+	lastChildNode := lsutil.GetLastVisitedChild(n, sourceFile)
 	var lastNodeAndTokens []*ast.Node
 	var tokenStartPos int
 	if lastChildNode != nil {

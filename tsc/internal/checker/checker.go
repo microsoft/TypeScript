@@ -5672,7 +5672,7 @@ func (c *Checker) checkVarDeclaredNamesNotShadowed(node *ast.Node) {
 func (c *Checker) checkDecorators(node *ast.Node) {
 	// skip this check for nodes that cannot have decorators. These should have already had an error reported by
 	// checkGrammarModifiers.
-	if !ast.CanHaveDecorators(node) || !hasDecorators(node) || !nodeCanBeDecorated(c.legacyDecorators, node, node.Parent, node.Parent.Parent) {
+	if !ast.CanHaveDecorators(node) || !ast.HasDecorators(node) || !nodeCanBeDecorated(c.legacyDecorators, node, node.Parent, node.Parent.Parent) {
 		return
 	}
 	firstDecorator := core.Find(node.ModifierNodes(), ast.IsDecorator)
@@ -11639,7 +11639,7 @@ func (c *Checker) getThisTypeOfDeclaration(declaration *ast.Node) *Type {
 func (c *Checker) checkThisInStaticClassFieldInitializerInDecoratedClass(thisExpression *ast.Node, container *ast.Node) {
 	if ast.IsPropertyDeclaration(container) && ast.HasStaticModifier(container) && c.legacyDecorators {
 		initializer := container.Initializer()
-		if initializer != nil && initializer.Loc.ContainsInclusive(thisExpression.Pos()) && hasDecorators(container.Parent) {
+		if initializer != nil && initializer.Loc.ContainsInclusive(thisExpression.Pos()) && ast.HasDecorators(container.Parent) {
 			c.error(thisExpression, diagnostics.Cannot_use_this_in_a_static_property_initializer_of_a_decorated_class)
 		}
 	}
@@ -26816,7 +26816,7 @@ func (c *Checker) markLinkedReferences(location *ast.Node, hint ReferenceHint, p
 		if !c.compilerOptions.EmitDecoratorMetadata.IsTrue() {
 			return
 		}
-		if !ast.CanHaveDecorators(location) || !hasDecorators(location) || location.Modifiers() == nil || !nodeCanBeDecorated(c.legacyDecorators, location, location.Parent, location.Parent.Parent) {
+		if !ast.CanHaveDecorators(location) || !ast.HasDecorators(location) || location.Modifiers() == nil || !nodeCanBeDecorated(c.legacyDecorators, location, location.Parent, location.Parent.Parent) {
 			return
 		}
 

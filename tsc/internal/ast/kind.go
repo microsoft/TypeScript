@@ -423,4 +423,6 @@ const (
 	KindFirstContextualKeyword  = KindAbstractKeyword
 	KindLastContextualKeyword   = KindOfKeyword
 	KindComment                 = KindSingleLineCommentTrivia | KindMultiLineCommentTrivia
+	KindFirstTriviaToken        = KindSingleLineCommentTrivia
+	KindLastTriviaToken         = KindConflictMarkerTrivia
 )
