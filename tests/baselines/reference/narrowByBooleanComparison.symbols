@@ -121,9 +121,9 @@ function test3(foo: unknown) {
 
     if (typeof foo !== 'string' && Array.isArray(foo) === false) {
 >foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >foo : Symbol(foo, Decl(narrowByBooleanComparison.ts, 50, 15))
 
         throw new Error('Not a string or an array');
