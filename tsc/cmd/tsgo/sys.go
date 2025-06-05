@@ -21,6 +21,11 @@ type osSys struct {
 	defaultLibraryPath string
 	newLine            string
 	cwd                string
+	start              time.Time
+}
+
+func (s *osSys) SinceStart() time.Duration {
+	return time.Since(s.start)
 }
 
 func (s *osSys) Now() time.Time {
@@ -65,5 +70,6 @@ func newSystem() *osSys {
 		defaultLibraryPath: bundled.LibPath(),
 		writer:             os.Stdout,
 		newLine:            core.IfElse(runtime.GOOS == "windows", "\r\n", "\n"),
+		start:              time.Now(),
 	}
 }

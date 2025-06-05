@@ -28,6 +28,7 @@ func newTestSys(fileOrFolderList FileMap, cwd string, args ...string) *testSys {
 		files:              slices.Collect(maps.Keys(fileOrFolderList)),
 		output:             []string{},
 		currentWrite:       &strings.Builder{},
+		start:              time.Now(),
 	}
 }
 
@@ -41,6 +42,8 @@ type testSys struct {
 	defaultLibraryPath string
 	cwd                string
 	files              []string
+
+	start time.Time
 }
 
 func (s *testSys) IsTestDone() bool {
@@ -51,6 +54,10 @@ func (s *testSys) IsTestDone() bool {
 func (s *testSys) Now() time.Time {
 	// todo: make a "test time" structure
 	return time.Now()
+}
+
+func (s *testSys) SinceStart() time.Duration {
+	return time.Since(s.start)
 }
 
 func (s *testSys) FS() vfs.FS {

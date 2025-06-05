@@ -10,11 +10,13 @@ import (
 type System interface {
 	Writer() io.Writer
 	EndWrite() // needed for testing
-	Now() time.Time
 	FS() vfs.FS
 	DefaultLibraryPath() string
 	GetCurrentDirectory() string
 	NewLine() string // #241 eventually we want to use "\n"
+
+	Now() time.Time
+	SinceStart() time.Duration
 }
 
 type ExitStatus int

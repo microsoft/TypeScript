@@ -114,8 +114,10 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 	compilerOptionsFromCommandLine := commandLine.CompilerOptions()
 
 	if configFileName != "" {
+		configStart := sys.Now()
 		extendedConfigCache := map[tspath.Path]*tsoptions.ExtendedConfigCacheEntry{}
 		configParseResult, errors := tsoptions.GetParsedCommandLineOfConfigFile(configFileName, compilerOptionsFromCommandLine, sys, extendedConfigCache)
+		configTime := sys.Now().Sub(configStart)
 		if len(errors) != 0 {
 			// these are unrecoverable errors--exit to report them as diagnostics
 			for _, e := range errors {
@@ -137,6 +139,7 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 			cb,
 			configParseResult,
 			reportDiagnostic,
+			configTime,
 		), nil
 	} else {
 		if compilerOptionsFromCommandLine.ShowConfig.IsTrue() {
@@ -155,6 +158,7 @@ func executeCommandLineWorker(sys System, cb cbType, commandLine *tsoptions.Pars
 		cb,
 		commandLine,
 		reportDiagnostic,
+		0, /*configTime*/
 	), nil
 }
 
@@ -172,15 +176,15 @@ func findConfigFile(searchPath string, fileExists func(string) bool, configName 
 	return result
 }
 
-func performCompilation(sys System, cb cbType, config *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter) ExitStatus {
+func performCompilation(sys System, cb cbType, config *tsoptions.ParsedCommandLine, reportDiagnostic diagnosticReporter, configTime time.Duration) ExitStatus {
 	host := compiler.NewCachedFSCompilerHost(config.CompilerOptions(), sys.GetCurrentDirectory(), sys.FS(), sys.DefaultLibraryPath())
 	// todo: cache, statistics, tracing
-	parseStart := time.Now()
+	parseStart := sys.Now()
 	program := compiler.NewProgram(compiler.ProgramOptions{
 		Config: config,
 		Host:   host,
 	})
-	parseTime := time.Since(parseStart)
+	parseTime := sys.Now().Sub(parseStart)
 
 	result := emitFilesAndReportErrors(sys, program, reportDiagnostic)
 	if result.status != ExitStatusSuccess {
@@ -188,8 +192,9 @@ func performCompilation(sys System, cb cbType, config *tsoptions.ParsedCommandLi
 		return result.status
 	}
 
+	result.configTime = configTime
 	result.parseTime = parseTime
-	result.totalTime = time.Since(parseStart)
+	result.totalTime = sys.SinceStart()
 
 	if config.CompilerOptions().Diagnostics.IsTrue() || config.CompilerOptions().ExtendedDiagnostics.IsTrue() {
 		var memStats runtime.MemStats
@@ -217,11 +222,12 @@ type compileAndEmitResult struct {
 	diagnostics []*ast.Diagnostic
 	emitResult  *compiler.EmitResult
 	status      ExitStatus
+	configTime  time.Duration
 	parseTime   time.Duration
 	bindTime    time.Duration
 	checkTime   time.Duration
-	emitTime    time.Duration
 	totalTime   time.Duration
+	emitTime    time.Duration
 }
 
 func emitFilesAndReportErrors(sys System, program *compiler.Program, reportDiagnostic diagnosticReporter) (result compileAndEmitResult) {
@@ -236,9 +242,9 @@ func emitFilesAndReportErrors(sys System, program *compiler.Program, reportDiagn
 		// Options diagnostics include global diagnostics (even though we collect them separately),
 		// and global diagnostics create checkers, which then bind all of the files. Do this binding
 		// early so we can track the time.
-		bindStart := time.Now()
+		bindStart := sys.Now()
 		_ = program.GetBindDiagnostics(ctx, nil)
-		result.bindTime = time.Since(bindStart)
+		result.bindTime = sys.Now().Sub(bindStart)
 
 		allDiagnostics = append(allDiagnostics, program.GetOptionsDiagnostics(ctx)...)
 
@@ -246,9 +252,9 @@ func emitFilesAndReportErrors(sys System, program *compiler.Program, reportDiagn
 			allDiagnostics = append(allDiagnostics, program.GetGlobalDiagnostics(ctx)...)
 
 			if len(allDiagnostics) == configFileParsingDiagnosticsLength {
-				checkStart := time.Now()
+				checkStart := sys.Now()
 				allDiagnostics = append(allDiagnostics, program.GetSemanticDiagnostics(ctx, nil)...)
-				result.checkTime = time.Since(checkStart)
+				result.checkTime = sys.Now().Sub(checkStart)
 			}
 
 			if options.NoEmit.IsTrue() && options.GetEmitDeclarations() && len(allDiagnostics) == configFileParsingDiagnosticsLength {
@@ -259,9 +265,9 @@ func emitFilesAndReportErrors(sys System, program *compiler.Program, reportDiagn
 
 	emitResult := &compiler.EmitResult{EmitSkipped: true, Diagnostics: []*ast.Diagnostic{}}
 	if !options.ListFilesOnly.IsTrue() {
-		emitStart := time.Now()
+		emitStart := sys.Now()
 		emitResult = program.Emit(compiler.EmitOptions{})
-		result.emitTime = time.Since(emitStart)
+		result.emitTime = sys.Now().Sub(emitStart)
 	}
 	allDiagnostics = append(allDiagnostics, emitResult.Diagnostics...)
 

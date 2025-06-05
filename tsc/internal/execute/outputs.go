@@ -79,6 +79,9 @@ func reportStatistics(sys System, program *compiler.Program, result compileAndEm
 	stats.add("Instantiations", program.InstantiationCount())
 	stats.add("Memory used", fmt.Sprintf("%vK", memStats.Alloc/1024))
 	stats.add("Memory allocs", strconv.FormatUint(memStats.Mallocs, 10))
+	if result.configTime != 0 {
+		stats.add("Config time", result.configTime)
+	}
 	stats.add("Parse time", result.parseTime)
 	if result.bindTime != 0 {
 		stats.add("Bind time", result.bindTime)
