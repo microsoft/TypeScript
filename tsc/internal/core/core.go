@@ -95,6 +95,17 @@ func MapNonNil[T any, U comparable](slice []T, f func(T) U) []U {
 	return result
 }
 
+func FlatMap[T any, U comparable](slice []T, f func(T) []U) []U {
+	var result []U
+	for _, value := range slice {
+		mapped := f(value)
+		if len(mapped) != 0 {
+			result = append(result, mapped...)
+		}
+	}
+	return result
+}
+
 func SameMap[T comparable](slice []T, f func(T) T) []T {
 	for i, value := range slice {
 		mapped := f(value)
@@ -325,6 +336,12 @@ func Coalesce[T *U, U any](a T, b T) T {
 	} else {
 		return a
 	}
+}
+
+// Returns the first element that is not `nil`; CoalesceList(a, b, c) is roughly analogous to `a ?? b ?? c` in JS, except that it
+// non-shortcutting, so it is advised to only use a constant or precomputed value for non-first values in the list
+func CoalesceList[T *U, U any](a ...T) T {
+	return FirstNonNil(a, func(t T) T { return t })
 }
 
 func ComputeLineStarts(text string) []TextPos {

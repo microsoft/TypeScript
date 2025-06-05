@@ -14,6 +14,10 @@ func GetTouchingPropertyName(sourceFile *ast.SourceFile, position int) *ast.Node
 	})
 }
 
+func GetTouchingToken(sourceFile *ast.SourceFile, position int) *ast.Node {
+	return getTokenAtPosition(sourceFile, position, false /*allowPositionInLeadingTrivia*/, nil)
+}
+
 func GetTokenAtPosition(sourceFile *ast.SourceFile, position int) *ast.Node {
 	return getTokenAtPosition(sourceFile, position, true /*allowPositionInLeadingTrivia*/, nil)
 }

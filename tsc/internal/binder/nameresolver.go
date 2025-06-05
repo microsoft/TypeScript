@@ -40,7 +40,7 @@ loop:
 			// (it refers to the constant type of the expression instead)
 			return nil
 		}
-		if isModuleOrEnumDeclaration(location) && lastLocation != nil && location.Name() == lastLocation {
+		if ast.IsModuleOrEnumDeclaration(location) && lastLocation != nil && location.Name() == lastLocation {
 			// If lastLocation is the name of a namespace or enum, skip the parent since it will have is own locals that could
 			// conflict.
 			lastLocation = location
@@ -99,7 +99,7 @@ loop:
 				// name of that export default matches.
 				result = moduleExports[ast.InternalSymbolNameDefault]
 				if result != nil {
-					localSymbol := getLocalSymbolForExportDefault(result)
+					localSymbol := GetLocalSymbolForExportDefault(result)
 					if localSymbol != nil && result.Flags&meaning != 0 && localSymbol.Name == name {
 						break loop
 					}
@@ -448,11 +448,7 @@ func (r *NameResolver) argumentsSymbol() *ast.Symbol {
 	return r.ArgumentsSymbol
 }
 
-func isModuleOrEnumDeclaration(node *ast.Node) bool {
-	return node.Kind == ast.KindModuleDeclaration || node.Kind == ast.KindEnumDeclaration
-}
-
-func getLocalSymbolForExportDefault(symbol *ast.Symbol) *ast.Symbol {
+func GetLocalSymbolForExportDefault(symbol *ast.Symbol) *ast.Symbol {
 	if !isExportDefaultSymbol(symbol) || len(symbol.Declarations) == 0 {
 		return nil
 	}

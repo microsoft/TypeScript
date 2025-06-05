@@ -316,6 +316,14 @@ func ResolvePath(path string, paths ...string) string {
 	return NormalizePath(combinedPath)
 }
 
+func ResolveTripleslashReference(moduleName string, containingFile string) string {
+	basePath := GetDirectoryPath(containingFile)
+	if IsRootedDiskPath(moduleName) {
+		return NormalizePath(moduleName)
+	}
+	return NormalizePath(CombinePaths(basePath, moduleName))
+}
+
 func GetNormalizedPathComponents(path string, currentDirectory string) []string {
 	return reducePathComponents(GetPathComponents(path, currentDirectory))
 }

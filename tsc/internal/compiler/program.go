@@ -42,7 +42,9 @@ type Program struct {
 
 	resolver *module.Resolver
 
-	comparePathsOptions tspath.ComparePathsOptions
+	comparePathsOptions                            tspath.ComparePathsOptions
+	supportedExtensions                            [][]string
+	supportedExtensionsWithJsonIfResolveJsonModule []string
 
 	processedFiles
 
@@ -879,6 +881,33 @@ func (p *Program) GetSourceFileByPath(path tspath.Path) *ast.SourceFile {
 
 func (p *Program) GetSourceFiles() []*ast.SourceFile {
 	return p.files
+}
+
+func (p *Program) GetLibFileFromReference(ref *ast.FileReference) *ast.SourceFile {
+	path, ok := tsoptions.GetLibFileName(ref.FileName)
+	if !ok {
+		return nil
+	}
+	if sourceFile, ok := p.filesByPath[tspath.Path(path)]; ok {
+		return sourceFile
+	}
+	return nil
+}
+
+func (p *Program) GetResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef *ast.FileReference, sourceFile *ast.SourceFile) *module.ResolvedTypeReferenceDirective {
+	return p.resolver.ResolveTypeReferenceDirective(
+		typeRef.FileName,
+		sourceFile.FileName(),
+		p.getModeForTypeReferenceDirectiveInFile(typeRef, sourceFile),
+		nil,
+	)
+}
+
+func (p *Program) getModeForTypeReferenceDirectiveInFile(ref *ast.FileReference, sourceFile *ast.SourceFile) core.ResolutionMode {
+	if ref.ResolutionMode != core.ResolutionModeNone {
+		return ref.ResolutionMode
+	}
+	return p.GetDefaultResolutionModeForFile(sourceFile)
 }
 
 type FileIncludeKind int
