@@ -634,8 +634,8 @@ function main() {
         fs.writeFileSync(out, generatedCode);
 
         // Format with gofmt
-        const gofmt = which.sync("gofmt");
-        cp.execFileSync(gofmt, ["-w", out]);
+        const gofmt = which.sync("go");
+        cp.execFileSync(gofmt, ["tool", "mvdan.cc/gofumpt", "-lang=go1.24", "-w", out]);
 
         console.log(`Successfully generated ${out}`);
     }

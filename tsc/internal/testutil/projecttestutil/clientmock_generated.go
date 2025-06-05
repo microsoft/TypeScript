@@ -84,9 +84,7 @@ func (mock *ClientMock) RefreshDiagnostics(ctx context.Context) error {
 	mock.calls.RefreshDiagnostics = append(mock.calls.RefreshDiagnostics, callInfo)
 	mock.lockRefreshDiagnostics.Unlock()
 	if mock.RefreshDiagnosticsFunc == nil {
-		var (
-			errOut error
-		)
+		var errOut error
 		return errOut
 	}
 	return mock.RefreshDiagnosticsFunc(ctx)
@@ -121,9 +119,7 @@ func (mock *ClientMock) UnwatchFiles(ctx context.Context, handle project.Watcher
 	mock.calls.UnwatchFiles = append(mock.calls.UnwatchFiles, callInfo)
 	mock.lockUnwatchFiles.Unlock()
 	if mock.UnwatchFilesFunc == nil {
-		var (
-			errOut error
-		)
+		var errOut error
 		return errOut
 	}
 	return mock.UnwatchFilesFunc(ctx, handle)

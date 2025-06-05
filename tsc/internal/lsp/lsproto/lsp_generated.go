@@ -983,8 +983,7 @@ type InitializeError struct {
 	Retry bool `json:"retry"`
 }
 
-type InitializedParams struct {
-}
+type InitializedParams struct{}
 
 // The parameters of a change configuration notification.
 type DidChangeConfigurationParams struct {

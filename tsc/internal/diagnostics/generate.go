@@ -88,7 +88,7 @@ func main() {
 			buf.WriteString(`, reportsDeprecated: true`)
 		}
 
-		buf.WriteString("}\n")
+		buf.WriteString("}\n\n")
 	}
 
 	formatted, err := format.Source(buf.Bytes())

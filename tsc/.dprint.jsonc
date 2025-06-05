@@ -50,7 +50,6 @@
         "**/*-lock.json",
         "**/testdata",
         "_submodules/**",
-        "**/*_generated.go",
         "internal/bundled/libs/**",
         "internal/lsp/lsproto/_generate/*.json",
         "internal/lsp/lsproto/_generate/metaModelSchema.mts",

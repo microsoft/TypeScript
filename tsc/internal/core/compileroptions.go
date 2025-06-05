@@ -8,6 +8,7 @@ import (
 )
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=ModuleKind,ScriptTarget -output=compileroptions_stringer_generated.go
+//go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w compileroptions_stringer_generated.go
 
 type CompilerOptions struct {
 	AllowJs                                   Tristate                                  `json:"allowJs,omitzero"`

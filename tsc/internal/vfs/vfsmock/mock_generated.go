@@ -124,8 +124,7 @@ type FSMock struct {
 			Path string
 		}
 		// UseCaseSensitiveFileNames holds details about calls to the UseCaseSensitiveFileNames method.
-		UseCaseSensitiveFileNames []struct {
-		}
+		UseCaseSensitiveFileNames []struct{}
 		// WalkDir holds details about calls to the WalkDir method.
 		WalkDir []struct {
 			// Root is the root argument value.
@@ -384,8 +383,7 @@ func (mock *FSMock) UseCaseSensitiveFileNames() bool {
 	if mock.UseCaseSensitiveFileNamesFunc == nil {
 		panic("FSMock.UseCaseSensitiveFileNamesFunc: method is nil but FS.UseCaseSensitiveFileNames was just called")
 	}
-	callInfo := struct {
-	}{}
+	callInfo := struct{}{}
 	mock.lockUseCaseSensitiveFileNames.Lock()
 	mock.calls.UseCaseSensitiveFileNames = append(mock.calls.UseCaseSensitiveFileNames, callInfo)
 	mock.lockUseCaseSensitiveFileNames.Unlock()
@@ -396,10 +394,8 @@ func (mock *FSMock) UseCaseSensitiveFileNames() bool {
 // Check the length with:
 //
 //	len(mockedFS.UseCaseSensitiveFileNamesCalls())
-func (mock *FSMock) UseCaseSensitiveFileNamesCalls() []struct {
-} {
-	var calls []struct {
-	}
+func (mock *FSMock) UseCaseSensitiveFileNamesCalls() []struct{} {
+	var calls []struct{}
 	mock.lockUseCaseSensitiveFileNames.RLock()
 	calls = mock.calls.UseCaseSensitiveFileNames
 	mock.lockUseCaseSensitiveFileNames.RUnlock()
