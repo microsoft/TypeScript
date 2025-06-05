@@ -146,7 +146,7 @@ Specify type package names to be included without being referenced in a source f
 ### JavaScript Support
 
 [94m--allowJs[39m
-Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.
+Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
 type: boolean
 default: false
 
