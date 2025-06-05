@@ -26966,8 +26966,9 @@ func (c *Checker) markJsxAliasReferenced(node *ast.Node /*JsxOpeningLikeElement 
 	// if JsxFragment, additionally mark jsx pragma as referenced, since `getJsxNamespace` above would have resolved to only the fragment factory if they are distinct
 	if ast.IsJsxOpeningFragment(node) {
 		file := ast.GetSourceFileOfNode(node)
-		localJsxNamespace := c.getLocalJsxNamespace(file)
-		if localJsxNamespace != "" {
+		entity := c.getJsxFactoryEntity(file.AsNode())
+		if entity != nil {
+			localJsxNamespace := ast.GetFirstIdentifier(entity).Text()
 			flags := ast.SymbolFlagsValue
 			if !shouldFactoryRefErr {
 				flags &= ^ast.SymbolFlagsEnum
