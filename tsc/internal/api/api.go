@@ -115,6 +115,11 @@ func (api *API) Log(s string) {
 	api.options.Logger.Info(s)
 }
 
+// Log implements ProjectHost.
+func (api *API) Trace(s string) {
+	api.options.Logger.Info(s)
+}
+
 // NewLine implements ProjectHost.
 func (api *API) NewLine() string {
 	return api.host.NewLine()

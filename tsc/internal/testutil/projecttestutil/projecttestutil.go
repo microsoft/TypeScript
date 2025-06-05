@@ -83,10 +83,6 @@ func (p *ProjectServiceHost) Client() project.Client {
 	return p.ClientMock
 }
 
-func (p *ProjectServiceHost) ReplaceFS(files map[string]any) {
-	p.fs = bundled.WrapFS(vfstest.FromMap(files, false /*useCaseSensitiveFileNames*/))
-}
-
 var _ project.ServiceHost = (*ProjectServiceHost)(nil)
 
 func Setup(files map[string]any, testOptions *TestTypingsInstaller) (*project.Service, *ProjectServiceHost) {

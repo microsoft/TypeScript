@@ -15,9 +15,11 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
+	"github.com/microsoft/typescript-go/internal/vfs/cachedvfs"
 )
 
 //go:generate go tool golang.org/x/tools/cmd/stringer -type=Kind -output=project_stringer_generated.go
@@ -72,6 +74,7 @@ const (
 
 type ProjectHost interface {
 	tsoptions.ParseConfigHost
+	module.ResolutionHost
 	NewLine() string
 	DefaultLibraryPath() string
 	TypingsInstaller() *TypingsInstaller
@@ -120,7 +123,7 @@ func typeAcquisitionChanged(opt1 *core.TypeAcquisition, opt2 *core.TypeAcquisiti
 var _ compiler.CompilerHost = (*Project)(nil)
 
 type Project struct {
-	host ProjectHost
+	host *projectHostWithCachedFS
 
 	name string
 	kind Kind
@@ -187,9 +190,11 @@ func NewInferredProject(compilerOptions *core.CompilerOptions, currentDirectory 
 }
 
 func NewProject(name string, kind Kind, currentDirectory string, host ProjectHost) *Project {
+	cachedHost := newProjectHostWithCachedFS(host)
+
 	host.Log(fmt.Sprintf("Creating %sProject: %s, currentDirectory: %s", kind.String(), name, currentDirectory))
 	project := &Project{
-		host:             host,
+		host:             cachedHost,
 		name:             name,
 		kind:             kind,
 		currentDirectory: currentDirectory,
@@ -198,11 +203,11 @@ func NewProject(name string, kind Kind, currentDirectory string, host ProjectHos
 	}
 	project.comparePathsOptions = tspath.ComparePathsOptions{
 		CurrentDirectory:          currentDirectory,
-		UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
+		UseCaseSensitiveFileNames: project.host.FS().UseCaseSensitiveFileNames(),
 	}
-	client := host.Client()
-	if host.IsWatchEnabled() && client != nil {
-		globMapper := createResolutionLookupGlobMapper(host)
+	client := project.host.Client()
+	if project.host.IsWatchEnabled() && client != nil {
+		globMapper := createResolutionLookupGlobMapper(project.host)
 		project.failedLookupsWatch = newWatchedFiles(project, lsproto.WatchKindCreate, globMapper, "failed lookup")
 		project.affectingLocationsWatch = newWatchedFiles(project, lsproto.WatchKindChange|lsproto.WatchKindCreate|lsproto.WatchKindDelete, globMapper, "affecting location")
 		project.typingsFilesWatch = newWatchedFiles(project, lsproto.WatchKindChange|lsproto.WatchKindCreate|lsproto.WatchKindDelete, globMapperForTypingsInstaller, "typings installer files")
@@ -210,6 +215,24 @@ func NewProject(name string, kind Kind, currentDirectory string, host ProjectHos
 	}
 	project.markAsDirty()
 	return project
+}
+
+type projectHostWithCachedFS struct {
+	ProjectHost
+	fs *cachedvfs.FS
+}
+
+func newProjectHostWithCachedFS(host ProjectHost) *projectHostWithCachedFS {
+	newHost := &projectHostWithCachedFS{
+		ProjectHost: host,
+		fs:          cachedvfs.From(host.FS()),
+	}
+	newHost.fs.DisableAndClearCache()
+	return newHost
+}
+
+func (p *projectHostWithCachedFS) FS() vfs.FS {
+	return p.fs
 }
 
 // FS implements compiler.CompilerHost.
@@ -265,7 +288,7 @@ func (p *Project) NewLine() string {
 
 // Trace implements compiler.CompilerHost.
 func (p *Project) Trace(msg string) {
-	p.Log(msg)
+	p.host.Log(msg)
 }
 
 // GetDefaultLibraryPath implements compiler.CompilerHost.
@@ -479,6 +502,9 @@ func (p *Project) updateGraph() (*compiler.Program, bool) {
 	if !p.dirty || p.isClosed() {
 		return p.program, false
 	}
+
+	p.host.fs.Enable()
+	defer p.host.fs.DisableAndClearCache()
 
 	start := time.Now()
 	p.Log("Starting updateGraph: Project: " + p.name)

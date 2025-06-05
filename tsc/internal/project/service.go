@@ -106,6 +106,10 @@ func (s *Service) Log(msg string) {
 	s.options.Logger.Info(msg)
 }
 
+func (s *Service) Trace(msg string) {
+	s.Log(msg)
+}
+
 func (s *Service) HasLevel(level LogLevel) bool {
 	return s.options.Logger.HasLevel(level)
 }

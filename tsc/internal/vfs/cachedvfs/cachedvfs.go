@@ -1,12 +1,15 @@
 package cachedvfs
 
 import (
+	"sync/atomic"
+
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/vfs"
 )
 
 type FS struct {
-	fs vfs.FS
+	fs      vfs.FS
+	enabled atomic.Bool
 
 	directoryExistsCache      collections.SyncMap[string, bool]
 	fileExistsCache           collections.SyncMap[string, bool]
@@ -18,7 +21,19 @@ type FS struct {
 var _ vfs.FS = (*FS)(nil)
 
 func From(fs vfs.FS) *FS {
-	return &FS{fs: fs}
+	fsys := &FS{fs: fs}
+	fsys.enabled.Store(true)
+	return fsys
+}
+
+func (fsys *FS) DisableAndClearCache() {
+	if fsys.enabled.CompareAndSwap(true, false) {
+		fsys.ClearCache()
+	}
+}
+
+func (fsys *FS) Enable() {
+	fsys.enabled.Store(true)
 }
 
 func (fsys *FS) ClearCache() {
@@ -30,29 +45,50 @@ func (fsys *FS) ClearCache() {
 }
 
 func (fsys *FS) DirectoryExists(path string) bool {
-	if ret, ok := fsys.directoryExistsCache.Load(path); ok {
-		return ret
+	if fsys.enabled.Load() {
+		if ret, ok := fsys.directoryExistsCache.Load(path); ok {
+			return ret
+		}
 	}
+
 	ret := fsys.fs.DirectoryExists(path)
-	fsys.directoryExistsCache.Store(path, ret)
+
+	if fsys.enabled.Load() {
+		fsys.directoryExistsCache.Store(path, ret)
+	}
+
 	return ret
 }
 
 func (fsys *FS) FileExists(path string) bool {
-	if ret, ok := fsys.fileExistsCache.Load(path); ok {
-		return ret
+	if fsys.enabled.Load() {
+		if ret, ok := fsys.fileExistsCache.Load(path); ok {
+			return ret
+		}
 	}
+
 	ret := fsys.fs.FileExists(path)
-	fsys.fileExistsCache.Store(path, ret)
+
+	if fsys.enabled.Load() {
+		fsys.fileExistsCache.Store(path, ret)
+	}
+
 	return ret
 }
 
 func (fsys *FS) GetAccessibleEntries(path string) vfs.Entries {
-	if ret, ok := fsys.getAccessibleEntriesCache.Load(path); ok {
-		return ret
+	if fsys.enabled.Load() {
+		if ret, ok := fsys.getAccessibleEntriesCache.Load(path); ok {
+			return ret
+		}
 	}
+
 	ret := fsys.fs.GetAccessibleEntries(path)
-	fsys.getAccessibleEntriesCache.Store(path, ret)
+
+	if fsys.enabled.Load() {
+		fsys.getAccessibleEntriesCache.Store(path, ret)
+	}
+
 	return ret
 }
 
@@ -61,11 +97,18 @@ func (fsys *FS) ReadFile(path string) (contents string, ok bool) {
 }
 
 func (fsys *FS) Realpath(path string) string {
-	if ret, ok := fsys.realpathCache.Load(path); ok {
-		return ret
+	if fsys.enabled.Load() {
+		if ret, ok := fsys.realpathCache.Load(path); ok {
+			return ret
+		}
 	}
+
 	ret := fsys.fs.Realpath(path)
-	fsys.realpathCache.Store(path, ret)
+
+	if fsys.enabled.Load() {
+		fsys.realpathCache.Store(path, ret)
+	}
+
 	return ret
 }
 
@@ -74,11 +117,18 @@ func (fsys *FS) Remove(path string) error {
 }
 
 func (fsys *FS) Stat(path string) vfs.FileInfo {
-	if ret, ok := fsys.statCache.Load(path); ok {
-		return ret.(vfs.FileInfo)
+	if fsys.enabled.Load() {
+		if ret, ok := fsys.statCache.Load(path); ok {
+			return ret.(vfs.FileInfo)
+		}
 	}
+
 	ret := fsys.fs.Stat(path)
-	fsys.statCache.Store(path, ret)
+
+	if fsys.enabled.Load() {
+		fsys.statCache.Store(path, ret)
+	}
+
 	return ret
 }
 
