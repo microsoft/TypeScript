@@ -55,12 +55,12 @@ import * as config3 from "./config.json" with { type: "json" };
 >config3 : Symbol(config3, Decl(main.mts, 10, 6))
 
 config3.version; // Error
->config3.version : Symbol("version", Decl(config.json, 0, 1))
 >config3 : Symbol(config3, Decl(main.mts, 10, 6))
->version : Symbol("version", Decl(config.json, 0, 1))
 
 config3.default; // Ok
+>config3.default : Symbol(default)
 >config3 : Symbol(config3, Decl(main.mts, 10, 6))
+>default : Symbol(default)
 
 === /loosey.cts ===
 import config from "./config.json" with { type: "json" }; // Error

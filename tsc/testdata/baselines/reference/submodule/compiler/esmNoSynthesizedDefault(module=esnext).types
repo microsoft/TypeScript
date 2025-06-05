@@ -6,32 +6,32 @@ export function toString(): string;
 
 === /index.ts ===
 import mdast, { toString } from 'mdast-util-to-string';
->mdast : typeof mdast
+>mdast : any
 >toString : () => string
 
 mdast;
->mdast : typeof mdast
+>mdast : any
 
 mdast.toString();
->mdast.toString() : string
->mdast.toString : () => string
->mdast : typeof mdast
->toString : () => string
+>mdast.toString() : any
+>mdast.toString : any
+>mdast : any
+>toString : any
 
 const mdast2 = await import('mdast-util-to-string');
->mdast2 : { toString(): string; default: typeof mdast; }
->await import('mdast-util-to-string') : { toString(): string; default: typeof mdast; }
->import('mdast-util-to-string') : Promise<{ toString(): string; default: typeof mdast; }>
+>mdast2 : typeof import("mdast-util-to-string")
+>await import('mdast-util-to-string') : typeof import("mdast-util-to-string")
+>import('mdast-util-to-string') : Promise<typeof import("mdast-util-to-string")>
 >'mdast-util-to-string' : "mdast-util-to-string"
 
 mdast2.toString();
 >mdast2.toString() : string
 >mdast2.toString : () => string
->mdast2 : { toString(): string; default: typeof mdast; }
+>mdast2 : typeof import("mdast-util-to-string")
 >toString : () => string
 
 mdast2.default;
->mdast2.default : typeof mdast
->mdast2 : { toString(): string; default: typeof mdast; }
->default : typeof mdast
+>mdast2.default : any
+>mdast2 : typeof import("mdast-util-to-string")
+>default : any
 

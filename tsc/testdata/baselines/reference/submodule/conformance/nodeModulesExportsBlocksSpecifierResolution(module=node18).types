@@ -6,14 +6,14 @@ import { Thing } from "inner/other";
 >Thing : any
 
 export const a = (await import("inner")).x();
->a : import("./node_modules/inner/other").Thing
->(await import("inner")).x() : import("./node_modules/inner/other").Thing
->(await import("inner")).x : () => import("./node_modules/inner/other").Thing
->(await import("inner")) : { x: () => import("./node_modules/inner/other").Thing; default: typeof import("./node_modules/inner"); }
->await import("inner") : { x: () => import("./node_modules/inner/other").Thing; default: typeof import("./node_modules/inner"); }
->import("inner") : Promise<{ x: () => import("./node_modules/inner/other").Thing; default: typeof import("./node_modules/inner"); }>
+>a : import("./node_modules/inner/other.js").Thing
+>(await import("inner")).x() : import("./node_modules/inner/other.js").Thing
+>(await import("inner")).x : () => import("./node_modules/inner/other.js").Thing
+>(await import("inner")) : typeof import("inner")
+>await import("inner") : typeof import("inner")
+>import("inner") : Promise<typeof import("inner")>
 >"inner" : "inner"
->x : () => import("./node_modules/inner/other").Thing
+>x : () => import("./node_modules/inner/other.js").Thing
 
 === node_modules/inner/index.d.ts ===
 // esm format file

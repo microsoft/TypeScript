@@ -1,47 +1,26 @@
 --- old.esmNoSynthesizedDefault(module=esnext).types
 +++ new.esmNoSynthesizedDefault(module=esnext).types
-@@= skipped -5, +5 lines =@@
-
- === /index.ts ===
- import mdast, { toString } from 'mdast-util-to-string';
-->mdast : any
-+>mdast : typeof mdast
- >toString : () => string
-
- mdast;
-->mdast : any
-+>mdast : typeof mdast
-
- mdast.toString();
-->mdast.toString() : any
-->mdast.toString : any
-->mdast : any
-->toString : any
-+>mdast.toString() : string
-+>mdast.toString : () => string
-+>mdast : typeof mdast
-+>toString : () => string
+@@= skipped -18, +18 lines =@@
+ >toString : any
 
  const mdast2 = await import('mdast-util-to-string');
 ->mdast2 : typeof import("/node_modules/mdast-util-to-string/index")
 ->await import('mdast-util-to-string') : typeof import("/node_modules/mdast-util-to-string/index")
 ->import('mdast-util-to-string') : Promise<typeof import("/node_modules/mdast-util-to-string/index")>
-+>mdast2 : { toString(): string; default: typeof mdast; }
-+>await import('mdast-util-to-string') : { toString(): string; default: typeof mdast; }
-+>import('mdast-util-to-string') : Promise<{ toString(): string; default: typeof mdast; }>
++>mdast2 : typeof import("mdast-util-to-string")
++>await import('mdast-util-to-string') : typeof import("mdast-util-to-string")
++>import('mdast-util-to-string') : Promise<typeof import("mdast-util-to-string")>
  >'mdast-util-to-string' : "mdast-util-to-string"
 
  mdast2.toString();
  >mdast2.toString() : string
  >mdast2.toString : () => string
 ->mdast2 : typeof import("/node_modules/mdast-util-to-string/index")
-+>mdast2 : { toString(): string; default: typeof mdast; }
++>mdast2 : typeof import("mdast-util-to-string")
  >toString : () => string
 
  mdast2.default;
-->mdast2.default : any
+ >mdast2.default : any
 ->mdast2 : typeof import("/node_modules/mdast-util-to-string/index")
-->default : any
-+>mdast2.default : typeof mdast
-+>mdast2 : { toString(): string; default: typeof mdast; }
-+>default : typeof mdast
++>mdast2 : typeof import("mdast-util-to-string")
+ >default : any

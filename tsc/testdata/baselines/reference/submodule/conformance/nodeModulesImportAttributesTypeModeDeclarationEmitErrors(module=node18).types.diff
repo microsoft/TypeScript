@@ -27,7 +27,7 @@
      & import("pkg", {"resolution-mode": "import"}).ImportInterface;
  >import("pkg", {"resolution-mode": "import"}).ImportInterface : any
 ->import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
-+>import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("./node_modules/pkg/import"); }>
++>import("pkg", {"resolution-mode": "import"}) : Promise<typeof import("./node_modules/pkg/import")>
  >"pkg" : "pkg"
  >{"resolution-mode": "import"} : { "resolution-mode": string; }
  >"resolution-mode" : string
@@ -49,7 +49,7 @@
      & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
  >import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
 ->import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
-+>import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("./node_modules/pkg/import"); }>
++>import("pkg", [ {"resolution-mode": "import"} ]) : Promise<typeof import("./node_modules/pkg/import")>
  >"pkg" : "pkg"
  >[ {"resolution-mode": "import"} ] : { "resolution-mode": string; }[]
  >{"resolution-mode": "import"} : { "resolution-mode": string; }
@@ -58,7 +58,7 @@
      & import("pkg", Attribute2).ImportInterface;
  >import("pkg", Attribute2).ImportInterface : any
 ->import("pkg", Attribute2) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
-+>import("pkg", Attribute2) : Promise<{ default: typeof import("./node_modules/pkg/import"); }>
++>import("pkg", Attribute2) : Promise<typeof import("./node_modules/pkg/import")>
  >"pkg" : "pkg"
  >Attribute2 : any
  >ImportInterface : any

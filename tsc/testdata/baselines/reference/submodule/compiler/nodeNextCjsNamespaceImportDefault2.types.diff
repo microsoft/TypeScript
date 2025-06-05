@@ -1,37 +1,31 @@
 --- old.nodeNextCjsNamespaceImportDefault2.types
 +++ new.nodeNextCjsNamespaceImportDefault2.types
-@@= skipped -7, +7 lines =@@
- export default 'string';
- === src/foo.mts ===
- import d, {a} from './a.cjs';
-->d : typeof d
-+>d : "string"
+@@= skipped -11, +11 lines =@@
  >a : number
 
  import * as ns from './a.cjs';
- >ns : typeof ns
+->ns : typeof ns
++>ns : typeof d
 
  export {d, a, ns};
-->d : typeof d
-+>d : "string"
+ >d : typeof d
  >a : number
- >ns : typeof ns
+->ns : typeof ns
++>ns : typeof d
 
  d.a;
-->d.a : number
-->d : typeof d
-->a : number
-+>d.a : any
-+>d : "string"
-+>a : any
+ >d.a : number
+@@= skipped -13, +13 lines =@@
+ >a : number
 
  ns.default.a;
 ->ns.default.a : number
 ->ns.default : typeof d
-+>ns.default.a : any
-+>ns.default : "string"
- >ns : typeof ns
+->ns : typeof ns
 ->default : typeof d
 ->a : number
++>ns.default.a : any
++>ns.default : "string"
++>ns : typeof d
 +>default : "string"
 +>a : any

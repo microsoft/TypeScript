@@ -1,11 +1,11 @@
 /loosey.cts(1,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
 /loosey.cts(6,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
-/main.mts(5,36): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-/main.mts(6,52): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-/main.mts(9,47): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-/main.mts(10,41): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-/main.mts(11,42): error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
-/main.mts(13,9): error TS2339: Property 'default' does not exist on type '{ version: number; }'.
+/main.mts(2,22): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNodeNext'.
+/main.mts(3,19): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNodeNext'.
+/main.mts(7,21): error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNodeNext'.
+/main.mts(9,47): error TS2857: Import attributes cannot be used with type-only imports or exports.
+/main.mts(10,10): error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'ModuleKindNodeNext'.
+/main.mts(12,9): error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
 
 
 ==== /node_modules/not.json/package.json (0 errors) ====
@@ -45,29 +45,29 @@
 ==== /main.mts (6 errors) ====
     import { oops } from "not.json"; // Ok
     import moreOops from "actually-json"; // Error in nodenext
+                         ~~~~~~~~~~~~~~~
+!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNodeNext'.
     import typed from "actually-json/typed"; // Error in nodenext
+                      ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNodeNext'.
     
     import config from "./config.json" with { type: "json" }; // Ok
-                                       ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     import { default as config1 } from "./config.json" with { type: "json" }; // Ok
-                                                       ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     import config2 from "./config.json"; // Error in nodenext, no attribute
+                        ~~~~~~~~~~~~~~~
+!!! error TS1543: Importing a JSON file into an ECMAScript module requires a 'type: "json"' import attribute when 'module' is set to 'ModuleKindNodeNext'.
     import type config2Type from "./config.json"; // Ok, type-only
     import type config2Type2 from "./config.json" with { type: "json" }; // Error, import attributes not allowed on type-only imports
                                                   ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+!!! error TS2857: Import attributes cannot be used with type-only imports or exports.
     import { version } from "./config.json" with { type: "json" }; // Error, named import
-                                            ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
+             ~~~~~~~
+!!! error TS1544: Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to 'ModuleKindNodeNext'.
     import * as config3 from "./config.json" with { type: "json" };
-                                             ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2856: Import attributes are not allowed on statements that compile to CommonJS 'require' calls.
     config3.version; // Error
-    config3.default; // Ok
             ~~~~~~~
-!!! error TS2339: Property 'default' does not exist on type '{ version: number; }'.
+!!! error TS2339: Property 'version' does not exist on type '{ default: { version: number; }; }'.
+    config3.default; // Ok
     
 ==== /loosey.cts (2 errors) ====
     import config from "./config.json" with { type: "json" }; // Error

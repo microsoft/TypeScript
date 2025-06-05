@@ -25,6 +25,11 @@ type fakeProgram struct {
 	getSourceFile               func(FileName string) *ast.SourceFile
 }
 
+// GetEmitSyntaxForUsageLocation implements checker.Program.
+func (p *fakeProgram) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation *ast.StringLiteralLike) core.ResolutionMode {
+	panic("unimplemented")
+}
+
 // CommonSourceDirectory implements checker.Program.
 func (p *fakeProgram) CommonSourceDirectory() string {
 	panic("unimplemented")

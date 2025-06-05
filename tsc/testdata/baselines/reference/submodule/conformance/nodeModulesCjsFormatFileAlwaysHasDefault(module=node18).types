@@ -9,8 +9,8 @@ export const a = 1;
 === index.ts ===
 // esm format file
 import mod from "./subfolder/index.js";
->mod : any
+>mod : typeof mod
 
 mod;
->mod : any
+>mod : typeof mod
 

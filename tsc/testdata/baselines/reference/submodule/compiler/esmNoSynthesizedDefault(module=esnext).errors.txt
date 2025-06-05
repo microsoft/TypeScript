@@ -1,0 +1,23 @@
+/index.ts(1,8): error TS1192: Module '"/node_modules/mdast-util-to-string/index"' has no default export.
+/index.ts(7,8): error TS2339: Property 'default' does not exist on type 'typeof import("/node_modules/mdast-util-to-string/index")'.
+
+
+==== /node_modules/mdast-util-to-string/package.json (0 errors) ====
+    { "type": "module" }
+    
+==== /node_modules/mdast-util-to-string/index.d.ts (0 errors) ====
+    export function toString(): string;
+    
+==== /index.ts (2 errors) ====
+    import mdast, { toString } from 'mdast-util-to-string';
+           ~~~~~
+!!! error TS1192: Module '"/node_modules/mdast-util-to-string/index"' has no default export.
+    mdast;
+    mdast.toString();
+    
+    const mdast2 = await import('mdast-util-to-string');
+    mdast2.toString();
+    mdast2.default;
+           ~~~~~~~
+!!! error TS2339: Property 'default' does not exist on type 'typeof import("/node_modules/mdast-util-to-string/index")'.
+    

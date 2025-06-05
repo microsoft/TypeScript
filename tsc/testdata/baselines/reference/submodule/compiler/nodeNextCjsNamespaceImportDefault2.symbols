@@ -19,7 +19,9 @@ export {d, a, ns};
 >ns : Symbol(ns, Decl(foo.mts, 2, 13))
 
 d.a;
+>d.a : Symbol(a, Decl(a.cts, 0, 12))
 >d : Symbol(d, Decl(foo.mts, 0, 6))
+>a : Symbol(a, Decl(a.cts, 0, 12))
 
 ns.default.a;
 >ns.default : Symbol(default, Decl(a.cts, 0, 27))

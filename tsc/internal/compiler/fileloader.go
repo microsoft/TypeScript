@@ -512,17 +512,12 @@ func importSyntaxAffectsModuleResolution(options *core.CompilerOptions) bool {
 }
 
 func getEmitSyntaxForUsageLocationWorker(fileName string, meta *ast.SourceFileMetaData, usage *ast.Node, options *core.CompilerOptions) core.ResolutionMode {
-	if options == nil {
-		// This should always be provided, but we try to fail somewhat
-		// gracefully to allow projects like ts-node time to update.
-		return core.ResolutionModeNone
-	}
-
 	if ast.IsRequireCall(usage.Parent) || ast.IsExternalModuleReference(usage.Parent) && ast.IsImportEqualsDeclaration(usage.Parent.Parent) {
 		return core.ModuleKindCommonJS
 	}
+	fileEmitMode := ast.GetEmitModuleFormatOfFileWorker(fileName, options, meta)
 	if ast.IsImportCall(ast.WalkUpParenthesizedExpressions(usage.Parent)) {
-		if ast.ShouldTransformImportCall(fileName, options, ast.GetImpliedNodeFormatForEmitWorker(fileName, options, meta)) {
+		if ast.ShouldTransformImportCall(fileName, options, fileEmitMode) {
 			return core.ModuleKindCommonJS
 		} else {
 			return core.ModuleKindESNext
@@ -535,7 +530,6 @@ func getEmitSyntaxForUsageLocationWorker(fileName string, meta *ast.SourceFileMe
 	// file, until/unless declaration emit can indicate a true ESM import. On the
 	// other hand, writing CJS syntax in a definitely-ESM file is fine, since declaration
 	// emit preserves the CJS syntax.
-	fileEmitMode := ast.GetEmitModuleFormatOfFileWorker(fileName, options, meta)
 	if fileEmitMode == core.ModuleKindCommonJS {
 		return core.ModuleKindCommonJS
 	} else {

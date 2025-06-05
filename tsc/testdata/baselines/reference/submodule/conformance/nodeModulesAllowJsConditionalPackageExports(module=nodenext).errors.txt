@@ -1,5 +1,3 @@
-index.cjs(3,22): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
-index.cjs(4,23): error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
 index.cjs(8,23): error TS2307: Cannot find module 'inner/a' or its corresponding type declarations.
 index.cjs(9,23): error TS2307: Cannot find module 'inner/b' or its corresponding type declarations.
 index.cjs(11,21): error TS2307: Cannot find module 'inner/types' or its corresponding type declarations.
@@ -70,15 +68,11 @@ node_modules/inner/index.d.ts(5,21): error TS2307: Cannot find module 'inner/typ
           ~~~~~~~~~
 !!! error TS2339: Property 'mjsSource' does not exist on type 'typeof import("node_modules/inner/index")'.
     ts.mjsSource;
-==== index.cjs (5 errors) ====
+==== index.cjs (3 errors) ====
     // cjs format file
     import * as cjs from "package/cjs";
     import * as mjs from "package/mjs";
-                         ~~~~~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package/mjs")' call instead.
     import * as type from "package";
-                          ~~~~~~~~~
-!!! error TS1479: The current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("package")' call instead.
     cjs;
     mjs;
     type;

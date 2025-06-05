@@ -26,13 +26,13 @@ import def8 from "./file.cts";
 >def8 : any
 
 import def9 from "./file.d.ts";
->def9 : "bad3"
+>def9 : any
 
 import def10 from "./file.d.cts";
->def10 : "bad8"
+>def10 : any
 
 import def11 from "./file.d.mts";
->def11 : "bad7"
+>def11 : any
 
 import def12 from "./file.d.json.ts";
 >def12 : any

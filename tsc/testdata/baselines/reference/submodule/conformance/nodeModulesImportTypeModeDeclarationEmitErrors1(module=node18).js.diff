@@ -1,11 +1,8 @@
 --- old.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node18).js
 +++ new.nodeModulesImportTypeModeDeclarationEmitErrors1(module=node18).js
-@@= skipped -121, +121 lines =@@
- //// [index.d.ts]
- export type LocalInterface = import("pkg", { assert: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
+@@= skipped -123, +123 lines =@@
  export declare const a: import("pkg").RequireInterface;
--export declare const b: import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
-+export declare const b: any;
+ export declare const b: import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
  //// [other.d.ts]
 +// missing assert:
  export type LocalInterface = import("pkg", { with: {} });
@@ -23,7 +20,7 @@
  export type LocalInterface = import("pkg", { with: {} })[{
      "resolution-mode": "require";
  }];
-@@= skipped -17, +20 lines =@@
+@@= skipped -15, +18 lines =@@
  export declare const b: any;
  //// [other4.d.ts]
  export type LocalInterface = import("pkg", { with: {} });

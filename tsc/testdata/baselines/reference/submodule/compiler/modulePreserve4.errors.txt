@@ -1,9 +1,11 @@
 /f.cts(1,1): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main1.ts(3,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 /main1.ts(19,4): error TS2339: Property 'default' does not exist on type '() => void'.
+/main1.ts(23,8): error TS1192: Module '"/e"' has no default export.
 /main1.ts(30,4): error TS2339: Property 'default' does not exist on type '0'.
 /main2.mts(4,4): error TS2339: Property 'default' does not exist on type 'typeof import("/a")'.
 /main2.mts(5,12): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+/main2.mts(14,8): error TS1192: Module '"/e"' has no default export.
 /main3.cjs(1,10): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(1,13): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main3.cjs(5,8): error TS1286: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
@@ -41,7 +43,7 @@
 ==== /g.js (0 errors) ====
     exports.default = 0;
     
-==== /main1.ts (3 errors) ====
+==== /main1.ts (4 errors) ====
     import { x, y } from "./a"; // No y
     import a1 = require("./a"); // { x: 0 }
     const a2 = require("./a"); // Error in TS
@@ -69,6 +71,8 @@
     d3.default();
     
     import e1 from "./e.mjs"; // 0
+           ~~
+!!! error TS1192: Module '"/e"' has no default export.
     import e2 = require("./e.mjs"); // 0
     import f1 from "./f.cjs"; // 0
     import f2 = require("./f.cjs"); // { default: 0 }
@@ -81,7 +85,7 @@
     import g2 = require("./g"); // { default: 0 }
     g2.default;
     
-==== /main2.mts (2 errors) ====
+==== /main2.mts (3 errors) ====
     import { x, y } from "./a"; // No y
     import a1 = require("./a"); // { x: 0 }
     a1.x;
@@ -100,6 +104,8 @@
     import d1 from "./d"; // [Function: default]
     import d2 = require("./d"); // [Function: default]
     import e1 from "./e.mjs"; // 0
+           ~~
+!!! error TS1192: Module '"/e"' has no default export.
     import e2 = require("./e.mjs"); // 0
     import f1 from "./f.cjs"; // 0
     import f2 = require("./f.cjs"); // { default: 0 }

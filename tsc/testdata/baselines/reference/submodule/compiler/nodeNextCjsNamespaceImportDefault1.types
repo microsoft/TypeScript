@@ -7,26 +7,26 @@ export const a: number = 1;
 
 === src/foo.mts ===
 import d, {a} from './a.cjs';
->d : any
+>d : typeof d
 >a : number
 
 import * as ns from './a.cjs';
->ns : typeof ns
+>ns : typeof d
 
 export {d, a, ns};
->d : any
+>d : typeof d
 >a : number
->ns : typeof ns
+>ns : typeof d
 
 d.a;
->d.a : any
->d : any
->a : any
+>d.a : number
+>d : typeof d
+>a : number
 
 ns.default.a;
 >ns.default.a : any
 >ns.default : any
->ns : typeof ns
+>ns : typeof d
 >default : any
 >a : any
 

@@ -5,8 +5,10 @@
 
  d.a;
 ->d.a : Symbol(d.a, Decl(a.cts, 0, 12))
++>d.a : Symbol(a, Decl(a.cts, 0, 12))
  >d : Symbol(d, Decl(foo.mts, 0, 6))
 ->a : Symbol(d.a, Decl(a.cts, 0, 12))
++>a : Symbol(a, Decl(a.cts, 0, 12))
 
  ns.default.a;
 ->ns.default.a : Symbol(d.a, Decl(a.cts, 0, 12))

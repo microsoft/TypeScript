@@ -9,9 +9,9 @@ export = example;
 
 === main.mts ===
 import example from "./other.mjs";
->example : () => 5
+>example : any
 
 example();
->example() : 5
->example : () => 5
+>example() : any
+>example : any
 

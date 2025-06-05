@@ -689,6 +689,10 @@ func (p *Program) GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) core.Mod
 	return ast.GetEmitModuleFormatOfFileWorker(sourceFile.FileName(), p.Options(), p.GetSourceFileMetaData(sourceFile.Path()))
 }
 
+func (p *Program) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {
+	return getEmitSyntaxForUsageLocationWorker(sourceFile.FileName(), p.sourceFileMetaDatas[sourceFile.Path()], location, p.Options())
+}
+
 func (p *Program) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ResolutionMode {
 	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.Options(), p.GetSourceFileMetaData(sourceFile.Path()))
 }

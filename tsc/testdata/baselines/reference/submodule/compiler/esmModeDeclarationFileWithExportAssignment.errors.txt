@@ -1,3 +1,4 @@
+main.mts(1,8): error TS1192: Module '"other"' has no default export.
 other.d.mts(2,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 
 
@@ -7,6 +8,8 @@ other.d.mts(2,1): error TS1203: Export assignment cannot be used when targeting 
     ~~~~~~~~~~~~~~~~~
 !!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
     
-==== main.mts (0 errors) ====
+==== main.mts (1 errors) ====
     import example from "./other.mjs";
+           ~~~~~~~
+!!! error TS1192: Module '"other"' has no default export.
     example();

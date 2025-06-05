@@ -8,26 +8,26 @@ export const a: number = 1;
 export default 'string';
 === src/foo.mts ===
 import d, {a} from './a.cjs';
->d : "string"
+>d : typeof d
 >a : number
 
 import * as ns from './a.cjs';
->ns : typeof ns
+>ns : typeof d
 
 export {d, a, ns};
->d : "string"
+>d : typeof d
 >a : number
->ns : typeof ns
+>ns : typeof d
 
 d.a;
->d.a : any
->d : "string"
->a : any
+>d.a : number
+>d : typeof d
+>a : number
 
 ns.default.a;
 >ns.default.a : any
 >ns.default : "string"
->ns : typeof ns
+>ns : typeof d
 >default : "string"
 >a : any
 

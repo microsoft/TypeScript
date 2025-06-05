@@ -528,6 +528,7 @@ type Program interface {
 	FileExists(fileName string) bool
 	GetSourceFile(fileName string) *ast.SourceFile
 	GetEmitModuleFormatOfFile(sourceFile ast.HasFileName) core.ModuleKind
+	GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation *ast.StringLiteralLike) core.ResolutionMode
 	GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ModuleKind
 	GetResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
 	GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
@@ -5016,7 +5017,10 @@ func (c *Checker) checkImportDeclaration(node *ast.Node) {
 					}
 				}
 			}
-			if c.isOnlyImportableAsDefault(moduleSpecifier, resolvedModule) && !hasTypeJsonImportAttribute(node) {
+			if !importClause.IsTypeOnly() &&
+				core.ModuleKindNode18 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext &&
+				c.isOnlyImportableAsDefault(moduleSpecifier, resolvedModule) &&
+				!hasTypeJsonImportAttribute(node) {
 				c.error(moduleSpecifier, diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, c.moduleKind.String())
 			}
 		} else if c.compilerOptions.NoUncheckedSideEffectImports.IsTrue() && importClause == nil {
@@ -5113,29 +5117,32 @@ func (c *Checker) checkImportAttributes(declaration *ast.Node) {
 	if isTypeOnly && override != core.ResolutionModeNone {
 		return // Other grammar checks do not apply to type-only imports with resolution mode assertions
 	}
-	var mode core.ResolutionMode
-	if c.moduleKind == core.ModuleKindNodeNext {
-		if moduleSpecifier := getModuleSpecifierFromNode(declaration); moduleSpecifier != nil {
-			mode = c.getEmitSyntaxForModuleSpecifierExpression(moduleSpecifier)
+
+	if !c.moduleKind.SupportsImportAttributes() {
+		if isImportAttributes {
+			c.grammarErrorOnNode(node, diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve)
+		} else {
+			c.grammarErrorOnNode(node, diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve)
 		}
-	}
-	if mode != core.ModuleKindESNext && c.moduleKind != core.ModuleKindESNext && c.moduleKind != core.ModuleKindPreserve {
-		var message *diagnostics.Message
-		switch {
-		case isImportAttributes:
-			if c.moduleKind == core.ModuleKindNodeNext {
-				message = diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-			} else {
-				message = diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
-			}
-		case c.moduleKind == core.ModuleKindNodeNext:
-			message = diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls
-		default:
-			message = diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
-		}
-		c.grammarErrorOnNode(node, message)
 		return
 	}
+
+	if c.moduleKind == core.ModuleKindNodeNext && !isImportAttributes {
+		c.grammarErrorOnNode(node, diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert)
+		return
+	}
+
+	if moduleSpecifier := getModuleSpecifierFromNode(declaration); moduleSpecifier != nil {
+		if c.getEmitSyntaxForModuleSpecifierExpression(moduleSpecifier) == core.ModuleKindCommonJS {
+			if isImportAttributes {
+				c.grammarErrorOnNode(node, diagnostics.Import_attributes_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls)
+			} else {
+				c.grammarErrorOnNode(node, diagnostics.Import_assertions_are_not_allowed_on_statements_that_compile_to_CommonJS_require_calls)
+			}
+			return
+		}
+	}
+
 	if isTypeOnly {
 		c.grammarErrorOnNode(node, core.IfElse(isImportAttributes,
 			diagnostics.Import_attributes_cannot_be_used_with_type_only_imports_or_exports,
@@ -10210,7 +10217,7 @@ func (c *Checker) checkNewTargetMetaProperty(node *ast.Node) *Type {
 }
 
 func (c *Checker) checkImportMetaProperty(node *ast.Node) *Type {
-	if c.moduleKind == core.ModuleKindNode16 || c.moduleKind == core.ModuleKindNodeNext {
+	if core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
 		sourceFileMetaData := c.program.GetSourceFileMetaData(ast.GetSourceFileOfNode(node).Path())
 		if sourceFileMetaData == nil || sourceFileMetaData.ImpliedNodeFormat != core.ModuleKindESNext {
 			c.error(node, diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output)
@@ -14092,10 +14099,9 @@ func (c *Checker) canHaveSyntheticDefault(file *ast.Node, moduleSymbol *ast.Symb
 }
 
 func (c *Checker) getEmitSyntaxForModuleSpecifierExpression(usage *ast.Node) core.ResolutionMode {
-	// !!!
-	// if isStringLiteralLike(usage) {
-	// 	return host.getEmitSyntaxForUsageLocation(ast.GetSourceFileOfNode(usage), usage)
-	// }
+	if ast.IsStringLiteralLike(usage) {
+		return c.program.GetEmitSyntaxForUsageLocation(ast.GetSourceFileOfNode(usage), usage)
+	}
 	return core.ModuleKindNone
 }
 
@@ -14446,7 +14452,7 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 				if resolvedModule.IsExternalLibraryImport && !(tspath.ExtensionIsTs(resolvedModule.Extension) || resolvedModule.Extension == tspath.ExtensionJson) {
 					c.errorOnImplicitAnyModule(false /*isError*/, errorNode, mode, resolvedModule, moduleReference)
 				}
-				if c.moduleResolutionKind == core.ModuleResolutionKindNode16 || c.moduleResolutionKind == core.ModuleResolutionKindNodeNext {
+				if c.moduleKind == core.ModuleKindNode16 || c.moduleKind == core.ModuleKindNode18 {
 					isSyncImport := c.program.GetDefaultResolutionModeForFile(importingSourceFile) == core.ModuleKindCommonJS && ast.FindAncestor(location, ast.IsImportCall) == nil ||
 						ast.FindAncestor(location, ast.IsImportEqualsDeclaration) != nil
 					overrideHost := ast.FindAncestor(location, ast.IsResolutionModeOverrideHost)

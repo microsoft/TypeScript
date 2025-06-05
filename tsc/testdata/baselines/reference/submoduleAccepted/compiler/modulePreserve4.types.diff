@@ -34,16 +34,7 @@
 
  import a1 = require("./a"); // { x: 0 }
  >a1 : typeof a1
-@@= skipped -91, +91 lines =@@
- >default : () => void
-
- import e1 from "./e.mjs"; // 0
-->e1 : any
-+>e1 : 0
-
- import e2 = require("./e.mjs"); // 0
- >e2 : 0
-@@= skipped -17, +17 lines =@@
+@@= skipped -108, +108 lines =@@
  >default : 0
 
  import g1 from "./g"; // { default: 0 }
@@ -76,16 +67,7 @@
 
  import a1 = require("./a"); // { x: 0 }
  >a1 : typeof a1
-@@= skipped -60, +60 lines =@@
- >d2 : () => void
-
- import e1 from "./e.mjs"; // 0
-->e1 : any
-+>e1 : 0
-
- import e2 = require("./e.mjs"); // 0
- >e2 : 0
-@@= skipped -12, +12 lines =@@
+@@= skipped -72, +72 lines =@@
  >f2 : typeof f2
 
  import g1 from "./g"; // { default: 0 }
