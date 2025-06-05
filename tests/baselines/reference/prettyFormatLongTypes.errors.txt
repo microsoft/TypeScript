@@ -1,0 +1,73 @@
+[96mprettyFormatLongTypes.ts[0m:[93m6[0m:[93m1[0m - [91merror[0m[90m TS2882: [0mType:
+  { b: { c: { e: { f: string; }; }; }; }
+
+is not assignable to type:
+  { b: { c: { e: { f: number; }; }; }; }
+
+  The types of 'b.c.e.f' are incompatible between these types.
+    Type 'string' is not assignable to type 'number'.
+
+[7m6[0m a = b;
+[7m [0m [91m~[0m
+[96mprettyFormatLongTypes.ts[0m:[93m9[0m:[93m1[0m - [91merror[0m[90m TS2882: [0mType:
+  string
+
+is not assignable to type:
+  { b: { c: { e: { f: number; }; }; }; }
+
+
+[7m9[0m a = c;
+[7m [0m [91m~[0m
+[96mprettyFormatLongTypes.ts[0m:[93m12[0m:[93m1[0m - [91merror[0m[90m TS2882: [0mType:
+  { b: { c: { e: { f: number; }; }; }; }
+
+is not assignable to type:
+  string
+
+
+[7m12[0m c = a;
+[7m  [0m [91m~[0m
+[96mprettyFormatLongTypes.ts[0m:[93m15[0m:[93m1[0m - [91merror[0m[90m TS2322: [0mType 'boolean' is not assignable to type 'string'.
+
+[7m15[0m c = false;
+[7m  [0m [91m~[0m
+
+
+==== prettyFormatLongTypes.ts (4 errors) ====
+    let a = { b: { c: { e: { f: 123 } } } };
+    let b = { b: { c: { e: { f: "123" } } } };
+    let c = "test";
+    
+    // both the source and target types are wide enough enough trigger pretty printing
+    a = b;
+    ~
+!!! error TS2882: Type:
+!!! error TS2882:   { b: { c: { e: { f: string; }; }; }; }
+!!! error TS2882: is not assignable to type:
+!!! error TS2882:   { b: { c: { e: { f: number; }; }; }; }
+!!! error TS2882:   The types of 'b.c.e.f' are incompatible between these types.
+!!! error TS2882:     Type 'string' is not assignable to type 'number'.
+    
+    // only the source type is wide enough to trigger pretty printing
+    a = c;
+    ~
+!!! error TS2882: Type:
+!!! error TS2882:   string
+!!! error TS2882: is not assignable to type:
+!!! error TS2882:   { b: { c: { e: { f: number; }; }; }; }
+    
+    // only the target type is wide enough to trigger pretty printing
+    c = a;
+    ~
+!!! error TS2882: Type:
+!!! error TS2882:   { b: { c: { e: { f: number; }; }; }; }
+!!! error TS2882: is not assignable to type:
+!!! error TS2882:   string
+    
+    // neither the source nor the target type is wide enough to trigger pretty printing
+    c = false;
+    ~
+!!! error TS2322: Type 'boolean' is not assignable to type 'string'.
+    
+Found 4 errors in the same file, starting at: prettyFormatLongTypes.ts[90m:6[0m
+

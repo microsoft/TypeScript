@@ -1,0 +1,39 @@
+//// [tests/cases/compiler/prettyFormatLongTypes.ts] ////
+
+=== prettyFormatLongTypes.ts ===
+let a = { b: { c: { e: { f: 123 } } } };
+>a : Symbol(a, Decl(prettyFormatLongTypes.ts, 0, 3))
+>b : Symbol(b, Decl(prettyFormatLongTypes.ts, 0, 9))
+>c : Symbol(c, Decl(prettyFormatLongTypes.ts, 0, 14))
+>e : Symbol(e, Decl(prettyFormatLongTypes.ts, 0, 19))
+>f : Symbol(f, Decl(prettyFormatLongTypes.ts, 0, 24))
+
+let b = { b: { c: { e: { f: "123" } } } };
+>b : Symbol(b, Decl(prettyFormatLongTypes.ts, 1, 3))
+>b : Symbol(b, Decl(prettyFormatLongTypes.ts, 1, 9))
+>c : Symbol(c, Decl(prettyFormatLongTypes.ts, 1, 14))
+>e : Symbol(e, Decl(prettyFormatLongTypes.ts, 1, 19))
+>f : Symbol(f, Decl(prettyFormatLongTypes.ts, 1, 24))
+
+let c = "test";
+>c : Symbol(c, Decl(prettyFormatLongTypes.ts, 2, 3))
+
+// both the source and target types are wide enough enough trigger pretty printing
+a = b;
+>a : Symbol(a, Decl(prettyFormatLongTypes.ts, 0, 3))
+>b : Symbol(b, Decl(prettyFormatLongTypes.ts, 1, 3))
+
+// only the source type is wide enough to trigger pretty printing
+a = c;
+>a : Symbol(a, Decl(prettyFormatLongTypes.ts, 0, 3))
+>c : Symbol(c, Decl(prettyFormatLongTypes.ts, 2, 3))
+
+// only the target type is wide enough to trigger pretty printing
+c = a;
+>c : Symbol(c, Decl(prettyFormatLongTypes.ts, 2, 3))
+>a : Symbol(a, Decl(prettyFormatLongTypes.ts, 0, 3))
+
+// neither the source nor the target type is wide enough to trigger pretty printing
+c = false;
+>c : Symbol(c, Decl(prettyFormatLongTypes.ts, 2, 3))
+
