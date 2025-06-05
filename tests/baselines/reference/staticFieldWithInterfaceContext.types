@@ -11,8 +11,8 @@ interface I {
 let c: I = class {
 >c : I
 >  : ^
->class {    // should typecheck the same as the last line    static x = { a: "a" };} : typeof c
->                                                                                    : ^^^^^^^^
+>class {    // should typecheck the same as the last line    static x = { a: "a" };} : I
+>                                                                                    : ^
 
     // should typecheck the same as the last line
     static x = { a: "a" };
@@ -51,8 +51,8 @@ const ex = "x";
 let c2: I = class { static [ex] = { a: "a" }; };
 >c2 : I
 >   : ^
->class { static [ex] = { a: "a" }; } : typeof c2
->                                    : ^^^^^^^^^
+>class { static [ex] = { a: "a" }; } : I
+>                                    : ^
 >[ex] : { a: "a"; }
 >     : ^^^^^^^^^^^
 >ex : "x"
@@ -103,8 +103,8 @@ let { c: c3 }: { c: I } = { c: class { static x = { a: "a" } } };
 >   : ^
 >c : I
 >  : ^
->{ c: class { static x = { a: "a" } } } : { c: typeof c; }
->                                       : ^^^^^^^^^^^^^^^^
+>{ c: class { static x = { a: "a" } } } : { c: I; }
+>                                       : ^^^^^ ^^^
 >c : typeof c
 >  : ^^^^^^^^
 >class { static x = { a: "a" } } : typeof c
@@ -135,8 +135,8 @@ let { c: c4 = class { static x = { a: "a" } }}: { c?: I } = { };
 >    : ^^^
 >c : I
 >  : ^
->{ } : {}
->    : ^^
+>{ } : { c?: I; }
+>    : ^^^^^^ ^^^
 
 let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static x = { a: "a" } } };
 >c : any
@@ -155,8 +155,8 @@ let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static 
 >    : ^^^
 >c : I
 >  : ^
->{ c: class { static x = { a: "a" } } } : { c: typeof c; }
->                                       : ^^^^^^^^^^^^^^^^
+>{ c: class { static x = { a: "a" } } } : { c?: I; }
+>                                       : ^^^^^^ ^^^
 >c : typeof c
 >  : ^^^^^^^^
 >class { static x = { a: "a" } } : typeof c
@@ -173,8 +173,8 @@ let { c: c5 = class { static x = { a: "a" } }}: { c?: I } = { c: class { static 
 let [ c6 ]: [I] = [class { static x = { a: "a" } }];
 >c6 : I
 >   : ^
->[class { static x = { a: "a" } }] : [typeof (Anonymous class)]
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[class { static x = { a: "a" } }] : [I]
+>                                  : ^^^
 >class { static x = { a: "a" } } : typeof (Anonymous class)
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { a: "a"; }
@@ -189,8 +189,8 @@ let [ c6 ]: [I] = [class { static x = { a: "a" } }];
 let [ c7 ]: I[] = [class { static x = { a: "a" } }];
 >c7 : I
 >   : ^
->[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[class { static x = { a: "a" } }] : I[]
+>                                  : ^^^
 >class { static x = { a: "a" } } : typeof (Anonymous class)
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { a: "a"; }
@@ -215,8 +215,8 @@ let [ c8 = class { static x = { a: "a" } } ]: [I?] = [];
 >  : ^^^
 >"a" : "a"
 >    : ^^^
->[] : []
->   : ^^
+>[] : [I?]
+>   : ^^^^
 
 let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
 >c9 : I
@@ -231,8 +231,8 @@ let [ c9 = class { static x = { a: "a" } } ]: I[] = [];
 >  : ^^^
 >"a" : "a"
 >    : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : I[]
+>   : ^^^
 
 let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "a" } }];
 >c10 : I
@@ -247,8 +247,8 @@ let [ c10 = class { static x = { a: "a" } } ]: [I?] = [class { static x = { a: "
 >  : ^^^
 >"a" : "a"
 >    : ^^^
->[class { static x = { a: "a" } }] : [typeof (Anonymous class)]
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[class { static x = { a: "a" } }] : [I?]
+>                                  : ^^^^
 >class { static x = { a: "a" } } : typeof (Anonymous class)
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { a: "a"; }
@@ -273,8 +273,8 @@ let [ c11 = class { static x = { a: "a" } } ]: I[] = [class { static x = { a: "a
 >  : ^^^
 >"a" : "a"
 >    : ^^^
->[class { static x = { a: "a" } }] : (typeof (Anonymous class))[]
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[class { static x = { a: "a" } }] : I[]
+>                                  : ^^^
 >class { static x = { a: "a" } } : typeof (Anonymous class)
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { a: "a"; }

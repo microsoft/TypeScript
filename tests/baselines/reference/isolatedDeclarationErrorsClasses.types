@@ -109,14 +109,14 @@ export class Cls {
 let noAnnotationStringName: string = "noAnnotationStringName";
 >noAnnotationStringName : string
 >                       : ^^^^^^
->"noAnnotationStringName" : "noAnnotationStringName"
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>"noAnnotationStringName" : string
+>                         : ^^^^^^
 
 let noParamAnnotationStringName: string = "noParamAnnotationStringName";
 >noParamAnnotationStringName : string
 >                            : ^^^^^^
->"noParamAnnotationStringName" : "noParamAnnotationStringName"
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"noParamAnnotationStringName" : string
+>                              : ^^^^^^
 
 const noAnnotationLiteralName = "noAnnotationLiteralName";
 >noAnnotationLiteralName : "noAnnotationLiteralName"

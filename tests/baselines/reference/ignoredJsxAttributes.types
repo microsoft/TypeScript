@@ -36,8 +36,8 @@ declare function Yadda(props: Props): JSX.Element;
 let props: Props = {
 >props : Props
 >      : ^^^^^
->{    foo: "",    "data-yadda": 42,  // Error} : { foo: string; "data-yadda": number; }
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    foo: "",    "data-yadda": 42,  // Error} : Props
+>                                              : ^^^^^
 
     foo: "",
 >foo : string

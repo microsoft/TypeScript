@@ -41,8 +41,8 @@ function kindIs(kind: Kind, is: Kind): boolean {
 var x: Kind = undefined;
 >x : Kind
 >  : ^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Kind
+>          : ^^^^
 
 if (kindIs(x, "A")) {
 >kindIs(x, "A") : boolean

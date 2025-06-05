@@ -121,7 +121,7 @@ function bar(x: string, items: string[]): C {
 var d: D = bar("hi", []); // D
 >d : D
 >  : ^
->bar("hi", []) : C
+>bar("hi", []) : D
 >              : ^
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
 >    : ^^^ ^^     ^^     ^^        ^^^ ^^^ ^^      ^^     ^^        ^^^ ^^^

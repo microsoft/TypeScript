@@ -155,8 +155,8 @@ interface FolderContentItem {
 let a: FolderContentItem[] = [];
 >a : FolderContentItem[]
 >  : ^^^^^^^^^^^^^^^^^^^
->[] : never[]
->   : ^^^^^^^
+>[] : FolderContentItem[]
+>   : ^^^^^^^^^^^^^^^^^^^
 
 a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' })) : { type: "folder"; }[]
@@ -296,8 +296,8 @@ function bug(): Diagnostic[] {
 	let values: any[] = [];
 >values : any[]
 >       : ^^^^^
->[] : never[]
->   : ^^^^^^^
+>[] : any[]
+>   : ^^^^^
 
 	return values.map((value) => {
 >values.map((value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	}) : { severity: 1; message: string; }[]
@@ -465,8 +465,8 @@ type WinCondition =
 let zz: Box<WinCondition> = box({ type: 'draw' });
 >zz : Box<WinCondition>
 >   : ^^^^^^^^^^^^^^^^^
->box({ type: 'draw' }) : Box<{ type: "draw"; }>
->                      : ^^^^^^^^^^^^^^^^^^^^^^
+>box({ type: 'draw' }) : Box<WinCondition>
+>                      : ^^^^^^^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
 >    : ^ ^^     ^^ ^^^^^      
 >{ type: 'draw' } : { type: "draw"; }
@@ -483,8 +483,8 @@ type WinType = 'win' | 'draw';
 let yy: Box<WinType> = box('draw');
 >yy : Box<WinType>
 >   : ^^^^^^^^^^^^
->box('draw') : Box<"draw">
->            : ^^^^^^^^^^^
+>box('draw') : Box<WinType>
+>            : ^^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
 >    : ^ ^^     ^^ ^^^^^      
 >'draw' : "draw"
@@ -735,8 +735,8 @@ declare function bar<T>(f: () => T[]): T[];
 let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
 >x : Foo[]
 >  : ^^^^^
->bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : { state: State.A; }[]
->                                                                : ^^^^^^^^^^^^^^^^^^^^^
+>bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : Foo[]
+>                                                                : ^^^^^
 >bar : <T>(f: () => T[]) => T[]
 >    : ^ ^^ ^^         ^^^^^   
 >() => !!true ? [{ state: State.A }] : [{ state: State.B }] : () => { state: State.A; }[] | { state: State.B; }[]

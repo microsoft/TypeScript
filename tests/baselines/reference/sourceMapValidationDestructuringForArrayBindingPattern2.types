@@ -21,8 +21,8 @@ type MultiSkilledRobot = [string, [string, string]];
 let robotA: Robot = [1, "mower", "mowing"];
 >robotA : Robot
 >       : ^^^^^
->[1, "mower", "mowing"] : [number, string, string]
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, "mower", "mowing"] : Robot
+>                       : ^^^^^
 >1 : 1
 >  : ^
 >"mower" : "mower"
@@ -42,8 +42,8 @@ function getRobot() {
 let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 >multiRobotA : MultiSkilledRobot
 >            : ^^^^^^^^^^^^^^^^^
->["mower", ["mowing", ""]] : [string, [string, string]]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["mower", ["mowing", ""]] : MultiSkilledRobot
+>                          : ^^^^^^^^^^^^^^^^^
 >"mower" : "mower"
 >        : ^^^^^^^
 >["mowing", ""] : [string, string]
@@ -56,8 +56,8 @@ let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
 let multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
 >multiRobotB : MultiSkilledRobot
 >            : ^^^^^^^^^^^^^^^^^
->["trimmer", ["trimming", "edging"]] : [string, [string, string]]
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["trimmer", ["trimming", "edging"]] : MultiSkilledRobot
+>                                    : ^^^^^^^^^^^^^^^^^
 >"trimmer" : "trimmer"
 >          : ^^^^^^^^^
 >["trimming", "edging"] : [string, string]

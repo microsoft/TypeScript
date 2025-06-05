@@ -65,8 +65,8 @@ b = d2;
 var r: Base[] = [d1, d2];
 >r : Base[]
 >  : ^^^^^^
->[d1, d2] : (Derived | Derived2)[]
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>[d1, d2] : Base[]
+>         : ^^^^^^
 >d1 : Derived
 >   : ^^^^^^^
 >d2 : Derived2

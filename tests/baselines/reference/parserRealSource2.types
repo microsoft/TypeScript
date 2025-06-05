@@ -1857,22 +1857,22 @@ module TypeScript {
     export var codeGenTarget: CodeGenTarget = CodeGenTarget.ES3;
 >codeGenTarget : CodeGenTarget
 >              : ^^^^^^^^^^^^^
->CodeGenTarget.ES3 : CodeGenTarget.ES3
->                  : ^^^^^^^^^^^^^^^^^
+>CodeGenTarget.ES3 : CodeGenTarget
+>                  : ^^^^^^^^^^^^^
 >CodeGenTarget : typeof CodeGenTarget
 >              : ^^^^^^^^^^^^^^^^^^^^
->ES3 : CodeGenTarget.ES3
->    : ^^^^^^^^^^^^^^^^^
+>ES3 : CodeGenTarget
+>    : ^^^^^^^^^^^^^
 
     export var moduleGenTarget: ModuleGenTarget = ModuleGenTarget.Synchronous;
 >moduleGenTarget : ModuleGenTarget
 >                : ^^^^^^^^^^^^^^^
->ModuleGenTarget.Synchronous : ModuleGenTarget.Synchronous
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ModuleGenTarget.Synchronous : ModuleGenTarget
+>                            : ^^^^^^^^^^^^^^^
 >ModuleGenTarget : typeof ModuleGenTarget
 >                : ^^^^^^^^^^^^^^^^^^^^^^
->Synchronous : ModuleGenTarget.Synchronous
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Synchronous : ModuleGenTarget
+>            : ^^^^^^^^^^^^^^^
 
     export var optimizeModuleCodeGen = true;
 >optimizeModuleCodeGen : boolean

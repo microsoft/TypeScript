@@ -24,8 +24,8 @@ interface Transform3D {
 var style: IBookStyle = {
 >style : IBookStyle
 >      : ^^^^^^^^^^
->{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : { initialLeftPageTransforms: (width: number) => { ry: any; }[]; }
->                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^
+>{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : IBookStyle
+>                                                                                                              : ^^^^^^^^^^
 
     initialLeftPageTransforms: (width: number) => {
 >initialLeftPageTransforms : (width: number) => { ry: any; }[]

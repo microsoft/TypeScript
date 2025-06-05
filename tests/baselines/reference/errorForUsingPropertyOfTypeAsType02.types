@@ -18,11 +18,11 @@ namespace Test1 {
 >  : ^^^^^
 >T : any
 >  : ^^^
->x.abc : number
->      : ^^^^^^
+>x.abc : T.abc
+>      : ^^^^^
 >x : T
 >  : ^
->abc : number
->    : ^^^^^^
+>abc : T.abc
+>    : ^^^^^
     }
 }

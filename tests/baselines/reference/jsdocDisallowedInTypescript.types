@@ -81,20 +81,20 @@ function hof2(f: function(this: number, string): string) {
 var whatevs: * = 1001;
 >whatevs : any
 >        : ^^^
->1001 : 1001
->     : ^^^^
+>1001 : any
+>     : ^^^
 
 var ques: ? = 'what';
 >ques : any
 >     : ^^^
->'what' : "what"
->       : ^^^^^^
+>'what' : any
+>       : ^^^
 
 var g: function(number, number): number = (n,m) => n + m;
 >g : (arg0: number, arg1: number) => number
 >  : ^^^^^^^      ^^^^^^^^      ^^^^^      
->(n,m) => n + m : (n: number, m: number) => number
->               : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>(n,m) => n + m : (arg0: number, arg1: number) => number
+>               : ^^^^^^^      ^^^^^^^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >m : number
@@ -109,20 +109,20 @@ var g: function(number, number): number = (n,m) => n + m;
 var most: !string = 'definite';
 >most : string
 >     : ^^^^^^
->'definite' : "definite"
->           : ^^^^^^^^^^
+>'definite' : string
+>           : ^^^^^^
 
 var postfixdef: number! = 101;
 >postfixdef : number
 >           : ^^^^^^
->101 : 101
->    : ^^^
+>101 : number
+>    : ^^^^^^
 
 var postfixopt: number? = undefined;
 >postfixopt : number | null
 >           : ^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : number | null
+>          : ^^^^^^^^^^^^^
 
 var nns: Array<?number>;
 >nns : (number | null)[]

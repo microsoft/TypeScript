@@ -199,8 +199,8 @@ interface I {
 let impl: I = {
 >impl : I
 >     : ^
->{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: number; explicitVoid1(this: void): any; explicitVoid2: () => any; explicitStructural: () => number; explicitInterface: () => number; explicitThis(this: I): number; }
->                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : I
+>                                                                                                                                                                                                                                                                                                 : ^
 
     a: 12,
 >a : number
@@ -372,8 +372,8 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, ex
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->{ y: 12, explicitStructural } : { y: number; explicitStructural: (this: { y: number; }, x: number) => number; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^
+>{ y: 12, explicitStructural } : { y: number; f: (this: { y: number; }, x: number) => number; }
+>                              : ^^^^^      ^^^^^                                           ^^^
 >y : number
 >  : ^^^^^^
 >12 : 12
@@ -394,8 +394,8 @@ let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->{ y: 'foo', explicitStructural } : { y: string; explicitStructural: (this: { y: number; }, x: number) => number; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^
+>{ y: 'foo', explicitStructural } : { y: string; f: (this: { y: number; }, x: number) => number; }
+>                                 : ^^^^^      ^^^^^                                           ^^^
 >y : string
 >  : ^^^^^^
 >'foo' : "foo"
@@ -416,8 +416,8 @@ let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) =
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->{ wrongName: 12, explicitStructural } : { wrongName: number; explicitStructural: (this: { y: number; }, x: number) => number; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^
+>{ wrongName: 12, explicitStructural } : { wrongName: number; f: (this: { y: number; }, x: number) => number; }
+>                                      : ^^^^^^^^^^^^^      ^^^^^                                           ^^^
 >wrongName : number
 >          : ^^^^^^
 >12 : 12
@@ -645,8 +645,8 @@ let specifiedToVoid: (this: void, x: number) => number = explicitStructural;
 >     : ^^^^
 >x : number
 >  : ^^^^^^
->explicitStructural : (this: { y: number; }, x: number) => number
->                   : ^    ^^              ^^ ^^      ^^^^^      
+>explicitStructural : (this: void, x: number) => number
+>                   : ^    ^^    ^^ ^^      ^^^^^      
 
 let reconstructed: { 
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
@@ -691,8 +691,8 @@ let reconstructed: {
 >  : ^^^^^^
 
 } = { 
->{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: number; explicitThis: (this: C, m: number) => number; explicitC: (this: C, m: number) => number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid: (this: void, m: number) => number; }
->                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^    ^^ ^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^    ^^    ^^ ^^      ^^^^^      ^^^
+>{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
+>                                                                                                                                                   : ^^^^^      ^^^^^^^^^^^^^^^    ^^ ^^ ^^      ^^^      ^^^^^^^^^^^^    ^^ ^^ ^^      ^^^      ^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^^^^^    ^^    ^^ ^^      ^^^      ^^^
 
     n: 12,
 >n : number

@@ -93,8 +93,8 @@ let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentit
 >    : ^^^^^^
 >length : number
 >       : ^^^^^^
->{ stringIdentity: x => x} : { stringIdentity: (x: string) => string; }
->                          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ stringIdentity: x => x} : StringIdentity
+>                          : ^^^^^^^^^^^^^^
 >stringIdentity : (x: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: string) => string

@@ -38,7 +38,7 @@ var x: number = foof("s", null);
 var y: string = foof("s", null);
 >y : string
 >  : ^^^^^^
->foof("s", null) : number
+>foof("s", null) : string
 >                : ^^^^^^
 >foof : { (bar: string, y: any): number; (bar: string, x: any): string; }
 >     : ^^^   ^^      ^^ ^^^^^^^^      ^^^   ^^      ^^ ^^^^^^^^      ^^^
@@ -82,7 +82,7 @@ var x2: string = foof2("s", null);
 var y2: number = foof2("s", null);
 >y2 : number
 >   : ^^^^^^
->foof2("s", null) : string
+>foof2("s", null) : number
 >                 : ^^^^^^
 >foof2 : { (bar: string, x: any): string; (bar: string, y: any): number; }
 >      : ^^^   ^^      ^^ ^^^^^^^^      ^^^   ^^      ^^ ^^^^^^^^      ^^^

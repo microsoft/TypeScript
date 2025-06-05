@@ -204,8 +204,8 @@ str = ctor2 instanceof D1 && ctor2.p1; // D1
 var r2: D1 | C2 = ctor2 instanceof C1 && ctor2; // C2 | D1
 >r2 : C2 | D1
 >   : ^^^^^^^
->ctor2 instanceof C1 && ctor2 : D1
->                             : ^^
+>ctor2 instanceof C1 && ctor2 : C2 | D1
+>                             : ^^^^^^^
 >ctor2 instanceof C1 : boolean
 >                    : ^^^^^^^
 >ctor2 : C2 | D1

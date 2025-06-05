@@ -13,6 +13,6 @@ enum E {
 let foo: Record<E, any> = {}
 >foo : Record<E, any>
 >    : ^^^^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : Record<E, any>
+>   : ^^^^^^^^^^^^^^
 

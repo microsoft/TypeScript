@@ -22,7 +22,7 @@ var AA : typeof A = B;
 >   : ^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->B : typeof B
+>B : typeof A
 >  : ^^^^^^^^
 
 var BB : typeof B = A;
@@ -30,7 +30,7 @@ var BB : typeof B = A;
 >   : ^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
->A : typeof A
+>A : typeof B
 >  : ^^^^^^^^
 
 var CC : typeof C = B;
@@ -38,7 +38,7 @@ var CC : typeof C = B;
 >   : ^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->B : typeof B
+>B : typeof C
 >  : ^^^^^^^^
 
 new AA;

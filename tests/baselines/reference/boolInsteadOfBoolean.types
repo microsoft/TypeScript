@@ -8,8 +8,8 @@ var x: bool;
 var a: boolean = x;
 >a : boolean
 >  : ^^^^^^^
->x : bool
->  : ^^^^
+>x : boolean
+>  : ^^^^^^^
 
 x = a;
 >x = a : boolean

@@ -46,8 +46,8 @@ interface WStatic {
 var x: WStatic = W;
 >x : WStatic
 >  : ^^^^^^^
->W : typeof W
->  : ^^^^^^^^
+>W : WStatic
+>  : ^^^^^^^
 
 var y: typeof W = W;
 >y : typeof W
@@ -60,30 +60,30 @@ var y: typeof W = W;
 var z: number = W; // error
 >z : number
 >  : ^^^^^^
->W : typeof W
->  : ^^^^^^^^
+>W : number
+>  : ^^^^^^
 
 var a: number = W.a;
 >a : number
 >  : ^^^^^^
->W.a : W.a
->    : ^^^
+>W.a : number
+>    : ^^^^^^
 >W : typeof W
 >  : ^^^^^^^^
->a : W.a
->  : ^^^
+>a : number
+>  : ^^^^^^
 
 var b: typeof W = W.a; // error
 >b : typeof W
 >  : ^^^^^^^^
 >W : typeof W
 >  : ^^^^^^^^
->W.a : W.a
->    : ^^^
+>W.a : typeof W
+>    : ^^^^^^^^
 >W : typeof W
 >  : ^^^^^^^^
->a : W.a
->  : ^^^
+>a : typeof W
+>  : ^^^^^^^^
 
 var c: typeof W.a = W.a;
 >c : W.a
@@ -106,8 +106,8 @@ var d: typeof W = 3; // error
 >  : ^^^^^^^^
 >W : typeof W
 >  : ^^^^^^^^
->3 : 3
->  : ^
+>3 : typeof W
+>  : ^^^^^^^^
 
 var e: typeof W.a = 4;
 >e : W.a
@@ -118,40 +118,40 @@ var e: typeof W.a = 4;
 >  : ^^^^^^^^
 >a : W.a
 >  : ^^^
->4 : 4
->  : ^
+>4 : W.a
+>  : ^^^
 
 var f: WStatic = W.a; // error
 >f : WStatic
 >  : ^^^^^^^
->W.a : W.a
->    : ^^^
+>W.a : WStatic
+>    : ^^^^^^^
 >W : typeof W
 >  : ^^^^^^^^
->a : W.a
->  : ^^^
+>a : WStatic
+>  : ^^^^^^^
 
 var g: WStatic = 5; // error
 >g : WStatic
 >  : ^^^^^^^
->5 : 5
->  : ^
+>5 : WStatic
+>  : ^^^^^^^
 
 var h: W = 3;
 >h : W
 >  : ^
->3 : 3
+>3 : W
 >  : ^
 
 var i: W = W.a;
 >i : W
 >  : ^
->W.a : W.a
->    : ^^^
+>W.a : W
+>    : ^
 >W : typeof W
 >  : ^^^^^^^^
->a : W.a
->  : ^^^
+>a : W
+>  : ^
 
 i = W.a;
 >i = W.a : W.a

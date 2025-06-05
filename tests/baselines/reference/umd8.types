@@ -29,8 +29,8 @@ let z: Foo.SubThing; // OK in ns position
 let x: any = Foo; // Not OK in value position
 >x : any
 >  : ^^^
->Foo : typeof ff
->    : ^^^^^^^^^
+>Foo : any
+>    : ^^^
 
 === foo.d.ts ===
 declare class Thing {

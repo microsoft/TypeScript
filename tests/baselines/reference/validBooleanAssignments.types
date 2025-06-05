@@ -9,24 +9,23 @@ var x = true;
 
 var a: any = x;
 >a : any
->x : true
->  : ^^^^
+>x : any
 
 var b: Object = x;
 >b : Object
 >  : ^^^^^^
->x : true
->  : ^^^^
+>x : Object
+>  : ^^^^^^
 
 var c: Boolean = x;
 >c : Boolean
 >  : ^^^^^^^
->x : true
->  : ^^^^
+>x : Boolean
+>  : ^^^^^^^
 
 var d: boolean = x;
 >d : boolean
 >  : ^^^^^^^
->x : true
->  : ^^^^
+>x : boolean
+>  : ^^^^^^^
 

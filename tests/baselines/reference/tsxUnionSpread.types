@@ -74,8 +74,8 @@ var component = <AnimalComponent {...props} />
 var props2:AnimalInfo = { type: 'Cat', subType: 'Large' };
 >props2 : AnimalInfo
 >       : ^^^^^^^^^^
->{ type: 'Cat', subType: 'Large' } : { type: "Cat"; subType: string; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ type: 'Cat', subType: 'Large' } : AnimalInfo
+>                                  : ^^^^^^^^^^
 >type : "Cat"
 >     : ^^^^^
 >'Cat' : "Cat"
@@ -90,6 +90,6 @@ var component2 = <AnimalComponent {...props2} />
 ><AnimalComponent {...props2} /> : error
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
 >                : ^    ^^          ^^^^^           
->props2 : CatInfo
->       : ^^^^^^^
+>props2 : AnimalInfo
+>       : ^^^^^^^^^^
 

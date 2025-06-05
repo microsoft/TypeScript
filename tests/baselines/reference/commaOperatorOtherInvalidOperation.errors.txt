@@ -1,5 +1,5 @@
-commaOperatorOtherInvalidOperation.ts(6,5): error TS2322: Type 'string' is not assignable to type 'number'.
-commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assignable to type 'T1'.
+commaOperatorOtherInvalidOperation.ts(6,30): error TS2322: Type 'string' is not assignable to type 'number'.
+commaOperatorOtherInvalidOperation.ts(12,22): error TS2322: Type 'T2' is not assignable to type 'T1'.
   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
 
 
@@ -10,7 +10,7 @@ commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assi
         return x, y;
     }
     var resultIsString: number = foo(1, "123"); //error here
-        ~~~~~~~~~~~~~~
+                                 ~~~~~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     //TypeParameters
@@ -18,7 +18,7 @@ commaOperatorOtherInvalidOperation.ts(12,9): error TS2322: Type 'T2' is not assi
         var x: T1;
         var y: T2;
         var result: T1 = (x, y); //error here
-            ~~~~~~
+                         ~~~~~~
 !!! error TS2322: Type 'T2' is not assignable to type 'T1'.
 !!! error TS2322:   'T1' could be instantiated with an arbitrary type which could be unrelated to 'T2'.
 !!! related TS2208 commaOperatorOtherInvalidOperation.ts:9:19: This type parameter might need an `extends T1` constraint.

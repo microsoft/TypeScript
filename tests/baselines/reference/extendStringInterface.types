@@ -34,8 +34,8 @@ var a: string = x.doStuff();
 var b: string = x.doOtherStuff('hm');
 >b : string
 >  : ^^^^^^
->x.doOtherStuff('hm') : "hm"
->                     : ^^^^
+>x.doOtherStuff('hm') : string
+>                     : ^^^^^^
 >x.doOtherStuff : <T>(x: T) => T
 >               : ^ ^^ ^^ ^^^^^ 
 >x : string
@@ -60,8 +60,8 @@ var c: string = x['doStuff']();
 var d: string = x['doOtherStuff']('hm');
 >d : string
 >  : ^^^^^^
->x['doOtherStuff']('hm') : "hm"
->                        : ^^^^
+>x['doOtherStuff']('hm') : string
+>                        : ^^^^^^
 >x['doOtherStuff'] : <T>(x: T) => T
 >                  : ^ ^^ ^^ ^^^^^ 
 >x : string

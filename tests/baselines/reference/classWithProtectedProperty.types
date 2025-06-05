@@ -76,11 +76,12 @@ class D extends C {
         var r1: string = d.x;
 >r1 : string
 >   : ^^^^^^
->d.x : any
+>d.x : string
+>    : ^^^^^^
 >d : D
 >  : ^
->x : any
->  : ^^^
+>x : string
+>  : ^^^^^^
 
         var r2: string = d.a;
 >r2 : string
@@ -129,11 +130,12 @@ class D extends C {
         var r6: string = C.e;
 >r6 : string
 >   : ^^^^^^
->C.e : any
+>C.e : string
+>    : ^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->e : any
->  : ^^^
+>e : string
+>  : ^^^^^^
 
         var r7: string = C.f();
 >r7 : string

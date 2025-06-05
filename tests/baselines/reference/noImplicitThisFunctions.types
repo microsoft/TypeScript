@@ -59,8 +59,8 @@ let f4: (b: number) => number = b => this.c + b;
 >   : ^ ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
->b => this.c + b : (b: number) => any
->                : ^ ^^^^^^^^^^^^^^^^
+>b => this.c + b : (b: number) => number
+>                : ^ ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 >this.c + b : any

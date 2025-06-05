@@ -79,8 +79,8 @@ export let y: import("./fo2").Bar.I = { a: "", b: 0 };
 >  : ^^^
 >Bar : any
 >    : ^^^
->{ a: "", b: 0 } : { a: string; b: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "", b: 0 } : any
+>                : ^^^
 >a : string
 >  : ^^^^^^
 >"" : ""
@@ -95,8 +95,8 @@ export let z: import("./foo2").Bar.Q = { a: "", b: 0 };
 >  : ^^^
 >Bar : any
 >    : ^^^
->{ a: "", b: 0 } : { a: string; b: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "", b: 0 } : any
+>                : ^^^
 >a : string
 >  : ^^^^^^
 >"" : ""
@@ -128,8 +128,8 @@ export class Bar2 {
 export let shim: typeof import("./fo2") = {
 >shim : any
 >     : ^^^
->{    Bar: Bar2} : { Bar: typeof Bar2; }
->                : ^^^^^^^^^^^^^^^^^^^^^
+>{    Bar: Bar2} : any
+>                : ^^^
 
     Bar: Bar2
 >Bar : typeof Bar2

@@ -20,6 +20,6 @@ var v1: I1<boolean>;
 var v2: I1<number> = v1;
 >v2 : I1<number>
 >   : ^^^^^^^^^^
->v1 : I1<boolean>
->   : ^^^^^^^^^^^
+>v1 : I1<number>
+>   : ^^^^^^^^^^
 

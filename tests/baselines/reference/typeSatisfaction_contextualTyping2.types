@@ -8,8 +8,8 @@ let obj: { f(s: string): void } & Record<string, unknown> = {
 >  : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
->{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f(s: any): void; g(s: string): void; }
->                                                                                                                          : ^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} satisfies { g(s: string): void } & Record<string, unknown> : { f(s: string): void; } & Record<string, unknown>
+>                                                                                                                          : ^^^^ ^^      ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    f(s) { }, // "incorrect" implicit any on 's'    g(s) { }} : { f(s: any): void; g(s: string): void; }
 >                                                               : ^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 

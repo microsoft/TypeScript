@@ -66,8 +66,8 @@ let dict: { [key: string]: string } = optionalUndefined; // error
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
->optionalUndefined : { k1?: undefined; }
->                  : ^^^^^^^         ^^^
+>optionalUndefined : { [key: string]: string; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f<T>() {
 >f : <T>() => void
@@ -78,8 +78,8 @@ function f<T>() {
 >         : ^^^^^^^ ^^^
 >k1 : T | undefined
 >   : ^^^^^^^^^^^^^
->undefined! : never
->           : ^^^^^
+>undefined! : { k1?: T; }
+>           : ^^^^^^^ ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -88,7 +88,7 @@ function f<T>() {
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
->optional : { k1?: T; }
->         : ^^^^^^^ ^^^
+>optional : { [key: string]: number | T; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

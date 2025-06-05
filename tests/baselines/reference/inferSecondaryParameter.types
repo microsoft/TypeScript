@@ -14,8 +14,8 @@ interface Ib { m(test: string, fn: Function); }
 var b: Ib = { m: function (test: string, fn: Function) { } };
 >b : Ib
 >  : ^^
->{ m: function (test: string, fn: Function) { } } : { m: (test: string, fn: Function) => void; }
->                                                 : ^^^^^^    ^^      ^^  ^^        ^^^^^^^^^^^^
+>{ m: function (test: string, fn: Function) { } } : Ib
+>                                                 : ^^
 >m : (test: string, fn: Function) => void
 >  : ^    ^^      ^^  ^^        ^^^^^^^^^
 >function (test: string, fn: Function) { } : (test: string, fn: Function) => void
@@ -42,6 +42,7 @@ b.m("test", function (bug) {
     var a: number = bug;
 >a : number
 >  : ^^^^^^
->bug : any
+>bug : number
+>    : ^^^^^^
 
 });

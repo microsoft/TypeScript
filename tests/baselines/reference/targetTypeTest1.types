@@ -176,8 +176,8 @@ Point.prototype.add = function(dx, dy) {
 var f : number = 5;
 >f : number
 >  : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 // Object literal type inferred using target typing
 // this in function add inferred to be type of object literal (i.e. Point)

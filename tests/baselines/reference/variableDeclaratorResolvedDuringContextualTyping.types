@@ -460,8 +460,8 @@ class FileService {
                 var result: IUploadResult = { // This should be error
 >result : IUploadResult
 >       : ^^^^^^^^^^^^^
->{ // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                } : { stat: any; isNew: boolean; }
->                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ // This should be error                    stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file                    isNew: response.status === 201                } : IUploadResult
+>                                                                                                                                                                                                              : ^^^^^^^^^^^^^
 
                     stat: this.jsonToStat(newFilePath, "someString"), // _this needs to be emitted to the js file
 >stat : any

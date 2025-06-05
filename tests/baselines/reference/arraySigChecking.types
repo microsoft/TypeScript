@@ -43,8 +43,8 @@ var myVar: myInt;
 var strArray: string[] = [myVar.voidFn()];
 >strArray : string[]
 >         : ^^^^^^^^
->[myVar.voidFn()] : void[]
->                 : ^^^^^^
+>[myVar.voidFn()] : string[]
+>                 : ^^^^^^^^
 >myVar.voidFn() : void
 >               : ^^^^
 >myVar.voidFn : () => void

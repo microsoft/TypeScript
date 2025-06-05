@@ -19,8 +19,8 @@ module A {
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
 >       : ^^^^^
->{ x: 0, y: 0 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0 } : Point
+>               : ^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0

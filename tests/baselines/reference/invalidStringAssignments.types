@@ -10,28 +10,28 @@ var x = '';
 var a: boolean = x;
 >a : boolean
 >  : ^^^^^^^
->x : string
->  : ^^^^^^
+>x : boolean
+>  : ^^^^^^^
 
 var b: number = x;
 >b : number
 >  : ^^^^^^
->x : string
+>x : number
 >  : ^^^^^^
 
 var c: void = x;
 >c : void
 >  : ^^^^
->x : string
->  : ^^^^^^
+>x : void
+>  : ^^^^
 
 var d: typeof undefined = x;
 >d : any
 >  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->x : string
->  : ^^^^^^
+>x : any
+>  : ^^^
 
 class C { foo: string; }
 >C : C
@@ -42,8 +42,8 @@ class C { foo: string; }
 var e: C = x;
 >e : C
 >  : ^
->x : string
->  : ^^^^^^
+>x : C
+>  : ^
 
 interface I { bar: string; }
 >bar : string
@@ -52,24 +52,24 @@ interface I { bar: string; }
 var f: I = x;
 >f : I
 >  : ^
->x : string
->  : ^^^^^^
+>x : I
+>  : ^
 
 var g: { baz: string } = 1;
 >g : { baz: string; }
 >  : ^^^^^^^      ^^^
 >baz : string
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : { baz: string; }
+>  : ^^^^^^^      ^^^
 
 var g2: { 0: number } = 1;
 >g2 : { 0: number; }
 >   : ^^^^^      ^^^
 >0 : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : { 0: number; }
+>  : ^^^^^      ^^^
 
 module M { export var x = 1; }
 >M : typeof M
@@ -118,6 +118,6 @@ enum E { A }
 var j: E = x;
 >j : E
 >  : ^
->x : string
->  : ^^^^^^
+>x : E
+>  : ^
 

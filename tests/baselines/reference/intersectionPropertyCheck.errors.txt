@@ -1,5 +1,7 @@
-intersectionPropertyCheck.ts(1,68): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
-intersectionPropertyCheck.ts(4,5): error TS2322: Type '{ a: { y: string; }; }' is not assignable to type '{ a?: { x?: number | undefined; } | undefined; } & { c?: string | undefined; }'.
+intersectionPropertyCheck.ts(1,68): error TS2322: Type '{ a: { x: string; y: number; }; c: number; }' is not assignable to type '{ a: { x: string; }; } & { c: number; }'.
+  Types of property 'a' are incompatible.
+    Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
+intersectionPropertyCheck.ts(4,53): error TS2322: Type '{ a: { y: string; }; }' is not assignable to type '{ a?: { x?: number | undefined; } | undefined; } & { c?: string | undefined; }'.
   Types of property 'a' are incompatible.
     Type '{ y: string; }' has no properties in common with type '{ x?: number | undefined; }'.
 intersectionPropertyCheck.ts(7,3): error TS2322: Type 'T & { a: boolean; }' is not assignable to type '{ a?: string | undefined; }'.
@@ -11,12 +13,13 @@ intersectionPropertyCheck.ts(17,22): error TS2322: Type 'boolean' is not assigna
 ==== intersectionPropertyCheck.ts (4 errors) ====
     let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property
                                                                        ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
-!!! related TS6500 intersectionPropertyCheck.ts:1:12: The expected type comes from property 'a' which is declared here on type '{ a: { x: string; }; } & { c: number; }'
+!!! error TS2322: Type '{ a: { x: string; y: number; }; c: number; }' is not assignable to type '{ a: { x: string; }; } & { c: number; }'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Object literal may only specify known properties, and 'y' does not exist in type '{ x: string; }'.
     
     declare let wrong: { a: { y: string } };
     let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
-        ~~~~
+                                                        ~~~~~
 !!! error TS2322: Type '{ a: { y: string; }; }' is not assignable to type '{ a?: { x?: number | undefined; } | undefined; } & { c?: string | undefined; }'.
 !!! error TS2322:   Types of property 'a' are incompatible.
 !!! error TS2322:     Type '{ y: string; }' has no properties in common with type '{ x?: number | undefined; }'.

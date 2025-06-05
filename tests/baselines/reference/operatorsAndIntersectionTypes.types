@@ -38,8 +38,8 @@ let map1: { [x: string]: number } = {};
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->{} : {}
->   : ^^
+>{} : { [x: string]: number; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 let guid = createGuid();
 >guid : Guid
@@ -66,8 +66,8 @@ let map2: { [x: number]: string } = {};
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->{} : {}
->   : ^^
+>{} : { [x: number]: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 let serialNo = createSerialNo();
 >serialNo : SerialNo

@@ -26,6 +26,6 @@ interface ShapeFactory {
 var x: ShapeFactory = Shape;
 >x : ShapeFactory
 >  : ^^^^^^^^^^^^
->Shape : typeof Shape
+>Shape : ShapeFactory
 >      : ^^^^^^^^^^^^
 

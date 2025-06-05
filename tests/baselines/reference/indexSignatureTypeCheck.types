@@ -17,8 +17,8 @@ var ps: IPropertySet = null;
 var index: any = "hello";
 >index : any
 >      : ^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : any
+>        : ^^^
 
 ps[index] = 12;
 >ps[index] = 12 : 12

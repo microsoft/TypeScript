@@ -6,8 +6,8 @@ let x: { o: boolean } = { o: false }
 >  : ^^^^^       ^^^
 >o : boolean
 >  : ^^^^^^^
->{ o: false } : { o: false; }
->             : ^^^^^^^^^^^^^
+>{ o: false } : { o: boolean; }
+>             : ^^^^^       ^^^
 >o : false
 >  : ^^^^^
 >false : false

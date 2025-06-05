@@ -30,14 +30,14 @@ var x = { p1: 10, p2: 20 };
 var y: number | I2 = x;
 >y : number | I2
 >  : ^^^^^^^^^^^
->x : { p1: number; p2: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | I2
+>  : ^^^^^^^^^^^
 
 var z: I1 = x;
 >z : I1
 >  : ^^
->x : { p1: number; p2: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : I1
+>  : ^^
 
 var a = <number | I2>z;
 >a : number | I2
@@ -68,6 +68,6 @@ var d = <I1>y;
 >  : ^^
 ><I1>y : I1
 >      : ^^
->y : I2
->  : ^^
+>y : number | I2
+>  : ^^^^^^^^^^^
 

@@ -400,8 +400,8 @@ module WithContextualType {
     var a: Base[] = [derived, derived2];
 >a : Base[]
 >  : ^^^^^^
->[derived, derived2] : (Derived | Derived2)[]
->                    : ^^^^^^^^^^^^^^^^^^^^^^
+>[derived, derived2] : Base[]
+>                    : ^^^^^^
 >derived : Derived
 >        : ^^^^^^^
 >derived2 : Derived2
@@ -410,20 +410,20 @@ module WithContextualType {
     var b: Derived[] = [null];
 >b : Derived[]
 >  : ^^^^^^^^^
->[null] : null[]
->       : ^^^^^^
+>[null] : Derived[]
+>       : ^^^^^^^^^
 
     var c: Derived[] = [];
 >c : Derived[]
 >  : ^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : Derived[]
+>   : ^^^^^^^^^
 
     var d: { (): Base }[] = [() => derived, () => derived2];
 >d : (() => Base)[]
 >  : ^^^^^^^    ^^^
->[() => derived, () => derived2] : ((() => Derived) | (() => Derived2))[]
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[() => derived, () => derived2] : (() => Base)[]
+>                                : ^^^^^^^    ^^^
 >() => derived : () => Derived
 >              : ^^^^^^^^^^^^^
 >derived : Derived
@@ -864,8 +864,8 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
     var k: Base[] = [t, u];
 >k : Base[]
 >  : ^^^^^^
->[t, u] : (T | U)[]
->       : ^^^^^^^^^
+>[t, u] : Base[]
+>       : ^^^^^^
 >t : T
 >  : ^
 >u : U

@@ -3,8 +3,7 @@
 === castTest.ts ===
 var x : any = 0;
 >x : any
->0 : 0
->  : ^
+>0 : any
 
 var z = <number> x;
 >z : number

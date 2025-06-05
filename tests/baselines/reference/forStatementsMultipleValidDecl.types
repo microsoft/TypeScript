@@ -59,8 +59,8 @@ for (var p = { x: 1, y: 2 }; ;) { }
 for (var p: Point = { x: 0, y: undefined }; ;) { }
 >p : Point
 >  : ^^^^^
->{ x: 0, y: undefined } : { x: number; y: undefined; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: undefined } : Point
+>                       : ^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -94,7 +94,7 @@ for (var p: { x: number; y: number; } = { x: 1, y: 2 }; ;) { }
 >y : number
 >  : ^^^^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -201,8 +201,8 @@ for (var a = <string[]>[]; ;) { }
 for (var a: string[] = []; ;) { }
 >a : string[]
 >  : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : string[]
+>   : ^^^^^^^^
 
 for (var a = new Array<string>(); ;) { }
 >a : string[]

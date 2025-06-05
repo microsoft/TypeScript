@@ -70,14 +70,14 @@ N = n; // should work
 var o: Object = {}
 >o : Object
 >  : ^^^^^^
->{} : {}
->   : ^^
+>{} : Object
+>   : ^^^^^^
 
 var f: Function = (x: string) => x.length;
 >f : Function
 >  : ^^^^^^^^
->(x: string) => x.length : (x: string) => number
->                        : ^ ^^      ^^^^^^^^^^^
+>(x: string) => x.length : Function
+>                        : ^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number
@@ -96,20 +96,20 @@ var r2: RegExp = /./g;
 var n2: Number = 34;
 >n2 : Number
 >   : ^^^^^^
->34 : 34
->   : ^^
+>34 : Number
+>   : ^^^^^^
 
 var s: String = "yo";
 >s : String
 >  : ^^^^^^
->"yo" : "yo"
->     : ^^^^
+>"yo" : String
+>     : ^^^^^^
 
 var b: Boolean = true;
 >b : Boolean
 >  : ^^^^^^^
->true : true
->     : ^^^^
+>true : Boolean
+>     : ^^^^^^^
 
 var n3 = 5 || {};
 >n3 : {}

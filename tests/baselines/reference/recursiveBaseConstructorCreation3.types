@@ -33,10 +33,10 @@ var bar = new xyz(); // Error: Invalid 'new' expression.
 var r: xyz = bar.foo;
 >r : xyz
 >  : ^^^
->bar.foo : any
+>bar.foo : xyz
 >        : ^^^
 >bar : any
 >    : ^^^
->foo : any
+>foo : xyz
 >    : ^^^
 

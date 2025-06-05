@@ -157,14 +157,14 @@ let o = {
 let i: I = o;
 >i : I
 >  : ^
->o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
+>o : I
+>  : ^
 
 let o2: I = {
 >o2 : I
 >   : ^
->{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : { n: number; explicitThis: (this: I, m: number) => any; }
->                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^ ^^^^^^^^^^^^^^^^^^^
+>{    n: 1001,    explicitThis: function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    },} : I
+>                                                                                                                                     : ^
 
     n: 1001,
 >n : number

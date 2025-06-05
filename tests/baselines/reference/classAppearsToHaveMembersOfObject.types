@@ -40,12 +40,12 @@ var r2 = c.hasOwnProperty('');
 var o: Object = c;
 >o : Object
 >  : ^^^^^^
->c : C
->  : ^
+>c : Object
+>  : ^^^^^^
 
 var o2: {} = c;
 >o2 : {}
 >   : ^^
->c : C
->  : ^
+>c : {}
+>  : ^^
 

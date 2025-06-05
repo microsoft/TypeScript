@@ -91,8 +91,8 @@ module M {
         var x:IEye[]= [];
 >x : IEye[]
 >  : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : IEye[]
+>   : ^^^^^^
 
         var result="";
 >result : string
@@ -251,8 +251,8 @@ module M {
         var eeks:IFrenchEye[] = [];
 >eeks : IFrenchEye[]
 >     : ^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : IFrenchEye[]
+>   : ^^^^^^^^^^^^
 
         for (var j=z.length=1;j>=0;j--) {
 >j : number

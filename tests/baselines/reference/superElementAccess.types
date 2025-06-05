@@ -93,7 +93,7 @@ class MyDerived extends MyBase {
 >a : string
 >  : ^^^^^^
 >super["m1"] : (a: string) => string
->            : ^ ^^      ^^^^^^^^^^^
+>            : ^ ^^      ^^^^^      
 >super : MyBase
 >      : ^^^^^^
 >"m1" : "m1"

@@ -20,8 +20,8 @@ interface NestedSelector  {
 let stylen: NestedCSSProps = {
 >stylen : NestedCSSProps
 >       : ^^^^^^^^^^^^^^
->{  nested: { prop: { colour: 'red' } }} : { nested: { prop: { colour: string; }; }; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  nested: { prop: { colour: 'red' } }} : NestedCSSProps
+>                                        : ^^^^^^^^^^^^^^
 
   nested: { prop: { colour: 'red' } }
 >nested : { prop: { colour: string; }; }

@@ -86,8 +86,8 @@ class C2 implements I3 {
 var a:I4 = function(){ 
 >a : I4
 >  : ^^
->function(){     return new C2();} : () => C2
->                                  : ^^^^^^^^
+>function(){     return new C2();} : I4
+>                                  : ^^
 
     return new C2();
 >new C2() : C2

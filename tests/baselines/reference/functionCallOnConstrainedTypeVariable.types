@@ -66,12 +66,12 @@ function callN<T extends A | B>(p: T) {
   var a: T["a"] = p.a;
 >a : T["a"]
 >  : ^^^^^^
->p.a : ((x: number) => string) | ((x: boolean) => string)
->    : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
+>p.a : T["a"]
+>    : ^^^^^^
 >p : A | B
 >  : ^^^^^
->a : ((x: number) => string) | ((x: boolean) => string)
->  : ^^ ^^      ^^^^^      ^^^^^^ ^^       ^^^^^      ^
+>a : T["a"]
+>  : ^^^^^^
 
   a(""); // Error
 >a("") : string

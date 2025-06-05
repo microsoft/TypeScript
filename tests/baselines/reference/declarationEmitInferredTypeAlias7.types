@@ -8,7 +8,7 @@ export type Data = string | boolean;
 let obj: Data = true;
 >obj : Data
 >    : ^^^^
->true : true
+>true : Data
 >     : ^^^^
 
 === 1.ts ===

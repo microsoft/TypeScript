@@ -64,7 +64,7 @@ function f3() {
     let s1: intrinsic = 'ok';
 >s1 : string
 >   : ^^^^^^
->'ok' : "ok"
->     : ^^^^
+>'ok' : string
+>     : ^^^^^^
 }
 

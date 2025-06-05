@@ -669,11 +669,11 @@ Info seq  [hh:mm:ss:mss] event:
           {
             "start": {
               "line": 6,
-              "offset": 12
+              "offset": 24
             },
             "end": {
               "line": 6,
-              "offset": 13
+              "offset": 26
             },
             "text": "Type 'number' is not assignable to type 'string'.",
             "code": 2322,

@@ -104,8 +104,8 @@ else {
     var x: number | boolean = numOrBool; // number | boolean
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
->numOrBool : boolean
->          : ^^^^^^^
+>numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 }
 if (typeof strOrNumOrBool === "number") {
 >typeof strOrNumOrBool === "number" : boolean
@@ -175,8 +175,8 @@ if (typeof strOrBool === "number") {
     let y1: {} = strOrBool; // {}
 >y1 : {}
 >   : ^^
->strOrBool : never
->          : ^^^^^
+>strOrBool : {}
+>          : ^^
 }
 else {
     let y2: string | boolean = strOrBool; // string | boolean
@@ -229,8 +229,8 @@ if (typeof numOrBool !== "number") {
     var x: number | boolean = numOrBool; // number | boolean
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
->numOrBool : boolean
->          : ^^^^^^^
+>numOrBool : number | boolean
+>          : ^^^^^^^^^^^^^^^^
 }
 else {
     num = numOrBool; // number
@@ -316,7 +316,7 @@ else {
     let y2: {} = strOrBool; // {}
 >y2 : {}
 >   : ^^
->strOrBool : never
->          : ^^^^^
+>strOrBool : {}
+>          : ^^
 }
 

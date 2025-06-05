@@ -5805,16 +5805,16 @@ module TypeScript {
         var containerScope: SymbolScope = context.scopeChain.scope;
 >containerScope : SymbolScope
 >               : ^^^^^^^^^^^
->context.scopeChain.scope : any
->                         : ^^^
+>context.scopeChain.scope : SymbolScope
+>                         : ^^^^^^^^^^^
 >context.scopeChain : any
 >                   : ^^^
 >context : TypeCollectionContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >scopeChain : any
 >           : ^^^
->scope : any
->      : ^^^
+>scope : SymbolScope
+>      : ^^^^^^^^^^^
 
         var isGlobal = containerSym == context.checker.gloMod;
 >isGlobal : boolean
@@ -7466,12 +7466,12 @@ module TypeScript {
         var context: TypeCollectionContext = walker.state;
 >context : TypeCollectionContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
->walker.state : any
->             : ^^^
+>walker.state : TypeCollectionContext
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >walker : IAstWalker
 >       : ^^^^^^^^^^
->state : any
->      : ^^^
+>state : TypeCollectionContext
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
         var go = false;
 >go : boolean
@@ -7907,12 +7907,12 @@ module TypeScript {
         var context: TypeCollectionContext = walker.state;
 >context : TypeCollectionContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
->walker.state : any
->             : ^^^
+>walker.state : TypeCollectionContext
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >walker : IAstWalker
 >       : ^^^^^^^^^^
->state : any
->      : ^^^
+>state : TypeCollectionContext
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
         if (ast.nodeType == NodeType.ModuleDeclaration) {
 >ast.nodeType == NodeType.ModuleDeclaration : boolean

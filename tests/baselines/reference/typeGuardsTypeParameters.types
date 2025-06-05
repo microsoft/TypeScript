@@ -29,14 +29,14 @@ function f1<T>(x: T) {
         let v1: T = x;
 >v1 : T
 >   : ^
->x : T & C
->  : ^^^^^
+>x : T
+>  : ^
 
         let v2: C = x;
 >v2 : C
 >   : ^
->x : T & C
->  : ^^^^^
+>x : C
+>  : ^
 
         x.prop;
 >x.prop : string
@@ -67,14 +67,14 @@ function f2<T>(x: T) {
         let v1: T = x;
 >v1 : T
 >   : ^
->x : T & string
->  : ^^^^^^^^^^
+>x : T
+>  : ^
 
         let v2: string = x;
 >v2 : string
 >   : ^^^^^^
->x : T & string
->  : ^^^^^^^^^^
+>x : string
+>  : ^^^^^^
 
         x.length;
 >x.length : number

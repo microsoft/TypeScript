@@ -42,8 +42,8 @@ export class BrokenClass {
 >       : ^^^^^^^^^^^^^^^^^^
 >MyModule : any
 >         : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : MyModule.MyModel[]
+>   : ^^^^^^^^^^^^^^^^^^
 
     let populateItems = (order) => {
 >populateItems : (order: any) => Promise<unknown>

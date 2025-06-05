@@ -17,8 +17,8 @@ var i: I;
 var r: string = i[1]; // error: numeric indexer returns the type of the string indexer
 >r : string
 >  : ^^^^^^
->i[1] : Date
->     : ^^^^
+>i[1] : string
+>     : ^^^^^^
 >i : I
 >  : ^
 >1 : 1
@@ -31,8 +31,8 @@ var i2: I2;
 var r2: string = i2[1]; // error: numeric indexer returns the type of the string indexer
 >r2 : string
 >   : ^^^^^^
->i2[1] : Date
->      : ^^^^
+>i2[1] : string
+>      : ^^^^^^
 >i2 : I2
 >   : ^^
 >1 : 1

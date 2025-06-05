@@ -108,8 +108,8 @@ var o: {
 >      : ^^^^^^^^^^^^^^^^
 
 } = {
->{        prop1: "string" ,        prop2: true    } : { prop1: string; prop2: true; }
->                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        prop1: "string" ,        prop2: true    } : { prop1: number | string; prop2: boolean | string; }
+>                                                   : ^^^^^^^^^               ^^^^^^^^^                ^^^
 
         prop1: "string" ,
 >prop1 : string

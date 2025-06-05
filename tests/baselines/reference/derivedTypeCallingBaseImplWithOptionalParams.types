@@ -23,8 +23,8 @@ class MyClass implements MyInterface {
 var x: MyInterface = new MyClass();
 >x : MyInterface
 >  : ^^^^^^^^^^^
->new MyClass() : MyClass
->              : ^^^^^^^
+>new MyClass() : MyInterface
+>              : ^^^^^^^^^^^
 >MyClass : typeof MyClass
 >        : ^^^^^^^^^^^^^^
 

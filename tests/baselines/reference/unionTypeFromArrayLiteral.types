@@ -39,8 +39,8 @@ var arr3Tuple: [number, string] = [3, "three"]; // [number, string]
 var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
 >arr4Tuple : [number, string]
 >          : ^^^^^^^^^^^^^^^^
->[3, "three", "hello"] : [number, string, string]
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[3, "three", "hello"] : [number, string]
+>                      : ^^^^^^^^^^^^^^^^
 >3 : 3
 >  : ^
 >"three" : "three"
@@ -67,8 +67,8 @@ var arr5Tuple: {
 >  : ^^^^^^
 
 } = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
->["hello", true, false, " hello", true, 10, "any"] : [string, boolean, boolean, string, boolean, number, string]
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["hello", true, false, " hello", true, 10, "any"] : { 0: string; 5: number; }
+>                                                  : ^^^^^      ^^^^^      ^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >true : true

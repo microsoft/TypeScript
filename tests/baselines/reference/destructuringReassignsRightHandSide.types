@@ -3,8 +3,7 @@
 === destructuringReassignsRightHandSide.ts ===
 var foo: any = { foo: 1, bar: 2 };
 >foo : any
->{ foo: 1, bar: 2 } : { foo: number; bar: number; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foo: 1, bar: 2 } : any
 >foo : number
 >    : ^^^^^^
 >1 : 1

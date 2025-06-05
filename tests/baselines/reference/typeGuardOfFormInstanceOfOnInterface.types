@@ -211,8 +211,8 @@ str = c2Ord1 instanceof d1 && c2Ord1.p1; // D1
 var r2: D1 | C2 = c2Ord1 instanceof c1 && c2Ord1; // C2 | D1
 >r2 : C2 | D1
 >   : ^^^^^^^
->c2Ord1 instanceof c1 && c2Ord1 : D1
->                               : ^^
+>c2Ord1 instanceof c1 && c2Ord1 : C2 | D1
+>                               : ^^^^^^^
 >c2Ord1 instanceof c1 : boolean
 >                     : ^^^^^^^
 >c2Ord1 : C2 | D1

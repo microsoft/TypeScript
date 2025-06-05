@@ -10,14 +10,14 @@ function f(x: string | number | boolean) {
     let y: string | number | boolean = false;
 >y : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->false : false
->      : ^^^^^
+>false : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let z: string | number | boolean = false;
 >z : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->false : false
->      : ^^^^^
+>false : string | number | boolean
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (y = "", typeof x === "string") {
 >y = "", typeof x === "string" : boolean
@@ -46,8 +46,8 @@ function f(x: string | number | boolean) {
 >  : ^^^^^^
 
         z; // boolean
->z : false
->  : ^^^^^
+>z : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     else if (z = 1, typeof x === "number") {
 >z = 1, typeof x === "number" : boolean
@@ -101,7 +101,7 @@ function f(x: string | number | boolean) {
 >  : ^^^^^^
 
     z; // number | boolean
->z : number | false
->  : ^^^^^^^^^^^^^^
+>z : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

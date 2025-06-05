@@ -3302,8 +3302,8 @@ class Unbounded<T> {
         let y: {} | undefined | null = x;
 >y : {} | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^
->x : T[keyof T]
->  : ^^^^^^^^^^
+>x : {} | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

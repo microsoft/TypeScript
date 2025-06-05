@@ -12,12 +12,12 @@ enum User { A, B }
 let user: User = User.A
 >user : User
 >     : ^^^^
->User.A : User.A
->       : ^^^^^^
+>User.A : User
+>       : ^^^^
 >User : typeof User
 >     : ^^^^^^^^^^^
->A : User.A
->  : ^^^^^^
+>A : User
+>  : ^^^^
 
 label: while (true) {
 >label : any

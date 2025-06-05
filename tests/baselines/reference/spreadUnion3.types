@@ -49,12 +49,12 @@ function g(t?: { a: number } | null): void {
     let c: number = b.a;  // might not have 'a'
 >c : number
 >  : ^^^^^^
->b.a : number | undefined
->    : ^^^^^^^^^^^^^^^^^^
+>b.a : number
+>    : ^^^^^^
 >b : { a?: number | undefined; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : number | undefined
->  : ^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
 }
 g()
 >g() : void

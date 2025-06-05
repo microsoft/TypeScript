@@ -123,8 +123,8 @@ var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { };
 >   : ^ ^^      ^^^^^    
 >x : Object
 >  : ^^^^^^
->true ? (x: number) => { } : (x: Object) => { } : ((x: number) => void) | ((x: Object) => void)
->                                               : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>true ? (x: number) => { } : (x: Object) => { } : (x: Object) => void
+>                                               : ^ ^^      ^^^^^    
 >true : true
 >     : ^^^^
 >(x: number) => { } : (x: number) => void
@@ -155,8 +155,8 @@ var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => vo
 var r10: Base = true ? derived : derived2; // no error since we use the contextual type in BCT
 >r10 : Base
 >    : ^^^^
->true ? derived : derived2 : Derived | Derived2
->                          : ^^^^^^^^^^^^^^^^^^
+>true ? derived : derived2 : Base
+>                          : ^^^^
 >true : true
 >     : ^^^^
 >derived : Derived

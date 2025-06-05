@@ -8,11 +8,12 @@ import modM = require("exportAssignmentInternalModule_A");
 var n: number = modM.x;
 >n : number
 >  : ^^^^^^
->modM.x : any
+>modM.x : number
+>       : ^^^^^^
 >modM : typeof modM
 >     : ^^^^^^^^^^^
->x : any
->  : ^^^
+>x : number
+>  : ^^^^^^
 
 === exportAssignmentInternalModule_A.ts ===
 module M {

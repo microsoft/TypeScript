@@ -352,12 +352,12 @@ module TypeScript {
         var memScope: MemberScopeContext = walker.state;
 >memScope : MemberScopeContext
 >         : ^^^^^^^^^^^^^^^^^^
->walker.state : any
->             : ^^^
+>walker.state : MemberScopeContext
+>             : ^^^^^^^^^^^^^^^^^^
 >walker : IAstWalker
 >       : ^^^^^^^^^^
->state : any
->      : ^^^
+>state : MemberScopeContext
+>      : ^^^^^^^^^^^^^^^^^^
 
         if (hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar))) {
 >hasFlag(ast.flags, memScope.matchFlag) && ((memScope.pos < 0) || (memScope.pos == ast.limChar)) : boolean
@@ -565,8 +565,8 @@ module TypeScript {
         var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
 >chain : ScopeChain
 >      : ^^^^^^^^^^
->new ScopeChain(container, context.scopeChain, builder) : any
->                                                       : ^^^
+>new ScopeChain(container, context.scopeChain, builder) : ScopeChain
+>                                                       : ^^^^^^^^^^
 >ScopeChain : any
 >           : ^^^
 >container : Symbol
@@ -669,12 +669,12 @@ module TypeScript {
         var context: EnclosingScopeContext = walker.state;
 >context : EnclosingScopeContext
 >        : ^^^^^^^^^^^^^^^^^^^^^
->walker.state : any
->             : ^^^
+>walker.state : EnclosingScopeContext
+>             : ^^^^^^^^^^^^^^^^^^^^^
 >walker : IAstWalker
 >       : ^^^^^^^^^^
->state : any
->      : ^^^
+>state : EnclosingScopeContext
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
         var minChar = ast.minChar;
 >minChar : any

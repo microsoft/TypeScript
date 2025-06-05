@@ -283,8 +283,8 @@ f16(x);
 var y: StringAndBoolean = ["1", false];
 >y : StringAndBoolean
 >  : ^^^^^^^^^^^^^^^^
->["1", false] : [string, false]
->             : ^^^^^^^^^^^^^^^
+>["1", false] : StringAndBoolean
+>             : ^^^^^^^^^^^^^^^^
 >"1" : "1"
 >    : ^^^
 >false : false

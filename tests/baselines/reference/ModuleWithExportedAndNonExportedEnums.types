@@ -28,16 +28,16 @@ var a: A.Color = A.Color.Red;
 >  : ^^^^^^^
 >A : any
 >  : ^^^
->A.Color.Red : A.Color.Red
->            : ^^^^^^^^^^^
+>A.Color.Red : A.Color
+>            : ^^^^^^^
 >A.Color : typeof A.Color
 >        : ^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >Color : typeof A.Color
 >      : ^^^^^^^^^^^^^^
->Red : A.Color.Red
->    : ^^^^^^^^^^^
+>Red : A.Color
+>    : ^^^^^^^
 
 // error not exported
 var b = A.Day.Monday;

@@ -838,15 +838,15 @@ if (flakyIsString(strOrNum)) {
   let t: string = strOrNum;  // should error
 >t : string
 >  : ^^^^^^
->strOrNum : string | number
->         : ^^^^^^^^^^^^^^^
+>strOrNum : string
+>         : ^^^^^^
 
 } else {
   let t: number = strOrNum;  // should error
 >t : number
 >  : ^^^^^^
->strOrNum : string | number
->         : ^^^^^^^^^^^^^^^
+>strOrNum : number
+>         : ^^^^^^
 }
 
 function isDate(x: object) {
@@ -929,8 +929,8 @@ if (flakyIsDate(maybeDate)) {
   let t: Date = maybeDate;  // should error
 >t : Date
 >  : ^^^^
->maybeDate : object
->          : ^^^^^^
+>maybeDate : Date
+>          : ^^^^
 
 } else {
   let t: object = maybeDate;  // should ok
@@ -1268,7 +1268,7 @@ if (c.isC2()) {
   let c2: C2 = c;  // should error
 >c2 : C2
 >   : ^^
->c : C1
+>c : C2
 >  : ^^
 }
 

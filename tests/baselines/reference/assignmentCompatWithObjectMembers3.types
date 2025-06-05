@@ -63,8 +63,8 @@ var b: { foo: string; baz?: string }
 var a2: S2 = { foo: '' };
 >a2 : S2
 >   : ^^
->{ foo: '' } : { foo: string; }
->            : ^^^^^^^^^^^^^^^^
+>{ foo: '' } : S2
+>            : ^^
 >foo : string
 >    : ^^^^^^
 >'' : ""
@@ -73,8 +73,8 @@ var a2: S2 = { foo: '' };
 var b2: T2 = { foo: '' };
 >b2 : T2
 >   : ^^
->{ foo: '' } : { foo: string; }
->            : ^^^^^^^^^^^^^^^^
+>{ foo: '' } : T2
+>            : ^^
 >foo : string
 >    : ^^^^^^
 >'' : ""

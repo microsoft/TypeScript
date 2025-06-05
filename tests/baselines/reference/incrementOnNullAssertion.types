@@ -15,8 +15,8 @@ const x = 'bar'
 let foo: Dictionary<number> = {}
 >foo : Dictionary<number>
 >    : ^^^^^^^^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : Dictionary<number>
+>   : ^^^^^^^^^^^^^^^^^^
 
 if (foo[x] === undefined) {
 >foo[x] === undefined : boolean

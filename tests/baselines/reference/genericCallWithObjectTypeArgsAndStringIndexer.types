@@ -78,8 +78,8 @@ function other2<T extends Date>(arg: T) {
     var d: Date = r2['hm']; // ok
 >d : Date
 >  : ^^^^
->r2['hm'] : T
->         : ^
+>r2['hm'] : Date
+>         : ^^^^
 >r2 : { [x: string]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >'hm' : "hm"
@@ -111,8 +111,8 @@ function other3<T extends Date, U extends Date>(arg: T) {
     var d: Date = r2['hm']; // ok
 >d : Date
 >  : ^^^^
->r2['hm'] : T
->         : ^
+>r2['hm'] : Date
+>         : ^^^^
 >r2 : { [x: string]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >'hm' : "hm"

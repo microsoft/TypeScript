@@ -442,8 +442,8 @@ module m {
        var b2: boolean = l;
 >b2 : boolean
 >   : ^^^^^^^
->l : false
->  : ^^^^^
+>l : boolean
+>  : ^^^^^^^
     }
 
     lable: let l2 = 0;

@@ -64,8 +64,7 @@ module MyModule {
 
             var obj:any = {};
 >obj : any
->{} : {}
->   : ^^
+>{} : any
             
             return obj;
 >obj : any

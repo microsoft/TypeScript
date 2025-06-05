@@ -78,8 +78,8 @@ class Test1 {
 >     : ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
 
         var self: typeof this = this;
 >self : this
@@ -106,8 +106,8 @@ class Test1 {
 >     : ^^^^
 >this : string
 >     : ^^^^^^
->'' : ""
->   : ^^
+>'' : string
+>   : ^^^^^^
     }
 }
 
@@ -125,8 +125,8 @@ function Test2() {
 >     : ^^^
 >no : any
 >   : ^^^
->1 : 1
->  : ^
+>1 : any
+>  : ^^^
 }
 
 function Test3(this: { no: number }) {
@@ -146,8 +146,8 @@ function Test3(this: { no: number }) {
 >     : ^^^^^^      ^^^
 >no : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 function Test4(this: { no: number } | undefined) {
@@ -167,8 +167,8 @@ function Test4(this: { no: number } | undefined) {
 >     : ^^^^^^      ^^^^^^^^^^^^^^^
 >no : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 class Test5 {
@@ -197,8 +197,8 @@ class Test5 {
 >     : ^^^^
 >no : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
     }
 }
 
@@ -221,8 +221,8 @@ namespace Test6 {
 >     : ^^^
 >no : any
 >   : ^^^
->1 : 1
->  : ^
+>1 : any
+>  : ^^^
     }
 }
 
@@ -245,8 +245,8 @@ module Test7 {
 >     : ^^^
 >no : any
 >   : ^^^
->1 : 1
->  : ^
+>1 : any
+>  : ^^^
     }
 }
 
@@ -265,8 +265,8 @@ const Test8 = () => {
 >     : ^^^^^^^^^^^^^^^^^
 >no : any
 >   : ^^^
->1 : 1
->  : ^
+>1 : any
+>  : ^^^
 }
 
 class Test9 {
@@ -557,8 +557,8 @@ class Test11 {
 >  : ^^^^
 >this : { x?: string; } | undefined
 >     : ^^^^^^      ^^^^^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : { x?: string; } | undefined
+>   : ^^^^^^      ^^^^^^^^^^^^^^^
 
         if (o.this && o.this.x) {
 >o.this && o.this.x : string | undefined

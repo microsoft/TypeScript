@@ -13,8 +13,8 @@ interface Console {
 let logs: string[] = [];
 >logs : string[]
 >     : ^^^^^^^^
->[] : never[]
->   : ^^^^^^^
+>[] : string[]
+>   : ^^^^^^^^
 
 let originalLog: typeof console.log;
 >originalLog : { (...data: any[]): void; (message?: any, ...optionalParams: any[]): void; }

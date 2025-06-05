@@ -9,14 +9,12 @@
 var { a1 }: any = undefined;
 >a1 : any
 >   : ^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
 
 var { a2 }: any = {};
 >a2 : any
 >   : ^^^
->{} : {}
->   : ^^
+>{} : any
 
 // V is an object assignment pattern and, for each assignment property P in V,
 //      S has an apparent property with the property name specified in
@@ -68,8 +66,7 @@ var {b4 = 1}: any = { b4: 100000 };
 >   : ^^^
 >1 : 1
 >  : ^
->{ b4: 100000 } : { b4: number; }
->               : ^^^^^^^^^^^^^^^
+>{ b4: 100000 } : any
 >b4 : number
 >   : ^^^^^^
 >100000 : 100000

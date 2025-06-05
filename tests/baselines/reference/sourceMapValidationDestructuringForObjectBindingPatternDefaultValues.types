@@ -43,8 +43,8 @@ interface MultiRobot {
 let robot: Robot = { name: "mower", skill: "mowing" };
 >robot : Robot
 >      : ^^^^^
->{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "mower", skill: "mowing" } : Robot
+>                                   : ^^^^^
 >name : string
 >     : ^^^^^^
 >"mower" : "mower"
@@ -57,8 +57,8 @@ let robot: Robot = { name: "mower", skill: "mowing" };
 let multiRobot: MultiRobot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >multiRobot : MultiRobot
 >           : ^^^^^^^^^^
->{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
->                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : MultiRobot
+>                                                                    : ^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >"mower" : "mower"

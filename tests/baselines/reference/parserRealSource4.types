@@ -177,8 +177,8 @@ module TypeScript {
             var result: string[] = [];
 >result : string[]
 >       : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : string[]
+>   : ^^^^^^^^
 
             for (var k in this.table) {
 >k : string
@@ -1239,8 +1239,8 @@ module TypeScript {
             for (var i: number = 0; i < this.size; i++) {
 >i : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 >i < this.size : boolean
 >              : ^^^^^^^
 >i : number

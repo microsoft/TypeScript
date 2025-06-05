@@ -3,8 +3,7 @@
 === keywordField.ts ===
 var obj:any = {};
 >obj : any
->{} : {}
->   : ^^
+>{} : any
 
 obj.if = 1;
 >obj.if = 1 : 1

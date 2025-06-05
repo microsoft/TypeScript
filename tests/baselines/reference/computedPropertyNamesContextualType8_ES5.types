@@ -14,8 +14,8 @@ interface I {
 var o: I = {
 >o : I
 >  : ^
->{    [""+"foo"]: "",    [""+"bar"]: 0} : { [x: string]: string | number; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [""+"foo"]: "",    [""+"bar"]: 0} : I
+>                                       : ^
 
     [""+"foo"]: "",
 >[""+"foo"] : string

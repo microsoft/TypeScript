@@ -21,8 +21,8 @@ module A {
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
 >       : ^^^^^
->{ x: 0, y: 0 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0 } : Point
+>               : ^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -46,8 +46,8 @@ module A {
     export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
 >Origin3d : Point3d
 >         : ^^^^^^^
->{ x: 0, y: 0, z: 0 } : { x: number; y: number; z: number; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0, z: 0 } : Point3d
+>                     : ^^^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0

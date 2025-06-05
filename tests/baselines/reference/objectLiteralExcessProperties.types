@@ -16,8 +16,8 @@ interface Cover {
 var b1: Book = { forword: "oops" };
 >b1 : Book
 >   : ^^^^
->{ forword: "oops" } : { forword: string; }
->                    : ^^^^^^^^^^^^^^^^^^^^
+>{ forword: "oops" } : Book
+>                    : ^^^^
 >forword : string
 >        : ^^^^^^
 >"oops" : "oops"
@@ -26,8 +26,8 @@ var b1: Book = { forword: "oops" };
 var b2: Book | string = { foreward: "nope" };
 >b2 : string | Book
 >   : ^^^^^^^^^^^^^
->{ foreward: "nope" } : { foreward: string; }
->                     : ^^^^^^^^^^^^^^^^^^^^^
+>{ foreward: "nope" } : string | Book
+>                     : ^^^^^^^^^^^^^
 >foreward : string
 >         : ^^^^^^
 >"nope" : "nope"
@@ -36,8 +36,8 @@ var b2: Book | string = { foreward: "nope" };
 var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
 >b3 : Book | Book[]
 >   : ^^^^^^^^^^^^^
->[{ foreword: "hello" }, { forwards: "back" }] : ({ foreword: string; } | { forwards: string; })[]
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ foreword: "hello" }, { forwards: "back" }] : Book | Book[]
+>                                              : ^^^^^^^^^^^^^
 >{ foreword: "hello" } : { foreword: string; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^
 >foreword : string
@@ -54,8 +54,8 @@ var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
 var b4: Book & Cover = { foreword: "hi", colour: "blue" };
 >b4 : Book & Cover
 >   : ^^^^^^^^^^^^
->{ foreword: "hi", colour: "blue" } : { foreword: string; colour: string; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foreword: "hi", colour: "blue" } : Book & Cover
+>                                   : ^^^^^^^^^^^^
 >foreword : string
 >         : ^^^^^^
 >"hi" : "hi"
@@ -68,8 +68,8 @@ var b4: Book & Cover = { foreword: "hi", colour: "blue" };
 var b5: Book & Cover = { foreward: "hi", color: "blue" };
 >b5 : Book & Cover
 >   : ^^^^^^^^^^^^
->{ foreward: "hi", color: "blue" } : { foreward: string; color: string; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foreward: "hi", color: "blue" } : Book & Cover
+>                                  : ^^^^^^^^^^^^
 >foreward : string
 >         : ^^^^^^
 >"hi" : "hi"
@@ -82,8 +82,8 @@ var b5: Book & Cover = { foreward: "hi", color: "blue" };
 var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 >b6 : Book & Cover
 >   : ^^^^^^^^^^^^
->{ foreword: "hi", color: "blue", price: 10.99 } : { foreword: string; color: string; price: number; }
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foreword: "hi", color: "blue", price: 10.99 } : Book & Cover
+>                                                : ^^^^^^^^^^^^
 >foreword : string
 >         : ^^^^^^
 >"hi" : "hi"
@@ -100,8 +100,8 @@ var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 var b7: Book & number = { foreword: "hi", price: 10.99 };
 >b7 : Book & number
 >   : ^^^^^^^^^^^^^
->{ foreword: "hi", price: 10.99 } : { foreword: string; price: number; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foreword: "hi", price: 10.99 } : Book & number
+>                                 : ^^^^^^^^^^^^^
 >foreword : string
 >         : ^^^^^^
 >"hi" : "hi"
@@ -114,8 +114,8 @@ var b7: Book & number = { foreword: "hi", price: 10.99 };
 var b8: Cover | Cover[] = { couleur : "non" };
 >b8 : Cover | Cover[]
 >   : ^^^^^^^^^^^^^^^
->{ couleur : "non" } : { couleur: string; }
->                    : ^^^^^^^^^^^^^^^^^^^^
+>{ couleur : "non" } : Cover | Cover[]
+>                    : ^^^^^^^^^^^^^^^
 >couleur : string
 >        : ^^^^^^
 >"non" : "non"
@@ -124,8 +124,8 @@ var b8: Cover | Cover[] = { couleur : "non" };
 var b9: Book | Book[] = { forewarned: "still no" };
 >b9 : Book | Book[]
 >   : ^^^^^^^^^^^^^
->{ forewarned: "still no" } : { forewarned: string; }
->                           : ^^^^^^^^^^^^^^^^^^^^^^^
+>{ forewarned: "still no" } : Book | Book[]
+>                           : ^^^^^^^^^^^^^
 >forewarned : string
 >           : ^^^^^^
 >"still no" : "still no"
@@ -140,8 +140,8 @@ interface Indexed {
 var b10: Indexed = { 0: { }, '1': { } }; // ok
 >b10 : Indexed
 >    : ^^^^^^^
->{ 0: { }, '1': { } } : { 0: {}; '1': {}; }
->                     : ^^^^^^^^^^^^^^^^^^^
+>{ 0: { }, '1': { } } : Indexed
+>                     : ^^^^^^^
 >0 : {}
 >  : ^^
 >{ } : {}
@@ -154,8 +154,8 @@ var b10: Indexed = { 0: { }, '1': { } }; // ok
 var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
 >b11 : Indexed
 >    : ^^^^^^^
->{ 0: { colour: "blue" } } : { 0: { colour: string; }; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ 0: { colour: "blue" } } : Indexed
+>                          : ^^^^^^^
 >0 : { colour: string; }
 >  : ^^^^^^^^^^^^^^^^^^^
 >{ colour: "blue" } : { colour: string; }

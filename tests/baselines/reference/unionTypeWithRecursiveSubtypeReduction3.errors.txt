@@ -1,4 +1,4 @@
-unionTypeWithRecursiveSubtypeReduction3.ts(5,5): error TS2322: Type '{ prop: number; } | { prop: { prop: number; } | any; }' is not assignable to type 'string'.
+unionTypeWithRecursiveSubtypeReduction3.ts(5,17): error TS2322: Type '{ prop: number; } | { prop: { prop: number; } | any; }' is not assignable to type 'string'.
   Type '{ prop: number; }' is not assignable to type 'string'.
 
 
@@ -8,7 +8,7 @@ unionTypeWithRecursiveSubtypeReduction3.ts(5,5): error TS2322: Type '{ prop: num
     
     var b: T27;
     var s: string = b;
-        ~
+                    ~
 !!! error TS2322: Type '{ prop: number; } | { prop: { prop: number; } | any; }' is not assignable to type 'string'.
 !!! error TS2322:   Type '{ prop: number; }' is not assignable to type 'string'.
     

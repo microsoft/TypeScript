@@ -12,8 +12,8 @@ module __test1__ {
 >    : ^
 >obj4 : interfaceWithPublicAndOptional<number, string>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ one: 1 } : { one: number; }
->           : ^^^^^^^^^^^^^^^^
+>{ one: 1 } : interfaceWithPublicAndOptional<number, string>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >one : number
 >    : ^^^^^^
 >1 : 1
@@ -34,8 +34,8 @@ module __test2__ {
 >    : ^
 >obj1 : interfaceOne<number>
 >     : ^^^^^^^^^^^^^^^^^^^^
->{ one: 1 } : { one: number; }
->           : ^^^^^^^^^^^^^^^^
+>{ one: 1 } : interfaceOne<number>
+>           : ^^^^^^^^^^^^^^^^^^^^
 >one : number
 >    : ^^^^^^
 >1 : 1

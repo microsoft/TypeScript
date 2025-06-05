@@ -50,6 +50,6 @@ i = new C;
 var c: C = i;
 >c : C
 >  : ^
->i : I
+>i : C
 >  : ^
 

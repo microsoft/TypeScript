@@ -31,8 +31,8 @@ var e: Ellement;
 var arr: Contextual[] = [e]; // Ellement[]
 >arr : Contextual[]
 >    : ^^^^^^^^^^^^
->[e] : Ellement[]
->    : ^^^^^^^^^^
+>[e] : Contextual[]
+>    : ^^^^^^^^^^^^
 >e : Ellement
 >  : ^^^^^^^^
 
@@ -41,8 +41,8 @@ var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: 
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
->{ s: e } : { s: Ellement; }
->         : ^^^^^^^^^^^^^^^^
+>{ s: e } : { [s: string]: Contextual; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Ellement
 >  : ^^^^^^^^
 >e : Ellement
@@ -51,8 +51,8 @@ var obj: { [s: string]: Contextual } = { s: e }; // { s: Ellement; [s: string]: 
 var conditional: Contextual = null ? e : e; // Ellement
 >conditional : Contextual
 >            : ^^^^^^^^^^
->null ? e : e : Ellement
->             : ^^^^^^^^
+>null ? e : e : Contextual
+>             : ^^^^^^^^^^
 >e : Ellement
 >  : ^^^^^^^^
 >e : Ellement
@@ -61,8 +61,8 @@ var conditional: Contextual = null ? e : e; // Ellement
 var contextualOr: Contextual = e || e; // Ellement
 >contextualOr : Contextual
 >             : ^^^^^^^^^^
->e || e : Ellement
->       : ^^^^^^^^
+>e || e : Contextual
+>       : ^^^^^^^^^^
 >e : Ellement
 >  : ^^^^^^^^
 >e : Ellement

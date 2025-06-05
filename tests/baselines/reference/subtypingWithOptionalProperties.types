@@ -15,8 +15,8 @@ function f<T>(a: T) {
 >  : ^^^^^^      ^^^
 >s : number
 >  : ^^^^^^
->a : T
->  : ^
+>a : { s?: number; }
+>  : ^^^^^^      ^^^
 
     return b;
 >b : { s?: number; }

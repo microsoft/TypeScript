@@ -12,8 +12,8 @@ type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 var tree: Tree<number> = {
 >tree : Tree<number>
 >     : ^^^^^^^^^^^^
->{    left: {        left: 0,        right: {            left: 1,            right: 2        },    },    right: 3} : { left: { left: number; right: { left: number; right: number; }; }; right: number; }
->                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    left: {        left: 0,        right: {            left: 1,            right: 2        },    },    right: 3} : Tree<number>
+>                                                                                                                  : ^^^^^^^^^^^^
 
     left: {
 >left : { left: number; right: { left: number; right: number; }; }

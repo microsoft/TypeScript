@@ -49,7 +49,7 @@ let obj: { 3: string } = { 3: "three" };
 >3 : string
 >  : ^^^^^^
 >{ 3: "three" } : { 3: string; }
->               : ^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^
 >3 : string
 >  : ^^^^^^
 >"three" : "three"

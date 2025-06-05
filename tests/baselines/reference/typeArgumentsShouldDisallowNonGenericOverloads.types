@@ -47,7 +47,7 @@ var y: string = foo("hi"); // return type should be 'string'
 var w: string = foo<string>("hi"); // should error
 >w : string
 >  : ^^^^^^
->foo<string>("hi") : number
+>foo<string>("hi") : string
 >                  : ^^^^^^
 >foo : { (a: string): string; <T>(a: T): number; }
 >    : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^      ^^^
@@ -57,7 +57,7 @@ var w: string = foo<string>("hi"); // should error
 var z: number = foo("hi"); // should error
 >z : number
 >  : ^^^^^^
->foo("hi") : string
+>foo("hi") : number
 >          : ^^^^^^
 >foo : { (a: string): string; <T>(a: T): number; }
 >    : ^^^ ^^      ^^^      ^^^ ^^ ^^ ^^^      ^^^

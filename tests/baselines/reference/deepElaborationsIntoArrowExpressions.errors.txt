@@ -1,7 +1,10 @@
 deepElaborationsIntoArrowExpressions.ts(4,14): error TS2322: Type '"b"' is not assignable to type '"a"'.
 deepElaborationsIntoArrowExpressions.ts(12,20): error TS2322: Type 'string' is not assignable to type 'number'.
 deepElaborationsIntoArrowExpressions.ts(16,14): error TS2322: Type 'string' is not assignable to type 'number'.
-deepElaborationsIntoArrowExpressions.ts(18,18): error TS2322: Type 'string' is not assignable to type 'number'.
+deepElaborationsIntoArrowExpressions.ts(18,16): error TS2322: Type '{ a: string; }[]' is not assignable to type 'Foo[]'.
+  Type '{ a: string; }' is not assignable to type 'Foo'.
+    Types of property 'a' are incompatible.
+      Type 'string' is not assignable to type 'number'.
 
 
 ==== deepElaborationsIntoArrowExpressions.ts (4 errors) ====
@@ -32,6 +35,8 @@ deepElaborationsIntoArrowExpressions.ts(18,18): error TS2322: Type 'string' is n
 !!! related TS6500 deepElaborationsIntoArrowExpressions.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Foo'
     }
     var y: Foo[] = [{a: ''}]
-                     ~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 deepElaborationsIntoArrowExpressions.ts:8:5: The expected type comes from property 'a' which is declared here on type 'Foo'
+                   ~~~~~~~~~
+!!! error TS2322: Type '{ a: string; }[]' is not assignable to type 'Foo[]'.
+!!! error TS2322:   Type '{ a: string; }' is not assignable to type 'Foo'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.

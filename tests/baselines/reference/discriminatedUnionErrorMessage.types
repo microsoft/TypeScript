@@ -37,8 +37,8 @@ type Shape =
 let shape: Shape = {
 >shape : Shape
 >      : ^^^^^
->{    kind: "sq",    x: 12,    y: 13,} : { kind: "sq"; x: number; y: number; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    kind: "sq",    x: 12,    y: 13,} : Shape
+>                                      : ^^^^^
 
     kind: "sq",
 >kind : "sq"

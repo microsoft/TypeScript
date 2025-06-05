@@ -48,14 +48,14 @@ var y = new Array<number>();
 var x2: number[] = [];
 >x2 : number[]
 >   : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : number[]
+>   : ^^^^^^^^
 
 var x2: number[] = new Array(1);
 >x2 : number[]
 >   : ^^^^^^^^
->new Array(1) : any[]
->             : ^^^^^
+>new Array(1) : number[]
+>             : ^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >1 : 1

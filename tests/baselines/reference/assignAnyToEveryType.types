@@ -10,26 +10,26 @@ var x: any;
 var a: number = x;
 >a : number
 >  : ^^^^^^
->x : any
->  : ^^^
+>x : number
+>  : ^^^^^^
 
 var b: boolean = x;
 >b : boolean
 >  : ^^^^^^^
->x : any
->  : ^^^
+>x : boolean
+>  : ^^^^^^^
 
 var c: string = x;
 >c : string
 >  : ^^^^^^
->x : any
->  : ^^^
+>x : string
+>  : ^^^^^^
 
 var d: void = x;
 >d : void
 >  : ^^^^
->x : any
->  : ^^^
+>x : void
+>  : ^^^^
 
 var e = null;
 >e : any
@@ -69,8 +69,8 @@ enum E {
 var g: E = x;
 >g : E
 >  : ^
->x : any
->  : ^^^
+>x : E
+>  : ^
 
 var g2 = E.A;
 >g2 : E
@@ -102,8 +102,8 @@ class C {
 var h: C = x;
 >h : C
 >  : ^
->x : any
->  : ^^^
+>x : C
+>  : ^
 
 interface I {
     foo: string;
@@ -114,22 +114,22 @@ interface I {
 var i: I = x;
 >i : I
 >  : ^
->x : any
->  : ^^^
+>x : I
+>  : ^
 
 var j: { (): string } = x;
 >j : () => string
 >  : ^^^^^^      
->x : any
->  : ^^^
+>x : () => string
+>  : ^^^^^^      
 
 var j2: { <T>(x: T): string } = x;
 >j2 : <T>(x: T) => string
 >   : ^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
->x : any
->  : ^^^
+>x : <T>(x: T) => string
+>  : ^ ^^ ^^ ^^^^^      
 
 module M {
 >M : typeof M

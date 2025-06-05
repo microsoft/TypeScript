@@ -59,8 +59,8 @@ interface IWithNumberIndexSignature2 {
 var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { z: a => a }; // a should be number
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ z: a => a } : { z: (a: number) => number; }
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ z: a => a } : IWithNoStringIndexSignature | IWithStringIndexSignature1
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : (a: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -73,8 +73,8 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { z: a => a };
 var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a }; // a should be number (because of index signature of IWithStringIndexSignature1)
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ foo: a => a } : { foo: (a: number) => number; }
->                : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ foo: a => a } : IWithNoStringIndexSignature | IWithStringIndexSignature1
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : (a: number) => number
 >    : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -87,8 +87,8 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a 
 var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: "hello" }; 
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ foo: "hello" } : { foo: string; }
->                 : ^^^^^^^^^^^^^^^^
+>{ foo: "hello" } : IWithNoStringIndexSignature | IWithStringIndexSignature1
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >"hello" : "hello"
@@ -97,8 +97,8 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: "hello"
 var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a.toString() }; // a should be number
 >x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ z: a => a.toString() } : { z: (a: number) => string; }
->                         : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ z: a => a.toString() } : IWithStringIndexSignature1 | IWithStringIndexSignature2
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : (a: number) => string
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a.toString() : (a: number) => string
@@ -117,8 +117,8 @@ var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a.to
 var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a }; // a should be number
 >x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ z: a => a } : { z: (a: number) => number; }
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ z: a => a } : IWithStringIndexSignature1 | IWithStringIndexSignature2
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : (a: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -135,8 +135,8 @@ var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a };
 var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }; // a should be number
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ 1: a => a } : { 1: (a: number) => number; }
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ 1: a => a } : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : (a: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -149,8 +149,8 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }
 var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }; // a should be number (because of index signature of IWithNumberIndexSignature1)
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ 0: a => a } : { 0: (a: number) => number; }
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ 0: a => a } : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : (a: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
@@ -163,8 +163,8 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }
 var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" };
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ 0: "hello" } : { 0: string; }
->               : ^^^^^^^^^^^^^^
+>{ 0: "hello" } : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : string
 >  : ^^^^^^
 >"hello" : "hello"
@@ -173,8 +173,8 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.toString() }; // a should be number
 >x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ 1: a => a.toString() } : { 1: (a: number) => string; }
->                         : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ 1: a => a.toString() } : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : (a: number) => string
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a.toString() : (a: number) => string
@@ -193,8 +193,8 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.to
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a }; // a should be number
 >x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ 1: a => a } : { 1: (a: number) => number; }
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{ 1: a => a } : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : (a: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number

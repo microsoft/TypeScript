@@ -49,8 +49,8 @@ module A {
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
 >       : ^^^^^
->{ x: 0, y: 0 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0 } : Point
+>               : ^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -70,8 +70,8 @@ module A {
     var Origin: string = "0,0";
 >Origin : string
 >       : ^^^^^^
->"0,0" : "0,0"
->      : ^^^^^
+>"0,0" : string
+>      : ^^^^^^
 
     export module Utils {
 >Utils : typeof Utils

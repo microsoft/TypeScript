@@ -1,12 +1,12 @@
-intersectionWithUnionConstraint.ts(7,9): error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
+intersectionWithUnionConstraint.ts(7,31): error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
   Type 'undefined' is not assignable to type 'string | number'.
-intersectionWithUnionConstraint.ts(8,9): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.
+intersectionWithUnionConstraint.ts(8,29): error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.
   Type 'undefined' is not assignable to type 'string | null'.
-intersectionWithUnionConstraint.ts(10,9): error TS2322: Type 'string | undefined' is not assignable to type 'number | null'.
+intersectionWithUnionConstraint.ts(10,29): error TS2322: Type 'string | undefined' is not assignable to type 'number | null'.
   Type 'undefined' is not assignable to type 'number | null'.
-intersectionWithUnionConstraint.ts(11,9): error TS2322: Type 'string | undefined' is not assignable to type 'number | undefined'.
+intersectionWithUnionConstraint.ts(11,34): error TS2322: Type 'string | undefined' is not assignable to type 'number | undefined'.
   Type 'string' is not assignable to type 'number'.
-intersectionWithUnionConstraint.ts(12,9): error TS2322: Type 'string | undefined' is not assignable to type 'null | undefined'.
+intersectionWithUnionConstraint.ts(12,32): error TS2322: Type 'string | undefined' is not assignable to type 'null | undefined'.
   Type 'string' is not assignable to type 'null | undefined'.
 
 
@@ -18,24 +18,24 @@ intersectionWithUnionConstraint.ts(12,9): error TS2322: Type 'string | undefined
     
     function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
         let y1: string | number = x;     // Error
-            ~~
+                                  ~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string | number'.
         let y2: string | null = x;       // Error
-            ~~
+                                ~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'string | null'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'string | null'.
         let y3: string | undefined = x;
         let y4: number | null = x;       // Error
-            ~~
+                                ~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'number | null'.
 !!! error TS2322:   Type 'undefined' is not assignable to type 'number | null'.
         let y5: number | undefined = x;  // Error
-            ~~
+                                     ~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'number | undefined'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
         let y6: null | undefined = x;    // Error
-            ~~
+                                   ~
 !!! error TS2322: Type 'string | undefined' is not assignable to type 'null | undefined'.
 !!! error TS2322:   Type 'string' is not assignable to type 'null | undefined'.
     }

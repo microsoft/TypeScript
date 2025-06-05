@@ -36,8 +36,8 @@ module onlyT {
 >   : ^ ^^  ^^^^^  
 >x : {}
 >  : ^^
->foo((x: number) => 1, (x: string) => '') : (x: number) => number
->                                         : ^ ^^^^^^^^^^^^^^^^^^^
+>foo((x: number) => 1, (x: string) => '') : (x: {}) => {}
+>                                         : ^ ^^  ^^^^^  
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
 >    : ^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: number) => 1 : (x: number) => number
@@ -277,8 +277,8 @@ module TU {
 >   : ^ ^^  ^^^^^  
 >x : {}
 >  : ^^
->foo((x: number) => 1, (x: string) => '') : (x: number) => number
->                                         : ^ ^^^^^^^^^^^^^^^^^^^
+>foo((x: number) => 1, (x: string) => '') : (x: {}) => {}
+>                                         : ^ ^^  ^^^^^  
 >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
 >    : ^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >(x: number) => 1 : (x: number) => number

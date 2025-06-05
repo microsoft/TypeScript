@@ -12,8 +12,8 @@ var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // 
 >   : ^^^^^^
 >a2 : string
 >   : ^^^^^^
->{ a1: true, a2: 1 } : { a1: boolean; a2: number; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a1: true, a2: 1 } : { a1: number; a2: string; }
+>                    : ^^^^^^      ^^^^^^      ^^^
 >a1 : boolean
 >   : ^^^^^^^
 >true : true
@@ -30,8 +30,8 @@ var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // 
 >   : ^^^^^^
 >a5 : boolean
 >   : ^^^^^^^
->[1, [[false]], true] : [number, [[boolean]], true]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, [[false]], true] : [number, [[string]], boolean]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >[[false]] : [[boolean]]
@@ -141,7 +141,7 @@ var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } 
 >d1 : number[]
 >   : ^^^^^^^^
 >{ d: { d1: [1, 2] } } : { d: { d1: number[]; }; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^                 ^^^
 >d : { d1: number[]; }
 >  : ^^^^^^^^^^^^^^^^^
 >{ d1: [1, 2] } : { d1: number[]; }

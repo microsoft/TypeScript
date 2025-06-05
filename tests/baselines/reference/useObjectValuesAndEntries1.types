@@ -244,8 +244,8 @@ interface I { }
 var i: I = {};
 >i : I
 >  : ^
->{} : {}
->   : ^^
+>{} : I
+>   : ^
 
 var entries6 = Object.entries(i);                   // [string, any][]
 >entries6 : [string, any][]

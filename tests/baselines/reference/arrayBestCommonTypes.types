@@ -398,8 +398,8 @@ module EmptyTypes {
 >  : ^^^^^^
 >y : base
 >  : ^^^^
->[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: derived; }[]
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
+>                                                      : ^^^^^      ^^^^^    ^^^^^
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -432,8 +432,8 @@ module EmptyTypes {
 >  : ^^^^^^^
 >y : base
 >  : ^^^^
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: base; }[]
+>                                                             : ^^^^^       ^^^^^    ^^^^^
 >{ x: true, y: new derived() } : { x: true; y: derived; }
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : true
@@ -466,8 +466,8 @@ module EmptyTypes {
 >  : ^^^^^^
 >y : base
 >  : ^^^^
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: derived; }[]
->                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: base; }[]
+>                                                               : ^^^^^      ^^^^^    ^^^^^
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined
@@ -1081,7 +1081,7 @@ module NonEmptyTypes {
 >y : base
 >  : ^^^^
 >[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^^^^^      ^^^^^    ^^^^^
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -1114,8 +1114,8 @@ module NonEmptyTypes {
 >  : ^^^^^^^
 >y : base
 >  : ^^^^
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: base; }[]
+>                                                             : ^^^^^       ^^^^^    ^^^^^
 >{ x: true, y: new derived() } : { x: true; y: derived; }
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : true
@@ -1148,8 +1148,8 @@ module NonEmptyTypes {
 >  : ^^^^^^
 >y : base
 >  : ^^^^
->[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: string; y: derived; })[]
->                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: base; }[]
+>                                                               : ^^^^^      ^^^^^    ^^^^^
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined

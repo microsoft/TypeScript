@@ -10,8 +10,8 @@ interface I {
 var I:I = { I: 3};
 >I : I
 >  : ^
->{ I: 3} : { I: number; }
->        : ^^^^^^^^^^^^^^
+>{ I: 3} : I
+>        : ^
 >I : number
 >  : ^^^^^^
 >3 : 3

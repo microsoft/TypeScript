@@ -8,8 +8,7 @@ function* gen() {
 
   var obj: any = { foo: 1, bar: 2 };
 >obj : any
->{ foo: 1, bar: 2 } : { foo: number; bar: number; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ foo: 1, bar: 2 } : any
 >foo : number
 >    : ^^^^^^
 >1 : 1

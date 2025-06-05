@@ -7,7 +7,7 @@ var fu: (s: string) => string = function (s) { return s.toLowerCase() };
 >s : string
 >  : ^^^^^^
 >function (s) { return s.toLowerCase() } : (s: string) => string
->                                        : ^ ^^^^^^^^^^^^^^^^^^^
+>                                        : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 >s.toLowerCase() : string

@@ -72,20 +72,20 @@ let x: { nope?: any } = E.A;  // Error
 >  : ^^^^^^^^^   ^^^
 >nope : any
 >     : ^^^
->E.A : E
->    : ^
+>E.A : { nope?: any; }
+>    : ^^^^^^^^^   ^^^
 >E : typeof E
 >  : ^^^^^^^^
->A : E
->  : ^
+>A : { nope?: any; }
+>  : ^^^^^^^^^   ^^^
 
 let y: { nope?: any } = "A";  // Error
 >y : { nope?: any; }
 >  : ^^^^^^^^^   ^^^
 >nope : any
 >     : ^^^
->"A" : "A"
->    : ^^^
+>"A" : { nope?: any; }
+>    : ^^^^^^^^^   ^^^
 
 // Repros from #51043
 

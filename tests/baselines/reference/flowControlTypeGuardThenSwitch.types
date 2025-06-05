@@ -60,8 +60,8 @@ function isBoth(x: Base): x is Both {
 let foo: Base = undefined;
 >foo : Base
 >    : ^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Base
+>          : ^^^^
 
 if (isBoth(foo)) {
 >isBoth(foo) : boolean

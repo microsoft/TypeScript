@@ -203,8 +203,8 @@ function implicitThis(n: number): number {
 let impl: I = {
 >impl : I
 >     : ^
->{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: number; explicitVoid2: () => any; explicitVoid1(this: void): number; explicitStructural(this: { a: number; }): number; explicitInterface(this: I): number; explicitThis(this: I): number; }
->                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : I
+>                                                                                                                                                                                                                                                                                                             : ^
 
     a: 12,
 >a : number
@@ -395,7 +395,7 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, f:
 >x : number
 >  : ^^^^^^
 >{ y: 12, f: explicitStructural } : { y: number; f: (this: { y: number; }, x: number) => number; }
->                                 : ^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^
+>                                 : ^^^^^      ^^^^^                                           ^^^
 >y : number
 >  : ^^^^^^
 >12 : 12
@@ -414,8 +414,8 @@ let implicitAnyOk: {notSpecified: number, f: (x: number) => number} = { notSpeci
 >  : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->{ notSpecified: 12, f: implicitThis } : { notSpecified: number; f: (n: number) => number; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^      ^^^
+>{ notSpecified: 12, f: implicitThis } : { notSpecified: number; f: (x: number) => number; }
+>                                      : ^^^^^^^^^^^^^^^^      ^^^^^                     ^^^
 >notSpecified : number
 >             : ^^^^^^
 >12 : 12
@@ -598,8 +598,8 @@ let reconstructed: {
 >  : ^^^^^^
 
 } = { 
->{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: number; explicitThis: (this: C, m: number) => number; explicitC: (this: C, m: number) => number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid: (this: void, m: number) => number; }
->                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^^^    ^^ ^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^      ^^^^^^^^^^^^^^^^^    ^^    ^^ ^^      ^^^^^      ^^^
+>{     n: 12,    explicitThis: c.explicitThis,    explicitC: c.explicitC,    explicitProperty: c.explicitProperty,    explicitVoid: c.explicitVoid} : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
+>                                                                                                                                                   : ^^^^^      ^^^^^^^^^^^^^^^    ^^ ^^ ^^      ^^^      ^^^^^^^^^^^^    ^^ ^^ ^^      ^^^      ^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^^^^^    ^^    ^^ ^^      ^^^      ^^^
 
     n: 12,
 >n : number
@@ -700,8 +700,8 @@ let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + th
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->x => x + this.y : (this: { y: number; }, x: number) => any
->                : ^    ^^              ^^ ^^^^^^^^^^^^^^^^
+>x => x + this.y : (this: { y: number; }, x: number) => number
+>                : ^    ^^              ^^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >x + this.y : any
@@ -753,7 +753,7 @@ let unspecifiedLambda: (x: number) => number = x => x + 12;
 >x : number
 >  : ^^^^^^
 >x => x + 12 : (x: number) => number
->            : ^ ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >x + 12 : number
@@ -771,7 +771,7 @@ let specifiedLambda: (this: void, x: number) => number = x => x + 12;
 >x : number
 >  : ^^^^^^
 >x => x + 12 : (this: void, x: number) => number
->            : ^    ^^    ^^ ^^^^^^^^^^^^^^^^^^^
+>            : ^    ^^    ^^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >x + 12 : number
@@ -790,8 +790,8 @@ let unspecifiedLambdaToSpecified: (this: {y: number}, x: number) => number = uns
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->unspecifiedLambda : (x: number) => number
->                  : ^ ^^      ^^^^^      
+>unspecifiedLambda : (this: { y: number; }, x: number) => number
+>                  : ^    ^^              ^^ ^^      ^^^^^      
 
 let specifiedLambdaToSpecified: (this: {y: number}, x: number) => number = specifiedLambda;
 >specifiedLambdaToSpecified : (this: { y: number; }, x: number) => number
@@ -802,8 +802,8 @@ let specifiedLambdaToSpecified: (this: {y: number}, x: number) => number = speci
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->specifiedLambda : (this: void, x: number) => number
->                : ^    ^^    ^^ ^^      ^^^^^      
+>specifiedLambda : (this: { y: number; }, x: number) => number
+>                : ^    ^^              ^^ ^^      ^^^^^      
 
 
 let explicitCFunction: (this: C, m: number) => number;

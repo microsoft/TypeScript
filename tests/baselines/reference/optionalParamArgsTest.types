@@ -280,7 +280,7 @@ var c1o1:C1 = new C1(5);
 var i1o1:I1 = new C1(5);
 >i1o1 : I1
 >     : ^^
->new C1(5) : C1
+>new C1(5) : I1
 >          : ^^
 >C1 : typeof C1
 >   : ^^^^^^^^^

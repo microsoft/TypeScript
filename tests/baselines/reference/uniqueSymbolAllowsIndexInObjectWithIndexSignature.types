@@ -27,8 +27,8 @@ export interface I {
 let a: I = {[SYM]: 'sym'}; // Expect ok
 >a : I
 >  : ^
->{[SYM]: 'sym'} : { [SYM]: "sym"; }
->               : ^^^^^^^^^^^^^^^^^
+>{[SYM]: 'sym'} : I
+>               : ^
 >[SYM] : "sym"
 >      : ^^^^^
 >SYM : unique symbol
@@ -39,8 +39,8 @@ let a: I = {[SYM]: 'sym'}; // Expect ok
 let b: I = {[SYM]: 'str'}; // Expect error
 >b : I
 >  : ^
->{[SYM]: 'str'} : { [SYM]: "str"; }
->               : ^^^^^^^^^^^^^^^^^
+>{[SYM]: 'str'} : I
+>               : ^
 >[SYM] : "str"
 >      : ^^^^^
 >SYM : unique symbol

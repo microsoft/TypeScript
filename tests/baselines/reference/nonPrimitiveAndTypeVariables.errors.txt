@@ -1,5 +1,5 @@
-nonPrimitiveAndTypeVariables.ts(10,9): error TS2322: Type 'T' is not assignable to type 'object'.
-nonPrimitiveAndTypeVariables.ts(11,9): error TS2322: Type 'T' is not assignable to type 'object | U'.
+nonPrimitiveAndTypeVariables.ts(10,21): error TS2322: Type 'T' is not assignable to type 'object'.
+nonPrimitiveAndTypeVariables.ts(11,25): error TS2322: Type 'T' is not assignable to type 'object | U'.
 
 
 ==== nonPrimitiveAndTypeVariables.ts (2 errors) ====
@@ -13,11 +13,11 @@ nonPrimitiveAndTypeVariables.ts(11,9): error TS2322: Type 'T' is not assignable 
     
     function foo<T, U>(x: T) {
         let a: object = x;  // Error
-            ~
+                        ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
 !!! related TS2208 nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object` constraint.
         let b: U | object = x;  // Error
-            ~
+                            ~
 !!! error TS2322: Type 'T' is not assignable to type 'object | U'.
 !!! related TS2208 nonPrimitiveAndTypeVariables.ts:9:14: This type parameter might need an `extends object | U` constraint.
     }

@@ -24,14 +24,14 @@ function f2<T extends string | number | undefined, U extends string | null | und
     let y1: string | number = x;     // Error
 >y1 : string | number
 >   : ^^^^^^^^^^^^^^^
->x : string | undefined
->  : ^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     let y2: string | null = x;       // Error
 >y2 : string | null
 >   : ^^^^^^^^^^^^^
->x : string | undefined
->  : ^^^^^^^^^^^^^^^^^^
+>x : string | null
+>  : ^^^^^^^^^^^^^
 
     let y3: string | undefined = x;
 >y3 : string | undefined
@@ -42,20 +42,20 @@ function f2<T extends string | number | undefined, U extends string | null | und
     let y4: number | null = x;       // Error
 >y4 : number | null
 >   : ^^^^^^^^^^^^^
->x : string | undefined
->  : ^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
 
     let y5: number | undefined = x;  // Error
 >y5 : number | undefined
 >   : ^^^^^^^^^^^^^^^^^^
->x : string | undefined
+>x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
     let y6: null | undefined = x;    // Error
 >y6 : null | undefined
 >   : ^^^^^^^^^^^^^^^^
->x : string | undefined
->  : ^^^^^^^^^^^^^^^^^^
+>x : null | undefined
+>  : ^^^^^^^^^^^^^^^^
 }
 
 type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined

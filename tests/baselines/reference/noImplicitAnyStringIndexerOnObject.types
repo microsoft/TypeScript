@@ -684,8 +684,8 @@ interface Dog { bark(): void; }
 let rover: Dog = { bark() {} };
 >rover : Dog
 >      : ^^^
->{ bark() {} } : { bark(): void; }
->              : ^^^^^^^^^^^^^^^^^
+>{ bark() {} } : Dog
+>              : ^^^
 >bark : () => void
 >     : ^^^^^^^^^^
 

@@ -51,8 +51,8 @@ let o2: { b: string, x: number } = test(o1);
 >  : ^^^^^^
 >x : number
 >  : ^^^^^^
->test(o1) : Omit<{ a: string; x: number; }, "a"> & { b: string; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test(o1) : { b: string; x: number; }
+>         : ^^^^^      ^^^^^      ^^^
 >test : <T extends { a: string; }>(obj: T) => Omit<T, "a"> & { b: string; }
 >     : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o1 : { a: string; x: number; }

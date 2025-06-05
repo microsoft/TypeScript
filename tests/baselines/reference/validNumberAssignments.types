@@ -9,13 +9,12 @@ var x = 1;
 
 var a: any = x;
 >a : any
->x : number
->  : ^^^^^^
+>x : any
 
 var b: Object = x;
 >b : Object
 >  : ^^^^^^
->x : number
+>x : Object
 >  : ^^^^^^
 
 var c: number = x;
@@ -33,8 +32,8 @@ enum E { A };
 var d: E = x;
 >d : E
 >  : ^
->x : number
->  : ^^^^^^
+>x : E
+>  : ^
 
 var e = E.A;
 >e : E

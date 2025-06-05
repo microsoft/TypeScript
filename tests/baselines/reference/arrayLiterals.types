@@ -137,8 +137,8 @@ var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '
 >  : ^^^^^^
 >b : number
 >  : ^^^^^^
->[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : ({ a: string; b: number; c: string; } | { a: string; b: number; c: number; })[]
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }] : { [n: number]: { a: string; b: number; }; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^
 >{ a: '', b: 0, c: '' } : { a: string; b: number; c: string; }
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -228,8 +228,8 @@ class Derived2 extends Base { private n };
 var context3: Base[] = [new Derived1(), new Derived2()];
 >context3 : Base[]
 >         : ^^^^^^
->[new Derived1(), new Derived2()] : (Derived1 | Derived2)[]
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>[new Derived1(), new Derived2()] : Base[]
+>                                 : ^^^^^^
 >new Derived1() : Derived1
 >               : ^^^^^^^^
 >Derived1 : typeof Derived1
@@ -243,8 +243,8 @@ var context3: Base[] = [new Derived1(), new Derived2()];
 var context4: Base[] = [new Derived1(), new Derived1()];
 >context4 : Base[]
 >         : ^^^^^^
->[new Derived1(), new Derived1()] : Derived1[]
->                                 : ^^^^^^^^^^
+>[new Derived1(), new Derived1()] : Base[]
+>                                 : ^^^^^^
 >new Derived1() : Derived1
 >               : ^^^^^^^^
 >Derived1 : typeof Derived1

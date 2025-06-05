@@ -9,8 +9,8 @@ interface A {
 var a: A = {
 >a : A
 >  : ^
->{  b: 123} : { b: number; }
->           : ^^^^^^^^^^^^^^
+>{  b: 123} : A
+>           : ^
 
   b: 123
 >b : number
@@ -39,8 +39,8 @@ interface B {
 var b: B = {
 >b : B
 >  : ^
->{  'test': 'test'} : { test: string; }
->                   : ^^^^^^^^^^^^^^^^^
+>{  'test': 'test'} : B
+>                   : ^
 
   'test': 'test'
 >'test' : string

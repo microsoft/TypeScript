@@ -75,8 +75,8 @@ function hasKind(entity: Entity, kind: Kind): entity is Entity {
 let x: A = {
 >x : A
 >  : ^
->{    kind: "A",    a: 100,} : { kind: "A"; a: number; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    kind: "A",    a: 100,} : A
+>                            : ^
 
     kind: "A",
 >kind : "A"

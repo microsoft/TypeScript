@@ -10,11 +10,11 @@ unknownType1.ts(63,5): error TS18046: 'x' is of type 'unknown'.
 unknownType1.ts(64,5): error TS18046: 'x' is of type 'unknown'.
 unknownType1.ts(65,5): error TS18046: 'x' is of type 'unknown'.
 unknownType1.ts(66,9): error TS18046: 'x' is of type 'unknown'.
-unknownType1.ts(110,9): error TS2322: Type 'unknown' is not assignable to type 'object'.
-unknownType1.ts(111,9): error TS2322: Type 'unknown' is not assignable to type 'string'.
-unknownType1.ts(112,9): error TS2322: Type 'unknown' is not assignable to type 'string[]'.
-unknownType1.ts(113,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
-unknownType1.ts(120,9): error TS2322: Type 'T' is not assignable to type 'object'.
+unknownType1.ts(110,22): error TS2322: Type 'unknown' is not assignable to type 'object'.
+unknownType1.ts(111,22): error TS2322: Type 'unknown' is not assignable to type 'string'.
+unknownType1.ts(112,24): error TS2322: Type 'unknown' is not assignable to type 'string[]'.
+unknownType1.ts(113,18): error TS2322: Type 'unknown' is not assignable to type '{}'.
+unknownType1.ts(120,21): error TS2322: Type 'T' is not assignable to type 'object'.
 unknownType1.ts(128,5): error TS2322: Type 'number[]' is not assignable to type '{ [x: string]: unknown; }'.
   Index signature for type 'string' is missing in type 'number[]'.
 unknownType1.ts(129,5): error TS2322: Type 'number' is not assignable to type '{ [x: string]: unknown; }'.
@@ -23,8 +23,8 @@ unknownType1.ts(144,29): error TS2698: Spread types may only be created from obj
 unknownType1.ts(150,17): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 unknownType1.ts(156,14): error TS2700: Rest types may only be created from object types.
 unknownType1.ts(162,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
-unknownType1.ts(170,9): error TS2322: Type 'T' is not assignable to type '{}'.
-unknownType1.ts(171,9): error TS2322: Type 'U' is not assignable to type '{}'.
+unknownType1.ts(170,17): error TS2322: Type 'T' is not assignable to type '{}'.
+unknownType1.ts(171,17): error TS2322: Type 'U' is not assignable to type '{}'.
 unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
 
 
@@ -163,16 +163,16 @@ unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
         let v1: any = x;
         let v2: unknown = x;
         let v3: object = x;  // Error
-            ~~
+                         ~
 !!! error TS2322: Type 'unknown' is not assignable to type 'object'.
         let v4: string = x;  // Error
-            ~~
+                         ~
 !!! error TS2322: Type 'unknown' is not assignable to type 'string'.
         let v5: string[] = x;  // Error
-            ~~
+                           ~
 !!! error TS2322: Type 'unknown' is not assignable to type 'string[]'.
         let v6: {} = x;  // Error
-            ~~
+                     ~
 !!! error TS2322: Type 'unknown' is not assignable to type '{}'.
         let v7: {} | null | undefined = x;  // Error
     }
@@ -181,7 +181,7 @@ unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
     
     function f23<T extends unknown>(x: T) {
         let y: object = x;  // Error
-            ~
+                        ~
 !!! error TS2322: Type 'T' is not assignable to type 'object'.
     }
     
@@ -248,11 +248,11 @@ unknownType1.ts(181,5): error TS2322: Type 'T' is not assignable to type '{}'.
     
     function f30<T, U extends unknown>(t: T, u: U) {
         let x: {} = t;
-            ~
+                    ~
 !!! error TS2322: Type 'T' is not assignable to type '{}'.
 !!! related TS2208 unknownType1.ts:169:14: This type parameter might need an `extends {}` constraint.
         let y: {} = u;
-            ~
+                    ~
 !!! error TS2322: Type 'U' is not assignable to type '{}'.
     }
     

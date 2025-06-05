@@ -102,8 +102,8 @@ var a5 = [...a0, , ]
 var b0: [any, any, any] = [undefined, null, undefined];
 >b0 : [any, any, any]
 >   : ^^^^^^^^^^^^^^^
->[undefined, null, undefined] : [undefined, null, undefined]
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[undefined, null, undefined] : [any, any, any]
+>                             : ^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >undefined : undefined
@@ -245,8 +245,8 @@ var d2: number[] = [...temp1];
 var d3: myArray = [...temp1];
 >d3 : myArray
 >   : ^^^^^^^
->[...temp1] : number[]
->           : ^^^^^^^^
+>[...temp1] : myArray
+>           : ^^^^^^^
 >...temp1 : number
 >         : ^^^^^^
 >temp1 : number[]
@@ -255,8 +255,8 @@ var d3: myArray = [...temp1];
 var d4: myArray2 = [...temp, ...temp1];
 >d4 : myArray2
 >   : ^^^^^^^^
->[...temp, ...temp1] : (string | number)[]
->                    : ^^^^^^^^^^^^^^^^^^^
+>[...temp, ...temp1] : myArray2
+>                    : ^^^^^^^^
 >...temp : string
 >        : ^^^^^^
 >temp : string[]

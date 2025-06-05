@@ -32,8 +32,8 @@ var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers ar
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
->{ x: b, 0: a } : { x: B; 0: A; }
->               : ^^^^^^^^^^^^^^^
+>{ x: b, 0: a } : { [s: string]: A; [n: number]: B; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : B
 >  : ^
 >b : B

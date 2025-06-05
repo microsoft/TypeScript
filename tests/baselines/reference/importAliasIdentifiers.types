@@ -66,8 +66,8 @@ module clodule {
     var Point: Point = { x: 0, y: 0 };
 >Point : Point
 >      : ^^^^^
->{ x: 0, y: 0 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0 } : Point
+>               : ^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -136,8 +136,8 @@ module fundule {
     var Point: Point = { x: 0, y: 0 };
 >Point : Point
 >      : ^^^^^
->{ x: 0, y: 0 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0 } : Point
+>               : ^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0

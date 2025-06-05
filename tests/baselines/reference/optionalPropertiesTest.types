@@ -140,32 +140,32 @@ interface i4 { M?: number; };
 var test1: i1 = {};
 >test1 : i1
 >      : ^^
->{} : {}
+>{} : i1
 >   : ^^
 
 var test2: i3 = {};
 >test2 : i3
 >      : ^^
->{} : {}
+>{} : i3
 >   : ^^
 
 var test3: i2 = {};
 >test3 : i2
 >      : ^^
->{} : {}
+>{} : i2
 >   : ^^
 
 var test4: i4 = {};
 >test4 : i4
 >      : ^^
->{} : {}
+>{} : i4
 >   : ^^
 
 var test5: i1 = { M: function () { } };
 >test5 : i1
 >      : ^^
->{ M: function () { } } : { M: () => void; }
->                       : ^^^^^^^^^^^^^^^^^^
+>{ M: function () { } } : i1
+>                       : ^^
 >M : () => void
 >  : ^^^^^^^^^^
 >function () { } : () => void
@@ -174,8 +174,8 @@ var test5: i1 = { M: function () { } };
 var test6: i3 = { M: 5 };
 >test6 : i3
 >      : ^^
->{ M: 5 } : { M: number; }
->         : ^^^^^^^^^^^^^^
+>{ M: 5 } : i3
+>         : ^^
 >M : number
 >  : ^^^^^^
 >5 : 5
@@ -184,8 +184,8 @@ var test6: i3 = { M: 5 };
 var test7: i2 = { M: function () { } };
 >test7 : i2
 >      : ^^
->{ M: function () { } } : { M: () => void; }
->                       : ^^^^^^^^^^^^^^^^^^
+>{ M: function () { } } : i2
+>                       : ^^
 >M : () => void
 >  : ^^^^^^^^^^
 >function () { } : () => void
@@ -202,8 +202,8 @@ test7 = {};
 var test8: i4 = { M: 5 }
 >test8 : i4
 >      : ^^
->{ M: 5 } : { M: number; }
->         : ^^^^^^^^^^^^^^
+>{ M: 5 } : i4
+>         : ^^
 >M : number
 >  : ^^^^^^
 >5 : 5

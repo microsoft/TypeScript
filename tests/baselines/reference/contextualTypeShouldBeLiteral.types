@@ -184,8 +184,8 @@ interface Y3 {
 let xy: X3 | Y3 = {
 >xy : X3 | Y3
 >   : ^^^^^^^
->{    type: 'y',    value: 11,    ytra: 12} : { type: "y"; value: 11; ytra: number; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: 'y',    value: 11,    ytra: 12} : X3 | Y3
+>                                           : ^^^^^^^
 
     type: 'y',
 >type : "y"
@@ -208,8 +208,8 @@ let xy: X3 | Y3 = {
 };
 
 xy;
->xy : Y3
->   : ^^
+>xy : X3 | Y3
+>   : ^^^^^^^
 
 
 interface LikeA {
@@ -251,8 +251,8 @@ interface LikeB {
 let xyz: LikeA | LikeB = {
 >xyz : LikeA | LikeB
 >    : ^^^^^^^^^^^^^
->{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method(): void; }
->                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : LikeA | LikeB
+>                                                                                                                           : ^^^^^^^^^^^^^
 
     x: 'x',
 >x : "x"
@@ -307,8 +307,8 @@ let xyz: LikeA | LikeB = {
 };
 
 xyz;
->xyz : LikeA
->    : ^^^^^
+>xyz : LikeA | LikeB
+>    : ^^^^^^^^^^^^^
 
 // Repro from #29168
 

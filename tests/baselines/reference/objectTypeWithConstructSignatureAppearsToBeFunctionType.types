@@ -14,8 +14,8 @@ var i: I;
 var r2: number = i();
 >r2 : number
 >   : ^^^^^^
->i() : any
->    : ^^^
+>i() : number
+>    : ^^^^^^
 >i : I
 >  : ^
 
@@ -34,12 +34,12 @@ var r2c: (x: any, y?: any) => any = i.apply;
 >  : ^^^
 >y : any
 >  : ^^^
->i.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>i.apply : (x: any, y?: any) => any
+>        : ^ ^^   ^^ ^^^   ^^^^^   
 >i : I
 >  : ^
->apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>apply : (x: any, y?: any) => any
+>      : ^ ^^   ^^ ^^^   ^^^^^   
 
 var b: {
 >b : new () => number
@@ -51,8 +51,8 @@ var b: {
 var r4: number = b();
 >r4 : number
 >   : ^^^^^^
->b() : any
->    : ^^^
+>b() : number
+>    : ^^^^^^
 >b : new () => number
 >  : ^^^^^^^^^^      
 
@@ -71,10 +71,10 @@ var r4c: (x: any, y?: any) => any = b.apply;
 >  : ^^^
 >y : any
 >  : ^^^
->b.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>b.apply : (x: any, y?: any) => any
+>        : ^ ^^   ^^ ^^^   ^^^^^   
 >b : new () => number
 >  : ^^^^^^^^^^      
->apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>apply : (x: any, y?: any) => any
+>      : ^ ^^   ^^ ^^^   ^^^^^   
 

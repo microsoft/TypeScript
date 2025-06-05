@@ -100,8 +100,8 @@ function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
   let s: `_${string}` = obj[key];
 >s : `_${string}`
 >  : ^^^^^^^^^^^^
->obj[key] : Mapped4<K>[K]
->         : ^^^^^^^^^^^^^
+>obj[key] : `_${string}`
+>         : ^^^^^^^^^^^^
 >obj : Mapped4<K>
 >    : ^^^^^^^^^^
 >key : K
@@ -126,8 +126,8 @@ function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
   let s: `_${string}` = obj[key];
 >s : `_${string}`
 >  : ^^^^^^^^^^^^
->obj[key] : Mapped5<K>[K extends `_${string}` ? K : never]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : `_${string}`
+>         : ^^^^^^^^^^^^
 >obj : Mapped5<K>
 >    : ^^^^^^^^^^
 >key : K extends `_${string}` ? K : never
@@ -154,8 +154,8 @@ function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
   let s: `_${string}` = obj[key]; // Error
 >s : `_${string}`
 >  : ^^^^^^^^^^^^
->obj[key] : Mapped6<K>[keyof Mapped6<K>]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key] : `_${string}`
+>         : ^^^^^^^^^^^^
 >obj : Mapped6<K>
 >    : ^^^^^^^^^^
 >key : keyof Mapped6<K>

@@ -25,8 +25,8 @@ if (typeof x === "string") {
             let y: string = x;
 >y : string
 >  : ^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
         }
     }
 }
@@ -41,8 +41,8 @@ else {
             let y: number = x;
 >y : number
 >  : ^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
         }
     }
 }

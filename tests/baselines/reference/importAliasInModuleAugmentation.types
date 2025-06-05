@@ -45,8 +45,8 @@ const m: number = x;
 let s: x = { s: "" };
 >s : x
 >  : ^
->{ s: "" } : { s: string; }
->          : ^^^^^^^^^^^^^^
+>{ s: "" } : x
+>          : ^
 >s : string
 >  : ^^^^^^
 >"" : ""

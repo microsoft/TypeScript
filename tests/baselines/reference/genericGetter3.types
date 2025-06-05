@@ -38,10 +38,10 @@ var c = new C<number>();
 var r: string = c.x;
 >r : string
 >  : ^^^^^^
->c.x : A<number>
->    : ^^^^^^^^^
+>c.x : string
+>    : ^^^^^^
 >c : C<number>
 >  : ^^^^^^^^^
->x : A<number>
->  : ^^^^^^^^^
+>x : string
+>  : ^^^^^^
 

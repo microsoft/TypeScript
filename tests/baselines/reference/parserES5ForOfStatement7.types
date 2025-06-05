@@ -4,12 +4,12 @@
 for (var a: number = 1, b: string = "" of X) {
 >a : any
 >  : ^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 >b : any
 >  : ^^^
->"" : ""
->   : ^^
+>"" : string
+>   : ^^^^^^
 >X : any
 >  : ^^^
 }

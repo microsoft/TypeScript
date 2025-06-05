@@ -323,11 +323,11 @@ Info seq  [hh:mm:ss:mss] event:
           {
             "start": {
               "line": 4,
-              "offset": 9
+              "offset": 21
             },
             "end": {
               "line": 4,
-              "offset": 10
+              "offset": 22
             },
             "text": "Type 'number' is not assignable to type 'string'.",
             "code": 2322,

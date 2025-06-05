@@ -18,8 +18,8 @@ module M {
     var x:I={salt:2,pepper:0};
 >x : I
 >  : ^
->{salt:2,pepper:0} : { salt: number; pepper: number; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{salt:2,pepper:0} : I
+>                  : ^
 >salt : number
 >     : ^^^^^^
 >2 : 2

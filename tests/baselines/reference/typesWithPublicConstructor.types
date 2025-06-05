@@ -21,12 +21,12 @@ var c = new C();
 var r: () => void = c.constructor;
 >r : () => void
 >  : ^^^^^^    
->c.constructor : Function
->              : ^^^^^^^^
+>c.constructor : () => void
+>              : ^^^^^^    
 >c : C
 >  : ^
->constructor : Function
->            : ^^^^^^^^
+>constructor : () => void
+>            : ^^^^^^    
 
 class C2 {
 >C2 : C2
@@ -54,10 +54,10 @@ var r2: (x: number) => void = c2.constructor;
 >   : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
->c2.constructor : Function
->               : ^^^^^^^^
+>c2.constructor : (x: number) => void
+>               : ^ ^^      ^^^^^    
 >c2 : C2
 >   : ^^
->constructor : Function
->            : ^^^^^^^^
+>constructor : (x: number) => void
+>            : ^ ^^      ^^^^^    
 

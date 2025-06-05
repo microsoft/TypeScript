@@ -107,8 +107,8 @@ var a: {
 var r3: string = a().notHere();
 >r3 : string
 >   : ^^^^^^
->a().notHere() : any
->              : ^^^
+>a().notHere() : string
+>              : ^^^^^^
 >a().notHere : any
 >            : ^^^
 >a() : Date
@@ -121,8 +121,8 @@ var r3: string = a().notHere();
 var r3b: string = a()['notHere']();
 >r3b : string
 >    : ^^^^^^
->a()['notHere']() : any
->                 : ^^^
+>a()['notHere']() : string
+>                 : ^^^^^^
 >a()['notHere'] : any
 >               : ^^^
 >a() : Date

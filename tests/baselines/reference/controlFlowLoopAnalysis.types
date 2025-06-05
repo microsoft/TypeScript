@@ -129,8 +129,8 @@ function mapUntilCant<a, b>(
     let result: b[] = [];
 >result : b[]
 >       : ^^^
->[] : never[]
->   : ^^^^^^^
+>[] : b[]
+>   : ^^^
 
     for (let index = 0, length = values.length; index < length; index++) {
 >index : number

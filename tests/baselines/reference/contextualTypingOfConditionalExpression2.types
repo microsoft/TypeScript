@@ -35,8 +35,8 @@ var x2: (a: A) => void = true ? (a: C) => a.foo : (b: number) => { };
 >   : ^ ^^ ^^^^^    
 >a : A
 >  : ^
->true ? (a: C) => a.foo : (b: number) => { } : ((a: C) => number) | ((b: number) => void)
->                                            : ^^ ^^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
+>true ? (a: C) => a.foo : (b: number) => { } : (a: A) => void
+>                                            : ^ ^^ ^^^^^    
 >true : true
 >     : ^^^^
 >(a: C) => a.foo : (a: C) => number

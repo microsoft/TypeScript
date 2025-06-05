@@ -38,11 +38,11 @@ module c {
     export var bVal: b = b.Sunday;
 >bVal : b
 >     : ^
->b.Sunday : b.Sunday
->         : ^^^^^^^^
+>b.Sunday : b
+>         : ^
 >b : typeof b
 >  : ^^^^^^^^
->Sunday : b.Sunday
->       : ^^^^^^^^
+>Sunday : b
+>       : ^
 }
 

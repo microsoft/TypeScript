@@ -112,56 +112,56 @@ module N {
 var aNumber: number = 'this is a string';
 >aNumber : number
 >        : ^^^^^^
->'this is a string' : "this is a string"
->                   : ^^^^^^^^^^^^^^^^^^
+>'this is a string' : number
+>                   : ^^^^^^
 
 var aString: string = 9.9;
 >aString : string
 >        : ^^^^^^
->9.9 : 9.9
->    : ^^^
+>9.9 : string
+>    : ^^^^^^
 
 var aDate: Date = 9.9;
 >aDate : Date
 >      : ^^^^
->9.9 : 9.9
->    : ^^^
+>9.9 : Date
+>    : ^^^^
 
 var aVoid: void = 9.9;
 >aVoid : void
 >      : ^^^^
->9.9 : 9.9
->    : ^^^
+>9.9 : void
+>    : ^^^^
 
 var anInterface: I = new D();
 >anInterface : I
 >            : ^
->new D() : D<unknown>
->        : ^^^^^^^^^^
+>new D() : I
+>        : ^
 >D : typeof D
 >  : ^^^^^^^^
 
 var aClass: C = new D();
 >aClass : C
 >       : ^
->new D() : D<unknown>
->        : ^^^^^^^^^^
+>new D() : C
+>        : ^
 >D : typeof D
 >  : ^^^^^^^^
 
 var aGenericClass: D<string> = new C();
 >aGenericClass : D<string>
 >              : ^^^^^^^^^
->new C() : C
->        : ^
+>new C() : D<string>
+>        : ^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 
 var anObjectLiteral: I = { id: 'a string' };
 >anObjectLiteral : I
 >                : ^
->{ id: 'a string' } : { id: string; }
->                   : ^^^^^^^^^^^^^^^
+>{ id: 'a string' } : I
+>                   : ^
 >id : string
 >   : ^^^^^^
 >'a string' : "a string"
@@ -172,8 +172,8 @@ var anOtherObjectLiteral: { id: string } = new C();
 >                     : ^^^^^^      ^^^
 >id : string
 >   : ^^^^^^
->new C() : C
->        : ^
+>new C() : { id: string; }
+>        : ^^^^^^      ^^^
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -182,24 +182,24 @@ var aFunction: typeof F = F2;
 >          : ^ ^^      ^^^^^      
 >F : (x: string) => number
 >  : ^ ^^      ^^^^^      
->F2 : (x: number) => boolean
->   : ^ ^^      ^^^^^       
+>F2 : (x: string) => number
+>   : ^ ^^      ^^^^^      
 
 var anOtherFunction: (x: string) => number = F2;
 >anOtherFunction : (x: string) => number
 >                : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
->F2 : (x: number) => boolean
->   : ^ ^^      ^^^^^       
+>F2 : (x: string) => number
+>   : ^ ^^      ^^^^^      
 
 var aLambda: typeof F = (x) => 'a string';
 >aLambda : (x: string) => number
 >        : ^ ^^      ^^^^^      
 >F : (x: string) => number
 >  : ^ ^^      ^^^^^      
->(x) => 'a string' : (x: string) => string
->                  : ^ ^^^^^^^^^^^^^^^^^^^
+>(x) => 'a string' : (x: string) => number
+>                  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >'a string' : "a string"
@@ -210,7 +210,7 @@ var aModule: typeof M = N;
 >        : ^^^^^^^^
 >M : typeof M
 >  : ^^^^^^^^
->N : typeof N
+>N : typeof M
 >  : ^^^^^^^^
 
 var aClassInModule: M.A = new N.A();
@@ -218,7 +218,7 @@ var aClassInModule: M.A = new N.A();
 >               : ^^^
 >M : any
 >  : ^^^
->new N.A() : N.A
+>new N.A() : M.A
 >          : ^^^
 >N.A : typeof N.A
 >    : ^^^^^^^^^^
@@ -236,7 +236,7 @@ var aFunctionInModule: typeof M.F2 = F2;
 >  : ^^^^^^^^
 >F2 : (x: number) => string
 >   : ^ ^^      ^^^^^      
->F2 : (x: number) => boolean
->   : ^ ^^      ^^^^^       
+>F2 : (x: number) => string
+>   : ^ ^^      ^^^^^      
 
 

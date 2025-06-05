@@ -42,8 +42,8 @@ var v1: {
 >  : ^^^^^^
 
 } = o; // Should be allowed
->o : {}
->  : ^^
+>o : { [n: number]: Foo; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
 var v2: {
 >v2 : { [n: number]: Bar; }
@@ -54,6 +54,6 @@ var v2: {
 >  : ^^^^^^
 
 } = f; // Should be allowed
->f : () => void
->  : ^^^^^^^^^^
+>f : { [n: number]: Bar; }
+>  : ^^^^^^^^^^^^^^^^^^^^^
 

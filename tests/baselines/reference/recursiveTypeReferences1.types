@@ -100,8 +100,8 @@ type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
 let data: Json = {
 >data : Json
 >     : ^^^^
->{    caption: "Test",    location: { x: 10, y: 20 },    values: [true, [10, 20], null]} : { caption: string; location: { x: number; y: number; }; values: (true | number[] | null)[]; }
->                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    caption: "Test",    location: { x: 10, y: 20 },    values: [true, [10, 20], null]} : Json
+>                                                                                        : ^^^^
 
     caption: "Test",
 >caption : string

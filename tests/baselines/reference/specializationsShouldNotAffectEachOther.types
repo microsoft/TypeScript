@@ -46,8 +46,8 @@ function foo() {
 var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
 >keyExtent2 : any[]
 >           : ^^^^^
->series.data.map(function (d: string) { return d; }) : string[]
->                                                    : ^^^^^^^^
+>series.data.map(function (d: string) { return d; }) : any[]
+>                                                    : ^^^^^
 >series.data.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
 >                : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >series.data : string[]

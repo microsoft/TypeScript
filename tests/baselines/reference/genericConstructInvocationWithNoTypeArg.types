@@ -9,8 +9,8 @@ interface Foo<T> {
 var f2: Foo<number> = new Foo(3);
 >f2 : Foo<number>
 >   : ^^^^^^^^^^^
->new Foo(3) : any
->           : ^^^
+>new Foo(3) : Foo<number>
+>           : ^^^^^^^^^^^
 >Foo : any
 >    : ^^^
 >3 : 3

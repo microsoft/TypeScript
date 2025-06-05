@@ -29,8 +29,8 @@ var hello = "hello";
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
 >       : ^^^^^
->{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "mower", skill: "mowing" } : Robot
+>                                   : ^^^^^
 >name : string
 >     : ^^^^^^
 >"mower" : "mower"
@@ -43,8 +43,8 @@ var robotA: Robot = { name: "mower", skill: "mowing" };
 var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >robotB : Robot
 >       : ^^^^^
->{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "trimmer", skill: "trimming" } : Robot
+>                                       : ^^^^^
 >name : string
 >     : ^^^^^^
 >"trimmer" : "trimmer"

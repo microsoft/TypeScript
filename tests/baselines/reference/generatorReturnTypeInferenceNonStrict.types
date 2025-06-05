@@ -152,8 +152,8 @@ function* g201() { // Generator<number, void, string>
     let a: string = yield 1;
 >a : string
 >  : ^^^^^^
->yield 1 : any
->        : ^^^
+>yield 1 : string
+>        : ^^^^^^
 >1 : 1
 >  : ^
 }
@@ -165,16 +165,16 @@ function* g202() { // Generator<1 | 2, void, never>
     let a: string = yield 1;
 >a : string
 >  : ^^^^^^
->yield 1 : any
->        : ^^^
+>yield 1 : string
+>        : ^^^^^^
 >1 : 1
 >  : ^
 
     let b: number = yield 2;
 >b : number
 >  : ^^^^^^
->yield 2 : any
->        : ^^^
+>yield 2 : number
+>        : ^^^^^^
 >2 : 2
 >  : ^
 }

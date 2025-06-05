@@ -4,36 +4,36 @@
 var v : Foo<T> = 1;
 >v : Foo<T>
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : Foo<T>
+>  : ^^^^^^
 
 var v : Foo<T>= 1;
 >v : Foo<T>
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : Foo<T>
+>  : ^^^^^^
 
 var v : Foo<Bar<T>> = 1;
 >v : Foo<T>
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : Foo<Bar<T>>
+>  : ^^^^^^^^^^^
 
 var v : Foo<Bar<T>>= 1;
 >v : Foo<T>
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : Foo<Bar<T>>
+>  : ^^^^^^^^^^^
 
 var v : Foo<Bar<Quux<T>>> = 1;
 >v : Foo<T>
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : Foo<Bar<Quux<T>>>
+>  : ^^^^^^^^^^^^^^^^^
 
 var v : Foo<Bar<Quux<T>>>= 1;
 >v : Foo<T>
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : Foo<Bar<Quux<T>>>
+>  : ^^^^^^^^^^^^^^^^^
 

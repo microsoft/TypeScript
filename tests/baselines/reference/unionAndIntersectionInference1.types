@@ -338,8 +338,8 @@ declare function f2<T, U>(x: T, y: U): T | U;
 let x1: string = f1('a');
 >x1 : string
 >   : ^^^^^^
->f1('a') : "a"
->        : ^^^
+>f1('a') : string
+>        : ^^^^^^
 >f1 : <T, U>(x: T | U) => T | U
 >   : ^ ^^ ^^ ^^     ^^^^^     
 >'a' : "a"
@@ -348,8 +348,8 @@ let x1: string = f1('a');
 let x2: string = f2('a', 'b');
 >x2 : string
 >   : ^^^^^^
->f2('a', 'b') : "a" | "b"
->             : ^^^^^^^^^
+>f2('a', 'b') : string
+>             : ^^^^^^
 >f2 : <T, U>(x: T, y: U) => T | U
 >   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >'a' : "a"

@@ -177,8 +177,8 @@ if (typeof strOrNum === "boolean") {
     let z1: {} = strOrNum; // {}
 >z1 : {}
 >   : ^^
->strOrNum : never
->         : ^^^^^
+>strOrNum : {}
+>         : ^^
 }
 else {
     let z2: string | number = strOrNum; // string | number
@@ -321,7 +321,7 @@ else {
     let z2: {} = strOrNum; // {}
 >z2 : {}
 >   : ^^
->strOrNum : never
->         : ^^^^^
+>strOrNum : {}
+>         : ^^
 }
 

@@ -359,8 +359,8 @@ module Harness {
         export var bugIds: string[] = [];
 >bugIds : string[]
 >       : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : string[]
+>   : ^^^^^^^^
 
         export var throwAssertError = (error: Error) => {
 >throwAssertError : (error: Error) => never
@@ -1572,8 +1572,8 @@ module Harness {
     var loggers: ILogger[] = [];
 >loggers : ILogger[]
 >        : ^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : ILogger[]
+>   : ^^^^^^^^^
 
     export function registerLogger(logger: ILogger) {
 >registerLogger : (logger: ILogger) => void
@@ -2471,8 +2471,8 @@ module Harness {
                     var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
 >metadata : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
->{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: false; bugs: any; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : IScenarioMetadata
+>                                                                            : ^^^^^^^^^^^^^^^^^
 >id : undefined
 >   : ^^^^^^^^^
 >undefined : undefined
@@ -2707,8 +2707,8 @@ module Harness {
             var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds };
 >metadata : IScenarioMetadata
 >         : ^^^^^^^^^^^^^^^^^
->{ id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds } : { id: undefined; desc: string; pass: any; bugs: any; }
->                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds } : IScenarioMetadata
+>                                                                                  : ^^^^^^^^^^^^^^^^^
 >id : undefined
 >   : ^^^^^^^^^
 >undefined : undefined
@@ -3669,8 +3669,8 @@ module Harness {
         export var benchmarks: { new (): Benchmark; }[] = [];
 >benchmarks : (new () => Benchmark)[]
 >           : ^^^^^^^^^^^         ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : (new () => Benchmark)[]
+>   : ^^^^^^^^^^^         ^^^
 
         var timeFunction: (
 >timeFunction : (benchmark: Benchmark, description?: string, name?: string, f?: (bench?: { (): void; }) => void) => void
@@ -4457,8 +4457,8 @@ module Harness {
 >         : ^^^^^^
 >file : WriterAggregator
 >     : ^^^^^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : { filename: string; file: WriterAggregator; }[]
+>   : ^^^^^^^^^^^^      ^^^^^^^^                ^^^^^
 
                 for (var p in this.fileCollection) {
 >p : string
@@ -4591,8 +4591,8 @@ module Harness {
         var libFolder: string = global['WScript'] ? TypeScript.filePath(global['WScript'].ScriptFullName) : (__dirname + '/');
 >libFolder : string
 >          : ^^^^^^
->global['WScript'] ? TypeScript.filePath(global['WScript'].ScriptFullName) : (__dirname + '/') : any
->                                                                                              : ^^^
+>global['WScript'] ? TypeScript.filePath(global['WScript'].ScriptFullName) : (__dirname + '/') : string
+>                                                                                              : ^^^^^^
 >global['WScript'] : any
 >                  : ^^^
 >global : any
@@ -6162,8 +6162,8 @@ module Harness {
                 var matchingIdentifiers: Type[] = [];
 >matchingIdentifiers : Type[]
 >                    : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : Type[]
+>   : ^^^^^^
 
                 if (!usePull) {
 >!usePull : boolean
@@ -9232,8 +9232,8 @@ module Harness {
 >        : ^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
 >           : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : TypeScript.Script[]
+>   : ^^^^^^^^^^^^^^^^^^^
 
             reset();
 >reset() : void
@@ -9783,8 +9783,8 @@ module Harness {
             var files: TestUnitData[] = [];
 >files : TestUnitData[]
 >      : ^^^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : TestUnitData[]
+>   : ^^^^^^^^^^^^^^
 
             var lines = splitContentByNewlines(code);
 >lines : string[]
@@ -9816,8 +9816,8 @@ module Harness {
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
 >           : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : TypeScript.IFileReference[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             for (var i = 0; i < lines.length; i++) {
 >i : number
@@ -12205,8 +12205,8 @@ module Harness {
 >       : ^^^^^^^^^^^^^^^^^^^
 >Services : any
 >         : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : Services.TextEdit[]
+>   : ^^^^^^^^^^^^^^^^^^^
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
 >mapEdits : (edits: Services.TextEdit[]) => { edit: Services.TextEdit; index: number; }[]
@@ -12831,16 +12831,16 @@ module Harness {
             var dangerNames: any = ['Array'];
 >dangerNames : any
 >            : ^^^
->['Array'] : string[]
->          : ^^^^^^^^
+>['Array'] : any
+>          : ^^^
 >'Array' : "Array"
 >        : ^^^^^^^
 
             var globalBackup: any = {};
 >globalBackup : any
 >             : ^^^
->{} : {}
->   : ^^
+>{} : any
+>   : ^^^
 
             var n: string = null;
 >n : string

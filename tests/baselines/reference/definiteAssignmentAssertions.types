@@ -202,8 +202,8 @@ function f4() {
     let c!: number = 1;
 >c : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 }
 
 // Definite assignment assertion not permitted in ambient context

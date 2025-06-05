@@ -37,7 +37,7 @@ function f1() {
     let a: A = [new C()];
 >a : I[]
 >  : ^^^
->[new C()] : C[]
+>[new C()] : I[]
 >          : ^^^
 >new C() : C
 >        : ^
@@ -109,7 +109,7 @@ function f2() {
         let a: A = [new C()];
 >a : I[]
 >  : ^^^
->[new C()] : C[]
+>[new C()] : I[]
 >          : ^^^
 >new C() : C
 >        : ^
@@ -193,7 +193,7 @@ function f3(b: boolean) {
             let a: A = [new C()];
 >a : I[]
 >  : ^^^
->[new C()] : C[]
+>[new C()] : I[]
 >          : ^^^
 >new C() : C
 >        : ^
@@ -245,7 +245,7 @@ function f3(b: boolean) {
             let c: C = [new A()];
 >c : J[]
 >  : ^^^
->[new A()] : A[]
+>[new A()] : J[]
 >          : ^^^
 >new A() : A
 >        : ^

@@ -1,4 +1,6 @@
-uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts(10,13): error TS2418: Type of computed property's value is '"str"', which is not assignable to type '"sym"'.
+uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts(10,12): error TS2322: Type '{ [SYM]: "str"; }' is not assignable to type 'I'.
+  Types of property '[SYM]' are incompatible.
+    Type '"str"' is not assignable to type '"sym"'.
 
 
 ==== uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts (1 errors) ====
@@ -12,7 +14,8 @@ uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts(10,13): error TS2418: Type 
     
     let a: I = {[SYM]: 'sym'}; // Expect ok
     let b: I = {[SYM]: 'str'}; // Expect error
-                ~~~~~
-!!! error TS2418: Type of computed property's value is '"str"', which is not assignable to type '"sym"'.
-!!! related TS6500 uniqueSymbolAllowsIndexInObjectWithIndexSignature.ts:5:3: The expected type comes from property 'unique symbol' which is declared here on type 'I'
+               ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ [SYM]: "str"; }' is not assignable to type 'I'.
+!!! error TS2322:   Types of property '[SYM]' are incompatible.
+!!! error TS2322:     Type '"str"' is not assignable to type '"sym"'.
     

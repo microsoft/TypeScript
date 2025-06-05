@@ -441,8 +441,8 @@ function f22(x: unknown) {
     let v1: any = x;
 >v1 : any
 >   : ^^^
->x : unknown
->  : ^^^^^^^
+>x : any
+>  : ^^^
 
     let v2: unknown = x;
 >v2 : unknown
@@ -453,32 +453,32 @@ function f22(x: unknown) {
     let v3: object = x;  // Error
 >v3 : object
 >   : ^^^^^^
->x : unknown
->  : ^^^^^^^
+>x : object
+>  : ^^^^^^
 
     let v4: string = x;  // Error
 >v4 : string
 >   : ^^^^^^
->x : unknown
->  : ^^^^^^^
+>x : string
+>  : ^^^^^^
 
     let v5: string[] = x;  // Error
 >v5 : string[]
 >   : ^^^^^^^^
->x : unknown
->  : ^^^^^^^
+>x : string[]
+>  : ^^^^^^^^
 
     let v6: {} = x;  // Error
 >v6 : {}
 >   : ^^
->x : unknown
->  : ^^^^^^^
+>x : {}
+>  : ^^
 
     let v7: {} | null | undefined = x;  // Error
 >v7 : {} | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^
->x : unknown
->  : ^^^^^^^
+>x : {} | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Type parameter 'T extends unknown' not related to object
@@ -492,8 +492,8 @@ function f23<T extends unknown>(x: T) {
     let y: object = x;  // Error
 >y : object
 >  : ^^^^^^
->x : T
->  : ^
+>x : object
+>  : ^^^^^^
 }
 
 // Anything fresh but primitive assignable to { [x: string]: unknown }
@@ -687,14 +687,14 @@ function f30<T, U extends unknown>(t: T, u: U) {
     let x: {} = t;
 >x : {}
 >  : ^^
->t : T
->  : ^
+>t : {}
+>  : ^^
 
     let y: {} = u;
 >y : {}
 >  : ^^
->u : U
->  : ^
+>u : {}
+>  : ^^
 }
 
 // Repro from #26796

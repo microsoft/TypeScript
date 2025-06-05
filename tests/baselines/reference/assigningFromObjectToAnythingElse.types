@@ -20,8 +20,8 @@ y = x;
 var a: String = Object.create<Object>("");
 >a : String
 >  : ^^^^^^
->Object.create<Object>("") : any
->                          : ^^^
+>Object.create<Object>("") : String
+>                          : ^^^^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
@@ -34,8 +34,8 @@ var a: String = Object.create<Object>("");
 var c: String = Object.create<Number>(1);
 >c : String
 >  : ^^^^^^
->Object.create<Number>(1) : any
->                         : ^^^
+>Object.create<Number>(1) : String
+>                         : ^^^^^^
 >Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
 >              : ^^^ ^^             ^^^   ^^^ ^^             ^^          ^^                                     ^^^   ^^^
 >Object : ObjectConstructor
@@ -48,8 +48,8 @@ var c: String = Object.create<Number>(1);
 var w: Error = new Object();
 >w : Error
 >  : ^^^^^
->new Object() : Object
->             : ^^^^^^
+>new Object() : Error
+>             : ^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 

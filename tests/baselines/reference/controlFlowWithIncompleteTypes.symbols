@@ -49,9 +49,7 @@ function foo2() {
         else {
             x = x.slice();
 >x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
->x.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowWithIncompleteTypes.ts, 17, 7))
->slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
         }
     }
 }

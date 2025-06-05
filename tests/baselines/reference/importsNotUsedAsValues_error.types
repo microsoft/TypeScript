@@ -138,12 +138,12 @@ C.One;
 let c: D = C.Two;
 >c : C
 >  : ^
->C.Two : C.Two
->      : ^^^^^
+>C.Two : C
+>      : ^
 >C : typeof C
 >  : ^^^^^^^^
->Two : C.Two
->    : ^^^^^
+>Two : C
+>    : ^
 
 let d: D.Two = C.Two;
 >d : C.Two
@@ -166,8 +166,8 @@ console.log(c, d);
 >        : ^^^^^^^
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
->c : C.Two
->  : ^^^^^
+>c : C
+>  : ^
 >d : C.Two
 >  : ^^^^^
 
@@ -217,8 +217,8 @@ import H = require('./h'); // Error
 let h: H = {};
 >h : H
 >  : ^
->{} : {}
->   : ^^
+>{} : H
+>   : ^
 
 console.log(h);
 >console.log(h) : void

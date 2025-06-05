@@ -56,7 +56,7 @@ var x: [g<string>, m.g<number>, () => c] = [new g<string>(), new m.g<number>(), 
 >m : any
 >  : ^^^
 >[new g<string>(), new m.g<number>(), () => new c()] : [g<string>, m.g<number>, () => c]
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^
 >new g<string>() : g<string>
 >                : ^^^^^^^^^
 >g : typeof g

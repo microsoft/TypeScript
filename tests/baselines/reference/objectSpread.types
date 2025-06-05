@@ -56,8 +56,8 @@ let addAfter: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { ...o, c: false }
->{ ...o, c: false } : { c: false; a: number; b: string; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...o, c: false } : { a: number; b: string; c: boolean; }
+>                   : ^^^^^      ^^^^^      ^^^^^       ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : false
@@ -76,8 +76,8 @@ let addBefore: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { c: false, ...o }
->{ c: false, ...o } : { a: number; b: string; c: false; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ c: false, ...o } : { a: number; b: string; c: boolean; }
+>                   : ^^^^^      ^^^^^      ^^^^^       ^^^
 >c : false
 >  : ^^^^^
 >false : false
@@ -94,8 +94,8 @@ let override: { a: number, b: string } =
 >  : ^^^^^^
 
     { ...o, b: 'override' }
->{ ...o, b: 'override' } : { b: string; a: number; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...o, b: 'override' } : { a: number; b: string; }
+>                        : ^^^^^      ^^^^^      ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
@@ -114,8 +114,8 @@ let nested: { a: number, b: boolean, c: string } =
 >  : ^^^^^^
 
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
->                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { a: number; b: boolean; c: string; }
+>                                                                : ^^^^^      ^^^^^       ^^^^^      ^^^
 >{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -148,8 +148,8 @@ let combined: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { ...o, ...o2 }
->{ ...o, ...o2 } : { b: string; c: boolean; a: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...o, ...o2 } : { a: number; b: string; c: boolean; }
+>                : ^^^^^      ^^^^^      ^^^^^       ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { b: string; c: boolean; }
@@ -166,8 +166,8 @@ let combinedAfter: { a: number, b: string, c: boolean } =
 >  : ^^^^^^^
 
     { ...o, ...o2, b: 'ok' }
->{ ...o, ...o2, b: 'ok' } : { b: string; c: boolean; a: number; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...o, ...o2, b: 'ok' } : { a: number; b: string; c: boolean; }
+>                         : ^^^^^      ^^^^^      ^^^^^       ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { b: string; c: boolean; }
@@ -188,8 +188,8 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >  : ^^^^^^
 
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { a: number; b: boolean; c: number; }
+>                                                        : ^^^^^      ^^^^^       ^^^^^      ^^^
 >{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -225,7 +225,7 @@ let propertyNested: { a: { a: number, b: string } } =
 
     { a: { ... o } }
 >{ a: { ... o } } : { a: { a: number; b: string; }; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^                         ^^^
 >a : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ... o } : { a: number; b: string; }
@@ -254,8 +254,8 @@ let getter: { a: number, c: number } =
 >  : ^^^^^^
 
     { ...op, c: 7 }
->{ ...op, c: 7 } : { c: number; a: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...op, c: 7 } : { a: number; c: number; }
+>                : ^^^^^      ^^^^^      ^^^
 >op : { readonly a: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
 >c : number
@@ -575,7 +575,7 @@ let spreadC: { p: number } = { ...c }
 >p : number
 >  : ^^^^^^
 >{ ...c } : { p: number; }
->         : ^^^^^^^^^^^^^^
+>         : ^^^^^      ^^^
 >c : C
 >  : ^
 
@@ -587,8 +587,8 @@ let cplus: { p: number, plus(): void } = { ...c, plus() { return this.p + 1; } }
 >  : ^^^^^^
 >plus : () => void
 >     : ^^^^^^    
->{ ...c, plus() { return this.p + 1; } } : { plus(): any; p: number; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...c, plus() { return this.p + 1; } } : { p: number; plus(): void; }
+>                                        : ^^^^^      ^^^^^^^^^^    ^^^
 >c : C
 >  : ^
 >plus : () => any
@@ -623,7 +623,7 @@ let changeTypeAfter: { a: string, b: string } =
 
     { ...o, a: 'wrong type?' }
 >{ ...o, a: 'wrong type?' } : { a: string; b: string; }
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^      ^^^^^      ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -641,7 +641,7 @@ let changeTypeBoth: { a: string, b: number } =
 
     { ...o, ...swap };
 >{ ...o, ...swap } : { a: string; b: number; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^      ^^^^^      ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >swap : { a: string; b: number; }
@@ -681,8 +681,8 @@ function container(
 >                   : ^^^^^^                         ^^^
 >sn : string | number | boolean
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number | boolean; }
+>                                                             : ^^^^^^                         ^^^
 >definiteBoolean : { sn: boolean; }
 >                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
@@ -696,7 +696,7 @@ function container(
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                : ^^^^^^               ^^^
 >definiteBoolean : { sn: boolean; }
 >                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
@@ -711,8 +711,8 @@ function container(
 >            : ^^^^^^^               ^^^
 >sn : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...optionalString, ...optionalNumber } : { sn?: string | number; }
+>                                         : ^^^^^^^               ^^^
 >optionalString : { sn?: string; }
 >               : ^^^^^^^      ^^^
 >optionalNumber : { sn?: number; }
@@ -730,8 +730,8 @@ function container(
 >                    : ^^^^^^
 
         { ['before everything']: 12, ...o, b: 'yes' }
->{ ['before everything']: 12, ...o, b: 'yes' } : { b: string; a: number; "before everything": number; }
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ['before everything']: 12, ...o, b: 'yes' } : { a: number; b: string; "before everything": number; }
+>                                              : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >['before everything'] : number
 >                      : ^^^^^^
 >'before everything' : "before everything"
@@ -756,8 +756,8 @@ function container(
 >             : ^^^^^^
 
         { ...o, b: 'yeah', ['at the end']: 14 }
->{ ...o, b: 'yeah', ['at the end']: 14 } : { b: string; "at the end": number; a: number; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...o, b: 'yeah', ['at the end']: 14 } : { a: number; b: string; "at the end": number; }
+>                                        : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^      ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : string
@@ -786,7 +786,7 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 >b : string
 >  : ^^^^^^
 >{ ...o, a } : { a: number; b: string; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^      ^^^^^      ^^^
 >o : { a: number; b: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -841,8 +841,8 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >  : ^^^^^^^
 
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
->f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { a: number; b: string; } & { c: string; d: boolean; } & { id: string; }
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { id: string; a: number; b: string; c: string; d: boolean; }
+>                                             : ^^^^^^      ^^^^^      ^^^^^      ^^^^^      ^^^^^       ^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 'yes' } : { a: number; b: string; }
@@ -877,8 +877,8 @@ let overlap: { id: string, a: number, b: string } =
 >  : ^^^^^^
 
     f({ a: 1 }, { a: 2, b: 'extra' })
->f({ a: 1 }, { a: 2, b: 'extra' }) : { a: number; } & { a: number; b: string; } & { id: string; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f({ a: 1 }, { a: 2, b: 'extra' }) : { id: string; a: number; b: string; }
+>                                  : ^^^^^^      ^^^^^      ^^^^^      ^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
@@ -907,8 +907,8 @@ let overlapConflict: { id:string, a: string } =
 >  : ^^^^^^
 
     f({ a: 1 }, { a: 'mismatch' })
->f({ a: 1 }, { a: 'mismatch' }) : { a: number; } & { a: string; } & { id: string; }
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f({ a: 1 }, { a: 'mismatch' }) : { id: string; a: string; }
+>                               : ^^^^^^      ^^^^^      ^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
@@ -937,8 +937,8 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >  : ^^^^^^
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
->f({ a: 1, id: true }, { c: 1, d: 'no' }) : never
->                                         : ^^^^^
+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : { id: string; a: number; c: number; d: string; }
+>                                         : ^^^^^^      ^^^^^      ^^^^^      ^^^^^      ^^^
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, id: true } : { a: number; id: true; }

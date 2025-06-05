@@ -16,6 +16,6 @@ let n: number;
 let z: E | boolean = n;
 >z : boolean | E
 >  : ^^^^^^^^^^^
->n : number
->  : ^^^^^^
+>n : boolean | E
+>  : ^^^^^^^^^^^
 

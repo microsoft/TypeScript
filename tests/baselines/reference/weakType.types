@@ -191,8 +191,8 @@ interface Ctor {
 let ctor: Ctor = K
 >ctor : Ctor
 >     : ^^^^
->K : typeof K
->  : ^^^^^^^^
+>K : Ctor
+>  : ^^^^
 
 type Spoiler = { nope?: string }
 >Spoiler : Spoiler
@@ -233,7 +233,7 @@ declare let propertiesWrong: {
 let weak: Weak & Spoiler = propertiesWrong
 >weak : Weak & Spoiler
 >     : ^^^^^^^^^^^^^^
->propertiesWrong : { properties: { wrong: string; }; }
->                : ^^^^^^^^^^^^^^                  ^^^
+>propertiesWrong : Weak & Spoiler
+>                : ^^^^^^^^^^^^^^
 
 

@@ -71,8 +71,8 @@ class B<T extends Date, U extends Date> extends A<T, U> {
         var a: Date = x;
 >a : Date
 >  : ^^^^
->x : T
->  : ^
+>x : Date
+>  : ^^^^
 
         var b = <Date>x;
 >b : Date

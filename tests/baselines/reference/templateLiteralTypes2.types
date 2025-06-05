@@ -420,34 +420,34 @@ function ft14(t: `foo${number}`) {
     let x1: string = t;
 >x1 : string
 >   : ^^^^^^
->t : `foo${number}`
->  : ^^^^^^^^^^^^^^
+>t : string
+>  : ^^^^^^
 
     let x2: String = t;
 >x2 : String
 >   : ^^^^^^
->t : `foo${number}`
->  : ^^^^^^^^^^^^^^
+>t : String
+>  : ^^^^^^
 
     let x3: Object = t;
 >x3 : Object
 >   : ^^^^^^
->t : `foo${number}`
->  : ^^^^^^^^^^^^^^
+>t : Object
+>  : ^^^^^^
 
     let x4: {} = t;
 >x4 : {}
 >   : ^^
->t : `foo${number}`
->  : ^^^^^^^^^^^^^^
+>t : {}
+>  : ^^
 
     let x6: { length: number } = t;
 >x6 : { length: number; }
 >   : ^^^^^^^^^^      ^^^
 >length : number
 >       : ^^^^^^
->t : `foo${number}`
->  : ^^^^^^^^^^^^^^
+>t : { length: number; }
+>  : ^^^^^^^^^^      ^^^
 }
 
 declare function g1<T>(x: T): T;

@@ -22,8 +22,8 @@ var s1: string = D(); // OK
 var s2: string = (new D(1))();
 >s2 : string
 >   : ^^^^^^
->(new D(1))() : any
->             : ^^^
+>(new D(1))() : string
+>             : ^^^^^^
 >(new D(1)) : D
 >           : ^
 >new D(1) : D

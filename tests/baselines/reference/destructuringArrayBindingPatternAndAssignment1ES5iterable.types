@@ -29,8 +29,8 @@ var [a0, a1]: any = undefined;
 >   : ^^^
 >a1 : any
 >   : ^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
+>          : ^^^
 
 var [a2 = false, a3 = 1]: any = undefined;
 >a2 : any
@@ -41,8 +41,8 @@ var [a2 = false, a3 = 1]: any = undefined;
 >   : ^^^
 >1 : 1
 >  : ^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
+>          : ^^^
 
 // V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is a tuple- like type (section 3.3.3) with a property named N of a type that is assignable to the target given in E,
@@ -168,8 +168,8 @@ var [[c5], c6]: [[string|number], boolean] = [[1], true];
 >   : ^^^^^^^^^^^^^^^
 >c6 : boolean
 >   : ^^^^^^^
->[[1], true] : [[number], true]
->            : ^^^^^^^^^^^^^^^^
+>[[1], true] : [[string | number], boolean]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
 >1 : 1

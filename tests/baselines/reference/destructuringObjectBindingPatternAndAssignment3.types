@@ -15,8 +15,8 @@ var {h?} = { h?: 1 };
 var {i}: string | number = { i: 2 };
 >i : any
 >  : ^^^
->{ i: 2 } : { i: number; }
->         : ^^^^^^^^^^^^^^
+>{ i: 2 } : string | number
+>         : ^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >2 : 2
@@ -25,8 +25,8 @@ var {i}: string | number = { i: 2 };
 var {i1}: string | number| {} = { i1: 2 };
 >i1 : any
 >   : ^^^
->{ i1: 2 } : { i1: number; }
->          : ^^^^^^^^^^^^^^^
+>{ i1: 2 } : string | number | {}
+>          : ^^^^^^^^^^^^^^^^^^^^
 >i1 : number
 >   : ^^^^^^
 >2 : 2
@@ -43,8 +43,8 @@ var { f2: {f21} = { f212: "string" } }: any = undefined;
 >     : ^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
+>          : ^^^
 
 var {1} = { 1 };
 > : any

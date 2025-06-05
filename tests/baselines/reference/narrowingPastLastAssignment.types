@@ -186,8 +186,8 @@ function f4(cond: () => boolean) {
     let x: string | number = 0;
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : string | number
+>  : ^^^^^^^^^^^^^^^
 
     while (cond()) {
 >cond() : boolean
@@ -238,8 +238,8 @@ function f4(cond: () => boolean) {
 >       : ^ ^^        ^^^^^^^^^
 >() => { x /* number */ } : () => void
 >                         : ^^^^^^^^^^
->x : number
->  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function f5(x: string | number, cond: () => boolean) {

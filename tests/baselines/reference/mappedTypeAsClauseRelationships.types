@@ -29,14 +29,14 @@ function fun<T>(val: T) {
     let x: Filter<T> = val; // Ok
 >x : Filter<T>
 >  : ^^^^^^^^^
->val : T
->    : ^
+>val : Filter<T>
+>    : ^^^^^^^^^
 
     let y: Modify<T> = val; // Error
 >y : Modify<T>
 >  : ^^^^^^^^^
->val : T
->    : ^
+>val : Modify<T>
+>    : ^^^^^^^^^
 }
 
 type FilterInclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]+?: T[P] };
@@ -64,26 +64,26 @@ function fun2<T>(val: T) {
     let x: FilterInclOpt<T> = val; // Ok
 >x : FilterInclOpt<T>
 >  : ^^^^^^^^^^^^^^^^
->val : T
->    : ^
+>val : FilterInclOpt<T>
+>    : ^^^^^^^^^^^^^^^^
 
     let y: ModifyInclOpt<T> = val; // Ok
 >y : ModifyInclOpt<T>
 >  : ^^^^^^^^^^^^^^^^
->val : T
->    : ^
+>val : ModifyInclOpt<T>
+>    : ^^^^^^^^^^^^^^^^
 
     let z: FilterExclOpt<T> = val; // Error
 >z : FilterExclOpt<T>
 >  : ^^^^^^^^^^^^^^^^
->val : T
->    : ^
+>val : FilterExclOpt<T>
+>    : ^^^^^^^^^^^^^^^^
 
     let w: ModifyExclOpt<T> = val; // Error
 >w : ModifyExclOpt<T>
 >  : ^^^^^^^^^^^^^^^^
->val : T
->    : ^
+>val : ModifyExclOpt<T>
+>    : ^^^^^^^^^^^^^^^^
 }
 
 

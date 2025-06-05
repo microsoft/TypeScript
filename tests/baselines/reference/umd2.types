@@ -20,10 +20,10 @@ let x: Foo.Thing;
 let y: number = x.n;
 >y : number
 >  : ^^^^^^
->x.n : any
->    : ^^^
+>x.n : number
+>    : ^^^^^^
 >x : Foo.Thing
 >  : ^^^^^^^^^
->n : any
->  : ^^^
+>n : number
+>  : ^^^^^^
 

@@ -12,8 +12,8 @@ var c: <T>(x: T) => void = function <T>(x: T) { return 42; }
 >  : ^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
->function <T>(x: T) { return 42; } : <T>(x: T) => number
->                                  : ^ ^^ ^^ ^^^^^^^^^^^
+>function <T>(x: T) { return 42; } : <T>(x: T) => void
+>                                  : ^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
 >42 : 42

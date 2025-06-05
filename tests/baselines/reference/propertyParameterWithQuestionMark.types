@@ -14,8 +14,8 @@ class C {
 var v: C = {}; // Should succeed
 >v : C
 >  : ^
->{} : {}
->   : ^^
+>{} : C
+>   : ^
 
 var v2: { x? }
 >v2 : { x?: any; }
@@ -36,8 +36,8 @@ var v3: { x } = new C; // Should fail
 >   : ^^^^^^^^^^^
 >x : any
 >  : ^^^
->new C : C
->      : ^
+>new C : { x: any; }
+>      : ^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 

@@ -33,8 +33,8 @@ let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 >  : ^^^
 >dinosaur : RexOrRaptor
 >         : ^^^^^^^^^^^
->['I\'m', 'a', 't-rex'] : ["I'm", "a", "t-rex"]
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>['I\'m', 'a', 't-rex'] : ["I'm", "a", RexOrRaptor]
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'I\'m' : "I'm"
 >       : ^^^^^
 >'a' : "a"
@@ -47,8 +47,8 @@ rawr(dinosaur);
 >               : ^^^^^^^^^^^^^^^^^^^^^^^
 >rawr : (dino: RexOrRaptor) => "ROAAAAR!" | "yip yip!"
 >     : ^    ^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->dinosaur : "t-rex"
->         : ^^^^^^^
+>dinosaur : RexOrRaptor
+>         : ^^^^^^^^^^^
 
 function rawr(dino: RexOrRaptor) {
 >rawr : (dino: RexOrRaptor) => "ROAAAAR!" | "yip yip!"

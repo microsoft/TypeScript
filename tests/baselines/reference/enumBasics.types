@@ -23,12 +23,12 @@ enum E1 {
 var x: number = E1.A;
 >x : number
 >  : ^^^^^^
->E1.A : E1.A
->     : ^^^^
+>E1.A : number
+>     : ^^^^^^
 >E1 : typeof E1
 >   : ^^^^^^^^^
->A : E1.A
->  : ^^^^
+>A : number
+>  : ^^^^^^
 
 // Enum object type is anonymous with properties of the enum type and numeric indexer
 var e = E1;

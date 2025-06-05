@@ -8,8 +8,8 @@ var s: string;
 var f: () => number = () => yield s;
 >f : () => number
 >  : ^^^^^^      
->() => yield s : () => any
->              : ^^^^^^^^^
+>() => yield s : () => number
+>              : ^^^^^^      
 >yield s : any
 >        : ^^^
 >s : string

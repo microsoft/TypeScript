@@ -92,8 +92,8 @@ declare var x:O.I;
 var e:string=x.g(new O.A()); // matches overload but bad assignment
 >e : string
 >  : ^^^^^^
->x.g(new O.A()) : O.C
->               : ^^^
+>x.g(new O.A()) : string
+>               : ^^^^^^
 >x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
 >    : ^^^  ^^      ^^  ^^      ^^^      ^^^ ^^      ^^^      ^^^ ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^
 >x : O.I

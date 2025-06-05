@@ -26,8 +26,8 @@ class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicEl
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
 >    : ^^^
->{} : {}
->   : ^^
+>{} : JSX.IntrinsicElements[T1]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         const c2: JSX.IntrinsicElements[T2] = c1;
 >c2 : JSX.IntrinsicElements[T2]

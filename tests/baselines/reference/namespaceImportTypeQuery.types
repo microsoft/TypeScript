@@ -43,8 +43,8 @@ let t: typeof types = {
 >  : ^^^^^^^^^^^^
 >types : typeof types
 >      : ^^^^^^^^^^^^
->{  // error: while you can ask for `typeof types.A`,  // `typeof types` does not include `A`  A: undefined as any,  B: undefined as any,} : { A: any; B: any; }
->                                                                                                                                          : ^^^^^   ^^^^^   ^^^
+>{  // error: while you can ask for `typeof types.A`,  // `typeof types` does not include `A`  A: undefined as any,  B: undefined as any,} : typeof types
+>                                                                                                                                          : ^^^^^^^^^^^^
 
   // error: while you can ask for `typeof types.A`,
   // `typeof types` does not include `A`

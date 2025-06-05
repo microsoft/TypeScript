@@ -65,8 +65,8 @@ module C2T5 {
 >  : ^^^^^^
 >s : string
 >  : ^^^^^^
->function(i) {        return i;    } : (i: number) => number
->                                    : ^ ^^^^^^^^^^^^^^^^^^^
+>function(i) {        return i;    } : (i: number, s: string) => number
+>                                    : ^ ^^      ^^ ^^      ^^^^^      
 >i : number
 >  : ^^^^^^
 
@@ -83,7 +83,7 @@ var c3t1: (s: string) => string = (function(s) { return s });
 >s : string
 >  : ^^^^^^
 >(function(s) { return s }) : (s: string) => string
->                           : ^ ^^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^      ^^^^^      
 >function(s) { return s } : (s: string) => string
 >                         : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -111,8 +111,8 @@ var c3t2 = <IFoo>({
 var c3t3: number[] = [];
 >c3t3 : number[]
 >     : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : number[]
+>   : ^^^^^^^^
 
 var c3t4: () => IFoo = function() { return <IFoo>({}) };
 >c3t4 : () => IFoo
@@ -132,7 +132,7 @@ var c3t5: (n: number) => IFoo = function(n) { return <IFoo>({}) };
 >n : number
 >  : ^^^^^^
 >function(n) { return <IFoo>({}) } : (n: number) => IFoo
->                                  : ^ ^^^^^^^^^^^^^    
+>                                  : ^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 ><IFoo>({}) : IFoo
@@ -150,7 +150,7 @@ var c3t6: (n: number, s: string) => IFoo = function(n, s) { return <IFoo>({}) };
 >s : string
 >  : ^^^^^^
 >function(n, s) { return <IFoo>({}) } : (n: number, s: string) => IFoo
->                                     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^    
+>                                     : ^ ^^      ^^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >s : string
@@ -175,8 +175,8 @@ var c3t7: {
 >   : ^^^^^^
 
 } = function(n) { return n; };
->function(n) { return n; } : (n: any) => any
->                          : ^ ^^^^^^^^^^^^^
+>function(n) { return n; } : { (n: number): number; (s1: string): number; }
+>                          : ^^^ ^^      ^^^      ^^^  ^^      ^^^      ^^^
 >n : any
 >  : ^^^
 >n : any
@@ -189,8 +189,8 @@ var c3t8: (n: number, s: string) => number = function(n) { return n; };
 >  : ^^^^^^
 >s : string
 >  : ^^^^^^
->function(n) { return n; } : (n: number) => number
->                          : ^ ^^^^^^^^^^^^^^^^^^^
+>function(n) { return n; } : (n: number, s: string) => number
+>                          : ^ ^^      ^^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >n : number
@@ -199,8 +199,8 @@ var c3t8: (n: number, s: string) => number = function(n) { return n; };
 var c3t9: number[][] = [[],[]];
 >c3t9 : number[][]
 >     : ^^^^^^^^^^
->[[],[]] : undefined[][]
->        : ^^^^^^^^^^^^^
+>[[],[]] : number[][]
+>        : ^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >[] : undefined[]
@@ -232,7 +232,7 @@ var c3t11: {(n: number, s: string): string;}[] = [function(n, s) { return s; }];
 >s : string
 >  : ^^^^^^
 >[function(n, s) { return s; }] : ((n: number, s: string) => string)[]
->                               : ^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^^ ^^      ^^ ^^      ^^^^^      ^^^
 >function(n, s) { return s; } : (n: number, s: string) => string
 >                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -245,8 +245,8 @@ var c3t11: {(n: number, s: string): string;}[] = [function(n, s) { return s; }];
 var c3t12: IBar = {
 >c3t12 : IBar
 >      : ^^^^
->{    foo: <IFoo>({})} : { foo: IFoo; }
->                      : ^^^^^^^    ^^^
+>{    foo: <IFoo>({})} : IBar
+>                      : ^^^^
 
     foo: <IFoo>({})
 >foo : IFoo
@@ -909,7 +909,7 @@ var c10t5: () => (n: number) => IFoo = function() { return function(n) { return 
 >n : number
 >  : ^^^^^^
 >function() { return function(n) { return <IFoo>({}) } } : () => (n: number) => IFoo
->                                                        : ^^^^^^^ ^^^^^^^^^^^^^    
+>                                                        : ^^^^^^                   
 >function(n) { return <IFoo>({}) } : (n: number) => IFoo
 >                                  : ^ ^^^^^^^^^^^^^    
 >n : number
@@ -1399,6 +1399,6 @@ interface B extends A { }
 var x: B = { };
 >x : B
 >  : ^
->{ } : {}
->    : ^^
+>{ } : B
+>    : ^
 

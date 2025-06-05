@@ -9,7 +9,7 @@ let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};
 >x : string
 >  : ^^^^^^
 >{foo: {x: "hello"}} : { foo: { x: string; }; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^^^^^^      ^^^^^^
 >foo : { x: string; }
 >    : ^^^^^^^^^^^^^^
 >{x: "hello"} : { x: string; }

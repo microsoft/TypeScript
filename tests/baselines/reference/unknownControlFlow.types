@@ -64,28 +64,28 @@ function f01(u: unknown) {
     let x1: {} = u;  // Error
 >x1 : {}
 >   : ^^
->u : unknown
->  : ^^^^^^^
+>u : {}
+>  : ^^
 
     let x2: {} | null | undefined = u;
 >x2 : {} | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^
->u : unknown
->  : ^^^^^^^
+>u : {} | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     let x3: {} | { x: string } | null | undefined = u;
 >x3 : {} | { x: string; } | null | undefined
 >   : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->u : unknown
->  : ^^^^^^^
+>u : {} | { x: string; } | null | undefined
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
 
     let x4: ThisOrThatNode | null | undefined = u;
 >x4 : ThisOrThatNode | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->u : unknown
->  : ^^^^^^^
+>u : ThisOrThatNode | null | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f10(x: unknown) {

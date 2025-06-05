@@ -10,8 +10,8 @@ interface Generic<T> {
 var y: Generic<number> = { x: 3 };
 >y : Generic<number>
 >  : ^^^^^^^^^^^^^^^
->{ x: 3 } : { x: number; }
->         : ^^^^^^^^^^^^^^
+>{ x: 3 } : Generic<number>
+>         : ^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >3 : 3

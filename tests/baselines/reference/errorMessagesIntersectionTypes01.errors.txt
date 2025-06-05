@@ -1,4 +1,4 @@
-errorMessagesIntersectionTypes01.ts(14,5): error TS2322: Type '{ fooProp: string; } & Bar' is not assignable to type 'FooBar'.
+errorMessagesIntersectionTypes01.ts(14,22): error TS2322: Type '{ fooProp: string; } & Bar' is not assignable to type 'FooBar'.
   Types of property 'fooProp' are incompatible.
     Type 'string' is not assignable to type 'boolean'.
 
@@ -18,9 +18,11 @@ errorMessagesIntersectionTypes01.ts(14,5): error TS2322: Type '{ fooProp: string
     declare function mixBar<T>(obj: T): T & Bar;
     
     let fooBar: FooBar = mixBar({
-        ~~~~~~
+                         ~~~~~~~~
+        fooProp: "frizzlebizzle"
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    });
+    ~~
 !!! error TS2322: Type '{ fooProp: string; } & Bar' is not assignable to type 'FooBar'.
 !!! error TS2322:   Types of property 'fooProp' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'boolean'.
-        fooProp: "frizzlebizzle"
-    });

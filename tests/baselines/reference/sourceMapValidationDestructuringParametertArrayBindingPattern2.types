@@ -17,8 +17,8 @@ type Robot = [string, [string, string]];
 var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 >robotA : Robot
 >       : ^^^^^
->["trimmer", ["trimming", "edging"]] : [string, [string, string]]
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>["trimmer", ["trimming", "edging"]] : Robot
+>                                    : ^^^^^
 >"trimmer" : "trimmer"
 >          : ^^^^^^^^^
 >["trimming", "edging"] : [string, string]

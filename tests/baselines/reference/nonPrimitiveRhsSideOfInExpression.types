@@ -4,8 +4,8 @@
 let o: object = {};
 >o : object
 >  : ^^^^^^
->{} : {}
->   : ^^
+>{} : object
+>   : ^^^^^^
 
 function f(): object {
 >f : () => object

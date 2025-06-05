@@ -14,8 +14,8 @@ var v: void = function () { } ();
 var a: any = function f() {
 >a : any
 >  : ^^^
->function f() {    return f;} : () => any
->                             : ^^^^^^^^^
+>function f() {    return f;} : any
+>                             : ^^^
 >f : () => any
 >  : ^^^^^^^^^
 
@@ -27,8 +27,8 @@ var a: any = function f() {
 var a: any = function f() {
 >a : any
 >  : ^^^
->function f() {    return f();} : () => never
->                               : ^^^^^^^^^^^
+>function f() {    return f();} : any
+>                               : ^^^
 >f : () => never
 >  : ^^^^^^^^^^^
 
@@ -44,8 +44,8 @@ var a: any = function f() {
 var a: any = function f() {
 >a : any
 >  : ^^^
->function f() {    var x = f;    return x;} : () => any
->                                           : ^^^^^^^^^
+>function f() {    var x = f;    return x;} : any
+>                                           : ^^^
 >f : () => any
 >  : ^^^^^^^^^
 
@@ -455,7 +455,7 @@ var f7: (x: number) => string | number = x => { // should be (x: number) => numb
 >x : number
 >  : ^^^^^^
 >x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => string | number
->                                                                                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                        : ^ ^^      ^^^^^               
 >x : number
 >  : ^^^^^^
 
@@ -484,8 +484,8 @@ var f8: (x: number) => any = x => { // should be (x: number) => Base
 >   : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base    return new Base();    return new Derived2();} : (x: number) => Base
->                                                                                         : ^ ^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Base    return new Base();    return new Derived2();} : (x: number) => any
+>                                                                                         : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 
@@ -506,8 +506,8 @@ var f9: (x: number) => any = x => { // should be (x: number) => Base
 >   : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base    return new Base();    return new Derived();    return new Derived2();} : (x: number) => Base
->                                                                                                                  : ^ ^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Base    return new Base();    return new Derived();    return new Derived2();} : (x: number) => any
+>                                                                                                                  : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 
@@ -534,8 +534,8 @@ var f10: (x: number) => any = x => { // should be (x: number) => Derived | Deriv
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Derived | Derived1    return new Derived();    return new Derived2();} : (x: number) => Derived | Derived2
->                                                                                                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Derived | Derived1    return new Derived();    return new Derived2();} : (x: number) => any
+>                                                                                                          : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 
@@ -556,8 +556,8 @@ var f11: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => Base | AnotherClass
->                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => any
+>                                                                                                            : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 
@@ -578,8 +578,8 @@ var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 >    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
->x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => Base | AnotherClass
->                                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => any
+>                                                                                                                                            : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 

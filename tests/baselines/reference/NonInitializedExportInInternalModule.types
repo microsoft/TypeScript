@@ -106,14 +106,14 @@ module Inner {
     export var c1: string = 'a';
 >c1 : string
 >   : ^^^^^^
->'a' : "a"
->    : ^^^
+>'a' : string
+>    : ^^^^^^
 
     export let d1: number = 1;
 >d1 : number
 >   : ^^^^^^
->1 : 1
->  : ^
+>1 : number
+>  : ^^^^^^
 
     class D {}
 >D : D

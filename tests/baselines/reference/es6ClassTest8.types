@@ -14,8 +14,7 @@ class C {
     constructor() {
         var bar:any = (function() {
 >bar : any
->(function() {            return bar; // 'bar' should be resolvable        }) : () => any
->                                                                             : ^^^^^^^^^
+>(function() {            return bar; // 'bar' should be resolvable        }) : any
 >function() {            return bar; // 'bar' should be resolvable        } : () => any
 >                                                                           : ^^^^^^^^^
 

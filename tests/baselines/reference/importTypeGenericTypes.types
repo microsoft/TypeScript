@@ -103,8 +103,8 @@ export let y: import("./foo2").Bar.I<{x: number}> = { a: "", b: 0, data: {x: 12}
 >    : ^^^
 >x : number
 >  : ^^^^^^
->{ a: "", b: 0, data: {x: 12} } : { a: string; b: number; data: { x: number; }; }
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "", b: 0, data: {x: 12} } : import("foo2").Bar.I<{ x: number; }>
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >a : string
 >  : ^^^^^^
 >"" : ""
@@ -145,7 +145,7 @@ export class Bar2<T> {
 export let shim: typeof import("./foo2") = {
 >shim : typeof import("foo2")
 >     : ^^^^^^^^^^^^^^^^^^^^^
->{    Bar: Bar2} : { Bar: typeof Bar2; }
+>{    Bar: Bar2} : typeof import("foo2")
 >                : ^^^^^^^^^^^^^^^^^^^^^
 
     Bar: Bar2

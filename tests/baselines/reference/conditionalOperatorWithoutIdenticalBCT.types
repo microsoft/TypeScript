@@ -67,8 +67,8 @@ var result1 = true ? a : b;
 var result2: A = true ? a : b;
 >result2 : A
 >        : ^
->true ? a : b : A | B
->             : ^^^^^
+>true ? a : b : A
+>             : ^
 >true : true
 >     : ^^^^
 >a : A
@@ -79,8 +79,8 @@ var result2: A = true ? a : b;
 var result3: B = true ? a : b;
 >result3 : B
 >        : ^
->true ? a : b : A | B
->             : ^^^^^
+>true ? a : b : B
+>             : ^
 >true : true
 >     : ^^^^
 >a : A
@@ -105,8 +105,8 @@ var result4: (t: X) => number = true ? (m) => m.propertyX1 : (n) => n.propertyX2
 >        : ^ ^^ ^^^^^      
 >t : X
 >  : ^
->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
->                                                 : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (t: X) => number
+>                                                 : ^ ^^ ^^^^^      
 >true : true
 >     : ^^^^
 >(m) => m.propertyX1 : (m: X) => number
@@ -135,8 +135,8 @@ var result5: (t: X) => string = true ? (m) => m.propertyX1 : (n) => n.propertyX2
 >        : ^ ^^ ^^^^^      
 >t : X
 >  : ^
->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
->                                                 : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (t: X) => string
+>                                                 : ^ ^^ ^^^^^      
 >true : true
 >     : ^^^^
 >(m) => m.propertyX1 : (m: X) => number
@@ -165,8 +165,8 @@ var result6: (t: X) => boolean = true ? (m) => m.propertyX1 : (n) => n.propertyX
 >        : ^ ^^ ^^^^^       
 >t : X
 >  : ^
->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
->                                                 : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (t: X) => boolean
+>                                                 : ^ ^^ ^^^^^       
 >true : true
 >     : ^^^^
 >(m) => m.propertyX1 : (m: X) => number
@@ -195,8 +195,8 @@ var result61: (t: X) => number| string = true ? (m) => m.propertyX1 : (n) => n.p
 >         : ^ ^^ ^^^^^               
 >t : X
 >  : ^
->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
->                                                 : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (t: X) => number | string
+>                                                 : ^ ^^ ^^^^^               
 >true : true
 >     : ^^^^
 >(m) => m.propertyX1 : (m: X) => number

@@ -47,7 +47,7 @@ function foo1<T1, T2>() {
     var result: T1 = (x, y); //error here
 >result : T1
 >       : ^^
->(x, y) : T2
+>(x, y) : T1
 >       : ^^
 >x, y : T2
 >     : ^^

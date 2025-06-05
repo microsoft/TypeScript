@@ -44,8 +44,8 @@ interface IWithCallSignatures4 {
 var x: IWithNoCallSignatures | IWithCallSignatures = a => a.toString();
 >x : IWithNoCallSignatures | IWithCallSignatures
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a => a.toString() : (a: number) => string
->                  : ^ ^^^^^^^^^^^^^^^^^^^
+>a => a.toString() : IWithNoCallSignatures | IWithCallSignatures
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a.toString() : string
@@ -61,8 +61,8 @@ var x: IWithNoCallSignatures | IWithCallSignatures = a => a.toString();
 var x2: IWithCallSignatures | IWithCallSignatures2 = a => a.toString(); // Like iWithCallSignatures
 >x2 : IWithCallSignatures | IWithCallSignatures2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a => a.toString() : (a: number) => string
->                  : ^ ^^^^^^^^^^^^^^^^^^^
+>a => a.toString() : IWithCallSignatures | IWithCallSignatures2
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a.toString() : string
@@ -77,8 +77,8 @@ var x2: IWithCallSignatures | IWithCallSignatures2 = a => a.toString(); // Like 
 var x2: IWithCallSignatures | IWithCallSignatures2 = a => a; // Like iWithCallSignatures2
 >x2 : IWithCallSignatures | IWithCallSignatures2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a => a : (a: number) => number
->       : ^ ^^^^^^^^^^^^^^^^^^^
+>a => a : IWithCallSignatures | IWithCallSignatures2
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -88,8 +88,8 @@ var x2: IWithCallSignatures | IWithCallSignatures2 = a => a; // Like iWithCallSi
 var x3: IWithCallSignatures | IWithCallSignatures3 = a => /*here a should be any*/ a.toString();
 >x3 : IWithCallSignatures | IWithCallSignatures3
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a => /*here a should be any*/ a.toString() : (a: any) => any
->                                           : ^ ^^^^^^^^^^^^^
+>a => /*here a should be any*/ a.toString() : IWithCallSignatures | IWithCallSignatures3
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >a.toString() : any
 >a.toString : any
@@ -102,8 +102,8 @@ var x3: IWithCallSignatures | IWithCallSignatures3 = a => /*here a should be any
 var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any*/ a.toString();
 >x4 : IWithCallSignatures | IWithCallSignatures4
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a => /*here a should be any*/ a.toString() : (a: number) => string
->                                           : ^ ^^^^^^^^^^^^^^^^^^^
+>a => /*here a should be any*/ a.toString() : IWithCallSignatures | IWithCallSignatures4
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a.toString() : string

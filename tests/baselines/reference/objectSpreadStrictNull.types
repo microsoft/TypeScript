@@ -48,7 +48,7 @@ function f(
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
 >{ ...definiteBoolean, ...definiteString, ...optionalNumber } : { sn: string | number; }
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                             : ^^^^^^               ^^^
 >definiteBoolean : { sn: boolean; }
 >                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
@@ -62,7 +62,7 @@ function f(
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
 >{ ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber } : { sn: string | number; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                : ^^^^^^               ^^^
 >definiteBoolean : { sn: boolean; }
 >                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
@@ -77,8 +77,8 @@ function f(
 >            : ^^^^^^^               ^^^
 >sn : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...optionalString, ...optionalNumber } : { sn?: string | number; }
+>                                         : ^^^^^^^               ^^^
 >optionalString : { sn?: string; }
 >               : ^^^^^^^      ^^^
 >optionalNumber : { sn?: number; }
@@ -90,8 +90,8 @@ function f(
 >                    : ^^^^^^               ^^^
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
->{ ...definiteBoolean, ...definiteString, ...undefinedNumber } : { sn: number | undefined; }
->                                                              : ^^^^^^                  ^^^
+>{ ...definiteBoolean, ...definiteString, ...undefinedNumber } : { sn: string | number; }
+>                                                              : ^^^^^^               ^^^
 >definiteBoolean : { sn: boolean; }
 >                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
@@ -104,8 +104,8 @@ function f(
 >                         : ^^^^^^               ^^^
 >sn : string | number
 >   : ^^^^^^^^^^^^^^^
->{ ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber } : { sn: number | undefined; }
->                                                                                  : ^^^^^^                  ^^^
+>{ ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber } : { sn: string | number; }
+>                                                                                  : ^^^^^^               ^^^
 >definiteBoolean : { sn: boolean; }
 >                : ^^^^^^       ^^^
 >definiteString : { sn: string; }
@@ -120,8 +120,8 @@ function f(
 >             : ^^^^^^                           ^^^
 >sn : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ ...undefinedString, ...undefinedNumber } : { sn: number | undefined; }
->                                           : ^^^^^^                  ^^^
+>{ ...undefinedString, ...undefinedNumber } : { sn: string | number | undefined; }
+>                                           : ^^^^^^                           ^^^
 >undefinedString : { sn: string | undefined; }
 >                : ^^^^^^                  ^^^
 >undefinedNumber : { sn: number | undefined; }
@@ -132,8 +132,8 @@ function f(
 >                               : ^^^^^^                         ^^^
 >sn : string | number | boolean
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | undefined; }
->                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ ...definiteBoolean, ...undefinedString, ...optionalNumber } : { sn: string | number | boolean; }
+>                                                              : ^^^^^^                         ^^^
 >definiteBoolean : { sn: boolean; }
 >                : ^^^^^^       ^^^
 >undefinedString : { sn: string | undefined; }

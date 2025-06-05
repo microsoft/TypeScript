@@ -10,8 +10,8 @@ interface I {
 var x: I = {
 >x : I
 >  : ^
->{    p: null} : { p: null; }
->              : ^^^^^^^^^^^^
+>{    p: null} : I
+>              : ^
 
     p: null
 >p : null

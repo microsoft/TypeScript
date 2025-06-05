@@ -180,8 +180,8 @@ var array1 = <{}[]>emptyObjTuple;
 var unionTuple: [C, string | number] = [new C(), "foo"];
 >unionTuple : [C, string | number]
 >           : ^^^^^^^^^^^^^^^^^^^^
->[new C(), "foo"] : [C, string]
->                 : ^^^^^^^^^^^
+>[new C(), "foo"] : [C, string | number]
+>                 : ^^^^^^^^^^^^^^^^^^^^
 >new C() : C
 >        : ^
 >C : typeof C
@@ -192,8 +192,8 @@ var unionTuple: [C, string | number] = [new C(), "foo"];
 var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 >unionTuple2 : [C, string | number, D]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^
->[new C(), "foo", new D()] : [C, string, D]
->                          : ^^^^^^^^^^^^^^
+>[new C(), "foo", new D()] : [C, string | number, D]
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^
 >new C() : C
 >        : ^
 >C : typeof C
@@ -208,8 +208,8 @@ var unionTuple2: [C, string | number, D] = [new C(), "foo", new D()];
 var unionTuple3: [number, string| number] = [10, "foo"]; 
 >unionTuple3 : [number, string | number]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
->[10, "foo"] : [number, string]
->            : ^^^^^^^^^^^^^^^^
+>[10, "foo"] : [number, string | number]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >"foo" : "foo"

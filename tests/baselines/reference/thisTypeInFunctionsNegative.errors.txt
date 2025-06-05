@@ -27,7 +27,7 @@ thisTypeInFunctionsNegative.ts(80,20): error TS2554: Expected 1 arguments, but g
 thisTypeInFunctionsNegative.ts(81,3): error TS2554: Expected 1 arguments, but got 0.
 thisTypeInFunctionsNegative.ts(82,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 thisTypeInFunctionsNegative.ts(83,24): error TS2554: Expected 1 arguments, but got 2.
-thisTypeInFunctionsNegative.ts(86,5): error TS2322: Type '(this: { y: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
+thisTypeInFunctionsNegative.ts(86,58): error TS2322: Type '(this: { y: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
   The 'this' types of each signature are incompatible.
     Type 'void' is not assignable to type '{ y: number; }'.
 thisTypeInFunctionsNegative.ts(107,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
@@ -242,7 +242,7 @@ thisTypeInFunctionsNegative.ts(178,22): error TS2730: An arrow function cannot h
     
     // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
     let specifiedToVoid: (this: void, x: number) => number = explicitStructural;
-        ~~~~~~~~~~~~~~~
+                                                             ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: { y: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Type 'void' is not assignable to type '{ y: number; }'.

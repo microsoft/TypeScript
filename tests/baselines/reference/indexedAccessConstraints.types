@@ -10,8 +10,8 @@ function foo<T extends object>(a: T[keyof T]) {
     let b: number = a;  // Error
 >b : number
 >  : ^^^^^^
->a : T[keyof T]
->  : ^^^^^^^^^^
+>a : number
+>  : ^^^^^^
 }
 
 // Repro from #54522

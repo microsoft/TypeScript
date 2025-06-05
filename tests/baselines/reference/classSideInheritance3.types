@@ -56,7 +56,7 @@ var r1: typeof A = B; // error
 >   : ^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->B : typeof B
+>B : typeof A
 >  : ^^^^^^^^
 
 var r2: new (x: string) => A = B; // error
@@ -64,14 +64,14 @@ var r2: new (x: string) => A = B; // error
 >   : ^^^^^ ^^      ^^^^^ 
 >x : string
 >  : ^^^^^^
->B : typeof B
->  : ^^^^^^^^
+>B : new (x: string) => A
+>  : ^^^^^ ^^      ^^^^^ 
 
 var r3: typeof A = C; // ok
 >r3 : typeof A
 >   : ^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->C : typeof C
+>C : typeof A
 >  : ^^^^^^^^
 

@@ -31,6 +31,6 @@ var p: Observable<{}>;
 var stuck: Property<number> = p;
 >stuck : Property<number>
 >      : ^^^^^^^^^^^^^^^^
->p : Observable<{}>
->  : ^^^^^^^^^^^^^^
+>p : Property<number>
+>  : ^^^^^^^^^^^^^^^^
 

@@ -70,8 +70,8 @@ f = 1; // ok
 var x: number = e; // ok
 >x : number
 >  : ^^^^^^
->e : E
->  : ^
+>e : number
+>  : ^^^^^^
 
 x = f; // ok
 >x = f : F
@@ -88,8 +88,8 @@ module Others {
     var a: any = e; // ok
 >a : any
 >  : ^^^
->e : E
->  : ^
+>e : any
+>  : ^^^
 
     class C {
 >C : C
@@ -115,70 +115,70 @@ module Others {
     var b: number = e; // ok
 >b : number
 >  : ^^^^^^
->e : E
->  : ^
+>e : number
+>  : ^^^^^^
 
     var c: string = e;
 >c : string
 >  : ^^^^^^
->e : E
->  : ^
+>e : string
+>  : ^^^^^^
 
     var d: boolean = e;
 >d : boolean
 >  : ^^^^^^^
->e : E
->  : ^
+>e : boolean
+>  : ^^^^^^^
 
     var ee: Date = e;
 >ee : Date
 >   : ^^^^
->e : E
->  : ^
+>e : Date
+>  : ^^^^
 
     var f: any = e; // ok
 >f : any
 >  : ^^^
->e : E
->  : ^
+>e : any
+>  : ^^^
 
     var g: void = e;
 >g : void
 >  : ^^^^
->e : E
->  : ^
+>e : void
+>  : ^^^^
 
     var h: Object = e;
 >h : Object
 >  : ^^^^^^
->e : E
->  : ^
+>e : Object
+>  : ^^^^^^
 
     var i: {} = e;
 >i : {}
 >  : ^^
->e : E
->  : ^
+>e : {}
+>  : ^^
 
     var j: () => {} = e;
 >j : () => {}
 >  : ^^^^^^  
->e : E
->  : ^
+>e : () => {}
+>  : ^^^^^^  
 
     var k: Function = e;
 >k : Function
 >  : ^^^^^^^^
->e : E
->  : ^
+>e : Function
+>  : ^^^^^^^^
 
     var l: (x: number) => string = e;
 >l : (x: number) => string
 >  : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->e : E
->  : ^
+>e : (x: number) => string
+>  : ^ ^^      ^^^^^      
 
     ac = e;
 >ac = e : E
@@ -199,36 +199,36 @@ module Others {
     var m: number[] = e;
 >m : number[]
 >  : ^^^^^^^^
->e : E
->  : ^
+>e : number[]
+>  : ^^^^^^^^
 
     var n: { foo: string } = e;
 >n : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
 >    : ^^^^^^
->e : E
->  : ^
+>e : { foo: string; }
+>  : ^^^^^^^      ^^^
 
     var o: <T>(x: T) => T = e;
 >o : <T>(x: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
->e : E
->  : ^
+>e : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 
     var p: Number = e;
 >p : Number
 >  : ^^^^^^
->e : E
->  : ^
+>e : Number
+>  : ^^^^^^
 
     var q: String = e;
 >q : String
 >  : ^^^^^^
->e : E
->  : ^
+>e : String
+>  : ^^^^^^
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
 >foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
@@ -267,13 +267,13 @@ module Others {
         var a: A = e;
 >a : A
 >  : ^
->e : E
+>e : A
 >  : ^
 
         var b: B = e;
 >b : B
 >  : ^
->e : E
+>e : B
 >  : ^
     }
 }

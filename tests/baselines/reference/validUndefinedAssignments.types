@@ -9,22 +9,26 @@ var x: typeof undefined;
 var a: number = x;
 >a : number
 >  : ^^^^^^
->x : any
+>x : number
+>  : ^^^^^^
 
 var b: boolean = x;
 >b : boolean
 >  : ^^^^^^^
->x : any
+>x : boolean
+>  : ^^^^^^^
 
 var c: string = x;
 >c : string
 >  : ^^^^^^
->x : any
+>x : string
+>  : ^^^^^^
 
 var d: void = x;
 >d : void
 >  : ^^^^
->x : any
+>x : void
+>  : ^^^^
 
 var e: typeof undefined = x;
 >e : any
@@ -72,7 +76,8 @@ var h: { f(): void } = x;
 >  : ^^^^^^^    ^^^
 >f : () => void
 >  : ^^^^^^    
->x : any
+>x : { f(): void; }
+>  : ^^^^^^^    ^^^
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void

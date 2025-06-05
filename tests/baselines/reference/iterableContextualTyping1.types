@@ -6,8 +6,8 @@ var iter: Iterable<(x: string) => number> = [s => s.length];
 >     : ^^^^^^^^^^ ^^      ^^^^^      ^
 >x : string
 >  : ^^^^^^
->[s => s.length] : ((s: string) => number)[]
->                : ^^ ^^^^^^^^^^^^^^^^^^^^^^
+>[s => s.length] : Iterable<(x: string) => number>
+>                : ^^^^^^^^^^ ^^      ^^^^^      ^
 >s => s.length : (s: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string

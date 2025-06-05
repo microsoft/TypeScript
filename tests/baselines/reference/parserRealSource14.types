@@ -7644,12 +7644,12 @@ module TypeScript {
 >     : ^^^^^^^
 >TypeScript : any
 >           : ^^^
->walker.state : any
->             : ^^^
+>walker.state : AstPath
+>             : ^^^^^^^
 >walker : TypeScript.IAstWalker
 >       : ^^^^^^^^^^^^^^^^^^^^^
->state : any
->      : ^^^
+>state : AstPath
+>      : ^^^^^^^
 
             path.push(cur);
 >path.push(cur) : void
@@ -7700,12 +7700,12 @@ module TypeScript {
 >     : ^^^^^^^
 >TypeScript : any
 >           : ^^^
->walker.state : any
->             : ^^^
+>walker.state : AstPath
+>             : ^^^^^^^
 >walker : TypeScript.IAstWalker
 >       : ^^^^^^^^^^^^^^^^^^^^^
->state : any
->      : ^^^
+>state : AstPath
+>      : ^^^^^^^
 
             path.pop();
 >path.pop() : TypeScript.AST

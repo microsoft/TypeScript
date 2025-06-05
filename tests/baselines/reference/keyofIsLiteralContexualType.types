@@ -14,8 +14,8 @@ function foo<T extends { a: string, b: string }>() {
     let a: (keyof T)[] = ["a", "b"];
 >a : (keyof T)[]
 >  : ^^^^^^^^^^^
->["a", "b"] : ("a" | "b")[]
->           : ^^^^^^^^^^^^^
+>["a", "b"] : (keyof T)[]
+>           : ^^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >"b" : "b"
@@ -24,8 +24,8 @@ function foo<T extends { a: string, b: string }>() {
     let b: (keyof T)[] = ["a", "b", "c"];
 >b : (keyof T)[]
 >  : ^^^^^^^^^^^
->["a", "b", "c"] : ("a" | "b" | "c")[]
->                : ^^^^^^^^^^^^^^^^^^^
+>["a", "b", "c"] : (keyof T)[]
+>                : ^^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >"b" : "b"

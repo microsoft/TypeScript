@@ -29,8 +29,8 @@ var m: typeof moduleA = i;
 >  : ^^^^^^^^^^^^^^
 >moduleA : typeof moduleA
 >        : ^^^^^^^^^^^^^^
->i : IHasVisualizationModel
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>i : typeof moduleA
+>  : ^^^^^^^^^^^^^^
 
 === aliasUsageInVarAssignment_backbone.ts ===
 export class Model {

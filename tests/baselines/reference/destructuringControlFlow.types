@@ -273,18 +273,18 @@ let [key, value]: KeyValue = ["foo"];
 >    : ^^^^^^
 >value : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
->["foo"] : [string]
+>["foo"] : KeyValue
 >        : ^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 
 value.toUpperCase();  // Error
->value.toUpperCase() : any
->                    : ^^^
->value.toUpperCase : any
->                  : ^^^
->value : undefined
->      : ^^^^^^^^^
->toUpperCase : any
->            : ^^^
+>value.toUpperCase() : string
+>                    : ^^^^^^
+>value.toUpperCase : () => string
+>                  : ^^^^^^      
+>value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
 

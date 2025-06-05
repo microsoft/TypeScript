@@ -36,12 +36,12 @@ var c: ParserFunc = parsers.raw; // ok!
 var d: ParserFunc = parsers.readline; // not ok
 >d : ParserFunc
 >  : ^^^^^^^^^^
->parsers.readline : (delimiter?: string) => ParserFunc
->                 : ^         ^^^      ^^^^^          
+>parsers.readline : ParserFunc
+>                 : ^^^^^^^^^^
 >parsers : Parsers
 >        : ^^^^^^^
->readline : (delimiter?: string) => ParserFunc
->         : ^         ^^^      ^^^^^          
+>readline : ParserFunc
+>         : ^^^^^^^^^^
 
 var e: ParserFunc = parsers.readline(); // ok
 >e : ParserFunc

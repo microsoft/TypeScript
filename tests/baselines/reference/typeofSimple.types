@@ -16,7 +16,7 @@ var v2: typeof v;
 var v3: string = v2; // Not assignment compatible
 >v3 : string
 >   : ^^^^^^
->v2 : number
+>v2 : string
 >   : ^^^^^^
 
 interface I<T> { x: T; }

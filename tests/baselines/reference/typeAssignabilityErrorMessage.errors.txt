@@ -1,6 +1,6 @@
 typeAssignabilityErrorMessage.ts(14,5): error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
 typeAssignabilityErrorMessage.ts(17,5): error TS2739: Type 'ThroughStream' is missing the following properties from type 'ReadStream': f, g, h, i, j
-typeAssignabilityErrorMessage.ts(40,5): error TS2322: Type 'Foo<string>' is not assignable to type 'Bar<number>'.
+typeAssignabilityErrorMessage.ts(40,22): error TS2322: Type 'Foo<string>' is not assignable to type 'Bar<number>'.
   Type 'Foo<string>' is not assignable to type '{ foo: { what: number; }; }'.
     The types of 'foo.what' are incompatible between these types.
       Type 'string' is not assignable to type 'number'.
@@ -57,7 +57,7 @@ typeAssignabilityErrorMessage.ts(42,5): error TS2345: Argument of type 'OtherWra
     declare let otherWrap: OtherWrap;
     
     let a: Bar<number> = fooStr;
-        ~
+                         ~~~~~~
 !!! error TS2322: Type 'Foo<string>' is not assignable to type 'Bar<number>'.
 !!! error TS2322:   Type 'Foo<string>' is not assignable to type '{ foo: { what: number; }; }'.
 !!! error TS2322:     The types of 'foo.what' are incompatible between these types.

@@ -39,8 +39,8 @@ var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
->{ 3: 'three', 'three': 'three' } : { 3: string; three: string; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ 3: 'three', 'three': 'three' } : { [n: number]: string; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : string
 >  : ^^^^^^
 >'three' : "three"
@@ -55,8 +55,8 @@ var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
->{ 'N': Compass.North, 'E': Compass.East } : { N: Compass.North; E: Compass.East; }
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ 'N': Compass.North, 'E': Compass.East } : { [n: string]: Compass; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >'N' : Compass.North
 >    : ^^^^^^^^^^^^^
 >Compass.North : Compass.North
@@ -146,8 +146,8 @@ var obj = {
 var anyVar: any = {};
 >anyVar : any
 >       : ^^^
->{} : {}
->   : ^^
+>{} : any
+>   : ^^^
 
 var stringOrNumber: string | number;
 >stringOrNumber : string | number

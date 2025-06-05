@@ -70,8 +70,8 @@ module otherRoot {
 >     : ^^^
 >A : any
 >  : ^^^
->{ x: 0, y: 0 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0 } : Root.A.Point
+>               : ^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0

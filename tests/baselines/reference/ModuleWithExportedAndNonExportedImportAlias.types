@@ -60,8 +60,8 @@ module Geometry {
 >       : ^^^^^^^^^^^^
 >Points : any
 >       : ^^^
->{ x: 0, y: 0 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: 0 } : Points.Point
+>               : ^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0

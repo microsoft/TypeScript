@@ -1949,16 +1949,16 @@ module TypeScript {
             var outerFnc: FuncDecl = context.scopeChain.fnc;
 >outerFnc : FuncDecl
 >         : ^^^^^^^^
->context.scopeChain.fnc : any
->                       : ^^^
+>context.scopeChain.fnc : FuncDecl
+>                       : ^^^^^^^^
 >context.scopeChain : ScopeChain
 >                   : ^^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
 >scopeChain : ScopeChain
 >           : ^^^^^^^^^^
->fnc : any
->    : ^^^
+>fnc : FuncDecl
+>    : ^^^^^^^^
 
             var nameText = funcDecl.name ? funcDecl.name.actualText : null;
 >nameText : any
@@ -3117,8 +3117,8 @@ module TypeScript {
                     var paramSym: ParameterSymbol = signature.parameters[i];
 >paramSym : ParameterSymbol
 >         : ^^^^^^^^^^^^^^^
->signature.parameters[i] : any
->                        : ^^^
+>signature.parameters[i] : ParameterSymbol
+>                        : ^^^^^^^^^^^^^^^
 >signature.parameters : any
 >                     : ^^^
 >signature : any
@@ -3433,12 +3433,12 @@ module TypeScript {
         var context:AssignScopeContext = walker.state;
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
->walker.state : any
->             : ^^^
+>walker.state : AssignScopeContext
+>             : ^^^^^^^^^^^^^^^^^^
 >walker : IAstWalker
 >       : ^^^^^^^^^^
->state : any
->      : ^^^
+>state : AssignScopeContext
+>      : ^^^^^^^^^^^^^^^^^^
 
         var go = true;
 >go : boolean
@@ -3709,12 +3709,12 @@ module TypeScript {
         var context:AssignScopeContext = walker.state;
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
->walker.state : any
->             : ^^^
+>walker.state : AssignScopeContext
+>             : ^^^^^^^^^^^^^^^^^^
 >walker : IAstWalker
 >       : ^^^^^^^^^^
->state : any
->      : ^^^
+>state : AssignScopeContext
+>      : ^^^^^^^^^^^^^^^^^^
 
         var go = true;
 >go : boolean

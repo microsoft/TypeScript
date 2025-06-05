@@ -6,8 +6,8 @@ var Person:new () => {name: string;} = function () {return {name:"joe"};};
 >       : ^^^^^^^^^^                 
 >name : string
 >     : ^^^^^^
->function () {return {name:"joe"};} : () => { name: string; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>function () {return {name:"joe"};} : new () => { name: string; }
+>                                   : ^^^^^^^^^^                 
 >{name:"joe"} : { name: string; }
 >             : ^^^^^^^^^^^^^^^^^
 >name : string

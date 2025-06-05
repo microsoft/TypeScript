@@ -61,8 +61,8 @@ module TypeScriptAllInOne {
                 var retValue: number = 0;
 >retValue : number
 >         : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 
                 retValue = bfs.VARIABLES();
 >retValue = bfs.VARIABLES() : number
@@ -822,8 +822,8 @@ module TypeScriptAllInOne {
             var xx: IF = c;
 >xx : IF
 >   : ^^
->c : CLASS
->  : ^^^^^
+>c : IF
+>  : ^^
 
             retVal +=  catch .Property;
 >retVal += : any

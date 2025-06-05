@@ -500,8 +500,8 @@ declare let tt3: [number, string, ...any[]]
 let tt4: [number, ...number[]] = tt3  // Error
 >tt4 : [number, ...number[]]
 >    : ^^^^^^^^^^^^^^^^^^^^^
->tt3 : [number, string, ...any[]]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>tt3 : [number, ...number[]]
+>    : ^^^^^^^^^^^^^^^^^^^^^
 
 // Inference
 

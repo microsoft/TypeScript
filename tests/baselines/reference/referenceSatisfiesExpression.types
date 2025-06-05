@@ -147,8 +147,8 @@ for ((g satisfies number) of [10]) {
 let x: string = "hello"
 >x : string
 >  : ^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : string
+>        : ^^^^^^
 
 for ((x satisfies string) in { a: 10 }) {
 >(x satisfies string) : string

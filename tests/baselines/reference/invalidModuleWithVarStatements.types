@@ -10,8 +10,8 @@ module Y {
     public var x: number = 0;
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 module Y2 {
@@ -32,8 +32,8 @@ module Y4 {
     static var x: number = 0;
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 module YY {
@@ -54,8 +54,8 @@ module YY2 {
     private var x: number = 0;
 >x : number
 >  : ^^^^^^
->0 : 0
->  : ^
+>0 : number
+>  : ^^^^^^
 }
 
 

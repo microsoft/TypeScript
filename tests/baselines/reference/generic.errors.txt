@@ -1,4 +1,4 @@
-/b.ts(5,5): error TS2741: Property 'a' is missing in type '{}' but required in type 'A<boolean>'.
+/b.ts(5,21): error TS2741: Property 'a' is missing in type '{}' but required in type 'A<boolean>'.
 /b.ts(6,8): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
@@ -12,7 +12,7 @@
     let a: A<string> = { a: "" };
     let b: B<number> = { a: 3 };
     let c: A<boolean> = {};
-        ~
+                        ~~
 !!! error TS2741: Property 'a' is missing in type '{}' but required in type 'A<boolean>'.
 !!! related TS2728 /a.ts:1:21: 'a' is declared here.
     let d: B = { a: "" };

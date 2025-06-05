@@ -307,8 +307,8 @@ switch (0) {
         var b: boolean = c;
 >b : boolean
 >  : ^^^^^^^
->c : false
->  : ^^^^^
+>c : boolean
+>  : ^^^^^^^
     }
 }
 
@@ -406,8 +406,8 @@ module m {
        var b2: boolean = c;
 >b2 : boolean
 >   : ^^^^^^^
->c : false
->  : ^^^^^
+>c : boolean
+>  : ^^^^^^^
     }
 }
 

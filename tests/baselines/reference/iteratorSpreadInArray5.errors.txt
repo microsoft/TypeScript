@@ -1,4 +1,6 @@
-iteratorSpreadInArray5.ts(14,30): error TS2322: Type 'symbol' is not assignable to type 'number'.
+iteratorSpreadInArray5.ts(14,23): error TS2322: Type '(number | symbol)[]' is not assignable to type 'number[]'.
+  Type 'number | symbol' is not assignable to type 'number'.
+    Type 'symbol' is not assignable to type 'number'.
 
 
 ==== iteratorSpreadInArray5.ts (1 errors) ====
@@ -16,5 +18,7 @@ iteratorSpreadInArray5.ts(14,30): error TS2322: Type 'symbol' is not assignable 
     }
     
     var array: number[] = [0, 1, ...new SymbolIterator];
-                                 ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'symbol' is not assignable to type 'number'.
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(number | symbol)[]' is not assignable to type 'number[]'.
+!!! error TS2322:   Type 'number | symbol' is not assignable to type 'number'.
+!!! error TS2322:     Type 'symbol' is not assignable to type 'number'.

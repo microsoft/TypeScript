@@ -345,31 +345,31 @@ function negativePropTest(x: ClassWithUnionProp) {
         let y: string = x.prop.b;
 >y : string
 >  : ^^^^^^
->x.prop.b : any
->         : ^^^
+>x.prop.b : string
+>         : ^^^^^^
 >x.prop : A
 >       : ^
 >x : ClassWithUnionProp
 >  : ^^^^^^^^^^^^^^^^^^
 >prop : A
 >     : ^
->b : any
->  : ^^^
+>b : string
+>  : ^^^^^^
 
     } else {
         let z: string = x.prop.a;
 >z : string
 >  : ^^^^^^
->x.prop.a : any
->         : ^^^
+>x.prop.a : string
+>         : ^^^^^^
 >x.prop : B
 >       : ^
 >x : ClassWithUnionProp
 >  : ^^^^^^^^^^^^^^^^^^
 >prop : B
 >     : ^
->a : any
->  : ^^^
+>a : string
+>  : ^^^^^^
     }
 }
 
@@ -400,31 +400,31 @@ class NegativeClassTest {
             let z: number = this.prop.b;
 >z : number
 >  : ^^^^^^
->this.prop.b : any
->            : ^^^
+>this.prop.b : number
+>            : ^^^^^^
 >this.prop : A
 >          : ^
 >this : this
 >     : ^^^^
 >prop : A
 >     : ^
->b : any
->  : ^^^
+>b : number
+>  : ^^^^^^
 
         } else {
             let y: string = this.prop.a;
 >y : string
 >  : ^^^^^^
->this.prop.a : any
->            : ^^^
+>this.prop.a : string
+>            : ^^^^^^
 >this.prop : B
 >          : ^
 >this : this
 >     : ^^^^
 >prop : B
 >     : ^
->a : any
->  : ^^^
+>a : string
+>  : ^^^^^^
         }
     }
 }

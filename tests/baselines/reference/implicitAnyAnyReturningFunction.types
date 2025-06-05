@@ -17,8 +17,7 @@ function B() {
 
     var someLocal: any = {};
 >someLocal : any
->{} : {}
->   : ^^
+>{} : any
 
     return someLocal;
 >someLocal : any
@@ -44,8 +43,7 @@ class C {
 
         var someLocal: any = {};
 >someLocal : any
->{} : {}
->   : ^^
+>{} : any
 
         return someLocal;
 >someLocal : any

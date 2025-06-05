@@ -36,8 +36,8 @@ interface A { x?: string }
 let a: A & ThisType<any> = { y: 10 };
 >a : A & ThisType<any>
 >  : ^^^^^^^^^^^^^^^^^
->{ y: 10 } : { y: number; }
->          : ^^^^^^^^^^^^^^
+>{ y: 10 } : A & ThisType<any>
+>          : ^^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >10 : 10
@@ -51,8 +51,8 @@ let x: Empty & { x: number } = { y: "hello" };
 >  : ^^^^^^^^^^^^^      ^^^
 >x : number
 >  : ^^^^^^
->{ y: "hello" } : { y: string; }
->               : ^^^^^^^^^^^^^^
+>{ y: "hello" } : Empty & { x: number; }
+>               : ^^^^^^^^^^^^^      ^^^
 >y : string
 >  : ^^^^^^
 >"hello" : "hello"

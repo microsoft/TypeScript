@@ -79,8 +79,8 @@ export let y: import("./foo2").Bar.I = { a: "", b: 0 };
 >  : ^^^^^^^^^^^^^^^^^^^^
 >Bar : any
 >    : ^^^
->{ a: "", b: 0 } : { a: string; b: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "", b: 0 } : import("foo2").Bar.I
+>                : ^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >"" : ""
@@ -111,7 +111,7 @@ export class Bar2 {
 export let shim: typeof import("./foo2") = {
 >shim : typeof import("foo2")
 >     : ^^^^^^^^^^^^^^^^^^^^^
->{    Bar: Bar2} : { Bar: typeof Bar2; }
+>{    Bar: Bar2} : typeof import("foo2")
 >                : ^^^^^^^^^^^^^^^^^^^^^
 
     Bar: Bar2

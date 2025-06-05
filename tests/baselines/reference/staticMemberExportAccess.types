@@ -44,8 +44,8 @@ var $: JQueryStatic;
 var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
 >instanceOfClassSammy : Sammy
 >                     : ^^^^^
->new $.sammy() : any
->              : ^^^
+>new $.sammy() : Sammy
+>              : ^^^^^
 >$.sammy : Sammy
 >        : ^^^^^
 >$ : JQueryStatic

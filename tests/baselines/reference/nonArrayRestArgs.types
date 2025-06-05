@@ -10,8 +10,8 @@ function foo(...rest: number) { // error
 	var x: string = rest[0];
 >x : string
 >  : ^^^^^^
->rest[0] : any
->        : ^^^
+>rest[0] : string
+>        : ^^^^^^
 >rest : number
 >     : ^^^^^^
 >0 : 0

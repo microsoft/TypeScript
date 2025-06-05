@@ -13,8 +13,8 @@ var y1: { C: new() => ext.C; } = ext;
 >  : ^^^^^^^^^^     
 >ext : any
 >    : ^^^
->ext : typeof ext
->    : ^^^^^^^^^^
+>ext : { C: new () => ext.C; }
+>    : ^^^^^               ^^^
 
 y1 = ext; // ok
 >y1 = ext : typeof ext
@@ -31,8 +31,8 @@ import ext2 = require('externalModuleAssignToVar_core_require2');
 var y2: new() => ext2 = ext2;
 >y2 : new () => ext2
 >   : ^^^^^^^^^^    
->ext2 : typeof ext2
->     : ^^^^^^^^^^^
+>ext2 : new () => ext2
+>     : ^^^^^^^^^^    
 
 y2 = ext2; // ok
 >y2 = ext2 : typeof ext2
@@ -49,8 +49,8 @@ import ext3 = require('externalModuleAssignToVar_ext');
 var y3: new () => ext3 = ext3;
 >y3 : new () => ext3
 >   : ^^^^^^^^^^    
->ext3 : typeof ext3
->     : ^^^^^^^^^^^
+>ext3 : new () => ext3
+>     : ^^^^^^^^^^    
 
 y3 = ext3; // ok
 >y3 = ext3 : typeof ext3

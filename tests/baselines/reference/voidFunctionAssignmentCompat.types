@@ -79,8 +79,8 @@ var fra: (v:any)=>any = function() { return function () {}; } // should work
 >fra : (v: any) => any
 >    : ^ ^^   ^^^^^   
 >v : any
->function() { return function () {}; } : () => () => void
->                                      : ^^^^^^^^^^^^^^^^
+>function() { return function () {}; } : (v: any) => any
+>                                      : ^ ^^   ^^^^^   
 >function () {} : () => void
 >               : ^^^^^^^^^^
 
@@ -88,8 +88,8 @@ var frv: (v:any)=>void = function() { return function () { return 0; } } // shou
 >frv : (v: any) => void
 >    : ^ ^^   ^^^^^    
 >v : any
->function() { return function () { return 0; } } : () => () => number
->                                                : ^^^^^^^^^^^^^^^^^^
+>function() { return function () { return 0; } } : (v: any) => void
+>                                                : ^ ^^   ^^^^^    
 >function () { return 0; } : () => number
 >                          : ^^^^^^^^^^^^
 >0 : 0

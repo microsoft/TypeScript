@@ -688,8 +688,8 @@ function f50<T extends ItemMap>(obj: T, key: keyof T) {
     let item: Item = obj[key];
 >item : Item
 >     : ^^^^
->obj[key] : T[keyof T]
->         : ^^^^^^^^^^
+>obj[key] : Item
+>         : ^^^^
 >obj : T
 >    : ^
 >key : keyof T
@@ -719,7 +719,7 @@ function f51<T extends ItemMap, K extends keyof T>(obj: T, key: K) {
     let item: Item = obj[key];
 >item : Item
 >     : ^^^^
->obj[key] : T[K]
+>obj[key] : Item
 >         : ^^^^
 >obj : T
 >    : ^

@@ -10,7 +10,8 @@ function foo(...rest) {
      var x: number = rest[0];
 >x : number
 >  : ^^^^^^
->rest[0] : any
+>rest[0] : number
+>        : ^^^^^^
 >rest : any[]
 >     : ^^^^^
 >0 : 0

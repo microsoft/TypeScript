@@ -10,19 +10,19 @@ var x = true;
 var a: number = x;
 >a : number
 >  : ^^^^^^
->x : true
->  : ^^^^
+>x : number
+>  : ^^^^^^
 
 var b: string = x;
 >b : string
 >  : ^^^^^^
->x : true
->  : ^^^^
+>x : string
+>  : ^^^^^^
 
 var c: void = x;
 >c : void
 >  : ^^^^
->x : true
+>x : void
 >  : ^^^^
 
 var d: typeof undefined = x;
@@ -30,8 +30,8 @@ var d: typeof undefined = x;
 >  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->x : true
->  : ^^^^
+>x : any
+>  : ^^^
 
 enum E { A }
 >E : E
@@ -42,8 +42,8 @@ enum E { A }
 var e: E = x;
 >e : E
 >  : ^
->x : true
->  : ^^^^
+>x : E
+>  : ^
 
 class C { foo: string }
 >C : C
@@ -54,8 +54,8 @@ class C { foo: string }
 var f: C = x;
 >f : C
 >  : ^
->x : true
->  : ^^^^
+>x : C
+>  : ^
 
 interface I { bar: string }
 >bar : string
@@ -64,22 +64,22 @@ interface I { bar: string }
 var g: I = x;
 >g : I
 >  : ^
->x : true
->  : ^^^^
+>x : I
+>  : ^
 
 var h: { (): string } = x;
 >h : () => string
 >  : ^^^^^^      
->x : true
->  : ^^^^
+>x : () => string
+>  : ^^^^^^      
 
 var h2: { toString(): string } = x; // no error
 >h2 : { toString(): string; }
 >   : ^^^^^^^^^^^^^^      ^^^
 >toString : () => string
 >         : ^^^^^^      
->x : true
->  : ^^^^
+>x : { toString(): string; }
+>  : ^^^^^^^^^^^^^^      ^^^
 
 module M { export var a = 1; }
 >M : typeof M

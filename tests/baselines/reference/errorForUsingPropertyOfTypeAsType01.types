@@ -16,8 +16,8 @@ namespace Test1 {
 >  : ^^^^^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Foo.bar
+>   : ^^^^^^^
 
     var y: Test1.Foo.bar = "";
 >y : Test1.Foo.bar
@@ -26,8 +26,8 @@ namespace Test1 {
 >      : ^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Test1.Foo.bar
+>   : ^^^^^^^^^^^^^
 }
 
 namespace Test2 {
@@ -48,8 +48,8 @@ namespace Test2 {
 >  : ^^^^^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Foo.bar
+>   : ^^^^^^^
 
     var y: Test2.Foo.bar = "";
 >y : Test2.Foo.bar
@@ -58,8 +58,8 @@ namespace Test2 {
 >      : ^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Test2.Foo.bar
+>   : ^^^^^^^^^^^^^
 }
 
 namespace Test3 {
@@ -80,8 +80,8 @@ namespace Test3 {
 >  : ^^^^^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Foo.bar
+>   : ^^^^^^^
 
     var y: Test3.Foo.bar = "";
 >y : Test3.Foo.bar
@@ -90,8 +90,8 @@ namespace Test3 {
 >      : ^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Test3.Foo.bar
+>   : ^^^^^^^^^^^^^
 }
 
 namespace Test4 {
@@ -113,8 +113,8 @@ namespace Test4 {
 >  : ^^^^^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Foo.bar
+>   : ^^^^^^^
 
     var y: Test4.Foo.bar = "";
 >y : Test4.Foo.bar
@@ -123,8 +123,8 @@ namespace Test4 {
 >      : ^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Test4.Foo.bar
+>   : ^^^^^^^^^^^^^
 }
 
 namespace Test5 {
@@ -146,8 +146,8 @@ namespace Test5 {
 >  : ^^^^^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Foo.bar
+>   : ^^^^^^^
 
     var y: Test5.Foo.bar = "";
 >y : Test5.Foo.bar
@@ -156,8 +156,8 @@ namespace Test5 {
 >      : ^^^
 >Foo : any
 >    : ^^^
->"" : ""
->   : ^^
+>"" : Test5.Foo.bar
+>   : ^^^^^^^^^^^^^
 }
 
 import lol = Test5.Foo.

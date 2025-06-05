@@ -83,8 +83,8 @@ var cb: (number) => number = (x: number) => 1;
 >   : ^      ^^^^^^^^^^      
 >number : any
 >       : ^^^
->(x: number) => 1 : (x: number) => number
->                 : ^ ^^      ^^^^^^^^^^^
+>(x: number) => 1 : (number: any) => number
+>                 : ^      ^^^^^^^^^^      
 >x : number
 >  : ^^^^^^
 >1 : 1

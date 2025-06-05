@@ -10,8 +10,8 @@ var obj: { [s: string]: number } = { p: "", q: x };
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
->{ p: "", q: x } : { p: string; q: any; }
->                : ^^^^^^^^^^^^^^^^^^^^^^
+>{ p: "", q: x } : { [s: string]: number; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >p : string
 >  : ^^^^^^
 >"" : ""
@@ -24,8 +24,8 @@ var obj: { [s: string]: number } = { p: "", q: x };
 var arr: number[] = ["", x];
 >arr : number[]
 >    : ^^^^^^^^
->["", x] : any[]
->        : ^^^^^
+>["", x] : number[]
+>        : ^^^^^^^^
 >"" : ""
 >   : ^^
 >x : any

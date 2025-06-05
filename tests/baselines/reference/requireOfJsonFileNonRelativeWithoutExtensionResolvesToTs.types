@@ -8,8 +8,8 @@ import f = require("f"); // should work to f.ts
 let fnumber: number = f;
 >fnumber : number
 >        : ^^^^^^
->f : 10
->  : ^^
+>f : number
+>  : ^^^^^^
 
 === /src/node_modules/f.ts ===
 

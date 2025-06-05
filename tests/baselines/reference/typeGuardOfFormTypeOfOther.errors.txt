@@ -3,7 +3,7 @@ typeGuardOfFormTypeOfOther.ts(27,5): error TS2367: This comparison appears to be
 typeGuardOfFormTypeOfOther.ts(33,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
 typeGuardOfFormTypeOfOther.ts(40,5): error TS2322: Type 'string | C' is not assignable to type 'C'.
   Type 'string' is not assignable to type 'C'.
-typeGuardOfFormTypeOfOther.ts(43,9): error TS2322: Type 'string | C' is not assignable to type 'string'.
+typeGuardOfFormTypeOfOther.ts(43,22): error TS2322: Type 'string | C' is not assignable to type 'string'.
   Type 'C' is not assignable to type 'string'.
 typeGuardOfFormTypeOfOther.ts(46,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
 typeGuardOfFormTypeOfOther.ts(56,5): error TS2367: This comparison appears to be unintentional because the types '"string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"' and '"Object"' have no overlap.
@@ -65,7 +65,7 @@ typeGuardOfFormTypeOfOther.ts(75,5): error TS2367: This comparison appears to be
     }
     else {
         var r5: string = strOrC; // error: no narrowing to string
-            ~~
+                         ~~~~~~
 !!! error TS2322: Type 'string | C' is not assignable to type 'string'.
 !!! error TS2322:   Type 'C' is not assignable to type 'string'.
     }

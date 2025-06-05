@@ -26,7 +26,7 @@ class C {
 var a: A = new B();
 >a : A
 >  : ^
->new B() : B
+>new B() : A
 >        : ^
 >B : typeof B
 >  : ^^^^^^^^
@@ -60,7 +60,7 @@ a = C;
 var b: B = new C(); // error prop is missing
 >b : B
 >  : ^
->new C() : C
+>new C() : B
 >        : ^
 >C : typeof C
 >  : ^^^^^^^^
@@ -92,7 +92,7 @@ b = a;
 var c: C = new B();
 >c : C
 >  : ^
->new B() : B
+>new B() : C
 >        : ^
 >B : typeof B
 >  : ^^^^^^^^

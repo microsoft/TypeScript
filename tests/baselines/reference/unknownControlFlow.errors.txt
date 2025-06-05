@@ -1,4 +1,4 @@
-unknownControlFlow.ts(18,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
+unknownControlFlow.ts(18,18): error TS2322: Type 'unknown' is not assignable to type '{}'.
 unknownControlFlow.ts(283,5): error TS2536: Type 'keyof (T & {})' cannot be used to index type 'T'.
 unknownControlFlow.ts(290,11): error TS2345: Argument of type '"foo"' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(291,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
@@ -26,7 +26,7 @@ unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be uninte
     
     function f01(u: unknown) {
         let x1: {} = u;  // Error
-            ~~
+                     ~
 !!! error TS2322: Type 'unknown' is not assignable to type '{}'.
         let x2: {} | null | undefined = u;
         let x3: {} | { x: string } | null | undefined = u;

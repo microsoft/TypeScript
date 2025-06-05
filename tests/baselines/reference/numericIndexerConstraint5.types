@@ -22,6 +22,6 @@ var z: { [name: number]: string } = x;
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : number
 >     : ^^^^^^
->x : { name: string; 0: Date; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : { [name: number]: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -8,14 +8,14 @@ type T = "" | "foo";
 let x: T = undefined;
 >x : T
 >  : ^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : T
+>          : ^
 
 let y: T = undefined;
 >y : T
 >  : ^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : T
+>          : ^
 
 if (x === "") {
 >x === "" : boolean

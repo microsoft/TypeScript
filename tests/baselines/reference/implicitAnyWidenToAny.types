@@ -54,20 +54,20 @@ var foo1: any = null;
 var foo2: any = undefined;
 >foo2 : any
 >     : ^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
+>          : ^^^
 
 var temp: number = 5;
 >temp : number
 >     : ^^^^^^
->5 : 5
->  : ^
+>5 : number
+>  : ^^^^^^
 
 var c: AnimalObj = { x: null }; 
 >c : AnimalObj
 >  : ^^^^^^^^^
->{ x: null } : { x: null; }
->            : ^^^^^^^^^^^^
+>{ x: null } : AnimalObj
+>            : ^^^^^^^^^
 >x : null
 >  : ^^^^
 
@@ -84,22 +84,22 @@ var array1 = ["Bob",2];
 var array2: any[] = [];
 >array2 : any[]
 >       : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : any[]
+>   : ^^^^^
 
 var array3: any[] = [null, undefined];
 >array3 : any[]
 >       : ^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : any[]
+>                  : ^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 var array4: number[] = [null, undefined];
 >array4 : number[]
 >       : ^^^^^^^^
->[null, undefined] : null[]
->                  : ^^^^^^
+>[null, undefined] : number[]
+>                  : ^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

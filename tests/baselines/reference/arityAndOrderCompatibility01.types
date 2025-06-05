@@ -73,92 +73,92 @@ var [g, h, i] = z;
 var j1: [number, number, number] = x;
 >j1 : [number, number, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->x : [string, number]
->  : ^^^^^^^^^^^^^^^^
+>x : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var j2: [number, number, number] = y;
 >j2 : [number, number, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->y : StrNum
->  : ^^^^^^
+>y : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var j3: [number, number, number] = z;
 >j3 : [number, number, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->z : { 0: string; 1: number; length: 2; }
->  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
+>z : [number, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var k1: [string, number, number] = x;
 >k1 : [string, number, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->x : [string, number]
->  : ^^^^^^^^^^^^^^^^
+>x : [string, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var k2: [string, number, number] = y;
 >k2 : [string, number, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->y : StrNum
->  : ^^^^^^
+>y : [string, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var k3: [string, number, number] = z;
 >k3 : [string, number, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->z : { 0: string; 1: number; length: 2; }
->  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
+>z : [string, number, number]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 var l1: [number] = x;
 >l1 : [number]
 >   : ^^^^^^^^
->x : [string, number]
->  : ^^^^^^^^^^^^^^^^
+>x : [number]
+>  : ^^^^^^^^
 
 var l2: [number] = y;
 >l2 : [number]
 >   : ^^^^^^^^
->y : StrNum
->  : ^^^^^^
+>y : [number]
+>  : ^^^^^^^^
 
 var l3: [number] = z;
 >l3 : [number]
 >   : ^^^^^^^^
->z : { 0: string; 1: number; length: 2; }
->  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
+>z : [number]
+>  : ^^^^^^^^
 
 var m1: [string] = x;
 >m1 : [string]
 >   : ^^^^^^^^
->x : [string, number]
->  : ^^^^^^^^^^^^^^^^
+>x : [string]
+>  : ^^^^^^^^
 
 var m2: [string] = y;
 >m2 : [string]
 >   : ^^^^^^^^
->y : StrNum
->  : ^^^^^^
+>y : [string]
+>  : ^^^^^^^^
 
 var m3: [string] = z;
 >m3 : [string]
 >   : ^^^^^^^^
->z : { 0: string; 1: number; length: 2; }
->  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
+>z : [string]
+>  : ^^^^^^^^
 
 var n1: [number, string] = x;
 >n1 : [number, string]
 >   : ^^^^^^^^^^^^^^^^
->x : [string, number]
+>x : [number, string]
 >  : ^^^^^^^^^^^^^^^^
 
 var n2: [number, string] = y;
 >n2 : [number, string]
 >   : ^^^^^^^^^^^^^^^^
->y : StrNum
->  : ^^^^^^
+>y : [number, string]
+>  : ^^^^^^^^^^^^^^^^
 
 var n3: [number, string] = z;
 >n3 : [number, string]
 >   : ^^^^^^^^^^^^^^^^
->z : { 0: string; 1: number; length: 2; }
->  : ^^^^^      ^^^^^      ^^^^^^^^^^ ^^^
+>z : [number, string]
+>  : ^^^^^^^^^^^^^^^^
 
 var o1: [string, number] = x;
 >o1 : [string, number]
@@ -169,12 +169,12 @@ var o1: [string, number] = x;
 var o2: [string, number] = y;
 >o2 : [string, number]
 >   : ^^^^^^^^^^^^^^^^
->y : StrNum
->  : ^^^^^^
+>y : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 
 var o3: [string, number] = y;
 >o3 : [string, number]
 >   : ^^^^^^^^^^^^^^^^
->y : StrNum
->  : ^^^^^^
+>y : [string, number]
+>  : ^^^^^^^^^^^^^^^^
 

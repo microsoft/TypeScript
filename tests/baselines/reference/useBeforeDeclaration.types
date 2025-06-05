@@ -46,7 +46,7 @@ namespace ts {
 >version : string
 >        : ^^^^^^
 >{version: "2.0.5"} : { version: string; }
->                   : ^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^^^^^^      ^^^
 >version : string
 >        : ^^^^^^
 >"2.0.5" : "2.0.5"

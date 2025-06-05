@@ -202,8 +202,8 @@ module m2 {
 >a : any
 >b2 : number
 >   : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b : any
 
     var m1;
@@ -213,8 +213,8 @@ module m2 {
 >a2 : any
 >b22 : number
 >    : ^^^^^^
->10 : 10
->   : ^^
+>10 : number
+>   : ^^^^^^
 >b222 : any
 
     var m3;

@@ -9,8 +9,8 @@ function Foo(): void {
 let d: number = (Foo.inVariableInit = 1);
 >d : number
 >  : ^^^^^^
->(Foo.inVariableInit = 1) : 1
->                         : ^
+>(Foo.inVariableInit = 1) : number
+>                         : ^^^^^^
 >Foo.inVariableInit = 1 : 1
 >                       : ^
 >Foo.inVariableInit : number

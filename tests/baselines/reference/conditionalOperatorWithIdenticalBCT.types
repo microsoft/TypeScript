@@ -150,8 +150,8 @@ var result4: (t: A) => any = true ? (m) => m.propertyX : (n) => n.propertyA;
 >        : ^ ^^ ^^^^^   
 >t : A
 >  : ^
->true ? (m) => m.propertyX : (n) => n.propertyA : (m: A) => any
->                                               : ^ ^^^^^^^^^^^
+>true ? (m) => m.propertyX : (n) => n.propertyA : (t: A) => any
+>                                               : ^ ^^ ^^^^^   
 >true : true
 >     : ^^^^
 >(m) => m.propertyX : (m: A) => any
@@ -285,8 +285,8 @@ var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 >        : ^ ^^ ^^^^^   
 >t : A
 >  : ^
->true ? (m) => m.propertyA : (n) => n.propertyX : (n: A) => any
->                                               : ^ ^^^^^^^^^^^
+>true ? (m) => m.propertyA : (n) => n.propertyX : (t: A) => any
+>                                               : ^ ^^ ^^^^^   
 >true : true
 >     : ^^^^
 >(m) => m.propertyA : (m: A) => number
@@ -314,8 +314,8 @@ var result8: (t: A) => any = true ? (m) => m.propertyA : (n) => n.propertyX;
 var resultIsX3: X = true ? a : b;
 >resultIsX3 : X
 >           : ^
->true ? a : b : A | B
->             : ^^^^^
+>true ? a : b : X
+>             : ^
 >true : true
 >     : ^^^^
 >a : A
@@ -328,8 +328,8 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 >         : ^ ^^ ^^^^^   
 >t : X
 >  : ^
->true ? (m) => m.propertyX1 : (n) => n.propertyX2 : ((m: X) => number) | ((n: X) => string)
->                                                 : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
+>true ? (m) => m.propertyX1 : (n) => n.propertyX2 : (t: X) => any
+>                                                 : ^ ^^ ^^^^^   
 >true : true
 >     : ^^^^
 >(m) => m.propertyX1 : (m: X) => number
@@ -356,8 +356,7 @@ var result10: (t: X) => any = true ? (m) => m.propertyX1 : (n) => n.propertyX2;
 //Expr1 and Expr2 are literals
 var result11: any = true ? 1 : 'string';
 >result11 : any
->true ? 1 : 'string' : "string" | 1
->                    : ^^^^^^^^^^^^
+>true ? 1 : 'string' : any
 >true : true
 >     : ^^^^
 >1 : 1

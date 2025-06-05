@@ -16,8 +16,8 @@ function f() {
     let foo: "aaa" | "bbb" = "aaa";
 >foo : "aaa" | "bbb"
 >    : ^^^^^^^^^^^^^
->"aaa" : "aaa"
->      : ^^^^^
+>"aaa" : "aaa" | "bbb"
+>      : ^^^^^^^^^^^^^
 
     while (true) {
 >true : true
@@ -75,8 +75,8 @@ function functionC(): void {
     let unionVal: "A" | "B" = "A";
 >unionVal : "A" | "B"
 >         : ^^^^^^^^^
->"A" : "A"
->    : ^^^
+>"A" : "A" | "B"
+>    : ^^^^^^^^^
 
     while (true) {
 >true : true
@@ -87,8 +87,8 @@ function functionC(): void {
 >    : ^^^^^^
 
         switch (unionVal) {
->unionVal : "A"
->         : ^^^
+>unionVal : "A" | "B"
+>         : ^^^^^^^^^
 
             case "A": {
 >"A" : "A"

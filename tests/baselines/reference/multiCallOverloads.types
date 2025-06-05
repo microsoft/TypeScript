@@ -16,16 +16,16 @@ function load(f: ICallback) {}
 var f1: ICallback = function(z?) {}
 >f1 : ICallback
 >   : ^^^^^^^^^
->function(z?) {} : (z?: string) => void
->                : ^ ^^^^^^^^^^^^^^^^^^
+>function(z?) {} : ICallback
+>                : ^^^^^^^^^
 >z : string
 >  : ^^^^^^
 
 var f2: ICallback = function(z?) {}
 >f2 : ICallback
 >   : ^^^^^^^^^
->function(z?) {} : (z?: string) => void
->                : ^ ^^^^^^^^^^^^^^^^^^
+>function(z?) {} : ICallback
+>                : ^^^^^^^^^
 >z : string
 >  : ^^^^^^
 

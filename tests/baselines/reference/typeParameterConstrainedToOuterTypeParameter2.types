@@ -24,6 +24,6 @@ var a: A<string>
 var b: B<string> = a;
 >b : B<string>
 >  : ^^^^^^^^^
->a : A<string>
+>a : B<string>
 >  : ^^^^^^^^^
 

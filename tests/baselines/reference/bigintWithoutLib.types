@@ -7,8 +7,8 @@
 let bigintVal: bigint = BigInt(123);
 >bigintVal : bigint
 >          : ^^^^^^
->BigInt(123) : any
->            : ^^^
+>BigInt(123) : bigint
+>            : ^^^^^^
 >BigInt : any
 >       : ^^^
 >123 : 123
@@ -194,8 +194,8 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EU
 let bigIntArray: BigInt64Array = new BigInt64Array();
 >bigIntArray : BigInt64Array
 >            : ^^^^^^^^^^^^^
->new BigInt64Array() : any
->                    : ^^^
+>new BigInt64Array() : BigInt64Array
+>                    : ^^^^^^^^^^^^^
 >BigInt64Array : any
 >              : ^^^
 
@@ -304,12 +304,12 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
 let len: number = bigIntArray.length;
 >len : number
 >    : ^^^^^^
->bigIntArray.length : any
->                   : ^^^
+>bigIntArray.length : number
+>                   : ^^^^^^
 >bigIntArray : BigInt64Array
 >            : ^^^^^^^^^^^^^
->length : any
->       : ^^^
+>length : number
+>       : ^^^^^^
 
 bigIntArray.length = 10;
 >bigIntArray.length = 10 : 10
@@ -326,15 +326,15 @@ bigIntArray.length = 10;
 let arrayBufferLike: ArrayBufferView = bigIntArray;
 >arrayBufferLike : ArrayBufferView<ArrayBuffer>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
+>bigIntArray : ArrayBufferView<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Test BigUint64Array
 let bigUintArray: BigUint64Array = new BigUint64Array();
 >bigUintArray : BigUint64Array
 >             : ^^^^^^^^^^^^^^
->new BigUint64Array() : any
->                     : ^^^
+>new BigUint64Array() : BigUint64Array
+>                     : ^^^^^^^^^^^^^^
 >BigUint64Array : any
 >               : ^^^
 

@@ -68,8 +68,8 @@
   let iNext: string | number = "";
 >iNext : string | number
 >      : ^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string | number
+>   : ^^^^^^^^^^^^^^^
 
   for (
     let i = 0;

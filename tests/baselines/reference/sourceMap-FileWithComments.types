@@ -108,8 +108,8 @@ module Shapes {
 var p: IPoint = new Shapes.Point(3, 4);
 >p : IPoint
 >  : ^^^^^^
->new Shapes.Point(3, 4) : Shapes.Point
->                       : ^^^^^^^^^^^^
+>new Shapes.Point(3, 4) : IPoint
+>                       : ^^^^^^
 >Shapes.Point : typeof Shapes.Point
 >             : ^^^^^^^^^^^^^^^^^^^
 >Shapes : typeof Shapes

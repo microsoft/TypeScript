@@ -6,8 +6,8 @@ var [a, b]: [number, any] = [undefined, undefined];
 >  : ^^^^^^
 >b : any
 >  : ^^^
->[undefined, undefined] : [undefined, undefined]
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>[undefined, undefined] : [number, any]
+>                       : ^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >undefined : undefined

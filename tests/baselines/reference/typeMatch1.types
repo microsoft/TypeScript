@@ -34,8 +34,8 @@ var x2: { z:number;f:{(n:number):string;(s:string):number;}; } = x1;
 >  : ^^^^^^
 >s : string
 >  : ^^^^^^
->x1 : { z: number; f(n: number): string; f(s: string): number; }
->   : ^^^^^      ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
+>x1 : { z: number; f: { (n: number): string; (s: string): number; }; }
+>   : ^^^^^      ^^^^^                                             ^^^
 
 var i:I;
 >i : I
@@ -50,22 +50,22 @@ var x3:{ z; }= i;
 >   : ^^^^^^^^^^^
 >z : any
 >  : ^^^
->i : I
->  : ^
+>i : { z: any; }
+>  : ^^^^^^^^^^^
 
 var x4:{ z; }= i2;
 >x4 : { z: any; }
 >   : ^^^^^^^^^^^
 >z : any
 >  : ^^^
->i2 : I2
->   : ^^
+>i2 : { z: any; }
+>   : ^^^^^^^^^^^
 
 var x5:I=i2;
 >x5 : I
 >   : ^
->i2 : I2
->   : ^^
+>i2 : I
+>   : ^
 
 class C { private x; }
 >C : C

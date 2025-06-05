@@ -92,8 +92,8 @@ namespace Test {
 	let file: FileSystemObject = new File("foo/bar.txt", "foo");
 >file : FileSystemObject
 >     : ^^^^^^^^^^^^^^^^
->new File("foo/bar.txt", "foo") : File
->                               : ^^^^
+>new File("foo/bar.txt", "foo") : FileSystemObject
+>                               : ^^^^^^^^^^^^^^^^
 >File : typeof File
 >     : ^^^^^^^^^^^
 >"foo/bar.txt" : "foo/bar.txt"

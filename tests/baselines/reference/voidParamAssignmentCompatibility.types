@@ -10,8 +10,8 @@ declare function g(a: void): void;
 let gg: () => void = g;
 >gg : () => void
 >   : ^^^^^^    
->g : (a: void) => void
->  : ^ ^^    ^^^^^    
+>g : () => void
+>  : ^^^^^^    
 
 interface Obj<T> {
     method(value: T): void;

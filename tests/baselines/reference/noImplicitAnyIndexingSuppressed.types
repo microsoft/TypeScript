@@ -84,8 +84,8 @@ var y = {}[10];
 var hi: any = "hi";
 >hi : any
 >   : ^^^
->"hi" : "hi"
->     : ^^^^
+>"hi" : any
+>     : ^^^
 
 var emptyObj = {};
 >emptyObj : {}
@@ -127,8 +127,8 @@ interface MyMap<T> {
 var m: MyMap<number> = {
 >m : MyMap<number>
 >  : ^^^^^^^^^^^^^
->{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { "0": number; "1": number; "2": number; "Okay that's enough for today.": number; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : MyMap<number>
+>                                                                            : ^^^^^^^^^^^^^
 
     "0": 0,
 >"0" : number

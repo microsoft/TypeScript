@@ -30,8 +30,8 @@ type ADT = {
 let wrong: ADT = { tag: "T", a1: "extra" }
 >wrong : ADT
 >      : ^^^
->{ tag: "T", a1: "extra" } : { tag: "T"; a1: string; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ tag: "T", a1: "extra" } : ADT
+>                          : ^^^
 >tag : "T"
 >    : ^^^
 >"T" : "T"

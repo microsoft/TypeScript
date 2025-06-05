@@ -556,7 +556,7 @@ function bar<T extends CA | CB>(x: T & CA) {
     let ab: ABI = x;
 >ab : ABI
 >   : ^^^
->x : CA
->  : ^^
+>x : ABI
+>  : ^^^
 }
 

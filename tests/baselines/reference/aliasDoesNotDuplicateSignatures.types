@@ -32,16 +32,16 @@ import { f } from 'demoModule';
 let x1: string = demoNS.f;
 >x1 : string
 >   : ^^^^^^
->demoNS.f : () => void
->         : ^^^^^^    
+>demoNS.f : string
+>         : ^^^^^^
 >demoNS : typeof demoNS
 >       : ^^^^^^^^^^^^^
->f : () => void
->  : ^^^^^^    
+>f : string
+>  : ^^^^^^
 
 let x2: string = f;
 >x2 : string
 >   : ^^^^^^
->f : () => void
->  : ^^^^^^    
+>f : string
+>  : ^^^^^^
 

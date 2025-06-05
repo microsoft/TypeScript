@@ -20,7 +20,7 @@ declare var v1: I1<number>;
 var r1: I1<string> = v1.func(num => num.toString()) // Correctly returns an I1<string>
 >r1 : I1<string>
 >   : ^^^^^^^^^^
->v1.func(num => num.toString()) // Correctly returns an I1<string>           .func(str => str.length) : I1<number>
+>v1.func(num => num.toString()) // Correctly returns an I1<string>           .func(str => str.length) : I1<string>
 >                                                                                                     : ^^^^^^^^^^
 >v1.func(num => num.toString()) // Correctly returns an I1<string>           .func : <U>(callback: (value: string) => U) => I1<U>
 >                                                                                  : ^ ^^        ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^

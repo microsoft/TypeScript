@@ -23,9 +23,15 @@ mappedTypeErrors.ts(105,17): error TS2322: Type 'undefined' is not assignable to
 mappedTypeErrors.ts(106,17): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
 mappedTypeErrors.ts(123,14): error TS2322: Type 'undefined' is not assignable to type 'string'.
 mappedTypeErrors.ts(124,14): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, keyof Foo>'.
-mappedTypeErrors.ts(128,16): error TS2322: Type 'string' is not assignable to type 'number'.
-mappedTypeErrors.ts(129,25): error TS2322: Type 'string' is not assignable to type 'number'.
-mappedTypeErrors.ts(130,39): error TS2322: Type 'string' is not assignable to type 'number'.
+mappedTypeErrors.ts(128,14): error TS2322: Type '{ a: string; }' is not assignable to type 'T2'.
+  Types of property 'a' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+mappedTypeErrors.ts(129,23): error TS2322: Type '{ a: string; }' is not assignable to type 'Partial<T2>'.
+  Types of property 'a' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+mappedTypeErrors.ts(130,37): error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
+  Types of property 'a' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 mappedTypeErrors.ts(136,16): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
 mappedTypeErrors.ts(136,21): error TS2536: Type 'P' cannot be used to index type 'T'.
 mappedTypeErrors.ts(148,17): error TS2339: Property 'foo' does not exist on type 'Pick<T, K>'.
@@ -214,17 +220,20 @@ mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type
     type T2 = { a?: number, [key: string]: any };
     
     let x1: T2 = { a: 'no' };  // Error
-                   ~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type 'T2'
+                 ~~~~~~~~~~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'T2'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     let x2: Partial<T2> = { a: 'no' }; // Error
-                            ~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type 'Partial<T2>'
+                          ~~~~~~~~~~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'Partial<T2>'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
-                                          ~
-!!! error TS2322: Type 'string' is not assignable to type 'number'.
-!!! related TS6500 mappedTypeErrors.ts:126:13: The expected type comes from property 'a' which is declared here on type '{ [x: string]: any; a?: number | undefined; }'
+                                        ~~~~~~~~~~~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type '{ [x: string]: any; a?: number | undefined; }'.
+!!! error TS2322:   Types of property 'a' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
     
     // Repro from #13044
     

@@ -737,8 +737,8 @@ function f21<T extends number | string>(x: T, y: ZeroOf<T>) {
     let z1: number | string = y;
 >z1 : string | number
 >   : ^^^^^^^^^^^^^^^
->y : "" | 0
->  : ^^^^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
 
     let z2: 0 | "" = y;
 >z2 : "" | 0

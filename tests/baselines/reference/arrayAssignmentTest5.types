@@ -84,12 +84,12 @@ module Test {
             var tokens:IStateToken[]= lineTokens.tokens;
 >tokens : IStateToken[]
 >       : ^^^^^^^^^^^^^
->lineTokens.tokens : IToken[]
->                  : ^^^^^^^^
+>lineTokens.tokens : IStateToken[]
+>                  : ^^^^^^^^^^^^^
 >lineTokens : ILineTokens
 >           : ^^^^^^^^^^^
->tokens : IToken[]
->       : ^^^^^^^^
+>tokens : IStateToken[]
+>       : ^^^^^^^^^^^^^
 
             if (tokens.length === 0) {
 >tokens.length === 0 : boolean

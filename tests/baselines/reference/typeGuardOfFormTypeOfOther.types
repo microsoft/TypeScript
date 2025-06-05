@@ -159,8 +159,8 @@ else {
     var r5: string = strOrC; // error: no narrowing to string
 >r5 : string
 >   : ^^^^^^
->strOrC : string | C
->       : ^^^^^^^^^^
+>strOrC : string
+>       : ^^^^^^
 }
 
 if (typeof strOrNumOrBool === "Object") {
@@ -176,8 +176,8 @@ if (typeof strOrNumOrBool === "Object") {
     let q1: {} = strOrNumOrBool; // {}
 >q1 : {}
 >   : ^^
->strOrNumOrBool : never
->               : ^^^^^
+>strOrNumOrBool : {}
+>               : ^^
 }
 else {
     let q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
@@ -286,7 +286,7 @@ else {
     let q2: {} = strOrNumOrBool; // {}
 >q2 : {}
 >   : ^^
->strOrNumOrBool : never
->               : ^^^^^
+>strOrNumOrBool : {}
+>               : ^^
 }
 

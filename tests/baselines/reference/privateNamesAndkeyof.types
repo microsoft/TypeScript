@@ -44,8 +44,8 @@ class A {
 let k: keyof A = "bar"; // OK
 >k : keyof A
 >  : ^^^^^^^
->"bar" : "bar"
->      : ^^^^^
+>"bar" : keyof A
+>      : ^^^^^^^
 
 k = "baz"; // OK
 >k = "baz" : "baz"

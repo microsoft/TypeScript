@@ -9,13 +9,12 @@ var x = '';
 
 var a: any = x;
 >a : any
->x : string
->  : ^^^^^^
+>x : any
 
 var b: Object = x;
 >b : Object
 >  : ^^^^^^
->x : string
+>x : Object
 >  : ^^^^^^
 
 var c: string = x;
@@ -27,6 +26,6 @@ var c: string = x;
 var d: String = x;
 >d : String
 >  : ^^^^^^
->x : string
+>x : String
 >  : ^^^^^^
 

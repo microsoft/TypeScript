@@ -1,6 +1,6 @@
-mappedTypes5.ts(6,9): error TS2322: Type 'Partial<T>' is not assignable to type 'Readonly<T>'.
-mappedTypes5.ts(8,9): error TS2322: Type 'Partial<Readonly<T>>' is not assignable to type 'Readonly<T>'.
-mappedTypes5.ts(9,9): error TS2322: Type 'Readonly<Partial<T>>' is not assignable to type 'Readonly<T>'.
+mappedTypes5.ts(6,27): error TS2322: Type 'Partial<T>' is not assignable to type 'Readonly<T>'.
+mappedTypes5.ts(8,27): error TS2322: Type 'Partial<Readonly<T>>' is not assignable to type 'Readonly<T>'.
+mappedTypes5.ts(9,27): error TS2322: Type 'Readonly<Partial<T>>' is not assignable to type 'Readonly<T>'.
 
 
 ==== mappedTypes5.ts (3 errors) ====
@@ -10,14 +10,14 @@ mappedTypes5.ts(9,9): error TS2322: Type 'Readonly<Partial<T>>' is not assignabl
         let a3: Partial<T> = pr;
         let a4: Partial<T> = rp;
         let b1: Readonly<T> = p;  // Error
-            ~~
+                              ~
 !!! error TS2322: Type 'Partial<T>' is not assignable to type 'Readonly<T>'.
         let b2: Readonly<T> = r;
         let b3: Readonly<T> = pr;  // Error
-            ~~
+                              ~~
 !!! error TS2322: Type 'Partial<Readonly<T>>' is not assignable to type 'Readonly<T>'.
         let b4: Readonly<T> = rp;  // Error
-            ~~
+                              ~~
 !!! error TS2322: Type 'Readonly<Partial<T>>' is not assignable to type 'Readonly<T>'.
         let c1: Partial<Readonly<T>> = p;
         let c2: Partial<Readonly<T>> = r;

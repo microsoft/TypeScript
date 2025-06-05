@@ -1,4 +1,4 @@
-unionTypeFromArrayLiteral.ts(9,5): error TS2322: Type '[number, string, string]' is not assignable to type '[number, string]'.
+unionTypeFromArrayLiteral.ts(9,35): error TS2322: Type '[number, string, string]' is not assignable to type '[number, string]'.
   Source has 3 element(s) but target allows only 2.
 
 
@@ -12,7 +12,7 @@ unionTypeFromArrayLiteral.ts(9,5): error TS2322: Type '[number, string, string]'
     var arr2 = ["hello", true]; // (string | number)[]
     var arr3Tuple: [number, string] = [3, "three"]; // [number, string]
     var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
-        ~~~~~~~~~
+                                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '[number, string, string]' is not assignable to type '[number, string]'.
 !!! error TS2322:   Source has 3 element(s) but target allows only 2.
     var arrEmpty = [];

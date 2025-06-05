@@ -116,8 +116,8 @@ ssk.g; // error
 let i: I = { p: 12, m() { }, get g() { return 0; } };
 >i : I
 >  : ^
->{ p: 12, m() { }, get g() { return 0; } } : { p: number; m(): void; readonly g: number; }
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ p: 12, m() { }, get g() { return 0; } } : I
+>                                          : ^
 >p : number
 >  : ^^^^^^
 >12 : 12

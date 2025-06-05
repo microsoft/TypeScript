@@ -18,8 +18,8 @@ interface Comparer {
 var max2: Comparer = (x, y) => { return (x.compareTo(y) > 0) ? x : y };
 >max2 : Comparer
 >     : ^^^^^^^^
->(x, y) => { return (x.compareTo(y) > 0) ? x : y } : <T extends Comparable<T>>(x: T, y: T) => T
->                                                  : ^ ^^^^^^^^^             ^^ ^^^^^ ^^^^^^^^^
+>(x, y) => { return (x.compareTo(y) > 0) ? x : y } : Comparer
+>                                                  : ^^^^^^^^
 >x : T
 >  : ^
 >y : T

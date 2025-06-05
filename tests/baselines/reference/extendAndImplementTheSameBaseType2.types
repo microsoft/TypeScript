@@ -38,11 +38,11 @@ var d: D = new D();
 var r: string = d.foo;
 >r : string
 >  : ^^^^^^
->d.foo : number
+>d.foo : string
 >      : ^^^^^^
 >d : D
 >  : ^
->foo : number
+>foo : string
 >    : ^^^^^^
 
 var r2: number = d.foo;

@@ -30,8 +30,8 @@ var x1:{ f(s:string):number;f(n:number):string; }=3;
 >  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : { f(s: string): number; f(n: number): string; }
+>  : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
 
 var x2:{ f(s:string):number; } =3;
 >x2 : { f(s: string): number; }
@@ -40,8 +40,8 @@ var x2:{ f(s:string):number; } =3;
 >  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : { f(s: string): number; }
+>  : ^^^^ ^^      ^^^      ^^^
 
 var x3:{ (s:string):number;(n:number):string; }=3;
 >x3 : { (s: string): number; (n: number): string; }
@@ -50,8 +50,8 @@ var x3:{ (s:string):number;(n:number):string; }=3;
 >  : ^^^^^^
 >n : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : { (s: string): number; (n: number): string; }
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 
 var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 >x4 : { x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
@@ -70,8 +70,8 @@ var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 >  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : { x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^      ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
 
 var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 >x5 : { (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
@@ -94,8 +94,8 @@ var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s
 >  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : { (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
 
 var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
 >x6 : { z: number; f: { (n: number): string; (s: string): number; }; }
@@ -108,16 +108,16 @@ var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
 >  : ^^^^^^
 >s : string
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : { z: number; f: { (n: number): string; (s: string): number; }; }
+>  : ^^^^^      ^^^^^                                             ^^^
 
 var x7:(s:string)=>boolean=3;
 >x7 : (s: string) => boolean
 >   : ^ ^^      ^^^^^       
 >s : string
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : (s: string) => boolean
+>  : ^ ^^      ^^^^^       
 
 var x8:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; }=3;
 >x8 : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
@@ -136,20 +136,20 @@ var x8:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; }=3;
 >  : ^^^
 >y : any
 >  : ^^^
->3 : 3
->  : ^
+>3 : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
+>  : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^
 
 var x9:I=3;
 >x9 : I
 >   : ^
->3 : 3
+>3 : I
 >  : ^
 
 var x10:I[][][][]=3;
 >x10 : I[][][][]
 >    : ^^^^^^^^^
->3 : 3
->  : ^
+>3 : I[][][][]
+>  : ^^^^^^^^^
 
 var x11:{z:I;x:boolean;}[][]=3;
 >x11 : { z: I; x: boolean; }[][]
@@ -158,8 +158,8 @@ var x11:{z:I;x:boolean;}[][]=3;
 >  : ^
 >x : boolean
 >  : ^^^^^^^
->3 : 3
->  : ^
+>3 : { z: I; x: boolean; }[][]
+>  : ^^^^^ ^^^^^       ^^^^^^^
 
 var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
 >x12 : { z: I; x: boolean; y: (s: string) => boolean; w: { z: I; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; (): boolean; }; }[][]
@@ -188,8 +188,8 @@ var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:num
 >  : ^^^
 >y : any
 >  : ^^^
->3 : 3
->  : ^
+>3 : { z: I; x: boolean; y: (s: string) => boolean; w: { z: I; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; (): boolean; }; }[][]
+>  : ^^^^^ ^^^^^       ^^^^^                      ^^^^^                          ^^^     ^^^                       ^^^     ^^^                   ^^^^^^^
 
 var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
 >x13 : { (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }
@@ -202,8 +202,8 @@ var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {
 >  : ^^^^^      ^^^
 >y : number
 >  : ^^^^^^
->3 : 3
->  : ^
+>3 : { (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }
+>  : ^^^^^^  ^^^^^^^^^^      ^^^^^^^ ^^      ^^^      ^^^^^      ^^^^^              ^^^
 
 var x14:{ f(x:number):boolean; p; q; ():string; }=3;
 >x14 : { (): string; f(x: number): boolean; p: any; q: any; }
@@ -216,14 +216,14 @@ var x14:{ f(x:number):boolean; p; q; ():string; }=3;
 >  : ^^^
 >q : any
 >  : ^^^
->3 : 3
->  : ^
+>3 : { (): string; f(x: number): boolean; p: any; q: any; }
+>  : ^^^^^^      ^^^^ ^^      ^^^       ^^^^^^^^^^^^^^^^^^^
 
 var x15:number=C;
 >x15 : number
 >    : ^^^^^^
->C : typeof C
->  : ^^^^^^^^
+>C : number
+>  : ^^^^^^
 
 
 

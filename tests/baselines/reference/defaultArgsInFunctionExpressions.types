@@ -123,8 +123,8 @@ var f4: (a: number) => void = function (a = "") { };
 >   : ^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
->function (a = "") { } : (a?: number) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^
+>function (a = "") { } : (a: number) => void
+>                      : ^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 >"" : ""
@@ -138,8 +138,8 @@ var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
 >  : ^ ^^      ^^^^^   
 >s : string
 >  : ^^^^^^
->function (a = s => <number>s) { } : (a?: (s: string) => any) => void
->                                  : ^ ^^^^ ^^      ^^^^^   ^^^^^^^^^
+>function (a = s => <number>s) { } : (a: (s: string) => any) => void
+>                                  : ^ ^^                  ^^^^^    
 >a : (s: string) => any
 >  : ^ ^^      ^^^^^   
 >s => <number>s : (s: string) => number

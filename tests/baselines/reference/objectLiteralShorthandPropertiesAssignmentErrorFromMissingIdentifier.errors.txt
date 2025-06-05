@@ -1,7 +1,7 @@
 objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(4,43): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
 objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(5,81): error TS2322: Type 'string' is not assignable to type 'number'.
 objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(5,87): error TS2322: Type 'number' is not assignable to type 'string'.
-objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(8,5): error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
+objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(8,45): error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
   Types of property 'name' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
@@ -23,7 +23,7 @@ objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts(8,5): er
     function foo(name: string, id: number): { name: string, id: number } { return { name, id }; }  // error
     var person1: { name, id }; // ok
     var person2: { name: string, id: number } = bar("hello", 5);
-        ~~~~~~~
+                                                ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
 !!! error TS2322:   Types of property 'name' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.

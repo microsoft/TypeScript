@@ -13,8 +13,8 @@ interface X {
 var x: X = { a: 0 };
 >x : X
 >  : ^
->{ a: 0 } : { a: number; }
->         : ^^^^^^^^^^^^^^
+>{ a: 0 } : X
+>         : ^
 >a : number
 >  : ^^^^^^
 >0 : 0
@@ -288,8 +288,8 @@ var p: { readonly a: number, b: number } = { a: 1, b: 1 };
 >  : ^^^^^^
 >b : number
 >  : ^^^^^^
->{ a: 1, b: 1 } : { a: number; b: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: 1, b: 1 } : { readonly a: number; b: number; }
+>               : ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >a : number
 >  : ^^^^^^
 >1 : 1
@@ -330,8 +330,8 @@ var q: { a: number, b: number } = p;
 >  : ^^^^^^
 >b : number
 >  : ^^^^^^
->p : { readonly a: number; b: number; }
->  : ^^^^^^^^^^^^^^      ^^^^^      ^^^
+>p : { a: number; b: number; }
+>  : ^^^^^      ^^^^^      ^^^
 
 q.a = 1;
 >q.a = 1 : 1

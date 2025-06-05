@@ -145,8 +145,8 @@ export class TestRunner {
             var testResult: boolean = false;
 >testResult : boolean
 >           : ^^^^^^^
->false : false
->      : ^^^^^
+>false : boolean
+>      : ^^^^^^^
 
             try {
                 testResult = testcase.test();

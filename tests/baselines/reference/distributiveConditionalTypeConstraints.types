@@ -20,16 +20,16 @@ function f1<T extends object>(x: IsArray<T>) {
 >  : ^^^^
 >true : true
 >     : ^^^^
->x : boolean
->  : ^^^^^^^
+>x : true
+>  : ^^^^
 
     let f: false = x;  // Error
 >f : false
 >  : ^^^^^
 >false : false
 >      : ^^^^^
->x : boolean
->  : ^^^^^^^
+>x : false
+>  : ^^^^^
 }
 
 function f2<T extends unknown[]>(x: IsArray<T>) {
@@ -43,16 +43,16 @@ function f2<T extends unknown[]>(x: IsArray<T>) {
 >  : ^^^^
 >true : true
 >     : ^^^^
->x : IsArray<T>
->  : ^^^^^^^^^^
+>x : true
+>  : ^^^^
 
     let f: false = x;  // Error
 >f : false
 >  : ^^^^^
 >false : false
 >      : ^^^^^
->x : IsArray<T>
->  : ^^^^^^^^^^
+>x : false
+>  : ^^^^^
 }
 
 function f3<T extends string[]>(x: IsArray<T>) {
@@ -66,16 +66,16 @@ function f3<T extends string[]>(x: IsArray<T>) {
 >  : ^^^^
 >true : true
 >     : ^^^^
->x : IsArray<T>
->  : ^^^^^^^^^^
+>x : true
+>  : ^^^^
 
     let f: false = x;  // Error
 >f : false
 >  : ^^^^^
 >false : false
 >      : ^^^^^
->x : IsArray<T>
->  : ^^^^^^^^^^
+>x : false
+>  : ^^^^^
 }
 
 function f4<T extends Function>(x: IsArray<T>) {
@@ -89,16 +89,16 @@ function f4<T extends Function>(x: IsArray<T>) {
 >  : ^^^^
 >true : true
 >     : ^^^^
->x : IsArray<T>
->  : ^^^^^^^^^^
+>x : true
+>  : ^^^^
 
     let f: false = x;
 >f : false
 >  : ^^^^^
 >false : false
 >      : ^^^^^
->x : IsArray<T>
->  : ^^^^^^^^^^
+>x : false
+>  : ^^^^^
 }
 
 type ZeroOf<T> =
@@ -149,8 +149,8 @@ function f20<T extends string>(x: Foo<T>) {
 >  : ^^^^^
 >false : false
 >      : ^^^^^
->x : boolean
->  : ^^^^^^^
+>x : false
+>  : ^^^^^
 }
 
 // Modified repro from #30152

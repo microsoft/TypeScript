@@ -202,8 +202,8 @@ function f4() {
     var _any: any = 0;
 >_any : any
 >     : ^^^
->0 : 0
->  : ^
+>0 : any
+>  : ^^^
 
     var i = 5;
 >i : number

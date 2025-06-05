@@ -95,11 +95,11 @@ class MyDerived extends MyBase {
 >a : string
 >  : ^^^^^^
 >super.m1 : (a: string) => string
->         : ^ ^^      ^^^^^^^^^^^
+>         : ^ ^^      ^^^^^      
 >super : MyBase
 >      : ^^^^^^
 >m1 : (a: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 
         super.m2.bind(this);                                // Should error, instance property, not a public instance member function
 >super.m2.bind(this) : any

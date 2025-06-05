@@ -8,28 +8,28 @@ var x: void;
 var a: boolean = x;
 >a : boolean
 >  : ^^^^^^^
->x : void
->  : ^^^^
+>x : boolean
+>  : ^^^^^^^
 
 var b: string = x;
 >b : string
 >  : ^^^^^^
->x : void
->  : ^^^^
+>x : string
+>  : ^^^^^^
 
 var c: number = x;
 >c : number
 >  : ^^^^^^
->x : void
->  : ^^^^
+>x : number
+>  : ^^^^^^
 
 var d: typeof undefined = x;
 >d : any
 >  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->x : void
->  : ^^^^
+>x : any
+>  : ^^^
 
 class C { foo: string; }
 >C : C
@@ -40,8 +40,8 @@ class C { foo: string; }
 var e: C = x;
 >e : C
 >  : ^
->x : void
->  : ^^^^
+>x : C
+>  : ^
 
 interface I { bar: string; }
 >bar : string
@@ -50,24 +50,24 @@ interface I { bar: string; }
 var f: I = x;
 >f : I
 >  : ^
->x : void
->  : ^^^^
+>x : I
+>  : ^
 
 var g: { baz: string } = 1;
 >g : { baz: string; }
 >  : ^^^^^^^      ^^^
 >baz : string
 >    : ^^^^^^
->1 : 1
->  : ^
+>1 : { baz: string; }
+>  : ^^^^^^^      ^^^
 
 var g2: { 0: number } = 1;
 >g2 : { 0: number; }
 >   : ^^^^^      ^^^
 >0 : number
 >  : ^^^^^^
->1 : 1
->  : ^
+>1 : { 0: number; }
+>  : ^^^^^      ^^^
 
 module M { export var x = 1; }
 >M : typeof M

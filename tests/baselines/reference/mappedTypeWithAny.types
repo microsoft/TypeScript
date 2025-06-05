@@ -151,8 +151,8 @@ declare function stringifyArray<T extends readonly any[]>(arr: T): { -readonly [
 let abc: any[] = stringifyArray(void 0 as any);
 >abc : any[]
 >    : ^^^^^
->stringifyArray(void 0 as any) : string[]
->                              : ^^^^^^^^
+>stringifyArray(void 0 as any) : any[]
+>                              : ^^^^^
 >stringifyArray : <T extends readonly any[]>(arr: T) => { -readonly [K in keyof T]: string; }
 >               : ^ ^^^^^^^^^              ^^   ^^ ^^^^^                                     
 >void 0 as any : any
@@ -171,8 +171,8 @@ declare function stringifyPair<T extends readonly [any, any]>(arr: T): { -readon
 let def: [any, any] = stringifyPair(void 0 as any);
 >def : [any, any]
 >    : ^^^^^^^^^^
->stringifyPair(void 0 as any) : string[]
->                             : ^^^^^^^^
+>stringifyPair(void 0 as any) : [any, any]
+>                             : ^^^^^^^^^^
 >stringifyPair : <T extends readonly [any, any]>(arr: T) => { -readonly [K in keyof T]: string; }
 >              : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^                                     
 >void 0 as any : any

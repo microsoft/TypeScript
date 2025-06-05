@@ -4,8 +4,8 @@
 var errObj: Object = { toString: 0 }; // Error, incompatible toString
 >errObj : Object
 >       : ^^^^^^
->{ toString: 0 } : { toString: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^
+>{ toString: 0 } : Object
+>                : ^^^^^^
 >toString : number
 >         : ^^^^^^
 >0 : 0
@@ -14,8 +14,8 @@ var errObj: Object = { toString: 0 }; // Error, incompatible toString
 var goodObj: Object = {
 >goodObj : Object
 >        : ^^^^^^
->{    toString(x?) {        return "";    }} : { toString(x?: any): string; }
->                                            : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>{    toString(x?) {        return "";    }} : Object
+>                                            : ^^^^^^
 
     toString(x?) {
 >toString : (x?: any) => string
@@ -32,8 +32,8 @@ var goodObj: Object = {
 var errFun: Function = {}; // Error for no call signature
 >errFun : Function
 >       : ^^^^^^^^
->{} : {}
->   : ^^
+>{} : Function
+>   : ^^^^^^^^
 
 function foo() { }
 >foo : typeof foo
@@ -53,8 +53,8 @@ module foo {
 var goodFundule: Function = foo; // ok
 >goodFundule : Function
 >            : ^^^^^^^^
->foo : typeof foo
->    : ^^^^^^^^^^
+>foo : Function
+>    : ^^^^^^^^
 
 function bar() { }
 >bar : typeof bar
@@ -76,8 +76,8 @@ module bar {
 var goodFundule2: Function = bar; // ok
 >goodFundule2 : Function
 >             : ^^^^^^^^
->bar : typeof bar
->    : ^^^^^^^^^^
+>bar : Function
+>    : ^^^^^^^^
 
 function bad() { }
 >bad : typeof bad
@@ -97,6 +97,6 @@ module bad {
 var badFundule: Function = bad; // error
 >badFundule : Function
 >           : ^^^^^^^^
->bad : typeof bad
->    : ^^^^^^^^^^
+>bad : Function
+>    : ^^^^^^^^
 

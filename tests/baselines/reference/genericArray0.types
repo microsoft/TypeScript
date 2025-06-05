@@ -20,7 +20,7 @@ function map<U>() {
     var ys: U[] = [];
 >ys : U[]
 >   : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : U[]
+>   : ^^^
 }
 

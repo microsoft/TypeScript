@@ -22,8 +22,8 @@ let s: S;
 let str: string = n[undefined];
 >str : string
 >    : ^^^^^^
->n[undefined] : any
->             : ^^^
+>n[undefined] : string
+>             : ^^^^^^
 >n : N
 >  : ^
 >undefined : undefined
@@ -42,8 +42,8 @@ str = n[null];
 let num: number = s[undefined];
 >num : number
 >    : ^^^^^^
->s[undefined] : any
->             : ^^^
+>s[undefined] : number
+>             : ^^^^^^
 >s : S
 >  : ^
 >undefined : undefined

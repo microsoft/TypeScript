@@ -727,8 +727,8 @@ function f30<T, K extends keyof T>() {
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 >x : Partial<Record<keyof T, string>>[K]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : Partial<Record<keyof T, string>>[K]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f31<T, K extends keyof T>() {
@@ -738,8 +738,8 @@ function f31<T, K extends keyof T>() {
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 >x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->"hello" : "hello"
->        : ^^^^^^^
+>"hello" : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #51069

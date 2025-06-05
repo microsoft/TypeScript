@@ -25,12 +25,12 @@ var r2b: (x: any, y?: any) => any = i.apply;
 >    : ^ ^^   ^^ ^^^   ^^^^^   
 >x : any
 >y : any
->i.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>i.apply : (x: any, y?: any) => any
+>        : ^ ^^   ^^ ^^^   ^^^^^   
 >i : I
 >  : ^
->apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>apply : (x: any, y?: any) => any
+>      : ^ ^^   ^^ ^^^   ^^^^^   
 
 var b: {
 >b : () => void
@@ -52,10 +52,10 @@ var rb4: (x: any, y?: any) => any = b.apply;
 >    : ^ ^^   ^^ ^^^   ^^^^^   
 >x : any
 >y : any
->b.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>b.apply : (x: any, y?: any) => any
+>        : ^ ^^   ^^ ^^^   ^^^^^   
 >b : () => void
 >  : ^^^^^^    
->apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^   
+>apply : (x: any, y?: any) => any
+>      : ^ ^^   ^^ ^^^   ^^^^^   
 

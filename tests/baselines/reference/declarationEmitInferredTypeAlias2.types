@@ -9,8 +9,8 @@
     let obj: Data = true;
 >obj : string | boolean
 >    : ^^^^^^^^^^^^^^^^
->true : true
->     : ^^^^
+>true : string | boolean
+>     : ^^^^^^^^^^^^^^^^
 }
 export { }
 

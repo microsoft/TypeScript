@@ -3,16 +3,15 @@
 === voidOperator1.ts ===
 var x: any = void 1;
 >x : any
->void 1 : undefined
->       : ^^^^^^^^^
+>void 1 : any
 >1 : 1
 >  : ^
 
 var y: void = void 1;
 >y : void
 >  : ^^^^
->void 1 : undefined
->       : ^^^^^^^^^
+>void 1 : void
+>       : ^^^^
 >1 : 1
 >  : ^
 

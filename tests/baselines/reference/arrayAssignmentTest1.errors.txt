@@ -1,7 +1,7 @@
-arrayAssignmentTest1.ts(46,5): error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type 'I1'.
-arrayAssignmentTest1.ts(47,5): error TS2739: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
-arrayAssignmentTest1.ts(48,5): error TS2739: Type 'undefined[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
-arrayAssignmentTest1.ts(49,5): error TS2741: Property 'CM3M1' is missing in type 'undefined[]' but required in type 'C3'.
+arrayAssignmentTest1.ts(46,20): error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type 'I1'.
+arrayAssignmentTest1.ts(47,20): error TS2739: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
+arrayAssignmentTest1.ts(48,20): error TS2739: Type 'undefined[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
+arrayAssignmentTest1.ts(49,20): error TS2741: Property 'CM3M1' is missing in type 'undefined[]' but required in type 'C3'.
 arrayAssignmentTest1.ts(60,1): error TS2322: Type 'C3[]' is not assignable to type 'I1[]'.
   Property 'IM1' is missing in type 'C3' but required in type 'I1'.
 arrayAssignmentTest1.ts(64,1): error TS2322: Type 'I1[]' is not assignable to type 'C1[]'.
@@ -75,17 +75,17 @@ arrayAssignmentTest1.ts(85,1): error TS2740: Type 'I1' is missing the following 
     var arr_c3: C3[] = [];
     
     var i1_error: I1 = []; // should be an error - is
-        ~~~~~~~~
+                       ~~
 !!! error TS2741: Property 'IM1' is missing in type 'undefined[]' but required in type 'I1'.
 !!! related TS2728 arrayAssignmentTest1.ts:2:2: 'IM1' is declared here.
     var c1_error: C1 = []; // should be an error - is
-        ~~~~~~~~
+                       ~~
 !!! error TS2739: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
     var c2_error: C2 = []; // should be an error - is
-        ~~~~~~~~
+                       ~~
 !!! error TS2739: Type 'undefined[]' is missing the following properties from type 'C2': C2M1, IM1, C1M1
     var c3_error: C3 = []; // should be an error - is
-        ~~~~~~~~
+                       ~~
 !!! error TS2741: Property 'CM3M1' is missing in type 'undefined[]' but required in type 'C3'.
 !!! related TS2728 arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
     

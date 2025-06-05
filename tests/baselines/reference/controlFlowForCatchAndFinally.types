@@ -32,14 +32,14 @@ async function test(): Promise<string> {
     let browser: Browser | undefined = undefined;
 >browser : Browser | undefined
 >        : ^^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Browser | undefined
+>          : ^^^^^^^^^^^^^^^^^^^
 
     let page: Page | undefined = undefined;
 >page : Page | undefined
 >     : ^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Page | undefined
+>          : ^^^^^^^^^^^^^^^^
 
     try {
         browser = await test1();

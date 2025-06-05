@@ -62,8 +62,8 @@ switch (r) {
 var s: any = 0;
 >s : any
 >  : ^^^
->0 : 0
->  : ^
+>0 : any
+>  : ^^^
 
 // No error for all
 switch (s) {

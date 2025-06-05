@@ -66,12 +66,12 @@ export function fn<r>(makeSome: () => r): void {
     let result: Optional<r> = none;
 >result : Optional<r>
 >       : ^^^^^^^^^^^
->none : None
->     : ^^^^
+>none : Optional<r>
+>     : ^^^^^^^^^^^
 
     result;  // None
->result : None
->       : ^^^^
+>result : Optional<r>
+>       : ^^^^^^^^^^^
 
     while (cond) {
 >cond : boolean
@@ -122,20 +122,20 @@ function foo1() {
     let x: string | number | boolean = 0;
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // number
->x : number
->  : ^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     while (cond) {
 >cond : boolean
 >     : ^^^^^^^
 
         x;  // number, then string | number
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x = typeof x === "string" ? x.slice() : "abc";
 >x = typeof x === "string" ? x.slice() : "abc" : string
@@ -148,8 +148,8 @@ function foo1() {
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 >x.slice() : string
@@ -168,8 +168,8 @@ function foo1() {
 >  : ^^^^^^
     }
     x;
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function foo2() {
@@ -179,28 +179,28 @@ function foo2() {
     let x: string | number | boolean = 0;
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // number
->x : number
->  : ^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     while (cond) {
 >cond : boolean
 >     : ^^^^^^^
 
         x;  // number, then string | number
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (typeof x === "string") {
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -232,8 +232,8 @@ function foo2() {
 >  : ^^^^^^
     }
     x;
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Type guards as assertions
@@ -245,24 +245,24 @@ function f1() {
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : string | number | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // undefined
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (x) {
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         x;  // string | number (guard as assertion)
->x : never
->  : ^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
     }
     x;  // string | number | undefined
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f2() {
@@ -272,30 +272,30 @@ function f2() {
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : string | number | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // undefined
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
         x;  // string (guard as assertion)
->x : never
->  : ^^^^^
+>x : string
+>  : ^^^^^^
     }
     x;  // string | undefined
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f3() {
@@ -305,24 +305,24 @@ function f3() {
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : string | number | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // undefined
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (!x) {
->!x : true
->   : ^^^^
->x : undefined
->  : ^^^^^^^^^
+>!x : boolean
+>   : ^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return;
     }
     x;  // string | number (guard as assertion)
->x : never
->  : ^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 
 function f4() {
@@ -332,20 +332,20 @@ function f4() {
     let x: string | number | undefined = undefined;
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : string | number | undefined
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;  // undefined
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
 >                       : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"boolean" : "boolean"
 >          : ^^^^^^^^^
 
@@ -354,8 +354,8 @@ function f4() {
 >  : ^^^^^
     }
     x;  // undefined
->x : undefined
->  : ^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function f5(x: string | number) {

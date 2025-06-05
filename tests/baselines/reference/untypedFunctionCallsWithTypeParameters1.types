@@ -19,8 +19,8 @@ var r1 = x<number>();
 var y: any = x;
 >y : any
 >  : ^^^
->x : () => void
->  : ^^^^^^^^^^
+>x : any
+>  : ^^^
 
 var r2 = y<string>();
 >r2 : any

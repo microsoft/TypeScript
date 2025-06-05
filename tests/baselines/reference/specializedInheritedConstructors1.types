@@ -33,8 +33,8 @@ class MyView extends View<Model> { }
 var m: ViewOptions<Model> = { model: new Model() };
 >m : ViewOptions<Model>
 >  : ^^^^^^^^^^^^^^^^^^
->{ model: new Model() } : { model: Model; }
->                       : ^^^^^^^^^^^^^^^^^
+>{ model: new Model() } : ViewOptions<Model>
+>                       : ^^^^^^^^^^^^^^^^^^
 >model : Model
 >      : ^^^^^
 >new Model() : Model

@@ -79,8 +79,8 @@ var p11: Promise<typeof defaultModule> = import(getSpecifier());
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultModule : typeof defaultModule
 >              : ^^^^^^^^^^^^^^^^^^^^
->import(getSpecifier()) : Promise<any>
->                       : ^^^^^^^^^^^^
+>import(getSpecifier()) : Promise<typeof defaultModule>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getSpecifier() : string
 >               : ^^^^^^
 >getSpecifier : () => string
@@ -138,8 +138,8 @@ var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultModule : typeof defaultModule
 >              : ^^^^^^^^^^^^^^^^^^^^
->import(j=getSpecifier()) : Promise<any>
->                         : ^^^^^^^^^^^^
+>import(j=getSpecifier()) : Promise<typeof defaultModule>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >j=getSpecifier() : string
 >                 : ^^^^^^
 >j : string

@@ -263,12 +263,12 @@ var blue: M3.Color = a3.Blue;
 >     : ^^^^^^^^
 >M3 : any
 >   : ^^^
->a3.Blue : M3.Color.Blue
->        : ^^^^^^^^^^^^^
+>a3.Blue : M3.Color
+>        : ^^^^^^^^
 >a3 : typeof M3.Color
 >   : ^^^^^^^^^^^^^^^
->Blue : M3.Color.Blue
->     : ^^^^^^^^^^^^^
+>Blue : M3.Color
+>     : ^^^^^^^^
 
 var p3: M3.Color;
 >p3 : M3.Color

@@ -8,22 +8,22 @@ function f1() {
     let x: string | number = 1;
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->1 : 1
->  : ^
+>1 : string | number
+>  : ^^^^^^^^^^^^^^^
 
     x;
->x : number
->  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     let y: string | undefined = "";
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
     y;
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 function f2() {
@@ -33,34 +33,34 @@ function f2() {
     let [x]: [string | number] = [1];
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->[1] : [number]
->    : ^^^^^^^^
+>[1] : [string | number]
+>    : ^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
     x;
->x : number
->  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     let [y]: [string | undefined] = [""];
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->[""] : [string]
->     : ^^^^^^^^
+>[""] : [string | undefined]
+>     : ^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
     y;
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let [z = ""]: [string | undefined] = [undefined];
 >z : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
->[undefined] : [undefined]
->            : ^^^^^^^^^^^
+>[undefined] : [string | undefined]
+>            : ^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -76,34 +76,34 @@ function f3() {
     let [x]: (string | number)[] = [1];
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->[1] : number[]
->    : ^^^^^^^^
+>[1] : (string | number)[]
+>    : ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
     x;
->x : number
->  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     let [y]: (string | undefined)[] = [""];
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->[""] : string[]
->     : ^^^^^^^^
+>[""] : (string | undefined)[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
     y;
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let [z = ""]: (string | undefined)[] = [undefined];
 >z : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
->[undefined] : undefined[]
->            : ^^^^^^^^^^^
+>[undefined] : (string | undefined)[]
+>            : ^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -121,32 +121,32 @@ function f4() {
 >  : ^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
->{ x: 1 } : { x: number; }
->         : ^^^^^^^^^^^^^^
+>{ x: 1 } : { x: string | number; }
+>         : ^^^^^               ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 
     x;
->x : number
->  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 
     let { y }: { y: string | undefined } = { y: "" };
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->{ y: "" } : { y: string; }
->          : ^^^^^^^^^^^^^^
+>{ y: "" } : { y: string | undefined; }
+>          : ^^^^^                  ^^^
 >y : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
 
     y;
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let { z = "" }: { z: string | undefined } = { z: undefined };
 >z : string
@@ -155,8 +155,8 @@ function f4() {
 >   : ^^
 >z : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->{ z: undefined } : { z: undefined; }
->                 : ^^^^^^^^^^^^^^^^^
+>{ z: undefined } : { z: string | undefined; }
+>                 : ^^^^^                  ^^^
 >z : undefined
 >  : ^^^^^^^^^
 >undefined : undefined
@@ -176,32 +176,32 @@ function f5() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ x: 1 } : { x: number; }
->         : ^^^^^^^^^^^^^^
+>{ x: 1 } : { x?: string | number; }
+>         : ^^^^^^               ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 
     x;
->x : number
->  : ^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     let { y }: { y?: string | undefined } = { y: "" };
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->{ y: "" } : { y: string; }
->          : ^^^^^^^^^^^^^^
+>{ y: "" } : { y?: string | undefined; }
+>          : ^^^^^^                  ^^^
 >y : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
 
     y;
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     let { z = "" }: { z?: string | undefined } = { z: undefined };
 >z : string
@@ -210,8 +210,8 @@ function f5() {
 >   : ^^
 >z : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->{ z: undefined } : { z: undefined; }
->                 : ^^^^^^^^^^^^^^^^^
+>{ z: undefined } : { z?: string | undefined; }
+>                 : ^^^^^^                  ^^^
 >z : undefined
 >  : ^^^^^^^^^
 >undefined : undefined
@@ -231,8 +231,8 @@ function f6() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : { x?: string | number; }
+>   : ^^^^^^               ^^^
 
     x;
 >x : string | number | undefined
@@ -243,8 +243,8 @@ function f6() {
 >  : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : { y?: string | undefined; }
+>   : ^^^^^^                  ^^^
 
     y;
 >y : string | undefined
@@ -257,8 +257,8 @@ function f6() {
 >   : ^^
 >z : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : { z?: string | undefined; }
+>   : ^^^^^^                  ^^^
 
     z;
 >z : string
@@ -274,8 +274,8 @@ function f7() {
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->{ x: 1 } : { x: number; }
->         : ^^^^^^^^^^^^^^
+>{ x: 1 } : { [x: string]: number; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -286,11 +286,11 @@ function f7() {
 >  : ^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->o : { [x: string]: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { [x: string]: string | number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x;
->x : number
->  : ^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
 }
 

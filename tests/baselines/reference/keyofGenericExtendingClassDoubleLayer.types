@@ -37,8 +37,8 @@ class PersonModel extends AutoModel<PersonModel> {
         let x: keyof this = 'createdAt';
 >x : keyof this
 >  : ^^^^^^^^^^
->'createdAt' : "createdAt"
->            : ^^^^^^^^^^^
+>'createdAt' : keyof this
+>            : ^^^^^^^^^^
     }
 }
 

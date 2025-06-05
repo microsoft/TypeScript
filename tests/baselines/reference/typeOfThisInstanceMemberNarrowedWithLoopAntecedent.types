@@ -139,15 +139,15 @@ class SomeClass2 {
         let n: number = this.state?.data; // This should be an error
 >n : number
 >  : ^^^^^^
->this.state?.data : string | number
->                 : ^^^^^^^^^^^^^^^
+>this.state?.data : number
+>                 : ^^^^^^
 >this.state : State
 >           : ^^^^^
 >this : this
 >     : ^^^^
 >state : State
 >      : ^^^^^
->data : string | number
->     : ^^^^^^^^^^^^^^^
+>data : number
+>     : ^^^^^^
     }
 }

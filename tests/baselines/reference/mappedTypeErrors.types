@@ -425,8 +425,8 @@ function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
 let foo: Foo = { a: "hello", b: 42 };
 >foo : Foo
 >    : ^^^
->{ a: "hello", b: 42 } : { a: string; b: number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: "hello", b: 42 } : Foo
+>                      : ^^^
 >a : string
 >  : ^^^^^^
 >"hello" : "hello"
@@ -700,8 +700,8 @@ type T2 = { a?: number, [key: string]: any };
 let x1: T2 = { a: 'no' };  // Error
 >x1 : T2
 >   : ^^
->{ a: 'no' } : { a: string; }
->            : ^^^^^^^^^^^^^^
+>{ a: 'no' } : T2
+>            : ^^
 >a : string
 >  : ^^^^^^
 >'no' : "no"
@@ -710,8 +710,8 @@ let x1: T2 = { a: 'no' };  // Error
 let x2: Partial<T2> = { a: 'no' }; // Error
 >x2 : Partial<T2>
 >   : ^^^^^^^^^^^
->{ a: 'no' } : { a: string; }
->            : ^^^^^^^^^^^^^^
+>{ a: 'no' } : Partial<T2>
+>            : ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >'no' : "no"
@@ -720,8 +720,8 @@ let x2: Partial<T2> = { a: 'no' }; // Error
 let x3: { [P in keyof T2]: T2[P]} = { a: 'no' };  // Error
 >x3 : { [x: string]: any; a?: number | undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
->{ a: 'no' } : { a: string; }
->            : ^^^^^^^^^^^^^^
+>{ a: 'no' } : { [x: string]: any; a?: number | undefined; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >'no' : "no"
@@ -753,8 +753,8 @@ type O = {x: number, y: boolean};
 let o: O = {x: 5, y: false};
 >o : O
 >  : ^
->{x: 5, y: false} : { x: number; y: false; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{x: 5, y: false} : O
+>                 : ^
 >x : number
 >  : ^^^^^^
 >5 : 5
@@ -767,8 +767,8 @@ let o: O = {x: 5, y: false};
 let f: Foo2<O, 'x'> = {
 >f : Foo2<O, "x">
 >  : ^^^^^^^^^^^^
->{    pf: {x: 7},    pt: {x: 7, y: false},} : { pf: { x: number; }; pt: { x: number; y: boolean; }; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    pf: {x: 7},    pt: {x: 7, y: false},} : Foo2<O, "x">
+>                                           : ^^^^^^^^^^^^
 
     pf: {x: 7},
 >pf : { x: number; }

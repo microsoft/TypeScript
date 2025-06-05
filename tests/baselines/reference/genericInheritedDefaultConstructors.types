@@ -29,6 +29,6 @@ class B<V> extends A<V> { b: V; }
 var c:Constructor<B<boolean>> = B; // shouldn't error here
 >c : Constructor<B<boolean>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
->B : typeof B
->  : ^^^^^^^^
+>B : Constructor<B<boolean>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 

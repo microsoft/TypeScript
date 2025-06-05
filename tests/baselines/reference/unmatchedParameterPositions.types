@@ -12,14 +12,14 @@ declare let s: (...items: never[]) => never[];
 let t1: () => unknown[] = s;
 >t1 : () => unknown[]
 >   : ^^^^^^         
->s : (...items: never[]) => never[]
->  : ^^^^     ^^       ^^^^^       
+>s : () => unknown[]
+>  : ^^^^^^         
 
 let t2: (...args: []) => unknown[] = s;
 >t2 : () => unknown[]
 >   : ^^^^^^         
 >args : []
 >     : ^^
->s : (...items: never[]) => never[]
->  : ^^^^     ^^       ^^^^^       
+>s : () => unknown[]
+>  : ^^^^^^         
 

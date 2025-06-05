@@ -822,14 +822,14 @@ namespace GH58603 {
         let x1: Foo = obj;
 >x1 : Foo
 >   : ^^^
->obj : { kind: "a" | "b"; value: number | undefined; }
->    : ^^^^^^^^         ^^^^^^^^^                  ^^^
+>obj : Foo
+>    : ^^^
 
         let x2: Foo = { kind: obj.kind, value: obj.value };
 >x2 : Foo
 >   : ^^^
->{ kind: obj.kind, value: obj.value } : { kind: "a" | "b"; value: number; }
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ kind: obj.kind, value: obj.value } : Foo
+>                                     : ^^^
 >kind : "a" | "b"
 >     : ^^^^^^^^^
 >obj.kind : "a" | "b"

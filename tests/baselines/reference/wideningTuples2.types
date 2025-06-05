@@ -5,7 +5,7 @@ var foo: () => [any] = function bar() {
 >foo : () => [any]
 >    : ^^^^^^     
 >function bar() {    let intermediate = bar();    intermediate = [""];    return [undefined];} : () => [any]
->                                                                                              : ^^^^^^^^^^^
+>                                                                                              : ^^^^^^     
 >bar : () => [any]
 >    : ^^^^^^^^^^^
 

@@ -28,8 +28,8 @@ var numTupleTuple: [number, [string, number]] = [10, ["bar", 20]];
 var unionTuple1: [number, string| number] = [10, "foo"];
 >unionTuple1 : [number, string | number]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
->[10, "foo"] : [number, string]
->            : ^^^^^^^^^^^^^^^^
+>[10, "foo"] : [number, string | number]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >"foo" : "foo"
@@ -38,8 +38,8 @@ var unionTuple1: [number, string| number] = [10, "foo"];
 var unionTuple2: [boolean, string| number] = [true, "foo"];
 >unionTuple2 : [boolean, string | number]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->[true, "foo"] : [true, string]
->              : ^^^^^^^^^^^^^^
+>[true, "foo"] : [boolean, string | number]
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >"foo" : "foo"

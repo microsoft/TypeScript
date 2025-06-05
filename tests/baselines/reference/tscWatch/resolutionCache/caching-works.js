@@ -120,10 +120,10 @@ Output::
 [7m1[0m import {x} from "f1"
 [7m [0m [91m                ~~~~[0m
 
-[96md/f0.ts[0m:[93m2[0m:[93m33[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+[96md/f0.ts[0m:[93m2[0m:[93m45[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
 
 [7m2[0m                             var x: string = 1;
-[7m [0m [91m                                ~[0m
+[7m [0m [91m                                            ~[0m
 
 [96mf1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS2304: [0mCannot find name 'foo'.
 

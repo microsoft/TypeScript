@@ -12,14 +12,14 @@ function fn(): typeof fn { return 1; }
 var x: number = fn; // error
 >x : number
 >  : ^^^^^^
->fn : () => typeof fn
->   : ^^^^^^         
+>fn : number
+>   : ^^^^^^
 
 var y: () => number = fn; // ok
 >y : () => number
 >  : ^^^^^^      
->fn : () => typeof fn
->   : ^^^^^^         
+>fn : () => number
+>   : ^^^^^^      
 
 var f: () => typeof g;
 >f : () => typeof g
@@ -65,8 +65,8 @@ function f3(): I<typeof f3> { return f3; }
 var a: number = f3; // error
 >a : number
 >  : ^^^^^^
->f3 : () => I<typeof f3>
->   : ^^^^^^            
+>f3 : number
+>   : ^^^^^^
 
 class C {
 >C : C

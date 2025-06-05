@@ -20,6 +20,6 @@ var x: {prototype: XEvent} = XEvent;
 >  : ^^^^^^^^^^^^^      ^^^
 >prototype : XEvent
 >          : ^^^^^^
->XEvent : typeof XEvent
->       : ^^^^^^^^^^^^^
+>XEvent : { prototype: XEvent; }
+>       : ^^^^^^^^^^^^^      ^^^
 

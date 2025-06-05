@@ -35,8 +35,8 @@ class A2 {
         let a: A2 = this;
 >a : A2
 >  : ^^
->this : this
->     : ^^^^
+>this : A2
+>     : ^^
 
         a.#prop;
 >a.#prop : string

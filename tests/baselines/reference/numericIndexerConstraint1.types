@@ -16,8 +16,8 @@ var x: { [index: string]: number; };
 var result: Foo = x["one"]; // error
 >result : Foo
 >       : ^^^
->x["one"] : number
->         : ^^^^^^
+>x["one"] : Foo
+>         : ^^^
 >x : { [index: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"one" : "one"

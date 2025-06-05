@@ -76,8 +76,8 @@ var p = { x: 1, y: 2 };
 var p: Point = { x: 0, y: undefined };
 >p : Point
 >  : ^^^^^
->{ x: 0, y: undefined } : { x: number; y: undefined; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: 0, y: undefined } : Point
+>                       : ^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -111,7 +111,7 @@ var p: { x: number; y: number; } = { x: 1, y: 2 };
 >y : number
 >  : ^^^^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^      ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -218,8 +218,8 @@ var a = <string[]>[];
 var a: string[] = [];
 >a : string[]
 >  : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : string[]
+>   : ^^^^^^^^
 
 var a = new Array<string>();
 >a : string[]

@@ -24,7 +24,7 @@ let p1: Promise<typeof anotherModule> = import("./defaultPath");
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anotherModule : typeof anotherModule
 >              : ^^^^^^^^^^^^^^^^^^^^
->import("./defaultPath") : Promise<typeof defaultModule>
+>import("./defaultPath") : Promise<typeof anotherModule>
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./defaultPath" : "./defaultPath"
 >                : ^^^^^^^^^^^^^^^
@@ -44,8 +44,8 @@ let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
 let p3: Promise<any> = import("./defaultPath");
 >p3 : Promise<any>
 >   : ^^^^^^^^^^^^
->import("./defaultPath") : Promise<typeof defaultModule>
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import("./defaultPath") : Promise<any>
+>                        : ^^^^^^^^^^^^
 >"./defaultPath" : "./defaultPath"
 >                : ^^^^^^^^^^^^^^^
 

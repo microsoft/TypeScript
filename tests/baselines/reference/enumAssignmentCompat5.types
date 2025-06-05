@@ -54,8 +54,8 @@ let n: number;
 let e: E = n; // ok because it's too inconvenient otherwise
 >e : E
 >  : ^
->n : number
->  : ^^^^^^
+>n : E
+>  : ^
 
 e = 0; // ok, in range
 >e = 0 : 0
@@ -78,8 +78,8 @@ let a: E.A = 0; // ok, A === 0
 >  : ^^^
 >E : any
 >  : ^^^
->0 : 0
->  : ^
+>0 : E.A
+>  : ^^^
 
 a = 2; // error, 2 !== 0
 >a = 2 : 2
@@ -100,8 +100,8 @@ a = n; // ok
 let c: Computed = n; // ok
 >c : Computed
 >  : ^^^^^^^^
->n : number
->  : ^^^^^^
+>n : Computed
+>  : ^^^^^^^^
 
 c = n; // ok
 >c = n : number
@@ -124,8 +124,8 @@ let ca: Computed.A = 1; // error, Computed.A isn't a literal type because Comput
 >   : ^^^^^^^^^^
 >Computed : any
 >         : ^^^
->1 : 1
->  : ^
+>1 : Computed.A
+>  : ^^^^^^^^^^
 
 
 

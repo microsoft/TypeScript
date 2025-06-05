@@ -4,8 +4,8 @@
 var tuple: [string, boolean] = ["", true];
 >tuple : [string, boolean]
 >      : ^^^^^^^^^^^^^^^^^
->["", true] : [string, true]
->           : ^^^^^^^^^^^^^^
+>["", true] : [string, boolean]
+>           : ^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 >true : true

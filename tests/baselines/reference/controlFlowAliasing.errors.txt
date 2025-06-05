@@ -1,6 +1,6 @@
-controlFlowAliasing.ts(59,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+controlFlowAliasing.ts(59,25): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
-controlFlowAliasing.ts(74,13): error TS2322: Type 'string | number' is not assignable to type 'string'.
+controlFlowAliasing.ts(74,25): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 controlFlowAliasing.ts(91,13): error TS2339: Property 'foo' does not exist on type '{ kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }'.
   Property 'foo' does not exist on type '{ kind: "bar"; bar: number; }'.
@@ -84,7 +84,7 @@ controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being a
         obj = { x: 42 };
         if (isString) {
             let s: string = obj.x;  // Not narrowed because of is assigned in function body
-                ~
+                            ~~~~~
 !!! error TS2322: Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:   Type 'number' is not assignable to type 'string'.
         }
@@ -102,7 +102,7 @@ controlFlowAliasing.ts(280,5): error TS2454: Variable 'a' is used before being a
         obj = [42];
         if (isString) {
             let s: string = obj[0];  // Not narrowed because of is assigned in function body
-                ~
+                            ~~~~~~
 !!! error TS2322: Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:   Type 'number' is not assignable to type 'string'.
         }

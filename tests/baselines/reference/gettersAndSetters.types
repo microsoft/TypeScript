@@ -214,8 +214,8 @@ interface I1 {
 var i:I1 = function (n) {return n;}
 >i : I1
 >  : ^^
->function (n) {return n;} : (n: number) => number
->                         : ^ ^^^^^^^^^^^^^^^^^^^
+>function (n) {return n;} : I1
+>                         : ^^
 >n : number
 >  : ^^^^^^
 >n : number

@@ -10,8 +10,8 @@ type Test<T extends string = T> = { value: T };  // Error
 let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
 >zz : Test<any>
 >   : ^^^^^^^^^
->{ foo: "abc" } : { foo: string; }
->               : ^^^^^^^^^^^^^^^^
+>{ foo: "abc" } : Test<any>
+>               : ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >"abc" : "abc"
@@ -20,8 +20,8 @@ let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
 let zzy: Test = { value: {} };
 >zzy : Test<any>
 >    : ^^^^^^^^^
->{ value: {} } : { value: {}; }
->              : ^^^^^^^^^^^^^^
+>{ value: {} } : Test<any>
+>              : ^^^^^^^^^
 >value : {}
 >      : ^^
 >{} : {}

@@ -53,8 +53,8 @@ var x: { a: C } = { a: new C<number>() };
 >  : ^^^^^ ^^^
 >a : any
 >  : ^^^
->{ a: new C<number>() } : { a: C<number>; }
->                       : ^^^^^^^^^^^^^^^^^
+>{ a: new C<number>() } : { a: C; }
+>                       : ^^^^^ ^^^
 >a : C<number>
 >  : ^^^^^^^^^
 >new C<number>() : C<number>
@@ -67,8 +67,8 @@ var x2: { a: I } = { a: { bar() { return 1 } } };
 >   : ^^^^^ ^^^
 >a : any
 >  : ^^^
->{ a: { bar() { return 1 } } } : { a: { bar(): number; }; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: { bar() { return 1 } } } : { a: I; }
+>                              : ^^^^^ ^^^
 >a : { bar(): number; }
 >  : ^^^^^^^^^^^^^^^^^^
 >{ bar() { return 1 } } : { bar(): number; }

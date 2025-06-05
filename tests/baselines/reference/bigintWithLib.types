@@ -192,8 +192,8 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EU
 let bigIntArray: BigInt64Array = new BigInt64Array();
 >bigIntArray : BigInt64Array<ArrayBufferLike>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new BigInt64Array() : BigInt64Array<ArrayBuffer>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array() : BigInt64Array<ArrayBufferLike>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -324,15 +324,15 @@ bigIntArray.length = 10; // should error
 let arrayBufferLike: ArrayBufferView = bigIntArray;
 >arrayBufferLike : ArrayBufferView<ArrayBufferLike>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->bigIntArray : BigInt64Array<ArrayBufferLike>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : ArrayBufferView<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Test BigUint64Array
 let bigUintArray: BigUint64Array = new BigUint64Array();
 >bigUintArray : BigUint64Array<ArrayBufferLike>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new BigUint64Array() : BigUint64Array<ArrayBuffer>
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array() : BigUint64Array<ArrayBufferLike>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

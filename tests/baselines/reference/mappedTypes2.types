@@ -252,8 +252,8 @@ function f2(shape: Shape) {
     var partial: Partial<Shape> = {};
 >partial : PartialShape
 >        : ^^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : Partial<Shape>
+>   : ^^^^^^^^^^^^^^
 }
 
 function f3(shape: Shape) {

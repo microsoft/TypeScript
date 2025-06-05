@@ -106,8 +106,8 @@ function f5() {
     let x: never[] = [];  // Ok
 >x : never[]
 >  : ^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 }
 
 // Repro from #46032

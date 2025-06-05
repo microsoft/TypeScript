@@ -96,7 +96,7 @@ function other3<T extends U, U extends Date>(arg: T) {
     var u: U = r2[1]; // ok
 >u : U
 >  : ^
->r2[1] : T
+>r2[1] : U
 >      : ^
 >r2 : { [x: string]: Object; [x: number]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

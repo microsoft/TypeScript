@@ -22,8 +22,8 @@ var a0: (n: number, s: string) => number = (num, str) => {
 >  : ^^^^^^
 >s : string
 >  : ^^^^^^
->(num, str) => {    num.toExponential();    return 0;} : (num: number, str: string) => number
->                                                      : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
+>(num, str) => {    num.toExponential();    return 0;} : (n: number, s: string) => number
+>                                                      : ^ ^^      ^^ ^^      ^^^^^      
 >num : number
 >    : ^^^^^^
 >str : string
@@ -58,8 +58,8 @@ var a1: (c: Class<Number>) => number = (a1) => {
 >   : ^ ^^             ^^^^^      
 >c : Class<Number>
 >  : ^^^^^^^^^^^^^
->(a1) => {    a1.foo();    return 1;} : (a1: Class<Number>) => number
->                                     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(a1) => {    a1.foo();    return 1;} : (c: Class<Number>) => number
+>                                     : ^ ^^             ^^^^^      
 >a1 : Class<Number>
 >   : ^^^^^^^^^^^^^
 
@@ -176,8 +176,8 @@ var b4: (n: E) => string = (number = 1) => { return "hello"; };
 >   : ^ ^^ ^^^^^      
 >n : E
 >  : ^
->(number = 1) => { return "hello"; } : (number?: E) => string
->                                    : ^      ^^^^^^^^^^^^^^^
+>(number = 1) => { return "hello"; } : (n: E) => string
+>                                    : ^ ^^ ^^^^^      
 >number : E
 >       : ^
 >1 : 1
@@ -190,8 +190,8 @@ var b5: (n: {}) => string = (number = "string") => { return "hello"; };
 >   : ^ ^^  ^^^^^      
 >n : {}
 >  : ^^
->(number = "string") => { return "hello"; } : (number?: {}) => string
->                                           : ^      ^^^^^^^^^^^^^^^^
+>(number = "string") => { return "hello"; } : (n: {}) => string
+>                                           : ^ ^^  ^^^^^      
 >number : {}
 >       : ^^
 >"string" : "string"
@@ -285,8 +285,8 @@ class C<T, U> {
 >  : ^^^^^^
 >k : U
 >  : ^
->(j, k) => {            return [j, k];        } : (j: any, k: any) => any[]
->                                               : ^ ^^^^^^^ ^^^^^^^^^^^^^^^
+>(j, k) => {            return [j, k];        } : ((j: T, k: U) => (T | U)[]) | ((j: number, k: U) => number[])
+>                                               : ^^ ^^ ^^ ^^ ^^^^^         ^^^^^^ ^^      ^^ ^^ ^^^^^        ^
 >j : any
 >k : any
 

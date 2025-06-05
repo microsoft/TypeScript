@@ -1097,8 +1097,8 @@ export interface Data {
 var data: Data[] = [];
 >data : Data[]
 >     : ^^^^^^
->[] : never[]
->   : ^^^^^^^
+>[] : Data[]
+>   : ^^^^^^
 
 declare function toKeys<a>(values: a[], toKey: (value: a) => string): string[];
 >toKeys : <a>(values: a[], toKey: (value: a) => string) => string[]
@@ -1176,8 +1176,8 @@ var expected: <T, U>(y: U, x: T) => [T, U] = flip(zip);
 >  : ^
 >x : T
 >  : ^
->flip(zip) : (b: U, a: T) => [T, U]
->          : ^ ^^^^^ ^^^^^^^^^^^^^^
+>flip(zip) : <T, U>(y: U, x: T) => [T, U]
+>          : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^      
 >flip : <a, b, c>(f: (a: a, b: b) => c) => (b: b, a: a) => c
 >     : ^ ^^ ^^ ^^ ^^                 ^^^^^                 
 >zip : <T, U>(x: T, y: U) => [T, U]

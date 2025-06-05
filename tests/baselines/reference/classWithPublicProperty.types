@@ -64,11 +64,12 @@ var c = new C();
 var r1: string = c.x;
 >r1 : string
 >   : ^^^^^^
->c.x : any
+>c.x : string
+>    : ^^^^^^
 >c : C
 >  : ^
->x : any
->  : ^^^
+>x : string
+>  : ^^^^^^
 
 var r2: string = c.a;
 >r2 : string
@@ -117,11 +118,12 @@ var r5: string = c.d();
 var r6: string = C.e;
 >r6 : string
 >   : ^^^^^^
->C.e : any
+>C.e : string
+>    : ^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
->e : any
->  : ^^^
+>e : string
+>  : ^^^^^^
 
 var r7: string = C.f();
 >r7 : string

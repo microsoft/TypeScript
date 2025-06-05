@@ -24,8 +24,8 @@ let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? 
 >         : ^ ^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
->x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "yes" | "no" | "idk"
->                                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => SomeResponse
+>                                             : ^ ^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
 >(x === 'yes' || x === 'no') ? x : 'idk' : "yes" | "no" | "idk"

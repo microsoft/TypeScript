@@ -45,8 +45,8 @@ var y: typeof foo.C1.s1 = false;
 >   : ^^^^^^^^^^^^^
 >s1 : boolean
 >   : ^^^^^^^
->false : false
->      : ^^^^^
+>false : boolean
+>      : ^^^^^^^
 
 var z: foo.M1.I2;
 >z : f.I2

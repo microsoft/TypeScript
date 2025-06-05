@@ -4,28 +4,28 @@
 var a: object & string = ""; // error
 >a : never
 >  : ^^^^^
->"" : ""
->   : ^^
+>"" : never
+>   : ^^^^^
 
 var b: object | string = ""; // ok
 >b : string | object
 >  : ^^^^^^^^^^^^^^^
->"" : ""
->   : ^^
+>"" : string | object
+>   : ^^^^^^^^^^^^^^^
 
 var c: object & {} = 123; // error
 >c : object
 >  : ^^^^^^
->123 : 123
->    : ^^^
+>123 : object
+>    : ^^^^^^
 
 a = b; // error
->a = b : string
->      : ^^^^^^
+>a = b : string | object
+>      : ^^^^^^^^^^^^^^^
 >a : never
 >  : ^^^^^
->b : string
->  : ^^^^^^
+>b : string | object
+>  : ^^^^^^^^^^^^^^^
 
 b = a; // ok
 >b = a : never

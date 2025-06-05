@@ -8,14 +8,14 @@ type T = "foo" | "bar" | "baz";
 var x: "foo" | "bar" | "baz" = undefined;
 >x : "foo" | "bar" | "baz"
 >  : ^^^^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : "foo" | "bar" | "baz"
+>          : ^^^^^^^^^^^^^^^^^^^^^
 
 var y: T = undefined;
 >y : T
 >  : ^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : T
+>          : ^
 
 if (x === "foo") {
 >x === "foo" : boolean

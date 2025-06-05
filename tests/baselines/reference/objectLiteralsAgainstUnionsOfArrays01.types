@@ -16,8 +16,8 @@ interface Bar {
 let x: Foo[] = [
 >x : Foo[]
 >  : ^^^^^
->[  { bar: { prop: 100 } }] : { bar: { prop: number; }; }[]
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[  { bar: { prop: 100 } }] : Foo[]
+>                           : ^^^^^
 
   { bar: { prop: 100 } }
 >{ bar: { prop: 100 } } : { bar: { prop: number; }; }

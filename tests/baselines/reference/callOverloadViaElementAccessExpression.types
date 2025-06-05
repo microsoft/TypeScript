@@ -38,7 +38,7 @@ var c = new C();
 var r: string = c['foo'](1);
 >r : string
 >  : ^^^^^^
->c['foo'](1) : number
+>c['foo'](1) : string
 >            : ^^^^^^
 >c['foo'] : { (x: number): number; (x: string): string; }
 >         : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
@@ -52,7 +52,7 @@ var r: string = c['foo'](1);
 var r2: number = c['foo']('');
 >r2 : number
 >   : ^^^^^^
->c['foo']('') : string
+>c['foo']('') : number
 >             : ^^^^^^
 >c['foo'] : { (x: number): number; (x: string): string; }
 >         : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^

@@ -301,8 +301,8 @@ var { removed, ...removableRest } = removable;
 var i: I = removable;
 >i : I
 >  : ^
->removable : Removable
->          : ^^^^^^^^^
+>removable : I
+>          : ^
 
 var { removed, ...removableRest2 } = i;
 >removed : string

@@ -33,8 +33,8 @@ interface Robot {
 var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >robotA : Robot
 >       : ^^^^^
->{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
->                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : Robot
+>                                                                    : ^^^^^
 >name : string
 >     : ^^^^^^
 >"mower" : "mower"

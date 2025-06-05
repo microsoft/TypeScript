@@ -12,16 +12,16 @@ var x: typeof foo0 = {};
 >  : ^^^^^^^^^^^
 >foo0 : typeof foo0
 >     : ^^^^^^^^^^^
->{} : {}
->   : ^^
+>{} : typeof foo0
+>   : ^^^^^^^^^^^
 
 var y: {M2: Object} = foo0;
 >y : { M2: Object; }
 >  : ^^^^^^      ^^^
 >M2 : Object
 >   : ^^^^^^
->foo0 : typeof foo0
->     : ^^^^^^^^^^^
+>foo0 : { M2: Object; }
+>     : ^^^^^^      ^^^
 
 === foo_0.ts ===
 export interface Person {

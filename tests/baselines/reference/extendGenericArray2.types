@@ -12,16 +12,16 @@ interface Array<T> extends IFoo<T> { }
 var arr: string[] = [];
 >arr : string[]
 >    : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : string[]
+>   : ^^^^^^^^
 
 var y: number = arr.x;
 >y : number
 >  : ^^^^^^
->arr.x : string
+>arr.x : number
 >      : ^^^^^^
 >arr : string[]
 >    : ^^^^^^^^
->x : string
+>x : number
 >  : ^^^^^^
 

@@ -35,69 +35,68 @@ var ae: E;
 var b: number = undefined;
 >b : number
 >  : ^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : number
+>          : ^^^^^^
 
 var c: string = undefined;
 >c : string
 >  : ^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : string
+>          : ^^^^^^
 
 var d: boolean = undefined;
 >d : boolean
 >  : ^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : boolean
+>          : ^^^^^^^
 
 var e: Date = undefined;
 >e : Date
 >  : ^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Date
+>          : ^^^^
 
 var f: any = undefined;
 >f : any
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
 
 var g: void = undefined;
 >g : void
 >  : ^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : void
+>          : ^^^^
 
 var h: Object = undefined;
 >h : Object
 >  : ^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Object
+>          : ^^^^^^
 
 var i: {} = undefined;
 >i : {}
 >  : ^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : {}
+>          : ^^
 
 var j: () => {} = undefined;
 >j : () => {}
 >  : ^^^^^^  
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : () => {}
+>          : ^^^^^^  
 
 var k: Function = undefined;
 >k : Function
 >  : ^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Function
+>          : ^^^^^^^^
 
 var l: (x: number) => string = undefined;
 >l : (x: number) => string
 >  : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : (x: number) => string
+>          : ^ ^^      ^^^^^      
 
 ac = undefined;
 >ac = undefined : undefined
@@ -126,36 +125,36 @@ ae = undefined;
 var m: number[] = undefined;
 >m : number[]
 >  : ^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : number[]
+>          : ^^^^^^^^
 
 var n: { foo: string } = undefined;
 >n : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
 >    : ^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : { foo: string; }
+>          : ^^^^^^^      ^^^
 
 var o: <T>(x: T) => T = undefined;
 >o : <T>(x: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : <T>(x: T) => T
+>          : ^ ^^ ^^ ^^^^^ 
 
 var p: Number = undefined;
 >p : Number
 >  : ^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : Number
+>          : ^^^^^^
 
 var q: String = undefined;
 >q : String
 >  : ^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : String
+>          : ^^^^^^
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void

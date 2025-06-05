@@ -48,7 +48,7 @@ var AA: typeof A = BB; // error, AA is not of abstract type.
 >   : ^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
->BB : typeof B
+>BB : typeof A
 >   : ^^^^^^^^
 
 new AA;
@@ -87,8 +87,8 @@ new BB; // error -- BB is of type typeof B.
 var x : any = C;
 >x : any
 >  : ^^^
->C : typeof C
->  : ^^^^^^^^
+>C : any
+>  : ^^^
 
 new x; // okay -- undefined behavior at runtime
 >new x : any

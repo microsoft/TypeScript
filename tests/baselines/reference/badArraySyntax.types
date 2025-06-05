@@ -15,8 +15,8 @@ class Z {
 var a1: Z[] = [];
 >a1 : Z[]
 >   : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : Z[]
+>   : ^^^
 
 var a2 = new Z[];
 >a2 : any
@@ -45,7 +45,7 @@ var a3 = new Z[]();
 var a4: Z[] = new Z[];
 >a4 : Z[]
 >   : ^^^
->new Z[] : any
+>new Z[] : Z[]
 >        : ^^^
 >Z[] : any
 >    : ^^^
@@ -57,7 +57,7 @@ var a4: Z[] = new Z[];
 var a5: Z[] = new Z[]();
 >a5 : Z[]
 >   : ^^^
->new Z[]() : any
+>new Z[]() : Z[]
 >          : ^^^
 >Z[] : any
 >    : ^^^
@@ -69,8 +69,8 @@ var a5: Z[] = new Z[]();
 var a6: Z[][] = new   Z     [      ]   [  ];
 >a6 : Z[][]
 >   : ^^^^^
->new   Z     [      ]   [  ] : any
->                            : ^^^
+>new   Z     [      ]   [  ] : Z[][]
+>                            : ^^^^^
 >Z     [      ]   [  ] : any
 >                      : ^^^
 >Z     [      ] : any

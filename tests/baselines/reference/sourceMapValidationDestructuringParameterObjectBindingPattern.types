@@ -29,8 +29,8 @@ var hello = "hello";
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
 >       : ^^^^^
->{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ name: "mower", skill: "mowing" } : Robot
+>                                   : ^^^^^
 >name : string
 >     : ^^^^^^
 >"mower" : "mower"

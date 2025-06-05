@@ -11,5 +11,4 @@ avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts(7,20): error 
     export let x:Dog = getRover;
                        ~~~~~~~~
 !!! error TS2322: Type '() => Dog' is not assignable to type 'Dog'.
-!!! related TS6212 avoidListingPropertiesForTypesWithOnlyCallOrConstructSignatures.ts:7:20: Did you mean to call this expression?
     // export let x: Dog = getRover; 

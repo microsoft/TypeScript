@@ -51,12 +51,12 @@ var r1b: (thisArg: number, ...argArray: number[]) => void = i.call;
 >        : ^^^^^^
 >argArray : number[]
 >         : ^^^^^^^^
->i.call : (thisArg: number, ...argArray: number[]) => any
->       : ^       ^^      ^^^^^        ^^        ^^^^^   
+>i.call : (thisArg: number, ...argArray: number[]) => void
+>       : ^       ^^      ^^^^^        ^^        ^^^^^    
 >i : I
 >  : ^
->call : (thisArg: number, ...argArray: number[]) => any
->     : ^       ^^      ^^^^^        ^^        ^^^^^   
+>call : (thisArg: number, ...argArray: number[]) => void
+>     : ^       ^^      ^^^^^        ^^        ^^^^^    
 
 var r1c = i.arguments;
 >r1c : any
@@ -123,12 +123,12 @@ var r2b: (thisArg: number, ...argArray: number[]) => void = x.call;
 >        : ^^^^^^
 >argArray : number[]
 >         : ^^^^^^^^
->x.call : (thisArg: number, ...argArray: number[]) => any
->       : ^       ^^      ^^^^^        ^^        ^^^^^   
+>x.call : (thisArg: number, ...argArray: number[]) => void
+>       : ^       ^^      ^^^^^        ^^        ^^^^^    
 >x : { new (): number; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 >  : ^^^^^^^^^^      ^^^^^^^^ ^^   ^^ ^^^   ^^^    ^^^^^^^       ^^      ^^^^^        ^^        ^^^   ^^^
->call : (thisArg: number, ...argArray: number[]) => any
->     : ^       ^^      ^^^^^        ^^        ^^^^^   
+>call : (thisArg: number, ...argArray: number[]) => void
+>     : ^       ^^      ^^^^^        ^^        ^^^^^    
 
 var r2c = x.arguments;
 >r2c : any

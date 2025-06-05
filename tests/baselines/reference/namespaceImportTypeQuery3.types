@@ -29,8 +29,8 @@ let t: typeof types = {
 >  : ^^^^^^^^^^^^
 >types : typeof types
 >      : ^^^^^^^^^^^^
->{  A: undefined as any, // ok  B: undefined as any,} : { A: any; B: any; }
->                                                     : ^^^^^   ^^^^^   ^^^
+>{  A: undefined as any, // ok  B: undefined as any,} : typeof types
+>                                                     : ^^^^^^^^^^^^
 
   A: undefined as any, // ok
 >A : any

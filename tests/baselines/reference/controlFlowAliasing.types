@@ -292,12 +292,12 @@ function f16(obj: { readonly x: string | number }) {
         let s: string = obj.x;  // Not narrowed because of is assigned in function body
 >s : string
 >  : ^^^^^^
->obj.x : string | number
->      : ^^^^^^^^^^^^^^^
+>obj.x : string
+>      : ^^^^^^
 >obj : { readonly x: string | number; }
 >    : ^^^^^^^^^^^^^^               ^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
     }
 }
 
@@ -378,8 +378,8 @@ function f18(obj: readonly [string | number]) {
         let s: string = obj[0];  // Not narrowed because of is assigned in function body
 >s : string
 >  : ^^^^^^
->obj[0] : string | number
->       : ^^^^^^^^^^^^^^^
+>obj[0] : string
+>       : ^^^^^^
 >obj : readonly [string | number]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0

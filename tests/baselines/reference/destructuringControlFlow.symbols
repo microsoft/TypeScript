@@ -135,5 +135,7 @@ let [key, value]: KeyValue = ["foo"];
 >KeyValue : Symbol(KeyValue, Decl(destructuringControlFlow.ts, 33, 1))
 
 value.toUpperCase();  // Error
+>value.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(destructuringControlFlow.ts, 38, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 

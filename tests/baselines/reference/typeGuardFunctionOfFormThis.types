@@ -56,8 +56,8 @@ class FollowerGuard extends RoyalGuard {
 let a: RoyalGuard = new FollowerGuard();
 >a : RoyalGuard
 >  : ^^^^^^^^^^
->new FollowerGuard() : FollowerGuard
->                    : ^^^^^^^^^^^^^
+>new FollowerGuard() : RoyalGuard
+>                    : ^^^^^^^^^^
 >FollowerGuard : typeof FollowerGuard
 >              : ^^^^^^^^^^^^^^^^^^^^
 

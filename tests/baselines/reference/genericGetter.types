@@ -34,10 +34,10 @@ var c = new C<number>();
 var r: string = c.x;
 >r : string
 >  : ^^^^^^
->c.x : number
+>c.x : string
 >    : ^^^^^^
 >c : C<number>
 >  : ^^^^^^^^^
->x : number
+>x : string
 >  : ^^^^^^
 

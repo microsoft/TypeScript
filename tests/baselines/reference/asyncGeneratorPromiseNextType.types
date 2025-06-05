@@ -16,8 +16,8 @@ async function *saverGen(): AsyncGenerator<void, void, Promise<Result> | undefin
     let pending: Promise<Result>[] = [];
 >pending : Promise<Result>[]
 >        : ^^^^^^^^^^^^^^^^^
->[] : never[]
->   : ^^^^^^^
+>[] : Promise<Result>[]
+>   : ^^^^^^^^^^^^^^^^^
 
     while (true) {
 >true : true
@@ -133,8 +133,8 @@ async function *saverGen2() {
     let pending: Promise<Result>[] = [];
 >pending : Promise<Result>[]
 >        : ^^^^^^^^^^^^^^^^^
->[] : never[]
->   : ^^^^^^^
+>[] : Promise<Result>[]
+>   : ^^^^^^^^^^^^^^^^^
 
     while (true) {
 >true : true

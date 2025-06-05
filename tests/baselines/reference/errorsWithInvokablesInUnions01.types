@@ -26,16 +26,16 @@ interface IDirectivePrePost<TScope> {
 export let blah: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = (x: string) => {}
 >blah : ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(x: string) => {} : (x: string) => void
->                  : ^ ^^      ^^^^^^^^^
+>(x: string) => {} : ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
 export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = class {
 >ctor : ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->class {    someUnaccountedProp: any;} : typeof ctor
->                                      : ^^^^^^^^^^^
+>class {    someUnaccountedProp: any;} : ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     someUnaccountedProp: any;
 >someUnaccountedProp : any

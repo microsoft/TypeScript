@@ -177,8 +177,8 @@ if (typeof numOrBool === "string") {
     let x1: {} = numOrBool; // {}
 >x1 : {}
 >   : ^^
->numOrBool : never
->          : ^^^^^
+>numOrBool : {}
+>          : ^^
 }
 else {
     let x2: number | boolean = numOrBool; // number | boolean
@@ -320,7 +320,7 @@ else {
     let x2: {} = numOrBool; // {}
 >x2 : {}
 >   : ^^
->numOrBool : never
->          : ^^^^^
+>numOrBool : {}
+>          : ^^
 }
 

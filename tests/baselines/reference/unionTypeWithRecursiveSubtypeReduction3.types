@@ -22,6 +22,6 @@ var b: T27;
 var s: string = b;
 >s : string
 >  : ^^^^^^
->b : { prop: number; } | { prop: T27; }
->  : ^^^^^^^^      ^^^^^^^^^^^^^^   ^^^
+>b : string
+>  : ^^^^^^
 

@@ -64,8 +64,8 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->new C.a.Point(0, 0) : A.Point
->                    : ^^^^^^^
+>new C.a.Point(0, 0) : { x: number; y: number; }
+>                    : ^^^^^      ^^^^^      ^^^
 >C.a.Point : typeof A.Point
 >          : ^^^^^^^^^^^^^^
 >C.a : typeof A
@@ -160,8 +160,8 @@ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >  : ^^^^^^
 >y : number
 >  : ^^^^^^
->new Z.y.Point(0, 0) : X.Y.Point
->                    : ^^^^^^^^^
+>new Z.y.Point(0, 0) : { x: number; y: number; }
+>                    : ^^^^^      ^^^^^      ^^^
 >Z.y.Point : typeof X.Y.Point
 >          : ^^^^^^^^^^^^^^^^
 >Z.y : typeof X.Y

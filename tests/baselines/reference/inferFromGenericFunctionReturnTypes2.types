@@ -42,8 +42,8 @@ declare function foo(f: Mapper<string, number>): void;
 let f1: Mapper<string, number> = s => s.length;
 >f1 : Mapper<string, number>
 >   : ^^^^^^^^^^^^^^^^^^^^^^
->s => s.length : (s: string) => number
->              : ^ ^^^^^^^^^^^^^^^^^^^
+>s => s.length : Mapper<string, number>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.length : number
@@ -96,8 +96,8 @@ let f3: Mapper<string, number[]> = arrayize(wrap(s => s.length));
 let f4: Mapper<string, boolean> = combine(wrap(s => s.length), wrap(n => n >= 10));
 >f4 : Mapper<string, boolean>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
->combine(wrap(s => s.length), wrap(n => n >= 10)) : (x: string) => boolean
->                                                 : ^ ^^^^^^^^^^^^^^^^^^^^
+>combine(wrap(s => s.length), wrap(n => n >= 10)) : Mapper<string, boolean>
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >combine : <A, B, C>(f: (x: A) => B, g: (x: B) => C) => (x: A) => C
 >        : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^           
 >wrap(s => s.length) : Mapper<string, number>

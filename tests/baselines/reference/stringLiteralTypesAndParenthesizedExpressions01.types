@@ -16,8 +16,8 @@ let a: "foo" = ("foo");
 let b: "foo" | "bar" = ("foo");
 >b : "foo" | "bar"
 >  : ^^^^^^^^^^^^^
->("foo") : "foo"
->        : ^^^^^
+>("foo") : "foo" | "bar"
+>        : ^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 

@@ -18,6 +18,6 @@ var x : B<string>
 var y : C<string> = x
 >y : C<string>
 >  : ^^^^^^^^^
->x : B<string>
+>x : C<string>
 >  : ^^^^^^^^^
 

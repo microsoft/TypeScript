@@ -111,7 +111,7 @@ declare let otherWrap: OtherWrap;
 let a: Bar<number> = fooStr;
 >a : Bar<number>
 >  : ^^^^^^^^^^^
->fooStr : Foo<string>
+>fooStr : Bar<number>
 >       : ^^^^^^^^^^^
 
 fun(otherWrap);

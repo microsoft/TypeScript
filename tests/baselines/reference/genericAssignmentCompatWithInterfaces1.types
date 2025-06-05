@@ -43,8 +43,8 @@ var z = { x: new A<number>() };
 var a1: I<string> = { x: new A<number>() };
 >a1 : I<string>
 >   : ^^^^^^^^^
->{ x: new A<number>() } : { x: A<number>; }
->                       : ^^^^^^^^^^^^^^^^^
+>{ x: new A<number>() } : I<string>
+>                       : ^^^^^^^^^
 >x : A<number>
 >  : ^^^^^^^^^
 >new A<number>() : A<number>
@@ -80,8 +80,8 @@ var a2: I<string> = function (): { x: A<number> } {
 var a3: I<string> = z;
 >a3 : I<string>
 >   : ^^^^^^^^^
->z : { x: A<number>; }
->  : ^^^^^^^^^^^^^^^^^
+>z : I<string>
+>  : ^^^^^^^^^
 
 var a4: I<string> = <K<number>>z;
 >a4 : I<string>

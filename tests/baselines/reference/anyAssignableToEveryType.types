@@ -38,22 +38,26 @@ var ae: E;
 var b: number = a;
 >b : number
 >  : ^^^^^^
->a : any
+>a : number
+>  : ^^^^^^
 
 var c: string = a;
 >c : string
 >  : ^^^^^^
->a : any
+>a : string
+>  : ^^^^^^
 
 var d: boolean = a;
 >d : boolean
 >  : ^^^^^^^
->a : any
+>a : boolean
+>  : ^^^^^^^
 
 var e: Date = a;
 >e : Date
 >  : ^^^^
->a : any
+>a : Date
+>  : ^^^^
 
 var f: any = a;
 >f : any
@@ -62,34 +66,40 @@ var f: any = a;
 var g: void = a;
 >g : void
 >  : ^^^^
->a : any
+>a : void
+>  : ^^^^
 
 var h: Object = a;
 >h : Object
 >  : ^^^^^^
->a : any
+>a : Object
+>  : ^^^^^^
 
 var i: {} = a;
 >i : {}
 >  : ^^
->a : any
+>a : {}
+>  : ^^
 
 var j: () => {} = a;
 >j : () => {}
 >  : ^^^^^^  
->a : any
+>a : () => {}
+>  : ^^^^^^  
 
 var k: Function = a;
 >k : Function
 >  : ^^^^^^^^
->a : any
+>a : Function
+>  : ^^^^^^^^
 
 var l: (x: number) => string = a;
 >l : (x: number) => string
 >  : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->a : any
+>a : (x: number) => string
+>  : ^ ^^      ^^^^^      
 
 ac = a;
 >ac = a : any
@@ -112,31 +122,36 @@ ae = a;
 var m: number[] = a;
 >m : number[]
 >  : ^^^^^^^^
->a : any
+>a : number[]
+>  : ^^^^^^^^
 
 var n: { foo: string } = a;
 >n : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
 >    : ^^^^^^
->a : any
+>a : { foo: string; }
+>  : ^^^^^^^      ^^^
 
 var o: <T>(x: T) => T = a;
 >o : <T>(x: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
->a : any
+>a : <T>(x: T) => T
+>  : ^ ^^ ^^ ^^^^^ 
 
 var p: Number = a;
 >p : Number
 >  : ^^^^^^
->a : any
+>a : Number
+>  : ^^^^^^
 
 var q: String = a;
 >q : String
 >  : ^^^^^^
->a : any
+>a : String
+>  : ^^^^^^
 
 function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void

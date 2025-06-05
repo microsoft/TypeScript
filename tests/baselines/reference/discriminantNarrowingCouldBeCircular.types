@@ -72,12 +72,12 @@ function getImplicitAriaRole(element: SomeRecord) {
   let ancestor: SomeRecord | null = element;
 >ancestor : SomeRecord | null
 >         : ^^^^^^^^^^^^^^^^^
->element : SomeRecord
->        : ^^^^^^^^^^
+>element : SomeRecord | null
+>        : ^^^^^^^^^^^^^^^^^
 
   while (ancestor) {
->ancestor : SomeRecord
->         : ^^^^^^^^^^
+>ancestor : SomeRecord | null
+>         : ^^^^^^^^^^^^^^^^^
 
     const parent = parentElementOrShadowHost(ancestor);
 >parent : SomeRecord | undefined

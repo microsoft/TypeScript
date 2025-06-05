@@ -28,8 +28,8 @@ type D = B & C;
 let a: B = { a: { x: 'hello' } }; // ok
 >a : B
 >  : ^
->{ a: { x: 'hello' } } : { a: { x: string; }; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^
+>{ a: { x: 'hello' } } : B
+>                      : ^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >{ x: 'hello' } : { x: string; }
@@ -42,8 +42,8 @@ let a: B = { a: { x: 'hello' } }; // ok
 let b: B = { a: { x: 2 } }; // error - types of property x are incompatible
 >b : B
 >  : ^
->{ a: { x: 2 } } : { a: { x: number; }; }
->                : ^^^^^^^^^^^^^^^^^^^^^^
+>{ a: { x: 2 } } : B
+>                : ^
 >a : { x: number; }
 >  : ^^^^^^^^^^^^^^
 >{ x: 2 } : { x: number; }
@@ -56,8 +56,8 @@ let b: B = { a: { x: 2 } }; // error - types of property x are incompatible
 let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 >c : B
 >  : ^
->{ a: { x: 'hello', y: 2 } } : { a: { x: string; y: number; }; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: { x: 'hello', y: 2 } } : B
+>                            : ^
 >a : { x: string; y: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'hello', y: 2 } : { x: string; y: number; }
@@ -74,8 +74,8 @@ let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
 let d: D = { a: { x: 'hello' }, c: 5 }; // ok
 >d : D
 >  : ^
->{ a: { x: 'hello' }, c: 5 } : { a: { x: string; }; c: number; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: { x: 'hello' }, c: 5 } : D
+>                            : ^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >{ x: 'hello' } : { x: string; }
@@ -92,8 +92,8 @@ let d: D = { a: { x: 'hello' }, c: 5 }; // ok
 let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
 >e : D
 >  : ^
->{ a: { x: 2 }, c: 5 } : { a: { x: number; }; c: number; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: { x: 2 }, c: 5 } : D
+>                      : ^
 >a : { x: number; }
 >  : ^^^^^^^^^^^^^^
 >{ x: 2 } : { x: number; }
@@ -110,8 +110,8 @@ let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatibl
 let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // error - y does not exist in type A
 >f : D
 >  : ^
->{ a: { x: 'hello', y: 2 }, c: 5 } : { a: { x: string; y: number; }; c: number; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ a: { x: 'hello', y: 2 }, c: 5 } : D
+>                                  : ^
 >a : { x: string; y: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'hello', y: 2 } : { x: string; y: number; }

@@ -1,11 +1,11 @@
-contextualTypeWithTuple.ts(3,5): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
+contextualTypeWithTuple.ts(3,38): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
   Source has 3 element(s) but target allows only 2.
 contextualTypeWithTuple.ts(15,1): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
   Source has 3 element(s) but target allows only 2.
 contextualTypeWithTuple.ts(18,17): error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
 contextualTypeWithTuple.ts(19,1): error TS2322: Type '[number, string]' is not assignable to type '[number, string, boolean]'.
   Source has 2 element(s) but target requires 3.
-contextualTypeWithTuple.ts(20,5): error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
+contextualTypeWithTuple.ts(20,37): error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
   Source has 3 element(s) but target allows only 2.
 contextualTypeWithTuple.ts(23,1): error TS2322: Type '[C, string | number, D]' is not assignable to type '[C, string | number]'.
   Source has 3 element(s) but target allows only 2.
@@ -21,7 +21,7 @@ contextualTypeWithTuple.ts(25,1): error TS2322: Type '[number, string | number]'
     // no error
     var numStrTuple: [number, string] = [5, "hello"];
     var numStrTuple2: [number, string] = [5, "foo", true];
-        ~~~~~~~~~~~~
+                                         ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
 !!! error TS2322:   Source has 3 element(s) but target allows only 2.
     var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];
@@ -50,7 +50,7 @@ contextualTypeWithTuple.ts(25,1): error TS2322: Type '[number, string | number]'
 !!! error TS2322: Type '[number, string]' is not assignable to type '[number, string, boolean]'.
 !!! error TS2322:   Source has 2 element(s) but target requires 3.
     var strStrTuple: [string, string] = ["foo", "bar", 5];
-        ~~~~~~~~~~~
+                                        ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
 !!! error TS2322:   Source has 3 element(s) but target allows only 2.
     

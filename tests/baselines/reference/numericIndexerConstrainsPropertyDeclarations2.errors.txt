@@ -1,7 +1,7 @@
 numericIndexerConstrainsPropertyDeclarations2.ts(16,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
 numericIndexerConstrainsPropertyDeclarations2.ts(25,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
 numericIndexerConstrainsPropertyDeclarations2.ts(34,5): error TS2411: Property '3.0' of type 'number' is not assignable to 'number' index type 'A'.
-numericIndexerConstrainsPropertyDeclarations2.ts(43,5): error TS2322: Type 'number' is not assignable to type 'A'.
+numericIndexerConstrainsPropertyDeclarations2.ts(44,5): error TS2353: Object literal may only specify known properties, and '"4.0"' does not exist in type '{ [x: number]: A; }'.
 
 
 ==== numericIndexerConstrainsPropertyDeclarations2.ts (4 errors) ====
@@ -54,8 +54,7 @@ numericIndexerConstrainsPropertyDeclarations2.ts(43,5): error TS2322: Type 'numb
         2.0: new B(), 
         "2.5": new B(),
         3.0: 1,
-        ~~~
-!!! error TS2322: Type 'number' is not assignable to type 'A'.
-!!! related TS6501 numericIndexerConstrainsPropertyDeclarations2.ts:39:10: The expected type comes from this index signature.
         "4.0": ''
+        ~~~~~
+!!! error TS2353: Object literal may only specify known properties, and '"4.0"' does not exist in type '{ [x: number]: A; }'.
     }

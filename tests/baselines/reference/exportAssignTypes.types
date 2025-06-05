@@ -48,8 +48,8 @@ import iObject = require('./expObject');
 var v5: Object = iObject;
 >v5 : Object
 >   : ^^^^^^
->iObject : { answer: number; when: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iObject : Object
+>        : ^^^^^^
 
 import iAny = require('./expAny');
 >iAny : any
@@ -68,8 +68,8 @@ var v7: {<x>(p1: x): x} = iGeneric;
 >   : ^ ^^  ^^ ^^^^^ 
 >p1 : x
 >   : ^
->iGeneric : <T>(a: T) => T
->         : ^ ^^ ^^ ^^^^^^
+>iGeneric : <x>(p1: x) => x
+>         : ^ ^^  ^^ ^^^^^ 
 
 === expString.ts ===
 var x = "test";

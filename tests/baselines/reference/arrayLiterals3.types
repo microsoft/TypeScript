@@ -13,13 +13,13 @@
 var a0: [any, any, any] = [];                             // Error
 >a0 : [any, any, any]
 >   : ^^^^^^^^^^^^^^^
->[] : []
->   : ^^
+>[] : [any, any, any]
+>   : ^^^^^^^^^^^^^^^
 
 var a1: [boolean, string, number] = ["string", 1, true];  // Error
 >a1 : [boolean, string, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
->["string", 1, true] : [string, number, boolean]
+>["string", 1, true] : [boolean, string, number]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
@@ -37,8 +37,8 @@ var [b1, b2]: [number, number] = [1, 2, "string", true];
 >   : ^^^^^^
 >b2 : number
 >   : ^^^^^^
->[1, 2, "string", true] : [number, number, string, boolean]
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, "string", true] : [number, number]
+>                       : ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -109,8 +109,8 @@ interface myArray2 extends Array<Number|String> { }
 var c0: tup = [...temp2];                         // Error
 >c0 : tup
 >   : ^^^
->[...temp2] : [number[], string[]]
->           : ^^^^^^^^^^^^^^^^^^^^
+>[...temp2] : tup
+>           : ^^^
 >...temp2 : number[] | string[]
 >         : ^^^^^^^^^^^^^^^^^^^
 >temp2 : [number[], string[]]
@@ -119,8 +119,8 @@ var c0: tup = [...temp2];                         // Error
 var c1: [number, number, number] = [...temp1];    // Error cannot assign number[] to [number, number, number]
 >c1 : [number, number, number]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
->[...temp1] : number[]
->           : ^^^^^^^^
+>[...temp1] : [number, number, number]
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >...temp1 : number
 >         : ^^^^^^
 >temp1 : number[]
@@ -129,8 +129,8 @@ var c1: [number, number, number] = [...temp1];    // Error cannot assign number[
 var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
 >c2 : myArray
 >   : ^^^^^^^
->[...temp1, ...temp] : (string | number)[]
->                    : ^^^^^^^^^^^^^^^^^^^
+>[...temp1, ...temp] : myArray
+>                    : ^^^^^^^
 >...temp1 : number
 >         : ^^^^^^
 >temp1 : number[]

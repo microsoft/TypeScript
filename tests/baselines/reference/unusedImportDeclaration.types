@@ -8,8 +8,8 @@ import B = require("./unusedImportDeclaration_testerB");
 var thingy: B = {
 >thingy : B
 >       : ^
->{    me: "A"} : { me: string; }
->              : ^^^^^^^^^^^^^^^
+>{    me: "A"} : B
+>              : ^
 
     me: "A"
 >me : string

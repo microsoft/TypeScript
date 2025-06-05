@@ -46,7 +46,7 @@ variadicTuples2.ts(79,5): error TS2322: Type '[number, ...T]' is not assignable 
   Type '[number, ...unknown[]]' is not assignable to type '[number, ...number[]]'.
     Type at position 1 in source is not compatible with type at position 1 in target.
       Type 'unknown' is not assignable to type 'number'.
-variadicTuples2.ts(84,5): error TS2322: Type '[number, string, ...any[]]' is not assignable to type '[number, ...number[]]'.
+variadicTuples2.ts(84,34): error TS2322: Type '[number, string, ...any[]]' is not assignable to type '[number, ...number[]]'.
   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
     Type 'string' is not assignable to type 'number'.
 variadicTuples2.ts(116,16): error TS2345: Argument of type '[1, 2, 3, number]' is not assignable to parameter of type '[...number[], (...values: number[]) => void]'.
@@ -225,7 +225,7 @@ variadicTuples2.ts(139,25): error TS2345: Argument of type '["blah2", 1, 2, 3]' 
     // repro #50216
     declare let tt3: [number, string, ...any[]]
     let tt4: [number, ...number[]] = tt3  // Error
-        ~~~
+                                     ~~~
 !!! error TS2322: Type '[number, string, ...any[]]' is not assignable to type '[number, ...number[]]'.
 !!! error TS2322:   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.

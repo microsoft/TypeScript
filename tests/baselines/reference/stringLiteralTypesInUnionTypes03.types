@@ -12,8 +12,8 @@ var x: "foo" | "bar" | number;
 var y: T = undefined;
 >y : T
 >  : ^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : T
+>          : ^
 
 if (x === "foo") {
 >x === "foo" : boolean

@@ -427,8 +427,8 @@ async function foobar() {
     let before: number | undefined = undefined;
 >before : number | undefined
 >       : ^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : number | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     for (let i = 0; i < 2; i++) {
 >i : number
@@ -487,8 +487,8 @@ async () => {
   let bar: string | undefined = undefined;
 >bar : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
   do {
     const baz = await foox(bar);
@@ -535,8 +535,8 @@ async function myFunc(): Promise<void> {
   let lastId: number | undefined = undefined;
 >lastId : number | undefined
 >       : ^^^^^^^^^^^^^^^^^^
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : number | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
   while (true) {
 >true : true

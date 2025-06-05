@@ -14,8 +14,8 @@ function foo1() {
     let x: string | number | boolean = 0;
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     while (cond) {
 >cond : boolean
@@ -26,8 +26,8 @@ function foo1() {
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -64,8 +64,8 @@ function foo2() {
     let x: string | number | boolean = 0;
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->0 : 0
->  : ^
+>0 : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     while (cond) {
 >cond : boolean
@@ -76,8 +76,8 @@ function foo2() {
 >                      : ^^^^^^^
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->x : string | number
->  : ^^^^^^^^^^^^^^^
+>x : string | number | boolean
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"number" : "number"
 >         : ^^^^^^^^
 
@@ -91,18 +91,18 @@ function foo2() {
         }
         else {
             x = x.slice();
->x = x.slice() : string
->              : ^^^^^^
+>x = x.slice() : any
+>              : ^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
->x.slice() : string
->          : ^^^^^^
->x.slice : (start?: number, end?: number) => string
->        : ^     ^^^      ^^   ^^^      ^^^^^      
->x : string
->  : ^^^^^^
->slice : (start?: number, end?: number) => string
->      : ^     ^^^      ^^   ^^^      ^^^^^      
+>x.slice() : any
+>          : ^^^
+>x.slice : any
+>        : ^^^
+>x : string | boolean
+>  : ^^^^^^^^^^^^^^^^
+>slice : any
+>      : ^^^
         }
     }
 }

@@ -125,7 +125,7 @@ var tf: [string, (x: string) => number] = ["hello", x => x.length];
 >x : string
 >  : ^^^^^^
 >["hello", x => x.length] : [string, (x: string) => number]
->                         : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^ ^^      ^^^^^      ^
 >"hello" : "hello"
 >        : ^^^^^^^
 >x => x.length : (x: string) => number

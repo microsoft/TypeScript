@@ -68,8 +68,8 @@ var r3 = i.Z;
 var f: Foo = i;
 >f : Foo
 >  : ^^^
->i : I
->  : ^
+>i : Foo
+>  : ^^^
 
 i = f;
 >i = f : Foo

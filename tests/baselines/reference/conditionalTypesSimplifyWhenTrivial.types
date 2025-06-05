@@ -24,8 +24,8 @@ function fn2<T>(x: Exclude<T, never>) {
     var y: T = x;
 >y : T
 >  : ^
->x : Exclude<T, never>
->  : ^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     x = y;
 >x = y : T
@@ -59,8 +59,8 @@ function fn4<T>(x: Extract<T, T>) {
     var y: T = x;
 >y : T
 >  : ^
->x : Extract<T, T>
->  : ^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     x = y;
 >x = y : T
@@ -106,8 +106,8 @@ function fn6<T>(x: ExcludeWithDefault<T, never>) {
     var y: T = x;
 >y : T
 >  : ^
->x : ExcludeWithDefault<T, never, never>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     x = y;
 >x = y : T
@@ -141,8 +141,8 @@ function fn8<T>(x: ExtractWithDefault<T, T>) {
     var y: T = x;
 >y : T
 >  : ^
->x : ExtractWithDefault<T, T, never>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     x = y;
 >x = y : T
@@ -180,8 +180,8 @@ function fn10<T>(x: TemplatedConditional<T, never, never, T>) {
     var y: T = x;
 >y : T
 >  : ^
->x : TemplatedConditional<T, never, never, T>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     x = y;
 >x = y : T
@@ -215,8 +215,8 @@ function fn12<T>(x: TemplatedConditional<T, T, T, never>) {
     var y: T = x;
 >y : T
 >  : ^
->x : TemplatedConditional<T, T, T, never>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
 
     x = y;
 >x = y : T

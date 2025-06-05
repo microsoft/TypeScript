@@ -17,8 +17,8 @@ interface I {
 var o: I = {
 >o : I
 >  : ^
->{    ["" + 0](y) { return y.length; },    ["" + 1]: y => y.length} : { [x: string]: (y: string) => number; }
->                                                                   : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>{    ["" + 0](y) { return y.length; },    ["" + 1]: y => y.length} : I
+>                                                                   : ^
 
     ["" + 0](y) { return y.length; },
 >["" + 0] : (y: string) => number

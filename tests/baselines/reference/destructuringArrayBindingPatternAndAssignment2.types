@@ -29,8 +29,8 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 >   : ^^^^^^^
 >b2 : string
 >   : ^^^^^^
->[1, 2, "string"] : [number, number, string]
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, "string"] : [number, boolean, string]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -93,8 +93,8 @@ var [c0, c1]: [number, number] = [...temp];  // Error
 >   : ^^^^^^
 >c1 : number
 >   : ^^^^^^
->[...temp] : number[]
->          : ^^^^^^^^
+>[...temp] : [number, number]
+>          : ^^^^^^^^^^^^^^^^
 >...temp : number
 >        : ^^^^^^
 >temp : number[]
@@ -105,8 +105,8 @@ var [c2, c3]: [string, string] = [...temp];  // Error
 >   : ^^^^^^
 >c3 : string
 >   : ^^^^^^
->[...temp] : number[]
->          : ^^^^^^^^
+>[...temp] : [string, string]
+>          : ^^^^^^^^^^^^^^^^
 >...temp : number
 >        : ^^^^^^
 >temp : number[]

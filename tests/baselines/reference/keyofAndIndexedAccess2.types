@@ -799,14 +799,14 @@ function fn4<K extends number>() {
     let x: Array<string>[K] = 'abc';
 >x : string[][K]
 >  : ^^^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : string[][K]
+>      : ^^^^^^^^^^^
 
     let y: ReadonlyArray<string>[K] = 'abc';
 >y : (readonly string[])[K]
 >  : ^^^^^^^^^^^^^^^^^^^^^^
->'abc' : "abc"
->      : ^^^^^
+>'abc' : (readonly string[])[K]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Repro from #31439 and #31691

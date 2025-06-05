@@ -57,8 +57,8 @@ interface MyDisposable {
   using _: MyDisposable = { [Symbol.dispose]() {}, value: 1, extra: "foo" };
 >_ : MyDisposable
 >  : ^^^^^^^^^^^^
->{ [Symbol.dispose]() {}, value: 1, extra: "foo" } : { [Symbol.dispose](): void; value: number; extra: string; }
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {}, value: 1, extra: "foo" } : MyDisposable
+>                                                  : ^^^^^^^^^^^^
 >[Symbol.dispose] : () => void
 >                 : ^^^^^^^^^^
 >Symbol.dispose : unique symbol

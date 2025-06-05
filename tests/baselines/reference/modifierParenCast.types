@@ -3,23 +3,19 @@
 === modifierParenCast.ts ===
 let readonly: any = undefined;
 >readonly : any
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
 
 let override: any = undefined;
 >override : any
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
 
 let out: any = undefined;
 >out : any
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
 
 let declare: any = undefined;
 >declare : any
->undefined : undefined
->          : ^^^^^^^^^
+>undefined : any
 
 export const a = (readonly as number);
 >a : number
