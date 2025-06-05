@@ -1077,6 +1077,10 @@ func (c *Checker) getJsxElementPropertiesName(jsxNamespace *ast.Symbol) string {
 }
 
 func (c *Checker) getJsxElementChildrenPropertyName(jsxNamespace *ast.Symbol) string {
+	if c.compilerOptions.Jsx == core.JsxEmitReactJSX || c.compilerOptions.Jsx == core.JsxEmitReactJSXDev {
+		// In these JsxEmit modes the children property is fixed to 'children'
+		return "children"
+	}
 	return c.getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer, jsxNamespace)
 }
 
