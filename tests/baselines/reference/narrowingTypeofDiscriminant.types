@@ -114,8 +114,8 @@ function numberOk(wrapped: WrappedStringOr<number> | null) {
     return wrapped.value;
 >wrapped.value : string
 >              : ^^^^^^
->wrapped : WrappedStringOr<number>
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>wrapped : { value?: string; }
+>        : ^^^^^^^^^^      ^^^
 >value : string
 >      : ^^^^^^
 }
