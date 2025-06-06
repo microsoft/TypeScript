@@ -1427,7 +1427,8 @@ Before running Timeout callback:: count: 2
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1472,6 +1473,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }
@@ -1629,7 +1631,8 @@ Before running Timeout callback:: count: 3
       "es5",
       "dom"
     ],
-    "traceResolution": true
+    "traceResolution": true,
+    "libReplacement": true
   }
 }
 
@@ -1726,6 +1729,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspace/projects/project1/tsconfig.
    "lib.dom.d.ts"
   ],
   "traceResolution": true,
+  "libReplacement": true,
   "configFilePath": "/home/src/workspace/projects/project1/tsconfig.json"
  }
 }

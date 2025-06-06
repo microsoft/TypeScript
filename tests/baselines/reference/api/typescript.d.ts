@@ -1487,7 +1487,10 @@ declare namespace ts {
                 arguments: FileLocationRequestArgs;
             }
             export interface QuickInfoRequestArgs extends FileLocationRequestArgs {
-                /** TODO */
+                /**
+                 * This controls how many levels of definitions will be expanded in the quick info response.
+                 * The default value is 0.
+                 */
                 verbosityLevel?: number;
             }
             /**
@@ -1524,7 +1527,7 @@ declare namespace ts {
                  */
                 tags: JSDocTagInfo[];
                 /**
-                 * TODO
+                 * Whether the verbosity level can be increased for this quick info response.
                  */
                 canIncreaseVerbosityLevel?: boolean;
             }
@@ -3642,7 +3645,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.8";
+    const versionMajorMinor = "5.9";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -6288,6 +6291,7 @@ declare namespace ts {
         getBigIntType(): Type;
         getBigIntLiteralType(value: PseudoBigInt): BigIntLiteralType;
         getBooleanType(): Type;
+        getUnknownType(): Type;
         getFalseType(): Type;
         getTrueType(): Type;
         getVoidType(): Type;
@@ -6310,6 +6314,10 @@ declare namespace ts {
          * is `never`. Instead, use `type.flags & TypeFlags.Never`.
          */
         getNeverType(): Type;
+        /**
+         * Gets the intrinsic `object` type.
+         */
+        getNonPrimitiveType(): Type;
         /**
          * Returns true if the "source" type is assignable to the "target" type.
          *
@@ -6347,6 +6355,7 @@ declare namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+        getTypeArgumentsForResolvedSignature(signature: Signature): readonly Type[] | undefined;
     }
     enum NodeBuilderFlags {
         None = 0,
@@ -6850,11 +6859,15 @@ declare namespace ts {
         String = 0,
         Number = 1,
     }
+    type ElementWithComputedPropertyName = (ClassElement | ObjectLiteralElement) & {
+        name: ComputedPropertyName;
+    };
     interface IndexInfo {
         keyType: Type;
         type: Type;
         isReadonly: boolean;
         declaration?: IndexSignatureDeclaration;
+        components?: ElementWithComputedPropertyName[];
     }
     enum InferencePriority {
         None = 0,
@@ -7025,6 +7038,7 @@ declare namespace ts {
         /** @deprecated */
         keyofStringsOnly?: boolean;
         lib?: string[];
+        libReplacement?: boolean;
         locale?: string;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
@@ -7101,6 +7115,7 @@ declare namespace ts {
         /** Paths used to compute primary types search locations */
         typeRoots?: string[];
         verbatimModuleSyntax?: boolean;
+        erasableSyntaxOnly?: boolean;
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
@@ -8391,6 +8406,12 @@ declare namespace ts {
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
         readonly disableLineTextInReferences?: boolean;
+        /**
+         * A positive integer indicating the maximum length of a hover text before it is truncated.
+         *
+         * Default: `500`
+         */
+        readonly maximumHoverLength?: number;
     }
     type OrganizeImportsTypeOrder = "last" | "inline" | "first";
     /** Represents a bigint literal value without requiring bigint support */
@@ -10168,8 +10189,9 @@ declare namespace ts {
          *
          * @param fileName The path to the file
          * @param position A zero-based index of the character where you want the quick info
+         * @param maximumLength Maximum length of a quickinfo text before it is truncated.
          */
-        getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;
+        getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number): QuickInfo | undefined;
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;

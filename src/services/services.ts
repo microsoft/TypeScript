@@ -49,6 +49,7 @@ import {
     Debug,
     Declaration,
     deduplicate,
+    defaultHoverMaximumTruncationLength,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
     Diagnostic,
@@ -2274,7 +2275,7 @@ export function createLanguageService(
         return Completions.getCompletionEntrySymbol(program, log, getValidSourceFile(fileName), position, { name, source }, host, preferences);
     }
 
-    function getQuickInfoAtPosition(fileName: string, position: number, verbosityLevel?: number): QuickInfo | undefined {
+    function getQuickInfoAtPosition(fileName: string, position: number, maximumLength?: number, verbosityLevel?: number): QuickInfo | undefined {
         synchronizeHostData();
 
         const sourceFile = getValidSourceFile(fileName);
@@ -2310,6 +2311,7 @@ export function createLanguageService(
                     nodeForQuickInfo,
                     /*semanticMeaning*/ undefined,
                     /*alias*/ undefined,
+                    maximumLength ?? defaultHoverMaximumTruncationLength,
                     verbosityLevel,
                 ),
         );

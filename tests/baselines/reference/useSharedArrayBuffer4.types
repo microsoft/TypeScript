@@ -27,20 +27,6 @@ var bar = foge.slice(1, 10);
 >10 : 10
 >   : ^^
 
-var species = foge[Symbol.species];
->species : SharedArrayBuffer
->        : ^^^^^^^^^^^^^^^^^
->foge[Symbol.species] : SharedArrayBuffer
->                     : ^^^^^^^^^^^^^^^^^
->foge : SharedArrayBuffer
->     : ^^^^^^^^^^^^^^^^^
->Symbol.species : unique symbol
->               : ^^^^^^^^^^^^^
->Symbol : SymbolConstructor
->       : ^^^^^^^^^^^^^^^^^
->species : unique symbol
->        : ^^^^^^^^^^^^^
-
 var stringTag = foge[Symbol.toStringTag];
 >stringTag : "SharedArrayBuffer"
 >          : ^^^^^^^^^^^^^^^^^^^
@@ -64,4 +50,18 @@ var len = foge.byteLength;
 >     : ^^^^^^^^^^^^^^^^^
 >byteLength : number
 >           : ^^^^^^
+
+var species = SharedArrayBuffer[Symbol.species];
+>species : SharedArrayBufferConstructor
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SharedArrayBuffer[Symbol.species] : SharedArrayBufferConstructor
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SharedArrayBuffer : SharedArrayBufferConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Symbol.species : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>species : unique symbol
+>        : ^^^^^^^^^^^^^
 

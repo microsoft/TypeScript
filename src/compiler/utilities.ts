@@ -2,6 +2,7 @@ import {
     __String,
     AccessExpression,
     AccessorDeclaration,
+    addEmitFlags,
     addRange,
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
@@ -138,6 +139,7 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
+    FileReference,
     FileWatcher,
     filter,
     find,
@@ -408,6 +410,7 @@ import {
     lastOrUndefined,
     LateVisibilityPaintedStatement,
     length,
+    libMap,
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
@@ -497,6 +500,7 @@ import {
     ResolutionMode,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
+    ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     resolvePath,
@@ -508,6 +512,8 @@ import {
     ScriptTarget,
     semanticDiagnosticsOptionDeclarations,
     SetAccessorDeclaration,
+    setOriginalNode,
+    setTextRange,
     ShorthandPropertyAssignment,
     shouldAllowImportingTsExtension,
     Signature,
@@ -549,6 +555,7 @@ import {
     TextRange,
     TextSpan,
     ThisTypePredicate,
+    toFileNameLowerCase,
     Token,
     TokenFlags,
     tokenToString,
@@ -588,6 +595,7 @@ import {
     VariableDeclarationList,
     VariableLikeDeclaration,
     VariableStatement,
+    visitEachChild,
     WhileStatement,
     WithStatement,
     WrappedExpression,
@@ -606,6 +614,8 @@ export const externalHelpersModuleNameText = "tslib";
 export const defaultMaximumTruncationLength = 160;
 /** @internal */
 export const noTruncationMaximumTruncationLength = 1_000_000;
+/** @internal */
+export const defaultHoverMaximumTruncationLength = 500;
 
 /** @internal */
 export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T | undefined {
@@ -1558,6 +1568,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "fround",
                 "cbrt",
             ],
+            esnext: [
+                "f16round",
+            ],
         })),
         Map: new Map(Object.entries({
             es2015: [
@@ -1727,6 +1740,10 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "getBigInt64",
                 "getBigUint64",
             ],
+            esnext: [
+                "setFloat16",
+                "getFloat16",
+            ],
         })),
         BigInt: new Map(Object.entries({
             es2020: emptyArray,
@@ -1828,6 +1845,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "toSpliced",
                 "with",
             ],
+        })),
+        Float16Array: new Map(Object.entries({
+            esnext: emptyArray,
         })),
         Float32Array: new Map(Object.entries({
             es2022: [
@@ -3014,14 +3034,6 @@ export function forEachPropertyAssignment<T>(objectLiteral: ObjectLiteralExpress
             callback(property) :
             undefined;
     });
-}
-
-/** @internal */
-export function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
-    return forEachPropertyAssignment(objectLiteral, propKey, property =>
-        isArrayLiteralExpression(property.initializer) ?
-            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
-            undefined);
 }
 
 /** @internal */
@@ -6579,7 +6591,7 @@ export function sourceFileMayBeEmitted(sourceFile: SourceFile, host: SourceFileM
     if (host.isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return false;
     // Any non json file should be emitted
     if (!isJsonSourceFile(sourceFile)) return true;
-    if (host.getResolvedProjectReferenceToRedirect(sourceFile.fileName)) return false;
+    if (host.getRedirectFromSourceFile(sourceFile.fileName)) return false;
     // Emit json file if outFile is specified
     if (options.outFile) return true;
     // Json file is not emitted if outDir is not specified
@@ -9051,8 +9063,8 @@ const _computedOptions = createComputedCompilerOptions({
             if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
                 return false;
             }
-            if (compilerOptions.resolvePackageJsonExports !== undefined) {
-                return compilerOptions.resolvePackageJsonExports;
+            if (compilerOptions.resolvePackageJsonImports !== undefined) {
+                return compilerOptions.resolvePackageJsonImports;
             }
             switch (moduleResolution) {
                 case ModuleResolutionKind.Node16:
@@ -10471,6 +10483,7 @@ export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean 
 /** @internal */
 export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
     return !!(useSite.flags & NodeFlags.Ambient)
+        || isInJSDoc(useSite)
         || isPartOfTypeQuery(useSite)
         || isIdentifierInNonEmittingHeritageClause(useSite)
         || isPartOfPossiblyValidTypeOrAbstractComputedPropertyName(useSite)
@@ -12112,4 +12125,210 @@ export function isNewScopeNode(node: Node): node is IntroducesNewScopeNode {
     return isFunctionLike(node)
         || isJSDocSignature(node)
         || isMappedTypeNode(node);
+}
+
+/** @internal */
+export function getLibNameFromLibReference(libReference: FileReference): string {
+    return toFileNameLowerCase(libReference.fileName);
+}
+
+/** @internal */
+export function getLibFileNameFromLibReference(libReference: FileReference): string | undefined {
+    const libName = getLibNameFromLibReference(libReference);
+    return libMap.get(libName);
+}
+
+/** @internal */
+export function forEachResolvedProjectReference<T>(
+    resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+    cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined,
+): T | undefined {
+    return forEachProjectReference(
+        /*projectReferences*/ undefined,
+        resolvedProjectReferences,
+        resolvedRef => resolvedRef && cb(resolvedRef),
+    );
+}
+
+/** @internal */
+export function forEachProjectReference<T>(
+    projectReferences: readonly ProjectReference[] | undefined,
+    resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+    cbResolvedRef: (resolvedRef: ResolvedProjectReference | undefined, parent: ResolvedProjectReference | undefined, index: number) => T | undefined,
+    cbRef?: (projectReferences: readonly ProjectReference[] | undefined, parent: ResolvedProjectReference | undefined) => T | undefined,
+): T | undefined {
+    let seenResolvedRefs: Set<Path> | undefined;
+    return worker(projectReferences, resolvedProjectReferences, /*parent*/ undefined);
+
+    function worker(
+        projectReferences: readonly ProjectReference[] | undefined,
+        resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined,
+        parent: ResolvedProjectReference | undefined,
+    ): T | undefined {
+        // Visit project references first
+        if (cbRef) {
+            const result = cbRef(projectReferences, parent);
+            if (result) return result;
+        }
+        let skipChildren: Set<ResolvedProjectReference> | undefined;
+        return forEach(
+            resolvedProjectReferences,
+            (resolvedRef, index) => {
+                if (resolvedRef && seenResolvedRefs?.has(resolvedRef.sourceFile.path)) {
+                    (skipChildren ??= new Set()).add(resolvedRef);
+                    // ignore recursives
+                    return undefined;
+                }
+                const result = cbResolvedRef(resolvedRef, parent, index);
+                if (result || !resolvedRef) return result;
+                (seenResolvedRefs ||= new Set()).add(resolvedRef.sourceFile.path);
+            },
+        ) || forEach(
+            resolvedProjectReferences,
+            resolvedRef =>
+                resolvedRef && !skipChildren?.has(resolvedRef) ?
+                    worker(resolvedRef.commandLine.projectReferences, resolvedRef.references, resolvedRef) :
+                    undefined,
+        );
+    }
+}
+
+/** @internal */
+export function getOptionsSyntaxByArrayElementValue(optionsObject: ObjectLiteralExpression | undefined, name: string, value: string): StringLiteral | undefined {
+    return optionsObject && getPropertyArrayElementValue(optionsObject, name, value);
+}
+
+function getPropertyArrayElementValue(objectLiteral: ObjectLiteralExpression, propKey: string, elementValue: string): StringLiteral | undefined {
+    return forEachPropertyAssignment(objectLiteral, propKey, property =>
+        isArrayLiteralExpression(property.initializer) ?
+            find(property.initializer.elements, (element): element is StringLiteral => isStringLiteral(element) && element.text === elementValue) :
+            undefined);
+}
+
+/** @internal */
+export function getOptionsSyntaxByValue(optionsObject: ObjectLiteralExpression | undefined, name: string, value: string): StringLiteral | undefined {
+    return forEachOptionsSyntaxByName(optionsObject, name, property => isStringLiteral(property.initializer) && property.initializer.text === value ? property.initializer : undefined);
+}
+
+/** @internal */
+export function forEachOptionsSyntaxByName<T>(optionsObject: ObjectLiteralExpression | undefined, name: string, callback: (prop: PropertyAssignment) => T | undefined): T | undefined {
+    return forEachPropertyAssignment(optionsObject, name, callback);
+}
+
+/**
+ * Creates a deep, memberwise clone of a node with no source map location.
+ *
+ * WARNING: This is an expensive operation and is only intended to be used in refactorings
+ * and code fixes (because those are triggered by explicit user actions).
+ *
+ * @internal
+ */
+// Moved here to compiler utilities for usage in node builder for quickinfo.
+export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
+    const clone = node && getSynthesizedDeepCloneWorker(node);
+    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+    return setParentRecursive(clone, /*incremental*/ false);
+}
+
+/** @internal */
+export function getSynthesizedDeepCloneWithReplacements<T extends Node>(
+    node: T,
+    includeTrivia: boolean,
+    replaceNode: (node: Node) => Node | undefined,
+): T {
+    let clone = replaceNode(node);
+    if (clone) {
+        setOriginalNode(clone, node);
+    }
+    else {
+        clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, replaceNode);
+    }
+
+    if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
+    return clone as T;
+}
+
+function getSynthesizedDeepCloneWorker<T extends Node>(node: T, replaceNode?: (node: Node) => Node | undefined): T {
+    const nodeClone: <T extends Node>(n: T) => T = replaceNode
+        ? n => getSynthesizedDeepCloneWithReplacements(n, /*includeTrivia*/ true, replaceNode)
+        : getSynthesizedDeepClone;
+    const nodesClone: <T extends Node>(ns: NodeArray<T> | undefined) => NodeArray<T> | undefined = replaceNode
+        ? ns => ns && getSynthesizedDeepClonesWithReplacements(ns, /*includeTrivia*/ true, replaceNode)
+        : ns => ns && getSynthesizedDeepClones(ns);
+    const visited = visitEachChild(node, nodeClone, /*context*/ undefined, nodesClone, nodeClone);
+
+    if (visited === node) {
+        // This only happens for leaf nodes - internal nodes always see their children change.
+        const clone = isStringLiteral(node) ? setOriginalNode(factory.createStringLiteralFromNode(node), node) as Node as T :
+            isNumericLiteral(node) ? setOriginalNode(factory.createNumericLiteral(node.text, node.numericLiteralFlags), node) as Node as T :
+            factory.cloneNode(node);
+        return setTextRange(clone, node);
+    }
+
+    // PERF: As an optimization, rather than calling factory.cloneNode, we'll update
+    // the new node created by visitEachChild with the extra changes factory.cloneNode
+    // would have made.
+    (visited as Mutable<T>).parent = undefined!;
+    return visited;
+}
+
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T>, includeTrivia?: boolean): NodeArray<T>;
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia?: boolean): NodeArray<T> | undefined;
+/** @internal */
+export function getSynthesizedDeepClones<T extends Node>(nodes: NodeArray<T> | undefined, includeTrivia = true): NodeArray<T> | undefined {
+    if (nodes) {
+        const cloned = factory.createNodeArray(nodes.map(n => getSynthesizedDeepClone(n, includeTrivia)), nodes.hasTrailingComma);
+        setTextRange(cloned, nodes);
+        return cloned;
+    }
+    return nodes;
+}
+
+/** @internal */
+export function getSynthesizedDeepClonesWithReplacements<T extends Node>(
+    nodes: NodeArray<T>,
+    includeTrivia: boolean,
+    replaceNode: (node: Node) => Node | undefined,
+): NodeArray<T> {
+    return factory.createNodeArray(nodes.map(n => getSynthesizedDeepCloneWithReplacements(n, includeTrivia, replaceNode)), nodes.hasTrailingComma);
+}
+
+/**
+ * Sets EmitFlags to suppress leading and trailing trivia on the node.
+ *
+ * @internal
+ */
+export function suppressLeadingAndTrailingTrivia(node: Node): void {
+    suppressLeadingTrivia(node);
+    suppressTrailingTrivia(node);
+}
+
+/**
+ * Sets EmitFlags to suppress leading trivia on the node.
+ *
+ * @internal
+ */
+export function suppressLeadingTrivia(node: Node): void {
+    addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+}
+
+/**
+ * Sets EmitFlags to suppress trailing trivia on the node.
+ *
+ * @internal @knipignore
+ */
+export function suppressTrailingTrivia(node: Node): void {
+    addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+}
+
+function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
+    addEmitFlags(node, flag);
+    const child = getChild(node);
+    if (child) addEmitFlagsRecursively(child, flag, getChild);
+}
+
+function getFirstChild(node: Node): Node | undefined {
+    return forEachChild(node, child => child);
 }

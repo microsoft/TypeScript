@@ -103,6 +103,7 @@ import {
     NodeArray,
     NodeBuilderFlags,
     ParameterDeclaration,
+    parameterIsThisKeyword,
     PrefixUnaryExpression,
     PropertyDeclaration,
     QuotePreference,
@@ -437,24 +438,26 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
             return;
         }
 
-        for (let i = 0; i < node.parameters.length && i < signature.parameters.length; ++i) {
-            const param = node.parameters[i];
-            if (!isHintableDeclaration(param)) {
+        let pos = 0;
+        for (const param of node.parameters) {
+            if (isHintableDeclaration(param)) {
+                addParameterTypeHint(param, parameterIsThisKeyword(param) ? signature.thisParameter : signature.parameters[pos]);
+            }
+            if (parameterIsThisKeyword(param)) {
                 continue;
             }
-
-            const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(param);
-            if (effectiveTypeAnnotation) {
-                continue;
-            }
-
-            const typeHints = getParameterDeclarationTypeHints(signature.parameters[i]);
-            if (!typeHints) {
-                continue;
-            }
-
-            addTypeHints(typeHints, param.questionToken ? param.questionToken.end : param.name.end);
+            pos++;
         }
+    }
+
+    function addParameterTypeHint(node: ParameterDeclaration, symbol: Symbol | undefined) {
+        const effectiveTypeAnnotation = getEffectiveTypeAnnotationNode(node);
+        if (effectiveTypeAnnotation || symbol === undefined) return;
+
+        const typeHints = getParameterDeclarationTypeHints(symbol);
+        if (typeHints === undefined) return;
+
+        addTypeHints(typeHints, node.questionToken ? node.questionToken.end : node.name.end);
     }
 
     function getParameterDeclarationTypeHints(symbol: Symbol) {

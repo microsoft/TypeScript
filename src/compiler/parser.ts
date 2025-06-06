@@ -7328,9 +7328,16 @@ namespace Parser {
         return nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(/*disallowOf*/ true);
     }
 
+    function nextTokenIsEqualsOrSemicolonOrColonToken() {
+        nextToken();
+        return token() === SyntaxKind.EqualsToken || token() === SyntaxKind.SemicolonToken || token() === SyntaxKind.ColonToken;
+    }
+
     function nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(disallowOf?: boolean) {
         nextToken();
-        if (disallowOf && token() === SyntaxKind.OfKeyword) return false;
+        if (disallowOf && token() === SyntaxKind.OfKeyword) {
+            return lookAhead(nextTokenIsEqualsOrSemicolonOrColonToken);
+        }
         return (isBindingIdentifier() || token() === SyntaxKind.OpenBraceToken) && !scanner.hasPrecedingLineBreak();
     }
 
@@ -9536,6 +9543,7 @@ namespace Parser {
                 const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; };
                 const res = finishNode(node, pos);
                 if (usedBrace) {
+                    skipWhitespace();
                     parseExpected(SyntaxKind.CloseBraceToken);
                 }
                 return res;
