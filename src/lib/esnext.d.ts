@@ -8,3 +8,4 @@
 /// <reference lib="esnext.promise" />
 /// <reference lib="esnext.float16" />
 /// <reference lib="esnext.error" />
+/// <reference lib="esnext.sharedmemory" />
