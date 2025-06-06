@@ -1,0 +1,1037 @@
+===================================================================
+JsFile: propertyNameWithEscape1.js
+mapUrl: propertyNameWithEscape1.js.map
+sourceRoot: 
+sources: propertyNameWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:propertyNameWithEscape1.js
+sourceFile:propertyNameWithEscape1.ts
+-------------------------------------------------------------------
+>>>export const foo = { \u0078: 10 };
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^
+9 >                           ^^
+10>                             ^^
+11>                               ^^
+12>                                 ^
+1 >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     \u0078
+9 >                           : 
+10>                             10
+11>                               }
+12>                                 ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+7 >Emitted(1, 22) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 28) Source(1, 27) + SourceIndex(0)
+9 >Emitted(1, 30) Source(1, 29) + SourceIndex(0)
+10>Emitted(1, 32) Source(1, 31) + SourceIndex(0)
+11>Emitted(1, 34) Source(1, 32) + SourceIndex(0)
+12>Emitted(1, 35) Source(1, 33) + SourceIndex(0)
+---
+>>>foo.x++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^
+5 >     ^^
+6 >       ^
+7 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    x
+5 >     ++
+6 >       ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+5 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+6 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=propertyNameWithEscape1.js.map===================================================================
+JsFile: propertyNameWithEscape2.js
+mapUrl: propertyNameWithEscape2.js.map
+sourceRoot: 
+sources: propertyNameWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:propertyNameWithEscape2.js
+sourceFile:propertyNameWithEscape2.ts
+-------------------------------------------------------------------
+>>>export const foo = { x\u0078: 10 };
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^
+9 >                            ^^
+10>                              ^^
+11>                                ^^
+12>                                  ^
+1 >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     x\u0078
+9 >                            : 
+10>                              10
+11>                                }
+12>                                  ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+7 >Emitted(1, 22) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 29) Source(1, 28) + SourceIndex(0)
+9 >Emitted(1, 31) Source(1, 30) + SourceIndex(0)
+10>Emitted(1, 33) Source(1, 32) + SourceIndex(0)
+11>Emitted(1, 35) Source(1, 33) + SourceIndex(0)
+12>Emitted(1, 36) Source(1, 34) + SourceIndex(0)
+---
+>>>foo.xx++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^
+5 >      ^^
+6 >        ^
+7 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    xx
+5 >      ++
+6 >        ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+5 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+6 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=propertyNameWithEscape2.js.map===================================================================
+JsFile: propertyNameWithEscape3.js
+mapUrl: propertyNameWithEscape3.js.map
+sourceRoot: 
+sources: propertyNameWithEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:propertyNameWithEscape3.js
+sourceFile:propertyNameWithEscape3.ts
+-------------------------------------------------------------------
+>>>export const foo = { a\u0062c\u0064e: 10 };
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^^^^^^^^^
+9 >                                    ^^
+10>                                      ^^
+11>                                        ^^
+12>                                          ^
+1 >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     a\u0062c\u0064e
+9 >                                    : 
+10>                                      10
+11>                                        }
+12>                                          ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+7 >Emitted(1, 22) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 37) Source(1, 36) + SourceIndex(0)
+9 >Emitted(1, 39) Source(1, 38) + SourceIndex(0)
+10>Emitted(1, 41) Source(1, 40) + SourceIndex(0)
+11>Emitted(1, 43) Source(1, 41) + SourceIndex(0)
+12>Emitted(1, 44) Source(1, 42) + SourceIndex(0)
+---
+>>>foo.abcde++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^^^^
+5 >         ^^
+6 >           ^
+7 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    abcde
+5 >         ++
+6 >           ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+5 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+6 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=propertyNameWithEscape3.js.map===================================================================
+JsFile: propertyNameWithExtendedEscape1.js
+mapUrl: propertyNameWithExtendedEscape1.js.map
+sourceRoot: 
+sources: propertyNameWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:propertyNameWithExtendedEscape1.js
+sourceFile:propertyNameWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>export const foo = { \u{78}: 10 };
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^
+9 >                           ^^
+10>                             ^^
+11>                               ^^
+12>                                 ^
+1 >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     \u{78}
+9 >                           : 
+10>                             10
+11>                               }
+12>                                 ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+7 >Emitted(1, 22) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 28) Source(1, 27) + SourceIndex(0)
+9 >Emitted(1, 30) Source(1, 29) + SourceIndex(0)
+10>Emitted(1, 32) Source(1, 31) + SourceIndex(0)
+11>Emitted(1, 34) Source(1, 32) + SourceIndex(0)
+12>Emitted(1, 35) Source(1, 33) + SourceIndex(0)
+---
+>>>foo.x++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^
+5 >     ^^
+6 >       ^
+7 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    x
+5 >     ++
+6 >       ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 6) Source(2, 6) + SourceIndex(0)
+5 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+6 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=propertyNameWithExtendedEscape1.js.map===================================================================
+JsFile: propertyNameWithExtendedEscape2.js
+mapUrl: propertyNameWithExtendedEscape2.js.map
+sourceRoot: 
+sources: propertyNameWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:propertyNameWithExtendedEscape2.js
+sourceFile:propertyNameWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>export const foo = { x\u{78}: 10 };
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^
+9 >                            ^^
+10>                              ^^
+11>                                ^^
+12>                                  ^
+1 >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     x\u{78}
+9 >                            : 
+10>                              10
+11>                                }
+12>                                  ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+7 >Emitted(1, 22) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 29) Source(1, 28) + SourceIndex(0)
+9 >Emitted(1, 31) Source(1, 30) + SourceIndex(0)
+10>Emitted(1, 33) Source(1, 32) + SourceIndex(0)
+11>Emitted(1, 35) Source(1, 33) + SourceIndex(0)
+12>Emitted(1, 36) Source(1, 34) + SourceIndex(0)
+---
+>>>foo.xx++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^
+5 >      ^^
+6 >        ^
+7 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    xx
+5 >      ++
+6 >        ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+5 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
+6 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=propertyNameWithExtendedEscape2.js.map===================================================================
+JsFile: propertyNameWithExtendedEscape3.js
+mapUrl: propertyNameWithExtendedEscape3.js.map
+sourceRoot: 
+sources: propertyNameWithExtendedEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:propertyNameWithExtendedEscape3.js
+sourceFile:propertyNameWithExtendedEscape3.ts
+-------------------------------------------------------------------
+>>>export const foo = { a\u{62}c\u{64}e: 10 };
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^^^^^^^^^
+9 >                                    ^^
+10>                                      ^^
+11>                                        ^^
+12>                                          ^
+1 >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     a\u{62}c\u{64}e
+9 >                                    : 
+10>                                      10
+11>                                        }
+12>                                          ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 14) Source(1, 14) + SourceIndex(0)
+5 >Emitted(1, 17) Source(1, 17) + SourceIndex(0)
+6 >Emitted(1, 20) Source(1, 20) + SourceIndex(0)
+7 >Emitted(1, 22) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 37) Source(1, 36) + SourceIndex(0)
+9 >Emitted(1, 39) Source(1, 38) + SourceIndex(0)
+10>Emitted(1, 41) Source(1, 40) + SourceIndex(0)
+11>Emitted(1, 43) Source(1, 41) + SourceIndex(0)
+12>Emitted(1, 44) Source(1, 42) + SourceIndex(0)
+---
+>>>foo.abcde++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^^^^
+5 >         ^^
+6 >           ^
+7 >            ^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    abcde
+5 >         ++
+6 >           ;
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 4) Source(2, 4) + SourceIndex(0)
+3 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
+4 >Emitted(2, 10) Source(2, 10) + SourceIndex(0)
+5 >Emitted(2, 12) Source(2, 12) + SourceIndex(0)
+6 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
+---
+>>>// Shorthand property names
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >// Shorthand property names
+1->Emitted(3, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(3, 28) Source(4, 28) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=propertyNameWithExtendedEscape3.js.map===================================================================
+JsFile: shorthandPropertyNameWithEscape1.js
+mapUrl: shorthandPropertyNameWithEscape1.js.map
+sourceRoot: 
+sources: shorthandPropertyNameWithEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:shorthandPropertyNameWithEscape1.js
+sourceFile:shorthandPropertyNameWithEscape1.ts
+-------------------------------------------------------------------
+>>>export let \u0078 = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^
+6 >                 ^^^
+7 >                    ^^
+8 >                      ^
+9 >                       ^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           \u0078
+6 >                  = 
+7 >                    10
+8 >                      ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+7 >Emitted(1, 23) Source(1, 23) + SourceIndex(0)
+8 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+---
+>>>export const foo = { \u0078 };
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^
+9 >                           ^^
+10>                             ^
+1->
+  >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     \u0078
+9 >                           }
+10>                             ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+7 >Emitted(2, 22) Source(2, 21) + SourceIndex(0)
+8 >Emitted(2, 28) Source(2, 27) + SourceIndex(0)
+9 >Emitted(2, 30) Source(2, 28) + SourceIndex(0)
+10>Emitted(2, 31) Source(2, 29) + SourceIndex(0)
+---
+>>>foo.x++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^
+5 >     ^^
+6 >       ^
+7 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    x
+5 >     ++
+6 >       ;
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+3 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+4 >Emitted(3, 6) Source(3, 6) + SourceIndex(0)
+5 >Emitted(3, 8) Source(3, 8) + SourceIndex(0)
+6 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=shorthandPropertyNameWithEscape1.js.map===================================================================
+JsFile: shorthandPropertyNameWithEscape2.js
+mapUrl: shorthandPropertyNameWithEscape2.js.map
+sourceRoot: 
+sources: shorthandPropertyNameWithEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:shorthandPropertyNameWithEscape2.js
+sourceFile:shorthandPropertyNameWithEscape2.ts
+-------------------------------------------------------------------
+>>>export let x\u0078 = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^^
+6 >                  ^^^
+7 >                     ^^
+8 >                       ^
+9 >                        ^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           x\u0078
+6 >                   = 
+7 >                     10
+8 >                       ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+6 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+7 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 25) Source(1, 25) + SourceIndex(0)
+---
+>>>export const foo = { x\u0078 };
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^
+9 >                            ^^
+10>                              ^
+1->
+  >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     x\u0078
+9 >                            }
+10>                              ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+7 >Emitted(2, 22) Source(2, 21) + SourceIndex(0)
+8 >Emitted(2, 29) Source(2, 28) + SourceIndex(0)
+9 >Emitted(2, 31) Source(2, 29) + SourceIndex(0)
+10>Emitted(2, 32) Source(2, 30) + SourceIndex(0)
+---
+>>>foo.xx++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^
+5 >      ^^
+6 >        ^
+7 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    xx
+5 >      ++
+6 >        ;
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+3 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+4 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+5 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+6 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=shorthandPropertyNameWithEscape2.js.map===================================================================
+JsFile: shorthandPropertyNameWithEscape3.js
+mapUrl: shorthandPropertyNameWithEscape3.js.map
+sourceRoot: 
+sources: shorthandPropertyNameWithEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:shorthandPropertyNameWithEscape3.js
+sourceFile:shorthandPropertyNameWithEscape3.ts
+-------------------------------------------------------------------
+>>>export let a\u0062c\u0064e = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^^^^^^^^^^
+6 >                          ^^^
+7 >                             ^^
+8 >                               ^
+9 >                                ^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           a\u0062c\u0064e
+6 >                           = 
+7 >                             10
+8 >                               ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 27) Source(1, 27) + SourceIndex(0)
+6 >Emitted(1, 30) Source(1, 30) + SourceIndex(0)
+7 >Emitted(1, 32) Source(1, 32) + SourceIndex(0)
+8 >Emitted(1, 33) Source(1, 33) + SourceIndex(0)
+---
+>>>export const foo = { a\u0062c\u0064e };
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^^^^^^^^^
+9 >                                    ^^
+10>                                      ^
+1->
+  >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     a\u0062c\u0064e
+9 >                                    }
+10>                                      ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+7 >Emitted(2, 22) Source(2, 21) + SourceIndex(0)
+8 >Emitted(2, 37) Source(2, 36) + SourceIndex(0)
+9 >Emitted(2, 39) Source(2, 37) + SourceIndex(0)
+10>Emitted(2, 40) Source(2, 38) + SourceIndex(0)
+---
+>>>foo.abcde++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^^^^
+5 >         ^^
+6 >           ^
+7 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    abcde
+5 >         ++
+6 >           ;
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+3 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+4 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+5 >Emitted(3, 12) Source(3, 12) + SourceIndex(0)
+6 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=shorthandPropertyNameWithEscape3.js.map===================================================================
+JsFile: shorthandPropertyNameWithExtendedEscape1.js
+mapUrl: shorthandPropertyNameWithExtendedEscape1.js.map
+sourceRoot: 
+sources: shorthandPropertyNameWithExtendedEscape1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:shorthandPropertyNameWithExtendedEscape1.js
+sourceFile:shorthandPropertyNameWithExtendedEscape1.ts
+-------------------------------------------------------------------
+>>>export let \u{78} = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^
+6 >                 ^^^
+7 >                    ^^
+8 >                      ^
+9 >                       ^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           \u{78}
+6 >                  = 
+7 >                    10
+8 >                      ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+7 >Emitted(1, 23) Source(1, 23) + SourceIndex(0)
+8 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+---
+>>>export const foo = { \u{78} };
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^
+9 >                           ^^
+10>                             ^
+1->
+  >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     \u{78}
+9 >                           }
+10>                             ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+7 >Emitted(2, 22) Source(2, 21) + SourceIndex(0)
+8 >Emitted(2, 28) Source(2, 27) + SourceIndex(0)
+9 >Emitted(2, 30) Source(2, 28) + SourceIndex(0)
+10>Emitted(2, 31) Source(2, 29) + SourceIndex(0)
+---
+>>>foo.x++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^
+5 >     ^^
+6 >       ^
+7 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    x
+5 >     ++
+6 >       ;
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+3 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+4 >Emitted(3, 6) Source(3, 6) + SourceIndex(0)
+5 >Emitted(3, 8) Source(3, 8) + SourceIndex(0)
+6 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=shorthandPropertyNameWithExtendedEscape1.js.map===================================================================
+JsFile: shorthandPropertyNameWithExtendedEscape2.js
+mapUrl: shorthandPropertyNameWithExtendedEscape2.js.map
+sourceRoot: 
+sources: shorthandPropertyNameWithExtendedEscape2.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:shorthandPropertyNameWithExtendedEscape2.js
+sourceFile:shorthandPropertyNameWithExtendedEscape2.ts
+-------------------------------------------------------------------
+>>>export let x\u{78} = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^^
+6 >                  ^^^
+7 >                     ^^
+8 >                       ^
+9 >                        ^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           x\u{78}
+6 >                   = 
+7 >                     10
+8 >                       ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
+6 >Emitted(1, 22) Source(1, 22) + SourceIndex(0)
+7 >Emitted(1, 24) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 25) Source(1, 25) + SourceIndex(0)
+---
+>>>export const foo = { x\u{78} };
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^
+9 >                            ^^
+10>                              ^
+1->
+  >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     x\u{78}
+9 >                            }
+10>                              ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+7 >Emitted(2, 22) Source(2, 21) + SourceIndex(0)
+8 >Emitted(2, 29) Source(2, 28) + SourceIndex(0)
+9 >Emitted(2, 31) Source(2, 29) + SourceIndex(0)
+10>Emitted(2, 32) Source(2, 30) + SourceIndex(0)
+---
+>>>foo.xx++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^
+5 >      ^^
+6 >        ^
+7 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    xx
+5 >      ++
+6 >        ;
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+3 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+4 >Emitted(3, 7) Source(3, 7) + SourceIndex(0)
+5 >Emitted(3, 9) Source(3, 9) + SourceIndex(0)
+6 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=shorthandPropertyNameWithExtendedEscape2.js.map===================================================================
+JsFile: shorthandPropertyNameWithExtendedEscape3.js
+mapUrl: shorthandPropertyNameWithExtendedEscape3.js.map
+sourceRoot: 
+sources: shorthandPropertyNameWithExtendedEscape3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:shorthandPropertyNameWithExtendedEscape3.js
+sourceFile:shorthandPropertyNameWithExtendedEscape3.ts
+-------------------------------------------------------------------
+>>>export let a\u{62}c\u{64}e = 10;
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^
+5 >           ^^^^^^^^^^^^^^^
+6 >                          ^^^
+7 >                             ^^
+8 >                               ^
+9 >                                ^^^^^^^^->
+1 >
+2 >export
+3 >       
+4 >       let 
+5 >           a\u{62}c\u{64}e
+6 >                           = 
+7 >                             10
+8 >                               ;
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(1, 8) + SourceIndex(0)
+4 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+5 >Emitted(1, 27) Source(1, 27) + SourceIndex(0)
+6 >Emitted(1, 30) Source(1, 30) + SourceIndex(0)
+7 >Emitted(1, 32) Source(1, 32) + SourceIndex(0)
+8 >Emitted(1, 33) Source(1, 33) + SourceIndex(0)
+---
+>>>export const foo = { a\u{62}c\u{64}e };
+1->
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^
+5 >             ^^^
+6 >                ^^^
+7 >                   ^^
+8 >                     ^^^^^^^^^^^^^^^
+9 >                                    ^^
+10>                                      ^
+1->
+  >
+2 >export
+3 >       
+4 >       const 
+5 >             foo
+6 >                 = 
+7 >                   {
+8 >                     a\u{62}c\u{64}e
+9 >                                    }
+10>                                      ;
+1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 7) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 8) Source(2, 8) + SourceIndex(0)
+4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(2, 17) Source(2, 17) + SourceIndex(0)
+6 >Emitted(2, 20) Source(2, 20) + SourceIndex(0)
+7 >Emitted(2, 22) Source(2, 21) + SourceIndex(0)
+8 >Emitted(2, 37) Source(2, 36) + SourceIndex(0)
+9 >Emitted(2, 39) Source(2, 37) + SourceIndex(0)
+10>Emitted(2, 40) Source(2, 38) + SourceIndex(0)
+---
+>>>foo.abcde++;
+1 >
+2 >^^^
+3 >   ^
+4 >    ^^^^^
+5 >         ^^
+6 >           ^
+7 >            ^^^^^^->
+1 >
+  >
+2 >foo
+3 >   .
+4 >    abcde
+5 >         ++
+6 >           ;
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 4) Source(3, 4) + SourceIndex(0)
+3 >Emitted(3, 5) Source(3, 5) + SourceIndex(0)
+4 >Emitted(3, 10) Source(3, 10) + SourceIndex(0)
+5 >Emitted(3, 12) Source(3, 12) + SourceIndex(0)
+6 >Emitted(3, 13) Source(3, 13) + SourceIndex(0)
+---
+>>>// Type variables
+1->
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+  >
+2 >// Type variables
+1->Emitted(4, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(4, 18) Source(5, 18) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=shorthandPropertyNameWithExtendedEscape3.js.map===================================================================
+JsFile: typeVariableWithEscape1.js
+mapUrl: typeVariableWithEscape1.js.map
+sourceRoot: 
+sources: typeVariableWithEscape1.ts
+===================================================================
+>>>export {};
+>>>//# sourceMappingURL=typeVariableWithEscape1.js.map===================================================================
+JsFile: typeVariableWithEscape2.js
+mapUrl: typeVariableWithEscape2.js.map
+sourceRoot: 
+sources: typeVariableWithEscape2.ts
+===================================================================
+>>>export {};
+>>>//# sourceMappingURL=typeVariableWithEscape2.js.map===================================================================
+JsFile: typeVariableWithEscape3.js
+mapUrl: typeVariableWithEscape3.js.map
+sourceRoot: 
+sources: typeVariableWithEscape3.ts
+===================================================================
+>>>export {};
+>>>//# sourceMappingURL=typeVariableWithEscape3.js.map===================================================================
+JsFile: typeVariableWithExtendedEscape1.js
+mapUrl: typeVariableWithExtendedEscape1.js.map
+sourceRoot: 
+sources: typeVariableWithExtendedEscape1.ts
+===================================================================
+>>>export {};
+>>>//# sourceMappingURL=typeVariableWithExtendedEscape1.js.map===================================================================
+JsFile: typeVariableWithExtendedEscape2.js
+mapUrl: typeVariableWithExtendedEscape2.js.map
+sourceRoot: 
+sources: typeVariableWithExtendedEscape2.ts
+===================================================================
+>>>export {};
+>>>//# sourceMappingURL=typeVariableWithExtendedEscape2.js.map===================================================================
+JsFile: typeVariableWithExtendedEscape3.js
+mapUrl: typeVariableWithExtendedEscape3.js.map
+sourceRoot: 
+sources: typeVariableWithExtendedEscape3.ts
+===================================================================
+>>>export {};
+>>>//# sourceMappingURL=typeVariableWithExtendedEscape3.js.map
