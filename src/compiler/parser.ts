@@ -7328,9 +7328,16 @@ namespace Parser {
         return nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(/*disallowOf*/ true);
     }
 
+    function nextTokenIsEqualsOrSemicolonOrColonToken() {
+        nextToken();
+        return token() === SyntaxKind.EqualsToken || token() === SyntaxKind.SemicolonToken || token() === SyntaxKind.ColonToken;
+    }
+
     function nextTokenIsBindingIdentifierOrStartOfDestructuringOnSameLine(disallowOf?: boolean) {
         nextToken();
-        if (disallowOf && token() === SyntaxKind.OfKeyword) return false;
+        if (disallowOf && token() === SyntaxKind.OfKeyword) {
+            return lookAhead(nextTokenIsEqualsOrSemicolonOrColonToken);
+        }
         return (isBindingIdentifier() || token() === SyntaxKind.OpenBraceToken) && !scanner.hasPrecedingLineBreak();
     }
 
