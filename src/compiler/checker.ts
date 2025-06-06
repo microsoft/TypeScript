@@ -52836,7 +52836,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     blockScopeKind === NodeFlags.Using ? "using" :
                     blockScopeKind === NodeFlags.AwaitUsing ? "await using" :
                     Debug.fail("Unknown BlockScope flag");
-                return grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
+                diagnostics.add(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword));
             }
         }
     }
