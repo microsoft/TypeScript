@@ -37,4 +37,4 @@ export const c = makeC();
 import { C } from "pkg";
 export declare function makeC(): C;
 //// [index.d.ts]
-export declare const c: any;
+export declare const c: import("pkg").C;

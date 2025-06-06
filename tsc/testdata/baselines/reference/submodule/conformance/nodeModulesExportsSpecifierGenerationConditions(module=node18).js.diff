@@ -12,5 +12,3 @@
 
 
  //// [index.d.ts]
--export declare const a: import("inner/other").Thing;
-+export declare const a: any;

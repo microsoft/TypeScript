@@ -163,8 +163,8 @@ export declare const e: typeof import("inner/mjs");
 export declare const a: Promise<typeof import("./index.cts")>;
 export declare const b: Promise<typeof import("package/mjs", { with: { "resolution-mode": "import" } })>;
 export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } })>;
-export declare const f: Promise<typeof import("inner", { with: { "resolution-mode": "import" } })>;
+export declare const f: Promise<typeof import("inner")>;
 //// [other2.d.cts]
 // cjs format file, no TLA
-export declare const d: Promise<typeof import("inner/cjs", { with: { "resolution-mode": "import" } })>;
+export declare const d: Promise<typeof import("inner/cjs")>;
 export declare const e: Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })>;

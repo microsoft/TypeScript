@@ -688,7 +688,7 @@ func tryGetModuleNameAsNodeModule(
 				return "" // File is under this package.json, but is not publicly exported - there's no way to name it via `node_modules` resolution
 			}
 			if verbatimFromExports {
-				return moduleFileName
+				return moduleFileToTry
 			}
 			//}
 			if len(packageRootPath) > 0 {

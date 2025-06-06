@@ -12,5 +12,3 @@
 
 
  //// [index.d.ts]
--export declare const a: import("inner/other.js").Thing;
-+export declare const a: any;

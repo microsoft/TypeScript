@@ -110,15 +110,15 @@ export const c = import("package");
 >"package" : "package"
 
 export const f = import("inner");
->f : Promise<{ cjsMain: true; default: typeof import("./node_modules/inner"); }>
->import("inner") : Promise<{ cjsMain: true; default: typeof import("./node_modules/inner"); }>
+>f : Promise<{ cjsMain: true; default: typeof import("inner"); }>
+>import("inner") : Promise<{ cjsMain: true; default: typeof import("inner"); }>
 >"inner" : "inner"
 
 === other2.cts ===
 // cjs format file, no TLA
 export const d = import("inner/cjs");
->d : Promise<{ cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }>
->import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("./node_modules/inner/index.d.cts"); }>
+>d : Promise<{ cjsNonmain: true; default: typeof import("inner/cjs"); }>
+>import("inner/cjs") : Promise<{ cjsNonmain: true; default: typeof import("inner/cjs"); }>
 >"inner/cjs" : "inner/cjs"
 
 export const e = import("inner/mjs");

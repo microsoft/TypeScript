@@ -38,4 +38,4 @@ export const a = (await import("inner")).x();
 
 
 //// [index.d.ts]
-export declare const a: any;
+export declare const a: import("inner/other").Thing;

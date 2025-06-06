@@ -169,12 +169,12 @@ export declare const b: Promise<typeof import("package/mjs", { with: { "resoluti
 export declare const c: Promise<typeof import("package", { with: { "resolution-mode": "import" } })>;
 export declare const f: Promise<{
     cjsMain: true;
-    default: typeof import("inner", { with: { "resolution-mode": "import" } });
+    default: typeof import("inner");
 }>;
 //// [other2.d.cts]
 // cjs format file, no TLA
 export declare const d: Promise<{
     cjsNonmain: true;
-    default: typeof import("inner/cjs", { with: { "resolution-mode": "import" } });
+    default: typeof import("inner/cjs");
 }>;
 export declare const e: Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })>;

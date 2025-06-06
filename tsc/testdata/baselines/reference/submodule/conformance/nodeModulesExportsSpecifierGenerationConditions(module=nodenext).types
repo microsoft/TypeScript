@@ -6,14 +6,14 @@ import { Thing } from "inner/other.js"; // should fail
 >Thing : any
 
 export const a = (await import("inner")).x();
->a : import("./node_modules/inner/other.js").Thing
->(await import("inner")).x() : import("./node_modules/inner/other.js").Thing
->(await import("inner")).x : () => import("./node_modules/inner/other.js").Thing
+>a : import("inner/other").Thing
+>(await import("inner")).x() : import("inner/other").Thing
+>(await import("inner")).x : () => import("inner/other").Thing
 >(await import("inner")) : typeof import("inner")
 >await import("inner") : typeof import("inner")
 >import("inner") : Promise<typeof import("inner")>
 >"inner" : "inner"
->x : () => import("./node_modules/inner/other.js").Thing
+>x : () => import("inner/other").Thing
 
 === node_modules/inner/index.d.ts ===
 // esm format file

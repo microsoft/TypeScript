@@ -127,12 +127,12 @@
 -    cjsMain: true;
 -    default: typeof import("inner");
 -}>;
-+export declare const f: Promise<typeof import("inner", { with: { "resolution-mode": "import" } })>;
++export declare const f: Promise<typeof import("inner")>;
  //// [other2.d.cts]
 -export declare const d: Promise<{
 -    cjsNonmain: true;
 -    default: typeof import("inner/cjs");
 -}>;
 +// cjs format file, no TLA
-+export declare const d: Promise<typeof import("inner/cjs", { with: { "resolution-mode": "import" } })>;
++export declare const d: Promise<typeof import("inner/cjs")>;
  export declare const e: Promise<typeof import("inner/mjs", { with: { "resolution-mode": "import" } })>;
