@@ -1,0 +1,10 @@
+usingDeclarationsInForOf.4.ts(3,12): error TS1155: 'using' declarations must be initialized.
+
+
+==== usingDeclarationsInForOf.4.ts (1 errors) ====
+    for (using of = null;;) break;
+    for (using of: null = null;;) break;
+    for (using of;;) break;
+               ~~
+!!! error TS1155: 'using' declarations must be initialized.
+    
