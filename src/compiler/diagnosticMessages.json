@@ -5702,6 +5702,42 @@
         "category": "Message",
         "code": 6283
     },
+    "File Layout": {
+        "category": "Message",
+        "code": 6284
+    },
+    "Environment Settings": {
+        "category": "Message",
+        "code": 6285
+    },
+    "See also https://aka.ms/tsconfig/module": {
+        "category": "Message",
+        "code": 6286
+    },
+    "For nodejs:": {
+        "category": "Message",
+        "code": 6287
+    },
+    "and npm install -D @types/node": {
+        "category": "Message",
+        "code": 6290
+    },
+    "Other Outputs": {
+        "category": "Message",
+        "code": 6291
+    },
+    "Stricter Typechecking Options": {
+        "category": "Message",
+        "code": 6292
+    },
+    "Style Options": {
+        "category": "Message",
+        "code": 6293
+    },
+    "Recommended Options": {
+        "category": "Message",
+        "code": 6294
+    },
 
     "Enable project compilation": {
         "category": "Message",
