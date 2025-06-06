@@ -1,0 +1,42 @@
+asyncIteratorExtraParameters.ts(11,27): error TS2322: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' is not assignable to type 'AsyncIterable<T, TReturn, TNext>'.
+  Types of property '[Symbol.asyncIterator]' are incompatible.
+    Type '(_: number) => AsyncGenerator<number, void, unknown>' is not assignable to type '() => AsyncIterator<T, TReturn, TNext>'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+asyncIteratorExtraParameters.ts(11,27): error TS2504: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+asyncIteratorExtraParameters.ts(13,12): error TS2322: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' is not assignable to type 'AsyncIterable<T, TReturn, TNext>'.
+  Types of property '[Symbol.asyncIterator]' are incompatible.
+    Type '(_: number) => AsyncGenerator<number, void, unknown>' is not assignable to type '() => AsyncIterator<T, TReturn, TNext>'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+asyncIteratorExtraParameters.ts(13,12): error TS2504: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+
+
+==== asyncIteratorExtraParameters.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/57130
+    const iter = {
+        async *[Symbol.asyncIterator](_: number) {
+            yield 0;
+        }
+    };
+    
+    declare function g(...args: any): any;
+    
+    async function* f() {
+        for await (const _ of iter);
+                              ~~~~
+!!! error TS2322: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' is not assignable to type 'AsyncIterable<T, TReturn, TNext>'.
+!!! error TS2322:   Types of property '[Symbol.asyncIterator]' are incompatible.
+!!! error TS2322:     Type '(_: number) => AsyncGenerator<number, void, unknown>' is not assignable to type '() => AsyncIterator<T, TReturn, TNext>'.
+!!! error TS2322:       Target signature provides too few arguments. Expected 1 or more, but got 0.
+                              ~~~~
+!!! error TS2504: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+    
+        yield* iter;
+               ~~~~
+!!! error TS2322: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' is not assignable to type 'AsyncIterable<T, TReturn, TNext>'.
+!!! error TS2322:   Types of property '[Symbol.asyncIterator]' are incompatible.
+!!! error TS2322:     Type '(_: number) => AsyncGenerator<number, void, unknown>' is not assignable to type '() => AsyncIterator<T, TReturn, TNext>'.
+!!! error TS2322:       Target signature provides too few arguments. Expected 1 or more, but got 0.
+               ~~~~
+!!! error TS2504: Type '{ [Symbol.asyncIterator](_: number): AsyncGenerator<number, void, unknown>; }' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+    }
+    

@@ -501,6 +501,7 @@ type IterationTypesResolver struct {
 	iteratorSymbolName                   string
 	getGlobalIteratorType                func() *Type
 	getGlobalIterableType                func() *Type
+	getGlobalIterableTypeChecked         func() *Type
 	getGlobalIterableIteratorType        func() *Type
 	getGlobalIterableIteratorTypeChecked func() *Type
 	getGlobalIteratorObjectType          func() *Type
@@ -812,6 +813,7 @@ type Checker struct {
 	getGlobalGeneratorType                     func() *Type
 	getGlobalAsyncIteratorType                 func() *Type
 	getGlobalAsyncIterableType                 func() *Type
+	getGlobalAsyncIterableTypeChecked          func() *Type
 	getGlobalAsyncIterableIteratorType         func() *Type
 	getGlobalAsyncIterableIteratorTypeChecked  func() *Type
 	getGlobalAsyncIteratorObjectType           func() *Type
@@ -1038,6 +1040,7 @@ func NewChecker(program Program) *Checker {
 	c.getGlobalGeneratorType = c.getGlobalTypeResolver("Generator", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalAsyncIteratorType = c.getGlobalTypeResolver("AsyncIterator", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalAsyncIterableType = c.getGlobalTypeResolver("AsyncIterable", 3 /*arity*/, false /*reportErrors*/)
+	c.getGlobalAsyncIterableTypeChecked = c.getGlobalTypeResolver("AsyncIterable", 3 /*arity*/, true /*reportErrors*/)
 	c.getGlobalAsyncIterableIteratorType = c.getGlobalTypeResolver("AsyncIterableIterator", 3 /*arity*/, false /*reportErrors*/)
 	c.getGlobalAsyncIterableIteratorTypeChecked = c.getGlobalTypeResolver("AsyncIterableIterator", 3 /*arity*/, true /*reportErrors*/)
 	c.getGlobalAsyncIteratorObjectType = c.getGlobalTypeResolver("AsyncIteratorObject", 3 /*arity*/, false /*reportErrors*/)
@@ -1207,6 +1210,7 @@ func (c *Checker) initializeIterationResolvers() {
 		iteratorSymbolName:                   "iterator",
 		getGlobalIteratorType:                c.getGlobalIteratorType,
 		getGlobalIterableType:                c.getGlobalIterableType,
+		getGlobalIterableTypeChecked:         c.getGlobalIterableTypeChecked,
 		getGlobalIterableIteratorType:        c.getGlobalIterableIteratorType,
 		getGlobalIterableIteratorTypeChecked: c.getGlobalIterableIteratorTypeChecked,
 		getGlobalIteratorObjectType:          c.getGlobalIteratorObjectType,
@@ -1223,6 +1227,7 @@ func (c *Checker) initializeIterationResolvers() {
 		iteratorSymbolName:                   "asyncIterator",
 		getGlobalIteratorType:                c.getGlobalAsyncIteratorType,
 		getGlobalIterableType:                c.getGlobalAsyncIterableType,
+		getGlobalIterableTypeChecked:         c.getGlobalAsyncIterableTypeChecked,
 		getGlobalIterableIteratorType:        c.getGlobalAsyncIterableIteratorType,
 		getGlobalIterableIteratorTypeChecked: c.getGlobalAsyncIterableIteratorTypeChecked,
 		getGlobalIteratorObjectType:          c.getGlobalAsyncIteratorObjectType,
@@ -6097,9 +6102,16 @@ func (c *Checker) getIterationTypesOfIterableSlow(t *Type, r *IterationTypesReso
 		if IsTypeAny(methodType) {
 			return IterationTypes{c.anyType, c.anyType, c.anyType}
 		}
-		if signatures := c.getSignaturesOfType(methodType, SignatureKindCall); len(signatures) != 0 {
-			iteratorType := c.getIntersectionType(core.Map(signatures, c.getReturnTypeOfSignature))
+		allSignatures := c.getSignaturesOfType(methodType, SignatureKindCall)
+		validSignatures := core.Filter(allSignatures, func(sig *Signature) bool {
+			return c.getMinArgumentCount(sig) == 0
+		})
+		if len(validSignatures) != 0 {
+			iteratorType := c.getIntersectionType(core.Map(validSignatures, c.getReturnTypeOfSignature))
 			return c.getIterationTypesOfIteratorWorker(iteratorType, r, errorNode, diagnosticOutput)
+		}
+		if errorNode != nil && len(allSignatures) != 0 {
+			c.checkTypeAssignableTo(t, r.getGlobalIterableTypeChecked(), errorNode, nil)
 		}
 	}
 	return IterationTypes{}
