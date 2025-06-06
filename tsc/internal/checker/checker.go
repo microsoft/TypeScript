@@ -3883,21 +3883,39 @@ func (c *Checker) checkReturnStatement(node *ast.Node) {
 			}
 		} else if c.getReturnTypeFromAnnotation(container) != nil {
 			unwrappedReturnType := core.OrElse(c.unwrapReturnType(returnType, functionFlags), returnType)
-			unwrappedExprType := exprType
-			if functionFlags&FunctionFlagsAsync != 0 {
-				unwrappedExprType = c.checkAwaitedType(exprType, false /*withAlias*/, node, diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
-			}
-			if unwrappedReturnType != nil {
-				// If the function has a return type, but promisedType is
-				// undefined, an error will be reported in checkAsyncFunctionReturnType
-				// so we don't need to report one here.
-				c.checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, node, exprNode, nil, nil)
-			}
+			c.checkReturnExpression(container, unwrappedReturnType, node, node.Expression(), exprType, false)
 		}
 	} else if !ast.IsConstructorDeclaration(container) && c.compilerOptions.NoImplicitReturns.IsTrue() && !c.isUnwrappedReturnTypeUndefinedVoidOrAny(container, returnType) {
 		// The function has a return type, but the return statement doesn't have an expression.
 		c.error(node, diagnostics.Not_all_code_paths_return_a_value)
 	}
+}
+
+// When checking an arrow expression such as `(x) => exp`, then `node` is the expression `exp`.
+// Otherwise, `node` is a return statement.
+func (c *Checker) checkReturnExpression(container *ast.Node, unwrappedReturnType *Type, node *ast.Node, expr *ast.Node, exprType *Type, inConditionalExpression bool) {
+	unwrappedExprType := exprType
+	functionFlags := getFunctionFlags(container)
+	if expr != nil {
+		unwrappedExpr := ast.SkipParentheses(expr)
+		if ast.IsConditionalExpression(unwrappedExpr) {
+			whenTrue := unwrappedExpr.AsConditionalExpression().WhenTrue
+			whenFalse := unwrappedExpr.AsConditionalExpression().WhenFalse
+			c.checkReturnExpression(container, unwrappedReturnType, node, whenTrue, c.checkExpression(whenTrue), true /*inConditionalExpression*/)
+			c.checkReturnExpression(container, unwrappedReturnType, node, whenFalse, c.checkExpression(whenFalse), true /*inConditionalExpression*/)
+			return
+		}
+	}
+	inReturnStatement := node.Kind == ast.KindReturnStatement
+	if functionFlags&FunctionFlagsAsync != 0 {
+		unwrappedExprType = c.checkAwaitedType(exprType, false /*withAlias*/, node, diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+	}
+	effectiveExpr := expr // The effective expression for diagnostics purposes.
+	if expr != nil {
+		effectiveExpr = c.getEffectiveCheckNode(expr)
+	}
+	errorNode := core.IfElse(inReturnStatement && !inConditionalExpression, node, effectiveExpr)
+	c.checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, errorNode, effectiveExpr, nil, nil)
 }
 
 func (c *Checker) checkWithStatement(node *ast.Node) {
@@ -9789,13 +9807,7 @@ func (c *Checker) checkFunctionExpressionOrObjectLiteralMethodDeferred(node *ast
 			if returnType != nil {
 				returnOrPromisedType := c.unwrapReturnType(returnType, functionFlags)
 				if returnOrPromisedType != nil {
-					effectiveCheckNode := c.getEffectiveCheckNode(body)
-					if (functionFlags & FunctionFlagsAsyncGenerator) == FunctionFlagsAsync {
-						awaitedType := c.checkAwaitedType(exprType, false /*withAlias*/, effectiveCheckNode, diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
-						c.checkTypeAssignableToAndOptionallyElaborate(awaitedType, returnOrPromisedType, effectiveCheckNode, effectiveCheckNode, nil, nil)
-					} else {
-						c.checkTypeAssignableToAndOptionallyElaborate(exprType, returnOrPromisedType, effectiveCheckNode, effectiveCheckNode, nil, nil)
-					}
+					c.checkReturnExpression(node, returnOrPromisedType, body, body, exprType, false)
 				}
 			}
 		}

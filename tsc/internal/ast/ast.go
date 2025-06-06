@@ -5984,6 +5984,10 @@ func (node *ConditionalExpression) computeSubtreeFacts() SubtreeFacts {
 		propagateSubtreeFacts(node.WhenFalse)
 }
 
+func IsConditionalExpression(node *Node) bool {
+	return node.Kind == KindConditionalExpression
+}
+
 // PropertyAccessExpression
 
 type PropertyAccessExpression struct {
