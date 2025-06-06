@@ -1,4 +1,4 @@
-package runner
+package testrunner
 
 import (
 	"testing"
@@ -20,14 +20,12 @@ function bar() { return "b"; }`
 	testUnit1 := &testUnit{
 		content: `function foo() { return "a"; }
 // normal comment`,
-		name:             "firstFile.ts",
-		originalFilePath: "simpleTest.ts",
+		name: "firstFile.ts",
 	}
 	testUnit2 := &testUnit{
 		content: `// some other comment
 function bar() { return "b"; }`,
-		name:             "secondFile.ts",
-		originalFilePath: "simpleTest.ts",
+		name: "secondFile.ts",
 	}
 	testContent := testCaseContent{
 		testUnitData:         []*testUnit{testUnit1, testUnit2},

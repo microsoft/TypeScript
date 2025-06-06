@@ -22,8 +22,8 @@ import (
 )
 
 type ServerOptions struct {
-	In  io.Reader
-	Out io.Writer
+	In  Reader
+	Out Writer
 	Err io.Writer
 
 	Cwd                string
@@ -31,6 +31,8 @@ type ServerOptions struct {
 	FS                 vfs.FS
 	DefaultLibraryPath string
 	TypingsLocation    string
+
+	ParsedFileCache project.ParsedFileCache
 }
 
 func NewServer(opts *ServerOptions) *Server {
@@ -38,8 +40,8 @@ func NewServer(opts *ServerOptions) *Server {
 		panic("Cwd is required")
 	}
 	return &Server{
-		r:                     lsproto.NewBaseReader(opts.In),
-		w:                     lsproto.NewBaseWriter(opts.Out),
+		r:                     opts.In,
+		w:                     opts.Out,
 		stderr:                opts.Err,
 		requestQueue:          make(chan *lsproto.RequestMessage, 100),
 		outgoingQueue:         make(chan *lsproto.Message, 100),
@@ -50,6 +52,7 @@ func NewServer(opts *ServerOptions) *Server {
 		fs:                    opts.FS,
 		defaultLibraryPath:    opts.DefaultLibraryPath,
 		typingsLocation:       opts.TypingsLocation,
+		parsedFileCache:       opts.ParsedFileCache,
 	}
 }
 
@@ -63,9 +66,60 @@ type pendingClientRequest struct {
 	cancel context.CancelFunc
 }
 
-type Server struct {
+type Reader interface {
+	Read() (*lsproto.Message, error)
+}
+
+type Writer interface {
+	Write(msg *lsproto.Message) error
+}
+
+type lspReader struct {
 	r *lsproto.BaseReader
+}
+
+type lspWriter struct {
 	w *lsproto.BaseWriter
+}
+
+func (r *lspReader) Read() (*lsproto.Message, error) {
+	data, err := r.r.Read()
+	if err != nil {
+		return nil, err
+	}
+
+	req := &lsproto.Message{}
+	if err := json.Unmarshal(data, req); err != nil {
+		return nil, fmt.Errorf("%w: %w", lsproto.ErrInvalidRequest, err)
+	}
+
+	return req, nil
+}
+
+func ToReader(r io.Reader) Reader {
+	return &lspReader{r: lsproto.NewBaseReader(r)}
+}
+
+func (w *lspWriter) Write(msg *lsproto.Message) error {
+	data, err := json.Marshal(msg)
+	if err != nil {
+		return fmt.Errorf("failed to marshal message: %w", err)
+	}
+	return w.w.Write(data)
+}
+
+func ToWriter(w io.Writer) Writer {
+	return &lspWriter{w: lsproto.NewBaseWriter(w)}
+}
+
+var (
+	_ Reader = (*lspReader)(nil)
+	_ Writer = (*lspWriter)(nil)
+)
+
+type Server struct {
+	r Reader
+	w Writer
 
 	stderr io.Writer
 
@@ -91,6 +145,12 @@ type Server struct {
 	watchers       core.Set[project.WatcherHandle]
 	logger         *project.Logger
 	projectService *project.Service
+
+	// enables tests to share a cache of parsed source files
+	parsedFileCache project.ParsedFileCache
+
+	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
+	compilerOptionsForInferredProjects *core.CompilerOptions
 }
 
 // FS implements project.ServiceHost.
@@ -215,6 +275,9 @@ func (s *Server) Run() error {
 
 func (s *Server) readLoop(ctx context.Context) error {
 	for {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
 		msg, err := s.read()
 		if err != nil {
 			if errors.Is(err, lsproto.ErrInvalidRequest) {
@@ -265,17 +328,7 @@ func (s *Server) cancelRequest(rawID lsproto.IntegerOrString) {
 }
 
 func (s *Server) read() (*lsproto.Message, error) {
-	data, err := s.r.Read()
-	if err != nil {
-		return nil, err
-	}
-
-	req := &lsproto.Message{}
-	if err := json.Unmarshal(data, req); err != nil {
-		return nil, fmt.Errorf("%w: %w", lsproto.ErrInvalidRequest, err)
-	}
-
-	return req, nil
+	return s.r.Read()
 }
 
 func (s *Server) dispatchLoop(ctx context.Context) error {
@@ -299,6 +352,14 @@ func (s *Server) dispatchLoop(ctx context.Context) error {
 			}
 
 			handle := func() {
+				defer func() {
+					if r := recover(); r != nil {
+						stack := debug.Stack()
+						s.Log("panic handling request", req.Method, r, string(stack))
+						// !!! send something back to client
+						lspExit()
+					}
+				}()
 				if err := s.handleRequestOrNotification(requestCtx, req); err != nil {
 					if errors.Is(err, io.EOF) {
 						lspExit()
@@ -329,11 +390,7 @@ func (s *Server) writeLoop(ctx context.Context) error {
 		case <-ctx.Done():
 			return ctx.Err()
 		case msg := <-s.outgoingQueue:
-			data, err := json.Marshal(msg)
-			if err != nil {
-				return fmt.Errorf("failed to marshal message: %w", err)
-			}
-			if err := s.w.Write(data); err != nil {
+			if err := s.w.Write(msg); err != nil {
 				return fmt.Errorf("failed to write message: %w", err)
 			}
 		}
@@ -513,7 +570,7 @@ func (s *Server) handleInitialize(req *lsproto.RequestMessage) {
 }
 
 func (s *Server) handleInitialized(ctx context.Context, req *lsproto.RequestMessage) error {
-	if s.initializeParams.Capabilities.Workspace.DidChangeWatchedFiles != nil && *s.initializeParams.Capabilities.Workspace.DidChangeWatchedFiles.DynamicRegistration {
+	if shouldEnableWatch(s.initializeParams) {
 		s.watchEnabled = true
 	}
 
@@ -526,7 +583,12 @@ func (s *Server) handleInitialized(ctx context.Context, req *lsproto.RequestMess
 			ThrottleLimit: 5,
 			NpmInstall:    project.NpmInstall,
 		},
+		ParsedFileCache: s.parsedFileCache,
 	})
+	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
+	if s.compilerOptionsForInferredProjects != nil {
+		s.projectService.SetCompilerOptionsForInferredProjects(s.compilerOptionsForInferredProjects)
+	}
 
 	return nil
 }
@@ -654,7 +716,7 @@ func (s *Server) handleCompletion(ctx context.Context, req *lsproto.RequestMessa
 		params.TextDocument.Uri,
 		params.Position,
 		params.Context,
-		s.initializeParams.Capabilities.TextDocument.Completion,
+		getCompletionClientCapabilities(s.initializeParams),
 		&ls.UserPreferences{})
 	if err != nil {
 		return err
@@ -748,6 +810,14 @@ func (s *Server) Log(msg ...any) {
 	fmt.Fprintln(s.stderr, msg...)
 }
 
+// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
+func (s *Server) SetCompilerOptionsForInferredProjects(options *core.CompilerOptions) {
+	s.compilerOptionsForInferredProjects = options
+	if s.projectService != nil {
+		s.projectService.SetCompilerOptionsForInferredProjects(options)
+	}
+}
+
 func isBlockingMethod(method lsproto.Method) bool {
 	switch method {
 	case lsproto.MethodInitialize,
@@ -771,4 +841,19 @@ func ptrIsTrue(v *bool) bool {
 		return false
 	}
 	return *v
+}
+
+func shouldEnableWatch(params *lsproto.InitializeParams) bool {
+	if params == nil || params.Capabilities == nil || params.Capabilities.Workspace == nil {
+		return false
+	}
+	return params.Capabilities.Workspace.DidChangeWatchedFiles != nil &&
+		ptrIsTrue(params.Capabilities.Workspace.DidChangeWatchedFiles.DynamicRegistration)
+}
+
+func getCompletionClientCapabilities(params *lsproto.InitializeParams) *lsproto.CompletionClientCapabilities {
+	if params == nil || params.Capabilities == nil || params.Capabilities.TextDocument == nil {
+		return nil
+	}
+	return params.Capabilities.TextDocument.Completion
 }

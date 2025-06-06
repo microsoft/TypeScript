@@ -257,6 +257,23 @@ var testLibFolderMap = sync.OnceValue(func() map[string]any {
 	return testfs
 })
 
+func SetCompilerOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions) {
+	for name, value := range testConfig {
+		if name == "typescriptversion" {
+			continue
+		}
+
+		commandLineOption := getCommandLineOption(name)
+		if commandLineOption != nil {
+			parsedValue := getOptionValue(t, commandLineOption, value)
+			errors := tsoptions.ParseCompilerOptions(commandLineOption.Name, parsedValue, compilerOptions)
+			if len(errors) > 0 {
+				t.Fatalf("Error parsing value '%s' for compiler option '%s'.", value, commandLineOption.Name)
+			}
+		}
+	}
+}
+
 func setOptionsFromTestConfig(t *testing.T, testConfig TestConfiguration, compilerOptions *core.CompilerOptions, harnessOptions *HarnessOptions) {
 	for name, value := range testConfig {
 		if name == "typescriptversion" {
@@ -450,9 +467,9 @@ type cachedCompilerHost struct {
 	options *core.CompilerOptions
 }
 
-var sourceFileCache collections.SyncMap[sourceFileCacheKey, *ast.SourceFile]
+var sourceFileCache collections.SyncMap[SourceFileCacheKey, *ast.SourceFile]
 
-type sourceFileCacheKey struct {
+type SourceFileCacheKey struct {
 	core.SourceFileAffectingCompilerOptions
 	fileName        string
 	path            tspath.Path
@@ -460,16 +477,32 @@ type sourceFileCacheKey struct {
 	text            string
 }
 
-func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, languageVersion core.ScriptTarget) *ast.SourceFile {
-	text, _ := h.FS().ReadFile(fileName)
-
-	key := sourceFileCacheKey{
-		SourceFileAffectingCompilerOptions: *h.options.SourceFileAffecting(),
+func GetSourceFileCacheKey(
+	options core.SourceFileAffectingCompilerOptions,
+	fileName string,
+	path tspath.Path,
+	languageVersion core.ScriptTarget,
+	text string,
+) SourceFileCacheKey {
+	return SourceFileCacheKey{
+		SourceFileAffectingCompilerOptions: options,
 		fileName:                           fileName,
 		path:                               path,
 		languageVersion:                    languageVersion,
 		text:                               text,
 	}
+}
+
+func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, languageVersion core.ScriptTarget) *ast.SourceFile {
+	text, _ := h.FS().ReadFile(fileName)
+
+	key := GetSourceFileCacheKey(
+		*h.options.SourceFileAffecting(),
+		fileName,
+		path,
+		languageVersion,
+		text,
+	)
 
 	if cached, ok := sourceFileCache.Load(key); ok {
 		return cached

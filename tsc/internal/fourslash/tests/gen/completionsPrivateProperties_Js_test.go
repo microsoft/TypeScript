@@ -1,0 +1,41 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestCompletionsPrivateProperties_Js(t *testing.T) {
+	t.Parallel()
+	t.Skip()
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `// @allowJs: true
+// @Filename: a.d.ts
+declare namespace A {
+    class Foo {
+        constructor();
+
+        private m1(): void;
+        protected m2(): void;
+
+        m3(): void;
+    }
+}
+// @filename: b.js
+let foo = new A.Foo();
+foo./**/`
+	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.VerifyCompletions(t, []string{""}, &fourslash.VerifyCompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &lsproto.CompletionItemDefaults{
+			CommitCharacters: &defaultCommitCharacters,
+		},
+		Items: &fourslash.VerifyCompletionsExpectedItems{
+			Includes: []fourslash.ExpectedCompletionItem{"m3"},
+			Excludes: []string{"m1", "m2"},
+		},
+	})
+}

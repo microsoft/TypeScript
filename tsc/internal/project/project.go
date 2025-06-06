@@ -171,7 +171,11 @@ type Project struct {
 	typingsWatchInvoked     atomic.Bool
 }
 
-func NewConfiguredProject(configFileName string, configFilePath tspath.Path, host ProjectHost) *Project {
+func NewConfiguredProject(
+	configFileName string,
+	configFilePath tspath.Path,
+	host ProjectHost,
+) *Project {
 	project := NewProject(configFileName, KindConfigured, tspath.GetDirectoryPath(configFileName), host)
 	project.configFileName = configFileName
 	project.configFilePath = configFilePath
@@ -184,7 +188,12 @@ func NewConfiguredProject(configFileName string, configFilePath tspath.Path, hos
 	return project
 }
 
-func NewInferredProject(compilerOptions *core.CompilerOptions, currentDirectory string, projectRootPath tspath.Path, host ProjectHost) *Project {
+func NewInferredProject(
+	compilerOptions *core.CompilerOptions,
+	currentDirectory string,
+	projectRootPath tspath.Path,
+	host ProjectHost,
+) *Project {
 	project := NewProject(projectNamer.next("/dev/null/inferredProject"), KindInferred, currentDirectory, host)
 	project.rootPath = projectRootPath
 	project.compilerOptions = compilerOptions

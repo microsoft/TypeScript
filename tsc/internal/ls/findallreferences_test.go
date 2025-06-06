@@ -5,14 +5,14 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"github.com/microsoft/typescript-go/internal/testutil/lstestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
 
 func runFindReferencesTest(t *testing.T, input string, expectedLocations map[string]*core.Set[string]) {
-	testData := lstestutil.ParseTestData("/testing", input, "/file1.ts")
+	testData := fourslash.ParseTestData(t, input, "/file1.ts")
 	markerPositions := testData.MarkerPositions
 	ctx := projecttestutil.WithRequestID(t.Context())
 	service, done := createLanguageService(ctx, testData.Files[0].Filename, map[string]any{

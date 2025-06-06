@@ -30,6 +30,8 @@ type ServiceOptions struct {
 	Logger           *Logger
 	PositionEncoding lsproto.PositionEncodingKind
 	WatchEnabled     bool
+
+	ParsedFileCache ParsedFileCache
 }
 
 var _ ProjectHost = (*Service)(nil)
@@ -59,6 +61,8 @@ type Service struct {
 	realpathToScriptInfos       map[tspath.Path]map[*ScriptInfo]struct{}
 
 	typingsInstaller *TypingsInstaller
+
+	compilerOptionsForInferredProjects *core.CompilerOptions
 }
 
 func NewService(host ServiceHost, options ServiceOptions) *Service {
@@ -81,6 +85,7 @@ func NewService(host ServiceHost, options ServiceOptions) *Service {
 				UseCaseSensitiveFileNames: host.FS().UseCaseSensitiveFileNames(),
 				CurrentDirectory:          host.GetCurrentDirectory(),
 			},
+			parsedFileCache: options.ParsedFileCache,
 		},
 		scriptInfos:                 make(map[tspath.Path]*ScriptInfo),
 		openFiles:                   make(map[tspath.Path]string),
@@ -911,21 +916,24 @@ func (s *Service) createInferredProject(currentDirectory string, projectRootPath
 		return existingProject
 	}
 
-	compilerOptions := core.CompilerOptions{
-		AllowJs:                    core.TSTrue,
-		Module:                     core.ModuleKindESNext,
-		ModuleResolution:           core.ModuleResolutionKindBundler,
-		Target:                     core.ScriptTargetES2022,
-		Jsx:                        core.JsxEmitReactJSX,
-		AllowImportingTsExtensions: core.TSTrue,
-		StrictNullChecks:           core.TSTrue,
-		StrictFunctionTypes:        core.TSTrue,
-		SourceMap:                  core.TSTrue,
-		ESModuleInterop:            core.TSTrue,
-		AllowNonTsExtensions:       core.TSTrue,
-		ResolveJsonModule:          core.TSTrue,
+	compilerOptions := s.compilerOptionsForInferredProjects
+	if compilerOptions == nil {
+		compilerOptions = &core.CompilerOptions{
+			AllowJs:                    core.TSTrue,
+			Module:                     core.ModuleKindESNext,
+			ModuleResolution:           core.ModuleResolutionKindBundler,
+			Target:                     core.ScriptTargetES2022,
+			Jsx:                        core.JsxEmitReactJSX,
+			AllowImportingTsExtensions: core.TSTrue,
+			StrictNullChecks:           core.TSTrue,
+			StrictFunctionTypes:        core.TSTrue,
+			SourceMap:                  core.TSTrue,
+			ESModuleInterop:            core.TSTrue,
+			AllowNonTsExtensions:       core.TSTrue,
+			ResolveJsonModule:          core.TSTrue,
+		}
 	}
-	project := NewInferredProject(&compilerOptions, currentDirectory, projectRootPath, s)
+	project := NewInferredProject(compilerOptions, currentDirectory, projectRootPath, s)
 	s.inferredProjects[project.rootPath] = project
 	return project
 }
@@ -970,4 +978,14 @@ func (s *Service) printMemoryUsage() {
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
 	s.logf("MemoryStats:\n\tAlloc: %v KB\n\tSys: %v KB\n\tNumGC: %v", memStats.Alloc/1024, memStats.Sys/1024, memStats.NumGC)
+}
+
+// !!! per root compiler options
+func (s *Service) SetCompilerOptionsForInferredProjects(compilerOptions *core.CompilerOptions) {
+	s.compilerOptionsForInferredProjects = compilerOptions
+
+	// !!! set compiler options for all inferred projects
+	// for _, project := range s.inferredProjects {
+	// 	project.SetCompilerOptions(compilerOptions)
+	// }
 }

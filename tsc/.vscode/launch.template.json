@@ -41,6 +41,13 @@
                 "-test.run",
                 "TestSubmodule/${fileBasename}"
             ]
+        },
+        {
+            "name": "Launch fourslash test",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/internal/fourslash/gen/${fileBasename}"
         }
     ]
 }

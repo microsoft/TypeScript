@@ -1,0 +1,32 @@
+package fourslash_test
+
+import (
+	"testing"
+
+	"github.com/microsoft/typescript-go/internal/fourslash"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/testutil"
+)
+
+func TestCompletionListInClosedObjectTypeLiteralInSignature01(t *testing.T) {
+	t.Parallel()
+
+	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
+	const content = `interface I<TString, TNumber> {
+    [s: string]: TString;
+    [s: number]: TNumber;
+}
+
+declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { str: T/*1*/ }`
+	f := fourslash.NewFourslash(t, nil /*capabilities*/, content)
+	f.VerifyCompletions(t, "1", &fourslash.VerifyCompletionsExpectedList{
+		IsIncomplete: false,
+		ItemDefaults: &lsproto.CompletionItemDefaults{
+			CommitCharacters: &defaultCommitCharacters,
+		},
+		Items: &fourslash.VerifyCompletionsExpectedItems{
+			Includes: []fourslash.ExpectedCompletionItem{"I", "TString", "TNumber"},
+			Excludes: []string{"foo", "obj"},
+		},
+	})
+}

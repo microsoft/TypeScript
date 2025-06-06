@@ -1566,7 +1566,6 @@ func isTemplateTail(node *ast.Node) bool {
 func findPrecedingMatchingToken(token *ast.Node, matchingTokenKind ast.Kind, sourceFile *ast.SourceFile) *ast.Node {
 	closeTokenText := scanner.TokenToString(token.Kind)
 	matchingTokenText := scanner.TokenToString(matchingTokenKind)
-	tokenFullStart := token.Loc.Pos()
 	// Text-scan based fast path - can be bamboozled by comments and other trivia, but often provides
 	// a good, fast approximation without too much extra work in the cases where it fails.
 	bestGuessIndex := strings.LastIndex(sourceFile.Text(), matchingTokenText)
@@ -1583,7 +1582,7 @@ func findPrecedingMatchingToken(token *ast.Node, matchingTokenKind ast.Kind, sou
 	tokenKind := token.Kind
 	remainingMatchingTokens := 0
 	for {
-		preceding := astnav.FindPrecedingToken(sourceFile, tokenFullStart)
+		preceding := astnav.FindPrecedingToken(sourceFile, token.Pos())
 		if preceding == nil {
 			return nil
 		}

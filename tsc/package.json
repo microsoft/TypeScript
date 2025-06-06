@@ -27,7 +27,8 @@
         "api:build": "npm run -w @typescript/api build",
         "extension:build": "npm run -w _extension build",
         "extension:watch": "npm run -w _extension watch",
-        "node": "node --no-warnings --conditions @typescript/source"
+        "node": "node --no-warnings --conditions @typescript/source",
+        "convertfourslash": "node --experimental-strip-types --no-warnings internal/fourslash/_scripts/convertFourslash.mts"
     },
     "workspaces": [
         "./_extension",
@@ -35,7 +36,7 @@
     ],
     "packageManager": "npm@8.19.4",
     "volta": {
-        "node": "20.19.1",
+        "node": "22.16.0",
         "npm": "8.19.4"
     }
 }

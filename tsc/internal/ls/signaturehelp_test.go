@@ -4,9 +4,9 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
-	"github.com/microsoft/typescript-go/internal/testutil/lstestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
@@ -1017,7 +1017,7 @@ f</*1*/>(1, 2);`,
 }
 
 func runSignatureHelpTest(t *testing.T, input string, expected map[string]verifySignatureHelpOptions) {
-	testData := lstestutil.ParseTestData("/mainFile.ts", input, "/mainFile.ts")
+	testData := fourslash.ParseTestData(t, input, "/mainFile.ts")
 	file := testData.Files[0].Filename
 	markerPositions := testData.MarkerPositions
 	ctx := projecttestutil.WithRequestID(t.Context())
