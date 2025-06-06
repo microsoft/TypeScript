@@ -5,7 +5,7 @@ describe("unittests:: config:: initTSConfig", () => {
     function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
         describe(name, () => {
             const commandLine = ts.parseCommandLine(commandLinesArgs);
-            const initResult = ts.generateTSConfig(commandLine.options, commandLine.fileNames, "\n");
+            const initResult = ts.generateTSConfig(commandLine.options, "\n");
             const outputFileName = `config/initTSConfig/${name.replace(/[^a-z0-9\-. ]/gi, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
