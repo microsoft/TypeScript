@@ -24114,6 +24114,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
             const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional);
+            // source could resolve to `any` and that's not related to `unknown` target under strict subtype relation
+            if (effectiveTarget.flags & (relation === strictSubtypeRelation ? TypeFlags.Any : TypeFlags.AnyOrUnknown)) {
+                return Ternary.True;
+            }
             const effectiveSource = getTypeOfSourceProperty(sourceProp);
             return isRelatedTo(effectiveSource, effectiveTarget, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
         }
@@ -52856,17 +52860,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const blockScopeFlags = declarationList.flags & NodeFlags.BlockScoped;
-        if ((blockScopeFlags === NodeFlags.Using || blockScopeFlags === NodeFlags.AwaitUsing) && isForInStatement(declarationList.parent)) {
-            return grammarErrorOnNode(
-                declarationList,
-                blockScopeFlags === NodeFlags.Using ?
-                    Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
-                    Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
-            );
-        }
+        if (blockScopeFlags === NodeFlags.Using || blockScopeFlags === NodeFlags.AwaitUsing) {
+            if (isForInStatement(declarationList.parent)) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
+                        Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
+                );
+            }
 
-        if (blockScopeFlags === NodeFlags.AwaitUsing) {
-            return checkAwaitGrammar(declarationList);
+            if (declarationList.flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.using_declarations_are_not_allowed_in_ambient_contexts :
+                        Diagnostics.await_using_declarations_are_not_allowed_in_ambient_contexts,
+                );
+            }
+
+            if (blockScopeFlags === NodeFlags.AwaitUsing) {
+                return checkAwaitGrammar(declarationList);
+            }
         }
 
         return false;
@@ -52898,7 +52913,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     blockScopeKind === NodeFlags.Using ? "using" :
                     blockScopeKind === NodeFlags.AwaitUsing ? "await using" :
                     Debug.fail("Unknown BlockScope flag");
-                return grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
+                error(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
             }
         }
     }
@@ -52965,7 +52980,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function grammarErrorOnNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
-            diagnostics.add(createDiagnosticForNode(node, message, ...args));
+            error(node, message, ...args);
             return true;
         }
         return false;
