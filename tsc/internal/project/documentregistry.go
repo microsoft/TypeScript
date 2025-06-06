@@ -27,6 +27,7 @@ func newRegistryKey(options *core.CompilerOptions, path tspath.Path, scriptKind 
 
 type registryEntry struct {
 	sourceFile *ast.SourceFile
+	version    int
 	refCount   int
 	mu         sync.Mutex
 }
@@ -94,28 +95,36 @@ func (r *DocumentRegistry) getDocumentWorker(
 	if entry, ok := r.documents.Load(key); ok {
 		// We have an entry for this file. However, it may be for a different version of
 		// the script snapshot. If so, update it appropriately.
-		if entry.sourceFile.Version != scriptInfoVersion {
+		if entry.version != scriptInfoVersion {
 			sourceFile := parser.ParseSourceFile(scriptInfo.fileName, scriptInfo.path, scriptInfoText, scriptTarget, scanner.JSDocParsingModeParseAll)
-			sourceFile.Version = scriptInfoVersion
 			entry.mu.Lock()
 			defer entry.mu.Unlock()
 			entry.sourceFile = sourceFile
+			entry.version = scriptInfoVersion
 		}
 		entry.refCount++
 		return entry.sourceFile
 	} else {
 		// Have never seen this file with these settings. Create a new source file for it.
 		sourceFile := parser.ParseSourceFile(scriptInfo.fileName, scriptInfo.path, scriptInfoText, scriptTarget, scanner.JSDocParsingModeParseAll)
-		sourceFile.Version = scriptInfoVersion
 		entry, _ := r.documents.LoadOrStore(key, &registryEntry{
 			sourceFile: sourceFile,
 			refCount:   0,
+			version:    scriptInfoVersion,
 		})
 		entry.mu.Lock()
 		defer entry.mu.Unlock()
 		entry.refCount++
 		return entry.sourceFile
 	}
+}
+
+func (r *DocumentRegistry) getFileVersion(file *ast.SourceFile, options *core.CompilerOptions) int {
+	key := newRegistryKey(options, file.Path(), file.ScriptKind)
+	if entry, ok := r.documents.Load(key); ok && entry.sourceFile == file {
+		return entry.version
+	}
+	return -1
 }
 
 // size should only be used for testing.

@@ -48,7 +48,7 @@ type snapshot struct {
 func (s *snapshot) GetLineMap(fileName string) *ls.LineMap {
 	file := s.program.GetSourceFile(fileName)
 	scriptInfo := s.project.host.GetScriptInfoByPath(file.Path())
-	if file.Version == scriptInfo.Version() {
+	if s.project.getFileVersion(file, s.program.Options()) == scriptInfo.Version() {
 		return scriptInfo.LineMap()
 	}
 	return ls.ComputeLineStarts(file.Text())
@@ -1015,12 +1015,13 @@ func (p *Project) print(writeFileNames bool, writeFileExplanation bool, writeFil
 		builder.WriteString("\n\tFiles (0) NoProgram\n")
 	} else {
 		sourceFiles := p.program.GetSourceFiles()
+		options := p.program.Options()
 		builder.WriteString(fmt.Sprintf("\n\tFiles (%d)\n", len(sourceFiles)))
 		if writeFileNames {
 			for _, sourceFile := range sourceFiles {
 				builder.WriteString("\n\t\t" + sourceFile.FileName())
 				if writeFileVersionAndText {
-					builder.WriteString(fmt.Sprintf(" %d %s", sourceFile.Version, sourceFile.Text()))
+					builder.WriteString(fmt.Sprintf(" %d %s", p.getFileVersion(sourceFile, options), sourceFile.Text()))
 				}
 			}
 			// !!!
@@ -1029,6 +1030,10 @@ func (p *Project) print(writeFileNames bool, writeFileExplanation bool, writeFil
 	}
 	builder.WriteString(hr)
 	return builder.String()
+}
+
+func (p *Project) getFileVersion(file *ast.SourceFile, options *core.CompilerOptions) int {
+	return p.host.DocumentRegistry().getFileVersion(file, options)
 }
 
 func (p *Project) Log(s string) {
