@@ -2520,6 +2520,7 @@ declare namespace ts {
                 ESNext = "esnext",
                 Node16 = "node16",
                 Node18 = "node18",
+                Node20 = "node20",
                 NodeNext = "nodenext",
                 Preserve = "preserve",
             }
@@ -7148,6 +7149,7 @@ declare namespace ts {
         ESNext = 99,
         Node16 = 100,
         Node18 = 101,
+        Node20 = 102,
         NodeNext = 199,
         Preserve = 200,
     }

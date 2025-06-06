@@ -34,6 +34,7 @@ export {};
         "rootDir": "src",
         "outDir": "dist",
         "module": "nodenext",
+        "resolveJsonModule": false,
     }
 }
 
@@ -50,6 +51,7 @@ import {} from "../../common/src/index.ts";
         "rewriteRelativeImportExtensions": true,
         "rootDir": "src",
         "outDir": "dist",
+        "resolveJsonModule": false,
     },
     "references": [
         { "path": "../common" }
@@ -78,6 +80,7 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/packages/common/t
   "rootDir": "/tests/cases/fourslash/server/packages/common/src",
   "outDir": "/tests/cases/fourslash/server/packages/common/dist",
   "module": 199,
+  "resolveJsonModule": false,
   "configFilePath": "/tests/cases/fourslash/server/packages/common/tsconfig.json"
  }
 }
@@ -216,7 +219,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/tests/cases/fourslash/server/packages/common/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"composite\": true,\n        \"rootDir\": \"src\",\n        \"outDir\": \"dist\",\n        \"module\": \"nodenext\",\n    }\n}"
+	/tests/cases/fourslash/server/packages/common/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"composite\": true,\n        \"rootDir\": \"src\",\n        \"outDir\": \"dist\",\n        \"module\": \"nodenext\",\n        \"resolveJsonModule\": false,\n    }\n}"
 
 
 	../../../../../../home/src/tslibs/TS/Lib/lib.d.ts
@@ -359,6 +362,7 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/packages/main/tsc
   "rewriteRelativeImportExtensions": true,
   "rootDir": "/tests/cases/fourslash/server/packages/main/src",
   "outDir": "/tests/cases/fourslash/server/packages/main/dist",
+  "resolveJsonModule": false,
   "configFilePath": "/tests/cases/fourslash/server/packages/main/tsconfig.json"
  },
  "projectReferences": [

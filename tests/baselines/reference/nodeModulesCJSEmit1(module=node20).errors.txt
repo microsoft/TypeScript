@@ -1,0 +1,27 @@
+/3.cjs(2,1): error TS2304: Cannot find name 'exports'.
+/5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
+
+
+==== /1.cjs (0 errors) ====
+    module.exports = {};
+    
+==== /2.cjs (0 errors) ====
+    exports.foo = 0;
+    
+==== /3.cjs (1 errors) ====
+    import "foo";
+    exports.foo = {};
+    ~~~~~~~
+!!! error TS2304: Cannot find name 'exports'.
+    
+==== /4.cjs (0 errors) ====
+    ;
+    
+==== /5.cjs (1 errors) ====
+    import two from "./2.cjs";   // ok
+    import three from "./3.cjs"; // error
+           ~~~~~
+!!! error TS1192: Module '"/3"' has no default export.
+    two.foo;
+    three.foo;
+    

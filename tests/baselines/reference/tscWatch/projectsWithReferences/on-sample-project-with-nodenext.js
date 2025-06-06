@@ -518,19 +518,19 @@ File '/package.json' does not exist.
 ======== Resolving module '../core/index' from '/user/username/projects/sample1/tests/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/index', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/index', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/sample1/core/index.ts' exists - use it as a name resolution result.
 ======== Module name '../core/index' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
 ======== Resolving module '../logic/index' from '/user/username/projects/sample1/tests/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/user/username/projects/sample1/logic/index', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/logic/index', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/sample1/logic/index.ts' exists - use it as a name resolution result.
 ======== Module name '../logic/index' was successfully resolved to '/user/username/projects/sample1/logic/index.ts'. ========
 ======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/tests/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in CJS mode with conditions 'require', 'types', 'node'.
-Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherModule', target file types: TypeScript, JavaScript, Declaration.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherModule', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/user/username/projects/sample1/core/anotherModule.ts' exists - use it as a name resolution result.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 File '/user/username/projects/sample1/core/package.json' does not exist.
