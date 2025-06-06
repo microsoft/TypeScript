@@ -1,5 +1,5 @@
 // === QuickInfo ===
-=== /tests/cases/fourslash/quickinfoVerbosityTruncation.ts ===
+=== /tests/cases/fourslash/quickinfoVerbosityTruncation1.ts ===
 // type Str = string | {};
 // type FooType = Str | number;
 // type Sym = symbol | (() => void);
@@ -48,7 +48,7 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTruncation.ts",
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTruncation1.ts",
       "position": 812,
       "name": "o1"
     },
@@ -92,7 +92,7 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTruncation.ts",
+      "fileName": "/tests/cases/fourslash/quickinfoVerbosityTruncation1.ts",
       "position": 812,
       "name": "o1"
     },

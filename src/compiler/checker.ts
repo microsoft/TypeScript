@@ -481,6 +481,7 @@ import {
     isAssignmentTarget,
     isAutoAccessorPropertyDeclaration,
     isAwaitExpression,
+    isBigIntLiteral,
     isBinaryExpression,
     isBinaryLogicalOperator,
     isBindableObjectDefinePropertyCall,
@@ -1719,11 +1720,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         typePredicateToString: (predicate, enclosingDeclaration, flags) => {
             return typePredicateToString(predicate, getParseTreeNode(enclosingDeclaration), flags);
         },
-        writeSignature: (signature, enclosingDeclaration, flags, kind, writer, verbosityLevel, out) => {
-            return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer, verbosityLevel, out);
+        writeSignature: (signature, enclosingDeclaration, flags, kind, writer, maximumLength, verbosityLevel, out) => {
+            return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind, writer, maximumLength, verbosityLevel, out);
         },
-        writeType: (type, enclosingDeclaration, flags, writer, verbosityLevel, out) => {
-            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer, verbosityLevel, out);
+        writeType: (type, enclosingDeclaration, flags, writer, maximumLength, verbosityLevel, out) => {
+            return typeToString(type, getParseTreeNode(enclosingDeclaration), flags, writer, maximumLength, verbosityLevel, out);
         },
         writeSymbol: (symbol, enclosingDeclaration, meaning, flags, writer) => {
             return symbolToString(symbol, getParseTreeNode(enclosingDeclaration), meaning, flags, writer);
@@ -4719,7 +4720,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 else if (resolvedModule.resolvedUsingTsExtension && shouldRewrite) {
-                    const redirect = host.getResolvedProjectReferenceToRedirect(sourceFile.path);
+                    const redirect = host.getRedirectFromSourceFile(sourceFile.path)?.resolvedRef;
                     if (redirect) {
                         const ignoreCase = !host.useCaseSensitiveFileNames();
                         const ownRootDir = host.getCommonSourceDirectory();
@@ -4814,9 +4815,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (moduleNotFoundError) {
             // See if this was possibly a projectReference redirect
             if (resolvedModule) {
-                const redirect = host.getProjectReferenceRedirect(resolvedModule.resolvedFileName);
-                if (redirect) {
-                    error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, resolvedModule.resolvedFileName);
+                const redirect = host.getRedirectFromSourceFile(resolvedModule.resolvedFileName);
+                if (redirect?.outputDts) {
+                    error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect.outputDts, resolvedModule.resolvedFileName);
                     return undefined;
                 }
             }
@@ -6047,7 +6048,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags = TypeFormatFlags.None, kind?: SignatureKind, writer?: EmitTextWriter, verbosityLevel?: number, out?: WriterContextOut): string {
+    function signatureToString(
+        signature: Signature,
+        enclosingDeclaration?: Node,
+        flags = TypeFormatFlags.None,
+        kind?: SignatureKind,
+        writer?: EmitTextWriter,
+        maximumLength?: number,
+        verbosityLevel?: number,
+        out?: WriterContextOut,
+    ): string {
         return writer ? signatureToStringWorker(writer).getText() : usingSingleLineStringWriter(signatureToStringWorker);
 
         function signatureToStringWorker(writer: EmitTextWriter) {
@@ -6065,6 +6075,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName,
                 /*internalFlags*/ undefined,
                 /*tracker*/ undefined,
+                maximumLength,
                 verbosityLevel,
                 out,
             );
@@ -6080,6 +6091,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         enclosingDeclaration?: Node,
         flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
         writer: EmitTextWriter = createTextWriter(""),
+        maximumLength?: number,
         verbosityLevel?: number,
         out?: WriterContextOut,
     ): string {
@@ -6091,6 +6103,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0),
             /*internalFlags*/ undefined,
             /*tracker*/ undefined,
+            maximumLength,
             verbosityLevel,
             out,
         );
@@ -6102,7 +6115,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
         const result = writer.getText();
 
-        const maxLength = noTruncation ? noTruncationMaximumTruncationLength * 2 : defaultMaximumTruncationLength * 2;
+        const maxLength = maximumLength || (noTruncation ? noTruncationMaximumTruncationLength * 2 : defaultMaximumTruncationLength * 2);
         if (maxLength && result && result.length >= maxLength) {
             return result.substr(0, maxLength - "...".length) + "...";
         }
@@ -6314,20 +6327,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         };
         return {
             syntacticBuilderResolver,
-            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeToTypeNodeHelper(type, context), out),
-            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
-            serializeTypeForDeclaration: (declaration: HasInferredType, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, symbol, context)),
-            serializeReturnTypeForSignature: (signature: SignatureDeclaration, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeReturnTypeForSignature(signature, getSymbolOfDeclaration(signature), context)),
-            serializeTypeForExpression: (expr: Expression, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfExpression(expr, context)),
-            indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
-            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => signatureToSignatureDeclarationHelper(signature, kind, context), out),
-            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
-            symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToExpression(symbol, context, meaning)),
-            symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => typeParametersToTypeParameterDeclarations(symbol, context)),
-            symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToParameterDeclaration(symbol, context)),
-            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, verbosityLevel, context => typeParameterToDeclaration(parameter, context), out),
-            symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolTableToDeclarationStatements(symbolTable, context)),
-            symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*verbosityLevel*/ undefined, context => symbolToNode(symbol, context, meaning)),
+            typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, maximumLength?: number, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, maximumLength, verbosityLevel, context => typeToTypeNodeHelper(type, context), out),
+            typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
+            serializeTypeForDeclaration: (declaration: HasInferredType, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, symbol, context)),
+            serializeReturnTypeForSignature: (signature: SignatureDeclaration, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeReturnTypeForSignature(signature, getSymbolOfDeclaration(signature), context)),
+            serializeTypeForExpression: (expr: Expression, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => syntacticNodeBuilder.serializeTypeOfExpression(expr, context)),
+            indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
+            signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, maximumLength?: number, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, maximumLength, verbosityLevel, context => signatureToSignatureDeclarationHelper(signature, kind, context), out),
+            symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
+            symbolToExpression: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => symbolToExpression(symbol, context, meaning)),
+            symbolToTypeParameterDeclarations: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => typeParametersToTypeParameterDeclarations(symbol, context)),
+            symbolToParameterDeclaration: (symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => symbolToParameterDeclaration(symbol, context)),
+            typeParameterToDeclaration: (parameter: TypeParameter, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker, maximumLength?: number, verbosityLevel?: number, out?: WriterContextOut) => withContext(enclosingDeclaration, flags, internalFlags, tracker, maximumLength, verbosityLevel, context => typeParameterToDeclaration(parameter, context), out),
+            symbolTableToDeclarationStatements: (symbolTable: SymbolTable, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => symbolTableToDeclarationStatements(symbolTable, context)),
+            symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, internalFlags, tracker, /*maximumLength*/ undefined, /*verbosityLevel*/ undefined, context => symbolToNode(symbol, context, meaning)),
             symbolToDeclarations,
         };
 
@@ -6388,12 +6401,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return symbolToExpression(symbol, context, meaning);
         }
 
-        function symbolToDeclarations(symbol: Symbol, meaning: SymbolFlags, flags: NodeBuilderFlags, verbosityLevel?: number, out?: WriterContextOut): Declaration[] {
+        function symbolToDeclarations(symbol: Symbol, meaning: SymbolFlags, flags: NodeBuilderFlags, maximumLength?: number, verbosityLevel?: number, out?: WriterContextOut): Declaration[] {
             const nodes = withContext(
                 /*enclosingDeclaration*/ undefined,
                 flags,
                 /*internalFlags*/ undefined,
                 /*tracker*/ undefined,
+                maximumLength,
                 verbosityLevel,
                 context => symbolToDeclarationsWorker(symbol, context),
                 out,
@@ -6463,6 +6477,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             flags: NodeBuilderFlags | undefined,
             internalFlags: InternalNodeBuilderFlags | undefined,
             tracker: SymbolTracker | undefined,
+            maximumLength: number | undefined,
             verbosityLevel: number | undefined,
             cb: (context: NodeBuilderContext) => T,
             out?: WriterContextOut,
@@ -6470,12 +6485,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const moduleResolverHost = tracker?.trackSymbol ? tracker.moduleResolverHost :
                 (internalFlags || InternalNodeBuilderFlags.None) & InternalNodeBuilderFlags.DoNotIncludeSymbolChain ? createBasicNodeBuilderModuleSpecifierResolutionHost(host) :
                 undefined;
+            flags = flags || NodeBuilderFlags.None;
+            const maxTruncationLength = maximumLength ||
+                (flags & NodeBuilderFlags.NoTruncation ? noTruncationMaximumTruncationLength : defaultMaximumTruncationLength);
             const context: NodeBuilderContext = {
                 enclosingDeclaration,
                 enclosingFile: enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration),
-                flags: flags || NodeBuilderFlags.None,
+                flags,
                 internalFlags: internalFlags || InternalNodeBuilderFlags.None,
                 tracker: undefined!,
+                maxTruncationLength,
                 maxExpansionDepth: verbosityLevel ?? -1,
                 encounteredError: false,
                 suppressReportInferenceFallback: false,
@@ -6552,7 +6571,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function checkTruncationLength(context: NodeBuilderContext): boolean {
             if (context.truncating) return context.truncating;
-            return context.truncating = context.approximateLength > ((context.flags & NodeBuilderFlags.NoTruncation) ? noTruncationMaximumTruncationLength : defaultMaximumTruncationLength);
+            return context.truncating = context.approximateLength > context.maxTruncationLength;
         }
 
         /**
@@ -6945,6 +6964,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const questionToken = type.declaration.questionToken ? factory.createToken(type.declaration.questionToken.kind) as QuestionToken | PlusToken | MinusToken : undefined;
                 let appropriateConstraintTypeNode: TypeNode;
                 let newTypeVariable: TypeReferenceNode | undefined;
+                let templateType = getTemplateTypeFromMappedType(type);
+                const typeParameter = getTypeParameterFromMappedType(type);
                 // If the mapped type isn't `keyof` constraint-declared, _but_ still has modifiers preserved, and its naive instantiation won't preserve modifiers because its constraint isn't `keyof` constrained, we have work to do
                 const needsModifierPreservingWrapper = !isMappedTypeWithKeyofConstraintDeclaration(type)
                     && !(getModifiersTypeFromMappedType(type).flags & TypeFlags.Unknown)
@@ -6954,9 +6975,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // We have a { [P in keyof T]: X }
                     // We do this to ensure we retain the toplevel keyof-ness of the type which may be lost due to keyof distribution during `getConstraintTypeFromMappedType`
                     if (isHomomorphicMappedTypeWithNonHomomorphicInstantiation(type) && context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
-                        const newParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
-                        const name = typeParameterToName(newParam, context);
+                        const newConstraintParam = createTypeParameter(createSymbol(SymbolFlags.TypeParameter, "T" as __String));
+                        const name = typeParameterToName(newConstraintParam, context);
+                        const target = type.target as MappedType;
                         newTypeVariable = factory.createTypeReferenceNode(name);
+                        templateType = instantiateType(
+                            getTemplateTypeFromMappedType(target),
+                            makeArrayTypeMapper([getTypeParameterFromMappedType(target), getModifiersTypeFromMappedType(target)], [typeParameter, newConstraintParam]),
+                        );
                     }
                     appropriateConstraintTypeNode = factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, newTypeVariable || typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context));
                 }
@@ -6971,9 +6997,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else {
                     appropriateConstraintTypeNode = typeToTypeNodeHelper(getConstraintTypeFromMappedType(type), context);
                 }
-                const typeParameterNode = typeParameterToDeclarationWithConstraint(getTypeParameterFromMappedType(type), context, appropriateConstraintTypeNode);
+                const typeParameterNode = typeParameterToDeclarationWithConstraint(typeParameter, context, appropriateConstraintTypeNode);
+
+                // nameType and templateType nodes have to be in the new scope
+                const cleanup = enterNewScope(context, type.declaration, /*expandedParams*/ undefined, [getDeclaredTypeOfTypeParameter(getSymbolOfDeclaration(type.declaration.typeParameter))]);
                 const nameTypeNode = type.declaration.nameType ? typeToTypeNodeHelper(getNameTypeFromMappedType(type)!, context) : undefined;
-                const templateTypeNode = typeToTypeNodeHelper(removeMissingType(getTemplateTypeFromMappedType(type), !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), context);
+                const templateTypeNode = typeToTypeNodeHelper(removeMissingType(templateType, !!(getMappedTypeModifiers(type) & MappedTypeModifiers.IncludeOptional)), context);
+                cleanup();
+
                 const mappedTypeNode = factory.createMappedTypeNode(readonlyToken, typeParameterNode, nameTypeNode, questionToken, templateTypeNode, /*members*/ undefined);
                 context.approximateLength += 10;
                 const result = setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
@@ -10216,7 +10247,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createImportDeclaration(
                                     /*modifiers*/ undefined,
                                     factory.createImportClause(
-                                        /*isTypeOnly*/ false,
+                                        /*phaseModifier*/ undefined,
                                         /*name*/ undefined,
                                         factory.createNamedImports([factory.createImportSpecifier(
                                             /*isTypeOnly*/ false,
@@ -10313,7 +10344,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, factory.createIdentifier(localName), /*namedBindings*/ undefined),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    factory.createIdentifier(localName),
+                                    /*namedBindings*/ undefined,
+                                ),
                                 specifier,
                                 attributes,
                             ),
@@ -10329,7 +10364,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    /*name*/ undefined,
+                                    factory.createNamespaceImport(factory.createIdentifier(localName)),
+                                ),
                                 specifier,
                                 (node as ImportClause).parent.attributes,
                             ),
@@ -10358,7 +10397,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(
-                                    isTypeOnly,
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
                                     /*name*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
@@ -13627,9 +13666,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             symbol.declarations.push(member);
         }
         if (symbolFlags & SymbolFlags.Value) {
-            if (!symbol.valueDeclaration || symbol.valueDeclaration.kind !== member.kind) {
-                symbol.valueDeclaration = member;
-            }
+            setValueDeclaration(symbol, member);
         }
     }
 
@@ -37985,6 +38022,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.keywordToken === SyntaxKind.ImportKeyword) {
+            if (node.name.escapedText === "defer") {
+                Debug.assert(!isCallExpression(node.parent) || node.parent.expression !== node, "Trying to get the type of `import.defer` in `import.defer(...)`");
+                return errorType;
+            }
             return checkImportMetaProperty(node);
         }
 
@@ -41423,7 +41464,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // Optimize for the common case of a call to a function with a single non-generic call
         // signature where we can just fetch the return type without checking the arguments.
-        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr)) {
+        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr) && !isImportCall(expr)) {
             return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                 getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
         }
@@ -41502,7 +41543,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
-            const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+            const redirect = host.getRedirectFromOutput(getSourceFileOfNode(constEnumDeclaration).resolvedPath)?.resolvedRef;
             if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node) && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
                 error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
             }
@@ -41577,8 +41618,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 return checkIndexedAccess(node as ElementAccessExpression, checkMode);
             case SyntaxKind.CallExpression:
-                if ((node as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
-                    return checkImportCallExpression(node as ImportCall);
+                if (isImportCall(node)) {
+                    return checkImportCallExpression(node);
                 }
                 // falls through
             case SyntaxKind.NewExpression:
@@ -47513,6 +47554,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isComputedNonLiteralName(member.name)) {
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
         }
+        else if (isBigIntLiteral(member.name)) {
+            error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
+        }
         else {
             const text = getTextOfPropertyName(member.name);
             if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
@@ -48156,7 +48200,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     targetFlags & SymbolFlags.ConstEnum
                 ) {
                     const constEnumDeclaration = target.valueDeclaration as EnumDeclaration;
-                    const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+                    const redirect = host.getRedirectFromOutput(getSourceFileOfNode(constEnumDeclaration).resolvedPath)?.resolvedRef;
                     if (constEnumDeclaration.flags & NodeFlags.Ambient && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
                         error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
                     }
@@ -49845,6 +49889,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
 
             case SyntaxKind.ImportKeyword:
+                if (isMetaProperty(node.parent) && node.parent.name.escapedText === "defer") {
+                    return undefined;
+                }
+                // falls through
             case SyntaxKind.NewKeyword:
                 return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
             case SyntaxKind.InstanceOfKeyword:
@@ -51034,8 +51082,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             },
-            symbolToDeclarations: (symbol, meaning, flags, verbosityLevel, out) => {
-                return nodeBuilder.symbolToDeclarations(symbol, meaning, flags, verbosityLevel, out);
+            symbolToDeclarations: (symbol, meaning, flags, maximumLength, verbosityLevel, out) => {
+                return nodeBuilder.symbolToDeclarations(symbol, meaning, flags, maximumLength, verbosityLevel, out);
             },
         };
 
@@ -52819,7 +52867,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.ImportKeyword:
                 if (escapedText !== "meta") {
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    const isCallee = isCallExpression(node.parent) && node.parent.expression === node;
+                    if (escapedText === "defer") {
+                        if (!isCallee) {
+                            return grammarErrorAtPos(node, node.end, 0, Diagnostics._0_expected, "(");
+                        }
+                    }
+                    else {
+                        if (isCallee) {
+                            return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, unescapeLeadingUnderscores(node.name.escapedText));
+                        }
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    }
                 }
                 break;
         }
@@ -53078,11 +53137,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarImportClause(node: ImportClause): boolean {
-        if (node.isTypeOnly && node.name && node.namedBindings) {
-            return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+        if (node.phaseModifier === SyntaxKind.TypeKeyword) {
+            if (node.name && node.namedBindings) {
+                return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+            }
+            if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return checkGrammarNamedImportsOrExports(node.namedBindings);
+            }
         }
-        if (node.isTypeOnly && node.namedBindings?.kind === SyntaxKind.NamedImports) {
-            return checkGrammarNamedImportsOrExports(node.namedBindings);
+        else if (node.phaseModifier === SyntaxKind.DeferKeyword) {
+            if (node.name) {
+                return grammarErrorOnNode(node, Diagnostics.Default_imports_are_not_allowed_in_a_deferred_import);
+            }
+            if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return grammarErrorOnNode(node, Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import);
+            }
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve);
+            }
         }
         return false;
     }
@@ -53105,7 +53177,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
         }
 
-        if (moduleKind === ModuleKind.ES2015) {
+        if (node.expression.kind === SyntaxKind.MetaProperty) {
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve);
+            }
+        }
+        else if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_or_nodenext);
         }
 
@@ -53346,7 +53423,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),
         useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         redirectTargetsMap: host.redirectTargetsMap,
-        getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
+        getRedirectFromSourceFile: fileName => host.getRedirectFromSourceFile(fileName),
         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
         fileExists: fileName => host.fileExists(fileName),
         getFileIncludeReasons: () => host.getFileIncludeReasons(),
@@ -53373,6 +53450,8 @@ interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
     tracker: SymbolTrackerImpl;
     /* Maximum depth we're allowed to expand names. */
     readonly maxExpansionDepth: number;
+    /* Maximum length before we truncate the output. */
+    readonly maxTruncationLength: number;
 
     // State
     encounteredError: boolean;

@@ -28,4 +28,4 @@
 //// const obj1/*o1*/: LotsOfProps = undefined as any as LotsOfProps;
 
 
-verify.baselineQuickInfo({ "o1": [0, 1], });
+verify.baselineQuickInfo({ "o1": [0, 1], }, 160);
