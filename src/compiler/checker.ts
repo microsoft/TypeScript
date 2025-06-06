@@ -52909,7 +52909,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     blockScopeKind === NodeFlags.Using ? "using" :
                     blockScopeKind === NodeFlags.AwaitUsing ? "await using" :
                     Debug.fail("Unknown BlockScope flag");
-                return grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
+                error(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
             }
         }
     }
@@ -52976,7 +52976,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function grammarErrorOnNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
-            diagnostics.add(createDiagnosticForNode(node, message, ...args));
+            error(node, message, ...args);
             return true;
         }
         return false;
