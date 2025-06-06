@@ -77,6 +77,7 @@ import {
     EndOfFileToken,
     EntityName,
     EnumDeclaration,
+    EnumLiteralExpression,
     EnumMember,
     EqualsGreaterThanToken,
     escapeLeadingUnderscores,
@@ -160,6 +161,7 @@ import {
     isElementAccessChain,
     isElementAccessExpression,
     isEnumDeclaration,
+    isEnumLiteralExpression,
     isExclamationToken,
     isExportAssignment,
     isExportDeclaration,
@@ -754,6 +756,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateTypeAliasDeclaration,
         createEnumDeclaration,
         updateEnumDeclaration,
+        createEnumLiteralExpression,
+        updateEnumLiteralExpression,
         createModuleDeclaration,
         updateModuleDeclaration,
         createModuleBlock,
@@ -4540,6 +4544,39 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
+    function createEnumLiteralExpression(
+        modifiers: readonly ModifierLike[] | undefined,
+        name: __String,
+        members: readonly EnumMember[],
+    ) {
+        const node = createBaseDeclaration<EnumLiteralExpression>(SyntaxKind.EnumLiteralExpression);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = name;
+        node.members = createNodeArray(members);
+        node.transformFlags |= propagateChildrenFlags(node.modifiers) |
+            propagateChildrenFlags(node.members) |
+            TransformFlags.ContainsTypeScript;
+        node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // Enum declarations cannot contain `await`
+
+        node.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        return node;
+    }
+
+    // @api
+    function updateEnumLiteralExpression(
+        node: EnumLiteralExpression,
+        modifiers: readonly ModifierLike[] | undefined,
+        name: __String,
+        members: readonly EnumMember[],
+    ) {
+        return node.modifiers !== modifiers
+                || node.name !== name
+                || node.members !== members
+            ? update(createEnumLiteralExpression(modifiers, name, members), node)
+            : node;
+    }
+
+    // @api
     function createModuleDeclaration(
         modifiers: readonly ModifierLike[] | undefined,
         name: ModuleName,
@@ -7086,6 +7123,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             isInterfaceDeclaration(node) ? updateInterfaceDeclaration(node, modifierArray, node.name, node.typeParameters, node.heritageClauses, node.members) :
             isTypeAliasDeclaration(node) ? updateTypeAliasDeclaration(node, modifierArray, node.name, node.typeParameters, node.type) :
             isEnumDeclaration(node) ? updateEnumDeclaration(node, modifierArray, node.name, node.members) :
+            isEnumLiteralExpression(node) ? updateEnumLiteralExpression(node, modifierArray, node.name, node.members) :
             isModuleDeclaration(node) ? updateModuleDeclaration(node, modifierArray, node.name, node.body) :
             isImportEqualsDeclaration(node) ? updateImportEqualsDeclaration(node, modifierArray, node.isTypeOnly, node.name, node.moduleReference) :
             isImportDeclaration(node) ? updateImportDeclaration(node, modifierArray, node.importClause, node.moduleSpecifier, node.attributes) :

@@ -75,6 +75,7 @@ import {
     ensureScriptKind,
     EntityName,
     EnumDeclaration,
+    EnumLiteralExpression,
     EnumMember,
     ExclamationToken,
     ExportAssignment,
@@ -135,6 +136,7 @@ import {
     isAssignmentOperator,
     isAsyncModifier,
     isClassMemberModifier,
+    isEnumTypeReference,
     isExportAssignment,
     isExportDeclaration,
     isExportModifier,
@@ -918,6 +920,12 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.EnumMember]: function forEachChildInEnumMember<T>(node: EnumMember, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.name) ||
             visitNode(cbNode, node.initializer);
+    },
+    [SyntaxKind.EnumLiteralExpression]: function forEachChildInEnumLiteralExpression<T>(node: EnumLiteralExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+        // For EnumLiteralExpression, the name is not visited or emitted. It is a reference to the binding name of a Declaration for which
+        // the EnumLiteralExpression is an initializer, and is used to permit diagnostic code for EnumDeclarations to be used.
+        return visitNodes(cbNode, cbNodes, node.modifiers) ||
+            visitNodes(cbNode, cbNodes, node.members);
     },
     [SyntaxKind.ModuleDeclaration]: function forEachChildInModuleDeclaration<T>(node: ModuleDeclaration, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNodes(cbNode, cbNodes, node.modifiers) ||
@@ -7624,11 +7632,14 @@ namespace Parser {
         return parseBindingIdentifier(privateIdentifierDiagnosticMessage);
     }
 
-    function parseVariableDeclarationAllowExclamation() {
-        return parseVariableDeclaration(/*allowExclamation*/ true);
+    // function parseVariableDeclarationAllowExclamation(): VariableDeclaration {
+    //     return parseVariableDeclaration(/*allowExclamation*/ true, /*allowEnumType*/ false);
+    // }
+    function parseVariableDeclarationAllowEnumDeclaration(): VariableDeclaration {
+        return parseVariableDeclaration(/*allowExclamation*/ true, /*allowEnumType*/ true);
     }
 
-    function parseVariableDeclaration(allowExclamation?: boolean): VariableDeclaration {
+    function parseVariableDeclaration(allowExclamation?: boolean, allowEnumType?: boolean): VariableDeclaration {
         const pos = getNodePos();
         const hasJSDoc = hasPrecedingJSDocComment();
         const name = parseIdentifierOrPattern(Diagnostics.Private_identifiers_are_not_allowed_in_variable_declarations);
@@ -7640,6 +7651,12 @@ namespace Parser {
             exclamationToken = parseTokenNode<Token<SyntaxKind.ExclamationToken>>();
         }
         const type = parseTypeAnnotation();
+        if (allowEnumType && type && isEnumTypeReference(type) && name.kind === SyntaxKind.Identifier) {
+            const initializer = parseInitializerAsEnumLiteralExpression(name);
+            const node = factoryCreateVariableDeclaration(name, exclamationToken, type, initializer);
+            return withJSDoc(finishNode(node, pos), hasJSDoc);
+        }
+
         const initializer = isInOrOfKeyword(token()) ? undefined : parseInitializer();
         const node = factoryCreateVariableDeclaration(name, exclamationToken, type, initializer);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
@@ -7691,7 +7708,7 @@ namespace Parser {
 
             declarations = parseDelimitedList(
                 ParsingContext.VariableDeclarations,
-                inForStatementInitializer ? parseVariableDeclaration : parseVariableDeclarationAllowExclamation,
+                inForStatementInitializer ? parseVariableDeclaration : parseVariableDeclarationAllowEnumDeclaration,
             );
 
             setDisallowInContext(savedDisallowIn);
@@ -8252,6 +8269,21 @@ namespace Parser {
         return withJSDoc(finishNode(factory.createEnumMember(name, initializer), pos), hasJSDoc);
     }
 
+    function parseObjectLiteralEnumMember(): EnumMember {
+        // const MyEnum: enum = { name: value }
+        const pos = getNodePos();
+        const hasJSDoc = hasPrecedingJSDocComment();
+        const name = parsePropertyName();
+        let initializer: Expression | undefined;
+
+        if (token() === SyntaxKind.ColonToken) {
+            parseExpected(SyntaxKind.ColonToken);
+            initializer = allowInAnd(() => parseAssignmentExpressionOrHigher(/*allowReturnTypeInArrowFunction*/ true));
+        }
+        const node = withJSDoc(finishNode(factory.createEnumMember(name, initializer), pos), hasJSDoc);
+        return node;
+    }
+
     function parseEnumDeclaration(pos: number, hasJSDoc: boolean, modifiers: NodeArray<ModifierLike> | undefined): EnumDeclaration {
         parseExpected(SyntaxKind.EnumKeyword);
         const name = parseIdentifier();
@@ -8265,6 +8297,19 @@ namespace Parser {
         }
         const node = factory.createEnumDeclaration(modifiers, name, members);
         return withJSDoc(finishNode(node, pos), hasJSDoc);
+    }
+
+    function parseInitializerAsEnumLiteralExpression(name: Identifier) {
+        // A VariableDeclaration with a declared type `enum` expects the initializer to be in a format like an ObjectLiteralExpression,
+        // with only constant keys and property assignments, which are treated as EnumMembers.
+        const pos = getNodePos();
+        parseExpected(SyntaxKind.EqualsToken);
+        parseExpected(SyntaxKind.OpenBraceToken);
+        const members = parseDelimitedList(ParsingContext.ObjectLiteralMembers, parseObjectLiteralEnumMember);
+        parseExpected(SyntaxKind.CloseBraceToken);
+
+        // Should the variable have the jsdoc, or the enum literal, or both?
+        return finishNode(factory.createEnumLiteralExpression(/*modifiers*/ undefined, name.escapedText, members), pos);
     }
 
     function parseModuleBlock(): ModuleBlock {

@@ -305,6 +305,7 @@ export const enum SyntaxKind {
     MetaProperty,
     SyntheticExpression,
     SatisfiesExpression,
+    EnumLiteralExpression,
 
     // Misc
     TemplateSpan,
@@ -1101,6 +1102,7 @@ export type HasChildren =
     | BindingElement
     | ArrayLiteralExpression
     | ObjectLiteralExpression
+    | EnumLiteralExpression
     | PropertyAccessExpression
     | ElementAccessExpression
     | CallExpression
@@ -1240,6 +1242,7 @@ export type HasJSDoc =
     | NamedTupleMember
     | NamespaceExportDeclaration
     | ObjectLiteralExpression
+    | EnumLiteralExpression
     | ParameterDeclaration
     | ParenthesizedExpression
     | PropertyAccessExpression
@@ -1376,6 +1379,7 @@ export type HasModifiers =
     | InterfaceDeclaration
     | TypeAliasDeclaration
     | EnumDeclaration
+    | EnumLiteralExpression
     | ModuleDeclaration
     | ImportEqualsDeclaration
     | ImportDeclaration
@@ -1412,6 +1416,7 @@ export type IsContainer =
     | ClassDeclaration
     | EnumDeclaration
     | ObjectLiteralExpression
+    | EnumLiteralExpression
     | TypeLiteralNode
     | JSDocTypeLiteral
     | JsxAttributes
@@ -1876,6 +1881,14 @@ export interface VariableDeclaration extends NamedDeclaration, JSDocContainer {
     readonly exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
     readonly type?: TypeNode;                      // Optional type annotation
     readonly initializer?: Expression;             // Optional initializer
+}
+
+export interface EnumLiteralDeclaration extends VariableDeclaration {
+    readonly kind: SyntaxKind.VariableDeclaration;
+    readonly parent: VariableDeclarationList;
+    readonly name: BindingName;
+    readonly type: TypeReferenceNode;
+    readonly initializer: EnumLiteralExpression;
 }
 
 /** @internal */
@@ -3593,7 +3606,7 @@ export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContain
 
 export interface EnumMember extends NamedDeclaration, JSDocContainer {
     readonly kind: SyntaxKind.EnumMember;
-    readonly parent: EnumDeclaration;
+    readonly parent: EnumDeclarationType;
     // This does include ComputedPropertyName, but the parser will give an error
     // if it parses a ComputedPropertyName in an EnumMember
     readonly name: PropertyName;
@@ -3606,6 +3619,16 @@ export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
     readonly name: Identifier;
     readonly members: NodeArray<EnumMember>;
 }
+
+export interface EnumLiteralExpression extends PrimaryExpression, Declaration, JSDocContainer {
+    readonly kind: SyntaxKind.EnumLiteralExpression;
+    readonly parent: VariableDeclaration;
+    readonly modifiers?: NodeArray<ModifierLike>;
+    readonly name: __String; // For compatibility with EnumDeclaration -- however this must be equal to the BindingName in the VariableDeclaration.
+    readonly members: NodeArray<EnumMember>;
+}
+
+export type EnumDeclarationType = EnumDeclaration | EnumLiteralExpression;
 
 export type ModuleName =
     | Identifier
@@ -4513,6 +4536,7 @@ export interface JsonMinusNumericLiteral extends PrefixUnaryExpression {
 
 export type JsonObjectExpression =
     | ObjectLiteralExpression
+    | EnumLiteralExpression
     | ArrayLiteralExpression
     | JsonMinusNumericLiteral
     | NumericLiteral
@@ -9056,6 +9080,8 @@ export interface NodeFactory {
     updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
     createEnumDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
     updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+    createEnumLiteralExpression(modifiers: readonly ModifierLike[] | undefined, name: __String, members: readonly EnumMember[]): EnumLiteralExpression;
+    updateEnumLiteralExpression(node: EnumLiteralExpression, modifiers: readonly ModifierLike[] | undefined, name: __String, members: readonly EnumMember[]): EnumLiteralExpression;
     createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
     updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
     createModuleBlock(statements: readonly Statement[]): ModuleBlock;
