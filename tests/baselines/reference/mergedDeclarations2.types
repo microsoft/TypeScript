@@ -14,9 +14,9 @@ enum Foo {
 >    : ^^^
 
     a = b
->a : Foo.b
+>a : Foo.a
 >  : ^^^^^
->b : Foo
+>b : any
 >  : ^^^
 }
 
