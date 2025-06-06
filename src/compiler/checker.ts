@@ -2322,6 +2322,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var inferenceContexts: (InferenceContext | undefined)[] = [];
     var inferenceContextCount = 0;
 
+    var activeTypeMappers: TypeMapper[] = [];
+    var activeTypeMappersCaches: Map<string, Type>[] = [];
+    var activeTypeMappersCount = 0;
+
     var emptyStringType = getStringLiteralType("");
     var zeroType = getNumberLiteralType(0);
     var zeroBigIntType = getBigIntLiteralType({ negative: false, base10Value: "0" });
@@ -20858,10 +20862,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
+        const index = findActiveMapper(mapper);
+        if (index === -1) {
+            pushActiveMapper(mapper);
+        }
+        const key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
+        const mapperCache = activeTypeMappersCaches[index !== -1 ? index : activeTypeMappersCount - 1];
+        const cached = mapperCache.get(key);
+        if (cached) {
+            return cached;
+        }
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
+        if (index === -1) {
+            popActiveMapper();
+        }
+        else {
+            mapperCache.set(key, result);
+        }
         instantiationDepth--;
         return result;
     }
@@ -27452,6 +27472,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
             }
+            clearActiveMapperCaches();
         }
 
         return inference.inferredType;
@@ -32665,6 +32686,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isNodeDescendantOf(node, inferenceContextNodes[i])) {
                 return inferenceContexts[i];
             }
+        }
+    }
+
+    function pushActiveMapper(mapper: TypeMapper) {
+        activeTypeMappers[activeTypeMappersCount] = mapper;
+        activeTypeMappersCaches[activeTypeMappersCount] = new Map();
+        activeTypeMappersCount++;
+    }
+
+    function popActiveMapper() {
+        activeTypeMappersCount--;
+    }
+
+    function findActiveMapper(mapper: TypeMapper) {
+        for (let i = activeTypeMappersCount - 1; i >= 0; i--) {
+            if (mapper === activeTypeMappers[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function clearActiveMapperCaches() {
+        for (let i = activeTypeMappersCount - 1; i >= 0; i--) {
+            activeTypeMappersCaches[i].clear();
         }
     }
 
