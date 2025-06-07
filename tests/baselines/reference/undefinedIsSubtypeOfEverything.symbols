@@ -42,7 +42,7 @@ class D1A extends Base {
 
     foo: String;
 >foo : Symbol(D1A.foo, Decl(undefinedIsSubtypeOfEverything.ts, 18, 24))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 

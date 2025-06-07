@@ -2,7 +2,7 @@
 
 === assignFromStringInterface2.ts ===
 interface String {
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
 
     doStuff(): string;
 >doStuff : Symbol(String.doStuff, Decl(assignFromStringInterface2.ts, 0, 18))
@@ -145,7 +145,7 @@ var x = '';
 
 var a: String;
 >a : Symbol(a, Decl(assignFromStringInterface2.ts, 37, 3))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromStringInterface2.ts, 0, 0))
 
 var b: NotString;
 >b : Symbol(b, Decl(assignFromStringInterface2.ts, 38, 3))
