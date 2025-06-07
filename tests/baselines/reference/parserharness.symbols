@@ -63,9 +63,9 @@ function filePath(fullPath: string) {
 
     var components = fullPath.split("/");
 >components : Symbol(components, Decl(parserharness.ts, 33, 7))
->fullPath.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>fullPath.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >fullPath : Symbol(fullPath, Decl(parserharness.ts, 31, 18))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     var path: string[] = components.slice(0, components.length - 1);
 >path : Symbol(path, Decl(parserharness.ts, 34, 7))
@@ -551,9 +551,9 @@ module Harness {
         // we have to string-based splitting instead and try to figure out the delimiting chars
         var lines = content.split('\r\n');
 >lines : Symbol(lines, Decl(parserharness.ts, 202, 11))
->content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >content : Symbol(content, Decl(parserharness.ts, 198, 43))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         if (lines.length === 1) {
 >lines.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
@@ -562,9 +562,9 @@ module Harness {
 
             lines = content.split('\n');
 >lines : Symbol(lines, Decl(parserharness.ts, 202, 11))
->content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>content.split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >content : Symbol(content, Decl(parserharness.ts, 198, 43))
->split : Symbol(String.split, Decl(lib.es5.d.ts, --, --))
+>split : Symbol(String.split, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
         }
         return lines;
 >lines : Symbol(lines, Decl(parserharness.ts, 202, 11))

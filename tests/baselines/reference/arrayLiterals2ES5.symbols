@@ -89,7 +89,7 @@ interface myArray2 extends Array<Number|String> { }
 >myArray2 : Symbol(myArray2, Decl(arrayLiterals2ES5.ts, 44, 43))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var d0 = [1, true, ...temp,];  // has type (string|number|boolean)[]
 >d0 : Symbol(d0, Decl(arrayLiterals2ES5.ts, 46, 3))

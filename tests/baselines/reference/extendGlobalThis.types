@@ -42,16 +42,16 @@ console.log(globalThis.test.split("-"));
 >    : ^^^^    ^^     ^^^^^    
 >globalThis.test.split("-") : string[]
 >                           : ^^^^^^^^
->globalThis.test.split : (separator: string | RegExp, limit?: number) => string[]
->                      : ^         ^^               ^^     ^^^      ^^^^^        
+>globalThis.test.split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>                      : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >globalThis.test : string
 >                : ^^^^^^
 >globalThis : typeof globalThis
 >           : ^^^^^^^^^^^^^^^^^
 >test : string
 >     : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >"-" : "-"
 >    : ^^^
 

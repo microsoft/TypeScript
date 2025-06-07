@@ -14,7 +14,7 @@ interface Number {
 }
 
 interface String {
->String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 5, 1))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 5, 1))
 
     foo(): string;
 >foo : Symbol(String.foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
