@@ -1,0 +1,119 @@
+// === QuickInfo ===
+=== /tests/cases/fourslash/jsdocLink7.ts ===
+// type Book = any;
+// 
+// class IsbnSyntaxError extends Error {}
+// 
+// /**
+//  * @throws {@link IsbnSyntaxError}
+//  * This exception is thrown if the input is not a valid ISBN number.
+//  */
+// function fetchBookByIsbn(isbnCode: string): Book {}
+//          ^^^^^^^^^^^^^^^
+// | ----------------------------------------------------------------------
+// | function fetchBookByIsbn(isbnCode: string): Book
+// | @throws {@link IsbnSyntaxError}This exception is thrown if the input is not a valid ISBN number.
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsdocLink7.ts",
+      "position": 194,
+      "name": ""
+    },
+    "item": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 179,
+        "length": 15
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "fetchBookByIsbn",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "isbnCode",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Book",
+          "kind": "aliasName"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "throws",
+          "text": [
+            {
+              "text": "",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "IsbnSyntaxError",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/tests/cases/fourslash/jsdocLink7.ts",
+                "textSpan": {
+                  "start": 18,
+                  "length": 38
+                }
+              }
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            },
+            {
+              "text": "This exception is thrown if the input is not a valid ISBN number.",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
