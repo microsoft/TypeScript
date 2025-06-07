@@ -23,3 +23,5 @@ if (typeof console !== "undefined") {
 }
 
 export * from "./_namespaces/ts.js";
+import * as ts from "./_namespaces/ts.js";
+export default ts;
