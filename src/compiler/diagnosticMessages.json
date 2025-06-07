@@ -1837,6 +1837,14 @@
         "category": "Error",
         "code": 1544
     },
+    "'using' declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1545
+    },
+    "'await using' declarations are not allowed in ambient contexts.": {
+        "category": "Error",
+        "code": 1546
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -5702,6 +5710,42 @@
         "category": "Message",
         "code": 6283
     },
+    "File Layout": {
+        "category": "Message",
+        "code": 6284
+    },
+    "Environment Settings": {
+        "category": "Message",
+        "code": 6285
+    },
+    "See also https://aka.ms/tsconfig/module": {
+        "category": "Message",
+        "code": 6286
+    },
+    "For nodejs:": {
+        "category": "Message",
+        "code": 6287
+    },
+    "and npm install -D @types/node": {
+        "category": "Message",
+        "code": 6290
+    },
+    "Other Outputs": {
+        "category": "Message",
+        "code": 6291
+    },
+    "Stricter Typechecking Options": {
+        "category": "Message",
+        "code": 6292
+    },
+    "Style Options": {
+        "category": "Message",
+        "code": 6293
+    },
+    "Recommended Options": {
+        "category": "Message",
+        "code": 6294
+    },
 
     "Enable project compilation": {
         "category": "Message",
@@ -8451,5 +8495,21 @@
     "String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.": {
         "category": "Error",
         "code": 18057
+    },
+    "Default imports are not allowed in a deferred import.": {
+        "category": "Error",
+        "code": 18058
+    },
+    "Named imports are not allowed in a deferred import.": {
+        "category": "Error",
+        "code": 18059
+    },
+    "Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.": {
+        "category": "Error",
+        "code": 18060
+    },
+    "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
+        "category": "Error",
+        "code": 18061
     }
 }
