@@ -1323,6 +1323,8 @@ export namespace Completion {
         interfaceEntry("Float32ArrayConstructor"),
         varEntry("Float64Array"),
         interfaceEntry("Float64ArrayConstructor"),
+        interfaceEntry("IntegerTypedArrayTypes"),
+        typeEntry("IntegerTypedArray"),
         moduleEntry("Intl"),
         typeEntry("WeakKey"),
         interfaceEntry("WeakKeyTypes"),
