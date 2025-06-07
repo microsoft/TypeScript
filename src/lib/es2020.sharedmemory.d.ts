@@ -1,3 +1,4 @@
+/// <reference lib="es2017.sharedmemory" />
 /// <reference lib="es2020.bigint" />
 
 interface Atomics {
@@ -60,13 +61,17 @@ interface Atomics {
      * agent is put to sleep causing execution to suspend until the timeout expires (returning
      * `"timed-out"`) or until the agent is awoken (returning `"ok"`); otherwise, returns
      * `"not-equal"`.
+     * @param typedArray A BigInt64Array that views a SharedArrayBuffer.
+     * @param index The position in the typedArray on which to wait.
+     * @param value The expected value to test.
+     * @param timeout Time to wait in milliseconds. Defaults to +Infinity.
      */
-    wait(typedArray: BigInt64Array<ArrayBufferLike>, index: number, value: bigint, timeout?: number): "ok" | "not-equal" | "timed-out";
+    wait(typedArray: BigInt64Array<SharedArrayBuffer>, index: number, value: bigint, timeout?: number): "ok" | "not-equal" | "timed-out";
 
     /**
      * Wakes up sleeping agents that are waiting on the given index of the array, returning the
      * number of agents that were awoken.
-     * @param typedArray A shared BigInt64Array.
+     * @param typedArray A BigInt64Array that views a SharedArrayBuffer.
      * @param index The position in the typedArray to wake up on.
      * @param count The number of sleeping agents to notify. Defaults to +Infinity.
      */
