@@ -160,7 +160,6 @@ import {
     isMetaProperty,
     isModifierKind,
     isNonNullExpression,
-    isPrivateIdentifier,
     isSetAccessorDeclaration,
     isStringOrNumericLiteralLike,
     isTaggedTemplateExpression,
@@ -6414,9 +6413,6 @@ namespace Parser {
         const propertyAccess = isOptionalChain ?
             factoryCreatePropertyAccessChain(expression, questionDotToken, name) :
             factoryCreatePropertyAccessExpression(expression, name);
-        if (isOptionalChain && isPrivateIdentifier(propertyAccess.name)) {
-            parseErrorAtRange(propertyAccess.name, Diagnostics.An_optional_chain_cannot_contain_private_identifiers);
-        }
         if (isExpressionWithTypeArguments(expression) && expression.typeArguments) {
             const pos = expression.typeArguments.pos - 1;
             const end = skipTrivia(sourceText, expression.typeArguments.end) + 1;
