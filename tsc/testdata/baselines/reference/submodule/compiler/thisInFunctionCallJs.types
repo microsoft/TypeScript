@@ -12,7 +12,6 @@ class Test {
 >this : this
 >data : number[]
 >[1, 2, 3] : number[]
->[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
 >3 : 3

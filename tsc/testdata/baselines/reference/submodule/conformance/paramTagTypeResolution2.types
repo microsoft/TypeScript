@@ -18,11 +18,11 @@ f({ x: 42 }, { x(param) { param.toFixed() } });
 >{ x: 42 } : { x: number; }
 >x : number
 >42 : 42
->{ x(param) { param.toFixed() } } : { x(param: K): void; }
->x : (param: K) => void
->param : K
->param.toFixed() : any
->param.toFixed : any
->param : K
->toFixed : any
+>{ x(param) { param.toFixed() } } : { x(param: number): void; }
+>x : (param: number) => void
+>param : number
+>param.toFixed() : string
+>param.toFixed : (fractionDigits?: number) => string
+>param : number
+>toFixed : (fractionDigits?: number) => string
 

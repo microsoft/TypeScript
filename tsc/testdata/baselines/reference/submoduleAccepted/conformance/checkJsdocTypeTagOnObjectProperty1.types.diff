@@ -11,15 +11,7 @@
 
    /** @type {string|undefined} */
    foo: undefined,
- >foo : string | undefined
-+>undefined : string | undefined
- >undefined : undefined
-
-   /** @type {string|undefined} */
-   bar: "42",
- >bar : string | undefined
-+>"42" : string | undefined
- >"42" : "42"
+@@= skipped -15, +15 lines =@@
 
    /** @type {function(number): number} */
    method1(n1) {
@@ -36,12 +28,7 @@
  >42 : 42
 
    },
-@@= skipped -34, +36 lines =@@
- >'b' + 'ar1' : string
- >'b' : "b"
- >'ar1' : "ar1"
-+>42 : number
- >42 : 42
+@@= skipped -23, +23 lines =@@
 
    /** @type {function(number): number} */
    arrowFunc: (num) => num + 42
@@ -51,7 +38,6 @@
 ->num + 42 : number
 ->num : number
 +>arrowFunc : function
-+>(num) => num + 42 : function
 +>(num) => num + 42 : (num: any) => any
 +>num : any
 +>num + 42 : any

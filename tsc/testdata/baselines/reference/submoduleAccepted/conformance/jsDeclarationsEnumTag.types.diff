@@ -1,22 +1,6 @@
 --- old.jsDeclarationsEnumTag.types
 +++ new.jsDeclarationsEnumTag.types
-@@= skipped -20, +20 lines =@@
-     /** @type {number} */
-     OK_I_GUESS: 2
- >OK_I_GUESS : number
-+>2 : number
- >2 : 2
- }
- /** @enum number */
-@@= skipped -14, +15 lines =@@
-     /** @type {number} */
-     FINE: 2,
- >FINE : number
-+>2 : number
- >2 : 2
- }
- /** @enum {function(number): number} */
-@@= skipped -37, +38 lines =@@
+@@= skipped -71, +71 lines =@@
   */
  export function consume(t,s,f) {
  >consume : (t: Target, s: Second, f: Fs) => void

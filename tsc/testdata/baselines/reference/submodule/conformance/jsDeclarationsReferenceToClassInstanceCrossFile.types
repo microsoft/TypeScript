@@ -66,11 +66,10 @@ class Render {
          * @type {Rectangle[]}
          */
         this.objects = [];
->this.objects = [] : Rectangle[]
+>this.objects = [] : undefined[]
 >this.objects : Rectangle[]
 >this : this
 >objects : Rectangle[]
->[] : Rectangle[]
 >[] : undefined[]
     }
     /**

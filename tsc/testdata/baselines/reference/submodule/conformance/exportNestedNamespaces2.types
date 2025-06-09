@@ -4,9 +4,9 @@
 // Based on a pattern from adonis
 exports.formatters = {}
 >exports.formatters = {} : {}
->exports.formatters : any
+>exports.formatters : {}
 >exports : typeof import("./mod")
->formatters : any
+>formatters : {}
 >{} : {}
 
 === first.js ===
@@ -58,18 +58,18 @@ import * as debug from './mod'
 
 debug.formatters.j
 >debug.formatters.j : any
->debug.formatters : any
+>debug.formatters : {}
 >debug : typeof debug
->formatters : any
+>formatters : {}
 >j : any
 
 var one = debug.formatters.o(1)
 >one : any
 >debug.formatters.o(1) : any
 >debug.formatters.o : any
->debug.formatters : any
+>debug.formatters : {}
 >debug : typeof debug
->formatters : any
+>formatters : {}
 >o : any
 >1 : 1
 

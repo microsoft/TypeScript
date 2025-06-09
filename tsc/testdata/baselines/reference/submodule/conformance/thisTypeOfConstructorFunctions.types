@@ -17,7 +17,6 @@ function Cp(t) {
 >this : any
 >dit : any
 >this : any
->this : any
 
     this.y = t
 >this.y = t : T

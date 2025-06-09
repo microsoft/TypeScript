@@ -1,15 +1,12 @@
 --- old.exportNestedNamespaces2.types
 +++ new.exportNestedNamespaces2.types
-@@= skipped -3, +3 lines =@@
- // Based on a pattern from adonis
+@@= skipped -4, +4 lines =@@
  exports.formatters = {}
  >exports.formatters = {} : {}
-->exports.formatters : {}
+ >exports.formatters : {}
 ->exports : typeof import("mod")
-->formatters : {}
-+>exports.formatters : any
 +>exports : typeof import("./mod")
-+>formatters : any
+ >formatters : {}
  >{} : {}
 
  === first.js ===
@@ -23,7 +20,7 @@
  >require : any
  >'./mod' : "./mod"
 
-@@= skipped -17, +17 lines =@@
+@@= skipped -16, +16 lines =@@
  >exports.formatters.j = function (v) {    return v} : (v: any) => any
  >exports.formatters.j : any
  >exports.formatters : any
@@ -54,25 +51,3 @@
  >formatters : any
  >o : any
  >function (v) {    return v} : (v: any) => any
-@@= skipped -16, +16 lines =@@
-
- debug.formatters.j
- >debug.formatters.j : any
-->debug.formatters : {}
-+>debug.formatters : any
- >debug : typeof debug
-->formatters : {}
-+>formatters : any
- >j : any
-
- var one = debug.formatters.o(1)
- >one : any
- >debug.formatters.o(1) : any
- >debug.formatters.o : any
-->debug.formatters : {}
-+>debug.formatters : any
- >debug : typeof debug
-->formatters : {}
-+>formatters : any
- >o : any
- >1 : 1

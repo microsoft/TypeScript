@@ -9,11 +9,9 @@
  }
  /** @type {string} */
  C.prototype = 12
-->C.prototype = 12 : 12
-+>C.prototype = 12 : string
+ >C.prototype = 12 : 12
  >C.prototype : string
 ->C : typeof C
 +>C : { (): void; prototype: string; }
  >prototype : string
-+>12 : string
  >12 : 12

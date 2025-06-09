@@ -22,7 +22,6 @@ class A {
 >this : this
 >"arguments" : "arguments"
 >foo : object
->foo : object
 	}
 }
 

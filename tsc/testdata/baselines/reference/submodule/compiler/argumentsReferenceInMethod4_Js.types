@@ -25,7 +25,6 @@ class A {
 >this : this
 >foo : object
 >foo : object
->foo : object
 
 		/**
 		 * @type object
@@ -40,11 +39,10 @@ class A {
 		 * @type object
 		 */
 		this.bar = arguments.bar;
->this.bar = arguments.bar : object
+>this.bar = arguments.bar : any
 >this.bar : object
 >this : this
 >bar : object
->arguments.bar : object
 >arguments.bar : any
 >arguments : object
 >bar : any
@@ -53,11 +51,10 @@ class A {
 		 * @type object
 		 */
 		this.baz = arguments[key];
->this.baz = arguments[key] : object
+>this.baz = arguments[key] : any
 >this.baz : object
 >this : this
 >baz : object
->arguments[key] : object
 >arguments[key] : any
 >arguments : object
 >key : "bar"
@@ -70,7 +67,6 @@ class A {
 >this.options : object
 >this : this
 >options : object
->arguments : object
 >arguments : object
 	}
 

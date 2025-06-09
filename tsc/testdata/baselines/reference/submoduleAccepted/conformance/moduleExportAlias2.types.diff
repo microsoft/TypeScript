@@ -1,14 +1,6 @@
 --- old.moduleExportAlias2.types
 +++ new.moduleExportAlias2.types
-@@= skipped -10, +10 lines =@@
- var two = C.f(1)
- >two : any
- >C.f(1) : any
-->C.f : (n: any) => any
-+>C.f : any
- >C : typeof C
-->f : (n: any) => any
-+>f : any
+@@= skipped -16, +16 lines =@@
  >1 : 1
 
  var c = new C
@@ -19,7 +11,7 @@
  >C : typeof C
 
  === node.d.ts ===
-@@= skipped -25, +25 lines =@@
+@@= skipped -19, +19 lines =@@
  === semver.js ===
  /// <reference path='node.d.ts' />
  exports = module.exports = C
@@ -40,15 +32,12 @@
 
  exports.f = n => n + 1
  >exports.f = n => n + 1 : (n: any) => any
-->exports.f : (n: any) => any
+ >exports.f : (n: any) => any
 ->exports : typeof C
-->f : (n: any) => any
-+>exports.f : any
 +>exports : typeof import("./semver")
-+>f : any
+ >f : (n: any) => any
  >n => n + 1 : (n: any) => any
  >n : any
- >n + 1 : any
 @@= skipped -20, +20 lines =@@
  >1 : 1
 

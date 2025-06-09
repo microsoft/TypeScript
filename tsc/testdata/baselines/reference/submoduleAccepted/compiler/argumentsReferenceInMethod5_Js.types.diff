@@ -21,20 +21,17 @@
 ->foo : any
 +>foo : object
 +>foo : object
-+>foo : object
 
  		/**
  		 * @type object
  		 */
  		this.bar = bar.arguments;
-->this.bar = bar.arguments : {}
+ >this.bar = bar.arguments : {}
 ->this.bar : any
-+>this.bar = bar.arguments : object
 +>this.bar : object
  >this : this
 ->bar : any
 +>bar : object
-+>bar.arguments : object
  >bar.arguments : {}
  >bar : { arguments: {}; }
  >arguments : {}

@@ -13,14 +13,13 @@
 +a.js(36,18): error TS2304: Cannot find name 'V'.
 +a.js(50,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +a.js(51,16): error TS2315: Type 'Object' is not generic.
-+a.js(51,31): error TS2304: Cannot find name 'V'.
 +a.js(52,10): error TS2339: Property '_map' does not exist on type '{}'.
 +a.js(55,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +a.js(57,16): error TS2304: Cannot find name 'K'.
 +a.js(58,18): error TS2304: Cannot find name 'V'.
 +
 +
-+==== a.js (16 errors) ====
++==== a.js (15 errors) ====
 +    /**
 +     * Should work for function declarations
 +     * @constructor
@@ -94,8 +93,6 @@
 +        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
 +                   ~~~~~~~~~~~~~~~~~
 +!!! error TS2315: Type 'Object' is not generic.
-+                                  ~
-+!!! error TS2304: Cannot find name 'V'.
 +        this._map = {};
 +             ~~~~
 +!!! error TS2339: Property '_map' does not exist on type '{}'.

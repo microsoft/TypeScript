@@ -7,7 +7,6 @@
  */
 
 /** @type {NumberLike[]} */export default ([ ]);
->([ ]) : (string | number)[]
 >([ ]) : undefined[]
 >[ ] : undefined[]
 

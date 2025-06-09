@@ -2896,11 +2896,12 @@ func (c *Checker) checkTypePredicate(node *ast.Node) {
 }
 
 func (c *Checker) getTypePredicateParent(node *ast.Node) *ast.SignatureDeclaration {
-	switch node.Parent.Kind {
+	parent := ast.GetEffectiveTypeParent(node.Parent)
+	switch parent.Kind {
 	case ast.KindArrowFunction, ast.KindCallSignature, ast.KindFunctionDeclaration, ast.KindFunctionExpression, ast.KindFunctionType,
 		ast.KindMethodDeclaration, ast.KindMethodSignature:
-		if node == node.Parent.Type() {
-			return node.Parent
+		if node == parent.Type() {
+			return parent
 		}
 	}
 	return nil
@@ -5377,6 +5378,11 @@ func (c *Checker) checkExportAssignment(node *ast.Node) {
 		c.error(node, diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled)
 	}
 	c.checkExternalModuleExports(container)
+	if typeNode := node.Type(); typeNode != nil && node.Kind == ast.KindExportAssignment {
+		t := c.getTypeFromTypeNode(typeNode)
+		initializerType := c.checkExpressionCached(node.Expression())
+		c.checkTypeAssignableToAndOptionallyElaborate(initializerType, t, node.Expression(), node.Expression(), nil /*headMessage*/, nil)
+	}
 	if (node.Flags&ast.NodeFlagsAmbient != 0) && !ast.IsEntityNameExpression(node.Expression()) {
 		c.grammarErrorOnNode(node.Expression(), diagnostics.The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context)
 	}
@@ -12579,18 +12585,11 @@ func (c *Checker) checkObjectLiteral(node *ast.Node, checkMode CheckMode) *Type 
 		}
 		if ast.IsPropertyAssignment(memberDecl) || ast.IsShorthandPropertyAssignment(memberDecl) || ast.IsObjectLiteralMethod(memberDecl) {
 			var t *Type
-			switch {
-			case memberDecl.Kind == ast.KindPropertyAssignment:
+			switch memberDecl.Kind {
+			case ast.KindPropertyAssignment:
 				t = c.checkPropertyAssignment(memberDecl, checkMode)
-			case memberDecl.Kind == ast.KindShorthandPropertyAssignment:
-				var expr *ast.Node
-				if !inDestructuringPattern {
-					expr = memberDecl.AsShorthandPropertyAssignment().ObjectAssignmentInitializer
-				}
-				if expr == nil {
-					expr = memberDecl.Name()
-				}
-				t = c.checkExpressionForMutableLocation(expr, checkMode)
+			case ast.KindShorthandPropertyAssignment:
+				t = c.checkShorthandPropertyAssignment(memberDecl, inDestructuringPattern, checkMode)
 			default:
 				t = c.checkObjectLiteralMethod(memberDecl, checkMode)
 			}
@@ -13025,7 +13024,30 @@ func (c *Checker) checkPropertyAssignment(node *ast.Node, checkMode CheckMode) *
 	if ast.IsComputedPropertyName(node.Name()) {
 		c.checkComputedPropertyName(node.Name())
 	}
-	return c.checkExpressionForMutableLocation(node.Initializer(), checkMode)
+	initializerType := c.checkExpressionForMutableLocation(node.Initializer(), checkMode)
+	if node.Type() != nil {
+		t := c.getTypeFromTypeNode(node.Type())
+		c.checkTypeAssignableToAndOptionallyElaborate(initializerType, t, node, node.Initializer(), nil /*headMessage*/, nil)
+		return t
+	}
+	return initializerType
+}
+
+func (c *Checker) checkShorthandPropertyAssignment(node *ast.Node, inDestructuringPattern bool, checkMode CheckMode) *Type {
+	var expr *ast.Node
+	if !inDestructuringPattern {
+		expr = node.AsShorthandPropertyAssignment().ObjectAssignmentInitializer
+	}
+	if expr == nil {
+		expr = node.Name()
+	}
+	expressionType := c.checkExpressionForMutableLocation(expr, checkMode)
+	if node.Type() != nil {
+		t := c.getTypeFromTypeNode(node.Type())
+		c.checkTypeAssignableToAndOptionallyElaborate(expressionType, t, node, expr, nil /*headMessage*/, nil)
+		return t
+	}
+	return expressionType
 }
 
 func (c *Checker) isInPropertyInitializerOrClassStaticBlock(node *ast.Node) bool {
@@ -15683,11 +15705,15 @@ func (c *Checker) getTypeOfVariableOrParameterOrPropertyWorker(symbol *ast.Symbo
 	case ast.KindPropertyAssignment:
 		result = c.checkPropertyAssignment(declaration, CheckModeNormal)
 	case ast.KindShorthandPropertyAssignment:
-		result = c.checkExpressionForMutableLocation(declaration.Name(), CheckModeNormal)
+		result = c.checkShorthandPropertyAssignment(declaration, true /*inDestructuringPattern*/, CheckModeNormal)
 	case ast.KindMethodDeclaration:
 		result = c.checkObjectLiteralMethod(declaration, CheckModeNormal)
 	case ast.KindExportAssignment, ast.KindJSExportAssignment:
-		result = c.widenTypeForVariableLikeDeclaration(c.checkExpressionCached(declaration.AsExportAssignment().Expression), declaration, false /*reportErrors*/)
+		if declaration.Type() != nil {
+			result = c.getTypeFromTypeNode(declaration.Type())
+		} else {
+			result = c.widenTypeForVariableLikeDeclaration(c.checkExpressionCached(declaration.AsExportAssignment().Expression), declaration, false /*reportErrors*/)
+		}
 	case ast.KindBinaryExpression:
 		result = c.getWidenedTypeForAssignmentDeclaration(symbol)
 	case ast.KindJsxAttribute:
@@ -17114,23 +17140,28 @@ const (
 func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Type {
 	var t *Type
 	kind, location := c.isConstructorDeclaredThisProperty(symbol)
-	if kind == thisAssignmentDeclarationTyped {
+	switch kind {
+	case thisAssignmentDeclarationTyped:
 		if location == nil {
 			panic("location should not be nil when this assignment has a type.")
 		}
 		t = c.getTypeFromTypeNode(location)
-	} else if kind == thisAssignmentDeclarationConstructor {
+	case thisAssignmentDeclarationConstructor:
 		if location == nil {
 			panic("constructor should not be nil when this assignment is in a constructor.")
 		}
 		t = c.getFlowTypeInConstructor(symbol, location)
-	} else if kind == thisAssignmentDeclarationMethod {
+	case thisAssignmentDeclarationMethod:
 		t = c.getTypeOfPropertyInBaseClass(symbol)
 	}
 	if t == nil {
 		var types []*Type
 		for _, declaration := range symbol.Declarations {
 			if ast.IsBinaryExpression(declaration) {
+				if declaration.Type() != nil {
+					t = c.getTypeFromTypeNode(declaration.Type())
+					break
+				}
 				types = core.AppendIfUnique(types, c.checkExpressionForMutableLocation(declaration.AsBinaryExpression().Right, CheckModeNormal))
 			}
 		}
@@ -17139,7 +17170,9 @@ func (c *Checker) getWidenedTypeForAssignmentDeclaration(symbol *ast.Symbol) *Ty
 				types = core.AppendIfUnique(types, c.undefinedOrMissingType)
 			}
 		}
-		t = c.getWidenedType(c.getUnionType(types))
+		if t == nil {
+			t = c.getWidenedType(c.getUnionType(types))
+		}
 	}
 	// report an all-nullable or empty union as an implicit any in JS files
 	if symbol.ValueDeclaration != nil && ast.IsInJSFile(symbol.ValueDeclaration) &&
@@ -17160,7 +17193,7 @@ func (c *Checker) isConstructorDeclaredThisProperty(symbol *ast.Symbol) (thisAss
 	if kind, ok := c.thisExpandoKinds[symbol]; ok {
 		location, ok2 := c.thisExpandoLocations[symbol]
 		if !ok2 {
-			panic("ctor should be cached whenever this expando location is cached")
+			panic("location should be cached whenever this expando symbol is cached")
 		}
 		return kind, location
 	}
@@ -17174,9 +17207,8 @@ func (c *Checker) isConstructorDeclaredThisProperty(symbol *ast.Symbol) (thisAss
 		bin := declaration.AsBinaryExpression()
 		if ast.GetAssignmentDeclarationKind(bin) == ast.JSDeclarationKindThisProperty &&
 			(bin.Left.Kind != ast.KindElementAccessExpression || ast.IsStringOrNumericLiteralLike(bin.Left.AsElementAccessExpression().ArgumentExpression)) {
-			// TODO: if bin.Type() != nil, use bin.Type()
-			if bin.Right.Kind == ast.KindTypeAssertionExpression {
-				typeAnnotation = bin.Right.AsTypeAssertion().Type
+			if bin.Type != nil {
+				typeAnnotation = bin.Type
 			}
 		} else {
 			allThis = false
@@ -21796,6 +21828,7 @@ func (c *Checker) getTypeFromTypeOperatorNode(node *ast.Node) *Type {
 }
 
 func (c *Checker) getESSymbolLikeTypeForNode(node *ast.Node) *Type {
+	node = ast.GetEffectiveTypeParent(node)
 	if isValidESSymbolDeclaration(node) {
 		symbol := c.getSymbolOfNode(node)
 		if symbol != nil {
@@ -27665,7 +27698,7 @@ func (c *Checker) getContextualType(node *ast.Node, contextFlags ContextFlags) *
 		return c.getContextualType(parent, contextFlags)
 	case ast.KindSatisfiesExpression:
 		return c.getTypeFromTypeNode(parent.AsSatisfiesExpression().Type)
-	case ast.KindExportAssignment:
+	case ast.KindExportAssignment, ast.KindJSExportAssignment, ast.KindCommonJSExport:
 		return c.tryGetTypeFromTypeNode(parent)
 	case ast.KindJsxExpression:
 		return c.getContextualTypeForJsxExpression(parent, contextFlags)
@@ -28075,11 +28108,15 @@ func (c *Checker) getContextualTypeForDecorator(decorator *ast.Node) *Type {
 
 func (c *Checker) getContextualTypeForBinaryOperand(node *ast.Node, contextFlags ContextFlags) *Type {
 	binary := node.Parent.AsBinaryExpression()
+	if t := binary.Type; t != nil {
+		return c.getTypeFromTypeNode(t)
+	}
 	switch binary.OperatorToken.Kind {
 	case ast.KindEqualsToken, ast.KindAmpersandAmpersandEqualsToken, ast.KindBarBarEqualsToken, ast.KindQuestionQuestionEqualsToken:
 		// In an assignment expression, the right operand is contextually typed by the type of the left operand
 		// unless it's an assignment declaration.
-		if node == binary.Right {
+		kind := ast.GetAssignmentDeclarationKind(binary)
+		if node == binary.Right && kind != ast.JSDeclarationKindModuleExports && kind != ast.JSDeclarationKindExportsProperty {
 			return c.getContextualTypeForAssignmentExpression(binary)
 		}
 	case ast.KindBarBarToken, ast.KindQuestionQuestionToken:
@@ -28171,6 +28208,9 @@ func (c *Checker) getContextualTypeForAssignmentExpression(binary *ast.BinaryExp
 }
 
 func (c *Checker) getContextualTypeForObjectLiteralElement(element *ast.Node, contextFlags ContextFlags) *Type {
+	if t := element.Type(); t != nil && !ast.IsObjectLiteralMethod(element) {
+		return c.getTypeFromTypeNode(t)
+	}
 	objectLiteral := element.Parent
 	t := c.getApparentTypeOfContextualType(objectLiteral, contextFlags)
 	if t != nil {

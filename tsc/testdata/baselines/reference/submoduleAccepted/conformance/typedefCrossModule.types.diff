@@ -52,9 +52,9 @@
 ->C : typeof C
 ->function() {    this.p = 1} : typeof C
 +>exports.C = function() {    this.p = 1} : () => void
-+>exports.C : any
++>exports.C : () => void
 +>exports : typeof import("./mod3")
-+>C : any
++>C : () => void
 +>function() {    this.p = 1} : () => void
 
      this.p = 1

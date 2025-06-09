@@ -10,13 +10,12 @@
 +a.js(35,37): error TS7006: Parameter 'key' implicitly has an 'any' type.
 +a.js(46,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +a.js(47,16): error TS2315: Type 'Object' is not generic.
-+a.js(47,31): error TS2304: Cannot find name 'V'.
 +a.js(48,10): error TS2339: Property '_map' does not exist on type '{}'.
 +a.js(55,4): error TS2339: Property 'Multimap3' does not exist on type '{}'.
 +a.js(55,40): error TS7006: Parameter 'key' implicitly has an 'any' type.
 +
 +
-+==== a.js (12 errors) ====
++==== a.js (11 errors) ====
 +    /**
 +     * Should work for function declarations
 +     * @constructor
@@ -80,8 +79,6 @@
 +        /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
 +                   ~~~~~~~~~~~~~~~~~
 +!!! error TS2315: Type 'Object' is not generic.
-+                                  ~
-+!!! error TS2304: Cannot find name 'V'.
 +        this._map = {};
 +             ~~~~
 +!!! error TS2339: Property '_map' does not exist on type '{}'.

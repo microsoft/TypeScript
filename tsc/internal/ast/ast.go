@@ -368,7 +368,7 @@ func (n *Node) Expression() *Node {
 	case KindJsxSpreadAttribute:
 		return n.AsJsxSpreadAttribute().Expression
 	}
-	panic("Unhandled case in Node.Expression")
+	panic("Unhandled case in Node.Expression: " + n.Kind.String())
 }
 
 func (n *Node) ArgumentList() *NodeList {
@@ -378,7 +378,7 @@ func (n *Node) ArgumentList() *NodeList {
 	case KindNewExpression:
 		return n.AsNewExpression().Arguments
 	}
-	panic("Unhandled case in Node.Arguments")
+	panic("Unhandled case in Node.Arguments: " + n.Kind.String())
 }
 
 func (n *Node) Arguments() []*Node {
@@ -522,6 +522,10 @@ func (n *Node) Type() *Node {
 		return n.AsPropertySignatureDeclaration().Type
 	case KindPropertyDeclaration:
 		return n.AsPropertyDeclaration().Type
+	case KindPropertyAssignment:
+		return n.AsPropertyAssignment().Type
+	case KindShorthandPropertyAssignment:
+		return n.AsShorthandPropertyAssignment().Type
 	case KindTypePredicate:
 		return n.AsTypePredicateNode().Type
 	case KindParenthesizedType:
@@ -556,7 +560,13 @@ func (n *Node) Type() *Node {
 		return n.AsJSDocNonNullableType().Type
 	case KindJSDocOptionalType:
 		return n.AsJSDocOptionalType().Type
-	case KindEnumMember, KindBindingElement, KindExportAssignment, KindJSExportAssignment, KindBinaryExpression, KindCommonJSExport:
+	case KindExportAssignment, KindJSExportAssignment:
+		return n.AsExportAssignment().Type
+	case KindCommonJSExport:
+		return n.AsCommonJSExport().Type
+	case KindBinaryExpression:
+		return n.AsBinaryExpression().Type
+	case KindEnumMember, KindBindingElement:
 		return nil
 	default:
 		funcLike := n.FunctionLikeData()
@@ -4430,46 +4440,48 @@ type ExportAssignment struct {
 	ModifiersBase
 	compositeNodeBase
 	IsExportEquals bool
+	Type           *TypeNode   // TypeNode. Only set by JSDoc @type tags.
 	Expression     *Expression // Expression
 }
 
-func (f *NodeFactory) newExportOrJSExportAssignment(kind Kind, modifiers *ModifierList, isExportEquals bool, expression *Expression) *Node {
+func (f *NodeFactory) newExportOrJSExportAssignment(kind Kind, modifiers *ModifierList, isExportEquals bool, typeNode *TypeNode, expression *Expression) *Node {
 	data := &ExportAssignment{}
 	data.modifiers = modifiers
 	data.IsExportEquals = isExportEquals
+	data.Type = typeNode
 	data.Expression = expression
 	return f.newNode(kind, data)
 }
 
-func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, expression *Expression) *Node {
-	return f.newExportOrJSExportAssignment(KindExportAssignment, modifiers, isExportEquals, expression)
+func (f *NodeFactory) NewExportAssignment(modifiers *ModifierList, isExportEquals bool, typeNode *TypeNode, expression *Expression) *Node {
+	return f.newExportOrJSExportAssignment(KindExportAssignment, modifiers, isExportEquals, typeNode, expression)
 }
 
-func (f *NodeFactory) NewJSExportAssignment(expression *Expression) *Node {
-	return f.newExportOrJSExportAssignment(KindJSExportAssignment, nil /*modifiers*/, true, expression)
+func (f *NodeFactory) NewJSExportAssignment(t *TypeNode, expression *Expression) *Node {
+	return f.newExportOrJSExportAssignment(KindJSExportAssignment, nil /*modifiers*/, true, t, expression)
 }
 
-func (f *NodeFactory) UpdateExportAssignment(node *ExportAssignment, modifiers *ModifierList, expression *Expression) *Node {
-	if modifiers != node.modifiers || expression != node.Expression {
-		return updateNode(f.newExportOrJSExportAssignment(node.Kind, modifiers, node.IsExportEquals, expression), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateExportAssignment(node *ExportAssignment, modifiers *ModifierList, typeNode *TypeNode, expression *Expression) *Node {
+	if modifiers != node.modifiers || typeNode != node.Type || expression != node.Expression {
+		return updateNode(f.newExportOrJSExportAssignment(node.Kind, modifiers, node.IsExportEquals, typeNode, expression), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ExportAssignment) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.Expression)
+	return visitModifiers(v, node.modifiers) || visit(v, node.Type) || visit(v, node.Expression)
 }
 
 func (node *ExportAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateExportAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.Expression))
+	return v.Factory.UpdateExportAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.Type), v.visitNode(node.Expression))
 }
 
 func (node *ExportAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().newExportOrJSExportAssignment(node.Kind, node.Modifiers(), node.IsExportEquals, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().newExportOrJSExportAssignment(node.Kind, node.Modifiers(), node.IsExportEquals, node.Type, node.Expression), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ExportAssignment) computeSubtreeFacts() SubtreeFacts {
-	return propagateModifierListSubtreeFacts(node.modifiers) | propagateSubtreeFacts(node.Expression)
+	return propagateModifierListSubtreeFacts(node.modifiers) | propagateSubtreeFacts(node.Type) | propagateSubtreeFacts(node.Expression)
 }
 
 func IsExportAssignment(node *Node) bool {
@@ -4492,34 +4504,36 @@ type CommonJSExport struct {
 	ExportableBase
 	ModifiersBase
 	name        *IdentifierNode
+	Type        *TypeNode
 	Initializer *Expression
 }
 
-func (f *NodeFactory) NewCommonJSExport(modifiers *ModifierList, name *IdentifierNode, initializer *Expression) *Node {
+func (f *NodeFactory) NewCommonJSExport(modifiers *ModifierList, name *IdentifierNode, typeNode *TypeNode, initializer *Expression) *Node {
 	data := &CommonJSExport{}
 	data.modifiers = modifiers
 	data.name = name
+	data.Type = typeNode
 	data.Initializer = initializer
 	return newNode(KindCommonJSExport, data, f.hooks)
 }
 
-func (f *NodeFactory) UpdateCommonJSExport(node *CommonJSExport, modifiers *ModifierList, name *IdentifierNode, initializer *Expression) *Node {
-	if modifiers != node.modifiers || initializer != node.Initializer || name != node.name {
-		return updateNode(f.NewCommonJSExport(node.modifiers, name, initializer), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateCommonJSExport(node *CommonJSExport, modifiers *ModifierList, name *IdentifierNode, typeNode *TypeNode, initializer *Expression) *Node {
+	if modifiers != node.modifiers || initializer != node.Initializer || name != node.name || typeNode != node.Type {
+		return updateNode(f.NewCommonJSExport(node.modifiers, name, typeNode, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *CommonJSExport) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.Type) || visit(v, node.Initializer)
 }
 
 func (node *CommonJSExport) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateCommonJSExport(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Initializer))
+	return v.Factory.UpdateCommonJSExport(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitNode(node.Type), v.visitNode(node.Initializer))
 }
 
 func (node *CommonJSExport) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewCommonJSExport(node.Modifiers(), node.name, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewCommonJSExport(node.Modifiers(), node.name, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func IsCommonJSExport(node *Node) bool {
@@ -5548,44 +5562,50 @@ func (node *NoSubstitutionTemplateLiteral) Clone(f NodeFactoryCoercible) *Node {
 type BinaryExpression struct {
 	ExpressionBase
 	DeclarationBase
+	ModifiersBase
 	compositeNodeBase
 	Left          *Expression // Expression
+	Type          *TypeNode   // TypeNode. Only set by JSDoc @type tags.
 	OperatorToken *TokenNode  // TokenNode
 	Right         *Expression // Expression
 }
 
-func (f *NodeFactory) NewBinaryExpression(left *Expression, operatorToken *TokenNode, right *Expression) *Node {
+func (f *NodeFactory) NewBinaryExpression(modifiers *ModifierList, left *Expression, typeNode *TypeNode, operatorToken *TokenNode, right *Expression) *Node {
 	if operatorToken == nil {
 		panic("operatorToken is required")
 	}
 	data := f.binaryExpressionPool.New()
+	data.modifiers = modifiers
 	data.Left = left
+	data.Type = typeNode
 	data.OperatorToken = operatorToken
 	data.Right = right
 	return f.newNode(KindBinaryExpression, data)
 }
 
-func (f *NodeFactory) UpdateBinaryExpression(node *BinaryExpression, left *Expression, operatorToken *TokenNode, right *Expression) *Node {
-	if left != node.Left || operatorToken != node.OperatorToken || right != node.Right {
-		return updateNode(f.NewBinaryExpression(left, operatorToken, right), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateBinaryExpression(node *BinaryExpression, modifiers *ModifierList, left *Expression, typeNode *TypeNode, operatorToken *TokenNode, right *Expression) *Node {
+	if left != node.Left || typeNode != node.Type || operatorToken != node.OperatorToken || right != node.Right {
+		return updateNode(f.NewBinaryExpression(modifiers, left, typeNode, operatorToken, right), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *BinaryExpression) ForEachChild(v Visitor) bool {
-	return visit(v, node.Left) || visit(v, node.OperatorToken) || visit(v, node.Right)
+	return visitModifiers(v, node.modifiers) || visit(v, node.Left) || visit(v, node.Type) || visit(v, node.OperatorToken) || visit(v, node.Right)
 }
 
 func (node *BinaryExpression) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateBinaryExpression(node, v.visitNode(node.Left), v.visitToken(node.OperatorToken), v.visitNode(node.Right))
+	return v.Factory.UpdateBinaryExpression(node, v.visitModifiers(node.modifiers), v.visitNode(node.Left), v.visitNode(node.Type), v.visitToken(node.OperatorToken), v.visitNode(node.Right))
 }
 
 func (node *BinaryExpression) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewBinaryExpression(node.Left, node.OperatorToken, node.Right), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewBinaryExpression(node.modifiers, node.Left, node.Type, node.OperatorToken, node.Right), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *BinaryExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Left) |
+	return propagateModifierListSubtreeFacts(node.modifiers) |
+		propagateSubtreeFacts(node.Left) |
+		propagateSubtreeFacts(node.Type) |
 		propagateSubtreeFacts(node.OperatorToken) |
 		propagateSubtreeFacts(node.Right) |
 		core.IfElse(node.OperatorToken.Kind == KindInKeyword && IsPrivateIdentifier(node.Left), SubtreeContainsClassFields, SubtreeFactsNone)
@@ -6666,39 +6686,42 @@ type PropertyAssignment struct {
 	NamedMemberBase
 	ObjectLiteralElementBase
 	compositeNodeBase
+	Type        *TypeNode   // TypeNode. Only set by JSDoc @type tags.
 	Initializer *Expression // Expression
 }
 
-func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, initializer *Expression) *Node {
+func (f *NodeFactory) NewPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
 	data := f.propertyAssignmentPool.New()
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
+	data.Type = typeNode
 	data.Initializer = initializer
 	return f.newNode(KindPropertyAssignment, data)
 }
 
-func (f *NodeFactory) UpdatePropertyAssignment(node *PropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, initializer *Expression) *Node {
-	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || initializer != node.Initializer {
-		return updateNode(f.NewPropertyAssignment(modifiers, name, postfixToken, initializer), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdatePropertyAssignment(node *PropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, initializer *Expression) *Node {
+	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || typeNode != node.Type || initializer != node.Initializer {
+		return updateNode(f.NewPropertyAssignment(modifiers, name, postfixToken, typeNode, initializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *PropertyAssignment) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.Initializer)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.Type) || visit(v, node.Initializer)
 }
 
 func (node *PropertyAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdatePropertyAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitToken(node.PostfixToken), v.visitNode(node.Initializer))
+	return v.Factory.UpdatePropertyAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitToken(node.PostfixToken), v.visitNode(node.Type), v.visitNode(node.Initializer))
 }
 
 func (node *PropertyAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewPropertyAssignment(node.Modifiers(), node.Name(), node.PostfixToken, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewPropertyAssignment(node.Modifiers(), node.Name(), node.PostfixToken, node.Type, node.Initializer), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *PropertyAssignment) computeSubtreeFacts() SubtreeFacts {
 	return propagateSubtreeFacts(node.name) |
+		propagateSubtreeFacts(node.Type) |
 		propagateSubtreeFacts(node.Initializer)
 }
 
@@ -6713,41 +6736,44 @@ type ShorthandPropertyAssignment struct {
 	NamedMemberBase
 	ObjectLiteralElementBase
 	compositeNodeBase
+	Type                        *TypeNode // TypeNode. Only set by JSDoc @type tags.
 	EqualsToken                 *TokenNode
 	ObjectAssignmentInitializer *Expression // Optional
 }
 
-func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, equalsToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
+func (f *NodeFactory) NewShorthandPropertyAssignment(modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, equalsToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
 	data := &ShorthandPropertyAssignment{}
 	data.modifiers = modifiers
 	data.name = name
 	data.PostfixToken = postfixToken
+	data.Type = typeNode
 	data.EqualsToken = equalsToken
 	data.ObjectAssignmentInitializer = objectAssignmentInitializer
 	return f.newNode(KindShorthandPropertyAssignment, data)
 }
 
-func (f *NodeFactory) UpdateShorthandPropertyAssignment(node *ShorthandPropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, equalsToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
-	if modifiers != node.modifiers || name != node.name || postfixToken != node.PostfixToken || objectAssignmentInitializer != node.ObjectAssignmentInitializer {
-		return updateNode(f.NewShorthandPropertyAssignment(modifiers, name, postfixToken, equalsToken, objectAssignmentInitializer), node.AsNode(), f.hooks)
+func (f *NodeFactory) UpdateShorthandPropertyAssignment(node *ShorthandPropertyAssignment, modifiers *ModifierList, name *PropertyName, postfixToken *TokenNode, typeNode *TypeNode, equalsToken *TokenNode, objectAssignmentInitializer *Expression) *Node {
+	if modifiers != node.modifiers || name != node.name || typeNode != node.Type || postfixToken != node.PostfixToken || objectAssignmentInitializer != node.ObjectAssignmentInitializer {
+		return updateNode(f.NewShorthandPropertyAssignment(modifiers, name, postfixToken, typeNode, equalsToken, objectAssignmentInitializer), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *ShorthandPropertyAssignment) ForEachChild(v Visitor) bool {
-	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.PostfixToken) || visit(v, node.EqualsToken) || visit(v, node.ObjectAssignmentInitializer)
+	return visitModifiers(v, node.modifiers) || visit(v, node.name) || visit(v, node.Type) || visit(v, node.PostfixToken) || visit(v, node.EqualsToken) || visit(v, node.ObjectAssignmentInitializer)
 }
 
 func (node *ShorthandPropertyAssignment) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateShorthandPropertyAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitToken(node.PostfixToken), v.visitToken(node.EqualsToken), v.visitNode(node.ObjectAssignmentInitializer))
+	return v.Factory.UpdateShorthandPropertyAssignment(node, v.visitModifiers(node.modifiers), v.visitNode(node.name), v.visitToken(node.PostfixToken), v.visitNode(node.Type), v.visitToken(node.EqualsToken), v.visitNode(node.ObjectAssignmentInitializer))
 }
 
 func (node *ShorthandPropertyAssignment) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewShorthandPropertyAssignment(node.Modifiers(), node.Name(), node.PostfixToken, node.EqualsToken, node.ObjectAssignmentInitializer), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewShorthandPropertyAssignment(node.Modifiers(), node.Name(), node.PostfixToken, node.Type, node.EqualsToken, node.ObjectAssignmentInitializer), node.AsNode(), f.AsNodeFactory().hooks)
 }
 
 func (node *ShorthandPropertyAssignment) computeSubtreeFacts() SubtreeFacts {
 	return propagateSubtreeFacts(node.name) | // we do not use propagateSubtreeFacts here because this is an IdentifierReference
+		propagateSubtreeFacts(node.Type) |
 		propagateSubtreeFacts(node.ObjectAssignmentInitializer) |
 		SubtreeContainsTypeScript // may require rewriting in a TypeScript namespace
 }

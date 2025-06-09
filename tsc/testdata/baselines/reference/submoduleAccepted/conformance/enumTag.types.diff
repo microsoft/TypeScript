@@ -1,22 +1,6 @@
 --- old.enumTag.types
 +++ new.enumTag.types
-@@= skipped -24, +24 lines =@@
-     /** @type {number} */
-     OK_I_GUESS: 2
- >OK_I_GUESS : number
-+>2 : number
- >2 : 2
- }
- /** @enum number */
-@@= skipped -18, +19 lines =@@
-     /** @type {number} */
-     FINE: 2,
- >FINE : number
-+>2 : number
- >2 : 2
- }
- /** @enum {function(number): number} */
-@@= skipped -36, +37 lines =@@
+@@= skipped -78, +78 lines =@@
   */
  function consume(t,s,f) {
  >consume : (t: Target, s: Second, f: Fs) => void

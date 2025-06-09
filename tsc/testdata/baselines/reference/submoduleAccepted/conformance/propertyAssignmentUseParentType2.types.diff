@@ -18,12 +18,7 @@
  >true : true
 
  /** @type {789} */
-@@= skipped -10, +10 lines =@@
- >duplicated : { (): boolean; nuo: 789; }
- >nuo : 789
- >789 : 789
-+>789 : 789
-
+@@= skipped -14, +14 lines =@@
  /** @type {{ (): boolean; nuo: 789 }} */
  export const conflictingDuplicated = () => true
  >conflictingDuplicated : { (): boolean; nuo: 789; }
@@ -32,11 +27,3 @@
  >true : true
 
  /** @type {1000} */
- conflictingDuplicated.nuo = 789
-->conflictingDuplicated.nuo = 789 : 789
-+>conflictingDuplicated.nuo = 789 : 1000
- >conflictingDuplicated.nuo : 789
- >conflictingDuplicated : { (): boolean; nuo: 789; }
- >nuo : 789
-+>789 : 1000
- >789 : 789

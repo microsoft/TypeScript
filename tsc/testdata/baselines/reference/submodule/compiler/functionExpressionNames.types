@@ -3,9 +3,9 @@
 === b.js ===
 exports.E = function() {
 >exports.E = function() {    this.e = 'exported'} : () => void
->exports.E : any
+>exports.E : () => void
 >exports : typeof import("./b")
->E : any
+>E : () => void
 >function() {    this.e = 'exported'} : () => void
 
     this.e = 'exported'
@@ -18,9 +18,9 @@ exports.E = function() {
 var e = new exports.E();
 >e : any
 >new exports.E() : any
->exports.E : any
+>exports.E : () => void
 >exports : typeof import("./b")
->E : any
+>E : () => void
 
 var o = {
 >o : { C: () => void; }

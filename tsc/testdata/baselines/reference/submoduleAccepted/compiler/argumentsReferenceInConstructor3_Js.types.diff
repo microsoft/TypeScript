@@ -22,7 +22,6 @@
 ->foo : any
 +>foo : object
 +>foo : object
-+>foo : object
 
  		/**
  		 * @type object
@@ -30,13 +29,12 @@
  		this.bar = super.arguments.foo;
 ->this.bar = super.arguments.foo : error
 ->this.bar : any
-+>this.bar = super.arguments.foo : object
++>this.bar = super.arguments.foo : any
 +>this.bar : object
  >this : this
 ->bar : any
 ->super.arguments.foo : error
 +>bar : object
-+>super.arguments.foo : object
 +>super.arguments.foo : any
  >super.arguments : { bar: {}; }
  >super : A

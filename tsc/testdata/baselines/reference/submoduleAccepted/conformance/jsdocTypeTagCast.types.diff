@@ -75,19 +75,17 @@
 
      /** @type {string|number} */
      this.p = "bar";
-->this.p = "bar" : "bar"
+ >this.p = "bar" : "bar"
 ->this.p : string | number
 ->this : this
 ->p : string | number
-+>this.p = "bar" : string | number
 +>this.p : any
 +>this : any
 +>p : any
-+>"bar" : string | number
  >"bar" : "bar"
  }
 
-@@= skipped -36, +37 lines =@@
+@@= skipped -36, +36 lines =@@
  >SomeOther : typeof SomeOther
 
  var someFakeClass = new SomeFakeClass();

@@ -2,18 +2,25 @@
 +++ new.jsDeclarationsFunctionsCjs.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
++index.js(4,18): error TS2339: Property 'cat' does not exist on type '() => void'.
++index.js(7,18): error TS2339: Property 'Cls' does not exist on type '() => void'.
++index.js(31,18): error TS2339: Property 'self' does not exist on type '(a: any) => any'.
 +index.js(35,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +index.js(45,23): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +
 +
-+==== index.js (2 errors) ====
++==== index.js (5 errors) ====
 +    module.exports.a = function a() {}
 +    
 +    module.exports.b = function b() {}
 +    module.exports.b.cat = "cat";
++                     ~~~
++!!! error TS2339: Property 'cat' does not exist on type '() => void'.
 +    
 +    module.exports.c = function c() {}
 +    module.exports.c.Cls = class {}
++                     ~~~
++!!! error TS2339: Property 'Cls' does not exist on type '() => void'.
 +    
 +    /**
 +     * @param {number} a
@@ -38,6 +45,8 @@
 +        return a;
 +    }
 +    module.exports.f.self = module.exports.f;
++                     ~~~~
++!!! error TS2339: Property 'self' does not exist on type '(a: any) => any'.
 +    
 +    /**
 +     * @param {{x: string}} a

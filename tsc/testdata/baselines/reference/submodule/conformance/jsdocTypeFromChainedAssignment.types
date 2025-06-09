@@ -18,7 +18,6 @@ function A () {
 >this : any
 >first : any
 >this.second = 1 : 1
->this.second = 1 : 1
 >this.second : any
 >this : any
 >second : any

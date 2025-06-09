@@ -36,11 +36,10 @@ const MyComponent2 = () => null;
  * @type {MyComponentProps}
  */
 MyComponent2.defaultProps = {
->MyComponent2.defaultProps = {    color: "red"} : { color: "blue" | "red"; }
+>MyComponent2.defaultProps = {    color: "red"} : { color: "red"; }
 >MyComponent2.defaultProps : { color: "blue" | "red"; }
 >MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
 >defaultProps : { color: "blue" | "red"; }
->{    color: "red"} : { color: "blue" | "red"; }
 >{    color: "red"} : { color: "red"; }
 
     color: "red"
@@ -70,11 +69,10 @@ function foo() {
      * @type {MyComponentProps}
      */
     this.props = { color: "red" };
->this.props = { color: "red" } : { color: "blue" | "red"; }
+>this.props = { color: "red" } : { color: "red"; }
 >this.props : any
 >this : any
 >props : any
->{ color: "red" } : { color: "blue" | "red"; }
 >{ color: "red" } : { color: "red"; }
 >color : "red"
 >"red" : "red"
@@ -89,11 +87,10 @@ function foo() {
  * @type {MyComponentProps}
  */
 module.exports = {
->module.exports = {    color: "red"} : { color: "blue" | "red"; }
+>module.exports = {    color: "red"} : { color: "red"; }
 >module.exports : { color: "blue" | "red"; }
 >module : { "export=": { color: "blue" | "red"; }; }
 >exports : { color: "blue" | "red"; }
->{    color: "red"} : { color: "blue" | "red"; }
 >{    color: "red"} : { color: "red"; }
 
     color: "red"

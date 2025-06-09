@@ -4,6 +4,8 @@ first.js(2,1): error TS2304: Cannot find name 'exports'.
 second.js(1,1): error TS2304: Cannot find name 'exports'.
 second.js(1,11): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 second.js(2,1): error TS2304: Cannot find name 'exports'.
+use.js(3,18): error TS2339: Property 'j' does not exist on type '{}'.
+use.js(4,28): error TS2339: Property 'o' does not exist on type '{}'.
 
 
 ==== mod.js (0 errors) ====
@@ -32,9 +34,13 @@ second.js(2,1): error TS2304: Cannot find name 'exports'.
         return v
     }
     
-==== use.js (0 errors) ====
+==== use.js (2 errors) ====
     import * as debug from './mod'
     
     debug.formatters.j
+                     ~
+!!! error TS2339: Property 'j' does not exist on type '{}'.
     var one = debug.formatters.o(1)
+                               ~
+!!! error TS2339: Property 'o' does not exist on type '{}'.
     

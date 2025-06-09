@@ -21,13 +21,12 @@ const abc = { a: 1, b: 1, c: 1 };
 
 /** @type {Foo} */
 export default abc;
->abc : Foo
 >abc : { a: number; b: number; c: number; }
 
 === b.js ===
 import a from "./a";
->a : import("./a").Foo
+>a : { a: number; b: number; c: number; }
 
 a;
->a : import("./a").Foo
+>a : { a: number; b: number; c: number; }
 

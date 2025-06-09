@@ -30,17 +30,15 @@ class A {
 >this : this
 >foo : object
 >foo : object
->foo : object
 
 		/**
 		 * @type object
 		 */
 		this.bar = bar.arguments;
->this.bar = bar.arguments : object
+>this.bar = bar.arguments : {}
 >this.bar : object
 >this : this
 >bar : object
->bar.arguments : object
 >bar.arguments : {}
 >bar : { arguments: {}; }
 >arguments : {}

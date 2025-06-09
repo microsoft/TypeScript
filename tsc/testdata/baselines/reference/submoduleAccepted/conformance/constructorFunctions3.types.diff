@@ -89,7 +89,6 @@
 +>this.second : any
 +>this : any
 +>second : any
-+>1 : 1
  >1 : 1
  }
  /** @param {number} n */

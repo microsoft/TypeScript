@@ -14,7 +14,6 @@ export interface Foo {
 === b.js ===
 /** @type {import("./a").Foo} */
 export default { c: false };
->{ c: false } : import("./a").Foo
 >{ c: false } : { c: boolean; }
 >c : boolean
 >false : false

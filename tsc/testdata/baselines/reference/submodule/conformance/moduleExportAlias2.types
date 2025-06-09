@@ -11,9 +11,9 @@ const C = require("./semver")
 var two = C.f(1)
 >two : any
 >C.f(1) : any
->C.f : any
+>C.f : (n: any) => any
 >C : typeof C
->f : any
+>f : (n: any) => any
 >1 : 1
 
 var c = new C
@@ -46,9 +46,9 @@ exports = module.exports = C
 
 exports.f = n => n + 1
 >exports.f = n => n + 1 : (n: any) => any
->exports.f : any
+>exports.f : (n: any) => any
 >exports : typeof import("./semver")
->f : any
+>f : (n: any) => any
 >n => n + 1 : (n: any) => any
 >n : any
 >n + 1 : any

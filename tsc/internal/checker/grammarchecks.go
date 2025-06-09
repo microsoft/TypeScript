@@ -1377,14 +1377,7 @@ func (c *Checker) checkGrammarTypeOperatorNode(node *ast.TypeOperatorNode) bool 
 		if innerType.Kind != ast.KindSymbolKeyword {
 			return c.grammarErrorOnNode(innerType, diagnostics.X_0_expected, scanner.TokenToString(ast.KindSymbolKeyword))
 		}
-		parent := ast.WalkUpParenthesizedTypes(node.Parent)
-		// !!!
-		// if ast.IsInJSFile(parent) && isJSDocTypeExpression(parent) {
-		// 	host := getJSDocHost(parent)
-		// 	if host != nil {
-		// 		parent = getSingleVariableOfVariableStatement(host) || host
-		// 	}
-		// }
+		parent := ast.GetEffectiveTypeParent(ast.WalkUpParenthesizedTypes(node.Parent))
 		switch parent.Kind {
 		case ast.KindVariableDeclaration:
 			decl := parent.AsVariableDeclaration()

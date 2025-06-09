@@ -6,14 +6,12 @@
 +test.js(14,4): error TS2339: Property 'x' does not exist on type '{}'.
 +test.js(16,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(18,4): error TS2339: Property 'x' does not exist on type '{}'.
-+test.js(33,13): error TS2322: Type 'string' is not assignable to type '"done"'.
-+test.js(34,15): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(57,17): error TS2339: Property 'x' does not exist on type 'Thing'.
 +test.js(59,7): error TS7006: Parameter 'n' implicitly has an 'any' type.
 +test.js(61,17): error TS2339: Property 'x' does not exist on type 'Thing'.
 +
 +
-+==== test.js (9 errors) ====
++==== test.js (7 errors) ====
 +    /** @typedef {{
 +        status: 'done'
 +        m(n: number): void
@@ -55,12 +53,7 @@
 +        fail() {
 +            this.s = {
 +                status: 'done',
-+                ~~~~~~
-+!!! error TS2322: Type 'string' is not assignable to type '"done"'.
-+!!! related TS6500 test.js:2:5: The expected type comes from property 'status' which is declared here on type '{ status: "done"; m(n: number): void; }'
 +                m(n) { }
-+                  ~
-+!!! error TS7006: Parameter 'n' implicitly has an 'any' type.
 +            }
 +        }
 +    }

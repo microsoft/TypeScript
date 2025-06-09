@@ -5,7 +5,6 @@
 
  /** @type {NumberLike[]} */export default ([ ]);
 ->([ ]) : NumberLike[]
-+>([ ]) : (string | number)[]
 +>([ ]) : undefined[]
  >[ ] : undefined[]
 

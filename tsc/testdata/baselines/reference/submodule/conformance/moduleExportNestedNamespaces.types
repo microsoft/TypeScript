@@ -3,21 +3,21 @@
 === mod.js ===
 module.exports.n = {};
 >module.exports.n = {} : {}
->module.exports.n : any
+>module.exports.n : {}
 >module.exports : typeof import("./mod")
 >module : { "\"mod\"": typeof import("./mod"); }
 >exports : typeof import("./mod")
->n : any
+>n : {}
 >{} : {}
 
 module.exports.n.K = function C() {
 >module.exports.n.K = function C() {    this.x = 10;} : () => void
 >module.exports.n.K : any
->module.exports.n : any
+>module.exports.n : {}
 >module.exports : typeof import("./mod")
 >module : { "\"mod\"": typeof import("./mod"); }
 >exports : typeof import("./mod")
->n : any
+>n : {}
 >K : any
 >function C() {    this.x = 10;} : () => void
 >C : () => void
@@ -56,9 +56,9 @@ var k = new s.n.K()
 >k : any
 >new s.n.K() : any
 >s.n.K : any
->s.n : any
+>s.n : {}
 >s : typeof s
->n : any
+>n : {}
 >K : any
 
 k.x

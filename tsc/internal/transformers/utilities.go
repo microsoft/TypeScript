@@ -184,7 +184,7 @@ func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitCon
 		if element.Initializer != nil {
 			expression = emitContext.Factory.NewAssignmentExpression(expression, element.Initializer)
 		}
-		assignment := emitContext.Factory.NewPropertyAssignment(nil /*modifiers*/, element.PropertyName, nil /*postfixToken*/, expression)
+		assignment := emitContext.Factory.NewPropertyAssignment(nil /*modifiers*/, element.PropertyName, nil /*postfixToken*/, nil /*typeNode*/, expression)
 		emitContext.SetOriginal(assignment, element.AsNode())
 		emitContext.AssignCommentAndSourceMapRanges(assignment, element.AsNode())
 		return assignment
@@ -197,6 +197,7 @@ func convertBindingElementToObjectAssignmentElement(emitContext *printer.EmitCon
 		nil, /*modifiers*/
 		element.Name(),
 		nil, /*postfixToken*/
+		nil, /*typeNode*/
 		equalsToken,
 		element.Initializer,
 	)

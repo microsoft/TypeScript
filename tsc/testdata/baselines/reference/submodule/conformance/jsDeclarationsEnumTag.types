@@ -21,7 +21,6 @@ export const Target = {
     /** @type {number} */
     OK_I_GUESS: 2
 >OK_I_GUESS : number
->2 : number
 >2 : 2
 }
 /** @enum number */
@@ -36,7 +35,6 @@ export const Second = {
     /** @type {number} */
     FINE: 2,
 >FINE : number
->2 : number
 >2 : 2
 }
 /** @enum {function(number): number} */

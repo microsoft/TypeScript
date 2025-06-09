@@ -223,7 +223,7 @@ func (tx *ESModuleTransformer) visitExportDeclaration(node *ast.ExportDeclaratio
 
 	var exportDecl *ast.Node
 	if ast.IsExportNamespaceAsDefaultDeclaration(node.AsNode()) {
-		exportDecl = tx.factory.NewExportAssignment(nil /*modifiers*/, false /*isExportEquals*/, synthName)
+		exportDecl = tx.factory.NewExportAssignment(nil /*modifiers*/, false /*isExportEquals*/, nil /*typeNode*/, synthName)
 	} else {
 		exportDecl = tx.factory.NewExportDeclaration(
 			nil,   /*modifiers*/

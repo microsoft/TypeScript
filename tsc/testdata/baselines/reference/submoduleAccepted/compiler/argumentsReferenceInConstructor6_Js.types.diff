@@ -1,17 +1,14 @@
 --- old.argumentsReferenceInConstructor6_Js.types
 +++ new.argumentsReferenceInConstructor6_Js.types
-@@= skipped -8, +8 lines =@@
- 		 * @type object
+@@= skipped -9, +9 lines =@@
  		 */
  		this.foo = arguments;
-->this.foo = arguments : IArguments
+ >this.foo = arguments : IArguments
 ->this.foo : any
-+>this.foo = arguments : object
 +>this.foo : object
  >this : this
 ->foo : any
 +>foo : object
-+>arguments : object
  >arguments : IArguments
  	}
  }

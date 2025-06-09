@@ -30,14 +30,12 @@
 
          /** @type {import("./conn").Whatever} */
          this.another = "";
-->this.another = "" : ""
+ >this.another = "" : ""
 ->this.another : import("conn").Whatever
-+>this.another = "" : any
 +>this.another : any
  >this : this
 ->another : import("conn").Whatever
 +>another : any
-+>"" : any
  >"" : ""
      }
  }

@@ -23,11 +23,11 @@
 ->exports : typeof module.exports
 ->A : typeof A
 +>module.exports.A = {} : {}
-+>module.exports.A : any
++>module.exports.A : {}
 +>module.exports : typeof import(".")
 +>module : { "\"index\"": typeof import("."); }
 +>exports : typeof import(".")
-+>A : any
++>A : {}
  >{} : {}
 
  module.exports.A.B = {
@@ -42,11 +42,11 @@
 ->{    thing: new Something()} : { thing: Something; }
 +>module.exports.A.B = {    thing: new Something()} : { thing: any; }
 +>module.exports.A.B : any
-+>module.exports.A : any
++>module.exports.A : {}
 +>module.exports : typeof import(".")
 +>module : { "\"index\"": typeof import("."); }
 +>exports : typeof import(".")
-+>A : any
++>A : {}
 +>B : any
 +>{    thing: new Something()} : { thing: any; }
 

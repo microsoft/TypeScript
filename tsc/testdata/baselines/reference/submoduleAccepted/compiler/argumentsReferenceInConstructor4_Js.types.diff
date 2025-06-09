@@ -22,7 +22,6 @@
 ->foo : any
 +>foo : object
 +>foo : object
-+>foo : object
 
  		/**
  		 * @type object
@@ -33,35 +32,30 @@
  >this.arguments : { bar: {}; }
  >this : this
  >arguments : { bar: {}; }
-@@= skipped -19, +20 lines =@@
- 		 * @type object
+@@= skipped -20, +20 lines =@@
  		 */
  		this.bar = arguments.bar;
-->this.bar = arguments.bar : any
+ >this.bar = arguments.bar : any
 ->this.bar : any
-+>this.bar = arguments.bar : object
 +>this.bar : object
  >this : this
 ->bar : any
 +>bar : object
-+>arguments.bar : object
  >arguments.bar : any
 ->arguments : any
 +>arguments : object
  >bar : any
 
  		/**
- 		 * @type object
+@@= skipped -12, +12 lines =@@
  		 */
  		this.baz = arguments[key];
-->this.baz = arguments[key] : any
+ >this.baz = arguments[key] : any
 ->this.baz : any
-+>this.baz = arguments[key] : object
 +>this.baz : object
  >this : this
 ->baz : any
 +>baz : object
-+>arguments[key] : object
  >arguments[key] : any
 ->arguments : any
 +>arguments : object
@@ -79,7 +73,6 @@
 ->options : any
 ->arguments : any
 +>options : object
-+>arguments : object
 +>arguments : object
  	}
 

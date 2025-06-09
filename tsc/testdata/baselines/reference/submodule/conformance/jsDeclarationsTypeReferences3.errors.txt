@@ -1,7 +1,8 @@
 index.js(3,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+index.js(5,18): error TS2339: Property 'B' does not exist on type '{}'.
 
 
-==== index.js (1 errors) ====
+==== index.js (2 errors) ====
     /// <reference types="node" />
     
     const Something = require("fs").Something;
@@ -9,6 +10,8 @@ index.js(3,19): error TS2580: Cannot find name 'require'. Do you need to install
 !!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
     module.exports.A = {}
     module.exports.A.B = {
+                     ~
+!!! error TS2339: Property 'B' does not exist on type '{}'.
         thing: new Something()
     }
     

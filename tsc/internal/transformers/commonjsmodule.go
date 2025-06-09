@@ -272,6 +272,7 @@ func (tx *CommonJSModuleTransformer) createUnderscoreUnderscoreESModule() *ast.S
 							nil, /*modifiers*/
 							tx.factory.NewIdentifier("value"),
 							nil, /*postfixToken*/
+							nil, /*typeNode*/
 							tx.factory.NewTrueExpression(),
 						),
 					}),
@@ -609,12 +610,14 @@ func (tx *CommonJSModuleTransformer) createExportExpression(name *ast.ModuleExpo
 							nil, /*modifiers*/
 							tx.factory.NewIdentifier("enumerable"),
 							nil, /*postfixToken*/
+							nil, /*typeNode*/
 							tx.factory.NewTrueExpression(),
 						),
 						tx.factory.NewPropertyAssignment(
 							nil, /*modifiers*/
 							tx.factory.NewIdentifier("get"),
 							nil, /*postfixToken*/
+							nil, /*typeNode*/
 							tx.factory.NewFunctionExpression(
 								nil, /*modifiers*/
 								nil, /*asteriskToken*/
@@ -1367,7 +1370,9 @@ func (tx *CommonJSModuleTransformer) visitAssignmentExpression(node *ast.BinaryE
 func (tx *CommonJSModuleTransformer) visitDestructuringAssignment(node *ast.BinaryExpression) *ast.Node {
 	return tx.factory.UpdateBinaryExpression(
 		node,
+		nil, /*modifiers*/
 		tx.assignmentPatternVisitor.VisitNode(node.Left),
+		nil, /*typeNode*/
 		node.OperatorToken,
 		tx.visitor.VisitNode(node.Right),
 	)
@@ -1379,6 +1384,7 @@ func (tx *CommonJSModuleTransformer) visitAssignmentProperty(node *ast.PropertyA
 		nil, /*modifiers*/
 		tx.visitor.VisitNode(node.Name()),
 		nil, /*postfixToken*/
+		nil, /*typeNode*/
 		tx.assignmentPatternVisitor.VisitNode(node.Initializer),
 	)
 }
@@ -1391,6 +1397,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandAssignmentProperty(node *ast.
 			nil, /*modifiers*/
 			target,
 			nil, /*postfixToken*/
+			nil, /*typeNode*/
 			node.EqualsToken,
 			tx.visitor.VisitNode(node.ObjectAssignmentInitializer),
 		)
@@ -1401,7 +1408,9 @@ func (tx *CommonJSModuleTransformer) visitShorthandAssignmentProperty(node *ast.
 			equalsToken = tx.factory.NewToken(ast.KindEqualsToken)
 		}
 		target = tx.factory.NewBinaryExpression(
+			nil, /*modifiers*/
 			target,
+			nil, /*typeNode*/
 			equalsToken,
 			tx.visitor.VisitNode(node.ObjectAssignmentInitializer),
 		)
@@ -1410,6 +1419,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandAssignmentProperty(node *ast.
 		nil, /*modifiers*/
 		node.Name(),
 		nil, /*postfixToken*/
+		nil, /*typeNode*/
 		target,
 	)
 	tx.emitContext.SetOriginal(updated, node.AsNode())
@@ -1437,7 +1447,9 @@ func (tx *CommonJSModuleTransformer) visitAssignmentElement(node *ast.Node) *ast
 		if n.OperatorToken.Kind == ast.KindEqualsToken {
 			return tx.factory.UpdateBinaryExpression(
 				n,
+				nil, /*modifiers*/
 				tx.visitDestructuringAssignmentTarget(n.Left),
+				nil, /*typeNode*/
 				n.OperatorToken,
 				tx.visitor.VisitNode(n.Right),
 			)
@@ -1515,7 +1527,7 @@ func (tx *CommonJSModuleTransformer) visitDestructuringAssignmentTargetNoStack(n
 func (tx *CommonJSModuleTransformer) visitCommaExpression(node *ast.BinaryExpression, resultIsDiscarded bool) *ast.Node {
 	left := tx.discardedValueVisitor.VisitNode(node.Left)
 	right := core.IfElse(resultIsDiscarded, tx.discardedValueVisitor, tx.visitor).VisitNode(node.Right)
-	return tx.factory.UpdateBinaryExpression(node, left, node.OperatorToken, right)
+	return tx.factory.UpdateBinaryExpression(node, nil /*modifiers*/, left, nil /*typeNode*/, node.OperatorToken, right)
 }
 
 // Visits a prefix unary expression that might modify an exported identifier.
@@ -1865,7 +1877,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandPropertyAssignment(node *ast.
 				tx.visitor.VisitNode(node.ObjectAssignmentInitializer),
 			)
 		}
-		assignment := tx.factory.NewPropertyAssignment(nil /*modifiers*/, name, nil /*postfixToken*/, expression)
+		assignment := tx.factory.NewPropertyAssignment(nil /*modifiers*/, name, nil /*postfixToken*/, nil /*typeNode*/, expression)
 		assignment.Loc = node.Loc
 		tx.emitContext.AssignCommentAndSourceMapRanges(assignment, node.AsNode())
 		return assignment
@@ -1874,6 +1886,7 @@ func (tx *CommonJSModuleTransformer) visitShorthandPropertyAssignment(node *ast.
 		nil, /*modifiers*/
 		exportedOrImportedName,
 		nil, /*postfixToken*/
+		nil, /*typeNode*/
 		node.EqualsToken,
 		tx.visitor.VisitNode(node.ObjectAssignmentInitializer),
 	)

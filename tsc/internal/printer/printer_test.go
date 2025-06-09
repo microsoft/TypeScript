@@ -595,7 +595,9 @@ func TestParenthesizeDecorator(t *testing.T) {
 					[]*ast.Node{
 						factory.NewDecorator(
 							factory.NewBinaryExpression(
+								nil, /*modifiers*/
 								factory.NewIdentifier("a"),
+								nil, /*typeNode*/
 								factory.NewToken(ast.KindPlusToken),
 								factory.NewIdentifier("b"),
 							),
@@ -632,7 +634,9 @@ func TestParenthesizeComputedPropertyName(t *testing.T) {
 						factory.NewComputedPropertyName(
 							// will be parenthesized on emit:
 							factory.NewBinaryExpression(
+								nil, /*modifiers*/
 								factory.NewIdentifier("a"),
+								nil, /*typeNode*/
 								factory.NewToken(ast.KindCommaToken),
 								factory.NewIdentifier("b"),
 							),
@@ -662,7 +666,9 @@ func TestParenthesizeArrayLiteral(t *testing.T) {
 						[]*ast.Node{
 							// will be parenthesized on emit:
 							factory.NewBinaryExpression(
+								nil, /*modifiers*/
 								factory.NewIdentifier("a"),
+								nil, /*typeNode*/
 								factory.NewToken(ast.KindCommaToken),
 								factory.NewIdentifier("b"),
 							),
@@ -688,7 +694,9 @@ func TestParenthesizePropertyAccess1(t *testing.T) {
 				factory.NewPropertyAccessExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -767,7 +775,9 @@ func TestParenthesizeElementAccess1(t *testing.T) {
 				factory.NewElementAccessExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -846,7 +856,9 @@ func TestParenthesizeCall1(t *testing.T) {
 				factory.NewCallExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -931,7 +943,9 @@ func TestParenthesizeCall4(t *testing.T) {
 					nil, /*typeArguments*/
 					factory.NewNodeList([]*ast.Node{
 						factory.NewBinaryExpression(
+							nil, /*modifiers*/
 							factory.NewIdentifier("b"),
+							nil, /*typeNode*/
 							factory.NewToken(ast.KindCommaToken),
 							factory.NewIdentifier("c"),
 						),
@@ -956,7 +970,9 @@ func TestParenthesizeNew1(t *testing.T) {
 				factory.NewNewExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1010,7 +1026,9 @@ func TestParenthesizeNew3(t *testing.T) {
 					nil, /*typeArguments*/
 					factory.NewNodeList([]*ast.Node{
 						factory.NewBinaryExpression(
+							nil, /*modifiers*/
 							factory.NewIdentifier("a"),
+							nil, /*typeNode*/
 							factory.NewToken(ast.KindCommaToken),
 							factory.NewIdentifier("b"),
 						),
@@ -1034,7 +1052,9 @@ func TestParenthesizeTaggedTemplate1(t *testing.T) {
 				factory.NewTaggedTemplateExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1093,7 +1113,9 @@ func TestParenthesizeTypeAssertion1(t *testing.T) {
 					),
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1175,7 +1197,9 @@ func TestParenthesizeDelete(t *testing.T) {
 				factory.NewDeleteExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1198,7 +1222,9 @@ func TestParenthesizeVoid(t *testing.T) {
 				factory.NewVoidExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1221,7 +1247,9 @@ func TestParenthesizeTypeOf(t *testing.T) {
 				factory.NewTypeOfExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1244,7 +1272,9 @@ func TestParenthesizeAwait(t *testing.T) {
 				factory.NewAwaitExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindPlusToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1321,7 +1351,9 @@ func makeSide(label string, kind ast.Kind, factory *ast.NodeFactory) *ast.Node {
 		)
 	case isBinaryOperator(kind):
 		return factory.NewBinaryExpression(
+			nil, /*modifiers*/
 			factory.NewIdentifier(label+"l"),
+			nil, /*typeNode*/
 			factory.NewToken(kind),
 			factory.NewIdentifier(label+"r"),
 		)
@@ -1364,7 +1396,9 @@ func TestParenthesizeBinary(t *testing.T) {
 				[]*ast.Node{
 					factory.NewExpressionStatement(
 						factory.NewBinaryExpression(
+							nil, /*modifiers*/
 							makeSide("l", rec.left, &factory),
+							nil, /*typeNode*/
 							factory.NewToken(rec.operator),
 							makeSide("r", rec.right, &factory),
 						),
@@ -1388,7 +1422,9 @@ func TestParenthesizeConditional1(t *testing.T) {
 				factory.NewConditionalExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1415,7 +1451,9 @@ func TestParenthesizeConditional2(t *testing.T) {
 				factory.NewConditionalExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindEqualsToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1500,7 +1538,9 @@ func TestParenthesizeConditional5(t *testing.T) {
 					factory.NewToken(ast.KindQuestionToken),
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("b"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("c"),
 					),
@@ -1529,7 +1569,9 @@ func TestParenthesizeConditional6(t *testing.T) {
 					factory.NewToken(ast.KindColonToken),
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("c"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("d"),
 					),
@@ -1553,7 +1595,9 @@ func TestParenthesizeYield1(t *testing.T) {
 					nil, /*asteriskToken*/
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1583,7 +1627,9 @@ func TestParenthesizeSpreadElement1(t *testing.T) {
 							factory.NewSpreadElement(
 								// will be parenthesized on emit:
 								factory.NewBinaryExpression(
+									nil, /*modifiers*/
 									factory.NewIdentifier("a"),
+									nil, /*typeNode*/
 									factory.NewToken(ast.KindCommaToken),
 									factory.NewIdentifier("b"),
 								),
@@ -1616,7 +1662,9 @@ func TestParenthesizeSpreadElement2(t *testing.T) {
 							factory.NewSpreadElement(
 								// will be parenthesized on emit:
 								factory.NewBinaryExpression(
+									nil, /*modifiers*/
 									factory.NewIdentifier("b"),
+									nil, /*typeNode*/
 									factory.NewToken(ast.KindCommaToken),
 									factory.NewIdentifier("c"),
 								),
@@ -1648,7 +1696,9 @@ func TestParenthesizeSpreadElement3(t *testing.T) {
 							factory.NewSpreadElement(
 								// will be parenthesized on emit:
 								factory.NewBinaryExpression(
+									nil, /*modifiers*/
 									factory.NewIdentifier("b"),
+									nil, /*typeNode*/
 									factory.NewToken(ast.KindCommaToken),
 									factory.NewIdentifier("c"),
 								),
@@ -1674,7 +1724,9 @@ func TestParenthesizeExpressionWithTypeArguments(t *testing.T) {
 				factory.NewExpressionWithTypeArguments(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1705,7 +1757,9 @@ func TestParenthesizeAsExpression(t *testing.T) {
 				factory.NewAsExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1732,7 +1786,9 @@ func TestParenthesizeSatisfiesExpression(t *testing.T) {
 				factory.NewSatisfiesExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1759,7 +1815,9 @@ func TestParenthesizeNonNullExpression(t *testing.T) {
 				factory.NewNonNullExpression(
 					// will be parenthesized on emit:
 					factory.NewBinaryExpression(
+						nil, /*modifiers*/
 						factory.NewIdentifier("a"),
+						nil, /*typeNode*/
 						factory.NewToken(ast.KindCommaToken),
 						factory.NewIdentifier("b"),
 					),
@@ -1856,6 +1914,7 @@ func TestParenthesizeExpressionDefault1(t *testing.T) {
 			factory.NewExportAssignment(
 				nil,   /*modifiers*/
 				false, /*isExportEquals*/
+				nil,   /*typeNode*/
 				// will be parenthesized on emit:
 				factory.NewClassExpression(
 					nil, /*modifiers*/
@@ -1883,6 +1942,7 @@ func TestParenthesizeExpressionDefault2(t *testing.T) {
 			factory.NewExportAssignment(
 				nil,   /*modifiers*/
 				false, /*isExportEquals*/
+				nil,   /*typeNode*/
 				// will be parenthesized on emit:
 				factory.NewFunctionExpression(
 					nil, /*modifiers*/
@@ -1917,9 +1977,12 @@ func TestParenthesizeExpressionDefault3(t *testing.T) {
 			factory.NewExportAssignment(
 				nil,   /*modifiers*/
 				false, /*isExportEquals*/
+				nil,   /*typeNode*/
 				// will be parenthesized on emit:
 				factory.NewBinaryExpression(
+					nil, /*modifiers*/
 					factory.NewIdentifier("a"),
+					nil, /*typeNode*/
 					factory.NewToken(ast.KindCommaToken),
 					factory.NewIdentifier("b"),
 				),

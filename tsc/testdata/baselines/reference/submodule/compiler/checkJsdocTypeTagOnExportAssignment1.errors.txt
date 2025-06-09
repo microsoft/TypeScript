@@ -1,4 +1,4 @@
-a.js(8,16): error TS2739: Type '{ c: boolean; }' is missing the following properties from type 'Foo': a, b
+a.js(8,18): error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
 
 
 ==== checkJsdocTypeTagOnExportAssignment1.js (0 errors) ====
@@ -12,8 +12,8 @@ a.js(8,16): error TS2739: Type '{ c: boolean; }' is missing the following proper
     
     /** @type {Foo} */
     export default { c: false };
-                   ~~~~~~~~~~~~
-!!! error TS2739: Type '{ c: boolean; }' is missing the following properties from type 'Foo': a, b
+                     ~
+!!! error TS2353: Object literal may only specify known properties, and 'c' does not exist in type 'Foo'.
     
 ==== b.js (0 errors) ====
     import a from "./a";

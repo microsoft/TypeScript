@@ -204,15 +204,15 @@ func (f *NodeFactory) NewFalseExpression() *ast.Expression {
 //
 
 func (f *NodeFactory) NewCommaExpression(left *ast.Expression, right *ast.Expression) *ast.Expression {
-	return f.NewBinaryExpression(left, f.NewToken(ast.KindCommaToken), right)
+	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindCommaToken), right)
 }
 
 func (f *NodeFactory) NewAssignmentExpression(left *ast.Expression, right *ast.Expression) *ast.Expression {
-	return f.NewBinaryExpression(left, f.NewToken(ast.KindEqualsToken), right)
+	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindEqualsToken), right)
 }
 
 func (f *NodeFactory) NewLogicalORExpression(left *ast.Expression, right *ast.Expression) *ast.Expression {
-	return f.NewBinaryExpression(left, f.NewToken(ast.KindBarBarToken), right)
+	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindBarBarToken), right)
 }
 
 // func (f *NodeFactory) NewLogicalANDExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
@@ -222,7 +222,7 @@ func (f *NodeFactory) NewLogicalORExpression(left *ast.Expression, right *ast.Ex
 // func (f *NodeFactory) NewStrictEqualityExpression(left *ast.Expression, right *ast.Expression) *ast.Expression
 
 func (f *NodeFactory) NewStrictInequalityExpression(left *ast.Expression, right *ast.Expression) *ast.Expression {
-	return f.NewBinaryExpression(left, f.NewToken(ast.KindExclamationEqualsEqualsToken), right)
+	return f.NewBinaryExpression(nil /*modifiers*/, left, nil /*typeNode*/, f.NewToken(ast.KindExclamationEqualsEqualsToken), right)
 }
 
 //

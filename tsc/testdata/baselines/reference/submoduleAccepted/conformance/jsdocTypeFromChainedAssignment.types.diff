@@ -21,15 +21,13 @@
 ->this.first : 1
 ->this : this
 ->first : 1
-->this.second = 1 : 1
-->this.second : 1
-->this : this
-->second : 1
 +>this.first : any
 +>this : any
 +>first : any
-+>this.second = 1 : 1
-+>this.second = 1 : 1
+ >this.second = 1 : 1
+->this.second : 1
+->this : this
+->second : 1
 +>this.second : any
 +>this : any
 +>second : any

@@ -18,9 +18,9 @@ exports.x;
     // 'exports' does not provide a contextual type to a function-class
     exports.Cls = function() {
 >exports.Cls = function() {        this.x = 0;    } : () => void
->exports.Cls : any
+>exports.Cls : () => void
 >exports : typeof import("./a")
->Cls : any
+>Cls : () => void
 >function() {        this.x = 0;    } : () => void
 
         this.x = 0;
@@ -35,7 +35,7 @@ exports.x;
 const instance = new exports.Cls();
 >instance : any
 >new exports.Cls() : any
->exports.Cls : any
+>exports.Cls : () => void
 >exports : typeof import("./a")
->Cls : any
+>Cls : () => void
 

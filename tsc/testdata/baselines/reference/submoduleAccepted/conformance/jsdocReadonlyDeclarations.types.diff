@@ -21,17 +21,7 @@
  >n : any
 
          /**
-@@= skipped -10, +10 lines =@@
-          * @type {number}
-          */
-         this.y = n
-->this.y = n : any
-+>this.y = n : number
- >this.y : number
- >this : this
- >y : number
-+>n : number
- >n : any
+@@= skipped -18, +18 lines =@@
      }
  }
  new C().x

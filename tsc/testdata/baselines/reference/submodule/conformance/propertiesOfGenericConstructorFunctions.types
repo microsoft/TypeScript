@@ -14,11 +14,10 @@ function Multimap(ik, iv) {
 
     /** @type {{ [s: string]: V }} */
     this._map = {};
->this._map = {} : { [s: string]: V; }
+>this._map = {} : {}
 >this._map : any
 >this : any
 >_map : any
->{} : { [s: string]: V; }
 >{} : {}
 
     // without type annotation

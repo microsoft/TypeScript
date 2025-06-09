@@ -26,9 +26,9 @@ const (
 	propertyLikeParseCallbackParameter
 )
 
-func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) {
+func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
 	if !hasJSDoc {
-		return
+		return nil
 	}
 
 	if p.jsdocCache == nil {
@@ -60,7 +60,9 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) {
 			p.reparseTags(node, jsdoc)
 		}
 		p.jsdocCache[node] = jsdoc
+		return jsdoc
 	}
+	return nil
 }
 
 func (p *Parser) parseJSDocTypeExpression(mayOmitBraces bool) *ast.Node {

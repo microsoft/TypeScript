@@ -58,20 +58,7 @@
  >require : any
  >'./rectangle' : "./rectangle"
 
-@@= skipped -23, +23 lines =@@
-          * @type {Rectangle[]}
-          */
-         this.objects = [];
-->this.objects = [] : undefined[]
-+>this.objects = [] : Rectangle[]
- >this.objects : Rectangle[]
- >this : this
- >objects : Rectangle[]
-+>[] : Rectangle[]
- >[] : undefined[]
-     }
-     /**
-@@= skipped -34, +35 lines =@@
+@@= skipped -57, +57 lines =@@
  }
 
  module.exports = { Render };

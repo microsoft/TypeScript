@@ -16,7 +16,6 @@ class A {
 >this : this
 >callee : Function
 >arguments.callee : Function
->arguments.callee : Function
 >arguments : IArguments
 >callee : Function
 	}

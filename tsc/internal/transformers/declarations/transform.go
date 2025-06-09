@@ -931,7 +931,7 @@ func (tx *DeclarationTransformer) visitDeclarationStatements(input *ast.Node) *a
 		}
 		statement := tx.Factory().NewVariableStatement(modList, tx.Factory().NewVariableDeclarationList(ast.NodeFlagsConst, tx.Factory().NewNodeList([]*ast.Node{varDecl})))
 
-		assignment := tx.Factory().UpdateExportAssignment(input.AsExportAssignment(), input.Modifiers(), newId)
+		assignment := tx.Factory().UpdateExportAssignment(input.AsExportAssignment(), input.Modifiers(), input.Type(), newId)
 		// Remove coments from the export declaration and copy them onto the synthetic _default declaration
 		tx.preserveJsDoc(statement, input)
 		tx.removeAllComments(assignment)

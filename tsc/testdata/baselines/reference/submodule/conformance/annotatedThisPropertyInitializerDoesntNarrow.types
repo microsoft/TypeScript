@@ -13,11 +13,10 @@ export class C {
     constructor() {
         /** @type {{ [assetName: string]: number}} */
         this.assets = {};
->this.assets = {} : { [assetName: string]: number; }
+>this.assets = {} : {}
 >this.assets : { [assetName: string]: number; }
 >this : this
 >assets : { [assetName: string]: number; }
->{} : { [assetName: string]: number; }
 >{} : {}
     }
     m() {

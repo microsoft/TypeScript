@@ -1,14 +1,6 @@
 --- old.thisInFunctionCallJs.types
 +++ new.thisInFunctionCallJs.types
-@@= skipped -11, +11 lines =@@
- >this : this
- >data : number[]
- >[1, 2, 3] : number[]
-+>[1, 2, 3] : number[]
- >1 : 1
- >2 : 2
- >3 : 3
-@@= skipped -72, +73 lines =@@
+@@= skipped -83, +83 lines =@@
 
          /** @this {Test} */
          function (d) {

@@ -6,14 +6,12 @@
  const obj = {
 ->obj : { bar: string | undefined; method1(arg0: number): number; method2: (arg0: number) => number; arrowFunc: (arg0: number) => number; lol: string; }
 ->{  /** @type {string|undefined} */  bar: 42,  /** @type {function(number): number} */  method1(n1) {      return "42";  },  /** @type {function(number): number} */  method2: (n1) => "lol",  /** @type {function(number): number} */  arrowFunc: (num="0") => num + 42,  /** @type {string} */  lol} : { bar: string | undefined; method1(arg0: number): number; method2: (arg0: number) => number; arrowFunc: (arg0: number) => number; lol: string; }
-+>obj : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: any; }
-+>{  /** @type {string|undefined} */  bar: 42,  /** @type {function(number): number} */  method1(n1) {      return "42";  },  /** @type {function(number): number} */  method2: (n1) => "lol",  /** @type {function(number): number} */  arrowFunc: (num="0") => num + 42,  /** @type {string} */  lol} : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: any; }
++>obj : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: string; }
++>{  /** @type {string|undefined} */  bar: 42,  /** @type {function(number): number} */  method1(n1) {      return "42";  },  /** @type {function(number): number} */  method2: (n1) => "lol",  /** @type {function(number): number} */  arrowFunc: (num="0") => num + 42,  /** @type {string} */  lol} : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: string; }
 
    /** @type {string|undefined} */
    bar: 42,
- >bar : string | undefined
-+>42 : string | undefined
- >42 : 42
+@@= skipped -10, +10 lines =@@
 
    /** @type {function(number): number} */
    method1(n1) {
@@ -24,7 +22,7 @@
 
        return "42";
  >"42" : "42"
-@@= skipped -19, +20 lines =@@
+@@= skipped -9, +9 lines =@@
    },
    /** @type {function(number): number} */
    method2: (n1) => "lol",
@@ -32,7 +30,6 @@
 ->(n1) => "lol" : (n1: number) => number
 ->n1 : number
 +>method2 : function
-+>(n1) => "lol" : function
 +>(n1) => "lol" : (n1: any) => string
 +>n1 : any
  >"lol" : "lol"
@@ -43,7 +40,6 @@
 ->(num="0") => num + 42 : (num?: number) => number
 ->num : number
 +>arrowFunc : function
-+>(num="0") => num + 42 : function
 +>(num="0") => num + 42 : (num?: string) => string
 +>num : string
  >"0" : "0"
@@ -54,13 +50,7 @@
  >42 : 42
 
    /** @type {string} */
-   lol
-->lol : string
-+>lol : any
- }
- lol = "string"
- >lol = "string" : "string"
-@@= skipped -27, +29 lines =@@
+@@= skipped -27, +27 lines =@@
  /** @type {string} */
  var s = obj.method1(0);
  >s : string
@@ -70,7 +60,7 @@
 ->method1 : (arg0: number) => number
 +>obj.method1(0) : string
 +>obj.method1 : (n1: any) => string
-+>obj : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: any; }
++>obj : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: string; }
 +>method1 : (n1: any) => string
  >0 : 0
 
@@ -83,6 +73,6 @@
 ->method2 : (arg0: number) => number
 +>obj.method2("0") : any
 +>obj.method2 : function
-+>obj : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: any; }
++>obj : { bar: string | undefined; method1(n1: any): string; method2: function; arrowFunc: function; lol: string; }
 +>method2 : function
  >"0" : "0"

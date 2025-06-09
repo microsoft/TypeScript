@@ -11,7 +11,6 @@
 
 /** @type {Foo} */
 export default { a: 1, b: 1, c: 1 };
->{ a: 1, b: 1, c: 1 } : Foo
 >{ a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
 >a : number
 >1 : 1

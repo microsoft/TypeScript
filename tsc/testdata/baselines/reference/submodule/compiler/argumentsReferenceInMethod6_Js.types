@@ -11,11 +11,10 @@ class A {
 		 * @type object
 		 */
 		this.foo = arguments;
->this.foo = arguments : object
+>this.foo = arguments : IArguments
 >this.foo : object
 >this : this
 >foo : object
->arguments : object
 >arguments : IArguments
 	}
 }

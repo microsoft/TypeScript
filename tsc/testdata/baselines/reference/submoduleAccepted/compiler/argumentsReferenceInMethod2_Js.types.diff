@@ -20,6 +20,5 @@
  >"arguments" : "arguments"
 ->foo : any
 +>foo : object
-+>foo : object
  	}
  }

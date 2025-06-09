@@ -1,13 +1,6 @@
 --- old.checkJsdocTypeTagOnExportAssignment1.types
 +++ new.checkJsdocTypeTagOnExportAssignment1.types
-@@= skipped -10, +10 lines =@@
-
- /** @type {Foo} */
- export default { c: false };
-+>{ c: false } : Foo
- >{ c: false } : { c: boolean; }
- >c : boolean
- >false : false
+@@= skipped -16, +16 lines =@@
 
  === b.js ===
  import a from "./a";

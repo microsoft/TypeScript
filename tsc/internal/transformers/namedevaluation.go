@@ -310,7 +310,7 @@ func transformNamedEvaluationOfPropertyAssignment(context *printer.EmitContext, 
 	factory := context.Factory
 	assignedName, name := getAssignedNameOfPropertyName(context, node.Name(), assignedNameText)
 	initializer := finishTransformNamedEvaluation(context, node.Initializer, assignedName, ignoreEmptyStringLiteral)
-	return factory.UpdatePropertyAssignment(node, nil /*modifiers*/, name, nil /*postfixToken*/, initializer)
+	return factory.UpdatePropertyAssignment(node, nil /*modifiers*/, name, nil /*postfixToken*/, nil /*typeNode*/, initializer)
 }
 
 func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.EmitContext, node *ast.ShorthandPropertyAssignment /*NamedEvaluation & ShorthandPropertyAssignment*/, ignoreEmptyStringLiteral bool, assignedNameText string) *ast.Expression {
@@ -335,6 +335,7 @@ func transformNamedEvaluationOfShorthandAssignmentProperty(emitContext *printer.
 		nil, /*modifiers*/
 		node.Name(),
 		nil, /*postfixToken*/
+		nil, /*typeNode*/
 		node.EqualsToken,
 		objectAssignmentInitializer,
 	)
@@ -500,7 +501,9 @@ func transformNamedEvaluationOfAssignmentExpression(emitContext *printer.EmitCon
 	right := finishTransformNamedEvaluation(emitContext, node.Right, assignedName, ignoreEmptyStringLiteral)
 	return factory.UpdateBinaryExpression(
 		node,
+		nil, /*modifiers*/
 		node.Left,
+		nil, /*typeNode*/
 		node.OperatorToken,
 		right,
 	)
@@ -527,6 +530,7 @@ func transformNamedEvaluationOfExportAssignment(emitContext *printer.EmitContext
 	return factory.UpdateExportAssignment(
 		node,
 		nil, /*modifiers*/
+		nil, /*typeNode*/
 		expression,
 	)
 }

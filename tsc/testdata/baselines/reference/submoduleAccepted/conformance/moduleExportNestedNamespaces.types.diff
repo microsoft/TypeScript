@@ -11,11 +11,11 @@
 ->exports : typeof module.exports
 ->n : typeof n
 +>module.exports.n = {} : {}
-+>module.exports.n : any
++>module.exports.n : {}
 +>module.exports : typeof import("./mod")
 +>module : { "\"mod\"": typeof import("./mod"); }
 +>exports : typeof import("./mod")
-+>n : any
++>n : {}
  >{} : {}
 
  module.exports.n.K = function C() {
@@ -31,11 +31,11 @@
 ->C : typeof C
 +>module.exports.n.K = function C() {    this.x = 10;} : () => void
 +>module.exports.n.K : any
-+>module.exports.n : any
++>module.exports.n : {}
 +>module.exports : typeof import("./mod")
 +>module : { "\"mod\"": typeof import("./mod"); }
 +>exports : typeof import("./mod")
-+>n : any
++>n : {}
 +>K : any
 +>function C() {    this.x = 10;} : () => void
 +>C : () => void
@@ -82,11 +82,11 @@
 +>k : any
 +>new s.n.K() : any
 +>s.n.K : any
-+>s.n : any
++>s.n : {}
  >s : typeof s
 ->n : typeof s.n
 ->K : typeof C
-+>n : any
++>n : {}
 +>K : any
 
  k.x

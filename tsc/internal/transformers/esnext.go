@@ -167,6 +167,7 @@ func (tx *ESNextTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node {
 			topLevelStatements = append(topLevelStatements, tx.factory.NewExportAssignment(
 				nil,  /*modifiers*/
 				true, /*isExportEquals*/
+				nil,  /*typeNode*/
 				tx.exportEqualsBinding,
 			))
 		}
@@ -715,9 +716,9 @@ func (tx *ESNextTransformer) createDownlevelUsingStatements(bodyStatements []*as
 	//  const env_1 = { stack: [], error: void 0, hasError: false };
 	//
 	envObject := tx.factory.NewObjectLiteralExpression(tx.factory.NewNodeList([]*ast.Expression{
-		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("stack"), nil /*postfixToken*/, tx.factory.NewArrayLiteralExpression(nil, false /*multiLine*/)),
-		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("error"), nil /*postfixToken*/, tx.factory.NewVoidZeroExpression()),
-		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("hasError"), nil /*postfixToken*/, tx.factory.NewFalseExpression()),
+		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("stack"), nil /*postfixToken*/, nil /*typeNode*/, tx.factory.NewArrayLiteralExpression(nil, false /*multiLine*/)),
+		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("error"), nil /*postfixToken*/, nil /*typeNode*/, tx.factory.NewVoidZeroExpression()),
+		tx.factory.NewPropertyAssignment(nil /*modifiers*/, tx.factory.NewIdentifier("hasError"), nil /*postfixToken*/, nil /*typeNode*/, tx.factory.NewFalseExpression()),
 	}), false /*multiLine*/)
 	envVar := tx.factory.NewVariableDeclaration(envBinding, nil /*exclamationToken*/, nil /*typeNode*/, envObject)
 	envVarList := tx.factory.NewVariableDeclarationList(ast.NodeFlagsConst, tx.factory.NewNodeList([]*ast.VariableDeclarationNode{envVar}))

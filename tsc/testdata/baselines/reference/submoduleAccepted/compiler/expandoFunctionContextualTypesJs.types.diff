@@ -39,19 +39,17 @@
   * @type {MyComponentProps}
   */
  MyComponent2.defaultProps = {
-->MyComponent2.defaultProps = {    color: "red"} : { color: "red"; }
+ >MyComponent2.defaultProps = {    color: "red"} : { color: "red"; }
 ->MyComponent2.defaultProps : MyComponentProps
 ->MyComponent2 : { (): any; defaultProps: MyComponentProps; }
 ->defaultProps : MyComponentProps
-+>MyComponent2.defaultProps = {    color: "red"} : { color: "blue" | "red"; }
 +>MyComponent2.defaultProps : { color: "blue" | "red"; }
 +>MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
 +>defaultProps : { color: "blue" | "red"; }
-+>{    color: "red"} : { color: "blue" | "red"; }
  >{    color: "red"} : { color: "red"; }
 
      color: "red"
-@@= skipped -40, +41 lines =@@
+@@= skipped -40, +40 lines =@@
    * @type {StatelessComponent<MyComponentProps>}
   */
  const check = MyComponent2;
@@ -78,15 +76,13 @@
       * @type {MyComponentProps}
       */
      this.props = { color: "red" };
-->this.props = { color: "red" } : { color: "red"; }
+ >this.props = { color: "red" } : { color: "red"; }
 ->this.props : MyComponentProps
 ->this : this
 ->props : MyComponentProps
-+>this.props = { color: "red" } : { color: "blue" | "red"; }
 +>this.props : any
 +>this : any
 +>props : any
-+>{ color: "red" } : { color: "blue" | "red"; }
  >{ color: "red" } : { color: "red"; }
  >color : "red"
  >"red" : "red"
@@ -107,15 +103,14 @@
 ->module.exports : MyComponentProps
 ->module : { exports: MyComponentProps; }
 ->exports : MyComponentProps
-+>module.exports = {    color: "red"} : { color: "blue" | "red"; }
++>module.exports = {    color: "red"} : { color: "red"; }
 +>module.exports : { color: "blue" | "red"; }
 +>module : { "export=": { color: "blue" | "red"; }; }
 +>exports : { color: "blue" | "red"; }
-+>{    color: "red"} : { color: "blue" | "red"; }
  >{    color: "red"} : { color: "red"; }
 
      color: "red"
-@@= skipped -49, +51 lines =@@
+@@= skipped -49, +49 lines =@@
 
  expectLiteral({ props: module.exports });
  >expectLiteral({ props: module.exports }) : void

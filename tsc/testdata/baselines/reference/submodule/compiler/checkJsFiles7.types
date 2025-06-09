@@ -7,11 +7,10 @@ class C {
 	constructor() {
 		/** @type {boolean} */
 		this.a = true;
->this.a = true : boolean
+>this.a = true : true
 >this.a : boolean
 >this : this
 >a : boolean
->true : boolean
 >true : true
 
 		this.a = !!this.a;
@@ -21,8 +20,8 @@ class C {
 >a : boolean
 >!!this.a : boolean
 >!this.a : boolean
->this.a : boolean
+>this.a : true
 >this : this
->a : boolean
+>a : true
 	}
 }

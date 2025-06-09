@@ -12,9 +12,9 @@ declare var module: any, exports: any;
 === a-ext.js ===
 exports.A = function () {
 >exports.A = function () {    this.x = 1;} : () => void
->exports.A : any
+>exports.A : () => void
 >exports : typeof import("./a-ext")
->A : any
+>A : () => void
 >function () {    this.x = 1;} : () => void
 
     this.x = 1;
@@ -28,7 +28,7 @@ exports.A = function () {
 
 === a.js ===
 const { A } = require("./a-ext");
->A : any
+>A : () => void
 >require("./a-ext") : typeof import("./a-ext")
 >require : (id: string) => any
 >"./a-ext" : "./a-ext"
