@@ -24,4 +24,5 @@ jobs:
       - uses: ./.github/actions/setup-go
         with:
           cache-name: copilot-setup-steps
+      - run: npm i -g @playwright/mcp@0.0.28
       - run: npm ci
