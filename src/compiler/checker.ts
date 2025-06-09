@@ -481,6 +481,7 @@ import {
     isAssignmentTarget,
     isAutoAccessorPropertyDeclaration,
     isAwaitExpression,
+    isBigIntLiteral,
     isBinaryExpression,
     isBinaryLogicalOperator,
     isBindableObjectDefinePropertyCall,
@@ -2320,6 +2321,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var inferenceContextNodes: Node[] = [];
     var inferenceContexts: (InferenceContext | undefined)[] = [];
     var inferenceContextCount = 0;
+
+    var activeTypeMappers: TypeMapper[] = [];
+    var activeTypeMappersCaches: Map<string, Type>[] = [];
+    var activeTypeMappersCount = 0;
 
     var emptyStringType = getStringLiteralType("");
     var zeroType = getNumberLiteralType(0);
@@ -4753,7 +4758,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 else if (resolvedModule.resolvedUsingTsExtension && shouldRewrite) {
-                    const redirect = host.getResolvedProjectReferenceToRedirect(sourceFile.path);
+                    const redirect = host.getRedirectFromSourceFile(sourceFile.path)?.resolvedRef;
                     if (redirect) {
                         const ignoreCase = !host.useCaseSensitiveFileNames();
                         const ownRootDir = host.getCommonSourceDirectory();
@@ -4848,9 +4853,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (moduleNotFoundError) {
             // See if this was possibly a projectReference redirect
             if (resolvedModule) {
-                const redirect = host.getProjectReferenceRedirect(resolvedModule.resolvedFileName);
-                if (redirect) {
-                    error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, resolvedModule.resolvedFileName);
+                const redirect = host.getRedirectFromSourceFile(resolvedModule.resolvedFileName);
+                if (redirect?.outputDts) {
+                    error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect.outputDts, resolvedModule.resolvedFileName);
                     return undefined;
                 }
             }
@@ -10295,7 +10300,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createImportDeclaration(
                                     /*modifiers*/ undefined,
                                     factory.createImportClause(
-                                        /*isTypeOnly*/ false,
+                                        /*phaseModifier*/ undefined,
                                         /*name*/ undefined,
                                         factory.createNamedImports([factory.createImportSpecifier(
                                             /*isTypeOnly*/ false,
@@ -10392,7 +10397,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, factory.createIdentifier(localName), /*namedBindings*/ undefined),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    factory.createIdentifier(localName),
+                                    /*namedBindings*/ undefined,
+                                ),
                                 specifier,
                                 attributes,
                             ),
@@ -10408,7 +10417,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addResult(
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
-                                factory.createImportClause(isTypeOnly, /*name*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
+                                factory.createImportClause(
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
+                                    /*name*/ undefined,
+                                    factory.createNamespaceImport(factory.createIdentifier(localName)),
+                                ),
                                 specifier,
                                 (node as ImportClause).parent.attributes,
                             ),
@@ -10437,7 +10450,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             factory.createImportDeclaration(
                                 /*modifiers*/ undefined,
                                 factory.createImportClause(
-                                    isTypeOnly,
+                                    /* phaseModifier */ isTypeOnly ? SyntaxKind.TypeKeyword : undefined,
                                     /*name*/ undefined,
                                     factory.createNamedImports([
                                         factory.createImportSpecifier(
@@ -20898,10 +20911,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
             return errorType;
         }
+        const index = findActiveMapper(mapper);
+        if (index === -1) {
+            pushActiveMapper(mapper);
+        }
+        const key = type.id + getAliasId(aliasSymbol, aliasTypeArguments);
+        const mapperCache = activeTypeMappersCaches[index !== -1 ? index : activeTypeMappersCount - 1];
+        const cached = mapperCache.get(key);
+        if (cached) {
+            return cached;
+        }
         totalInstantiationCount++;
         instantiationCount++;
         instantiationDepth++;
         const result = instantiateTypeWorker(type, mapper, aliasSymbol, aliasTypeArguments);
+        if (index === -1) {
+            popActiveMapper();
+        }
+        else {
+            mapperCache.set(key, result);
+        }
         instantiationDepth--;
         return result;
     }
@@ -24134,6 +24163,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isPropertySymbolTypeRelated(sourceProp: Symbol, targetProp: Symbol, getTypeOfSourceProperty: (sym: Symbol) => Type, reportErrors: boolean, intersectionState: IntersectionState): Ternary {
             const targetIsOptional = strictNullChecks && !!(getCheckFlags(targetProp) & CheckFlags.Partial);
             const effectiveTarget = addOptionality(getNonMissingTypeOfSymbol(targetProp), /*isProperty*/ false, targetIsOptional);
+            // source could resolve to `any` and that's not related to `unknown` target under strict subtype relation
+            if (effectiveTarget.flags & (relation === strictSubtypeRelation ? TypeFlags.Any : TypeFlags.AnyOrUnknown)) {
+                return Ternary.True;
+            }
             const effectiveSource = getTypeOfSourceProperty(sourceProp);
             return isRelatedTo(effectiveSource, effectiveTarget, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
         }
@@ -27492,6 +27525,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     inference.inferredType = fallbackType && context.compareTypes(fallbackType, getTypeWithThisArgument(instantiatedConstraint, fallbackType)) ? fallbackType : instantiatedConstraint;
                 }
             }
+            clearActiveMapperCaches();
         }
 
         return inference.inferredType;
@@ -32705,6 +32739,31 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isNodeDescendantOf(node, inferenceContextNodes[i])) {
                 return inferenceContexts[i];
             }
+        }
+    }
+
+    function pushActiveMapper(mapper: TypeMapper) {
+        activeTypeMappers[activeTypeMappersCount] = mapper;
+        activeTypeMappersCaches[activeTypeMappersCount] = new Map();
+        activeTypeMappersCount++;
+    }
+
+    function popActiveMapper() {
+        activeTypeMappersCount--;
+    }
+
+    function findActiveMapper(mapper: TypeMapper) {
+        for (let i = activeTypeMappersCount - 1; i >= 0; i--) {
+            if (mapper === activeTypeMappers[i]) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function clearActiveMapperCaches() {
+        for (let i = activeTypeMappersCount - 1; i >= 0; i--) {
+            activeTypeMappersCaches[i].clear();
         }
     }
 
@@ -38062,6 +38121,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (node.keywordToken === SyntaxKind.ImportKeyword) {
+            if (node.name.escapedText === "defer") {
+                Debug.assert(!isCallExpression(node.parent) || node.parent.expression !== node, "Trying to get the type of `import.defer` in `import.defer(...)`");
+                return errorType;
+            }
             return checkImportMetaProperty(node);
         }
 
@@ -41501,7 +41564,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // Optimize for the common case of a call to a function with a single non-generic call
         // signature where we can just fetch the return type without checking the arguments.
-        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr)) {
+        if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*requireStringLiteralLikeArgument*/ true) && !isSymbolOrSymbolForCall(expr) && !isImportCall(expr)) {
             return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                 getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
         }
@@ -41580,7 +41643,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
-            const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+            const redirect = host.getRedirectFromOutput(getSourceFileOfNode(constEnumDeclaration).resolvedPath)?.resolvedRef;
             if (constEnumDeclaration.flags & NodeFlags.Ambient && !isValidTypeOnlyAliasUseSite(node) && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
                 error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
             }
@@ -41655,8 +41718,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ElementAccessExpression:
                 return checkIndexedAccess(node as ElementAccessExpression, checkMode);
             case SyntaxKind.CallExpression:
-                if ((node as CallExpression).expression.kind === SyntaxKind.ImportKeyword) {
-                    return checkImportCallExpression(node as ImportCall);
+                if (isImportCall(node)) {
+                    return checkImportCallExpression(node);
                 }
                 // falls through
             case SyntaxKind.NewExpression:
@@ -47591,6 +47654,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isComputedNonLiteralName(member.name)) {
             error(member.name, Diagnostics.Computed_property_names_are_not_allowed_in_enums);
         }
+        else if (isBigIntLiteral(member.name)) {
+            error(member.name, Diagnostics.An_enum_member_cannot_have_a_numeric_name);
+        }
         else {
             const text = getTextOfPropertyName(member.name);
             if (isNumericLiteralName(text) && !isInfinityOrNaNString(text)) {
@@ -48234,7 +48300,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     targetFlags & SymbolFlags.ConstEnum
                 ) {
                     const constEnumDeclaration = target.valueDeclaration as EnumDeclaration;
-                    const redirect = host.getRedirectReferenceForResolutionFromSourceOfProject(getSourceFileOfNode(constEnumDeclaration).resolvedPath);
+                    const redirect = host.getRedirectFromOutput(getSourceFileOfNode(constEnumDeclaration).resolvedPath)?.resolvedRef;
                     if (constEnumDeclaration.flags & NodeFlags.Ambient && (!redirect || !shouldPreserveConstEnums(redirect.commandLine.options))) {
                         error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
                     }
@@ -49923,6 +49989,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return isExportAssignment(node.parent) ? Debug.checkDefined(node.parent.symbol) : undefined;
 
             case SyntaxKind.ImportKeyword:
+                if (isMetaProperty(node.parent) && node.parent.name.escapedText === "defer") {
+                    return undefined;
+                }
+                // falls through
             case SyntaxKind.NewKeyword:
                 return isMetaProperty(node.parent) ? checkMetaPropertyKeyword(node.parent).symbol : undefined;
             case SyntaxKind.InstanceOfKeyword:
@@ -52841,17 +52911,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const blockScopeFlags = declarationList.flags & NodeFlags.BlockScoped;
-        if ((blockScopeFlags === NodeFlags.Using || blockScopeFlags === NodeFlags.AwaitUsing) && isForInStatement(declarationList.parent)) {
-            return grammarErrorOnNode(
-                declarationList,
-                blockScopeFlags === NodeFlags.Using ?
-                    Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
-                    Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
-            );
-        }
+        if (blockScopeFlags === NodeFlags.Using || blockScopeFlags === NodeFlags.AwaitUsing) {
+            if (isForInStatement(declarationList.parent)) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_a_using_declaration :
+                        Diagnostics.The_left_hand_side_of_a_for_in_statement_cannot_be_an_await_using_declaration,
+                );
+            }
 
-        if (blockScopeFlags === NodeFlags.AwaitUsing) {
-            return checkAwaitGrammar(declarationList);
+            if (declarationList.flags & NodeFlags.Ambient) {
+                return grammarErrorOnNode(
+                    declarationList,
+                    blockScopeFlags === NodeFlags.Using ?
+                        Diagnostics.using_declarations_are_not_allowed_in_ambient_contexts :
+                        Diagnostics.await_using_declarations_are_not_allowed_in_ambient_contexts,
+                );
+            }
+
+            if (blockScopeFlags === NodeFlags.AwaitUsing) {
+                return checkAwaitGrammar(declarationList);
+            }
         }
 
         return false;
@@ -52883,7 +52964,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     blockScopeKind === NodeFlags.Using ? "using" :
                     blockScopeKind === NodeFlags.AwaitUsing ? "await using" :
                     Debug.fail("Unknown BlockScope flag");
-                return grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
+                error(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, keyword);
             }
         }
     }
@@ -52898,7 +52979,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.ImportKeyword:
                 if (escapedText !== "meta") {
-                    return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    const isCallee = isCallExpression(node.parent) && node.parent.expression === node;
+                    if (escapedText === "defer") {
+                        if (!isCallee) {
+                            return grammarErrorAtPos(node, node.end, 0, Diagnostics._0_expected, "(");
+                        }
+                    }
+                    else {
+                        if (isCallee) {
+                            return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer, unescapeLeadingUnderscores(node.name.escapedText));
+                        }
+                        return grammarErrorOnNode(node.name, Diagnostics._0_is_not_a_valid_meta_property_for_keyword_1_Did_you_mean_2, unescapeLeadingUnderscores(node.name.escapedText), tokenToString(node.keywordToken), "meta");
+                    }
                 }
                 break;
         }
@@ -52939,7 +53031,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function grammarErrorOnNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): boolean {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
-            diagnostics.add(createDiagnosticForNode(node, message, ...args));
+            error(node, message, ...args);
             return true;
         }
         return false;
@@ -53157,11 +53249,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarImportClause(node: ImportClause): boolean {
-        if (node.isTypeOnly && node.name && node.namedBindings) {
-            return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+        if (node.phaseModifier === SyntaxKind.TypeKeyword) {
+            if (node.name && node.namedBindings) {
+                return grammarErrorOnNode(node, Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both);
+            }
+            if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return checkGrammarNamedImportsOrExports(node.namedBindings);
+            }
         }
-        if (node.isTypeOnly && node.namedBindings?.kind === SyntaxKind.NamedImports) {
-            return checkGrammarNamedImportsOrExports(node.namedBindings);
+        else if (node.phaseModifier === SyntaxKind.DeferKeyword) {
+            if (node.name) {
+                return grammarErrorOnNode(node, Diagnostics.Default_imports_are_not_allowed_in_a_deferred_import);
+            }
+            if (node.namedBindings?.kind === SyntaxKind.NamedImports) {
+                return grammarErrorOnNode(node, Diagnostics.Named_imports_are_not_allowed_in_a_deferred_import);
+            }
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve);
+            }
         }
         return false;
     }
@@ -53184,7 +53289,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
         }
 
-        if (moduleKind === ModuleKind.ES2015) {
+        if (node.expression.kind === SyntaxKind.MetaProperty) {
+            if (moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Preserve) {
+                return grammarErrorOnNode(node, Diagnostics.Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve);
+            }
+        }
+        else if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_node20_or_nodenext);
         }
 
@@ -53425,7 +53535,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
         getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),
         useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         redirectTargetsMap: host.redirectTargetsMap,
-        getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
+        getRedirectFromSourceFile: fileName => host.getRedirectFromSourceFile(fileName),
         isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
         fileExists: fileName => host.fileExists(fileName),
         getFileIncludeReasons: () => host.getFileIncludeReasons(),

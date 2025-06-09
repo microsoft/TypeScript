@@ -2458,7 +2458,7 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getPackageJsonInfoCache: () => program.getModuleResolutionCache()?.getPackageJsonInfoCache(),
         getGlobalTypingsCacheLocation: maybeBind(host, host.getGlobalTypingsCacheLocation),
         redirectTargetsMap: program.redirectTargetsMap,
-        getProjectReferenceRedirect: fileName => program.getProjectReferenceRedirect(fileName),
+        getRedirectFromSourceFile: fileName => program.getRedirectFromSourceFile(fileName),
         isSourceOfProjectReferenceRedirect: fileName => program.isSourceOfProjectReferenceRedirect(fileName),
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
@@ -2488,7 +2488,7 @@ export function makeImport(defaultImport: Identifier | undefined, namedImports: 
     return factory.createImportDeclaration(
         /*modifiers*/ undefined,
         defaultImport || namedImports
-            ? factory.createImportClause(!!isTypeOnly, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
+            ? factory.createImportClause(isTypeOnly ? SyntaxKind.TypeKeyword : undefined, defaultImport, namedImports && namedImports.length ? factory.createNamedImports(namedImports) : undefined)
             : undefined,
         typeof moduleSpecifier === "string" ? makeStringLiteral(moduleSpecifier, quotePreference) : moduleSpecifier,
         /*attributes*/ undefined,
