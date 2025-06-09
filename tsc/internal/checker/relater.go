@@ -1217,10 +1217,12 @@ func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminat
 		for i := range types {
 			if include[i] != TernaryFalse {
 				targetType := c.getTypeOfPropertyOrIndexSignatureOfType(types[i], discriminator.name(n))
-				if targetType != nil && discriminator.matches(n, targetType) {
-					matched = true
-				} else {
-					include[i] = TernaryMaybe
+				if targetType != nil {
+					if discriminator.matches(n, targetType) {
+						matched = true
+					} else {
+						include[i] = TernaryMaybe
+					}
 				}
 			}
 		}
