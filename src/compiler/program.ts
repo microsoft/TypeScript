@@ -4986,8 +4986,8 @@ function updateHostForUseSourceOfProjectReferenceRedirect(host: HostForUseSource
 
     function fileOrDirectoryExistsUsingSource(fileOrDirectory: string, isFile: boolean): boolean {
         const fileOrDirectoryExistsUsingSource = isFile ?
-            (file: string) => fileExistsIfProjectReferenceDts(file) :
-            (dir: string) => directoryExistsIfProjectReferenceDeclDir(dir);
+            fileExistsIfProjectReferenceDts :
+            directoryExistsIfProjectReferenceDeclDir;
         // Check current directory or file
         const result = fileOrDirectoryExistsUsingSource(fileOrDirectory);
         if (result !== undefined) return result;

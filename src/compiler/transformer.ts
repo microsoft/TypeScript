@@ -87,6 +87,7 @@ function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<Source
         case ModuleKind.ES2015:
         case ModuleKind.Node16:
         case ModuleKind.Node18:
+        case ModuleKind.Node20:
         case ModuleKind.NodeNext:
         case ModuleKind.CommonJS:
             // Wraps `transformModule` and `transformECMAScriptModule` and

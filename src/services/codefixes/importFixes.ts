@@ -1559,6 +1559,7 @@ function getUmdImportKind(importingFile: SourceFile | FutureSourceFile, program:
             return ImportKind.Namespace;
         case ModuleKind.Node16:
         case ModuleKind.Node18:
+        case ModuleKind.Node20:
         case ModuleKind.NodeNext:
             return getImpliedNodeFormatForEmit(importingFile, program) === ModuleKind.ESNext ? ImportKind.Namespace : ImportKind.CommonJS;
         default:
