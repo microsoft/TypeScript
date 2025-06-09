@@ -8392,7 +8392,10 @@ namespace Parser {
             phaseModifier = SyntaxKind.TypeKeyword;
             identifier = isIdentifier() ? parseIdentifier() : undefined;
         }
-        else if (identifier?.escapedText === "defer" && token() !== SyntaxKind.FromKeyword) {
+        else if (
+            identifier?.escapedText === "defer" &&
+            (token() === SyntaxKind.FromKeyword ? !lookAhead(nextTokenIsStringLiteral) : token() !== SyntaxKind.CommaToken && token() !== SyntaxKind.EqualsToken)
+        ) {
             phaseModifier = SyntaxKind.DeferKeyword;
             identifier = isIdentifier() ? parseIdentifier() : undefined;
         }
