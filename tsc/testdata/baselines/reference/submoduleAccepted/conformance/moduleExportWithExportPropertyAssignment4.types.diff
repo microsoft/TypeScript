@@ -6,47 +6,46 @@
  var mod1 = require('./mod1')
 ->mod1 : typeof mod1
 ->require('./mod1') : typeof mod1
-+>mod1 : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>require('./mod1') : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
++>mod1 : any
++>require('./mod1') : any
  >require : (name: string) => any
  >'./mod1' : "./mod1"
 
-@@= skipped -9, +9 lines =@@
- >mod1.justExport.toFixed() : string
- >mod1.justExport.toFixed : (fractionDigits?: number) => string
- >mod1.justExport : number
+ mod1.justExport.toFixed()
+->mod1.justExport.toFixed() : string
+->mod1.justExport.toFixed : (fractionDigits?: number) => string
+->mod1.justExport : number
 ->mod1 : typeof mod1
-+>mod1 : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
- >justExport : number
- >toFixed : (fractionDigits?: number) => string
+->justExport : number
+->toFixed : (fractionDigits?: number) => string
++>mod1.justExport.toFixed() : any
++>mod1.justExport.toFixed : any
++>mod1.justExport : any
++>mod1 : any
++>justExport : any
++>toFixed : any
 
  mod1.bothBefore.toFixed() // error
-->mod1.bothBefore.toFixed() : any
-->mod1.bothBefore.toFixed : any
+ >mod1.bothBefore.toFixed() : any
+ >mod1.bothBefore.toFixed : any
 ->mod1.bothBefore : number | "string"
 ->mod1 : typeof mod1
 ->bothBefore : number | "string"
-->toFixed : any
-+>mod1.bothBefore.toFixed() : string
-+>mod1.bothBefore.toFixed : (fractionDigits?: number) => string
-+>mod1.bothBefore : number
-+>mod1 : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothBefore : number
-+>toFixed : (fractionDigits?: number) => string
++>mod1.bothBefore : any
++>mod1 : any
++>bothBefore : any
+ >toFixed : any
 
  mod1.bothAfter.toFixed()
-->mod1.bothAfter.toFixed() : any
-->mod1.bothAfter.toFixed : any
+ >mod1.bothAfter.toFixed() : any
+ >mod1.bothAfter.toFixed : any
 ->mod1.bothAfter : number | "string"
 ->mod1 : typeof mod1
 ->bothAfter : number | "string"
-->toFixed : any
-+>mod1.bothAfter.toFixed() : string
-+>mod1.bothAfter.toFixed : (fractionDigits?: number) => string
-+>mod1.bothAfter : number
-+>mod1 : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothAfter : number
-+>toFixed : (fractionDigits?: number) => string
++>mod1.bothAfter : any
++>mod1 : any
++>bothAfter : any
+ >toFixed : any
 
  mod1.justProperty.length
 ->mod1.justProperty.length : number
@@ -56,104 +55,80 @@
 ->length : number
 +>mod1.justProperty.length : any
 +>mod1.justProperty : any
-+>mod1 : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
++>mod1 : any
 +>justProperty : any
 +>length : any
 
  === requires.d.ts ===
  declare var module: { exports: any };
-@@= skipped -40, +40 lines =@@
- /// <reference path='./requires.d.ts' />
- module.exports.bothBefore = 'string'
- >module.exports.bothBefore = 'string' : "string"
+@@= skipped -44, +44 lines =@@
+ declare function require(name: string): any;
+ >require : (name: string) => any
+ >name : string
+-
+-=== mod1.js ===
+-/// <reference path='./requires.d.ts' />
+-module.exports.bothBefore = 'string'
+->module.exports.bothBefore = 'string' : "string"
 ->module.exports.bothBefore : number | "string"
 ->module.exports : typeof A
 ->module : { exports: typeof A; }
 ->exports : typeof A
 ->bothBefore : number | "string"
-+>module.exports.bothBefore : number
-+>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
-+>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothBefore : number
- >'string' : "string"
-
- A.justExport = 4
- >A.justExport = 4 : 4
- >A.justExport : number
+->'string' : "string"
+-
+-A.justExport = 4
+->A.justExport = 4 : 4
+->A.justExport : number
 ->A : typeof A
-+>A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
- >justExport : number
- >4 : 4
-
- A.bothBefore = 2
- >A.bothBefore = 2 : 2
+->justExport : number
+->4 : 4
+-
+-A.bothBefore = 2
+->A.bothBefore = 2 : 2
 ->A.bothBefore : number | "string"
 ->A : typeof A
 ->bothBefore : number | "string"
-+>A.bothBefore : number
-+>A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothBefore : number
- >2 : 2
-
- A.bothAfter = 3
- >A.bothAfter = 3 : 3
+->2 : 2
+-
+-A.bothAfter = 3
+->A.bothAfter = 3 : 3
 ->A.bothAfter : number | "string"
 ->A : typeof A
 ->bothAfter : number | "string"
-+>A.bothAfter : number
-+>A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothAfter : number
- >3 : 3
-
- module.exports = A
+->3 : 3
+-
+-module.exports = A
 ->module.exports = A : typeof A
 ->module.exports : typeof A
 ->module : { exports: typeof A; }
 ->exports : typeof A
 ->A : typeof A
-+>module.exports = A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
-+>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-
- function A() {
+-
+-function A() {
 ->A : typeof A
-+>A : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-
-     this.p = 1
- >this.p = 1 : 1
- >this.p : any
+-
+-    this.p = 1
+->this.p = 1 : 1
+->this.p : any
 ->this : this
-+>this : any
- >p : any
- >1 : 1
- }
- module.exports.bothAfter = 'string'
- >module.exports.bothAfter = 'string' : "string"
+->p : any
+->1 : 1
+-}
+-module.exports.bothAfter = 'string'
+->module.exports.bothAfter = 'string' : "string"
 ->module.exports.bothAfter : number | "string"
 ->module.exports : typeof A
 ->module : { exports: typeof A; }
 ->exports : typeof A
 ->bothAfter : number | "string"
-+>module.exports.bothAfter : number
-+>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
-+>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>bothAfter : number
- >'string' : "string"
-
- module.exports.justProperty = 'string'
- >module.exports.justProperty = 'string' : "string"
+->'string' : "string"
+-
+-module.exports.justProperty = 'string'
+->module.exports.justProperty = 'string' : "string"
 ->module.exports.justProperty : "string"
 ->module.exports : typeof A
 ->module : { exports: typeof A; }
 ->exports : typeof A
 ->justProperty : "string"
-+>module.exports.justProperty : any
-+>module.exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>module : { A: { (): void; justExport: number; bothBefore: number; bothAfter: number; }; }
-+>exports : { (): void; justExport: number; bothBefore: number; bothAfter: number; }
-+>justProperty : any
- >'string' : "string"
+->'string' : "string"

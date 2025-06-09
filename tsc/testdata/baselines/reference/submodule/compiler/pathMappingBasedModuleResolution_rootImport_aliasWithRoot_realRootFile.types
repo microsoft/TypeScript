@@ -5,13 +5,9 @@ import { foo } from "/foo";
 >foo : () => void
 
 import { bar } from "/bar";
->bar : () => void
+>bar : any
 
 === /foo.ts ===
 export function foo() {}
 >foo : () => void
-
-=== /bar.js ===
-export function bar() {}
->bar : () => void
 

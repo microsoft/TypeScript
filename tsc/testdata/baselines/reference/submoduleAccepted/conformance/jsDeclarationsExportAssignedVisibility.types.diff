@@ -1,18 +1,32 @@
 --- old.jsDeclarationsExportAssignedVisibility.types
 +++ new.jsDeclarationsExportAssignedVisibility.types
-@@= skipped -12, +12 lines =@@
+@@= skipped -1, +1 lines =@@
+
+ === index.js ===
+ const Obj = require("./obj");
+->Obj : typeof Obj
+->require("./obj") : typeof Obj
++>Obj : any
++>require("./obj") : any
+ >require : any
+ >"./obj" : "./obj"
+
+@@= skipped -10, +10 lines =@@
+
      constructor() {
          this.usage = new Obj();
- >this.usage = new Obj() : Obj
-->this.usage : any
-+>this.usage : Obj
+->this.usage = new Obj() : Obj
++>this.usage = new Obj() : any
+ >this.usage : any
  >this : this
-->usage : any
-+>usage : Obj
- >new Obj() : Obj
- >Obj : typeof Obj
+ >usage : any
+->new Obj() : Obj
+->Obj : typeof Obj
++>new Obj() : any
++>Obj : any
      }
-@@= skipped -11, +11 lines =@@
+ }
+
  module.exports = Container;
  >module.exports = Container : typeof Container
  >module.exports : typeof Container
@@ -21,29 +35,21 @@
  >exports : typeof Container
  >Container : typeof Container
 
- === obj.js ===
- module.exports = class Obj {
+-=== obj.js ===
+-module.exports = class Obj {
 ->module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("obj")
 ->module.exports : typeof import("obj")
 ->module : { exports: typeof import("obj"); }
 ->exports : typeof import("obj")
 ->class Obj {    constructor() {        this.x = 12;    }} : typeof import("obj")
 ->Obj : typeof import("obj")
-+>module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("./obj")
-+>module.exports : typeof import("./obj")
-+>module : { Obj: typeof import("./obj"); }
-+>exports : typeof import("./obj")
-+>class Obj {    constructor() {        this.x = 12;    }} : typeof import("./obj")
-+>Obj : typeof import("./obj")
-
-     constructor() {
-         this.x = 12;
- >this.x = 12 : 12
+-
+-    constructor() {
+-        this.x = 12;
+->this.x = 12 : 12
 ->this.x : any
-+>this.x : number
- >this : this
+->this : this
 ->x : any
-+>x : number
- >12 : 12
-     }
- }
+->12 : 12
+-    }
+-}

@@ -26,12 +26,9 @@
 ->util.existy : () => void
 ->util : typeof util
 ->existy : () => void
-+>util.existy : any
-+>util : any
-+>existy : any
-
- === mod.js ===
- const util = exports = module.exports = {}
+-
+-=== mod.js ===
+-const util = exports = module.exports = {}
 ->util : typeof module.exports
 ->exports = module.exports = {} : typeof module.exports
 ->exports : typeof import("mod")
@@ -39,25 +36,20 @@
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>util : {}
-+>exports = module.exports = {} : {}
-+>exports : any
-+>module.exports = {} : {}
-+>module.exports : any
-+>module : any
-+>exports : any
- >{} : {}
-
- if (!!false) {
-@@= skipped -27, +27 lines =@@
-
-     util.existy = function () { }
- >util.existy = function () { } : () => void
+->{} : {}
+-
+-if (!!false) {
+->!!false : boolean
+->!false : true
+->false : false
+-
+-    util.existy = function () { }
+->util.existy = function () { } : () => void
 ->util.existy : () => void
 ->util : typeof module.exports
 ->existy : () => void
+->function () { } : () => void
+-}
 +>util.existy : any
-+>util : {}
++>util : any
 +>existy : any
- >function () { } : () => void
- }

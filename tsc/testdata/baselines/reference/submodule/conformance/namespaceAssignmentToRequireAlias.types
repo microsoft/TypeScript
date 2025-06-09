@@ -2,8 +2,8 @@
 
 === bug40140.js ===
 const u = require('untyped');
->u : {}
->require('untyped') : {}
+>u : any
+>require('untyped') : any
 >require : any
 >'untyped' : "untyped"
 
@@ -11,7 +11,7 @@ u.assignment.nested = true
 >u.assignment.nested = true : true
 >u.assignment.nested : any
 >u.assignment : any
->u : {}
+>u : any
 >assignment : any
 >nested : any
 >true : true
@@ -19,15 +19,7 @@ u.assignment.nested = true
 u.noError()
 >u.noError() : any
 >u.noError : any
->u : {}
+>u : any
 >noError : any
 
-
-=== node_modules/untyped/index.js ===
-module.exports = {}
->module.exports = {} : {}
->module.exports : {}
->module : { "export=": {}; }
->exports : {}
->{} : {}
 

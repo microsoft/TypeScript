@@ -4,7 +4,3 @@
 
 import "server-only";
 
-=== node_modules/server-only/index.js ===
-throw new Error();
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
-

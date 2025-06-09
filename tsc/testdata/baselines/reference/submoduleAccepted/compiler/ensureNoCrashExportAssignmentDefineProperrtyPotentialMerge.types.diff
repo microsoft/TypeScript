@@ -6,8 +6,8 @@
  const _item = require("./namespacer");
 ->_item : typeof _item
 ->require("./namespacer") : typeof _item
-+>_item : {}
-+>require("./namespacer") : {}
++>_item : any
++>require("./namespacer") : any
  >require : any
  >"./namespacer" : "./namespacer"
 
@@ -33,79 +33,58 @@
  >"exports" : "exports"
  >{ value: "oh no" } : { value: string; }
  >value : string
-@@= skipped -25, +25 lines =@@
-
- === namespacey.js ===
- const A = {}
+ >"oh no" : "oh no"
+-
+-=== namespacey.js ===
+-const A = {}
 ->A : typeof A
-+>A : {}
- >{} : {}
-
- A.bar = class Q {}
- >A.bar = class Q {} : typeof Q
+->{} : {}
+-
+-A.bar = class Q {}
+->A.bar = class Q {} : typeof Q
 ->A.bar : typeof Q
 ->A : typeof A
 ->bar : typeof Q
-+>A.bar : any
-+>A : {}
-+>bar : any
- >class Q {} : typeof Q
- >Q : typeof Q
-
- module.exports = A;
+->class Q {} : typeof Q
+->Q : typeof Q
+-
+-module.exports = A;
 ->module.exports = A : typeof A
 ->module.exports : typeof A
 ->module : { exports: typeof A; }
 ->exports : typeof A
 ->A : typeof A
-+>module.exports = A : {}
-+>module.exports : {}
-+>module : { readonly A: {}; }
-+>exports : {}
-+>A : {}
-
- === namespacer.js ===
- const B = {}
+-
+-=== namespacer.js ===
+-const B = {}
 ->B : typeof B
-+>B : {}
- >{} : {}
-
- B.NS = require("./namespacey");
+->{} : {}
+-
+-B.NS = require("./namespacey");
 ->B.NS = require("./namespacey") : typeof A
 ->B.NS : string | typeof A
 ->B : typeof B
 ->NS : string | typeof A
 ->require("./namespacey") : typeof A
-+>B.NS = require("./namespacey") : any
-+>B.NS : any
-+>B : {}
-+>NS : any
-+>require("./namespacey") : any
- >require : any
- >"./namespacey" : "./namespacey"
-
- Object.defineProperty(B, "NS", { value: "why though", writable: true });
+->require : any
+->"./namespacey" : "./namespacey"
+-
+-Object.defineProperty(B, "NS", { value: "why though", writable: true });
 ->Object.defineProperty(B, "NS", { value: "why though", writable: true }) : typeof B
-+>Object.defineProperty(B, "NS", { value: "why though", writable: true }) : {}
- >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
- >Object : ObjectConstructor
- >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
+->Object : ObjectConstructor
+->defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 ->B : typeof B
-+>B : {}
- >"NS" : "NS"
- >{ value: "why though", writable: true } : { value: string; writable: true; }
- >value : string
-@@= skipped -46, +46 lines =@@
- >true : true
-
- module.exports = B;
+->"NS" : "NS"
+->{ value: "why though", writable: true } : { value: string; writable: true; }
+->value : string
+->"why though" : "why though"
+->writable : true
+->true : true
+-
+-module.exports = B;
 ->module.exports = B : typeof B
 ->module.exports : typeof B
 ->module : { exports: typeof B; }
 ->exports : typeof B
 ->B : typeof B
-+>module.exports = B : {}
-+>module.exports : {}
-+>module : { readonly B: {}; }
-+>exports : {}
-+>B : {}

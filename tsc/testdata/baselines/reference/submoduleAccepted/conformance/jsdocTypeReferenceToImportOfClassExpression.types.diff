@@ -1,6 +1,16 @@
 --- old.jsdocTypeReferenceToImportOfClassExpression.types
 +++ new.jsdocTypeReferenceToImportOfClassExpression.types
-@@= skipped -9, +9 lines =@@
+@@= skipped -1, +1 lines =@@
+
+ === MC.js ===
+ const MW = require("./MW");
+->MW : typeof MW
+->require("./MW") : typeof MW
++>MW : any
++>require("./MW") : any
+ >require : any
+ >"./MW" : "./MW"
+
  /** @typedef {number} Cictema */
 
  module.exports = class MC {
@@ -18,31 +28,42 @@
 +>MC : typeof import("./MC")
 
    watch() {
- >watch : () => MW
-@@= skipped -27, +27 lines =@@
-    * @param {MC} compiler the compiler
-    */
-   constructor(compiler) {
-->compiler : import("MC")
-+>compiler : import("./MC")
+->watch : () => MW
++>watch : () => any
 
-     this.compiler = compiler;
+     return new MW(this);
+->new MW(this) : MW
+->MW : typeof MW
++>new MW(this) : any
++>MW : any
+ >this : this
+   }
+ };
+-
+-=== MW.js ===
+-/** @typedef {import("./MC")} MC */
+-
+-class MW {
+->MW : MW
+-
+-  /**
+-   * @param {MC} compiler the compiler
+-   */
+-  constructor(compiler) {
+->compiler : import("MC")
+-
+-    this.compiler = compiler;
 ->this.compiler = compiler : import("MC")
 ->this.compiler : any
-+>this.compiler = compiler : import("./MC")
-+>this.compiler : import("./MC")
- >this : this
+->this : this
 ->compiler : any
 ->compiler : import("MC")
-+>compiler : import("./MC")
-+>compiler : import("./MC")
-   }
- }
-
- module.exports = MW;
- >module.exports = MW : typeof MW
- >module.exports : typeof MW
+-  }
+-}
+-
+-module.exports = MW;
+->module.exports = MW : typeof MW
+->module.exports : typeof MW
 ->module : { exports: typeof MW; }
-+>module : { MW: typeof MW; }
- >exports : typeof MW
- >MW : typeof MW
+->exports : typeof MW
+->MW : typeof MW
