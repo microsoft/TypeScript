@@ -12,6 +12,10 @@ func TestParseCompilerOptionNoMissingFields(t *testing.T) {
 	t.Parallel()
 	var missingKeys []string
 	for _, field := range reflect.VisibleFields(reflect.TypeFor[core.CompilerOptions]()) {
+		if !field.IsExported() {
+			continue
+		}
+
 		keyName := field.Name
 		// use the JSON key from the tag, if present
 		// e.g. `json:"dog[,anythingelse]"` --> dog

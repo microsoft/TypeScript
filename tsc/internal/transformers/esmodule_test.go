@@ -19,7 +19,7 @@ func TestESModuleTransformer(t *testing.T) {
 		output  string
 		other   string
 		jsx     bool
-		options core.CompilerOptions
+		options *core.CompilerOptions
 	}{
 		// ImportDeclaration
 		{
@@ -31,19 +31,19 @@ func TestESModuleTransformer(t *testing.T) {
 			title:   "ImportDeclaration#2",
 			input:   `import "./other.ts"`,
 			output:  `import "./other.js";`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title:   "ImportDeclaration#3",
 			input:   `import "./other.tsx"`,
 			output:  `import "./other.js";`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title:   "ImportDeclaration#4",
 			input:   `import "./other.tsx"`,
 			output:  `import "./other.jsx";`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
 		},
 
 		// ImportEqualsDeclaration
@@ -58,7 +58,7 @@ func TestESModuleTransformer(t *testing.T) {
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("other");`,
-			options: core.CompilerOptions{Module: core.ModuleKindNode16},
+			options: &core.CompilerOptions{Module: core.ModuleKindNode16},
 		},
 		{
 			title: "ImportEqualsDeclaration#3",
@@ -66,7 +66,7 @@ const x = __require("other");`,
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("./other.js");`,
-			options: core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "ImportEqualsDeclaration#4",
@@ -74,7 +74,7 @@ const x = __require("./other.js");`,
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("./other.js");`,
-			options: core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "ImportEqualsDeclaration#5",
@@ -82,7 +82,7 @@ const x = __require("./other.js");`,
 			output: `import { createRequire as _createRequire } from "module";
 const __require = _createRequire(import.meta.url);
 const x = __require("./other.jsx");`,
-			options: core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
+			options: &core.CompilerOptions{Module: core.ModuleKindNode16, RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
 		},
 		{
 			title: "ImportEqualsDeclaration#6",
@@ -91,7 +91,7 @@ const x = __require("./other.jsx");`,
 const __require = _createRequire(import.meta.url);
 const x = __require("other");
 export { x };`,
-			options: core.CompilerOptions{Module: core.ModuleKindNode16},
+			options: &core.CompilerOptions{Module: core.ModuleKindNode16},
 		},
 
 		// ExportAssignment
@@ -104,7 +104,7 @@ export { x };`,
 			title:   "ExportAssignment#2",
 			input:   `export = x`,
 			output:  `module.exports = x;`,
-			options: core.CompilerOptions{Module: core.ModuleKindPreserve},
+			options: &core.CompilerOptions{Module: core.ModuleKindPreserve},
 		},
 
 		// ExportDeclaration
@@ -117,13 +117,13 @@ export { x };`,
 			title:   "ExportDeclaration#2",
 			input:   `export * from "./other.ts";`,
 			output:  `export * from "./other.js";`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title:   "ExportDeclaration#3",
 			input:   `export * as x from "other";`,
 			output:  `export * as x from "other";`,
-			options: core.CompilerOptions{Module: core.ModuleKindESNext},
+			options: &core.CompilerOptions{Module: core.ModuleKindESNext},
 		},
 		{
 			title:  "ExportDeclaration#4",
@@ -160,7 +160,7 @@ export default default_1;`,
 import("./other.ts");`,
 			output: `export {};
 import("./other.js");`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "CallExpression#4",
@@ -176,7 +176,7 @@ import(x);`,
 };
 export {};
 import(__rewriteRelativeImportExtension(x));`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "CallExpression#5",
@@ -192,7 +192,7 @@ import(x);`,
 };
 export {};
 import(__rewriteRelativeImportExtension(x, true));`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
 		},
 		{
 			title: "CallExpression#6",
@@ -201,7 +201,7 @@ import(x);`,
 			output: `import { __rewriteRelativeImportExtension } from "tslib";
 export {};
 import(__rewriteRelativeImportExtension(x));`,
-			options: core.CompilerOptions{Module: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: &core.CompilerOptions{Module: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 		{
 			title: "CallExpression#7",
@@ -212,7 +212,7 @@ var __rewriteRelativeImportExtension;`,
 export {};
 import(__rewriteRelativeImportExtension_1(x));
 var __rewriteRelativeImportExtension;`,
-			options: core.CompilerOptions{Module: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: &core.CompilerOptions{Module: core.ModuleKindESNext, RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 	}
 	for _, rec := range data {
@@ -220,6 +220,10 @@ var __rewriteRelativeImportExtension;`,
 			t.Parallel()
 
 			compilerOptions := rec.options
+			if compilerOptions == nil {
+				compilerOptions = &core.CompilerOptions{}
+			}
+
 			sourceFileAffecting := compilerOptions.SourceFileAffecting()
 			file := parsetestutil.ParseTypeScript(rec.input, rec.jsx)
 			parsetestutil.CheckDiagnostics(t, file)
@@ -233,10 +237,10 @@ var __rewriteRelativeImportExtension;`,
 			}
 
 			emitContext := printer.NewEmitContext()
-			resolver := binder.NewReferenceResolver(&compilerOptions, binder.ReferenceResolverHooks{})
+			resolver := binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 
-			file = NewRuntimeSyntaxTransformer(emitContext, &compilerOptions, resolver).TransformSourceFile(file)
-			file = NewESModuleTransformer(emitContext, &compilerOptions, resolver, fakeGetEmitModuleFormatOfFile).TransformSourceFile(file)
+			file = NewRuntimeSyntaxTransformer(emitContext, compilerOptions, resolver).TransformSourceFile(file)
+			file = NewESModuleTransformer(emitContext, compilerOptions, resolver, fakeGetEmitModuleFormatOfFile).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)
 		})
 	}

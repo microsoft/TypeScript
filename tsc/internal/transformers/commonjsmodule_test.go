@@ -23,7 +23,7 @@ func TestCommonJSModuleTransformer(t *testing.T) {
 		output  string
 		other   string
 		jsx     bool
-		options core.CompilerOptions
+		options *core.CompilerOptions
 	}{
 		// ImportDeclaration
 		{
@@ -100,7 +100,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const a = __importStar(require("other"));`,
-			options: core.CompilerOptions{ESModuleInterop: core.TSTrue},
+			options: &core.CompilerOptions{ESModuleInterop: core.TSTrue},
 		},
 		{
 			title: "ImportDeclaration#8",
@@ -109,7 +109,7 @@ const a = __importStar(require("other"));`,
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const a = tslib_1.__importStar(require("other"));`,
-			options: core.CompilerOptions{ESModuleInterop: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: &core.CompilerOptions{ESModuleInterop: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 
 		// ImportEqualsDeclaration
@@ -175,7 +175,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 const tslib_1 = require("tslib");
 exports.a = tslib_1.__importStar(require("other"));`,
-			options: core.CompilerOptions{ESModuleInterop: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: &core.CompilerOptions{ESModuleInterop: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 		{
 			title: "ExportDeclaration#5",
@@ -184,7 +184,7 @@ exports.a = tslib_1.__importStar(require("other"));`,
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 tslib_1.__exportStar(require("other"), exports);`,
-			options: core.CompilerOptions{ESModuleInterop: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: &core.CompilerOptions{ESModuleInterop: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 
 		// ExportAssignment
@@ -855,7 +855,7 @@ import("./other.ts");`,
 			output: `"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 Promise.resolve().then(() => require("./other.js"));`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "CallExpression#4",
@@ -872,7 +872,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 Promise.resolve(` + "`" + `${__rewriteRelativeImportExtension(x)}` + "`" + `).then(s => require(s));`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue},
 		},
 		{
 			title: "CallExpression#5",
@@ -889,7 +889,7 @@ var __rewriteRelativeImportExtension = (this && this.__rewriteRelativeImportExte
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 Promise.resolve(` + "`" + `${__rewriteRelativeImportExtension(x, true)}` + "`" + `).then(s => require(s));`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, Jsx: core.JsxEmitPreserve},
 		},
 		{
 			title: "CallExpression#6",
@@ -899,7 +899,7 @@ import(x);`,
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 Promise.resolve(` + "`" + `${tslib_1.__rewriteRelativeImportExtension(x)}` + "`" + `).then(s => require(s));`,
-			options: core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
+			options: &core.CompilerOptions{RewriteRelativeImportExtensions: core.TSTrue, ImportHelpers: core.TSTrue},
 		},
 		{
 			title: "CallExpression#7",
@@ -1016,6 +1016,10 @@ exports.a = a;`,
 			t.Parallel()
 
 			compilerOptions := rec.options
+			if compilerOptions == nil {
+				compilerOptions = &core.CompilerOptions{}
+			}
+
 			compilerOptions.Module = core.ModuleKindCommonJS
 			sourceFileAffecting := compilerOptions.SourceFileAffecting()
 
@@ -1031,10 +1035,10 @@ exports.a = a;`,
 			}
 
 			emitContext := printer.NewEmitContext()
-			resolver := binder.NewReferenceResolver(&compilerOptions, binder.ReferenceResolverHooks{})
+			resolver := binder.NewReferenceResolver(compilerOptions, binder.ReferenceResolverHooks{})
 
-			file = NewRuntimeSyntaxTransformer(emitContext, &compilerOptions, resolver).TransformSourceFile(file)
-			file = NewCommonJSModuleTransformer(emitContext, &compilerOptions, resolver, fakeGetEmitModuleFormatOfFile).TransformSourceFile(file)
+			file = NewRuntimeSyntaxTransformer(emitContext, compilerOptions, resolver).TransformSourceFile(file)
+			file = NewCommonJSModuleTransformer(emitContext, compilerOptions, resolver, fakeGetEmitModuleFormatOfFile).TransformSourceFile(file)
 			emittestutil.CheckEmit(t, emitContext, file, rec.output)
 		})
 	}

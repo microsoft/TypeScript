@@ -170,8 +170,8 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		assert.Equal(t, tsBaseline.fileNames, newBaselineFileNames)
 
 		o, _ := json.Marshal(parsed.Options)
-		newParsedCompilerOptions := core.CompilerOptions{}
-		e := json.Unmarshal(o, &newParsedCompilerOptions)
+		newParsedCompilerOptions := &core.CompilerOptions{}
+		e := json.Unmarshal(o, newParsedCompilerOptions)
 		assert.NilError(t, e)
 		assert.DeepEqual(t, tsBaseline.options, newParsedCompilerOptions)
 
@@ -215,8 +215,8 @@ func parseExistingCompilerBaseline(t *testing.T, baseline string) *TestCommandLi
 	}
 
 	return &TestCommandLineParser{
-		options:      *baselineCompilerOptions,
-		watchoptions: *baselineWatchOptions,
+		options:      baselineCompilerOptions,
+		watchoptions: baselineWatchOptions,
 		fileNames:    fileNames,
 		errors:       errors,
 	}
@@ -300,8 +300,8 @@ type verifyNull struct {
 }
 
 type TestCommandLineParser struct {
-	options           core.CompilerOptions
-	watchoptions      core.WatchOptions
+	options           *core.CompilerOptions
+	watchoptions      *core.WatchOptions
 	fileNames, errors string
 }
 

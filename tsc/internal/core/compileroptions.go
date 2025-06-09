@@ -1,6 +1,7 @@
 package core
 
 import (
+	"reflect"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/collections"
@@ -11,6 +12,8 @@ import (
 //go:generate go tool mvdan.cc/gofumpt -lang=go1.24 -w compileroptions_stringer_generated.go
 
 type CompilerOptions struct {
+	_ noCopy
+
 	AllowJs                                   Tristate                                  `json:"allowJs,omitzero"`
 	AllowArbitraryExtensions                  Tristate                                  `json:"allowArbitraryExtensions,omitzero"`
 	AllowSyntheticDefaultImports              Tristate                                  `json:"allowSyntheticDefaultImports,omitzero"`
@@ -143,6 +146,36 @@ type CompilerOptions struct {
 	PprofDir       string   `json:"pprofDir,omitzero"`
 	SingleThreaded Tristate `json:"singleThreaded,omitzero"`
 	Quiet          Tristate `json:"quiet,omitzero"`
+}
+
+// noCopy may be embedded into structs which must not be copied
+// after the first use.
+//
+// See https://golang.org/issues/8005#issuecomment-190753527
+// for details.
+type noCopy struct{}
+
+// Lock is a no-op used by -copylocks checker from `go vet`.
+func (*noCopy) Lock()   {}
+func (*noCopy) Unlock() {}
+
+var optionsType = reflect.TypeFor[CompilerOptions]()
+
+// Clone creates a shallow copy of the CompilerOptions.
+func (options *CompilerOptions) Clone() *CompilerOptions {
+	// TODO: this could be generated code instead of reflection.
+	target := &CompilerOptions{}
+
+	sourceValue := reflect.ValueOf(options).Elem()
+	targetValue := reflect.ValueOf(target).Elem()
+
+	for i := range sourceValue.NumField() {
+		if optionsType.Field(i).IsExported() {
+			targetValue.Field(i).Set(sourceValue.Field(i))
+		}
+	}
+
+	return target
 }
 
 func (options *CompilerOptions) GetEmitScriptTarget() ScriptTarget {

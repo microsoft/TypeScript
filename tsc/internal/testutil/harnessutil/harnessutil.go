@@ -84,9 +84,12 @@ func CompileFiles(
 	currentDirectory string,
 	symlinks map[string]string,
 ) *CompilationResult {
-	var compilerOptions core.CompilerOptions
+	var compilerOptions *core.CompilerOptions
 	if tsconfig != nil {
-		compilerOptions = *tsconfig.ParsedConfig.CompilerOptions
+		compilerOptions = tsconfig.ParsedConfig.CompilerOptions.Clone()
+	}
+	if compilerOptions == nil {
+		compilerOptions = &core.CompilerOptions{}
 	}
 	// Set default options for tests
 	if compilerOptions.NewLine == core.NewLineKindNone {
@@ -100,10 +103,10 @@ func CompileFiles(
 
 	// Parse harness and compiler options from the test configuration
 	if testConfig != nil {
-		setOptionsFromTestConfig(t, testConfig, &compilerOptions, &harnessOptions)
+		setOptionsFromTestConfig(t, testConfig, compilerOptions, &harnessOptions)
 	}
 
-	return CompileFilesEx(t, inputFiles, otherFiles, &harnessOptions, &compilerOptions, currentDirectory, symlinks, tsconfig)
+	return CompileFilesEx(t, inputFiles, otherFiles, &harnessOptions, compilerOptions, currentDirectory, symlinks, tsconfig)
 }
 
 func CompileFilesEx(
@@ -225,9 +228,9 @@ func CompileFilesEx(
 	result.Symlinks = symlinks
 	result.Repeat = func(testConfig TestConfiguration) *CompilationResult {
 		newHarnessOptions := *harnessOptions
-		newCompilerOptions := *compilerOptions
-		setOptionsFromTestConfig(t, testConfig, &newCompilerOptions, &newHarnessOptions)
-		return CompileFilesEx(t, inputFiles, otherFiles, &newHarnessOptions, &newCompilerOptions, currentDirectory, symlinks, tsconfig)
+		newCompilerOptions := compilerOptions.Clone()
+		setOptionsFromTestConfig(t, testConfig, newCompilerOptions, &newHarnessOptions)
+		return CompileFilesEx(t, inputFiles, otherFiles, &newHarnessOptions, newCompilerOptions, currentDirectory, symlinks, tsconfig)
 	}
 	return result
 }
