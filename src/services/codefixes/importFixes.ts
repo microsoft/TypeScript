@@ -370,7 +370,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         );
 
         let fix: FixAddNewImport | ImportFixWithModuleSpecifier;
-        if (existingFix && importKind !== ImportKind.Namespace) {
+        if (existingFix && importKind !== ImportKind.Namespace && existingFix.kind !== ImportFixKind.UseNamespace && existingFix.kind !== ImportFixKind.JsdocTypeImport) {
             fix = {
                 ...existingFix,
                 addAsTypeOnly,
