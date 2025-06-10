@@ -192,11 +192,7 @@
  >param : Symbol(param, Decl(index.js, 162, 16))
      }
  }
-@@= skipped -22, +22 lines =@@
- >param : Symbol(param, Decl(index.js, 176, 16))
-
-         super(param);
-->super : Symbol(N, Decl(index.js, 152, 1))
+@@= skipped -26, +26 lines =@@
  >param : Symbol(param, Decl(index.js, 176, 16))
 
          this.another2 = param;
@@ -208,7 +204,7 @@
  >param : Symbol(param, Decl(index.js, 176, 16))
      }
  }
-@@= skipped -22, +21 lines =@@
+@@= skipped -18, +18 lines =@@
  >HasStatics : Symbol(HasStatics, Decl(index.js, 184, 38))
 
      static staticMethod() {}

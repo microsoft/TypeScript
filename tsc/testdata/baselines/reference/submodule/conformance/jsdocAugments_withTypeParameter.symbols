@@ -17,7 +17,9 @@ class B extends A {
 >m : Symbol(m, Decl(b.js, 1, 19))
 
         return this.x;
+>this.x : Symbol(x, Decl(a.d.ts, 0, 20))
 >this : Symbol(B, Decl(b.js, 0, 0))
+>x : Symbol(x, Decl(a.d.ts, 0, 20))
     }
 }
 

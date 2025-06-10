@@ -61,22 +61,7 @@
  >param : T
      }
  }
-@@= skipped -13, +13 lines =@@
-  */
- export class O extends N {
- >O : O<U>
-->N : N<U>
-+>N : typeof N
-
-     /**
-      * @param {U} param 
-@@= skipped -10, +10 lines =@@
-
-         super(param);
- >super(param) : void
-->super : typeof N
-+>super : any
- >param : U
+@@= skipped -28, +28 lines =@@
 
          this.another2 = param;
  >this.another2 = param : U
@@ -88,7 +73,7 @@
  >param : U
      }
  }
-@@= skipped -15, +15 lines =@@
+@@= skipped -10, +10 lines =@@
  var x = /** @type {*} */(null);
  >x : any
  >(null) : any

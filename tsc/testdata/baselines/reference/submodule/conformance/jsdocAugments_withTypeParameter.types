@@ -9,15 +9,15 @@ declare class A<T> { x: T }
 /** @augments A<number> */
 class B extends A {
 >B : B
->A : typeof A
+>A : A<number>
 
     m() {
->m : () => any
+>m : () => number
 
         return this.x;
->this.x : any
+>this.x : number
 >this : this
->x : any
+>x : number
     }
 }
 

@@ -18,7 +18,9 @@
 
          return this.x;
 ->this.x : Symbol(A.x, Decl(a.d.ts, 0, 20))
++>this.x : Symbol(x, Decl(a.d.ts, 0, 20))
  >this : Symbol(B, Decl(b.js, 0, 0))
 ->x : Symbol(A.x, Decl(a.d.ts, 0, 20))
++>x : Symbol(x, Decl(a.d.ts, 0, 20))
      }
  }

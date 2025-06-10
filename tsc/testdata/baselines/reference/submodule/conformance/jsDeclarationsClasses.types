@@ -284,7 +284,7 @@ export class N extends L {
  */
 export class O extends N {
 >O : O<U>
->N : typeof N
+>N : N<U>
 
     /**
      * @param {U} param 
@@ -294,7 +294,7 @@ export class O extends N {
 
         super(param);
 >super(param) : void
->super : any
+>super : typeof N
 >param : U
 
         this.another2 = param;

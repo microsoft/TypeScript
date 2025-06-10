@@ -1,8 +1,0 @@
---- old.extendsTag1.types
-+++ new.extendsTag1.types
-@@= skipped -6, +6 lines =@@
-  */
- class My extends Set {}
- >My : My<T>
-->Set : Set<T>
-+>Set : Set<any>
