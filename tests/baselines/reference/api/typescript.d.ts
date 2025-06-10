@@ -4393,7 +4393,8 @@ declare namespace ts {
         | VariableDeclaration
         | VariableStatement
         | WhileStatement
-        | WithStatement;
+        | WithStatement
+        | MappedTypeNode;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -4812,7 +4813,7 @@ declare namespace ts {
         readonly objectType: TypeNode;
         readonly indexType: TypeNode;
     }
-    interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer {
+    interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer, JSDocContainer {
         readonly kind: SyntaxKind.MappedType;
         readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
         readonly typeParameter: TypeParameterDeclaration;
