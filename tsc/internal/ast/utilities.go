@@ -1557,6 +1557,16 @@ func IsDottedName(node *Node) bool {
 	return false
 }
 
+func HasSamePropertyAccessName(node1, node2 *Node) bool {
+	if node1.Kind == KindIdentifier && node2.Kind == KindIdentifier {
+		return node1.Text() == node2.Text()
+	} else if node1.Kind == KindPropertyAccessExpression && node2.Kind == KindPropertyAccessExpression {
+		return node1.AsPropertyAccessExpression().Name().Text() == node2.AsPropertyAccessExpression().Name().Text() &&
+			HasSamePropertyAccessName(node1.AsPropertyAccessExpression().Expression, node2.AsPropertyAccessExpression().Expression)
+	}
+	return false
+}
+
 func IsAmbientModule(node *Node) bool {
 	return IsModuleDeclaration(node) && (node.AsModuleDeclaration().Name().Kind == KindStringLiteral || IsGlobalScopeAugmentation(node))
 }

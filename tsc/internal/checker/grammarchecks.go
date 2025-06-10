@@ -779,7 +779,7 @@ func (c *Checker) checkGrammarFunctionLikeDeclaration(node *ast.Node) bool {
 
 func (c *Checker) checkGrammarClassLikeDeclaration(node *ast.Node) bool {
 	file := ast.GetSourceFileOfNode(node)
-	return c.checkGrammarClassDeclarationHeritageClauses(node) || c.checkGrammarTypeParameterList(node.ClassLikeData().TypeParameters, file)
+	return c.checkGrammarClassDeclarationHeritageClauses(node, file) || c.checkGrammarTypeParameterList(node.ClassLikeData().TypeParameters, file)
 }
 
 func (c *Checker) checkGrammarArrowFunction(node *ast.Node, file *ast.SourceFile) bool {
@@ -907,7 +907,7 @@ func (c *Checker) checkGrammarExpressionWithTypeArguments(node *ast.Node /*Union
 	return c.checkGrammarTypeArguments(node, exprWithTypeArgs.TypeArguments)
 }
 
-func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node *ast.ClassLikeDeclaration) bool {
+func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node *ast.ClassLikeDeclaration, file *ast.SourceFile) bool {
 	seenExtendsClause := false
 	seenImplementsClause := false
 
@@ -930,6 +930,19 @@ func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node *ast.ClassLik
 					return c.grammarErrorOnFirstToken(typeNodes[1], diagnostics.Classes_can_only_extend_a_single_class)
 				}
 
+				for _, j := range node.JSDoc(file) {
+					for _, tag := range j.AsJSDoc().Tags.Nodes {
+						if tag.Kind == ast.KindJSDocAugmentsTag {
+							target := typeNodes[0].AsExpressionWithTypeArguments()
+							source := tag.AsJSDocAugmentsTag().ClassName.AsExpressionWithTypeArguments()
+							if !ast.HasSamePropertyAccessName(target.Expression, source.Expression) &&
+								target.Expression.Kind == ast.KindIdentifier &&
+								source.Expression.Kind == ast.KindIdentifier {
+								return c.grammarErrorOnNode(tag.AsJSDocAugmentsTag().ClassName, diagnostics.JSDoc_0_1_does_not_match_the_extends_2_clause, tag.AsJSDocAugmentsTag().TagName.Text(), source.Expression.Text(), target.Expression.Text())
+							}
+						}
+					}
+				}
 				seenExtendsClause = true
 			} else {
 				if heritageClause.Token != ast.KindImplementsKeyword {

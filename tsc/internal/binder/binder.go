@@ -537,9 +537,7 @@ func (b *Binder) combineFlowLists(head *ast.FlowList, tail *ast.FlowList) *ast.F
 }
 
 func (b *Binder) newSingleDeclaration(declaration *ast.Node) []*ast.Node {
-	nodes := b.singleDeclarationsPool.NewSlice(1)
-	nodes[0] = declaration
-	return nodes
+	return b.singleDeclarationsPool.NewSlice1(declaration)
 }
 
 func setFlowNodeReferenced(flow *ast.FlowNode) {

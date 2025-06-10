@@ -1,0 +1,14 @@
+main.js(2,15): error TS8023: JSDoc '@extends Mismatch' does not match the 'extends B' clause.
+
+
+==== super.js (0 errors) ====
+    export class B { }
+    
+==== main.js (1 errors) ====
+    import { B } from './super'
+    /** @extends {Mismatch} */
+                  ~~~~~~~~
+!!! error TS8023: JSDoc '@extends Mismatch' does not match the 'extends B' clause.
+    class C extends B { }
+    
+    

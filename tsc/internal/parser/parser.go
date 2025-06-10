@@ -2162,9 +2162,7 @@ func (p *Parser) parseModuleOrNamespaceDeclaration(pos int, hasJSDoc bool, modif
 		implicitExport := p.factory.NewModifier(ast.KindExportKeyword)
 		implicitExport.Loc = core.NewTextRange(p.nodePos(), p.nodePos())
 		implicitExport.Flags = ast.NodeFlagsReparsed
-		nodes := p.nodeSlicePool.NewSlice(1)
-		nodes[0] = implicitExport
-		implicitModifiers := p.newModifierList(implicitExport.Loc, nodes)
+		implicitModifiers := p.newModifierList(implicitExport.Loc, p.nodeSlicePool.NewSlice1(implicitExport))
 		body = p.parseModuleOrNamespaceDeclaration(p.nodePos(), false /*hasJSDoc*/, implicitModifiers, true /*nested*/, keyword)
 	} else {
 		body = p.parseModuleBlock()
@@ -3804,9 +3802,7 @@ func (p *Parser) parseModifiersForConstructorType() *ast.ModifierList {
 		modifier := p.factory.NewModifier(p.token)
 		p.nextToken()
 		p.finishNode(modifier, pos)
-		nodes := p.nodeSlicePool.NewSlice(1)
-		nodes[0] = modifier
-		return p.newModifierList(modifier.Loc, nodes)
+		return p.newModifierList(modifier.Loc, p.nodeSlicePool.NewSlice1(modifier))
 	}
 	return nil
 }
@@ -4455,9 +4451,7 @@ func (p *Parser) parseModifiersForArrowFunction() *ast.ModifierList {
 		p.nextToken()
 		modifier := p.factory.NewModifier(ast.KindAsyncKeyword)
 		p.finishNode(modifier, pos)
-		nodes := p.nodeSlicePool.NewSlice(1)
-		nodes[0] = modifier
-		return p.newModifierList(modifier.Loc, nodes)
+		return p.newModifierList(modifier.Loc, p.nodeSlicePool.NewSlice1(modifier))
 	}
 	return nil
 }

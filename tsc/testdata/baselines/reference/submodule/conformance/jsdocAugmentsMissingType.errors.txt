@@ -1,0 +1,14 @@
+/a.js(2,14): error TS8023: JSDoc '@augments ' does not match the 'extends A' clause.
+
+
+==== /a.js (1 errors) ====
+    class A { constructor() { this.x = 0; } }
+    /** @augments */
+                 
+!!! error TS8023: JSDoc '@augments ' does not match the 'extends A' clause.
+    class B extends A {
+        m() {
+            this.x
+        }
+    }
+    
