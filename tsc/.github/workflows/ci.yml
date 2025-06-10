@@ -176,8 +176,9 @@ jobs:
             main: true
           - os: windows-latest
             skip: ${{ github.event_name == 'merge_group' }}
-          - os: macos-latest
-            skip: ${{ github.event_name == 'merge_group' }}
+          # Skip macOS; we do not have any build tag'd files that require checking.
+          # - os: macos-latest
+          #   skip: ${{ github.event_name == 'merge_group' }}
           - os: ubuntu-latest
             name: 'noembed'
             noembed: true
