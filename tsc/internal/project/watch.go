@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -101,7 +101,7 @@ func createResolutionLookupGlobMapper(host ProjectHost) func(data map[tspath.Pat
 
 		// dir -> recursive
 		globSet := make(map[string]bool)
-		var seenDirs core.Set[string]
+		var seenDirs collections.Set[string]
 
 		for path, fileName := range data {
 			// Assuming all of the input paths are filenames, we can avoid

@@ -9,6 +9,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/stringutil"
@@ -76,8 +77,8 @@ func Run(t *testing.T, fileName string, actual string, opts Options) {
 	}
 }
 
-var submoduleAcceptedFileNames = sync.OnceValue(func() *core.Set[string] {
-	var set core.Set[string]
+var submoduleAcceptedFileNames = sync.OnceValue(func() *collections.Set[string] {
+	var set collections.Set[string]
 
 	submoduleAccepted := filepath.Join(repo.TestDataPath, "submoduleAccepted.txt")
 	if content, err := os.ReadFile(submoduleAccepted); err == nil {

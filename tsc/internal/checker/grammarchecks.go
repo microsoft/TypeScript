@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/jsnum"
@@ -1155,7 +1156,7 @@ func (c *Checker) checkGrammarObjectLiteralExpression(node *ast.ObjectLiteralExp
 func (c *Checker) checkGrammarJsxElement(node *ast.Node) bool {
 	c.checkGrammarJsxName(node.TagName())
 	c.checkGrammarTypeArguments(node, node.TypeArgumentList())
-	var seen core.Set[string]
+	var seen collections.Set[string]
 	for _, attrNode := range node.Attributes().AsJsxAttributes().Properties.Nodes {
 		if attrNode.Kind == ast.KindJsxSpreadAttribute {
 			continue

@@ -11,6 +11,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/binder"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -487,10 +488,10 @@ func (l *LanguageService) mergeReferences(program *compiler.Program, referencesT
 
 // === functions for find all ref implementation ===
 
-func (l *LanguageService) getReferencedSymbolsForNode(position int, node *ast.Node, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *core.Set[string]) []*SymbolAndEntries {
+func (l *LanguageService) getReferencedSymbolsForNode(position int, node *ast.Node, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
 	// !!! cancellationToken
 	if sourceFilesSet == nil || sourceFilesSet.Len() == 0 {
-		sourceFilesSet = core.NewSetWithSizeHint[string](len(sourceFiles))
+		sourceFilesSet = collections.NewSetWithSizeHint[string](len(sourceFiles))
 		for _, file := range sourceFiles {
 			sourceFilesSet.Add(file.FileName())
 		}
@@ -572,7 +573,7 @@ func (l *LanguageService) getReferencedSymbolsForNode(position int, node *ast.No
 	return l.mergeReferences(program, moduleReferences, references, moduleReferencesOfExportTarget)
 }
 
-func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol *ast.Symbol, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *core.Set[string]) []*SymbolAndEntries {
+func (l *LanguageService) getReferencedSymbolsForModuleIfDeclaredBySourceFile(symbol *ast.Symbol, program *compiler.Program, sourceFiles []*ast.SourceFile, options refOptions, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
 	moduleSourceFileName := ""
 	if symbol == nil || !((symbol.Flags&ast.SymbolFlagsModule != 0) && len(symbol.Declarations) != 0) {
 		return nil
@@ -867,7 +868,7 @@ func getMergedAliasedSymbolOfNamespaceExportDeclaration(node *ast.Node, symbol *
 	return nil
 }
 
-func getReferencedSymbolsForModule(program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *core.Set[string]) []*SymbolAndEntries {
+func getReferencedSymbolsForModule(program *compiler.Program, symbol *ast.Symbol, excludeImportTypeOfExportEquals bool, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string]) []*SymbolAndEntries {
 	// !!! not implemented
 	return nil
 }
@@ -922,7 +923,7 @@ func getReferenceAtPosition(sourceFile *ast.SourceFile, position int, program *c
 }
 
 // -- Core algorithm for find all references --
-func getReferencedSymbolsForSymbol(originalSymbol *ast.Symbol, node *ast.Node, sourceFiles []*ast.SourceFile, sourceFilesSet *core.Set[string], checker *checker.Checker, options refOptions) []*SymbolAndEntries {
+func getReferencedSymbolsForSymbol(originalSymbol *ast.Symbol, node *ast.Node, sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], checker *checker.Checker, options refOptions) []*SymbolAndEntries {
 	// Core find-all-references algorithm for a normal symbol.
 
 	symbol := core.Coalesce(skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker /*useLocalSymbolForExportSpecifier*/, !isForRenameWithPrefixAndSuffixText(options)), originalSymbol)
@@ -1011,7 +1012,7 @@ type inheritKey struct {
 
 type refState struct {
 	sourceFiles       []*ast.SourceFile
-	sourceFilesSet    *core.Set[string]
+	sourceFilesSet    *collections.Set[string]
 	specialSearchKind string // !!! none, constructor, class
 	checker           *checker.Checker
 	// cancellationToken CancellationToken
@@ -1020,14 +1021,14 @@ type refState struct {
 	result        []*SymbolAndEntries
 
 	inheritsFromCache            map[inheritKey]bool
-	seenContainingTypeReferences *core.Set[*ast.Node] // node seen tracker
-	// seenReExportRHS           *core.Set[*ast.Node] // node seen tracker
+	seenContainingTypeReferences *collections.Set[*ast.Node] // node seen tracker
+	// seenReExportRHS           *collections.Set[*ast.Node] // node seen tracker
 	// importTracker             ImportTracker
 	symbolIdToReferences    map[ast.SymbolId]*SymbolAndEntries
-	sourceFileToSeenSymbols map[ast.NodeId]*core.Set[ast.SymbolId]
+	sourceFileToSeenSymbols map[ast.NodeId]*collections.Set[ast.SymbolId]
 }
 
-func newState(sourceFiles []*ast.SourceFile, sourceFilesSet *core.Set[string], node *ast.Node, checker *checker.Checker, searchMeaning ast.SemanticMeaning, options refOptions) *refState {
+func newState(sourceFiles []*ast.SourceFile, sourceFilesSet *collections.Set[string], node *ast.Node, checker *checker.Checker, searchMeaning ast.SemanticMeaning, options refOptions) *refState {
 	return &refState{
 		sourceFiles:                  sourceFiles,
 		sourceFilesSet:               sourceFilesSet,
@@ -1037,10 +1038,10 @@ func newState(sourceFiles []*ast.SourceFile, sourceFilesSet *core.Set[string], n
 		options:                      options,
 		result:                       []*SymbolAndEntries{},
 		inheritsFromCache:            map[inheritKey]bool{},
-		seenContainingTypeReferences: &core.Set[*ast.Node]{},
-		// seenReExportRHS:           &core.Set[*ast.Node]{},
+		seenContainingTypeReferences: &collections.Set[*ast.Node]{},
+		// seenReExportRHS:           &collections.Set[*ast.Node]{},
 		symbolIdToReferences:    map[ast.SymbolId]*SymbolAndEntries{},
-		sourceFileToSeenSymbols: map[ast.NodeId]*core.Set[ast.SymbolId]{},
+		sourceFileToSeenSymbols: map[ast.NodeId]*collections.Set[ast.SymbolId]{},
 	}
 }
 
@@ -1209,7 +1210,7 @@ func (state *refState) markSearchedSymbols(sourceFile *ast.SourceFile, symbols [
 	sourceId := ast.GetNodeId(sourceFile.AsNode())
 	seenSymbols := state.sourceFileToSeenSymbols[sourceId]
 	if seenSymbols == nil {
-		seenSymbols = &core.Set[ast.SymbolId]{}
+		seenSymbols = &collections.Set[ast.SymbolId]{}
 		state.sourceFileToSeenSymbols[sourceId] = seenSymbols
 	}
 

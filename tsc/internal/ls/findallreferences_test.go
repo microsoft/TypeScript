@@ -4,14 +4,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/fourslash"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"gotest.tools/v3/assert"
 )
 
-func runFindReferencesTest(t *testing.T, input string, expectedLocations map[string]*core.Set[string]) {
+func runFindReferencesTest(t *testing.T, input string, expectedLocations map[string]*collections.Set[string]) {
 	testData := fourslash.ParseTestData(t, input, "/file1.ts")
 	markerPositions := testData.MarkerPositions
 	ctx := projecttestutil.WithRequestID(t.Context())
@@ -56,16 +56,16 @@ func TestFindReferences(t *testing.T) {
 	testCases := []struct {
 		title             string
 		input             string
-		expectedLocations map[string]*core.Set[string]
+		expectedLocations map[string]*collections.Set[string]
 	}{
 		{
 			title: "getOccurencesIsDefinitionOfParameter",
 			input: `function f(/*1*/x: number) {
 	return /*2*/x + 1
 }`,
-			expectedLocations: map[string]*core.Set[string]{
-				"1": core.NewSetFromItems("1", "2"),
-				"2": core.NewSetFromItems("1", "2"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"1": collections.NewSetFromItems("1", "2"),
+				"2": collections.NewSetFromItems("1", "2"),
 			},
 		},
 		{
@@ -76,17 +76,17 @@ let c: /*a2*/Bar<string, number>;
 let d: /*b0*/Bar./*c0*/X;
 let e: /*b1*/Bar./*c1*/X<string>;
 let f: /*b2*/Bar./*d0*/X./*e0*/Y;`,
-			expectedLocations: map[string]*core.Set[string]{
-				"a0": core.NewSetFromItems("a0", "a1", "a2"),
-				"a1": core.NewSetFromItems("a0", "a1", "a2"),
-				"a2": core.NewSetFromItems("a0", "a1", "a2"),
-				"b0": core.NewSetFromItems("b0", "b1", "b2"),
-				"b1": core.NewSetFromItems("b0", "b1", "b2"),
-				"b2": core.NewSetFromItems("b0", "b1", "b2"),
-				"c0": core.NewSetFromItems("c0", "c1"),
-				"c1": core.NewSetFromItems("c0", "c1"),
-				"d0": core.NewSetFromItems("d0"),
-				"e0": core.NewSetFromItems("e0"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"a0": collections.NewSetFromItems("a0", "a1", "a2"),
+				"a1": collections.NewSetFromItems("a0", "a1", "a2"),
+				"a2": collections.NewSetFromItems("a0", "a1", "a2"),
+				"b0": collections.NewSetFromItems("b0", "b1", "b2"),
+				"b1": collections.NewSetFromItems("b0", "b1", "b2"),
+				"b2": collections.NewSetFromItems("b0", "b1", "b2"),
+				"c0": collections.NewSetFromItems("c0", "c1"),
+				"c1": collections.NewSetFromItems("c0", "c1"),
+				"d0": collections.NewSetFromItems("d0"),
+				"e0": collections.NewSetFromItems("e0"),
 			},
 		},
 		{
@@ -102,23 +102,23 @@ function s(x: /*11*/string): /*12*/string;
 function sy(s: /*13*/symbol): /*14*/symbol;
 function v(v: /*15*/void): /*16*/void;
 `,
-			expectedLocations: map[string]*core.Set[string]{
-				"1":  core.NewSetFromItems("1", "2"),
-				"2":  core.NewSetFromItems("1", "2"),
-				"3":  core.NewSetFromItems("3", "4"),
-				"4":  core.NewSetFromItems("3", "4"),
-				"5":  core.NewSetFromItems("5", "6"),
-				"6":  core.NewSetFromItems("5", "6"),
-				"7":  core.NewSetFromItems("7", "8"),
-				"8":  core.NewSetFromItems("7", "8"),
-				"9":  core.NewSetFromItems("9", "10"),
-				"10": core.NewSetFromItems("9", "10"),
-				"11": core.NewSetFromItems("11", "12"),
-				"12": core.NewSetFromItems("11", "12"),
-				"13": core.NewSetFromItems("13", "14"),
-				"14": core.NewSetFromItems("13", "14"),
-				"15": core.NewSetFromItems("15", "16"),
-				"16": core.NewSetFromItems("15", "16"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"1":  collections.NewSetFromItems("1", "2"),
+				"2":  collections.NewSetFromItems("1", "2"),
+				"3":  collections.NewSetFromItems("3", "4"),
+				"4":  collections.NewSetFromItems("3", "4"),
+				"5":  collections.NewSetFromItems("5", "6"),
+				"6":  collections.NewSetFromItems("5", "6"),
+				"7":  collections.NewSetFromItems("7", "8"),
+				"8":  collections.NewSetFromItems("7", "8"),
+				"9":  collections.NewSetFromItems("9", "10"),
+				"10": collections.NewSetFromItems("9", "10"),
+				"11": collections.NewSetFromItems("11", "12"),
+				"12": collections.NewSetFromItems("11", "12"),
+				"13": collections.NewSetFromItems("13", "14"),
+				"14": collections.NewSetFromItems("13", "14"),
+				"15": collections.NewSetFromItems("15", "16"),
+				"16": collections.NewSetFromItems("15", "16"),
 			},
 		},
 		{
@@ -126,7 +126,7 @@ function v(v: /*15*/void): /*16*/void;
 			input: `export function foo() { return "foo"; }
 /*1*/import("/*2*/./foo")
 /*3*/var x = import("/*4*/./foo")`,
-			expectedLocations: map[string]*core.Set[string]{
+			expectedLocations: map[string]*collections.Set[string]{
 				"1": {},
 			},
 		},
@@ -142,12 +142,12 @@ var y = /*5*/DefaultExportedFunction();
 
 /*6*/namespace /*7*/DefaultExportedFunction {
 }`,
-			expectedLocations: map[string]*core.Set[string]{
-				"2": core.NewSetFromItems("2", "3", "4", "5"),
-				"3": core.NewSetFromItems("2", "3", "4", "5"),
-				"4": core.NewSetFromItems("2", "3", "4", "5"),
-				"5": core.NewSetFromItems("2", "3", "4", "5"),
-				"7": core.NewSetFromItems("7"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"2": collections.NewSetFromItems("2", "3", "4", "5"),
+				"3": collections.NewSetFromItems("2", "3", "4", "5"),
+				"4": collections.NewSetFromItems("2", "3", "4", "5"),
+				"5": collections.NewSetFromItems("2", "3", "4", "5"),
+				"7": collections.NewSetFromItems("7"),
 			},
 		},
 		{
@@ -158,10 +158,10 @@ function foo() {
 }
 class C extends (foo())./*2*/B {}
 class C1 extends foo()./*3*/B {}`,
-			expectedLocations: map[string]*core.Set[string]{
-				"1": core.NewSetFromItems("1", "2", "3"),
-				"2": core.NewSetFromItems("1", "2", "3"),
-				"3": core.NewSetFromItems("1", "2", "3"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"1": collections.NewSetFromItems("1", "2", "3"),
+				"2": collections.NewSetFromItems("1", "2", "3"),
+				"3": collections.NewSetFromItems("1", "2", "3"),
 			},
 		},
 		{
@@ -169,14 +169,14 @@ class C1 extends foo()./*3*/B {}`,
 			input: `var foo = /*1*/function /*2*/foo(a = /*3*/foo(), b = () => /*4*/foo) {
    /*5*/foo(/*6*/foo, /*7*/foo);
 }`,
-			expectedLocations: map[string]*core.Set[string]{
-				"1": core.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"2": core.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"3": core.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"4": core.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"5": core.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"6": core.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"7": core.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"1": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+				"2": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+				"3": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+				"4": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+				"5": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+				"6": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+				"7": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
 			},
 		},
 		{
@@ -188,11 +188,11 @@ let a2: A2;
 let a12 = { ...a1, ...a2 };
 a12./*2*/a;
 a1./*3*/a;`,
-			expectedLocations: map[string]*core.Set[string]{
-				"0": core.NewSetFromItems("0", "2", "3"),
-				"1": core.NewSetFromItems("1", "2"),
-				"2": core.NewSetFromItems("0", "1", "2"),
-				"3": core.NewSetFromItems("0", "2", "3"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"0": collections.NewSetFromItems("0", "2", "3"),
+				"1": collections.NewSetFromItems("1", "2"),
+				"2": collections.NewSetFromItems("0", "1", "2"),
+				"3": collections.NewSetFromItems("0", "2", "3"),
 			},
 		},
 		{
@@ -204,19 +204,19 @@ a1./*3*/a;`,
 x./*2*/property;
 
 /*3*/let {/*4*/property: pVar} = x;`,
-			expectedLocations: map[string]*core.Set[string]{
-				"0": core.NewSetFromItems("0", "2", "3", "4"),
-				"1": core.NewSetFromItems("1", "2", "3", "4"),
-				"2": core.NewSetFromItems("1", "2", "3", "4"),
-				"3": core.NewSetFromItems("1", "2", "3", "4"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"0": collections.NewSetFromItems("0", "2", "3", "4"),
+				"1": collections.NewSetFromItems("1", "2", "3", "4"),
+				"2": collections.NewSetFromItems("1", "2", "3", "4"),
+				"3": collections.NewSetFromItems("1", "2", "3", "4"),
 			},
 		},
 		{
 			title: "findAllRefsImportEquals",
 			input: `import j = N./*0*/q;
 namespace N { export const /*1*/q = 0; }`,
-			expectedLocations: map[string]*core.Set[string]{
-				"0": core.NewSetFromItems("0", "1"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"0": collections.NewSetFromItems("0", "1"),
 			},
 		},
 		{
@@ -229,19 +229,19 @@ millennial: string;
 let t: Gen;
 var { x, ...rest } = t;
 rest./*1*/parent;`,
-			expectedLocations: map[string]*core.Set[string]{
-				"0": core.NewSetFromItems("0", "1"),
-				"1": core.NewSetFromItems("0", "1"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"0": collections.NewSetFromItems("0", "1"),
+				"1": collections.NewSetFromItems("0", "1"),
 			},
 		},
 		{
 			title: "findAllRefsForVariableInExtendsClause01",
 			input: `/*1*/var /*2*/Base = class { };
 class C extends /*3*/Base { }`,
-			expectedLocations: map[string]*core.Set[string]{
-				"1": core.NewSetFromItems("1", "2", "3"),
-				"2": core.NewSetFromItems("1", "2", "3"),
-				"3": core.NewSetFromItems("1", "2", "3"),
+			expectedLocations: map[string]*collections.Set[string]{
+				"1": collections.NewSetFromItems("1", "2", "3"),
+				"2": collections.NewSetFromItems("1", "2", "3"),
+				"3": collections.NewSetFromItems("1", "2", "3"),
 			},
 		},
 	}

@@ -174,11 +174,11 @@ func (p *fileLoader) startTasks(tasks []*parseTask) {
 
 func (p *fileLoader) collectTasks(tasks []*parseTask) iter.Seq[*parseTask] {
 	return func(yield func(*parseTask) bool) {
-		p.collectTasksWorker(tasks, core.Set[*parseTask]{}, yield)
+		p.collectTasksWorker(tasks, collections.Set[*parseTask]{}, yield)
 	}
 }
 
-func (p *fileLoader) collectTasksWorker(tasks []*parseTask, seen core.Set[*parseTask], yield func(*parseTask) bool) bool {
+func (p *fileLoader) collectTasksWorker(tasks []*parseTask, seen collections.Set[*parseTask], yield func(*parseTask) bool) bool {
 	for _, task := range tasks {
 		// ensure we only walk each task once
 		if seen.Has(task) {

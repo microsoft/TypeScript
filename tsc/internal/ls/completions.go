@@ -514,7 +514,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 	symbolToOriginInfoMap := map[ast.SymbolId]*symbolOriginInfo{}
 	symbolToSortTextMap := map[ast.SymbolId]sortText{}
 	// var importSpecifierResolver any // !!! import
-	var seenPropertySymbols core.Set[ast.SymbolId]
+	var seenPropertySymbols collections.Set[ast.SymbolId]
 	isTypeOnlyLocation := insideJSDocTagTypeExpression || insideJsDocImportTag ||
 		importStatementCompletion != nil && ast.IsTypeOnlyImportOrExportDeclaration(location.Parent) ||
 		!isContextTokenValueLocation(contextToken) &&
@@ -705,7 +705,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 							return typeChecker.IsValidPropertyAccess(valueAccessNode, s.Name)
 						}
 						isValidTypeAccess := func(s *ast.Symbol) bool {
-							return symbolCanBeReferencedAtTypeLocation(s, typeChecker, core.Set[ast.SymbolId]{})
+							return symbolCanBeReferencedAtTypeLocation(s, typeChecker, collections.Set[ast.SymbolId]{})
 						}
 						var isValidAccess bool
 						if isNamespaceName {
@@ -807,7 +807,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 		members := getPropertiesForCompletion(containerExpectedType, typeChecker)
 		existingMembers := getPropertiesForCompletion(containerActualType, typeChecker)
 
-		existingMemberNames := core.Set[string]{}
+		existingMemberNames := collections.Set[string]{}
 		for _, member := range existingMembers {
 			existingMemberNames.Add(member.Name)
 		}
@@ -1022,7 +1022,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 		isNewIdentifierLocation = false
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
 
-		existing := core.Set[string]{}
+		existing := collections.Set[string]{}
 		for _, element := range namedImportsOrExports.Elements() {
 			if isCurrentlyEditingNode(element, file, position) {
 				continue
@@ -1062,7 +1062,7 @@ func getCompletionData(program *compiler.Program, typeChecker *checker.Checker, 
 		if importAttributes.AsImportAttributes().Attributes != nil {
 			elements = importAttributes.AsImportAttributes().Attributes.Nodes
 		}
-		existing := core.NewSetFromItems(core.Map(elements, (*ast.Node).Text)...)
+		existing := collections.NewSetFromItems(core.Map(elements, (*ast.Node).Text)...)
 		uniques := core.Filter(
 			typeChecker.GetApparentProperties(typeChecker.GetTypeAtLocation(importAttributes)),
 			func(symbol *ast.Symbol) bool {
@@ -1621,7 +1621,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	preferences *UserPreferences,
 	compilerOptions *core.CompilerOptions,
 	clientOptions *lsproto.CompletionClientCapabilities,
-) (uniqueNames core.Set[string], sortedEntries []*lsproto.CompletionItem) {
+) (uniqueNames collections.Set[string], sortedEntries []*lsproto.CompletionItem) {
 	closestSymbolDeclaration := getClosestSymbolDeclaration(data.contextToken, data.location)
 	useSemicolons := probablyUsesSemicolons(file)
 	typeChecker, done := program.GetTypeCheckerForFile(ctx, file)
@@ -1696,7 +1696,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 		sortedEntries = core.InsertSorted(sortedEntries, entry, compareCompletionEntries)
 	}
 
-	uniqueSet := core.NewSetWithSizeHint[string](len(uniques))
+	uniqueSet := collections.NewSetWithSizeHint[string](len(uniques))
 	for name := range maps.Keys(uniques) {
 		uniqueSet.Add(name)
 	}
@@ -2018,7 +2018,7 @@ func isRecommendedCompletionMatch(localSymbol *ast.Symbol, recommendedCompletion
 }
 
 // Ported from vscode's `USUAL_WORD_SEPARATORS`.
-var wordSeparators = core.NewSetFromItems(
+var wordSeparators = collections.NewSetFromItems(
 	'`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', '[', '{', ']', '}', '\\', '|',
 	';', ':', '\'', '"', ',', '.', '<', '>', '/', '?',
 )
@@ -2263,7 +2263,7 @@ func shouldIncludeSymbol(
 
 		if data.isTypeOnlyLocation {
 			// It's a type, but you can reach it by namespace.type as well.
-			return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker, core.Set[ast.SymbolId]{})
+			return symbolCanBeReferencedAtTypeLocation(symbol, typeChecker, collections.Set[ast.SymbolId]{})
 		}
 	}
 
@@ -2502,7 +2502,7 @@ func isContextTokenTypeLocation(contextToken *ast.Node) bool {
 }
 
 // True if symbol is a type or a module containing at least one type.
-func symbolCanBeReferencedAtTypeLocation(symbol *ast.Symbol, typeChecker *checker.Checker, seenModules core.Set[ast.SymbolId]) bool {
+func symbolCanBeReferencedAtTypeLocation(symbol *ast.Symbol, typeChecker *checker.Checker, seenModules collections.Set[ast.SymbolId]) bool {
 	// Since an alias can be merged with a local declaration, we need to test both the alias and its target.
 	// This code used to just test the result of `skipAlias`, but that would ignore any locally introduced meanings.
 	return nonAliasCanBeReferencedAtTypeLocation(symbol, typeChecker, seenModules) ||
@@ -2513,7 +2513,7 @@ func symbolCanBeReferencedAtTypeLocation(symbol *ast.Symbol, typeChecker *checke
 		)
 }
 
-func nonAliasCanBeReferencedAtTypeLocation(symbol *ast.Symbol, typeChecker *checker.Checker, seenModules core.Set[ast.SymbolId]) bool {
+func nonAliasCanBeReferencedAtTypeLocation(symbol *ast.Symbol, typeChecker *checker.Checker, seenModules collections.Set[ast.SymbolId]) bool {
 	return symbol.Flags&ast.SymbolFlagsType != 0 || typeChecker.IsUnknownSymbol(symbol) ||
 		symbol.Flags&ast.SymbolFlagsModule != 0 && seenModules.AddIfAbsent(ast.GetSymbolId(symbol)) &&
 			core.Some(
@@ -3120,7 +3120,7 @@ func getContextualKeywords(file *ast.SourceFile, contextToken *ast.Node, positio
 func getJSCompletionEntries(
 	file *ast.SourceFile,
 	position int,
-	uniqueNames *core.Set[string],
+	uniqueNames *collections.Set[string],
 	target core.ScriptTarget,
 	sortedEntries []*lsproto.CompletionItem,
 ) []*lsproto.CompletionItem {
@@ -3553,13 +3553,13 @@ func filterObjectMembersList(
 	file *ast.SourceFile,
 	position int,
 	typeChecker *checker.Checker,
-) (filteredMembers []*ast.Symbol, spreadMemberNames core.Set[string]) {
+) (filteredMembers []*ast.Symbol, spreadMemberNames collections.Set[string]) {
 	if len(existingMembers) == 0 {
-		return contextualMemberSymbols, core.Set[string]{}
+		return contextualMemberSymbols, collections.Set[string]{}
 	}
 
-	membersDeclaredBySpreadAssignment := core.Set[string]{}
-	existingMemberNames := core.Set[string]{}
+	membersDeclaredBySpreadAssignment := collections.Set[string]{}
+	existingMemberNames := collections.Set[string]{}
 	for _, member := range existingMembers {
 		// Ignore omitted expressions for missing members.
 		if member.Kind != ast.KindPropertyAssignment &&
@@ -3613,7 +3613,7 @@ func isCurrentlyEditingNode(node *ast.Node, file *ast.SourceFile, position int) 
 	return start <= position && position <= node.End()
 }
 
-func setMemberDeclaredBySpreadAssignment(declaration *ast.Node, members *core.Set[string], typeChecker *checker.Checker) {
+func setMemberDeclaredBySpreadAssignment(declaration *ast.Node, members *collections.Set[string], typeChecker *checker.Checker) {
 	expression := declaration.Expression()
 	symbol := typeChecker.GetSymbolAtLocation(expression)
 	var t *checker.Type
@@ -3765,7 +3765,7 @@ func filterClassMembersList(
 	file *ast.SourceFile,
 	position int,
 ) []*ast.Symbol {
-	existingMemberNames := core.Set[string]{}
+	existingMemberNames := collections.Set[string]{}
 	for _, member := range existingMembers {
 		// Ignore omitted expressions for missing members.
 		if member.Kind != ast.KindPropertyDeclaration &&
@@ -3865,9 +3865,9 @@ func filterJsxAttributes(
 	file *ast.SourceFile,
 	position int,
 	typeChecker *checker.Checker,
-) (filteredMembers []*ast.Symbol, spreadMemberNames *core.Set[string]) {
-	existingNames := core.Set[string]{}
-	membersDeclaredBySpreadAssignment := core.Set[string]{}
+) (filteredMembers []*ast.Symbol, spreadMemberNames *collections.Set[string]) {
+	existingNames := collections.Set[string]{}
+	membersDeclaredBySpreadAssignment := collections.Set[string]{}
 	for _, attr := range attributes {
 		// If this is the item we are editing right now, do not filter it out.
 		if isCurrentlyEditingNode(attr, file, position) {
@@ -3979,8 +3979,8 @@ func (l *LanguageService) getJsxClosingTagCompletion(
 		"",             /*filterText*/
 		SortTextLocationPriority,
 		ScriptElementKindClassElement,
-		core.Set[ScriptElementKindModifier]{}, /*kindModifiers*/
-		nil,                                   /*replacementSpan*/
+		collections.Set[ScriptElementKindModifier]{}, /*kindModifiers*/
+		nil, /*replacementSpan*/
 		optionalReplacementSpan,
 		nil, /*commitCharacters*/
 		nil, /*labelDetails*/
@@ -4009,7 +4009,7 @@ func (l *LanguageService) createLSPCompletionItem(
 	filterText string,
 	sortText sortText,
 	elementKind ScriptElementKind,
-	kindModifiers core.Set[ScriptElementKindModifier],
+	kindModifiers collections.Set[ScriptElementKindModifier],
 	replacementSpan *lsproto.Range,
 	optionalReplacementSpan *lsproto.Range,
 	commitCharacters *[]string,
@@ -4172,7 +4172,7 @@ func (l *LanguageService) getLabelStatementCompletions(
 	file *ast.SourceFile,
 	position int,
 ) []*lsproto.CompletionItem {
-	var uniques core.Set[string]
+	var uniques collections.Set[string]
 	var items []*lsproto.CompletionItem
 	current := node
 	for current != nil {
@@ -4189,11 +4189,11 @@ func (l *LanguageService) getLabelStatementCompletions(
 					"", /*filterText*/
 					SortTextLocationPriority,
 					ScriptElementKindLabel,
-					core.Set[ScriptElementKindModifier]{}, /*kindModifiers*/
-					nil,                                   /*replacementSpan*/
-					nil,                                   /*optionalReplacementSpan*/
-					nil,                                   /*commitCharacters*/
-					nil,                                   /*labelDetails*/
+					collections.Set[ScriptElementKindModifier]{}, /*kindModifiers*/
+					nil, /*replacementSpan*/
+					nil, /*optionalReplacementSpan*/
+					nil, /*commitCharacters*/
+					nil, /*labelDetails*/
 					file,
 					position,
 					clientOptions,

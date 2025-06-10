@@ -946,7 +946,7 @@ func (p *Program) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
 	return p.importHelpersImportSpecifiers[path]
 }
 
-var plainJSErrors = core.NewSetFromItems(
+var plainJSErrors = collections.NewSetFromItems(
 	// binder errors
 	diagnostics.Cannot_redeclare_block_scoped_variable_0.Code(),
 	diagnostics.A_module_cannot_have_multiple_default_exports.Code(),

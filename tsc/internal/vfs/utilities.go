@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/dlclark/regexp2"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -363,7 +364,7 @@ type visitor struct {
 	extensions                []string
 	useCaseSensitiveFileNames bool
 	host                      FS
-	visited                   core.Set[string]
+	visited                   collections.Set[string]
 	results                   [][]string
 }
 

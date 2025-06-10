@@ -1651,7 +1651,7 @@ func moveToNextDirectorySeparatorIfAvailable(path string, prevSeparatorIndex int
 }
 
 type ParsedPatterns struct {
-	matchableStringSet core.Set[string]
+	matchableStringSet collections.Set[string]
 	patterns           []core.Pattern
 }
 
@@ -1674,12 +1674,12 @@ func TryParsePatterns(pathMappings *collections.OrderedMap[string, []string]) *P
 	numMatchables := pathMappings.Size() - numPatterns
 
 	var patterns []core.Pattern
-	var matchableStringSet core.Set[string]
+	var matchableStringSet collections.Set[string]
 	if numPatterns != 0 {
 		patterns = make([]core.Pattern, 0, numPatterns)
 	}
 	if numMatchables != 0 {
-		matchableStringSet = *core.NewSetWithSizeHint[string](numMatchables)
+		matchableStringSet = *collections.NewSetWithSizeHint[string](numMatchables)
 	}
 
 	for path := range paths {

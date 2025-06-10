@@ -297,7 +297,7 @@ func (c *EmitContext) mergeEnvironment(statements []*ast.Statement, declarations
 			left = core.Splice(left, 0, 0, declarations[:rightStandardPrologueEnd]...)
 			changed = true
 		} else {
-			var leftPrologues core.Set[string]
+			var leftPrologues collections.Set[string]
 			for i := range leftStandardPrologueEnd {
 				leftPrologue := statements[i]
 				leftPrologues.Add(leftPrologue.Expression().Text())

@@ -693,7 +693,7 @@ func (p *Project) extractUnresolvedImports(oldProgram *compiler.Program) []strin
 	// tracing?.push(tracing.Phase.Session, "getUnresolvedImports", { count: sourceFiles.length });
 	hasChanges := false
 	sourceFiles := p.program.GetSourceFiles()
-	sourceFilesSet := core.NewSetWithSizeHint[*ast.SourceFile](len(sourceFiles))
+	sourceFilesSet := collections.NewSetWithSizeHint[*ast.SourceFile](len(sourceFiles))
 
 	// !!! sheetal remove ambient module names from unresolved imports
 	// const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));

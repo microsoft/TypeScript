@@ -114,7 +114,7 @@ var libMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, an
 
 var (
 	Libs        = slices.Collect(libMap.Keys())
-	LibFilesSet = core.NewSetFromItems(core.Map(slices.Collect(libMap.Values()), func(s any) string { return s.(string) })...)
+	LibFilesSet = collections.NewSetFromItems(core.Map(slices.Collect(libMap.Values()), func(s any) string { return s.(string) })...)
 )
 
 func GetLibFileName(libName string) (string, bool) {

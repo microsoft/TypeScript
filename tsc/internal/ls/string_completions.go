@@ -8,6 +8,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -143,7 +144,7 @@ func (l *LanguageService) convertStringLiteralCompletions(
 				"", /*filterText*/
 				SortTextLocationPriority,
 				ScriptElementKindString,
-				core.Set[ScriptElementKindModifier]{},
+				collections.Set[ScriptElementKindModifier]{},
 				l.getReplacementRangeForContextToken(file, contextToken, position),
 				nil, /*optionalReplacementSpan*/
 				nil, /*commitCharacters*/
@@ -186,7 +187,7 @@ func (l *LanguageService) convertPathCompletions(
 			"", /*filterText*/
 			SortTextLocationPriority,
 			pathCompletion.kind,
-			*core.NewSetFromItems(kindModifiersFromExtension(pathCompletion.extension)),
+			*collections.NewSetFromItems(kindModifiersFromExtension(pathCompletion.extension)),
 			replacementSpan,
 			nil, /*optionalReplacementSpan*/
 			nil, /*commitCharacters*/
@@ -330,7 +331,7 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 			return nil
 		}
 		exports := typeChecker.GetExportsAndPropertiesOfModule(moduleSpecifierSymbol)
-		existing := core.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) string {
+		existing := collections.NewSetFromItems(core.Map(namedImportsOrExports.Elements(), func(n *ast.Node) string {
 			if n.PropertyName() != nil {
 				return n.PropertyName().Text()
 			}
@@ -498,12 +499,12 @@ func walkUpParentheses(node *ast.Node) *ast.Node {
 	}
 }
 
-func getStringLiteralTypes(t *checker.Type, uniques *core.Set[string], typeChecker *checker.Checker) []*checker.StringLiteralType {
+func getStringLiteralTypes(t *checker.Type, uniques *collections.Set[string], typeChecker *checker.Checker) []*checker.StringLiteralType {
 	if t == nil {
 		return nil
 	}
 	if uniques == nil {
-		uniques = &core.Set[string]{}
+		uniques = &collections.Set[string]{}
 	}
 	t = skipConstraint(t, typeChecker)
 	if t.IsUnion() {

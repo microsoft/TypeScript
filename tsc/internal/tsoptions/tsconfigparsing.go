@@ -28,7 +28,7 @@ type extendsResult struct {
 	exclude             []any
 	files               []any
 	compileOnSave       bool
-	extendedSourceFiles core.Set[string]
+	extendedSourceFiles collections.Set[string]
 }
 
 var compilerOptionsDeclaration = &CommandLineOption{

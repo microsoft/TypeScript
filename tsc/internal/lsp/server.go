@@ -13,6 +13,7 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -142,7 +143,7 @@ type Server struct {
 
 	watchEnabled   bool
 	watcherID      int
-	watchers       core.Set[project.WatcherHandle]
+	watchers       collections.Set[project.WatcherHandle]
 	logger         *project.Logger
 	projectService *project.Service
 

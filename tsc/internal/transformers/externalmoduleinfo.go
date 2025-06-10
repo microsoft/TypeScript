@@ -12,13 +12,13 @@ import (
 )
 
 type externalModuleInfo struct {
-	externalImports              []*ast.Declaration                                     // ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration. imports and reexports of other external modules
-	exportSpecifiers             core.MultiMap[string, *ast.ExportSpecifier]            // Maps local names to their associated export specifiers (excludes reexports)
-	exportedBindings             core.MultiMap[*ast.Declaration, *ast.ModuleExportName] // Maps local declarations to their associated export aliases
-	exportedNames                []*ast.ModuleExportName                                // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
-	exportedFunctions            collections.OrderedSet[*ast.FunctionDeclarationNode]   // all of the top-level exported function declarations
-	exportEquals                 *ast.ExportAssignment                                  // an export=/module.exports= declaration if one was present
-	hasExportStarsToExportValues bool                                                   // whether this module contains export*
+	externalImports              []*ast.Declaration                                            // ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration. imports and reexports of other external modules
+	exportSpecifiers             collections.MultiMap[string, *ast.ExportSpecifier]            // Maps local names to their associated export specifiers (excludes reexports)
+	exportedBindings             collections.MultiMap[*ast.Declaration, *ast.ModuleExportName] // Maps local declarations to their associated export aliases
+	exportedNames                []*ast.ModuleExportName                                       // all exported names in the module, both local and re-exported, excluding the names of locally exported function declarations
+	exportedFunctions            collections.OrderedSet[*ast.FunctionDeclarationNode]          // all of the top-level exported function declarations
+	exportEquals                 *ast.ExportAssignment                                         // an export=/module.exports= declaration if one was present
+	hasExportStarsToExportValues bool                                                          // whether this module contains export*
 }
 
 type externalModuleInfoCollector struct {
@@ -26,7 +26,7 @@ type externalModuleInfoCollector struct {
 	compilerOptions  *core.CompilerOptions
 	emitContext      *printer.EmitContext
 	resolver         binder.ReferenceResolver
-	uniqueExports    core.Set[string]
+	uniqueExports    collections.Set[string]
 	hasExportDefault bool
 	output           *externalModuleInfo
 }

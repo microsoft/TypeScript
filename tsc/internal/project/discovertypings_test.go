@@ -40,7 +40,7 @@ func TestDiscoverTypings(t *testing.T) {
 			map[string]map[string]string{},
 		)
 		assert.Assert(t, cachedTypingPaths == nil)
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"jquery",
 			"chroma-js",
 		))
@@ -73,7 +73,7 @@ func TestDiscoverTypings(t *testing.T) {
 			map[string]map[string]string{},
 		)
 		assert.Assert(t, cachedTypingPaths == nil)
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"node",
 			"somename",
 		))
@@ -116,7 +116,7 @@ func TestDiscoverTypings(t *testing.T) {
 		assert.DeepEqual(t, cachedTypingPaths, []string{
 			"/home/src/projects/project/node.d.ts",
 		})
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"bar",
 		))
 		assert.DeepEqual(t, filesToWatch, []string{
@@ -154,7 +154,7 @@ func TestDiscoverTypings(t *testing.T) {
 			map[string]map[string]string{},
 		)
 		assert.Assert(t, cachedTypingPaths == nil)
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"node",
 			"bar",
 		))
@@ -189,7 +189,7 @@ func TestDiscoverTypings(t *testing.T) {
 			map[string]map[string]string{},
 		)
 		assert.Assert(t, cachedTypingPaths == nil)
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"a",
 		))
 		assert.DeepEqual(t, filesToWatch, []string{
@@ -222,7 +222,7 @@ func TestDiscoverTypings(t *testing.T) {
 			map[string]map[string]string{},
 		)
 		assert.Assert(t, cachedTypingPaths == nil)
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"@a/b",
 		))
 		assert.DeepEqual(t, filesToWatch, []string{
@@ -268,7 +268,7 @@ func TestDiscoverTypings(t *testing.T) {
 		assert.DeepEqual(t, cachedTypingPaths, []string{
 			"/home/src/Library/Caches/typescript/node_modules/@types/node/index.d.ts",
 		})
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"commander",
 		))
 		assert.DeepEqual(t, filesToWatch, []string{
@@ -310,7 +310,7 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 		)
 		assert.Assert(t, cachedTypingPaths == nil)
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"node",
 		))
 		assert.DeepEqual(t, filesToWatch, []string{
@@ -356,7 +356,7 @@ func TestDiscoverTypings(t *testing.T) {
 			},
 		)
 		assert.Assert(t, cachedTypingPaths == nil)
-		assert.DeepEqual(t, core.NewSetFromItems(newTypingNames...), core.NewSetFromItems(
+		assert.DeepEqual(t, collections.NewSetFromItems(newTypingNames...), collections.NewSetFromItems(
 			"node",
 			"commander",
 		))

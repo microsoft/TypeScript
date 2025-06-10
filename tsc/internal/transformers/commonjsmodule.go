@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -421,7 +422,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfImportDeclaration(statements
 		return statements
 	}
 
-	seen := &core.Set[string]{}
+	seen := &collections.Set[string]{}
 	if importClause.Name() != nil {
 		statements = tx.appendExportsOfDeclaration(statements, importClause, seen, false /*liveBinding*/)
 	}
@@ -499,7 +500,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfClassOrFunctionDeclaration(s
 		return statements
 	}
 
-	seen := &core.Set[string]{}
+	seen := &collections.Set[string]{}
 	if ast.HasSyntacticModifier(decl, ast.ModifierFlagsExport) {
 		var exportName *ast.IdentifierNode
 		if ast.HasSyntacticModifier(decl, ast.ModifierFlagsDefault) {
@@ -523,13 +524,13 @@ func (tx *CommonJSModuleTransformer) appendExportsOfClassOrFunctionDeclaration(s
 //
 //   - The `statements` parameter is a statement list to which the down-level export statements are to be appended.
 //   - The `decl` parameter is the declaration to export.
-func (tx *CommonJSModuleTransformer) appendExportsOfDeclaration(statements []*ast.Statement, decl *ast.Declaration, seen *core.Set[string], liveBinding bool) []*ast.Statement {
+func (tx *CommonJSModuleTransformer) appendExportsOfDeclaration(statements []*ast.Statement, decl *ast.Declaration, seen *collections.Set[string], liveBinding bool) []*ast.Statement {
 	if tx.currentModuleInfo.exportEquals != nil {
 		return statements
 	}
 
 	if seen == nil {
-		seen = &core.Set[string]{}
+		seen = &collections.Set[string]{}
 	}
 
 	if name := decl.Name(); tx.currentModuleInfo.exportSpecifiers.Len() > 0 && name != nil && ast.IsIdentifier(name) {
@@ -553,7 +554,7 @@ func (tx *CommonJSModuleTransformer) appendExportsOfDeclaration(statements []*as
 //   - The `expression` parameter is the expression to export.
 //   - The `location` parameter is the location to use for source maps and comments for the export.
 //   - The `allowComments` parameter indicates whether to allow comments on the export.
-func (tx *CommonJSModuleTransformer) appendExportStatement(statements []*ast.Statement, seen *core.Set[string], exportName *ast.ModuleExportName, expression *ast.Expression, location *core.TextRange, allowComments bool, liveBinding bool) []*ast.Statement {
+func (tx *CommonJSModuleTransformer) appendExportStatement(statements []*ast.Statement, seen *collections.Set[string], exportName *ast.ModuleExportName, expression *ast.Expression, location *core.TextRange, allowComments bool, liveBinding bool) []*ast.Statement {
 	if exportName.Kind != ast.KindStringLiteral {
 		if seen.Has(exportName.Text()) {
 			return statements
@@ -1973,7 +1974,7 @@ func (tx *CommonJSModuleTransformer) getExports(name *ast.IdentifierNode) []*ast
 
 		// An exported namespace or enum may merge with an ambient declaration, which won't show up in .js emit, so
 		// we analyze all value exports of a symbol.
-		var bindingsSet core.Set[*ast.ModuleExportName]
+		var bindingsSet collections.Set[*ast.ModuleExportName]
 		var bindings []*ast.ModuleExportName
 		declarations := tx.resolver.GetReferencedValueDeclarations(tx.emitContext.MostOriginal(name))
 		if declarations != nil {

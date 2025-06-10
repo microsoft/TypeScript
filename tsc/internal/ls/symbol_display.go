@@ -3,6 +3,7 @@ package ls
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 )
 
@@ -304,9 +305,9 @@ func isLocalVariableOrFunction(symbol *ast.Symbol) bool {
 	return false
 }
 
-func getSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) core.Set[ScriptElementKindModifier] {
+func getSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) collections.Set[ScriptElementKindModifier] {
 	if symbol == nil {
-		return core.Set[ScriptElementKindModifier]{}
+		return collections.Set[ScriptElementKindModifier]{}
 	}
 
 	modifiers := getNormalizedSymbolModifiers(typeChecker, symbol)
@@ -326,8 +327,8 @@ func getSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) core.S
 	return modifiers
 }
 
-func getNormalizedSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) core.Set[ScriptElementKindModifier] {
-	var modifierSet core.Set[ScriptElementKindModifier]
+func getNormalizedSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symbol) collections.Set[ScriptElementKindModifier] {
+	var modifierSet collections.Set[ScriptElementKindModifier]
 	if len(symbol.Declarations) > 0 {
 		declaration := symbol.Declarations[0]
 		declarations := symbol.Declarations[1:]
@@ -346,8 +347,8 @@ func getNormalizedSymbolModifiers(typeChecker *checker.Checker, symbol *ast.Symb
 	return modifierSet
 }
 
-func getNodeModifiers(node *ast.Node, excludeFlags ast.ModifierFlags) core.Set[ScriptElementKindModifier] {
-	var result core.Set[ScriptElementKindModifier]
+func getNodeModifiers(node *ast.Node, excludeFlags ast.ModifierFlags) collections.Set[ScriptElementKindModifier] {
+	var result collections.Set[ScriptElementKindModifier]
 	var flags ast.ModifierFlags
 	if ast.IsDeclaration(node) {
 		flags = ast.GetCombinedModifierFlags(node) & ^excludeFlags // !!! include jsdoc node flags

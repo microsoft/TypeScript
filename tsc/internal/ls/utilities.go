@@ -9,6 +9,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/checker"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/jsnum"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
@@ -483,7 +484,7 @@ func probablyUsesSemicolons(file *ast.SourceFile) bool {
 	return withSemicolon/withoutSemicolon > 1/nStatementsToObserve
 }
 
-var typeKeywords *core.Set[ast.Kind] = core.NewSetFromItems(
+var typeKeywords *collections.Set[ast.Kind] = collections.NewSetFromItems(
 	ast.KindAnyKeyword,
 	ast.KindAssertsKeyword,
 	ast.KindBigIntKeyword,
@@ -1369,7 +1370,7 @@ func getParentSymbolsOfPropertyAccess(location *ast.Node, symbol *ast.Symbol, ch
 //
 //	The value of previousIterationSymbol is undefined when the function is first called.
 func getPropertySymbolsFromBaseTypes(symbol *ast.Symbol, propertyName string, checker *checker.Checker, cb func(base *ast.Symbol) *ast.Symbol) *ast.Symbol {
-	seen := core.Set[*ast.Symbol]{}
+	seen := collections.Set[*ast.Symbol]{}
 	var recur func(*ast.Symbol) *ast.Symbol
 	recur = func(symbol *ast.Symbol) *ast.Symbol {
 		// Use `addToSeen` to ensure we don't infinitely recurse in this situation:
@@ -1437,9 +1438,9 @@ func skipConstraint(t *checker.Type, typeChecker *checker.Checker) *checker.Type
 }
 
 type caseClauseTrackerState struct {
-	existingStrings core.Set[string]
-	existingNumbers core.Set[jsnum.Number]
-	existingBigInts core.Set[jsnum.PseudoBigInt]
+	existingStrings collections.Set[string]
+	existingNumbers collections.Set[jsnum.Number]
+	existingBigInts collections.Set[jsnum.PseudoBigInt]
 }
 
 // string | jsnum.Number
@@ -1479,9 +1480,9 @@ func (c *caseClauseTrackerState) hasValue(value trackerHasValue) bool {
 
 func newCaseClauseTracker(typeChecker *checker.Checker, clauses []*ast.CaseOrDefaultClauseNode) caseClauseTracker {
 	c := &caseClauseTrackerState{
-		existingStrings: core.Set[string]{},
-		existingNumbers: core.Set[jsnum.Number]{},
-		existingBigInts: core.Set[jsnum.PseudoBigInt]{},
+		existingStrings: collections.Set[string]{},
+		existingNumbers: collections.Set[jsnum.Number]{},
+		existingBigInts: collections.Set[jsnum.PseudoBigInt]{},
 	}
 	for _, clause := range clauses {
 		if !ast.IsDefaultClause(clause) {

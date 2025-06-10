@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -88,7 +89,7 @@ func FuzzParser(f *testing.F) {
 		// "tests/cases",
 	}
 
-	var extensions core.Set[string]
+	var extensions collections.Set[string]
 	for _, es := range tspath.AllSupportedExtensionsWithJson {
 		for _, e := range es {
 			extensions.Add(e)

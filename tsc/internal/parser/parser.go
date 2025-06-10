@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -68,7 +69,7 @@ type Parser struct {
 
 	identifiers             map[string]string
 	identifierCount         int
-	notParenthesizedArrow   core.Set[int]
+	notParenthesizedArrow   collections.Set[int]
 	nodeSlicePool           core.Pool[*ast.Node]
 	jsdocCache              map[*ast.Node][]*ast.Node
 	possibleAwaitSpans      []int

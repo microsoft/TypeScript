@@ -605,7 +605,7 @@ type Checker struct {
 	reverseMappedCache                         map[ReverseMappedTypeKey]*Type
 	reverseHomomorphicMappedCache              map[ReverseMappedTypeKey]*Type
 	iterationTypesCache                        map[IterationTypesKey]IterationTypes
-	markerTypes                                core.Set[*Type]
+	markerTypes                                collections.Set[*Type]
 	undefinedSymbol                            *ast.Symbol
 	argumentsSymbol                            *ast.Symbol
 	requireSymbol                              *ast.Symbol
@@ -843,7 +843,7 @@ type Checker struct {
 	nodeBuilder                                *NodeBuilder
 	_jsxNamespace                              string
 	_jsxFactoryEntity                          *ast.Node
-	skipDirectInferenceNodes                   core.Set[*ast.Node]
+	skipDirectInferenceNodes                   collections.Set[*ast.Node]
 	ctx                                        context.Context
 	packagesMap                                map[string]bool
 }
@@ -6742,7 +6742,7 @@ func (c *Checker) checkUnusedClassMembers(node *ast.Node) {
 }
 
 func (c *Checker) checkUnusedLocalsAndParameters(node *ast.Node) {
-	var variableParents core.Set[*ast.Node]
+	var variableParents collections.Set[*ast.Node]
 	var importClauses map[*ast.Node][]*ast.Node
 	for _, local := range node.Locals() {
 		referenceKinds := c.symbolReferenceLinks.Get(local).referenceKinds
@@ -12784,7 +12784,7 @@ func (c *Checker) getSpreadType(left *Type, right *Type, symbol *ast.Symbol, obj
 		return c.getIntersectionType([]*Type{left, right})
 	}
 	members := make(ast.SymbolTable)
-	var skippedPrivateMembers core.Set[string]
+	var skippedPrivateMembers collections.Set[string]
 	var indexInfos []*IndexInfo
 	if left == c.emptyObjectType {
 		indexInfos = c.getIndexInfosOfType(right)
@@ -15257,7 +15257,7 @@ type ExportCollisionTable = map[string]*ExportCollision
 
 func (c *Checker) getExportsOfModuleWorker(moduleSymbol *ast.Symbol) (exports ast.SymbolTable, typeOnlyExportStarMap map[string]*ast.Node) {
 	var visitedSymbols []*ast.Symbol
-	nonTypeOnlyNames := core.NewSetWithSizeHint[string](len(moduleSymbol.Exports))
+	nonTypeOnlyNames := collections.NewSetWithSizeHint[string](len(moduleSymbol.Exports))
 	// The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
 	// module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
 	var visit func(*ast.Symbol, *ast.Node, bool) ast.SymbolTable
@@ -15463,7 +15463,7 @@ func (c *Checker) getSymbolFlagsEx(symbol *ast.Symbol, excludeTypeOnlyMeanings b
 	if !excludeLocalMeanings {
 		flags = symbol.Flags
 	}
-	var seenSymbols core.Set[*ast.Symbol]
+	var seenSymbols collections.Set[*ast.Symbol]
 	for symbol.Flags&ast.SymbolFlagsAlias != 0 {
 		target := c.getExportSymbolOfValueSymbolIfExported(c.resolveAlias(symbol))
 		if !typeOnlyDeclarationIsExportStar && target == typeOnlyResolution || typeOnlyExportStarTargets[target.Name] == target {
@@ -17811,7 +17811,7 @@ func (c *Checker) getPropertiesOfObjectType(t *Type) []*ast.Symbol {
 func (c *Checker) getPropertiesOfUnionOrIntersectionType(t *Type) []*ast.Symbol {
 	d := t.AsUnionOrIntersectionType()
 	if d.resolvedProperties == nil {
-		var checked core.Set[string]
+		var checked collections.Set[string]
 		props := []*ast.Symbol{}
 		for _, current := range d.types {
 			for _, prop := range c.getPropertiesOfType(current) {
@@ -20562,7 +20562,7 @@ func isPrototypeProperty(symbol *ast.Symbol) bool {
 }
 
 func (c *Checker) hasCommonDeclaration(symbols *collections.OrderedSet[*ast.Symbol]) bool {
-	var commonDeclarations core.Set[*ast.Node]
+	var commonDeclarations collections.Set[*ast.Node]
 	for symbol := range symbols.Values() {
 		if len(symbol.Declarations) == 0 {
 			return false

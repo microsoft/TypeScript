@@ -65,7 +65,7 @@ type CommandLineOption struct {
 	ElementOptions map[string]*CommandLineOption
 }
 
-func (o *CommandLineOption) DeprecatedKeys() *core.Set[string] {
+func (o *CommandLineOption) DeprecatedKeys() *collections.Set[string] {
 	if o.Kind != CommandLineOptionTypeEnum {
 		return nil
 	}
@@ -179,9 +179,9 @@ var commandLineOptionEnumMap = map[string]*collections.OrderedMap[string, any]{
 }
 
 // CommandLineOption.DeprecatedKeys()
-var commandLineOptionDeprecated = map[string]*core.Set[string]{
-	"moduleResolution": core.NewSetFromItems("node", "classic", "node10"),
-	"target":           core.NewSetFromItems("es3"),
+var commandLineOptionDeprecated = map[string]*collections.Set[string]{
+	"moduleResolution": collections.NewSetFromItems("node", "classic", "node10"),
+	"target":           collections.NewSetFromItems("es3"),
 }
 
 // todo: revisit to see if this can be improved
