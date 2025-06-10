@@ -15,3 +15,14 @@ function getPredicate(alwaysTrue: boolean) {
     });
     return predicate;
 }
+
+// https://github.com/microsoft/typescript-go/issues/1016
+
+declare function compact<T>(array: T[]): T[];
+declare function makeFooer(): Fooer;
+interface Fooer {
+    foo: (v: string) => string;
+}
+function f() {
+    const _ = compact([makeFooer(), { foo: (v) => v }]);
+}

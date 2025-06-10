@@ -4360,8 +4360,12 @@ func (r *Relater) signaturesRelatedTo(source *Type, target *Type, kind Signature
 	if r.relation == r.c.identityRelation {
 		return r.signaturesIdenticalTo(source, target, kind)
 	}
-	if target == r.c.anyFunctionType || r.relation != r.c.strictSubtypeRelation && source == r.c.anyFunctionType {
+	// With respect to signatures, the anyFunctionType wildcard is a subtype of every other function type.
+	if source == r.c.anyFunctionType {
 		return TernaryTrue
+	}
+	if target == r.c.anyFunctionType {
+		return TernaryFalse
 	}
 	sourceSignatures := r.c.getSignaturesOfType(source, kind)
 	targetSignatures := r.c.getSignaturesOfType(target, kind)
