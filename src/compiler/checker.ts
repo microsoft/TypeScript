@@ -32512,7 +32512,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getContextualTypeForObjectLiteralMethod(node, contextFlags) :
             getContextualType(node, contextFlags);
         const instantiatedType = instantiateContextualType(contextualType, node, contextFlags);
-        if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && instantiatedType.flags & TypeFlags.TypeVariable)) {
+        if (instantiatedType && !(contextFlags && contextFlags & ContextFlags.NoConstraints && maybeTypeOfKind(getNonNullableType(instantiatedType), TypeFlags.TypeVariable))) {
             const apparentType = mapType(
                 instantiatedType,
                 // When obtaining apparent type of *contextual* type we don't want to get apparent type of mapped types.
