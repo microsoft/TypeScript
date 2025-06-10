@@ -13,29 +13,30 @@ type TextRangeWithKind struct {
 	Kind ast.Kind
 }
 
-func NewTextRangeWithKind(pos int, end int, kind ast.Kind) *TextRangeWithKind {
-	return &TextRangeWithKind{
+func NewTextRangeWithKind(pos int, end int, kind ast.Kind) TextRangeWithKind {
+	return TextRangeWithKind{
 		Loc:  core.NewTextRange(pos, end),
 		Kind: kind,
 	}
 }
 
 type tokenInfo struct {
-	leadingTrivia  []*TextRangeWithKind
-	token          *TextRangeWithKind
-	trailingTrivia []*TextRangeWithKind
+	leadingTrivia  []TextRangeWithKind
+	token          TextRangeWithKind
+	trailingTrivia []TextRangeWithKind
 }
 
 type formattingScanner struct {
-	s              *scanner.Scanner
-	startPos       int
-	endPos         int
-	savedPos       int
-	lastTokenInfo  *tokenInfo
-	lastScanAction scanAction
-	leadingTrivia  []*TextRangeWithKind
-	trailingTrivia []*TextRangeWithKind
-	wasNewLine     bool
+	s                *scanner.Scanner
+	startPos         int
+	endPos           int
+	savedPos         int
+	hasLastTokenInfo bool
+	lastTokenInfo    tokenInfo
+	lastScanAction   scanAction
+	leadingTrivia    []TextRangeWithKind
+	trailingTrivia   []TextRangeWithKind
+	wasNewLine       bool
 }
 
 func newFormattingScanner(text string, languageVariant core.LanguageVariant, startPos int, endPos int, worker *formatSpanWorker) []core.TextChange {
@@ -54,14 +55,14 @@ func newFormattingScanner(text string, languageVariant core.LanguageVariant, sta
 
 	res := worker.execute(fmtScn)
 
-	fmtScn.lastTokenInfo = nil
+	fmtScn.hasLastTokenInfo = false
 	scan.Reset()
 
 	return res
 }
 
 func (s *formattingScanner) advance() {
-	s.lastTokenInfo = nil
+	s.hasLastTokenInfo = false
 	isStarted := s.s.TokenFullStart() != s.startPos
 
 	if isStarted {
@@ -124,7 +125,7 @@ func (s *formattingScanner) shouldRescanJsxText(node *ast.Node) bool {
 	if ast.IsJsxText(node) {
 		return true
 	}
-	if !ast.IsJsxElement(node) || s.lastTokenInfo == nil {
+	if !ast.IsJsxElement(node) || s.hasLastTokenInfo == false {
 		return false
 	}
 
@@ -160,14 +161,14 @@ const (
 	actionRescanJsxAttributeValue
 )
 
-func fixTokenKind(tokenInfo *tokenInfo, container *ast.Node) *tokenInfo {
+func fixTokenKind(tokenInfo tokenInfo, container *ast.Node) tokenInfo {
 	if ast.IsTokenKind(container.Kind) && tokenInfo.token.Kind != container.Kind {
 		tokenInfo.token.Kind = container.Kind
 	}
 	return tokenInfo
 }
 
-func (s *formattingScanner) readTokenInfo(n *ast.Node) *tokenInfo {
+func (s *formattingScanner) readTokenInfo(n *ast.Node) tokenInfo {
 	// Debug.assert(isOnToken()); // !!!
 
 	// normally scanner returns the smallest available token
@@ -190,14 +191,15 @@ func (s *formattingScanner) readTokenInfo(n *ast.Node) *tokenInfo {
 		expectedScanAction = actionScan
 	}
 
-	if s.lastTokenInfo != nil && expectedScanAction == s.lastScanAction {
+	if s.hasLastTokenInfo && expectedScanAction == s.lastScanAction {
 		// readTokenInfo was called before with the same expected scan action.
 		// No need to re-scan text, return existing 'lastTokenInfo'
 		// it is ok to call fixTokenKind here since it does not affect
 		// what portion of text is consumed. In contrast rescanning can change it,
 		// i.e. for '>=' when originally scanner eats just one character
 		// and rescanning forces it to consume more.
-		return fixTokenKind(s.lastTokenInfo, n)
+		s.lastTokenInfo = fixTokenKind(s.lastTokenInfo, n)
+		return s.lastTokenInfo
 	}
 
 	if s.s.TokenFullStart() != s.savedPos {
@@ -237,13 +239,15 @@ func (s *formattingScanner) readTokenInfo(n *ast.Node) *tokenInfo {
 		}
 	}
 
-	s.lastTokenInfo = &tokenInfo{
+	s.hasLastTokenInfo = true
+	s.lastTokenInfo = tokenInfo{
 		leadingTrivia:  slices.Clone(s.leadingTrivia),
 		token:          token,
 		trailingTrivia: slices.Clone(s.trailingTrivia),
 	}
+	s.lastTokenInfo = fixTokenKind(s.lastTokenInfo, n)
 
-	return fixTokenKind(s.lastTokenInfo, n)
+	return s.lastTokenInfo
 }
 
 func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAction) ast.Kind {
@@ -287,7 +291,7 @@ func (s *formattingScanner) getNextToken(n *ast.Node, expectedScanAction scanAct
 	return token
 }
 
-func (s *formattingScanner) readEOFTokenRange() *TextRangeWithKind {
+func (s *formattingScanner) readEOFTokenRange() TextRangeWithKind {
 	// Debug.assert(isOnEOF()); // !!!
 	return NewTextRangeWithKind(
 		s.s.TokenFullStart(),
@@ -298,7 +302,7 @@ func (s *formattingScanner) readEOFTokenRange() *TextRangeWithKind {
 
 func (s *formattingScanner) isOnToken() bool {
 	current := s.s.Token()
-	if s.lastTokenInfo != nil {
+	if s.hasLastTokenInfo {
 		current = s.lastTokenInfo.token.Kind
 	}
 	return current != ast.KindEndOfFile && !ast.IsTrivia(current)
@@ -306,7 +310,7 @@ func (s *formattingScanner) isOnToken() bool {
 
 func (s *formattingScanner) isOnEOF() bool {
 	current := s.s.Token()
-	if s.lastTokenInfo != nil {
+	if s.hasLastTokenInfo {
 		current = s.lastTokenInfo.token.Kind
 	}
 	return current == ast.KindEndOfFile
@@ -316,7 +320,7 @@ func (s *formattingScanner) skipToEndOf(r *core.TextRange) {
 	s.s.ResetTokenState(r.End())
 	s.savedPos = s.s.TokenFullStart()
 	s.lastScanAction = actionScan
-	s.lastTokenInfo = nil
+	s.hasLastTokenInfo = false
 	s.wasNewLine = false
 	s.leadingTrivia = nil
 	s.trailingTrivia = nil
@@ -326,13 +330,13 @@ func (s *formattingScanner) skipToStartOf(r *core.TextRange) {
 	s.s.ResetTokenState(r.Pos())
 	s.savedPos = s.s.TokenFullStart()
 	s.lastScanAction = actionScan
-	s.lastTokenInfo = nil
+	s.hasLastTokenInfo = false
 	s.wasNewLine = false
 	s.leadingTrivia = nil
 	s.trailingTrivia = nil
 }
 
-func (s *formattingScanner) getCurrentLeadingTrivia() []*TextRangeWithKind {
+func (s *formattingScanner) getCurrentLeadingTrivia() []TextRangeWithKind {
 	return s.leadingTrivia
 }
 
@@ -341,7 +345,7 @@ func (s *formattingScanner) lastTrailingTriviaWasNewLine() bool {
 }
 
 func (s *formattingScanner) getTokenFullStart() int {
-	if s.lastTokenInfo != nil {
+	if s.hasLastTokenInfo {
 		return s.lastTokenInfo.token.Loc.Pos()
 	}
 	return s.s.TokenFullStart()

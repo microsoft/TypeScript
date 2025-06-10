@@ -86,8 +86,8 @@ func GetDefaultFormatCodeSettings(newLineCharacter string) *FormatCodeSettings {
 }
 
 type formattingContext struct {
-	currentTokenSpan   *TextRangeWithKind
-	nextTokenSpan      *TextRangeWithKind
+	currentTokenSpan   TextRangeWithKind
+	nextTokenSpan      TextRangeWithKind
 	contextNode        *ast.Node
 	currentTokenParent *ast.Node
 	nextTokenParent    *ast.Node
@@ -117,15 +117,9 @@ func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options 
 	return res
 }
 
-func (this *formattingContext) UpdateContext(cur *TextRangeWithKind, curParent *ast.Node, next *TextRangeWithKind, nextParent *ast.Node, commonParent *ast.Node) {
-	if cur == nil {
-		panic("nil current range in update context")
-	}
+func (this *formattingContext) UpdateContext(cur TextRangeWithKind, curParent *ast.Node, next TextRangeWithKind, nextParent *ast.Node, commonParent *ast.Node) {
 	if curParent == nil {
 		panic("nil current range node parent in update context")
-	}
-	if next == nil {
-		panic("nil next range in update context")
 	}
 	if nextParent == nil {
 		panic("nil next range node parent in update context")

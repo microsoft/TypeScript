@@ -15,11 +15,11 @@ import (
 ///
 
 type (
-	optionSelector    = func(options *FormatCodeSettings) core.Tristate
-	anyOptionSelector = func(options *FormatCodeSettings) any
+	optionSelector                  = func(options *FormatCodeSettings) core.Tristate
+	anyOptionSelector[T comparable] = func(options *FormatCodeSettings) T
 )
 
-func semicolonOption(options *FormatCodeSettings) any { return options.Semicolons }
+func semicolonOption(options *FormatCodeSettings) SemicolonPreference { return options.Semicolons }
 func insertSpaceAfterCommaDelimiterOption(options *FormatCodeSettings) core.Tristate {
 	return options.InsertSpaceAfterCommaDelimiter
 }
@@ -96,7 +96,7 @@ func indentSwitchCaseOption(options *FormatCodeSettings) core.Tristate {
 	return options.IndentSwitchCase
 }
 
-func optionEquals(optionName anyOptionSelector, optionValue any) contextPredicate {
+func optionEquals[T comparable](optionName anyOptionSelector[T], optionValue T) contextPredicate {
 	return func(context *formattingContext) bool {
 		if context.Options == nil {
 			return false
@@ -494,7 +494,7 @@ func isConstructorSignatureContext(context *formattingContext) bool {
 	return context.contextNode.Kind == ast.KindConstructSignature
 }
 
-func isTypeArgumentOrParameterOrAssertion(token *TextRangeWithKind, parent *ast.Node) bool {
+func isTypeArgumentOrParameterOrAssertion(token TextRangeWithKind, parent *ast.Node) bool {
 	if token.Kind != ast.KindLessThanToken && token.Kind != ast.KindGreaterThanToken {
 		return false
 	}

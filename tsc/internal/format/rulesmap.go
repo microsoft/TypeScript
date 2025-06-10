@@ -7,10 +7,9 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 )
 
-func getRules(context *formattingContext) []*ruleImpl {
+func getRules(context *formattingContext, rules []*ruleImpl) []*ruleImpl {
 	bucket := getRulesMap()[getRuleBucketIndex(context.currentTokenSpan.Kind, context.nextTokenSpan.Kind)]
 	if len(bucket) > 0 {
-		var rules []*ruleImpl
 		ruleActionMask := ruleActionNone
 	outer:
 		for _, rule := range bucket {
@@ -28,7 +27,7 @@ func getRules(context *formattingContext) []*ruleImpl {
 		}
 		return rules
 	}
-	return nil
+	return rules
 }
 
 func getRuleBucketIndex(row ast.Kind, column ast.Kind) int {

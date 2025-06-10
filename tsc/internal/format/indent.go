@@ -152,7 +152,11 @@ func getActualIndentationForListItem(node *ast.Node, sourceFile *ast.SourceFile,
 		if listIndentsChild {
 			delta = options.IndentSize
 		}
-		return getActualIndentationForListStartLine(containingList, sourceFile, options) + delta
+		res := getActualIndentationForListStartLine(containingList, sourceFile, options)
+		if res == -1 {
+			return delta
+		}
+		return res + delta
 	}
 	return -1
 }
