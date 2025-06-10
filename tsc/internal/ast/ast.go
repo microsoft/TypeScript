@@ -10031,8 +10031,6 @@ type SourceFile struct {
 
 	tokenCacheMu sync.Mutex
 	tokenCache   map[core.TextRange]*Node
-
-	JSGlobalAugmentations SymbolTable // !!! remove me
 }
 
 func (f *NodeFactory) NewSourceFile(text string, fileName string, path tspath.Path, statements *NodeList) *Node {
@@ -10132,7 +10130,6 @@ func (node *SourceFile) copyFrom(other *SourceFile) {
 	node.LibReferenceDirectives = other.LibReferenceDirectives
 	node.CommonJSModuleIndicator = other.CommonJSModuleIndicator
 	node.ExternalModuleIndicator = other.ExternalModuleIndicator
-	node.JSGlobalAugmentations = other.JSGlobalAugmentations
 	node.Flags |= other.Flags
 }
 

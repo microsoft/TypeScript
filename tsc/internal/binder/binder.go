@@ -1221,12 +1221,6 @@ func (b *Binder) lookupName(name string, container *ast.Node) *ast.Symbol {
 			return core.OrElse(local.ExportSymbol, local)
 		}
 	}
-	if ast.IsSourceFile(container) {
-		local := container.AsSourceFile().JSGlobalAugmentations[name]
-		if local != nil {
-			return local
-		}
-	}
 	declaration := container.DeclarationData()
 	if declaration != nil && declaration.Symbol != nil {
 		return declaration.Symbol.Exports[name]
