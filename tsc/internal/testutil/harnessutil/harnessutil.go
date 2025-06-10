@@ -474,37 +474,37 @@ var sourceFileCache collections.SyncMap[SourceFileCacheKey, *ast.SourceFile]
 
 type SourceFileCacheKey struct {
 	core.SourceFileAffectingCompilerOptions
-	fileName        string
-	path            tspath.Path
-	languageVersion core.ScriptTarget
-	text            string
+	ast.SourceFileMetaData
+	fileName string
+	path     tspath.Path
+	text     string
 }
 
 func GetSourceFileCacheKey(
-	options core.SourceFileAffectingCompilerOptions,
 	fileName string,
 	path tspath.Path,
-	languageVersion core.ScriptTarget,
 	text string,
+	options *core.SourceFileAffectingCompilerOptions,
+	metadata *ast.SourceFileMetaData,
 ) SourceFileCacheKey {
 	return SourceFileCacheKey{
-		SourceFileAffectingCompilerOptions: options,
+		SourceFileAffectingCompilerOptions: *options,
+		SourceFileMetaData:                 *metadata,
 		fileName:                           fileName,
 		path:                               path,
-		languageVersion:                    languageVersion,
 		text:                               text,
 	}
 }
 
-func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, languageVersion core.ScriptTarget) *ast.SourceFile {
+func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, options *core.SourceFileAffectingCompilerOptions, metadata *ast.SourceFileMetaData) *ast.SourceFile {
 	text, _ := h.FS().ReadFile(fileName)
 
 	key := GetSourceFileCacheKey(
-		*h.options.SourceFileAffecting(),
 		fileName,
 		path,
-		languageVersion,
 		text,
+		h.options.SourceFileAffecting(),
+		metadata,
 	)
 
 	if cached, ok := sourceFileCache.Load(key); ok {
@@ -517,7 +517,7 @@ func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, la
 		sourceFile = parser.ParseJSONText(fileName, path, text)
 	} else {
 		// !!! JSDocParsingMode
-		sourceFile = parser.ParseSourceFile(fileName, path, text, languageVersion, scanner.JSDocParsingModeParseAll)
+		sourceFile = parser.ParseSourceFile(fileName, path, text, options, metadata, scanner.JSDocParsingModeParseAll)
 	}
 
 	result, _ := sourceFileCache.LoadOrStore(key, sourceFile)

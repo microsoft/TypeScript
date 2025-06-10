@@ -11,3 +11,4 @@
 -_jsxDEV("div", { children: "2" }, "key-attr", false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 14 }, this);
 +<div>1</div>;
 +<div key={"key-attr"}>2</div>;
++export {};

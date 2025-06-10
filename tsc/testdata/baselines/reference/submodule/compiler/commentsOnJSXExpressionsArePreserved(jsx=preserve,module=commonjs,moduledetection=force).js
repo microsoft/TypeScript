@@ -23,6 +23,8 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.jsx]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Component {
     render() {
         return <div>

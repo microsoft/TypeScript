@@ -34,6 +34,10 @@ func applyBulkEdits(text string, edits []core.TextChange) string {
 	return b.String()
 }
 
+var parseCompilerOptions = &core.SourceFileAffectingCompilerOptions{
+	EmitScriptTarget: core.ScriptTargetLatest,
+}
+
 func TestFormat(t *testing.T) {
 	t.Parallel()
 
@@ -60,7 +64,8 @@ func TestFormat(t *testing.T) {
 			"/checker.ts",
 			"/checker.ts",
 			text,
-			core.ScriptTargetESNext,
+			parseCompilerOptions,
+			nil,
 			scanner.JSDocParsingModeParseAll,
 		)
 		ast.SetParentInChildren(sourceFile.AsNode())
@@ -93,7 +98,8 @@ func BenchmarkFormat(b *testing.B) {
 		"/checker.ts",
 		"/checker.ts",
 		text,
-		core.ScriptTargetESNext,
+		parseCompilerOptions,
+		nil,
 		scanner.JSDocParsingModeParseAll,
 	)
 	ast.SetParentInChildren(sourceFile.AsNode())

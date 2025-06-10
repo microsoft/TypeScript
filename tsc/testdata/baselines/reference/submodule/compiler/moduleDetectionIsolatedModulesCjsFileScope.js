@@ -6,12 +6,15 @@ const a = 2;
 const a = 2;
 
 //// [filename.cjs]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const a = 2;
 //// [filename.mjs]
 const a = 2;
+export {};
 
 
 //// [filename.d.cts]
-declare const a = 2;
+export {};
 //// [filename.d.mts]
-declare const a = 2;
+export {};

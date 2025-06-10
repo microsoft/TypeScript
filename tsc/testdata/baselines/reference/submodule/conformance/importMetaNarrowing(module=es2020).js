@@ -13,3 +13,4 @@ if (import.meta.foo) {
 if (import.meta.foo) {
     import.meta.foo();
 }
+export {};

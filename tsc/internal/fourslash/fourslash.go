@@ -80,15 +80,15 @@ func (c *parsedFileCache) GetFile(
 	fileName string,
 	path tspath.Path,
 	text string,
-	scriptTarget core.ScriptTarget,
-	options core.SourceFileAffectingCompilerOptions,
+	options *core.SourceFileAffectingCompilerOptions,
+	metadata *ast.SourceFileMetaData,
 ) *ast.SourceFile {
 	key := harnessutil.GetSourceFileCacheKey(
-		options,
 		fileName,
 		path,
-		scriptTarget,
 		text,
+		options,
+		metadata,
 	)
 
 	cachedFile, ok := sourceFileCache.Load(key)
@@ -102,16 +102,16 @@ func (c *parsedFileCache) CacheFile(
 	fileName string,
 	path tspath.Path,
 	text string,
-	scriptTarget core.ScriptTarget,
-	options core.SourceFileAffectingCompilerOptions,
+	options *core.SourceFileAffectingCompilerOptions,
+	metadata *ast.SourceFileMetaData,
 	sourceFile *ast.SourceFile,
 ) {
 	key := harnessutil.GetSourceFileCacheKey(
-		options,
 		fileName,
 		path,
-		scriptTarget,
 		text,
+		options,
+		metadata,
 	)
 	sourceFileCache.Store(key, sourceFile)
 }

@@ -9,6 +9,8 @@ if (import.meta.foo) {
 
 
 //// [importMetaNarrowing.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 ;
 if (import.meta.foo) {
     import.meta.foo();

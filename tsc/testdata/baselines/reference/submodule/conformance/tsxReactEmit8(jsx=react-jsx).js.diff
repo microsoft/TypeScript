@@ -10,3 +10,4 @@
 -_jsx("div", { children: "2" }, "key-attr");
 +<div>1</div>;
 +<div key={"key-attr"}>2</div>;
++export {};

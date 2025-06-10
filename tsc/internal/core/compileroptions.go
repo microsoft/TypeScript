@@ -216,6 +216,18 @@ func (options *CompilerOptions) GetModuleResolutionKind() ModuleResolutionKind {
 	}
 }
 
+func (options *CompilerOptions) GetEmitModuleDetectionKind() ModuleDetectionKind {
+	if options.ModuleDetection != ModuleDetectionKindNone {
+		return options.ModuleDetection
+	}
+	switch options.GetEmitModuleKind() {
+	case ModuleKindNode16, ModuleKindNodeNext:
+		return ModuleDetectionKindForce
+	default:
+		return ModuleDetectionKindAuto
+	}
+}
+
 func (options *CompilerOptions) GetResolvePackageJsonExports() bool {
 	return options.ResolvePackageJsonExports.IsTrueOrUnknown()
 }
@@ -339,7 +351,10 @@ type SourceFileAffectingCompilerOptions struct {
 	AllowUnreachableCode       Tristate
 	AllowUnusedLabels          Tristate
 	BindInStrictMode           bool
+	EmitModuleDetectionKind    ModuleDetectionKind
+	EmitModuleKind             ModuleKind
 	EmitScriptTarget           ScriptTarget
+	JsxEmit                    JsxEmit
 	NoFallthroughCasesInSwitch Tristate
 	ShouldPreserveConstEnums   bool
 }
@@ -349,7 +364,10 @@ func (options *CompilerOptions) SourceFileAffecting() *SourceFileAffectingCompil
 		AllowUnreachableCode:       options.AllowUnreachableCode,
 		AllowUnusedLabels:          options.AllowUnusedLabels,
 		BindInStrictMode:           options.AlwaysStrict.IsTrue() || options.Strict.IsTrue(),
+		EmitModuleDetectionKind:    options.GetEmitModuleDetectionKind(),
+		EmitModuleKind:             options.GetEmitModuleKind(),
 		EmitScriptTarget:           options.GetEmitScriptTarget(),
+		JsxEmit:                    options.Jsx,
 		NoFallthroughCasesInSwitch: options.NoFallthroughCasesInSwitch,
 		ShouldPreserveConstEnums:   options.ShouldPreserveConstEnums(),
 	}

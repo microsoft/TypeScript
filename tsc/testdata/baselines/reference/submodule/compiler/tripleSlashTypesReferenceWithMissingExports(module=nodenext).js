@@ -14,5 +14,7 @@ interface GlobalThing { a: number }
 const a: GlobalThing = { a: 0 };
 
 //// [usage.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg" />
 const a = { a: 0 };

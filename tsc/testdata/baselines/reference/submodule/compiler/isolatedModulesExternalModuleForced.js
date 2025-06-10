@@ -5,3 +5,4 @@ var x;
 
 //// [file1.js]
 var x;
+export {};

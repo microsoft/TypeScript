@@ -39,6 +39,8 @@ declare global {
 const { a, b, c } = import.meta.wellKnownProperty;
 
 //// [example.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
 (async () => {
     const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
@@ -57,6 +59,8 @@ exports.x = import.meta;
 exports.y = import.metal;
 exports.z = import.import.import.malkovich;
 //// [scriptLookingFile01.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let globalA = import.meta;
 let globalB = import.metal;
 let globalC = import.import.import.malkovich;

@@ -228,7 +228,9 @@ func NewProgram(opts ProgramOptions) *Program {
 // In addition to a new program, return a boolean indicating whether the data of the old program was reused.
 func (p *Program) UpdateProgram(changedFilePath tspath.Path) (*Program, bool) {
 	oldFile := p.filesByPath[changedFilePath]
-	newFile := p.Host().GetSourceFile(oldFile.FileName(), changedFilePath, oldFile.LanguageVersion)
+	// TODO(jakebailey): is wrong because the new file may have new metadata?
+	metadata := p.sourceFileMetaDatas[changedFilePath]
+	newFile := p.Host().GetSourceFile(oldFile.FileName(), changedFilePath, p.Options().SourceFileAffecting(), metadata)
 	if !canReplaceFileInProgram(oldFile, newFile) {
 		return NewProgram(p.opts), false
 	}
@@ -262,6 +264,7 @@ func (p *Program) initCheckerPool() {
 }
 
 func canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.SourceFile) bool {
+	// TODO(jakebailey): metadata??
 	return file1.FileName() == file2.FileName() &&
 		file1.Path() == file2.Path() &&
 		file1.LanguageVersion == file2.LanguageVersion &&
@@ -696,7 +699,7 @@ func (p *Program) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, loca
 }
 
 func (p *Program) GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ResolutionMode {
-	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.Options(), p.GetSourceFileMetaData(sourceFile.Path()))
+	return ast.GetImpliedNodeFormatForEmitWorker(sourceFile.FileName(), p.Options().GetEmitModuleKind(), p.GetSourceFileMetaData(sourceFile.Path()))
 }
 
 func (p *Program) GetModeForUsageLocation(sourceFile ast.HasFileName, location *ast.StringLiteralLike) core.ResolutionMode {

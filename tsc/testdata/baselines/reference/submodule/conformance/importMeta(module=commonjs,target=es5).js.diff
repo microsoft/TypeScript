@@ -1,10 +1,9 @@
 --- old.importMeta(module=commonjs,target=es5).js
 +++ new.importMeta(module=commonjs,target=es5).js
-@@= skipped -38, +38 lines =@@
- const { a, b, c } = import.meta.wellKnownProperty;
+@@= skipped -39, +39 lines =@@
 
  //// [example.js]
--"use strict";
+ "use strict";
 -var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
 -    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
 -    return new (P || (P = Promise))(function (resolve, reject) {
@@ -41,7 +40,7 @@
 -        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
 -    }
 -};
--Object.defineProperty(exports, "__esModule", { value: true });
+ Object.defineProperty(exports, "__esModule", { value: true });
  // Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
 -(function () { return __awaiter(void 0, void 0, void 0, function () {
 -    var response, blob, size, image;
@@ -74,12 +73,10 @@
  //// [moduleLookingFile01.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
-@@= skipped -66, +18 lines =@@
- exports.y = import.metal;
- exports.z = import.import.import.malkovich;
+@@= skipped -67, +21 lines =@@
  //// [scriptLookingFile01.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
 -var globalA = import.meta;
 -var globalB = import.metal;
 -var globalC = import.import.import.malkovich;

@@ -22,13 +22,13 @@ func BenchmarkBind(b *testing.B) {
 			path := tspath.ToPath(fileName, "/", osvfs.FS().UseCaseSensitiveFileNames())
 			sourceText := f.ReadFile(b)
 
-			sourceFiles := make([]*ast.SourceFile, b.N)
-			for i := range b.N {
-				sourceFiles[i] = parser.ParseSourceFile(fileName, path, sourceText, core.ScriptTargetESNext, scanner.JSDocParsingModeParseAll)
-			}
-
 			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, Module: core.ModuleKindNodeNext}
 			sourceAffecting := compilerOptions.SourceFileAffecting()
+
+			sourceFiles := make([]*ast.SourceFile, b.N)
+			for i := range b.N {
+				sourceFiles[i] = parser.ParseSourceFile(fileName, path, sourceText, sourceAffecting, nil, scanner.JSDocParsingModeParseAll)
+			}
 
 			// The above parses do a lot of work; ensure GC is finished before we start collecting performance data.
 			// GC must be called twice to allow things to settle.
