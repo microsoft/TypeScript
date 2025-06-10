@@ -5,10 +5,16 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"gotest.tools/v3/assert"
 )
+
+func configFileExists(t *testing.T, service *project.Service, path tspath.Path, exists bool) {
+	_, loaded := service.ConfigFileRegistry().ConfigFiles.Load(path)
+	assert.Equal(t, loaded, exists, "config file %s should exist: %v", path, exists)
+}
 
 func TestProjectLifetime(t *testing.T) {
 	t.Parallel()
@@ -60,6 +66,8 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, service.ConfiguredProject(tspath.ToPath("/home/projects/TS/p1/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())) != nil)
 		assert.Assert(t, service.ConfiguredProject(tspath.ToPath("/home/projects/TS/p2/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())) != nil)
 		assert.Equal(t, len(host.ClientMock.WatchFilesCalls()), 2)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p1/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), true)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p2/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), true)
 
 		service.CloseFile("/home/projects/TS/p1/src/index.ts")
 		service.OpenFile("/home/projects/TS/p3/src/index.ts", files["/home/projects/TS/p3/src/index.ts"].(string), core.ScriptKindTS, "")
@@ -71,6 +79,9 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, service.GetScriptInfoByPath(tspath.ToPath("/home/projects/TS/p1/src/x.ts", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())) == nil)
 		assert.Equal(t, len(host.ClientMock.WatchFilesCalls()), 3)
 		assert.Equal(t, len(host.ClientMock.UnwatchFilesCalls()), 1)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p1/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), false)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p2/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), true)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p3/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), true)
 
 		service.CloseFile("/home/projects/TS/p2/src/index.ts")
 		service.CloseFile("/home/projects/TS/p3/src/index.ts")
@@ -84,6 +95,9 @@ func TestProjectLifetime(t *testing.T) {
 		assert.Assert(t, service.GetScriptInfoByPath(tspath.ToPath("/home/projects/TS/p3/src/x.ts", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames())) == nil)
 		assert.Equal(t, len(host.ClientMock.WatchFilesCalls()), 4)
 		assert.Equal(t, len(host.ClientMock.UnwatchFilesCalls()), 3)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p1/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), true)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p2/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), false)
+		configFileExists(t, service, tspath.ToPath("/home/projects/TS/p3/tsconfig.json", host.GetCurrentDirectory(), host.FS().UseCaseSensitiveFileNames()), false)
 	})
 
 	t.Run("inferred projects", func(t *testing.T) {

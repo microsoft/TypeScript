@@ -10,7 +10,6 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/repo"
@@ -230,16 +229,29 @@ func sanitizeTraceOutput(trace string) string {
 	return typesVersionsMessageRegex.ReplaceAllString(trace, "that matches compiler version '3.1.0-dev'")
 }
 
+type RedirectRef struct {
+	fileName string
+	options  *core.CompilerOptions
+}
+
+func (r *RedirectRef) ConfigName() string {
+	return r.fileName
+}
+
+func (r *RedirectRef) CompilerOptions() *core.CompilerOptions {
+	return r.options
+}
+
+var _ module.ResolvedProjectReference = (*RedirectRef)(nil)
+
 func doCall(t *testing.T, resolver *module.Resolver, call functionCall, skipLocations bool) {
 	switch call.call {
 	case "resolveModuleName", "resolveTypeReferenceDirective":
-		var redirectedReference *module.ResolvedProjectReference
+		var redirectedReference module.ResolvedProjectReference
 		if call.args.RedirectedRef != nil {
-			redirectedReference = &module.ResolvedProjectReference{
-				SourceFile: (&ast.NodeFactory{}).NewSourceFile("", call.args.RedirectedRef.SourceFile.FileName, tspath.Path(call.args.RedirectedRef.SourceFile.FileName), nil).AsSourceFile(),
-				CommandLine: core.ParsedOptions{
-					CompilerOptions: call.args.RedirectedRef.CommandLine.CompilerOptions,
-				},
+			redirectedReference = &RedirectRef{
+				fileName: call.args.RedirectedRef.SourceFile.FileName,
+				options:  call.args.RedirectedRef.CommandLine.CompilerOptions,
 			}
 		}
 

@@ -200,12 +200,13 @@ func getEachFileNameOfModule(
 	preferSymlinks bool,
 ) []ModulePath {
 	cwd := host.GetCurrentDirectory()
+	importedPath := tspath.ToPath(importedFileName, cwd, host.UseCaseSensitiveFileNames())
 	var referenceRedirect string
-	if host.IsSourceOfProjectReferenceRedirect(importedFileName) {
-		referenceRedirect = host.GetProjectReferenceRedirect(importedFileName)
+	outputAndReference := host.GetOutputAndProjectReference(importedPath)
+	if outputAndReference != nil && outputAndReference.OutputDts != "" {
+		referenceRedirect = outputAndReference.OutputDts
 	}
 
-	importedPath := tspath.ToPath(importedFileName, cwd, host.UseCaseSensitiveFileNames())
 	redirects := host.GetRedirectTargets(importedPath)
 	importedFileNames := make([]string, 0, 2+len(redirects))
 	if len(referenceRedirect) > 0 {

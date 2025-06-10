@@ -317,7 +317,10 @@ func sourceFileMayBeEmitted(sourceFile *ast.SourceFile, host printer.EmitHost, f
 		return true
 	}
 
-	// !!! Source files from referenced projects are not emitted
+	// Source files from referenced projects are not emitted
+	if host.GetOutputAndProjectReference(sourceFile.Path()) != nil {
+		return false
+	}
 
 	// Any non json file should be emitted
 	if !ast.IsJsonSourceFile(sourceFile) {

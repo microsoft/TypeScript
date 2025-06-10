@@ -12,17 +12,19 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/emittestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
 type fakeProgram struct {
-	singleThreaded              bool
-	compilerOptions             *core.CompilerOptions
-	files                       []*ast.SourceFile
-	getEmitModuleFormatOfFile   func(sourceFile ast.HasFileName) core.ModuleKind
-	getImpliedNodeFormatForEmit func(sourceFile ast.HasFileName) core.ModuleKind
-	getResolvedModule           func(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
-	getSourceFile               func(FileName string) *ast.SourceFile
+	singleThreaded                 bool
+	compilerOptions                *core.CompilerOptions
+	files                          []*ast.SourceFile
+	getEmitModuleFormatOfFile      func(sourceFile ast.HasFileName) core.ModuleKind
+	getImpliedNodeFormatForEmit    func(sourceFile ast.HasFileName) core.ModuleKind
+	getResolvedModule              func(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
+	getSourceFile                  func(FileName string) *ast.SourceFile
+	getSourceFileForResolvedModule func(FileName string) *ast.SourceFile
 }
 
 // GetEmitSyntaxForUsageLocation implements checker.Program.
@@ -59,16 +61,20 @@ func (p *fakeProgram) GetPackageJsonInfo(pkgJsonPath string) modulespecifiers.Pa
 	return nil
 }
 
-func (p *fakeProgram) GetProjectReferenceRedirect(path string) string {
-	return ""
-}
-
 func (p *fakeProgram) GetRedirectTargets(path tspath.Path) []string {
 	return nil
 }
 
-func (p *fakeProgram) IsSourceOfProjectReferenceRedirect(path string) bool {
+func (p *fakeProgram) GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference {
+	return nil
+}
+
+func (p *fakeProgram) IsSourceFromProjectReference(path tspath.Path) bool {
 	return false
+}
+
+func (p *fakeProgram) GetSourceAndProjectReference(path tspath.Path) *tsoptions.SourceAndProjectReference {
+	return nil
 }
 
 func (p *fakeProgram) UseCaseSensitiveFileNames() bool {
@@ -117,6 +123,10 @@ func (p *fakeProgram) GetResolvedModule(currentSourceFile ast.HasFileName, modul
 
 func (p *fakeProgram) GetSourceFile(FileName string) *ast.SourceFile {
 	return p.getSourceFile(FileName)
+}
+
+func (p *fakeProgram) GetSourceFileForResolvedModule(FileName string) *ast.SourceFile {
+	return p.getSourceFileForResolvedModule(FileName)
 }
 
 func (p *fakeProgram) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
@@ -194,6 +204,12 @@ func TestImportElision(t *testing.T) {
 					return core.ModuleKindESNext
 				},
 				getSourceFile: func(fileName string) *ast.SourceFile {
+					if fileName == "other.ts" {
+						return other
+					}
+					return nil
+				},
+				getSourceFileForResolvedModule: func(fileName string) *ast.SourceFile {
 					if fileName == "other.ts" {
 						return other
 					}

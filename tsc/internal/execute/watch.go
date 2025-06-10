@@ -23,7 +23,7 @@ func start(w *watcher) ExitStatus {
 func (w *watcher) initialize() {
 	// if this function is updated, make sure to update `StartForTest` in export_test.go as needed
 	if w.configFileName == "" {
-		w.host = compiler.NewCompilerHost(w.options.CompilerOptions(), w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath())
+		w.host = compiler.NewCompilerHost(w.options.CompilerOptions(), w.sys.GetCurrentDirectory(), w.sys.FS(), w.sys.DefaultLibraryPath(), nil)
 	}
 }
 

@@ -6,19 +6,18 @@ Input::--p project
 import { x } from "../utils";
 //// [/home/src/workspaces/solution/project/tsconfig.json] new file
 {
-			"references": [
-				{ "path": "../utils" },
-			],
-		}
+	"references": [
+		{ "path": "../utils" },
+	],
+}
 //// [/home/src/workspaces/solution/utils/index.ts] new file
 export const x = 10;
 //// [/home/src/workspaces/solution/utils/tsconfig.json] new file
 {
-			"compilerOptions": {
-				"composite": true,
-				"noEmit": true,
-			},
-		}
+	"compilerOptions": {
+		"composite": true,
+	},
+}
 
 ExitStatus:: 2
 

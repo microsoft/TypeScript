@@ -29,9 +29,10 @@ type API struct {
 	host    APIHost
 	options APIOptions
 
-	documentRegistry *project.DocumentRegistry
-	scriptInfosMu    sync.RWMutex
-	scriptInfos      map[tspath.Path]*project.ScriptInfo
+	documentRegistry   *project.DocumentRegistry
+	scriptInfosMu      sync.RWMutex
+	scriptInfos        map[tspath.Path]*project.ScriptInfo
+	configFileRegistry *project.ConfigFileRegistry
 
 	projects  handleMap[project.Project]
 	filesMu   sync.Mutex
@@ -65,6 +66,9 @@ func NewAPI(host APIHost, options APIOptions) *API {
 			},
 		},
 	}
+	api.configFileRegistry = &project.ConfigFileRegistry{
+		Host: api,
+	}
 	return api
 }
 
@@ -81,6 +85,11 @@ func (api *API) TypingsInstaller() *project.TypingsInstaller {
 // DocumentRegistry implements ProjectHost.
 func (api *API) DocumentRegistry() *project.DocumentRegistry {
 	return api.documentRegistry
+}
+
+// ConfigFileRegistry implements ProjectHost.
+func (api *API) ConfigFileRegistry() *project.ConfigFileRegistry {
+	return api.configFileRegistry
 }
 
 // FS implements ProjectHost.

@@ -65,20 +65,17 @@ func parseNumber(value any) *int {
 	return nil
 }
 
-func parseProjectReference(json any) []core.ProjectReference {
-	var result []core.ProjectReference
+func parseProjectReference(json any) []*core.ProjectReference {
+	var result []*core.ProjectReference
 	if v, ok := json.(*collections.OrderedMap[string, any]); ok {
 		var reference core.ProjectReference
 		if v, ok := v.Get("path"); ok {
 			reference.Path = v.(string)
 		}
-		if v, ok := v.Get("originalPath"); ok {
-			reference.OriginalPath = v.(string)
-		}
 		if v, ok := v.Get("circular"); ok {
 			reference.Circular = v.(bool)
 		}
-		result = append(result, reference)
+		result = append(result, &reference)
 	}
 	return result
 }

@@ -53,6 +53,7 @@ type Service struct {
 	scriptInfos            map[tspath.Path]*ScriptInfo
 	openFiles              map[tspath.Path]string // values are projectRootPath, if provided
 	configFileForOpenFiles map[tspath.Path]string // default config project for open files !!! todo solution and project reference handling
+	configFileRegistry     *ConfigFileRegistry
 
 	// Contains all the deleted script info's version information so that
 	// it does not reset when creating script info again
@@ -93,7 +94,9 @@ func NewService(host ServiceHost, options ServiceOptions) *Service {
 		filenameToScriptInfoVersion: make(map[tspath.Path]int),
 		realpathToScriptInfos:       make(map[tspath.Path]map[*ScriptInfo]struct{}),
 	}
-
+	service.configFileRegistry = &ConfigFileRegistry{
+		Host: service,
+	}
 	service.converters = ls.NewConverters(options.PositionEncoding, func(fileName string) *ls.LineMap {
 		return service.GetScriptInfo(fileName).LineMap()
 	})
@@ -147,6 +150,11 @@ func (s *Service) TypingsInstaller() *TypingsInstaller {
 // DocumentRegistry implements ProjectHost.
 func (s *Service) DocumentRegistry() *DocumentRegistry {
 	return s.documentRegistry
+}
+
+// ConfigFileRegistry implements ProjectHost.
+func (s *Service) ConfigFileRegistry() *ConfigFileRegistry {
+	return s.configFileRegistry
 }
 
 // FS implements ProjectHost.
@@ -229,11 +237,7 @@ func (s *Service) OpenFile(fileName string, fileContent string, scriptKind core.
 	info := s.getOrCreateOpenScriptInfo(fileName, path, fileContent, scriptKind, projectRootPath)
 	if existing == nil && info != nil && !info.isDynamic {
 		// Invoke wild card directory watcher to ensure that the file presence is reflected
-		s.projectsMu.RLock()
-		for _, project := range s.configuredProjects {
-			project.tryInvokeWildCardDirectories(fileName, info.path)
-		}
-		s.projectsMu.RUnlock()
+		s.configFileRegistry.tryInvokeWildCardDirectories(fileName, info.path)
 	}
 	result := s.assignProjectToOpenedScriptInfo(info)
 	s.cleanupProjectsAndScriptInfos(info, result)
@@ -321,9 +325,8 @@ func (s *Service) OnWatchedFilesChanged(ctx context.Context, changes []*lsproto.
 	for _, change := range changes {
 		fileName := ls.DocumentURIToFileName(change.Uri)
 		path := s.toPath(fileName)
-		if project, ok := s.configuredProjects[path]; ok {
-			// tsconfig of project
-			if err := s.onConfigFileChanged(project, change.Type); err != nil {
+		if err, ok := s.configFileRegistry.onWatchedFilesChanged(path, change.Type); ok {
+			if err != nil {
 				return fmt.Errorf("error handling config file change: %w", err)
 			}
 		} else if _, ok := s.openFiles[path]; ok {
@@ -346,6 +349,7 @@ func (s *Service) OnWatchedFilesChanged(ctx context.Context, changes []*lsproto.
 			for _, project := range s.inferredProjects {
 				project.onWatchEventForNilScriptInfo(fileName)
 			}
+			s.configFileRegistry.tryInvokeWildCardDirectories(fileName, path)
 		}
 	}
 
@@ -354,23 +358,6 @@ func (s *Service) OnWatchedFilesChanged(ctx context.Context, changes []*lsproto.
 		return client.RefreshDiagnostics(ctx)
 	}
 
-	return nil
-}
-
-func (s *Service) onConfigFileChanged(project *Project, changeKind lsproto.FileChangeType) error {
-	wasDeferredClose := project.deferredClose
-	switch changeKind {
-	case lsproto.FileChangeTypeCreated:
-		if wasDeferredClose {
-			project.deferredClose = false
-		}
-	case lsproto.FileChangeTypeDeleted:
-		project.deferredClose = true
-	}
-
-	if !project.deferredClose {
-		project.SetPendingReload(PendingReloadFull)
-	}
 	return nil
 }
 

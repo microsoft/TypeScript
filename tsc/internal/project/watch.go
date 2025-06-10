@@ -18,8 +18,14 @@ const (
 	recursiveFileGlobPattern = "**/*.{js,jsx,mjs,cjs,ts,tsx,mts,cts,json}"
 )
 
+type watchFileHost interface {
+	Name() string
+	Client() Client
+	Log(message string)
+}
+
 type watchedFiles[T any] struct {
-	p         *Project
+	p         watchFileHost
 	getGlobs  func(data T) []string
 	watchKind lsproto.WatchKind
 
@@ -30,7 +36,7 @@ type watchedFiles[T any] struct {
 }
 
 func newWatchedFiles[T any](
-	p *Project,
+	p watchFileHost,
 	watchKind lsproto.WatchKind,
 	getGlobs func(data T) []string,
 	watchType string,
@@ -55,11 +61,11 @@ func (w *watchedFiles[T]) update(ctx context.Context, newData T) {
 
 	w.globs = newGlobs
 	if w.watcherID != "" {
-		if err := w.p.host.Client().UnwatchFiles(ctx, w.watcherID); err != nil {
-			w.p.Log(fmt.Sprintf("%s:: Failed to unwatch %s watch: %s, err: %v newGlobs that are not updated: \n%s", w.p.name, w.watchType, w.watcherID, err, formatFileList(w.globs, "\t", hr)))
+		if err := w.p.Client().UnwatchFiles(ctx, w.watcherID); err != nil {
+			w.p.Log(fmt.Sprintf("%s:: Failed to unwatch %s watch: %s, err: %v newGlobs that are not updated: \n%s", w.p.Name(), w.watchType, w.watcherID, err, formatFileList(w.globs, "\t", hr)))
 			return
 		}
-		w.p.Logf("%s:: %s watches unwatch %s", w.p.name, w.watchType, w.watcherID)
+		w.p.Log(fmt.Sprintf("%s:: %s watches unwatch %s", w.p.Name(), w.watchType, w.watcherID))
 	}
 
 	w.watcherID = ""
@@ -76,13 +82,13 @@ func (w *watchedFiles[T]) update(ctx context.Context, newData T) {
 			Kind: &w.watchKind,
 		})
 	}
-	watcherID, err := w.p.host.Client().WatchFiles(ctx, watchers)
+	watcherID, err := w.p.Client().WatchFiles(ctx, watchers)
 	if err != nil {
-		w.p.Log(fmt.Sprintf("%s:: Failed to update %s watch: %v\n%s", w.p.name, w.watchType, err, formatFileList(w.globs, "\t", hr)))
+		w.p.Log(fmt.Sprintf("%s:: Failed to update %s watch: %v\n%s", w.p.Name(), w.watchType, err, formatFileList(w.globs, "\t", hr)))
 		return
 	}
 	w.watcherID = watcherID
-	w.p.Logf("%s:: %s watches updated %s:\n%s", w.p.name, w.watchType, w.watcherID, formatFileList(w.globs, "\t", hr))
+	w.p.Log(fmt.Sprintf("%s:: %s watches updated %s:\n%s", w.p.Name(), w.watchType, w.watcherID, formatFileList(w.globs, "\t", hr)))
 	return
 }
 

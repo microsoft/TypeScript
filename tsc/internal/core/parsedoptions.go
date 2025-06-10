@@ -5,6 +5,6 @@ type ParsedOptions struct {
 	WatchOptions    *WatchOptions    `json:"watchOptions"`
 	TypeAcquisition *TypeAcquisition `json:"typeAcquisition"`
 
-	FileNames         []string           `json:"fileNames"`
-	ProjectReferences []ProjectReference `json:"projectReferences"`
+	FileNames         []string            `json:"fileNames"`
+	ProjectReferences []*ProjectReference `json:"projectReferences"`
 }

@@ -2,9 +2,11 @@ package compiler
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/cachedvfs"
@@ -17,6 +19,7 @@ type CompilerHost interface {
 	NewLine() string
 	Trace(msg string)
 	GetSourceFile(fileName string, path tspath.Path, options *core.SourceFileAffectingCompilerOptions, metadata *ast.SourceFileMetaData) *ast.SourceFile
+	GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine
 }
 
 type FileInfo struct {
@@ -27,23 +30,37 @@ type FileInfo struct {
 var _ CompilerHost = (*compilerHost)(nil)
 
 type compilerHost struct {
-	options            *core.CompilerOptions
-	currentDirectory   string
-	fs                 vfs.FS
-	defaultLibraryPath string
+	options             *core.CompilerOptions
+	currentDirectory    string
+	fs                  vfs.FS
+	defaultLibraryPath  string
+	extendedConfigCache *collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry]
 }
 
-func NewCachedFSCompilerHost(options *core.CompilerOptions, currentDirectory string, fs vfs.FS, defaultLibraryPath string) CompilerHost {
-	return NewCompilerHost(options, currentDirectory, cachedvfs.From(fs), defaultLibraryPath)
+func NewCachedFSCompilerHost(
+	options *core.CompilerOptions,
+	currentDirectory string,
+	fs vfs.FS,
+	defaultLibraryPath string,
+	extendedConfigCache *collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry],
+) CompilerHost {
+	return NewCompilerHost(options, currentDirectory, cachedvfs.From(fs), defaultLibraryPath, extendedConfigCache)
 }
 
-func NewCompilerHost(options *core.CompilerOptions, currentDirectory string, fs vfs.FS, defaultLibraryPath string) CompilerHost {
-	h := &compilerHost{}
-	h.options = options
-	h.currentDirectory = currentDirectory
-	h.fs = fs
-	h.defaultLibraryPath = defaultLibraryPath
-	return h
+func NewCompilerHost(
+	options *core.CompilerOptions,
+	currentDirectory string,
+	fs vfs.FS,
+	defaultLibraryPath string,
+	extendedConfigCache *collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry],
+) CompilerHost {
+	return &compilerHost{
+		options:             options,
+		currentDirectory:    currentDirectory,
+		fs:                  fs,
+		defaultLibraryPath:  defaultLibraryPath,
+		extendedConfigCache: extendedConfigCache,
+	}
 }
 
 func (h *compilerHost) FS() vfs.FS {
@@ -82,4 +99,9 @@ func (h *compilerHost) GetSourceFile(fileName string, path tspath.Path, options 
 		return parser.ParseJSONText(fileName, path, text)
 	}
 	return parser.ParseSourceFile(fileName, path, text, options, metadata, scanner.JSDocParsingModeParseForTypeErrors)
+}
+
+func (h *compilerHost) GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine {
+	commandLine, _ := tsoptions.GetParsedCommandLineOfConfigFilePath(fileName, path, nil, h, nil)
+	return commandLine
 }

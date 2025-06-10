@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/transformers/declarations"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -73,16 +74,12 @@ func (host *emitHost) GetPackageJsonInfo(pkgJsonPath string) modulespecifiers.Pa
 	return host.program.GetPackageJsonInfo(pkgJsonPath)
 }
 
-func (host *emitHost) GetProjectReferenceRedirect(path string) string {
-	return host.program.GetProjectReferenceRedirect(path)
+func (host *emitHost) GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference {
+	return host.program.GetOutputAndProjectReference(path)
 }
 
 func (host *emitHost) GetRedirectTargets(path tspath.Path) []string {
 	return host.program.GetRedirectTargets(path)
-}
-
-func (host *emitHost) IsSourceOfProjectReferenceRedirect(path string) bool {
-	return host.program.IsSourceOfProjectReferenceRedirect(path)
 }
 
 func (host *emitHost) GetEffectiveDeclarationFlags(node *ast.Node, flags ast.ModifierFlags) ast.ModifierFlags {

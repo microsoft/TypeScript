@@ -5,6 +5,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/module"
 	"github.com/microsoft/typescript-go/internal/packagejson"
+	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
@@ -52,8 +53,7 @@ type ModuleSpecifierGenerationHost interface {
 	UseCaseSensitiveFileNames() bool
 	GetCurrentDirectory() string
 
-	IsSourceOfProjectReferenceRedirect(path string) bool
-	GetProjectReferenceRedirect(path string) string
+	GetOutputAndProjectReference(path tspath.Path) *tsoptions.OutputDtsAndProjectReference
 	GetRedirectTargets(path tspath.Path) []string
 
 	FileExists(path string) bool

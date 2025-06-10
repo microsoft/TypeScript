@@ -63,18 +63,14 @@ func newResolutionState(
 	isTypeReferenceDirective bool,
 	resolutionMode core.ResolutionMode,
 	compilerOptions *core.CompilerOptions,
-	redirectedReference *ResolvedProjectReference,
+	redirectedReference ResolvedProjectReference,
 	resolver *Resolver,
 ) *resolutionState {
 	state := &resolutionState{
 		name:                name,
 		containingDirectory: containingDirectory,
-		compilerOptions:     compilerOptions,
+		compilerOptions:     GetCompilerOptionsWithRedirect(compilerOptions, redirectedReference),
 		resolver:            resolver,
-	}
-
-	if redirectedReference != nil {
-		state.compilerOptions = redirectedReference.CommandLine.CompilerOptions
 	}
 
 	if isTypeReferenceDirective {
@@ -103,6 +99,16 @@ func newResolutionState(
 		state.conditions = GetConditions(compilerOptions, resolutionMode)
 	}
 	return state
+}
+
+func GetCompilerOptionsWithRedirect(compilerOptions *core.CompilerOptions, redirectedReference ResolvedProjectReference) *core.CompilerOptions {
+	if redirectedReference == nil {
+		return compilerOptions
+	}
+	if optionsFromRedirect := redirectedReference.CompilerOptions(); optionsFromRedirect != nil {
+		return optionsFromRedirect
+	}
+	return compilerOptions
 }
 
 type Resolver struct {
@@ -150,22 +156,27 @@ func (r *Resolver) GetPackageJsonScopeIfApplicable(path string) *packagejson.Inf
 	return nil
 }
 
-func (r *Resolver) ResolveTypeReferenceDirective(typeReferenceDirectiveName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference *ResolvedProjectReference) *ResolvedTypeReferenceDirective {
+func (r *Resolver) traceResolutionUsingProjectReference(redirectedReference ResolvedProjectReference) {
+	if redirectedReference != nil && redirectedReference.CompilerOptions() != nil {
+		r.host.Trace(diagnostics.Using_compiler_options_of_project_reference_redirect_0.Format(redirectedReference.ConfigName()))
+	}
+}
+
+func (r *Resolver) ResolveTypeReferenceDirective(
+	typeReferenceDirectiveName string,
+	containingFile string,
+	resolutionMode core.ResolutionMode,
+	redirectedReference ResolvedProjectReference,
+) *ResolvedTypeReferenceDirective {
 	traceEnabled := r.traceEnabled()
 
-	compilerOptions := r.compilerOptions
-	if redirectedReference != nil {
-		compilerOptions = redirectedReference.CommandLine.CompilerOptions
-	}
-
+	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 
 	typeRoots, fromConfig := compilerOptions.GetEffectiveTypeRoots(r.host.GetCurrentDirectory())
 	if traceEnabled {
 		r.host.Trace(diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2.Format(typeReferenceDirectiveName, containingFile, strings.Join(typeRoots, ",")))
-		if redirectedReference != nil {
-			r.host.Trace(diagnostics.Using_compiler_options_of_project_reference_redirect_0.Format(redirectedReference.SourceFile.FileName()))
-		}
+		r.traceResolutionUsingProjectReference(redirectedReference)
 	}
 
 	state := newResolutionState(typeReferenceDirectiveName, containingDirectory, true /*isTypeReferenceDirective*/, resolutionMode, compilerOptions, redirectedReference, r)
@@ -177,19 +188,12 @@ func (r *Resolver) ResolveTypeReferenceDirective(typeReferenceDirectiveName stri
 	return result
 }
 
-func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference *ResolvedProjectReference) *ResolvedModule {
+func (r *Resolver) ResolveModuleName(moduleName string, containingFile string, resolutionMode core.ResolutionMode, redirectedReference ResolvedProjectReference) *ResolvedModule {
 	traceEnabled := r.traceEnabled()
-
-	compilerOptions := r.compilerOptions
-	if redirectedReference != nil {
-		compilerOptions = redirectedReference.CommandLine.CompilerOptions
-	}
-
+	compilerOptions := GetCompilerOptionsWithRedirect(r.compilerOptions, redirectedReference)
 	if traceEnabled {
 		r.host.Trace(diagnostics.Resolving_module_0_from_1.Format(moduleName, containingFile))
-		if redirectedReference != nil {
-			r.host.Trace(diagnostics.Using_compiler_options_of_project_reference_redirect_0.Format(redirectedReference.SourceFile.FileName()))
-		}
+		r.traceResolutionUsingProjectReference(redirectedReference)
 	}
 	containingDirectory := tspath.GetDirectoryPath(containingFile)
 
