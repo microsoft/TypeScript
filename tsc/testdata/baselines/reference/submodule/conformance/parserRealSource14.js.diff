@@ -1,14 +1,6 @@
 --- old.parserRealSource14.js
 +++ new.parserRealSource14.js
-@@= skipped -576, +576 lines =@@
- }
-
-
-+//// [typescript.js]
- //// [parserRealSource14.js]
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
-@@= skipped -22, +23 lines =@@
+@@= skipped -598, +598 lines =@@
      // Helper class representing a path from a root ast node to a (grand)child ast node.
      // This is helpful as our tree don't have parents.
      //

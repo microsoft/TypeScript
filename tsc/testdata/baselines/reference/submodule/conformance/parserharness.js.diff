@@ -1,13 +1,8 @@
 --- old.parserharness.js
 +++ new.parserharness.js
-@@= skipped -2082, +2082 lines =@@
- }
+@@= skipped -2083, +2083 lines =@@
 
 
-+//// [io.js]
-+//// [typescript.js]
-+//// [typescriptServices.js]
-+//// [diff.js]
  //// [parserharness.js]
 -//﻿
 -// Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -41,7 +36,7 @@
  ///<reference path='..\compiler\io.ts'/>
  ///<reference path='..\compiler\typescript.ts'/>
  ///<reference path='..\services\typescriptServices.ts' />
-@@= skipped -62, +37 lines =@@
+@@= skipped -61, +32 lines =@@
      var global = Function("return this").call(null);
      Harness.usePull = false;
      // Assert functions

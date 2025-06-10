@@ -743,7 +743,6 @@ module Formatting {
 }
 
 
-//// [formatting.js]
 //// [parserindenter.js]
 //﻿
 // Copyright (c) Microsoft Corporation.  All rights reserved.

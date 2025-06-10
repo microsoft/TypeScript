@@ -1,13 +1,6 @@
 --- old.parserRealSource4.js
 +++ new.parserRealSource4.js
-@@= skipped -296, +296 lines =@@
-
- }
-
-+//// [typescript.js]
- //// [parserRealSource4.js]
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
+@@= skipped -302, +302 lines =@@
  ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
@@ -49,7 +42,7 @@
              var result = [];
              for (var k in this.table) {
                  if (this.table[k] != undefined) {
-@@= skipped -34, +32 lines =@@
+@@= skipped -28, +25 lines =@@
                  }
              }
              return result;

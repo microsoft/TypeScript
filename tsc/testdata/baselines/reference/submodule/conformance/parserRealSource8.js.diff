@@ -1,13 +1,6 @@
 --- old.parserRealSource8.js
 +++ new.parserRealSource8.js
-@@= skipped -467, +467 lines =@@
-     }
- }
-
-+//// [typescript.js]
- //// [parserRealSource8.js]
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
+@@= skipped -473, +473 lines =@@
  ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
@@ -28,7 +21,7 @@
      TypeScript.AssignScopeContext = AssignScopeContext;
      function pushAssignScope(scope, context, type, classType, fnc) {
          var chain = new ScopeChain(null, context.scopeChain, scope);
-@@= skipped -40, +43 lines =@@
+@@= skipped -34, +36 lines =@@
          return s.isInstanceProperty();
      }
      TypeScript.instanceFilterStop = instanceFilterStop;

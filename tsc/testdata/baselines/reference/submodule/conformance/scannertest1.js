@@ -26,7 +26,6 @@ class CharacterInfo {
 
 
 
-//// [References.js]
 //// [scannertest1.js]
 ///<reference path='References.ts' />
 class CharacterInfo {

@@ -497,7 +497,10 @@ func GetSourceFileCacheKey(
 }
 
 func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, options *core.SourceFileAffectingCompilerOptions, metadata *ast.SourceFileMetaData) *ast.SourceFile {
-	text, _ := h.FS().ReadFile(fileName)
+	text, ok := h.FS().ReadFile(fileName)
+	if !ok {
+		return nil
+	}
 
 	key := GetSourceFileCacheKey(
 		fileName,

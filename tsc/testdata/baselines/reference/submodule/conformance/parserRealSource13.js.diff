@@ -1,13 +1,6 @@
 --- old.parserRealSource13.js
 +++ new.parserRealSource13.js
-@@= skipped -147, +147 lines =@@
-     }
- }
-
-+//// [typescript.js]
- //// [parserRealSource13.js]
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
+@@= skipped -153, +153 lines =@@
  ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {

@@ -1,13 +1,6 @@
 --- old.parserRealSource12.js
 +++ new.parserRealSource12.js
-@@= skipped -531, +531 lines =@@
-     }
- }
-
-+//// [typescript.js]
- //// [parserRealSource12.js]
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
+@@= skipped -537, +537 lines =@@
  ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
@@ -52,7 +45,7 @@
              var preAst = this.pre(ast, parent, this);
              if (preAst === undefined) {
                  preAst = ast;
-@@= skipped -54, +56 lines =@@
+@@= skipped -48, +49 lines =@@
              else {
                  return preAst;
              }

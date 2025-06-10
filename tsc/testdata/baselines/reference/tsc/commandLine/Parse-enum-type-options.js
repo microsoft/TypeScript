@@ -43,6 +43,4 @@ ParsedCommandLine::{
     "compileOnSave": null
 }
 Output::
-//// [/home/src/workspaces/project/first.js] new file
-
 

@@ -25,4 +25,3 @@ export {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="./file1" />
-//// [file1.js]

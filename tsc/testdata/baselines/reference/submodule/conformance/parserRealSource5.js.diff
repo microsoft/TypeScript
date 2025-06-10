@@ -1,14 +1,6 @@
 --- old.parserRealSource5.js
 +++ new.parserRealSource5.js
-@@= skipped -67, +67 lines =@@
-     }
- }
-
-+//// [typescript.js]
- //// [parserRealSource5.js]
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
-@@= skipped -7, +8 lines =@@
+@@= skipped -74, +74 lines =@@
  var TypeScript;
  (function (TypeScript) {
      // TODO: refactor indent logic for use in emit

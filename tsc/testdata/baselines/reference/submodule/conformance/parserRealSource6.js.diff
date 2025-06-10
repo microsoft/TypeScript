@@ -1,13 +1,6 @@
 --- old.parserRealSource6.js
 +++ new.parserRealSource6.js
-@@= skipped -222, +222 lines =@@
-     }
- }
-
-+//// [typescript.js]
- //// [parserRealSource6.js]
- // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
- // See LICENSE.txt in the project root for complete license information.
+@@= skipped -228, +228 lines =@@
  ///<reference path='typescript.ts' />
  var TypeScript;
  (function (TypeScript) {
@@ -117,7 +110,7 @@
              if (this.scriptFragment == null) {
                  var ast = this.getScriptFragmentStartAST();
                  var minChar = ast.minChar;
-@@= skipped -70, +81 lines =@@
+@@= skipped -64, +74 lines =@@
                  this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null /*errorCapture*/).Script;
              }
              return this.scriptFragment;

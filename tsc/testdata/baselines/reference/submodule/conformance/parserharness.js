@@ -2083,10 +2083,6 @@ module Harness {
 }
 
 
-//// [io.js]
-//// [typescript.js]
-//// [typescriptServices.js]
-//// [diff.js]
 //// [parserharness.js]
 ///<reference path='..\compiler\io.ts'/>
 ///<reference path='..\compiler\typescript.ts'/>
