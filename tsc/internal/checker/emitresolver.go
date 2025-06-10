@@ -472,14 +472,21 @@ func (r *emitResolver) IsImportRequiredByAugmentation(decl *ast.ImportDeclaratio
 }
 
 func (r *emitResolver) RequiresAddingImplicitUndefined(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
+	if !ast.IsParseTreeNode(declaration) {
+		return false
+	}
+	r.checkerMu.Lock()
+	defer r.checkerMu.Unlock()
+	return r.requiresAddingImplicitUndefined(declaration, symbol, enclosingDeclaration)
+}
+
+func (r *emitResolver) requiresAddingImplicitUndefined(declaration *ast.Node, symbol *ast.Symbol, enclosingDeclaration *ast.Node) bool {
 	// node = r.emitContext.ParseNode(node)
 	if !ast.IsParseTreeNode(declaration) {
 		return false
 	}
 	switch declaration.Kind {
 	case ast.KindPropertyDeclaration, ast.KindPropertySignature, ast.KindJSDocPropertyTag:
-		r.checkerMu.Lock()
-		defer r.checkerMu.Unlock()
 		if symbol == nil {
 			symbol = r.checker.getSymbolOfDeclaration(declaration)
 		}
@@ -487,13 +494,13 @@ func (r *emitResolver) RequiresAddingImplicitUndefined(declaration *ast.Node, sy
 		r.checker.mappedSymbolLinks.Has(symbol)
 		return !!((symbol.Flags&ast.SymbolFlagsProperty != 0) && (symbol.Flags&ast.SymbolFlagsOptional != 0) && isOptionalDeclaration(declaration) && r.checker.ReverseMappedSymbolLinks.Has(symbol) && r.checker.ReverseMappedSymbolLinks.Get(symbol).mappedType != nil && containsNonMissingUndefinedType(r.checker, t))
 	case ast.KindParameter, ast.KindJSDocParameterTag:
-		return r.requiresAddingImplicitUndefined(declaration, enclosingDeclaration)
+		return r.requiresAddingImplicitUndefinedWorker(declaration, enclosingDeclaration)
 	default:
 		panic("Node cannot possibly require adding undefined")
 	}
 }
 
-func (r *emitResolver) requiresAddingImplicitUndefined(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
+func (r *emitResolver) requiresAddingImplicitUndefinedWorker(parameter *ast.Node, enclosingDeclaration *ast.Node) bool {
 	return (r.isRequiredInitializedParameter(parameter, enclosingDeclaration) || r.isOptionalUninitializedParameterProperty(parameter)) && !r.declaredParameterTypeContainsUndefined(parameter)
 }
 
