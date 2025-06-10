@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/enumComputedStringSuggestion.ts] ////
+
+=== enumComputedStringSuggestion.ts ===
+enum Test {
+>Test : Test
+>     : ^^^^
+
+  ["Hello"] = 1,
+>["Hello"] : Test.Hello
+>          : ^^^^^^^^^^
+>"Hello" : "Hello"
+>        : ^^^^^^^
+>1 : 1
+>  : ^
+}
+

@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/enumComputedStringSuggestion.ts] ////
+
+=== enumComputedStringSuggestion.ts ===
+enum Test {
+>Test : Symbol(Test, Decl(enumComputedStringSuggestion.ts, 0, 0))
+
+  ["Hello"] = 1,
+>["Hello"] : Symbol(Test["Hello"], Decl(enumComputedStringSuggestion.ts, 0, 11))
+>"Hello" : Symbol(Test["Hello"], Decl(enumComputedStringSuggestion.ts, 0, 11))
+}
+

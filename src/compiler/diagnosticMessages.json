@@ -8511,5 +8511,9 @@
     "'{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?": {
         "category": "Error",
         "code": 18061
+    },
+    "Enum member keys should not use computed strings like ['A']. Use a string literal instead for clarity and compatibility.": {
+        "category": "Suggestion",
+        "code": 18062
     }
 }
