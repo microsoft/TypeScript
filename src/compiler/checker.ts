@@ -22538,7 +22538,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             return;
                         }
                     }
-                    message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+
+                    const includesWideTypes = sourceType.length > 30 || targetType.length > 30;
+                    if (compilerOptions.pretty && includesWideTypes) {
+                        message = Diagnostics.Type_Colon_0_is_not_assignable_to_type_Colon_1;
+                    }
+                    else {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    }
                 }
             }
             else if (

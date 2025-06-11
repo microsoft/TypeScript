@@ -3999,6 +3999,10 @@
         "category": "Error",
         "code": 2881
     },
+    "Type:\n  {0}\n\nis not assignable to type:\n  {1}\n": {
+        "category": "Error",
+        "code": 2882
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
