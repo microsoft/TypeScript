@@ -72,7 +72,7 @@ func GetScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 
 	var emitResolver printer.EmitResolver
 	var referenceResolver binder.ReferenceResolver
-	if importElisionEnabled {
+	if importElisionEnabled || options.GetJSXTransformEnabled() {
 		emitResolver = host.GetEmitResolver(sourceFile, false /*skipDiagnostics*/) // !!! conditionally skip diagnostics
 		emitResolver.MarkLinkedReferencesRecursively(sourceFile)
 		referenceResolver = emitResolver
@@ -95,7 +95,9 @@ func GetScriptTransformers(emitContext *printer.EmitContext, host printer.EmitHo
 	}
 
 	// !!! transform legacy decorator syntax
-	// !!! transform JSX syntax
+	if options.GetJSXTransformEnabled() {
+		tx = append(tx, NewJSXTransformer(emitContext, options, emitResolver))
+	}
 
 	if languageVersion < core.ScriptTargetESNext {
 		tx = append(tx, NewESNextTransformer(emitContext))

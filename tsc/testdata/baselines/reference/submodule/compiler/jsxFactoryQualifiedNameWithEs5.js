@@ -20,7 +20,7 @@ var skate;
 const React = { createElement: skate.h };
 class Component {
     renderCallback() {
-        return <div>test</div>;
+        return skate.h("div", null, "test");
     }
 }
 ;

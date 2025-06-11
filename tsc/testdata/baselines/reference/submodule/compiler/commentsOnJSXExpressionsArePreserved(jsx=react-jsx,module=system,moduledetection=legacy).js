@@ -25,13 +25,6 @@ class Component {
 //// [commentsOnJSXExpressionsArePreserved.js]
 class Component {
     render() {
-        return <div>
-            
-            {null /* preserved */}
-            
-            
-            
-            
-        </div>;
+        return _jsx("div", { children: null /* preserved */ });
     }
 }

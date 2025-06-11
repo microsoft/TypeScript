@@ -87,50 +87,29 @@ exports.Blah3 = Blah3;
 /// <reference path="react16.d.ts" />
 const React = require("react");
 function Blah(props) {
-    return <></>;
+    return React.createElement(React.Fragment, null);
 }
 // Incompatible child.
-var a = <Blah>
-  {x => x}
-</Blah>;
+var a = React.createElement(Blah, null, x => x);
 // Blah components don't accept text as child elements
-var a = <Blah>
-  Hello unexpected text!
-</Blah>;
+var a = React.createElement(Blah, null, "Hello unexpected text");
 // Blah components don't accept multiple children.
-var a = <Blah>
-  {x => "" + x}
-  {x => "" + x}
-</Blah>;
+var a = React.createElement(Blah, null, x => "" + x, x => "" + x);
 function Blah2(props) {
-    return <></>;
+    return React.createElement(React.Fragment, null);
 }
 // Incompatible child.
-var a = <Blah2>
-  {x => x}
-</Blah2>;
+var a = React.createElement(Blah2, null, x => x);
 // Blah2 components don't accept text as child elements
-var a = <Blah2>
-  Hello unexpected text!
-</Blah2>;
+var a = React.createElement(Blah2, null, "Hello unexpected text");
 // Blah2 components don't accept multiple children of the wrong type.
-var a = <Blah2>
-  {x => x}
-  {x => x}
-</Blah2>;
+var a = React.createElement(Blah2, null, x => x, x => x);
 function Blah3(props) {
-    return <></>;
+    return React.createElement(React.Fragment, null);
 }
 // Incompatible child.
-var a = <Blah3>
-  {x => x}
-</Blah3>;
+var a = React.createElement(Blah3, null, x => x);
 // Blah3 components don't accept text as child elements
-var a = <Blah3>
-  Hello unexpected text!
-</Blah3>;
+var a = React.createElement(Blah3, null, "Hello unexpected text");
 // Blah3 components don't accept multiple children of the wrong type.
-var a = <Blah3>
-  {x => x}
-  {x => x}
-</Blah3>;
+var a = React.createElement(Blah3, null, x => x, x => x);

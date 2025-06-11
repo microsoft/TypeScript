@@ -33,4 +33,4 @@ declare const Comp: (p: { className?: string }) => null
 //// [jsxLibraryManagedAttributesUnusedGeneric.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-<Comp css="color:hotpink;"/>;
+jsx(Comp, { css: "color:hotpink;" });

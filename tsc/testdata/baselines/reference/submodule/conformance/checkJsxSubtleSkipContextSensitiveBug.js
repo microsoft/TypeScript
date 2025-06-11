@@ -37,4 +37,4 @@ class AsyncLoader extends React.Component {
 async function load() {
     return { success: true };
 }
-const loader = <AsyncLoader prop1={load} prop2={result => result}/>;
+const loader = React.createElement(AsyncLoader, { prop1: load, prop2: result => result });

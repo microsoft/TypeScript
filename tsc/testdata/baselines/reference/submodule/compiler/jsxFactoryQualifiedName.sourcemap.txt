@@ -436,102 +436,66 @@ sourceFile:test.tsx
 >>>        return [
 1->^^^^^^^^
 2 >        ^^^^^^^
-3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->{
   >		
 2 >        return 
 1->Emitted(7, 9) Source(11, 3) + SourceIndex(0)
 2 >Emitted(7, 16) Source(11, 10) + SourceIndex(0)
 ---
->>>            <meta content="helloworld"></meta>,
+>>>            Element_1.Element.createElement("meta", { content: "helloworld" }),
 1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^
-4 >                 ^
-5 >                  ^^^^^^^
-6 >                         ^
-7 >                          ^^^^^^^^^^^^
-8 >                                      ^
-9 >                                       ^^
-10>                                         ^^^^
-11>                                             ^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                      ^^^^^^^
+4 >                                                             ^^
+5 >                                                               ^^^^^^^^^^^^
+6 >                                                                           ^^^
 1->[
   >			
-2 >            <
-3 >             meta
-4 >                  
-5 >                  content
-6 >                         =
-7 >                          "helloworld"
-8 >                                      >
-9 >                                       </
-10>                                         meta
-11>                                             >
+2 >            <meta 
+3 >                                                      content
+4 >                                                             =
+5 >                                                               "helloworld"
+6 >                                                                           ></meta>
 1->Emitted(8, 13) Source(12, 4) + SourceIndex(0)
-2 >Emitted(8, 14) Source(12, 5) + SourceIndex(0)
-3 >Emitted(8, 18) Source(12, 9) + SourceIndex(0)
-4 >Emitted(8, 19) Source(12, 10) + SourceIndex(0)
-5 >Emitted(8, 26) Source(12, 17) + SourceIndex(0)
-6 >Emitted(8, 27) Source(12, 18) + SourceIndex(0)
-7 >Emitted(8, 39) Source(12, 30) + SourceIndex(0)
-8 >Emitted(8, 40) Source(12, 31) + SourceIndex(0)
-9 >Emitted(8, 42) Source(12, 33) + SourceIndex(0)
-10>Emitted(8, 46) Source(12, 37) + SourceIndex(0)
-11>Emitted(8, 47) Source(12, 38) + SourceIndex(0)
+2 >Emitted(8, 55) Source(12, 10) + SourceIndex(0)
+3 >Emitted(8, 62) Source(12, 17) + SourceIndex(0)
+4 >Emitted(8, 64) Source(12, 18) + SourceIndex(0)
+5 >Emitted(8, 76) Source(12, 30) + SourceIndex(0)
+6 >Emitted(8, 79) Source(12, 38) + SourceIndex(0)
 ---
->>>            <meta content={c.a.b}></meta>
+>>>            Element_1.Element.createElement("meta", { content: c.a.b })
 1 >^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^
-4 >                 ^
-5 >                  ^^^^^^^
-6 >                         ^
-7 >                          ^
-8 >                           ^
-9 >                            ^
-10>                             ^
-11>                              ^
-12>                               ^
-13>                                ^
-14>                                 ^
-15>                                  ^^
-16>                                    ^^^^
-17>                                        ^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                      ^^^^^^^
+4 >                                                             ^^
+5 >                                                               ^
+6 >                                                                ^
+7 >                                                                 ^
+8 >                                                                  ^
+9 >                                                                   ^
+10>                                                                    ^^^
 1 >,
   >			
-2 >            <
-3 >             meta
-4 >                  
-5 >                  content
-6 >                         =
-7 >                          {
-8 >                           c
-9 >                            .
-10>                             a!
-11>                              .
-12>                               b
-13>                                }
-14>                                 >
-15>                                  </
-16>                                    meta
-17>                                        >
+2 >            <meta 
+3 >                                                      content
+4 >                                                             ={
+5 >                                                               c
+6 >                                                                .
+7 >                                                                 a!
+8 >                                                                  .
+9 >                                                                   b
+10>                                                                    }></meta>
 1 >Emitted(9, 13) Source(13, 4) + SourceIndex(0)
-2 >Emitted(9, 14) Source(13, 5) + SourceIndex(0)
-3 >Emitted(9, 18) Source(13, 9) + SourceIndex(0)
-4 >Emitted(9, 19) Source(13, 10) + SourceIndex(0)
-5 >Emitted(9, 26) Source(13, 17) + SourceIndex(0)
-6 >Emitted(9, 27) Source(13, 18) + SourceIndex(0)
-7 >Emitted(9, 28) Source(13, 19) + SourceIndex(0)
-8 >Emitted(9, 29) Source(13, 20) + SourceIndex(0)
-9 >Emitted(9, 30) Source(13, 21) + SourceIndex(0)
-10>Emitted(9, 31) Source(13, 23) + SourceIndex(0)
-11>Emitted(9, 32) Source(13, 24) + SourceIndex(0)
-12>Emitted(9, 33) Source(13, 25) + SourceIndex(0)
-13>Emitted(9, 34) Source(13, 26) + SourceIndex(0)
-14>Emitted(9, 35) Source(13, 27) + SourceIndex(0)
-15>Emitted(9, 37) Source(13, 29) + SourceIndex(0)
-16>Emitted(9, 41) Source(13, 33) + SourceIndex(0)
-17>Emitted(9, 42) Source(13, 34) + SourceIndex(0)
+2 >Emitted(9, 55) Source(13, 10) + SourceIndex(0)
+3 >Emitted(9, 62) Source(13, 17) + SourceIndex(0)
+4 >Emitted(9, 64) Source(13, 19) + SourceIndex(0)
+5 >Emitted(9, 65) Source(13, 20) + SourceIndex(0)
+6 >Emitted(9, 66) Source(13, 21) + SourceIndex(0)
+7 >Emitted(9, 67) Source(13, 23) + SourceIndex(0)
+8 >Emitted(9, 68) Source(13, 24) + SourceIndex(0)
+9 >Emitted(9, 69) Source(13, 25) + SourceIndex(0)
+10>Emitted(9, 72) Source(13, 34) + SourceIndex(0)
 ---
 >>>        ];
 1 >^^^^^^^^^

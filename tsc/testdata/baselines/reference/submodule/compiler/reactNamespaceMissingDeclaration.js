@@ -6,4 +6,4 @@
 
 //// [reactNamespaceMissingDeclaration.js]
 // Error myReactLib not declared
-<foo data/>;
+myReactLib.createElement("foo", { data: true });

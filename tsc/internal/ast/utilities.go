@@ -3609,3 +3609,16 @@ func (h *hasFileNameImpl) FileName() string {
 func (h *hasFileNameImpl) Path() tspath.Path {
 	return h.path
 }
+
+func GetSemanticJsxChildren(children []*JsxChild) []*JsxChild {
+	return core.Filter(children, func(i *JsxChild) bool {
+		switch i.Kind {
+		case KindJsxExpression:
+			return i.Expression() != nil
+		case KindJsxText:
+			return !i.AsJsxText().ContainsOnlyTriviaWhiteSpaces
+		default:
+			return true
+		}
+	})
+}

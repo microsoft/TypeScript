@@ -33,12 +33,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importDefault(require("react"));
 class ResizablePanel extends react_1.default.Component {
 }
-const test = <ResizablePanel>
-  <div />
-  <div />
-</ResizablePanel>;
-const testErr = <ResizablePanel>
-  <div />
-  <div />
-  <div />
-</ResizablePanel>;
+const test = react_1.default.createElement(ResizablePanel, null, react_1.default.createElement("div", null), react_1.default.createElement("div", null));
+const testErr = react_1.default.createElement(ResizablePanel, null, react_1.default.createElement("div", null), react_1.default.createElement("div", null), react_1.default.createElement("div", null));

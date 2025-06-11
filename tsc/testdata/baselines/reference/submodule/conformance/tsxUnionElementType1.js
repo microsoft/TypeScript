@@ -19,11 +19,11 @@ var SFCComp = SFC1 || SFC2;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 function SFC1(prop) {
-    return <div>hello</div>;
+    return React.createElement("div", null, "hello");
 }
 ;
 function SFC2(prop) {
-    return <h1>World </h1>;
+    return React.createElement("h1", null, "World ");
 }
 var SFCComp = SFC1 || SFC2;
-<SFCComp x/>;
+React.createElement(SFCComp, { x: true });

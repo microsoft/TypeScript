@@ -26,9 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 const react_1 = __importDefault(require("react"));
 function BackButton(_props) {
-    return <div />;
+    return react_1.default.createElement("div", null);
 }
 BackButton.defaultProps = {
     text: 'Go Back',
 };
-let a = <BackButton />;
+let a = react_1.default.createElement(BackButton, null);

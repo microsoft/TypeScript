@@ -41,31 +41,33 @@ exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime classic */
 const React = require("react");
-const HelloWorld = () => <h1>Hello world</h1>;
+const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
-exports.frag = <><div></div></>;
-exports.selfClosing = <img src="./image.png"/>;
+exports.frag = React.createElement(React.Fragment, null, React.createElement("div", null));
+exports.selfClosing = React.createElement("img", { src: "./image.png" });
 //// [two.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime automatic */
-const HelloWorld = () => <h1>Hello world</h1>;
+const HelloWorld = () => jsx_dev_runtime_1.jsxDEV("h1", { children: "Hello world" });
 exports.HelloWorld = HelloWorld;
-exports.frag = <><div></div></>;
-exports.selfClosing = <img src="./image.png"/>;
+exports.frag = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: jsx_dev_runtime_1.jsxDEV("div", {}) });
+exports.selfClosing = jsx_dev_runtime_1.jsxDEV("img", { src: "./image.png" });
 //// [three.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 /// <reference path="react16.d.ts" />
 /* @jsxRuntime classic */
 /* @jsxRuntime automatic */
-const HelloWorld = () => <h1>Hello world</h1>;
+const HelloWorld = () => jsx_dev_runtime_1.jsxDEV("h1", { children: "Hello world" });
 exports.HelloWorld = HelloWorld;
-exports.frag = <><div></div></>;
-exports.selfClosing = <img src="./image.png"/>;
+exports.frag = jsx_dev_runtime_1.jsxDEV(jsx_dev_runtime_1.Fragment, { children: jsx_dev_runtime_1.jsxDEV("div", {}) });
+exports.selfClosing = jsx_dev_runtime_1.jsxDEV("img", { src: "./image.png" });
 //// [four.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -74,10 +76,10 @@ exports.selfClosing = exports.frag = exports.HelloWorld = void 0;
 /* @jsxRuntime automatic */
 /* @jsxRuntime classic */
 const React = require("react");
-const HelloWorld = () => <h1>Hello world</h1>;
+const HelloWorld = () => React.createElement("h1", null, "Hello world");
 exports.HelloWorld = HelloWorld;
-exports.frag = <><div></div></>;
-exports.selfClosing = <img src="./image.png"/>;
+exports.frag = React.createElement(React.Fragment, null, React.createElement("div", null));
+exports.selfClosing = React.createElement("img", { src: "./image.png" });
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

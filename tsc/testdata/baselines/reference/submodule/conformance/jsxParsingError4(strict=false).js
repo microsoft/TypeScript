@@ -18,5 +18,5 @@ const b = (
 
 
 //// [a.js]
-const a = (<public-foo></public-foo>);
-const b = (<public></public>);
+const a = (React.createElement("public-foo", null));
+const b = (React.createElement("public", null));

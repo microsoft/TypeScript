@@ -32,12 +32,12 @@ const React = require("react");
 class MyComponent extends React.Component {
     render() {
         const { AnyComponent } = this.props;
-        return (<AnyComponent />);
+        return (React.createElement(AnyComponent, null));
     }
 }
 // Stateless Component As Props
-<MyComponent AnyComponent={() => <button>test</button>}/>;
+React.createElement(MyComponent, { AnyComponent: () => React.createElement("button", null, "test") });
 // Component Class as Props
 class MyButtonComponent extends React.Component {
 }
-<MyComponent AnyComponent={MyButtonComponent}/>;
+React.createElement(MyComponent, { AnyComponent: MyButtonComponent });

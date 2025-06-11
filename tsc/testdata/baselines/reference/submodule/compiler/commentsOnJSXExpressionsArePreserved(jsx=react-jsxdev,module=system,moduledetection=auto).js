@@ -23,15 +23,12 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
+const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
 class Component {
     render() {
-        return <div>
-            
-            {null /* preserved */}
-            
-            
-            
-            
-        </div>;
+        return jsx_dev_runtime_1.jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
     }
 }

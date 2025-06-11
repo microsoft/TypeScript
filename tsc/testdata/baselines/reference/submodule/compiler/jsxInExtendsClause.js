@@ -16,7 +16,7 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 //// [jsxInExtendsClause.js]
 class Foo extends createComponentClass(() => class extends React.Component {
     render() {
-        return <span>Hello, world!</span>;
+        return React.createElement("span", null, "Hello, world!");
     }
 }) {
 }

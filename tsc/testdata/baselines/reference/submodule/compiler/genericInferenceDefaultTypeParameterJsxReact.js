@@ -26,6 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Repro from #50858
 const react_1 = __importDefault(require("react"));
 function Component(props) {
-    return <></>;
+    return react_1.default.createElement(react_1.default.Fragment, null);
 }
-const v1 = <Component onClick={e => e.preventDefault()}/>;
+const v1 = react_1.default.createElement(Component, { onClick: e => e.preventDefault() });

@@ -17,9 +17,10 @@ export function Foo() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
+const jsx_runtime_1 = require("react/jsx-runtime");
 function Bar() {
-    return <div />;
+    return jsx_runtime_1.jsx("div", {});
 }
 function Foo() {
-    return <Bar />;
+    return jsx_runtime_1.jsx(Bar, {});
 }

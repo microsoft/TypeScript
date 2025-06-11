@@ -7,14 +7,5 @@
 -var React = require("react");
 +const React = require("react");
  function SFC1(prop) {
--    return React.createElement("div", null, "hello");
-+    return <div>hello</div>;
+     return React.createElement("div", null, "hello");
  }
- ;
- function SFC2(prop) {
--    return React.createElement("h1", null, "World ");
-+    return <h1>World </h1>;
- }
- var SFCComp = SFC1 || SFC2;
--React.createElement(SFCComp, { x: true });
-+<SFCComp x/>;

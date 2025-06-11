@@ -24,10 +24,10 @@ import { dom } from "./renderer";
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx React.createElement */
 const React = require("./renderer");
-<><h></h></>;
+React.createElement(React.Fragment, null, React.createElement("h", null));
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
 const renderer_1 = require("./renderer");
-<><h></h></>;
+(0, renderer_1.dom)(React.Fragment, null, (0, renderer_1.dom)("h", null));

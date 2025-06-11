@@ -19,8 +19,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 function SomeComponent(props) {
     // Just so the return value is RectElement, the rendered element doesnt matter
-    return <div />;
+    return React.createElement("div", null);
 }
 function Test(el) {
-    return <SomeComponent element={el}/>;
+    return React.createElement(SomeComponent, { element: el });
 }

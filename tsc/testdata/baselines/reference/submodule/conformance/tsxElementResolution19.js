@@ -32,4 +32,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Should not elide React import
 const React = require("react");
 const file1_1 = require("./file1");
-<file1_1.MyClass />;
+React.createElement(file1_1.MyClass, null);

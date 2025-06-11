@@ -6,10 +6,5 @@
  //// [a.js]
 -"use strict";
  function A() {
--    return React.createElement("package", null);
-+    return <package />;
- }
- function B() {
--    return React.createElement("package", null);
-+    return <package></package>;
+     return React.createElement("package", null);
  }

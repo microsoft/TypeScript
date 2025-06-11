@@ -19,6 +19,4 @@ let k = <button {...buttonProps}>
 import * as cx from 'classnames';
 import * as React from "react";
 let buttonProps;
-let k = <button {...buttonProps}>
-            <span className={cx('class1', { class2: true })}/>
-        </button>;
+let k = React.createElement("button", Object.assign({}, buttonProps), React.createElement("span", { className: cx('class1', { class2: true }) }));

@@ -83,37 +83,37 @@ class FieldFeedback extends react_1.default.Component {
         when: () => true
     };
     render() {
-        return <div>Hello</div>;
+        return react_1.default.createElement("div", null, "Hello");
     }
 }
 // OK
-const Test1 = () => <FieldFeedback when={value => !!value}/>;
+const Test1 = () => react_1.default.createElement(FieldFeedback, { when: value => !!value });
 // Error: Void not assignable to boolean
-const Test2 = () => <FieldFeedback when={value => console.log(value)}/>;
+const Test2 = () => react_1.default.createElement(FieldFeedback, { when: value => console.log(value) });
 class FieldFeedbackBeta extends react_1.default.Component {
     static defaultProps = {
         when: () => true
     };
     render() {
-        return <div>Hello</div>;
+        return react_1.default.createElement("div", null, "Hello");
     }
 }
 // OK
-const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta>;
+const Test1a = () => react_1.default.createElement(FieldFeedbackBeta, { when: value => !!value, error: true }, "Hah");
 // Error: Void not assignable to boolean
-const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
+const Test2a = () => react_1.default.createElement(FieldFeedbackBeta, { when: value => console.log(value), error: true }, "Hah");
 class FieldFeedback2 extends FieldFeedback {
     static defaultProps = {
         when: () => true
     };
     render() {
         this.props.when("now"); // OK, always defined
-        return <div>Hello</div>;
+        return react_1.default.createElement("div", null, "Hello");
     }
 }
 // OK
-const Test3 = () => <FieldFeedback2 when={value => !!value}/>;
+const Test3 = () => react_1.default.createElement(FieldFeedback2, { when: value => !!value });
 // Error: Void not assignable to boolean
-const Test4 = () => <FieldFeedback2 when={value => console.log(value)}/>;
+const Test4 = () => react_1.default.createElement(FieldFeedback2, { when: value => console.log(value) });
 // OK
-const Test5 = () => <FieldFeedback2 />;
+const Test5 = () => react_1.default.createElement(FieldFeedback2, null);

@@ -8,14 +8,14 @@
 -    "word ",
 -    React.createElement("code", null, "code"),
 -    " word");
-+<div>word <code>code</code> word</div>;
++React.createElement("div", null, "word ", React.createElement("code", null, "code"), " word");
  // Same here
 -React.createElement("div", null,
 -    React.createElement("code", null, "code"),
 -    " word");
-+<div><code>code</code> word</div>;
++React.createElement("div", null, React.createElement("code", null, "code"), " word");
  // And here
 -React.createElement("div", null,
 -    React.createElement("code", null),
 -    " word");
-+<div><code /> word</div>;
++React.createElement("div", null, React.createElement("code", null), " word");

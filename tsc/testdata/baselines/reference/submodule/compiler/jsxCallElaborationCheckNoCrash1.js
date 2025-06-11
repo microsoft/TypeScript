@@ -22,7 +22,7 @@ exports.Hoc = void 0;
 /// <reference path="react16.d.ts" />
 const React = require("react");
 const Hoc = (TagElement) => {
-    const Component = () => <TagElement />;
+    const Component = () => React.createElement(TagElement, null);
     return Component;
 };
 exports.Hoc = Hoc;

@@ -10,7 +10,4 @@
 -const a = (React.createElement("main", null,
 -    (React.createElement("div", null)),
 -    React.createElement("span", null)));
-+const a = (<main>
-+    {(<div />)}
-+    <span />
-+  </main>);
++const a = (React.createElement("main", null, (React.createElement("div", null)), React.createElement("span", null)));

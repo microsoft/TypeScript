@@ -7,17 +7,9 @@
 -var React = require("react");
 +const React = require("react");
  function EmptySFC1() {
--    return React.createElement("div", null, "Hi");
-+    return <div>Hi</div>;
+     return React.createElement("div", null, "Hi");
  }
- function EmptySFC2() {
--    return React.createElement("div", null, "Hello");
-+    return <div>Hello</div>;
- }
- function SFC2(prop) {
--    return React.createElement("h1", null, "World");
-+    return <h1>World</h1>;
- }
+@@= skipped -13, +13 lines =@@
  var EmptySFCComp = EmptySFC1 || EmptySFC2;
  var SFC2AndEmptyComp = SFC2 || EmptySFC1;
  // Error
@@ -25,7 +17,7 @@
 -var b = React.createElement(SFC2AndEmptyComp, { x: "hi" });
 -var c = React.createElement(SFC2AndEmptyComp, null);
 -var d = React.createElement(SFC2AndEmptyComp, { "data-prop": true });
-+let a = <EmptySFCComp x/>;
-+let b = <SFC2AndEmptyComp x="hi"/>;
-+let c = <SFC2AndEmptyComp />;
-+let d = <SFC2AndEmptyComp data-prop/>;
++let a = React.createElement(EmptySFCComp, { x: true });
++let b = React.createElement(SFC2AndEmptyComp, { x: "hi" });
++let c = React.createElement(SFC2AndEmptyComp, null);
++let d = React.createElement(SFC2AndEmptyComp, { "data-prop": true });

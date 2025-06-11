@@ -30,4 +30,4 @@ class TestComponent extends React.Component {
         return true;
     }
 }
-const TestRender = () => <TestComponent />;
+const TestRender = () => React.createElement(TestComponent, null);

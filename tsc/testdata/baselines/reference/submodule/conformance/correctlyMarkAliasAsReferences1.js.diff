@@ -6,6 +6,4 @@
  let buttonProps; // any
 -let k = React.createElement("button", Object.assign({}, buttonProps),
 -    React.createElement("span", { className: cx('class1', { class2: true }) }));
-+let k = <button {...buttonProps}>
-+            <span className={cx('class1', { class2: true })}/>
-+        </button>;
++let k = React.createElement("button", Object.assign({}, buttonProps), React.createElement("span", { className: cx('class1', { class2: true }) }));

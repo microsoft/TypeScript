@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"strings"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -59,4 +60,8 @@ func IsIdentifierText(name string, languageVersion core.ScriptTarget, languageVa
 		i += size
 	}
 	return true
+}
+
+func IsIntrinsicJsxName(name string) bool {
+	return len(name) != 0 && (name[0] >= 'a' && name[0] <= 'z' || strings.ContainsRune(name, '-'))
 }

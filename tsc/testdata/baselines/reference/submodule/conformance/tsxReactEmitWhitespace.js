@@ -71,45 +71,24 @@ world
 // WHITESPACE, DO NOT RUN 'FORMAT DOCUMENT' ON IT
 var p = 0;
 // Emit "   "
-<div>   </div>;
+React.createElement("div", null, "   ");
 // Emit "  ", p, "   "
-<div>  {p}    </div>;
+React.createElement("div", null, "  ", p, "    ");
 // Emit only p
-<div>  
-      {p}    
-      </div>;
+React.createElement("div", null, p);
 // Emit only p
-<div>
-  {p}
-    </div>;
+React.createElement("div", null, p);
 // Emit "  3"
-<div>  3  
-  </div>;
+React.createElement("div", null, "  ");
 // Emit "  3  "
-<div>  3  </div>;
+React.createElement("div", null, "  3  ");
 // Emit "3"
-<div>   
-   3    
-   </div>;
+React.createElement("div", null);
 // Emit no args
-<div>   
-   </div>;
+React.createElement("div", null);
 // Emit "foo bar"
-<div>  
-
-   foo
-
- bar   
-
-  </div>;
+React.createElement("div", null, "fo ba");
 // Emit "hello\\ world"
-<div>
-
-    hello\
-
-world
-</div>;
+React.createElement("div", null, "hello worl");
 // Emit "  a b  c d  "
-<div>  a
-    b  c
-    d  </div>;
+React.createElement("div", null, "   b   d  ");

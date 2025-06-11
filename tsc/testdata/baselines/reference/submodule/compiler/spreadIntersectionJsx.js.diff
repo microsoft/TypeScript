@@ -1,20 +1,9 @@
 --- old.spreadIntersectionJsx.js
 +++ new.spreadIntersectionJsx.js
-@@= skipped -8, +8 lines =@@
-
-
- //// [spreadIntersectionJsx.js]
--var __assign = (this && this.__assign) || function () {
--    __assign = Object.assign || function(t) {
--        for (var s, i = 1, n = arguments.length; i < n; i++) {
--            s = arguments[i];
--            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
--                t[p] = s[p];
--        }
--        return t;
--    };
--    return __assign.apply(this, arguments);
--};
+@@= skipped -19, +19 lines =@@
+     };
+     return __assign.apply(this, arguments);
+ };
 -var React = null;
 -var A = /** @class */ (function () {
 -    function A() {
@@ -36,4 +25,4 @@
 +    c;
 +}
 +let intersected;
-+let element = <div {...intersected}/>;
++let element = React.createElement("div", __assign({}, intersected));

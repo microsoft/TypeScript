@@ -17,4 +17,4 @@ const X: Invalid1 = 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 const X = 1;
-<X />;
+React.createElement(X, null);

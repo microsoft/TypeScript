@@ -73,27 +73,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
 const React = require("react");
 function MyComponent(props) {
-    return <div />;
+    return React.createElement("div", null);
 }
-let x = (<div>
-    
-    <MyComponent foo={100}/>
-
-    
-    <MyComponent foo={100}/>
-
-    
-    <MyComponent foo={100}/>
-
-    
-    <MyComponent foo={100}/>
-
-    
-    <MyComponent foo={100}/>
-
-    
-    <MyComponent foo={100}/>
-
-    
-    <MyComponent foo={"hooray"}/>
-  </div>);
+let x = (React.createElement("div", null, React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: 100 }), React.createElement(MyComponent, { foo: "hooray" })));

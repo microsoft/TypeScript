@@ -33,5 +33,5 @@ let props = {
     foo: "",
     "data-yadda": 42, // Error
 };
-let x1 = <Yadda foo="hello" data-yadda={42}/>;
-let x2 = <Yadda bar="hello" data-yadda={42}/>; // Error
+let x1 = React.createElement(Yadda, { foo: "hello", "data-yadda": 42 });
+let x2 = React.createElement(Yadda, { bar: "hello", "data-yadda": 42 }); // Error

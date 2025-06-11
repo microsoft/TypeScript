@@ -33,7 +33,7 @@ export default RenderString
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
 function MyComponent(props) {
-    return <span>my component</span>;
+    return React.createElement("span", null, "my component");
 }
 //// [file1.js]
 "use strict";
@@ -44,11 +44,7 @@ const MY_STRING = 'Ceci n\'est pas une string.';
 const MY_CLASSNAME = 'jeclass';
 class RenderString extends React.PureComponent {
     render() {
-        return (<>
-        <my_component_1.MyComponent />
-        <span>{MY_STRING}</span>
-        <span className={MY_CLASSNAME}/>
-      </>);
+        return (React.createElement(React.Fragment, null, React.createElement(my_component_1.MyComponent, null), React.createElement("span", null, MY_STRING), React.createElement("span", { className: MY_CLASSNAME })));
     }
 }
 exports.default = RenderString;

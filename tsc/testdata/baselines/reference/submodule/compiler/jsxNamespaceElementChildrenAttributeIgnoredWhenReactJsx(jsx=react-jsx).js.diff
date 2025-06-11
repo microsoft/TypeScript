@@ -1,18 +1,7 @@
 --- old.jsxNamespaceElementChildrenAttributeIgnoredWhenReactJsx(jsx=react-jsx).js
 +++ new.jsxNamespaceElementChildrenAttributeIgnoredWhenReactJsx(jsx=react-jsx).js
-@@= skipped -27, +27 lines =@@
- export {};
-
-
--//// [jsx-runtime.js]
--"use strict";
--Object.defineProperty(exports, "__esModule", { value: true });
+@@= skipped -33, +33 lines =@@
  //// [test.js]
-+const Title = (props) => <h1>{props.children}</h1>;
-+<Title>Hello, world!</Title>;
-+const Wrong = (props) => <h1>{props.offspring}</h1>;
-+<Wrong>Byebye, world!</Wrong>;
-+//// [jsx-runtime.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
 -var jsx_runtime_1 = require("/jsx/jsx-runtime");
@@ -20,6 +9,11 @@
 -(0, jsx_runtime_1.jsx)(Title, { children: "Hello, world!" });
 -var Wrong = function (props) { return (0, jsx_runtime_1.jsx)("h1", { children: props.offspring }); };
 -(0, jsx_runtime_1.jsx)(Wrong, { children: "Byebye, world!" });
++const jsx_runtime_1 = require("/jsx/jsx-runtime");
++const Title = (props) => jsx_runtime_1.jsx("h1", { children: props.children });
++jsx_runtime_1.jsx(Title, { children: "Hello, world!" });
++const Wrong = (props) => jsx_runtime_1.jsx("h1", { children: props.offspring });
++jsx_runtime_1.jsx(Wrong, { children: "Byebye, world!" });
  //// [jsx-dev-runtime.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });

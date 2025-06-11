@@ -15,5 +15,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = Foo;
 function Foo() {
     // No error; "const" is lowercase and therefore intrinsic.
-    return <const T extends/>;
+    return React.createElement("const", { T: true, extends: true });
 }

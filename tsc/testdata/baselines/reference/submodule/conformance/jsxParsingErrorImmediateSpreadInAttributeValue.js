@@ -17,4 +17,4 @@ const a: any
 //// [a.js]
 const X;
 const a;
-<X a={} a/>;
+React.createElement(X, { a: , a: true });

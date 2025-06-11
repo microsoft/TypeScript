@@ -1,9 +1,8 @@
 --- old.reactJsxReactResolvedNodeNext.js
 +++ new.reactJsxReactResolvedNodeNext.js
-@@= skipped -22, +22 lines =@@
- "use strict";
+@@= skipped -23, +23 lines =@@
  Object.defineProperty(exports, "__esModule", { value: true });
  exports.a = void 0;
--const jsx_runtime_1 = require("react/jsx-runtime");
+ const jsx_runtime_1 = require("react/jsx-runtime");
 -exports.a = (0, jsx_runtime_1.jsx)("div", {});
-+exports.a = <div></div>;
++exports.a = jsx_runtime_1.jsx("div", {});

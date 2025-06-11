@@ -481,5 +481,5 @@ func isIntrinsicJsxTag(node *ast.Node, sourceFile *ast.SourceFile) bool {
 		return false
 	}
 	text := scanner.GetSourceTextOfNodeFromSourceFile(sourceFile, node, false /*includeTrivia*/)
-	return checker.IsIntrinsicJsxName(text)
+	return scanner.IsIntrinsicJsxName(text)
 }

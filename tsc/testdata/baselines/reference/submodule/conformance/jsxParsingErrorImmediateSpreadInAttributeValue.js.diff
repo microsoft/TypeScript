@@ -6,7 +6,6 @@
  //// [a.js]
 -var X;
 -var a;
--React.createElement(X, { a: , a: true });
 +const X;
 +const a;
-+<X a={} a/>;
+ React.createElement(X, { a: , a: true });

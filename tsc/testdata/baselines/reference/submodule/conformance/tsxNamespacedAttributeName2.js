@@ -8,5 +8,5 @@ const b = <svg : path a:b={1}></svg : path>;
 
 
 //// [a.js]
-const a = <svg:path a:b={1}></svg:path>;
-const b = <svg:path a:b={1}></svg:path>;
+const a = React.createElement("svg:path", { "a:b": 1 });
+const b = React.createElement("svg:path", { "a:b": 1 });

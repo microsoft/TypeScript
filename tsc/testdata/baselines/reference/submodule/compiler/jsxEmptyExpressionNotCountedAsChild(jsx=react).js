@@ -25,9 +25,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 const React = require("react");
 function Wrapper(props) {
-    return <div>{props.children}</div>;
+    return React.createElement("div", null, props.children);
 }
-const element = (<Wrapper>
-    
-     <div>Hello</div>
-    </Wrapper>);
+const element = (React.createElement(Wrapper, null, React.createElement("div", null, "Hello")));

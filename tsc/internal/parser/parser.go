@@ -412,7 +412,7 @@ func walkTreeForJSXTags(node *ast.Node) *ast.Node {
 			return true
 		}
 		if node.SubtreeFacts()&ast.SubtreeContainsJsx == 0 {
-			return true
+			return false
 		}
 		if ast.IsJsxOpeningElement(node) || ast.IsJsxFragment(node) {
 			found = node

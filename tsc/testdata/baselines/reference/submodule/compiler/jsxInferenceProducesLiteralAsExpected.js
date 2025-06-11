@@ -27,7 +27,7 @@ class TestObject {
     b = 1;
     c = () => { };
 }
-function Test(props) { return <></>; }
+function Test(props) { return React.createElement(React.Fragment, null); }
 const model = new TestObject();
-const el1 = <Test model={model} foo="c"/>;
-const el2 = <Test model={model} foo="c"/>;
+const el1 = React.createElement(Test, { model: model, foo: "c" });
+const el2 = React.createElement(Test, { model: model, foo: "c" });

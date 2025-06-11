@@ -11,8 +11,8 @@ var x = <div></div><div></div>
 
 
 //// [file1.js]
-<div></div>
+React.createElement("div", null)
     ,
-        <div></div>;
+        React.createElement("div", null);
 //// [file2.js]
-var x = (<div></div>, <div></div>);
+var x = (React.createElement("div", null), React.createElement("div", null));

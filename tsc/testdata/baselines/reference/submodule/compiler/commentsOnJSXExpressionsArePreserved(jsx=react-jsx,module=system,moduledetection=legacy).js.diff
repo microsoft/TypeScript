@@ -6,20 +6,13 @@
  //// [commentsOnJSXExpressionsArePreserved.js]
 -var Component = /** @class */ (function () {
 -    function Component() {
+-    }
+-    Component.prototype.render = function () {
 +class Component {
 +    render() {
-+        return <div>
-+            
-+            {null /* preserved */}
-+            
-+            
-+            
-+            
-+        </div>;
-     }
--    Component.prototype.render = function () {
--        return _jsx("div", { children: null /* preserved */ });
+         return _jsx("div", { children: null /* preserved */ });
 -    };
 -    return Component;
 -}());
++    }
 +}

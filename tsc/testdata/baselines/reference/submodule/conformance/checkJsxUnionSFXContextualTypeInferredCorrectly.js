@@ -51,12 +51,11 @@ exports.HereIsTheError = HereIsTheError;
 /// <reference path="react16.d.ts" />
 const react_1 = __importDefault(require("react"));
 function ComponentWithUnion(props) {
-    return <h1></h1>;
+    return react_1.default.createElement("h1", null);
 }
 // Usage with React tsx
 function HereIsTheError() {
-    return (<ComponentWithUnion multi={false} value={'s'} onChange={val => console.log(val)} // <- this throws an error
-    />);
+    return (react_1.default.createElement(ComponentWithUnion, { multi: false, value: 's', onChange: val => console.log(val) }));
 }
 // Usage with pure TypeScript
 ComponentWithUnion({

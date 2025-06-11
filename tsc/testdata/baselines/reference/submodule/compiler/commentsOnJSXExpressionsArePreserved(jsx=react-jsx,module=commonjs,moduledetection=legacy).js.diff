@@ -8,14 +8,7 @@
 -    function Component() {
 +class Component {
 +    render() {
-+        return <div>
-+            
-+            {null /* preserved */}
-+            
-+            
-+            
-+            
-+        </div>;
++        return _jsx("div", { children: null /* preserved */ });
      }
 -    Component.prototype.render = function () {
 -        return (0, _a.jsx)("div", { children: null /* preserved */ });

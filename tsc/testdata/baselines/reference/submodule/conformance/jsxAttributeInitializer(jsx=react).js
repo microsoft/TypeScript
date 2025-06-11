@@ -12,9 +12,4 @@ declare var React: any;
 
 
 //// [a.js]
-<div>
-    <div attr=<div />/>
-    <div attr=<div>foo</div>/>
-    <div attr=<><div>foo</div></>/>
-    <div attr/>
-</div>;
+React.createElement("div", null, React.createElement("div", { attr: React.createElement("div", null) }), React.createElement("div", { attr: React.createElement("div", null, "foo") }), React.createElement("div", { attr: React.createElement(React.Fragment, null, React.createElement("div", null, "foo")) }), React.createElement("div", { attr: true }));

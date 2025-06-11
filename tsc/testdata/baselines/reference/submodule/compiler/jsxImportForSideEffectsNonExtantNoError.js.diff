@@ -8,4 +8,4 @@
 +const React = require("react");
  require("./App.css"); // doesn't actually exist
 -var tag = React.createElement("div", null);
-+const tag = <div></div>;
++const tag = React.createElement("div", null);

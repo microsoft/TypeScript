@@ -32,16 +32,16 @@ const x = { video: () => null }
 
 //// [file.js]
 import * as React from "react";
-const Compa = (x) => <div>{"" + x}</div>;
+const Compa = (x) => React.createElement("div", null, "" + x);
 const x = { video: () => null };
-<\u0061></a>;
-<\u0061-b></a-b>;
-<a-\u0063></a-c>;
-<Comp\u0061 x={12}/>;
-<x.\u0076ideo />;
-<\u{0061}></a>;
-<\u{0061}-b></a-b>;
-<a-\u{0063}></a-c>;
-<Comp\u{0061} x={12}/>;
-<video data-\u0076ideo/>;
-<video \u0073rc=""/>;
+React.createElement("a", null);
+React.createElement("a-b", null);
+React.createElement("a-c", null);
+React.createElement(Comp\u0061, { x: 12 });
+React.createElement(x.\u0076ideo, null);
+React.createElement("a", null);
+React.createElement("a-b", null);
+React.createElement("a-c", null);
+React.createElement(Comp\u{0061}, { x: 12 });
+React.createElement("video", { "data-video": true });
+React.createElement("video", { \u0073rc: "" });

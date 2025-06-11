@@ -30,5 +30,5 @@ class X {
 }
 exports.X = X;
 function A() {
-    return (<p>Hello</p>);
+    return (X.jsx("p", null, "Hello"));
 }

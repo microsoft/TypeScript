@@ -30,7 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 const React = require("react");
 // should be fine - `ElementType` accepts `div`
-let a = <div />;
+let a = React.createElement("div", null);
 // Should be an error.
 // `ruhroh` is in neither `IntrinsicElements` nor `ElementType`
-let c = <ruhroh />;
+let c = React.createElement("ruhroh", null);

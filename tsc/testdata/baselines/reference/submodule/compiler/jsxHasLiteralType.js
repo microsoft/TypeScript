@@ -16,4 +16,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = require("react");
 class MyComponent extends React.Component {
 }
-const m = <MyComponent x="a"/>;
+const m = React.createElement(MyComponent, { x: "a" });

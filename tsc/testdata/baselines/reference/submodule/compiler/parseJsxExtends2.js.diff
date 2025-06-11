@@ -1,9 +1,0 @@
---- old.parseJsxExtends2.js
-+++ new.parseJsxExtends2.js
-@@= skipped -14, +14 lines =@@
- exports.Foo = Foo;
- function Foo() {
-     // Error: T is not declared.
--    return React.createElement(T, { extends: true });
-+    return <T extends/>;
- }

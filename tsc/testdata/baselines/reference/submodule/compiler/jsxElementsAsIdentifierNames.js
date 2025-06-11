@@ -19,8 +19,8 @@ function B() {
 
 //// [a.js]
 function A() {
-    return <package />;
+    return React.createElement("package", null);
 }
 function B() {
-    return <package></package>;
+    return React.createElement("package", null);
 }

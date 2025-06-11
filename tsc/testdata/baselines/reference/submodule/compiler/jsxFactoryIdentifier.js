@@ -79,8 +79,8 @@ let c;
 class A {
     view() {
         return [
-            <meta content="helloworld"></meta>,
-            <meta content={c.a.b}></meta>
+            createElement("meta", { content: "helloworld" }),
+            createElement("meta", { content: c.a.b })
         ];
     }
 }

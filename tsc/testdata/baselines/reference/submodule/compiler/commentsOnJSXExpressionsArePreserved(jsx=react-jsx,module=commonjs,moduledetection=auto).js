@@ -23,15 +23,11 @@ class Component {
 }
 
 //// [commentsOnJSXExpressionsArePreserved.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const jsx_runtime_1 = require("react/jsx-runtime");
 class Component {
     render() {
-        return <div>
-            
-            {null /* preserved */}
-            
-            
-            
-            
-        </div>;
+        return jsx_runtime_1.jsx("div", { children: null /* preserved */ });
     }
 }

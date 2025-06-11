@@ -19,7 +19,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppComponent = void 0;
 class AppComponent {
     render(createElement) {
-        return <div />;
+        return MyElement.createElement("div", null);
     }
 }
 exports.AppComponent = AppComponent;

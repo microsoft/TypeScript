@@ -26,29 +26,23 @@
 +/// <reference path="react16.d.ts" />
 +const React = require("react");
  function TabLayout(props) {
--    return React.createElement("div", null);
-+    return <div />;
+     return React.createElement("div", null);
  }
 -var App = /** @class */ (function (_super) {
 -    __extends(App, _super);
 -    function App() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    App.prototype.render = function () {
 +class App extends React.Component {
 +    render() {
-+        return <TabLayout>
-+            {[
-+                ['Users', <div />],
-+                ['Products', <div />]
-+            ]}
-+        </TabLayout>;
-     }
--    App.prototype.render = function () {
--        return React.createElement(TabLayout, null, [
--            ['Users', React.createElement("div", null)],
--            ['Products', React.createElement("div", null)]
--        ]);
+         return React.createElement(TabLayout, null, [
+             ['Users', React.createElement("div", null)],
+             ['Products', React.createElement("div", null)]
+         ]);
 -    };
 -    return App;
 -}(React.Component));
++    }
 +}
  exports.App = App;

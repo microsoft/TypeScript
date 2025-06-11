@@ -19,7 +19,4 @@ const b = (
 //// [other.js]
 /// <reference path="react18/react18.d.ts" />
 /// <reference path="react18/global.d.ts" />
-const b = (<Foo>
-        {<div />}
-        {"aa"}
-    </Foo>);
+const b = (React.createElement(Foo, null, React.createElement("div", null), "aa"));

@@ -120,32 +120,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 const React = require("react");
 let Component;
-const RenderElement = ({ title }) => <div>{title}</div>;
+const RenderElement = ({ title }) => React.createElement("div", null, title);
 Component = RenderElement;
-<RenderElement />;
-<RenderElement title="react"/>;
-<RenderElement excessProp/>;
+React.createElement(RenderElement, null);
+React.createElement(RenderElement, { title: "react" });
+React.createElement(RenderElement, { excessProp: true });
 const RenderString = ({ title }) => title;
 Component = RenderString;
-<RenderString />;
-<RenderString title="react"/>;
-<RenderString excessProp/>;
+React.createElement(RenderString, null);
+React.createElement(RenderString, { title: "react" });
+React.createElement(RenderString, { excessProp: true });
 const RenderNumber = ({ title }) => title.length;
 Component = RenderNumber;
-<RenderNumber />;
-<RenderNumber title="react"/>;
-<RenderNumber excessProp/>;
+React.createElement(RenderNumber, null);
+React.createElement(RenderNumber, { title: "react" });
+React.createElement(RenderNumber, { excessProp: true });
 const RenderArray = ({ title }) => [title];
 Component = RenderArray;
-<RenderArray />;
-<RenderArray title="react"/>;
-<RenderArray excessProp/>;
+React.createElement(RenderArray, null);
+React.createElement(RenderArray, { title: "react" });
+React.createElement(RenderArray, { excessProp: true });
 // React Server Component
 const RenderPromise = async ({ title }) => "react";
 Component = RenderPromise;
-<RenderPromise />;
-<RenderPromise title="react"/>;
-<RenderPromise excessProp/>;
+React.createElement(RenderPromise, null);
+React.createElement(RenderPromise, { title: "react" });
+React.createElement(RenderPromise, { excessProp: true });
 // Class components still work
 class RenderStringClass extends React.Component {
     render() {
@@ -153,25 +153,25 @@ class RenderStringClass extends React.Component {
     }
 }
 Component = RenderStringClass;
-<RenderStringClass />;
-<RenderStringClass title="react"/>;
-<RenderStringClass excessProp/>;
+React.createElement(RenderStringClass, null);
+React.createElement(RenderStringClass, { title: "react" });
+React.createElement(RenderStringClass, { excessProp: true });
 // Host element types still work
-<div />;
-<my-custom-element />;
+React.createElement("div", null);
+React.createElement("my-custom-element", null);
 // Undeclared host element types are still rejected
-<boop />;
-<my-undeclared-custom-element />;
+React.createElement("boop", null);
+React.createElement("my-undeclared-custom-element", null);
 function ReactNativeFlatList(props, ref) {
     return null;
 }
-<ReactNativeFlatList />;
+React.createElement(ReactNativeFlatList, null);
 // testing higher-order component compat
 function f1(Component) {
-    return <Component />;
+    return React.createElement(Component, null);
 }
-<Unresolved />;
-<Unresolved foo="abc"/>;
-<a:b a="accepted"/>;
-<a:b b="rejected"/>;
-<a:b a="accepted" b="rejected"/>;
+React.createElement(Unresolved, null);
+React.createElement(Unresolved, { foo: "abc" });
+React.createElement("a:b", { a: "accepted" });
+React.createElement("a:b", { b: "rejected" });
+React.createElement("a:b", { a: "accepted", b: "rejected" });

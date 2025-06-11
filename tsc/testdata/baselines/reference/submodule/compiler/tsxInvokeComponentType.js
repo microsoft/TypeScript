@@ -22,6 +22,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 const react_1 = __importDefault(require("react"));
-const bad = <Elem />;
-const good = <Elem someKey="ok"/>;
-const alsoOk = <Elem2>text</Elem2>;
+const bad = react_1.default.createElement(Elem, null);
+const good = react_1.default.createElement(Elem, { someKey: "ok" });
+const alsoOk = react_1.default.createElement(Elem2, null, "text");

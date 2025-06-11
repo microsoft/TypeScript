@@ -67,8 +67,8 @@ var EmptyRCComp = RC3 || RC4;
 var PartRCComp = RC1 || RC4;
 var RCComp = RC1 || RC2;
 // OK
-let a = <RCComp x="Hi"/>;
-let a1 = <EmptyRCComp />;
-let a2 = <EmptyRCComp data-prop="hello"/>;
-let b = <PartRCComp />;
-let c = <PartRCComp data-extra="hello"/>;
+let a = React.createElement(RCComp, { x: "Hi" });
+let a1 = React.createElement(EmptyRCComp, null);
+let a2 = React.createElement(EmptyRCComp, { "data-prop": "hello" });
+let b = React.createElement(PartRCComp, null);
+let c = React.createElement(PartRCComp, { "data-extra": "hello" });

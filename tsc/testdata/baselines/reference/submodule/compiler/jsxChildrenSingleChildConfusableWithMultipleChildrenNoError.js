@@ -33,16 +33,14 @@ exports.App = void 0;
 /// <reference path="react16.d.ts" />
 const React = require("react");
 function TabLayout(props) {
-    return <div />;
+    return React.createElement("div", null);
 }
 class App extends React.Component {
     render() {
-        return <TabLayout>
-            {[
-                ['Users', <div />],
-                ['Products', <div />]
-            ]}
-        </TabLayout>;
+        return React.createElement(TabLayout, null, [
+            ['Users', React.createElement("div", null)],
+            ['Products', React.createElement("div", null)]
+        ]);
     }
 }
 exports.App = App;

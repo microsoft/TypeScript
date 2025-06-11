@@ -93,7 +93,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
 const renderer2_1 = require("./renderer2");
-const MySFC = (props) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
+const MySFC = (props) => (0, renderer2_1.predom)("p", null, props.x, " + ", props.y, " = ", props.x + props.y, ...this.props.children);
 exports.MySFC = MySFC;
 class MyClass {
     props;
@@ -102,15 +102,12 @@ class MyClass {
         this.props = props;
     }
     render() {
-        return <p>
-            {this.props.x} + {this.props.y} = {this.props.x + this.props.y}
-            {...this.props.children}
-        </p>;
+        return (0, renderer2_1.predom)("p", null, this.props.x, " + ", this.props.y, " = ", this.props.x + this.props.y, ...this.props.children);
     }
 }
 exports.MyClass = MyClass;
-exports.tree = <exports.MySFC x={1} y={2}><MyClass x={3} y={4}/><MyClass x={5} y={6}/></exports.MySFC>;
-exports.default = <h></h>;
+exports.tree = (0, renderer2_1.predom)(exports.MySFC, { x: 1, y: 2 }, (0, renderer2_1.predom)(MyClass, { x: 3, y: 4 }), (0, renderer2_1.predom)(MyClass, { x: 5, y: 6 }));
+exports.default = (0, renderer2_1.predom)("h", null);
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -118,8 +115,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const renderer_1 = require("./renderer");
 const component_1 = require("./component");
 let elem = component_1.default;
-elem = <h></h>; // Expect assignability error here
-const DOMSFC = (props) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
+elem = (0, renderer_1.dom)("h", null); // Expect assignability error here
+const DOMSFC = (props) => (0, renderer_1.dom)("p", null, props.x, " + ", props.y, " = ", props.x + props.y, props.children);
 class DOMClass {
     props;
     __domBrand;
@@ -127,12 +124,12 @@ class DOMClass {
         this.props = props;
     }
     render() {
-        return <p>{this.props.x} + {this.props.y} = {this.props.x + this.props.y}{...this.props.children}</p>;
+        return (0, renderer_1.dom)("p", null, this.props.x, " + ", this.props.y, " = ", this.props.x + this.props.y, ...this.props.children);
     }
 }
 // Should work, everything is a DOM element
-const _tree = <DOMSFC x={1} y={2}><DOMClass x={3} y={4}/><DOMClass x={5} y={6}/></DOMSFC>;
+const _tree = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 }, (0, renderer_1.dom)(DOMClass, { x: 3, y: 4 }), (0, renderer_1.dom)(DOMClass, { x: 5, y: 6 }));
 // Should fail, no dom elements
-const _brokenTree = <component_1.MySFC x={1} y={2}><component_1.MyClass x={3} y={4}/><component_1.MyClass x={5} y={6}/></component_1.MySFC>;
+const _brokenTree = (0, renderer_1.dom)(component_1.MySFC, { x: 1, y: 2 }, (0, renderer_1.dom)(component_1.MyClass, { x: 3, y: 4 }), (0, renderer_1.dom)(component_1.MyClass, { x: 5, y: 6 }));
 // Should fail, nondom isn't allowed as children of dom
-const _brokenTree2 = <DOMSFC x={1} y={2}>{component_1.tree}{component_1.tree}</DOMSFC>;
+const _brokenTree2 = (0, renderer_1.dom)(DOMSFC, { x: 1, y: 2 }, component_1.tree, component_1.tree);

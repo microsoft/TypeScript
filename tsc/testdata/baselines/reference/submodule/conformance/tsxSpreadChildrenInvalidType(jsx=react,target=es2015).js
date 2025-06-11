@@ -36,18 +36,14 @@ let x: TodoListProps;
 
 //// [tsxSpreadChildrenInvalidType.js]
 function Todo(prop) {
-    return <div>{prop.key.toString() + prop.todo}</div>;
+    return React.createElement("div", null, prop.key.toString() + prop.todo);
 }
 function TodoList({ todos }) {
-    return <div>
-        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
-    </div>;
+    return React.createElement("div", null, ...React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
 }
 function TodoListNoError({ todos }) {
     // any is not checked
-    return <div>
-        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
-    </div>;
+    return React.createElement("div", null, ...React.createElement(Todo, { key: todos[0].id, todo: todos[0].todo }));
 }
 let x;
-<TodoList {...x}/>;
+React.createElement(TodoList, Object.assign({}, x));

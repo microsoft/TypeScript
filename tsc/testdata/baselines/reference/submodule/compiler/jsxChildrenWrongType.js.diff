@@ -10,7 +10,4 @@
 -const b = (React.createElement(Foo, null,
 -    React.createElement("div", null),
 -    "aa"));
-+const b = (<Foo>
-+        {<div />}
-+        {"aa"}
-+    </Foo>);
++const b = (React.createElement(Foo, null, React.createElement("div", null), "aa"));

@@ -25,4 +25,4 @@ function createElement(name, attributes, ...contents) {
 function Button(attributes, contents) {
     return '';
 }
-const b = <Button></Button>;
+const b = createElement(Button, null);

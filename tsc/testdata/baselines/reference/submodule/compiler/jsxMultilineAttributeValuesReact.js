@@ -14,12 +14,6 @@ foo: 23\n
 
 
 //// [jsxMultilineAttributeValuesReact.js]
-const a = <input value="
-foo: 23
-"></input>;
-const b = <input value='
-foo: 23
-'></input>;
-const c = <input value='
-foo: 23\n
-'></input>;
+const a = React.createElement("input", { value: "\nfoo: 23\n" });
+const b = React.createElement("input", { value: "\nfoo: 23\n" });
+const c = React.createElement("input", { value: "\nfoo: 23\\n\n" });

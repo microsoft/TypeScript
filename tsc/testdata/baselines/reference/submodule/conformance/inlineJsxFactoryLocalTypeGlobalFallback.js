@@ -50,7 +50,7 @@ elem = <h></h>; // Expect assignability error here
 Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx predom */
 const renderer2_1 = require("./renderer2");
-exports.default = <h></h>;
+exports.default = (0, renderer2_1.predom)("h", null);
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -58,4 +58,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const renderer_1 = require("./renderer");
 const component_1 = require("./component");
 let elem = component_1.default;
-elem = <h></h>; // Expect assignability error here
+elem = (0, renderer_1.dom)("h", null); // Expect assignability error here

@@ -7,16 +7,10 @@
 -var jsx_runtime_1 = require("react/jsx-runtime");
 -var Component = /** @class */ (function () {
 -    function Component() {
++const jsx_runtime_1 = require("react/jsx-runtime");
 +class Component {
 +    render() {
-+        return <div>
-+            
-+            {null /* preserved */}
-+            
-+            
-+            
-+            
-+        </div>;
++        return jsx_runtime_1.jsx("div", { children: null /* preserved */ });
      }
 -    Component.prototype.render = function () {
 -        return (0, jsx_runtime_1.jsx)("div", { children: null /* preserved */ });

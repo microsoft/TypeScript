@@ -1,10 +1,9 @@
 --- old.tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es5).js
 +++ new.tsxSpreadChildrenInvalidType(jsx=react-jsx,target=es5).js
-@@= skipped -34, +34 lines =@@
-
+@@= skipped -35, +35 lines =@@
 
  //// [tsxSpreadChildrenInvalidType.js]
--"use strict";
+ "use strict";
 -var __assign = (this && this.__assign) || function () {
 -    __assign = Object.assign || function(t) {
 -        for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -25,8 +24,9 @@
 -    }
 -    return to.concat(ar || Array.prototype.slice.call(from));
 -};
--Object.defineProperty(exports, "__esModule", { value: true });
+ Object.defineProperty(exports, "__esModule", { value: true });
 -var jsx_runtime_1 = require("react/jsx-runtime");
++const jsx_runtime_1 = require("react/jsx-runtime");
  function Todo(prop) {
 -    return (0, jsx_runtime_1.jsx)("div", { children: prop.key.toString() + prop.todo });
 -}
@@ -36,21 +36,17 @@
 -}
 -function TodoListNoError(_a) {
 -    var todos = _a.todos;
-+    return <div>{prop.key.toString() + prop.todo}</div>;
++    return jsx_runtime_1.jsx("div", { children: prop.key.toString() + prop.todo });
 +}
 +function TodoList({ todos }) {
-+    return <div>
-+        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
-+    </div>;
++    return jsx_runtime_1.jsxs("div", { children: [...jsx_runtime_1.jsx(Todo, { todo: todos[0].todo }, todos[0].id)] });
 +}
 +function TodoListNoError({ todos }) {
      // any is not checked
 -    return (0, jsx_runtime_1.jsxs)("div", { children: __spreadArray([], (0, jsx_runtime_1.jsx)(Todo, { todo: todos[0].todo }, todos[0].id), true) });
-+    return <div>
-+        {...<Todo key={todos[0].id} todo={todos[0].todo}/>}
-+    </div>;
++    return jsx_runtime_1.jsxs("div", { children: [...jsx_runtime_1.jsx(Todo, { todo: todos[0].todo }, todos[0].id)] });
  }
 -var x;
 -(0, jsx_runtime_1.jsx)(TodoList, __assign({}, x));
 +let x;
-+<TodoList {...x}/>;
++jsx_runtime_1.jsx(TodoList, __assign({}, x));

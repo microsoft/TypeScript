@@ -7,5 +7,5 @@
 -"use strict";
 -var a = (React.createElement("public-foo", null));
 -var b = (React.createElement("public", null));
-+const a = (<public-foo></public-foo>);
-+const b = (<public></public>);
++const a = (React.createElement("public-foo", null));
++const b = (React.createElement("public", null));

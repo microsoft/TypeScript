@@ -13,17 +13,16 @@
 -    }
 -    return TestObject;
 -}());
--function Test(props) { return React.createElement(React.Fragment, null); }
--var model = new TestObject();
--var el1 = React.createElement(Test, { model: model, foo: "c" });
--var el2 = React.createElement(Test, { model: model, foo: "c" });
 +const React = require("react");
 +class TestObject {
 +    a = '';
 +    b = 1;
 +    c = () => { };
 +}
-+function Test(props) { return <></>; }
+ function Test(props) { return React.createElement(React.Fragment, null); }
+-var model = new TestObject();
+-var el1 = React.createElement(Test, { model: model, foo: "c" });
+-var el2 = React.createElement(Test, { model: model, foo: "c" });
 +const model = new TestObject();
-+const el1 = <Test model={model} foo="c"/>;
-+const el2 = <Test model={model} foo="c"/>;
++const el1 = React.createElement(Test, { model: model, foo: "c" });
++const el2 = React.createElement(Test, { model: model, foo: "c" });

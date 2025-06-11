@@ -25,22 +25,22 @@
 -    __extends(MyComponent, _super);
 -    function MyComponent() {
 -        return _super !== null && _super.apply(this, arguments) || this;
+-    }
+-    MyComponent.prototype.render = function () {
+-        var AnyComponent = this.props.AnyComponent;
 +const React = require("react");
 +class MyComponent extends React.Component {
 +    render() {
 +        const { AnyComponent } = this.props;
-+        return (<AnyComponent />);
-     }
--    MyComponent.prototype.render = function () {
--        var AnyComponent = this.props.AnyComponent;
--        return (React.createElement(AnyComponent, null));
+         return (React.createElement(AnyComponent, null));
 -    };
 -    return MyComponent;
 -}(React.Component));
++    }
 +}
  // Stateless Component As Props
 -React.createElement(MyComponent, { AnyComponent: function () { return React.createElement("button", null, "test"); } });
-+<MyComponent AnyComponent={() => <button>test</button>}/>;
++React.createElement(MyComponent, { AnyComponent: () => React.createElement("button", null, "test") });
  // Component Class as Props
 -var MyButtonComponent = /** @class */ (function (_super) {
 -    __extends(MyButtonComponent, _super);
@@ -49,7 +49,6 @@
 -    }
 -    return MyButtonComponent;
 -}(React.Component));
--React.createElement(MyComponent, { AnyComponent: MyButtonComponent });
 +class MyButtonComponent extends React.Component {
 +}
-+<MyComponent AnyComponent={MyButtonComponent}/>;
+ React.createElement(MyComponent, { AnyComponent: MyButtonComponent });

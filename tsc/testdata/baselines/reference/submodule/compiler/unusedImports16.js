@@ -25,4 +25,4 @@ declare global {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FooComponent = void 0;
 const Element = require("react");
-exports.FooComponent = <div></div>;
+exports.FooComponent = Element.createElement("div", null);

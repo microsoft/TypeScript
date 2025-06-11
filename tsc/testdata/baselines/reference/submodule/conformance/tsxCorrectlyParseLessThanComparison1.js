@@ -28,7 +28,7 @@ exports.ShortDetails = void 0;
 class ShortDetails extends React.Component {
     render() {
         if (this.props.id < 1) {
-            return (<div></div>);
+            return (React.createElement("div", null));
         }
     }
 }

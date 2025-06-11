@@ -39,5 +39,5 @@ const RandomComponent = () => {
     const OtherComponent = condition2
         ? OtherRadio
         : Checkbox;
-    return condition1 ? <Component /> : <OtherComponent />;
+    return condition1 ? React.createElement(Component, null) : React.createElement(OtherComponent, null);
 };

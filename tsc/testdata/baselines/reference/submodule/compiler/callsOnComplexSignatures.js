@@ -154,16 +154,16 @@ function test5() {
     // Pair of non-like intrinsics
     function render(url) {
         const Tag = url ? 'a' : 'button';
-        return <Tag>test</Tag>;
+        return react_1.default.createElement(Tag, null, "test");
     }
     // Union of all intrinsics and components of `any`
     function App(props) {
         const Comp = props.component;
-        return (<Comp />);
+        return (react_1.default.createElement(Comp, null));
     }
     // custom components with non-subset props
     function render2() {
         var C = null;
-        const a = <C p={true}/>;
+        const a = react_1.default.createElement(C, { p: true });
     }
 }

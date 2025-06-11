@@ -91,6 +91,6 @@
 -var a = React.createElement(RCComp, { x: true });
 -var b = React.createElement(PartRCComp, { x: 10 });
 -var c = React.createElement(EmptyRCComp, { prop: true });
-+let a = <RCComp x/>;
-+let b = <PartRCComp x={10}/>;
-+let c = <EmptyRCComp prop/>;
++let a = React.createElement(RCComp, { x: true });
++let b = React.createElement(PartRCComp, { x: 10 });
++let c = React.createElement(EmptyRCComp, { prop: true });

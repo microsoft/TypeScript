@@ -243,7 +243,7 @@ func (c *Checker) getContextualTypeForChildJsxExpression(node *ast.Node, child *
 	if !(attributesType != nil && !IsTypeAny(attributesType) && jsxChildrenPropertyName != ast.InternalSymbolNameMissing && jsxChildrenPropertyName != "") {
 		return nil
 	}
-	realChildren := getSemanticJsxChildren(node.Children().Nodes)
+	realChildren := ast.GetSemanticJsxChildren(node.Children().Nodes)
 	childIndex := slices.Index(realChildren, child)
 	childFieldType := c.getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName)
 	if childFieldType == nil {
@@ -279,7 +279,7 @@ func (c *Checker) discriminateContextualTypeByJSXAttributes(node *ast.Node, cont
 			return false
 		}
 		element := node.Parent.Parent
-		if s.Name == jsxChildrenPropertyName && ast.IsJsxElement(element) && len(getSemanticJsxChildren(element.Children().Nodes)) != 0 {
+		if s.Name == jsxChildrenPropertyName && ast.IsJsxElement(element) && len(ast.GetSemanticJsxChildren(element.Children().Nodes)) != 0 {
 			return false
 		}
 		return node.Symbol().Members[s.Name] == nil && c.isDiscriminantProperty(contextualType, s.Name)
@@ -308,7 +308,7 @@ func (c *Checker) elaborateJsxComponents(node *ast.Node, source *Type, target *T
 		}
 		childrenNameType := c.getStringLiteralType(childrenPropName)
 		childrenTargetType := c.getIndexedAccessType(target, childrenNameType)
-		validChildren := getSemanticJsxChildren(containingElement.Children().Nodes)
+		validChildren := ast.GetSemanticJsxChildren(containingElement.Children().Nodes)
 		if len(validChildren) == 0 {
 			return reportedError
 		}
@@ -803,7 +803,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 				children = parent.AsJsxFragment().Children.Nodes
 			}
 		}
-		return len(getSemanticJsxChildren(children)) != 0
+		return len(ast.GetSemanticJsxChildren(children)) != 0
 	}
 	if parentHasSemanticJsxChildren(openingLikeElement) {
 		var childTypes []*Type = c.checkJsxChildren(openingLikeElement.Parent, checkMode)
@@ -853,19 +853,6 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 		return createJsxAttributesType()
 	}
 	return spread
-}
-
-func getSemanticJsxChildren(children []*ast.JsxChild) []*ast.JsxChild {
-	return core.Filter(children, func(i *ast.JsxChild) bool {
-		switch i.Kind {
-		case ast.KindJsxExpression:
-			return i.Expression() != nil
-		case ast.KindJsxText:
-			return !i.AsJsxText().ContainsOnlyTriviaWhiteSpaces
-		default:
-			return true
-		}
-	})
 }
 
 func (c *Checker) checkJsxAttribute(node *ast.Node, checkMode CheckMode) *Type {

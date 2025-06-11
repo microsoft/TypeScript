@@ -28,11 +28,11 @@ function MyComp2(props) {
 }
 class MyComp extends React.Component {
 }
-<a class=""/>;
-<a for=""/>; // should have no fix
-<label for=""/>;
-<label for="" class=""/>;
-<MyComp class=""/>;
-<MyComp2 class=""/>;
-<MyComp for=""/>;
-<MyComp2 for=""/>;
+React.createElement("a", { class: "" });
+React.createElement("a", { for: "" }); // should have no fix
+React.createElement("label", { for: "" });
+React.createElement("label", { for: "", class: "" });
+React.createElement(MyComp, { class: "" });
+React.createElement(MyComp2, { class: "" });
+React.createElement(MyComp, { for: "" });
+React.createElement(MyComp2, { for: "" });

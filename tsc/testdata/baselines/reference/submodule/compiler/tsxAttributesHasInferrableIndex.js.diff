@@ -17,4 +17,4 @@
      return '';
  }
 -var b = createElement(Button, null);
-+const b = <Button></Button>;
++const b = createElement(Button, null);
