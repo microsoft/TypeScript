@@ -47532,9 +47532,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkInterfaceDeclaration(node: InterfaceDeclaration) {
         // Grammar checking
         if (!checkGrammarModifiers(node)) checkGrammarInterfaceDeclaration(node);
-        if (!allowBlockDeclarations(node.parent)) {
-            grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, "interface");
-        }
+        addLazyDiagnostic(() => {
+            if (!allowBlockDeclarations(node.parent)) {
+                grammarErrorOnNode(node, Diagnostics._0_declarations_can_only_be_declared_inside_a_block, "interface");
+            }
+        });
 
         checkTypeParameters(node.typeParameters);
         addLazyDiagnostic(() => {
