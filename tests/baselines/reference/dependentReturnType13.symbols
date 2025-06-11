@@ -1,0 +1,293 @@
+//// [tests/cases/compiler/dependentReturnType13.ts] ////
+
+=== dependentReturnType13.ts ===
+// Restrictions on what kind of union types can be narrowed.
+
+function f1<T extends string | string[]>(param: T):
+>f1 : Symbol(f1, Decl(dependentReturnType13.ts, 0, 0))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 2, 12))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 2, 41))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 2, 12))
+
+    T extends string ? 1 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 2, 12))
+
+    T extends string[] ? 2 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 2, 12))
+
+    never {
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 2, 41))
+
+        return 2;
+    }
+    return 1;
+}
+
+function f2<T extends string | string[] | number[]>(param: T):
+>f2 : Symbol(f2, Decl(dependentReturnType13.ts, 10, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 12, 12))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 12, 52))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 12, 12))
+
+    T extends string ? 1 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 12, 12))
+
+    T extends string[] | number[] ? 2 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 12, 12))
+
+    never {
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 12, 52))
+
+        return 2;
+    }
+    return 1;
+}
+
+declare function isNumberArray(x: unknown): x is number[];
+>isNumberArray : Symbol(isNumberArray, Decl(dependentReturnType13.ts, 20, 1))
+>x : Symbol(x, Decl(dependentReturnType13.ts, 22, 31))
+>x : Symbol(x, Decl(dependentReturnType13.ts, 22, 31))
+
+function f3<T extends string | string[] | number[]>(param: T): // Bad.
+>f3 : Symbol(f3, Decl(dependentReturnType13.ts, 22, 58))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 24, 12))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 24, 52))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 24, 12))
+
+    T extends string ? 1 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 24, 12))
+
+    T extends string[] ? 2 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 24, 12))
+
+    T extends number[] ? 3 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 24, 12))
+
+    never {
+    if (isNumberArray(param)) {
+>isNumberArray : Symbol(isNumberArray, Decl(dependentReturnType13.ts, 20, 1))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 24, 52))
+
+        return 3;
+    }
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 24, 52))
+
+        return 2;
+    }
+    return 1;
+}
+
+class Dog {
+>Dog : Symbol(Dog, Decl(dependentReturnType13.ts, 36, 1))
+
+    bark(): void {}
+>bark : Symbol(Dog.bark, Decl(dependentReturnType13.ts, 38, 11))
+}
+
+class Cat {
+>Cat : Symbol(Cat, Decl(dependentReturnType13.ts, 40, 1))
+
+    meow(): void {}
+>meow : Symbol(Cat.meow, Decl(dependentReturnType13.ts, 42, 11))
+
+}
+
+function f4<T extends Cat | Dog>(param: T): // Bad.
+>f4 : Symbol(f4, Decl(dependentReturnType13.ts, 45, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 47, 12))
+>Cat : Symbol(Cat, Decl(dependentReturnType13.ts, 40, 1))
+>Dog : Symbol(Dog, Decl(dependentReturnType13.ts, 36, 1))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 47, 33))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 47, 12))
+
+    T extends Cat ? 1 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 47, 12))
+>Cat : Symbol(Cat, Decl(dependentReturnType13.ts, 40, 1))
+
+    T extends Dog ? 2 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 47, 12))
+>Dog : Symbol(Dog, Decl(dependentReturnType13.ts, 36, 1))
+
+    never {
+    if ('bark' in param) {
+>param : Symbol(param, Decl(dependentReturnType13.ts, 47, 33))
+
+        const _: Dog = param;
+>_ : Symbol(_, Decl(dependentReturnType13.ts, 52, 13))
+>Dog : Symbol(Dog, Decl(dependentReturnType13.ts, 36, 1))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 47, 33))
+
+        return 2;
+    }
+    const _: Cat = param;
+>_ : Symbol(_, Decl(dependentReturnType13.ts, 55, 9))
+>Cat : Symbol(Cat, Decl(dependentReturnType13.ts, 40, 1))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 47, 33))
+
+    return 1;
+}
+
+function f5<T extends string | number | string[]>(param: T):
+>f5 : Symbol(f5, Decl(dependentReturnType13.ts, 57, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 59, 12))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 59, 50))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 59, 12))
+
+    T extends string ? 1 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 59, 12))
+
+    T extends number | string[] ? 2 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 59, 12))
+
+    never {
+    if (Array.isArray(param) || typeof param === "number") {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 59, 50))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 59, 50))
+
+        const _: string[] | number = param;
+>_ : Symbol(_, Decl(dependentReturnType13.ts, 64, 13))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 59, 50))
+
+        return 2;
+    }
+    const _: string = param;
+>_ : Symbol(_, Decl(dependentReturnType13.ts, 67, 9))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 59, 50))
+
+    return 1;
+}
+
+function f6<T extends string | number[] | string[], U extends boolean>(param: T, other: U):
+>f6 : Symbol(f6, Decl(dependentReturnType13.ts, 69, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 71, 12))
+>U : Symbol(U, Decl(dependentReturnType13.ts, 71, 51))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 71, 71))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 71, 12))
+>other : Symbol(other, Decl(dependentReturnType13.ts, 71, 80))
+>U : Symbol(U, Decl(dependentReturnType13.ts, 71, 51))
+
+    T extends number[] ? 2 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 71, 12))
+
+        U extends true ?
+>U : Symbol(U, Decl(dependentReturnType13.ts, 71, 51))
+
+            T extends string[] ? 3 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 71, 12))
+
+            T extends string ? 1 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 71, 12))
+
+            never :
+        U extends false ?
+>U : Symbol(U, Decl(dependentReturnType13.ts, 71, 51))
+
+            T extends string[] ? 4 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 71, 12))
+
+            T extends string ? 5 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 71, 12))
+
+            never :
+        never {
+    if (isNumberArray(param)) {
+>isNumberArray : Symbol(isNumberArray, Decl(dependentReturnType13.ts, 20, 1))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 71, 71))
+
+        return 2;
+    }
+    if (other) {
+>other : Symbol(other, Decl(dependentReturnType13.ts, 71, 80))
+
+        if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 71, 71))
+
+            return 3;
+        }
+        return 1;
+    }
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 71, 71))
+
+        return 4;
+    }
+    return 5;
+}
+
+function f7<T extends string | string[], U extends number | number[]>(param: T, other: U):
+>f7 : Symbol(f7, Decl(dependentReturnType13.ts, 95, 1))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 97, 12))
+>U : Symbol(U, Decl(dependentReturnType13.ts, 97, 40))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 97, 70))
+>T : Symbol(T, Decl(dependentReturnType13.ts, 97, 12))
+>other : Symbol(other, Decl(dependentReturnType13.ts, 97, 79))
+>U : Symbol(U, Decl(dependentReturnType13.ts, 97, 40))
+
+    U extends number ?
+>U : Symbol(U, Decl(dependentReturnType13.ts, 97, 40))
+
+        T extends string[] ? 2 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 97, 12))
+
+        T extends string ? 1 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 97, 12))
+
+        never :
+    U extends number[] ?
+>U : Symbol(U, Decl(dependentReturnType13.ts, 97, 40))
+
+        T extends string[] ? 4 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 97, 12))
+
+        T extends string ? 3 :
+>T : Symbol(T, Decl(dependentReturnType13.ts, 97, 12))
+
+        never :
+    never {
+    if (Array.isArray(other)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>other : Symbol(other, Decl(dependentReturnType13.ts, 97, 79))
+
+        if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 97, 70))
+
+            return 4;
+        }
+        return 3;
+    }
+    if (Array.isArray(param)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>param : Symbol(param, Decl(dependentReturnType13.ts, 97, 70))
+
+        return 2;
+    }
+    return 1;
+}
