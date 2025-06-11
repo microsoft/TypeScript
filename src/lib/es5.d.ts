@@ -1598,6 +1598,11 @@ type Record<K extends keyof any, T> = {
 type Exclude<T, U> = T extends U ? never : T;
 
 /**
+ * Any type but `null` or `undefined`
+ */
+type Something = {};
+
+/**
  * Extract from T those types that are assignable to U
  */
 type Extract<T, U> = T extends U ? T : never;
