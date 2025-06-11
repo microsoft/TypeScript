@@ -13036,7 +13036,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const s = signatures[0];
             if (!s.typeParameters && s.parameters.length === 1 && signatureHasRestParameter(s)) {
                 const paramType = getTypeOfParameter(s.parameters[0]);
-                return isTypeAny(paramType) || getElementTypeOfArrayType(paramType) === anyType;
+                return isTypeAny(paramType) || getElementTypeOfArrayType(paramType) === anyType || getElementTypeOfArrayType(paramType) === unknownType;
             }
         }
         return false;
@@ -40194,6 +40194,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return sourceType;
     }
 
+    function isBoolean(value: any): boolean {
+        return (value === typeof "boolean");
+    }
+
     /**
      * This is a *shallow* check: An expression is side-effect-free if the
      * evaluation of the expression *itself* cannot produce side effects.
@@ -40690,6 +40694,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     leftType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(leftType, left));
                     rightType = getBaseTypeOfLiteralTypeForComparison(checkNonNullType(rightType, right));
                     reportOperatorErrorUnless((left, right) => {
+                        if (isBoolean(left) || isBoolean(right)) {
+                            return true;
+                        }
                         if (isTypeAny(left) || isTypeAny(right)) {
                             return true;
                         }
