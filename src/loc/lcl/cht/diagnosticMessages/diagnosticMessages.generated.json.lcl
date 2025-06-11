@@ -5271,6 +5271,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Default_imports_are_not_allowed_in_a_deferred_import_18058" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Default imports are not allowed in a deferred import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[延遲的匯入中不允許預設匯入。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Default_library_1424" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Default library]]></Val>
@@ -5285,6 +5294,15 @@
           <Val><![CDATA[Default library for target '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[目標 '{0}' 的預設程式庫]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Deferred_imports_are_only_supported_when_the_module_flag_is_set_to_esnext_or_preserve_18060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Deferred imports are only supported when the '--module' flag is set to 'esnext' or 'preserve'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[只有當 '--module' 旗標設定為 'esnext' 或 'preserve' 時，才支援延遲的匯入。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6624,6 +6642,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Environment_Settings_6285" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Environment Settings]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[環境設定]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Errors_Files_6041" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Errors  Files]]></Val>
@@ -7311,6 +7338,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";File_Layout_6284" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[File Layout]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[檔案配置]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";File_Management_6245" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[File Management]]></Val>
@@ -7601,6 +7637,15 @@
           <Val><![CDATA[Fix all with type-only imports]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[使用僅限類型匯入來修正所有問題]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";For_nodejs_Colon_6287" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[For nodejs:]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[針對 nodejs：]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -9876,6 +9921,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Named_imports_are_not_allowed_in_a_deferred_import_18059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Named imports are not allowed in a deferred import.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[延遲的匯出中不允許具名匯入。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Named_imports_from_a_JSON_file_into_an_ECMAScript_module_are_not_allowed_when_module_is_set_to_0_1544" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Named imports from a JSON file into an ECMAScript module are not allowed when 'module' is set to '{0}'.]]></Val>
@@ -10670,6 +10724,15 @@
           <Val><![CDATA[Options:]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[選項:]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Other_Outputs_6291" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Other Outputs]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[其他輸出]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -12153,6 +12216,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Recommended_Options_6294" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Recommended Options]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[建議選項]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Redirect_output_structure_to_the_directory_6006" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Redirect output structure to the directory.]]></Val>
@@ -13191,6 +13263,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";See_also_https_Colon_Slash_Slashaka_ms_Slashtsconfig_Slashmodule_6286" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[See also https://aka.ms/tsconfig/module]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[另請參閱 https://aka.ms/tsconfig/module]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Selection_is_not_a_valid_statement_or_statements_95155" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Selection is not a valid statement or statements]]></Val>
@@ -13935,6 +14016,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Stricter_Typechecking_Options_6292" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Stricter Typechecking Options]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[更嚴格的類型檢查選項]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";String_literal_expected_1141" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[String literal expected.]]></Val>
@@ -13958,6 +14048,15 @@
           <Val><![CDATA[String literal with double quotes expected.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[應有具雙引號的字串常值。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Style_Options_6293" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Style Options]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[樣式選項]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -17937,6 +18036,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";_0_is_not_a_valid_meta_property_for_keyword_import_Did_you_mean_meta_or_defer_18061" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['{0}' is not a valid meta-property for keyword 'import'. Did you mean 'meta' or 'defer'?]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA['{0}' 對關鍵字 'import' 而言不是有效的中繼屬性。您的意思是 'meta' 或 'defer'？]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";_0_is_not_allowed_as_a_parameter_name_1390" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['{0}' is not allowed as a parameter name.]]></Val>
@@ -18402,6 +18510,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";and_npm_install_D_types_Slashnode_6290" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[and npm install -D @types/node]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[和 npm 安裝 -D @types/node]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";arguments_cannot_be_referenced_in_property_initializers_or_class_static_initialization_blocks_2815" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['arguments' cannot be referenced in property initializers or class static initialization blocks.]]></Val>
@@ -18464,6 +18581,15 @@
           <Val><![CDATA['await' has no effect on the type of this expression.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['await' 對此運算式的類型沒有作用。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";await_using_declarations_are_not_allowed_in_ambient_contexts_1546" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['await using' declarations are not allowed in ambient contexts.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[環境內容中不允許使用 'await using' 宣告。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -19319,6 +19445,15 @@
           <Val><![CDATA['use strict' directive used here.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA['use strict' 指示詞已用於此處。]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";using_declarations_are_not_allowed_in_ambient_contexts_1545" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['using' declarations are not allowed in ambient contexts.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[環境內容中不允許 'using' 宣告。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
