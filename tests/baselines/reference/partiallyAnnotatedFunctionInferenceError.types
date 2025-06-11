@@ -33,8 +33,8 @@ declare function testError<T extends C>(a: (t: T, t1: T) => void): T
 
 // more args
 testError((t1: D, t2, t3) => {})
->testError((t1: D, t2, t3) => {}) : C
->                                 : ^
+>testError((t1: D, t2, t3) => {}) : any
+>                                 : ^^^
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
 >          : ^ ^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >(t1: D, t2, t3) => {} : (t1: D, t2: any, t3: any) => void
@@ -47,8 +47,8 @@ testError((t1: D, t2, t3) => {})
 >   : ^^^
 
 testError((t1, t2: D, t3) => {})
->testError((t1, t2: D, t3) => {}) : C
->                                 : ^
+>testError((t1, t2: D, t3) => {}) : any
+>                                 : ^^^
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
 >          : ^ ^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >(t1, t2: D, t3) => {} : (t1: any, t2: D, t3: any) => void
@@ -61,8 +61,8 @@ testError((t1, t2: D, t3) => {})
 >   : ^^^
 
 testError((t1, t2, t3: D) => {})
->testError((t1, t2, t3: D) => {}) : C
->                                 : ^
+>testError((t1, t2, t3: D) => {}) : any
+>                                 : ^^^
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
 >          : ^ ^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >(t1, t2, t3: D) => {} : (t1: any, t2: any, t3: D) => void

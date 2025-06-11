@@ -36467,7 +36467,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (result) {
             return result;
         }
-        result = getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray, checkMode);
+        result = getCandidateForOverloadFailure(node, candidates, candidatesForArgumentError, args, !!candidatesOutArray, checkMode);
         // Preemptively cache the result; getResolvedSignature will do this after we return, but
         // we need to ensure that the result is present for the error checks below so that if
         // this signature is encountered again, we handle the circularity (rather than producing a
@@ -36689,6 +36689,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getCandidateForOverloadFailure(
         node: CallLikeExpression,
         candidates: Signature[],
+        candidatesForArgumentError: Signature[] | undefined,
         args: readonly Expression[],
         hasCandidatesOutArray: boolean,
         checkMode: CheckMode,
@@ -36699,7 +36700,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Don't do this if there is a `candidatesOutArray`,
         // because then we want the chosen best candidate to be one of the overloads, not a combination.
         return hasCandidatesOutArray || candidates.length === 1 || candidates.some(c => !!c.typeParameters)
-            ? pickLongestCandidateSignature(node, candidates, args, checkMode)
+            ? pickLongestCandidateSignature(node, candidates, candidatesForArgumentError, args, checkMode)
             : createUnionOfSignaturesForOverloadFailure(candidates);
     }
 
@@ -36755,7 +36756,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createSymbolWithType(first(sources), type);
     }
 
-    function pickLongestCandidateSignature(node: CallLikeExpression, candidates: Signature[], args: readonly Expression[], checkMode: CheckMode): Signature {
+    function pickLongestCandidateSignature(node: CallLikeExpression, candidates: Signature[], candidatesForArgumentError: Signature[] | undefined, args: readonly Expression[], checkMode: CheckMode): Signature {
         // Pick the longest signature. This way we can get a contextual type for cases like:
         //     declare function f(a: { xa: number; xb: number; }, b: number);
         //     f({ |
@@ -36772,9 +36773,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeArgumentNodes: readonly TypeNode[] | undefined = callLikeExpressionMayHaveTypeArguments(node) ? node.typeArguments : undefined;
         const instantiated = typeArgumentNodes
             ? createSignatureInstantiation(candidate, getTypeArgumentsFromNodes(typeArgumentNodes, typeParameters, isInJSFile(node)))
+            // when there is only one candidate reuse existing *inferred* candidate for argument error (if available)
+            // this saves the compiler some extra work but more importantly it includes inferences made from context-sensitive arguments and generic functions
+            // which avoids confusing mismatches between inferred type arguments and reported argument error
+            //
+            // for the time being only do this when there is a single candidate as the origin index of the `candidatesForArgumentError` is not known
+            // and it could be different from the selected `bestIndex` here
+            : candidates.length === 1 && candidatesForArgumentError
+            ? candidatesForArgumentError[0]
             : inferSignatureInstantiationForOverloadFailure(node, typeParameters, candidate, args, checkMode);
         candidates[bestIndex] = instantiated;
-        return instantiated;
+        // for similar reasons as above, we reuse the already instantiated *single* candidatesForArgumentError here (even when there are more input candidates)
+        // this is the preferred candidate for which the signature errors are reported
+        return candidatesForArgumentError?.length === 1 ? candidatesForArgumentError[0] : instantiated;
     }
 
     function getTypeArgumentsFromNodes(typeArgumentNodes: readonly TypeNode[], typeParameters: readonly TypeParameter[], isJs: boolean): readonly Type[] {
