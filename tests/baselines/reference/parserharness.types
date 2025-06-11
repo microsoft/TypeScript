@@ -94,12 +94,12 @@ function filePath(fullPath: string) {
 >           : ^^^^^^^^
 >fullPath.split("/") : string[]
 >                    : ^^^^^^^^
->fullPath.split : (separator: string | RegExp, limit?: number) => string[]
->               : ^         ^^               ^^     ^^^      ^^^^^        
+>fullPath.split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>               : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >fullPath : string
 >         : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >"/" : "/"
 >    : ^^^
 
@@ -1264,12 +1264,12 @@ module Harness {
 >      : ^^^^^^^^
 >content.split('\r\n') : string[]
 >                      : ^^^^^^^^
->content.split : (separator: string | RegExp, limit?: number) => string[]
->              : ^         ^^               ^^     ^^^      ^^^^^        
+>content.split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>              : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >content : string
 >        : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >'\r\n' : "\r\n"
 >       : ^^^^^^
 
@@ -1292,12 +1292,12 @@ module Harness {
 >      : ^^^^^^^^
 >content.split('\n') : string[]
 >                    : ^^^^^^^^
->content.split : (separator: string | RegExp, limit?: number) => string[]
->              : ^         ^^               ^^     ^^^      ^^^^^        
+>content.split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>              : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >content : string
 >        : ^^^^^^
->split : (separator: string | RegExp, limit?: number) => string[]
->      : ^         ^^               ^^     ^^^      ^^^^^        
+>split : { (separator: string | RegExp, limit?: number): string[]; <Source extends string, Separator extends string>(this: Source, separator: Separator, limit?: undefined): Split<Source, Separator>; (separator: string | RegExp, limit: 0): []; }
+>      : ^^^         ^^               ^^     ^^^      ^^^        ^^^      ^^^^^^^^^      ^^         ^^^^^^^^^      ^^    ^^      ^^         ^^         ^^     ^^^         ^^^                        ^^^         ^^               ^^     ^^ ^^^  ^^^
 >'\n' : "\n"
 >     : ^^^^
         }

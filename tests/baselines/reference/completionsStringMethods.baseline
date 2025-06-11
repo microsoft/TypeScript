@@ -14,7 +14,7 @@
 // | (method) String.replace(searchValue: string | RegExp, replaceValue: string): string (+1 overload)
 // | (method) String.search(regexp: string | RegExp): number
 // | (method) String.slice(start?: number, end?: number): string
-// | (method) String.split(separator: string | RegExp, limit?: number): string[]
+// | (method) String.split(separator: string | RegExp, limit?: number): string[] (+2 overloads)
 // | (method) String.substring(start: number, end?: number): string
 // | (method) String.toLocaleLowerCase(locales?: string | string[]): string
 // | (method) String.toLocaleUpperCase(locales?: string | string[]): string
@@ -1541,6 +1541,34 @@
             },
             {
               "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "+",
+              "kind": "operator"
+            },
+            {
+              "text": "2",
+              "kind": "numericLiteral"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "overloads",
+              "kind": "text"
+            },
+            {
+              "text": ")",
               "kind": "punctuation"
             }
           ],
