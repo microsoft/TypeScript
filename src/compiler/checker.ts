@@ -25212,7 +25212,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isReadonlySymbol(sourceProp) !== isReadonlySymbol(targetProp)) {
             return Ternary.False;
         }
-        return compareTypes(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp));
+        return compareTypes(getNonMissingTypeOfSymbol(sourceProp), getNonMissingTypeOfSymbol(targetProp));
     }
 
     function isMatchingSignature(source: Signature, target: Signature, partialMatch: boolean) {
