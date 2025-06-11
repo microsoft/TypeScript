@@ -308,11 +308,11 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_already_seen, "override")
 				} else if flags&ast.ModifierFlagsAmbient != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_with_1_modifier, "override", "declare")
-				} else if flags&ast.ModifierFlagsReadonly != 0 {
+				} else if flags&ast.ModifierFlagsReadonly != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "override", "readonly")
-				} else if flags&ast.ModifierFlagsAccessor != 0 {
+				} else if flags&ast.ModifierFlagsAccessor != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "override", "accessor")
-				} else if flags&ast.ModifierFlagsAsync != 0 {
+				} else if flags&ast.ModifierFlagsAsync != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "override", "async")
 				}
 				flags |= ast.ModifierFlagsOverride
@@ -325,22 +325,22 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 
 				if flags&ast.ModifierFlagsAccessibilityModifier != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.Accessibility_modifier_already_seen)
-				} else if flags&ast.ModifierFlagsOverride != 0 {
+				} else if flags&ast.ModifierFlagsOverride != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, text, "override")
-				} else if flags&ast.ModifierFlagsStatic != 0 {
+				} else if flags&ast.ModifierFlagsStatic != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, text, "static")
-				} else if flags&ast.ModifierFlagsAccessor != 0 {
+				} else if flags&ast.ModifierFlagsAccessor != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, text, "accessor")
-				} else if flags&ast.ModifierFlagsReadonly != 0 {
+				} else if flags&ast.ModifierFlagsReadonly != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, text, "readonly")
-				} else if flags&ast.ModifierFlagsAsync != 0 {
+				} else if flags&ast.ModifierFlagsAsync != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, text, "async")
 				} else if node.Parent.Kind == ast.KindModuleBlock || node.Parent.Kind == ast.KindSourceFile {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_a_module_or_namespace_element, text)
 				} else if flags&ast.ModifierFlagsAbstract != 0 {
 					if modifier.Kind == ast.KindPrivateKeyword {
 						return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_with_1_modifier, text, "abstract")
-					} else {
+					} else if modifier.Flags&ast.NodeFlagsReparsed == 0 {
 						return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, text, "abstract")
 					}
 				} else if ast.IsPrivateIdentifierClassElementDeclaration(node) {
@@ -350,11 +350,11 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 			case ast.KindStaticKeyword:
 				if flags&ast.ModifierFlagsStatic != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_already_seen, "static")
-				} else if flags&ast.ModifierFlagsReadonly != 0 {
+				} else if flags&ast.ModifierFlagsReadonly != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "static", "readonly")
-				} else if flags&ast.ModifierFlagsAsync != 0 {
+				} else if flags&ast.ModifierFlagsAsync != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "static", "async")
-				} else if flags&ast.ModifierFlagsAccessor != 0 {
+				} else if flags&ast.ModifierFlagsAccessor != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "static", "accessor")
 				} else if node.Parent.Kind == ast.KindModuleBlock || node.Parent.Kind == ast.KindSourceFile {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_a_module_or_namespace_element, "static")
@@ -362,7 +362,7 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_a_parameter, "static")
 				} else if flags&ast.ModifierFlagsAbstract != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_be_used_with_1_modifier, "static", "abstract")
-				} else if flags&ast.ModifierFlagsOverride != 0 {
+				} else if flags&ast.ModifierFlagsOverride != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "static", "override")
 				}
 				flags |= ast.ModifierFlagsStatic
@@ -395,11 +395,11 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 				}
 				if flags&ast.ModifierFlagsExport != 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_already_seen, "export")
-				} else if flags&ast.ModifierFlagsAmbient != 0 {
+				} else if flags&ast.ModifierFlagsAmbient != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "export", "declare")
-				} else if flags&ast.ModifierFlagsAbstract != 0 {
+				} else if flags&ast.ModifierFlagsAbstract != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "export", "abstract")
-				} else if flags&ast.ModifierFlagsAsync != 0 {
+				} else if flags&ast.ModifierFlagsAsync != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "export", "async")
 				} else if ast.IsClassLike(node.Parent) && !ast.IsJSTypeAliasDeclaration(node) {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_class_elements_of_this_kind, "export")
@@ -424,7 +424,7 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_a_using_declaration, "default")
 				} else if blockScopeKind == ast.NodeFlagsAwaitUsing {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_cannot_appear_on_an_await_using_declaration, "default")
-				} else if flags&ast.ModifierFlagsExport == 0 {
+				} else if flags&ast.ModifierFlagsExport == 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 					return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "export", "default")
 				} else if sawExportBeforeDecorators {
 					return c.grammarErrorOnNode(firstDecorator, diagnostics.Decorators_are_not_valid_here)
@@ -481,10 +481,10 @@ func (c *Checker) checkGrammarModifiers(node *ast.Node /*Union[HasModifiers, Has
 					if flags&ast.ModifierFlagsAsync != 0 && lastAsync != nil {
 						return c.grammarErrorOnNode(lastAsync, diagnostics.X_0_modifier_cannot_be_used_with_1_modifier, "async", "abstract")
 					}
-					if flags&ast.ModifierFlagsOverride != 0 {
+					if flags&ast.ModifierFlagsOverride != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 						return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "abstract", "override")
 					}
-					if flags&ast.ModifierFlagsAccessor != 0 {
+					if flags&ast.ModifierFlagsAccessor != 0 && modifier.Flags&ast.NodeFlagsReparsed == 0 {
 						return c.grammarErrorOnNode(modifier, diagnostics.X_0_modifier_must_precede_1_modifier, "abstract", "accessor")
 					}
 				}

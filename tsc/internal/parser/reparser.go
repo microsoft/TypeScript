@@ -183,53 +183,57 @@ func (p *Parser) gatherTypeParameters(j *ast.Node) *ast.NodeList {
 func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node) {
 	switch tag.Kind {
 	case ast.KindJSDocTypeTag:
-		if parent.Kind == ast.KindVariableStatement && parent.AsVariableStatement().DeclarationList != nil {
-			for _, declaration := range parent.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
-				if declaration.AsVariableDeclaration().Type == nil {
-					declaration.AsVariableDeclaration().Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, declaration)
-					break
+		switch parent.Kind {
+		case ast.KindVariableStatement:
+			if parent.AsVariableStatement().DeclarationList != nil {
+				for _, declaration := range parent.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes {
+					if declaration.AsVariableDeclaration().Type == nil {
+						declaration.AsVariableDeclaration().Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, declaration)
+						break
+					}
 				}
 			}
-		} else if parent.Kind == ast.KindVariableDeclaration {
+		case ast.KindVariableDeclaration:
 			if parent.AsVariableDeclaration().Type == nil {
 				parent.AsVariableDeclaration().Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent)
 			}
-		} else if parent.Kind == ast.KindCommonJSExport {
+		case ast.KindCommonJSExport:
 			export := parent.AsCommonJSExport()
 			if export.Type == nil {
 				export.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent)
 			}
-		} else if parent.Kind == ast.KindPropertyDeclaration {
+		case ast.KindPropertyDeclaration:
 			declaration := parent.AsPropertyDeclaration()
 			if declaration.Type == nil {
 				declaration.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent)
 			}
-		} else if parent.Kind == ast.KindPropertyAssignment {
+		case ast.KindPropertyAssignment:
 			prop := parent.AsPropertyAssignment()
 			if prop.Type == nil {
 				prop.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent)
 			}
-		} else if parent.Kind == ast.KindShorthandPropertyAssignment {
+		case ast.KindShorthandPropertyAssignment:
 			prop := parent.AsShorthandPropertyAssignment()
 			if prop.Type == nil {
 				prop.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent)
 			}
-		} else if parent.Kind == ast.KindExportAssignment || parent.Kind == ast.KindJSExportAssignment {
+		case ast.KindExportAssignment, ast.KindJSExportAssignment:
 			export := parent.AsExportAssignment()
 			if export.Type == nil {
 				export.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent)
 			}
-		} else if parent.Kind == ast.KindReturnStatement {
+		case ast.KindReturnStatement:
 			ret := parent.AsReturnStatement()
 			ret.Expression = p.makeNewTypeAssertion(p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, nil), ret.Expression)
-		} else if parent.Kind == ast.KindParenthesizedExpression {
+		case ast.KindParenthesizedExpression:
 			paren := parent.AsParenthesizedExpression()
 			paren.Expression = p.makeNewTypeAssertion(p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, nil), paren.Expression)
-		} else if parent.Kind == ast.KindExpressionStatement &&
-			parent.AsExpressionStatement().Expression.Kind == ast.KindBinaryExpression {
-			bin := parent.AsExpressionStatement().Expression.AsBinaryExpression()
-			if kind := ast.GetAssignmentDeclarationKind(bin); kind != ast.JSDeclarationKindNone {
-				bin.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent.AsExpressionStatement().Expression)
+		case ast.KindExpressionStatement:
+			if parent.AsExpressionStatement().Expression.Kind == ast.KindBinaryExpression {
+				bin := parent.AsExpressionStatement().Expression.AsBinaryExpression()
+				if kind := ast.GetAssignmentDeclarationKind(bin); kind != ast.JSDeclarationKindNone {
+					bin.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent.AsExpressionStatement().Expression)
+				}
 			}
 		}
 	case ast.KindJSDocTemplateTag:
@@ -267,6 +271,40 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			if fun.Type() == nil {
 				fun.FunctionLikeData().Type = p.makeNewType(tag.AsJSDocReturnTag().TypeExpression, fun)
 			}
+		}
+	case ast.KindJSDocReadonlyTag, ast.KindJSDocPrivateTag, ast.KindJSDocPublicTag, ast.KindJSDocProtectedTag, ast.KindJSDocOverrideTag:
+		if parent.Kind == ast.KindExpressionStatement {
+			parent = parent.AsExpressionStatement().Expression
+		}
+		switch parent.Kind {
+		case ast.KindPropertyDeclaration, ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindBinaryExpression:
+			var keyword ast.Kind
+			switch tag.Kind {
+			case ast.KindJSDocReadonlyTag:
+				keyword = ast.KindReadonlyKeyword
+			case ast.KindJSDocPrivateTag:
+				keyword = ast.KindPrivateKeyword
+			case ast.KindJSDocPublicTag:
+				keyword = ast.KindPublicKeyword
+			case ast.KindJSDocProtectedTag:
+				keyword = ast.KindProtectedKeyword
+			case ast.KindJSDocOverrideTag:
+				keyword = ast.KindOverrideKeyword
+			}
+			modifier := p.factory.NewModifier(keyword)
+			modifier.Loc = tag.Loc
+			modifier.Flags = p.contextFlags | ast.NodeFlagsReparsed
+			var nodes []*ast.Node
+			var loc core.TextRange
+			if parent.Modifiers() == nil {
+				nodes = p.nodeSlicePool.NewSlice(1)
+				nodes[0] = modifier
+				loc = tag.Loc
+			} else {
+				nodes = append(parent.Modifiers().Nodes, modifier)
+				loc = parent.Modifiers().Loc
+			}
+			parent.AsMutable().SetModifiers(p.newModifierList(loc, nodes))
 		}
 	case ast.KindJSDocImplementsTag:
 		if class := getClassLikeData(parent); class != nil {

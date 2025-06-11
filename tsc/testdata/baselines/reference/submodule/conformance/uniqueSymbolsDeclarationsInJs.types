@@ -9,8 +9,8 @@ class C {
      * @readonly
      */
     static readonlyStaticCall = Symbol();
->readonlyStaticCall : symbol
->Symbol() : symbol
+>readonlyStaticCall : unique symbol
+>Symbol() : unique symbol
 >Symbol : SymbolConstructor
 
     /**
@@ -18,15 +18,15 @@ class C {
      * @readonly
      */
     static readonlyStaticType;
->readonlyStaticType : symbol
+>readonlyStaticType : unique symbol
 
     /**
      * @type {unique symbol}
      * @readonly
      */
     static readonlyStaticTypeAndCall = Symbol();
->readonlyStaticTypeAndCall : symbol
->Symbol() : symbol
+>readonlyStaticTypeAndCall : unique symbol
+>Symbol() : unique symbol
 >Symbol : SymbolConstructor
 
     static readwriteStaticCall = Symbol();

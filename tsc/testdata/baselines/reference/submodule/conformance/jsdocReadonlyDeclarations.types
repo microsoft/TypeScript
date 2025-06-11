@@ -6,7 +6,7 @@ class C {
 
     /** @readonly */
     x = 6
->x : number
+>x : 6
 >6 : 6
 
     /** @readonly */
@@ -15,9 +15,9 @@ class C {
 
         this.x = n
 >this.x = n : any
->this.x : number
+>this.x : 6
 >this : this
->x : number
+>x : 6
 >n : any
 
         /**
@@ -33,10 +33,10 @@ class C {
     }
 }
 new C().x
->new C().x : number
+>new C().x : 6
 >new C() : C
 >C : typeof C
->x : number
+>x : 6
 
 function F() {
 >F : () => void

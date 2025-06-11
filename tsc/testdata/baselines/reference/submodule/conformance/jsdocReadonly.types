@@ -16,12 +16,12 @@ class LOL {
 
     /** @readonly */
     y = 2
->y : number
+>y : 2
 >2 : 2
 
     /** @readonly Definitely not here */
     static z = 3
->z : number
+>z : 3
 >3 : 3
 
     /** @readonly This is OK too */
@@ -29,9 +29,9 @@ class LOL {
         /** ok */
         this.y = 2
 >this.y = 2 : 2
->this.y : number
+>this.y : 2
 >this : this
->y : number
+>y : 2
 >2 : 2
 
         /** @readonly ok */
@@ -51,8 +51,8 @@ var l = new LOL()
 
 l.y = 12
 >l.y = 12 : 12
->l.y : number
+>l.y : any
 >l : LOL
->y : number
+>y : any
 >12 : 12
 
