@@ -1600,7 +1600,7 @@ type Exclude<T, U> = T extends U ? never : T;
 /**
  * Any type but `null` or `undefined`
  */
-type Something = {};
+type something = {};
 
 /**
  * Extract from T those types that are assignable to U
