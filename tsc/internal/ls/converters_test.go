@@ -34,7 +34,8 @@ func TestDocumentURIToFileName(t *testing.T) {
 		{"untitled:Untitled-1", "^/untitled/ts-nul-authority/Untitled-1"},
 		{"untitled:Untitled-1#fragment", "^/untitled/ts-nul-authority/Untitled-1#fragment"},
 		{"untitled:c:/Users/jrieken/Code/abc.txt", "^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt"},
-		{"untitled:C:/Users/jrieken/Code/abc.txt", "^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt"},
+		{"untitled:C:/Users/jrieken/Code/abc.txt", "^/untitled/ts-nul-authority/C:/Users/jrieken/Code/abc.txt"},
+		{"untitled://wsl%2Bubuntu/home/jabaile/work/TypeScript-go/newfile.ts", "^/untitled/wsl%2Bubuntu/home/jabaile/work/TypeScript-go/newfile.ts"},
 	}
 
 	for _, test := range tests {
@@ -70,6 +71,7 @@ func TestFileNameToDocumentURI(t *testing.T) {
 
 		{"^/untitled/ts-nul-authority/Untitled-1", "untitled:Untitled-1"},
 		{"^/untitled/ts-nul-authority/c:/Users/jrieken/Code/abc.txt", "untitled:c:/Users/jrieken/Code/abc.txt"},
+		{"^/untitled/ts-nul-authority///wsl%2Bubuntu/home/jabaile/work/TypeScript-go/newfile.ts", "untitled://wsl%2Bubuntu/home/jabaile/work/TypeScript-go/newfile.ts"},
 	}
 
 	for _, test := range tests {

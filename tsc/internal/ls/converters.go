@@ -81,34 +81,30 @@ func LanguageKindToScriptKind(languageID lsproto.LanguageKind) core.ScriptKind {
 }
 
 func DocumentURIToFileName(uri lsproto.DocumentUri) string {
-	parsed := core.Must(url.Parse(string(uri)))
-	if parsed.Scheme == "file" {
+	if strings.HasPrefix(string(uri), "file://") {
+		parsed := core.Must(url.Parse(string(uri)))
 		if parsed.Host != "" {
 			return "//" + parsed.Host + parsed.Path
 		}
 		return fixWindowsURIPath(parsed.Path)
 	}
 
-	authority := parsed.Host
-	if authority == "" {
-		authority = "ts-nul-authority"
+	// Leave all other URIs escaped so we can round-trip them.
+
+	scheme, path, ok := strings.Cut(string(uri), ":")
+	if !ok {
+		panic(fmt.Sprintf("invalid URI: %s", uri))
 	}
-	path := parsed.Path
-	if path == "" {
-		path = parsed.Opaque
+
+	authority := "ts-nul-authority"
+	if rest, ok := strings.CutPrefix(path, "//"); ok {
+		authority, path, ok = strings.Cut(rest, "/")
+		if !ok {
+			panic(fmt.Sprintf("invalid URI: %s", uri))
+		}
 	}
-	if !strings.HasPrefix(path, "/") {
-		path = "/" + path
-	}
-	path = fixWindowsURIPath(path)
-	if !strings.HasPrefix(path, "/") {
-		path = "/" + path
-	}
-	fragment := parsed.Fragment
-	if fragment != "" {
-		fragment = "#" + fragment
-	}
-	return fmt.Sprintf("^/%s/%s%s%s", parsed.Scheme, authority, path, fragment)
+
+	return "^/" + scheme + "/" + authority + "/" + path
 }
 
 func fixWindowsURIPath(path string) string {
@@ -154,7 +150,18 @@ var extraEscapeReplacer = strings.NewReplacer(
 
 func FileNameToDocumentURI(fileName string) lsproto.DocumentUri {
 	if strings.HasPrefix(fileName, "^/") {
-		return lsproto.DocumentUri(strings.Replace(fileName[2:], "/ts-nul-authority/", ":", 1))
+		scheme, rest, ok := strings.Cut(fileName[2:], "/")
+		if !ok {
+			panic("invalid file name: " + fileName)
+		}
+		authority, path, ok := strings.Cut(rest, "/")
+		if !ok {
+			panic("invalid file name: " + fileName)
+		}
+		if authority == "ts-nul-authority" {
+			return lsproto.DocumentUri(scheme + ":" + path)
+		}
+		return lsproto.DocumentUri(scheme + "://" + authority + "/" + path)
 	}
 
 	volume, fileName, _ := splitVolumePath(fileName)
