@@ -4552,7 +4552,7 @@ namespace Parser {
         parseExpected(SyntaxKind.OpenParenToken);
         const type = parseType();
         let attributes: ImportAttributes | undefined;
-        if (parseOptional(SyntaxKind.CommaToken)) {
+        if (parseOptional(SyntaxKind.CommaToken) && token() !== SyntaxKind.CloseParenToken) {
             const openBracePosition = scanner.getTokenStart();
             parseExpected(SyntaxKind.OpenBraceToken);
             const currentToken = token();
@@ -4573,6 +4573,7 @@ namespace Parser {
                     );
                 }
             }
+            parseOptional(SyntaxKind.CommaToken);
         }
         parseExpected(SyntaxKind.CloseParenToken);
         const qualifier = parseOptional(SyntaxKind.DotToken) ? parseEntityNameOfTypeReference() : undefined;
