@@ -6058,7 +6058,7 @@
         "category": "Message",
         "code": 6506
     },
-    "Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.": {
+    "Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.": {
         "category": "Message",
         "code": 6600
     },

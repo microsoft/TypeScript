@@ -118,7 +118,7 @@ one or more: es5, es6/es2015, es7/es2016, es2017, es2018, es2019, es2020, es2021
 default: undefined
 
 [94m--allowJs[39m
-Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files.
+Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
 type: boolean
 default: false
 
