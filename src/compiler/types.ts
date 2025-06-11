@@ -7654,7 +7654,7 @@ export const enum ScriptKind {
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
 //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
-export enum ScriptTarget {
+export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
     ES5 = 1,
