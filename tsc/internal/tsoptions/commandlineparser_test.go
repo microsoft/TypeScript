@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
@@ -173,7 +174,7 @@ func (f commandLineSubScenario) assertParseResult(t *testing.T) {
 		newParsedCompilerOptions := &core.CompilerOptions{}
 		e := json.Unmarshal(o, newParsedCompilerOptions)
 		assert.NilError(t, e)
-		assert.DeepEqual(t, tsBaseline.options, newParsedCompilerOptions)
+		assert.DeepEqual(t, tsBaseline.options, newParsedCompilerOptions, cmpopts.IgnoreUnexported(core.CompilerOptions{}))
 
 		newParsedWatchOptions := core.WatchOptions{}
 		e = json.Unmarshal(o, &newParsedWatchOptions)

@@ -41,9 +41,6 @@ type Program struct {
 	nodeModules map[string]*ast.SourceFile
 	checkerPool CheckerPool
 
-	sourceAffectingCompilerOptionsOnce sync.Once
-	sourceAffectingCompilerOptions     *core.SourceFileAffectingCompilerOptions
-
 	comparePathsOptions tspath.ComparePathsOptions
 
 	processedFiles
@@ -302,19 +299,12 @@ func (p *Program) singleThreaded() bool {
 	return p.opts.SingleThreaded.DefaultIfUnknown(p.Options().SingleThreaded).IsTrue()
 }
 
-func (p *Program) getSourceAffectingCompilerOptions() *core.SourceFileAffectingCompilerOptions {
-	p.sourceAffectingCompilerOptionsOnce.Do(func() {
-		p.sourceAffectingCompilerOptions = p.Options().SourceFileAffecting()
-	})
-	return p.sourceAffectingCompilerOptions
-}
-
 func (p *Program) BindSourceFiles() {
 	wg := core.NewWorkGroup(p.singleThreaded())
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
-				binder.BindSourceFile(file, p.getSourceAffectingCompilerOptions())
+				binder.BindSourceFile(file, p.projectReferenceFileMapper.getCompilerOptionsForFile(file).SourceFileAffecting())
 			})
 		}
 	}
@@ -605,7 +595,7 @@ func compactAndMergeRelatedInfos(diagnostics []*ast.Diagnostic) []*ast.Diagnosti
 func (p *Program) getDiagnosticsHelper(ctx context.Context, sourceFile *ast.SourceFile, ensureBound bool, ensureChecked bool, getDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
 	if sourceFile != nil {
 		if ensureBound {
-			binder.BindSourceFile(sourceFile, p.getSourceAffectingCompilerOptions())
+			binder.BindSourceFile(sourceFile, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile).SourceFileAffecting())
 		}
 		return SortAndDeduplicateDiagnostics(getDiagnostics(ctx, sourceFile))
 	}

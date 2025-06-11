@@ -3,6 +3,7 @@ package core
 import (
 	"reflect"
 	"strings"
+	"sync"
 
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -146,6 +147,9 @@ type CompilerOptions struct {
 	PprofDir       string   `json:"pprofDir,omitzero"`
 	SingleThreaded Tristate `json:"singleThreaded,omitzero"`
 	Quiet          Tristate `json:"quiet,omitzero"`
+
+	sourceFileAffectingCompilerOptionsOnce sync.Once
+	sourceFileAffectingCompilerOptions     *SourceFileAffectingCompilerOptions
 }
 
 // noCopy may be embedded into structs which must not be copied
@@ -360,17 +364,20 @@ type SourceFileAffectingCompilerOptions struct {
 }
 
 func (options *CompilerOptions) SourceFileAffecting() *SourceFileAffectingCompilerOptions {
-	return &SourceFileAffectingCompilerOptions{
-		AllowUnreachableCode:       options.AllowUnreachableCode,
-		AllowUnusedLabels:          options.AllowUnusedLabels,
-		BindInStrictMode:           options.AlwaysStrict.IsTrue() || options.Strict.IsTrue(),
-		EmitModuleDetectionKind:    options.GetEmitModuleDetectionKind(),
-		EmitModuleKind:             options.GetEmitModuleKind(),
-		EmitScriptTarget:           options.GetEmitScriptTarget(),
-		JsxEmit:                    options.Jsx,
-		NoFallthroughCasesInSwitch: options.NoFallthroughCasesInSwitch,
-		ShouldPreserveConstEnums:   options.ShouldPreserveConstEnums(),
-	}
+	options.sourceFileAffectingCompilerOptionsOnce.Do(func() {
+		options.sourceFileAffectingCompilerOptions = &SourceFileAffectingCompilerOptions{
+			AllowUnreachableCode:       options.AllowUnreachableCode,
+			AllowUnusedLabels:          options.AllowUnusedLabels,
+			BindInStrictMode:           options.AlwaysStrict.IsTrue() || options.Strict.IsTrue(),
+			EmitModuleDetectionKind:    options.GetEmitModuleDetectionKind(),
+			EmitModuleKind:             options.GetEmitModuleKind(),
+			EmitScriptTarget:           options.GetEmitScriptTarget(),
+			JsxEmit:                    options.Jsx,
+			NoFallthroughCasesInSwitch: options.NoFallthroughCasesInSwitch,
+			ShouldPreserveConstEnums:   options.ShouldPreserveConstEnums(),
+		}
+	})
+	return options.sourceFileAffectingCompilerOptions
 }
 
 type ModuleDetectionKind int32
