@@ -29304,26 +29304,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbol = getResolvedSymbol(expr);
                 if (isConstantVariable(symbol)) {
                     const declaration = symbol.valueDeclaration!;
+                    let initializer = getCandidateVariableDeclarationInitializer(declaration);
                     // Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
-                    if (
-                        isVariableDeclaration(declaration) && !declaration.type && declaration.initializer && isAccessExpression(declaration.initializer) &&
-                        isMatchingReference(reference, declaration.initializer.expression)
-                    ) {
-                        return declaration.initializer;
+                    if (initializer && isAccessExpression(initializer) && isMatchingReference(reference, initializer.expression)) {
+                        return initializer;
                     }
                     // Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
                     if (isBindingElement(declaration) && !declaration.initializer) {
-                        const parent = declaration.parent.parent;
-                        if (
-                            isVariableDeclaration(parent) && !parent.type && parent.initializer && (isIdentifier(parent.initializer) || isAccessExpression(parent.initializer)) &&
-                            isMatchingReference(reference, parent.initializer)
-                        ) {
+                        initializer = getCandidateVariableDeclarationInitializer(declaration.parent.parent);
+                        if (initializer && (isIdentifier(initializer) || isAccessExpression(initializer)) && isMatchingReference(reference, initializer)) {
                             return declaration;
                         }
                     }
                 }
             }
             return undefined;
+
+            function getCandidateVariableDeclarationInitializer(node: Node) {
+                return isVariableDeclaration(node) && !node.type && node.initializer ? skipParentheses(node.initializer) : undefined;
+            }
         }
 
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
