@@ -2666,6 +2666,8 @@
 // | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface Int32ArrayConstructor
+// | type IntegerTypedArray = Int8Array<ArrayBuffer> | Int16Array<ArrayBuffer> | Int32Array<ArrayBuffer> | Uint8Array<ArrayBuffer> | Uint16Array<...> | Uint32Array<...> | Uint8ClampedArray<...>
+// | interface IntegerTypedArrayTypes
 // | namespace Intl
 // | interface JSON
 // | var JSON: JSON
@@ -2846,6 +2848,8 @@
 // | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int32Array: Int32ArrayConstructor
 // | interface Int32ArrayConstructor
+// | type IntegerTypedArray = Int8Array<ArrayBuffer> | Int16Array<ArrayBuffer> | Int32Array<ArrayBuffer> | Uint8Array<ArrayBuffer> | Uint16Array<...> | Uint32Array<...> | Uint8ClampedArray<...>
+// | interface IntegerTypedArrayTypes
 // | namespace Intl
 // | interface JSON
 // | var JSON: JSON
@@ -78923,6 +78927,249 @@
           "documentation": []
         },
         {
+          "name": "IntegerTypedArray",
+          "kind": "type",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "IntegerTypedArray",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint8ClampedArray",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "IntegerTypedArrayTypes",
+          "kind": "interface",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "IntegerTypedArrayTypes",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Stores types to be used with crypto.getRandomValues",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Intl",
           "kind": "module",
           "kindModifiers": "declare",
@@ -88392,6 +88639,249 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "IntegerTypedArray",
+          "kind": "type",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "type",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "IntegerTypedArray",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint8ClampedArray",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "...",
+              "kind": "text"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "IntegerTypedArrayTypes",
+          "kind": "interface",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "IntegerTypedArrayTypes",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Stores types to be used with crypto.getRandomValues",
+              "kind": "text"
+            }
+          ]
         },
         {
           "name": "Intl",
