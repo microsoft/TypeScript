@@ -16,7 +16,7 @@ new Int8Array().at(0);
 
 new Uint8Array().at(0);
 >new Uint8Array().at : Symbol(Uint8Array.at, Decl(lib.es2022.array.d.ts, --, --))
->Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 3 more)
+>Uint8Array : Symbol(Uint8Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >at : Symbol(Uint8Array.at, Decl(lib.es2022.array.d.ts, --, --))
 
 new Uint8ClampedArray().at(0);
