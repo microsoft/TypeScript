@@ -810,8 +810,8 @@ var commonOptionsWithBuild = []*CommandLineOption{
 		AffectsSemanticDiagnostics: true,
 		AffectsBuildInfo:           true,
 		Category:                   diagnostics.Modules,
-		// description: diagnostics.Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files,
-		DefaultValueDescription: false,
+		Description:                diagnostics.Rewrite_ts_tsx_mts_and_cts_file_extensions_in_relative_import_paths_to_their_JavaScript_equivalent_in_output_files,
+		DefaultValueDescription:    false,
 	},
 	{
 		Name:                    "resolvePackageJsonExports",

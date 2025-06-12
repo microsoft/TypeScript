@@ -27,6 +27,16 @@ type fakeProgram struct {
 	getSourceFileForResolvedModule func(FileName string) *ast.SourceFile
 }
 
+// GetRedirectForResolution implements checker.Program.
+func (p *fakeProgram) GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine {
+	panic("unimplemented")
+}
+
+// SourceFileMayBeEmitted implements checker.Program.
+func (p *fakeProgram) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool {
+	panic("unimplemented")
+}
+
 // GetEmitSyntaxForUsageLocation implements checker.Program.
 func (p *fakeProgram) GetEmitSyntaxForUsageLocation(sourceFile ast.HasFileName, usageLocation *ast.StringLiteralLike) core.ResolutionMode {
 	panic("unimplemented")

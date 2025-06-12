@@ -537,8 +537,11 @@ type Program interface {
 	GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData
 	GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node)
 	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
+	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
 	IsSourceFromProjectReference(path tspath.Path) bool
 	GetSourceAndProjectReference(path tspath.Path) *tsoptions.SourceAndProjectReference
+	GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine
+	CommonSourceDirectory() string
 }
 
 type Host interface {
@@ -14497,6 +14500,63 @@ func (c *Checker) resolveExternalModule(location *ast.Node, moduleReference stri
 						diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled,
 						tsExtension,
 					)
+				}
+			} else if c.compilerOptions.RewriteRelativeImportExtensions.IsTrue() &&
+				location.Flags&ast.NodeFlagsAmbient == 0 &&
+				!tspath.IsDeclarationFileName(moduleReference) &&
+				!ast.IsLiteralImportTypeNode(location) &&
+				!ast.IsPartOfTypeOnlyImportOrExportDeclaration(location) {
+				shouldRewrite := core.ShouldRewriteModuleSpecifier(moduleReference, c.compilerOptions)
+				if !resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
+					relativeToSourceFile := tspath.GetRelativePathFromFile(
+						tspath.GetNormalizedAbsolutePath(importingSourceFile.FileName(), c.program.GetCurrentDirectory()),
+						resolvedModule.ResolvedFileName,
+						tspath.ComparePathsOptions{
+							UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
+							CurrentDirectory:          c.program.GetCurrentDirectory(),
+						},
+					)
+					c.error(
+						errorNode,
+						diagnostics.This_relative_import_path_is_unsafe_to_rewrite_because_it_looks_like_a_file_name_but_actually_resolves_to_0,
+						relativeToSourceFile,
+					)
+				} else if resolvedModule.ResolvedUsingTsExtension && !shouldRewrite && c.program.SourceFileMayBeEmitted(sourceFile, false) {
+					c.error(
+						errorNode,
+						diagnostics.This_import_uses_a_0_extension_to_resolve_to_an_input_TypeScript_file_but_will_not_be_rewritten_during_emit_because_it_is_not_a_relative_path,
+						tspath.GetAnyExtensionFromPath(moduleReference, nil, false),
+					)
+				} else if resolvedModule.ResolvedUsingTsExtension && shouldRewrite {
+					if redirect := c.program.GetRedirectForResolution(sourceFile); redirect != nil {
+						ownRootDir := c.program.CommonSourceDirectory()
+						otherRootDir := redirect.CommonSourceDirectory()
+
+						compareOptions := tspath.ComparePathsOptions{
+							UseCaseSensitiveFileNames: c.program.UseCaseSensitiveFileNames(),
+							CurrentDirectory:          c.program.GetCurrentDirectory(),
+						}
+
+						rootDirPath := tspath.GetRelativePathFromDirectory(ownRootDir, otherRootDir, compareOptions)
+
+						// Get outDir paths, defaulting to root directories if not specified
+						ownOutDir := c.compilerOptions.OutDir
+						if ownOutDir == "" {
+							ownOutDir = ownRootDir
+						}
+						otherOutDir := redirect.CompilerOptions().OutDir
+						if otherOutDir == "" {
+							otherOutDir = otherRootDir
+						}
+						outDirPath := tspath.GetRelativePathFromDirectory(ownOutDir, otherOutDir, compareOptions)
+
+						if rootDirPath != outDirPath {
+							c.error(
+								errorNode,
+								diagnostics.This_import_path_is_unsafe_to_rewrite_because_it_resolves_to_another_project_and_the_relative_path_between_the_projects_output_files_is_not_the_same_as_the_relative_path_between_its_input_files,
+							)
+						}
+					}
 				}
 			}
 		}

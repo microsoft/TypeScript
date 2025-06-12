@@ -119,6 +119,10 @@ func (p *Program) GetResolvedProjectReferenceFor(path tspath.Path) (*tsoptions.P
 	return p.projectReferenceFileMapper.getResolvedReferenceFor(path)
 }
 
+func (p *Program) GetRedirectForResolution(file ast.HasFileName) *tsoptions.ParsedCommandLine {
+	return p.projectReferenceFileMapper.getRedirectForResolution(file)
+}
+
 func (p *Program) ForEachResolvedProjectReference(
 	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine) bool,
 ) {
@@ -872,6 +876,10 @@ func (p *Program) GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReferenc
 
 func (p *Program) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
 	return p.importHelpersImportSpecifiers[path]
+}
+
+func (p *Program) SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool {
+	return sourceFileMayBeEmitted(sourceFile, &emitHost{program: p}, forceDtsEmit)
 }
 
 var plainJSErrors = collections.NewSetFromItems(

@@ -631,6 +631,10 @@ func GetRelativePathFromDirectory(fromDirectory string, to string, options Compa
 	return GetPathFromPathComponents(pathComponents)
 }
 
+func GetRelativePathFromFile(from string, to string, options ComparePathsOptions) string {
+	return EnsurePathIsNonModuleName(GetRelativePathFromDirectory(GetDirectoryPath(from), to, options))
+}
+
 func ConvertToRelativePath(absoluteOrRelativePath string, options ComparePathsOptions) string {
 	if !IsRootedDiskPath(absoluteOrRelativePath) {
 		return absoluteOrRelativePath
@@ -766,6 +770,15 @@ func PathIsRelative(path string) bool {
 	}
 
 	return false
+}
+
+// EnsurePathIsNonModuleName ensures a path is either absolute (prefixed with `/` or `c:`) or dot-relative (prefixed
+// with `./` or `../`) so as not to be confused with an unprefixed module name.
+func EnsurePathIsNonModuleName(path string) string {
+	if !PathIsAbsolute(path) && !PathIsRelative(path) {
+		return "./" + path
+	}
+	return path
 }
 
 func IsExternalModuleNameRelative(moduleName string) bool {

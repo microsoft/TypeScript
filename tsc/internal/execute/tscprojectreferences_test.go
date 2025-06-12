@@ -192,6 +192,108 @@ func TestProjectReferences(t *testing.T) {
 			}, "/home/src/workspaces/solution"),
 			commandLineArgs: []string{"--p", "project", "--pretty", "false"},
 		},
+		{
+			subScenario: "rewriteRelativeImportExtensionsProjectReferences1",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/packages/common/tsconfig.json": `{
+					"compilerOptions": {
+						"composite": true,
+						"rootDir": "src",
+						"outDir": "dist", 
+						"module": "nodenext"
+					}
+				}`,
+				"/home/src/workspaces/packages/common/package.json": `{
+						"name": "common",
+						"version": "1.0.0",
+						"type": "module",
+						"exports": {
+							".": {
+								"source": "./src/index.ts",
+								"default": "./dist/index.js"
+							}
+						}
+				}`,
+				"/home/src/workspaces/packages/common/src/index.ts":    "export {};",
+				"/home/src/workspaces/packages/common/dist/index.d.ts": "export {};",
+				"/home/src/workspaces/packages/main/tsconfig.json": `{
+					"compilerOptions": {
+						"module": "nodenext",
+						"rewriteRelativeImportExtensions": true,
+						"rootDir": "src",
+						"outDir": "dist"
+					},
+					"references": [
+						{ "path": "../common" }
+					]
+				}`,
+				"/home/src/workspaces/packages/main/package.json": `{ "type": "module" }`,
+				"/home/src/workspaces/packages/main/src/index.ts": `import {} from "../../common/src/index.ts";`,
+			}, "/home/src/workspaces"),
+			commandLineArgs: []string{"-p", "packages/main", "--pretty", "false"},
+		},
+		{
+			subScenario: "rewriteRelativeImportExtensionsProjectReferences2",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/solution/src/tsconfig-base.json": `{
+					"compilerOptions": {
+						"module": "nodenext",
+						"composite": true,
+						"rootDir": ".",
+						"outDir": "../dist",
+						"rewriteRelativeImportExtensions": true
+					}
+				}`,
+				"/home/src/workspaces/solution/src/compiler/tsconfig.json": `{
+					"extends": "../tsconfig-base.json",
+					"compilerOptions": {}
+				}`,
+				"/home/src/workspaces/solution/src/compiler/parser.ts":    "export {};",
+				"/home/src/workspaces/solution/dist/compiler/parser.d.ts": "export {};",
+				"/home/src/workspaces/solution/src/services/tsconfig.json": `{
+					"extends": "../tsconfig-base.json", 
+					"compilerOptions": {},
+					"references": [
+						{ "path": "../compiler" }
+					]
+				}`,
+				"/home/src/workspaces/solution/src/services/services.ts": `import {} from "../compiler/parser.ts";`,
+			}, "/home/src/workspaces/solution"),
+			commandLineArgs: []string{"--p", "src/services", "--pretty", "false"},
+		},
+		{
+			subScenario: "rewriteRelativeImportExtensionsProjectReferences3",
+			sys: newTestSys(FileMap{
+				"/home/src/workspaces/solution/src/tsconfig-base.json": `{
+					"compilerOptions": { 
+						"module": "nodenext",
+						"composite": true,
+						"rewriteRelativeImportExtensions": true
+					}
+				}`,
+				"/home/src/workspaces/solution/src/compiler/tsconfig.json": `{
+					"extends": "../tsconfig-base.json",
+					"compilerOptions": {
+						"rootDir": ".",
+						"outDir": "../../dist/compiler"
+					}
+				}`,
+				"/home/src/workspaces/solution/src/compiler/parser.ts":    "export {};",
+				"/home/src/workspaces/solution/dist/compiler/parser.d.ts": "export {};",
+				"/home/src/workspaces/solution/src/services/tsconfig.json": `{
+					"extends": "../tsconfig-base.json",
+					"compilerOptions": {
+						"rootDir": ".", 
+						"outDir": "../../dist/services"
+					},
+					"references": [
+						{ "path": "../compiler" }
+					]
+				}`,
+				"/home/src/workspaces/solution/src/services/services.ts": `import {} from "../compiler/parser.ts";`,
+			}, "/home/src/workspaces/solution"),
+			commandLineArgs: []string{"--p", "src/services", "--pretty", "false"},
+		},
 	}
 
 	for _, c := range cases {

@@ -1087,7 +1087,7 @@ func (b *nodeBuilderImpl) getSpecifierForModuleSymbol(symbol *ast.Symbol, overri
 	}
 	if isBundle {
 		// !!! relies on option cloning and specifier host implementation
-		// specifierCompilerOptions = &core.CompilerOptions{BaseUrl: host.GetCommonSourceDirectory()}
+		// specifierCompilerOptions = &core.CompilerOptions{BaseUrl: host.CommonSourceDirectory()}
 		// TODO: merge with b.ch.compilerOptions
 		specifierPref = modulespecifiers.ImportModuleSpecifierPreferenceNonRelative
 		endingPref = modulespecifiers.ImportModuleSpecifierEndingPreferenceMinimal
