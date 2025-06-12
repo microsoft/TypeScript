@@ -41,9 +41,7 @@ export = MyClass;
 let a = /** @type {Foo} */(/** @type {*} */(undefined)); 
 >a : import("./externs")
 >(/** @type {*} */(undefined)) : import("./externs")
->(undefined) : import("./externs")
 >(undefined) : any
->undefined : any
 >undefined : undefined
 
 a = new Foo({doer: Foo.Bar});
@@ -60,7 +58,6 @@ a = new Foo({doer: Foo.Bar});
 const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 >q : import("./externs").Bar
 >({ doer: q => q }) : import("./externs").Bar
->{ doer: q => q } : import("./externs").Bar
 >{ doer: q => q } : { doer: (q: string) => string; }
 >doer : (q: string) => string
 >q => q : (q: string) => string
@@ -70,7 +67,6 @@ const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 const r = /** @type {typeof import("./externs").Bar} */(r => r);
 >r : (x: string, y?: number) => void
 >(r => r) : (x: string, y?: number) => void
->r => r : (x: string, y?: number) => void
 >r => r : (r: string) => string
 >r : string
 >r : string

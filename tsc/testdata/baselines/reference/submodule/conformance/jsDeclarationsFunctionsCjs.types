@@ -70,7 +70,6 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >a : any
 >b : any
 >(null) : any
->null : any
 
 /**
  * @template T,U
@@ -90,7 +89,6 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >a : any
 >b : any
 >(null) : any
->null : any
 
 /**
  * @template T

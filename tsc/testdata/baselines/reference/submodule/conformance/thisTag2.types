@@ -3,9 +3,9 @@
 === a.js ===
 /** @this {string} */
 export function f1() {}
->f1 : () => void
+>f1 : (this: string) => void
 
 /** @this */
 export function f2() {}
->f2 : () => void
+>f2 : (this: any) => void
 

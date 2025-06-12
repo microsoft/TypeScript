@@ -1,14 +1,6 @@
 --- old.contravariantOnlyInferenceWithAnnotatedOptionalParameterJs.types
 +++ new.contravariantOnlyInferenceWithAnnotatedOptionalParameterJs.types
-@@= skipped -11, +11 lines =@@
-
-   return /** @type {any} */ (null);
- >(null) : any
-+>null : any
- }
-
- const a = filter(
-@@= skipped -11, +12 lines =@@
+@@= skipped -22, +22 lines =@@
     * @param {number} [pose]
     */
    (pose) => true

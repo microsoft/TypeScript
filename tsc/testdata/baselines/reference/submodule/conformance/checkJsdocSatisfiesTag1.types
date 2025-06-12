@@ -62,9 +62,9 @@ const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >0 : 0
 
 const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
->t6 : number[]
->([1, 2]) : number[]
->[1, 2] : number[]
+>t6 : [number, number]
+>([1, 2]) : [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 

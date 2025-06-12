@@ -22,7 +22,6 @@ const foo = (a) => {
 >(a).y !== 0 : boolean
 >(a).y : number
 >(a) : { x: number; } & { y: number; }
->a : { x: number; } & { y: number; }
 >a : { x: number; }
 >y : number
 >0 : 0

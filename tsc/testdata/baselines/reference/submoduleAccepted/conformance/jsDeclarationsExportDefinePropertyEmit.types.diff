@@ -58,11 +58,8 @@
  >"cat" : "cat"
  >{ value: "cat" } : { value: string; }
  >value : string
-@@= skipped -24, +24 lines =@@
- >a : number
- >b : number
+@@= skipped -26, +26 lines =@@
  >(null) : any
-+>null : any
 
  Object.defineProperty(module.exports, "d", { value: d });
 ->Object.defineProperty(module.exports, "d", { value: d }) : typeof module.exports
@@ -79,11 +76,8 @@
  >"d" : "d"
  >{ value: d } : { value: (a: number, b: number) => string; }
  >value : (a: number, b: number) => string
-@@= skipped -26, +27 lines =@@
- >a : T
- >b : U
+@@= skipped -26, +26 lines =@@
  >(null) : any
-+>null : any
 
  Object.defineProperty(module.exports, "e", { value: e });
 ->Object.defineProperty(module.exports, "e", { value: e }) : typeof module.exports
@@ -100,7 +94,7 @@
  >"e" : "e"
  >{ value: e } : { value: <T, U>(a: T, b: U) => T & U; }
  >value : <T, U>(a: T, b: U) => T & U
-@@= skipped -26, +27 lines =@@
+@@= skipped -24, +24 lines =@@
  >a : T
  }
  Object.defineProperty(module.exports, "f", { value: f });

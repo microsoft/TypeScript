@@ -26,7 +26,6 @@ export default class Foo {
     a = /** @type {Foo} */(null);
 >a : Foo
 >(null) : Foo
->null : Foo
 
 };
 export const X = Foo;
@@ -48,7 +47,6 @@ class Bar extends Fab {
     x = /** @type {Bar} */(null);
 >x : Bar
 >(null) : Bar
->null : Bar
 }
 export default Bar;
 >Bar : Bar

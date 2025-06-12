@@ -27,22 +27,7 @@
  >Cls : typeof Cls
  >class {} : typeof Cls
 
-@@= skipped -29, +29 lines =@@
- >a : number
- >b : number
- >(null) : any
-+>null : any
-
- /**
-  * @template T,U
-@@= skipped -12, +13 lines =@@
- >a : T
- >b : U
- >(null) : any
-+>null : any
-
- /**
-  * @template T
+@@= skipped -47, +47 lines =@@
   * @param {T} a
   */
  export function f(a) {

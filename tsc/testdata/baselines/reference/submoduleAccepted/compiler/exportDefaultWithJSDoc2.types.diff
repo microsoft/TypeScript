@@ -6,7 +6,6 @@
  export default /** @type {NumberLike[]} */([ ]);
 ->([ ]) : NumberLike[]
 +>([ ]) : (string | number)[]
-+>[ ] : (string | number)[]
  >[ ] : undefined[]
 
  === b.ts ===

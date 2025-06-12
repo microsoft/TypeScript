@@ -9,7 +9,6 @@
 const x = /** @type {Foo} */ ({});
 >x : Foo
 >({}) : Foo
->{} : Foo
 >{} : {}
 
 x.foo; // number | undefined
@@ -20,7 +19,6 @@ x.foo; // number | undefined
 const y = /** @type {Required<Foo>} */ ({});
 >y : Required<Foo>
 >({}) : Required<Foo>
->{} : Required<Foo>
 >{} : {}
 
 y.foo; // number

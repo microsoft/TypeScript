@@ -21,7 +21,6 @@ const getStringGetter = (key) => {
 
     return /** @type {string} */ (cache.get(key))
 >(cache.get(key)) : string
->cache.get(key) : string
 >cache.get(key) : string | Set<string> | undefined
 >cache.get : (key: string) => string | Set<string> | undefined
 >cache : Map<string, string | Set<string>>

@@ -4,8 +4,8 @@
 /** @typedef {Object.<string, (n: number) => boolean>} Predicates */
 
 const p = /** @satisfies {Predicates} */ ({
->p : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
->({    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1}) : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
+>p : any
+>({    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1}) : any
 >{    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1} : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
 
     isEven: n => n % 2 === 0,

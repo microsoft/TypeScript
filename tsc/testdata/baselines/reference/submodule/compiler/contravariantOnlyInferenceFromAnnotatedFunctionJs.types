@@ -19,7 +19,6 @@ function foo(fns) {
 
   return /** @type {any} */ (null);
 >(null) : any
->null : any
 }
 
 const result = foo({

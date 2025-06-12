@@ -112,11 +112,9 @@
 +>a : any
 +>b : any
  >(null) : any
-+>null : any
 
  /**
-  * @template T,U
-@@= skipped -19, +20 lines =@@
+@@= skipped -19, +19 lines =@@
   * @return {T & U} 
   */
  module.exports.e = function e(a, b) { return /** @type {*} */(null); }
@@ -141,10 +139,9 @@
 +>a : any
 +>b : any
  >(null) : any
-+>null : any
 
  /**
-  * @template T
+@@= skipped -17, +17 lines =@@
   * @param {T} a
   */
  module.exports.f = function f(a) {
@@ -297,7 +294,7 @@
  >i : () => void
  >function i() {} : () => void
  >i : () => void
-@@= skipped -116, +117 lines =@@
+@@= skipped -99, +99 lines =@@
  module.exports.ii = module.exports.i;
  >module.exports.ii = module.exports.i : () => void
  >module.exports.ii : () => void

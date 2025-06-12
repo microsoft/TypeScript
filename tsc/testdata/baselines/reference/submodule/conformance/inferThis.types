@@ -10,10 +10,10 @@ export class C {
      * @return {T}
      */
     static a() {
->a : <T>() => T
+>a : <T>(this: T) => T
 
         return this;
->this : typeof C
+>this : T
     }
 
     /**
@@ -22,22 +22,22 @@ export class C {
      * @return {T}
      */
     b() {
->b : <T>() => T
+>b : <T>(this: T) => T
 
         return this;
->this : this
+>this : T
     }
 }
 
 const a = C.a();
->a : unknown
->C.a() : unknown
->C.a : <T>() => T
+>a : typeof C
+>C.a() : typeof C
+>C.a : <T>(this: T) => T
 >C : typeof C
->a : <T>() => T
+>a : <T>(this: T) => T
 
 a; // typeof C
->a : unknown
+>a : typeof C
 
 const c = new C();
 >c : C
@@ -45,12 +45,12 @@ const c = new C();
 >C : typeof C
 
 const b = c.b();
->b : unknown
->c.b() : unknown
->c.b : <T>() => T
+>b : C
+>c.b() : C
+>c.b : <T>(this: T) => T
 >c : C
->b : <T>() => T
+>b : <T>(this: T) => T
 
 b; // C
->b : unknown
+>b : C
 

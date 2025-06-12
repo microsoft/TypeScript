@@ -54,7 +54,6 @@ function d(a, b) { return /** @type {*} */(null); }
 >a : number
 >b : number
 >(null) : any
->null : any
 
 Object.defineProperty(module.exports, "d", { value: d });
 >Object.defineProperty(module.exports, "d", { value: d }) : any
@@ -81,7 +80,6 @@ function e(a, b) { return /** @type {*} */(null); }
 >a : T
 >b : U
 >(null) : any
->null : any
 
 Object.defineProperty(module.exports, "e", { value: e });
 >Object.defineProperty(module.exports, "e", { value: e }) : any

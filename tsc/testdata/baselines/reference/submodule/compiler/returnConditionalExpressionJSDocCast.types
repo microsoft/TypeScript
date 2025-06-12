@@ -22,7 +22,6 @@ function source(type = "javascript") {
 >(        type            ? sources.get(type)            : sources.get("some other thing")    ) : String
 
         type
->type            ? sources.get(type)            : sources.get("some other thing") : String
 >type            ? sources.get(type)            : sources.get("some other thing") : string | undefined
 >type : string
 

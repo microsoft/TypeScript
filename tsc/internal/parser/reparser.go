@@ -224,10 +224,10 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}
 		case ast.KindReturnStatement:
 			ret := parent.AsReturnStatement()
-			ret.Expression = p.makeNewTypeAssertion(p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, nil), ret.Expression)
+			ret.Expression = p.makeNewCast(p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, nil), ret.Expression, true /*isAssertion*/)
 		case ast.KindParenthesizedExpression:
 			paren := parent.AsParenthesizedExpression()
-			paren.Expression = p.makeNewTypeAssertion(p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, nil), paren.Expression)
+			paren.Expression = p.makeNewCast(p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, nil), paren.Expression, true /*isAssertion*/)
 		case ast.KindExpressionStatement:
 			if parent.AsExpressionStatement().Expression.Kind == ast.KindBinaryExpression {
 				bin := parent.AsExpressionStatement().Expression.AsBinaryExpression()
@@ -235,6 +235,11 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 					bin.Type = p.makeNewType(tag.AsJSDocTypeTag().TypeExpression, parent.AsExpressionStatement().Expression)
 				}
 			}
+		}
+	case ast.KindJSDocSatisfiesTag:
+		if parent.Kind == ast.KindParenthesizedExpression {
+			paren := parent.AsParenthesizedExpression()
+			paren.Expression = p.makeNewCast(p.makeNewType(tag.AsJSDocSatisfiesTag().TypeExpression, nil), paren.Expression, false /*isAssertion*/)
 		}
 	case ast.KindJSDocTemplateTag:
 		if fun, ok := getFunctionLikeHost(parent); ok {
@@ -264,6 +269,31 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 						param.QuestionToken = question
 					}
 				}
+			}
+		}
+	case ast.KindJSDocThisTag:
+		if fun, ok := getFunctionLikeHost(parent); ok {
+			params := fun.Parameters()
+			if len(params) == 0 || params[0].Name().Kind != ast.KindThisKeyword {
+				thisParam := p.factory.NewParameterDeclaration(
+					nil, /* decorators */
+					nil, /* modifiers */
+					p.factory.NewIdentifier("this"),
+					nil, /* questionToken */
+					nil, /* type */
+					nil, /* initializer */
+				)
+				thisParam.AsParameterDeclaration().Type = p.makeNewType(tag.AsJSDocThisTag().TypeExpression, thisParam)
+				thisParam.Loc = tag.AsJSDocThisTag().TagName.Loc
+				thisParam.Flags = p.contextFlags | ast.NodeFlagsReparsed
+
+				newParams := p.nodeSlicePool.NewSlice(len(params) + 1)
+				newParams[0] = thisParam
+				for i, param := range params {
+					newParams[i+1] = param
+				}
+
+				fun.FunctionLikeData().Parameters = p.newNodeList(thisParam.Loc, newParams)
 			}
 		}
 	case ast.KindJSDocReturnTag:
@@ -351,7 +381,6 @@ func (p *Parser) reparseHosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Node)
 			}
 		}
 	}
-	// !!! other attached tags (@this, @satisfies) support goes here
 }
 
 func (p *Parser) makeQuestionIfOptional(parameter *ast.JSDocParameterTag) *ast.Node {
@@ -398,8 +427,13 @@ func getFunctionLikeHost(host *ast.Node) (*ast.Node, bool) {
 	return nil, false
 }
 
-func (p *Parser) makeNewTypeAssertion(t *ast.TypeNode, e *ast.Node) *ast.Node {
-	assert := p.factory.NewTypeAssertion(t, e)
+func (p *Parser) makeNewCast(t *ast.TypeNode, e *ast.Node, isAssertion bool) *ast.Node {
+	var assert *ast.Node
+	if isAssertion {
+		assert = p.factory.NewAsExpression(e, t)
+	} else {
+		assert = p.factory.NewSatisfiesExpression(e, t)
+	}
 	assert.Flags = p.contextFlags | ast.NodeFlagsReparsed
 	assert.Loc = core.NewTextRange(e.Pos(), e.End())
 	return assert

@@ -9,15 +9,12 @@ var W: string;
 var W = /** @type {string} */(/** @type {*} */ (4));
 >W : string
 >(/** @type {*} */ (4)) : string
->(4) : string
 >(4) : any
->4 : any
 >4 : 4
 
 var W = /** @type {string} */(4); // Error
 >W : string
 >(4) : string
->4 : string
 >4 : 4
 
 /** @type {*} */
@@ -31,7 +28,6 @@ var s;
 var a = /** @type {*} */("" + 4);
 >a : any
 >("" + 4) : any
->"" + 4 : any
 >"" + 4 : string
 >"" : ""
 >4 : 4
@@ -41,7 +37,6 @@ var s = "" + /** @type {*} */(4);
 >"" + /** @type {*} */(4) : string
 >"" : ""
 >(4) : any
->4 : any
 >4 : 4
 
 class SomeBase {
@@ -123,7 +118,6 @@ someBase = /** @type {SomeBase} */(someDerived);
 >someBase = /** @type {SomeBase} */(someDerived) : SomeBase
 >someBase : SomeBase
 >(someDerived) : SomeBase
->someDerived : SomeBase
 >someDerived : SomeDerived
 
 someBase = /** @type {SomeBase} */(someBase);
@@ -131,13 +125,11 @@ someBase = /** @type {SomeBase} */(someBase);
 >someBase : SomeBase
 >(someBase) : SomeBase
 >someBase : SomeBase
->someBase : SomeBase
 
 someBase = /** @type {SomeBase} */(someOther); // Error
 >someBase = /** @type {SomeBase} */(someOther) : SomeBase
 >someBase : SomeBase
 >(someOther) : SomeBase
->someOther : SomeBase
 >someOther : SomeOther
 
 someDerived = /** @type {SomeDerived} */(someDerived);
@@ -145,41 +137,35 @@ someDerived = /** @type {SomeDerived} */(someDerived);
 >someDerived : SomeDerived
 >(someDerived) : SomeDerived
 >someDerived : SomeDerived
->someDerived : SomeDerived
 
 someDerived = /** @type {SomeDerived} */(someBase);
 >someDerived = /** @type {SomeDerived} */(someBase) : SomeDerived
 >someDerived : SomeDerived
 >(someBase) : SomeDerived
->someBase : SomeDerived
 >someBase : SomeBase
 
 someDerived = /** @type {SomeDerived} */(someOther); // Error
 >someDerived = /** @type {SomeDerived} */(someOther) : SomeDerived
 >someDerived : SomeDerived
 >(someOther) : SomeDerived
->someOther : SomeDerived
 >someOther : SomeOther
 
 someOther = /** @type {SomeOther} */(someDerived); // Error
 >someOther = /** @type {SomeOther} */(someDerived) : SomeOther
 >someOther : SomeOther
 >(someDerived) : SomeOther
->someDerived : SomeOther
 >someDerived : SomeDerived
 
 someOther = /** @type {SomeOther} */(someBase); // Error
 >someOther = /** @type {SomeOther} */(someBase) : SomeOther
 >someOther : SomeOther
 >(someBase) : SomeOther
->someBase : SomeOther
 >someBase : SomeBase
 
 someOther = /** @type {SomeOther} */(someOther);
 >someOther = /** @type {SomeOther} */(someOther) : SomeOther
 >someOther : SomeOther
 >(someOther) : SomeOther
->someOther : SomeOther
 >someOther : SomeOther
 
 someFakeClass = someBase;
@@ -201,7 +187,6 @@ someBase = /** @type {SomeBase} */(someFakeClass);
 >someBase = /** @type {SomeBase} */(someFakeClass) : SomeBase
 >someBase : SomeBase
 >(someFakeClass) : SomeBase
->someFakeClass : SomeBase
 >someFakeClass : any
 
 // Type assertion cannot be a type-predicate type
@@ -215,7 +200,6 @@ var str;
 
 if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 >(numOrStr === undefined) : boolean
->numOrStr === undefined : boolean
 >numOrStr === undefined : boolean
 >numOrStr : string | number
 >undefined : undefined
@@ -231,12 +215,10 @@ var asConst1 = /** @type {const} */(1);
 >asConst1 : 1
 >(1) : 1
 >1 : 1
->1 : 1
 
 var asConst2 = /** @type {const} */({
 >asConst2 : { readonly x: 1; }
 >({    x: 1}) : { readonly x: 1; }
->{    x: 1} : { readonly x: 1; }
 >{    x: 1} : { readonly x: 1; }
 
     x: 1

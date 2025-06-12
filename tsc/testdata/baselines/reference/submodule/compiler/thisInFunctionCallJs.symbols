@@ -68,6 +68,11 @@ class Test {
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >d : Symbol(d, Decl(a.js, 21, 18))
+>this.data.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(data, Decl(a.js, 1, 19))
+>this : Symbol((Missing), Decl(a.js, 20, 13))
+>data : Symbol(data, Decl(a.js, 1, 19))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
         }, this)
 >this : Symbol(Test, Decl(a.js, 0, 0))
@@ -89,6 +94,11 @@ class Test {
 
             return d === this.data.length
 >d : Symbol(d, Decl(a.js, 29, 18))
+>this.data.length : Symbol(length, Decl(lib.es5.d.ts, --, --))
+>this.data : Symbol(data, Decl(a.js, 1, 19))
+>this : Symbol((Missing), Decl(a.js, 28, 13))
+>data : Symbol(data, Decl(a.js, 1, 19))
+>length : Symbol(length, Decl(lib.es5.d.ts, --, --))
 
         }, this)
 >this : Symbol(Test, Decl(a.js, 0, 0))

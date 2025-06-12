@@ -6,6 +6,5 @@
    return /** @type {import('./GeometryType.js').default} */ ('Point');
 ->('Point') : typeof import("GeometryType").default
 +>('Point') : any
-+>'Point' : any
  >'Point' : "Point"
  }

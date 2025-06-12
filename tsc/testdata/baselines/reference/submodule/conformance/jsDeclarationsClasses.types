@@ -62,7 +62,6 @@ export class E {
     get f1() { return /** @type {*} */(null); }
 >f1 : U
 >(null) : any
->null : any
 
     /**
      * @param {U} _p
@@ -77,7 +76,6 @@ export class E {
     get f2() { return /** @type {*} */(null); }
 >f2 : U
 >(null) : any
->null : any
 
     /**
      * @param {U} _p
@@ -309,7 +307,6 @@ export class O extends N {
 var x = /** @type {*} */(null);
 >x : any
 >(null) : any
->null : any
 
 export class VariableBase extends x {}
 >VariableBase : VariableBase

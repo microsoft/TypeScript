@@ -11,7 +11,6 @@ const foo1 = value => /** @type {string} */({ ...value });
 >value => /** @type {string} */({ ...value }) : <T>(value: T | undefined) => T
 >value : T | undefined
 >({ ...value }) : string
->{ ...value } : string
 >{ ...value } : {}
 >value : T | undefined
 
@@ -25,9 +24,7 @@ const foo2 = value => /** @type {string} */(/** @type {T} */({ ...value }));
 >value => /** @type {string} */(/** @type {T} */({ ...value })) : <T>(value: T | undefined) => T
 >value : T | undefined
 >(/** @type {T} */({ ...value })) : string
->({ ...value }) : string
 >({ ...value }) : T
->{ ...value } : T
 >{ ...value } : {}
 >value : T | undefined
 

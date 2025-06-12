@@ -1,10 +1,6 @@
 --- old.strictOptionalProperties4.types
 +++ new.strictOptionalProperties4.types
-@@= skipped -8, +8 lines =@@
- const x = /** @type {Foo} */ ({});
- >x : Foo
- >({}) : Foo
-+>{} : Foo
+@@= skipped -11, +11 lines =@@
  >{} : {}
 
  x.foo; // number | undefined
@@ -16,8 +12,7 @@
 
  const y = /** @type {Required<Foo>} */ ({});
  >y : Required<Foo>
- >({}) : Required<Foo>
-+>{} : Required<Foo>
+@@= skipped -10, +10 lines =@@
  >{} : {}
 
  y.foo; // number

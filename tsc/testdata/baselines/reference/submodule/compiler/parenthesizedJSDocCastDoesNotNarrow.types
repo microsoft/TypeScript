@@ -7,7 +7,6 @@ let value = "";
 
 switch (/** @type {"foo" | "bar"} */ (value)) {
 >(value) : "bar" | "foo"
->value : "bar" | "foo"
 >value : string
 
   case "bar":

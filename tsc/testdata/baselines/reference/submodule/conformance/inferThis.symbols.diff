@@ -9,7 +9,7 @@
 
          return this;
 ->this : Symbol(this)
-+>this : Symbol(C, Decl(a.js, 0, 0))
++>this : Symbol((Missing), Decl(a.js, 3, 8))
      }
 
      /**
@@ -22,7 +22,7 @@
 
          return this;
 ->this : Symbol(this)
-+>this : Symbol(C, Decl(a.js, 0, 0))
++>this : Symbol((Missing), Decl(a.js, 12, 8))
      }
  }
 

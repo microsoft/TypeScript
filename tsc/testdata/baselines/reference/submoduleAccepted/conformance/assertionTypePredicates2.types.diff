@@ -17,12 +17,11 @@
 ->(a) : B
 ->a : A
 +>(a) : { x: number; } & { y: number; }
-+>a : { x: number; } & { y: number; }
 +>a : { x: number; }
  >y : number
  >0 : 0
  >TypeError() : TypeError
-@@= skipped -25, +26 lines =@@
+@@= skipped -25, +25 lines =@@
 
      /** @type { A } */
      const a = { x: 1 };

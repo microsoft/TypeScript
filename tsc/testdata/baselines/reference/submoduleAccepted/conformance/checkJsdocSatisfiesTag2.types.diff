@@ -7,8 +7,8 @@
 ->p : { isEven: (n: number) => boolean; isOdd: (n: number) => boolean; }
 ->({    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1}) : { isEven: (n: number) => boolean; isOdd: (n: number) => boolean; }
 ->{    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1} : { isEven: (n: number) => boolean; isOdd: (n: number) => boolean; }
-+>p : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
-+>({    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1}) : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
++>p : any
++>({    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1}) : any
 +>{    isEven: n => n % 2 === 0,    isOdd: n => n % 2 === 1} : { isEven: (n: any) => boolean; isOdd: (n: any) => boolean; }
 
      isEven: n => n % 2 === 0,

@@ -11,7 +11,6 @@ const cloneObjectGood = value => /** @type {T} */({ ...value });
 >value => /** @type {T} */({ ...value }) : <T>(value: T | undefined) => T
 >value : T | undefined
 >({ ...value }) : T
->{ ...value } : T
 >{ ...value } : {}
 >value : T | undefined
 

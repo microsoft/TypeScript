@@ -13,8 +13,8 @@ class C {
      * @param {string} a
      */
     p = (a) => this.fn("" + a);
->p : (a: string) => any
->(a) => this.fn("" + a) : (a: string) => any
+>p : (this: { fn(a: string): void; }, a: string) => any
+>(a) => this.fn("" + a) : (this: { fn(a: string): void; }, a: string) => any
 >a : string
 >this.fn("" + a) : any
 >this.fn : any

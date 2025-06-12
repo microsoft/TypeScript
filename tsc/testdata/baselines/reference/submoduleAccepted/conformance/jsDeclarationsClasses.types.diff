@@ -1,22 +1,6 @@
 --- old.jsDeclarationsClasses.types
 +++ new.jsDeclarationsClasses.types
-@@= skipped -61, +61 lines =@@
-     get f1() { return /** @type {*} */(null); }
- >f1 : U
- >(null) : any
-+>null : any
-
-     /**
-      * @param {U} _p
-@@= skipped -14, +15 lines =@@
-     get f2() { return /** @type {*} */(null); }
- >f2 : U
- >(null) : any
-+>null : any
-
-     /**
-      * @param {U} _p
-@@= skipped -133, +134 lines =@@
+@@= skipped -208, +208 lines =@@
      constructor() {
          this.p1 = 12;
  >this.p1 = 12 : 12
@@ -73,11 +57,3 @@
  >param : U
      }
  }
-@@= skipped -10, +10 lines =@@
- var x = /** @type {*} */(null);
- >x : any
- >(null) : any
-+>null : any
-
- export class VariableBase extends x {}
- >VariableBase : VariableBase

@@ -13,7 +13,7 @@ export class C {
 >a : Symbol(a, Decl(a.js, 0, 16))
 
         return this;
->this : Symbol(C, Decl(a.js, 0, 0))
+>this : Symbol((Missing), Decl(a.js, 3, 8))
     }
 
     /**
@@ -25,7 +25,7 @@ export class C {
 >b : Symbol(b, Decl(a.js, 8, 5))
 
         return this;
->this : Symbol(C, Decl(a.js, 0, 0))
+>this : Symbol((Missing), Decl(a.js, 12, 8))
     }
 }
 
