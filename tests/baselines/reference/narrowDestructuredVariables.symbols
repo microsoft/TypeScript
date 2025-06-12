@@ -1,0 +1,153 @@
+//// [tests/cases/compiler/narrowDestructuredVariables.ts] ////
+
+=== narrowDestructuredVariables.ts ===
+interface Ref<T> { current: T };
+>Ref : Symbol(Ref, Decl(narrowDestructuredVariables.ts, 0, 0))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 0, 14))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 0, 14))
+
+type ToRefs<T> = { [K in keyof T]: Ref<T[K]> };
+>ToRefs : Symbol(ToRefs, Decl(narrowDestructuredVariables.ts, 0, 32))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 1, 12))
+>K : Symbol(K, Decl(narrowDestructuredVariables.ts, 1, 20))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 1, 12))
+>Ref : Symbol(Ref, Decl(narrowDestructuredVariables.ts, 0, 0))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 1, 12))
+>K : Symbol(K, Decl(narrowDestructuredVariables.ts, 1, 20))
+
+declare function toRefs<T>(o: T): ToRefs<T>;
+>toRefs : Symbol(toRefs, Decl(narrowDestructuredVariables.ts, 1, 47))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 2, 24))
+>o : Symbol(o, Decl(narrowDestructuredVariables.ts, 2, 27))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 2, 24))
+>ToRefs : Symbol(ToRefs, Decl(narrowDestructuredVariables.ts, 0, 32))
+>T : Symbol(T, Decl(narrowDestructuredVariables.ts, 2, 24))
+
+interface DataPrepared {
+>DataPrepared : Symbol(DataPrepared, Decl(narrowDestructuredVariables.ts, 2, 44))
+
+    prepared: true
+>prepared : Symbol(DataPrepared.prepared, Decl(narrowDestructuredVariables.ts, 4, 24))
+
+    payload: string
+>payload : Symbol(DataPrepared.payload, Decl(narrowDestructuredVariables.ts, 5, 18))
+
+};
+
+interface DataPending {
+>DataPending : Symbol(DataPending, Decl(narrowDestructuredVariables.ts, 7, 2))
+
+    prepared: false
+>prepared : Symbol(DataPending.prepared, Decl(narrowDestructuredVariables.ts, 9, 23))
+
+    payload: null
+>payload : Symbol(DataPending.payload, Decl(narrowDestructuredVariables.ts, 10, 19))
+
+};
+
+type Data = DataPrepared | DataPending;
+>Data : Symbol(Data, Decl(narrowDestructuredVariables.ts, 12, 2))
+>DataPrepared : Symbol(DataPrepared, Decl(narrowDestructuredVariables.ts, 2, 44))
+>DataPending : Symbol(DataPending, Decl(narrowDestructuredVariables.ts, 7, 2))
+
+declare function isDataRefsPrepared(refs: ToRefs<Data>): refs is ToRefs<DataPrepared>;
+>isDataRefsPrepared : Symbol(isDataRefsPrepared, Decl(narrowDestructuredVariables.ts, 14, 39))
+>refs : Symbol(refs, Decl(narrowDestructuredVariables.ts, 16, 36))
+>ToRefs : Symbol(ToRefs, Decl(narrowDestructuredVariables.ts, 0, 32))
+>Data : Symbol(Data, Decl(narrowDestructuredVariables.ts, 12, 2))
+>refs : Symbol(refs, Decl(narrowDestructuredVariables.ts, 16, 36))
+>ToRefs : Symbol(ToRefs, Decl(narrowDestructuredVariables.ts, 0, 32))
+>DataPrepared : Symbol(DataPrepared, Decl(narrowDestructuredVariables.ts, 2, 44))
+
+declare const data: Data;
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>Data : Symbol(Data, Decl(narrowDestructuredVariables.ts, 12, 2))
+
+const dataRefs = toRefs(data);
+>dataRefs : Symbol(dataRefs, Decl(narrowDestructuredVariables.ts, 19, 5))
+>toRefs : Symbol(toRefs, Decl(narrowDestructuredVariables.ts, 1, 47))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+
+const { prepared, payload } = dataRefs;
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 20, 7))
+>payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 20, 17))
+>dataRefs : Symbol(dataRefs, Decl(narrowDestructuredVariables.ts, 19, 5))
+
+if (prepared.current) {
+>prepared.current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 20, 7))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+
+    prepared.current;
+>prepared.current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18))
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 20, 7))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18))
+
+    payload.current;
+>payload.current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+>payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 20, 17))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+
+    data.prepared;
+>data.prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 4, 24), Decl(narrowDestructuredVariables.ts, 9, 23))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 4, 24), Decl(narrowDestructuredVariables.ts, 9, 23))
+
+    data.payload;
+>data.payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 5, 18), Decl(narrowDestructuredVariables.ts, 10, 19))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 5, 18), Decl(narrowDestructuredVariables.ts, 10, 19))
+}
+
+if (isDataRefsPrepared(dataRefs)) {
+>isDataRefsPrepared : Symbol(isDataRefsPrepared, Decl(narrowDestructuredVariables.ts, 14, 39))
+>dataRefs : Symbol(dataRefs, Decl(narrowDestructuredVariables.ts, 19, 5))
+
+    prepared.current;
+>prepared.current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18))
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 20, 7))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18))
+
+    payload.current;
+>payload.current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18))
+>payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 20, 17))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18))
+
+    data.prepared;
+>data.prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 4, 24), Decl(narrowDestructuredVariables.ts, 9, 23))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 4, 24), Decl(narrowDestructuredVariables.ts, 9, 23))
+
+    data.payload;
+>data.payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 5, 18), Decl(narrowDestructuredVariables.ts, 10, 19))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 5, 18), Decl(narrowDestructuredVariables.ts, 10, 19))
+}
+
+if (data.prepared) {
+>data.prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 4, 24), Decl(narrowDestructuredVariables.ts, 9, 23))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 4, 24), Decl(narrowDestructuredVariables.ts, 9, 23))
+
+    prepared.current;
+>prepared.current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+>prepared : Symbol(prepared, Decl(narrowDestructuredVariables.ts, 20, 7))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+
+    payload.current;
+>payload.current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+>payload : Symbol(payload, Decl(narrowDestructuredVariables.ts, 20, 17))
+>current : Symbol(Ref.current, Decl(narrowDestructuredVariables.ts, 0, 18), Decl(narrowDestructuredVariables.ts, 0, 18))
+
+    data.prepared;
+>data.prepared : Symbol(DataPrepared.prepared, Decl(narrowDestructuredVariables.ts, 4, 24))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>prepared : Symbol(DataPrepared.prepared, Decl(narrowDestructuredVariables.ts, 4, 24))
+
+    data.payload;
+>data.payload : Symbol(DataPrepared.payload, Decl(narrowDestructuredVariables.ts, 5, 18))
+>data : Symbol(data, Decl(narrowDestructuredVariables.ts, 18, 13))
+>payload : Symbol(DataPrepared.payload, Decl(narrowDestructuredVariables.ts, 5, 18))
+}
+
