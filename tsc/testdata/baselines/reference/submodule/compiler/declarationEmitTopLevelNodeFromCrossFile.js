@@ -49,10 +49,6 @@ export declare const m: {
 };
 export declare const x: {
     p: {
-        o: (
-        /**
-        * leading doc for prop
-        */
-        a?: string[]) => void;
+        o: (a?: string[]) => void;
     };
 };

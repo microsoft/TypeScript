@@ -1,0 +1,85 @@
+===================================================================
+JsFile: export.d.ts
+mapUrl: export.d.ts.map
+sourceRoot: 
+sources: export.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:export.d.ts
+sourceFile:export.ts
+-------------------------------------------------------------------
+>>>/**
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+---
+>>> * blah blah blah blah
+>>> * blah blah blah blah
+>>> * blah blah blah blah
+>>> * blah blah blah blah
+>>> * blah blah blah blah
+>>> */
+1->^^^
+2 >   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->/**
+  > * blah blah blah blah
+  > * blah blah blah blah
+  > * blah blah blah blah
+  > * blah blah blah blah
+  > * blah blah blah blah
+  > */
+1->Emitted(7, 4) Source(7, 4) + SourceIndex(0)
+---
+>>>export declare function foo(): (_item: unknown) => _item is boolean;
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                        ^^^
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+  >
+2 >export function 
+3 >                        foo
+4 >                           () {
+  >                             return (_item: unknown): _item is boolean => {
+  >                               return true;
+  >                             };
+  >                           }
+1->Emitted(8, 1) Source(9, 1) + SourceIndex(0)
+2 >Emitted(8, 25) Source(9, 17) + SourceIndex(0)
+3 >Emitted(8, 28) Source(9, 20) + SourceIndex(0)
+4 >Emitted(8, 69) Source(13, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=export.d.ts.map===================================================================
+JsFile: import.d.ts
+mapUrl: import.d.ts.map
+sourceRoot: 
+sources: import.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:import.d.ts
+sourceFile:import.ts
+-------------------------------------------------------------------
+>>>export declare const x: (_item: unknown) => _item is boolean;
+1 >
+2 >^^^^^^^^^^^^^^^
+3 >               ^^^^^^
+4 >                     ^
+5 >                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 >                                                            ^
+1 >import { foo } from './export';
+  >
+2 >export 
+3 >               const 
+4 >                     x
+5 >                       = foo()
+6 >                                                            ;
+1 >Emitted(1, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(1, 16) Source(2, 8) + SourceIndex(0)
+3 >Emitted(1, 22) Source(2, 14) + SourceIndex(0)
+4 >Emitted(1, 23) Source(2, 15) + SourceIndex(0)
+5 >Emitted(1, 61) Source(2, 23) + SourceIndex(0)
+6 >Emitted(1, 62) Source(2, 24) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=import.d.ts.map
