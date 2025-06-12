@@ -46569,7 +46569,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             languageVersion >= ScriptTarget.ES5 && name.escapedText === "Object"
             && host.getEmitModuleFormatOfFile(getSourceFileOfNode(name)) < ModuleKind.ES2015
         ) {
-            error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
+            error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_and_above_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
         }
     }
 
