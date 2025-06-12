@@ -118,61 +118,33 @@ class B3 extends A3 {
 
 
 //// [protectedMembers.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 // Class with protected members
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    C1.prototype.f = function () {
+class C1 {
+    f() {
         return this.x;
-    };
-    C1.sf = function () {
+    }
+    static sf() {
         return this.sx;
-    };
-    return C1;
-}());
+    }
+}
 // Derived class accessing protected members
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        return _super !== null && _super.apply(this, arguments) || this;
+class C2 extends C1 {
+    f() {
+        return super.f() + this.x;
     }
-    C2.prototype.f = function () {
-        return _super.prototype.f.call(this) + this.x;
-    };
-    C2.sf = function () {
-        return _super.sf.call(this) + this.sx;
-    };
-    return C2;
-}(C1));
+    static sf() {
+        return super.sf() + this.sx;
+    }
+}
 // Derived class making protected members public
-var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);
-    function C3() {
-        return _super !== null && _super.apply(this, arguments) || this;
+class C3 extends C2 {
+    f() {
+        return super.f();
     }
-    C3.prototype.f = function () {
-        return _super.prototype.f.call(this);
-    };
-    C3.sf = function () {
-        return _super.sf.call(this);
-    };
-    return C3;
-}(C2));
+    static sf() {
+        return super.sf();
+    }
+}
 var c1;
 var c2;
 var c3;
@@ -191,80 +163,39 @@ c3.x;
 c3.f();
 C3.sx;
 C3.sf();
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return B;
-}(A));
-var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C.foo = function (a, b, c, d, e) {
+class A {
+}
+class B extends A {
+}
+class C extends A {
+    static foo(a, b, c, d, e) {
         a.x = 1; // Error, access must be through C or type derived from C
         b.x = 1; // Error, access must be through C or type derived from C
         c.x = 1;
         d.x = 1;
         e.x = 1;
-    };
-    return C;
-}(A));
-var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
-        return _super !== null && _super.apply(this, arguments) || this;
     }
-    return D;
-}(C));
-var CC = /** @class */ (function () {
-    function CC() {
+}
+class D extends C {
+}
+class CC {
+    constructor() {
     }
-    return CC;
-}());
-var A1 = /** @class */ (function () {
-    function A1() {
-    }
-    return A1;
-}());
-var B1 = /** @class */ (function () {
-    function B1() {
-    }
-    return B1;
-}());
+}
+class A1 {
+}
+class B1 {
+}
 var a1;
 var b1;
 a1 = b1; // Error, B1 doesn't derive from A1
 b1 = a1; // Error, x is protected in A1 but public in B1
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
-var B2 = /** @class */ (function (_super) {
-    __extends(B2, _super);
-    function B2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return B2;
-}(A2));
-var A3 = /** @class */ (function () {
-    function A3() {
-    }
-    return A3;
-}());
+class A2 {
+}
+class B2 extends A2 {
+}
+class A3 {
+}
 // Error x is protected in B3 but public in A3
-var B3 = /** @class */ (function (_super) {
-    __extends(B3, _super);
-    function B3() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return B3;
-}(A3));
+class B3 extends A3 {
+}

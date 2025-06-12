@@ -12,16 +12,9 @@ class Employee {
 
 //// [unusedSetterInClass2.js]
 // Unlike everything else, a setter without a getter is used by a write access.
-var Employee = /** @class */ (function () {
-    function Employee() {
-    }
-    Object.defineProperty(Employee.prototype, "p", {
-        set: function (_) { },
-        enumerable: false,
-        configurable: true
-    });
-    Employee.prototype.m = function () {
+class Employee {
+    set p(_) { }
+    m() {
         this.p = 0;
-    };
-    return Employee;
-}());
+    }
+}

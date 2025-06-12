@@ -12,15 +12,12 @@ class c {
 }
 
 //// [blockScopedFunctionDeclarationInStrictClass.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
-    c.prototype.method = function () {
+class c {
+    method() {
         if (true) {
             function foo() { }
             foo(); // ok
         }
         foo(); // not ok
-    };
-    return c;
-}());
+    }
+}

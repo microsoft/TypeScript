@@ -21,11 +21,8 @@ define(["require", "exports", "recursiveExportAssignmentAndFindAliasedType4_modu
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleB.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var ClassB = /** @class */ (function () {
-        function ClassB() {
-        }
-        return ClassB;
-    }());
+    class ClassB {
+    }
     return ClassB;
 });
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleA.js]

@@ -31,4 +31,4 @@ const o: Foo = a.o;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a = require("a");
-var o = a.o;
+const o = a.o;

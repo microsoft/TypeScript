@@ -13,11 +13,8 @@ export {default as Foob} from "./cls";
 
 
 //// [cls.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 module.exports = Foo;
 //// [usage.js]
 "use strict";

@@ -33,6 +33,6 @@ console.log(JSON.stringify(result));
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("typescript");
-var source = "let x: string  = 'string'";
-var result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
+const source = "let x: string  = 'string'";
+let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 console.log(JSON.stringify(result));

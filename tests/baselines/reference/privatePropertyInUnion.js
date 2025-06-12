@@ -19,8 +19,5 @@ type __ValueDescriptorType<T extends string | object> = T extends ISyncableObjec
 //// [privatePropertyInUnion.js]
 "use strict";
 // Repro from #38236
-var SyncableObject = /** @class */ (function () {
-    function SyncableObject() {
-    }
-    return SyncableObject;
-}());
+class SyncableObject {
+}

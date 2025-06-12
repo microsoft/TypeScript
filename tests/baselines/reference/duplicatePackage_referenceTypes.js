@@ -28,4 +28,4 @@ let foo: Foo = a.foo;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a = require("a");
-var foo = a.foo;
+let foo = a.foo;

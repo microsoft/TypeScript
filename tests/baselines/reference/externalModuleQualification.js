@@ -18,17 +18,12 @@ class NavigateAction {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DiffEditor = exports.ID = void 0;
 exports.ID = "test";
-var DiffEditor = /** @class */ (function () {
-    function DiffEditor(id) {
-        if (id === void 0) { id = exports.ID; }
+class DiffEditor {
+    constructor(id = exports.ID) {
     }
-    return DiffEditor;
-}());
+}
 exports.DiffEditor = DiffEditor;
-var NavigateAction = /** @class */ (function () {
-    function NavigateAction() {
+class NavigateAction {
+    f(editor) {
     }
-    NavigateAction.prototype.f = function (editor) {
-    };
-    return NavigateAction;
-}());
+}

@@ -26,6 +26,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 var jsx_runtime_1 = require("react/jsx-runtime");
 /// <reference path="react16.d.ts" />
-var props = { answer: 42 };
-var a = (0, jsx_runtime_1.jsx)("div", __assign({}, props, { children: "text" }), "foo");
-var b = (0, react_1.createElement)("div", __assign({}, props, { key: "bar" }), "text");
+const props = { answer: 42 };
+const a = (0, jsx_runtime_1.jsx)("div", __assign({}, props, { children: "text" }), "foo");
+const b = (0, react_1.createElement)("div", __assign({}, props, { key: "bar" }), "text");

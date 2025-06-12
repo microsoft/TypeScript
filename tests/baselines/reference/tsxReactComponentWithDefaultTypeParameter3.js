@@ -26,8 +26,8 @@ let x2 = <MyComp a="hi"/>
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 // Error
-var x1 = <MyComp />;
+let x1 = <MyComp />;
 // OK
-var x = <MyComp a={10} b="hi"/>;
+let x = <MyComp a={10} b="hi"/>;
 // Error
-var x2 = <MyComp a="hi"/>;
+let x2 = <MyComp a="hi"/>;

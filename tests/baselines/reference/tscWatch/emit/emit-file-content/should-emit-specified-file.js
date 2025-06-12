@@ -56,7 +56,7 @@ exports.y = (0, f1_1.Foo)();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var f2_1 = require("./f2");
-var x = f2_1.y;
+let x = f2_1.y;
 
 
 

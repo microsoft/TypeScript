@@ -29,35 +29,17 @@ const {} = useReduxDispatch1(
 
 
 //// [bindingPatternCannotBeOnlyInferenceSource.js]
-var _a = f(); // error (only in strictNullChecks)
-var p1 = f().p1; // error
-var _b = f(); // error
-var _c = f(), e1 = _c[0], e2 = _c[1]; // error
-var funcs1 = {
-    funcA: function (a) { },
-    funcB: function (b, bb) { },
-    funcC: function (c, cc, ccc) { },
+const {} = f(); // error (only in strictNullChecks)
+const { p1 } = f(); // error
+const [] = f(); // error
+const [e1, e2] = f(); // error
+const funcs1 = {
+    funcA: (a) => { },
+    funcB: (b, bb) => { },
+    funcC: (c, cc, ccc) => { },
 };
-var _d = useReduxDispatch1(function (d, f) { return ({
-    funcA: function () {
-        var p = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            p[_i] = arguments[_i];
-        }
-        return d(f.funcA.apply(f, p));
-    }, // p should be inferrable
-    funcB: function () {
-        var p = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            p[_i] = arguments[_i];
-        }
-        return d(f.funcB.apply(f, p));
-    },
-    funcC: function () {
-        var p = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            p[_i] = arguments[_i];
-        }
-        return d(f.funcC.apply(f, p));
-    },
-}); });
+const {} = useReduxDispatch1((d, f) => ({
+    funcA: (...p) => d(f.funcA(...p)), // p should be inferrable
+    funcB: (...p) => d(f.funcB(...p)),
+    funcC: (...p) => d(f.funcC(...p)),
+}));

@@ -333,7 +333,7 @@ Output::
 }
 
 //// [/home/src/projects/project/a.js]
-var a = "hello";
+const a = "hello";
 
 
 

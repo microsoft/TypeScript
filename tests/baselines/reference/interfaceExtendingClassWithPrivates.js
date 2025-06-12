@@ -18,11 +18,8 @@ var r = i.y;
 var r2 = i.x; // error
 
 //// [interfaceExtendingClassWithPrivates.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 var i;
 var r = i.y;
 var r2 = i.x; // error

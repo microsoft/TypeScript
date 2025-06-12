@@ -36,8 +36,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 function f1(a) {
-    a.map(function (item) { return (__assign({}, item)); }).filter(function (value) { });
+    a.map(item => (__assign({}, item))).filter(value => { });
 }
 function f2(a) {
-    a.map(function (item) { return (__assign({}, item)); }).filter(function (value) { });
+    a.map(item => (__assign({}, item))).filter(value => { });
 }

@@ -47,15 +47,14 @@ Output::
 //// [/home/src/workspaces/project/MessageablePerson.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Messageable = function () {
-    return /** @class */ (function () {
-        function MessageableClass() {
+const Messageable = () => {
+    return class MessageableClass {
+        constructor() {
             this.message = 'hello';
         }
-        return MessageableClass;
-    }());
+    };
 };
-var wrapper = function () { return Messageable(); };
+const wrapper = () => Messageable();
 
 
 //// [/home/src/workspaces/project/MessageablePerson.d.ts]

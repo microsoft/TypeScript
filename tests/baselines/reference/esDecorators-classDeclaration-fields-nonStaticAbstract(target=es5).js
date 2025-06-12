@@ -13,9 +13,6 @@ abstract class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStaticAbstract.js]
-var field3 = "field3";
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+const field3 = "field3";
+class C {
+}

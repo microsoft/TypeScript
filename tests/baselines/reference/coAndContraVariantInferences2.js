@@ -124,8 +124,8 @@ const x = tryCast(types, isNodeArray);  // NodeAray<TypeNode>
 //// [coAndContraVariantInferences2.js]
 "use strict";
 function f1(a, b) {
-    var x1 = cast(a, isC); // cast<A, C>
-    var x2 = cast(b, isC); // cast<A, C>
+    const x1 = cast(a, isC); // cast<A, C>
+    const x2 = cast(b, isC); // cast<A, C>
 }
 function f2(b, c) {
     consume(b, c, useA); // consume<A, C>
@@ -155,7 +155,7 @@ function foo(node) {
     node; // FunctionDeclaration
 }
 function bar(node) {
-    var a = tryCast(node, isExpression); // tryCast<Expression, Node>
+    const a = tryCast(node, isExpression); // tryCast<Expression, Node>
 }
-var maybeClassStatement = tryCast(statement, isClassLike); // ClassLike1
-var x = tryCast(types, isNodeArray); // NodeAray<TypeNode>
+const maybeClassStatement = tryCast(statement, isClassLike); // ClassLike1
+const x = tryCast(types, isNodeArray); // NodeAray<TypeNode>

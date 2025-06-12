@@ -755,12 +755,12 @@ Errors  Files
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-exports.a = /** @class */ (function () {
-    function class_1() {
+const a = class {
+    constructor() {
         this.p = 10;
     }
-    return class_1;
-}());
+};
+exports.a = a;
 
 
 //// [/home/src/projects/project/b.js]
@@ -778,24 +778,24 @@ export declare const b = 10;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
-exports.c = /** @class */ (function () {
-    function class_1() {
+const c = class {
+    constructor() {
         this.p = 10;
     }
-    return class_1;
-}());
+};
+exports.c = c;
 
 
 //// [/home/src/projects/project/d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
-exports.d = /** @class */ (function () {
-    function class_1() {
+const d = class {
+    constructor() {
         this.p = 10;
     }
-    return class_1;
-}());
+};
+exports.d = d;
 
 
 

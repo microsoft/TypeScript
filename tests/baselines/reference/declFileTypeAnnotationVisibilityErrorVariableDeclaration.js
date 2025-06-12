@@ -37,16 +37,10 @@ module m {
 //// [declFileTypeAnnotationVisibilityErrorVariableDeclaration.js]
 var m;
 (function (m) {
-    var private1 = /** @class */ (function () {
-        function private1() {
-        }
-        return private1;
-    }());
-    var public1 = /** @class */ (function () {
-        function public1() {
-        }
-        return public1;
-    }());
+    class private1 {
+    }
+    class public1 {
+    }
     m.public1 = public1;
     // Directly using names from this module
     var x;
@@ -55,13 +49,10 @@ var m;
     var x2;
     var y2 = new public1();
     m.l2 = new public1();
-    var m2;
+    let m2;
     (function (m2) {
-        var public2 = /** @class */ (function () {
-            function public2() {
-            }
-            return public2;
-        }());
+        class public2 {
+        }
         m2.public2 = public2;
     })(m2 || (m2 = {}));
     var x3;

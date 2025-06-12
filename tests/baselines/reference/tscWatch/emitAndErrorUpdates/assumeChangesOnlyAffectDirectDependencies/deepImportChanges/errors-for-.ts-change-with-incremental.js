@@ -51,12 +51,11 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.d = 1;
     }
-    return C;
-}());
+}
 exports.C = C;
 
 
@@ -65,12 +64,11 @@ exports.C = C;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 var c_1 = require("./c");
-var B = /** @class */ (function () {
-    function B() {
+class B {
+    constructor() {
         this.c = new c_1.C();
     }
-    return B;
-}());
+}
 exports.B = B;
 
 
@@ -78,7 +76,7 @@ exports.B = B;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
-var b = new b_1.B();
+let b = new b_1.B();
 console.log(b.c.d);
 
 
@@ -242,12 +240,11 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.d2 = 1;
     }
-    return C;
-}());
+}
 exports.C = C;
 
 
@@ -416,12 +413,11 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.d = 1;
     }
-    return C;
-}());
+}
 exports.C = C;
 
 
@@ -587,12 +583,11 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.d2 = 1;
     }
-    return C;
-}());
+}
 exports.C = C;
 
 

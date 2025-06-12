@@ -22,8 +22,8 @@ foo.b;
 foo1.b;
 
 //// [0.js]
-export var a = 1;
-export var b = 2;
+export const a = 1;
+export const b = 2;
 //// [1.js]
 import * as default_1 from './0';
 export default default_1;

@@ -31,11 +31,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo;
 (function (Foo) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     Foo.C = C;
 })(Foo || (exports.Foo = Foo = {}));
 (function (Foo) {

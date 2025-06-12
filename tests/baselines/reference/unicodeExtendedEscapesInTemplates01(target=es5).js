@@ -5,4 +5,4 @@ var x = `\u{0}`;
 
 
 //// [unicodeExtendedEscapesInTemplates01.js]
-var x = "\0";
+var x = `\u{0}`;

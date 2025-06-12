@@ -21,11 +21,8 @@ class MyComponent {
 //// [service.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Service = /** @class */ (function () {
-    function Service() {
-    }
-    return Service;
-}());
+class Service {
+}
 exports.default = Service;
 //// [component.js]
 "use strict";
@@ -40,11 +37,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var service_1 = require("./service");
-var MyComponent = /** @class */ (function () {
-    function MyComponent(Service) {
-        this.Service = Service;
-    }
-    MyComponent.prototype.method = function (x) {
+let MyComponent = (() => {
+    let MyComponent = class MyComponent {
+        constructor(Service) {
+            this.Service = Service;
+        }
+        method(x) {
+        }
     };
     __decorate([
         decorator,
@@ -57,4 +56,4 @@ var MyComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [service_1.default])
     ], MyComponent);
     return MyComponent;
-}());
+})();

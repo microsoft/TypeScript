@@ -34,12 +34,12 @@ let pair2: Pairs<FooBar>[keyof FooBar] = {
 "use strict";
 // Repro from #15756
 // Error expected here
-var pair1 = {
+let pair1 = {
     key: "foo",
     value: 3
 };
 // Error expected here
-var pair2 = {
+let pair2 = {
     key: "foo",
     value: 3
 };

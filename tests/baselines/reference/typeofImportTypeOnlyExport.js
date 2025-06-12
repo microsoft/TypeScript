@@ -22,16 +22,11 @@ export const classMap = directive(ClassMapDirective);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classMap = exports.directive = void 0;
-var ClassMapDirective = /** @class */ (function () {
-    function ClassMapDirective() {
-    }
-    return ClassMapDirective;
-}());
-var directive = function (class_) {
-    return function () { return ({
-        directive: class_,
-    }); };
-};
+class ClassMapDirective {
+}
+const directive = (class_) => () => ({
+    directive: class_,
+});
 exports.directive = directive;
 exports.classMap = (0, exports.directive)(ClassMapDirective);
 //// [button.js]

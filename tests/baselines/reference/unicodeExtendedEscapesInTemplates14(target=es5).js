@@ -7,4 +7,4 @@ var x = `\u{-DDDD}`;
 
 //// [unicodeExtendedEscapesInTemplates14.js]
 // Shouldn't work, negatives are not allowed.
-var x = "\\u{-DDDD}";
+var x = `\u{-DDDD}`;

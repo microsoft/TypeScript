@@ -14,12 +14,11 @@ var x = d.p;
 //// [exportAssignmentClass_A.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             this.p = 0;
         }
-        return C;
-    }());
+    }
     return C;
 });
 //// [exportAssignmentClass_B.js]

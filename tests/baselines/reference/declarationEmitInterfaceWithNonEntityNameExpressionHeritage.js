@@ -5,11 +5,8 @@ class A { }
 interface Class extends (typeof A) { }
 
 //// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 
 
 //// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.d.ts]

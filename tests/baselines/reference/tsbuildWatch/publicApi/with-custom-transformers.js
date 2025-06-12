@@ -89,12 +89,8 @@ exports.f1 = f1;
 exports.f2 = f2;
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function f1() { }
-//@after/user/username/projects/myproject/shared/tsconfig.json
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 exports.c = c;
 //@after/user/username/projects/myproject/shared/tsconfig.json
 var e;
@@ -166,12 +162,8 @@ exports.f2 = f2;
 exports.f22 = f22;
 /*@before/user/username/projects/myproject/webpack/tsconfig.json*/
 function f2() { }
-//@after/user/username/projects/myproject/webpack/tsconfig.json
-var c2 = /** @class */ (function () {
-    function c2() {
-    }
-    return c2;
-}());
+class c2 {
+}
 exports.c2 = c2;
 //@after/user/username/projects/myproject/webpack/tsconfig.json
 var e2;
@@ -338,12 +330,8 @@ exports.f2 = f2;
 function fooBar() { }
 /*@before/user/username/projects/myproject/shared/tsconfig.json*/
 function f1() { }
-//@after/user/username/projects/myproject/shared/tsconfig.json
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 exports.c = c;
 //@after/user/username/projects/myproject/shared/tsconfig.json
 var e;

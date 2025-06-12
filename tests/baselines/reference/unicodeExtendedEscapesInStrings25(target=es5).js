@@ -5,4 +5,4 @@ var x = "\u{00000000000067}
 
 
 //// [unicodeExtendedEscapesInStrings25.js]
-var x = "g";
+var x = "\u{00000000000067};

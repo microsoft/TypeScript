@@ -33,46 +33,29 @@ class C {
 }
 
 //// [getterControlFlowStrictNull.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.a = function () {
+class A {
+    a() {
         if (Math.random() > 0.5) {
             return '';
         }
         // it does error here as expected
-    };
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
     }
-    Object.defineProperty(B.prototype, "a", {
-        get: function () {
-            if (Math.random() > 0.5) {
-                return '';
-            }
-            // it should error here because it returns undefined
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C() {
+}
+class B {
+    get a() {
+        if (Math.random() > 0.5) {
+            return '';
+        }
+        // it should error here because it returns undefined
     }
-    Object.defineProperty(C.prototype, "a", {
-        get: function () {
-            if (Math.random() > 0.5) {
-                return 0;
-            }
-            // it should error here because it returns undefined
-        },
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}
+class C {
+    get a() {
+        if (Math.random() > 0.5) {
+            return 0;
+        }
+        // it should error here because it returns undefined
+    }
+    set a(value) {
+    }
+}

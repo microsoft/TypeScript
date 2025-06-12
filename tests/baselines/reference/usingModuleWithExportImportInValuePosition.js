@@ -25,13 +25,12 @@ var c: C.a.B.Id;
 var A;
 (function (A) {
     A.x = 'hello world';
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     A.Point = Point;
 })(A || (A = {}));
 var C;

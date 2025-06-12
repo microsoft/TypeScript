@@ -76,150 +76,58 @@ export class CC extends Y {
 "use strict";
 // Pretty much all of this should be an error, (since index signatures and generics are forbidden in js),
 // but we should be able to synthesize declarations from the symbols regardless
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CC = exports.BB = exports.AA = exports.Z = exports.Y = exports.X = exports.W = exports.V = exports.U = exports.T = exports.S = exports.R = exports.Q = exports.P = exports.O = exports.N = exports.M = void 0;
-var M = /** @class */ (function () {
-    function M() {
-    }
-    return M;
-}());
+class M {
+}
 exports.M = M;
-var N = /** @class */ (function (_super) {
-    __extends(N, _super);
-    function N() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return N;
-}(M));
+class N extends M {
+}
 exports.N = N;
-var O = /** @class */ (function () {
-    function O() {
-    }
-    return O;
-}());
+class O {
+}
 exports.O = O;
-var P = /** @class */ (function (_super) {
-    __extends(P, _super);
-    function P() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return P;
-}(O));
+class P extends O {
+}
 exports.P = P;
-var Q = /** @class */ (function (_super) {
-    __extends(Q, _super);
-    function Q() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Q;
-}(O));
+class Q extends O {
+}
 exports.Q = Q;
-var R = /** @class */ (function (_super) {
-    __extends(R, _super);
-    function R() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return R;
-}(O));
+class R extends O {
+}
 exports.R = R;
-var S = /** @class */ (function (_super) {
-    __extends(S, _super);
-    function S() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return S;
-}(O));
+class S extends O {
+}
 exports.S = S;
-var T = /** @class */ (function () {
-    function T() {
-    }
-    return T;
-}());
+class T {
+}
 exports.T = T;
-var U = /** @class */ (function (_super) {
-    __extends(U, _super);
-    function U() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return U;
-}(T));
+class U extends T {
+}
 exports.U = U;
-var V = /** @class */ (function (_super) {
-    __extends(V, _super);
-    function V() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return V;
-}(T));
+class V extends T {
+}
 exports.V = V;
-var W = /** @class */ (function (_super) {
-    __extends(W, _super);
-    function W() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return W;
-}(T));
+class W extends T {
+}
 exports.W = W;
-var X = /** @class */ (function (_super) {
-    __extends(X, _super);
-    function X() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return X;
-}(T));
+class X extends T {
+}
 exports.X = X;
-var Y = /** @class */ (function () {
-    function Y() {
-    }
-    return Y;
-}());
+class Y {
+}
 exports.Y = Y;
-var Z = /** @class */ (function (_super) {
-    __extends(Z, _super);
-    function Z() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Z;
-}(Y));
+class Z extends Y {
+}
 exports.Z = Z;
-var AA = /** @class */ (function (_super) {
-    __extends(AA, _super);
-    function AA() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return AA;
-}(Y));
+class AA extends Y {
+}
 exports.AA = AA;
-var BB = /** @class */ (function (_super) {
-    __extends(BB, _super);
-    function BB() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return BB;
-}(Y));
+class BB extends Y {
+}
 exports.BB = BB;
-var CC = /** @class */ (function (_super) {
-    __extends(CC, _super);
-    function CC() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return CC;
-}(Y));
+class CC extends Y {
+}
 exports.CC = CC;
 
 

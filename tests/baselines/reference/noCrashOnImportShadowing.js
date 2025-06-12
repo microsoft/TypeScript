@@ -37,14 +37,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 var B = require("./b");
 exports.B = B;
-var x = { x: "" };
+const x = { x: "" };
 B.zzz;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-var x = { x: "" };
+const x = { x: "" };
 a_1.B.zzz;
 var OriginalB = require("./b");
 OriginalB.zzz;
-var y = x;
+const y = x;

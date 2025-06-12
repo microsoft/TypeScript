@@ -217,11 +217,11 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var Binder = /** @class */ (function () {
-        function Binder(checker) {
+    class Binder {
+        constructor(checker) {
             this.checker = checker;
         }
-        Binder.prototype.resolveBaseTypeLinks = function (typeLinks, scope) {
+        resolveBaseTypeLinks(typeLinks, scope) {
             var extendsList = null;
             if (typeLinks) {
                 extendsList = new Type[];
@@ -239,8 +239,8 @@ var TypeScript;
                 }
             }
             return extendsList;
-        };
-        Binder.prototype.resolveBases = function (scope, type) {
+        }
+        resolveBases(scope, type) {
             type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
             var i = 0, len = type.extendsList.length;
             var derivedIsClass = type.isClassInstance();
@@ -270,8 +270,8 @@ var TypeScript;
                     }
                 }
             }
-        };
-        Binder.prototype.resolveSignatureGroup = function (signatureGroup, scope, instanceType) {
+        }
+        resolveSignatureGroup(signatureGroup, scope, instanceType) {
             var supplyVar = !(signatureGroup.hasImplementation);
             for (var i = 0, len = signatureGroup.signatures.length; i < len; i++) {
                 var signature = signatureGroup.signatures[i];
@@ -295,8 +295,8 @@ var TypeScript;
                     }
                 }
             }
-        };
-        Binder.prototype.bindType = function (scope, type, instanceType) {
+        }
+        bindType(scope, type, instanceType) {
             if (instanceType) {
                 this.bindType(scope, instanceType, null);
             }
@@ -345,8 +345,8 @@ var TypeScript;
             if (type.elementType) {
                 this.bindType(scope, type.elementType, null);
             }
-        };
-        Binder.prototype.bindSymbol = function (scope, symbol) {
+        }
+        bindSymbol(scope, symbol) {
             if (!symbol.bound) {
                 var prevLocationInfo = this.checker.locationInfo;
                 if ((this.checker.units) && (symbol.unitIndex >= 0) && (symbol.unitIndex < this.checker.units.length)) {
@@ -366,7 +366,7 @@ var TypeScript;
                         // context of a given module  (E.g., an outer import statement)
                         if (typeSymbol.aliasLink && !typeSymbol.type && typeSymbol.aliasLink.alias.nodeType == NodeType.Name) {
                             var modPath = typeSymbol.aliasLink.alias.text;
-                            var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, function (id) { return scope.find(id, false, true); });
+                            var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, (id) => scope.find(id, false, true));
                             if (modSym) {
                                 typeSymbol.type = modSym.getType();
                             }
@@ -391,13 +391,12 @@ var TypeScript;
                 this.checker.locationInfo = prevLocationInfo;
             }
             symbol.bound = true;
-        };
-        Binder.prototype.bind = function (scope, table) {
-            table.map(function (key, sym, binder) {
+        }
+        bind(scope, table) {
+            table.map((key, sym, binder) => {
                 binder.bindSymbol(scope, sym);
             }, this);
-        };
-        return Binder;
-    }());
+        }
+    }
     TypeScript.Binder = Binder;
 })(TypeScript || (TypeScript = {}));

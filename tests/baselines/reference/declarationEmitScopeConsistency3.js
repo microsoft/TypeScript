@@ -11,9 +11,9 @@ export const g = (v: "outer") => {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.g = void 0;
-var g = function (v) {
-    var f = function (v) { return function () { return null; }; };
-    var r = f(null);
+const g = (v) => {
+    const f = (v) => () => null;
+    const r = f(null);
     return r;
 };
 exports.g = g;

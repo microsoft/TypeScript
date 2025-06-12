@@ -9,8 +9,8 @@ while (1) {
 
 
 //// [noImplicitAnyLoopCrash.js]
-var foo = function () { };
-var bar;
+let foo = () => { };
+let bar;
 while (1) {
-    bar = ~foo.apply(void 0, bar);
+    bar = ~foo(...bar);
 }

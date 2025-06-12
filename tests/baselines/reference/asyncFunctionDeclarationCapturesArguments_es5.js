@@ -12,24 +12,14 @@ class C {
 
 
 //// [asyncFunctionDeclarationCapturesArguments_es5.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.method = function () {
+class C {
+    method() {
         function other() { }
         function fn() {
             var arguments_1 = arguments;
-            return __awaiter(this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, other.apply(this, arguments_1)];
-                        case 1:
-                            _a.sent();
-                            return [2 /*return*/];
-                    }
-                });
+            return __awaiter(this, void 0, void 0, function* () {
+                yield other.apply(this, arguments_1);
             });
         }
-    };
-    return C;
-}());
+    }
+}

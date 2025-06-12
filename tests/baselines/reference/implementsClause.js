@@ -24,13 +24,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class D {
+}

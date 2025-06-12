@@ -11,17 +11,12 @@ var v = {
 }
 
 //// [computedPropertyNamesSourceMap2_ES5.js]
-var _a;
-var v = (_a = {},
-    _a["hello"] = function () {
+var v = {
+    ["hello"]() {
         debugger;
     },
-    Object.defineProperty(_a, "goodbye", {
-        get: function () {
-            return 0;
-        },
-        enumerable: false,
-        configurable: true
-    }),
-    _a);
+    get ["goodbye"]() {
+        return 0;
+    }
+};
 //# sourceMappingURL=computedPropertyNamesSourceMap2_ES5.js.map

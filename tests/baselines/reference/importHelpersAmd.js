@@ -24,11 +24,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     exports.A = A;
 });
 //// [b.js]
@@ -37,12 +34,7 @@ define(["require", "exports", "tslib", "./a", "./a"], function (require, exports
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
     tslib_1.__exportStar(a_2, exports);
-    var B = /** @class */ (function (_super) {
-        tslib_1.__extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(a_1.A));
+    class B extends a_1.A {
+    }
     exports.B = B;
 });

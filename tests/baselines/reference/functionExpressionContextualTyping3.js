@@ -7,4 +7,4 @@ f((a: any) => "")
 
 
 //// [functionExpressionContextualTyping3.js]
-f(function (a) { return ""; });
+f((a) => "");

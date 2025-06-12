@@ -21,7 +21,7 @@ module.exports = {x, b}
 /**
  * const doc comment
  */
-var x = function (a) {
+const x = (a) => {
     return '';
 };
 /**
@@ -30,7 +30,7 @@ var x = function (a) {
 function b() {
     return 0;
 }
-module.exports = { x: x, b: b };
+module.exports = { x, b };
 
 
 //// [index1.d.ts]

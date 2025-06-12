@@ -304,8 +304,8 @@ function func2(inst) {
     }
 }
 // Repro from #29106
-var f = function (_a, _b) { };
-var u = {};
+const f = (_a, _b) => { };
+const u = {};
 u.a && u.b && f(u.a, u.b);
 u.b && u.a && f(u.a, u.b);
 function foo(obj) {
@@ -333,19 +333,19 @@ function func3(value) {
 }
 function WorksProperly(data) {
     if (data.Name === "TypeA") {
-        var value1 = data.Value1;
+        const value1 = data.Value1;
     }
 }
 function DoesNotWork(data) {
     if (isType(data)) {
         if (data.Name === "TypeA") {
-            var value1 = data.Value1;
+            const value1 = data.Value1;
         }
     }
 }
-var doTestingStuff = function (mapOfTests, ids) {
-    ids.forEach(function (id) {
-        var test;
+const doTestingStuff = (mapOfTests, ids) => {
+    ids.forEach(id => {
+        let test;
         test = mapOfTests[id];
         if (test.type === 'testA') {
             console.log(test.bananas);

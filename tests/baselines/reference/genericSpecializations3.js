@@ -40,34 +40,22 @@ var stringFoo3: StringFoo3;
 //// [genericSpecializations3.js]
 var iFoo;
 iFoo.foo(1);
-var IntFooBad = /** @class */ (function () {
-    function IntFooBad() {
-    }
-    IntFooBad.prototype.foo = function (x) { return null; };
-    return IntFooBad;
-}());
+class IntFooBad {
+    foo(x) { return null; }
+}
 var intFooBad;
-var IntFoo = /** @class */ (function () {
-    function IntFoo() {
-    }
-    IntFoo.prototype.foo = function (x) { return null; };
-    return IntFoo;
-}());
+class IntFoo {
+    foo(x) { return null; }
+}
 var intFoo;
-var StringFoo2 = /** @class */ (function () {
-    function StringFoo2() {
-    }
-    StringFoo2.prototype.foo = function (x) { return null; };
-    return StringFoo2;
-}());
+class StringFoo2 {
+    foo(x) { return null; }
+}
 var stringFoo2;
 stringFoo2.foo("hm");
 intFoo = stringFoo2; // error
 stringFoo2 = intFoo; // error
-var StringFoo3 = /** @class */ (function () {
-    function StringFoo3() {
-    }
-    StringFoo3.prototype.foo = function (x) { return null; };
-    return StringFoo3;
-}());
+class StringFoo3 {
+    foo(x) { return null; }
+}
 var stringFoo3;

@@ -20,7 +20,7 @@ var x: A.B = null;
 //// [interMixingModulesInterfaces2.js]
 var A;
 (function (A) {
-    var B;
+    let B;
     (function (B) {
         function createB() {
             return null;

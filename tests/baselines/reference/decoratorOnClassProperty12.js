@@ -19,12 +19,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var A = /** @class */ (function () {
-    function A() {
+let A = (() => {
+    class A {
     }
     __decorate([
         dec(),
         __metadata("design:type", String)
     ], A.prototype, "foo", void 0);
     return A;
-}());
+})();

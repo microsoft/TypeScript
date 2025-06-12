@@ -16,7 +16,7 @@ let shape: Shape = {
 
 
 //// [discriminatedUnionErrorMessage.js]
-var shape = {
+let shape = {
     kind: "sq",
     x: 12,
     y: 13,

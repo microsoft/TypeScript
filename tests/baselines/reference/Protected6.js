@@ -6,9 +6,6 @@ class C {
 }
 
 //// [Protected6.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.m = function () { };
-    return C;
-}());
+class C {
+    static m() { }
+}

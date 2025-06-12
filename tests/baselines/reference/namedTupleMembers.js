@@ -102,9 +102,7 @@ exports.func = null;
 function useState(initial) {
     return null;
 }
-function readSegment(_a) {
-    var length = _a[0], count = _a[1];
-}
+function readSegment([length, count]) { }
 // documenting binding pattern behavior (currently does _not_ generate tuple names)
 exports.val = null;
 q = r;
@@ -112,7 +110,7 @@ r = q;
 x = y;
 y = x;
 exports.argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tuple with captures arguments as first member
-exports.argumentsOfG = f.apply(void 0, getArgsForInjection(g)); // captured arguments list re-spread
+exports.argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
 
 
 //// [namedTupleMembers.d.ts]

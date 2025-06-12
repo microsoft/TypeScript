@@ -41,11 +41,11 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/f1.js]
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
-var y = 1;
+let y = 1;
 
 
 
@@ -127,8 +127,8 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/out.js]
-var x = 1;
-var y = 1;
+let x = 1;
+let y = 1;
 
 
 

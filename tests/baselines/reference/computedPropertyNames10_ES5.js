@@ -19,20 +19,19 @@ var v = {
 }
 
 //// [computedPropertyNames10_ES5.js]
-var _a;
 var s;
 var n;
 var a;
-var v = (_a = {},
-    _a[s] = function () { },
-    _a[n] = function () { },
-    _a[s + s] = function () { },
-    _a[s + n] = function () { },
-    _a[+s] = function () { },
-    _a[""] = function () { },
-    _a[0] = function () { },
-    _a[a] = function () { },
-    _a[true] = function () { },
-    _a["hello bye"] = function () { },
-    _a["hello ".concat(a, " bye")] = function () { },
-    _a);
+var v = {
+    [s]() { },
+    [n]() { },
+    [s + s]() { },
+    [s + n]() { },
+    [+s]() { },
+    [""]() { },
+    [0]() { },
+    [a]() { },
+    [true]() { },
+    [`hello bye`]() { },
+    [`hello ${a} bye`]() { }
+};

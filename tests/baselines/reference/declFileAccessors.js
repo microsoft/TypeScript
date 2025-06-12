@@ -105,169 +105,99 @@ class c2 {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c1 = void 0;
 /** This is comment for c1*/
-var c1 = /** @class */ (function () {
-    function c1() {
+class c1 {
+    /** getter property*/
+    get p3() {
+        return 10;
     }
-    Object.defineProperty(c1.prototype, "p3", {
-        /** getter property*/
-        get: function () {
-            return 10;
-        },
-        /** setter property*/
-        set: function (/** this is value*/ value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c1.prototype, "pp3", {
-        /** private getter property*/
-        get: function () {
-            return 10;
-        },
-        /** private setter property*/
-        set: function (/** this is value*/ value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c1, "s3", {
-        /** static getter property*/
-        get: function () {
-            return 10;
-        },
-        /** setter property*/
-        set: function (/** this is value*/ value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c1.prototype, "nc_p3", {
-        get: function () {
-            return 10;
-        },
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c1.prototype, "nc_pp3", {
-        get: function () {
-            return 10;
-        },
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c1, "nc_s3", {
-        get: function () {
-            return "";
-        },
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c1.prototype, "onlyGetter", {
-        // Only getter property
-        get: function () {
-            return 10;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c1.prototype, "onlySetter", {
-        // Only setter property
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return c1;
-}());
+    /** setter property*/
+    set p3(/** this is value*/ value) {
+    }
+    /** private getter property*/
+    get pp3() {
+        return 10;
+    }
+    /** private setter property*/
+    set pp3(/** this is value*/ value) {
+    }
+    /** static getter property*/
+    static get s3() {
+        return 10;
+    }
+    /** setter property*/
+    static set s3(/** this is value*/ value) {
+    }
+    get nc_p3() {
+        return 10;
+    }
+    set nc_p3(value) {
+    }
+    get nc_pp3() {
+        return 10;
+    }
+    set nc_pp3(value) {
+    }
+    static get nc_s3() {
+        return "";
+    }
+    static set nc_s3(value) {
+    }
+    // Only getter property
+    get onlyGetter() {
+        return 10;
+    }
+    // Only setter property
+    set onlySetter(value) {
+    }
+}
 exports.c1 = c1;
 //// [declFileAccessors_1.js]
 /** This is comment for c2 - the global class*/
-var c2 = /** @class */ (function () {
-    function c2() {
+class c2 {
+    /** getter property*/
+    get p3() {
+        return 10;
     }
-    Object.defineProperty(c2.prototype, "p3", {
-        /** getter property*/
-        get: function () {
-            return 10;
-        },
-        /** setter property*/
-        set: function (/** this is value*/ value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c2.prototype, "pp3", {
-        /** private getter property*/
-        get: function () {
-            return 10;
-        },
-        /** private setter property*/
-        set: function (/** this is value*/ value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c2, "s3", {
-        /** static getter property*/
-        get: function () {
-            return 10;
-        },
-        /** setter property*/
-        set: function (/** this is value*/ value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c2.prototype, "nc_p3", {
-        get: function () {
-            return 10;
-        },
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c2.prototype, "nc_pp3", {
-        get: function () {
-            return 10;
-        },
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c2, "nc_s3", {
-        get: function () {
-            return "";
-        },
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c2.prototype, "onlyGetter", {
-        // Only getter property
-        get: function () {
-            return 10;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(c2.prototype, "onlySetter", {
-        // Only setter property
-        set: function (value) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return c2;
-}());
+    /** setter property*/
+    set p3(/** this is value*/ value) {
+    }
+    /** private getter property*/
+    get pp3() {
+        return 10;
+    }
+    /** private setter property*/
+    set pp3(/** this is value*/ value) {
+    }
+    /** static getter property*/
+    static get s3() {
+        return 10;
+    }
+    /** setter property*/
+    static set s3(/** this is value*/ value) {
+    }
+    get nc_p3() {
+        return 10;
+    }
+    set nc_p3(value) {
+    }
+    get nc_pp3() {
+        return 10;
+    }
+    set nc_pp3(value) {
+    }
+    static get nc_s3() {
+        return "";
+    }
+    static set nc_s3(value) {
+    }
+    // Only getter property
+    get onlyGetter() {
+        return 10;
+    }
+    // Only setter property
+    set onlySetter(value) {
+    }
+}
 
 
 //// [declFileAccessors_0.d.ts]

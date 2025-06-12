@@ -35,7 +35,6 @@ function Component(props) {
     // Error extra property
     <AnotherComponent {...props} Property1/>);
 }
-function AnotherComponent(_a) {
-    var property1 = _a.property1;
+function AnotherComponent({ property1 }) {
     return (<span>{property1}</span>);
 }

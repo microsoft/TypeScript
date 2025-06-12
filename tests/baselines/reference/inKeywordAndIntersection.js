@@ -34,18 +34,16 @@ if (instance instanceof ClassOne) {
 
 //// [inKeywordAndIntersection.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.a = 0;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+}
+class B {
+    constructor() {
         this.b = 0;
     }
-    return B;
-}());
+}
 function f10(obj) {
     if (obj instanceof Object) {
         obj; // A & { x: string } | B
@@ -54,8 +52,8 @@ function f10(obj) {
         obj; // Error
     }
 }
-var instance = {};
-var ClassOne = {};
+const instance = {};
+const ClassOne = {};
 if (instance instanceof ClassOne) {
     instance.one();
 }

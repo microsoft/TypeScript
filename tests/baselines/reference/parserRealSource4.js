@@ -303,8 +303,8 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var BlockIntrinsics = /** @class */ (function () {
-        function BlockIntrinsics() {
+    class BlockIntrinsics {
+        constructor() {
             this.prototype = undefined;
             this.toString = undefined;
             this.toLocaleString = undefined;
@@ -315,15 +315,14 @@ var TypeScript;
             // initialize the 'constructor' field
             this["constructor"] = undefined;
         }
-        return BlockIntrinsics;
-    }());
+    }
     TypeScript.BlockIntrinsics = BlockIntrinsics;
-    var StringHashTable = /** @class */ (function () {
-        function StringHashTable() {
+    class StringHashTable {
+        constructor() {
             this.itemCount = 0;
             this.table = new BlockIntrinsics();
         }
-        StringHashTable.prototype.getAllKeys = function () {
+        getAllKeys() {
             var result = [];
             for (var k in this.table) {
                 if (this.table[k] != undefined) {
@@ -331,16 +330,16 @@ var TypeScript;
                 }
             }
             return result;
-        };
-        StringHashTable.prototype.add = function (key, data) {
+        }
+        add(key, data) {
             if (this.table[key] != undefined) {
                 return false;
             }
             this.table[key] = data;
             this.itemCount++;
             return true;
-        };
-        StringHashTable.prototype.addOrUpdate = function (key, data) {
+        }
+        addOrUpdate(key, data) {
             if (this.table[key] != undefined) {
                 this.table[key] = data;
                 return false;
@@ -348,16 +347,16 @@ var TypeScript;
             this.table[key] = data;
             this.itemCount++;
             return true;
-        };
-        StringHashTable.prototype.map = function (fn, context) {
+        }
+        map(fn, context) {
             for (var k in this.table) {
                 var data = this.table[k];
                 if (data != undefined) {
                     fn(k, this.table[k], context);
                 }
             }
-        };
-        StringHashTable.prototype.every = function (fn, context) {
+        }
+        every(fn, context) {
             for (var k in this.table) {
                 var data = this.table[k];
                 if (data != undefined) {
@@ -367,8 +366,8 @@ var TypeScript;
                 }
             }
             return true;
-        };
-        StringHashTable.prototype.some = function (fn, context) {
+        }
+        some(fn, context) {
             for (var k in this.table) {
                 var data = this.table[k];
                 if (data != undefined) {
@@ -378,9 +377,9 @@ var TypeScript;
                 }
             }
             return false;
-        };
-        StringHashTable.prototype.count = function () { return this.itemCount; };
-        StringHashTable.prototype.lookup = function (key) {
+        }
+        count() { return this.itemCount; }
+        lookup(key) {
             var data = this.table[key];
             if (data != undefined) {
                 return data;
@@ -388,52 +387,51 @@ var TypeScript;
             else {
                 return (null);
             }
-        };
-        return StringHashTable;
-    }());
+        }
+    }
     TypeScript.StringHashTable = StringHashTable;
     // The resident table is expected to reference the same table object, whereas the 
     // transientTable may reference different objects over time
     // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
-    var DualStringHashTable = /** @class */ (function () {
-        function DualStringHashTable(primaryTable, secondaryTable) {
+    class DualStringHashTable {
+        constructor(primaryTable, secondaryTable) {
             this.primaryTable = primaryTable;
             this.secondaryTable = secondaryTable;
             this.insertPrimary = true;
         }
-        DualStringHashTable.prototype.getAllKeys = function () {
+        getAllKeys() {
             return this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys());
-        };
-        DualStringHashTable.prototype.add = function (key, data) {
+        }
+        add(key, data) {
             if (this.insertPrimary) {
                 return this.primaryTable.add(key, data);
             }
             else {
                 return this.secondaryTable.add(key, data);
             }
-        };
-        DualStringHashTable.prototype.addOrUpdate = function (key, data) {
+        }
+        addOrUpdate(key, data) {
             if (this.insertPrimary) {
                 return this.primaryTable.addOrUpdate(key, data);
             }
             else {
                 return this.secondaryTable.addOrUpdate(key, data);
             }
-        };
-        DualStringHashTable.prototype.map = function (fn, context) {
+        }
+        map(fn, context) {
             this.primaryTable.map(fn, context);
             this.secondaryTable.map(fn, context);
-        };
-        DualStringHashTable.prototype.every = function (fn, context) {
+        }
+        every(fn, context) {
             return this.primaryTable.every(fn, context) && this.secondaryTable.every(fn, context);
-        };
-        DualStringHashTable.prototype.some = function (fn, context) {
+        }
+        some(fn, context) {
             return this.primaryTable.some(fn, context) || this.secondaryTable.some(fn, context);
-        };
-        DualStringHashTable.prototype.count = function () {
+        }
+        count() {
             return this.primaryTable.count() + this.secondaryTable.count();
-        };
-        DualStringHashTable.prototype.lookup = function (key) {
+        }
+        lookup(key) {
             var data = this.primaryTable.lookup(key);
             if (data != undefined) {
                 return data;
@@ -441,9 +439,8 @@ var TypeScript;
             else {
                 return this.secondaryTable.lookup(key);
             }
-        };
-        return DualStringHashTable;
-    }());
+        }
+    }
     TypeScript.DualStringHashTable = DualStringHashTable;
     function numberHashFn(key) {
         var c2 = 0x27d4eb2d; // a prime or an odd constant
@@ -459,16 +456,15 @@ var TypeScript;
         return key2 ^ ((key1 >> 5) + key1);
     }
     TypeScript.combineHashes = combineHashes;
-    var HashEntry = /** @class */ (function () {
-        function HashEntry(key, data) {
+    class HashEntry {
+        constructor(key, data) {
             this.key = key;
             this.data = data;
         }
-        return HashEntry;
-    }());
+    }
     TypeScript.HashEntry = HashEntry;
-    var HashTable = /** @class */ (function () {
-        function HashTable(size, hashFn, equalsFn) {
+    class HashTable {
+        constructor(size, hashFn, equalsFn) {
             this.size = size;
             this.hashFn = hashFn;
             this.equalsFn = equalsFn;
@@ -478,7 +474,7 @@ var TypeScript;
                 this.table[i] = null;
             }
         }
-        HashTable.prototype.add = function (key, data) {
+        add(key, data) {
             var current;
             var entry = new HashEntry(key, data);
             var val = this.hashFn(key);
@@ -492,8 +488,8 @@ var TypeScript;
             this.table[val] = entry;
             this.itemCount++;
             return true;
-        };
-        HashTable.prototype.remove = function (key) {
+        }
+        remove(key) {
             var current;
             var val = this.hashFn(key);
             val = val % this.size;
@@ -514,9 +510,9 @@ var TypeScript;
                 prevEntry = current;
             }
             return result;
-        };
-        HashTable.prototype.count = function () { return this.itemCount; };
-        HashTable.prototype.lookup = function (key) {
+        }
+        count() { return this.itemCount; }
+        lookup(key) {
             var current;
             var val = this.hashFn(key);
             val = val % this.size;
@@ -526,17 +522,16 @@ var TypeScript;
                 }
             }
             return (null);
-        };
-        return HashTable;
-    }());
+        }
+    }
     TypeScript.HashTable = HashTable;
     // Simple Hash table with list of keys and values matching each other at the given index
-    var SimpleHashTable = /** @class */ (function () {
-        function SimpleHashTable() {
+    class SimpleHashTable {
+        constructor() {
             this.keys = [];
             this.values = [];
         }
-        SimpleHashTable.prototype.lookup = function (key, findValue) {
+        lookup(key, findValue) {
             var searchArray = this.keys;
             if (findValue) {
                 searchArray = this.values;
@@ -550,8 +545,8 @@ var TypeScript;
                 }
             }
             return null;
-        };
-        SimpleHashTable.prototype.add = function (key, data) {
+        }
+        add(key, data) {
             var lookupData = this.lookup(key);
             if (lookupData) {
                 return false;
@@ -559,8 +554,7 @@ var TypeScript;
             this.keys[this.keys.length] = key;
             this.values[this.values.length] = data;
             return true;
-        };
-        return SimpleHashTable;
-    }());
+        }
+    }
     TypeScript.SimpleHashTable = SimpleHashTable;
 })(TypeScript || (TypeScript = {}));

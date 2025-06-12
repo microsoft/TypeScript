@@ -7,8 +7,7 @@ class C {
 }
 
 //// [parserParameterList6.js]
-var C = /** @class */ (function () {
-    function C(C) {
+class C {
+    constructor(C) {
     }
-    return C;
-}());
+}

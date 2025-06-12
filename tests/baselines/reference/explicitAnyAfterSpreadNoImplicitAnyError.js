@@ -18,4 +18,4 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 (__assign({ a: [] }, null));
-var x;
+let x;

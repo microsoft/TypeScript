@@ -4,9 +4,8 @@
 class foo { public bar:{id:number;} = {id:5}; }
 
 //// [contextualTyping3.js]
-var foo = /** @class */ (function () {
-    function foo() {
+class foo {
+    constructor() {
         this.bar = { id: 5 };
     }
-    return foo;
-}());
+}

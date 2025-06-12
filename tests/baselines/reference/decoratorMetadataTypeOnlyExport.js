@@ -18,11 +18,8 @@ class Bar {
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 //// [b.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -35,13 +32,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var Decorator = function () { return undefined; };
-var Bar = /** @class */ (function () {
-    function Bar(par) {
-    }
+const Decorator = () => undefined;
+let Bar = (() => {
+    let Bar = class Bar {
+        constructor(par) { }
+    };
     Bar = __decorate([
         Decorator,
         __metadata("design:paramtypes", [Function])
     ], Bar);
     return Bar;
-}());
+})();

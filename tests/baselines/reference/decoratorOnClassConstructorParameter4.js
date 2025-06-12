@@ -17,11 +17,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var C = /** @class */ (function () {
-    function C(public, p) {
-    }
+let C = (() => {
+    let C = class C {
+        constructor(public, p) { }
+    };
     C = __decorate([
         __param(1, dec)
     ], C);
     return C;
-}());
+})();

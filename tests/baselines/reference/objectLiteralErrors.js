@@ -70,7 +70,7 @@ var e11 = { 1.0: 0, '1': 0 };
 var e12 = { 0: 0, 0: 0 };
 var e13 = { 0: 0, 0: 0 };
 var e14 = { 0: 0, 0x0: 0 };
-var e14 = { 0: 0, 0: 0 };
+var e14 = { 0: 0, 0o0: 0 };
 var e15 = { "100": 0, 1e2: 0 };
 var e16 = { 0x20: 0, 3.2e1: 0 };
 var e17 = { a: 0, b: 1, a: 0 };
@@ -99,7 +99,7 @@ var g2 = { get a() { return 4; }, set a(n) { } };
 var g3 = { get a() { return undefined; }, set a(n) { } };
 // did you mean colon errors
 var h1 = {
-    x: x,
-    y: y,
+    x = 1,
+    y = 2,
     : 3
 };

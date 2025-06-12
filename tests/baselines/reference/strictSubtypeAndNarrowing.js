@@ -236,17 +236,17 @@ const f = (value: Union) => {
 //// [strictSubtypeAndNarrowing.js]
 "use strict";
 // Check that `any` is a strict supertype of `unknown`
-var a11 = [x11, x12];
-var a12 = [x12, x11];
-var a21 = [x22, x21];
-var a22 = [x21, x22];
+const a11 = [x11, x12];
+const a12 = [x12, x11];
+const a21 = [x22, x21];
+const a22 = [x21, x22];
 // Strict subtype doesn't infer index signatures in non-fresh object types
-var x31 = { a: 1 };
-var a31 = [x31, x32];
-var a32 = [x32, x31];
-var x42 = { a: 1 };
-var a41 = [x42, x41];
-var a42 = [x41, x42];
+const x31 = { a: 1 };
+const a31 = [x31, x32];
+const a32 = [x32, x31];
+const x42 = { a: 1 };
+const a41 = [x42, x41];
+const a42 = [x41, x42];
 function fx1(f) {
     if (isFunction(f)) {
         f; // () => void
@@ -325,7 +325,7 @@ function fx10(obj1, obj2) {
     obj2 = obj1 = { x: 1, y: 2 };
 }
 function fx11() {
-    var obj;
+    let obj;
     return obj = { x: 1, y: 2 };
 }
 function ff1(value) {
@@ -363,7 +363,7 @@ function test2(foo) {
     assert(!doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB));
     return foo;
 }
-var f = function (value) {
+const f = (value) => {
     if (!checkIsPremium(value)) {
         value.premium;
     }

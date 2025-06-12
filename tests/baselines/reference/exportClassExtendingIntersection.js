@@ -39,76 +39,34 @@ const AnotherMixedClass = MyMixin(MyExtendedClass);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyBaseClass = void 0;
-var MyBaseClass = /** @class */ (function () {
-    function MyBaseClass(value) {
-    }
-    return MyBaseClass;
-}());
+class MyBaseClass {
+    constructor(value) { }
+}
 exports.MyBaseClass = MyBaseClass;
 //// [MixinClass.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyMixin = MyMixin;
 function MyMixin(base) {
-    return /** @class */ (function (_super) {
-        __extends(class_1, _super);
-        function class_1() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return class_1;
-    }(base));
+    return class extends base {
+    };
 }
 //// [FinalClass.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyExtendedClass = void 0;
 var BaseClass_1 = require("./BaseClass");
 var MixinClass_1 = require("./MixinClass");
-var MyExtendedClass = /** @class */ (function (_super) {
-    __extends(MyExtendedClass, _super);
-    function MyExtendedClass() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return MyExtendedClass;
-}((0, MixinClass_1.MyMixin)(BaseClass_1.MyBaseClass)));
+class MyExtendedClass extends (0, MixinClass_1.MyMixin)(BaseClass_1.MyBaseClass) {
+}
 exports.MyExtendedClass = MyExtendedClass;
 //// [Main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var FinalClass_1 = require("./FinalClass");
 var MixinClass_1 = require("./MixinClass");
-var myExtendedClass = new FinalClass_1.MyExtendedClass('string');
-var AnotherMixedClass = (0, MixinClass_1.MyMixin)(FinalClass_1.MyExtendedClass);
+const myExtendedClass = new FinalClass_1.MyExtendedClass('string');
+const AnotherMixedClass = (0, MixinClass_1.MyMixin)(FinalClass_1.MyExtendedClass);
 
 
 //// [BaseClass.d.ts]

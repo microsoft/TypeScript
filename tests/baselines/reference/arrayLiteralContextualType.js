@@ -32,20 +32,18 @@ foo(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 bar(arr); // ok because arr is Array<Giraffe|Elephant> not {}[]
 
 //// [arrayLiteralContextualType.js]
-var Giraffe = /** @class */ (function () {
-    function Giraffe() {
+class Giraffe {
+    constructor() {
         this.name = "Giraffe";
         this.neckLength = "3m";
     }
-    return Giraffe;
-}());
-var Elephant = /** @class */ (function () {
-    function Elephant() {
+}
+class Elephant {
+    constructor() {
         this.name = "Elephant";
         this.trunkDiameter = "20cm";
     }
-    return Elephant;
-}());
+}
 function foo(animals) { }
 function bar(animals) { }
 foo([

@@ -117,17 +117,14 @@ __exportStar(require("./tools/public"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Data = void 0;
-var Data = /** @class */ (function () {
-    function Data() {
-    }
-    Data.prototype.test = function () {
-        var result = {
+class Data {
+    test() {
+        const result = {
             title: "title"
         };
         return result;
-    };
-    return Data;
-}());
+    }
+}
 exports.Data = Data;
 
 
@@ -156,12 +153,11 @@ __exportStar(require("./data"), exports);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var public_1 = require("lib2/public");
-var App = /** @class */ (function () {
-    function App() {
+class App {
+    constructor() {
         new public_1.Data().test();
     }
-    return App;
-}());
+}
 exports.App = App;
 
 

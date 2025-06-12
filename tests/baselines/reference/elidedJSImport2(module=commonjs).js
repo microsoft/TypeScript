@@ -70,24 +70,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var other_js_1 = require("./other.js");
 var other = __importStar(require("./other.js"));
 var other_js_2 = __importDefault(require("./other.js"));
-var x = new other_js_1.Foo();
-var y = other.Foo();
-var z = new other_js_2.default();
+const x = new other_js_1.Foo();
+const y = other.Foo();
+const z = new other_js_2.default();
 //// [other.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.bar = 2.4;
     }
-    return Foo;
-}());
+}
 exports.Foo = Foo;
-var Bar = /** @class */ (function () {
-    function Bar() {
+class Bar {
+    constructor() {
         this.foo = 1.2;
     }
-    return Bar;
-}());
+}
 exports.default = Bar;

@@ -27,11 +27,9 @@ var sas;
 (function (sas) {
     var tools;
     (function (tools) {
-        var Test = /** @class */ (function () {
-            function Test() {
-            }
-            Test.prototype.doX = function () {
-                var f = 2;
+        class Test {
+            doX() {
+                let f = 2;
                 switch (f) {
                     case 1:
                         break;
@@ -43,9 +41,8 @@ var sas;
                         //a comment
                         break;
                 }
-            };
-            return Test;
-        }());
+            }
+        }
         tools.Test = Test;
     })(tools = sas.tools || (sas.tools = {}));
 })(sas || (sas = {}));

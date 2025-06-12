@@ -905,33 +905,33 @@ _.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'da
 //// [underscoreTest1_underscore.js]
 //// [underscoreTest1_underscoreTests.js]
 /// <reference path="underscoreTest1_underscore.ts" />
-_.each([1, 2, 3], function (num) { return alert(num.toString()); });
-_.each({ one: 1, two: 2, three: 3 }, function (value, key) { return alert(value.toString()); });
-_.map([1, 2, 3], function (num) { return num * 3; });
-_.map({ one: 1, two: 2, three: 3 }, function (value, key) { return value * 3; });
-var sum = _.reduce([1, 2, 3], function (memo, num) { return memo + num; }, 0);
+_.each([1, 2, 3], (num) => alert(num.toString()));
+_.each({ one: 1, two: 2, three: 3 }, (value, key) => alert(value.toString()));
+_.map([1, 2, 3], (num) => num * 3);
+_.map({ one: 1, two: 2, three: 3 }, (value, key) => value * 3);
+var sum = _.reduce([1, 2, 3], (memo, num) => memo + num, 0);
 var list = [[0, 1], [2, 3], [4, 5]];
-var flat = _.reduceRight(list, function (a, b) { return a.concat(b); }, []);
-var even = _.find([1, 2, 3, 4, 5, 6], function (num) { return num % 2 == 0; });
-var evens = _.filter([1, 2, 3, 4, 5, 6], function (num) { return num % 2 == 0; });
+var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
+var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
+var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 var listOfPlays = [{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }];
 _.where(listOfPlays, { author: "Shakespeare", year: 1611 });
-var odds = _.reject([1, 2, 3, 4, 5, 6], function (num) { return num % 2 == 0; });
+var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
 _.all([true, 1, null, 'yes'], _.identity);
 _.any([null, 0, 'yes', false]);
 _.contains([1, 2, 3], 3);
 _.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
 var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
 _.pluck(stooges, 'name');
-_.max(stooges, function (stooge) { return stooge.age; });
+_.max(stooges, (stooge) => stooge.age);
 var numbers = [10, 5, 100, 2, 1000];
 _.min(numbers);
-_.sortBy([1, 2, 3, 4, 5, 6], function (num) { return Math.sin(num); });
+_.sortBy([1, 2, 3, 4, 5, 6], (num) => Math.sin(num));
 // not sure how this is typechecking at all.. Math.floor(e) is number not string..?
-_([1.3, 2.1, 2.4]).groupBy(function (e, i, list) { return Math.floor(e); });
-_.groupBy([1.3, 2.1, 2.4], function (num) { return Math.floor(num); });
+_([1.3, 2.1, 2.4]).groupBy((e, i, list) => Math.floor(e));
+_.groupBy([1.3, 2.1, 2.4], (num) => Math.floor(num));
 _.groupBy(['one', 'two', 'three'], 'length');
-_.countBy([1, 2, 3, 4, 5], function (num) { return num % 2 == 0 ? 'even' : 'odd'; });
+_.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
 _.shuffle([1, 2, 3, 4, 5, 6]);
 // (function(){ return _.toArray(arguments).slice(1); })(1, 2, 3, 4);
 _.size({ one: 1, two: 2, three: 3 });
@@ -978,30 +978,25 @@ $('#underscore_button').bind('click', buttonView.onClick);
 var fibonacci = _.memoize(function (n) {
     return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
 });
-var log = _.bind(function (message) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
-}, Date);
+var log = _.bind((message, ...rest) => { }, Date);
 _.delay(log, 1000, 'logged later');
 _.defer(function () { alert('deferred'); });
-var updatePosition = function () { return alert('updating position...'); };
+var updatePosition = () => alert('updating position...');
 var throttled = _.throttle(updatePosition, 100);
 $(null).scroll(throttled);
-var calculateLayout = function () { return alert('calculating layout...'); };
+var calculateLayout = () => alert('calculating layout...');
 var lazyLayout = _.debounce(calculateLayout, 300);
 $(null).resize(lazyLayout);
-var createApplication = function () { return alert('creating application...'); };
+var createApplication = () => alert('creating application...');
 var initialize = _.once(createApplication);
 initialize();
 initialize();
 var notes;
-var render = function () { return alert("rendering..."); };
+var render = () => alert("rendering...");
 var renderNotes = _.after(notes.length, render);
-_.each(notes, function (note) { return note.asyncSave({ success: renderNotes }); });
+_.each(notes, (note) => note.asyncSave({ success: renderNotes }));
 var hello = function (name) { return "hello: " + name; };
-hello = _.wrap(hello, function (func, arg) { return "before, " + func(arg) + ", after"; });
+hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"; });
 hello("moe");
 var greet = function (name) { return "hi: " + name; };
 var exclaim = function (statement) { return statement + "!"; };

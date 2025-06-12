@@ -41,5 +41,5 @@ observable_1.Observable.prototype.map = function () { };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./map");
-var x;
-var y = x.map(function (x) { return x + 1; });
+let x;
+let y = x.map(x => x + 1);

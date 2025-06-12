@@ -11,5 +11,5 @@ const a = f(<K extends string>(_: K) => _ => ({}));  // <K extends string>(_: K)
 //// [genericFunctionsNotContextSensitive.js]
 "use strict";
 // Repro from #37110
-var f = function (_) { return _; };
-var a = f(function (_) { return function (_) { return ({}); }; }); // <K extends string>(_: K) => <G>(_: G) => {}
+const f = (_) => _;
+const a = f((_) => _ => ({})); // <K extends string>(_: K) => <G>(_: G) => {}

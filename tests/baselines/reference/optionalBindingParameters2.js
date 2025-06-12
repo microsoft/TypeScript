@@ -10,8 +10,7 @@ foo({ x: "", y: 0, z: false });
 foo({ x: false, y: 0, z: "" });
 
 //// [optionalBindingParameters2.js]
-function foo(_a) {
-    var x = _a.x, y = _a.y, z = _a.z;
+function foo({ x, y, z }) {
 }
 foo({ x: "", y: 0, z: false });
 foo({ x: false, y: 0, z: "" });

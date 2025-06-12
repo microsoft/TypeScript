@@ -50,42 +50,31 @@ class C4 {
 
 
 //// [declarationFiles.js]
-var C1 = /** @class */ (function () {
-    function C1(x) {
-    }
-    C1.prototype.f = function (x) { return undefined; };
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
-var C4 = /** @class */ (function () {
-    function C4() {
-        var _this = this;
+class C1 {
+    f(x) { return undefined; }
+    constructor(x) { }
+}
+class C2 {
+}
+class C3 {
+}
+class C4 {
+    constructor() {
         this.x1 = { a: this };
         this.x2 = [this];
         this.x3 = [{ a: this }];
-        this.x4 = function () { return _this; };
+        this.x4 = () => this;
     }
-    C4.prototype.f1 = function () {
+    f1() {
         return { a: this };
-    };
-    C4.prototype.f2 = function () {
+    }
+    f2() {
         return [this];
-    };
-    C4.prototype.f3 = function () {
+    }
+    f3() {
         return [{ a: this }];
-    };
-    C4.prototype.f4 = function () {
-        var _this = this;
-        return function () { return _this; };
-    };
-    return C4;
-}());
+    }
+    f4() {
+        return () => this;
+    }
+}

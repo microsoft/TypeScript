@@ -55,8 +55,8 @@ var Nums;
     Nums[Nums["Zero"] = 0] = "Zero";
     Nums[Nums["One"] = 1] = "One";
 })(Nums || (Nums = {}));
-var a = Nums.Zero ? "a" : "b";
-var b = Nums.One ? "a" : "b";
+const a = Nums.Zero ? "a" : "b";
+const b = Nums.One ? "a" : "b";
 if (Nums.Zero) {
     Nums;
 }
@@ -74,8 +74,8 @@ var Strs;
     Strs["Empty"] = "";
     Strs["A"] = "A";
 })(Strs || (Strs = {}));
-var c = Strs.Empty ? "a" : "b";
-var d = Strs.A ? "a" : "b";
+const c = Strs.Empty ? "a" : "b";
+const d = Strs.A ? "a" : "b";
 if (Strs.Empty) {
     Strs;
 }

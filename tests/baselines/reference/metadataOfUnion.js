@@ -49,13 +49,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 function PropDeco(target, propKey) { }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+class A {
+}
+let B = (() => {
+    class B {
     }
     __decorate([
         PropDeco,
@@ -70,7 +67,7 @@ var B = /** @class */ (function () {
         __metadata("design:type", Object)
     ], B.prototype, "z", void 0);
     return B;
-}());
+})();
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -78,8 +75,8 @@ var E;
     E[E["C"] = 2] = "C";
     E[E["D"] = 3] = "D";
 })(E || (E = {}));
-var D = /** @class */ (function () {
-    function D() {
+let D = (() => {
+    class D {
     }
     __decorate([
         PropDeco,
@@ -98,4 +95,4 @@ var D = /** @class */ (function () {
         __metadata("design:type", Number)
     ], D.prototype, "d", void 0);
     return D;
-}());
+})();

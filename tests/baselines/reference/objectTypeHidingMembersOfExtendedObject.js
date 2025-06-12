@@ -57,39 +57,13 @@ var b: {
 var r4: void = b.valueOf();
 
 //// [objectTypeHidingMembersOfExtendedObject.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return B;
-}(A));
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.valueOf = function () { };
-    return C;
-}());
+class A {
+}
+class B extends A {
+}
+class C {
+    valueOf() { }
+}
 var c;
 var r1 = c.valueOf();
 var r1b = c.data;
@@ -101,7 +75,7 @@ var r2b = i.data;
 var r2c = r2b['hm']; // should be 'Object'
 var r2d = i['hm']; // should be 'any'
 var a = {
-    valueOf: function () { },
+    valueOf: () => { },
     data: new B()
 };
 var r3 = a.valueOf();

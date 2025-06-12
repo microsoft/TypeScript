@@ -11,11 +11,11 @@ class C
 
 
 //// [staticClassProps.js]
-var C = /** @class */ (function () {
-    function C() {
+let C = (() => {
+    class C {
+        foo() {
+        }
     }
-    C.prototype.foo = function () {
-    };
     C.z = 1;
     return C;
-}());
+})();

@@ -21,11 +21,8 @@ export var x6 = new defaultBinding6();
 //// [server.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = /** @class */ (function () {
-    function a() {
-    }
-    return a;
-}());
+class a {
+}
 exports.default = a;
 //// [client.js]
 "use strict";

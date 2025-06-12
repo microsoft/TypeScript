@@ -12,4 +12,4 @@ new P<string>(r => { r('foo') });
 
 //// [first.js]
 //// [second.js]
-new P(function (r) { r('foo'); });
+new P(r => { r('foo'); });

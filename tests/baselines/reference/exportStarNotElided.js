@@ -17,7 +17,7 @@ export * as aliased from "./data1";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.register = register;
-var r = [];
+const r = [];
 function register(data) {
     r.push(data);
 }

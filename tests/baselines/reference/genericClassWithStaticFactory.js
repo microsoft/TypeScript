@@ -146,21 +146,21 @@ module Editor {
 //// [genericClassWithStaticFactory.js]
 var Editor;
 (function (Editor) {
-    var List = /** @class */ (function () {
-        function List(isHead, data) {
+    class List {
+        constructor(isHead, data) {
             this.isHead = isHead;
             this.data = data;
             this.listFactory = new ListFactory();
         }
-        List.prototype.add = function (data) {
+        add(data) {
             var entry = this.listFactory.MakeEntry(data);
             this.prev.next = entry;
             entry.next = this;
             entry.prev = this.prev;
             this.prev = entry;
             return entry;
-        };
-        List.prototype.count = function () {
+        }
+        count() {
             var entry;
             var i;
             entry = this.next;
@@ -168,26 +168,26 @@ var Editor;
                 entry = entry.next;
             }
             return (i);
-        };
-        List.prototype.isEmpty = function () {
+        }
+        isEmpty() {
             return (this.next == this);
-        };
-        List.prototype.first = function () {
+        }
+        first() {
             if (this.isEmpty()) {
                 return this.next.data;
             }
             else {
                 return null;
             }
-        };
-        List.prototype.pushEntry = function (entry) {
+        }
+        pushEntry(entry) {
             entry.isHead = false;
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
-        };
-        List.prototype.push = function (data) {
+        }
+        push(data) {
             var entry = this.listFactory.MakeEntry(data);
             entry.data = data;
             entry.isHead = false;
@@ -195,61 +195,58 @@ var Editor;
             entry.prev = this;
             this.next = entry;
             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
-        };
-        List.prototype.popEntry = function (head) {
+        }
+        popEntry(head) {
             if (this.next.isHead) {
                 return null;
             }
             else {
                 return this.listFactory.RemoveEntry(this.next);
             }
-        };
-        List.prototype.insertEntry = function (entry) {
+        }
+        insertEntry(entry) {
             entry.isHead = false;
             this.prev.next = entry;
             entry.next = this;
             entry.prev = this.prev;
             this.prev = entry;
             return entry;
-        };
-        List.prototype.insertAfter = function (data) {
+        }
+        insertAfter(data) {
             var entry = this.listFactory.MakeEntry(data);
             entry.next = this.next;
             entry.prev = this;
             this.next = entry;
             entry.next.prev = entry; // entry.next.prev does not show intellisense, but entry.prev.prev does
             return entry;
-        };
-        List.prototype.insertEntryBefore = function (entry) {
+        }
+        insertEntryBefore(entry) {
             this.prev.next = entry;
             entry.next = this;
             entry.prev = this.prev;
             this.prev = entry;
             return entry;
-        };
-        List.prototype.insertBefore = function (data) {
+        }
+        insertBefore(data) {
             var entry = this.listFactory.MakeEntry(data);
             return this.insertEntryBefore(entry);
-        };
-        return List;
-    }());
-    Editor.List = List;
-    var ListFactory = /** @class */ (function () {
-        function ListFactory() {
         }
-        ListFactory.prototype.MakeHead = function () {
+    }
+    Editor.List = List;
+    class ListFactory {
+        MakeHead() {
             var entry = new List(true, null);
             entry.prev = entry;
             entry.next = entry;
             return entry;
-        };
-        ListFactory.prototype.MakeEntry = function (data) {
+        }
+        MakeEntry(data) {
             var entry = new List(false, data);
             entry.prev = entry;
             entry.next = entry;
             return entry;
-        };
-        ListFactory.prototype.RemoveEntry = function (entry) {
+        }
+        RemoveEntry(entry) {
             if (entry == null) {
                 return null;
             }
@@ -262,8 +259,7 @@ var Editor;
                 entry.prev.next = entry.next;
                 return entry;
             }
-        };
-        return ListFactory;
-    }());
+        }
+    }
     Editor.ListFactory = ListFactory;
 })(Editor || (Editor = {}));

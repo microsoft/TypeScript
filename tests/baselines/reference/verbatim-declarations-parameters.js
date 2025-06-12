@@ -29,8 +29,8 @@ export function foo1(
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 exports.foo1 = foo1;
-var Foo = /** @class */ (function () {
-    function Foo(
+class Foo {
+    constructor(
     // Type node is accurate, preserve
     reuseTypeNode, reuseTypeNode2, 
     // Resolve type node, requires adding | undefined
@@ -39,17 +39,13 @@ var Foo = /** @class */ (function () {
         this.reuseTypeNode2 = reuseTypeNode2;
         this.resolveType = resolveType;
     }
-    return Foo;
-}());
+}
 exports.Foo = Foo;
 function foo1(
 // Type node is accurate, preserve
-reuseTypeNode, reuseTypeNode2, 
+reuseTypeNode = {}, reuseTypeNode2 = {}, 
 // Resolve type node, requires adding | undefined
-resolveType, requiredParam) {
-    if (reuseTypeNode === void 0) { reuseTypeNode = {}; }
-    if (reuseTypeNode2 === void 0) { reuseTypeNode2 = {}; }
-    if (resolveType === void 0) { resolveType = {}; }
+resolveType = {}, requiredParam) {
 }
 
 

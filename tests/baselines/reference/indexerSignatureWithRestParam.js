@@ -10,8 +10,5 @@ class C {
 }
 
 //// [indexerSignatureWithRestParam.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}

@@ -26,4 +26,4 @@ let p: Passport = passport.use();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var passport = require("passport");
-var p = passport.use();
+let p = passport.use();

@@ -30,9 +30,9 @@ switch (x) {
 
 
 //// [stringLiteralsWithSwitchStatements03.js]
-var x;
-var y;
-var z;
+let x;
+let y;
+let z;
 switch (x) {
     case randBool() ? "foo" : "baz":
         break;

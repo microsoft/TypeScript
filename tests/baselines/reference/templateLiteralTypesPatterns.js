@@ -222,9 +222,9 @@ foo("abcTest"); // error
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BB = exports.AA = void 0;
 // ok
-var a = "/bin";
+const a = "/bin";
 // not ok
-var b = "no slash";
+const b = "no slash";
 function download(hostSpec) { }
 // ok, has protocol
 download("http://example.com/protocol");
@@ -232,7 +232,7 @@ download("http://example.com/protocol");
 download("example.com/noprotocol");
 // issues error, incorrect protocol
 download("gopher://example.com/protocol");
-var q = true;
+const q = true;
 // ok
 bools("true");
 bools("false");
@@ -326,45 +326,39 @@ bigints("-1.1E-10n");
 bigints("1.1e-10n");
 // not ok
 num = str;
-anyish = "bno";
+anyish = `bno`;
 // ok
 str = num;
 anyish = str;
 str = anyish;
 anyish = num;
 num = anyish;
-anyish = "aok";
-var shouldWork1 = null;
-var shouldWork2 = null;
-var exampleBad = "anything"; // fails
-var exampleGood = "1 2"; // ok
+anyish = `aok`;
+const shouldWork1 = null;
+const shouldWork2 = null;
+const exampleBad = "anything"; // fails
+const exampleGood = "1 2"; // ok
 // Repro from #41161
 var aa;
 var aa;
 // Remove string literals from unions with matching template literals
-var t1; // `foo${string}` | '1foo'
-var t2; // `foo${string}` | '1foo' | 'xfoo'
-var t3; // `foo${string}` | xfoo' | `${number}foo`
+let t1; // `foo${string}` | '1foo'
+let t2; // `foo${string}` | '1foo' | 'xfoo'
+let t3; // `foo${string}` | xfoo' | `${number}foo`
 var bb;
 var bb;
 function ff1(x) {
-    var s1 = x && 42; // number
-    var s2 = x || 42; // `${string}-${string}`
+    let s1 = x && 42; // number
+    let s2 = x || 42; // `${string}-${string}`
 }
-var AA = /** @class */ (function () {
-    function AA() {
-    }
-    return AA;
-}());
+class AA {
+}
 exports.AA = AA;
-var BB = /** @class */ (function () {
-    function BB() {
-    }
-    BB.prototype.update = function (id) {
+class BB {
+    update(id) {
         this.get(id);
-    };
-    return BB;
-}());
+    }
+}
 exports.BB = BB;
 // repro from https://github.com/microsoft/TypeScript/issues/54177#issuecomment-1538436654
 function conversionTest(groupName) { }

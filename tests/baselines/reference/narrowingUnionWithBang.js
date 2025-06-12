@@ -64,21 +64,21 @@ if (fixed.thing?.name !== "Correct") {
 "use strict";
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-var working = null;
+const working = null;
 if (working.thing.name !== "Correct") {
     console.log(working.thing.message);
 }
 else {
     console.log(working.thing.id);
 }
-var borked = null;
+const borked = null;
 if (borked.thing.name !== "Correct") {
     console.log(borked.thing.message);
 }
 else {
     console.log(borked.thing.id);
 }
-var fixed = null;
+const fixed = null;
 if (((_a = fixed.thing) === null || _a === void 0 ? void 0 : _a.name) !== "Correct") {
     console.log(fixed.thing.message);
 }

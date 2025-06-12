@@ -428,7 +428,7 @@ Output::
 
 
 //// [/user/username/projects/sample1/tests/index.js]
-var m = 10;
+const m = 10;
 
 
 //// [/user/username/projects/sample1/tests/index.d.ts]
@@ -649,10 +649,7 @@ Output::
 
 //// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib*
 
-//// [/user/username/projects/sample1/tests/index.js]
-const m = 10;
-
-
+//// [/user/username/projects/sample1/tests/index.js] file written with same contents
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
 {"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2020.full.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3708260210-const m = 10;","signature":"-357908916-declare const m = 10;\n","affectsGlobalScope":true}],"root":[2],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"target":7},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 

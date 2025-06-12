@@ -23,14 +23,14 @@ System.register([], function (exports_1, context_1) {
             env_1 = { stack: [], error: void 0, hasError: false };
             try {
                 before = __addDisposableResource(env_1, null, false);
-                default_1 = /** @class */ (function () {
-                    function default_1() {
-                    }
+                default_1 = (() => {
+                    let default_1 = class {
+                    };
                     default_1 = __decorate([
                         dec
                     ], default_1);
                     return default_1;
-                }());
+                })();
                 exports_1("default", _default = default_1);
             }
             catch (e_1) {

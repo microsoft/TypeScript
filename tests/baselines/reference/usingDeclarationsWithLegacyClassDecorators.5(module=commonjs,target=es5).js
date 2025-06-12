@@ -18,17 +18,17 @@ export { C };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var before, C;
-var env_1 = { stack: [], error: void 0, hasError: false };
+const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    exports.C = C = /** @class */ (function () {
-        function C() {
-        }
+    exports.C = C = (() => {
+        let C = class C {
+        };
         C = __decorate([
             dec
         ], C);
         return C;
-    }());
+    })();
 }
 catch (e_1) {
     env_1.error = e_1;

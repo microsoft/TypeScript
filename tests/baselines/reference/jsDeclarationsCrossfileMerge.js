@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function validate() { }
 exports.default = validate;
 //// [index.js]
-var m = require("./exporter");
+const m = require("./exporter");
 module.exports = m.default;
 module.exports.memberName = "thing";
 

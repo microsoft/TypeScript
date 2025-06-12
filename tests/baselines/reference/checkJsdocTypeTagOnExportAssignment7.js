@@ -28,7 +28,7 @@ a;
  * @property {number} b
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var abc = { a: 1, b: 1, c: 1 };
+const abc = { a: 1, b: 1, c: 1 };
 /** @type {Foo} */
 exports.default = abc;
 //// [b.js]

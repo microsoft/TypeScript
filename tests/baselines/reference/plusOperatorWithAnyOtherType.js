@@ -64,20 +64,17 @@ var ANY;
 var ANY1;
 var ANY2 = ["", ""];
 var obj;
-var obj1 = { x: function (s) { }, y: function (s1) { } };
+var obj1 = { x: (s) => { }, y: (s1) => { } };
 function foo() {
     var a;
     return a;
 }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () {
+class A {
+    static foo() {
         var a;
         return a;
-    };
-    return A;
-}());
+    }
+}
 var M;
 (function (M) {
 })(M || (M = {}));

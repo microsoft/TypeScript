@@ -55,7 +55,7 @@ var A;
 })(A || (A = {}));
 var AA;
 (function (AA) {
-    var B;
+    let B;
     (function (B) {
         B.x = 1;
     })(B = AA.B || (AA.B = {}));

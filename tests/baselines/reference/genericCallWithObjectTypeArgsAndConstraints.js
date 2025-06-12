@@ -38,21 +38,12 @@ var r2 = foo2(c1, c1);
 //// [genericCallWithObjectTypeArgsAndConstraints.js]
 // Generic call with constraints infering type parameter from object member properties
 // No errors expected
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
+class C {
+}
+class D {
+}
+class X {
+}
 function foo(t, t2) {
     var x;
     return x;

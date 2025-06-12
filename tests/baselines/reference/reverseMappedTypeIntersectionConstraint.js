@@ -188,7 +188,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var inferredParams1 = createMachine({
+const inferredParams1 = createMachine({
     entry: "foo",
     states: {
         a: {
@@ -197,7 +197,7 @@ var inferredParams1 = createMachine({
     },
     extra: 12,
 });
-var inferredParams2 = createMachine({
+const inferredParams2 = createMachine({
     entry: "foo",
     states: {
         a: {
@@ -207,8 +207,8 @@ var inferredParams2 = createMachine({
     extra: 12,
 });
 // -----------------------------------------------------------------------------------------
-var checkType = function () { return function (value) { return value; }; };
-var checked = checkType()({
+const checkType = () => (value) => value;
+const checked = checkType()({
     x: 1,
     y: "y",
     z: "z", // undesirable property z is *not* allowed
@@ -243,16 +243,16 @@ baz({ x: 1 });
 baz({ x: 1, z: 123 });
 baz({ x: 1, y: 'foo' });
 baz({ x: 1, y: 'foo', z: 123 });
-var wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
-var child = function () { return Promise.resolve("foo"); };
-var config = createXMachine({
+const wnp = withNestedProp({ prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
+const child = () => Promise.resolve("foo");
+const config = createXMachine({
     types: {},
     invoke: {
         src: "str",
     },
     extra: 10
 });
-var config2 = createXMachine({
+const config2 = createXMachine({
     invoke: {
         src: "whatever",
     },

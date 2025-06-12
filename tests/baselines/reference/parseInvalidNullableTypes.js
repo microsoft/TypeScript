@@ -39,11 +39,11 @@ function f5(a) { }
 function f6(a) {
     return true;
 }
-var a = 1;
-var b = 1;
-var c = 1;
-var d = 1;
-var e;
-var f;
-var g;
-var h;
+const a = 1;
+const b = 1;
+const c = 1;
+const d = 1;
+let e;
+let f;
+let g;
+let h;

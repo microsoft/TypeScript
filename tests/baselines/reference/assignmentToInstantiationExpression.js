@@ -15,9 +15,9 @@ getValue2<number> = () => 1234;
 
 //// [assignmentToInstantiationExpression.js]
 "use strict";
-var obj = {};
-(obj.fn) = function () { return 1234; };
-var getValue;
-(getValue) = function () { return 1234; };
-var getValue2;
-(getValue2) = function () { return 1234; };
+let obj = {};
+(obj.fn) = () => 1234;
+let getValue;
+(getValue) = () => 1234;
+let getValue2;
+(getValue2) = () => 1234;

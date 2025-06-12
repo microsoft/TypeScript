@@ -21,12 +21,11 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    var classWithPrivate = /** @class */ (function () {
-        function classWithPrivate(one) {
+    class classWithPrivate {
+        constructor(one) {
             this.one = one;
         }
-        return classWithPrivate;
-    }());
+    }
     __test2__.classWithPrivate = classWithPrivate;
     var x5 = new classWithPrivate(1);
     ;

@@ -1016,8 +1016,8 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.aaa = exports.a = void 0;
 exports.a = 10;
-var aLocal = 10;
-var aa = 10;
+const aLocal = 10;
+const aa = 10;
 exports.aaa = 10;
 
 
@@ -1026,7 +1026,7 @@ exports.aaa = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
+const bLocal = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/c.js]
@@ -1258,8 +1258,8 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
-var alocal = 10;
+const bLocal = 10;
+const alocal = 10;
 
 
 
@@ -1935,9 +1935,9 @@ export declare const a2 = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a2 = exports.aaaaa = exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
-var alocal = 10;
-var aaaa = 10;
+const bLocal = 10;
+const alocal = 10;
+const aaaa = 10;
 exports.aaaaa = 10;
 exports.a2 = 10;
 

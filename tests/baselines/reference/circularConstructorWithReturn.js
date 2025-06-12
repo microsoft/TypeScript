@@ -27,12 +27,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPrismaClient = getPrismaClient;
 exports.applyModelsAndClientExtensions = applyModelsAndClientExtensions;
 function getPrismaClient(options) {
-    var PrismaClient = /** @class */ (function () {
-        function PrismaClient(options) {
+    class PrismaClient {
+        constructor(options) {
             return (this.self = applyModelsAndClientExtensions(this));
         }
-        return PrismaClient;
-    }());
+    }
     return PrismaClient;
 }
 function applyModelsAndClientExtensions(client) {

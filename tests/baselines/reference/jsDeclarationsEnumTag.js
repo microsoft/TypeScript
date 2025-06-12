@@ -72,9 +72,9 @@ exports.Second = {
 };
 /** @enum {function(number): number} */
 exports.Fs = {
-    ADD1: function (n) { return n + 1; },
-    ID: function (n) { return n; },
-    SUB1: function (n) { return n - 1; }
+    ADD1: n => n + 1,
+    ID: n => n,
+    SUB1: n => n - 1
 };
 /**
  * @param {Target} t

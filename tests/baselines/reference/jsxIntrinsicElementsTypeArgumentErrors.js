@@ -37,16 +37,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 // opening + closing
-var a = React.createElement("div", null); // empty type args
-var b = React.createElement("div", null); // trailing comma type args
-var c = React.createElement("div", null); // nonexistant type args
-var d = React.createElement("div", null); // nested missing type args
-var e = React.createElement("div", null); // existing but incorrect nested type args
-var f = React.createElement("div", null); // existing type argument with no internal issues
+const a = React.createElement("div", null); // empty type args
+const b = React.createElement("div", null); // trailing comma type args
+const c = React.createElement("div", null); // nonexistant type args
+const d = React.createElement("div", null); // nested missing type args
+const e = React.createElement("div", null); // existing but incorrect nested type args
+const f = React.createElement("div", null); // existing type argument with no internal issues
 // self-closing
-var g = React.createElement("div", null); // empty type args
-var h = React.createElement("div", null); // trailing comma type args
-var i = React.createElement("div", null); // nonexistant type args
-var j = React.createElement("div", null); // nested missing type args
-var k = React.createElement("div", null); // existing but incorrect nested type args
-var l = React.createElement("div", null); // existing type argument with no internal issues
+const g = React.createElement("div", null); // empty type args
+const h = React.createElement("div", null); // trailing comma type args
+const i = React.createElement("div", null); // nonexistant type args
+const j = React.createElement("div", null); // nested missing type args
+const k = React.createElement("div", null); // existing but incorrect nested type args
+const l = React.createElement("div", null); // existing type argument with no internal issues

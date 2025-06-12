@@ -42,12 +42,12 @@ function foo(x, a, b) {
     var r;
     return r;
 }
-var r1 = foo('', function (x) { return ''; }, function (x) { return null; }); // any => any
-var r1ii = foo('', function (x) { return ''; }, function (x) { return null; }); // string => string
-var r2 = foo('', function (x) { return ''; }, function (x) { return ''; }); // string => string
-var r3 = foo(null, function (x) { return ''; }, function (x) { return ''; }); // Object => Object
-var r4 = foo(null, function (x) { return ''; }, function (x) { return ''; }); // any => any
-var r5 = foo(new Object(), function (x) { return ''; }, function (x) { return ''; }); // Object => Object
+var r1 = foo('', (x) => '', (x) => null); // any => any
+var r1ii = foo('', (x) => '', (x) => null); // string => string
+var r2 = foo('', (x) => '', (x) => ''); // string => string
+var r3 = foo(null, (x) => '', (x) => ''); // Object => Object
+var r4 = foo(null, (x) => '', (x) => ''); // any => any
+var r5 = foo(new Object(), (x) => '', (x) => ''); // Object => Object
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -56,14 +56,14 @@ var F;
 (function (F) {
     F[F["A"] = 0] = "A";
 })(F || (F = {}));
-var r6 = foo(E.A, function (x) { return E.A; }, function (x) { return F.A; }); // number => number 
+var r6 = foo(E.A, (x) => E.A, (x) => F.A); // number => number 
 function foo2(x, a, b) {
     var r;
     return r;
 }
-var r8 = foo2('', function (x) { return ''; }, function (x) { return null; }); // string => string
-var r9 = foo2(null, function (x) { return ''; }, function (x) { return ''; }); // any => any
-var r10 = foo2(null, function (x) { return ''; }, function (x) { return ''; }); // Object => Object
+var r8 = foo2('', (x) => '', (x) => null); // string => string
+var r9 = foo2(null, (x) => '', (x) => ''); // any => any
+var r10 = foo2(null, (x) => '', (x) => ''); // Object => Object
 var x;
-var r11 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // error
-var r12 = foo2(x, function (a1) { return function (n) { return 1; }; }, function (a2) { return 2; }); // error
+var r11 = foo2(x, (a1) => (n) => 1, (a2) => 2); // error
+var r12 = foo2(x, (a1) => (n) => 1, (a2) => 2); // error

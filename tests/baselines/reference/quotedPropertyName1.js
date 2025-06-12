@@ -6,9 +6,8 @@ class Test1 {
 }
 
 //// [quotedPropertyName1.js]
-var Test1 = /** @class */ (function () {
-    function Test1() {
+class Test1 {
+    constructor() {
         this["prop1"] = 0;
     }
-    return Test1;
-}());
+}

@@ -83,7 +83,7 @@ index.tsx
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
+const App = () => (0, jsx_runtime_1.jsx)("div", { propA: true });
 exports.App = App;
 
 

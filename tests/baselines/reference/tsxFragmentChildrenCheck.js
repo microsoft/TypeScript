@@ -37,37 +37,17 @@ function MyComponent(props) {
 }
 //// [file1.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var my_component_1 = require("./my-component");
-var MY_STRING = 'Ceci n\'est pas une string.';
-var MY_CLASSNAME = 'jeclass';
-var RenderString = /** @class */ (function (_super) {
-    __extends(RenderString, _super);
-    function RenderString() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    RenderString.prototype.render = function () {
+const MY_STRING = 'Ceci n\'est pas une string.';
+const MY_CLASSNAME = 'jeclass';
+class RenderString extends React.PureComponent {
+    render() {
         return (React.createElement(React.Fragment, null,
             React.createElement(my_component_1.MyComponent, null),
             React.createElement("span", null, MY_STRING),
             React.createElement("span", { className: MY_CLASSNAME })));
-    };
-    return RenderString;
-}(React.PureComponent));
+    }
+}
 exports.default = RenderString;

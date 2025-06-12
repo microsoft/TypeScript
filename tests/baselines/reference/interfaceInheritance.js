@@ -43,11 +43,8 @@ i5 = i4; // should be an error
 
 
 //// [interfaceInheritance.js]
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
+class C1 {
+}
 var i2;
 var i1;
 var i3;

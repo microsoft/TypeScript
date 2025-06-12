@@ -52,27 +52,24 @@ class X {
 var o = {
     counter: 0,
     start: function () {
-        var _this = this;
-        window.onmousemove = function () {
-            _this.counter++;
-            var f = function () { return _this.counter; };
+        window.onmousemove = () => {
+            this.counter++;
+            var f = () => this.counter;
         };
     }
 };
-var X = /** @class */ (function () {
-    function X() {
+class X {
+    constructor() {
         this.value = "value";
     }
-    X.prototype.foo = function () {
-        var _this = this;
-        var outer = function () {
-            var x = _this.value;
-            var inner = function () {
-                var y = _this.value;
+    foo() {
+        var outer = () => {
+            var x = this.value;
+            var inner = () => {
+                var y = this.value;
             };
             inner();
         };
         outer();
-    };
-    return X;
-}());
+    }
+}

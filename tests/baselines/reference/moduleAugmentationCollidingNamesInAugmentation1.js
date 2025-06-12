@@ -53,7 +53,7 @@ define(["require", "exports", "./observable"], function (require, exports, obser
 define(["require", "exports", "./map1", "./map2"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var x;
+    let x;
 });
 
 

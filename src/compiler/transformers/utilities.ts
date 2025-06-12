@@ -530,10 +530,8 @@ export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssi
 
 /**
  * @returns Contained super() call from descending into the statement ignoring parentheses, if that call exists.
- *
- * @internal
  */
-export function getSuperCallFromStatement(statement: Statement): SuperCall | undefined {
+function getSuperCallFromStatement(statement: Statement): SuperCall | undefined {
     if (!isExpressionStatement(statement)) {
         return undefined;
     }

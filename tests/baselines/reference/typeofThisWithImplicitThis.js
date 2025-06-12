@@ -8,5 +8,5 @@ function Test1() {
 
 //// [typeofThisWithImplicitThis.js]
 function Test1() {
-    var x = 1;
+    let x = 1;
 }

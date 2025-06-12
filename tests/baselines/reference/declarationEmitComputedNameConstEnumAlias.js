@@ -24,12 +24,11 @@ var EnumExample;
 exports.default = EnumExample;
 //// [index.js]
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 var EnumExample_1 = require("./EnumExample");
-exports.default = (_a = {},
-    _a[EnumExample_1.default.TEST] = {},
-    _a);
+exports.default = {
+    [EnumExample_1.default.TEST]: {},
+};
 
 
 //// [EnumExample.d.ts]

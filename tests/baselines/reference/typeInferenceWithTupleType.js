@@ -56,6 +56,6 @@ function zip(array1, array2) {
 var zipResult = zip(["foo", "bar"], [5, 6]);
 var zipResultEle = zipResult[0]; // [string, number]
 var zipResultEleEle = zipResult[0][0]; // string
-var expected;
+let expected;
 expected = f1(undefined);
 expected = f2(undefined);

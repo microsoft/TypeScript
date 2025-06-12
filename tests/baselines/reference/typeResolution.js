@@ -119,14 +119,12 @@ define(["require", "exports"], function (require, exports) {
     exports.TopLevelModule1 = void 0;
     var TopLevelModule1;
     (function (TopLevelModule1) {
-        var SubModule1;
+        let SubModule1;
         (function (SubModule1) {
-            var SubSubModule1;
+            let SubSubModule1;
             (function (SubSubModule1) {
-                var ClassA = /** @class */ (function () {
-                    function ClassA() {
-                    }
-                    ClassA.prototype.AisIn1_1_1 = function () {
+                class ClassA {
+                    AisIn1_1_1() {
                         // Try all qualified names of this type
                         var a1;
                         a1.AisIn1_1_1();
@@ -149,14 +147,11 @@ define(["require", "exports"], function (require, exports) {
                         d1.XisIn1_1_1();
                         var d2;
                         d2.XisIn1_1_1();
-                    };
-                    return ClassA;
-                }());
-                SubSubModule1.ClassA = ClassA;
-                var ClassB = /** @class */ (function () {
-                    function ClassB() {
                     }
-                    ClassB.prototype.BisIn1_1_1 = function () {
+                }
+                SubSubModule1.ClassA = ClassA;
+                class ClassB {
+                    BisIn1_1_1() {
                         /** Exactly the same as above in AisIn1_1_1 **/
                         // Try all qualified names of this type
                         var a1;
@@ -182,12 +177,11 @@ define(["require", "exports"], function (require, exports) {
                         d1.XisIn1_1_1();
                         var d2;
                         d2.XisIn1_1_1();
-                    };
-                    return ClassB;
-                }());
+                    }
+                }
                 SubSubModule1.ClassB = ClassB;
-                var NonExportedClassQ = /** @class */ (function () {
-                    function NonExportedClassQ() {
+                class NonExportedClassQ {
+                    constructor() {
                         function QQ() {
                             /* Sampling of stuff from AisIn1_1_1 */
                             var a4;
@@ -200,12 +194,11 @@ define(["require", "exports"], function (require, exports) {
                             c2.AisIn2_3();
                         }
                     }
-                    return NonExportedClassQ;
-                }());
+                }
             })(SubSubModule1 = SubModule1.SubSubModule1 || (SubModule1.SubSubModule1 = {}));
             // Should have no effect on S1.SS1.ClassA above because it is not exported
-            var ClassA = /** @class */ (function () {
-                function ClassA() {
+            class ClassA {
+                constructor() {
                     function AA() {
                         var a2;
                         a2.AisIn1_1_1();
@@ -218,63 +211,44 @@ define(["require", "exports"], function (require, exports) {
                         d2.XisIn1_1_1();
                     }
                 }
-                return ClassA;
-            }());
+            }
         })(SubModule1 = TopLevelModule1.SubModule1 || (TopLevelModule1.SubModule1 = {}));
-        var SubModule2;
+        let SubModule2;
         (function (SubModule2) {
-            var SubSubModule2;
+            let SubSubModule2;
             (function (SubSubModule2) {
                 // No code here since these are the mirror of the above calls
-                var ClassA = /** @class */ (function () {
-                    function ClassA() {
-                    }
-                    ClassA.prototype.AisIn1_2_2 = function () { };
-                    return ClassA;
-                }());
+                class ClassA {
+                    AisIn1_2_2() { }
+                }
                 SubSubModule2.ClassA = ClassA;
-                var ClassB = /** @class */ (function () {
-                    function ClassB() {
-                    }
-                    ClassB.prototype.BisIn1_2_2 = function () { };
-                    return ClassB;
-                }());
+                class ClassB {
+                    BisIn1_2_2() { }
+                }
                 SubSubModule2.ClassB = ClassB;
-                var ClassC = /** @class */ (function () {
-                    function ClassC() {
-                    }
-                    ClassC.prototype.CisIn1_2_2 = function () { };
-                    return ClassC;
-                }());
+                class ClassC {
+                    CisIn1_2_2() { }
+                }
                 SubSubModule2.ClassC = ClassC;
             })(SubSubModule2 = SubModule2.SubSubModule2 || (SubModule2.SubSubModule2 = {}));
         })(SubModule2 = TopLevelModule1.SubModule2 || (TopLevelModule1.SubModule2 = {}));
-        var ClassA = /** @class */ (function () {
-            function ClassA() {
-            }
-            ClassA.prototype.AisIn1 = function () { };
-            return ClassA;
-        }());
-        var NotExportedModule;
+        class ClassA {
+            AisIn1() { }
+        }
+        let NotExportedModule;
         (function (NotExportedModule) {
-            var ClassA = /** @class */ (function () {
-                function ClassA() {
-                }
-                return ClassA;
-            }());
+            class ClassA {
+            }
             NotExportedModule.ClassA = ClassA;
         })(NotExportedModule || (NotExportedModule = {}));
     })(TopLevelModule1 || (exports.TopLevelModule1 = TopLevelModule1 = {}));
     var TopLevelModule2;
     (function (TopLevelModule2) {
-        var SubModule3;
+        let SubModule3;
         (function (SubModule3) {
-            var ClassA = /** @class */ (function () {
-                function ClassA() {
-                }
-                ClassA.prototype.AisIn2_3 = function () { };
-                return ClassA;
-            }());
+            class ClassA {
+                AisIn2_3() { }
+            }
             SubModule3.ClassA = ClassA;
         })(SubModule3 = TopLevelModule2.SubModule3 || (TopLevelModule2.SubModule3 = {}));
     })(TopLevelModule2 || (TopLevelModule2 = {}));

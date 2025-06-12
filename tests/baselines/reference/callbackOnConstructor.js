@@ -20,20 +20,19 @@ var ooscope2 = s => s.length > 0
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Preferences = void 0;
-var Preferences = /** @class */ (function () {
+class Preferences {
     /**
      * @callback ValueGetter_2
      * @param {string} name
      * @returns {boolean|number|string|undefined}
      */
-    function Preferences() {
+    constructor() {
         this.assignability = "no";
     }
-    return Preferences;
-}());
+}
 exports.Preferences = Preferences;
 /** @type {ValueGetter_2} */
-var ooscope2 = function (s) { return s.length > 0; };
+var ooscope2 = s => s.length > 0;
 
 
 //// [callbackOnConstructor.d.ts]

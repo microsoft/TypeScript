@@ -26,16 +26,15 @@ c.dynamic();
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
     // https://github.com/Microsoft/TypeScript/issues/17564
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             this._path = './other';
         }
-        C.prototype.dynamic = function () {
+        dynamic() {
             var _a;
             return _a = this._path, __syncRequire ? Promise.resolve().then(function () { return require(_a); }) : new Promise(function (resolve_1, reject_1) { require([_a], resolve_1, reject_1); });
-        };
-        return C;
-    }());
-    var c = new C();
+        }
+    }
+    const c = new C();
     c.dynamic();
 });

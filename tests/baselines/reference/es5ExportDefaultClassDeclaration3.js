@@ -19,14 +19,11 @@ var t: typeof C = C;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var before = new C();
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.method = function () {
+class C {
+    method() {
         return new C();
-    };
-    return C;
-}());
+    }
+}
 exports.default = C;
 var after = new C();
 var t = C;

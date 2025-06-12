@@ -81,11 +81,8 @@ var exprString2;
 var exprIsObject2;
 function foo() { }
 ;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 ;
 //Cond is an object type variable
 condObject ? exprAny1 : exprAny2;
@@ -95,8 +92,8 @@ condObject ? exprString1 : exprString2;
 condObject ? exprIsObject1 : exprIsObject2;
 condObject ? exprString1 : exprBoolean1; // union
 //Cond is an object type literal
-(function (a) { return a.length; }) ? exprAny1 : exprAny2;
-(function (a) { return a.length; }) ? exprBoolean1 : exprBoolean2;
+((a) => a.length) ? exprAny1 : exprAny2;
+((a) => a.length) ? exprBoolean1 : exprBoolean2;
 ({}) ? exprNumber1 : exprNumber2;
 ({ a: 1, b: "s" }) ? exprString1 : exprString2;
 ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;
@@ -115,8 +112,8 @@ var resultIsNumber1 = condObject ? exprNumber1 : exprNumber2;
 var resultIsString1 = condObject ? exprString1 : exprString2;
 var resultIsObject1 = condObject ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean1 = condObject ? exprString1 : exprBoolean1; // union
-var resultIsAny2 = (function (a) { return a.length; }) ? exprAny1 : exprAny2;
-var resultIsBoolean2 = (function (a) { return a.length; }) ? exprBoolean1 : exprBoolean2;
+var resultIsAny2 = ((a) => a.length) ? exprAny1 : exprAny2;
+var resultIsBoolean2 = ((a) => a.length) ? exprBoolean1 : exprBoolean2;
 var resultIsNumber2 = ({}) ? exprNumber1 : exprNumber2;
 var resultIsString2 = ({ a: 1, b: "s" }) ? exprString1 : exprString2;
 var resultIsObject2 = ({ a: 1, b: "s" }) ? exprIsObject1 : exprIsObject2;

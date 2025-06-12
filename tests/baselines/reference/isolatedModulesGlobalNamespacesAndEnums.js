@@ -53,7 +53,7 @@ var Enum;
     Enum[Enum["B"] = 1] = "B";
     Enum[Enum["C"] = 2] = "C";
 })(Enum || (Enum = {}));
-var d = 'd';
+const d = 'd';
 //// [enum2.js]
 var Enum;
 (function (Enum) {

@@ -32,7 +32,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/main.js]
-var x = 10;
+const x = 10;
 
 
 
@@ -89,7 +89,7 @@ Output::
 
 //// [/user/username/projects/myproject/main.js] file written with same contents
 //// [/user/username/projects/myproject/bar.js]
-var y = 10;
+const y = 10;
 
 
 

@@ -36,7 +36,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/PROJECTS/PROJECT/app.js]
-var x = 1;
+let x = 1;
 
 
 

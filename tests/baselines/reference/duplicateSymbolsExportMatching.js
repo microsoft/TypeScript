@@ -74,7 +74,7 @@ define(["require", "exports"], function (require, exports) {
     // Should report error only once for instantiated module
     var M;
     (function (M) {
-        var inst;
+        let inst;
         (function (inst) {
             var t;
         })(inst || (inst = {}));
@@ -89,7 +89,7 @@ define(["require", "exports"], function (require, exports) {
         var w;
     })(M2 || (M2 = {}));
     (function (M) {
-        var F;
+        let F;
         (function (F) {
             var t;
         })(F || (F = {}));
@@ -97,11 +97,8 @@ define(["require", "exports"], function (require, exports) {
         M.F = F;
     })(M || (M = {}));
     (function (M) {
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         (function (C) {
             var t;
         })(C = M.C || (M.C = {}));

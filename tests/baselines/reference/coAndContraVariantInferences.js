@@ -41,12 +41,12 @@ call(actionB, printFn);
 "use strict";
 foo(a, fab);
 foo(b, fab);
-var actionA = { payload: 'any-string' };
-var actionB = { payload: true };
+const actionA = { payload: 'any-string' };
+const actionB = { payload: true };
 function call(action, fn) {
     fn(action);
 }
-var printFn = function (action) { return console.log(action); };
+const printFn = (action) => console.log(action);
 call(actionA, printFn);
 call(actionB, printFn);
 

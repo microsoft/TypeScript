@@ -87,24 +87,15 @@ var a3: {
 // Specialized signatures must be a subtype of a non-specialized signature
 // All the below should not be errors
 function foo(x) { }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x) { };
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    C2.prototype.foo = function (x) { };
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    C3.prototype.foo = function (x) { };
-    return C3;
-}());
+class C {
+    foo(x) { }
+}
+class C2 {
+    foo(x) { }
+}
+class C3 {
+    foo(x) { }
+}
 var a;
 var a2;
 var a3;

@@ -16,4 +16,4 @@ exports.Foo = Foo;
 // GH #38532
 var blah_1 = require("blah");
 function Foo() { }
-blah_1.default.bar = function () { };
+blah_1.default.bar = () => { };

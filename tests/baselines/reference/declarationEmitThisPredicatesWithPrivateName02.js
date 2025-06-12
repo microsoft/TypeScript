@@ -19,8 +19,8 @@ export const obj = {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
 exports.obj = {
-    m: function () {
-        var dis = this;
+    m() {
+        let dis = this;
         return dis.a != null && dis.b != null && dis.c != null;
     }
 };

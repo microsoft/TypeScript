@@ -11,14 +11,11 @@ export class Enhancement {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Enhancement = void 0;
-var Enhancement = /** @class */ (function () {
-    function Enhancement() {
-    }
-    Enhancement.getType = function () {
+class Enhancement {
+    static getType() {
         return this;
-    };
-    return Enhancement;
-}());
+    }
+}
 exports.Enhancement = Enhancement;
 
 

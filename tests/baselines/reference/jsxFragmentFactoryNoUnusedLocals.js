@@ -22,10 +22,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Counter = Counter;
 /// <reference path="react16.d.ts" />
 var react_1 = require("react");
-function Counter(_a) {
-    var _b = _a.count, count = _b === void 0 ? 0 : _b;
-    var _c = null, cnt = _c[0], setCnt = _c[1];
+function Counter({ count = 0 }) {
+    const [cnt, setCnt] = null;
     return (0, react_1.createElement)(react_1.Fragment, null,
         (0, react_1.createElement)("p", null, cnt),
-        (0, react_1.createElement)("button", { onClick: function () { return setCnt(function (prev) { return prev + 1; }); }, type: "button" }, "Update"));
+        (0, react_1.createElement)("button", { onClick: () => setCnt((prev) => prev + 1), type: "button" }, "Update"));
 }

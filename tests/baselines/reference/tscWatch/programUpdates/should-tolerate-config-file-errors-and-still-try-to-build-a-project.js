@@ -46,11 +46,11 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 

@@ -9,5 +9,5 @@ if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 
 //// [typeGuardNarrowByUntypedField.js]
 if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
-    var x = arrayLikeOrIterable.length;
+    let x = arrayLikeOrIterable.length;
 }

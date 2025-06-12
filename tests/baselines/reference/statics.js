@@ -36,22 +36,23 @@ M.f();
 //// [statics.js]
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C(c1, c2, c3) {
-            var _this = this;
-            this.c1 = c1;
-            this.c2 = c2;
-            this.x = C.y + this.c1 + this.c2 + c3;
-            this.g = function (v) { return C.f(_this.x + C.y + v + _this.c1 + _this.c2 + C.pub); };
+    let C = (() => {
+        class C {
+            constructor(c1, c2, c3) {
+                this.c1 = c1;
+                this.c2 = c2;
+                this.x = C.y + this.c1 + this.c2 + c3;
+                this.g = (v) => C.f(this.x + C.y + v + this.c1 + this.c2 + C.pub);
+            }
+            static f(n) {
+                return "wow: " + (n + C.y + C.pub + C.priv);
+            }
         }
-        C.f = function (n) {
-            return "wow: " + (n + C.y + C.pub + C.priv);
-        };
         C.priv = 2;
         C.pub = 3;
         C.y = C.priv;
         return C;
-    }());
+    })();
     M.C = C;
     var c = C.y;
     function f() {

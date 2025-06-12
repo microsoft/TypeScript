@@ -10,12 +10,8 @@ export class C {
 
 
 //// [classStaticBlock24.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-export { C };
-(function () {
+export class C {
+}
+(() => {
     C.x = 1;
 })();

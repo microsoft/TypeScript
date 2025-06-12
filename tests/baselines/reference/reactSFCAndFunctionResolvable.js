@@ -32,11 +32,11 @@ const RandomComponent: React.SFC = () => {
 /// <reference path="react16.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var RandomComponent = function () {
-    var Component = condition1
+const RandomComponent = () => {
+    const Component = condition1
         ? Radio
         : Checkbox;
-    var OtherComponent = condition2
+    const OtherComponent = condition2
         ? OtherRadio
         : Checkbox;
     return condition1 ? React.createElement(Component, null) : React.createElement(OtherComponent, null);

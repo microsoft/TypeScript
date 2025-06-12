@@ -39,39 +39,18 @@ function bar(this: A, a: A, b: B) {
 
 
 //// [publicGetterProtectedSetterFromThisParameter.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    Object.defineProperty(A.prototype, "x", {
-        get: function () { return 0; },
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(A.prototype, "y", {
-        get: function () { return 0; },
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    Object.defineProperty(B.prototype, "q", {
-        get: function () { return 0; },
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(B.prototype, "u", {
-        get: function () { return 0; },
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    B.prototype.foo = function (a, b) {
+class A {
+    get x() { return 0; }
+    set x(v) { }
+    get y() { return 0; }
+    set y(v) { }
+}
+class B {
+    get q() { return 0; }
+    set q(v) { }
+    get u() { return 0; }
+    set u(v) { }
+    foo(a, b) {
         // Should have no errors in this block
         this.x = 0;
         this.y = 0;
@@ -79,9 +58,8 @@ var B = /** @class */ (function () {
         a.y = 0;
         b.q = 0;
         b.u = 0;
-    };
-    return B;
-}());
+    }
+}
 function bar(a, b) {
     this.x = 0;
     this.y = 0;

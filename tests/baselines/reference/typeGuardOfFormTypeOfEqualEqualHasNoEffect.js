@@ -38,11 +38,8 @@ else {
 }
 
 //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 ;
 var strOrNum;
 var strOrBool;

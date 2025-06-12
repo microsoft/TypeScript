@@ -20,26 +20,20 @@ export declare const AConstructor: typeof A; // Ok
 
 //// [a.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 module.exports = A;
 //// [b.js]
 "use strict";
-var SomeClass = /** @class */ (function () {
-    function SomeClass() {
-    }
-    return SomeClass;
-}());
+class SomeClass {
+}
 module.exports = SomeClass;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var type = require("./b"); // Ok
 A.prototype; // Error
-var a = { a: 'a' }; // Ok
+const a = { a: 'a' }; // Ok
 void type; // Ok
 
 

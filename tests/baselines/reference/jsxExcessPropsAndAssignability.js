@@ -34,9 +34,9 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var myHoc = function (ComposedComponent) {
-    var WrapperComponent = null;
-    var props = null;
+const myHoc = (ComposedComponent) => {
+    const WrapperComponent = null;
+    const props = null;
     React.createElement(WrapperComponent, __assign({}, props, { myProp: '1000000' }));
     React.createElement(WrapperComponent, __assign({}, props, { myProp: 1000000 }));
 };

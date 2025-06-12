@@ -110,48 +110,17 @@ module NonEmptyTypes {
 
 
 //// [arrayBestCommonTypes.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var EmptyTypes;
 (function (EmptyTypes) {
-    var base = /** @class */ (function () {
-        function base() {
-        }
-        return base;
-    }());
-    var base2 = /** @class */ (function () {
-        function base2() {
-        }
-        return base2;
-    }());
-    var derived = /** @class */ (function (_super) {
-        __extends(derived, _super);
-        function derived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return derived;
-    }(base));
-    var f = /** @class */ (function () {
-        function f() {
-        }
-        f.prototype.voidIfAny = function (x, y) {
-            if (y === void 0) { y = false; }
-            return null;
-        };
-        f.prototype.x = function () {
+    class base {
+    }
+    class base2 {
+    }
+    class derived extends base {
+    }
+    class f {
+        voidIfAny(x, y = false) { return null; }
+        x() {
             (this.voidIfAny([4, 2][0]));
             (this.voidIfAny([4, 2, undefined][0]));
             (this.voidIfAny([undefined, 2, 4][0]));
@@ -180,37 +149,20 @@ var EmptyTypes;
             var b2 = [base2Obj, baseObj, ifaceObj];
             var b3 = [baseObj, ifaceObj, base2Obj];
             var b4 = [ifaceObj, baseObj, base2Obj];
-        };
-        return f;
-    }());
+        }
+    }
 })(EmptyTypes || (EmptyTypes = {}));
 var NonEmptyTypes;
 (function (NonEmptyTypes) {
-    var base = /** @class */ (function () {
-        function base() {
-        }
-        return base;
-    }());
-    var base2 = /** @class */ (function () {
-        function base2() {
-        }
-        return base2;
-    }());
-    var derived = /** @class */ (function (_super) {
-        __extends(derived, _super);
-        function derived() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return derived;
-    }(base));
-    var f = /** @class */ (function () {
-        function f() {
-        }
-        f.prototype.voidIfAny = function (x, y) {
-            if (y === void 0) { y = false; }
-            return null;
-        };
-        f.prototype.x = function () {
+    class base {
+    }
+    class base2 {
+    }
+    class derived extends base {
+    }
+    class f {
+        voidIfAny(x, y = false) { return null; }
+        x() {
             (this.voidIfAny([4, 2][0]));
             (this.voidIfAny([4, 2, undefined][0]));
             (this.voidIfAny([undefined, 2, 4][0]));
@@ -239,7 +191,6 @@ var NonEmptyTypes;
             var b2 = [base2Obj, baseObj, ifaceObj];
             var b3 = [baseObj, ifaceObj, base2Obj];
             var b4 = [ifaceObj, baseObj, base2Obj];
-        };
-        return f;
-    }());
+        }
+    }
 })(NonEmptyTypes || (NonEmptyTypes = {}));

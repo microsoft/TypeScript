@@ -12,7 +12,7 @@ export function increment(point: Point) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.increment = increment;
 function increment(point) {
-    return point.map(function (d) { return d + 1; });
+    return point.map(d => d + 1);
 }
 
 

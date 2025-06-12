@@ -10,15 +10,9 @@ class C {
 }
 
 //// [classDeclarationBlockScoping1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 {
-    var C_1 = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
 }

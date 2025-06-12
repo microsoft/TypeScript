@@ -13,13 +13,10 @@ console.log(foo)
 
 //// [classStaticBlock28.js]
 "use strict";
-var foo;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-(function () {
+let foo;
+class C {
+}
+(() => {
     foo = 1;
 })();
 console.log(foo);

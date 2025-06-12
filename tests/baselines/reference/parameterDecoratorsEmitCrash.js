@@ -48,24 +48,26 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = function () {
-    var _a;
-    var _x_decorators;
-    var _x_initializers = [];
-    var _x_extraInitializers = [];
-    return _a = /** @class */ (function () {
-            function C(x) {
-                this.x = __runInitializers(this, _x_initializers, void 0);
-                __runInitializers(this, _x_extraInitializers);
-            }
-            return C;
-        }()),
-        (function () {
-            var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-            _x_decorators = [dec];
-            __esDecorate(null, null, _x_decorators, { kind: "field", name: "x", static: false, private: false, access: { has: function (obj) { return "x" in obj; }, get: function (obj) { return obj.x; }, set: function (obj, value) { obj.x = value; } }, metadata: _metadata }, _x_initializers, _x_extraInitializers);
-            if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-        })(),
-        _a;
-}();
+let C = (() => {
+    let C = (() => {
+        var _a;
+        let _x_decorators;
+        let _x_initializers = [];
+        let _x_extraInitializers = [];
+        return _a = class C {
+                constructor(x) {
+                    this.x = __runInitializers(this, _x_initializers, void 0);
+                    __runInitializers(this, _x_extraInitializers);
+                }
+            },
+            (() => {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+                _x_decorators = [dec];
+                __esDecorate(null, null, _x_decorators, { kind: "field", name: "x", static: false, private: false, access: { has: obj => "x" in obj, get: obj => obj.x, set: (obj, value) => { obj.x = value; } }, metadata: _metadata }, _x_initializers, _x_extraInitializers);
+                if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            })(),
+            _a;
+    })();
+    return C;
+})();
 exports.C = C;

@@ -35,18 +35,15 @@ export interface SomeType {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.methodName = function (propName) { return propName; };
-    Foo.prototype.otherMethod = function () {
+class Foo {
+    methodName(propName) { return propName; }
+    otherMethod() {
         if (Math.random() > 0.5) {
             return { x: 42 };
         }
         return { y: "yes" };
-    };
-    return Foo;
-}());
+    }
+}
 exports.Foo = Foo;
 
 
@@ -423,7 +420,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/home/src/workspaces/project/dist/index.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Foo = void 0;\nvar Foo = /** @class */ (function () {\n    function Foo() {\n    }\n    Foo.prototype.methodName = function (propName) { return propName; };\n    Foo.prototype.otherMethod = function () {\n        if (Math.random() > 0.5) {\n            return { x: 42 };\n        }\n        return { y: \"yes\" };\n    };\n    return Foo;\n}());\nexports.Foo = Foo;\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Foo = void 0;\nclass Foo {\n    methodName(propName) { return propName; }\n    otherMethod() {\n        if (Math.random() > 0.5) {\n            return { x: 42 };\n        }\n        return { y: \"yes\" };\n    }\n}\nexports.Foo = Foo;\n"
           },
           {
             "name": "/home/src/workspaces/project/dist/index.d.ts.map",

@@ -402,7 +402,7 @@ Output::
 //// [/user/username/projects/myproject/project1/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var bar = 10;
+const bar = 10;
 
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo]

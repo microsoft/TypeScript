@@ -21,17 +21,11 @@ const d = { types };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Value = exports.B = exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 exports.B = B;
 exports.Value = {};
 //// [b.js]
@@ -39,8 +33,8 @@ exports.Value = {};
 Object.defineProperty(exports, "__esModule", { value: true });
 types;
 types.Value;
-var v;
-var a = {};
-var b = {};
-var c = "";
-var d = { types: types };
+let v;
+const a = {};
+const b = {};
+const c = "";
+const d = { types };

@@ -31,4 +31,4 @@ function BackButton(_props) {
 BackButton.defaultProps = {
     text: 'Go Back',
 };
-var a = react_1.default.createElement(BackButton, null);
+let a = react_1.default.createElement(BackButton, null);

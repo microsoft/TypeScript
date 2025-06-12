@@ -30,16 +30,9 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Wizard = void 0;
-var Wizard = /** @class */ (function () {
-    function Wizard() {
+class Wizard {
+    get steps() {
+        return __assign({ wizard: this }, props);
     }
-    Object.defineProperty(Wizard.prototype, "steps", {
-        get: function () {
-            return __assign({ wizard: this }, props);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Wizard;
-}());
+}
 exports.Wizard = Wizard;

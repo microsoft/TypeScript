@@ -99,11 +99,11 @@ function func1() {
         console.log(EnumA.Value);
         console.log(0 /* EnumB.Value */);
     }
-    var EnumA;
+    let EnumA;
     (function (EnumA) {
         EnumA[EnumA["Value"] = 0] = "Value";
     })(EnumA || (EnumA = {}));
-    var EnumB;
+    let EnumB;
     (function (EnumB) {
         EnumB[EnumB["Value"] = 0] = "Value";
     })(EnumB || (EnumB = {}));
@@ -115,7 +115,7 @@ function func2() {
     function aFunc() {
         console.log(EnumA.Value);
     }
-    var EnumA;
+    let EnumA;
     (function (EnumA) {
         EnumA[EnumA["Value"] = 0] = "Value";
     })(EnumA || (EnumA = {}));
@@ -127,7 +127,7 @@ function func3() {
     function aFunc() {
         console.log(0 /* EnumB.Value */);
     }
-    var EnumB;
+    let EnumB;
     (function (EnumB) {
         EnumB[EnumB["Value"] = 0] = "Value";
     })(EnumB || (EnumB = {}));
@@ -139,12 +139,12 @@ function func4() {
     function aFunc() {
         console.log(ClassA.Value);
     }
-    var ClassA = /** @class */ (function () {
-        function ClassA() {
+    let ClassA = (() => {
+        class ClassA {
         }
         ClassA.Value = 1234;
         return ClassA;
-    }());
+    })();
 }
 function func5() {
     aFunc();
@@ -159,18 +159,17 @@ function func5() {
         console.log(new Foo());
         console.log(Baz.value);
     }
-    var blah = { prop: 1234 };
-    var Bar;
+    const blah = { prop: 1234 };
+    let Bar;
     (function (Bar) {
         Bar[Bar["A"] = 0] = "A";
     })(Bar || (Bar = {}));
-    var Foo = /** @class */ (function () {
-        function Foo() {
+    class Foo {
+        constructor() {
             this.x = 1234;
         }
-        return Foo;
-    }());
-    var Baz;
+    }
+    let Baz;
     (function (Baz) {
         Baz.value = 1234;
     })(Baz || (Baz = {}));

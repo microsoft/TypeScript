@@ -97,11 +97,7 @@ function fooWithParameters(/** this is comment about a*/ a,
 b) {
     var d = a;
 }
-function fooWithRestParameters(a) {
-    var rests = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rests[_i - 1] = arguments[_i];
-    }
+function fooWithRestParameters(a, ...rests) {
     return a + rests.join("");
 }
 function fooWithOverloads(a) {
@@ -119,11 +115,7 @@ function fooWithTypePredicateAndMulitpleParams(a, b, c) {
 function fooWithTypeTypePredicateAndGeneric(a) {
     return true;
 }
-function fooWithTypeTypePredicateAndRestParam(a) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+function fooWithTypeTypePredicateAndRestParam(a, ...rest) {
     return true;
 }
 /** This comment should appear for nonExportedFoo*/
@@ -135,11 +127,7 @@ function nonExportedFooWithParameters(/** this is comment about a*/ a,
 b) {
     var d = a;
 }
-function nonExportedFooWithRestParameters(a) {
-    var rests = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rests[_i - 1] = arguments[_i];
-    }
+function nonExportedFooWithRestParameters(a, ...rests) {
     return a + rests.join("");
 }
 function nonExportedFooWithOverloads(a) {
@@ -155,11 +143,7 @@ function globalfooWithParameters(/** this is comment about a*/ a,
 b) {
     var d = a;
 }
-function globalfooWithRestParameters(a) {
-    var rests = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rests[_i - 1] = arguments[_i];
-    }
+function globalfooWithRestParameters(a, ...rests) {
     return a + rests.join("");
 }
 function globalfooWithOverloads(a) {

@@ -25,8 +25,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = require("preact");
 var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
-var _jsxFileName = "jsxJsxsCjsTransformKeyPropCustomImport.tsx";
+const _jsxFileName = "jsxJsxsCjsTransformKeyPropCustomImport.tsx";
 /// <reference path="react16.d.ts" />
-var props = { answer: 42 };
-var a = (0, jsx_dev_runtime_1.jsxDEV)("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 10 }, this);
-var b = (0, preact_1.createElement)("div", __assign({}, props, { key: "bar" }), "text");
+const props = { answer: 42 };
+const a = (0, jsx_dev_runtime_1.jsxDEV)("div", __assign({}, props, { children: "text" }), "foo", false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 10 }, this);
+const b = (0, preact_1.createElement)("div", __assign({}, props, { key: "bar" }), "text");

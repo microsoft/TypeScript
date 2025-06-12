@@ -70,24 +70,22 @@ define("class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
-    var classC = /** @class */ (function () {
-        function classC() {
+    class classC {
+        constructor() {
             this.prop = 1;
         }
-        return classC;
-    }());
+    }
     exports.classC = classC;
 });
 define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
-    var indirectClass = /** @class */ (function () {
-        function indirectClass() {
+    class indirectClass {
+        constructor() {
             this.classC = new class_1.classC();
         }
-        return indirectClass;
-    }());
+    }
     exports.indirectClass = indirectClass;
 });
 define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
@@ -107,11 +105,7 @@ define("noChangeFile", ["require", "exports"], function (require, exports) {
     function writeLog(s) {
     }
 });
-function someFunc(arguments) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+function someFunc(arguments, ...rest) {
 }
 
 
@@ -575,24 +569,22 @@ define("class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
-    var classC = /** @class */ (function () {
-        function classC() {
+    class classC {
+        constructor() {
             this.prop1 = 1;
         }
-        return classC;
-    }());
+    }
     exports.classC = classC;
 });
 define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
-    var indirectClass = /** @class */ (function () {
-        function indirectClass() {
+    class indirectClass {
+        constructor() {
             this.classC = new class_1.classC();
         }
-        return indirectClass;
-    }());
+    }
     exports.indirectClass = indirectClass;
 });
 define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
@@ -612,11 +604,7 @@ define("noChangeFile", ["require", "exports"], function (require, exports) {
     function writeLog(s) {
     }
 });
-function someFunc(arguments) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+function someFunc(arguments, ...rest) {
 }
 
 
@@ -1014,24 +1002,22 @@ define("class", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classC = void 0;
-    var classC = /** @class */ (function () {
-        function classC() {
+    class classC {
+        constructor() {
             this.prop = 1;
         }
-        return classC;
-    }());
+    }
     exports.classC = classC;
 });
 define("indirectClass", ["require", "exports", "class"], function (require, exports, class_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.indirectClass = void 0;
-    var indirectClass = /** @class */ (function () {
-        function indirectClass() {
+    class indirectClass {
+        constructor() {
             this.classC = new class_1.classC();
         }
-        return indirectClass;
-    }());
+    }
     exports.indirectClass = indirectClass;
 });
 define("directUse", ["require", "exports", "indirectClass"], function (require, exports, indirectClass_1) {
@@ -1051,11 +1037,7 @@ define("noChangeFile", ["require", "exports"], function (require, exports) {
     function writeLog(s) {
     }
 });
-function someFunc(arguments) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+function someFunc(arguments, ...rest) {
 }
 
 

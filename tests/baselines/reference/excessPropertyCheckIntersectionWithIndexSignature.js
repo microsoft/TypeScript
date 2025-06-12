@@ -20,10 +20,10 @@ const yy: Record<string, A> & Record<string, B> = {
 //// [excessPropertyCheckIntersectionWithIndexSignature.js]
 "use strict";
 // Repro from #51875
-var x;
+let x;
 x = { y: { a: 0 } }; // Error
 x = { y: { a: 0, b: 0 } };
 x = { y: { a: 0, b: 0, c: 0 } }; // Error
-var yy = {
+const yy = {
     foo: { a: '', b: '' },
 };

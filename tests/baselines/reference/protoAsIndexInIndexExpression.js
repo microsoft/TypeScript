@@ -34,9 +34,8 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 var o = {
     "__proto__": 0
 };
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this["__proto__"] = 0;
     }
-    return C;
-}());
+}

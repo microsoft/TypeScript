@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.w = void 0;
 function wrapper(value) {
     return {
-        m: function () { return value; },
+        m() { return value; },
         get g() { return value; },
     };
 }

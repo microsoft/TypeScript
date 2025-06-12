@@ -36,37 +36,28 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 function cloneAgain(_a) {
-    var a = _a.a, clone = __rest(_a, ["a"]);
+    var { a } = _a, clone = __rest(_a, ["a"]);
 }
-suddenly(function (_a) {
-    var a = _a.x, rest = __rest(_a, ["x"]);
+suddenly((_a) => {
+    var { x: a } = _a, rest = __rest(_a, ["x"]);
     return rest.y;
 });
-suddenly(function (_a) {
-    if (_a === void 0) { _a = { x: { z: 1, ka: 1 }, y: 'noo' }; }
-    var _b = _a.x, _c = _b.z, z = _c === void 0 ? 12 : _c, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
+suddenly((_a = { x: { z: 1, ka: 1 }, y: 'noo' }) => {
+    var _b = _a.x, { z = 12 } = _b, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
     return rest.y + nested.ka;
 });
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.m = function (_a) {
-        var a = _a.a, clone = __rest(_a, ["a"]);
+class C {
+    m(_a) {
+        var { a } = _a, clone = __rest(_a, ["a"]);
         // actually, never mind, don't clone
-    };
-    Object.defineProperty(C.prototype, "p", {
-        set: function (_a) {
-            var a = _a.a, clone = __rest(_a, ["a"]);
-            // actually, never mind, don't clone
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
-function foobar(_a) {
-    if (_a === void 0) { _a = {}; }
-    var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
+    }
+    set p(_a) {
+        var { a } = _a, clone = __rest(_a, ["a"]);
+        // actually, never mind, don't clone
+    }
+}
+function foobar(_a = {}) {
+    var { bar = {} } = _a, opts = __rest(_a, ["bar"]);
 }
 foobar();
 foobar({ baz: 'hello' });

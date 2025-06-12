@@ -101,38 +101,32 @@ function foo(p) {
 var fooVar;
 foo(50);
 fooVar();
-var c = (function () {
-    function c() {
+class c {
+    constructor() {
         this.b = 10;
     }
-    c.prototype.myFoo = function () {
+    myFoo() {
         return this.b;
-    };
-    Object.defineProperty(c.prototype, "prop1", {
-        get: function () {
-            return this.b;
-        },
-        set: function (val) {
-            this.b = val;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    c.prototype.foo1 = function (aOrb) {
+    }
+    get prop1() {
+        return this.b;
+    }
+    set prop1(val) {
+        this.b = val;
+    }
+    foo1(aOrb) {
         return aOrb.toString();
-    };
-    return c;
-}());
+    }
+}
 var i = new c();
 var i1_i;
 var m1;
 (function (m1) {
-    var b = (function () {
-        function b(x) {
+    class b {
+        constructor(x) {
             this.x = x;
         }
-        return b;
-    }());
+    }
     m1.b = b;
 })(m1 || (m1 = {}));
 var shade = 1;

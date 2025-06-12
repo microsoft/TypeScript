@@ -36,31 +36,22 @@ class Hola {
 /**
  * Hello class
  */
-var Hello = /** @class */ (function () {
-    function Hello() {
-    }
-    return Hello;
-}());
+class Hello {
+}
 //// [test2.js]
 /* A comment at the top of the file. */
 /**
  * Hi class
  */
-var Hi = /** @class */ (function () {
-    function Hi() {
-    }
-    return Hi;
-}());
+class Hi {
+}
 //// [test3.js]
 // A one-line comment at the top of the file.
 /**
  * Hola class
  */
-var Hola = /** @class */ (function () {
-    function Hola() {
-    }
-    return Hola;
-}());
+class Hola {
+}
 
 
 //// [test1.d.ts]

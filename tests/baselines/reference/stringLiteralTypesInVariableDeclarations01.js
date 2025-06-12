@@ -20,17 +20,17 @@ f = "foo";
 g = "bar";
 
 //// [stringLiteralTypesInVariableDeclarations01.js]
-var a;
+let a;
 var b;
-var c;
-var d;
+let c;
+const d;
 a = "";
 b = "foo";
 c = "bar";
-var e = "";
+let e = "";
 var f = "foo";
-var g = "bar";
-var h = "baz";
+let g = "bar";
+const h = "baz";
 e = "";
 f = "foo";
 g = "bar";

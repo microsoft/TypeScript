@@ -24,38 +24,24 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
     return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 };
-var C1 = /** @class */ (function () {
-    function C1() {
-        _C1__a_accessor_storage.set(this, void 0);
-        _C1__b_accessor_storage.set(this, 1);
-    }
-    Object.defineProperty(C1.prototype, 0, {
-        get: function () { return __classPrivateFieldGet(this, _C1__a_accessor_storage, "f"); },
-        set: function (value) { __classPrivateFieldSet(this, _C1__a_accessor_storage, value, "f"); },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C1.prototype, 1, {
-        get: function () { return __classPrivateFieldGet(this, _C1__b_accessor_storage, "f"); },
-        set: function (value) { __classPrivateFieldSet(this, _C1__b_accessor_storage, value, "f"); },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C1, 2, {
-        get: function () { return __classPrivateFieldGet(_a, _a, "f", _C1__c_accessor_storage); },
-        set: function (value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__c_accessor_storage); },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C1, 3, {
-        get: function () { return __classPrivateFieldGet(_a, _a, "f", _C1__d_accessor_storage); },
-        set: function (value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__d_accessor_storage); },
-        enumerable: false,
-        configurable: true
-    });
+let C1 = (() => {
     var _a, _C1__a_accessor_storage, _C1__b_accessor_storage, _C1__c_accessor_storage, _C1__d_accessor_storage;
+    class C1 {
+        constructor() {
+            _C1__a_accessor_storage.set(this, void 0);
+            _C1__b_accessor_storage.set(this, 1);
+        }
+        get 0() { return __classPrivateFieldGet(this, _C1__a_accessor_storage, "f"); }
+        set 0(value) { __classPrivateFieldSet(this, _C1__a_accessor_storage, value, "f"); }
+        get 1() { return __classPrivateFieldGet(this, _C1__b_accessor_storage, "f"); }
+        set 1(value) { __classPrivateFieldSet(this, _C1__b_accessor_storage, value, "f"); }
+        static get 2() { return __classPrivateFieldGet(_a, _a, "f", _C1__c_accessor_storage); }
+        static set 2(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__c_accessor_storage); }
+        static get 3() { return __classPrivateFieldGet(_a, _a, "f", _C1__d_accessor_storage); }
+        static set 3(value) { __classPrivateFieldSet(_a, _a, value, "f", _C1__d_accessor_storage); }
+    }
     _a = C1, _C1__a_accessor_storage = new WeakMap(), _C1__b_accessor_storage = new WeakMap();
     _C1__c_accessor_storage = { value: void 0 };
     _C1__d_accessor_storage = { value: 2 };
     return C1;
-}());
+})();

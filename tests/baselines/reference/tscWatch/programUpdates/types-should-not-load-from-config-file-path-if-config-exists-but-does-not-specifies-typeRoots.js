@@ -51,7 +51,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/app.js]
-var x = 1;
+let x = 1;
 
 
 

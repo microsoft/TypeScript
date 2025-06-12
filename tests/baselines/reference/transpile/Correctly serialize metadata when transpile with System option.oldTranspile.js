@@ -18,17 +18,19 @@ System.register(["angular2/core"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            MyClass1 = /** @class */ (function () {
-                function MyClass1(_elementRef) {
-                    this._elementRef = _elementRef;
-                }
+            MyClass1 = (() => {
                 var _a;
+                let MyClass1 = class MyClass1 {
+                    constructor(_elementRef) {
+                        this._elementRef = _elementRef;
+                    }
+                };
                 MyClass1 = __decorate([
                     fooexport,
                     __metadata("design:paramtypes", [typeof (_a = typeof ng !== "undefined" && ng.ElementRef) === "function" ? _a : Object])
                 ], MyClass1);
                 return MyClass1;
-            }());
+            })();
         }
     };
 });

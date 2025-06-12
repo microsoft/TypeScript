@@ -46,9 +46,9 @@ import type { type something } from "./mod.js"; // Error
 
 
 //// [mod.js]
-export var as = 0;
-export var type = 0;
-export var something = 0;
+export const as = 0;
+export const type = 0;
+export const something = 0;
 //// [a.js]
 import { type } from "./mod.js";
 type;

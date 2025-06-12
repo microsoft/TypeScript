@@ -33,42 +33,37 @@ function C() {
 
 //// [argumentsUsedInClassFieldInitializerOrStaticInitializationBlock.js]
 function A() {
-    return /** @class */ (function () {
-        function T() {
+    return class T {
+        constructor() {
             this.a = arguments;
         }
-        return T;
-    }());
+    };
 }
 function A1() {
-    return new /** @class */ (function () {
-        function T() {
+    return new class T {
+        constructor() {
             this.a = arguments;
         }
-        return T;
-    }());
+    };
 }
 function B() {
-    return /** @class */ (function () {
-        function T() {
+    return class T {
+        constructor() {
             this.a = { b: arguments };
         }
-        return T;
-    }());
+    };
 }
 function B1() {
-    return new /** @class */ (function () {
-        function T() {
+    return new class T {
+        constructor() {
             this.a = { b: arguments };
         }
-        return T;
-    }());
+    };
 }
 function C() {
-    return /** @class */ (function () {
-        function T() {
+    return class T {
+        constructor() {
             this.a = function () { arguments; };
         }
-        return T;
-    }());
+    };
 }

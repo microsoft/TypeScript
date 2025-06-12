@@ -27,11 +27,11 @@ function f2<M extends object>(mymap: MyMap<M>, k: keyof M, z: { x: number }) {
 "use strict";
 // Repro from from #43152
 function f1(mymap, k) {
-    var elemofM = mymap[k];
+    const elemofM = mymap[k];
     g(elemofM);
 }
 function f2(mymap, k, z) {
-    var q1 = z;
-    var q2 = z;
-    var q3 = z;
+    const q1 = z;
+    const q2 = z;
+    const q3 = z;
 }

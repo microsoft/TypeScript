@@ -43,5 +43,5 @@ hoge.fetch(null as any);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Backbone = require("backbone");
-var hoge = new Backbone.Model();
+const hoge = new Backbone.Model();
 hoge.fetch(null);

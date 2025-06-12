@@ -19,13 +19,13 @@
 
 //// [shadowingViaLocalValue.js]
 {
-    var x_1;
+    let x;
     {
         var x = 1;
     }
 }
 {
-    var x1_1;
+    let x1;
     {
         for (var x1 = 0;;)
             ;

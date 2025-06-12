@@ -34,13 +34,13 @@ export const fExp = fnExp;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn = void 0;
-var fn = function (v, p, key, p2) { };
+const fn = (v, p, key, p2) => { };
 exports.fn = fn;
 //// [aExp.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fnExp = void 0;
-var fnExp = function (v, p, key, p2) { };
+const fnExp = (v, p, key, p2) => { };
 exports.fnExp = fnExp;
 //// [b.js]
 "use strict";

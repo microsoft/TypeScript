@@ -64,7 +64,7 @@ exports.ns = void 0;
 exports.ns = __importStar(require("./0"));
 ns.a;
 ns.b;
-var ns = { a: 1, b: 2 };
+let ns = { a: 1, b: 2 };
 ns.a;
 ns.b;
 //// [2.js]

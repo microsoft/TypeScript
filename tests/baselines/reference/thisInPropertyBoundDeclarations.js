@@ -70,33 +70,32 @@ class B {
 }
 
 //// [thisInPropertyBoundDeclarations.js]
-var Bug = /** @class */ (function () {
-    function Bug() {
+let Bug = (() => {
+    class Bug {
+        foo(name) {
+            this.name = name;
+        }
     }
-    Bug.prototype.foo = function (name) {
-        this.name = name;
-    };
     Bug.func = [
-        function (that, name) {
+        (that, name) => {
             that.foo(name);
         }
     ];
     return Bug;
-}());
+})();
 // Valid use of this in a property bound decl
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.prop1 = function () {
             this;
         };
         this.prop2 = function () {
-            var _this = this;
             function inner() {
                 this;
             }
-            (function () { return _this; });
+            () => this;
         };
-        this.prop3 = function () {
+        this.prop3 = () => {
             function inner() {
                 this;
             }
@@ -104,33 +103,30 @@ var A = /** @class */ (function () {
         this.prop4 = {
             a: function () { return this; },
         };
-        this.prop5 = function () {
+        this.prop5 = () => {
             return {
                 a: function () { return this; },
             };
         };
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-        var _this = this;
+}
+class B {
+    constructor() {
         this.prop1 = this;
-        this.prop2 = function () { return _this; };
-        this.prop3 = function () { return function () { return function () { return function () { return _this; }; }; }; };
+        this.prop2 = () => this;
+        this.prop3 = () => () => () => () => this;
         this.prop4 = '  ' +
             function () {
             } +
             ' ' +
-            (function () { return function () { return function () { return _this; }; }; });
+            (() => () => () => this);
         this.prop5 = {
-            a: function () { return _this; }
+            a: () => { return this; }
         };
-        this.prop6 = function () {
+        this.prop6 = () => {
             return {
-                a: function () { return _this; }
+                a: () => { return this; }
             };
         };
     }
-    return B;
-}());
+}

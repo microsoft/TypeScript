@@ -28,12 +28,9 @@ export const toBoundedInteger =
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toBoundedInteger = void 0;
-var toBoundedInteger = function (bounds) {
-    return function (n) {
-        // Implementation doesn't matter here
-        return ({});
-    };
-};
+const toBoundedInteger = (bounds) => (n) => 
+// Implementation doesn't matter here
+({});
 exports.toBoundedInteger = toBoundedInteger;
 
 

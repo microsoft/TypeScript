@@ -41,43 +41,25 @@ class c3 {
 }
 
 //// [collisionRestParameterClassMethod.js]
-var c1 = /** @class */ (function () {
-    function c1() {
+class c1 {
+    foo(_i, ...restParameters) {
+        var _i = 10; // no error
     }
-    c1.prototype.foo = function (_i) {
-        var restParameters = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            restParameters[_a - 1] = arguments[_a];
-        }
+    fooNoError(_i) {
         var _i = 10; // no error
-    };
-    c1.prototype.fooNoError = function (_i) {
-        var _i = 10; // no error
-    };
-    c1.prototype.f4 = function (_i) {
-        var rest = [];
-        for (var _a = 1; _a < arguments.length; _a++) {
-            rest[_a - 1] = arguments[_a];
-        }
-        var _i; // no error
-    };
-    c1.prototype.f4NoError = function (_i) {
-        var _i; // no error
-    };
-    return c1;
-}());
-var c3 = /** @class */ (function () {
-    function c3() {
     }
-    c3.prototype.foo = function () {
-        var restParameters = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            restParameters[_a] = arguments[_a];
-        }
+    f4(_i, ...rest) {
+        var _i; // no error
+    }
+    f4NoError(_i) {
+        var _i; // no error
+    }
+}
+class c3 {
+    foo(...restParameters) {
         var _i = 10; // no error
-    };
-    c3.prototype.fooNoError = function () {
+    }
+    fooNoError() {
         var _i = 10; // no error
-    };
-    return c3;
-}());
+    }
+}

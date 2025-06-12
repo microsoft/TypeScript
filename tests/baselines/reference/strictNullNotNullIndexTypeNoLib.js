@@ -36,28 +36,19 @@ class Test2<T extends A> {
 }
 
 //// [strictNullNotNullIndexTypeNoLib.js]
-var Test = /** @class */ (function () {
-    function Test() {
-    }
-    Test.prototype.m = function () {
+class Test {
+    m() {
         this.attrs.params.name;
-    };
-    return Test;
-}());
-var FooClass = /** @class */ (function () {
-    function FooClass() {
     }
-    FooClass.prototype.foo = function () {
-        var _a = this.properties.foo, foo = _a === void 0 ? 42 : _a;
+}
+class FooClass {
+    foo() {
+        const { foo = 42 } = this.properties;
         return foo;
-    };
-    return FooClass;
-}());
-var Test2 = /** @class */ (function () {
-    function Test2() {
     }
-    Test2.prototype.m = function () {
+}
+class Test2 {
+    m() {
         return this.attrs.params; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
-    };
-    return Test2;
-}());
+    }
+}

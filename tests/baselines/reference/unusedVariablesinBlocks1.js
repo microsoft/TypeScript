@@ -10,8 +10,8 @@ function f1 () {
 
 //// [unusedVariablesinBlocks1.js]
 function f1() {
-    var x = 10;
+    let x = 10;
     {
-        var x_1 = 11;
+        let x = 11;
     }
 }

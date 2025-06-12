@@ -21,7 +21,7 @@ var _a, _b, _c, _d, _e, _f, _g, _h;
 var globalCounter = 0;
 function incrementIdx(max) {
     globalCounter += 1;
-    var idx = Math.floor(Math.random() * max);
+    let idx = Math.floor(Math.random() * max);
     return idx;
 }
 var array1 = [1, 2, 3, 4, 5];

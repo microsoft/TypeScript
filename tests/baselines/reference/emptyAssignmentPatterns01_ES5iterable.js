@@ -8,8 +8,8 @@ var a: any;
 
 //// [emptyAssignmentPatterns01_ES5iterable.js]
 var a;
-(a);
-(a);
+({} = a);
+([] = a);
 
 
 //// [emptyAssignmentPatterns01_ES5iterable.d.ts]

@@ -18,7 +18,7 @@ var TopLevelEnum;
 })(TopLevelEnum || (TopLevelEnum = {}));
 var ModuleEnum;
 (function (ModuleEnum) {
-    var EnumInModule;
+    let EnumInModule;
     (function (EnumInModule) {
         EnumInModule[EnumInModule["WasADifferentError"] = this] = "WasADifferentError"; // this was handled as if this was in a module
     })(EnumInModule || (EnumInModule = {}));

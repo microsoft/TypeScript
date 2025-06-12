@@ -100,34 +100,29 @@ var fooVar;
 foo(50);
 fooVar();
 /**class comment*/
-var c = /** @class */ (function () {
+class c {
     /** constructor comment*/
-    function c() {
+    constructor() {
         /** property comment */
         this.b = 10;
     }
     /** function comment */
-    c.prototype.myFoo = function () {
+    myFoo() {
         return this.b;
-    };
-    Object.defineProperty(c.prototype, "prop1", {
-        /** getter comment*/
-        get: function () {
-            return this.b;
-        },
-        /** setter comment*/
-        set: function (val) {
-            this.b = val;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    /** getter comment*/
+    get prop1() {
+        return this.b;
+    }
+    /** setter comment*/
+    set prop1(val) {
+        this.b = val;
+    }
     /** overload implementation signature*/
-    c.prototype.foo1 = function (aOrb) {
+    foo1(aOrb) {
         return aOrb.toString();
-    };
-    return c;
-}());
+    }
+}
 /**instance comment*/
 var i = new c();
 /**interface instance comments*/
@@ -136,12 +131,11 @@ var i1_i;
 var m1;
 (function (m1) {
     /** class b */
-    var b = /** @class */ (function () {
-        function b(x) {
+    class b {
+        constructor(x) {
             this.x = x;
         }
-        return b;
-    }());
+    }
     m1.b = b;
 })(m1 || (m1 = {}));
 

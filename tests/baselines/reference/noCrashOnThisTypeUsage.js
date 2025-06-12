@@ -32,20 +32,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ObservableValue = void 0;
 function notifyListeners(listenable, change) {
 }
-var ObservableValue = /** @class */ (function () {
-    function ObservableValue(value) {
+class ObservableValue {
+    constructor(value) {
         this.value = value;
         this.changeListeners = [];
-        var newValue = value;
-        var oldValue = null;
+        const newValue = value;
+        const oldValue = null;
         notifyListeners(this, {
             type: "update",
             object: this,
-            newValue: newValue,
-            oldValue: oldValue
+            newValue,
+            oldValue
         });
     }
-    ObservableValue.prototype.observe = function (handler, fireImmediately) { };
-    return ObservableValue;
-}());
+    observe(handler, fireImmediately) { }
+}
 exports.ObservableValue = ObservableValue;

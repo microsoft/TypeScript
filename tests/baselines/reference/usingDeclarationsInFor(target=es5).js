@@ -58,11 +58,10 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
-var _a;
 {
-    var env_1 = { stack: [], error: void 0, hasError: false };
+    const env_1 = { stack: [], error: void 0, hasError: false };
     try {
-        var d1 = __addDisposableResource(env_1, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false), d2 = __addDisposableResource(env_1, null, false), d3 = __addDisposableResource(env_1, undefined, false);
+        const d1 = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false), d2 = __addDisposableResource(env_1, null, false), d3 = __addDisposableResource(env_1, undefined, false);
         for (;;) {
         }
     }

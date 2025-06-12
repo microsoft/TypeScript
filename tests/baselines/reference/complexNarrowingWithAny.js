@@ -626,53 +626,41 @@ exports.viewFactory_AppComponent0 = viewFactory_AppComponent0;
 //stubbed out imports
 var import44;
 (function (import44) {
-    var FormGroupDirective = /** @class */ (function () {
-        function FormGroupDirective(any) {
-        }
-        return FormGroupDirective;
-    }());
+    class FormGroupDirective {
+        constructor(any) { }
+    }
     import44.FormGroupDirective = FormGroupDirective;
 })(import44 || (import44 = {}));
 var import45;
 (function (import45) {
-    var NgControlStatus = /** @class */ (function () {
-        function NgControlStatus(any) {
-        }
-        return NgControlStatus;
-    }());
+    class NgControlStatus {
+        constructor(any) { }
+    }
     import45.NgControlStatus = NgControlStatus;
-    var NgControlStatusGroup = /** @class */ (function () {
-        function NgControlStatusGroup(any) {
-        }
-        return NgControlStatusGroup;
-    }());
+    class NgControlStatusGroup {
+        constructor(any) { }
+    }
     import45.NgControlStatusGroup = NgControlStatusGroup;
 })(import45 || (import45 = {}));
 var import46;
 (function (import46) {
-    var DefaultValueAccessor = /** @class */ (function () {
-        function DefaultValueAccessor(any) {
-        }
-        return DefaultValueAccessor;
-    }());
+    class DefaultValueAccessor {
+        constructor(any) { }
+    }
     import46.DefaultValueAccessor = DefaultValueAccessor;
 })(import46 || (import46 = {}));
 var import47;
 (function (import47) {
-    var FormControlName = /** @class */ (function () {
-        function FormControlName(any) {
-        }
-        return FormControlName;
-    }());
+    class FormControlName {
+        constructor(any) { }
+    }
     import47.FormControlName = FormControlName;
 })(import47 || (import47 = {}));
 var import48;
 (function (import48) {
-    var FormControlName = /** @class */ (function () {
-        function FormControlName(any) {
-        }
-        return FormControlName;
-    }());
+    class FormControlName {
+        constructor(any) { }
+    }
     import48.FormControlName = FormControlName;
 })(import48 || (import48 = {}));
 //HERE BE DRAGONS
@@ -692,26 +680,22 @@ var import49;
 //END DRAGONS
 var import50;
 (function (import50) {
-    var NgControl = /** @class */ (function () {
-        function NgControl(any) {
-        }
-        return NgControl;
-    }());
+    class NgControl {
+        constructor(any) { }
+    }
     import50.NgControl = NgControl;
 })(import50 || (import50 = {}));
 var import51;
 (function (import51) {
-    var ControlContainer = /** @class */ (function () {
-        function ControlContainer(any) {
-        }
-        return ControlContainer;
-    }());
+    class ControlContainer {
+        constructor(any) { }
+    }
     import51.ControlContainer = ControlContainer;
 })(import51 || (import51 = {}));
-var _View_AppComponent0 = /** @class */ (function () {
-    function _View_AppComponent0(viewUtils, parentInjector, declarationEl) {
+class _View_AppComponent0 {
+    constructor(viewUtils, parentInjector, declarationEl) {
     }
-    _View_AppComponent0.prototype.injectorGetInternal = function (token, requestNodeIndex, notFoundResult) {
+    injectorGetInternal(token, requestNodeIndex, notFoundResult) {
         if (((token === import46.DefaultValueAccessor) && (3 === requestNodeIndex))) {
             return this._DefaultValueAccessor_3_3;
         }
@@ -1022,9 +1006,8 @@ var _View_AppComponent0 = /** @class */ (function () {
             return this._NgControlStatusGroup_1_5;
         }
         return notFoundResult;
-    };
-    return _View_AppComponent0;
-}());
+    }
+}
 function viewFactory_AppComponent0(viewUtils, parentInjector, declarationEl) {
     return new _View_AppComponent0(viewUtils, parentInjector, declarationEl);
 }

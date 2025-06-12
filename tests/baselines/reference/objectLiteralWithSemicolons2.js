@@ -9,7 +9,7 @@ var v = {
 
 //// [objectLiteralWithSemicolons2.js]
 var v = {
-    a: a,
-    b: b,
-    c: c
+    a,
+    b,
+    c
 };

@@ -208,12 +208,9 @@ var obj86: i8 = new <i8> anyVar;
 var obj87: i8 = new {};
 
 //// [intTypeCheck.js]
-var Base = /** @class */ (function () {
-    function Base() {
-    }
-    Base.prototype.foo = function () { };
-    return Base;
-}());
+class Base {
+    foo() { }
+}
 var anyVar;
 //
 // Property signatures

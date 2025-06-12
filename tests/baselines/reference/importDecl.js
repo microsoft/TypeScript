@@ -86,11 +86,8 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.d = void 0;
 exports.foo = foo;
-var d = /** @class */ (function () {
-    function d() {
-    }
-    return d;
-}());
+class d {
+}
 exports.d = d;
 function foo() { return null; }
 //// [importDecl_require1.js]
@@ -98,11 +95,8 @@ function foo() { return null; }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
 exports.foo = foo;
-var d = /** @class */ (function () {
-    function d() {
-    }
-    return d;
-}());
+class d {
+}
 exports.d = d;
 var x;
 function foo() { return null; }
@@ -111,11 +105,8 @@ function foo() { return null; }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.d = void 0;
 exports.foo = foo;
-var d = /** @class */ (function () {
-    function d() {
-    }
-    return d;
-}());
+class d {
+}
 exports.d = d;
 function foo() { return null; }
 //// [importDecl_require3.js]
@@ -123,11 +114,8 @@ function foo() { return null; }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = exports.d = void 0;
 exports.foo = foo;
-var d = /** @class */ (function () {
-    function d() {
-    }
-    return d;
-}());
+class d {
+}
 exports.d = d;
 function foo() { return null; }
 //// [importDecl_require4.js]

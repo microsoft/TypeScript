@@ -55,62 +55,41 @@ function invalidPrologue(a = 10, b = 20) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
-function a(a) {
+function a(a = 10) {
     "use strict";
-    if (a === void 0) { a = 10; }
 }
 exports.foo = 10;
-function b(a) {
-    if (a === void 0) { a = 10; }
+function b(a = 10) {
 }
 function container() {
     "use strict";
-    function f(a) {
-        if (a === void 0) { a = 10; }
+    function f(a = 10) {
     }
 }
-function rest() {
+function rest(...args) {
     'use strict';
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
 }
-function rest1(a) {
+function rest1(a = 1, ...args) {
     'use strict';
-    if (a === void 0) { a = 1; }
-    var args = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-    }
 }
-function paramDefault(param) {
+function paramDefault(param = 1) {
     'use strict';
-    if (param === void 0) { param = 1; }
 }
-function objectBindingPattern(_a) {
+function objectBindingPattern({ foo }) {
     'use strict';
-    var foo = _a.foo;
 }
-function arrayBindingPattern(_a) {
+function arrayBindingPattern([foo]) {
     'use strict';
-    var foo = _a[0];
 }
-function manyParameter(a, b) {
+function manyParameter(a = 10, b = 20) {
     "use strict";
-    if (a === void 0) { a = 10; }
-    if (b === void 0) { b = 20; }
 }
-function manyPrologue(a, b) {
+function manyPrologue(a = 10, b = 20) {
     "foo";
     "use strict";
-    if (a === void 0) { a = 10; }
-    if (b === void 0) { b = 20; }
 }
-function invalidPrologue(a, b) {
+function invalidPrologue(a = 10, b = 20) {
     "foo";
-    if (a === void 0) { a = 10; }
-    if (b === void 0) { b = 20; }
-    var c = 1;
+    const c = 1;
     "use strict";
 }

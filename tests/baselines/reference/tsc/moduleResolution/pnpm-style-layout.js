@@ -352,7 +352,7 @@ src/app.tsx
 
 //// [/home/src/projects/component-type-checker/packages/app/dist/app.js]
 import { createButton } from "@component-type-checker/button";
-var button = createButton();
+const button = createButton();
 
 
 

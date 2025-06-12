@@ -34,7 +34,7 @@ __exportStar(require("./thingB"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing2 = void 0;
-var thing2 = function (param) { return null; };
+const thing2 = (param) => null;
 exports.thing2 = thing2;
 
 

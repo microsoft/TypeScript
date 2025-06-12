@@ -243,7 +243,7 @@ function f20(x) {
 }
 // Anything is assignable to unknown
 function f21(pAny, pNever, pT) {
-    var x;
+    let x;
     x = 123;
     x = "hello";
     x = [1, 2, 3];
@@ -255,17 +255,17 @@ function f21(pAny, pNever, pT) {
 }
 // unknown assignable only to itself and any
 function f22(x) {
-    var v1 = x;
-    var v2 = x;
-    var v3 = x; // Error
-    var v4 = x; // Error
-    var v5 = x; // Error
-    var v6 = x; // Error
-    var v7 = x; // Error
+    let v1 = x;
+    let v2 = x;
+    let v3 = x; // Error
+    let v4 = x; // Error
+    let v5 = x; // Error
+    let v6 = x; // Error
+    let v7 = x; // Error
 }
 // Type parameter 'T extends unknown' not related to object
 function f23(x) {
-    var y = x; // Error
+    let y = x; // Error
 }
 // Anything fresh but primitive assignable to { [x: string]: unknown }
 function f24(x) {
@@ -276,33 +276,30 @@ function f24(x) {
 }
 // Locals of type unknown always considered initialized
 function f25() {
-    var x;
-    var y = x;
+    let x;
+    let y = x;
 }
 // Spread of unknown causes result to be unknown
 function f26(x, y, z) {
-    var o1 = __assign({ a: 42 }, x); // { a: number }
-    var o2 = __assign(__assign({ a: 42 }, x), y); // unknown
-    var o3 = __assign(__assign(__assign({ a: 42 }, x), y), z); // any
-    var o4 = __assign({ a: 42 }, z); // any
+    let o1 = __assign({ a: 42 }, x); // { a: number }
+    let o2 = __assign(__assign({ a: 42 }, x), y); // unknown
+    let o3 = __assign(__assign(__assign({ a: 42 }, x), y), z); // any
+    let o4 = __assign({ a: 42 }, z); // any
 }
 // Functions with unknown return type don't need return expressions
 function f27() {
 }
 // Rest type cannot be created from unknown
 function f28(x) {
-    var a = __rest(x, []); // Error
+    let a = __rest(x, []); // Error
 }
 // Class properties of type unknown don't need definite assignment
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
+class C1 {
+}
 // Type parameter with explicit 'unknown' constraint not assignable to '{}'
 function f30(t, u) {
-    var x = t;
-    var y = u;
+    let x = t;
+    let y = u;
 }
 function oops(arg) {
     return arg; // Error

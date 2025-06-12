@@ -12,10 +12,9 @@ class Camera implements iface{
 
 
 //// [interfaceSubtyping.js]
-var Camera = /** @class */ (function () {
-    function Camera(str) {
+class Camera {
+    constructor(str) {
         this.str = str;
     }
-    Camera.prototype.foo = function () { return "s"; };
-    return Camera;
-}());
+    foo() { return "s"; }
+}

@@ -251,8 +251,8 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 function f1(obj) {
-    var a = obj.a; // string | undefined
-    var b = obj.b; // string | undefined
+    let a = obj.a; // string | undefined
+    let b = obj.b; // string | undefined
     obj.a = 'hello';
     obj.b = 'hello';
     obj.a = undefined; // Error
@@ -296,15 +296,15 @@ function f2(obj) {
     }
 }
 function f3(obj) {
-    var a = obj.a; // string | undefined
-    var b = obj.b; // string | undefined
+    let a = obj.a; // string | undefined
+    let b = obj.b; // string | undefined
     obj.a = 'hello';
     obj.b = 'hello';
     obj.a = undefined; // Error
     obj.b = undefined;
 }
 function f4(t) {
-    var x = t[0]; // string | undefined
+    let x = t[0]; // string | undefined
     t[0] = 'hello';
     t[0] = undefined; // Error
 }
@@ -322,23 +322,23 @@ function f5(t) {
     t = [42, undefined, true]; // Error
 }
 function f6() {
-    var t1 = [1, 2];
-    var t2 = [1, 2, ,];
-    var t3 = [1, 2, , ,];
-    var t4 = [1, , 2];
-    var t5 = [1, , , 2];
+    const t1 = [1, 2];
+    const t2 = [1, 2, ,];
+    const t3 = [1, 2, , ,];
+    const t4 = [1, , 2];
+    const t5 = [1, , , 2];
 }
-var defaultProps = { foo: 'foo' };
-var inputProps = { foo: undefined, bar: 'bar' };
-var completeProps = __assign(__assign({}, defaultProps), inputProps);
+const defaultProps = { foo: 'foo' };
+const inputProps = { foo: undefined, bar: 'bar' };
+const completeProps = __assign(__assign({}, defaultProps), inputProps);
 // Example from #13195
-var t1 = [1];
-var t2 = [1, undefined];
-var t3 = [1, "string", undefined];
-var t4 = [1, undefined, undefined];
+const t1 = [1];
+const t2 = [1, undefined];
+const t3 = [1, "string", undefined];
+const t4 = [1, undefined, undefined];
 // Example from #13195
-var x = { foo: undefined };
-var y = __assign({ foo: 123 }, x);
+const x = { foo: undefined };
+const y = __assign({ foo: 123 }, x);
 f11(ox1); // string
 f11(ox2); // string | undefined
 f11(ox3); // string
@@ -362,7 +362,7 @@ function expectNotUndefined(value) {
     return value;
 }
 function aa(input) {
-    var notUndefinedVal = expectNotUndefined(input.bar);
+    const notUndefinedVal = expectNotUndefined(input.bar);
     bb(notUndefinedVal);
 }
 u1.email = e; // error, but only because boolean isn't in email's type

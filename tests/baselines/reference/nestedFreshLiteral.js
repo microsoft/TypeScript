@@ -16,6 +16,6 @@ let stylen: NestedCSSProps = {
 }
 
 //// [nestedFreshLiteral.js]
-var stylen = {
+let stylen = {
     nested: { prop: { colour: 'red' } }
 };

@@ -116,25 +116,16 @@ module TargetIsPublic {
 var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
+    class Base {
+    }
     var a;
     var b;
     var i;
     // sources
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
-    var E = /** @class */ (function () {
-        function E() {
-        }
-        return E;
-    }());
+    class D {
+    }
+    class E {
+    }
     var d;
     var e;
     a = b;
@@ -161,25 +152,16 @@ var TargetIsPublic;
 })(TargetIsPublic || (TargetIsPublic = {}));
 (function (TargetIsPublic) {
     // targets
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
+    class Base {
+    }
     var a;
     var b;
     var i;
     // sources
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
-    var E = /** @class */ (function () {
-        function E() {
-        }
-        return E;
-    }());
+    class D {
+    }
+    class E {
+    }
     var d;
     var e;
     a = b; // error

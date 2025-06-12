@@ -4,4 +4,4 @@
 var { x } = <any><any>new Foo;
 
 //// [destructuringTypeAssertionsES5_7.js]
-var x = (new Foo).x;
+var { x } = new Foo;

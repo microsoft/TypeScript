@@ -142,20 +142,18 @@ var qq: any;
 // Initializers
 var varInit = varInit; // any
 var pInit;
-function fn(pInit) {
-    if (pInit === void 0) { pInit = pInit; }
+function fn(pInit = pInit) {
     var pInit;
 }
-var InitClass = /** @class */ (function () {
-    function InitClass() {
+class InitClass {
+    constructor() {
         this.x = this.x;
     }
-    InitClass.prototype.fn = function () {
+    fn() {
         var y = this.x;
         var y;
-    };
-    return InitClass;
-}());
+    }
+}
 // Return type
 function fnReturn1() {
     return fnReturn1();
@@ -215,21 +213,18 @@ function fnArg2() {
 }
 var t = fnArg2(); // t: should be 'any', but is 'string'
 // New operator
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.fn1 = function () {
+class C {
+    fn1() {
         return new (this.fn1())();
-    };
-    C.prototype.fn2 = function () {
+    }
+    fn2() {
         return new (this.fn2());
-    };
-    C.prototype.fn3 = function () {
+    }
+    fn3() {
         var a;
         return new a(this.fn3);
-    };
-    return C;
-}());
+    }
+}
 function fn5() {
     var a;
     return new a(fn5);
@@ -248,21 +243,20 @@ var M2;
     var y;
 })(M2 || (M2 = {}));
 // Property access of class instance type
-var C2 = /** @class */ (function () {
-    function C2() {
+class C2 {
+    constructor() {
         this.n = this.n; // n: any
     }
-    return C2;
-}());
+}
 var c2inst = new C2().n;
 var c2inst;
 // Constructor function property access
-var C3 = /** @class */ (function () {
-    function C3() {
+let C3 = (() => {
+    class C3 {
     }
     C3.q = C3.q;
     return C3;
-}());
+})();
 var qq = C3.q;
 var qq;
 // Parentheses - tested a bunch above

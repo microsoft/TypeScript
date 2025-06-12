@@ -16,12 +16,10 @@ export default class A
 
 
 //// [es5andes6module.js]
-var A = /** @class */ (function () {
-    function A() {
+export default class A {
+    constructor() {
     }
-    A.prototype.B = function () {
+    B() {
         return 42;
-    };
-    return A;
-}());
-export default A;
+    }
+}

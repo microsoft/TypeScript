@@ -43,7 +43,7 @@ s = map("", dottedIdentity.x);
 // index expression
 s = map("", dottedIdentity['x']);
 // function call
-s = map("", (function () { return identity; })());
+s = map("", (() => identity)());
 var ic;
 s = map("", new ic());
 // assignment

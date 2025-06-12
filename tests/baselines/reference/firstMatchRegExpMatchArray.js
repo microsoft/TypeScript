@@ -11,8 +11,8 @@ if (match !== null) {
 
 //// [firstMatchRegExpMatchArray.js]
 "use strict";
-var match = ''.match(/ /);
+const match = ''.match(/ /);
 if (match !== null) {
-    var foo = match[0];
-    var bar = match[1];
+    const foo = match[0];
+    const bar = match[1];
 }

@@ -12,11 +12,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Object = /** @class */ (function () {
-                function Object() {
-                }
-                return Object;
-            }());
+            Object = class Object {
+            };
             exports_1("Object", Object);
         }
     };

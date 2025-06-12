@@ -43,22 +43,17 @@ module Generic {
 //// [instancePropertyInClassType.js]
 var NonGeneric;
 (function (NonGeneric) {
-    var C = /** @class */ (function () {
-        function C(a, b) {
+    class C {
+        get y() {
+            return 1;
+        }
+        set y(v) { }
+        fn() { return this; }
+        constructor(a, b) {
             this.a = a;
             this.b = b;
         }
-        Object.defineProperty(C.prototype, "y", {
-            get: function () {
-                return 1;
-            },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        C.prototype.fn = function () { return this; };
-        return C;
-    }());
+    }
     var c = new C(1, 2);
     var r = c.fn();
     var r2 = r.x;
@@ -68,22 +63,17 @@ var NonGeneric;
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
-    var C = /** @class */ (function () {
-        function C(a, b) {
+    class C {
+        get y() {
+            return null;
+        }
+        set y(v) { }
+        fn() { return this; }
+        constructor(a, b) {
             this.a = a;
             this.b = b;
         }
-        Object.defineProperty(C.prototype, "y", {
-            get: function () {
-                return null;
-            },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        C.prototype.fn = function () { return this; };
-        return C;
-    }());
+    }
     var c = new C(1, '');
     var r = c.fn();
     var r2 = r.x;

@@ -44,13 +44,12 @@ function foo2(a: any): void {
 */
 function foo(a) {
 }
-var c = /** @class */ (function () {
-    function c(a) {
+class c {
+    constructor(a) {
     }
-    c.prototype.foo = function (a) {
-    };
-    return c;
-}());
+    foo(a) {
+    }
+}
 //// [b.js]
 ///<reference path='a.ts'/>
 function foo2(a) {

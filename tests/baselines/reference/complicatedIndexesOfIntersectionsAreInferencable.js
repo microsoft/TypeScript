@@ -29,7 +29,7 @@ Func({
     initialValues: {
         foo: ""
     },
-    validate: function (props) {
+    validate: props => {
         props.foo;
     }
 });

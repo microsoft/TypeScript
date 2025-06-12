@@ -37,21 +37,6 @@ class C5 extends A {
 
 
 //// [usingDeclarations.11.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -104,19 +89,14 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var C1 = /** @class */ (function (_super) {
-    __extends(C1, _super);
-    function C1() {
-        var _this = this;
-        var env_1 = { stack: [], error: void 0, hasError: false };
+class A {
+}
+class C1 extends A {
+    constructor() {
+        const env_1 = { stack: [], error: void 0, hasError: false };
         try {
-            var x = __addDisposableResource(env_1, null, false);
-            _this = _super.call(this) || this;
+            const x = __addDisposableResource(env_1, null, false);
+            super();
         }
         catch (e_1) {
             env_1.error = e_1;
@@ -125,18 +105,14 @@ var C1 = /** @class */ (function (_super) {
         finally {
             __disposeResources(env_1);
         }
-        return _this;
     }
-    return C1;
-}(A));
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        var _this = this;
-        var env_2 = { stack: [], error: void 0, hasError: false };
+}
+class C2 extends A {
+    constructor() {
+        const env_2 = { stack: [], error: void 0, hasError: false };
         try {
-            _this = _super.call(this) || this;
-            var x = __addDisposableResource(env_2, null, false);
+            super();
+            const x = __addDisposableResource(env_2, null, false);
         }
         catch (e_2) {
             env_2.error = e_2;
@@ -145,19 +121,15 @@ var C2 = /** @class */ (function (_super) {
         finally {
             __disposeResources(env_2);
         }
-        return _this;
     }
-    return C2;
-}(A));
-var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);
-    function C3() {
-        var _this = this;
-        var env_3 = { stack: [], error: void 0, hasError: false };
+}
+class C3 extends A {
+    constructor() {
+        const env_3 = { stack: [], error: void 0, hasError: false };
         try {
-            var x = __addDisposableResource(env_3, null, false);
-            _this = _super.call(this) || this;
-            _this.y = 1;
+            const x = __addDisposableResource(env_3, null, false);
+            super();
+            this.y = 1;
         }
         catch (e_3) {
             env_3.error = e_3;
@@ -166,19 +138,15 @@ var C3 = /** @class */ (function (_super) {
         finally {
             __disposeResources(env_3);
         }
-        return _this;
     }
-    return C3;
-}(A));
-var C4 = /** @class */ (function (_super) {
-    __extends(C4, _super);
-    function C4(y) {
-        var _this = this;
-        var env_4 = { stack: [], error: void 0, hasError: false };
+}
+class C4 extends A {
+    constructor(y) {
+        const env_4 = { stack: [], error: void 0, hasError: false };
         try {
-            var x = __addDisposableResource(env_4, null, false);
-            _this = _super.call(this) || this;
-            _this.y = y;
+            const x = __addDisposableResource(env_4, null, false);
+            super();
+            this.y = y;
         }
         catch (e_4) {
             env_4.error = e_4;
@@ -187,20 +155,16 @@ var C4 = /** @class */ (function (_super) {
         finally {
             __disposeResources(env_4);
         }
-        return _this;
     }
-    return C4;
-}(A));
-var C5 = /** @class */ (function (_super) {
-    __extends(C5, _super);
-    function C5(y) {
-        var _this = this;
-        var env_5 = { stack: [], error: void 0, hasError: false };
+}
+class C5 extends A {
+    constructor(y) {
+        const env_5 = { stack: [], error: void 0, hasError: false };
         try {
-            var x = __addDisposableResource(env_5, null, false);
-            _this = _super.call(this) || this;
-            _this.y = y;
-            _this.z = 1;
+            const x = __addDisposableResource(env_5, null, false);
+            super();
+            this.y = y;
+            this.z = 1;
         }
         catch (e_5) {
             env_5.error = e_5;
@@ -209,7 +173,5 @@ var C5 = /** @class */ (function (_super) {
         finally {
             __disposeResources(env_5);
         }
-        return _this;
     }
-    return C5;
-}(A));
+}

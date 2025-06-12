@@ -139,32 +139,6 @@ describe("unittests:: evaluation:: superInStaticInitializer", () => {
         assert.strictEqual(Derived.y, 1);
         assert.strictEqual(thisInBase, Derived);
     });
-    it("super-call in es5", () => {
-        const result = evaluator.evaluateTypeScript(
-            `
-            export function main() {
-                let thisInBase;
-                class Base {
-                    static x() {
-                        thisInBase = this;
-                        return 1;
-                    }
-                }
-                class Derived extends Base {
-                    static y = super.x();
-                }
-                return [
-                    Derived,
-                    thisInBase,
-                ];
-            }
-        `,
-            { target: ts.ScriptTarget.ES5 },
-        );
-        const [Derived, thisInBase] = result.main();
-        assert.strictEqual(Derived.y, 1);
-        assert.strictEqual(thisInBase, Derived);
-    });
     it("super- and this-call in es2015", () => {
         const result = evaluator.evaluateTypeScript(
             `

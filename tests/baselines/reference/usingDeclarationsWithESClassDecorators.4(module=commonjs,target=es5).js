@@ -17,29 +17,29 @@ export default class {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
 var before, default_1, _default;
-var env_1 = { stack: [], error: void 0, hasError: false };
+const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    default_1 = function () {
-        var _classDecorators = [dec];
-        var _classDescriptor;
-        var _classExtraInitializers = [];
-        var _classThis;
-        var default_1 = _classThis = /** @class */ (function () {
-            function default_1() {
-            }
-            return default_1;
-        }());
-        __setFunctionName(_classThis, "default");
-        (function () {
-            var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-            __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-            default_1 = _classThis = _classDescriptor.value;
-            if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-            __runInitializers(_classThis, _classExtraInitializers);
+    default_1 = (() => {
+        let default_1 = (() => {
+            let _classDecorators = [dec];
+            let _classDescriptor;
+            let _classExtraInitializers = [];
+            let _classThis;
+            var default_1 = _classThis = class {
+            };
+            __setFunctionName(_classThis, "default");
+            (() => {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+                __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
+                default_1 = _classThis = _classDescriptor.value;
+                if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+                __runInitializers(_classThis, _classExtraInitializers);
+            })();
+            return default_1 = _classThis;
         })();
-        return default_1 = _classThis;
-    }();
+        return default_1;
+    })();
     exports.default = _default = default_1;
 }
 catch (e_1) {

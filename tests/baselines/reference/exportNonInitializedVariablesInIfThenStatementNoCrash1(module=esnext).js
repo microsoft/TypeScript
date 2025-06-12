@@ -11,5 +11,5 @@ export default cssExports;
 //// [exportNonInitializedVariablesInIfThenStatementNoCrash1.js]
 // https://github.com/microsoft/TypeScript/issues/59373
 if (true)
-    export var cssExports;
+    export const cssExports;
 export default cssExports;

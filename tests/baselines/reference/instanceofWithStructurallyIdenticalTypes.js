@@ -74,36 +74,12 @@ function goo(x: A) {
 
 //// [instanceofWithStructurallyIdenticalTypes.js]
 // Repro from #7271
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
+class C1 {
+}
+class C2 {
+}
+class C3 {
+}
 function foo1(x) {
     if (x instanceof C1) {
         return x.item;
@@ -132,30 +108,14 @@ function foo2(x) {
     return "error";
 }
 // More tests
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var A1 = /** @class */ (function (_super) {
-    __extends(A1, _super);
-    function A1() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return A1;
-}(A));
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
-var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return B;
-}(A));
+class A {
+}
+class A1 extends A {
+}
+class A2 {
+}
+class B extends A {
+}
 function goo(x) {
     if (x instanceof A) {
         x; // A

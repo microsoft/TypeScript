@@ -24,7 +24,7 @@ var style: IBookStyle = {
 
 //// [contextualTypeArrayReturnType.js]
 var style = {
-    initialLeftPageTransforms: function (width) {
+    initialLeftPageTransforms: (width) => {
         return [
             { 'ry': null }
         ];

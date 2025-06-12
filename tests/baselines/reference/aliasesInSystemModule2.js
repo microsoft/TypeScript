@@ -35,9 +35,9 @@ System.register(["foo"], function (exports_1, context_1) {
             z = new cls2();
             (function (M) {
                 M.cls = foo_1.alias.Class;
-                var x = new foo_1.alias.Class();
-                var y = new M.cls();
-                var z = new cls2();
+                let x = new foo_1.alias.Class();
+                let y = new M.cls();
+                let z = new cls2();
             })(M || (M = {}));
         }
     };

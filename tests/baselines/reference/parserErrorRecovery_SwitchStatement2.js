@@ -9,15 +9,11 @@ class D {
 }
 
 //// [parserErrorRecovery_SwitchStatement2.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         switch (e) {
         }
-        var D = /** @class */ (function () {
-            function D() {
-            }
-            return D;
-        }());
+        class D {
+        }
     }
-    return C;
-}());
+}

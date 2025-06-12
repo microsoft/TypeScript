@@ -25,8 +25,8 @@ function f(x) {
 function g(x) {
     return 0;
 }
-var a = f;
-var b = g;
+let a = f;
+let b = g;
 a = b;
 b = a;
 

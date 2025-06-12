@@ -15,15 +15,12 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BuildWorkspaceService = void 0;
-    var BuildWorkspaceService = /** @class */ (function () {
-        function BuildWorkspaceService() {
-        }
-        BuildWorkspaceService.prototype.injectRequestService = function (service) {
+    class BuildWorkspaceService {
+        injectRequestService(service) {
             this.injectBuildService(new X(service));
-        };
-        BuildWorkspaceService.prototype.injectBuildService = function (service) {
-        };
-        return BuildWorkspaceService;
-    }());
+        }
+        injectBuildService(service) {
+        }
+    }
     exports.BuildWorkspaceService = BuildWorkspaceService;
 });

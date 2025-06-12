@@ -36,12 +36,9 @@ function f<T>(x: T): A {
 }
 
 //// [genericsWithoutTypeParameters1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () { return null; };
-    return C;
-}());
+class C {
+    foo() { return null; }
+}
 var c1;
 var i1;
 var c2;
@@ -49,17 +46,11 @@ var i2;
 function foo(x, y) { }
 function foo2(x, y) { }
 var x = { a: new C() };
-var x2 = { a: { bar: function () { return 1; } } };
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+var x2 = { a: { bar() { return 1; } } };
+class D {
+}
+class A {
+}
 function f(x) {
     return null;
 }

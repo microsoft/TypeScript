@@ -12,11 +12,8 @@ module bar {
 //// [genericClassImplementingGenericInterfaceFromAnotherModule.js]
 var bar;
 (function (bar) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+    }
     bar.Foo = Foo;
 })(bar || (bar = {}));
 

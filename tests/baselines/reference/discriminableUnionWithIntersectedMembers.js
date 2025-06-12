@@ -18,6 +18,6 @@ const y: Y = 4 as any as { x: 'x' | 'y', y: number };
 
 //// [discriminableUnionWithIntersectedMembers.js]
 // error
-var x = 4;
+const x = 4;
 // no  error
-var y = 4;
+const y = 4;

@@ -13,11 +13,8 @@ define("mynamespace::SomeModuleA", ["require", "exports"], function (require, ex
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Foo = void 0;
     /// <amd-module name="mynamespace::SomeModuleA" />
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
+    class Foo {
+    }
     exports.Foo = Foo;
 });
 define("mynamespace::SomeModuleB", ["require", "exports"], function (require, exports) {
@@ -25,11 +22,8 @@ define("mynamespace::SomeModuleB", ["require", "exports"], function (require, ex
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Bar = void 0;
     /// <amd-module name="mynamespace::SomeModuleB" />
-    var Bar = /** @class */ (function () {
-        function Bar() {
-        }
-        return Bar;
-    }());
+    class Bar {
+    }
     exports.Bar = Bar;
 });
 

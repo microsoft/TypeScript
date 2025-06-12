@@ -17,5 +17,5 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var x = { b: 1, extra: 2 };
-var xx = __assign(__assign({ a: 1 }, x), { z: 3 }); // error for 'z', no error for 'extra'
+let x = { b: 1, extra: 2 };
+let xx = __assign(__assign({ a: 1 }, x), { z: 3 }); // error for 'z', no error for 'extra'

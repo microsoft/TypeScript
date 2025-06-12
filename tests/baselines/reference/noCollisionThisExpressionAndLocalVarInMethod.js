@@ -23,24 +23,21 @@ class a {
 
 //// [noCollisionThisExpressionAndLocalVarInMethod.js]
 var _this = 2;
-var a = /** @class */ (function () {
-    function a() {
-    }
-    a.prototype.method1 = function () {
+class a {
+    method1() {
         return {
-            doStuff: function (callback) { return function () {
+            doStuff: (callback) => () => {
                 var _this = 2;
                 return callback(_this);
-            }; }
+            }
         };
-    };
-    a.prototype.method2 = function () {
+    }
+    method2() {
         var _this = 2;
         return {
-            doStuff: function (callback) { return function () {
+            doStuff: (callback) => () => {
                 return callback(_this);
-            }; }
+            }
         };
-    };
-    return a;
-}());
+    }
+}

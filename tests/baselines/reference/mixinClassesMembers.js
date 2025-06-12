@@ -101,46 +101,31 @@ class C3 extends Mixed3 {
 
 
 //// [mixinClassesMembers.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 function f1() {
-    var x1 = new Mixed1("hello");
-    var x2 = new Mixed1(42);
-    var x3 = new Mixed2("hello");
-    var x4 = new Mixed2(42);
-    var x5 = new Mixed3("hello");
-    var x6 = new Mixed3(42);
-    var x7 = new Mixed4("hello");
-    var x8 = new Mixed4(42);
-    var x9 = new Mixed5();
+    let x1 = new Mixed1("hello");
+    let x2 = new Mixed1(42);
+    let x3 = new Mixed2("hello");
+    let x4 = new Mixed2(42);
+    let x5 = new Mixed3("hello");
+    let x6 = new Mixed3(42);
+    let x7 = new Mixed4("hello");
+    let x8 = new Mixed4(42);
+    let x9 = new Mixed5();
 }
 function f2() {
-    var x = new Mixed1("hello");
+    let x = new Mixed1("hello");
     x.a;
     x.p;
     Mixed1.p;
 }
 function f3() {
-    var x = new Mixed2("hello");
+    let x = new Mixed2("hello");
     x.a;
     x.p;
     Mixed2.p;
 }
 function f4() {
-    var x = new Mixed3("hello");
+    let x = new Mixed3("hello");
     x.a;
     x.p;
     x.f();
@@ -148,7 +133,7 @@ function f4() {
     Mixed3.f();
 }
 function f5() {
-    var x = new Mixed4("hello");
+    let x = new Mixed4("hello");
     x.a;
     x.p;
     x.f();
@@ -156,36 +141,30 @@ function f5() {
     Mixed4.f();
 }
 function f6() {
-    var x = new Mixed5();
+    let x = new Mixed5();
     x.p;
     x.f();
     Mixed5.p;
     Mixed5.f();
 }
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        var _this = _super.call(this, "hello") || this;
-        _this.a;
-        _this.b;
-        _this.p;
-        return _this;
+class C2 extends Mixed1 {
+    constructor() {
+        super("hello");
+        this.a;
+        this.b;
+        this.p;
     }
-    return C2;
-}(Mixed1));
-var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);
-    function C3() {
-        var _this = _super.call(this, 42) || this;
-        _this.a;
-        _this.b;
-        _this.p;
-        _this.f();
-        return _this;
+}
+class C3 extends Mixed3 {
+    constructor() {
+        super(42);
+        this.a;
+        this.b;
+        this.p;
+        this.f();
     }
-    C3.prototype.f = function () { return _super.prototype.f.call(this); };
-    return C3;
-}(Mixed3));
+    f() { return super.f(); }
+}
 
 
 //// [mixinClassesMembers.d.ts]

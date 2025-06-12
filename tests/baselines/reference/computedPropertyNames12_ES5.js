@@ -22,14 +22,16 @@ class C {
 var s;
 var n;
 var a;
-var C = /** @class */ (function () {
-    function C() {
-        this[_a] = n;
-        this[_b] = 2;
-        this["hello bye"] = 0;
-    }
+let C = (() => {
     var _a, _b, _c;
-    _a = n, s + s, _b = s + n, +s, _c = "hello ".concat(a, " bye");
+    class C {
+        constructor() {
+            this[_a] = n;
+            this[_b] = 2;
+            this[`hello bye`] = 0;
+        }
+    }
+    _a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
     C[_c] = 0;
     return C;
-}());
+})();

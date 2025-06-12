@@ -60,17 +60,13 @@ for (obj === null || obj === void 0 ? void 0 : obj["a"] in {})
     ;
 for (obj === null || obj === void 0 ? void 0 : obj.a["b"] in {})
     ;
-for (var _i = 0, _a = []; _i < _a.length; _i++) {
-    obj === null || obj === void 0 ? void 0 : obj["a"] = _a[_i];
+for (obj === null || obj === void 0 ? void 0 : obj["a"] of [])
     ;
-}
-for (var _b = 0, _c = []; _b < _c.length; _b++) {
-    obj === null || obj === void 0 ? void 0 : obj.a["b"] = _c[_b];
+for (obj === null || obj === void 0 ? void 0 : obj.a["b"] of [])
     ;
-}
-(obj === null || obj === void 0 ? void 0 : obj["a"] = { a: 1 }.a);
-(obj === null || obj === void 0 ? void 0 : obj.a["b"] = { a: 1 }.a);
+({ a: obj === null || obj === void 0 ? void 0 : obj["a"] } = { a: 1 });
+({ a: obj === null || obj === void 0 ? void 0 : obj.a["b"] } = { a: 1 });
 (obj === null || obj === void 0 ? void 0 : obj["a"] = __rest({ a: 1 }, []));
 (obj === null || obj === void 0 ? void 0 : obj.a["b"] = __rest({ a: 1 }, []));
-obj === null || obj === void 0 ? void 0 : obj["a"] = [].slice(0);
-obj === null || obj === void 0 ? void 0 : obj.a["b"] = [].slice(0);
+[...obj === null || obj === void 0 ? void 0 : obj["a"]] = [];
+[...obj === null || obj === void 0 ? void 0 : obj.a["b"]] = [];

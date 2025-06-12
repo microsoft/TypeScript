@@ -31,25 +31,13 @@ export = Foo;
 "use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class C {
+    }
+    class D {
+    }
 })(M || (M = {}));
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+class Foo {
+}
+class Bar {
+}
 module.exports = Foo;

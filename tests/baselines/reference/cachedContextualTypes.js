@@ -28,13 +28,11 @@ createInstance(MenuWorkbenchToolBar, {
 "use strict";
 // Repro from #52198
 Object.defineProperty(exports, "__esModule", { value: true });
-var MenuWorkbenchToolBar = /** @class */ (function () {
-    function MenuWorkbenchToolBar(options) {
-    }
-    return MenuWorkbenchToolBar;
-}());
+class MenuWorkbenchToolBar {
+    constructor(options) { }
+}
 createInstance(MenuWorkbenchToolBar, {
     toolbarOptions: {
-        foo: function (bar) { return bar; }
+        foo(bar) { return bar; }
     }
 });

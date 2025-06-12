@@ -554,11 +554,8 @@ exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 function multiply(a, b) { return a * b; }
-var someClass = /** @class */ (function () {
-    function someClass() {
-    }
-    return someClass;
-}());
+class someClass {
+}
 exports.someClass = someClass;
 
 
@@ -1308,17 +1305,11 @@ exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 function multiply(a, b) { return a * b; }
-var someClass = /** @class */ (function () {
-    function someClass() {
-    }
-    return someClass;
-}());
+class someClass {
+}
 exports.someClass = someClass;
-var someClass2 = /** @class */ (function () {
-    function someClass2() {
-    }
-    return someClass2;
-}());
+class someClass2 {
+}
 exports.someClass2 = someClass2;
 
 

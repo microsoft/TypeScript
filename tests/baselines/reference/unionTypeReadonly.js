@@ -30,13 +30,13 @@ differentName.value = 12; // error, property 'value' doesn't exist
 
 
 //// [unionTypeReadonly.js]
-var base;
+let base;
 base.value = 12; // error, lhs can't be a readonly property
-var identical;
+let identical;
 identical.value = 12; // error, lhs can't be a readonly property
-var mutable;
+let mutable;
 mutable.value = 12; // error, lhs can't be a readonly property
-var differentType;
+let differentType;
 differentType.value = 12; // error, lhs can't be a readonly property
-var differentName;
+let differentName;
 differentName.value = 12; // error, property 'value' doesn't exist

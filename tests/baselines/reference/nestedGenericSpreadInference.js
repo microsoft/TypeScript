@@ -11,4 +11,4 @@ const leak = call(wrap(<T>(x: T) => x), 1);
 //// [nestedGenericSpreadInference.js]
 "use strict";
 // This should be of type `number` - ideally, it also would not error.
-var leak = call(wrap(function (x) { return x; }), 1);
+const leak = call(wrap((x) => x), 1);

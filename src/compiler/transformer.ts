@@ -55,7 +55,6 @@ import {
     transformECMAScriptModule,
     Transformer,
     TransformerFactory,
-    transformES2015,
     transformES2016,
     transformES2017,
     transformES2018,
@@ -64,7 +63,6 @@ import {
     transformES2021,
     transformESDecorators,
     transformESNext,
-    transformGenerators,
     transformImpliedNodeFormatDependentModule,
     transformJsx,
     transformLegacyDecorators,
@@ -175,11 +173,6 @@ function getScriptTransformers(compilerOptions: CompilerOptions, customTransform
 
     if (languageVersion < ScriptTarget.ES2016) {
         transformers.push(transformES2016);
-    }
-
-    if (languageVersion < ScriptTarget.ES2015) {
-        transformers.push(transformES2015);
-        transformers.push(transformGenerators);
     }
 
     transformers.push(getModuleTransformer(moduleKind));

@@ -8,10 +8,10 @@ var c = C.x;
 
 
 //// [propertyAccessibility2.js]
-var C = /** @class */ (function () {
-    function C() {
+let C = (() => {
+    class C {
     }
     C.x = 1;
     return C;
-}());
+})();
 var c = C.x;

@@ -155,7 +155,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.js]
-var a = "hello";
+const a = "hello";
 
 
 
@@ -312,7 +312,7 @@ Output::
 
 
 //// [/home/src/projects/outFile.js]
-var a = "hello;
+const a = "hello;
 
 
 

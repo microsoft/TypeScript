@@ -34,5 +34,5 @@ export const pick = () => pick();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pick = void 0;
 var pick = require("lodash/pick");
-var pick = function () { return (0, exports.pick)(); };
+const pick = () => (0, exports.pick)();
 exports.pick = pick;

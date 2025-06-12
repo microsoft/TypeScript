@@ -20,14 +20,11 @@ var r3 = r.a
 
 
 //// [indexersInClassType.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.fn = function () {
+class C {
+    fn() {
         return this;
-    };
-    return C;
-}());
+    }
+}
 var c = new C();
 var r = c.fn();
 var r2 = r[1];

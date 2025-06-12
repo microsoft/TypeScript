@@ -138,16 +138,10 @@ var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
+class A {
+}
+class A2 {
+}
 var E2;
 (function (E2) {
     E2[E2["A"] = 0] = "A";
@@ -156,11 +150,8 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));

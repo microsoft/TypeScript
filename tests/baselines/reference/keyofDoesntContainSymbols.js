@@ -27,19 +27,18 @@ type Values<T> = T[keyof T];
 type ValuesOfObj = Values<typeof obj>;
 
 //// [keyofDoesntContainSymbols.js]
-var _a;
-var sym = Symbol();
-var num = 0;
-var obj = (_a = { num: 0, str: 's' }, _a[num] = num, _a[sym] = sym, _a);
+const sym = Symbol();
+const num = 0;
+const obj = { num: 0, str: 's', [num]: num, [sym]: sym };
 function set(obj, key, value) {
     return obj[key] = value;
 }
-var val = set(obj, 'str', '');
+const val = set(obj, 'str', '');
 // string
-var valB = set(obj, 'num', '');
+const valB = set(obj, 'num', '');
 // Expect type error
 // Argument of type '""' is not assignable to parameter of type 'number'.
-var valC = set(obj, sym, sym);
+const valC = set(obj, sym, sym);
 // Expect type error
 // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
-var valD = set(obj, num, num);
+const valD = set(obj, num, num);

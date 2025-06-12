@@ -23,19 +23,19 @@ const enum AfterObject {
 //// [blockScopedEnumVariablesUseBeforeDef_verbatimModuleSyntax.js]
 function foo1() {
     return E.A;
-    var E;
+    let E;
     (function (E) {
         E[E["A"] = 0] = "A";
     })(E || (E = {}));
 }
 function foo2() {
     return E.A;
-    var E;
+    let E;
     (function (E) {
         E[E["A"] = 0] = "A";
     })(E || (E = {}));
 }
-var config = {
+const config = {
     a: AfterObject.A,
 };
 var AfterObject;

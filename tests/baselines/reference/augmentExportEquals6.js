@@ -30,19 +30,13 @@ let c = x.B.b;
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var foo = /** @class */ (function () {
-        function foo() {
-        }
-        return foo;
-    }());
+    class foo {
+    }
     (function (foo) {
-        var A = /** @class */ (function () {
-            function A() {
-            }
-            return A;
-        }());
+        class A {
+        }
         foo.A = A;
-        var B;
+        let B;
         (function (B) {
         })(B = foo.B || (foo.B = {}));
     })(foo || (foo = {}));
@@ -58,7 +52,7 @@ define(["require", "exports", "./file1"], function (require, exports, x) {
 define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var a;
-    var b = a.a;
-    var c = x.B.b;
+    let a;
+    let b = a.a;
+    let c = x.B.b;
 });

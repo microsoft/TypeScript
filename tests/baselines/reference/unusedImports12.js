@@ -16,11 +16,8 @@ import r = require("./b");
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Member = void 0;
-var Member = /** @class */ (function () {
-    function Member() {
-    }
-    return Member;
-}());
+class Member {
+}
 exports.Member = Member;
 exports.default = Member;
 //// [a.js]

@@ -355,7 +355,7 @@ export class ExportedStaticArgumentsFn {
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExportedStaticArgumentsFn = exports.ExportedStaticArguments = exports.ExportedStaticCallerFn = exports.ExportedStaticCaller = exports.ExportedStaticPrototypeFn = exports.ExportedStaticPrototype = exports.ExportedStaticLengthFn = exports.ExportedStaticLength = exports.ExportedStaticNameFn = exports.ExportedStaticName = void 0;
-var FunctionPropertyNames = {
+const FunctionPropertyNames = {
     name: 'name',
     length: 'length',
     prototype: 'prototype',
@@ -363,8 +363,8 @@ var FunctionPropertyNames = {
     arguments: 'arguments',
 };
 // name
-var StaticName = /** @class */ (function () {
-    function StaticName() {
+class StaticName {
+    constructor() {
         Object.defineProperty(this, "name", {
             enumerable: true,
             configurable: true,
@@ -372,10 +372,9 @@ var StaticName = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticName;
-}());
-var StaticName2 = /** @class */ (function () {
-    function StaticName2() {
+}
+class StaticName2 {
+    constructor() {
         Object.defineProperty(this, _b, {
             enumerable: true,
             configurable: true,
@@ -383,46 +382,19 @@ var StaticName2 = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticName2;
-}());
+}
 _a = FunctionPropertyNames.name, _b = FunctionPropertyNames.name;
-var StaticNameFn = /** @class */ (function () {
-    function StaticNameFn() {
-    }
-    Object.defineProperty(StaticNameFn, "name", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticNameFn.prototype, "name", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticNameFn;
-}());
-var StaticNameFn2 = /** @class */ (function () {
-    function StaticNameFn2() {
-    }
-    Object.defineProperty(StaticNameFn2, FunctionPropertyNames.name, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticNameFn2.prototype, FunctionPropertyNames.name, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticNameFn2;
-}());
+class StaticNameFn {
+    static name() { } // error without useDefineForClassFields
+    name() { } // ok
+}
+class StaticNameFn2 {
+    static [FunctionPropertyNames.name]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.name]() { } // ok
+}
 // length
-var StaticLength = /** @class */ (function () {
-    function StaticLength() {
+class StaticLength {
+    constructor() {
         Object.defineProperty(this, "length", {
             enumerable: true,
             configurable: true,
@@ -430,10 +402,9 @@ var StaticLength = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticLength;
-}());
-var StaticLength2 = /** @class */ (function () {
-    function StaticLength2() {
+}
+class StaticLength2 {
+    constructor() {
         Object.defineProperty(this, _d, {
             enumerable: true,
             configurable: true,
@@ -441,46 +412,19 @@ var StaticLength2 = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticLength2;
-}());
+}
 _c = FunctionPropertyNames.length, _d = FunctionPropertyNames.length;
-var StaticLengthFn = /** @class */ (function () {
-    function StaticLengthFn() {
-    }
-    Object.defineProperty(StaticLengthFn, "length", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticLengthFn.prototype, "length", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticLengthFn;
-}());
-var StaticLengthFn2 = /** @class */ (function () {
-    function StaticLengthFn2() {
-    }
-    Object.defineProperty(StaticLengthFn2, FunctionPropertyNames.length, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticLengthFn2.prototype, FunctionPropertyNames.length, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticLengthFn2;
-}());
+class StaticLengthFn {
+    static length() { } // error without useDefineForClassFields
+    length() { } // ok
+}
+class StaticLengthFn2 {
+    static [FunctionPropertyNames.length]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.length]() { } // ok
+}
 // prototype
-var StaticPrototype = /** @class */ (function () {
-    function StaticPrototype() {
+class StaticPrototype {
+    constructor() {
         Object.defineProperty(this, "prototype", {
             enumerable: true,
             configurable: true,
@@ -488,10 +432,9 @@ var StaticPrototype = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticPrototype;
-}());
-var StaticPrototype2 = /** @class */ (function () {
-    function StaticPrototype2() {
+}
+class StaticPrototype2 {
+    constructor() {
         Object.defineProperty(this, _f, {
             enumerable: true,
             configurable: true,
@@ -499,46 +442,19 @@ var StaticPrototype2 = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticPrototype2;
-}());
+}
 _e = FunctionPropertyNames.prototype, _f = FunctionPropertyNames.prototype;
-var StaticPrototypeFn = /** @class */ (function () {
-    function StaticPrototypeFn() {
-    }
-    Object.defineProperty(StaticPrototypeFn, "prototype", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // always an error
-    Object.defineProperty(StaticPrototypeFn.prototype, "prototype", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticPrototypeFn;
-}());
-var StaticPrototypeFn2 = /** @class */ (function () {
-    function StaticPrototypeFn2() {
-    }
-    Object.defineProperty(StaticPrototypeFn2, FunctionPropertyNames.prototype, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // always an error
-    Object.defineProperty(StaticPrototypeFn2.prototype, FunctionPropertyNames.prototype, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticPrototypeFn2;
-}());
+class StaticPrototypeFn {
+    static prototype() { } // always an error
+    prototype() { } // ok
+}
+class StaticPrototypeFn2 {
+    static [FunctionPropertyNames.prototype]() { } // always an error
+    [FunctionPropertyNames.prototype]() { } // ok
+}
 // caller
-var StaticCaller = /** @class */ (function () {
-    function StaticCaller() {
+class StaticCaller {
+    constructor() {
         Object.defineProperty(this, "caller", {
             enumerable: true,
             configurable: true,
@@ -546,10 +462,9 @@ var StaticCaller = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticCaller;
-}());
-var StaticCaller2 = /** @class */ (function () {
-    function StaticCaller2() {
+}
+class StaticCaller2 {
+    constructor() {
         Object.defineProperty(this, _h, {
             enumerable: true,
             configurable: true,
@@ -557,46 +472,19 @@ var StaticCaller2 = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticCaller2;
-}());
+}
 _g = FunctionPropertyNames.caller, _h = FunctionPropertyNames.caller;
-var StaticCallerFn = /** @class */ (function () {
-    function StaticCallerFn() {
-    }
-    Object.defineProperty(StaticCallerFn, "caller", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticCallerFn.prototype, "caller", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticCallerFn;
-}());
-var StaticCallerFn2 = /** @class */ (function () {
-    function StaticCallerFn2() {
-    }
-    Object.defineProperty(StaticCallerFn2, FunctionPropertyNames.caller, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticCallerFn2.prototype, FunctionPropertyNames.caller, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticCallerFn2;
-}());
+class StaticCallerFn {
+    static caller() { } // error without useDefineForClassFields
+    caller() { } // ok
+}
+class StaticCallerFn2 {
+    static [FunctionPropertyNames.caller]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.caller]() { } // ok
+}
 // arguments
-var StaticArguments = /** @class */ (function () {
-    function StaticArguments() {
+class StaticArguments {
+    constructor() {
         Object.defineProperty(this, "arguments", {
             enumerable: true,
             configurable: true,
@@ -604,10 +492,9 @@ var StaticArguments = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticArguments;
-}());
-var StaticArguments2 = /** @class */ (function () {
-    function StaticArguments2() {
+}
+class StaticArguments2 {
+    constructor() {
         Object.defineProperty(this, _k, {
             enumerable: true,
             configurable: true,
@@ -615,47 +502,20 @@ var StaticArguments2 = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return StaticArguments2;
-}());
+}
 _j = FunctionPropertyNames.arguments, _k = FunctionPropertyNames.arguments;
-var StaticArgumentsFn = /** @class */ (function () {
-    function StaticArgumentsFn() {
-    }
-    Object.defineProperty(StaticArgumentsFn, "arguments", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticArgumentsFn.prototype, "arguments", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticArgumentsFn;
-}());
-var StaticArgumentsFn2 = /** @class */ (function () {
-    function StaticArgumentsFn2() {
-    }
-    Object.defineProperty(StaticArgumentsFn2, FunctionPropertyNames.arguments, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticArgumentsFn2.prototype, FunctionPropertyNames.arguments, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticArgumentsFn2;
-}());
+class StaticArgumentsFn {
+    static arguments() { } // error without useDefineForClassFields
+    arguments() { } // ok
+}
+class StaticArgumentsFn2 {
+    static [FunctionPropertyNames.arguments]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.arguments]() { } // ok
+}
 // === Static properties on anonymous classes ===
 // name
-var StaticName_Anonymous = /** @class */ (function () {
-    function class_1() {
+var StaticName_Anonymous = class {
+    constructor() {
         Object.defineProperty(this, "name", {
             enumerable: true,
             configurable: true,
@@ -663,10 +523,9 @@ var StaticName_Anonymous = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return class_1;
-}());
-var StaticName_Anonymous2 = (_o = /** @class */ (function () {
-        function class_2() {
+};
+var StaticName_Anonymous2 = (_o = class {
+        constructor() {
             Object.defineProperty(this, _m, {
                 enumerable: true,
                 configurable: true,
@@ -674,48 +533,21 @@ var StaticName_Anonymous2 = (_o = /** @class */ (function () {
                 value: void 0
             }); // ok
         }
-        return class_2;
-    }()),
+    },
     _l = FunctionPropertyNames.name,
     _m = FunctionPropertyNames.name,
     _o);
-var StaticNameFn_Anonymous = /** @class */ (function () {
-    function StaticNameFn_Anonymous() {
-    }
-    Object.defineProperty(StaticNameFn_Anonymous, "name", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticNameFn_Anonymous.prototype, "name", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticNameFn_Anonymous;
-}());
-var StaticNameFn_Anonymous2 = /** @class */ (function () {
-    function StaticNameFn_Anonymous2() {
-    }
-    Object.defineProperty(StaticNameFn_Anonymous2, FunctionPropertyNames.name, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticNameFn_Anonymous2.prototype, FunctionPropertyNames.name, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticNameFn_Anonymous2;
-}());
+var StaticNameFn_Anonymous = class {
+    static name() { } // error without useDefineForClassFields
+    name() { } // ok
+};
+var StaticNameFn_Anonymous2 = class {
+    static [FunctionPropertyNames.name]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.name]() { } // ok
+};
 // length
-var StaticLength_Anonymous = /** @class */ (function () {
-    function class_3() {
+var StaticLength_Anonymous = class {
+    constructor() {
         Object.defineProperty(this, "length", {
             enumerable: true,
             configurable: true,
@@ -723,10 +555,9 @@ var StaticLength_Anonymous = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return class_3;
-}());
-var StaticLength_Anonymous2 = (_r = /** @class */ (function () {
-        function class_4() {
+};
+var StaticLength_Anonymous2 = (_r = class {
+        constructor() {
             Object.defineProperty(this, _q, {
                 enumerable: true,
                 configurable: true,
@@ -734,48 +565,21 @@ var StaticLength_Anonymous2 = (_r = /** @class */ (function () {
                 value: void 0
             }); // ok
         }
-        return class_4;
-    }()),
+    },
     _p = FunctionPropertyNames.length,
     _q = FunctionPropertyNames.length,
     _r);
-var StaticLengthFn_Anonymous = /** @class */ (function () {
-    function StaticLengthFn_Anonymous() {
-    }
-    Object.defineProperty(StaticLengthFn_Anonymous, "length", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticLengthFn_Anonymous.prototype, "length", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticLengthFn_Anonymous;
-}());
-var StaticLengthFn_Anonymous2 = /** @class */ (function () {
-    function StaticLengthFn_Anonymous2() {
-    }
-    Object.defineProperty(StaticLengthFn_Anonymous2, FunctionPropertyNames.length, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticLengthFn_Anonymous2.prototype, FunctionPropertyNames.length, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticLengthFn_Anonymous2;
-}());
+var StaticLengthFn_Anonymous = class {
+    static length() { } // error without useDefineForClassFields
+    length() { } // ok
+};
+var StaticLengthFn_Anonymous2 = class {
+    static [FunctionPropertyNames.length]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.length]() { } // ok
+};
 // prototype
-var StaticPrototype_Anonymous = /** @class */ (function () {
-    function class_5() {
+var StaticPrototype_Anonymous = class {
+    constructor() {
         Object.defineProperty(this, "prototype", {
             enumerable: true,
             configurable: true,
@@ -783,10 +587,9 @@ var StaticPrototype_Anonymous = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return class_5;
-}());
-var StaticPrototype_Anonymous2 = (_u = /** @class */ (function () {
-        function class_6() {
+};
+var StaticPrototype_Anonymous2 = (_u = class {
+        constructor() {
             Object.defineProperty(this, _t, {
                 enumerable: true,
                 configurable: true,
@@ -794,48 +597,21 @@ var StaticPrototype_Anonymous2 = (_u = /** @class */ (function () {
                 value: void 0
             }); // ok
         }
-        return class_6;
-    }()),
+    },
     _s = FunctionPropertyNames.prototype,
     _t = FunctionPropertyNames.prototype,
     _u);
-var StaticPrototypeFn_Anonymous = /** @class */ (function () {
-    function StaticPrototypeFn_Anonymous() {
-    }
-    Object.defineProperty(StaticPrototypeFn_Anonymous, "prototype", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // always an error
-    Object.defineProperty(StaticPrototypeFn_Anonymous.prototype, "prototype", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticPrototypeFn_Anonymous;
-}());
-var StaticPrototypeFn_Anonymous2 = /** @class */ (function () {
-    function StaticPrototypeFn_Anonymous2() {
-    }
-    Object.defineProperty(StaticPrototypeFn_Anonymous2, FunctionPropertyNames.prototype, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // always an error
-    Object.defineProperty(StaticPrototypeFn_Anonymous2.prototype, FunctionPropertyNames.prototype, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticPrototypeFn_Anonymous2;
-}());
+var StaticPrototypeFn_Anonymous = class {
+    static prototype() { } // always an error
+    prototype() { } // ok
+};
+var StaticPrototypeFn_Anonymous2 = class {
+    static [FunctionPropertyNames.prototype]() { } // always an error
+    [FunctionPropertyNames.prototype]() { } // ok
+};
 // caller
-var StaticCaller_Anonymous = /** @class */ (function () {
-    function class_7() {
+var StaticCaller_Anonymous = class {
+    constructor() {
         Object.defineProperty(this, "caller", {
             enumerable: true,
             configurable: true,
@@ -843,10 +619,9 @@ var StaticCaller_Anonymous = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return class_7;
-}());
-var StaticCaller_Anonymous2 = (_x = /** @class */ (function () {
-        function class_8() {
+};
+var StaticCaller_Anonymous2 = (_x = class {
+        constructor() {
             Object.defineProperty(this, _w, {
                 enumerable: true,
                 configurable: true,
@@ -854,48 +629,21 @@ var StaticCaller_Anonymous2 = (_x = /** @class */ (function () {
                 value: void 0
             }); // ok
         }
-        return class_8;
-    }()),
+    },
     _v = FunctionPropertyNames.caller,
     _w = FunctionPropertyNames.caller,
     _x);
-var StaticCallerFn_Anonymous = /** @class */ (function () {
-    function StaticCallerFn_Anonymous() {
-    }
-    Object.defineProperty(StaticCallerFn_Anonymous, "caller", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticCallerFn_Anonymous.prototype, "caller", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticCallerFn_Anonymous;
-}());
-var StaticCallerFn_Anonymous2 = /** @class */ (function () {
-    function StaticCallerFn_Anonymous2() {
-    }
-    Object.defineProperty(StaticCallerFn_Anonymous2, FunctionPropertyNames.caller, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticCallerFn_Anonymous2.prototype, FunctionPropertyNames.caller, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticCallerFn_Anonymous2;
-}());
+var StaticCallerFn_Anonymous = class {
+    static caller() { } // error without useDefineForClassFields
+    caller() { } // ok
+};
+var StaticCallerFn_Anonymous2 = class {
+    static [FunctionPropertyNames.caller]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.caller]() { } // ok
+};
 // arguments
-var StaticArguments_Anonymous = /** @class */ (function () {
-    function class_9() {
+var StaticArguments_Anonymous = class {
+    constructor() {
         Object.defineProperty(this, "arguments", {
             enumerable: true,
             configurable: true,
@@ -903,10 +651,9 @@ var StaticArguments_Anonymous = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return class_9;
-}());
-var StaticArguments_Anonymous2 = (_0 = /** @class */ (function () {
-        function class_10() {
+};
+var StaticArguments_Anonymous2 = (_0 = class {
+        constructor() {
             Object.defineProperty(this, _z, {
                 enumerable: true,
                 configurable: true,
@@ -914,51 +661,24 @@ var StaticArguments_Anonymous2 = (_0 = /** @class */ (function () {
                 value: void 0
             }); // ok
         }
-        return class_10;
-    }()),
+    },
     _y = FunctionPropertyNames.arguments,
     _z = FunctionPropertyNames.arguments,
     _0);
-var StaticArgumentsFn_Anonymous = /** @class */ (function () {
-    function StaticArgumentsFn_Anonymous() {
-    }
-    Object.defineProperty(StaticArgumentsFn_Anonymous, "arguments", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticArgumentsFn_Anonymous.prototype, "arguments", {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticArgumentsFn_Anonymous;
-}());
-var StaticArgumentsFn_Anonymous2 = /** @class */ (function () {
-    function StaticArgumentsFn_Anonymous2() {
-    }
-    Object.defineProperty(StaticArgumentsFn_Anonymous2, FunctionPropertyNames.arguments, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(StaticArgumentsFn_Anonymous2.prototype, FunctionPropertyNames.arguments, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return StaticArgumentsFn_Anonymous2;
-}());
+var StaticArgumentsFn_Anonymous = class {
+    static arguments() { } // error without useDefineForClassFields
+    arguments() { } // ok
+};
+var StaticArgumentsFn_Anonymous2 = class {
+    static [FunctionPropertyNames.arguments]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.arguments]() { } // ok
+};
 // === Static properties on default exported classes ===
 // name
 var TestOnDefaultExportedClass_1;
 (function (TestOnDefaultExportedClass_1) {
-    var StaticName = /** @class */ (function () {
-        function StaticName() {
+    class StaticName {
+        constructor() {
             Object.defineProperty(this, "name", {
                 enumerable: true,
                 configurable: true,
@@ -966,11 +686,10 @@ var TestOnDefaultExportedClass_1;
                 value: void 0
             }); // ok
         }
-        return StaticName;
-    }());
+    }
 })(TestOnDefaultExportedClass_1 || (TestOnDefaultExportedClass_1 = {}));
-var ExportedStaticName = /** @class */ (function () {
-    function ExportedStaticName() {
+class ExportedStaticName {
+    constructor() {
         Object.defineProperty(this, _2, {
             enumerable: true,
             configurable: true,
@@ -978,53 +697,26 @@ var ExportedStaticName = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return ExportedStaticName;
-}());
+}
 exports.ExportedStaticName = ExportedStaticName;
 _1 = FunctionPropertyNames.name, _2 = FunctionPropertyNames.name;
 var TestOnDefaultExportedClass_2;
 (function (TestOnDefaultExportedClass_2) {
-    var StaticNameFn = /** @class */ (function () {
-        function StaticNameFn() {
-        }
-        Object.defineProperty(StaticNameFn, "name", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // error without useDefineForClassFields
-        Object.defineProperty(StaticNameFn.prototype, "name", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // ok
-        return StaticNameFn;
-    }());
-})(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
-var ExportedStaticNameFn = /** @class */ (function () {
-    function ExportedStaticNameFn() {
+    class StaticNameFn {
+        static name() { } // error without useDefineForClassFields
+        name() { } // ok
     }
-    Object.defineProperty(ExportedStaticNameFn, FunctionPropertyNames.name, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(ExportedStaticNameFn.prototype, FunctionPropertyNames.name, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return ExportedStaticNameFn;
-}());
+})(TestOnDefaultExportedClass_2 || (TestOnDefaultExportedClass_2 = {}));
+class ExportedStaticNameFn {
+    static [FunctionPropertyNames.name]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.name]() { } // ok
+}
 exports.ExportedStaticNameFn = ExportedStaticNameFn;
 // length
 var TestOnDefaultExportedClass_3;
 (function (TestOnDefaultExportedClass_3) {
-    var StaticLength = /** @class */ (function () {
-        function StaticLength() {
+    class StaticLength {
+        constructor() {
             Object.defineProperty(this, "length", {
                 enumerable: true,
                 configurable: true,
@@ -1032,12 +724,11 @@ var TestOnDefaultExportedClass_3;
                 value: void 0
             }); // ok
         }
-        return StaticLength;
-    }());
+    }
     TestOnDefaultExportedClass_3.StaticLength = StaticLength;
 })(TestOnDefaultExportedClass_3 || (TestOnDefaultExportedClass_3 = {}));
-var ExportedStaticLength = /** @class */ (function () {
-    function ExportedStaticLength() {
+class ExportedStaticLength {
+    constructor() {
         Object.defineProperty(this, _4, {
             enumerable: true,
             configurable: true,
@@ -1045,54 +736,27 @@ var ExportedStaticLength = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return ExportedStaticLength;
-}());
+}
 exports.ExportedStaticLength = ExportedStaticLength;
 _3 = FunctionPropertyNames.length, _4 = FunctionPropertyNames.length;
 var TestOnDefaultExportedClass_4;
 (function (TestOnDefaultExportedClass_4) {
-    var StaticLengthFn = /** @class */ (function () {
-        function StaticLengthFn() {
-        }
-        Object.defineProperty(StaticLengthFn, "length", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // error without useDefineForClassFields
-        Object.defineProperty(StaticLengthFn.prototype, "length", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // ok
-        return StaticLengthFn;
-    }());
+    class StaticLengthFn {
+        static length() { } // error without useDefineForClassFields
+        length() { } // ok
+    }
     TestOnDefaultExportedClass_4.StaticLengthFn = StaticLengthFn;
 })(TestOnDefaultExportedClass_4 || (TestOnDefaultExportedClass_4 = {}));
-var ExportedStaticLengthFn = /** @class */ (function () {
-    function ExportedStaticLengthFn() {
-    }
-    Object.defineProperty(ExportedStaticLengthFn, FunctionPropertyNames.length, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(ExportedStaticLengthFn.prototype, FunctionPropertyNames.length, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return ExportedStaticLengthFn;
-}());
+class ExportedStaticLengthFn {
+    static [FunctionPropertyNames.length]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.length]() { } // ok
+}
 exports.ExportedStaticLengthFn = ExportedStaticLengthFn;
 // prototype
 var TestOnDefaultExportedClass_5;
 (function (TestOnDefaultExportedClass_5) {
-    var StaticPrototype = /** @class */ (function () {
-        function StaticPrototype() {
+    class StaticPrototype {
+        constructor() {
             Object.defineProperty(this, "prototype", {
                 enumerable: true,
                 configurable: true,
@@ -1100,12 +764,11 @@ var TestOnDefaultExportedClass_5;
                 value: void 0
             }); // ok
         }
-        return StaticPrototype;
-    }());
+    }
     TestOnDefaultExportedClass_5.StaticPrototype = StaticPrototype;
 })(TestOnDefaultExportedClass_5 || (TestOnDefaultExportedClass_5 = {}));
-var ExportedStaticPrototype = /** @class */ (function () {
-    function ExportedStaticPrototype() {
+class ExportedStaticPrototype {
+    constructor() {
         Object.defineProperty(this, _6, {
             enumerable: true,
             configurable: true,
@@ -1113,54 +776,27 @@ var ExportedStaticPrototype = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return ExportedStaticPrototype;
-}());
+}
 exports.ExportedStaticPrototype = ExportedStaticPrototype;
 _5 = FunctionPropertyNames.prototype, _6 = FunctionPropertyNames.prototype;
 var TestOnDefaultExportedClass_6;
 (function (TestOnDefaultExportedClass_6) {
-    var StaticPrototypeFn = /** @class */ (function () {
-        function StaticPrototypeFn() {
-        }
-        Object.defineProperty(StaticPrototypeFn, "prototype", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // always an error
-        Object.defineProperty(StaticPrototypeFn.prototype, "prototype", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // ok
-        return StaticPrototypeFn;
-    }());
+    class StaticPrototypeFn {
+        static prototype() { } // always an error
+        prototype() { } // ok
+    }
     TestOnDefaultExportedClass_6.StaticPrototypeFn = StaticPrototypeFn;
 })(TestOnDefaultExportedClass_6 || (TestOnDefaultExportedClass_6 = {}));
-var ExportedStaticPrototypeFn = /** @class */ (function () {
-    function ExportedStaticPrototypeFn() {
-    }
-    Object.defineProperty(ExportedStaticPrototypeFn, FunctionPropertyNames.prototype, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // always an error
-    Object.defineProperty(ExportedStaticPrototypeFn.prototype, FunctionPropertyNames.prototype, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return ExportedStaticPrototypeFn;
-}());
+class ExportedStaticPrototypeFn {
+    static [FunctionPropertyNames.prototype]() { } // always an error
+    [FunctionPropertyNames.prototype]() { } // ok
+}
 exports.ExportedStaticPrototypeFn = ExportedStaticPrototypeFn;
 // caller
 var TestOnDefaultExportedClass_7;
 (function (TestOnDefaultExportedClass_7) {
-    var StaticCaller = /** @class */ (function () {
-        function StaticCaller() {
+    class StaticCaller {
+        constructor() {
             Object.defineProperty(this, "caller", {
                 enumerable: true,
                 configurable: true,
@@ -1168,12 +804,11 @@ var TestOnDefaultExportedClass_7;
                 value: void 0
             }); // ok
         }
-        return StaticCaller;
-    }());
+    }
     TestOnDefaultExportedClass_7.StaticCaller = StaticCaller;
 })(TestOnDefaultExportedClass_7 || (TestOnDefaultExportedClass_7 = {}));
-var ExportedStaticCaller = /** @class */ (function () {
-    function ExportedStaticCaller() {
+class ExportedStaticCaller {
+    constructor() {
         Object.defineProperty(this, _8, {
             enumerable: true,
             configurable: true,
@@ -1181,54 +816,27 @@ var ExportedStaticCaller = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return ExportedStaticCaller;
-}());
+}
 exports.ExportedStaticCaller = ExportedStaticCaller;
 _7 = FunctionPropertyNames.caller, _8 = FunctionPropertyNames.caller;
 var TestOnDefaultExportedClass_8;
 (function (TestOnDefaultExportedClass_8) {
-    var StaticCallerFn = /** @class */ (function () {
-        function StaticCallerFn() {
-        }
-        Object.defineProperty(StaticCallerFn, "caller", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // error without useDefineForClassFields
-        Object.defineProperty(StaticCallerFn.prototype, "caller", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // ok
-        return StaticCallerFn;
-    }());
+    class StaticCallerFn {
+        static caller() { } // error without useDefineForClassFields
+        caller() { } // ok
+    }
     TestOnDefaultExportedClass_8.StaticCallerFn = StaticCallerFn;
 })(TestOnDefaultExportedClass_8 || (TestOnDefaultExportedClass_8 = {}));
-var ExportedStaticCallerFn = /** @class */ (function () {
-    function ExportedStaticCallerFn() {
-    }
-    Object.defineProperty(ExportedStaticCallerFn, FunctionPropertyNames.caller, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(ExportedStaticCallerFn.prototype, FunctionPropertyNames.caller, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return ExportedStaticCallerFn;
-}());
+class ExportedStaticCallerFn {
+    static [FunctionPropertyNames.caller]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.caller]() { } // ok
+}
 exports.ExportedStaticCallerFn = ExportedStaticCallerFn;
 // arguments
 var TestOnDefaultExportedClass_9;
 (function (TestOnDefaultExportedClass_9) {
-    var StaticArguments = /** @class */ (function () {
-        function StaticArguments() {
+    class StaticArguments {
+        constructor() {
             Object.defineProperty(this, "arguments", {
                 enumerable: true,
                 configurable: true,
@@ -1236,12 +844,11 @@ var TestOnDefaultExportedClass_9;
                 value: void 0
             }); // ok
         }
-        return StaticArguments;
-    }());
+    }
     TestOnDefaultExportedClass_9.StaticArguments = StaticArguments;
 })(TestOnDefaultExportedClass_9 || (TestOnDefaultExportedClass_9 = {}));
-var ExportedStaticArguments = /** @class */ (function () {
-    function ExportedStaticArguments() {
+class ExportedStaticArguments {
+    constructor() {
         Object.defineProperty(this, _10, {
             enumerable: true,
             configurable: true,
@@ -1249,46 +856,19 @@ var ExportedStaticArguments = /** @class */ (function () {
             value: void 0
         }); // ok
     }
-    return ExportedStaticArguments;
-}());
+}
 exports.ExportedStaticArguments = ExportedStaticArguments;
 _9 = FunctionPropertyNames.arguments, _10 = FunctionPropertyNames.arguments;
 var TestOnDefaultExportedClass_10;
 (function (TestOnDefaultExportedClass_10) {
-    var StaticArgumentsFn = /** @class */ (function () {
-        function StaticArgumentsFn() {
-        }
-        Object.defineProperty(StaticArgumentsFn, "arguments", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // error without useDefineForClassFields
-        Object.defineProperty(StaticArgumentsFn.prototype, "arguments", {
-            enumerable: false,
-            configurable: true,
-            writable: true,
-            value: function () { }
-        }); // ok
-        return StaticArgumentsFn;
-    }());
+    class StaticArgumentsFn {
+        static arguments() { } // error without useDefineForClassFields
+        arguments() { } // ok
+    }
     TestOnDefaultExportedClass_10.StaticArgumentsFn = StaticArgumentsFn;
 })(TestOnDefaultExportedClass_10 || (TestOnDefaultExportedClass_10 = {}));
-var ExportedStaticArgumentsFn = /** @class */ (function () {
-    function ExportedStaticArgumentsFn() {
-    }
-    Object.defineProperty(ExportedStaticArgumentsFn, FunctionPropertyNames.arguments, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // error without useDefineForClassFields
-    Object.defineProperty(ExportedStaticArgumentsFn.prototype, FunctionPropertyNames.arguments, {
-        enumerable: false,
-        configurable: true,
-        writable: true,
-        value: function () { }
-    }); // ok
-    return ExportedStaticArgumentsFn;
-}());
+class ExportedStaticArgumentsFn {
+    static [FunctionPropertyNames.arguments]() { } // error without useDefineForClassFields
+    [FunctionPropertyNames.arguments]() { } // ok
+}
 exports.ExportedStaticArgumentsFn = ExportedStaticArgumentsFn;

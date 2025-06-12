@@ -23,22 +23,18 @@ class C {
 function A() { }
 A.prototype = {
     : 1, // Error
-    : function () { }, // Error
+    () { }, // Error
     get () { return ""; } // Error
 };
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 B.prototype = {
     : 2, // Error
-    : function () { }, // Error
+    () { }, // Error
     get () { return ""; } // Error
 };
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this. = 3;
     }
-    return C;
-}());
+}

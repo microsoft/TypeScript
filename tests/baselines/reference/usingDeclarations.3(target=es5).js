@@ -62,11 +62,10 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
-var _a, _b;
 {
-    var env_1 = { stack: [], error: void 0, hasError: false };
+    const env_1 = { stack: [], error: void 0, hasError: false };
     try {
-        var d1 = __addDisposableResource(env_1, (_a = {}, _a[Symbol.dispose] = function () { }, _a), false), d2 = __addDisposableResource(env_1, null, false), d3 = __addDisposableResource(env_1, undefined, false), d4 = __addDisposableResource(env_1, (_b = {}, _b[Symbol.dispose] = function () { }, _b), false);
+        const d1 = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false), d2 = __addDisposableResource(env_1, null, false), d3 = __addDisposableResource(env_1, undefined, false), d4 = __addDisposableResource(env_1, { [Symbol.dispose]() { } }, false);
     }
     catch (e_1) {
         env_1.error = e_1;

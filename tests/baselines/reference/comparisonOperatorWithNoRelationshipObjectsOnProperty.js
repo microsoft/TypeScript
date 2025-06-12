@@ -79,26 +79,14 @@ var r8b1 = b1 !== a1;
 var r8b2 = b2 !== a2;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnProperty.js]
-var A1 = /** @class */ (function () {
-    function A1() {
-    }
-    return A1;
-}());
-var B1 = /** @class */ (function () {
-    function B1() {
-    }
-    return B1;
-}());
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
-var B2 = /** @class */ (function () {
-    function B2() {
-    }
-    return B2;
-}());
+class A1 {
+}
+class B1 {
+}
+class A2 {
+}
+class B2 {
+}
 var a1;
 var b1;
 var a2;

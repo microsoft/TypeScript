@@ -90,297 +90,107 @@ async function callExpression20() {
 
 //// [es5-asyncFunctionCallExpressions.js]
 function callExpression0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x(y, z)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x(y, z);
     });
 }
 function callExpression1() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent())(y, z);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x)(y, z);
     });
 }
 function callExpression2() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a.apply(void 0, [_b.sent(), z]);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x(yield y, z);
     });
 }
 function callExpression3() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _a = x;
-                    _b = [y];
-                    return [4 /*yield*/, z];
-                case 1:
-                    _a.apply(void 0, _b.concat([_c.sent()]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x(y, yield z);
     });
 }
 function callExpression4() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x.apply(void 0, __spreadArray(__spreadArray([], y, false), [z], false))];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x(...y, z);
     });
 }
 function callExpression5() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent()).apply(void 0, __spreadArray(__spreadArray([], y, false), [z], false));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x)(...y, z);
     });
 }
 function callExpression6() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
-                case 0:
-                    _b = (_a = x).apply;
-                    _c = [void 0];
-                    _d = [[]];
-                    return [4 /*yield*/, y];
-                case 1:
-                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, [__spreadArray.apply(void 0, _d.concat([(_e.sent()), false])), [z], false])]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x(...(yield y), z);
     });
 }
 function callExpression7() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
-                case 0:
-                    _b = (_a = x).apply;
-                    _c = [void 0];
-                    _d = [__spreadArray([], y, false)];
-                    return [4 /*yield*/, z];
-                case 1:
-                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, _d.concat([[_e.sent()], false]))]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x(...y, yield z);
     });
 }
 function callExpression8() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    _b = (_a = x).apply;
-                    _c = [void 0];
-                    return [4 /*yield*/, y];
-                case 1:
-                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, [[_d.sent()], z, false])]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x(yield y, ...z);
     });
 }
 function callExpression9() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d;
-        return __generator(this, function (_e) {
-            switch (_e.label) {
-                case 0:
-                    _b = (_a = x).apply;
-                    _c = [void 0];
-                    _d = [[y]];
-                    return [4 /*yield*/, z];
-                case 1:
-                    _b.apply(_a, _c.concat([__spreadArray.apply(void 0, _d.concat([(_e.sent()), false]))]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x(y, ...(yield z));
     });
 }
 function callExpression10() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x.a(y, z)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x.a(y, z);
     });
 }
 function callExpression11() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x.a];
-                case 1:
-                    (_a.sent())(y, z);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x.a)(y, z);
     });
 }
 function callExpression12() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent()).a(y, z);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x).a(y, z);
     });
 }
 function callExpression13() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _b = (_a = x).a;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _b.apply(_a, [_c.sent(), z]);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x.a(yield y, z);
     });
 }
 function callExpression14() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    _b = (_a = x).a;
-                    _c = [y];
-                    return [4 /*yield*/, z];
-                case 1:
-                    _b.apply(_a, _c.concat([_d.sent()]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x.a(y, yield z);
     });
 }
 function callExpression15() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x[a](y, z)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x[a](y, z);
     });
 }
 function callExpression16() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x[a]];
-                case 1:
-                    (_a.sent())(y, z);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x[a])(y, z);
     });
 }
 function callExpression17() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent())[a](y, z);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x)[a](y, z);
     });
 }
 function callExpression18() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, a];
-                case 1:
-                    _a[_b.sent()](y, z);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[yield a](y, z);
     });
 }
 function callExpression19() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _b = (_a = x)[a];
-                    return [4 /*yield*/, y];
-                case 1:
-                    _b.apply(_a, [_c.sent(), z]);
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[a](yield y, z);
     });
 }
 function callExpression20() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    _b = (_a = x)[a];
-                    _c = [y];
-                    return [4 /*yield*/, z];
-                case 1:
-                    _b.apply(_a, _c.concat([_d.sent()]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[a](y, yield z);
     });
 }

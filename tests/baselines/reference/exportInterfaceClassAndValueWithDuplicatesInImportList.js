@@ -12,11 +12,8 @@ export {foo, Foo, Foo}
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.foo = void 0;
-var foo = 1;
+const foo = 1;
 exports.foo = foo;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 exports.Foo = Foo;

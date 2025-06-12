@@ -7,14 +7,7 @@ class C {
 }
 
 //// [asyncGetter_es5.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    get foo() {
     }
-    Object.defineProperty(C.prototype, "foo", {
-        get: function () {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}

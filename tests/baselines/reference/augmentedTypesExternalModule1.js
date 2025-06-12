@@ -11,10 +11,7 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 1;
-    var c5 = /** @class */ (function () {
-        function c5() {
-        }
-        c5.prototype.foo = function () { };
-        return c5;
-    }());
+    class c5 {
+        foo() { }
+    }
 });

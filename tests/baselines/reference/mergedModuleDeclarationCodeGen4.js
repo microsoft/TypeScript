@@ -21,13 +21,13 @@ module superContain {
 //// [mergedModuleDeclarationCodeGen4.js]
 var superContain;
 (function (superContain) {
-    var contain;
+    let contain;
     (function (contain_1) {
-        var my;
+        let my;
         (function (my) {
-            var buz;
+            let buz;
             (function (buz) {
-                var data;
+                let data;
                 (function (data) {
                     function foo() { }
                     data.foo = foo;
@@ -35,9 +35,9 @@ var superContain;
             })(buz = my.buz || (my.buz = {}));
         })(my = contain_1.my || (contain_1.my = {}));
         (function (my_1) {
-            var buz;
+            let buz;
             (function (buz_1) {
-                var data;
+                let data;
                 (function (data_1) {
                     function bar(contain, my, buz, data) {
                         data_1.foo();

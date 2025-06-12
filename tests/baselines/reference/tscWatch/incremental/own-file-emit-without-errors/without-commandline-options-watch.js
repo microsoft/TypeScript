@@ -39,11 +39,11 @@ Output::
 
 
 //// [/users/username/projects/project/file1.js]
-var x = 10;
+const x = 10;
 
 
 //// [/users/username/projects/project/file2.js]
-var y = 20;
+const y = 20;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
@@ -184,7 +184,7 @@ Output::
 
 //// [/users/username/projects/project/file1.js] file written with same contents
 //// [/users/username/projects/project/file2.js]
-var z = 10;
+const z = 10;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]

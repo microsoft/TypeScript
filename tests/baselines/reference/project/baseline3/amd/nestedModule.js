@@ -4,7 +4,7 @@ define(["require", "exports"], function (require, exports) {
     exports.outer = void 0;
     var outer;
     (function (outer) {
-        var inner;
+        let inner;
         (function (inner) {
             var local = 1;
             inner.a = local;

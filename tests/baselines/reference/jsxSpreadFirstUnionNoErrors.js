@@ -33,11 +33,9 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
-var Info = function (props) {
-    return props.status === "hidden"
-        ? react_1.default.createElement("noscript", null)
-        : react_1.default.createElement("div", null, props.content);
-};
-var a = react_1.default.createElement(Info, { status: "hidden" });
-var b = react_1.default.createElement(Info, { status: "visible", content: "hello world" });
-var c = react_1.default.createElement(Info, __assign({}, infoProps));
+const Info = (props) => props.status === "hidden"
+    ? react_1.default.createElement("noscript", null)
+    : react_1.default.createElement("div", null, props.content);
+const a = react_1.default.createElement(Info, { status: "hidden" });
+const b = react_1.default.createElement(Info, { status: "visible", content: "hello world" });
+const c = react_1.default.createElement(Info, __assign({}, infoProps));

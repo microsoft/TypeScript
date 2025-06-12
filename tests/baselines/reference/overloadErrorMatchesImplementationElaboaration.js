@@ -11,11 +11,8 @@ var ea: EventAggregator;
 ea.publish([1,2,3]);
 
 //// [overloadErrorMatchesImplementationElaboaration.js]
-var EventAggregator = /** @class */ (function () {
-    function EventAggregator() {
-    }
-    EventAggregator.prototype.publish = function (event) { };
-    return EventAggregator;
-}());
+class EventAggregator {
+    publish(event) { }
+}
 var ea;
 ea.publish([1, 2, 3]);

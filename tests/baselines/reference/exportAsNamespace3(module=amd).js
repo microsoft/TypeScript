@@ -67,7 +67,7 @@ define(["require", "exports", "./0"], function (require, exports, ns) {
     exports.ns = __importStar(ns);
     ns.a;
     ns.b;
-    var ns = { a: 1, b: 2 };
+    let ns = { a: 1, b: 2 };
     ns.a;
     ns.b;
 });

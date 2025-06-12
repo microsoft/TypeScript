@@ -23,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
     function doCompile(fileset, moduleType) {
         return undefined;
     }
-    exports.compileServer = task(function () {
+    exports.compileServer = task(() => {
         var folder = path.join(), fileset = nake.fileSetSync(folder);
         return doCompile(fileset, moduleType);
     });

@@ -76,8 +76,8 @@ class C1 {
 // variables in global
 var num;
 var var1;
-var C1 = /** @class */ (function () {
-    function C1(param) {
+class C1 {
+    constructor(param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables in function declaration
@@ -87,7 +87,7 @@ var C1 = /** @class */ (function () {
         num = typeof param === "string" && param.length; // string
     }
     // Inside function declaration
-    C1.prototype.p1 = function (param) {
+    p1(param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables in function declaration
@@ -95,9 +95,9 @@ var C1 = /** @class */ (function () {
         num = typeof var2 === "string" && var2.length; // string
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
-    };
+    }
     // Inside function declaration
-    C1.prototype.p2 = function (param) {
+    p2(param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables in function declaration
@@ -105,9 +105,9 @@ var C1 = /** @class */ (function () {
         num = typeof var2 === "string" && var2.length; // string
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
-    };
+    }
     // Inside function declaration
-    C1.s1 = function (param) {
+    static s1(param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables in function declaration
@@ -115,9 +115,9 @@ var C1 = /** @class */ (function () {
         num = typeof var2 === "string" && var2.length; // string
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
-    };
+    }
     // Inside function declaration
-    C1.s2 = function (param) {
+    static s2(param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables in function declaration
@@ -125,6 +125,5 @@ var C1 = /** @class */ (function () {
         num = typeof var2 === "string" && var2.length; // string
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
-    };
-    return C1;
-}());
+    }
+}

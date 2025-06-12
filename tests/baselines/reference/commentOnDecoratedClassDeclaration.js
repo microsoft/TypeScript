@@ -28,22 +28,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 /**
  * Leading trivia
  */
-var Remote = /** @class */ (function () {
-    function Remote() {
-    }
+let Remote = (() => {
+    let Remote = class Remote {
+    };
     Remote = __decorate([
         decorator("hello")
     ], Remote);
     return Remote;
-}());
+})();
 /**
  * Floating Comment
  */
-var AnotherRomote = /** @class */ (function () {
-    function AnotherRomote() {
-    }
+let AnotherRomote = (() => {
+    let AnotherRomote = class AnotherRomote {
+        constructor() { }
+    };
     AnotherRomote = __decorate([
         decorator("hi")
     ], AnotherRomote);
     return AnotherRomote;
-}());
+})();

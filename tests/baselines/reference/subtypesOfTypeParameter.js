@@ -109,47 +109,18 @@ function f2<T, U>(x: T, y: U) {
 
 //// [subtypesOfTypeParameter.js]
 // checking whether other types are subtypes of type parameters
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
-var D1 = /** @class */ (function (_super) {
-    __extends(D1, _super);
-    function D1() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return D1;
-}(C3));
+class C3 {
+}
+class D1 extends C3 {
+}
 function f1(x, y) {
     var r = true ? x : y; // error
     var r = true ? y : x; // error
 }
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C1 {
+}
+class C2 {
+}
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -158,11 +129,8 @@ function f() { }
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));
@@ -185,10 +153,10 @@ function f2(x, y) {
     var r5 = true ? x : /1/;
     var r6 = true ? { foo: 1 } : x;
     var r6 = true ? x : { foo: 1 };
-    var r7 = true ? function () { } : x;
-    var r7 = true ? x : function () { };
-    var r8 = true ? function (x) { return x; } : x;
-    var r8b = true ? x : function (x) { return x; }; // type parameters not identical across declarations
+    var r7 = true ? () => { } : x;
+    var r7 = true ? x : () => { };
+    var r8 = true ? (x) => { return x; } : x;
+    var r8b = true ? x : (x) => { return x; }; // type parameters not identical across declarations
     var i1;
     var r9 = true ? i1 : x;
     var r9 = true ? x : i1;

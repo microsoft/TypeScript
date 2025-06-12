@@ -18,17 +18,11 @@ module Moclodule {
 }
 
 //// [cloduleWithPriorUninstantiatedModule.js]
-var Moclodule = /** @class */ (function () {
-    function Moclodule() {
-    }
-    return Moclodule;
-}());
+class Moclodule {
+}
 // Instantiated module.
 (function (Moclodule) {
-    var Manager = /** @class */ (function () {
-        function Manager() {
-        }
-        return Manager;
-    }());
+    class Manager {
+    }
     Moclodule.Manager = Manager;
 })(Moclodule || (Moclodule = {}));

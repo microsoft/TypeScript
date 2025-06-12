@@ -14,9 +14,9 @@ class foo {
 
 
 //// [reassignStaticProp.js]
-var foo = /** @class */ (function () {
-    function foo() {
+let foo = (() => {
+    class foo {
     }
     foo.bar = 1;
     return foo;
-}());
+})();

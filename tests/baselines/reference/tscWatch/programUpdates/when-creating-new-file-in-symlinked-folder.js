@@ -69,11 +69,8 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Module1Class = void 0;
-var Module1Class = /** @class */ (function () {
-    function Module1Class() {
-    }
-    return Module1Class;
-}());
+class Module1Class {
+}
 exports.Module1Class = Module1Class;
 
 

@@ -56,46 +56,17 @@ var m: typeof M;
 var m = M.A;
 
 //// [invalidMultipleVariableDeclarations.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return C2;
-}(C));
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class C2 extends C {
+}
+class D {
+}
 function F(x) { return 42; }
 var M;
 (function (M) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
@@ -111,7 +82,7 @@ var b;
 var b = new C();
 var b = new C2();
 var f = F;
-var f = function (x) { return ''; };
+var f = (x) => '';
 var arr;
 var arr = [1, 2, 3, 4];
 var arr = [new C(), new C2(), new D()];

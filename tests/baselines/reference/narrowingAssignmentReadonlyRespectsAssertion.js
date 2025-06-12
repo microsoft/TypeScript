@@ -56,12 +56,11 @@ function dataFunc(subFunc) {
     return { cases: subFunc() };
 }
 function testFunc() {
-    var fixture = dataFunc(subDataFunc);
-    fixture.cases.forEach(function (_a) {
-        var val1 = _a.val1, val2 = _a.val2;
+    const fixture = dataFunc(subDataFunc);
+    fixture.cases.forEach(({ val1, val2 }) => {
         if (Array.isArray(val1)) {
             // This should retain val1 as being an array
-            var reversedVal1 = val1.slice().reverse();
+            const reversedVal1 = val1.slice().reverse();
             console.log(reversedVal1);
         }
         else {

@@ -8,7 +8,6 @@ function p(undefined = "wat") {
 
 
 //// [undefinedTypeAssignment1.js]
-function p(undefined) {
-    if (undefined === void 0) { undefined = "wat"; }
+function p(undefined = "wat") {
     return undefined;
 }

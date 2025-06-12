@@ -7,9 +7,6 @@ class C<T> { a: T; }
 interface C<T> { }
 
 //// [a.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 //// [b.js]

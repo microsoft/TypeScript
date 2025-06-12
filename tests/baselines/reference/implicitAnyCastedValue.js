@@ -87,46 +87,32 @@ var x = function () {
 function foo() {
     return "hello world"; // this should not be an error
 }
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.bar = null; // this should be an error
         this.foo = undefined; // this should be an error
     }
-    Object.defineProperty(C.prototype, "tempVar", {
-        get: function () {
-            return 0; // this should not be an error
-        },
-        enumerable: false,
-        configurable: true
-    });
-    C.prototype.returnBarWithCase = function () {
+    get tempVar() {
+        return 0; // this should not be an error
+    }
+    returnBarWithCase() {
         return this.bar;
-    };
-    C.prototype.returnFooWithCase = function () {
+    }
+    returnFooWithCase() {
         return this.foo; // this should not be an error
-    };
-    return C;
-}());
-var C1 = /** @class */ (function () {
-    function C1() {
+    }
+}
+class C1 {
+    constructor() {
         this.getValue = null; // this should be an error
     }
-    Object.defineProperty(C1.prototype, "castedGet", {
-        get: function () {
-            return this.getValue; // this should not be an error
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C1.prototype, "notCastedGet", {
-        get: function () {
-            return this.getValue; // this should not be an error
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C1;
-}());
+    get castedGet() {
+        return this.getValue; // this should not be an error
+    }
+    get notCastedGet() {
+        return this.getValue; // this should not be an error
+    }
+}
 function castedNull() {
     return null; // this should not be an error
 }

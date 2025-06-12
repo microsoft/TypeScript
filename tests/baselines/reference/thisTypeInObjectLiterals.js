@@ -37,24 +37,24 @@ var impl: I = mutuallyRecursive;
 
 
 //// [thisTypeInObjectLiterals.js]
-var o = {
+let o = {
     d: "bar",
-    m: function () {
+    m() {
         return this.d.length;
     },
     f: function () {
         return this.d.length;
     }
 };
-var mutuallyRecursive = {
+let mutuallyRecursive = {
     a: 100,
-    start: function () {
+    start() {
         return this.passthrough(this.a);
     },
-    passthrough: function (n) {
+    passthrough(n) {
         return this.sub1(n);
     },
-    sub1: function (n) {
+    sub1(n) {
         if (n > 0) {
             return this.passthrough(n - 1);
         }

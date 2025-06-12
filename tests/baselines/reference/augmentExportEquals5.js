@@ -89,6 +89,6 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports", "./augmentation"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var x;
-    var y = x.id;
+    let x;
+    const y = x.id;
 });

@@ -21,20 +21,20 @@ module One {
 //// [nonExportedElementsOfMergedModules.js]
 var One;
 (function (One) {
-    var A;
+    let A;
     (function (A) {
         A[A["X"] = 0] = "X";
     })(A || (A = {}));
-    var B;
+    let B;
     (function (B) {
     })(B || (B = {}));
 })(One || (One = {}));
 (function (One) {
-    var A;
+    let A;
     (function (A) {
         A[A["Y"] = 0] = "Y";
     })(A || (A = {}));
-    var B;
+    let B;
     (function (B) {
     })(B || (B = {}));
     B.x;

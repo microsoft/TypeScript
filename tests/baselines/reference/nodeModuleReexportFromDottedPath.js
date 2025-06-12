@@ -23,7 +23,7 @@ export default new EnhancedPrisma();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var client_1 = require("@prisma/client");
-var EnhancedPrisma = enhancePrisma(client_1.PrismaClient);
+const EnhancedPrisma = enhancePrisma(client_1.PrismaClient);
 exports.default = new EnhancedPrisma();
 
 

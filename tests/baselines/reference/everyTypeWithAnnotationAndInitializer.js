@@ -51,24 +51,15 @@ var aFunctionInModule: typeof M.F2 = (x) => 'this is a string';
 
 
 //// [everyTypeWithAnnotationAndInitializer.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class D {
+}
 function F(x) { return 42; }
 var M;
 (function (M) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
@@ -87,7 +78,7 @@ var anObjectLiteral = { id: 12 };
 var anOtherObjectLiteral = new C();
 var aFunction = F;
 var anOtherFunction = F;
-var aLambda = function (x) { return 2; };
+var aLambda = (x) => 2;
 var aModule = M;
 var aClassInModule = new M.A();
-var aFunctionInModule = function (x) { return 'this is a string'; };
+var aFunctionInModule = (x) => 'this is a string';

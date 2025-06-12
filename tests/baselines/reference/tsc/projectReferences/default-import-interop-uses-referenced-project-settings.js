@@ -90,7 +90,7 @@ app/src/index.ts(3,28): error TS2613: Module '"/home/src/workspaces/project/node
 
 
 //// [/home/src/workspaces/project/app/dist/local.js]
-export var local = 0;
+export const local = 0;
 
 
 //// [/home/src/workspaces/project/app/dist/index.js]

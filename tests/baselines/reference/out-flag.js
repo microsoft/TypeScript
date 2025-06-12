@@ -22,18 +22,15 @@ class MyClass
 //// [out-flag.js]
 //// @outFile: bin\
 // my class comments
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
+class MyClass {
     // my function comments
-    MyClass.prototype.Count = function () {
+    Count() {
         return 42;
-    };
-    MyClass.prototype.SetCount = function (value) {
+    }
+    SetCount(value) {
         //
-    };
-    return MyClass;
-}());
+    }
+}
 //# sourceMappingURL=out-flag.js.map
 
 //// [out-flag.d.ts]

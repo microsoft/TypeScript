@@ -21,19 +21,19 @@ namespace Namespace {
 
 
 //// [classStaticInitializersUsePropertiesBeforeDeclaration.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+let Foo = (() => {
+    class Foo {
     }
     Foo.enumMember = Enum.A;
     Foo.objLiteralMember = ObjLiteral.A;
     Foo.namespaceMember = Namespace.A;
     return Foo;
-}());
+})();
 var Enum;
 (function (Enum) {
     Enum[Enum["A"] = 0] = "A";
 })(Enum || (Enum = {}));
-var ObjLiteral = {
+const ObjLiteral = {
     A: 0
 };
 var Namespace;

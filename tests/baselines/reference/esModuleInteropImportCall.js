@@ -44,6 +44,6 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-Promise.resolve().then(function () { return __importStar(require("./foo")); }).then(function (f) {
+Promise.resolve().then(function () { return __importStar(require("./foo")); }).then(f => {
     f.default;
 });

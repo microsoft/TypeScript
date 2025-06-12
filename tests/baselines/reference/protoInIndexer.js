@@ -8,9 +8,8 @@ class X {
 }
 
 //// [protoInIndexer.js]
-var X = /** @class */ (function () {
-    function X() {
+class X {
+    constructor() {
         this['__proto__'] = null; // used to cause ICE
     }
-    return X;
-}());
+}

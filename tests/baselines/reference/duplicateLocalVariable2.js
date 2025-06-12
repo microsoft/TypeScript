@@ -42,25 +42,21 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.tests = exports.TestRunner = exports.TestCase = void 0;
-    var TestCase = /** @class */ (function () {
-        function TestCase(name, test, errorMessageRegEx) {
+    class TestCase {
+        constructor(name, test, errorMessageRegEx) {
             this.name = name;
             this.test = test;
             this.errorMessageRegEx = errorMessageRegEx;
         }
-        return TestCase;
-    }());
+    }
     exports.TestCase = TestCase;
-    var TestRunner = /** @class */ (function () {
-        function TestRunner() {
-        }
-        TestRunner.arrayCompare = function (arg1, arg2) {
+    class TestRunner {
+        static arrayCompare(arg1, arg2) {
             return false;
-        };
-        TestRunner.prototype.addTest = function (test) {
-        };
-        return TestRunner;
-    }());
+        }
+        addTest(test) {
+        }
+    }
     exports.TestRunner = TestRunner;
     exports.tests = (function () {
         var testRunner = new TestRunner();

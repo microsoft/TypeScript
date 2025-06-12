@@ -538,29 +538,27 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var AstWalkOptions = /** @class */ (function () {
-        function AstWalkOptions() {
+    class AstWalkOptions {
+        constructor() {
             this.goChildren = true;
             this.goNextSibling = true;
             this.reverseSiblings = false; // visit siblings in reverse execution order
         }
-        AstWalkOptions.prototype.stopWalk = function (stop) {
-            if (stop === void 0) { stop = true; }
+        stopWalk(stop = true) {
             this.goChildren = !stop;
             this.goNextSibling = !stop;
-        };
-        return AstWalkOptions;
-    }());
+        }
+    }
     TypeScript.AstWalkOptions = AstWalkOptions;
-    var AstWalker = /** @class */ (function () {
-        function AstWalker(childrenWalkers, pre, post, options, state) {
+    class AstWalker {
+        constructor(childrenWalkers, pre, post, options, state) {
             this.childrenWalkers = childrenWalkers;
             this.pre = pre;
             this.post = post;
             this.options = options;
             this.state = state;
         }
-        AstWalker.prototype.walk = function (ast, parent) {
+        walk(ast, parent) {
             var preAst = this.pre(ast, parent, this);
             if (preAst === undefined) {
                 preAst = ast;
@@ -586,27 +584,26 @@ var TypeScript;
             else {
                 return preAst;
             }
-        };
-        return AstWalker;
-    }());
-    var AstWalkerFactory = /** @class */ (function () {
-        function AstWalkerFactory() {
+        }
+    }
+    class AstWalkerFactory {
+        constructor() {
             this.childrenWalkers = [];
             this.initChildrenWalkers();
         }
-        AstWalkerFactory.prototype.walk = function (ast, pre, post, options, state) {
+        walk(ast, pre, post, options, state) {
             return this.getWalker(pre, post, options, state).walk(ast, null);
-        };
-        AstWalkerFactory.prototype.getWalker = function (pre, post, options, state) {
+        }
+        getWalker(pre, post, options, state) {
             return this.getSlowWalker(pre, post, options, state);
-        };
-        AstWalkerFactory.prototype.getSlowWalker = function (pre, post, options, state) {
+        }
+        getSlowWalker(pre, post, options, state) {
             if (!options) {
                 options = new AstWalkOptions();
             }
             return new AstWalker(this.childrenWalkers, pre, post, options, state);
-        };
-        AstWalkerFactory.prototype.initChildrenWalkers = function () {
+        }
+        initChildrenWalkers() {
             this.childrenWalkers[NodeType.None] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.Empty] = ChildrenWalkers.walkNone;
             this.childrenWalkers[NodeType.EmptyExpr] = ChildrenWalkers.walkNone;
@@ -720,9 +717,8 @@ var TypeScript;
                     throw new Error("initWalkers function is not up to date with enum content!");
                 }
             }
-        };
-        return AstWalkerFactory;
-    }());
+        }
+    }
     TypeScript.AstWalkerFactory = AstWalkerFactory;
     var globalAstWalkerFactory;
     function getAstWalkerFactory() {
@@ -732,7 +728,7 @@ var TypeScript;
         return globalAstWalkerFactory;
     }
     TypeScript.getAstWalkerFactory = getAstWalkerFactory;
-    var ChildrenWalkers;
+    let ChildrenWalkers;
     (function (ChildrenWalkers) {
         function walkNone(preAst, parent, walker) {
             // Nothing to do

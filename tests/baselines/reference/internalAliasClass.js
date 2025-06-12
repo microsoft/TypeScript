@@ -14,11 +14,8 @@ module c {
 //// [internalAliasClass.js]
 var a;
 (function (a) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     a.c = c;
 })(a || (a = {}));
 var c;

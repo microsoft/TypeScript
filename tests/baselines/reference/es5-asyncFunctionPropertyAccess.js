@@ -17,38 +17,17 @@ async function callExpression0() {
 
 //// [es5-asyncFunctionPropertyAccess.js]
 function propertyAccess0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x.a];
-                case 1:
-                    y = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        y = yield x.a;
     });
 }
 function propertyAccess1() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    y = (_a.sent()).a;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        y = (yield x).a;
     });
 }
 function callExpression0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x(y, z)];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x(y, z);
     });
 }

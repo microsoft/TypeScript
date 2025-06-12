@@ -17,11 +17,8 @@ module m2 {
 //// [declFileInternalAliases.js]
 var m;
 (function (m) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     m.c = c;
 })(m || (m = {}));
 var m1;

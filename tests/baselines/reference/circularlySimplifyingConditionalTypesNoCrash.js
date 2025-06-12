@@ -55,7 +55,6 @@ export {};
 //// [circularlySimplifyingConditionalTypesNoCrash.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var myStoreConnect = function (mapStateToProps, mapDispatchToProps, mergeProps, options) {
-    if (options === void 0) { options = {}; }
+const myStoreConnect = function (mapStateToProps, mapDispatchToProps, mergeProps, options = {}) {
     return connect(mapStateToProps, mapDispatchToProps, mergeProps, options);
 };

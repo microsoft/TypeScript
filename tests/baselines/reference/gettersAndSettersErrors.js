@@ -19,37 +19,16 @@ class E {
 
 
 //// [gettersAndSettersErrors.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.Foo = 0; // error - duplicate identifier Foo - confirmed
     }
-    Object.defineProperty(C.prototype, "Foo", {
-        get: function () { return "foo"; } // ok
-        ,
-        set: function (foo) { } // ok
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "Goo", {
-        get: function (v) { return null; } // error - getters must not have a parameter
-        ,
-        set: function (v) { } // error - setters must not specify a return type
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
-var E = /** @class */ (function () {
-    function E() {
-    }
-    Object.defineProperty(E.prototype, "Baz", {
-        get: function () { return 0; },
-        set: function (n) { } // error - accessors do not agree in visibility
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    return E;
-}());
+    get Foo() { return "foo"; } // ok
+    set Foo(foo) { } // ok
+    get Goo(v) { return null; } // error - getters must not have a parameter
+    set Goo(v): string { } // error - setters must not specify a return type
+}
+class E {
+    get Baz() { return 0; }
+    set Baz(n) { } // error - accessors do not agree in visibility
+}

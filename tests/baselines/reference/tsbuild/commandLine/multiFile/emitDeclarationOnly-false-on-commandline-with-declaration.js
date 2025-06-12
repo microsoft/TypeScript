@@ -440,8 +440,8 @@ Found 1 error.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 10;
-var aa = 10;
+const aLocal = 10;
+const aa = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/b.js]
@@ -449,7 +449,7 @@ var aa = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
+const bLocal = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/c.js]
@@ -749,8 +749,8 @@ Found 1 error.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
-var blocal = 10;
+const bLocal = 10;
+const blocal = 10;
 
 
 //// [/home/src/workspaces/solution/project1/src/c.js] file written with same contents

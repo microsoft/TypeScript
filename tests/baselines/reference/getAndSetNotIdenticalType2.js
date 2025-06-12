@@ -18,26 +18,16 @@ var r = x.x;
 x.x = r;
 
 //// [getAndSetNotIdenticalType2.js]
-var A = /** @class */ (function () {
-    function A() {
+class A {
+}
+class C {
+    get x() {
+        return this.data;
     }
-    return A;
-}());
-var C = /** @class */ (function () {
-    function C() {
+    set x(v) {
+        this.data = v;
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () {
-            return this.data;
-        },
-        set: function (v) {
-            this.data = v;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}
 var x = new C();
 var r = x.x;
 x.x = r;

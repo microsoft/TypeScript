@@ -18,27 +18,18 @@ module N {
 }
 
 //// [genericOfACloduleType2.js]
-var G = /** @class */ (function () {
-    function G() {
-    }
-    G.prototype.bar = function (x) { return x; };
-    return G;
-}());
+class G {
+    bar(x) { return x; }
+}
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        C.prototype.foo = function () { };
-        return C;
-    }());
+    class C {
+        foo() { }
+    }
     M.C = C;
     (function (C) {
-        var X = /** @class */ (function () {
-            function X() {
-            }
-            return X;
-        }());
+        class X {
+        }
         C.X = X;
     })(C = M.C || (M.C = {}));
     var g1 = new G();

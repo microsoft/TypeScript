@@ -9,7 +9,7 @@ const regexes: RegExp[] = [
 
 
 //// [regExpWithOpenBracketInCharClass.js]
-var regexes = [
+const regexes = [
     /[[]/, // Valid
     /[[]/u, // Valid
     /[[]/v, // Well-terminated regex with an incomplete character class

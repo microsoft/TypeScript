@@ -18,21 +18,12 @@ class Board {
 }
 
 //// [2dArrays.js]
-var Cell = /** @class */ (function () {
-    function Cell() {
-    }
-    return Cell;
-}());
-var Ship = /** @class */ (function () {
-    function Ship() {
-    }
-    return Ship;
-}());
-var Board = /** @class */ (function () {
-    function Board() {
-    }
-    Board.prototype.allShipsSunk = function () {
+class Cell {
+}
+class Ship {
+}
+class Board {
+    allShipsSunk() {
         return this.ships.every(function (val) { return val.isSunk; });
-    };
-    return Board;
-}());
+    }
+}

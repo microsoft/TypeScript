@@ -26,11 +26,8 @@ X.A.r; // Error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
 // empty
@@ -54,11 +51,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 __exportStar(require("./exportStarFromEmptyModule_module2"), exports);
 __exportStar(require("./exportStarFromEmptyModule_module1"), exports);
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
 "use strict";

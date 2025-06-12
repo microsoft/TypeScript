@@ -25,25 +25,23 @@ module A {
 //// [ExportModuleWithAccessibleTypesOnItsExportedMembers.js]
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     A.Point = Point;
-    var B;
+    let B;
     (function (B) {
         B.Origin = new Point(0, 0);
-        var Line = /** @class */ (function () {
-            function Line(start, end) {
+        class Line {
+            constructor(start, end) {
             }
-            Line.fromOrigin = function (p) {
+            static fromOrigin(p) {
                 return new Line({ x: 0, y: 0 }, p);
-            };
-            return Line;
-        }());
+            }
+        }
         B.Line = Line;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));

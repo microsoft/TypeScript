@@ -6,11 +6,8 @@ class C {
 }
 
 //// [classMemberWithMissingIdentifier2.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 {
     [name, string];
     VariableDeclaration;

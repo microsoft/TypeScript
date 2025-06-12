@@ -30,13 +30,10 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.User = void 0;
-    var User = /** @class */ (function () {
-        function User() {
-        }
-        User.prototype.method = function (input) {
+    class User {
+        method(input) {
             if (0 /* CharCode.A */ === input) { }
-        };
-        return User;
-    }());
+        }
+    }
     exports.User = User;
 });

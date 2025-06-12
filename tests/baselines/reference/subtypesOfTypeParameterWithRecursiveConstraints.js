@@ -161,26 +161,8 @@ module M2 {
 
 //// [subtypesOfTypeParameterWithRecursiveConstraints.js]
 // checking whether other types are subtypes of type parameters with constraints
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 function f(t, u, v) {
     // ok
     var r1 = true ? t : u;
@@ -221,143 +203,47 @@ function f(t, u, v) {
 }
 var M1;
 (function (M1) {
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
-    var D1 = /** @class */ (function (_super) {
-        __extends(D1, _super);
-        function D1() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D1;
-    }(Base));
-    var D2 = /** @class */ (function (_super) {
-        __extends(D2, _super);
-        function D2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D2;
-    }(Base));
-    var D3 = /** @class */ (function (_super) {
-        __extends(D3, _super);
-        function D3() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D3;
-    }(Base));
-    var D4 = /** @class */ (function (_super) {
-        __extends(D4, _super);
-        function D4() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D4;
-    }(Base));
-    var D5 = /** @class */ (function (_super) {
-        __extends(D5, _super);
-        function D5() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D5;
-    }(Base));
-    var D6 = /** @class */ (function (_super) {
-        __extends(D6, _super);
-        function D6() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D6;
-    }(Base));
-    var D7 = /** @class */ (function (_super) {
-        __extends(D7, _super);
-        function D7() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D7;
-    }(Base));
-    var D8 = /** @class */ (function (_super) {
-        __extends(D8, _super);
-        function D8() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D8;
-    }(Base));
-    var D9 = /** @class */ (function (_super) {
-        __extends(D9, _super);
-        function D9() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D9;
-    }(Base));
+    class Base {
+    }
+    class D1 extends Base {
+    }
+    class D2 extends Base {
+    }
+    class D3 extends Base {
+    }
+    class D4 extends Base {
+    }
+    class D5 extends Base {
+    }
+    class D6 extends Base {
+    }
+    class D7 extends Base {
+    }
+    class D8 extends Base {
+    }
+    class D9 extends Base {
+    }
 })(M1 || (M1 = {}));
 var M2;
 (function (M2) {
-    var Base2 = /** @class */ (function () {
-        function Base2() {
-        }
-        return Base2;
-    }());
-    var D1 = /** @class */ (function (_super) {
-        __extends(D1, _super);
-        function D1() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D1;
-    }(Base2));
-    var D2 = /** @class */ (function (_super) {
-        __extends(D2, _super);
-        function D2() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D2;
-    }(Base2));
-    var D3 = /** @class */ (function (_super) {
-        __extends(D3, _super);
-        function D3() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D3;
-    }(Base2));
-    var D4 = /** @class */ (function (_super) {
-        __extends(D4, _super);
-        function D4() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D4;
-    }(Base2));
-    var D5 = /** @class */ (function (_super) {
-        __extends(D5, _super);
-        function D5() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D5;
-    }(Base2));
-    var D6 = /** @class */ (function (_super) {
-        __extends(D6, _super);
-        function D6() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D6;
-    }(Base2));
-    var D7 = /** @class */ (function (_super) {
-        __extends(D7, _super);
-        function D7() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D7;
-    }(Base2));
-    var D8 = /** @class */ (function (_super) {
-        __extends(D8, _super);
-        function D8() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D8;
-    }(Base2));
-    var D9 = /** @class */ (function (_super) {
-        __extends(D9, _super);
-        function D9() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return D9;
-    }(Base2));
+    class Base2 {
+    }
+    class D1 extends Base2 {
+    }
+    class D2 extends Base2 {
+    }
+    class D3 extends Base2 {
+    }
+    class D4 extends Base2 {
+    }
+    class D5 extends Base2 {
+    }
+    class D6 extends Base2 {
+    }
+    class D7 extends Base2 {
+    }
+    class D8 extends Base2 {
+    }
+    class D9 extends Base2 {
+    }
 })(M2 || (M2 = {}));

@@ -17,23 +17,15 @@ async function nestedLoops() {
 
 //// [es5-asyncFunctionNestedLoops.js]
 function nestedLoops() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!x) return [3 /*break*/, 2];
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a.sent();
-                    while (z) {
-                        return [3 /*break*/, 0];
-                    }
-                    while (a) {
-                        continue;
-                    }
-                    return [3 /*break*/, 0];
-                case 2: return [2 /*return*/];
+    return __awaiter(this, void 0, void 0, function* () {
+        A: while (x) {
+            yield y;
+            while (z) {
+                continue A;
             }
-        });
+            while (a) {
+                continue;
+            }
+        }
     });
 }

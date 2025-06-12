@@ -100,18 +100,16 @@ export default _default;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LazyAction = exports.LazyModule = void 0;
-var LazyModule = /** @class */ (function () {
-    function LazyModule(importCallback) {
+class LazyModule {
+    constructor(importCallback) {
         this.importCallback = importCallback;
     }
-    return LazyModule;
-}());
+}
 exports.LazyModule = LazyModule;
-var LazyAction = /** @class */ (function () {
-    function LazyAction(_lazyModule, _getter) {
+class LazyAction {
+    constructor(_lazyModule, _getter) {
     }
-    return LazyAction;
-}());
+}
 exports.LazyAction = LazyAction;
 
 
@@ -142,10 +140,8 @@ export { default as bar } from './bar';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyBar = void 0;
 var bundling_1 = require("./bundling");
-var lazyModule = new bundling_1.LazyModule(function () {
-    return Promise.resolve().then(function () { return require('./lazyIndex'); });
-});
-exports.lazyBar = new bundling_1.LazyAction(lazyModule, function (m) { return m.bar; });
+const lazyModule = new bundling_1.LazyModule(() => Promise.resolve().then(function () { return require('./lazyIndex'); }));
+exports.lazyBar = new bundling_1.LazyAction(lazyModule, m => m.bar);
 
 
 //// [/home/src/workspaces/project/obj/index.d.ts]

@@ -110,5 +110,5 @@ export const Comp = () => <div></div>;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Comp = void 0;
 var jsx_runtime_1 = require("preact/jsx-runtime");
-var Comp = function () { return (0, jsx_runtime_1.jsx)("div", {}); };
+const Comp = () => (0, jsx_runtime_1.jsx)("div", {});
 exports.Comp = Comp;

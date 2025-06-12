@@ -304,7 +304,7 @@ export const m: {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = getVar;
 var index_1 = require("../sub-project/index");
-var variable = {
+const variable = {
     key: index_1.m,
 };
 function getVar() {

@@ -15,21 +15,14 @@ class MyClass
 }
 
 //// [properties.js]
-var MyClass = /** @class */ (function () {
-    function MyClass() {
+class MyClass {
+    get Count() {
+        return 42;
     }
-    Object.defineProperty(MyClass.prototype, "Count", {
-        get: function () {
-            return 42;
-        },
-        set: function (value) {
-            //
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return MyClass;
-}());
+    set Count(value) {
+        //
+    }
+}
 //# sourceMappingURL=properties.js.map
 
 //// [properties.d.ts]

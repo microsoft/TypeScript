@@ -17,13 +17,10 @@ class Component {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./jsx");
 var skate;
-var React = { createElement: skate.h };
-var Component = /** @class */ (function () {
-    function Component() {
-    }
-    Component.prototype.renderCallback = function () {
+const React = { createElement: skate.h };
+class Component {
+    renderCallback() {
         return skate.h("div", null, "test");
-    };
-    return Component;
-}());
+    }
+}
 ;

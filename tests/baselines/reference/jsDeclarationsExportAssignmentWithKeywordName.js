@@ -17,7 +17,7 @@ module.exports = {
     more: {
         others: ['strs']
     },
-    x: x
+    x
 };
 
 

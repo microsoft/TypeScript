@@ -7,18 +7,7 @@ class foo<T> {
 } 
 
 //// [typeParametersInStaticAccessors.js]
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    Object.defineProperty(foo, "Foo", {
-        get: function () { return null; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(foo, "Bar", {
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    return foo;
-}());
+class foo {
+    static get Foo() { return null; }
+    static set Bar(v) { }
+}

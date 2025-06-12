@@ -19,21 +19,12 @@ class C3<T extends Date> {
 
 //// [staticMembersUsingClassTypeParameter.js]
 // BUG 745747
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.f = function (x) { };
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    C2.f = function (x) { };
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    C3.f = function (x) { };
-    return C3;
-}());
+class C {
+    static f(x) { }
+}
+class C2 {
+    static f(x) { }
+}
+class C3 {
+    static f(x) { }
+}

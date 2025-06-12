@@ -26,11 +26,8 @@ let b = x.b;
 //// [file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var foo = /** @class */ (function () {
-        function foo() {
-        }
-        return foo;
-    }());
+    class foo {
+    }
     (function (foo) {
         foo.v = 1;
     })(foo || (foo = {}));
@@ -46,6 +43,6 @@ define(["require", "exports", "./file1"], function (require, exports, x) {
 define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var a;
-    var b = x.b;
+    let a;
+    let b = x.b;
 });

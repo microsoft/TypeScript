@@ -384,8 +384,8 @@ var bigObject = {
     while: 0,
     with: 0,
 };
-var bigClass = /** @class */ (function () {
-    function bigClass() {
+class bigClass {
+    constructor() {
         this["constructor"] = 0;
         this.any = 0;
         this.boolean = 0;
@@ -441,8 +441,7 @@ var bigClass = /** @class */ (function () {
         this.while = 0;
         this.with = 0;
     }
-    return bigClass;
-}());
+}
 var bigEnum;
 (function (bigEnum) {
     bigEnum[bigEnum["constructor"] = 0] = "constructor";
@@ -502,74 +501,32 @@ var bigEnum;
 })(bigEnum || (bigEnum = {}));
 var bigModule;
 (function (bigModule) {
-    var constructor = /** @class */ (function () {
-        function constructor() {
-        }
-        return constructor;
-    }());
-    var implements = /** @class */ (function () {
-        function implements_1() {
-        }
-        return implements_1;
-    }());
-    var interface = /** @class */ (function () {
-        function interface_1() {
-        }
-        return interface_1;
-    }());
-    var let = /** @class */ (function () {
-        function let_1() {
-        }
-        return let_1;
-    }());
-    var module = /** @class */ (function () {
-        function module() {
-        }
-        return module;
-    }());
-    var package = /** @class */ (function () {
-        function package_1() {
-        }
-        return package_1;
-    }());
-    var private = /** @class */ (function () {
-        function private_1() {
-        }
-        return private_1;
-    }());
-    var protected = /** @class */ (function () {
-        function protected_1() {
-        }
-        return protected_1;
-    }());
-    var public = /** @class */ (function () {
-        function public_1() {
-        }
-        return public_1;
-    }());
-    var set = /** @class */ (function () {
-        function set() {
-        }
-        return set;
-    }());
-    var static = /** @class */ (function () {
-        function static_1() {
-        }
-        return static_1;
-    }());
-    var get = /** @class */ (function () {
-        function get() {
-        }
-        return get;
-    }());
-    var yield = /** @class */ (function () {
-        function yield_1() {
-        }
-        return yield_1;
-    }());
-    var declare = /** @class */ (function () {
-        function declare() {
-        }
-        return declare;
-    }());
+    class constructor {
+    }
+    class implements {
+    }
+    class interface {
+    }
+    class let {
+    }
+    class module {
+    }
+    class package {
+    }
+    class private {
+    }
+    class protected {
+    }
+    class public {
+    }
+    class set {
+    }
+    class static {
+    }
+    class get {
+    }
+    class yield {
+    }
+    class declare {
+    }
 })(bigModule || (bigModule = {}));

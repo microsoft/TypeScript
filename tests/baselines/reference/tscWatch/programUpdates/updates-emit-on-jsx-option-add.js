@@ -40,7 +40,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.js]
-var d = <div />;
+const d = <div />;
 
 
 
@@ -108,7 +108,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/index.jsx]
-var d = <div />;
+const d = <div />;
 
 
 

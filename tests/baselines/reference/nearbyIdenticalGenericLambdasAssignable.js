@@ -31,10 +31,10 @@ accL(fA); accL(fB); accL(fC);
 //             ~~ previously an error
 
 //// [nearbyIdenticalGenericLambdasAssignable.js]
-var fB = function () {
+const fB = () => {
     return { v: '' };
 };
-var fC = function () {
+const fC = () => {
     return {};
 };
 // These should all be OK, every type is identical

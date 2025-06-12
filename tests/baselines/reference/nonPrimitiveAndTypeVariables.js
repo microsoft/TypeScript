@@ -18,9 +18,9 @@ function foo<T, U>(x: T) {
 //// [nonPrimitiveAndTypeVariables.js]
 "use strict";
 // Repros from #23800
-var a = { a: 0 };
-var b = { a: 0 };
+let a = { a: 0 };
+let b = { a: 0 };
 function foo(x) {
-    var a = x; // Error
-    var b = x; // Error
+    let a = x; // Error
+    let b = x; // Error
 }

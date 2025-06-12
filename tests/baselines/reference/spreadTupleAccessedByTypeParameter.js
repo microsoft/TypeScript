@@ -14,7 +14,7 @@ export function test<N extends number>(singletons: ["a"][], i: N) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = test;
 function test(singletons, i) {
-    var singleton = singletons[i];
-    var rest = singleton.slice(1);
+    const singleton = singletons[i];
+    const [, ...rest] = singleton;
     return rest;
 }

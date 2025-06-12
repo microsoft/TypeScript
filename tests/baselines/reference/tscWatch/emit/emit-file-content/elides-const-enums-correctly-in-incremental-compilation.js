@@ -47,7 +47,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var v = 1 /* E2.V */;
+const v = 1 /* E2.V */;
 
 
 
@@ -120,7 +120,7 @@ Output::
 //// [/user/someone/projects/myproject/file3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var v = 1 /* E2.V */;
+const v = 1 /* E2.V */;
 function foo2() { return 2; }
 
 

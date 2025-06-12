@@ -285,11 +285,8 @@ function jsDocParamTest(/** this is inline comment for a */ a, /** this is inlin
     return a + b + c + d;
 }
 /**/
-var NoQuickInfoClass = /** @class */ (function () {
-    function NoQuickInfoClass() {
-    }
-    return NoQuickInfoClass;
-}());
+class NoQuickInfoClass {
+}
 
 
 //// [commentsCommentParsing.d.ts]

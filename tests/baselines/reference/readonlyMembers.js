@@ -76,36 +76,30 @@ yy["foo"] = "abc";
 var x = { a: 0 };
 x.a = 1; // Error
 x.b = 1; // Error
-var C = /** @class */ (function () {
-    function C() {
-        var _this = this;
+class C {
+    get c() { return 1; }
+    constructor() {
         this.b = 1;
         this.a = 1; // Ok
         this.b = 1; // Ok
         this.c = 1; // Error
-        var f = function () {
-            _this.a = 1; // Error
-            _this.b = 1; // Error
-            _this.c = 1; // Error
+        const f = () => {
+            this.a = 1; // Error
+            this.b = 1; // Error
+            this.c = 1; // Error
         };
-        (function () {
-            _this.a = 1; // Ok
-            _this.b = 1; // Ok
-            _this.c = 1; // Error
+        (() => {
+            this.a = 1; // Ok
+            this.b = 1; // Ok
+            this.c = 1; // Error
         })();
     }
-    Object.defineProperty(C.prototype, "c", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    C.prototype.foo = function () {
+    foo() {
         this.a = 1; // Error
         this.b = 1; // Error
         this.c = 1; // Error
-    };
-    return C;
-}());
+    }
+}
 var o = {
     get a() { return 1; },
     get b() { return 1; },
@@ -135,9 +129,9 @@ var N;
 N.a = 1; // Error
 N.b = 1;
 N.c = 1;
-var xx;
-var s = xx["foo"];
+let xx;
+let s = xx["foo"];
 xx["foo"] = "abc"; // Error
-var yy;
+let yy;
 yy[1] = "abc"; // Error
 yy["foo"] = "abc";

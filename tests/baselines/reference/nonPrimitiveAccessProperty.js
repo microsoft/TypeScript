@@ -24,5 +24,5 @@ var __rest = (this && this.__rest) || function (s, e) {
 var a;
 a.toString();
 a.nonExist(); // error
-var destructuring = a.destructuring; // error
+var { destructuring } = a; // error
 var rest = __rest(a, []); // ok

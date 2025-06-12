@@ -7,12 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var Foo = /** @class */ (function () {
-    function Foo(x) {
-        this.x = x;
-    }
+let Foo = (() => {
+    let Foo = class Foo {
+        constructor(x) {
+            this.x = x;
+        }
+    };
     Foo = __decorate([
         __param(0, Dec)
     ], Foo);
     return Foo;
-}());
+})();

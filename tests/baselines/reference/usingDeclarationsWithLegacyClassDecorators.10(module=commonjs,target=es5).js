@@ -15,17 +15,17 @@ using after = null;
 //// [usingDeclarationsWithLegacyClassDecorators.10.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var default_1 = /** @class */ (function () {
-    function default_1() {
-    }
+let default_1 = (() => {
+    let default_1 = class {
+    };
     default_1 = __decorate([
         dec
     ], default_1);
     return default_1;
-}());
+})();
 exports.default = default_1;
 var after;
-var env_1 = { stack: [], error: void 0, hasError: false };
+const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     after = __addDisposableResource(env_1, null, false);
 }

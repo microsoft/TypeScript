@@ -65,84 +65,48 @@ class Foo4 extends Foo {
 }
 
 //// [collisionSuperAndParameter.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    a() {
+        var lamda = (_super) => {
+            return x => this; // New scope.  So should inject new _this capture
+        };
     }
-    Foo.prototype.a = function () {
-        var _this = this;
-        var lamda = function (_super) {
-            return function (x) { return _this; }; // New scope.  So should inject new _this capture
+    b(_super) {
+        var lambda = () => {
+            return x => this; // New scope.  So should inject new _this capture
         };
-    };
-    Foo.prototype.b = function (_super) {
-        var _this = this;
-        var lambda = function () {
-            return function (x) { return _this; }; // New scope.  So should inject new _this capture
+    }
+    set c(_super) {
+    }
+}
+class Foo2 extends Foo {
+    x() {
+        var lamda = (_super) => {
+            return x => this; // New scope.  So should inject new _this capture
         };
-    };
-    Object.defineProperty(Foo.prototype, "c", {
-        set: function (_super) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Foo;
-}());
-var Foo2 = /** @class */ (function (_super_1) {
-    __extends(Foo2, _super_1);
-    function Foo2(_super) {
-        var _this = _super_1.call(this) || this;
-        _this.prop4 = {
-            doStuff: function (_super) {
+    }
+    y(_super) {
+        var lambda = () => {
+            return x => this; // New scope.  So should inject new _this capture
+        };
+    }
+    set z(_super) {
+    }
+    constructor(_super) {
+        super();
+        this.prop4 = {
+            doStuff: (_super) => {
             }
         };
-        return _this;
     }
-    Foo2.prototype.x = function () {
-        var _this = this;
-        var lamda = function (_super) {
-            return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        };
-    };
-    Foo2.prototype.y = function (_super) {
-        var _this = this;
-        var lambda = function () {
-            return function (x) { return _this; }; // New scope.  So should inject new _this capture
-        };
-    };
-    Object.defineProperty(Foo2.prototype, "z", {
-        set: function (_super) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Foo2;
-}(Foo));
-var Foo4 = /** @class */ (function (_super_1) {
-    __extends(Foo4, _super_1);
-    function Foo4(_super) {
-        return _super_1.call(this) || this;
+}
+class Foo4 extends Foo {
+    constructor(_super) {
+        super();
     }
-    Foo4.prototype.y = function (_super) {
-        var _this = this;
-        var lambda = function () {
-            return function (x) { return _this; }; // New scope.  So should inject new _this capture
+    y(_super) {
+        var lambda = () => {
+            return x => this; // New scope.  So should inject new _this capture
         };
-    };
-    return Foo4;
-}(Foo));
+    }
+}

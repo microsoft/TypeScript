@@ -52,5 +52,5 @@ __exportStar(require("./file"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ns = require("./reexport");
-var g = ns.Root.A;
+const g = ns.Root.A;
 f.x;

@@ -9,9 +9,8 @@ const example = {
 
 
 //// [emitThisInObjectLiteralGetter.js]
-var example = {
+const example = {
     get foo() {
-        var _this = this;
-        return function (item) { return _this.bar(item); };
+        return item => this.bar(item);
     }
 };

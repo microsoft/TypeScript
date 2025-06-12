@@ -14,11 +14,8 @@ export {default as Foob} from "./cls";
 //// [cls.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 exports.default = Foo;
 //// [usage.js]
 "use strict";

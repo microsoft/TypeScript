@@ -11,11 +11,8 @@ export default Bar
 //// [exportDefaultTypeClassAndValue.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = 1;
+const foo = 1;
 exports.default = foo;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 exports.default = Foo;

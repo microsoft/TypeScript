@@ -59,39 +59,21 @@ module M {
 //// [mergedInterfacesWithMultipleBases.js]
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class C2 {
+}
+class D {
+}
 var a;
 var r = a.a;
 // generic interfaces in a module
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var C2 = /** @class */ (function () {
-        function C2() {
-        }
-        return C2;
-    }());
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class C {
+    }
+    class C2 {
+    }
+    class D {
+    }
 })(M || (M = {}));

@@ -15,7 +15,7 @@ var foo;
 (function (foo) {
     function bar() { }
     foo.obj = {
-        bar: bar
+        bar
     };
 })(foo || (foo = {}));
 

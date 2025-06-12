@@ -35,23 +35,20 @@ export interface SomeType {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.methodName = function (propName) { return propName; };
-    Foo.prototype.otherMethod = function () {
+class Foo {
+    methodName(propName) { return propName; }
+    otherMethod() {
         if (Math.random() > 0.5) {
             return { x: 42 };
         }
         return { y: "yes" };
-    };
-    return Foo;
-}());
+    }
+}
 exports.Foo = Foo;
 //# sourceMappingURL=index.js.map
 
 //// [/home/src/workspaces/project/dist/index.js.map]
-{"version":3,"file":"index.js","sourceRoot":"/home/src/workspaces/project/","sources":["index.ts"],"names":[],"mappings":";;;AAAA;IAAA;IASA,CAAC;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG"}
+{"version":3,"file":"index.js","sourceRoot":"/home/src/workspaces/project/","sources":["index.ts"],"names":[],"mappings":";;;AAAA,MAAa,GAAG;IAEZ,UAAU,CAAC,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,WAAW;QACP,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;CACJ;AATD,kBASC"}
 
 //// [/home/src/workspaces/project/index.ts]
 export class Foo {
@@ -413,12 +410,12 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/home/src/workspaces/project/dist/index.js.map",
             "writeByteOrderMark": false,
-            "text": "{\"version\":3,\"file\":\"index.js\",\"sourceRoot\":\"/home/src/workspaces/project/\",\"sources\":[\"index.ts\"],\"names\":[],\"mappings\":\";;;AAAA;IAAA;IASA,CAAC;IAPG,wBAAU,GAAV,UAAW,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,yBAAW,GAAX;QACI,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;IACL,UAAC;AAAD,CAAC,AATD,IASC;AATY,kBAAG\"}"
+            "text": "{\"version\":3,\"file\":\"index.js\",\"sourceRoot\":\"/home/src/workspaces/project/\",\"sources\":[\"index.ts\"],\"names\":[],\"mappings\":\";;;AAAA,MAAa,GAAG;IAEZ,UAAU,CAAC,QAAkB,IAAc,OAAO,QAAQ,CAAC,CAAC,CAAC;IAC7D,WAAW;QACP,IAAI,IAAI,CAAC,MAAM,EAAE,GAAG,GAAG,EAAE,CAAC;YACtB,OAAO,EAAC,CAAC,EAAE,EAAE,EAAC,CAAC;QACnB,CAAC;QACD,OAAO,EAAC,CAAC,EAAE,KAAK,EAAC,CAAC;IACtB,CAAC;CACJ;AATD,kBASC\"}"
           },
           {
             "name": "/home/src/workspaces/project/dist/index.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Foo = void 0;\nvar Foo = /** @class */ (function () {\n    function Foo() {\n    }\n    Foo.prototype.methodName = function (propName) { return propName; };\n    Foo.prototype.otherMethod = function () {\n        if (Math.random() > 0.5) {\n            return { x: 42 };\n        }\n        return { y: \"yes\" };\n    };\n    return Foo;\n}());\nexports.Foo = Foo;\n//# sourceMappingURL=index.js.map"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.Foo = void 0;\nclass Foo {\n    methodName(propName) { return propName; }\n    otherMethod() {\n        if (Math.random() > 0.5) {\n            return { x: 42 };\n        }\n        return { y: \"yes\" };\n    }\n}\nexports.Foo = Foo;\n//# sourceMappingURL=index.js.map"
           },
           {
             "name": "/home/src/workspaces/project/dist/index.d.ts.map",

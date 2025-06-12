@@ -40,7 +40,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/b.js]
-var b = 10;
+const b = 10;
 
 
 //// [/home/src/workspaces/project/b.d.ts]

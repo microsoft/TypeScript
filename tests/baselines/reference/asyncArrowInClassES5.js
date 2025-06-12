@@ -12,13 +12,11 @@ class Test {
 //// [asyncArrowInClassES5.js]
 // https://github.com/Microsoft/TypeScript/issues/16924
 // Should capture `this`
-var Test = /** @class */ (function () {
-    function Test() {
-    }
+let Test = (() => {
     var _a;
+    class Test {
+    }
     _a = Test;
-    Test.member = function (x) { return __awaiter(_a, void 0, void 0, function () { return __generator(_a, function (_b) {
-        return [2 /*return*/];
-    }); }); };
+    Test.member = (x) => __awaiter(_a, void 0, void 0, function* () { });
     return Test;
-}());
+})();

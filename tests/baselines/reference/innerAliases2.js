@@ -24,13 +24,10 @@ module consumer {
 //// [innerAliases2.js]
 var _provider;
 (function (_provider) {
-    var UsefulClass = /** @class */ (function () {
-        function UsefulClass() {
+    class UsefulClass {
+        foo() {
         }
-        UsefulClass.prototype.foo = function () {
-        };
-        return UsefulClass;
-    }());
+    }
     _provider.UsefulClass = UsefulClass;
 })(_provider || (_provider = {}));
 var consumer;

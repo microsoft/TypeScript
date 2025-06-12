@@ -23,7 +23,7 @@ const enum AfterObject {
 //// [blockScopedEnumVariablesUseBeforeDef.js]
 function foo1() {
     return E.A;
-    var E;
+    let E;
     (function (E) {
         E[E["A"] = 0] = "A";
     })(E || (E = {}));
@@ -31,6 +31,6 @@ function foo1() {
 function foo2() {
     return 0 /* E.A */;
 }
-var config = {
+const config = {
     a: 2 /* AfterObject.A */,
 };

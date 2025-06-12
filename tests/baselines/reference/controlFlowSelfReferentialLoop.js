@@ -230,11 +230,11 @@ function getObject(id) {
     return {};
 }
 ;
-(function () {
-    var id = 'a';
+(() => {
+    let id = 'a';
     while (1) {
-        var data = getObject(id);
-        var message = data.message;
+        const data = getObject(id);
+        const message = data.message;
         id = message.id;
     }
 })();

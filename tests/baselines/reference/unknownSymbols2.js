@@ -52,9 +52,9 @@ var M;
         default:
             break;
     }
-    var a = function () { return asdf; };
-    var b = function (asdf) { return qwerty; };
-    var N;
+    var a = () => asdf;
+    var b = (asdf) => { return qwerty; };
+    let N;
     (function (N) {
         var x = 1;
     })(N || (N = {}));

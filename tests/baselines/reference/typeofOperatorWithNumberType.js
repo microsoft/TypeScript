@@ -64,12 +64,9 @@ z: typeof M.n;
 var NUMBER;
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return 1; };
-    return A;
-}());
+class A {
+    static foo() { return 1; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -80,7 +77,7 @@ var ResultIsString2 = typeof NUMBER1;
 // number type literal
 var ResultIsString3 = typeof 1;
 var ResultIsString4 = typeof { x: 1, y: 2 };
-var ResultIsString5 = typeof { x: 1, y: function (n) { return n; } };
+var ResultIsString5 = typeof { x: 1, y: (n) => { return n; } };
 // number type expressions
 var ResultIsString6 = typeof objA.a;
 var ResultIsString7 = typeof M.n;

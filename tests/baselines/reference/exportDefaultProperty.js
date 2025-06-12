@@ -44,11 +44,9 @@ fooLength + 1;
 Object.defineProperty(exports, "__esModule", { value: true });
 var A;
 (function (A) {
-    var B = /** @class */ (function () {
-        function B(b) {
-        }
-        return B;
-    }());
+    class B {
+        constructor(b) { }
+    }
     A.B = B;
     (function (B) {
         B.b = 0;
@@ -66,9 +64,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var foobar_1 = require("foobar");
 var X = foobar_1.default.X;
 var foobarx_1 = require("foobarx");
-var x = X;
-var x2 = foobarx_1.default;
+const x = X;
+const x2 = foobarx_1.default;
 var a_1 = require("./a");
-var b = new a_1.default(a_1.default.b);
+const b = new a_1.default(a_1.default.b);
 var b_1 = require("./b");
 b_1.default + 1;

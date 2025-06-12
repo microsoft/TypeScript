@@ -19,5 +19,5 @@ let x1 = <MyComp a="hi"/>
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var x = <MyComp />;
-var x1 = <MyComp a="hi"/>;
+let x = <MyComp />;
+let x1 = <MyComp a="hi"/>;

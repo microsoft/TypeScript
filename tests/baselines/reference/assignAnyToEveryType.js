@@ -65,11 +65,8 @@ var E;
 var g = x;
 var g2 = E.A;
 g2 = x;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var h = x;
 var i = x;
 var j = x;

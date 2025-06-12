@@ -18,13 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.mappedUnionWithPrivateType = void 0;
 var internal_1 = require("./internal");
-var mappedUnionWithPrivateType = function () {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return internal_1.usePrivateType.apply(void 0, args);
-};
+const mappedUnionWithPrivateType = (...args) => (0, internal_1.usePrivateType)(...args);
 exports.mappedUnionWithPrivateType = mappedUnionWithPrivateType;
 
 

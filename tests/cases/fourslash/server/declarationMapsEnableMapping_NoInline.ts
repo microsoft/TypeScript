@@ -38,20 +38,17 @@
 ////"use strict";
 ////Object.defineProperty(exports, "__esModule", { value: true });
 ////exports.Foo = void 0;
-////var Foo = /** @class */ (function () {
-////    function Foo() {
-////    }
-////    Foo.prototype.methodName = function (propName) { return propName; };
-////    Foo.prototype.otherMethod = function () {
+////class Foo {
+////    methodName(propName) { return propName; }
+////    otherMethod() {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
 ////        }
 ////        return { y: "yes" };
-////    };
-////    return Foo;
-////}());
+////    }
+////}
 ////exports.Foo = Foo;
-//////# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQTtJQUFBO0lBU0EsQ0FBQztJQVBHLHdCQUFVLEdBQVYsVUFBVyxRQUFrQixJQUFjLE9BQU8sUUFBUSxDQUFDLENBQUMsQ0FBQztJQUM3RCx5QkFBVyxHQUFYO1FBQ0ksSUFBSSxJQUFJLENBQUMsTUFBTSxFQUFFLEdBQUcsR0FBRyxFQUFFLENBQUM7WUFDdEIsT0FBTyxFQUFDLENBQUMsRUFBRSxFQUFFLEVBQUMsQ0FBQztRQUNuQixDQUFDO1FBQ0QsT0FBTyxFQUFDLENBQUMsRUFBRSxLQUFLLEVBQUMsQ0FBQztJQUN0QixDQUFDO0lBQ0wsVUFBQztBQUFELENBQUMsQUFURCxJQVNDO0FBVFksa0JBQUcifQ==
+//////# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSxNQUFhLEdBQUc7SUFFWixVQUFVLENBQUMsUUFBa0IsSUFBYyxPQUFPLFFBQVEsQ0FBQyxDQUFDLENBQUM7SUFDN0QsV0FBVztRQUNQLElBQUksSUFBSSxDQUFDLE1BQU0sRUFBRSxHQUFHLEdBQUcsRUFBRSxDQUFDO1lBQ3RCLE9BQU8sRUFBQyxDQUFDLEVBQUUsRUFBRSxFQUFDLENBQUM7UUFDbkIsQ0FBQztRQUNELE9BQU8sRUFBQyxDQUFDLEVBQUUsS0FBSyxFQUFDLENBQUM7SUFDdEIsQ0FBQztDQUNKO0FBVEQsa0JBU0MifQ==
 
 // @Filename: /home/src/workspaces/project/dist/index.d.ts.map
 ////{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}

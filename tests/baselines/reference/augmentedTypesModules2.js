@@ -61,11 +61,8 @@ function m2f() { }
 function m2g() { }
 ;
 (function (m2g) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        C.prototype.foo = function () { };
-        return C;
-    }());
+    class C {
+        foo() { }
+    }
     m2g.C = C;
 })(m2g || (m2g = {}));

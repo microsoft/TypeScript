@@ -13,11 +13,8 @@ import defaultBinding2 from "./server"; // elide this import since defaultBindin
 //// [server.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 exports.default = c;
 //// [client.js]
 "use strict";

@@ -17,12 +17,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
+let C = (() => {
+    let C = class C {
+    };
     C = __decorate([
         dec
     ], C);
     return C;
-}());
+})();
 exports.C = C;

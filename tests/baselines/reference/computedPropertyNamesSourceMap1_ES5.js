@@ -11,19 +11,12 @@ class C {
 }
 
 //// [computedPropertyNamesSourceMap1_ES5.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype["hello"] = function () {
+class C {
+    ["hello"]() {
         debugger;
-    };
-    Object.defineProperty(C.prototype, "goodbye", {
-        get: function () {
-            return 0;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+    }
+    get ["goodbye"]() {
+        return 0;
+    }
+}
 //# sourceMappingURL=computedPropertyNamesSourceMap1_ES5.js.map

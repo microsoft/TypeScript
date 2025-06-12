@@ -34,16 +34,13 @@ foo3({ name: "Edger", skill: "cutting edges" });
 //// [sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.js]
 var hello = "hello";
 var robotA = { name: "mower", skill: "mowing" };
-function foo1(_a) {
-    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameA = _c === void 0 ? "<NoName>" : _c;
+function foo1({ name: nameA = "<NoName>" } = {}) {
     console.log(nameA);
 }
-function foo2(_a) {
-    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameB = _c === void 0 ? "<NoName>" : _c, _d = _b.skill, skillB = _d === void 0 ? "noSkill" : _d;
+function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" } = {}) {
     console.log(nameB);
 }
-function foo3(_a) {
-    var _b = _a === void 0 ? {} : _a, _c = _b.name, name = _c === void 0 ? "<NoName>" : _c;
+function foo3({ name = "<NoName>" } = {}) {
     console.log(name);
 }
 foo1(robotA);

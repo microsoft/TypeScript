@@ -29,7 +29,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/compile.js]
-var x = 1;
+let x = 1;
 
 
 

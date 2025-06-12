@@ -38,30 +38,27 @@ function fun<T>(item: { [P in keyof T]: T[P] }) {
 
 //// [typeGuardsTypeParameters.js]
 // Type guards involving type parameters produce intersection types
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 function f1(x) {
     if (x instanceof C) {
-        var v1 = x;
-        var v2 = x;
+        let v1 = x;
+        let v2 = x;
         x.prop;
     }
 }
 function f2(x) {
     if (typeof x === "string") {
-        var v1 = x;
-        var v2 = x;
+        let v1 = x;
+        let v2 = x;
         x.length;
     }
 }
 // Repro from #13872
 function fun(item) {
-    var strings = [];
-    for (var key in item) {
-        var value = item[key];
+    const strings = [];
+    for (const key in item) {
+        const value = item[key];
         if (typeof value === "string") {
             strings.push(value);
         }

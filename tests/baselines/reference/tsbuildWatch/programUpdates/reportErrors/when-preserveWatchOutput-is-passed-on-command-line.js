@@ -570,7 +570,7 @@ function getSecondsInDay() {
 }
 var mod = require("../core/anotherModule");
 exports.m = mod;
-var y = 10;
+let y = 10;
 //# sourceMappingURL=index.js.map
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
@@ -724,7 +724,7 @@ exports.multiply = multiply;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 function multiply(a, b) { return a * b; }
-var x = 10;
+let x = 10;
 
 
 //// [/user/username/projects/sample1/core/index.d.ts.map] file written with same contents

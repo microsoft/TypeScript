@@ -70,43 +70,43 @@ function run(options: { something?(b?: string): void }) {
 //// [unionTypeReduction2.js]
 "use strict";
 function f1(x, y) {
-    var z = !!true ? x : y; // { f(x?: string): void }
+    let z = !!true ? x : y; // { f(x?: string): void }
     z.f();
     z.f('hello');
 }
 function f2(x, y) {
-    var z = !!true ? x : y; // { f(x?: string): void }
+    let z = !!true ? x : y; // { f(x?: string): void }
     z.f();
     z.f('hello');
 }
 function f3(x, y) {
-    var f = !!true ? x : y; // (x?: string) => void
+    let f = !!true ? x : y; // (x?: string) => void
     f();
     f('hello');
 }
 function f4(x, y) {
-    var f = !!true ? x : y; // (x?: string) => void
+    let f = !!true ? x : y; // (x?: string) => void
     f();
     f('hello');
 }
 function f5(x, y) {
-    var f = !!true ? x : y; // (x?: 'hello') => void
+    let f = !!true ? x : y; // (x?: 'hello') => void
     f();
     f('hello');
 }
 function f6(x, y) {
-    var f = !!true ? x : y; // (x: 'hello' | undefined) => void
+    let f = !!true ? x : y; // (x: 'hello' | undefined) => void
     f(); // Error
     f('hello');
 }
 function f11(a, b) {
-    var z = !!true ? a : b; // A | B
+    let z = !!true ? a : b; // A | B
     z.f();
     z.f('hello');
 }
-var k = { something: function () { } };
+const k = { something() { } };
 function run(options) {
     var _a;
-    var something = (_a = options.something) !== null && _a !== void 0 ? _a : val.something;
+    const something = (_a = options.something) !== null && _a !== void 0 ? _a : val.something;
     something('');
 }

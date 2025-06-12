@@ -27,41 +27,23 @@ export var x6 = new m();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x11 = exports.a12 = exports.a11 = exports.m = exports.x = exports.a = void 0;
-var a = /** @class */ (function () {
-    function a() {
-    }
-    return a;
-}());
+class a {
+}
 exports.a = a;
-var x = /** @class */ (function () {
-    function x() {
-    }
-    return x;
-}());
+class x {
+}
 exports.x = x;
-var m = /** @class */ (function () {
-    function m() {
-    }
-    return m;
-}());
+class m {
+}
 exports.m = m;
-var a11 = /** @class */ (function () {
-    function a11() {
-    }
-    return a11;
-}());
+class a11 {
+}
 exports.a11 = a11;
-var a12 = /** @class */ (function () {
-    function a12() {
-    }
-    return a12;
-}());
+class a12 {
+}
 exports.a12 = a12;
-var x11 = /** @class */ (function () {
-    function x11() {
-    }
-    return x11;
-}());
+class x11 {
+}
 exports.x11 = x11;
 //// [client.js]
 "use strict";

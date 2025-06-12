@@ -32,21 +32,17 @@ export default class Bar {
 import { Foo } from "./other.js";
 import * as other from "./other.js";
 import defaultFoo from "./other.js";
-var x = new Foo();
-var y = other.Foo();
-var z = new defaultFoo();
+const x = new Foo();
+const y = other.Foo();
+const z = new defaultFoo();
 //// [other.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+export class Foo {
+    constructor() {
         this.bar = 2.4;
     }
-    return Foo;
-}());
-export { Foo };
-var Bar = /** @class */ (function () {
-    function Bar() {
+}
+export default class Bar {
+    constructor() {
         this.foo = 1.2;
     }
-    return Bar;
-}());
-export default Bar;
+}

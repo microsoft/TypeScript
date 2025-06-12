@@ -234,7 +234,7 @@ Output::
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/a.js]
-var a = "hello";
+const a = "hello";
 
 
 
@@ -361,7 +361,7 @@ Found 1 error.
 //// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/a.js]
-var a = "hello;
+const a = "hello;
 
 
 

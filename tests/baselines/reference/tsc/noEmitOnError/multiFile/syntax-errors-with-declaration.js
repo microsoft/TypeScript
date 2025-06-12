@@ -141,7 +141,7 @@ export interface A {
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = {
+const a = {
     lastName: 'sdsd'
 };
 

@@ -21,10 +21,10 @@ const mySecondFunction = <T extends { commonProperty: number, otherProperty: num
 
 //// [intersectionSatisfiesConstraint.js]
 "use strict";
-var myFirstFunction = function (param1) {
-    var newParam = Object.assign(param1, { otherProperty: 3 });
+const myFirstFunction = (param1) => {
+    const newParam = Object.assign(param1, { otherProperty: 3 });
     mySecondFunction(newParam);
 };
-var mySecondFunction = function (newParam) {
+const mySecondFunction = (newParam) => {
     return newParam;
 };

@@ -30,35 +30,23 @@ new multiM.c();
 var multiM;
 (function (multiM) {
     /** class b*/
-    var b = /** @class */ (function () {
-        function b() {
-        }
-        return b;
-    }());
+    class b {
+    }
     multiM.b = b;
     // class d
-    var d = /** @class */ (function () {
-        function d() {
-        }
-        return d;
-    }());
+    class d {
+    }
     multiM.d = d;
 })(multiM || (multiM = {}));
 /// this is multi module 2
 (function (multiM) {
     /** class c comment*/
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     multiM.c = c;
     /// class e
-    var e = /** @class */ (function () {
-        function e() {
-        }
-        return e;
-    }());
+    class e {
+    }
     multiM.e = e;
 })(multiM || (multiM = {}));
 new multiM.b();

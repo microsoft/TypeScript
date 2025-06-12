@@ -99,7 +99,7 @@ Output::
 
 //// [/user/username/projects/project/commonFile1.js]
 "use strict";
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/projects/project/commonFile1.d.ts]
@@ -108,7 +108,7 @@ declare let x: number;
 
 //// [/user/username/projects/project/commonFile2.js]
 "use strict";
-var y = 1;
+let y = 1;
 
 
 //// [/user/username/projects/project/commonFile2.d.ts]
@@ -177,7 +177,7 @@ declare let y: number;
 
 //// [/user/username/projects/project/other.js]
 "use strict";
-var z = 0;
+let z = 0;
 
 
 //// [/user/username/projects/project/other.d.ts]

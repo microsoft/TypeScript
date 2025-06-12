@@ -11,5 +11,5 @@ const items = require("./some-mod")();
 module.exports = items;
 
 //// [index.js]
-var items = require("./some-mod")();
+const items = require("./some-mod")();
 module.exports = items;

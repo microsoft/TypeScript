@@ -22,12 +22,12 @@ import { get } from "./t1";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get = exports.set = void 0;
-var set = {
+let set = {
     set foo(x) {
     }
 };
 exports.set = set;
-var get = 10;
+let get = 10;
 exports.get = get;
 //// [t2.js]
 "use strict";

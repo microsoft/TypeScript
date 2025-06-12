@@ -19,13 +19,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
+let A = (() => {
+    class A {
     }
     __decorate([
         test,
         __metadata("design:type", Object)
     ], A.prototype, "b", void 0);
     return A;
-}());
+})();
 exports.A = A;

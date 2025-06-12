@@ -16,13 +16,10 @@ export class C {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var abcdefgh_1 = require("abcdefgh");
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype[abcdefgh_1.default.someKey] = function () { };
+class C {
+    [abcdefgh_1.default.someKey]() { }
     ;
-    return C;
-}());
+}
 exports.C = C;
 
 

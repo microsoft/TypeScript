@@ -46,7 +46,7 @@ export const narrowToLiterals = (str: string) => {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.narrowToStringOrNumber = exports.narrowToString = exports.narrowToLiterals = void 0;
-var narrowToLiterals = function (str) {
+const narrowToLiterals = (str) => {
     switch (str) {
         case 'abc': {
             // inferred type as `abc`
@@ -57,7 +57,7 @@ var narrowToLiterals = function (str) {
     }
 };
 exports.narrowToLiterals = narrowToLiterals;
-var narrowToString = function (str, someOtherStr) {
+const narrowToString = (str, someOtherStr) => {
     switch (str) {
         case 'abc': {
             // inferred type should be `abc`
@@ -72,7 +72,7 @@ var narrowToString = function (str, someOtherStr) {
     }
 };
 exports.narrowToString = narrowToString;
-var narrowToStringOrNumber = function (str, someNumber) {
+const narrowToStringOrNumber = (str, someNumber) => {
     switch (str) {
         case 'abc': {
             // inferred type should be `abc`

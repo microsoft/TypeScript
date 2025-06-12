@@ -15,14 +15,13 @@ class A
 }
 
 //// [es5-declaration-amd.js]
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
     }
-    A.prototype.B = function () {
+    B() {
         return 42;
-    };
-    return A;
-}());
+    }
+}
 
 
 //// [es5-declaration-amd.d.ts]

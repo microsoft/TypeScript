@@ -23,7 +23,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function fn(sliceIndex) {
     return null;
 }
-exports.default = { fn: fn };
+exports.default = { fn };
 //// [reexport.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

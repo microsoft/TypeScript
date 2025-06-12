@@ -20,14 +20,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
-var B = /** @class */ (function () {
-    function B() {
-    }
+let B = (() => {
     var _a;
+    class B {
+    }
     __decorate([
         Decorate,
         __metadata("design:type", typeof (_a = typeof Map !== "undefined" && Map) === "function" ? _a : Object)
     ], B.prototype, "member", void 0);
     return B;
-}());
+})();
 exports.B = B;

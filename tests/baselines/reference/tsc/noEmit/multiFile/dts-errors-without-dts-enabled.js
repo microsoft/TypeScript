@@ -128,7 +128,7 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
-var a = "hello";
+const a = "hello";
 
 
 
@@ -206,12 +206,11 @@ Output::
 
 
 //// [/home/src/projects/project/a.js]
-var a = /** @class */ (function () {
-    function class_1() {
+const a = class {
+    constructor() {
         this.p = 10;
     }
-    return class_1;
-}());
+};
 
 
 

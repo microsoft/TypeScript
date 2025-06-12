@@ -6,7 +6,5 @@
 )
 
 //// [sourceMapValidationLambdaSpanningMultipleLines.js]
-(function (item) {
-    return item;
-});
+((item) => item);
 //# sourceMappingURL=sourceMapValidationLambdaSpanningMultipleLines.js.map

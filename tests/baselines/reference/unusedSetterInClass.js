@@ -10,15 +10,8 @@ class Employee {
 }
 
 //// [unusedSetterInClass.js]
-var Employee = /** @class */ (function () {
-    function Employee() {
+class Employee {
+    set fullName(newName) {
+        this._fullName = newName;
     }
-    Object.defineProperty(Employee.prototype, "fullName", {
-        set: function (newName) {
-            this._fullName = newName;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return Employee;
-}());
+}

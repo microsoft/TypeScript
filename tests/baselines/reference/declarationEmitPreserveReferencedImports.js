@@ -21,7 +21,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.o = void 0;
-var o = function (o) { return function () { return null; }; };
+const o = (o) => () => null;
 exports.o = o;
 //// [main.js]
 "use strict";

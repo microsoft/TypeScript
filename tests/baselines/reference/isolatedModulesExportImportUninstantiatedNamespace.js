@@ -24,10 +24,6 @@ export function createElement<ElementType extends HTMLElement>(
 //// [jsx.js]
 export {};
 //// [factory.js]
-export function createElement(tagName, attributes) {
-    var children = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        children[_i - 2] = arguments[_i];
-    }
+export function createElement(tagName, attributes, ...children) {
     //...
 }

@@ -12,11 +12,8 @@ import {Calculator} from "./file1"
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Calculator = void 0;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    return Calculator;
-}());
+class Calculator {
+}
 exports.Calculator = Calculator;
 //// [file2.js]
 "use strict";

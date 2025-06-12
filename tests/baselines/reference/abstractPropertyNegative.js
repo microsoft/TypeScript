@@ -46,95 +46,38 @@ abstract class AbstractAccessorMismatch {
 
 
 //// [abstractPropertyNegative.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var B = /** @class */ (function () {
-    function B() {
+class B {
+}
+class C extends B {
+    constructor() {
+        super(...arguments);
+        this.ro = "readonly please";
     }
-    return B;
-}());
-var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.ro = "readonly please";
-        return _this;
-    }
-    Object.defineProperty(C.prototype, "concreteWithNoBody", {
-        get: function () { },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}(B));
-var c = new C();
+    get concreteWithNoBody() { }
+}
+let c = new C();
 c.ro = "error: lhs of assignment can't be readonly";
-var WrongTypeProperty = /** @class */ (function () {
-    function WrongTypeProperty() {
+class WrongTypeProperty {
+}
+class WrongTypePropertyImpl extends WrongTypeProperty {
+    constructor() {
+        super(...arguments);
+        this.num = "nope, wrong";
     }
-    return WrongTypeProperty;
-}());
-var WrongTypePropertyImpl = /** @class */ (function (_super) {
-    __extends(WrongTypePropertyImpl, _super);
-    function WrongTypePropertyImpl() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.num = "nope, wrong";
-        return _this;
+}
+class WrongTypeAccessor {
+}
+class WrongTypeAccessorImpl extends WrongTypeAccessor {
+    get num() { return "nope, wrong"; }
+}
+class WrongTypeAccessorImpl2 extends WrongTypeAccessor {
+    constructor() {
+        super(...arguments);
+        this.num = "nope, wrong";
     }
-    return WrongTypePropertyImpl;
-}(WrongTypeProperty));
-var WrongTypeAccessor = /** @class */ (function () {
-    function WrongTypeAccessor() {
-    }
-    return WrongTypeAccessor;
-}());
-var WrongTypeAccessorImpl = /** @class */ (function (_super) {
-    __extends(WrongTypeAccessorImpl, _super);
-    function WrongTypeAccessorImpl() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
-        get: function () { return "nope, wrong"; },
-        enumerable: false,
-        configurable: true
-    });
-    return WrongTypeAccessorImpl;
-}(WrongTypeAccessor));
-var WrongTypeAccessorImpl2 = /** @class */ (function (_super) {
-    __extends(WrongTypeAccessorImpl2, _super);
-    function WrongTypeAccessorImpl2() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.num = "nope, wrong";
-        return _this;
-    }
-    return WrongTypeAccessorImpl2;
-}(WrongTypeAccessor));
-var AbstractAccessorMismatch = /** @class */ (function () {
-    function AbstractAccessorMismatch() {
-    }
-    Object.defineProperty(AbstractAccessorMismatch.prototype, "p1", {
-        set: function (val) { },
-        enumerable: false,
-        configurable: true
-    });
+}
+class AbstractAccessorMismatch {
+    set p1(val) { }
     ;
-    Object.defineProperty(AbstractAccessorMismatch.prototype, "p2", {
-        get: function () { return "should work"; },
-        enumerable: false,
-        configurable: true
-    });
-    return AbstractAccessorMismatch;
-}());
+    get p2() { return "should work"; }
+}

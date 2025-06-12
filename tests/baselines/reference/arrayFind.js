@@ -18,7 +18,7 @@ const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAnd
 function isNumber(x) {
     return typeof x === "number";
 }
-var arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
-var foundNumber = arrayOfStringsNumbersAndBooleans.find(isNumber);
-var readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans;
-var readonlyFoundNumber = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
+const arrayOfStringsNumbersAndBooleans = ["string", false, 0, "strung", 1, true];
+const foundNumber = arrayOfStringsNumbersAndBooleans.find(isNumber);
+const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBooleans;
+const readonlyFoundNumber = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);

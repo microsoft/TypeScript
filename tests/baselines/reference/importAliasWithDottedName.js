@@ -18,7 +18,7 @@ module A {
 var M;
 (function (M) {
     M.x = 1;
-    var N;
+    let N;
     (function (N) {
         N.y = 2;
     })(N = M.N || (M.N = {}));

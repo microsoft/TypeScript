@@ -51,53 +51,13 @@ interface I31<T> extends T { x: string }
 
 
 //// [interfaceExtendsObjectIntersectionErrors.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C1 = /** @class */ (function (_super) {
-    __extends(C1, _super);
-    function C1() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return C1;
-}(Constructor()));
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return C2;
-}(Constructor()));
-var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);
-    function C3() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return C3;
-}(Constructor()));
-var C4 = /** @class */ (function (_super) {
-    __extends(C4, _super);
-    function C4() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return C4;
-}(Constructor()));
-var C5 = /** @class */ (function (_super) {
-    __extends(C5, _super);
-    function C5() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return C5;
-}(Constructor()));
+class C1 extends Constructor() {
+}
+class C2 extends Constructor() {
+}
+class C3 extends Constructor() {
+}
+class C4 extends Constructor() {
+}
+class C5 extends Constructor() {
+}

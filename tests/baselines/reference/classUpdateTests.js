@@ -116,170 +116,109 @@ class R {
 }
 
 //// [classUpdateTests.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 //
 // test codegen for instance properties
 //
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.p1 = 0;
         this.p2 = 0;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+}
+class B {
+    constructor() {
         this.p1 = 0;
         this.p2 = 0;
     }
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C(p1, p2, p3) {
-        if (p1 === void 0) { p1 = 0; }
-        if (p2 === void 0) { p2 = 0; }
-        if (p3 === void 0) { p3 = 0; }
+}
+class C {
+    constructor(p1 = 0, p2 = 0, p3 = 0) {
         this.p1 = p1;
         this.p2 = p2;
     }
-    return C;
-}());
+}
 //
 // test requirements for super calls
 //
-var D = /** @class */ (function () {
-    function D() {
+class D {
+}
+class E extends D {
+    constructor() {
+        super(...arguments);
+        this.p1 = 0;
     }
-    return D;
-}());
-var E = /** @class */ (function (_super) {
-    __extends(E, _super);
-    function E() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.p1 = 0;
-        return _this;
-    }
-    return E;
-}(D));
-var F = /** @class */ (function (_super) {
-    __extends(F, _super);
-    function F() {
-        var _this = this;
-        return _this;
-    } // ERROR - super call required
-    return F;
-}(E));
-var G = /** @class */ (function (_super) {
-    __extends(G, _super);
-    function G() {
-        var _this = _super.call(this) || this;
-        _this.p1 = 0;
-        return _this;
+}
+class F extends E {
+    constructor() { } // ERROR - super call required
+}
+class G extends D {
+    constructor() {
+        super();
+        this.p1 = 0;
     } // NO ERROR
-    return G;
-}(D));
-var H = /** @class */ (function () {
-    function H() {
-        return _super.call(this) || this;
-    } // ERROR - no super call allowed
-    return H;
-}());
-var I = /** @class */ (function (_super) {
-    __extends(I, _super);
-    function I() {
-        return _super.call(this) || this;
-    } // ERROR - no super call allowed
-    return I;
-}(Object));
-var J = /** @class */ (function (_super) {
-    __extends(J, _super);
-    function J(p1) {
-        var _this = _super.call(this) || this; // NO ERROR
-        _this.p1 = p1;
-        return _this;
+}
+class H {
+    constructor() { super(); } // ERROR - no super call allowed
+}
+class I extends Object {
+    constructor() { super(); } // ERROR - no super call allowed
+}
+class J extends G {
+    constructor(p1) {
+        super(); // NO ERROR
+        this.p1 = p1;
     }
-    return J;
-}(G));
-var K = /** @class */ (function (_super) {
-    __extends(K, _super);
-    function K(p1) {
-        var _this = this;
+}
+class K extends G {
+    constructor(p1) {
         var i = 0;
-        _this = _super.call(this) || this;
-        _this.p1 = p1;
-        return _this;
+        super();
+        this.p1 = p1;
     }
-    return K;
-}(G));
-var L = /** @class */ (function (_super) {
-    __extends(L, _super);
-    function L(p1) {
-        var _this = _super.call(this) || this; // NO ERROR
-        _this.p1 = p1;
-        return _this;
+}
+class L extends G {
+    constructor(p1) {
+        super(); // NO ERROR
+        this.p1 = p1;
     }
-    return L;
-}(G));
-var M = /** @class */ (function (_super) {
-    __extends(M, _super);
-    function M(p1) {
-        var _this = this;
+}
+class M extends G {
+    constructor(p1) {
         var i = 0;
-        _this = _super.call(this) || this;
-        _this.p1 = p1;
-        return _this;
+        super();
+        this.p1 = p1;
     }
-    return M;
-}(G));
+}
 //
 // test this reference in field initializers
 //
-var N = /** @class */ (function () {
-    function N() {
+class N {
+    constructor() {
         this.p1 = 0;
         this.p2 = this.p1;
         this.p2 = 0;
     }
-    return N;
-}());
+}
 //
 // test error on property declarations within class constructors
 //
-var O = /** @class */ (function () {
-    function O() {
+class O {
+    constructor() {
         this.p1 = 0; // ERROR
     }
-    return O;
-}());
-var P = /** @class */ (function () {
-    function P() {
+}
+class P {
+    constructor() {
         this.p1 = 0; // ERROR
     }
-    return P;
-}());
-var Q = /** @class */ (function () {
-    function Q() {
+}
+class Q {
+    constructor() {
         this.p1 = 0; // ERROR
     }
-    return Q;
-}());
-var R = /** @class */ (function () {
-    function R() {
+}
+class R {
+    constructor() {
         this.p1 = 0; // ERROR
     }
-    return R;
-}());
+}

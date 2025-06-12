@@ -18,18 +18,14 @@ class Foo2 {
 
 
 //// [es6MemberScoping.js]
-var Foo = /** @class */ (function () {
-    function Foo(store) {
+class Foo {
+    constructor(store) {
         this._store = store; // should be an error.
     }
-    Foo.prototype.foo = function () {
+    foo() {
         return this._store.length;
-    };
-    return Foo;
-}());
-var Foo2 = /** @class */ (function () {
-    function Foo2() {
     }
-    Foo2.Foo2 = function () { return 0; }; // should not be an error
-    return Foo2;
-}());
+}
+class Foo2 {
+    static Foo2() { return 0; } // should not be an error
+}

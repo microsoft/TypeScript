@@ -10,21 +10,12 @@ class C {
 
 
 //// [asyncArrowFunctionCapturesArguments_es5.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.method = function () {
-        var _this = this;
+class C {
+    method() {
         function other() { }
-        var fn = function () {
+        var fn = () => {
             var arguments_1 = arguments;
-            return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, other.apply(this, arguments_1)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            }); });
+            return __awaiter(this, void 0, void 0, function* () { return yield other.apply(this, arguments_1); });
         };
-    };
-    return C;
-}());
+    }
+}

@@ -42,51 +42,22 @@ i.prop2 = "hello"; // error
 //// [divergentAccessorsTypes5.js]
 // Not really different from divergentAccessorsTypes4.ts,
 // but goes through the deferred type code
-var One = /** @class */ (function () {
-    function One() {
-    }
-    Object.defineProperty(One.prototype, "prop1", {
-        get: function () { return ""; },
-        set: function (s) { },
-        enumerable: false,
-        configurable: true
-    });
-    return One;
-}());
-var Two = /** @class */ (function () {
-    function Two() {
-    }
-    Object.defineProperty(Two.prototype, "prop1", {
-        get: function () { return "hello"; },
-        set: function (s) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Two.prototype, "prop2", {
-        get: function () { return ""; },
-        set: function (s) { },
-        enumerable: false,
-        configurable: true
-    });
-    return Two;
-}());
-var Three = /** @class */ (function () {
-    function Three() {
-    }
-    Object.defineProperty(Three.prototype, "prop1", {
-        get: function () { return "hello"; },
-        set: function (s) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Three.prototype, "prop2", {
-        get: function () { return ""; },
-        set: function (s) { },
-        enumerable: false,
-        configurable: true
-    });
-    return Three;
-}());
+class One {
+    get prop1() { return ""; }
+    set prop1(s) { }
+}
+class Two {
+    get prop1() { return "hello"; }
+    set prop1(s) { }
+    get prop2() { return ""; }
+    set prop2(s) { }
+}
+class Three {
+    get prop1() { return "hello"; }
+    set prop1(s) { }
+    get prop2() { return ""; }
+    set prop2(s) { }
+}
 // "hello"
 i.prop1 = 42; // error
 i.prop1 = "hello";

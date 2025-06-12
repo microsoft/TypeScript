@@ -28,11 +28,8 @@ var B;
 // should be ok
 function foo(x) {
 }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 // should be ok
 function foo1(x) {
 }

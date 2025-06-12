@@ -34,8 +34,8 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var obj = { a: { x: 'hello', y: 2 }, c: 5 }; // Nested excess property
-var weak = wrong; // Nested weak object type
+let obj = { a: { x: 'hello', y: 2 }, c: 5 }; // Nested excess property
+let weak = wrong; // Nested weak object type
 function foo(x, y) {
     x = y; // Mismatched property in source intersection
 }

@@ -348,69 +348,66 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 callIt({
-    produce: function () { return 0; },
-    consume: function (n) { return n.toFixed(); }
+    produce: () => 0,
+    consume: n => n.toFixed()
 });
 callIt({
-    produce: function (_a) { return 0; },
-    consume: function (n) { return n.toFixed(); },
+    produce: _a => 0,
+    consume: n => n.toFixed(),
 });
 callIt({
-    produce: function () {
+    produce() {
         return 0;
     },
-    consume: function (n) { return n.toFixed(); }
+    consume: n => n.toFixed()
 });
-callItT([function () { return 0; }, function (n) { return n.toFixed(); }]);
-callItT([function (_a) { return 0; }, function (n) { return n.toFixed(); }]);
-var inferTypeFn = function (generic) { return generic; };
-var myGeneric = inferTypeFn({
-    retrieveGeneric: function (parameter) { return 5; },
-    operateWithGeneric: function (generic) { return generic.toFixed(); }
+callItT([() => 0, n => n.toFixed()]);
+callItT([_a => 0, n => n.toFixed()]);
+const inferTypeFn = (generic) => generic;
+const myGeneric = inferTypeFn({
+    retrieveGeneric: parameter => 5,
+    operateWithGeneric: generic => generic.toFixed()
 });
 // Repro #38623
 function make(o) { }
 make({
     mutations: {
-        foo: function () { }
+        foo() { }
     },
-    action: function (a) { a.foo(); }
+    action: (a) => { a.foo(); }
+});
+foo({
+    a: () => { return 42; },
+    b(a) { },
 });
 foo({
     a: function () { return 42; },
-    b: function (a) { },
+    b(a) { },
 });
 foo({
-    a: function () { return 42; },
-    b: function (a) { },
-});
-foo({
-    a: function () { return 42; },
-    b: function (a) { },
+    a() { return 42; },
+    b(a) { },
 });
 function test(foo) { }
 test({
-    a: function () { return 0; },
-    b: function (a) { return 'a'; },
-    c: function (b) {
-        var x = b;
+    a: () => 0,
+    b: (a) => 'a',
+    c: (b) => {
+        const x = b;
     }
 });
 test({
-    a: function () { return 0; },
-    b: function (a) { return a; },
-    c: function (b) {
-        var x = b;
+    a: () => 0,
+    b: (a) => a,
+    c: (b) => {
+        const x = b;
     }
 });
 // Repro from #41712
-var Wrapper = /** @class */ (function () {
-    function Wrapper() {
-    }
-    return Wrapper;
-}());
+class Wrapper {
+}
 createMappingComponent({
-    setup: function () {
+    setup() {
         return {
             inputs: {
                 num: new Wrapper(),
@@ -422,7 +419,7 @@ createMappingComponent({
             }
         };
     },
-    map: function (inputs) {
+    map(inputs) {
         return {
             bool: inputs.nonexistent,
             str: inputs.num, // Causes error
@@ -433,90 +430,90 @@ createMappingComponent({
 function simplified(props) { }
 function whatIWant(props) { }
 function nonObject(generator, receiver) { }
-simplified({ generator: function () { return 123; }, receiver: function (t) { return console.log(t + 2); } });
-whatIWant({ generator: function (bob) { return bob ? 1 : 2; }, receiver: function (t) { return console.log(t + 2); } });
-nonObject(function (bob) { return bob ? 1 : 2; }, function (t) { return console.log(t + 2); });
+simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) });
+whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2) });
+nonObject((bob) => bob ? 1 : 2, (t) => console.log(t + 2));
 function example(options) {
-    return function (params) {
-        var data = options.fetch(params, 123);
+    return (params) => {
+        const data = options.fetch(params, 123);
         return options.map(data);
     };
 }
 example({
-    fetch: function (params) { return 123; },
-    map: function (number) { return String(number); }
+    fetch: (params) => 123,
+    map: (number) => String(number)
 });
 example({
-    fetch: function (params, foo) { return 123; },
-    map: function (number) { return String(number); }
+    fetch: (params, foo) => 123,
+    map: (number) => String(number)
 });
 example({
-    fetch: function (params, foo) { return 123; },
-    map: function (number) { return String(number); }
+    fetch: (params, foo) => 123,
+    map: (number) => String(number)
 });
 branch({
     test: x,
-    if: function (t) { return t === "a"; },
-    then: function (u) {
-        var test1 = u;
+    if: (t) => t === "a",
+    then: u => {
+        let test1 = u;
     }
 });
 Foo(__assign({
-    a: function (x) { return 10; },
-    b: function (arg) {
+    a: (x) => 10,
+    b: (arg) => {
         arg.toString();
     },
 }));
-var resNested = nested({
+const resNested = nested({
     prop: {
-        produce: function (a) { return [a]; },
-        consume: function (arg) { return arg.join(","); },
+        produce: (a) => [a],
+        consume: (arg) => arg.join(","),
     },
 });
-var resTwoConsumers = twoConsumers({
-    a: function (arg) { return [arg]; },
-    consume1: function (arg1) { },
-    consume2: function (arg2) { },
+const resTwoConsumers = twoConsumers({
+    a: (arg) => [arg],
+    consume1: (arg1) => { },
+    consume2: (arg2) => { },
 });
-var resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
-    a: function (arg) { return [arg]; },
-    b: function (arg) { return Number(arg); },
-    consume1: function (arg1) { },
-    consume2: function (arg2) { },
+const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
+    a: (arg) => [arg],
+    b: (arg) => Number(arg),
+    consume1: (arg1) => { },
+    consume2: (arg2) => { },
 });
-var resWithConditionalExpression = withConditionalExpression({
-    a: function (arg) { return [arg]; },
-    b: Math.random() ? function (arg) { return "first"; } : function (arg) { return "two"; },
-    c: function (arg) { return Boolean(arg); },
+const resWithConditionalExpression = withConditionalExpression({
+    a: (arg) => [arg],
+    b: Math.random() ? (arg) => "first" : (arg) => "two",
+    c: (arg) => Boolean(arg),
 });
-var resOnion = onion({
-    a: function (arg) { return [arg]; },
+const resOnion = onion({
+    a: (arg) => [arg],
     nested: {
-        b: function (arg) { return arg.join(","); },
+        b: (arg) => arg.join(","),
         nested2: {
-            c: function (arg) { return Boolean(arg); },
+            c: (arg) => Boolean(arg),
         },
     },
 });
-var resOnion2 = onion2({
-    a: function (arg) { return [arg]; },
+const resOnion2 = onion2({
+    a: (arg) => [arg],
     nested: {
-        b: function (arg) { return arg.join(","); },
-        c: function (arg) { return Number(arg); },
+        b: (arg) => arg.join(","),
+        c: (arg) => Number(arg),
         nested2: {
-            d: function (arg) { return Boolean(arg); },
+            d: (arg) => Boolean(arg),
         },
     },
 });
-var distantRes = distant({
+const distantRes = distant({
     foo: {
         bar: {
             baz: {
-                producer: function (arg) { return 1; },
+                producer: (arg) => 1,
             },
         },
     },
-    consumer: function (val) { },
+    consumer: (val) => { },
 });
 
 

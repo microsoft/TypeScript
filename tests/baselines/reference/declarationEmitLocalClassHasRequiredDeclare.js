@@ -21,23 +21,17 @@ export class Y { }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Y = exports.A = void 0;
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
-var A = /** @class */ (function () {
-    function A() {
+class X {
+}
+let A = (() => {
+    class A {
     }
     A.X = X;
     return A;
-}());
+})();
 exports.A = A;
-var Y = /** @class */ (function () {
-    function Y() {
-    }
-    return Y;
-}());
+class Y {
+}
 exports.Y = Y;
 
 

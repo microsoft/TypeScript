@@ -44,20 +44,15 @@ module Generic {
 //// [staticPropertyNotInClassType.js]
 var NonGeneric;
 (function (NonGeneric) {
-    var C = /** @class */ (function () {
-        function C(a, b) {
+    class C {
+        fn() { return this; }
+        static get x() { return 1; }
+        static set x(v) { }
+        constructor(a, b) {
             this.a = a;
             this.b = b;
         }
-        C.prototype.fn = function () { return this; };
-        Object.defineProperty(C, "x", {
-            get: function () { return 1; },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
+    }
     (function (C) {
         C.bar = ''; // not reflected in class type
     })(C || (C = {}));
@@ -69,20 +64,15 @@ var NonGeneric;
 })(NonGeneric || (NonGeneric = {}));
 var Generic;
 (function (Generic) {
-    var C = /** @class */ (function () {
-        function C(a, b) {
+    class C {
+        fn() { return this; }
+        static get x() { return 1; }
+        static set x(v) { }
+        constructor(a, b) {
             this.a = a;
             this.b = b;
         }
-        C.prototype.fn = function () { return this; };
-        Object.defineProperty(C, "x", {
-            get: function () { return 1; },
-            set: function (v) { },
-            enumerable: false,
-            configurable: true
-        });
-        return C;
-    }());
+    }
     (function (C) {
         C.bar = ''; // not reflected in class type
     })(C || (C = {}));

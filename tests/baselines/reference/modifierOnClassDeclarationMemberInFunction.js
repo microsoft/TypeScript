@@ -11,14 +11,13 @@ function f() {
 
 //// [modifierOnClassDeclarationMemberInFunction.js]
 function f() {
-    var C = /** @class */ (function () {
-        function C() {
+    class C {
+        constructor() {
             this.baz = 1;
         }
-        C.foo = function () { };
-        C.prototype.bar = function () { };
-        return C;
-    }());
+        static foo() { }
+        bar() { }
+    }
 }
 
 

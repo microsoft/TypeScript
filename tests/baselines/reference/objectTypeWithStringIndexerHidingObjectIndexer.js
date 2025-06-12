@@ -38,11 +38,8 @@ var r4: string = o2[''];
 // no errors expected below 
 var o = {};
 var r = o['']; // should be Object
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 var r2 = c[''];
 var i;

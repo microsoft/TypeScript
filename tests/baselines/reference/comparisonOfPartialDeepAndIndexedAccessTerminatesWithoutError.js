@@ -16,4 +16,4 @@ export {};
 //// [comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var x = null;
+const x = null;

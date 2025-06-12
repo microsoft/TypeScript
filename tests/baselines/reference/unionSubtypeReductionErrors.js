@@ -6014,7 +6014,7 @@ let b = [
 
 //// [unionSubtypeReductionErrors.js]
 "use strict";
-var a = [
+let a = [
     0,
     1,
     2,
@@ -11018,7 +11018,7 @@ var a = [
     5000,
     5001,
 ];
-var b = [
+let b = [
     { value: 0 },
     { value: 1 },
     { value: 2 },

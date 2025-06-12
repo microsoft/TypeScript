@@ -19,15 +19,14 @@ module M {
 //// [es6ClassTest3.js]
 var M;
 (function (M) {
-    var Visibility = /** @class */ (function () {
-        function Visibility() {
+    class Visibility {
+        foo() { }
+        ;
+        bar() { }
+        ;
+        constructor() {
             this.x = 1;
             this.y = 2;
         }
-        Visibility.prototype.foo = function () { };
-        ;
-        Visibility.prototype.bar = function () { };
-        ;
-        return Visibility;
-    }());
+    }
 })(M || (M = {}));

@@ -20,37 +20,17 @@ class C {
 });
 
 //// [esDecorators-classDeclaration-parameterDecorators.js]
-var C = /** @class */ (function () {
-    function C(x) {
-    }
-    C.prototype.method = function (x) { };
-    Object.defineProperty(C.prototype, "x", {
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    C.method = function (x) { };
-    Object.defineProperty(C, "x", {
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
-(/** @class */ (function () {
-    function C(x) {
-    }
-    C.prototype.method = function (x) { };
-    Object.defineProperty(C.prototype, "x", {
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    C.method = function (x) { };
-    Object.defineProperty(C, "x", {
-        set: function (x) { },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}()));
+class C {
+    constructor(x) { }
+    method(x) { }
+    set x(x) { }
+    static method(x) { }
+    static set x(x) { }
+}
+(class C {
+    constructor(x) { }
+    method(x) { }
+    set x(x) { }
+    static method(x) { }
+    static set x(x) { }
+});

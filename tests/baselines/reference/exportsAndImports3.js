@@ -42,11 +42,8 @@ exports.f1 = f;
 exports.v = 1;
 exports.v1 = exports.v;
 function f() { }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.C = C;
 exports.C1 = C;
 var E;

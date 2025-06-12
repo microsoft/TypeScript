@@ -44,23 +44,23 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 function f1(_a) {
-    var _enum = _a.enum, rest = __rest(_a, ["enum"]);
+    var { enum: _enum } = _a, rest = __rest(_a, ["enum"]);
     return rest;
 }
 function f2(_a) {
-    var _function = _a.function, rest = __rest(_a, ["function"]);
+    var { function: _function } = _a, rest = __rest(_a, ["function"]);
     return rest;
 }
 function f3(_a) {
-    var _abstract = _a.abstract, rest = __rest(_a, ["abstract"]);
+    var { abstract: _abstract } = _a, rest = __rest(_a, ["abstract"]);
     return rest;
 }
 function f4(_a) {
-    var _async = _a.async, rest = __rest(_a, ["async"]);
+    var { async: _async } = _a, rest = __rest(_a, ["async"]);
     return rest;
 }
 function f5(_a) {
-    var _await = _a.await, rest = __rest(_a, ["await"]);
+    var { await: _await } = _a, rest = __rest(_a, ["await"]);
     return rest;
 }
 

@@ -83,7 +83,7 @@ xyz.x.c = "hello";
 var f;
 var s = f("hello");
 var n = f(42);
-var de = {
+const de = {
     nested: {
         doublyNested: {
             d: 'yes',
@@ -93,7 +93,7 @@ var de = {
         other: { g: 101 }
     }
 };
-var defg = {
+const defg = {
     nested: {
         doublyNested: {
             d: 'yes',

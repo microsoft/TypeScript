@@ -28,11 +28,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.f = function (user) { };
+let Foo = (() => {
     var _a, _b, _c, _d;
+    class Foo {
+        f(user) { }
+    }
     __decorate([
         __param(0, decorate),
         __metadata("design:type", Function),
@@ -40,4 +40,4 @@ var Foo = /** @class */ (function () {
         __metadata("design:returntype", void 0)
     ], Foo.prototype, "f", null);
     return Foo;
-}());
+})();

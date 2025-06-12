@@ -5,4 +5,4 @@ var x = `\u{FFFFFFFF}`;
 
 
 //// [unicodeExtendedEscapesInTemplates12.js]
-var x = "\\u{FFFFFFFF}";
+var x = `\u{FFFFFFFF}`;

@@ -25,36 +25,23 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     exports.A = A;
 });
-define("b", ["require", "exports", "tslib", "a"], function (require, exports, tslib_1, a_1) {
+define("b", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
-    var B = /** @class */ (function (_super) {
-        tslib_1.__extends(B, _super);
-        function B() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return B;
-    }(a_1.A));
+    class B extends a_1.A {
+    }
     exports.B = B;
 });
-define("c", ["require", "exports", "tslib", "a"], function (require, exports, tslib_2, a_2) {
+define("c", ["require", "exports", "a"], function (require, exports, a_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.C = void 0;
-    var C = /** @class */ (function (_super) {
-        tslib_2.__extends(C, _super);
-        function C() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return C;
-    }(a_2.A));
+    class C extends a_2.A {
+    }
     exports.C = C;
 });

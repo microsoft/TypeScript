@@ -14,11 +14,8 @@ let _: ns.A = new ns.A(); // Error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [b.js]
 "use strict";
@@ -26,4 +23,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var _ = new ns.A(); // Error
+let _ = new ns.A(); // Error

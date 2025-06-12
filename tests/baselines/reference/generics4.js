@@ -10,11 +10,8 @@ var b: C<Y>;
 a = b; // Not ok - return types of "f" are different
 
 //// [generics4.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var a;
 var b;
 a = b; // Not ok - return types of "f" are different

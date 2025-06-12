@@ -85,71 +85,39 @@ namespace Test {
 
 
 //// [typeGuardOfFormThisMember.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 var Test;
 (function (Test) {
-    var FileSystemObject = /** @class */ (function () {
-        function FileSystemObject(path) {
+    class FileSystemObject {
+        get isFile() {
+            return this instanceof File;
+        }
+        set isFile(param) {
+            // noop
+        }
+        get isDirectory() {
+            return this instanceof Directory;
+        }
+        constructor(path) {
             this.path = path;
         }
-        Object.defineProperty(FileSystemObject.prototype, "isFile", {
-            get: function () {
-                return this instanceof File;
-            },
-            set: function (param) {
-                // noop
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(FileSystemObject.prototype, "isDirectory", {
-            get: function () {
-                return this instanceof Directory;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return FileSystemObject;
-    }());
+    }
     Test.FileSystemObject = FileSystemObject;
-    var File = /** @class */ (function (_super) {
-        __extends(File, _super);
-        function File(path, content) {
-            var _this = _super.call(this, path) || this;
-            _this.content = content;
-            return _this;
+    class File extends FileSystemObject {
+        constructor(path, content) {
+            super(path);
+            this.content = content;
         }
-        return File;
-    }(FileSystemObject));
+    }
     Test.File = File;
-    var Directory = /** @class */ (function (_super) {
-        __extends(Directory, _super);
-        function Directory() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Directory;
-    }(FileSystemObject));
+    class Directory extends FileSystemObject {
+    }
     Test.Directory = Directory;
-    var file = new File("foo/bar.txt", "foo");
+    let file = new File("foo/bar.txt", "foo");
     file.isNetworked = false;
     file.isFSO = file.isFile;
     file.isFile = true;
-    var x = file.isFile;
+    let x = file.isFile;
     if (file.isFile) {
         file.content;
         if (file.isNetworked) {
@@ -163,14 +131,14 @@ var Test;
     else if (file.isNetworked) {
         file.host;
     }
-    var guard;
+    let guard;
     if (guard.isLeader) {
         guard.lead();
     }
     else if (guard.isFollower) {
         guard.follow();
     }
-    var general;
+    let general;
     if (general.isMoreSpecific) {
         general.do();
     }

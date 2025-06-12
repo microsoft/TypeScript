@@ -238,7 +238,7 @@ define("shared/types/db", ["require", "exports"], function (require, exports) {
 define("src/main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var a = {
+    const a = {
         lastName: 'sdsd'
     };
 });

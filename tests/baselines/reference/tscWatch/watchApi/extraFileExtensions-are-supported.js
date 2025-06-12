@@ -35,7 +35,7 @@ Output::
 
 
 //// [/user/username/projects/myproject/main.js]
-var x = 10;
+const x = 10;
 
 
 //// [/user/username/projects/myproject/other.vue.js]

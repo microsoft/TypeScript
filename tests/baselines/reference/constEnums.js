@@ -183,10 +183,10 @@ function baz(c: Comments) {
 //// [constEnums.js]
 var A2;
 (function (A2) {
-    var B;
+    let B;
     (function (B) {
         // module C will be classified as value
-        var C;
+        let C;
         (function (C) {
             var x = 1;
         })(C = B.C || (B.C = {}));

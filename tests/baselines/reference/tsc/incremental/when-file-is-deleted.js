@@ -38,11 +38,8 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.C = C;
 
 
@@ -55,11 +52,8 @@ export declare class C {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 exports.D = D;
 
 

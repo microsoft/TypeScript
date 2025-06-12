@@ -343,7 +343,6 @@ import {
     isNumericLiteral,
     isObjectBindingPattern,
     isObjectLiteralExpression,
-    isOmittedExpression,
     isOptionalChain,
     isParameter,
     isParameterPropertyDeclaration,
@@ -7317,11 +7316,6 @@ export function isBinaryLogicalOperator(token: SyntaxKind): boolean {
 }
 
 /** @internal */
-export function isLogicalOperator(token: SyntaxKind): boolean {
-    return isBinaryLogicalOperator(token) || token === SyntaxKind.ExclamationToken;
-}
-
-/** @internal */
 export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): token is LogicalOrCoalescingAssignmentOperator {
     return token === SyntaxKind.BarBarEqualsToken
         || token === SyntaxKind.AmpersandAmpersandEqualsToken
@@ -7748,18 +7742,6 @@ export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): 
 export function createRange(pos: number, end: number = pos): TextRange {
     Debug.assert(end >= pos || end === -1);
     return { pos, end };
-}
-
-/**
- * Creates a new TextRange from a provided range with a new end position.
- *
- * @param range A TextRange.
- * @param end The new end position.
- *
- * @internal
- */
-export function moveRangeEnd(range: TextRange, end: number): TextRange {
-    return createRange(range.pos, end);
 }
 
 /**
@@ -10642,19 +10624,6 @@ export function setParentRecursive<T extends Node>(rootNode: T | undefined, incr
     function bindParentToChild(child: Node, parent: Node) {
         return bindParentToChildIgnoringJSDoc(child, parent) || bindJSDoc(child);
     }
-}
-
-function isPackedElement(node: Expression) {
-    return !isOmittedExpression(node);
-}
-
-/**
- * Determines whether the provided node is an ArrayLiteralExpression that contains no missing elements.
- *
- * @internal
- */
-export function isPackedArrayLiteral(node: Expression): boolean {
-    return isArrayLiteralExpression(node) && every(node.elements, isPackedElement);
 }
 
 /**

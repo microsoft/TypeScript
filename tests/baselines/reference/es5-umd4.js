@@ -28,13 +28,12 @@ export = A;
     }
 })(function (require, exports) {
     "use strict";
-    var A = /** @class */ (function () {
-        function A() {
+    class A {
+        constructor() {
         }
-        A.prototype.B = function () {
+        B() {
             return 42;
-        };
-        return A;
-    }());
+        }
+    }
     return A;
 });

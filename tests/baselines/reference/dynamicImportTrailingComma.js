@@ -5,5 +5,5 @@ const path = './foo';
 import(path,);
 
 //// [dynamicImportTrailingComma.js]
-var path = './foo';
+const path = './foo';
 Promise.resolve("".concat(path)).then(function (s) { return require(s); });

@@ -10,16 +10,8 @@ async function func(): Promise<void> {
 
 //// [asyncUseStrict_es5.js]
 function func() {
-    return __awaiter(this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function* () {
         "use strict";
-        var b;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, p];
-                case 1:
-                    b = (_a.sent()) || a;
-                    return [2 /*return*/];
-            }
-        });
+        var b = (yield p) || a;
     });
 }

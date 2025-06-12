@@ -8,7 +8,7 @@ readonlyArray.flatMap((): ReadonlyArray<number> => []); // ok
 
 
 //// [arrayFlatMap.js]
-var array = [];
-var readonlyArray = [];
-array.flatMap(function () { return []; }); // ok
-readonlyArray.flatMap(function () { return []; }); // ok
+const array = [];
+const readonlyArray = [];
+array.flatMap(() => []); // ok
+readonlyArray.flatMap(() => []); // ok

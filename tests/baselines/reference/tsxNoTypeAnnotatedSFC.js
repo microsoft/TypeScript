@@ -15,7 +15,7 @@ function testComponent(props) {
 Object.defineProperty(exports, "__esModule", { value: true });
 // not _actually_ making react available in this test to regression test #22948
 var React = require("react");
-var Test123 = function () { return <div />; };
+const Test123 = () => <div />;
 function testComponent(props) {
     return <Test123 {...props}/>;
 }

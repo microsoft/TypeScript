@@ -17,11 +17,8 @@ interface indexErrors {
 }
 
 //// [indexSignatureTypeCheck2.js]
-var IPropertySet = /** @class */ (function () {
-    function IPropertySet() {
-    }
-    return IPropertySet;
-}());
+class IPropertySet {
+}
 var ps = null;
 var index = "hello";
 ps[index] = 12;

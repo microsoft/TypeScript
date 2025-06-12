@@ -20,19 +20,13 @@ y2 = ext;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.C = C;
 //// [typeofExternalModules_exportAssign.js]
 "use strict";
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 module.exports = D;
 //// [typeofExternalModules_core.js]
 "use strict";

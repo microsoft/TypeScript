@@ -25,20 +25,19 @@ const bindCopy2: BindingFunction = function () {
 
 //// [protectedAccessThroughContextualThis.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
         this.protec = 'bar';
         this.privat = '';
         bindCopy.call(this);
         bindCopy2.call(this);
     }
-    return Foo;
-}());
+}
 function bindCopy() {
     this.copy = this.protec; // Should OK
     console.log(this.privat); // Should error
 }
-var bindCopy2 = function () {
+const bindCopy2 = function () {
     this.copy = this.protec; // Should OK
     console.log(this.privat); // Should error
 };

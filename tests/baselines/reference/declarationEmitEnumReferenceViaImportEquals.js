@@ -46,15 +46,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
 var translation_1 = require("./translation");
 var TranslationKeyEnum = translation_1.Translation.TranslationKeyEnum;
-var Test = /** @class */ (function () {
-    function Test() {
+class Test {
+    constructor() {
         this.TranslationKeyEnum = TranslationKeyEnum;
     }
-    Test.prototype.print = function () {
+    print() {
         console.log(TranslationKeyEnum.Translation1);
-    };
-    return Test;
-}());
+    }
+}
 exports.Test = Test;
 //// [index.js]
 "use strict";

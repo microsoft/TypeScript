@@ -14,22 +14,12 @@ var c = new C<number>();
 var r: string = c.x;
 
 //// [genericGetter3.js]
-var A = /** @class */ (function () {
-    function A() {
+class A {
+}
+class C {
+    get x() {
+        return this.data;
     }
-    return A;
-}());
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () {
-            return this.data;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}
 var c = new C();
 var r = c.x;

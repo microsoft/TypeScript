@@ -28,17 +28,14 @@ var i;
 var o;
 o = i; // error
 i = o; // ok
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.toString = function () { };
-    return C;
-}());
+class C {
+    toString() { }
+}
 var c;
 o = c; // error
 c = o; // ok
 var a = {
-    toString: function () { }
+    toString: () => { }
 };
 o = a; // error
 a = o; // ok

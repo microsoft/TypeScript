@@ -20,13 +20,12 @@ Foo("s");
 
 
 //// [callOverloads3.js]
-var Foo = /** @class */ (function () {
-    function Foo(x) {
+class Foo {
+    bar1() { }
+    constructor(x) {
         // WScript.Echo("Constructor function has executed");
     }
-    Foo.prototype.bar1 = function () { };
-    return Foo;
-}());
+}
 //class Foo(s: String);
 var f1 = new Foo("hey");
 f1.bar1();

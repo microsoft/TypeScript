@@ -41,97 +41,73 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var A = /** @class */ (function () {
-    function A() {
+let A = (() => {
+    class A {
+        get x() { return 0; }
+        set x(value) { }
     }
-    Object.defineProperty(A.prototype, "x", {
-        get: function () { return 0; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
     __decorate([
         dec,
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], A.prototype, "x", null);
     return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
+})();
+let B = (() => {
+    class B {
+        get x() { return 0; }
+        set x(value) { }
     }
-    Object.defineProperty(B.prototype, "x", {
-        get: function () { return 0; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
     __decorate([
         dec,
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], B.prototype, "x", null);
     return B;
-}());
-var C = /** @class */ (function () {
-    function C() {
+})();
+let C = (() => {
+    class C {
+        set x(value) { }
+        get x() { return 0; }
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () { return 0; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
     __decorate([
         dec,
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], C.prototype, "x", null);
     return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+})();
+let D = (() => {
+    class D {
+        set x(value) { }
+        get x() { return 0; }
     }
-    Object.defineProperty(D.prototype, "x", {
-        get: function () { return 0; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
     __decorate([
         dec,
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], D.prototype, "x", null);
     return D;
-}());
-var E = /** @class */ (function () {
-    function E() {
+})();
+let E = (() => {
+    class E {
+        get x() { return 0; }
     }
-    Object.defineProperty(E.prototype, "x", {
-        get: function () { return 0; },
-        enumerable: false,
-        configurable: true
-    });
     __decorate([
         dec,
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [])
     ], E.prototype, "x", null);
     return E;
-}());
-var F = /** @class */ (function () {
-    function F() {
+})();
+let F = (() => {
+    class F {
+        set x(value) { }
     }
-    Object.defineProperty(F.prototype, "x", {
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
     __decorate([
         dec,
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], F.prototype, "x", null);
     return F;
-}());
+})();

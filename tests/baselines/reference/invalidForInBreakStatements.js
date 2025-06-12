@@ -49,7 +49,7 @@ ONE: for (var x in {})
     break TWO;
 // break from inside function
 TWO: for (var x in {}) {
-    var fn = function () {
+    var fn = () => {
         break TWO;
     };
 }

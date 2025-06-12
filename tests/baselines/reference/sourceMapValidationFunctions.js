@@ -21,21 +21,11 @@ function greet(greeting) {
     greetings++;
     return greetings;
 }
-function greet2(greeting, n, x) {
-    if (n === void 0) { n = 10; }
-    var restParams = [];
-    for (var _i = 3; _i < arguments.length; _i++) {
-        restParams[_i - 3] = arguments[_i];
-    }
+function greet2(greeting, n = 10, x, ...restParams) {
     greetings++;
     return greetings;
 }
-function foo(greeting, n, x) {
-    if (n === void 0) { n = 10; }
-    var restParams = [];
-    for (var _i = 3; _i < arguments.length; _i++) {
-        restParams[_i - 3] = arguments[_i];
-    }
+function foo(greeting, n = 10, x, ...restParams) {
     return;
 }
 //# sourceMappingURL=sourceMapValidationFunctions.js.map

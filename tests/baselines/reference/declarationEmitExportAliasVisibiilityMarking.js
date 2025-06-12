@@ -20,12 +20,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [Card.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = (function (suit, rank) { return ({ suit: suit, rank: rank }); });
+exports.default = (suit, rank) => ({ suit, rank });
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.lazyCard = void 0;
-var lazyCard = function () { return Promise.resolve().then(function () { return require('./Card'); }).then(function (a) { return a.default; }); };
+let lazyCard = () => Promise.resolve().then(function () { return require('./Card'); }).then(a => a.default);
 exports.lazyCard = lazyCard;
 
 

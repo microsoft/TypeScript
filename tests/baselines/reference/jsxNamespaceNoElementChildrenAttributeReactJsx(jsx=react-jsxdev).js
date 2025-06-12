@@ -24,12 +24,11 @@ export {};
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [test.js]
 "use strict";
-var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_dev_runtime_1 = require("/jsx/jsx-dev-runtime");
-var _jsxFileName = "/test.tsx";
-var Title = function (props) { return (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 47 }, _this); };
-var element = (0, jsx_dev_runtime_1.jsxDEV)(Title, { children: "Hello, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 16 }, this);
+const _jsxFileName = "/test.tsx";
+const Title = (props) => (0, jsx_dev_runtime_1.jsxDEV)("h1", { children: props.children }, void 0, false, { fileName: _jsxFileName, lineNumber: 1, columnNumber: 47 }, this);
+const element = (0, jsx_dev_runtime_1.jsxDEV)(Title, { children: "Hello, world!" }, void 0, false, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 16 }, this);
 //// [jsx-runtime.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

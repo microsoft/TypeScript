@@ -51,12 +51,9 @@ delete objA.a,M.n;
 var STRING;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -67,7 +64,7 @@ var ResultIsBoolean2 = delete STRING1;
 // string type literal
 var ResultIsBoolean3 = delete "";
 var ResultIsBoolean4 = delete { x: "", y: "" };
-var ResultIsBoolean5 = delete { x: "", y: function (s) { return s; } };
+var ResultIsBoolean5 = delete { x: "", y: (s) => { return s; } };
 // string type expressions
 var ResultIsBoolean6 = delete objA.a;
 var ResultIsBoolean7 = delete M.n;

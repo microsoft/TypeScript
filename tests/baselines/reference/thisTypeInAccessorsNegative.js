@@ -20,12 +20,12 @@ const contextual: Foo = {
 
 
 //// [thisTypeInAccessorsNegative.js]
-var mismatch = {
+const mismatch = {
     n: 13,
     get x() { return this.n; },
     set x(n) { this.wrong = "method"; }
 };
-var contextual = {
+const contextual = {
     n: 16,
     get x() { return this.n; }
 };

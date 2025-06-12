@@ -8,7 +8,7 @@ A.prototype.b = {};
 
 //// [index.js]
 // https://github.com/microsoft/TypeScript/issues/35801
-var A;
+let A;
 A = {};
 A.prototype.b = {};
 

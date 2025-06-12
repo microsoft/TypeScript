@@ -59,15 +59,12 @@ bar.workaround("a", "1", true); // ok - true is not allowed
 
 
 //// [deepKeysIndexing.js]
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    Bar.prototype.broken = function (k1, k2, value) { };
-    Bar.prototype.working = function (k1, k2, value) { };
-    Bar.prototype.workaround = function (k1, k2, value) { };
-    return Bar;
-}());
-var bar = new Bar();
+class Bar {
+    broken(k1, k2, value) { }
+    working(k1, k2, value) { }
+    workaround(k1, k2, value) { }
+}
+const bar = new Bar();
 // all 3 of the below should error on passing `true` for `"1"`
 bar.broken("a", "1", true); // was broken in the past - with 2nd argument incorrectly of type "1" | "2" | "3".
 bar.working("a", "1", true); // ok - true is not allowed

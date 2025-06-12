@@ -20,7 +20,7 @@ var testArrayWithFunc = [
 var testArrayWithFunc = [
     // Function comment
     function () {
-        var x = 1;
+        let x = 1;
     },
     // String comment
     '1',

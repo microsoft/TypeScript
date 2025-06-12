@@ -108,46 +108,39 @@ export function listFiles<T extends BuilderProgram>(program: Program | T) {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.listFiles = listFiles;
-var NumClass = /** @class */ (function () {
-    function NumClass() {
-    }
-    NumClass.prototype.get = function () {
+class NumClass {
+    get() {
         return this.value;
-    };
-    NumClass.prototype.numExclusive = function () { };
-    return NumClass;
-}());
-var StrClass = /** @class */ (function () {
-    function StrClass() {
     }
-    StrClass.prototype.get = function () {
+    numExclusive() { }
+}
+class StrClass {
+    get() {
         return this.value;
-    };
-    StrClass.prototype.strExclusive = function () { };
-    return StrClass;
-}());
-var isNumClass = function (item) {
+    }
+    strExclusive() { }
+}
+const isNumClass = (item) => {
     return (item instanceof NumClass);
 };
 /**
  * An example with one dimensional dictionary. Everything worked ok here, even in prior
  * versions.
  */
-var SimpleStore = /** @class */ (function () {
-    function SimpleStore() {
+class SimpleStore {
+    constructor() {
         this.entries = {};
     }
-    SimpleStore.prototype.get = function (entryId) {
-        var entry = this.entries[entryId];
+    get(entryId) {
+        let entry = this.entries[entryId];
         entry.numExclusive(); // error - expected.
         if (isNumClass(entry)) {
             entry.numExclusive(); // works
             return entry;
         }
         return entry; // type is Entries[EntryId] - all fine
-    };
-    return SimpleStore;
-}());
+    }
+}
 /**
  * A an example with 2-dimensional dictionary.
  *
@@ -155,12 +148,12 @@ var SimpleStore = /** @class */ (function () {
  * In v4.2 or later, `isNumClass` type guard leaks outside its
  * scope.
  */
-var ComplexStore = /** @class */ (function () {
-    function ComplexStore() {
+class ComplexStore {
+    constructor() {
         this.slices = {};
     }
-    ComplexStore.prototype.get = function (sliceId, sliceKey) {
-        var item = this.slices[sliceId][sliceKey];
+    get(sliceId, sliceKey) {
+        let item = this.slices[sliceId][sliceKey];
         if (isNumClass(item)) {
             item.numExclusive(); // works only since version 4.2
         }
@@ -168,9 +161,9 @@ var ComplexStore = /** @class */ (function () {
         // unfortunately, doesn't work completely.
         // it seems like item's predicated type leaks outside the bracket...
         return item; // type is Extract ...
-    };
-    ComplexStore.prototype.get2 = function (sliceId, sliceKey) {
-        var item = this.slices[sliceId][sliceKey];
+    }
+    get2(sliceId, sliceKey) {
+        let item = this.slices[sliceId][sliceKey];
         if (isNumClass(item)) {
             return item;
         }
@@ -178,9 +171,8 @@ var ComplexStore = /** @class */ (function () {
         // truthy
         item.get();
         return item; // type is never
-    };
-    return ComplexStore;
-}());
+    }
+}
 function listFiles(program) {
-    var x = isBuilderProgram(program) ? program.getProgram() : program;
+    const x = isBuilderProgram(program) ? program.getProgram() : program;
 }

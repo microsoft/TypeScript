@@ -54,19 +54,19 @@ const t6: A[] = coAndContraArray([], acceptA);
 
 //// [strictFunctionTypes1.js]
 "use strict";
-var x1 = f1(fo, fs); // (x: string) => void
-var x2 = f2("abc", fo, fs); // "abc"
-var x3 = f3("abc", fo, fx); // "abc" | "def"
-var x4 = f4(fo, fs); // Func<string>
-var x10 = f2(never, fo, fs); // string
-var x11 = f3(never, fo, fx); // "def"
-var x = foo([]); // never
-var t1 = coAndContra(a, acceptUnion);
-var t2 = coAndContra(b, acceptA);
-var t3 = coAndContra(never, acceptA);
-var t4 = coAndContraArray([a], acceptUnion);
-var t5 = coAndContraArray([b], acceptA);
-var t6 = coAndContraArray([], acceptA);
+const x1 = f1(fo, fs); // (x: string) => void
+const x2 = f2("abc", fo, fs); // "abc"
+const x3 = f3("abc", fo, fx); // "abc" | "def"
+const x4 = f4(fo, fs); // Func<string>
+const x10 = f2(never, fo, fs); // string
+const x11 = f3(never, fo, fx); // "def"
+let x = foo([]); // never
+const t1 = coAndContra(a, acceptUnion);
+const t2 = coAndContra(b, acceptA);
+const t3 = coAndContra(never, acceptA);
+const t4 = coAndContraArray([a], acceptUnion);
+const t5 = coAndContraArray([b], acceptA);
+const t6 = coAndContraArray([], acceptA);
 
 
 //// [strictFunctionTypes1.d.ts]

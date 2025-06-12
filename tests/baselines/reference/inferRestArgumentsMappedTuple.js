@@ -28,5 +28,5 @@ const myPrimitiveTupleNew: [string, number] = extractPrimitivesNew({ primitive: 
 
 //// [inferRestArgumentsMappedTuple.js]
 "use strict";
-var myPrimitiveTupleOld = extractPrimitivesOld({ primitive: "" }, { primitive: 0 });
-var myPrimitiveTupleNew = extractPrimitivesNew({ primitive: "" }, { primitive: 0 });
+const myPrimitiveTupleOld = extractPrimitivesOld({ primitive: "" }, { primitive: 0 });
+const myPrimitiveTupleNew = extractPrimitivesNew({ primitive: "" }, { primitive: 0 });

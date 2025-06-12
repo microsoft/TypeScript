@@ -12,14 +12,14 @@ class Vector {
 
 //// [thisInArrowFunctionInStaticInitializer1.js]
 function log(a) { }
-var Vector = /** @class */ (function () {
-    function Vector() {
-    }
+let Vector = (() => {
     var _a;
+    class Vector {
+    }
     _a = Vector;
-    Vector.foo = function () {
+    Vector.foo = () => {
         // 'this' should be allowed in a static initializer.
         log(_a);
     };
     return Vector;
-}());
+})();

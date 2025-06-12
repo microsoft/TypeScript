@@ -47,23 +47,23 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var getType = function (params) {
-    var 
+const getType = (params) => {
+    const { 
     // Omit
-    foo = params.foo, rest = __rest(params, ["foo"]);
+    foo } = params, rest = __rest(params, ["foo"]);
     return rest;
 };
 switch (params.tag) {
     case 'a': {
         // TS 4.2: number
         // TS 4.3: string | number
-        var result = getType(params).type;
+        const result = getType(params).type;
         break;
     }
     case 'b': {
         // TS 4.2: string
         // TS 4.3: string | number
-        var result = getType(params).type;
+        const result = getType(params).type;
         break;
     }
 }

@@ -33,23 +33,20 @@ module.exports = {
 function bar(a) {
     return a + a;
 }
-var SomeClass = /** @class */ (function () {
-    function SomeClass() {
-    }
-    SomeClass.prototype.a = function () {
+class SomeClass {
+    a() {
         return 1;
-    };
-    return SomeClass;
-}());
+    }
+}
 module.exports = {
-    bar: bar,
-    SomeClass: SomeClass
+    bar,
+    SomeClass
 };
 //// [main.js]
-var _a = require('./lib'), SomeClass = _a.SomeClass, Another = _a.SomeClass;
+const { SomeClass, SomeClass: Another } = require('./lib');
 module.exports = {
-    SomeClass: SomeClass,
-    Another: Another
+    SomeClass,
+    Another
 };
 
 

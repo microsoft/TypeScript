@@ -10,11 +10,8 @@ import * from Zero from "./0"
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.C = C;
 //// [1.js]
 "use strict";

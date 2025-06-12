@@ -77,7 +77,7 @@ function isMobile() {
 //// [uncalledFunctionChecksInConditional2.js]
 var _a;
 {
-    var perf = window.performance;
+    const perf = window.performance;
     // Simplified
     if (perf &&
         perf.measure &&
@@ -102,29 +102,29 @@ var _a;
 }
 ;
 {
-    var mark = void 0;
-    var measure = void 0;
-    var perf_1 = inBrowser && window.performance;
+    let mark;
+    let measure;
+    const perf = inBrowser && window.performance;
     /* istanbul ignore if */
-    if (perf_1 &&
-        perf_1.mark &&
-        perf_1.measure &&
-        perf_1.clearMarks &&
-        perf_1.clearMeasures) {
-        mark = function (tag) { return perf_1.mark(tag); };
-        measure = function (name, startTag, endTag) {
-            perf_1.measure(name, startTag, endTag);
-            perf_1.clearMarks(startTag);
-            perf_1.clearMarks(endTag);
+    if (perf &&
+        perf.mark &&
+        perf.measure &&
+        perf.clearMarks &&
+        perf.clearMeasures) {
+        mark = (tag) => perf.mark(tag);
+        measure = (name, startTag, endTag) => {
+            perf.measure(name, startTag, endTag);
+            perf.clearMarks(startTag);
+            perf.clearMarks(endTag);
             // perf.clearMeasures(name)
         };
     }
 }
 ;
-var _isMobile;
+let _isMobile;
 function isMobile() {
     if (_isMobile === undefined) {
-        var isMobileMatch = typeof window !== 'undefined' &&
+        const isMobileMatch = typeof window !== 'undefined' &&
             window.matchMedia && // no error
             window.matchMedia('(max-device-width: 680px)');
         _isMobile = isMobileMatch && isMobileMatch.matches;

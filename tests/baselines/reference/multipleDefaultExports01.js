@@ -21,11 +21,8 @@ Entity();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = bar;
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    return foo;
-}());
+class foo {
+}
 exports.default = foo;
 function bar() {
 }

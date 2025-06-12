@@ -13,11 +13,8 @@ a;
 
 //// [a.js]
 "use strict";
-var a = /** @class */ (function () {
-    function a() {
-    }
-    return a;
-}());
+class a {
+}
 module.exports = a;
 //// [main.js]
 "use strict";

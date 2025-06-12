@@ -20,13 +20,13 @@ ignoreJsdoc.extra = 111
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ignoreJsdoc = exports.inlined = exports.interfaced = void 0;
-var interfaced = function () { return true; };
+const interfaced = () => true;
 exports.interfaced = interfaced;
 exports.interfaced.num = 123;
-var inlined = function () { return true; };
+const inlined = () => true;
 exports.inlined = inlined;
 exports.inlined.nun = 456;
-var ignoreJsdoc = function () { return true; };
+const ignoreJsdoc = () => true;
 exports.ignoreJsdoc = ignoreJsdoc;
 /** @type {string} make sure to ignore jsdoc! */
 exports.ignoreJsdoc.extra = 111;

@@ -28,7 +28,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConstEnumOnlyModule = void 0;
 var ConstEnumOnlyModule;
 (function (ConstEnumOnlyModule) {
-    var ConstFooEnum;
+    let ConstFooEnum;
     (function (ConstFooEnum) {
         ConstFooEnum[ConstFooEnum["Some"] = 0] = "Some";
         ConstFooEnum[ConstFooEnum["Values"] = 1] = "Values";

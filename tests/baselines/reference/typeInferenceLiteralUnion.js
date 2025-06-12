@@ -43,20 +43,19 @@ extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extent = extent;
 // Not very useful, but meets Numeric
-var NumCoercible = /** @class */ (function () {
-    function NumCoercible(a) {
+class NumCoercible {
+    constructor(a) {
         this.a = a;
     }
-    NumCoercible.prototype.valueOf = function () {
+    valueOf() {
         return this.a;
-    };
-    return NumCoercible;
-}());
+    }
+}
 /**
  * Return the min and max simultaneously.
  */
 function extent(array) {
     return [undefined, undefined];
 }
-var extentMixed;
+let extentMixed;
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);

@@ -34,66 +34,39 @@ export class FilteredThing extends Filter(Unmixed) {
 
 //// [declarationEmitLocalClassDeclarationMixin.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilteredThing = exports.Mixed = exports.Unmixed = void 0;
 function mixin(Base) {
-    var PrivateMixed = /** @class */ (function (_super) {
-        __extends(PrivateMixed, _super);
-        function PrivateMixed() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.bar = 2;
-            return _this;
+    class PrivateMixed extends Base {
+        constructor() {
+            super(...arguments);
+            this.bar = 2;
         }
-        return PrivateMixed;
-    }(Base));
+    }
     return PrivateMixed;
 }
-var Unmixed = /** @class */ (function () {
-    function Unmixed() {
+class Unmixed {
+    constructor() {
         this.foo = 1;
     }
-    return Unmixed;
-}());
+}
 exports.Unmixed = Unmixed;
 exports.Mixed = mixin(Unmixed);
 function Filter(ctor) {
-    var FilterMixin = /** @class */ (function (_super) {
-        __extends(FilterMixin, _super);
-        function FilterMixin() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
+    class FilterMixin extends ctor {
+        constructor() {
+            super(...arguments);
             // other concrete methods, fields, constructor
-            _this.thing = 12;
-            return _this;
+            this.thing = 12;
         }
-        return FilterMixin;
-    }(ctor));
+    }
     return FilterMixin;
 }
-var FilteredThing = /** @class */ (function (_super) {
-    __extends(FilteredThing, _super);
-    function FilteredThing() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    FilteredThing.prototype.match = function (path) {
+class FilteredThing extends Filter(Unmixed) {
+    match(path) {
         return false;
-    };
-    return FilteredThing;
-}(Filter(Unmixed)));
+    }
+}
 exports.FilteredThing = FilteredThing;
 
 

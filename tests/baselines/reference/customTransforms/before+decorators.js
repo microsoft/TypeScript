@@ -8,19 +8,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
-var C = /** @class */ (function () {
-    function C(b) {
-    }
+class B {
+}
+let C = (() => {
+    let C = class C {
+        constructor(b) { }
+    };
     C = __decorate([
         dec,
         __metadata("design:paramtypes", [B])
     ], C);
     return C;
-}());
+})();
 export { C };
 "changed";

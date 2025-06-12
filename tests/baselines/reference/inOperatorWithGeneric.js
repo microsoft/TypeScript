@@ -9,12 +9,9 @@ class C<T> {
 }
 
 //// [inOperatorWithGeneric.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function (x) {
+class C {
+    foo(x) {
         for (var p in x) {
         }
-    };
-    return C;
-}());
+    }
+}

@@ -1062,2498 +1062,1031 @@ module publicModuleInGlobal {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicClassWithPrivateModuleSetAccessorTypes = exports.publicClassWithPrivateModuleGetAccessorTypes = exports.publicClassWithWithPublicSetAccessorTypes = exports.publicClassWithWithPrivateSetAccessorTypes = exports.publicClassWithWithPublicGetAccessorTypes = exports.publicClassWithWithPrivateGetAccessorTypes = exports.publicClass = void 0;
-var privateClass = /** @class */ (function () {
-    function privateClass() {
-    }
-    return privateClass;
-}());
-var publicClass = /** @class */ (function () {
-    function publicClass() {
-    }
-    return publicClass;
-}());
+class privateClass {
+}
+class publicClass {
+}
 exports.publicClass = publicClass;
-var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-    function publicClassWithWithPrivateGetAccessorTypes() {
+class publicClassWithWithPrivateGetAccessorTypes {
+    static get myPublicStaticMethod() {
+        return null;
     }
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassWithWithPrivateGetAccessorTypes;
-}());
+    static get myPrivateStaticMethod() {
+        return null;
+    }
+    get myPublicMethod() {
+        return null;
+    }
+    get myPrivateMethod() {
+        return null;
+    }
+    static get myPublicStaticMethod1() {
+        return new privateClass();
+    }
+    static get myPrivateStaticMethod1() {
+        return new privateClass();
+    }
+    get myPublicMethod1() {
+        return new privateClass();
+    }
+    get myPrivateMethod1() {
+        return new privateClass();
+    }
+}
 exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-    function publicClassWithWithPublicGetAccessorTypes() {
+class publicClassWithWithPublicGetAccessorTypes {
+    static get myPublicStaticMethod() {
+        return null;
     }
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassWithWithPublicGetAccessorTypes;
-}());
+    static get myPrivateStaticMethod() {
+        return null;
+    }
+    get myPublicMethod() {
+        return null;
+    }
+    get myPrivateMethod() {
+        return null;
+    }
+    static get myPublicStaticMethod1() {
+        return new publicClass();
+    }
+    static get myPrivateStaticMethod1() {
+        return new publicClass();
+    }
+    get myPublicMethod1() {
+        return new publicClass();
+    }
+    get myPrivateMethod1() {
+        return new publicClass();
+    }
+}
 exports.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-    function privateClassWithWithPrivateGetAccessorTypes() {
+class privateClassWithWithPrivateGetAccessorTypes {
+    static get myPublicStaticMethod() {
+        return null;
     }
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-        get: function () {
-            return new privateClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return privateClassWithWithPrivateGetAccessorTypes;
-}());
-var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-    function privateClassWithWithPublicGetAccessorTypes() {
+    static get myPrivateStaticMethod() {
+        return null;
     }
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-        get: function () {
-            return new publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return privateClassWithWithPublicGetAccessorTypes;
-}());
-var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-    function publicClassWithWithPrivateSetAccessorTypes() {
+    get myPublicMethod() {
+        return null;
     }
-    Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassWithWithPrivateSetAccessorTypes;
-}());
+    get myPrivateMethod() {
+        return null;
+    }
+    static get myPublicStaticMethod1() {
+        return new privateClass();
+    }
+    static get myPrivateStaticMethod1() {
+        return new privateClass();
+    }
+    get myPublicMethod1() {
+        return new privateClass();
+    }
+    get myPrivateMethod1() {
+        return new privateClass();
+    }
+}
+class privateClassWithWithPublicGetAccessorTypes {
+    static get myPublicStaticMethod() {
+        return null;
+    }
+    static get myPrivateStaticMethod() {
+        return null;
+    }
+    get myPublicMethod() {
+        return null;
+    }
+    get myPrivateMethod() {
+        return null;
+    }
+    static get myPublicStaticMethod1() {
+        return new publicClass();
+    }
+    static get myPrivateStaticMethod1() {
+        return new publicClass();
+    }
+    get myPublicMethod1() {
+        return new publicClass();
+    }
+    get myPrivateMethod1() {
+        return new publicClass();
+    }
+}
+class publicClassWithWithPrivateSetAccessorTypes {
+    static set myPublicStaticMethod(param) {
+    }
+    static set myPrivateStaticMethod(param) {
+    }
+    set myPublicMethod(param) {
+    }
+    set myPrivateMethod(param) {
+    }
+}
 exports.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-    function publicClassWithWithPublicSetAccessorTypes() {
+class publicClassWithWithPublicSetAccessorTypes {
+    static set myPublicStaticMethod(param) {
     }
-    Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassWithWithPublicSetAccessorTypes;
-}());
+    static set myPrivateStaticMethod(param) {
+    }
+    set myPublicMethod(param) {
+    }
+    set myPrivateMethod(param) {
+    }
+}
 exports.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-    function privateClassWithWithPrivateSetAccessorTypes() {
+class privateClassWithWithPrivateSetAccessorTypes {
+    static set myPublicStaticMethod(param) {
     }
-    Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return privateClassWithWithPrivateSetAccessorTypes;
-}());
-var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-    function privateClassWithWithPublicSetAccessorTypes() {
+    static set myPrivateStaticMethod(param) {
     }
-    Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return privateClassWithWithPublicSetAccessorTypes;
-}());
-var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-    function publicClassWithPrivateModuleGetAccessorTypes() {
+    set myPublicMethod(param) {
     }
-    Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
-            return new privateModule.publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
-            return new privateModule.publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassWithPrivateModuleGetAccessorTypes;
-}());
+    set myPrivateMethod(param) {
+    }
+}
+class privateClassWithWithPublicSetAccessorTypes {
+    static set myPublicStaticMethod(param) {
+    }
+    static set myPrivateStaticMethod(param) {
+    }
+    set myPublicMethod(param) {
+    }
+    set myPrivateMethod(param) {
+    }
+}
+class publicClassWithPrivateModuleGetAccessorTypes {
+    static get myPublicStaticMethod() {
+        return null;
+    }
+    get myPublicMethod() {
+        return null;
+    }
+    static get myPublicStaticMethod1() {
+        return new privateModule.publicClass();
+    }
+    get myPublicMethod1() {
+        return new privateModule.publicClass();
+    }
+}
 exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-    function publicClassWithPrivateModuleSetAccessorTypes() {
+class publicClassWithPrivateModuleSetAccessorTypes {
+    static set myPublicStaticMethod(param) {
     }
-    Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassWithPrivateModuleSetAccessorTypes;
-}());
+    set myPublicMethod(param) {
+    }
+}
 exports.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-    function privateClassWithPrivateModuleGetAccessorTypes() {
+class privateClassWithPrivateModuleGetAccessorTypes {
+    static get myPublicStaticMethod() {
+        return null;
     }
-    Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
-            return new privateModule.publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
-            return new privateModule.publicClass();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return privateClassWithPrivateModuleGetAccessorTypes;
-}());
-var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-    function privateClassWithPrivateModuleSetAccessorTypes() {
+    get myPublicMethod() {
+        return null;
     }
-    Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return privateClassWithPrivateModuleSetAccessorTypes;
-}());
+    static get myPublicStaticMethod1() {
+        return new privateModule.publicClass();
+    }
+    get myPublicMethod1() {
+        return new privateModule.publicClass();
+    }
+}
+class privateClassWithPrivateModuleSetAccessorTypes {
+    static set myPublicStaticMethod(param) {
+    }
+    set myPublicMethod(param) {
+    }
+}
 var publicModule;
 (function (publicModule) {
-    var privateClass = /** @class */ (function () {
-        function privateClass() {
-        }
-        return privateClass;
-    }());
-    var publicClass = /** @class */ (function () {
-        function publicClass() {
-        }
-        return publicClass;
-    }());
+    class privateClass {
+    }
+    class publicClass {
+    }
     publicModule.publicClass = publicClass;
-    var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPrivateGetAccessorTypes() {
+    class publicClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPrivateGetAccessorTypes;
-    }());
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() {
+            return new privateClass();
+        }
+        get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
     publicModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-    var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPublicGetAccessorTypes() {
+    class publicClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPublicGetAccessorTypes;
-    }());
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
     publicModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-    var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPrivateGetAccessorTypes() {
+    class privateClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPrivateGetAccessorTypes;
-    }());
-    var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPublicGetAccessorTypes() {
+        static get myPrivateStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPublicGetAccessorTypes;
-    }());
-    var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPrivateSetAccessorTypes() {
+        get myPublicMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPrivateSetAccessorTypes;
-    }());
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() {
+            return new privateClass();
+        }
+        get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
+    class privateClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
+        }
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
+    class publicClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
     publicModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-    var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPublicSetAccessorTypes() {
+    class publicClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPublicSetAccessorTypes;
-    }());
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
     publicModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-    var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPrivateSetAccessorTypes() {
+    class privateClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPrivateSetAccessorTypes;
-    }());
-    var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPublicSetAccessorTypes() {
+        static set myPrivateStaticMethod(param) {
         }
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPublicSetAccessorTypes;
-    }());
-    var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithPrivateModuleGetAccessorTypes() {
+        set myPublicMethod(param) {
         }
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithPrivateModuleGetAccessorTypes;
-    }());
+        set myPrivateMethod(param) {
+        }
+    }
+    class privateClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
+    class publicClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() {
+            return new privateModule.publicClass();
+        }
+    }
     publicModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-    var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithPrivateModuleSetAccessorTypes() {
+    class publicClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithPrivateModuleSetAccessorTypes;
-    }());
+        set myPublicMethod(param) {
+        }
+    }
     publicModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-    var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithPrivateModuleGetAccessorTypes() {
+    class privateClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithPrivateModuleGetAccessorTypes;
-    }());
-    var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithPrivateModuleSetAccessorTypes() {
+        get myPublicMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithPrivateModuleSetAccessorTypes;
-    }());
+        static get myPublicStaticMethod1() {
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() {
+            return new privateModule.publicClass();
+        }
+    }
+    class privateClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+    }
 })(publicModule || (exports.publicModule = publicModule = {}));
 var privateModule;
 (function (privateModule) {
-    var privateClass = /** @class */ (function () {
-        function privateClass() {
-        }
-        return privateClass;
-    }());
-    var publicClass = /** @class */ (function () {
-        function publicClass() {
-        }
-        return publicClass;
-    }());
+    class privateClass {
+    }
+    class publicClass {
+    }
     privateModule.publicClass = publicClass;
-    var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPrivateGetAccessorTypes() {
+    class publicClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPrivateGetAccessorTypes;
-    }());
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() {
+            return new privateClass();
+        }
+        get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
     privateModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-    var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPublicGetAccessorTypes() {
+    class publicClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPublicGetAccessorTypes;
-    }());
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
     privateModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-    var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPrivateGetAccessorTypes() {
+    class privateClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPrivateGetAccessorTypes;
-    }());
-    var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPublicGetAccessorTypes() {
+        static get myPrivateStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPublicGetAccessorTypes;
-    }());
-    var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPrivateSetAccessorTypes() {
+        get myPublicMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPrivateSetAccessorTypes;
-    }());
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() {
+            return new privateClass();
+        }
+        get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
+    class privateClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
+        }
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
+    class publicClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
     privateModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-    var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPublicSetAccessorTypes() {
+    class publicClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPublicSetAccessorTypes;
-    }());
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
     privateModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-    var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPrivateSetAccessorTypes() {
+    class privateClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPrivateSetAccessorTypes;
-    }());
-    var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPublicSetAccessorTypes() {
+        static set myPrivateStaticMethod(param) {
         }
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPublicSetAccessorTypes;
-    }());
-    var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithPrivateModuleGetAccessorTypes() {
+        set myPublicMethod(param) {
         }
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithPrivateModuleGetAccessorTypes;
-    }());
+        set myPrivateMethod(param) {
+        }
+    }
+    class privateClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
+    class publicClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() {
+            return new privateModule.publicClass();
+        }
+    }
     privateModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-    var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithPrivateModuleSetAccessorTypes() {
+    class publicClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithPrivateModuleSetAccessorTypes;
-    }());
+        set myPublicMethod(param) {
+        }
+    }
     privateModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-    var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithPrivateModuleGetAccessorTypes() {
+    class privateClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithPrivateModuleGetAccessorTypes;
-    }());
-    var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithPrivateModuleSetAccessorTypes() {
+        get myPublicMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithPrivateModuleSetAccessorTypes;
-    }());
+        static get myPublicStaticMethod1() {
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() {
+            return new privateModule.publicClass();
+        }
+    }
+    class privateClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+    }
 })(privateModule || (privateModule = {}));
 //// [privacyAccessorDeclFile_GlobalFile.js]
-var publicClassInGlobal = /** @class */ (function () {
-    function publicClassInGlobal() {
+class publicClassInGlobal {
+}
+class publicClassInGlobalWithPublicGetAccessorTypes {
+    static get myPublicStaticMethod() {
+        return null;
     }
-    return publicClassInGlobal;
-}());
-var publicClassInGlobalWithPublicGetAccessorTypes = /** @class */ (function () {
-    function publicClassInGlobalWithPublicGetAccessorTypes() {
+    static get myPrivateStaticMethod() {
+        return null;
     }
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-        get: function () {
-            return null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-        get: function () {
-            return new publicClassInGlobal();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-        get: function () {
-            return new publicClassInGlobal();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-        get: function () {
-            return new publicClassInGlobal();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-        get: function () {
-            return new publicClassInGlobal();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassInGlobalWithPublicGetAccessorTypes;
-}());
-var publicClassInGlobalWithWithPublicSetAccessorTypes = /** @class */ (function () {
-    function publicClassInGlobalWithWithPublicSetAccessorTypes() {
+    get myPublicMethod() {
+        return null;
     }
-    Object.defineProperty(publicClassInGlobalWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(publicClassInGlobalWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-        set: function (param) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return publicClassInGlobalWithWithPublicSetAccessorTypes;
-}());
+    get myPrivateMethod() {
+        return null;
+    }
+    static get myPublicStaticMethod1() {
+        return new publicClassInGlobal();
+    }
+    static get myPrivateStaticMethod1() {
+        return new publicClassInGlobal();
+    }
+    get myPublicMethod1() {
+        return new publicClassInGlobal();
+    }
+    get myPrivateMethod1() {
+        return new publicClassInGlobal();
+    }
+}
+class publicClassInGlobalWithWithPublicSetAccessorTypes {
+    static set myPublicStaticMethod(param) {
+    }
+    static set myPrivateStaticMethod(param) {
+    }
+    set myPublicMethod(param) {
+    }
+    set myPrivateMethod(param) {
+    }
+}
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
-    var privateClass = /** @class */ (function () {
-        function privateClass() {
-        }
-        return privateClass;
-    }());
-    var publicClass = /** @class */ (function () {
-        function publicClass() {
-        }
-        return publicClass;
-    }());
+    class privateClass {
+    }
+    class publicClass {
+    }
     publicModuleInGlobal.publicClass = publicClass;
-    var privateModule;
+    let privateModule;
     (function (privateModule) {
-        var privateClass = /** @class */ (function () {
-            function privateClass() {
-            }
-            return privateClass;
-        }());
-        var publicClass = /** @class */ (function () {
-            function publicClass() {
-            }
-            return publicClass;
-        }());
+        class privateClass {
+        }
+        class publicClass {
+        }
         privateModule.publicClass = publicClass;
-        var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-            function publicClassWithWithPrivateGetAccessorTypes() {
+        class publicClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod() {
+                return null;
             }
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return publicClassWithWithPrivateGetAccessorTypes;
-        }());
+            static get myPrivateStaticMethod() {
+                return null;
+            }
+            get myPublicMethod() {
+                return null;
+            }
+            get myPrivateMethod() {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() {
+                return new privateClass();
+            }
+            get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
         privateModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-        var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-            function publicClassWithWithPublicGetAccessorTypes() {
+        class publicClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod() {
+                return null;
             }
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return publicClassWithWithPublicGetAccessorTypes;
-        }());
+            static get myPrivateStaticMethod() {
+                return null;
+            }
+            get myPublicMethod() {
+                return null;
+            }
+            get myPrivateMethod() {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
         privateModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-        var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-            function privateClassWithWithPrivateGetAccessorTypes() {
+        class privateClassWithWithPrivateGetAccessorTypes {
+            static get myPublicStaticMethod() {
+                return null;
             }
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-                get: function () {
-                    return new privateClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return privateClassWithWithPrivateGetAccessorTypes;
-        }());
-        var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-            function privateClassWithWithPublicGetAccessorTypes() {
+            static get myPrivateStaticMethod() {
+                return null;
             }
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-                get: function () {
-                    return new publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return privateClassWithWithPublicGetAccessorTypes;
-        }());
-        var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-            function publicClassWithWithPrivateSetAccessorTypes() {
+            get myPublicMethod() {
+                return null;
             }
-            Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return publicClassWithWithPrivateSetAccessorTypes;
-        }());
+            get myPrivateMethod() {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            static get myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            get myPublicMethod1() {
+                return new privateClass();
+            }
+            get myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+        class privateClassWithWithPublicGetAccessorTypes {
+            static get myPublicStaticMethod() {
+                return null;
+            }
+            static get myPrivateStaticMethod() {
+                return null;
+            }
+            get myPublicMethod() {
+                return null;
+            }
+            get myPrivateMethod() {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            static get myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            get myPublicMethod1() {
+                return new publicClass();
+            }
+            get myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+        class publicClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param) {
+            }
+            static set myPrivateStaticMethod(param) {
+            }
+            set myPublicMethod(param) {
+            }
+            set myPrivateMethod(param) {
+            }
+        }
         privateModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-        var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-            function publicClassWithWithPublicSetAccessorTypes() {
+        class publicClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param) {
             }
-            Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return publicClassWithWithPublicSetAccessorTypes;
-        }());
+            static set myPrivateStaticMethod(param) {
+            }
+            set myPublicMethod(param) {
+            }
+            set myPrivateMethod(param) {
+            }
+        }
         privateModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-        var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-            function privateClassWithWithPrivateSetAccessorTypes() {
+        class privateClassWithWithPrivateSetAccessorTypes {
+            static set myPublicStaticMethod(param) {
             }
-            Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return privateClassWithWithPrivateSetAccessorTypes;
-        }());
-        var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-            function privateClassWithWithPublicSetAccessorTypes() {
+            static set myPrivateStaticMethod(param) {
             }
-            Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return privateClassWithWithPublicSetAccessorTypes;
-        }());
-        var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-            function publicClassWithPrivateModuleGetAccessorTypes() {
+            set myPublicMethod(param) {
             }
-            Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-                get: function () {
-                    return new privateModule.publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-                get: function () {
-                    return new privateModule.publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return publicClassWithPrivateModuleGetAccessorTypes;
-        }());
+            set myPrivateMethod(param) {
+            }
+        }
+        class privateClassWithWithPublicSetAccessorTypes {
+            static set myPublicStaticMethod(param) {
+            }
+            static set myPrivateStaticMethod(param) {
+            }
+            set myPublicMethod(param) {
+            }
+            set myPrivateMethod(param) {
+            }
+        }
+        class publicClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod() {
+                return null;
+            }
+            get myPublicMethod() {
+                return null;
+            }
+            static get myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
         privateModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-        var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-            function publicClassWithPrivateModuleSetAccessorTypes() {
+        class publicClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param) {
             }
-            Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return publicClassWithPrivateModuleSetAccessorTypes;
-        }());
+            set myPublicMethod(param) {
+            }
+        }
         privateModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-        var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-            function privateClassWithPrivateModuleGetAccessorTypes() {
+        class privateClassWithPrivateModuleGetAccessorTypes {
+            static get myPublicStaticMethod() {
+                return null;
             }
-            Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-                get: function () {
-                    return null;
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-                get: function () {
-                    return new privateModule.publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-                get: function () {
-                    return new privateModule.publicClass();
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return privateClassWithPrivateModuleGetAccessorTypes;
-        }());
-        var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-            function privateClassWithPrivateModuleSetAccessorTypes() {
+            get myPublicMethod() {
+                return null;
             }
-            Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-                set: function (param) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            return privateClassWithPrivateModuleSetAccessorTypes;
-        }());
+            static get myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            get myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
+        class privateClassWithPrivateModuleSetAccessorTypes {
+            static set myPublicStaticMethod(param) {
+            }
+            set myPublicMethod(param) {
+            }
+        }
     })(privateModule || (privateModule = {}));
-    var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPrivateGetAccessorTypes() {
+    class publicClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPrivateGetAccessorTypes;
-    }());
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() {
+            return new privateClass();
+        }
+        get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
     publicModuleInGlobal.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-    var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPublicGetAccessorTypes() {
+    class publicClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPublicGetAccessorTypes;
-    }());
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
     publicModuleInGlobal.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-    var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPrivateGetAccessorTypes() {
+    class privateClassWithWithPrivateGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new privateClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPrivateGetAccessorTypes;
-    }());
-    var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPublicGetAccessorTypes() {
+        static get myPrivateStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPrivateStaticMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicGetAccessorTypes.prototype, "myPrivateMethod1", {
-            get: function () {
-                return new publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPublicGetAccessorTypes;
-    }());
-    var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPrivateSetAccessorTypes() {
+        get myPublicMethod() {
+            return null;
         }
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPrivateSetAccessorTypes;
-    }());
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        get myPublicMethod1() {
+            return new privateClass();
+        }
+        get myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
+    class privateClassWithWithPublicGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
+        }
+        static get myPrivateStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        get myPrivateMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        static get myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        get myPublicMethod1() {
+            return new publicClass();
+        }
+        get myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
+    class publicClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
     publicModuleInGlobal.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-    var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithWithPublicSetAccessorTypes() {
+    class publicClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithWithPublicSetAccessorTypes;
-    }());
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
     publicModuleInGlobal.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-    var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPrivateSetAccessorTypes() {
+    class privateClassWithWithPrivateSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPrivateSetAccessorTypes;
-    }());
-    var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithWithPublicSetAccessorTypes() {
+        static set myPrivateStaticMethod(param) {
         }
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPrivateStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithWithPublicSetAccessorTypes.prototype, "myPrivateMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithWithPublicSetAccessorTypes;
-    }());
-    var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-        function publicClassWithPrivateModuleGetAccessorTypes() {
+        set myPublicMethod(param) {
         }
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithPrivateModuleGetAccessorTypes;
-    }());
+        set myPrivateMethod(param) {
+        }
+    }
+    class privateClassWithWithPublicSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        static set myPrivateStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+        set myPrivateMethod(param) {
+        }
+    }
+    class publicClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
+        }
+        get myPublicMethod() {
+            return null;
+        }
+        static get myPublicStaticMethod1() {
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() {
+            return new privateModule.publicClass();
+        }
+    }
     publicModuleInGlobal.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-    var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-        function publicClassWithPrivateModuleSetAccessorTypes() {
+    class publicClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
         }
-        Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return publicClassWithPrivateModuleSetAccessorTypes;
-    }());
+        set myPublicMethod(param) {
+        }
+    }
     publicModuleInGlobal.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-    var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
-        function privateClassWithPrivateModuleGetAccessorTypes() {
+    class privateClassWithPrivateModuleGetAccessorTypes {
+        static get myPublicStaticMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod", {
-            get: function () {
-                return null;
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes.prototype, "myPublicMethod1", {
-            get: function () {
-                return new privateModule.publicClass();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithPrivateModuleGetAccessorTypes;
-    }());
-    var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
-        function privateClassWithPrivateModuleSetAccessorTypes() {
+        get myPublicMethod() {
+            return null;
         }
-        Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes.prototype, "myPublicMethod", {
-            set: function (param) {
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return privateClassWithPrivateModuleSetAccessorTypes;
-    }());
+        static get myPublicStaticMethod1() {
+            return new privateModule.publicClass();
+        }
+        get myPublicMethod1() {
+            return new privateModule.publicClass();
+        }
+    }
+    class privateClassWithPrivateModuleSetAccessorTypes {
+        static set myPublicStaticMethod(param) {
+        }
+        set myPublicMethod(param) {
+        }
+    }
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));
 
 

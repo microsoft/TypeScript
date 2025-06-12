@@ -35,17 +35,14 @@ exports.Encoder = void 0;
  * @template T
  * @implements {IEncoder<T>}
  */
-var Encoder = /** @class */ (function () {
-    function Encoder() {
-    }
+class Encoder {
     /**
      * @param {T} value
      */
-    Encoder.prototype.encode = function (value) {
+    encode(value) {
         return new Uint8Array(0);
-    };
-    return Encoder;
-}());
+    }
+}
 exports.Encoder = Encoder;
 /**
  * @template T

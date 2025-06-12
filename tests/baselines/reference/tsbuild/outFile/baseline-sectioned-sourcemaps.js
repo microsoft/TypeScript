@@ -173,10 +173,10 @@ third/third_part1.ts
 
 
 //// [/home/src/workspaces/solution/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,MAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/home/src/workspaces/solution/first/bin/first-output.js]
-var s = "Hello, world";
+const s = "Hello, world";
 console.log(s);
 console.log(f());
 function f() {
@@ -245,7 +245,7 @@ declare function f(): string;
 }
 
 //// [/home/src/workspaces/solution/2/second-output.js.map]
-{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
+{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD,MAAM,CAAC;IACH,WAAW;QACP,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;CACJ"}
 
 //// [/home/src/workspaces/solution/2/second-output.js]
 var N;
@@ -255,14 +255,11 @@ var N;
     }
     f();
 })(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
+class C {
+    doSomething() {
         console.log("something got done");
-    };
-    return C;
-}());
+    }
+}
 //# sourceMappingURL=second-output.js.map
 
 //// [/home/src/workspaces/solution/2/second-output.d.ts.map]
@@ -386,29 +383,29 @@ sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
->>>var s = "Hello, world";
+>>>const s = "Hello, world";
 1 >
-2 >^^^^
-3 >    ^
-4 >     ^^^
-5 >        ^^^^^^^^^^^^^^
-6 >                      ^
+2 >^^^^^^
+3 >      ^
+4 >       ^^^
+5 >          ^^^^^^^^^^^^^^
+6 >                        ^
 1 >interface TheFirst {
   >    none: any;
   >}
   >
   >
 2 >const 
-3 >    s
-4 >      = 
-5 >        "Hello, world"
-6 >                      ;
+3 >      s
+4 >        = 
+5 >          "Hello, world"
+6 >                        ;
 1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(5, 7) + SourceIndex(0)
-3 >Emitted(1, 6) Source(5, 8) + SourceIndex(0)
-4 >Emitted(1, 9) Source(5, 11) + SourceIndex(0)
-5 >Emitted(1, 23) Source(5, 25) + SourceIndex(0)
-6 >Emitted(1, 24) Source(5, 26) + SourceIndex(0)
+2 >Emitted(1, 7) Source(5, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(5, 8) + SourceIndex(0)
+4 >Emitted(1, 11) Source(5, 11) + SourceIndex(0)
+5 >Emitted(1, 25) Source(5, 25) + SourceIndex(0)
+6 >Emitted(1, 26) Source(5, 26) + SourceIndex(0)
 ---
 >>>console.log(s);
 1 >
@@ -772,7 +769,6 @@ sourceFile:../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^->
 1->
   >
 2 >}
@@ -799,42 +795,27 @@ sourceFile:../second/second_part1.ts
 emittedFile:/home/src/workspaces/solution/2/second-output.js
 sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
->>>var C = (function () {
-1->
-2 >^^^^^^^^^^^^^^^^^^->
-1->
-1->Emitted(8, 1) Source(1, 1) + SourceIndex(1)
+>>>class C {
+1 >
+2 >^^^^^^
+3 >      ^
+4 >       ^^^^^^^^^^^^->
+1 >
+2 >class 
+3 >      C
+1 >Emitted(8, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(8, 7) Source(1, 7) + SourceIndex(1)
+3 >Emitted(8, 8) Source(1, 8) + SourceIndex(1)
 ---
->>>    function C() {
+>>>    doSomething() {
 1->^^^^
-2 >    ^->
-1->
-1->Emitted(9, 5) Source(1, 1) + SourceIndex(1)
----
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->class C {
-  >    doSomething() {
-  >        console.log("something got done");
-  >    }
-  >
-2 >    }
-1->Emitted(10, 5) Source(5, 1) + SourceIndex(1)
-2 >Emitted(10, 6) Source(5, 2) + SourceIndex(1)
----
->>>    C.prototype.doSomething = function () {
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^
-3 >                           ^^^
-4 >                              ^^^^^^^^^^^^->
-1->
+2 >    ^^^^^^^^^^^
+3 >               ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1-> {
+  >    
 2 >    doSomething
-3 >                           
-1->Emitted(11, 5) Source(2, 5) + SourceIndex(1)
-2 >Emitted(11, 28) Source(2, 16) + SourceIndex(1)
-3 >Emitted(11, 31) Source(2, 5) + SourceIndex(1)
+1->Emitted(9, 5) Source(2, 5) + SourceIndex(1)
+2 >Emitted(9, 16) Source(2, 16) + SourceIndex(1)
 ---
 >>>        console.log("something got done");
 1->^^^^^^^^
@@ -845,7 +826,7 @@ sourceFile:../second/second_part2.ts
 6 >                    ^^^^^^^^^^^^^^^^^^^^
 7 >                                        ^
 8 >                                         ^
-1->doSomething() {
+1->() {
   >        
 2 >        console
 3 >               .
@@ -854,52 +835,30 @@ sourceFile:../second/second_part2.ts
 6 >                    "something got done"
 7 >                                        )
 8 >                                         ;
-1->Emitted(12, 9) Source(3, 9) + SourceIndex(1)
-2 >Emitted(12, 16) Source(3, 16) + SourceIndex(1)
-3 >Emitted(12, 17) Source(3, 17) + SourceIndex(1)
-4 >Emitted(12, 20) Source(3, 20) + SourceIndex(1)
-5 >Emitted(12, 21) Source(3, 21) + SourceIndex(1)
-6 >Emitted(12, 41) Source(3, 41) + SourceIndex(1)
-7 >Emitted(12, 42) Source(3, 42) + SourceIndex(1)
-8 >Emitted(12, 43) Source(3, 43) + SourceIndex(1)
+1->Emitted(10, 9) Source(3, 9) + SourceIndex(1)
+2 >Emitted(10, 16) Source(3, 16) + SourceIndex(1)
+3 >Emitted(10, 17) Source(3, 17) + SourceIndex(1)
+4 >Emitted(10, 20) Source(3, 20) + SourceIndex(1)
+5 >Emitted(10, 21) Source(3, 21) + SourceIndex(1)
+6 >Emitted(10, 41) Source(3, 41) + SourceIndex(1)
+7 >Emitted(10, 42) Source(3, 42) + SourceIndex(1)
+8 >Emitted(10, 43) Source(3, 43) + SourceIndex(1)
 ---
->>>    };
+>>>    }
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^->
 1 >
   >    
 2 >    }
-1 >Emitted(13, 5) Source(4, 5) + SourceIndex(1)
-2 >Emitted(13, 6) Source(4, 6) + SourceIndex(1)
+1 >Emitted(11, 5) Source(4, 5) + SourceIndex(1)
+2 >Emitted(11, 6) Source(4, 6) + SourceIndex(1)
 ---
->>>    return C;
-1->^^^^
-2 >    ^^^^^^^^
-1->
-  >
-2 >    }
-1->Emitted(14, 5) Source(5, 1) + SourceIndex(1)
-2 >Emitted(14, 13) Source(5, 2) + SourceIndex(1)
----
->>>}());
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > 
-4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-2 >}
-3 > 
-4 > class C {
-  >     doSomething() {
-  >         console.log("something got done");
-  >     }
-  > }
-1 >Emitted(15, 1) Source(5, 1) + SourceIndex(1)
-2 >Emitted(15, 2) Source(5, 2) + SourceIndex(1)
-3 >Emitted(15, 2) Source(1, 1) + SourceIndex(1)
-4 >Emitted(15, 6) Source(5, 2) + SourceIndex(1)
+  >}
+1 >Emitted(12, 2) Source(5, 2) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
@@ -1165,10 +1124,10 @@ third/third_part1.ts
 
 
 //// [/home/src/workspaces/solution/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,MAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/home/src/workspaces/solution/first/bin/first-output.js]
-var s = "Hola, world";
+const s = "Hola, world";
 console.log(s);
 console.log(f());
 function f() {
@@ -1290,29 +1249,29 @@ sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
->>>var s = "Hola, world";
+>>>const s = "Hola, world";
 1 >
-2 >^^^^
-3 >    ^
-4 >     ^^^
-5 >        ^^^^^^^^^^^^^
-6 >                     ^
+2 >^^^^^^
+3 >      ^
+4 >       ^^^
+5 >          ^^^^^^^^^^^^^
+6 >                       ^
 1 >interface TheFirst {
   >    none: any;
   >}
   >
   >
 2 >const 
-3 >    s
-4 >      = 
-5 >        "Hola, world"
-6 >                     ;
+3 >      s
+4 >        = 
+5 >          "Hola, world"
+6 >                       ;
 1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(5, 7) + SourceIndex(0)
-3 >Emitted(1, 6) Source(5, 8) + SourceIndex(0)
-4 >Emitted(1, 9) Source(5, 11) + SourceIndex(0)
-5 >Emitted(1, 22) Source(5, 24) + SourceIndex(0)
-6 >Emitted(1, 23) Source(5, 25) + SourceIndex(0)
+2 >Emitted(1, 7) Source(5, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(5, 8) + SourceIndex(0)
+4 >Emitted(1, 11) Source(5, 11) + SourceIndex(0)
+5 >Emitted(1, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(1, 25) Source(5, 25) + SourceIndex(0)
 ---
 >>>console.log(s);
 1 >
@@ -1618,10 +1577,10 @@ first/first_part3.ts
 
 
 //// [/home/src/workspaces/solution/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAIA,MAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/home/src/workspaces/solution/first/bin/first-output.js]
-var s = "Hola, world";
+const s = "Hola, world";
 console.log(s);
 console.log(s);
 console.log(f());
@@ -1689,29 +1648,29 @@ sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 emittedFile:/home/src/workspaces/solution/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
->>>var s = "Hola, world";
+>>>const s = "Hola, world";
 1 >
-2 >^^^^
-3 >    ^
-4 >     ^^^
-5 >        ^^^^^^^^^^^^^
-6 >                     ^
+2 >^^^^^^
+3 >      ^
+4 >       ^^^
+5 >          ^^^^^^^^^^^^^
+6 >                       ^
 1 >interface TheFirst {
   >    none: any;
   >}
   >
   >
 2 >const 
-3 >    s
-4 >      = 
-5 >        "Hola, world"
-6 >                     ;
+3 >      s
+4 >        = 
+5 >          "Hola, world"
+6 >                       ;
 1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(5, 7) + SourceIndex(0)
-3 >Emitted(1, 6) Source(5, 8) + SourceIndex(0)
-4 >Emitted(1, 9) Source(5, 11) + SourceIndex(0)
-5 >Emitted(1, 22) Source(5, 24) + SourceIndex(0)
-6 >Emitted(1, 23) Source(5, 25) + SourceIndex(0)
+2 >Emitted(1, 7) Source(5, 7) + SourceIndex(0)
+3 >Emitted(1, 8) Source(5, 8) + SourceIndex(0)
+4 >Emitted(1, 11) Source(5, 11) + SourceIndex(0)
+5 >Emitted(1, 24) Source(5, 24) + SourceIndex(0)
+6 >Emitted(1, 25) Source(5, 25) + SourceIndex(0)
 ---
 >>>console.log(s);
 1 >

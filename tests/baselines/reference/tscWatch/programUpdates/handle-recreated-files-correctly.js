@@ -41,11 +41,11 @@ commonFile2.ts
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 
@@ -131,8 +131,8 @@ commonFile2.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
-var xy = 10;
+let y = 1;
+let xy = 10;
 
 
 
@@ -269,7 +269,7 @@ commonFile2.ts
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 

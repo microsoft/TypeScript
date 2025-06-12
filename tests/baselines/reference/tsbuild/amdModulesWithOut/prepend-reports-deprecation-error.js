@@ -105,10 +105,10 @@ Found 1 error.
 
 
 //// [/home/src/workspaces/soltion/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,MAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/lib/module.js]
-var myGlob = 20;
+const myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -121,7 +121,7 @@ define("file2", ["require", "exports"], function (require, exports) {
     exports.y = void 0;
     exports.y = 20;
 });
-var globalConst = 10;
+const globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/home/src/workspaces/soltion/lib/module.d.ts.map]
@@ -187,7 +187,7 @@ declare const globalConst = 10;
 }
 
 //// [/home/src/workspaces/soltion/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file3.ts","file4.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file3.ts","file4.ts"],"names":[],"mappings":";;;;IAAa,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,MAAM,KAAK,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/app/module.js]
 define("file3", ["require", "exports"], function (require, exports) {
@@ -196,7 +196,7 @@ define("file3", ["require", "exports"], function (require, exports) {
     exports.z = void 0;
     exports.z = 30;
 });
-var myVar = 30;
+const myVar = 30;
 //# sourceMappingURL=module.js.map
 
 //// [/home/src/workspaces/soltion/app/module.d.ts.map]
@@ -280,26 +280,26 @@ sources: file0.ts,file1.ts,file2.ts,global.ts
 emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:file0.ts
 -------------------------------------------------------------------
->>>var myGlob = 20;
+>>>const myGlob = 20;
 1 >
-2 >^^^^
-3 >    ^^^^^^
-4 >          ^^^
-5 >             ^^
-6 >               ^
-7 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^
+4 >            ^^^
+5 >               ^^
+6 >                 ^
+7 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
-3 >    myGlob
-4 >           = 
-5 >             20
-6 >               ;
+3 >      myGlob
+4 >             = 
+5 >               20
+6 >                 ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+4 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -363,26 +363,26 @@ emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:global.ts
 -------------------------------------------------------------------
 >>>});
->>>var globalConst = 10;
+>>>const globalConst = 10;
 1 >
-2 >^^^^
-3 >    ^^^^^^^^^^^
-4 >               ^^^
-5 >                  ^^
-6 >                    ^
-7 >                     ^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^^^^^^
+4 >                 ^^^
+5 >                    ^^
+6 >                      ^
+7 >                       ^^^^^^^^^^->
 1 >
 2 >const 
-3 >    globalConst
-4 >                = 
-5 >                  10
-6 >                    ;
+3 >      globalConst
+4 >                  = 
+5 >                    10
+6 >                      ;
 1 >Emitted(14, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(14, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(14, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(14, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(14, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(14, 22) Source(1, 24) + SourceIndex(3)
+2 >Emitted(14, 7) Source(1, 7) + SourceIndex(3)
+3 >Emitted(14, 18) Source(1, 18) + SourceIndex(3)
+4 >Emitted(14, 21) Source(1, 21) + SourceIndex(3)
+5 >Emitted(14, 23) Source(1, 23) + SourceIndex(3)
+6 >Emitted(14, 24) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -542,26 +542,26 @@ emittedFile:/home/src/workspaces/soltion/app/module.js
 sourceFile:file4.ts
 -------------------------------------------------------------------
 >>>});
->>>var myVar = 30;
+>>>const myVar = 30;
 1 >
-2 >^^^^
-3 >    ^^^^^
-4 >         ^^^
-5 >            ^^
-6 >              ^
-7 >               ^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^
+4 >           ^^^
+5 >              ^^
+6 >                ^
+7 >                 ^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
-3 >    myVar
-4 >          = 
-5 >            30
-6 >              ;
+3 >      myVar
+4 >            = 
+5 >              30
+6 >                ;
 1 >Emitted(7, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(7, 5) Source(1, 7) + SourceIndex(1)
-3 >Emitted(7, 10) Source(1, 12) + SourceIndex(1)
-4 >Emitted(7, 13) Source(1, 15) + SourceIndex(1)
-5 >Emitted(7, 15) Source(1, 17) + SourceIndex(1)
-6 >Emitted(7, 16) Source(1, 18) + SourceIndex(1)
+2 >Emitted(7, 7) Source(1, 7) + SourceIndex(1)
+3 >Emitted(7, 12) Source(1, 12) + SourceIndex(1)
+4 >Emitted(7, 15) Source(1, 15) + SourceIndex(1)
+5 >Emitted(7, 17) Source(1, 17) + SourceIndex(1)
+6 >Emitted(7, 18) Source(1, 18) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -669,10 +669,10 @@ Found 1 error.
 
 
 //// [/home/src/workspaces/soltion/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,IAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AAAA,MAAM,MAAM,GAAG,EAAE,CAAC;;;;;ICAL,QAAA,CAAC,GAAG,EAAE,CAAC;IAAA,OAAO,CAAC,GAAG,CAAC,SAAC,CAAC,CAAC;;;;;;ICAtB,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,MAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/soltion/lib/module.js]
-var myGlob = 20;
+const myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -686,7 +686,7 @@ define("file2", ["require", "exports"], function (require, exports) {
     exports.y = void 0;
     exports.y = 20;
 });
-var globalConst = 10;
+const globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/home/src/workspaces/soltion/lib/module.d.ts.map] file written with same contents
@@ -749,26 +749,26 @@ sources: file0.ts,file1.ts,file2.ts,global.ts
 emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:file0.ts
 -------------------------------------------------------------------
->>>var myGlob = 20;
+>>>const myGlob = 20;
 1 >
-2 >^^^^
-3 >    ^^^^^^
-4 >          ^^^
-5 >             ^^
-6 >               ^
-7 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^
+4 >            ^^^
+5 >               ^^
+6 >                 ^
+7 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >const 
-3 >    myGlob
-4 >           = 
-5 >             20
-6 >               ;
+3 >      myGlob
+4 >             = 
+5 >               20
+6 >                 ;
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 7) + SourceIndex(0)
-3 >Emitted(1, 11) Source(1, 13) + SourceIndex(0)
-4 >Emitted(1, 14) Source(1, 16) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 18) + SourceIndex(0)
-6 >Emitted(1, 17) Source(1, 19) + SourceIndex(0)
+2 >Emitted(1, 7) Source(1, 7) + SourceIndex(0)
+3 >Emitted(1, 13) Source(1, 13) + SourceIndex(0)
+4 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
+5 >Emitted(1, 18) Source(1, 18) + SourceIndex(0)
+6 >Emitted(1, 19) Source(1, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/home/src/workspaces/soltion/lib/module.js
@@ -859,26 +859,26 @@ emittedFile:/home/src/workspaces/soltion/lib/module.js
 sourceFile:global.ts
 -------------------------------------------------------------------
 >>>});
->>>var globalConst = 10;
+>>>const globalConst = 10;
 1 >
-2 >^^^^
-3 >    ^^^^^^^^^^^
-4 >               ^^^
-5 >                  ^^
-6 >                    ^
-7 >                     ^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^^^^^^
+4 >                 ^^^
+5 >                    ^^
+6 >                      ^
+7 >                       ^^^^^^^^^^->
 1 >
 2 >const 
-3 >    globalConst
-4 >                = 
-5 >                  10
-6 >                    ;
+3 >      globalConst
+4 >                  = 
+5 >                    10
+6 >                      ;
 1 >Emitted(15, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(15, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(15, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(15, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(15, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(15, 22) Source(1, 24) + SourceIndex(3)
+2 >Emitted(15, 7) Source(1, 7) + SourceIndex(3)
+3 >Emitted(15, 18) Source(1, 18) + SourceIndex(3)
+4 >Emitted(15, 21) Source(1, 21) + SourceIndex(3)
+5 >Emitted(15, 23) Source(1, 23) + SourceIndex(3)
+6 >Emitted(15, 24) Source(1, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.js.map
 

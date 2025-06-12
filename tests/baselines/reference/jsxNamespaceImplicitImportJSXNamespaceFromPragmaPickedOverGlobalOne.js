@@ -71,5 +71,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Comp = void 0;
 var jsx_runtime_1 = require("@emotion/react/jsx-runtime");
 /* @jsxImportSource @emotion/react */
-var Comp = function () { return (0, jsx_runtime_1.jsx)("div", { css: "color: hotpink;" }); };
+const Comp = () => (0, jsx_runtime_1.jsx)("div", { css: "color: hotpink;" });
 exports.Comp = Comp;

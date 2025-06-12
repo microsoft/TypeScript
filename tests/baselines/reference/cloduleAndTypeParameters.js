@@ -16,16 +16,12 @@ module Foo {
 }
 
 //// [cloduleAndTypeParameters.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+class Foo {
+    constructor() {
     }
-    return Foo;
-}());
+}
 (function (Foo) {
-    var Baz = /** @class */ (function () {
-        function Baz() {
-        }
-        return Baz;
-    }());
+    class Baz {
+    }
     Foo.Baz = Baz;
 })(Foo || (Foo = {}));

@@ -15,4 +15,4 @@ exports.Foo = Foo;
 function Foo() { }
 // This comment should have no effect; this is a TS file.
 /** @type {never} */
-Foo.bar = function () { };
+Foo.bar = () => { };

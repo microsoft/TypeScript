@@ -136,45 +136,37 @@ module GenericSignaturesValid {
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
 var ClassTypeParam;
 (function (ClassTypeParam) {
-    var Base = /** @class */ (function () {
-        function Base() {
-            var _this = this;
-            this.init = function () {
-                _this.a = function () { return null; }; // ok, same T of required params
-                _this.a = function (x) { return null; }; // ok, same T of required params
-                _this.a = function (x) { return null; }; // error, too many required params
-                _this.a2 = function () { return null; }; // ok, same T of required params
-                _this.a2 = function (x) { return null; }; // ok, same T of required params
-                _this.a2 = function (x) { return null; }; // ok, same number of params
-                _this.a3 = function () { return null; }; // ok, fewer required params
-                _this.a3 = function (x) { return null; }; // ok, fewer required params
-                _this.a3 = function (x) { return null; }; // ok, same T of required params
-                _this.a3 = function (x, y) { return null; }; // error, too many required params
-                _this.a4 = function () { return null; }; // ok, fewer required params
-                _this.a4 = function (x, y) { return null; }; // ok, fewer required params
-                _this.a4 = function (x) { return null; }; // ok, same T of required params
-                _this.a4 = function (x, y) { return null; }; // ok, same number of params
-                _this.a5 = function () { return null; }; // ok, fewer required params
-                _this.a5 = function (x, y) { return null; }; // ok, fewer required params
-                _this.a5 = function (x) { return null; }; // ok, all present params match
-                _this.a5 = function (x, y) { return null; }; // ok, same number of params
+    class Base {
+        constructor() {
+            this.init = () => {
+                this.a = () => null; // ok, same T of required params
+                this.a = (x) => null; // ok, same T of required params
+                this.a = (x) => null; // error, too many required params
+                this.a2 = () => null; // ok, same T of required params
+                this.a2 = (x) => null; // ok, same T of required params
+                this.a2 = (x) => null; // ok, same number of params
+                this.a3 = () => null; // ok, fewer required params
+                this.a3 = (x) => null; // ok, fewer required params
+                this.a3 = (x) => null; // ok, same T of required params
+                this.a3 = (x, y) => null; // error, too many required params
+                this.a4 = () => null; // ok, fewer required params
+                this.a4 = (x, y) => null; // ok, fewer required params
+                this.a4 = (x) => null; // ok, same T of required params
+                this.a4 = (x, y) => null; // ok, same number of params
+                this.a5 = () => null; // ok, fewer required params
+                this.a5 = (x, y) => null; // ok, fewer required params
+                this.a5 = (x) => null; // ok, all present params match
+                this.a5 = (x, y) => null; // ok, same number of params
             };
         }
-        return Base;
-    }());
+    }
 })(ClassTypeParam || (ClassTypeParam = {}));
 var GenericSignaturesInvalid;
 (function (GenericSignaturesInvalid) {
-    var Base2 = /** @class */ (function () {
-        function Base2() {
-        }
-        return Base2;
-    }());
-    var Target = /** @class */ (function () {
-        function Target() {
-        }
-        return Target;
-    }());
+    class Base2 {
+    }
+    class Target {
+    }
     function foo() {
         var b;
         var t;
@@ -208,30 +200,28 @@ var GenericSignaturesInvalid;
 })(GenericSignaturesInvalid || (GenericSignaturesInvalid = {}));
 var GenericSignaturesValid;
 (function (GenericSignaturesValid) {
-    var Base2 = /** @class */ (function () {
-        function Base2() {
-            var _this = this;
-            this.init = function () {
-                _this.a = function () { return null; }; // ok, same T of required params
-                _this.a = function (x) { return null; }; // ok, same T of required params
-                _this.a = function (x) { return null; }; // error, too many required params
-                _this.a2 = function () { return null; }; // ok, same T of required params
-                _this.a2 = function (x) { return null; }; // ok, same T of required params
-                _this.a2 = function (x) { return null; }; // ok, same number of params
-                _this.a3 = function () { return null; }; // ok, fewer required params
-                _this.a3 = function (x) { return null; }; // ok, fewer required params
-                _this.a3 = function (x) { return null; }; // ok, same T of required params
-                _this.a3 = function (x, y) { return null; }; // error, too many required params
-                _this.a4 = function () { return null; }; // ok, fewer required params
-                _this.a4 = function (x, y) { return null; }; // ok, fewer required params
-                _this.a4 = function (x) { return null; }; // ok, same T of required params
-                _this.a4 = function (x, y) { return null; }; // ok, same number of params
-                _this.a5 = function () { return null; }; // ok, fewer required params
-                _this.a5 = function (x, y) { return null; }; // ok, fewer required params
-                _this.a5 = function (x) { return null; }; // ok, all present params match
-                _this.a5 = function (x, y) { return null; }; // ok, same number of params
+    class Base2 {
+        constructor() {
+            this.init = () => {
+                this.a = () => null; // ok, same T of required params
+                this.a = (x) => null; // ok, same T of required params
+                this.a = (x) => null; // error, too many required params
+                this.a2 = () => null; // ok, same T of required params
+                this.a2 = (x) => null; // ok, same T of required params
+                this.a2 = (x) => null; // ok, same number of params
+                this.a3 = () => null; // ok, fewer required params
+                this.a3 = (x) => null; // ok, fewer required params
+                this.a3 = (x) => null; // ok, same T of required params
+                this.a3 = (x, y) => null; // error, too many required params
+                this.a4 = () => null; // ok, fewer required params
+                this.a4 = (x, y) => null; // ok, fewer required params
+                this.a4 = (x) => null; // ok, same T of required params
+                this.a4 = (x, y) => null; // ok, same number of params
+                this.a5 = () => null; // ok, fewer required params
+                this.a5 = (x, y) => null; // ok, fewer required params
+                this.a5 = (x) => null; // ok, all present params match
+                this.a5 = (x, y) => null; // ok, same number of params
             };
         }
-        return Base2;
-    }());
+    }
 })(GenericSignaturesValid || (GenericSignaturesValid = {}));

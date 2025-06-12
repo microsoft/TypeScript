@@ -25,10 +25,10 @@ exports.o = {
     m: 1
 };
 //// [index.js]
-var _a = require("./something").o, a = _a.a, m = _a.m;
-var thing = a + m;
+const { a, m } = require("./something").o;
+const thing = a + m;
 module.exports = {
-    thing: thing
+    thing
 };
 
 

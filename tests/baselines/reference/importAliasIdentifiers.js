@@ -51,24 +51,20 @@ var p: { x: number; y: number; };
 //// [importAliasIdentifiers.js]
 var moduleA;
 (function (moduleA) {
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     moduleA.Point = Point;
 })(moduleA || (moduleA = {}));
 var alias = moduleA;
 var p;
 var p;
 var p;
-var clodule = /** @class */ (function () {
-    function clodule() {
-    }
-    return clodule;
-}());
+class clodule {
+}
 (function (clodule) {
     var Point = { x: 0, y: 0 };
 })(clodule || (clodule = {}));

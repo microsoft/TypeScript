@@ -32,21 +32,19 @@ exports.x = 0;
 var y = 0;
 function f1() { }
 function f2() { }
-var C1 = /** @class */ (function () {
-    function C1() {
+class C1 {
+    constructor() {
         this.p1 = 0;
     }
-    C1.prototype.p2 = function () { };
-    return C1;
-}());
+    p2() { }
+}
 exports.C1 = C1;
-var C2 = /** @class */ (function () {
-    function C2() {
+class C2 {
+    constructor() {
         this.p1 = 0;
     }
-    C2.prototype.p2 = function () { };
-    return C2;
-}());
+    p2() { }
+}
 var E1;
 (function (E1) {
     E1[E1["A"] = 0] = "A";

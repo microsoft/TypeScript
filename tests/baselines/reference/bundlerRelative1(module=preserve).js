@@ -33,7 +33,7 @@ import * as cjs from "./types/cjs";
 
 
 //// [index.js]
-export var x = 0;
+export const x = 0;
 //// [index.js]
-export var y = 0;
+export const y = 0;
 //// [main.js]

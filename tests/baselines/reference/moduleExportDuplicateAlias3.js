@@ -27,8 +27,8 @@ var OK = exports.apply.toUpperCase();
 exports.apply = 1;
 //// [test.js]
 "use strict";
-var apply = require('./moduleExportAliasDuplicateAlias').apply;
-var result = apply.toFixed();
+const { apply } = require('./moduleExportAliasDuplicateAlias');
+const result = apply.toFixed();
 
 
 //// [moduleExportAliasDuplicateAlias.d.ts]

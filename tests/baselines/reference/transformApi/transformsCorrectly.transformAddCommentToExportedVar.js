@@ -4,5 +4,5 @@ exports.exportedSeparately = exports.exportedDirectly = void 0;
 /*comment*/
 exports.exportedDirectly = 1;
 /*comment*/
-var exportedSeparately = 2;
+const exportedSeparately = 2;
 exports.exportedSeparately = exportedSeparately;

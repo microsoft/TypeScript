@@ -46,11 +46,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            default_1 = /** @class */ (function () {
-                function default_1() {
-                }
-                return default_1;
-            }());
+            default_1 = class {
+            };
             exports_1("default", default_1);
         }
     };
@@ -63,11 +60,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
+            C = class C {
+            };
             exports_1("default", C);
         }
     };

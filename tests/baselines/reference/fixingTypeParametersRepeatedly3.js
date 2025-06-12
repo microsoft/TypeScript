@@ -21,5 +21,5 @@ var result2 = bar(derived, d => d.toBase());
 
 //// [fixingTypeParametersRepeatedly3.js]
 var derived;
-var result = foo(derived, function (d) { return d.toBase(); });
-var result2 = bar(derived, function (d) { return d.toBase(); });
+var result = foo(derived, d => d.toBase());
+var result2 = bar(derived, d => d.toBase());

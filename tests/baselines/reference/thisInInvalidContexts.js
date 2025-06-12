@@ -46,45 +46,22 @@ enum SomeEnum {
 
 
 //// [thisInInvalidContexts.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var BaseErrClass = /** @class */ (function () {
-    function BaseErrClass(t) {
-    }
-    return BaseErrClass;
-}());
-var ClassWithNoInitializer = /** @class */ (function (_super) {
-    __extends(ClassWithNoInitializer, _super);
+class BaseErrClass {
+    constructor(t) { }
+}
+class ClassWithNoInitializer extends BaseErrClass {
     //'this' in optional super call
-    function ClassWithNoInitializer() {
-        var _this = _super.call(this, _this) || this; // Error
-        return _this;
+    constructor() {
+        super(this); // Error
     }
-    return ClassWithNoInitializer;
-}(BaseErrClass));
-var ClassWithInitializer = /** @class */ (function (_super) {
-    __extends(ClassWithInitializer, _super);
+}
+class ClassWithInitializer extends BaseErrClass {
     //'this' in required super call
-    function ClassWithInitializer() {
-        var _this = _super.call(this, _this) || this; // Error
-        _this.t = 4;
-        return _this;
+    constructor() {
+        super(this); // Error
+        this.t = 4;
     }
-    return ClassWithInitializer;
-}(BaseErrClass));
+}
 var M;
 (function (M) {
     //'this' in module variable
@@ -95,13 +72,8 @@ var M;
 //'this' as a type argument
 function genericFunc(x) { }
 genericFunc(undefined); // Should be an error
-var ErrClass3 = /** @class */ (function (_super) {
-    __extends(ErrClass3, _super);
-    function ErrClass3() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ErrClass3;
-}(this));
+class ErrClass3 extends this {
+}
 //'this' as a computed enum value
 var SomeEnum;
 (function (SomeEnum) {

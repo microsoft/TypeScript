@@ -9,9 +9,8 @@ class C {
 
 
 //// [optionalParamterAndVariableDeclaration.js]
-var C = /** @class */ (function () {
-    function C(options) {
+class C {
+    constructor(options) {
         var options = (options || 0);
     }
-    return C;
-}());
+}

@@ -88,42 +88,16 @@ arr_any = c3; // should be an error - is
 arr_any = i1; // should be an error - is
 
 //// [arrayAssignmentTest1.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    C1.prototype.IM1 = function () { return null; };
-    C1.prototype.C1M1 = function () { return null; };
-    return C1;
-}());
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    C2.prototype.C2M1 = function () { return null; };
-    return C2;
-}(C1));
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    C3.prototype.CM3M1 = function () { return 3; };
-    return C3;
-}());
+class C1 {
+    IM1() { return null; }
+    C1M1() { return null; }
+}
+class C2 extends C1 {
+    C2M1() { return null; }
+}
+class C3 {
+    CM3M1() { return 3; }
+}
 /*
 
 This behaves unexpectedly with the following types:

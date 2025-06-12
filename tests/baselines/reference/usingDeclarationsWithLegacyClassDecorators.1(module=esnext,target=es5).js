@@ -14,17 +14,17 @@ class C {
 
 //// [usingDeclarationsWithLegacyClassDecorators.1.js]
 var before, C;
-var env_1 = { stack: [], error: void 0, hasError: false };
+const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     before = __addDisposableResource(env_1, null, false);
-    C = /** @class */ (function () {
-        function C() {
-        }
+    C = (() => {
+        let C = class C {
+        };
         C = __decorate([
             dec
         ], C);
         return C;
-    }());
+    })();
 }
 catch (e_1) {
     env_1.error = e_1;

@@ -221,200 +221,149 @@ cProperties_i.nc_p2 = cProperties_i.nc_p1;
 
 //// [commentsClassMembers.js]
 /** This is comment for c1*/
-var c1 = /** @class */ (function () {
-    /** Constructor method*/
-    function c1() {
+class c1 {
+    /** sum with property*/
+    p2(/** number to add*/ b) {
+        return this.p1 + b;
+    } /* trailing comment of method*/
+    /** getter property*/
+    get p3() {
+        return this.p2(this.p1);
+    } // trailing comment Getter
+    /** setter property*/
+    set p3(/** this is value*/ value) {
+        this.p1 = this.p2(value);
+    } // trailing comment Setter
+    /** sum with property*/
+    pp2(/** number to add*/ b) {
+        return this.p1 + b;
+    } // trailing comment of method
+    /** getter property*/
+    get pp3() {
+        return this.pp2(this.pp1);
     }
-    /** sum with property*/
-    c1.prototype.p2 = function (/** number to add*/ b) {
-        return this.p1 + b;
-    }; /* trailing comment of method*/
-    Object.defineProperty(c1.prototype, "p3", {
-        /** getter property*/
-        get: function () {
-            return this.p2(this.p1);
-        } // trailing comment Getter
-        ,
-        /** setter property*/
-        set: function (/** this is value*/ value) {
-            this.p1 = this.p2(value);
-        } // trailing comment Setter
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    /** sum with property*/
-    c1.prototype.pp2 = function (/** number to add*/ b) {
-        return this.p1 + b;
-    }; // trailing comment of method
-    Object.defineProperty(c1.prototype, "pp3", {
-        /** getter property*/
-        get: function () {
-            return this.pp2(this.pp1);
-        },
-        /** setter property*/
-        set: function (/** this is value*/ value) {
-            this.pp1 = this.pp2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
+    /** setter property*/
+    set pp3(/** this is value*/ value) {
+        this.pp1 = this.pp2(value);
+    }
+    /** Constructor method*/
+    constructor() {
+    }
     /** static sum with property*/
-    c1.s2 = function (/** number to add*/ b) {
+    static s2(/** number to add*/ b) {
         return c1.s1 + b;
-    };
-    Object.defineProperty(c1, "s3", {
-        /** static getter property*/
-        get: function () {
-            return c1.s2(c1.s1);
-        } /*trailing comment 1 getter*/,
-        /** setter property*/
-        set: function (/** this is value*/ value) {
-            c1.s1 = c1.s2(value);
-        } /*trailing comment 2 */ /*setter*/,
-        enumerable: false,
-        configurable: true
-    });
-    c1.prototype.nc_p2 = function (b) {
+    }
+    /** static getter property*/
+    static get s3() {
+        return c1.s2(c1.s1);
+    } /*trailing comment 1 getter*/
+    /** setter property*/
+    static set s3(/** this is value*/ value) {
+        c1.s1 = c1.s2(value);
+    } /*trailing comment 2 */ /*setter*/
+    nc_p2(b) {
         return this.nc_p1 + b;
-    };
-    Object.defineProperty(c1.prototype, "nc_p3", {
-        get: function () {
-            return this.nc_p2(this.nc_p1);
-        },
-        set: function (value) {
-            this.nc_p1 = this.nc_p2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    c1.prototype.nc_pp2 = function (b) {
+    }
+    get nc_p3() {
+        return this.nc_p2(this.nc_p1);
+    }
+    set nc_p3(value) {
+        this.nc_p1 = this.nc_p2(value);
+    }
+    nc_pp2(b) {
         return this.nc_pp1 + b;
-    };
-    Object.defineProperty(c1.prototype, "nc_pp3", {
-        get: function () {
-            return this.nc_pp2(this.nc_pp1);
-        },
-        set: function (value) {
-            this.nc_pp1 = this.nc_pp2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    c1.nc_s2 = function (b) {
+    }
+    get nc_pp3() {
+        return this.nc_pp2(this.nc_pp1);
+    }
+    set nc_pp3(value) {
+        this.nc_pp1 = this.nc_pp2(value);
+    }
+    static nc_s2(b) {
         return c1.nc_s1 + b;
-    };
-    Object.defineProperty(c1, "nc_s3", {
-        get: function () {
-            return c1.nc_s2(c1.nc_s1);
-        },
-        set: function (value) {
-            c1.nc_s1 = c1.nc_s2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    static get nc_s3() {
+        return c1.nc_s2(c1.nc_s1);
+    }
+    static set nc_s3(value) {
+        c1.nc_s1 = c1.nc_s2(value);
+    }
     // sum with property
-    c1.prototype.a_p2 = function (b) {
+    a_p2(b) {
         return this.a_p1 + b;
-    };
-    Object.defineProperty(c1.prototype, "a_p3", {
-        // getter property
-        get: function () {
-            return this.a_p2(this.a_p1);
-        },
-        // setter property
-        set: function (value) {
-            this.a_p1 = this.a_p2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // getter property
+    get a_p3() {
+        return this.a_p2(this.a_p1);
+    }
+    // setter property
+    set a_p3(value) {
+        this.a_p1 = this.a_p2(value);
+    }
     // sum with property
-    c1.prototype.a_pp2 = function (b) {
+    a_pp2(b) {
         return this.a_p1 + b;
-    };
-    Object.defineProperty(c1.prototype, "a_pp3", {
-        // getter property
-        get: function () {
-            return this.a_pp2(this.a_pp1);
-        },
-        // setter property
-        set: function (value) {
-            this.a_pp1 = this.a_pp2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // getter property
+    get a_pp3() {
+        return this.a_pp2(this.a_pp1);
+    }
+    // setter property
+    set a_pp3(value) {
+        this.a_pp1 = this.a_pp2(value);
+    }
     // static sum with property
-    c1.a_s2 = function (b) {
+    static a_s2(b) {
         return c1.a_s1 + b;
-    };
-    Object.defineProperty(c1, "a_s3", {
-        // static getter property
-        get: function () {
-            return c1.s2(c1.s1);
-        },
-        // setter property
-        set: function (value) {
-            c1.a_s1 = c1.a_s2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    // static getter property
+    static get a_s3() {
+        return c1.s2(c1.s1);
+    }
+    // setter property
+    static set a_s3(value) {
+        c1.a_s1 = c1.a_s2(value);
+    }
     /** sum with property */
-    c1.prototype.b_p2 = function (b) {
+    b_p2(b) {
         return this.b_p1 + b;
-    };
-    Object.defineProperty(c1.prototype, "b_p3", {
-        /** getter property */
-        get: function () {
-            return this.b_p2(this.b_p1);
-        },
-        /** setter property */
-        set: function (value) {
-            this.b_p1 = this.b_p2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    /** getter property */
+    get b_p3() {
+        return this.b_p2(this.b_p1);
+    }
+    /** setter property */
+    set b_p3(value) {
+        this.b_p1 = this.b_p2(value);
+    }
     /** sum with property */
-    c1.prototype.b_pp2 = function (b) {
+    b_pp2(b) {
         return this.b_p1 + b;
-    };
-    Object.defineProperty(c1.prototype, "b_pp3", {
-        /** getter property */
-        get: function () {
-            return this.b_pp2(this.b_pp1);
-        },
-        /** setter property */
-        set: function (value) {
-            this.b_pp1 = this.b_pp2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
+    }
+    /** getter property */
+    get b_pp3() {
+        return this.b_pp2(this.b_pp1);
+    }
+    /** setter property */
+    set b_pp3(value) {
+        this.b_pp1 = this.b_pp2(value);
+    }
     /** static sum with property */
-    c1.b_s2 = function (b) {
+    static b_s2(b) {
         return c1.b_s1 + b;
-    };
-    Object.defineProperty(c1, "b_s3", {
-        /** static getter property
-        */
-        get: function () {
-            return c1.s2(c1.s1);
-        },
-        /** setter property
-        */
-        set: function (value) {
-            /** setter */
-            c1.b_s1 = c1.b_s2(value);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return c1;
-}());
+    }
+    /** static getter property
+    */
+    static get b_s3() {
+        return c1.s2(c1.s1);
+    }
+    /** setter property
+    */
+    static set b_s3(value) {
+        /** setter */
+        c1.b_s1 = c1.b_s2(value);
+    }
+}
 var i1 = new c1();
 var i1_p = i1.p1;
 var i1_f = i1.p2;
@@ -437,44 +386,26 @@ var i1_s_ncr = c1.nc_s2(20);
 var i1_s_ncprop = c1.nc_s3;
 c1.nc_s3 = i1_s_ncprop;
 var i1_c = c1;
-var cProperties = /** @class */ (function () {
-    function cProperties() {
+class cProperties {
+    constructor() {
         this.x = 10; /*trailing comment for property*/
         this.y = 10; // trailing comment of // style
     }
-    Object.defineProperty(cProperties.prototype, "p1", {
-        /** getter only property*/
-        get: function () {
-            return this.val;
-        } // trailing comment of only getter
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(cProperties.prototype, "nc_p1", {
-        get: function () {
-            return this.val;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(cProperties.prototype, "p2", {
-        /**setter only property*/
-        set: function (value) {
-            this.val = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(cProperties.prototype, "nc_p2", {
-        set: function (value) {
-            this.val = value;
-        } /* trailing comment of setter only*/,
-        enumerable: false,
-        configurable: true
-    });
-    return cProperties;
-}());
+    /** getter only property*/
+    get p1() {
+        return this.val;
+    } // trailing comment of only getter
+    get nc_p1() {
+        return this.val;
+    }
+    /**setter only property*/
+    set p2(value) {
+        this.val = value;
+    }
+    set nc_p2(value) {
+        this.val = value;
+    } /* trailing comment of setter only*/
+}
 var cProperties_i = new cProperties();
 cProperties_i.p2 = cProperties_i.p1;
 cProperties_i.nc_p2 = cProperties_i.nc_p1;

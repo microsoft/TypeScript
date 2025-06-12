@@ -92,16 +92,10 @@ module ObjectTypes {
 // no errors expected
 var SimpleTypes;
 (function (SimpleTypes) {
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
+    class S {
+    }
+    class T {
+    }
     var s;
     var t;
     var s2;
@@ -132,16 +126,10 @@ var SimpleTypes;
 })(SimpleTypes || (SimpleTypes = {}));
 var ObjectTypes;
 (function (ObjectTypes) {
-    var S = /** @class */ (function () {
-        function S() {
-        }
-        return S;
-    }());
-    var T = /** @class */ (function () {
-        function T() {
-        }
-        return T;
-    }());
+    class S {
+    }
+    class T {
+    }
     var s;
     var t;
     var s2;

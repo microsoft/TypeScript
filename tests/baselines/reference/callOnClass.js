@@ -7,9 +7,6 @@ var c = C();
 
 
 //// [callOnClass.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c = C();

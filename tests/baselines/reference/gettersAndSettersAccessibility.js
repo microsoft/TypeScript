@@ -8,15 +8,7 @@ class C99 {
 
 
 //// [gettersAndSettersAccessibility.js]
-var C99 = /** @class */ (function () {
-    function C99() {
-    }
-    Object.defineProperty(C99.prototype, "Baz", {
-        get: function () { return 0; },
-        set: function (n) { } // error - accessors do not agree in visibility
-        ,
-        enumerable: false,
-        configurable: true
-    });
-    return C99;
-}());
+class C99 {
+    get Baz() { return 0; }
+    set Baz(n) { } // error - accessors do not agree in visibility
+}

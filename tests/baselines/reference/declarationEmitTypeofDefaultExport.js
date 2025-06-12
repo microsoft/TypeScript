@@ -11,11 +11,8 @@ export default a.default;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.default = C;
 ;
 //// [b.js]

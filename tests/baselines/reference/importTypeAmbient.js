@@ -44,14 +44,12 @@ let shim: typeof import("foo2") = {
 
 
 //// [importTypeAmbient.js]
-var x = { x: 0, y: 0 };
-var y = { a: "", b: 0 };
-var Bar2 = /** @class */ (function () {
-    function Bar2(input) {
-    }
-    return Bar2;
-}());
-var shim = {
+const x = { x: 0, y: 0 };
+let y = { a: "", b: 0 };
+class Bar2 {
+    constructor(input) { }
+}
+let shim = {
     Bar: Bar2
 };
 

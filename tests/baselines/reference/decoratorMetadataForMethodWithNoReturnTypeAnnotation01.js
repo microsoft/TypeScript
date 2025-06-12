@@ -16,11 +16,13 @@ class MyClass {
 
 
 //// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.js]
-var MyClass = /** @class */ (function () {
-    function MyClass(test, test2) {
+let MyClass = (() => {
+    class MyClass {
+        constructor(test, test2) {
+        }
+        doSomething() {
+        }
     }
-    MyClass.prototype.doSomething = function () {
-    };
     __decorate([
         decorator,
         __metadata("design:type", Function),
@@ -28,4 +30,4 @@ var MyClass = /** @class */ (function () {
         __metadata("design:returntype", void 0)
     ], MyClass.prototype, "doSomething", null);
     return MyClass;
-}());
+})();

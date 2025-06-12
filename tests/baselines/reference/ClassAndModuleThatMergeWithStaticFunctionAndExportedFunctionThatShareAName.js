@@ -25,28 +25,26 @@ module A {
 }
 
 //// [ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.js]
-var Point = /** @class */ (function () {
-    function Point(x, y) {
+class Point {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    Point.Origin = function () { return { x: 0, y: 0 }; }; // unexpected error here bug 840246
-    return Point;
-}());
+    static Origin() { return { x: 0, y: 0 }; } // unexpected error here bug 840246
+}
 (function (Point) {
     function Origin() { return null; } //expected duplicate identifier error
     Point.Origin = Origin;
 })(Point || (Point = {}));
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        Point.Origin = function () { return { x: 0, y: 0 }; }; // unexpected error here bug 840246
-        return Point;
-    }());
+        static Origin() { return { x: 0, y: 0 }; } // unexpected error here bug 840246
+    }
     A.Point = Point;
     (function (Point) {
         function Origin() { return ""; } //expected duplicate identifier error

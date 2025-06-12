@@ -6,4 +6,4 @@ var a = () => arguments;
 
 //// [emitArrowFunctionWhenUsingArguments03.js]
 var arguments;
-var a = function () { return arguments; };
+var a = () => arguments;

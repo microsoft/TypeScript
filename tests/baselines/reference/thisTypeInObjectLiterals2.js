@@ -248,14 +248,14 @@ vue.hello;
 "use strict";
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.
-var obj1 = {
+let obj1 = {
     a: 1,
-    f: function () {
+    f() {
         return this.a;
     },
     b: "hello",
     c: {
-        g: function () {
+        g() {
             this.g();
         }
     },
@@ -269,10 +269,10 @@ var obj1 = {
         this.b = value;
     }
 };
-var p1 = {
+let p1 = {
     x: 10,
     y: 20,
-    moveBy: function (dx, dy, dz) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
         if (this.z && dz) {
@@ -280,10 +280,10 @@ var p1 = {
         }
     }
 };
-var p2 = {
+let p2 = {
     x: 10,
     y: 20,
-    moveBy: function (dx, dy, dz) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
         if (this.z && dz) {
@@ -291,10 +291,10 @@ var p2 = {
         }
     }
 };
-var p3 = {
+let p3 = {
     x: 10,
     y: 20,
-    moveBy: function (dx, dy, dz) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
         if (this.z && dz) {
@@ -302,10 +302,10 @@ var p3 = {
         }
     }
 };
-var p4 = {
+let p4 = {
     x: 10,
     y: 20,
-    moveBy: function (dx, dy, dz) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
         if (this.z && dz) {
@@ -316,7 +316,7 @@ var p4 = {
 f1({
     x: 10,
     y: 20,
-    moveBy: function (dx, dy, dz) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
         if (this.z && dz) {
@@ -327,7 +327,7 @@ f1({
 f2({
     x: 10,
     y: 20,
-    moveBy: function (dx, dy, dz) {
+    moveBy(dx, dy, dz) {
         this.x += dx;
         this.y += dy;
         if (this.z && dz) {
@@ -335,66 +335,66 @@ f2({
         }
     }
 });
-var x1 = makeObject({
+let x1 = makeObject({
     data: { x: 0, y: 0 },
     methods: {
-        moveBy: function (dx, dy) {
+        moveBy(dx, dy) {
             this.x += dx; // Strongly typed this
             this.y += dy; // Strongly typed this
         }
     }
 });
-var x2 = makeObject2({
+let x2 = makeObject2({
     data: { x: 0, y: 0 },
     methods: {
-        moveBy: function (dx, dy) {
+        moveBy(dx, dy) {
             this.x += dx; // Strongly typed this
             this.y += dy; // Strongly typed this
         }
     }
 });
-var p10 = defineProp(p1, "foo", { value: 42 });
+let p10 = defineProp(p1, "foo", { value: 42 });
 p10.foo = p10.foo + 1;
-var p11 = defineProp(p1, "bar", {
-    get: function () {
+let p11 = defineProp(p1, "bar", {
+    get() {
         return this.x;
     },
-    set: function (value) {
+    set(value) {
         this.x = value;
     }
 });
 p11.bar = p11.bar + 1;
-var p12 = defineProps(p1, {
+let p12 = defineProps(p1, {
     foo: {
         value: 42
     },
     bar: {
-        get: function () {
+        get() {
             return this.x;
         },
-        set: function (value) {
+        set(value) {
             this.x = value;
         }
     }
 });
 p12.foo = p12.foo + 1;
 p12.bar = p12.bar + 1;
-var vue = new Vue({
-    data: function () { return ({ x: 1, y: 2 }); },
+let vue = new Vue({
+    data: () => ({ x: 1, y: 2 }),
     methods: {
-        f: function (x) {
+        f(x) {
             return this.x;
         }
     },
     computed: {
-        test: function () {
+        test() {
             return this.x;
         },
         hello: {
-            get: function () {
+            get() {
                 return "hi";
             },
-            set: function (value) {
+            set(value) {
             }
         }
     }

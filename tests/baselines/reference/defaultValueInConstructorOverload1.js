@@ -8,9 +8,7 @@ class C {
 }
 
 //// [defaultValueInConstructorOverload1.js]
-var C = /** @class */ (function () {
-    function C(x) {
-        if (x === void 0) { x = ''; }
+class C {
+    constructor(x = '') {
     }
-    return C;
-}());
+}

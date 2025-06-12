@@ -9,8 +9,8 @@ const enum ConstColor { Red, Green, Blue }
 
 
 //// [enumUsedBeforeDeclaration.js]
-var v = Color.Green;
-var v2 = 1 /* ConstColor.Green */;
+const v = Color.Green;
+const v2 = 1 /* ConstColor.Green */;
 var Color;
 (function (Color) {
     Color[Color["Red"] = 0] = "Red";

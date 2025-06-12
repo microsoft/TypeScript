@@ -139,74 +139,70 @@ exports.xx++;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
-exports.x = 10;
+exports.\u{78} = 10;
 exports.x++;
 //# sourceMappingURL=identifierVariableWithExtendedEscape1.js.map
 //// [identifierVariableWithExtendedEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.xx = void 0;
-exports.xx = 10;
+exports.x\u{78} = 10;
 exports.xx++;
 //# sourceMappingURL=identifierVariableWithExtendedEscape2.js.map
 //// [IdentifierNameWithEscape1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithEscape1 = void 0;
-var IdentifierNameWithEscape1 = /** @class */ (function () {
-    function IdentifierNameWithEscape1() {
+class IdentifierNameWithEscape1 {
+    constructor() {
         this.\u0078 = 0;
     }
-    IdentifierNameWithEscape1.prototype.doThing = function () {
+    doThing() {
         this.x = 42;
-    };
-    return IdentifierNameWithEscape1;
-}());
+    }
+}
 exports.IdentifierNameWithEscape1 = IdentifierNameWithEscape1;
 //# sourceMappingURL=IdentifierNameWithEscape1.js.map
 //// [IdentifierNameWithEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithEscape2 = void 0;
-var IdentifierNameWithEscape2 = /** @class */ (function () {
-    function IdentifierNameWithEscape2() {
+class IdentifierNameWithEscape2 {
+    constructor() {
         this.x\u0078 = 0;
     }
-    IdentifierNameWithEscape2.prototype.doThing = function () {
+    doThing() {
         this.xx = 42;
-    };
-    return IdentifierNameWithEscape2;
-}());
+    }
+}
 exports.IdentifierNameWithEscape2 = IdentifierNameWithEscape2;
 //# sourceMappingURL=IdentifierNameWithEscape2.js.map
 //// [IdentifierNameWithExtendedEscape1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithExtendedEscape1 = void 0;
-var IdentifierNameWithExtendedEscape1 = /** @class */ (function () {
-    function IdentifierNameWithExtendedEscape1() {
-        this.x = 0;
+class IdentifierNameWithExtendedEscape1 {
+    constructor() {
+        this.\u{78} = 0;
     }
-    IdentifierNameWithExtendedEscape1.prototype.doThing = function () {
+    doThing() {
         this.x = 42;
-    };
-    return IdentifierNameWithExtendedEscape1;
-}());
+    }
+}
 exports.IdentifierNameWithExtendedEscape1 = IdentifierNameWithExtendedEscape1;
 //# sourceMappingURL=IdentifierNameWithExtendedEscape1.js.map
 //// [IdentifierNameWithExtendedEscape2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IdentifierNameWithExtendedEscape2 = void 0;
-var IdentifierNameWithExtendedEscape2 = /** @class */ (function () {
-    function IdentifierNameWithExtendedEscape2() {
-        this.xx = 0;
+class IdentifierNameWithExtendedEscape2 {
+    constructor() {
+        this.x\u{78} = 0;
     }
-    IdentifierNameWithExtendedEscape2.prototype.doThing = function () {
+    doThing() {
         this.xx = 42;
-    };
-    return IdentifierNameWithExtendedEscape2;
-}());
+    }
+}
 exports.IdentifierNameWithExtendedEscape2 = IdentifierNameWithExtendedEscape2;
 //# sourceMappingURL=IdentifierNameWithExtendedEscape2.js.map
 //// [PrivateIdentifierNameWithEscape1.js]
@@ -220,16 +216,15 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 var _PrivateIdentifierWithEscape1_x;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrivateIdentifierWithEscape1 = void 0;
-var PrivateIdentifierWithEscape1 = /** @class */ (function () {
-    function PrivateIdentifierWithEscape1() {
+class PrivateIdentifierWithEscape1 {
+    constructor() {
         _PrivateIdentifierWithEscape1_x.set(this, void 0);
         __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 0, "f");
     }
-    PrivateIdentifierWithEscape1.prototype.doThing = function () {
+    doThing() {
         __classPrivateFieldSet(this, _PrivateIdentifierWithEscape1_x, 42, "f");
-    };
-    return PrivateIdentifierWithEscape1;
-}());
+    }
+}
 exports.PrivateIdentifierWithEscape1 = PrivateIdentifierWithEscape1;
 _PrivateIdentifierWithEscape1_x = new WeakMap();
 //# sourceMappingURL=PrivateIdentifierNameWithEscape1.js.map
@@ -244,16 +239,15 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 var _PrivateIdentifierWithEscape2_xx;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrivateIdentifierWithEscape2 = void 0;
-var PrivateIdentifierWithEscape2 = /** @class */ (function () {
-    function PrivateIdentifierWithEscape2() {
+class PrivateIdentifierWithEscape2 {
+    constructor() {
         _PrivateIdentifierWithEscape2_xx.set(this, void 0);
         __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 0, "f");
     }
-    PrivateIdentifierWithEscape2.prototype.doThing = function () {
+    doThing() {
         __classPrivateFieldSet(this, _PrivateIdentifierWithEscape2_xx, 42, "f");
-    };
-    return PrivateIdentifierWithEscape2;
-}());
+    }
+}
 exports.PrivateIdentifierWithEscape2 = PrivateIdentifierWithEscape2;
 _PrivateIdentifierWithEscape2_xx = new WeakMap();
 //# sourceMappingURL=PrivateIdentifierNameWithEscape2.js.map
@@ -268,16 +262,15 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 var _PrivateIdentifierWithExtendedEscape1_x;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrivateIdentifierWithExtendedEscape1 = void 0;
-var PrivateIdentifierWithExtendedEscape1 = /** @class */ (function () {
-    function PrivateIdentifierWithExtendedEscape1() {
+class PrivateIdentifierWithExtendedEscape1 {
+    constructor() {
         _PrivateIdentifierWithExtendedEscape1_x.set(this, void 0);
         __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 0, "f");
     }
-    PrivateIdentifierWithExtendedEscape1.prototype.doThing = function () {
+    doThing() {
         __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape1_x, 42, "f");
-    };
-    return PrivateIdentifierWithExtendedEscape1;
-}());
+    }
+}
 exports.PrivateIdentifierWithExtendedEscape1 = PrivateIdentifierWithExtendedEscape1;
 _PrivateIdentifierWithExtendedEscape1_x = new WeakMap();
 //# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape1.js.map
@@ -292,16 +285,15 @@ var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (
 var _PrivateIdentifierWithExtendedEscape2_xx;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrivateIdentifierWithExtendedEscape2 = void 0;
-var PrivateIdentifierWithExtendedEscape2 = /** @class */ (function () {
-    function PrivateIdentifierWithExtendedEscape2() {
+class PrivateIdentifierWithExtendedEscape2 {
+    constructor() {
         _PrivateIdentifierWithExtendedEscape2_xx.set(this, void 0);
         __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 0, "f");
     }
-    PrivateIdentifierWithExtendedEscape2.prototype.doThing = function () {
+    doThing() {
         __classPrivateFieldSet(this, _PrivateIdentifierWithExtendedEscape2_xx, 42, "f");
-    };
-    return PrivateIdentifierWithExtendedEscape2;
-}());
+    }
+}
 exports.PrivateIdentifierWithExtendedEscape2 = PrivateIdentifierWithExtendedEscape2;
 _PrivateIdentifierWithExtendedEscape2_xx = new WeakMap();
 //# sourceMappingURL=PrivateIdentifierNameWithExtendedEscape2.js.map

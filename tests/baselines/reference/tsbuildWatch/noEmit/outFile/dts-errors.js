@@ -202,7 +202,7 @@ Output::
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
-var a = "hello";
+const a = "hello";
 
 
 //// [/home/src/projects/outFile.d.ts]
@@ -412,12 +412,11 @@ Output::
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
-var a = /** @class */ (function () {
-    function class_1() {
+const a = class {
+    constructor() {
         this.p = 10;
     }
-    return class_1;
-}());
+};
 
 
 //// [/home/src/projects/outFile.d.ts] file changed its modified time

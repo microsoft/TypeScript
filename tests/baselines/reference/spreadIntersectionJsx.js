@@ -20,16 +20,10 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var React = null;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var intersected;
-var element = React.createElement("div", __assign({}, intersected));
+const React = null;
+class A {
+}
+class C {
+}
+let intersected;
+let element = React.createElement("div", __assign({}, intersected));

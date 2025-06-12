@@ -15,11 +15,8 @@ function bar() {
 }
 
 //// [a.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 //// [b.js]
 /// <reference path="c.js"/>
 // no error on above reference path since not emitting declarations

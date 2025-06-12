@@ -30,11 +30,8 @@ x = 1;
 x = true;
 x = '';
 x = {};
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 x = C;
 x = c;

@@ -52,13 +52,13 @@ function fn(arg) {
     arg(10);
 }
 // Legal invocations are not problematic
-fn(function (m) { return m.toFixed(); });
-fn(function (m) { return m.toFixed(); });
+fn(m => m.toFixed());
+fn(m => m.toFixed());
 function fn2(arg) {
     function useT(_arg) { }
     // Expected: OK
-    arg(function (arg) { return useT(arg); });
+    arg(arg => useT(arg));
 }
 // Legal invocations are not problematic
-fn2(function (m) { return m(42); });
-fn2(function (m) { return m(42); });
+fn2(m => m(42));
+fn2(m => m(42));

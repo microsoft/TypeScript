@@ -11,15 +11,14 @@ module.exports = class Thing {
 }
 
 //// [index.js]
-module.exports = /** @class */ (function () {
+module.exports = class Thing {
     /**
      * @param {number} p
      */
-    function Thing(p) {
+    constructor(p) {
         this.t = 12 + p;
     }
-    return Thing;
-}());
+};
 
 
 //// [index.d.ts]

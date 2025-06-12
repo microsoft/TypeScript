@@ -21,21 +21,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var BaseEntity = /** @class */ (function () {
-    function BaseEntity() {
+let BaseEntity = (() => {
+    class BaseEntity {
     }
     __decorate([
         d(),
         __metadata("design:type", Object)
     ], BaseEntity.prototype, "attributes", void 0);
     return BaseEntity;
-}());
-var C = /** @class */ (function () {
-    function C() {
+})();
+let C = (() => {
+    class C {
     }
     __decorate([
         d(),
         __metadata("design:type", Boolean)
     ], C.prototype, "x", void 0);
     return C;
-}());
+})();

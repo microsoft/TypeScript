@@ -126,211 +126,135 @@ async function tryCatchFinally3() {
 
 //// [es5-asyncFunctionTryStatements.js]
 function tryCatch0() {
-    return __awaiter(this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function* () {
         var x, y;
-        return __generator(this, function (_a) {
-            try {
-                x;
-            }
-            catch (e) {
-                y;
-            }
-            return [2 /*return*/];
-        });
+        try {
+            x;
+        }
+        catch (e) {
+            y;
+        }
     });
 }
 function tryCatch1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var x, y, e_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, x];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 3];
-                case 2:
-                    e_1 = _a.sent();
-                    y;
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            yield x;
+        }
+        catch (e) {
+            y;
+        }
     });
 }
 function tryCatch2() {
-    return __awaiter(this, void 0, void 0, function () {
-        var x, y, e_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 1, , 3]);
-                    x;
-                    return [3 /*break*/, 3];
-                case 1:
-                    e_2 = _a.sent();
-                    return [4 /*yield*/, y];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            x;
+        }
+        catch (e) {
+            yield y;
+        }
     });
 }
 function tryCatch3() {
-    return __awaiter(this, void 0, void 0, function () {
-        var x, y, e_3;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, x];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 3];
-                case 2:
-                    e_3 = _a.sent();
-                    return [2 /*return*/, function () { return e_3; }];
-                case 3: return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            yield x;
+        }
+        catch (e) {
+            return () => e;
+        }
     });
 }
 function tryFinally0() {
-    return __awaiter(this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function* () {
         var x, y;
-        return __generator(this, function (_a) {
-            try {
-                x;
-            }
-            finally {
-                y;
-            }
-            return [2 /*return*/];
-        });
+        try {
+            x;
+        }
+        finally {
+            y;
+        }
     });
 }
 function tryFinally1() {
-    return __awaiter(this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function* () {
         var x, y;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, , 2, 3]);
-                    return [4 /*yield*/, x];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 3];
-                case 2:
-                    y;
-                    return [7 /*endfinally*/];
-                case 3: return [2 /*return*/];
-            }
-        });
+        try {
+            yield x;
+        }
+        finally {
+            y;
+        }
     });
 }
 function tryFinally2() {
-    return __awaiter(this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function* () {
         var x, y;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, , 1, 3]);
-                    x;
-                    return [3 /*break*/, 3];
-                case 1: return [4 /*yield*/, y];
-                case 2:
-                    _a.sent();
-                    return [7 /*endfinally*/];
-                case 3: return [2 /*return*/];
-            }
-        });
+        try {
+            x;
+        }
+        finally {
+            yield y;
+        }
     });
 }
 function tryCatchFinally0() {
-    return __awaiter(this, void 0, void 0, function () {
+    return __awaiter(this, void 0, void 0, function* () {
         var x, y, z;
-        return __generator(this, function (_a) {
-            try {
-                x;
-            }
-            catch (e) {
-                y;
-            }
-            finally {
-                z;
-            }
-            return [2 /*return*/];
-        });
+        try {
+            x;
+        }
+        catch (e) {
+            y;
+        }
+        finally {
+            z;
+        }
     });
 }
 function tryCatchFinally1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var x, y, z, e_4;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, 3, 4]);
-                    return [4 /*yield*/, x];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 2:
-                    e_4 = _a.sent();
-                    y;
-                    return [3 /*break*/, 4];
-                case 3:
-                    z;
-                    return [7 /*endfinally*/];
-                case 4: return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y, z;
+        try {
+            yield x;
+        }
+        catch (e) {
+            y;
+        }
+        finally {
+            z;
+        }
     });
 }
 function tryCatchFinally2() {
-    return __awaiter(this, void 0, void 0, function () {
-        var x, y, z, e_5;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 1, 3, 4]);
-                    x;
-                    return [3 /*break*/, 4];
-                case 1:
-                    e_5 = _a.sent();
-                    return [4 /*yield*/, y];
-                case 2:
-                    _a.sent();
-                    return [3 /*break*/, 4];
-                case 3:
-                    z;
-                    return [7 /*endfinally*/];
-                case 4: return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y, z;
+        try {
+            x;
+        }
+        catch (e) {
+            yield y;
+        }
+        finally {
+            z;
+        }
     });
 }
 function tryCatchFinally3() {
-    return __awaiter(this, void 0, void 0, function () {
-        var x, y, z, e_6;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 1, 2, 4]);
-                    x;
-                    return [3 /*break*/, 4];
-                case 1:
-                    e_6 = _a.sent();
-                    y;
-                    return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, z];
-                case 3:
-                    _a.sent();
-                    return [7 /*endfinally*/];
-                case 4: return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y, z;
+        try {
+            x;
+        }
+        catch (e) {
+            y;
+        }
+        finally {
+            yield z;
+        }
     });
 }

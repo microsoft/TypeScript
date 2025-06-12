@@ -10,10 +10,7 @@ class Bar {
 
 
 //// [genericArrayWithoutTypeAnnotation.js]
-var Bar = /** @class */ (function () {
-    function Bar() {
+class Bar {
+    getBar(foo) {
     }
-    Bar.prototype.getBar = function (foo) {
-    };
-    return Bar;
-}());
+}

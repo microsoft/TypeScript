@@ -43,12 +43,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 element.style = "color: red";
 element.style.animationTimingFunction;
 element.style = element.style; // error
-var o1 = {
+const o1 = {
     get x() { return 0; },
     set x(value) { }
 };
 // A setter annotation still implies the getter return type.
-var o2 = {
+const o2 = {
     get p1() { return 0; }, // error - no annotation means type is implied from the setter annotation
     set p1(value) { },
     get p2() { return 0; }, // ok - explicit annotation

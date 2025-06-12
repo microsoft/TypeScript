@@ -17,7 +17,7 @@ const a = {
 
 //// [circularObjectLiteralAccessors.js]
 // Repro from #6000
-var a = {
+const a = {
     b: {
         get foo() {
             return a.foo;

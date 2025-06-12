@@ -21,11 +21,8 @@ y = x;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass = void 0;
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    return MyClass;
-}());
+class MyClass {
+}
 exports.MyClass = MyClass;
 //// [/src/bin/library-b/index.js]
 "use strict";
@@ -36,7 +33,7 @@ Object.defineProperty(exports, "MyClass2", { enumerable: true, get: function () 
 //// [/src/bin/app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var x;
-var y;
+let x;
+let y;
 x = y;
 y = x;

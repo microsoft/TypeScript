@@ -9,4 +9,4 @@ f({ data: 0 }, { data(value, key) {} });
 
 //// [contextualPropertyOfGenericMappedType.js]
 // Repro for #24694
-f({ data: 0 }, { data: function (value, key) { } });
+f({ data: 0 }, { data(value, key) { } });

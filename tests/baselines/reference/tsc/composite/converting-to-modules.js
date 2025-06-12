@@ -32,7 +32,7 @@ Output::
 
 
 //// [/home/src/workspaces/project/src/main.js]
-var x = 10;
+const x = 10;
 
 
 //// [/home/src/workspaces/project/src/main.d.ts]

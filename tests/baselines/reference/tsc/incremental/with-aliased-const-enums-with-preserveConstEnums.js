@@ -50,13 +50,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var b_1 = require("./b");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return b_1.A; } });
-var b = 1 /* A.ONE */;
+let b = 1 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = 1 /* A.ONE */;
+let a = 1 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
@@ -147,13 +147,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var b_1 = require("./b");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return b_1.A; } });
-var b = 2 /* A.ONE */;
+let b = 2 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = 2 /* A.ONE */;
+let a = 2 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]
@@ -252,13 +252,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var b_1 = require("./b");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return b_1.A; } });
-var b = 3 /* A.ONE */;
+let b = 3 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = 3 /* A.ONE */;
+let a = 3 /* A.ONE */;
 
 
 //// [/home/src/workspaces/project/a.tsbuildinfo]

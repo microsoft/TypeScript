@@ -17,21 +17,19 @@ module.exports.Sub = class {
 
 
 //// [index.js]
-module.exports = /** @class */ (function () {
+module.exports = class {
     /**
      * @param {number} p
      */
-    function exports(p) {
+    constructor(p) {
         this.t = 12 + p;
     }
-    return exports;
-}());
-module.exports.Sub = /** @class */ (function () {
-    function Sub() {
+};
+module.exports.Sub = class {
+    constructor() {
         this.instance = new module.exports(10);
     }
-    return Sub;
-}());
+};
 
 
 //// [index.d.ts]

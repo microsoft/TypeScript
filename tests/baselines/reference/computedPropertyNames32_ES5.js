@@ -11,12 +11,9 @@ class C<T> {
 
 //// [computedPropertyNames32_ES5.js]
 function foo() { return ''; }
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.bar = function () {
+class C {
+    bar() {
         return 0;
-    };
-    C.prototype[foo()] = function () { };
-    return C;
-}());
+    }
+    [foo()]() { }
+}

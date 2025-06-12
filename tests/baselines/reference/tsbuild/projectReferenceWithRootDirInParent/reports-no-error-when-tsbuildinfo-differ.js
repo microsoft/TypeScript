@@ -149,7 +149,7 @@ export declare const b = 0;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
-var a = b_1.b;
+const a = b_1.b;
 
 
 //// [/home/src/workspaces/solution/dist/a.d.ts]

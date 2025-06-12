@@ -11,15 +11,13 @@ class D<T> {
 }
 
 //// [thisInInstanceMemberInitializer.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = this;
     }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+}
+class D {
+    constructor() {
         this.x = this;
     }
-    return D;
-}());
+}

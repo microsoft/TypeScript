@@ -19,14 +19,9 @@ const content = <my-element/>;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createElement = createElement;
-function createElement(element, props) {
-    var children = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        children[_i - 2] = arguments[_i];
-    }
-}
+function createElement(element, props, ...children) { }
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var MyLib = require("./library");
-var content = MyLib.createElement("my-element", null);
+const content = MyLib.createElement("my-element", null);

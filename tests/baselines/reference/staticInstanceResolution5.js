@@ -21,14 +21,11 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Promise = void 0;
-    var Promise = /** @class */ (function () {
-        function Promise() {
-        }
-        Promise.timeout = function (delay) {
+    class Promise {
+        static timeout(delay) {
             return null;
-        };
-        return Promise;
-    }());
+        }
+    }
     exports.Promise = Promise;
 });
 //// [staticInstanceResolution5_1.js]
@@ -36,7 +33,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     // these 3 should be errors
-    var x = function (w1) { };
+    var x = (w1) => { };
     var y = function (w2) { };
     function z(w3) { }
 });

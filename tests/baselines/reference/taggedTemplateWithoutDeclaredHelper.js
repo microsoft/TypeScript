@@ -15,9 +15,7 @@ export { };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.result = void 0;
-var tslib_1 = require("tslib");
 function id(x) {
     return x;
 }
-exports.result = id(templateObject_1 || (templateObject_1 = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
-var templateObject_1;
+exports.result = id `hello world`;

@@ -17,7 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.unsafeCast = unsafeCast;
 function unsafeCast(_value) { }
 function yadda() {
-    var out = [];
+    let out = [];
     out.push(100);
     unsafeCast(out);
     return out;

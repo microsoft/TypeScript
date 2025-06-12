@@ -10,8 +10,8 @@ function f() {
 
 //// [emitArrowFunctionWhenUsingArguments18.js]
 function f() {
-    var args = { arguments: arguments }.arguments;
+    var { arguments: args } = { arguments };
     if (Math.random()) {
-        return function () { return arguments; };
+        return () => arguments;
     }
 }

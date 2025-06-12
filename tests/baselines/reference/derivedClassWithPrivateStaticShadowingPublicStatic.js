@@ -36,53 +36,22 @@ var r6 = Derived.a; // error
 Derived.a = 2; // error
 
 //// [derivedClassWithPrivateStaticShadowingPublicStatic.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Base = /** @class */ (function () {
-    function Base() {
-    }
-    Base.fn = function () {
+class Base {
+    static fn() {
         return '';
-    };
-    Object.defineProperty(Base, "a", {
-        get: function () { return 1; },
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    return Base;
-}());
+    }
+    static get a() { return 1; }
+    static set a(v) { }
+}
 // BUG 847404
 // should be error
-var Derived = /** @class */ (function (_super) {
-    __extends(Derived, _super);
-    function Derived() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Derived.fn = function () {
+class Derived extends Base {
+    static fn() {
         return '';
-    };
-    Object.defineProperty(Derived, "a", {
-        get: function () { return 1; },
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    return Derived;
-}(Base));
+    }
+    static get a() { return 1; }
+    static set a(v) { }
+}
 var r = Base.x; // ok
 var r2 = Derived.x; // error
 var r3 = Base.fn(); // ok

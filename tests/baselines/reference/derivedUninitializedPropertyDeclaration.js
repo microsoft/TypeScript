@@ -86,130 +86,55 @@ class M extends L {
 
 //// [derivedUninitializedPropertyDeclaration.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.property = 'x';
     }
-    A.prototype.m = function () { return 1; };
-    return A;
-}());
-var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    m() { return 1; }
+}
+class B extends A {
+}
+class BD extends A {
+}
+class BDBang extends A {
+}
+class BOther extends A {
+    m() { return 2; } // not allowed on methods
+}
+class U {
+}
+class C {
+}
+class D extends C {
+}
+class DD extends C {
+}
+class F extends E {
+}
+class G extends E {
+    constructor() {
+        super();
+        this.p1 = 'z';
     }
-    return B;
-}(A));
-var BD = /** @class */ (function (_super) {
-    __extends(BD, _super);
-    function BD() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return BD;
-}(A));
-var BDBang = /** @class */ (function (_super) {
-    __extends(BDBang, _super);
-    function BDBang() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return BDBang;
-}(A));
-var BOther = /** @class */ (function (_super) {
-    __extends(BOther, _super);
-    function BOther() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    BOther.prototype.m = function () { return 2; }; // not allowed on methods
-    return BOther;
-}(A));
-var U = /** @class */ (function () {
-    function U() {
-    }
-    return U;
-}());
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function (_super) {
-    __extends(D, _super);
-    function D() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return D;
-}(C));
-var DD = /** @class */ (function (_super) {
-    __extends(DD, _super);
-    function DD() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return DD;
-}(C));
-var F = /** @class */ (function (_super) {
-    __extends(F, _super);
-    function F() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return F;
-}(E));
-var G = /** @class */ (function (_super) {
-    __extends(G, _super);
-    function G() {
-        var _this = _super.call(this) || this;
-        _this.p1 = 'z';
-        return _this;
-    }
-    return G;
-}(E));
-var H = /** @class */ (function (_super) {
-    __extends(H, _super);
-    function H() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return H;
-}(E));
-var J = /** @class */ (function () {
-    function J() {
+}
+class H extends E {
+}
+class J {
+    constructor() {
         this.r = 5;
     }
-    return J;
-}());
-var K = /** @class */ (function (_super) {
-    __extends(K, _super);
-    function K() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return K;
-}(J));
+}
+class K extends J {
+}
 // #35327
-var L = /** @class */ (function () {
-    function L(arg) {
+class L {
+    constructor(arg) {
         this.a = arg;
     }
-    return L;
-}());
-var M = /** @class */ (function (_super) {
-    __extends(M, _super);
-    function M(arg) {
-        var _this = _super.call(this, arg) || this;
-        console.log(_this.a); // should be OK, M.a is ambient
-        return _this;
+}
+class M extends L {
+    constructor(arg) {
+        super(arg);
+        console.log(this.a); // should be OK, M.a is ambient
     }
-    return M;
-}(L));
+}

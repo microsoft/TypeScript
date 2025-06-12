@@ -11,7 +11,7 @@ function f() {
 //// [emitArrowFunctionWhenUsingArguments14.js]
 function f() {
     if (Math.random()) {
-        var arguments_1 = 100;
-        return function () { return arguments; };
+        const arguments = 100;
+        return () => arguments;
     }
 }

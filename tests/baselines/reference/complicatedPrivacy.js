@@ -109,7 +109,7 @@ module mglo5 {
 //// [complicatedPrivacy.js]
 var m1;
 (function (m1) {
-    var m2;
+    let m2;
     (function (m2) {
         function f1(c1) {
         }
@@ -117,23 +117,16 @@ var m1;
         function f2(c2) {
         }
         m2.f2 = f2;
-        var C2 = /** @class */ (function () {
-            function C2() {
+        class C2 {
+            get p1(arg) {
+                return new C1();
             }
-            Object.defineProperty(C2.prototype, "p1", {
-                get: function (arg) {
-                    return new C1();
-                },
-                set: function (arg1) {
-                },
-                enumerable: false,
-                configurable: true
-            });
-            C2.prototype.f55 = function () {
+            set p1(arg1) {
+            }
+            f55() {
                 return "Hello world";
-            };
-            return C2;
-        }());
+            }
+        }
         m2.C2 = C2;
     })(m2 = m1.m2 || (m1.m2 = {}));
     function f2(arg1) {
@@ -149,51 +142,36 @@ var m1;
     function f5(arg2) {
     }
     m1.f5 = f5;
-    var m3;
+    let m3;
     (function (m3) {
         function f2(f1) {
         }
     })(m3 || (m3 = {}));
-    var C1 = /** @class */ (function () {
-        function C1() {
-        }
-        return C1;
-    }());
-    var C5 = /** @class */ (function () {
-        function C5() {
-        }
-        return C5;
-    }());
+    class C1 {
+    }
+    class C5 {
+    }
     m1.C5 = C5;
 })(m1 || (m1 = {}));
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C2 {
+}
 var m2;
 (function (m2) {
-    var m3;
+    let m3;
     (function (m3) {
-        var c_pr = /** @class */ (function () {
-            function c_pr() {
-            }
-            c_pr.prototype.f1 = function () {
+        class c_pr {
+            f1() {
                 return "Hello";
-            };
-            return c_pr;
-        }());
+            }
+        }
         m3.c_pr = c_pr;
-        var m4;
+        let m4;
         (function (m4) {
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
-            var m5;
+            class C {
+            }
+            let m5;
             (function (m5) {
-                var m6;
+                let m6;
                 (function (m6) {
                     function f1() {
                         return new C();

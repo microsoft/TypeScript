@@ -10,7 +10,7 @@ const a = {
 
 
 //// [commentsOnObjectLiteral5.js]
-var a = {
+const a = {
     p0: 0, // Comment 0
     p1: 0, /* Comment 1
     A multiline comment. */

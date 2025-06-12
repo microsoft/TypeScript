@@ -39,27 +39,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = exports.p2 = void 0;
 Promise.resolve().then(function () { return require("./0"); });
 var p1 = Promise.resolve().then(function () { return require("./0"); });
-p1.then(function (zero) {
+p1.then(zero => {
     return zero.foo();
 });
 exports.p2 = Promise.resolve().then(function () { return require("./0"); });
 function foo() {
-    var p2 = Promise.resolve().then(function () { return require("./0"); });
+    const p2 = Promise.resolve().then(function () { return require("./0"); });
 }
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    method() {
+        const loadAsync = Promise.resolve().then(function () { return require("./0"); });
     }
-    C.prototype.method = function () {
-        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
-    };
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+}
+class D {
+    method() {
+        const loadAsync = Promise.resolve().then(function () { return require("./0"); });
     }
-    D.prototype.method = function () {
-        var loadAsync = Promise.resolve().then(function () { return require("./0"); });
-    };
-    return D;
-}());
+}
 exports.D = D;

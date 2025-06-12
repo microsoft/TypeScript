@@ -7,8 +7,5 @@ const a = (): { d: string } | undefined => undefined;
 
 //// [optionalChainingInParameterInitializer.js]
 // https://github.com/microsoft/TypeScript/issues/36295
-var a = function () { return undefined; };
-(function (b) {
-    var _a;
-    if (b === void 0) { b = (_a = a()) === null || _a === void 0 ? void 0 : _a.d; }
-})();
+const a = () => undefined;
+((b = (_a = a()) === null || _a === void 0 ? void 0 : _a.d) => { var _a; })();

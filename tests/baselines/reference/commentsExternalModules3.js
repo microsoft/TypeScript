@@ -72,14 +72,11 @@ var m1;
         return m1.b;
     }
     /** m2 comments*/
-    var m2;
+    let m2;
     (function (m2) {
         /** class comment;*/
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         m2.c = c;
         ;
         /** i*/
@@ -103,14 +100,11 @@ var m4;
     }
     /** m2 comments
     */
-    var m2;
+    let m2;
     (function (m2) {
         /** class comment; */
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         m2.c = c;
         ;
         /** i */

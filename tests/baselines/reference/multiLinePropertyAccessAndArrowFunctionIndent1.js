@@ -8,9 +8,6 @@ return this.edit(role)
 
 
 //// [multiLinePropertyAccessAndArrowFunctionIndent1.js]
-var _this = this;
 return this.edit(role)
-    .then(function (role) {
-    return _this.roleService.add(role)
-        .then(function (data) { return data.data; });
-});
+    .then((role) => this.roleService.add(role)
+    .then((data) => data.data));

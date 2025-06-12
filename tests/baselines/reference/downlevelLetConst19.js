@@ -26,14 +26,14 @@ use(x)
 var x;
 function a() {
     {
-        var x_1;
-        use(x_1);
+        let x;
+        use(x);
         function b() {
             {
-                var x_2;
-                use(x_2);
+                let x;
+                use(x);
             }
-            use(x_1);
+            use(x);
         }
     }
     use(x);

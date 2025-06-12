@@ -6,4 +6,4 @@ var c = {};
 
 //// [nonIterableRestElement1.js]
 var c = {};
-c = ["", 0].slice(0);
+[...c] = ["", 0];

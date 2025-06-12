@@ -32,7 +32,7 @@ Output::
 
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
-var x = 1;
+let x = 1;
 
 
 
@@ -105,7 +105,7 @@ Output::
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/workspace/solution/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 

@@ -40,7 +40,7 @@ class A {
 //// [nonNullableTypes1.js]
 "use strict";
 function f1(x) {
-    var y = x || "hello"; // NonNullable<T> | string
+    let y = x || "hello"; // NonNullable<T> | string
 }
 function error() {
     throw new Error();
@@ -49,7 +49,7 @@ function f2(x) {
     return x || error();
 }
 function f3(x) {
-    var y = x; // {}
+    let y = x; // {}
 }
 function f4(obj) {
     if ((obj === null || obj === void 0 ? void 0 : obj.x) === "hello") {
@@ -62,15 +62,14 @@ function f4(obj) {
         obj; // NonNullable<T>
     }
 }
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.x = "hello";
     }
-    A.prototype.foo = function () {
-        var zz = this === null || this === void 0 ? void 0 : this.x; // string
-    };
-    return A;
-}());
+    foo() {
+        let zz = this === null || this === void 0 ? void 0 : this.x; // string
+    }
+}
 
 
 //// [nonNullableTypes1.d.ts]

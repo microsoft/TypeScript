@@ -57,36 +57,24 @@ var aFunctionInModule: typeof M.F2 = F2;
 
 
 //// [everyTypeWithAnnotationAndInvalidInitializer.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class D {
+}
 function F(x) { return 42; }
 function F2(x) { return x < 42; }
 var M;
 (function (M) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
 })(M || (M = {}));
 var N;
 (function (N) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     N.A = A;
     function F2(x) { return x.toString(); }
     N.F2 = F2;
@@ -102,7 +90,7 @@ var anObjectLiteral = { id: 'a string' };
 var anOtherObjectLiteral = new C();
 var aFunction = F2;
 var anOtherFunction = F2;
-var aLambda = function (x) { return 'a string'; };
+var aLambda = (x) => 'a string';
 var aModule = N;
 var aClassInModule = new N.A();
 var aFunctionInModule = F2;

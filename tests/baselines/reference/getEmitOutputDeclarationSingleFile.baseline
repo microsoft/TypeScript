@@ -3,17 +3,11 @@ EmitSkipped: false
 
 FileName : declSingleFile.js
 var x = 5;
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+class Bar {
+}
 var x1 = "hello world";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 
 FileName : declSingleFile.d.ts
 declare var x: number;

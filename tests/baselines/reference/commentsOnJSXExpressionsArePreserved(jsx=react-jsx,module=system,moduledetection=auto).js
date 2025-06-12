@@ -34,14 +34,11 @@ System.register(["react/jsx-runtime"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            Component = /** @class */ (function () {
-                function Component() {
-                }
-                Component.prototype.render = function () {
+            Component = class Component {
+                render() {
                     return _jsx("div", { children: null /* preserved */ });
-                };
-                return Component;
-            }());
+                }
+            };
         }
     };
 });

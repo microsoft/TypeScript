@@ -11,6 +11,6 @@ function asReversedTuple(a: number, b: string, c: boolean): [boolean, string, nu
 
 //// [argumentsObjectIterator03_ES5.js]
 function asReversedTuple(a, b, c) {
-    var x = arguments[0], y = arguments[1], z = arguments[2];
+    let [x, y, z] = arguments;
     return [z, y, x];
 }

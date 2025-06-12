@@ -15,12 +15,9 @@ module B {
 //// [unusedImports10.js]
 var A;
 (function (A) {
-    var Calculator = /** @class */ (function () {
-        function Calculator() {
+    class Calculator {
+        handelChar() {
         }
-        Calculator.prototype.handelChar = function () {
-        };
-        return Calculator;
-    }());
+    }
     A.Calculator = Calculator;
 })(A || (A = {}));

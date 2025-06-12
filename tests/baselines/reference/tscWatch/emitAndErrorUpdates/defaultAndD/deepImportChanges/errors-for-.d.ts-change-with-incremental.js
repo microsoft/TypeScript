@@ -51,7 +51,7 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
-var b = new b_1.B();
+let b = new b_1.B();
 console.log(b.c.d);
 
 

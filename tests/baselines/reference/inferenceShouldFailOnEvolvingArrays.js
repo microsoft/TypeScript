@@ -29,13 +29,13 @@ function logLength(arg) {
     return arg;
 }
 logLength(42); // error
-var z;
+let z;
 z = logLength(42); // no error; T is inferred as `any`
 function logFirstLength(arg) {
     console.log(arg[0].length);
     return arg;
 }
 logFirstLength([42]); // error
-var zz = [];
+let zz = [];
 zz.push(logLength(42)); // no error; T is inferred as `any`
 zz = logFirstLength([42]); // no error; T is inferred as `any[]`

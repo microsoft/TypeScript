@@ -13,7 +13,7 @@ function f() {
 function f() {
     var arguments = "hello";
     if (Math.random()) {
-        var arguments_1 = 100;
-        return function () { return arguments; };
+        const arguments = 100;
+        return () => arguments;
     }
 }

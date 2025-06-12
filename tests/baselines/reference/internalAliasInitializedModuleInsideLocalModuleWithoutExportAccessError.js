@@ -21,13 +21,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = exports.c = exports.a = void 0;
 var a;
 (function (a) {
-    var b;
+    let b;
     (function (b) {
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a || (exports.a = a = {}));

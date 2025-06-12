@@ -10,13 +10,15 @@ class A {
 }
 
 //// [noEmitHelpers2.js]
-var A = /** @class */ (function () {
-    function A(a, b) {
-    }
+let A = (() => {
+    let A = class A {
+        constructor(a, b) {
+        }
+    };
     A = __decorate([
         decorator,
         __param(1, decorator),
         __metadata("design:paramtypes", [Number, String])
     ], A);
     return A;
-}());
+})();

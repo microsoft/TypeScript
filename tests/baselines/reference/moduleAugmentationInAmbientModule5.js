@@ -27,8 +27,8 @@ let y = x.getA().x;
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="array.d.ts"/>
 require("array");
-var x = [1];
-var y = x.getA().x;
+let x = [1];
+let y = x.getA().x;
 
 
 //// [f.d.ts]

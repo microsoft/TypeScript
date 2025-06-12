@@ -33,16 +33,13 @@ foo3(["roomba", ["vacuum", "mopping"]]);
 
 //// [sourceMapValidationDestructuringParametertArrayBindingPatternDefaultValues2.js]
 var robotA = ["trimmer", ["trimming", "edging"]];
-function foo1(_a) {
-    var _b = _a === void 0 ? ["name", ["skill1", "skill2"]] : _a, _c = _b[1], skillA = _c === void 0 ? ["noSkill", "noSkill"] : _c;
+function foo1([, skillA = ["noSkill", "noSkill"]] = ["name", ["skill1", "skill2"]]) {
     console.log(skillA);
 }
-function foo2(_a) {
-    var _b = _a === void 0 ? ["name", ["skill1", "skill2"]] : _a, _c = _b[0], nameMB = _c === void 0 ? "noName" : _c;
+function foo2([nameMB = "noName"] = ["name", ["skill1", "skill2"]]) {
     console.log(nameMB);
 }
-function foo3(_a) {
-    var _b = _a[0], nameMA = _b === void 0 ? "noName" : _b, _c = _a[1], _d = _c === void 0 ? ["noSkill", "noSkill"] : _c, _e = _d[0], primarySkillA = _e === void 0 ? "primary" : _e, _f = _d[1], secondarySkillA = _f === void 0 ? "secondary" : _f;
+function foo3([nameMA = "noName", [primarySkillA = "primary", secondarySkillA = "secondary"] = ["noSkill", "noSkill"]]) {
     console.log(nameMA);
 }
 foo1(robotA);

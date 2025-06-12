@@ -244,63 +244,40 @@ function f22() {
 function f23() {
     // Error; because `undefined | number` becomes `number` without strictNullChecks.
 }
-var f30 = function () {
+const f30 = () => {
     // Ok, contextual type for implicit return is `undefined`
 };
-var f31 = function () {
+const f31 = () => {
     // Ok, contextual type for expression-less return is `undefined`
     return;
 };
-var f32 = function () {
+const f32 = () => {
     // Error, contextual type for implicit return isn't just `undefined`
 };
-var f33 = function () {
+const f33 = () => {
     // Error, contextual type for expression-less return isn't just `undefined`
     return;
 };
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    get m1() {
+        // Errors; get accessors must return a value.
     }
-    Object.defineProperty(C.prototype, "m1", {
-        get: function () {
-            // Errors; get accessors must return a value.
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "m2", {
-        get: function () {
-            // Permissible; returns undefined.
-            return;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "m3", {
-        get: function () {
-            return "Okay, because this is a return expression.";
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "m4", {
-        get: function () {
-            // Fine since this consists of a single throw statement.
-            throw null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "m5", {
-        get: function () {
-            // Not fine, since we can *only* consist of a single throw statement
-            // if no return statements are present but we are a get accessor.
-            throw null;
-            throw undefined.
-            ;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+    get m2() {
+        // Permissible; returns undefined.
+        return;
+    }
+    get m3() {
+        return "Okay, because this is a return expression.";
+    }
+    get m4() {
+        // Fine since this consists of a single throw statement.
+        throw null;
+    }
+    get m5() {
+        // Not fine, since we can *only* consist of a single throw statement
+        // if no return statements are present but we are a get accessor.
+        throw null;
+        throw undefined.
+        ;
+    }
+}

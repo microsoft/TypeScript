@@ -12,14 +12,11 @@ class arrTest {
 
 
 //// [trailingCommaInHeterogenousArrayLiteral1.js]
-var arrTest = /** @class */ (function () {
-    function arrTest() {
-    }
-    arrTest.prototype.test = function (arg1) { };
-    arrTest.prototype.callTest = function () {
+class arrTest {
+    test(arg1) { }
+    callTest() {
         // these two should give the same error
         this.test([1, 2, "hi", 5,]);
         this.test([1, 2, "hi", 5]);
-    };
-    return arrTest;
-}());
+    }
+}

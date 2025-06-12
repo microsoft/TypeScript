@@ -30,7 +30,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 var b0 = require("./b");
 var b1 = require("./b");
-var x;
+let x;
 if (a_1.default)
     x = a_1.default;
 if (a_1.a1)

@@ -33,16 +33,10 @@ var x8: B<I2, I1>;
 
 
 //// [typeParamExtendsOtherTypeParam.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class A {
+}
+class B {
+}
 // Below 2 should compile without error 
 var x;
 var y;

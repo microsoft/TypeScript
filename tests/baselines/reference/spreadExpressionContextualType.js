@@ -39,7 +39,7 @@ function test(item) {
     return __assign({}, item);
 }
 function test2(item) {
-    var x = __assign({}, item);
+    const x = __assign({}, item);
     return x;
 }
 

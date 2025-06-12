@@ -28,22 +28,11 @@ bug3(function(x:string):string { return x; });
 //// [overloadResolutionOverNonCTLambdas.js]
 var Bugs;
 (function (Bugs) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     // replace(searchValue: RegExp, replaceValue: (substring: string, ...args: any[]) => string): string;
-    function bug2(message) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-        }
-        var result = message.replace(/\{(\d+)\}/g, function (match) {
-            var rest = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                rest[_i - 1] = arguments[_i];
-            }
+    function bug2(message, ...args) {
+        var result = message.replace(/\{(\d+)\}/g, function (match, ...rest) {
             var index = rest[0];
             return typeof args[index] !== 'undefined'
                 ? args[index]

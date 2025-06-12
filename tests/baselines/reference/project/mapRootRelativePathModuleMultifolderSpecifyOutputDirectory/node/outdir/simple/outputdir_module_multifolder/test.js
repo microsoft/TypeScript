@@ -5,11 +5,8 @@ exports.f1 = f1;
 var m1 = require("ref/m1");
 var m2 = require("../outputdir_module_multifolder_ref/m2");
 exports.a1 = 10;
-var c1 = /** @class */ (function () {
-    function c1() {
-    }
-    return c1;
-}());
+class c1 {
+}
 exports.c1 = c1;
 exports.instance1 = new c1();
 function f1() {

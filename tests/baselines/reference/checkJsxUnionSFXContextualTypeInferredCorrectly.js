@@ -55,11 +55,11 @@ function ComponentWithUnion(props) {
 }
 // Usage with React tsx
 function HereIsTheError() {
-    return (react_1.default.createElement(ComponentWithUnion, { multi: false, value: 's', onChange: function (val) { return console.log(val); } }));
+    return (react_1.default.createElement(ComponentWithUnion, { multi: false, value: 's', onChange: val => console.log(val) }));
 }
 // Usage with pure TypeScript
 ComponentWithUnion({
     multi: false,
     value: 's',
-    onChange: function (val) { return console.log(val); } // <- this works fine
+    onChange: val => console.log(val) // <- this works fine
 });

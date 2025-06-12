@@ -52,24 +52,15 @@ var x;
 
 
 //// [everyTypeWithInitializer.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class C {
+}
+class D {
+}
 function F(x) { return 42; }
 var M;
 (function (M) {
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     M.A = A;
     function F2(x) { return x.toString(); }
     M.F2 = F2;
@@ -85,7 +76,7 @@ var aClass = new C();
 var aGenericClass = new D();
 var anObjectLiteral = { id: 12 };
 var aFunction = F;
-var aLambda = function (x) { return 2; };
+var aLambda = (x) => 2;
 var aModule = M;
 var aClassInModule = new M.A();
 var aFunctionInModule = M.F2;

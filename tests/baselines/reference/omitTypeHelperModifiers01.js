@@ -26,11 +26,11 @@ function f(x: B) {
 //// [omitTypeHelperModifiers01.js]
 "use strict";
 function f(x) {
-    var b = x.b;
+    const b = x.b;
     x.b = "hello";
     x.b = undefined;
-    var c = x.c;
+    const c = x.c;
     x.c = true;
-    var d = x.d;
+    const d = x.d;
     x.d = d;
 }

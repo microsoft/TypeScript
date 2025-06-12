@@ -54,11 +54,8 @@ Output::
 
 
 //// [/home/src/workspaces/projects/project2/class2.js]
-var class2 = /** @class */ (function () {
-    function class2() {
-    }
-    return class2;
-}());
+class class2 {
+}
 
 
 //// [/home/src/workspaces/projects/project2/class2.d.ts]

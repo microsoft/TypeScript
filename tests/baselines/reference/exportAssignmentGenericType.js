@@ -14,11 +14,8 @@ var y:number = x.test;
 
 //// [foo_0.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";

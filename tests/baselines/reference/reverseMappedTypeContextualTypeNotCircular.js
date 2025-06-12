@@ -14,7 +14,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 //// [reverseMappedTypeContextualTypeNotCircular.js]
-var editable = function () { return ({}); };
-var mapStateToProps = createStructuredSelector({
-    editable: function (state, props) { return editable(); }, // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
+const editable = () => ({});
+const mapStateToProps = createStructuredSelector({
+    editable: (state, props) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
 });

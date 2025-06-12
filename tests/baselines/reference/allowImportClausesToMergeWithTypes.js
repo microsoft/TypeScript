@@ -39,14 +39,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
 var b_1 = require("./b");
 exports.default = b_1.default;
-var x = { x: "" };
+const x = { x: "" };
 b_1.default;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-var x = { x: "" };
+const x = { x: "" };
 a_1.default;
 var b_1 = require("./b");
 b_1.default;
-var y = x;
+const y = x;

@@ -12,17 +12,10 @@ class X {
 
 //// [readonlyInNonPropertyParameters.js]
 // `readonly` won't work outside of property parameters
-var X = /** @class */ (function () {
-    function X() {
-    }
-    X.prototype.method = function (x) { };
-    Object.defineProperty(X.prototype, "x", {
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    return X;
-}());
-(function (x) { return 0; });
+class X {
+    method(x) { }
+    set x(value) { }
+}
+(x) => 0;
 // OK to use `readonly` as a name
-(function (readonly) { return 0; });
+(readonly) => 0;

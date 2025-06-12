@@ -293,80 +293,65 @@ function isEmptyString(x: unknown) {
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var numsOrNull = [1, 2, 3, 4, null];
-var filteredNumsTruthy = numsOrNull.filter(function (x) { return !!x; }); // should error
-var filteredNumsNonNullish = numsOrNull.filter(function (x) { return x !== null; }); // should ok
-var evenSquaresInline = // should error
+const numsOrNull = [1, 2, 3, 4, null];
+const filteredNumsTruthy = numsOrNull.filter(x => !!x); // should error
+const filteredNumsNonNullish = numsOrNull.filter(x => x !== null); // should ok
+const evenSquaresInline = // should error
  [1, 2, 3, 4]
-    .map(function (x) { return x % 2 === 0 ? x * x : null; })
-    .filter(function (x) { return !!x; }); // tests truthiness, not non-nullishness
-var isTruthy = function (x) { return !!x; };
-var evenSquares = // should error
+    .map(x => x % 2 === 0 ? x * x : null)
+    .filter(x => !!x); // tests truthiness, not non-nullishness
+const isTruthy = (x) => !!x;
+const evenSquares = // should error
  [1, 2, 3, 4]
-    .map(function (x) { return x % 2 === 0 ? x * x : null; })
+    .map(x => x % 2 === 0 ? x * x : null)
     .filter(isTruthy);
-var evenSquaresNonNull = // should ok
+const evenSquaresNonNull = // should ok
  [1, 2, 3, 4]
-    .map(function (x) { return x % 2 === 0 ? x * x : null; })
-    .filter(function (x) { return x !== null; });
+    .map(x => x % 2 === 0 ? x * x : null)
+    .filter(x => x !== null);
 function isNonNull(x) {
     return x !== null;
 }
 // factoring out a boolean works thanks to aliased discriminants
 function isNonNullVar(x) {
-    var ok = x !== null;
+    const ok = x !== null;
     return ok;
 }
 function isNonNullGeneric(x) {
     return x !== null;
 }
 // Type guards can flow between functions
-var myGuard = function (o) { return !!o; };
-var mySecondGuard = function (o) { return myGuard(o); };
-var myArray = [];
-var result = myArray
-    .map(function (arr) { return arr.list; })
-    .filter(function (arr) { return arr && arr.length; })
-    .map(function (arr) { return arr // should error
-    .filter(function (obj) { return obj && obj.data; })
-    .map(function (obj) { return JSON.parse(obj.data); }); } // should error
+const myGuard = (o) => !!o;
+const mySecondGuard = (o) => myGuard(o);
+const myArray = [];
+const result = myArray
+    .map((arr) => arr.list)
+    .filter((arr) => arr && arr.length)
+    .map((arr) => arr // should error
+    .filter((obj) => obj && obj.data)
+    .map(obj => JSON.parse(obj.data)) // should error
 );
-var result2 = myArray
-    .map(function (arr) { return arr.list; })
-    .filter(function (arr) { return !!arr; })
-    .filter(function (arr) { return arr.length; })
-    .map(function (arr) { return arr // should ok
-    .filter(function (obj) { return obj; })
+const result2 = myArray
+    .map((arr) => arr.list)
+    .filter((arr) => !!arr)
+    .filter(arr => arr.length)
+    .map((arr) => arr // should ok
+    .filter((obj) => obj)
     // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384
-    .filter(function (obj) { return !!obj.data; })
-    .map(function (obj) { return JSON.parse(obj.data); }); });
-var list = [];
-var resultBars = list.filter(function (value) { return 'bar' in value; }); // should ok
+    .filter(obj => !!obj.data)
+    .map(obj => JSON.parse(obj.data)));
+const list = [];
+const resultBars = list.filter((value) => 'bar' in value); // should ok
 function isBarNonNull(x) {
     return ('bar' in x);
 }
-var fooOrBar = list[0];
+const fooOrBar = list[0];
 if (isBarNonNull(fooOrBar)) {
-    var t = fooOrBar; // should ok
+    const t = fooOrBar; // should ok
 }
 // https://github.com/microsoft/TypeScript/issues/38390#issuecomment-626019466
 // Ryan's example (currently legal):
-var a = [1, "foo", 2, "bar"].filter(function (x) { return typeof x === "string"; });
+const a = [1, "foo", 2, "bar"].filter(x => typeof x === "string");
 a.push(10);
 // Defer to explicit type guards, even when they're incorrect.
 function backwardsGuard(x) {
@@ -377,19 +362,19 @@ function isString(x) {
     return typeof x === 'string';
 }
 if (isString(strOrNum)) {
-    var t = strOrNum; // should ok
+    let t = strOrNum; // should ok
 }
 else {
-    var t = strOrNum; // should ok
+    let t = strOrNum; // should ok
 }
 function flakyIsString(x) {
     return typeof x === 'string' && Math.random() > 0.5;
 }
 if (flakyIsString(strOrNum)) {
-    var t = strOrNum; // should error
+    let t = strOrNum; // should error
 }
 else {
-    var t = strOrNum; // should error
+    let t = strOrNum; // should error
 }
 function isDate(x) {
     return x instanceof Date;
@@ -398,16 +383,16 @@ function flakyIsDate(x) {
     return x instanceof Date && Math.random() > 0.5;
 }
 if (isDate(maybeDate)) {
-    var t = maybeDate; // should ok
+    let t = maybeDate; // should ok
 }
 else {
-    var t = maybeDate; // should ok
+    let t = maybeDate; // should ok
 }
 if (flakyIsDate(maybeDate)) {
-    var t = maybeDate; // should error
+    let t = maybeDate; // should error
 }
 else {
-    var t = maybeDate; // should ok
+    let t = maybeDate; // should ok
 }
 // This should not infer a type guard since the value on which we do the refinement
 // is not related to the original parameter.
@@ -416,7 +401,7 @@ function irrelevantIsNumber(x) {
     return typeof x === 'string';
 }
 function irrelevantIsNumberDestructuring(x) {
-    x = [Math.random() < 0.5 ? "string" : 123][0];
+    [x] = [Math.random() < 0.5 ? "string" : 123];
     return typeof x === 'string';
 }
 // Cannot infer a type guard for either param because of the false case.
@@ -438,47 +423,37 @@ function dunderguard(__x) {
     return typeof __x === 'string';
 }
 // could infer a type guard here but it doesn't seem that helpful.
-var booleanIdentity = function (x) { return x; };
+const booleanIdentity = (x) => x;
 // we infer "x is number | true" which is accurate but of debatable utility.
-var numOrBoolean = function (x) { return typeof x === 'number' || x; };
-var Inferrer = /** @class */ (function () {
-    function Inferrer() {
-    }
-    Inferrer.prototype.isNumber = function (x) {
+const numOrBoolean = (x) => typeof x === 'number' || x;
+class Inferrer {
+    isNumber(x) {
         return typeof x === 'number';
-    };
-    return Inferrer;
-}());
-var inf = new Inferrer();
+    }
+}
+const inf = new Inferrer();
 if (inf.isNumber(numOrStr)) {
-    var t = numOrStr; // should ok
+    let t = numOrStr; // should ok
 }
 else {
-    var t = numOrStr; // should ok
+    let t = numOrStr; // should ok
 }
 // Type predicates are not inferred on "this"
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    C1.prototype.isC2 = function () {
+class C1 {
+    isC2() {
         return this instanceof C2;
-    };
-    return C1;
-}());
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.z = 0;
-        return _this;
     }
-    return C2;
-}(C1));
-if (c.isC2()) {
-    var c2 = c; // should error
 }
-function doNotRefineDestructuredParam(_a) {
-    var x = _a.x, y = _a.y;
+class C2 extends C1 {
+    constructor() {
+        super(...arguments);
+        this.z = 0;
+    }
+}
+if (c.isC2()) {
+    let c2 = c; // should error
+}
+function doNotRefineDestructuredParam({ x, y }) {
     return typeof x === 'number';
 }
 // The type predicate must remain valid when the function is called with subtypes.
@@ -498,14 +473,14 @@ if (isStringFromUnknown(str)) {
     str.charAt(0); // should OK
 }
 else {
-    var t = str; // should OK
+    let t = str; // should OK
 }
 // infer a union type
 function isNumOrStr(x) {
     return (typeof x === "number" || typeof x === "string");
 }
 if (isNumOrStr(unk)) {
-    var t = unk; // should ok
+    let t = unk; // should ok
 }
 // A function can be a type predicate even if it throws.
 function assertAndPredicate(x) {
@@ -515,7 +490,7 @@ function assertAndPredicate(x) {
     return typeof x === 'string';
 }
 if (assertAndPredicate(snd)) {
-    var t = snd; // should error
+    let t = snd; // should error
 }
 function isNumberWithThis(x) {
     return typeof x === 'number';
@@ -523,35 +498,19 @@ function isNumberWithThis(x) {
 function narrowFromAny(x) {
     return typeof x === 'number';
 }
-var noInferenceFromRest = function () {
-    var f = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        f[_i] = arguments[_i];
-    }
-    return f[0] === "a";
-};
-var noInferenceFromImpossibleRest = function () {
-    var f = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        f[_i] = arguments[_i];
-    }
-    return typeof f === "undefined";
-};
-function inferWithRest(x) {
-    var f = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        f[_i - 1] = arguments[_i];
-    }
+const noInferenceFromRest = (...f) => f[0] === "a";
+const noInferenceFromImpossibleRest = (...f) => typeof f === "undefined";
+function inferWithRest(x, ...f) {
     return typeof x === 'string';
 }
-var foobarPred = function (fb) { return fb.type === "foo"; };
+const foobarPred = (fb) => fb.type === "foo";
 if (foobarPred(foobar)) {
     foobar.foo;
 }
 // https://github.com/microsoft/TypeScript/issues/60778
-var arrTest = [1, 2, null, 3].filter(function (x) { return (x != null); });
+const arrTest = [1, 2, null, 3].filter((x) => (x != null));
 function isEmptyString(x) {
-    var rv = x === "";
+    const rv = x === "";
     return rv;
 }
 

@@ -32,19 +32,13 @@ new AsyncLoader({
 
 //// [overloadedConstructorFixesInferencesAppropriately.js]
 "use strict";
-var AsyncLoader = /** @class */ (function () {
-    function AsyncLoader() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    }
-    return AsyncLoader;
-}());
+class AsyncLoader {
+    constructor(...args) { }
+}
 function load() {
     return null;
 }
 new AsyncLoader({
     asyncLoad: load,
-    children: function (result) { return result.success; },
+    children: result => result.success,
 }); // should work fine

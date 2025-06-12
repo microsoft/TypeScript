@@ -17,9 +17,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var array = [{ a: 0, b: 1 }];
-for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
-    var _a = array_1[_i];
-    var a = _a.a, rest = __rest(_a, ["a"]);
+let array = [{ a: 0, b: 1 }];
+for (let _a of array) {
+    let { a } = _a, rest = __rest(_a, ["a"]);
     void a;
 }

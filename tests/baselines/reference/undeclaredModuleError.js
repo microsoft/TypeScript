@@ -22,17 +22,12 @@ define(["require", "exports", "fs"], function (require, exports, fs) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function readdir(path, accept, callback) { }
-    function join() {
-        var paths = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            paths[_i] = arguments[_i];
-        }
-    }
+    function join(...paths) { }
     function instrumentFile(covFileDir, covFileName, originalFilePath) {
-        fs.readFile(originalFilePath, function () {
-            readdir(covFileDir, function () {
-            }, function (error, files) {
-                files.forEach(function (file) {
+        fs.readFile(originalFilePath, () => {
+            readdir(covFileDir, () => {
+            }, (error, files) => {
+                files.forEach((file) => {
                     var fullPath = join(IDoNotExist);
                 });
             });

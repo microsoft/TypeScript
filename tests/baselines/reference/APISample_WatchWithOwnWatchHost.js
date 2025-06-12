@@ -73,15 +73,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("typescript");
 function watchMain() {
     // get list of files and compiler options somehow
-    var files = [];
-    var options = {};
-    var host = {
+    const files = [];
+    const options = {};
+    const host = {
         rootFiles: files,
-        options: options,
-        useCaseSensitiveFileNames: function () { return ts.sys.useCaseSensitiveFileNames; },
-        getNewLine: function () { return ts.sys.newLine; },
+        options,
+        useCaseSensitiveFileNames: () => ts.sys.useCaseSensitiveFileNames,
+        getNewLine: () => ts.sys.newLine,
         getCurrentDirectory: ts.sys.getCurrentDirectory,
-        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); },
+        getDefaultLibFileName: options => ts.getDefaultLibFilePath(options),
         fileExists: ts.sys.fileExists,
         readFile: ts.sys.readFile,
         directoryExists: ts.sys.directoryExists,
@@ -94,13 +94,13 @@ function watchMain() {
     };
     // You can technically override any given hook on the host, though you probably don't need to.
     // Note that we're assuming `origCreateProgram` and `origPostProgramCreate` doesn't use `this` at all.
-    var origCreateProgram = host.createProgram;
-    host.createProgram = function (rootNames, options, host, oldProgram) {
+    const origCreateProgram = host.createProgram;
+    host.createProgram = (rootNames, options, host, oldProgram) => {
         console.log("** We're about to create the program! **");
         return origCreateProgram(rootNames, options, host, oldProgram);
     };
-    var origPostProgramCreate = host.afterProgramCreate;
-    host.afterProgramCreate = function (program) {
+    const origPostProgramCreate = host.afterProgramCreate;
+    host.afterProgramCreate = program => {
         console.log("** We finished making the program! **");
         origPostProgramCreate(program);
     };

@@ -6,11 +6,8 @@ class Foo {}
 module.exports = new Foo();
 
 //// [index.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 module.exports = new Foo();
 
 

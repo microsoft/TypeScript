@@ -18,30 +18,12 @@ export class C  extends base{
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.base = void 0;
 exports.foo = foo;
-var base = /** @class */ (function () {
-    function base() {
-    }
-    return base;
-}());
+class base {
+}
 exports.base = base;
 function foo(target, propertyKey, parameterIndex) { }
 //// [2.js]
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -55,14 +37,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var _0_ts_1 = require("./0.ts");
 var _0_ts_2 = require("./0.ts");
-var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C(prop) {
-        return _super.call(this) || this;
-    }
+let C = (() => {
+    let C = class C extends _0_ts_1.base {
+        constructor(prop) {
+            super();
+        }
+    };
     C = __decorate([
         __param(0, _0_ts_2.foo)
     ], C);
     return C;
-}(_0_ts_1.base));
+})();
 exports.C = C;

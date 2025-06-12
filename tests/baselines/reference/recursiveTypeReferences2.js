@@ -51,7 +51,7 @@ const p = {};
   )
 }} XMLObject<T> */
 /** @type {XMLObject<{foo:string}>} */
-var p = {};
+const p = {};
 
 
 //// [bug39372.d.ts]

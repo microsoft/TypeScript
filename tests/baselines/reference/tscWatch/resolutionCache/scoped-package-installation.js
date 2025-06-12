@@ -88,7 +88,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ts_types_1 = require("@myapp/ts-types");
-var x = ts_types_1.myapp;
+const x = ts_types_1.myapp;
 
 
 

@@ -42,13 +42,10 @@ exports.obj = exports.klass = void 0;
 exports.func = func;
 exports.exportedDirectly = exportedDirectly;
 function func() { }
-var klass = /** @class */ (function () {
-    function klass() {
-    }
-    return klass;
-}());
+class klass {
+}
 exports.klass = klass;
-var obj = { x: true };
+const obj = { x: true };
 exports.obj = obj;
 function exportedDirectly() { }
 //// [spreadExpressionContextualTypeWithNamespace_1.js]
@@ -71,7 +68,7 @@ stuff.klass;
 stuff.obj;
 stuff.exportedDirectly;
 function getStuff() {
-    var thing = __assign({}, stuff);
+    const thing = __assign({}, stuff);
     thing.func;
     thing.klass;
     thing.obj;

@@ -26,13 +26,10 @@ export {MyClass};
 //// [db.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var db = /** @class */ (function () {
-    function db() {
+class db {
+    doSomething() {
     }
-    db.prototype.doSomething = function () {
-    };
-    return db;
-}());
+}
 exports.default = db;
 //// [service.js]
 "use strict";
@@ -42,15 +39,17 @@ var db_1 = require("./db");
 function someDecorator(target) {
     return target;
 }
-var MyClass = /** @class */ (function () {
-    function MyClass(db) {
-        this.db = db;
-        this.db.doSomething();
-    }
+let MyClass = (() => {
+    let MyClass = class MyClass {
+        constructor(db) {
+            this.db = db;
+            this.db.doSomething();
+        }
+    };
     MyClass = __decorate([
         someDecorator,
         __metadata("design:paramtypes", [db_1.default])
     ], MyClass);
     return MyClass;
-}());
+})();
 exports.MyClass = MyClass;

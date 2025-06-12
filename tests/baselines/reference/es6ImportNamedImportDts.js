@@ -49,89 +49,47 @@ import { aaaa1 as bbbb } from "./server";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.aaaa1 = exports.aaaa = exports.z2 = exports.z1 = exports.x111 = exports.a111 = exports.x1 = exports.a1 = exports.m = exports.x11 = exports.x = exports.a12 = exports.a11 = exports.a = void 0;
-var a = /** @class */ (function () {
-    function a() {
-    }
-    return a;
-}());
+class a {
+}
 exports.a = a;
-var a11 = /** @class */ (function () {
-    function a11() {
-    }
-    return a11;
-}());
+class a11 {
+}
 exports.a11 = a11;
-var a12 = /** @class */ (function () {
-    function a12() {
-    }
-    return a12;
-}());
+class a12 {
+}
 exports.a12 = a12;
-var x = /** @class */ (function () {
-    function x() {
-    }
-    return x;
-}());
+class x {
+}
 exports.x = x;
-var x11 = /** @class */ (function () {
-    function x11() {
-    }
-    return x11;
-}());
+class x11 {
+}
 exports.x11 = x11;
-var m = /** @class */ (function () {
-    function m() {
-    }
-    return m;
-}());
+class m {
+}
 exports.m = m;
-var a1 = /** @class */ (function () {
-    function a1() {
-    }
-    return a1;
-}());
+class a1 {
+}
 exports.a1 = a1;
-var x1 = /** @class */ (function () {
-    function x1() {
-    }
-    return x1;
-}());
+class x1 {
+}
 exports.x1 = x1;
-var a111 = /** @class */ (function () {
-    function a111() {
-    }
-    return a111;
-}());
+class a111 {
+}
 exports.a111 = a111;
-var x111 = /** @class */ (function () {
-    function x111() {
-    }
-    return x111;
-}());
+class x111 {
+}
 exports.x111 = x111;
-var z1 = /** @class */ (function () {
-    function z1() {
-    }
-    return z1;
-}());
+class z1 {
+}
 exports.z1 = z1;
-var z2 = /** @class */ (function () {
-    function z2() {
-    }
-    return z2;
-}());
+class z2 {
+}
 exports.z2 = z2;
-var aaaa = /** @class */ (function () {
-    function aaaa() {
-    }
-    return aaaa;
-}());
+class aaaa {
+}
 exports.aaaa = aaaa;
-var aaaa1 = /** @class */ (function () {
-    function aaaa1() {
-    }
-    return aaaa1;
-}());
+class aaaa1 {
+}
 exports.aaaa1 = aaaa1;
 //// [client.js]
 "use strict";

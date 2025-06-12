@@ -32,24 +32,17 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 // have no effect on members of objects such as properties. 
 var num;
 var strOrNum;
-var C1 = /** @class */ (function () {
-    function C1() {
+class C1 {
+    // Inside public accessor getter
+    get pp3() {
+        return strOrNum;
     }
-    Object.defineProperty(C1.prototype, "pp3", {
-        // Inside public accessor getter
-        get: function () {
-            return strOrNum;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    C1.prototype.method = function () {
+    method() {
         strOrNum = typeof this.pp1 === "string" && this.pp1; // string | number
         strOrNum = typeof this.pp2 === "string" && this.pp2; // string | number
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
-    };
-    return C1;
-}());
+    }
+}
 var c1;
 strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number

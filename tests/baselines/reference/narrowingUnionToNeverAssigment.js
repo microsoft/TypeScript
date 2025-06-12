@@ -19,6 +19,6 @@ function fx1(x) {
     if (x === "a" || x === "b") {
     }
     else {
-        var y = x;
+        const y = x;
     }
 }

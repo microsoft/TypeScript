@@ -120,11 +120,7 @@ function fun1(x, y) {
 function fun2(x, y) {
     return randBool() ? x : y;
 }
-function fun3() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
+function fun3(...args) {
     return args[+randBool()];
 }
 var n1;

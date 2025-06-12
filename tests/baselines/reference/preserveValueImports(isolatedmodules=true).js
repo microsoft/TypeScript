@@ -28,8 +28,8 @@ b;
 
 //// [a.js]
 export default {};
-export var b = 0;
-export var c = 1;
+export const b = 0;
+export const c = 1;
 //// [b.js]
 export {};
 //// [c.js]

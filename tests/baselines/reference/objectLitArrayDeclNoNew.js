@@ -33,12 +33,11 @@ module Test {
 "use strict";
 var Test;
 (function (Test) {
-    var Gar = /** @class */ (function () {
-        function Gar() {
+    class Gar {
+        constructor() {
             this.moo = 0;
         }
-        return Gar;
-    }());
+    }
     Test.Gar = Gar;
     function bug() {
         var state = null;

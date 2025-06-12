@@ -126,437 +126,153 @@ async function binaryComma1(): Promise<any> {
 
 //// [es5-asyncFunctionBinaryExpressions.js]
 function binaryPlus0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent()) + y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x) + y;
     });
 }
 function binaryPlus1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a + (_b.sent());
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x + (yield y);
     });
 }
 function binaryLogicalAnd0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent()) && y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x) && y;
     });
 }
 function binaryLogicalAnd1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    if (!_a) return [3 /*break*/, 2];
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a = (_b.sent());
-                    _b.label = 2;
-                case 2:
-                    _a;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x && (yield y);
     });
 }
 function binaryAssignment0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, y];
-                case 1:
-                    x = _a.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x = yield y;
     });
 }
 function binaryAssignment1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a.a = _b.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x.a = yield y;
     });
 }
 function binaryAssignment2() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x.a;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a.b = _b.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x.a.b = yield y;
     });
 }
 function binaryAssignment3() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _a = x;
-                    _b = z;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a[_b] = _c.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[z] = yield y;
     });
 }
 function binaryAssignment4() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x[z];
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a.b = _b.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[z].b = yield y;
     });
 }
 function binaryAssignment5() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _a = x.a;
-                    _b = z;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a[_b] = _c.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x.a[z] = yield y;
     });
 }
 function binaryAssignment6() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent()).a = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x).a = y;
     });
 }
 function binaryAssignment7() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x.a];
-                case 1:
-                    (_a.sent()).b = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x.a).b = y;
     });
 }
 function binaryAssignment8() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent())[z] = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x)[z] = y;
     });
 }
 function binaryAssignment9() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, z];
-                case 1:
-                    _a[_b.sent()] = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[yield z] = y;
     });
 }
 function binaryAssignment10() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, z];
-                case 1:
-                    _a[_b.sent()].b = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[yield z].b = y;
     });
 }
 function binaryAssignment11() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x[z]];
-                case 1:
-                    (_a.sent()).b = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x[z]).b = y;
     });
 }
 function binaryAssignment12() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x.a;
-                    return [4 /*yield*/, z];
-                case 1:
-                    _a[_b.sent()] = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x.a[yield z] = y;
     });
 }
 function binaryAssignment13() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x.a];
-                case 1:
-                    (_a.sent())[z] = y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x.a)[z] = y;
     });
 }
 function binaryCompoundAssignment0() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, y];
-                case 1:
-                    x = _a + _b.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x += yield y;
     });
 }
 function binaryCompoundAssignment1() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _a = x;
-                    _b = _a.a;
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a.a = _b + _c.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x.a += yield y;
     });
 }
 function binaryCompoundAssignment2() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    _a = x;
-                    _b = a;
-                    _c = _a[_b];
-                    return [4 /*yield*/, y];
-                case 1:
-                    _a[_b] = _c + _d.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[a] += yield y;
     });
 }
 function binaryCompoundAssignment3() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent()).a += y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x).a += y;
     });
 }
 function binaryCompoundAssignment4() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    (_a.sent())[a] += y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x)[a] += y;
     });
 }
 function binaryCompoundAssignment5() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, a];
-                case 1:
-                    _a[_b.sent()] += y;
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[yield a] += y;
     });
 }
 function binaryCompoundAssignment6() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    _a = (_c.sent());
-                    _b = _a.a;
-                    return [4 /*yield*/, y];
-                case 2:
-                    _a.a = _b + _c.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x).a += yield y;
     });
 }
 function binaryCompoundAssignment7() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1:
-                    _a = (_d.sent());
-                    _b = a;
-                    _c = _a[_b];
-                    return [4 /*yield*/, y];
-                case 2:
-                    _a[_b] = _c + _d.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        (yield x)[a] += yield y;
     });
 }
 function binaryCompoundAssignment8() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
-                case 0:
-                    _a = x;
-                    return [4 /*yield*/, a];
-                case 1:
-                    _b = _d.sent();
-                    _c = _a[_b];
-                    return [4 /*yield*/, y];
-                case 2:
-                    _a[_b] = _c + _d.sent();
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        x[yield a] += yield y;
     });
 }
 function binaryExponentiation() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e;
-        return __generator(this, function (_f) {
-            switch (_f.label) {
-                case 0:
-                    _b = (_a = Math).pow;
-                    return [4 /*yield*/, x];
-                case 1:
-                    _b.apply(_a, [(_f.sent()), y]);
-                    _d = (_c = Math).pow;
-                    _e = [x];
-                    return [4 /*yield*/, y];
-                case 2:
-                    _d.apply(_c, _e.concat([_f.sent()]));
-                    return [2 /*return*/];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        Math.pow((yield x), y);
+        Math.pow(x, yield y);
     });
 }
 function binaryComma0() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, x];
-                case 1: return [2 /*return*/, ((_a.sent()), y)];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        return (yield x), y;
     });
 }
 function binaryComma1() {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    x;
-                    return [4 /*yield*/, y];
-                case 1: return [2 /*return*/, _a.sent()];
-            }
-        });
+    return __awaiter(this, void 0, void 0, function* () {
+        return x, yield y;
     });
 }

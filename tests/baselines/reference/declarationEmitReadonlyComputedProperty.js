@@ -27,10 +27,9 @@ exports.SYMBOL = void 0;
 exports.createInstance = createInstance;
 exports.SYMBOL = Symbol();
 function createInstance() {
-    var _a;
-    return _a = {},
-        _a[exports.SYMBOL] = '',
-        _a;
+    return {
+        [exports.SYMBOL]: ''
+    };
 }
 //// [index.js]
 "use strict";

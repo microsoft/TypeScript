@@ -23,36 +23,21 @@ class Z implements I {
 } // { f: <T>() => T } 
 
 //// [genericImplements.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 ;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}
 ;
 // OK
-var X = /** @class */ (function () {
-    function X() {
-    }
-    X.prototype.f = function () { return undefined; };
-    return X;
-}()); // { f: () => { b; } }
+class X {
+    f() { return undefined; }
+} // { f: () => { b; } }
 // OK
-var Y = /** @class */ (function () {
-    function Y() {
-    }
-    Y.prototype.f = function () { return undefined; };
-    return Y;
-}()); // { f: () => { a; } }
+class Y {
+    f() { return undefined; }
+} // { f: () => { a; } }
 // OK
-var Z = /** @class */ (function () {
-    function Z() {
-    }
-    Z.prototype.f = function () { return undefined; };
-    return Z;
-}()); // { f: <T>() => T } 
+class Z {
+    f() { return undefined; }
+} // { f: <T>() => T } 

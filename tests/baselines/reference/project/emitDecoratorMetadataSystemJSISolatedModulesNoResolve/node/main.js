@@ -11,15 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyClass1 = void 0;
 var ng = require("angular2/core");
-var MyClass1 = /** @class */ (function () {
-    function MyClass1(_elementRef) {
-        this._elementRef = _elementRef;
-    }
+let MyClass1 = (() => {
     var _a;
+    let MyClass1 = class MyClass1 {
+        constructor(_elementRef) {
+            this._elementRef = _elementRef;
+        }
+    };
     MyClass1 = __decorate([
         foo,
         __metadata("design:paramtypes", [typeof (_a = typeof ng !== "undefined" && ng.ElementRef) === "function" ? _a : Object])
     ], MyClass1);
     return MyClass1;
-}());
+})();
 exports.MyClass1 = MyClass1;

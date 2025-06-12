@@ -35,13 +35,10 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MyComponent = void 0;
-    var MyComponent = /** @class */ (function () {
-        function MyComponent() {
+    class MyComponent {
+        render() {
         }
-        MyComponent.prototype.render = function () {
-        };
-        return MyComponent;
-    }());
+    }
     exports.MyComponent = MyComponent;
     // Should be an error
     <MyComponent bar='world'/>;

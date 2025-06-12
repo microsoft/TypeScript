@@ -22,14 +22,14 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = /** @class */ (function () {
-                function C() {
-                }
+            C = (() => {
+                let C = class C {
+                };
                 C = __decorate([
                     dec
                 ], C);
                 return C;
-            }());
+            })();
             exports_1("C", C);
             env_1 = { stack: [], error: void 0, hasError: false };
             try {

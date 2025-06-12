@@ -24,12 +24,11 @@ var p: M.D.Point;
 //// [exportImportAndClodule.js]
 var K;
 (function (K) {
-    var L = /** @class */ (function () {
-        function L(name) {
+    class L {
+        constructor(name) {
             this.name = name;
         }
-        return L;
-    }());
+    }
     K.L = L;
     (function (L) {
         L.y = 12;

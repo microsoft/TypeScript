@@ -37,11 +37,8 @@ var b = {
 //// [objectTypeWithDuplicateNumericProperty.js]
 // numeric properties must be distinct after a ToNumber operation
 // so the below are all errors
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var a;
 var b = {
     1: 1,

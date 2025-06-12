@@ -16,15 +16,12 @@ export = A
 
 //// [es5ExportEqualsDts.js]
 "use strict";
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () {
+class A {
+    foo() {
         var aVal;
         return aVal;
-    };
-    return A;
-}());
+    }
+}
 module.exports = A;
 
 

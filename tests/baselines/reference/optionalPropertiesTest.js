@@ -48,7 +48,7 @@ var foo;
 foo = { id: 1234 }; // Ok
 foo = { id: 1234, name: "test" }; // Ok
 foo = { name: "test" }; // Error, id missing
-foo = { id: 1234, print: function () { } }; // Ok
+foo = { id: 1234, print: () => { } }; // Ok
 var s = foo.name || "default";
 if (foo.print !== undefined)
     foo.print();

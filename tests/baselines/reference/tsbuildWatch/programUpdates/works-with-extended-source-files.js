@@ -122,7 +122,7 @@ Output::
 
 
 //// [/user/username/projects/project/commonFile1.js]
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/projects/project/commonFile1.d.ts]
@@ -130,7 +130,7 @@ declare let x: number;
 
 
 //// [/user/username/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 //// [/user/username/projects/project/commonFile2.d.ts]
@@ -197,7 +197,7 @@ declare let y: number;
 }
 
 //// [/user/username/projects/project/other.js]
-var z = 0;
+let z = 0;
 
 
 //// [/user/username/projects/project/other.d.ts]
@@ -249,7 +249,7 @@ declare let z: number;
 }
 
 //// [/user/username/projects/project/other2.js]
-var k = 0;
+let k = 0;
 
 
 //// [/user/username/projects/project/project3.tsconfig.tsbuildinfo]
@@ -396,12 +396,12 @@ Output::
 
 //// [/user/username/projects/project/commonFile1.js]
 "use strict";
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js]
 "use strict";
-var y = 1;
+let y = 1;
 
 
 //// [/user/username/projects/project/project1.tsconfig.tsbuildinfo]
@@ -515,7 +515,7 @@ Output::
 
 //// [/user/username/projects/project/other.js]
 "use strict";
-var z = 0;
+let z = 0;
 
 
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
@@ -621,7 +621,7 @@ Output::
 
 
 //// [/user/username/projects/project/other.js]
-var z = 0;
+let z = 0;
 
 
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
@@ -727,7 +727,7 @@ Output::
 //// [/user/username/projects/project/commonFile2.js] file written with same contents
 //// [/user/username/projects/project/other.js]
 "use strict";
-var z = 0;
+let z = 0;
 
 
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo]
@@ -747,7 +747,7 @@ var z = 0;
 
 //// [/user/username/projects/project/other2.js]
 "use strict";
-var k = 0;
+let k = 0;
 
 
 
@@ -845,11 +845,11 @@ Output::
 
 
 //// [/user/username/projects/project/commonFile1.js]
-var x = 1;
+let x = 1;
 
 
 //// [/user/username/projects/project/commonFile2.js]
-var y = 1;
+let y = 1;
 
 
 //// [/user/username/projects/project/project1.tsconfig.tsbuildinfo]
@@ -962,13 +962,13 @@ Output::
 //// [/user/username/projects/project/commonFile1.js] file written with same contents
 //// [/user/username/projects/project/commonFile2.js] file written with same contents
 //// [/user/username/projects/project/other.js]
-var z = 0;
+let z = 0;
 
 
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo] file written with same contents
 //// [/user/username/projects/project/project2.tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/user/username/projects/project/other2.js]
-var k = 0;
+let k = 0;
 
 
 

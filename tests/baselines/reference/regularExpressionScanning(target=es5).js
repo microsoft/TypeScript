@@ -52,7 +52,7 @@ const regexes: RegExp[] = [
 
 
 //// [regularExpressionScanning.js]
-var regexes = [
+const regexes = [
     // Flags
     /foo/visualstudiocode,
     // Pattern modifiers

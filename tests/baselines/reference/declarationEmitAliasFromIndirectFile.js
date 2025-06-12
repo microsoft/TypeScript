@@ -30,7 +30,7 @@ export default fp.l10ns;
 //// [app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fp = { l10ns: {} };
+const fp = { l10ns: {} };
 exports.default = fp.l10ns;
 
 

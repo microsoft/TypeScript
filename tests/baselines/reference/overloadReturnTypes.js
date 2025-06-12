@@ -26,11 +26,8 @@ interface IFace {
 
 
 //// [overloadReturnTypes.js]
-var Accessor = /** @class */ (function () {
-    function Accessor() {
-    }
-    return Accessor;
-}());
+class Accessor {
+}
 function attr(nameOrMap, value) {
     if (nameOrMap && typeof nameOrMap === "object") {
         // handle map case

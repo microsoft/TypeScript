@@ -14,11 +14,10 @@ class Greeter {
 }
 
 //// [classMemberInitializerWithLamdaScoping5.js]
-var Greeter = /** @class */ (function () {
-    function Greeter(message) {
-        this.messageHandler = function (message) {
+class Greeter {
+    constructor(message) {
+        this.messageHandler = (message) => {
             console.log(message); // This shouldnt be error
         };
     }
-    return Greeter;
-}());
+}

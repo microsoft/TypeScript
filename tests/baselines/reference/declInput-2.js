@@ -26,28 +26,19 @@ module M {
 //// [declInput-2.js]
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var E = /** @class */ (function () {
-        function E() {
-        }
-        return E;
-    }());
+    class C {
+    }
+    class E {
+    }
     M.E = E;
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        D.prototype.m232 = function () { return null; };
-        D.prototype.m242 = function () { return null; };
-        D.prototype.m252 = function () { return null; }; // don't generate
-        D.prototype.m26 = function (i) { };
-        D.prototype.m262 = function (i) { };
-        D.prototype.m3 = function () { return new C(); };
-        return D;
-    }());
+    class D {
+        m232() { return null; }
+        m242() { return null; }
+        m252() { return null; } // don't generate
+        m26(i) { }
+        m262(i) { }
+        m3() { return new C(); }
+    }
     M.D = D;
 })(M || (M = {}));
 

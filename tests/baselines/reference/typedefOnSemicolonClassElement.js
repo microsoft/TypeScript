@@ -13,15 +13,14 @@ export class Preferences {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Preferences = void 0;
-var Preferences = /** @class */ (function () {
-    function Preferences() {
+class Preferences {
+    constructor() {
         /** @type {A} */
         this.a = 'ok';
     }
     /** @typedef {string} A */
     ;
-    return Preferences;
-}());
+}
 exports.Preferences = Preferences;
 
 

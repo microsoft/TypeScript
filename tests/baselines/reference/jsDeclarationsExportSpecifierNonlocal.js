@@ -11,17 +11,11 @@ export { Thing, OtherThing as default } from "./source";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OtherThing = exports.Thing = void 0;
-var Thing = /** @class */ (function () {
-    function Thing() {
-    }
-    return Thing;
-}());
+class Thing {
+}
 exports.Thing = Thing;
-var OtherThing = /** @class */ (function () {
-    function OtherThing() {
-    }
-    return OtherThing;
-}());
+class OtherThing {
+}
 exports.OtherThing = OtherThing;
 //// [index.js]
 "use strict";

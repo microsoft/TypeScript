@@ -244,7 +244,7 @@ export interface A {
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = {
+const a = {
     lastName: 'sdsd'
 };
 
@@ -540,7 +540,7 @@ Output::
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a = "hello";
+const a = "hello";
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts] file written with same contents
@@ -836,12 +836,12 @@ Output::
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
-exports.a = /** @class */ (function () {
-    function class_1() {
+const a = class {
+    constructor() {
         this.p = 10;
     }
-    return class_1;
-}());
+};
+exports.a = a;
 
 
 //// [/user/username/projects/noEmitOnError/dev-build/src/main.d.ts]

@@ -14,12 +14,11 @@ export const value = create();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    constructor() {
         this.field = { x: 1 };
     }
-    return A;
-}());
+}
 exports.A = A;
 //// [consumes.js] ////
 "use strict";

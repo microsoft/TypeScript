@@ -29,7 +29,7 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
-var classes = "";
-var rest = {};
-var children = [];
+const classes = "";
+const rest = {};
+const children = [];
 React.createElement(Tag, __assign({ className: classes }, rest), children);

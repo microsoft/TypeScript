@@ -25,7 +25,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var obj = {};
-var a = __assign(__assign({}, obj), { prop: function () {
+const obj = {};
+const a = __assign(__assign({}, obj), { prop() {
         return __assign(__assign({}, obj), { metadata: 213 });
     } });

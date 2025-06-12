@@ -39,16 +39,13 @@ var E;
 })(E || (E = {}));
 x = E;
 x = E.A;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var a;
 x = a;
 var b;
 x = b;
-x = { f: function () { } };
+x = { f() { } };
 var M;
 (function (M) {
     M.x = 1;

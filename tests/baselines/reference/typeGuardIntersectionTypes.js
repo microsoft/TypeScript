@@ -145,27 +145,27 @@ function identifyBeast(beast) {
         // All winged beasts with legs
         if (hasWings(beast)) {
             if (beast.legs === 4) {
-                log("pegasus - 4 legs, wings");
+                log(`pegasus - 4 legs, wings`);
             }
             else if (beast.legs === 2) {
-                log("bird - 2 legs, wings");
+                log(`bird - 2 legs, wings`);
             }
             else {
-                log("unknown - ".concat(beast.legs, " legs, wings"));
+                log(`unknown - ${beast.legs} legs, wings`);
             }
         }
         // All non-winged beasts with legs
         else {
-            log("manbearpig - ".concat(beast.legs, " legs, no wings"));
+            log(`manbearpig - ${beast.legs} legs, no wings`);
         }
     }
     // All beasts without legs    
     else {
         if (hasWings(beast)) {
-            log("quetzalcoatl - no legs, wings");
+            log(`quetzalcoatl - no legs, wings`);
         }
         else {
-            log("snake - no legs, no wings");
+            log(`snake - no legs, no wings`);
         }
     }
 }

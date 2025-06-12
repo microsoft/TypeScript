@@ -40,7 +40,7 @@ function MyComp3(props, context, bad) {
 function MyComp2(props, context) {
     return React.createElement("div", null);
 }
-var a = React.createElement(MyComp4, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
-var b = React.createElement(MyComp3, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
-var c = React.createElement(MyComp2, { x: 2 }); // Should be OK, `context` is allowed, per react rules
-var d = React.createElement(MyTagWithOptionalNonJSXBits, { x: 2 }); // Technically OK, but probably questionable
+const a = React.createElement(MyComp4, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
+const b = React.createElement(MyComp3, { x: 2 }); // using `MyComp` as a component should error - it expects more arguments than react provides
+const c = React.createElement(MyComp2, { x: 2 }); // Should be OK, `context` is allowed, per react rules
+const d = React.createElement(MyTagWithOptionalNonJSXBits, { x: 2 }); // Technically OK, but probably questionable

@@ -1,2 +1,2 @@
-[].forEach(function (k) { return console.log(k); });
+[].forEach(k => console.log(k));
 //# sourceMappingURL=file.js.map

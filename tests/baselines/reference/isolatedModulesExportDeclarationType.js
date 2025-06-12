@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [test1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var T = 0; // Error as of #56354
+const T = 0; // Error as of #56354
 exports.default = T; // Ok
 //// [test2.js]
 "use strict";

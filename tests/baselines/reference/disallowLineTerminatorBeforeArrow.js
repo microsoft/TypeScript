@@ -77,72 +77,43 @@ module m {
 
 
 //// [disallowLineTerminatorBeforeArrow.js]
-var f1 = function () { };
-var f2 = function (x, y) { };
-var f3 = function (x, y) {
-    var rest = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        rest[_i - 2] = arguments[_i];
-    }
-};
-var f4 = function (x, y) {
-    var rest = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        rest[_i - 2] = arguments[_i];
-    }
-};
-var f5 = function () {
-    var rest = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i] = arguments[_i];
-    }
-};
-var f6 = function () {
-    var rest = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i] = arguments[_i];
-    }
-};
-var f7 = function (x, y, z) {
-    if (z === void 0) { z = 10; }
-};
-var f8 = function (x, y, z) {
-    if (z === void 0) { z = 10; }
-};
-var f9 = function (a) { return a; };
-var f10 = function (a) { return a; };
-var f11 = function (a) { return a; };
-var f12 = function (a) { return a; };
+var f1 = () => { };
+var f2 = (x, y) => { };
+var f3 = (x, y, ...rest) => { };
+var f4 = (x, y, ...rest) => { };
+var f5 = (...rest) => { };
+var f6 = (...rest) => { };
+var f7 = (x, y, z = 10) => { };
+var f8 = (x, y, z = 10) => { };
+var f9 = (a) => a;
+var f10 = (a) => a;
+var f11 = (a) => a;
+var f12 = (a) => a;
 // Should be valid.
-var f11 = function (a) { return a; };
+var f11 = (a) => a;
 // Should be valid.
-var f12 = function (a) { return a; };
+var f12 = (a) => a;
 // Should be valid.
-var f13 = function (a) { return a; };
+var f13 = (a) => a;
 // Should be valid.
-var f14 = function () { };
+var f14 = () => { };
 // Should be valid.
-var f15 = function (a) { return a; };
+var f15 = (a) => a;
 // Should be valid.
-var f16 = function (a, b) {
-    if (b === void 0) { b = 10; }
-    return a + b;
-};
+var f16 = (a, b = 10) => a + b;
 function foo(func) { }
-foo(function () { return true; });
-foo(function () { return false; });
+foo(() => true);
+foo(() => { return false; });
 var m;
 (function (m) {
-    var City = /** @class */ (function () {
-        function City(x, thing) {
-            if (thing === void 0) { thing = function () { return 100; }; }
-            this.m = function () { return 2 * 2 * 2; };
+    class City {
+        constructor(x, thing = () => 100) {
+            this.m = () => 2 * 2 * 2;
         }
-        return City;
-    }());
-    var Enum;
+    }
+    let Enum;
     (function (Enum) {
-        Enum[Enum["claw"] = (function () { return 10; })()] = "claw";
+        Enum[Enum["claw"] = (() => 10)()] = "claw";
     })(Enum = m.Enum || (m.Enum = {}));
-    m.v = function (x) { return new City(Enum.claw); };
+    m.v = x => new City(Enum.claw);
 })(m || (m = {}));

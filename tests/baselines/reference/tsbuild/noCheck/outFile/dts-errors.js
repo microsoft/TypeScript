@@ -62,12 +62,12 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
+    const a = class {
+        constructor() {
             this.p = 10;
         }
-        return class_1;
-    }());
+    };
+    exports.a = a;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -399,12 +399,12 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
+    const a = class {
+        constructor() {
             this.p = 10;
         }
-        return class_1;
-    }());
+    };
+    exports.a = a;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -816,12 +816,12 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
+    const a = class {
+        constructor() {
             this.p = 10;
         }
-        return class_1;
-    }());
+    };
+    exports.a = a;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";

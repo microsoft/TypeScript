@@ -49,25 +49,23 @@ const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 //// [mappedTypeGenericIndexedAccess.js]
 "use strict";
 // Repro from #49242
-var _a;
-var Test = /** @class */ (function () {
-    function Test() {
+class Test {
+    constructor() {
         this.entries = {};
     }
-    Test.prototype.addEntry = function (name, entry) {
+    addEntry(name, entry) {
         var _a;
         if (!this.entries[name]) {
             this.entries[name] = [];
         }
         (_a = this.entries[name]) === null || _a === void 0 ? void 0 : _a.push(entry);
-    };
-    return Test;
-}());
-var typeHandlers = (_a = {},
-    _a[0] = function (p) { return console.log(p.foo); },
-    _a[1] = function (p) { return console.log(p.a); },
-    _a);
-var onSomeEvent = function (p) { var _a; return (_a = typeHandlers[p.t]) === null || _a === void 0 ? void 0 : _a.call(typeHandlers, p); };
+    }
+}
+const typeHandlers = {
+    [0]: (p) => console.log(p.foo),
+    [1]: (p) => console.log(p.a),
+};
+const onSomeEvent = (p) => { var _a; return (_a = typeHandlers[p.t]) === null || _a === void 0 ? void 0 : _a.call(typeHandlers, p); };
 
 
 //// [mappedTypeGenericIndexedAccess.d.ts]

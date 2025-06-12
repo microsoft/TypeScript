@@ -12,23 +12,25 @@ class C {
 
 
 //// [esDecorators-classDeclaration-parameterProperties.js]
-var C = function () {
-    var _a;
-    var _instanceExtraInitializers = [];
-    var _speak_decorators;
-    return _a = /** @class */ (function () {
-            function C(message) {
-                this.message = (__runInitializers(this, _instanceExtraInitializers), message);
-            }
-            C.prototype.speak = function () {
-            };
-            return C;
-        }()),
-        (function () {
-            var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
-            _speak_decorators = [bound];
-            __esDecorate(_a, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { has: function (obj) { return "speak" in obj; }, get: function (obj) { return obj.speak; } }, metadata: _metadata }, null, _instanceExtraInitializers);
-            if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
-        })(),
-        _a;
-}();
+let C = (() => {
+    let C = (() => {
+        var _a;
+        let _instanceExtraInitializers = [];
+        let _speak_decorators;
+        return _a = class C {
+                constructor(message) {
+                    this.message = (__runInitializers(this, _instanceExtraInitializers), message);
+                }
+                speak() {
+                }
+            },
+            (() => {
+                const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+                _speak_decorators = [bound];
+                __esDecorate(_a, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { has: obj => "speak" in obj, get: obj => obj.speak }, metadata: _metadata }, null, _instanceExtraInitializers);
+                if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+            })(),
+            _a;
+    })();
+    return C;
+})();

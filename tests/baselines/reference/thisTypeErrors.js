@@ -66,41 +66,37 @@ function f1(x) {
     var y;
     return this;
 }
-var C1 = /** @class */ (function () {
-    function C1() {
+class C1 {
+}
+let C2 = (() => {
+    class C2 {
+        static foo(x) {
+            return undefined;
+        }
     }
-    return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    C2.foo = function (x) {
-        return undefined;
-    };
     C2.y = undefined;
     return C2;
-}());
+})();
 var N1;
 (function (N1) {
     N1.y = this;
 })(N1 || (N1 = {}));
-var C3 = /** @class */ (function () {
-    function C3() {
+class C3 {
+    constructor() {
         this.x1 = {
-            g: function (x) {
+            g(x) {
                 return undefined;
             }
         };
     }
-    C3.prototype.f = function () {
+    f() {
         function g(x) {
             return undefined;
         }
-        var x2 = {
-            h: function (x) {
+        let x2 = {
+            h(x) {
                 return undefined;
             }
         };
-    };
-    return C3;
-}());
+    }
+}

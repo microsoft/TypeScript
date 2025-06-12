@@ -29,8 +29,6 @@ export * from "./unittests/evaluation/esDecorators.js";
 export * from "./unittests/evaluation/esDecoratorsMetadata.js";
 export * from "./unittests/evaluation/externalModules.js";
 export * from "./unittests/evaluation/forAwaitOf.js";
-export * from "./unittests/evaluation/forOf.js";
-export * from "./unittests/evaluation/generator.js";
 export * from "./unittests/evaluation/objectRest.js";
 export * from "./unittests/evaluation/optionalCall.js";
 export * from "./unittests/evaluation/superInStaticInitializer.js";

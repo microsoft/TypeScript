@@ -73,13 +73,10 @@ declare const console: { log(msg: any): void; };
 //// [/user/username/projects/myproject/buttonClass/Source.js]
 var Hmi;
 (function (Hmi) {
-    var Button = /** @class */ (function () {
-        function Button() {
+    class Button {
+        static myStaticFunction() {
         }
-        Button.myStaticFunction = function () {
-        };
-        return Button;
-    }());
+    }
     Hmi.Button = Button;
 })(Hmi || (Hmi = {}));
 
@@ -125,13 +122,10 @@ declare namespace Hmi {
 //// [/user/username/projects/myproject/SiblingClass/Source.js]
 var Hmi;
 (function (Hmi) {
-    var Sibling = /** @class */ (function () {
-        function Sibling() {
+    class Sibling {
+        mySiblingFunction() {
         }
-        Sibling.prototype.mySiblingFunction = function () {
-        };
-        return Sibling;
-    }());
+    }
     Hmi.Sibling = Sibling;
 })(Hmi || (Hmi = {}));
 

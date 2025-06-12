@@ -143,51 +143,30 @@ function f6() {
 
 
 //// [localTypes1.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 function f1() {
-    var E;
+    let E;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
     })(E || (E = {}));
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var a = [new C()];
+    class C {
+    }
+    let a = [new C()];
     a[0].x = E.B;
     return a;
 }
 function f2() {
     function g() {
-        var E;
+        let E;
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
-        var a = [new C()];
+        class C {
+        }
+        let a = [new C()];
         a[0].x = E.B;
         return a;
     }
@@ -195,29 +174,23 @@ function f2() {
 }
 function f3(b) {
     if (true) {
-        var E = void 0;
+        let E;
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
         if (b) {
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
-            var a = [new C()];
+            class C {
+            }
+            let a = [new C()];
             a[0].x = E.B;
             return a;
         }
         else {
-            var A_1 = /** @class */ (function () {
-                function A() {
-                }
-                return A;
-            }());
-            var c = [new A_1()];
+            class A {
+            }
+            let c = [new A()];
             c[0].x = E.B;
             return c;
         }
@@ -225,104 +198,71 @@ function f3(b) {
 }
 function f5() {
     var z1 = function () {
-        var E;
+        let E;
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         return new C();
     };
-    var z2 = function () {
-        var E;
+    var z2 = () => {
+        let E;
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         return new C();
     };
 }
-var A = /** @class */ (function () {
-    function A() {
-        var E;
+class A {
+    constructor() {
+        let E;
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
             E[E["C"] = 2] = "C";
         })(E || (E = {}));
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
-    }
-    A.prototype.m = function () {
-        var E;
-        (function (E) {
-            E[E["A"] = 0] = "A";
-            E[E["B"] = 1] = "B";
-            E[E["C"] = 2] = "C";
-        })(E || (E = {}));
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
-        return new C();
-    };
-    Object.defineProperty(A.prototype, "p", {
-        get: function () {
-            var E;
-            (function (E) {
-                E[E["A"] = 0] = "A";
-                E[E["B"] = 1] = "B";
-                E[E["C"] = 2] = "C";
-            })(E || (E = {}));
-            var C = /** @class */ (function () {
-                function C() {
-                }
-                return C;
-            }());
-            return new C();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return A;
-}());
-function f6() {
-    var A = /** @class */ (function () {
-        function A() {
+        class C {
         }
-        return A;
-    }());
+    }
+    m() {
+        let E;
+        (function (E) {
+            E[E["A"] = 0] = "A";
+            E[E["B"] = 1] = "B";
+            E[E["C"] = 2] = "C";
+        })(E || (E = {}));
+        class C {
+        }
+        return new C();
+    }
+    get p() {
+        let E;
+        (function (E) {
+            E[E["A"] = 0] = "A";
+            E[E["B"] = 1] = "B";
+            E[E["C"] = 2] = "C";
+        })(E || (E = {}));
+        class C {
+        }
+        return new C();
+    }
+}
+function f6() {
+    class A {
+    }
     function g() {
-        var B = /** @class */ (function (_super) {
-            __extends(B, _super);
-            function B() {
-                return _super !== null && _super.apply(this, arguments) || this;
-            }
-            return B;
-        }(A));
+        class B extends A {
+        }
         function h() {
-            var C = /** @class */ (function (_super) {
-                __extends(C, _super);
-                function C() {
-                    return _super !== null && _super.apply(this, arguments) || this;
-                }
-                return C;
-            }(B));
+            class C extends B {
+            }
             var x = new C();
             x.a = "a";
             x.b = "b";

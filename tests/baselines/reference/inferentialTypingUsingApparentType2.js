@@ -11,4 +11,4 @@ foo({ m(x) { return x.length } });
 function foo(x) {
     return undefined;
 }
-foo({ m: function (x) { return x.length; } });
+foo({ m(x) { return x.length; } });

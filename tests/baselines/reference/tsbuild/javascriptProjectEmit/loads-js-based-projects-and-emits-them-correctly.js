@@ -302,7 +302,7 @@ import { Nominal } from '../common/nominal';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = getVar;
 var index_1 = require("../sub-project/index");
-var variable = {
+const variable = {
     key: /** @type {MyNominal} */ ('value'),
 };
 /**

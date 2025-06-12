@@ -23,22 +23,16 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
 };
 function foo() {
     var _a;
-    return _a = /** @class */ (function () {
-            function class_1() {
-            }
-            return class_1;
-        }()),
+    return _a = class {
+        },
         _a.foo = 1,
-        (function () {
+        (() => {
             var _b;
-            var c = (_b = /** @class */ (function () {
-                    function class_2() {
-                    }
-                    return class_2;
-                }()),
+            const c = (_b = class {
+                },
                 __setFunctionName(_b, "c"),
                 _b.bar = 2,
-                (function () {
+                (() => {
                     // do
                 })(),
                 _b);

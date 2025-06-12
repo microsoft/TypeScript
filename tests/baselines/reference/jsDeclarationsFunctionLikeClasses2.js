@@ -94,19 +94,19 @@ Vec.prototype = {
     /**
      * @param {Vec} other
      */
-    dot: function (other) {
+    dot(other) {
         if (other.storage.length !== this.storage.length) {
-            throw new Error("Dot product only applicable for vectors of equal length");
+            throw new Error(`Dot product only applicable for vectors of equal length`);
         }
-        var sum = 0;
-        for (var i = 0; i < this.storage.length; i++) {
+        let sum = 0;
+        for (let i = 0; i < this.storage.length; i++) {
             sum += (this.storage[i] * other.storage[i]);
         }
         return sum;
     },
-    magnitude: function () {
-        var sum = 0;
-        for (var i = 0; i < this.storage.length; i++) {
+    magnitude() {
+        let sum = 0;
+        for (let i = 0; i < this.storage.length; i++) {
             sum += (Math.pow(this.storage[i], 2));
         }
         return Math.sqrt(sum);

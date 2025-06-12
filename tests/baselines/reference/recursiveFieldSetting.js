@@ -22,23 +22,20 @@ class Recursive3 {
 
 //// [recursiveFieldSetting.js]
 // #32721
-var Recursive1 = /** @class */ (function () {
-    function Recursive1(parent) {
+class Recursive1 {
+    constructor(parent) {
         this.parent = parent;
         this.depth = this.parent ? this.parent.depth + 1 : 0;
     }
-    return Recursive1;
-}());
-var Recursive2 = /** @class */ (function () {
-    function Recursive2() {
+}
+class Recursive2 {
+    constructor() {
         this.depth = this.parent.depth;
     }
-    return Recursive2;
-}());
-var Recursive3 = /** @class */ (function () {
-    function Recursive3() {
+}
+class Recursive3 {
+    constructor() {
         this.depth = this.parent.alpha;
         this.alpha = 0;
     }
-    return Recursive3;
-}());
+}

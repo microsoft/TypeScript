@@ -117,5 +117,5 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
             labelOffset.y -= size;
             break;
     }
-    var _ = rotation;
+    let _ = rotation;
 }

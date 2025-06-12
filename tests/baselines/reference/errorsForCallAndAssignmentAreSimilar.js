@@ -28,7 +28,7 @@ function minimalExample1() {
         { kind: "bluray", },
         { kind: "hdpvd", }
     ]);
-    var ds = [
+    const ds = [
         { kind: "bluray", },
         { kind: "hdpvd", }
     ];

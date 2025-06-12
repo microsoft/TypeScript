@@ -12,14 +12,11 @@ const { A } = types;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var types = require("./a");
 types.A;
-var A = types.A;
+const { A } = types;

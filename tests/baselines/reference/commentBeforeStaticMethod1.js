@@ -11,14 +11,11 @@ class C {
 }
 
 //// [commentBeforeStaticMethod1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
+class C {
     /**
      * Returns bar
      */
-    C.foo = function () {
+    static foo() {
         return "bar";
-    };
-    return C;
-}());
+    }
+}

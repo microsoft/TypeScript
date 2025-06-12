@@ -20,11 +20,8 @@ export class Class2 {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Class1 = void 0;
-var Class1 = /** @class */ (function () {
-    function Class1() {
-    }
-    return Class1;
-}());
+class Class1 {
+}
 exports.Class1 = Class1;
 //// [Class2.js]
 "use strict";
@@ -42,21 +39,17 @@ exports.Class2 = void 0;
 var Class1_1 = require("./Class1");
 function decorate(target, propertyKey) {
 }
-var Class2 = /** @class */ (function () {
-    function Class2() {
-    }
-    Object.defineProperty(Class2.prototype, "prop", {
-        get: function () {
+let Class2 = (() => {
+    class Class2 {
+        get prop() {
             return undefined;
-        },
-        enumerable: false,
-        configurable: true
-    });
+        }
+    }
     __decorate([
         decorate,
         __metadata("design:type", Class1_1.Class1),
         __metadata("design:paramtypes", [])
     ], Class2.prototype, "prop", null);
     return Class2;
-}());
+})();
 exports.Class2 = Class2;

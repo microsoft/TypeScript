@@ -21,13 +21,12 @@ var y = new enumdule.Point(0, 0);
 //// [ModuleAndEnumWithSameNameAndCommonRoot.js]
 var enumdule;
 (function (enumdule) {
-    var Point = /** @class */ (function () {
-        function Point(x, y) {
+    class Point {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
-        return Point;
-    }());
+    }
     enumdule.Point = Point;
 })(enumdule || (enumdule = {}));
 (function (enumdule) {

@@ -19,19 +19,18 @@ class C {
 
 
 //// [noUnusedLocals_destructuringAssignment.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.x = 0;
     }
-    C.prototype.m = function () {
-        var x;
-        (x = this.x);
+    m() {
+        let x;
+        ({ x } = this);
         return x;
-    };
-    C.prototype.f = function () {
-        var f;
-        (f = this.f);
+    }
+    f() {
+        let f;
+        ({ f } = this);
         return f;
-    };
-    return C;
-}());
+    }
+}

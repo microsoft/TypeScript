@@ -56,77 +56,26 @@ function g() {
 }
 
 //// [readonlyInDeclarationFile.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    Object.defineProperty(C.prototype, "b1", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "b2", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "b3", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "c1", {
-        get: function () { return 1; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "c2", {
-        get: function () { return 1; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "c3", {
-        get: function () { return 1; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "t1", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "t2", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "t3", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "u1", {
-        get: function () { return 1; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "u2", {
-        get: function () { return 1; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "u3", {
-        get: function () { return 1; },
-        set: function (value) { },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+class C {
+    get b1() { return 1; }
+    get b2() { return 1; }
+    get b3() { return 1; }
+    get c1() { return 1; }
+    set c1(value) { }
+    get c2() { return 1; }
+    set c2(value) { }
+    get c3() { return 1; }
+    set c3(value) { }
+    static get t1() { return 1; }
+    static get t2() { return 1; }
+    static get t3() { return 1; }
+    static get u1() { return 1; }
+    static set u1(value) { }
+    static get u2() { return 1; }
+    static set u2(value) { }
+    static get u3() { return 1; }
+    static set u3(value) { }
+}
 var z;
 function f() {
     return {

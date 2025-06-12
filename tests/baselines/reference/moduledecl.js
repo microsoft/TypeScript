@@ -241,11 +241,8 @@ var m0;
     }
     function f2(ns) {
     }
-    var c1 = /** @class */ (function () {
-        function c1() {
-        }
-        return c1;
-    }());
+    class c1 {
+    }
 })(m0 || (m0 = {}));
 var m1;
 (function (m1) {
@@ -255,45 +252,44 @@ var m1;
     function f2(ns) {
     }
     m1.f2 = f2;
-    var c1 = /** @class */ (function () {
-        function c1(n, n2, n3, n4) {
+    class c1 {
+        d() {
+            return "Hello";
+        }
+        constructor(n, n2, n3, n4) {
             this.n = n;
             this.n2 = n2;
             this.n3 = n3;
             this.n4 = n4;
         }
-        c1.prototype.d = function () {
-            return "Hello";
-        };
-        return c1;
-    }());
+    }
     m1.c1 = c1;
 })(m1 || (m1 = {}));
 var m;
 (function (m) {
-    var m2;
+    let m2;
     (function (m2) {
         var a = 10;
     })(m2 = m.m2 || (m.m2 = {}));
-    var m3;
+    let m3;
     (function (m3) {
     })(m3 = m.m3 || (m.m3 = {}));
 })(m || (m = {}));
 (function (m) {
-    var m25;
+    let m25;
     (function (m25) {
-        var m5;
+        let m5;
         (function (m5) {
         })(m5 = m25.m5 || (m25.m5 = {}));
     })(m25 = m.m25 || (m.m25 = {}));
 })(m || (m = {}));
 var m13;
 (function (m13) {
-    var m4;
+    let m4;
     (function (m4) {
-        var m2;
+        let m2;
         (function (m2) {
-            var m3;
+            let m3;
             (function (m3) {
             })(m3 = m2.m3 || (m2.m3 = {}));
         })(m2 = m4.m2 || (m4.m2 = {}));
@@ -305,58 +301,41 @@ var m13;
 })(m13 || (m13 = {}));
 var exportTests;
 (function (exportTests) {
-    var C1_public = /** @class */ (function () {
-        function C1_public() {
-        }
-        C1_public.prototype.f2 = function () {
+    class C1_public {
+        f2() {
             return 30;
-        };
-        C1_public.prototype.f3 = function () {
+        }
+        f3() {
             return "string";
-        };
-        return C1_public;
-    }());
+        }
+    }
     exportTests.C1_public = C1_public;
-    var C2_private = /** @class */ (function () {
-        function C2_private() {
-        }
-        C2_private.prototype.f2 = function () {
+    class C2_private {
+        f2() {
             return 30;
-        };
-        C2_private.prototype.f3 = function () {
-            return "string";
-        };
-        return C2_private;
-    }());
-    var C3_public = /** @class */ (function () {
-        function C3_public() {
         }
-        C3_public.prototype.getC2_private = function () {
+        f3() {
+            return "string";
+        }
+    }
+    class C3_public {
+        getC2_private() {
             return new C2_private();
-        };
-        C3_public.prototype.setC2_private = function (arg) {
-        };
-        Object.defineProperty(C3_public.prototype, "c2", {
-            get: function () {
-                return new C2_private();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        C3_public.prototype.getC1_public = function () {
+        }
+        setC2_private(arg) {
+        }
+        get c2() {
+            return new C2_private();
+        }
+        getC1_public() {
             return new C1_public();
-        };
-        C3_public.prototype.setC1_public = function (arg) {
-        };
-        Object.defineProperty(C3_public.prototype, "c1", {
-            get: function () {
-                return new C1_public();
-            },
-            enumerable: false,
-            configurable: true
-        });
-        return C3_public;
-    }());
+        }
+        setC1_public(arg) {
+        }
+        get c1() {
+            return new C1_public();
+        }
+    }
     exportTests.C3_public = C3_public;
 })(exportTests || (exportTests = {}));
 function foo() {

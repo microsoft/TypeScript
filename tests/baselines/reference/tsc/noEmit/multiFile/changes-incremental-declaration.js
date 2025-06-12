@@ -67,12 +67,11 @@ Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
-var classC = /** @class */ (function () {
-    function classC() {
+class classC {
+    constructor() {
         this.prop = 1;
     }
-    return classC;
-}());
+}
 exports.classC = classC;
 
 
@@ -87,12 +86,11 @@ export declare class classC {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.indirectClass = void 0;
 var class_1 = require("./class");
-var indirectClass = /** @class */ (function () {
-    function indirectClass() {
+class indirectClass {
+    constructor() {
         this.classC = new class_1.classC();
     }
-    return indirectClass;
-}());
+}
 exports.indirectClass = indirectClass;
 
 
@@ -138,11 +136,7 @@ export declare function writeLog(s: string): void;
 
 
 //// [/home/src/workspaces/project/src/noChangeFileWithEmitSpecificError.js]
-function someFunc(arguments) {
-    var rest = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        rest[_i - 1] = arguments[_i];
-    }
+function someFunc(arguments, ...rest) {
 }
 
 
@@ -810,12 +804,11 @@ Errors  Files
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
-var classC = /** @class */ (function () {
-    function classC() {
+class classC {
+    constructor() {
         this.prop1 = 1;
     }
-    return classC;
-}());
+}
 exports.classC = classC;
 
 
@@ -1358,12 +1351,11 @@ Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
-var classC = /** @class */ (function () {
-    function classC() {
+class classC {
+    constructor() {
         this.prop = 1;
     }
-    return classC;
-}());
+}
 exports.classC = classC;
 
 

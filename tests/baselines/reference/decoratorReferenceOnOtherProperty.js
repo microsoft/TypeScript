@@ -27,11 +27,8 @@ class Bar {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Yoha = void 0;
-var Yoha = /** @class */ (function () {
-    function Yoha() {
-    }
-    return Yoha;
-}());
+class Yoha {
+}
 exports.Yoha = Yoha;
 //// [index.js]
 "use strict";
@@ -49,16 +46,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var yoha_1 = require("./yoha");
-function foo() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
+function foo(...args) { }
+let Bar = (() => {
+    class Bar {
+        yoha(yoha, bar) { }
     }
-}
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    Bar.prototype.yoha = function (yoha, bar) { };
     __decorate([
         __param(0, foo),
         __metadata("design:type", Function),
@@ -66,7 +58,7 @@ var Bar = /** @class */ (function () {
         __metadata("design:returntype", void 0)
     ], Bar.prototype, "yoha", null);
     return Bar;
-}());
+})();
 //// [index2.js]
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -83,21 +75,11 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var yoha_1 = require("./yoha");
-function foo() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
+function foo(...args) { }
+let Bar = (() => {
+    class Bar {
+        yoha(yoha, ...bar) { }
     }
-}
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    Bar.prototype.yoha = function (yoha) {
-        var bar = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            bar[_i - 1] = arguments[_i];
-        }
-    };
     __decorate([
         __param(0, foo),
         __metadata("design:type", Function),
@@ -105,4 +87,4 @@ var Bar = /** @class */ (function () {
         __metadata("design:returntype", void 0)
     ], Bar.prototype, "yoha", null);
     return Bar;
-}());
+})();

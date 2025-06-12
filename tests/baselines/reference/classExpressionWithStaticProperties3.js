@@ -12,19 +12,13 @@ for (let i = 0; i < 3; i++) {
 arr.forEach(C => console.log(C.y()));
 
 //// [classExpressionWithStaticProperties3.js]
-var arr = [];
-var _loop_1 = function (i) {
-    var _a = void 0;
-    arr.push((_a = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }()),
+const arr = [];
+for (let i = 0; i < 3; i++) {
+    let _a;
+    arr.push((_a = class C {
+        },
         _a.x = i,
-        _a.y = function () { return _a.x * 2; },
+        _a.y = () => _a.x * 2,
         _a));
-};
-for (var i = 0; i < 3; i++) {
-    _loop_1(i);
 }
-arr.forEach(function (C) { return console.log(C.y()); });
+arr.forEach(C => console.log(C.y()));

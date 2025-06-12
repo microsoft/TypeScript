@@ -33,36 +33,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 function decorator() {
-    return function (target) { };
+    return (target) => { };
 }
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo_1 = Foo;
-    Foo.func = function () {
-        return new Foo_1();
-    };
+let Foo = (() => {
     var Foo_1;
+    let Foo = Foo_1 = class Foo {
+        static func() {
+            return new Foo_1();
+        }
+    };
     Foo = Foo_1 = __decorate([
         decorator()
     ], Foo);
     return Foo;
-}());
+})();
 Foo.func();
 try {
-    var Foo_2 = /** @class */ (function () {
-        function Foo() {
-        }
-        Foo_3 = Foo;
-        Foo.func = function () {
-            return new Foo_3();
+    let Foo = (() => {
+        var Foo_2;
+        let Foo = Foo_2 = class Foo {
+            static func() {
+                return new Foo_2();
+            }
         };
-        var Foo_3;
-        Foo = Foo_3 = __decorate([
+        Foo = Foo_2 = __decorate([
             decorator()
         ], Foo);
         return Foo;
-    }());
-    Foo_2.func();
+    })();
+    Foo.func();
 }
 catch (e) { }

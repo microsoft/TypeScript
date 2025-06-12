@@ -57,11 +57,8 @@ declare module N {
 //// [duplicateIdentifiersAcrossContainerBoundaries.js]
 var M;
 (function (M) {
-    var I = /** @class */ (function () {
-        function I() {
-        }
-        return I;
-    }());
+    class I {
+    }
     M.I = I;
 })(M || (M = {}));
 (function (M) {
@@ -69,30 +66,21 @@ var M;
     M.f = f;
 })(M || (M = {}));
 (function (M) {
-    var f = /** @class */ (function () {
-        function f() {
-        }
-        return f;
-    }()); // error
+    class f {
+    } // error
     M.f = f;
 })(M || (M = {}));
 (function (M) {
     function g() { }
 })(M || (M = {}));
 (function (M) {
-    var g = /** @class */ (function () {
-        function g() {
-        }
-        return g;
-    }()); // no error
+    class g {
+    } // no error
     M.g = g;
 })(M || (M = {}));
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
 })(M || (M = {}));
 (function (M) {
@@ -104,16 +92,13 @@ var M;
 (function (M) {
     M.v = 3; // error for redeclaring var in a different parent
 })(M || (M = {}));
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 (function (Foo) {
 })(Foo || (Foo = {}));
 var N;
 (function (N) {
-    var F;
+    let F;
     (function (F) {
         var t;
     })(F = N.F || (N.F = {}));

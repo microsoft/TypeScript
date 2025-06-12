@@ -45,31 +45,19 @@ function foo8() {
 }
 
 //// [declFileTypeAnnotationTypeReference.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+class c {
+}
 var m;
 (function (m) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     m.c = c;
-    var g = /** @class */ (function () {
-        function g() {
-        }
-        return g;
-    }());
+    class g {
+    }
     m.g = g;
 })(m || (m = {}));
-var g = /** @class */ (function () {
-    function g() {
-    }
-    return g;
-}());
+class g {
+}
 // Just the name
 function foo() {
     return new c();

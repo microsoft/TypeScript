@@ -90,7 +90,7 @@ sourceFile:sourceMap-Comments.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^
-4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                    ^->
 1->
 2 >    
 3 >               tools
@@ -98,75 +98,50 @@ sourceFile:sourceMap-Comments.ts
 2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
 3 >Emitted(4, 21) Source(1, 17) + SourceIndex(0)
 ---
->>>        var Test = /** @class */ (function () {
+>>>        class Test {
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^->
+2 >        ^^^^^^
+3 >              ^^^^
+4 >                  ^^->
 1-> {
   >    
+2 >        export class 
+3 >              Test
 1->Emitted(5, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(5, 15) Source(2, 18) + SourceIndex(0)
+3 >Emitted(5, 19) Source(2, 22) + SourceIndex(0)
 ---
->>>            function Test() {
+>>>            doX() {
 1->^^^^^^^^^^^^
-2 >            ^^->
-1->
-1->Emitted(6, 13) Source(2, 5) + SourceIndex(0)
----
->>>            }
-1->^^^^^^^^^^^^
-2 >            ^
-3 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->export class Test {
-  >        public doX(): void {
-  >            let f: number = 2;
-  >            switch (f) {
-  >                case 1:
-  >                    break;
-  >                case 2:
-  >                    //line comment 1
-  >                    //line comment 2
-  >                    break;
-  >                case 3:
-  >                    //a comment
-  >                    break;
-  >            }
-  >        }
-  >    
-2 >            }
-1->Emitted(7, 13) Source(17, 5) + SourceIndex(0)
-2 >Emitted(7, 14) Source(17, 6) + SourceIndex(0)
----
->>>            Test.prototype.doX = function () {
-1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^
-3 >                              ^^^
-1->
+2 >            ^^^
+3 >               ^^^^^^^^^^^^->
+1-> {
+  >        public 
 2 >            doX
-3 >                              
-1->Emitted(8, 13) Source(3, 16) + SourceIndex(0)
-2 >Emitted(8, 31) Source(3, 19) + SourceIndex(0)
-3 >Emitted(8, 34) Source(3, 9) + SourceIndex(0)
+1->Emitted(6, 13) Source(3, 16) + SourceIndex(0)
+2 >Emitted(6, 16) Source(3, 19) + SourceIndex(0)
 ---
->>>                var f = 2;
-1 >^^^^^^^^^^^^^^^^
+>>>                let f = 2;
+1->^^^^^^^^^^^^^^^^
 2 >                ^^^^
 3 >                    ^
 4 >                     ^^^
 5 >                        ^
 6 >                         ^
 7 >                          ^^^->
-1 >public doX(): void {
+1->(): void {
   >            
 2 >                let 
 3 >                    f
 4 >                     : number = 
 5 >                        2
 6 >                         ;
-1 >Emitted(9, 17) Source(4, 13) + SourceIndex(0)
-2 >Emitted(9, 21) Source(4, 17) + SourceIndex(0)
-3 >Emitted(9, 22) Source(4, 18) + SourceIndex(0)
-4 >Emitted(9, 25) Source(4, 29) + SourceIndex(0)
-5 >Emitted(9, 26) Source(4, 30) + SourceIndex(0)
-6 >Emitted(9, 27) Source(4, 31) + SourceIndex(0)
+1->Emitted(7, 17) Source(4, 13) + SourceIndex(0)
+2 >Emitted(7, 21) Source(4, 17) + SourceIndex(0)
+3 >Emitted(7, 22) Source(4, 18) + SourceIndex(0)
+4 >Emitted(7, 25) Source(4, 29) + SourceIndex(0)
+5 >Emitted(7, 26) Source(4, 30) + SourceIndex(0)
+6 >Emitted(7, 27) Source(4, 31) + SourceIndex(0)
 ---
 >>>                switch (f) {
 1->^^^^^^^^^^^^^^^^
@@ -180,11 +155,11 @@ sourceFile:sourceMap-Comments.ts
 3 >                        f
 4 >                         ) 
 5 >                           {
-1->Emitted(10, 17) Source(5, 13) + SourceIndex(0)
-2 >Emitted(10, 25) Source(5, 21) + SourceIndex(0)
-3 >Emitted(10, 26) Source(5, 22) + SourceIndex(0)
-4 >Emitted(10, 28) Source(5, 24) + SourceIndex(0)
-5 >Emitted(10, 29) Source(5, 25) + SourceIndex(0)
+1->Emitted(8, 17) Source(5, 13) + SourceIndex(0)
+2 >Emitted(8, 25) Source(5, 21) + SourceIndex(0)
+3 >Emitted(8, 26) Source(5, 22) + SourceIndex(0)
+4 >Emitted(8, 28) Source(5, 24) + SourceIndex(0)
+5 >Emitted(8, 29) Source(5, 25) + SourceIndex(0)
 ---
 >>>                    case 1:
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -195,9 +170,9 @@ sourceFile:sourceMap-Comments.ts
   >                
 2 >                    case 
 3 >                         1
-1 >Emitted(11, 21) Source(6, 17) + SourceIndex(0)
-2 >Emitted(11, 26) Source(6, 22) + SourceIndex(0)
-3 >Emitted(11, 27) Source(6, 23) + SourceIndex(0)
+1 >Emitted(9, 21) Source(6, 17) + SourceIndex(0)
+2 >Emitted(9, 26) Source(6, 22) + SourceIndex(0)
+3 >Emitted(9, 27) Source(6, 23) + SourceIndex(0)
 ---
 >>>                        break;
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -205,8 +180,8 @@ sourceFile:sourceMap-Comments.ts
 1->:
   >                    
 2 >                        break;
-1->Emitted(12, 25) Source(7, 21) + SourceIndex(0)
-2 >Emitted(12, 31) Source(7, 27) + SourceIndex(0)
+1->Emitted(10, 25) Source(7, 21) + SourceIndex(0)
+2 >Emitted(10, 31) Source(7, 27) + SourceIndex(0)
 ---
 >>>                    case 2:
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -217,9 +192,9 @@ sourceFile:sourceMap-Comments.ts
   >                
 2 >                    case 
 3 >                         2
-1 >Emitted(13, 21) Source(8, 17) + SourceIndex(0)
-2 >Emitted(13, 26) Source(8, 22) + SourceIndex(0)
-3 >Emitted(13, 27) Source(8, 23) + SourceIndex(0)
+1 >Emitted(11, 21) Source(8, 17) + SourceIndex(0)
+2 >Emitted(11, 26) Source(8, 22) + SourceIndex(0)
+3 >Emitted(11, 27) Source(8, 23) + SourceIndex(0)
 ---
 >>>                        //line comment 1
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -228,8 +203,8 @@ sourceFile:sourceMap-Comments.ts
 1->:
   >                    
 2 >                        //line comment 1
-1->Emitted(14, 25) Source(9, 21) + SourceIndex(0)
-2 >Emitted(14, 41) Source(9, 37) + SourceIndex(0)
+1->Emitted(12, 25) Source(9, 21) + SourceIndex(0)
+2 >Emitted(12, 41) Source(9, 37) + SourceIndex(0)
 ---
 >>>                        //line comment 2
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -237,8 +212,8 @@ sourceFile:sourceMap-Comments.ts
 1->
   >                    
 2 >                        //line comment 2
-1->Emitted(15, 25) Source(10, 21) + SourceIndex(0)
-2 >Emitted(15, 41) Source(10, 37) + SourceIndex(0)
+1->Emitted(13, 25) Source(10, 21) + SourceIndex(0)
+2 >Emitted(13, 41) Source(10, 37) + SourceIndex(0)
 ---
 >>>                        break;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -246,8 +221,8 @@ sourceFile:sourceMap-Comments.ts
 1 >
   >                    
 2 >                        break;
-1 >Emitted(16, 25) Source(11, 21) + SourceIndex(0)
-2 >Emitted(16, 31) Source(11, 27) + SourceIndex(0)
+1 >Emitted(14, 25) Source(11, 21) + SourceIndex(0)
+2 >Emitted(14, 31) Source(11, 27) + SourceIndex(0)
 ---
 >>>                    case 3:
 1 >^^^^^^^^^^^^^^^^^^^^
@@ -258,9 +233,9 @@ sourceFile:sourceMap-Comments.ts
   >                
 2 >                    case 
 3 >                         3
-1 >Emitted(17, 21) Source(12, 17) + SourceIndex(0)
-2 >Emitted(17, 26) Source(12, 22) + SourceIndex(0)
-3 >Emitted(17, 27) Source(12, 23) + SourceIndex(0)
+1 >Emitted(15, 21) Source(12, 17) + SourceIndex(0)
+2 >Emitted(15, 26) Source(12, 22) + SourceIndex(0)
+3 >Emitted(15, 27) Source(12, 23) + SourceIndex(0)
 ---
 >>>                        //a comment
 1->^^^^^^^^^^^^^^^^^^^^^^^^
@@ -268,8 +243,8 @@ sourceFile:sourceMap-Comments.ts
 1->:
   >                    
 2 >                        //a comment
-1->Emitted(18, 25) Source(13, 21) + SourceIndex(0)
-2 >Emitted(18, 36) Source(13, 32) + SourceIndex(0)
+1->Emitted(16, 25) Source(13, 21) + SourceIndex(0)
+2 >Emitted(16, 36) Source(13, 32) + SourceIndex(0)
 ---
 >>>                        break;
 1 >^^^^^^^^^^^^^^^^^^^^^^^^
@@ -277,8 +252,8 @@ sourceFile:sourceMap-Comments.ts
 1 >
   >                    
 2 >                        break;
-1 >Emitted(19, 25) Source(14, 21) + SourceIndex(0)
-2 >Emitted(19, 31) Source(14, 27) + SourceIndex(0)
+1 >Emitted(17, 25) Source(14, 21) + SourceIndex(0)
+2 >Emitted(17, 31) Source(14, 27) + SourceIndex(0)
 ---
 >>>                }
 1 >^^^^^^^^^^^^^^^^
@@ -286,57 +261,24 @@ sourceFile:sourceMap-Comments.ts
 1 >
   >            
 2 >                }
-1 >Emitted(20, 17) Source(15, 13) + SourceIndex(0)
-2 >Emitted(20, 18) Source(15, 14) + SourceIndex(0)
+1 >Emitted(18, 17) Source(15, 13) + SourceIndex(0)
+2 >Emitted(18, 18) Source(15, 14) + SourceIndex(0)
 ---
->>>            };
+>>>            }
 1 >^^^^^^^^^^^^
 2 >            ^
-3 >             ^^^^^^^^^^^^->
 1 >
   >        
 2 >            }
-1 >Emitted(21, 13) Source(16, 9) + SourceIndex(0)
-2 >Emitted(21, 14) Source(16, 10) + SourceIndex(0)
+1 >Emitted(19, 13) Source(16, 9) + SourceIndex(0)
+2 >Emitted(19, 14) Source(16, 10) + SourceIndex(0)
 ---
->>>            return Test;
-1->^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^
-1->
-  >    
-2 >            }
-1->Emitted(22, 13) Source(17, 5) + SourceIndex(0)
-2 >Emitted(22, 24) Source(17, 6) + SourceIndex(0)
----
->>>        }());
-1 >^^^^^^^^
-2 >        ^
-3 >         
-4 >         ^^^^
-5 >             ^^^^^^^^^^^^^^->
+>>>        }
+1 >^^^^^^^^^
+2 >         ^^^^^^^^^^^^^^^^^^->
 1 >
-2 >        }
-3 >         
-4 >         export class Test {
-  >                 public doX(): void {
-  >                     let f: number = 2;
-  >                     switch (f) {
-  >                         case 1:
-  >                             break;
-  >                         case 2:
-  >                             //line comment 1
-  >                             //line comment 2
-  >                             break;
-  >                         case 3:
-  >                             //a comment
-  >                             break;
-  >                     }
-  >                 }
-  >             }
-1 >Emitted(23, 9) Source(17, 5) + SourceIndex(0)
-2 >Emitted(23, 10) Source(17, 6) + SourceIndex(0)
-3 >Emitted(23, 10) Source(2, 5) + SourceIndex(0)
-4 >Emitted(23, 14) Source(17, 6) + SourceIndex(0)
+  >    }
+1 >Emitted(20, 10) Source(17, 6) + SourceIndex(0)
 ---
 >>>        tools.Test = Test;
 1->^^^^^^^^
@@ -363,10 +305,10 @@ sourceFile:sourceMap-Comments.ts
   >                          }
   >                      }
 4 >                         
-1->Emitted(24, 9) Source(2, 18) + SourceIndex(0)
-2 >Emitted(24, 19) Source(2, 22) + SourceIndex(0)
-3 >Emitted(24, 26) Source(17, 6) + SourceIndex(0)
-4 >Emitted(24, 27) Source(17, 6) + SourceIndex(0)
+1->Emitted(21, 9) Source(2, 18) + SourceIndex(0)
+2 >Emitted(21, 19) Source(2, 22) + SourceIndex(0)
+3 >Emitted(21, 26) Source(17, 6) + SourceIndex(0)
+4 >Emitted(21, 27) Source(17, 6) + SourceIndex(0)
 ---
 >>>    })(tools = sas.tools || (sas.tools = {}));
 1->^^^^
@@ -407,15 +349,15 @@ sourceFile:sourceMap-Comments.ts
   >                                          }
   >                                      
   >                                      }
-1->Emitted(25, 5) Source(19, 1) + SourceIndex(0)
-2 >Emitted(25, 6) Source(19, 2) + SourceIndex(0)
-3 >Emitted(25, 8) Source(1, 12) + SourceIndex(0)
-4 >Emitted(25, 13) Source(1, 17) + SourceIndex(0)
-5 >Emitted(25, 16) Source(1, 12) + SourceIndex(0)
-6 >Emitted(25, 25) Source(1, 17) + SourceIndex(0)
-7 >Emitted(25, 30) Source(1, 12) + SourceIndex(0)
-8 >Emitted(25, 39) Source(1, 17) + SourceIndex(0)
-9 >Emitted(25, 47) Source(19, 2) + SourceIndex(0)
+1->Emitted(22, 5) Source(19, 1) + SourceIndex(0)
+2 >Emitted(22, 6) Source(19, 2) + SourceIndex(0)
+3 >Emitted(22, 8) Source(1, 12) + SourceIndex(0)
+4 >Emitted(22, 13) Source(1, 17) + SourceIndex(0)
+5 >Emitted(22, 16) Source(1, 12) + SourceIndex(0)
+6 >Emitted(22, 25) Source(1, 17) + SourceIndex(0)
+7 >Emitted(22, 30) Source(1, 12) + SourceIndex(0)
+8 >Emitted(22, 39) Source(1, 17) + SourceIndex(0)
+9 >Emitted(22, 47) Source(19, 2) + SourceIndex(0)
 ---
 >>>})(sas || (sas = {}));
 1 >
@@ -451,12 +393,12 @@ sourceFile:sourceMap-Comments.ts
   >                  }
   >              
   >              }
-1 >Emitted(26, 1) Source(19, 1) + SourceIndex(0)
-2 >Emitted(26, 2) Source(19, 2) + SourceIndex(0)
-3 >Emitted(26, 4) Source(1, 8) + SourceIndex(0)
-4 >Emitted(26, 7) Source(1, 11) + SourceIndex(0)
-5 >Emitted(26, 12) Source(1, 8) + SourceIndex(0)
-6 >Emitted(26, 15) Source(1, 11) + SourceIndex(0)
-7 >Emitted(26, 23) Source(19, 2) + SourceIndex(0)
+1 >Emitted(23, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(23, 2) Source(19, 2) + SourceIndex(0)
+3 >Emitted(23, 4) Source(1, 8) + SourceIndex(0)
+4 >Emitted(23, 7) Source(1, 11) + SourceIndex(0)
+5 >Emitted(23, 12) Source(1, 8) + SourceIndex(0)
+6 >Emitted(23, 15) Source(1, 11) + SourceIndex(0)
+7 >Emitted(23, 23) Source(19, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-Comments.js.map

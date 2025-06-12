@@ -51,6 +51,6 @@ parrot({
 });
 parrot({
     name: "TypeScript",
-    sayHello: function () {
+    sayHello() {
     },
 });

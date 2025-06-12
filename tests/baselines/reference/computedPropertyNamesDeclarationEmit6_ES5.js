@@ -10,13 +10,12 @@ var v = {
 
 
 //// [computedPropertyNamesDeclarationEmit6_ES5.js]
-var _a;
-var v = (_a = {},
-    _a[-1] = {},
-    _a[+1] = {},
-    _a[~1] = {},
-    _a[!1] = {},
-    _a);
+var v = {
+    [-1]: {},
+    [+1]: {},
+    [~1]: {},
+    [!1]: {}
+};
 
 
 //// [computedPropertyNamesDeclarationEmit6_ES5.d.ts]

@@ -23,12 +23,12 @@ foo(/*c2*/ 1);
 foo(/*c3*/ function () { });
 foo(
 /*c4*/
-function () { });
+() => { });
 foo(
 /*c5*/
 /*c6*/
-function () { });
-foo(/*c7*/ function () { });
+() => { });
+foo(/*c7*/ () => { });
 foo(
 /*c7*/
-/*c8*/ function () { });
+/*c8*/ () => { });

@@ -48,12 +48,12 @@ declare const console: { log(msg: any): void; };
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-exports.C = /** @class */ (function () {
-    function CReal() {
+var C = class CReal {
+    constructor() {
         this.d = 1;
     }
-    return CReal;
-}());
+};
+exports.C = C;
 
 
 //// [/user/username/projects/myproject/c.d.ts]
@@ -69,12 +69,11 @@ export declare var C: {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.B = void 0;
 var c_1 = require("./c");
-var B = /** @class */ (function () {
-    function B() {
+class B {
+    constructor() {
         this.c = new c_1.C();
     }
-    return B;
-}());
+}
 exports.B = B;
 
 
@@ -90,7 +89,7 @@ export declare class B {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
-var b = new b_1.B();
+let b = new b_1.B();
 console.log(b.c.d);
 
 
@@ -102,11 +101,8 @@ export {};
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 exports.D = D;
 
 
@@ -388,12 +384,12 @@ Input::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 exports.foo = foo;
-exports.C = /** @class */ (function () {
-    function CReal() {
+var C = class CReal {
+    constructor() {
         this.d = 1;
     }
-    return CReal;
-}());
+};
+exports.C = C;
 function foo() { }
 
 

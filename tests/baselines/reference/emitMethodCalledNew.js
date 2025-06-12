@@ -17,18 +17,17 @@ export const c = {
 //// [emitMethodCalledNew.js]
 "use strict";
 // https://github.com/microsoft/TypeScript/issues/55075
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = exports.b = exports.a = void 0;
 exports.a = {
-    new: function (x) { return x + 1; }
+    new(x) { return x + 1; }
 };
 exports.b = {
-    "new": function (x) { return x + 1; }
+    "new"(x) { return x + 1; }
 };
-exports.c = (_a = {},
-    _a["new"] = function (x) { return x + 1; },
-    _a);
+exports.c = {
+    ["new"](x) { return x + 1; }
+};
 
 
 //// [emitMethodCalledNew.d.ts]

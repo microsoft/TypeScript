@@ -30,7 +30,7 @@ foo(gK);
 "use strict";
 // Repro from #37475
 Object.defineProperty(exports, "__esModule", { value: true });
-var gK = { b: ["number", "null"] };
+const gK = { b: ["number", "null"] };
 function foo(g) {
     return {};
 }

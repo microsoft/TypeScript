@@ -78,34 +78,18 @@ stuff[n]++;
 (stuff['blah'])++;
 (stuff[n])++;
 for (stuff.x in []) { }
-for (var _i = 0, _a = []; _i < _a.length; _i++) {
-    stuff.x = _a[_i];
-}
+for (stuff.x of []) { }
 for (stuff['x'] in []) { }
-for (var _b = 0, _c = []; _b < _c.length; _b++) {
-    stuff['x'] = _c[_b];
-}
+for (stuff['x'] of []) { }
 for (stuff.blah in []) { }
-for (var _d = 0, _e = []; _d < _e.length; _d++) {
-    stuff.blah = _e[_d];
-}
+for (stuff.blah of []) { }
 for (stuff[n] in []) { }
-for (var _f = 0, _g = []; _f < _g.length; _f++) {
-    stuff[n] = _g[_f];
-}
+for (stuff[n] of []) { }
 for ((stuff.x) in []) { }
-for (var _h = 0, _j = []; _h < _j.length; _h++) {
-    (stuff.x) = _j[_h];
-}
+for ((stuff.x) of []) { }
 for ((stuff['x']) in []) { }
-for (var _k = 0, _l = []; _k < _l.length; _k++) {
-    (stuff['x']) = _l[_k];
-}
+for ((stuff['x']) of []) { }
 for ((stuff.blah) in []) { }
-for (var _m = 0, _o = []; _m < _o.length; _m++) {
-    (stuff.blah) = _o[_m];
-}
+for ((stuff.blah) of []) { }
 for ((stuff[n]) in []) { }
-for (var _p = 0, _q = []; _p < _q.length; _p++) {
-    (stuff[n]) = _q[_p];
-}
+for ((stuff[n]) of []) { }

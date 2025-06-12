@@ -25,32 +25,17 @@ class C extends B {
 }
 
 //// [thisAndSuperInStaticMembers4.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var C = /** @class */ (function (_super) {
-    __extends(C, _super);
-    function C() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        // these should be unaffected
-        _this.x = 1;
-        _this.y = _this.x;
-        _this.z = _super.prototype.f.call(_this);
-        return _this;
-    }
+let C = (() => {
     var _a;
+    class C extends B {
+        constructor() {
+            super(...arguments);
+            // these should be unaffected
+            this.x = 1;
+            this.y = this.x;
+            this.z = super.f();
+        }
+    }
     _a = C;
     C.x = undefined;
     C.y1 = _a.x;
@@ -58,7 +43,7 @@ var C = /** @class */ (function (_super) {
     C.y3 = _a === null || _a === void 0 ? void 0 : _a.x();
     C.y4 = _a[("x")]();
     C.y5 = _a === null || _a === void 0 ? void 0 : _a[("x")]();
-    C.z3 = _super.f.call(_a);
-    C.z4 = _super["f"].call(_a);
+    C.z3 = super.f();
+    C.z4 = super["f"]();
     return C;
-}(B));
+})();

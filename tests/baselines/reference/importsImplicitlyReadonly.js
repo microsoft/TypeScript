@@ -33,7 +33,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
 var a1 = require("./a");
 var a2 = require("./a");
-var a3 = a1;
+const a3 = a1;
 a_1.x = 1; // Error
 a_1.y = 1; // Error
 a1.x = 1; // Error

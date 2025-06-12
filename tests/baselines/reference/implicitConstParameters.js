@@ -63,19 +63,19 @@ function doSomething(cb) {
 }
 function fn(x) {
     if (typeof x === 'number') {
-        doSomething(function () { return x.toFixed(); });
+        doSomething(() => x.toFixed());
     }
 }
 function f1(x) {
     if (!x) {
         return;
     }
-    doSomething(function () { return x.length; });
+    doSomething(() => x.length);
 }
 function f2(x) {
     if (x) {
-        doSomething(function () {
-            doSomething(function () { return x.length; });
+        doSomething(() => {
+            doSomething(() => x.length);
         });
     }
 }
@@ -83,25 +83,25 @@ function f3(x) {
     inner();
     function inner() {
         if (x) {
-            doSomething(function () { return x.length; });
+            doSomething(() => x.length);
         }
     }
 }
 function f4(x) {
     x = "abc";
     if (x) {
-        doSomething(function () { return x.length; });
+        doSomething(() => x.length);
     }
 }
 function f5(x) {
     if (x) {
-        doSomething(function () { return x.length; });
+        doSomething(() => x.length);
     }
     x = "abc"; // causes x to be considered non-const
 }
 function f6(x) {
-    var y = x || "";
+    const y = x || "";
     if (x) {
-        doSomething(function () { return y.length; });
+        doSomething(() => y.length);
     }
 }

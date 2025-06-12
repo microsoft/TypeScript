@@ -12,13 +12,10 @@ class C<T> {
 
 
 //// [incrementOnTypeParameter.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () {
+class C {
+    foo() {
         this.a++;
         for (var i, j = 0; j < 10; i++) {
         }
-    };
-    return C;
-}());
+    }
+}

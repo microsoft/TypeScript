@@ -75,8 +75,8 @@ var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b) {
     return b;
 };
 /// lamdaFoo var comment
-var lambdaFoo = /** this is lambda comment*/ function (/**param a*/ a, /**param b*/ b) { return a + b; };
-var lambddaNoVarComment = /** this is lambda multiplication*/ function (/**param a*/ a, /**param b*/ b) { return a * b; };
+var lambdaFoo = /** this is lambda comment*/ (/**param a*/ a, /**param b*/ b) => a + b;
+var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/ a, /**param b*/ b) => a * b;
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 function blah(a /* multiline trailing comment
@@ -87,9 +87,9 @@ function blah2(a /* single line multiple trailing comments */ /* second */) {
 function blah3(a // trailing commen single line
 ) {
 }
-lambdaFoo = function (a, b) { return a * b; }; // This is trailing comment
-/*leading comment*/ (function () { return 0; }); // Needs to be wrapped in parens to be a valid expression (not declaration)
-/*leading comment*/ (function () { return 0; }); //trailing comment
+lambdaFoo = (a, b) => a * b; // This is trailing comment
+/*leading comment*/ () => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
+/*leading comment*/ (() => 0); //trailing comment
 function blah4(/*1*/ a /*2*/, /*3*/ b /*4*/) {
 }
 function foo1() {

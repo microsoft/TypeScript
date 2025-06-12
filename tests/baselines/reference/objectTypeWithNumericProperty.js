@@ -47,11 +47,8 @@ var r4 = b['1.1'];
 
 //// [objectTypeWithNumericProperty.js]
 // no errors here
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 var r1 = c[1];
 var r2 = c[1.1];

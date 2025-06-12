@@ -19,5 +19,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var react_1 = __importDefault(require("react"));
-var RootNotHappy = function () { return (react_1.default.createElement(NotHappy, { "data-testid": "my-test-id" })); };
-var RootHappy = function () { return (react_1.default.createElement(Happy, { "data-testid": "my-test-id" })); };
+const RootNotHappy = () => (react_1.default.createElement(NotHappy, { "data-testid": "my-test-id" }));
+const RootHappy = () => (react_1.default.createElement(Happy, { "data-testid": "my-test-id" }));

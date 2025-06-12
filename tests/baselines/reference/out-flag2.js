@@ -8,16 +8,10 @@ class B { }
 
 
 //// [c.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class A {
+}
+class B {
+}
 //# sourceMappingURL=c.js.map
 
 //// [c.d.ts]

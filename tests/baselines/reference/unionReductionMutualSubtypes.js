@@ -19,9 +19,9 @@ function run(options: { something?(b?: string): void }) {
 //// [unionReductionMutualSubtypes.js]
 "use strict";
 // Repro from #35414
-var k = { something: function () { } };
+const k = { something() { } };
 function run(options) {
     var _a;
-    var something = (_a = options.something) !== null && _a !== void 0 ? _a : val.something;
+    const something = (_a = options.something) !== null && _a !== void 0 ? _a : val.something;
     something('');
 }

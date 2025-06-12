@@ -55,11 +55,8 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.c_public = void 0;
     // Public elements
-    var c_public = /** @class */ (function () {
-        function c_public() {
-        }
-        return c_public;
-    }());
+    class c_public {
+    }
     exports.c_public = c_public;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.js]
@@ -67,11 +64,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.c_public = void 0;
-    var c_public = /** @class */ (function () {
-        function c_public() {
-        }
-        return c_public;
-    }());
+    class c_public {
+    }
     exports.c_public = c_public;
 });
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_core.js]

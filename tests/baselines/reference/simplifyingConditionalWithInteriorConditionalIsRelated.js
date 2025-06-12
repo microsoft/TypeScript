@@ -48,5 +48,5 @@ function JustGeneric() {
 }
 // Simplified example:
 function f() {
-    var x = null;
+    const x = null;
 }

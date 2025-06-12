@@ -2098,21 +2098,6 @@ module Harness {
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 ///<reference path='..\compiler\io.ts'/>
 ///<reference path='..\compiler\typescript.ts'/>
 ///<reference path='..\services\typescriptServices.ts' />
@@ -2145,10 +2130,10 @@ var Harness;
     var global = Function("return this").call(null);
     Harness.usePull = false;
     // Assert functions
-    var Assert;
+    let Assert;
     (function (Assert) {
         Assert.bugIds = [];
-        Assert.throwAssertError = function (error) {
+        Assert.throwAssertError = (error) => {
             throw error;
         };
         // Marks that the current scenario is impacted by a bug
@@ -2162,7 +2147,7 @@ var Harness;
         function bugs(content) {
             var bugs = content.match(/\bbug (\d+)/i);
             if (bugs) {
-                bugs.forEach(function (bug) { return assert.bug(bug); });
+                bugs.forEach(bug => assert.bug(bug));
             }
         }
         Assert.bugs = bugs;
@@ -2175,7 +2160,7 @@ var Harness;
         function arrayLengthIs(arr, length) {
             if (arr.length != length) {
                 var actual = '';
-                arr.forEach(function (n) { return actual = actual + '\n      ' + n.toString(); });
+                arr.forEach(n => actual = actual + '\n      ' + n.toString());
                 Assert.throwAssertError(new Error('Expected array to have ' + length + ' elements. Actual elements were:' + actual));
             }
         }
@@ -2201,7 +2186,7 @@ var Harness;
         function compilerWarning(result, line, column, desc) {
             if (!result.isErrorAt(line, column, desc)) {
                 var actual = '';
-                result.errors.forEach(function (err) {
+                result.errors.forEach(err => {
                     actual = actual + '\n     ' + err.toString();
                 });
                 Assert.throwAssertError(new Error("Expected compiler warning at (" + line + ", " + column + "): " + desc + "\nActual errors follow: " + actual));
@@ -2279,22 +2264,19 @@ var Harness;
         return content;
     }
     Harness.readFile = readFile;
-    var Logger = /** @class */ (function () {
-        function Logger() {
-        }
-        Logger.prototype.start = function (fileName, priority) { };
-        Logger.prototype.end = function (fileName) { };
-        Logger.prototype.scenarioStart = function (scenario) { };
-        Logger.prototype.scenarioEnd = function (scenario, error) { };
-        Logger.prototype.testStart = function (test) { };
-        Logger.prototype.pass = function (test) { };
-        Logger.prototype.bug = function (test) { };
-        Logger.prototype.fail = function (test) { };
-        Logger.prototype.error = function (test, error) { };
-        Logger.prototype.comment = function (comment) { };
-        Logger.prototype.verify = function (test, passed, actual, expected, message) { };
-        return Logger;
-    }());
+    class Logger {
+        start(fileName, priority) { }
+        end(fileName) { }
+        scenarioStart(scenario) { }
+        scenarioEnd(scenario, error) { }
+        testStart(test) { }
+        pass(test) { }
+        bug(test) { }
+        fail(test) { }
+        error(test, error) { }
+        comment(comment) { }
+        verify(test, passed, actual, expected, message) { }
+    }
     Harness.Logger = Logger;
     // Logger-related functions
     var loggers = [];
@@ -2302,11 +2284,7 @@ var Harness;
         loggers.push(logger);
     }
     Harness.registerLogger = registerLogger;
-    function emitLog(field) {
-        var params = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            params[_i - 1] = arguments[_i];
-        }
+    function emitLog(field, ...params) {
         for (var i = 0; i < loggers.length; i++) {
             if (typeof loggers[i][field] === 'function') {
                 loggers[i][field].apply(loggers[i], params);
@@ -2314,94 +2292,93 @@ var Harness;
         }
     }
     Harness.emitLog = emitLog;
-    var Runnable = /** @class */ (function () {
-        function Runnable(description, block) {
-            this.description = description;
-            this.block = block;
-            // The error, if any, that occurred when running 'block'
-            this.error = null;
-            // Whether or not this object has any failures (including in its descendants)
-            this.passed = null;
-            // A list of bugs impacting this object
-            this.bugs = [];
-            // A list of all our child Runnables
-            this.children = [];
-        }
-        Runnable.prototype.addChild = function (child) {
-            this.children.push(child);
-        };
-        /** Call function fn, which may take a done function and may possibly execute
-         *  asynchronously, calling done when finished. Returns true or false depending
-         *  on whether the function was asynchronous or not.
-         */
-        Runnable.prototype.call = function (fn, done) {
-            var isAsync = true;
-            try {
-                if (fn.length === 0) {
-                    // No async.
-                    fn();
-                    done();
+    let Runnable = (() => {
+        class Runnable {
+            constructor(description, block) {
+                this.description = description;
+                this.block = block;
+                // The error, if any, that occurred when running 'block'
+                this.error = null;
+                // Whether or not this object has any failures (including in its descendants)
+                this.passed = null;
+                // A list of bugs impacting this object
+                this.bugs = [];
+                // A list of all our child Runnables
+                this.children = [];
+            }
+            addChild(child) {
+                this.children.push(child);
+            }
+            /** Call function fn, which may take a done function and may possibly execute
+             *  asynchronously, calling done when finished. Returns true or false depending
+             *  on whether the function was asynchronous or not.
+             */
+            call(fn, done) {
+                var isAsync = true;
+                try {
+                    if (fn.length === 0) {
+                        // No async.
+                        fn();
+                        done();
+                        return false;
+                    }
+                    else {
+                        // Possibly async
+                        Runnable.pushGlobalErrorHandler(done);
+                        fn(function () {
+                            isAsync = false; // If we execute synchronously, this will get called before the return below.
+                            Runnable.popGlobalErrorHandler();
+                            done();
+                        });
+                        return isAsync;
+                    }
+                }
+                catch (e) {
+                    done(e);
                     return false;
                 }
+            }
+            run(done) { }
+            runBlock(done) {
+                return this.call(this.block, done);
+            }
+            runChild(index, done) {
+                return this.call(((done) => this.children[index].run(done)), done);
+            }
+            static pushGlobalErrorHandler(done) {
+                errorHandlerStack.push(function (e) {
+                    done(e);
+                });
+            }
+            static popGlobalErrorHandler() {
+                errorHandlerStack.pop();
+            }
+            static handleError(e) {
+                if (errorHandlerStack.length === 0) {
+                    IO.printLine('Global error: ' + e);
+                }
                 else {
-                    // Possibly async
-                    Runnable.pushGlobalErrorHandler(done);
-                    fn(function () {
-                        isAsync = false; // If we execute synchronously, this will get called before the return below.
-                        Runnable.popGlobalErrorHandler();
-                        done();
-                    });
-                    return isAsync;
+                    errorHandlerStack[errorHandlerStack.length - 1](e);
                 }
             }
-            catch (e) {
-                done(e);
-                return false;
-            }
-        };
-        Runnable.prototype.run = function (done) { };
-        Runnable.prototype.runBlock = function (done) {
-            return this.call(this.block, done);
-        };
-        Runnable.prototype.runChild = function (index, done) {
-            var _this = this;
-            return this.call((function (done) { return _this.children[index].run(done); }), done);
-        };
-        Runnable.pushGlobalErrorHandler = function (done) {
-            errorHandlerStack.push(function (e) {
-                done(e);
-            });
-        };
-        Runnable.popGlobalErrorHandler = function () {
-            errorHandlerStack.pop();
-        };
-        Runnable.handleError = function (e) {
-            if (errorHandlerStack.length === 0) {
-                IO.printLine('Global error: ' + e);
-            }
-            else {
-                errorHandlerStack[errorHandlerStack.length - 1](e);
-            }
-        };
+        }
         // The current stack of Runnable objects
         Runnable.currentStack = [];
         Runnable.errorHandlerStack = [];
         return Runnable;
-    }());
+    })();
     Harness.Runnable = Runnable;
-    var TestCase = /** @class */ (function (_super) {
-        __extends(TestCase, _super);
-        function TestCase(description, block) {
-            var _this = _super.call(this, description, block) || this;
-            _this.description = description;
-            _this.block = block;
-            return _this;
+    class TestCase extends Runnable {
+        constructor(description, block) {
+            super(description, block);
+            this.description = description;
+            this.block = block;
         }
-        TestCase.prototype.addChild = function (child) {
+        addChild(child) {
             throw new Error("Testcases may not be nested inside other testcases");
-        };
+        }
         /** Run the test case block and fail the test if it raised an error. If no error is raised, the test passes. */
-        TestCase.prototype.run = function (done) {
+        run(done) {
             var that = this;
             Runnable.currentStack.push(this);
             emitLog('testStart', { desc: this.description });
@@ -2420,20 +2397,17 @@ var Harness;
                     done();
                 });
             }
-        };
-        return TestCase;
-    }(Runnable));
+        }
+    }
     Harness.TestCase = TestCase;
-    var Scenario = /** @class */ (function (_super) {
-        __extends(Scenario, _super);
-        function Scenario(description, block) {
-            var _this = _super.call(this, description, block) || this;
-            _this.description = description;
-            _this.block = block;
-            return _this;
+    class Scenario extends Runnable {
+        constructor(description, block) {
+            super(description, block);
+            this.description = description;
+            this.block = block;
         }
         /** Run the block, and if the block doesn't raise an error, run the children. */
-        Scenario.prototype.run = function (done) {
+        run(done) {
             var that = this;
             Runnable.currentStack.push(this);
             emitLog('scenarioStart', { desc: this.description });
@@ -2444,7 +2418,7 @@ var Harness;
                     that.error = e;
                     var metadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
                     // Report all bugs affecting this scenario
-                    assert.bugIds.forEach(function (desc) { return emitLog('bug', metadata, desc); });
+                    assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));
                     emitLog('scenarioEnd', metadata, e);
                     done();
                 }
@@ -2453,13 +2427,12 @@ var Harness;
                     that.runChildren(done);
                 }
             });
-        };
+        }
         /** Run the children of the scenario (other scenarios and test cases). If any fail,
          *  set this scenario to failed. Synchronous tests will run synchronously without
          *  adding stack frames.
          */
-        Scenario.prototype.runChildren = function (done, index) {
-            if (index === void 0) { index = 0; }
+        runChildren(done, index = 0) {
             var that = this;
             var async = false;
             for (; index < this.children.length; index++) {
@@ -2473,24 +2446,21 @@ var Harness;
             }
             var metadata = { id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds };
             // Report all bugs affecting this scenario
-            assert.bugIds.forEach(function (desc) { return emitLog('bug', metadata, desc); });
+            assert.bugIds.forEach(desc => emitLog('bug', metadata, desc));
             emitLog('scenarioEnd', metadata);
             done();
-        };
-        return Scenario;
-    }(Runnable));
-    Harness.Scenario = Scenario;
-    var Run = /** @class */ (function (_super) {
-        __extends(Run, _super);
-        function Run() {
-            return _super.call(this, 'Test Run', null) || this;
         }
-        Run.prototype.run = function () {
+    }
+    Harness.Scenario = Scenario;
+    class Run extends Runnable {
+        constructor() {
+            super('Test Run', null);
+        }
+        run() {
             emitLog('start');
             this.runChildren();
-        };
-        Run.prototype.runChildren = function (index) {
-            if (index === void 0) { index = 0; }
+        }
+        runChildren(index = 0) {
             var async = false;
             var that = this;
             for (; index < this.children.length; index++) {
@@ -2507,14 +2477,13 @@ var Harness;
             }
             Perf.runBenchmarks();
             emitLog('end');
-        };
-        return Run;
-    }(Runnable));
+        }
+    }
     Harness.Run = Run;
     // Performance test
-    var Perf;
+    let Perf;
     (function (Perf) {
-        var Clock;
+        let Clock;
         (function (Clock) {
             if (typeof WScript !== "undefined" && typeof global['WScript'].InitializeProjection !== "undefined") {
                 // Running in JSHost.
@@ -2531,36 +2500,35 @@ var Harness;
                 Clock.resolution = 1000;
             }
         })(Clock = Perf.Clock || (Perf.Clock = {}));
-        var Timer = /** @class */ (function () {
-            function Timer() {
+        class Timer {
+            constructor() {
                 this.time = 0;
             }
-            Timer.prototype.start = function () {
+            start() {
                 this.time = 0;
                 this.startTime = Clock.now();
-            };
-            Timer.prototype.end = function () {
+            }
+            end() {
                 // Set time to MS.
                 this.time = (Clock.now() - this.startTime) / Clock.resolution * 1000;
-            };
-            return Timer;
-        }());
+            }
+        }
         Perf.Timer = Timer;
-        var Dataset = /** @class */ (function () {
-            function Dataset() {
+        class Dataset {
+            constructor() {
                 this.data = [];
             }
-            Dataset.prototype.add = function (value) {
+            add(value) {
                 this.data.push(value);
-            };
-            Dataset.prototype.mean = function () {
+            }
+            mean() {
                 var sum = 0;
                 for (var i = 0; i < this.data.length; i++) {
                     sum += this.data[i];
                 }
                 return sum / this.data.length;
-            };
-            Dataset.prototype.min = function () {
+            }
+            min() {
                 var min = this.data[0];
                 for (var i = 1; i < this.data.length; i++) {
                     if (this.data[i] < min) {
@@ -2568,8 +2536,8 @@ var Harness;
                     }
                 }
                 return min;
-            };
-            Dataset.prototype.max = function () {
+            }
+            max() {
                 var max = this.data[0];
                 for (var i = 1; i < this.data.length; i++) {
                     if (this.data[i] > max) {
@@ -2577,43 +2545,38 @@ var Harness;
                     }
                 }
                 return max;
-            };
-            Dataset.prototype.stdDev = function () {
+            }
+            stdDev() {
                 var sampleMean = this.mean();
                 var sumOfSquares = 0;
                 for (var i = 0; i < this.data.length; i++) {
                     sumOfSquares += Math.pow(this.data[i] - sampleMean, 2);
                 }
                 return Math.sqrt(sumOfSquares / this.data.length);
-            };
-            return Dataset;
-        }());
+            }
+        }
         Perf.Dataset = Dataset;
         // Base benchmark class with some defaults.
-        var Benchmark = /** @class */ (function () {
-            function Benchmark() {
+        class Benchmark {
+            constructor() {
                 this.iterations = 10;
                 this.description = "";
                 this.results = {};
             }
-            Benchmark.prototype.bench = function (subBench) { };
-            Benchmark.prototype.before = function () { };
-            Benchmark.prototype.beforeEach = function () { };
-            Benchmark.prototype.after = function () { };
-            Benchmark.prototype.afterEach = function () { };
-            Benchmark.prototype.addTimingFor = function (name, timing) {
+            bench(subBench) { }
+            before() { }
+            beforeEach() { }
+            after() { }
+            afterEach() { }
+            addTimingFor(name, timing) {
                 this.results[name] = this.results[name] || new Dataset();
                 this.results[name].add(timing);
-            };
-            return Benchmark;
-        }());
+            }
+        }
         Perf.Benchmark = Benchmark;
         Perf.benchmarks = [];
         var timeFunction;
-        timeFunction = function (benchmark, description, name, f) {
-            if (description === void 0) { description = benchmark.description; }
-            if (name === void 0) { name = ''; }
-            if (f === void 0) { f = benchmark.bench; }
+        timeFunction = function (benchmark, description = benchmark.description, name = '', f = benchmark.bench) {
             var t = new Timer();
             t.start();
             var subBenchmark = function (name, f) {
@@ -2659,55 +2622,54 @@ var Harness;
         Perf.addBenchmark = addBenchmark;
     })(Perf = Harness.Perf || (Harness.Perf = {}));
     /** Functionality for compiling TypeScript code */
-    var Compiler;
+    let Compiler;
     (function (Compiler) {
         /** Aggregate various writes into a single array of lines. Useful for passing to the
          *  TypeScript compiler to fill with source code or errors.
          */
-        var WriterAggregator = /** @class */ (function () {
-            function WriterAggregator() {
+        class WriterAggregator {
+            constructor() {
                 this.lines = [];
                 this.currentLine = "";
             }
-            WriterAggregator.prototype.Write = function (str) {
+            Write(str) {
                 this.currentLine += str;
-            };
-            WriterAggregator.prototype.WriteLine = function (str) {
+            }
+            WriteLine(str) {
                 this.lines.push(this.currentLine + str);
                 this.currentLine = "";
-            };
-            WriterAggregator.prototype.Close = function () {
+            }
+            Close() {
                 if (this.currentLine.length > 0) {
                     this.lines.push(this.currentLine);
                 }
                 this.currentLine = "";
-            };
-            WriterAggregator.prototype.reset = function () {
+            }
+            reset() {
                 this.lines = [];
                 this.currentLine = "";
-            };
-            return WriterAggregator;
-        }());
+            }
+        }
         Compiler.WriterAggregator = WriterAggregator;
         /** Mimics having multiple files, later concatenated to a single file. */
-        var EmitterIOHost = /** @class */ (function () {
-            function EmitterIOHost() {
+        class EmitterIOHost {
+            constructor() {
                 this.fileCollection = {};
             }
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
-            EmitterIOHost.prototype.createFile = function (s, useUTF8) {
+            createFile(s, useUTF8) {
                 if (this.fileCollection[s]) {
                     return this.fileCollection[s];
                 }
                 var writer = new Harness.Compiler.WriterAggregator();
                 this.fileCollection[s] = writer;
                 return writer;
-            };
-            EmitterIOHost.prototype.directoryExists = function (s) { return false; };
-            EmitterIOHost.prototype.fileExists = function (s) { return typeof this.fileCollection[s] !== 'undefined'; };
-            EmitterIOHost.prototype.resolvePath = function (s) { return s; };
-            EmitterIOHost.prototype.reset = function () { this.fileCollection = {}; };
-            EmitterIOHost.prototype.toArray = function () {
+            }
+            directoryExists(s) { return false; }
+            fileExists(s) { return typeof this.fileCollection[s] !== 'undefined'; }
+            resolvePath(s) { return s; }
+            reset() { this.fileCollection = {}; }
+            toArray() {
                 var result = [];
                 for (var p in this.fileCollection) {
                     if (this.fileCollection.hasOwnProperty(p)) {
@@ -2721,9 +2683,8 @@ var Harness;
                     }
                 }
                 return result;
-            };
-            return EmitterIOHost;
-        }());
+            }
+        }
         Compiler.EmitterIOHost = EmitterIOHost;
         var libFolder = global['WScript'] ? TypeScript.filePath(global['WScript'].ScriptFullName) : (__dirname + '/');
         Compiler.libText = IO ? IO.readFile(libFolder + "lib.d.ts") : '';
@@ -2771,25 +2732,25 @@ var Harness;
         }
         Compiler.compile = compile;
         // Types
-        var Type = /** @class */ (function () {
-            function Type(type, code, identifier) {
+        class Type {
+            constructor(type, code, identifier) {
                 this.type = type;
                 this.code = code;
                 this.identifier = identifier;
             }
-            Type.prototype.normalizeToArray = function (arg) {
+            normalizeToArray(arg) {
                 if ((Array.isArray && Array.isArray(arg)) || arg instanceof Array)
                     return arg;
                 return [arg];
-            };
-            Type.prototype.compilesOk = function (testCode) {
+            }
+            compilesOk(testCode) {
                 var errors = null;
                 compileString(testCode, 'test.ts', function (compilerResult) {
                     errors = compilerResult.errors;
                 });
                 return errors.length === 0;
-            };
-            Type.prototype.isSubtypeOf = function (other) {
+            }
+            isSubtypeOf(other) {
                 var testCode = 'class __test1__ {\n';
                 testCode += '    public test() {\n';
                 testCode += '        ' + other.code + ';\n';
@@ -2803,7 +2764,7 @@ var Harness;
                 testCode += '    }\n';
                 testCode += '}\n';
                 return this.compilesOk(testCode);
-            };
+            }
             // TODO: Find an implementation of isIdenticalTo that works.
             //public isIdenticalTo(other: Type) {
             //    var testCode = 'module __test1__ {\n';
@@ -2819,22 +2780,22 @@ var Harness;
             //    testCode += 'function __test__function__() { if(true) { return __test1__val__ }; return __test2__val__; }';
             //    return this.compilesOk(testCode);
             //}
-            Type.prototype.assertSubtypeOf = function (others) {
+            assertSubtypeOf(others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     if (!this.isSubtypeOf(others[i])) {
                         throw new Error("Expected " + this.type + " to be a subtype of " + others[i].type);
                     }
                 }
-            };
-            Type.prototype.assertNotSubtypeOf = function (others) {
+            }
+            assertNotSubtypeOf(others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     if (this.isSubtypeOf(others[i])) {
                         throw new Error("Expected " + this.type + " to be a subtype of " + others[i].type);
                     }
                 }
-            };
+            }
             //public assertIdenticalTo(other: Type) {
             //    if (!this.isIdenticalTo(other)) {
             //        throw new Error("Expected " + this.type + " to be identical to " + other.type);
@@ -2845,7 +2806,7 @@ var Harness;
             //        throw new Error("Expected " + this.type + " to not be identical to " + other.type);
             //    }
             //}
-            Type.prototype.isAssignmentCompatibleWith = function (other) {
+            isAssignmentCompatibleWith(other) {
                 var testCode = 'module __test1__ {\n';
                 testCode += '    ' + this.code + ';\n';
                 testCode += '    export var __val__ = ' + this.identifier + ';\n';
@@ -2858,8 +2819,8 @@ var Harness;
                 testCode += 'var __test2__val__ = __test2__.__val__;\n';
                 testCode += '__test2__val__ = __test1__val__;';
                 return this.compilesOk(testCode);
-            };
-            Type.prototype.assertAssignmentCompatibleWith = function (others) {
+            }
+            assertAssignmentCompatibleWith(others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     var other = others[i];
@@ -2867,8 +2828,8 @@ var Harness;
                         throw new Error("Expected " + this.type + " to be assignment compatible with " + other.type);
                     }
                 }
-            };
-            Type.prototype.assertNotAssignmentCompatibleWith = function (others) {
+            }
+            assertNotAssignmentCompatibleWith(others) {
                 others = this.normalizeToArray(others);
                 for (var i = 0; i < others.length; i++) {
                     var other = others[i];
@@ -2876,27 +2837,25 @@ var Harness;
                         throw new Error("Expected " + this.type + " to not be assignment compatible with " + other.type);
                     }
                 }
-            };
-            Type.prototype.assertThisCanBeAssignedTo = function (desc, these, notThese) {
-                var _this = this;
-                it(desc + " is assignable to ", function () {
-                    _this.assertAssignmentCompatibleWith(these);
+            }
+            assertThisCanBeAssignedTo(desc, these, notThese) {
+                it(desc + " is assignable to ", () => {
+                    this.assertAssignmentCompatibleWith(these);
                 });
-                it(desc + " not assignable to ", function () {
-                    _this.assertNotAssignmentCompatibleWith(notThese);
+                it(desc + " not assignable to ", () => {
+                    this.assertNotAssignmentCompatibleWith(notThese);
                 });
-            };
-            return Type;
-        }());
+            }
+        }
         Compiler.Type = Type;
-        var TypeFactory = /** @class */ (function () {
-            function TypeFactory() {
+        class TypeFactory {
+            constructor() {
                 this.any = this.get('var x : any', 'x');
                 this.number = this.get('var x : number', 'x');
                 this.string = this.get('var x : string', 'x');
                 this.boolean = this.get('var x : boolean', 'x');
             }
-            TypeFactory.prototype.get = function (code, target) {
+            get(code, target) {
                 var targetIdentifier = '';
                 var targetPosition = -1;
                 if (typeof target === "string") {
@@ -2938,7 +2897,7 @@ var Harness;
                                 var tyInfo = compiler.pullGetTypeInfoAtPosition(targetPosition, script2);
                                 var name = this.getTypeInfoName(tyInfo.ast);
                                 var foundValue = new Type(tyInfo.typeInfo, code, name);
-                                if (!matchingIdentifiers.some(function (value) { return (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type); })) {
+                                if (!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type))) {
                                     matchingIdentifiers.push(foundValue);
                                 }
                             }
@@ -2948,7 +2907,7 @@ var Harness;
                                     var name = this.getTypeInfoName(tyInfo.ast);
                                     if (name === targetIdentifier) {
                                         var foundValue = new Type(tyInfo.typeInfo, code, targetIdentifier);
-                                        if (!matchingIdentifiers.some(function (value) { return (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type); })) {
+                                        if (!matchingIdentifiers.some(value => (value.identifier === foundValue.identifier) && (value.code === foundValue.code) && (value.type === foundValue.type))) {
                                             matchingIdentifiers.push(foundValue);
                                         }
                                     }
@@ -2971,8 +2930,8 @@ var Harness;
                 else {
                     return matchingIdentifiers[0];
                 }
-            };
-            TypeFactory.prototype.getTypeInfoName = function (ast) {
+            }
+            getTypeInfoName(ast) {
                 var name = '';
                 switch (ast.nodeType) {
                     case TypeScript.NodeType.Name: // Type Name?
@@ -3020,15 +2979,14 @@ var Harness;
                         break;
                 }
                 return name;
-            };
-            TypeFactory.prototype.isOfType = function (expr, expectedType) {
+            }
+            isOfType(expr, expectedType) {
                 var actualType = this.get('var _v_a_r_ = ' + expr, '_v_a_r_');
                 it('Expression "' + expr + '" is of type "' + expectedType + '"', function () {
                     assert.equal(actualType.type, expectedType);
                 });
-            };
-            return TypeFactory;
-        }());
+            }
+        }
         Compiler.TypeFactory = TypeFactory;
         /** Generates a .d.ts file for the given code
           * @param verifyNoDeclFile pass true when the given code should generate no decl file, false otherwise
@@ -3050,13 +3008,13 @@ var Harness;
                 var outputs = {};
                 compiler.settings.outputOption = "";
                 compiler.parseEmitOption({
-                    createFile: function (fn) {
+                    createFile: (fn) => {
                         outputs[fn] = new Harness.Compiler.WriterAggregator();
                         return outputs[fn];
                     },
-                    directoryExists: function (path) { return true; },
-                    fileExists: function (path) { return true; },
-                    resolvePath: function (path) { return path; }
+                    directoryExists: (path) => true,
+                    fileExists: (path) => true,
+                    resolvePath: (path) => path
                 });
                 compiler.emitDeclarations();
                 var results = null;
@@ -3091,13 +3049,13 @@ var Harness;
         }
         Compiler.generateDeclFile = generateDeclFile;
         /** Contains the code and errors of a compilation and some helper methods to check its status. */
-        var CompilerResult = /** @class */ (function () {
+        class CompilerResult {
             /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
-            function CompilerResult(fileResults, errorLines, scripts) {
+            constructor(fileResults, errorLines, scripts) {
                 this.fileResults = fileResults;
                 this.scripts = scripts;
                 var lines = [];
-                fileResults.forEach(function (v) { return lines = lines.concat(v.file.lines); });
+                fileResults.forEach(v => lines = lines.concat(v.file.lines));
                 this.code = lines.join("\n");
                 this.errors = [];
                 for (var i = 0; i < errorLines.length; i++) {
@@ -3116,29 +3074,27 @@ var Harness;
                     }
                 }
             }
-            CompilerResult.prototype.isErrorAt = function (line, column, message) {
+            isErrorAt(line, column, message) {
                 for (var i = 0; i < this.errors.length; i++) {
                     if (this.errors[i].line === line && this.errors[i].column === column && this.errors[i].message === message)
                         return true;
                 }
                 return false;
-            };
-            return CompilerResult;
-        }());
+            }
+        }
         Compiler.CompilerResult = CompilerResult;
         // Compiler Error.
-        var CompilerError = /** @class */ (function () {
-            function CompilerError(file, line, column, message) {
+        class CompilerError {
+            constructor(file, line, column, message) {
                 this.file = file;
                 this.line = line;
                 this.column = column;
                 this.message = message;
             }
-            CompilerError.prototype.toString = function () {
+            toString() {
                 return this.file + "(" + this.line + "," + this.column + "): " + this.message;
-            };
-            return CompilerError;
-        }());
+            }
+        }
         Compiler.CompilerError = CompilerError;
         /** Create a new instance of the compiler with default settings and lib.d.ts, then typecheck */
         function recreate() {
@@ -3154,7 +3110,7 @@ var Harness;
         function reset() {
             stdout.reset();
             stderr.reset();
-            var files = compiler.units.map(function (value) { return value.filename; });
+            var files = compiler.units.map((value) => value.filename);
             for (var i = 0; i < files.length; i++) {
                 var fname = files[i];
                 if (fname !== 'lib.d.ts') {
@@ -3285,16 +3241,16 @@ var Harness;
             }
             else {
                 var addedFiles = [];
-                var precompile = function () {
+                var precompile = () => {
                     // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?
                     // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
-                    dependencies.forEach(function (dep) {
+                    dependencies.forEach(dep => {
                         addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));
                         addedFiles.push(dep.name);
                     });
                 };
-                var postcompile = function () {
-                    addedFiles.forEach(function (file) {
+                var postcompile = () => {
+                    addedFiles.forEach(file => {
                         updateUnit('', file);
                     });
                 };
@@ -3311,7 +3267,7 @@ var Harness;
     /** Parses the test cases files
      *  extracts options and individual files in a multifile test
      */
-    var TestCaseParser;
+    let TestCaseParser;
     (function (TestCaseParser) {
         optionRegex = /^[\/]{2}\s*@(\w+):\s*(\S*)/gm; // multiple matches on multiple lines
         // List of allowed metadata names
@@ -3417,8 +3373,8 @@ var Harness;
         }
         TestCaseParser.makeUnitsFromTest = makeUnitsFromTest;
     })(TestCaseParser = Harness.TestCaseParser || (Harness.TestCaseParser = {}));
-    var ScriptInfo = /** @class */ (function () {
-        function ScriptInfo(name, content, isResident, maxScriptVersions) {
+    class ScriptInfo {
+        constructor(name, content, isResident, maxScriptVersions) {
             this.name = name;
             this.content = content;
             this.isResident = isResident;
@@ -3426,13 +3382,13 @@ var Harness;
             this.editRanges = [];
             this.version = 1;
         }
-        ScriptInfo.prototype.updateContent = function (content, isResident) {
+        updateContent(content, isResident) {
             this.editRanges = [];
             this.content = content;
             this.isResident = isResident;
             this.version++;
-        };
-        ScriptInfo.prototype.editContent = function (minChar, limChar, newText) {
+        }
+        editContent(minChar, limChar, newText) {
             // Apply edits
             var prefix = this.content.substring(0, minChar);
             var middle = newText;
@@ -3448,8 +3404,8 @@ var Harness;
             }
             // Update version #
             this.version++;
-        };
-        ScriptInfo.prototype.getEditRangeSinceVersion = function (version) {
+        }
+        getEditRangeSinceVersion(version) {
             if (this.version == version) {
                 // No edits!
                 return null;
@@ -3460,35 +3416,31 @@ var Harness;
                 return TypeScript.ScriptEditRange.unknown();
             }
             var entries = this.editRanges.slice(initialEditRangeIndex);
-            var minDistFromStart = entries.map(function (x) { return x.editRange.minChar; }).reduce(function (prev, current) { return Math.min(prev, current); });
-            var minDistFromEnd = entries.map(function (x) { return x.length - x.editRange.limChar; }).reduce(function (prev, current) { return Math.min(prev, current); });
-            var aggDelta = entries.map(function (x) { return x.editRange.delta; }).reduce(function (prev, current) { return prev + current; });
+            var minDistFromStart = entries.map(x => x.editRange.minChar).reduce((prev, current) => Math.min(prev, current));
+            var minDistFromEnd = entries.map(x => x.length - x.editRange.limChar).reduce((prev, current) => Math.min(prev, current));
+            var aggDelta = entries.map(x => x.editRange.delta).reduce((prev, current) => prev + current);
             return new TypeScript.ScriptEditRange(minDistFromStart, entries[0].length - minDistFromEnd, aggDelta);
-        };
-        return ScriptInfo;
-    }());
+        }
+    }
     Harness.ScriptInfo = ScriptInfo;
-    var TypeScriptLS = /** @class */ (function () {
-        function TypeScriptLS() {
+    class TypeScriptLS {
+        constructor() {
             this.ls = null;
             this.scripts = [];
             this.maxScriptVersions = 100;
         }
-        TypeScriptLS.prototype.addDefaultLibrary = function () {
+        addDefaultLibrary() {
             this.addScript("lib.d.ts", Harness.Compiler.libText, true);
-        };
-        TypeScriptLS.prototype.addFile = function (name, isResident) {
-            if (isResident === void 0) { isResident = false; }
+        }
+        addFile(name, isResident = false) {
             var code = readFile(name);
             this.addScript(name, code, isResident);
-        };
-        TypeScriptLS.prototype.addScript = function (name, content, isResident) {
-            if (isResident === void 0) { isResident = false; }
+        }
+        addScript(name, content, isResident = false) {
             var script = new ScriptInfo(name, content, isResident, this.maxScriptVersions);
             this.scripts.push(script);
-        };
-        TypeScriptLS.prototype.updateScript = function (name, content, isResident) {
-            if (isResident === void 0) { isResident = false; }
+        }
+        updateScript(name, content, isResident = false) {
             for (var i = 0; i < this.scripts.length; i++) {
                 if (this.scripts[i].name == name) {
                     this.scripts[i].updateContent(content, isResident);
@@ -3496,8 +3448,8 @@ var Harness;
                 }
             }
             this.addScript(name, content, isResident);
-        };
-        TypeScriptLS.prototype.editScript = function (name, minChar, limChar, newText) {
+        }
+        editScript(name, minChar, limChar, newText) {
             for (var i = 0; i < this.scripts.length; i++) {
                 if (this.scripts[i].name == name) {
                     this.scripts[i].editContent(minChar, limChar, newText);
@@ -3505,107 +3457,107 @@ var Harness;
                 }
             }
             throw new Error("No script with name '" + name + "'");
-        };
-        TypeScriptLS.prototype.getScriptContent = function (scriptIndex) {
+        }
+        getScriptContent(scriptIndex) {
             return this.scripts[scriptIndex].content;
-        };
+        }
         //////////////////////////////////////////////////////////////////////
         // ILogger implementation
         //
-        TypeScriptLS.prototype.information = function () { return false; };
-        TypeScriptLS.prototype.debug = function () { return true; };
-        TypeScriptLS.prototype.warning = function () { return true; };
-        TypeScriptLS.prototype.error = function () { return true; };
-        TypeScriptLS.prototype.fatal = function () { return true; };
-        TypeScriptLS.prototype.log = function (s) {
+        information() { return false; }
+        debug() { return true; }
+        warning() { return true; }
+        error() { return true; }
+        fatal() { return true; }
+        log(s) {
             // For debugging...
             //IO.printLine("TypeScriptLS:" + s);
-        };
+        }
         //////////////////////////////////////////////////////////////////////
         // ILanguageServiceShimHost implementation
         //
-        TypeScriptLS.prototype.getCompilationSettings = function () {
+        getCompilationSettings() {
             return ""; // i.e. default settings
-        };
-        TypeScriptLS.prototype.getScriptCount = function () {
+        }
+        getScriptCount() {
             return this.scripts.length;
-        };
-        TypeScriptLS.prototype.getScriptSourceText = function (scriptIndex, start, end) {
+        }
+        getScriptSourceText(scriptIndex, start, end) {
             return this.scripts[scriptIndex].content.substring(start, end);
-        };
-        TypeScriptLS.prototype.getScriptSourceLength = function (scriptIndex) {
+        }
+        getScriptSourceLength(scriptIndex) {
             return this.scripts[scriptIndex].content.length;
-        };
-        TypeScriptLS.prototype.getScriptId = function (scriptIndex) {
+        }
+        getScriptId(scriptIndex) {
             return this.scripts[scriptIndex].name;
-        };
-        TypeScriptLS.prototype.getScriptIsResident = function (scriptIndex) {
+        }
+        getScriptIsResident(scriptIndex) {
             return this.scripts[scriptIndex].isResident;
-        };
-        TypeScriptLS.prototype.getScriptVersion = function (scriptIndex) {
+        }
+        getScriptVersion(scriptIndex) {
             return this.scripts[scriptIndex].version;
-        };
-        TypeScriptLS.prototype.getScriptEditRangeSinceVersion = function (scriptIndex, scriptVersion) {
+        }
+        getScriptEditRangeSinceVersion(scriptIndex, scriptVersion) {
             var range = this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion);
             var result = (range.minChar + "," + range.limChar + "," + range.delta);
             return result;
-        };
+        }
         /** Return a new instance of the language service shim, up-to-date wrt to typecheck.
          *  To access the non-shim (i.e. actual) language service, use the "ls.languageService" property.
          */
-        TypeScriptLS.prototype.getLanguageService = function () {
+        getLanguageService() {
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
             ls.refresh(true);
             this.ls = ls;
             return ls;
-        };
+        }
         /** Parse file given its source text */
-        TypeScriptLS.prototype.parseSourceText = function (fileName, sourceText) {
+        parseSourceText(fileName, sourceText) {
             var parser = new TypeScript.Parser();
             parser.setErrorRecovery(null);
-            parser.errorCallback = function (a, b, c, d) { };
+            parser.errorCallback = (a, b, c, d) => { };
             var script = parser.parse(sourceText, fileName, 0);
             return script;
-        };
+        }
         /** Parse a file on disk given its filename */
-        TypeScriptLS.prototype.parseFile = function (fileName) {
+        parseFile(fileName) {
             var sourceText = new TypeScript.StringSourceText(IO.readFile(fileName));
             return this.parseSourceText(fileName, sourceText);
-        };
+        }
         /**
          * @param line 1 based index
          * @param col 1 based index
         */
-        TypeScriptLS.prototype.lineColToPosition = function (fileName, line, col) {
+        lineColToPosition(fileName, line, col) {
             var script = this.ls.languageService.getScriptAST(fileName);
             assert.notNull(script);
             assert.is(line >= 1);
             assert.is(col >= 1);
             assert.is(line <= script.locationInfo.lineMap.length);
             return TypeScript.getPositionFromZeroBasedLineColumn(script, line - 1, col - 1);
-        };
+        }
         /**
          * @param line 0 based index
          * @param col 0 based index
         */
-        TypeScriptLS.prototype.positionToZeroBasedLineCol = function (fileName, position) {
+        positionToZeroBasedLineCol(fileName, position) {
             var script = this.ls.languageService.getScriptAST(fileName);
             assert.notNull(script);
             var result = TypeScript.getZeroBasedLineColumnFromPosition(script, position);
             assert.is(result.line >= 0);
             assert.is(result.col >= 0);
             return result;
-        };
+        }
         /** Verify that applying edits to sourceFileName result in the content of the file baselineFileName */
-        TypeScriptLS.prototype.checkEdits = function (sourceFileName, baselineFileName, edits) {
+        checkEdits(sourceFileName, baselineFileName, edits) {
             var script = readFile(sourceFileName);
             var formattedScript = this.applyEdits(script, edits);
             var baseline = readFile(baselineFileName);
             assert.noDiff(formattedScript, baseline);
             assert.equal(formattedScript, baseline);
-        };
+        }
         /** Apply an array of text edits to a string, and return the resulting string. */
-        TypeScriptLS.prototype.applyEdits = function (content, edits) {
+        applyEdits(content, edits) {
             var result = content;
             edits = this.normalizeEdits(edits);
             for (var i = edits.length - 1; i >= 0; i--) {
@@ -3616,9 +3568,9 @@ var Harness;
                 result = prefix + middle + suffix;
             }
             return result;
-        };
+        }
         /** Normalize an array of edits by removing overlapping entries and sorting entries on the minChar position. */
-        TypeScriptLS.prototype.normalizeEdits = function (edits) {
+        normalizeEdits(edits) {
             var result = [];
             function mapEdits(edits) {
                 var result = [];
@@ -3663,12 +3615,11 @@ var Harness;
                 }
             }
             return result;
-        };
-        TypeScriptLS.prototype.getHostSettings = function () {
+        }
+        getHostSettings() {
             return JSON.stringify({ usePullLanguageService: Harness.usePull });
-        };
-        return TypeScriptLS;
-    }());
+        }
+    }
     Harness.TypeScriptLS = TypeScriptLS;
     // Describe/it definitions
     function describe(description, block) {
@@ -3693,7 +3644,7 @@ var Harness;
     }
     Harness.run = run;
     /** Runs TypeScript or Javascript code. */
-    var Runner;
+    let Runner;
     (function (Runner) {
         function runCollateral(path, callback) {
             path = switchToForwardSlashes(path);
@@ -3731,7 +3682,7 @@ var Harness;
         Runner.runString = runString;
     })(Runner = Harness.Runner || (Harness.Runner = {}));
     /** Support class for baseline files */
-    var Baseline;
+    let Baseline;
     (function (Baseline) {
         var reportFilename = 'baseline-report.html';
         var firstRun = true;
@@ -3839,8 +3790,7 @@ var Harness;
                 throw new Error(errMsg);
             }
         }
-        function runBaseline(descriptionForDescribe, relativeFilename, generateContent, runImmediately, opts) {
-            if (runImmediately === void 0) { runImmediately = false; }
+        function runBaseline(descriptionForDescribe, relativeFilename, generateContent, runImmediately = false, opts) {
             var actual = undefined;
             var actualFilename = localPath(relativeFilename);
             if (runImmediately) {
@@ -3849,12 +3799,12 @@ var Harness;
                 writeComparison(comparison.expected, comparison.actual, relativeFilename, actualFilename, descriptionForDescribe);
             }
             else {
-                describe(descriptionForDescribe, function () {
+                describe(descriptionForDescribe, () => {
                     var actual;
-                    it('Can generate the content without error', function () {
+                    it('Can generate the content without error', () => {
                         actual = generateActual(actualFilename, generateContent);
                     });
-                    it('Matches the baseline file', function () {
+                    it('Matches the baseline file', () => {
                         var comparison = compareToBaseline(actual, relativeFilename, opts);
                         writeComparison(comparison.expected, comparison.actual, relativeFilename, actualFilename, descriptionForDescribe);
                     });

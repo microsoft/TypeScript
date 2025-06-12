@@ -37,6 +37,6 @@ define(["require", "exports", "file1"], function (require, exports, x) {
 define(["require", "exports", "file1", "file2"], function (require, exports, x) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var a;
-    var b = x.b;
+    let a;
+    let b = x.b;
 });

@@ -35,8 +35,8 @@ Output::
 
 
 //// [/users/username/projects/project/out.js]
-var x = 10;
-var y = 20;
+const x = 10;
+const y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]

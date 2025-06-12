@@ -23,17 +23,14 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Foo = function (props) { return <div />; };
+    const Foo = (props) => <div />;
     // Should be OK
-    var foo = <Foo />;
+    const foo = <Foo />;
     // Should be OK
-    var MainMenu = function (props) { return (<div>
+    var MainMenu = (props) => (<div>
     <h3>Main Menu</h3>
-    </div>); };
-    var App = function (_a) {
-        var children = _a.children;
-        return (<div>
+    </div>);
+    var App = ({ children }) => (<div>
         <MainMenu />
 	</div>);
-    };
 });

@@ -41,14 +41,14 @@ function filter(handler) {
         // ...
     };
 }
-var Wat = /** @class */ (function () {
-    function Wat() {
+let Wat = (() => {
+    class Wat {
+        static whatever() {
+            // ...
+        }
     }
-    Wat.whatever = function () {
-        // ...
-    };
     __decorate([
-        filter(function () { return a_1.test == 'abc'; })
+        filter(() => a_1.test == 'abc')
     ], Wat, "whatever", null);
     return Wat;
-}());
+})();

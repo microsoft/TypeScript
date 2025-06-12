@@ -11,15 +11,13 @@ class X2 {
 
 
 //// [propertyNamedConstructor.js]
-var X1 = /** @class */ (function () {
-    function X1() {
+class X1 {
+    constructor() {
         this["constructor"] = 3; // Error
     }
-    return X1;
-}());
-var X2 = /** @class */ (function () {
-    function X2() {
+}
+class X2 {
+    constructor() {
         this["constructor"] = 3;
     }
-    return X2;
-}());
+}

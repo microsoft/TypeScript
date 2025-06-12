@@ -43,17 +43,10 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 // Repro from #14896
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.css = css;
-var Query = /** @class */ (function () {
-    function Query() {
-    }
-    return Query;
-}());
-function css(styles) {
-    var classNames = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        classNames[_i - 1] = arguments[_i];
-    }
-    var args = classNames.map(function (arg) {
+class Query {
+}
+function css(styles, ...classNames) {
+    const args = classNames.map(arg => {
         if (arg == null) {
             return null;
         }
@@ -61,8 +54,8 @@ function css(styles) {
             return styles[arg];
         }
         if (typeof arg == "object") {
-            return Object.keys(arg).reduce(function (obj, key) {
-                var exportedClassName = styles[key];
+            return Object.keys(arg).reduce((obj, key) => {
+                const exportedClassName = styles[key];
                 obj[exportedClassName] = arg[key];
                 return obj;
             }, {});

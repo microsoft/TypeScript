@@ -296,7 +296,7 @@ define("shared/types/db", ["require", "exports"], function (require, exports) {
 define("src/main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var a = {
+    const a = {
         lastName: 'sdsd'
     };
 });
@@ -644,7 +644,7 @@ define("shared/types/db", ["require", "exports"], function (require, exports) {
 define("src/main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var a = "hello";
+    const a = "hello";
 });
 define("src/other", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1001,12 +1001,12 @@ define("src/main", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
+    const a = class {
+        constructor() {
             this.p = 10;
         }
-        return class_1;
-    }());
+    };
+    exports.a = a;
 });
 define("src/other", ["require", "exports"], function (require, exports) {
     "use strict";

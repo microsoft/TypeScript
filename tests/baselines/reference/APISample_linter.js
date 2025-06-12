@@ -95,7 +95,7 @@ function delint(sourceFile) {
                 }
                 break;
             case ts.SyntaxKind.IfStatement:
-                var ifStatement = node;
+                let ifStatement = node;
                 if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
@@ -106,7 +106,7 @@ function delint(sourceFile) {
                 }
                 break;
             case ts.SyntaxKind.BinaryExpression:
-                var op = node.operatorToken.kind;
+                let op = node.operatorToken.kind;
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.");
                 }
@@ -115,14 +115,14 @@ function delint(sourceFile) {
         ts.forEachChild(node, delintNode);
     }
     function report(node, message) {
-        var _a = sourceFile.getLineAndCharacterOfPosition(node.getStart()), line = _a.line, character = _a.character;
-        console.log("".concat(sourceFile.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
+        let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
     }
 }
-var fileNames = process.argv.slice(2);
-fileNames.forEach(function (fileName) {
+const fileNames = process.argv.slice(2);
+fileNames.forEach(fileName => {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
     // delint it
     delint(sourceFile);
 });

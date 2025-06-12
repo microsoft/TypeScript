@@ -52,7 +52,7 @@ function testObjLiteral(objLit) { }
 function testFuncLiteral(funcLit) { }
 ;
 // this should not be an error
-testFunctionExprC2(function (v1, v2) { return 1; });
+testFunctionExprC2((v1, v2) => 1);
 testObjLiteral(objL);
 testFuncLiteral(funcL);
 var k = temp1(null);
@@ -63,11 +63,10 @@ noError(null, []);
 noError(undefined, []);
 noError(null, [null, undefined]);
 noError(undefined, anyArray);
-var C = /** @class */ (function () {
-    function C(emtpyArray, variable) {
+class C {
+    constructor(emtpyArray, variable) {
     }
-    return C;
-}());
+}
 var newC = new C([], undefined);
 var newC1 = new C([], arg0);
 var newC2 = new C([], null);

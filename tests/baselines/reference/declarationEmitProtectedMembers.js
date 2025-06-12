@@ -52,90 +52,45 @@ class C4 {
 }
 
 //// [declarationEmitProtectedMembers.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 // Class with protected members
-var C1 = /** @class */ (function () {
-    function C1() {
-    }
-    C1.prototype.f = function () {
+class C1 {
+    f() {
         return this.x;
-    };
-    Object.defineProperty(C1.prototype, "accessor", {
-        get: function () { return 0; },
-        set: function (a) { },
-        enumerable: false,
-        configurable: true
-    });
-    C1.sf = function () {
+    }
+    set accessor(a) { }
+    get accessor() { return 0; }
+    static sf() {
         return this.sx;
-    };
-    Object.defineProperty(C1, "staticSetter", {
-        set: function (a) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C1, "staticGetter", {
-        get: function () { return 0; },
-        enumerable: false,
-        configurable: true
-    });
-    return C1;
-}());
+    }
+    static set staticSetter(a) { }
+    static get staticGetter() { return 0; }
+}
 // Derived class overriding protected members
-var C2 = /** @class */ (function (_super) {
-    __extends(C2, _super);
-    function C2() {
-        return _super !== null && _super.apply(this, arguments) || this;
+class C2 extends C1 {
+    f() {
+        return super.f() + this.x;
     }
-    C2.prototype.f = function () {
-        return _super.prototype.f.call(this) + this.x;
-    };
-    C2.sf = function () {
-        return _super.sf.call(this) + this.sx;
-    };
-    return C2;
-}(C1));
+    static sf() {
+        return super.sf() + this.sx;
+    }
+}
 // Derived class making protected members public
-var C3 = /** @class */ (function (_super) {
-    __extends(C3, _super);
-    function C3() {
-        return _super !== null && _super.apply(this, arguments) || this;
+class C3 extends C2 {
+    f() {
+        return super.f();
     }
-    C3.prototype.f = function () {
-        return _super.prototype.f.call(this);
-    };
-    C3.sf = function () {
-        return _super.sf.call(this);
-    };
-    Object.defineProperty(C3, "staticGetter", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    return C3;
-}(C2));
+    static sf() {
+        return super.sf();
+    }
+    static get staticGetter() { return 1; }
+}
 // Protected properties in constructors
-var C4 = /** @class */ (function () {
-    function C4(a, b) {
+class C4 {
+    constructor(a, b) {
         this.a = a;
         this.b = b;
     }
-    return C4;
-}());
+}
 
 
 //// [declarationEmitProtectedMembers.d.ts]

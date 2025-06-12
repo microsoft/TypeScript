@@ -16,4 +16,4 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var _a = [0, 1, 2], a = _a[0], b = __rest(_a, ["0"]);
+const _a = [0, 1, 2], { 0: a } = _a, b = __rest(_a, ["0"]);

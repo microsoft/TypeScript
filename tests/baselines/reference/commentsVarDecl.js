@@ -71,7 +71,7 @@ var yy =
 /// value comment
 20;
 /** comment2 */
-var z = /** lambda comment */ function (x, y) { return x + y; };
+var z = /** lambda comment */ (x, y) => x + y;
 var z2;
 var x2 = z2;
 var n4;

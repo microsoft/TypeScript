@@ -16,8 +16,8 @@ const a = (
 );
 
 //// [jsxNestedWithinTernaryParsesCorrectly.jsx]
-var emptyMessage = null;
-var a = (<div>
+const emptyMessage = null;
+const a = (<div>
       {0 ? (emptyMessage // must be identifier?
     ) : (
     // must be exactly two expression holes

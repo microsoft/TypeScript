@@ -22,7 +22,7 @@ var res = x('a', 'b')
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /** @type {Foo} */
-var x = function () { return 1; };
+const x = () => 1;
 exports.x = x;
 var res = (0, exports.x)('a', 'b');
 

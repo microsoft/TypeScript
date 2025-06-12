@@ -16,6 +16,6 @@ export const Form3 = brokenFunction(parameterFn)({store: "hello"})
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Form3 = void 0;
 function alert(s) { }
-var parameterFn = function (props) { return alert(props.store); };
-var brokenFunction = function (f) { return function (o) { return o; }; };
+const parameterFn = (props) => alert(props.store);
+const brokenFunction = (f) => (o) => o;
 exports.Form3 = brokenFunction(parameterFn)({ store: "hello" });

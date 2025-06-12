@@ -7,8 +7,5 @@ class C {
 
 
 //// [parserIsClassMemberStart.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}

@@ -14,13 +14,10 @@ a.foo();
 
 
 //// [classOrder1.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () {
+class A {
+    foo() {
         /*WScript.Echo("Here!");*/
-    };
-    return A;
-}());
+    }
+}
 var a = new A();
 a.foo();

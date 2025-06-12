@@ -5,4 +5,4 @@ var x = `\u{r}\u{n}\u{t}`;
 
 
 //// [unicodeExtendedEscapesInTemplates17.js]
-var x = "\\u{r}\\u{n}\\u{t}";
+var x = `\u{r}\u{n}\u{t}`;

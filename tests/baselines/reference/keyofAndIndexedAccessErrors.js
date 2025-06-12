@@ -173,11 +173,8 @@ class Test<T extends Record<string, number>> {
 
 
 //// [keyofAndIndexedAccessErrors.js]
-var Shape = /** @class */ (function () {
-    function Shape() {
-    }
-    return Shape;
-}());
+class Shape {
+}
 function getProperty(obj, key) {
     return obj[key];
 }
@@ -185,9 +182,9 @@ function setProperty(obj, key, value) {
     obj[key] = value;
 }
 function f10(shape) {
-    var x1 = getProperty(shape, "name");
-    var x2 = getProperty(shape, "size"); // Error
-    var x3 = getProperty(shape, cond ? "name" : "size"); // Error
+    let x1 = getProperty(shape, "name");
+    let x2 = getProperty(shape, "size"); // Error
+    let x3 = getProperty(shape, cond ? "name" : "size"); // Error
     setProperty(shape, "name", "rectangle");
     setProperty(shape, "size", 10); // Error
     setProperty(shape, cond ? "name" : "size", 10); // Error
@@ -216,7 +213,7 @@ function f20(x, y, k1, k2, k3, k4) {
 }
 // Repro from #17166
 function f3(t, k, tk, u, j, uk, tj, uj) {
-    for (var key in t) {
+    for (let key in t) {
         key = k; // ok, K ==> keyof T
         k = key; // error, keyof T =/=> K
         t[key] = tk; // ok, T[K] ==> T[keyof T]
@@ -236,8 +233,8 @@ function f4(k) {
     k = 42; // error
     k = "hello"; // error
 }
-var a1 = 'a'; // Error
-var b1 = 'b';
+const a1 = 'a'; // Error
+const b1 = 'b';
 function test1(t, k) {
     t[k] = 42; // Error
     t[k] = "hello"; // Error
@@ -245,19 +242,18 @@ function test1(t, k) {
 }
 // Repro from #28839
 function f30() {
-    var x = "hello";
+    let x = "hello";
 }
 function f31() {
-    var x = "hello";
+    let x = "hello";
 }
 // Repro from #51069
-var Test = /** @class */ (function () {
-    function Test(t) {
+class Test {
+    constructor(t) {
         this.testy = t;
     }
-    Test.prototype.t = function (key) {
+    t(key) {
         this.testy[key] += 1; // Error
         return this.testy[key];
-    };
-    return Test;
-}());
+    }
+}

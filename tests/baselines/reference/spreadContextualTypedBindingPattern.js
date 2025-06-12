@@ -27,4 +27,4 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 // [ts] Initializer provides no value for this binding element and the binding element has no default value.
-var _a = __assign(__assign({}, bob), alice), naam = _a.naam, age = _a.age;
+const { naam, age } = __assign(__assign({}, bob), alice);

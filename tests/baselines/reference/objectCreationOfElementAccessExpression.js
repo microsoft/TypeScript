@@ -58,27 +58,12 @@ var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Co
 
 
 //// [objectCreationOfElementAccessExpression.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var Food = /** @class */ (function () {
-    function Food(name) {
+class Food {
+    constructor(name) {
         this.name = name;
         this.amount = 100;
     }
-    Food.prototype.eat = function (amountToEat) {
+    eat(amountToEat) {
         this.amount -= amountToEat;
         if (this.amount <= 0) {
             this.amount = 0;
@@ -87,70 +72,48 @@ var Food = /** @class */ (function () {
         else {
             return true;
         }
-    };
-    return Food;
-}());
-var MonsterFood = /** @class */ (function (_super) {
-    __extends(MonsterFood, _super);
-    function MonsterFood(name, flavor) {
-        var _this = _super.call(this, name) || this;
-        _this.flavor = flavor;
-        return _this;
     }
-    return MonsterFood;
-}(Food));
-var IceCream = /** @class */ (function (_super) {
-    __extends(IceCream, _super);
-    function IceCream(flavor) {
-        var _this = _super.call(this, "Ice Cream", flavor) || this;
-        _this.flavor = flavor;
-        return _this;
+}
+class MonsterFood extends Food {
+    constructor(name, flavor) {
+        super(name);
+        this.flavor = flavor;
     }
-    return IceCream;
-}(MonsterFood));
-var Cookie = /** @class */ (function (_super) {
-    __extends(Cookie, _super);
-    function Cookie(flavor, isGlutenFree) {
-        var _this = _super.call(this, "Cookie", flavor) || this;
-        _this.flavor = flavor;
-        _this.isGlutenFree = isGlutenFree;
-        return _this;
+}
+class IceCream extends MonsterFood {
+    constructor(flavor) {
+        super("Ice Cream", flavor);
+        this.flavor = flavor;
     }
-    return Cookie;
-}(MonsterFood));
-var PetFood = /** @class */ (function (_super) {
-    __extends(PetFood, _super);
-    function PetFood(name, whereToBuy) {
-        var _this = _super.call(this, name) || this;
-        _this.whereToBuy = whereToBuy;
-        return _this;
+}
+class Cookie extends MonsterFood {
+    constructor(flavor, isGlutenFree) {
+        super("Cookie", flavor);
+        this.flavor = flavor;
+        this.isGlutenFree = isGlutenFree;
     }
-    return PetFood;
-}(Food));
-var ExpensiveOrganicDogFood = /** @class */ (function (_super) {
-    __extends(ExpensiveOrganicDogFood, _super);
-    function ExpensiveOrganicDogFood(whereToBuy) {
-        var _this = _super.call(this, "Origen", whereToBuy) || this;
-        _this.whereToBuy = whereToBuy;
-        return _this;
+}
+class PetFood extends Food {
+    constructor(name, whereToBuy) {
+        super(name);
+        this.whereToBuy = whereToBuy;
     }
-    return ExpensiveOrganicDogFood;
-}(PetFood));
-var ExpensiveOrganicCatFood = /** @class */ (function (_super) {
-    __extends(ExpensiveOrganicCatFood, _super);
-    function ExpensiveOrganicCatFood(whereToBuy, containsFish) {
-        var _this = _super.call(this, "Nature's Logic", whereToBuy) || this;
-        _this.whereToBuy = whereToBuy;
-        _this.containsFish = containsFish;
-        return _this;
+}
+class ExpensiveOrganicDogFood extends PetFood {
+    constructor(whereToBuy) {
+        super("Origen", whereToBuy);
+        this.whereToBuy = whereToBuy;
     }
-    return ExpensiveOrganicCatFood;
-}(PetFood));
-var Slug = /** @class */ (function () {
-    function Slug() {
+}
+class ExpensiveOrganicCatFood extends PetFood {
+    constructor(whereToBuy, containsFish) {
+        super("Nature's Logic", whereToBuy);
+        this.whereToBuy = whereToBuy;
+        this.containsFish = containsFish;
     }
-    return Slug;
-}());
+}
+class Slug {
+}
 // ElementAccessExpressions can only contain one expression.  There should be a parse error here.
 var foods = new PetFood[new IceCream('Mint chocolate chip'), Cookie('Chocolate chip', false), new Cookie('Peanut butter', true)];
 var foods2 = new PetFood[new IceCream('Mint chocolate chip'), Cookie('Chocolate chip', false), new Cookie('Peanut butter', true)];

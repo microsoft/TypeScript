@@ -13,17 +13,17 @@ using after = null;
 
 
 //// [usingDeclarationsWithLegacyClassDecorators.8.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
+let C = (() => {
+    let C = class C {
+    };
     C = __decorate([
         dec
     ], C);
     return C;
-}());
+})();
 export { C };
 var after;
-var env_1 = { stack: [], error: void 0, hasError: false };
+const env_1 = { stack: [], error: void 0, hasError: false };
 try {
     after = __addDisposableResource(env_1, null, false);
 }

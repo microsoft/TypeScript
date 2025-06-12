@@ -44,7 +44,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 10;
+const aLocal = 10;
 
 
 //// [/home/src/workspaces/project/b.js]
@@ -52,7 +52,7 @@ var aLocal = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
+const bLocal = 10;
 
 
 //// [/home/src/workspaces/project/c.js]
@@ -192,7 +192,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 10;
+const aLocal = 10;
 //# sourceMappingURL=a.js.map
 
 //// [/home/src/workspaces/project/b.js]
@@ -200,7 +200,7 @@ var aLocal = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
+const bLocal = 10;
 //# sourceMappingURL=b.js.map
 
 //// [/home/src/workspaces/project/c.js]
@@ -296,10 +296,10 @@ exports.d = b_1.b;
 }
 
 //// [/home/src/workspaces/project/a.js.map]
-{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":";;;AAAa,QAAA,CAAC,GAAG,EAAE,CAAC;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC"}
+{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":";;;AAAa,QAAA,CAAC,GAAG,EAAE,CAAC;AAAA,MAAM,MAAM,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/project/b.js.map]
-{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":";;;AAAa,QAAA,CAAC,GAAG,EAAE,CAAC;AAAA,IAAM,MAAM,GAAG,EAAE,CAAC"}
+{"version":3,"file":"b.js","sourceRoot":"","sources":["b.ts"],"names":[],"mappings":";;;AAAa,QAAA,CAAC,GAAG,EAAE,CAAC;AAAA,MAAM,MAAM,GAAG,EAAE,CAAC"}
 
 //// [/home/src/workspaces/project/c.js.map]
 {"version":3,"file":"c.js","sourceRoot":"","sources":["c.ts"],"names":[],"mappings":";;;AAAA,yBAAwB;AAAa,QAAA,CAAC,GAAG,KAAC,CAAC"}
@@ -346,7 +346,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 10;
+const aLocal = 10;
 
 
 //// [/home/src/workspaces/project/b.js]
@@ -354,7 +354,7 @@ var aLocal = 10;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
+const bLocal = 10;
 
 
 //// [/home/src/workspaces/project/c.js]
@@ -818,7 +818,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 100;
+const aLocal = 100;
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
@@ -1119,16 +1119,16 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 100;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQWEsUUFBQSxDQUFDLEdBQUcsRUFBRSxDQUFDO0FBQUEsSUFBTSxNQUFNLEdBQUcsR0FBRyxDQUFDIn0=
+const aLocal = 100;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQWEsUUFBQSxDQUFDLEdBQUcsRUFBRSxDQUFDO0FBQUEsTUFBTSxNQUFNLEdBQUcsR0FBRyxDQUFDIn0=
 
 //// [/home/src/workspaces/project/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQWEsUUFBQSxDQUFDLEdBQUcsRUFBRSxDQUFDO0FBQUEsSUFBTSxNQUFNLEdBQUcsRUFBRSxDQUFDIn0=
+const bLocal = 10;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYi5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7O0FBQWEsUUFBQSxDQUFDLEdBQUcsRUFBRSxDQUFDO0FBQUEsTUFBTSxNQUFNLEdBQUcsRUFBRSxDQUFDIn0=
 
 //// [/home/src/workspaces/project/c.js]
 "use strict";
@@ -1277,7 +1277,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 100;
+const aLocal = 100;
 //# sourceMappingURL=a.js.map
 
 //// [/home/src/workspaces/project/b.js]
@@ -1285,7 +1285,7 @@ var aLocal = 100;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
+const bLocal = 10;
 //# sourceMappingURL=b.js.map
 
 //// [/home/src/workspaces/project/c.js]
@@ -1397,7 +1397,7 @@ exports.d = b_1.b;
 }
 
 //// [/home/src/workspaces/project/a.js.map]
-{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":";;;AAAa,QAAA,CAAC,GAAG,EAAE,CAAC;AAAA,IAAM,MAAM,GAAG,GAAG,CAAC"}
+{"version":3,"file":"a.js","sourceRoot":"","sources":["a.ts"],"names":[],"mappings":";;;AAAa,QAAA,CAAC,GAAG,EAAE,CAAC;AAAA,MAAM,MAAM,GAAG,GAAG,CAAC"}
 
 //// [/home/src/workspaces/project/b.js.map] file written with same contents
 //// [/home/src/workspaces/project/c.js.map] file written with same contents
@@ -1441,7 +1441,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
-var aLocal = 100;
+const aLocal = 100;
 
 
 //// [/home/src/workspaces/project/b.js]
@@ -1449,7 +1449,7 @@ var aLocal = 100;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
-var bLocal = 10;
+const bLocal = 10;
 
 
 //// [/home/src/workspaces/project/c.js]

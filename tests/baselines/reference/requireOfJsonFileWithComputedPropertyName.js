@@ -14,15 +14,14 @@ if (x) {
 }
 
 //// [b.json]
-var _a;
-_a = {},
-    _a[a] = 10,
-    _a;
+{
+    [a]: 10
+}
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var b1 = require("./b.json");
-var x = b1;
+let x = b1;
 var b2 = require("./b.json");
 if (x) {
     x = b2;

@@ -10,5 +10,5 @@ export const title: string
 
 //// [labeledStatementExportDeclarationNoCrash1.js]
 // https://github.com/microsoft/TypeScript/issues/59372
-export var box;
-subTitle: export var title;
+export const box;
+subTitle: export const title;

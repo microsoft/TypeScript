@@ -17,10 +17,7 @@ module m {
 // In second instance of same module, exported interface is not visible
 var m;
 (function (m) {
-    var n = /** @class */ (function () {
-        function n() {
-        }
-        return n;
-    }());
+    class n {
+    }
     m.n = n;
 })(m || (m = {}));

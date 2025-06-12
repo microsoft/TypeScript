@@ -25,11 +25,8 @@ child1(ParentThing.prototype);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParentThing = void 0;
 var child1_1 = require("./child1"); // this import should still exist in some form in the output, since it augments this module
-var ParentThing = /** @class */ (function () {
-    function ParentThing() {
-    }
-    return ParentThing;
-}());
+class ParentThing {
+}
 exports.ParentThing = ParentThing;
 (0, child1_1.child1)(ParentThing.prototype);
 //// [child1.js]
@@ -37,7 +34,7 @@ exports.ParentThing = ParentThing;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.child1 = child1;
 function child1(prototype) {
-    prototype.add = function (a, b) { return a + b; };
+    prototype.add = (a, b) => a + b;
 }
 
 

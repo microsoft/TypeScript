@@ -126,41 +126,41 @@ someGenerics1(3, 4); // Error
 someGenerics1(3, 4);
 // Generic call with argument of function type whose parameter is of type parameter type
 function someGenerics2a(n) { }
-someGenerics2a(function (n) { return n; });
-someGenerics2a(function (n) { return n; });
-someGenerics2a(function (n) { return n.substr(0); });
+someGenerics2a((n) => n);
+someGenerics2a((n) => n);
+someGenerics2a((n) => n.substr(0));
 function someGenerics2b(n) { }
-someGenerics2b(function (n, x) { return n; });
-someGenerics2b(function (n, t) { return n; });
-someGenerics2b(function (n, t) { return n.substr(t * t); });
+someGenerics2b((n, x) => n);
+someGenerics2b((n, t) => n);
+someGenerics2b((n, t) => n.substr(t * t));
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3(producer) { }
-someGenerics3(function () { return ''; }); // Error
-someGenerics3(function () { return undefined; });
-someGenerics3(function () { return 3; }); // Error
+someGenerics3(() => ''); // Error
+someGenerics3(() => undefined);
+someGenerics3(() => 3); // Error
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4(n, f) { }
-someGenerics4(4, function () { return null; }); // Valid
-someGenerics4('', function () { return 3; });
-someGenerics4('', function (x) { return ''; }); // Error
+someGenerics4(4, () => null); // Valid
+someGenerics4('', () => 3);
+someGenerics4('', (x) => ''); // Error
 someGenerics4(null, null);
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5(n, f) { }
-someGenerics5(4, function () { return null; }); // Valid
-someGenerics5('', function () { return 3; });
-someGenerics5('', function (x) { return ''; }); // Error
+someGenerics5(4, () => null); // Valid
+someGenerics5('', () => 3);
+someGenerics5('', (x) => ''); // Error
 someGenerics5(null, null); // Error
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6(a, b, c) { }
-someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Valid
-someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
-someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Error
-someGenerics6(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+someGenerics6(n => n, n => n, n => n); // Valid
+someGenerics6(n => n, n => n, n => n);
+someGenerics6((n) => n, (n) => n, (n) => n); // Error
+someGenerics6((n) => n, (n) => n, (n) => n);
 // Generic call with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7(a, b, c) { }
-someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; }); // Valid, types of n are <any, string, any> respectively
-someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
-someGenerics7(function (n) { return n; }, function (n) { return n; }, function (n) { return n; });
+someGenerics7(n => n, n => n, n => n); // Valid, types of n are <any, string, any> respectively
+someGenerics7(n => n, n => n, n => n);
+someGenerics7((n) => n, (n) => n, (n) => n);
 // Generic call with argument of generic function type
 function someGenerics8(n) { return n; }
 var x = someGenerics8(someGenerics7); // Error

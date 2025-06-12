@@ -9,11 +9,8 @@ var v = class C {
 
 //// [classExpressionWithStaticProperties1.js]
 var _a;
-var v = (_a = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }()),
+var v = (_a = class C {
+    },
     _a.a = 1,
     _a.b = 2,
     _a.c = _a.a + _a.b,

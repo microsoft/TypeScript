@@ -391,7 +391,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg0 = void 0;
 exports.pkg0 = 0;
-var someConst2 = 10;
+const someConst2 = 10;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
@@ -499,7 +499,7 @@ Output::
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.someConst = exports.pkg0 = void 0;
 exports.pkg0 = 0;
-var someConst2 = 10;
+const someConst2 = 10;
 exports.someConst = 10;
 
 

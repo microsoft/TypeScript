@@ -98,7 +98,7 @@ function fn(x) {
     // minor bug: shows that the `catch` argument is skipped when checking scope
     try { }
     catch (x) {
-        var x_1;
+        let x;
     }
     try { }
     catch (x) {
@@ -109,35 +109,25 @@ function fn(x) {
         var x;
     }
     try { }
-    catch (_a) {
-        var x_2 = _a.x;
+    catch ({ x }) { } // should be OK
+    try { }
+    catch ({ x }) {
+        x.foo;
     } // should be OK
     try { }
-    catch (_b) {
-        var x_3 = _b.x;
-        x_3.foo;
+    catch ({ x }) {
+        x.foo;
     } // should be OK
     try { }
-    catch (_c) {
-        var x_4 = _c.x;
-        x_4.foo;
-    } // should be OK
-    try { }
-    catch (_d) {
-        var x_5 = _d.x;
-        console.log(x_5);
+    catch ({ x }) {
+        console.log(x);
     } // error in the destructure
     try { }
-    catch (_e) {
-        var x_6 = _e.x;
-        console.log(x_6);
+    catch ({ x }) {
+        console.log(x);
     } // error in the destructure
     try { }
-    catch (_f) {
-        var x_7 = _f.x;
-    } // error in the type
+    catch ({ x }) { } // error in the type
     try { }
-    catch (_g) {
-        var x_8 = _g.x;
-    } // error in the type
+    catch ({ x }) { } // error in the type
 }

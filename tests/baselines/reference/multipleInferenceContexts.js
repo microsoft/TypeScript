@@ -29,10 +29,10 @@ const r2 = Moon({
 
 //// [multipleInferenceContexts.js]
 "use strict";
-var r2 = Moon({
+const r2 = Moon({
     data: { msg: "" },
-    render: function () {
-        var h = function (x) { return x; };
+    render() {
+        const h = (x) => x;
         return h(this.get("msg"));
     },
 });

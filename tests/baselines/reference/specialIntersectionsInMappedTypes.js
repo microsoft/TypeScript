@@ -20,7 +20,7 @@ a.other.length;  // Error expected here
 //// [specialIntersectionsInMappedTypes.js]
 "use strict";
 // Repro from #50683
-var a = {
+const a = {
     left: "align-left",
     center: "align-center",
     right: "align-right",

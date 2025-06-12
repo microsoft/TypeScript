@@ -38,11 +38,10 @@ exports.default = foo;
 var op_1 = __importDefault(require("./op"));
 var po_1 = require("./po");
 function foo() {
-    var _a;
-    return _a = {},
-        _a[op_1.default.or] = [],
-        _a[po_1.Po.ro] = {},
-        _a;
+    return {
+        [op_1.default.or]: [],
+        [po_1.Po.ro]: {}
+    };
 }
 
 

@@ -110,85 +110,79 @@ const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
 "use strict";
 var _a, _b, _c;
 // Type arguments in member expressions
-var a1 = (f); // { (): number; g<U>(): U; }
-var a2 = (f.g); // () => number
-var a3 = f.g; // <U>() => U
-var a4 = (f.g); // () => number
-var a5 = (f['g']); // () => number
+const a1 = (f); // { (): number; g<U>(): U; }
+const a2 = (f.g); // () => number
+const a3 = f.g; // <U>() => U
+const a4 = (f.g); // () => number
+const a5 = (f['g']); // () => number
 // `[` is an expression starter and cannot immediately follow a type argument list
-var a6 = f < number > ['g']; // Error
-var a7 = (f)['g'];
+const a6 = f < number > ['g']; // Error
+const a7 = (f)['g'];
 // An `<` cannot immediately follow a type argument list
-var a8 = f < number > ; // Relational operator error
-var a9 = ((f)); // Error, no applicable signatures
+const a8 = f < number > ; // Relational operator error
+const a9 = ((f)); // Error, no applicable signatures
 // Type arguments with `?.` token
-var b1 = f === null || f === void 0 ? void 0 : f(); // Error, `(` expected
-var b2 = f === null || f === void 0 ? void 0 : f();
-var b3 = (_a = (f)) === null || _a === void 0 ? void 0 : _a();
-var b4 = (_b = (f)) === null || _b === void 0 ? void 0 : _b(); // Error, expected no type arguments
-var c1 = (g) || (function (x) { return x; });
-var c2 = (_c = (g)) !== null && _c !== void 0 ? _c : (function (x) { return x; });
-var c3 = (g) && (function (x) { return x; });
+const b1 = f === null || f === void 0 ? void 0 : f(); // Error, `(` expected
+const b2 = f === null || f === void 0 ? void 0 : f();
+const b3 = (_a = (f)) === null || _a === void 0 ? void 0 : _a();
+const b4 = (_b = (f)) === null || _b === void 0 ? void 0 : _b(); // Error, expected no type arguments
+const c1 = (g) || ((x) => x);
+const c2 = (_c = (g)) !== null && _c !== void 0 ? _c : ((x) => x);
+const c3 = (g) && ((x) => x);
 // Parsed as function call, even though this differs from JavaScript
-var x1 = f(true);
+const x1 = f(true);
 // Parsed as relational expressions
-var r1 = f < true > true;
-var r2 = f < true > +1;
-var r3 = f < true > -1;
+const r1 = f < true > true;
+const r2 = f < true > +1;
+const r3 = f < true > -1;
 // All of the following are parsed as instantiation expressions
-var x2 = (f);
+const x2 = (f);
 true;
-var x3 = (f);
+const x3 = (f);
 true;
-var x4 = (f);
+const x4 = (f);
 if (true) { }
-var x5 = (f);
-var yy = 0;
-var x6 = (f);
-var x10 = (f);
+const x5 = (f);
+let yy = 0;
+const x6 = (f);
+let x10 = (f);
 this.bar();
-var x11 = (f);
+let x11 = (f);
 function bar() { }
-var x12 = (f);
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var x13 = (f);
+let x12 = (f);
+class C {
+}
+let x13 = (f);
 bar();
-var x14 = (f);
+let x14 = (f);
 void bar();
-var C1 = /** @class */ (function () {
-    function C1() {
+let C1 = (() => {
+    class C1 {
     }
     C1.specialFoo = (f);
     C1.bar = 123;
     return C1;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
+})();
+class C2 {
+    constructor() {
         this.specialFoo = (f);
         this.bar = 123;
     }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
+}
+class C3 {
+    constructor() {
         this.specialFoo = (f);
         this.bar = 123;
     }
-    return C3;
-}());
-var C4 = /** @class */ (function () {
-    function C4() {
+}
+class C4 {
+    constructor() {
         this.specialFoo = (f);
         this.bar = 123;
     }
-    return C4;
-}());
-var ver = 21;
-var a = ver < (1 /* MyVer.v1 */ >= 2 /* MyVer.v2 */ ? 1 /* MyVer.v1 */ : 2 /* MyVer.v2 */);
+}
+let ver = 21;
+const a = ver < (1 /* MyVer.v1 */ >= 2 /* MyVer.v2 */ ? 1 /* MyVer.v1 */ : 2 /* MyVer.v2 */);
 
 
 //// [instantiationExpressionErrors.d.ts]

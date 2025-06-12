@@ -33,8 +33,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var a;
-var b;
+let a;
+let b;
 if (a === b) {
 }
 a = b;

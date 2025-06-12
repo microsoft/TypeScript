@@ -16,23 +16,16 @@ class C3 {
 }
 
 //// [classBodyWithStatements.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var x = 1;
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C2 {
+}
 function foo() { }
 var x = 1;
 var y = 2;
-var C3 = /** @class */ (function () {
-    function C3() {
+class C3 {
+    constructor() {
         this.x = y + 1; // ok, need a var in the statement production
     }
-    return C3;
-}());
+}

@@ -18,22 +18,22 @@ class After {
 
 
 //// [scopeCheckStaticInitializer.js]
-var X = /** @class */ (function () {
-    function X() {
+let X = (() => {
+    class X {
+        static method() { }
     }
-    X.method = function () { };
     X.illegalBeforeProperty = X.data;
     X.okBeforeMethod = X.method;
     X.illegal2 = After.data;
     X.illegal3 = After.method;
     X.data = 13;
     return X;
-}());
-var After = /** @class */ (function () {
-    function After() {
+})();
+let After = (() => {
+    class After {
+        static method() { }
+        ;
     }
-    After.method = function () { };
-    ;
     After.data = 12;
     return After;
-}());
+})();

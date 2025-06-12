@@ -372,8 +372,8 @@ function f1(x, y) {
 function f2(x, y) {
     x = y;
     y = x; // Error
-    var s1 = x; // Error
-    var s2 = y;
+    let s1 = x; // Error
+    let s2 = y;
 }
 function f3(x, y) {
     x = y;
@@ -382,10 +382,10 @@ function f3(x, y) {
 function f4(x, y) {
     x = y;
     y = x; // Error
-    var s1 = x; // Error
-    var s2 = y;
+    let s1 = x; // Error
+    let s2 = y;
 }
-var x0 = f5("a"); // { k: "a", a: number }
+let x0 = f5("a"); // { k: "a", a: number }
 function f7(x, y, z) {
     x = y; // Error
     x = z; // Error
@@ -403,8 +403,8 @@ function f8(x, y, z) {
     z = y; // Error
 }
 function f10(part) {
-    var name = part.name;
-    var id = part.subparts[0].id;
+    let name = part.name;
+    let id = part.subparts[0].id;
     part.id = part.id; // Error
     part.subparts[0] = part.subparts[0]; // Error
     part.subparts[0].id = part.subparts[0].id; // Error
@@ -423,19 +423,19 @@ function f20(n, b, x, y) {
     zeroOf(y); // ZeroOf<T>
 }
 function f21(x, y) {
-    var z1 = y;
-    var z2 = y;
+    let z1 = y;
+    let z2 = y;
     x = y; // Error
     y = x; // Error
 }
 function f22(x) {
-    var e = x[0]; // {}
+    let e = x[0]; // {}
 }
 function f23(x) {
-    var e = x[0]; // string
+    let e = x[0]; // string
 }
-var convert = function (value) { return value; };
-var convert2 = function (value) { return value; };
+const convert = (value) => value;
+const convert2 = (value) => value;
 function f31() {
     var x;
     var x;
@@ -448,12 +448,12 @@ function f33() {
     var z;
     var z;
 }
-var f40 = function (a) { return a; };
-var f41 = function (a) { return a; };
-var f42 = function (a) { return a; };
-var f43 = function (a) { return a; };
-var f44 = function (value) { return value; };
-var f45 = function (value) { return value; }; // Error
+const f40 = (a) => a;
+const f41 = (a) => a;
+const f42 = (a) => a;
+const f43 = (a) => a;
+const f44 = (value) => value;
+const f45 = (value) => value; // Error
 // Repro from #21863
 function f50() {
 }

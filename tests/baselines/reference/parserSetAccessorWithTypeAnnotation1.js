@@ -7,14 +7,7 @@ class C {
 }
 
 //// [parserSetAccessorWithTypeAnnotation1.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    set foo(v): number {
     }
-    Object.defineProperty(C.prototype, "foo", {
-        set: function (v) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+}

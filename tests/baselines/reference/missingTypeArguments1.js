@@ -57,68 +57,35 @@ var a10: X10<number>;
 
 
 //// [missingTypeArguments1.js]
-var Y = /** @class */ (function () {
-    function Y() {
-    }
-    return Y;
-}());
-var X = /** @class */ (function () {
-    function X() {
-    }
-    return X;
-}());
+class Y {
+}
+class X {
+}
 var a;
-var X2 = /** @class */ (function () {
-    function X2() {
-    }
-    return X2;
-}());
+class X2 {
+}
 var a2;
-var X3 = /** @class */ (function () {
-    function X3() {
-    }
-    return X3;
-}());
+class X3 {
+}
 var a3;
-var X4 = /** @class */ (function () {
-    function X4() {
-    }
-    return X4;
-}());
+class X4 {
+}
 var a4;
-var X5 = /** @class */ (function () {
-    function X5() {
-    }
-    return X5;
-}());
+class X5 {
+}
 var a5;
-var X6 = /** @class */ (function () {
-    function X6() {
-    }
-    return X6;
-}());
+class X6 {
+}
 var a6;
-var X7 = /** @class */ (function () {
-    function X7() {
-    }
-    return X7;
-}());
+class X7 {
+}
 var a7;
-var X8 = /** @class */ (function () {
-    function X8() {
-    }
-    return X8;
-}());
+class X8 {
+}
 var a8;
-var X9 = /** @class */ (function () {
-    function X9() {
-    }
-    return X9;
-}());
+class X9 {
+}
 var a9;
-var X10 = /** @class */ (function () {
-    function X10() {
-    }
-    return X10;
-}());
+class X10 {
+}
 var a10;

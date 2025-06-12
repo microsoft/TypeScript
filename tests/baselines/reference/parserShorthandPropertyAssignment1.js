@@ -8,4 +8,4 @@ foo({ name?, id? });
 //// [parserShorthandPropertyAssignment1.js]
 function foo(obj) { }
 var name, id;
-foo({ name: name, id: id });
+foo({ name, id });

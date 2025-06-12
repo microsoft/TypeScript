@@ -18,5 +18,5 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var extra1 = { a: "a", b: "b", extra: "extra" };
-var a1 = __assign({}, extra1); // spread should not give excess property errors
+const extra1 = { a: "a", b: "b", extra: "extra" };
+const a1 = __assign({}, extra1); // spread should not give excess property errors

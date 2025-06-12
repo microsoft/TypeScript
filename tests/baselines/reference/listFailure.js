@@ -46,17 +46,16 @@ module Editor {
 //// [listFailure.js]
 var Editor;
 (function (Editor) {
-    var Buffer = /** @class */ (function () {
-        function Buffer() {
+    class Buffer {
+        constructor() {
             this.lines = ListMakeHead();
         }
-        Buffer.prototype.addLine = function (lineText) {
+        addLine(lineText) {
             var line = new Line();
             var lineEntry = this.lines.add(line);
             return lineEntry;
-        };
-        return Buffer;
-    }());
+        }
+    }
     Editor.Buffer = Buffer;
     function ListRemoveEntry(entry) {
         return entry;
@@ -70,22 +69,16 @@ var Editor;
         return null;
     }
     Editor.ListMakeEntry = ListMakeEntry;
-    var List = /** @class */ (function () {
-        function List() {
-        }
-        List.prototype.add = function (data) {
+    class List {
+        add(data) {
             this.next = ListMakeEntry(data);
             return this.next;
-        };
-        List.prototype.popEntry = function (head) {
-            return (ListRemoveEntry(this.next));
-        };
-        return List;
-    }());
-    var Line = /** @class */ (function () {
-        function Line() {
         }
-        return Line;
-    }());
+        popEntry(head) {
+            return (ListRemoveEntry(this.next));
+        }
+    }
+    class Line {
+    }
     Editor.Line = Line;
 })(Editor || (Editor = {}));

@@ -7,10 +7,7 @@ class C {
 }
 
 //// [thisTypeAsConstraint.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    m() {
     }
-    C.prototype.m = function () {
-    };
-    return C;
-}());
+}

@@ -22,6 +22,6 @@ let x: Empty & { x: number } = { y: "hello" };
 // Excess property error expected here
 Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 // Excess property error expected here
-var a = { y: 10 };
+let a = { y: 10 };
 // Excess property error expected here
-var x = { y: "hello" };
+let x = { y: "hello" };

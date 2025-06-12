@@ -59,63 +59,47 @@ var r3: typeof D;
 var r4: typeof d;
 
 //// [typeQueryOnClass.js]
-var C = /** @class */ (function () {
-    function C(x) {
-        var _this = this;
-        this.x = x;
-        this.ia = 1;
-        this.ib = function () { return _this.ia; };
+let C = (() => {
+    class C {
+        constructor(x) {
+            this.x = x;
+            this.ia = 1;
+            this.ib = () => this.ia;
+        }
+        static foo(x) { }
+        static bar(x) { }
+        static get sc() {
+            return 1;
+        }
+        static set sc(x) {
+        }
+        static get sd() {
+            return 1;
+        }
+        baz(x) { return ''; }
+        get ic() {
+            return 1;
+        }
+        set ic(x) {
+        }
+        get id() {
+            return 1;
+        }
     }
-    C.foo = function (x) { };
-    C.bar = function (x) { };
-    Object.defineProperty(C, "sc", {
-        get: function () {
-            return 1;
-        },
-        set: function (x) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "sd", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    C.prototype.baz = function (x) { return ''; };
-    Object.defineProperty(C.prototype, "ic", {
-        get: function () {
-            return 1;
-        },
-        set: function (x) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C.prototype, "id", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
     C.sa = 1;
-    C.sb = function () { return 1; };
+    C.sb = () => 1;
     return C;
-}());
+})();
 var c;
 // BUG 820454
 var r1;
 var r2;
-var D = /** @class */ (function () {
-    function D(y) {
+class D {
+    constructor(y) {
         this.y = y;
     }
-    D.prototype.foo = function () { };
-    return D;
-}());
+    foo() { }
+}
 var d;
 var r3;
 var r4;

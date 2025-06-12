@@ -50,10 +50,10 @@ observable_1.Observable.prototype.map = function () { };
 Object.defineProperty(exports, "__esModule", { value: true });
 var observable_1 = require("./observable");
 require("./map");
-var x;
-var y = x.map(function (x) { return x + 1; });
-var z1 = observable_1.Observable.someValue.toFixed();
-var z2 = observable_1.Observable.someAnotherValue.toLowerCase();
+let x;
+let y = x.map(x => x + 1);
+let z1 = observable_1.Observable.someValue.toFixed();
+let z2 = observable_1.Observable.someAnotherValue.toLowerCase();
 
 
 //// [observable.d.ts]

@@ -18,5 +18,5 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 var _a, _b;
-var a, b, c = { x: { a: 1, y: 2 } }, d;
-(_a = c.x, _b = _a === void 0 ? d : _a, a = _b.a, b = __rest(_b, ["a"]));
+let a, b, c = { x: { a: 1, y: 2 } }, d;
+(_a = c.x, _b = _a === void 0 ? d : _a, { a } = _b, b = __rest(_b, ["a"]));

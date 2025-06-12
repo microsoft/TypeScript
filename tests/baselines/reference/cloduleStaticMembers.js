@@ -15,13 +15,13 @@ module Clod {
 
 
 //// [cloduleStaticMembers.js]
-var Clod = /** @class */ (function () {
-    function Clod() {
+let Clod = (() => {
+    class Clod {
     }
     Clod.x = 10;
     Clod.y = 10;
     return Clod;
-}());
+})();
 (function (Clod) {
     var p = Clod.x;
     var q = x;

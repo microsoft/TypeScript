@@ -26,12 +26,9 @@ class Component {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
-var _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
-var Component = /** @class */ (function () {
-    function Component() {
-    }
-    Component.prototype.render = function () {
+const _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
+class Component {
+    render() {
         return (0, jsx_dev_runtime_1.jsxDEV)("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
-    };
-    return Component;
-}());
+    }
+}

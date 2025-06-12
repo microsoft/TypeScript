@@ -33,7 +33,7 @@ var A;
 //// [module.js]
 var B;
 (function (B) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));

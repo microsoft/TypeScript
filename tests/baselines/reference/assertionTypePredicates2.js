@@ -39,14 +39,14 @@ exports.main = void 0;
  * @param {A} a
  * @returns { asserts a is B }
  */
-var foo = function (a) {
+const foo = (a) => {
     if ( /** @type { B } */(a).y !== 0)
         throw TypeError();
     return undefined;
 };
-var main = function () {
+const main = () => {
     /** @type { A } */
-    var a = { x: 1 };
+    const a = { x: 1 };
     foo(a);
 };
 exports.main = main;

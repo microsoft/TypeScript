@@ -33,24 +33,21 @@ var b: {
 
 //// [constructSignatureWithAccessibilityModifiersOnParameters.js]
 // Parameter properties are only valid in constructor definitions, not even in other forms of construct signatures
-var C = /** @class */ (function () {
-    function C(x, y) {
+class C {
+    constructor(x, y) {
         this.x = x;
         this.y = y;
     }
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2(x) {
+}
+class C2 {
+    constructor(x) {
         this.x = x;
     }
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3(x) {
+}
+class C3 {
+    constructor(x) {
         this.x = x;
     }
-    return C3;
-}());
+}
 var a;
 var b;

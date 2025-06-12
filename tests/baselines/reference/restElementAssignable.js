@@ -32,17 +32,17 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 {
-    var props = __rest({}, []);
+    const props = __rest({}, []);
     // Use to fail
-    var t1 = props;
+    const t1 = props;
     // Working equivalent
-    var t2 = {};
+    const t2 = {};
 }
 {
-    var props = __rest({ a: 1, b: false, c: "str" }, []);
+    const props = __rest({ a: 1, b: false, c: "str" }, []);
     // Use to fail
-    var t1 = props;
+    const t1 = props;
     // Working equivalent
-    var t2 = { a: 1, b: false, c: "str" };
+    const t2 = { a: 1, b: false, c: "str" };
     ;
 }

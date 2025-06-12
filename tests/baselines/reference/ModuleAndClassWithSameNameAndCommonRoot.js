@@ -36,7 +36,7 @@ var X;
 (function (X) {
     var Y;
     (function (Y) {
-        var Point;
+        let Point;
         (function (Point) {
             Point.Origin = new Point(0, 0);
         })(Point = Y.Point || (Y.Point = {}));
@@ -48,13 +48,12 @@ var X;
     var Y;
     (function (Y) {
         // duplicate identifier
-        var Point = /** @class */ (function () {
-            function Point(x, y) {
+        class Point {
+            constructor(x, y) {
                 this.x = x;
                 this.y = y;
             }
-            return Point;
-        }());
+        }
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
@@ -64,8 +63,5 @@ var A;
     A.Instance = new A();
 })(A || (A = {}));
 // duplicate identifier
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}

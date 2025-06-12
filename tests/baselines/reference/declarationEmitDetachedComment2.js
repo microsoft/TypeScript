@@ -33,23 +33,14 @@ class Hola {
 
 //// [test1.js]
 /*! Copyright 2015 MyCompany Inc. */
-var Hello = (function () {
-    function Hello() {
-    }
-    return Hello;
-}());
+class Hello {
+}
 //// [test2.js]
-var Hi = (function () {
-    function Hi() {
-    }
-    return Hi;
-}());
+class Hi {
+}
 //// [test3.js]
-var Hola = (function () {
-    function Hola() {
-    }
-    return Hola;
-}());
+class Hola {
+}
 
 
 //// [test1.d.ts]

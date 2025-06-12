@@ -185,40 +185,33 @@ super_contravariant = sub_contravariant; // Error
 sub_contravariant = super_contravariant;
 super_invariant = sub_invariant; // Error
 sub_invariant = super_invariant; // Error
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.a = 0; // Error
         this.b = 0; // Error
     }
-    return C;
-}());
+}
 baz1 = baz2; // Error
 baz2 = baz1; // Error
 function fn(inp) {
-    var a = inp;
+    const a = inp;
 }
-var pu = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
-var notString = pu; // Error
-var machine = createMachine({});
+const pu = { child: { a: 0, b: 0, child: null, parent: null }, parent: null };
+const notString = pu; // Error
+const machine = createMachine({});
 interpret(machine);
 createMachine(qq); // Error
 // Repros from #48618
-var Anon = /** @class */ (function () {
-    function class_1() {
-    }
-    class_1.prototype.foo = function () {
+let Anon = class {
+    foo() {
         return this;
-    };
-    return class_1;
-}());
-var OuterC = /** @class */ (function () {
-    function C() {
     }
-    C.prototype.foo = function () {
+};
+let OuterC = class C {
+    foo() {
         return this;
-    };
-    return C;
-}());
+    }
+};
 
 
 //// [varianceAnnotations.d.ts]

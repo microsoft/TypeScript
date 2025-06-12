@@ -15,11 +15,8 @@ var x = ext;
 //// [ambientExternalModuleInAnotherExternalModule.js]
 define(["require", "exports", "ext"], function (require, exports, ext) {
     "use strict";
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
+    class D {
+    }
     var x = ext;
     return D;
 });

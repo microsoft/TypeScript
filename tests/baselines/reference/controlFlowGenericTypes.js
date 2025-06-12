@@ -279,7 +279,7 @@ function bounceAndTakeIfA(value) {
         return value;
     }
 }
-var fn = function (value) {
+const fn = (value) => {
     value.foo; // Error
     if ('foo' in value) {
         value.foo;
@@ -288,7 +288,7 @@ var fn = function (value) {
         value.foo;
     }
 };
-var fn2 = function (value) {
+const fn2 = (value) => {
     value.foo; // Error
     if ('foo' in value) {
         value.foo;
@@ -304,7 +304,7 @@ function notWorking(object) {
 }
 ;
 function get(key, obj) {
-    var value = obj[key];
+    const value = obj[key];
     if (value !== null) {
         return value;
     }
@@ -312,17 +312,9 @@ function get(key, obj) {
 }
 ;
 // Repro from #44093
-var EventEmitter = /** @class */ (function () {
-    function EventEmitter() {
-    }
-    EventEmitter.prototype.off = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
-    return EventEmitter;
-}());
+class EventEmitter {
+    off(...args) { }
+}
 function once(emittingObject, eventName) {
     emittingObject.off(eventName, 0);
     emittingObject.off(eventName, 0);
@@ -331,23 +323,21 @@ function once(emittingObject, eventName) {
 // a generic type without a nullable constraint and x is a generic type. This is because when both obj
 // and x are of generic types T and K, we want the resulting type to be T[K].
 function fx1(obj, key) {
-    var x1 = obj[key];
-    var x2 = obj && obj[key];
+    const x1 = obj[key];
+    const x2 = obj && obj[key];
 }
 function fx2(obj, key) {
-    var x1 = obj[key];
-    var x2 = obj && obj[key];
+    const x1 = obj[key];
+    const x2 = obj && obj[key];
 }
 function fx3(obj, key) {
-    var x1 = obj[key]; // Error
-    var x2 = obj && obj[key];
+    const x1 = obj[key]; // Error
+    const x2 = obj && obj[key];
 }
 // Repro from #44166
-var TableBaseEnum = /** @class */ (function () {
-    function TableBaseEnum() {
-    }
-    TableBaseEnum.prototype.m = function () {
-        var iSpec = null;
+class TableBaseEnum {
+    m() {
+        let iSpec = null;
         iSpec[null]; // Error, object possibly undefined
         iSpec[null]; // Error, object possibly undefined
         if (iSpec === undefined) {
@@ -355,23 +345,19 @@ var TableBaseEnum = /** @class */ (function () {
         }
         iSpec[null];
         iSpec[null];
-    };
-    return TableBaseEnum;
-}());
+    }
+}
 // Repros from #45145
 function f10(x, y) {
     y = x;
 }
-var SqlTable = /** @class */ (function () {
-    function SqlTable() {
+class SqlTable {
+    validateRow(_row) {
     }
-    SqlTable.prototype.validateRow = function (_row) {
-    };
-    SqlTable.prototype.insertRow = function (row) {
+    insertRow(row) {
         this.validateRow(row);
-    };
-    return SqlTable;
-}());
+    }
+}
 function update(control, key, value) {
     if (control !== undefined) {
         control[key] = value;

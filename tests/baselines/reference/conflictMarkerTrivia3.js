@@ -5,4 +5,4 @@ const x = <div>
 <<<<<<< HEAD
 
 //// [conflictMarkerTrivia3.js]
-var x = <div></>;
+const x = <div></>;

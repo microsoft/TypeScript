@@ -36,14 +36,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Broken = void 0;
-var Broken = /** @class */ (function () {
-    function Broken() {
-    }
-    Broken.prototype.method = function () {
+class Broken {
+    method() {
         return {};
-    };
-    return Broken;
-}());
+    }
+}
 exports.Broken = Broken;
 
 

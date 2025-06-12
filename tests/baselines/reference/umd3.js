@@ -18,5 +18,5 @@ let y: number = x.n;
 Object.defineProperty(exports, "__esModule", { value: true });
 var Foo = require("./foo");
 Foo.fn();
-var x;
-var y = x.n;
+let x;
+let y = x.n;

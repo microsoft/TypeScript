@@ -10,7 +10,7 @@ const p = {
 
 
 //// [typeSatisfaction_contextualTyping1.js]
-var p = {
-    isEven: function (n) { return n % 2 === 0; },
-    isOdd: function (n) { return n % 2 === 1; }
+const p = {
+    isEven: n => n % 2 === 0,
+    isOdd: n => n % 2 === 1
 };

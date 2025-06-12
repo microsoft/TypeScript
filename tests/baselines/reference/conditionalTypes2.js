@@ -273,8 +273,8 @@ function getFunction(item) {
 }
 function f10(x) {
     if (isFunction(x)) {
-        var f = x;
-        var t = x;
+        const f = x;
+        const t = x;
     }
 }
 function f11(x) {
@@ -283,7 +283,7 @@ function f11(x) {
     }
 }
 function f12(x) {
-    var f = getFunction(x); // () => string
+    const f = getFunction(x); // () => string
     f();
 }
 function f20(x, y, z) {
@@ -297,32 +297,26 @@ function f21(x, y, z) {
     fooBat(z); // Error
 }
 // Repros from #22860
-var Opt = /** @class */ (function () {
-    function Opt() {
+class Opt {
+    toVector() {
+        return undefined;
     }
-    Opt.prototype.toVector = function () {
+}
+class Vector {
+    tail() {
         return undefined;
-    };
-    return Opt;
-}());
-var Vector = /** @class */ (function () {
-    function Vector() {
     }
-    Vector.prototype.tail = function () {
+    partition2(predicate) {
         return undefined;
-    };
-    Vector.prototype.partition2 = function (predicate) {
-        return undefined;
-    };
-    return Vector;
-}());
+    }
+}
 function foo(value) {
     if (isFunction(value)) {
         toString1(value);
         toString2(value);
     }
 }
-var w = { a: 4 };
+const w = { a: 4 };
 exportCommand(save);
 gg(ff);
 

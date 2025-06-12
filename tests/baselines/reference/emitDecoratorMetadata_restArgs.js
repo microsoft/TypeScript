@@ -29,18 +29,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var A = /** @class */ (function () {
-    function A() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    }
-    A.prototype.method = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+let A = (() => {
+    let A = class A {
+        constructor(...args) { }
+        method(...args) { }
     };
     __decorate([
         MyMethodDecorator,
@@ -53,19 +45,11 @@ var A = /** @class */ (function () {
         __metadata("design:paramtypes", [Object])
     ], A);
     return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    }
-    B.prototype.method = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
+})();
+let B = (() => {
+    let B = class B {
+        constructor(...args) { }
+        method(...args) { }
     };
     __decorate([
         MyMethodDecorator,
@@ -78,4 +62,4 @@ var B = /** @class */ (function () {
         __metadata("design:paramtypes", [Number])
     ], B);
     return B;
-}());
+})();

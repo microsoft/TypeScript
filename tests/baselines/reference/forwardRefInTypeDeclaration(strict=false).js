@@ -30,15 +30,15 @@ const obj2 = { d: 'd' } as const
 
 
 //// [forwardRefInTypeDeclaration.js]
-var s1 = "x";
-var s2 = "x";
-var s3 = "x";
-var s4 = "x";
-var s5 = "x";
-var Cls2 = /** @class */ (function () {
-    function Cls2() {
+const s1 = "x";
+const s2 = "x";
+const s3 = "x";
+const s4 = "x";
+const s5 = "x";
+let Cls2 = (() => {
+    class Cls2 {
     }
     Cls2.b = "b";
     return Cls2;
-}());
-var obj2 = { d: 'd' };
+})();
+const obj2 = { d: 'd' };

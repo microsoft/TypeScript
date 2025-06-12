@@ -42,11 +42,9 @@ fooLength + 1;
 "use strict";
 var A;
 (function (A) {
-    var B = /** @class */ (function () {
-        function B(b) {
-        }
-        return B;
-    }());
+    class B {
+        constructor(b) { }
+    }
     A.B = B;
     (function (B) {
         B.b = 0;
@@ -62,9 +60,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
 var X2 = require("foobarx");
-var x = foobar_1.X;
-var x2 = X2;
+const x = foobar_1.X;
+const x2 = X2;
 var B = require("./a");
-var b = new B(B.b);
+const b = new B(B.b);
 var fooLength = require("./b");
 fooLength + 1;

@@ -16,11 +16,9 @@ var z: number = y.test.b;
 
 //// [foo_0.js]
 "use strict";
-var Foo = /** @class */ (function () {
-    function Foo(x) {
-    }
-    return Foo;
-}());
+class Foo {
+    constructor(x) { }
+}
 module.exports = Foo;
 //// [foo_1.js]
 "use strict";

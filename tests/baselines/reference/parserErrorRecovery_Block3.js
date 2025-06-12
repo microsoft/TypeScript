@@ -9,12 +9,9 @@ class C  {
 }
 
 //// [parserErrorRecovery_Block3.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    a() {
     }
-    C.prototype.a = function () {
-    };
-    C.prototype.b = function () {
-    };
-    return C;
-}());
+    b() {
+    }
+}

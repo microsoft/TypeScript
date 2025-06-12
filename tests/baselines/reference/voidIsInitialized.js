@@ -15,8 +15,8 @@ if(typeof y !== "undefined") {
 
 //// [voidIsInitialized.js]
 "use strict";
-var x = undefined;
-var y = undefined;
+const x = undefined;
+const y = undefined;
 if (typeof x === "undefined") {
     x; // no error: assume x2 is initialised
 }

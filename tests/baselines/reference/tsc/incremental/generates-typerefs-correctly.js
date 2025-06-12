@@ -100,16 +100,13 @@ var W = require("./wrap.js");
  * @param {C} source
  * @returns {W.Wrap<C>}
  */
-var wrap = function (source) {
+const wrap = source => {
     throw source;
 };
 /**
  * @returns {B.Box<number>}
  */
-var box = function (n) {
-    if (n === void 0) { n = 0; }
-    return ({ unbox: function () { return n; } });
-};
+const box = (n = 0) => ({ unbox: () => n });
 exports.bug = wrap({ n: box(1) });
 
 
@@ -245,16 +242,13 @@ var W = require("./wrap.js");
  * @param {C} source
  * @returns {W.Wrap<C>}
  */
-var wrap = function (source) {
+const wrap = source => {
     throw source;
 };
 /**
  * @returns {B.Box<number>}
  */
-var box = function (n) {
-    if (n === void 0) { n = 0; }
-    return ({ unbox: function () { return n; } });
-};
+const box = (n = 0) => ({ unbox: () => n });
 exports.bug = wrap({ n: box(1) });
 exports.something = 1;
 

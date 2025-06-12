@@ -122,20 +122,20 @@ function onlyErrorsWhenUnusedInBody() {
         test();
     }
     if (test) { // ok
-        [function () { return null; }].forEach(function () {
+        [() => null].forEach(() => {
             test();
         });
     }
     if (test) { // error
-        [function () { return null; }].forEach(function (test) {
+        [() => null].forEach(test => {
             test();
         });
     }
 }
 function checksPropertyAccess() {
-    var x = {
+    const x = {
         foo: {
-            bar: function () { return true; }
+            bar() { return true; }
         }
     };
     if (x.foo.bar) { // error
@@ -144,24 +144,21 @@ function checksPropertyAccess() {
         x.foo.bar;
     }
 }
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    Foo.prototype.isUser = function () {
+class Foo {
+    isUser() {
         return true;
-    };
-    Foo.prototype.test = function () {
+    }
+    test() {
         if (this.isUser) { // error
         }
         if (this.maybeIsUser) { // ok
         }
-    };
-    return Foo;
-}());
+    }
+}
 // Test for GH-35557 where ids were not assigned for a symbol.
 function A(stats) {
     if (stats.isDirectory) { // err
-        console.log("[Directory] ".concat(stats.ctime));
+        console.log(`[Directory] ${stats.ctime}`);
     }
 }
 function B(a, b) {

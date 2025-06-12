@@ -23,7 +23,7 @@ let obj = {
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var obj = {
+let obj = {
     x: 10,
     y: [1],
     fun: function () {

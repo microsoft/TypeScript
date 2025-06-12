@@ -18,20 +18,18 @@ class Container {
 module.exports = Container;
 
 //// [obj.js]
-module.exports = /** @class */ (function () {
-    function Obj() {
+module.exports = class Obj {
+    constructor() {
         this.x = 12;
     }
-    return Obj;
-}());
+};
 //// [index.js]
-var Obj = require("./obj");
-var Container = /** @class */ (function () {
-    function Container() {
+const Obj = require("./obj");
+class Container {
+    constructor() {
         this.usage = new Obj();
     }
-    return Container;
-}());
+}
 module.exports = Container;
 
 

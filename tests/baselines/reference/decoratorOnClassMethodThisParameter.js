@@ -21,18 +21,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    method() { }
+}
+let C2 = (() => {
+    class C2 {
+        method(allowed) { }
     }
-    C.prototype.method = function () { };
-    return C;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    C2.prototype.method = function (allowed) { };
     __decorate([
         __param(0, dec)
     ], C2.prototype, "method", null);
     return C2;
-}());
+})();

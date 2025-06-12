@@ -49,8 +49,6 @@ export * from "../transformers/es2021.js";
 export * from "../transformers/esnext.js";
 export * from "../transformers/jsx.js";
 export * from "../transformers/es2016.js";
-export * from "../transformers/es2015.js";
-export * from "../transformers/generators.js";
 export * from "../transformers/module/module.js";
 export * from "../transformers/module/system.js";
 export * from "../transformers/module/esnextAnd2015.js";

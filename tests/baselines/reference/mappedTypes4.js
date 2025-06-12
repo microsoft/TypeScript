@@ -76,8 +76,8 @@ var z1: Clone<Z>;
 //// [mappedTypes4.js]
 function boxify(obj) {
     if (typeof obj === "object") {
-        var result = {};
-        for (var k in obj) {
+        let result = {};
+        for (let k in obj) {
             result[k] = { value: obj[k] };
         }
         return result;

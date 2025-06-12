@@ -1,18 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RM = void 0;
-var RM = /** @class */ (function () {
-    function RM() {
-    }
-    RM.prototype.getName = function () {
+class RM {
+    getName() {
         return 'rm';
-    };
-    RM.prototype.getDescription = function () {
+    }
+    getDescription() {
         return "\t\t\tDelete file";
-    };
-    RM.prototype.run = function (configuration) {
+    }
+    run(configuration) {
         var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
-    };
-    return RM;
-}());
+    }
+}
 exports.RM = RM;

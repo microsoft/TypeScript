@@ -145,15 +145,6 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 //// [variadicTuples2.js]
 "use strict";
 // Declarations
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 tt1 = [5];
 tt1 = ['abc', 5];
 tt1 = ['abc', 'def', 5];
@@ -184,47 +175,31 @@ function ft3(x, y, z) {
     y = x; // Error
     z = x; // Error
 }
-var tt4 = tt3; // Error
+let tt4 = tt3; // Error
 // Inference
-function pipe() {
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    var callback = args[args.length - 1];
-    var values = args.slice(0, -1);
-    callback.apply(void 0, values);
+function pipe(...args) {
+    const callback = args[args.length - 1];
+    const values = args.slice(0, -1);
+    callback(...values);
 }
-pipe("foo", 123, true, function (a, b, c) {
+pipe("foo", 123, true, (a, b, c) => {
     a; // string
     b; // number
     c; // boolean
 });
-pipe("foo", 123, true, function () {
-    var x = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i] = arguments[_i];
-    }
+pipe("foo", 123, true, (...x) => {
     x; // [string, number, boolean]
 });
-pipe.apply(void 0, __spreadArray(__spreadArray([], sa, false), [function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i] = arguments[_i];
-        }
-        x; // string[]
-    }], false));
-pipe.apply(void 0, __spreadArray(__spreadArray([1], sa, false), [2, function () {
-        var x = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i] = arguments[_i];
-        }
-        x; // [number, ...string[], number]
-        var qq = x[x.length - 1];
-        var ww = x[0];
-    }], false));
+pipe(...sa, (...x) => {
+    x; // string[]
+});
+pipe(1, ...sa, 2, (...x) => {
+    x; // [number, ...string[], number]
+    let qq = x[x.length - 1];
+    let ww = x[0];
+});
 pipe(1, 2, 3, 4); // Error
-pipe.apply(void 0, sa); // Error
+pipe(...sa); // Error
 fn1([]); // Error
 fn1([1]); // Error
 fn1([1, 'abc']); // [number, string]
@@ -233,11 +208,11 @@ fn2([]); // Error
 fn2([1]); // Error
 fn2([1, 'abc']); // [number, string]
 fn2([1, 'abc', true]); // [number, boolean]
-var a1 = foo('blah1', 1);
-var b1 = foo('blah1', 'blah2', 1);
-var c1 = foo(1); // Error
-var d1 = foo(1, 2); // Error
-var e1 = foo('blah1', 'blah2', 1, 2, 3); // Error
+const a1 = foo('blah1', 1);
+const b1 = foo('blah1', 'blah2', 1);
+const c1 = foo(1); // Error
+const d1 = foo(1, 2); // Error
+const e1 = foo('blah1', 'blah2', 1, 2, 3); // Error
 
 
 //// [variadicTuples2.d.ts]

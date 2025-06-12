@@ -50,7 +50,7 @@ __exportStar(require("./account"), exports);
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.func = void 0;
-var func = function (account, acc2) { };
+const func = (account, acc2) => { };
 exports.func = func;
 
 

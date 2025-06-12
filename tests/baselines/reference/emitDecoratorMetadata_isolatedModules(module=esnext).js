@@ -43,12 +43,8 @@ export {};
 //// [type2.js]
 export {};
 //// [class3.js]
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
-export { C3 };
+export class C3 {
+}
 //// [index.js]
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -61,12 +57,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import * as t1 from "./type1";
 import { C3 } from "./class3";
-var HelloWorld = /** @class */ (function () {
-    function HelloWorld() {
+let HelloWorld = (() => {
+    class HelloWorld {
+        handleEvent1(event) { } // Error
+        handleEvent2(event) { } // Ok
+        handleEvent3(event) { return undefined; } // Ok, Error
     }
-    HelloWorld.prototype.handleEvent1 = function (event) { }; // Error
-    HelloWorld.prototype.handleEvent2 = function (event) { }; // Ok
-    HelloWorld.prototype.handleEvent3 = function (event) { return undefined; }; // Ok, Error
     __decorate([
         EventListener('1'),
         __metadata("design:type", Function),
@@ -98,4 +94,4 @@ var HelloWorld = /** @class */ (function () {
         __metadata("design:returntype", Object)
     ], HelloWorld.prototype, "handleEvent3", null);
     return HelloWorld;
-}());
+})();

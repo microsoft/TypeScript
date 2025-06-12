@@ -51,24 +51,16 @@ export declare function __makeTemplateObject(cooked: string[], raw: string[]): T
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.result = exports.B = exports.A = void 0;
 var tslib_1 = require("tslib");
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
-var B = /** @class */ (function (_super) {
-    tslib_1.__extends(B, _super);
-    function B() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return B;
-}(A));
+class B extends A {
+}
 exports.B = B;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.method = function (x) {
+let C = (() => {
+    let C = class C {
+        method(x) {
+        }
     };
     tslib_1.__decorate([
         tslib_1.__param(0, dec),
@@ -80,32 +72,12 @@ var C = /** @class */ (function () {
         dec
     ], C);
     return C;
-}());
+})();
 function id(x) {
     return x;
 }
-exports.result = id(templateObject_1 || (templateObject_1 = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
-var templateObject_1;
+exports.result = id `hello world`;
 //// [script.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -118,22 +90,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
-var B = /** @class */ (function (_super) {
-    __extends(B, _super);
-    function B() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return B;
-}(A));
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.method = function (x) {
+class A {
+}
+class B extends A {
+}
+let C = (() => {
+    let C = class C {
+        method(x) {
+        }
     };
     __decorate([
         __param(0, dec),
@@ -145,8 +109,8 @@ var C = /** @class */ (function () {
         dec
     ], C);
     return C;
-}());
+})();
 function id(x) {
     return x;
 }
-var result = id(__makeTemplateObject(["hello world"], ["hello world"]));
+const result = id `hello world`;

@@ -17,12 +17,11 @@ export function w(): e.w { // Should be OK
 //// [w1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Widget1 = /** @class */ (function () {
-        function Widget1() {
+    class Widget1 {
+        constructor() {
             this.name = 'one';
         }
-        return Widget1;
-    }());
+    }
     return Widget1;
 });
 //// [exporter.js]

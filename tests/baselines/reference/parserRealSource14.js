@@ -599,126 +599,126 @@ var TypeScript;
     // Helper class representing a path from a root ast node to a (grand)child ast node.
     // This is helpful as our tree don't have parents.
     //
-    var AstPath = /** @class */ (function () {
-        function AstPath() {
+    class AstPath {
+        constructor() {
             this.asts = [];
             this.top = -1;
         }
-        AstPath.reverseIndexOf = function (items, index) {
+        static reverseIndexOf(items, index) {
             return (items === null || items.length <= index) ? null : items[items.length - index - 1];
-        };
-        AstPath.prototype.clone = function () {
+        }
+        clone() {
             var clone = new AstPath();
-            clone.asts = this.asts.map(function (value) { return value; });
+            clone.asts = this.asts.map((value) => { return value; });
             clone.top = this.top;
             return clone;
-        };
-        AstPath.prototype.pop = function () {
+        }
+        pop() {
             var head = this.ast();
             this.up();
             while (this.asts.length > this.count()) {
                 this.asts.pop();
             }
             return head;
-        };
-        AstPath.prototype.push = function (ast) {
+        }
+        push(ast) {
             while (this.asts.length > this.count()) {
                 this.asts.pop();
             }
             this.top = this.asts.length;
             this.asts.push(ast);
-        };
-        AstPath.prototype.up = function () {
+        }
+        up() {
             if (this.top <= -1)
                 throw new Error("Invalid call to 'up'");
             this.top--;
-        };
-        AstPath.prototype.down = function () {
+        }
+        down() {
             if (this.top == this.ast.length - 1)
                 throw new Error("Invalid call to 'down'");
             this.top++;
-        };
-        AstPath.prototype.nodeType = function () {
+        }
+        nodeType() {
             if (this.ast() == null)
                 return TypeScript.NodeType.None;
             return this.ast().nodeType;
-        };
-        AstPath.prototype.ast = function () {
+        }
+        ast() {
             return AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
-        };
-        AstPath.prototype.parent = function () {
+        }
+        parent() {
             return AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
-        };
-        AstPath.prototype.count = function () {
+        }
+        count() {
             return this.top + 1;
-        };
-        AstPath.prototype.get = function (index) {
+        }
+        get(index) {
             return this.asts[index];
-        };
-        AstPath.prototype.isNameOfClass = function () {
+        }
+        isNameOfClass() {
             if (this.ast() === null || this.parent() === null)
                 return false;
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.ClassDeclaration) &&
                 (this.parent().name === this.ast());
-        };
-        AstPath.prototype.isNameOfInterface = function () {
+        }
+        isNameOfInterface() {
             if (this.ast() === null || this.parent() === null)
                 return false;
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.InterfaceDeclaration) &&
                 (this.parent().name === this.ast());
-        };
-        AstPath.prototype.isNameOfArgument = function () {
+        }
+        isNameOfArgument() {
             if (this.ast() === null || this.parent() === null)
                 return false;
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.ArgDecl) &&
                 (this.parent().id === this.ast());
-        };
-        AstPath.prototype.isNameOfVariable = function () {
+        }
+        isNameOfVariable() {
             if (this.ast() === null || this.parent() === null)
                 return false;
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.VarDecl) &&
                 (this.parent().id === this.ast());
-        };
-        AstPath.prototype.isNameOfModule = function () {
+        }
+        isNameOfModule() {
             if (this.ast() === null || this.parent() === null)
                 return false;
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.ModuleDeclaration) &&
                 (this.parent().name === this.ast());
-        };
-        AstPath.prototype.isNameOfFunction = function () {
+        }
+        isNameOfFunction() {
             if (this.ast() === null || this.parent() === null)
                 return false;
             return (this.ast().nodeType === TypeScript.NodeType.Name) &&
                 (this.parent().nodeType === TypeScript.NodeType.FuncDecl) &&
                 (this.parent().name === this.ast());
-        };
-        AstPath.prototype.isChildOfScript = function () {
+        }
+        isChildOfScript() {
             var ast = lastOf(this.asts);
             return this.count() >= 3 &&
                 this.asts[this.top] === ast &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.Script;
-        };
-        AstPath.prototype.isChildOfModule = function () {
+        }
+        isChildOfModule() {
             var ast = lastOf(this.asts);
             return this.count() >= 3 &&
                 this.asts[this.top] === ast &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.ModuleDeclaration;
-        };
-        AstPath.prototype.isChildOfClass = function () {
+        }
+        isChildOfClass() {
             var ast = lastOf(this.asts);
             return this.count() >= 3 &&
                 this.asts[this.top] === ast &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.ClassDeclaration;
-        };
-        AstPath.prototype.isArgumentOfClassConstructor = function () {
+        }
+        isArgumentOfClassConstructor() {
             var ast = lastOf(this.asts);
             return this.count() >= 5 &&
                 this.asts[this.top] === ast &&
@@ -729,220 +729,219 @@ var TypeScript;
                 (this.asts[this.top - 2].isConstructor) &&
                 (this.asts[this.top - 2].arguments === this.asts[this.top - 1]) &&
                 (this.asts[this.top - 4].constructorDecl === this.asts[this.top - 2]);
-        };
-        AstPath.prototype.isChildOfInterface = function () {
+        }
+        isChildOfInterface() {
             var ast = lastOf(this.asts);
             return this.count() >= 3 &&
                 this.asts[this.top] === ast &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.InterfaceDeclaration;
-        };
-        AstPath.prototype.isTopLevelImplicitModule = function () {
+        }
+        isTopLevelImplicitModule() {
             return this.count() >= 1 &&
                 this.asts[this.top].nodeType === TypeScript.NodeType.ModuleDeclaration &&
                 TypeScript.hasFlag(this.asts[this.top].modFlags, TypeScript.ModuleFlags.IsWholeFile);
-        };
-        AstPath.prototype.isBodyOfTopLevelImplicitModule = function () {
+        }
+        isBodyOfTopLevelImplicitModule() {
             return this.count() >= 2 &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
                 this.asts[this.top - 1].members == this.asts[this.top - 0] &&
                 TypeScript.hasFlag(this.asts[this.top - 1].modFlags, TypeScript.ModuleFlags.IsWholeFile);
-        };
-        AstPath.prototype.isBodyOfScript = function () {
+        }
+        isBodyOfScript() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Script &&
                 this.asts[this.top - 1].bod == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfSwitch = function () {
+        }
+        isBodyOfSwitch() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Switch &&
                 this.asts[this.top - 1].caseList == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfModule = function () {
+        }
+        isBodyOfModule() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ModuleDeclaration &&
                 this.asts[this.top - 1].members == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfClass = function () {
+        }
+        isBodyOfClass() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ClassDeclaration &&
                 this.asts[this.top - 1].members == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfFunction = function () {
+        }
+        isBodyOfFunction() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
                 this.asts[this.top - 1].bod == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfInterface = function () {
+        }
+        isBodyOfInterface() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.InterfaceDeclaration &&
                 this.asts[this.top - 1].members == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfBlock = function () {
+        }
+        isBodyOfBlock() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Block &&
                 this.asts[this.top - 1].statements == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfFor = function () {
+        }
+        isBodyOfFor() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.For &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfCase = function () {
+        }
+        isBodyOfCase() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Case &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfTry = function () {
+        }
+        isBodyOfTry() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Try &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfCatch = function () {
+        }
+        isBodyOfCatch() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Catch &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfDoWhile = function () {
+        }
+        isBodyOfDoWhile() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.DoWhile &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfWhile = function () {
+        }
+        isBodyOfWhile() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.While &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfForIn = function () {
+        }
+        isBodyOfForIn() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ForIn &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfWith = function () {
+        }
+        isBodyOfWith() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.With &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfFinally = function () {
+        }
+        isBodyOfFinally() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Finally &&
                 this.asts[this.top - 1].body == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isCaseOfSwitch = function () {
+        }
+        isCaseOfSwitch() {
             return this.count() >= 3 &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 2].caseList == this.asts[this.top - 1];
-        };
-        AstPath.prototype.isDefaultCaseOfSwitch = function () {
+        }
+        isDefaultCaseOfSwitch() {
             return this.count() >= 3 &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.Switch &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 2].caseList == this.asts[this.top - 1] &&
                 this.asts[this.top - 2].defaultCase == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isListOfObjectLit = function () {
+        }
+        isListOfObjectLit() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].operand == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfObjectLit = function () {
+        }
+        isBodyOfObjectLit() {
             return this.isListOfObjectLit();
-        };
-        AstPath.prototype.isEmptyListOfObjectLit = function () {
+        }
+        isEmptyListOfObjectLit() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ObjectLit &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].operand == this.asts[this.top - 0] &&
                 this.asts[this.top - 0].members.length == 0;
-        };
-        AstPath.prototype.isMemberOfObjectLit = function () {
+        }
+        isMemberOfObjectLit() {
             return this.count() >= 3 &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.ObjectLit &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.Member &&
                 this.asts[this.top - 2].operand == this.asts[this.top - 1];
-        };
-        AstPath.prototype.isNameOfMemberOfObjectLit = function () {
+        }
+        isNameOfMemberOfObjectLit() {
             return this.count() >= 4 &&
                 this.asts[this.top - 3].nodeType === TypeScript.NodeType.ObjectLit &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.Name &&
                 this.asts[this.top - 3].operand == this.asts[this.top - 2];
-        };
-        AstPath.prototype.isListOfArrayLit = function () {
+        }
+        isListOfArrayLit() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.ArrayLit &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].operand == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isTargetOfMember = function () {
+        }
+        isTargetOfMember() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
                 this.asts[this.top - 1].operand1 === this.asts[this.top - 0];
-        };
-        AstPath.prototype.isMemberOfMember = function () {
+        }
+        isMemberOfMember() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Member &&
                 this.asts[this.top - 1].operand2 === this.asts[this.top - 0];
-        };
-        AstPath.prototype.isItemOfList = function () {
+        }
+        isItemOfList() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List;
             //(<Tools.ASTList>this.asts[this.top - 1]).operand2 === this.asts[this.top - 0];
-        };
-        AstPath.prototype.isThenOfIf = function () {
+        }
+        isThenOfIf() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
                 this.asts[this.top - 1].thenBod == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isElseOfIf = function () {
+        }
+        isElseOfIf() {
             return this.count() >= 2 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.If &&
                 this.asts[this.top - 1].elseBod == this.asts[this.top - 0];
-        };
-        AstPath.prototype.isBodyOfDefaultCase = function () {
+        }
+        isBodyOfDefaultCase() {
             return this.isBodyOfCase();
-        };
-        AstPath.prototype.isSingleStatementList = function () {
+        }
+        isSingleStatementList() {
             return this.count() >= 1 &&
                 this.asts[this.top].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top].members.length === 1;
-        };
-        AstPath.prototype.isArgumentListOfFunction = function () {
+        }
+        isArgumentListOfFunction() {
             return this.count() >= 2 &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.FuncDecl &&
                 this.asts[this.top - 1].arguments === this.asts[this.top - 0];
-        };
-        AstPath.prototype.isArgumentOfFunction = function () {
+        }
+        isArgumentOfFunction() {
             return this.count() >= 3 &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 2].nodeType === TypeScript.NodeType.FuncDecl &&
                 this.asts[this.top - 2].arguments === this.asts[this.top - 1];
-        };
-        AstPath.prototype.isArgumentListOfCall = function () {
+        }
+        isArgumentListOfCall() {
             return this.count() >= 2 &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.Call &&
                 this.asts[this.top - 1].arguments === this.asts[this.top - 0];
-        };
-        AstPath.prototype.isArgumentListOfNew = function () {
+        }
+        isArgumentListOfNew() {
             return this.count() >= 2 &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.List &&
                 this.asts[this.top - 1].nodeType === TypeScript.NodeType.New &&
                 this.asts[this.top - 1].arguments === this.asts[this.top - 0];
-        };
-        AstPath.prototype.isSynthesizedBlock = function () {
+        }
+        isSynthesizedBlock() {
             return this.count() >= 1 &&
                 this.asts[this.top - 0].nodeType === TypeScript.NodeType.Block &&
                 this.asts[this.top - 0].isStatementBlock === false;
-        };
-        return AstPath;
-    }());
+        }
+    }
     TypeScript.AstPath = AstPath;
     function isValidAstNode(ast) {
         if (ast === null)
@@ -952,14 +951,13 @@ var TypeScript;
         return true;
     }
     TypeScript.isValidAstNode = isValidAstNode;
-    var AstPathContext = /** @class */ (function () {
-        function AstPathContext() {
+    class AstPathContext {
+        constructor() {
             this.path = new TypeScript.AstPath();
         }
-        return AstPathContext;
-    }());
+    }
     TypeScript.AstPathContext = AstPathContext;
-    var GetAstPathOptions;
+    let GetAstPathOptions;
     (function (GetAstPathOptions) {
         GetAstPathOptions[GetAstPathOptions["Default"] = 0] = "Default";
         GetAstPathOptions[GetAstPathOptions["EdgeInclusive"] = 1] = "EdgeInclusive";
@@ -975,9 +973,8 @@ var TypeScript;
     ///
     /// Return the stack of AST nodes containing "position"
     ///
-    function getAstPathToPosition(script, pos, options) {
-        if (options === void 0) { options = GetAstPathOptions.Default; }
-        var lookInComments = function (comments) {
+    function getAstPathToPosition(script, pos, options = GetAstPathOptions.Default) {
+        var lookInComments = (comments) => {
             if (comments && comments.length > 0) {
                 for (var i = 0; i < comments.length; i++) {
                     var minChar = comments[i].minChar;
@@ -1041,7 +1038,7 @@ var TypeScript;
     //
     function getTokenizationOffset(script, position) {
         var bestOffset = 0;
-        var pre = function (cur, parent, walker) {
+        var pre = (cur, parent, walker) => {
             if (TypeScript.isValidAstNode(cur)) {
                 // Did we find a closer offset?
                 if (cur.minChar <= position) {

@@ -16,35 +16,19 @@ class C {
 }
 
 //// [declFilePrivateStatic.js]
-var C = /** @class */ (function () {
-    function C() {
+let C = (() => {
+    class C {
+        static a() { }
+        static b() { }
+        static get c() { return 1; }
+        static get d() { return 1; }
+        static set e(v) { }
+        static set f(v) { }
     }
-    C.a = function () { };
-    C.b = function () { };
-    Object.defineProperty(C, "c", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "d", {
-        get: function () { return 1; },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "e", {
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(C, "f", {
-        set: function (v) { },
-        enumerable: false,
-        configurable: true
-    });
     C.x = 1;
     C.y = 1;
     return C;
-}());
+})();
 
 
 //// [declFilePrivateStatic.d.ts]

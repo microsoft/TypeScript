@@ -12,15 +12,11 @@ class B {
 }
 
 //// [superCallFromClassThatHasNoBaseType1.js]
-var A = /** @class */ (function () {
-    function A(map) {
+class A {
+    constructor(map) {
         this.map = map;
     }
-    return A;
-}());
-var B = /** @class */ (function () {
-    function B() {
-        return _super.call(this, function (value) { return String(value); }) || this;
-    }
-    return B;
-}());
+}
+class B {
+    constructor() { super(value => String(value)); }
+}

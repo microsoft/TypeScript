@@ -21,29 +21,15 @@ var y = {
 }
 
 //// [accessorWithES5.js]
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    get x() {
+        return 1;
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () {
-            return 1;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
+}
+class D {
+    set x(v) {
     }
-    Object.defineProperty(D.prototype, "x", {
-        set: function (v) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return D;
-}());
+}
 var x = {
     get a() { return 1; }
 };

@@ -20,7 +20,7 @@ import { as } from "./t1";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.as = exports.return = void 0;
-var as = 100;
+let as = 100;
 exports.return = as;
 exports.as = as;
 //// [t2.js]
