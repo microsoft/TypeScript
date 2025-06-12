@@ -931,6 +931,9 @@ func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node *ast.ClassLik
 				}
 
 				for _, j := range node.JSDoc(file) {
+					if j.AsJSDoc().Tags == nil {
+						continue
+					}
 					for _, tag := range j.AsJSDoc().Tags.Nodes {
 						if tag.Kind == ast.KindJSDocAugmentsTag {
 							target := typeNodes[0].AsExpressionWithTypeArguments()

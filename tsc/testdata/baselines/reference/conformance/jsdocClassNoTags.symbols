@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/jsdoc/jsdocClassNoTags.ts] ////
+
+=== jsdocClassNoTags.ts ===
+class B {
+>B : Symbol(B, Decl(jsdocClassNoTags.ts, 0, 0))
+}
+/** this is a test */
+class C extends B {
+>C : Symbol(C, Decl(jsdocClassNoTags.ts, 1, 1))
+>B : Symbol(B, Decl(jsdocClassNoTags.ts, 0, 0))
+}
+
+
