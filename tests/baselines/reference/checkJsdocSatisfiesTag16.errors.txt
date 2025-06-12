@@ -1,0 +1,35 @@
+/a.js(9,17): error TS1360: Type 'number' does not satisfy the expected type 'string'.
+/a.js(12,5): error TS1360: Type 'number' does not satisfy the expected type 'string'.
+/a.js(17,5): error TS1360: Type 'number' does not satisfy the expected type 'string'.
+/a.js(19,17): error TS1360: Type 'number' does not satisfy the expected type 'string'.
+
+
+==== /a.js (4 errors) ====
+    /**
+     * @satisfies {number}
+     */
+    const t1 = /** @satisfies {number} */ (1);
+    
+    /**
+     * @satisfies {number}
+     */
+    const t2 = /** @satisfies {string} */ (1);
+                    ~~~~~~~~~
+!!! error TS1360: Type 'number' does not satisfy the expected type 'string'.
+    
+    /**
+     * @satisfies {string}
+        ~~~~~~~~~
+!!! error TS1360: Type 'number' does not satisfy the expected type 'string'.
+     */
+    const t3 = /** @satisfies {number} */ (1);
+    
+    /**
+     * @satisfies {string}
+        ~~~~~~~~~
+!!! error TS1360: Type 'number' does not satisfy the expected type 'string'.
+     */
+    const t4 = /** @satisfies {string} */ (1);
+                    ~~~~~~~~~
+!!! error TS1360: Type 'number' does not satisfy the expected type 'string'.
+    
