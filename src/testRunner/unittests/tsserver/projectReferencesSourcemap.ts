@@ -1,10 +1,12 @@
 import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     createHostWithSolutionBuild,
     openFilesForSession,
+    protocolFileLocationFromSubstring,
     TestSession,
     TestSessionRequest,
 } from "../helpers/tsserver.js";
@@ -14,11 +16,11 @@ import {
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectReferencesSourcemap:: with project references and tsbuild source map", () => {
-    const dependecyLocation = `/user/username/projects/myproject/dependency`;
-    const dependecyDeclsLocation = `/user/username/projects/myproject/decls`;
+    const dependencyLocation = `/user/username/projects/myproject/dependency`;
+    const dependencyDeclsLocation = `/user/username/projects/myproject/decls`;
     const mainLocation = `/user/username/projects/myproject/main`;
     const dependencyTs: File = {
-        path: `${dependecyLocation}/FnS.ts`,
+        path: `${dependencyLocation}/FnS.ts`,
         content: `export function fn1() { }
 export function fn2() { }
 export function fn3() { }
@@ -27,7 +29,7 @@ export function fn5() { }
 `,
     };
     const dependencyConfig: File = {
-        path: `${dependecyLocation}/tsconfig.json`,
+        path: `${dependencyLocation}/tsconfig.json`,
         content: jsonToReadableText({ compilerOptions: { composite: true, declarationMap: true, declarationDir: "../decls" } }),
     };
 
@@ -64,8 +66,8 @@ fn5();
         path: `/user/username/projects/myproject/random/tsconfig.json`,
         content: "{}",
     };
-    const dtsLocation = `${dependecyDeclsLocation}/FnS.d.ts`;
-    const dtsMapLocation = `${dependecyDeclsLocation}/FnS.d.ts.map`;
+    const dtsLocation = `${dependencyDeclsLocation}/FnS.d.ts`;
+    const dtsMapLocation = `${dependencyDeclsLocation}/FnS.d.ts.map`;
 
     const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, randomFile, randomConfig];
 
@@ -142,7 +144,7 @@ fn5();
     }
 
     type OnHostCreate = (host: TestServerHost) => void;
-    function createSessionWithoutProjectReferences(onHostCreate?: OnHostCreate) {
+    function createSessionWithoutProjectReferences(files: File[], onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         // Erase project reference
         writeConfigWithoutProjectReferences(host);
@@ -159,13 +161,13 @@ fn5();
         );
     }
 
-    function createSessionWithProjectReferences(onHostCreate?: OnHostCreate) {
+    function createSessionWithProjectReferences(files: File[], onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         onHostCreate?.(host);
         return new TestSession(host);
     }
 
-    function createSessionWithDisabledProjectReferences(onHostCreate?: OnHostCreate) {
+    function createSessionWithDisabledProjectReferences(files: File[], onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         // Erase project reference
         WithDisabledProjectReferences(host);
@@ -227,16 +229,16 @@ fn5();
         });
     }
 
-    function createSession(type: SessionType, onHostCreate?: OnHostCreate) {
-        return type === SessionType.NoReference ? createSessionWithoutProjectReferences(onHostCreate) :
-            type === SessionType.ProjectReference ? createSessionWithProjectReferences(onHostCreate) :
+    function createSession(type: SessionType, files: File[], onHostCreate?: OnHostCreate) {
+        return type === SessionType.NoReference ? createSessionWithoutProjectReferences(files, onHostCreate) :
+            type === SessionType.ProjectReference ? createSessionWithProjectReferences(files, onHostCreate) :
             type === SessionType.DisableSourceOfProjectReferenceRedirect ?
-            createSessionWithDisabledProjectReferences(onHostCreate) :
+            createSessionWithDisabledProjectReferences(files, onHostCreate) :
             ts.Debug.assertNever(type);
     }
 
     function setup(type: SessionType, openFiles: readonly File[], action: Action | Action[], max?: number, onHostCreate?: OnHostCreate) {
-        const session = createSession(type, onHostCreate);
+        const session = createSession(type, files, onHostCreate);
         openFilesForSession(openFiles, session);
         runActions(session, action, max);
         return session;
@@ -510,7 +512,7 @@ fn5();
 
         verifyForAllSessionTypes(type => {
             it("goto Definition in usage and rename locations, deleting config file", () => {
-                const session = createSession(type);
+                const session = createSession(type, files);
                 openFilesForSession([mainTs], session);
                 session.executeCommandSeq<ts.server.protocol.RenameRequest>({
                     command: ts.server.protocol.CommandTypes.Rename,
@@ -549,4 +551,51 @@ fn5();
             });
         }, /*options*/ undefined);
     });
+
+    verifyForAllSessionTypes(type => {
+        it("goto Definition in usage of a property with mapped type origin", () => {
+            const dependencyTs: File = {
+                path: `${dependencyLocation}/api.ts`,
+                content: dedent`
+                    type ValidateShape<T> = {
+                        [K in keyof T]: T[K];
+                    };
+
+                    function getApi<T>(arg: ValidateShape<T>) {
+                        function createCaller<T>(arg: T): () => {
+                            [K in keyof T]: () => T[K];
+                        } {
+                            return null as any;
+                        }
+                        return {
+                            createCaller: createCaller(arg),
+                        };
+                    }
+
+                    const obj = getApi({
+                        foo: 1,
+                        bar: "",
+                    });
+
+                    export const createCaller = obj.createCaller;
+                `,
+            };
+            const mainTs: File = {
+                path: `${mainLocation}/main.ts`,
+                content: dedent`
+                    import { createCaller } from "../decls/api";
+                    const caller = createCaller();
+                    caller.foo;
+                `,
+            };
+            const files = [dependencyTs, dependencyConfig, mainTs, mainConfig];
+            const session = createSession(type, files);
+            openFilesForSession([mainTs], session);
+            session.executeCommandSeq<ts.server.protocol.DefinitionAndBoundSpanRequest>({
+                command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
+                arguments: protocolFileLocationFromSubstring(mainTs, "foo"),
+            });
+            baselineTsserverLogs("projectReferencesSourcemap", `dependencyAndUsage/${type}/goto Definition in usage of a property with mapped type origin`, session);
+        });
+    }, /*options*/ undefined);
 });
