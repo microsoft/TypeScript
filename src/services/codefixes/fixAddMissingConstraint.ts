@@ -16,7 +16,6 @@ import {
     factory,
     find,
     flattenDiagnosticMessageText,
-    getEmitScriptTarget,
     getNodeId,
     getTokenAtPosition,
     isExpression,
@@ -120,10 +119,9 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
         changes.insertText(sourceFile, declaration.name.end, ` extends ${constraint}`);
     }
     else {
-        const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const tracker = getNoopSymbolTrackerWithResolver({ program, host });
         const importAdder = createImportAdder(sourceFile, program, preferences, host);
-        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, /*internalFlags*/ undefined, tracker);
+        const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, /*flags*/ undefined, /*internalFlags*/ undefined, tracker);
         if (typeNode) {
             changes.replaceNode(sourceFile, declaration, factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default));
             importAdder.writeFixes(changes);

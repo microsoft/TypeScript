@@ -13,7 +13,6 @@ import {
     ClassDeclaration,
     ClassElement,
     CodeFixContext,
-    CompilerOptions,
     concatenate,
     copyLeadingComments,
     Diagnostics,
@@ -24,7 +23,6 @@ import {
     forEach,
     FunctionDeclaration,
     FunctionExpression,
-    getEmitScriptTarget,
     getNameOfDeclaration,
     getQuotePreference,
     getTokenAtPosition,
@@ -72,14 +70,14 @@ const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_
 registerCodeFix({
     errorCodes,
     getCodeActions(context: CodeFixContext) {
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
+        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences));
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
+    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences)),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
+function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences): void {
     const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
     if (!ctorSymbol || !ctorSymbol.valueDeclaration || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
         // Bad input
@@ -212,7 +210,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, po
             // f.x = expr
             if (isAccessExpression(memberDeclaration) && (isFunctionExpression(assignmentExpr) || isArrowFunction(assignmentExpr))) {
                 const quotePreference = getQuotePreference(sourceFile, preferences);
-                const name = tryGetPropertyName(memberDeclaration, compilerOptions, quotePreference);
+                const name = tryGetPropertyName(memberDeclaration, quotePreference);
                 if (name) {
                     createFunctionLikeExpressionMember(members, assignmentExpr, name);
                 }
@@ -320,7 +318,7 @@ function isConstructorAssignment(x: ObjectLiteralElementLike | PropertyAccessExp
     return false;
 }
 
-function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOptions, quotePreference: QuotePreference): PropertyName | undefined {
+function tryGetPropertyName(node: AccessExpression, quotePreference: QuotePreference): PropertyName | undefined {
     if (isPropertyAccessExpression(node)) {
         return node.name;
     }
@@ -331,7 +329,7 @@ function tryGetPropertyName(node: AccessExpression, compilerOptions: CompilerOpt
     }
 
     if (isStringLiteralLike(propName)) {
-        return isIdentifierText(propName.text, getEmitScriptTarget(compilerOptions)) ? factory.createIdentifier(propName.text)
+        return isIdentifierText(propName.text) ? factory.createIdentifier(propName.text)
             : isNoSubstitutionTemplateLiteral(propName) ? factory.createStringLiteral(propName.text, quotePreference === QuotePreference.Single)
             : propName;
     }

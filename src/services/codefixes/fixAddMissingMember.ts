@@ -41,7 +41,6 @@ import {
     FunctionExpression,
     getCheckFlags,
     getClassLikeDeclarationOfSymbol,
-    getEmitScriptTarget,
     getEscapedTextOfJsxAttributeName,
     getFirstConstructorWithBody,
     getNodeId,
@@ -105,7 +104,6 @@ import {
     PropertyDeclaration,
     QuotePreference,
     ReturnStatement,
-    ScriptTarget,
     setParent,
     Signature,
     SignatureKind,
@@ -348,8 +346,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     }
 
     if (isIdentifier(token) && isJsxOpeningLikeElement(token.parent)) {
-        const target = getEmitScriptTarget(program.getCompilerOptions());
-        const attributes = getUnmatchedAttributes(checker, target, token.parent);
+        const attributes = getUnmatchedAttributes(checker, token.parent);
         if (!length(attributes)) return undefined;
         return { kind: InfoKind.JsxAttributes, token, attributes, parentDeclaration: token.parent };
     }
@@ -654,11 +651,10 @@ function addJsxAttributes(changes: textChanges.ChangeTracker, context: CodeFixCo
 function addObjectLiteralProperties(changes: textChanges.ChangeTracker, context: CodeFixContextBase, info: ObjectLiteralInfo) {
     const importAdder = createImportAdder(context.sourceFile, context.program, context.preferences, context.host);
     const quotePreference = getQuotePreference(context.sourceFile, context.preferences);
-    const target = getEmitScriptTarget(context.program.getCompilerOptions());
     const checker = context.program.getTypeChecker();
     const props = map(info.properties, prop => {
         const initializer = tryGetValueFromType(context, checker, importAdder, quotePreference, checker.getTypeOfSymbol(prop), info.parentDeclaration);
-        return factory.createPropertyAssignment(createPropertyNameFromSymbol(prop, target, quotePreference, checker), initializer);
+        return factory.createPropertyAssignment(createPropertyNameFromSymbol(prop, quotePreference, checker), initializer);
     });
     const options = {
         leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
@@ -751,7 +747,7 @@ function isObjectLiteralType(type: Type) {
         ((getObjectFlags(type) & ObjectFlags.ObjectLiteral) || (type.symbol && tryCast(singleOrUndefined(type.symbol.declarations), isTypeLiteralNode)));
 }
 
-function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, source: JsxOpeningLikeElement) {
+function getUnmatchedAttributes(checker: TypeChecker, source: JsxOpeningLikeElement) {
     const attrsType = checker.getContextualType(source.attributes);
     if (attrsType === undefined) return emptyArray;
 
@@ -770,7 +766,7 @@ function getUnmatchedAttributes(checker: TypeChecker, target: ScriptTarget, sour
             }
         }
     }
-    return filter(targetProps, targetProp => isIdentifierText(targetProp.name, target, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
+    return filter(targetProps, targetProp => isIdentifierText(targetProp.name, LanguageVariant.JSX) && !((targetProp.flags & SymbolFlags.Optional || getCheckFlags(targetProp) & CheckFlags.Partial) || seenNames.has(targetProp.escapedName)));
 }
 
 function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, callExpression: CallExpression) {
@@ -781,13 +777,13 @@ function tryGetContainingMethodDeclaration(node: ClassLikeDeclaration | Interfac
     return declaration && declaration.parent === node ? declaration : undefined;
 }
 
-function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quotePreference: QuotePreference, checker: TypeChecker) {
+function createPropertyNameFromSymbol(symbol: Symbol, quotePreference: QuotePreference, checker: TypeChecker) {
     if (isTransientSymbol(symbol)) {
         const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, InternalNodeBuilderFlags.WriteComputedProps);
         if (prop && isComputedPropertyName(prop)) return prop;
     }
     // We're using these nodes as property names in an object literal; no need to quote names when not needed.
-    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single, /*stringNamed*/ false, /*isMethod*/ false);
+    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, quotePreference === QuotePreference.Single, /*stringNamed*/ false, /*isMethod*/ false);
 }
 
 function findScope(node: Node) {

@@ -10811,9 +10811,9 @@ export function isNumericLiteralName(name: string | __String): boolean {
 }
 
 /** @internal */
-export function createPropertyNameNodeForIdentifierOrLiteral(name: string, target: ScriptTarget, singleQuote: boolean, stringNamed: boolean, isMethod: boolean): Identifier | StringLiteral | NumericLiteral {
+export function createPropertyNameNodeForIdentifierOrLiteral(name: string, singleQuote: boolean, stringNamed: boolean, isMethod: boolean): Identifier | StringLiteral | NumericLiteral {
     const isMethodNamedNew = isMethod && name === "new";
-    return !isMethodNamedNew && isIdentifierText(name, target) ? factory.createIdentifier(name) :
+    return !isMethodNamedNew && isIdentifierText(name) ? factory.createIdentifier(name) :
         !stringNamed && !isMethodNamedNew && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
         factory.createStringLiteral(name, !!singleQuote);
 }
@@ -10927,14 +10927,14 @@ export function isOptionalJSDocPropertyLikeTag(node: Node): boolean {
 }
 
 /** @internal */
-export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget): boolean {
+export function canUsePropertyAccess(name: string): boolean {
     if (name.length === 0) {
         return false;
     }
     const firstChar = name.charCodeAt(0);
     return firstChar === CharacterCodes.hash ?
-        name.length > 1 && isIdentifierStart(name.charCodeAt(1), languageVersion) :
-        isIdentifierStart(firstChar, languageVersion);
+        name.length > 1 && isIdentifierStart(name.charCodeAt(1)) :
+        isIdentifierStart(firstChar);
 }
 
 /** @internal */

@@ -1819,7 +1819,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     }
                     // If the class name was assigned from a string literal that is a valid identifier, create an
                     // identifier from it.
-                    else if (isIdentifierText(node.emitNode.assignedName.text, languageVersion)) {
+                    else if (isIdentifierText(node.emitNode.assignedName.text)) {
                         const prefixName = factory.createIdentifier(node.emitNode.assignedName.text);
                         getPrivateIdentifierEnvironment().data.className = prefixName;
                     }

@@ -304,7 +304,7 @@ function updateParameters(
                 declaration.dotDotDotToken,
                 declaration.name,
                 prev && prev.questionToken ? factory.createToken(SyntaxKind.QuestionToken) : declaration.questionToken,
-                getParameterType(importAdder, declaration.type, scriptTarget),
+                getParameterType(importAdder, declaration.type),
                 declaration.initializer,
             ),
         );
@@ -347,8 +347,8 @@ function isOptionalPos(declarations: ConvertibleSignatureDeclaration[], pos: num
     return length(declarations) && some(declarations, d => pos < length(d.parameters) && !!d.parameters[pos] && d.parameters[pos].questionToken === undefined);
 }
 
-function getParameterType(importAdder: ImportAdder, typeNode: TypeNode | undefined, scriptTarget: ScriptTarget) {
-    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+function getParameterType(importAdder: ImportAdder, typeNode: TypeNode | undefined) {
+    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode);
     if (importableReference) {
         importSymbols(importAdder, importableReference.symbols);
         return importableReference.typeNode;

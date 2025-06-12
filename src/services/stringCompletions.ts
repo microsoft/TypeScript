@@ -1375,7 +1375,7 @@ function getDirectoryFragmentTextSpan(text: string, textStart: number): TextSpan
     const offset = index !== -1 ? index + 1 : 0;
     // If the range is an identifier, span is unnecessary.
     const length = text.length - offset;
-    return length === 0 || isIdentifierText(text.substr(offset, length), ScriptTarget.ESNext) ? undefined : createTextSpan(textStart + offset, length);
+    return length === 0 || isIdentifierText(text.substr(offset, length)) ? undefined : createTextSpan(textStart + offset, length);
 }
 
 // Returns true if the path is explicitly relative to the script (i.e. relative to . or ..)

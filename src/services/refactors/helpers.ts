@@ -89,5 +89,5 @@ export function addTargetFileImports(
         }
     });
 
-    addImportsForMovedSymbols(targetFileImportsFromOldFile, oldFile.fileName, importAdder, program);
+    addImportsForMovedSymbols(targetFileImportsFromOldFile, oldFile.fileName, importAdder);
 }

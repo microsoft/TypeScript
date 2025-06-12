@@ -506,7 +506,7 @@ function convertSingleImport(
             import x from "x";
             const [a, b, c] = x;
             */
-            const tmp = makeUniqueName(moduleSpecifierToValidIdentifier(moduleSpecifier.text, target), identifiers);
+            const tmp = makeUniqueName(moduleSpecifierToValidIdentifier(moduleSpecifier.text), identifiers);
             return convertedImports([
                 makeImport(factory.createIdentifier(tmp), /*namedImports*/ undefined, moduleSpecifier, quotePreference),
                 makeConst(/*modifiers*/ undefined, getSynthesizedDeepClone(name), factory.createIdentifier(tmp)),

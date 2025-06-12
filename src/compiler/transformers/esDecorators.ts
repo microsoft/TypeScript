@@ -155,7 +155,6 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
-    ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
@@ -548,7 +547,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function getHelperVariableName(node: ClassLikeDeclaration | ClassElement) {
         let declarationName = node.name && isIdentifier(node.name) && !isGeneratedIdentifier(node.name) ? idText(node.name) :
             node.name && isPrivateIdentifier(node.name) && !isGeneratedIdentifier(node.name) ? idText(node.name).slice(1) :
-            node.name && isStringLiteral(node.name) && isIdentifierText(node.name.text, ScriptTarget.ESNext) ? node.name.text :
+            node.name && isStringLiteral(node.name) && isIdentifierText(node.name.text) ? node.name.text :
             isClassLike(node) ? "class" : "member";
         if (isGetAccessor(node)) declarationName = `get_${declarationName}`;
         if (isSetAccessor(node)) declarationName = `set_${declarationName}`;

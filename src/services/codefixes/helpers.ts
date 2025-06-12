@@ -188,7 +188,6 @@ export function addNewNodeForMemberSymbol(
     const declarations = symbol.getDeclarations();
     const declaration = firstOrUndefined(declarations);
     const checker = context.program.getTypeChecker();
-    const scriptTarget = getEmitScriptTarget(context.program.getCompilerOptions());
 
     /**
      * (#49811)
@@ -227,7 +226,7 @@ export function addNewNodeForMemberSymbol(
         case SyntaxKind.PropertyDeclaration:
             let typeNode = checker.typeToTypeNode(type, enclosingDeclaration, flags, InternalNodeBuilderFlags.AllowUnresolvedNames, getNoopSymbolTrackerWithResolver(context));
             if (importAdder) {
-                const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode);
                 if (importableReference) {
                     typeNode = importableReference.typeNode;
                     importSymbols(importAdder, importableReference.symbols);
@@ -250,7 +249,7 @@ export function addNewNodeForMemberSymbol(
                 ? [allAccessors.firstAccessor, allAccessors.secondAccessor]
                 : [allAccessors.firstAccessor];
             if (importAdder) {
-                const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode);
                 if (importableReference) {
                     typeNode = importableReference.typeNode;
                     importSymbols(importAdder, importableReference.symbols);
@@ -392,7 +391,6 @@ export function createSignatureDeclarationFromSignature(
 ): FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | undefined {
     const program = context.program;
     const checker = program.getTypeChecker();
-    const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
     const isJs = isInJSFile(enclosingDeclaration);
     const flags = NodeBuilderFlags.NoTruncation
         | NodeBuilderFlags.SuppressAnyReturnType
@@ -412,14 +410,14 @@ export function createSignatureDeclarationFromSignature(
                 let constraint = typeParameterDecl.constraint;
                 let defaultType = typeParameterDecl.default;
                 if (constraint) {
-                    const importableReference = tryGetAutoImportableReferenceFromTypeNode(constraint, scriptTarget);
+                    const importableReference = tryGetAutoImportableReferenceFromTypeNode(constraint);
                     if (importableReference) {
                         constraint = importableReference.typeNode;
                         importSymbols(importAdder, importableReference.symbols);
                     }
                 }
                 if (defaultType) {
-                    const importableReference = tryGetAutoImportableReferenceFromTypeNode(defaultType, scriptTarget);
+                    const importableReference = tryGetAutoImportableReferenceFromTypeNode(defaultType);
                     if (importableReference) {
                         defaultType = importableReference.typeNode;
                         importSymbols(importAdder, importableReference.symbols);
@@ -440,7 +438,7 @@ export function createSignatureDeclarationFromSignature(
         const newParameters = sameMap(parameters, parameterDecl => {
             let type = isJs ? undefined : parameterDecl.type;
             if (type) {
-                const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(type);
                 if (importableReference) {
                     type = importableReference.typeNode;
                     importSymbols(importAdder, importableReference.symbols);
@@ -460,7 +458,7 @@ export function createSignatureDeclarationFromSignature(
             parameters = setTextRange(factory.createNodeArray(newParameters, parameters.hasTrailingComma), parameters);
         }
         if (type) {
-            const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
+            const importableReference = tryGetAutoImportableReferenceFromTypeNode(type);
             if (importableReference) {
                 type = importableReference.typeNode;
                 importSymbols(importAdder, importableReference.symbols);
@@ -596,17 +594,17 @@ function createTypeParameterName(index: number) {
 }
 
 /** @internal */
-export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+export function typeToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, type: Type, contextNode: Node | undefined, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
     const typeNode = checker.typeToTypeNode(type, contextNode, flags, internalFlags, tracker);
     if (!typeNode) {
         return undefined;
     }
-    return typeNodeToAutoImportableTypeNode(typeNode, importAdder, scriptTarget);
+    return typeNodeToAutoImportableTypeNode(typeNode, importAdder);
 }
 
 /** @internal */
-export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder: ImportAdder, scriptTarget: ScriptTarget): TypeNode | undefined {
-    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+export function typeNodeToAutoImportableTypeNode(typeNode: TypeNode, importAdder: ImportAdder): TypeNode | undefined {
+    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode);
     if (importableReference) {
         importSymbols(importAdder, importableReference.symbols);
         typeNode = importableReference.typeNode;
@@ -651,10 +649,10 @@ export function typeToMinimizedReferenceType(checker: TypeChecker, type: Type, c
 }
 
 /** @internal */
-export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, typePredicate: TypePredicate, contextNode: Node | undefined, scriptTarget: ScriptTarget, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
+export function typePredicateToAutoImportableTypeNode(checker: TypeChecker, importAdder: ImportAdder, typePredicate: TypePredicate, contextNode: Node | undefined, flags?: NodeBuilderFlags, internalFlags?: InternalNodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined {
     let typePredicateNode = checker.typePredicateToTypePredicateNode(typePredicate, contextNode, flags, internalFlags, tracker);
     if (typePredicateNode?.type && isImportTypeNode(typePredicateNode.type)) {
-        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typePredicateNode.type, scriptTarget);
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typePredicateNode.type);
         if (importableReference) {
             importSymbols(importAdder, importableReference.symbols);
             typePredicateNode = factory.updateTypePredicateNode(typePredicateNode, typePredicateNode.assertsModifier, typePredicateNode.parameterName, importableReference.typeNode);
@@ -715,7 +713,7 @@ function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: Im
 
         // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
         const widenedInstanceType = checker.getBaseTypeOfLiteralType(instanceType);
-        const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, widenedInstanceType, contextNode, scriptTarget, flags, internalFlags, tracker);
+        const argumentTypeNode = typeToAutoImportableTypeNode(checker, importAdder, widenedInstanceType, contextNode, flags, internalFlags, tracker);
         if (!argumentTypeNode) {
             continue;
         }
@@ -733,7 +731,7 @@ function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAdder: Im
         // We instead want to output:
         //    function added<T extends string>(value: T) { ... }
         const instanceTypeConstraint = instanceType.isTypeParameter() && instanceType.constraint && !isAnonymousObjectConstraintType(instanceType.constraint)
-            ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, scriptTarget, flags, internalFlags, tracker)
+            ? typeToAutoImportableTypeNode(checker, importAdder, instanceType.constraint, contextNode, flags, internalFlags, tracker)
             : undefined;
 
         if (argumentTypeParameter) {
@@ -950,7 +948,7 @@ function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyA
  *
  * @internal
  */
-export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined, scriptTarget: ScriptTarget): {
+export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNode | undefined): {
     typeNode: TypeNode;
     symbols: Symbol[];
 } | undefined {
@@ -970,7 +968,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
                 // it can't refer to reserved internal symbol names and such
                 return visitEachChild(node, visit, /*context*/ undefined);
             }
-            const name = getNameForExportedSymbol(firstIdentifier.symbol, scriptTarget);
+            const name = getNameForExportedSymbol(firstIdentifier.symbol);
             const qualifier = name !== firstIdentifier.text
                 ? replaceFirstIdentifierOfEntityName(node.qualifier, factory.createIdentifier(name))
                 : node.qualifier;

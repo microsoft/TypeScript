@@ -25,7 +25,6 @@ import {
     getEffectiveSetAccessorTypeAnnotationNode,
     getEffectiveTypeAnnotationNode,
     getEmitFlags,
-    getEmitScriptTarget,
     getFunctionFlags,
     getJSDocType,
     getJSDocTypeAssertionType,
@@ -502,7 +501,7 @@ export function createSyntacticTypeNodeBuilder(
                         }
                         literal = literalNode;
                     }
-                    if (literal.kind === SyntaxKind.StringLiteral && isIdentifierText(literal.text, getEmitScriptTarget(options))) {
+                    if (literal.kind === SyntaxKind.StringLiteral && isIdentifierText(literal.text)) {
                         return factory.createIdentifier(literal.text);
                     }
                     if (literal.kind === SyntaxKind.NumericLiteral && !literal.text.startsWith("-")) {

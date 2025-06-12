@@ -282,7 +282,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
 
     function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
         const moduleSymbol = Debug.checkDefined(exportedSymbol.parent, "Expected exported symbol to have module symbol as parent");
-        const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
+        const symbolName = getNameForExportedSymbol(exportedSymbol);
         const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
@@ -1296,7 +1296,6 @@ function getNewImportFixes(
                 }
                 namespacePrefix ||= moduleSymbolToValidIdentifier(
                     exportInfo.moduleSymbol,
-                    getEmitScriptTarget(compilerOptions),
                     /*forceCapitalize*/ false,
                 );
                 qualification = { namespacePrefix, usagePosition };

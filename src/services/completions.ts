@@ -1461,7 +1461,7 @@ function getExhaustiveCaseSnippets(
                     }
                     tracker.addValue(enumValue);
                 }
-                const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseBlock, target);
+                const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseBlock);
                 if (!typeNode) {
                     return undefined;
                 }
@@ -1564,7 +1564,7 @@ function entityNameToExpression(entityName: EntityName, languageVersion: ScriptT
         return entityName;
     }
     const unescapedName = unescapeLeadingUnderscores(entityName.right.escapedText);
-    if (canUsePropertyAccess(unescapedName, languageVersion)) {
+    if (canUsePropertyAccess(unescapedName)) {
         return factory.createPropertyAccessExpression(
             entityNameToExpression(entityName.left, languageVersion, quotePreference),
             unescapedName,
@@ -1655,7 +1655,7 @@ function getJSCompletionEntries(
             return;
         }
         const realName = unescapeLeadingUnderscores(name);
-        if (!uniqueNames.has(realName) && isIdentifierText(realName, target)) {
+        if (!uniqueNames.has(realName) && isIdentifierText(realName)) {
             uniqueNames.add(realName);
             insertSorted(entries, {
                 name: realName,
@@ -1888,8 +1888,7 @@ function createCompletionEntry(
 
     const parentNamedImportOrExport = findAncestor(location, isNamedImportsOrExports);
     if (parentNamedImportOrExport) {
-        const languageVersion = getEmitScriptTarget(host.getCompilationSettings());
-        if (!isIdentifierText(name, languageVersion)) {
+        if (!isIdentifierText(name)) {
             insertText = quotePropertyName(sourceFile, preferences, name);
 
             if (parentNamedImportOrExport.kind === SyntaxKind.NamedImports) {
@@ -1898,7 +1897,7 @@ function createCompletionEntry(
                 scanner.setText(sourceFile.text);
                 scanner.resetTokenState(position);
                 if (!(scanner.scan() === SyntaxKind.AsKeyword && scanner.scan() === SyntaxKind.Identifier)) {
-                    insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion);
+                    insertText += " as " + generateIdentifierForArbitraryString(name);
                 }
             }
         }
@@ -1942,7 +1941,7 @@ function createCompletionEntry(
     };
 }
 
-function generateIdentifierForArbitraryString(text: string, languageVersion: ScriptTarget | undefined): string {
+function generateIdentifierForArbitraryString(text: string): string {
     let needsUnderscore = false;
     let identifier = "";
     let ch: number | undefined;
@@ -1950,7 +1949,7 @@ function generateIdentifierForArbitraryString(text: string, languageVersion: Scr
     // Convert "(example, text)" into "_example_text_"
     for (let i = 0; i < text.length; i += ch !== undefined && ch >= 0x10000 ? 2 : 1) {
         ch = text.codePointAt(i);
-        if (ch !== undefined && (i === 0 ? isIdentifierStart(ch, languageVersion) : isIdentifierPart(ch, languageVersion))) {
+        if (ch !== undefined && (i === 0 ? isIdentifierStart(ch) : isIdentifierPart(ch))) {
             if (needsUnderscore) identifier += "_";
             identifier += String.fromCodePoint(ch);
             needsUnderscore = false;
@@ -4165,7 +4164,7 @@ function getCompletionData(
                     sourceFile.path,
                     /*preferCapitalized*/ isRightOfOpenTag,
                     (symbolName, targetFlags) => {
-                        if (!isIdentifierText(symbolName, getEmitScriptTarget(host.getCompilationSettings()))) return false;
+                        if (!isIdentifierText(symbolName)) return false;
                         if (!detailsEntryId && isStringANonContextualKeyword(symbolName)) return false;
                         if (!isTypeOnlyLocation && !importStatementCompletion && !(targetFlags & SymbolFlags.Value)) return false;
                         if (isTypeOnlyLocation && !(targetFlags & (SymbolFlags.Module | SymbolFlags.Type))) return false;
@@ -5413,7 +5412,7 @@ function getCompletionEntryDisplayNameForSymbol(
     }
 
     const validNameResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
-    if (isIdentifierText(name, target, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
+    if (isIdentifierText(name, jsxIdentifierExpected ? LanguageVariant.JSX : LanguageVariant.Standard) || symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return validNameResult;
     }
     if (symbol.flags & SymbolFlags.Alias) {

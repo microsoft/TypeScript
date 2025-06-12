@@ -660,8 +660,8 @@ export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: Ty
     for (const symbol of chain ?? emptyArray) {
         if (symbol.parent && isExternalModuleSymbol(symbol.parent)) {
             const final = cb(
-                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ false),
-                moduleSymbolToValidIdentifier(symbol.parent, scriptTarget, /*forceCapitalize*/ true),
+                moduleSymbolToValidIdentifier(symbol.parent, /*forceCapitalize*/ false),
+                moduleSymbolToValidIdentifier(symbol.parent, /*forceCapitalize*/ true),
             );
             if (final) return final;
         }

@@ -235,7 +235,6 @@ import {
     ReferenceEntry,
     RenameLocation,
     ScriptElementKind,
-    ScriptTarget,
     SemanticMeaning,
     SetAccessorDeclaration,
     SignatureDeclaration,
@@ -1804,8 +1803,8 @@ export namespace Core {
             const endPosition = position + symbolNameLength;
 
             if (
-                (position === 0 || !isIdentifierPart(text.charCodeAt(position - 1), ScriptTarget.Latest)) &&
-                (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition), ScriptTarget.Latest))
+                (position === 0 || !isIdentifierPart(text.charCodeAt(position - 1))) &&
+                (endPosition === sourceLength || !isIdentifierPart(text.charCodeAt(endPosition)))
             ) {
                 // Found a real match.  Keep searching.
                 positions.push(position);

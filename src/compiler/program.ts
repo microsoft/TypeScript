@@ -4364,7 +4364,7 @@ export function createProgram(_rootNamesOrOptions: readonly string[] | CreatePro
                 createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
             }
         }
-        else if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
+        else if (options.reactNamespace && !isIdentifierText(options.reactNamespace)) {
             createOptionValueDiagnostic("reactNamespace", Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace);
         }
 

@@ -4000,14 +4000,14 @@ export function firstOrOnly<T>(valueOrArray: T | readonly T[]): T {
  * instead, which searches for names of re-exported defaults/namespaces in target files.
  * @internal
  */
-export function getNameForExportedSymbol(symbol: Symbol, scriptTarget: ScriptTarget | undefined, preferCapitalized?: boolean): string {
+export function getNameForExportedSymbol(symbol: Symbol, preferCapitalized?: boolean): string {
     if (symbol.escapedName === InternalSymbolName.ExportEquals || symbol.escapedName === InternalSymbolName.Default) {
         // Names for default exports:
         // - export default foo => foo
         // - export { foo as default } => foo
         // - export default 0 => filename converted to camelCase
         return getDefaultLikeExportNameFromDeclaration(symbol)
-            || moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), scriptTarget, !!preferCapitalized);
+            || moduleSymbolToValidIdentifier(getSymbolParentOrFail(symbol), !!preferCapitalized);
     }
     return symbol.name;
 }
@@ -4054,17 +4054,17 @@ function getSymbolParentOrFail(symbol: Symbol) {
 }
 
 /** @internal */
-export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined, forceCapitalize: boolean): string {
-    return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target, forceCapitalize);
+export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, forceCapitalize: boolean): string {
+    return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), forceCapitalize);
 }
 
 /** @internal */
-export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
+export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, forceCapitalize?: boolean): string {
     const baseName = getBaseFileName(removeSuffix(removeFileExtension(moduleSpecifier), "/index"));
     let res = "";
     let lastCharWasValid = true;
     const firstCharCode = baseName.charCodeAt(0);
-    if (isIdentifierStart(firstCharCode, target)) {
+    if (isIdentifierStart(firstCharCode)) {
         res += String.fromCharCode(firstCharCode);
         if (forceCapitalize) {
             res = res.toUpperCase();
@@ -4075,7 +4075,7 @@ export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target
     }
     for (let i = 1; i < baseName.length; i++) {
         const ch = baseName.charCodeAt(i);
-        const isValid = isIdentifierPart(ch, target);
+        const isValid = isIdentifierPart(ch);
         if (isValid) {
             let char = String.fromCharCode(ch);
             if (!lastCharWasValid) {

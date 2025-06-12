@@ -6485,7 +6485,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return parentName;
                     }
                     const memberName = symbolName(type.symbol);
-                    if (isIdentifierText(memberName, ScriptTarget.ES5)) {
+                    if (isIdentifierText(memberName)) {
                         return appendReferenceToType(
                             parentName as TypeReferenceNode | ImportTypeNode,
                             factory.createTypeReferenceNode(memberName, /*typeArguments*/ undefined),
@@ -8509,7 +8509,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                     return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                 }
-                if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
+                if (index === 0 || canUsePropertyAccess(symbolName)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
                     if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
@@ -8569,7 +8569,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return fromNameType;
             }
             const rawName = unescapeLeadingUnderscores(symbol.escapedName);
-            return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
+            return createPropertyNameNodeForIdentifierOrLiteral(rawName, singleQuote, stringNamed, isMethod);
         }
 
         // See getNameForSymbolFromNameType for a stringy equivalent
@@ -8578,13 +8578,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (nameType) {
                 if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                     const name = "" + (nameType as StringLiteralType | NumberLiteralType).value;
-                    if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && (stringNamed || !isNumericLiteralName(name))) {
+                    if (!isIdentifierText(name) && (stringNamed || !isNumericLiteralName(name))) {
                         return factory.createStringLiteral(name, !!singleQuote);
                     }
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
                         return factory.createComputedPropertyName(factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-name)));
                     }
-                    return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
+                    return createPropertyNameNodeForIdentifierOrLiteral(name, singleQuote, stringNamed, isMethod);
                 }
                 if (nameType.flags & TypeFlags.UniqueESSymbol) {
                     return factory.createComputedPropertyName(symbolToExpression((nameType as UniqueESSymbolType).symbol, context, SymbolFlags.Value));
@@ -9511,7 +9511,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     exports = arrayFrom(membersSet);
                 }
-                return filter(exports, m => isNamespaceMember(m) && isIdentifierText(m.escapedName as string, ScriptTarget.ESNext));
+                return filter(exports, m => isNamespaceMember(m) && isIdentifierText(m.escapedName as string));
             }
 
             function isTypeOnlyNamespace(symbol: Symbol) {
@@ -10169,7 +10169,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !some(getPropertiesOfType(typeToSerialize), p => isLateBoundName(p.escapedName)) &&
                     !some(getPropertiesOfType(typeToSerialize), p => some(p.declarations, d => getSourceFileOfNode(d) !== ctxSrc)) &&
                     every(getPropertiesOfType(typeToSerialize), p => {
-                        if (!isIdentifierText(symbolName(p), languageVersion)) {
+                        if (!isIdentifierText(symbolName(p))) {
                             return false;
                         }
                         if (!(p.flags & SymbolFlags.Accessor)) {
@@ -10497,7 +10497,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 else if (localName === InternalSymbolName.ExportEquals) {
                     localName = "_exports";
                 }
-                localName = isIdentifierText(localName, languageVersion) && !isStringANonContextualKeyword(localName) ? localName : "_" + localName.replace(/[^a-z0-9]/gi, "_");
+                localName = isIdentifierText(localName) && !isStringANonContextualKeyword(localName) ? localName : "_" + localName.replace(/[^a-z0-9]/gi, "_");
                 return localName;
             }
 
@@ -10588,7 +10588,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (nameType) {
             if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                 const name = "" + (nameType as StringLiteralType | NumberLiteralType).value;
-                if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && !isNumericLiteralName(name)) {
+                if (!isIdentifierText(name) && !isNumericLiteralName(name)) {
                     return `"${escapeString(name, CharacterCodes.doubleQuote)}"`;
                 }
                 if (isNumericLiteralName(name) && startsWith(name, "-")) {
@@ -21839,7 +21839,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             path = `${str}`;
                         }
                         // Otherwise write a dotted name if possible
-                        else if (isIdentifierText(str, getEmitScriptTarget(compilerOptions))) {
+                        else if (isIdentifierText(str)) {
                             path = `${path}.${str}`;
                         }
                         // Failing that, check if the name is already a computed name

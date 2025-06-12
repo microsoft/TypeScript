@@ -50,7 +50,6 @@ import {
     GetCanonicalFileName,
     getDecorators,
     getDirectoryPath,
-    getEmitScriptTarget,
     getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
     getModifiers,
@@ -135,7 +134,6 @@ import {
     RefactorEditInfo,
     RequireOrImportCall,
     resolvePath,
-    ScriptTarget,
     skipAlias,
     some,
     SourceFile,
@@ -253,7 +251,7 @@ export function getNewStatementsAndRemoveFromOldFile(
 
     const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, program, host, !!oldFile.commonJsModuleIndicator);
     const quotePreference = getQuotePreference(oldFile, preferences);
-    addImportsForMovedSymbols(usage.oldFileImportsFromTargetFile, targetFile.fileName, importAdderForOldFile, program);
+    addImportsForMovedSymbols(usage.oldFileImportsFromTargetFile, targetFile.fileName, importAdderForOldFile);
     deleteUnusedOldImports(oldFile, toMove.all, usage.unusedImportsFromOldFile, importAdderForOldFile);
     importAdderForOldFile.writeFixes(changes, quotePreference);
     deleteMovedStatements(oldFile, toMove.ranges, changes);
@@ -396,7 +394,7 @@ function updateNamespaceLikeImport(
     oldImportNode: SupportedImport,
     quotePreference: QuotePreference,
 ): void {
-    const preferredNewNamespaceName = moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
+    const preferredNewNamespaceName = moduleSpecifierToValidIdentifier(newModuleSpecifier);
     let needUniqueName = false;
     const toChange: Identifier[] = [];
     FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
@@ -512,10 +510,9 @@ export function addImportsForMovedSymbols(
     symbols: Map<Symbol, boolean>,
     targetFileName: string,
     importAdder: codefix.ImportAdder,
-    program: Program,
 ): void {
     for (const [symbol, isValidTypeOnlyUseSite] of symbols) {
-        const symbolName = getNameForExportedSymbol(symbol, getEmitScriptTarget(program.getCompilerOptions()));
+        const symbolName = getNameForExportedSymbol(symbol);
         const exportKind = symbol.name === "default" && symbol.parent ? ExportKind.Default : ExportKind.Named;
         importAdder.addImportForNonExistentExport(symbolName, targetFileName, exportKind, symbol.flags, isValidTypeOnlyUseSite);
     }

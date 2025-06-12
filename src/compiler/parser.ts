@@ -2371,7 +2371,7 @@ namespace Parser {
 
         // Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
         const expressionText = isIdentifierNode(node) ? idText(node) : undefined;
-        if (!expressionText || !isIdentifierText(expressionText, languageVersion)) {
+        if (!expressionText || !isIdentifierText(expressionText)) {
             parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
             return;
         }

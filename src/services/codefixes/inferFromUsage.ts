@@ -34,7 +34,6 @@ import {
     forEach,
     forEachEntry,
     getContainingFunction,
-    getEmitScriptTarget,
     getJSDocType,
     getNameOfDeclaration,
     getObjectFlags,
@@ -85,7 +84,6 @@ import {
     PropertyName,
     PropertySignature,
     returnTrue,
-    ScriptTarget,
     SetAccessorDeclaration,
     setEmitFlags,
     ShorthandPropertyAssignment,
@@ -423,7 +421,7 @@ function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, 
             const typeTag = isGetAccessorDeclaration(declaration) ? factory.createJSDocReturnTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined) : factory.createJSDocTypeTag(/*tagName*/ undefined, typeExpression, /*comment*/ undefined);
             changes.addJSDocTags(sourceFile, parent, [typeTag]);
         }
-        else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder, getEmitScriptTarget(program.getCompilerOptions()))) {
+        else if (!tryReplaceImportTypeNodeWithAutoImport(typeNode, declaration, sourceFile, changes, importAdder)) {
             changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
         }
     }
@@ -435,9 +433,8 @@ function tryReplaceImportTypeNodeWithAutoImport(
     sourceFile: SourceFile,
     changes: textChanges.ChangeTracker,
     importAdder: ImportAdder,
-    scriptTarget: ScriptTarget,
 ): boolean {
-    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+    const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode);
     if (importableReference && changes.tryInsertTypeAnnotation(sourceFile, declaration, importableReference.typeNode)) {
         forEach(importableReference.symbols, s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
         return true;
