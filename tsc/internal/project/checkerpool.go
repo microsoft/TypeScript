@@ -87,6 +87,9 @@ func (p *checkerPool) Files(checker *checker.Checker) iter.Seq[*ast.SourceFile] 
 }
 
 func (p *checkerPool) GetAllCheckers(ctx context.Context) ([]*checker.Checker, func()) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
 	requestID := core.GetRequestID(ctx)
 	if requestID == "" {
 		panic("cannot call GetAllCheckers on a project.checkerPool without a request ID")
