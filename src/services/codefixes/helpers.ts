@@ -620,10 +620,16 @@ function endOfRequiredTypeParameters(checker: TypeChecker, type: GenericType): n
     Debug.assert(type.typeArguments);
     const fullTypeArguments = type.typeArguments;
     const target = type.target;
+    
     for (let cutoff = 0; cutoff < fullTypeArguments.length; cutoff++) {
-        if (target.localTypeParameters?.[cutoff].constraint === undefined) {
+        // Special handling for Promise<unknown> - don't minimize it to just Promise
+        // This fixes the issue where Promise<unknown> was being incorrectly minimized
+        if (target && target.symbol && target.symbol.name === "Promise" && 
+            fullTypeArguments.length === 1 && 
+            checker.typeToString(fullTypeArguments[0]) === "unknown") {
             continue;
         }
+        
         const typeArguments = fullTypeArguments.slice(0, cutoff);
         const filledIn = checker.fillMissingTypeArguments(typeArguments, target.typeParameters, cutoff, /*isJavaScriptImplicitAny*/ false);
         if (filledIn.every((fill, i) => fill === fullTypeArguments[i])) {
