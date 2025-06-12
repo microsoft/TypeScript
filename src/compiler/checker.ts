@@ -27653,8 +27653,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NonNullExpression:
                 return isMatchingReference(source, (target as NonNullExpression | ParenthesizedExpression).expression);
             case SyntaxKind.BinaryExpression:
-                return (isAssignmentExpression(target) && isMatchingReference(source, target.left)) ||
-                    (isBinaryExpression(target) && target.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source, target.right));
+                if (isAssignmentExpression(target)) {
+                    return isMatchingReference(source, target.left);
+                }
+                if (isBinaryExpression(target)) {
+                    switch (target.operatorToken.kind) {
+                        case SyntaxKind.CommaToken:
+                            return isMatchingReference(source, target.right);
+                        case SyntaxKind.InKeyword:
+                            return isMatchingElementAccess(source, target.right, target.left);
+                    }
+                }
+                return false;
         }
         switch (source.kind) {
             case SyntaxKind.MetaProperty:
@@ -27685,12 +27695,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return targetPropertyName === sourcePropertyName && isMatchingReference((source as AccessExpression).expression, (target as AccessExpression).expression);
                     }
                 }
-                if (isElementAccessExpression(source) && isElementAccessExpression(target) && isIdentifier(source.argumentExpression) && isIdentifier(target.argumentExpression)) {
-                    const symbol = getResolvedSymbol(source.argumentExpression);
-                    if (symbol === getResolvedSymbol(target.argumentExpression) && (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol))) {
-                        return isMatchingReference(source.expression, target.expression);
-                    }
-                }
+                return isElementAccessExpression(target) && isMatchingElementAccess(source, target.expression, target.argumentExpression);
                 break;
             case SyntaxKind.QualifiedName:
                 return isAccessExpression(target) &&
@@ -27700,6 +27705,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return (isBinaryExpression(source) && source.operatorToken.kind === SyntaxKind.CommaToken && isMatchingReference(source.right, target));
         }
         return false;
+
+        function isMatchingElementAccess(source: Node, targetObjNode: Node, targetPropNode: Node): boolean {
+            if (!isElementAccessExpression(source) || !isIdentifier(source.argumentExpression) || !isIdentifier(targetPropNode)) {
+                return false;
+            }
+            const symbol = getResolvedSymbol(source.argumentExpression);
+            return (symbol === getResolvedSymbol(targetPropNode) && (isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol)))
+                && isMatchingReference(source.expression, targetObjNode);
+        }
     }
 
     function getAccessedPropertyName(access: AccessExpression | BindingElement | ParameterDeclaration): __String | undefined {
@@ -29499,7 +29513,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const target = getReferenceCandidate(expr.right);
                     if (containsMissingType(type) && isAccessExpression(reference) && isMatchingReference(reference.expression, target)) {
                         const leftType = getTypeOfExpression(expr.left);
-                        if (isTypeUsableAsPropertyName(leftType) && getAccessedPropertyName(reference) === getPropertyNameFromType(leftType)) {
+                        if (
+                            isTypeUsableAsPropertyName(leftType)
+                                ? getAccessedPropertyName(reference) === getPropertyNameFromType(leftType)
+                                : isMatchingReference(reference, expr)
+                        ) {
                             return getTypeWithFacts(type, assumeTrue ? TypeFacts.NEUndefined : TypeFacts.EQUndefined);
                         }
                     }
