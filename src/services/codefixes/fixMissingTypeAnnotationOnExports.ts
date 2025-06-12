@@ -3,8 +3,10 @@ import {
     createCombinedCodeActions,
     createImportAdder,
     eachDiagnostic,
+    ImportAdder,
+    importSymbols,
     registerCodeFix,
-    typeNodeToAutoImportableTypeNode,
+    tryGetAutoImportableReferenceFromTypeNode,
     typePredicateToAutoImportableTypeNode,
     typeToMinimizedReferenceType,
 } from "../_namespaces/ts.codefix.js";
@@ -39,6 +41,7 @@ import {
     FunctionDeclaration,
     GeneratedIdentifierFlags,
     getEmitScriptTarget,
+    getNameForExportedSymbol,
     getSourceFileOfNode,
     getSynthesizedDeepClone,
     getTokenAtPosition,
@@ -46,6 +49,7 @@ import {
     hasInitializer,
     hasSyntacticModifier,
     Identifier,
+    ImportDeclaration,
     InternalNodeBuilderFlags,
     isArrayBindingPattern,
     isArrayLiteralExpression,
@@ -81,6 +85,8 @@ import {
     isVariableDeclaration,
     ModifierFlags,
     ModifierLike,
+    NamedImports,
+    NamespaceImport,
     Node,
     NodeBuilderFlags,
     NodeFlags,
@@ -89,6 +95,7 @@ import {
     ParameterDeclaration,
     PropertyAccessExpression,
     PropertyDeclaration,
+    ScriptTarget,
     setEmitFlags,
     SignatureDeclaration,
     some,
@@ -1111,7 +1118,7 @@ function withContext<T>(
         if (!minimizedTypeNode) {
             return undefined;
         }
-        const result = typeNodeToAutoImportableTypeNode(minimizedTypeNode, importAdder, scriptTarget);
+        const result = typeNodeToAutoImportableTypeNodeWithExistingImportCheck(minimizedTypeNode, importAdder, scriptTarget, sourceFile, typeChecker);
         return isTruncated ? factory.createKeywordTypeNode(SyntaxKind.AnyKeyword) : result;
     }
 
@@ -1150,6 +1157,58 @@ function withContext<T>(
         }
         setEmitFlags(node, EmitFlags.None);
         return result;
+    }
+
+    function typeNodeToAutoImportableTypeNodeWithExistingImportCheck(typeNode: TypeNode, importAdder: ImportAdder, scriptTarget: ScriptTarget, sourceFile: SourceFile, typeChecker: TypeChecker): TypeNode | undefined {
+        const importableReference = tryGetAutoImportableReferenceFromTypeNode(typeNode, scriptTarget);
+        if (importableReference) {
+            // Check if symbols are already available before importing them
+            const symbolsToImport = importableReference.symbols.filter(symbol => {
+                const symbolName = getNameForExportedSymbol(symbol, scriptTarget);
+                return !isSymbolAlreadyAvailable(symbolName, sourceFile, typeChecker);
+            });
+            
+            if (symbolsToImport.length > 0) {
+                importSymbols(importAdder, symbolsToImport);
+            }
+            typeNode = importableReference.typeNode;
+        }
+
+        // Ensure nodes are fresh so they can have different positions when going through formatting.
+        return getSynthesizedDeepClone(typeNode);
+    }
+
+    function isSymbolAlreadyAvailable(symbolName: string, sourceFile: SourceFile, _typeChecker: TypeChecker): boolean {
+        // Check if the symbol name is already imported in the current file
+        for (const statement of sourceFile.statements) {
+            if (statement.kind === SyntaxKind.ImportDeclaration) {
+                const importDecl = statement as ImportDeclaration;
+                if (importDecl.importClause) {
+                    // Check default import
+                    if (importDecl.importClause.name && importDecl.importClause.name.text === symbolName) {
+                        return true;
+                    }
+                    // Check named imports
+                    if (importDecl.importClause.namedBindings && importDecl.importClause.namedBindings.kind === SyntaxKind.NamedImports) {
+                        const namedImports = importDecl.importClause.namedBindings;
+                        for (const element of namedImports.elements) {
+                            const name = element.name.text;
+                            if (name === symbolName) {
+                                return true;
+                            }
+                        }
+                    }
+                    // Check namespace import
+                    if (importDecl.importClause.namedBindings && importDecl.importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                        const namespaceImport = importDecl.importClause.namedBindings;
+                        if (namespaceImport.name.text === symbolName) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     // Some --isolatedDeclarations errors are not present on the node that directly needs type annotation, so look in the
