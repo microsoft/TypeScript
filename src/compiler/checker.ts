@@ -3177,6 +3177,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function setRequiresScopeChangeCache(node: FunctionLikeDeclaration, value: boolean) {
         getNodeLinks(node).declarationRequiresScopeChange = value;
     }
+
     // The invalid initializer error is needed in two situation:
     // 1. When result is undefined, after checking for a missing "this."
     // 2. When result is defined
