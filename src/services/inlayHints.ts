@@ -42,6 +42,7 @@ import {
     isBindingPattern,
     isCallExpression,
     isCallSignatureDeclaration,
+    isComputedPropertyName,
     isConditionalTypeNode,
     isConstructorTypeNode,
     isEnumMember,
@@ -875,6 +876,12 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
                 case SyntaxKind.ThisType:
                     Debug.assertNode(node, isThisTypeNode);
                     parts.push({ text: "this" });
+                    break;
+                case SyntaxKind.ComputedPropertyName:
+                    Debug.assertNode(node, isComputedPropertyName);
+                    parts.push({ text: "[" });
+                    visitForDisplayParts(node.expression);
+                    parts.push({ text: "]" });
                     break;
                 default:
                     Debug.failBadSyntaxKind(node);
