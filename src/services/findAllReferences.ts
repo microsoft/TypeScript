@@ -1694,6 +1694,17 @@ export namespace Core {
         //     declare module "a" { export type T = number; }
         //     declare module "b" { import { T } from "a"; export const x: T; }
         // So we must search the whole source file. (Because we will mark the source file as seen, we we won't return to it when searching for imports.)
+        // However, for declare modules, the exports are globally accessible and can be used from any file, so we should do a global search.
+        if (exposedByParent && parent && isExternalModuleSymbol(parent)) {
+            // Check if this is a declare module by examining the declarations
+            const isInDeclareModule = parent.declarations?.some(decl => 
+                isModuleDeclaration(decl) && (decl.flags & NodeFlags.GlobalAugmentation) === 0
+            );
+            if (isInDeclareModule) {
+                // For declare modules, do a global search since their exports can be accessed from anywhere
+                return undefined;
+            }
+        }
         return exposedByParent ? scope!.getSourceFile() : scope; // TODO: GH#18217
     }
 
