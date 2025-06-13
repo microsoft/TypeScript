@@ -1,6 +1,7 @@
 package fourslash
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 	"unicode/utf8"
@@ -19,18 +20,18 @@ import (
 // [|text in range|]
 //
 // is a range with `text in range` "selected".
-type markerRange struct {
-	core.TextRange
-	filename string
-	position int
-	data     string
+type RangeMarker struct {
+	*Marker
+	Range   core.TextRange
+	LSRange lsproto.Range
 }
 
 type Marker struct {
-	Filename   string
+	FileName   string
 	Position   int
 	LSPosition lsproto.Position
 	Name       string
+	Data       map[string]interface{}
 }
 
 type TestData struct {
@@ -39,12 +40,13 @@ type TestData struct {
 	Markers         []*Marker
 	Symlinks        map[string]string
 	GlobalOptions   map[string]string
-	Ranges          []*markerRange
+	Ranges          []*RangeMarker
 }
 
 type testFileWithMarkers struct {
 	file    *TestFileInfo
 	markers []*Marker
+	ranges  []*RangeMarker
 }
 
 func ParseTestData(t *testing.T, contents string, fileName string) TestData {
@@ -53,6 +55,7 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 
 	markerPositions := make(map[string]*Marker)
 	var markers []*Marker
+	var ranges []*RangeMarker
 	filesWithMarker, symlinks, _, globalOptions := testrunner.ParseTestFilesAndSymlinks(
 		contents,
 		fileName,
@@ -62,14 +65,17 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 	hasTSConfig := false
 	for _, file := range filesWithMarker {
 		files = append(files, file.file)
-		hasTSConfig = hasTSConfig || isConfigFile(file.file.Filename)
+		hasTSConfig = hasTSConfig || isConfigFile(file.file.fileName)
+
 		markers = append(markers, file.markers...)
+		ranges = append(ranges, file.ranges...)
 		for _, marker := range file.markers {
 			if _, ok := markerPositions[marker.Name]; ok {
 				t.Fatalf("Duplicate marker name: %s", marker.Name)
 			}
 			markerPositions[marker.Name] = marker
 		}
+
 	}
 
 	if hasTSConfig && len(globalOptions) > 0 {
@@ -82,13 +88,13 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 		Markers:         markers,
 		Symlinks:        symlinks,
 		GlobalOptions:   globalOptions,
-		Ranges:          nil,
+		Ranges:          ranges,
 	}
 }
 
-func isConfigFile(filename string) bool {
-	filename = strings.ToLower(filename)
-	return strings.HasSuffix(filename, "tsconfig.json") || strings.HasSuffix(filename, "jsconfig.json")
+func isConfigFile(fileName string) bool {
+	fileName = strings.ToLower(fileName)
+	return strings.HasSuffix(fileName, "tsconfig.json") || strings.HasSuffix(fileName, "jsconfig.json")
 }
 
 type locationInformation struct {
@@ -98,8 +104,13 @@ type locationInformation struct {
 	sourceColumn   int
 }
 
+type rangeLocationInformation struct {
+	locationInformation
+	marker *Marker
+}
+
 type TestFileInfo struct {
-	Filename string
+	fileName string
 	// The contents of the file (with markers, etc stripped out)
 	Content string
 	emit    bool
@@ -107,7 +118,7 @@ type TestFileInfo struct {
 
 // FileName implements ls.Script.
 func (t *TestFileInfo) FileName() string {
-	return t.Filename
+	return t.fileName
 }
 
 // Text implements ls.Script.
@@ -127,13 +138,18 @@ const (
 	stateInObjectMarker
 )
 
-func parseFileContent(filename string, content string, fileOptions map[string]string) *testFileWithMarkers {
-	filename = tspath.GetNormalizedAbsolutePath(filename, "/")
+func parseFileContent(fileName string, content string, fileOptions map[string]string) *testFileWithMarkers {
+	fileName = tspath.GetNormalizedAbsolutePath(fileName, "/")
 
 	// The file content (minus metacharacters) so far
 	var output strings.Builder
 
 	var markers []*Marker
+
+	/// A stack of the open range markers that are still unclosed
+	openRanges := []rangeLocationInformation{}
+	/// A list of closed ranges we've collected so far
+	rangeMarkers := []*RangeMarker{}
 
 	// The total number of metacharacters removed from the file (so far)
 	difference := 0
@@ -164,9 +180,43 @@ func parseFileContent(filename string, content string, fileOptions map[string]st
 		currentCharacter, size = utf8.DecodeRuneInString(content[i:])
 		switch state {
 		case stateNone:
-			// !!! case '[', '|'
-			// !!! case '|', ']'
-			if previousCharacter == '/' && currentCharacter == '*' {
+			if previousCharacter == '[' && currentCharacter == '|' {
+				// found a range start
+				openRanges = append(openRanges, rangeLocationInformation{
+					locationInformation: locationInformation{
+						position:       (i - 1) - difference,
+						sourcePosition: i - 1,
+						sourceLine:     line,
+						sourceColumn:   column,
+					},
+				})
+				// copy all text up to marker position
+				flush(i - 1)
+				lastNormalCharPosition = i + 1
+				difference += 2
+			} else if previousCharacter == '|' && currentCharacter == ']' {
+				// found a range end
+				if len(openRanges) == 0 {
+					reportError(fileName, line, column, "Found range end with no matching start.")
+				}
+				rangeStart := openRanges[len(openRanges)-1]
+				openRanges = openRanges[:len(openRanges)-1]
+
+				closedRange := &RangeMarker{Range: core.NewTextRange(rangeStart.position, (i-1)-difference)}
+				if rangeStart.marker != nil {
+					closedRange.Marker = rangeStart.marker
+				} else {
+					// RangeMarker is not added to list of markers
+					closedRange.Marker = &Marker{FileName: fileName}
+				}
+
+				rangeMarkers = append(rangeMarkers, closedRange)
+
+				// copy all text up to range marker position
+				flush(i - 1)
+				lastNormalCharPosition = i + 1
+				difference += 2
+			} else if previousCharacter == '/' && currentCharacter == '*' {
 				// found a possible marker start
 				state = stateInSlashStarMarker
 				openMarker = locationInformation{
@@ -175,19 +225,48 @@ func parseFileContent(filename string, content string, fileOptions map[string]st
 					sourceLine:     line,
 					sourceColumn:   column - 1,
 				}
+			} else if previousCharacter == '{' && currentCharacter == '|' {
+				// found an object marker start
+				state = stateInObjectMarker
+				openMarker = locationInformation{
+					position:       (i - 1) - difference,
+					sourcePosition: i - 1,
+					sourceLine:     line,
+					sourceColumn:   column,
+				}
+				flush(i - 1)
 			}
-			// !!! case '{', '|'
 		case stateInObjectMarker:
-			// !!! object marker
+			// Object markers are only ever terminated by |} and have no content restrictions
+			if previousCharacter == '|' && currentCharacter == '}' {
+				objectMarkerData := strings.TrimSpace(content[openMarker.sourcePosition+2 : i-1])
+				marker := getObjectMarker(fileName, openMarker, objectMarkerData)
+
+				if len(openRanges) > 0 {
+					openRanges[len(openRanges)-1].marker = marker
+				}
+				markers = append(markers, marker)
+
+				// Set the current start to point to the end of the current marker to ignore its text
+				lastNormalCharPosition = i + 1
+				difference += i + 1 - openMarker.sourcePosition
+
+				// Reset the state
+				openMarker = locationInformation{}
+				state = stateNone
+			}
 		case stateInSlashStarMarker:
 			if previousCharacter == '*' && currentCharacter == '/' {
 				// Record the marker
 				// start + 2 to ignore the */, -1 on the end to ignore the * (/ is next)
 				markerNameText := strings.TrimSpace(content[openMarker.sourcePosition+2 : i-1])
 				marker := &Marker{
-					Filename: filename,
+					FileName: fileName,
 					Position: openMarker.position,
 					Name:     markerNameText,
+				}
+				if len(openRanges) > 0 {
+					openRanges[len(openRanges)-1].marker = marker
 				}
 				markers = append(markers, marker)
 
@@ -240,7 +319,7 @@ func parseFileContent(filename string, content string, fileOptions map[string]st
 	emit := fileOptions[emitThisFileOption] == "true"
 
 	testFileInfo := &TestFileInfo{
-		Filename: filename,
+		fileName: fileName,
 		Content:  outputString,
 		emit:     emit,
 	}
@@ -248,9 +327,52 @@ func parseFileContent(filename string, content string, fileOptions map[string]st
 	for _, marker := range markers {
 		marker.LSPosition = converters.PositionToLineAndCharacter(testFileInfo, core.TextPos(marker.Position))
 	}
+	for _, rangeMarker := range rangeMarkers {
+		rangeMarker.LSRange = lsproto.Range{
+			Start: converters.PositionToLineAndCharacter(testFileInfo, core.TextPos(rangeMarker.Range.Pos())),
+			End:   converters.PositionToLineAndCharacter(testFileInfo, core.TextPos(rangeMarker.Range.End())),
+		}
+	}
 
 	return &testFileWithMarkers{
 		file:    testFileInfo,
 		markers: markers,
+		ranges:  rangeMarkers,
 	}
+}
+
+func getObjectMarker(fileName string, location locationInformation, text string) *Marker {
+	// Attempt to parse the marker value as JSON
+	var v interface{}
+	e := json.Unmarshal([]byte("{ "+text+" }"), &v)
+
+	if e != nil {
+		reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text "+text)
+		return nil
+	}
+	markerValue, ok := v.(map[string]interface{})
+	if !ok || len(markerValue) == 0 {
+		reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty")
+		return nil
+	}
+
+	marker := &Marker{
+		FileName: fileName,
+		Position: location.position,
+		Data:     markerValue,
+	}
+
+	// Object markers can be anonymous
+	if markerValue["name"] != nil {
+		if name, ok := markerValue["name"].(string); ok && name != "" {
+			marker.Name = name
+		}
+	}
+
+	return marker
+}
+
+func reportError(fileName string, line int, col int, message string) {
+	// !!! not implemented
+	// errorMessage := fileName + "(" + string(line) + "," + string(col) + "): " + message;
 }

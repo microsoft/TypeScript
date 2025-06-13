@@ -129,7 +129,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	testfs := make(map[string]string)
 	testData := ParseTestData(t, content, fileName)
 	for _, file := range testData.Files {
-		filePath := tspath.GetNormalizedAbsolutePath(file.Filename, rootDir)
+		filePath := tspath.GetNormalizedAbsolutePath(file.fileName, rootDir)
 		testfs[filePath] = file.Content
 	}
 
@@ -276,9 +276,9 @@ func (f *FourslashTest) GoToMarker(t *testing.T, markerName string) {
 	if !ok {
 		t.Fatalf("Marker %s not found", markerName)
 	}
-	f.ensureActiveFile(t, marker.Filename)
+	f.ensureActiveFile(t, marker.FileName)
 	f.currentCaretPosition = marker.LSPosition
-	f.currentFilename = marker.Filename
+	f.currentFilename = marker.FileName
 	f.lastKnownMarkerName = marker.Name
 }
 
@@ -289,7 +289,7 @@ func (f *FourslashTest) Markers() []*Marker {
 func (f *FourslashTest) ensureActiveFile(t *testing.T, filename string) {
 	if f.activeFilename != filename {
 		file := core.Find(f.testData.Files, func(f *TestFileInfo) bool {
-			return f.Filename == filename
+			return f.fileName == filename
 		})
 		if file == nil {
 			t.Fatalf("File %s not found in test data", filename)
@@ -299,11 +299,11 @@ func (f *FourslashTest) ensureActiveFile(t *testing.T, filename string) {
 }
 
 func (f *FourslashTest) openFile(t *testing.T, file *TestFileInfo) {
-	f.activeFilename = file.Filename
+	f.activeFilename = file.fileName
 	f.sendNotification(t, lsproto.MethodTextDocumentDidOpen, &lsproto.DidOpenTextDocumentParams{
 		TextDocument: &lsproto.TextDocumentItem{
-			Uri:        ls.FileNameToDocumentURI(file.Filename),
-			LanguageId: getLanguageKind(file.Filename),
+			Uri:        ls.FileNameToDocumentURI(file.fileName),
+			LanguageId: getLanguageKind(file.fileName),
 			Text:       file.Content,
 		},
 	})

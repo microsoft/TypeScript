@@ -314,10 +314,10 @@ func (l *LanguageService) getCompletionsAtPosition(
 		return stringCompletions
 	}
 
-	if previousToken != nil && ast.IsBreakOrContinueStatement(previousToken.Parent) &&
-		(previousToken.Kind == ast.KindBreakKeyword ||
-			previousToken.Kind == ast.KindContinueKeyword ||
-			previousToken.Kind == ast.KindIdentifier) {
+	if previousToken != nil && (previousToken.Kind == ast.KindBreakKeyword ||
+		previousToken.Kind == ast.KindContinueKeyword ||
+		previousToken.Kind == ast.KindIdentifier) &&
+		ast.IsBreakOrContinueStatement(previousToken.Parent) {
 		return l.getLabelCompletionsAtPosition(previousToken.Parent, clientOptions, file, position)
 	}
 

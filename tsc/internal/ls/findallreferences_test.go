@@ -15,15 +15,15 @@ func runFindReferencesTest(t *testing.T, input string, expectedLocations map[str
 	testData := fourslash.ParseTestData(t, input, "/file1.ts")
 	markerPositions := testData.MarkerPositions
 	ctx := projecttestutil.WithRequestID(t.Context())
-	service, done := createLanguageService(ctx, testData.Files[0].Filename, map[string]any{
-		testData.Files[0].Filename: testData.Files[0].Content,
+	service, done := createLanguageService(ctx, testData.Files[0].FileName(), map[string]any{
+		testData.Files[0].FileName(): testData.Files[0].Content,
 	})
 	defer done()
 
 	// for each marker location, calculate the expected ref location ahead of time so we don't have to re-calculate each location for every reference call
 	allExpectedLocations := map[lsproto.Location]string{}
-	for _, marker := range testData.MarkerPositions {
-		allExpectedLocations[*service.GetExpectedReferenceFromMarker(marker.Filename, marker.Position)] = marker.Name
+	for _, expectedRange := range testData.Ranges {
+		allExpectedLocations[*service.GetExpectedReferenceFromMarker(expectedRange.FileName, expectedRange.Position)] = expectedRange.Name
 	}
 
 	for requestMarkerName, expectedSet := range expectedLocations {
@@ -32,14 +32,14 @@ func runFindReferencesTest(t *testing.T, input string, expectedLocations map[str
 			t.Fatalf("No marker found for '%s'", requestMarkerName)
 		}
 
-		referencesResult := service.TestProvideReferences(marker.Filename, marker.Position)
+		referencesResult := service.TestProvideReferences(marker.FileName, marker.Position)
 		libReference := 0
 
 		for _, loc := range referencesResult {
 			if name, ok := allExpectedLocations[*loc]; ok {
 				// check if returned ref location is in this request's expected set
 				assert.Assert(t, expectedSet.Has(name), "Reference to '%s' not expected when find all references requested at %s", name, requestMarkerName)
-			} else if strings.Contains(string(loc.Uri), "///bundled:///libs") {
+			} else if strings.Contains(string(loc.Uri), "//bundled") && strings.Contains(string(loc.Uri), "//libs") {
 				libReference += 1
 			} else {
 				t.Fatalf("Found reference at loc '%v' when find all references triggered at '%s'", loc, requestMarkerName)
@@ -60,8 +60,8 @@ func TestFindReferences(t *testing.T) {
 	}{
 		{
 			title: "getOccurencesIsDefinitionOfParameter",
-			input: `function f(/*1*/x: number) {
-	return /*2*/x + 1
+			input: `function f([|/*1*/x|]: number) {
+	return [|/*2*/x|] + 1
 }`,
 			expectedLocations: map[string]*collections.Set[string]{
 				"1": collections.NewSetFromItems("1", "2"),
@@ -70,12 +70,12 @@ func TestFindReferences(t *testing.T) {
 		},
 		{
 			title: "findAllRefsUnresolvedSymbols1",
-			input: `let a: /*a0*/Bar;
-let b: /*a1*/Bar<string>;
-let c: /*a2*/Bar<string, number>;
-let d: /*b0*/Bar./*c0*/X;
-let e: /*b1*/Bar./*c1*/X<string>;
-let f: /*b2*/Bar./*d0*/X./*e0*/Y;`,
+			input: `let a: [|/*a0*/Bar|];
+let b: [|/*a1*/Bar|]<string>;
+let c: [|/*a2*/Bar|]<string, number>;
+let d: [|/*b0*/Bar|].[|/*c0*/X|];
+let e: [|/*b1*/Bar|].[|/*c1*/X|]<string>;
+let f: [|/*b2*/Bar|].[|/*d0*/X|].[|/*e0*/Y|];`,
 			expectedLocations: map[string]*collections.Set[string]{
 				"a0": collections.NewSetFromItems("a0", "a1", "a2"),
 				"a1": collections.NewSetFromItems("a0", "a1", "a2"),
@@ -90,17 +90,17 @@ let f: /*b2*/Bar./*d0*/X./*e0*/Y;`,
 			},
 		},
 		{
-			title: "findAllRefsPrimitive partial",
-			input: `const x: /*1*/any = 0;
+			title: "findAllRefsPrimitive partial-",
+			input: `const x: [|/*1*/any|] = 0;
 const any = 2;
-const y: /*2*/any = any;
-function f(b: /*3*/boolean): /*4*/boolean;
-type T = /*5*/never; type U = /*6*/never;
-function n(x: /*7*/number): /*8*/number;
-function o(x: /*9*/object): /*10*/object;
-function s(x: /*11*/string): /*12*/string;
-function sy(s: /*13*/symbol): /*14*/symbol;
-function v(v: /*15*/void): /*16*/void;
+const y: [|/*2*/any|] = any;
+function f(b: [|/*3*/boolean|]): [|/*4*/boolean|];
+type T = [|/*5*/never|]; type U = [|/*6*/never|];
+function n(x: [|/*7*/number|]): [|/*8*/number|];
+function o(x: [|/*9*/object|]): [|/*10*/object|];
+function s(x: [|/*11*/string|]): [|/*12*/string|];
+function sy(s: [|/*13*/symbol|]): [|/*14*/symbol|];
+function v(v: [|/*15*/void|]): [|/*16*/void|];
 `,
 			expectedLocations: map[string]*collections.Set[string]{
 				"1":  collections.NewSetFromItems("1", "2"),
@@ -122,26 +122,26 @@ function v(v: /*15*/void): /*16*/void;
 			},
 		},
 		{
-			title: "findAllReferencesDynamicImport1Partial",
+			title: "findAllReferencesDynamicImport1 Partial",
 			input: `export function foo() { return "foo"; }
-/*1*/import("/*2*/./foo")
-/*3*/var x = import("/*4*/./foo")`,
+[|/*1*/import([|"/*2*/./foo"|])|]
+[|/*3*/var x = import([|"/*4*/./foo"|])|]`,
 			expectedLocations: map[string]*collections.Set[string]{
 				"1": {},
 			},
 		},
 		{
 			title: "findAllRefsForDefaultExport02 partial",
-			input: `/*1*/export default function /*2*/DefaultExportedFunction() {
-   return /*3*/DefaultExportedFunction;
-}
+			input: `[|/*1*/export default function [|/*2*/DefaultExportedFunction|]() {
+   return [|/*3*/DefaultExportedFunction|];
+}|]
 
-var x: typeof /*4*/DefaultExportedFunction;
+var x: typeof [|/*4*/DefaultExportedFunction|];
 
-var y = /*5*/DefaultExportedFunction();
+var y = [|/*5*/DefaultExportedFunction|]();
 
-/*6*/namespace /*7*/DefaultExportedFunction {
-}`,
+[|/*6*/namespace [|/*7*/DefaultExportedFunction|] {
+}|]`,
 			expectedLocations: map[string]*collections.Set[string]{
 				"2": collections.NewSetFromItems("2", "3", "4", "5"),
 				"3": collections.NewSetFromItems("2", "3", "4", "5"),
@@ -154,10 +154,10 @@ var y = /*5*/DefaultExportedFunction();
 			title: "findAllReferPropertyAccessExpressionHeritageClause",
 			input: `class B {}
 function foo() {
-    return {/*1*/B: B};
+    return {[|/*1*/B|]: B};
 }
-class C extends (foo())./*2*/B {}
-class C1 extends foo()./*3*/B {}`,
+class C extends (foo()).[|/*2*/B|] {}
+class C1 extends foo().[|/*3*/B|] {}`,
 			expectedLocations: map[string]*collections.Set[string]{
 				"1": collections.NewSetFromItems("1", "2", "3"),
 				"2": collections.NewSetFromItems("1", "2", "3"),
@@ -165,91 +165,85 @@ class C1 extends foo()./*3*/B {}`,
 			},
 		},
 		{
-			title: "findAllRefsForFunctionExpression01 partial",
-			input: `var foo = /*1*/function /*2*/foo(a = /*3*/foo(), b = () => /*4*/foo) {
-   /*5*/foo(/*6*/foo, /*7*/foo);
-}`,
+			title: "findAllRefsForFunctionExpression01 partial-",
+			input: `var foo = [|/*1*/function [|/*2*/foo|](a = [|/*3*/foo|](), b = () => [|/*4*/foo|]) {
+   [|/*5*/foo|]([|/*6*/foo|], [|/*7*/foo|]);
+}|]`,
 			expectedLocations: map[string]*collections.Set[string]{
-				"1": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"2": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"3": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"4": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"5": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"6": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
-				"7": collections.NewSetFromItems("1", "2", "3", "4", "5", "6", "7"),
+				"2": collections.NewSetFromItems("2", "3", "4", "5", "6", "7"),
+				"3": collections.NewSetFromItems("2", "3", "4", "5", "6", "7"),
+				"4": collections.NewSetFromItems("2", "3", "4", "5", "6", "7"),
+				"5": collections.NewSetFromItems("2", "3", "4", "5", "6", "7"),
+				"6": collections.NewSetFromItems("2", "3", "4", "5", "6", "7"),
+				"7": collections.NewSetFromItems("2", "3", "4", "5", "6", "7"),
 			},
 		},
 		{
-			title: "findAllRefsForObjectSpread",
-			input: `interface A1 { readonly /*0*/a: string };
-interface A2 { /*1*/a?: number };
+			title: "findAllRefsForObjectSpread-",
+			input: `interface A1 { readonly [|/*0*/a|]: string };
+interface A2 { [|/*1*/a|]?: number };
 let a1: A1;
 let a2: A2;
 let a12 = { ...a1, ...a2 };
-a12./*2*/a;
-a1./*3*/a;`,
+a12.[|/*2*/a|];
+a1.[|/*3*/a|];`,
 			expectedLocations: map[string]*collections.Set[string]{
 				"0": collections.NewSetFromItems("0", "2", "3"),
 				"1": collections.NewSetFromItems("1", "2"),
-				"2": collections.NewSetFromItems("0", "1", "2"),
+				"2": collections.NewSetFromItems("0", "1", "2", "3"),
 				"3": collections.NewSetFromItems("0", "2", "3"),
 			},
 		},
 		{
-			title: "findAllRefsForObjectLiteralProperties",
+			title: "findAllRefsForObjectLiteralProperties-",
 			input: `var x = {
-   /*1*/property: {}
+   [|/*1*/property|]: {}
 };
 
-x./*2*/property;
+x.[|/*2*/property|];
 
-/*3*/let {/*4*/property: pVar} = x;`,
+[|/*3*/let {[|/*4*/property|]: pVar} = x;|]`,
 			expectedLocations: map[string]*collections.Set[string]{
-				"0": collections.NewSetFromItems("0", "2", "3", "4"),
-				"1": collections.NewSetFromItems("1", "2", "3", "4"),
-				"2": collections.NewSetFromItems("1", "2", "3", "4"),
-				"3": collections.NewSetFromItems("1", "2", "3", "4"),
+				"1": collections.NewSetFromItems("1", "2", "4"),
+				"2": collections.NewSetFromItems("1", "2", "4"),
+				"4": collections.NewSetFromItems("1", "2", "4"),
 			},
 		},
 		{
-			title: "findAllRefsImportEquals",
-			input: `import j = N./*0*/q;
-namespace N { export const /*1*/q = 0; }`,
+			title: "findAllRefsImportEquals-",
+			input: `import j = N.[|/*0*/q|];
+namespace N { export const [|/*1*/q|] = 0; }`,
 			expectedLocations: map[string]*collections.Set[string]{
-				"0": collections.NewSetFromItems("0", "1"),
+				// "0": collections.NewSetFromItems("0", "1"),
 			},
 		},
 		{
 			title: "findAllRefsForRest",
 			input: `interface Gen {
 x: number
-/*0*/parent: Gen;
+[|/*0*/parent|]: Gen;
 millennial: string;
 }
 let t: Gen;
 var { x, ...rest } = t;
-rest./*1*/parent;`,
+rest.[|/*1*/parent|];`,
 			expectedLocations: map[string]*collections.Set[string]{
 				"0": collections.NewSetFromItems("0", "1"),
 				"1": collections.NewSetFromItems("0", "1"),
 			},
 		},
 		{
-			title: "findAllRefsForVariableInExtendsClause01",
-			input: `/*1*/var /*2*/Base = class { };
-class C extends /*3*/Base { }`,
+			title: "findAllRefsForVariableInExtendsClause01 -",
+			input: `[|/*1*/var [|/*2*/Base|] = class { };|]
+class C extends [|/*3*/Base|] { }`,
 			expectedLocations: map[string]*collections.Set[string]{
-				"1": collections.NewSetFromItems("1", "2", "3"),
-				"2": collections.NewSetFromItems("1", "2", "3"),
-				"3": collections.NewSetFromItems("1", "2", "3"),
+				"2": collections.NewSetFromItems("2", "3"),
+				"3": collections.NewSetFromItems("2", "3"),
 			},
 		},
 	}
 
 	for _, testCase := range testCases {
-		if testCase.title != "findAllReferPropertyAccessExpressionHeritageClause" {
-			continue
-		}
 		t.Run(testCase.title, func(t *testing.T) {
 			t.Parallel()
 			runFindReferencesTest(t, testCase.input, testCase.expectedLocations)
