@@ -576,7 +576,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
     let filesWithInvalidatedResolutions: Set<Path> | undefined;
     let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
-    const nonRelativeExternalModuleResolutions = new Set<ResolutionWithFailedLookupLocations>();
+    const nonRelativeExternalModuleResolutions = new Set<ResolvedModuleWithFailedLookupLocations>();
 
     const resolutionsWithFailedLookups = new Set<ResolutionWithFailedLookupLocations>();
     const resolutionsWithOnlyAffectingLocations = new Set<ResolutionWithFailedLookupLocations>();
@@ -1103,10 +1103,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         (resolution.files ??= new Set()).add(filePath);
         if (resolution.files.size !== 1) return;
         if (!deferWatchingNonRelativeResolution || isExternalModuleNameRelative(name)) {
-            watchFailedLookupLocationOfResolution(resolution);
+            watchFailedLookupLocationOfResolution(resolution, getResolutionWithResolvedFileName);
         }
         else {
-            nonRelativeExternalModuleResolutions.add(resolution);
+            nonRelativeExternalModuleResolutions.add(resolution as unknown as ResolvedModuleWithFailedLookupLocations);
         }
         const resolved = getResolutionWithResolvedFileName(resolution);
         if (resolved && resolved.resolvedFileName) {
@@ -1143,25 +1143,34 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return setAtRoot;
     }
 
-    function watchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations) {
+    function watchFailedLookupLocationOfModule(resolution: ResolvedModuleWithFailedLookupLocations) {
+        watchFailedLookupLocationOfResolution(resolution, getResolvedModuleFromResolution);
+    }
+
+    function watchFailedLookupLocationOfResolution<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
+        resolution: T,
+        getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+    ) {
         Debug.assert(!!resolution.files?.size);
 
         const { failedLookupLocations, affectingLocations, alternateResult } = resolution;
         if (!failedLookupLocations?.length && !affectingLocations?.length && !alternateResult) return;
-        if (failedLookupLocations?.length || alternateResult) resolutionsWithFailedLookups.add(resolution);
-
-        let setAtRoot = false;
-        if (failedLookupLocations) {
-            for (const failedLookupLocation of failedLookupLocations) {
-                setAtRoot = watchFailedLookupLocation(failedLookupLocation, setAtRoot);
+        const resolvedFileName = getResolutionWithResolvedFileName(resolution)?.resolvedFileName;
+        if (!resolvedFileName) {
+            if (failedLookupLocations?.length || alternateResult) resolutionsWithFailedLookups.add(resolution);
+            let setAtRoot = false;
+            if (failedLookupLocations) {
+                for (const failedLookupLocation of failedLookupLocations) {
+                    setAtRoot = watchFailedLookupLocation(failedLookupLocation, setAtRoot);
+                }
             }
+            if (alternateResult) setAtRoot = watchFailedLookupLocation(alternateResult, setAtRoot);
+            if (setAtRoot) {
+                // This is always non recursive
+                setDirectoryWatcher(rootDir, rootPath, /*packageDir*/ undefined, /*packageDirPath*/ undefined, /*nonRecursive*/ true);
+            }
+            watchAffectingLocationsOfResolution(resolution, !!resolvedFileName);
         }
-        if (alternateResult) setAtRoot = watchFailedLookupLocation(alternateResult, setAtRoot);
-        if (setAtRoot) {
-            // This is always non recursive
-            setDirectoryWatcher(rootDir, rootPath, /*packageDir*/ undefined, /*packageDirPath*/ undefined, /*nonRecursive*/ true);
-        }
-        watchAffectingLocationsOfResolution(resolution, !failedLookupLocations?.length && !alternateResult);
     }
 
     function watchAffectingLocationsOfResolution(resolution: ResolutionWithFailedLookupLocations, addToResolutionsWithOnlyAffectingLocations: boolean) {
@@ -1241,7 +1250,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function watchFailedLookupLocationOfNonRelativeModuleResolutions() {
-        nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfResolution);
+        nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfModule);
         nonRelativeExternalModuleResolutions.clear();
     }
 
@@ -1384,26 +1393,27 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             const resolutions = resolvedFileToResolution.get(key);
             if (resolutions?.delete(resolution) && !resolutions.size) resolvedFileToResolution.delete(key);
         }
-
-        const { failedLookupLocations, affectingLocations, alternateResult } = resolution;
-        if (resolutionsWithFailedLookups.delete(resolution)) {
-            let removeAtRoot = false;
-            if (failedLookupLocations) {
-                for (const failedLookupLocation of failedLookupLocations) {
-                    removeAtRoot = stopWatchFailedLookupLocation(failedLookupLocation, removeAtRoot);
+        else {
+            const { failedLookupLocations, affectingLocations, alternateResult } = resolution;
+            if (resolutionsWithFailedLookups.delete(resolution)) {
+                let removeAtRoot = false;
+                if (failedLookupLocations) {
+                    for (const failedLookupLocation of failedLookupLocations) {
+                        removeAtRoot = stopWatchFailedLookupLocation(failedLookupLocation, removeAtRoot);
+                    }
                 }
+                if (alternateResult) removeAtRoot = stopWatchFailedLookupLocation(alternateResult, removeAtRoot);
+                if (removeAtRoot) removeDirectoryWatcher(rootPath);
             }
-            if (alternateResult) removeAtRoot = stopWatchFailedLookupLocation(alternateResult, removeAtRoot);
-            if (removeAtRoot) removeDirectoryWatcher(rootPath);
-        }
-        else if (affectingLocations?.length) {
-            resolutionsWithOnlyAffectingLocations.delete(resolution);
-        }
+            else if (affectingLocations?.length) {
+                resolutionsWithOnlyAffectingLocations.delete(resolution);
+            }
 
-        if (affectingLocations) {
-            for (const affectingLocation of affectingLocations) {
-                const watcher = fileWatchesOfAffectingLocations.get(affectingLocation)!;
-                watcher.resolutions--;
+            if (affectingLocations) {
+                for (const affectingLocation of affectingLocations) {
+                    const watcher = fileWatchesOfAffectingLocations.get(affectingLocation)!;
+                    watcher.resolutions--;
+                }
             }
         }
     }

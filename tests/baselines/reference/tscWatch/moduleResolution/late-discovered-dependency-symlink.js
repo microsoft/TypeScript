@@ -152,23 +152,13 @@ FsWatches::
   {}
 /home/src/workspace/packageB/index.d.ts: *new*
   {}
-/home/src/workspace/packageB/package.json: *new*
-  {}
 /home/src/workspace/packageC/index.ts: *new*
   {}
 /home/src/workspace/packageC/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/home/src/workspace/packageB/node_modules: *new*
-  {}
-/home/src/workspace/packageB/node_modules/package-a: *new*
-  {}
 /home/src/workspace/packageC: *new*
-  {}
-/home/src/workspace/packageC/node_modules: *new*
-  {}
-/home/src/workspace/packageC/node_modules/package-b: *new*
   {}
 
 Program root files: [

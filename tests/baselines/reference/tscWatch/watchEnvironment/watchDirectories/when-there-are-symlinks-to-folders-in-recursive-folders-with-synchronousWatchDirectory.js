@@ -78,12 +78,6 @@ File '/home/package.json' does not exist.
 File '/package.json' does not exist.
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"synchronousWatchDirectory":true} Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
@@ -92,8 +86,6 @@ DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js :: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js :: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
@@ -127,8 +119,6 @@ FsWatches::
   {"inode":4}
 /home/user/projects/myproject/node_modules: *new*
   {"inode":8}
-/home/user/projects/myproject/node_modules/a: *new*
-  {"inode":9}
 /home/user/projects/myproject/node_modules/reala: *new*
   {"inode":9}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
@@ -183,21 +173,9 @@ FileWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/in
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 2:: WatchInfo: /home/user/projects/myproject/node_modules/reala/index.d.ts 250 {"synchronousWatchDirectory":true} Source file
 sysLog:: /home/user/projects/myproject/node_modules/reala/index.d.ts:: Changing watcher to MissingFileSystemEntryWatcher
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
-Scheduling update
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
 PolledWatches::
@@ -223,8 +201,6 @@ FsWatches::
   {"inode":4}
 /home/user/projects/myproject/node_modules:
   {"inode":8}
-/home/user/projects/myproject/node_modules/a:
-  {"inode":9}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":9}
 /home/user/projects/myproject/node_modules/reala/node_modules:
@@ -244,13 +220,11 @@ FsWatches *deleted*::
 /home/user/projects/myproject/node_modules/reala/index.d.ts:
   {"inode":10}
 
-Timeout callback:: count: 2
-5: timerToInvalidateFailedLookupResolutions *new*
-6: timerToUpdateProgram *new*
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-5: timerToInvalidateFailedLookupResolutions
-6: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -262,7 +236,7 @@ Synchronizing program
 CreatingProgramWith::
   roots: ["/home/user/projects/myproject/src/file.ts"]
   options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
-File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/myproject/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
@@ -275,7 +249,7 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/a/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
@@ -300,6 +274,12 @@ Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /home/user/projects/myproject/node_modules/reala/package.json 2000 {"synchronousWatchDirectory":true} File location affecting resolution
@@ -344,7 +324,7 @@ FsWatches::
   {"inode":4}
 /home/user/projects/myproject/node_modules:
   {"inode":8}
-/home/user/projects/myproject/node_modules/a:
+/home/user/projects/myproject/node_modules/a: *new*
   {"inode":9}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":9}

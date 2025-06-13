@@ -272,8 +272,6 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
@@ -402,8 +400,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/decls: *new*
-  {}
 /user/username/projects/myproject/dependency: *new*
   {}
 /user/username/projects/myproject/main: *new*
@@ -588,8 +584,6 @@ FsWatches *deleted*::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
 /user/username/projects/myproject/dependency:
   {}
 /user/username/projects/myproject/main:
@@ -792,8 +786,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
 /user/username/projects/myproject/dependency:
   {}
 /user/username/projects/myproject/main:
@@ -1013,8 +1005,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
 /user/username/projects/myproject/dependency:
   {}
 /user/username/projects/myproject/main:
@@ -1081,17 +1071,13 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tscon
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
 
-Timeout callback:: count: 4
+Timeout callback:: count: 3
 1: /user/username/projects/myproject/main/tsconfig.json *new*
 2: /user/username/projects/myproject/dependency/tsconfig.json *new*
 3: *ensureProjectForOpenFiles* *new*
-4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1203,12 +1189,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-Timeout callback:: count: 3
-4: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-1: /user/username/projects/myproject/main/tsconfig.json
-2: /user/username/projects/myproject/dependency/tsconfig.json
-3: *ensureProjectForOpenFiles*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
@@ -1509,9 +1489,6 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/my
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts 0:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts 2000 undefined Project: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Missing generated file
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts]
 export declare function fn1(): void;
@@ -1522,14 +1499,13 @@ export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
 
-Timeout callback:: count: 4
+Timeout callback:: count: 3
 1: /user/username/projects/myproject/main/tsconfig.json *deleted*
 2: /user/username/projects/myproject/dependency/tsconfig.json *deleted*
 3: *ensureProjectForOpenFiles* *deleted*
-5: /user/username/projects/myproject/main/tsconfig.json *new*
-8: /user/username/projects/myproject/dependency/tsconfig.json *new*
-9: *ensureProjectForOpenFiles* *new*
-10: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
+4: /user/username/projects/myproject/main/tsconfig.json *new*
+7: /user/username/projects/myproject/dependency/tsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
@@ -1641,12 +1617,6 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-
-Timeout callback:: count: 3
-10: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
-5: /user/username/projects/myproject/main/tsconfig.json
-8: /user/username/projects/myproject/dependency/tsconfig.json
-9: *ensureProjectForOpenFiles*
 
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
