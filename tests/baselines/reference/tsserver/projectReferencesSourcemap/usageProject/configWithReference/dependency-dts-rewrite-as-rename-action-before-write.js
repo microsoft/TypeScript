@@ -272,8 +272,6 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/dependency/ts
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency 1 undefined Config: /user/username/projects/myproject/dependency/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/FnS.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main/node_modules/@types 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Type roots
@@ -402,8 +400,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/decls: *new*
-  {}
 /user/username/projects/myproject/dependency: *new*
   {}
 /user/username/projects/myproject/main: *new*
@@ -593,8 +589,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
 /user/username/projects/myproject/dependency:
   {}
 /user/username/projects/myproject/main:
@@ -683,14 +677,8 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
-
-Timeout callback:: count: 1
-1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -741,9 +729,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
-
-Timeout callback:: count: 0
-1: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Before request
 
@@ -797,9 +782,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts]
 export declare function fn1(): void;
@@ -809,9 +791,6 @@ export declare function fn4(): void;
 export declare function fn5(): void;
 //# sourceMappingURL=FnS.d.ts.map
 
-
-Timeout callback:: count: 1
-2: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -862,9 +841,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
-
-Timeout callback:: count: 0
-2: /user/username/projects/myproject/main/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Before request
 

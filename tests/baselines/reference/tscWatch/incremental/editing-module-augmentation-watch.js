@@ -153,10 +153,6 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project: *new*
   {}
-/users/username/projects/project/node_modules: *new*
-  {}
-/users/username/projects/project/src: *new*
-  {}
 
 Program root files: [
   "/users/username/projects/project/src/index.ts",
@@ -224,10 +220,6 @@ FsWatches *deleted*::
 
 FsWatchesRecursive *deleted*::
 /users/username/projects/project:
-  {}
-/users/username/projects/project/node_modules:
-  {}
-/users/username/projects/project/src:
   {}
 
 Output::
@@ -365,10 +357,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /users/username/projects/project: *new*
-  {}
-/users/username/projects/project/node_modules: *new*
-  {}
-/users/username/projects/project/src: *new*
   {}
 
 Program root files: [

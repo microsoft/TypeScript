@@ -177,17 +177,6 @@ Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/nod
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
@@ -310,19 +299,13 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {}
-/home/src/projects/project/packages/package1/package.json: *new*
   {}
 /home/src/projects/project/packages/package2/package.json: *new*
   {}
@@ -332,13 +315,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project/node_modules: *new*
-  {}
-/home/src/projects/project/node_modules/package1: *new*
-  {}
 /home/src/projects/project/packages/package2: *new*
-  {}
-/home/src/projects/project/packages/package2/src: *new*
   {}
 
 Projects::
@@ -484,26 +461,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.js :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.js :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 3
+Before running Timeout callback:: count: 2
 2: /home/src/projects/project/packages/package2/tsconfig.json
 3: *ensureProjectForOpenFiles*
-6: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/packages/package1/dist/index.js] deleted
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] deleted
 
-Timeout callback:: count: 3
+Timeout callback:: count: 2
 2: /home/src/projects/project/packages/package2/tsconfig.json *new*
 3: *ensureProjectForOpenFiles* *new*
-6: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -537,11 +503,10 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-Info seq  [hh:mm:ss:mss] Found 'package.json' at '/home/src/projects/project/node_modules/package1/package.json'.
+Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
 Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typesVersions' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'typings' field.
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'types' field.
 Info seq  [hh:mm:ss:mss] 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
@@ -599,8 +564,19 @@ Info seq  [hh:mm:ss:mss] Directory '/home/src/node_modules' does not exist, skip
 Info seq  [hh:mm:ss:mss] Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was not resolved. ========
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -652,11 +628,11 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules:
+/home/src/projects/project/packages/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules:
+/home/src/projects/project/packages/package2/node_modules: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
@@ -664,7 +640,7 @@ PolledWatches::
 FsWatches::
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {}
-/home/src/projects/project/packages/package1/package.json:
+/home/src/projects/project/packages/package1/package.json: *new*
   {}
 /home/src/projects/project/packages/package2/package.json:
   {}
@@ -674,17 +650,14 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/project/node_modules:
+/home/src/projects/project/node_modules: *new*
   {}
-/home/src/projects/project/node_modules/package1:
+/home/src/projects/project/node_modules/package1: *new*
   {}
 /home/src/projects/project/packages/package2:
   {}
-/home/src/projects/project/packages/package2/src:
+/home/src/projects/project/packages/package2/src: *new*
   {}
-
-Timeout callback:: count: 0
-6: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *deleted*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -718,10 +691,10 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 1
-7: checkOne *new*
+4: checkOne *new*
 
 Before running Timeout callback:: count: 1
-7: checkOne
+4: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -846,7 +819,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/pr
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
-10: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+7: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/packages/package1/dist/index.js]
@@ -861,7 +834,7 @@ export type BarType = "bar";
 
 
 Timeout callback:: count: 1
-10: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
+7: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
 
 ScriptInfos::
 /home/src/projects/project/packages/package1/dist/index.d.ts *changed*
@@ -884,8 +857,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
-11: /home/src/projects/project/packages/package2/tsconfig.json *new*
-12: *ensureProjectForOpenFiles* *new*
+8: /home/src/projects/project/packages/package2/tsconfig.json *new*
+9: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*
@@ -894,8 +867,8 @@ Projects::
     dirty: true *changed*
 
 Before running Timeout callback:: count: 2
-11: /home/src/projects/project/packages/package2/tsconfig.json
-12: *ensureProjectForOpenFiles*
+8: /home/src/projects/project/packages/package2/tsconfig.json
+9: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/packages/package2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json
@@ -921,8 +894,19 @@ Info seq  [hh:mm:ss:mss] File '/home/src/projects/project/node_modules/package1/
 Info seq  [hh:mm:ss:mss] 'package.json' does not have a 'peerDependencies' field.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/src 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package2/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -975,11 +959,7 @@ PolledWatches::
   {"pollingInterval":500}
 /home/src/projects/project/node_modules/@types:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
@@ -987,11 +967,13 @@ PolledWatches::
 PolledWatches *deleted*::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
+/home/src/projects/project/packages/node_modules:
+  {"pollingInterval":500}
+/home/src/projects/project/packages/package2/node_modules:
+  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {}
-/home/src/projects/project/packages/package1/package.json:
   {}
 /home/src/projects/project/packages/package2/package.json:
   {}
@@ -1000,12 +982,18 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
   {}
 
+FsWatches *deleted*::
+/home/src/projects/project/packages/package1/package.json:
+  {}
+
 FsWatchesRecursive::
+/home/src/projects/project/packages/package2:
+  {}
+
+FsWatchesRecursive *deleted*::
 /home/src/projects/project/node_modules:
   {}
 /home/src/projects/project/node_modules/package1:
-  {}
-/home/src/projects/project/packages/package2:
   {}
 /home/src/projects/project/packages/package2/src:
   {}
@@ -1052,10 +1040,10 @@ Info seq  [hh:mm:ss:mss] request:
 After request
 
 Timeout callback:: count: 1
-13: checkOne *new*
+10: checkOne *new*
 
 Before running Timeout callback:: count: 1
-13: checkOne
+10: checkOne
 
 Info seq  [hh:mm:ss:mss] event:
     {

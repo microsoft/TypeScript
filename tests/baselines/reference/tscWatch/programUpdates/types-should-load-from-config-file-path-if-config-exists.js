@@ -74,8 +74,6 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/workspace/solution/projects/project: *new*
   {}
-/user/username/workspace/solution/projects/project/node_modules: *new*
-  {}
 
 Program root files: [
   "/user/username/workspace/solution/projects/project/app.ts"

@@ -176,10 +176,6 @@ FsWatches *deleted*::
 /user/username/workspace/solution/projects/projectc/f3.ts:
   {}
 
-FsWatchesRecursive::
-/user/username/workspace/solution/projects/project: *new*
-  {}
-
 
 Program root files: [
   "/user/username/workspace/solution/projects/project/f1.ts"
