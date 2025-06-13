@@ -9,7 +9,9 @@
 ->Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
 ->Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
 ->Message : Symbol(Outer.Inner.Message, Decl(usage.js, 0, 0))
++>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
 +>Outer : Symbol(Outer, Decl(def.js, 0, 3))
++>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
  };
 
@@ -18,12 +20,16 @@
 ->Outer.Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
 ->Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
 ->Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
++>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
 +>Outer : Symbol(Outer, Decl(def.js, 0, 3))
++>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
  y.name
 ->y.name : Symbol(Inner.name, Decl(def.js, 1, 21))
++>y.name : Symbol(name, Decl(def.js, 1, 21))
  >y : Symbol(y, Decl(usage.js, 4, 3))
 ->name : Symbol(Inner.name, Decl(def.js, 1, 21))
++>name : Symbol(name, Decl(def.js, 1, 21))
 
  /** @type {Outer.Inner} should be instance type, not static type */
  var x;
@@ -43,7 +49,9 @@
 ->Outer.Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
 ->Outer : Symbol(Outer, Decl(usage.js, 0, 0), Decl(def.js, 0, 3), Decl(def.js, 0, 14))
 ->Inner : Symbol(Outer.Inner, Decl(usage.js, 1, 6), Decl(def.js, 0, 14))
++>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
 +>Outer : Symbol(Outer, Decl(def.js, 0, 3))
++>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
    name() {
 ->name : Symbol(Inner.name, Decl(def.js, 1, 21))

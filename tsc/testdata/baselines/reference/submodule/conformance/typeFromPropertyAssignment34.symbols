@@ -5,12 +5,18 @@ var N = {};
 >N : Symbol(N, Decl(file1.js, 0, 3))
 
 N.commands = {};
+>N.commands : Symbol(commands, Decl(file1.js, 0, 11))
 >N : Symbol(N, Decl(file1.js, 0, 3))
+>commands : Symbol(commands, Decl(file1.js, 0, 11))
 
 === file2.js ===
 N.commands.a = 111;
+>N.commands : Symbol(commands, Decl(file1.js, 0, 11))
 >N : Symbol(N, Decl(file1.js, 0, 3))
+>commands : Symbol(commands, Decl(file1.js, 0, 11))
 
 N.commands.b = function () { };
+>N.commands : Symbol(commands, Decl(file1.js, 0, 11))
 >N : Symbol(N, Decl(file1.js, 0, 3))
+>commands : Symbol(commands, Decl(file1.js, 0, 11))
 

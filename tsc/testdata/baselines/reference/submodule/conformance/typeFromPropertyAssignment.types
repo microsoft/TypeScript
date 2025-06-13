@@ -13,9 +13,9 @@ var Outer = class O {
 }
 Outer.Inner = class I {
 >Outer.Inner = class I {    n(a, b) { }} : typeof I
->Outer.Inner : any
+>Outer.Inner : typeof I
 >Outer : typeof O
->Inner : any
+>Inner : typeof I
 >class I {    n(a, b) { }} : typeof I
 >I : typeof I
 

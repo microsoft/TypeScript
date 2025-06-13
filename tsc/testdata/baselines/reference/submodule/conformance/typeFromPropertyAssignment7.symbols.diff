@@ -11,7 +11,9 @@
 ->obj.method : Symbol(obj.method, Decl(a.js, 0, 13))
 ->obj : Symbol(obj, Decl(a.js, 0, 3), Decl(a.js, 0, 13))
 ->method : Symbol(obj.method, Decl(a.js, 0, 13))
++>obj.method : Symbol(method, Decl(a.js, 0, 13))
 +>obj : Symbol(obj, Decl(a.js, 0, 3))
++>method : Symbol(method, Decl(a.js, 0, 13))
  >hunch : Symbol(hunch, Decl(a.js, 1, 23))
 
      return true;
@@ -21,4 +23,6 @@
 ->obj.method : Symbol(obj.method, Decl(a.js, 0, 13))
 ->obj : Symbol(obj, Decl(a.js, 0, 3), Decl(a.js, 0, 13))
 ->method : Symbol(obj.method, Decl(a.js, 0, 13))
++>obj.method : Symbol(method, Decl(a.js, 0, 13))
 +>obj : Symbol(obj, Decl(a.js, 0, 3))
++>method : Symbol(method, Decl(a.js, 0, 13))

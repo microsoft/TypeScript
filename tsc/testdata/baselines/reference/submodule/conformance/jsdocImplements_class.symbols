@@ -37,7 +37,9 @@ var Ns = {};
 
 /** @implements {A} */
 Ns.C1 = class {
+>Ns.C1 : Symbol(C1, Decl(a.js, 20, 12))
 >Ns : Symbol(Ns, Decl(a.js, 20, 3))
+>C1 : Symbol(C1, Decl(a.js, 20, 12))
 
     method() { return 11; }
 >method : Symbol(method, Decl(a.js, 22, 15))
@@ -80,7 +82,9 @@ var C5;
 
 /** @implements {A} */
 Ns.C5 = C5 || class {
+>Ns.C5 : Symbol(C5, Decl(a.js, 44, 7))
 >Ns : Symbol(Ns, Decl(a.js, 20, 3))
+>C5 : Symbol(C5, Decl(a.js, 44, 7))
 >C5 : Symbol(C5, Decl(a.js, 44, 3))
 
     method() {

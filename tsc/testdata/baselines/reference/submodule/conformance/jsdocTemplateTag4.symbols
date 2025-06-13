@@ -65,7 +65,9 @@ var Ns = {};
  * @template V
  */
 Ns.Multimap3 = function() {
+>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
 >Ns : Symbol(Ns, Decl(a.js, 38, 3))
+>Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
@@ -78,7 +80,11 @@ Ns.Multimap3 = function() {
  * @returns {V} the value ok
  */
 Ns.Multimap3.prototype.get = function (key) {
+>Ns.Multimap3.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
 >Ns : Symbol(Ns, Decl(a.js, 38, 3))
+>Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(a.js, 54, 39))
 
     return this._map[key + ''];

@@ -3,16 +3,22 @@
 === usage.js ===
 // note that usage is first in the compilation
 Outer.Inner.Message = function() {
+>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
 >Outer : Symbol(Outer, Decl(def.js, 0, 3))
+>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
 };
 
 var y = new Outer.Inner()
 >y : Symbol(y, Decl(usage.js, 4, 3))
+>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
 >Outer : Symbol(Outer, Decl(def.js, 0, 3))
+>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
 y.name
+>y.name : Symbol(name, Decl(def.js, 1, 21))
 >y : Symbol(y, Decl(usage.js, 4, 3))
+>name : Symbol(name, Decl(def.js, 1, 21))
 
 /** @type {Outer.Inner} should be instance type, not static type */
 var x;
@@ -26,7 +32,9 @@ var Outer = {}
 >Outer : Symbol(Outer, Decl(def.js, 0, 3))
 
 Outer.Inner = class {
+>Outer.Inner : Symbol(Inner, Decl(def.js, 0, 14))
 >Outer : Symbol(Outer, Decl(def.js, 0, 3))
+>Inner : Symbol(Inner, Decl(def.js, 0, 14))
 
   name() {
 >name : Symbol(name, Decl(def.js, 1, 21))

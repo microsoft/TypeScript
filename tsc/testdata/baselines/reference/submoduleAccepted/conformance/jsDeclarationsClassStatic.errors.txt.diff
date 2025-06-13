@@ -2,12 +2,11 @@
 +++ new.jsDeclarationsClassStatic.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+source.js(9,9): error TS2339: Property 'statische' does not exist on type 'typeof Handler'.
 +source.js(15,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 +source.js(16,16): error TS2339: Property 'Strings' does not exist on type 'typeof Handler'.
 +
 +
-+==== source.js (3 errors) ====
++==== source.js (2 errors) ====
 +    class Handler {
 +    	static get OPTIONS() {
 +    		return 1;
@@ -17,8 +16,6 @@
 +    	}
 +    }
 +    Handler.statische = function() { }
-+            ~~~~~~~~~
-+!!! error TS2339: Property 'statische' does not exist on type 'typeof Handler'.
 +    const Strings = {
 +        a: "A",
 +        b: "B"

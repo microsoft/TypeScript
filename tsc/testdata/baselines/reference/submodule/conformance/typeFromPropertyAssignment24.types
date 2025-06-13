@@ -5,25 +5,25 @@
 Outer.Inner.Message = function() {
 >Outer.Inner.Message = function() {} : () => void
 >Outer.Inner.Message : any
->Outer.Inner : any
->Outer : {}
->Inner : any
+>Outer.Inner : typeof Inner
+>Outer : { Inner: typeof Inner; }
+>Inner : typeof Inner
 >Message : any
 >function() {} : () => void
 
 };
 
 var y = new Outer.Inner()
->y : any
->new Outer.Inner() : any
->Outer.Inner : any
->Outer : {}
->Inner : any
+>y : Inner
+>new Outer.Inner() : Inner
+>Outer.Inner : typeof Inner
+>Outer : { Inner: typeof Inner; }
+>Inner : typeof Inner
 
 y.name
->y.name : any
->y : any
->name : any
+>y.name : () => string
+>y : Inner
+>name : () => string
 
 /** @type {Outer.Inner} should be instance type, not static type */
 var x;
@@ -36,14 +36,14 @@ x.name
 
 === def.js ===
 var Outer = {}
->Outer : {}
->{} : {}
+>Outer : { Inner: typeof Inner; }
+>{} : { Inner: typeof Inner; }
 
 Outer.Inner = class {
 >Outer.Inner = class {  name() {    return 'hi'  }} : typeof Inner
->Outer.Inner : any
->Outer : {}
->Inner : any
+>Outer.Inner : typeof Inner
+>Outer : { Inner: typeof Inner; }
+>Inner : typeof Inner
 >class {  name() {    return 'hi'  }} : typeof Inner
 
   name() {

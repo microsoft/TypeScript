@@ -8,7 +8,9 @@ var Outer = function O() {
     this.y = 2
 }
 Outer.Inner = class I {
+>Outer.Inner : Symbol(Inner, Decl(a.js, 2, 1))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3))
+>Inner : Symbol(Inner, Decl(a.js, 2, 1))
 >I : Symbol(I, Decl(a.js, 3, 13))
 
     constructor() {

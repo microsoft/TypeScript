@@ -101,7 +101,9 @@ C2.prototype.method2 = function (x, y) {
  * @returns {number}
  */
 C2.staticProp = function (x, y) {
+>C2.staticProp : Symbol(staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
 >C2 : Symbol(C2, Decl(jsDeclarationsClassMethod.js, 30, 1))
+>staticProp : Symbol(staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
 >x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 60, 26))
 >y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 60, 28))
 

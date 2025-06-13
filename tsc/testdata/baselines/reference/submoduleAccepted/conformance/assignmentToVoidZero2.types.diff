@@ -22,39 +22,36 @@
 
  var o = {}
 ->o : typeof o
-+>o : {}
- >{} : {}
+->{} : {}
++>o : { x: number; y: any; }
++>{} : { x: number; y: any; }
 
  o.x = 1
  >o.x = 1 : 1
-->o.x : number
+ >o.x : number
 ->o : typeof o
-->x : number
-+>o.x : any
-+>o : {}
-+>x : any
++>o : { x: number; y: any; }
+ >x : number
  >1 : 1
 
  o.y = void 0
  >o.y = void 0 : undefined
  >o.y : any
 ->o : typeof o
-+>o : {}
++>o : { x: number; y: any; }
  >y : any
  >void 0 : undefined
  >0 : 0
-
+@@= skipped -34, +34 lines =@@
  o.x + o.y
  >o.x + o.y : any
-->o.x : number
+ >o.x : number
 ->o : typeof o
-->x : number
-+>o.x : any
-+>o : {}
-+>x : any
++>o : { x: number; y: any; }
+ >x : number
  >o.y : any
 ->o : typeof o
-+>o : {}
++>o : { x: number; y: any; }
  >y : any
 
  function C() {

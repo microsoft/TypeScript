@@ -3,9 +3,6 @@
 @@= skipped -0, +0 lines =@@
 -<no content>
 +main.js(2,13): error TS2749: 'K' refers to a value, but is being used as a type here. Did you mean 'typeof K'?
-+mod1.js(2,4): error TS2339: Property 'K' does not exist on type '{}'.
-+mod1.js(4,23): error TS2339: Property 'K' does not exist on type '{}'.
-+mod1.js(7,16): error TS2339: Property 'K' does not exist on type '{}'.
 +
 +
 +==== main.js (1 errors) ====
@@ -17,18 +14,12 @@
 +        k.values()
 +    }
 +    
-+==== mod1.js (3 errors) ====
++==== mod1.js (0 errors) ====
 +    var NS = {}
 +    NS.K =class {
-+       ~
-+!!! error TS2339: Property 'K' does not exist on type '{}'.
 +        values() {
 +            return new NS.K()
-+                          ~
-+!!! error TS2339: Property 'K' does not exist on type '{}'.
 +        }
 +    }
 +    exports.K = NS.K;
-+                   ~
-+!!! error TS2339: Property 'K' does not exist on type '{}'.
 +    

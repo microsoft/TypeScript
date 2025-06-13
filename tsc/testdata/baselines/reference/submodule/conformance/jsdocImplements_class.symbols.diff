@@ -39,7 +39,9 @@
 ->Ns.C1 : Symbol(Ns.C1, Decl(a.js, 20, 12))
 ->Ns : Symbol(Ns, Decl(a.js, 20, 3), Decl(a.js, 20, 12), Decl(a.js, 44, 7))
 ->C1 : Symbol(Ns.C1, Decl(a.js, 20, 12))
++>Ns.C1 : Symbol(C1, Decl(a.js, 20, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 20, 3))
++>C1 : Symbol(C1, Decl(a.js, 20, 12))
 
      method() { return 11; }
 ->method : Symbol(C1.method, Decl(a.js, 22, 15))
@@ -55,7 +57,7 @@
  }
  var o = {
  >o : Symbol(o, Decl(a.js, 29, 3))
-@@= skipped -26, +24 lines =@@
+@@= skipped -26, +26 lines =@@
  >C3 : Symbol(C3, Decl(a.js, 29, 9))
 
          method() { return 13; }
@@ -84,7 +86,9 @@
 ->Ns.C5 : Symbol(Ns.C5, Decl(a.js, 44, 7))
 ->Ns : Symbol(Ns, Decl(a.js, 20, 3), Decl(a.js, 20, 12), Decl(a.js, 44, 7))
 ->C5 : Symbol(Ns.C5, Decl(a.js, 44, 7))
++>Ns.C5 : Symbol(C5, Decl(a.js, 44, 7))
 +>Ns : Symbol(Ns, Decl(a.js, 20, 3))
++>C5 : Symbol(C5, Decl(a.js, 44, 7))
  >C5 : Symbol(C5, Decl(a.js, 44, 3))
 
      method() {

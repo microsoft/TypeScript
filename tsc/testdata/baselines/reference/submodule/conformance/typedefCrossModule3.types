@@ -3,21 +3,21 @@
 === mod2.js ===
 /** @typedef {number} Foo */
 const ns = {};
->ns : {}
->{} : {}
+>ns : { Foo: typeof Foo; }
+>{} : { Foo: typeof Foo; }
 
 ns.Foo = class {}
 >ns.Foo = class {} : typeof Foo
->ns.Foo : any
->ns : {}
->Foo : any
+>ns.Foo : typeof Foo
+>ns : { Foo: typeof Foo; }
+>Foo : typeof Foo
 >class {} : typeof Foo
 
 module.exports = ns;
->module.exports = ns : {}
->module.exports : {}
->module : { readonly ns: {}; }
->exports : {}
->ns : {}
+>module.exports = ns : { Foo: typeof Foo; }
+>module.exports : { Foo: typeof Foo; }
+>module : { readonly ns: { Foo: typeof Foo; }; }
+>exports : { Foo: typeof Foo; }
+>ns : { Foo: typeof Foo; }
 
 

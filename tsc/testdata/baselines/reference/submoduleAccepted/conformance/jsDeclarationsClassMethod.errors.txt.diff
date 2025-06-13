@@ -11,12 +11,11 @@
 +jsDeclarationsClassMethod.js(51,14): error TS2551: Property 'method2' does not exist on type 'C2'. Did you mean 'method1'?
 +jsDeclarationsClassMethod.js(51,34): error TS7006: Parameter 'x' implicitly has an 'any' type.
 +jsDeclarationsClassMethod.js(51,37): error TS7006: Parameter 'y' implicitly has an 'any' type.
-+jsDeclarationsClassMethod.js(61,4): error TS2339: Property 'staticProp' does not exist on type 'typeof C2'.
 +jsDeclarationsClassMethod.js(61,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
 +jsDeclarationsClassMethod.js(61,30): error TS7006: Parameter 'y' implicitly has an 'any' type.
 +
 +
-+==== jsDeclarationsClassMethod.js (12 errors) ====
++==== jsDeclarationsClassMethod.js (11 errors) ====
 +    function C1() {
 +        /**
 +         * A comment prop
@@ -97,8 +96,6 @@
 +     * @returns {number}
 +     */
 +    C2.staticProp = function (x, y) {
-+       ~~~~~~~~~~
-+!!! error TS2339: Property 'staticProp' does not exist on type 'typeof C2'.
 +                              ~
 +!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
 +                                 ~

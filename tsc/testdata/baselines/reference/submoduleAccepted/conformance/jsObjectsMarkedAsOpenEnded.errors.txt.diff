@@ -2,8 +2,6 @@
 +++ new.jsObjectsMarkedAsOpenEnded.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+b.ts(1,10): error TS2339: Property 'a' does not exist on type '{}'.
-+b.ts(2,18): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(3,29): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(4,14): error TS2339: Property 'a' does not exist on type '{}'.
 +b.ts(5,8): error TS2339: Property 'a' does not exist on type '{}'.
@@ -35,13 +33,9 @@
 +    }
 +    
 +    
-+==== b.ts (6 errors) ====
++==== b.ts (4 errors) ====
 +    variable.a = 1;
-+             ~
-+!!! error TS2339: Property 'a' does not exist on type '{}'.
 +    (new C()).member.a = 1;
-+                     ~
-+!!! error TS2339: Property 'a' does not exist on type '{}'.
 +    (new C()).initializedMember.a = 1;
 +                                ~
 +!!! error TS2339: Property 'a' does not exist on type '{}'.

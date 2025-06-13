@@ -2,7 +2,7 @@
 
 === main.js ===
 const { K } = require("./mod1");
->K : any
+>K : typeof K
 >require("./mod1") : typeof import("./mod1")
 >require : any
 >"./mod1" : "./mod1"
@@ -21,32 +21,32 @@ function f(k) {
 
 === mod1.js ===
 var NS = {}
->NS : {}
->{} : {}
+>NS : { K: typeof K; }
+>{} : { K: typeof K; }
 
 NS.K =class {
 >NS.K =class {    values() {        return new NS.K()    }} : typeof K
->NS.K : any
->NS : {}
->K : any
+>NS.K : typeof K
+>NS : { K: typeof K; }
+>K : typeof K
 >class {    values() {        return new NS.K()    }} : typeof K
 
     values() {
->values : () => any
+>values : () => K
 
         return new NS.K()
->new NS.K() : any
->NS.K : any
->NS : {}
->K : any
+>new NS.K() : K
+>NS.K : typeof K
+>NS : { K: typeof K; }
+>K : typeof K
     }
 }
 exports.K = NS.K;
->exports.K = NS.K : any
->exports.K : any
+>exports.K = NS.K : typeof K
+>exports.K : typeof K
 >exports : typeof import("./mod1")
->K : any
->NS.K : any
->NS : {}
->K : any
+>K : typeof K
+>NS.K : typeof K
+>NS : { K: typeof K; }
+>K : typeof K
 

@@ -37,6 +37,7 @@ const (
 	ContainerFlagsHasLocals                                        ContainerFlags = 1 << 5
 	ContainerFlagsIsInterface                                      ContainerFlags = 1 << 6
 	ContainerFlagsIsObjectLiteralOrClassExpressionMethodOrAccessor ContainerFlags = 1 << 7
+	ContainerFlagsIsThisContainer                                  ContainerFlags = 1 << 8
 )
 
 type Binder struct {
@@ -49,7 +50,7 @@ type Binder struct {
 
 	parent                 *ast.Node
 	container              *ast.Node
-	thisParentContainer    *ast.Node
+	thisContainer          *ast.Node
 	blockScopeContainer    *ast.Node
 	lastContainer          *ast.Node
 	currentFlow            *ast.FlowNode
@@ -625,7 +626,7 @@ func (b *Binder) bind(node *ast.Node) bool {
 	case ast.KindBinaryExpression:
 		switch ast.GetAssignmentDeclarationKind(node.AsBinaryExpression()) {
 		case ast.JSDeclarationKindProperty:
-			b.bindFunctionPropertyAssignment(node)
+			b.bindExpandoPropertyAssignment(node)
 		case ast.JSDeclarationKindThisProperty:
 			b.bindThisPropertyAssignment(node)
 		}
@@ -1014,39 +1015,63 @@ func addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbo
 	symbol.AssignmentDeclarationMembers.Add(node)
 }
 
-func (b *Binder) bindFunctionPropertyAssignment(node *ast.Node) {
+func (b *Binder) bindExpandoPropertyAssignment(node *ast.Node) {
 	expr := node.AsBinaryExpression()
-	parentName := expr.Left.Expression().Text()
-	symbol := b.lookupName(parentName, b.blockScopeContainer)
+	parent := expr.Left.Expression()
+	symbol := b.lookupEntity(parent, b.blockScopeContainer)
 	if symbol == nil {
-		symbol = b.lookupName(parentName, b.container)
+		symbol = b.lookupEntity(parent, b.container)
 	}
-	if symbol != nil && symbol.ValueDeclaration != nil {
-		// For an assignment 'fn.xxx = ...', where 'fn' is a previously declared function or a previously
-		// declared const variable initialized with a function expression or arrow function, we add expando
-		// property declarations to the function's symbol.
-		var funcSymbol *ast.Symbol
-		switch {
-		case ast.IsFunctionDeclaration(symbol.ValueDeclaration):
-			funcSymbol = symbol
-		case ast.IsVariableDeclaration(symbol.ValueDeclaration) && symbol.ValueDeclaration.Parent.Flags&ast.NodeFlagsConst != 0:
-			initializer := symbol.ValueDeclaration.Initializer()
-			if initializer != nil && ast.IsFunctionExpressionOrArrowFunction(initializer) {
-				funcSymbol = initializer.Symbol()
-			}
-		}
-		if funcSymbol != nil {
-			// Fix up parent pointers since we're going to use these nodes before we bind into them
-			setParent(expr.Left, node)
-			setParent(expr.Right, node)
-			if ast.HasDynamicName(node) {
-				b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
-				addLateBoundAssignmentDeclarationToSymbol(node, funcSymbol)
-			} else {
-				b.declareSymbol(ast.GetExports(funcSymbol), funcSymbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
-			}
+	if symbol = getInitializerSymbol(symbol); symbol != nil {
+		// Fix up parent pointers since we're going to use these nodes before we bind into them
+		setParent(expr.Left, node)
+		setParent(expr.Right, node)
+		if ast.HasDynamicName(node) {
+			b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
+			addLateBoundAssignmentDeclarationToSymbol(node, symbol)
+		} else {
+			b.declareSymbol(ast.GetExports(symbol), symbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
 		}
 	}
+}
+
+func getInitializerSymbol(symbol *ast.Symbol) *ast.Symbol {
+	if symbol == nil || symbol.ValueDeclaration == nil {
+		return nil
+	}
+	declaration := symbol.ValueDeclaration
+	// For an assignment 'fn.xxx = ...', where 'fn' is a previously declared function or a previously
+	// declared const variable initialized with a function expression or arrow function, we add expando
+	// property declarations to the function's symbol.
+	// This also applies to class expressions and empty object literals.
+	switch {
+	case ast.IsFunctionDeclaration(declaration) || ast.IsInJSFile(declaration) && ast.IsClassDeclaration(declaration):
+		return symbol
+	case ast.IsVariableDeclaration(declaration) &&
+		(declaration.Parent.Flags&ast.NodeFlagsConst != 0 || ast.IsInJSFile(declaration)):
+		initializer := declaration.Initializer()
+		if isExpandoInitializer(initializer) {
+			return initializer.Symbol()
+		}
+	case ast.IsBinaryExpression(declaration) && ast.IsInJSFile(declaration):
+		initializer := declaration.AsBinaryExpression().Right
+		if isExpandoInitializer(initializer) {
+			return initializer.Symbol()
+		}
+	}
+	return nil
+}
+
+func isExpandoInitializer(initializer *ast.Node) bool {
+	if initializer == nil {
+		return false
+	}
+	if ast.IsFunctionExpressionOrArrowFunction(initializer) {
+		return true
+	} else if ast.IsInJSFile(initializer) {
+		return ast.IsClassExpression(initializer) || (ast.IsObjectLiteralExpression(initializer) && len(initializer.AsObjectLiteralExpression().Properties.Nodes) == 0)
+	}
+	return false
 }
 
 func (b *Binder) bindThisPropertyAssignment(node *ast.Node) {
@@ -1054,34 +1079,40 @@ func (b *Binder) bindThisPropertyAssignment(node *ast.Node) {
 		return
 	}
 	bin := node.AsBinaryExpression()
-	if ast.IsPropertyAccessExpression(bin.Left) && ast.IsPrivateIdentifier(bin.Left.AsPropertyAccessExpression().Name()) {
+	if ast.IsPropertyAccessExpression(bin.Left) && ast.IsPrivateIdentifier(bin.Left.AsPropertyAccessExpression().Name()) ||
+		b.thisContainer == nil {
 		return
 	}
-	thisContainer := ast.GetThisContainer(node /*includeArrowFunctions*/, false /*includeClassComputedPropertyName*/, false)
-	switch thisContainer.Kind {
+	if classSymbol, symbolTable := b.getThisClassAndSymbolTable(); symbolTable != nil {
+		if ast.HasDynamicName(node) {
+			b.declareSymbolEx(symbolTable, classSymbol, node, ast.SymbolFlagsProperty, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, true /*isComputedName*/)
+			addLateBoundAssignmentDeclarationToSymbol(node, classSymbol)
+		} else {
+			b.declareSymbolEx(symbolTable, classSymbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, false /*isComputedName*/)
+		}
+	} else if b.thisContainer.Kind != ast.KindFunctionDeclaration && b.thisContainer.Kind != ast.KindFunctionExpression {
+		// !!! constructor functions
+		panic("Unhandled case in bindThisPropertyAssignment: " + b.thisContainer.Kind.String())
+	}
+}
+
+func (b *Binder) getThisClassAndSymbolTable() (classSymbol *ast.Symbol, symbolTable ast.SymbolTable) {
+	if b.thisContainer == nil {
+		return nil, nil
+	}
+	switch b.thisContainer.Kind {
 	case ast.KindFunctionDeclaration, ast.KindFunctionExpression:
 		// !!! constructor functions
 	case ast.KindConstructor, ast.KindPropertyDeclaration, ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor, ast.KindClassStaticBlockDeclaration:
 		// this.property assignment in class member -- bind to the containing class
-		containingClass := thisContainer.Parent
-		classSymbol := containingClass.Symbol()
-		var symbolTable ast.SymbolTable
-		if ast.IsStatic(thisContainer) {
-			symbolTable = ast.GetExports(containingClass.Symbol())
+		classSymbol = b.thisContainer.Parent.Symbol()
+		if ast.IsStatic(b.thisContainer) {
+			symbolTable = ast.GetExports(classSymbol)
 		} else {
-			symbolTable = ast.GetMembers(containingClass.Symbol())
+			symbolTable = ast.GetMembers(classSymbol)
 		}
-		if ast.HasDynamicName(node) {
-			b.declareSymbolEx(symbolTable, containingClass.Symbol(), node, ast.SymbolFlagsProperty, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, true /*isComputedName*/)
-			addLateBoundAssignmentDeclarationToSymbol(node, classSymbol)
-		} else {
-			b.declareSymbolEx(symbolTable, containingClass.Symbol(), node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsNone, true /*isReplaceableByMethod*/, false /*isComputedName*/)
-		}
-	case ast.KindSourceFile, ast.KindModuleDeclaration:
-		// top-level this.property as assignment to globals is no longer supported
-	default:
-		panic("Unhandled case in bindThisPropertyAssignment: " + thisContainer.Kind.String())
 	}
+	return classSymbol, symbolTable
 }
 
 func (b *Binder) bindEnumDeclaration(node *ast.Node) {
@@ -1213,16 +1244,35 @@ func (b *Binder) bindTypeParameter(node *ast.Node) {
 	}
 }
 
+func (b *Binder) lookupEntity(node *ast.Node, container *ast.Node) *ast.Symbol {
+	if ast.IsIdentifier(node) {
+		return b.lookupName(node.AsIdentifier().Text, container)
+	}
+	if ast.IsPropertyAccessExpression(node) && node.AsPropertyAccessExpression().Expression.Kind == ast.KindThisKeyword ||
+		ast.IsElementAccessExpression(node) && node.AsElementAccessExpression().Expression.Kind == ast.KindThisKeyword {
+		if _, symbolTable := b.getThisClassAndSymbolTable(); symbolTable != nil {
+			if name := ast.GetElementOrPropertyAccessName(node); name != nil {
+				return symbolTable[name.Text()]
+			}
+		}
+		return nil
+	}
+	if symbol := getInitializerSymbol(b.lookupEntity(node.Expression(), container)); symbol != nil && symbol.Exports != nil {
+		if name := ast.GetElementOrPropertyAccessName(node); name != nil {
+			return symbol.Exports[name.Text()]
+		}
+	}
+	return nil
+}
+
 func (b *Binder) lookupName(name string, container *ast.Node) *ast.Symbol {
-	localsContainer := container.LocalsContainerData()
-	if localsContainer != nil {
-		local := localsContainer.Locals[name]
-		if local != nil {
+	if localsContainer := container.LocalsContainerData(); localsContainer != nil {
+		if local := localsContainer.Locals[name]; local != nil {
 			return core.OrElse(local.ExportSymbol, local)
 		}
 	}
-	declaration := container.DeclarationData()
-	if declaration != nil && declaration.Symbol != nil {
+
+	if declaration := container.DeclarationData(); declaration != nil && declaration.Symbol != nil {
 		return declaration.Symbol.Exports[name]
 	}
 	return nil
@@ -1434,7 +1484,7 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 	// and block-container.  Then after we pop out of processing the children, we restore
 	// these saved values.
 	saveContainer := b.container
-	saveThisParentContainer := b.thisParentContainer
+	saveThisContainer := b.thisContainer
 	savedBlockScopeContainer := b.blockScopeContainer
 	// Depending on what kind of node this is, we may have to adjust the current container
 	// and block-container.   If the current node is a container, then it is automatically
@@ -1454,9 +1504,6 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 	// for it.  We must clear this so we don't accidentally move any stale data forward from
 	// a previous compilation.
 	if containerFlags&ContainerFlagsIsContainer != 0 {
-		if node.Kind != ast.KindArrowFunction {
-			b.thisParentContainer = b.container
-		}
 		b.container = node
 		b.blockScopeContainer = node
 		if containerFlags&ContainerFlagsHasLocals != 0 {
@@ -1467,6 +1514,9 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 	} else if containerFlags&ContainerFlagsIsBlockScopedContainer != 0 {
 		b.blockScopeContainer = node
 		b.addToContainerChain(node)
+	}
+	if containerFlags&ContainerFlagsIsThisContainer != 0 {
+		b.thisContainer = node
 	}
 	if containerFlags&ContainerFlagsIsControlFlowContainer != 0 {
 		saveCurrentFlow := b.currentFlow
@@ -1548,7 +1598,7 @@ func (b *Binder) bindContainer(node *ast.Node, containerFlags ContainerFlags) {
 		b.bindChildren(node)
 	}
 	b.container = saveContainer
-	b.thisParentContainer = saveThisParentContainer
+	b.thisContainer = saveThisContainer
 	b.blockScopeContainer = savedBlockScopeContainer
 }
 
@@ -2574,19 +2624,24 @@ func GetContainerFlags(node *ast.Node) ContainerFlags {
 		return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals
 	case ast.KindGetAccessor, ast.KindSetAccessor, ast.KindMethodDeclaration:
 		if ast.IsObjectLiteralOrClassExpressionMethodOrAccessor(node) {
-			return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals | ContainerFlagsIsFunctionLike | ContainerFlagsIsObjectLiteralOrClassExpressionMethodOrAccessor
+			return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals | ContainerFlagsIsFunctionLike | ContainerFlagsIsObjectLiteralOrClassExpressionMethodOrAccessor | ContainerFlagsIsThisContainer
 		}
 		fallthrough
-	case ast.KindConstructor, ast.KindFunctionDeclaration, ast.KindMethodSignature, ast.KindCallSignature, ast.KindJSDocSignature,
-		ast.KindFunctionType, ast.KindConstructSignature, ast.KindConstructorType, ast.KindClassStaticBlockDeclaration:
+	case ast.KindConstructor, ast.KindClassStaticBlockDeclaration:
+		return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals | ContainerFlagsIsFunctionLike | ContainerFlagsIsThisContainer
+	case ast.KindMethodSignature, ast.KindCallSignature, ast.KindJSDocSignature, ast.KindFunctionType, ast.KindConstructSignature, ast.KindConstructorType:
 		return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals | ContainerFlagsIsFunctionLike
-	case ast.KindFunctionExpression, ast.KindArrowFunction:
+	case ast.KindFunctionDeclaration:
+		return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals | ContainerFlagsIsFunctionLike | ContainerFlagsIsThisContainer
+	case ast.KindFunctionExpression:
+		return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals | ContainerFlagsIsFunctionLike | ContainerFlagsIsFunctionExpression | ContainerFlagsIsThisContainer
+	case ast.KindArrowFunction:
 		return ContainerFlagsIsContainer | ContainerFlagsIsControlFlowContainer | ContainerFlagsHasLocals | ContainerFlagsIsFunctionLike | ContainerFlagsIsFunctionExpression
 	case ast.KindModuleBlock:
 		return ContainerFlagsIsControlFlowContainer
 	case ast.KindPropertyDeclaration:
 		if node.AsPropertyDeclaration().Initializer != nil {
-			return ContainerFlagsIsControlFlowContainer
+			return ContainerFlagsIsControlFlowContainer | ContainerFlagsIsThisContainer
 		} else {
 			return ContainerFlagsNone
 		}

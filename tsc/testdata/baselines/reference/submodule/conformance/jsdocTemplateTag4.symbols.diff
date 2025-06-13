@@ -73,7 +73,9 @@
 ->Ns.Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 38, 12))
 ->Ns : Symbol(Ns, Decl(a.js, 38, 3), Decl(a.js, 38, 12))
 ->Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 38, 12))
++>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 38, 3))
++>Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
 
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
@@ -84,7 +86,7 @@
 
  };
 
-@@= skipped -17, +13 lines =@@
+@@= skipped -17, +15 lines =@@
   * @returns {V} the value ok
   */
  Ns.Multimap3.prototype.get = function (key) {
@@ -94,7 +96,11 @@
 ->Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 38, 12))
 ->prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 ->get : Symbol(Ns.Multimap3.get, Decl(a.js, 48, 2))
++>Ns.Multimap3.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 38, 3))
++>Multimap3 : Symbol(Multimap3, Decl(a.js, 38, 12))
++>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
  >key : Symbol(key, Decl(a.js, 54, 39))
 
      return this._map[key + ''];

@@ -131,13 +131,13 @@
 ->C2.staticProp = function (x, y) {    return x + y;} : (x: number, y: number) => number
 ->C2.staticProp : (x: number, y: number) => number
 +>C2.staticProp = function (x, y) {    return x + y;} : (x: any, y: any) => any
-+>C2.staticProp : any
++>C2.staticProp : (x: any, y: any) => any
  >C2 : typeof C2
 ->staticProp : (x: number, y: number) => number
 ->function (x, y) {    return x + y;} : (x: number, y: number) => number
 ->x : number
 ->y : number
-+>staticProp : any
++>staticProp : (x: any, y: any) => any
 +>function (x, y) {    return x + y;} : (x: any, y: any) => any
 +>x : any
 +>y : any

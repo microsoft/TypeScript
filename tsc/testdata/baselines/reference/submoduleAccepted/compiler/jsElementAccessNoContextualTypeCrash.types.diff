@@ -5,18 +5,21 @@
  === jsElementAccessNoContextualTypeCrash.js ===
  var Common = {};
 ->Common : typeof Common
-+>Common : {}
- >{} : {}
+->{} : {}
++>Common : { localize: (string: any) => any; }
++>{} : { localize: (string: any) => any; }
 
  self['Common'] = self['Common'] || {};
- >self['Common'] = self['Common'] || {} : {}
+->self['Common'] = self['Common'] || {} : {}
 ->self['Common'] : typeof Common
-+>self['Common'] : {}
++>self['Common'] = self['Common'] || {} : { localize: (string: any) => any; } | {}
++>self['Common'] : { localize: (string: any) => any; }
  >self : Window & typeof globalThis
  >'Common' : "Common"
- >self['Common'] || {} : {}
+->self['Common'] || {} : {}
 ->self['Common'] : typeof Common
-+>self['Common'] : {}
++>self['Common'] || {} : { localize: (string: any) => any; } | {}
++>self['Common'] : { localize: (string: any) => any; }
  >self : Window & typeof globalThis
  >'Common' : "Common"
  >{} : {}
@@ -31,9 +34,9 @@
 ->function (string) {    return string;} : (string: string) => string
 ->string : string
 +>Common.localize = function (string) {    return string;} : (string: any) => any
-+>Common.localize : any
-+>Common : {}
-+>localize : any
++>Common.localize : (string: any) => any
++>Common : { localize: (string: any) => any; }
++>localize : (string: any) => any
 +>function (string) {    return string;} : (string: any) => any
 +>string : any
 

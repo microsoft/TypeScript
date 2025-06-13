@@ -15,37 +15,71 @@ var Multimap = function() {
 };
 
 Multimap.prototype = {
->Multimap.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Multimap.prototype : Symbol(prototype, Decl(a.js, 9, 2))
 >Multimap : Symbol(Multimap, Decl(a.js, 3, 3))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(a.js, 9, 2))
 
     set: function() {
 >set : Symbol(set, Decl(a.js, 11, 22))
 
         this._map
+>this : Symbol(__object, Decl(a.js, 11, 20))
+
         this.set
+>this.set : Symbol(set, Decl(a.js, 11, 22))
+>this : Symbol(__object, Decl(a.js, 11, 20))
+>set : Symbol(set, Decl(a.js, 11, 22))
+
         this.get
+>this.get : Symbol(get, Decl(a.js, 17, 6))
+>this : Symbol(__object, Decl(a.js, 11, 20))
+>get : Symbol(get, Decl(a.js, 17, 6))
+
         this.addon
+>this : Symbol(__object, Decl(a.js, 11, 20))
+
     },
     get() {
 >get : Symbol(get, Decl(a.js, 17, 6))
 
         this._map
+>this : Symbol(__object, Decl(a.js, 11, 20))
+
         this.set
+>this.set : Symbol(set, Decl(a.js, 11, 22))
+>this : Symbol(__object, Decl(a.js, 11, 20))
+>set : Symbol(set, Decl(a.js, 11, 22))
+
         this.get
+>this.get : Symbol(get, Decl(a.js, 17, 6))
+>this : Symbol(__object, Decl(a.js, 11, 20))
+>get : Symbol(get, Decl(a.js, 17, 6))
+
         this.addon
+>this : Symbol(__object, Decl(a.js, 11, 20))
     }
 }
 
 Multimap.prototype.addon = function () {
->Multimap.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Multimap.prototype : Symbol(prototype, Decl(a.js, 9, 2))
 >Multimap : Symbol(Multimap, Decl(a.js, 3, 3))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(a.js, 9, 2))
 
     this._map
+>this : Symbol(__object, Decl(a.js, 11, 20))
+
     this.set
+>this.set : Symbol(set, Decl(a.js, 11, 22))
+>this : Symbol(__object, Decl(a.js, 11, 20))
+>set : Symbol(set, Decl(a.js, 11, 22))
+
     this.get
+>this.get : Symbol(get, Decl(a.js, 17, 6))
+>this : Symbol(__object, Decl(a.js, 11, 20))
+>get : Symbol(get, Decl(a.js, 17, 6))
+
     this.addon
+>this : Symbol(__object, Decl(a.js, 11, 20))
 }
 
 var mm = new Multimap();

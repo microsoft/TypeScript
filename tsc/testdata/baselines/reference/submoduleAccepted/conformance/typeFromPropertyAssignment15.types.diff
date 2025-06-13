@@ -5,17 +5,16 @@
  === a.js ===
  var Outer = {};
 ->Outer : typeof Outer
-+>Outer : {}
- >{} : {}
+->{} : {}
++>Outer : { Inner: typeof Inner; }
++>{} : { Inner: typeof Inner; }
 
  Outer.Inner = class {
  >Outer.Inner = class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
-->Outer.Inner : typeof Inner
+ >Outer.Inner : typeof Inner
 ->Outer : typeof Outer
-->Inner : typeof Inner
-+>Outer.Inner : any
-+>Outer : {}
-+>Inner : any
++>Outer : { Inner: typeof Inner; }
+ >Inner : typeof Inner
  >class {    constructor() {        this.x = 1    }    m() { }} : typeof Inner
 
      constructor() {
@@ -55,31 +54,11 @@
 +>m : any
 
  var inno = new Outer.Inner()
-->inno : Inner
-->new Outer.Inner() : Inner
-->Outer.Inner : typeof Inner
+ >inno : Inner
+ >new Outer.Inner() : Inner
+ >Outer.Inner : typeof Inner
 ->Outer : typeof Outer
-->Inner : typeof Inner
-+>inno : any
-+>new Outer.Inner() : any
-+>Outer.Inner : any
-+>Outer : {}
-+>Inner : any
++>Outer : { Inner: typeof Inner; }
+ >Inner : typeof Inner
 
  inno.x
-->inno.x : number
-->inno : Inner
-->x : number
-+>inno.x : any
-+>inno : any
-+>x : any
-
- inno.m()
-->inno.m() : void
-->inno.m : () => void
-->inno : Inner
-->m : () => void
-+>inno.m() : any
-+>inno.m : any
-+>inno : any
-+>m : any

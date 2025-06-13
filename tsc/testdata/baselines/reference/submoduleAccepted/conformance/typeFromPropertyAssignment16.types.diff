@@ -5,8 +5,9 @@
  === a.js ===
  var Outer = {};
 ->Outer : typeof Outer
-+>Outer : {}
- >{} : {}
+->{} : {}
++>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
++>{} : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
 
  Outer.Inner = function () {}
 ->Outer.Inner = function () {} : typeof Inner
@@ -14,27 +15,24 @@
 ->Outer : typeof Outer
 ->Inner : typeof Inner
 ->function () {} : typeof Inner
-+>Outer.Inner = function () {} : () => void
-+>Outer.Inner : any
-+>Outer : {}
-+>Inner : any
-+>function () {} : () => void
++>Outer.Inner = function () {} : { (): void; prototype: { x: number; m(): void; }; }
++>Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
++>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
++>Inner : { (): void; prototype: { x: number; m(): void; }; }
++>function () {} : { (): void; prototype: { x: number; m(): void; }; }
 
  Outer.Inner.prototype = {
  >Outer.Inner.prototype = {    x: 1,    m() { }} : { x: number; m(): void; }
-->Outer.Inner.prototype : { x: number; m(): void; }
+ >Outer.Inner.prototype : { x: number; m(): void; }
 ->Outer.Inner : typeof Inner
 ->Outer : typeof Outer
 ->Inner : typeof Inner
-->prototype : { x: number; m(): void; }
-+>Outer.Inner.prototype : any
-+>Outer.Inner : any
-+>Outer : {}
-+>Inner : any
-+>prototype : any
++>Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
++>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
++>Inner : { (): void; prototype: { x: number; m(): void; }; }
+ >prototype : { x: number; m(): void; }
  >{    x: 1,    m() { }} : { x: number; m(): void; }
 
-     x: 1,
 @@= skipped -29, +29 lines =@@
 
  /** @type {Outer.Inner} */
@@ -68,9 +66,9 @@
 ->Inner : typeof Inner
 +>inno : any
 +>new Outer.Inner() : any
-+>Outer.Inner : any
-+>Outer : {}
-+>Inner : any
++>Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
++>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
++>Inner : { (): void; prototype: { x: number; m(): void; }; }
 
  inno.x
 ->inno.x : number

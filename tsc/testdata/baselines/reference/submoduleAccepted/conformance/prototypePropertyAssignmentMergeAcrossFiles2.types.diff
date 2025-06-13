@@ -5,8 +5,9 @@
  === prototypePropertyAssignmentMergeAcrossFiles2.js ===
  var Ns = {}
 ->Ns : typeof Ns
-+>Ns : {}
- >{} : {}
+->{} : {}
++>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
++>{} : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
 
  Ns.One = function() {};
 ->Ns.One = function() {} : typeof One
@@ -14,11 +15,11 @@
 ->Ns : typeof Ns
 ->One : typeof One
 ->function() {} : typeof One
-+>Ns.One = function() {} : () => void
-+>Ns.One : any
-+>Ns : {}
-+>One : any
-+>function() {} : () => void
++>Ns.One = function() {} : { (): void; prototype: { ok(): void; }; }
++>Ns.One : { (): void; prototype: { ok(): void; }; }
++>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
++>One : { (): void; prototype: { ok(): void; }; }
++>function() {} : { (): void; prototype: { ok(): void; }; }
 
  Ns.Two = function() {};
 ->Ns.Two = function() {} : typeof Two
@@ -26,45 +27,38 @@
 ->Ns : typeof Ns
 ->Two : typeof Two
 ->function() {} : typeof Two
-+>Ns.Two = function() {} : () => void
-+>Ns.Two : any
-+>Ns : {}
-+>Two : any
-+>function() {} : () => void
++>Ns.Two = function() {} : { (): void; prototype: {}; }
++>Ns.Two : { (): void; prototype: {}; }
++>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
++>Two : { (): void; prototype: {}; }
++>function() {} : { (): void; prototype: {}; }
 
  Ns.One.prototype = {
  >Ns.One.prototype = {  ok() {},} : { ok(): void; }
-->Ns.One.prototype : { ok(): void; }
+ >Ns.One.prototype : { ok(): void; }
 ->Ns.One : typeof One
 ->Ns : typeof Ns
 ->One : typeof One
-->prototype : { ok(): void; }
-+>Ns.One.prototype : any
-+>Ns.One : any
-+>Ns : {}
-+>One : any
-+>prototype : any
++>Ns.One : { (): void; prototype: { ok(): void; }; }
++>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
++>One : { (): void; prototype: { ok(): void; }; }
+ >prototype : { ok(): void; }
  >{  ok() {},} : { ok(): void; }
 
-   ok() {},
-@@= skipped -32, +32 lines =@@
- };
+@@= skipped -33, +33 lines =@@
  Ns.Two.prototype = {
  >Ns.Two.prototype = {} : {}
-->Ns.Two.prototype : {}
+ >Ns.Two.prototype : {}
 ->Ns.Two : typeof Two
 ->Ns : typeof Ns
 ->Two : typeof Two
-->prototype : {}
-+>Ns.Two.prototype : any
-+>Ns.Two : any
-+>Ns : {}
-+>Two : any
-+>prototype : any
++>Ns.Two : { (): void; prototype: {}; }
++>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
++>Two : { (): void; prototype: {}; }
+ >prototype : {}
  >{} : {}
  }
-
-@@= skipped -13, +13 lines =@@
+@@= skipped -12, +12 lines =@@
   * @type {Ns.One}
   */
  var one;

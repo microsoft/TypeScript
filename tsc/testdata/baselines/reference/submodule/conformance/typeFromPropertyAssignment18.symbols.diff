@@ -29,9 +29,11 @@
 ->m : Symbol(m, Decl(a.js, 0, 30), Decl(a.js, 3, 14))
 ->GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
 ->q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
++>m.GLOBSTAR.q : Symbol(q, Decl(a.js, 3, 14))
 +>m.GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 14))
 +>m : Symbol(m, Decl(a.js, 0, 30))
 +>GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 14))
++>q : Symbol(q, Decl(a.js, 3, 14))
 
  GLOBSTAR.p
 ->GLOBSTAR.p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
@@ -43,7 +45,9 @@
 ->GLOBSTAR.q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
 ->GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
 ->q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
++>GLOBSTAR.q : Symbol(q, Decl(a.js, 3, 14))
 +>GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 3))
++>q : Symbol(q, Decl(a.js, 3, 14))
 
  m.GLOBSTAR.p
 ->m.GLOBSTAR.p : Symbol(GLOBSTAR.p, Decl(a.js, 2, 1))
@@ -61,6 +65,8 @@
 ->m : Symbol(m, Decl(a.js, 0, 30), Decl(a.js, 3, 14))
 ->GLOBSTAR : Symbol(m.GLOBSTAR, Decl(a.js, 0, 14), Decl(a.js, 4, 2))
 ->q : Symbol(m.GLOBSTAR.q, Decl(a.js, 3, 14))
++>m.GLOBSTAR.q : Symbol(q, Decl(a.js, 3, 14))
 +>m.GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 14))
 +>m : Symbol(m, Decl(a.js, 0, 30))
 +>GLOBSTAR : Symbol(GLOBSTAR, Decl(a.js, 0, 14))
++>q : Symbol(q, Decl(a.js, 3, 14))

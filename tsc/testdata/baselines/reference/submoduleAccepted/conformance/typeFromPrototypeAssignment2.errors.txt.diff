@@ -1,19 +1,25 @@
 --- old.typeFromPrototypeAssignment2.errors.txt
 +++ new.typeFromPrototypeAssignment2.errors.txt
 @@= skipped -0, +0 lines =@@
--a.js(28,24): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
--
--
--==== a.js (1 errors) ====
 +a.js(6,9): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(7,9): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(8,9): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(9,9): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +a.js(10,9): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
++a.js(15,18): error TS2339: Property '_map' does not exist on type '{ set: () => void; get(): void; }'.
++a.js(18,18): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
++a.js(21,18): error TS2339: Property '_map' does not exist on type '{ set: () => void; get(): void; }'.
++a.js(24,18): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+ a.js(28,24): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+-
+-
+-==== a.js (1 errors) ====
++a.js(29,14): error TS2339: Property '_map' does not exist on type '{ set: () => void; get(): void; }'.
++a.js(32,14): error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
 +a.js(35,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +
 +
-+==== a.js (6 errors) ====
++==== a.js (13 errors) ====
      // non top-level:
      // all references to _map, set, get, addon should be ok
      (function container() {
@@ -37,16 +43,39 @@
          };
      
          Multimap.prototype = {
-@@= skipped -29, +44 lines =@@
+             set: function() {
+                 this._map
++                     ~~~~
++!!! error TS2339: Property '_map' does not exist on type '{ set: () => void; get(): void; }'.
+                 this.set
+                 this.get
+                 this.addon
++                     ~~~~~
++!!! error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+             },
+             get() {
+                 this._map
++                     ~~~~
++!!! error TS2339: Property '_map' does not exist on type '{ set: () => void; get(): void; }'.
+                 this.set
+                 this.get
+                 this.addon
++                     ~~~~~
++!!! error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+             }
          }
      
-         Multimap.prototype.addon = function () {
--                           ~~~~~
--!!! error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
+@@= skipped -32, +62 lines =@@
+                            ~~~~~
+ !!! error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
              this._map
++                 ~~~~
++!!! error TS2339: Property '_map' does not exist on type '{ set: () => void; get(): void; }'.
              this.set
              this.get
-@@= skipped -9, +7 lines =@@
+             this.addon
++                 ~~~~~
++!!! error TS2339: Property 'addon' does not exist on type '{ set: () => void; get(): void; }'.
          }
      
          var mm = new Multimap();

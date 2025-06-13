@@ -5,7 +5,9 @@ var A = {};
 >A : Symbol(A, Decl(bug24252.js, 0, 3))
 
 A.B = class {
+>A.B : Symbol(B, Decl(bug24252.js, 0, 11))
 >A : Symbol(A, Decl(bug24252.js, 0, 3))
+>B : Symbol(B, Decl(bug24252.js, 0, 11))
 
     m() {
 >m : Symbol(m, Decl(bug24252.js, 1, 13))

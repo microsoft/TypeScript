@@ -5,8 +5,9 @@
  === bug24703.js ===
  var Common = {};
 ->Common : typeof Common
-+>Common : {}
- >{} : {}
+->{} : {}
++>Common : any
++>{} : { I: typeof I; O: any; }
 
  Common.I = class {
  >Common.I = class {    constructor() {        this.i = 1    }} : typeof I
@@ -14,7 +15,7 @@
 ->Common : typeof Common
 ->I : typeof I
 +>Common.I : any
-+>Common : {}
++>Common : any
 +>I : any
  >class {    constructor() {        this.i = 1    }} : typeof I
 
@@ -35,14 +36,14 @@
 ->Common : typeof Common
 ->O : typeof O
 +>Common.O : any
-+>Common : {}
++>Common : any
 +>O : any
  >class extends Common.I {    constructor() {        super()        this.o = 2    }} : typeof O
 ->Common.I : I
 ->Common : typeof Common
 ->I : typeof I
 +>Common.I : any
-+>Common : {}
++>Common : any
 +>I : any
 
      constructor() {
@@ -70,7 +71,7 @@
 +>o : any
 +>new Common.O() : any
 +>Common.O : any
-+>Common : {}
++>Common : any
 +>O : any
 
  var i = new Common.I()
@@ -82,7 +83,7 @@
 +>i : any
 +>new Common.I() : any
 +>Common.I : any
-+>Common : {}
++>Common : any
 +>I : any
 
  o.i

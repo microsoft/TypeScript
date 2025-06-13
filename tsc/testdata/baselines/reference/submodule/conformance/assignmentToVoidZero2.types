@@ -17,31 +17,31 @@ exports.k = void 0;
 >0 : 0
 
 var o = {}
->o : {}
->{} : {}
+>o : { x: number; y: any; }
+>{} : { x: number; y: any; }
 
 o.x = 1
 >o.x = 1 : 1
->o.x : any
->o : {}
->x : any
+>o.x : number
+>o : { x: number; y: any; }
+>x : number
 >1 : 1
 
 o.y = void 0
 >o.y = void 0 : undefined
 >o.y : any
->o : {}
+>o : { x: number; y: any; }
 >y : any
 >void 0 : undefined
 >0 : 0
 
 o.x + o.y
 >o.x + o.y : any
->o.x : any
->o : {}
->x : any
+>o.x : number
+>o : { x: number; y: any; }
+>x : number
 >o.y : any
->o : {}
+>o : { x: number; y: any; }
 >y : any
 
 function C() {

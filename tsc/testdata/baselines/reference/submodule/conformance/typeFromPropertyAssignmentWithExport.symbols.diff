@@ -11,11 +11,15 @@
 ->Adapter.prop : Symbol(Adapter.prop, Decl(a.js, 2, 26))
 ->Adapter : Symbol(Adapter, Decl(a.js, 2, 12), Decl(a.js, 2, 26), Decl(a.js, 4, 18))
 ->prop : Symbol(Adapter.prop, Decl(a.js, 2, 26))
++>Adapter.prop : Symbol(prop, Decl(a.js, 2, 26))
 +>Adapter : Symbol(Adapter, Decl(a.js, 2, 12))
++>prop : Symbol(prop, Decl(a.js, 2, 26))
 
  // comment this out, and it works
  Adapter.asyncMethod = function() {}
 ->Adapter.asyncMethod : Symbol(Adapter.asyncMethod, Decl(a.js, 4, 18))
 ->Adapter : Symbol(Adapter, Decl(a.js, 2, 12), Decl(a.js, 2, 26), Decl(a.js, 4, 18))
 ->asyncMethod : Symbol(Adapter.asyncMethod, Decl(a.js, 4, 18))
++>Adapter.asyncMethod : Symbol(asyncMethod, Decl(a.js, 4, 18))
 +>Adapter : Symbol(Adapter, Decl(a.js, 2, 12))
++>asyncMethod : Symbol(asyncMethod, Decl(a.js, 4, 18))

@@ -17,7 +17,9 @@
 ->Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
 ->Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
 ->Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
++>Outer.Inner : Symbol(Inner, Decl(a.js, 2, 1))
 +>Outer : Symbol(Outer, Decl(a.js, 0, 3))
++>Inner : Symbol(Inner, Decl(a.js, 2, 1))
  >I : Symbol(I, Decl(a.js, 3, 13))
 
      constructor() {
@@ -30,7 +32,7 @@
      }
  }
  /** @type {Outer} */
-@@= skipped -26, +21 lines =@@
+@@= skipped -26, +23 lines =@@
  >ja : Symbol(ja, Decl(a.js, 9, 3))
 
  ja.y

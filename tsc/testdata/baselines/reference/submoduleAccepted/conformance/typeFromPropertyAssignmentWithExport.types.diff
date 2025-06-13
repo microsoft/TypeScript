@@ -5,26 +5,23 @@
 
  export const Adapter = {};
 ->Adapter : typeof Adapter
-+>Adapter : {}
- >{} : {}
+->{} : {}
++>Adapter : { prop: {}; asyncMethod: () => void; }
++>{} : { prop: {}; asyncMethod: () => void; }
 
  Adapter.prop = {};
  >Adapter.prop = {} : {}
-->Adapter.prop : {}
+ >Adapter.prop : {}
 ->Adapter : typeof Adapter
-->prop : {}
-+>Adapter.prop : any
-+>Adapter : {}
-+>prop : any
++>Adapter : { prop: {}; asyncMethod: () => void; }
+ >prop : {}
  >{} : {}
 
- // comment this out, and it works
+@@= skipped -14, +14 lines =@@
  Adapter.asyncMethod = function() {}
  >Adapter.asyncMethod = function() {} : () => void
-->Adapter.asyncMethod : () => void
+ >Adapter.asyncMethod : () => void
 ->Adapter : typeof Adapter
-->asyncMethod : () => void
-+>Adapter.asyncMethod : any
-+>Adapter : {}
-+>asyncMethod : any
++>Adapter : { prop: {}; asyncMethod: () => void; }
+ >asyncMethod : () => void
  >function() {} : () => void

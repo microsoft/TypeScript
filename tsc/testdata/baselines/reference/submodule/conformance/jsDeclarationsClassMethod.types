@@ -122,9 +122,9 @@ C2.prototype.method2 = function (x, y) {
  */
 C2.staticProp = function (x, y) {
 >C2.staticProp = function (x, y) {    return x + y;} : (x: any, y: any) => any
->C2.staticProp : any
+>C2.staticProp : (x: any, y: any) => any
 >C2 : typeof C2
->staticProp : any
+>staticProp : (x: any, y: any) => any
 >function (x, y) {    return x + y;} : (x: any, y: any) => any
 >x : any
 >y : any

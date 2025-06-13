@@ -2,23 +2,23 @@
 
 === a.js ===
 var Outer = {};
->Outer : {}
->{} : {}
+>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
+>{} : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
 
 Outer.Inner = function () {}
->Outer.Inner = function () {} : () => void
->Outer.Inner : any
->Outer : {}
->Inner : any
->function () {} : () => void
+>Outer.Inner = function () {} : { (): void; prototype: { x: number; m(): void; }; }
+>Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
+>Inner : { (): void; prototype: { x: number; m(): void; }; }
+>function () {} : { (): void; prototype: { x: number; m(): void; }; }
 
 Outer.Inner.prototype = {
 >Outer.Inner.prototype = {    x: 1,    m() { }} : { x: number; m(): void; }
->Outer.Inner.prototype : any
->Outer.Inner : any
->Outer : {}
->Inner : any
->prototype : any
+>Outer.Inner.prototype : { x: number; m(): void; }
+>Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
+>Inner : { (): void; prototype: { x: number; m(): void; }; }
+>prototype : { x: number; m(): void; }
 >{    x: 1,    m() { }} : { x: number; m(): void; }
 
     x: 1,
@@ -47,9 +47,9 @@ inner.m()
 var inno = new Outer.Inner()
 >inno : any
 >new Outer.Inner() : any
->Outer.Inner : any
->Outer : {}
->Inner : any
+>Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Outer : { Inner: { (): void; prototype: { x: number; m(): void; }; }; }
+>Inner : { (): void; prototype: { x: number; m(): void; }; }
 
 inno.x
 >inno.x : any

@@ -28,9 +28,9 @@
 ->B.prototype : Symbol(B.prototype, Decl(privateNameJsPrototype.js, 6, 11))
 ->B : Symbol(B, Decl(privateNameJsPrototype.js, 5, 1), Decl(privateNameJsPrototype.js, 6, 11))
 ->prototype : Symbol(B.prototype, Decl(privateNameJsPrototype.js, 6, 11))
-+>B.prototype : Symbol(prototype)
++>B.prototype : Symbol(prototype, Decl(privateNameJsPrototype.js, 6, 11))
 +>B : Symbol(B, Decl(privateNameJsPrototype.js, 5, 1))
-+>prototype : Symbol(prototype)
++>prototype : Symbol(prototype, Decl(privateNameJsPrototype.js, 6, 11))
 
    #y: 2,         // Error
  >#y : Symbol(#y, Decl(privateNameJsPrototype.js, 7, 15))

@@ -47,9 +47,9 @@ var Multimap2 = function() {
 };
 
 Multimap2.prototype = {
->Multimap2.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>Multimap2.prototype : Symbol(prototype, Decl(a.js, 30, 2))
 >Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3))
->prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(prototype, Decl(a.js, 30, 2))
 
     /**
      * @param {K} key the key ok
@@ -60,6 +60,7 @@ Multimap2.prototype = {
 >key : Symbol(key, Decl(a.js, 37, 18))
 
         return this._map[key + ''];
+>this : Symbol(__object, Decl(a.js, 32, 21))
 >key : Symbol(key, Decl(a.js, 37, 18))
     }
 }
@@ -74,7 +75,9 @@ var Ns = {};
  * @template V
  */
 Ns.Multimap3 = function() {
+>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 >Ns : Symbol(Ns, Decl(a.js, 42, 3))
+>Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 
     /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
     this._map = {};
@@ -83,7 +86,11 @@ Ns.Multimap3 = function() {
 };
 
 Ns.Multimap3.prototype = {
+>Ns.Multimap3.prototype : Symbol(prototype, Decl(a.js, 52, 2))
+>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 >Ns : Symbol(Ns, Decl(a.js, 42, 3))
+>Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
+>prototype : Symbol(prototype, Decl(a.js, 52, 2))
 
     /**
      * @param {K} key the key ok
@@ -94,6 +101,7 @@ Ns.Multimap3.prototype = {
 >key : Symbol(key, Decl(a.js, 59, 8))
 
         return this._map[key + ''];
+>this : Symbol(__object, Decl(a.js, 54, 24))
 >key : Symbol(key, Decl(a.js, 59, 8))
     }
 }

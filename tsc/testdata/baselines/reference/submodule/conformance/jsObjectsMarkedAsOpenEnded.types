@@ -2,14 +2,14 @@
 
 === a.js ===
 var variable = {};
->variable : {}
->{} : {}
+>variable : { a: number; }
+>{} : { a: number; }
 
 variable.a = 0;
 >variable.a = 0 : 0
->variable.a : any
->variable : {}
->a : any
+>variable.a : number
+>variable : { a: number; }
+>a : number
 >0 : 0
 
 class C {
@@ -21,19 +21,19 @@ class C {
 
     constructor() {
         this.member = {};
->this.member = {} : {}
->this.member : {}
+>this.member = {} : { a: number; }
+>this.member : { a: number; }
 >this : this
->member : {}
->{} : {}
+>member : { a: number; }
+>{} : { a: number; }
 
         this.member.a = 0;
 >this.member.a = 0 : 0
->this.member.a : any
->this.member : {}
+>this.member.a : number
+>this.member : { a: number; }
 >this : this
->member : {}
->a : any
+>member : { a: number; }
+>a : number
 >0 : 0
     }
 }
@@ -73,20 +73,20 @@ function getObj() {
 === b.ts ===
 variable.a = 1;
 >variable.a = 1 : 1
->variable.a : any
->variable : {}
->a : any
+>variable.a : number
+>variable : { a: number; }
+>a : number
 >1 : 1
 
 (new C()).member.a = 1;
 >(new C()).member.a = 1 : 1
->(new C()).member.a : any
->(new C()).member : {}
+>(new C()).member.a : number
+>(new C()).member : { a: number; }
 >(new C()) : C
 >new C() : C
 >C : typeof C
->member : {}
->a : any
+>member : { a: number; }
+>a : number
 >1 : 1
 
 (new C()).initializedMember.a = 1;

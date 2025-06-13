@@ -1,26 +1,14 @@
-assignmentToVoidZero2.js(4,3): error TS2339: Property 'x' does not exist on type '{}'.
-assignmentToVoidZero2.js(5,3): error TS2339: Property 'y' does not exist on type '{}'.
-assignmentToVoidZero2.js(6,3): error TS2339: Property 'x' does not exist on type '{}'.
-assignmentToVoidZero2.js(6,9): error TS2339: Property 'y' does not exist on type '{}'.
 assignmentToVoidZero2.js(12,9): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 importer.js(2,1): error TS2365: Operator '+' cannot be applied to types '1' and 'undefined'.
 
 
-==== assignmentToVoidZero2.js (5 errors) ====
+==== assignmentToVoidZero2.js (1 errors) ====
     exports.j = 1;
     exports.k = void 0;
     var o = {}
     o.x = 1
-      ~
-!!! error TS2339: Property 'x' does not exist on type '{}'.
     o.y = void 0
-      ~
-!!! error TS2339: Property 'y' does not exist on type '{}'.
     o.x + o.y
-      ~
-!!! error TS2339: Property 'x' does not exist on type '{}'.
-            ~
-!!! error TS2339: Property 'y' does not exist on type '{}'.
     
     function C() {
         this.p = 1

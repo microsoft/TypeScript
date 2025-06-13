@@ -1,28 +1,16 @@
 other.js(2,11): error TS2503: Cannot find namespace 'Ns'.
 other.js(7,11): error TS2503: Cannot find namespace 'Ns'.
-prototypePropertyAssignmentMergeAcrossFiles2.js(2,4): error TS2339: Property 'One' does not exist on type '{}'.
-prototypePropertyAssignmentMergeAcrossFiles2.js(3,4): error TS2339: Property 'Two' does not exist on type '{}'.
-prototypePropertyAssignmentMergeAcrossFiles2.js(5,4): error TS2339: Property 'One' does not exist on type '{}'.
-prototypePropertyAssignmentMergeAcrossFiles2.js(8,4): error TS2339: Property 'Two' does not exist on type '{}'.
 
 
-==== prototypePropertyAssignmentMergeAcrossFiles2.js (4 errors) ====
+==== prototypePropertyAssignmentMergeAcrossFiles2.js (0 errors) ====
     var Ns = {}
     Ns.One = function() {};
-       ~~~
-!!! error TS2339: Property 'One' does not exist on type '{}'.
     Ns.Two = function() {};
-       ~~~
-!!! error TS2339: Property 'Two' does not exist on type '{}'.
     
     Ns.One.prototype = {
-       ~~~
-!!! error TS2339: Property 'One' does not exist on type '{}'.
       ok() {},
     };
     Ns.Two.prototype = {
-       ~~~
-!!! error TS2339: Property 'Two' does not exist on type '{}'.
     }
     
 ==== other.js (2 errors) ====

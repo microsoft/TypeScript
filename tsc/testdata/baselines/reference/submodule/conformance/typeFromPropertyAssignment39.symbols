@@ -6,7 +6,10 @@ const foo = {};
 
 foo["baz"] = {};
 >foo : Symbol(foo, Decl(a.js, 0, 5))
+>"baz" : Symbol("baz", Decl(a.js, 0, 15))
 
 foo["baz"]["blah"] = 3;
 >foo : Symbol(foo, Decl(a.js, 0, 5))
+>"baz" : Symbol("baz", Decl(a.js, 0, 15))
+>"blah" : Symbol("blah", Decl(a.js, 1, 16))
 

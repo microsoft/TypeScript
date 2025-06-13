@@ -15,7 +15,9 @@ class Handler {
 	}
 }
 Handler.statische = function() { }
+>Handler.statische : Symbol(statische, Decl(source.js, 7, 1))
 >Handler : Symbol(Handler, Decl(source.js, 0, 0))
+>statische : Symbol(statische, Decl(source.js, 7, 1))
 
 const Strings = {
 >Strings : Symbol(Strings, Decl(source.js, 9, 5))

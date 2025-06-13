@@ -6,42 +6,33 @@
  var Inner = function() {}
 ->Inner : typeof Inner
 ->function() {} : typeof Inner
-+>Inner : () => void
-+>function() {} : () => void
++>Inner : { (): void; prototype: { m(): void; i: number; }; }
++>function() {} : { (): void; prototype: { m(): void; i: number; }; }
 
  Inner.prototype = {
  >Inner.prototype = {    m() { },    i: 1} : { m(): void; i: number; }
-->Inner.prototype : { m(): void; i: number; }
+ >Inner.prototype : { m(): void; i: number; }
 ->Inner : typeof Inner
-->prototype : { m(): void; i: number; }
-+>Inner.prototype : any
-+>Inner : () => void
-+>prototype : any
++>Inner : { (): void; prototype: { m(): void; i: number; }; }
+ >prototype : { m(): void; i: number; }
  >{    m() { },    i: 1} : { m(): void; i: number; }
 
-     m() { },
-@@= skipped -21, +21 lines =@@
- Inner.prototype.j = 2
+@@= skipped -22, +22 lines =@@
  >Inner.prototype.j = 2 : 2
  >Inner.prototype.j : any
-->Inner.prototype : { m(): void; i: number; }
+ >Inner.prototype : { m(): void; i: number; }
 ->Inner : typeof Inner
-->prototype : { m(): void; i: number; }
-+>Inner.prototype : any
-+>Inner : () => void
-+>prototype : any
++>Inner : { (): void; prototype: { m(): void; i: number; }; }
+ >prototype : { m(): void; i: number; }
  >j : any
  >2 : 2
-
- /** @type {string} */
+@@= skipped -9, +9 lines =@@
  Inner.prototype.k;
  >Inner.prototype.k : any
-->Inner.prototype : { m(): void; i: number; }
+ >Inner.prototype : { m(): void; i: number; }
 ->Inner : typeof Inner
-->prototype : { m(): void; i: number; }
-+>Inner.prototype : any
-+>Inner : () => void
-+>prototype : any
++>Inner : { (): void; prototype: { m(): void; i: number; }; }
+ >prototype : { m(): void; i: number; }
  >k : any
 
  var inner = new Inner()
@@ -50,7 +41,7 @@
 ->Inner : typeof Inner
 +>inner : any
 +>new Inner() : any
-+>Inner : () => void
++>Inner : { (): void; prototype: { m(): void; i: number; }; }
 
  inner.m()
 ->inner.m() : void

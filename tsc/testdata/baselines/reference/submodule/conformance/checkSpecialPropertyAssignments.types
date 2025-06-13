@@ -2,14 +2,14 @@
 
 === bug24252.js ===
 var A = {};
->A : {}
->{} : {}
+>A : { B: typeof B; }
+>{} : { B: typeof B; }
 
 A.B = class {
 >A.B = class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
->A.B : any
->A : {}
->B : any
+>A.B : typeof B
+>A : { B: typeof B; }
+>B : typeof B
 >class {    m() {        /** @type {string[]} */        var x = [];        /** @type {number[]} */        var y;        y = x;    }} : typeof B
 
     m() {

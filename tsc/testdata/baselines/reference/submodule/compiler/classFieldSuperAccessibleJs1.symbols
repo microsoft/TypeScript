@@ -8,7 +8,9 @@ class C {
 >blah1 : Symbol(blah1, Decl(index.js, 0, 9))
 }
 C.blah2 = 456;
+>C.blah2 : Symbol(blah2, Decl(index.js, 2, 1))
 >C : Symbol(C, Decl(index.js, 0, 0))
+>blah2 : Symbol(blah2, Decl(index.js, 2, 1))
 
 class D extends C {
 >D : Symbol(D, Decl(index.js, 3, 14))
@@ -27,7 +29,9 @@ class D extends C {
 >console.log : Symbol(log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(log, Decl(lib.dom.d.ts, --, --))
+>super.blah2 : Symbol(blah2, Decl(index.js, 2, 1))
 >super : Symbol(C, Decl(index.js, 0, 0))
+>blah2 : Symbol(blah2, Decl(index.js, 2, 1))
   }
 }
 

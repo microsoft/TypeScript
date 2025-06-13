@@ -18,7 +18,9 @@
 ->Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
 ->Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
 ->Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
++>Outer.Inner : Symbol(Inner, Decl(a.js, 2, 1))
 +>Outer : Symbol(Outer, Decl(a.js, 0, 3))
++>Inner : Symbol(Inner, Decl(a.js, 2, 1))
  >I : Symbol(I, Decl(a.js, 3, 13))
 
      n(a, b) { }
@@ -27,7 +29,7 @@
  >a : Symbol(a, Decl(a.js, 4, 6))
  >b : Symbol(b, Decl(a.js, 4, 8))
 
-@@= skipped -25, +23 lines =@@
+@@= skipped -25, +25 lines =@@
  >si : Symbol(si, Decl(a.js, 8, 3))
 
  si.m

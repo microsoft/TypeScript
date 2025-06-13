@@ -16,9 +16,9 @@
 ->Foo.foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
 ->Foo : Symbol(Foo, Decl(Foo.js, 2, 1), Decl(Foo.js, 3, 32))
 ->foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
-+>Foo.foo : Symbol(foo, Decl(Foo.js, 0, 12))
++>Foo.foo : Symbol(foo, Decl(Foo.js, 3, 32))
 +>Foo : Symbol(Foo, Decl(Foo.js, 2, 1))
-+>foo : Symbol(foo, Decl(Foo.js, 0, 12))
++>foo : Symbol(foo, Decl(Foo.js, 3, 32))
 
  === Bar.ts ===
  import { Foo } from "./Foo.js";
@@ -27,7 +27,7 @@
 
  Bar.foo = "foo";
 ->Bar.foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
-+>Bar.foo : Symbol(foo, Decl(Foo.js, 0, 12))
++>Bar.foo : Symbol(foo, Decl(Foo.js, 3, 32))
  >Bar : Symbol(Bar, Decl(Bar.ts, 0, 31))
 ->foo : Symbol(Foo.foo, Decl(Foo.js, 3, 32))
-+>foo : Symbol(foo, Decl(Foo.js, 0, 12))
++>foo : Symbol(foo, Decl(Foo.js, 3, 32))

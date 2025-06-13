@@ -11,7 +11,9 @@
 ->Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
 ->Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15))
 ->Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
++>Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15))
 +>Outer : Symbol(Outer, Decl(a.js, 0, 3))
++>Inner : Symbol(Inner, Decl(a.js, 0, 15))
 
      constructor() {
          this.x = 1
@@ -27,7 +29,7 @@
  }
 
  /** @type {Outer.Inner} */
-@@= skipped -22, +20 lines =@@
+@@= skipped -22, +22 lines =@@
  >inner : Symbol(inner, Decl(a.js, 10, 3))
 
  inner.x
@@ -45,14 +47,20 @@
 ->Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
 ->Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15))
 ->Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
++>Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15))
 +>Outer : Symbol(Outer, Decl(a.js, 0, 3))
++>Inner : Symbol(Inner, Decl(a.js, 0, 15))
 
  inno.x
 ->inno.x : Symbol(Inner.x, Decl(a.js, 3, 19))
++>inno.x : Symbol(x, Decl(a.js, 3, 19))
  >inno : Symbol(inno, Decl(a.js, 13, 3))
 ->x : Symbol(Inner.x, Decl(a.js, 3, 19))
++>x : Symbol(x, Decl(a.js, 3, 19))
 
  inno.m()
 ->inno.m : Symbol(Inner.m, Decl(a.js, 5, 5))
++>inno.m : Symbol(m, Decl(a.js, 5, 5))
  >inno : Symbol(inno, Decl(a.js, 13, 3))
 ->m : Symbol(Inner.m, Decl(a.js, 5, 5))
++>m : Symbol(m, Decl(a.js, 5, 5))

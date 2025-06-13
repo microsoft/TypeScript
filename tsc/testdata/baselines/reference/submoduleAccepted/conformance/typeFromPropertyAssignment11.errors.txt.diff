@@ -1,0 +1,28 @@
+--- old.typeFromPropertyAssignment11.errors.txt
++++ new.typeFromPropertyAssignment11.errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++module.js(7,17): error TS2339: Property 'j' does not exist on type '{ m(): void; i: number; }'.
++module.js(9,17): error TS2339: Property 'k' does not exist on type '{ m(): void; i: number; }'.
++
++
++==== module.js (2 errors) ====
++    var Inner = function() {}
++    Inner.prototype = {
++        m() { },
++        i: 1
++    }
++    // incremental assignments still work
++    Inner.prototype.j = 2
++                    ~
++!!! error TS2339: Property 'j' does not exist on type '{ m(): void; i: number; }'.
++    /** @type {string} */
++    Inner.prototype.k;
++                    ~
++!!! error TS2339: Property 'k' does not exist on type '{ m(): void; i: number; }'.
++    var inner = new Inner()
++    inner.m()
++    inner.i
++    inner.j
++    inner.k
++    

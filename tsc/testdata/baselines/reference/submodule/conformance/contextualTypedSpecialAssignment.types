@@ -8,15 +8,15 @@
 
 // property assignment
 var ns = {}
->ns : {}
->{} : {}
+>ns : { x: { status: "done"; m(n: number): void; }; }
+>{} : { x: { status: "done"; m(n: number): void; }; }
 
 /** @type {DoneStatus} */
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->ns.x : any
->ns : {}
->x : any
+>ns.x : { status: "done"; m(n: number): void; }
+>ns : { x: { status: "done"; m(n: number): void; }; }
+>x : { status: "done"; m(n: number): void; }
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: 'done',
@@ -30,9 +30,9 @@ ns.x = {
 
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: string; m(n: any): void; }
->ns.x : any
->ns : {}
->x : any
+>ns.x : { status: "done"; m(n: number): void; }
+>ns : { x: { status: "done"; m(n: number): void; }; }
+>x : { status: "done"; m(n: number): void; }
 >{    status: 'done',    m(n) { }} : { status: string; m(n: any): void; }
 
     status: 'done',
@@ -44,9 +44,9 @@ ns.x = {
 >n : any
 }
 ns.x
->ns.x : any
->ns : {}
->x : any
+>ns.x : { status: "done"; m(n: number): void; }
+>ns : { x: { status: "done"; m(n: number): void; }; }
+>x : { status: "done"; m(n: number): void; }
 
 
 // this-property assignment
@@ -144,21 +144,21 @@ module.exports.y
 // prototype-property assignment
 /** @type {DoneStatus} */
 Thing.prototype.x = {
->Thing.prototype.x = {    status: 'done',    m(n) { }} : { status: string; m(n: any): void; }
+>Thing.prototype.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 >Thing.prototype.x : any
 >Thing.prototype : Thing
 >Thing : typeof Thing
 >prototype : Thing
 >x : any
->{    status: 'done',    m(n) { }} : { status: string; m(n: any): void; }
+>{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
     status: 'done',
->status : string
+>status : "done"
 >'done' : "done"
 
     m(n) { }
->m : (n: any) => void
->n : any
+>m : (n: number) => void
+>n : number
 }
 Thing.prototype.x
 >Thing.prototype.x : any

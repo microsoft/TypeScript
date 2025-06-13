@@ -2,53 +2,53 @@
 
 === a.js ===
 var GLOBSTAR = m.GLOBSTAR = {}
->GLOBSTAR : {}
->m.GLOBSTAR = {} : {}
->m.GLOBSTAR : {}
->m : { (): void; GLOBSTAR: {}; }
->GLOBSTAR : {}
->{} : {}
+>GLOBSTAR : { q: number; }
+>m.GLOBSTAR = {} : { q: number; }
+>m.GLOBSTAR : { q: number; }
+>m : { (): void; GLOBSTAR: { q: number; }; }
+>GLOBSTAR : { q: number; }
+>{} : { q: number; }
 
 function m() {
->m : { (): void; GLOBSTAR: {}; }
+>m : { (): void; GLOBSTAR: { q: number; }; }
 }
 GLOBSTAR.p = 1
 >GLOBSTAR.p = 1 : 1
 >GLOBSTAR.p : any
->GLOBSTAR : {}
+>GLOBSTAR : { q: number; }
 >p : any
 >1 : 1
 
 m.GLOBSTAR.q = 2
 >m.GLOBSTAR.q = 2 : 2
->m.GLOBSTAR.q : any
->m.GLOBSTAR : {}
->m : { (): void; GLOBSTAR: {}; }
->GLOBSTAR : {}
->q : any
+>m.GLOBSTAR.q : number
+>m.GLOBSTAR : { q: number; }
+>m : { (): void; GLOBSTAR: { q: number; }; }
+>GLOBSTAR : { q: number; }
+>q : number
 >2 : 2
 
 GLOBSTAR.p
 >GLOBSTAR.p : any
->GLOBSTAR : {}
+>GLOBSTAR : { q: number; }
 >p : any
 
 GLOBSTAR.q
->GLOBSTAR.q : any
->GLOBSTAR : {}
->q : any
+>GLOBSTAR.q : number
+>GLOBSTAR : { q: number; }
+>q : number
 
 m.GLOBSTAR.p
 >m.GLOBSTAR.p : any
->m.GLOBSTAR : {}
->m : { (): void; GLOBSTAR: {}; }
->GLOBSTAR : {}
+>m.GLOBSTAR : { q: number; }
+>m : { (): void; GLOBSTAR: { q: number; }; }
+>GLOBSTAR : { q: number; }
 >p : any
 
 m.GLOBSTAR.q
->m.GLOBSTAR.q : any
->m.GLOBSTAR : {}
->m : { (): void; GLOBSTAR: {}; }
->GLOBSTAR : {}
->q : any
+>m.GLOBSTAR.q : number
+>m.GLOBSTAR : { q: number; }
+>m : { (): void; GLOBSTAR: { q: number; }; }
+>GLOBSTAR : { q: number; }
+>q : number
 

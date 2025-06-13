@@ -12,33 +12,39 @@
 ->ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
++>ns.x : Symbol(x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 +>ns : Symbol(ns, Decl(test.js, 6, 3))
++>x : Symbol(x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 
      status: 'done',
  >status : Symbol(status, Decl(test.js, 8, 8))
-@@= skipped -17, +15 lines =@@
+@@= skipped -17, +17 lines =@@
  }
 
  ns.x = {
 ->ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
++>ns.x : Symbol(x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 +>ns : Symbol(ns, Decl(test.js, 6, 3))
++>x : Symbol(x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 
      status: 'done',
  >status : Symbol(status, Decl(test.js, 13, 8))
-@@= skipped -12, +10 lines =@@
+@@= skipped -12, +12 lines =@@
  >n : Symbol(n, Decl(test.js, 15, 6))
  }
  ns.x
 ->ns.x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->ns : Symbol(ns, Decl(test.js, 6, 3), Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 ->x : Symbol(ns.x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
++>ns.x : Symbol(x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 +>ns : Symbol(ns, Decl(test.js, 6, 3))
++>x : Symbol(x, Decl(test.js, 6, 11), Decl(test.js, 11, 1))
 
 
  // this-property assignment
-@@= skipped -12, +10 lines =@@
+@@= skipped -12, +12 lines =@@
      constructor() {
          /** @type {DoneStatus} */
          this.s = {

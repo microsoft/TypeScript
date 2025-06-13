@@ -2,22 +2,19 @@
 +++ new.typeFromPropertyAssignment34.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+file1.js(2,3): error TS2339: Property 'commands' does not exist on type '{}'.
-+file2.js(1,3): error TS2339: Property 'commands' does not exist on type '{}'.
-+file2.js(2,3): error TS2339: Property 'commands' does not exist on type '{}'.
++file2.js(1,12): error TS2339: Property 'a' does not exist on type '{}'.
++file2.js(2,12): error TS2339: Property 'b' does not exist on type '{}'.
 +
 +
-+==== file1.js (1 errors) ====
++==== file1.js (0 errors) ====
 +    var N = {};
 +    N.commands = {};
-+      ~~~~~~~~
-+!!! error TS2339: Property 'commands' does not exist on type '{}'.
 +    
 +==== file2.js (2 errors) ====
 +    N.commands.a = 111;
-+      ~~~~~~~~
-+!!! error TS2339: Property 'commands' does not exist on type '{}'.
++               ~
++!!! error TS2339: Property 'a' does not exist on type '{}'.
 +    N.commands.b = function () { };
-+      ~~~~~~~~
-+!!! error TS2339: Property 'commands' does not exist on type '{}'.
++               ~
++!!! error TS2339: Property 'b' does not exist on type '{}'.
 +    

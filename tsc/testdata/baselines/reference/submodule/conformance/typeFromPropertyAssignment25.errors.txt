@@ -1,35 +1,23 @@
-bug24703.js(2,8): error TS2339: Property 'I' does not exist on type '{}'.
-bug24703.js(7,8): error TS2339: Property 'O' does not exist on type '{}'.
-bug24703.js(7,33): error TS2339: Property 'I' does not exist on type '{}'.
-bug24703.js(13,20): error TS2339: Property 'O' does not exist on type '{}'.
-bug24703.js(14,20): error TS2339: Property 'I' does not exist on type '{}'.
+bug24703.js(7,8): error TS2506: 'O' is referenced directly or indirectly in its own base expression.
 
 
-==== bug24703.js (5 errors) ====
+==== bug24703.js (1 errors) ====
     var Common = {};
     Common.I = class {
-           ~
-!!! error TS2339: Property 'I' does not exist on type '{}'.
         constructor() {
             this.i = 1
         }
     }
     Common.O = class extends Common.I {
            ~
-!!! error TS2339: Property 'O' does not exist on type '{}'.
-                                    ~
-!!! error TS2339: Property 'I' does not exist on type '{}'.
+!!! error TS2506: 'O' is referenced directly or indirectly in its own base expression.
         constructor() {
             super()
             this.o = 2
         }
     }
     var o = new Common.O()
-                       ~
-!!! error TS2339: Property 'O' does not exist on type '{}'.
     var i = new Common.I()
-                       ~
-!!! error TS2339: Property 'I' does not exist on type '{}'.
     o.i
     o.o
     i.i

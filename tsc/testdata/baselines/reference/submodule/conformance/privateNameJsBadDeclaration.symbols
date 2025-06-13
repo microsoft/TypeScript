@@ -22,9 +22,9 @@ class B { }
 >B : Symbol(B, Decl(privateNameJsPrototype.js, 5, 1))
 
 B.prototype = {
->B.prototype : Symbol(prototype)
+>B.prototype : Symbol(prototype, Decl(privateNameJsPrototype.js, 6, 11))
 >B : Symbol(B, Decl(privateNameJsPrototype.js, 5, 1))
->prototype : Symbol(prototype)
+>prototype : Symbol(prototype, Decl(privateNameJsPrototype.js, 6, 11))
 
   #y: 2,         // Error
 >#y : Symbol(#y, Decl(privateNameJsPrototype.js, 7, 15))

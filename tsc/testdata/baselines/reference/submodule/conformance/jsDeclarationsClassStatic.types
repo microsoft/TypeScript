@@ -17,9 +17,9 @@ class Handler {
 }
 Handler.statische = function() { }
 >Handler.statische = function() { } : () => void
->Handler.statische : any
+>Handler.statische : () => void
 >Handler : typeof Handler
->statische : any
+>statische : () => void
 >function() { } : () => void
 
 const Strings = {

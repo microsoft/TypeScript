@@ -2,16 +2,16 @@
 
 === jsElementAccessNoContextualTypeCrash.js ===
 var Common = {};
->Common : {}
->{} : {}
+>Common : { localize: (string: any) => any; }
+>{} : { localize: (string: any) => any; }
 
 self['Common'] = self['Common'] || {};
->self['Common'] = self['Common'] || {} : {}
->self['Common'] : {}
+>self['Common'] = self['Common'] || {} : { localize: (string: any) => any; } | {}
+>self['Common'] : { localize: (string: any) => any; }
 >self : Window & typeof globalThis
 >'Common' : "Common"
->self['Common'] || {} : {}
->self['Common'] : {}
+>self['Common'] || {} : { localize: (string: any) => any; } | {}
+>self['Common'] : { localize: (string: any) => any; }
 >self : Window & typeof globalThis
 >'Common' : "Common"
 >{} : {}
@@ -22,9 +22,9 @@ self['Common'] = self['Common'] || {};
  */
 Common.localize = function (string) {
 >Common.localize = function (string) {    return string;} : (string: any) => any
->Common.localize : any
->Common : {}
->localize : any
+>Common.localize : (string: any) => any
+>Common : { localize: (string: any) => any; }
+>localize : (string: any) => any
 >function (string) {    return string;} : (string: any) => any
 >string : any
 

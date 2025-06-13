@@ -1,9 +1,7 @@
 jsdocTypeReferenceToMergedClass.js(2,12): error TS2503: Cannot find namespace 'Workspace'.
-jsdocTypeReferenceToMergedClass.js(6,11): error TS2339: Property 'Project' does not exist on type '{}'.
-jsdocTypeReferenceToMergedClass.js(7,11): error TS2339: Property 'Project' does not exist on type '{}'.
 
 
-==== jsdocTypeReferenceToMergedClass.js (3 errors) ====
+==== jsdocTypeReferenceToMergedClass.js (1 errors) ====
     var Workspace = {}
     /** @type {Workspace.Project} */
                ~~~~~~~~~
@@ -12,11 +10,7 @@ jsdocTypeReferenceToMergedClass.js(7,11): error TS2339: Property 'Project' does 
     p.isServiceProject()
     
     Workspace.Project = function wp() { }
-              ~~~~~~~
-!!! error TS2339: Property 'Project' does not exist on type '{}'.
     Workspace.Project.prototype = {
-              ~~~~~~~
-!!! error TS2339: Property 'Project' does not exist on type '{}'.
       isServiceProject() {}
     }
     

@@ -2,14 +2,14 @@
 
 === a.js ===
 var obj = {};
->obj : {}
->{} : {}
+>obj : { method: (hunch: any) => boolean; }
+>{} : { method: (hunch: any) => boolean; }
 
 obj.method = function (hunch) {
 >obj.method = function (hunch) {    return true;} : (hunch: any) => boolean
->obj.method : any
->obj : {}
->method : any
+>obj.method : (hunch: any) => boolean
+>obj : { method: (hunch: any) => boolean; }
+>method : (hunch: any) => boolean
 >function (hunch) {    return true;} : (hunch: any) => boolean
 >hunch : any
 
@@ -17,9 +17,9 @@ obj.method = function (hunch) {
 >true : true
 }
 var b = obj.method();
->b : any
->obj.method() : any
->obj.method : any
->obj : {}
->method : any
+>b : boolean
+>obj.method() : boolean
+>obj.method : (hunch: any) => boolean
+>obj : { method: (hunch: any) => boolean; }
+>method : (hunch: any) => boolean
 

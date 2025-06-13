@@ -5,7 +5,9 @@ var Outer = {};
 >Outer : Symbol(Outer, Decl(a.js, 0, 3))
 
 Outer.Inner = class {
+>Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3))
+>Inner : Symbol(Inner, Decl(a.js, 0, 15))
 
     constructor() {
         this.x = 1
@@ -29,11 +31,17 @@ inner.m()
 
 var inno = new Outer.Inner()
 >inno : Symbol(inno, Decl(a.js, 13, 3))
+>Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3))
+>Inner : Symbol(Inner, Decl(a.js, 0, 15))
 
 inno.x
+>inno.x : Symbol(x, Decl(a.js, 3, 19))
 >inno : Symbol(inno, Decl(a.js, 13, 3))
+>x : Symbol(x, Decl(a.js, 3, 19))
 
 inno.m()
+>inno.m : Symbol(m, Decl(a.js, 5, 5))
 >inno : Symbol(inno, Decl(a.js, 13, 3))
+>m : Symbol(m, Decl(a.js, 5, 5))
 

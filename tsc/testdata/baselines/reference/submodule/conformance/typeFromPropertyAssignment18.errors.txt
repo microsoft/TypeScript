@@ -1,32 +1,23 @@
-a.js(4,10): error TS2339: Property 'p' does not exist on type '{}'.
-a.js(5,12): error TS2339: Property 'q' does not exist on type '{}'.
-a.js(7,10): error TS2339: Property 'p' does not exist on type '{}'.
-a.js(8,10): error TS2339: Property 'q' does not exist on type '{}'.
-a.js(9,12): error TS2339: Property 'p' does not exist on type '{}'.
-a.js(10,12): error TS2339: Property 'q' does not exist on type '{}'.
+a.js(4,10): error TS2339: Property 'p' does not exist on type '{ q: number; }'.
+a.js(7,10): error TS2339: Property 'p' does not exist on type '{ q: number; }'.
+a.js(9,12): error TS2339: Property 'p' does not exist on type '{ q: number; }'.
 
 
-==== a.js (6 errors) ====
+==== a.js (3 errors) ====
     var GLOBSTAR = m.GLOBSTAR = {}
     function m() {
     }
     GLOBSTAR.p = 1
              ~
-!!! error TS2339: Property 'p' does not exist on type '{}'.
+!!! error TS2339: Property 'p' does not exist on type '{ q: number; }'.
     m.GLOBSTAR.q = 2
-               ~
-!!! error TS2339: Property 'q' does not exist on type '{}'.
     
     GLOBSTAR.p
              ~
-!!! error TS2339: Property 'p' does not exist on type '{}'.
+!!! error TS2339: Property 'p' does not exist on type '{ q: number; }'.
     GLOBSTAR.q
-             ~
-!!! error TS2339: Property 'q' does not exist on type '{}'.
     m.GLOBSTAR.p
                ~
-!!! error TS2339: Property 'p' does not exist on type '{}'.
+!!! error TS2339: Property 'p' does not exist on type '{ q: number; }'.
     m.GLOBSTAR.q
-               ~
-!!! error TS2339: Property 'q' does not exist on type '{}'.
     

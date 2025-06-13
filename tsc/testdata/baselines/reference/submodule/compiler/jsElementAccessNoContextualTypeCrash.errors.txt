@@ -1,15 +1,18 @@
-jsElementAccessNoContextualTypeCrash.js(7,8): error TS2339: Property 'localize' does not exist on type '{}'.
+jsElementAccessNoContextualTypeCrash.js(2,1): error TS2322: Type '{ localize: (string: any) => any; } | {}' is not assignable to type '{ localize: (string: any) => any; }'.
+  Property 'localize' is missing in type '{}' but required in type '{ localize: (string: any) => any; }'.
 
 
 ==== jsElementAccessNoContextualTypeCrash.js (1 errors) ====
     var Common = {};
     self['Common'] = self['Common'] || {};
+    ~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ localize: (string: any) => any; } | {}' is not assignable to type '{ localize: (string: any) => any; }'.
+!!! error TS2322:   Property 'localize' is missing in type '{}' but required in type '{ localize: (string: any) => any; }'.
+!!! related TS2728 jsElementAccessNoContextualTypeCrash.js:7:1: 'localize' is declared here.
     /**
      * @param {string} string
      * @return {string}
      */
     Common.localize = function (string) {
-           ~~~~~~~~
-!!! error TS2339: Property 'localize' does not exist on type '{}'.
         return string;
     };

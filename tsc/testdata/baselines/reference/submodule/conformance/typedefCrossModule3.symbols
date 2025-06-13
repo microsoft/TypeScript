@@ -6,7 +6,9 @@ const ns = {};
 >ns : Symbol(ns, Decl(mod2.js, 1, 5))
 
 ns.Foo = class {}
+>ns.Foo : Symbol(Foo, Decl(mod2.js, 1, 14))
 >ns : Symbol(ns, Decl(mod2.js, 1, 5))
+>Foo : Symbol(Foo, Decl(mod2.js, 1, 14))
 
 module.exports = ns;
 >module.exports : Symbol(ns, Decl(mod2.js, 1, 5))

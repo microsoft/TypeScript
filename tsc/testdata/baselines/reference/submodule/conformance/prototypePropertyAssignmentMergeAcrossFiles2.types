@@ -2,30 +2,30 @@
 
 === prototypePropertyAssignmentMergeAcrossFiles2.js ===
 var Ns = {}
->Ns : {}
->{} : {}
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>{} : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
 
 Ns.One = function() {};
->Ns.One = function() {} : () => void
->Ns.One : any
->Ns : {}
->One : any
->function() {} : () => void
+>Ns.One = function() {} : { (): void; prototype: { ok(): void; }; }
+>Ns.One : { (): void; prototype: { ok(): void; }; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>One : { (): void; prototype: { ok(): void; }; }
+>function() {} : { (): void; prototype: { ok(): void; }; }
 
 Ns.Two = function() {};
->Ns.Two = function() {} : () => void
->Ns.Two : any
->Ns : {}
->Two : any
->function() {} : () => void
+>Ns.Two = function() {} : { (): void; prototype: {}; }
+>Ns.Two : { (): void; prototype: {}; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>Two : { (): void; prototype: {}; }
+>function() {} : { (): void; prototype: {}; }
 
 Ns.One.prototype = {
 >Ns.One.prototype = {  ok() {},} : { ok(): void; }
->Ns.One.prototype : any
->Ns.One : any
->Ns : {}
->One : any
->prototype : any
+>Ns.One.prototype : { ok(): void; }
+>Ns.One : { (): void; prototype: { ok(): void; }; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>One : { (): void; prototype: { ok(): void; }; }
+>prototype : { ok(): void; }
 >{  ok() {},} : { ok(): void; }
 
   ok() {},
@@ -34,11 +34,11 @@ Ns.One.prototype = {
 };
 Ns.Two.prototype = {
 >Ns.Two.prototype = {} : {}
->Ns.Two.prototype : any
->Ns.Two : any
->Ns : {}
->Two : any
->prototype : any
+>Ns.Two.prototype : {}
+>Ns.Two : { (): void; prototype: {}; }
+>Ns : { One: { (): void; prototype: { ok(): void; }; }; Two: { (): void; prototype: {}; }; }
+>Two : { (): void; prototype: {}; }
+>prototype : {}
 >{} : {}
 }
 

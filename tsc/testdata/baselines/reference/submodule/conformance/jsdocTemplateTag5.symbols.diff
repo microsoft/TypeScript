@@ -55,9 +55,9 @@
 ->Multimap2.prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
 ->Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3), Decl(a.js, 30, 2))
 ->prototype : Symbol(Multimap2.prototype, Decl(a.js, 30, 2))
-+>Multimap2.prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>Multimap2.prototype : Symbol(prototype, Decl(a.js, 30, 2))
 +>Multimap2 : Symbol(Multimap2, Decl(a.js, 27, 3))
-+>prototype : Symbol(prototype, Decl(lib.es5.d.ts, --, --))
++>prototype : Symbol(prototype, Decl(a.js, 30, 2))
 
      /**
       * @param {K} key the key ok
@@ -68,6 +68,7 @@
 ->this._map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
 ->this : Symbol(Multimap2, Decl(a.js, 27, 15))
 ->_map : Symbol(Multimap2._map, Decl(a.js, 27, 28))
++>this : Symbol(__object, Decl(a.js, 32, 21))
  >key : Symbol(key, Decl(a.js, 37, 18))
      }
  }
@@ -78,14 +79,16 @@
 
  /**
   * Should work for expando-namespaced initialisers too
-@@= skipped -17, +14 lines =@@
+@@= skipped -17, +15 lines =@@
   * @template V
   */
  Ns.Multimap3 = function() {
 ->Ns.Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
 ->Ns : Symbol(Ns, Decl(a.js, 42, 3), Decl(a.js, 42, 12), Decl(a.js, 52, 2))
 ->Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
++>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 42, 3))
++>Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 
      /** @type {Object<string, V>} TODO: Remove the prototype from the fresh object */
      this._map = {};
@@ -102,17 +105,22 @@
 ->Ns : Symbol(Ns, Decl(a.js, 42, 3), Decl(a.js, 42, 12), Decl(a.js, 52, 2))
 ->Multimap3 : Symbol(Ns.Multimap3, Decl(a.js, 42, 12), Decl(a.js, 54, 3))
 ->prototype : Symbol(Ns.Multimap3.prototype, Decl(a.js, 52, 2))
++>Ns.Multimap3.prototype : Symbol(prototype, Decl(a.js, 52, 2))
++>Ns.Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
 +>Ns : Symbol(Ns, Decl(a.js, 42, 3))
++>Multimap3 : Symbol(Multimap3, Decl(a.js, 42, 12))
++>prototype : Symbol(prototype, Decl(a.js, 52, 2))
 
      /**
       * @param {K} key the key ok
-@@= skipped -28, +20 lines =@@
+@@= skipped -28, +26 lines =@@
  >key : Symbol(key, Decl(a.js, 59, 8))
 
          return this._map[key + ''];
 ->this._map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
 ->this : Symbol(Multimap3, Decl(a.js, 49, 14))
 ->_map : Symbol(Multimap3._map, Decl(a.js, 49, 27))
++>this : Symbol(__object, Decl(a.js, 54, 24))
  >key : Symbol(key, Decl(a.js, 59, 8))
      }
  }

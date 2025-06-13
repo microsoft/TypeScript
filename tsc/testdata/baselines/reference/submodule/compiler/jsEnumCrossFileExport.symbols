@@ -5,11 +5,17 @@ var Host = {};
 >Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
 
 Host.UserMetrics = {};
+>Host.UserMetrics : Symbol(UserMetrics, Decl(enumDef.js, 0, 14))
 >Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
+>UserMetrics : Symbol(UserMetrics, Decl(enumDef.js, 0, 14))
 
 /** @enum {number} */
 Host.UserMetrics.Action = {
+>Host.UserMetrics.Action : Symbol(Action, Decl(enumDef.js, 1, 22))
+>Host.UserMetrics : Symbol(UserMetrics, Decl(enumDef.js, 0, 14))
 >Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
+>UserMetrics : Symbol(UserMetrics, Decl(enumDef.js, 0, 14))
+>Action : Symbol(Action, Decl(enumDef.js, 1, 22))
 
     WindowDocked: 1,
 >WindowDocked : Symbol(WindowDocked, Decl(enumDef.js, 3, 27))
@@ -31,7 +37,9 @@ Host.UserMetrics.Action = {
  * @typedef {string}
  */
 Host.UserMetrics.Blah = {
+>Host.UserMetrics : Symbol(UserMetrics, Decl(enumDef.js, 0, 14))
 >Host : Symbol(Host, Decl(enumDef.js, 0, 3), Decl(enumDef.js, 10, 3))
+>UserMetrics : Symbol(UserMetrics, Decl(enumDef.js, 0, 14))
 
     x: 12
 >x : Symbol(x, Decl(enumDef.js, 15, 25))
@@ -41,7 +49,9 @@ var Other = {};
 >Other : Symbol(Other, Decl(index.js, 0, 3))
 
 Other.Cls = class {
+>Other.Cls : Symbol(Cls, Decl(index.js, 0, 15))
 >Other : Symbol(Other, Decl(index.js, 0, 3))
+>Cls : Symbol(Cls, Decl(index.js, 0, 15))
 
     /**
      * @param {!Host.UserMetrics.Action} p

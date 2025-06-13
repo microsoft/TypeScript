@@ -2,9 +2,9 @@
 
 === a.js ===
 var Outer = function O() {
->Outer : () => void
->function O() {    this.y = 2} : () => void
->O : () => void
+>Outer : { (): void; Inner: typeof I; }
+>function O() {    this.y = 2} : { (): void; Inner: typeof I; }
+>O : { (): void; Inner: typeof I; }
 
     this.y = 2
 >this.y = 2 : 2
@@ -15,9 +15,9 @@ var Outer = function O() {
 }
 Outer.Inner = class I {
 >Outer.Inner = class I {    constructor() {        this.x = 1    }} : typeof I
->Outer.Inner : any
->Outer : () => void
->Inner : any
+>Outer.Inner : typeof I
+>Outer : { (): void; Inner: typeof I; }
+>Inner : typeof I
 >class I {    constructor() {        this.x = 1    }} : typeof I
 >I : typeof I
 

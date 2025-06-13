@@ -2,23 +2,23 @@
 
 === a.js ===
 const a = {};
->a : {}
->{} : {}
+>a : { d: () => void; }
+>{} : { d: () => void; }
 
 a.d = function() {};
 >a.d = function() {} : () => void
->a.d : any
->a : {}
->d : any
+>a.d : () => void
+>a : { d: () => void; }
+>d : () => void
 >function() {} : () => void
 
 === b.js ===
 a.d.prototype = {};
 >a.d.prototype = {} : {}
 >a.d.prototype : any
->a.d : any
->a : {}
->d : any
+>a.d : () => void
+>a : { d: () => void; }
+>d : () => void
 >prototype : any
 >{} : {}
 

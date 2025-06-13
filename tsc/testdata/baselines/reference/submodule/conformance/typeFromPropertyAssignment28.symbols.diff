@@ -21,9 +21,9 @@
 ->C.prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
 ->C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
 ->prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
-+>C.prototype : Symbol(prototype)
++>C.prototype : Symbol(prototype, Decl(a.js, 1, 41))
 +>C : Symbol(C, Decl(a.js, 0, 0))
-+>prototype : Symbol(prototype)
++>prototype : Symbol(prototype, Decl(a.js, 1, 41))
  >q : Symbol(q, Decl(a.js, 6, 15))
 
  const c = new C()

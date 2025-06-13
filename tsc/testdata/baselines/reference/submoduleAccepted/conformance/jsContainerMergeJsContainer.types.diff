@@ -5,8 +5,9 @@
  === a.js ===
  const a = {};
 ->a : typeof a
-+>a : {}
- >{} : {}
+->{} : {}
++>a : { d: () => void; }
++>{} : { d: () => void; }
 
  a.d = function() {};
 ->a.d = function() {} : typeof d
@@ -15,9 +16,9 @@
 ->d : typeof d
 ->function() {} : typeof d
 +>a.d = function() {} : () => void
-+>a.d : any
-+>a : {}
-+>d : any
++>a.d : () => void
++>a : { d: () => void; }
++>d : () => void
 +>function() {} : () => void
 
  === b.js ===
@@ -29,8 +30,8 @@
 ->d : typeof d
 ->prototype : {}
 +>a.d.prototype : any
-+>a.d : any
-+>a : {}
-+>d : any
++>a.d : () => void
++>a : { d: () => void; }
++>d : () => void
 +>prototype : any
  >{} : {}
