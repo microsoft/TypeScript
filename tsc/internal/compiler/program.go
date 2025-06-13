@@ -452,9 +452,11 @@ func (p *Program) getSemanticDiagnosticsForFile(ctx context.Context, sourceFile 
 		return nil
 	}
 
+	// !!! This should be rewritten to work like getBindAndCheckDiagnosticsForFileNoCache.
+
 	isPlainJS := ast.IsPlainJSFile(sourceFile, compilerOptions.CheckJs)
 	if isPlainJS {
-		diags = core.Filter(diags, func(d *ast.Diagnostic) bool {
+		return core.Filter(diags, func(d *ast.Diagnostic) bool {
 			return plainJSErrors.Has(d.Code())
 		})
 	}
