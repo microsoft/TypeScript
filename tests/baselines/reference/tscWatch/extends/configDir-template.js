@@ -131,18 +131,6 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -197,14 +185,6 @@ export declare const z = 10;
 
 
 
-PolledWatches::
-/home/src/projects/myproject/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/myproject/other: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-
 FsWatches::
 /home/src/projects/configs/first/tsconfig.json: *new*
   {}
@@ -222,10 +202,6 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/home/src/projects/configs: *new*
-  {}
-/home/src/projects/myproject/root2: *new*
-  {}
 /home/src/projects/myproject/src: *new*
   {}
 
@@ -352,8 +328,6 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
-DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 ../../tslibs/TS/Lib/lib.d.ts
   Default library for target 'es5'
 types/sometype.ts
@@ -368,40 +342,6 @@ src/secondary.ts
 
 
 
-
-PolledWatches::
-/home/src/projects/myproject/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/myproject/other:
-  {"pollingInterval":500}
-/home/src/projects/node_modules:
-  {"pollingInterval":500}
-
-FsWatches::
-/home/src/projects/configs/first/tsconfig.json:
-  {}
-/home/src/projects/configs/second/tsconfig.json:
-  {}
-/home/src/projects/myproject/root2/other/sometype2/index.d.ts:
-  {}
-/home/src/projects/myproject/src/secondary.ts:
-  {}
-/home/src/projects/myproject/tsconfig.json:
-  {}
-/home/src/projects/myproject/types/sometype.ts:
-  {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/myproject/root2:
-  {}
-/home/src/projects/myproject/src:
-  {}
-
-FsWatchesRecursive *deleted*::
-/home/src/projects/configs:
-  {}
 
 
 Program root files: [

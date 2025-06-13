@@ -169,6 +169,8 @@ Output::
 PolledWatches::
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/package.json: *new*
   {"pollingInterval":2000}
+
+PolledWatches *deleted*::
 /user/username/projects/node_modules:
   {"pollingInterval":500}
 
@@ -187,6 +189,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
+
+FsWatchesRecursive *deleted*::
 /user/username/projects/myproject/node_modules:
   {}
 
