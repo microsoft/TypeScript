@@ -17,6 +17,7 @@ type ConfigFileEntry struct {
 	mu             sync.Mutex
 	commandLine    *tsoptions.ParsedCommandLine
 	projects       collections.Set[*Project]
+	infos          collections.Set[*ScriptInfo]
 	pendingReload  PendingReload
 	rootFilesWatch *watchedFiles[[]string]
 }
@@ -28,6 +29,7 @@ type ExtendedConfigFileEntry struct {
 
 type ConfigFileRegistry struct {
 	Host                  ProjectHost
+	defaultProjectFinder  *defaultProjectFinder
 	ConfigFiles           collections.SyncMap[tspath.Path, *ConfigFileEntry]
 	ExtendedConfigCache   collections.SyncMap[tspath.Path, *tsoptions.ExtendedConfigCacheEntry]
 	ExtendedConfigsUsedBy collections.SyncMap[tspath.Path, *ExtendedConfigFileEntry]
@@ -60,7 +62,7 @@ func (c *configFileWatchHost) Log(message string) {
 	c.host.Log(message)
 }
 
-func (c *ConfigFileRegistry) ReleaseConfig(path tspath.Path, project *Project) {
+func (c *ConfigFileRegistry) releaseConfig(path tspath.Path, project *Project) {
 	entry, ok := c.ConfigFiles.Load(path)
 	if !ok {
 		return
@@ -68,18 +70,9 @@ func (c *ConfigFileRegistry) ReleaseConfig(path tspath.Path, project *Project) {
 	entry.mu.Lock()
 	defer entry.mu.Unlock()
 	entry.projects.Delete(project)
-	if entry.projects.Len() == 0 {
-		c.ConfigFiles.Delete(path)
-		commandLine := entry.commandLine
-		entry.commandLine = nil
-		c.updateExtendedConfigsUsedBy(path, entry, commandLine)
-		if entry.rootFilesWatch != nil {
-			entry.rootFilesWatch.update(context.Background(), nil)
-		}
-	}
 }
 
-func (c *ConfigFileRegistry) AcquireConfig(fileName string, path tspath.Path, project *Project) *tsoptions.ParsedCommandLine {
+func (c *ConfigFileRegistry) acquireConfig(fileName string, path tspath.Path, project *Project, info *ScriptInfo) *tsoptions.ParsedCommandLine {
 	entry, ok := c.ConfigFiles.Load(path)
 	if !ok {
 		// Create parsed command line
@@ -97,7 +90,11 @@ func (c *ConfigFileRegistry) AcquireConfig(fileName string, path tspath.Path, pr
 	}
 	entry.mu.Lock()
 	defer entry.mu.Unlock()
-	entry.projects.Add(project)
+	if project != nil {
+		entry.projects.Add(project)
+	} else if info != nil {
+		entry.infos.Add(info)
+	}
 	if entry.pendingReload == PendingReloadNone {
 		return entry.commandLine
 	}
@@ -112,6 +109,23 @@ func (c *ConfigFileRegistry) AcquireConfig(fileName string, path tspath.Path, pr
 	}
 	entry.pendingReload = PendingReloadNone
 	return entry.commandLine
+}
+
+func (c *ConfigFileRegistry) getConfig(path tspath.Path) *tsoptions.ParsedCommandLine {
+	entry, ok := c.ConfigFiles.Load(path)
+	if ok {
+		return entry.commandLine
+	}
+	return nil
+}
+
+func (c *ConfigFileRegistry) releaseConfigsForInfo(info *ScriptInfo) {
+	c.ConfigFiles.Range(func(path tspath.Path, entry *ConfigFileEntry) bool {
+		entry.mu.Lock()
+		entry.infos.Delete(info)
+		entry.mu.Unlock()
+		return true
+	})
 }
 
 func (c *ConfigFileRegistry) updateRootFilesWatch(fileName string, entry *ConfigFileEntry) {
@@ -187,6 +201,10 @@ func (c *ConfigFileRegistry) onConfigChange(path tspath.Path, changeKind lsproto
 	entry.mu.Lock()
 	defer entry.mu.Unlock()
 	if entry.SetPendingReload(PendingReloadFull) {
+		for info := range entry.infos.Keys() {
+			delete(c.defaultProjectFinder.configFileForOpenFiles, info.Path())
+			delete(c.defaultProjectFinder.configFilesAncestorForOpenFiles, info.Path())
+		}
 		for project := range entry.projects.Keys() {
 			if project.configFilePath == path {
 				switch changeKind {
@@ -202,6 +220,7 @@ func (c *ConfigFileRegistry) onConfigChange(path tspath.Path, changeKind lsproto
 				project.markAsDirty()
 			}
 		}
+		return true
 	}
 	return false
 }
@@ -219,6 +238,22 @@ func (c *ConfigFileRegistry) tryInvokeWildCardDirectories(fileName string, path 
 						project.markAsDirty()
 					}
 				}
+			}
+		}
+		entry.mu.Unlock()
+	}
+}
+
+func (c *ConfigFileRegistry) cleanup(toRemoveConfigs map[tspath.Path]*ConfigFileEntry) {
+	for path, entry := range toRemoveConfigs {
+		entry.mu.Lock()
+		if entry.projects.Len() == 0 && entry.infos.Len() == 0 {
+			c.ConfigFiles.Delete(path)
+			commandLine := entry.commandLine
+			entry.commandLine = nil
+			c.updateExtendedConfigsUsedBy(path, entry, commandLine)
+			if entry.rootFilesWatch != nil {
+				entry.rootFilesWatch.update(context.Background(), nil)
 			}
 		}
 		entry.mu.Unlock()

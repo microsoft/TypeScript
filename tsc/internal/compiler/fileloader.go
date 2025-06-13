@@ -200,7 +200,7 @@ func (p *fileLoader) addProjectReferenceTasks() {
 		opts: p.opts,
 		host: p.opts.Host,
 	}
-	projectReferences := p.opts.Config.ProjectReferences()
+	projectReferences := p.opts.Config.ResolvedProjectReferencePaths()
 	if len(projectReferences) == 0 {
 		return
 	}

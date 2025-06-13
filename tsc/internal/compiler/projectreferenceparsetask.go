@@ -25,7 +25,7 @@ func (t *projectReferenceParseTask) start(loader *fileLoader) {
 			t.resolved.ParseInputOutputNames()
 		})
 	}
-	subReferences := t.resolved.ProjectReferences()
+	subReferences := t.resolved.ResolvedProjectReferencePaths()
 	if len(subReferences) == 0 {
 		return
 	}
@@ -36,13 +36,10 @@ func getSubTasksOfProjectReferenceParseTask(t *projectReferenceParseTask) []*pro
 	return t.subTasks
 }
 
-func createProjectReferenceParseTasks(projectReferences []*core.ProjectReference) []*projectReferenceParseTask {
-	tasks := make([]*projectReferenceParseTask, 0, len(projectReferences))
-	for _, reference := range projectReferences {
-		configName := core.ResolveProjectReferencePath(reference)
-		tasks = append(tasks, &projectReferenceParseTask{
+func createProjectReferenceParseTasks(projectReferences []string) []*projectReferenceParseTask {
+	return core.Map(projectReferences, func(configName string) *projectReferenceParseTask {
+		return &projectReferenceParseTask{
 			configName: configName,
-		})
-	}
-	return tasks
+		}
+	})
 }

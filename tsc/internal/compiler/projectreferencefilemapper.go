@@ -140,7 +140,7 @@ func (mapper *projectReferenceFileMapper) getResolvedReferenceFor(path tspath.Pa
 }
 
 func (mapper *projectReferenceFileMapper) forEachResolvedProjectReference(
-	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine) bool,
+	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine),
 ) {
 	if mapper.opts.Config.ConfigFile == nil {
 		return
@@ -150,14 +150,13 @@ func (mapper *projectReferenceFileMapper) forEachResolvedProjectReference(
 }
 
 func (mapper *projectReferenceFileMapper) forEachResolvedReferenceWorker(
-	referenes []tspath.Path,
-	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine) bool,
+	references []tspath.Path,
+	fn func(path tspath.Path, config *tsoptions.ParsedCommandLine),
 ) {
-	for _, path := range referenes {
+	for _, path := range references {
 		config, _ := mapper.configToProjectReference[path]
-		if !fn(path, config) {
-			return
-		}
+		fn(path, config)
+		mapper.forEachResolvedReferenceWorker(mapper.referencesInConfigFile[path], fn)
 	}
 }
 

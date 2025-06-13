@@ -33,6 +33,9 @@ type ParsedCommandLine struct {
 
 	commonSourceDirectory     string
 	commonSourceDirectoryOnce sync.Once
+
+	resolvedProjectReferencePaths     []string
+	resolvedProjectReferencePathsOnce sync.Once
 }
 
 type SourceAndProjectReference struct {
@@ -191,6 +194,20 @@ func (p *ParsedCommandLine) FileNames() []string {
 
 func (p *ParsedCommandLine) ProjectReferences() []*core.ProjectReference {
 	return p.ParsedConfig.ProjectReferences
+}
+
+func (p *ParsedCommandLine) ResolvedProjectReferencePaths() []string {
+	p.resolvedProjectReferencePathsOnce.Do(func() {
+		if p.ParsedConfig.ProjectReferences == nil {
+			return
+		}
+		resolvedProjectReferencePaths := make([]string, 0, len(p.ParsedConfig.ProjectReferences))
+		for _, ref := range p.ParsedConfig.ProjectReferences {
+			resolvedProjectReferencePaths = append(resolvedProjectReferencePaths, core.ResolveProjectReferencePath(ref))
+		}
+		p.resolvedProjectReferencePaths = resolvedProjectReferencePaths
+	})
+	return p.resolvedProjectReferencePaths
 }
 
 func (p *ParsedCommandLine) ExtendedSourceFiles() []string {

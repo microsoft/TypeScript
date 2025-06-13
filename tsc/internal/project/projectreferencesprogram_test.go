@@ -6,6 +6,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/projecttestutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -215,6 +216,25 @@ func TestProjectReferencesProgram(t *testing.T) {
 		assert.Assert(t, fooFile != nil)
 		barFile := p.CurrentProgram().GetSourceFile(bBar)
 		assert.Assert(t, barFile != nil)
+	})
+
+	t.Run("when new file is added to referenced project", func(t *testing.T) {
+		t.Parallel()
+		files := filesForReferencedProjectProgram(false)
+		service, host := projecttestutil.Setup(files, nil)
+		service.OpenFile("/user/username/projects/myproject/main/main.ts", files["/user/username/projects/myproject/main/main.ts"].(string), core.ScriptKindTS, "/user/username/projects/myproject")
+		assert.Equal(t, len(service.Projects()), 1)
+		project := service.Projects()[0]
+		programBefore := project.GetProgram()
+		err := host.FS().WriteFile("/user/username/projects/myproject/dependency/fns2.ts", `export const x = 2;`, false)
+		assert.NilError(t, err)
+		assert.NilError(t, service.OnWatchedFilesChanged(t.Context(), []*lsproto.FileEvent{
+			{
+				Type: lsproto.FileChangeTypeChanged,
+				Uri:  "file:///user/username/projects/myproject/dependency/fns2.ts",
+			},
+		}))
+		assert.Check(t, project.GetProgram() != programBefore)
 	})
 }
 

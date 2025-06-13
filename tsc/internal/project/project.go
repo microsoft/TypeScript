@@ -293,7 +293,7 @@ func (p *Project) GetSourceFile(fileName string, path tspath.Path, options *core
 
 // GetResolvedProjectReference implements compiler.CompilerHost.
 func (p *Project) GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine {
-	return p.host.ConfigFileRegistry().AcquireConfig(fileName, path, p)
+	return p.host.ConfigFileRegistry().acquireConfig(fileName, path, p, nil)
 }
 
 // Updates the program if needed.
@@ -530,11 +530,10 @@ func (p *Project) updateGraph() (*compiler.Program, bool) {
 				}
 			}
 
-			oldProgram.ForEachResolvedProjectReference(func(path tspath.Path, ref *tsoptions.ParsedCommandLine) bool {
+			oldProgram.ForEachResolvedProjectReference(func(path tspath.Path, ref *tsoptions.ParsedCommandLine) {
 				if _, ok := p.program.GetResolvedProjectReferenceFor(path); !ok {
-					p.host.ConfigFileRegistry().ReleaseConfig(path, p)
+					p.host.ConfigFileRegistry().releaseConfig(path, p)
 				}
-				return true
 			})
 		}
 		p.enqueueInstallTypingsForProject(oldProgram, hasAddedOrRemovedFiles)
@@ -830,6 +829,19 @@ func (p *Project) WatchTypingLocations(files []string) {
 	p.typingsDirectoryWatch.update(ctx, typingsInstallerDirectoryGlobs)
 }
 
+func (p *Project) isSourceFromProjectReference(info *ScriptInfo) bool {
+	program := p.program
+	return program != nil && program.IsSourceFromProjectReference(info.Path())
+}
+
+func (p *Project) containsScriptInfo(info *ScriptInfo) bool {
+	if p.isRoot(info) {
+		return true
+	}
+	program := p.program
+	return program != nil && program.GetSourceFileByPath(info.Path()) != nil
+}
+
 func (p *Project) isOrphan() bool {
 	switch p.kind {
 	case KindInferred:
@@ -1041,12 +1053,11 @@ func (p *Project) Close() {
 			// Detach script info if its not root or is root of non inferred project
 			p.detachScriptInfoIfNotInferredRoot(sourceFile.Path())
 		}
-		p.program.ForEachResolvedProjectReference(func(path tspath.Path, ref *tsoptions.ParsedCommandLine) bool {
-			p.host.ConfigFileRegistry().ReleaseConfig(path, p)
-			return true
+		p.program.ForEachResolvedProjectReference(func(path tspath.Path, ref *tsoptions.ParsedCommandLine) {
+			p.host.ConfigFileRegistry().releaseConfig(path, p)
 		})
 		if p.kind == KindConfigured {
-			p.host.ConfigFileRegistry().ReleaseConfig(p.configFilePath, p)
+			p.host.ConfigFileRegistry().releaseConfig(p.configFilePath, p)
 		}
 		p.program = nil
 	}
