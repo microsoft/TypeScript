@@ -22,6 +22,23 @@ hooks.forEach(hook => {
             fs.unlinkSync(hookInHiddenDirectory);
         }
 
-        fs.linkSync(hookInSourceControl, hookInHiddenDirectory);
+        // Hard links are ideal to keep hooks in sync with the source-controlled
+        // versions, but they are not always supported. In particular, they can
+        // fail on Windows when the working copy resides on a FAT32 drive or
+        // when the user lacks the required privileges, and they always fail
+        // across device/volume boundaries (EXDEV). Gracefully fall back to a
+        // normal file copy in those scenarios so that contributors on any
+        // platform can still set up git hooks and contribute without friction.
+        try {
+            fs.linkSync(hookInSourceControl, hookInHiddenDirectory);
+        }
+        catch (err) {
+            if (err && (err.code === "EXDEV" || err.code === "EPERM")) {
+                fs.copyFileSync(hookInSourceControl, hookInHiddenDirectory);
+            }
+            else {
+                throw err;
+            }
+        }
     }
 });
