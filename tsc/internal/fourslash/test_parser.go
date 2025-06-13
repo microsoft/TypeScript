@@ -2,6 +2,7 @@ package fourslash
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"testing"
 	"unicode/utf8"
@@ -56,11 +57,15 @@ func ParseTestData(t *testing.T, contents string, fileName string) TestData {
 	markerPositions := make(map[string]*Marker)
 	var markers []*Marker
 	var ranges []*RangeMarker
-	filesWithMarker, symlinks, _, globalOptions := testrunner.ParseTestFilesAndSymlinks(
+
+	filesWithMarker, symlinks, _, globalOptions, e := testrunner.ParseTestFilesAndSymlinks(
 		contents,
 		fileName,
 		parseFileContent,
 	)
+	if e != nil {
+		t.Fatalf("Error parsing fourslash data: %s", e.Error())
+	}
 
 	hasTSConfig := false
 	for _, file := range filesWithMarker {
@@ -138,7 +143,7 @@ const (
 	stateInObjectMarker
 )
 
-func parseFileContent(fileName string, content string, fileOptions map[string]string) *testFileWithMarkers {
+func parseFileContent(fileName string, content string, fileOptions map[string]string) (*testFileWithMarkers, error) {
 	fileName = tspath.GetNormalizedAbsolutePath(fileName, "/")
 
 	// The file content (minus metacharacters) so far
@@ -159,7 +164,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 	column := 1
 
 	// The current marker (or maybe multi-line comment?) we're parsing, possibly
-	var openMarker locationInformation
+	var openMarker *locationInformation
 
 	// The latest position of the start of an unflushed plain text area
 	lastNormalCharPosition := 0
@@ -197,7 +202,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 			} else if previousCharacter == '|' && currentCharacter == ']' {
 				// found a range end
 				if len(openRanges) == 0 {
-					reportError(fileName, line, column, "Found range end with no matching start.")
+					return nil, reportError(fileName, line, column, "Found range end with no matching start.")
 				}
 				rangeStart := openRanges[len(openRanges)-1]
 				openRanges = openRanges[:len(openRanges)-1]
@@ -219,7 +224,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 			} else if previousCharacter == '/' && currentCharacter == '*' {
 				// found a possible marker start
 				state = stateInSlashStarMarker
-				openMarker = locationInformation{
+				openMarker = &locationInformation{
 					position:       (i - 1) - difference,
 					sourcePosition: i - 1,
 					sourceLine:     line,
@@ -228,7 +233,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 			} else if previousCharacter == '{' && currentCharacter == '|' {
 				// found an object marker start
 				state = stateInObjectMarker
-				openMarker = locationInformation{
+				openMarker = &locationInformation{
 					position:       (i - 1) - difference,
 					sourcePosition: i - 1,
 					sourceLine:     line,
@@ -240,7 +245,10 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 			// Object markers are only ever terminated by |} and have no content restrictions
 			if previousCharacter == '|' && currentCharacter == '}' {
 				objectMarkerData := strings.TrimSpace(content[openMarker.sourcePosition+2 : i-1])
-				marker := getObjectMarker(fileName, openMarker, objectMarkerData)
+				marker, e := getObjectMarker(fileName, openMarker, objectMarkerData)
+				if e != nil {
+					return nil, e
+				}
 
 				if len(openRanges) > 0 {
 					openRanges[len(openRanges)-1].marker = marker
@@ -252,7 +260,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 				difference += i + 1 - openMarker.sourcePosition
 
 				// Reset the state
-				openMarker = locationInformation{}
+				openMarker = nil
 				state = stateNone
 			}
 		case stateInSlashStarMarker:
@@ -276,7 +284,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 				difference += i + 1 - openMarker.sourcePosition
 
 				// Reset the state
-				openMarker = locationInformation{}
+				openMarker = nil
 				state = stateNone
 			} else if !(stringutil.IsDigit(currentCharacter) ||
 				stringutil.IsASCIILetter(currentCharacter) ||
@@ -289,7 +297,7 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 					// Bail out the text we've gathered so far back into the output
 					flush(i)
 					lastNormalCharPosition = i
-					openMarker = locationInformation{}
+					openMarker = nil
 					state = stateNone
 				}
 			}
@@ -308,6 +316,15 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 
 	// Add the remaining text
 	flush(-1)
+
+	if len(openRanges) > 0 {
+		openRange := openRanges[0]
+		return nil, reportError(fileName, openRange.sourceLine, openRange.sourceColumn, "Unterminated range.")
+	}
+
+	if openMarker != nil {
+		return nil, reportError(fileName, openMarker.sourceLine, openMarker.sourceColumn, "Unterminated marker.")
+	}
 
 	outputString := output.String()
 	// Set LS positions for markers
@@ -338,22 +355,20 @@ func parseFileContent(fileName string, content string, fileOptions map[string]st
 		file:    testFileInfo,
 		markers: markers,
 		ranges:  rangeMarkers,
-	}
+	}, nil
 }
 
-func getObjectMarker(fileName string, location locationInformation, text string) *Marker {
+func getObjectMarker(fileName string, location *locationInformation, text string) (*Marker, error) {
 	// Attempt to parse the marker value as JSON
 	var v interface{}
 	e := json.Unmarshal([]byte("{ "+text+" }"), &v)
 
 	if e != nil {
-		reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text "+text)
-		return nil
+		return nil, reportError(fileName, location.sourceLine, location.sourceColumn, "Unable to parse marker text "+text)
 	}
 	markerValue, ok := v.(map[string]interface{})
 	if !ok || len(markerValue) == 0 {
-		reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty")
-		return nil
+		return nil, reportError(fileName, location.sourceLine, location.sourceColumn, "Object markers can not be empty")
 	}
 
 	marker := &Marker{
@@ -369,10 +384,17 @@ func getObjectMarker(fileName string, location locationInformation, text string)
 		}
 	}
 
-	return marker
+	return marker, nil
 }
 
-func reportError(fileName string, line int, col int, message string) {
-	// !!! not implemented
-	// errorMessage := fileName + "(" + string(line) + "," + string(col) + "): " + message;
+func reportError(fileName string, line int, col int, message string) error {
+	return &fourslashError{fmt.Sprintf("%v (%v,%v): %v", fileName, line, col, message)}
+}
+
+type fourslashError struct {
+	err string
+}
+
+func (e *fourslashError) Error() string {
+	return e.err
 }
