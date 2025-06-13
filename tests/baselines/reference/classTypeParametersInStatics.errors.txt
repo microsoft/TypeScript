@@ -1,10 +1,13 @@
+classTypeParametersInStatics.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 classTypeParametersInStatics.ts(12,40): error TS2302: Static members cannot reference class type parameters.
 classTypeParametersInStatics.ts(13,29): error TS2302: Static members cannot reference class type parameters.
 classTypeParametersInStatics.ts(13,43): error TS2302: Static members cannot reference class type parameters.
 
 
-==== classTypeParametersInStatics.ts (3 errors) ====
+==== classTypeParametersInStatics.ts (4 errors) ====
     module Editor {
+           ~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     
     
         export class List<T> {

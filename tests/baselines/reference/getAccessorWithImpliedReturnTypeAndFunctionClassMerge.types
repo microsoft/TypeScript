@@ -25,6 +25,7 @@ declare module _ {
         //iterator: ListIterator<T, void>,
         context?: any): void;
 >context : any
+>        : ^^^
 
     interface ListIterator<T, TResult> {
         (value: T, index: number, list: T[]): TResult;
@@ -49,6 +50,7 @@ declare class _<T> {
 >_ : any
 >  : ^^^
 >context : any
+>        : ^^^
 }
 
 module MyModule { 
@@ -61,14 +63,17 @@ module MyModule {
 
         public get myGetter() {
 >myGetter : any
+>         : ^^^
 
             var obj:any = {};
 >obj : any
+>    : ^^^
 >{} : {}
 >   : ^^
             
             return obj;
 >obj : any
+>    : ^^^
         }
     }
 }

@@ -1,8 +1,11 @@
+missingReturnStatement.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 missingReturnStatement.ts(3,22): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
 
 
-==== missingReturnStatement.ts (1 errors) ====
+==== missingReturnStatement.ts (2 errors) ====
     module Test {
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class Bug {
             public foo():string {
                          ~~~~~~

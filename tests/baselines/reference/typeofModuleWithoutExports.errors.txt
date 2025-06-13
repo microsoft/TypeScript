@@ -1,0 +1,14 @@
+typeofModuleWithoutExports.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== typeofModuleWithoutExports.ts (1 errors) ====
+    module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x = 1;
+        class C {
+            foo: number;
+        }
+    }
+    
+    var r: typeof M;

@@ -1,0 +1,80 @@
+declarationEmit_nameConflicts_0.ts(2,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(5,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(16,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(16,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(19,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(31,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(31,17): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(34,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_0.ts(40,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+declarationEmit_nameConflicts_1.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declarationEmit_nameConflicts_0.ts (9 errors) ====
+    import im = require('./declarationEmit_nameConflicts_1');
+    export module M {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f() { }
+        export class C { }
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function g() { };
+            export interface I { }
+        }
+    
+        export import a = M.f;
+        export import b = M.C;
+        export import c = N;
+        export import d = im;
+    }
+    
+    export module M.P {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f() { }
+        export class C { }
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function g() { };
+            export interface I { }
+        }
+        export import im = M.P.f;
+        export var a = M.a; // emitted incorrectly as typeof f
+        export var b = M.b; // ok
+        export var c = M.c; // ok
+        export var g = M.c.g; // ok
+        export var d = M.d; // emitted incorrectly as typeof im
+    }
+    
+    export module M.Q {
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                    ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function f() { }
+        export class C { }
+        export module N {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export function g() { };
+            export interface I { }
+        }
+        export interface b extends M.b { } // ok
+        export interface I extends M.c.I { } // ok
+        export module c {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            export interface I extends M.c.I { } // ok
+        }
+    }
+==== declarationEmit_nameConflicts_1.ts (1 errors) ====
+    module f { export class c { } }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    export = f;
+    

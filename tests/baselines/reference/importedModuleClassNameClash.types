@@ -4,7 +4,8 @@
 import foo = m1;
 >foo : typeof foo
 >    : ^^^^^^^^^^
->m1 : error
+>m1 : any
+>   : ^^^
  
 export module m1 { }
  

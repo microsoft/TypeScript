@@ -1,0 +1,15 @@
+ref.d.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ref.d.ts (1 errors) ====
+    declare module M1
+                   ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    {
+        export function f1(): void;
+    }
+==== consumer.ts (0 errors) ====
+    ///<reference path="ref.d.ts" />
+    
+    // in the generated code a 'this' is added before this call
+    M1.f1();

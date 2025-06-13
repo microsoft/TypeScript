@@ -1,7 +1,8 @@
 aliasesInSystemModule2.ts(1,21): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+aliasesInSystemModule2.ts(9,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== aliasesInSystemModule2.ts (1 errors) ====
+==== aliasesInSystemModule2.ts (2 errors) ====
     import {alias} from "foo";
                         ~~~~~
 !!! error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
@@ -13,6 +14,8 @@ aliasesInSystemModule2.ts(1,21): error TS2792: Cannot find module 'foo'. Did you
     let z = new cls2();
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       export import cls = alias.Class;
       let x = new alias.Class();
       let y = new cls(); 

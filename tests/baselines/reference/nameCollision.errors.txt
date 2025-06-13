@@ -1,0 +1,76 @@
+nameCollision.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(12,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(22,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(24,23): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(32,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(32,10): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nameCollision.ts(40,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== nameCollision.ts (9 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        // these 2 statements force an underscore before the 'A' 
+        // in the generated function call.
+        var A = 12;
+        var _A = '';
+    }
+    
+    module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var A = 12;
+    }
+    
+    module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        // re-opened module with colliding name
+        // this should add an underscore.
+        class B {
+            name: string;
+        }
+    }
+    
+    module X {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var X = 13;
+        export module Y {
+                      ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+            var Y = 13;
+            export module Z {
+                          ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                var X = 12;
+                var Y = 12;
+                var Z = 12;
+            }
+        }
+    }
+    
+    module Y.Y {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+             ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export enum Y {
+            Red, Blue
+        }
+    }
+    
+    // no collision, since interface doesn't
+    // generate code.
+    module D {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface D {
+            id: number;
+        }
+    
+        export var E = 'hello';
+    }

@@ -1,9 +1,11 @@
 typeofANonExportedType.ts(20,12): error TS2323: Cannot redeclare exported variable 'r5'.
 typeofANonExportedType.ts(21,12): error TS2323: Cannot redeclare exported variable 'r5'.
+typeofANonExportedType.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or indirectly in its own type annotation.
+typeofANonExportedType.ts(45,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== typeofANonExportedType.ts (3 errors) ====
+==== typeofANonExportedType.ts (5 errors) ====
     var x = 1;
     export var r1: typeof x;
     var y = { foo: '' };
@@ -31,6 +33,8 @@ typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or 
 !!! error TS2323: Cannot redeclare exported variable 'r5'.
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var foo = '';
         export class C {
             foo: string;
@@ -55,6 +59,8 @@ typeofANonExportedType.ts(42,12): error TS2502: 'r12' is referenced directly or 
     
     function foo() { }
     module foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var y = 1;
         export class C {
             foo: string;

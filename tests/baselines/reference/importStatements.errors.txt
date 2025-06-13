@@ -1,0 +1,52 @@
+importStatements.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatements.ts(10,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatements.ts(15,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatements.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+importStatements.ts(29,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== importStatements.ts (5 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class Point {
+            constructor(public x: number, public y: number) { }
+        }
+    
+        export var Origin = new Point(0, 0);
+    }
+    
+    // no code gen expected
+    module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import a = A; //Error generates 'var <Alias> = <EntityName>;'
+    }
+    
+    // no code gen expected
+    module C {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import a = A; //Error generates 'var <Alias> = <EntityName>;'
+        var m: typeof a;
+        var p: a.Point;
+        var p = {x:0, y:0 };
+    }
+    
+    // code gen expected
+    module D {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import a = A;
+    
+        var p = new a.Point(1, 1);
+    }
+    
+    module E {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        import a = A;
+        export function xDist(x: a.Point) {
+            return (a.Origin.x - x.x);
+        }
+    }

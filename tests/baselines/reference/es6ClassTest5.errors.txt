@@ -1,0 +1,18 @@
+es6ClassTest5.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== es6ClassTest5.ts (1 errors) ====
+    class C1T5 {
+        foo: (i: number, s: string) => number = 
+    	   	(i) => {
+    	        return i;
+    	    }
+    }
+    module C2T5 {}
+           ~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+    class  bigClass {
+         public break = 1;
+    }
+    

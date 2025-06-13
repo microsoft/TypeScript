@@ -1,0 +1,15 @@
+nestedModulePrivateAccess.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+nestedModulePrivateAccess.ts(3,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== nestedModulePrivateAccess.ts (2 errors) ====
+    module a{
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+           var x:number;
+           module b{
+                  ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+                   var y = x; // should not be an error
+           }
+    }

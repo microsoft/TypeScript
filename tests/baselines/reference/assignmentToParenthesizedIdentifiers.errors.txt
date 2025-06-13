@@ -1,10 +1,13 @@
 assignmentToParenthesizedIdentifiers.ts(4,1): error TS2322: Type 'string' is not assignable to type 'number'.
 assignmentToParenthesizedIdentifiers.ts(5,1): error TS2322: Type 'string' is not assignable to type 'number'.
+assignmentToParenthesizedIdentifiers.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentToParenthesizedIdentifiers.ts(13,1): error TS2322: Type 'string' is not assignable to type 'number'.
 assignmentToParenthesizedIdentifiers.ts(14,1): error TS2322: Type 'string' is not assignable to type 'number'.
 assignmentToParenthesizedIdentifiers.ts(15,1): error TS2322: Type 'string' is not assignable to type 'number'.
 assignmentToParenthesizedIdentifiers.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
 assignmentToParenthesizedIdentifiers.ts(18,2): error TS2631: Cannot assign to 'M' because it is a namespace.
+assignmentToParenthesizedIdentifiers.ts(20,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+assignmentToParenthesizedIdentifiers.ts(21,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentToParenthesizedIdentifiers.ts(25,5): error TS2631: Cannot assign to 'M3' because it is a namespace.
 assignmentToParenthesizedIdentifiers.ts(31,11): error TS2322: Type 'string' is not assignable to type 'number'.
 assignmentToParenthesizedIdentifiers.ts(32,13): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -24,7 +27,7 @@ assignmentToParenthesizedIdentifiers.ts(69,1): error TS2629: Cannot assign to 'C
 assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C' because it is a class.
 
 
-==== assignmentToParenthesizedIdentifiers.ts (24 errors) ====
+==== assignmentToParenthesizedIdentifiers.ts (27 errors) ====
     var x: number;
     x = 3; // OK
     (x) = 3; // OK
@@ -36,6 +39,8 @@ assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var y: number;
     }
     M.y = 3; // OK
@@ -59,7 +64,11 @@ assignmentToParenthesizedIdentifiers.ts(70,2): error TS2629: Cannot assign to 'C
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.
     
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module M3 {
+                      ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var x: number;
         }
     

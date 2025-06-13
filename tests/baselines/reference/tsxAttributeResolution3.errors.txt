@@ -1,3 +1,4 @@
+file.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 file.tsx(19,2): error TS2322: Type '{ x: number; }' is not assignable to type 'Attribs1'.
   Types of property 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -5,8 +6,10 @@ file.tsx(23,2): error TS2741: Property 'x' is missing in type '{ y: number; }' b
 file.tsx(31,8): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== file.tsx (3 errors) ====
+==== file.tsx (4 errors) ====
     declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	interface Element { }
     	interface IntrinsicElements {
     		test1: Attribs1;

@@ -1,3 +1,5 @@
+ifDoWhileStatements.ts(23,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+ifDoWhileStatements.ts(31,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 ifDoWhileStatements.ts(44,5): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(45,8): error TS2873: This kind of expression is always falsy.
 ifDoWhileStatements.ts(46,13): error TS2873: This kind of expression is always falsy.
@@ -30,7 +32,7 @@ ifDoWhileStatements.ts(85,8): error TS2872: This kind of expression is always tr
 ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always truthy.
 
 
-==== ifDoWhileStatements.ts (30 errors) ====
+==== ifDoWhileStatements.ts (32 errors) ====
     interface I {
         id: number;
     }
@@ -54,6 +56,8 @@ ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always t
     function F2(x: number): boolean { return x < 42; }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class A {
             name: string;
         }
@@ -62,6 +66,8 @@ ifDoWhileStatements.ts(86,13): error TS2872: This kind of expression is always t
     }
     
     module N {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class A {
             id: number;
         }

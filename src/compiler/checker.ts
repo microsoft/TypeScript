@@ -47873,6 +47873,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node.name, Diagnostics.Augmentations_for_the_global_scope_should_have_declare_modifier_unless_they_appear_in_already_ambient_context);
             }
 
+            if ((node.flags & NodeFlags.Namespace) === NodeFlags.None && node.name.kind !== SyntaxKind.StringLiteral && !isGlobalScopeAugmentation(node)) {
+                error(node.name, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
+            }
+
             const isAmbientExternalModule: boolean = isAmbientModule(node);
             const contextErrorMessage = isAmbientExternalModule
                 ? Diagnostics.An_ambient_module_declaration_is_only_allowed_at_the_top_level_in_a_file
@@ -47909,9 +47913,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 && !inAmbientContext
                 && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))
             ) {
-                if (compilerOptions.erasableSyntaxOnly) {
-                    error(node.name, Diagnostics.This_syntax_is_not_allowed_when_erasableSyntaxOnly_is_enabled);
-                }
 
                 if (getIsolatedModules(compilerOptions) && !getSourceFileOfNode(node).externalModuleIndicator) {
                     // This could be loosened a little if needed. The only problem we are trying to avoid is unqualified

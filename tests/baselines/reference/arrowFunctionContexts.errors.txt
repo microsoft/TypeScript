@@ -1,12 +1,15 @@
 arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 arrowFunctionContexts.ts(30,9): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
 arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
+arrowFunctionContexts.ts(35,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+arrowFunctionContexts.ts(41,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 arrowFunctionContexts.ts(71,13): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
 arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
+arrowFunctionContexts.ts(76,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== arrowFunctionContexts.ts (6 errors) ====
+==== arrowFunctionContexts.ts (9 errors) ====
     // Arrow function used in with statement
     with (window) {
     ~~~~~~~~~~~~~
@@ -48,12 +51,16 @@ arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in cu
     
     // Arrow function as module variable initializer
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export var a = (s) => '';
         var b = (s) => s;
     }
     
     // Repeat above for module members that are functions? (necessary to redo all of them?)
     module M2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         // Arrow function used in with statement
         with (window) {
         ~~~~~~~~~~~~~
@@ -95,6 +102,8 @@ arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in cu
     
         // Arrow function as module variable initializer
         module M {
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var a = (s) => '';
             var b = (s) => s;
         }

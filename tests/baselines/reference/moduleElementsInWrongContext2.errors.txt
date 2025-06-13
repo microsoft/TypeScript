@@ -1,4 +1,5 @@
 moduleElementsInWrongContext2.ts(2,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+moduleElementsInWrongContext2.ts(2,12): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 moduleElementsInWrongContext2.ts(3,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 moduleElementsInWrongContext2.ts(7,5): error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
 moduleElementsInWrongContext2.ts(9,5): error TS1234: An ambient module declaration is only allowed at the top level in a file.
@@ -17,11 +18,13 @@ moduleElementsInWrongContext2.ts(27,5): error TS1232: An import declaration can 
 moduleElementsInWrongContext2.ts(28,5): error TS1232: An import declaration can only be used at the top level of a namespace or module.
 
 
-==== moduleElementsInWrongContext2.ts (17 errors) ====
+==== moduleElementsInWrongContext2.ts (18 errors) ====
     function blah () {
         module M { }
         ~~~~~~
 !!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.
+               ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export namespace N {
         ~~~~~~
 !!! error TS1235: A namespace declaration is only allowed at the top level of a namespace or module.

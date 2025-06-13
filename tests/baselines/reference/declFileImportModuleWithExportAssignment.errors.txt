@@ -1,0 +1,29 @@
+declFileImportModuleWithExportAssignment_0.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== declFileImportModuleWithExportAssignment_1.ts (0 errors) ====
+    /**This is on import declaration*/
+    import a1 = require("./declFileImportModuleWithExportAssignment_0");
+    export var a = a1;
+    a.test1(null, null, null);
+    
+==== declFileImportModuleWithExportAssignment_0.ts (1 errors) ====
+    module m2 {
+           ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export interface connectModule {
+            (res, req, next): void;
+        }
+        export interface connectExport {
+            use: (mod: connectModule) => connectExport;
+            listen: (port: number) => void;
+        }
+    
+    }
+    var m2: {
+        (): m2.connectExport;
+        test1: m2.connectModule;
+        test2(): m2.connectModule;
+    };
+    export = m2;
+    

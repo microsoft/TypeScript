@@ -1,3 +1,4 @@
+assignmentCompatWithObjectMembers4.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembers4.ts(24,5): error TS2322: Type 'T' is not assignable to type 'S'.
   Types of property 'foo' are incompatible.
     Property 'bar' is missing in type 'Derived2' but required in type 'Derived'.
@@ -37,6 +38,7 @@ assignmentCompatWithObjectMembers4.ts(44,5): error TS2322: Type 'T2' is not assi
 assignmentCompatWithObjectMembers4.ts(45,5): error TS2322: Type 'T' is not assignable to type '{ foo: Derived; }'.
   Types of property 'foo' are incompatible.
     Property 'bar' is missing in type 'Derived2' but required in type 'Derived'.
+assignmentCompatWithObjectMembers4.ts(48,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 assignmentCompatWithObjectMembers4.ts(70,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Types of property 'foo' are incompatible.
     Property 'baz' is missing in type 'Base' but required in type 'Derived2'.
@@ -51,10 +53,12 @@ assignmentCompatWithObjectMembers4.ts(87,5): error TS2322: Type '{ foo: Base; }'
     Property 'baz' is missing in type 'Base' but required in type 'Derived2'.
 
 
-==== assignmentCompatWithObjectMembers4.ts (17 errors) ====
+==== assignmentCompatWithObjectMembers4.ts (19 errors) ====
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is not assignable M
     
     module OnlyDerived {
+           ~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Base { baz: string; }
@@ -165,6 +169,8 @@ assignmentCompatWithObjectMembers4.ts(87,5): error TS2322: Type '{ foo: Base; }'
     }
     
     module WithBase {
+           ~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         class Base { foo: string; }
         class Derived extends Base { bar: string; }
         class Derived2 extends Base { baz: string; }

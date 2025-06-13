@@ -1,15 +1,21 @@
+internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts(4,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts(10,16): error TS2437: Module 'A' is hidden by a local declaration with the same name.
 
 
-==== internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts (1 errors) ====
+==== internalImportUnInstantiatedModuleMergedWithClassNotReferencingInstance.ts (3 errors) ====
     class A {
         aProp: string;
     }
     module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export interface X { s: string }
     }
     
     module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         var A = 1;
         import Y = A;
                    ~

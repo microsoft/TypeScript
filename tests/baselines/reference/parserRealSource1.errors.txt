@@ -1,7 +1,9 @@
 parserRealSource1.ts(4,21): error TS6053: File 'typescript.ts' not found.
+parserRealSource1.ts(6,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+parserRealSource1.ts(7,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== parserRealSource1.ts (1 errors) ====
+==== parserRealSource1.ts (3 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -10,7 +12,11 @@ parserRealSource1.ts(4,21): error TS6053: File 'typescript.ts' not found.
 !!! error TS6053: File 'typescript.ts' not found.
     
     module TypeScript {
+           ~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export module CompilerDiagnostics {
+                      ~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
             export var debug = false;
             export interface IDiagnosticWriter {
                 Alert(output: string): void;

@@ -1,11 +1,15 @@
+foo1.ts(2,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 foo1.ts(9,12): error TS2339: Property 'x' does not exist on type 'C1'.
+foo2.ts(2,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 foo2.ts(8,12): error TS2339: Property 'y' does not exist on type 'C1'.
 foo2.ts(13,8): error TS2339: Property 'x' does not exist on type 'C1'.
 
 
-==== foo2.ts (2 errors) ====
+==== foo2.ts (3 errors) ====
     import foo1 = require('./foo1');
     export module M1 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export class C1 {
     		m1: foo1.M1.C1;
     		y: number
@@ -25,9 +29,11 @@ foo2.ts(13,8): error TS2339: Property 'x' does not exist on type 'C1'.
     	}
     }
     
-==== foo1.ts (1 errors) ====
+==== foo1.ts (2 errors) ====
     import foo2 = require('./foo2');
     export module M1 {
+                  ~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export class C1 {
     		m1: foo2.M1.C1;
     		x: number;

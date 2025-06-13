@@ -1,10 +1,13 @@
+parameterPropertyInConstructor2.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 parameterPropertyInConstructor2.ts(3,5): error TS2394: This overload signature is not compatible with its implementation signature.
 parameterPropertyInConstructor2.ts(3,17): error TS2369: A parameter property is only allowed in a constructor implementation.
 parameterPropertyInConstructor2.ts(4,24): error TS2300: Duplicate identifier 'names'.
 
 
-==== parameterPropertyInConstructor2.ts (3 errors) ====
+==== parameterPropertyInConstructor2.ts (4 errors) ====
     module mod {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
       class Customers {
         constructor(public names: string);
         ~~~~~~~~~~~

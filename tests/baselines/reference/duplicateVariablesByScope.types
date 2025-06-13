@@ -94,6 +94,7 @@ class C {
         }
         catch (e) {
 >e : any
+>  : ^^^
 
             var x = 2;
 >x : number

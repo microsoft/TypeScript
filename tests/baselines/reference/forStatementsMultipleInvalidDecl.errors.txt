@@ -1,3 +1,4 @@
+forStatementsMultipleInvalidDecl.ts(22,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 forStatementsMultipleInvalidDecl.ts(32,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'number'.
 forStatementsMultipleInvalidDecl.ts(33,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'string'.
 forStatementsMultipleInvalidDecl.ts(34,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a' must be of type 'any', but here has type 'C'.
@@ -12,7 +13,7 @@ forStatementsMultipleInvalidDecl.ts(50,10): error TS2403: Subsequent variable de
 forStatementsMultipleInvalidDecl.ts(53,10): error TS2403: Subsequent variable declarations must have the same type.  Variable 'm' must be of type 'typeof M', but here has type 'typeof A'.
 
 
-==== forStatementsMultipleInvalidDecl.ts (12 errors) ====
+==== forStatementsMultipleInvalidDecl.ts (13 errors) ====
     interface I {
         id: number;
     }
@@ -35,6 +36,8 @@ forStatementsMultipleInvalidDecl.ts(53,10): error TS2403: Subsequent variable de
     function F(x: string): number { return 42; }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
         export class A {
             name: string;
         }

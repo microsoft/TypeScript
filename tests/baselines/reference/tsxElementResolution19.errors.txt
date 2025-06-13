@@ -1,0 +1,23 @@
+file1.tsx(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== react.d.ts (0 errors) ====
+    declare module "react" {
+    
+    }
+    
+==== file1.tsx (1 errors) ====
+    declare module JSX {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        interface Element { }
+    }
+    export class MyClass { }
+    
+==== file2.tsx (0 errors) ====
+    // Should not elide React import
+    import * as React from 'react';
+    import {MyClass} from './file1';
+    
+    <MyClass />;
+    

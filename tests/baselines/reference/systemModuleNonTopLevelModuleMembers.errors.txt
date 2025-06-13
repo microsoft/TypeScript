@@ -1,0 +1,23 @@
+systemModuleNonTopLevelModuleMembers.ts(2,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+systemModuleNonTopLevelModuleMembers.ts(6,15): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+systemModuleNonTopLevelModuleMembers.ts(8,19): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== systemModuleNonTopLevelModuleMembers.ts (3 errors) ====
+    export class TopLevelClass {}
+    export module TopLevelModule {var v;}
+                  ~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    export function TopLevelFunction(): void {}
+    export enum TopLevelEnum {E}
+    
+    export module TopLevelModule2 {
+                  ~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export class NonTopLevelClass {}
+        export module NonTopLevelModule {var v;}
+                      ~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        export function NonTopLevelFunction(): void {}
+        export enum NonTopLevelEnum {E}
+    }

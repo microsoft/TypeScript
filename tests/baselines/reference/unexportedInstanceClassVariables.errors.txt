@@ -1,0 +1,21 @@
+unexportedInstanceClassVariables.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+unexportedInstanceClassVariables.ts(7,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== unexportedInstanceClassVariables.ts (2 errors) ====
+    module M{
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	class A{
+    		constructor(val:string){}
+    	}
+    }
+    
+    module M{
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	class A {}  
+     
+     	var a = new A();
+    }
+    

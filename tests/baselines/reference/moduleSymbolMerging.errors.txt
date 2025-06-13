@@ -1,0 +1,22 @@
+A.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+B.ts(2,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+B.ts(3,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== B.ts (2 errors) ====
+    ///<reference path="A.ts" preserve="true" />
+    module A { ; }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    module B {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    	export function f(): A.I { return null; }
+    }
+    
+    
+==== A.ts (1 errors) ====
+    module A { export interface I {} }
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    

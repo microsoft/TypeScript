@@ -1,0 +1,21 @@
+ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts(1,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ExportInterfaceWithInaccessibleTypeInIndexerTypeAnnotations.ts (1 errors) ====
+    module A {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+        interface Point {
+            x: number;
+            y: number;
+        }
+    
+        export interface points {
+    
+            [idx: number]: Point;
+            [idx: string]: Point;
+        }
+    }
+    
+    

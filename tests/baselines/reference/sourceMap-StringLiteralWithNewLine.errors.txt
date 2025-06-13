@@ -1,0 +1,19 @@
+sourceMap-StringLiteralWithNewLine.ts(8,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== sourceMap-StringLiteralWithNewLine.ts (1 errors) ====
+    interface Document {
+    }
+    interface Window {
+        document: Document;
+    }
+    declare var window: Window;
+    
+    module Foo {
+           ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        var x = "test1";
+        var y = "test 2\
+    isn't this a lot of fun";
+        var z = window.document;
+    }

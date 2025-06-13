@@ -1,7 +1,8 @@
 asyncAwaitIsolatedModules_es6.ts(1,27): error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+asyncAwaitIsolatedModules_es6.ts(37,8): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
 
 
-==== asyncAwaitIsolatedModules_es6.ts (1 errors) ====
+==== asyncAwaitIsolatedModules_es6.ts (2 errors) ====
     import { MyPromise } from "missing";
                               ~~~~~~~~~
 !!! error TS2792: Cannot find module 'missing'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
@@ -41,5 +42,7 @@ asyncAwaitIsolatedModules_es6.ts(1,27): error TS2792: Cannot find module 'missin
     }
     
     module M {
+           ~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
     	export async function f1() { }
     }

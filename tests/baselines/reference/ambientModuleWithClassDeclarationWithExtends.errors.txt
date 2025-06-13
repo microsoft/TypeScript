@@ -1,0 +1,10 @@
+ambientModuleWithClassDeclarationWithExtends.ts(1,16): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== ambientModuleWithClassDeclarationWithExtends.ts (1 errors) ====
+    declare module foo {
+                   ~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+        class A { }
+        class B extends A { }
+    }
