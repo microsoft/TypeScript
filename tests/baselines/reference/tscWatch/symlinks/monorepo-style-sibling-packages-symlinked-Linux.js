@@ -469,25 +469,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-<<<<<<< HEAD
-/home/src/projects/project/node_modules:
-  {"inode":16}
-/home/src/projects/project/node_modules/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1/dist:
-  {"inode":122}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":124}
-/home/src/projects/project/packages/package1/package.json:
-  {"inode":7}
-/home/src/projects/project/packages/package1/src:
-  {"inode":9}
-=======
-/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":126}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
@@ -509,7 +492,7 @@ FsWatches *deleted*::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":124}
+  {"inode":122}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -592,11 +575,6 @@ FsWatches::
   {"inode":31}
 
 FsWatches *deleted*::
-<<<<<<< HEAD
-/home/src/projects/project/packages/package1/dist:
-  {"inode":122}
-=======
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":124}
 
@@ -980,25 +958,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-<<<<<<< HEAD
-/home/src/projects/project/node_modules:
-  {"inode":16}
-/home/src/projects/project/node_modules/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1/dist:
-  {"inode":127}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":129}
-/home/src/projects/project/packages/package1/package.json:
-  {"inode":7}
-/home/src/projects/project/packages/package1/src:
-  {"inode":9}
-=======
-/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":131}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/dist:
@@ -1020,7 +981,7 @@ FsWatches *deleted*::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":129}
+  {"inode":127}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:

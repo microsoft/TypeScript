@@ -722,25 +722,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-<<<<<<< HEAD
-/home/src/projects/project/node_modules:
-  {"inode":16}
-/home/src/projects/project/node_modules/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1/dist:
-  {"inode":122}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":124}
-/home/src/projects/project/packages/package1/package.json:
-  {"inode":7}
-/home/src/projects/project/packages/package1/src:
-  {"inode":9}
-=======
-/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":126}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/package.json:
@@ -760,7 +743,7 @@ FsWatches *deleted*::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":124}
+  {"inode":122}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -941,11 +924,6 @@ FsWatches::
   {"inode":34}
 
 FsWatches *deleted*::
-<<<<<<< HEAD
-/home/src/projects/project/packages/package1/dist:
-  {"inode":122}
-=======
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":124}
 
@@ -1294,17 +1272,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/pr
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
-<<<<<<< HEAD
-25: timerToUpdateChildWatches
+17: timerToUpdateChildWatches
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 125
 //// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 126
 //// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 128
-=======
-17: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 127
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 128
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 130
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -1555,25 +1526,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-<<<<<<< HEAD
-/home/src/projects/project/node_modules:
-  {"inode":16}
-/home/src/projects/project/node_modules/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1:
-  {"inode":6}
-/home/src/projects/project/packages/package1/dist:
-  {"inode":127}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"inode":129}
-/home/src/projects/project/packages/package1/package.json:
-  {"inode":7}
-/home/src/projects/project/packages/package1/src:
-  {"inode":9}
-=======
-/home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":131}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/project/packages/package2:
   {"inode":11}
 /home/src/projects/project/packages/package2/package.json:
@@ -1593,7 +1547,7 @@ FsWatches *deleted*::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":129}
+  {"inode":127}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:

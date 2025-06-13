@@ -576,13 +576,7 @@ FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
   {"inode":153}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":155}
-/home/src/projects/a/1/a-impl/a/package.json:
-  {"inode":24}
-=======
-  {"inode":157}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/b/2/b-impl/b/src/index.ts:
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
@@ -590,13 +584,7 @@ FsWatches::
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
   {"inode":146}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":148}
-/home/src/projects/c/3/c-impl/c/package.json: *new*
-  {"inode":12}
-=======
-  {"inode":150}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":42}
 
@@ -1216,13 +1204,7 @@ FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
   {"inode":169}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":171}
-/home/src/projects/a/1/a-impl/a/package.json:
-  {"inode":24}
-=======
-  {"inode":173}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/b/2/b-impl/b/src/index.ts:
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
@@ -1230,13 +1212,7 @@ FsWatches::
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
   {"inode":162}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":164}
-/home/src/projects/c/3/c-impl/c/package.json: *new*
-  {"inode":12}
-=======
-  {"inode":166}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":42}
 

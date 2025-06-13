@@ -499,8 +499,6 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/server/index.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/server/router.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspaces/project/packages/server/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared 1 undefined Project: /home/src/workspaces/project/packages/server/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/shared 1 undefined Project: /home/src/workspaces/project/packages/server/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/server/node_modules 1 undefined Project: /home/src/workspaces/project/packages/server/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/server/node_modules 1 undefined Project: /home/src/workspaces/project/packages/server/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/packages/node_modules 1 undefined Project: /home/src/workspaces/project/packages/server/tsconfig.json WatchType: Failed Lookup Locations
@@ -796,7 +794,6 @@ watchedDirectoriesRecursive::
   {}
 /home/src/workspaces/project/packages/shared:
   {}
-  {} *new*
 /home/src/workspaces/project/packages/shared/node_modules:
   {}
 /home/src/workspaces/project/packages/shared/node_modules/@types:

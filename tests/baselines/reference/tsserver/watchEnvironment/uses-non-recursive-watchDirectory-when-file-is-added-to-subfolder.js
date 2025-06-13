@@ -253,12 +253,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/user
 Before running Timeout callback:: count: 2
 1: /a/username/workspace/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
-<<<<<<< HEAD
-3: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation
 //// [/a/username/workspace/project/src/file2.ts] Inode:: 115
-=======
-//// [/a/username/workspace/project/src/file2.ts] Inode:: 117
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 
 
 

@@ -360,44 +360,18 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-<<<<<<< HEAD
-/home/src/projects/a/1/a-impl/a/lib: *new*
-  {"inode":150}
-=======
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
   {"inode":152}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":154}
-/home/src/projects/a/1/a-impl/a/node_modules: *new*
-  {"inode":25}
-/home/src/projects/a/1/a-impl/a/package.json: *new*
-  {"inode":24}
-/home/src/projects/b/2/b-impl/b/node_modules: *new*
-  {"inode":37}
-=======
-  {"inode":156}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/b/2/b-impl/b/src: *new*
   {"inode":34}
 /home/src/projects/b/2/b-impl/b/tsconfig.json: *new*
   {"inode":36}
-<<<<<<< HEAD
-/home/src/projects/c/3/c-impl/c/lib: *new*
-  {"inode":143}
-=======
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
   {"inode":145}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":147}
-/home/src/projects/c/3/c-impl/c/package.json: *new*
-  {"inode":12}
-=======
-  {"inode":149}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {"inode":45}
 
@@ -1063,21 +1037,10 @@ FsWatches::
   {"inode":45}
 
 FsWatches *deleted*::
-<<<<<<< HEAD
-/home/src/projects/a/1/a-impl/a/lib:
-  {"inode":150}
-=======
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
   {"inode":152}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-<<<<<<< HEAD
   {"inode":154}
-/home/src/projects/c/3/c-impl/c/lib:
-  {"inode":143}
-=======
-  {"inode":156}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
   {"inode":145}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
@@ -1388,13 +1351,8 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/pr
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.d.ts 0:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.d.ts 0:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
-<<<<<<< HEAD
-30: timerToUpdateChildWatches
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 162
-=======
 16: timerToUpdateChildWatches
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 164
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 162
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
@@ -1763,44 +1721,18 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-<<<<<<< HEAD
-/home/src/projects/a/1/a-impl/a/lib:
-  {"inode":168}
-=======
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
   {"inode":170}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-<<<<<<< HEAD
   {"inode":172}
-/home/src/projects/a/1/a-impl/a/node_modules:
-  {"inode":25}
-/home/src/projects/a/1/a-impl/a/package.json:
-  {"inode":24}
-/home/src/projects/b/2/b-impl/b/node_modules:
-  {"inode":37}
-=======
-  {"inode":174}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/b/2/b-impl/b/src:
   {"inode":34}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-<<<<<<< HEAD
-/home/src/projects/c/3/c-impl/c/lib: *new*
-  {"inode":161}
-=======
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
   {"inode":163}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
-<<<<<<< HEAD
   {"inode":165}
-/home/src/projects/c/3/c-impl/c/package.json: *new*
-  {"inode":12}
-=======
-  {"inode":167}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":45}
 
@@ -1808,7 +1740,7 @@ FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib:
-  {"inode":170}
+  {"inode":168}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:

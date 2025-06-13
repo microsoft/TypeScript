@@ -187,17 +187,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-<<<<<<< HEAD
   {"inode":116}
-/home/src/Vscode: *new*
-  {"inode":12}
-/home/src/Vscode/Projects: *new*
-  {"inode":13}
-/home/src/Vscode/Projects/bin: *new*
-  {"inode":14}
-=======
-  {"inode":118}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
   {"inode":24}
 
@@ -377,17 +367,7 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json:
-<<<<<<< HEAD
   {"inode":116}
-/home/src/Vscode:
-  {"inode":12}
-/home/src/Vscode/Projects:
-  {"inode":13}
-/home/src/Vscode/Projects/bin:
-  {"inode":14}
-=======
-  {"inode":118}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts:
   {"inode":24}
 

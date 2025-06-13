@@ -927,25 +927,13 @@ FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
   {"inode":154}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":156}
-/home/src/projects/a/1/a-impl/a/package.json:
-  {"inode":24}
-=======
-  {"inode":158}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
   {"inode":147}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-<<<<<<< HEAD
   {"inode":149}
-/home/src/projects/c/3/c-impl/c/package.json: *new*
-  {"inode":12}
-=======
-  {"inode":151}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":45}
 
@@ -1105,17 +1093,8 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 change in unrelated folder in a
-<<<<<<< HEAD
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/anotherFile.ts :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/2/unrelated/anotherFile.ts :: WatchInfo: /home/src/projects/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 1
-14: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 159
-=======
 Before running Timeout callback:: count: 0
-//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 161
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
+//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 159
 export const a = 10;
 
 
@@ -1230,17 +1209,8 @@ Info seq  [hh:mm:ss:mss] event:
 After running Immedidate callback:: count: 0
 
 change in unrelated folder in c
-<<<<<<< HEAD
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/anotherFile.ts :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/4/unrelated/anotherFile.ts :: WatchInfo: /home/src/projects/c 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
-Before running Timeout callback:: count: 1
-16: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 160
-=======
 Before running Timeout callback:: count: 0
-//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 162
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
+//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 160
 export const a = 10;
 
 
@@ -1747,13 +1717,8 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /home/src/projects/b/
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Project: /home/src/projects/b/2/b-impl/b/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
-<<<<<<< HEAD
-47: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 162
-=======
 31: /home/src/projects/b/2/b-impl/b/tsconfig.jsonFailedLookupInvalidation
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 164
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 162
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
@@ -2057,25 +2022,13 @@ FsWatches::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
   {"inode":170}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-<<<<<<< HEAD
   {"inode":172}
-/home/src/projects/a/1/a-impl/a/package.json:
-  {"inode":24}
-=======
-  {"inode":174}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
   {"inode":163}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
-<<<<<<< HEAD
   {"inode":165}
-/home/src/projects/c/3/c-impl/c/package.json: *new*
-  {"inode":12}
-=======
-  {"inode":167}
->>>>>>> 817f213202 (Merge 29e5a304b4c96589cb6849e48c639f2cc3b4cc33 into dd1e258ba56f1b511879372c857fb625de3dec4a)
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {"inode":45}
 
