@@ -142,9 +142,10 @@ type Server struct {
 	initializeParams *lsproto.InitializeParams
 	positionEncoding lsproto.PositionEncodingKind
 
-	watchEnabled   bool
-	watcherID      int
-	watchers       collections.Set[project.WatcherHandle]
+	watchEnabled bool
+	watcherID    atomic.Uint32
+	watchers     collections.SyncSet[project.WatcherHandle]
+
 	logger         *project.Logger
 	projectService *project.Service
 
@@ -195,7 +196,7 @@ func (s *Server) Client() project.Client {
 
 // WatchFiles implements project.Client.
 func (s *Server) WatchFiles(ctx context.Context, watchers []*lsproto.FileSystemWatcher) (project.WatcherHandle, error) {
-	watcherId := fmt.Sprintf("watcher-%d", s.watcherID)
+	watcherId := fmt.Sprintf("watcher-%d", s.watcherID.Add(1))
 	_, err := s.sendRequest(ctx, lsproto.MethodClientRegisterCapability, &lsproto.RegistrationParams{
 		Registrations: []*lsproto.Registration{
 			{
@@ -213,7 +214,6 @@ func (s *Server) WatchFiles(ctx context.Context, watchers []*lsproto.FileSystemW
 
 	handle := project.WatcherHandle(watcherId)
 	s.watchers.Add(handle)
-	s.watcherID++
 	return handle, nil
 }
 
