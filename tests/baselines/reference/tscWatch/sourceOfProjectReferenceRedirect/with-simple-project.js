@@ -312,8 +312,6 @@ PolledWatches::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/user/username/projects/demo/animals: *new*
-  {}
 /user/username/projects/demo/animals/animal.ts: *new*
   {}
 /user/username/projects/demo/animals/dog.ts: *new*

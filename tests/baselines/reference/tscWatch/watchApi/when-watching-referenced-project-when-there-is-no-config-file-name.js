@@ -73,14 +73,8 @@ CreatingProgramWith::
   projectReferences: [{"path":"/user/username/projects/project/lib","originalPath":"./lib"}]
 Loading config file: /user/username/projects/project/lib/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/app.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/lib 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/project/app.js :: WatchInfo: /user/username/projects/project 0 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 FileWatcher:: Added:: WatchInfo: /user/username/projects/project/lib/tsconfig.json 2000 undefined Config file of referened project
@@ -97,17 +91,11 @@ console.log(lib_1.one);
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts: *new*
   {}
-/user/username/projects/project: *new*
-  {}
 /user/username/projects/project/app.ts: *new*
   {}
 /user/username/projects/project/lib/index.d.ts: *new*
   {}
 /user/username/projects/project/lib/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/project/lib: *new*
   {}
 
 Program root files: [

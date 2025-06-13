@@ -47,18 +47,12 @@ File '/home/src/workspaces/project/src/app/services/generated.d.ts' does not exi
 File '/home/src/workspaces/project/src/app/services/generated/package.json' does not exist.
 File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists - use it as a name resolution result.
 ======== Module name './app/services/generated' was successfully resolved to '/home/src/workspaces/project/src/app/services/generated/index.ts'. ========
-DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/main.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/main.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
@@ -99,8 +93,6 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/workspaces/project: *new*
   {}
-/home/src/workspaces/project/src: *new*
-  {}
 
 Program root files: [
   "/home/src/workspaces/project/src/main.ts",
@@ -137,35 +129,25 @@ Input::
 //// [/home/src/workspaces/project/src/app/services/generated/index.js] deleted
 
 Output::
-DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 Project: /home/src/workspaces/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/workspaces/project/src/app/services/generated/index.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 FileWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.ts 2:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.ts 2:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.ts :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.ts :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.ts :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.ts :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
-DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 
 
-Timeout callback:: count: 2
-4: timerToInvalidateFailedLookupResolutions *new*
-5: timerToUpdateProgram *new*
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
 
-Before running Timeout callback:: count: 2
-4: timerToInvalidateFailedLookupResolutions
-5: timerToUpdateProgram
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -189,6 +171,8 @@ File '/home/src/workspaces/project/src/app/services/generated.js' does not exist
 File '/home/src/workspaces/project/src/app/services/generated.jsx' does not exist.
 Directory '/home/src/workspaces/project/src/app/services/generated' does not exist, skipping all lookups in it.
 ======== Module name './app/services/generated' was not resolved. ========
+DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
 [96msrc/main.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './app/services/generated' or its corresponding type declarations.
 
@@ -222,7 +206,7 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/workspaces/project:
   {}
-/home/src/workspaces/project/src:
+/home/src/workspaces/project/src: *new*
   {}
 
 Before running Timeout callback:: count: 0
@@ -269,12 +253,12 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src
 
 
 Timeout callback:: count: 2
-6: timerToInvalidateFailedLookupResolutions *new*
-7: timerToUpdateProgram *new*
+4: timerToInvalidateFailedLookupResolutions *new*
+5: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 2
-6: timerToInvalidateFailedLookupResolutions
-7: timerToUpdateProgram
+4: timerToInvalidateFailedLookupResolutions
+5: timerToUpdateProgram
 
 After running Timeout callback:: count: 1
 Output::
@@ -283,11 +267,11 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-7: timerToUpdateProgram *deleted*
-8: timerToUpdateProgram *new*
+5: timerToUpdateProgram *deleted*
+6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-8: timerToUpdateProgram
+6: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -309,8 +293,8 @@ File '/home/src/workspaces/project/src/app/services/generated/package.json' does
 File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists - use it as a name resolution result.
 ======== Module name './app/services/generated' was successfully resolved to '/home/src/workspaces/project/src/app/services/generated/index.ts'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 Project: /home/src/workspaces/project/tsconfig.json Detected file add/remove of non supported extension: /home/src/workspaces/project/src/app/services/generated/index.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
@@ -346,6 +330,8 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/workspaces/project:
   {}
+
+FsWatchesRecursive *deleted*::
 /home/src/workspaces/project/src:
   {}
 

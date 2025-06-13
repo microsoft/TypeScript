@@ -126,8 +126,6 @@ PolledWatches *deleted*::
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.d.ts:
   {}
-/users/username/projects/project:
-  {}
 /users/username/projects/project/bar.d.ts: *new*
   {}
 /users/username/projects/project/foo.ts:
@@ -135,6 +133,8 @@ FsWatches::
 
 FsWatches *deleted*::
 /users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 
 Timeout callback:: count: 0
