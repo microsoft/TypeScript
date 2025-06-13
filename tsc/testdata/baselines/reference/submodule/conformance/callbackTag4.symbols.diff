@@ -13,6 +13,8 @@
 
      this
 ->this : Symbol(this)
--
++>this : Symbol(@this {{ a: string, b: number }}
++ * , Decl(a.js, 2, 3))
+
      return true
  }

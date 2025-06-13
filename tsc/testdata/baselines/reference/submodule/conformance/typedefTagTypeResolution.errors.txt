@@ -1,5 +1,5 @@
 github20832.js(2,15): error TS2304: Cannot find name 'U'.
-github20832.js(26,12): error TS2304: Cannot find name 'Cb'.
+github20832.js(17,12): error TS2304: Cannot find name 'V'.
 
 
 ==== github20832.js (2 errors) ====
@@ -22,6 +22,8 @@ github20832.js(26,12): error TS2304: Cannot find name 'Cb'.
     /**
      * @callback Cb
      * @param {V} firstParam
+               ~
+!!! error TS2304: Cannot find name 'V'.
      */
     /**
      * @template V
@@ -31,7 +33,5 @@ github20832.js(26,12): error TS2304: Cannot find name 'Cb'.
     }
     
     /** @type {Cb} */
-               ~~
-!!! error TS2304: Cannot find name 'Cb'.
     const cb = x => {}
     

@@ -6,27 +6,22 @@
  const MyComponent = () => /* @type {any} */(null);
 ->MyComponent : StatelessComponent<MyComponentProps>
 ->() => /* @type {any} */(null) : { (): any; defaultProps: Partial<MyComponentProps>; }
-+>MyComponent : { (): any; defaultProps?: P; }
-+>() => /* @type {any} */(null) : { (): any; defaultProps: { color: string; }; }
++>MyComponent : { (): any; defaultProps?: Partial<{ color: "blue" | "red"; }>; }
++>() => /* @type {any} */(null) : { (): any; defaultProps: { color: "red"; }; }
  >(null) : null
 
  MyComponent.defaultProps = {
-->MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
+ >MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
 ->MyComponent.defaultProps : Partial<MyComponentProps>
 ->MyComponent : StatelessComponent<MyComponentProps>
 ->defaultProps : Partial<MyComponentProps>
-->{    color: "red"} : { color: "red"; }
-+>MyComponent.defaultProps = {    color: "red"} : { color: string; }
-+>MyComponent.defaultProps : P
-+>MyComponent : { (): any; defaultProps?: P; }
-+>defaultProps : P
-+>{    color: "red"} : { color: string; }
++>MyComponent.defaultProps : Partial<{ color: "blue" | "red"; }>
++>MyComponent : { (): any; defaultProps?: Partial<{ color: "blue" | "red"; }>; }
++>defaultProps : Partial<{ color: "blue" | "red"; }>
+ >{    color: "red"} : { color: "red"; }
 
      color: "red"
-->color : "red"
-+>color : string
- >"red" : "red"
-
+@@= skipped -18, +18 lines =@@
  };
 
  const MyComponent2 = () => null;
@@ -49,13 +44,13 @@
  >{    color: "red"} : { color: "red"; }
 
      color: "red"
-@@= skipped -40, +40 lines =@@
+@@= skipped -22, +22 lines =@@
    * @type {StatelessComponent<MyComponentProps>}
   */
  const check = MyComponent2;
 ->check : StatelessComponent<MyComponentProps>
 ->MyComponent2 : { (): any; defaultProps: MyComponentProps; }
-+>check : { (): any; defaultProps?: P; }
++>check : { (): any; defaultProps?: Partial<{ color: "blue" | "red"; }>; }
 +>MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
 
  /**

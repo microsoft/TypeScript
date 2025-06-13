@@ -5,4 +5,4 @@
  /** @type {B<number>} */
  var b;
 ->b : B<number>
-+>b : { b: U; }
++>b : { b: number; }

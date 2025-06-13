@@ -1,20 +1,11 @@
 --- old.templateInsideCallback.types
 +++ new.templateInsideCallback.types
-@@= skipped -17, +17 lines =@@
-  * @type {Call<T>}
+@@= skipped -51, +51 lines =@@
+  * @returns {unknown[]}
   */
- const identity = x => x;
-->identity : any
-+>identity : Call<T>
- >x => x : <T>(x: any) => any
- >x : any
- >x : any
-@@= skipped -37, +37 lines =@@
- >flatMap : { <U>(): any; (): any; }
+ function flatMap(array, iterable = identity) {
+->flatMap : { <U>(): any; (): any; }
++>flatMap : { (): any; (): any; }
  >array : unknown[]
  >iterable : (x: unknown) => unknown
-->identity : any
-+>identity : Call<T>
-
-   /** @type {unknown[]} */
-   const result = [];
+ >identity : any

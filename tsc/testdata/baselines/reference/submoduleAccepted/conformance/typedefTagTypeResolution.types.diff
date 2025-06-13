@@ -14,6 +14,5 @@
  const cb = x => {}
  >cb : Cb
 ->x => {} : (x: V) => any
-->x : V
-+>x => {} : (x: any) => void
-+>x : any
++>x => {} : (x: V) => void
+ >x : V

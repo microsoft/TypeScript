@@ -5,26 +5,20 @@
 -
 -
 -==== file1.js (0 errors) ====
-+file1.js(3,21): error TS2304: Cannot find name 'T'.
-+
-+
-+==== file1.js (1 errors) ====
-     /**
-      * @template {string} T
-      * @typedef {{ foo: T }} Foo
-+                        ~
-+!!! error TS2304: Cannot find name 'T'.
-      */
-     
-     export default {};
-     
+-    /**
+-     * @template {string} T
+-     * @typedef {{ foo: T }} Foo
+-     */
+-    
+-    export default {};
+-    
 -==== file2.js (1 errors) ====
-+==== file2.js (0 errors) ====
-     /**
-      * @template T
-      * @typedef {import('./file1').Foo<T>} Bar
+-    /**
+-     * @template T
+-     * @typedef {import('./file1').Foo<T>} Bar
 -                                       ~
 -!!! error TS2344: Type 'T' does not satisfy the constraint 'string'.
 -!!! related TS2208 file2.js:2:14: This type parameter might need an `extends string` constraint.
-      */
-     
+-     */
+-    
++<no content>

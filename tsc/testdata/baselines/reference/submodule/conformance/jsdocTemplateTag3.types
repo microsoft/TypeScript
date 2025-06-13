@@ -14,7 +14,7 @@
  * @return {W | X}
  */
 function f(t, u, v, w, x) {
->f : <T extends { a: number; b: string; }, U extends { a: number; b: string; }, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
+>f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
 >t : T
 >u : U
 >v : V
@@ -34,14 +34,14 @@ function f(t, u, v, w, x) {
 >b : string
 >length : number
 >u.a - u.b.length : number
->u.a : number
+>u.a : any
 >u : U
->a : number
->u.b.length : number
->u.b : string
+>a : any
+>u.b.length : any
+>u.b : any
 >u : U
->b : string
->length : number
+>b : any
+>length : any
 >v.c : boolean
 >v : V
 >c : boolean
@@ -55,7 +55,7 @@ function f(t, u, v, w, x) {
 
 f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
 >f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope') : "nope" | 101
->f : <T extends { a: number; b: string; }, U extends { a: number; b: string; }, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
+>f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
 >{ a: 12, b: 'hi', c: null } : { a: number; b: string; c: null; }
 >a : number
 >12 : 12
@@ -75,7 +75,7 @@ f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101
 
 f({ a: 12  }, undefined, undefined, 101, 'nope');
 >f({ a: 12  }, undefined, undefined, 101, 'nope') : "nope" | 101
->f : <T extends { a: number; b: string; }, U extends { a: number; b: string; }, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
+>f : <T extends { a: number; b: string; }, U, V extends { c: boolean; }, W, X>(t: T, u: U, v: V, w: W, x: X) => W | X
 >{ a: 12  } : { a: number; }
 >a : number
 >12 : 12

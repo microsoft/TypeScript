@@ -11,19 +11,19 @@
   * @type {StatelessComponent<MyComponentProps>}
   */
 const MyComponent = () => /* @type {any} */(null);
->MyComponent : { (): any; defaultProps?: P; }
->() => /* @type {any} */(null) : { (): any; defaultProps: { color: string; }; }
+>MyComponent : { (): any; defaultProps?: Partial<{ color: "blue" | "red"; }>; }
+>() => /* @type {any} */(null) : { (): any; defaultProps: { color: "red"; }; }
 >(null) : null
 
 MyComponent.defaultProps = {
->MyComponent.defaultProps = {    color: "red"} : { color: string; }
->MyComponent.defaultProps : P
->MyComponent : { (): any; defaultProps?: P; }
->defaultProps : P
->{    color: "red"} : { color: string; }
+>MyComponent.defaultProps = {    color: "red"} : { color: "red"; }
+>MyComponent.defaultProps : Partial<{ color: "blue" | "red"; }>
+>MyComponent : { (): any; defaultProps?: Partial<{ color: "blue" | "red"; }>; }
+>defaultProps : Partial<{ color: "blue" | "red"; }>
+>{    color: "red"} : { color: "red"; }
 
     color: "red"
->color : string
+>color : "red"
 >"red" : "red"
 
 };
@@ -51,7 +51,7 @@ MyComponent2.defaultProps = {
   * @type {StatelessComponent<MyComponentProps>}
  */
 const check = MyComponent2;
->check : { (): any; defaultProps?: P; }
+>check : { (): any; defaultProps?: Partial<{ color: "blue" | "red"; }>; }
 >MyComponent2 : { (): any; defaultProps: { color: "blue" | "red"; }; }
 
 /**

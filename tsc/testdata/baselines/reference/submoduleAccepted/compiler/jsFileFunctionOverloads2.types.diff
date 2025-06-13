@@ -1,0 +1,15 @@
+--- old.jsFileFunctionOverloads2.types
++++ new.jsFileFunctionOverloads2.types
+@@= skipped -54, +54 lines =@@
+  * @returns {unknown[]}
+  */
+ function flatMap(array, iterable = identity) {
+->flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T, U>(array: T[][]): T[]; }
++>flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; (array: T[][]): T[]; }
+ >array : unknown[]
+ >iterable : (x: unknown) => unknown
+->identity : <T_1>(x: T_1) => T_1
++>identity : <T>(x: T) => T
+
+   /** @type {unknown[]} */
+   const result = [];

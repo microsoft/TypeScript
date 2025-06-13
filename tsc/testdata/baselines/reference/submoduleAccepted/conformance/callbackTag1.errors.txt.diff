@@ -2,11 +2,10 @@
 +++ new.callbackTag1.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+cb.js(7,12): error TS2304: Cannot find name 'Sid'.
 +cb.js(11,12): error TS2304: Cannot find name 'NoReturn'.
 +
 +
-+==== cb.js (2 errors) ====
++==== cb.js (1 errors) ====
 +    /** @callback Sid
 +     * @param {string} s
 +     * @returns {string} What were you expecting
@@ -14,8 +13,6 @@
 +    var x = 1
 +    
 +    /** @type {Sid} smallId */
-+               ~~~
-+!!! error TS2304: Cannot find name 'Sid'.
 +    var sid = s => s + "!";
 +    
 +    

@@ -13,8 +13,8 @@ var x = 1
 /** @type {Id<string>} I actually wanted to write `const "120"` */
 var one_twenty = s => "120";
 >one_twenty : Id<string>
->s => "120" : (s: any) => string
->s : any
+>s => "120" : (s: string) => string
+>s : string
 >"120" : "120"
 
 /** @template S
@@ -23,7 +23,7 @@ var one_twenty = s => "120";
  * @return {S}
  */
 class SharedClass {
->SharedClass : SharedClass<S>
+>SharedClass : SharedClass
 
     constructor() {
         /** @type {SharedId<S>} */
@@ -36,10 +36,10 @@ class SharedClass {
 /** @type {SharedId<number>} */
 var outside = n => n + 1;
 >outside : SharedId<number>
->n => n + 1 : (n: any) => any
->n : any
->n + 1 : any
->n : any
+>n => n + 1 : (n: number) => number
+>n : number
+>n + 1 : number
+>n : number
 >1 : 1
 
 /** @type {Final<{ fantasy }, { heroes }>} */

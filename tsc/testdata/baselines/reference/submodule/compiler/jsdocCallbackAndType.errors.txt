@@ -1,4 +1,4 @@
-/a.js(5,12): error TS2304: Cannot find name 'B'.
+/a.js(8,3): error TS2554: Expected 0 arguments, but got 1.
 
 
 ==== /a.js (1 errors) ====
@@ -7,9 +7,9 @@
      * @callback B
      */
     /** @type {B<string>} */
-               ~
-!!! error TS2304: Cannot find name 'B'.
     let b;
     b();
     b(1);
+      ~
+!!! error TS2554: Expected 0 arguments, but got 1.
     

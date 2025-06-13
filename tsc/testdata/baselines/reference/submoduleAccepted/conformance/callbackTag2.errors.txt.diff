@@ -5,26 +5,15 @@
 -
 -
 -==== cb.js (1 errors) ====
-+cb.js(8,12): error TS2304: Cannot find name 'Id'.
-+cb.js(19,14): error TS2339: Property 'id' does not exist on type 'SharedClass<S>'.
-+cb.js(22,12): error TS2304: Cannot find name 'SharedId'.
++cb.js(19,14): error TS2339: Property 'id' does not exist on type 'SharedClass'.
 +cb.js(25,12): error TS2304: Cannot find name 'Final'.
 +
 +
-+==== cb.js (4 errors) ====
++==== cb.js (2 errors) ====
      /** @template T
       * @callback Id
       * @param {T} t
-@@= skipped -9, +12 lines =@@
-     var x = 1
-     
-     /** @type {Id<string>} I actually wanted to write `const "120"` */
-+               ~~
-+!!! error TS2304: Cannot find name 'Id'.
-     var one_twenty = s => "120";
-     
-     /** @template S
-@@= skipped -10, +12 lines =@@
+@@= skipped -19, +20 lines =@@
      class SharedClass {
          constructor() {
              /** @type {SharedId<S>} */
@@ -32,12 +21,10 @@
 -!!! error TS2304: Cannot find name 'S'.
              this.id;
 +                 ~~
-+!!! error TS2339: Property 'id' does not exist on type 'SharedClass<S>'.
++!!! error TS2339: Property 'id' does not exist on type 'SharedClass'.
          }
      }
      /** @type {SharedId<number>} */
-+               ~~~~~~~~
-+!!! error TS2304: Cannot find name 'SharedId'.
      var outside = n => n + 1;
      
      /** @type {Final<{ fantasy }, { heroes }>} */

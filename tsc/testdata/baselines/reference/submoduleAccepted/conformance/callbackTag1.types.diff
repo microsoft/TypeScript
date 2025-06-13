@@ -1,19 +1,6 @@
 --- old.callbackTag1.types
 +++ new.callbackTag1.types
-@@= skipped -11, +11 lines =@@
- /** @type {Sid} smallId */
- var sid = s => s + "!";
- >sid : Sid
-->s => s + "!" : (s: string) => string
-->s : string
-+>s => s + "!" : (s: any) => string
-+>s : any
- >s + "!" : string
-->s : string
-+>s : any
- >"!" : "!"
-
-
+@@= skipped -21, +21 lines =@@
  /** @type {NoReturn} */
  var noreturn = obj => void obj.title
  >noreturn : NoReturn

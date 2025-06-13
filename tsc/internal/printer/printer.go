@@ -1843,6 +1843,9 @@ func (p *Printer) emitTypeReference(node *ast.TypeReferenceNode) {
 
 // Emits the return type of a FunctionTypeNode or ConstructorTypeNode, including the arrow (`=>`)
 func (p *Printer) emitReturnType(node *ast.TypeNode) {
+	if node == nil {
+		return
+	}
 	p.writePunctuation("=>")
 	p.writeSpace()
 	if p.inExtends && node.Kind == ast.KindInferType && node.AsInferTypeNode().TypeParameter.AsTypeParameter().Constraint != nil {

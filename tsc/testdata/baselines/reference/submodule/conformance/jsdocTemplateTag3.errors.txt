@@ -1,7 +1,9 @@
+a.js(14,29): error TS2339: Property 'a' does not exist on type 'U'.
+a.js(14,35): error TS2339: Property 'b' does not exist on type 'U'.
 a.js(21,3): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
 
 
-==== a.js (1 errors) ====
+==== a.js (3 errors) ====
     /**
      * @template {{ a: number, b: string }} T,U A Comment
      * @template {{ c: boolean }} V uh ... are comments even supported??
@@ -16,6 +18,10 @@ a.js(21,3): error TS2741: Property 'b' is missing in type '{ a: number; }' but r
      */
     function f(t, u, v, w, x) {
         if(t.a + t.b.length > u.a - u.b.length && v.c) {
+                                ~
+!!! error TS2339: Property 'a' does not exist on type 'U'.
+                                      ~
+!!! error TS2339: Property 'b' does not exist on type 'U'.
             return w;
         }
         return x;

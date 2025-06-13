@@ -1,0 +1,22 @@
+--- old.jsdocTemplateTag7.errors.txt
++++ new.jsdocTemplateTag7.errors.txt
+@@= skipped -0, +0 lines =@@
+ a.js(2,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
++a.js(7,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+ a.js(12,14): error TS1273: 'private' modifier cannot appear on a type parameter
+
+
+-==== a.js (2 errors) ====
++==== a.js (3 errors) ====
+     /**
+      * @template const T
+                  ~~~~~
+@@= skipped -11, +12 lines =@@
+     
+     /**
+      * @template const T
++                 ~~~~~
++!!! error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+      */
+     class C { }
+     

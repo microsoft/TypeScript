@@ -40,11 +40,11 @@ const f1 = async str => {
 /** @type {T1} */
 const f2 = async str => {
 >f2 : T1
->async str => {    return str;} : (str: any) => Promise<any>
->str : any
+>async str => {    return str;} : (str: string) => Promise<string>
+>str : string
 
     return str;
->str : any
+>str : string
 }
 
 /**
@@ -63,20 +63,20 @@ const f3 = async str => {
 /** @type {T2} */
 const f4 = async str => {
 >f4 : T2
->async str => {    return str;} : (str: any) => Promise<any>
->str : any
+>async str => {    return str;} : (str: string) => Promise<string>
+>str : string
 
     return str;
->str : any
+>str : string
 }
 
 /** @type {T3} */
 const f5 = async str => {
 >f5 : T3
->async str => {    return str;} : (str: any) => Promise<any>
->str : any
+>async str => {    return str;} : (str: string) => Promise<string>
+>str : string
 
     return str;
->str : any
+>str : string
 }
 

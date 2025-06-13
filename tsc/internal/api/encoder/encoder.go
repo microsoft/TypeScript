@@ -686,7 +686,7 @@ func getChildrenPropertyMask(node *ast.Node) uint8 {
 		return (boolToByte(n.TagName != nil) << 0) | (boolToByte(n.TypeExpression != nil) << 1) | (boolToByte(n.Name() != nil) << 2) | (boolToByte(n.Comment != nil) << 3)
 	case ast.KindJSDocSignature:
 		n := node.AsJSDocSignature()
-		return (boolToByte(n.TypeParameters() != nil) << 0) | (boolToByte(n.Parameters != nil) << 1) | (boolToByte(n.Type != nil) << 2)
+		return (boolToByte(n.TypeParameters != nil) << 0) | (boolToByte(n.Parameters != nil) << 1) | (boolToByte(n.Type != nil) << 2)
 	case ast.KindClassStaticBlockDeclaration:
 		n := node.AsClassStaticBlockDeclaration()
 		return (boolToByte(n.Modifiers() != nil) << 0) | (boolToByte(n.Body != nil) << 1)

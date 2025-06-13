@@ -12,12 +12,12 @@
 /** @type {C} */
 const cb = function (a, b) {
 >cb : C
->function (a, b) {    this    return true} : (a: any, b: any) => boolean
->a : any
->b : any
+>function (a, b) {    this    return true} : (this: { a: string; b: number; }, a: string, b: number) => true
+>a : string
+>b : number
 
     this
->this : any
+>this : { a: string; b: number; }
 
     return true
 >true : true

@@ -4,6 +4,7 @@
 -<no content>
 +base.js(11,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +file.js(1,15): error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
++file.js(4,12): error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
 +
 +
 +==== base.js (1 errors) ====
@@ -21,13 +22,15 @@
 +    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 +!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    
-+==== file.js (1 errors) ====
++==== file.js (2 errors) ====
 +    /** @typedef {import('./base')} BaseFactory */
 +                  ~~~~~~~~~~~~~~~~
 +!!! error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
 +    /**
 +     * @callback BaseFactoryFactory
 +     * @param {import('./base')} factory
++               ~~~~~~~~~~~~~~~~
++!!! error TS1340: Module './base' does not refer to a type, but is used as a type here. Did you mean 'typeof import('./base')'?
 +     */
 +    /** @enum {import('./base')} */
 +    const couldntThinkOfAny = {}

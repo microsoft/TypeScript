@@ -6,8 +6,8 @@
  function foo(fns) {
 ->foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
 ->fns : Funcs<A, B>
-+>foo : <A, B extends Record<string, unknown>>(fns: { [x: string]: { fn: (a: A, b: B) => void; thing: B; }; }) => [A, B]
-+>fns : { [x: string]: { fn: (a: A, b: B) => void; thing: B; }; }
++>foo : <A, B extends Record<string, unknown>>(fns: any) => [A, B]
++>fns : any
 
    return /** @type {any} */ (null);
  >(null) : any
@@ -19,7 +19,7 @@
 ->foo : <A, B extends Record<string, unknown>>(fns: Funcs<A, B>) => [A, B]
 +>result : [unknown, Record<string, unknown>]
 +>foo({  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },}) : [unknown, Record<string, unknown>]
-+>foo : <A, B extends Record<string, unknown>>(fns: { [x: string]: { fn: (a: A, b: B) => void; thing: B; }; }) => [A, B]
++>foo : <A, B extends Record<string, unknown>>(fns: any) => [A, B]
  >{  bar: {    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  },} : { bar: { fn: (a: string) => void; thing: string; }; }
 
    bar: {

@@ -865,9 +865,11 @@ func WalkUpParenthesizedTypes(node *TypeNode) *Node {
 }
 
 func GetEffectiveTypeParent(parent *Node) *Node {
-	if IsInJSFile(parent) && parent.Kind == KindJSDocTypeExpression {
-		if host := parent.AsJSDocTypeExpression().Host; host != nil {
-			parent = host
+	if parent != nil && IsInJSFile(parent) {
+		if parent.Kind == KindJSDocTypeExpression && parent.AsJSDocTypeExpression().Host != nil {
+			parent = parent.AsJSDocTypeExpression().Host
+		} else if parent.Kind == KindJSDocTemplateTag && parent.AsJSDocTemplateTag().Host != nil {
+			parent = parent.AsJSDocTemplateTag().Host
 		}
 	}
 	return parent

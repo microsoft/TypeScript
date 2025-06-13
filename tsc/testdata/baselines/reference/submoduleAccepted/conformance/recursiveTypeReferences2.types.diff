@@ -5,5 +5,5 @@
  /** @type {XMLObject<{foo:string}>} */
  const p = {};
 ->p : XMLObject<{ foo: string; }>
-+>p : { $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; } & { [x: string]: string | { $A: { [x: string]: (any & { [x: string]: string | any & any; })[]; }; $O: { [x: string]: { $$?: Record<string, string>; } & ({ $: string; } | any & { [x: string]: string | any & any; }); }; $$?: Record<string, string>; } & any; }
++>p : { $A: { foo?: ({ $A: string; $O: string; $$?: Record<string, string>; } & string)[]; }; $O: { foo?: { $$?: Record<string, string>; } & { $: string; }; }; $$?: Record<string, string>; } & { foo?: string; }
  >{} : {}

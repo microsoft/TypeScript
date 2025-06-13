@@ -56,7 +56,7 @@
    * @returns {unknown}
    */
   transform(fn) {
->transform : { <U>(fn: (y: T) => U): U; <U_1>(): T; }
+>transform : { <U>(fn: (y: T) => U): U; (): T; }
 >fn : (y: T) => unknown
 
     return fn ? fn(this.value) : this.value;

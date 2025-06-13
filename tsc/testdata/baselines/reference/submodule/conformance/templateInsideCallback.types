@@ -18,7 +18,7 @@
  * @type {Call<T>}
  */
 const identity = x => x;
->identity : Call<T>
+>identity : any
 >x => x : <T>(x: any) => any
 >x : any
 >x : any
@@ -52,10 +52,10 @@ const identity = x => x;
  * @returns {unknown[]}
  */
 function flatMap(array, iterable = identity) {
->flatMap : { <U>(): any; (): any; }
+>flatMap : { (): any; (): any; }
 >array : unknown[]
 >iterable : (x: unknown) => unknown
->identity : Call<T>
+>identity : any
 
   /** @type {unknown[]} */
   const result = [];

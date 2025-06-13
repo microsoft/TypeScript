@@ -1,4 +1,3 @@
-test.js(3,19): error TS2304: Cannot find name 'U'.
 test.js(5,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 test.js(7,14): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 
@@ -6,12 +5,10 @@ test.js(7,14): error TS2344: Type 'number' does not satisfy the constraint 'stri
 ==== t.d.ts (0 errors) ====
     type A<T extends string> = { a: T }
     
-==== test.js (3 errors) ====
+==== test.js (2 errors) ====
     /** Also should error for jsdoc typedefs
      * @template {string} U
      * @typedef {{ b: U }} B
-                      ~
-!!! error TS2304: Cannot find name 'U'.
      */
     /** @type {A<number>} */
                  ~~~~~~

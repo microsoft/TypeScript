@@ -14,8 +14,8 @@ export const x = () => 1
 >1 : 1
 
 var res = x('a', 'b')
->res : any
->x('a', 'b') : any
+>res : number
+>x('a', 'b') : number
 >x : Foo
 >'a' : "a"
 >'b' : "b"

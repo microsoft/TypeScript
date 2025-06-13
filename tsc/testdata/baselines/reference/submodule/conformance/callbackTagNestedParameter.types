@@ -19,7 +19,7 @@ function eachPerson(callback) {
 >callback : WorksWithPeopleCallback
 
     callback({ name: "Empty" });
->callback({ name: "Empty" }) : any
+>callback({ name: "Empty" }) : void
 >callback : WorksWithPeopleCallback
 >{ name: "Empty" } : { name: string; }
 >name : string

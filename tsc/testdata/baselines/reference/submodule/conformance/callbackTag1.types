@@ -12,10 +12,10 @@ var x = 1
 /** @type {Sid} smallId */
 var sid = s => s + "!";
 >sid : Sid
->s => s + "!" : (s: any) => string
->s : any
+>s => s + "!" : (s: string) => string
+>s : string
 >s + "!" : string
->s : any
+>s : string
 >"!" : "!"
 
 

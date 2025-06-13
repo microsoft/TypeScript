@@ -9201,6 +9201,7 @@ type JSDocTemplateTag struct {
 	JSDocTagBase
 	Constraint     *Node
 	TypeParameters *TypeParameterList
+	Host           *Node
 }
 
 func (f *NodeFactory) NewJSDocTemplateTag(tagName *IdentifierNode, constraint *Node, typeParameters *TypeParameterList, comment *NodeList) *Node {
@@ -9876,39 +9877,35 @@ func (node *JSDocTypeLiteral) Clone(f NodeFactoryCoercible) *Node {
 // JSDocSignature
 type JSDocSignature struct {
 	TypeNodeBase
-	typeParameters *TypeParameterList
-	Parameters     *NodeList
-	Type           *JSDocTag
+	FunctionLikeBase
 }
 
-func (f *NodeFactory) NewJSDocSignature(typeParameters *TypeParameterList, parameters *NodeList, typeNode *JSDocTag) *Node {
+func (f *NodeFactory) NewJSDocSignature(typeParameters *NodeList, parameters *NodeList, typeNode *JSDocTag) *Node {
 	data := &JSDocSignature{}
-	data.typeParameters = typeParameters
+	data.TypeParameters = typeParameters
 	data.Parameters = parameters
 	data.Type = typeNode
 	return f.newNode(KindJSDocSignature, data)
 }
 
-func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *TypeParameterList, parameters *NodeList, typeNode *JSDocTag) *Node {
-	if typeParameters != node.typeParameters || parameters != node.Parameters || typeNode != node.Type {
+func (f *NodeFactory) UpdateJSDocSignature(node *JSDocSignature, typeParameters *NodeList, parameters *NodeList, typeNode *JSDocTag) *Node {
+	if typeParameters != node.TypeParameters || parameters != node.Parameters || typeNode != node.Type {
 		return updateNode(f.NewJSDocSignature(typeParameters, parameters, typeNode), node.AsNode(), f.hooks)
 	}
 	return node.AsNode()
 }
 
 func (node *JSDocSignature) ForEachChild(v Visitor) bool {
-	return visitNodeList(v, node.typeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
+	return visitNodeList(v, node.TypeParameters) || visitNodeList(v, node.Parameters) || visit(v, node.Type)
 }
 
 func (node *JSDocSignature) VisitEachChild(v *NodeVisitor) *Node {
-	return v.Factory.UpdateJSDocSignature(node, v.visitNodes(node.typeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
+	return v.Factory.UpdateJSDocSignature(node, v.visitNodes(node.TypeParameters), v.visitNodes(node.Parameters), v.visitNode(node.Type))
 }
 
 func (node *JSDocSignature) Clone(f NodeFactoryCoercible) *Node {
-	return cloneNode(f.AsNodeFactory().NewJSDocSignature(node.TypeParameters(), node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
+	return cloneNode(f.AsNodeFactory().NewJSDocSignature(node.TypeParameters, node.Parameters, node.Type), node.AsNode(), f.AsNodeFactory().hooks)
 }
-
-func (node *JSDocSignature) TypeParameters() *TypeParameterList { return node.typeParameters }
 
 // JSDocNameReference
 type JSDocNameReference struct {

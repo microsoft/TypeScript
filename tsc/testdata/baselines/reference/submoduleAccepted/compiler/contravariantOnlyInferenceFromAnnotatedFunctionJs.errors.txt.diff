@@ -6,9 +6,10 @@
 +index.js(2,42): error TS2304: Cannot find name 'A'.
 +index.js(2,48): error TS2304: Cannot find name 'B'.
 +index.js(2,67): error TS2304: Cannot find name 'B'.
++index.js(10,12): error TS2315: Type 'Funcs' is not generic.
 +
 +
-+==== index.js (4 errors) ====
++==== index.js (5 errors) ====
 +    /**
 +     * @typedef {{ [K in keyof B]: { fn: (a: A, b: B) => void; thing: B[K]; } }} Funcs
 +                               ~
@@ -27,6 +28,8 @@
 +     * @template A
 +     * @template {Record<string, unknown>} B
 +     * @param {Funcs<A, B>} fns
++               ~~~~~~~~~~~
++!!! error TS2315: Type 'Funcs' is not generic.
 +     * @returns {[A, B]}
 +     */
 +    function foo(fns) {
