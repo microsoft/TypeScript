@@ -129,3 +129,7 @@ func (c *Checker) TypePredicateToString(t *TypePredicate) string {
 func (c *Checker) GetExpandedParameters(signature *Signature, skipUnionExpanding bool) [][]*ast.Symbol {
 	return c.getExpandedParameters(signature, skipUnionExpanding)
 }
+
+func (c *Checker) GetResolvedSignature(node *ast.Node) *Signature {
+	return c.getResolvedSignature(node, nil, CheckModeNormal)
+}

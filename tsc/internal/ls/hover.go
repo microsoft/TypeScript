@@ -3,6 +3,7 @@ package ls
 import (
 	"context"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -26,7 +27,7 @@ func (l *LanguageService) ProvideHover(ctx context.Context, documentURI lsproto.
 	}
 	c, done := program.GetTypeCheckerForFile(ctx, file)
 	defer done()
-	quickInfo, declaration := getQuickInfoAndDeclarationAtLocation(c, node)
+	quickInfo, declaration := getQuickInfoAndDeclarationAtLocation(c, getNodeForQuickInfo(node))
 	if quickInfo != "" {
 		return &lsproto.Hover{
 			Contents: lsproto.MarkupContentOrMarkedStringOrMarkedStrings{
@@ -63,6 +64,7 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, node *ast.Node) (s
 		// If the symbol has a type meaning and we're in a type context, remove value-only meanings
 		flags &^= ast.SymbolFlagsVariable | ast.SymbolFlagsFunction
 	}
+	container := getContainerNode(node)
 	var b strings.Builder
 	if isAlias {
 		b.WriteString("(alias) ")
@@ -93,64 +95,90 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, node *ast.Node) (s
 				}
 			}
 		}
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 		b.WriteString(": ")
-		b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbolAtLocation(symbol, node), nil, typeFormatFlags))
+		b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbolAtLocation(symbol, node), container, typeFormatFlags))
 	case flags&ast.SymbolFlagsEnumMember != 0:
 		b.WriteString("(enum member) ")
 		t := c.GetTypeOfSymbol(symbol)
-		b.WriteString(c.TypeToStringEx(t, nil, typeFormatFlags))
+		b.WriteString(c.TypeToStringEx(t, container, typeFormatFlags))
 		if t.Flags()&checker.TypeFlagsLiteral != 0 {
 			b.WriteString(" = ")
 			b.WriteString(t.AsLiteralType().String())
 		}
 	case flags&(ast.SymbolFlagsFunction|ast.SymbolFlagsMethod) != 0:
-		signatures := c.GetSignaturesOfType(c.GetTypeOfSymbol(symbol), checker.SignatureKindCall)
+		signatures := getSignaturesAtLocation(c, symbol, checker.SignatureKindCall, node)
+		if len(signatures) == 1 && signatures[0].Declaration() != nil {
+			declaration = signatures[0].Declaration()
+		}
 		prefix := core.IfElse(symbol.Flags&ast.SymbolFlagsMethod != 0, "(method) ", "function ")
-		writeSignatures(&b, c, signatures, prefix, symbol)
+		writeSignatures(&b, c, signatures, container, prefix, symbol)
 	case flags&ast.SymbolFlagsConstructor != 0:
-		signatures := c.GetSignaturesOfType(c.GetTypeOfSymbol(symbol.Parent), checker.SignatureKindConstruct)
-		writeSignatures(&b, c, signatures, "constructor ", symbol.Parent)
+		signatures := getSignaturesAtLocation(c, symbol.Parent, checker.SignatureKindConstruct, node)
+		if len(signatures) == 1 && signatures[0].Declaration() != nil {
+			declaration = signatures[0].Declaration()
+		}
+		writeSignatures(&b, c, signatures, container, "constructor ", symbol.Parent)
 	case flags&(ast.SymbolFlagsClass|ast.SymbolFlagsInterface) != 0:
-		b.WriteString(core.IfElse(symbol.Flags&ast.SymbolFlagsClass != 0, "class ", "interface "))
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
-		params := c.GetDeclaredTypeOfSymbol(symbol).AsInterfaceType().LocalTypeParameters()
-		writeTypeParams(&b, c, params)
+		if node.Kind == ast.KindThisKeyword || ast.IsThisInTypeQuery(node) {
+			b.WriteString("this")
+		} else {
+			b.WriteString(core.IfElse(symbol.Flags&ast.SymbolFlagsClass != 0, "class ", "interface "))
+			b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
+			params := c.GetDeclaredTypeOfSymbol(symbol).AsInterfaceType().LocalTypeParameters()
+			writeTypeParams(&b, c, params)
+		}
 		if flags&ast.SymbolFlagsInterface != 0 {
 			declaration = core.Find(symbol.Declarations, ast.IsInterfaceDeclaration)
 		}
 	case flags&ast.SymbolFlagsEnum != 0:
 		b.WriteString("enum ")
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 	case flags&ast.SymbolFlagsModule != 0:
 		b.WriteString(core.IfElse(symbol.ValueDeclaration != nil && ast.IsSourceFile(symbol.ValueDeclaration), "module ", "namespace "))
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 	case flags&ast.SymbolFlagsTypeParameter != 0:
 		b.WriteString("(type parameter) ")
 		tp := c.GetDeclaredTypeOfSymbol(symbol)
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 		cons := c.GetConstraintOfTypeParameter(tp)
 		if cons != nil {
 			b.WriteString(" extends ")
-			b.WriteString(c.TypeToStringEx(cons, nil, typeFormatFlags))
+			b.WriteString(c.TypeToStringEx(cons, container, typeFormatFlags))
 		}
 		declaration = core.Find(symbol.Declarations, ast.IsTypeParameterDeclaration)
 	case flags&ast.SymbolFlagsTypeAlias != 0:
 		b.WriteString("type ")
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 		writeTypeParams(&b, c, c.GetTypeAliasTypeParameters(symbol))
 		if len(symbol.Declarations) != 0 {
 			b.WriteString(" = ")
-			b.WriteString(c.TypeToStringEx(c.GetDeclaredTypeOfSymbol(symbol), nil, typeFormatFlags|checker.TypeFormatFlagsInTypeAlias))
+			b.WriteString(c.TypeToStringEx(c.GetDeclaredTypeOfSymbol(symbol), container, typeFormatFlags|checker.TypeFormatFlagsInTypeAlias))
 		}
 		declaration = core.Find(symbol.Declarations, ast.IsTypeAliasDeclaration)
 	case flags&ast.SymbolFlagsAlias != 0:
 		b.WriteString("import ")
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 	default:
-		b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbol(symbol), nil, typeFormatFlags))
+		b.WriteString(c.TypeToStringEx(c.GetTypeOfSymbol(symbol), container, typeFormatFlags))
 	}
 	return b.String(), declaration
+}
+
+func getNodeForQuickInfo(node *ast.Node) *ast.Node {
+	if ast.IsNewExpression(node.Parent) && node.Pos() == node.Parent.Pos() {
+		return node.Parent.Expression()
+	}
+	if ast.IsNamedTupleMember(node.Parent) && node.Pos() == node.Parent.Pos() {
+		return node.Parent
+	}
+	if ast.IsImportMeta(node.Parent) && node.Parent.Name() == node {
+		return node.Parent
+	}
+	if ast.IsJsxNamespacedName(node.Parent) {
+		return node.Parent
+	}
+	return node
 }
 
 func inConstructorContext(node *ast.Node) bool {
@@ -166,6 +194,30 @@ func inConstructorContext(node *ast.Node) bool {
 		}
 	}
 	return false
+}
+
+func getSignaturesAtLocation(c *checker.Checker, symbol *ast.Symbol, kind checker.SignatureKind, node *ast.Node) []*checker.Signature {
+	signatures := c.GetSignaturesOfType(c.GetTypeOfSymbol(symbol), kind)
+	if len(signatures) > 1 || len(signatures) == 1 && len(signatures[0].TypeParameters()) != 0 {
+		if callNode := getCallOrNewExpression(node); callNode != nil {
+			signature := c.GetResolvedSignature(callNode)
+			// If we have a resolved signature, make sure it isn't a synthetic signature
+			if signature != nil && (slices.Contains(signatures, signature) || signature.Target() != nil && slices.Contains(signatures, signature.Target())) {
+				return []*checker.Signature{signature}
+			}
+		}
+	}
+	return signatures
+}
+
+func getCallOrNewExpression(node *ast.Node) *ast.Node {
+	if ast.IsPropertyAccessExpression(node.Parent) && node.Parent.Name() == node {
+		node = node.Parent
+	}
+	if ast.IsCallExpression(node.Parent) || ast.IsNewExpression(node.Parent) {
+		return node.Parent
+	}
+	return nil
 }
 
 func writeTypeParams(b *strings.Builder, c *checker.Checker, params []*checker.Type) {
@@ -187,7 +239,7 @@ func writeTypeParams(b *strings.Builder, c *checker.Checker, params []*checker.T
 	}
 }
 
-func writeSignatures(b *strings.Builder, c *checker.Checker, signatures []*checker.Signature, prefix string, symbol *ast.Symbol) {
+func writeSignatures(b *strings.Builder, c *checker.Checker, signatures []*checker.Signature, container *ast.Node, prefix string, symbol *ast.Symbol) {
 	for i, sig := range signatures {
 		if i != 0 {
 			b.WriteString("\n")
@@ -197,8 +249,8 @@ func writeSignatures(b *strings.Builder, c *checker.Checker, signatures []*check
 			break
 		}
 		b.WriteString(prefix)
-		b.WriteString(c.SymbolToStringEx(symbol, nil, ast.SymbolFlagsNone, symbolFormatFlags))
-		b.WriteString(c.SignatureToStringEx(sig, nil, typeFormatFlags|checker.TypeFormatFlagsWriteCallStyleSignature))
+		b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
+		b.WriteString(c.SignatureToStringEx(sig, container, typeFormatFlags|checker.TypeFormatFlagsWriteCallStyleSignature|checker.TypeFormatFlagsWriteTypeArgumentsOfSignature))
 	}
 }
 

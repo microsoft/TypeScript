@@ -1572,8 +1572,7 @@ type SignatureToSignatureDeclarationOptions struct {
 }
 
 func (b *nodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signature, kind ast.Kind, options *SignatureToSignatureDeclarationOptions) *ast.Node {
-	var typeParameters *[]*ast.Node
-	var typeArguments *[]*ast.Node
+	var typeParameters []*ast.Node
 
 	expandedParams := b.ch.getExpandedParameters(signature, true /*skipUnionExpanding*/)[0]
 	cleanup := b.enterNewScope(signature.declaration, expandedParams, signature.typeParameters, signature.parameters, signature.mapper)
@@ -1582,21 +1581,11 @@ func (b *nodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 
 	if b.ctx.flags&nodebuilder.FlagsWriteTypeArgumentsOfSignature != 0 && signature.target != nil && signature.mapper != nil && signature.target.typeParameters != nil {
 		for _, parameter := range signature.target.typeParameters {
-			node := b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper))
-			if typeArguments == nil {
-				typeArguments = &[]*ast.Node{}
-			}
-			args := append(*typeArguments, node)
-			typeArguments = &args
+			typeParameters = append(typeParameters, b.typeToTypeNode(b.ch.instantiateType(parameter, signature.mapper)))
 		}
 	} else if signature.typeParameters != nil {
 		for _, parameter := range signature.typeParameters {
-			node := b.typeParameterToDeclaration(parameter)
-			if typeParameters == nil {
-				typeParameters = &[]*ast.Node{}
-			}
-			args := append(*typeParameters, node)
-			typeParameters = &args
+			typeParameters = append(typeParameters, b.typeParameterToDeclaration(parameter))
 		}
 	}
 
@@ -1632,8 +1621,8 @@ func (b *nodeBuilderImpl) signatureToSignatureDeclarationHelper(signature *Signa
 
 	paramList := b.f.NewNodeList(parameters)
 	var typeParamList *ast.NodeList
-	if typeParameters != nil {
-		typeParamList = b.f.NewNodeList(*typeParameters)
+	if len(typeParameters) != 0 {
+		typeParamList = b.f.NewNodeList(typeParameters)
 	}
 	var modifierList *ast.ModifierList
 	if modifiers != nil && len(modifiers) > 0 {
