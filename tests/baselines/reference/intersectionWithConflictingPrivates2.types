@@ -1,0 +1,18 @@
+//// [tests/cases/compiler/intersectionWithConflictingPrivates2.ts] ////
+
+=== intersectionWithConflictingPrivates2.ts ===
+declare class A {
+>A : A
+>  : ^
+
+  private a: number;
+>a : number
+>  : ^^^^^^
+
+}
+type B = Pick<{ a: number }, 'a'> & A;
+>B : never
+>  : ^^^^^
+>a : number
+>  : ^^^^^^
+
