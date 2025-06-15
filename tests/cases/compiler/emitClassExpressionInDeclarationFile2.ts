@@ -1,4 +1,5 @@
 // @declaration: true
+// @target: ES6
 export var noPrivates = class {
     static getTags() { }
     tags() { }
@@ -27,3 +28,9 @@ const test = new Test();
 
 Test.getTags()
 test.tags();
+
+export var noPrivates2 = class {
+    static getTags() { }
+    tags() { }
+    #p = -1
+}

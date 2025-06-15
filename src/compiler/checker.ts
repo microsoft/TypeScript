@@ -7584,8 +7584,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         if (propertySymbol.flags & SymbolFlags.Prototype) {
                             continue;
                         }
-                        if (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected) && context.tracker.reportPrivateInBaseOfClassExpression) {
+                        if (context.tracker.reportPrivateInBaseOfClassExpression && (getDeclarationModifierFlagsFromSymbol(propertySymbol) & (ModifierFlags.Private | ModifierFlags.Protected))) {
                             context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(propertySymbol.escapedName));
+                        }
+                        else if (context.tracker.reportPrivateInBaseOfClassExpression && isHashPrivate(propertySymbol)) {
+                            context.tracker.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(getClonedHashPrivateName(propertySymbol)?.escapedText || "" as __String));
                         }
                     }
                     if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
