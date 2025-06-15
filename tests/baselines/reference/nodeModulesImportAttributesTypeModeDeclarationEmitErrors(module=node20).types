@@ -1,0 +1,293 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmitErrors.ts] ////
+
+=== /node_modules/pkg/import.d.ts ===
+
+export interface ImportInterface {}
+
+=== /node_modules/pkg/require.d.ts ===
+
+export interface RequireInterface {}
+
+=== /index.ts ===
+export type LocalInterface =
+>LocalInterface : LocalInterface
+>               : ^^^^^^^^^^^^^^
+
+    & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
+    & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
+
+export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
+>a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any : any
+>            : ^^^
+
+export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
+>b : import("/node_modules/pkg/import").ImportInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface) : import("/node_modules/pkg/import").ImportInterface
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface : import("/node_modules/pkg/import").ImportInterface
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any : any
+>            : ^^^
+
+=== /other.ts ===
+// missing with:
+export type LocalInterface =
+>LocalInterface : any
+>               : ^^^
+
+    & import("pkg", {"resolution-mode": "require"}).RequireInterface
+>"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
+>"require" : "require"
+>          : ^^^^^^^^^
+>RequireInterface    & import("pkg", {"resolution-mode": "import"}).ImportInterface : number
+>                                                                                   : ^^^^^^
+>RequireInterface : any
+>                 : ^^^
+
+    & import("pkg", {"resolution-mode": "import"}).ImportInterface;
+>import("pkg", {"resolution-mode": "import"}).ImportInterface : any
+>                                                             : ^^^
+>import("pkg", {"resolution-mode": "import"}) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
+>{"resolution-mode": "import"} : { "resolution-mode": string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"resolution-mode" : string
+>                  : ^^^^^^
+>"import" : "import"
+>         : ^^^^^^^^
+>ImportInterface : any
+>                : ^^^
+
+export const a = (null as any as import("pkg", {"resolution-mode": "require"}).RequireInterface);
+>a : any
+>  : ^^^
+>(null as any as import("pkg", { : any
+>                                : ^^^
+>null as any as import("pkg", { : any
+>                               : ^^^
+>null as any : any
+>            : ^^^
+>"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
+>"require" : "require"
+>          : ^^^^^^^^^
+>RequireInterface : any
+>                 : ^^^
+
+export const b = (null as any as import("pkg", {"resolution-mode": "import"}).ImportInterface);
+>b : any
+>  : ^^^
+>(null as any as import("pkg", { : any
+>                                : ^^^
+>null as any as import("pkg", { : any
+>                               : ^^^
+>null as any : any
+>            : ^^^
+>"resolution-mode" : "resolution-mode"
+>                  : ^^^^^^^^^^^^^^^^^
+>"import" : "import"
+>         : ^^^^^^^^
+>ImportInterface : any
+>                : ^^^
+
+=== /other2.ts ===
+// wrong attribute key
+export type LocalInterface =
+>LocalInterface : any
+>               : ^^^
+
+    & import("pkg", { with: {"bad": "require"} }).RequireInterface
+    & import("pkg", { with: {"bad": "import"} }).ImportInterface;
+
+export const a = (null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface);
+>a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any as import("pkg", { with: {"bad": "require"} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any : any
+>            : ^^^
+
+export const b = (null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface);
+>b : any
+>  : ^^^
+>(null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface) : any
+>                                                                            : ^^^
+>null as any as import("pkg", { with: {"bad": "import"} }).ImportInterface : any
+>                                                                          : ^^^
+>null as any : any
+>            : ^^^
+
+=== /other3.ts ===
+// Array instead of object-y thing
+export type LocalInterface =
+>LocalInterface : any
+>               : ^^^
+
+    & import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface
+>"resolution-mode" : "require"
+>                  : ^^^^^^^^^
+>RequireInterface    & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : number
+>                                                                                       : ^^^^^^
+>RequireInterface : any
+>                 : ^^^
+
+    & import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface;
+>import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
+>                                                                 : ^^^
+>import("pkg", [ {"resolution-mode": "import"} ]) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
+>[ {"resolution-mode": "import"} ] : { "resolution-mode": string; }[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{"resolution-mode": "import"} : { "resolution-mode": string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"resolution-mode" : string
+>                  : ^^^^^^
+>"import" : "import"
+>         : ^^^^^^^^
+>ImportInterface : any
+>                : ^^^
+
+export const a = (null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface);
+>a : any
+>  : ^^^
+>(null as any as import("pkg", [ {"resolution-mode": "require"} ]).RequireInterface : any
+>                                                                                   : ^^^
+>(null as any as import("pkg", [ {"resolution-mode": "require"} ]) : any
+>                                                                  : ^^^
+>null as any as import("pkg", [ {"resolution-mode": "require"} ] : any
+>                                                                : ^^^
+>null as any : any
+>            : ^^^
+>"resolution-mode" : "require"
+>                  : ^^^^^^^^^
+>RequireInterface : any
+>                 : ^^^
+
+export const b = (null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface);
+>b : any
+>  : ^^^
+>(null as any as import("pkg", [ {"resolution-mode": "import"} ]).ImportInterface : any
+>                                                                                 : ^^^
+>(null as any as import("pkg", [ {"resolution-mode": "import"} ]) : any
+>                                                                 : ^^^
+>null as any as import("pkg", [ {"resolution-mode": "import"} ] : any
+>                                                               : ^^^
+>null as any : any
+>            : ^^^
+>"resolution-mode" : "import"
+>                  : ^^^^^^^^
+>ImportInterface : any
+>                : ^^^
+
+=== /other4.ts ===
+// Indirected attribute objecty-thing - not allowed
+type Attribute1 = { with: {"resolution-mode": "require"} };
+>Attribute1 : Attribute1
+>           : ^^^^^^^^^^
+>with : { "resolution-mode": "require"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^         ^^^
+>"resolution-mode" : "require"
+>                  : ^^^^^^^^^
+
+type Attribute2 = { with: {"resolution-mode": "import"} };
+>Attribute2 : Attribute2
+>           : ^^^^^^^^^^
+>with : { "resolution-mode": "import"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^        ^^^
+>"resolution-mode" : "import"
+>                  : ^^^^^^^^
+
+export type LocalInterface =
+>LocalInterface : any
+>               : ^^^
+
+    & import("pkg", Attribute1).RequireInterface
+>Attribute1 : any
+>           : ^^^
+>RequireInterface    & import("pkg", Attribute2).ImportInterface : number
+>                                                                : ^^^^^^
+>RequireInterface : any
+>                 : ^^^
+
+    & import("pkg", Attribute2).ImportInterface;
+>import("pkg", Attribute2).ImportInterface : any
+>                                          : ^^^
+>import("pkg", Attribute2) : Promise<{ default: typeof import("/node_modules/pkg/import"); }>
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"pkg" : "pkg"
+>      : ^^^^^
+>Attribute2 : any
+>           : ^^^
+>ImportInterface : any
+>                : ^^^
+
+export const a = (null as any as import("pkg", Attribute1).RequireInterface);
+>a : any
+>  : ^^^
+>(null as any as import("pkg", : any
+>                              : ^^^
+>null as any as import("pkg", : any
+>                             : ^^^
+>null as any : any
+>            : ^^^
+>Attribute1 : any
+>           : ^^^
+>RequireInterface : any
+>                 : ^^^
+
+export const b = (null as any as import("pkg", Attribute2).ImportInterface);
+>b : any
+>  : ^^^
+>(null as any as import("pkg", : any
+>                              : ^^^
+>null as any as import("pkg", : any
+>                             : ^^^
+>null as any : any
+>            : ^^^
+>Attribute2 : any
+>           : ^^^
+>ImportInterface : any
+>                : ^^^
+
+=== /other5.ts ===
+export type LocalInterface =
+>LocalInterface : any
+>               : ^^^
+
+    & import("pkg", { with: {} }).RequireInterface
+    & import("pkg", { with: {} }).ImportInterface;
+
+export const a = (null as any as import("pkg", { with: {} }).RequireInterface);
+>a : import("/node_modules/pkg/require").RequireInterface
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(null as any as import("pkg", { with: {} }).RequireInterface) : import("/node_modules/pkg/require").RequireInterface
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any as import("pkg", { with: {} }).RequireInterface : import("/node_modules/pkg/require").RequireInterface
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>null as any : any
+>            : ^^^
+
+export const b = (null as any as import("pkg", { with: {} }).ImportInterface);
+>b : any
+>  : ^^^
+>(null as any as import("pkg", { with: {} }).ImportInterface) : any
+>                                                             : ^^^
+>null as any as import("pkg", { with: {} }).ImportInterface : any
+>                                                           : ^^^
+>null as any : any
+>            : ^^^
+

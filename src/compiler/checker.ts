@@ -1009,7 +1009,6 @@ import {
     SignatureFlags,
     SignatureKind,
     singleElementArray,
-    SingleSignatureType,
     skipOuterExpressions,
     skipParentheses,
     skipTrivia,
@@ -5429,6 +5428,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     getExternalModuleImportEqualsDeclarationExpression(node)
             );
             const resolved = resolveExternalModuleSymbol(immediate);
+            if (
+                resolved &&
+                ModuleKind.Node20 <= moduleKind &&
+                moduleKind <= ModuleKind.NodeNext
+            ) {
+                const moduleExports = getExportOfModule(
+                    resolved,
+                    "module.exports" as __String,
+                    node,
+                    dontResolveAlias
+                );
+                if (moduleExports) {
+                    return moduleExports;
+                }
+            }
             markSymbolOfAliasDeclarationIfTypeOnly(
                 node,
                 immediate,
@@ -5676,9 +5690,56 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: ImportClause | ImportOrExportSpecifier,
         dontResolveAlias: boolean
     ) {
+        const file = moduleSymbol.declarations?.find(isSourceFile);
+        const specifier = getModuleSpecifierForImportOrExport(node);
         let exportDefaultSymbol: Symbol | undefined;
+        let exportModuleDotExportsSymbol: Symbol | undefined;
         if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
             exportDefaultSymbol = moduleSymbol;
+        } else if (
+            file &&
+            specifier &&
+            ModuleKind.Node20 <= moduleKind &&
+            moduleKind <= ModuleKind.NodeNext &&
+            getEmitSyntaxForModuleSpecifierExpression(specifier) ===
+                ModuleKind.CommonJS &&
+            host.getImpliedNodeFormatForEmit(file) === ModuleKind.ESNext &&
+            (exportModuleDotExportsSymbol = resolveExportByName(
+                moduleSymbol,
+                "module.exports" as __String,
+                node,
+                dontResolveAlias
+            ))
+        ) {
+            // We have a transpiled default import where the `require` resolves to an ES module with a `module.exports` named
+            // export. If `esModuleInterop` is enabled, this will work:
+            //
+            // const dep_1 = __importDefault(require("./dep.mjs")); // wraps like { default: require("./dep.mjs") }
+            // dep_1.default; // require("./dep.mjs") -> the `module.exports` export value
+            //
+            // But without `esModuleInterop`, it will be broken:
+            //
+            // const dep_1 = require("./dep.mjs"); // the `module.exports` export value (could be primitive)
+            // dep_1.default; // `default` property access on the `module.exports` export value
+            //
+            // We could try to resolve the 'default' property in the latter case, but it's a mistake to run in this
+            // environment without `esModuleInterop`, so just error.
+            if (!getESModuleInterop(compilerOptions)) {
+                error(
+                    node.name,
+                    Diagnostics.Module_0_can_only_be_default_imported_using_the_1_flag,
+                    symbolToString(moduleSymbol),
+                    "esModuleInterop"
+                );
+                return undefined;
+            }
+            markSymbolOfAliasDeclarationIfTypeOnly(
+                node,
+                exportModuleDotExportsSymbol,
+                /*finalTarget*/ undefined,
+                /*overwriteEmpty*/ false
+            );
+            return exportModuleDotExportsSymbol;
         } else {
             exportDefaultSymbol = resolveExportByName(
                 moduleSymbol,
@@ -5688,8 +5749,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             );
         }
 
-        const file = moduleSymbol.declarations?.find(isSourceFile);
-        const specifier = getModuleSpecifierForImportOrExport(node);
         if (!specifier) {
             return exportDefaultSymbol;
         }
@@ -7885,11 +7944,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             const referenceParent = referencingLocation.parent;
-            if (
-                (isImportDeclaration(referenceParent) &&
-                    getNamespaceDeclarationNode(referenceParent)) ||
-                isImportCall(referenceParent)
-            ) {
+            const namespaceImport =
+                isImportDeclaration(referenceParent) &&
+                getNamespaceDeclarationNode(referenceParent);
+            if (namespaceImport || isImportCall(referenceParent)) {
                 const reference = isImportCall(referenceParent)
                     ? referenceParent.arguments[0]
                     : referenceParent.moduleSpecifier;
@@ -7910,25 +7968,59 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 const targetFile =
                     moduleSymbol?.declarations?.find(isSourceFile);
-                const isEsmCjsRef =
+                const usageMode =
+                    getEmitSyntaxForModuleSpecifierExpression(reference);
+                let exportModuleDotExportsSymbol: Symbol | undefined;
+                if (
+                    namespaceImport &&
                     targetFile &&
-                    isESMFormatImportImportingCommonjsFormatFile(
-                        getEmitSyntaxForModuleSpecifierExpression(reference),
-                        host.getImpliedNodeFormatForEmit(targetFile)
-                    );
-                if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
-                    let sigs = getSignaturesOfStructuredType(
-                        type,
-                        SignatureKind.Call
-                    );
-                    if (!sigs || !sigs.length) {
-                        sigs = getSignaturesOfStructuredType(
-                            type,
-                            SignatureKind.Construct
+                    ModuleKind.Node20 <= moduleKind &&
+                    moduleKind <= ModuleKind.NodeNext &&
+                    usageMode === ModuleKind.CommonJS &&
+                    host.getImpliedNodeFormatForEmit(targetFile) ===
+                        ModuleKind.ESNext &&
+                    (exportModuleDotExportsSymbol = resolveExportByName(
+                        symbol,
+                        "module.exports" as __String,
+                        namespaceImport,
+                        dontResolveAlias
+                    ))
+                ) {
+                    if (
+                        !suppressInteropError &&
+                        !(
+                            symbol.flags &
+                            (SymbolFlags.Module | SymbolFlags.Variable)
+                        )
+                    ) {
+                        error(
+                            referencingLocation,
+                            Diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export,
+                            "esModuleInterop"
                         );
                     }
                     if (
-                        (sigs && sigs.length) ||
+                        getESModuleInterop(compilerOptions) &&
+                        hasSignatures(type)
+                    ) {
+                        return cloneTypeAsModuleType(
+                            exportModuleDotExportsSymbol,
+                            type,
+                            referenceParent
+                        );
+                    }
+                    return exportModuleDotExportsSymbol;
+                }
+
+                const isEsmCjsRef =
+                    targetFile &&
+                    isESMFormatImportImportingCommonjsFormatFile(
+                        usageMode,
+                        host.getImpliedNodeFormatForEmit(targetFile)
+                    );
+                if (getESModuleInterop(compilerOptions) || isEsmCjsRef) {
+                    if (
+                        hasSignatures(type) ||
                         getPropertyOfType(
                             type,
                             InternalSymbolName.Default,
@@ -7958,6 +8050,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return symbol;
+    }
+
+    function hasSignatures(type: Type): boolean {
+        return (
+            some(getSignaturesOfStructuredType(type, SignatureKind.Call)) ||
+            some(getSignaturesOfStructuredType(type, SignatureKind.Construct))
+        );
     }
 
     /**
@@ -12185,8 +12284,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     (signature) => !!(signature.flags & SignatureFlags.Abstract)
                 );
                 if (some(abstractSignatures)) {
-                    const types = map(abstractSignatures, (s) =>
-                        getOrCreateTypeFromSignature(s)
+                    const types = map(
+                        abstractSignatures,
+                        getOrCreateTypeFromSignature
                     );
                     // count the number of type elements excluding abstract constructors
                     const typeElementCount =
@@ -28408,7 +28508,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getSignatureInstantiation(
         signature: Signature,
-        typeArguments: readonly Type[] | undefined,
+        typeArguments: Type[] | undefined,
         isJavascript: boolean,
         inferredTypeParameters?: readonly TypeParameter[]
     ): Signature {
@@ -28429,11 +28529,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (returnSignature) {
                 const newReturnSignature = cloneSignature(returnSignature);
                 newReturnSignature.typeParameters = inferredTypeParameters;
+                const newReturnType = getOrCreateTypeFromSignature(
+                    newReturnSignature
+                ) as AnonymousType;
+                newReturnType.mapper = instantiatedSignature.mapper;
                 const newInstantiatedSignature = cloneSignature(
                     instantiatedSignature
                 );
-                newInstantiatedSignature.resolvedReturnType =
-                    getOrCreateTypeFromSignature(newReturnSignature);
+                newInstantiatedSignature.resolvedReturnType = newReturnType;
                 return newInstantiatedSignature;
             }
         }
@@ -28531,19 +28634,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
-    function getImplementationSignature(signature: Signature) {
-        return signature.typeParameters
-            ? (signature.implementationSignatureCache ||=
-                  createImplementationSignature(signature))
-            : signature;
-    }
-
-    function createImplementationSignature(signature: Signature) {
-        return signature.typeParameters
-            ? instantiateSignature(signature, createTypeMapper([], []))
-            : signature;
-    }
-
     function getBaseSignature(signature: Signature) {
         const typeParameters = signature.typeParameters;
         if (typeParameters) {
@@ -28581,10 +28671,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return signature;
     }
 
-    function getOrCreateTypeFromSignature(
-        signature: Signature,
-        outerTypeParameters?: TypeParameter[]
-    ): ObjectType {
+    function getOrCreateTypeFromSignature(signature: Signature): ObjectType {
         // There are two ways to declare a construct signature, one is by declaring a class constructor
         // using the constructor keyword, and the other is declaring a bare construct signature in an
         // object type literal or interface (using the new keyword). Each way of declaring a constructor
@@ -28599,28 +28686,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 kind === SyntaxKind.ConstructSignature ||
                 kind === SyntaxKind.ConstructorType;
 
-            // The type must have a symbol with a `Function` flag and a declaration in order to be correctly flagged as possibly containing
-            // type variables by `couldContainTypeVariables`
             const type = createObjectType(
                 ObjectFlags.Anonymous | ObjectFlags.SingleSignatureType,
-                createSymbol(SymbolFlags.Function, InternalSymbolName.Function)
-            ) as SingleSignatureType;
-            if (
-                signature.declaration &&
-                !nodeIsSynthesized(signature.declaration)
-            ) {
-                // skip synthetic declarations - keeping those around could be bad, since they lack a parent pointer
-                type.symbol.declarations = [signature.declaration];
-                type.symbol.valueDeclaration = signature.declaration;
-            }
-            outerTypeParameters ||=
-                signature.declaration &&
-                getOuterTypeParameters(
-                    signature.declaration,
-                    /*includeThisTypes*/ true
-                );
-            type.outerTypeParameters = outerTypeParameters;
-
+                signature.declaration?.symbol
+            );
             type.members = emptySymbols;
             type.properties = emptyArray;
             type.callSignatures = !isConstructor ? [signature] : emptyArray;
@@ -35837,6 +35906,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    /**
+     * Return a type mapper that combines the context's return mapper with a mapper that erases any additional type parameters
+     * to their inferences at the time of creation.
+     */
+    function createOuterReturnMapper(context: InferenceContext) {
+        return (context.outerReturnMapper ??= mergeTypeMappers(
+            context.returnMapper,
+            cloneInferenceContext(context).mapper
+        ));
+    }
+
     function combineTypeMappers(
         mapper1: TypeMapper | undefined,
         mapper2: TypeMapper
@@ -36022,10 +36102,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 : type.objectFlags & ObjectFlags.Instantiated
                 ? type.target!
                 : type;
-        let typeParameters =
-            type.objectFlags & ObjectFlags.SingleSignatureType
-                ? (type as SingleSignatureType).outerTypeParameters
-                : links.outerTypeParameters;
+        let typeParameters = links.outerTypeParameters;
         if (!typeParameters) {
             // The first time an anonymous type is instantiated we compute and store a list of the type
             // parameters that are in scope (and therefore potentially referenced). For type literals that
@@ -36079,9 +36156,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ? aliasTypeArguments
                 : instantiateTypes(type.aliasTypeArguments, mapper);
             const id =
-                (type.objectFlags & ObjectFlags.SingleSignatureType
-                    ? "S"
-                    : "") +
                 getTypeListId(typeArguments) +
                 getAliasId(newAliasSymbol, newAliasTypeArguments);
             if (!target.instantiations) {
@@ -36097,15 +36171,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             let result = target.instantiations.get(id);
             if (!result) {
-                if (type.objectFlags & ObjectFlags.SingleSignatureType) {
-                    result = instantiateAnonymousType(type, mapper);
-                    target.instantiations.set(id, result);
-                    return result;
+                let newMapper = createTypeMapper(typeParameters, typeArguments);
+                if (
+                    target.objectFlags & ObjectFlags.SingleSignatureType &&
+                    mapper
+                ) {
+                    newMapper = combineTypeMappers(newMapper, mapper);
                 }
-                const newMapper = createTypeMapper(
-                    typeParameters,
-                    typeArguments
-                );
                 result =
                     target.objectFlags & ObjectFlags.Reference
                         ? createDeferredTypeReference(
@@ -36558,11 +36630,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (result as InstantiationExpressionType).node = (
                 type as InstantiationExpressionType
             ).node;
-        }
-        if (type.objectFlags & ObjectFlags.SingleSignatureType) {
-            (result as SingleSignatureType).outerTypeParameters = (
-                type as SingleSignatureType
-            ).outerTypeParameters;
         }
         result.target = type;
         result.mapper = mapper;
@@ -44337,16 +44404,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         types[i],
                         propertyName
                     );
-                    if (
-                        targetType &&
-                        someType(
-                            getDiscriminatingType(),
-                            (t) => !!related(t, targetType)
-                        )
-                    ) {
-                        matched = true;
-                    } else {
-                        include[i] = Ternary.Maybe;
+                    if (targetType) {
+                        if (
+                            someType(
+                                getDiscriminatingType(),
+                                (t) => !!related(t, targetType)
+                            )
+                        ) {
+                            matched = true;
+                        } else {
+                            include[i] = Ternary.Maybe;
+                        }
                     }
                 }
             }
@@ -46572,10 +46640,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             getTypeArguments(type as TypeReference),
                             couldContainTypeVariables
                         ))) ||
-                    (objectFlags & ObjectFlags.SingleSignatureType &&
-                        !!length(
-                            (type as SingleSignatureType).outerTypeParameters
-                        )) ||
                     (objectFlags & ObjectFlags.Anonymous &&
                         type.symbol &&
                         type.symbol.flags &
@@ -47247,18 +47311,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    /**
-     * @returns `true` if `type` has the shape `[T[0]]` where `T` is `typeParameter`
-     */
-    function isTupleOfSelf(typeParameter: TypeParameter, type: Type) {
-        return (
-            isTupleType(type) &&
-            getTupleElementType(type, 0) ===
-                getIndexedAccessType(typeParameter, getNumberLiteralType(0)) &&
-            !getTypeOfPropertyOfType(type, "1" as __String)
-        );
-    }
-
     function inferTypes(
         inferences: InferenceInfo[],
         originalSource: Type,
@@ -47449,16 +47501,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             inference.priority = priority;
                         }
                         if (priority === inference.priority) {
-                            // Inferring A to [A[0]] is a zero information inference (it guarantees A becomes its constraint), but oft arises from generic argument list inferences
-                            // By discarding it early, we can allow more fruitful results to be used instead.
-                            if (
-                                isTupleOfSelf(
-                                    inference.typeParameter,
-                                    candidate
-                                )
-                            ) {
-                                return;
-                            }
                             // We make contravariant inferences only if we are in a pure contravariant position,
                             // i.e. only if we have not descended into a bivariant position.
                             if (contravariant && !bivariant) {
@@ -62848,6 +62890,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // from the return type. We need a separate inference pass here because (a) instantiation of
                     // the source type uses the outer context's return mapper (which excludes inferences made from
                     // outer arguments), and (b) we don't want any further inferences going into this context.
+                    // We use `createOuterReturnMapper` to ensure that all occurrences of outer type parameters are
+                    // replaced with inferences produced from the outer return type or preceding outer arguments.
+                    // This protects against circular inferences, i.e. avoiding situations where inferences reference
+                    // type parameters for which the inferences are being made.
                     const returnContext = createInferenceContext(
                         signature.typeParameters!,
                         signature,
@@ -62855,7 +62901,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                     const returnSourceType = instantiateType(
                         contextualType,
-                        outerContext && outerContext.returnMapper
+                        outerContext && createOuterReturnMapper(outerContext)
                     );
                     inferTypes(
                         returnContext.inferences,
@@ -63338,8 +63384,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         reportErrors: boolean,
         containingMessageChain:
             | (() => DiagnosticMessageChain | undefined)
-            | undefined,
-        inferenceContext: InferenceContext | undefined
+            | undefined
     ): readonly Diagnostic[] | undefined {
         const errorOutputContainer: ErrorOutputContainer = {
             errors: undefined,
@@ -63421,18 +63466,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                 // we obtain the regular type of any object literal arguments because we may not have inferred complete
                 // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                const regularArgType =
+                const checkArgType =
                     checkMode & CheckMode.SkipContextSensitive
                         ? getRegularTypeOfObjectLiteral(argType)
                         : argType;
-                // If this was inferred under a given inference context, we may need to instantiate the expression type to finish resolving
-                // the type variables in the expression.
-                const checkArgType = inferenceContext
-                    ? instantiateType(
-                          regularArgType,
-                          inferenceContext.nonFixingMapper
-                      )
-                    : regularArgType;
                 const effectiveCheckArgumentNode = getEffectiveCheckNode(arg);
                 if (
                     !checkTypeRelatedToAndOptionallyElaborate(
@@ -64263,8 +64300,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         assignableRelation,
                         CheckMode.Normal,
                         /*reportErrors*/ true,
-                        () => chain,
-                        /*inferenceContext*/ undefined
+                        () => chain
                     );
                     if (diags) {
                         for (const d of diags) {
@@ -64309,8 +64345,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             assignableRelation,
                             CheckMode.Normal,
                             /*reportErrors*/ true,
-                            chain,
-                            /*inferenceContext*/ undefined
+                            chain
                         );
                         if (diags) {
                             if (diags.length <= min) {
@@ -64512,8 +64547,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         relation,
                         CheckMode.Normal,
                         /*reportErrors*/ false,
-                        /*containingMessageChain*/ undefined,
-                        /*inferenceContext*/ undefined
+                        /*containingMessageChain*/ undefined
                     )
                 ) {
                     candidatesForArgumentError = [candidate];
@@ -64527,7 +64561,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 candidateIndex < candidates.length;
                 candidateIndex++
             ) {
-                let candidate = candidates[candidateIndex];
+                const candidate = candidates[candidateIndex];
                 if (
                     !hasCorrectTypeArgumentArity(candidate, typeArguments) ||
                     !hasCorrectArity(
@@ -64544,27 +64578,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let inferenceContext: InferenceContext | undefined;
 
                 if (candidate.typeParameters) {
-                    // If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
-                    // so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
-                    const paramLocation =
-                        candidate.typeParameters[0].symbol.declarations?.[0]
-                            ?.parent;
-                    const candidateParameterContext =
-                        paramLocation ||
-                        (candidate.declaration &&
-                        isConstructorDeclaration(candidate.declaration)
-                            ? candidate.declaration.parent
-                            : candidate.declaration);
-                    if (
-                        candidateParameterContext &&
-                        findAncestor(
-                            node,
-                            (a) => a === candidateParameterContext
-                        )
-                    ) {
-                        candidate = getImplementationSignature(candidate);
-                    }
-                    let typeArgumentTypes: readonly Type[] | undefined;
+                    let typeArgumentTypes: Type[] | undefined;
                     if (some(typeArguments)) {
                         typeArgumentTypes = checkTypeArguments(
                             candidate,
@@ -64577,23 +64591,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     } else {
                         inferenceContext = createInferenceContext(
-                            candidate.typeParameters!,
+                            candidate.typeParameters,
                             candidate,
                             /*flags*/ isInJSFile(node)
                                 ? InferenceFlags.AnyDefault
                                 : InferenceFlags.None
                         );
-                        // The resulting type arguments are instantiated with the inference context mapper, as the inferred types may still contain references to the inference context's
-                        //  type variables via contextual projection. These are kept generic until all inferences are locked in, so the dependencies expressed can pass constraint checks.
-                        typeArgumentTypes = instantiateTypes(
-                            inferTypeArguments(
-                                node,
-                                candidate,
-                                args,
-                                argCheckMode | CheckMode.SkipGenericFunctions,
-                                inferenceContext
-                            ),
-                            inferenceContext.nonFixingMapper
+                        typeArgumentTypes = inferTypeArguments(
+                            node,
+                            candidate,
+                            args,
+                            argCheckMode | CheckMode.SkipGenericFunctions,
+                            inferenceContext
                         );
                         argCheckMode |=
                             inferenceContext.flags &
@@ -64633,8 +64642,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         relation,
                         argCheckMode,
                         /*reportErrors*/ false,
-                        /*containingMessageChain*/ undefined,
-                        inferenceContext
+                        /*containingMessageChain*/ undefined
                     )
                 ) {
                     // Give preference to error candidates that have no rest parameters (as they are more specific)
@@ -64650,15 +64658,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // round of type inference and applicability checking for this particular candidate.
                     argCheckMode = CheckMode.Normal;
                     if (inferenceContext) {
-                        const typeArgumentTypes = instantiateTypes(
-                            inferTypeArguments(
-                                node,
-                                candidate,
-                                args,
-                                argCheckMode,
-                                inferenceContext
-                            ),
-                            inferenceContext.mapper
+                        const typeArgumentTypes = inferTypeArguments(
+                            node,
+                            candidate,
+                            args,
+                            argCheckMode,
+                            inferenceContext
                         );
                         checkCandidate = getSignatureInstantiation(
                             candidate,
@@ -64689,8 +64694,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             relation,
                             argCheckMode,
                             /*reportErrors*/ false,
-                            /*containingMessageChain*/ undefined,
-                            inferenceContext
+                            /*containingMessageChain*/ undefined
                         )
                     ) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
@@ -67170,7 +67174,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         ) {
             error(
                 node,
-                Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_or_nodenext
+                Diagnostics.The_import_meta_meta_property_is_only_allowed_when_the_module_option_is_es2020_es2022_esnext_system_node16_node18_node20_or_nodenext
             );
         }
         const file = getSourceFileOfNode(node);
@@ -69682,6 +69686,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     switch (moduleKind) {
                         case ModuleKind.Node16:
                         case ModuleKind.Node18:
+                        case ModuleKind.Node20:
                         case ModuleKind.NodeNext:
                             if (
                                 sourceFile.impliedNodeFormat ===
@@ -69717,8 +69722,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 node.pos
                             );
                             const message = isAwaitExpression(node)
-                                ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher
-                                : Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher;
+                                ? Diagnostics.Top_level_await_expressions_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher
+                                : Diagnostics.Top_level_await_using_statements_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher;
                             diagnostics.add(
                                 createFileDiagnostic(
                                     sourceFile,
@@ -72518,21 +72523,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 }
                             }
                         }
-                        // TODO: The signature may reference any outer inference contexts, but we map pop off and then apply new inference contexts, and thus get different inferred types.
-                        // That this is cached on the *first* such attempt is not currently an issue, since expression types *also* get cached on the first pass. If we ever properly speculate, though,
-                        // the cached "isolatedSignatureType" signature field absolutely needs to be included in the list of speculative caches.
                         return getOrCreateTypeFromSignature(
                             instantiateSignatureInContextOf(
                                 signature,
                                 contextualSignature,
                                 context
-                            ),
-                            flatMap(
-                                inferenceContexts,
-                                (c) =>
-                                    c &&
-                                    map(c.inferences, (i) => i.typeParameter)
-                            ).slice()
+                            )
                         );
                     }
                 }
@@ -83586,12 +83582,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return grammarErrorOnNode(
                     node,
                     isImportAttributes
-                        ? Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
-                        : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_nodenext_or_preserve
+                        ? Diagnostics.Import_attributes_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext_or_preserve
+                        : Diagnostics.Import_assertions_are_only_supported_when_the_module_option_is_set_to_esnext_node18_node20_nodenext_or_preserve
                 );
             }
 
-            if (moduleKind === ModuleKind.NodeNext && !isImportAttributes) {
+            if (
+                ModuleKind.Node20 <= moduleKind &&
+                moduleKind <= ModuleKind.NodeNext &&
+                !isImportAttributes
+            ) {
                 return grammarErrorOnFirstToken(
                     node,
                     Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert
@@ -90182,6 +90182,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         switch (moduleKind) {
                             case ModuleKind.Node16:
                             case ModuleKind.Node18:
+                            case ModuleKind.Node20:
                             case ModuleKind.NodeNext:
                                 if (
                                     sourceFile.impliedNodeFormat ===
@@ -90208,7 +90209,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 diagnostics.add(
                                     createDiagnosticForNode(
                                         forInOrOfStatement.awaitModifier,
-                                        Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher
+                                        Diagnostics.Top_level_for_await_loops_are_only_allowed_when_the_module_option_is_set_to_es2022_esnext_system_node16_node18_node20_nodenext_or_preserve_and_the_target_option_is_set_to_es2017_or_higher
                                     )
                                 );
                                 break;
@@ -91580,7 +91581,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         } else if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(
                 node,
-                Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_or_nodenext
+                Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_node18_node20_or_nodenext
             );
         }
 
@@ -91607,7 +91608,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const importAttributesArgument = nodeArguments[1];
                 return grammarErrorOnNode(
                     importAttributesArgument,
-                    Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_nodenext_or_preserve
+                    Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_node18_node20_nodenext_or_preserve
                 );
             }
         }
