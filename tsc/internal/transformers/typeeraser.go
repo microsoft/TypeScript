@@ -230,7 +230,7 @@ func (tx *TypeEraserTransformer) visit(node *ast.Node) *ast.Node {
 
 	case ast.KindParenthesizedExpression:
 		n := node.AsParenthesizedExpression()
-		expression := ast.SkipOuterExpressions(n.Expression, ^(ast.OEKTypeAssertions | ast.OEKExpressionsWithTypeArguments))
+		expression := ast.SkipOuterExpressions(n.Expression, ^(ast.OEKAssertions | ast.OEKExpressionsWithTypeArguments))
 		if ast.IsAssertionExpression(expression) || ast.IsSatisfiesExpression(expression) {
 			partial := tx.factory.NewPartiallyEmittedExpression(tx.visitor.VisitNode(n.Expression))
 			tx.emitContext.SetOriginal(partial, node)

@@ -9064,11 +9064,12 @@ func (c *Checker) getThisArgumentType(node *ast.Node) *Type {
 }
 
 func (c *Checker) getEffectiveCheckNode(argument *ast.Node) *ast.Node {
-	argument = ast.SkipParentheses(argument)
-	if ast.IsSatisfiesExpression(argument) {
-		return ast.SkipParentheses(argument.Expression())
-	}
-	return argument
+	flags := core.IfElse(
+		ast.IsInJSFile(argument),
+		ast.OEKParentheses|ast.OEKSatisfies|ast.OEKExcludeJSDocTypeAssertion,
+		ast.OEKParentheses|ast.OEKSatisfies,
+	)
+	return ast.SkipOuterExpressions(argument, flags)
 }
 
 func (c *Checker) inferTypeArguments(node *ast.Node, signature *Signature, args []*ast.Node, checkMode CheckMode, context *InferenceContext) []*Type {
