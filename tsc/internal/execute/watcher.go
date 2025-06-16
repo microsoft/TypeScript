@@ -54,7 +54,8 @@ func (w *watcher) hasErrorsInTsConfig() bool {
 			}
 			return true
 		}
-		if !reflect.DeepEqual(w.options.CompilerOptions(), configParseResult.CompilerOptions()) {
+		// CompilerOptions contain fields which should not be compared; clone to get a copy without those set.
+		if !reflect.DeepEqual(w.options.CompilerOptions().Clone(), configParseResult.CompilerOptions().Clone()) {
 			// fmt.Fprint(w.sys.Writer(), "build triggered due to config change", w.sys.NewLine())
 			w.configModified = true
 		}
