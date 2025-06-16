@@ -25,6 +25,7 @@ func TestEscapeString(t *testing.T) {
 		{s: "ab'c", quoteChar: QuoteCharSingleQuote, expected: `ab\'c`},
 		{s: "ab\"c", quoteChar: QuoteCharSingleQuote, expected: `ab"c`},
 		{s: "ab`c", quoteChar: QuoteCharBacktick, expected: "ab\\`c"},
+		{s: "\u001f", quoteChar: QuoteCharBacktick, expected: "\\u001F"},
 	}
 	for i, rec := range data {
 		t.Run(fmt.Sprintf("[%d] escapeString(%q, %v)", i, rec.s, rec.quoteChar), func(t *testing.T) {

@@ -103,7 +103,7 @@ func escapeStringWorker(s string, quoteChar QuoteChar, flags getLiteralTextFlags
 				escape = true
 			}
 		default:
-			if ch < '\u001f' || flags&getLiteralTextFlagsNeverAsciiEscape == 0 && ch > '\u007f' {
+			if ch <= '\u001f' || flags&getLiteralTextFlagsNeverAsciiEscape == 0 && ch > '\u007f' {
 				escape = true
 			}
 		}

@@ -28,6 +28,8 @@ func TestEmit(t *testing.T) {
 		{title: "BooleanLiteral#1", input: `true`, output: `true;`},
 		{title: "BooleanLiteral#2", input: `false`, output: `false;`},
 		{title: "NoSubstitutionTemplateLiteral", input: "``", output: "``;"},
+		{title: "NoSubstitutionTemplateLiteral#2", input: "`\n`", output: "`\n`;"},
+
 		{title: "RegularExpressionLiteral#1", input: `/a/`, output: `/a/;`},
 		{title: "RegularExpressionLiteral#2", input: `/a/g`, output: `/a/g;`},
 		{title: "NullLiteral", input: `null`, output: `null;`},
