@@ -1,11 +1,12 @@
 package internal
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 	"io/fs"
+	"strings"
 	"unicode/utf16"
+	"unsafe"
 
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -146,30 +147,42 @@ func (vfs *Common) ReadFile(path string) (contents string, ok bool) {
 		return "", false
 	}
 
-	return decodeBytes(b)
+	// An invariant of any underlying filesystem is that the bytes returned
+	// are immutable, otherwise anyone using the filesystem would end up
+	// with data races.
+	//
+	// This means that we can safely convert the bytes to a string directly,
+	// saving a copy.
+	if len(b) == 0 {
+		return "", true
+	}
+
+	s := unsafe.String(&b[0], len(b))
+
+	return decodeBytes(s)
 }
 
-func decodeBytes(b []byte) (contents string, ok bool) {
+func decodeBytes(s string) (contents string, ok bool) {
 	var bom [2]byte
-	if len(b) >= 2 {
-		bom = [2]byte{b[0], b[1]}
+	if len(s) >= 2 {
+		bom = [2]byte{s[0], s[1]}
 		switch bom {
 		case [2]byte{0xFF, 0xFE}:
-			return decodeUtf16(b[2:], binary.LittleEndian), true
+			return decodeUtf16(s[2:], binary.LittleEndian), true
 		case [2]byte{0xFE, 0xFF}:
-			return decodeUtf16(b[2:], binary.BigEndian), true
+			return decodeUtf16(s[2:], binary.BigEndian), true
 		}
 	}
-	if len(b) >= 3 && b[0] == 0xEF && b[1] == 0xBB && b[2] == 0xBF {
-		b = b[3:]
+	if len(s) >= 3 && s[0] == 0xEF && s[1] == 0xBB && s[2] == 0xBF {
+		s = s[3:]
 	}
 
-	return string(b), true
+	return s, true
 }
 
-func decodeUtf16(b []byte, order binary.ByteOrder) string {
-	ints := make([]uint16, len(b)/2)
-	if err := binary.Read(bytes.NewReader(b), order, &ints); err != nil {
+func decodeUtf16(s string, order binary.ByteOrder) string {
+	ints := make([]uint16, len(s)/2)
+	if err := binary.Read(strings.NewReader(s), order, &ints); err != nil {
 		return ""
 	}
 	return string(utf16.Decode(ints))
