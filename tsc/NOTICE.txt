@@ -264,7 +264,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ---------------------------------------------------------
 
-golang.org/x/sync v0.14.0 - BSD-3-Clause
+golang.org/x/sync v0.15.0 - BSD-3-Clause
 
 Copyright 2009 The Go Authors.
 
