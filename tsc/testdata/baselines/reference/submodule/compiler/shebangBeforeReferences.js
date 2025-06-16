@@ -15,6 +15,7 @@ import {x} from "test";
 use(x);
 
 //// [f.js]
+#!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="f.d.ts"/>

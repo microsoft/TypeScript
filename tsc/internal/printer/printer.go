@@ -4336,7 +4336,11 @@ func (p *Printer) emitJSDocNode(node *ast.Node) {
 //
 
 func (p *Printer) emitShebangIfNeeded(node *ast.SourceFile) {
-	// !!!
+	shebang := scanner.GetShebang(node.Text())
+	if shebang != "" {
+		p.writeComment(shebang)
+		p.writeLine()
+	}
 }
 
 func (p *Printer) emitPrologueDirectives(statements *ast.StatementList) int {

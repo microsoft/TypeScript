@@ -1,10 +1,8 @@
 --- old.shebangBeforeReferences.js
 +++ new.shebangBeforeReferences.js
-@@= skipped -14, +14 lines =@@
- use(x);
-
+@@= skipped -16, +16 lines =@@
  //// [f.js]
--#!/usr/bin/env node
+ #!/usr/bin/env node
  "use strict";
 -/// <reference path="f.d.ts"/>
  Object.defineProperty(exports, "__esModule", { value: true });

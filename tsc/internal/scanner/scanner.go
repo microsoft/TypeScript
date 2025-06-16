@@ -2260,6 +2260,15 @@ func scanShebangTrivia(text string, pos int) int {
 	return pos
 }
 
+func GetShebang(text string) string {
+	if !isShebangTrivia(text, 0) {
+		return ""
+	}
+
+	end := scanShebangTrivia(text, 0)
+	return text[:end]
+}
+
 func GetScannerForSourceFile(sourceFile *ast.SourceFile, pos int) *Scanner {
 	s := NewScanner()
 	s.text = sourceFile.Text()
