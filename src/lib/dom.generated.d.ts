@@ -2879,9 +2879,9 @@ declare var AnimationEvent: {
 };
 
 interface AnimationFrameProvider {
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/cancelAnimationFrame) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/cancelAnimationFrame) */
     cancelAnimationFrame(handle: number): void;
-    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DedicatedWorkerGlobalScope/requestAnimationFrame) */
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/Window/requestAnimationFrame) */
     requestAnimationFrame(callback: FrameRequestCallback): number;
 }
 
