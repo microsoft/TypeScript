@@ -1555,7 +1555,6 @@ func (l *LanguageService) completionInfoFromData(
 		position,
 		file,
 		program,
-		compilerOptions.GetEmitScriptTarget(),
 		preferences,
 		compilerOptions,
 		clientOptions,
@@ -1593,7 +1592,6 @@ func (l *LanguageService) completionInfoFromData(
 			file,
 			position,
 			&uniqueNames,
-			compilerOptions.GetEmitScriptTarget(),
 			sortedEntries,
 		)
 	}
@@ -1617,7 +1615,6 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 	position int,
 	file *ast.SourceFile,
 	program *compiler.Program,
-	target core.ScriptTarget,
 	preferences *UserPreferences,
 	compilerOptions *core.CompilerOptions,
 	clientOptions *lsproto.CompletionClientCapabilities,
@@ -1637,7 +1634,6 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 		origin := data.symbolToOriginInfoMap[symbolId]
 		name, needsConvertPropertyAccess := getCompletionEntryDisplayNameForSymbol(
 			symbol,
-			target,
 			origin,
 			data.completionKind,
 			data.isJsxIdentifierExpected,
@@ -1951,8 +1947,7 @@ func (l *LanguageService) createCompletionItem(
 
 	parentNamedImportOrExport := ast.FindAncestor(data.location, isNamedImportsOrExports)
 	if parentNamedImportOrExport != nil {
-		languageVersion := compilerOptions.GetEmitScriptTarget()
-		if !scanner.IsIdentifierText(name, languageVersion, core.LanguageVariantStandard) {
+		if !scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
 			insertText = quotePropertyName(file, preferences, name)
 
 			if parentNamedImportOrExport.Kind == ast.KindNamedImports {
@@ -1962,7 +1957,7 @@ func (l *LanguageService) createCompletionItem(
 				scanner.SetText(file.Text())
 				scanner.ResetPos(position)
 				if !(scanner.Scan() == ast.KindAsKeyword && scanner.Scan() == ast.KindIdentifier) {
-					insertText += " as " + generateIdentifierForArbitraryString(name, languageVersion)
+					insertText += " as " + generateIdentifierForArbitraryString(name)
 				}
 			}
 		} else if parentNamedImportOrExport.Kind == ast.KindNamedImports {
@@ -2273,7 +2268,6 @@ func shouldIncludeSymbol(
 
 func getCompletionEntryDisplayNameForSymbol(
 	symbol *ast.Symbol,
-	target core.ScriptTarget,
 	origin *symbolOriginInfo,
 	completionKind CompletionKind,
 	isJsxIdentifierExpected bool,
@@ -2299,7 +2293,7 @@ func getCompletionEntryDisplayNameForSymbol(
 
 	variant := core.IfElse(isJsxIdentifierExpected, core.LanguageVariantJSX, core.LanguageVariantStandard)
 	// name is a valid identifier or private identifier text
-	if scanner.IsIdentifierText(name, target, variant) ||
+	if scanner.IsIdentifierText(name, variant) ||
 		symbol.ValueDeclaration != nil && ast.IsPrivateIdentifierClassElementDeclaration(symbol.ValueDeclaration) {
 		return name, false
 	}
@@ -2819,7 +2813,7 @@ func isNamedImportsOrExports(node *ast.Node) bool {
 	return ast.IsNamedImports(node) || ast.IsNamedExports(node)
 }
 
-func generateIdentifierForArbitraryString(text string, languageVersion core.ScriptTarget) string {
+func generateIdentifierForArbitraryString(text string) string {
 	needsUnderscore := false
 	identifier := ""
 	var ch rune
@@ -2830,9 +2824,9 @@ func generateIdentifierForArbitraryString(text string, languageVersion core.Scri
 		ch, size = utf8.DecodeRuneInString(text[pos:])
 		var validChar bool
 		if pos == 0 {
-			validChar = scanner.IsIdentifierStart(ch, languageVersion)
+			validChar = scanner.IsIdentifierStart(ch)
 		} else {
-			validChar = scanner.IsIdentifierPart(ch, languageVersion)
+			validChar = scanner.IsIdentifierPart(ch)
 		}
 		if size > 0 && validChar {
 			if needsUnderscore {
@@ -3121,7 +3115,6 @@ func getJSCompletionEntries(
 	file *ast.SourceFile,
 	position int,
 	uniqueNames *collections.Set[string],
-	target core.ScriptTarget,
 	sortedEntries []*lsproto.CompletionItem,
 ) []*lsproto.CompletionItem {
 	nameTable := getNameTable(file)
@@ -3130,7 +3123,7 @@ func getJSCompletionEntries(
 		if pos == position {
 			continue
 		}
-		if !uniqueNames.Has(name) && scanner.IsIdentifierText(name, target, core.LanguageVariantStandard) {
+		if !uniqueNames.Has(name) && scanner.IsIdentifierText(name, core.LanguageVariantStandard) {
 			uniqueNames.Add(name)
 			sortedEntries = core.InsertSorted(
 				sortedEntries,

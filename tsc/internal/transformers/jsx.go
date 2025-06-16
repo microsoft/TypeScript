@@ -507,7 +507,7 @@ func (tx *JSXTransformer) getAttributeName(node *ast.JsxAttribute) *ast.Node {
 	name := node.Name()
 	if ast.IsIdentifier(name) {
 		text := name.Text()
-		if scanner.IsIdentifierText(text, tx.compilerOptions.GetEmitScriptTarget(), core.LanguageVariantStandard) {
+		if scanner.IsIdentifierText(text, core.LanguageVariantStandard) {
 			return name
 		}
 		return tx.factory.NewStringLiteral(text)

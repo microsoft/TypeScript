@@ -835,8 +835,8 @@ func getPossibleSymbolReferencePositions(sourceFile *ast.SourceFile, symbolName 
 		// before and after it have to be a non-identifier char).
 		endPosition := position + symbolNameLength
 
-		if (position == 0 || !scanner.IsIdentifierPart(rune(text[position-1]), core.ScriptTargetLatest)) &&
-			(endPosition == sourceLength || !scanner.IsIdentifierPart(rune(text[endPosition]), core.ScriptTargetLatest)) {
+		if (position == 0 || !scanner.IsIdentifierPart(rune(text[position-1]))) &&
+			(endPosition == sourceLength || !scanner.IsIdentifierPart(rune(text[endPosition]))) {
 			// Found a real match.  Keep searching.
 			positions = append(positions, position)
 		}

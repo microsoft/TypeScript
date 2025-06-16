@@ -114,7 +114,6 @@ func (l *LanguageService) convertStringLiteralCompletions(
 			position,
 			file,
 			program,
-			core.ScriptTargetESNext,
 			preferences,
 			options,
 			clientOptions,
