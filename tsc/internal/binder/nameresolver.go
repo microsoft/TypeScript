@@ -322,9 +322,10 @@ loop:
 		}
 	}
 	if result == nil {
-		if originalLocation != nil && originalLocation.Parent != nil && originalLocation.Parent.Parent != nil &&
-			ast.IsVariableDeclarationInitializedToRequire(originalLocation.Parent.Parent) {
-			return r.RequireSymbol
+		if originalLocation != nil && ast.IsInJSFile(originalLocation) && originalLocation.Parent != nil {
+			if ast.IsRequireCall(originalLocation.Parent, false /*requireStringLiteralLikeArgument*/) {
+				return r.RequireSymbol
+			}
 		}
 	}
 	if nameNotFoundMessage != nil {

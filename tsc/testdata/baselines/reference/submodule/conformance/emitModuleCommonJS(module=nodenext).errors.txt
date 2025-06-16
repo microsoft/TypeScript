@@ -1,18 +1,15 @@
-a.js(2,3): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
-a.js(4,3): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+a.js(4,11): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
 a.js(5,10): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
 b.ts(3,10): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
 
 
-==== a.js (3 errors) ====
+==== a.js (2 errors) ====
     {
       require("" + "./foo.ts");
-      ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
       import("" + "./foo.ts");
       require("./foo.ts");
-      ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+              ~~~~~~~~~~
+!!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
       import("./foo.ts");
              ~~~~~~~~~~
 !!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.

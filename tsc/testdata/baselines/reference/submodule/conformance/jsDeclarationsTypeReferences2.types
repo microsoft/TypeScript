@@ -2,29 +2,29 @@
 
 === index.js ===
 const{ a, m } = require("./something").o;
->a : any
->m : any
->require("./something").o : any
->require("./something") : any
+>a : number
+>m : number
+>require("./something").o : { a: number; m: number; }
+>require("./something") : typeof import("./something")
 >require : any
 >"./something" : "./something"
->o : any
+>o : { a: number; m: number; }
 
 const thing = a + m
->thing : any
->a + m : any
->a : any
->m : any
+>thing : number
+>a + m : number
+>a : number
+>m : number
 
 module.exports = {
->module.exports = {    thing} : { thing: any; }
->module.exports : { thing: any; }
->module : { "export=": { thing: any; }; }
->exports : { thing: any; }
->{    thing} : { thing: any; }
+>module.exports = {    thing} : { thing: number; }
+>module.exports : { thing: number; }
+>module : { "export=": { thing: number; }; }
+>exports : { thing: number; }
+>{    thing} : { thing: number; }
 
     thing
->thing : any
+>thing : number
 
 };
 

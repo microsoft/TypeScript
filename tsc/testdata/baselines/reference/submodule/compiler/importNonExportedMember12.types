@@ -10,12 +10,12 @@ module.exports = 1;
 
 === /a.js ===
 export const A = require("foo");
->A : any
->require("foo") : any
+>A : 1
+>require("foo") : 1
 >require : any
 >"foo" : "foo"
 
 === /b.ts ===
 import { A } from "./a";
->A : any
+>A : 1
 

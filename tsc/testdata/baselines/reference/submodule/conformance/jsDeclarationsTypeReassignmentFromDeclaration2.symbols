@@ -3,6 +3,7 @@
 === index.js ===
 const items = require("./some-mod")();
 >items : Symbol(items, Decl(index.js, 0, 5))
+>require : Symbol(require)
 
 module.exports = items;
 >module.exports : Symbol(items, Decl(index.js, 0, 5))

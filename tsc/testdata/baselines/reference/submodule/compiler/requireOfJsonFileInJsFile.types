@@ -15,7 +15,7 @@ json0.b; // Error (good)
 /** @type {{ b: number }} */
 const json1 = require("./json.json"); // No error (bad)
 >json1 : { b: number; }
->require("./json.json") : any
+>require("./json.json") : { a: number; }
 >require : any
 >"./json.json" : "./json.json"
 

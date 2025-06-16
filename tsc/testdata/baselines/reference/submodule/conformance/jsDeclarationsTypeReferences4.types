@@ -15,21 +15,21 @@ export namespace A {
 >B : typeof B
 
         const Something = require("fs").Something;
->Something : any
->require("fs").Something : any
->require("fs") : any
+>Something : typeof import("fs").Something
+>require("fs").Something : typeof import("fs").Something
+>require("fs") : typeof import("fs")
 >require : any
 >"fs" : "fs"
->Something : any
+>Something : typeof import("fs").Something
 
         const thing = new Something();
->thing : any
->new Something() : any
->Something : any
+>thing : import("fs").Something
+>new Something() : import("fs").Something
+>Something : typeof import("fs").Something
 
         // @ts-ignore
         export { thing };
->thing : any
+>thing : import("fs").Something
     }
 }
 

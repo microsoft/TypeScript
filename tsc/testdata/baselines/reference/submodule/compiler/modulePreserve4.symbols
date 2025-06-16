@@ -261,6 +261,7 @@ exports.x = require("./g");
 >exports.x : Symbol(x, Decl(main4.cjs, 0, 0))
 >exports : Symbol("/main4", Decl(main4.cjs, 0, 0))
 >x : Symbol(x, Decl(main4.cjs, 0, 0))
+>require : Symbol(require)
 
 === /dummy.ts ===
 

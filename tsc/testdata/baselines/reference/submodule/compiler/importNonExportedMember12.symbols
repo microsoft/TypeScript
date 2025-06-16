@@ -9,6 +9,7 @@ module.exports = 1;
 === /a.js ===
 export const A = require("foo");
 >A : Symbol(A, Decl(a.js, 0, 12))
+>require : Symbol(require)
 
 === /b.ts ===
 import { A } from "./a";

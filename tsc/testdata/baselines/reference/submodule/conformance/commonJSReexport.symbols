@@ -3,6 +3,7 @@
 === main.js ===
 const { hardline } = require('./second').nested;
 >hardline : Symbol(hardline, Decl(main.js, 0, 7))
+>require : Symbol(require)
 
 hardline
 >hardline : Symbol(hardline, Decl(main.js, 0, 7))

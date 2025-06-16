@@ -299,11 +299,11 @@ const g2 = require("./g"); // { default: 0 }
 
 === /main4.cjs ===
 exports.x = require("./g");
->exports.x = require("./g") : any
->exports.x : any
+>exports.x = require("./g") : typeof import("./g")
+>exports.x : typeof import("./g")
 >exports : typeof import("./main4.cjs")
->x : any
->require("./g") : any
+>x : typeof import("./g")
+>require("./g") : typeof import("./g")
 >require : any
 >"./g" : "./g"
 

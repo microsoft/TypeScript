@@ -4,6 +4,7 @@
 'use strict';
 const Thing = require('./thing').Thing
 >Thing : Symbol(Thing, Decl(reexport.js, 1, 5))
+>require : Symbol(require)
 
 module.exports = { Thing }
 >module.exports : Symbol(export=, Decl(reexport.js, 1, 38))

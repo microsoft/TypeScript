@@ -2,7 +2,6 @@
 +++ new.importNonExportedMember12.errors.txt
 @@= skipped -0, +0 lines =@@
 -<no content>
-+/a.js(1,18): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +/node_modules/foo/src/index.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +
 +
@@ -14,10 +13,8 @@
 +    ~~~~~~~~~~~~~~~~~~
 +!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
 +    
-+==== /a.js (1 errors) ====
++==== /a.js (0 errors) ====
 +    export const A = require("foo");
-+                     ~~~~~~~
-+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
 +    
 +==== /b.ts (0 errors) ====
 +    import { A } from "./a";

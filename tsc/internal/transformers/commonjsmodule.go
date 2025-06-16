@@ -1645,7 +1645,7 @@ func (tx *CommonJSModuleTransformer) visitCallExpression(node *ast.CallExpressio
 	needsRewrite := false
 	if tx.compilerOptions.RewriteRelativeImportExtensions.IsTrue() {
 		if ast.IsImportCall(node.AsNode()) && len(node.Arguments.Nodes) > 0 ||
-			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode()) {
+			ast.IsInJSFile(node.AsNode()) && ast.IsRequireCall(node.AsNode(), false /*requireStringLiteralLikeArgument*/) {
 			needsRewrite = true
 		}
 	}

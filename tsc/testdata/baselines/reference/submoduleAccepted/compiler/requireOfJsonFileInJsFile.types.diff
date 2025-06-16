@@ -1,15 +1,6 @@
 --- old.requireOfJsonFileInJsFile.types
 +++ new.requireOfJsonFileInJsFile.types
-@@= skipped -14, +14 lines =@@
- /** @type {{ b: number }} */
- const json1 = require("./json.json"); // No error (bad)
- >json1 : { b: number; }
-->require("./json.json") : { a: number; }
-+>require("./json.json") : any
- >require : any
- >"./json.json" : "./json.json"
-
-@@= skipped -10, +10 lines =@@
+@@= skipped -24, +24 lines =@@
  >b : number
 
  const js0 = require("./js.js");

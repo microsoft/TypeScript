@@ -2,18 +2,18 @@
 
 === index.js ===
 const items = require("./some-mod")();
->items : any
->require("./some-mod")() : any
->require("./some-mod") : any
+>items : Item[]
+>require("./some-mod")() : Item[]
+>require("./some-mod") : () => Item[]
 >require : any
 >"./some-mod" : "./some-mod"
 
 module.exports = items;
->module.exports = items : any
->module.exports : any
->module : { readonly items: any; }
->exports : any
->items : any
+>module.exports = items : Item[]
+>module.exports : Item[]
+>module : { readonly items: Item[]; }
+>exports : Item[]
+>items : Item[]
 
 === some-mod.d.ts ===
 interface Item {

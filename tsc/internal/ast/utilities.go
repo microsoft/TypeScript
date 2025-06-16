@@ -2705,7 +2705,7 @@ func ForEachDynamicImportOrRequireCall(
 	lastIndex, size := findImportOrRequire(file.Text(), 0)
 	for lastIndex >= 0 {
 		node := GetNodeAtPosition(file, lastIndex, isJavaScriptFile && includeTypeSpaceImports)
-		if isJavaScriptFile && IsRequireCall(node) {
+		if isJavaScriptFile && IsRequireCall(node, requireStringLiteralLikeArgument) {
 			if cb(node, node.Arguments()[0]) {
 				return true
 			}
@@ -2725,8 +2725,10 @@ func ForEachDynamicImportOrRequireCall(
 	return false
 }
 
-// IsVariableDeclarationInitializedToRequire should be used wherever parent pointers are set
-func IsRequireCall(node *Node) bool {
+// Returns true if the node is a CallExpression to the identifier 'require' with
+// exactly one argument (of the form 'require("name")').
+// This function does not test if the node is in a JavaScript file or not.
+func IsRequireCall(node *Node, requireStringLiteralLikeArgument bool) bool {
 	if !IsCallExpression(node) {
 		return false
 	}
@@ -2737,7 +2739,7 @@ func IsRequireCall(node *Node) bool {
 	if len(call.Arguments.Nodes) != 1 {
 		return false
 	}
-	return IsStringLiteralLike(call.Arguments.Nodes[0])
+	return !requireStringLiteralLikeArgument || IsStringLiteralLike(call.Arguments.Nodes[0])
 }
 
 func IsUnterminatedLiteral(node *Node) bool {
@@ -2812,7 +2814,7 @@ func IsVariableDeclarationInitializedToRequire(node *Node) bool {
 	return node.Parent.Parent.ModifierFlags()&ModifierFlagsExport == 0 &&
 		node.AsVariableDeclaration().Initializer != nil &&
 		node.Type() == nil &&
-		IsRequireCall(node.AsVariableDeclaration().Initializer)
+		IsRequireCall(node.AsVariableDeclaration().Initializer, true /*requireStringLiteralLikeArgument*/)
 }
 
 func IsModuleExportsAccessExpression(node *Node) bool {

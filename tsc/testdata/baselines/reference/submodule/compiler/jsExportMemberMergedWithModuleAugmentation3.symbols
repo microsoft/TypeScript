@@ -10,6 +10,7 @@ module.exports = require("./y.js");
 >module.exports : Symbol(export=, Decl(x.js, 0, 21))
 >module : Symbol(module.exports)
 >exports : Symbol(export=, Decl(x.js, 0, 21))
+>require : Symbol(require)
 
 === /y.d.ts ===
 export declare type x = 1;

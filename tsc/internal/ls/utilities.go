@@ -67,7 +67,7 @@ func tryGetImportFromModuleSpecifier(node *ast.StringLiteralLike) *ast.Node {
 	case ast.KindExternalModuleReference:
 		return node.Parent.Parent
 	case ast.KindCallExpression:
-		if ast.IsImportCall(node.Parent) || ast.IsRequireCall(node.Parent) {
+		if ast.IsImportCall(node.Parent) || ast.IsRequireCall(node.Parent, false /*requireStringLiteralLikeArgument*/) {
 			return node.Parent
 		}
 		return nil
@@ -88,7 +88,7 @@ func isModuleSpecifierLike(node *ast.Node) bool {
 		return false
 	}
 
-	if ast.IsVariableDeclarationInitializedToRequire(node.Parent) || ast.IsImportCall(node.Parent) {
+	if ast.IsRequireCall(node.Parent, false /*requireStringLiteralLikeArgument*/) || ast.IsImportCall(node.Parent) {
 		return node.Parent.AsCallExpression().Arguments.Nodes[0] == node
 	}
 

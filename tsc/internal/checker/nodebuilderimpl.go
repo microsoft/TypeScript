@@ -981,7 +981,7 @@ func tryGetModuleSpecifierFromDeclarationWorker(node *ast.Node) *ast.Node {
 	switch node.Kind {
 	case ast.KindVariableDeclaration, ast.KindBindingElement:
 		requireCall := ast.FindAncestor(node.Initializer(), func(node *ast.Node) bool {
-			return ast.IsRequireCall(node)
+			return ast.IsRequireCall(node, true /*requireStringLiteralLikeArgument*/)
 		})
 		if requireCall == nil {
 			return nil

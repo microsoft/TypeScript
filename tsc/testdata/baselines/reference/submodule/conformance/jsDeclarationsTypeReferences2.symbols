@@ -4,6 +4,9 @@
 const{ a, m } = require("./something").o;
 >a : Symbol(a, Decl(index.js, 0, 6))
 >m : Symbol(m, Decl(index.js, 0, 9))
+>require("./something").o : Symbol(o, Decl(something.ts, 0, 12))
+>require : Symbol(require)
+>o : Symbol(o, Decl(something.ts, 0, 12))
 
 const thing = a + m
 >thing : Symbol(thing, Decl(index.js, 2, 5))
