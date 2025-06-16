@@ -218,8 +218,8 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 	program *compiler.Program,
 	preferences *UserPreferences,
 ) *stringLiteralCompletions {
-	typeChecker, done := program.GetTypeChecker(ctx)
-	done()
+	typeChecker, done := program.GetTypeCheckerForFile(ctx, file)
+	defer done()
 	parent := walkUpParentheses(node.Parent)
 	switch parent.Kind {
 	case ast.KindLiteralType:
