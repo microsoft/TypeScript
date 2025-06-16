@@ -30046,7 +30046,7 @@ func (c *Checker) getSymbolAtLocation(node *ast.Node, ignoreErrors bool) *ast.Sy
 		// 3). Require in Javascript
 		// 4). type A = import("./f/*gotToDefinitionHere*/oo")
 		if (ast.IsExternalModuleImportEqualsDeclaration(grandParent) && ast.GetExternalModuleImportEqualsDeclarationExpression(grandParent) == node) ||
-			((parent.Kind == ast.KindImportDeclaration || parent.Kind == ast.KindJSImportDeclaration || parent.Kind == ast.KindExportDeclaration) && parent.AsImportDeclaration().ModuleSpecifier == node) ||
+			((parent.Kind == ast.KindImportDeclaration || parent.Kind == ast.KindJSImportDeclaration || parent.Kind == ast.KindExportDeclaration) && ast.GetExternalModuleName(parent) == node) ||
 			ast.IsVariableDeclarationInitializedToRequire(grandParent) ||
 			(ast.IsLiteralTypeNode(parent) && ast.IsLiteralImportTypeNode(grandParent) && grandParent.AsImportTypeNode().Argument == parent) {
 			return c.resolveExternalModuleName(node, node, ignoreErrors)
