@@ -1,10 +1,13 @@
+breakTarget5.ts(3,12): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 breakTarget5.ts(5,7): error TS1107: Jump target cannot cross function boundary.
 
 
-==== breakTarget5.ts (1 errors) ====
+==== breakTarget5.ts (2 errors) ====
     target:
     while (true) {
       function f() {
+               ~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
         while (true) {
           break target;
           ~~~~~~~~~~~~~

@@ -1,10 +1,11 @@
 ambientWithStatements.ts(2,5): error TS1036: Statements are not allowed in ambient contexts.
 ambientWithStatements.ts(3,5): error TS1104: A 'continue' statement can only be used within an enclosing iteration statement.
 ambientWithStatements.ts(11,5): error TS1108: A 'return' statement can only be used within a function body.
+ambientWithStatements.ts(25,5): error TS1101: 'with' statements are not allowed in strict mode.
 ambientWithStatements.ts(25,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== ambientWithStatements.ts (4 errors) ====
+==== ambientWithStatements.ts (5 errors) ====
     declare module M {
         break;
         ~~~~~
@@ -36,6 +37,8 @@ ambientWithStatements.ts(25,5): error TS2410: The 'with' statement is not suppor
         finally {
         }
         with (x) {
+        ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
         ~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         }

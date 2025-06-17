@@ -3,6 +3,7 @@
 === for-of56.ts ===
 for (var let of []) {}
 >let : any
+>    : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 

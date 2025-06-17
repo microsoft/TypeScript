@@ -1,0 +1,47 @@
+collisionArgumentsInType.ts(1,24): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(2,11): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(4,6): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(5,10): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(6,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(7,12): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(10,20): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(11,24): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(12,23): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInType.ts(13,26): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+==== collisionArgumentsInType.ts (10 errors) ====
+    var v1: (i: number, ...arguments) => void; // no error - no code gen
+                           ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    var v12: (arguments: number, ...restParameters) => void; // no error - no code gen
+              ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    var v2: {
+        (arguments: number, ...restParameters); // no error - no code gen
+         ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        new (arguments: number, ...restParameters); // no error - no code gen
+             ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        foo(arguments: number, ...restParameters); // no error - no code gen
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        prop: (arguments: number, ...restParameters) => void; // no error - no code gen
+               ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    var v21: {
+        (i: number, ...arguments); // no error - no code gen
+                       ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        new (i: number, ...arguments); // no error - no code gen
+                           ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        foo(i: number, ...arguments); // no error - no code gen
+                          ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        prop: (i: number, ...arguments) => void; // no error - no code gen
+                             ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }

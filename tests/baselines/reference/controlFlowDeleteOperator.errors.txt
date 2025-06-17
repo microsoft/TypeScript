@@ -1,8 +1,9 @@
 controlFlowDeleteOperator.ts(10,12): error TS2790: The operand of a 'delete' operator must be optional.
+controlFlowDeleteOperator.ts(14,12): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 controlFlowDeleteOperator.ts(14,12): error TS2703: The operand of a 'delete' operator must be a property reference.
 
 
-==== controlFlowDeleteOperator.ts (2 errors) ====
+==== controlFlowDeleteOperator.ts (3 errors) ====
     function f() {
         let x: { a?: number | string, b: number | string } = { b: 1 };
         x.a;
@@ -19,6 +20,8 @@ controlFlowDeleteOperator.ts(14,12): error TS2703: The operand of a 'delete' ope
         x.b;
         x;
         delete x;  // No effect
+               ~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                ~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
         x;

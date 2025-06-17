@@ -1,11 +1,14 @@
 parserModifierOnStatementInBlock4.ts(2,4): error TS1184: Modifiers cannot appear here.
+parserModifierOnStatementInBlock4.ts(2,20): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
 
 
-==== parserModifierOnStatementInBlock4.ts (1 errors) ====
+==== parserModifierOnStatementInBlock4.ts (2 errors) ====
     {
        export function bar() {
        ~~~~~~
 !!! error TS1184: Modifiers cannot appear here.
+                       ~~~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
        }
     }
     

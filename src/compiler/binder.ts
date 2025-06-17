@@ -630,14 +630,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         emitFlags = NodeFlags.None;
     }
 
-    function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-        if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
-            // bind in strict mode source files with alwaysStrict option
-            return true;
-        }
-        else {
-            return !!file.externalModuleIndicator;
-        }
+    function bindInStrictMode(_file: SourceFile, _opts: CompilerOptions): boolean {
+        return true;
     }
 
     function createSymbol(flags: SymbolFlags, name: __String): Symbol {

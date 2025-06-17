@@ -1,8 +1,11 @@
+parserWithStatement2.ts(1,1): error TS1101: 'with' statements are not allowed in strict mode.
 parserWithStatement2.ts(1,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== parserWithStatement2.ts (1 errors) ====
+==== parserWithStatement2.ts (2 errors) ====
     with (1)
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
     ~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
       return;

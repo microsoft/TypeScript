@@ -1,0 +1,58 @@
+collisionArgumentsInterfaceMembers.ts(3,20): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(6,6): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(9,6): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(14,24): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(17,10): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(20,10): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(25,23): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(26,10): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsInterfaceMembers.ts(27,16): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+==== collisionArgumentsInterfaceMembers.ts (9 errors) ====
+    // call
+    interface i1 {
+        (i: number, ...arguments); // no error - no code gen
+                       ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    interface i12 {
+        (arguments: number, ...rest); // no error - no code gen
+         ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    interface i1NoError {
+        (arguments: number);  // no error
+         ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    
+    // new
+    interface i2 {
+        new (i: number, ...arguments); // no error - no code gen
+                           ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    interface i21 {
+        new (arguments: number, ...rest); // no error - no code gen
+             ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    interface i2NoError {
+        new (arguments: number);  // no error
+             ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    
+    // method
+    interface i3 {
+        foo(i: number, ...arguments); // no error - no code gen
+                          ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        foo1(arguments: number, ...rest); // no error - no code gen
+             ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        fooNoError(arguments: number);  // no error
+                   ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }

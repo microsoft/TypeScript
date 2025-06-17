@@ -26,8 +26,3 @@
 
 
 //// [privateConstructorFunction.d.ts]
-/** @private */
-declare function C(): void;
-declare class C {
-    x: number;
-}

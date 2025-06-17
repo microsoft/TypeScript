@@ -1,0 +1,8 @@
+FunctionDeclaration2_es6.ts(1,12): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+
+
+==== FunctionDeclaration2_es6.ts (1 errors) ====
+    function f(yield) {
+               ~~~~~
+!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+    }

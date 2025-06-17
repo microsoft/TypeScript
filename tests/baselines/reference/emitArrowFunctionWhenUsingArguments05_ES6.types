@@ -5,6 +5,7 @@ function f(arguments) {
 >f : (arguments: any) => void
 >  : ^         ^^^^^^^^^^^^^^
 >arguments : any
+>          : ^^^
 
     var a = () => arguments;
 >a : () => any
@@ -12,4 +13,5 @@ function f(arguments) {
 >() => arguments : () => any
 >                : ^^^^^^^^^
 >arguments : any
+>          : ^^^
 }

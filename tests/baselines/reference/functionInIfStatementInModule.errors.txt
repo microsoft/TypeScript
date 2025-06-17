@@ -1,0 +1,16 @@
+functionInIfStatementInModule.ts(5,18): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+
+
+==== functionInIfStatementInModule.ts (1 errors) ====
+     
+    module Midori
+    {
+        if (false) {
+            function Foo(src)
+                     ~~~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+            {
+            }
+        }
+    }
+    

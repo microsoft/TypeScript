@@ -1,10 +1,11 @@
 parserStrictMode1.ts(1,1): error TS2304: Cannot find name 'foo1'.
 parserStrictMode1.ts(2,1): error TS2304: Cannot find name 'foo1'.
 parserStrictMode1.ts(3,1): error TS2304: Cannot find name 'foo1'.
+parserStrictMode1.ts(4,1): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
 parserStrictMode1.ts(4,1): error TS2304: Cannot find name 'static'.
 
 
-==== parserStrictMode1.ts (4 errors) ====
+==== parserStrictMode1.ts (5 errors) ====
     foo1();
     ~~~~
 !!! error TS2304: Cannot find name 'foo1'.
@@ -15,5 +16,7 @@ parserStrictMode1.ts(4,1): error TS2304: Cannot find name 'static'.
     ~~~~
 !!! error TS2304: Cannot find name 'foo1'.
     static();
+    ~~~~~~
+!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
     ~~~~~~
 !!! error TS2304: Cannot find name 'static'.
