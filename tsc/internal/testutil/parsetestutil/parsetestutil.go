@@ -8,18 +8,22 @@ import (
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnosticwriter"
 	"github.com/microsoft/typescript-go/internal/parser"
-	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
 
-var parseCompilerOptions = &core.SourceFileAffectingCompilerOptions{
+var parseCompilerOptions = core.SourceFileAffectingCompilerOptions{
 	EmitScriptTarget: core.ScriptTargetLatest,
 }
 
 // Simplifies parsing an input string into a SourceFile for testing purposes.
 func ParseTypeScript(text string, jsx bool) *ast.SourceFile {
 	fileName := core.IfElse(jsx, "/main.tsx", "/main.ts")
-	file := parser.ParseSourceFile(fileName, tspath.Path(fileName), text, parseCompilerOptions, nil, scanner.JSDocParsingModeParseNone)
+	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName:         fileName,
+		Path:             tspath.Path(fileName),
+		CompilerOptions:  parseCompilerOptions,
+		JSDocParsingMode: ast.JSDocParsingModeParseNone,
+	}, text, core.GetScriptKindFromFileName(fileName))
 	ast.SetParentInChildren(file.AsNode())
 	return file
 }

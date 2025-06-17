@@ -8,20 +8,13 @@ import (
 	"github.com/microsoft/typescript-go/internal/scanner"
 )
 
-func ensureScriptKind(fileName string, scriptKind core.ScriptKind) core.ScriptKind {
-	// Using scriptKind as a condition handles both:
-	// - 'scriptKind' is unspecified and thus it is `undefined`
-	// - 'scriptKind' is set and it is `Unknown` (0)
-	// If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
-	// to get the ScriptKind from the file name. If it cannot be resolved
-	// from the file name then the default 'TS' script kind is returned.
-	if scriptKind == core.ScriptKindUnknown {
-		scriptKind = core.GetScriptKindFromFileName(fileName)
+func getLanguageVariant(scriptKind core.ScriptKind) core.LanguageVariant {
+	switch scriptKind {
+	case core.ScriptKindTSX, core.ScriptKindJSX, core.ScriptKindJS, core.ScriptKindJSON:
+		// .tsx and .jsx files are treated as jsx language variant.
+		return core.LanguageVariantJSX
 	}
-	if scriptKind == core.ScriptKindUnknown {
-		scriptKind = core.ScriptKindTS
-	}
-	return scriptKind
+	return core.LanguageVariantStandard
 }
 
 func tokenIsIdentifierOrKeyword(token ast.Kind) bool {

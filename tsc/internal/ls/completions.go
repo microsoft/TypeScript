@@ -1513,7 +1513,7 @@ func (l *LanguageService) completionInfoFromData(
 	defer done()
 
 	// Verify if the file is JSX language variant
-	if ast.GetLanguageVariant(file.ScriptKind) == core.LanguageVariantJSX {
+	if file.LanguageVariant == core.LanguageVariantJSX {
 		list := l.getJsxClosingTagCompletion(data.location, file, position, clientOptions)
 		if list != nil {
 			return list

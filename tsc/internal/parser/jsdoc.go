@@ -127,7 +127,6 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int, fullSta
 	saveToken := p.token
 	saveContextFlags := p.contextFlags
 	saveParsingContexts := p.parsingContexts
-	saveParsingMode := p.scanner.JSDocParsingMode
 	saveScannerState := p.scanner.Mark()
 	saveDiagnosticsLength := len(p.diagnostics)
 	saveHasParseError := p.hasParseError
@@ -157,7 +156,6 @@ func (p *Parser) parseJSDocComment(parent *ast.Node, start int, end int, fullSta
 	p.scanner.SetText(p.sourceText)
 	p.parsingContexts = saveParsingContexts
 	p.contextFlags = saveContextFlags
-	p.scanner.JSDocParsingMode = saveParsingMode
 	p.scanner.Rewind(saveScannerState)
 	p.token = saveToken
 	p.hasParseError = saveHasParseError

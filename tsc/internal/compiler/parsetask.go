@@ -16,7 +16,7 @@ type parseTask struct {
 	isRedirected       bool
 	subTasks           []*parseTask
 
-	metadata                     *ast.SourceFileMetaData
+	metadata                     ast.SourceFileMetaData
 	resolutionsInFile            module.ModeAwareCache[*module.ResolvedModule]
 	typeResolutionsInFile        module.ModeAwareCache[*module.ResolvedTypeReferenceDirective]
 	importHelpersImportSpecifier *ast.Node

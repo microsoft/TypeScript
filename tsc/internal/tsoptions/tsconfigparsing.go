@@ -252,7 +252,10 @@ func tsconfigToSourceFile(tsconfigSourceFile *TsConfigSourceFile) *ast.SourceFil
 }
 
 func NewTsconfigSourceFileFromFilePath(configFileName string, configPath tspath.Path, configSourceText string) *TsConfigSourceFile {
-	sourceFile := parser.ParseJSONText(configFileName, configPath, configSourceText)
+	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: configFileName,
+		Path:     configPath,
+	}, configSourceText, core.ScriptKindJSON)
 	return &TsConfigSourceFile{
 		SourceFile: sourceFile,
 	}
@@ -624,7 +627,10 @@ func directoryOfCombinedPath(fileName string, basePath string) string {
 // fileName is the path to the config file
 // jsonText is the text of the config file
 func ParseConfigFileTextToJson(fileName string, path tspath.Path, jsonText string) (any, []*ast.Diagnostic) {
-	jsonSourceFile := parser.ParseJSONText(fileName, path, jsonText)
+	jsonSourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+		FileName: fileName,
+		Path:     path,
+	}, jsonText, core.ScriptKindJSON)
 	config, errors := convertConfigFileToObject(jsonSourceFile /*jsonConversionNotifier*/, nil)
 	if len(jsonSourceFile.Diagnostics()) > 0 {
 		errors = []*ast.Diagnostic{jsonSourceFile.Diagnostics()[0]}
@@ -876,11 +882,14 @@ func readJsonConfigFile(fileName string, path tspath.Path, readFile func(fileNam
 	text, diagnostic := tryReadFile(fileName, readFile, []*ast.Diagnostic{})
 	if text != "" {
 		return &TsConfigSourceFile{
-			SourceFile: parser.ParseJSONText(fileName, path, text),
+			SourceFile: parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: fileName,
+				Path:     path,
+			}, text, core.ScriptKindJSON),
 		}, diagnostic
 	} else {
 		file := &TsConfigSourceFile{
-			SourceFile: (&ast.NodeFactory{}).NewSourceFile("", fileName, path, nil).AsSourceFile(),
+			SourceFile: (&ast.NodeFactory{}).NewSourceFile(ast.SourceFileParseOptions{FileName: fileName, Path: path}, "", nil).AsSourceFile(),
 		}
 		file.SourceFile.SetDiagnostics(diagnostic)
 		return file, diagnostic

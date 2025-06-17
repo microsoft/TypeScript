@@ -9985,17 +9985,14 @@ type SourceFile struct {
 	compositeNodeBase
 
 	// Fields set by NewSourceFile
-
-	text       string
-	fileName   string
-	path       tspath.Path
-	Statements *NodeList // NodeList[*Statement]
+	fileName     string // For debugging convenience
+	parseOptions SourceFileParseOptions
+	text         string
+	Statements   *NodeList // NodeList[*Statement]
 
 	// Fields set by parser
-
 	diagnostics                 []*Diagnostic
 	jsdocDiagnostics            []*Diagnostic
-	LanguageVersion             core.ScriptTarget
 	LanguageVariant             core.LanguageVariant
 	ScriptKind                  core.ScriptKind
 	IsDeclarationFile           bool
@@ -10040,18 +10037,24 @@ type SourceFile struct {
 	tokenCache   map[core.TextRange]*Node
 }
 
-func (f *NodeFactory) NewSourceFile(text string, fileName string, path tspath.Path, statements *NodeList) *Node {
-	if (tspath.GetEncodedRootLength(fileName) == 0 && !strings.HasPrefix(fileName, "^/")) || fileName != tspath.NormalizePath(fileName) {
-		panic(fmt.Sprintf("fileName should be normalized and absolute: %q", fileName))
+func (f *NodeFactory) NewSourceFile(opts SourceFileParseOptions, text string, statements *NodeList) *Node {
+	if (tspath.GetEncodedRootLength(opts.FileName) == 0 && !strings.HasPrefix(opts.FileName, "^/")) || opts.FileName != tspath.NormalizePath(opts.FileName) {
+		panic(fmt.Sprintf("fileName should be normalized and absolute: %q", opts.FileName))
 	}
-
 	data := &SourceFile{}
+	data.fileName = opts.FileName
+	data.parseOptions = opts
 	data.text = text
-	data.fileName = fileName
-	data.path = path
 	data.Statements = statements
-	data.LanguageVersion = core.ScriptTargetLatest
 	return f.newNode(KindSourceFile, data)
+}
+
+func (node *SourceFile) ParseOptions() SourceFileParseOptions {
+	return node.parseOptions
+}
+
+func (node *SourceFile) LanguageVersion() core.ScriptTarget {
+	return node.parseOptions.CompilerOptions.EmitScriptTarget
 }
 
 func (node *SourceFile) Text() string {
@@ -10059,11 +10062,11 @@ func (node *SourceFile) Text() string {
 }
 
 func (node *SourceFile) FileName() string {
-	return node.fileName
+	return node.parseOptions.FileName
 }
 
 func (node *SourceFile) Path() tspath.Path {
-	return node.path
+	return node.parseOptions.Path
 }
 
 func (node *SourceFile) OriginalFileName() string {
@@ -10120,7 +10123,6 @@ func (node *SourceFile) IsJS() bool {
 
 func (node *SourceFile) copyFrom(other *SourceFile) {
 	// Do not copy fields set by NewSourceFile (Text, FileName, Path, or Statements)
-	node.LanguageVersion = other.LanguageVersion
 	node.LanguageVariant = other.LanguageVariant
 	node.ScriptKind = other.ScriptKind
 	node.IsDeclarationFile = other.IsDeclarationFile
@@ -10141,7 +10143,7 @@ func (node *SourceFile) copyFrom(other *SourceFile) {
 }
 
 func (node *SourceFile) Clone(f NodeFactoryCoercible) *Node {
-	updated := f.AsNodeFactory().NewSourceFile(node.Text(), node.FileName(), node.Path(), node.Statements)
+	updated := f.AsNodeFactory().NewSourceFile(node.parseOptions, node.text, node.Statements)
 	newFile := updated.AsSourceFile()
 	newFile.copyFrom(node)
 	return cloneNode(updated, node.AsNode(), f.AsNodeFactory().hooks)
@@ -10153,7 +10155,7 @@ func (node *SourceFile) computeSubtreeFacts() SubtreeFacts {
 
 func (f *NodeFactory) UpdateSourceFile(node *SourceFile, statements *StatementList) *Node {
 	if statements != node.Statements {
-		updated := f.NewSourceFile(node.Text(), node.fileName, node.path, statements).AsSourceFile()
+		updated := f.NewSourceFile(node.parseOptions, node.text, statements).AsSourceFile()
 		updated.copyFrom(node)
 		return updateNode(updated.AsNode(), node.AsNode(), f.hooks)
 	}

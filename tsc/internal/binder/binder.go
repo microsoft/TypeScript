@@ -42,7 +42,6 @@ const (
 
 type Binder struct {
 	file                    *ast.SourceFile
-	options                 *core.SourceFileAffectingCompilerOptions
 	languageVersion         core.ScriptTarget
 	bindFunc                func(*ast.Node) bool
 	unreachableFlow         *ast.FlowNode
@@ -77,6 +76,10 @@ type Binder struct {
 	singleDeclarationsPool core.Pool[*ast.Node]
 }
 
+func (b *Binder) options() core.SourceFileAffectingCompilerOptions {
+	return b.file.ParseOptions().CompilerOptions
+}
+
 type ActiveLabel struct {
 	next           *ActiveLabel
 	breakTarget    *ast.FlowLabel
@@ -88,11 +91,11 @@ type ActiveLabel struct {
 func (label *ActiveLabel) BreakTarget() *ast.FlowNode    { return label.breakTarget }
 func (label *ActiveLabel) ContinueTarget() *ast.FlowNode { return label.continueTarget }
 
-func BindSourceFile(file *ast.SourceFile, options *core.SourceFileAffectingCompilerOptions) {
+func BindSourceFile(file *ast.SourceFile) {
 	// This is constructed this way to make the compiler "out-line" the function,
 	// avoiding most work in the common case where the file has already been bound.
 	if !file.IsBound() {
-		bindSourceFile(file, options)
+		bindSourceFile(file)
 	}
 }
 
@@ -113,14 +116,13 @@ func putBinder(b *Binder) {
 	binderPool.Put(b)
 }
 
-func bindSourceFile(file *ast.SourceFile, options *core.SourceFileAffectingCompilerOptions) {
+func bindSourceFile(file *ast.SourceFile) {
 	file.BindOnce(func() {
 		b := getBinder()
 		defer putBinder(b)
 		b.file = file
-		b.options = options
-		b.languageVersion = options.EmitScriptTarget
-		b.inStrictMode = options.BindInStrictMode && !file.IsDeclarationFile || ast.IsExternalModule(file)
+		b.languageVersion = b.options().EmitScriptTarget
+		b.inStrictMode = b.options().BindInStrictMode && !file.IsDeclarationFile || ast.IsExternalModule(file)
 		b.unreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.reportedUnreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.bind(file.AsNode())
@@ -1441,7 +1443,7 @@ func (b *Binder) checkStrictModeWithStatement(node *ast.Node) {
 
 func (b *Binder) checkStrictModeLabeledStatement(node *ast.Node) {
 	// Grammar checking for labeledStatement
-	if b.inStrictMode && b.options.EmitScriptTarget >= core.ScriptTargetES2015 {
+	if b.inStrictMode && b.options().EmitScriptTarget >= core.ScriptTargetES2015 {
 		data := node.AsLabeledStatement()
 		if ast.IsDeclarationStatement(data.Statement) || ast.IsVariableStatement(data.Statement) {
 			b.errorOnFirstToken(data.Label, diagnostics.A_label_is_not_allowed_here)
@@ -1614,7 +1616,7 @@ func (b *Binder) bindChildren(node *ast.Node) {
 		return
 	}
 	kind := node.Kind
-	if kind >= ast.KindFirstStatement && kind <= ast.KindLastStatement && (b.options.AllowUnreachableCode != core.TSTrue || kind == ast.KindReturnStatement) {
+	if kind >= ast.KindFirstStatement && kind <= ast.KindLastStatement && (b.options().AllowUnreachableCode != core.TSTrue || kind == ast.KindReturnStatement) {
 		hasFlowNodeData := node.FlowNodeData()
 		if hasFlowNodeData != nil {
 			hasFlowNodeData.FlowNode = b.currentFlow
@@ -1749,11 +1751,11 @@ func (b *Binder) checkUnreachable(node *ast.Node) bool {
 		// report errors on instantiated modules
 		reportError := ast.IsStatementButNotDeclaration(node) && !ast.IsEmptyStatement(node) ||
 			ast.IsClassDeclaration(node) ||
-			isEnumDeclarationWithPreservedEmit(node, b.options) ||
+			isEnumDeclarationWithPreservedEmit(node, b.options()) ||
 			ast.IsModuleDeclaration(node) && b.shouldReportErrorOnModuleDeclaration(node)
 		if reportError {
 			b.currentFlow = b.reportedUnreachableFlow
-			if b.options.AllowUnreachableCode != core.TSTrue {
+			if b.options().AllowUnreachableCode != core.TSTrue {
 				// unreachable code is reported if
 				// - user has explicitly asked about it AND
 				// - statement is in not ambient context (statements in ambient context is already an error
@@ -1763,7 +1765,7 @@ func (b *Binder) checkUnreachable(node *ast.Node) bool {
 				//   - node is not block scoped variable statement and at least one variable declaration has initializer
 				//   Rationale: we don't want to report errors on non-initialized var's since they are hoisted
 				//   On the other side we do want to report errors on non-initialized 'lets' because of TDZ
-				isError := unreachableCodeIsError(b.options) && node.Flags&ast.NodeFlagsAmbient == 0 && (!ast.IsVariableStatement(node) ||
+				isError := unreachableCodeIsError(b.options()) && node.Flags&ast.NodeFlagsAmbient == 0 && (!ast.IsVariableStatement(node) ||
 					ast.GetCombinedNodeFlags(node.AsVariableStatement().DeclarationList)&ast.NodeFlagsBlockScoped != 0 ||
 					core.Some(node.AsVariableStatement().DeclarationList.AsVariableDeclarationList().Declarations.Nodes, func(d *ast.Node) bool {
 						return d.AsVariableDeclaration().Initializer != nil
@@ -1777,7 +1779,7 @@ func (b *Binder) checkUnreachable(node *ast.Node) bool {
 
 func (b *Binder) shouldReportErrorOnModuleDeclaration(node *ast.Node) bool {
 	instanceState := ast.GetModuleInstanceState(node)
-	return instanceState == ast.ModuleInstanceStateInstantiated || (instanceState == ast.ModuleInstanceStateConstEnumOnly && b.options.ShouldPreserveConstEnums)
+	return instanceState == ast.ModuleInstanceStateInstantiated || (instanceState == ast.ModuleInstanceStateConstEnumOnly && b.options().ShouldPreserveConstEnums)
 }
 
 func (b *Binder) errorOnEachUnreachableRange(node *ast.Node, isError bool) {
@@ -1820,7 +1822,7 @@ func (b *Binder) isPurelyTypeDeclaration(s *ast.Node) bool {
 	case ast.KindModuleDeclaration:
 		return ast.GetModuleInstanceState(s) != ast.ModuleInstanceStateInstantiated
 	case ast.KindEnumDeclaration:
-		return !isEnumDeclarationWithPreservedEmit(s, b.options)
+		return !isEnumDeclarationWithPreservedEmit(s, b.options())
 	default:
 		return false
 	}
@@ -2171,7 +2173,7 @@ func (b *Binder) bindCaseBlock(node *ast.Node) {
 		clause := clauses[i]
 		b.bind(clause)
 		fallthroughFlow = b.currentFlow
-		if b.currentFlow.Flags&ast.FlowFlagsUnreachable == 0 && i != len(clauses)-1 && b.options.NoFallthroughCasesInSwitch == core.TSTrue {
+		if b.currentFlow.Flags&ast.FlowFlagsUnreachable == 0 && i != len(clauses)-1 && b.options().NoFallthroughCasesInSwitch == core.TSTrue {
 			clause.AsCaseOrDefaultClause().FallthroughFlowNode = b.currentFlow
 		}
 	}
@@ -2216,8 +2218,8 @@ func (b *Binder) bindLabeledStatement(node *ast.Node) {
 	}
 	b.bind(stmt.Label)
 	b.bind(stmt.Statement)
-	if !b.activeLabelList.referenced && b.options.AllowUnusedLabels != core.TSTrue {
-		b.errorOrSuggestionOnNode(unusedLabelIsError(b.options), stmt.Label, diagnostics.Unused_label)
+	if !b.activeLabelList.referenced && b.options().AllowUnusedLabels != core.TSTrue {
+		b.errorOrSuggestionOnNode(unusedLabelIsError(b.options()), stmt.Label, diagnostics.Unused_label)
 	}
 	b.activeLabelList = b.activeLabelList.next
 	b.addAntecedent(postStatementLabel, b.currentFlow)
@@ -2539,7 +2541,7 @@ func (b *Binder) bindInitializer(node *ast.Node) {
 	b.currentFlow = b.finishFlowLabel(exitFlow)
 }
 
-func isEnumDeclarationWithPreservedEmit(node *ast.Node, options *core.SourceFileAffectingCompilerOptions) bool {
+func isEnumDeclarationWithPreservedEmit(node *ast.Node, options core.SourceFileAffectingCompilerOptions) bool {
 	return node.Kind == ast.KindEnumDeclaration && (!ast.IsEnumConst(node) || options.ShouldPreserveConstEnums)
 }
 
@@ -2871,11 +2873,11 @@ func isFunctionSymbol(symbol *ast.Symbol) bool {
 	return false
 }
 
-func unreachableCodeIsError(options *core.SourceFileAffectingCompilerOptions) bool {
+func unreachableCodeIsError(options core.SourceFileAffectingCompilerOptions) bool {
 	return options.AllowUnreachableCode == core.TSFalse
 }
 
-func unusedLabelIsError(options *core.SourceFileAffectingCompilerOptions) bool {
+func unusedLabelIsError(options core.SourceFileAffectingCompilerOptions) bool {
 	return options.AllowUnusedLabels == core.TSFalse
 }
 

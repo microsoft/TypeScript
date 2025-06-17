@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
@@ -72,7 +74,10 @@ func makeUnitsFromTest(code string, fileName string) testCaseContent {
 		if harnessutil.GetConfigNameFromFileName(data.name) != "" {
 			configFileName := tspath.GetNormalizedAbsolutePath(data.name, currentDirectory)
 			path := tspath.ToPath(data.name, parseConfigHost.GetCurrentDirectory(), parseConfigHost.Vfs.UseCaseSensitiveFileNames())
-			configJson := parser.ParseJSONText(configFileName, path, data.content)
+			configJson := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName: configFileName,
+				Path:     path,
+			}, data.content, core.ScriptKindJSON)
 			tsConfigSourceFile := &tsoptions.TsConfigSourceFile{
 				SourceFile: configJson,
 			}

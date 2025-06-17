@@ -5,13 +5,10 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/binder"
-	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/testutil/parsetestutil"
 	"gotest.tools/v3/assert"
 )
-
-var defaultSourceFileAffectingOptions = (&core.CompilerOptions{}).SourceFileAffecting()
 
 func TestTempVariable1(t *testing.T) {
 	t.Parallel()
@@ -260,7 +257,7 @@ func TestGeneratedNameForIdentifier1(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("function f() {}", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].Name()
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -277,7 +274,7 @@ func TestGeneratedNameForIdentifier2(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("function f() {}", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].Name()
 	name1 := ec.Factory.NewGeneratedNameForNodeEx(n, printer.AutoGenerateOptions{
@@ -297,7 +294,7 @@ func TestGeneratedNameForIdentifier3(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("function f() {}", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].Name()
 	name1 := ec.Factory.NewGeneratedNameForNodeEx(n, printer.AutoGenerateOptions{
@@ -319,7 +316,7 @@ func TestGeneratedNameForNamespace1(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("namespace foo { }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	ns1 := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
@@ -337,7 +334,7 @@ func TestGeneratedNameForNamespace2(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("namespace foo { var foo; }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	ns1 := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
@@ -355,7 +352,7 @@ func TestGeneratedNameForNamespace3(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("namespace ns1 { namespace foo { var foo; } } namespace ns2 { namespace foo { var foo; } }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	ns1 := file.Statements.Nodes[0].AsModuleDeclaration().Body.AsModuleBlock().Statements.Nodes[0]
 	ns2 := file.Statements.Nodes[1].AsModuleDeclaration().Body.AsModuleBlock().Statements.Nodes[0]
@@ -377,7 +374,7 @@ func TestGeneratedNameForNamespace4(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("namespace ns1 { namespace foo { var foo; } } namespace ns2 { namespace foo { var foo; } }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	ns1 := file.Statements.Nodes[0].AsModuleDeclaration().Body.AsModuleBlock().Statements.Nodes[0]
 	ns2 := file.Statements.Nodes[1].AsModuleDeclaration().Body.AsModuleBlock().Statements.Nodes[0]
@@ -404,7 +401,7 @@ func TestGeneratedNameForNodeCached(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("namespace foo { var foo; }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	ns1 := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(ns1)
@@ -424,7 +421,7 @@ func TestGeneratedNameForImport(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("import * as foo from 'foo'", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -441,7 +438,7 @@ func TestGeneratedNameForExport(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("export * as foo from 'foo'", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -458,7 +455,7 @@ func TestGeneratedNameForFunctionDeclaration1(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("export function f() {}", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -475,7 +472,7 @@ func TestGeneratedNameForFunctionDeclaration2(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("export default function () {}", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -492,7 +489,7 @@ func TestGeneratedNameForClassDeclaration1(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("export class C {}", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -509,7 +506,7 @@ func TestGeneratedNameForClassDeclaration2(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("export default class {}", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -526,7 +523,7 @@ func TestGeneratedNameForExportAssignment(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("export default 0", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -543,7 +540,7 @@ func TestGeneratedNameForClassExpression(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("(class {})", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].AsExpressionStatement().Expression.AsParenthesizedExpression().Expression
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -560,7 +557,7 @@ func TestGeneratedNameForMethod1(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("class C { m() {} }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].AsClassDeclaration().Members.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -577,7 +574,7 @@ func TestGeneratedNameForMethod2(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("class C { 0() {} }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].AsClassDeclaration().Members.Nodes[0]
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -594,7 +591,7 @@ func TestGeneratedPrivateNameForMethod(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("class C { m() {} }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].AsClassDeclaration().Members.Nodes[0]
 	name1 := ec.Factory.NewGeneratedPrivateNameForNode(n)
@@ -611,7 +608,7 @@ func TestGeneratedNameForComputedPropertyName(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("class C { [x] }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := file.Statements.Nodes[0].AsClassDeclaration().Members.Nodes[0].Name()
 	name1 := ec.Factory.NewGeneratedNameForNode(n)
@@ -628,7 +625,7 @@ func TestGeneratedNameForOther(t *testing.T) {
 	ec := printer.NewEmitContext()
 
 	file := parsetestutil.ParseTypeScript("class C { [x] }", false /*jsx*/)
-	binder.BindSourceFile(file, defaultSourceFileAffectingOptions)
+	binder.BindSourceFile(file)
 
 	n := ec.Factory.NewObjectLiteralExpression(
 		ec.Factory.NewNodeList([]*ast.Node{}),

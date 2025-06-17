@@ -30,6 +30,7 @@ type ProgramOptions struct {
 	CreateCheckerPool           func(*Program) CheckerPool
 	TypingsLocation             string
 	ProjectName                 string
+	JSDocParsingMode            ast.JSDocParsingMode
 }
 
 func (p *ProgramOptions) canUseProjectReferenceSource() bool {
@@ -225,9 +226,7 @@ func NewProgram(opts ProgramOptions) *Program {
 // In addition to a new program, return a boolean indicating whether the data of the old program was reused.
 func (p *Program) UpdateProgram(changedFilePath tspath.Path) (*Program, bool) {
 	oldFile := p.filesByPath[changedFilePath]
-	// TODO(jakebailey): is wrong because the new file may have new metadata?
-	metadata := p.sourceFileMetaDatas[changedFilePath]
-	newFile := p.Host().GetSourceFile(oldFile.FileName(), changedFilePath, p.Options().SourceFileAffecting(), metadata)
+	newFile := p.Host().GetSourceFile(oldFile.ParseOptions())
 	if !canReplaceFileInProgram(oldFile, newFile) {
 		return NewProgram(p.opts), false
 	}
@@ -257,14 +256,8 @@ func (p *Program) initCheckerPool() {
 }
 
 func canReplaceFileInProgram(file1 *ast.SourceFile, file2 *ast.SourceFile) bool {
-	// TODO(jakebailey): metadata??
 	return file2 != nil &&
-		file1.FileName() == file2.FileName() &&
-		file1.Path() == file2.Path() &&
-		file1.LanguageVersion == file2.LanguageVersion &&
-		file1.LanguageVariant == file2.LanguageVariant &&
-		file1.ScriptKind == file2.ScriptKind &&
-		file1.IsDeclarationFile == file2.IsDeclarationFile &&
+		file1.ParseOptions() == file2.ParseOptions() &&
 		file1.HasNoDefaultLib == file2.HasNoDefaultLib &&
 		file1.UsesUriStyleNodeCoreModules == file2.UsesUriStyleNodeCoreModules &&
 		slices.EqualFunc(file1.Imports(), file2.Imports(), equalModuleSpecifiers) &&
@@ -308,7 +301,7 @@ func (p *Program) BindSourceFiles() {
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
-				binder.BindSourceFile(file, p.projectReferenceFileMapper.getCompilerOptionsForFile(file).SourceFileAffecting())
+				binder.BindSourceFile(file)
 			})
 		}
 	}
@@ -601,7 +594,7 @@ func compactAndMergeRelatedInfos(diagnostics []*ast.Diagnostic) []*ast.Diagnosti
 func (p *Program) getDiagnosticsHelper(ctx context.Context, sourceFile *ast.SourceFile, ensureBound bool, ensureChecked bool, getDiagnostics func(context.Context, *ast.SourceFile) []*ast.Diagnostic) []*ast.Diagnostic {
 	if sourceFile != nil {
 		if ensureBound {
-			binder.BindSourceFile(sourceFile, p.projectReferenceFileMapper.getCompilerOptionsForFile(sourceFile).SourceFileAffecting())
+			binder.BindSourceFile(sourceFile)
 		}
 		return SortAndDeduplicateDiagnostics(getDiagnostics(ctx, sourceFile))
 	}
@@ -670,7 +663,7 @@ func (p *Program) InstantiationCount() int {
 	return count
 }
 
-func (p *Program) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
+func (p *Program) GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData {
 	return p.sourceFileMetaDatas[path]
 }
 

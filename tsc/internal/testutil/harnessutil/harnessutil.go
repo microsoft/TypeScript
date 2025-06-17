@@ -23,7 +23,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/outputpaths"
 	"github.com/microsoft/typescript-go/internal/parser"
 	"github.com/microsoft/typescript-go/internal/repo"
-	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/testutil"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -467,62 +466,42 @@ func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value str
 
 type cachedCompilerHost struct {
 	compiler.CompilerHost
-	options *core.CompilerOptions
 }
 
 var sourceFileCache collections.SyncMap[SourceFileCacheKey, *ast.SourceFile]
 
 type SourceFileCacheKey struct {
-	core.SourceFileAffectingCompilerOptions
-	ast.SourceFileMetaData
-	fileName string
-	path     tspath.Path
-	text     string
+	opts       ast.SourceFileParseOptions
+	text       string
+	scriptKind core.ScriptKind
 }
 
-func GetSourceFileCacheKey(
-	fileName string,
-	path tspath.Path,
-	text string,
-	options *core.SourceFileAffectingCompilerOptions,
-	metadata *ast.SourceFileMetaData,
-) SourceFileCacheKey {
+func GetSourceFileCacheKey(opts ast.SourceFileParseOptions, text string, scriptKind core.ScriptKind) SourceFileCacheKey {
 	return SourceFileCacheKey{
-		SourceFileAffectingCompilerOptions: *options,
-		SourceFileMetaData:                 *metadata,
-		fileName:                           fileName,
-		path:                               path,
-		text:                               text,
+		opts:       opts,
+		text:       text,
+		scriptKind: scriptKind,
 	}
 }
 
-func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, options *core.SourceFileAffectingCompilerOptions, metadata *ast.SourceFileMetaData) *ast.SourceFile {
-	text, ok := h.FS().ReadFile(fileName)
+func (h *cachedCompilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
+	text, ok := h.FS().ReadFile(opts.FileName)
 	if !ok {
 		return nil
 	}
 
-	key := GetSourceFileCacheKey(
-		fileName,
-		path,
-		text,
-		h.options.SourceFileAffecting(),
-		metadata,
-	)
+	scriptKind := core.GetScriptKindFromFileName(opts.FileName)
+	if scriptKind == core.ScriptKindUnknown {
+		panic("Unknown script kind for file  " + opts.FileName)
+	}
+
+	key := GetSourceFileCacheKey(opts, text, scriptKind)
 
 	if cached, ok := sourceFileCache.Load(key); ok {
 		return cached
 	}
 
-	// !!! dedupe with compiler.compilerHost
-	var sourceFile *ast.SourceFile
-	if tspath.FileExtensionIs(fileName, tspath.ExtensionJson) {
-		sourceFile = parser.ParseJSONText(fileName, path, text)
-	} else {
-		// !!! JSDocParsingMode
-		sourceFile = parser.ParseSourceFile(fileName, path, text, options, metadata, scanner.JSDocParsingModeParseAll)
-	}
-
+	sourceFile := parser.ParseSourceFile(opts, text, scriptKind)
 	result, _ := sourceFileCache.LoadOrStore(key, sourceFile)
 	return result
 }
@@ -530,7 +509,6 @@ func (h *cachedCompilerHost) GetSourceFile(fileName string, path tspath.Path, op
 func createCompilerHost(fs vfs.FS, defaultLibraryPath string, options *core.CompilerOptions, currentDirectory string) compiler.CompilerHost {
 	return &cachedCompilerHost{
 		CompilerHost: compiler.NewCompilerHost(options, currentDirectory, fs, defaultLibraryPath, nil),
-		options:      options,
 	}
 }
 

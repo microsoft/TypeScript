@@ -534,7 +534,7 @@ type Program interface {
 	GetImpliedNodeFormatForEmit(sourceFile ast.HasFileName) core.ModuleKind
 	GetResolvedModule(currentSourceFile ast.HasFileName, moduleReference string, mode core.ResolutionMode) *module.ResolvedModule
 	GetResolvedModules() map[tspath.Path]module.ModeAwareCache[*module.ResolvedModule]
-	GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData
+	GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData
 	GetJSXRuntimeImportSpecifier(path tspath.Path) (moduleReference string, specifier *ast.Node)
 	GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node
 	SourceFileMayBeEmitted(sourceFile *ast.SourceFile, forceDtsEmit bool) bool
@@ -10261,7 +10261,7 @@ func (c *Checker) checkNewTargetMetaProperty(node *ast.Node) *Type {
 func (c *Checker) checkImportMetaProperty(node *ast.Node) *Type {
 	if core.ModuleKindNode16 <= c.moduleKind && c.moduleKind <= core.ModuleKindNodeNext {
 		sourceFileMetaData := c.program.GetSourceFileMetaData(ast.GetSourceFileOfNode(node).Path())
-		if sourceFileMetaData == nil || sourceFileMetaData.ImpliedNodeFormat != core.ModuleKindESNext {
+		if sourceFileMetaData.ImpliedNodeFormat != core.ModuleKindESNext {
 			c.error(node, diagnostics.The_import_meta_meta_property_is_not_allowed_in_files_which_will_build_into_CommonJS_output)
 		}
 	} else if c.moduleKind < core.ModuleKindES2020 && c.moduleKind != core.ModuleKindSystem {

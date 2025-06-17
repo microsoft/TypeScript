@@ -5,7 +5,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
-	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -18,7 +17,7 @@ type CompilerHost interface {
 	GetCurrentDirectory() string
 	NewLine() string
 	Trace(msg string)
-	GetSourceFile(fileName string, path tspath.Path, options *core.SourceFileAffectingCompilerOptions, metadata *ast.SourceFileMetaData) *ast.SourceFile
+	GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile
 	GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine
 }
 
@@ -90,15 +89,12 @@ func (h *compilerHost) Trace(msg string) {
 	//!!! TODO: implement
 }
 
-func (h *compilerHost) GetSourceFile(fileName string, path tspath.Path, options *core.SourceFileAffectingCompilerOptions, metadata *ast.SourceFileMetaData) *ast.SourceFile {
-	text, ok := h.FS().ReadFile(fileName)
+func (h *compilerHost) GetSourceFile(opts ast.SourceFileParseOptions) *ast.SourceFile {
+	text, ok := h.FS().ReadFile(opts.FileName)
 	if !ok {
 		return nil
 	}
-	if tspath.FileExtensionIs(fileName, tspath.ExtensionJson) {
-		return parser.ParseJSONText(fileName, path, text)
-	}
-	return parser.ParseSourceFile(fileName, path, text, options, metadata, scanner.JSDocParsingModeParseForTypeErrors)
+	return parser.ParseSourceFile(opts, text, core.GetScriptKindFromFileName(opts.FileName))
 }
 
 func (h *compilerHost) GetResolvedProjectReference(fileName string, path tspath.Path) *tsoptions.ParsedCommandLine {

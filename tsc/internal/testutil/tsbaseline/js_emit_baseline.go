@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/parser"
-	"github.com/microsoft/typescript-go/internal/scanner"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -61,14 +61,11 @@ func DoJSEmitBaseline(
 			jsCode.WriteString("\r\n")
 		}
 		if len(result.Diagnostics) == 0 && strings.HasSuffix(file.UnitName, tspath.ExtensionJson) {
-			fileParseResult := parser.ParseSourceFile(
-				file.UnitName,
-				tspath.Path(file.UnitName),
-				file.Content,
-				options.SourceFileAffecting(),
-				nil, // TODO(jakebailey): need to grab this somehow?
-				scanner.JSDocParsingModeParseAll,
-			)
+			fileParseResult := parser.ParseSourceFile(ast.SourceFileParseOptions{
+				FileName:        file.UnitName,
+				Path:            tspath.Path(file.UnitName),
+				CompilerOptions: options.SourceFileAffecting(),
+			}, file.Content, core.ScriptKindJSON)
 			if len(fileParseResult.Diagnostics()) > 0 {
 				jsCode.WriteString(getErrorBaseline(t, []*harnessutil.TestFile{file}, fileParseResult.Diagnostics(), false /*pretty*/))
 				continue

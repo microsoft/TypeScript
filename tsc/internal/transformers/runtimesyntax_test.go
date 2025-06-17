@@ -233,7 +233,7 @@ var E;
 			options := &core.CompilerOptions{}
 			file := parsetestutil.ParseTypeScript(rec.input, false /*jsx*/)
 			parsetestutil.CheckDiagnostics(t, file)
-			binder.BindSourceFile(file, options.SourceFileAffecting())
+			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
@@ -411,7 +411,7 @@ func TestNamespaceTransformer(t *testing.T) {
 			options := &core.CompilerOptions{}
 			file := parsetestutil.ParseTypeScript(rec.input, false /*jsx*/)
 			parsetestutil.CheckDiagnostics(t, file)
-			binder.BindSourceFile(file, options.SourceFileAffecting())
+			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 			emittestutil.CheckEmit(t, emitContext, NewRuntimeSyntaxTransformer(emitContext, options, resolver).TransformSourceFile(file), rec.output)
@@ -447,7 +447,7 @@ func TestParameterPropertyTransformer(t *testing.T) {
 			options := &core.CompilerOptions{}
 			file := parsetestutil.ParseTypeScript(rec.input, false /*jsx*/)
 			parsetestutil.CheckDiagnostics(t, file)
-			binder.BindSourceFile(file, options.SourceFileAffecting())
+			binder.BindSourceFile(file)
 			emitContext := printer.NewEmitContext()
 			resolver := binder.NewReferenceResolver(options, binder.ReferenceResolverHooks{})
 			file = NewTypeEraserTransformer(emitContext, options).TransformSourceFile(file)

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler"
 )
 
@@ -36,8 +37,9 @@ func (w *watcher) doCycle() {
 	}
 	// updateProgram()
 	w.program = compiler.NewProgram(compiler.ProgramOptions{
-		Config: w.options,
-		Host:   w.host,
+		Config:           w.options,
+		Host:             w.host,
+		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
 	})
 	if w.hasBeenModified(w.program) {
 		fmt.Fprint(w.sys.Writer(), "build starting at ", w.sys.Now(), w.sys.NewLine())

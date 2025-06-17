@@ -844,7 +844,7 @@ func (p *Printer) shouldAllowTrailingComma(node *ast.Node, list *ast.NodeList) b
 		return false
 	}
 
-	target := p.currentSourceFile.LanguageVersion
+	target := p.currentSourceFile.LanguageVersion()
 	switch node.Kind {
 	case ast.KindObjectLiteralExpression:
 		return target >= core.ScriptTargetES5

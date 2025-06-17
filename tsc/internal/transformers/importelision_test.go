@@ -104,7 +104,7 @@ func (p *fakeProgram) BindSourceFiles() {
 	for _, file := range p.files {
 		if !file.IsBound() {
 			wg.Queue(func() {
-				binder.BindSourceFile(file, p.compilerOptions.SourceFileAffecting())
+				binder.BindSourceFile(file)
 			})
 		}
 	}
@@ -139,8 +139,8 @@ func (p *fakeProgram) GetSourceFileForResolvedModule(FileName string) *ast.Sourc
 	return p.getSourceFileForResolvedModule(FileName)
 }
 
-func (p *fakeProgram) GetSourceFileMetaData(path tspath.Path) *ast.SourceFileMetaData {
-	return nil
+func (p *fakeProgram) GetSourceFileMetaData(path tspath.Path) ast.SourceFileMetaData {
+	return ast.SourceFileMetaData{}
 }
 
 func (p *fakeProgram) GetImportHelpersImportSpecifier(path tspath.Path) *ast.Node {
