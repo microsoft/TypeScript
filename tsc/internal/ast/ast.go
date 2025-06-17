@@ -10053,10 +10053,6 @@ func (node *SourceFile) ParseOptions() SourceFileParseOptions {
 	return node.parseOptions
 }
 
-func (node *SourceFile) LanguageVersion() core.ScriptTarget {
-	return node.parseOptions.CompilerOptions.EmitScriptTarget
-}
-
 func (node *SourceFile) Text() string {
 	return node.text
 }

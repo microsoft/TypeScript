@@ -33,10 +33,6 @@ func applyBulkEdits(text string, edits []core.TextChange) string {
 	return b.String()
 }
 
-var parseCompilerOptions = core.SourceFileAffectingCompilerOptions{
-	EmitScriptTarget: core.ScriptTargetLatest,
-}
-
 func TestFormat(t *testing.T) {
 	t.Parallel()
 
@@ -60,9 +56,8 @@ func TestFormat(t *testing.T) {
 		assert.NilError(t, err)
 		text := string(fileContent)
 		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-			FileName:        "/checker.ts",
-			Path:            "/checker.ts",
-			CompilerOptions: parseCompilerOptions,
+			FileName: "/checker.ts",
+			Path:     "/checker.ts",
 		}, text, core.ScriptKindTS)
 		ast.SetParentInChildren(sourceFile.AsNode())
 		edits := format.FormatDocument(ctx, sourceFile)
@@ -91,9 +86,8 @@ func BenchmarkFormat(b *testing.B) {
 	assert.NilError(b, err)
 	text := string(fileContent)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName:        "/checker.ts",
-		Path:            "/checker.ts",
-		CompilerOptions: parseCompilerOptions,
+		FileName: "/checker.ts",
+		Path:     "/checker.ts",
 	}, text, core.ScriptKindTS)
 	ast.SetParentInChildren(sourceFile.AsNode())
 

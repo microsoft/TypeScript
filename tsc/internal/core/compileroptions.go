@@ -355,7 +355,6 @@ type SourceFileAffectingCompilerOptions struct {
 	AllowUnreachableCode     Tristate
 	AllowUnusedLabels        Tristate
 	BindInStrictMode         bool
-	EmitScriptTarget         ScriptTarget
 	ShouldPreserveConstEnums bool
 }
 
@@ -365,7 +364,6 @@ func (options *CompilerOptions) SourceFileAffecting() SourceFileAffectingCompile
 			AllowUnreachableCode:     options.AllowUnreachableCode,
 			AllowUnusedLabels:        options.AllowUnusedLabels,
 			BindInStrictMode:         options.AlwaysStrict.IsTrue() || options.Strict.IsTrue(),
-			EmitScriptTarget:         options.GetEmitScriptTarget(),
 			ShouldPreserveConstEnums: options.ShouldPreserveConstEnums(),
 		}
 	})

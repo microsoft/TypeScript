@@ -207,9 +207,7 @@ type ScannerState struct {
 }
 
 type Scanner struct {
-	text string
-	// TODO: remove this? unused except for (unimplemented) regex checking
-	languageVersion  core.ScriptTarget
+	text             string
 	languageVariant  core.LanguageVariant
 	onError          ErrorCallback
 	skipTrivia       bool
@@ -222,7 +220,7 @@ func defaultScanner() Scanner {
 	// Using a function rather than a global is intentional; this function is
 	// inlined as pure code (zeroing + moves), whereas a global requires write
 	// barriers since the memory is mutable.
-	return Scanner{languageVersion: core.ScriptTargetLatest, skipTrivia: true}
+	return Scanner{skipTrivia: true}
 }
 
 func NewScanner() *Scanner {
@@ -337,10 +335,6 @@ func (s *Scanner) SetText(text string) {
 
 func (s *Scanner) SetOnError(errorCallback ErrorCallback) {
 	s.onError = errorCallback
-}
-
-func (s *Scanner) SetScriptTarget(scriptTarget core.ScriptTarget) {
-	s.languageVersion = scriptTarget
 }
 
 func (s *Scanner) SetScriptKind(scriptKind core.ScriptKind) {
@@ -2237,7 +2231,6 @@ func GetScannerForSourceFile(sourceFile *ast.SourceFile, pos int) *Scanner {
 	s := NewScanner()
 	s.text = sourceFile.Text()
 	s.pos = pos
-	s.languageVersion = sourceFile.LanguageVersion()
 	s.languageVariant = sourceFile.LanguageVariant
 	s.Scan()
 	return s

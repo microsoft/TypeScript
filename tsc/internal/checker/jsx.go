@@ -1422,7 +1422,7 @@ func (c *Checker) getJsxFragmentFactoryEntity(location *ast.Node) *ast.EntityNam
 }
 
 func (c *Checker) parseIsolatedEntityName(name string) *ast.Node {
-	result := parser.ParseIsolatedEntityName(name, c.languageVersion)
+	result := parser.ParseIsolatedEntityName(name)
 	if result != nil {
 		markAsSynthetic(result)
 	}

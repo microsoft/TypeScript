@@ -844,10 +844,9 @@ func (p *Printer) shouldAllowTrailingComma(node *ast.Node, list *ast.NodeList) b
 		return false
 	}
 
-	target := p.currentSourceFile.LanguageVersion()
 	switch node.Kind {
 	case ast.KindObjectLiteralExpression:
-		return target >= core.ScriptTargetES5
+		return true
 	case ast.KindArrayLiteralExpression,
 		ast.KindArrowFunction,
 		ast.KindConstructor,
@@ -874,11 +873,11 @@ func (p *Printer) shouldAllowTrailingComma(node *ast.Node, list *ast.NodeList) b
 	case ast.KindFunctionDeclaration,
 		ast.KindFunctionExpression,
 		ast.KindMethodDeclaration:
-		return target >= core.ScriptTargetES2015 || list == node.FunctionLikeData().TypeParameters
+		return true
 	case ast.KindCallExpression:
-		return target >= core.ScriptTargetES2015 || list == node.AsCallExpression().TypeArguments
+		return true
 	case ast.KindNewExpression:
-		return target >= core.ScriptTargetES2015 || list == node.AsNewExpression().TypeArguments
+		return true
 	}
 
 	return false

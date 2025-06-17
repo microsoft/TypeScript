@@ -42,7 +42,6 @@ const (
 
 type Binder struct {
 	file                    *ast.SourceFile
-	languageVersion         core.ScriptTarget
 	bindFunc                func(*ast.Node) bool
 	unreachableFlow         *ast.FlowNode
 	reportedUnreachableFlow *ast.FlowNode
@@ -121,7 +120,6 @@ func bindSourceFile(file *ast.SourceFile) {
 		b := getBinder()
 		defer putBinder(b)
 		b.file = file
-		b.languageVersion = b.options().EmitScriptTarget
 		b.inStrictMode = b.options().BindInStrictMode && !file.IsDeclarationFile || ast.IsExternalModule(file)
 		b.unreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.reportedUnreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
@@ -1181,7 +1179,6 @@ func (b *Binder) bindParameter(node *ast.Node) {
 func (b *Binder) bindFunctionDeclaration(node *ast.Node) {
 	b.checkStrictModeFunctionName(node)
 	if b.inStrictMode {
-		b.checkStrictModeFunctionDeclaration(node)
 		b.bindBlockScopedDeclaration(node, ast.SymbolFlagsFunction, ast.SymbolFlagsFunctionExcludes)
 	} else {
 		b.declareSymbolAndAddToSymbolTable(node, ast.SymbolFlagsFunction, ast.SymbolFlagsFunctionExcludes)
@@ -1364,17 +1361,6 @@ func (b *Binder) checkStrictModeFunctionName(node *ast.Node) {
 	}
 }
 
-func (b *Binder) checkStrictModeFunctionDeclaration(node *ast.Node) {
-	if b.languageVersion < core.ScriptTargetES2015 {
-		// Report error if function is not top level function declaration
-		if b.blockScopeContainer.Kind != ast.KindSourceFile && b.blockScopeContainer.Kind != ast.KindModuleDeclaration && !ast.IsFunctionLikeOrClassStaticBlockDeclaration(b.blockScopeContainer) {
-			// We check first if the name is inside class declaration or class expression; if so give explicit message
-			// otherwise report generic error message.
-			b.errorOnNode(node, b.getStrictModeBlockScopeFunctionDeclarationMessage(node))
-		}
-	}
-}
-
 func (b *Binder) getStrictModeBlockScopeFunctionDeclarationMessage(node *ast.Node) *diagnostics.Message {
 	// Provide specialized messages to help the user understand why we think they're in strict mode.
 	if ast.GetContainingClass(node) != nil {
@@ -1443,7 +1429,7 @@ func (b *Binder) checkStrictModeWithStatement(node *ast.Node) {
 
 func (b *Binder) checkStrictModeLabeledStatement(node *ast.Node) {
 	// Grammar checking for labeledStatement
-	if b.inStrictMode && b.options().EmitScriptTarget >= core.ScriptTargetES2015 {
+	if b.inStrictMode {
 		data := node.AsLabeledStatement()
 		if ast.IsDeclarationStatement(data.Statement) || ast.IsVariableStatement(data.Statement) {
 			b.errorOnFirstToken(data.Label, diagnostics.A_label_is_not_allowed_here)

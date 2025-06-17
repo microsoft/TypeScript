@@ -74,11 +74,8 @@ func fmtMain(sys System, input, output string) ExitStatus {
 	text := fileContent
 	pathified := tspath.ToPath(input, sys.GetCurrentDirectory(), true)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName: string(pathified),
-		Path:     pathified,
-		CompilerOptions: core.SourceFileAffectingCompilerOptions{
-			EmitScriptTarget: core.ScriptTargetLatest,
-		},
+		FileName:         string(pathified),
+		Path:             pathified,
 		JSDocParsingMode: ast.JSDocParsingModeParseAll,
 	}, text, core.GetScriptKindFromFileName(string(pathified)))
 	ast.SetParentInChildren(sourceFile.AsNode())

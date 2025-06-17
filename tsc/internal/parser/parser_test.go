@@ -40,11 +40,8 @@ func BenchmarkParse(b *testing.B) {
 					jsdocMode := jsdoc.mode
 
 					opts := ast.SourceFileParseOptions{
-						FileName: fileName,
-						Path:     path,
-						CompilerOptions: core.SourceFileAffectingCompilerOptions{
-							EmitScriptTarget: core.ScriptTargetESNext,
-						},
+						FileName:         fileName,
+						Path:             path,
 						JSDocParsingMode: jsdocMode,
 					}
 
@@ -138,11 +135,8 @@ func FuzzParser(f *testing.F) {
 		path := tspath.Path(fileName)
 
 		opts := ast.SourceFileParseOptions{
-			FileName: fileName,
-			Path:     path,
-			CompilerOptions: core.SourceFileAffectingCompilerOptions{
-				EmitScriptTarget: scriptTarget,
-			},
+			FileName:         fileName,
+			Path:             path,
 			JSDocParsingMode: jsdocParsingMode,
 		}
 

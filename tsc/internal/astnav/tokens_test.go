@@ -25,10 +25,6 @@ var testFiles = []string{
 	filepath.Join(repo.TypeScriptSubmodulePath, "src/services/mapCode.ts"),
 }
 
-var parseCompilerOptions = core.SourceFileAffectingCompilerOptions{
-	EmitScriptTarget: core.ScriptTargetLatest,
-}
-
 func TestGetTokenAtPosition(t *testing.T) {
 	t.Parallel()
 	repo.SkipIfNoTypeScriptSubmodule(t)
@@ -57,9 +53,8 @@ func TestGetTokenAtPosition(t *testing.T) {
 			}
 		`
 		file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-			FileName:        "/file.ts",
-			Path:            "/file.ts",
-			CompilerOptions: parseCompilerOptions,
+			FileName: "/file.ts",
+			Path:     "/file.ts",
 		}, fileText, core.ScriptKindTS)
 		assert.Equal(t, astnav.GetTokenAtPosition(file, 0), astnav.GetTokenAtPosition(file, 0))
 	})
@@ -96,9 +91,8 @@ func baselineTokens(t *testing.T, testName string, includeEOF bool, getTSTokens 
 			}
 			tsTokens := getTSTokens(string(fileText), positions)
 			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-				FileName:        "/file.ts",
-				Path:            "/file.ts",
-				CompilerOptions: parseCompilerOptions,
+				FileName: "/file.ts",
+				Path:     "/file.ts",
 			}, string(fileText), core.ScriptKindTS)
 
 			var output strings.Builder
@@ -433,9 +427,8 @@ export function isAnyDirectorySeparator(charCode: number): boolean {
 		t.Run(testCase.name, func(t *testing.T) {
 			t.Parallel()
 			file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-				FileName:        "/file.ts",
-				Path:            "/file.ts",
-				CompilerOptions: parseCompilerOptions,
+				FileName: "/file.ts",
+				Path:     "/file.ts",
 			}, testCase.fileContent, core.ScriptKindTS)
 			token := astnav.FindPrecedingToken(file, testCase.position)
 			assert.Equal(t, token.Kind, testCase.expectedKind)
