@@ -352,23 +352,21 @@ func (options *CompilerOptions) GetPathsBasePath(currentDirectory string) string
 // SourceFileAffectingCompilerOptions are the precomputed CompilerOptions values which
 // affect the parse and bind of a source file.
 type SourceFileAffectingCompilerOptions struct {
-	AllowUnreachableCode       Tristate
-	AllowUnusedLabels          Tristate
-	BindInStrictMode           bool
-	EmitScriptTarget           ScriptTarget
-	NoFallthroughCasesInSwitch Tristate
-	ShouldPreserveConstEnums   bool
+	AllowUnreachableCode     Tristate
+	AllowUnusedLabels        Tristate
+	BindInStrictMode         bool
+	EmitScriptTarget         ScriptTarget
+	ShouldPreserveConstEnums bool
 }
 
 func (options *CompilerOptions) SourceFileAffecting() SourceFileAffectingCompilerOptions {
 	options.sourceFileAffectingCompilerOptionsOnce.Do(func() {
 		options.sourceFileAffectingCompilerOptions = SourceFileAffectingCompilerOptions{
-			AllowUnreachableCode:       options.AllowUnreachableCode,
-			AllowUnusedLabels:          options.AllowUnusedLabels,
-			BindInStrictMode:           options.AlwaysStrict.IsTrue() || options.Strict.IsTrue(),
-			EmitScriptTarget:           options.GetEmitScriptTarget(),
-			NoFallthroughCasesInSwitch: options.NoFallthroughCasesInSwitch,
-			ShouldPreserveConstEnums:   options.ShouldPreserveConstEnums(),
+			AllowUnreachableCode:     options.AllowUnreachableCode,
+			AllowUnusedLabels:        options.AllowUnusedLabels,
+			BindInStrictMode:         options.AlwaysStrict.IsTrue() || options.Strict.IsTrue(),
+			EmitScriptTarget:         options.GetEmitScriptTarget(),
+			ShouldPreserveConstEnums: options.ShouldPreserveConstEnums(),
 		}
 	})
 	return options.sourceFileAffectingCompilerOptions
