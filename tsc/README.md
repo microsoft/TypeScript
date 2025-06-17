@@ -4,7 +4,7 @@
 
 ## Preview
 
-A preview build is available on npm as `@typescript/native-preview`.
+A preview build is available on npm as [`@typescript/native-preview`](https://www.npmjs.com/package/@typescript/native-preview).
 
 ```sh
 npm install @typescript/native-preview
